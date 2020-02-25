@@ -174,12 +174,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The storage of market data.
 		/// </summary>
-		public IStorageRegistry StorageRegistry => Adapter?.StorageRegistry;
+		public IStorageRegistry StorageRegistry => Adapter?.StorageProcessor.StorageRegistry;
 
 		/// <summary>
 		/// Snapshot storage registry.
 		/// </summary>
-		public SnapshotRegistry SnapshotRegistry => Adapter?.SnapshotRegistry;
+		public SnapshotRegistry SnapshotRegistry => Adapter?.StorageProcessor.SnapshotRegistry;
 
 		private IBasketSecurityProcessorProvider _basketSecurityProcessorProvider = new BasketSecurityProcessorProvider();
 
@@ -214,7 +214,7 @@ namespace StockSharp.Algo
 
 		private void InitAdapter(IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
 		{
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), new CandleBuilderProvider(_entityCache.ExchangeInfoProvider), storageRegistry, snapshotRegistry);
+			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), new StorageProcessor(storageRegistry, snapshotRegistry, new CandleBuilderProvider(_entityCache.ExchangeInfoProvider)));
 		}
 
 		/// <summary>

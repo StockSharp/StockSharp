@@ -286,9 +286,9 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdapter = true };
 
-					if (SecurityStorage != null && StorageRegistry != null && SnapshotRegistry != null)
+					if (SecurityStorage != null && StorageRegistry != null && _adapter.StorageProcessor.SnapshotRegistry != null)
 					{
-						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider, StorageRegistry, SnapshotRegistry, _adapter.CandleBuilderProvider)
+						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider, _adapter.StorageProcessor)
 						{
 							OwnInnerAdapter = true,
 							OverrideSecurityData = OverrideSecurityData

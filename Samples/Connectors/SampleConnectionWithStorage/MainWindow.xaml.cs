@@ -166,8 +166,8 @@ namespace SampleConnection
 				MessageBox.Show(this, ex.ToString());
 			}
 
-			Connector.Adapter.StorageDaysLoad = TimeSpan.FromDays(3);
-			Connector.Adapter.StorageMode = StorageModes.Snapshot;
+			Connector.Adapter.StorageProcessor.DaysLoad = TimeSpan.FromDays(3);
+			Connector.Adapter.StorageProcessor.Mode = StorageModes.Snapshot;
 			Connector.LookupAll();
 
 			snapshotRegistry.Init();
@@ -301,7 +301,7 @@ namespace SampleConnection
 			if (Connector == null)
 				return;
 
-			Connector.Adapter.StorageDrive = new LocalMarketDataDrive(path.ToFullPath());
+			Connector.Adapter.StorageProcessor.Drive = new LocalMarketDataDrive(path.ToFullPath());
 			Connector.LookupAll();
 		}
 	}

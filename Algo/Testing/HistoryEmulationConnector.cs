@@ -68,6 +68,8 @@ namespace StockSharp.Algo.Testing
 				_parent = parent;
 			}
 
+			protected override bool CanAutoStorage => false;
+
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
 			protected override bool OnSendInMessage(Message message)

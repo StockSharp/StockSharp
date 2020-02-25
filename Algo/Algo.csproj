@@ -138,7 +138,9 @@
     <Compile Include="Storages\Remote\ISecurityRemoteExtendedStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
+    <Compile Include="Storages\StorageBuffer.cs" />
     <Compile Include="Storages\StorageMetaInfoMessageAdapter.cs" />
+    <Compile Include="Storages\StorageProcessor.cs" />
     <Compile Include="Storages\Storages.cs" />
     <Compile Include="Strategies\Strategy_SubscriptionProvider.cs" />
     <Compile Include="Subscription.cs" />

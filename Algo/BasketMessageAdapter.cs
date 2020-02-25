@@ -267,7 +267,7 @@ namespace StockSharp.Algo
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator, CandleBuilderProvider candleBuilderProvider)
-			: this(transactionIdGenerator, new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), candleBuilderProvider, null, null)
+			: this(transactionIdGenerator, new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), new StorageProcessor(null, null, candleBuilderProvider))
 		{
 		}
 
@@ -277,25 +277,17 @@ namespace StockSharp.Algo
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="securityAdapterProvider">The security based message adapter's provider.</param>
 		/// <param name="portfolioAdapterProvider">The portfolio based message adapter's provider.</param>
-		/// <param name="candleBuilderProvider">Candle builders provider.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		/// <param name="storageProcessor">Storage processor.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator,
 			ISecurityMessageAdapterProvider securityAdapterProvider,
 			IPortfolioMessageAdapterProvider portfolioAdapterProvider,
-			CandleBuilderProvider candleBuilderProvider,
-			IStorageRegistry storageRegistry,
-			SnapshotRegistry snapshotRegistry)
-
+			StorageProcessor storageProcessor)
 		{
 			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			_innerAdapters = new InnerAdapterList(this);
 			SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
 			PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
-			CandleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
-
-			StorageRegistry = storageRegistry;// ?? throw new ArgumentNullException(nameof(storageRegistry));
-			SnapshotRegistry = snapshotRegistry;// ?? throw new ArgumentNullException(nameof(snapshotRegistry));
+			StorageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
 
 			LatencyManager = new LatencyManager();
 			CommissionManager = new CommissionManager();
@@ -315,11 +307,6 @@ namespace StockSharp.Algo
 		/// The security based message adapter's provider.
 		/// </summary>
 		public ISecurityMessageAdapterProvider SecurityAdapterProvider { get; }
-
-		/// <summary>
-		/// Candle builders provider.
-		/// </summary>
-		public CandleBuilderProvider CandleBuilderProvider { get; }
 
 		private readonly InnerAdapterList _innerAdapters;
 
@@ -538,56 +525,19 @@ namespace StockSharp.Algo
 		public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
 
 		/// <summary>
-		/// The storage of market data.
+		/// Storage processor.
 		/// </summary>
-		public IStorageRegistry StorageRegistry { get; }
-
-		/// <summary>
-		/// Snapshot storage registry.
-		/// </summary>
-		public SnapshotRegistry SnapshotRegistry { get; }
-
-		/// <summary>
-		/// Save data only for subscriptions.
-		/// </summary>
-		public bool StorageFilterSubscription { get; set; }
-
-		/// <summary>
-		/// The storage (database, file etc.).
-		/// </summary>
-		public IMarketDataDrive StorageDrive { get; set; }
-
-		/// <summary>
-		/// Storage mode. By default is <see cref="StorageModes.Incremental"/>.
-		/// </summary>
-		public StorageModes StorageMode { get; set; } = StorageModes.Incremental;
-
-		/// <summary>
-		/// Format.
-		/// </summary>
-		public StorageFormats StorageFormat { get; set; } = StorageFormats.Binary;
-
-		private TimeSpan _storageDaysLoad;
-
-		/// <summary>
-		/// Max days to load stored data.
-		/// </summary>
-		public TimeSpan StorageDaysLoad
-		{
-			get => _storageDaysLoad;
-			set
-			{
-				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
-
-				_storageDaysLoad = value;
-			}
-		}
+		public StorageProcessor StorageProcessor { get; }
 
 		/// <summary>
 		/// Use separated <see cref="IMessageChannel"/> for each adapters.
 		/// </summary>
 		public bool UseSeparatedChannels { get; set; }
+
+		/// <summary>
+		/// Use <see cref="BufferMessageAdapter"/>.
+		/// </summary>
+		public bool SupportBuffer { get; set; }
 
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
@@ -710,18 +660,6 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter));
 			}
 
-			if (StorageRegistry != null)
-			{
-				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageRegistry, SnapshotRegistry, CandleBuilderProvider)
-				{
-					FilterSubscription = StorageFilterSubscription,
-					Drive = StorageDrive,
-					DaysLoad = StorageDaysLoad,
-					Format = StorageFormat,
-					Mode = StorageMode,
-				});
-			}
-
 			if (SupportBuildingFromOrderLog)
 			{
 				adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
@@ -732,6 +670,15 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new OrderBookInrementMessageAdapter(adapter));
 			}
 
+			if (StorageProcessor.StorageRegistry != null)
+			{
+				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
+			}
+			else if (SupportBuffer)
+			{
+				adapter = ApplyOwnInner(new BufferMessageAdapter(adapter, StorageProcessor.Buffer));
+			}
+
 			if (SupportOrderBookTruncate)
 			{
 				adapter = ApplyOwnInner(new OrderBookTruncateMessageAdapter(adapter));
@@ -739,7 +686,7 @@ namespace StockSharp.Algo
 
 			if (SupportCandlesCompression)
 			{
-				adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, CandleBuilderProvider));
+				adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, StorageProcessor.CandleBuilderProvider));
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
@@ -821,6 +768,11 @@ namespace StockSharp.Algo
 			}
 		}
 
+		/// <summary>
+		/// Can use <see cref="StorageBuffer"/>.
+		/// </summary>
+		protected virtual bool CanAutoStorage => true;
+
 		private bool InternalSendInMessage(Message message)
 		{
 			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
@@ -853,6 +805,9 @@ namespace StockSharp.Algo
 				case MessageTypes.Connect:
 				{
 					ProcessReset(new ResetMessage(), true);
+
+					StorageProcessor.Buffer.Enabled = CanAutoStorage && (StorageProcessor.StorageRegistry != null || SupportBuffer);
+					StorageProcessor.StartStorageTimer();
 
 					_currState = ConnectionStates.Connecting;
 
@@ -1176,7 +1131,7 @@ namespace StockSharp.Algo
 								return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
 							default:
 							{
-								if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null)
+								if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, StorageProcessor.CandleBuilderProvider) != null)
 									return true;
 
 								return false;
@@ -1203,7 +1158,7 @@ namespace StockSharp.Algo
 						return true;
 				}
 
-				return a.TryGetCandlesBuildFrom(mdMsg, CandleBuilderProvider) != null;
+				return a.TryGetCandlesBuildFrom(mdMsg, StorageProcessor.CandleBuilderProvider) != null;
 			}).ToArray();
 
 			//if (!isPended && adapters.Length == 0)
@@ -1950,7 +1905,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public IMessageChannel Clone()
 		{
-			var clone = new BasketMessageAdapter(TransactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, CandleBuilderProvider, StorageRegistry, SnapshotRegistry)
+			var clone = new BasketMessageAdapter(TransactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, StorageProcessor)
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,
@@ -1961,11 +1916,6 @@ namespace StockSharp.Algo
 				SupportOffline = SupportOffline,
 				IgnoreExtraAdapters = IgnoreExtraAdapters,
 				NativeIdStorage = NativeIdStorage,
-				StorageDaysLoad = StorageDaysLoad,
-				StorageMode = StorageMode,
-				StorageFormat = StorageFormat,
-				StorageDrive = StorageDrive,
-				StorageFilterSubscription = StorageFilterSubscription,
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
 				UseSeparatedChannels = UseSeparatedChannels,
 			};
