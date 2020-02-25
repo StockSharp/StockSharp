@@ -63,9 +63,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -96,7 +94,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IBasketSecurityProcessor.cs" />
     <Compile Include="IBasketSecurityProcessorProvider.cs" />
-    <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="IErrorMessage.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="IOriginalTransactionIdMessage.cs" />

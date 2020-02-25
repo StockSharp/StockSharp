@@ -17,15 +17,14 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
+	using System.Globalization;
 	using System.Linq;
-	using System.ServiceModel;
+	using System.Net;
 
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
-	using Ecng.Net;
 
 	using MoreLinq;
 
@@ -1019,9 +1018,6 @@ namespace StockSharp.Messages
 			return new ErrorMessage { Error = error };
 		}
 
-		private static readonly ChannelFactory<IDailyInfoSoap> _dailyInfoFactory = new ChannelFactory<IDailyInfoSoap>(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/dailyinfowebserv/dailyinfo.asmx"));
-		private static readonly Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>> _rateInfo = new Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>>();
-
 		/// <summary>
 		/// To convert one currency to another.
 		/// </summary>
@@ -1059,24 +1055,8 @@ namespace StockSharp.Messages
 			if (from == to)
 				return 1;
 
-			var info = _rateInfo.SafeAdd(date, key =>
-			{
-				var i = _dailyInfoFactory.Invoke(c => c.GetCursOnDate(key));
-				return i.Tables[0].Rows.Cast<DataRow>().ToDictionary(r => r[4].To<CurrencyTypes>(), r => r[2].To<decimal>());
-			});
-
-			if (from != CurrencyTypes.RUB && !info.ContainsKey(from))
-				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(from), nameof(from));
-
-			if (to != CurrencyTypes.RUB && !info.ContainsKey(to))
-				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(to), nameof(to));
-
-			if (from == CurrencyTypes.RUB)
-				return 1 / info[to];
-			else if (to == CurrencyTypes.RUB)
-				return info[from];
-			else
-				return info[from] / info[to];
+			using (var client = new WebClient())
+				return decimal.Parse(client.DownloadString($"https://stocksharp.com/services/currencyconverter.ashx?from={from}&to={to}&date={(long)date.ToUnix()}"), CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>
