@@ -43,11 +43,16 @@ namespace SampleStorage
 			// generation 1000 random ticks
 			//
 
-			for (var i = 0; i < 1000; i++)
+			const int count = 1000;
+
+			var begin = DateTime.Today;
+			var end = begin + TimeSpan.FromMinutes(count);
+
+			for (var i = 0; i < count; i++)
 			{
 				var t = new Trade
 				{
-					Time = DateTime.Today + TimeSpan.FromMinutes(i),
+					Time = begin + TimeSpan.FromMinutes(i),
 					Id = i + 1,
 					Security = security,
 					Volume = RandomGen.GetInt(1, 10),
@@ -68,12 +73,15 @@ namespace SampleStorage
 				// saving ticks
 				tradeStorage.Save(trades);
 
-				// loading ticks
-				var loadedTrades = tradeStorage.Load(DateTime.Today, DateTime.Today + TimeSpan.FromMinutes(1000));
-
-				foreach (var trade in loadedTrades)
+				for (var d = begin; d < end; d += TimeSpan.FromDays(1))
 				{
-					Console.WriteLine(LocalizedStrings.Str2968Params, trade.Id, trade);
+					// loading ticks
+					var loadedTrades = tradeStorage.Load(d);
+
+					foreach (var trade in loadedTrades)
+					{
+						Console.WriteLine(LocalizedStrings.Str2968Params, trade.Id, trade);
+					}	
 				}
 
 				Console.ReadLine();
