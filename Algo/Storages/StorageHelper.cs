@@ -40,6 +40,7 @@ namespace StockSharp.Algo.Storages
 	public static class StorageHelper
 	{
 		private sealed class RangeEnumerable<TData> : SimpleEnumerable<TData>//, IEnumerableEx<TData>
+			where TData : Message
 		{
 			[DebuggerDisplay("From {_from} Cur {_currDate} To {_to}")]
 			private sealed class RangeEnumerator : IEnumerator<TData>
@@ -197,7 +198,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The candles storage.</returns>
-		public static IMarketDataStorage<Candle> GetCandleStorage<TCandle, TArg>(this IStorageRegistry storageRegistry, Security security, TArg arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public static IEntityMarketDataStorage<Candle, CandleMessage> GetCandleStorage<TCandle, TArg>(this IStorageRegistry storageRegistry, Security security, TArg arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 			where TCandle : Candle
 		{
 			return storageRegistry.ThrowIfNull().GetCandleStorage(typeof(TCandle), security, arg, drive, format);
@@ -211,7 +212,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The candles storage.</returns>
-		public static IMarketDataStorage<Candle> GetCandleStorage(this IStorageRegistry storageRegistry, CandleSeries series, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public static IEntityMarketDataStorage<Candle, CandleMessage> GetCandleStorage(this IStorageRegistry storageRegistry, CandleSeries series, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -227,7 +228,8 @@ namespace StockSharp.Algo.Storages
 			return storageRegistry;
 		}
 
-		internal static IEnumerable<Range<DateTimeOffset>> GetRanges<TValue>(this IMarketDataStorage<TValue> storage)
+		internal static IEnumerable<Range<DateTimeOffset>> GetRanges<TMessage>(this IMarketDataStorage<TMessage> storage)
+			where TMessage : Message
 		{
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
@@ -243,18 +245,19 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// To create an iterative loader of market data for the time range.
 		/// </summary>
-		/// <typeparam name="TData">Data type.</typeparam>
+		/// <typeparam name="TMessage">Data type.</typeparam>
 		/// <param name="storage">Market-data storage.</param>
 		/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="GetFromDate"/>.</param>
 		/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="GetToDate"/> date, inclusive.</param>
 		/// <returns>The iterative loader of market data.</returns>
-		public static IEnumerable<TData> Load<TData>(this IMarketDataStorage<TData> storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
+			where TMessage : Message
 		{
 			var range = GetRange(storage, from, to);
 
 			return range == null
-				? Enumerable.Empty<TData>()
-				: new RangeEnumerable<TData>(storage, range.Min, range.Max, ((IMarketDataStorageInfo<TData>)storage).GetTime);
+				? Enumerable.Empty<TMessage>()
+				: new RangeEnumerable<TMessage>(storage, range.Min, range.Max, ((IMarketDataStorageInfo<TMessage>)storage).GetTime);
 		}
 
 		/// <summary>
@@ -293,7 +296,7 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var data = storage.Load(date.Date).Cast<object>().ToList();
+						var data = storage.Load(date.Date).ToList();
 						data.RemoveWhere(d =>
 						{
 							var time = info.GetTime(d);
@@ -306,7 +309,7 @@ namespace StockSharp.Algo.Storages
 					storage.Delete(date.Date);
 				else
 				{
-					var data = storage.Load(date.Date).Cast<object>().ToList();
+					var data = storage.Load(date.Date).ToList();
 					data.RemoveWhere(d => info.GetTime(d) > range.Max);
 					storage.Delete(data);
 				}
@@ -552,13 +555,13 @@ namespace StockSharp.Algo.Storages
 				set => _original.AppendOnlyNew = value;
 			}
 
-			int IMarketDataStorage.Save(IEnumerable data) => ((IMarketDataStorage<CandleMessage>)this).Save(data);
+			int IMarketDataStorage.Save(IEnumerable<Message> data) => ((IMarketDataStorage<CandleMessage>)this).Save(data);
 
-			void IMarketDataStorage.Delete(IEnumerable data) => ((IMarketDataStorage<CandleMessage>)this).Delete(data);
+			void IMarketDataStorage.Delete(IEnumerable<Message> data) => ((IMarketDataStorage<CandleMessage>)this).Delete(data);
 
 			void IMarketDataStorage.Delete(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Delete(date);
 
-			IEnumerable IMarketDataStorage.Load(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Load(date);
+			IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Load(date);
 
 			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) =>  ((IMarketDataStorage<CandleMessage>)this).GetMetaInfo(date);
 
@@ -693,7 +696,7 @@ namespace StockSharp.Algo.Storages
 			return args.OrderBy().ToArray();
 		}
 
-		private class ConvertableStorage<TMessage, TEntity> : IMarketDataStorage<TEntity>, IMarketDataStorageInfo<TEntity>
+		private class ConvertableStorage<TMessage, TEntity> : IEntityMarketDataStorage<TEntity, TMessage>, IMarketDataStorageInfo<TEntity>
 			where TMessage : Message
 		{
 			private readonly Security _security;
@@ -716,17 +719,7 @@ namespace StockSharp.Algo.Storages
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => _messageStorage.Serializer;
 
-			IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer => throw new NotSupportedException();
-
-			public int Save(IEnumerable<TEntity> data)
-			{
-				return _messageStorage.Save(data.Select(_toMessage));
-			}
-
-			public void Delete(IEnumerable<TEntity> data)
-			{
-				_messageStorage.Delete(data.Select(_toMessage));
-			}
+			IMarketDataSerializer<TMessage> IMarketDataStorage<TMessage>.Serializer => throw new NotSupportedException();
 
 			IEnumerable<DateTime> IMarketDataStorage.Dates => _messageStorage.Dates;
 
@@ -744,14 +737,34 @@ namespace StockSharp.Algo.Storages
 				set => _messageStorage.AppendOnlyNew = value;
 			}
 
-			int IMarketDataStorage.Save(IEnumerable data)
+			int IMarketDataStorage.Save(IEnumerable<Message> data)
 			{
-				return Save(data.Cast<TEntity>());
+				return ((IMarketDataStorage<TMessage>)this).Save(data.Cast<TMessage>());
 			}
 
-			void IMarketDataStorage.Delete(IEnumerable data)
+			int IEntityMarketDataStorage<TEntity, TMessage>.Save(IEnumerable<TEntity> data)
 			{
-				Delete(data.Cast<TEntity>());
+				return ((IMarketDataStorage<TMessage>)this).Save(data.Select(_toMessage));
+			}
+
+			int IMarketDataStorage<TMessage>.Save(IEnumerable<TMessage> data)
+			{
+				return _messageStorage.Save(data);
+			}
+
+			void IMarketDataStorage.Delete(IEnumerable<Message> data)
+			{
+				((IMarketDataStorage<TMessage>)this).Delete(data.Cast<TMessage>());
+			}
+
+			void IEntityMarketDataStorage<TEntity, TMessage>.Delete(IEnumerable<TEntity> data)
+			{
+				((IMarketDataStorage<TMessage>)this).Delete(data.Select(_toMessage));
+			}
+
+			void IMarketDataStorage<TMessage>.Delete(IEnumerable<TMessage> data)
+			{
+				_messageStorage.Delete(data);
 			}
 
 			void IMarketDataStorage.Delete(DateTime date)
@@ -759,24 +772,29 @@ namespace StockSharp.Algo.Storages
 				_messageStorage.Delete(date);
 			}
 
-			IEnumerable IMarketDataStorage.Load(DateTime date)
+			IEnumerable<Message> IMarketDataStorage.Load(DateTime date)
 			{
-				return Load(date);
+				return ((IMarketDataStorage<TMessage>)this).Load(date);
 			}
 
 			public IEnumerable<TEntity> Load(DateTime date)
 			{
-				return _messageStorage.Load(date).ToEntities<TMessage, TEntity>(_security, _exchangeInfoProvider);
+				return ((IMarketDataStorage<TMessage>)this).Load(date).ToEntities<TMessage, TEntity>(_security, _exchangeInfoProvider);
+			}
+
+			IEnumerable<TMessage> IMarketDataStorage<TMessage>.Load(DateTime date)
+			{
+				return _messageStorage.Load(date);
 			}
 
 			public DateTimeOffset GetTime(TEntity data)
 			{
-				return ((IMarketDataStorageInfo<TMessage>)_messageStorage).GetTime(_toMessage(data));
+				return ((IMarketDataStorageInfo)this).GetTime(_toMessage(data));
 			}
 
 			DateTimeOffset IMarketDataStorageInfo.GetTime(object data)
 			{
-				return GetTime((TEntity)data);
+				return ((IMarketDataStorageInfo<TMessage>)_messageStorage).GetTime((TMessage)data);
 			}
 		}
 
@@ -791,7 +809,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="security">Security.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Entity storage.</returns>
-		public static IMarketDataStorage<TEntity> ToEntityStorage<TMessage, TEntity>(this IMarketDataStorage<TMessage> storage, Security security, IExchangeInfoProvider exchangeInfoProvider = null)
+		public static IEntityMarketDataStorage<TEntity, TMessage> ToEntityStorage<TMessage, TEntity>(this IMarketDataStorage<TMessage> storage, Security security, IExchangeInfoProvider exchangeInfoProvider = null)
 			where TMessage : Message
 		{
 			Func<TEntity, TMessage> toMessage;
@@ -848,7 +866,7 @@ namespace StockSharp.Algo.Storages
 			else
 				throw new ArgumentOutOfRangeException(nameof(TEntity), typeof(TEntity), LocalizedStrings.Str1219);
 
-			return (IMarketDataStorage<TEntity>)_convertedStorages.SafeAdd(storage, key => new ConvertableStorage<TMessage, TEntity>(security, storage, exchangeInfoProvider ?? new InMemoryExchangeInfoProvider(), toMessage));
+			return (IEntityMarketDataStorage<TEntity, TMessage>)_convertedStorages.SafeAdd(storage, key => new ConvertableStorage<TMessage, TEntity>(security, storage, exchangeInfoProvider ?? new InMemoryExchangeInfoProvider(), toMessage));
 		}
 	}
 }

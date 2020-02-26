@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -63,11 +62,9 @@ namespace StockSharp.Algo.Storages
 		IEnumerable<DateTime> IMarketDataStorage.Dates => throw new NotSupportedException();
 
 		private readonly SecurityId _securityId;
-
 		SecurityId IMarketDataStorage.SecurityId => _securityId;
 
 		private readonly object _arg;
-
 		object IMarketDataStorage.Arg => _arg;
 
 		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
@@ -75,56 +72,21 @@ namespace StockSharp.Algo.Storages
 		bool IMarketDataStorage.AppendOnlyNew { get; set; }
 
 		private readonly Type _dataType;
-
 		Type IMarketDataStorage.DataType => _dataType;
 
 		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
-
 		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => throw new NotSupportedException();
 
-		/// <summary>
-		/// To load data.
-		/// </summary>
-		/// <param name="date">Date, for which data shall be loaded.</param>
-		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-		public IEnumerable<T> Load(DateTime date)
-		{
-			return _getData(date);
-		}
+		/// <inheritdoc />
+		public IEnumerable<T> Load(DateTime date) => _getData(date);
 
-		IEnumerable IMarketDataStorage.Load(DateTime date)
-		{
-			return Load(date);
-		}
-
-		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
-		{
-			throw new NotSupportedException();
-		}
-
-		int IMarketDataStorage.Save(IEnumerable data)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataStorage.Delete(IEnumerable data)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataStorage.Delete(DateTime date)
-		{
-			throw new NotSupportedException();
-		}
-
-		int IMarketDataStorage<T>.Save(IEnumerable<T> data)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataStorage<T>.Delete(IEnumerable<T> data)
-		{
-			throw new NotSupportedException();
-		}
+		IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
+		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => throw new NotSupportedException();
+		
+		int IMarketDataStorage.Save(IEnumerable<Message> data) => throw new NotSupportedException();
+		void IMarketDataStorage.Delete(IEnumerable<Message> data) => throw new NotSupportedException();
+		void IMarketDataStorage.Delete(DateTime date) => throw new NotSupportedException();
+		int IMarketDataStorage<T>.Save(IEnumerable<T> data) => throw new NotSupportedException();
+		void IMarketDataStorage<T>.Delete(IEnumerable<T> data) => throw new NotSupportedException();
 	}
 }

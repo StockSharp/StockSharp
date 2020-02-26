@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Storages
 			private readonly BasketMarketDataStorage<TMessage> _storage;
 			private readonly DateTime _date;
 			private readonly SynchronizedQueue<Tuple<ActionTypes, IMarketDataStorage, long>> _actions = new SynchronizedQueue<Tuple<ActionTypes, IMarketDataStorage, long>>();
-			private readonly OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator, IMarketDataStorage, long>> _enumerators = new OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator, IMarketDataStorage, long>>();
+			private readonly OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator<Message>, IMarketDataStorage, long>> _enumerators = new OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator<Message>, IMarketDataStorage, long>>();
 
 			public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date)
 			{
@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Storages
 									break;
 								}
 
-								var msg = (Message)enu.Current;
+								var msg = enu.Current;
 
 								if (msg.GetServerTime() >= lastTime)
 									break;
@@ -158,7 +158,7 @@ namespace StockSharp.Algo.Storages
 
 				var enumerator = pair.Value.Item1;
 
-				Current = TrySetTransactionId((TMessage)enumerator.Current, pair.Value.Item3);
+				Current = TrySetTransactionId(enumerator.Current, pair.Value.Item3);
 
 				if (enumerator.MoveNext())
 					_enumerators.Enqueue(GetServerTime(enumerator), pair.Value);
@@ -183,9 +183,9 @@ namespace StockSharp.Algo.Storages
 				return (TMessage)message;
 			}
 
-			private static DateTimeOffset GetServerTime(IEnumerator enumerator)
+			private static DateTimeOffset GetServerTime(IEnumerator<Message> enumerator)
 			{
-				return ((Message)enumerator.Current).GetServerTime();
+				return enumerator.Current.GetServerTime();
 			}
 
 			object IEnumerator.Current => Current;
@@ -346,9 +346,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates
-		{
-			get { return _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct(); }
-		}
+			=> _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct();
 
 		/// <inheritdoc />
 		public virtual Type DataType => throw new NotSupportedException();
@@ -367,9 +365,9 @@ namespace StockSharp.Algo.Storages
 			set => throw new NotSupportedException();
 		}
 
-		int IMarketDataStorage.Save(IEnumerable data) => throw new NotSupportedException();
+		int IMarketDataStorage.Save(IEnumerable<Message> data) => throw new NotSupportedException();
 
-		void IMarketDataStorage.Delete(IEnumerable data) => throw new NotSupportedException();
+		void IMarketDataStorage.Delete(IEnumerable<Message> data) => throw new NotSupportedException();
 
 		void IMarketDataStorage.Delete(DateTime date) => throw new NotSupportedException();
 
@@ -406,7 +404,7 @@ namespace StockSharp.Algo.Storages
 
 		int IMarketDataStorage<TMessage>.Save(IEnumerable<TMessage> data) => throw new NotSupportedException();
 		void IMarketDataStorage<TMessage>.Delete(IEnumerable<TMessage> data) => throw new NotSupportedException();
-		IEnumerable IMarketDataStorage.Load(DateTime date) => OnLoad(date);
+		IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => OnLoad(date);
 
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => throw new NotSupportedException();
 		

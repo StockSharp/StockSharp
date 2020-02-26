@@ -125,6 +125,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private static void RegisterStorage<T>(SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<T>> storages, IMarketDataStorage<T> storage)
+			where T : Message
 		{
 			if (storages == null)
 				throw new ArgumentNullException(nameof(storages));
@@ -136,6 +137,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private static void RegisterStorage<T>(SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<T>> storages, ExecutionTypes type, IMarketDataStorage<T> storage)
+			where T : Message
 		{
 			if (storages == null)
 				throw new ArgumentNullException(nameof(storages));
@@ -147,31 +149,31 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public IMarketDataStorage<Trade> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public IEntityMarketDataStorage<Trade, ExecutionMessage> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetTickMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<ExecutionMessage, Trade>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
-		public IMarketDataStorage<MarketDepth> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public IEntityMarketDataStorage<MarketDepth, QuoteChangeMessage> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetQuoteMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<QuoteChangeMessage, MarketDepth>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
-		public IMarketDataStorage<OrderLogItem> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public IEntityMarketDataStorage<OrderLogItem, ExecutionMessage> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetOrderLogMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<ExecutionMessage, OrderLogItem>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
-		public IMarketDataStorage<Candle> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public IEntityMarketDataStorage<Candle, CandleMessage> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetCandleMessageStorage(candleType.ToCandleMessageType(), security.ToSecurityId(), arg, drive, format).ToEntityStorage<CandleMessage, Candle>(security, ExchangeInfoProvider);
 		}
 
 		/// <inheritdoc />
-		public IMarketDataStorage<News> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public IEntityMarketDataStorage<News, NewsMessage> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetNewsMessageStorage(drive, format).ToEntityStorage<NewsMessage, News>(null, ExchangeInfoProvider);
 		}

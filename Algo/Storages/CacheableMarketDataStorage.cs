@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Storages
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -12,6 +11,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	/// <typeparam name="TData">Market data type.</typeparam>
 	public class CacheableMarketDataStorage<TData> : IMarketDataStorage<TData>
+		where TData : Message
 	{
 		private readonly IMarketDataStorage<TData> _cacheStorage;
 		private readonly IMarketDataStorage<TData> _sourceStorage;
@@ -43,13 +43,13 @@ namespace StockSharp.Algo.Storages
 			set => _sourceStorage.AppendOnlyNew = value;
 		}
 
-		int IMarketDataStorage.Save(IEnumerable data) => ((IMarketDataStorage<TData>)this).Save(data);
+		int IMarketDataStorage.Save(IEnumerable<Message> data) => ((IMarketDataStorage<TData>)this).Save(data);
 
-		void IMarketDataStorage.Delete(IEnumerable data) => ((IMarketDataStorage<TData>)this).Delete(data);
+		void IMarketDataStorage.Delete(IEnumerable<Message> data) => ((IMarketDataStorage<TData>)this).Delete(data);
 
 		void IMarketDataStorage.Delete(DateTime date) => ((IMarketDataStorage<TData>)this).Delete(date);
 
-		IEnumerable IMarketDataStorage.Load(DateTime date) =>  ((IMarketDataStorage<TData>)this).Load(date);
+		IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => ((IMarketDataStorage<TData>)this).Load(date);
 
 		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<TData>)this).Serializer;
 

@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The news storage.</returns>
-		IMarketDataStorage<News> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+		IEntityMarketDataStorage<News, NewsMessage> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the storage of tick trades for the specified instrument.
@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The storage of tick trades.</returns>
-		IMarketDataStorage<Trade> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+		IEntityMarketDataStorage<Trade, ExecutionMessage> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the storage of order books for the specified instrument.
@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The order books storage.</returns>
-		IMarketDataStorage<MarketDepth> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+		IEntityMarketDataStorage<MarketDepth, QuoteChangeMessage> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the storage of orders log for the specified instrument.
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The storage of orders log.</returns>
-		IMarketDataStorage<OrderLogItem> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+		IEntityMarketDataStorage<OrderLogItem, ExecutionMessage> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the candles storage for the specified instrument.
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The candles storage.</returns>
-		IMarketDataStorage<Candle> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+		IEntityMarketDataStorage<Candle, CandleMessage> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the market-data storage.

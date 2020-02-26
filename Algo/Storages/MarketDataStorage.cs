@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Storages
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
@@ -56,7 +55,6 @@ namespace StockSharp.Algo.Storages
 		public SecurityId SecurityId { get; }
 
 		private readonly object _arg;
-
 		object IMarketDataStorage.Arg => _arg;
 
 		public bool AppendOnlyNew { get; set; }
@@ -231,12 +229,12 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		int IMarketDataStorage.Save(IEnumerable data)
+		int IMarketDataStorage.Save(IEnumerable<Message> data)
 		{
 			return Save(data.Cast<TMessage>());
 		}
 
-		void IMarketDataStorage.Delete(IEnumerable data)
+		void IMarketDataStorage.Delete(IEnumerable<Message> data)
 		{
 			Delete(data.Cast<TMessage>());
 		}
@@ -391,7 +389,7 @@ namespace StockSharp.Algo.Storages
 				Drive.Delete(date);
 		}
 
-		IEnumerable IMarketDataStorage.Load(DateTime date)
+		IEnumerable<Message> IMarketDataStorage.Load(DateTime date)
 		{
 			return Load(date);
 		}
