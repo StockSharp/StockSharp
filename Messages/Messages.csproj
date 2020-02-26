@@ -70,7 +70,7 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AdapterCommandMessage.cs" />
+    <Compile Include="CommandMessage.cs" />
     <Compile Include="AdapterListRequestMessage.cs" />
     <Compile Include="AdapterResponseMessage.cs" />
     <Compile Include="BaseConnectionMessage.cs" />

@@ -306,9 +306,9 @@ namespace StockSharp.Messages
 		AdapterListFinished,
 
 		/// <summary>
-		/// <see cref="AdapterCommandMessage"/>.
+		/// <see cref="CommandMessage"/>.
 		/// </summary>
-		AdapterCommand,
+		Command,
 
 		/// <summary>
 		/// <see cref="AdapterResponseMessage"/>.
