@@ -529,7 +529,14 @@ namespace StockSharp.Messages
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
 
 			if (storage.ContainsKey(nameof(SupportedInMessages)) || storage.ContainsKey("SupportedMessages"))
-				SupportedInMessages = (storage.GetValue<string[]>(nameof(SupportedInMessages)) ?? storage.GetValue<string[]>("SupportedMessages")).Select(i => i.To<MessageTypes>()).ToArray();
+				SupportedInMessages = (storage.GetValue<string[]>(nameof(SupportedInMessages)) ?? storage.GetValue<string[]>("SupportedMessages")).Select(i =>
+				{
+					// TODO Remove few releases later 2020-02-26
+					if (i == "AdapterCommand")
+						i = "Command";
+
+					return i.To<MessageTypes>();
+				}).ToArray();
 			
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));

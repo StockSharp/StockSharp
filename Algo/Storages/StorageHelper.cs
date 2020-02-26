@@ -696,7 +696,7 @@ namespace StockSharp.Algo.Storages
 			return args.OrderBy().ToArray();
 		}
 
-		private class ConvertableStorage<TMessage, TEntity> : IEntityMarketDataStorage<TEntity, TMessage>, IMarketDataStorageInfo<TEntity>
+		private class ConvertableStorage<TMessage, TEntity> : IEntityMarketDataStorage<TEntity, TMessage>, IMarketDataStorageInfo<TMessage>
 			where TMessage : Message
 		{
 			private readonly Security _security;
@@ -787,9 +787,9 @@ namespace StockSharp.Algo.Storages
 				return _messageStorage.Load(date);
 			}
 
-			public DateTimeOffset GetTime(TEntity data)
+			DateTimeOffset IMarketDataStorageInfo<TMessage>.GetTime(TMessage message)
 			{
-				return ((IMarketDataStorageInfo)this).GetTime(_toMessage(data));
+				return ((IMarketDataStorageInfo)this).GetTime(message);
 			}
 
 			DateTimeOffset IMarketDataStorageInfo.GetTime(object data)
