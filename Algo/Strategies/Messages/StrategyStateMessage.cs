@@ -11,47 +11,6 @@ namespace StockSharp.Algo.Strategies.Messages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Strategy commands.
-	/// </summary>
-	public enum StrategyCommands
-	{
-		/// <summary>
-		/// Request current state.
-		/// </summary>
-		RequestState,
-
-		/// <summary>
-		/// Cancel orders.
-		/// </summary>
-		CancelOrders,
-
-		/// <summary>
-		/// Register new order.
-		/// </summary>
-		RegisterOrder,
-
-		/// <summary>
-		/// Cancel order.
-		/// </summary>
-		CancelOrder,
-		
-		/// <summary>
-		/// Close position.
-		/// </summary>
-		ClosePosition,
-
-		/// <summary>
-		/// Start.
-		/// </summary>
-		Start,
-
-		/// <summary>
-		/// Stop.
-		/// </summary>
-		Stop,
-	}
-
-	/// <summary>
 	/// The message contains information about strategy state or command to change state.
 	/// </summary>
 	[DataContract]
@@ -78,12 +37,6 @@ namespace StockSharp.Algo.Strategies.Messages
 		[DataMember]
 		public string StrategyTypeId { get; set; }
 
-		/// <summary>
-		/// Command.
-		/// </summary>
-		[DataMember]
-		public StrategyCommands? Command { get; set; }
-
 		/// <inheritdoc />
 		[DataMember]
 		public long TransactionId { get; set; }
@@ -105,9 +58,6 @@ namespace StockSharp.Algo.Strategies.Messages
 			if (!StrategyTypeId.IsEmpty())
 				str += $",TypeId={StrategyTypeId}";
 
-			if (Command != null)
-				str += $",Command={Command}";
-
 			return str;
 		}
 
@@ -120,7 +70,6 @@ namespace StockSharp.Algo.Strategies.Messages
 			destination.StrategyId = StrategyId;
 			destination.StrategyTypeId = StrategyTypeId;
 			destination.Statistics = Statistics.ToDictionary();
-			destination.Command = Command;
 		}
 	}
 }

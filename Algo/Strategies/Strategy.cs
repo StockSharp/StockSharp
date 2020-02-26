@@ -2484,42 +2484,44 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Apply incoming command.
 		/// </summary>
-		/// <param name="stateMsg">The message contains information about strategy state or command to change state.</param>
-		public virtual void ApplyCommand(StrategyStateMessage stateMsg)
+		/// <param name="cmdMsg">The message contains information about command to change state.</param>
+		public virtual void ApplyCommand(CommandMessage cmdMsg)
 		{
-			if (stateMsg == null)
-				throw new ArgumentNullException(nameof(stateMsg));
+			if (cmdMsg == null)
+				throw new ArgumentNullException(nameof(cmdMsg));
 
-			switch (stateMsg.Command)
+			var parameters = cmdMsg.Parameters;
+
+			switch (cmdMsg.Command)
 			{
-				case StrategyCommands.Start:
+				case CommandTypes.Start:
 				{
 					Start();
 					break;
 				}
 
-				case StrategyCommands.Stop:
+				case CommandTypes.Stop:
 				{
 					Stop();
 					break;
 				}
 
-				case StrategyCommands.CancelOrders:
+				case CommandTypes.CancelOrders:
 				{
 					CancelActiveOrders();
 					break;
 				}
 
-				case StrategyCommands.RegisterOrder:
+				case CommandTypes.RegisterOrder:
 				{
-					var secId = stateMsg.Statistics.TryGetValue(nameof(Order.Security))?.Item2;
-					var pfName = stateMsg.Statistics.TryGetValue(nameof(Order.Portfolio))?.Item2;
-					var side = stateMsg.Statistics[nameof(Order.Direction)].Item2.To<Sides>();
-					var volume = stateMsg.Statistics[nameof(Order.Volume)].Item2.To<decimal>();
-					var price = stateMsg.Statistics.TryGetValue(nameof(Order.Price))?.Item2.To<decimal?>() ?? 0;
-					var comment = stateMsg.Statistics.TryGetValue(nameof(Order.Comment))?.Item2;
-					var clientCode = stateMsg.Statistics.TryGetValue(nameof(Order.ClientCode))?.Item2;
-					var tif = stateMsg.Statistics.TryGetValue(nameof(Order.TimeInForce))?.Item2.To<TimeInForce?>();
+					var secId = parameters.TryGetValue(nameof(Order.Security))?.Item2;
+					var pfName = parameters.TryGetValue(nameof(Order.Portfolio))?.Item2;
+					var side = parameters[nameof(Order.Direction)].Item2.To<Sides>();
+					var volume = parameters[nameof(Order.Volume)].Item2.To<decimal>();
+					var price = parameters.TryGetValue(nameof(Order.Price))?.Item2.To<decimal?>() ?? 0;
+					var comment = parameters.TryGetValue(nameof(Order.Comment))?.Item2;
+					var clientCode = parameters.TryGetValue(nameof(Order.ClientCode))?.Item2;
+					var tif = parameters.TryGetValue(nameof(Order.TimeInForce))?.Item2.To<TimeInForce?>();
 
 					var order = new Order
 					{
@@ -2538,9 +2540,9 @@ namespace StockSharp.Algo.Strategies
 					break;
 				}
 
-				case StrategyCommands.CancelOrder:
+				case CommandTypes.CancelOrder:
 				{
-					var orderId = stateMsg.Statistics[nameof(Order.Id)].Item2.To<long>();
+					var orderId = parameters[nameof(Order.Id)].Item2.To<long>();
 
 					// TODO
 #pragma warning disable 618
@@ -2550,9 +2552,9 @@ namespace StockSharp.Algo.Strategies
 					break;
 				}
 
-				case StrategyCommands.ClosePosition:
+				case CommandTypes.ClosePosition:
 				{
-					var slippage = stateMsg.Statistics.TryGetValue(nameof(Order.Slippage))?.Item2.To<decimal?>();
+					var slippage = parameters.TryGetValue(nameof(Order.Slippage))?.Item2.To<decimal?>();
 					
 					this.ClosePosition(slippage ?? 0);
 					
