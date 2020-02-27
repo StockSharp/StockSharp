@@ -81,7 +81,6 @@
     <Compile Include="BrokerData.cs" />
     <Compile Include="CommunityNews.cs" />
     <Compile Include="CommunityAuthorization.cs" />
-    <Compile Include="CommunityUrls.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="ErrorExtensions.cs" />
     <Compile Include="FileClient.cs" />
