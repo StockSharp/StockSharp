@@ -119,13 +119,12 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version50)
 					continue;
 
-				if (news.ExpiryDate == null)
-					writer.Write(false);
-				else
-				{
-					writer.Write(true);
+				writer.Write(news.ExpiryDate != null);
+
+				if (news.ExpiryDate != null)
 					writer.WriteLong(news.ExpiryDate.Value.To<long>());
-				}
+
+				writer.WriteStringEx(news.SecurityId?.BoardCode);
 			}
 		}
 
@@ -160,11 +159,23 @@ namespace StockSharp.Algo.Storages.Binary
 			if (reader.Read())
 				message.Priority = (NewsPriorities)reader.ReadInt();
 
-			if (metaInfo.Version >= MarketDataVersions.Version49)
-				message.Language = reader.ReadStringEx();
+			if (metaInfo.Version < MarketDataVersions.Version49)
+				return message;
 
-			if (metaInfo.Version >= MarketDataVersions.Version50)
-				message.ExpiryDate = reader.Read() ? reader.ReadLong().To<DateTimeOffset>() : (DateTimeOffset?)null;
+			message.Language = reader.ReadStringEx();
+
+			if (metaInfo.Version < MarketDataVersions.Version50)
+				return message;
+
+			message.ExpiryDate = reader.Read() ? reader.ReadLong().To<DateTimeOffset>() : (DateTimeOffset?)null;
+
+			var secBoard = reader.ReadStringEx();
+			if (!secBoard.IsEmpty() && message.SecurityId != null)
+			{
+				var secId = message.SecurityId.Value;
+				secId.BoardCode = secBoard;
+				message.SecurityId = secId;
+			}
 
 			return message;
 		}

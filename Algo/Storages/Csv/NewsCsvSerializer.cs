@@ -24,6 +24,8 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class NewsCsvSerializer : CsvMarketDataSerializer<NewsMessage>
 	{
+		private const string _expiryFormat = "yyyyMMddHHmmssfff zzz";
+
 		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, NewsMessage data, IMarketDataMetaInfo metaInfo)
 		{
@@ -39,7 +41,8 @@ namespace StockSharp.Algo.Storages.Csv
 				data.SecurityId?.SecurityCode,
 				data.Priority?.To<string>(),
 				data.Language,
-				data.ExpiryDate?.UtcDateTime.ToString("yyyyMMddHHmmss zzz"),
+				data.SecurityId?.BoardCode,
+				data.ExpiryDate?.ToString(_expiryFormat),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -70,7 +73,19 @@ namespace StockSharp.Algo.Storages.Csv
 				news.Language = reader.ReadString();
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				news.ExpiryDate = reader.ReadString().TryToDateTimeOffset("yyyyMMddHHmmss zzz");
+			{
+				var boardCode = reader.ReadString();
+
+				if (news.SecurityId != null)
+				{
+					var secId = news.SecurityId.Value;
+					secId.BoardCode = boardCode;
+					news.SecurityId = secId;
+				}
+			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				news.ExpiryDate = reader.ReadString().TryToDateTimeOffset(_expiryFormat);
 
 			return news;
 		}
