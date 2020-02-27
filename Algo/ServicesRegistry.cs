@@ -137,7 +137,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The client for access to the StockSharp notification service.
 		/// </summary>
-		public static INotificationClient TryNotificationClient => ConfigManager.GetService<INotificationClient>();
+		public static INotificationClient TryNotificationClient => ConfigManager.TryGetService<INotificationClient>();
 
 		/// <summary>
 		/// The client for access to the service of work with files and documents.

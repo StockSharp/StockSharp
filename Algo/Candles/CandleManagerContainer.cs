@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Candles
 
 			public void Reset(DateTimeOffset from)
 			{
-				_firstCandleTime = from.UtcTicks;
+				_firstCandleTime = from.To<long>();
 
 				_byTime.Clear();
 
@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Candles
 				if (candle == null)
 					throw new ArgumentNullException(nameof(candle));
 
-				var ticks = candle.OpenTime.UtcTicks;
+				var ticks = candle.OpenTime.To<long>();
 
 				if (!_byTime.SafeAdd(ticks).TryAdd(candle))
 					return false;
@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Candles
 				{
 					while (list.Count > 0)
 					{
-						if (list.First.Value.OpenTime.UtcTicks >= _firstCandleTime)
+						if (list.First.Value.OpenTime.To<long>() >= _firstCandleTime)
 							break;
 
 						_candleStat.Remove(list.First.Value);
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Candles
 
 			public IEnumerable<Candle> GetCandles(DateTimeOffset time)
 			{
-				var candles = _byTime.TryGetValue(time.UtcTicks);
+				var candles = _byTime.TryGetValue(time.To<long>());
 
 				return candles != null ? candles.SyncGet(c => c.ToArray()) : Enumerable.Empty<Candle>();
 			}
