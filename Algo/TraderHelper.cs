@@ -5373,5 +5373,18 @@ namespace StockSharp.Algo
 		{
 			return state == SubscriptionStates.Active || state == SubscriptionStates.Online;
 		}
+
+		/// <summary>
+		/// Determines whether the specified news related with StockSharp.
+		/// </summary>
+		/// <param name="news">News.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsStockSharp(this News news)
+		{
+			if (news == null)
+				throw new ArgumentNullException(nameof(news));
+
+			return news.Source.CompareIgnoreCase(Messages.Extensions.NewsStockSharpSource);
+		}
 	}
 }

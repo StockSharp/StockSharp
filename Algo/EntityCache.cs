@@ -859,6 +859,9 @@ namespace StockSharp.Algo
 			if (!message.Language.IsEmpty())
 				news.Language = message.Language;
 
+			if (message.ExpiryDate != null)
+				news.ExpiryDate = message.ExpiryDate;
+
 			message.CopyExtensionInfo(news);
 
 			return Tuple.Create(news, isNew);

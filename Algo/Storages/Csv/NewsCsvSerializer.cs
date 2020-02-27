@@ -39,6 +39,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.SecurityId?.SecurityCode,
 				data.Priority?.To<string>(),
 				data.Language,
+				data.ExpiryDate?.UtcDateTime.ToString("yyyyMMddHHmmss zzz"),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -67,6 +68,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				news.Language = reader.ReadString();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				news.ExpiryDate = reader.ReadString().TryToDateTimeOffset("yyyyMMddHHmmss zzz");
 
 			return news;
 		}

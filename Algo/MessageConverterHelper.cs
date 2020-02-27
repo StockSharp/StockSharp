@@ -1443,6 +1443,7 @@ namespace StockSharp.Algo
 				Url = news.Url,
 				Priority = news.Priority,
 				Language = news.Language,
+				ExpiryDate = news.ExpiryDate,
 			};
 		}
 
@@ -1660,6 +1661,7 @@ namespace StockSharp.Algo
 				LocalTime = message.LocalTime,
 				Priority = message.Priority,
 				Language = message.Language,
+				ExpiryDate = message.ExpiryDate,
 				Security = message.SecurityId == null ? null : new Security
 				{
 					Id = message.SecurityId.Value.SecurityCode

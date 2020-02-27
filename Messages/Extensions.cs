@@ -2168,5 +2168,38 @@ namespace StockSharp.Messages
 				dataType == DataType.Users ||
 				dataType == DataType.Transactions;
 		}
+
+		/// <summary>
+		/// StockSharp news source.
+		/// </summary>
+		public const string NewsStockSharpSource = nameof(StockSharp);
+
+		/// <summary>
+		/// Determines whether the specified news related with StockSharp.
+		/// </summary>
+		/// <param name="news">News.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsStockSharp(this NewsMessage news)
+		{
+			if (news == null)
+				throw new ArgumentNullException(nameof(news));
+
+			return news.Source.CompareIgnoreCase(NewsStockSharpSource);
+		}
+
+		/// <summary>
+		/// Make news related with StockSharp.
+		/// </summary>
+		/// <param name="news">News.</param>
+		public static void MakeAsStockSharp(this NewsMessage news)
+		{
+			if (news == null)
+				throw new ArgumentNullException(nameof(news));
+
+			if (!news.Story.IsEmpty())
+				throw new ArgumentException(nameof(news));
+
+			news.Story = NewsStockSharpSource;
+		}
 	}
 }

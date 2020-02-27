@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -67,7 +68,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class NewsBinarySerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
 	{
 		public NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
-			: base(default, null, 200, MarketDataVersions.Version49, exchangeInfoProvider)
+			: base(default, null, 200, MarketDataVersions.Version50, exchangeInfoProvider)
 		{
 		}
 
@@ -114,6 +115,17 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteStringEx(news.Language);
+
+				if (metaInfo.Version < MarketDataVersions.Version50)
+					continue;
+
+				if (news.ExpiryDate == null)
+					writer.Write(false);
+				else
+				{
+					writer.Write(true);
+					writer.WriteLong(news.ExpiryDate.Value.To<long>());
+				}
 			}
 		}
 
@@ -148,10 +160,11 @@ namespace StockSharp.Algo.Storages.Binary
 			if (reader.Read())
 				message.Priority = (NewsPriorities)reader.ReadInt();
 
-			if (metaInfo.Version < MarketDataVersions.Version49)
-				return message;
+			if (metaInfo.Version >= MarketDataVersions.Version49)
+				message.Language = reader.ReadStringEx();
 
-			message.Language = reader.ReadStringEx();
+			if (metaInfo.Version >= MarketDataVersions.Version50)
+				message.ExpiryDate = reader.Read() ? reader.ReadLong().To<DateTimeOffset>() : (DateTimeOffset?)null;
 
 			return message;
 		}

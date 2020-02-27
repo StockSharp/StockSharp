@@ -161,7 +161,14 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Language.
 		/// </summary>
+		[DataMember]
 		public string Language { get; set; }
+
+		/// <summary>
+		/// Expiration date.
+		/// </summary>
+		[DataMember]
+		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <inheritdoc />
 		public override string ToString()
