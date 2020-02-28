@@ -1349,7 +1349,7 @@ namespace StockSharp.Algo
 			if (message.IsUpTick != null)
 			{
 				info.SetValue(Level1Fields.LastTradeUpDown, message.IsUpTick.Value);
-				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.IsUpTick.Value));
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeUpDown, message.IsUpTick.Value));
 			}
 
 			if (tuple.Item2)

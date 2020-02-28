@@ -2594,7 +2594,7 @@ namespace StockSharp.Algo
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeOrigin:
-							lastTrade.OrderDirection = (Sides?)value;
+							lastTrade.OrderDirection = (Sides)value;
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.IsSystem:
