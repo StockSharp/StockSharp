@@ -8,30 +8,32 @@ namespace StockSharp.Community
 	using Ecng.Common;
 	using Ecng.Security;
 
+	using StockSharp.Community.Messages;
+
 	/// <summary>
 	/// Extensions for <see cref="Community"/>.
 	/// </summary>
 	public static class Extensions
 	{
-		private static readonly Dictionary<Products, ProductData> _productsMapping = new Dictionary<Products, ProductData>
+		private static readonly Dictionary<Products, ProductInfoMessage> _productsMapping = new Dictionary<Products, ProductInfoMessage>
 		{
-			{ Products.Api, new ProductData { Id = 5, Name = "S#.API" } },
-			{ Products.Hydra, new ProductData { Id = 8, Name = "S#.Data" } },
-			{ Products.Designer, new ProductData { Id = 9, Name = "S#.Designer" } },
-			{ Products.Terminal, new ProductData { Id = 10, Name = "S#.Terminal" } },
-			{ Products.Shell, new ProductData { Id = 11, Name = "S#.Shell" } },
-			{ Products.MatLab, new ProductData { Id = 12, Name = "S#.MatLab" } },
-			{ Products.Lci, new ProductData { Id = 13, Name = "S#.Ë×È" } },
-			{ Products.Server, new ProductData { Id = 14, Name = "S#.Server" } },
-			{ Products.Updater, new ProductData { Id = 16, Name = "S#.Updater" } },
+			{ Products.Api, new ProductInfoMessage { Id = 5, Name = "S#.API" } },
+			{ Products.Hydra, new ProductInfoMessage { Id = 8, Name = "S#.Data" } },
+			{ Products.Designer, new ProductInfoMessage { Id = 9, Name = "S#.Designer" } },
+			{ Products.Terminal, new ProductInfoMessage { Id = 10, Name = "S#.Terminal" } },
+			{ Products.Shell, new ProductInfoMessage { Id = 11, Name = "S#.Shell" } },
+			{ Products.MatLab, new ProductInfoMessage { Id = 12, Name = "S#.MatLab" } },
+			{ Products.Lci, new ProductInfoMessage { Id = 13, Name = "S#.Ë×È" } },
+			{ Products.Server, new ProductInfoMessage { Id = 14, Name = "S#.Server" } },
+			{ Products.Updater, new ProductInfoMessage { Id = 16, Name = "S#.Updater" } },
 		};
 
 		/// <summary>
-		/// Convert <see cref="ProductData"/> to <see cref="Products"/> value.
+		/// Convert <see cref="ProductInfoMessage"/> to <see cref="Products"/> value.
 		/// </summary>
-		/// <param name="product"><see cref="ProductData"/> value.</param>
+		/// <param name="product"><see cref="ProductInfoMessage"/> value.</param>
 		/// <returns><see cref="Products"/> value.</returns>
-		public static Products ToEnum(this ProductData product)
+		public static Products ToEnum(this ProductInfoMessage product)
 		{
 			if (product == null)
 				throw new ArgumentNullException(nameof(product));
@@ -40,11 +42,11 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Convert <see cref="Products"/> to <see cref="ProductData"/> value.
+		/// Convert <see cref="Products"/> to <see cref="ProductInfoMessage"/> value.
 		/// </summary>
 		/// <param name="product"><see cref="Products"/> value.</param>
-		/// <returns><see cref="ProductData"/> value.</returns>
-		public static ProductData FromEnum(this Products product)
+		/// <returns><see cref="ProductInfoMessage"/> value.</returns>
+		public static ProductInfoMessage FromEnum(this Products product)
 		{
 			return _productsMapping[product];
 		}
@@ -54,7 +56,7 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="product">Product.</param>
 		/// <returns>Public name.</returns>
-		public static string GetPublicName(this ProductData product)
+		public static string GetPublicName(this ProductInfoMessage product)
 		{
 			if (product == null)
 				throw new ArgumentNullException(nameof(product));

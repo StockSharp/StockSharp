@@ -7,6 +7,7 @@ namespace StockSharp.Community
 	/// The strategy subscription.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class StrategySubscription
 	{
 		/// <summary>

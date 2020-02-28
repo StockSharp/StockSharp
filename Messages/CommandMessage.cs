@@ -91,6 +91,24 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		Restart,
+
+		/// <summary>
+		/// Share.
+		/// </summary>
+		[EnumMember]
+		Share,
+
+		/// <summary>
+		/// Unshare.
+		/// </summary>
+		[EnumMember]
+		UnShare,
+
+		/// <summary>
+		/// List objects.
+		/// </summary>
+		[EnumMember]
+		List,
 	}
 
 	/// <summary>
@@ -129,6 +147,18 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		Order,
+
+		/// <summary>
+		/// File.
+		/// </summary>
+		[EnumMember]
+		File,
+
+		/// <summary>
+		/// File group.
+		/// </summary>
+		[EnumMember]
+		FileGroup,
 	}
 
 	/// <summary>
@@ -142,6 +172,15 @@ namespace StockSharp.Messages
 		/// Initialize <see cref="CommandMessage"/>.
 		/// </summary>
 		public CommandMessage()
+			: this(MessageTypes.Command)
+		{
+		}
+
+		/// <summary>
+		/// Initialize <see cref="CommandMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		protected CommandMessage(MessageTypes type)
 			: base(MessageTypes.Command)
 		{
 		}

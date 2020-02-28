@@ -1,5 +1,7 @@
 namespace StockSharp.Community
 {
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The interface describing a client for access to the registration service.
 	/// </summary>
@@ -9,7 +11,7 @@ namespace StockSharp.Community
 		/// To start the registration.
 		/// </summary>
 		/// <param name="profile">The profile information.</param>
-		void CreateProfile(Profile profile);
+		void CreateProfile(UserInfoMessage profile);
 
 		/// <summary>
 		/// To send an e-mail message.
@@ -41,19 +43,19 @@ namespace StockSharp.Community
 		/// To update profile information.
 		/// </summary>
 		/// <param name="profile">The profile information.</param>
-		void UpdateProfile(Profile profile);
+		void UpdateProfile(UserInfoMessage profile);
 
 		/// <summary>
 		/// To get profile information.
 		/// </summary>
 		/// <returns>The profile information.</returns>
-		Profile GetProfile();
+		UserInfoMessage GetProfile();
 
 		/// <summary>
 		/// To get user information.
 		/// </summary>
 		/// <param name="userId">User ID.</param>
 		/// <returns>The user information.</returns>
-		Profile GetUserProfile(long userId);
+		UserInfoMessage GetUserProfile(long userId);
 	}
 }

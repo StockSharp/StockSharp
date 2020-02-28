@@ -18,6 +18,8 @@ namespace StockSharp.Community
 	using System;
 	using System.ServiceModel;
 
+	using StockSharp.Community.Messages;
+
 	/// <summary>
 	/// The interface describing the service to work with files and documents.
 	/// </summary>
@@ -31,7 +33,17 @@ namespace StockSharp.Community
 		/// <param name="id">File ID.</param>
 		/// <returns>The file data.</returns>
 		[OperationContract]
+		[Obsolete]
 		FileData GetFileInfo(Guid sessionId, long id);
+
+		/// <summary>
+		/// To get the file data.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="id">File ID.</param>
+		/// <returns>The file data.</returns>
+		[OperationContract]
+		FileInfoMessage GetFileInfo2(Guid sessionId, long id);
 
 		/// <summary>
 		/// To start downloading the file.

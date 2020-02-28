@@ -22,6 +22,7 @@ namespace StockSharp.Community
 	/// News.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class CommunityNews
 	{
 		/// <summary>

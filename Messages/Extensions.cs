@@ -2191,7 +2191,8 @@ namespace StockSharp.Messages
 		/// Make news related with StockSharp.
 		/// </summary>
 		/// <param name="news">News.</param>
-		public static void MakeAsStockSharp(this NewsMessage news)
+		/// <returns>News.</returns>
+		public static NewsMessage MakeAsStockSharp(this NewsMessage news)
 		{
 			if (news == null)
 				throw new ArgumentNullException(nameof(news));
@@ -2200,6 +2201,7 @@ namespace StockSharp.Messages
 				throw new ArgumentException(nameof(news));
 
 			news.Story = NewsStockSharpSource;
+			return news;
 		}
 	}
 }

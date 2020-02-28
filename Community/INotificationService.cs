@@ -18,6 +18,8 @@ namespace StockSharp.Community
 	using System;
 	using System.ServiceModel;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The interface to the notification sending service to the phone or e-mail.
 	/// </summary>
@@ -88,7 +90,18 @@ namespace StockSharp.Community
 		/// <param name="fromId">The identifier from which you need to receive the news.</param>
 		/// <returns>Last news.</returns>
 		[OperationContract]
+		[Obsolete]
 		CommunityNews[] GetNews2(Guid sessionId, bool isEnglish, long fromId);
+
+		/// <summary>
+		/// To get the latest news.
+		/// </summary>
+		/// <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
+		/// <param name="isEnglish">Request news on English.</param>
+		/// <param name="fromId">The identifier from which you need to receive the news.</param>
+		/// <returns>Last news.</returns>
+		[OperationContract]
+		NewsMessage[] GetNews3(Guid sessionId, bool isEnglish, long fromId);
 
 		/// <summary>
 		/// Has feedback for specified product.

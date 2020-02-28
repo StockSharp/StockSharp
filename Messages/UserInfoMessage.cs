@@ -69,6 +69,78 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsBlocked { get; set; }
 
+		/// <summary>
+		/// Identifier.
+		/// </summary>
+		[DataMember]
+		public long? Id { get; set; }
+
+		/// <summary>
+		/// Display name.
+		/// </summary>
+		[DataMember]
+		public string DisplayName { get; set; }
+
+		/// <summary>
+		/// Phone.
+		/// </summary>
+		[DataMember]
+		public string Phone { get; set; }
+
+		/// <summary>
+		/// Web site.
+		/// </summary>
+		[DataMember]
+		public string Homepage { get; set; }
+
+		/// <summary>
+		/// Skype.
+		/// </summary>
+		[DataMember]
+		public string Skype { get; set; }
+
+		/// <summary>
+		/// City.
+		/// </summary>
+		[DataMember]
+		public string City { get; set; }
+
+		/// <summary>
+		/// Gender.
+		/// </summary>
+		[DataMember]
+		public bool? Gender { get; set; }
+
+		/// <summary>
+		/// Is the mail-out enabled.
+		/// </summary>
+		[DataMember]
+		public bool? IsSubscription { get; set; }
+
+		/// <summary>
+		/// Language.
+		/// </summary>
+		[DataMember]
+		public string Language { get; set; }
+
+		/// <summary>
+		/// Balance.
+		/// </summary>
+		[DataMember]
+		public decimal? Balance { get; set; }
+
+		/// <summary>
+		/// Balance.
+		/// </summary>
+		[DataMember]
+		public long? Avatar { get; set; }
+
+		/// <summary>
+		/// Date of registration.
+		/// </summary>
+		[DataMember]
+		public DateTimeOffset? CreationDate { get; set; }
+
 		private IEnumerable<IPAddress> _ipRestrictions = Enumerable.Empty<IPAddress>();
 
 		/// <summary>
@@ -99,9 +171,22 @@ namespace StockSharp.Messages
 
 			destination.Login = Login;
 			destination.Password = Password;
+			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.IsBlocked = IsBlocked;
 			destination.IpRestrictions = IpRestrictions.ToArray();
+			destination.Id = Id;
+			destination.DisplayName = DisplayName;
+			destination.Phone = Phone;
+			destination.Homepage = Homepage;
+			destination.Skype = Skype;
+			destination.City = City;
+			destination.Gender = Gender;
+			destination.IsSubscription = IsSubscription;
+			destination.Language = Language;
+			destination.Balance = Balance;
+			destination.Avatar = Avatar;
+			destination.CreationDate = CreationDate;
 			destination.Permissions.AddRange(Permissions.ToDictionary());
 		}
 	}

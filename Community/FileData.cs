@@ -7,6 +7,7 @@ namespace StockSharp.Community
 	/// The file data.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class FileData
 	{
 		/// <summary>

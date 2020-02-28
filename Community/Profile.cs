@@ -7,6 +7,7 @@ namespace StockSharp.Community
 	/// The profile information.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class Profile
 	{
 		/// <summary>

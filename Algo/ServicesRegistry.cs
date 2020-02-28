@@ -218,10 +218,5 @@ namespace StockSharp.Algo
 		/// The risks control manager.
 		/// </summary>
 		public static IRiskManager RiskManager => ConfigManager.GetService<IRiskManager>();
-
-		/// <summary>
-		/// The client for access to <see cref="IUpdateService"/>.
-		/// </summary>
-		public static IUpdateClient UpdateClient => ConfigManager.GetService<IUpdateClient>();
 	}
 }

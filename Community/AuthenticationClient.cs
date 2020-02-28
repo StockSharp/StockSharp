@@ -22,6 +22,7 @@ namespace StockSharp.Community
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
+	using StockSharp.Community.Messages;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -54,7 +55,7 @@ namespace StockSharp.Community
 		public ServerCredentials Credentials { get; }
 
 		/// <inheritdoc />
-		public ProductData Product { get; set; }
+		public ProductInfoMessage Product { get; set; }
 
 		/// <inheritdoc />
 		public Version Version { get; set; }
@@ -87,7 +88,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void Login(ProductData product, Version version, string login, SecureString password)
+		public void Login(ProductInfoMessage product, Version version, string login, SecureString password)
 		{
 			if (login.IsEmpty())
 				throw new ArgumentNullException(nameof(login));

@@ -18,6 +18,8 @@ namespace StockSharp.Community
 	using System;
 	using System.ServiceModel;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The interface describing the registration service.
 	/// </summary>
@@ -30,7 +32,16 @@ namespace StockSharp.Community
 		/// <param name="profile">The profile information.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
+		[Obsolete]
 		byte CreateProfile(Profile profile);
+
+		/// <summary>
+		/// To start the registration.
+		/// </summary>
+		/// <param name="profile">The profile information.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte CreateProfile2(UserInfoMessage profile);
 
 		/// <summary>
 		/// To send an e-mail message.
@@ -73,7 +84,17 @@ namespace StockSharp.Community
 		/// <param name="profile">The profile information.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
+		[Obsolete]
 		byte UpdateProfile(Guid sessionId, Profile profile);
+
+		/// <summary>
+		/// To update profile information.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="profile">The profile information.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte UpdateProfile2(Guid sessionId, UserInfoMessage profile);
 
 		/// <summary>
 		/// To get profile information.
@@ -81,7 +102,16 @@ namespace StockSharp.Community
 		/// <param name="sessionId">Session ID.</param>
 		/// <returns>The profile information.</returns>
 		[OperationContract]
+		[Obsolete]
 		Profile GetProfile(Guid sessionId);
+
+		/// <summary>
+		/// To get profile information.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>The profile information.</returns>
+		[OperationContract]
+		UserInfoMessage GetProfile2(Guid sessionId);
 
 		/// <summary>
 		/// To get user information.
@@ -89,6 +119,15 @@ namespace StockSharp.Community
 		/// <param name="userId">User ID.</param>
 		/// <returns>The user information.</returns>
 		[OperationContract]
+		[Obsolete]
 		Profile GetUserProfile(long userId);
+
+		/// <summary>
+		/// To get user information.
+		/// </summary>
+		/// <param name="userId">User ID.</param>
+		/// <returns>The user information.</returns>
+		[OperationContract]
+		UserInfoMessage GetUserProfile2(long userId);
 	}
 }

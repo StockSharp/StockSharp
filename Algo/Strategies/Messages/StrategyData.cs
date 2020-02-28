@@ -22,6 +22,7 @@ namespace StockSharp.Community
 	/// The strategy data.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class StrategyData
 	{
 		/// <summary>

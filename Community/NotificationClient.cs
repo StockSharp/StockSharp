@@ -21,7 +21,9 @@ namespace StockSharp.Community
 
 	using Ecng.Common;
 
+	using StockSharp.Community.Messages;
 	using StockSharp.Logging;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The client for access to the StockSharp notification service.
@@ -93,7 +95,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void SendMessage(string title, string body, FileData[] attachments)
+		public void SendMessage(string title, string body, FileInfoMessage[] attachments)
 		{
 			if (attachments == null)
 				throw new ArgumentNullException(nameof(attachments));
@@ -102,19 +104,19 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void SendFeedback(ProductData product, int rating, string comment)
+		public void SendFeedback(ProductInfoMessage product, int rating, string comment)
 		{
 			ValidateError(Invoke(f => f.SendFeedback2(SessionId, product.Id, rating, comment)));
 		}
 
 		/// <inheritdoc />
-		public bool HasFeedback(ProductData product)
+		public bool HasFeedback(ProductInfoMessage product)
 		{
 			return Invoke(f => f.HasFeedback2(SessionId, product.Id));
 		}
 
 		/// <inheritdoc />
-		public event Action<CommunityNews> NewsReceived;
+		public event Action<NewsMessage> NewsReceived;
 
 		private readonly SyncObject _syncObject = new SyncObject();
 		private bool _isProcessing;
@@ -156,7 +158,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews2(NullableSessionId ?? Guid.Empty, IsEnglish, 0));
+			var news = Invoke(f => f.GetNews3(NullableSessionId ?? Guid.Empty, IsEnglish, 0));
 
 			//if (news.Length <= 0)
 			//	return;
@@ -165,7 +167,7 @@ namespace StockSharp.Community
 
 			foreach (var n in news)
 			{
-				n.EndDate = n.EndDate.UtcKind();
+				n.ExpiryDate = n.ExpiryDate?.UtcDateTime.UtcKind();
 				NewsReceived?.Invoke(n);
 			}
 

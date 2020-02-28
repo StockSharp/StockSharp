@@ -26,6 +26,7 @@ namespace StockSharp.Community
 
 	using MoreLinq;
 
+	using StockSharp.Community.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -33,7 +34,7 @@ namespace StockSharp.Community
 	/// </summary>
 	public class FileClient : BaseCommunityClient<IFileService>, IFileClient
 	{
-		private readonly CachedSynchronizedDictionary<long, FileData> _cache = new CachedSynchronizedDictionary<long, FileData>(); 
+		private readonly CachedSynchronizedDictionary<long, FileInfoMessage> _cache = new CachedSynchronizedDictionary<long, FileInfoMessage>(); 
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileClient"/>.
@@ -62,7 +63,7 @@ namespace StockSharp.Community
 		public int PartSize { get; set; } = 40 * 1024; // 40kb
 
 		/// <inheritdoc />
-		public FileData GetFile(long id, Action<long> progress = null, Func<bool> cancel = null)
+		public FileInfoMessage GetFile(long id, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			var data = GetFileInfo(id);
 			Download(data, progress, cancel);
@@ -70,13 +71,13 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public FileData GetFileInfo(long id)
+		public FileInfoMessage GetFileInfo(long id)
 		{
-			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo(NullableSessionId ?? Guid.Empty, id)));
+			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo2(NullableSessionId ?? Guid.Empty, id)));
 		}
 
 		/// <inheritdoc />
-		public bool Download(FileData data, Action<long> progress = null, Func<bool> cancel = null)
+		public bool Download(FileInfoMessage data, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -97,7 +98,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public bool DownloadTemp(FileData data, Guid operationId, Action<long> progress = null, Func<bool> cancel = null)
+		public bool DownloadTemp(FileInfoMessage data, Guid operationId, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -162,7 +163,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void Update(FileData data, Action<long> progress = null, Func<bool> cancel = null)
+		public void Update(FileInfoMessage data, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -177,7 +178,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<long> progress = null, Func<bool> cancel = null)
+		public FileInfoMessage Upload(string fileName, byte[] body, bool isPublic, Action<long> progress = null, Func<bool> cancel = null)
 		{
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
@@ -186,7 +187,7 @@ namespace StockSharp.Community
 
 			var operationId = Invoke(f => f.BeginUpload2(SessionId, fileName, isPublic, Compression, hash));
 
-			var data = new FileData
+			var data = new FileInfoMessage
 			{
 				FileName = fileName,
 				Body = body,
@@ -211,7 +212,7 @@ namespace StockSharp.Community
 
 			var operationId = Invoke(f => f.BeginUploadTemp(SessionId, fileName, Compression, hash));
 
-			var data = new FileData
+			var data = new FileInfoMessage
 			{
 				FileName = fileName,
 				Body = body,
@@ -228,7 +229,7 @@ namespace StockSharp.Community
 			return operationId;
 		}
 
-		private long? Upload(Guid operationId, FileData file, Action<long> progress, Func<bool> cancel)
+		private long? Upload(Guid operationId, FileInfoMessage file, Action<long> progress, Func<bool> cancel)
 		{
 			if (file == null)
 				throw new ArgumentNullException(nameof(file));

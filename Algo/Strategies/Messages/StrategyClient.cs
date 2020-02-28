@@ -24,6 +24,7 @@ namespace StockSharp.Community
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -35,11 +36,11 @@ namespace StockSharp.Community
 		private Timer _refreshTimer;
 
 		private DateTime _lastCheckTime;
-		private readonly CachedSynchronizedDictionary<long, StrategyData> _strategies = new CachedSynchronizedDictionary<long, StrategyData>();
-		private readonly CachedSynchronizedDictionary<long, StrategySubscription> _subscriptions = new CachedSynchronizedDictionary<long, StrategySubscription>();
-		private readonly CachedSynchronizedDictionary<long, StrategyBacktest> _backtests = new CachedSynchronizedDictionary<long, StrategyBacktest>();
-		private readonly CachedSynchronizedDictionary<StrategyBacktest, long> _backtestResults = new CachedSynchronizedDictionary<StrategyBacktest, long>();
-		private readonly CachedSynchronizedDictionary<StrategyBacktest, int> _startedBacktests = new CachedSynchronizedDictionary<StrategyBacktest, int>();
+		private readonly CachedSynchronizedDictionary<long, StrategyInfoMessage> _strategies = new CachedSynchronizedDictionary<long, StrategyInfoMessage>();
+		private readonly CachedSynchronizedDictionary<long, StrategySubscriptionInfoMessage> _subscriptions = new CachedSynchronizedDictionary<long, StrategySubscriptionInfoMessage>();
+		//private readonly CachedSynchronizedDictionary<long, StrategyBacktest> _backtests = new CachedSynchronizedDictionary<long, StrategyBacktest>();
+		//private readonly CachedSynchronizedDictionary<StrategyBacktest, long> _backtestResults = new CachedSynchronizedDictionary<StrategyBacktest, long>();
+		//private readonly CachedSynchronizedDictionary<StrategyBacktest, int> _startedBacktests = new CachedSynchronizedDictionary<StrategyBacktest, int>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyClient"/>.
@@ -59,7 +60,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<StrategyData> Strategies
+		public IEnumerable<StrategyInfoMessage> Strategies
 		{
 			get
 			{
@@ -69,7 +70,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<StrategySubscription> Subscriptions
+		public IEnumerable<StrategySubscriptionInfoMessage> Subscriptions
 		{
 			get
 			{
@@ -78,36 +79,36 @@ namespace StockSharp.Community
 			}
 		}
 
-		/// <inheritdoc />
-		public IEnumerable<StrategyBacktest> StrategyBacktests
-		{
-			get
-			{
-				EnsureInit();
-				return _backtests.CachedValues;
-			}
-		}
+		///// <inheritdoc />
+		//public IEnumerable<StrategyBacktest> StrategyBacktests
+		//{
+		//	get
+		//	{
+		//		EnsureInit();
+		//		return _backtests.CachedValues;
+		//	}
+		//}
 
 		/// <inheritdoc />
-		public event Action<StrategyData> StrategyCreated;
+		public event Action<StrategyInfoMessage> StrategyCreated;
 
 		/// <inheritdoc />
-		public event Action<StrategyData> StrategyUpdated;
+		public event Action<StrategyInfoMessage> StrategyUpdated;
 
 		/// <inheritdoc />
-		public event Action<StrategyData> StrategyDeleted;
+		public event Action<StrategyInfoMessage> StrategyDeleted;
 
 		/// <inheritdoc />
-		public event Action<StrategySubscription> StrategySubscribed;
+		public event Action<StrategySubscriptionInfoMessage> StrategySubscribed;
 
 		/// <inheritdoc />
-		public event Action<StrategySubscription> StrategyUnSubscribed;
+		public event Action<StrategySubscriptionInfoMessage> StrategyUnSubscribed;
 
-		/// <inheritdoc />
-		public event Action<StrategyBacktest, int> BacktestProgressChanged;
+		///// <inheritdoc />
+		//public event Action<StrategyBacktest, int> BacktestProgressChanged;
 
-		/// <inheritdoc />
-		public event Action<StrategyBacktest> BacktestStopped;
+		///// <inheritdoc />
+		//public event Action<StrategyBacktest> BacktestStopped;
 
 		private readonly SyncObject _syncObject = new SyncObject();
 		private bool _isProcessing;
@@ -137,19 +138,19 @@ namespace StockSharp.Community
 
 						if (processSubscriptions)
 						{
-							var subscriptions = Invoke(f => f.GetSubscriptions(SessionId, DateTime.MinValue));
+							var subscriptions = Invoke(f => f.GetSubscriptions2(SessionId, DateTime.MinValue));
 
 							foreach (var subscription in subscriptions)
 							{
 								_subscriptions.Add(subscription.Id, subscription);
 							}
 
-							var backtests = Invoke(f => f.GetBacktests(SessionId, DateTime.Today - TimeSpan.FromDays(5), DateTime.UtcNow));
+							//var backtests = Invoke(f => f.GetBacktests(SessionId, DateTime.Today - TimeSpan.FromDays(5), DateTime.UtcNow));
 
-							foreach (var backtest in backtests)
-							{
-								_backtests.Add(backtest.Id, backtest);
-							}
+							//foreach (var backtest in backtests)
+							//{
+							//	_backtests.Add(backtest.Id, backtest);
+							//}
 
 							processSubscriptions = false;
 						}
@@ -192,7 +193,7 @@ namespace StockSharp.Community
 					newIds.Add(tuple.Item1);
 			}
 
-			var newStrategies = Invoke(f => f.GetDescription(newIds.ToArray()));
+			var newStrategies = Invoke(f => f.GetDescription2(newIds.ToArray()));
 
 			foreach (var newStrategy in newStrategies)
 			{
@@ -200,67 +201,54 @@ namespace StockSharp.Community
 				StrategyCreated?.Invoke(newStrategy);
 			}
 
-			var updatedStrategies = Invoke(f => f.GetDescription(updatedIds.ToArray()));
+			var updatedStrategies = Invoke(f => f.GetDescription2(updatedIds.ToArray()));
 
 			foreach (var updatedStrategy in updatedStrategies)
 			{
 				var strategy = _strategies[updatedStrategy.Id];
-				CopyTo(updatedStrategy, strategy);
+				updatedStrategy.CopyTo(strategy);
 				StrategyUpdated?.Invoke(strategy);
 			}
 
 			_lastCheckTime = DateTime.Now;
 
-			foreach (var backtest in _backtests.CachedValues)
-			{
-				if (_backtestResults.ContainsKey(backtest))
-					continue;
+			//foreach (var backtest in _backtests.CachedValues)
+			//{
+			//	if (_backtestResults.ContainsKey(backtest))
+			//		continue;
 
-				var resultId = Invoke(f => f.GetBacktestResult(SessionId, backtest.Id));
+			//	var resultId = Invoke(f => f.GetBacktestResult(SessionId, backtest.Id));
 
-				if (resultId == null)
-					continue;
+			//	if (resultId == null)
+			//		continue;
 
-				_backtestResults.Add(backtest, resultId.Value);
-				BacktestStopped?.Invoke(backtest);
+			//	_backtestResults.Add(backtest, resultId.Value);
+			//	BacktestStopped?.Invoke(backtest);
 
-				_startedBacktests.Remove(backtest);
-			}
+			//	_startedBacktests.Remove(backtest);
+			//}
 
-			foreach (var backtest in _startedBacktests.CachedKeys)
-			{
-				var count = Invoke(f => f.GetCompletedIterationCount(SessionId, backtest.Id));
-				var prevCount = _startedBacktests[backtest];
+			//foreach (var backtest in _startedBacktests.CachedKeys)
+			//{
+			//	var count = Invoke(f => f.GetCompletedIterationCount(SessionId, backtest.Id));
+			//	var prevCount = _startedBacktests[backtest];
 
-				if (count == prevCount)
-					continue;
+			//	if (count == prevCount)
+			//		continue;
 
-				BacktestProgressChanged?.Invoke(backtest, count);
+			//	BacktestProgressChanged?.Invoke(backtest, count);
 
-				if (count == backtest.Iterations.Length)
-					_startedBacktests.Remove(backtest);
-				else
-					_startedBacktests[backtest] = count;
-			}
-		}
-
-		private static void CopyTo(StrategyData source, StrategyData destination)
-		{
-			destination.Name = source.Name;
-			//destination.EnName = source.EnName;
-			destination.Description = source.Description;
-			//destination.EnDescription = source.EnDescription;
-			destination.Price = source.Price;
-			destination.Revision = source.Revision;
-			destination.DescriptionId = source.DescriptionId;
-			destination.Content = source.Content;
-			destination.ContentType = source.ContentType;
+			//	if (count == backtest.Iterations.Length)
+			//		_startedBacktests.Remove(backtest);
+			//	else
+			//		_startedBacktests[backtest] = count;
+			//}
 		}
 
 		/// <inheritdoc />
-		public void CreateStrategy(StrategyData strategy)
+		public void CreateStrategy(StrategyInfoMessage strategy)
 		{
-			var id = Invoke(f => f.CreateStrategy(SessionId, IsEnglish, strategy));
+			var id = Invoke(f => f.CreateStrategy2(SessionId, IsEnglish, strategy));
 
 			if (id < 0)
 				ValidateError((byte)-id, strategy.Id, strategy.Price);
@@ -272,14 +260,14 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void UpdateStrategy(StrategyData strategy)
+		public void UpdateStrategy(StrategyInfoMessage strategy)
 		{
-			ValidateError(Invoke(f => f.UpdateStrategy(SessionId, strategy)), strategy.Id);
+			ValidateError(Invoke(f => f.UpdateStrategy2(SessionId, strategy)), strategy.Id);
 			StrategyUpdated?.Invoke(strategy);
 		}
 
 		/// <inheritdoc />
-		public void DeleteStrategy(StrategyData strategy)
+		public void DeleteStrategy(StrategyInfoMessage strategy)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
@@ -291,12 +279,12 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public StrategySubscription Subscribe(StrategyData strategy, bool isAutoRenew)
+		public StrategySubscriptionInfoMessage Subscribe(StrategyInfoMessage strategy, bool isAutoRenew)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			var subscription = Invoke(f => f.Subscribe(SessionId, strategy.Id, isAutoRenew));
+			var subscription = Invoke(f => f.Subscribe2(SessionId, strategy.Id, isAutoRenew));
 
 			if (subscription.Id < 0)
 				ValidateError((byte)-subscription.Id, strategy.Id);
@@ -319,7 +307,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void UnSubscribe(StrategySubscription subscription)
+		public void UnSubscribe(StrategySubscriptionInfoMessage subscription)
 		{
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
@@ -330,35 +318,37 @@ namespace StockSharp.Community
 			_subscriptions.Remove(subscription.Id);
 		}
 
-		/// <inheritdoc />
-		public decimal GetApproximateAmount(StrategyBacktest backtest)
-		{
-			return Invoke(f => f.GetApproximateAmount(SessionId, backtest));
-		}
+		///// <inheritdoc />
+		//public decimal GetApproximateAmount(StrategyBacktest backtest)
+		//{
+		//	return Invoke(f => f.GetApproximateAmount(SessionId, backtest));
+		//}
+
+		///// <inheritdoc />
+		//public void StartBacktest(StrategyBacktest backtest)
+		//{
+		//	backtest.Id = Invoke(f => f.StartBacktest(SessionId, backtest));
+		//	_backtests.Add(backtest.Id, backtest);
+		//	_startedBacktests.Add(backtest, 0);
+		//}
+
+		///// <inheritdoc />
+		//public void StopBacktest(StrategyBacktest backtest)
+		//{
+		//	ValidateError(Invoke(f => f.StopBacktest(SessionId, backtest.Id)));
+		//}
 
 		/// <inheritdoc />
-		public void StartBacktest(StrategyBacktest backtest)
+		public StrategyInfoMessage GetDescription(long id)
 		{
-			backtest.Id = Invoke(f => f.StartBacktest(SessionId, backtest));
-			_backtests.Add(backtest.Id, backtest);
-			_startedBacktests.Add(backtest, 0);
-		}
-
-		/// <inheritdoc />
-		public void StopBacktest(StrategyBacktest backtest)
-		{
-			ValidateError(Invoke(f => f.StopBacktest(SessionId, backtest.Id)));
-		}
-
-		/// <inheritdoc />
-		public StrategyData GetDescription(long id)
-		{
-			return Invoke(f => f.GetDescription(new[] { id }))?.FirstOrDefault();
+			return Invoke(f => f.GetDescription2(new[] { id }))?.FirstOrDefault();
 		}
 
 		private static void ValidateError(byte errorCode, params object[] args)
 		{
-			((ErrorCodes)errorCode).ThrowIfError(args);
+			if (errorCode != 0)
+				throw new InvalidOperationException();
+			//((ErrorCodes)errorCode).ThrowIfError(args);
 		}
 
 		/// <inheritdoc />

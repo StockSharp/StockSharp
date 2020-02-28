@@ -2,6 +2,9 @@ namespace StockSharp.Community
 {
 	using System;
 
+	using StockSharp.Community.Messages;
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The interface describing a client for access to <see cref="INotificationService"/>.
 	/// </summary>
@@ -36,7 +39,7 @@ namespace StockSharp.Community
 		/// <param name="title">The message title.</param>
 		/// <param name="body">Message body.</param>
 		/// <param name="attachments">Attachments.</param>
-		void SendMessage(string title, string body, FileData[] attachments);
+		void SendMessage(string title, string body, FileInfoMessage[] attachments);
 
 		/// <summary>
 		/// Send feedback for specified product.
@@ -44,19 +47,19 @@ namespace StockSharp.Community
 		/// <param name="product">Product.</param>
 		/// <param name="rating">Rating.</param>
 		/// <param name="comment">Comment.</param>
-		void SendFeedback(ProductData product, int rating, string comment);
+		void SendFeedback(ProductInfoMessage product, int rating, string comment);
 
 		/// <summary>
 		/// Has feedback for specified product.
 		/// </summary>
 		/// <param name="product">Product.</param>
 		/// <returns>Check result.</returns>
-		bool HasFeedback(ProductData product);
+		bool HasFeedback(ProductInfoMessage product);
 
 		/// <summary>
 		/// News received.
 		/// </summary>
-		event Action<CommunityNews> NewsReceived;
+		event Action<NewsMessage> NewsReceived;
 
 		/// <summary>
 		/// To subscribe for news.

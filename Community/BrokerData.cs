@@ -1,11 +1,13 @@
 namespace StockSharp.Community
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
 	/// Broker information.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class BrokerData
 	{
 		/// <summary>

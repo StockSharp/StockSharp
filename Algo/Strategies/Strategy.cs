@@ -2441,7 +2441,7 @@ namespace StockSharp.Algo.Strategies
 			var msg = new StrategyInfoMessage
 			{
 				StrategyId = Id,
-				StrategyName = Name,
+				Name = Name,
 				OriginalTransactionId = transactionId,
 			};
 

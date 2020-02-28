@@ -32,6 +32,7 @@ namespace StockSharp.Community
 	/// Backtest iteration settings.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class StrategyBacktestIteration
 	{
 		/// <summary>
@@ -63,6 +64,7 @@ namespace StockSharp.Community
 	/// Backtesting session.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public class StrategyBacktest
 	{
 		/// <summary>

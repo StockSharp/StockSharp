@@ -136,12 +136,24 @@
     <Compile Include="Storages\Remote\IRemoteExtendedStorage.cs" />
     <Compile Include="Storages\Remote\IRemoteStorage.cs" />
     <Compile Include="Storages\Remote\ISecurityRemoteExtendedStorage.cs" />
+    <Compile Include="Storages\Remote\Messages\RemoteFileCommandMessage.cs" />
+    <Compile Include="Storages\Remote\Messages\RemoteFileMessage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorageClient.cs" />
     <Compile Include="Storages\StorageBuffer.cs" />
     <Compile Include="Storages\StorageMetaInfoMessageAdapter.cs" />
     <Compile Include="Storages\StorageProcessor.cs" />
     <Compile Include="Storages\Storages.cs" />
+    <Compile Include="Strategies\Messages\IStrategyClient.cs" />
+    <Compile Include="Strategies\Messages\IStrategyService.cs" />
+    <Compile Include="Strategies\Messages\StrategyBacktest.cs" />
+    <Compile Include="Strategies\Messages\StrategyBacktestResultMessage.cs" />
+    <Compile Include="Strategies\Messages\StrategyClient.cs" />
+    <Compile Include="Strategies\Messages\StrategyContentTypes.cs" />
+    <Compile Include="Strategies\Messages\StrategyData.cs" />
+    <Compile Include="Strategies\Messages\StrategyPriceTypes.cs" />
+    <Compile Include="Strategies\Messages\StrategySubscription.cs" />
+    <Compile Include="Strategies\Messages\StrategySubscriptionInfoMessage.cs" />
     <Compile Include="Strategies\Strategy_SubscriptionProvider.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="Testing\IHistoryMessageAdapter.cs" />
@@ -529,6 +541,7 @@
       <Name>Messages</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -19,6 +19,8 @@ namespace StockSharp.Community
 
 	using Ecng.Common;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The client for access to the registration service.
 	/// </summary>
@@ -42,9 +44,9 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void CreateProfile(Profile profile)
+		public void CreateProfile(UserInfoMessage profile)
 		{
-			ValidateError(Invoke(f => f.CreateProfile(profile)));
+			ValidateError(Invoke(f => f.CreateProfile2(profile)));
 		}
 
 		/// <inheritdoc />
@@ -72,21 +74,21 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void UpdateProfile(Profile profile)
+		public void UpdateProfile(UserInfoMessage profile)
 		{
-			ValidateError(Invoke(f => f.UpdateProfile(SessionId, profile)));
+			ValidateError(Invoke(f => f.UpdateProfile2(SessionId, profile)));
 		}
 
 		/// <inheritdoc />
-		public Profile GetProfile()
+		public UserInfoMessage GetProfile()
 		{
-			return Invoke(f => f.GetProfile(SessionId));
+			return Invoke(f => f.GetProfile2(SessionId));
 		}
 
 		/// <inheritdoc />
-		public Profile GetUserProfile(long userId)
+		public UserInfoMessage GetUserProfile(long userId)
 		{
-			return Invoke(f => f.GetUserProfile(userId));
+			return Invoke(f => f.GetUserProfile2(userId));
 		}
 
 		private static void ValidateError(byte errorCode)

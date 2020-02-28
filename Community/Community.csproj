@@ -11,8 +11,7 @@
     <AssemblyName>StockSharp.Community</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\StockSharp.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -92,26 +91,18 @@
     <Compile Include="INotificationService.cs" />
     <Compile Include="IProfileClient.cs" />
     <Compile Include="IProfileService.cs" />
-    <Compile Include="IStrategyClient.cs" />
-    <Compile Include="IStrategyService.cs" />
-    <Compile Include="IUpdateClient.cs" />
-    <Compile Include="IUpdateService.cs" />
+    <Compile Include="Messages\CommunityMessageTypes.cs" />
+    <Compile Include="Messages\FileInfoMessage.cs" />
+    <Compile Include="Messages\ProductCheckVersionMessage.cs" />
+    <Compile Include="Messages\ProductInfoMessage.cs" />
     <Compile Include="NotificationClient.cs" />
-    <Compile Include="ProductData.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProfileClient.cs" />
-    <Compile Include="StrategyClient.cs" />
-    <Compile Include="StrategyContentTypes.cs" />
-    <Compile Include="StrategyData.cs" />
-    <Compile Include="StrategyPriceTypes.cs" />
-    <Compile Include="StrategySubscription.cs" />
     <Compile Include="Products.cs" />
     <Compile Include="ISessionService.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileData.cs" />
-    <Compile Include="StrategyBacktest.cs" />
-    <Compile Include="UpdateClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj">
@@ -121,6 +112,10 @@
     <ProjectReference Include="..\Logging\Logging.csproj">
       <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
       <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Name>Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
