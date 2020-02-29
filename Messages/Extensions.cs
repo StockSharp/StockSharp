@@ -414,6 +414,17 @@ namespace StockSharp.Messages
 		/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
+		/// <param name="messageType">Message type.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, MessageTypes messageType, object arg = null)
+		{
+			adapter.AddSupportedMarketDataType(messageType.ToMarketDataType(arg));
+		}
+
+		/// <summary>
+		/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Market data type.</param>
 		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
 		{
@@ -598,6 +609,7 @@ namespace StockSharp.Messages
 			if (argParser == null)
 				throw new ArgumentNullException(nameof(argParser));
 
+			_messageTypeMap.Add(dataType, Tuple.Create(type, default(object)));
 			_candleDataTypes.Add(type, dataType);
 			_candleMarketDataTypes.Add(messageType, dataType);
 			_candleArgParsers.Add(messageType, argParser);
@@ -691,7 +703,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Convert <see cref="MarketDataMessage"/> to <see cref="DataType"/> value.
 		/// </summary>
-		/// <param name="message"> Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <returns>Data type info.</returns>
 		public static DataType ToDataType(this MarketDataMessage message)
 		{
@@ -699,6 +711,66 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(message));
 
 			return message.DataType.ToDataType(message.Arg);
+		}
+
+		private static readonly SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>> _messageTypeMap = new SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>>
+		{
+			{ MarketDataTypes.Level1, Tuple.Create(MessageTypes.Level1Change, default(object)) },
+			{ MarketDataTypes.MarketDepth, Tuple.Create(MessageTypes.QuoteChange, default(object)) },
+			{ MarketDataTypes.Trades, Tuple.Create(MessageTypes.Execution, (object)ExecutionTypes.Tick) },
+			{ MarketDataTypes.OrderLog, Tuple.Create(MessageTypes.Execution, (object)ExecutionTypes.OrderLog) },
+			{ MarketDataTypes.News, Tuple.Create(MessageTypes.News, default(object)) },
+			{ MarketDataTypes.Board, Tuple.Create(MessageTypes.Board, default(object)) },
+		};
+
+		/// <summary>
+		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <returns>Market data type.</returns>
+		public static MarketDataTypes ToMarketDataType(this MessageTypes type, object arg)
+		{
+			if (_messageTypeMap.TryGetKey(Tuple.Create(type, arg), out var dataType))
+				return dataType;
+
+			throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+		}
+
+		/// <summary>
+		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
+		/// </summary>
+		/// <param name="type">Market data type.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <returns>Message type.</returns>
+		public static MessageTypes ToMessageType(this MarketDataTypes type, out object arg)
+		{
+			arg = null;
+
+			switch (type)
+			{
+				case MarketDataTypes.Level1:
+					return MessageTypes.Level1Change;
+				case MarketDataTypes.MarketDepth:
+					return MessageTypes.QuoteChange;
+				case MarketDataTypes.Trades:
+					arg = ExecutionTypes.Tick;
+					return MessageTypes.Execution;
+				case MarketDataTypes.OrderLog:
+					arg = ExecutionTypes.OrderLog;
+					return MessageTypes.Execution;
+				case MarketDataTypes.News:
+					return MessageTypes.News;
+				case MarketDataTypes.Board:
+					return MessageTypes.Board;
+				default:
+				{
+					if (type.IsCandleDataType())
+						return type.ToCandleMessageType();
+
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				}
+			}
 		}
 
 		/// <summary>
@@ -709,28 +781,7 @@ namespace StockSharp.Messages
 		/// <returns>Data type info.</returns>
 		public static DataType ToDataType(this MarketDataTypes type, object arg)
 		{
-			switch (type)
-			{
-				case MarketDataTypes.Level1:
-					return DataType.Level1;
-				case MarketDataTypes.MarketDepth:
-					return DataType.MarketDepth;
-				case MarketDataTypes.Trades:
-					return DataType.Ticks;
-				case MarketDataTypes.OrderLog:
-					return DataType.OrderLog;
-				case MarketDataTypes.News:
-					return DataType.News;
-				case MarketDataTypes.Board:
-					return DataType.Board;
-				default:
-				{
-					if (type.IsCandleDataType())
-						return DataType.Create(type.ToCandleMessage(), arg);
-
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-				}
-			}
+			return type.ToMessageType(out var arg2).ToDataType(arg2 ?? arg);
 		}
 
 		/// <summary>
