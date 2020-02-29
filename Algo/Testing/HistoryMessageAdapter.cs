@@ -187,10 +187,10 @@ namespace StockSharp.Algo.Testing
 			base.DisposeManaged();
 		}
 
-		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes;
+		private IEnumerable<DataType> _supportedMarketDataTypes;
 
 		/// <inheritdoc />
-		public override IEnumerable<MarketDataTypes> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedMarketDataTypes
 		{
 			get
 			{
@@ -201,9 +201,9 @@ namespace StockSharp.Algo.Testing
 					var dataTypes = drive.GetAvailableDataTypes(default, StorageFormat);
 
 					_supportedMarketDataTypes = dataTypes
-						.Select(dt => dt.ToMarketDataType())
-						.Where(t => t != null)
-						.Select(t => t.Value)
+						//.Select(dt => dt.ToMarketDataType())
+						//.Where(t => t != null)
+						//.Select(t => t.Value)
 						.Distinct()
 						.ToArray();
 				}

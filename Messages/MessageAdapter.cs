@@ -124,11 +124,11 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private IEnumerable<MarketDataTypes> _supportedMarketDataTypes = Enumerable.Empty<MarketDataTypes>();
+		private IEnumerable<DataType> _supportedMarketDataTypes = Enumerable.Empty<DataType>();
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
+		public virtual IEnumerable<DataType> SupportedMarketDataTypes
 		{
 			get => _supportedMarketDataTypes;
 			set

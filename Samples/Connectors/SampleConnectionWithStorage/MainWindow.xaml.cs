@@ -95,7 +95,7 @@ namespace SampleConnection
 			{
 				this.GuiAsync(() => ChangeConnectStatus(true));
 
-				if (Connector.Adapter.IsMarketDataTypeSupported(MarketDataTypes.News) && !Connector.Adapter.IsSecurityNewsOnly)
+				if (Connector.Adapter.IsMarketDataTypeSupported(DataType.News) && !Connector.Adapter.IsSecurityNewsOnly)
 					Connector.SubscribeNews();
 			};
 

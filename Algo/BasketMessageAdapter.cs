@@ -396,7 +396,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		IEnumerable<MarketDataTypes> IMessageAdapter.SupportedMarketDataTypes
+		IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes
 		{
 			get => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
 			set { }
@@ -1090,7 +1090,7 @@ namespace StockSharp.Algo
 				{
 					var isCandles = mdMsg.DataType.IsCandleDataType();
 
-					if (a.IsMarketDataTypeSupported(mdMsg.DataType) && (!isCandles || a.IsCandlesSupported(mdMsg)))
+					if (a.IsMarketDataTypeSupported(mdMsg.ToDataType()) && (!isCandles || a.IsCandlesSupported(mdMsg)))
 						return true;
 					else
 					{
@@ -1109,14 +1109,14 @@ namespace StockSharp.Algo
 								switch (mdMsg.BuildFrom)
 								{
 									case MarketDataTypes.Level1:
-										return a.IsMarketDataTypeSupported(MarketDataTypes.Level1);
+										return a.IsMarketDataTypeSupported(DataType.Level1);
 									case MarketDataTypes.OrderLog:
-										return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
+										return a.IsMarketDataTypeSupported(DataType.OrderLog);
 									case null:
 									{
-										if (a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
+										if (a.IsMarketDataTypeSupported(DataType.OrderLog))
 											mdMsg.BuildFrom = MarketDataTypes.OrderLog;
-										else if (a.IsMarketDataTypeSupported(MarketDataTypes.Level1))
+										else if (a.IsMarketDataTypeSupported(DataType.Level1))
 											mdMsg.BuildFrom = MarketDataTypes.Level1;
 										else
 											return false;
@@ -1128,7 +1128,7 @@ namespace StockSharp.Algo
 								return false;
 							}
 							case MarketDataTypes.Trades:
-								return a.IsMarketDataTypeSupported(MarketDataTypes.OrderLog);
+								return a.IsMarketDataTypeSupported(DataType.OrderLog);
 							default:
 							{
 								if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, StorageProcessor.CandleBuilderProvider) != null)

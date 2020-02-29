@@ -92,6 +92,36 @@ namespace StockSharp.Messages
 		public static DataType TimeFrames { get; } = Create(typeof(TimeFrameInfoMessage), null).Immutable();
 
 		/// <summary>
+		/// <see cref="TimeFrameCandleMessage"/> data type.
+		/// </summary>
+		public static DataType CandleTimeFrame { get; } = Create(typeof(TimeFrameCandleMessage), null).Immutable();
+
+		/// <summary>
+		/// <see cref="VolumeCandleMessage"/> data type.
+		/// </summary>
+		public static DataType CandleVolume { get; } = Create(typeof(VolumeCandleMessage), null).Immutable();
+
+		/// <summary>
+		/// <see cref="TickCandleMessage"/> data type.
+		/// </summary>
+		public static DataType CandleTick { get; } = Create(typeof(TickCandleMessage), null).Immutable();
+
+		/// <summary>
+		/// <see cref="RangeCandleMessage"/> data type.
+		/// </summary>
+		public static DataType CandleRange { get; } = Create(typeof(RangeCandleMessage), null).Immutable();
+
+		/// <summary>
+		/// <see cref="RenkoCandleMessage"/> data type.
+		/// </summary>
+		public static DataType CandleRenko { get; } = Create(typeof(RenkoCandleMessage), null).Immutable();
+		
+		/// <summary>
+		/// <see cref="PnFCandleMessage"/> data type.
+		/// </summary>
+		public static DataType CandlePnF { get; } = Create(typeof(PnFCandleMessage), null).Immutable();
+
+		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <param name="tf">Candle arg.</param>
@@ -169,10 +199,7 @@ namespace StockSharp.Messages
 
 		/// <summary>Serves as a hash function for a particular type. </summary>
 		/// <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
-		public override int GetHashCode()
-		{
-			return _hashCode;
-		}
+		public override int GetHashCode() => _hashCode;
 
 		/// <summary>
 		/// Create a copy of <see cref="DataType"/>.

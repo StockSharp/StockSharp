@@ -72,7 +72,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Supported by adapter market data types.
 		/// </summary>
-		IEnumerable<MarketDataTypes> SupportedMarketDataTypes { get; set; }
+		IEnumerable<DataType> SupportedMarketDataTypes { get; set; }
 
 		/// <summary>
 		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.

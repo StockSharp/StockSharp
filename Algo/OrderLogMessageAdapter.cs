@@ -45,7 +45,7 @@
 		{
 			if (message.IsSubscribe)
 			{
-				if (!InnerAdapter.IsMarketDataTypeSupported(MarketDataTypes.OrderLog))
+				if (!InnerAdapter.IsMarketDataTypeSupported(DataType.OrderLog))
 					return message;
 
 				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == MarketDataTypes.OrderLog;
@@ -54,7 +54,7 @@
 				{
 					case MarketDataTypes.MarketDepth:
 					{
-						if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType))
+						if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
 						{
 							var secId = GetSecurityId(message.SecurityId);
 
@@ -76,7 +76,7 @@
 
 					case MarketDataTypes.Trades:
 					{
-						if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType))
+						if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
 						{
 							var secId = GetSecurityId(message.SecurityId);
 

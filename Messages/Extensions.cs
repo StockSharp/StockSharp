@@ -414,24 +414,13 @@ namespace StockSharp.Messages
 		/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		/// <param name="messageType">Message type.</param>
-		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
-		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, MessageTypes messageType, object arg = null)
-		{
-			adapter.AddSupportedMarketDataType(messageType.ToMarketDataType(arg));
-		}
-
-		/// <summary>
-		/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <param name="type">Market data type.</param>
-		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
+		/// <param name="dataType">Data type info.</param>
+		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, DataType dataType)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Concat(type).ToArray();
+			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Concat(dataType).ToArray();
 		}
 
 		/// <summary>
@@ -439,7 +428,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Market data type.</param>
-		public static void RemoveSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
+		public static void RemoveSupportedMarketDataType(this IMessageAdapter adapter, DataType type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -660,7 +649,7 @@ namespace StockSharp.Messages
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			if (!adapter.SupportedMarketDataTypes.Contains(subscription.DataType))
+			if (!adapter.SupportedMarketDataTypes.Contains(subscription.ToDataType()))
 				return false;
 
 			var args = adapter.GetCandleArgs(subscription.DataType.ToCandleMessage(), subscription.SecurityId, subscription.From, subscription.To).ToArray();
@@ -828,7 +817,7 @@ namespace StockSharp.Messages
 				default:
 				{
 					if (type.IsCandle())
-						return type.ToCandleMarketDataType().ToDataType(arg);
+						return DataType.Create(type.ToCandleMarketDataType().ToCandleMessage(), arg);
 
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 				}
@@ -889,7 +878,7 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
 		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
-		public static bool IsMarketDataTypeSupported(this IMessageAdapter adapter, MarketDataTypes type)
+		public static bool IsMarketDataTypeSupported(this IMessageAdapter adapter, DataType type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -906,7 +895,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
+			adapter.SupportedMarketDataTypes = ArrayHelper.Empty<DataType>();
 		}
 
 		/// <summary>
@@ -2072,7 +2061,7 @@ namespace StockSharp.Messages
 		/// <param name="supportedMarketDataTypes">Supported by adapter market data types.</param>
 		/// <param name="iterationInterval">Interval between iterations.</param>
 		/// <returns>Step.</returns>
-		public static TimeSpan GetHistoryStepSize(this DataType dataType, IEnumerable<MarketDataTypes> supportedMarketDataTypes, out TimeSpan iterationInterval)
+		public static TimeSpan GetHistoryStepSize(this DataType dataType, IEnumerable<DataType> supportedMarketDataTypes, out TimeSpan iterationInterval)
 		{
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
@@ -2081,7 +2070,7 @@ namespace StockSharp.Messages
 
 			if (dataType.IsCandles)
 			{
-				if (!supportedMarketDataTypes.Contains(dataType.ToMarketDataType().Value))
+				if (!supportedMarketDataTypes.Contains(dataType))
 					return TimeSpan.Zero;
 
 				if (dataType.MessageType == typeof(TimeFrameCandleMessage))

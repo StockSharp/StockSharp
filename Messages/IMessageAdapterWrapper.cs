@@ -282,7 +282,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MarketDataTypes> SupportedMarketDataTypes
+		public virtual IEnumerable<DataType> SupportedMarketDataTypes
 		{
 			get => InnerAdapter.SupportedMarketDataTypes;
 			set => InnerAdapter.SupportedMarketDataTypes = value;
