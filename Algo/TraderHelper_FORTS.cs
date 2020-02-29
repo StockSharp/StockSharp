@@ -70,7 +70,7 @@ namespace StockSharp.Algo
 
 							message.Add(new Level1ChangeMessage
 							{
-								ServerTime = time.EndOfDay().ApplyTimeZone(TimeHelper.Moscow),
+								ServerTime = time.EndOfDay().ApplyMoscow(),
 								SecurityId = new SecurityId
 								{
 									SecurityCode = securityName,
@@ -130,7 +130,7 @@ namespace StockSharp.Algo
 				return CultureInfo.InvariantCulture.DoInCulture(() =>
 					(from rate in XDocument.Load(stream).Descendants("rate")
 					select new KeyValuePair<DateTimeOffset, decimal>(
-						rate.GetAttributeValue<string>("moment").ToDateTime("yyyy-MM-dd HH:mm:ss").ApplyTimeZone(TimeHelper.Moscow),
+						rate.GetAttributeValue<string>("moment").ToDateTime("yyyy-MM-dd HH:mm:ss").ApplyMoscow(),
 						rate.GetAttributeValue<decimal>("value"))).OrderBy(p => p.Key).ToDictionary());
 			}
 		}

@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Storages
 			if (range == null)
 				return Enumerable.Empty<Range<DateTimeOffset>>();
 
-			return storage.Dates.Select(d => d.ApplyTimeZone(TimeZoneInfo.Utc)).GetRanges(range.Min, range.Max);
+			return storage.Dates.Select(d => d.ApplyUtc()).GetRanges(range.Min, range.Max);
 		}
 
 		/// <summary>
@@ -332,8 +332,8 @@ namespace StockSharp.Algo.Storages
 			if (dates.IsEmpty())
 				return null;
 
-			var first = dates.First().ApplyTimeZone(TimeZoneInfo.Utc);
-			var last = dates.Last().EndOfDay().ApplyTimeZone(TimeZoneInfo.Utc);
+			var first = dates.First().ApplyUtc();
+			var last = dates.Last().EndOfDay().ApplyUtc();
 
 			if (from > last)
 				return null;

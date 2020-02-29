@@ -340,7 +340,7 @@ namespace SampleHistoryTesting
 
 			// (ru only) ОЛ необходимо загружать с 18.45 пред дня, чтобы стаканы строились правильно
 			if (OrderLogCheckBox.IsChecked == true)
-				startTime = startTime.Subtract(TimeSpan.FromDays(1)).AddHours(18).AddMinutes(45).AddTicks(1).ApplyTimeZone(TimeHelper.Moscow).UtcDateTime;
+				startTime = startTime.Subtract(TimeSpan.FromDays(1)).AddHours(18).AddMinutes(45).AddTicks(1).ApplyMoscow().UtcDateTime;
 
 			// ProgressBar refresh step
 			var progressStep = ((stopTime - startTime).Ticks / 100).To<TimeSpan>();

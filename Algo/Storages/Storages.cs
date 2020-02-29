@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Storages
 		protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 		{
 			var prevId = (long?)metaInfo.LastId ?? 0;
-			var prevTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
+			var prevTime = metaInfo.LastTime.ApplyUtc();
 
 			foreach (var msg in data)
 			{
@@ -122,14 +122,14 @@ namespace StockSharp.Algo.Storages
 
 		protected override IEnumerable<TCandleMessage> FilterNewData(IEnumerable<TCandleMessage> data, IMarketDataMetaInfo metaInfo)
 		{
-			var lastTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
+			var lastTime = metaInfo.LastTime.ApplyUtc();
 
 			foreach (var msg in data)
 			{
 				if (msg.State == CandleStates.Active)
 					continue;
 
-				var time = GetTruncatedTime(msg).ApplyTimeZone(TimeZoneInfo.Utc);
+				var time = GetTruncatedTime(msg).ApplyUtc();
 
 				if ((msg is TimeFrameCandleMessage && time <= lastTime) || time < lastTime)
 					continue;
