@@ -203,104 +203,6 @@ namespace StockSharp.Messages
 			};
 		}
 
-		///// <summary>
-		///// Cast <see cref="OrderGroupCancelMessage"/> to the <see cref="ExecutionMessage"/>.
-		///// </summary>
-		///// <param name="message"><see cref="OrderGroupCancelMessage"/>.</param>
-		///// <returns><see cref="ExecutionMessage"/>.</returns>
-		//public static ExecutionMessage ToExecutionMessage(this OrderGroupCancelMessage message)
-		//{
-		//	return new ExecutionMessage
-		//	{
-		//		OriginalTransactionId = message.TransactionId,
-		//		ExecutionType = ExecutionTypes.Transaction,
-		//	};
-		//}
-
-		///// <summary>
-		///// Cast <see cref="OrderPairReplaceMessage"/> to the <see cref="ExecutionMessage"/>.
-		///// </summary>
-		///// <param name="message"><see cref="OrderPairReplaceMessage"/>.</param>
-		///// <returns><see cref="ExecutionMessage"/>.</returns>
-		//public static ExecutionMessage ToExecutionMessage(this OrderPairReplaceMessage message)
-		//{
-		//	throw new NotImplementedException();
-		//	//return new ExecutionMessage
-		//	//{
-		//	//	LocalTime = message.LocalTime,
-		//	//	OriginalTransactionId = message.TransactionId,
-		//	//	Action = ExecutionActions.Canceled,
-		//	//};
-		//}
-
-		///// <summary>
-		///// Cast <see cref="OrderCancelMessage"/> to the <see cref="ExecutionMessage"/>.
-		///// </summary>
-		///// <param name="message"><see cref="OrderCancelMessage"/>.</param>
-		///// <returns><see cref="ExecutionMessage"/>.</returns>
-		//public static ExecutionMessage ToExecutionMessage(this OrderCancelMessage message)
-		//{
-		//	return new ExecutionMessage
-		//	{
-		//		SecurityId = message.SecurityId,
-		//		OriginalTransactionId = message.TransactionId,
-		//		//OriginalTransactionId = message.OriginalTransactionId,
-		//		OrderId = message.OrderId,
-		//		OrderType = message.OrderType,
-		//		PortfolioName = message.PortfolioName,
-		//		ExecutionType = ExecutionTypes.Transaction,
-		//		UserOrderId = message.UserOrderId,
-		//		HasOrderInfo = true,
-		//	};
-		//}
-
-		///// <summary>
-		///// Cast <see cref="OrderReplaceMessage"/> to the <see cref="ExecutionMessage"/>.
-		///// </summary>
-		///// <param name="message"><see cref="OrderReplaceMessage"/>.</param>
-		///// <returns><see cref="ExecutionMessage"/>.</returns>
-		//public static ExecutionMessage ToExecutionMessage(this OrderReplaceMessage message)
-		//{
-		//	return new ExecutionMessage
-		//	{
-		//		SecurityId = message.SecurityId,
-		//		OriginalTransactionId = message.TransactionId,
-		//		OrderType = message.OrderType,
-		//		OrderPrice = message.Price,
-		//		OrderVolume = message.Volume,
-		//		Side = message.Side,
-		//		PortfolioName = message.PortfolioName,
-		//		ExecutionType = ExecutionTypes.Transaction,
-		//		Condition = message.Condition,
-		//		UserOrderId = message.UserOrderId,
-		//		HasOrderInfo = true,
-		//	};
-		//}
-
-		///// <summary>
-		///// Cast <see cref="OrderRegisterMessage"/> to the <see cref="ExecutionMessage"/>.
-		///// </summary>
-		///// <param name="message"><see cref="OrderRegisterMessage"/>.</param>
-		///// <returns><see cref="ExecutionMessage"/>.</returns>
-		//public static ExecutionMessage ToExecutionMessage(this OrderRegisterMessage message)
-		//{
-		//	return new ExecutionMessage
-		//	{
-		//		SecurityId = message.SecurityId,
-		//		OriginalTransactionId = message.TransactionId,
-		//		OrderType = message.OrderType,
-		//		OrderPrice = message.Price,
-		//		OrderVolume = message.Volume,
-		//		Balance = message.Volume,
-		//		Side = message.Side,
-		//		PortfolioName = message.PortfolioName,
-		//		ExecutionType = ExecutionTypes.Transaction,
-		//		Condition = message.Condition,
-		//		UserOrderId = message.UserOrderId,
-		//		HasOrderInfo = true,
-		//	};
-		//}
-
 		/// <summary>
 		/// Copy extended info.
 		/// </summary>
@@ -614,7 +516,7 @@ namespace StockSharp.Messages
 			return adapter.SupportedOutMessages.Contains(type);
 		}
 
-		private static readonly PairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new PairSet<MessageTypes, MarketDataTypes>();
+		private static readonly SynchronizedPairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new SynchronizedPairSet<MessageTypes, MarketDataTypes>();
 
 		/// <summary>
 		/// Determine the <paramref name="type"/> is candle data type.
@@ -622,9 +524,15 @@ namespace StockSharp.Messages
 		/// <param name="type">The data type.</param>
 		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
 		public static bool IsCandleDataType(this MarketDataTypes type)
-		{
-			return _candleDataTypes.ContainsValue(type);
-		}
+			=> _candleDataTypes.ContainsValue(type);
+
+		/// <summary>
+		/// Determine the <paramref name="type"/> is candle data type.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
+		public static bool IsCandle(this MessageTypes type)
+			=> _candleDataTypes.ContainsKey(type);
 
 		/// <summary>
 		/// To convert the type of candles <see cref="MarketDataTypes"/> into type of message <see cref="MessageTypes"/>.
@@ -845,14 +753,6 @@ namespace StockSharp.Messages
 				case MessageTypes.PositionChange:
 					return DataType.PositionChanges;
 
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-					return type.ToCandleMarketDataType().ToDataType(arg);
-
 				case MessageTypes.News:
 					return DataType.News;
 
@@ -875,7 +775,12 @@ namespace StockSharp.Messages
 					return DataType.Users;
 
 				default:
+				{
+					if (type.IsCandle())
+						return type.ToCandleMarketDataType().ToDataType(arg);
+
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				}
 			}
 		}
 
