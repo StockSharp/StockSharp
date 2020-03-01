@@ -51116,5 +51116,15 @@ namespace StockSharp.Localization
 		/// Highest last trade volume.
 		/// </summary>
 		public static string LastTradeVolumeHighDesc => GetString(LastTradeVolumeHighDescKey);
+
+		/// <summary>
+		/// Max support version.
+		/// </summary>
+		public const string MaxSupportVersionKey = nameof(MaxSupportVersion);
+
+		/// <summary>
+		/// Max support version.
+		/// </summary>
+		public static string MaxSupportVersion => GetString(MaxSupportVersionKey);
 	}
 }

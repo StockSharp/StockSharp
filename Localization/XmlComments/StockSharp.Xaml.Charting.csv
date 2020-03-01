@@ -521,6 +521,7 @@ F:StockSharp.Xaml.Charting.ChartPanel.RegisterOrderCommand/summary;DocStr7806
 F:StockSharp.Xaml.Charting.ChartPanel.AddAreaCommand/summary;DocStr7807
 F:StockSharp.Xaml.Charting.ChartPanel.AddCandlesCommand/summary;DocStr7808
 F:StockSharp.Xaml.Charting.ChartPanel.AddIndicatorCommand/summary;DocStr7809
+F:StockSharp.Xaml.Charting.ChartPanel.ShareCommand/summary;DocStr11672
 E:StockSharp.Xaml.Charting.ChartPanel.SettingsChanged/summary;DocStr7811
 E:StockSharp.Xaml.Charting.ChartPanel.RegisterOrder/summary;DocStr7812
 E:StockSharp.Xaml.Charting.ChartPanel.MoveOrder/summary;DocStr8982
@@ -563,6 +564,10 @@ P:StockSharp.Xaml.Charting.ChartPanel.ShowOverview/summary;DocStr7733
 P:StockSharp.Xaml.Charting.ChartPanel.TimeZone/summary;DocStr8855
 P:StockSharp.Xaml.Charting.ChartPanel.IndicatorTypes/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartPanel.ShowNonFormedIndicators/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.ChartPanel.RegisterCandleStyle(System.String,System.String,StockSharp.Xaml.Charting.ChartCandleDrawStyles)/summary;DocStr11659
+M:StockSharp.Xaml.Charting.ChartPanel.RegisterCandleStyle(System.String,System.String,StockSharp.Xaml.Charting.ChartCandleDrawStyles)/param/image;DocStr9851
+M:StockSharp.Xaml.Charting.ChartPanel.RegisterCandleStyle(System.String,System.String,StockSharp.Xaml.Charting.ChartCandleDrawStyles)/param/name;Name2
+M:StockSharp.Xaml.Charting.ChartPanel.RegisterCandleStyle(System.String,System.String,StockSharp.Xaml.Charting.ChartCandleDrawStyles)/param/style;Str1947
 M:StockSharp.Xaml.Charting.ChartPanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.ChartPanel.ReSubscribeElements/summary;DocStr7810
 M:StockSharp.Xaml.Charting.ChartPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -573,7 +578,6 @@ P:StockSharp.Xaml.Charting.ChartPanel.Areas/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartPanel.IsAutoScroll/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartPanel.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartPanel.Draw(StockSharp.Xaml.Charting.ChartDrawData)/inheritdoc;DocStr8459
-P:StockSharp.Xaml.Charting.ChartPanel.BackupService/summary;DocStr9785
 M:StockSharp.Xaml.Charting.ChartPanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.ChartPanelOrderSettings/summary;DocStr8869
 P:StockSharp.Xaml.Charting.ChartPanelOrderSettings.Security/summary;DocStr8871

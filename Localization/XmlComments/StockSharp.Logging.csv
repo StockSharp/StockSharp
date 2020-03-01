@@ -18,7 +18,6 @@ M:StockSharp.Logging.EmailLogListener.OnWriteMessage(StockSharp.Logging.LogMessa
 M:StockSharp.Logging.EmailLogListener.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Logging.EmailLogListener.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Logging.EmailLogListener.DisposeManaged/summary;DocStr7
-T:StockSharp.Logging.ErrorLoggingAttribute/summary;DocStr3927
 T:StockSharp.Logging.ExternalLogListener/summary;DocStr3928
 M:StockSharp.Logging.ExternalLogListener.#ctor(StockSharp.Logging.ILogListener)/summary;DocStr1
 M:StockSharp.Logging.ExternalLogListener.#ctor(StockSharp.Logging.ILogListener)/param/logger;DocStr3929

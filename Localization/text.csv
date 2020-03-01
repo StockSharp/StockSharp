@@ -5145,6 +5145,7 @@ LastTradeVolumeLow;Low trade vol;Мин объем сделки
 LastTradeVolumeLowDesc;Lowest last trade volume.;Наименьший объем сделки.
 LastTradeVolumeHigh;High trade vol;Макс объем сделки
 LastTradeVolumeHighDesc;Highest last trade volume.;Наибольший объем сделки.
+MaxSupportVersion;Max support version.;Максимальная поддерживаемая версия.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15259,7 +15260,6 @@ DocStr10759;The price of the associated stop order (loss limit level);Цена �
 DocStr10760;The price of the associated limit order (profit limit level);Цена ассоциированной стоп заявки (уровень тейка)
 DocStr10761;Defines if the trade‘s stop/limit rate is in pips;Определяет, находится ли стоп/лимит ставка торговли в пипсах
 DocStr10762;Is composite diagram element loaded;Загружен ли составной элемент диаграммы
-DocStr10763;Max support version;Максимальная поддерживаемая версия
 DocStr10764;Whether this axis can be removed from chart area;Можно ли удалить эту ось из области графика
 DocStr10765;Proxy object to edit chart indicator element in property grid;Прокси-объект для редактирования индикатора графика в таблице свойств
 DocStr10766;Base proxy object to edit chart element in property grid;Базовый прокси-объект для редактирования элемента графика в таблице свойств
@@ -16038,3 +16038,43 @@ DocStr11632;Public name;Публичное имя
 DocStr11633;Get file list and their hashes in the specified folder;Получить список файлов и их хэши в указанной директории
 DocStr11634;Path to the folder;Путь к директории
 DocStr11635;The connection access check module which provides access by simple login and password set;Модуль проверки доступа соединения, который предоставляется через простую установку логина и пароля
+DocStr11636;Remove file message (upload or download);Remove file message (upload or download)
+DocStr11637;Storage buffer;Storage buffer
+DocStr11638;Storage processor;Storage processor
+DocStr11639;Process {0};Process {0}
+DocStr11640;Start storage auto-save thread;Start storage auto-save thread
+DocStr11641;>Message type;>Message type
+DocStr11642;The message contains information about command to change state;The message contains information about command to change state
+DocStr11643;Can use {0};Can use {0}
+DocStr11644;Create instance of {0};Create instance of {0}
+DocStr11645;Instance of {0};Instance of {0}
+DocStr11646;All registered candle types;All registered candle types
+DocStr11647;Register new candle type;Register new candle type
+DocStr11648;{0} instance creator;{0} instance creator
+DocStr11649;License message;License message
+DocStr11650;License lookup message;License lookup message
+DocStr11651;License request (create, renew, delete) message;License request (create, renew, delete) message
+DocStr11652;Broker identifier;Broker identifier
+DocStr11653;License identifier;License identifier
+DocStr11654;Command types;Command types
+DocStr11655;Command scopes;Command scopes
+DocStr11656;Application;Application
+DocStr11657;Scope;Scope
+DocStr11658;Candle arg parser;Candle arg parser
+DocStr11659;Register candle style;Register candle style
+DocStr11660;Remote file command;Remote file command
+DocStr11661;Strategy server ID;Strategy server ID
+DocStr11662;Determines whether the specified news related with StockSharp;Determines whether the specified news related with StockSharp
+DocStr11663;File info message;File info message
+DocStr11664;Product check version message;Product check version message
+DocStr11665;Product info message;Product info message
+DocStr11666;Originator;Originator
+DocStr11667;Unshare;Unshare
+DocStr11668;List objects;List objects
+DocStr11669;File group;File group
+DocStr11670;StockSharp news source;StockSharp news source
+DocStr11671;Make news related with StockSharp;Make news related with StockSharp
+DocStr11672;The command for share chart as an image;The command for share chart as an image
+DocStr11673;Add news;Add news
+DocStr11674;Owner;Owner
+DocStr11675;Is file newly or updated;Is file newly or updated

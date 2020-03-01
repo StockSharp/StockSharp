@@ -1805,7 +1805,7 @@ F:StockSharp.Fix.Native.FixExtendedMessages.SecurityMappingInfo/summary;DocStr10
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityLegsRequest/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.SecurityLegsInfo/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.AdapterListRequest/summary;DocStr10846
-F:StockSharp.Fix.Native.FixExtendedMessages.AdapterCommand/summary;DocStr10846
+F:StockSharp.Fix.Native.FixExtendedMessages.Command/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.AdapterResponse/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.SubscriptionListRequest/summary;DocStr10846
 F:StockSharp.Fix.Native.FixExtendedMessages.Subscription/summary;DocStr10846
@@ -1984,6 +1984,7 @@ F:StockSharp.Fix.Native.FixTags.QuoteType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NestedPartyRole/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoNestedPartyIDs/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.CashMargin/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Scope/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Username/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Password/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoLegs/summary;DocStr8459
@@ -2069,6 +2070,7 @@ F:StockSharp.Fix.Native.FixTags.NoStrategyParameters/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StrategyParameterName/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StrategyParameterType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StrategyParameterValue/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.TradeVolume/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MatchIncrement/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDEntryForwardPoints/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ApplVerId/summary;DocStr8459
@@ -2128,6 +2130,24 @@ F:StockSharp.Fix.Native.FixTags.Permissions/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoPermissionsValues/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.FaceValue/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDResponseID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Language/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Topic/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.ContentType/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Content/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Owner/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Picture/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Revision/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Private/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Colocation/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.PromoPrice/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.PromoEnd/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.DisplayName/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Phone/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Homepage/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Skype/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.City/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Gender/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Subscription/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295
@@ -2200,6 +2220,7 @@ P:StockSharp.Fix.Native.MDEntry.ClosePrice/summary;ClosingPrice
 P:StockSharp.Fix.Native.MDEntry.CloseSize/summary;CloseVolume
 P:StockSharp.Fix.Native.MDEntry.CandleState/summary;CandleState
 P:StockSharp.Fix.Native.MDEntry.QuoteCondition/summary;DocStr11565
+P:StockSharp.Fix.Native.MDEntry.Originator/summary;DocStr11666
 T:StockSharp.Fix.Native.TextFixReader/summary;DocStr3331
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr1
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr3198

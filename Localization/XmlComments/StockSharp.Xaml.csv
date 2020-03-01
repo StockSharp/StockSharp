@@ -26,6 +26,10 @@ T:StockSharp.Xaml.AdvertisePanel/summary;DocStr8063
 F:StockSharp.Xaml.AdvertisePanel.TextColorProperty/summary;DocStr29
 P:StockSharp.Xaml.AdvertisePanel.TextColor/summary;DocStr9202
 M:StockSharp.Xaml.AdvertisePanel.#ctor/summary;DocStr1
+M:StockSharp.Xaml.AdvertisePanel.AddNews(StockSharp.BusinessEntities.News)/summary;DocStr11673
+M:StockSharp.Xaml.AdvertisePanel.AddNews(StockSharp.BusinessEntities.News)/param/news;News
+M:StockSharp.Xaml.AdvertisePanel.AddNews(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.News})/summary;DocStr11673
+M:StockSharp.Xaml.AdvertisePanel.AddNews(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.News})/param/news;News
 M:StockSharp.Xaml.AdvertisePanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.AutoCompletePopUp/summary;DocStr8064
 M:StockSharp.Xaml.AutoCompletePopUp.#ctor/summary;DocStr1
@@ -187,7 +191,6 @@ P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility/summary;DocStr899
 E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler/summary;DocStr8994
 E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged/summary;DocStr8995
 E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick/summary;DocStr9459
-P:StockSharp.Xaml.GridControl.BaseGridControl.BackupService/summary;DocStr9785
 F:StockSharp.Xaml.GridControl.BaseGridControl.AutoScrollProperty/summary;DocStr29
 P:StockSharp.Xaml.GridControl.BaseGridControl.AutoScroll/summary;DocStr8348
 M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor/summary;DocStr1
@@ -481,6 +484,11 @@ M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Co
 M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)/param/window;DocStr8267
 M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)/param/connector;DocStr754
 M:StockSharp.Xaml.Extensions.Init(StockSharp.Xaml.OrderWindow,StockSharp.Algo.Connector)/returns;DocStr8267
+M:StockSharp.Xaml.Extensions.Share(System.Windows.DependencyObject,System.Boolean,System.String,System.Func{System.IO.Stream})/summary;ShareFile
+M:StockSharp.Xaml.Extensions.Share(System.Windows.DependencyObject,System.Boolean,System.String,System.Func{System.IO.Stream})/param/owner;DocStr11674
+M:StockSharp.Xaml.Extensions.Share(System.Windows.DependencyObject,System.Boolean,System.String,System.Func{System.IO.Stream})/param/isNew;DocStr11675
+M:StockSharp.Xaml.Extensions.Share(System.Windows.DependencyObject,System.Boolean,System.String,System.Func{System.IO.Stream})/param/fileName;Str2002
+M:StockSharp.Xaml.Extensions.Share(System.Windows.DependencyObject,System.Boolean,System.String,System.Func{System.IO.Stream})/param/getBody;DocStr2995
 T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/summary;DocStr1
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/param/fileId;DocStr10239
@@ -661,11 +669,11 @@ T:StockSharp.Xaml.QuestionWindow/summary;DocStr9455
 F:StockSharp.Xaml.QuestionWindow.OkCommand/summary;DocStr11454
 P:StockSharp.Xaml.QuestionWindow.Link/summary;DocStr9491
 M:StockSharp.Xaml.QuestionWindow.#ctor/summary;DocStr1
-M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.ProductData,System.Version,System.String,System.String)/summary;DocStr1204
-M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.ProductData,System.Version,System.String,System.String)/param/product;Product
-M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.ProductData,System.Version,System.String,System.String)/param/version;DocStr9545
-M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.ProductData,System.Version,System.String,System.String)/param/caption;DocStr3023
-M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.ProductData,System.Version,System.String,System.String)/param/text;Str3167
+M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.Messages.ProductInfoMessage,System.Version,System.String,System.String)/summary;DocStr1204
+M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.Messages.ProductInfoMessage,System.Version,System.String,System.String)/param/product;Product
+M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.Messages.ProductInfoMessage,System.Version,System.String,System.String)/param/version;DocStr9545
+M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.Messages.ProductInfoMessage,System.Version,System.String,System.String)/param/caption;DocStr3023
+M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.Messages.ProductInfoMessage,System.Version,System.String,System.String)/param/text;Str3167
 M:StockSharp.Xaml.QuestionWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityLookupWindow/summary;DocStr9348
 F:StockSharp.Xaml.SecurityLookupWindow.OkCommand/summary;DocStr11454

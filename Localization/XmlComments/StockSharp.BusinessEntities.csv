@@ -771,6 +771,7 @@ P:StockSharp.BusinessEntities.News.Url/summary;Str222
 P:StockSharp.BusinessEntities.News.Priority/summary;NewsPriority
 P:StockSharp.BusinessEntities.News.ExtensionInfo/inheritdoc;DocStr8459
 P:StockSharp.BusinessEntities.News.Language/summary;Str3429
+P:StockSharp.BusinessEntities.News.ExpiryDate/summary;ExpiryDate
 M:StockSharp.BusinessEntities.News.ToString/inheritdoc;DocStr8459
 T:StockSharp.BusinessEntities.Order/summary;Str504
 M:StockSharp.BusinessEntities.Order.#ctor/summary;DocStr1
