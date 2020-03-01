@@ -96,6 +96,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), LocalizedStrings.Str150, LocalizedStrings.Str151, (i, v) => i.OpenInterest = v));
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.Str342, LocalizedStrings.Str140, (i, v) => i.IsSystem = v));
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsUpTick), LocalizedStrings.Str157, LocalizedStrings.Str158, (i, v) => i.IsUpTick = v));
+						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382Key, (i, v) => i.Currency = v));
 
 						break;
 					}

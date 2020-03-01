@@ -70,6 +70,9 @@ namespace StockSharp.Algo.Export
 						if (trade.IsUpTick != null)
 							writer.WriteAttribute("isUpTick", trade.IsUpTick.Value);
 
+						if (trade.Currency != null)
+							writer.WriteAttribute("currency", trade.Currency.Value);
+
 						writer.WriteEndElement();
 					});
 

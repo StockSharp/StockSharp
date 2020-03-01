@@ -69,7 +69,8 @@ namespace StockSharp.Algo.Export
 							.SetCell(3, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
 							.SetCell(4, 0, LocalizedStrings.Str128)
 							.SetCell(5, 0, LocalizedStrings.OI).SetStyle(5, typeof(decimal))
-							.SetCell(6, 0, "UP_DOWN").SetStyle(5, typeof(bool));
+							.SetCell(6, 0, "UP_DOWN").SetStyle(5, typeof(bool))
+							.SetCell(7, 0, LocalizedStrings.Currency);
 
 						worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
 						worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
@@ -85,7 +86,8 @@ namespace StockSharp.Algo.Export
 								.SetCell(3, index, message.TradeVolume)
 								.SetCell(4, index, message.OriginSide)
 								.SetCell(5, index, message.OpenInterest)
-								.SetCell(6, index, message.IsUpTick);
+								.SetCell(6, index, message.IsUpTick)
+								.SetCell(7, index, message.Currency);
 
 							index++;
 
