@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Candles.Compression
 		where TCandleMessage : CandleMessage
 	{
 		/// <inheritdoc />
-		public abstract MarketDataTypes CandleType { get; }
+		public virtual Type CandleType { get; } = typeof(TCandleMessage);
 
 		/// <summary>
 		/// Initialize <see cref="CandleBuilder{TCandleMessage}"/>.
@@ -407,9 +407,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 		//private readonly SynchronizedDictionary<CandleSeries, TimeoutInfo> _timeoutInfos = new SynchronizedDictionary<CandleSeries, TimeoutInfo>();
 
-		/// <inheritdoc />
-		public override MarketDataTypes CandleType => MarketDataTypes.CandleTimeFrame;
-
 		/// <summary>
 		/// Whether to create empty candles (<see cref="CandleStates.None"/>) in the lack of trades. The default mode is enabled.
 		/// </summary>
@@ -492,9 +489,6 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class TickCandleBuilder : CandleBuilder<TickCandleMessage>
 	{
-		/// <inheritdoc />
-		public override MarketDataTypes CandleType => MarketDataTypes.CandleTick;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
 		/// </summary>
@@ -531,9 +525,6 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class VolumeCandleBuilder : CandleBuilder<VolumeCandleMessage>
 	{
-		/// <inheritdoc />
-		public override MarketDataTypes CandleType => MarketDataTypes.CandleVolume;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolumeCandleBuilder"/>.
 		/// </summary>
@@ -570,9 +561,6 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class RangeCandleBuilder : CandleBuilder<RangeCandleMessage>
 	{
-		/// <inheritdoc />
-		public override MarketDataTypes CandleType => MarketDataTypes.CandleRange;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RangeCandleBuilder"/>.
 		/// </summary>
@@ -609,9 +597,6 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class PnFCandleBuilder : CandleBuilder<PnFCandleMessage>
 	{
-		/// <inheritdoc />
-		public override MarketDataTypes CandleType => MarketDataTypes.CandlePnF;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PnFCandleBuilder"/>.
 		/// </summary>
@@ -764,9 +749,6 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class RenkoCandleBuilder : CandleBuilder<RenkoCandleMessage>
 	{
-		/// <inheritdoc />
-		public override MarketDataTypes CandleType => MarketDataTypes.CandleRenko;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RenkoCandleBuilder"/>.
 		/// </summary>

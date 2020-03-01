@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (!_candleBuilderProvider.IsRegistered(mdMsg.DataType))
+					if (!_candleBuilderProvider.IsRegistered(mdMsg.ToDataType().MessageType))
 						break;
 
 					var transactionId = mdMsg.TransactionId;
@@ -172,7 +172,7 @@ namespace StockSharp.Algo.Candles.Compression
 										_series.Add(transactionId, new SeriesInfo(original, current)
 										{
 											State = SeriesStates.SmallTimeFrame,
-											BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame)),
+											BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(typeof(TimeFrameCandleMessage))),
 											LastTime = original.From,
 										});
 									}
@@ -574,7 +574,7 @@ namespace StockSharp.Algo.Candles.Compression
 							series.Current.Arg = smaller;
 							series.Current.TransactionId = TransactionIdGenerator.GetNextId();
 
-							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(MarketDataTypes.CandleTimeFrame));
+							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)));
 							series.State = SeriesStates.SmallTimeFrame;
 							series.NonFinishedCandle = null;
 
@@ -708,7 +708,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				series.LastTime = time;
 
-				var builder = _candleBuilderProvider.Get(origin.DataType);
+				var builder = _candleBuilderProvider.Get(origin.ToDataType().MessageType);
 
 				var result = builder.Process(origin, series.CurrentCandleMessage, transform);
 

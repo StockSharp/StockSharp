@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The candle type.
 		/// </summary>
-		MarketDataTypes CandleType { get; }
+		Type CandleType { get; }
 
 		/// <summary>
 		/// To process the new data.
