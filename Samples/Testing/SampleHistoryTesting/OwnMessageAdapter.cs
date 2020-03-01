@@ -14,7 +14,7 @@ namespace SampleHistoryTesting
 			: base(transactionIdGenerator)
 		{
 			this.AddMarketDataSupport();
-			this.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
+			this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
 
 			this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		}
