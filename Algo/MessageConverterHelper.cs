@@ -276,17 +276,19 @@ namespace StockSharp.Algo
 
 			return new ExecutionMessage
 			{
+				ExecutionType = ExecutionTypes.Tick,
 				LocalTime = trade.LocalTime,
-				SecurityId = trade.Security.ToSecurityId(),
-				TradeId = trade.Id,
 				ServerTime = trade.Time,
+				SecurityId = trade.Security.ToSecurityId(),
+				TradeId = trade.Id.DefaultAsNull(),
+				TradeStringId = trade.StringId,
 				TradePrice = trade.Price,
 				TradeVolume = trade.Volume,
 				IsSystem = trade.IsSystem,
 				TradeStatus = trade.Status,
 				OpenInterest = trade.OpenInterest,
 				OriginSide = trade.OrderDirection,
-				ExecutionType = ExecutionTypes.Tick,
+				IsUpTick = trade.IsUpTick,
 				Currency = trade.Currency,
 			};
 		}
