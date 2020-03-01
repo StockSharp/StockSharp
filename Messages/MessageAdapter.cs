@@ -506,7 +506,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public virtual TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
-			=> dataType.GetHistoryStepSize(SupportedMarketDataTypes, out iterationInterval);
+			=> Extensions.GetHistoryStepSize(this, dataType, out iterationInterval);
 
 		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;

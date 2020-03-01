@@ -2057,12 +2057,15 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get maximum size step allowed for historical download.
 		/// </summary>
+		/// <param name="adapter">Trading system adapter.</param>
 		/// <param name="dataType">Data type info.</param>
-		/// <param name="supportedMarketDataTypes">Supported by adapter market data types.</param>
 		/// <param name="iterationInterval">Interval between iterations.</param>
 		/// <returns>Step.</returns>
-		public static TimeSpan GetHistoryStepSize(this DataType dataType, IEnumerable<DataType> supportedMarketDataTypes, out TimeSpan iterationInterval)
+		public static TimeSpan GetHistoryStepSize(this IMessageAdapter adapter, DataType dataType, out TimeSpan iterationInterval)
 		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
@@ -2070,12 +2073,17 @@ namespace StockSharp.Messages
 
 			if (dataType.IsCandles)
 			{
-				if (!supportedMarketDataTypes.Contains(dataType))
+				var supportedCandles = adapter.SupportedMarketDataTypes.FirstOrDefault(d => d.MessageType == dataType.MessageType);
+
+				if (supportedCandles == null)
 					return TimeSpan.Zero;
 
 				if (dataType.MessageType == typeof(TimeFrameCandleMessage))
 				{
 					var tf = (TimeSpan)dataType.Arg;
+
+					if (!adapter.CheckTimeFrameByRequest && !adapter.GetTimeFrames().Contains(tf))
+						return TimeSpan.Zero;
 
 					if (tf.TotalDays <= 1)
 						return TimeSpan.FromDays(30);
