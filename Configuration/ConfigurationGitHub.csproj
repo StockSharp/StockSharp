@@ -83,10 +83,6 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Community\Community.csproj">
-      <Project>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</Project>
-      <Name>Community</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Localization\Localization.csproj">
       <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
       <Name>Localization</Name>
