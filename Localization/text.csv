@@ -5146,6 +5146,8 @@ LastTradeVolumeLowDesc;Lowest last trade volume.;Наименьший объем
 LastTradeVolumeHigh;High trade vol;Макс объем сделки
 LastTradeVolumeHighDesc;Highest last trade volume.;Наибольший объем сделки.
 MaxSupportVersion;Max support version.;Максимальная поддерживаемая версия.
+Gaps;Gaps;Пропуски
+GapsDesc;Make gap in incremental messages for test purpose.;Сделать пропуски в инкрементальных сообщениях в тестовых целях.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
