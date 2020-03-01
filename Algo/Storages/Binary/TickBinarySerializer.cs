@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
 		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version56, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version57, exchangeInfoProvider)
 		{
 		}
 
@@ -250,6 +250,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (msg.Currency != null)
 					writer.WriteInt((int)msg.Currency.Value);
+
+				if (metaInfo.Version < MarketDataVersions.Version57)
+					continue;
+
+				writer.WriteStringEx(msg.TradeStringId);
 			}
 		}
 
@@ -347,6 +352,9 @@ namespace StockSharp.Algo.Storages.Binary
 				if (reader.Read())
 					msg.Currency = (CurrencyTypes)reader.ReadInt();
 			}
+
+			if (metaInfo.Version >= MarketDataVersions.Version57)
+				msg.TradeStringId = reader.ReadStringEx();
 
 			return msg;
 		}
