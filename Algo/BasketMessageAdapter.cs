@@ -1670,7 +1670,10 @@ namespace StockSharp.Algo
 						var allFailed = _adapterStates.All(v => v.Value.Item1 == ConnectionStates.Failed);
 
 						if (allFailed)
-							CreateConnectedMsg(ConnectionStates.Failed, new AggregateException(_adapterStates.Select(v => v.Value.Item2).Where(e => e != null).ToArray()));
+						{
+							var errors = _adapterStates.Select(v => v.Value.Item2).Where(e => e != null).ToArray();
+							CreateConnectedMsg(ConnectionStates.Failed, errors.SingleOrAggr());
+						}
 					}
 				}
 			}

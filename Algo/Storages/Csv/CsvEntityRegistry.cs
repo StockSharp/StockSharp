@@ -1115,7 +1115,7 @@ namespace StockSharp.Algo.Storages.Csv
 					list.Init(listErrors);
 
 					if (listErrors.Count > 0)
-						errors.Add(list, new AggregateException(listErrors));
+						errors.Add(list, listErrors.SingleOrAggr());
 				}
 				catch (Exception ex)
 				{
