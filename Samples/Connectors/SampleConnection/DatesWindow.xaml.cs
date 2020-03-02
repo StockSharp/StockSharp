@@ -45,13 +45,13 @@
 		public DateTimeOffset? From
 		{
 			get => _range.From;
-			set => _range.From = value;
+			set => _range.From = value?.Date;
 		}
 
 		public DateTimeOffset? To
 		{
 			get => _range.To;
-			set => _range.To = value;
+			set => _range.To = value?.Date;
 		}
 	}
 }
