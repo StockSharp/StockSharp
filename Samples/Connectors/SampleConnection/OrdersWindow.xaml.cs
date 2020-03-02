@@ -9,7 +9,7 @@
 			InitializeComponent();
 		}
 
-		private static IConnector Connector => MainWindow.Instance.Connector;
+		private static IConnector Connector => MainWindow.Instance.MainPanel.Connector;
 
 		private void OrderGrid_OnOrderCanceling(Order order)
 		{

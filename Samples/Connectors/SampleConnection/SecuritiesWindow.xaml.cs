@@ -32,7 +32,7 @@ namespace SampleConnection
 			InitializeComponent();
 		}
 
-		private static Connector Connector => MainWindow.Instance.Connector;
+		private static Connector Connector => MainWindow.Instance.MainPanel.Connector;
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
@@ -90,8 +90,8 @@ namespace SampleConnection
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = Ticks.IsEnabled = HistTicks.IsEnabled = OrderLog.IsEnabled
-				= NewOrder.IsEnabled = Depth.IsEnabled = DepthAdvanced.IsEnabled = security != null;
+			Level1.IsEnabled = Level1Hist.IsEnabled = Ticks.IsEnabled = TicksHist.IsEnabled =
+				OrderLog.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = DepthAdvanced.IsEnabled = security != null;
 
 			TryEnableCandles();
 		}
@@ -147,7 +147,7 @@ namespace SampleConnection
 			}
 		}
 
-		private void QuotesClick(object sender, RoutedEventArgs e)
+		private void Level1Click(object sender, RoutedEventArgs e)
 		{
 			var connector = Connector;
 
@@ -157,6 +157,21 @@ namespace SampleConnection
 					connector.UnSubscribeLevel1(security);
 				else
 					connector.SubscribeLevel1(security);
+			}
+		}
+
+		private void Level1HistClick(object sender, RoutedEventArgs e)
+		{
+			var connector = Connector;
+
+			var wnd = new DatesWindow();
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				connector.SubscribeLevel1(security, wnd.From, wnd.To);
 			}
 		}
 
@@ -173,7 +188,7 @@ namespace SampleConnection
 			}
 		}
 
-		private void HistTicksClick(object sender, RoutedEventArgs e)
+		private void TicksHistClick(object sender, RoutedEventArgs e)
 		{
 			var connector = Connector;
 

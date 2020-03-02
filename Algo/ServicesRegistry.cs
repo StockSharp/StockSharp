@@ -117,6 +117,11 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Security native identifier storage.
 		/// </summary>
+		public static INativeIdStorage TryNativeIdStorage => ConfigManager.TryGetService<INativeIdStorage>();
+
+		/// <summary>
+		/// Security native identifier storage.
+		/// </summary>
 		public static INativeIdStorage NativeIdStorage => ConfigManager.GetService<INativeIdStorage>();
 		
 		/// <summary>

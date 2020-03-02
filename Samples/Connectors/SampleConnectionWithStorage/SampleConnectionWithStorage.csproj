@@ -116,6 +116,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="..\SampleConnection\Level1Window.xaml">
+      <Link>Level1Window.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\SampleConnection\MainPanel.xaml">
+      <Link>MainPanel.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="..\SampleConnection\MyTradesWindow.xaml">
       <Link>MyTradesWindow.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
@@ -182,6 +192,14 @@
     <Compile Include="..\SampleConnection\DepthSettingsWindow.xaml.cs">
       <Link>DepthSettingsWindow.xaml.cs</Link>
       <DependentUpon>DepthSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\SampleConnection\Level1Window.xaml.cs">
+      <Link>Level1Window.xaml.cs</Link>
+      <DependentUpon>Level1Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\SampleConnection\MainPanel.xaml.cs">
+      <Link>MainPanel.xaml.cs</Link>
+      <DependentUpon>MainPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="..\SampleConnection\MyTradesWindow.xaml.cs">
       <Link>MyTradesWindow.xaml.cs</Link>

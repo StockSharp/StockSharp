@@ -107,6 +107,12 @@
     <Compile Include="DepthSettingsWindow.xaml.cs">
       <DependentUpon>DepthSettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Level1Window.xaml.cs">
+      <DependentUpon>Level1Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPanel.xaml.cs">
+      <DependentUpon>MainPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewsWindow.xaml.cs">
       <DependentUpon>NewsWindow.xaml</DependentUpon>
     </Compile>
@@ -125,6 +131,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DepthSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Level1Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

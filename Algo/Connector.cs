@@ -85,9 +85,7 @@ namespace StockSharp.Algo
 			bool initManagers = true)
 			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry, initManagers)
 		{
-#pragma warning disable 612
 			EntityRegistry = entityRegistry;
-#pragma warning restore 612
 		}
 
 		/// <summary>
@@ -158,7 +156,6 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The storage of trade objects.
 		/// </summary>
-		[Obsolete]
 		public IEntityRegistry EntityRegistry { get; }
 
 		/// <summary>

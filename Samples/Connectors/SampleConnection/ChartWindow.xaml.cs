@@ -23,7 +23,7 @@
 			Title = candleSeries.ToString();
 
 			_candleSeries = candleSeries;
-			_connector = MainWindow.Instance.Connector;
+			_connector = MainWindow.Instance.MainPanel.Connector;
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
