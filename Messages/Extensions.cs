@@ -149,10 +149,17 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var bestBid = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
-			var bestAsk = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+			var spreadMiddle = (decimal?)message.Changes.TryGetValue(Level1Fields.SpreadMiddle);
 
-			return bestBid.GetSpreadMiddle(bestAsk);
+			if (spreadMiddle == null)
+			{
+				var bestBid = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
+				var bestAsk = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+
+				spreadMiddle = bestBid.GetSpreadMiddle(bestAsk);
+			}
+
+			return spreadMiddle;
 		}
 
 		/// <summary>
@@ -167,9 +174,20 @@ namespace StockSharp.Messages
 				return null;
 
 			if (bestBidPrice != null && bestAskPrice != null)
-				return (bestAskPrice + bestBidPrice).Value / 2;
+				return bestBidPrice.Value.GetSpreadMiddle(bestAskPrice.Value);
 
 			return bestAskPrice ?? bestBidPrice.Value;
+		}
+
+		/// <summary>
+		/// Get middle of spread.
+		/// </summary>
+		/// <param name="bestBidPrice">Best bid price.</param>
+		/// <param name="bestAskPrice">Best ask price.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal GetSpreadMiddle(this decimal bestBidPrice, decimal bestAskPrice)
+		{
+			return (bestAskPrice + bestBidPrice) / 2;
 		}
 
 		/// <summary>
@@ -2086,7 +2104,12 @@ namespace StockSharp.Messages
 						return TimeSpan.Zero;
 
 					if (tf.TotalDays <= 1)
+					{
+						if (tf.TotalMinutes < 0.1)
+							return TimeSpan.FromHours(0.5);
+
 						return TimeSpan.FromDays(30);
+					}
 
 					return TimeSpan.MaxValue;
 				}

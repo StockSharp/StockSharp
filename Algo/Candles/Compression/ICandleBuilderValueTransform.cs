@@ -215,6 +215,9 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class Level1CandleBuilderValueTransform : BaseCandleBuilderValueTransform
 	{
+		private decimal? _prevBestBid;
+		private decimal? _prevBestAsk;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CandleBuilderValueTransform"/>.
 		/// </summary>
@@ -232,28 +235,38 @@ namespace StockSharp.Algo.Candles.Compression
 		public override bool Process(Message message)
 		{
 			if (!(message is Level1ChangeMessage l1))
+			{
+				if (message.Type == MessageTypes.Reset)
+				{
+					_prevBestBid = _prevBestAsk = null;
+				}
+
 				return base.Process(message);
+			}
+
+			var changes = l1.Changes;
+			var time = l1.ServerTime;
 
 			switch (Type)
 			{
 				case Level1Fields.BestBidPrice:
 				{
-					var price = (decimal?)l1.Changes.TryGetValue(Type);
+					var price = (decimal?)changes.TryGetValue(Type);
 
 					if (price == null)
 						return false;
 
-					Update(l1.ServerTime, price.Value, (decimal?)l1.Changes.TryGetValue(Level1Fields.BestBidVolume), Sides.Buy, null);
+					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestBidVolume), Sides.Buy, null);
 					return true;
 				}
 				case Level1Fields.BestAskPrice:
 				{
-					var price = (decimal?)l1.Changes.TryGetValue(Type);
+					var price = (decimal?)changes.TryGetValue(Type);
 
 					if (price == null)
 						return false;
 
-					Update(l1.ServerTime, price.Value, (decimal?)l1.Changes.TryGetValue(Level1Fields.BestAskVolume), Sides.Sell, null);
+					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestAskVolume), Sides.Sell, null);
 					return true;
 				}
 				case Level1Fields.LastTradePrice:
@@ -263,21 +276,37 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(l1.ServerTime, price.Value,
-						(decimal?)l1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
-						(Sides?)l1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
-						(decimal?)l1.Changes.TryGetValue(Level1Fields.OpenInterest));
+					Update(time, price.Value,
+						(decimal?)changes.TryGetValue(Level1Fields.LastTradeVolume),
+						(Sides?)changes.TryGetValue(Level1Fields.LastTradeOrigin),
+						(decimal?)changes.TryGetValue(Level1Fields.OpenInterest));
+
 					return true;
 				}
 
 				//case Level1Fields.SpreadMiddle:
 				default:
 				{
-					var price = l1.GetSpreadMiddle();
-					if (price == null)
-						return false;
+					var currBidPrice = (decimal?)changes.TryGetValue(Level1Fields.BestBidPrice);
+					var currAskPrice = (decimal?)changes.TryGetValue(Level1Fields.BestAskPrice);
 
-					Update(l1.ServerTime, price.Value, null, null, null);
+					_prevBestBid = currBidPrice ?? _prevBestBid;
+					_prevBestAsk = currAskPrice ?? _prevBestAsk;
+
+					var spreadMiddle = (decimal?)changes.TryGetValue(Level1Fields.SpreadMiddle);
+
+					if (spreadMiddle == null)
+					{
+						if (currBidPrice == null && currAskPrice == null)
+							return false;
+
+						if (_prevBestBid == null || _prevBestAsk == null)
+							return false;
+
+						spreadMiddle = _prevBestBid.Value.GetSpreadMiddle(_prevBestAsk.Value);
+					}
+
+					Update(time, spreadMiddle.Value, null, null, null);
 					return true;
 				}
 
