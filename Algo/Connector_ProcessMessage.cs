@@ -1625,6 +1625,13 @@ namespace StockSharp.Algo
 
 					if (order == null)
 					{
+						if (message.SecurityId == default)
+						{
+							this.AddWarningLog(LocalizedStrings.Str1025);
+							this.AddWarningLog(message.ToString());
+							break;
+						}
+
 						security = EnsureGetSecurity(message);
 
 						if (transactionId == 0 && isStatusRequest)
