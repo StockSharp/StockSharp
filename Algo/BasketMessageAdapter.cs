@@ -1665,7 +1665,7 @@ namespace StockSharp.Algo
 				{
 					_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
 
-					if (_currState == ConnectionStates.Connecting)
+					if (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected)
 					{
 						var allFailed = _adapterStates.All(v => v.Value.Item1 == ConnectionStates.Failed);
 
