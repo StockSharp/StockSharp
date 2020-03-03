@@ -411,6 +411,11 @@
 				<p>Классы для нативного API FIX протокола.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Fix.Dialects.Bovespa">
+			<summary>
+				<p>Диалекты FIX и FAST протоколов для биржи Brasil Bovespa B3 (акции и деривативы).</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Fix.Dialects.Moex.Asts">
 			<summary>
 				<p>Диалекты FIX и FAST протоколов Московской бирже валютной и спот секций.</p>

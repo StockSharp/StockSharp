@@ -411,6 +411,11 @@
 				<p>FIX protocol native components.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Fix.Dialects.Bovespa">
+			<summary>
+				<p>FIX and FAST dialects for Brasil Bovespa B3 exchange (equities and derivatives section).</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Fix.Dialects.Moex.Asts">
 			<summary>
 				<p>FIX and FAST dialects for Moscow exchange (equities section).</p>
