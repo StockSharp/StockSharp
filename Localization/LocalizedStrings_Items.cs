@@ -51146,5 +51146,15 @@ namespace StockSharp.Localization
 		/// Make gap in incremental messages for test purpose.
 		/// </summary>
 		public static string GapsDesc => GetString(GapsDescKey);
+
+		/// <summary>
+		/// Heikin Ashi
+		/// </summary>
+		public const string HeikinAshiKey = nameof(HeikinAshi);
+
+		/// <summary>
+		/// Heikin Ashi
+		/// </summary>
+		public static string HeikinAshi => GetString(HeikinAshiKey);
 	}
 }

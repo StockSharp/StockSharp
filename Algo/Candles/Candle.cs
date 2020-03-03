@@ -518,4 +518,22 @@ namespace StockSharp.Algo.Candles
 			return CopyTo(new RenkoCandle());
 		}
 	}
+
+	/// <summary>
+	/// Heikin ashi candle.
+	/// </summary>
+	[DataContract]
+	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.HeikinAshiKey)]
+	public class HeikinAshiCandle : TimeFrameCandle
+	{
+		/// <summary>
+		/// Create a copy of <see cref="HeikinAshiCandle"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Candle Clone()
+		{
+			return CopyTo(new HeikinAshiCandle());
+		}
+	}
 }

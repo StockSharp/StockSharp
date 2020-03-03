@@ -896,4 +896,61 @@ namespace StockSharp.Algo.Candles.Compression
 			return candle;
 		}
 	}
+
+	/// <summary>
+	/// The builder of candles of <see cref="HeikinAshiCandleBuilder"/> type.
+	/// </summary>
+	public class HeikinAshiCandleBuilder : CandleBuilder<HeikinAshiCandleMessage>
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HeikinAshiCandleBuilder"/>.
+		/// </summary>
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		public HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
+			: base(exchangeInfoProvider)
+		{
+		}
+
+		/// <inheritdoc />
+		protected override HeikinAshiCandleMessage CreateCandle(MarketDataMessage message, HeikinAshiCandleMessage currentCandle, ICandleBuilderValueTransform transform)
+		{
+			var timeFrame = message.GetTimeFrame();
+
+			var board = ExchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode);
+			var bounds = timeFrame.GetCandleBounds(transform.Time, board, board.WorkingTime);
+
+			if (transform.Time < bounds.Min)
+				return null;
+
+			var openTime = bounds.Min;
+
+			var candle = FirstInitCandle(message, new HeikinAshiCandleMessage
+			{
+				TimeFrame = timeFrame,
+				OpenTime = openTime,
+				HighTime = openTime,
+				LowTime = openTime,
+				CloseTime = openTime,
+			}, transform);
+
+			if (currentCandle != null)
+				candle.OpenPrice = (currentCandle.OpenPrice + currentCandle.ClosePrice) / 2M;
+
+			return candle;
+		}
+
+		/// <inheritdoc />
+		protected override bool IsCandleFinishedBeforeChange(MarketDataMessage message, HeikinAshiCandleMessage candle, ICandleBuilderValueTransform transform)
+		{
+			return transform.Time < candle.OpenTime || (candle.OpenTime + candle.TimeFrame) <= transform.Time;
+		}
+
+		/// <inheritdoc />
+		protected override void UpdateCandle(MarketDataMessage message, HeikinAshiCandleMessage candle, ICandleBuilderValueTransform transform)
+		{
+			base.UpdateCandle(message, candle, transform);
+
+			candle.ClosePrice = (candle.OpenPrice + candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 4M;
+		}
+	}
 }

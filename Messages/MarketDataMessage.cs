@@ -114,6 +114,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BoardInfoKey)]
 		Board,
+
+		/// <summary>
+		/// Heikin Ashi.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HeikinAshiKey)]
+		CandleHeikinAshi
 	}
 
 	/// <summary>

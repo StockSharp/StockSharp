@@ -5148,6 +5148,7 @@ LastTradeVolumeHighDesc;Highest last trade volume.;Наибольший объе
 MaxSupportVersion;Max support version.;Максимальная поддерживаемая версия.
 Gaps;Gaps;Пропуски
 GapsDesc;Make gap in incremental messages for test purpose.;Сделать пропуски в инкрементальных сообщениях в тестовых целях.
+HeikinAshi;Heikin Ashi;Heikin Ashi
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -16080,3 +16081,8 @@ DocStr11672;The command for share chart as an image;The command for share chart 
 DocStr11673;Add news;Add news
 DocStr11674;Owner;Owner
 DocStr11675;Is file newly or updated;Is file newly or updated
+DocStr11676;Contract price;Contract price
+DocStr11677;Gap size (in messages);Gap size (in messages)
+DocStr11678;Versions;Versions
+DocStr11679;Version {0};Version {0}
+DocStr11680;{0} data type;{0} data type

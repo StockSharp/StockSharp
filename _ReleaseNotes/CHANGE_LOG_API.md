@@ -341,6 +341,7 @@ StockSharp API Change log
 * (feature) Level1. LowBidPrice, HighAskPrice, LastTradeVolumeLow, LastTradeVolumeHigh new fields.
 * (feature) News. ExpiryDate property added.
 * (feature) Tick storage. Supports string ids.
+* (feature) Heikin Ashi candles.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

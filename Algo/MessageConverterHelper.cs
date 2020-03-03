@@ -38,12 +38,13 @@ namespace StockSharp.Algo
 	{
 		static MessageConverterHelper()
 		{
-			RegisterCandle(typeof(TimeFrameCandle), typeof(TimeFrameCandleMessage), () => new TimeFrameCandle(), () => new TimeFrameCandleMessage());
-			RegisterCandle(typeof(TickCandle), typeof(TickCandleMessage), () => new TickCandle(), () => new TickCandleMessage());
-			RegisterCandle(typeof(VolumeCandle), typeof(VolumeCandleMessage), () => new VolumeCandle(), () => new VolumeCandleMessage());
-			RegisterCandle(typeof(RangeCandle), typeof(RangeCandleMessage), () => new RangeCandle(), () => new RangeCandleMessage());
-			RegisterCandle(typeof(PnFCandle), typeof(PnFCandleMessage), () => new PnFCandle(), () => new PnFCandleMessage());
-			RegisterCandle(typeof(RenkoCandle), typeof(RenkoCandleMessage), () => new RenkoCandle(), () => new RenkoCandleMessage());
+			RegisterCandle(() => new TimeFrameCandle(), () => new TimeFrameCandleMessage());
+			RegisterCandle(() => new TickCandle(), () => new TickCandleMessage());
+			RegisterCandle(() => new VolumeCandle(), () => new VolumeCandleMessage());
+			RegisterCandle(() => new RangeCandle(), () => new RangeCandleMessage());
+			RegisterCandle(() => new PnFCandle(), () => new PnFCandleMessage());
+			RegisterCandle(() => new RenkoCandle(), () => new RenkoCandleMessage());
+			RegisterCandle(() => new HeikinAshiCandle(), () => new HeikinAshiCandleMessage());
 		}
 
 		/// <summary>
@@ -1086,6 +1087,20 @@ namespace StockSharp.Algo
 		/// All registered candle types.
 		/// </summary>
 		public static IEnumerable<Type> AllCandleTypes => _candleTypes.CachedKeys;
+
+		/// <summary>
+		/// Register new candle type.
+		/// </summary>
+		/// <typeparam name="TCandle">Candle type.</typeparam>
+		/// <typeparam name="TMessage">The type of candle message.</typeparam>
+		/// <param name="candleCreator"><see cref="Candle"/> instance creator.</param>
+		/// <param name="candleMessageCreator"><see cref="CandleMessage"/> instance creator.</param>
+		public static void RegisterCandle<TCandle, TMessage>(Func<TCandle> candleCreator, Func<TMessage> candleMessageCreator)
+			where TCandle : Candle
+			where TMessage : CandleMessage
+		{
+			RegisterCandle(typeof(TCandle), typeof(TMessage), candleCreator, candleMessageCreator);
+		}
 
 		/// <summary>
 		/// Register new candle type.

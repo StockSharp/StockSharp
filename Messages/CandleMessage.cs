@@ -355,7 +355,16 @@ namespace StockSharp.Messages
 		/// Initializes a new instance of the <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		public TimeFrameCandleMessage()
-			: base(MessageTypes.CandleTimeFrame)
+			: this(MessageTypes.CandleTimeFrame)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimeFrameCandleMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		protected TimeFrameCandleMessage(MessageTypes type)
+			: base(type)
 		{
 		}
 
@@ -711,5 +720,34 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override object CloneArg() => BoxSize.Clone();
+	}
+
+	/// <summary>
+	/// The message contains information about the Heikin-Ashi candle.
+	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
+	[DisplayNameLoc(LocalizedStrings.HeikinAshiKey)]
+	public class HeikinAshiCandleMessage : TimeFrameCandleMessage
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HeikinAshiCandleMessage"/>.
+		/// </summary>
+		public HeikinAshiCandleMessage()
+			: base(MessageTypes.CandleHeikinAshi)
+		{
+		}
+
+		/// <summary>
+		/// Create a copy of <see cref="HeikinAshiCandleMessage"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			return CopyTo(new HeikinAshiCandleMessage
+			{
+				TimeFrame = TimeFrame
+			});
+		}
 	}
 }

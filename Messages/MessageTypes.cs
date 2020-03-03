@@ -372,6 +372,11 @@ namespace StockSharp.Messages
 		/// <see cref="SubscriptionResponseMessage"/>.
 		/// </summary>
 		SubscriptionResponse,
+
+		/// <summary>
+		/// <see cref="HeikinAshiCandleMessage"/>.
+		/// </summary>
+		CandleHeikinAshi,
 	}
 
 	/// <summary>

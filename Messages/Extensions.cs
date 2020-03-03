@@ -53,6 +53,7 @@ namespace StockSharp.Messages
 					ReversalAmount = parts[1].To<int>()
 				};
 			});
+			RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, str => str.Replace('-', ':').To<TimeSpan>());
 		}
 
 		/// <summary>

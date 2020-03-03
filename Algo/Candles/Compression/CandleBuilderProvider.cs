@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Candles.Compression
 			Register(new RangeCandleBuilder(exchangeInfoProvider));
 			Register(new RenkoCandleBuilder(exchangeInfoProvider));
 			Register(new PnFCandleBuilder(exchangeInfoProvider));
+			Register(new HeikinAshiCandleBuilder(exchangeInfoProvider));
 		}
 
 		/// <summary>
