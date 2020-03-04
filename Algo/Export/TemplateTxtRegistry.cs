@@ -142,6 +142,18 @@ namespace StockSharp.Algo.Export
 		public string TemplateTxtIndicator { get; set; } = "{SecurityId.SecurityCode};{Time:default:yyyyMMdd};{Time:default:HH:mm:ss};{Value1}";
 
 		/// <summary>
+		/// Level1 txt export template.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TemplateLevel1Key,
+			Description = LocalizedStrings.TemplateTxtLevel1Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 11)]
+		public string TemplateTxtPositionChange { get; set; } = "{SecurityId.SecurityCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{CurrentValue};{BlockedValue};{RealizedPnL};{UnrealizedPnL};{AveragePrice};{Commission}}";
+
+
+		/// <summary>
 		/// Do not show again.
 		/// </summary>
 		[Display(
@@ -149,7 +161,7 @@ namespace StockSharp.Algo.Export
 				Name = LocalizedStrings.DoNotShowAgainKey,
 				Description = LocalizedStrings.DoNotShowAgainKey,
 				GroupName = LocalizedStrings.GeneralKey,
-				Order = 11)]
+				Order = 12)]
 		public bool DoNotShowAgain { get; set; }
 
 		void IPersistable.Load(SettingsStorage storage)
@@ -165,6 +177,7 @@ namespace StockSharp.Algo.Export
 			TemplateTxtNews = storage.GetValue(nameof(TemplateTxtNews), TemplateTxtNews);
 			TemplateTxtBoard = storage.GetValue(nameof(TemplateTxtBoard), TemplateTxtBoard);
 			TemplateTxtIndicator = storage.GetValue(nameof(TemplateTxtIndicator), TemplateTxtIndicator);
+			TemplateTxtPositionChange = storage.GetValue(nameof(TemplateTxtPositionChange), TemplateTxtPositionChange);
 
 			DoNotShowAgain = storage.GetValue(nameof(DoNotShowAgain), DoNotShowAgain);
 		}
@@ -182,6 +195,7 @@ namespace StockSharp.Algo.Export
 			storage.SetValue(nameof(TemplateTxtNews), TemplateTxtNews);
 			storage.SetValue(nameof(TemplateTxtBoard), TemplateTxtBoard);
 			storage.SetValue(nameof(TemplateTxtIndicator), TemplateTxtIndicator);
+			storage.SetValue(nameof(TemplateTxtPositionChange), TemplateTxtPositionChange);
 
 			storage.SetValue(nameof(DoNotShowAgain), DoNotShowAgain);
 		}
