@@ -4,6 +4,8 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -13,21 +15,13 @@ namespace StockSharp.Algo.Storages
 	{
 		private readonly StorageProcessor _storageProcessor;
 
-		private static StorageProcessor CheckOnNull(StorageProcessor storageProcessor)
-		{
-			if (storageProcessor == null)
-				throw new ArgumentNullException(nameof(storageProcessor));
-
-			return storageProcessor;
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		/// <param name="storageProcessor">Storage processor.</param>
 		public StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcessor storageProcessor)
-			: base(innerAdapter, CheckOnNull(storageProcessor).Buffer)
+			: base(innerAdapter, storageProcessor.CheckOnNull().Buffer)
 		{
 			_storageProcessor = storageProcessor;
 		}
