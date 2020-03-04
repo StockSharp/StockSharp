@@ -4203,6 +4203,7 @@ TemplateTxtSecurity;Security txt export template.;Шаблон экспорта 
 TemplateTxtNews;News txt export template.;Шаблон экспорта в txt для новостей.
 TemplateTxtBoard;Board state txt export template.;Шаблон экспорта в txt для состояния площадок.
 TemplateTxtIndicator;Indicator's value txt export template.;Шаблон экспорта в txt для значений индикатора.
+TemplateTxtPositionChange;Position change txt export template.;Шаблон экспорта в txt для изменения позиции.
 TemplateDepth;Depth template;Шаблон стаканов
 TemplateTick;Ticks template;Шаблон тиков
 TemplateCandle;Candles template;Шаблон свечей
@@ -16086,3 +16087,5 @@ DocStr11677;Gap size (in messages);Gap size (in messages)
 DocStr11678;Versions;Versions
 DocStr11679;Version {0};Version {0}
 DocStr11680;{0} data type;{0} data type
+DocStr11681;Heikin ashi candle;Heikin ashi candle
+DocStr11682;The message contains information about the Heikin-Ashi candle;The message contains information about the Heikin-Ashi candle

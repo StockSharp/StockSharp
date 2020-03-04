@@ -142,12 +142,12 @@ namespace StockSharp.Algo.Export
 		public string TemplateTxtIndicator { get; set; } = "{SecurityId.SecurityCode};{Time:default:yyyyMMdd};{Time:default:HH:mm:ss};{Value1}";
 
 		/// <summary>
-		/// Level1 txt export template.
+		/// Position change txt export template.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TemplateLevel1Key,
-			Description = LocalizedStrings.TemplateTxtLevel1Key,
+			Name = LocalizedStrings.Str1042Key,
+			Description = LocalizedStrings.TemplateTxtPositionChangeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
 		public string TemplateTxtPositionChange { get; set; } = "{SecurityId.SecurityCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Changes:{CurrentValue};{BlockedValue};{RealizedPnL};{UnrealizedPnL};{AveragePrice};{Commission}}";

@@ -41708,6 +41708,16 @@ namespace StockSharp.Localization
 		public static string TemplateTxtIndicator => GetString(TemplateTxtIndicatorKey);
 
 		/// <summary>
+		/// Position change txt export template.
+		/// </summary>
+		public const string TemplateTxtPositionChangeKey = nameof(TemplateTxtPositionChange);
+
+		/// <summary>
+		/// Position change txt export template.
+		/// </summary>
+		public static string TemplateTxtPositionChange => GetString(TemplateTxtPositionChangeKey);
+
+		/// <summary>
 		/// Depth template
 		/// </summary>
 		public const string TemplateDepthKey = nameof(TemplateDepth);
