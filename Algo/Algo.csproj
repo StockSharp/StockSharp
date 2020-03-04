@@ -73,20 +73,10 @@
     <Reference Include="Ecng.Serialization.FieldFactories">
       <HintPath>..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Xaml">
-      <HintPath>..\References\Ecng.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Xaml.DevExp">
-      <HintPath>..\References\Ecng.Xaml.DevExp.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -94,10 +84,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">

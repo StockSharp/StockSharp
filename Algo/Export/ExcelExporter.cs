@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Export
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
-	using System.Windows.Media;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -69,8 +68,8 @@ namespace StockSharp.Algo.Export
 					.SetCell(9, 0, LocalizedStrings.Str724).SetStyle(9, typeof(decimal))
 					.SetCell(10, 0, LocalizedStrings.Str725).SetStyle(10, typeof(decimal));
 
-				worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
-				worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
+				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
+				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
 				var index = 1;
 
@@ -117,8 +116,8 @@ namespace StockSharp.Algo.Export
 					.SetCell(6, 0, "UP_DOWN").SetStyle(5, typeof(bool))
 					.SetCell(7, 0, LocalizedStrings.Currency);
 
-				worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
-				worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
+				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
+				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
 				var index = 1;
 
@@ -161,12 +160,12 @@ namespace StockSharp.Algo.Export
 					.SetCell(10, 0, LocalizedStrings.Str506)
 					.SetCell(11, 0, LocalizedStrings.TradePrice).SetStyle(3, typeof(decimal));
 
-				worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
-				worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
+				//worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
+				//worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
-				worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Active), null, Colors.Blue);
-				worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Done), null, Colors.Green);
-				worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Failed), null, Colors.Red);
+				//worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Active), null, Colors.Blue);
+				//worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Done), null, Colors.Green);
+				//worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Failed), null, Colors.Red);
 
 				var index = 1;
 

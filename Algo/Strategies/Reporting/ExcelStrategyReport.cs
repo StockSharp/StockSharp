@@ -19,10 +19,8 @@ namespace StockSharp.Algo.Strategies.Reporting
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
-	using System.Windows.Media;
 
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Interop;
 	using Ecng.Collections;
 
@@ -217,11 +215,11 @@ namespace StockSharp.Algo.Strategies.Reporting
 						.SetCell(columnShift + 13, 1, LocalizedStrings.Str1345).SetStyle(columnShift + 14, typeof(decimal))
 						.SetCell(columnShift + 14, 1, LocalizedStrings.Str862).SetStyle(columnShift + 15, typeof(decimal));
 
-					worker
-						.SetConditionalFormatting(columnShift + 10, ComparisonOperator.Less, "0", null, Colors.Red)
-						.SetConditionalFormatting(columnShift + 11, ComparisonOperator.Less, "0", null, Colors.Red)
-						.SetConditionalFormatting(columnShift + 12, ComparisonOperator.Less, "0", null, Colors.Red)
-						.SetConditionalFormatting(columnShift + 13, ComparisonOperator.Less, "0", null, Colors.Red);
+					//worker
+					//	.SetConditionalFormatting(columnShift + 10, ComparisonOperator.Less, "0", null, Colors.Red)
+					//	.SetConditionalFormatting(columnShift + 11, ComparisonOperator.Less, "0", null, Colors.Red)
+					//	.SetConditionalFormatting(columnShift + 12, ComparisonOperator.Less, "0", null, Colors.Red)
+					//	.SetConditionalFormatting(columnShift + 13, ComparisonOperator.Less, "0", null, Colors.Red);
 
 					var totalPnL = 0m;
 					var position = 0m;
@@ -283,9 +281,9 @@ namespace StockSharp.Algo.Strategies.Reporting
 							.SetCell(columnShift + 13, 1, LocalizedStrings.Str1327)
 							.SetCell(columnShift + 14, 1, LocalizedStrings.Str135);
 
-						worker
-							.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str1329), null, Colors.Green)
-							.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str238), null, Colors.Red);
+						//worker
+						//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str1329), null, Colors.Green)
+						//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str238), null, Colors.Red);
 
 						rowIndex = 2;
 						foreach (var order in strategy.Orders.ToArray())

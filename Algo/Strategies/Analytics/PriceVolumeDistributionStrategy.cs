@@ -8,7 +8,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
@@ -68,7 +67,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			// clear prev values
 			Panel.ClearControls();
 
-			ThreadSafeObservableCollection<GridRow> gridSeries = null;
+			ICollection<GridRow> gridSeries = null;
 			IAnalyticsChart chart = null;
 
 			switch (ResultType)
@@ -81,9 +80,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 					var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
 					volumeColumn.Width = 100;
 
-					var gridSource = new ObservableCollectionEx<GridRow>();
-					grid.ItemsSource = gridSource;
-					gridSeries = new ThreadSafeObservableCollection<GridRow>(gridSource);
+					gridSeries = grid.CreateSource<GridRow>();
 
 					grid.SetSort(volumeColumn, ListSortDirection.Descending);
 					break;

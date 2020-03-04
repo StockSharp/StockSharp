@@ -1,5 +1,6 @@
 namespace StockSharp.Algo.Strategies.Analytics
 {
+	using System.Collections.Generic;
 	using System.ComponentModel;
 
 	/// <summary>
@@ -32,9 +33,11 @@ namespace StockSharp.Algo.Strategies.Analytics
 		IAnalyticsGridColumn AddColumn(string fieldName, string header);
 
 		/// <summary>
-		/// Items source.
+		/// Create item source.
 		/// </summary>
-		object ItemsSource { get; set; }
+		/// <typeparam name="T">Data type.</typeparam>
+		/// <returns>Items source.</returns>
+		ICollection<T> CreateSource<T>();
 
 		/// <summary>
 		/// Set sorting mode.
