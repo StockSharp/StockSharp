@@ -89,8 +89,8 @@ namespace StockSharp.Algo.Export
 					Export((IEnumerable<SecurityMessage>)values);
 				else if (DataType == DataType.PositionChanges)
 					Export((IEnumerable<PositionChangeMessage>)values);
-				//else if (DataType == DataType.IndicatorValue)
-				//	Export((IEnumerable<IndicatorValue>)values);
+				else if (DataType == TraderHelper.IndicatorValue)
+					Export((IEnumerable<IndicatorValue>)values);
 				else
 					throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.Str721);
 			});
