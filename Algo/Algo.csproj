@@ -123,6 +123,7 @@
     <Compile Include="Export\Database\PositionChangeTable.cs" />
     <Compile Include="Export\Database\SecurityTable.cs" />
     <Compile Include="Export\IndicatorValue.cs" />
+    <Compile Include="Export\TemplateTxtRegistry.cs" />
     <Compile Include="Expressions\ExpressionIndexSecurity.cs" />
     <Compile Include="Expressions\ExpressionIndexSecurityProcessor.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
