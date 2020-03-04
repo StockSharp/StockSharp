@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Export
 
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -35,134 +34,123 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// Initializes a new instance of the <see cref="XmlExporter"/>.
 		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="arg">The data parameter.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
-		public XmlExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName)
-			: base(security, arg, isCancelled, fileName)
+		public XmlExporter(DataType dataType, Func<int, bool> isCancelled, string fileName)
+			: base(dataType, isCancelled, fileName)
 		{
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<ExecutionMessage> messages)
+		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
 		{
-			switch ((ExecutionTypes)Arg)
+			Do(messages, "orderLog", (writer, item) =>
 			{
-				case ExecutionTypes.Tick:
+				writer.WriteStartElement("item");
+
+				writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
+				writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
+				writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
+				writer.WriteAttribute("price", item.OrderPrice);
+				writer.WriteAttribute("volume", item.OrderVolume);
+				writer.WriteAttribute("side", item.Side);
+				writer.WriteAttribute("state", item.OrderState);
+				writer.WriteAttribute("timeInForce", item.TimeInForce);
+				writer.WriteAttribute("isSystem", item.IsSystem);
+
+				if (item.TradePrice != null)
 				{
-					Do(messages, "ticks", (writer, trade) =>
-					{
-						writer.WriteStartElement("trade");
+					writer.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
+					writer.WriteAttribute("tradePrice", item.TradePrice);
 
-						writer.WriteAttribute("id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>());
-						writer.WriteAttribute("serverTime", trade.ServerTime.ToString(_timeFormat));
-						writer.WriteAttribute("localTime", trade.LocalTime.ToString(_timeFormat));
-						writer.WriteAttribute("price", trade.TradePrice);
-						writer.WriteAttribute("volume", trade.TradeVolume);
-
-						if (trade.OriginSide != null)
-							writer.WriteAttribute("originSide", trade.OriginSide.Value);
-
-						if (trade.OpenInterest != null)
-							writer.WriteAttribute("openInterest", trade.OpenInterest.Value);
-
-						if (trade.IsUpTick != null)
-							writer.WriteAttribute("isUpTick", trade.IsUpTick.Value);
-
-						if (trade.Currency != null)
-							writer.WriteAttribute("currency", trade.Currency.Value);
-
-						writer.WriteEndElement();
-					});
-
-					break;
+					if (item.OpenInterest != null)
+						writer.WriteAttribute("openInterest", item.OpenInterest.Value);
 				}
-				case ExecutionTypes.OrderLog:
-				{
-					Do(messages, "orderLog", (writer, item) =>
-					{
-						writer.WriteStartElement("item");
 
-						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
-						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
-						writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
-						writer.WriteAttribute("price", item.OrderPrice);
-						writer.WriteAttribute("volume", item.OrderVolume);
-						writer.WriteAttribute("side", item.Side);
-						writer.WriteAttribute("state", item.OrderState);
-						writer.WriteAttribute("timeInForce", item.TimeInForce);
-						writer.WriteAttribute("isSystem", item.IsSystem);
+				writer.WriteEndElement();
+			});
+		}
 
-						if (item.TradePrice != null)
-						{
-							writer.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
-							writer.WriteAttribute("tradePrice", item.TradePrice);
+		/// <inheritdoc />
+		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
+		{
+			Do(messages, "ticks", (writer, trade) =>
+			{
+				writer.WriteStartElement("trade");
 
-							if (item.OpenInterest != null)
-								writer.WriteAttribute("openInterest", item.OpenInterest.Value);
-						}
+				writer.WriteAttribute("id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>());
+				writer.WriteAttribute("serverTime", trade.ServerTime.ToString(_timeFormat));
+				writer.WriteAttribute("localTime", trade.LocalTime.ToString(_timeFormat));
+				writer.WriteAttribute("price", trade.TradePrice);
+				writer.WriteAttribute("volume", trade.TradeVolume);
 
-						writer.WriteEndElement();
-					});
+				if (trade.OriginSide != null)
+					writer.WriteAttribute("originSide", trade.OriginSide.Value);
 
-					break;
-				}
-				case ExecutionTypes.Transaction:
-				{
-					Do(messages, "transactions", (writer, item) =>
-					{
-						writer.WriteStartElement("item");
+				if (trade.OpenInterest != null)
+					writer.WriteAttribute("openInterest", trade.OpenInterest.Value);
 
-						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
-						writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
-						writer.WriteAttribute("portfolio", item.PortfolioName);
-						writer.WriteAttribute("clientCode", item.ClientCode);
-						writer.WriteAttribute("brokerCode", item.BrokerCode);
-						writer.WriteAttribute("depoName", item.DepoName);
-						writer.WriteAttribute("transactionId", item.TransactionId);
-						writer.WriteAttribute("originalTransactionId", item.OriginalTransactionId);
-						writer.WriteAttribute("orderId", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
-						//writer.WriteAttribute("derivedOrderId", item.DerivedOrderId == null ? item.DerivedOrderStringId : item.DerivedOrderId.To<string>());
-						writer.WriteAttribute("orderPrice", item.OrderPrice);
-						writer.WriteAttribute("orderVolume", item.OrderVolume);
-						writer.WriteAttribute("orderType", item.OrderType);
-						writer.WriteAttribute("orderState", item.OrderState);
-						writer.WriteAttribute("orderStatus", item.OrderStatus);
-						writer.WriteAttribute("visibleVolume", item.VisibleVolume);
-						writer.WriteAttribute("balance", item.Balance);
-						writer.WriteAttribute("side", item.Side);
-						writer.WriteAttribute("originSide", item.OriginSide);
-						writer.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
-						writer.WriteAttribute("tradePrice", item.TradePrice);
-						writer.WriteAttribute("tradeVolume", item.TradeVolume);
-						writer.WriteAttribute("tradeStatus", item.TradeStatus);
-						writer.WriteAttribute("isOrder", item.HasOrderInfo);
-						writer.WriteAttribute("isTrade", item.HasTradeInfo);
-						writer.WriteAttribute("commission", item.Commission);
-						writer.WriteAttribute("commissionCurrency", item.CommissionCurrency);
-						writer.WriteAttribute("pnl", item.PnL);
-						writer.WriteAttribute("position", item.Position);
-						writer.WriteAttribute("latency", item.Latency);
-						writer.WriteAttribute("slippage", item.Slippage);
-						writer.WriteAttribute("error", item.Error?.Message);
-						writer.WriteAttribute("currency", item.Currency);
-						writer.WriteAttribute("openInterest", item.OpenInterest);
-						writer.WriteAttribute("isCancelled", item.IsCancellation);
-						writer.WriteAttribute("isSystem", item.IsSystem);
-						writer.WriteAttribute("isUpTick", item.IsUpTick);
-						writer.WriteAttribute("isMargin", item.IsMargin);
-						writer.WriteAttribute("isMarketMaker", item.IsMarketMaker);
-						writer.WriteAttribute("isManual", item.IsManual);
+				if (trade.IsUpTick != null)
+					writer.WriteAttribute("isUpTick", trade.IsUpTick.Value);
 
-						writer.WriteEndElement();
-					});
+				if (trade.Currency != null)
+					writer.WriteAttribute("currency", trade.Currency.Value);
 
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+				writer.WriteEndElement();
+			});
+		}
+
+		/// <inheritdoc />
+		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		{
+			Do(messages, "transactions", (writer, item) =>
+			{
+				writer.WriteStartElement("item");
+
+				writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
+				writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
+				writer.WriteAttribute("portfolio", item.PortfolioName);
+				writer.WriteAttribute("clientCode", item.ClientCode);
+				writer.WriteAttribute("brokerCode", item.BrokerCode);
+				writer.WriteAttribute("depoName", item.DepoName);
+				writer.WriteAttribute("transactionId", item.TransactionId);
+				writer.WriteAttribute("originalTransactionId", item.OriginalTransactionId);
+				writer.WriteAttribute("orderId", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
+				//writer.WriteAttribute("derivedOrderId", item.DerivedOrderId == null ? item.DerivedOrderStringId : item.DerivedOrderId.To<string>());
+				writer.WriteAttribute("orderPrice", item.OrderPrice);
+				writer.WriteAttribute("orderVolume", item.OrderVolume);
+				writer.WriteAttribute("orderType", item.OrderType);
+				writer.WriteAttribute("orderState", item.OrderState);
+				writer.WriteAttribute("orderStatus", item.OrderStatus);
+				writer.WriteAttribute("visibleVolume", item.VisibleVolume);
+				writer.WriteAttribute("balance", item.Balance);
+				writer.WriteAttribute("side", item.Side);
+				writer.WriteAttribute("originSide", item.OriginSide);
+				writer.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
+				writer.WriteAttribute("tradePrice", item.TradePrice);
+				writer.WriteAttribute("tradeVolume", item.TradeVolume);
+				writer.WriteAttribute("tradeStatus", item.TradeStatus);
+				writer.WriteAttribute("isOrder", item.HasOrderInfo);
+				writer.WriteAttribute("isTrade", item.HasTradeInfo);
+				writer.WriteAttribute("commission", item.Commission);
+				writer.WriteAttribute("commissionCurrency", item.CommissionCurrency);
+				writer.WriteAttribute("pnl", item.PnL);
+				writer.WriteAttribute("position", item.Position);
+				writer.WriteAttribute("latency", item.Latency);
+				writer.WriteAttribute("slippage", item.Slippage);
+				writer.WriteAttribute("error", item.Error?.Message);
+				writer.WriteAttribute("currency", item.Currency);
+				writer.WriteAttribute("openInterest", item.OpenInterest);
+				writer.WriteAttribute("isCancelled", item.IsCancellation);
+				writer.WriteAttribute("isSystem", item.IsSystem);
+				writer.WriteAttribute("isUpTick", item.IsUpTick);
+				writer.WriteAttribute("isMargin", item.IsMargin);
+				writer.WriteAttribute("isMarketMaker", item.IsMarketMaker);
+				writer.WriteAttribute("isManual", item.IsManual);
+
+				writer.WriteEndElement();
+			});
 		}
 
 		/// <inheritdoc />

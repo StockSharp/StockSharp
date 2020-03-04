@@ -24,7 +24,6 @@ namespace StockSharp.Algo.Export
 	using SmartFormat;
 	using SmartFormat.Core.Formatting;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -38,14 +37,13 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextExporter"/>.
 		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="arg">The data parameter.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		/// <param name="template">The string formatting template.</param>
 		/// <param name="header">Header at the first line. Do not add header while empty string.</param>
-		public TextExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, string template, string header)
-			: base(security, arg, isCancelled, fileName)
+		public TextExporter(DataType dataType, Func<int, bool> isCancelled, string fileName, string template, string header)
+			: base(dataType, isCancelled, fileName)
 		{
 			if (template.IsEmpty())
 				throw new ArgumentNullException(nameof(template));
@@ -55,7 +53,19 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<ExecutionMessage> messages)
+		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		{
+			Do(messages);
+		}
+
+		/// <inheritdoc />
+		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
+		{
+			Do(messages);
+		}
+
+		/// <inheritdoc />
+		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
 		{
 			Do(messages);
 		}

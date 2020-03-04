@@ -6,13 +6,12 @@ namespace StockSharp.Algo.Export.Database
 
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	class PositionChangeTable : Table<PositionChangeMessage>
 	{
-		public PositionChangeTable(Security security)
-			: base("PositionChange", CreateColumns(security))
+		public PositionChangeTable(decimal? priceStep, decimal? volumeStep)
+			: base("PositionChange", CreateColumns(priceStep, volumeStep))
 		{
 		}
 
@@ -28,7 +27,7 @@ namespace StockSharp.Algo.Export.Database
 			}
 		}
 
-		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
+		private static IEnumerable<ColumnDescription> CreateColumns(decimal? priceStep, decimal? volumeStep)
 		{
 			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
@@ -76,9 +75,9 @@ namespace StockSharp.Algo.Export.Database
 					case PositionChangeTypes.State:
 					case PositionChangeTypes.Currency:
 						break;
-					default:
-						step = security.Multiplier ?? 1;
-						break;
+					//default:
+					//	step = security.Multiplier ?? 1;
+					//	break;
 				}
 
 				yield return new ColumnDescription(type.ToString())

@@ -19,10 +19,11 @@ namespace StockSharp.Algo.Export
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
+
 	using MoreLinq;
 
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -37,14 +38,13 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StockSharpExporter"/>.
 		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="arg">The data parameter.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="drive">Storage.</param>
 		/// <param name="format">Format type.</param>
-		public StockSharpExporter(Security security, object arg, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format)
-			: base(security, arg, isCancelled, drive.Path)
+		public StockSharpExporter(DataType dataType, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format)
+			: base(dataType, isCancelled, drive.CheckOnNull().Path)
 		{
 			_storageRegistry = storageRegistry ?? throw new ArgumentNullException(nameof(storageRegistry));
 			_drive = drive ?? throw new ArgumentNullException(nameof(drive));
@@ -68,30 +68,38 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		private void Export<TMessage>(IEnumerable<TMessage> messages)
-			where TMessage : Message
+		private void Export(IEnumerable<Message> messages)
 		{
-			Export(typeof(TMessage), messages);
-		}
-
-		private void Export(Type messageType, IEnumerable<Message> messages)
-		{
-			IMarketDataStorage storage = null;
-
-			foreach (var batch in messages.Batch(BatchSize).Select(b => b.ToArray()))
+			foreach (var batch in messages.Batch(BatchSize))
 			{
-				if (storage == null)
-					storage = _storageRegistry.GetStorage(Security, messageType, Arg, _drive, _format);
+				foreach (var group in batch.GroupBy(m => m.TryGetSecurityId()))
+				{
+					var b = group.ToArray();
 
-				if (!CanProcess(batch.Length))
-					break;
+					var storage = _storageRegistry.GetStorage(group.Key ?? default, DataType.MessageType, DataType.Arg, _drive, _format);
 
-				storage.Save(batch);
+					if (!CanProcess(b.Length))
+						break;
+
+					storage.Save(b);
+				}
 			}
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<ExecutionMessage> messages)
+		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		{
+			Export(messages);
+		}
+
+		/// <inheritdoc />
+		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
+		{
+			Export(messages);
+		}
+
+		/// <inheritdoc />
+		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
 		{
 			Export(messages);
 		}
@@ -120,13 +128,7 @@ namespace StockSharp.Algo.Export
 		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
-			foreach (var group in messages.GroupBy(m => m.GetType()))
-			{
-				Export(group.Key, group);
-
-				if (!CanProcess())
-					break;
-			}
+			Export(messages);
 		}
 
 		/// <inheritdoc />

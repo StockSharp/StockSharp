@@ -20,17 +20,16 @@ namespace StockSharp.Algo.Export.Database
 
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	class TransactionTable : Table<ExecutionMessage>
 	{
-		public TransactionTable(Security security)
-			: base("Transaction", CreateColumns(security))
+		public TransactionTable(decimal? priceStep, decimal? volumeStep)
+			: base("Transaction", CreateColumns(priceStep, volumeStep))
 		{
 		}
 
-		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
+		private static IEnumerable<ColumnDescription> CreateColumns(decimal? priceStep, decimal? volumeStep)
 		{
 			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
@@ -77,10 +76,10 @@ namespace StockSharp.Algo.Export.Database
 			//	DbType = typeof(string),
 			//	ValueRestriction = new StringRestriction(32)
 			//};
-			yield return new ColumnDescription(nameof(ExecutionMessage.OrderPrice)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription(nameof(ExecutionMessage.OrderVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription(nameof(ExecutionMessage.VisibleVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription(nameof(ExecutionMessage.Balance)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderPrice)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = priceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.VisibleVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.Balance)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Side)) { DbType = typeof(int) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.OriginSide)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.OrderType)) { DbType = typeof(int?) };
@@ -94,8 +93,8 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription(nameof(ExecutionMessage.TradePrice)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription(nameof(ExecutionMessage.TradeVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.TradePrice)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = priceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.TradeVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.TradeStatus)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.HasOrderInfo)) { DbType = typeof(bool) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.HasOrderInfo)) { DbType = typeof(bool) };
@@ -115,11 +114,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription(nameof(ExecutionMessage.Slippage)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.Slippage)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = priceStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Latency)) { DbType = typeof(TimeSpan?) };
-			yield return new ColumnDescription(nameof(ExecutionMessage.Position)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription(nameof(ExecutionMessage.PnL)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription(nameof(ExecutionMessage.OpenInterest)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.Position)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.PnL)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = priceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OpenInterest)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Currency)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Error))
 			{

@@ -21,13 +21,12 @@ namespace StockSharp.Algo.Export.Database
 
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	class Level1Table : Table<Level1ChangeMessage>
 	{
-		public Level1Table(Security security)
-			: base("Level1", CreateColumns(security))
+		public Level1Table(decimal? priceStep, decimal? volumeStep)
+			: base("Level1", CreateColumns(priceStep, volumeStep))
 		{
 		}
 
@@ -44,7 +43,7 @@ namespace StockSharp.Algo.Export.Database
 			return typeof(Nullable<>).Make(type);
 		}
 
-		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
+		private static IEnumerable<ColumnDescription> CreateColumns(decimal? priceStep, decimal? volumeStep)
 		{
 			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
@@ -82,7 +81,7 @@ namespace StockSharp.Algo.Export.Database
 					case Level1Fields.BestAskPrice:
 					case Level1Fields.HighBidPrice:
 					case Level1Fields.LowAskPrice:
-						step = security.PriceStep ?? 1;
+						step = priceStep ?? 1;
 						break;
 					case Level1Fields.OpenInterest:
 					case Level1Fields.BidsVolume:
@@ -92,10 +91,7 @@ namespace StockSharp.Algo.Export.Database
 					case Level1Fields.Volume:
 					case Level1Fields.BestBidVolume:
 					case Level1Fields.BestAskVolume:
-						step = security.VolumeStep ?? 1;
-						break;
-					case Level1Fields.Multiplier:
-						step = security.Multiplier ?? 1;
+						step = volumeStep ?? 1;
 						break;
 				}
 

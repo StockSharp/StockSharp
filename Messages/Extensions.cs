@@ -1923,6 +1923,24 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Try get security ID from the specified message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Security ID or <see langword="null"/> if message do not provide it.</returns>
+		public static SecurityId? TryGetSecurityId(this Message message)
+		{
+			switch (message)
+			{
+				case ISecurityIdMessage secIdMsg:
+					return secIdMsg.SecurityId;
+				case INullableSecurityIdMessage nullSecIdMsg:
+					return nullSecIdMsg.SecurityId;
+				default:
+					return null;
+			}
+		}
+
+		/// <summary>
 		/// Replace security id by the specified.
 		/// </summary>
 		/// <param name="message">Message.</param>

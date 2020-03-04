@@ -24,7 +24,6 @@ namespace StockSharp.Algo.Export
 	using MoreLinq;
 
 	using StockSharp.Messages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Export.Database;
 	using StockSharp.Algo.Export.Database.DbProviders;
 
@@ -38,16 +37,29 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DatabaseExporter"/>.
 		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="arg">The data parameter.</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <param name="volumeStep">Minimum volume step.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="connection">The connection to DB.</param>
-		public DatabaseExporter(Security security, object arg, Func<int, bool> isCancelled, DatabaseConnectionPair connection)
-			: base(security, arg, isCancelled, connection.ToString())
+		public DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, Func<int, bool> isCancelled, DatabaseConnectionPair connection)
+			: base(dataType, isCancelled, connection.ToString())
 		{
+			PriceStep = priceStep;
+			VolumeStep = volumeStep;
 			_connection = connection;
 			CheckUnique = true;
 		}
+
+		/// <summary>
+		/// Minimum price step.
+		/// </summary>
+		public decimal? PriceStep { get; }
+
+		/// <summary>
+		/// Minimum volume step.
+		/// </summary>
+		public decimal? VolumeStep { get; }
 
 		private int _batchSize = 50;
 
@@ -72,41 +84,40 @@ namespace StockSharp.Algo.Export
 		public bool CheckUnique { get; set; }
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<ExecutionMessage> messages)
+		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
 		{
-			switch ((ExecutionTypes)Arg)
-			{
-				case ExecutionTypes.Tick:
-					Do(messages, () => new TradeTable(Security));
-					break;
-				case ExecutionTypes.OrderLog:
-					Do(messages, () => new OrderLogTable(Security));
-					break;
-				case ExecutionTypes.Transaction:
-					Do(messages, () => new TransactionTable(Security));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			Do(messages, () => new OrderLogTable(PriceStep, VolumeStep));
+		}
+
+		/// <inheritdoc />
+		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
+		{
+			Do(messages, () => new TradeTable(PriceStep, VolumeStep));
+		}
+
+		/// <inheritdoc />
+		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		{
+			Do(messages, () => new TransactionTable(PriceStep, VolumeStep));
 		}
 
 		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
-			Do(messages.ToTimeQuotes(), () => new MarketDepthQuoteTable(Security));
+			Do(messages.ToTimeQuotes(), () => new MarketDepthQuoteTable(PriceStep, VolumeStep));
 		}
 
 		/// <inheritdoc />
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
-			Do(messages, () => new Level1Table(Security));
+			Do(messages, () => new Level1Table(PriceStep, VolumeStep));
 		}
 
 		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			// TODO
-			Do(messages, () => new CandleTable(Security));
+			Do(messages, () => new CandleTable(PriceStep, VolumeStep));
 		}
 
 		/// <inheritdoc />
@@ -124,7 +135,7 @@ namespace StockSharp.Algo.Export
 		/// <inheritdoc />
 		protected override void Export(IEnumerable<PositionChangeMessage> messages)
 		{
-			Do(messages, () => new PositionChangeTable(Security));
+			Do(messages, () => new PositionChangeTable(PriceStep, VolumeStep));
 		}
 
 		/// <inheritdoc />

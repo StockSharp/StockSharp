@@ -19,12 +19,9 @@ namespace StockSharp.Algo.Export
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
 
 	using Ecng.Common;
 
-	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -38,33 +35,23 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// Initialize <see cref="BaseExporter"/>.
 		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="arg">The data parameter.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="path">The path to file.</param>
-		protected BaseExporter(Security security, object arg, Func<int, bool> isCancelled, string path)
+		protected BaseExporter(DataType dataType, Func<int, bool> isCancelled, string path)
 		{
-			//if (security == null)
-			//	throw new ArgumentNullException(nameof(security));
-
 			if (path.IsEmpty())
 				throw new ArgumentNullException(nameof(path));
 
-			Security = security;
-			Arg = arg;
+			DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 			_isCancelled = isCancelled ?? throw new ArgumentNullException(nameof(isCancelled));
 			Path = path;
 		}
 
 		/// <summary>
-		/// Security.
+		/// Data type info.
 		/// </summary>
-		protected Security Security { get; }
-
-		/// <summary>
-		/// The data parameter.
-		/// </summary>
-		public object Arg { get; }
+		public DataType DataType { get; }
 
 		/// <summary>
 		/// The path to file.
@@ -74,45 +61,38 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// To export values.
 		/// </summary>
-		/// <param name="dataType">Market data type.</param>
 		/// <param name="values">Value.</param>
-		public void Export(Type dataType, IEnumerable values)
+		public void Export(IEnumerable values)
 		{
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				if (dataType == typeof(Trade))
-					Export(((IEnumerable<Trade>)values).Select(t => t.ToMessage()));
-				else if (dataType == typeof(MarketDepth))
-					Export(((IEnumerable<MarketDepth>)values).Select(d => d.ToMessage()));
-				else if (dataType == typeof(QuoteChangeMessage))
+				if (DataType == DataType.MarketDepth)
 					Export((IEnumerable<QuoteChangeMessage>)values);
-				else if (dataType == typeof(Level1ChangeMessage))
+				else if (DataType == DataType.Level1)
 					Export((IEnumerable<Level1ChangeMessage>)values);
-				else if (dataType == typeof(OrderLogItem))
-					Export(((IEnumerable<OrderLogItem>)values).Select(i => i.ToMessage()));
-				else if (dataType == typeof(ExecutionMessage))
-					Export((IEnumerable<ExecutionMessage>)values);
-				else if (dataType.IsCandle())
-					Export(((IEnumerable<Candle>)values).Select(c => c.ToMessage()));
-				else if (dataType.IsCandleMessage())
+				else if (DataType == DataType.Ticks)
+					ExportTicks((IEnumerable<ExecutionMessage>)values);
+				else if (DataType == DataType.OrderLog)
+					ExportOrderLog((IEnumerable<ExecutionMessage>)values);
+				else if (DataType == DataType.Transactions)
+					ExportTransactions((IEnumerable<ExecutionMessage>)values);
+				else if (DataType.IsCandles)
 					Export((IEnumerable<CandleMessage>)values);
-				else if (dataType == typeof(News))
-					Export(((IEnumerable<News>)values).Select(s => s.ToMessage()));
-				else if (dataType == typeof(NewsMessage))
+				else if (DataType == DataType.News)
 					Export((IEnumerable<NewsMessage>)values);
-				else if (dataType == typeof(Security))
-					Export(((IEnumerable<Security>)values).Select(s => s.ToMessage()));
-				else if (dataType == typeof(SecurityMessage))
+				else if (DataType == DataType.Securities)
 					Export((IEnumerable<SecurityMessage>)values);
-				else if (dataType == typeof(PositionChangeMessage))
+				else if (DataType == DataType.Securities)
+					Export((IEnumerable<SecurityMessage>)values);
+				else if (DataType == DataType.PositionChanges)
 					Export((IEnumerable<PositionChangeMessage>)values);
-				else if (dataType == typeof(IndicatorValue))
-					Export((IEnumerable<IndicatorValue>)values);
+				//else if (DataType == DataType.IndicatorValue)
+				//	Export((IEnumerable<IndicatorValue>)values);
 				else
-					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
+					throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.Str721);
 			});
 		}
 
@@ -139,10 +119,22 @@ namespace StockSharp.Algo.Export
 		protected abstract void Export(IEnumerable<Level1ChangeMessage> messages);
 
 		/// <summary>
-		/// To export <see cref="ExecutionMessage"/>.
+		/// To export <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void Export(IEnumerable<ExecutionMessage> messages);
+		protected abstract void ExportTicks(IEnumerable<ExecutionMessage> messages);
+
+		/// <summary>
+		/// To export <see cref="ExecutionTypes.OrderLog"/>.
+		/// </summary>
+		/// <param name="messages">Messages.</param>
+		protected abstract void ExportOrderLog(IEnumerable<ExecutionMessage> messages);
+
+		/// <summary>
+		/// To export <see cref="ExecutionTypes.Transaction"/>.
+		/// </summary>
+		/// <param name="messages">Messages.</param>
+		protected abstract void ExportTransactions(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="CandleMessage"/>.
