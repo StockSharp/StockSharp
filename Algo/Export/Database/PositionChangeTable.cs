@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Export.Database
 
 				yield return new ColumnDescription(type.ToString())
 				{
-					DbType = columnType.IsNullable() ? columnType : typeof(Nullable<>).Make(columnType),
+					DbType = columnType.IsNullable() || columnType.IsClass ? columnType : typeof(Nullable<>).Make(columnType),
 					ValueRestriction = columnType == typeof(decimal) ? new DecimalRestriction { Scale = step.GetCachedDecimals() } : null,
 				};
 			}

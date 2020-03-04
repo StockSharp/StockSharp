@@ -33,19 +33,19 @@ namespace StockSharp.Algo.Export.Database
 		{
 			yield return new ColumnDescription(nameof(ExecutionMessage.TradeId))
 			{
-				IsPrimaryKey = true,
+				//IsPrimaryKey = true,
 				DbType = typeof(string),
-				ValueRestriction = new StringRestriction(32)
+				ValueRestriction = new StringRestriction(32),
 			};
 			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
-				IsPrimaryKey = true,
+				//IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
 			yield return new ColumnDescription(nameof(SecurityId.BoardCode))
 			{
-				IsPrimaryKey = true,
+				//IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};

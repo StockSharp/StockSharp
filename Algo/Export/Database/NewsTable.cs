@@ -31,7 +31,11 @@ namespace StockSharp.Algo.Export.Database
 
 		private static IEnumerable<ColumnDescription> CreateColumns()
 		{
-			yield return new ColumnDescription(nameof(NewsMessage.Id)) { DbType = typeof(long) };
+			yield return new ColumnDescription(nameof(NewsMessage.Id))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(32),
+			};
 			yield return new ColumnDescription(nameof(NewsMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(NewsMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
