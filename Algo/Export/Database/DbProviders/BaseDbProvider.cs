@@ -195,13 +195,13 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 						return "nvarchar({0})".Put(srest.MaxLength == int.MaxValue ? "max" : srest.MaxLength.To<string>());
 				}
 				else
-					return "ntext";
+					return "nvarchar(max)";
 			}
 
 			if (type == typeof(long))
-				return "BIGINT";
+				return "bigint";
 			if (type == typeof(int))
-				return "INTEGER";
+				return "integer";
 
 			if (type == typeof(decimal))
 			{
@@ -211,11 +211,11 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			}
 
 			if (type == typeof(Enum))
-				return "INTEGER";
+				return "integer";
 			if (type == typeof(double))
-				return "FLOAT";
+				return "float";
 			if (type == typeof(float))
-				return "FLOAT";
+				return "float";
 
 			throw new NotSupportedException($"{type.Name} is not supported by {nameof(BaseDbProvider)}.");
 		}

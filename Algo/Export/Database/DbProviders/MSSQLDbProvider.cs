@@ -142,13 +142,13 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 		protected override string GetDbType(Type t, object restriction)
 		{
 			if (t == typeof(DateTimeOffset))
-				return "DATETIMEOFFSET";
+				return "datetimeoffset";
 			if (t == typeof(DateTime))
-				return "DATETIME2";
+				return "datetime2";
 			if (t == typeof(TimeSpan))
-				return "TIME";
+				return "time";
 			if (t == typeof(Guid))
-				return "GUID";
+				return "guid";
 			if (t == typeof(bool))
 				return "bit";
 			if (t == typeof(byte))

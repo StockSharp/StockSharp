@@ -4614,7 +4614,7 @@ namespace StockSharp.Algo
 					return typeof(PortfolioStates);
 
 				case PositionChangeTypes.Currency:
-					return typeof(Currency);
+					return typeof(CurrencyTypes);
 
 				default:
 					return type.IsObsolete() ? null : typeof(decimal);
@@ -5386,5 +5386,10 @@ namespace StockSharp.Algo
 
 			return news.Source.CompareIgnoreCase(Messages.Extensions.NewsStockSharpSource);
 		}
+
+		/// <summary>
+		/// Indicator value.
+		/// </summary>
+		public static DataType IndicatorValue { get; } = DataType.Create(typeof(Indicators.IIndicatorValue), null);//.Immutable();
 	}
 }

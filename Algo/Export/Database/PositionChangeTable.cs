@@ -15,16 +15,17 @@ namespace StockSharp.Algo.Export.Database
 		{
 		}
 
-		private static Type GetDbType(PositionChangeTypes type)
+		private static Type GetDbType(PositionChangeTypes field)
 		{
-			switch (type)
-			{
-				case PositionChangeTypes.State:
-				case PositionChangeTypes.Currency:
-					return typeof(string);
-				default:
-					return typeof(decimal);
-			}
+			var type = field.ToType();
+
+			if (type == null)
+				return null;
+
+			if (type.IsEnum)
+				type = type.GetEnumUnderlyingType();
+
+			return type.IsClass ? type : typeof(Nullable<>).Make(type);
 		}
 
 		private static IEnumerable<ColumnDescription> CreateColumns(decimal? priceStep, decimal? volumeStep)

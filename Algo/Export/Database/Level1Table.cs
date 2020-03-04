@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Export.Database
 			if (type.IsEnum)
 				type = type.GetEnumUnderlyingType();
 
-			return typeof(Nullable<>).Make(type);
+			return type.IsClass ? type : typeof(Nullable<>).Make(type);
 		}
 
 		private static IEnumerable<ColumnDescription> CreateColumns(decimal? priceStep, decimal? volumeStep)
