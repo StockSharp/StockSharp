@@ -1,36 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Community</RootNamespace>
     <AssemblyName>StockSharp.Community</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net45</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DocumentationFile>bin\$(Configuration)\StockSharp.Community.XML</DocumentationFile>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\StockSharp.Community.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\StockSharp.Community.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
@@ -60,69 +42,17 @@
     <Reference Include="Ecng.IO">
       <HintPath>..\References\Ecng.IO.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\StockSharpAssemblyInfo.cs">
-      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="AuthenticationClient.cs" />
-    <Compile Include="BaseCommunityClient.cs" />
-    <Compile Include="BaseServiceClient.cs" />
-    <Compile Include="BrokerData.cs" />
-    <Compile Include="CommunityNews.cs" />
-    <Compile Include="CommunityAuthorization.cs" />
-    <Compile Include="ErrorCodes.cs" />
-    <Compile Include="ErrorExtensions.cs" />
-    <Compile Include="FileClient.cs" />
-    <Compile Include="IAuthenticationClient.cs" />
-    <Compile Include="IAuthenticationService.cs" />
-    <Compile Include="IFileClient.cs" />
-    <Compile Include="IFileService.cs" />
-    <Compile Include="INotificationClient.cs" />
-    <Compile Include="INotificationService.cs" />
-    <Compile Include="IProfileClient.cs" />
-    <Compile Include="IProfileService.cs" />
-    <Compile Include="Messages\CommunityMessageTypes.cs" />
-    <Compile Include="Messages\FileInfoMessage.cs" />
-    <Compile Include="Messages\ProductCheckVersionMessage.cs" />
-    <Compile Include="Messages\ProductInfoMessage.cs" />
-    <Compile Include="NotificationClient.cs" />
-    <Compile Include="Profile.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProfileClient.cs" />
-    <Compile Include="Products.cs" />
-    <Compile Include="ISessionService.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FileData.cs" />
+    <Compile Include="..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Localization\Localization.csproj">
-      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
-      <Name>Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logging\Logging.csproj">
-      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
-      <Name>Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Messages\Messages.csproj">
-      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
-      <Name>Messages</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
+    <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
