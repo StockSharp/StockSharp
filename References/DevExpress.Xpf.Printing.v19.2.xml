@@ -4,6 +4,11 @@
     <name>DevExpress.Xpf.Printing.v19.2</name>
   </assembly>
   <members>
+    <member name="N:DevExpress.Xpf.Printing">
+      <summary>
+        <para>Contains classes that provide the basic functionality for the DXPrinting for WPF library. To use these classes in XAML code, add the xmlns:dxp=&quot;&quot; namespace reference.</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.Xpf.Printing.BackstagePrintPreview">
       <summary>
         <para>A control used to print documents in WPF applications and easily incorporated into a Backstage View-based menu.</para>

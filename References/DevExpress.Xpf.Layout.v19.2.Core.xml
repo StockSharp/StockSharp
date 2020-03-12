@@ -86,17 +86,17 @@
     </member>
     <member name="F:DevExpress.Xpf.Layout.Core.SelectionMode.ItemRange">
       <summary>
-        <para>Selects in Customization Mode all items in the range between the last selected item and an item specified as a parameter in the  method.</para>
+        <para>Selects in Customization Mode all items in the range between the last selected item and an item specified as a parameter in the DockLayoutManager.SelectItem method.</para>
       </summary>
     </member>
     <member name="F:DevExpress.Xpf.Layout.Core.SelectionMode.MultipleItems">
       <summary>
-        <para>Selects in Customization Mode multiple items specified via all the  methods called.</para>
+        <para>Selects in Customization Mode multiple items specified via all the DockLayoutManager.SelectItem methods called.</para>
       </summary>
     </member>
     <member name="F:DevExpress.Xpf.Layout.Core.SelectionMode.SingleItem">
       <summary>
-        <para>Selects in Customization Mode the only item specified via the  method. If multiple  methods were called, the last one&#39;s item will be selected.</para>
+        <para>Selects in Customization Mode the only item specified via the DockLayoutManager.SelectItem method. If multiple DockLayoutManager.SelectItem methods were called, the last one&#39;s item will be selected.</para>
       </summary>
     </member>
     <member name="T:DevExpress.Xpf.Layout.Core.TabHeaderLayoutType">

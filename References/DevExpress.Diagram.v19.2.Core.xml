@@ -3521,19 +3521,19 @@
     </member>
     <member name="F:DevExpress.Diagram.Core.MeasureUnits.Inches">
       <summary>
-        <para>Specifies that inches are used as the measure unit.</para>
+        <para>Represents inches as the measure unit.</para>
       </summary>
       <value></value>
     </member>
     <member name="F:DevExpress.Diagram.Core.MeasureUnits.Millimeters">
       <summary>
-        <para>Specifies that millimeters are used as the measure unit.</para>
+        <para>Represents millimeters as the measure unit.</para>
       </summary>
       <value></value>
     </member>
     <member name="F:DevExpress.Diagram.Core.MeasureUnits.Pixels">
       <summary>
-        <para>Specifies that pixels are used as the measure unit.</para>
+        <para>Represents pixels as the measure unit.</para>
       </summary>
       <value></value>
     </member>
@@ -3566,6 +3566,31 @@
     <member name="F:DevExpress.Diagram.Core.ModifySelectionMode.ReplaceSelection">
       <summary>
         <para>The existing selection is replaced with selected diagram items.</para>
+      </summary>
+    </member>
+    <member name="N:DevExpress.Diagram.Core.Native">
+      <summary>
+        <para></para>
+      </summary>
+    </member>
+    <member name="T:DevExpress.Diagram.Core.Native.SerializationKind">
+      <summary>
+        <para></para>
+      </summary>
+    </member>
+    <member name="F:DevExpress.Diagram.Core.Native.SerializationKind.CopyPaste">
+      <summary>
+        <para></para>
+      </summary>
+    </member>
+    <member name="F:DevExpress.Diagram.Core.Native.SerializationKind.Recreate">
+      <summary>
+        <para></para>
+      </summary>
+    </member>
+    <member name="F:DevExpress.Diagram.Core.Native.SerializationKind.SaveLoadDocument">
+      <summary>
+        <para></para>
       </summary>
     </member>
     <member name="T:DevExpress.Diagram.Core.OrientationKind">

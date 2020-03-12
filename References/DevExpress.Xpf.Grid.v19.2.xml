@@ -4,6 +4,11 @@
     <name>DevExpress.Xpf.Grid.v19.2</name>
   </assembly>
   <members>
+    <member name="N:DevExpress.Xpf.Core.FilteringUI">
+      <summary>
+        <para>Contains classes that implement the filtering UI functionality.</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.Xpf.Core.FilteringUI.CalendarFilterElement">
       <summary>
         <para>A calendar filter element that allows a user to filter by date values.</para>
@@ -911,6 +916,11 @@
     <member name="M:DevExpress.Xpf.Core.FilteringUI.RangeFilterElement.#ctor">
       <summary>
         <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Core.FilteringUI.RangeFilterElement"/> class.</para>
+      </summary>
+    </member>
+    <member name="N:DevExpress.Xpf.Grid">
+      <summary>
+        <para>Contains classes which implement the main functionality of the DXGrid for WPF suite. To use these classes in XAML code, add the xmlns:dxg=&quot;&quot; namespace reference.</para>
       </summary>
     </member>
     <member name="T:DevExpress.Xpf.Grid.CardData">
@@ -4955,9 +4965,9 @@
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.GridMenu">
       <summary>
-        <para>Gets the context menu currently being displayed within a View.</para>
+        <para>Gets the context menu that is displayed within a View.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Grid.GridPopupMenu"/> object that represents the context menu displayed within a View. null (Nothing in Visual Basic) if no menu is currently displayed within a View.</value>
+      <value>The context menu displayed within a View. null if no menu is displayed within a View.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.GridViewCommands">
       <summary>
@@ -4985,21 +4995,21 @@
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.GroupFooterMenuCustomizations">
       <summary>
-        <para>Allows you to customize the Group Footer context menu by adding new menu items or removing existing items.</para>
+        <para>Allows you to customize the Group Footer&#39;s context menu. You can add new menu items or remove existing items.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize the Group Footer&#39;s context menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.GroupPanelMenuCustomizations">
       <summary>
-        <para>Allows you to customize the Group Panel context menu by adding new menu items or removing existing items.</para>
+        <para>Allows you to customize the Group Panel&#39;s context menu. You can add new menu items or remove existing items.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize the Group Panel&#39;s context menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.GroupRowMenuCustomizations">
       <summary>
-        <para>Allows you to customize the Group Row context menu by adding new menu items or removing existing items.</para>
+        <para>Allows you to customize the group row&#39;s context menu. You can add new menu items or remove existing items.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize the group row&#39;s context menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.GroupRowStyle">
       <summary>
@@ -5133,9 +5143,9 @@
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.IsGroupFooterMenuEnabled">
       <summary>
-        <para>Gets or sets whether the group footer context menu is shown when an end-user right-clicks within the Group Footer. This is a dependency property.</para>
+        <para>Gets or sets whether an end user can right-click the Group Footer to access its context menu. This is a dependency property.</para>
       </summary>
-      <value>true to enable the group footer context menu; otherwise, false.</value>
+      <value>true, to enable a group footer context menu; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.GridViewBase.IsGroupFooterMenuEnabledProperty">
       <summary>
@@ -5145,9 +5155,9 @@
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.IsGroupPanelMenuEnabled">
       <summary>
-        <para>Gets or sets whether the column context menu is shown when an end-user right-clicks within the Group Panel.</para>
+        <para>Gets or sets whether an end user can right-click the Group Panel to access its context menu.</para>
       </summary>
-      <value>true to enable the group panel context menu; otherwise, false.</value>
+      <value>true, to enable the group panel context menu; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.GridViewBase.IsGroupPanelMenuEnabledProperty">
       <summary>
@@ -5181,9 +5191,9 @@
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.IsGroupRowMenuEnabled">
       <summary>
-        <para>Gets or sets whether the group row context menu is shown when an end-user right-clicks within the Group Row. This is a dependency property.</para>
+        <para>Gets or sets whether an end user can right-click a Group Row to access its context menu. This is a dependency property.</para>
       </summary>
-      <value>true to enable the group footer context menu; otherwise, false.</value>
+      <value>true, to enable the group row context menu; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.GridViewBase.IsGroupRowMenuEnabledProperty">
       <summary>
@@ -5421,7 +5431,7 @@ If the value is null, the rows number is 20.</value>
     </member>
     <member name="E:DevExpress.Xpf.Grid.GridViewBase.ValidateRow">
       <summary>
-        <para>Enables you to specify whether the focused row&#39;s data is valid, and whether the row can lose focus.</para>
+        <para>Allows you to specify whether the focused row&#39;s data is valid, and whether the row can lose focus.</para>
       </summary>
     </member>
     <member name="P:DevExpress.Xpf.Grid.GridViewBase.VisibleColumns">
@@ -6042,7 +6052,7 @@ If the value is null, the rows number is 20.</value>
       <summary>
         <para>Gets or sets whether columns should be created automatically for all fields in a data source. This is a dependency property.</para>
       </summary>
-      <value>true to automatically create columns for all fields in a data source; otherwise, false.</value>
+      <value>true, to automatically create columns for all fields in a data source; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEdit.AutoPopulateColumnsProperty">
       <summary>
@@ -6072,7 +6082,7 @@ If the value is null, the rows number is 20.</value>
       <summary>
         <para>Returns an embedded <see cref="T:DevExpress.Xpf.Grid.GridControl"/>.</para>
       </summary>
-      <returns>A <see cref="T:DevExpress.Xpf.Grid.GridControl"/> object that represents the DXGrid control for WPF.</returns>
+      <returns>A <see cref="T:DevExpress.Xpf.Grid.GridControl"/> object that represents the data grid embedded in the editor&#39;s drop-down window.</returns>
     </member>
     <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEdit.IsPopupAutoWidth">
       <summary>
@@ -7587,9 +7597,9 @@ If the value is null, the rows number is 20.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TableView.BandMenuCustomizations">
       <summary>
-        <para>Allows you to customize the band context menu by adding new menu items or removing existing items.</para>
+        <para>Allows you to customize the band header&#39;s context menu. You can add new menu items or remove existing items.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize the band header&#39;s context menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TableView.BandSeparatorWidth">
       <summary>
@@ -7797,9 +7807,9 @@ If the value is null, the rows number is 20.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TableView.CompactModeFilterElementMenuCustomizations">
       <summary>
-        <para>Allows you to customize a filter menu displayed in compact mode.</para>
+        <para>Allows you to customize a filter menu in compact mode.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize a filter menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TableView.CompactModeFilterItems">
       <summary>
@@ -7821,15 +7831,15 @@ If the value is null, the rows number is 20.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TableView.CompactModeFilterMergeElementMenuCustomizations">
       <summary>
-        <para>Allows you to customize a merged filter and sorting menu displayed in compact mode.</para>
+        <para>Allows you to customize a filter menu with sort items in compact mode.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize a filter menu with sort items.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TableView.CompactModeSortElementMenuCustomizations">
       <summary>
-        <para>Allows you to customize a sort menu displayed in compact mode.</para>
+        <para>Allows you to customize a sort menu in compact mode.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize a sort menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TableView.CompactPanelShowMode">
       <summary>
@@ -12704,9 +12714,9 @@ If the value is null, the rows number is 20.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TreeListView.CompactModeFilterElementMenuCustomizations">
       <summary>
-        <para>Allows you to customize a filter menu displayed in compact mode.</para>
+        <para>Allows you to customize a filter menu in compact mode.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize a filter menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TreeListView.CompactModeFilterItems">
       <summary>
@@ -12728,15 +12738,15 @@ If the value is null, the rows number is 20.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TreeListView.CompactModeFilterMergeElementMenuCustomizations">
       <summary>
-        <para>Allows you to customize a merged filter and sorting menu displayed in compact mode.</para>
+        <para>Allows you to customize a filter menu with sort items in compact mode.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize a filter menu with sort items.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TreeListView.CompactModeSortElementMenuCustomizations">
       <summary>
-        <para>Allows you to customize a sort menu displayed in compact mode.</para>
+        <para>Allows you to customize a sort menu in compact mode.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize a sort menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.TreeListView.CompactPanelShowMode">
       <summary>

@@ -650,6 +650,18 @@
       </summary>
       <value>The item&#39;s field name.</value>
     </member>
+    <member name="P:DevExpress.Xpf.Core.FilteringUI.FieldItem.SelectedCaptionTemplate">
+      <summary>
+        <para></para>
+      </summary>
+      <value></value>
+    </member>
+    <member name="P:DevExpress.Xpf.Core.FilteringUI.FieldItem.SelectedCaptionTemplateSelector">
+      <summary>
+        <para></para>
+      </summary>
+      <value></value>
+    </member>
     <member name="T:DevExpress.Xpf.Core.FilteringUI.FieldList">
       <summary>
         <para>A list of <see cref="T:DevExpress.Xpf.Core.FilteringUI.FieldItem"/>s displayed in the <see cref="T:DevExpress.Xpf.Core.FilteringUI.FilterEditorControl"/>.</para>
@@ -1470,6 +1482,11 @@
         <para>Gets a collection of operand values.</para>
       </summary>
       <value>A collection of operand values.</value>
+    </member>
+    <member name="N:DevExpress.Xpf.Data">
+      <summary>
+        <para>Contains classes implementing the common data management functionality for DevExpress WPF controls (e.g. DXGrid).</para>
+      </summary>
     </member>
     <member name="T:DevExpress.Xpf.Data.RowHandle">
       <summary>
@@ -5689,6 +5706,81 @@
       </summary>
       <value>A <see cref="T:DevExpress.Xpf.Grid.DataViewBase"/> descendant that is the view that raised the event.</value>
     </member>
+    <member name="T:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs">
+      <summary>
+        <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.DataControlBase.CustomUniqueValues"/> event.</para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.#ctor(DevExpress.Xpf.Grid.ColumnBase,System.Boolean,System.Boolean,DevExpress.Data.OperationCompleted,DevExpress.Data.Filtering.CriteriaOperator)">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs"/> class with specified settings.</para>
+      </summary>
+      <param name="column">A column for which a drop-down filter is shown.</param>
+      <param name="includeFilteredOut">true, if a drop-down filter&#39;s values are displayed with ignoring filters by other columns; otherwise, false.</param>
+      <param name="roundDateTime">true, if time values are ignored when you filter by DateTime values; otherwise, false.</param>
+      <param name="asyncCompleted">An AsyncCompletedHandler delegate referencing a method that should be executed after the operation is completed.</param>
+      <param name="filter">The current filter.</param>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.AsyncCompleted">
+      <summary>
+        <para>Gets an AsyncCompletedHandler delegate referencing a method that should be executed after the operation is completed.</para>
+      </summary>
+      <value>An AsyncCompletedHandler delegate referencing a method that should be executed after the operation is completed.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.Column">
+      <summary>
+        <para>Gets a column for which a drop-down filter is shown.</para>
+      </summary>
+      <value>A column for which a drop-down filter is shown.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.Filter">
+      <summary>
+        <para>Gets the current filter.</para>
+      </summary>
+      <value>The current filter.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.IncludeFilteredOut">
+      <summary>
+        <para>Gets whether a drop-down filter&#39;s values are displayed with ignoring filters by other columns.</para>
+      </summary>
+      <value>true, if a drop-down filter&#39;s values are displayed with ignoring filters by other columns; otherwise, false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.RoundDateTime">
+      <summary>
+        <para>Gets or sets whether to ignore time values when you filter by DateTime values.</para>
+      </summary>
+      <value>true, to ignore time values; otherwise, false.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.Source">
+      <summary>
+        <para>Gets a control (GridControl or TreeListControl) that raised the event.</para>
+      </summary>
+      <value>A control (GridControl or TreeListControl) that raised the event.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.UniqueValues">
+      <summary>
+        <para>Gets or sets unique values.</para>
+      </summary>
+      <value>Gets or sets unique values.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.UniqueValuesAndCounts">
+      <summary>
+        <para>Gets or sets unique values and their counts.</para>
+      </summary>
+      <value>Unique values and their counts.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.UniqueValuesAndCountsAsync">
+      <summary>
+        <para>Gets or sets a task that allows you to asynchronously return unique values and their counts.</para>
+      </summary>
+      <value>A task that allows you to asynchronously return unique values and their counts.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Grid.CustomUniqueValuesEventArgs.UniqueValuesAsync">
+      <summary>
+        <para>Gets or sets a task that allows you to asynchronously return unique values.</para>
+      </summary>
+      <value>A task that allows you to asynchronously return unique values.</value>
+    </member>
     <member name="T:DevExpress.Xpf.Grid.DataBarFormatCondition">
       <summary>
         <para>A Data Bars conditional format.</para>
@@ -6122,7 +6214,7 @@
     </member>
     <member name="E:DevExpress.Xpf.Grid.DataControlBase.CustomUniqueValues">
       <summary>
-        <para>Enables you to specify unique values displayed within a column&#39;s Drop-down Filter.</para>
+        <para>Allows you to specify unique values displayed within a column&#39;s Drop-down Filter.</para>
       </summary>
     </member>
     <member name="F:DevExpress.Xpf.Grid.DataControlBase.CustomUniqueValuesEvent">
@@ -7805,9 +7897,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.ColumnMenuCustomizations">
       <summary>
-        <para>Allows you to customize the Column Header context menu by adding new menu items or removing existing items.</para>
+        <para>Allows you to customize the column header&#39;s context menu. You can add new menu items or remove existing items.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize the column header&#39;s context menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.ColumnSortClearMode">
       <summary>
@@ -8933,9 +9025,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.IsColumnMenuEnabled">
       <summary>
-        <para>Gets or sets whether the column context menu is shown when an end-user right-clicks a column&#39;s header.</para>
+        <para>Gets or sets whether an end user can right-click a column header to access its context menu.</para>
       </summary>
-      <value>true to enable the column context menu; otherwise, false.</value>
+      <value>true, to enable a column context menu; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.DataViewBase.IsColumnMenuEnabledProperty">
       <summary>
@@ -9033,9 +9125,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.IsRowCellMenuEnabled">
       <summary>
-        <para>Gets or sets whether the column context menu can be shown when an end user right-clicks a data cell. This is a dependency property.</para>
+        <para>Gets or sets whether an end user can right-click a row cell to access its context menu. This is a dependency property.</para>
       </summary>
-      <value>true, to enable the row cell context menu; otherwise, false.</value>
+      <value>true, to enable a row cell context menu; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.DataViewBase.IsRowCellMenuEnabledProperty">
       <summary>
@@ -9064,9 +9156,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.IsTotalSummaryMenuEnabled">
       <summary>
-        <para>Gets or sets whether an end-user can invoke the summary or fixed summary context menu. This is a dependency property.</para>
+        <para>Gets or sets whether an end user can right-click the Total Summary Panel or the Fixed Summary Panel to access their context menus. This is a dependency property.</para>
       </summary>
-      <value>true to allow an end-user to invoke the summary or fixed summary context menu; otherwise, false.</value>
+      <value>true, to enable the summary or fixed summary context menu; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.DataViewBase.IsTotalSummaryMenuEnabledProperty">
       <summary>
@@ -9419,9 +9511,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.RowCellMenuCustomizations">
       <summary>
-        <para>Allows you to customize the Row Cell context menu by adding new menu items or removing existing items.</para>
+        <para>Allows you to customize the row cell&#39;s context menu. You can add new menu items or remove existing items.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize the row cell&#39;s context menu.</value>
     </member>
     <member name="F:DevExpress.Xpf.Grid.DataViewBase.RowHandleProperty">
       <summary>
@@ -10244,9 +10336,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.TotalSummaryMenuCustomizations">
       <summary>
-        <para>Allows you to customize the Total Summary context menu, by adding new menu items or removing existing items.</para>
+        <para>Allows you to customize the Total Summary&#39;s context menu. You can add new menu items or remove existing items.</para>
       </summary>
-      <value>A <see cref="T:DevExpress.Xpf.Bars.BarManagerActionCollection"/> object.</value>
+      <value>A collection of bar actions to customize the Total Summary&#39;s context menu.</value>
     </member>
     <member name="P:DevExpress.Xpf.Grid.DataViewBase.TouchScrollThreshold">
       <summary>

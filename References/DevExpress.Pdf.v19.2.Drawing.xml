@@ -4,6 +4,11 @@
     <name>DevExpress.Pdf.v19.2.Drawing</name>
   </assembly>
   <members>
+    <member name="N:DevExpress.Pdf">
+      <summary>
+        <para>Contains classes and enumerations that are used to implement the main functionality of WinForms and WPF PDF Viewers, and the PDF Document API.</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.Pdf.PdfGraphics">
       <summary>
         <para>Implements drawing on a PDF page.</para>
@@ -397,7 +402,7 @@
     </member>
     <member name="P:DevExpress.Pdf.PdfGraphics.TextOrigin">
       <summary>
-        <para>Specifies how to interpret a point passed to one of the  overload methods that take a PointF object.</para>
+        <para>Specifies how to interpret a point passed to one of the PdfGraphics.DrawString overload methods that take a PointF object.</para>
       </summary>
       <value>A <see cref="T:DevExpress.Pdf.PdfGraphicsTextOrigin"/> enumeration value. The default value is TopLeftCorner.</value>
     </member>

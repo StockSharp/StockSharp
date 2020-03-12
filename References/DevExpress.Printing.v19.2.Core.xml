@@ -1615,6 +1615,11 @@
       </summary>
       <value></value>
     </member>
+    <member name="N:DevExpress.Export">
+      <summary>
+        <para>Contains settings controlling data export from controls.</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.Export.BandedLayoutMode">
       <summary>
         <para>Contains values that enumerate possible ways of exporting bands and columns from Banded Views.</para>
@@ -2589,7 +2594,7 @@ When exporting to XLS and XLSX formats, the layout of control elements is retain
     </member>
     <member name="M:DevExpress.Export.Xl.IXlRow.EndTable(DevExpress.Export.Xl.IXlTable,System.Boolean)">
       <summary>
-        <para>Finishes table generation after calling the  method.</para>
+        <para>Finishes table generation after calling the IXlRow.BeginTable method.</para>
       </summary>
       <param name="table">An <see cref="T:DevExpress.Export.Xl.IXlTable"/> object that is the generated table.</param>
       <param name="hasTotalRow">A <see cref="T:System.Boolean"/> value indicating whether the total row is displayed for the table.</param>
@@ -2761,7 +2766,7 @@ When exporting to XLS and XLSX formats, the layout of control elements is retain
     </member>
     <member name="M:DevExpress.Export.Xl.IXlSheet.EndGroup">
       <summary>
-        <para>Finalizes the group creation after calling the  method.</para>
+        <para>Finalizes the group creation after calling the IXlSheet.BeginGroup method.</para>
       </summary>
     </member>
     <member name="P:DevExpress.Export.Xl.IXlSheet.HeaderFooter">
@@ -3259,14 +3264,14 @@ When exporting to XLS and XLSX formats, the layout of control elements is retain
     </member>
     <member name="M:DevExpress.Export.Xl.XlBorder.AllBorders(DevExpress.Export.Xl.XlColor)">
       <summary>
-        <para>Returns the <see cref="T:DevExpress.Export.Xl.XlBorder"/> object that specifies all outside borders of a cell. This method is equivalent to the  method and is reserved for future use.</para>
+        <para>Returns the <see cref="T:DevExpress.Export.Xl.XlBorder"/> object that specifies all outside borders of a cell. This method is equivalent to the XlBorder.OutlineBorders method and is reserved for future use.</para>
       </summary>
       <param name="color">An <see cref="T:DevExpress.Export.Xl.XlColor"/> object that defines the line color of borders.</param>
       <returns>An <see cref="T:DevExpress.Export.Xl.XlBorder"/> class instance.</returns>
     </member>
     <member name="M:DevExpress.Export.Xl.XlBorder.AllBorders(DevExpress.Export.Xl.XlColor,DevExpress.Export.Xl.XlBorderLineStyle)">
       <summary>
-        <para>Returns the <see cref="T:DevExpress.Export.Xl.XlBorder"/> object that specifies all outside borders of a cell.This method is equivalent to the  method and is reserved for future use.</para>
+        <para>Returns the <see cref="T:DevExpress.Export.Xl.XlBorder"/> object that specifies all outside borders of a cell.This method is equivalent to the XlBorder.OutlineBorders method and is reserved for future use.</para>
       </summary>
       <param name="color">An <see cref="T:DevExpress.Export.Xl.XlColor"/> object that defines the line color of borders.</param>
       <param name="lineStyle">An <see cref="T:DevExpress.Export.Xl.XlBorderLineStyle"/> enumeration member that specifies the line style of borders.</param>
@@ -12673,6 +12678,11 @@ When exporting to XLS and XLSX formats, the layout of control elements is retain
         <para>A vertical tab character.</para>
       </summary>
     </member>
+    <member name="N:DevExpress.XtraPrinting">
+      <summary>
+        <para>Contains classes that provide the basic functionality for the XtraPrinting library (bricks, pages, document).</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.XtraPrinting.Accessor">
       <summary>
         <para>This class supports the .NET Framework infrastructure and is not intended to be used directly from your code.</para>
@@ -18383,9 +18393,9 @@ When exporting to XLS and XLSX formats, the layout of control elements is retain
     </member>
     <member name="P:DevExpress.XtraPrinting.ImageBrick.UseImageResolution">
       <summary>
-        <para>Specifies whether the original or default image DPI (dots per inch) value should be taken into account when rendering the image in a document.</para>
+        <para>Gets or sets whether to use the original image DPI (dots per inch) value when the image is rendered in a document.</para>
       </summary>
-      <value>true to use the original image resolution; otherwise false.</value>
+      <value>true, to use the image resolution; otherwise false.</value>
     </member>
     <member name="P:DevExpress.XtraPrinting.ImageBrick.XlsxFormatString">
       <summary>
@@ -20703,9 +20713,9 @@ When exporting to XLS and XLSX formats, the layout of control elements is retain
     </member>
     <member name="P:DevExpress.XtraPrinting.PdfExportOptions.ConvertImagesToJpeg">
       <summary>
-        <para>Specifies whether or not all bitmaps contained in the document should be converted to JPEG format during exporting to PDF.</para>
+        <para>Specifies whether to convert the images contained in the document to JPEG format during the export to PDF.</para>
       </summary>
-      <value>true to convert images to JPEG; otherwise false.</value>
+      <value>true, to convert images to JPEG; otherwise, false.</value>
     </member>
     <member name="P:DevExpress.XtraPrinting.PdfExportOptions.DocumentOptions">
       <summary>
@@ -20751,7 +20761,7 @@ When exporting to XLS and XLSX formats, the layout of control elements is retain
     </member>
     <member name="P:DevExpress.XtraPrinting.PdfExportOptions.ShowPrintDialogOnOpen">
       <summary>
-        <para>Gets or sets a value indicating whether the Print dialog should be displayed when a PDF file is opened in an appropriate application.</para>
+        <para>Gets or sets whether to display the Print dialog when a PDF file is opened.</para>
       </summary>
       <value>true, to show the Print dialog on open; otherwise, false.</value>
     </member>
@@ -25410,6 +25420,11 @@ The DefaultBoolean.Default value is equivalent to True.</value>
       </summary>
       <value>A <see cref="T:DevExpress.XtraPrinting.Drawing.Watermark"/> object.</value>
     </member>
+    <member name="N:DevExpress.XtraReports.Parameters">
+      <summary>
+        <para>Contains classes that are used to handle parameters in XtraReports.</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.XtraReports.Parameters.CascadingParametersService">
       <summary>
         <para>For internal use.</para>
@@ -26170,6 +26185,11 @@ The DefaultBoolean.Default value is equivalent to True.</value>
         <para>Specifies whether dedicated print appearance settings (<see cref="P:DevExpress.XtraGrid.Views.Grid.GridView.AppearancePrint"/>) or regular appearance settings (<see cref="P:DevExpress.XtraGrid.Views.Grid.GridView.Appearance"/>) are used when generating a report.</para>
       </summary>
       <value><see cref="F:DevExpress.Utils.DefaultBoolean.True"/> to use print appearance settings; <see cref="F:DevExpress.Utils.DefaultBoolean.False"/> or <see cref="F:DevExpress.Utils.DefaultBoolean.Default"/> to use regular appearance settings.</value>
+    </member>
+    <member name="N:DevExpress.XtraReports.UI">
+      <summary>
+        <para>Contains classes that implement the basic functionality of XtraReports.</para>
+      </summary>
     </member>
     <member name="T:DevExpress.XtraReports.UI.HorizontalAnchorStyles">
       <summary>

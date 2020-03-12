@@ -4,6 +4,11 @@
     <name>DevExpress.Pdf.v19.2.Core</name>
   </assembly>
   <members>
+    <member name="N:DevExpress.Pdf">
+      <summary>
+        <para>Contains classes and enumerations that are used to implement the main functionality of WinForms and WPF PDF Viewers, and the PDF Document API.</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.Pdf.IPdfViewer">
       <summary>
         <para>For internal use. Provides the functionality of  <see cref="T:DevExpress.XtraPdfViewer.PdfViewer"/> and <see cref="T:DevExpress.Xpf.PdfViewer.PdfViewerControl"/> classes.</para>
@@ -3063,17 +3068,17 @@
     </member>
     <member name="T:DevExpress.Pdf.PdfGraphicsTextOrigin">
       <summary>
-        <para>Contains values that specify how to interpret a point passed to one of the  overload methods that take a PointF object as an argument.</para>
+        <para>Contains values that specify how to interpret a point passed to one of the PdfGraphics.DrawString overload methods that take a PointF object as an argument.</para>
       </summary>
     </member>
     <member name="F:DevExpress.Pdf.PdfGraphicsTextOrigin.Baseline">
       <summary>
-        <para>The point passed to one of the  methods that take a PointF object is on the text baseline.</para>
+        <para>The point passed to one of the PdfGraphics.DrawString methods that take a PointF object is on the text baseline.</para>
       </summary>
     </member>
     <member name="F:DevExpress.Pdf.PdfGraphicsTextOrigin.TopLeftCorner">
       <summary>
-        <para>The point passed to one the  methods that take a PointF object is the top left corner of the text bounding rectangle.</para>
+        <para>The point passed to one the PdfGraphics.DrawString methods that take a PointF object is the top left corner of the text bounding rectangle.</para>
       </summary>
     </member>
     <member name="T:DevExpress.Pdf.PdfHotkeyPrefix">
@@ -3327,7 +3332,7 @@
     </member>
     <member name="P:DevExpress.Pdf.PdfInteractiveFormField.Flags">
       <summary>
-        <para>Gets flags specifying various document-level characteristics related to interactive form fields.</para>
+        <para>Gets or sets flags specifying various document-level characteristics related to interactive form fields.</para>
       </summary>
       <value><see cref="T:DevExpress.Pdf.PdfInteractiveFormFieldFlags"/> enumeration values that represent flags specifying various document-level characteristics.</value>
     </member>
@@ -5164,6 +5169,12 @@
       </summary>
       <value>A <see cref="T:System.String"/> value, specifying the file name.</value>
     </member>
+    <member name="P:DevExpress.Pdf.PdfPasswordRequestedEventArgs.FilePath">
+      <summary>
+        <para>Returns the path of the file requested to be opened in the PDF Viewer or PDF Document Processor.</para>
+      </summary>
+      <value>The file path.</value>
+    </member>
     <member name="P:DevExpress.Pdf.PdfPasswordRequestedEventArgs.Password">
       <summary>
         <para>This property is now obsolete. Use the <see cref="P:DevExpress.Pdf.PdfPasswordRequestedEventArgs.PasswordString"/> property instead.</para>
@@ -5640,6 +5651,12 @@
       <param name="imageData">A System.IO.Stream class descendant, specifying the stream with the image data.</param>
       <param name="pageNumber">An integer value that specifies the page number where the signature should be added.</param>
       <param name="signatureBounds">A <see cref="T:DevExpress.Pdf.PdfRectangle"/> object that represents the signature bounds in the default  user space.</param>
+    </member>
+    <member name="P:DevExpress.Pdf.PdfSignature.AnnotationFlags">
+      <summary>
+        <para>Gets or sets the signature&#39;s characteristics.</para>
+      </summary>
+      <value>A set of annotation flags.</value>
     </member>
     <member name="P:DevExpress.Pdf.PdfSignature.ContactInfo">
       <summary>

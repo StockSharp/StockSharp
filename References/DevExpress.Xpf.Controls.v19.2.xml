@@ -409,6 +409,18 @@
       </summary>
       <value>A routed event identifier.</value>
     </member>
+    <member name="P:DevExpress.Xpf.Controls.BreadcrumbControl.HistoryNodes">
+      <summary>
+        <para></para>
+      </summary>
+      <value></value>
+    </member>
+    <member name="F:DevExpress.Xpf.Controls.BreadcrumbControl.HistoryNodesProperty">
+      <summary>
+        <para></para>
+      </summary>
+      <value></value>
+    </member>
     <member name="P:DevExpress.Xpf.Controls.BreadcrumbControl.ImageMember">
       <summary>
         <para>Gets or sets the name of the member in bound data objects that contains node image. This is a dependency property.</para>
@@ -5402,7 +5414,7 @@ This is a dependency property.</para>
     </member>
     <member name="T:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton">
       <summary>
-        <para></para>
+        <para>Represents a preview item of the <see cref="T:DevExpress.Xpf.WindowsUI.HamburgerMenu"/>&#39;s Sub Menu.</para>
       </summary>
     </member>
     <member name="M:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.#ctor">
@@ -5418,104 +5430,229 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.IsRightContentVisible">
       <summary>
-        <para></para>
+        <para>Returns whether the right content is currently shown.</para>
       </summary>
-      <value></value>
+      <value>true, if the right content is currently shown; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.IsRightContentVisibleProperty">
       <summary>
-        <para></para>
+        <para>Identifies the IsRightContentVisible dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.IsSelected">
       <summary>
-        <para></para>
+        <para>Gets or sets whether the current item is selected among the items in the HamburgerSubMenu to which it belongs. This is a dependency property.</para>
       </summary>
-      <value></value>
+      <value>true, if the current item is selected in its sub-menu; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.IsSelectedProperty">
       <summary>
-        <para></para>
+        <para>Identifies the IsSelected dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightContent">
       <summary>
-        <para></para>
+        <para>Specifies the additional button content displayed to the right of the main content. This is a dependency property.</para>
       </summary>
-      <value></value>
+      <value>The additional button content.</value>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightContentMargin">
       <summary>
-        <para></para>
+        <para>Specifies the outer margin of the additional content displayed to the right of the main content. This is a dependency property.</para>
       </summary>
-      <value></value>
+      <value>A System.Windows.Thickness structure that specifies the outer margin of the additional content displayed to the right of the main content.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightContentMarginProperty">
       <summary>
-        <para></para>
+        <para>Identifies the RightContentMargin dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightContentProperty">
       <summary>
-        <para></para>
+        <para>Identifies the RightContent dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightContentTemplate">
       <summary>
-        <para></para>
+        <para>Specifies the data template used to render the additional content displayed to the right of the main content.</para>
       </summary>
-      <value></value>
+      <value>A System.Windows.DataTemplate object used to render the content.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightContentTemplateProperty">
       <summary>
-        <para></para>
+        <para>Identifies the RightContentTemplate dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightForeground">
       <summary>
-        <para></para>
+        <para>Specifies the brush used to paint the foreground of the additional content displayed to the right of the main content. This is a dependency property.</para>
       </summary>
-      <value></value>
+      <value>A System.Windows.Media.Brush value.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.RightForegroundProperty">
       <summary>
-        <para></para>
+        <para>Identifies the RightForeground dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.SelectionIndicatorBrush">
       <summary>
-        <para></para>
+        <para>Specifies the brush used to paint the vertical bar that indicates the selected menu item. This is a dependency property.</para>
       </summary>
-      <value></value>
+      <value>A System.Windows.Media.Brush value.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.SelectionIndicatorBrushProperty">
       <summary>
-        <para></para>
+        <para>Identifies the SelectionIndicatorBrush dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="P:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.ShowSelectionIndicator">
       <summary>
-        <para></para>
+        <para>Specifies whether to display a vertical bar that indicates that the menu item is selected. This is a dependency property.</para>
       </summary>
-      <value></value>
+      <value>true, to display a vertical bar to the left of the selected menu item; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.HamburgerSubMenuPreviewNavigationButton.ShowSelectionIndicatorProperty">
       <summary>
-        <para></para>
+        <para>Identifies the ShowSelectionIndicator dependency property.</para>
       </summary>
-      <value></value>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="N:DevExpress.Xpf.WindowsUI.Internal">
       <summary>
         <para>Provides utility classes that support the Windows Modern UI functionality.</para>
       </summary>
+    </member>
+    <member name="T:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1">
+      <summary>
+        <para>The base class for classes that represent a button with an icon in the Main Menu of the HamburgerMenu.</para>
+      </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.HideMenuWhenSelected">
+      <summary>
+        <para>Gets or sets whether the HamburgerMenu is automatically hidden when the button is selected. This is a dependency property.</para>
+      </summary>
+      <value>true, if the HamburgerMenu is automatically hidden when the menu item is selected; otherwise, false.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.HideMenuWhenSelectedProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.HideMenuWhenSelected"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.IsRightContentVisible">
+      <summary>
+        <para>Returns whether the additional button content is shown.</para>
+      </summary>
+      <value>true, if the right content is currently shown; otherwise, false.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.IsRightContentVisibleProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.IsRightContentVisible"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContent">
+      <summary>
+        <para>Specifies the additional button content displayed to the right of the main content. This is a dependency property.</para>
+      </summary>
+      <value>The additional button content.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContentMargin">
+      <summary>
+        <para>Specifies the outer margin of the additional content displayed to the right of the main content. This is a dependency property.</para>
+      </summary>
+      <value>A System.Windows.Thickness structure that specifies the outer margin of the additional content displayed to the right of the main content.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContentMarginProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContentMargin"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContentProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContent"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContentTemplate">
+      <summary>
+        <para>Specifies the data template used to render the additional content displayed to the right of the main content. This is a dependency property.</para>
+      </summary>
+      <value>A System.Windows.DataTemplate object used to render the content.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContentTemplateProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightContentTemplate"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightForeground">
+      <summary>
+        <para>Specifies the brush used to paint the foreground of the additional content. This is a dependency property.</para>
+      </summary>
+      <value>A System.Windows.Media.Brush value.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightForegroundProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.RightForeground"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.SelectionIndicatorBrush">
+      <summary>
+        <para>Specifies the brush used to paint the vertical bar that indicates the selected button. This is a dependency property.</para>
+      </summary>
+      <value>A System.Windows.Media.Brush value.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.SelectionIndicatorBrushProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.SelectionIndicatorBrush"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.ShowSelectionIndicator">
+      <summary>
+        <para>Specifies whether to display a vertical bar that indicates that the button is selected. This is a dependency property.</para>
+      </summary>
+      <value>true, to display a vertical bar to the left of the selected menu item; otherwise, false.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.ShowSelectionIndicatorProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.ShowSelectionIndicator"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.SyncWithActivePage">
+      <summary>
+        <para>Gets or sets whether the button is automatically selected if the button&#39;s target page has been navigated. This is a dependency property.</para>
+      </summary>
+      <value>true, if the current button is automatically selected if the button&#39;s target page has been navigated; otherwise, false.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.SyncWithActivePageProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.SyncWithActivePage"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.UseNavigationTargetParameterForSync">
+      <summary>
+        <para>Gets or sets whether to use the button&#39;s navigation parameters to synchronize the button selection in the menu with the navigated page.</para>
+      </summary>
+      <value>true, to use current button&#39;s navigation parameters to synchronize the button selection in the menu with the navigated page; otherwise, false.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.UseNavigationTargetParameterForSyncProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButton`1.SyncWithActivePage"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="T:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1">
       <summary>
@@ -5530,7 +5667,7 @@ This is a dependency property.</para>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.ClearNavigationHistoryProperty">
       <summary>
-        <para>Identifies the <see cref="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.ClearNavigationHistoryProperty"/> dependency property.</para>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.ClearNavigationHistory"/> dependency property.</para>
       </summary>
       <value>A dependency property identifier.</value>
     </member>
@@ -5542,7 +5679,7 @@ This is a dependency property.</para>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetParameterProperty">
       <summary>
-        <para>Identifies the <see cref="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetParameterProperty"/> dependency property.</para>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetParameter"/> dependency property.</para>
       </summary>
       <value>A dependency property identifier.</value>
     </member>
@@ -5560,13 +5697,13 @@ This is a dependency property.</para>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetTypeNameProperty">
       <summary>
-        <para>Identifies the <see cref="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetTypeNameProperty"/> dependency property.</para>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetTypeName"/> dependency property.</para>
       </summary>
       <value>A dependency property identifier.</value>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetTypeProperty">
       <summary>
-        <para>Identifies the <see cref="F:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetTypeProperty"/> dependency property.</para>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.WindowsUI.Internal.HamburgerMenuNavigationButtonBase`1.NavigationTargetType"/> dependency property.</para>
       </summary>
       <value>A dependency property identifier.</value>
     </member>
@@ -7119,7 +7256,7 @@ This is a dependency property.</para>
     </member>
     <member name="T:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions">
       <summary>
-        <para>Enumerates actions that automatically execute when a <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/> receives a list of containers that this frame can navigate to by calling the  and <see cref="M:DevExpress.Xpf.WindowsUI.NavigationFrame.GoForward"/> methods.</para>
+        <para>Enumerates actions that automatically execute when a <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/> receives a list of containers that this frame can navigate to by calling the NavigationFrame.GoBack and <see cref="M:DevExpress.Xpf.WindowsUI.NavigationFrame.GoForward"/> methods.</para>
       </summary>
     </member>
     <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.ClearNavigationCache">

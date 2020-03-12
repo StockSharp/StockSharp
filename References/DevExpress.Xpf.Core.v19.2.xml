@@ -4591,10 +4591,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Bars.BarItemActionBase.ItemName">
       <summary>
-        <para>Gets or sets the name of the current bar item.
-This is a dependency property.</para>
+        <para>Gets or sets the bar item&#39;s name. This is a dependency property.</para>
       </summary>
-      <value>A string that specifies the name of the current bar item.</value>
+      <value>The bar item&#39;s name.</value>
     </member>
     <member name="F:DevExpress.Xpf.Bars.BarItemActionBase.ItemNameProperty">
       <summary>
@@ -4781,10 +4780,9 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Bars.BarItemLinkActionBase.ItemLinkIndex">
       <summary>
-        <para>Gets or sets the index of the current bar item link in the collection of bar item links in the Target object.
-This is an attached property, which is in effect for <see cref="T:DevExpress.Xpf.Bars.BarItem"/> and <see cref="T:DevExpress.Xpf.Bars.BarItemLink"/> descendants when they act as actions (when they are added to the <see cref="P:DevExpress.Xpf.Bars.BarManagerActionContainer.Actions"/> collection).</para>
+        <para>Gets or sets the index of the bar item link in the object&#39;s collection of bar item links. This is an attached property.</para>
       </summary>
-      <value>An integer value that specifies the index of the current bar item link in the collection of bar item links in the Target object.</value>
+      <value>The index of the bar item link in the object&#39;s collection of bar item links.</value>
     </member>
     <member name="F:DevExpress.Xpf.Bars.BarItemLinkActionBase.ItemLinkIndexProperty">
       <summary>
@@ -5196,10 +5194,10 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Bars.BarItemLinkBase.IsVisible">
       <summary>
-        <para>Gets or sets whether the current link is visible.
+        <para>Gets or sets whether the link is visible.
 This is a dependency property.</para>
       </summary>
-      <value>A Boolean value that specifies the link&#39;s visibility.</value>
+      <value>true, if a link is visible; otherwise, false.</value>
     </member>
     <member name="F:DevExpress.Xpf.Bars.BarItemLinkBase.IsVisibleProperty">
       <summary>
@@ -6056,8 +6054,7 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Bars.BarManager.AllowHotCustomization">
       <summary>
-        <para>Gets or sets whether a bar can be customized without invoking Customization Mode, by dragging bar item links while holding the ALT key down.
-This is a dependency property.</para>
+        <para>Gets or sets whether a bar can be customized without invoking Customization Mode, by dragging bar item links while holding the ALT key down. This is a dependency property.</para>
       </summary>
       <value>true if items can be dragged within and between bars when the ALT key is pressed; otherwise, false.</value>
     </member>
@@ -11572,7 +11569,7 @@ For ApplicationMenu objects, the default draw mode is affected by the Applicatio
     </member>
     <member name="T:DevExpress.Xpf.Bars.RemoveBarItemAndLinkAction">
       <summary>
-        <para>Removes a bar item from the <see cref="P:DevExpress.Xpf.Bars.BarManager.Items"/> collection, and removes all links to this bar item from link holders (bars, submenus, menus, etc.).</para>
+        <para>Removes a bar item from the <see cref="P:DevExpress.Xpf.Bars.BarManager.Items"/> collection, and removes all links to this bar item from link holders (bars, submenus, menus, and so on).</para>
       </summary>
     </member>
     <member name="M:DevExpress.Xpf.Bars.RemoveBarItemAndLinkAction.#ctor">
@@ -25103,15 +25100,15 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Data.GetUniqueValuesAsyncEventArgs.Result">
       <summary>
-        <para>Gets or sets the result of the get unique values operation.</para>
+        <para>Gets or sets the result of the get unique values operation (only values).</para>
       </summary>
       <value>A task that returns the result of the get unique values operation.</value>
     </member>
     <member name="P:DevExpress.Xpf.Data.GetUniqueValuesAsyncEventArgs.ResultWithCounts">
       <summary>
-        <para></para>
+        <para>Gets or sets the result of the get unique values operation (values and their counts).</para>
       </summary>
-      <value></value>
+      <value>A task that returns the result of the get unique values operation.</value>
     </member>
     <member name="T:DevExpress.Xpf.Data.GetUniqueValuesEventArgs">
       <summary>
@@ -25120,15 +25117,15 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Data.GetUniqueValuesEventArgs.Result">
       <summary>
-        <para>Gets or sets the result of the get unique values operation.</para>
+        <para>Gets or sets the result of the get unique values operation (only values).</para>
       </summary>
       <value>The result of the get unique values operation.</value>
     </member>
     <member name="P:DevExpress.Xpf.Data.GetUniqueValuesEventArgs.ResultWithCounts">
       <summary>
-        <para></para>
+        <para>Gets or sets the result of the get unique values operation (values and their counts).</para>
       </summary>
-      <value></value>
+      <value>The result of the get unique values operation.</value>
     </member>
     <member name="P:DevExpress.Xpf.Data.GetUniqueValuesEventArgs.Source">
       <summary>
@@ -25175,7 +25172,7 @@ This is a dependency property.</para>
     </member>
     <member name="E:DevExpress.Xpf.Data.InfiniteAsyncSource.GetUniqueValues">
       <summary>
-        <para>Allows getting unique values.</para>
+        <para>Allows you to get unique values.</para>
       </summary>
     </member>
     <member name="T:DevExpress.Xpf.Data.InfiniteSource">
@@ -25216,7 +25213,7 @@ This is a dependency property.</para>
     </member>
     <member name="E:DevExpress.Xpf.Data.InfiniteSource.GetUniqueValues">
       <summary>
-        <para>Allows getting unique values.</para>
+        <para>Allows you to get unique values and their counts.</para>
       </summary>
     </member>
     <member name="T:DevExpress.Xpf.Data.InfiniteSourceBase">
@@ -25269,7 +25266,7 @@ This is a dependency property.</para>
     </member>
     <member name="E:DevExpress.Xpf.Data.PagedAsyncSource.GetUniqueValues">
       <summary>
-        <para>Allows getting unique values.</para>
+        <para>Allows you to get unique values.</para>
       </summary>
     </member>
     <member name="T:DevExpress.Xpf.Data.PagedSource">
@@ -25310,7 +25307,7 @@ This is a dependency property.</para>
     </member>
     <member name="E:DevExpress.Xpf.Data.PagedSource.GetUniqueValues">
       <summary>
-        <para>Allows getting unique values.</para>
+        <para>Allows you to get unique values.</para>
       </summary>
     </member>
     <member name="T:DevExpress.Xpf.Data.PagedSourceBase">
@@ -25434,6 +25431,49 @@ This is a dependency property.</para>
       <summary>
         <para>The sum of all values in a column.</para>
       </summary>
+    </member>
+    <member name="T:DevExpress.Xpf.Data.ValueAndCount">
+      <summary>
+        <para></para>
+      </summary>
+    </member>
+    <member name="M:DevExpress.Xpf.Data.ValueAndCount.#ctor(System.Object,System.Int32)">
+      <summary>
+        <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Data.ValueAndCount"/> class with specified settings.</para>
+      </summary>
+      <param name="value"></param>
+      <param name="count"></param>
+    </member>
+    <member name="P:DevExpress.Xpf.Data.ValueAndCount.Count">
+      <summary>
+        <para></para>
+      </summary>
+      <value></value>
+    </member>
+    <member name="M:DevExpress.Xpf.Data.ValueAndCount.Equals(System.Object)">
+      <summary>
+        <para></para>
+      </summary>
+      <param name="obj"></param>
+      <returns></returns>
+    </member>
+    <member name="M:DevExpress.Xpf.Data.ValueAndCount.GetHashCode">
+      <summary>
+        <para></para>
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="M:DevExpress.Xpf.Data.ValueAndCount.ToString">
+      <summary>
+        <para></para>
+      </summary>
+      <returns></returns>
+    </member>
+    <member name="P:DevExpress.Xpf.Data.ValueAndCount.Value">
+      <summary>
+        <para></para>
+      </summary>
+      <value></value>
     </member>
     <member name="T:DevExpress.Xpf.Data.VirtualSourceBase">
       <summary>
@@ -29403,6 +29443,13 @@ This is a dependency property.</para>
       </summary>
       <value>true, if the editor closes its popup; otherwise, false.</value>
     </member>
+    <member name="M:DevExpress.Xpf.Editors.DateEditNavigatorWithTimePickerStyleSettings.GetPopupFooterButtons(DevExpress.Xpf.Editors.PopupBaseEdit)">
+      <summary>
+        <para></para>
+      </summary>
+      <param name="editor"></param>
+      <returns></returns>
+    </member>
     <member name="T:DevExpress.Xpf.Editors.DateEditPickerStyleSettings">
       <summary>
         <para>Defines the appearance and behavior of a picker date editor.</para>
@@ -29464,6 +29511,13 @@ This is a dependency property.</para>
         <para>Assigns the settings which define the appearance and behavior to the specified editor.</para>
       </summary>
       <param name="editor">A <see cref="T:DevExpress.Xpf.Editors.BaseEdit"/> class descendant that is a target editor.</param>
+    </member>
+    <member name="M:DevExpress.Xpf.Editors.DateEditTimePickerStyleSettings.GetPopupFooterButtons(DevExpress.Xpf.Editors.PopupBaseEdit)">
+      <summary>
+        <para></para>
+      </summary>
+      <param name="editor"></param>
+      <returns></returns>
     </member>
     <member name="N:DevExpress.Xpf.Editors.DateNavigator">
       <summary>
@@ -32109,6 +32163,11 @@ This is a dependency property.</para>
         <para>Represents the caption of the Is not blank filter clause.Return value: Is not blank</para>
       </summary>
     </member>
+    <member name="F:DevExpress.Xpf.Editors.EditorStringId.FilterClauseIsNotOn">
+      <summary>
+        <para></para>
+      </summary>
+    </member>
     <member name="F:DevExpress.Xpf.Editors.EditorStringId.FilterClauseIsNovember">
       <summary>
         <para>Represents the caption of the Is November filter clause.Return value: Is November</para>
@@ -32127,6 +32186,16 @@ This is a dependency property.</para>
     <member name="F:DevExpress.Xpf.Editors.EditorStringId.FilterClauseIsOctober">
       <summary>
         <para>Represents the caption of the Is October filter clause.Return value: Is October</para>
+      </summary>
+    </member>
+    <member name="F:DevExpress.Xpf.Editors.EditorStringId.FilterClauseIsOn">
+      <summary>
+        <para></para>
+      </summary>
+    </member>
+    <member name="F:DevExpress.Xpf.Editors.EditorStringId.FilterClauseIsOnAnyOfTheFollowing">
+      <summary>
+        <para></para>
       </summary>
     </member>
     <member name="F:DevExpress.Xpf.Editors.EditorStringId.FilterClauseIsOnDates">
@@ -35835,7 +35904,7 @@ This is a dependency property.</para>
       <summary>
         <para>Gets or sets the index of the selected item. This is a dependency property.</para>
       </summary>
-      <value>An integer value that specifies the index of the selected item.  if there is no selected item.</value>
+      <value>An integer value that specifies the index of the selected item. -1 if there is no selected item.</value>
     </member>
     <member name="E:DevExpress.Xpf.Editors.LookUpEditBase.SelectedIndexChanged">
       <summary>
@@ -37130,6 +37199,18 @@ This is a dependency property.</para>
       <summary>
         <para>Invokes the editor&#39;s popup window.</para>
       </summary>
+    </member>
+    <member name="P:DevExpress.Xpf.Editors.PopupBaseEdit.ShowPopupIfReadOnly">
+      <summary>
+        <para>Gets or sets whether the read-only editor can display its popup. This is a dependency property.</para>
+      </summary>
+      <value>true, if a read-only editor can display its popup; otherwise, false. The default is true.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.Editors.PopupBaseEdit.ShowPopupIfReadOnlyProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.Editors.PopupBaseEdit.ShowPopupIfReadOnly"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
     </member>
     <member name="P:DevExpress.Xpf.Editors.PopupBaseEdit.ShowSizeGrip">
       <summary>
@@ -41076,12 +41157,6 @@ This is a dependency property.</para>
         <para>Fires when a hyperlink is about to be navigated.</para>
       </summary>
     </member>
-    <member name="F:DevExpress.Xpf.Editors.Settings.HyperlinkEditSettings.RequestNavigationEvent">
-      <summary>
-        <para>Identifies the <see cref="E:DevExpress.Xpf.Editors.Settings.HyperlinkEditSettings.RequestNavigation"/> routed event.</para>
-      </summary>
-      <value>A routed event identifier.</value>
-    </member>
     <member name="T:DevExpress.Xpf.Editors.Settings.ImageEditSettings">
       <summary>
         <para>Contains settings specific to the ImageEdit editor.</para>
@@ -41910,6 +41985,18 @@ This is a dependency property.</para>
     <member name="F:DevExpress.Xpf.Editors.Settings.PopupBaseEditSettings.PopupWidthProperty">
       <summary>
         <para>Identifies the <see cref="P:DevExpress.Xpf.Editors.Settings.PopupBaseEditSettings.PopupWidth"/> dependency property.</para>
+      </summary>
+      <value>A dependency property identifier.</value>
+    </member>
+    <member name="P:DevExpress.Xpf.Editors.Settings.PopupBaseEditSettings.ShowPopupIfReadOnly">
+      <summary>
+        <para>Gets or sets whether the read-only editor can display its popup. This is a dependency property.</para>
+      </summary>
+      <value>true, if a read-only editor can display its popup; otherwise, false. The default is true.</value>
+    </member>
+    <member name="F:DevExpress.Xpf.Editors.Settings.PopupBaseEditSettings.ShowPopupIfReadOnlyProperty">
+      <summary>
+        <para>Identifies the <see cref="P:DevExpress.Xpf.Editors.Settings.PopupBaseEditSettings.ShowPopupIfReadOnly"/> dependency property.</para>
       </summary>
       <value>A dependency property identifier.</value>
     </member>
@@ -43773,7 +43860,7 @@ This is a dependency property.</para>
     </member>
     <member name="P:DevExpress.Xpf.Editors.TextEditBase.EditNonEditableTemplate">
       <summary>
-        <para>Gets or sets a template that defines the in-place button editor&#39;s presentation when the editor is active, but its text field is not editable. This is a dependency property.</para>
+        <para>Gets or sets a template that defines the editor&#39;s presentation when the editor&#39;s text field is not editable. This is a dependency property.</para>
       </summary>
       <value>A <see cref="T:System.Windows.Controls.ControlTemplate"/> object representing the editor&#39;s template.</value>
     </member>

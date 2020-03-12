@@ -4,6 +4,11 @@
     <name>DevExpress.Xpf.Ribbon.v19.2</name>
   </assembly>
   <members>
+    <member name="N:DevExpress.Xpf.Ribbon">
+      <summary>
+        <para>Contains classes that implement the Ribbon UI. To use these classes in XAML code, add the xmlns:dxr=&quot;&quot; namespace reference.</para>
+      </summary>
+    </member>
     <member name="T:DevExpress.Xpf.Ribbon.ApplicationMenu">
       <summary>
         <para>A popup menu emulating the menu in MS Office 2007 Ribbon UI.</para>
