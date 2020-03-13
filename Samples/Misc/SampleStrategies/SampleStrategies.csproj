@@ -66,14 +66,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj" />

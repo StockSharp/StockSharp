@@ -48,7 +48,7 @@
 		</TextBlock>
 		<TextBox x:Name="ClientCodeCtrl" Grid.Column="2" Grid.Row="4" Height="25" />
 
-		<dxlc:GroupBox Grid.Row="6" Grid.Column="2" Padding="0,0,0,0">
+		<GroupBox Grid.Row="6" Grid.Column="2" Padding="0,0,0,0">
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />
@@ -59,7 +59,7 @@
 				<RadioButton x:Name="IsBuyCtrl" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Str403}" GroupName="Direction" IsChecked="True" HorizontalAlignment="Right" />
 				<RadioButton x:Name="IsSellCtrl" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Str404}" GroupName="Direction" />
 			</Grid>
-		</dxlc:GroupBox>
+		</GroupBox>
 
 		<TextBlock Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
 			<Run Text="{x:Static loc:LocalizedStrings.Amount}" />:
