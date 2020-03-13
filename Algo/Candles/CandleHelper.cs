@@ -1043,18 +1043,22 @@ namespace StockSharp.Algo.Candles
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
 
-			var isWhiteOrBlack = candle.IsWhiteOrBlack();
-
-			switch (isWhiteOrBlack)
+			switch (candle.IsWhiteOrBlack())
 			{
 				case true:
+				{
 					if (candle.GetBottomShadow() >= candle.GetBody())
 						return true;
+
 					break;
+				}
 				case false:
+				{
 					if (candle.GetTopShadow() >= candle.GetBody())
-						return true;
+						return false;
+
 					break;
+				}
 			}
 
 			return null;
