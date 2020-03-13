@@ -1,18 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common.props" />
   <PropertyGroup>
     <ProjectGuid>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</ProjectGuid>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
     <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
-    <TargetFramework>net461</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DocumentationFile>bin\$(Configuration)\StockSharp.Configuration.Adapters.xml</DocumentationFile>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
@@ -21,9 +12,6 @@
     <Reference Include="Ecng.Common">
       <HintPath>..\References\Ecng.Common.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj" />
@@ -91,7 +79,6 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Oanda\Oanda.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okcoin\Okcoin.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okex\Okex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\OpenECry\OpenECry.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Poloniex\Poloniex.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\PrizmBit\PrizmBit.csproj" />
