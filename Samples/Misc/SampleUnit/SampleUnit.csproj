@@ -3,7 +3,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\$(Configuration)\</OutputPath>
