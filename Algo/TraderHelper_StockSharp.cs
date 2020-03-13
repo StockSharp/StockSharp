@@ -1136,31 +1136,32 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 				if (criteria == null)
 					throw new ArgumentNullException(nameof(criteria));
 
-				byte[] CreateArg<T>(T value)
-				{
-					var request = new MemoryStream();
-					request.SerializeDataContract(value);
-					return request.To<byte[]>();
-				}
-				
 				var existingIds = ServicesRegistry.TrySecurityProvider?.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase) ?? new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 				var securities = new List<SecurityMessage>();
 
-				using (var client = new WebClientEx { Timeout = TimeSpan.FromMinutes(1) })
+				byte[] Send<T>(string method, string argName, T arg)
 				{
-					client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-					var response = client.UploadString("https://stocksharp.com/services/instrumentprovider.ashx", $"method={nameof(IRemoteStorage.LookupSecurityIds)}&criteria={CreateArg(criteria).UTF8()}");
-					var ids = response.UTF8().DeflateFrom().UTF8().Split(";");
+					var request = new MemoryStream();
+					request.SerializeDataContract(arg);
 
-					var newSecurityIds = ids.Where(id => !existingIds.Contains(id)).ToArray();
-
-					foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
+					using (var client = new WebClientEx { Timeout = TimeSpan.FromMinutes(1) })
 					{
-						var batch = b.ToArray();
-
-						response = client.UploadString("https://stocksharp.com/services/instrumentprovider.ashx", $"method={nameof(IRemoteStorage.GetSecurities)}&securityIds={CreateArg(batch).UTF8()}");
-						securities.AddRange(response.UTF8().DeflateFrom().To<Stream>().DeserializeDataContract<SecurityMessage[]>());
+						client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+						var response = client.UploadString("https://stocksharp.com/services/instrumentprovider.ashx", $"method={method}&{argName}={request.To<byte[]>().DeflateTo().UTF8()}");
+						return client.Encoding.GetBytes(response).DeflateFrom();
 					}
+				}
+
+				var ids = Send(nameof(IRemoteStorage.LookupSecurityIds),"criteria", criteria).UTF8().Split(";");
+
+				var newSecurityIds = ids.Where(id => !existingIds.Contains(id)).ToArray();
+
+				foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
+				{
+					var batch = b.ToArray();
+
+					var response = Send(nameof(IRemoteStorage.GetSecurities), "securityIds", batch);
+					securities.AddRange(response.To<Stream>().DeserializeDataContract<SecurityMessage[]>());
 				}
 
 				return securities;
