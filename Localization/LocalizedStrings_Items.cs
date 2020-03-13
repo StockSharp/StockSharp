@@ -18178,12 +18178,12 @@ namespace StockSharp.Localization
 		public static string Str1875 => GetString(Str1875Key);
 
 		/// <summary>
-		/// SmartCOM connection timeout.
+		/// Connection timeout.
 		/// </summary>
 		public const string Str1876Key = nameof(Str1876);
 
 		/// <summary>
-		/// SmartCOM connection timeout.
+		/// Connection timeout.
 		/// </summary>
 		public static string Str1876 => GetString(Str1876Key);
 

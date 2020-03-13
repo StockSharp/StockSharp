@@ -1819,7 +1819,7 @@ Str1872Params;Wrong direction {0} orders {0}/{1}.;Неправильное на�
 Str1873Params;Order {0} was not accepted by the system.;Заявка {0} не была принята системой.
 Str1874Params;No transaction with SmartCOM ID {0} found.;Не найдена ни одна транзакция с идентификатором SmartCOM {0}.
 Str1875;Connection to SmartCOM is not initialized.;Подключение к SmartCOM не инициализировано.
-Str1876;SmartCOM connection timeout.;Время установления связи со SmartCOM вышло.
+Str1876;Connection timeout.;Время установления связи  вышло.
 NetworkError;Network error.;Сетевая ошибка.
 Main;Main;Основная
 MainUDP;The main UDP group;Основная UDP группа
@@ -16089,3 +16089,7 @@ DocStr11679;Version {0};Version {0}
 DocStr11680;{0} data type;{0} data type
 DocStr11681;Heikin ashi candle;Heikin ashi candle
 DocStr11682;The message contains information about the Heikin-Ashi candle;The message contains information about the Heikin-Ashi candle
+DocStr11683;Txt templates registry;Txt templates registry
+DocStr11684;Create item source;Create item source
+DocStr11685;Try get security ID from the specified message;Try get security ID from the specified message
+DocStr11686;Security ID or {0} if message do not provide it;Security ID or {0} if message do not provide it
