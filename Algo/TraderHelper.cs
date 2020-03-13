@@ -5152,7 +5152,7 @@ namespace StockSharp.Algo
 						sync.WaitSignal();
 
 					if (error != null)
-						throw error;
+						throw new InvalidOperationException(LocalizedStrings.Str2959, error);
 
 					responseReceived = false;
 				}
@@ -5165,7 +5165,7 @@ namespace StockSharp.Algo
 						sync.WaitSignal();
 
 					if (error != null)
-						throw error;
+						throw new InvalidOperationException(LocalizedStrings.Str2955, error);
 
 					responseReceived = false;
 				}
