@@ -11,23 +11,6 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\References\Ecng.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\References\Ecng.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v19.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v19.2.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
     <ProjectReference Include="..\..\..\Messages\Messages.csproj" />

@@ -6,12 +6,7 @@
     <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ecng.Collections">
-      <HintPath>..\References\Ecng.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Common">
-      <HintPath>..\References\Ecng.Common.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj" />

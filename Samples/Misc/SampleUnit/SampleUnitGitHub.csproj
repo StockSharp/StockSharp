@@ -10,15 +10,7 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\References\Ecng.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\References\Ecng.ComponentModel.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />

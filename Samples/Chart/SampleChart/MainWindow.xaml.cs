@@ -21,6 +21,7 @@
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 	using Ecng.Xaml.Charting.Visuals.Annotations;
+	using Ecng.Xaml.DevExp.Yandex;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -126,7 +127,7 @@
 				MessageBox.Show($"RegisterOrder: sec={order.Security.Id}, {order.Direction} {order.Volume}@{order.Price}");
 			};
 
-			ConfigManager.RegisterService<IBackupService>(new YandexDiskService());
+			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(YandexLoginWindow.Authorize));
 
 			HistoryPath.Folder = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
 
