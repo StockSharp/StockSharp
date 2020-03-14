@@ -6,33 +6,18 @@
     <AssemblyName>StockSharp.Messages</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ecng.Collections">
-      <HintPath>..\References\Ecng.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Common">
-      <HintPath>..\References\Ecng.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\References\Ecng.ComponentModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Interop">
-      <HintPath>..\References\Ecng.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Net">
-      <HintPath>..\References\Ecng.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Reflection">
-      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Serialization">
-      <HintPath>..\References\Ecng.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Localization">
-      <HintPath>..\References\Ecng.Localization.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Ecng.Common" Version="1.0.0" />
+    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
+    <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
+    <PackageReference Include="Ecng.Serialization" Version="1.0.0" />
+    <PackageReference Include="Ecng.Serialization.FieldFactories" Version="1.0.0" />
+    <PackageReference Include="Ecng.Configuration" Version="1.0.0" />
+    <PackageReference Include="Ecng.Interop" Version="1.0.0" />
+    <PackageReference Include="Ecng.Net" Version="1.0.0" />
+    <PackageReference Include="Ecng.Localization" Version="1.0.0" />
+    <PackageReference Include="Ecng.Reflection" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
   </ItemGroup>
