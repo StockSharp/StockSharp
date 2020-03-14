@@ -30,7 +30,9 @@ namespace StockSharp.Community
 	/// <summary>
 	/// The client for access to <see cref="IStrategyService"/>.
 	/// </summary>
+#if NETFRAMEWORK
 	[CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
+#endif
 	public class StrategyClient : BaseCommunityClient<IStrategyService>, IStrategyClient
 	{
 		private Timer _refreshTimer;
