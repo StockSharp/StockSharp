@@ -1,18 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\common_target.props" />
   <PropertyGroup>
-    <ProductVersion>8.0.30703</ProductVersion>
     <ProjectGuid>{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net461</TargetFramework>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
