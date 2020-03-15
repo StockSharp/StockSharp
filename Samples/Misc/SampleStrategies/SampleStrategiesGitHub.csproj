@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <Import Project="..\..\..\common_target.props" />
+  <Import Project="..\..\common_samples.props" />
   <PropertyGroup>
     <ProjectGuid>{04A22C35-9D49-41FA-9E09-881680D658AF}</ProjectGuid>
     <OutputType>WinExe</OutputType>

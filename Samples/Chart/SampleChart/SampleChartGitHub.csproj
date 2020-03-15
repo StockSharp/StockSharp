@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <Import Project="..\..\..\common_target.props" />
+  <Import Project="..\..\common_samples.props" />
   <PropertyGroup>
     <ProjectGuid>{8B430A27-B392-4129-9AA2-731A52427E40}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -21,9 +21,6 @@
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />

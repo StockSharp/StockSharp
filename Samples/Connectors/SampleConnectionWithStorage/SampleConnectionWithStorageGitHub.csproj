@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <Import Project="..\..\..\common_target.props" />
+  <Import Project="..\..\common_samples.props" />
   <PropertyGroup>
     <ProjectGuid>{DDEE1CE2-7283-4394-8FCF-514E8581F10F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -9,9 +9,6 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>SampleConnection.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="StockSharp.Xaml" Version="1.0.0" />
@@ -87,7 +84,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
     <Compile Include="..\SampleConnection\App.xaml.cs" Link="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

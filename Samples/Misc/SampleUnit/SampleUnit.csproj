@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\common_target.props" />
+  <Import Project="..\..\common_samples.props" />
   <PropertyGroup>
     <ProjectGuid>{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -10,9 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />

@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <Import Project="..\..\..\common_target.props" />
+  <Import Project="..\..\common_samples.props" />
   <PropertyGroup>
     <ProjectGuid>{1F698A62-C461-4A8A-9D81-FFEF09C0DC52}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -10,9 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Xaml" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
