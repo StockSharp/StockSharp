@@ -12,6 +12,7 @@
 		private readonly Connector _connector;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
+		private readonly Subscription _subscription;
 
 		public ChartWindow(CandleSeries candleSeries)
 		{
@@ -42,7 +43,7 @@
 			area.Elements.Add(_candleElem);
 
 			_connector.CandleSeriesProcessing += ProcessNewCandle;
-			_connector.SubscribeCandles(_candleSeries);
+			_subscription = _connector.SubscribeCandles(_candleSeries);
 		}
 
 		public bool SeriesInactive { get; set; }
@@ -59,7 +60,7 @@
 		{
 			_connector.CandleSeriesProcessing -= ProcessNewCandle;
 
-			if (!SeriesInactive)
+			if (!SeriesInactive && _subscription.State.IsActive())
 				_connector.UnSubscribeCandles(_candleSeries);
 
 			base.OnClosing(e);

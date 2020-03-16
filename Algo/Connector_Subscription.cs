@@ -448,7 +448,8 @@ namespace StockSharp.Algo
 		/// <param name="count">Candles count.</param>
 		/// <param name="transactionId">Transaction ID.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		public void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null,
+		/// <returns>Subscription.</returns>
+		public Subscription SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null,
 			long? count = null, long? transactionId = null, IMessageAdapter adapter = null)
 		{
 			this.AddInfoLog(nameof(SubscribeCandles));
@@ -472,6 +473,7 @@ namespace StockSharp.Algo
 				subscription.TransactionId = transactionId.Value;
 
 			Subscribe(subscription);
+			return subscription;
 		}
 
 		/// <summary>
