@@ -3,14 +3,12 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using StockSharp.Localization;
-
 	/// <summary>
 	/// Message to request supported time-frames.
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class TimeFrameLookupMessage : Message, ISubscriptionMessage
+	public class TimeFrameLookupMessage : BaseSubscriptionMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeFrameLookupMessage"/>.
@@ -19,13 +17,6 @@ namespace StockSharp.Messages
 			: base(MessageTypes.TimeFrameLookup)
 		{
 		}
-
-		/// <inheritdoc />
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
-		[MainCategory]
-		public long TransactionId { get; set; }
 
 		/// <inheritdoc />
 		public override string ToString()
@@ -51,34 +42,23 @@ namespace StockSharp.Messages
 		{
 			base.CopyTo(destination);
 
-			destination.TransactionId = TransactionId;
-
 			return destination;
 		}
 
-		DateTimeOffset? ISubscriptionMessage.From
-		{
-			get => null;
-			set { }
-		}
+		/// <inheritdoc />
+		[DataMember]
+		public override DateTimeOffset? From => null;
 
-		DateTimeOffset? ISubscriptionMessage.To
-		{
-			// prevent for online mode
-			get => DateTimeOffset.MaxValue;
-			set { }
-		}
+		/// <inheritdoc />
+		[DataMember]
+		public override DateTimeOffset? To => DateTimeOffset.MaxValue /* prevent for online mode */;
 
-		bool ISubscriptionMessage.IsSubscribe
-		{
-			get => true;
-			set { }
-		}
+		/// <inheritdoc />
+		[DataMember]
+		public override bool IsSubscribe => true;
 
-		long IOriginalTransactionIdMessage.OriginalTransactionId
-		{
-			get => 0;
-			set { }
-		}
+		/// <inheritdoc />
+		[DataMember]
+		public override long OriginalTransactionId => 0;
 	}
 }
