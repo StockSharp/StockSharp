@@ -399,11 +399,6 @@
 
 						if (!_partialRequests.TryGetValue(originId, out var info))
 							break;
-						
-						if (info.ReplyReceived)
-							return;
-
-						info.ReplyReceived = true;
 
 						var requestId = info.Origin.TransactionId;
 
@@ -411,7 +406,19 @@
 						{
 							_original.Remove(requestId);
 							_partialRequests.RemoveWhere(p => p.Value == info);
+
+							if (info.ReplyReceived)
+							{
+								// unexpected subscription stop
+								responseMsg.OriginalTransactionId = requestId;
+								break;
+							}
 						}
+						
+						if (info.ReplyReceived)
+							return;
+
+						info.ReplyReceived = true;
 						
 						responseMsg.OriginalTransactionId = requestId;
 					}
