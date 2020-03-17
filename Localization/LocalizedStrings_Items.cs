@@ -51166,5 +51166,35 @@ namespace StockSharp.Localization
 		/// Heikin Ashi
 		/// </summary>
 		public static string HeikinAshi => GetString(HeikinAshiKey);
+
+		/// <summary>
+		/// Subscription {0} in state {1} and cannot be stopped.
+		/// </summary>
+		public const string SubscriptionInStateKey = nameof(SubscriptionInState);
+
+		/// <summary>
+		/// Subscription {0} in state {1} and cannot be stopped.
+		/// </summary>
+		public static string SubscriptionInState => GetString(SubscriptionInStateKey);
+
+		/// <summary>
+		/// Subscription {0} notify subscriber {1}.
+		/// </summary>
+		public const string SubscriptionNotifySubscriberKey = nameof(SubscriptionNotifySubscriber);
+
+		/// <summary>
+		/// Subscription {0} notify subscriber {1}.
+		/// </summary>
+		public static string SubscriptionNotifySubscriber => GetString(SubscriptionNotifySubscriberKey);
+
+		/// <summary>
+		/// Online subscription {0} removed.
+		/// </summary>
+		public const string OnlineSubscriptionRemovedKey = nameof(OnlineSubscriptionRemoved);
+
+		/// <summary>
+		/// Online subscription {0} removed.
+		/// </summary>
+		public static string OnlineSubscriptionRemoved => GetString(OnlineSubscriptionRemovedKey);
 	}
 }

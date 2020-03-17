@@ -637,6 +637,11 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() });
 			}
 
+			if (adapter.IsSupportSubscriptions)
+			{
+				adapter = ApplyOwnInner(new SubscriptionOnlineMessageAdapter(adapter));
+			}
+
 			if (SupportPartialDownload)
 			{
 				adapter = ApplyOwnInner(new PartialDownloadMessageAdapter(adapter));
