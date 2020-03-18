@@ -84,8 +84,15 @@ namespace StockSharp.Community
 				if (name[0] == '\\')
 					name = name.Substring(1);
 
-				return Tuple.Create(name, File.ReadAllBytes(f).Md5());
+				return Tuple.Create(name, File.ReadAllBytes(f).Hash());
 			}).ToArray();
 		}
+
+		/// <summary>
+		/// Get hash for the specified input.
+		/// </summary>
+		/// <param name="input">Input.</param>
+		/// <returns>Hash.</returns>
+		public static string Hash(this byte[] input) => input.Md5();
 	}
 }

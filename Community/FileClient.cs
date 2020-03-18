@@ -22,7 +22,6 @@ namespace StockSharp.Community
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.IO;
-	using Ecng.Security;
 
 	using MoreLinq;
 
@@ -142,24 +141,13 @@ namespace StockSharp.Community
 
 			if (checkHash && CheckDownloadedHash && !hash.IsEmpty())
 			{
-				var calc = body.Md5();
+				var calc = body.Hash();
 
 				if (!hash.CompareIgnoreCase(calc))
 					throw new InvalidOperationException(LocalizedStrings.FileHashNotMatchKey.Put(hash, calc));
 			}
 
 			return body;
-		}
-
-		private static string GetHash(byte[] body)
-		{
-			if (body == null)
-				throw new ArgumentNullException(nameof(body));
-
-			if (body.Length == 0)
-				throw new ArgumentOutOfRangeException(nameof(body));
-
-			return body.Md5();
 		}
 
 		/// <inheritdoc />
@@ -171,7 +159,7 @@ namespace StockSharp.Community
 			if (data.Id == 0)
 				throw new ArgumentException(nameof(data));
 
-			var hash = GetHash(data.Body);
+			var hash = data.Body.Hash();
 
 			var operationId = Invoke(f => f.BeginUploadExisting2(SessionId, data.Id, Compression, hash));
 			Upload(operationId, data, progress, cancel);
@@ -183,7 +171,7 @@ namespace StockSharp.Community
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
 
-			var hash = GetHash(body);
+			var hash = body.Hash();
 
 			var operationId = Invoke(f => f.BeginUpload2(SessionId, fileName, isPublic, Compression, hash));
 
@@ -208,7 +196,7 @@ namespace StockSharp.Community
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
 
-			var hash = GetHash(body);
+			var hash = body.Hash();
 
 			var operationId = Invoke(f => f.BeginUploadTemp(SessionId, fileName, Compression, hash));
 
