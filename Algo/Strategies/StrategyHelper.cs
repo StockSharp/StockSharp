@@ -927,7 +927,7 @@ namespace StockSharp.Algo.Strategies
 		/// Convert <see cref="Type"/> to <see cref="StrategyTypeMessage"/>.
 		/// </summary>
 		/// <param name="strategyType">Strategy type.</param>
-		/// <param name="transactionId">ID of the original message <see cref="StrategyLookupMessage.TransactionId"/> for which this message is a response.</param>
+		/// <param name="transactionId">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
 		/// <returns>The message contains information about strategy type.</returns>
 		public static StrategyTypeMessage ToTypeMessage(this Type strategyType, long transactionId = 0)
 		{

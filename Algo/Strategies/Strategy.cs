@@ -2434,7 +2434,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Convert to <see cref="StrategyInfoMessage"/>.
 		/// </summary>
-		/// <param name="transactionId">ID of the original message <see cref="StrategyLookupMessage.TransactionId"/> for which this message is a response.</param>
+		/// <param name="transactionId">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
 		/// <returns>The message contains information about strategy.</returns>
 		public virtual StrategyInfoMessage ToInfoMessage(long transactionId = 0)
 		{

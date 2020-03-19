@@ -183,6 +183,7 @@ namespace StockSharp.Algo.Storages.Remote
 		}
 
 		/// <inheritdoc />
+		[CLSCompliant(false)]
 		protected override ChannelFactory<IRemoteStorage> CreateChannel()
 		{
 			var f = new ChannelFactory<IRemoteStorage>(new NetTcpBinding(SecurityMode.None)
