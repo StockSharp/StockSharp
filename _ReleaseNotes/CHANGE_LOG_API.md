@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## v4.4.17:
+## v5.0.0:
 * (feature) INativeIdStorage. Clear method added.
 * (bug) FinamHistorySource. Fix https://stocksharp.ru/forum/10395/skachivanie-tikovyh-i-svechnyh-istoricheskih-dannyh-gidroi-s-finama/
 * (bug) DiMinus, DiPlus, IchimokuChinkouLine, IchimokuLine, RelativeVigorIndexAverage, RelativeVigorIndexSignal excluded from indicators list.

@@ -1,6 +1,6 @@
 StockSharp Terminal Change log
 ========================
-## v4.4.17:
+## v5.0.0:
 * (bug) Many bug fixes and improvements.
 * (feature) S# paper trading auto connection.
 * (feature) Finam, DukasCopy (history), Oanda (history), MFD supported.

@@ -1,6 +1,6 @@
 StockSharp Data (Hydra) Change log
 ========================
-## v4.4.17:
+## v5.0.0:
 * (feature) Plugins refactoring. Hydra now uses IMessageAdapter directly.
 * (feature) Task pane redesign.
 * (feature) CandlesBuildFrom separated for each candles series.
