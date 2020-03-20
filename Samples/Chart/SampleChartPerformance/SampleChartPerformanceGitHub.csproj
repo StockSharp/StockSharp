@@ -14,12 +14,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Xaml.Charting" Version="1.0.0" />
-    <Reference Include="StockSharp.Xaml">
-      <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />

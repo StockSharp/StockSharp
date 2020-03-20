@@ -7,295 +7,95 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Collections" Version="1.0.0" />
-
-    <Reference Include="StockSharp.AlfaDirect">
-      <HintPath>..\References\StockSharp.AlfaDirect.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.AlorHistory">
-      <HintPath>..\References\StockSharp.AlorHistory.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BarChart">
-      <HintPath>..\References\StockSharp.BarChart.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bibox">
-      <HintPath>..\References\StockSharp.Bibox.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bitbank">
-      <HintPath>..\References\StockSharp.Bitbank.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bitfinex">
-      <HintPath>..\References\StockSharp.Bitfinex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bithumb">
-      <HintPath>..\References\StockSharp.Bithumb.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BitMax">
-      <HintPath>..\References\StockSharp.BitMax.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BitStamp">
-      <HintPath>..\References\StockSharp.BitStamp.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bittrex">
-      <HintPath>..\References\StockSharp.Bittrex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BitZ">
-      <HintPath>..\References\StockSharp.BitZ.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Blackwood">
-      <HintPath>..\References\StockSharp.Blackwood.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Btce">
-      <HintPath>..\References\StockSharp.Btce.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BW">
-      <HintPath>..\References\StockSharp.BW.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Coinbase">
-      <HintPath>..\References\StockSharp.Coinbase.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.CoinBene">
-      <HintPath>..\References\StockSharp.CoinBene.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.CoinCap">
-      <HintPath>..\References\StockSharp.CoinCap.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Coincheck">
-      <HintPath>..\References\StockSharp.Coincheck.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Coinigy">
-      <HintPath>..\References\StockSharp.Coinigy.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Cqg.Com">
-      <HintPath>..\References\StockSharp.Cqg.Com.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Cqg.Continuum">
-      <HintPath>..\References\StockSharp.Cqg.Continuum.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.CSV">
-      <HintPath>..\References\StockSharp.CSV.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Digifinex">
-      <HintPath>..\References\StockSharp.Digifinex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.DukasCopy">
-      <HintPath>..\References\StockSharp.DukasCopy.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.ETrade">
-      <HintPath>..\References\StockSharp.ETrade.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Finam">
-      <HintPath>..\References\StockSharp.Finam.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.FinViz">
-      <HintPath>..\References\StockSharp.FinViz.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Fix">
-      <HintPath>..\References\StockSharp.Fix.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Fxcm">
-      <HintPath>..\References\StockSharp.Fxcm.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.GainCapital">
-      <HintPath>..\References\StockSharp.GainCapital.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Gdax">
-      <HintPath>..\References\StockSharp.Gdax.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Google">
-      <HintPath>..\References\StockSharp.Google.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.HitBtc">
-      <HintPath>..\References\StockSharp.HitBtc.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Idax">
-      <HintPath>..\References\StockSharp.Idax.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.InteractiveBrokers">
-      <HintPath>..\References\StockSharp.InteractiveBrokers.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.IQFeed">
-      <HintPath>..\References\StockSharp.IQFeed.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.ITCH">
-      <HintPath>..\References\StockSharp.ITCH.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Kraken">
-      <HintPath>..\References\StockSharp.Kraken.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.LBank">
-      <HintPath>..\References\StockSharp.LBank.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.LMAX">
-      <HintPath>..\References\StockSharp.LMAX.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.MBTrading">
-      <HintPath>..\References\StockSharp.MBTrading.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Mfd">
-      <HintPath>..\References\StockSharp.Mfd.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Micex">
-      <HintPath>..\References\StockSharp.Micex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Oanda">
-      <HintPath>..\References\StockSharp.Oanda.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Okcoin">
-      <HintPath>..\References\StockSharp.Okcoin.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.OpenECry">
-      <HintPath>..\References\StockSharp.OpenECry.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Plaza">
-      <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Poloniex">
-      <HintPath>..\References\StockSharp.Poloniex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quandl">
-      <HintPath>..\References\StockSharp.Quandl.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.QuantHouse">
-      <HintPath>..\References\StockSharp.QuantHouse.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quik">
-      <HintPath>..\References\StockSharp.Quik.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quoinex">
-      <HintPath>..\References\StockSharp.Quoinex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Rithmic">
-      <HintPath>..\References\StockSharp.Rithmic.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Rss">
-      <HintPath>..\References\StockSharp.Rss.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.RtsHistory">
-      <HintPath>..\References\StockSharp.RtsHistory.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.SmartCom">
-      <HintPath>..\References\StockSharp.SmartCom.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.SpbEx">
-      <HintPath>..\References\StockSharp.SpbEx.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Sterling">
-      <HintPath>..\References\StockSharp.Sterling.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.TradeOgre">
-      <HintPath>..\References\StockSharp.TradeOgre.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Transaq">
-      <HintPath>..\References\StockSharp.Transaq.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.TrueFX">
-      <HintPath>..\References\StockSharp.TrueFX.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Twime">
-      <HintPath>..\References\StockSharp.Twime.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Binance">
-      <HintPath>..\References\StockSharp.Binance.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bitexbook">
-      <HintPath>..\References\StockSharp.Bitexbook.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bitmex">
-      <HintPath>..\References\StockSharp.Bitmex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Cex">
-      <HintPath>..\References\StockSharp.Cex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.CoinExchange">
-      <HintPath>..\References\StockSharp.CoinExchange.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Cryptopia">
-      <HintPath>..\References\StockSharp.Cryptopia.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Deribit">
-      <HintPath>..\References\StockSharp.Deribit.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Exmo">
-      <HintPath>..\References\StockSharp.Exmo.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Huobi">
-      <HintPath>..\References\StockSharp.Huobi.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Kucoin">
-      <HintPath>..\References\StockSharp.Kucoin.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Liqui">
-      <HintPath>..\References\StockSharp.Liqui.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.LiveCoin">
-      <HintPath>..\References\StockSharp.LiveCoin.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Okex">
-      <HintPath>..\References\StockSharp.Okex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.UkrExh">
-      <HintPath>..\References\StockSharp.UkrExh.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml">
-      <HintPath>..\References\StockSharp.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\References\StockSharp.Xaml.Diagram.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xignite">
-      <HintPath>..\References\StockSharp.Xignite.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Yahoo">
-      <HintPath>..\References\StockSharp.Yahoo.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Yobit">
-      <HintPath>..\References\StockSharp.Yobit.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.AlphaVantage">
-      <HintPath>..\References\StockSharp.AlphaVantage.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.IEX">
-      <HintPath>..\References\StockSharp.IEX.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Zaif">
-      <HintPath>..\References\StockSharp.Zaif.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.ZB">
-      <HintPath>..\References\StockSharp.ZB.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Tradier">
-      <HintPath>..\References\StockSharp.Tradier.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Upbit">
-      <HintPath>..\References\StockSharp.Upbit.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.CoinEx">
-      <HintPath>..\References\StockSharp.CoinEx.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.FatBtc">
-      <HintPath>..\References\StockSharp.FatBtc.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Latoken">
-      <HintPath>..\References\StockSharp.Latoken.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Gopax">
-      <HintPath>..\References\StockSharp.Gopax.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.CoinHub">
-      <HintPath>..\References\StockSharp.CoinHub.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Hotbit">
-      <HintPath>..\References\StockSharp.Hotbit.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Bitalong">
-      <HintPath>..\References\StockSharp.Bitalong.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.PrizmBit">
-      <HintPath>..\References\StockSharp.PrizmBit.dll</HintPath>
-    </Reference>
+    
+    <PackageReference Include="StockSharp.AlfaDirect" Version="5.0.0" />
+    <PackageReference Include="StockSharp.AlorHistory" Version="5.0.0" />
+    <PackageReference Include="StockSharp.AlphaVantage" Version="5.0.0" />
+    <PackageReference Include="StockSharp.BarChart" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bibox" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Binance" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bitalong" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bitbank" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bitexbook" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bitfinex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bithumb" Version="5.0.0" />
+    <PackageReference Include="StockSharp.BitMax" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bitmex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.BitStamp" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Bittrex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.BitZ" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Btce" Version="5.0.0" />
+    <PackageReference Include="StockSharp.BW" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Cex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Coinbase" Version="5.0.0" />
+    <PackageReference Include="StockSharp.CoinBene" Version="5.0.0" />
+    <PackageReference Include="StockSharp.CoinCap" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Coincheck" Version="5.0.0" />
+    <PackageReference Include="StockSharp.CoinExchange" Version="5.0.0" />
+    <PackageReference Include="StockSharp.CoinEx" Version="5.0.0" />
+    <PackageReference Include="StockSharp.CoinHub" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Coinigy" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Cqg.Com" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Cqg.Continuum" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Cryptopia" Version="5.0.0" />
+    <PackageReference Include="StockSharp.CSV" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Deribit" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Digifinex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.DukasCopy" Version="5.0.0" />
+    <PackageReference Include="StockSharp.ETrade" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Exmo" Version="5.0.0" />
+    <PackageReference Include="StockSharp.FatBTC" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Finam" Version="5.0.0" />
+    <PackageReference Include="StockSharp.FinViz" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Fix" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Fxcm" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Gdax" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Google" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Gopax" Version="5.0.0" />
+    <PackageReference Include="StockSharp.HitBtc" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Hotbit" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Huobi" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Idax" Version="5.0.0" />
+    <PackageReference Include="StockSharp.IEX" Version="5.0.0" />
+    <PackageReference Include="StockSharp.InteractiveBrokers" Version="5.0.0" />
+    <PackageReference Include="StockSharp.IQFeed" Version="5.0.0" />
+    <PackageReference Include="StockSharp.ITCH" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Kraken" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Kucoin" Version="5.0.0" />
+    <PackageReference Include="StockSharp.LATOKEN" Version="5.0.0" />
+    <PackageReference Include="StockSharp.LBank" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Liqui" Version="5.0.0" />
+    <PackageReference Include="StockSharp.LiveCoin" Version="5.0.0" />
+    <PackageReference Include="StockSharp.LMAX" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Mfd" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Micex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Oanda" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Okcoin" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Okex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Plaza" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Poloniex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.PrizmBit" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Quandl" Version="5.0.0" />
+    <PackageReference Include="StockSharp.QuantHouse" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Quik" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Quoinex" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Rithmic" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Rss" Version="5.0.0" />
+    <PackageReference Include="StockSharp.SmartCom" Version="5.0.0" />
+    <PackageReference Include="StockSharp.SpbEx" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Sterling" Version="5.0.0" />
+    <PackageReference Include="StockSharp.TradeOgre" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Tradier" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Transaq" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Twime" Version="5.0.0" />
+    <PackageReference Include="StockSharp.UkrExh" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Upbit" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Xignite" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Yahoo" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Yobit" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Zaif" Version="5.0.0" />
+    <PackageReference Include="StockSharp.ZB" Version="5.0.0" />
+    <PackageReference Include="StockSharp.DigitexFutures" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Configuration\ConfigurationGitHub.csproj" />
