@@ -95,6 +95,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Yobit;
 	using StockSharp.Zaif;
 	using StockSharp.ZB;
+	using StockSharp.DigitexFutures;
 
 	/// <summary>
 	/// In memory configuration message adapter's provider.
@@ -230,6 +231,7 @@ namespace StockSharp.Configuration
 			() => typeof(CoinHubMessageAdapter),
 			() => typeof(BitalongMessageAdapter),
 			() => typeof(PrizmBitMessageAdapter),
+			() => typeof(DigitexFuturesMessageAdapter),
 		});
 	}
 }

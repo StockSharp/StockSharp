@@ -342,6 +342,7 @@ StockSharp API Change log
 * (feature) News. ExpiryDate property added.
 * (feature) Tick storage. Supports string ids.
 * (feature) Heikin Ashi candles.
+* (feature) DigitexFutures connector.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
