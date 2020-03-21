@@ -164,7 +164,7 @@ namespace SampleConnection
 		{
 			var connector = Connector;
 
-			var wnd = new DatesWindow();
+			var wnd = new DatesWindow { From = DateTime.Today.AddDays(-1) };
 
 			if (!wnd.ShowModal(this))
 				return;
@@ -192,7 +192,7 @@ namespace SampleConnection
 		{
 			var connector = Connector;
 
-			var wnd = new DatesWindow();
+			var wnd = new DatesWindow { From = DateTime.Today.AddDays(-1) };
 
 			if (!wnd.ShowModal(this))
 				return;
@@ -227,7 +227,7 @@ namespace SampleConnection
 			var wnd = new SecurityLookupWindow
 			{
 				ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll(),
-				Criteria = new Security { Code = "IS" }
+				Criteria = new Security { Code = "EUR", Currency = CurrencyTypes.USD, Type = SecurityTypes.Currency, }
 			};
 
 			if (!wnd.ShowModal(this))
