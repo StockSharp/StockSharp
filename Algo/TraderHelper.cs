@@ -2405,8 +2405,31 @@ namespace StockSharp.Algo
 						case PositionChangeTypes.CommissionTaker:
 							position.CommissionTaker = (decimal)change.Value;
 							break;
-						default:
-							throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
+						case PositionChangeTypes.BuyOrdersCount:
+							position.BuyOrdersCount = (int)change.Value;
+							break;
+						case PositionChangeTypes.SellOrdersCount:
+							position.SellOrdersCount = (int)change.Value;
+							break;
+						case PositionChangeTypes.BuyOrdersMargin:
+							position.BuyOrdersMargin = (int)change.Value;
+							break;
+						case PositionChangeTypes.SellOrdersMargin:
+							position.SellOrdersMargin = (int)change.Value;
+							break;
+						case PositionChangeTypes.OrdersMargin:
+							position.OrdersMargin = (int)change.Value;
+							break;
+						case PositionChangeTypes.OrdersCount:
+							position.OrdersCount = (int)change.Value;
+							break;
+						case PositionChangeTypes.TradesCount:
+							position.TradesCount = (int)change.Value;
+							break;
+
+						// skip unknown fields
+						//default:
+						//	throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
 					}
 				}
 				catch (Exception ex)
@@ -4615,6 +4638,10 @@ namespace StockSharp.Algo
 
 				case PositionChangeTypes.Currency:
 					return typeof(CurrencyTypes);
+
+				case PositionChangeTypes.BuyOrdersCount:
+				case PositionChangeTypes.SellOrdersCount:
+					return typeof(int);
 
 				default:
 					return type.IsObsolete() ? null : typeof(decimal);

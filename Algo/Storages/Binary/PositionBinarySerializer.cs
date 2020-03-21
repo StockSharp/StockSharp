@@ -296,10 +296,19 @@ namespace StockSharp.Algo.Storages.Binary
 							break;
 						case PositionChangeTypes.CommissionMaker:
 						case PositionChangeTypes.CommissionTaker:
+						case PositionChangeTypes.BuyOrdersMargin:
+						case PositionChangeTypes.SellOrdersMargin:
+						case PositionChangeTypes.OrdersMargin:
 							writer.WriteDecimal((decimal)change.Value, 0);
 							break;
 						case PositionChangeTypes.SettlementPrice:
 							SerializeChange(writer, metaInfo.SettlementPrice, (decimal)change.Value);
+							break;
+						case PositionChangeTypes.BuyOrdersCount:
+						case PositionChangeTypes.SellOrdersCount:
+						case PositionChangeTypes.OrdersCount:
+						case PositionChangeTypes.TradesCount:
+							writer.WriteInt((int)change.Value);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -397,10 +406,19 @@ namespace StockSharp.Algo.Storages.Binary
 						break;
 					case PositionChangeTypes.CommissionMaker:
 					case PositionChangeTypes.CommissionTaker:
+					case PositionChangeTypes.BuyOrdersMargin:
+					case PositionChangeTypes.SellOrdersMargin:
+					case PositionChangeTypes.OrdersMargin:
 						posMsg.Add(type, reader.ReadDecimal(0));
 						break;
 					case PositionChangeTypes.SettlementPrice:
 						posMsg.Add(type, DeserializeChange(reader, metaInfo.SettlementPrice));
+						break;
+					case PositionChangeTypes.BuyOrdersCount:
+					case PositionChangeTypes.SellOrdersCount:
+					case PositionChangeTypes.OrdersCount:
+					case PositionChangeTypes.TradesCount:
+						posMsg.Add(type, reader.ReadInt());
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

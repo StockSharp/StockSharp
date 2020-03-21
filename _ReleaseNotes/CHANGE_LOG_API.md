@@ -343,6 +343,7 @@ StockSharp API Change log
 * (feature) Tick storage. Supports string ids.
 * (feature) Heikin Ashi candles.
 * (feature) DigitexFutures connector.
+* (feature) Position. BuyOrdersCount, SellOrdersCount, BuyOrdersMargin, SellOrdersMargin, OrdersMargin, OrdersCount, TradesCount.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

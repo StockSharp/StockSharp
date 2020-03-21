@@ -514,6 +514,132 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private int? _buyOrdersCount;
+
+		/// <summary>
+		/// Orders (bids).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public int? BuyOrdersCount
+		{
+			get => _buyOrdersCount;
+			set
+			{
+				_buyOrdersCount = value;
+				NotifyChanged(nameof(BuyOrdersCount));
+			}
+		}
+
+		private int? _sellOrdersCount;
+
+		/// <summary>
+		/// Orders (asks).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public int? SellOrdersCount
+		{
+			get => _sellOrdersCount;
+			set
+			{
+				_sellOrdersCount = value;
+				NotifyChanged(nameof(SellOrdersCount));
+			}
+		}
+
+		private decimal? _buyOrdersMargin;
+
+		/// <summary>
+		/// Margin (buy).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? BuyOrdersMargin
+		{
+			get => _buyOrdersMargin;
+			set
+			{
+				_buyOrdersMargin = value;
+				NotifyChanged(nameof(BuyOrdersMargin));
+			}
+		}
+
+		private decimal? _sellOrdersMargin;
+
+		/// <summary>
+		/// Margin (sell).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? SellOrdersMargin
+		{
+			get => _sellOrdersMargin;
+			set
+			{
+				_sellOrdersMargin = value;
+				NotifyChanged(nameof(SellOrdersMargin));
+			}
+		}
+
+		private decimal? _ordersMargin;
+
+		/// <summary>
+		/// Orders (margin).
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public decimal? OrdersMargin
+		{
+			get => _ordersMargin;
+			set
+			{
+				_ordersMargin = value;
+				NotifyChanged(nameof(OrdersMargin));
+			}
+		}
+
+		private int? _ordersCount;
+
+		/// <summary>
+		/// Orders.
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public int? OrdersCount
+		{
+			get => _ordersCount;
+			set
+			{
+				_ordersCount = value;
+				NotifyChanged(nameof(OrdersCount));
+			}
+		}
+
+		private int? _tradesCount;
+
+		/// <summary>
+		/// Trades.
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		public int? TradesCount
+		{
+			get => _tradesCount;
+			set
+			{
+				_tradesCount = value;
+				NotifyChanged(nameof(TradesCount));
+			}
+		}
+
 		/// <summary>
 		/// Create a copy of <see cref="Position"/>.
 		/// </summary>
@@ -559,6 +685,13 @@ namespace StockSharp.BusinessEntities
 			destination.Leverage = Leverage;
 			destination.CommissionMaker = CommissionMaker;
 			destination.CommissionTaker = CommissionTaker;
+
+			destination.BuyOrdersCount = BuyOrdersCount;
+			destination.SellOrdersCount = SellOrdersCount;
+			destination.BuyOrdersMargin = BuyOrdersMargin;
+			destination.SellOrdersMargin = SellOrdersMargin;
+			destination.OrdersCount = OrdersCount;
+			destination.TradesCount = TradesCount;
 		}
 
 		/// <inheritdoc />

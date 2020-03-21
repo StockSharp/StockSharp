@@ -359,8 +359,8 @@ Delta;Delta;Дельта
 Gamma;Gamma;Гамма
 Vega;Vega;Вега
 Theta;Theta;Тета
-Str304;Initial margin (buy);ГО (покупка)
-Str305;Initial margin (sell);ГО (продажа)
+Str304;Margin (buy);ГО (покупка)
+Str305;Margin (sell);ГО (продажа)
 Str306;Minimum price step;Минимальный шаг цены
 Str307;Minimum volume step;Минимальный шаг объема
 Str308;Last trade price;Цена последней сделки
@@ -5154,6 +5154,7 @@ SubscriptionInState;Subscription {0} in state {1} and cannot be stopped.;Под�
 SubscriptionNotifySubscriber;Subscription {0} notify subscriber {1}.;Подписка {0} уведомляет подписчика {1}.
 OnlineSubscriptionRemoved;Online subscription {0} removed.;Онлайн подписку {0} удалена.
 DigitexFutures;Digitex Futures;Digitex Futures
+OrdersMargin;Orders (margin);Заявки (маржа)
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

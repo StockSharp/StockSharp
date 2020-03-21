@@ -51206,5 +51206,15 @@ namespace StockSharp.Localization
 		/// Digitex Futures
 		/// </summary>
 		public static string DigitexFutures => GetString(DigitexFuturesKey);
+
+		/// <summary>
+		/// Orders (margin)
+		/// </summary>
+		public const string OrdersMarginKey = nameof(OrdersMargin);
+
+		/// <summary>
+		/// Orders (margin)
+		/// </summary>
+		public static string OrdersMargin => GetString(OrdersMarginKey);
 	}
 }

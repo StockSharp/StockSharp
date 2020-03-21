@@ -855,6 +855,17 @@ namespace StockSharp.Algo.Storages.Csv
 					position.SettlementPrice = reader.ReadNullableDecimal();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					position.BuyOrdersCount = reader.ReadNullableInt();
+					position.SellOrdersCount = reader.ReadNullableInt();
+					position.BuyOrdersMargin = reader.ReadNullableDecimal();
+					position.SellOrdersMargin = reader.ReadNullableDecimal();
+					position.OrdersMargin = reader.ReadNullableDecimal();
+					position.OrdersCount = reader.ReadNullableInt();
+					position.TradesCount = reader.ReadNullableInt();
+				}
+
 				return position;
 			}
 
@@ -885,6 +896,13 @@ namespace StockSharp.Algo.Storages.Csv
 					data.UnrealizedPnL.To<string>(),
 					data.CurrentPrice.To<string>(),
 					data.SettlementPrice.To<string>(),
+					data.BuyOrdersCount.To<string>(),
+					data.SellOrdersCount.To<string>(),
+					data.BuyOrdersMargin.To<string>(),
+					data.SellOrdersMargin.To<string>(),
+					data.OrdersMargin.To<string>(),
+					data.OrdersCount.To<string>(),
+					data.TradesCount.To<string>(),
 				});
 			}
 
