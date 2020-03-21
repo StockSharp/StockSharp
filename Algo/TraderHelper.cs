@@ -2412,13 +2412,13 @@ namespace StockSharp.Algo
 							position.SellOrdersCount = (int)change.Value;
 							break;
 						case PositionChangeTypes.BuyOrdersMargin:
-							position.BuyOrdersMargin = (int)change.Value;
+							position.BuyOrdersMargin = (decimal)change.Value;
 							break;
 						case PositionChangeTypes.SellOrdersMargin:
-							position.SellOrdersMargin = (int)change.Value;
+							position.SellOrdersMargin = (decimal)change.Value;
 							break;
 						case PositionChangeTypes.OrdersMargin:
-							position.OrdersMargin = (int)change.Value;
+							position.OrdersMargin = (decimal)change.Value;
 							break;
 						case PositionChangeTypes.OrdersCount:
 							position.OrdersCount = (int)change.Value;
