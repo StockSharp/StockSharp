@@ -3271,12 +3271,13 @@ namespace StockSharp.Algo
 		/// <param name="message">Change message.</param>
 		/// <param name="type">Change type.</param>
 		/// <param name="value">Change value.</param>
+		/// <param name="isZeroAcceptable">Is zero value is acceptable values.</param>
 		/// <returns>Change message.</returns>
-		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int value)
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int value, bool isZeroAcceptable = false)
 			where TMessage : BaseChangeMessage<TMessage, TChange>, new()
 		{
-			//if (value == 0)
-			//	return message;
+			if (value == 0 && !isZeroAcceptable)
+				return message;
 
 			return message.Add(type, value);
 		}
@@ -3289,14 +3290,15 @@ namespace StockSharp.Algo
 		/// <param name="message">Change message.</param>
 		/// <param name="type">Change type.</param>
 		/// <param name="value">Change value.</param>
+		/// <param name="isZeroAcceptable">Is zero value is acceptable values.</param>
 		/// <returns>Change message.</returns>
-		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int? value)
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int? value, bool isZeroAcceptable = false)
 			where TMessage : BaseChangeMessage<TMessage, TChange>, new()
 		{
-			if (value == null/* || value == 0*/)
+			if (value == null)
 				return message;
 
-			return message.Add(type, value.Value);
+			return message.TryAdd(type, value.Value, isZeroAcceptable);
 		}
 
 		/// <summary>
@@ -3307,11 +3309,12 @@ namespace StockSharp.Algo
 		/// <param name="message">Change message.</param>
 		/// <param name="type">Change type.</param>
 		/// <param name="value">Change value.</param>
+		/// <param name="isZeroAcceptable">Is zero value is acceptable values.</param>
 		/// <returns>Change message.</returns>
-		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long value)
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long value, bool isZeroAcceptable = false)
 			where TMessage : BaseChangeMessage<TMessage, TChange>, new()
 		{
-			if (value == 0)
+			if (value == 0 && !isZeroAcceptable)
 				return message;
 
 			return message.Add(type, value);
@@ -3325,14 +3328,15 @@ namespace StockSharp.Algo
 		/// <param name="message">Change message.</param>
 		/// <param name="type">Change type.</param>
 		/// <param name="value">Change value.</param>
+		/// <param name="isZeroAcceptable">Is zero value is acceptable values.</param>
 		/// <returns>Change message.</returns>
-		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long? value)
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long? value, bool isZeroAcceptable = false)
 			where TMessage : BaseChangeMessage<TMessage, TChange>, new()
 		{
-			if (value == null || value == 0)
+			if (value == null)
 				return message;
 
-			return message.Add(type, value.Value);
+			return message.TryAdd(type, value.Value, isZeroAcceptable);
 		}
 
 		/// <summary>
