@@ -5153,6 +5153,7 @@ HeikinAshi;Heikin Ashi;Heikin Ashi
 SubscriptionInState;Subscription {0} in state {1} and cannot be stopped.;Подписка {0} в состоянии {1} и не может быть остановлена.
 SubscriptionNotifySubscriber;Subscription {0} notify subscriber {1}.;Подписка {0} уведомляет подписчика {1}.
 OnlineSubscriptionRemoved;Online subscription {0} removed.;Онлайн подписку {0} удалена.
+DigitexFutures;Digitex Futures;Digitex Futures
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

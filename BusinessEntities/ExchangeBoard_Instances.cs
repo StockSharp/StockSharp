@@ -3541,5 +3541,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.PrizmBit.Name,
 			Exchange = Exchange.PrizmBit,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.DigitexFutures"/>.
+		/// </summary>
+		public static ExchangeBoard DigitexFutures { get; } = new ExchangeBoard
+		{
+			Code = Exchange.DigitexFutures.Name,
+			Exchange = Exchange.DigitexFutures,
+		};
 	}
 }

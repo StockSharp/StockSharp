@@ -1118,5 +1118,14 @@ namespace StockSharp.BusinessEntities
 			Name = "PRZM",
 			FullNameLoc = LocalizedStrings.PrizmBitKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="DigitexFutures"/>.
+		/// </summary>
+		public static Exchange DigitexFutures { get; } = new Exchange
+		{
+			Name = "DGFT",
+			FullNameLoc = LocalizedStrings.DigitexFuturesKey,
+		};
 	}
 }

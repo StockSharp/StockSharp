@@ -51196,5 +51196,15 @@ namespace StockSharp.Localization
 		/// Online subscription {0} removed.
 		/// </summary>
 		public static string OnlineSubscriptionRemoved => GetString(OnlineSubscriptionRemovedKey);
+
+		/// <summary>
+		/// Digitex Futures
+		/// </summary>
+		public const string DigitexFuturesKey = nameof(DigitexFutures);
+
+		/// <summary>
+		/// Digitex Futures
+		/// </summary>
+		public static string DigitexFutures => GetString(DigitexFuturesKey);
 	}
 }
