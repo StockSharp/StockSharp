@@ -76,7 +76,7 @@ namespace SampleHistoryTesting
 		{
 			InitializeComponent();
 
-			HistoryPath.Folder = @"..\..\..\HistoryData\".ToFullPath();
+			HistoryPath.Folder = @"..\..\..\..\HistoryData\".ToFullPath();
 
 			if (LocalizedStrings.ActiveLanguage == Languages.Russian)
 			{

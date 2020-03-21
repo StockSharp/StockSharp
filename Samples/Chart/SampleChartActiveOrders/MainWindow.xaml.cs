@@ -79,7 +79,7 @@
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
 			InitCharts();
-			LoadData(@"..\..\..\..\Testing\HistoryData\".ToFullPath());
+			LoadData(@"..\..\..\..\..\Testing\HistoryData\".ToFullPath());
 		}
 
 		private void InitCharts()

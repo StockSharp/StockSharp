@@ -44,7 +44,7 @@ namespace SampleHistoryTestingParallel
 		{
 			InitializeComponent();
 
-			HistoryPath.Folder = @"..\..\..\HistoryData\".ToFullPath();
+			HistoryPath.Folder = @"..\..\..\..\HistoryData\".ToFullPath();
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
