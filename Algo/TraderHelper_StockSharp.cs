@@ -1146,13 +1146,12 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 
 					using (var client = new WebClientEx { Timeout = TimeSpan.FromMinutes(1) })
 					{
-						client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-						var response = client.UploadString("https://stocksharp.com/services/instrumentprovider.ashx", $"method={method}&{argName}={request.To<byte[]>().DeflateTo().UTF8()}");
-						return client.Encoding.GetBytes(response).DeflateFrom();
+						var response = client.UploadData($"https://stocksharp.com/services/instrumentprovider.ashx?method={method}", request.To<byte[]>().DeflateTo());
+						return response.DeflateFrom();
 					}
 				}
 
-				var ids = Send(nameof(IRemoteStorage.LookupSecurityIds),"criteria", criteria).UTF8().Split(";");
+				var ids = Send(nameof(IRemoteStorage.LookupSecurityIds), "criteria", criteria).UTF8().Split(";");
 
 				var newSecurityIds = ids.Where(id => !existingIds.Contains(id)).ToArray();
 
