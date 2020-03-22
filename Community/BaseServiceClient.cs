@@ -60,6 +60,7 @@ namespace StockSharp.Community
 		/// Create WCF channel.
 		/// </summary>
 		/// <returns>WCF channel.</returns>
+		[CLSCompliant(false)]
 		protected virtual ChannelFactory<TService> CreateChannel()
 		{
 			return new ChannelFactory<TService>(new WSHttpBinding

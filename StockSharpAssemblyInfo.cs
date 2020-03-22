@@ -17,8 +17,8 @@ using StockSharp.Localization;
 [assembly: AssemblyCopyright(ProjectDescriptions.Copyright)]
 [assembly: AssemblyTrademark(ProjectDescriptions.Trademark)]
 [assembly: AssemblyCulture("")]
-#if DEBUG
 
+#if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
 [assembly: AssemblyConfiguration("Release")]
