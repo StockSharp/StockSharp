@@ -6,16 +6,12 @@
     <AssemblyName>StockSharp.Logging</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Common" Version="1.0.0" />
-    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
-    <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
-    <PackageReference Include="Ecng.Serialization" Version="1.0.0" />
-    <PackageReference Include="Ecng.Configuration" Version="1.0.0" />
-    <PackageReference Include="Ecng.Interop" Version="1.0.0" />
-    <PackageReference Include="Ecng.Net" Version="1.0.0" />
-    <PackageReference Include="Ecng.Localization" Version="1.0.0" />
+    <PackageReference Include="Ecng.Interop" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netstandard2.1' ">
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
 </Project>

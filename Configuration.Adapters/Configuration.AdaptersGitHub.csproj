@@ -6,8 +6,6 @@
     <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
-    
     <PackageReference Include="StockSharp.AlfaDirect" Version="5.0.0" />
     <PackageReference Include="StockSharp.AlorHistory" Version="5.0.0" />
     <PackageReference Include="StockSharp.AlphaVantage" Version="5.0.0" />
@@ -99,8 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Configuration\ConfigurationGitHub.csproj" />
-    <ProjectReference Include="..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

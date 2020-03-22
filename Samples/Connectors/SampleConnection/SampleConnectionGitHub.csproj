@@ -11,7 +11,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml" Version="1.0.0" />
+    <PackageReference Include="StockSharp.Xaml" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">

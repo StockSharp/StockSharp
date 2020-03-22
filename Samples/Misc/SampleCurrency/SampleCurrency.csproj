@@ -9,7 +9,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Xaml" Version="1.0.0" />
+    <PackageReference Include="Ecng.Xaml" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
@@ -18,9 +18,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

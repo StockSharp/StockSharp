@@ -9,7 +9,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml" Version="1.0.0" />
+    <PackageReference Include="StockSharp.Xaml" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
@@ -17,12 +17,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.AdaptersGitHub.csproj" />
-    <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

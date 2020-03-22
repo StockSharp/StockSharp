@@ -10,16 +10,11 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\..\..\References\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

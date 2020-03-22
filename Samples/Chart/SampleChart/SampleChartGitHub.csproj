@@ -13,16 +13,11 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Xaml.DevExp" Version="1.0.0" />
     <PackageReference Include="StockSharp.Xaml.Charting" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
