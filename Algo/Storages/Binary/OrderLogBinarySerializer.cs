@@ -279,11 +279,18 @@ namespace StockSharp.Algo.Storages.Binary
 					metaInfo.LastTradeId = writer.SerializeId(tradeId.Value, metaInfo.LastTradeId);
 
 					writer.WritePriceEx(message.GetTradePrice(), metaInfo, SecurityId);
+
+					if (metaInfo.Version >= MarketDataVersions.Version54)
+						writer.WriteInt((int)message.OrderState);
 				}
 				else
 				{
 					writer.Write(false);
-					writer.Write(message.OrderState == OrderStates.Active);
+
+					if (metaInfo.Version >= MarketDataVersions.Version54)
+						writer.WriteInt((int)message.OrderState);
+					else
+						writer.Write(message.OrderState == OrderStates.Active);
 				}
 
 				if (metaInfo.Version < MarketDataVersions.Version31)
@@ -442,11 +449,17 @@ namespace StockSharp.Algo.Storages.Binary
 				execMsg.TradeId = metaInfo.FirstTradeId;
 				execMsg.TradePrice = price;
 
-				execMsg.OrderState = OrderStates.Done;
+				if (metaInfo.Version >= MarketDataVersions.Version54)
+					execMsg.OrderState = (OrderStates)reader.ReadInt();
+				else
+					execMsg.OrderState = OrderStates.Done;
 			}
 			else
 			{
-				execMsg.OrderState = reader.Read() ? OrderStates.Active : OrderStates.Done;
+				if (metaInfo.Version >= MarketDataVersions.Version54)
+					execMsg.OrderState = (OrderStates)reader.ReadInt();
+				else
+					execMsg.OrderState = reader.Read() ? OrderStates.Active : OrderStates.Done;
 			}
 
 			if (metaInfo.Version >= MarketDataVersions.Version31)
