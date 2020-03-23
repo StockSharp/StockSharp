@@ -326,14 +326,35 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WriteLong(0/*item.Latency.Ticks*/);
 
 				var portfolio = message.PortfolioName;
-				var isEmptyPf = portfolio == null || portfolio == Portfolio.AnonymousPortfolio.Name;
+				var isEmptyPf = portfolio == null;
+				var isAnonymous = !isEmptyPf && portfolio == Portfolio.AnonymousPortfolio.Name;
 
-				writer.Write(!isEmptyPf);
-
-				if (!isEmptyPf)
+				if (isEmptyPf)
 				{
-					metaInfo.Portfolios.TryAdd(message.PortfolioName);
-					writer.WriteInt(metaInfo.Portfolios.IndexOf(message.PortfolioName));
+					writer.Write(false);
+				}
+				else
+				{
+					if (isAnonymous)
+					{
+						if (metaInfo.Version < MarketDataVersions.Version54)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+							writer.Write(true); // is anonymous
+						}
+					}
+					else
+					{
+						writer.Write(true);
+
+						if (metaInfo.Version > MarketDataVersions.Version54)
+							writer.Write(false); // not anonymous
+
+						metaInfo.Portfolios.TryAdd(message.PortfolioName);
+						writer.WriteInt(metaInfo.Portfolios.IndexOf(message.PortfolioName));
+					}
 				}
 
 				if (metaInfo.Version < MarketDataVersions.Version51)
@@ -462,7 +483,15 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (reader.Read())
 				{
-					execMsg.PortfolioName = metaInfo.Portfolios[reader.ReadInt()];
+					if (metaInfo.Version >= MarketDataVersions.Version54)
+					{
+						if (reader.Read())
+							execMsg.PortfolioName = Portfolio.AnonymousPortfolio.Name;
+						else
+							execMsg.PortfolioName = metaInfo.Portfolios[reader.ReadInt()];
+					}
+					else
+						execMsg.PortfolioName = metaInfo.Portfolios[reader.ReadInt()];
 				}
 			}
 
