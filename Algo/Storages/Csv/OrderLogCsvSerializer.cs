@@ -60,7 +60,8 @@ namespace StockSharp.Algo.Storages.Csv
 				data.TradeId.ToString(),
 				data.TradePrice.ToString(),
 				data.PortfolioName,
-				data.IsSystem.ToString()
+				data.IsSystem.ToString(),
+				data.Balance.ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -70,7 +71,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <inheritdoc />
 		protected override ExecutionMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
-			return new ExecutionMessage
+			var ol = new ExecutionMessage
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.OrderLog,
@@ -87,6 +88,11 @@ namespace StockSharp.Algo.Storages.Csv
 				PortfolioName = reader.ReadString(),
 				IsSystem = reader.ReadNullableBool(),
 			};
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				ol.Balance = reader.ReadNullableDecimal();
+
+			return ol;
 		}
 	}
 }

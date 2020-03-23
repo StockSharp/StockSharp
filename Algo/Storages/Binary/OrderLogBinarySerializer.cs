@@ -370,7 +370,14 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					writer.Write(true);
-					writer.WriteDecimal(message.Balance.Value, 0);
+
+					if (message.Balance.Value == 0)
+						writer.Write(false);
+					else
+					{
+						writer.Write(true);
+						writer.WriteDecimal(message.Balance.Value, 0);
+					}
 				}
 			}
 		}
@@ -507,7 +514,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo.Version >= MarketDataVersions.Version54)
 			{
 				if (reader.Read())
-					execMsg.Balance = reader.ReadDecimal(0);
+					execMsg.Balance = reader.Read() ? reader.ReadDecimal(0) : 0M;
 			}
 
 			return execMsg;
