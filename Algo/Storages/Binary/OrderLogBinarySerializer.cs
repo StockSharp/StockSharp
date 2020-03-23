@@ -172,7 +172,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
 		public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.OrderLog, 200, MarketDataVersions.Version53, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.OrderLog, 200, MarketDataVersions.Version54, exchangeInfoProvider)
 		{
 		}
 
@@ -339,10 +339,18 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version51)
 					continue;
 
-				writer.Write(message.Currency != null);
+				writer.WriteNullableInt((int?)message.Currency);
 
-				if (message.Currency != null)
-					writer.WriteInt((int)message.Currency.Value);
+				if (metaInfo.Version < MarketDataVersions.Version54)
+					continue;
+
+				if (message.Balance == null)
+					writer.Write(false);
+				else
+				{
+					writer.Write(true);
+					writer.WriteDecimal(message.Balance.Value, 0);
+				}
 			}
 		}
 
@@ -465,6 +473,12 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				if (reader.Read())
 					execMsg.Currency = (CurrencyTypes)reader.ReadInt();
+			}
+
+			if (metaInfo.Version >= MarketDataVersions.Version54)
+			{
+				if (reader.Read())
+					execMsg.Balance = reader.ReadDecimal(0);
 			}
 
 			return execMsg;
