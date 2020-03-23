@@ -65,7 +65,18 @@ namespace StockSharp.Logging
 				_digitChars[i] = (char)(i + '0');
 		}
 
-		private readonly PairSet<Tuple<string, DateTime>, StreamWriter> _writers = new PairSet<Tuple<string, DateTime>, StreamWriter>();
+		private class StreamWriterEx : StreamWriter
+		{
+			public StreamWriterEx(string path, bool append, Encoding encoding)
+				: base(path, append, encoding)
+			{
+				Path = path;
+			}
+
+			public string Path { get; }
+		}
+
+		private readonly PairSet<Tuple<string, DateTime>, StreamWriterEx> _writers = new PairSet<Tuple<string, DateTime>, StreamWriterEx>();
 
 		/// <summary>
 		/// To create <see cref="FileLogListener"/>. For each <see cref="ILogSource"/> a separate file with a name equal to <see cref="ILogSource.Name"/> will be created.
@@ -270,9 +281,9 @@ namespace StockSharp.Logging
 		/// </summary>
 		/// <param name="fileName">The name of the text file to which messages from the event <see cref="ILogSource.Log"/> will be recorded.</param>
 		/// <returns>A text writer.</returns>
-		protected virtual StreamWriter OnCreateWriter(string fileName)
+		private StreamWriterEx OnCreateWriter(string fileName)
 		{
-			return new StreamWriter(fileName, Append, Encoding);
+			return new StreamWriterEx(fileName, Append, Encoding);
 		}
 
 		/// <inheritdoc />
@@ -283,7 +294,7 @@ namespace StockSharp.Logging
 			var date = SeparateByDates != SeparateByDateModes.None ? DateTime.Today : default;
 
 			string prevFileName = null;
-			StreamWriter prevWriter = null;
+			StreamWriterEx prevWriter = null;
 
 			var isDisposing = false;
 
@@ -343,10 +354,10 @@ namespace StockSharp.Logging
 						if (MaxLength <= 0 || writer.BaseStream.Position < MaxLength)
 							continue;
 
+						var fileName = writer.Path;
+
 						var key = _writers[writer];
 						writer.Dispose();
-
-						var fileName = key.Item1;
 
 						var maxIndex = 0;
 
