@@ -1008,8 +1008,15 @@ namespace StockSharp.Algo
 
 				if (quoteTo != null)
 				{
-					if (quoteTo.Volume == quoteFrom.Volume)
+					if (quoteTo.Volume == quoteFrom.Volume &&
+						quoteTo.OrdersCount == quoteFrom.OrdersCount &&
+						quoteTo.Action == quoteFrom.Action &&
+						quoteTo.Condition == quoteFrom.Condition &&
+						quoteTo.StartPosition == quoteFrom.StartPosition &&
+						quoteTo.EndPosition == quoteFrom.EndPosition)
+					{
 						mapTo.Remove(price);		// то же самое
+					}
 				}
 				else
 				{
