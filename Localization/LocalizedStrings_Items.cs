@@ -5538,12 +5538,12 @@ namespace StockSharp.Localization
 		public static string Str538 => GetString(Str538Key);
 
 		/// <summary>
-		/// Combination
+		/// Matching
 		/// </summary>
 		public const string Str539Key = nameof(Str539);
 
 		/// <summary>
-		/// Combination
+		/// Matching
 		/// </summary>
 		public static string Str539 => GetString(Str539Key);
 
