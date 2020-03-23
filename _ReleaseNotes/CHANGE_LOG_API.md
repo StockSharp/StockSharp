@@ -344,6 +344,7 @@ StockSharp API Change log
 * (feature) Heikin Ashi candles.
 * (feature) DigitexFutures connector.
 * (feature) Position. BuyOrdersCount, SellOrdersCount, BuyOrdersMargin, SellOrdersMargin, OrdersMargin, OrdersCount, TradesCount.
+* (bug) FileLogListener. Clean out of date writers.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

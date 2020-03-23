@@ -309,6 +309,14 @@ namespace StockSharp.Logging
 					if (isDisposing)
 						return null;
 
+					if (_writers.Count > 0 && date != default)
+					{
+						var outOfDate = _writers.Where(p => p.Key.Item2 < date).ToArray();
+
+						foreach (var pair in outOfDate)
+							_writers.GetAndRemove(pair.Key).Dispose();
+					}
+
 					writer = OnCreateWriter(GetFileName(fileName, date));
 					_writers.Add(key, writer);
 				}
