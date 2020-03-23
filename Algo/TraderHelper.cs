@@ -4645,6 +4645,8 @@ namespace StockSharp.Algo
 
 				case PositionChangeTypes.BuyOrdersCount:
 				case PositionChangeTypes.SellOrdersCount:
+				case PositionChangeTypes.OrdersCount:
+				case PositionChangeTypes.TradesCount:
 					return typeof(int);
 
 				default:
