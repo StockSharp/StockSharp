@@ -7,10 +7,10 @@
     <AssemblyName>SampleUnit</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\..\..\References\stocksharp.ico">
+    <Content Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Content>
   </ItemGroup>

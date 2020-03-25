@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
@@ -17,7 +17,7 @@
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\References\stocksharp.ico">
+    <Content Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Content>
   </ItemGroup>

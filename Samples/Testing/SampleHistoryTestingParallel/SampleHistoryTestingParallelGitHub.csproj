@@ -9,10 +9,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\References\stocksharp.ico">
+    <Resource Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
