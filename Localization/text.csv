@@ -16098,3 +16098,28 @@ DocStr11683;Txt templates registry;Txt templates registry
 DocStr11684;Create item source;Create item source
 DocStr11685;Try get security ID from the specified message;Try get security ID from the specified message
 DocStr11686;Security ID or {0} if message do not provide it;Security ID or {0} if message do not provide it
+DocStr11687;Online subscription counter adapter;Online subscription counter adapter
+DocStr11688;Download securities info;Download securities info
+DocStr11689;Get hash for the specified input;Get hash for the specified input
+DocStr11690;Hash;Hash
+DocStr11691;Defines the different types of data that can be returned;Defines the different types of data that can be returned
+DocStr11692;Bid Prices;Bid Prices
+DocStr11693;Ask Prices;Ask Prices
+DocStr11694;The format the historic market data is returned in;The format the historic market data is returned in
+DocStr11695;Comma Separated Values, not a fixed format, the columns will be different according to the different types of data returned;Comma Separated Values, not a fixed format, the columns will be different according to the different types of data returned
+DocStr11696;The product type used to connect to the LMAX Trader platform;The product type used to connect to the LMAX Trader platform
+DocStr11697;The order book has been newly created;The order book has been newly created
+DocStr11698;The order book is accepting orders;The order book is accepting orders
+DocStr11699;The order book is temporarily not accepting orders;The order book is temporarily not accepting orders
+DocStr11700;The order book is closed and waiting to be opened;The order book is closed and waiting to be opened
+DocStr11701;The trades on the order book have been settled;The trades on the order book have been settled
+DocStr11702;The order book is no longer trading;The order book is no longer trading
+DocStr11703;Base implementation of {0} interface;Base implementation of {0} interface
+DocStr11704;Initial margin (buy);Initial margin (buy)
+DocStr11705;Initial margin (sell);Initial margin (sell)
+DocStr11706;Xaml extension to use themed SVG icons;Xaml extension to use themed SVG icons
+DocStr11707;Icon key;Icon key
+DocStr11708;Get icon image source;Get icon image source
+DocStr11709;The icon key;The icon key
+DocStr11710;Xaml extension to apply color to SVG icons;Xaml extension to apply color to SVG icons
+DocStr11711;New icon color;New icon color

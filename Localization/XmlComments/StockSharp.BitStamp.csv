@@ -1,4 +1,7 @@
 T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
+M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.BitStamp.BitStampMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.BitStamp.BitStampMessageAdapter.Key/summary;Str3304
 P:StockSharp.BitStamp.BitStampMessageAdapter.Secret/summary;DocStr3146
@@ -8,9 +11,6 @@ P:StockSharp.BitStamp.BitStampMessageAdapter.AuthV2/summary;DocStr11406
 M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.BitStamp.BitStampMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.BitStamp.BitStampMessageAdapter.ToString/inheritdoc;DocStr8459
-M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.BitStamp.BitStampOrderCondition/summary;DocStr60
 M:StockSharp.BitStamp.BitStampOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.BitStamp.BitStampOrderCondition.StopPrice/summary;Str3460

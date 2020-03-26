@@ -1,13 +1,13 @@
 T:StockSharp.HitBtc.HitBtcMessageAdapter/summary;DocStr2538
+M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.HitBtc.HitBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.HitBtc.HitBtcMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.HitBtc.HitBtcMessageAdapter.Key/summary;Str3304
 P:StockSharp.HitBtc.HitBtcMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.HitBtc.HitBtcMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.HitBtc.HitBtcMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.HitBtc.HitBtcMessageAdapter.ToString/inheritdoc;DocStr8459
-M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.HitBtc.HitBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.HitBtc.HitBtcOrderCondition/summary;DocStr60
 M:StockSharp.HitBtc.HitBtcOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.HitBtc.HitBtcOrderCondition.StopPrice/summary;Str3460

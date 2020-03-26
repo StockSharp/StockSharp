@@ -130,6 +130,7 @@ P:StockSharp.BusinessEntities.Exchange.CoinHub/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.Hotbit/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.Bitalong/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.PrizmBit/summary;DocStr11334
+P:StockSharp.BusinessEntities.Exchange.DigitexFutures/summary;DocStr11334
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -371,6 +372,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.CoinHub/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Hotbit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Bitalong/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.PrizmBit/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.DigitexFutures/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
 E:StockSharp.BusinessEntities.IConnector.NewTrades/summary;DocStr868
@@ -869,6 +871,13 @@ P:StockSharp.BusinessEntities.Position.LimitType/summary;DocStr2934
 P:StockSharp.BusinessEntities.Position.Leverage/summary;Str261
 P:StockSharp.BusinessEntities.Position.CommissionTaker/summary;CommissionTaker
 P:StockSharp.BusinessEntities.Position.CommissionMaker/summary;CommissionMaker
+P:StockSharp.BusinessEntities.Position.BuyOrdersCount/summary;OrdersBids
+P:StockSharp.BusinessEntities.Position.SellOrdersCount/summary;OrdersAsks
+P:StockSharp.BusinessEntities.Position.BuyOrdersMargin/summary;Str304
+P:StockSharp.BusinessEntities.Position.SellOrdersMargin/summary;Str305
+P:StockSharp.BusinessEntities.Position.OrdersMargin/summary;OrdersMargin
+P:StockSharp.BusinessEntities.Position.OrdersCount/summary;Orders
+P:StockSharp.BusinessEntities.Position.TradesCount/summary;Str985
 M:StockSharp.BusinessEntities.Position.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Position.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Position.CopyTo(StockSharp.BusinessEntities.Position)/summary;DocStr2615

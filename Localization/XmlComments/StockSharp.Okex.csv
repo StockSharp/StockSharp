@@ -1,4 +1,7 @@
 T:StockSharp.Okex.OkexMessageAdapter/summary;DocStr2538
+M:StockSharp.Okex.OkexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Okex.OkexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Okex.OkexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Okex.OkexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Okex.OkexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Okex.OkexMessageAdapter.Secret/summary;DocStr3146
@@ -10,9 +13,6 @@ P:StockSharp.Okex.OkexMessageAdapter.AdminPassword/summary;AdminPassword
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.ToString/inheritdoc;DocStr8459
-M:StockSharp.Okex.OkexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Okex.OkexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Okex.OkexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Okex.OkexOrderCondition/summary;DocStr60
 M:StockSharp.Okex.OkexOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Okex.OkexOrderCondition.Leverage/summary;Leverage

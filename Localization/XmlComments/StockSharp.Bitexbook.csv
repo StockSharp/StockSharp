@@ -1,4 +1,7 @@
 T:StockSharp.Bitexbook.BitexbookMessageAdapter/summary;DocStr2538
+M:StockSharp.Bitexbook.BitexbookMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Bitexbook.BitexbookMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Bitexbook.BitexbookMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.Secret/summary;DocStr3146
@@ -6,8 +9,5 @@ P:StockSharp.Bitexbook.BitexbookMessageAdapter.BalanceCheckInterval/summary;Bala
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.ToString/inheritdoc;DocStr8459
-M:StockSharp.Bitexbook.BitexbookMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Bitexbook.BitexbookMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Bitexbook.BitexbookMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Bitexbook.BitexbookOrderCondition/summary;DocStr60
 M:StockSharp.Bitexbook.BitexbookOrderCondition.#ctor/summary;DocStr1

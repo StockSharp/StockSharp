@@ -1,4 +1,7 @@
 T:StockSharp.Bithumb.BithumbMessageAdapter/summary;DocStr2538
+M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Bithumb.BithumbMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Bithumb.BithumbMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bithumb.BithumbMessageAdapter.Secret/summary;DocStr3146
@@ -7,9 +10,6 @@ P:StockSharp.Bithumb.BithumbMessageAdapter.BalanceCheckInterval/summary;BalanceC
 M:StockSharp.Bithumb.BithumbMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bithumb.BithumbMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bithumb.BithumbMessageAdapter.ToString/inheritdoc;DocStr8459
-M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Bithumb.BithumbOrderCondition/summary;DocStr60
 M:StockSharp.Bithumb.BithumbOrderCondition.#ctor/summary;DocStr1
 T:StockSharp.Bithumb.BithumbTrader/summary;DocStr2539

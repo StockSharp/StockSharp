@@ -1,4 +1,7 @@
 T:StockSharp.Btce.BtceMessageAdapter/summary;DocStr2581
+M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Btce.BtceMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Btce.BtceMessageAdapter.Key/summary;Str3304
 P:StockSharp.Btce.BtceMessageAdapter.Secret/summary;DocStr3146
@@ -8,9 +11,6 @@ F:StockSharp.Btce.BtceMessageAdapter.DefaultDomain/summary;DocStr9884
 M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Btce.BtceMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Btce.BtceMessageAdapter.ToString/inheritdoc;DocStr8459
-M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Btce.BtceOrderCondition/summary;DocStr60
 M:StockSharp.Btce.BtceOrderCondition.#ctor/summary;DocStr1
 T:StockSharp.Btce.BtceTrader/summary;DocStr2539
