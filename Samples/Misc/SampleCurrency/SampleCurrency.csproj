@@ -9,7 +9,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Xaml" Version="1.*" />
+    <PackageReference Include="Ecng.Xaml" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\stocksharp.ico">

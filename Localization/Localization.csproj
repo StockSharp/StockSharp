@@ -6,7 +6,7 @@
     <AssemblyName>StockSharp.Localization</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.ComponentModel" Version="1.*" />
+    <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="text.csv" />

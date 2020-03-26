@@ -6,9 +6,9 @@
     <AssemblyName>StockSharp.Community</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.ComponentModel" Version="1.*" />
-    <PackageReference Include="Ecng.Net" Version="1.*" />
-    <PackageReference Include="Ecng.IO" Version="1.*" />
+    <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>

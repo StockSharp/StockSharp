@@ -6,8 +6,8 @@
     <AssemblyName>StockSharp.Messages</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Serialization.FieldFactories" Version="1.*" />
-    <PackageReference Include="Ecng.Interop" Version="1.*" />
+    <PackageReference Include="Ecng.Serialization.FieldFactories" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netstandard2.1' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
