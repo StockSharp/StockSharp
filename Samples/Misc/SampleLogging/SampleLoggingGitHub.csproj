@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <Import Project="..\..\..\common_samples.props" />
+  <Import Project="..\..\common_samples.props" />
   <PropertyGroup>
     <ProjectGuid>{FE5CE31E-0461-410F-874F-65EDE074C89C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -11,14 +11,14 @@
     <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Xaml" Version="5.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
     <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
-	<ItemGroup>
+  <ItemGroup>
     <Content Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Content>

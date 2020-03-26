@@ -6,8 +6,8 @@
     <ProjectGuid>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Interop" Version="1.0.1" />
-    <PackageReference Include="Ecng.Data" Version="1.0.1" />
+    <PackageReference Include="Ecng.Interop" Version="1.*" />
+    <PackageReference Include="Ecng.Data" Version="1.*" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\Community\Community.csproj" />

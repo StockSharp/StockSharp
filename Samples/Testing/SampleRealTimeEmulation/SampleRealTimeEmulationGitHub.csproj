@@ -12,7 +12,7 @@
     <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml" Version="5.0.0" />
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\stocksharp.ico">

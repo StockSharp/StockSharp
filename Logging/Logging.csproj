@@ -6,7 +6,7 @@
     <AssemblyName>StockSharp.Logging</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Interop" Version="1.0.1" />
+    <PackageReference Include="Ecng.Interop" Version="1.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj" />

@@ -17,6 +17,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
