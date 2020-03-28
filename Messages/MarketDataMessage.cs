@@ -273,6 +273,11 @@ namespace StockSharp.Messages
 		public TimeSpan? RefreshSpeed { get; set; }
 
 		/// <summary>
+		/// Order log to market depth builder.
+		/// </summary>
+		public IOrderLogMarketDepthBuilder DepthBuilder { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>
 		public MarketDataMessage()
@@ -326,6 +331,7 @@ namespace StockSharp.Messages
 			destination.IsFinished = IsFinished;
 			destination.BoardCode = BoardCode;
 			destination.RefreshSpeed = RefreshSpeed;
+			destination.DepthBuilder = DepthBuilder;
 		}
 
 		/// <inheritdoc />
