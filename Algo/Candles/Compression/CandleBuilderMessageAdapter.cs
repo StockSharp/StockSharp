@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						var isLoadOnly = mdMsg.BuildMode == MarketDataBuildModes.Load;
 
-						if (mdMsg.IsCalcVolumeProfile || mdMsg.BuildMode == MarketDataBuildModes.Build)
+						if (mdMsg.IsBuildOnly())
 						{
 							if (isLoadOnly || !TrySubscribeBuild(mdMsg))
 							{

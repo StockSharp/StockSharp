@@ -360,7 +360,7 @@ namespace StockSharp.Algo.Storages
 				case MarketDataTypes.CandleTimeFrame:
 					var tf = msg.GetTimeFrame();
 
-					if (msg.IsCalcVolumeProfile)
+					if (msg.IsBuildOnly())
 					{
 						IMarketDataStorage storage;
 
