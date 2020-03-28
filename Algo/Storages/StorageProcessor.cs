@@ -105,11 +105,6 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Cache buildable from smaller time-frames candles.
-		/// </summary>
-		public bool CacheBuildableCandles { get; set; }
-
-		/// <summary>
 		/// Storage mode. By default is <see cref="StorageModes.Incremental"/>.
 		/// </summary>
 		public StorageModes Mode { get; set; } = StorageModes.Incremental;
@@ -138,12 +133,7 @@ namespace StockSharp.Algo.Storages
 			if (!allowBuildFromSmallerTimeFrame)
 				return StorageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format);
 
-			var storage = StorageRegistry.GetCandleMessageBuildableStorage(securityId, timeFrame, Drive, Format);
-
-			if (CacheBuildableCandles)
-				storage = new CacheableMarketDataStorage<CandleMessage>(storage, StorageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format));
-
-			return storage;
+			return StorageRegistry.GetCandleMessageBuildableStorage(securityId, timeFrame, Drive, Format);
 		}
 
 		/// <summary>
@@ -246,6 +236,9 @@ namespace StockSharp.Algo.Storages
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
+
+			if (newOutMessage is null)
+				throw new ArgumentNullException(nameof(newOutMessage));
 
 			if (message.From == null && DaysLoad == TimeSpan.Zero)
 				return message;
@@ -394,13 +387,21 @@ namespace StockSharp.Algo.Storages
 							var mdMsg = (MarketDataMessage)msg.Clone();
 							mdMsg.From = mdMsg.To = null;
 
+							void SendCompressedCandle(Message candle)
+							{
+								if (_timer != null)
+									Buffer.ProcessMessage(candle);
+
+								newOutMessage(candle);
+							}
+
 							switch (msg.BuildFrom)
 							{
 								case null:
 								case MarketDataTypes.Trades:
 									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 									                        .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									                        .ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, newOutMessage);
+									                        .ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, SendCompressedCandle);
 
 									break;
 
@@ -412,7 +413,7 @@ namespace StockSharp.Algo.Storages
 										case Level1Fields.LastTradePrice:
 											lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 											                        .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											                        .ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, newOutMessage);
+											                        .ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, SendCompressedCandle);
 
 											break;
 											
@@ -421,7 +422,7 @@ namespace StockSharp.Algo.Storages
 										//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 										//	    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 										//		.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
-										//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), range.Item1, transactionId, SendReply, newOutMessage);
+										//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), range.Item1, transactionId, SendReply, SendCompressedCandle);
 										//	break;
 									}
 
@@ -436,7 +437,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 											                        .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 											                        .ToTicks()
-											                        .ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, newOutMessage);
+											                        .ToCandles(mdMsg, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, SendCompressedCandle);
 											break;
 
 										case Level1Fields.BestBidPrice:
@@ -445,7 +446,7 @@ namespace StockSharp.Algo.Storages
 											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
 											                        .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 											                        .ToOrderBooks()
-											                        .ToCandles(mdMsg, msg.BuildField.Value, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, newOutMessage);
+											                        .ToCandles(mdMsg, msg.BuildField.Value, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, SendCompressedCandle);
 											break;
 									}
 									
@@ -454,7 +455,7 @@ namespace StockSharp.Algo.Storages
 								case MarketDataTypes.MarketDepth:
 									lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
 									                        .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									                        .ToCandles(mdMsg, msg.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, newOutMessage);
+									                        .ToCandles(mdMsg, msg.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: CandleBuilderProvider), range.Item1, transactionId, SendReply, SendCompressedCandle);
 									break;
 
 								default:
@@ -848,7 +849,6 @@ namespace StockSharp.Algo.Storages
 			Mode = storage.GetValue(nameof(Mode), Mode);
 			Format = storage.GetValue(nameof(Format), Format);
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
-			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
@@ -858,7 +858,6 @@ namespace StockSharp.Algo.Storages
 			storage.SetValue(nameof(Mode), Mode);
 			storage.SetValue(nameof(Format), Format);
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
-			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 		}
 	}
 }
