@@ -6541,17 +6541,17 @@ DocStr1437;The order re-registration;Перерегистрация заявки
 DocStr1438;Group canceling of orders;Групповая отмена заявок
 DocStr1439;The sign of deletion of order residual due to cross-trade;Признак удаления остатка заявки по причине кросс-сделки
 DocStr1440;Building order book by the orders log;Построение стакана по логу заявок
-DocStr1441;To check, does the string contain the order registration;Проверить, содержит ли строчка регистрацию заявки
+DocStr1441;To check, does the order log contain the order registration;Проверить, содержит ли лог заявок регистрацию заявки
 DocStr1442;Order log item;Строчка лога заявок
-DocStr1443;{0}, if the string contains the order registration, otherwise, {1};{0}, если строчка содержит регистрацию заявки, иначе, {1}
-DocStr1444;To check, does the string contain the cancelled order;Проверить, содержит ли строчка отмененные заявки
-DocStr1445;{0}, if the string contain the cancelled order, otherwise, {1};{0}, если строчка содержит отмененные заявки, иначе, {1}
-DocStr1446;To check, does the string contain the order matching;Проверить, содержит ли строчка исполнение заявки
-DocStr1447;{0}, if the string contains order matching, otherwise, {1};{0}, если строчка содержит исполнение заявки, иначе, {1}
+DocStr1443;{0}, if the order log contains the order registration, otherwise, {1};{0}, если лог заявок содержит регистрацию заявки, иначе, {1}
+DocStr1444;To check, does the order log contain the cancelled order;Проверить, содержит ли лог заявок отмененные заявки
+DocStr1445;{0}, if the order log contain the cancelled order, otherwise, {1};{0}, если лог заявок содержит отмененные заявки, иначе, {1}
+DocStr1446;To check, does the order log contain the order matching;Проверить, содержит ли лог заявок исполнение заявки
+DocStr1447;{0}, if the order log contains order matching, otherwise, {1};{0}, если лог заявок содержит исполнение заявки, иначе, {1}
 DocStr1448;To get the reason for cancelling order in orders log;Получить причину отмены заявки в логе заявок
 DocStr1449;The reason for order cancelling in order log;Причина отмены заявки в логе заявок
 DocStr1450;Order log to market depth builder;Построитель стакана
-DocStr1451;The interval of the order book generation. The default is {0}, which means order books generation at each new string of orders log;Интервал генерации стакана. По умолчанию равен {0}, что означает генерацию стаканов при каждой новой строчке лога заявок
+DocStr1451;The interval of the order book generation. The default is {0}, which means order books generation at each new item of orders log;Интервал генерации стакана. По умолчанию равен {0}, что означает генерацию стаканов при каждой новой строчке лога заявок
 DocStr1452;The maximal depth of order book. The default is {0}, which means endless depth;Максимальная глубина стакана. По умолчанию равно {0}, что означает бесконечную глубину
 DocStr1453;To build tick trades from the orders log;Построить тиковые сделки из лога заявок
 DocStr1454;The timer, based on trading system time;Таймер, основанный на времени торговой системы
