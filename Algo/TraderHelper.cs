@@ -5431,5 +5431,41 @@ namespace StockSharp.Algo
 		/// Indicator value.
 		/// </summary>
 		public static DataType IndicatorValue { get; } = DataType.Create(typeof(Indicators.IIndicatorValue), null);//.Immutable();
+
+		/// <summary>
+		/// To build level1 from the order books.
+		/// </summary>
+		/// <param name="quotes">Order books.</param>
+		/// <returns>Level1.</returns>
+		public static IEnumerable<Level1ChangeMessage> ToLevel1(this IEnumerable<QuoteChangeMessage> quotes)
+		{
+			if (quotes is null)
+				throw new ArgumentNullException(nameof(quotes));
+
+			foreach (var quote in quotes)
+			{
+				var l1Msg = new Level1ChangeMessage
+				{
+					SecurityId = quote.SecurityId,
+					ServerTime = quote.ServerTime,
+				};
+
+				if (quote.Bids.Length > 0)
+				{
+					l1Msg
+						.TryAdd(Level1Fields.BestBidPrice, quote.Bids[0].Price)
+						.TryAdd(Level1Fields.BestBidVolume, quote.Bids[0].Volume);
+				}
+
+				if (quote.Asks.Length > 0)
+				{
+					l1Msg
+						.TryAdd(Level1Fields.BestAskPrice, quote.Asks[0].Price)
+						.TryAdd(Level1Fields.BestAskVolume, quote.Asks[0].Volume);
+				}
+
+				yield return l1Msg;
+			}
+		}
 	}
 }

@@ -384,5 +384,18 @@ namespace StockSharp.Algo
 		{
 			return new OrderLogTickEnumerable(items);
 		}
+
+		/// <summary>
+		/// To build level1 from the orders log.
+		/// </summary>
+		/// <param name="items">Orders log lines.</param>
+		/// <param name="builder">Order log to market depth builder.</param>
+		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new item of orders log.</param>
+		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
+		/// <returns>Tick trades.</returns>
+		public static IEnumerable<Level1ChangeMessage> ToLevel1(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue)
+		{
+			return items.ToOrderBooks(builder, interval, maxDepth).ToLevel1();
+		}
 	}
 }
