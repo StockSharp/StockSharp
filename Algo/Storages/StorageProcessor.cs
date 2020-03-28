@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Storages
 			if (!allowBuildFromSmallerTimeFrame)
 				return StorageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, timeFrame, Drive, Format);
 
-			return StorageRegistry.GetCandleMessageBuildableStorage(securityId, timeFrame, Drive, Format);
+			return CandleBuilderProvider.GetCandleMessageBuildableStorage(StorageRegistry, securityId, timeFrame, Drive, Format);
 		}
 
 		/// <summary>

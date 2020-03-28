@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		private readonly PartCandleBuilderValueTransform _transform;
-		private readonly TimeFrameCandleBuilder _builder;
+		private readonly ICandleBuilder _builder;
 		private readonly MarketDataMessage _subscription;
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="builder">The builder of candles of <see cref="TimeFrameCandleMessage"/> type.</param>
-		public BiggerTimeFrameCandleCompressor(MarketDataMessage subscription, TimeFrameCandleBuilder builder)
+		public BiggerTimeFrameCandleCompressor(MarketDataMessage subscription, ICandleBuilder builder)
 		{
 			_subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 			_transform = new PartCandleBuilderValueTransform();

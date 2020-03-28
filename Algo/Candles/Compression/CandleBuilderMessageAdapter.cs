@@ -172,7 +172,7 @@ namespace StockSharp.Algo.Candles.Compression
 										_series.Add(transactionId, new SeriesInfo(original, current)
 										{
 											State = SeriesStates.SmallTimeFrame,
-											BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(typeof(TimeFrameCandleMessage))),
+											BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage))),
 											LastTime = original.From,
 										});
 									}
@@ -574,7 +574,7 @@ namespace StockSharp.Algo.Candles.Compression
 							series.Current.Arg = smaller;
 							series.Current.TransactionId = TransactionIdGenerator.GetNextId();
 
-							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, (TimeFrameCandleBuilder)_candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)));
+							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)));
 							series.State = SeriesStates.SmallTimeFrame;
 							series.NonFinishedCandle = null;
 

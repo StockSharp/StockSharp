@@ -506,7 +506,7 @@ namespace StockSharp.Algo.Storages
 			private readonly TimeSpan _timeFrame;
 			private DateTime _prevDate;
 
-			public CandleMessageBuildableStorage(IStorageRegistry registry, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format)
+			public CandleMessageBuildableStorage(CandleBuilderProvider provider, IStorageRegistry registry, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format)
 			{
 				if (registry == null)
 					throw new ArgumentNullException(nameof(registry));
@@ -522,7 +522,7 @@ namespace StockSharp.Algo.Storages
 					DataType = MarketDataTypes.CandleTimeFrame,
 					Arg = timeFrame,
 					IsSubscribe = true,
-				}, new TimeFrameCandleBuilder(registry.ExchangeInfoProvider)));
+				}, provider.Get(typeof(TimeFrameCandleMessage))));
 			}
 
 			private IEnumerable<TimeSpan> GetSmallerTimeFrames()
@@ -643,15 +643,16 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// To get the candles storage for the specified instrument. The storage will build candles from smaller time-frames if original time-frames is not exist.
 		/// </summary>
+		/// <param name="provider">Candle builders provider.</param>
 		/// <param name="registry">Market-data storage.</param>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="timeFrame">Time-frame.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The candles storage.</returns>
-		public static IMarketDataStorage<CandleMessage> GetCandleMessageBuildableStorage(this IStorageRegistry registry, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		public static IMarketDataStorage<CandleMessage> GetCandleMessageBuildableStorage(this CandleBuilderProvider provider, IStorageRegistry registry, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return new CandleMessageBuildableStorage(registry, securityId, timeFrame, drive, format);
+			return new CandleMessageBuildableStorage(provider, registry, securityId, timeFrame, drive, format);
 		}
 
 		/// <summary>
