@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Storages
 	/// <summary>
 	/// Storage based message adapter.
 	/// </summary>
-	public class StorageMessageAdapter : BufferMessageAdapter
+	public class StorageMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly StorageProcessor _storageProcessor;
 
@@ -21,9 +21,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		/// <param name="storageProcessor">Storage processor.</param>
 		public StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcessor storageProcessor)
-			: base(innerAdapter, storageProcessor.CheckOnNull().Buffer)
+			: base(innerAdapter)
 		{
-			_storageProcessor = storageProcessor;
+			_storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
 		}
 
 		/// <inheritdoc />

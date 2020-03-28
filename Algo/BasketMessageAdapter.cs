@@ -679,10 +679,6 @@ namespace StockSharp.Algo
 			{
 				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
 			}
-			else if (SupportBuffer)
-			{
-				adapter = ApplyOwnInner(new BufferMessageAdapter(adapter, StorageProcessor.Buffer));
-			}
 
 			if (SupportOrderBookTruncate)
 			{
@@ -697,6 +693,11 @@ namespace StockSharp.Algo
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
 				adapter = ApplyOwnInner(new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage));
+			}
+
+			if (SupportBuffer || StorageProcessor.StorageRegistry != null)
+			{
+				adapter = ApplyOwnInner(new BufferMessageAdapter(adapter, StorageProcessor.Buffer));
 			}
 
 			return adapter;
