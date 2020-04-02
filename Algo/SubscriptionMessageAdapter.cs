@@ -222,6 +222,14 @@ namespace StockSharp.Algo
 									}
 								}
 							}
+							else
+							{
+								lock (_sync)
+								{
+									if (_replaceId.Count > 0)
+										subscrMsg.SetSubscriptionIds(subscrMsg.GetSubscriptionIds().Select(id => _replaceId.TryGetValue2(id) ?? id).ToArray());
+								}
+							}
 						}
 					}
 
