@@ -62,8 +62,6 @@ namespace StockSharp.Algo
 					return ProcessReset(message);
 
 				case MessageTypes.MarketData:
-					return ProcessInMarketDataMessage((MarketDataMessage)message);
-
 				case MessageTypes.Portfolio:
 				case MessageTypes.SecurityLookup:
 				case MessageTypes.BoardLookup:
@@ -208,19 +206,6 @@ namespace StockSharp.Algo
 							{
 								if (subscrMsg.OriginalTransactionId != 0 && _historicalRequests.ContainsKey(subscrMsg.OriginalTransactionId))
 									subscrMsg.SetSubscriptionIds(subscriptionId: subscrMsg.OriginalTransactionId);
-								else
-								{
-									if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
-									{
-									}
-									else
-									{
-										var dataType = message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType);
-										var secId = dataType.IsLookup()
-											? default
-											: GetSecurityId(dataType, (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
-									}
-								}
 							}
 							else
 							{
@@ -278,24 +263,12 @@ namespace StockSharp.Algo
 			return ProcessInSubscriptionMessage(message);
 		}
 
-		private bool ProcessInMarketDataMessage(MarketDataMessage message)
-		{
-			var dataType = message.ToDataType();
-			var secId = GetSecurityId(dataType, message.SecurityId);
-
-			return ProcessInSubscriptionMessage(message, dataType, secId);
-		}
-
-		private SecurityId GetSecurityId(DataType dataType, SecurityId securityId)
-			=> IsSecurityRequired(dataType) ? securityId : default;
-
 		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
 		{
 			return ProcessInSubscriptionMessage(message, message.ToDataType());
 		}
 
-		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message,
-			DataType dataType, SecurityId securityId = default)
+		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message, DataType dataType)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));

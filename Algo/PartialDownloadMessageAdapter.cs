@@ -505,7 +505,9 @@
 					return;
 
 				info.TryUpdateNextFrom(message.ServerTime);
+
 				message.OriginalTransactionId = info.Origin.TransactionId;
+				message.SetSubscriptionIds(subscriptionId: info.Origin.TransactionId);
 			}
 		}
 
