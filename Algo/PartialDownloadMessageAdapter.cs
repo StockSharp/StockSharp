@@ -455,12 +455,7 @@
 
 				case MessageTypes.Execution:
 				{
-					var execMsg = (ExecutionMessage)message;
-
-					if (!execMsg.IsMarketData())
-						break;
-
-					TryUpdateSubscriptionResult(execMsg);
+					TryUpdateSubscriptionResult((ExecutionMessage)message);
 					break;
 				}
 
@@ -473,6 +468,12 @@
 				case MessageTypes.QuoteChange:
 				{
 					TryUpdateSubscriptionResult((QuoteChangeMessage)message);
+					break;
+				}
+
+				case MessageTypes.PositionChange:
+				{
+					TryUpdateSubscriptionResult((PositionChangeMessage)message);
 					break;
 				}
 
