@@ -120,32 +120,55 @@ namespace StockSharp.Algo.Storages
 
 			if (message.IsSubscribe && Settings.IsMode(StorageModes.Snapshot))
 			{
+				void SendSnapshot<TMessage>(TMessage msg)
+					where TMessage : Message, ISubscriptionIdMessage
+				{
+					msg.SetSubscriptionIds(subscriptionId: message.TransactionId);
+					RaiseNewOutMessage(msg);
+				}
+
 				switch (message.DataType)
 				{
 					case MarketDataTypes.Level1:
 					{
-						var level1Msg = (Level1ChangeMessage)GetSnapshotStorage(DataType.Level1).Get(message.SecurityId);
+						var l1Storage = GetSnapshotStorage(DataType.Level1);
 
-						if (level1Msg != null)
+						if (message.SecurityId.IsAllSecurity())
 						{
-							//SendReply();
+							foreach (Level1ChangeMessage msg in l1Storage.GetAll())
+								SendSnapshot(msg);
+						}
+						else
+						{
+							var level1Msg = (Level1ChangeMessage)l1Storage.Get(message.SecurityId);
 
-							level1Msg.SetSubscriptionIds(subscriptionId: message.TransactionId);
-							RaiseNewOutMessage(level1Msg);
+							if (level1Msg != null)
+							{
+								//SendReply();
+								SendSnapshot(level1Msg);
+							}
 						}
 
 						break;
 					}
 					case MarketDataTypes.MarketDepth:
 					{
-						var quotesMsg = (QuoteChangeMessage)GetSnapshotStorage(DataType.MarketDepth).Get(message.SecurityId);
+						var	quotesStorage = GetSnapshotStorage(DataType.MarketDepth);
 
-						if (quotesMsg != null)
+						if (message.SecurityId.IsAllSecurity())
 						{
-							//SendReply();
+							foreach (QuoteChangeMessage msg in quotesStorage.GetAll())
+								SendSnapshot(msg);
+						}
+						else
+						{
+							var quotesMsg = (QuoteChangeMessage)quotesStorage.Get(message.SecurityId);
 
-							quotesMsg.SetSubscriptionIds(subscriptionId: message.TransactionId);
-							RaiseNewOutMessage(quotesMsg);
+							if (quotesMsg != null)
+							{
+								//SendReply();
+								SendSnapshot(quotesMsg);
+							}
 						}
 
 						break;
@@ -153,8 +176,6 @@ namespace StockSharp.Algo.Storages
 					default:
 						break;
 				}
-
-				//var lastTime = LoadMessages(message, message.From, message.To, transactionId, newOutMessage);
 			}
 		}
 

@@ -74,6 +74,9 @@ namespace StockSharp.Algo.Storages
 
 			if (message.IsSubscribe)
 			{
+				if (message.SecurityId.IsAllSecurity())
+					return message;
+
 				var transactionId = message.TransactionId;
 
 				var lastTime = LoadMessages(message, message.From, message.To, transactionId, newOutMessage);
