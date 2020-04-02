@@ -39,11 +39,11 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketSecurityMessageAdapter"/>.
 		/// </summary>
+		/// <param name="innerAdapter">Underlying adapter.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="processorProvider">Basket security processors provider.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		/// <param name="innerAdapter">Underlying adapter.</param>
-		public BasketSecurityMessageAdapter(ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IExchangeInfoProvider exchangeInfoProvider, IMessageAdapter innerAdapter)
+		public BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IExchangeInfoProvider exchangeInfoProvider)
 			: base(innerAdapter)
 		{
 			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
@@ -234,7 +234,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new BasketSecurityMessageAdapter(_securityProvider, _processorProvider, _exchangeInfoProvider, InnerAdapter);
+			return new BasketSecurityMessageAdapter(InnerAdapter, _securityProvider, _processorProvider, _exchangeInfoProvider);
 		}
 	}
 }
