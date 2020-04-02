@@ -2211,5 +2211,14 @@ namespace StockSharp.Messages
 
 			return mdMsg.IsCalcVolumeProfile || mdMsg.BuildMode == MarketDataBuildModes.Build;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static T TypedClone<T>(this T value) where T : ICloneable
+			=> (T)value.Clone();
 	}
 }

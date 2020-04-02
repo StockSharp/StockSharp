@@ -126,7 +126,7 @@ namespace StockSharp.Algo
 					var queue = _queue.SafeAdd(message.Type);
 
 					// not prev queued lookup
-					if (queue.TryAdd(transId, (ITransactionIdMessage)message.Clone()))
+					if (queue.TryAdd(transId, message.TypedClone()))
 					{
 						if (queue.Count > 1)
 						{
@@ -137,7 +137,7 @@ namespace StockSharp.Algo
 
 					if (message.IsSubscribe && !this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
 					{
-						_lookups.Add(transId, new LookupInfo((ISubscriptionMessage)message.Clone(), TimeOut));
+						_lookups.Add(transId, new LookupInfo(message.TypedClone(), TimeOut));
 						isStarted = true;
 					}
 				}
@@ -276,7 +276,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new LookupTrackingMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { TimeOut = TimeOut };
+			return new LookupTrackingMessageAdapter(InnerAdapter.TypedClone()) { TimeOut = TimeOut };
 		}
 	}
 }

@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Commissions
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CommissionMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new CommissionMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

@@ -212,7 +212,7 @@ namespace StockSharp.Algo.Testing
 								if (_parent.Settings.Latency > TimeSpan.Zero)
 								{
 									this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancellation ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
-									_pendingExecutions.Add((ExecutionMessage)execMsg.Clone(), _parent.Settings.Latency);
+									_pendingExecutions.Add(execMsg.TypedClone(), _parent.Settings.Latency);
 								}
 								else
 									AcceptExecution(execMsg.LocalTime, execMsg, result);
@@ -337,7 +337,7 @@ namespace StockSharp.Algo.Testing
 								finish = true;
 							}
 
-							var clone = (ExecutionMessage)order.Clone();
+							var clone = order.TypedClone();
 							clone.OriginalTransactionId = statusMsg.TransactionId;
 							result.Add(clone);
 
@@ -467,7 +467,7 @@ namespace StockSharp.Algo.Testing
 							// т.о. время уйдет вперед данных, которые построены по свечкам.
 							var info = _candleInfo.SafeAdd(candleMsg.OpenTime, key => Tuple.Create(new List<CandleMessage>(), new List<ExecutionMessage>()));
 
-							info.Item1.Add((CandleMessage)candleMsg.Clone());
+							info.Item1.Add(candleMsg.TypedClone());
 
 							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
 							{
@@ -580,7 +580,7 @@ namespace StockSharp.Algo.Testing
 
 			private static ExecutionMessage CreateReply(ExecutionMessage original, DateTimeOffset time)
 			{
-				var replyMsg = (ExecutionMessage)original.Clone();
+				var replyMsg = original.TypedClone();
 
 				replyMsg.ServerTime = time;
 				replyMsg.LocalTime = time;
@@ -1168,7 +1168,7 @@ namespace StockSharp.Algo.Testing
 				if (register)
 				{
 					//если пришло увеличение объема на уровне, то всегда добавляем в конец очереди, даже для диффа стаканов
-					//var clone = (ExecutionMessage)message.Clone();
+					//var clone = message.TypedClone();
 					var clone = _messagePool.Allocate();
 					
 					clone.TransactionId = message.TransactionId;
@@ -1203,7 +1203,7 @@ namespace StockSharp.Algo.Testing
 							{
 								leftBalance = -leftBalance;
 
-								//var clone = (ExecutionMessage)message.Clone();
+								//var clone = message.TypedClone();
 								var clone = _messagePool.Allocate();
 
 								clone.TransactionId = message.TransactionId;
@@ -1875,7 +1875,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Board:
 				{
 					var boardMsg = (BoardMessage)message;
-					_boardDefinitions[boardMsg.Code] = (BoardMessage)boardMsg.Clone();
+					_boardDefinitions[boardMsg.Code] = boardMsg.TypedClone();
 
 					var emulators = _securityEmulatorsByBoard.TryGetValue(boardMsg.Code);
 

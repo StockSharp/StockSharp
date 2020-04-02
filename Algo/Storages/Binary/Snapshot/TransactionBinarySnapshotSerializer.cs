@@ -494,7 +494,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (message.SecurityId.IsDefault())
 				throw new ArgumentException(message.ToString());
 
-			var copy = (ExecutionMessage)message.Clone();
+			var copy = message.TypedClone();
 
 			//if (copy.TransactionId == 0)
 			//	copy.TransactionId = message.OriginalTransactionId;

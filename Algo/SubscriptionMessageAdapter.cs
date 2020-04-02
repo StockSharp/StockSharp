@@ -251,7 +251,7 @@ namespace StockSharp.Algo
 
 						subscriptions = _subscriptionsById.Values.Distinct().Select(i =>
 						{
-							var subscription = (ISubscriptionMessage)i.Subscription.Clone();
+							var subscription = i.Subscription.TypedClone();
 							subscription.TransactionId = TransactionIdGenerator.GetNextId();
 
 							_replaceId.Add(subscription.TransactionId, i.Subscription.TransactionId);
@@ -320,7 +320,7 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						var clone = (ISubscriptionMessage)message.Clone();
+						var clone = message.TypedClone();
 
 						if (message.To != null)
 							_historicalRequests.Add(transId, clone);
@@ -334,7 +334,7 @@ namespace StockSharp.Algo
 				{
 					ISubscriptionMessage MakeUnsubscribe(ISubscriptionMessage m)
 					{
-						m = (ISubscriptionMessage)m.Clone();
+						m = m.TypedClone();
 
 						m.IsSubscribe = false;
 						m.OriginalTransactionId = m.TransactionId;
@@ -395,7 +395,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SubscriptionMessageAdapter((IMessageAdapter)InnerAdapter.Clone())
+			return new SubscriptionMessageAdapter(InnerAdapter.TypedClone())
 			{
 				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
 			};

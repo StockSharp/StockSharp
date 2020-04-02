@@ -175,13 +175,13 @@ namespace StockSharp.Algo.Testing
 					ExecutionType = ExecutionTypes.OrderLog,
 				};
 
-				_activeOrders.Enqueue((ExecutionMessage)item.Clone());
+				_activeOrders.Enqueue(item.TypedClone());
 			}
 			else
 			{
 				var activeOrder = _activeOrders.Peek();
 
-				item = (ExecutionMessage)activeOrder.Clone();
+				item = activeOrder.TypedClone();
 				item.ServerTime = time;
 
 				var isMatched = action == 5;
@@ -236,7 +236,7 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
-			return new OrderLogGenerator(SecurityId, (TradeGenerator)TradeGenerator.Clone())
+			return new OrderLogGenerator(SecurityId, TradeGenerator.TypedClone())
 			{
 				_lastOrderPrice = _lastOrderPrice,
 				IdGenerator = IdGenerator

@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		QuoteChangeMessage ISnapshotSerializer<SecurityId, QuoteChangeMessage>.CreateCopy(QuoteChangeMessage message)
 		{
-			return (QuoteChangeMessage)message.Clone();
+			return message.TypedClone();
 		}
 
 		void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)

@@ -1425,12 +1425,12 @@ namespace StockSharp.Algo
 						if (message.OrderId != null)
 						{
 							this.AddInfoLog("{0} info suspended.", message.OrderId.Value);
-							_nonAssociatedOrderIds.SafeAdd(message.OrderId.Value).Add((ExecutionMessage)message.Clone());
+							_nonAssociatedOrderIds.SafeAdd(message.OrderId.Value).Add(message.TypedClone());
 						}
 						else if (!message.OrderStringId.IsEmpty())
 						{
 							this.AddInfoLog("{0} info suspended.", message.OrderStringId);
-							_nonAssociatedStringOrderIds.SafeAdd(message.OrderStringId).Add((ExecutionMessage)message.Clone());
+							_nonAssociatedStringOrderIds.SafeAdd(message.OrderStringId).Add(message.TypedClone());
 						}
 					}
 					
@@ -1562,7 +1562,7 @@ namespace StockSharp.Algo
 
 				this.AddInfoLog("My trade delayed: {0}", message);
 
-				nonOrderedMyTrades.Add((ExecutionMessage)message.Clone());
+				nonOrderedMyTrades.Add(message.TypedClone());
 
 				return;
 			}

@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Testing
 			_lastDepthDate = message.LocalTime.Date;
 
 			// чтобы склонировать внутренние котировки
-			//message = (QuoteChangeMessage)message.Clone();
+			//message = message.TypedClone();
 			// TODO для ускорения идет shallow copy котировок
 			var newBids = message.IsSorted ? (IEnumerable<QuoteChange>)message.Bids : message.Bids.OrderByDescending(q => q.Price);
 			var newAsks = message.IsSorted ? (IEnumerable<QuoteChange>)message.Asks : message.Asks.OrderBy(q => q.Price);

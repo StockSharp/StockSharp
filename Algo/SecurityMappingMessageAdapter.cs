@@ -112,7 +112,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SecurityMappingMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), Storage);
+			return new SecurityMappingMessageAdapter(InnerAdapter.TypedClone(), Storage);
 		}
 
 		private void ReplaceSecurityId(SecurityMessage secMsg)

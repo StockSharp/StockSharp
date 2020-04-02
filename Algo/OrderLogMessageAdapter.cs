@@ -65,7 +65,7 @@
 
 							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, true, builder));
 
-							message = (MarketDataMessage)message.Clone();
+							message = message.TypedClone();
 							message.DataType = MarketDataTypes.OrderLog;
 
 							this.AddInfoLog("OL->MD subscribed {0}/{1}.", secId, message.TransactionId);
@@ -82,7 +82,7 @@
 
 							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(secId, false, (IOrderLogMarketDepthBuilder)null));
 
-							message = (MarketDataMessage)message.Clone();
+							message = message.TypedClone();
 							message.DataType = MarketDataTypes.OrderLog;
 
 							this.AddInfoLog("OL->TICK subscribed {0}/{1}.", secId, message.TransactionId);
@@ -175,7 +175,7 @@
 
 						if (updated)
 						{
-							var depth = (QuoteChangeMessage)builder.Depth.Clone();
+							var depth = builder.Depth.TypedClone();
 							depth.SetSubscriptionIds(subscriptionId: subscriptionId);
 							base.OnInnerAdapterNewOutMessage(depth);
 						}
@@ -201,7 +201,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OrderLogMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new OrderLogMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

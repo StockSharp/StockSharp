@@ -931,7 +931,7 @@ namespace StockSharp.Algo
 		private void ProcessAdapterMessage(IMessageAdapter adapter, Message message)
 		{
 			if (message is ISubscriptionMessage subscrMsg)
-				SendRequest((ISubscriptionMessage)subscrMsg.Clone(), adapter);
+				SendRequest(subscrMsg.TypedClone(), adapter);
 			else
 				adapter.SendInMessage(message);
 		}
@@ -963,7 +963,7 @@ namespace StockSharp.Algo
 						return;
 					}
 
-					_subscription.TryAdd(subscrMsg.TransactionId, Tuple.Create((ISubscriptionMessage)subscrMsg.Clone(), adapters, subscrMsg.ToDataType()));
+					_subscription.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg.TypedClone(), adapters, subscrMsg.ToDataType()));
 				}
 				else
 					adapters = null;
@@ -1170,7 +1170,7 @@ namespace StockSharp.Algo
 			{
 				foreach (var adapter in adapters)
 				{
-					var clone = (ISubscriptionMessage)subscrMsg.Clone();
+					var clone = subscrMsg.TypedClone();
 					clone.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
 					child.Add(clone, adapter);
@@ -1186,7 +1186,7 @@ namespace StockSharp.Algo
 				{
 					var adapter = pair.Value;
 
-					var clone = (ISubscriptionMessage)subscrMsg.Clone();
+					var clone = subscrMsg.TypedClone();
 					clone.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 					clone.OriginalTransactionId = pair.Key;
 
@@ -1275,7 +1275,7 @@ namespace StockSharp.Algo
 						
 						adapter = tuple.Item2.First();
 
-						mdMsg = (MarketDataMessage)mdMsg.Clone();
+						mdMsg = mdMsg.TypedClone();
 					}
 
 					SendRequest(mdMsg, adapter);
@@ -1340,7 +1340,7 @@ namespace StockSharp.Algo
 				else
 				{
 					_portfolioAdapters.TryAdd(message.PortfolioName, GetUnderlyingAdapter(adapter));
-					SendRequest((PortfolioMessage)message.Clone(), adapter);
+					SendRequest(message.TypedClone(), adapter);
 				}
 			}
 			else
@@ -1356,7 +1356,7 @@ namespace StockSharp.Algo
 					adapter = tuple.Item2;
 
 					var transId = message.TransactionId;
-					message = (PortfolioMessage)message.Clone();
+					message = message.TypedClone();
 					((PortfolioMessage)tuple.Item1).CopyTo(message);
 					message.IsSubscribe = false;
 					message.TransactionId = transId;

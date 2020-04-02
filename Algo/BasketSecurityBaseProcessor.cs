@@ -404,7 +404,7 @@ namespace StockSharp.Algo
 
 					var dict = _candles.SafeAdd(candleMsg.OpenTime);
 					
-					dict[candleMsg.SecurityId] = (CandleMessage)candleMsg.Clone();
+					dict[candleMsg.SecurityId] = candleMsg.TypedClone();
 
 					if (dict.Count == BasketLegs.Length)
 					{
@@ -551,7 +551,7 @@ namespace StockSharp.Algo
 		private IEnumerable<Message> ProcessMessage<TMessage>(Dictionary<SecurityId, TMessage> dict, SecurityId securityId, TMessage message, Func<TMessage[], TMessage> convert)
 			where TMessage : Message
 		{
-			dict[securityId] = (TMessage)message.Clone();
+			dict[securityId] = message.TypedClone();
 
 			if (dict.Count != BasketLegs.Length)
 				yield break;

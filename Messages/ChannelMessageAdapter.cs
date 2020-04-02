@@ -119,7 +119,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new ChannelMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), InputChannel.Clone(), OutputChannel.Clone());
+			return new ChannelMessageAdapter(InnerAdapter.TypedClone(), InputChannel.Clone(), OutputChannel.Clone());
 		}
 	}
 }

@@ -496,7 +496,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		Level1ChangeMessage ISnapshotSerializer<SecurityId, Level1ChangeMessage>.CreateCopy(Level1ChangeMessage message)
 		{
-			return (Level1ChangeMessage)message.Clone();
+			return message.TypedClone();
 		}
 
 		void ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Update(Level1ChangeMessage message, Level1ChangeMessage changes)

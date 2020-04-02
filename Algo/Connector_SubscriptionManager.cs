@@ -50,7 +50,7 @@ namespace StockSharp.Algo
 
 				public ISubscriptionMessage CreateSubscriptionContinue()
 				{
-					var subscrMsg = (ISubscriptionMessage)Subscription.SubscriptionMessage.Clone();
+					var subscrMsg = Subscription.SubscriptionMessage.TypedClone();
 
 					if (_last != null)
 						subscrMsg.From = _last.Value;
@@ -332,7 +332,7 @@ namespace StockSharp.Algo
 					_subscriptions.Add(subscription.TransactionId, info);
 				}
 
-				SendRequest((ISubscriptionMessage)subscrMsg.Clone(), subscription);
+				SendRequest(subscrMsg.TypedClone(), subscription);
 			}
 
 			public void UnSubscribe(Subscription subscription)

@@ -165,7 +165,7 @@ namespace StockSharp.Algo
 						if (Current != null && (_builder.Depth.ServerTime - Current.ServerTime) < _interval)
 							continue;
 
-						Current = (QuoteChangeMessage)_builder.Depth.Clone();
+						Current = _builder.Depth.TypedClone();
 
 						if (_maxDepth < int.MaxValue)
 						{

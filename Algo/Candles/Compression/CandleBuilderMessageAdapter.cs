@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Candles.Compression
 							{
 								this.AddInfoLog("Origin tf: {0}", originalTf);
 
-								var original = (MarketDataMessage)mdMsg.Clone();
+								var original = mdMsg.TypedClone();
 
 								if (mdMsg.To == null &&
 									mdMsg.BuildMode == MarketDataBuildModes.LoadAndBuild &&
@@ -162,9 +162,9 @@ namespace StockSharp.Algo.Candles.Compression
 								{
 									this.AddInfoLog("Smaller tf: {0}->{1}", originalTf, smaller);
 
-									var original = (MarketDataMessage)mdMsg.Clone();
+									var original = mdMsg.TypedClone();
 
-									var current = (MarketDataMessage)original.Clone();
+									var current = original.TypedClone();
 									current.Arg = smaller;
 
 									lock (_syncObject)
@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Candles.Compression
 							{
 								this.AddInfoLog("Origin arg: {0}", mdMsg.Arg);
 
-								var original = (MarketDataMessage)mdMsg.Clone();
+								var original = mdMsg.TypedClone();
 
 								lock (_syncObject)
 								{
@@ -223,7 +223,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (series == null)
 							break;
 
-						var unsubscribe = (MarketDataMessage)series.Current.Clone();
+						var unsubscribe = series.Current.TypedClone();
 
 						unsubscribe.OriginalTransactionId = unsubscribe.TransactionId;
 						unsubscribe.TransactionId = transactionId;
@@ -303,7 +303,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			current.TransactionId = original.TransactionId;
 
-			var series = new SeriesInfo((MarketDataMessage)original.Clone(), current)
+			var series = new SeriesInfo(original.TypedClone(), current)
 			{
 				LastTime = current.From,
 				Transform = CreateTransform(current.DataType, current.BuildField),
@@ -533,7 +533,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				if (response != null && !response.IsOk())
 				{
-					response = (SubscriptionResponseMessage)response.Clone();
+					response = response.TypedClone();
 					response.OriginalTransactionId = original.TransactionId;
 					RaiseNewOutMessage(response);
 				}
@@ -570,7 +570,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 						if (smaller != null)
 						{
-							series.Current = (MarketDataMessage)original.Clone();
+							series.Current = original.TypedClone();
 							series.Current.Arg = smaller;
 							series.Current.TransactionId = TransactionIdGenerator.GetNextId();
 
@@ -656,7 +656,7 @@ namespace StockSharp.Algo.Candles.Compression
 				info.NonFinishedCandle = null;
 			}
 
-			candleMsg = (CandleMessage)candleMsg.Clone();
+			candleMsg = candleMsg.TypedClone();
 
 			if (candleMsg.Type == MessageTypes.CandleTimeFrame)
 			{
@@ -667,7 +667,7 @@ namespace StockSharp.Algo.Candles.Compression
 			SendCandle(info, candleMsg);
 
 			if (candleMsg.State != CandleStates.Finished)
-				info.NonFinishedCandle = (CandleMessage)candleMsg.Clone();
+				info.NonFinishedCandle = candleMsg.TypedClone();
 		}
 
 		private bool ProcessValue(ISubscriptionIdMessage message)
@@ -719,7 +719,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (series.Original.IsFinished && candleMessage.State != CandleStates.Finished)
 						continue;
 
-					SendCandle(series, (CandleMessage)candleMessage.Clone());
+					SendCandle(series, candleMessage.TypedClone());
 				}
 			}
 
@@ -749,7 +749,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CandleBuilderMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _candleBuilderProvider);
+			return new CandleBuilderMessageAdapter(InnerAdapter.TypedClone(), _candleBuilderProvider);
 		}
 	}
 }

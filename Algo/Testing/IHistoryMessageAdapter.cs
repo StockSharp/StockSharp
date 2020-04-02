@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CustomHistoryMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new CustomHistoryMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

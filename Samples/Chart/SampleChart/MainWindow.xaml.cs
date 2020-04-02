@@ -302,7 +302,7 @@
 							foreach (var candle in candles)
 							{
 								_currCandle = candle;
-								_updatedCandles.Add((CandleMessage)candle.Clone());
+								_updatedCandles.Add(candle.TypedClone());
 							}
 						}
 
@@ -436,7 +436,7 @@
 					foreach (var candle in candles)
 					{
 						_currCandle = candle;
-						_updatedCandles.Add((CandleMessage)candle.Clone());
+						_updatedCandles.Add(candle.TypedClone());
 					}
 				}
 			}

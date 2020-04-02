@@ -508,7 +508,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new HeartbeatMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
+			return new HeartbeatMessageAdapter(InnerAdapter.TypedClone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
 		}
 	}
 }

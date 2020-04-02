@@ -53,8 +53,8 @@ namespace StockSharp.Messages
 		{
 			var clone = new OrderPairReplaceMessage
 			{
-				Message1 = (OrderReplaceMessage)Message1?.Clone(),
-				Message2 = (OrderReplaceMessage)Message2?.Clone(),
+				Message1 = Message1?.TypedClone(),
+				Message2 = Message2?.TypedClone(),
 			};
 
 			CopyTo(clone);

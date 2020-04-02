@@ -94,7 +94,7 @@ namespace StockSharp.Algo
 
 						for (var i = 0; i < inners.Length; i++)
 						{
-							var inner = (MarketDataMessage)mdMsg.Clone();
+							var inner = mdMsg.TypedClone();
 
 							inner.TransactionId = TransactionIdGenerator.GetNextId();
 							inner.SecurityId = processor.BasketLegs[i];

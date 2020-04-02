@@ -82,7 +82,7 @@ namespace StockSharp.Algo.PnL
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new PnLMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new PnLMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

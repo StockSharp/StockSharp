@@ -261,7 +261,7 @@
 						{
 							sendInMsg = message;
 
-							info = new SubscriptionInfo((ISubscriptionMessage)message.Clone());
+							info = new SubscriptionInfo(message.TypedClone());
 						
 							_subscriptionsByKey.Add(key, info);
 						}
@@ -321,7 +321,7 @@
 								if (info.State.IsActive())
 								{
 									// copy full subscription's details into unsubscribe request
-									sendInMsg = MakeUnsubscribe((ISubscriptionMessage)info.Subscription.Clone(), info.Subscription.TransactionId);
+									sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
 								}
 								else
 									this.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
@@ -368,7 +368,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SubscriptionOnlineMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new SubscriptionOnlineMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

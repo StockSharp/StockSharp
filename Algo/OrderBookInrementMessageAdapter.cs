@@ -375,7 +375,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OrderBookInrementMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new OrderBookInrementMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

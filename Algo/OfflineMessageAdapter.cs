@@ -382,7 +382,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OfflineMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new OfflineMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

@@ -123,8 +123,6 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public abstract override Message Clone();
 
-		IMessage IMessage.Clone() => Clone();
-
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>

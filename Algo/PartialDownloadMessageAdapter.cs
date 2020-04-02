@@ -113,7 +113,7 @@
 				if (LastIteration)
 					throw new InvalidOperationException("LastIteration == true");
 
-				var mdMsg = (MarketDataMessage)Origin.Clone();
+				var mdMsg = Origin.TypedClone();
 
 				if (_firstIteration)
 				{
@@ -278,7 +278,7 @@
 								}
 							}
 
-							var info = new DownloadInfo(this, (MarketDataMessage)mdMsg.Clone(), step, iterationInterval);
+							var info = new DownloadInfo(this, mdMsg.TypedClone(), step, iterationInterval);
 
 							message = info.InitNext();
 
@@ -515,7 +515,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new PartialDownloadMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new PartialDownloadMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

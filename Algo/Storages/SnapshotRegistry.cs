@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Storages
 								return false;
 
 							return true;
-						}).Select(m => (TMessage)m.Clone()).ToArray();
+						}).Select(m => m.TypedClone()).ToArray();
 					}
 				}
 

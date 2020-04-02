@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Storages
 				{
 					if (!(message.DataType == MarketDataTypes.MarketDepth && message.From == null && message.To == null))
 					{
-						var clone = (MarketDataMessage)message.Clone();
+						var clone = message.TypedClone();
 						clone.From = lastTime;
 						message = clone;
 						message.ValidateBounds();
@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Storages
 
 						if (range != null)
 						{
-							var mdMsg = (MarketDataMessage)msg.Clone();
+							var mdMsg = msg.TypedClone();
 							mdMsg.From = mdMsg.To = null;
 
 							switch (msg.BuildFrom)

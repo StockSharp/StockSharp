@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (!quoteMsg.IsSorted)
 				{
-					quoteMsg = (QuoteChangeMessage)quoteMsg.Clone();
+					quoteMsg = quoteMsg.TypedClone();
 
 					quoteMsg.Bids = quoteMsg.Bids.OrderByDescending(q => q.Price).ToArray();
 					quoteMsg.Asks = quoteMsg.Asks.OrderBy(q => q.Price).ToArray();

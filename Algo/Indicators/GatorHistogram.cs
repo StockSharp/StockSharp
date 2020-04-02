@@ -19,6 +19,8 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The oscillator histogram <see cref="GatorOscillator"/>.
 	/// </summary>
@@ -56,7 +58,7 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>Copy.</returns>
 		public override IIndicator Clone()
 		{
-			return new GatorHistogram((AlligatorLine)_line1.Clone(), (AlligatorLine)_line2.Clone(), _isNegative) { Name = Name };
+			return new GatorHistogram(_line1.TypedClone(), _line2.TypedClone(), _isNegative) { Name = Name };
 		}
 
 		/// <inheritdoc />

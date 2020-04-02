@@ -525,7 +525,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new BufferMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), Settings, Buffer.Clone(), SnapshotRegistry);
+			return new BufferMessageAdapter(InnerAdapter.TypedClone(), Settings, Buffer.Clone(), SnapshotRegistry);
 		}
 	}
 }

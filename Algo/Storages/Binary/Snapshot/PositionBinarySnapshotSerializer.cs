@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		PositionChangeMessage ISnapshotSerializer<SecurityId, PositionChangeMessage>.CreateCopy(PositionChangeMessage message)
 		{
-			return (PositionChangeMessage)message.Clone();
+			return message.TypedClone();
 		}
 
 		void ISnapshotSerializer<SecurityId, PositionChangeMessage>.Update(PositionChangeMessage message, PositionChangeMessage changes)
