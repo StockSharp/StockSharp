@@ -123,14 +123,20 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
-
 				// create order book window
 				var window = new QuotesWindow
 				{
 					Title = security.Id + " " + LocalizedStrings.MarketDepth
 				};
+
+				window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+				window.Show();
+				
+				// subscribe on order book flow
+				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
+
+				_quotesWindows.Add(subscription, window);
+
 				window.Closed += (s, e) =>
 				{
 					if (_appClosing)
@@ -139,11 +145,6 @@ namespace SampleConnection
 					if (subscription.State.IsActive())
 						connector.UnSubscribe(subscription);
 				};
-
-				window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
-				window.Show();
-
-				_quotesWindows.Add(subscription, window);
 			}
 		}
 
