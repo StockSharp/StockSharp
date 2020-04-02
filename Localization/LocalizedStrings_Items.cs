@@ -51216,5 +51216,25 @@ namespace StockSharp.Localization
 		/// Orders (margin)
 		/// </summary>
 		public static string OrdersMargin => GetString(OrdersMarginKey);
+
+		/// <summary>
+		/// License N{0} is not support on current platform.
+		/// </summary>
+		public const string LicenseNotSupportPlatformKey = nameof(LicenseNotSupportPlatform);
+
+		/// <summary>
+		/// License N{0} is not support on current platform.
+		/// </summary>
+		public static string LicenseNotSupportPlatform => GetString(LicenseNotSupportPlatformKey);
+
+		/// <summary>
+		/// OS
+		/// </summary>
+		public const string OSKey = nameof(OS);
+
+		/// <summary>
+		/// OS
+		/// </summary>
+		public static string OS => GetString(OSKey);
 	}
 }

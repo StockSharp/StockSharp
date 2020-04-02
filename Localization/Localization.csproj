@@ -6,6 +6,11 @@
     <AssemblyName>StockSharp.Localization</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="XmlComments\**" />
+    <EmbeddedResource Remove="XmlComments\**" />
+    <None Remove="XmlComments\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>

@@ -5155,6 +5155,8 @@ SubscriptionNotifySubscriber;Subscription {0} notify subscriber {1}.;Подпи�
 OnlineSubscriptionRemoved;Online subscription {0} removed.;Онлайн подписку {0} удалена.
 DigitexFutures;Digitex Futures;Digitex Futures
 OrdersMargin;Orders (margin);Заявки (маржа)
+LicenseNotSupportPlatform;License N{0} is not support on current platform.;Лицензия N{0} не поддерживается на текущей платформе.
+OS;OS;ОС
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
