@@ -88,20 +88,6 @@
 					break;
 				}
 
-				case MessageTypes.Reset:
-				{
-					lock (_syncRoot)
-					{
-						_securityIds.Clear();
-						_suspendedOutMessages.Clear();
-						_suspendedInMessages.Clear();
-						_skipTransactions.Clear();
-					}
-
-					base.OnInnerAdapterNewOutMessage(message);
-					break;
-				}
-
 				case MessageTypes.Security:
 				{
 					var secMsg = (SecurityMessage)message;
@@ -227,6 +213,18 @@
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					lock (_syncRoot)
+					{
+						_securityIds.Clear();
+						_suspendedOutMessages.Clear();
+						_suspendedInMessages.Clear();
+						_skipTransactions.Clear();
+					}
+
+					break;
+				}
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderCancel:
