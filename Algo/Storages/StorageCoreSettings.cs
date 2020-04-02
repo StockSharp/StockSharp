@@ -102,7 +102,7 @@
 		/// </summary>
 		/// <param name="mode">Storage mode.</param>
 		/// <returns>Check result.</returns>
-		public bool IsMode(StorageModes mode) => mode.Contains(StorageModes.Snapshot);
+		public bool IsMode(StorageModes mode) => Mode.Contains(mode);
 
 		void IPersistable.Load(SettingsStorage storage)
 		{

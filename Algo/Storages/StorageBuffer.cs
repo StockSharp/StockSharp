@@ -64,9 +64,7 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
-		private readonly SyncObject _subscriptionsLock = new SyncObject();
-		private readonly HashSet<Tuple<SecurityId, DataType>> _subscriptions = new HashSet<Tuple<SecurityId, DataType>>();
-		private readonly Dictionary<long, Tuple<MarketDataMessage, Tuple<SecurityId, DataType>>> _subscriptionsById = new Dictionary<long, Tuple<MarketDataMessage, Tuple<SecurityId, DataType>>>();
+		private readonly SynchronizedSet<long> _subscriptionsById = new SynchronizedSet<long>();
 		private readonly SynchronizedDictionary<long, SecurityId> _securityIds = new SynchronizedDictionary<long, SecurityId>();
 
 		/// <summary>
@@ -88,98 +86,6 @@ namespace StockSharp.Algo.Storages
 		/// <see cref="BufferMessageAdapter.StartStorageTimer"/>.
 		/// </summary>
 		public bool DisableStorageTimer { get; set; }
-
-		/// <summary>
-		/// Update filter with new subscription.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		public void Subscribe(MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			var origin = (MarketDataMessage)message.Clone();
-			
-			lock (_subscriptionsLock)
-			{
-				DataType dataType;
-
-				if (message.DataType == MarketDataTypes.CandleTimeFrame)
-				{
-					if (message.IsCalcVolumeProfile)
-					{
-						switch (message.BuildFrom)
-						{
-							case MarketDataTypes.Trades:
-								dataType = TicksAsLevel1 ? DataType.Level1 : DataType.Ticks;
-								break;
-
-							case MarketDataTypes.MarketDepth:
-								dataType = DataType.MarketDepth;
-								break;
-
-							default:
-								dataType = DataType.Level1;
-								break;
-						}
-					}
-					else if (message.AllowBuildFromSmallerTimeFrame)
-					{
-						// null arg means do not use DataType.Arg as a filter
-						dataType = DataType.Create(typeof(TimeFrameCandleMessage), null);
-					}
-					else
-						dataType = DataType.Create(typeof(TimeFrameCandleMessage), message.Arg);
-				}
-				else
-				{
-					dataType = CreateDataType(message);
-
-					if (dataType == null)
-						return;
-				}
-
-				var subscription = Tuple.Create(message.SecurityId, dataType);
-
-				_subscriptionsById.Add(message.TransactionId, Tuple.Create(origin, subscription));
-				Subscribe(subscription);
-			}
-		}
-
-		/// <summary>
-		/// Update filter with remove a subscription.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		public void UnSubscribe(MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			lock (_subscriptionsLock)
-			{
-				if (!_subscriptionsById.TryGetValue(message.OriginalTransactionId, out var tuple))
-					return;
-
-				_subscriptionsById.Remove(message.OriginalTransactionId);
-				_subscriptions.Remove(tuple.Item2);
-			}
-		}
-
-		/// <summary>
-		/// Update filter with new subscription.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Data type info.</param>
-		public void Subscribe(SecurityId securityId, DataType dataType)
-		{
-			lock (_subscriptionsLock)
-				Subscribe(Tuple.Create(securityId, dataType));
-		}
-
-		private void Subscribe(Tuple<SecurityId, DataType> subscription)
-		{
-			_subscriptions.TryAdd(subscription);
-		}
 
 		private DataType CreateDataType(MarketDataMessage msg)
 		{
@@ -284,13 +190,7 @@ namespace StockSharp.Algo.Storages
 			return _newsBuffer.SyncGet(c => c.CopyAndClear());
 		}
 
-		private bool CanStore<TMessage>(SecurityId securityId, object arg = null)
-			where TMessage : Message
-		{
-			return CanStore(securityId, typeof(TMessage), arg);
-		}
-
-		private bool CanStore(SecurityId securityId, Type messageType, object arg)
+		private bool CanStore(ISubscriptionIdMessage message)
 		{
 			if (!Enabled)
 				return false;
@@ -298,44 +198,7 @@ namespace StockSharp.Algo.Storages
 			if (!FilterSubscription)
 				return true;
 
-			if (TicksAsLevel1 && arg == (object)ExecutionTypes.Tick)
-			{
-				messageType = typeof(Level1ChangeMessage);
-				arg = null;
-			}
-
-			lock (_subscriptionsLock)
-			{
-				if (_subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, arg))))
-					return true;
-
-				if (arg == null)
-					return false;
-
-				// null arg means do not use DataType.Arg as a filter
-				return _subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, null)));
-			}
-		}
-
-		/// <summary>
-		/// To reset the state.
-		/// </summary>
-		public void Reset()
-		{
-			lock (_subscriptionsLock)
-			{
-				_subscriptions.Clear();
-				_subscriptionsById.Clear();
-			}
-
-			_ticksBuffer.Clear();
-			_level1Buffer.Clear();
-			_candleBuffer.Clear();
-			_orderLogBuffer.Clear();
-			_orderBooksBuffer.Clear();
-			_transactionsBuffer.Clear();
-			_newsBuffer.Clear();
-			_positionChangesBuffer.Clear();
+			return message.GetSubscriptionIds().Any(_subscriptionsById.Contains);
 		}
 
 		/// <summary>
@@ -355,7 +218,17 @@ namespace StockSharp.Algo.Storages
 				// in message
 				case MessageTypes.Reset:
 				{
-					Reset();
+					_subscriptionsById.Clear();
+
+					_ticksBuffer.Clear();
+					_level1Buffer.Clear();
+					_candleBuffer.Clear();
+					_orderLogBuffer.Clear();
+					_orderBooksBuffer.Clear();
+					_transactionsBuffer.Clear();
+					_newsBuffer.Clear();
+					_positionChangesBuffer.Clear();
+
 					//SendOutMessage(new ResetMessage());
 					break;
 				}
@@ -432,14 +305,12 @@ namespace StockSharp.Algo.Storages
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.IsSubscribe)
+					if (Enabled)
 					{
-						if (Enabled)
-							Subscribe(mdMsg);
-					}
-					else
-					{
-						UnSubscribe(mdMsg);
+						if (mdMsg.IsSubscribe)
+							_subscriptionsById.Add(mdMsg.TransactionId);
+						else
+							_subscriptionsById.Remove(mdMsg.OriginalTransactionId);
 					}
 
 					break;
@@ -450,8 +321,8 @@ namespace StockSharp.Algo.Storages
 				{
 					var level1Msg = (Level1ChangeMessage)message;
 
-					if (CanStore<Level1ChangeMessage>(level1Msg.SecurityId))
-						_level1Buffer.Add(level1Msg.SecurityId, (Level1ChangeMessage)level1Msg.Clone());
+					if (CanStore(level1Msg))
+						_level1Buffer.Add(level1Msg.SecurityId, level1Msg.TypedClone());
 
 					break;
 				}
@@ -459,8 +330,8 @@ namespace StockSharp.Algo.Storages
 				{
 					var quotesMsg = (QuoteChangeMessage)message;
 
-					if (CanStore<QuoteChangeMessage>(quotesMsg.SecurityId))
-						_orderBooksBuffer.Add(quotesMsg.SecurityId, (QuoteChangeMessage)quotesMsg.Clone());
+					if (CanStore(quotesMsg))
+						_orderBooksBuffer.Add(quotesMsg.SecurityId, quotesMsg.TypedClone());
 
 					break;
 				}
@@ -497,15 +368,17 @@ namespace StockSharp.Algo.Storages
 					//if (execType == ExecutionTypes.Transaction && execMsg.TransactionId == 0)
 					//	break;
 
-					if (execType == ExecutionTypes.Transaction || CanStore<ExecutionMessage>(secId, execType))
-						buffer.Add(secId, (ExecutionMessage)message.Clone());
+					if (execType == ExecutionTypes.Transaction || CanStore(execMsg))
+						buffer.Add(secId, execMsg.TypedClone());
 
 					break;
 				}
 				case MessageTypes.News:
 				{
-					if (CanStore<NewsMessage>(default))
-						_newsBuffer.Add((NewsMessage)message.Clone());
+					var newsMsg = (NewsMessage)message;
+
+					if (CanStore(newsMsg))
+						_newsBuffer.Add(newsMsg.TypedClone());
 
 					break;
 				}
@@ -515,7 +388,7 @@ namespace StockSharp.Algo.Storages
 					var secId = posMsg.SecurityId;
 
 					//if (CanStore<PositionChangeMessage>(secId))
-					_positionChangesBuffer.Add(secId, (PositionChangeMessage)posMsg.Clone());
+					_positionChangesBuffer.Add(secId, posMsg.TypedClone());
 
 					break;
 				}
@@ -524,8 +397,8 @@ namespace StockSharp.Algo.Storages
 				{
 					if (message is CandleMessage candleMsg && candleMsg.State == CandleStates.Finished)
 					{
-						if (CanStore(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg))
-							_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), (CandleMessage)candleMsg.Clone());
+						if (CanStore(candleMsg))
+							_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), candleMsg.TypedClone());
 					}
 
 					break;
