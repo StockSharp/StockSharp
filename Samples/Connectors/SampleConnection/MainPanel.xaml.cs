@@ -178,8 +178,8 @@
 					MessageBox.Show(this.GetWindow(), ex.ToString());
 				}
 
-				Connector.Adapter.StorageProcessor.DaysLoad = TimeSpan.FromDays(3);
-				Connector.Adapter.StorageProcessor.Mode = StorageModes.Snapshot;
+				Connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(3);
+				Connector.Adapter.StorageSettings.Mode = StorageModes.Snapshot;
 				Connector.LookupAll();
 
 				Connector.SnapshotRegistry.Init();

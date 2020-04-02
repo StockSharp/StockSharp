@@ -286,7 +286,7 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdapter = true };
 
-					if (SecurityStorage != null && StorageRegistry != null && _adapter.StorageProcessor.SnapshotRegistry != null)
+					if (SecurityStorage != null && StorageRegistry != null)
 					{
 						_inAdapter = StorageAdapter = new StorageMetaInfoMessageAdapter(_inAdapter, SecurityStorage, PositionStorage, StorageRegistry.ExchangeInfoProvider, _adapter.StorageProcessor)
 						{
@@ -295,8 +295,11 @@ namespace StockSharp.Algo
 						};
 					}
 
+					if (Buffer != null)
+						_inAdapter = new BufferMessageAdapter(_inAdapter, _adapter.StorageSettings, Buffer, SnapshotRegistry);
+
 					if (SupportBasketSecurities)
-						_inAdapter = new BasketSecurityMessageAdapter(this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider, _inAdapter) { OwnInnerAdapter = true };
+						_inAdapter = new BasketSecurityMessageAdapter(_inAdapter, this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider) { OwnInnerAdapter = true };
 
 					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdapter = true };
@@ -382,6 +385,11 @@ namespace StockSharp.Algo
 				_supportLevel1DepthBuilder = value;
 			}
 		}
+
+		/// <summary>
+		/// Storage buffer.
+		/// </summary>
+		public StorageBuffer Buffer { get; }
 
 		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter(Type type)
 		{

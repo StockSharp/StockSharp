@@ -43,8 +43,6 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 
-			protected override bool CanAutoStorage => false;
-
 			public BasketEmulationAdapter(HistoryEmulationConnector parent)
 				: base(parent.TransactionIdGenerator, new CandleBuilderProvider(new InMemoryExchangeInfoProvider()))
 			{

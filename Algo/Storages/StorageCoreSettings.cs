@@ -1,0 +1,102 @@
+﻿namespace StockSharp.Algo.Storages
+{
+	using System;
+
+	using Ecng.Common;
+	using Ecng.Serialization;
+
+	using StockSharp.Localization;
+	using StockSharp.Messages;
+
+	/// <summary>
+	/// Storage modes.
+	/// </summary>
+	[Flags]
+	public enum StorageModes
+	{
+		/// <summary>
+		/// None.
+		/// </summary>
+		None = 1,
+
+		/// <summary>
+		/// Incremental.
+		/// </summary>
+		Incremental = None << 1,
+
+		/// <summary>
+		/// Snapshot.
+		/// </summary>
+		Snapshot = Incremental << 1,
+	}
+
+	/// <summary>
+	/// Storage settings.
+	/// </summary>
+	public class StorageCoreSettings : IPersistable
+	{
+		/// <summary>
+		/// The storage of market data.
+		/// </summary>
+		public IStorageRegistry StorageRegistry { get; set; }
+
+		/// <summary>
+		/// The storage (database, file etc.).
+		/// </summary>
+		public IMarketDataDrive Drive { get; set; }
+
+		/// <summary>
+		/// Format.
+		/// </summary>
+		public StorageFormats Format { get; set; }
+
+		private TimeSpan _daysLoad;
+
+		/// <summary>
+		/// Max days to load stored data.
+		/// </summary>
+		public TimeSpan DaysLoad
+		{
+			get => _daysLoad;
+			set
+			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_daysLoad = value;
+			}
+		}
+
+		/// <summary>
+		/// Storage mode. By default is <see cref="StorageModes.Incremental"/>.
+		/// </summary>
+		public StorageModes Mode { get; set; } = StorageModes.Incremental;
+
+		public IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
+			where TMessage : Message
+		{
+			return (IMarketDataStorage<TMessage>)GetStorage(securityId, typeof(TMessage), arg);
+		}
+
+		public IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
+		{
+			return StorageRegistry.GetStorage(securityId, messageType, arg, Drive, Format);
+		}
+
+		public bool IsMode(StorageModes mode) => mode.Contains(StorageModes.Snapshot);
+
+		void IPersistable.Load(SettingsStorage storage)
+		{
+			Mode = storage.GetValue(nameof(Mode), Mode);
+			Format = storage.GetValue(nameof(Format), Format);
+			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
+		}
+
+		void IPersistable.Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(Mode), Mode);
+			storage.SetValue(nameof(Format), Format);
+			storage.SetValue(nameof(DaysLoad), DaysLoad);
+		}
+	}
+}

@@ -267,7 +267,7 @@ namespace StockSharp.Algo
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator, CandleBuilderProvider candleBuilderProvider)
-			: this(transactionIdGenerator, new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), new StorageProcessor(null, null, candleBuilderProvider))
+			: this(transactionIdGenerator, candleBuilderProvider, new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider())
 		{
 		}
 
@@ -275,19 +275,19 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <param name="securityAdapterProvider">The security based message adapter's provider.</param>
 		/// <param name="portfolioAdapterProvider">The portfolio based message adapter's provider.</param>
-		/// <param name="storageProcessor">Storage processor.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator,
+			CandleBuilderProvider candleBuilderProvider,
 			ISecurityMessageAdapterProvider securityAdapterProvider,
-			IPortfolioMessageAdapterProvider portfolioAdapterProvider,
-			StorageProcessor storageProcessor)
+			IPortfolioMessageAdapterProvider portfolioAdapterProvider)
 		{
 			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			_innerAdapters = new InnerAdapterList(this);
 			SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
 			PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
-			StorageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
+			StorageProcessor = new StorageProcessor(StorageSettings, candleBuilderProvider);
 
 			LatencyManager = new LatencyManager();
 			CommissionManager = new CommissionManager();
@@ -361,6 +361,11 @@ namespace StockSharp.Algo
 		/// Slippage manager.
 		/// </summary>
 		public ISlippageManager SlippageManager { get; set; }
+
+		/// <summary>
+		/// Storage settings.
+		/// </summary>
+		public StorageCoreSettings StorageSettings { get; } = new StorageCoreSettings();
 
 		private IdGenerator _transactionIdGenerator;
 
@@ -535,11 +540,6 @@ namespace StockSharp.Algo
 		public bool UseSeparatedChannels { get; set; }
 
 		/// <summary>
-		/// Use <see cref="BufferMessageAdapter"/>.
-		/// </summary>
-		public bool SupportBuffer { get; set; }
-
-		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>
 		/// <returns>Sorted adapters.</returns>
@@ -675,7 +675,7 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new OrderBookInrementMessageAdapter(adapter));
 			}
 
-			if (StorageProcessor.StorageRegistry != null)
+			if (StorageProcessor.Settings.StorageRegistry != null)
 			{
 				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
 			}
@@ -693,11 +693,6 @@ namespace StockSharp.Algo
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
 				adapter = ApplyOwnInner(new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage));
-			}
-
-			if (SupportBuffer || StorageProcessor.StorageRegistry != null)
-			{
-				adapter = ApplyOwnInner(new BufferMessageAdapter(adapter, StorageProcessor.Buffer));
 			}
 
 			return adapter;
@@ -774,11 +769,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Can use <see cref="StorageBuffer"/>.
-		/// </summary>
-		protected virtual bool CanAutoStorage => true;
-
 		private bool InternalSendInMessage(Message message)
 		{
 			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
@@ -811,9 +801,6 @@ namespace StockSharp.Algo
 				case MessageTypes.Connect:
 				{
 					ProcessReset(new ResetMessage(), true);
-
-					StorageProcessor.Buffer.Enabled = CanAutoStorage && (StorageProcessor.StorageRegistry != null || SupportBuffer);
-					StorageProcessor.StartStorageTimer();
 
 					_currState = ConnectionStates.Connecting;
 
@@ -1914,7 +1901,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public IMessageChannel Clone()
 		{
-			var clone = new BasketMessageAdapter(TransactionIdGenerator, SecurityAdapterProvider, PortfolioAdapterProvider, StorageProcessor)
+			var clone = new BasketMessageAdapter(TransactionIdGenerator, StorageProcessor.CandleBuilderProvider, SecurityAdapterProvider, PortfolioAdapterProvider)
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,
@@ -1934,10 +1921,7 @@ namespace StockSharp.Algo
 			return clone;
 		}
 
-		object ICloneable.Clone()
-		{
-			return Clone();
-		}
+		object ICloneable.Clone() => Clone();
 
 		bool IMessageChannel.IsOpened => true;
 

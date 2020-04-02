@@ -90,22 +90,9 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.MarketData:
 					return ProcessMarketData((MarketDataMessage)message);
 
-				case MessageTypes.OrderStatus:
-					return ProcessOrderStatus((OrderStatusMessage)message);
-
 				default:
 					return base.OnSendInMessage(message);
 			}
-		}
-
-		private bool ProcessOrderStatus(OrderStatusMessage message)
-		{
-			if (message.Adapter != null && message.Adapter != this)
-				return base.OnSendInMessage(message);
-
-			message = _storageProcessor.ProcessOrderStatus(message, RaiseNewOutMessage);
-
-			return message == null || base.OnSendInMessage(message);
 		}
 
 		private bool ProcessMarketData(MarketDataMessage message)

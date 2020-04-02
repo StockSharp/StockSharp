@@ -85,6 +85,11 @@ namespace StockSharp.Algo.Storages
 		public bool TicksAsLevel1 { get; set; } = true;
 
 		/// <summary>
+		/// <see cref="BufferMessageAdapter.StartStorageTimer"/>.
+		/// </summary>
+		public bool DisableStorageTimer { get; set; }
+
+		/// <summary>
 		/// Update filter with new subscription.
 		/// </summary>
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
@@ -342,6 +347,9 @@ namespace StockSharp.Algo.Storages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (message.OfflineMode != MessageOfflineModes.None)
+				return;
+
 			switch (message.Type)
 			{
 				// in message
@@ -530,6 +538,7 @@ namespace StockSharp.Algo.Storages
 			storage.SetValue(nameof(Enabled), Enabled);
 			storage.SetValue(nameof(FilterSubscription), FilterSubscription);
 			storage.SetValue(nameof(TicksAsLevel1), TicksAsLevel1);
+			storage.SetValue(nameof(DisableStorageTimer), DisableStorageTimer);
 		}
 
 		void IPersistable.Load(SettingsStorage storage)
@@ -537,6 +546,7 @@ namespace StockSharp.Algo.Storages
 			Enabled = storage.GetValue(nameof(Enabled), Enabled);
 			FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
 			TicksAsLevel1 = storage.GetValue(nameof(TicksAsLevel1), TicksAsLevel1);
+			DisableStorageTimer = storage.GetValue(nameof(DisableStorageTimer), DisableStorageTimer);
 		}
 	}
 }

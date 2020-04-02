@@ -31,12 +31,14 @@ namespace StockSharp.Algo.Storages
 		{
 			var args = base.GetCandleArgs(candleType, securityId, from, to);
 
-			var drive = _storageProcessor.Drive ?? _storageProcessor.StorageRegistry.DefaultDrive;
+			var settings = _storageProcessor.Settings;
+
+			var drive = settings.Drive ?? settings.StorageRegistry.DefaultDrive;
 
 			if (drive == null)
 				return args;
 
-			return args.Concat(drive.GetCandleArgs(_storageProcessor.Format, candleType, securityId, from, to)).Distinct();
+			return args.Concat(drive.GetCandleArgs(settings.Format, candleType, securityId, from, to)).Distinct();
 		}
 
 		/// <inheritdoc />
@@ -51,32 +53,9 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.MarketData:
 					return ProcessMarketData((MarketDataMessage)message);
 
-				case MessageTypes.OrderStatus:
-					return ProcessOrderStatus((OrderStatusMessage)message);
-
-				case MessageTypes.OrderCancel:
-					return ProcessOrderCancel((OrderCancelMessage)message);
-
 				default:
 					return base.OnSendInMessage(message);
 			}
-		}
-
-		private bool ProcessOrderCancel(OrderCancelMessage message)
-		{
-			message = _storageProcessor.ProcessOrderCancel(message);
-
-			return message == null || base.OnSendInMessage(message);
-		}
-
-		private bool ProcessOrderStatus(OrderStatusMessage message)
-		{
-			if (message.Adapter != null && message.Adapter != this)
-				return base.OnSendInMessage(message);
-
-			message = _storageProcessor.ProcessOrderStatus(message, RaiseStorageMessage);
-
-			return message == null || base.OnSendInMessage(message);
 		}
 
 		private bool ProcessMarketData(MarketDataMessage message)

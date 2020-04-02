@@ -77,7 +77,16 @@ namespace SampleStrategies
 			var storageRegistry = ServicesRegistry.StorageRegistry;
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine("Data", "Snapshots"));
 
-			Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry);
+			Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry)
+			{
+				Adapter =
+				{
+					StorageSettings =
+					{
+						DaysLoad = TimeSpan.FromDays(3),
+					}
+				}
+			};
 			LogManager.Sources.Add(Connector);
 
 			InitConnector(entityRegistry, snapshotRegistry);
@@ -138,9 +147,6 @@ namespace SampleStrategies
 				return;
 
 			entityRegistry.Init();
-
-			Connector.Adapter.StorageProcessor.DaysLoad = TimeSpan.FromDays(3);
-			//Connector.LookupAll();
 
 			snapshotRegistry.Init();
 
