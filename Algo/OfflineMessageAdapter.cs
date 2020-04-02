@@ -110,7 +110,7 @@
 						{
 							var timeMsg = (TimeMessage)message;
 
-							if (timeMsg.OfflineMode == MessageOfflineModes.Force)
+							if (timeMsg.OfflineMode == MessageOfflineModes.Ignore)
 								break;
 
 							return true;
@@ -239,7 +239,7 @@
 							}
 
 							break;
-						case MessageOfflineModes.Force:
+						case MessageOfflineModes.Ignore:
 							break;
 						case MessageOfflineModes.Cancel:
 						{

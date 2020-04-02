@@ -38,7 +38,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Ignore offline mode and continue processing.
 		/// </summary>
-		Force,
+		Ignore,
 
 		/// <summary>
 		/// Cancel message processing and create reply.
