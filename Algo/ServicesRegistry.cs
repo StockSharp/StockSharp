@@ -107,7 +107,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Log manager.
 		/// </summary>
-		public static LogManager LogManager => ConfigManager.TryGetService<LogManager>();
+		public static LogManager LogManager => LogManager.Instance;
 
 		/// <summary>
 		/// The storage of trade objects.

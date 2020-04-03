@@ -111,6 +111,11 @@ namespace StockSharp.Logging
 		private readonly bool _asyncMode;
 
 		/// <summary>
+		/// Instance.
+		/// </summary>
+		public static LogManager Instance => ConfigManager.TryGetService<LogManager>();
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="LogManager"/>.
 		/// </summary>
 		public LogManager()
