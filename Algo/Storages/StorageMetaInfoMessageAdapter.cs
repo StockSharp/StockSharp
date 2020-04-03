@@ -243,21 +243,25 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(msg));
 
 			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			{
 				return base.OnSendInMessage(msg);
-			}
 
+			var now = CurrentTime;
 			var transId = msg.TransactionId;
 
 			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 			{
 				RaiseNewOutMessage(portfolio.ToMessage(transId).SetSubscriptionIds(subscriptionId: transId));
-				RaiseNewOutMessage(portfolio.ToChangeMessage().SetSubscriptionIds(subscriptionId: transId));
+
+				var changeMsg = portfolio.ToChangeMessage().SetSubscriptionIds(subscriptionId: transId);
+				changeMsg.ServerTime = now;
+				RaiseNewOutMessage(changeMsg);
 			}
 
 			foreach (var position in _positionStorage.Positions.Filter(msg))
 			{
-				RaiseNewOutMessage(position.ToChangeMessage(transId).SetSubscriptionIds(subscriptionId: transId));
+				var changeMsg = position.ToChangeMessage(transId).SetSubscriptionIds(subscriptionId: transId);
+				changeMsg.ServerTime = now;
+				RaiseNewOutMessage(changeMsg);
 			}
 
 			return base.OnSendInMessage(msg);
