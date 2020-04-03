@@ -18,6 +18,8 @@ namespace StockSharp.Algo.PnL
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>

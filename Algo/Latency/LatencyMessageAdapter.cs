@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Latency
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>

@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Testing
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;

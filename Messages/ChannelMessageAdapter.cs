@@ -17,6 +17,8 @@ namespace StockSharp.Messages
 {
 	using System;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>

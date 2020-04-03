@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Risk
 {
 	using System;
 
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 

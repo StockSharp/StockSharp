@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Positions
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>

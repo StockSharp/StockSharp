@@ -17,9 +17,8 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The oscillator histogram <see cref="GatorOscillator"/>.
