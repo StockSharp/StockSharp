@@ -7,6 +7,7 @@
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -287,6 +288,8 @@
 								_original.Add(info.Origin.TransactionId, info);
 								_partialRequests.Add(info.CurrTransId, info);
 							}
+
+							this.AddInfoLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType, mdMsg.From, mdMsg.To);
 						}
 						else
 						{
@@ -313,6 +316,8 @@
 				{
 					var partialMsg = (PartialDownloadMessage)message;
 
+					MarketDataMessage mdMsg;
+
 					lock (_syncObject)
 					{
 						if (!_original.TryGetValue(partialMsg.OriginalTransactionId, out var info))
@@ -325,7 +330,7 @@
 							break;
 						}
 
-						var mdMsg = info.InitNext();
+						mdMsg = info.InitNext();
 
 						if (mdMsg.To == null)
 						{
@@ -339,6 +344,8 @@
 
 						message = mdMsg;
 					}
+
+					this.AddInfoLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType, mdMsg.From, mdMsg.To);
 
 					break;
 				}
@@ -448,7 +455,11 @@
 								message = new PartialDownloadMessage { OriginalTransactionId = origin.TransactionId }.LoopBack(this);
 							}
 						}
+						else
+							break;
 					}
+
+					this.AddInfoLog("Partial {0} finished.", finishMsg.OriginalTransactionId);
 
 					break;
 				}
