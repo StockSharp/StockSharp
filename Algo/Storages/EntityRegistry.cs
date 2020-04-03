@@ -274,7 +274,7 @@ namespace StockSharp.Algo.Storages
 			//		return this.Select(s => s.Id);
 
 			//	var str = _readSecurityIds.ExecuteScalar<string>(new SerializationItemCollection());
-			//	return str.SplitByComma(",", true);
+			//	return str.SplitByComma();
 			//}
 
 			/// <inheritdoc />

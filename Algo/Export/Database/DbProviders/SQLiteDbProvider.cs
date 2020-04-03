@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 		protected override string CreatePrimaryKeyString(Table table, IEnumerable<ColumnDescription> columns)
 		{
-			var str = columns.Select(c => $"[{c.Name}]").Join(",");
+			var str = columns.Select(c => $"[{c.Name}]").JoinComma();
 
 			if (str.IsEmpty())
 				return null;

@@ -143,7 +143,7 @@ namespace StockSharp.Algo
 
 			private void RefreshName()
 			{
-				_parent.Name = CachedPairs.Select(p => "{0}*{1}".Put(p.Value, p.Key)).Join(", ");
+				_parent.Name = CachedPairs.Select(p => $"{p.Value}*{p.Key}").JoinCommaSpace();
 				RefreshParent();
 			}
 

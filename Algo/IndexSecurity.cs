@@ -91,9 +91,9 @@ namespace StockSharp.Algo
 			lock (Weights.SyncRoot)
 			{
 				Weights.Clear();
-				Weights.AddRange(text.Split(",").Select(p =>
+				Weights.AddRange(text.SplitByComma().Select(p =>
 				{
-					var parts = p.Split("=");
+					var parts = p.SplitBySep("=");
 					return new KeyValuePair<SecurityId, decimal>(parts[0].ToSecurityId(), parts[1].To<decimal>());
 				}));
 			}
@@ -102,13 +102,13 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override string ToSerializedString()
 		{
-			return Weights.CachedPairs.Select(p => $"{p.Key.ToStringId()}={p.Value}").Join(",");
+			return Weights.CachedPairs.Select(p => $"{p.Key.ToStringId()}={p.Value}").JoinComma();
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return Weights.CachedPairs.Select(p => $"{p.Value} * {p.Key.ToStringId()}").Join(", ");
+			return Weights.CachedPairs.Select(p => $"{p.Value} * {p.Key.ToStringId()}").JoinCommaSpace();
 		}
 	}
 }

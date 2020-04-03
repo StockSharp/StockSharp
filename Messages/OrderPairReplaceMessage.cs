@@ -18,6 +18,8 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// The message containing the information for modify order's pair.
 	/// </summary>

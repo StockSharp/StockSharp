@@ -78,7 +78,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return GetType().Name.Remove(nameof(OrderCondition)) + ": " + _parameters.SyncGet(d => d.Select(p => $"{p.Key}={p.Value}").Join(","));
+			return GetType().Name.Remove(nameof(OrderCondition)) + ": " + _parameters.SyncGet(d => d.Select(p => $"{p.Key}={p.Value}").JoinComma());
 		}
 	}
 

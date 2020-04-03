@@ -43,6 +43,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override string ToString()
-			=> base.ToString() + $",TF={TimeFrames.Select(t => t.ToString()).Join(",")}";
+			=> base.ToString() + $",TF={TimeFrames.Select(t => t.ToString()).JoinComma()}";
 	}
 }

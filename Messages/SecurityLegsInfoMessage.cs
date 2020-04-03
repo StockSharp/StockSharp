@@ -46,6 +46,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override string ToString() =>
-			base.ToString() + $",Legs={Legs.Select(p => p.ToString()).Join(",")}";
+			base.ToString() + $",Legs={Legs.Select(p => p.ToString()).JoinComma()}";
 	}
 }

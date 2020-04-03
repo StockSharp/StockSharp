@@ -1074,7 +1074,7 @@ GOLD
 RTS
 GMKR
 GAZR
-SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
 		#endregion
 
@@ -1151,7 +1151,7 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 					}
 				}
 
-				var ids = Send(nameof(IRemoteStorage.LookupSecurityIds), "criteria", criteria).UTF8().Split(";");
+				var ids = Send(nameof(IRemoteStorage.LookupSecurityIds), "criteria", criteria).UTF8().SplitByDotComma();
 
 				var newSecurityIds = ids.Where(id => !existingIds.Contains(id)).ToArray();
 

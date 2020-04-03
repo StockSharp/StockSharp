@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Id={StrategyId},Name={Name},Params={Parameters.Select(p => $"{p.Key}={p.Value}").Join(",")}";
+			return base.ToString() + $",Id={StrategyId},Name={Name},Params={Parameters.Select(p => $"{p.Key}={p.Value}").JoinComma()}";
 		}
 
 		/// <inheritdoc />

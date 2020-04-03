@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",TrId={TransactionId},Orig={OriginalTransactionId},Stat={Statistics.Select(p => $"{p.Key}={p.Value}").Join(",")}";
+			var str = base.ToString() + $",TrId={TransactionId},Orig={OriginalTransactionId},Stat={Statistics.Select(p => $"{p.Key}={p.Value}").JoinComma()}";
 
 			if (!StrategyId.IsDefault())
 				str += $",Id={StrategyId}";

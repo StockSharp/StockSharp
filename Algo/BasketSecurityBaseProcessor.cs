@@ -570,7 +570,7 @@ namespace StockSharp.Algo
 			}
 			catch (ArithmeticException excp)
 			{
-				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, BasketLegs.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
+				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, BasketLegs.Zip(values, (s, v) => $"{s}: {v}").JoinCommaSpace()), excp);
 			}
 		}
 
