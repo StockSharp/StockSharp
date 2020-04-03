@@ -1797,10 +1797,13 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Set subscription identifiers into the specified message.
 		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
 		/// <param name="message">Message.</param>
 		/// <param name="subscriptionIds">Identifiers.</param>
 		/// <param name="subscriptionId">Identifier.</param>
-		public static void SetSubscriptionIds(this ISubscriptionIdMessage message, long[] subscriptionIds = null, long subscriptionId = 0)
+		/// <returns>Message.</returns>
+		public static TMessage SetSubscriptionIds<TMessage>(this TMessage message, long[] subscriptionIds = null, long subscriptionId = 0)
+				where TMessage : ISubscriptionIdMessage
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1815,6 +1818,8 @@ namespace StockSharp.Messages
 				message.SubscriptionId = 0;
 				message.SubscriptionIds = subscriptionIds;
 			}
+
+			return message;
 		}
 
 		/// <summary>

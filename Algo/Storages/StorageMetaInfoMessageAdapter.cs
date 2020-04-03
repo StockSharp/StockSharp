@@ -210,11 +210,13 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (msg.Adapter != null && msg.Adapter != this)
+			if (/*!msg.IsSubscribe || */(msg.Adapter != null && msg.Adapter != this))
 				return base.OnSendInMessage(msg);
 
+			var transId = msg.TransactionId;
+
 			foreach (var security in _securityStorage.Lookup(msg))
-				RaiseNewOutMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
+				RaiseNewOutMessage(security.ToMessage(originalTransactionId: transId).SetSubscriptionIds(subscriptionId: transId));
 
 			return base.OnSendInMessage(msg);
 		}
@@ -224,10 +226,13 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (msg.Adapter != null && msg.Adapter != this)
+			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 				return base.OnSendInMessage(msg);
+
+			var transId = msg.TransactionId;
+
 			foreach (var board in _exchangeInfoProvider.LookupBoards(msg))
-				RaiseNewOutMessage(board.ToMessage(msg.TransactionId));
+				RaiseNewOutMessage(board.ToMessage(transId).SetSubscriptionIds(subscriptionId: transId));
 
 			return base.OnSendInMessage(msg);
 		}
@@ -242,15 +247,17 @@ namespace StockSharp.Algo.Storages
 				return base.OnSendInMessage(msg);
 			}
 
+			var transId = msg.TransactionId;
+
 			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 			{
-				RaiseNewOutMessage(portfolio.ToMessage(msg.TransactionId));
-				RaiseNewOutMessage(portfolio.ToChangeMessage());
+				RaiseNewOutMessage(portfolio.ToMessage(transId).SetSubscriptionIds(subscriptionId: transId));
+				RaiseNewOutMessage(portfolio.ToChangeMessage().SetSubscriptionIds(subscriptionId: transId));
 			}
 
 			foreach (var position in _positionStorage.Positions.Filter(msg))
 			{
-				RaiseNewOutMessage(position.ToChangeMessage(msg.TransactionId));
+				RaiseNewOutMessage(position.ToChangeMessage(transId).SetSubscriptionIds(subscriptionId: transId));
 			}
 
 			return base.OnSendInMessage(msg);
