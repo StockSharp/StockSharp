@@ -11,6 +11,7 @@
 	using System.Windows.Media;
 
 	using DevExpress.Xpf.Core;
+	using DXTheme = DevExpress.Xpf.Core.Theme;
 
 	using MoreLinq;
 
@@ -34,8 +35,9 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+    using StockSharp.Xaml;
 
-	public partial class MainWindow
+    public partial class MainWindow
 	{
 		private ChartArea _areaComb;
 		private ChartCandleElement _candleElement;
@@ -99,6 +101,9 @@
 
 			ConfigManager.RegisterService<IMarketDataProvider>(_testMdProvider);
 			ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
+
+			Theme.ItemsSource = DXTheme.Themes.Where(t => t.ShowInThemeSelector);
+			ThemeExtensions.ApplyDefaultTheme();
 		}
 
 		private void HistoryPath_OnFolderChanged(string path)
@@ -147,11 +152,11 @@
 
 		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			var theme = (string)((ComboBoxItem)Theme.SelectedValue).Content;
-			if (theme.IsEmpty())
+			var theme = (DXTheme)Theme.SelectedItem;
+			if (theme == null)
 				return;
 
-			ApplicationThemeHelper.ApplicationThemeName = theme;
+			ApplicationThemeHelper.ApplicationThemeName = theme.Name;
 		}
 
 		private void Chart_OnSubscribeCandleElement(ChartCandleElement el, CandleSeries ser)

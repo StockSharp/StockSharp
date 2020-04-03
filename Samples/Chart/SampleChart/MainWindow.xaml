@@ -30,12 +30,7 @@
 				</StackPanel>
 			</GroupBox>
 
-			<ComboBox Margin="5,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="100">
-				<ComboBoxItem Content="{x:Static dx:Theme.Office2016BlackName}"/>
-				<ComboBoxItem Content="{x:Static dx:Theme.Office2016WhiteName}"/>
-				<ComboBoxItem Content="{x:Static dx:Theme.MetropolisDarkName}"/>
-				<ComboBoxItem Content="{x:Static dx:Theme.MetropolisLightName}"/>
-			</ComboBox>
+			<ComboBox Margin="5,0,0,0" x:Name="Theme" DisplayMemberPath="Name" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="100" />
 
 			<GroupBox Margin="0" Padding="0" VerticalAlignment="Center">
 				<StackPanel Orientation="Vertical">
