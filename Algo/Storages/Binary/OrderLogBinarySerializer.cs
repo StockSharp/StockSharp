@@ -57,26 +57,26 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			base.Write(stream);
 
-			stream.Write(FirstOrderId);
-			stream.Write(FirstTradeId);
-			stream.Write(LastOrderId);
-			stream.Write(LastTradeId);
-			stream.Write(FirstPrice);
-			stream.Write(LastPrice);
+			stream.WriteEx(FirstOrderId);
+			stream.WriteEx(FirstTradeId);
+			stream.WriteEx(LastOrderId);
+			stream.WriteEx(LastTradeId);
+			stream.WriteEx(FirstPrice);
+			stream.WriteEx(LastPrice);
 
 			if (Version < MarketDataVersions.Version34)
 				return;
 
-			stream.Write(FirstTransactionId);
-			stream.Write(LastTransactionId);
+			stream.WriteEx(FirstTransactionId);
+			stream.WriteEx(LastTransactionId);
 
 			if (Version < MarketDataVersions.Version40)
 				return;
 
-			stream.Write(Portfolios.Count);
+			stream.WriteEx(Portfolios.Count);
 
 			foreach (var portfolio in Portfolios)
-				stream.Write(portfolio);
+				stream.WriteEx(portfolio);
 
 			WriteFractionalPrice(stream);
 			WriteFractionalVolume(stream);
@@ -84,15 +84,15 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version45)
 				return;
 
-			stream.Write(FirstOrderPrice);
-			stream.Write(LastOrderPrice);
+			stream.WriteEx(FirstOrderPrice);
+			stream.WriteEx(LastOrderPrice);
 
 			WriteLocalTime(stream, MarketDataVersions.Version46);
 
 			if (Version < MarketDataVersions.Version48)
 				return;
 
-			stream.Write(ServerOffset);
+			stream.WriteEx(ServerOffset);
 
 			if (Version < MarketDataVersions.Version52)
 				return;

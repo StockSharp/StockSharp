@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Storages
 
 						foreach (var buffer in buffers)
 						{
-							stream.Write(buffer);
+							stream.WriteEx(buffer);
 						}
 					}
 				}

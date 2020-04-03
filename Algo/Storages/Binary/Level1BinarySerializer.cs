@@ -40,11 +40,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			public void Write(Stream stream)
 			{
-				stream.Write(FirstDateTime);
-				stream.Write(LastDateTime);
+				stream.WriteEx(FirstDateTime);
+				stream.WriteEx(LastDateTime);
 
-				stream.Write(FirstDateOffset);
-				stream.Write(LastDateOffset);
+				stream.WriteEx(FirstDateOffset);
+				stream.WriteEx(LastDateOffset);
 			}
 
 			public void Read(Stream stream)
@@ -216,8 +216,8 @@ namespace StockSharp.Algo.Storages.Binary
 			Write(stream, AccruedCouponIncome);
 			Write(stream, Yield);
 
-			stream.Write(FirstFieldTime);
-			stream.Write(LastFieldTime);
+			stream.WriteEx(FirstFieldTime);
+			stream.WriteEx(LastFieldTime);
 
 			if (Version < MarketDataVersions.Version47)
 				return;
@@ -264,7 +264,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version53)
 				return;
 
-			stream.Write(ServerOffset);
+			stream.WriteEx(ServerOffset);
 
 			if (Version < MarketDataVersions.Version54)
 				return;
@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version58)
 				return;
 
-			stream.Write((int)MaxKnownType);
+			stream.WriteEx((int)MaxKnownType);
 
 			if (Version < MarketDataVersions.Version59)
 				return;
@@ -436,8 +436,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
 		{
-			stream.Write(info.First);
-			stream.Write(info.Second);
+			stream.WriteEx(info.First);
+			stream.WriteEx(info.Second);
 		}
 
 		private static RefPair<decimal, decimal> ReadInfo(Stream stream)

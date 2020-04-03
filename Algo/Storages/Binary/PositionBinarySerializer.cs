@@ -71,20 +71,20 @@ namespace StockSharp.Algo.Storages.Binary
 			Write(stream, Commission);
 			Write(stream, CurrentValueInLots);
 			
-			stream.Write(Portfolios.Count);
+			stream.WriteEx(Portfolios.Count);
 
 			foreach (var portfolio in Portfolios)
-				stream.Write(portfolio);
+				stream.WriteEx(portfolio);
 
-			stream.Write(ClientCodes.Count);
+			stream.WriteEx(ClientCodes.Count);
 
 			foreach (var clientCode in ClientCodes)
-				stream.Write(clientCode);
+				stream.WriteEx(clientCode);
 
-			stream.Write(DepoNames.Count);
+			stream.WriteEx(DepoNames.Count);
 
 			foreach (var depoName in DepoNames)
-				stream.Write(depoName);
+				stream.WriteEx(depoName);
 
 			if (Version < MarketDataVersions.Version33)
 				return;
@@ -131,8 +131,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
 		{
-			stream.Write(info.First);
-			stream.Write(info.Second);
+			stream.WriteEx(info.First);
+			stream.WriteEx(info.Second);
 		}
 
 		private static RefPair<decimal, decimal> ReadInfo(Stream stream)

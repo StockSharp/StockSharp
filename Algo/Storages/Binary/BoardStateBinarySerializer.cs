@@ -31,7 +31,7 @@
 		{
 			base.Write(stream);
 
-			stream.Write(ServerOffset);
+			stream.WriteEx(ServerOffset);
 
 			WriteOffsets(stream);
 		}

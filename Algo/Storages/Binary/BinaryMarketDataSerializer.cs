@@ -116,23 +116,23 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			stream.WriteByte((byte)Version.Major);
 			stream.WriteByte((byte)Version.Minor);
-			stream.Write(Count);
-			stream.Write(PriceStep);
+			stream.WriteEx(Count);
+			stream.WriteEx(PriceStep);
 
 			if (Version < MarketDataVersions.Version40)
-				stream.Write(0m); // ранее был StepPrice
+				stream.WriteEx(0m); // ранее был StepPrice
 
-			stream.Write(FirstTime);
-			stream.Write(LastTime);
+			stream.WriteEx(FirstTime);
+			stream.WriteEx(LastTime);
 
 			if (Version < MarketDataVersions.Version40)
 				return;
 
-			stream.Write(LocalOffset);
+			stream.WriteEx(LocalOffset);
 
 			// размер под дополнительную информацию.
 			// пока этой информации нет.
-			stream.Write((short)0);
+			stream.WriteEx((short)0);
 		}
 
 		public override void Read(Stream stream)
@@ -167,8 +167,8 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version43)
 				return;
 
-			stream.Write(FirstFractionalPrice);
-			stream.Write(LastFractionalPrice);
+			stream.WriteEx(FirstFractionalPrice);
+			stream.WriteEx(LastFractionalPrice);
 		}
 
 		protected void ReadFractionalPrice(Stream stream)
@@ -184,8 +184,8 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			WriteFractionalPrice(stream);
 
-			stream.Write(/*FirstPriceStep*/0m);
-			stream.Write(LastPriceStep);
+			stream.WriteEx(/*FirstPriceStep*/0m);
+			stream.WriteEx(LastPriceStep);
 		}
 
 		protected void ReadPriceStep(Stream stream)
@@ -201,9 +201,9 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version44)
 				return;
 
-			stream.Write(VolumeStep);
-			stream.Write(FirstFractionalVolume);
-			stream.Write(LastFractionalVolume);
+			stream.WriteEx(VolumeStep);
+			stream.WriteEx(FirstFractionalVolume);
+			stream.WriteEx(LastFractionalVolume);
 		}
 
 		protected void ReadFractionalVolume(Stream stream)
@@ -221,8 +221,8 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < minVersion)
 				return;
 
-			stream.Write(FirstLocalTime);
-			stream.Write(LastLocalTime);
+			stream.WriteEx(FirstLocalTime);
+			stream.WriteEx(LastLocalTime);
 		}
 
 		protected void ReadLocalTime(Stream stream, Version minVersion)
@@ -236,11 +236,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 		protected void WriteOffsets(Stream stream)
 		{
-			stream.Write(FirstLocalOffset);
-			stream.Write(LastLocalOffset);
+			stream.WriteEx(FirstLocalOffset);
+			stream.WriteEx(LastLocalOffset);
 
-			stream.Write(FirstServerOffset);
-			stream.Write(LastServerOffset);
+			stream.WriteEx(FirstServerOffset);
+			stream.WriteEx(LastServerOffset);
 		}
 
 		protected void ReadOffsets(Stream stream)
@@ -257,8 +257,8 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < minVersion)
 				return;
 
-			stream.Write(FirstItemLocalOffset);
-			stream.Write(LastItemLocalOffset);
+			stream.WriteEx(FirstItemLocalOffset);
+			stream.WriteEx(LastItemLocalOffset);
 		}
 
 		protected void ReadItemLocalOffset(Stream stream, Version minVersion)
@@ -275,8 +275,8 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < minVersion)
 				return;
 
-			stream.Write(FirstItemLocalTime);
-			stream.Write(LastItemLocalTime);
+			stream.WriteEx(FirstItemLocalTime);
+			stream.WriteEx(LastItemLocalTime);
 		}
 
 		protected void ReadItemLocalTime(Stream stream, Version minVersion)

@@ -89,24 +89,24 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			base.Write(stream);
 
-			stream.Write(FirstOrderId);
-			stream.Write(LastOrderId);
-			stream.Write(FirstTradeId);
-			stream.Write(LastTradeId);
-			stream.Write(FirstTransactionId);
-			stream.Write(LastTransactionId);
-			stream.Write(FirstOriginalTransactionId);
-			stream.Write(LastOriginalTransactionId);
-			stream.Write(FirstPrice);
-			stream.Write(LastPrice);
-			stream.Write(FirstCommission);
-			stream.Write(LastCommission);
-			stream.Write(FirstPnL);
-			stream.Write(LastPnL);
-			stream.Write(FirstPosition);
-			stream.Write(LastPosition);
-			stream.Write(FirstSlippage);
-			stream.Write(LastSlippage);
+			stream.WriteEx(FirstOrderId);
+			stream.WriteEx(LastOrderId);
+			stream.WriteEx(FirstTradeId);
+			stream.WriteEx(LastTradeId);
+			stream.WriteEx(FirstTransactionId);
+			stream.WriteEx(LastTransactionId);
+			stream.WriteEx(FirstOriginalTransactionId);
+			stream.WriteEx(LastOriginalTransactionId);
+			stream.WriteEx(FirstPrice);
+			stream.WriteEx(LastPrice);
+			stream.WriteEx(FirstCommission);
+			stream.WriteEx(LastCommission);
+			stream.WriteEx(FirstPnL);
+			stream.WriteEx(LastPnL);
+			stream.WriteEx(FirstPosition);
+			stream.WriteEx(LastPosition);
+			stream.WriteEx(FirstSlippage);
+			stream.WriteEx(LastSlippage);
 
 			WriteList(stream, Portfolios);
 			WriteList(stream, ClientCodes);
@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			WriteLocalTime(stream, MarketDataVersions.Version47);
 
-			stream.Write(ServerOffset);
+			stream.WriteEx(ServerOffset);
 
 			WriteOffsets(stream);
 
@@ -132,10 +132,10 @@ namespace StockSharp.Algo.Storages.Binary
 
 		private static void WriteList(Stream stream, IList<string> list)
 		{
-			stream.Write(list.Count);
+			stream.WriteEx(list.Count);
 
 			foreach (var item in list)
-				stream.Write(item);
+				stream.WriteEx(item);
 		}
 
 		private static void ReadList(Stream stream, IList<string> list)

@@ -44,10 +44,10 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			base.Write(stream);
 
-			stream.Write(FirstId);
-			stream.Write(PrevId);
-			stream.Write(FirstPrice);
-			stream.Write(LastPrice);
+			stream.WriteEx(FirstId);
+			stream.WriteEx(PrevId);
+			stream.WriteEx(FirstPrice);
+			stream.WriteEx(LastPrice);
 
 			WriteFractionalPrice(stream);
 			WriteFractionalVolume(stream);
@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version50)
 				return;
 
-			stream.Write(ServerOffset);
+			stream.WriteEx(ServerOffset);
 
 			if (Version < MarketDataVersions.Version54)
 				return;

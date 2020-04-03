@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version45)
 				return;
 
-			stream.Write(ServerOffset);
+			stream.WriteEx(ServerOffset);
 
 			if (Version < MarketDataVersions.Version46)
 				return;
