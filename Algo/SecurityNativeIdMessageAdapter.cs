@@ -116,10 +116,22 @@
 								if (prevId != null)
 								{
 									if (securityId != prevId.Value)
-										throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
+									{
+										//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
+										this.AddWarningLog(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
+										
+										Storage.RemoveBySecurityId(storageName, prevId.Value);
+										Storage.TryAdd(storageName, securityId, nativeSecurityId, IsNativeIdentifiersPersistable);
+									}
 								}
 								else
-									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
+								{
+									//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
+									this.AddWarningLog(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
+									
+									Storage.RemoveByNativeId(storageName, nativeSecurityId);
+									Storage.TryAdd(storageName, securityId, nativeSecurityId, IsNativeIdentifiersPersistable);
+								}
 							}
 
 							lock (_syncRoot)

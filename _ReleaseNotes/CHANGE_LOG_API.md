@@ -346,6 +346,7 @@ StockSharp API Change log
 * (feature) DigitexFutures connector.
 * (feature) Position. BuyOrdersCount, SellOrdersCount, BuyOrdersMargin, SellOrdersMargin, OrdersMargin, OrdersCount, TradesCount.
 * (bug) FileLogListener. Clean out of date writers.
+* (feature) INativeIdStorage. Supports variable tuple based ids. Support remove operations.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.
