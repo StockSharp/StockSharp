@@ -1,4 +1,8 @@
-﻿DrawSize;Draw size;Размер отрисовки
+﻿NuGetPackageInstallerTitle;NuGet package library installer;Установщик библиотек из пакетов NuGet
+SetupType;Setup type;Тип установки
+PackageVersion;Package version;Версия пакета
+OutputDirectory;Output directory;Выходная папка
+DrawSize;Draw size;Размер отрисовки
 OrdersDisplayFilter;Orders display filter;Фильтр отображения заявок
 AllOrders;All orders;Все заявки
 ErrorOrdersOnly;Orders with errors;Заявки с ошибками
