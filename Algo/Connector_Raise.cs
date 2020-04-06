@@ -878,13 +878,15 @@ namespace StockSharp.Algo
 			ChangePasswordResult?.Invoke(transactionId, error);
 		}
 
-		private bool RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
+		private bool? RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
 		{
-			var anyOnline = false;
+			bool? anyOnline = null;
 
 			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
 			{
-				if (!anyOnline && subscription.State == SubscriptionStates.Online)
+				anyOnline = false;
+
+				if (subscription.State == SubscriptionStates.Online)
 					anyOnline = true;
 
 				evt?.Invoke(subscription, entity);

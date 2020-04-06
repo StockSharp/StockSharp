@@ -955,7 +955,7 @@ namespace StockSharp.Algo
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
 		{
-			if (!RaiseReceived(message, message, Level1Received))
+			if (RaiseReceived(message, message, Level1Received) == false)
 				return;
 
 			var security = EnsureGetSecurity(message);
@@ -1116,7 +1116,7 @@ namespace StockSharp.Algo
 
 			var news = _entityCache.ProcessNewsMessage(security, message);
 
-			if (!RaiseReceived(news.Item1, message, NewsReceived))
+			if (RaiseReceived(news.Item1, message, NewsReceived) == false)
 				return;
 
 			if (news.Item2)
@@ -1302,7 +1302,7 @@ namespace StockSharp.Algo
 			var logItem = message.ToOrderLog(EntityFactory.CreateOrderLogItem(new Order { Security = security }, trade));
 			//logItem.LocalTime = message.LocalTime;
 
-			if (!RaiseReceived(logItem, message, OrderLogItemReceived))
+			if (RaiseReceived(logItem, message, OrderLogItemReceived) == false)
 				return;
 
 			RaiseNewOrderLogItem(logItem);
@@ -1312,7 +1312,7 @@ namespace StockSharp.Algo
 		{
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
 
-			if (!RaiseReceived(tuple.Item1, message, TickTradeReceived))
+			if (RaiseReceived(tuple.Item1, message, TickTradeReceived) == false)
 				return;
 
 			var info = _entityCache.GetSecurityValues(security);
