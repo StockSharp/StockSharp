@@ -136,6 +136,12 @@ namespace StockSharp.Messages
 		public long? Avatar { get; set; }
 
 		/// <summary>
+		/// Token.
+		/// </summary>
+		[DataMember]
+		public string AuthToken { get; set; }
+
+		/// <summary>
 		/// Date of registration.
 		/// </summary>
 		[DataMember]
@@ -187,6 +193,7 @@ namespace StockSharp.Messages
 			destination.Balance = Balance;
 			destination.Avatar = Avatar;
 			destination.CreationDate = CreationDate;
+			destination.AuthToken = AuthToken;
 			destination.Permissions.AddRange(Permissions.ToDictionary());
 		}
 	}

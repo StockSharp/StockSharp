@@ -143,8 +143,6 @@ namespace StockSharp.Algo
 
 			_subscriptionManager = new SubscriptionManager(this);
 
-			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = UpdateSecurityByDefinition = true;
-
 			SupportLevel1DepthBuilder = true;
 			SupportFilteredMarketDepth = true;
 
@@ -445,17 +443,17 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To update <see cref="Security.LastTrade"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
 		/// </summary>
-		public bool UpdateSecurityLastQuotes { get; set; }
+		public bool UpdateSecurityLastQuotes { get; set; } = true;
 
 		/// <summary>
 		/// To update <see cref="Security"/> fields when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 		/// </summary>
-		public bool UpdateSecurityByLevel1 { get; set; }
+		public bool UpdateSecurityByLevel1 { get; set; } = true;
 
 		/// <summary>
 		/// To update <see cref="Security"/> fields when the <see cref="SecurityMessage"/> message appears. By default is enabled.
 		/// </summary>
-		public bool UpdateSecurityByDefinition { get; set; }
+		public bool UpdateSecurityByDefinition { get; set; } = true;
 
 		/// <summary>
 		/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
@@ -1215,9 +1213,9 @@ namespace StockSharp.Algo
 
 			TradesKeepCount = storage.GetValue(nameof(TradesKeepCount), TradesKeepCount);
 			OrdersKeepCount = storage.GetValue(nameof(OrdersKeepCount), OrdersKeepCount);
-			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), true);
-			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), true);
-			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), true);
+			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
+			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
+			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 

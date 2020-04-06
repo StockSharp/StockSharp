@@ -22,7 +22,7 @@ namespace SampleConnection
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Subscription, QuotesWindow>();
+		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
 		private bool _appClosing;
@@ -135,7 +135,7 @@ namespace SampleConnection
 				// subscribe on order book flow
 				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
-				_quotesWindows.Add(subscription, window);
+				_quotesWindows.Add(security, window);
 
 				window.Closed += (s, e) =>
 				{
@@ -219,7 +219,7 @@ namespace SampleConnection
 
 		private void TraderOnMarketDepthChanged(Subscription subscription, MarketDepth depth)
 		{
-			if (_quotesWindows.TryGetValue(subscription, out var wnd))
+			if (_quotesWindows.TryGetValue(depth.Security, out var wnd))
 				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
