@@ -18,6 +18,46 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// NuGet package library installer
+		/// </summary>
+		public const string NuGetPackageInstallerTitleKey = nameof(NuGetPackageInstallerTitle);
+
+		/// <summary>
+		/// NuGet package library installer
+		/// </summary>
+		public static string NuGetPackageInstallerTitle => GetString(NuGetPackageInstallerTitleKey);
+
+		/// <summary>
+		/// Setup type
+		/// </summary>
+		public const string SetupTypeKey = nameof(SetupType);
+
+		/// <summary>
+		/// Setup type
+		/// </summary>
+		public static string SetupType => GetString(SetupTypeKey);
+
+		/// <summary>
+		/// Package version
+		/// </summary>
+		public const string PackageVersionKey = nameof(PackageVersion);
+
+		/// <summary>
+		/// Package version
+		/// </summary>
+		public static string PackageVersion => GetString(PackageVersionKey);
+
+		/// <summary>
+		/// Output directory
+		/// </summary>
+		public const string OutputDirectoryKey = nameof(OutputDirectory);
+
+		/// <summary>
+		/// Output directory
+		/// </summary>
+		public static string OutputDirectory => GetString(OutputDirectoryKey);
+
+		/// <summary>
 		/// Draw size
 		/// </summary>
 		public const string  DrawSizeKey = nameof(DrawSize);
@@ -47705,7 +47745,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Split (after)
 		/// </summary>
-                public static string AfterSplit => GetString(AfterSplitKey);
+		public static string AfterSplit => GetString(AfterSplitKey);
 
 		/// <summary>
 		/// Split (before)
