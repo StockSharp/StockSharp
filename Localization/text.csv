@@ -16125,3 +16125,14 @@ DocStr11708;Get icon image source;Get icon image source
 DocStr11709;The icon key;The icon key
 DocStr11710;Xaml extension to apply color to SVG icons;Xaml extension to apply color to SVG icons
 DocStr11711;New icon color;New icon color
+DocStr11712;To build level1 from the orders log;To build level1 from the orders log
+DocStr11713;Check the specified mode turned on;Check the specified mode turned on
+DocStr11714;Storage mode;Storage mode
+DocStr11715;To build level1 from the order books;To build level1 from the order books
+DocStr11716;To check, does the string contain the order registration;To check, does the string contain the order registration
+DocStr11717;{0}, if the string contains the order registration, otherwise, {1};{0}, if the string contains the order registration, otherwise, {1}
+DocStr11718;To check, does the string contain the cancelled order;To check, does the string contain the cancelled order
+DocStr11719;{0}, if the string contain the cancelled order, otherwise, {1};{0}, if the string contain the cancelled order, otherwise, {1}
+DocStr11720;To check, does the string contain the order matching;To check, does the string contain the order matching
+DocStr11721;{0}, if the string contains order matching, otherwise, {1};{0}, if the string contains order matching, otherwise, {1}
+DocStr11722;Determines the specified message is required build only mode;Determines the specified message is required build only mode
