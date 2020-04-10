@@ -5333,7 +5333,7 @@ namespace StockSharp.Algo
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			return portfolio.InternalId?.To<string>() ?? portfolio.Name;
+			return /*portfolio.InternalId?.To<string>() ?? */portfolio.Name;
 		}
 
 		/// <summary>
@@ -5347,7 +5347,7 @@ namespace StockSharp.Algo
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			return portfolio.Name.CompareIgnoreCase(uniqueId) || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
+			return portfolio.Name.CompareIgnoreCase(uniqueId);// || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
 		}
 
 		/// <summary>

@@ -180,7 +180,6 @@ StockSharp API Change log
 * (feature) BuySellGrid. AddPanel, RemovePanel methods added.
 * (feature) GuiConnector removed.
 * (feature) SampleSync removed as obsolete.
-* (feature) Portfolio. InternalId added.
 * (feature) Connector. CandleSeriesError event added.
 * (feature) IMarketDataProvider. Added adapter parameter to subscription methods.
 * (feature) Micex TEAP. Stock32, Stock33, Stock34, Currency32, Currency33, Currency34 interfaces added.

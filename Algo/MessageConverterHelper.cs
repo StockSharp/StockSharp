@@ -668,7 +668,6 @@ namespace StockSharp.Algo
 				BoardCode = portfolio.Board?.Code,
 				Currency = portfolio.Currency,
 				ClientCode = portfolio.ClientCode,
-				InternalId = portfolio.InternalId,
 				OriginalTransactionId = originalTransactionId,
 			};
 		}
@@ -713,7 +712,6 @@ namespace StockSharp.Algo
 				Currency = criteria.Currency,
 				PortfolioName = criteria.Name,
 				ClientCode = criteria.ClientCode,
-				InternalId = criteria.InternalId,
 			};
 		}
 
@@ -1709,9 +1707,6 @@ namespace StockSharp.Algo
 
 			if (!message.ClientCode.IsEmpty())
 				portfolio.ClientCode = message.ClientCode;
-
-			if (message.InternalId != null)
-				portfolio.InternalId = message.InternalId;
 
 			//if (message.State != null)
 			//	portfolio.State = message.State;

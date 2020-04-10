@@ -107,12 +107,6 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
-		/// <summary>
-		/// Internal identifier.
-		/// </summary>
-		[DataMember]
-		public Guid? InternalId { get; set; }
-
 		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
@@ -182,7 +176,6 @@ namespace StockSharp.Messages
 			//destination.State = State;
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
-			destination.InternalId = InternalId;
 			destination.From = From;
 			destination.To = To;
 		}
