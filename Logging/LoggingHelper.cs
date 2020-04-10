@@ -290,7 +290,7 @@ namespace StockSharp.Logging
 
 				foreach (var pair in dict)
 				{
-					new InvalidOperationException(pair.Key.ToString()).LogError(LocalizedStrings.CorruptedFile);
+					new InvalidOperationException(pair.Key.ToString(), pair.Value).LogError(LocalizedStrings.CorruptedFile);
 				}
 			}
 			catch (Exception ex)

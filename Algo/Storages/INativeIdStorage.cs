@@ -404,9 +404,16 @@ namespace StockSharp.Algo.Storages
 			{
 				var dict = _nativeIds.SafeAdd(storageName);
 
-				foreach (var id in ids)
+				foreach (var tuple in ids)
 				{
-					dict.Add(id.Item1, id.Item2);
+					var secId = tuple.Item1;
+					var nativeId = tuple.Item2;
+
+					// skip duplicates
+					if (dict.ContainsKey(secId) || dict.ContainsValue(nativeId))
+						continue;
+
+					dict.Add(secId, nativeId);
 				}
 			}
 		}
