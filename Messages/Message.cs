@@ -109,10 +109,14 @@ namespace StockSharp.Messages
 		protected Message(MessageTypes type)
 		{
 			_type = type;
-			//StackTrace = Environment.StackTrace;
+#if MSG_TRACE
+			StackTrace = Environment.StackTrace;
+#endif
 		}
 
-		//internal readonly string StackTrace;
+#if MSG_TRACE
+		internal string StackTrace;
+#endif
 
 		/// <inheritdoc />
 		public override string ToString() => Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";
@@ -133,7 +137,9 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(destination));
 
 			destination.LocalTime = LocalTime;
-
+#if MSG_TRACE
+			destination.StackTrace = StackTrace;
+#endif
 			this.CopyExtensionInfo(destination);
 		}
 	}
