@@ -10,7 +10,6 @@ namespace StockSharp.Algo.Storages
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Reflection;
 	using Ecng.Serialization;
 
 	using StockSharp.Logging;
@@ -274,16 +273,11 @@ namespace StockSharp.Algo.Storages
 		{
 			if (nativeId is ITuple tuple)
 			{
-				var tupleValues = new List<string>();
-
-				for (var i = 0; i < tuple.Length; i++)
-					tupleValues.Add(tuple[i].To<string>());
-
 				writer.WriteRow(new[]
 				{
 					securityId.SecurityCode,
 					securityId.BoardCode
-				}.Concat(tupleValues));
+				}.Concat(tuple.ToValues().Select(v => v.To<string>())));
 			}
 			else
 			{
@@ -358,15 +352,12 @@ namespace StockSharp.Algo.Storages
 
 						if (isTuple)
 						{
-							Type genericType = Type.GetType("System.Tuple`" + types.Count);
-							Type specificType = genericType.Make(types);
-
 							var args = new List<object>();
 
 							for (var i = 0; i < types.Count; i++)
 								args.Add(reader.ReadString().To(types[i]));
 
-							nativeId = specificType.CreateInstance(args.ToArray());
+							nativeId = args.ToTuple();
 						}
 						else
 							nativeId = reader.ReadString().To(types[0]);
