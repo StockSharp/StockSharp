@@ -376,11 +376,7 @@ namespace StockSharp.Algo
 			set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages
-		{
-			get => GetSortedAdapters().SelectMany(a => a.PossibleSupportedMessages).DistinctBy(i => i.Type);
-			set { }
-		}
+		IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages => GetSortedAdapters().SelectMany(a => a.PossibleSupportedMessages).DistinctBy(i => i.Type);
 
 		IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages
 		{
@@ -388,24 +384,11 @@ namespace StockSharp.Algo
 			set { }
 		}
 
-		IEnumerable<MessageTypes> IMessageAdapter.SupportedOutMessages
-		{
-			get => GetSortedAdapters().SelectMany(a => a.SupportedOutMessages).Distinct();
-			set { }
-		}
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedOutMessages => GetSortedAdapters().SelectMany(a => a.SupportedOutMessages).Distinct();
 
-		IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages
-		{
-			get => GetSortedAdapters().SelectMany(a => a.SupportedResultMessages).Distinct();
-			set { }
-		}
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages => GetSortedAdapters().SelectMany(a => a.SupportedResultMessages).Distinct();
 
-		/// <inheritdoc />
-		IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes
-		{
-			get => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
-			set { }
-		}
+		IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes => GetSortedAdapters().SelectMany(a => a.SupportedMarketDataTypes).Distinct();
 
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo { get; } = new Dictionary<string, RefPair<SecurityTypes, string>>();
 

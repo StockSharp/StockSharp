@@ -20,6 +20,7 @@ namespace StockSharp.Messages
 	using System.Globalization;
 	using System.Linq;
 	using System.Net;
+    using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -302,7 +303,7 @@ namespace StockSharp.Messages
 		/// Fill the <see cref="IMessageAdapter.SupportedInMessages"/> message types related to transactional.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		public static void AddTransactionalSupport(this IMessageAdapter adapter)
+		public static void AddTransactionalSupport(this MessageAdapter adapter)
 		{
 			foreach (var type in TransactionalMessageTypes)
 				adapter.AddSupportedMessage(type, false);
@@ -312,7 +313,7 @@ namespace StockSharp.Messages
 		/// Remove from <see cref="IMessageAdapter.SupportedInMessages"/> message types related to transactional.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		public static void RemoveTransactionalSupport(this IMessageAdapter adapter)
+		public static void RemoveTransactionalSupport(this MessageAdapter adapter)
 		{
 			foreach (var type in TransactionalMessageTypes)
 				adapter.RemoveSupportedMessage(type);
@@ -333,7 +334,7 @@ namespace StockSharp.Messages
 		/// Fill the <see cref="IMessageAdapter.SupportedInMessages"/> message types related to market-data.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		public static void AddMarketDataSupport(this IMessageAdapter adapter)
+		public static void AddMarketDataSupport(this MessageAdapter adapter)
 		{
 			foreach (var type in MarketDataMessageTypes)
 				adapter.AddSupportedMessage(type, true);
@@ -343,7 +344,7 @@ namespace StockSharp.Messages
 		/// Remove from <see cref="IMessageAdapter.SupportedInMessages"/> message types related to market-data.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		public static void RemoveMarketDataSupport(this IMessageAdapter adapter)
+		public static void RemoveMarketDataSupport(this MessageAdapter adapter)
 		{
 			foreach (var type in MarketDataMessageTypes)
 				adapter.RemoveSupportedMessage(type);
@@ -367,7 +368,7 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
 		[Obsolete]
-		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
+		public static void AddSupportedMessage(this MessageAdapter adapter, MessageTypes type)
 		{
 			AddSupportedMessage(adapter, type, IsMarketData(type));
 		}
@@ -378,17 +379,17 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
 		/// <param name="isMarketData"><paramref name="type"/> is market-data type.</param>
-		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypes type, bool? isMarketData)
+		public static void AddSupportedMessage(this MessageAdapter adapter, MessageTypes type, bool? isMarketData)
 		{
 			adapter.AddSupportedMessage(new MessageTypeInfo(type, isMarketData));
 		}
 
 		/// <summary>
-		/// Add the message type info <see cref="IMessageAdapter.SupportedInMessages"/>.
+		/// Add the message type info <see cref="IMessageAdapter.PossibleSupportedMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="info">Extended info for <see cref="MessageTypes"/>.</param>
-		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypeInfo info)
+		public static void AddSupportedMessage(this MessageAdapter adapter, MessageTypeInfo info)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -403,11 +404,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove the message type from <see cref="IMessageAdapter.SupportedInMessages"/>.
+		/// Remove the message type from <see cref="IMessageAdapter.PossibleSupportedMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
-		public static void RemoveSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
+		public static void RemoveSupportedMessage(this MessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -434,7 +435,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="dataType">Data type info.</param>
-		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, DataType dataType)
+		public static void AddSupportedMarketDataType(this MessageAdapter adapter, DataType dataType)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -447,7 +448,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Market data type.</param>
-		public static void RemoveSupportedMarketDataType(this IMessageAdapter adapter, DataType type)
+		public static void RemoveSupportedMarketDataType(this MessageAdapter adapter, DataType type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -460,7 +461,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
-		public static void AddSupportedResultMessage(this IMessageAdapter adapter, MessageTypes type)
+		public static void AddSupportedResultMessage(this MessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -473,7 +474,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
-		public static void RemoveSupportedResultMessage(this IMessageAdapter adapter, MessageTypes type)
+		public static void RemoveSupportedResultMessage(this MessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -500,7 +501,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
-		public static void AddSupportedOutMessage(this IMessageAdapter adapter, MessageTypes type)
+		public static void AddSupportedOutMessage(this MessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -513,7 +514,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Message type.</param>
-		public static void RemoveSupportedOutMessage(this IMessageAdapter adapter, MessageTypes type)
+		public static void RemoveSupportedOutMessage(this MessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -909,7 +910,7 @@ namespace StockSharp.Messages
 		/// Remove all market data types from <see cref="IMessageAdapter.SupportedInMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		public static void RemoveSupportedAllMarketDataTypes(this IMessageAdapter adapter)
+		public static void RemoveSupportedAllMarketDataTypes(this MessageAdapter adapter)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -1634,6 +1635,9 @@ namespace StockSharp.Messages
 
 			var reply = message.To == null ? (IOriginalTransactionIdMessage)new SubscriptionOnlineMessage() : new SubscriptionFinishedMessage();
 			reply.OriginalTransactionId = message.TransactionId;
+#if MSG_TRACE
+			((Message)reply).StackTrace = ((Message)message).StackTrace;
+#endif
 			return (Message)reply;
 		}
 
@@ -1852,7 +1856,7 @@ namespace StockSharp.Messages
 		/// Remove lookup messages support.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		public static void RemoveLookupMessages(this IMessageAdapter adapter)
+		public static void RemoveLookupMessages(this MessageAdapter adapter)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -2215,6 +2219,26 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(mdMsg));
 
 			return mdMsg.IsCalcVolumeProfile || mdMsg.BuildMode == MarketDataBuildModes.Build;
+		}
+
+		/// <summary>
+		/// Simulator portfolio name.
+		/// </summary>
+		public static string SimulatorPortfolioName = "Simulator (S#)";
+
+		/// <summary>
+		/// Anonymois portfolio name.
+		/// </summary>
+		public static string AnonymousPortfolioName = "Anonymous (S#)";
+
+		/// <summary>
+		/// Convert key to numeric identifier.
+		/// </summary>
+		/// <param name="key">Key.</param>
+		/// <returns>Identifier.</returns>
+		public static int? ToId(this SecureString key)
+		{
+			return key?.UnSecure().GetDeterministicHashCode();
 		}
 	}
 }

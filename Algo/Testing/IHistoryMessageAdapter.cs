@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Testing
 {
 	using System;
 	using System.Collections.Generic;
+    using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -58,7 +59,6 @@ namespace StockSharp.Algo.Testing
 		public CustomHistoryMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
-			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState, null);
 		}
 
 		/// <summary>
@@ -70,6 +70,13 @@ namespace StockSharp.Algo.Testing
 			: this(innerAdapter)
 		{
 			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
+		}
+
+		/// <inheritdoc />
+		public override IEnumerable<MessageTypes> SupportedInMessages
+		{
+			get => base.SupportedInMessages.Concat(new[] { ExtendedMessageTypes.EmulationState });
+			set => base.SupportedInMessages = value;
 		}
 
 		/// <inheritdoc />
