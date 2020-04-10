@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// The interface, describing paper trading.
 	/// </summary>
-	public interface IMarketEmulator : IMessageChannel, ILogSource
+	public interface IMarketEmulator : IMessageAdapter, ILogSource
 	{
 		/// <summary>
 		/// Emulator settings.

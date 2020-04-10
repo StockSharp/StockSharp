@@ -1721,6 +1721,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public MarketEmulator()
 		{
+			((IMessageAdapter)this).SupportedInMessages = ((IMessageAdapter)this).PossibleSupportedMessages.Select(i => i.Type).ToArray();
 		}
 
 		/// <inheritdoc />
@@ -1875,6 +1876,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Board:
 				{
 					var boardMsg = (BoardMessage)message;
+
 					_boardDefinitions[boardMsg.Code] = boardMsg.TypedClone();
 
 					var emulators = _securityEmulatorsByBoard.TryGetValue(boardMsg.Code);
@@ -1918,6 +1920,9 @@ namespace StockSharp.Algo.Testing
 						pair.Value.Process(message, retVal);
 					}
 
+					if (statusMsg.To == null)
+						retVal.Add(new SubscriptionOnlineMessage { OriginalTransactionId = statusMsg.TransactionId });
+
 					break;
 				}
 
@@ -1955,7 +1960,8 @@ namespace StockSharp.Algo.Testing
 						}
 					}
 
-					retVal.Add(new SubscriptionOnlineMessage { OriginalTransactionId = pfMsg.TransactionId });
+					if (pfMsg.To == null)
+						retVal.Add(new SubscriptionOnlineMessage { OriginalTransactionId = pfMsg.TransactionId });
 
 					break;
 				}
@@ -1963,8 +1969,10 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Security:
 				{
 					var secMsg = (SecurityMessage)message;
+
 					//retVal.Add(secMsg);
 					GetEmulator(secMsg.SecurityId).Process(secMsg, retVal);
+
 					break;
 				}
 
@@ -1983,6 +1991,7 @@ namespace StockSharp.Algo.Testing
 				}
 
 				case MessageTypes.BoardState:
+				{
 					if (Settings.CheckTradingState)
 					{
 						var boardStateMsg = (BoardStateMessage)message;
@@ -1998,6 +2007,27 @@ namespace StockSharp.Algo.Testing
 					retVal.Add(message);
 
 					break;
+				}
+
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					if (mdMsg.IsSubscribe)
+						retVal.Add(new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId });
+
+					retVal.Add(mdMsg.CreateResult());
+					break;
+				}
+
+				case MessageTypes.SecurityLookup:
+				case MessageTypes.BoardLookup:
+				case MessageTypes.TimeFrameLookup:
+				{
+					var subscrMsg = (ISubscriptionMessage)message;
+					retVal.Add(subscrMsg.CreateResult());
+					break;
+				}
 
 				default:
 				{
@@ -2201,6 +2231,93 @@ namespace StockSharp.Algo.Testing
 		}
 
 		bool IMessageChannel.IsOpened => true;
+
+		IdGenerator IMessageAdapter.TransactionIdGenerator { get; } = new IncrementalIdGenerator();
+
+		IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } = new[]
+		{
+			MessageTypes.SecurityLookup.ToInfo(),
+			MessageTypes.PortfolioLookup.ToInfo(),
+			MessageTypes.TimeFrameLookup.ToInfo(),
+			MessageTypes.BoardLookup.ToInfo(),
+			MessageTypes.OrderStatus.ToInfo(),
+			MessageTypes.OrderRegister.ToInfo(),
+			MessageTypes.OrderCancel.ToInfo(),
+			MessageTypes.OrderReplace.ToInfo(),
+			MessageTypes.OrderGroupCancel.ToInfo(),
+			MessageTypes.MarketData.ToInfo(),
+			MessageTypes.BoardState.ToInfo(),
+			MessageTypes.Security.ToInfo(),
+			MessageTypes.Portfolio.ToInfo(),
+			MessageTypes.Board.ToInfo(),
+			MessageTypes.Reset.ToInfo(),
+			MessageTypes.QuoteChange.ToInfo(),
+			ExtendedMessageTypes.Generator.ToInfo(),
+			ExtendedMessageTypes.CommissionRule.ToInfo(),
+			ExtendedMessageTypes.Clearing.ToInfo(),
+		};
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedOutMessages => throw new NotImplementedException();
+		IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages { get; } = new[]
+		{
+			MessageTypes.SecurityLookup,
+			MessageTypes.PortfolioLookup,
+			MessageTypes.TimeFrameLookup,
+			MessageTypes.BoardLookup,
+		};
+		IEnumerable<DataType> IMessageAdapter.SupportedMarketDataTypes { get; } = new[]
+		{
+			DataType.OrderLog,
+			DataType.Ticks,
+			DataType.CandleTimeFrame,
+			DataType.MarketDepth,
+		};
+
+		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo { get; } = new Dictionary<string, RefPair<SecurityTypes, string>>();
+
+		IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => Enumerable.Empty<Level1Fields>();
+
+		bool IMessageAdapter.CheckTimeFrameByRequest => true;
+
+		ReConnectionSettings IMessageAdapter.ReConnectionSettings { get; } = new ReConnectionSettings();
+
+		TimeSpan IMessageAdapter.HeartbeatInterval { get => TimeSpan.Zero; set { } }
+
+		string IMessageAdapter.StorageName => null;
+
+		bool IMessageAdapter.IsNativeIdentifiersPersistable => false;
+		bool IMessageAdapter.IsNativeIdentifiers => false;
+		bool IMessageAdapter.IsFullCandlesOnly => false;
+		bool IMessageAdapter.IsSupportSubscriptions => true;
+		bool IMessageAdapter.IsSupportCandlesUpdates => true;
+
+		MessageAdapterCategories IMessageAdapter.Categories => default;
+		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => null;
+
+		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();
+		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => throw new NotImplementedException();
+		bool IMessageAdapter.IsSupportOrderBookIncrements => false;
+		bool IMessageAdapter.IsSupportExecutionsPnL => true;
+		bool IMessageAdapter.IsSecurityNewsOnly => false;
+		Type IMessageAdapter.OrderConditionType => null;
+		bool IMessageAdapter.HeartbeatBeforConnect => false;
+		Uri IMessageAdapter.Icon => null;
+		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => true;
+
+		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
+			=> new OrderLogMarketDepthBuilder(securityId);
+
+		IEnumerable<object> IMessageAdapter.GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
+			=> Enumerable.Empty<object>();
+
+		TimeSpan IMessageAdapter.GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+		{
+			iterationInterval = TimeSpan.Zero;
+			return TimeSpan.Zero;
+		}
+
+		bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => false;
+		bool IMessageAdapter.IsSecurityRequired(DataType dataType) => true;
 
 		void IMessageChannel.Open()
 		{
