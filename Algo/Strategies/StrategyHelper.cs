@@ -404,10 +404,11 @@ namespace StockSharp.Algo.Strategies
 			if (array.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(orders));
 
-			using (var connector = new RealTimeEmulationTrader<HistoryMessageAdapter>(new HistoryMessageAdapter(new IncrementalIdGenerator(), new CollectionSecurityProvider(array.Select(o => o.Security).Distinct()))
+			var secProvider = new CollectionSecurityProvider(array.Select(o => o.Security).Distinct());
+			using (var connector = new RealTimeEmulationTrader<HistoryMessageAdapter>(new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider)
 			{
 				StorageRegistry = storageRegistry
-			}))
+			}, secProvider))
 			{
 				var from = array.Min(o => o.Time);
 				var to = from.EndOfDay();
