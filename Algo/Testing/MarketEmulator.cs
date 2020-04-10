@@ -2042,7 +2042,15 @@ namespace StockSharp.Algo.Testing
 
 			RecalcPnL(message.LocalTime, retVal);
 
-			BufferResult(retVal, message.LocalTime).ForEach(RaiseNewOutMessage);
+			var allowStore = Settings.AllowStoreGenerateMessages;
+
+			foreach (var msg in BufferResult(retVal, message.LocalTime))
+			{
+				if (!allowStore)
+					msg.OfflineMode = MessageOfflineModes.Ignore;
+
+				RaiseNewOutMessage(msg);
+			}
 
 			return true;
 		}
