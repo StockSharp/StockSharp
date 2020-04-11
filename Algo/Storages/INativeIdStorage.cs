@@ -95,6 +95,7 @@ namespace StockSharp.Algo.Storages
 	public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		private readonly INativeIdStorage _inMemory = new InMemoryNativeIdStorage();
+		private readonly SynchronizedDictionary<SecurityId, object> _buffer = new SynchronizedDictionary<SecurityId, object>();
 
 		private readonly string _path;
 
@@ -176,7 +177,7 @@ namespace StockSharp.Algo.Storages
 		public void Clear(string storageName)
 		{
 			_inMemory.Clear(storageName);
-
+			_buffer.Clear();
 			DelayAction.DefaultGroup.Add(() => File.Delete(GetFileName(storageName)));
 		}
 
@@ -210,6 +211,8 @@ namespace StockSharp.Algo.Storages
 
 		private void SaveAll(string storageName)
 		{
+			_buffer.Clear();
+
 			DelayAction.DefaultGroup.Add(() =>
 			{
 				var fileName = GetFileName(storageName);
@@ -292,8 +295,15 @@ namespace StockSharp.Algo.Storages
 
 		private void Save(string storageName, SecurityId securityId, object nativeId)
 		{
+			_buffer[securityId] = nativeId;
+
+			var items = _buffer.SyncGet(c => c.CopyAndClear());
+
 			DelayAction.DefaultGroup.Add(() =>
 			{
+				if (items.Length == 0)
+					return;
+
 				var fileName = GetFileName(storageName);
 
 				var appendHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
@@ -303,7 +313,8 @@ namespace StockSharp.Algo.Storages
 					if (appendHeader)
 						WriteHeader(writer, nativeId);
 
-					WriteItem(writer, securityId, nativeId);
+					foreach (var item in items)
+						WriteItem(writer, item.Key, item.Value);
 				}
 			});
 		}
