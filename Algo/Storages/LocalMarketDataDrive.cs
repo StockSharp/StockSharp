@@ -540,18 +540,6 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new SynchronizedPairSet<DataType, string>
-		{
-			{ DataType.Ticks, "trades" },
-			{ DataType.OrderLog, "orderLog" },
-			{ DataType.Transactions, "transactions" },
-			{ DataType.MarketDepth, "quotes" },
-			{ DataType.Level1, "security" },
-			{ DataType.PositionChanges, "position" },
-			{ DataType.News, "news" },
-			{ DataType.Board, "board" },
-		};
-
 		/// <summary>
 		/// Get data type and parameter for the specified file name.
 		/// </summary>
@@ -559,25 +547,9 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Data type and parameter associated with the type. For example, <see cref="CandleMessage.Arg"/>.</returns>
 		public static DataType GetDataType(string fileName)
 		{
-			var info = _fileNames.TryGetKey(fileName);
-
-			if (info != null)
-				return info;
-
-			if (!fileName.StartsWithIgnoreCase("candles_"))
-				return null;
-
-			var parts = fileName.Split('_');
-
-			if (parts.Length < 2)
-				return null;
-
 			try
 			{
-				var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
-				var arg = type.ToCandleArg(parts[2]);
-
-				return DataType.Create(type, arg);
+				return fileName.FileNameToDataType();
 			}
 			catch (Exception ex)
 			{
@@ -598,17 +570,7 @@ namespace StockSharp.Algo.Storages
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			string fileName;
-
-			if (dataType.IsCandleMessage())
-				fileName = "candles_{0}_{1}".Put(dataType.Name.Remove(nameof(Message)), dataType.CandleArgToFolderName(arg));
-			else
-			{
-				fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));
-
-				if (fileName == null)
-					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));
-			}
+			var fileName = DataType.Create(dataType, arg).DataTypeToFileName();
 
 			if (format != null)
 				fileName += GetExtension(format.Value);
