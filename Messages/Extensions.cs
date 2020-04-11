@@ -39,11 +39,11 @@ namespace StockSharp.Messages
 	{
 		static Extensions()
 		{
-			RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, str => str.Replace('-', ':').To<TimeSpan>());
-			RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, str => str.To<int>());
-			RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, str => str.To<decimal>());
-			RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, str => str.ToUnit());
-			RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, str => str.ToUnit());
+			RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, str => str.Replace('-', ':').To<TimeSpan>(), arg => arg.ToString().Replace(':', '-'));
+			RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, str => str.To<int>(), arg => arg.ToString().Replace(':', '-'));
+			RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, str => str.To<decimal>(), arg => arg.ToString().Replace(':', '-'));
+			RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, str => str.ToUnit(), arg => arg.ToString().Replace(':', '-'));
+			RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, str => str.ToUnit(), arg => arg.ToString().Replace(':', '-'));
 			RegisterCandleType(typeof(PnFCandleMessage), MessageTypes.CandlePnF, MarketDataTypes.CandlePnF, str =>
 			{
 				var parts = str.Split('_');
@@ -53,8 +53,8 @@ namespace StockSharp.Messages
 					BoxSize = parts[0].ToUnit(),
 					ReversalAmount = parts[1].To<int>()
 				};
-			});
-			RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, str => str.Replace('-', ':').To<TimeSpan>());
+			}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}");
+			RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, str => str.Replace('-', ':').To<TimeSpan>(), arg => arg.ToString().Replace(':', '-'));
 		}
 
 		/// <summary>
@@ -574,7 +574,7 @@ namespace StockSharp.Messages
 			return _candleDataTypes[type];
 		}
 
-		private static readonly SynchronizedPairSet<Type, Func<string, object>> _candleArgParsers = new SynchronizedPairSet<Type, Func<string, object>>();
+		private static readonly SynchronizedPairSet<Type, Tuple<Func<string, object>, Func<object, string>>> _candleArgConverters = new SynchronizedPairSet<Type, Tuple<Func<string, object>, Func<object, string>>>();
 
 		/// <summary>
 		/// To convert string representation of the candle argument into typified.
@@ -590,8 +590,25 @@ namespace StockSharp.Messages
 			if (str.IsEmpty())
 				throw new ArgumentNullException(nameof(str));
 
-			if (_candleArgParsers.TryGetValue(messageType, out var parser))
-				return parser(str);
+			if (_candleArgConverters.TryGetValue(messageType, out var converter))
+				return converter.Item1(str);
+
+			throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
+		}
+
+		/// <summary>
+		/// Convert candle parameter into folder name replacing the reserved symbols.
+		/// </summary>
+		/// <param name="messageType">The type of candle message.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <returns>Directory name.</returns>
+		public static string CandleArgToFolderName(this Type messageType, object arg)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (_candleArgConverters.TryGetValue(messageType, out var converter))
+				return converter.Item2(arg);
 
 			throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 		}
@@ -609,19 +626,26 @@ namespace StockSharp.Messages
 		/// <param name="messageType">The type of candle message.</param>
 		/// <param name="type">Message type.</param>
 		/// <param name="dataType">Candles type.</param>
-		/// <param name="argParser">Candle arg parser.</param>
-		public static void RegisterCandleType(Type messageType, MessageTypes type, MarketDataTypes dataType, Func<string, object> argParser)
+		/// <param name="argParserTo"><see cref="string"/> to <typeparamref name="TArg"/> converter.</param>
+		/// <param name="argParserFrom"><typeparamref name="TArg"/> to <see cref="string"/> converter.</param>
+		public static void RegisterCandleType<TArg>(Type messageType, MessageTypes type, MarketDataTypes dataType, Func<string, TArg> argParserTo, Func<TArg, string> argParserFrom)
 		{
-			if (messageType == null)
+			if (messageType is null)
 				throw new ArgumentNullException(nameof(messageType));
 
-			if (argParser == null)
-				throw new ArgumentNullException(nameof(argParser));
+			if (argParserTo is null)
+				throw new ArgumentNullException(nameof(argParserTo));
+
+			if (argParserFrom is null)
+				throw new ArgumentNullException(nameof(argParserFrom));
+
+			Func<string, object> p1 = str => argParserTo(str);
+			Func<object, string> p2 = arg => arg is string s ? s : argParserFrom((TArg)arg);
 
 			_messageTypeMap.Add(dataType, Tuple.Create(type, default(object)));
 			_candleDataTypes.Add(type, dataType);
 			_candleMarketDataTypes.Add(messageType, dataType);
-			_candleArgParsers.Add(messageType, argParser);
+			_candleArgConverters.Add(messageType, Tuple.Create(p1, p2));
 		}
 
 		/// <summary>

@@ -327,25 +327,6 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		//private bool _useAlphabeticPath = true;
-
-		///// <summary>
-		///// Whether to use the alphabetical path to data. The default is enabled.
-		///// </summary>
-		//[Obsolete]
-		//public bool UseAlphabeticPath
-		//{
-		//	get { return _useAlphabeticPath; }
-		//	set
-		//	{
-		//		if (value == UseAlphabeticPath)
-		//			return;
-
-		//		_useAlphabeticPath = value;
-		//		ResetDrives();
-		//	}
-		//}
-
 		private void ResetDrives()
 		{
 			lock (_drives.SyncRoot)
@@ -371,7 +352,7 @@ namespace StockSharp.Algo.Storages
 				.EnumerateDirectories(path)
 				.SelectMany(Directory.EnumerateDirectories)
 				.Select(IOPath.GetFileName)
-				.Select(TraderHelper.FolderNameToSecurityId)
+				.Select(StorageHelper.FolderNameToSecurityId)
 				.Select(n => idGenerator.Split(n, true))
 				.Where(t => !t.IsDefault());
 		}
@@ -620,7 +601,7 @@ namespace StockSharp.Algo.Storages
 			string fileName;
 
 			if (dataType.IsCandleMessage())
-				fileName = "candles_{0}_{1}".Put(dataType.Name.Remove(nameof(Message)), TraderHelper.CandleArgToFolderName(arg));
+				fileName = "candles_{0}_{1}".Put(dataType.Name.Remove(nameof(Message)), dataType.CandleArgToFolderName(arg));
 			else
 			{
 				fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));
@@ -657,29 +638,6 @@ namespace StockSharp.Algo.Storages
 			return date.ToString(_dateFormat);
 		}
 
-//#pragma warning disable 612
-		///// <summary>
-		///// Load settings.
-		///// </summary>
-		///// <param name="storage">Settings storage.</param>
-		//public override void Load(SettingsStorage storage)
-		//{
-		//	base.Load(storage);
-
-		//	UseAlphabeticPath = storage.GetValue<bool>(nameof(UseAlphabeticPath));
-		//}
-
-		///// <summary>
-		///// Save settings.
-		///// </summary>
-		///// <param name="storage">Settings storage.</param>
-		//public override void Save(SettingsStorage storage)
-		//{
-		//	base.Save(storage);
-
-		//	storage.SetValue(nameof(UseAlphabeticPath), UseAlphabeticPath);
-		//}
-
 		/// <summary>
 		/// To get the path to the folder with market data for the instrument.
 		/// </summary>
@@ -694,10 +652,7 @@ namespace StockSharp.Algo.Storages
 
 			var folderName = id.SecurityIdToFolderName();
 
-			return //UseAlphabeticPath
-				IOPath.Combine(Path, folderName.Substring(0, 1), folderName);
-			//: IOPath.Combine(Path, folderName);
+			return IOPath.Combine(Path, folderName.Substring(0, 1), folderName);
 		}
-//#pragma warning restore 612
 	}
 }

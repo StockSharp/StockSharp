@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Candles
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return CandleType?.Name + "_" + Security + "_" + TraderHelper.CandleArgToFolderName(Arg);
+			return CandleType?.Name + "_" + Security + "_" + CandleType?.ToCandleMessageType().CandleArgToFolderName(Arg);
 		}
 
 		/// <summary>
