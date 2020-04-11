@@ -64,11 +64,6 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Emulation enabled.
-		/// </summary>
-		public bool IsEnabled { get; set; } = true;
-
-		/// <summary>
 		/// Settings of exchange emulator.
 		/// </summary>
 		public MarketEmulatorSettings Settings => _emulator.Settings;
@@ -92,7 +87,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
-					ProcessPortfolioMessage(regMsg.PortfolioName, regMsg);
+					ProcessOrderMessage(regMsg.PortfolioName, regMsg);
 					return true;
 				}
 				case MessageTypes.OrderReplace:
@@ -111,13 +106,8 @@ namespace StockSharp.Algo.Testing
 
 				case MessageTypes.OrderGroupCancel:
 				{
-					if (IsEnabled)
-					{
-						SendToEmulator(message);
-						return true;
-					}
-					else
-						return base.OnSendInMessage(message);
+					SendToEmulator(message);
+					return true;
 				}
 
 				case MessageTypes.Reset:
@@ -167,15 +157,11 @@ namespace StockSharp.Algo.Testing
 
 				case MessageTypes.MarketData:
 				{
-					if (IsEnabled)
-					{
-						var transId = ((ISubscriptionMessage)message).TransactionId;
-						_subscriptionIds.Add(transId);
-						_realSubscribeIds.Add(transId);
+					var transId = ((ISubscriptionMessage)message).TransactionId;
+					_subscriptionIds.Add(transId);
+					_realSubscribeIds.Add(transId);
 
-						SendToEmulator(message);
-					}
-
+					SendToEmulator(message);
 					return base.OnSendInMessage(message);
 				}
 
@@ -202,7 +188,7 @@ namespace StockSharp.Algo.Testing
 			if (OwnInnerAdapter)
 				base.OnInnerAdapterNewOutMessage(message);
 
-			if (!IsEnabled || message.IsBack)
+			if (message.IsBack)
 				return;
 
 			switch (message.Type)
@@ -311,28 +297,23 @@ namespace StockSharp.Algo.Testing
 			RaiseNewOutMessage(message);
 		}
 
-		private void ProcessPortfolioMessage(string portfolioName, OrderMessage message)
+		private void ProcessOrderMessage(string portfolioName, OrderMessage message)
 		{
-			if (IsEnabled)
+			if (OwnInnerAdapter)
 			{
-				if (OwnInnerAdapter)
-				{
-					if (portfolioName == Extensions.SimulatorPortfolioName)
-					{
-						_emuOrderIds.Add(message.TransactionId);
-						SendToEmulator(message);
-					}
-					else
-						base.OnSendInMessage(message);
-				}
-				else
+				if (portfolioName == Extensions.SimulatorPortfolioName)
 				{
 					_emuOrderIds.Add(message.TransactionId);
 					SendToEmulator(message);
 				}
+				else
+					base.OnSendInMessage(message);
 			}
 			else
-				base.OnSendInMessage(message);
+			{
+				_emuOrderIds.Add(message.TransactionId);
+				SendToEmulator(message);
+			}
 		}
 
 		private void ProcessOrderMessage(long transId, Message message)
