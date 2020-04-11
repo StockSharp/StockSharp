@@ -16,44 +16,24 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class StorageBuffer : IPersistable
 	{
-		/// <summary>
-		/// The market data buffer.
-		/// </summary>
-		/// <typeparam name="TKey">The key type.</typeparam>
-		/// <typeparam name="TMarketData">Market data type.</typeparam>
 		private class DataBuffer<TKey, TMarketData>
 			where TMarketData : Message
 		{
 			private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new SynchronizedDictionary<TKey, List<TMarketData>>();
 
-			/// <summary>
-			/// To add new information to the buffer.
-			/// </summary>
-			/// <param name="key">The key possessing new information.</param>
-			/// <param name="data">New information.</param>
 			public void Add(TKey key, TMarketData data)
-			{
-				_data.SyncDo(d => d.SafeAdd(key).Add(data));
-			}
+				=> _data.SyncDo(d => d.SafeAdd(key).Add(data));
 
-			/// <summary>
-			/// To get accumulated data from the buffer and delete them.
-			/// </summary>
-			/// <returns>Gotten data.</returns>
 			public IDictionary<TKey, IEnumerable<TMarketData>> Get()
-			{
-				return _data.SyncGet(d =>
+				=> _data.SyncGet(d =>
 				{
 					var retVal = d.ToDictionary(p => p.Key, p => (IEnumerable<TMarketData>)p.Value);
 					d.Clear();
 					return retVal;
 				});
-			}
 
 			public void Clear()
-			{
-				_data.Clear();
-			}
+				=> _data.Clear();
 		}
 
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _ticksBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
@@ -87,108 +67,61 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public bool DisableStorageTimer { get; set; }
 
-		private DataType CreateDataType(MarketDataMessage msg)
-		{
-			switch (msg.DataType)
-			{
-				case MarketDataTypes.Level1:
-					return DataType.Level1;
-
-				case MarketDataTypes.Trades:
-					return TicksAsLevel1 ? DataType.Level1 : DataType.Ticks;
-
-				case MarketDataTypes.MarketDepth:
-					return DataType.MarketDepth;
-
-				case MarketDataTypes.OrderLog:
-					return DataType.OrderLog;
-
-				case MarketDataTypes.News:
-					return DataType.News;
-
-				case MarketDataTypes.Board:
-					return DataType.Board;
-
-				default:
-					if (msg.DataType.IsCandleDataType())
-						return DataType.Create(msg.DataType.ToCandleMessage(), msg.Arg);
-
-					return null;
-				//throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str1219);
-			}
-		}
-
 		/// <summary>
 		/// Get accumulated ticks.
 		/// </summary>
 		/// <returns>Ticks.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTicks()
-		{
-			return _ticksBuffer.Get();
-		}
+			=> _ticksBuffer.Get();
 
 		/// <summary>
 		/// Get accumulated order log.
 		/// </summary>
 		/// <returns>Order log.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetOrderLog()
-		{
-			return _orderLogBuffer.Get();
-		}
+			=> _orderLogBuffer.Get();
 
 		/// <summary>
 		/// Get accumulated transactions.
 		/// </summary>
 		/// <returns>Transactions.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTransactions()
-		{
-			return _transactionsBuffer.Get();
-		}
+			=> _transactionsBuffer.Get();
 
 		/// <summary>
 		/// Get accumulated candles.
 		/// </summary>
 		/// <returns>Candles.</returns>
 		public IDictionary<Tuple<SecurityId, Type, object>, IEnumerable<CandleMessage>> GetCandles()
-		{
-			return _candleBuffer.Get();
-		}
+			=> _candleBuffer.Get();
 
 		/// <summary>
 		/// Get accumulated level1.
 		/// </summary>
 		/// <returns>Level1.</returns>
 		public IDictionary<SecurityId, IEnumerable<Level1ChangeMessage>> GetLevel1()
-		{
-			return _level1Buffer.Get();
-		}
+			=> _level1Buffer.Get();
 
 		/// <summary>
 		/// Get accumulated position changes.
 		/// </summary>
 		/// <returns>Position changes.</returns>
 		public IDictionary<SecurityId, IEnumerable<PositionChangeMessage>> GetPositionChanges()
-		{
-			return _positionChangesBuffer.Get();
-		}
+			=> _positionChangesBuffer.Get();
 
 		/// <summary>
 		/// Get accumulated order books.
 		/// </summary>
 		/// <returns>Order books.</returns>
 		public IDictionary<SecurityId, IEnumerable<QuoteChangeMessage>> GetOrderBooks()
-		{
-			return _orderBooksBuffer.Get();
-		}
+			=> _orderBooksBuffer.Get();
 
 		/// <summary>
 		/// Get accumulated news.
 		/// </summary>
 		/// <returns>News.</returns>
 		public IEnumerable<NewsMessage> GetNews()
-		{
-			return _newsBuffer.SyncGet(c => c.CopyAndClear());
-		}
+			=> _newsBuffer.SyncGet(c => c.CopyAndClear());
 
 		private bool CanStore(ISubscriptionIdMessage message)
 		{
