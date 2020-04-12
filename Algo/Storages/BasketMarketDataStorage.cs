@@ -172,12 +172,8 @@ namespace StockSharp.Algo.Storages
 			{
 				if (transactionId > 0)
 				{
-					if (message is CandleMessage candleMsg)
-						candleMsg.OriginalTransactionId = transactionId;
-					//else if (message is ExecutionMessage execMsg && execMsg.ExecutionType != ExecutionTypes.Transaction)
-					//	execMsg.OriginalTransactionId = transactionId;
-					else if (message is NewsMessage newsMsg)
-						newsMsg.OriginalTransactionId = transactionId;
+					if (message is ISubscriptionIdMessage subscrMsg)
+						subscrMsg.SetSubscriptionIds(subscriptionId: transactionId);
 				}
 
 				return (TMessage)message;

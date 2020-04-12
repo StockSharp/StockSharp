@@ -382,7 +382,7 @@ namespace SampleHistoryTesting
 					SecurityId = secId,
 					ServerTime = startTime,
 				}
-				.TryAdd(Level1Fields.PriceStep, secCode == "RIZ2" ? 10m : 1)
+				.TryAdd(Level1Fields.PriceStep, secCode == "RIZ2" ? 10m : 0.05m)
 				.TryAdd(Level1Fields.StepPrice, 6m)
 				.TryAdd(Level1Fields.MinPrice, 10m)
 				.TryAdd(Level1Fields.MaxPrice, 1000000m)
@@ -400,15 +400,12 @@ namespace SampleHistoryTesting
 				{
 					EmulationAdapter =
 					{
-						Emulator =
+						Settings =
 						{
-							Settings =
-							{
-								// match order if historical price touched our limit order price. 
-								// It is terned off, and price should go through limit order price level
-								// (more "severe" test mode)
-								MatchOnTouch = false,
-							}
+							// match order if historical price touched our limit order price. 
+							// It is terned off, and price should go through limit order price level
+							// (more "severe" test mode)
+							MatchOnTouch = false,
 						}
 					},
 
@@ -483,12 +480,12 @@ namespace SampleHistoryTesting
 				if (emulationInfo.CustomHistoryAdapter != null)
 				{
 					connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
-					connector.Adapter.InnerAdapters.Add(new CustomHistoryMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), secProvider));
+					connector.Adapter.InnerAdapters.Add(new EmulationMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), new PassThroughMessageChannel(), new PassThroughMessageChannel()));
 				}
 
 				// set history range
-				connector.HistoryMessageAdapterEx.StartDate = startTime;
-				connector.HistoryMessageAdapterEx.StopDate = stopTime;
+				connector.HistoryMessageAdapter.StartDate = startTime;
+				connector.HistoryMessageAdapter.StopDate = stopTime;
 
 				connector.NewSecurity += s =>
 				{
@@ -496,7 +493,7 @@ namespace SampleHistoryTesting
 						return;
 
 					// fill level1 values
-					connector.HistoryMessageAdapterEx.SendOutMessage(level1Info);
+					connector.EmulationAdapter.SendInMessage(level1Info);
 
 					if (emulationInfo.UseMarketDepth)
 					{
@@ -643,7 +640,6 @@ namespace SampleHistoryTesting
 
 					connector.NewMessage += message =>
 					{
-
 						if (message is QuoteChangeMessage quoteMsg)
 							MarketDepth.UpdateDepth(quoteMsg);
 					};

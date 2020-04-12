@@ -15,26 +15,39 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
-	using System;
+    using System;
+    using System.Linq;
 
-	/// <summary>
-	/// The base connection of emulation.
-	/// </summary>
-	public abstract class BaseEmulationConnector : Connector
+    using Ecng.Serialization;
+
+    using StockSharp.BusinessEntities;
+	using StockSharp.Algo.Storages;
+
+    /// <summary>
+    /// The base connection of emulation.
+    /// </summary>
+    public abstract class BaseEmulationConnector : Connector
 	{
 		/// <summary>
-		/// Initialize <see cref="BaseEmulationConnector"/>.
+		/// Initializes a new instance of the <see cref="BaseEmulationConnector"/>.
 		/// </summary>
-		protected BaseEmulationConnector()
+		/// <param name="emulationAdapter">Emulation message adapter.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		public BaseEmulationConnector(EmulationMessageAdapter emulationAdapter, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
 		{
-			EmulationAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(EmulationAdapter);
+			Adapter.ApplyHeartbeat(EmulationAdapter, EmulationAdapter.OwnInnerAdapter);
+
 			TimeChange = false;
+
+			EntityFactory = new StorageEntityFactory(securityProvider ?? throw new ArgumentNullException(nameof(securityProvider)), portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider)));
 		}
 
 		/// <summary>
 		/// The adapter, executing messages in <see cref="IMarketEmulator"/>.
 		/// </summary>
-		public EmulationMessageAdapter EmulationAdapter { get; }
+		public EmulationMessageAdapter EmulationAdapter => (EmulationMessageAdapter)Adapter.InnerAdapters.First();
 
 		private void SendInGeneratorMessage(MarketDataGenerator generator, bool isSubscribe)
 		{
@@ -49,6 +62,33 @@ namespace StockSharp.Algo.Testing
 				Generator = generator,
 				DataType = generator.DataType,
 			});
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			if (EmulationAdapter.OwnInnerAdapter)
+				EmulationAdapter.Load(storage.GetValue<SettingsStorage>(nameof(EmulationAdapter)));
+
+			base.Load(storage);
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			if (EmulationAdapter.OwnInnerAdapter)
+				storage.SetValue(nameof(EmulationAdapter), EmulationAdapter.Save());
+
+			base.Save(storage);
+		}
+
+		/// <inheritdoc />
+		protected override void DisposeManaged()
+		{
+			if (EmulationAdapter.OwnInnerAdapter)
+				EmulationAdapter.Dispose();
+
+			base.DisposeManaged();
 		}
 
 		/// <summary>

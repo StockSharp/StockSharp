@@ -124,8 +124,9 @@ namespace SampleRealTimeEmulation
 			_emuConnector = new RealTimeEmulationTrader<IMessageAdapter>(_realConnector.Adapter, _realConnector, _emuPf, false);
 			_logManager.Sources.Add(_emuConnector);
 
-			_emuConnector.EmulationAdapter.Emulator.Settings.TimeZone = TimeHelper.Est;
-			_emuConnector.EmulationAdapter.Emulator.Settings.ConvertTime = true;
+			var settings = _emuConnector.EmulationAdapter.Emulator.Settings;
+			settings.TimeZone = TimeHelper.Est;
+			settings.ConvertTime = true;
 
 			SecurityPicker.MarketDataProvider = _emuConnector;
 

@@ -705,7 +705,7 @@ namespace StockSharp.Algo
 
 			if (adapter is IMessageAdapterWrapper wrapper)
 			{
-				return wrapper is IRealTimeEmulationMarketDataAdapter || wrapper is IHistoryMessageAdapter
+				return wrapper is IEmulationMessageAdapter || wrapper is HistoryMessageAdapter
 					? wrapper
 					: GetUnderlyingAdapter(wrapper.InnerAdapter);
 			}
