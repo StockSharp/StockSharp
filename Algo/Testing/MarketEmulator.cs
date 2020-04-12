@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Testing
 	}
 
 	/// <summary>
-	/// Paper trading.
+	/// Emulator.
 	/// </summary>
 	public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
@@ -133,7 +133,6 @@ namespace StockSharp.Algo.Testing
 			private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = new Dictionary<ExecutionMessage, TimeSpan>();
 			private DateTimeOffset _prevTime;
 			private readonly ExecutionLogConverter _execLogConverter;
-			private SecurityMessage _securityDefinition;
 			private int _volumeDecimals;
 			private readonly SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>> _candleInfo = new SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>>();
 			private TradeGenerator _tradeGenerator;
@@ -153,6 +152,8 @@ namespace StockSharp.Algo.Testing
 				_securityId = securityId;
 				_execLogConverter = new ExecutionLogConverter(securityId, _bids, _asks, _parent.Settings, GetServerTime);
 			}
+
+			private SecurityMessage _securityDefinition;
 
 			public SecurityMessage SecurityDefinition => _securityDefinition;
 
@@ -1728,6 +1729,11 @@ namespace StockSharp.Algo.Testing
 		public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
 
 		/// <summary>
+		/// The number of processed messages.
+		/// </summary>
+		public long ProcessedMessageCount { get; private set; }
+
+		/// <summary>
 		/// The generator of identifiers for orders.
 		/// </summary>
 		public IncrementalIdGenerator OrderIdGenerator { get; set; } = new IncrementalIdGenerator();
@@ -1833,6 +1839,8 @@ namespace StockSharp.Algo.Testing
 
 					_bufferPrevFlush = default;
 					_portfoliosPrevRecalc = default;
+
+					ProcessedMessageCount = 0;
 
 					retVal.Add(new ResetMessage());
 					break;
@@ -2039,6 +2047,9 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 			}
+
+			if (message.Type != MessageTypes.Reset)
+				ProcessedMessageCount++;
 
 			RecalcPnL(message.LocalTime, retVal);
 

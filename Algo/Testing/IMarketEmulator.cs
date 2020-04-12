@@ -27,5 +27,10 @@ namespace StockSharp.Algo.Testing
 		/// Emulator settings.
 		/// </summary>
 		MarketEmulatorSettings Settings { get; }
+
+		/// <summary>
+		/// The number of processed messages.
+		/// </summary>
+		long ProcessedMessageCount { get; }
 	}
 }
