@@ -199,8 +199,8 @@ namespace SampleRealTimeEmulation
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_realConnector?.Dispose();
-			_emuConnector?.Dispose();
+			_realConnector?.Disconnect();
+			_emuConnector?.Disconnect();
 
 			base.OnClosing(e);
 		}
