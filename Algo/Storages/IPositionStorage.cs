@@ -5,7 +5,7 @@
 	/// <summary>
 	/// The interface for access to the position storage.
 	/// </summary>
-	public interface IPositionStorage : IPositionProvider, IPortfolioProvider
+	public interface IPositionStorage : IPositionProvider
 	{
 		/// <summary>
 		/// Save portfolio.

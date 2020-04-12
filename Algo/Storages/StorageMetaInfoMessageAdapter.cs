@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var portfolioMsg = (PortfolioMessage)message;
 
-					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
+					var portfolio = _positionStorage.LookupByPortfolioName(portfolioMsg.PortfolioName) ?? new Portfolio
 					{
 						Name = portfolioMsg.PortfolioName
 					};
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Storages
 
 					if (positionMsg.IsMoney())
 					{
-						var portfolio = _positionStorage.GetPortfolio(positionMsg.PortfolioName) ?? new Portfolio
+						var portfolio = _positionStorage.LookupByPortfolioName(positionMsg.PortfolioName) ?? new Portfolio
 						{
 							Name = positionMsg.PortfolioName
 						};
@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Storages
 			if (security == null)
 				return null;
 
-			var portfolio = _positionStorage.GetPortfolio(portfolioName);
+			var portfolio = _positionStorage.LookupByPortfolioName(portfolioName);
 
 			if (portfolio == null)
 			{

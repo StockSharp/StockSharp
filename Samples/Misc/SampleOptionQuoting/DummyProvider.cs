@@ -4,6 +4,8 @@ namespace SampleOptionQuoting
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
+
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -250,6 +252,8 @@ namespace SampleOptionQuoting
 
 		IEnumerable<Position> IPositionProvider.Positions => _positions;
 
+		IEnumerable<Portfolio> IPortfolioProvider.Portfolios => _positions.OfType<Portfolio>();
+
 		event Action<Position> IPositionProvider.NewPosition
 		{
 			add { }
@@ -257,6 +261,18 @@ namespace SampleOptionQuoting
 		}
 
 		event Action<Position> IPositionProvider.PositionChanged
+		{
+			add { }
+			remove { }
+		}
+
+		event Action<Portfolio> IPortfolioProvider.NewPortfolio
+		{
+			add { }
+			remove { }
+		}
+
+		event Action<Portfolio> IPortfolioProvider.PortfolioChanged
 		{
 			add { }
 			remove { }
@@ -273,6 +289,11 @@ namespace SampleOptionQuoting
 
 		void IPositionProvider.UnSubscribePositions(long originalTransactionId)
 		{
+		}
+
+		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)
+		{
+			return _positions.OfType<Portfolio>().FirstOrDefault(p => p.Name.CompareIgnoreCase(name));
 		}
 	}
 }

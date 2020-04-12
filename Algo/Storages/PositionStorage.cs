@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Storages
 			remove => throw new NotSupportedException();
 		}
 
-		Portfolio IPortfolioProvider.GetPortfolio(string portfolioName)
+		Portfolio IPortfolioProvider.LookupByPortfolioName(string portfolioName)
 		{
 			return _entityRegistry.Portfolios.ReadById(portfolioName);
 		}

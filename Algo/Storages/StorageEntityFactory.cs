@@ -24,33 +24,45 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class StorageEntityFactory : EntityFactory
 	{
-		private readonly ISecurityStorage _securityStorage;
-		private readonly IPositionStorage _positionStorage;
+		private readonly ISecurityProvider _securityProvider;
+		private readonly IPositionProvider _positionStorage;
+		private readonly IPortfolioProvider _portfolioProvider;
 		private readonly bool _trackPositions;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageEntityFactory"/>.
 		/// </summary>
-		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="positionStorage">Position storage.</param>
 		/// <param name="trackPositions">Track positions.</param>
-		public StorageEntityFactory(ISecurityStorage securityStorage, IPositionStorage positionStorage, bool trackPositions)
+		public StorageEntityFactory(ISecurityProvider securityProvider, IPositionProvider positionStorage, bool trackPositions)
+			: this(securityProvider, positionStorage)
 		{
-			_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 			_positionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 			_trackPositions = trackPositions;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StorageEntityFactory"/>.
+		/// </summary>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		public StorageEntityFactory(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
+		{
+			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
+			_portfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
 		}
 
 		/// <inheritdoc />
 		public override Security CreateSecurity(string id)
 		{
-			return _securityStorage.LookupById(id) ?? base.CreateSecurity(id);
+			return _securityProvider.LookupById(id) ?? base.CreateSecurity(id);
 		}
 
 		/// <inheritdoc />
 		public override Portfolio CreatePortfolio(string name)
 		{
-			return _positionStorage.GetPortfolio(name) ?? base.CreatePortfolio(name);
+			return _portfolioProvider.LookupByPortfolioName(name) ?? base.CreatePortfolio(name);
 		}
 
 		/// <inheritdoc />
