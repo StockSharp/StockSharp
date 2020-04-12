@@ -1009,10 +1009,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Portfolio GetPortfolio(string name)
-		{
-			return GetPortfolio(name, null, out _);
-		}
+		public Portfolio LookupByPortfolioName(string name) => GetPortfolio(name, null, out _);
+
+		/// <inheritdoc />
+		public Portfolio GetPortfolio(string name) => LookupByPortfolioName(name);
 
 		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio, out bool isNew)
 		{
@@ -1086,7 +1086,7 @@ namespace StockSharp.Algo
 			else
 			{
 				var security = EnsureGetSecurity(message);
-				portfolio = GetPortfolio(message.PortfolioName);
+				portfolio = LookupByPortfolioName(message.PortfolioName);
 
 				var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
 				if (valueInLots != null)
