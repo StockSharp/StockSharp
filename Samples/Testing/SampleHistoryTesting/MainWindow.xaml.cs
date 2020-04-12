@@ -59,7 +59,7 @@ namespace SampleHistoryTesting
 
 		private readonly List<ProgressBar> _progressBars = new List<ProgressBar>();
 		private readonly List<CheckBox> _checkBoxes = new List<CheckBox>();
-		private readonly List<HistoryEmulationConnector> _connectors = new List<HistoryEmulationConnector>();
+		private readonly CachedSynchronizedList<HistoryEmulationConnector> _connectors = new CachedSynchronizedList<HistoryEmulationConnector>();
 		
 		private DateTime _startEmulationTime;
 		private ChartCandleElement _candlesElem;
@@ -130,7 +130,7 @@ namespace SampleHistoryTesting
 		{
 			if (_connectors.Count > 0)
 			{
-				foreach (var connector in _connectors)
+				foreach (var connector in _connectors.Cache)
 					connector.Start();
 
 				return;
@@ -653,7 +653,7 @@ namespace SampleHistoryTesting
 			_startEmulationTime = DateTime.Now;
 
 			// start emulation
-			foreach (var connector in _connectors)
+			foreach (var connector in _connectors.Cache)
 			{
 				// raise NewSecurities and NewPortfolio for full fill strategy properties
 				connector.Connect();
@@ -678,7 +678,7 @@ namespace SampleHistoryTesting
 
 		private void StopBtnClick(object sender, RoutedEventArgs e)
 		{
-			foreach (var connector in _connectors)
+			foreach (var connector in _connectors.Cache)
 			{
 				connector.Disconnect();
 			}
@@ -686,7 +686,7 @@ namespace SampleHistoryTesting
 
 		private void PauseBtnClick(object sender, RoutedEventArgs e)
 		{
-			foreach (var connector in _connectors)
+			foreach (var connector in _connectors.Cache)
 			{
 				connector.Suspend();
 			}
