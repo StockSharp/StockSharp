@@ -30,16 +30,15 @@ namespace StockSharp.Algo.Testing
 		private readonly SyncObject _moveNextSyncRoot = new SyncObject();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
-		private readonly IdGenerator _transactionIdGenerator;
 		private readonly BasketMarketDataStorage<Message> _basketStorage;
 
 		private CancellationTokenSource _cancellationToken;
 
-		private bool _isInitialized;
 		private bool _isChanged;
-		private bool _isTimeLineAdded;
 
 		private bool _isSuspended;
+		private SyncObject _suspendLock = new SyncObject();
+
 		private bool _isStarted;
 
 		/// <summary>
@@ -127,11 +126,6 @@ namespace StockSharp.Algo.Testing
 				.Distinct();
 
 			_basketStorage = new BasketMarketDataStorage<Message>();
-			//_basketStorage = new CachedBasketMarketDataStorage<Message>(transactionIdGenerator)
-			//{
-			//	Boards = Enumerable.Empty<ExchangeBoard>(),
-			//	Parent = this
-			//};
 
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
@@ -249,13 +243,14 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Reset:
 				{
 					_isSuspended = false;
+					_suspendLock.Pulse();
+
 					_currentTime = default;
 
 					_generators.Clear();
 					_historySources.Clear();
 
                     _currentTime = DateTimeOffset.MinValue;
-					_isTimeLineAdded = false;
 					_basketStorage.InnerStorages.Clear();
 					
 					LoadedMessageCount = 0;
@@ -280,6 +275,8 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Disconnect:
 				{
 					_isSuspended = false;
+					_suspendLock.Pulse();
+
 					_isStarted = false;
 
 					SendOutMessage(new DisconnectMessage { LocalTime = StopDate });
@@ -334,7 +331,10 @@ namespace StockSharp.Algo.Testing
 						case EmulationStates.Starting:
 						{
 							if (_isStarted)
+							{
 								_isSuspended = false;
+								_suspendLock.Pulse();
+							}
 							else
 							{
 								_isStarted = true;
@@ -354,6 +354,8 @@ namespace StockSharp.Algo.Testing
 						case EmulationStates.Stopping:
 						{
 							_isSuspended = false;
+							_suspendLock.Pulse();
+
 							Stop();
 							break;
 						}
@@ -392,8 +394,6 @@ namespace StockSharp.Algo.Testing
 			}
 
 			return true;
-
-			//SendOutMessage(message);
 		}
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
@@ -409,7 +409,6 @@ namespace StockSharp.Algo.Testing
 				_isChanged = true;
 				_actions.Add(Tuple.Create(storage, transactionId));
 
-				//_messageQueue.Close();
 				_syncRoot.PulseSignal();
 			}
 
@@ -421,7 +420,6 @@ namespace StockSharp.Algo.Testing
 				_isChanged = true;
 				_actions.Add(Tuple.Create((IMarketDataStorage)null, originalTransactionId));
 
-				//_messageQueue.Close();
 				_syncRoot.PulseSignal();
 			}
 
@@ -611,10 +609,7 @@ namespace StockSharp.Algo.Testing
 						while (!IsDisposed && !token.IsCancellationRequested)
 						{
 							_syncRoot.WaitSignal();
-							//_messageQueue.Clear();
-							//_messageQueue.Open();
 
-							_isInitialized = true;
 							_isChanged = false;
 
 							_moveNextSyncRoot.PulseSignal();
@@ -657,8 +652,6 @@ namespace StockSharp.Algo.Testing
 
 							if (!_isChanged)
 								SendOutMessage(new LastMessage { LocalTime = stopDate });
-
-							_isInitialized = false;
 						}
 					}
 					catch (Exception ex)
@@ -689,6 +682,9 @@ namespace StockSharp.Algo.Testing
 			{
 				if (_isChanged || token.IsCancellationRequested)
 					break;
+
+				while (_isSuspended)
+					_suspendLock.Wait();
 
 				var serverTime = msg.GetServerTime();
 
@@ -840,7 +836,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		/// <inheritdoc cref="MessageAdapter" />
+		/// <inheritdoc />
 		protected override void SendOutMessage(Message message)
 		{
 			LoadedMessageCount++;

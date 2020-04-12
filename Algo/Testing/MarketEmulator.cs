@@ -197,7 +197,7 @@ namespace StockSharp.Algo.Testing
 								foreach (var m in _execLogConverter.ToExecutionLog(execMsg))
 									Process(m, result);
 
-								//result.Add(execMsg);
+								result.Add(execMsg);
 
 								result.Add(CreateQuoteMessage(
 									execMsg.SecurityId,

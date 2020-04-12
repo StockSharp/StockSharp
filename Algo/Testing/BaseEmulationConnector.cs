@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		public BaseEmulationConnector(EmulationMessageAdapter emulationAdapter, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
 		{
-			Adapter.InnerAdapters.Add(EmulationAdapter);
+			Adapter.InnerAdapters.Add(emulationAdapter ?? throw new ArgumentNullException(nameof(emulationAdapter)));
 			Adapter.ApplyHeartbeat(EmulationAdapter, EmulationAdapter.OwnInnerAdapter);
 
 			TimeChange = false;
