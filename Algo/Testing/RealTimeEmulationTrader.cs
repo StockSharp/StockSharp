@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, bool ownAdapter = true)
-			: base(new EmulationMessageAdapter(underlyngMarketDataAdapter, new InMemoryMessageChannel(new MessageByOrderQueue(), "Emulator In", err => err.LogError()), new InMemoryMessageChannel(new MessageByOrderQueue(), "Emulator Out", err => err.LogError())) { OwnInnerAdapter = ownAdapter }, securityProvider, portfolioProvider)
+			: base(new EmulationMessageAdapter(underlyngMarketDataAdapter, new MessageByOrderQueue(), false) { OwnInnerAdapter = ownAdapter }, securityProvider, portfolioProvider)
 		{
 			UpdateSecurityByLevel1 = false;
 			UpdateSecurityLastQuotes = false;

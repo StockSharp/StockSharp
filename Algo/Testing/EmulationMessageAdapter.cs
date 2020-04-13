@@ -43,17 +43,17 @@ namespace StockSharp.Algo.Testing
 		private readonly SynchronizedSet<long> _realSubscribeIds = new SynchronizedSet<long>();
 		private readonly SynchronizedSet<long> _emuOrderIds = new SynchronizedSet<long>();
 
-		private readonly IMessageAdapter _channelEmulator;
-		private readonly IMessageChannel _inputChannel;
-		private readonly IMessageChannel _outputChannel;
+		private readonly ChannelMessageAdapter _channelEmulator;
+		private readonly IMessageQueue _queue;
+		private readonly bool _sendTimeToEmulator;
 
 		/// <summary>
 		/// Initialize <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		/// <param name="inputChannel">Incoming messages channel.</param>
-		/// <param name="outputChannel">Outgoing message channel.</param>
-		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inputChannel, IMessageChannel outputChannel)
+		/// <param name="queue">Message queue.</param>
+		/// <param name="sendTimeToEmulator">Send <see cref="TimeMessage"/> to emulator.</param>
+		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageQueue queue, bool sendTimeToEmulator)
 			: base(innerAdapter)
 		{
 			Emulator = new MarketEmulator
@@ -68,11 +68,10 @@ namespace StockSharp.Algo.Testing
 				}
 			};
 
-			_inputChannel = inputChannel;
-			_outputChannel = outputChannel;
-
-			_channelEmulator = new ChannelMessageAdapter(new SubscriptionOnlineMessageAdapter(Emulator), inputChannel, outputChannel);
+			_channelEmulator = new ChannelMessageAdapter(new SubscriptionOnlineMessageAdapter(Emulator), new InMemoryMessageChannel(queue, "Emulator in", err => RaiseNewOutMessage(new ErrorMessage { Error = err })), new PassThroughMessageChannel());
 			_channelEmulator.NewOutMessage += OnMarketEmulatorNewOutMessage;
+			_queue = queue;
+			_sendTimeToEmulator = sendTimeToEmulator;
 		}
 
 		/// <summary>
@@ -267,6 +266,53 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
+				case ExtendedMessageTypes.Last:
+					SendToEmulator(message);
+					break;
+
+				case ExtendedMessageTypes.EmulationState:
+				{
+					var stateMsg = (EmulationStateMessage)message;
+
+					switch (stateMsg.State)
+					{
+						case EmulationStates.Suspending:
+						case EmulationStates.Starting:
+						case EmulationStates.Stopping:
+							break;
+						case EmulationStates.Suspended:
+							_channelEmulator.InputChannel.Suspend();
+							break;
+						case EmulationStates.Stopped:
+							_channelEmulator.InputChannel.Close();
+							_channelEmulator.InputChannel.Resume();
+							break;
+						case EmulationStates.Started:
+							_channelEmulator.InputChannel.Resume();
+							break;
+						default:
+							throw new ArgumentOutOfRangeException(stateMsg.State.ToString());
+					}
+
+					if (OwnInnerAdapter)
+						base.OnInnerAdapterNewOutMessage(message);
+
+					break;
+				}
+
+				case MessageTypes.Time:
+				{
+					if (OwnInnerAdapter)
+					{
+						if (_sendTimeToEmulator)
+							SendToEmulator(message);
+						else
+							base.OnInnerAdapterNewOutMessage(message);
+					}
+
+					break;
+				}
+
 				default:
 				{
 					if (message is ISubscriptionIdMessage subscrMsg)
@@ -389,6 +435,6 @@ namespace StockSharp.Algo.Testing
 		/// Create a copy of <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone() => new EmulationMessageAdapter(InnerAdapter.TypedClone(), _inputChannel.TypedClone(), _outputChannel.TypedClone());
+		public override IMessageChannel Clone() => new EmulationMessageAdapter(InnerAdapter.TypedClone(), _queue, _sendTimeToEmulator);
 	}
 }

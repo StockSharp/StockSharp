@@ -415,7 +415,7 @@ namespace StockSharp.Algo.Strategies.Testing
 				portfolio.Name += "_" + ++id;
 				portfolios.Add(portfolio);
 				
-				var strategyAdapter = new EmulationMessageAdapter(EmulationConnector.MarketDataAdapter, new PassThroughMessageChannel(), new PassThroughMessageChannel());
+				var strategyAdapter = new EmulationMessageAdapter(EmulationConnector.MarketDataAdapter, new MessageByLocalTimeQueue(), true);
 				strategyAdapter.Settings.Load(EmulationSettings.Save());
 
 				adapter.InnerAdapters.Add(strategyAdapter);

@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
 		public HistoryEmulationConnector(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
-			: base(new EmulationMessageAdapter(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider), new PassThroughMessageChannel(), new PassThroughMessageChannel()) { OwnInnerAdapter = true }, securityProvider, new CollectionPortfolioProvider(portfolios))
+			: base(new EmulationMessageAdapter(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider), new MessageByLocalTimeQueue(), true) { OwnInnerAdapter = true }, securityProvider, new CollectionPortfolioProvider(portfolios))
 		{
 			if (securityProvider == null)
 				throw new ArgumentNullException(nameof(securityProvider));
@@ -258,8 +258,8 @@ namespace StockSharp.Algo.Testing
 						break;
 					}
 
-					case ExtendedMessageTypes.Clearing:
-						break;
+					//case ExtendedMessageTypes.Clearing:
+					//	break;
 
 					case ExtendedMessageTypes.EmulationState:
 						ProcessEmulationStateMessage(((EmulationStateMessage)message).State);

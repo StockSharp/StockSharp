@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Testing
 		private bool _isChanged;
 
 		private bool _isSuspended;
-		private SyncObject _suspendLock = new SyncObject();
+		private readonly SyncObject _suspendLock = new SyncObject();
 
 		private bool _isStarted;
 
@@ -603,7 +603,7 @@ namespace StockSharp.Algo.Testing
 				{
 					try
 					{
-						var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
+						var messageTypes = new[] { MessageTypes.Time/*, ExtendedMessageTypes.Clearing*/ };
 						var token = _cancellationToken.Token;
 
 						while (!IsDisposed && !token.IsCancellationRequested)

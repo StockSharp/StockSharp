@@ -480,7 +480,7 @@ namespace SampleHistoryTesting
 				if (emulationInfo.CustomHistoryAdapter != null)
 				{
 					connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
-					connector.Adapter.InnerAdapters.Add(new EmulationMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), new PassThroughMessageChannel(), new PassThroughMessageChannel()));
+					connector.Adapter.InnerAdapters.Add(new EmulationMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), new MessageByLocalTimeQueue(), true));
 				}
 
 				// set history range
