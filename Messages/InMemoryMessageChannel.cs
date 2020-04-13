@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Globalization;
+	using System.Threading;
 
 	using Ecng.Common;
 
@@ -96,6 +97,8 @@ namespace StockSharp.Messages
 			_queue.Open();
 			StateChanged?.Invoke();
 
+			var version = Interlocked.Increment(ref _version);
+
 			ThreadingHelper
 				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
@@ -104,12 +107,18 @@ namespace StockSharp.Messages
 						try
 						{
 							if (!_queue.TryDequeue(out var message))
-							{
 								break;
-							}
 
 							if (_isSuspended)
+							{
 								_suspendLock.Wait();
+
+								if (!IsOpened)
+									break;
+							}
+
+							if (_version != version)
+								break;
 
 							_msgStat.Remove(message);
 							NewOutMessage?.Invoke(message);
@@ -132,6 +141,7 @@ namespace StockSharp.Messages
 		public void Close()
 		{
 			_queue.Close();
+			_queue.Clear();
 		}
 
 		void IMessageChannel.Suspend()
