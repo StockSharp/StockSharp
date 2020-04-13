@@ -280,6 +280,14 @@ namespace StockSharp.Messages
 		{
 		}
 
+		void IMessageChannel.Suspend()
+		{
+		}
+
+		void IMessageChannel.Resume()
+		{
+		}
+
 		event Action IMessageChannel.StateChanged
 		{
 			add { }

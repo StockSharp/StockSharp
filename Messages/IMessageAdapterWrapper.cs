@@ -131,6 +131,16 @@ namespace StockSharp.Messages
 			InnerAdapter.Close();
 		}
 
+		void IMessageChannel.Suspend()
+		{
+			InnerAdapter.Suspend();
+		}
+
+		void IMessageChannel.Resume()
+		{
+			InnerAdapter.Resume();
+		}
+
 		event Action IMessageChannel.StateChanged
 		{
 			add => InnerAdapter.StateChanged += value;

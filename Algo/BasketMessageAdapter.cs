@@ -1916,6 +1916,14 @@ namespace StockSharp.Algo
 		{
 		}
 
+		void IMessageChannel.Suspend()
+		{
+		}
+
+		void IMessageChannel.Resume()
+		{
+		}
+
 		event Action IMessageChannel.StateChanged
 		{
 			add { }

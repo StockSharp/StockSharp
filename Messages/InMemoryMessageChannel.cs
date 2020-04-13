@@ -38,6 +38,11 @@ namespace StockSharp.Messages
 		private readonly IMessageQueue _queue;
 		private readonly Action<Exception> _errorHandler;
 
+		private bool _isSuspended;
+		private readonly SyncObject _suspendLock = new SyncObject();
+
+		private int _version;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryMessageChannel"/>.
 		/// </summary>
@@ -103,6 +108,9 @@ namespace StockSharp.Messages
 								break;
 							}
 
+							if (_isSuspended)
+								_suspendLock.Wait();
+
 							_msgStat.Remove(message);
 							NewOutMessage?.Invoke(message);
 						}
@@ -124,6 +132,17 @@ namespace StockSharp.Messages
 		public void Close()
 		{
 			_queue.Close();
+		}
+
+		void IMessageChannel.Suspend()
+		{
+			_isSuspended = true;
+		}
+
+		void IMessageChannel.Resume()
+		{
+			_isSuspended = false;
+			_suspendLock.Pulse();
 		}
 
 		/// <inheritdoc />

@@ -45,6 +45,16 @@ namespace StockSharp.Messages
 		void Close();
 
 		/// <summary>
+		/// Suspend.
+		/// </summary>
+		void Suspend();
+
+		/// <summary>
+		/// Resume.
+		/// </summary>
+		void Resume();
+
+		/// <summary>
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
@@ -86,6 +96,14 @@ namespace StockSharp.Messages
 		}
 
 		void IMessageChannel.Close()
+		{
+		}
+
+		void IMessageChannel.Suspend()
+		{
+		}
+
+		void IMessageChannel.Resume()
 		{
 		}
 

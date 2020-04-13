@@ -1337,6 +1337,14 @@ namespace StockSharp.Algo
 			Disconnect();
 		}
 
+		void IMessageChannel.Suspend()
+		{
+		}
+
+		void IMessageChannel.Resume()
+		{
+		}
+
 		IMessageChannel ICloneable<IMessageChannel>.Clone()
 		{
 			return this.Clone();

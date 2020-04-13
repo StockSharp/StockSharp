@@ -2271,6 +2271,7 @@ namespace StockSharp.Algo.Testing
 			MessageTypes.Board.ToInfo(),
 			MessageTypes.Reset.ToInfo(),
 			MessageTypes.QuoteChange.ToInfo(),
+			ExtendedMessageTypes.Last.ToInfo(),
 			ExtendedMessageTypes.Generator.ToInfo(),
 			ExtendedMessageTypes.CommissionRule.ToInfo(),
 			//ExtendedMessageTypes.Clearing.ToInfo(),
@@ -2343,6 +2344,14 @@ namespace StockSharp.Algo.Testing
 		}
 
 		void IMessageChannel.Close()
+		{
+		}
+
+		void IMessageChannel.Suspend()
+		{
+		}
+
+		void IMessageChannel.Resume()
 		{
 		}
 
