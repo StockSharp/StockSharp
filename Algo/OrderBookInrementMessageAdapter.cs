@@ -137,7 +137,7 @@
 		{
 			var currState = info.State;
 
-			if (currState != newState)
+			void CheckSwitch()
 			{
 				switch (currState)
 				{
@@ -145,23 +145,14 @@
 					case QuoteChangeStates.SnapshotStarted:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-						{
 							this.AddDebugLog($"{currState}->{newState}");
-							return null;
-						}
-
-						info.Bids.Clear();
-						info.Asks.Clear();
 
 						break;
 					}
 					case QuoteChangeStates.SnapshotBuilding:
 					{
 						if (newState != QuoteChangeStates.SnapshotComplete)
-						{
 							this.AddDebugLog($"{currState}->{newState}");
-							return null;
-						}
 
 						break;
 					}
@@ -169,13 +160,38 @@
 					case QuoteChangeStates.Increment:
 					{
 						if (newState == QuoteChangeStates.SnapshotBuilding)
-						{
 							this.AddDebugLog($"{currState}->{newState}");
-							return null;
-						}
 
 						break;
 					}
+				}
+			}
+
+			if (currState != newState)
+			{
+				CheckSwitch();
+
+				switch (currState)
+				{
+					case _none:
+					case QuoteChangeStates.SnapshotStarted:
+					{
+						info.Bids.Clear();
+						info.Asks.Clear();
+
+						break;
+					}
+					case QuoteChangeStates.SnapshotBuilding:
+						break;
+					case QuoteChangeStates.SnapshotComplete:
+					{
+						info.Bids.Clear();
+						info.Asks.Clear();
+
+						break;
+					}
+					case QuoteChangeStates.Increment:
+						break;
 					default:
 						throw new ArgumentOutOfRangeException(currState.ToString());
 				}
