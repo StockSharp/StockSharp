@@ -15,10 +15,10 @@
 		/// </summary>
 		public const MessageTypes Last = (MessageTypes)(-1);
 
-		/// <summary>
-		/// <see cref="ClearingMessage"/>.
-		/// </summary>
-		public const MessageTypes Clearing = (MessageTypes)(-2);
+		///// <summary>
+		///// <see cref="ClearingMessage"/>.
+		///// </summary>
+		//public const MessageTypes Clearing = (MessageTypes)(-2);
 
 		/// <summary>
 		/// <see cref="EmulationStateMessage"/>.

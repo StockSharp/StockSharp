@@ -1846,26 +1846,26 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case ExtendedMessageTypes.Clearing:
-				{
-					var clearingMsg = (ClearingMessage)message;
-					var emu = _securityEmulators.TryGetValue(clearingMsg.SecurityId);
+				//case ExtendedMessageTypes.Clearing:
+				//{
+				//	var clearingMsg = (ClearingMessage)message;
+				//	var emu = _securityEmulators.TryGetValue(clearingMsg.SecurityId);
 
-					if (emu != null)
-					{
-						_securityEmulators.Remove(clearingMsg.SecurityId);
+				//	if (emu != null)
+				//	{
+				//		_securityEmulators.Remove(clearingMsg.SecurityId);
 
-						var emulators = _securityEmulatorsByBoard.TryGetValue(clearingMsg.SecurityId.BoardCode);
+				//		var emulators = _securityEmulatorsByBoard.TryGetValue(clearingMsg.SecurityId.BoardCode);
 
-						if (emulators != null)
-						{
-							if (emulators.Remove(emu) && emulators.Count == 0)
-								_securityEmulatorsByBoard.Remove(clearingMsg.SecurityId.BoardCode);
-						}
-					}
+				//		if (emulators != null)
+				//		{
+				//			if (emulators.Remove(emu) && emulators.Count == 0)
+				//				_securityEmulatorsByBoard.Remove(clearingMsg.SecurityId.BoardCode);
+				//		}
+				//	}
 
-					break;
-				}
+				//	break;
+				//}
 
 				//case MessageTypes.PortfolioChange:
 				//{
@@ -2273,7 +2273,7 @@ namespace StockSharp.Algo.Testing
 			MessageTypes.QuoteChange.ToInfo(),
 			ExtendedMessageTypes.Generator.ToInfo(),
 			ExtendedMessageTypes.CommissionRule.ToInfo(),
-			ExtendedMessageTypes.Clearing.ToInfo(),
+			//ExtendedMessageTypes.Clearing.ToInfo(),
 		};
 		IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
 		IEnumerable<MessageTypes> IMessageAdapter.SupportedOutMessages => throw new NotImplementedException();
