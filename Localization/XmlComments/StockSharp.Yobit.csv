@@ -1,6 +1,9 @@
 T:StockSharp.Yobit.YobitMessageAdapter/summary;DocStr2538
 M:StockSharp.Yobit.YobitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Yobit.YobitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Yobit.YobitMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Yobit.YobitMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
+M:StockSharp.Yobit.YobitMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Yobit.YobitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Yobit.YobitMessageAdapter.Key/summary;Str3304
 P:StockSharp.Yobit.YobitMessageAdapter.Secret/summary;DocStr3146

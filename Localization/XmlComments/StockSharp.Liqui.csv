@@ -1,6 +1,9 @@
 T:StockSharp.Liqui.LiquiMessageAdapter/summary;DocStr2538
 M:StockSharp.Liqui.LiquiMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Liqui.LiquiMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Liqui.LiquiMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Liqui.LiquiMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
+M:StockSharp.Liqui.LiquiMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Liqui.LiquiMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Liqui.LiquiMessageAdapter.Key/summary;Str3304
 P:StockSharp.Liqui.LiquiMessageAdapter.Secret/summary;DocStr3146

@@ -1,6 +1,13 @@
 T:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter/summary;DocStr2538
 M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
+M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.IsSupportExecutionsPnL/inheritdoc;DocStr8459
+M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.Token/summary;DocStr3145

@@ -1,6 +1,12 @@
 T:StockSharp.Kraken.KrakenMessageAdapter/summary;DocStr2538
 M:StockSharp.Kraken.KrakenMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Kraken.KrakenMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Kraken.KrakenMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Kraken.KrakenMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
+P:StockSharp.Kraken.KrakenMessageAdapter.IsSupportExecutionsPnL/inheritdoc;DocStr8459
+M:StockSharp.Kraken.KrakenMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Kraken.KrakenMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.Kraken.KrakenMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Kraken.KrakenMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Kraken.KrakenMessageAdapter.AllTimeFrames/summary;DocStr206
 F:StockSharp.Kraken.KrakenMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884

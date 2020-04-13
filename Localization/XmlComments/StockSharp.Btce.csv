@@ -1,6 +1,9 @@
 T:StockSharp.Btce.BtceMessageAdapter/summary;DocStr2581
 M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Btce.BtceMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Btce.BtceMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.Btce.BtceMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Btce.BtceMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Btce.BtceMessageAdapter.Key/summary;Str3304

@@ -1,11 +1,16 @@
 T:StockSharp.Deribit.DeribitMessageAdapter/summary;DocStr2538
 M:StockSharp.Deribit.DeribitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Deribit.DeribitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Deribit.DeribitMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Deribit.DeribitMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.Deribit.DeribitMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+M:StockSharp.Deribit.DeribitMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Deribit.DeribitMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Deribit.DeribitMessageAdapter.Key/summary;Str3304
 P:StockSharp.Deribit.DeribitMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Deribit.DeribitMessageAdapter.IsDemo/summary;Str3388
+P:StockSharp.Deribit.DeribitMessageAdapter.Address/summary;DocStr11725
 M:StockSharp.Deribit.DeribitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.ToString/inheritdoc;DocStr8459

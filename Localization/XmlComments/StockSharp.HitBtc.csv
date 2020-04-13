@@ -1,6 +1,11 @@
 T:StockSharp.HitBtc.HitBtcMessageAdapter/summary;DocStr2538
 M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.HitBtc.HitBtcMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+M:StockSharp.HitBtc.HitBtcMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.HitBtc.HitBtcMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+P:StockSharp.HitBtc.HitBtcMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.HitBtc.HitBtcMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.HitBtc.HitBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.HitBtc.HitBtcMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.HitBtc.HitBtcMessageAdapter.Key/summary;Str3304

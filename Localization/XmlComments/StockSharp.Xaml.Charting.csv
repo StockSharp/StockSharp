@@ -448,6 +448,8 @@ M:StockSharp.Xaml.Charting.ChartHelper.GetChart(StockSharp.Algo.Strategies.Strat
 M:StockSharp.Xaml.Charting.ChartHelper.SetChart(StockSharp.Algo.Strategies.Strategy,StockSharp.Xaml.Charting.IChart)/summary;DocStr7788
 M:StockSharp.Xaml.Charting.ChartHelper.SetChart(StockSharp.Algo.Strategies.Strategy,StockSharp.Xaml.Charting.IChart)/param/strategy;Strategy
 M:StockSharp.Xaml.Charting.ChartHelper.SetChart(StockSharp.Algo.Strategies.Strategy,StockSharp.Xaml.Charting.IChart)/param/chart;Str3200
+M:StockSharp.Xaml.Charting.ChartHelper.CurrChartTheme/summary;DocStr11734
+M:StockSharp.Xaml.Charting.ChartHelper.CurrChartTheme/returns;DocStr9857
 M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/summary;DocStr9855
 M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/param/appTheme;DocStr9856
 M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/returns;DocStr9857

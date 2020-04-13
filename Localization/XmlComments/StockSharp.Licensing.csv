@@ -14,6 +14,7 @@ P:StockSharp.Licensing.License.Account/summary;DocStr3873
 P:StockSharp.Licensing.License.Features/summary;DocStr3874
 P:StockSharp.Licensing.License.Body/summary;DocStr3876
 P:StockSharp.Licensing.License.ExpireAction/summary;DocStr8817
+P:StockSharp.Licensing.License.Platforms/summary;DocStr11728
 P:StockSharp.Licensing.License.StrategySubscriptions/summary;DocStr9042
 T:StockSharp.Licensing.LicenseErrorLogSource/summary;DocStr3884
 M:StockSharp.Licensing.LicenseErrorLogSource.#ctor/summary;DocStr1

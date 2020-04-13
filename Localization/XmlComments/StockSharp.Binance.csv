@@ -1,6 +1,11 @@
 T:StockSharp.Binance.BinanceMessageAdapter/summary;DocStr2538
 M:StockSharp.Binance.BinanceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Binance.BinanceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Binance.BinanceMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+M:StockSharp.Binance.BinanceMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Binance.BinanceMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+P:StockSharp.Binance.BinanceMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.Binance.BinanceMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Binance.BinanceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Binance.BinanceMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Binance.BinanceMessageAdapter.Key/summary;Str3304

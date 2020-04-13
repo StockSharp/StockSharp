@@ -1,6 +1,8 @@
 T:StockSharp.Zaif.ZaifMessageAdapter/summary;DocStr2538
 M:StockSharp.Zaif.ZaifMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Zaif.ZaifMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Zaif.ZaifMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+M:StockSharp.Zaif.ZaifMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Zaif.ZaifMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Zaif.ZaifMessageAdapter.Key/summary;Str3304
 P:StockSharp.Zaif.ZaifMessageAdapter.Secret/summary;DocStr3146

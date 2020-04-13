@@ -546,9 +546,9 @@ M:StockSharp.BusinessEntities.INewsProvider.RequestNewsStory(StockSharp.Business
 M:StockSharp.BusinessEntities.INewsProvider.RequestNewsStory(StockSharp.BusinessEntities.News,StockSharp.Messages.IMessageAdapter)/param/news;News
 M:StockSharp.BusinessEntities.INewsProvider.RequestNewsStory(StockSharp.BusinessEntities.News,StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr10512
 T:StockSharp.BusinessEntities.IPortfolioProvider/summary;DocStr8683
-M:StockSharp.BusinessEntities.IPortfolioProvider.GetPortfolio(System.String)/summary;DocStr10879
-M:StockSharp.BusinessEntities.IPortfolioProvider.GetPortfolio(System.String)/param/name;DocStr3127
-M:StockSharp.BusinessEntities.IPortfolioProvider.GetPortfolio(System.String)/returns;Portfolio
+M:StockSharp.BusinessEntities.IPortfolioProvider.LookupByPortfolioName(System.String)/summary;DocStr10037
+M:StockSharp.BusinessEntities.IPortfolioProvider.LookupByPortfolioName(System.String)/param/name;Str247
+M:StockSharp.BusinessEntities.IPortfolioProvider.LookupByPortfolioName(System.String)/returns;DocStr10039
 P:StockSharp.BusinessEntities.IPortfolioProvider.Portfolios/summary;DocStr917
 E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio/summary;DocStr8553
 E:StockSharp.BusinessEntities.IPortfolioProvider.PortfolioChanged/summary;DocStr8554
@@ -836,7 +836,6 @@ P:StockSharp.BusinessEntities.Portfolio.Name/summary;Str247
 P:StockSharp.BusinessEntities.Portfolio.Board/summary;Str544
 P:StockSharp.BusinessEntities.Portfolio.State/summary;Str265
 P:StockSharp.BusinessEntities.Portfolio.AnonymousPortfolio/summary;DocStr2932
-P:StockSharp.BusinessEntities.Portfolio.InternalId/summary;DocStr11281
 M:StockSharp.BusinessEntities.Portfolio.CreateSimulator/summary;DocStr11273
 M:StockSharp.BusinessEntities.Portfolio.CreateSimulator/returns;Str1209
 M:StockSharp.BusinessEntities.Portfolio.CopyTo(StockSharp.BusinessEntities.Portfolio)/summary;DocStr2929

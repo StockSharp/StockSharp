@@ -909,6 +909,7 @@ M:StockSharp.Xaml.PortfolioDataSource.Add(StockSharp.BusinessEntities.Portfolio)
 M:StockSharp.Xaml.PortfolioDataSource.AddRange(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/summary;DocStr10902
 M:StockSharp.Xaml.PortfolioDataSource.AddRange(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/portfolios;Portfolios
 M:StockSharp.Xaml.PortfolioDataSource.Dispose/inheritdoc;DocStr8459
+P:StockSharp.Xaml.PortfolioDataSource.Instance/summary;DocStr9981
 T:StockSharp.Xaml.PortfolioGrid/summary;DocStr8282
 M:StockSharp.Xaml.PortfolioGrid.#ctor/summary;DocStr1
 P:StockSharp.Xaml.PortfolioGrid.Portfolios/summary;DocStr8283
@@ -1441,15 +1442,12 @@ M:StockSharp.Xaml.TargetPlatformWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.TargetPlatformWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ThemeExtensions/summary;DocStr10280
 F:StockSharp.Xaml.ThemeExtensions.DefaultTheme/summary;DocStr10498
-M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)/summary;DocStr8459
+M:StockSharp.Xaml.ThemeExtensions.IsCurrDark/summary;DocStr11735
+M:StockSharp.Xaml.ThemeExtensions.IsCurrDark/returns;DocStr8659
+M:StockSharp.Xaml.ThemeExtensions.ApplyDefaultTheme/summary;DocStr93
+M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)/summary;DocStr11735
 M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)/param/appTheme;DocStr9856
 M:StockSharp.Xaml.ThemeExtensions.IsDark(System.String)/returns;DocStr8659
-M:StockSharp.Xaml.ThemeExtensions.ToTextColor(System.String)/summary;DocStr8459
-M:StockSharp.Xaml.ThemeExtensions.ToTextColor(System.String)/param/appTheme;DocStr9856
-M:StockSharp.Xaml.ThemeExtensions.ToTextColor(System.String)/returns;Str1984
-M:StockSharp.Xaml.ThemeExtensions.ToThemeToolbarIconBrush(System.String)/summary;DocStr8459
-M:StockSharp.Xaml.ThemeExtensions.ToThemeToolbarIconBrush(System.String)/param/appTheme;DocStr9856
-M:StockSharp.Xaml.ThemeExtensions.ToThemeToolbarIconBrush(System.String)/returns;DocStr10488
 T:StockSharp.Xaml.TradeGrid/summary;DocStr8432
 M:StockSharp.Xaml.TradeGrid.#ctor/summary;DocStr1
 P:StockSharp.Xaml.TradeGrid.MaxCount/summary;DocStr8433

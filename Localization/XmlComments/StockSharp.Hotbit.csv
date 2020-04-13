@@ -1,6 +1,11 @@
 T:StockSharp.Hotbit.HotbitMessageAdapter/summary;DocStr2538
 M:StockSharp.Hotbit.HotbitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Hotbit.HotbitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Hotbit.HotbitMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+M:StockSharp.Hotbit.HotbitMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Hotbit.HotbitMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.Hotbit.HotbitMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
+P:StockSharp.Hotbit.HotbitMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Hotbit.HotbitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Hotbit.HotbitMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Hotbit.HotbitMessageAdapter.Key/summary;Str3304

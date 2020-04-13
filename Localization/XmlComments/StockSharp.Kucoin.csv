@@ -1,6 +1,9 @@
 T:StockSharp.Kucoin.KucoinMessageAdapter/summary;DocStr2538
 M:StockSharp.Kucoin.KucoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Kucoin.KucoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Kucoin.KucoinMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+M:StockSharp.Kucoin.KucoinMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Kucoin.KucoinMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Kucoin.KucoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Kucoin.KucoinMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Kucoin.KucoinMessageAdapter.Key/summary;Str3304

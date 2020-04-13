@@ -1,6 +1,9 @@
 T:StockSharp.Quoinex.QuoinexMessageAdapter/summary;DocStr2538
 M:StockSharp.Quoinex.QuoinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Quoinex.QuoinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Quoinex.QuoinexMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Quoinex.QuoinexMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
+M:StockSharp.Quoinex.QuoinexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Quoinex.QuoinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Quoinex.QuoinexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Quoinex.QuoinexMessageAdapter.Secret/summary;DocStr3146

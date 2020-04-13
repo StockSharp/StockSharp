@@ -1,6 +1,10 @@
 T:StockSharp.Coinbase.CoinbaseMessageAdapter/summary;DocStr2538
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Coinbase.CoinbaseMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Coinbase.CoinbaseMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Coinbase.CoinbaseMessageAdapter.Key/summary;Str3304

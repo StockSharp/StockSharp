@@ -1,6 +1,11 @@
 T:StockSharp.LiveCoin.LiveCoinMessageAdapter/summary;DocStr2538
 M:StockSharp.LiveCoin.LiveCoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.LiveCoin.LiveCoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.LiveCoin.LiveCoinMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.LiveCoin.LiveCoinMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
+M:StockSharp.LiveCoin.LiveCoinMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.LiveCoin.LiveCoinMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.LiveCoin.LiveCoinMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.LiveCoin.LiveCoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.LiveCoin.LiveCoinMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.LiveCoin.LiveCoinMessageAdapter.Key/summary;Str3304

@@ -1,6 +1,10 @@
 T:StockSharp.BitZ.BitZMessageAdapter/summary;DocStr2538
 M:StockSharp.BitZ.BitZMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.BitZ.BitZMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.BitZ.BitZMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+M:StockSharp.BitZ.BitZMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.BitZ.BitZMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+M:StockSharp.BitZ.BitZMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.BitZ.BitZMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.BitZ.BitZMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.BitZ.BitZMessageAdapter.Key/summary;Str3304
