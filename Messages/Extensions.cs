@@ -707,8 +707,10 @@ namespace StockSharp.Messages
 			if (argParserFrom is null)
 				throw new ArgumentNullException(nameof(argParserFrom));
 
-			Func<string, object> p1 = str => argParserTo(str);
-			Func<object, string> p2 = arg => arg is string s ? s : argParserFrom((TArg)arg);
+			T Do<T>(Func<T> func) => CultureInfo.InvariantCulture.DoInCulture(func);
+
+			Func<string, object> p1 = str => Do(() => argParserTo(str));
+			Func<object, string> p2 = arg => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
 
 			_messageTypeMap.Add(dataType, Tuple.Create(type, default(object)));
 			_candleDataTypes.Add(type, dataType);
