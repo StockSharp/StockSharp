@@ -1843,7 +1843,6 @@ M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.ExtendedMessageTypes/summary;DocStr10482
 F:StockSharp.Algo.ExtendedMessageTypes.Last/summary;DocStr3317
-F:StockSharp.Algo.ExtendedMessageTypes.Clearing/summary;DocStr608
 F:StockSharp.Algo.ExtendedMessageTypes.EmulationState/summary;DocStr608
 F:StockSharp.Algo.ExtendedMessageTypes.Generator/summary;DocStr608
 F:StockSharp.Algo.ExtendedMessageTypes.CommissionRule/summary;DocStr608
@@ -6738,13 +6737,6 @@ M:StockSharp.Algo.Testing.ChangeTimeIntervalMessage.#ctor/summary;DocStr1
 P:StockSharp.Algo.Testing.ChangeTimeIntervalMessage.Interval/summary;Str175
 M:StockSharp.Algo.Testing.ChangeTimeIntervalMessage.Clone/summary;DocStr643
 M:StockSharp.Algo.Testing.ChangeTimeIntervalMessage.Clone/returns;DocStr1116
-T:StockSharp.Algo.Testing.ClearingMessage/summary;DocStr2102
-P:StockSharp.Algo.Testing.ClearingMessage.SecurityId/inheritdoc;DocStr8459
-P:StockSharp.Algo.Testing.ClearingMessage.ClearMarketDepth/summary;DocStr2103
-M:StockSharp.Algo.Testing.ClearingMessage.#ctor/summary;DocStr1
-M:StockSharp.Algo.Testing.ClearingMessage.Clone/summary;DocStr643
-M:StockSharp.Algo.Testing.ClearingMessage.Clone/returns;DocStr1116
-M:StockSharp.Algo.Testing.ClearingMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Algo.Testing.CommissionRuleMessage/summary;DocStr1912
 M:StockSharp.Algo.Testing.CommissionRuleMessage.#ctor/summary;DocStr1
 P:StockSharp.Algo.Testing.CommissionRuleMessage.Rule/summary;DocStr753
@@ -6753,10 +6745,10 @@ M:StockSharp.Algo.Testing.CommissionRuleMessage.Clone/summary;DocStr643
 M:StockSharp.Algo.Testing.CommissionRuleMessage.Clone/returns;DocStr1116
 T:StockSharp.Algo.Testing.IEmulationMessageAdapter/summary;DocStr10363
 T:StockSharp.Algo.Testing.EmulationMessageAdapter/summary;DocStr11723
-M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,StockSharp.Messages.IMessageChannel)/summary;DocStr93
-M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,StockSharp.Messages.IMessageChannel)/param/innerAdapter;DocStr8563
-M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,StockSharp.Messages.IMessageChannel)/param/inputChannel;DocStr4081
-M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,StockSharp.Messages.IMessageChannel)/param/outputChannel;DocStr863
+M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/summary;DocStr93
+M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/param/innerAdapter;DocStr8563
+M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/param/queue;DocStr11475
+M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/param/sendTimeToEmulator;DocStr11736
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.Emulator/summary;Str1125
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.Settings/summary;DocStr1883
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.SupportedInMessages/inheritdoc;DocStr8459

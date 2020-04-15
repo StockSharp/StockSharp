@@ -1276,6 +1276,8 @@ P:StockSharp.Messages.IMessageChannel.IsOpened/summary;DocStr4078
 E:StockSharp.Messages.IMessageChannel.StateChanged/summary;DocStr3900
 M:StockSharp.Messages.IMessageChannel.Open/summary;DocStr4076
 M:StockSharp.Messages.IMessageChannel.Close/summary;DocStr4077
+M:StockSharp.Messages.IMessageChannel.Suspend/summary;DocStr11737
+M:StockSharp.Messages.IMessageChannel.Resume/summary;Str1510
 M:StockSharp.Messages.IMessageChannel.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Messages.IMessageChannel.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Messages.IMessageChannel.SendInMessage(StockSharp.Messages.Message)/returns;DocStr8774
