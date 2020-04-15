@@ -1,4 +1,4 @@
-﻿NuGetPackageInstallerTitle;NuGet package library installer;Установщик библиотек из пакетов NuGet
+﻿StockSharpInstaller;S#.Installer;S#.Установщик
 SetupType;Setup type;Тип установки
 PackageVersion;Package version;Версия пакета
 OutputDirectory;Output directory;Выходная папка

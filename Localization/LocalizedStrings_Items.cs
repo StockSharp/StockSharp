@@ -18,14 +18,14 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
-		/// NuGet package library installer
+		/// S#.Installer
 		/// </summary>
-		public const string NuGetPackageInstallerTitleKey = nameof(NuGetPackageInstallerTitle);
+		public const string StockSharpInstallerKey = nameof(StockSharpInstaller);
 
 		/// <summary>
-		/// NuGet package library installer
+		/// S#.Installer
 		/// </summary>
-		public static string NuGetPackageInstallerTitle => GetString(NuGetPackageInstallerTitleKey);
+		public static string StockSharpInstaller => GetString(StockSharpInstallerKey);
 
 		/// <summary>
 		/// Setup type
