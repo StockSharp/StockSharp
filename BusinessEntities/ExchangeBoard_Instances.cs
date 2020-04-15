@@ -2752,12 +2752,12 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard MicexJunior { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Spb"/>.
+		/// Information about board <see cref="Exchange.Spb"/>.
 		/// </summary>
 		public static ExchangeBoard Spb { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Ux"/>.
+		/// Information about board <see cref="Exchange.Ux"/>.
 		/// </summary>
 		public static ExchangeBoard Ux { get; }
 
@@ -2767,237 +2767,237 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard UxStock { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cme"/>.
+		/// Information about board <see cref="Exchange.Cme"/>.
 		/// </summary>
 		public static ExchangeBoard Cme { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cme"/>.
+		/// Information about board <see cref="Exchange.Cme"/>.
 		/// </summary>
 		public static ExchangeBoard CmeMini { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cce"/>.
+		/// Information about board <see cref="Exchange.Cce"/>.
 		/// </summary>
 		public static ExchangeBoard Cce { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cbot"/>.
+		/// Information about board <see cref="Exchange.Cbot"/>.
 		/// </summary>
 		public static ExchangeBoard Cbot { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Nymex"/>.
+		/// Information about board <see cref="Exchange.Nymex"/>.
 		/// </summary>
 		public static ExchangeBoard Nymex { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Amex"/>.
+		/// Information about board <see cref="Exchange.Amex"/>.
 		/// </summary>
 		public static ExchangeBoard Amex { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Nyse"/>.
+		/// Information about board <see cref="Exchange.Nyse"/>.
 		/// </summary>
 		public static ExchangeBoard Nyse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Nasdaq"/>.
+		/// Information about board <see cref="Exchange.Nasdaq"/>.
 		/// </summary>
 		public static ExchangeBoard Nasdaq { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Nqlx"/>.
+		/// Information about board <see cref="Exchange.Nqlx"/>.
 		/// </summary>
 		public static ExchangeBoard Nqlx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Lse"/>.
+		/// Information about board <see cref="Exchange.Lse"/>.
 		/// </summary>
 		public static ExchangeBoard Lse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Lme"/>.
+		/// Information about board <see cref="Exchange.Lme"/>.
 		/// </summary>
 		public static ExchangeBoard Lme { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Tse"/>.
+		/// Information about board <see cref="Exchange.Tse"/>.
 		/// </summary>
 		public static ExchangeBoard Tse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Hkex"/>.
+		/// Information about board <see cref="Exchange.Hkex"/>.
 		/// </summary>
 		public static ExchangeBoard Hkex { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Hkfe"/>.
+		/// Information about board <see cref="Exchange.Hkfe"/>.
 		/// </summary>
 		public static ExchangeBoard Hkfe { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Sse"/>.
+		/// Information about board <see cref="Exchange.Sse"/>.
 		/// </summary>
 		public static ExchangeBoard Sse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Szse"/>.
+		/// Information about board <see cref="Exchange.Szse"/>.
 		/// </summary>
 		public static ExchangeBoard Szse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Tsx"/>.
+		/// Information about board <see cref="Exchange.Tsx"/>.
 		/// </summary>
 		public static ExchangeBoard Tsx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Fwb"/>.
+		/// Information about board <see cref="Exchange.Fwb"/>.
 		/// </summary>
 		public static ExchangeBoard Fwb { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Asx"/>.
+		/// Information about board <see cref="Exchange.Asx"/>.
 		/// </summary>
 		public static ExchangeBoard Asx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Nzx"/>.
+		/// Information about board <see cref="Exchange.Nzx"/>.
 		/// </summary>
 		public static ExchangeBoard Nzx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bse"/>.
+		/// Information about board <see cref="Exchange.Bse"/>.
 		/// </summary>
 		public static ExchangeBoard Bse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Nse"/>.
+		/// Information about board <see cref="Exchange.Nse"/>.
 		/// </summary>
 		public static ExchangeBoard Nse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Swx"/>.
+		/// Information about board <see cref="Exchange.Swx"/>.
 		/// </summary>
 		public static ExchangeBoard Swx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Krx"/>.
+		/// Information about board <see cref="Exchange.Krx"/>.
 		/// </summary>
 		public static ExchangeBoard Krx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Mse"/>.
+		/// Information about board <see cref="Exchange.Mse"/>.
 		/// </summary>
 		public static ExchangeBoard Mse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Jse"/>.
+		/// Information about board <see cref="Exchange.Jse"/>.
 		/// </summary>
 		public static ExchangeBoard Jse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Sgx"/>.
+		/// Information about board <see cref="Exchange.Sgx"/>.
 		/// </summary>
 		public static ExchangeBoard Sgx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Tsec"/>.
+		/// Information about board <see cref="Exchange.Tsec"/>.
 		/// </summary>
 		public static ExchangeBoard Tsec { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Pse"/>.
+		/// Information about board <see cref="Exchange.Pse"/>.
 		/// </summary>
 		public static ExchangeBoard Pse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Klse"/>.
+		/// Information about board <see cref="Exchange.Klse"/>.
 		/// </summary>
 		public static ExchangeBoard Klse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Idx"/>.
+		/// Information about board <see cref="Exchange.Idx"/>.
 		/// </summary>
 		public static ExchangeBoard Idx { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Set"/>.
+		/// Information about board <see cref="Exchange.Set"/>.
 		/// </summary>
 		public static ExchangeBoard Set { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cse"/>.
+		/// Information about board <see cref="Exchange.Cse"/>.
 		/// </summary>
 		public static ExchangeBoard Cse { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Tase"/>.
+		/// Information about board <see cref="Exchange.Tase"/>.
 		/// </summary>
 		public static ExchangeBoard Tase { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Lmax"/>.
+		/// Information about board <see cref="Exchange.Lmax"/>.
 		/// </summary>
 		public static ExchangeBoard Lmax { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.DukasCopy"/>.
+		/// Information about board <see cref="Exchange.DukasCopy"/>.
 		/// </summary>
 		public static ExchangeBoard DukasCopy { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.GainCapital"/>.
+		/// Information about board <see cref="Exchange.GainCapital"/>.
 		/// </summary>
 		public static ExchangeBoard GainCapital { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.MBTrading"/>.
+		/// Information about board <see cref="Exchange.MBTrading"/>.
 		/// </summary>
 		public static ExchangeBoard MBTrading { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.TrueFX"/>.
+		/// Information about board <see cref="Exchange.TrueFX"/>.
 		/// </summary>
 		public static ExchangeBoard TrueFX { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Integral"/>.
+		/// Information about board <see cref="Exchange.Integral"/>.
 		/// </summary>
 		public static ExchangeBoard Integral { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cfh"/>.
+		/// Information about board <see cref="Exchange.Cfh"/>.
 		/// </summary>
 		public static ExchangeBoard Cfh { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Ond"/>.
+		/// Information about board <see cref="Exchange.Ond"/>.
 		/// </summary>
 		public static ExchangeBoard Ond { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Nasdaq"/>.
+		/// Information about board <see cref="Exchange.Nasdaq"/>.
 		/// </summary>
 		public static ExchangeBoard Smart { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Btce"/>.
+		/// Information about board <see cref="Exchange.Btce"/>.
 		/// </summary>
 		public static ExchangeBoard Btce { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.BitStamp"/>.
+		/// Information about board <see cref="Exchange.BitStamp"/>.
 		/// </summary>
 		public static ExchangeBoard BitStamp { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.BtcChina"/>.
+		/// Information about board <see cref="Exchange.BtcChina"/>.
 		/// </summary>
 		public static ExchangeBoard BtcChina { get; }
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Icbit"/>.
+		/// Information about board <see cref="Exchange.Icbit"/>.
 		/// </summary>
 		public static ExchangeBoard Icbit { get; }
 
@@ -3039,7 +3039,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Fxcm"/>.
+		/// Information about board <see cref="Exchange.Fxcm"/>.
 		/// </summary>
 		public static ExchangeBoard Fxcm { get; } = new ExchangeBoard
 		{
@@ -3048,7 +3048,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Poloniex"/>.
+		/// Information about board <see cref="Exchange.Poloniex"/>.
 		/// </summary>
 		public static ExchangeBoard Poloniex { get; } = new ExchangeBoard
 		{
@@ -3057,7 +3057,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Kraken"/>.
+		/// Information about board <see cref="Exchange.Kraken"/>.
 		/// </summary>
 		public static ExchangeBoard Kraken { get; } = new ExchangeBoard
 		{
@@ -3066,7 +3066,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bittrex"/>.
+		/// Information about board <see cref="Exchange.Bittrex"/>.
 		/// </summary>
 		public static ExchangeBoard Bittrex { get; } = new ExchangeBoard
 		{
@@ -3075,7 +3075,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bitfinex"/>.
+		/// Information about board <see cref="Exchange.Bitfinex"/>.
 		/// </summary>
 		public static ExchangeBoard Bitfinex { get; } = new ExchangeBoard
 		{
@@ -3084,7 +3084,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Coinbase"/>.
+		/// Information about board <see cref="Exchange.Coinbase"/>.
 		/// </summary>
 		public static ExchangeBoard Coinbase { get; } = new ExchangeBoard
 		{
@@ -3093,7 +3093,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Gdax"/>.
+		/// Information about board <see cref="Exchange.Gdax"/>.
 		/// </summary>
 		public static ExchangeBoard Gdax { get; } = new ExchangeBoard
 		{
@@ -3102,7 +3102,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bithumb"/>.
+		/// Information about board <see cref="Exchange.Bithumb"/>.
 		/// </summary>
 		public static ExchangeBoard Bithumb { get; } = new ExchangeBoard
 		{
@@ -3111,7 +3111,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.HitBtc"/>.
+		/// Information about board <see cref="Exchange.HitBtc"/>.
 		/// </summary>
 		public static ExchangeBoard HitBtc { get; } = new ExchangeBoard
 		{
@@ -3120,7 +3120,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.OkCoin"/>.
+		/// Information about board <see cref="Exchange.OkCoin"/>.
 		/// </summary>
 		public static ExchangeBoard OkCoin { get; } = new ExchangeBoard
 		{
@@ -3129,7 +3129,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Coincheck"/>.
+		/// Information about board <see cref="Exchange.Coincheck"/>.
 		/// </summary>
 		public static ExchangeBoard Coincheck { get; } = new ExchangeBoard
 		{
@@ -3138,7 +3138,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Binance"/>.
+		/// Information about board <see cref="Exchange.Binance"/>.
 		/// </summary>
 		public static ExchangeBoard Binance { get; } = new ExchangeBoard
 		{
@@ -3147,7 +3147,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bitexbook"/>.
+		/// Information about board <see cref="Exchange.Bitexbook"/>.
 		/// </summary>
 		public static ExchangeBoard Bitexbook { get; } = new ExchangeBoard
 		{
@@ -3156,7 +3156,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bitmex"/>.
+		/// Information about board <see cref="Exchange.Bitmex"/>.
 		/// </summary>
 		public static ExchangeBoard Bitmex { get; } = new ExchangeBoard
 		{
@@ -3165,7 +3165,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cex"/>.
+		/// Information about board <see cref="Exchange.Cex"/>.
 		/// </summary>
 		public static ExchangeBoard Cex { get; } = new ExchangeBoard
 		{
@@ -3174,7 +3174,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Cryptopia"/>.
+		/// Information about board <see cref="Exchange.Cryptopia"/>.
 		/// </summary>
 		public static ExchangeBoard Cryptopia { get; } = new ExchangeBoard
 		{
@@ -3183,7 +3183,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Okex"/>.
+		/// Information about board <see cref="Exchange.Okex"/>.
 		/// </summary>
 		public static ExchangeBoard Okex { get; } = new ExchangeBoard
 		{
@@ -3192,7 +3192,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Yobit"/>.
+		/// Information about board <see cref="Exchange.Yobit"/>.
 		/// </summary>
 		public static ExchangeBoard Yobit { get; } = new ExchangeBoard
 		{
@@ -3201,7 +3201,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.CoinExchange"/>.
+		/// Information about board <see cref="Exchange.CoinExchange"/>.
 		/// </summary>
 		public static ExchangeBoard CoinExchange { get; } = new ExchangeBoard
 		{
@@ -3210,7 +3210,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.LiveCoin"/>.
+		/// Information about board <see cref="Exchange.LiveCoin"/>.
 		/// </summary>
 		public static ExchangeBoard LiveCoin { get; } = new ExchangeBoard
 		{
@@ -3219,7 +3219,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Exmo"/>.
+		/// Information about board <see cref="Exchange.Exmo"/>.
 		/// </summary>
 		public static ExchangeBoard Exmo { get; } = new ExchangeBoard
 		{
@@ -3228,7 +3228,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Deribit"/>.
+		/// Information about board <see cref="Exchange.Deribit"/>.
 		/// </summary>
 		public static ExchangeBoard Deribit { get; } = new ExchangeBoard
 		{
@@ -3237,7 +3237,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Kucoin"/>.
+		/// Information about board <see cref="Exchange.Kucoin"/>.
 		/// </summary>
 		public static ExchangeBoard Kucoin { get; } = new ExchangeBoard
 		{
@@ -3246,7 +3246,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Liqui"/>.
+		/// Information about board <see cref="Exchange.Liqui"/>.
 		/// </summary>
 		public static ExchangeBoard Liqui { get; } = new ExchangeBoard
 		{
@@ -3255,7 +3255,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Huobi"/>.
+		/// Information about board <see cref="Exchange.Huobi"/>.
 		/// </summary>
 		public static ExchangeBoard Huobi { get; } = new ExchangeBoard
 		{
@@ -3273,7 +3273,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.IEX"/>.
+		/// Information about board <see cref="Exchange.IEX"/>.
 		/// </summary>
 		public static ExchangeBoard IEX { get; } = new ExchangeBoard
 		{
@@ -3282,7 +3282,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.AlphaVantage"/>.
+		/// Information about board <see cref="Exchange.AlphaVantage"/>.
 		/// </summary>
 		public static ExchangeBoard AlphaVantage { get; } = new ExchangeBoard
 		{
@@ -3291,7 +3291,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bitbank"/>.
+		/// Information about board <see cref="Exchange.Bitbank"/>.
 		/// </summary>
 		public static ExchangeBoard Bitbank { get; } = new ExchangeBoard
 		{
@@ -3300,7 +3300,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Zaif"/>.
+		/// Information about board <see cref="Exchange.Zaif"/>.
 		/// </summary>
 		public static ExchangeBoard Zaif { get; } = new ExchangeBoard
 		{
@@ -3309,7 +3309,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Quoinex"/>.
+		/// Information about board <see cref="Exchange.Quoinex"/>.
 		/// </summary>
 		public static ExchangeBoard Quoinex { get; } = new ExchangeBoard
 		{
@@ -3318,7 +3318,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Wiki"/>.
+		/// Information about board <see cref="Exchange.Wiki"/>.
 		/// </summary>
 		public static ExchangeBoard Wiki { get; } = new ExchangeBoard
 		{
@@ -3327,7 +3327,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Idax"/>.
+		/// Information about board <see cref="Exchange.Idax"/>.
 		/// </summary>
 		public static ExchangeBoard Idax { get; } = new ExchangeBoard
 		{
@@ -3336,7 +3336,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Digifinex"/>.
+		/// Information about board <see cref="Exchange.Digifinex"/>.
 		/// </summary>
 		public static ExchangeBoard Digifinex { get; } = new ExchangeBoard
 		{
@@ -3345,7 +3345,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.TradeOgre"/>.
+		/// Information about board <see cref="Exchange.TradeOgre"/>.
 		/// </summary>
 		public static ExchangeBoard TradeOgre { get; } = new ExchangeBoard
 		{
@@ -3354,7 +3354,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.CoinCap"/>.
+		/// Information about board <see cref="Exchange.CoinCap"/>.
 		/// </summary>
 		public static ExchangeBoard CoinCap { get; } = new ExchangeBoard
 		{
@@ -3363,7 +3363,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Coinigy"/>.
+		/// Information about board <see cref="Exchange.Coinigy"/>.
 		/// </summary>
 		public static ExchangeBoard Coinigy { get; } = new ExchangeBoard
 		{
@@ -3372,7 +3372,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.LBank"/>.
+		/// Information about board <see cref="Exchange.LBank"/>.
 		/// </summary>
 		public static ExchangeBoard LBank { get; } = new ExchangeBoard
 		{
@@ -3381,7 +3381,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.BitMax"/>.
+		/// Information about board <see cref="Exchange.BitMax"/>.
 		/// </summary>
 		public static ExchangeBoard BitMax { get; } = new ExchangeBoard
 		{
@@ -3390,7 +3390,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.BW"/>.
+		/// Information about board <see cref="Exchange.BW"/>.
 		/// </summary>
 		public static ExchangeBoard BW { get; } = new ExchangeBoard
 		{
@@ -3399,7 +3399,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bibox"/>.
+		/// Information about board <see cref="Exchange.Bibox"/>.
 		/// </summary>
 		public static ExchangeBoard Bibox { get; } = new ExchangeBoard
 		{
@@ -3408,7 +3408,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.CoinBene"/>.
+		/// Information about board <see cref="Exchange.CoinBene"/>.
 		/// </summary>
 		public static ExchangeBoard CoinBene { get; } = new ExchangeBoard
 		{
@@ -3417,7 +3417,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.BitZ"/>.
+		/// Information about board <see cref="Exchange.BitZ"/>.
 		/// </summary>
 		public static ExchangeBoard BitZ { get; } = new ExchangeBoard
 		{
@@ -3426,7 +3426,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.ZB"/>.
+		/// Information about board <see cref="Exchange.ZB"/>.
 		/// </summary>
 		public static ExchangeBoard ZB { get; } = new ExchangeBoard
 		{
@@ -3435,7 +3435,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Tradier"/>.
+		/// Information about board <see cref="Exchange.Tradier"/>.
 		/// </summary>
 		public static ExchangeBoard Tradier { get; } = new ExchangeBoard
 		{
@@ -3444,7 +3444,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.SwSq"/>.
+		/// Information about board <see cref="Exchange.SwSq"/>.
 		/// </summary>
 		public static ExchangeBoard SwSq { get; } = new ExchangeBoard
 		{
@@ -3453,7 +3453,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.StockSharp"/>.
+		/// Information about board <see cref="Exchange.StockSharp"/>.
 		/// </summary>
 		public static ExchangeBoard StockSharp { get; } = new ExchangeBoard
 		{
@@ -3462,7 +3462,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Upbit"/>.
+		/// Information about board <see cref="Exchange.Upbit"/>.
 		/// </summary>
 		public static ExchangeBoard Upbit { get; } = new ExchangeBoard
 		{
@@ -3471,7 +3471,7 @@ namespace StockSharp.BusinessEntities
 		};
 		
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.CoinEx"/>.
+		/// Information about board <see cref="Exchange.CoinEx"/>.
 		/// </summary>
 		public static ExchangeBoard CoinEx { get; } = new ExchangeBoard
 		{
@@ -3480,7 +3480,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.FatBtc"/>.
+		/// Information about board <see cref="Exchange.FatBtc"/>.
 		/// </summary>
 		public static ExchangeBoard FatBtc { get; } = new ExchangeBoard
 		{
@@ -3489,7 +3489,7 @@ namespace StockSharp.BusinessEntities
 		};
 		
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Latoken"/>.
+		/// Information about board <see cref="Exchange.Latoken"/>.
 		/// </summary>
 		public static ExchangeBoard Latoken { get; } = new ExchangeBoard
 		{
@@ -3498,7 +3498,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Gopax"/>.
+		/// Information about board <see cref="Exchange.Gopax"/>.
 		/// </summary>
 		public static ExchangeBoard Gopax { get; } = new ExchangeBoard
 		{
@@ -3507,7 +3507,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.CoinHub"/>.
+		/// Information about board <see cref="Exchange.CoinHub"/>.
 		/// </summary>
 		public static ExchangeBoard CoinHub { get; } = new ExchangeBoard
 		{
@@ -3516,7 +3516,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Hotbit"/>.
+		/// Information about board <see cref="Exchange.Hotbit"/>.
 		/// </summary>
 		public static ExchangeBoard Hotbit { get; } = new ExchangeBoard
 		{
@@ -3525,7 +3525,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.Bitalong"/>.
+		/// Information about board <see cref="Exchange.Bitalong"/>.
 		/// </summary>
 		public static ExchangeBoard Bitalong { get; } = new ExchangeBoard
 		{
@@ -3534,7 +3534,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.PrizmBit"/>.
+		/// Information about board <see cref="Exchange.PrizmBit"/>.
 		/// </summary>
 		public static ExchangeBoard PrizmBit { get; } = new ExchangeBoard
 		{
@@ -3543,12 +3543,21 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="BusinessEntities.Exchange.DigitexFutures"/>.
+		/// Information about board <see cref="Exchange.DigitexFutures"/>.
 		/// </summary>
 		public static ExchangeBoard DigitexFutures { get; } = new ExchangeBoard
 		{
 			Code = Exchange.DigitexFutures.Name,
 			Exchange = Exchange.DigitexFutures,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="Exchange.Bovespa"/>.
+		/// </summary>
+		public static ExchangeBoard Bovespa { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bovespa.Name,
+			Exchange = Exchange.Bovespa,
 		};
 	}
 }

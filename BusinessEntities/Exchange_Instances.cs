@@ -1127,5 +1127,14 @@ namespace StockSharp.BusinessEntities
 			Name = "DGFT",
 			FullNameLoc = LocalizedStrings.DigitexFuturesKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="Bovespa"/>.
+		/// </summary>
+		public static Exchange Bovespa { get; } = new Exchange
+		{
+			Name = "B3",
+			FullNameLoc = LocalizedStrings.BrasilBolsaKey,
+		};
 	}
 }
