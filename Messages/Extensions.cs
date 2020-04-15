@@ -16,11 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using System.Net;
-    using System.Security;
+	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -35,7 +36,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Extension class.
 	/// </summary>
-	public static class Extensions
+	public static partial class Extensions
 	{
 		static Extensions()
 		{
@@ -2331,6 +2332,513 @@ namespace StockSharp.Messages
 		public static int? ToId(this SecureString key)
 		{
 			return key?.UnSecure().GetDeterministicHashCode();
+		}
+
+		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
+		{
+			private class TickEnumerator : IEnumerator<ExecutionMessage>
+			{
+				private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator;
+
+				public TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
+				{
+					_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
+				}
+
+				public ExecutionMessage Current { get; private set; }
+
+				bool IEnumerator.MoveNext()
+				{
+					while (_level1Enumerator.MoveNext())
+					{
+						var level1 = _level1Enumerator.Current;
+
+						if (!level1.IsContainsTick())
+							continue;
+
+						Current = level1.ToTick();
+						return true;
+					}
+
+					Current = null;
+					return false;
+				}
+
+				public void Reset()
+				{
+					_level1Enumerator.Reset();
+					Current = null;
+				}
+
+				object IEnumerator.Current => Current;
+
+				void IDisposable.Dispose()
+				{
+					Current = null;
+					_level1Enumerator.Dispose();
+				}
+			}
+
+			//private readonly IEnumerable<Level1ChangeMessage> _level1;
+
+			public TickEnumerable(IEnumerable<Level1ChangeMessage> level1)
+				: base(() => new TickEnumerator(level1.GetEnumerator()))
+			{
+				if (level1 == null)
+					throw new ArgumentNullException(nameof(level1));
+
+				//_level1 = level1;
+			}
+
+			//int IEnumerableEx.Count => _level1.Count;
+		}
+
+		/// <summary>
+		/// To convert level1 data into tick data.
+		/// </summary>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Tick data.</returns>
+		public static IEnumerable<ExecutionMessage> ToTicks(this IEnumerable<Level1ChangeMessage> level1)
+		{
+			return new TickEnumerable(level1);
+		}
+
+		/// <summary>
+		/// To check, are there tick data in the level1 data.
+		/// </summary>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>The test result.</returns>
+		public static bool IsContainsTick(this Level1ChangeMessage level1)
+		{
+			if (level1 == null)
+				throw new ArgumentNullException(nameof(level1));
+
+			return level1.Changes.ContainsKey(Level1Fields.LastTradePrice);
+		}
+
+		/// <summary>
+		/// To convert level1 data into tick data.
+		/// </summary>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Tick data.</returns>
+		public static ExecutionMessage ToTick(this Level1ChangeMessage level1)
+		{
+			if (level1 == null)
+				throw new ArgumentNullException(nameof(level1));
+
+			return new ExecutionMessage
+			{
+				ExecutionType = ExecutionTypes.Tick,
+				SecurityId = level1.SecurityId,
+				TradeId = (long?)level1.Changes.TryGetValue(Level1Fields.LastTradeId),
+				TradePrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradePrice),
+				TradeVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
+				OriginSide = (Sides?)level1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
+				ServerTime = (DateTimeOffset?)level1.Changes.TryGetValue(Level1Fields.LastTradeTime) ?? level1.ServerTime,
+				IsUpTick = (bool?)level1.Changes.TryGetValue(Level1Fields.LastTradeUpDown),
+				LocalTime = level1.LocalTime,
+			};
+		}
+
+		private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
+		{
+			private class OrderBookEnumerator : IEnumerator<QuoteChangeMessage>
+			{
+				private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator;
+
+				private decimal? _prevBidPrice;
+				private decimal? _prevBidVolume;
+				private decimal? _prevAskPrice;
+				private decimal? _prevAskVolume;
+
+				public OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
+				{
+					_level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
+				}
+
+				public QuoteChangeMessage Current { get; private set; }
+
+				bool IEnumerator.MoveNext()
+				{
+					while (_level1Enumerator.MoveNext())
+					{
+						var level1 = _level1Enumerator.Current;
+
+						if (!level1.IsContainsQuotes())
+							continue;
+
+						var prevBidPrice = _prevBidPrice;
+						var prevBidVolume = _prevBidVolume;
+						var prevAskPrice = _prevAskPrice;
+						var prevAskVolume = _prevAskVolume;
+
+						_prevBidPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _prevBidPrice;
+						_prevBidVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _prevBidVolume;
+						_prevAskPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _prevAskPrice;
+						_prevAskVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _prevAskVolume;
+
+						if (_prevBidPrice == 0)
+							_prevBidPrice = null;
+
+						if (_prevAskPrice == 0)
+							_prevAskPrice = null;
+
+						if (prevBidPrice == _prevBidPrice && prevBidVolume == _prevBidVolume && prevAskPrice == _prevAskPrice && prevAskVolume == _prevAskVolume)
+							continue;
+
+						Current = new QuoteChangeMessage
+						{
+							SecurityId = level1.SecurityId,
+							LocalTime = level1.LocalTime,
+							ServerTime = level1.ServerTime,
+							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
+							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
+						};
+
+						return true;
+					}
+
+					Current = null;
+					return false;
+				}
+
+				public void Reset()
+				{
+					_level1Enumerator.Reset();
+					Current = null;
+				}
+
+				object IEnumerator.Current => Current;
+
+				void IDisposable.Dispose()
+				{
+					Current = null;
+					_level1Enumerator.Dispose();
+				}
+			}
+
+			//private readonly IEnumerable<Level1ChangeMessage> _level1;
+
+			public OrderBookEnumerable(IEnumerable<Level1ChangeMessage> level1)
+				: base(() => new OrderBookEnumerator(level1.GetEnumerator()))
+			{
+				if (level1 == null)
+					throw new ArgumentNullException(nameof(level1));
+
+				//_level1 = level1;
+			}
+
+			//int IEnumerableEx.Count => _level1.Count;
+		}
+
+		/// <summary>
+		/// To convert level1 data into order books.
+		/// </summary>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Market depths.</returns>
+		public static IEnumerable<QuoteChangeMessage> ToOrderBooks(this IEnumerable<Level1ChangeMessage> level1)
+		{
+			return new OrderBookEnumerable(level1);
+		}
+
+		/// <summary>
+		/// To check, are there quotes in the level1.
+		/// </summary>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Quotes.</returns>
+		public static bool IsContainsQuotes(this Level1ChangeMessage level1)
+		{
+			if (level1 == null)
+				throw new ArgumentNullException(nameof(level1));
+
+			return level1.Changes.ContainsKey(Level1Fields.BestBidPrice) || level1.Changes.ContainsKey(Level1Fields.BestAskPrice);
+		}
+
+		/// <summary>
+		/// To get the price increment on the basis of accuracy.
+		/// </summary>
+		/// <param name="decimals">Decimals.</param>
+		/// <returns>Price step.</returns>
+		public static decimal GetPriceStep(this int decimals)
+		{
+			return 1m / 10m.Pow(decimals);
+		}
+
+		/// <summary>
+		/// Check if the specified identifier is <see cref="SecurityId.All"/>.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns><see langword="true"/>, if the specified identifier is <see cref="SecurityId.All"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAllSecurity(this SecurityId securityId)
+		{
+			//if (security == null)
+			//	throw new ArgumentNullException(nameof(security));
+
+			return securityId.SecurityCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode);
+		}
+
+		/// <summary>
+		/// To convert the currency type into the name in the MICEX format.
+		/// </summary>
+		/// <param name="type">Currency type.</param>
+		/// <returns>The currency name in the MICEX format.</returns>
+		public static string ToMicexCurrencyName(this CurrencyTypes type)
+		{
+			switch (type)
+			{
+				case CurrencyTypes.RUB:
+					return "SUR";
+				default:
+					return type.GetName();
+			}
+		}
+
+		/// <summary>
+		/// To convert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
+		/// </summary>
+		/// <param name="name">The currency name in the MICEX format.</param>
+		/// <param name="errorHandler">Error handler.</param>
+		/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
+		public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler = null)
+		{
+			if (name.IsEmpty())
+				return null;
+
+			switch (name)
+			{
+				case "SUR":
+				case "RUR":
+					return CurrencyTypes.RUB;
+				case "PLD":
+				case "PLT":
+				case "GLD":
+				case "SLV":
+					return null;
+				default:
+				{
+					try
+					{
+						return name.To<CurrencyTypes>();
+					}
+					catch (Exception ex)
+					{
+						if (errorHandler == null)
+							ex.LogError();
+						else
+							errorHandler.Invoke(ex);
+
+						return null;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// To get the instrument description by the class.
+		/// </summary>
+		/// <param name="securityClassInfo">Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.</param>
+		/// <param name="secClass">Security class.</param>
+		/// <returns>The instrument description. If the class is not found, then empty value is returned as instrument type.</returns>
+		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
+		{
+			var pair = securityClassInfo.TryGetValue(secClass);
+			return Tuple.Create(pair?.First, pair == null ? secClass : pair.Second);
+		}
+
+		/// <summary>
+		/// To get the board code for the instrument class.
+		/// </summary>
+		/// <param name="adapter">Adapter to the trading system.</param>
+		/// <param name="secClass">Security class.</param>
+		/// <returns>Board code.</returns>
+		public static string GetBoardCode(this IMessageAdapter adapter, string secClass)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (secClass.IsEmpty())
+				throw new ArgumentNullException(nameof(secClass));
+
+			return adapter.SecurityClassInfo.GetSecurityClassInfo(secClass).Item2;
+		}
+
+		/// <summary>
+		/// Convert <see cref="Level1Fields"/> to <see cref="Type"/> value.
+		/// </summary>
+		/// <param name="field"><see cref="Level1Fields"/> value.</param>
+		/// <returns><see cref="Type"/> value.</returns>
+		public static Type ToType(this Level1Fields field)
+		{
+			switch (field)
+			{
+				case Level1Fields.AsksCount:
+				case Level1Fields.BidsCount:
+				case Level1Fields.TradesCount:
+				case Level1Fields.Decimals:
+					return typeof(int);
+
+				case Level1Fields.LastTradeId:
+					return typeof(long);
+
+				case Level1Fields.BestAskTime:
+				case Level1Fields.BestBidTime:
+				case Level1Fields.LastTradeTime:
+				case Level1Fields.BuyBackDate:
+				case Level1Fields.CouponDate:
+					return typeof(DateTimeOffset);
+
+				case Level1Fields.LastTradeUpDown:
+				case Level1Fields.IsSystem:
+					return typeof(bool);
+
+				case Level1Fields.State:
+					return typeof(SecurityStates);
+
+				case Level1Fields.LastTradeOrigin:
+					return typeof(Sides);
+
+				default:
+					return field.IsObsolete() ? null : typeof(decimal);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="PositionChangeTypes"/> to <see cref="Type"/> value.
+		/// </summary>
+		/// <param name="type"><see cref="PositionChangeTypes"/> value.</param>
+		/// <returns><see cref="Type"/> value.</returns>
+		public static Type ToType(this PositionChangeTypes type)
+		{
+			switch (type)
+			{
+				case PositionChangeTypes.ExpirationDate:
+					return typeof(DateTimeOffset);
+
+				case PositionChangeTypes.State:
+					return typeof(PortfolioStates);
+
+				case PositionChangeTypes.Currency:
+					return typeof(CurrencyTypes);
+
+				case PositionChangeTypes.BuyOrdersCount:
+				case PositionChangeTypes.SellOrdersCount:
+				case PositionChangeTypes.OrdersCount:
+				case PositionChangeTypes.TradesCount:
+					return typeof(int);
+
+				default:
+					return type.IsObsolete() ? null : typeof(decimal);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="QuoteChangeMessage"/> to <see cref="Level1ChangeMessage"/> value.
+		/// </summary>
+		/// <param name="message"><see cref="QuoteChangeMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this QuoteChangeMessage message)
+		{
+			var bestBid = message.GetBestBid();
+			var bestAsk = message.GetBestAsk();
+
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.ServerTime,
+			};
+
+			if (bestBid != null)
+			{
+				level1.Add(Level1Fields.BestBidPrice, bestBid.Price);
+				level1.Add(Level1Fields.BestBidVolume, bestBid.Volume);
+			}
+
+			if (bestAsk != null)
+			{
+				level1.Add(Level1Fields.BestAskPrice, bestAsk.Price);
+				level1.Add(Level1Fields.BestAskVolume, bestAsk.Volume);
+			}
+
+			return level1;
+		}
+
+		/// <summary>
+		/// Convert <see cref="CandleMessage"/> to <see cref="Level1ChangeMessage"/> value.
+		/// </summary>
+		/// <param name="message"><see cref="CandleMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this CandleMessage message)
+		{
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.OpenTime,
+			}
+			.Add(Level1Fields.OpenPrice, message.OpenPrice)
+			.Add(Level1Fields.HighPrice, message.HighPrice)
+			.Add(Level1Fields.LowPrice, message.LowPrice)
+			.Add(Level1Fields.ClosePrice, message.ClosePrice)
+			.Add(Level1Fields.Volume, message.TotalVolume)
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true);
+
+			return level1;
+		}
+
+		/// <summary>
+		/// Convert <see cref="ExecutionMessage"/> to <see cref="Level1ChangeMessage"/> value.
+		/// </summary>
+		/// <param name="message"><see cref="ExecutionMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this ExecutionMessage message)
+		{
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.ServerTime,
+			}
+			.TryAdd(Level1Fields.LastTradeId, message.TradeId)
+			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
+			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true)
+			.TryAdd(Level1Fields.LastTradeOrigin, message.OriginSide);
+
+			return level1;
+		}
+
+		/// <summary>
+		/// To build level1 from the order books.
+		/// </summary>
+		/// <param name="quotes">Order books.</param>
+		/// <returns>Level1.</returns>
+		public static IEnumerable<Level1ChangeMessage> ToLevel1(this IEnumerable<QuoteChangeMessage> quotes)
+		{
+			if (quotes is null)
+				throw new ArgumentNullException(nameof(quotes));
+
+			foreach (var quote in quotes)
+			{
+				var l1Msg = new Level1ChangeMessage
+				{
+					SecurityId = quote.SecurityId,
+					ServerTime = quote.ServerTime,
+				};
+
+				if (quote.Bids.Length > 0)
+				{
+					l1Msg
+						.TryAdd(Level1Fields.BestBidPrice, quote.Bids[0].Price)
+						.TryAdd(Level1Fields.BestBidVolume, quote.Bids[0].Volume);
+				}
+
+				if (quote.Asks.Length > 0)
+				{
+					l1Msg
+						.TryAdd(Level1Fields.BestAskPrice, quote.Asks[0].Price)
+						.TryAdd(Level1Fields.BestAskVolume, quote.Asks[0].Volume);
+				}
+
+				yield return l1Msg;
+			}
 		}
 	}
 }
