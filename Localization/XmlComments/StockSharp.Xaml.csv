@@ -1,5 +1,4 @@
 T:StockSharp.Xaml.AboutWindow/summary;DocStr9433
-P:StockSharp.Xaml.AboutWindow.UpdaterPath/summary;DocStr9434
 P:StockSharp.Xaml.AboutWindow.ProductTitle/summary;DocStr9435
 P:StockSharp.Xaml.AboutWindow.Version/summary;DocStr9436
 P:StockSharp.Xaml.AboutWindow.Description/summary;DocStr9437
@@ -7,10 +6,7 @@ P:StockSharp.Xaml.AboutWindow.Product/summary;DocStr9438
 P:StockSharp.Xaml.AboutWindow.Copyright/summary;DocStr9439
 P:StockSharp.Xaml.AboutWindow.Company/summary;DocStr9440
 P:StockSharp.Xaml.AboutWindow.LinkUri/summary;DocStr9441
-P:StockSharp.Xaml.AboutWindow.ClosingForInstall/summary;DocStr9442
 M:StockSharp.Xaml.AboutWindow.#ctor/summary;DocStr1
-M:StockSharp.Xaml.AboutWindow.CheckForUpdates(System.Nullable{System.TimeSpan})/summary;Str1470
-M:StockSharp.Xaml.AboutWindow.CheckForUpdates(System.Nullable{System.TimeSpan})/param/delay;DocStr9812
 M:StockSharp.Xaml.AboutWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.AdvertisePanel/summary;DocStr8063
 F:StockSharp.Xaml.AdvertisePanel.TextColorProperty/summary;DocStr29
@@ -31,6 +27,9 @@ P:StockSharp.Xaml.AutoCompletePopUp.SelectedSecurity/summary;DocStr8068
 E:StockSharp.Xaml.AutoCompletePopUp.MatchKeyDown/summary;DocStr8069
 M:StockSharp.Xaml.AutoCompletePopUp.DoFocus/summary;DocStr8065
 M:StockSharp.Xaml.AutoCompletePopUp.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.AutomaticUpdaterExtensions/summary;DocStr9443
+M:StockSharp.Xaml.AutomaticUpdaterExtensions.Translate(Ecng.Xaml.AutoUpdater.AutomaticUpdater)/summary;DocStr8189
+M:StockSharp.Xaml.AutomaticUpdaterExtensions.Translate(Ecng.Xaml.AutoUpdater.AutomaticUpdater)/param/automaticUpdater;DocStr608
 T:StockSharp.Xaml.BaseApplication/summary;DocStr8070
 M:StockSharp.Xaml.BaseApplication.#ctor/summary;DocStr93
 P:StockSharp.Xaml.BaseApplication.ShowExceptions/summary;DocStr8076
@@ -1419,6 +1418,11 @@ M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionActive(StockSharp.Messages.M
 M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionActive(StockSharp.Messages.MarketDataMessage)/param/subscription;DocStr11068
 M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)/summary;DocStr11069
 M:StockSharp.Xaml.ISubscriptionsView.SetSubscriptionStopped(StockSharp.Messages.MarketDataMessage)/param/subscription;DocStr11068
+T:StockSharp.Xaml.SubsetComboBox/summary;DocStr11739
+F:StockSharp.Xaml.SubsetComboBox.ValTypeProperty/summary;DocStr11740
+P:StockSharp.Xaml.SubsetComboBox.ValType/summary;DocStr11740
+M:StockSharp.Xaml.SubsetComboBox.#ctor/summary;DocStr1
+M:StockSharp.Xaml.SubsetComboBox.ItemsSourceChanged(System.Object)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.TargetPlatformFeature/summary;Features
 P:StockSharp.Xaml.TargetPlatformFeature.LocalizationKey/summary;DocStr8425
 P:StockSharp.Xaml.TargetPlatformFeature.PreferLanguage/summary;DocStr4324

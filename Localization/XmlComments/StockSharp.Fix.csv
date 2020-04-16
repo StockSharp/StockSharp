@@ -1011,6 +1011,8 @@ T:StockSharp.Fix.Native.DialectSource`1/summary;DocStr11581
 T:StockSharp.Fix.Native.DialectSource`1/typeparam/TInterfaceType;DocStr11582
 M:StockSharp.Fix.Native.DialectSource`1.Add(System.Type)/summary;DocStr11583
 M:StockSharp.Fix.Native.DialectSource`1.Add(System.Type)/param/type;Str1963
+M:StockSharp.Fix.Native.DialectSource`1.GetValues/summary;DocStr11738
+M:StockSharp.Fix.Native.DialectSource`1.GetValues/returns;DocStr7837
 T:StockSharp.Fix.Native.EncryptMethod/summary;DocStr3224
 F:StockSharp.Fix.Native.EncryptMethod.None/summary;Str1658
 F:StockSharp.Fix.Native.EncryptMethod.PKCS/summary;DocStr3225
@@ -2054,7 +2056,9 @@ F:StockSharp.Fix.Native.FixTags.RefTagID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RefMsgType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SessionRejectReason/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.BusinessRejectReason/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.GrossTradeAmt/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoTradingSessions/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.TotalVolumeTraded/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TotalNumSecurities/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.PriceType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ExpireDate/summary;DocStr8459

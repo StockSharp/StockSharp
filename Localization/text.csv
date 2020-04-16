@@ -16155,3 +16155,6 @@ DocStr11734;Get current chart theme;Get current chart theme
 DocStr11735;Determines the {0} is dark;Determines the {0} is dark
 DocStr11736;Send {0} to emulator;Send {0} to emulator
 DocStr11737;Suspend;Suspend
+DocStr11738;Get values;Get values
+DocStr11739;Interaction logic for SubsetComboBox.xaml;Interaction logic for SubsetComboBox.xaml
+DocStr11740;Current value type in the combo box;Current value type in the combo box
