@@ -294,7 +294,9 @@ namespace StockSharp.Algo.Testing
 
 					foreach (var security in securities)
 					{
-						SendOutMessage(security.Board.ToMessage());
+						if (security.Board != null)
+							SendOutMessage(security.Board.ToMessage());
+
 						SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
 					}
 
