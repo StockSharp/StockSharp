@@ -2842,5 +2842,13 @@ namespace StockSharp.Messages
 				yield return l1Msg;
 			}
 		}
+
+		/// <summary>
+		/// Extract time frames from the specified data types set.
+		/// </summary>
+		/// <param name="dataTypes">Data types.</param>
+		/// <returns>Time frames.</returns>
+		public static IEnumerable<TimeSpan> FilterTimeFrames(this IEnumerable<DataType> dataTypes)
+			=> dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage) && t.Arg != null).Select(t => (TimeSpan)t.Arg);
 	}
 }

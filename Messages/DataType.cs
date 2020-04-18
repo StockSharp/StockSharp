@@ -233,10 +233,8 @@ namespace StockSharp.Messages
 				return LocalizedStrings.News;
 			else if (this == Securities)
 				return LocalizedStrings.Securities;
-			else if (MessageType?.IsCandleMessage() == true)
-			{
+			else if (IsCandles)
 				return $"{MessageType.GetDisplayName()}: {Arg}";
-			}
 			else
 				return $"{MessageType}: {Arg}";
 		}
