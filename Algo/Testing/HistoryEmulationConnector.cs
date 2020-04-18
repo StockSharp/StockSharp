@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Algo.Storages;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Algo.Risk;
 
 	/// <summary>
 	/// The emulation connection. It uses historical data and/or occasionally generated.
@@ -83,10 +84,6 @@ namespace StockSharp.Algo.Testing
 			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
 			TransactionIdGenerator = EmulationAdapter.TransactionIdGenerator;
 
-			RiskManager = null;
-
-			SupportBasketSecurities = true;
-
 			Adapter.LatencyManager = null;
 			Adapter.CommissionManager = null;
 			Adapter.PnLManager = null;
@@ -107,6 +104,12 @@ namespace StockSharp.Algo.Testing
 			Adapter.SupportOrderBookTruncate = false;
 			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 		}
+
+		/// <inheritdoc />
+		public override IRiskManager RiskManager => null;
+
+		/// <inheritdoc />
+		public override bool SupportBasketSecurities => true;
 
 		/// <summary>
 		/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.

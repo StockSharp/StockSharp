@@ -377,7 +377,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Risk control manager.
 		/// </summary>
-		public IRiskManager RiskManager { get; set; }
+		public virtual IRiskManager RiskManager { get; set; }
 
 		/// <summary>
 		/// Orders registration delay calculation manager.
