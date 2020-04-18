@@ -21,11 +21,10 @@ namespace StockSharp.Algo.Testing
 
     using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Serialization;
 
     using StockSharp.BusinessEntities;
     using StockSharp.Messages;
-	using StockSharp.Logging;
-	using Ecng.Serialization;
 
 	/// <summary>
 	/// The interface of the real time market data adapter.
@@ -45,15 +44,15 @@ namespace StockSharp.Algo.Testing
 
 		private readonly ChannelMessageAdapter _channelEmulator;
 		private readonly IMessageQueue _queue;
-		private readonly bool _sendTimeToEmulator;
+		private readonly bool _isEmulationOnly;
 
 		/// <summary>
 		/// Initialize <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		/// <param name="queue">Message queue.</param>
-		/// <param name="sendTimeToEmulator">Send <see cref="TimeMessage"/> to emulator.</param>
-		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageQueue queue, bool sendTimeToEmulator)
+		/// <param name="isEmulationOnly">Send <see cref="TimeMessage"/> to emulator.</param>
+		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageQueue queue, bool isEmulationOnly)
 			: base(innerAdapter)
 		{
 			Emulator = new MarketEmulator
@@ -71,7 +70,7 @@ namespace StockSharp.Algo.Testing
 			_channelEmulator = new ChannelMessageAdapter(new SubscriptionOnlineMessageAdapter(Emulator), new InMemoryMessageChannel(queue, "Emulator in", err => RaiseNewOutMessage(new ErrorMessage { Error = err })), new PassThroughMessageChannel());
 			_channelEmulator.NewOutMessage += OnMarketEmulatorNewOutMessage;
 			_queue = queue;
-			_sendTimeToEmulator = sendTimeToEmulator;
+			_isEmulationOnly = isEmulationOnly;
 		}
 
 		/// <summary>
@@ -304,7 +303,7 @@ namespace StockSharp.Algo.Testing
 				{
 					if (OwnInnerAdapter)
 					{
-						if (_sendTimeToEmulator)
+						if (_isEmulationOnly)
 							SendToEmulator(message);
 						else
 							base.OnInnerAdapterNewOutMessage(message);
@@ -392,9 +391,11 @@ namespace StockSharp.Algo.Testing
 		{
 			if (OwnInnerAdapter)
 			{
-				if (portfolioName == Extensions.SimulatorPortfolioName)
+				if (_isEmulationOnly || portfolioName.CompareIgnoreCase(Extensions.SimulatorPortfolioName))
 				{
-					_emuOrderIds.Add(message.TransactionId);
+					if (!_isEmulationOnly)
+						_emuOrderIds.Add(message.TransactionId);
+
 					SendToEmulator(message);
 				}
 				else
@@ -409,7 +410,7 @@ namespace StockSharp.Algo.Testing
 
 		private void ProcessOrderMessage(long transId, Message message)
 		{
-			if (_emuOrderIds.Contains(transId))
+			if (_isEmulationOnly || _emuOrderIds.Contains(transId))
 				SendToEmulator(message);
 			else
 				base.OnSendInMessage(message);
@@ -435,6 +436,6 @@ namespace StockSharp.Algo.Testing
 		/// Create a copy of <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone() => new EmulationMessageAdapter(InnerAdapter.TypedClone(), _queue, _sendTimeToEmulator);
+		public override IMessageChannel Clone() => new EmulationMessageAdapter(InnerAdapter.TypedClone(), _queue, _isEmulationOnly);
 	}
 }
