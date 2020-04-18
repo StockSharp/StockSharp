@@ -984,6 +984,30 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
+		/// Convert <see cref="MarketDataMessage.Arg"/> to <see cref="string"/> value.
+		/// </summary>
+		/// <param name="messageType">Message type.</param>
+		/// <param name="arg"><see cref="MarketDataMessage.Arg"/> value.</param>
+		/// <returns><see cref="string"/> value.</returns>
+		public static string MessageArgToString(this Type messageType, object arg)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			if (messageType == typeof(ExecutionMessage))
+			{
+				if (arg is null)
+					throw new ArgumentNullException(nameof(arg));
+
+				return arg.ToString();
+			}
+			else if (messageType.IsCandleMessage())
+				return messageType.CandleArgToFolderName(arg);
+			else
+				return arg?.ToString();
+		}
+
+		/// <summary>
 		/// Load messages.
 		/// </summary>
 		/// <param name="settings">Storage settings.</param>
