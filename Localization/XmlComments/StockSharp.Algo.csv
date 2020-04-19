@@ -5930,6 +5930,16 @@ M:StockSharp.Algo.Storages.StorageHelper.StringToMessageArg(System.Type,System.S
 M:StockSharp.Algo.Storages.StorageHelper.StringToMessageArg(System.Type,System.String)/param/messageType;DocStr9
 M:StockSharp.Algo.Storages.StorageHelper.StringToMessageArg(System.Type,System.String)/param/strValue;DocStr65
 M:StockSharp.Algo.Storages.StorageHelper.StringToMessageArg(System.Type,System.String)/returns;DocStr65
+M:StockSharp.Algo.Storages.StorageHelper.MessageArgToString(System.Type,System.Object)/summary;DocStr8644
+M:StockSharp.Algo.Storages.StorageHelper.MessageArgToString(System.Type,System.Object)/param/messageType;DocStr9
+M:StockSharp.Algo.Storages.StorageHelper.MessageArgToString(System.Type,System.Object)/param/arg;DocStr65
+M:StockSharp.Algo.Storages.StorageHelper.MessageArgToString(System.Type,System.Object)/returns;DocStr65
+M:StockSharp.Algo.Storages.StorageHelper.LoadMessages(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider,StockSharp.Messages.MarketDataMessage,System.Action{StockSharp.Messages.Message})/summary;DocStr11741
+M:StockSharp.Algo.Storages.StorageHelper.LoadMessages(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider,StockSharp.Messages.MarketDataMessage,System.Action{StockSharp.Messages.Message})/param/settings;StorageSettings
+M:StockSharp.Algo.Storages.StorageHelper.LoadMessages(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider,StockSharp.Messages.MarketDataMessage,System.Action{StockSharp.Messages.Message})/param/candleBuilderProvider;DocStr10629
+M:StockSharp.Algo.Storages.StorageHelper.LoadMessages(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider,StockSharp.Messages.MarketDataMessage,System.Action{StockSharp.Messages.Message})/param/msg;DocStr4473
+M:StockSharp.Algo.Storages.StorageHelper.LoadMessages(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider,StockSharp.Messages.MarketDataMessage,System.Action{StockSharp.Messages.Message})/param/newOutMessage;DocStr2237
+M:StockSharp.Algo.Storages.StorageHelper.LoadMessages(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider,StockSharp.Messages.MarketDataMessage,System.Action{StockSharp.Messages.Message})/returns;DocStr11742
 T:StockSharp.Algo.Storages.StorageMessageAdapter/summary;DocStr8613
 M:StockSharp.Algo.Storages.StorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.StorageProcessor)/summary;DocStr1
 M:StockSharp.Algo.Storages.StorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.StorageProcessor)/param/innerAdapter;DocStr1241
@@ -6748,7 +6758,7 @@ T:StockSharp.Algo.Testing.EmulationMessageAdapter/summary;DocStr11723
 M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/summary;DocStr93
 M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/param/innerAdapter;DocStr8563
 M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/param/queue;DocStr11475
-M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/param/sendTimeToEmulator;DocStr11736
+M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageQueue,System.Boolean)/param/isEmulationOnly;DocStr11736
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.Emulator/summary;Str1125
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.Settings/summary;DocStr1883
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.SupportedInMessages/inheritdoc;DocStr8459
@@ -6810,6 +6820,8 @@ M:StockSharp.Algo.Testing.HistoryEmulationConnector.#ctor(StockSharp.BusinessEnt
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.#ctor(StockSharp.BusinessEntities.ISecurityProvider,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio},StockSharp.Algo.Storages.IStorageRegistry)/param/securityProvider;DocStr972
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.#ctor(StockSharp.BusinessEntities.ISecurityProvider,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio},StockSharp.Algo.Storages.IStorageRegistry)/param/portfolios;DocStr1870
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.#ctor(StockSharp.BusinessEntities.ISecurityProvider,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio},StockSharp.Algo.Storages.IStorageRegistry)/param/storageRegistry;MarketDataStorage
+P:StockSharp.Algo.Testing.HistoryEmulationConnector.RiskManager/inheritdoc;DocStr8459
+P:StockSharp.Algo.Testing.HistoryEmulationConnector.SupportBasketSecurities/inheritdoc;DocStr8459
 P:StockSharp.Algo.Testing.HistoryEmulationConnector.HistoryMessageAdapter/summary;DocStr2104
 P:StockSharp.Algo.Testing.HistoryEmulationConnector.State/summary;DocStr1878
 E:StockSharp.Algo.Testing.HistoryEmulationConnector.StateChanged/summary;DocStr2124

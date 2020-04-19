@@ -16158,3 +16158,7 @@ DocStr11737;Suspend;Suspend
 DocStr11738;Get values;Get values
 DocStr11739;Interaction logic for SubsetComboBox.xaml;Interaction logic for SubsetComboBox.xaml
 DocStr11740;Current value type in the combo box;Current value type in the combo box
+DocStr11741;Load messages;Load messages
+DocStr11742;Last date;Last date
+DocStr11743;Extract time frames from the specified data types set;Extract time frames from the specified data types set
+DocStr11744;Time frames;Time frames

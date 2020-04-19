@@ -1174,6 +1174,9 @@ M:StockSharp.Messages.Extensions.ToLevel1(StockSharp.Messages.ExecutionMessage)/
 M:StockSharp.Messages.Extensions.ToLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.QuoteChangeMessage})/summary;DocStr11715
 M:StockSharp.Messages.Extensions.ToLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.QuoteChangeMessage})/param/quotes;DocStr8573
 M:StockSharp.Messages.Extensions.ToLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.QuoteChangeMessage})/returns;DocStr8571
+M:StockSharp.Messages.Extensions.FilterTimeFrames(System.Collections.Generic.IEnumerable{StockSharp.Messages.DataType})/summary;DocStr11743
+M:StockSharp.Messages.Extensions.FilterTimeFrames(System.Collections.Generic.IEnumerable{StockSharp.Messages.DataType})/param/dataTypes;DataTypes
+M:StockSharp.Messages.Extensions.FilterTimeFrames(System.Collections.Generic.IEnumerable{StockSharp.Messages.DataType})/returns;DocStr11744
 M:StockSharp.Messages.Extensions.Add``2(``0,``1,System.Object)/summary;DocStr2481
 M:StockSharp.Messages.Extensions.Add``2(``0,``1,System.Object)/typeparam/TMessage;DocStr2482
 M:StockSharp.Messages.Extensions.Add``2(``0,``1,System.Object)/typeparam/TChange;DocStr2485
