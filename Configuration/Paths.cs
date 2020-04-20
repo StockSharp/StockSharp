@@ -30,6 +30,7 @@
 			SecurityExtendedInfo = Path.Combine(AppDataPath, "Extended info");
 			StorageDir = Path.Combine(AppDataPath, "Storage");
 			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
+			InstallerDir = Path.Combine(CompanyPath, "Installer");
 		}
 
 		/// <summary>
@@ -81,6 +82,11 @@
 		/// The path to the directory with snapshots of market data.
 		/// </summary>
 		public static readonly string SnapshotsDir;
+
+		/// <summary>
+		/// The path to the installer directory.
+		/// </summary>
+		public static readonly string InstallerDir;
 
 		/// <summary>
 		/// Get website url.

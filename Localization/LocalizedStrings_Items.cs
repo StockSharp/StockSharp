@@ -18,6 +18,186 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Application update
+		/// </summary>
+		public const string ApplicationUpdateKey = nameof(ApplicationUpdate);
+
+		/// <summary>
+		/// Application update
+		/// </summary>
+		public static string ApplicationUpdate => GetString(ApplicationUpdateKey);
+
+		/// <summary>
+		/// Following updates are available
+		/// </summary>
+		public const string FollowingUpdatesAvailableKey = nameof(FollowingUpdatesAvailable);
+
+		/// <summary>
+		/// Following updates are available
+		/// </summary>
+		public static string FollowingUpdatesAvailable => GetString(FollowingUpdatesAvailableKey);
+
+		/// <summary>
+		/// {0} is not found
+		/// </summary>
+		public const string ElementNotFoundParamsKey = nameof(ElementNotFoundParams);
+
+		/// <summary>
+		/// {0} is not found
+		/// </summary>
+		public static string ElementNotFoundParams => GetString(ElementNotFoundParamsKey);
+
+		/// <summary>
+		/// Exiting the application
+		/// </summary>
+		public const string ExitingApplicationKey = nameof(ExitingApplication);
+
+		/// <summary>
+		/// Exiting the application
+		/// </summary>
+		public static string ExitingApplication => GetString(ExitingApplicationKey);
+
+		/// <summary>
+		/// The application will be stopped in order to run installer
+		/// </summary>
+		public const string ExitingAppForInstallerKey = nameof(ExitingAppForInstaller);
+
+		/// <summary>
+		/// The application will be stopped in order to run installer
+		/// </summary>
+		public static string ExitingAppForInstaller => GetString(ExitingAppForInstallerKey);
+
+		/// <summary>
+		/// Update is not required
+		/// </summary>
+		public const string UpdateIsNotRequiredKey = nameof(UpdateIsNotRequired);
+
+		/// <summary>
+		/// Update is not required
+		/// </summary>
+		public static string UpdateIsNotRequired => GetString(UpdateIsNotRequiredKey);
+
+		/// <summary>
+		/// The installer was not found
+		/// </summary>
+		public const string InstallerNotFoundKey = nameof(InstallerNotFound);
+
+		/// <summary>
+		/// The installer was not found
+		/// </summary>
+		public static string InstallerNotFound => GetString(InstallerNotFoundKey);
+
+		/// <summary>
+		/// The installer was not found. In order to be able to update the applications you need to download application installer at {0}.
+		/// </summary>
+		public const string InstallerNotFoundDetailParamsKey = nameof(InstallerNotFoundDetailParams);
+
+		/// <summary>
+		/// The installer was not found. In order to be able to update the applications you need to download application installer at {0}.
+		/// </summary>
+		public static string InstallerNotFoundDetailParams => GetString(InstallerNotFoundDetailParamsKey);
+
+		/// <summary>
+		/// Application install folder
+		/// </summary>
+		public const string AppInstallDirKey = nameof(AppInstallDir);
+
+		/// <summary>
+		/// Application install folder
+		/// </summary>
+		public static string AppInstallDir => GetString(AppInstallDirKey);
+
+		/// <summary>
+		/// install
+		/// </summary>
+		public const string InstallKey = nameof(Install);
+
+		/// <summary>
+		/// install
+		/// </summary>
+		public static string Install => GetString(InstallKey);
+
+		/// <summary>
+		/// reset
+		/// </summary>
+		public const string ResetAppKey = nameof(ResetApp);
+
+		/// <summary>
+		/// reset
+		/// </summary>
+		public static string ResetApp => GetString(ResetAppKey);
+
+		/// <summary>
+		/// installing
+		/// </summary>
+		public const string InstallingKey = nameof(Installing);
+
+		/// <summary>
+		/// installing
+		/// </summary>
+		public static string Installing => GetString(InstallingKey);
+
+		/// <summary>
+		/// installed
+		/// </summary>
+		public const string InstalledKey = nameof(Installed);
+
+		/// <summary>
+		/// installed
+		/// </summary>
+		public static string Installed => GetString(InstalledKey);
+
+		/// <summary>
+		/// not installed
+		/// </summary>
+		public const string NotInstalledKey = nameof(NotInstalled);
+
+		/// <summary>
+		/// not installed
+		/// </summary>
+		public static string NotInstalled => GetString(NotInstalledKey);
+
+		/// <summary>
+		/// Applications
+		/// </summary>
+		public const string ApplicationsKey = nameof(Applications);
+
+		/// <summary>
+		/// Applications
+		/// </summary>
+		public static string Applications => GetString(ApplicationsKey);
+
+		/// <summary>
+		/// Plugins
+		/// </summary>
+		public const string PluginsKey = nameof(Plugins);
+
+		/// <summary>
+		/// Plugins
+		/// </summary>
+		public static string Plugins => GetString(PluginsKey);
+
+		/// <summary>
+		/// Update information
+		/// </summary>
+		public const string UpdateDetailsKey = nameof(UpdateDetails);
+
+		/// <summary>
+		/// Update information
+		/// </summary>
+		public static string UpdateDetails => GetString(UpdateDetailsKey);
+
+		/// <summary>
+		/// Update fail details
+		/// </summary>
+		public const string UpdateFailDetailsKey = nameof(UpdateFailDetails);
+
+		/// <summary>
+		/// Update fail details
+		/// </summary>
+		public static string UpdateFailDetails => GetString(UpdateFailDetailsKey);
+	
+		/// <summary>
 		/// S#.Installer
 		/// </summary>
 		public const string StockSharpInstallerKey = nameof(StockSharpInstaller);

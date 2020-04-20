@@ -1,4 +1,22 @@
-﻿StockSharpInstaller;S#.Installer;S#.Установщик
+﻿ApplicationUpdate;Application update;Обновление приложения
+FollowingUpdatesAvailable;Following updates are available;Доступны следующие обновления
+ElementNotFoundParams;{0} is not found;{0} не найден
+ExitingApplication;Exiting the application;Завершение приложения
+ExitingAppForInstaller;The application will be stopped in order to run installer;Для запуска установщика приложение будет закрыто
+UpdateIsNotRequired;Update is not required;Обновление не требуется
+InstallerNotFound;The installer was not found;Установщик не найден
+InstallerNotFoundDetailParams;The installer was not found. In order to be able to update the applications you need to download application installer at {0}.;Программа-установщик обновлений не найдена. Чтобы использовать функцию обновления приложений, необходимо скачать установщик обновлений по адресу {0}.
+AppInstallDir;Application install folder;Папка для установки приложения
+Install;install;установить
+ResetApp;reset;сбросить
+Installing;installing;установка
+Installed;installed;установлено
+NotInstalled;not installed;не установлено
+Applications;Applications;Приложения
+Plugins;Plugins;Плагины
+UpdateDetails;Update information;Информация об обновлении
+UpdateFailDetails;Update fail details;Информация об ошибке
+StockSharpInstaller;S#.Installer;S#.Установщик
 SetupType;Setup type;Тип установки
 PackageVersion;Package version;Версия пакета
 OutputDirectory;Output directory;Выходная папка
