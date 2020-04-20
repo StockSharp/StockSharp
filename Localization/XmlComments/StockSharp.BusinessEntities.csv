@@ -131,6 +131,7 @@ P:StockSharp.BusinessEntities.Exchange.Hotbit/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.Bitalong/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.PrizmBit/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.DigitexFutures/summary;DocStr11334
+P:StockSharp.BusinessEntities.Exchange.Bovespa/summary;DocStr11334
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -373,6 +374,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Hotbit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Bitalong/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.PrizmBit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.DigitexFutures/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.Bovespa/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
 E:StockSharp.BusinessEntities.IConnector.NewTrades/summary;DocStr868

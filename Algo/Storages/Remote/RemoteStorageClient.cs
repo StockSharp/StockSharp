@@ -622,7 +622,7 @@ namespace StockSharp.Algo.Storages.Remote
 			return Invoke(f => f.GetAvailableDataTypes(SessionId, securityId.ToStringId(nullIfEmpty: true), format))
 				.Select(t =>
 				{
-					var messageType = typeof(CandleMessage).To<string>().Replace(typeof(CandleMessage).Name, t.Item1).To<Type>();
+					var messageType = t.Item1.Contains(',') ? t.Item1.To<Type>() : typeof(CandleMessage).To<string>().Replace(typeof(CandleMessage).Name, t.Item1).To<Type>();
 					return DataType.Create(messageType, messageType.StringToMessageArg(t.Item2));
 				})
 				.ToArray();

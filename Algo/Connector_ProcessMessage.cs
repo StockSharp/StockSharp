@@ -318,7 +318,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Use <see cref="BasketSecurityMessageAdapter"/>.
 		/// </summary>
-		public bool SupportBasketSecurities { get; set; }
+		public virtual bool SupportBasketSecurities => false;
 
 		private bool _supportFilteredMarketDepth;
 

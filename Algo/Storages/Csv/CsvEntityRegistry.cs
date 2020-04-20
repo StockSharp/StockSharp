@@ -935,7 +935,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.SecurityId.SecurityCode,
 					data.SecurityId.BoardCode,
 					data.DataType.To<string>(),
-					data.DataType.ToCandleMessage().CandleArgToFolderName(data.Arg),
+					data.DataType.IsCandleDataType() ? data.DataType.ToCandleMessage().CandleArgToFolderName(data.Arg) : data.Arg.To<string>(),
 					data.IsCalcVolumeProfile.To<string>(),
 					data.AllowBuildFromSmallerTimeFrame.To<string>(),
 					data.IsRegularTradingHours.To<string>(),

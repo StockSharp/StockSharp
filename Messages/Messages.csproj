@@ -9,7 +9,7 @@
     <PackageReference Include="Ecng.Serialization.FieldFactories" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netstandard2.1' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
   </ItemGroup>

@@ -8,7 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netstandard2.1' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
 </Project>

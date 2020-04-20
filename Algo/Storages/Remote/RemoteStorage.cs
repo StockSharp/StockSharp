@@ -350,7 +350,7 @@ namespace StockSharp.Algo.Storages.Remote
 			return GetDrives()
 						.SelectMany(drive => drive.GetAvailableDataTypes(securityId, format))
 						.Distinct()
-						.Select(t => Tuple.Create(t.MessageType.Name, t.MessageType.CandleArgToFolderName(t.Arg)))
+						.Select(t => Tuple.Create(t.MessageType.GetTypeAsString(false), t.MessageType.MessageArgToString(t.Arg)))
 						.ToArray();
 		}
 
