@@ -67,5 +67,11 @@ namespace StockSharp.Community
 		/// </summary>
 		[EnumMember]
 		Lci,
+
+		/// <summary>
+		/// S#.Updater.
+		/// </summary>
+		[EnumMember]
+		Installer,
 	}
 }

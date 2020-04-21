@@ -25,6 +25,7 @@ namespace StockSharp.Community
 			{ Products.MatLab, new ProductInfoMessage { Id = 12, Name = "S#.MatLab", PackageId = "MatLab" } },
 			{ Products.Lci, new ProductInfoMessage { Id = 13, Name = "S#.Ë×È", PackageId = "Lci" } },
 			{ Products.Server, new ProductInfoMessage { Id = 14, Name = "S#.Server", PackageId = "Server" } },
+			{ Products.Installer, new ProductInfoMessage { Id = 16, Name = "S#.Installer" } },
 		};
 
 		/// <summary>
