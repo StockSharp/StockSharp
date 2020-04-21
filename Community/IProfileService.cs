@@ -18,6 +18,7 @@ namespace StockSharp.Community
 	using System;
 	using System.ServiceModel;
 
+	using StockSharp.Community.Messages;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -129,5 +130,13 @@ namespace StockSharp.Community
 		/// <returns>The user information.</returns>
 		[OperationContract]
 		UserInfoMessage GetUserProfile2(long userId);
+
+		/// <summary>
+		/// To get all available products.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>All available products.</returns>
+		[OperationContract]
+		ProductInfoMessage[] GetProducts(Guid sessionId);
 	}
 }

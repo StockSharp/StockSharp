@@ -63,12 +63,6 @@ namespace StockSharp.Community
 		MatLab,
 
 		/// <summary>
-		/// S#.Updater.
-		/// </summary>
-		[EnumMember]
-		Updater,
-
-		/// <summary>
 		/// S#.Ë×È.
 		/// </summary>
 		[EnumMember]

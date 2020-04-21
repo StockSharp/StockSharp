@@ -19,6 +19,7 @@ namespace StockSharp.Community
 
 	using Ecng.Common;
 
+	using StockSharp.Community.Messages;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -89,6 +90,12 @@ namespace StockSharp.Community
 		public UserInfoMessage GetUserProfile(long userId)
 		{
 			return Invoke(f => f.GetUserProfile2(userId));
+		}
+
+		/// <inheritdoc />
+		public ProductInfoMessage[] GetProducts()
+		{
+			return Invoke(f => f.GetProducts(SessionId));
 		}
 
 		private static void ValidateError(byte errorCode)

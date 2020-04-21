@@ -21,6 +21,18 @@
 		[DataMember]
 		public string Name { get; set; }
 
+		/// <summary>
+		/// Description.
+		/// </summary>
+		[DataMember]
+		public string Description { get; set; }
+
+		/// <summary>
+		/// Package id.
+		/// </summary>
+		[DataMember]
+		public string PackageId { get; set; }
+
 		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
@@ -43,6 +55,8 @@
 			{
 				Id = Id,
 				Name = Name,
+				Description = Description,
+				PackageId = PackageId,
 				OriginalTransactionId = OriginalTransactionId,
 			};
 			CopyTo(clone);
