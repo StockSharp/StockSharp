@@ -44,42 +44,40 @@
 
 		private static TaskCompletionSource<string[]> _tcs;
 
-		/// <inheritdoc />
-		public delegate void UpdateStatusDelegate(UpdateCheckStatus state, string details);
-
-		/// <summary>Update check status event.</summary>
-		public static event UpdateStatusDelegate Status;
-
 		/// <summary>Check for current application updates.</summary>
 		/// <param name="credentials">Server credentials for private repository updates.</param>
-		public static void CheckForUpdates(ServerCredentials credentials)
+		/// <param name="status">Update check status event.</param>
+		public static void CheckForUpdates(ServerCredentials credentials, Action<UpdateCheckStatus, string> status)
 		{
+			if (status is null)
+				throw new ArgumentNullException(nameof(status));
+
 			Task.Run(async () =>
 			{
 				try
 				{
 					var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-					var lines = await DoCheckForUpdates(credentials, cts.Token);
+					var lines = await DoCheckForUpdates(credentials, cts.Token, status);
 					if(lines.Length == 1 && lines[0].ToLowerInvariant() == "uptodate")
 					{
-						Status?.Invoke(UpdateCheckStatus.UpToDate, string.Empty);
+						status.Invoke(UpdateCheckStatus.UpToDate, string.Empty);
 						return;
 					}
 
-					Status?.Invoke(UpdateCheckStatus.UpdatesAvailable, lines.Join("\n"));
+					status.Invoke(UpdateCheckStatus.UpdatesAvailable, lines.Join("\n"));
 				}
 				catch (UpdateException e)
 				{
-					Status?.Invoke(e.Status, e.ToString());
+					status.Invoke(e.Status, e.ToString());
 				}
 				catch (Exception e)
 				{
-					Status?.Invoke(UpdateCheckStatus.Error, e.ToString());
+					status.Invoke(UpdateCheckStatus.Error, e.ToString());
 				}
 			});
 		}
 
-		private static Task<string[]> DoCheckForUpdates(ServerCredentials credentials, CancellationToken token)
+		private static Task<string[]> DoCheckForUpdates(ServerCredentials credentials, CancellationToken token, Action<UpdateCheckStatus, string> status)
 		{
 			lock (_lock)
 			{
@@ -104,7 +102,7 @@
 					return task;
 				}
 
-				Status?.Invoke(UpdateCheckStatus.InProgress, string.Empty);
+				status.Invoke(UpdateCheckStatus.InProgress, string.Empty);
 
 				var asm = Assembly.GetEntryAssembly();
 				var appPath = Path.GetDirectoryName(asm.Location);
