@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using Ecng.Common;
-using Ecng.ComponentModel;
-
-namespace StockSharp.Configuration
+﻿namespace StockSharp.Configuration
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.IO;
+	using System.Linq;
+	using System.Reflection;
+	using System.Threading;
+	using System.Threading.Tasks;
+
+	using Ecng.Common;
+	using Ecng.ComponentModel;
+
 	/// <summary>
 	/// App installer client.
 	/// </summary>
 	public static class UpdateHelper
 	{
-		class UpdateException : Exception
+		private class UpdateException : Exception
 		{
 			public UpdateCheckStatus Status {get;}
 			public UpdateException(UpdateCheckStatus status, string msg = null) : base(msg) => Status = status;
@@ -39,9 +40,9 @@ namespace StockSharp.Configuration
 			Error
 		}
 
-		static readonly object _lock = new object();
+		private static readonly object _lock = new object();
 
-		static TaskCompletionSource<string[]> _tcs;
+		private static TaskCompletionSource<string[]> _tcs;
 
 		/// <inheritdoc />
 		public delegate void UpdateStatusDelegate(UpdateCheckStatus state, string details);
@@ -78,7 +79,7 @@ namespace StockSharp.Configuration
 			});
 		}
 
-		static Task<string[]> DoCheckForUpdates(ServerCredentials credentials, CancellationToken token)
+		private static Task<string[]> DoCheckForUpdates(ServerCredentials credentials, CancellationToken token)
 		{
 			lock (_lock)
 			{

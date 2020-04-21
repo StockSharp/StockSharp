@@ -30,7 +30,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
