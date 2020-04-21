@@ -88,15 +88,28 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
+		public void Login(ProductInfoMessage product, Version version, SecureString token)
+		{
+			HandleResponse(product, Invoke(f => f.Login5(product?.Id ?? 0, version.To<string>(), token.UnSecure())));
+		}
+
+		/// <inheritdoc />
 		public void Login(ProductInfoMessage product, Version version, string login, SecureString password)
 		{
-			if (login.IsEmpty())
-				throw new ArgumentNullException(nameof(login));
+			//if (login.IsEmpty())
+			//	throw new ArgumentNullException(nameof(login));
 
 			if (password.IsEmpty())
 				throw new ArgumentNullException(nameof(password));
 
-			var tuple = Invoke(f => f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure()));
+			HandleResponse(product, Invoke(f => f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure())));
+		}
+
+		private void HandleResponse(ProductInfoMessage product, Tuple<Guid, long> tuple)
+		{
+			if (tuple is null)
+				throw new ArgumentNullException(nameof(tuple));
+
 			tuple.Item1.ToErrorCode().ThrowIfError();
 
 			NullableSessionId = tuple.Item1;

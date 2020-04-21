@@ -198,6 +198,9 @@ namespace StockSharp.Algo.Storages.Remote
 		Tuple<Guid, long> IAuthenticationService.Login4(long productId, string version, string email, string password)
 			=> Login(productId, version, email, password);
 
+		Tuple<Guid, long> IAuthenticationService.Login5(long productId, string version, string token)
+			=> Login(productId, version, null, token);
+
 		private Tuple<Guid, long> Login(long productId, string version, string email, string password)
 		{
 			var sessionId = Authorization.ValidateCredentials(email, password.Secure(), NetworkHelper.UserAddress);

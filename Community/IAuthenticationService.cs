@@ -69,6 +69,16 @@ namespace StockSharp.Community
 		Tuple<Guid, long> Login4(long productId, string version, string email, string password);
 
 		/// <summary>
+		/// To log in.
+		/// </summary>
+		/// <param name="productId">Product ID.</param>
+		/// <param name="version">Version.</param>
+		/// <param name="token">Token.</param>
+		/// <returns>Session ID.</returns>
+		[OperationContract]
+		Tuple<Guid, long> Login5(long productId, string version, string token);
+
+		/// <summary>
 		/// Track the session is alive.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>

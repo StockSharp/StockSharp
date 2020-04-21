@@ -62,6 +62,14 @@ namespace StockSharp.Community
 		void Login(ProductInfoMessage product, Version version, string login, SecureString password);
 
 		/// <summary>
+		/// To log in.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <param name="version">Version.</param>
+		/// <param name="token">Token.</param>
+		void Login(ProductInfoMessage product, Version version, SecureString token);
+
+		/// <summary>
 		/// Logout.
 		/// </summary>
 		void Logout();
