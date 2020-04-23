@@ -13,6 +13,12 @@
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\HistoryDataHelper.cs" Link="HistoryDataHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="StockSharp.SampleHistoryData" Version="$(SampleHistoryDataVersion)" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="..\..\..\stocksharp.ico">
       <Link>Properties\stocksharp.ico</Link>
     </Resource>

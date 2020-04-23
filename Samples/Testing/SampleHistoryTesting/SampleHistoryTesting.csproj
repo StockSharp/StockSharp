@@ -15,6 +15,12 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\HistoryDataHelper.cs" Link="HistoryDataHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="StockSharp.SampleHistoryData" Version="$(SampleHistoryDataVersion)" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Finam\Finam.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Yahoo\Yahoo.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
