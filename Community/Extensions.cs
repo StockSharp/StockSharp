@@ -92,7 +92,7 @@ namespace StockSharp.Community
 		/// Get hash for the specified input.
 		/// </summary>
 		/// <param name="input">Input.</param>
-		/// <returns>Hash.</returns>
+		/// <returns>File hash.</returns>
 		public static string Hash(this byte[] input) => input.Md5();
 	}
 }

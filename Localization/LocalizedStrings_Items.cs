@@ -3848,22 +3848,22 @@ namespace StockSharp.Localization
 		public static string Theta => GetString(ThetaKey);
 
 		/// <summary>
-		/// Initial margin (buy)
+		/// Initial margin to buy
 		/// </summary>
 		public const string Str304Key = nameof(Str304);
 
 		/// <summary>
-		/// Initial margin (buy)
+		/// Initial margin to buy
 		/// </summary>
 		public static string Str304 => GetString(Str304Key);
 
 		/// <summary>
-		/// Initial margin (sell)
+		/// Initial margin to sell
 		/// </summary>
 		public const string Str305Key = nameof(Str305);
 
 		/// <summary>
-		/// Initial margin (sell)
+		/// Initial margin to sell
 		/// </summary>
 		public static string Str305 => GetString(Str305Key);
 

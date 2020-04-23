@@ -14808,7 +14808,6 @@ DocStr10194;Implementation of {0} in binary format;Реализация {0} в �
 DocStr10195;Storage modes;Режимы хранилищ
 DocStr10196;Full;Полное
 DocStr10197;Full and snapshot;Полное и снэпшот
-DocStr10198;Storage mode. By default is {0};Режим хранилища. По-умолчанию равно {0}
 DocStr10199;Implementation of {0} in binary format for {1};Реализация {0} в бинарном формате для {1}
 DocStr10200;The interface for serialize snapshots;Интерфейс сериализации снэпшотов
 DocStr10201;Version of data format;Версия формата данных
@@ -15881,7 +15880,6 @@ DocStr11435;Determines the specified type is lookup;Определить, явл
 DocStr11436;Determines the specified type is lookup result message;Определить, является ли переданный тип сообщением результата поиска
 DocStr11437;Create message by the specified type;Создать сообщение по указанному типу
 DocStr11438;Replace security id by the specified;Заменить идентификатор инструмента указанным
-DocStr11439;Determines the security id required for the specified message;Определить, необходим ли идентификатор инструмента для указанного сообщения
 DocStr11440;Determines the specified message contains {0} position;Определить, содержит ли позицию {0} переданное сообщение
 DocStr11441;The interface describing an message with {0} method;Интерфейс, описывающий сообщение с методом {0}
 DocStr11442;Create security id with board code set as {0};Создать идентификатор инструмента с кодом площадки, установленным в {0}
@@ -16125,7 +16123,6 @@ DocStr11686;Security ID or {0} if message do not provide it;Security ID or {0} i
 DocStr11687;Online subscription counter adapter;Online subscription counter adapter
 DocStr11688;Download securities info;Download securities info
 DocStr11689;Get hash for the specified input;Get hash for the specified input
-DocStr11690;Hash;Hash
 DocStr11691;Defines the different types of data that can be returned;Defines the different types of data that can be returned
 DocStr11692;Bid Prices;Bid Prices
 DocStr11693;Ask Prices;Ask Prices
@@ -16139,17 +16136,14 @@ DocStr11700;The order book is closed and waiting to be opened;The order book is 
 DocStr11701;The trades on the order book have been settled;The trades on the order book have been settled
 DocStr11702;The order book is no longer trading;The order book is no longer trading
 DocStr11703;Base implementation of {0} interface;Base implementation of {0} interface
-DocStr11704;Initial margin (buy);Initial margin (buy)
-DocStr11705;Initial margin (sell);Initial margin (sell)
 DocStr11706;Xaml extension to use themed SVG icons;Xaml extension to use themed SVG icons
 DocStr11707;Icon key;Icon key
 DocStr11708;Get icon image source;Get icon image source
-DocStr11709;The icon key;The icon key
 DocStr11710;Xaml extension to apply color to SVG icons;Xaml extension to apply color to SVG icons
 DocStr11711;New icon color;New icon color
 DocStr11712;To build level1 from the orders log;To build level1 from the orders log
 DocStr11713;Check the specified mode turned on;Check the specified mode turned on
-DocStr11714;Storage mode;Storage mode
+DocStr11714;Storage mode;Режим хранилища
 DocStr11715;To build level1 from the order books;To build level1 from the order books
 DocStr11716;To check, does the string contain the order registration;To check, does the string contain the order registration
 DocStr11717;{0}, if the string contains the order registration, otherwise, {1};{0}, if the string contains the order registration, otherwise, {1}
@@ -16166,8 +16160,6 @@ DocStr11727;T for taker, M for maker;T for taker, M for maker
 DocStr11728;Supported platforms (Windows, Linux etc.);Supported platforms (Windows, Linux etc.)
 DocStr11729;Convert {0} to file name;Convert {0} to file name
 DocStr11730;Convert file name to {0};Convert file name to {0}
-DocStr11731;Simulator portfolio name;Simulator portfolio name
-DocStr11732;Anonymois portfolio name;Anonymois portfolio name
 DocStr11733;Convert key to numeric identifier;Convert key to numeric identifier
 DocStr11734;Get current chart theme;Get current chart theme
 DocStr11735;Determines the {0} is dark;Determines the {0} is dark
@@ -16179,4 +16171,3 @@ DocStr11740;Current value type in the combo box;Current value type in the combo 
 DocStr11741;Load messages;Load messages
 DocStr11742;Last date;Last date
 DocStr11743;Extract time frames from the specified data types set;Extract time frames from the specified data types set
-DocStr11744;Time frames;Time frames
