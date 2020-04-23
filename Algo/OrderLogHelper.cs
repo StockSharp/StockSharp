@@ -159,13 +159,14 @@ namespace StockSharp.Algo
 						//if (_builder == null)
 						//	_builder = new OrderLogMarketDepthBuilder(new QuoteChangeMessage { SecurityId = item.SecurityId, IsSorted = true }, _maxDepth);
 
-						if (!_builder.Update(item))
+						var depth = _builder.Update(item);
+						if (depth == null)
 							continue;
 
-						if (Current != null && (_builder.Depth.ServerTime - Current.ServerTime) < _interval)
+						if (Current != null && (depth.ServerTime - Current.ServerTime) < _interval)
 							continue;
 
-						Current = _builder.Depth.TypedClone();
+						Current = depth.TypedClone();
 
 						if (_maxDepth < int.MaxValue)
 						{

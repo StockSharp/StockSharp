@@ -68,8 +68,9 @@
 		}
 
 		/// <summary>
-		/// Storage mode. By default is <see cref="StorageModes.Incremental"/>.
+		/// Storage mode.
 		/// </summary>
+		/// <remarks>By default is <see cref="StorageModes.Incremental"/>.</remarks>
 		public StorageModes Mode { get; set; } = StorageModes.Incremental;
 
 		/// <summary>

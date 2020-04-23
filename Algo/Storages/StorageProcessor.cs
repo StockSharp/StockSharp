@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Storages
 
 			if (message.IsSubscribe)
 			{
-				if (message.SecurityId.IsAllSecurity())
+				if (message.SecurityId == default)
 					return message;
 
 				var transactionId = message.TransactionId;

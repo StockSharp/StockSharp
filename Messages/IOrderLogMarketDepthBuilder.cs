@@ -29,16 +29,11 @@ namespace StockSharp.Messages
 	public interface IOrderLogMarketDepthBuilder
 	{
 		/// <summary>
-		/// Market depth.
-		/// </summary>
-		QuoteChangeMessage Depth { get; }
-
-		/// <summary>
 		/// Process order log item.
 		/// </summary>
 		/// <param name="item">Order log item.</param>
-		/// <returns>Order book was changed.</returns>
-		bool Update(ExecutionMessage item);
+		/// <returns>Market depth.</returns>
+		QuoteChangeMessage Update(ExecutionMessage item);
 	}
 
 	/// <summary>
@@ -49,6 +44,8 @@ namespace StockSharp.Messages
 		private readonly Dictionary<long, decimal> _orders = new Dictionary<long, decimal>();
 		private readonly SortedDictionary<decimal, QuoteChange> _bids = new SortedDictionary<decimal, QuoteChange>(new BackwardComparer<decimal>());
 		private readonly SortedDictionary<decimal, QuoteChange> _asks = new SortedDictionary<decimal, QuoteChange>();
+
+		private readonly QuoteChangeMessage _depth;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMarketDepthBuilder"/>.
@@ -83,11 +80,7 @@ namespace StockSharp.Messages
 			_depth.Asks = _asks.Values.ToArray();
 		}
 
-		private readonly QuoteChangeMessage _depth;
-
-		QuoteChangeMessage IOrderLogMarketDepthBuilder.Depth => _depth;
-
-		bool IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)
+		QuoteChangeMessage IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)
 		{
 			if (item == null)
 				throw new ArgumentNullException(nameof(item));
@@ -96,7 +89,7 @@ namespace StockSharp.Messages
 				throw new ArgumentException(nameof(item));
 
 			if (item.OrderPrice == 0)
-				return false;
+				return null;
 
 			var changed = false;
 
@@ -193,7 +186,7 @@ namespace StockSharp.Messages
 				}
 			}
 
-			return changed;
+			return changed ? _depth : null;
 		}
 	}
 }

@@ -33,6 +33,30 @@
 		[DataMember]
 		public string PackageId { get; set; }
 
+		/// <summary>
+		/// Tags.
+		/// </summary>
+		[DataMember]
+		public string Tags { get; set; }
+
+		/// <summary>
+		/// Author.
+		/// </summary>
+		[DataMember]
+		public long Author { get; set; }
+
+		/// <summary>
+		/// Price.
+		/// </summary>
+		[DataMember]
+		public Currency Price { get; set; }
+
+		/// <summary>
+		/// Download count.
+		/// </summary>
+		[DataMember]
+		public int DownloadCount { get; set; }
+
 		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
@@ -57,6 +81,9 @@
 				Name = Name,
 				Description = Description,
 				PackageId = PackageId,
+				Tags = Tags,
+				Author = Author,
+				DownloadCount = DownloadCount,
 				OriginalTransactionId = OriginalTransactionId,
 			};
 			CopyTo(clone);
