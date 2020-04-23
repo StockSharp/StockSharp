@@ -44,7 +44,7 @@ namespace SampleHistoryTestingParallel
 		{
 			InitializeComponent();
 
-			HistoryPath.Folder = @"..\..\..\..\HistoryData\".ToFullPath();
+			HistoryPath.Folder = StockSharp.Samples.HistoryDataHelper.DataPath;
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)

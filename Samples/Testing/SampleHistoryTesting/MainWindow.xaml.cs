@@ -76,7 +76,7 @@ namespace SampleHistoryTesting
 		{
 			InitializeComponent();
 
-			HistoryPath.Folder = @"..\..\..\..\HistoryData\".ToFullPath();
+			HistoryPath.Folder = StockSharp.Samples.HistoryDataHelper.DataPath;
 
 			if (LocalizedStrings.ActiveLanguage == Languages.Russian)
 			{

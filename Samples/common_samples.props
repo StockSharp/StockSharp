@@ -3,4 +3,7 @@
   <ItemGroup>
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 </Project>

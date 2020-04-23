@@ -20,6 +20,12 @@
     <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\HistoryDataHelper.cs" Link="HistoryDataHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="StockSharp.SampleHistoryData" Version="$(SampleHistoryDataVersion)" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
     <ProjectReference Include="..\..\..\Localization\Localization.csproj" />

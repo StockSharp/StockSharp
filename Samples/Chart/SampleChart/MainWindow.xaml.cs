@@ -134,7 +134,7 @@
 
 			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(YandexLoginWindow.Authorize(this)));
 
-			HistoryPath.Folder = @"..\..\..\..\..\Testing\HistoryData\".ToFullPath();
+			HistoryPath.Folder = StockSharp.Samples.HistoryDataHelper.DataPath;
 
 			Chart.SecurityProvider = _securityProvider;
 

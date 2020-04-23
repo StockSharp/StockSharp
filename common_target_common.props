@@ -3,6 +3,7 @@
     <ProductVersion>9.0.30729</ProductVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <!--<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>-->
+    <SampleHistoryDataVersion>1.0.0</SampleHistoryDataVersion>
     <EcngVer>1.0.9</EcngVer>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
