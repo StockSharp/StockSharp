@@ -1475,6 +1475,9 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
+			if (security == TraderHelper.AllSecurity)
+				return default;
+
 			string secCode;
 			string boardCode;
 

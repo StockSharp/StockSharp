@@ -117,7 +117,7 @@ namespace StockSharp.Algo
 
 		private void ReplaceSecurityId(SecurityMessage secMsg)
 		{
-			if (secMsg.NotRequiredSecurityId())
+			if (secMsg.SecurityId == default)
 				return;
 
 			var stockSharpId = secMsg.SecurityId.SetNativeId(null);

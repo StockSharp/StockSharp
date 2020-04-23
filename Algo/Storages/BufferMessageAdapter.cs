@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var l1Storage = GetSnapshotStorage(DataType.Level1);
 
-						if (message.SecurityId.IsAllSecurity())
+						if (message.SecurityId == default)
 						{
 							foreach (Level1ChangeMessage msg in l1Storage.GetAll())
 								SendSnapshot(msg);
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var	quotesStorage = GetSnapshotStorage(DataType.MarketDepth);
 
-						if (message.SecurityId.IsAllSecurity())
+						if (message.SecurityId == default)
 						{
 							foreach (QuoteChangeMessage msg in quotesStorage.GetAll())
 								SendSnapshot(msg);

@@ -2065,24 +2065,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines the security id required for the specified message.
-		/// </summary>
-		/// <param name="secMsg">A message containing info about the security.</param>
-		/// <returns>Check result.</returns>
-		public static bool NotRequiredSecurityId(this SecurityMessage secMsg)
-		{
-			if (secMsg == null)
-				throw new ArgumentNullException(nameof(secMsg));
-
-			if (secMsg.Type == MessageTypes.MarketData && !((MarketDataMessage)secMsg).DataType.IsSecurityRequired())
-				return secMsg.SecurityId.IsDefault();
-			else if (secMsg.Type == MessageTypes.OrderGroupCancel)
-				return secMsg.SecurityId.IsDefault();
-
-			return false;
-		}
-
-		/// <summary>
 		/// Support portfolio subscriptions.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
@@ -2317,12 +2299,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Simulator portfolio name.
+		/// Simulator.
 		/// </summary>
 		public static string SimulatorPortfolioName = "Simulator (S#)";
 
 		/// <summary>
-		/// Anonymois portfolio name.
+		/// Anonymous account.
 		/// </summary>
 		public static string AnonymousPortfolioName = "Anonymous (S#)";
 
@@ -2847,7 +2829,7 @@ namespace StockSharp.Messages
 		/// Extract time frames from the specified data types set.
 		/// </summary>
 		/// <param name="dataTypes">Data types.</param>
-		/// <returns>Time frames.</returns>
+		/// <returns>Possible time-frames.</returns>
 		public static IEnumerable<TimeSpan> FilterTimeFrames(this IEnumerable<DataType> dataTypes)
 			=> dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage) && t.Arg != null).Select(t => (TimeSpan)t.Arg);
 	}

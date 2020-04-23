@@ -980,7 +980,7 @@ namespace StockSharp.Algo
 			if (adapter != null)
 				adapter = GetUnderlyingAdapter(adapter);
 
-			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType.IsSecurityRequired())
+			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType.IsSecurityRequired() && mdMsg.SecurityId != default)
 				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)mdMsg.DataType)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)null));
 
 			if (adapter != null)

@@ -245,7 +245,7 @@
 				{
 					var secMsg = (SecurityMessage)message;
 
-					if (secMsg.NotRequiredSecurityId())
+					if (secMsg.SecurityId == default)
 						break;
 
 					var securityId = secMsg.SecurityId;

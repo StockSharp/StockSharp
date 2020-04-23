@@ -178,7 +178,7 @@
 									? default
 									: GetSecurityId(dataType, (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
 
-								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info))
+								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info) && !_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, default(SecurityId)), out info))
 									break;
 							}
 
