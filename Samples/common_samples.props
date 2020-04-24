@@ -1,9 +1,10 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\common_target_fw_core.props" />
+  <PropertyGroup>
+    <SampleHistoryDataVersion>1.0.0</SampleHistoryDataVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
-  <PropertyGroup>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
 </Project>
