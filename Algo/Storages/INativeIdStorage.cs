@@ -297,10 +297,10 @@ namespace StockSharp.Algo.Storages
 		{
 			_buffer[securityId] = nativeId;
 
-			var items = _buffer.SyncGet(c => c.CopyAndClear());
-
 			DelayAction.DefaultGroup.Add(() =>
 			{
+				var items = _buffer.SyncGet(c => c.CopyAndClear());
+
 				if (items.Length == 0)
 					return;
 
