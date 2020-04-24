@@ -51456,5 +51456,15 @@ namespace StockSharp.Localization
 		/// OS
 		/// </summary>
 		public static string OS => GetString(OSKey);
+
+		/// <summary>
+		/// UDP Dumper
+		/// </summary>
+		public const string UdpDumperKey = nameof(UdpDumper);
+
+		/// <summary>
+		/// UDP Dumper
+		/// </summary>
+		public static string UdpDumper => GetString(UdpDumperKey);
 	}
 }
