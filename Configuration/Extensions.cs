@@ -109,6 +109,8 @@ namespace StockSharp.Configuration
 			if (!savePassword)
 				clone.Password = null;
 
+			Directory.CreateDirectory(Paths.CompanyPath);
+
 			var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
 
 			new XmlSerializer<SettingsStorage>().Serialize(clone.Save(), file);
