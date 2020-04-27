@@ -36,7 +36,14 @@ namespace SampleConnection
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			UpdateTimeFrames(Connector.Adapter.GetTimeFrames());
+			var timeFrames = Connector.Adapter.GetTimeFrames().ToArray();
+
+			if (timeFrames.Length == 0 && Connector.Adapter.IsMarketDataTypeSupported(DataType.Ticks))
+			{
+				timeFrames = new[] { TimeSpan.FromMinutes(1) };
+			}
+
+			UpdateTimeFrames(timeFrames);
 		}
 
 		public void UpdateTimeFrames(IEnumerable<TimeSpan> timeFrames)
@@ -256,7 +263,7 @@ namespace SampleConnection
 				var chartWnd = new ChartWindow(new CandleSeries(typeof(TimeFrameCandle), security, tf)
 				{
 					From = wnd.From,
-					To = wnd.To
+					To = wnd.To,
 				});
 
 				_chartWindows.Add(chartWnd);
