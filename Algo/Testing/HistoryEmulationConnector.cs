@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
 		public HistoryEmulationConnector(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
-			: this((ISecurityProvider)new CollectionSecurityProvider(securities), portfolios, storageRegistry)
+			: this(new CollectionSecurityProvider(securities), new CollectionPortfolioProvider(portfolios), storageRegistry)
 		{
 		}
 
@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		public HistoryEmulationConnector(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios)
-			: this(securityProvider, portfolios, new StorageRegistry())
+			: this(securityProvider, new CollectionPortfolioProvider(portfolios), new StorageRegistry())
 		{
 		}
 
@@ -67,20 +67,21 @@ namespace StockSharp.Algo.Testing
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
-		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
-		/// <param name="storageRegistry">Market data storage.</param>
-		public HistoryEmulationConnector(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
-			: base(new EmulationMessageAdapter(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider), new MessageByLocalTimeQueue(), true) { OwnInnerAdapter = true }, securityProvider, new CollectionPortfolioProvider(portfolios))
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		public HistoryEmulationConnector(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
+			: this(securityProvider, portfolioProvider, new StorageRegistry())
 		{
-			if (securityProvider == null)
-				throw new ArgumentNullException(nameof(securityProvider));
+		}
 
-			if (portfolios == null)
-				throw new ArgumentNullException(nameof(portfolios));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
+		/// </summary>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		/// <param name="storageRegistry">Market data storage.</param>
+		public HistoryEmulationConnector(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry)
+			: base(new EmulationMessageAdapter(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider) { StorageRegistry = storageRegistry }, new MessageByLocalTimeQueue(), true) { OwnInnerAdapter = true }, securityProvider, portfolioProvider)
+		{
 			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
 			TransactionIdGenerator = EmulationAdapter.TransactionIdGenerator;
 
