@@ -1108,7 +1108,11 @@ namespace StockSharp.Algo.Testing
 						// change current time before the candle will be processed
 						result.Add(new TimeMessage { LocalTime = message.LocalTime });
 
-                        result.AddRange(pair.Value.Item1);
+						foreach (var candle in pair.Value.Item1)
+						{
+							candle.LocalTime = message.LocalTime;
+							result.Add(candle);
+						}
 					}
 				}
 			}

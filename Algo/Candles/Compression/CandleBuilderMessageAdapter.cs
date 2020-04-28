@@ -652,6 +652,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (nonFinished != null && nonFinished.OpenTime < candleMsg.OpenTime)
 			{
 				nonFinished.State = CandleStates.Finished;
+				nonFinished.LocalTime = candleMsg.LocalTime;
 				RaiseNewOutMessage(nonFinished);
 				info.NonFinishedCandle = null;
 			}
