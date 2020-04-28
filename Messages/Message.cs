@@ -95,9 +95,7 @@ namespace StockSharp.Messages
 		[XmlIgnore]
 		public MessageOfflineModes OfflineMode { get; set; }
 
-		/// <summary>
-		/// Source adapter. Can be <see langword="null" />.
-		/// </summary>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		public IMessageAdapter Adapter { get; set; }

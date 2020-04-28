@@ -16,5 +16,10 @@ namespace StockSharp.Messages
 		/// Local timestamp when a message was received/created.
 		/// </summary>
 		DateTimeOffset LocalTime { get; set; }
+
+		/// <summary>
+		/// Source adapter. Can be <see langword="null" />.
+		/// </summary>
+		IMessageAdapter Adapter { get; set; }
 	}
 }

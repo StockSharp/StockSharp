@@ -332,7 +332,9 @@ namespace StockSharp.Algo
 					_subscriptions.Add(subscription.TransactionId, info);
 				}
 
-				SendRequest(subscrMsg.TypedClone(), subscription);
+				var clone = subscrMsg.TypedClone();
+				clone.Adapter = subscrMsg.Adapter;
+				SendRequest(clone, subscription);
 			}
 
 			public void UnSubscribe(Subscription subscription)
