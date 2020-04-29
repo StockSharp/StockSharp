@@ -36,8 +36,9 @@
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
     using StockSharp.Xaml;
+	using StockSharp.Configuration;
 
-    public partial class MainWindow
+	public partial class MainWindow
 	{
 		private ChartArea _areaComb;
 		private ChartCandleElement _candleElement;
@@ -134,7 +135,7 @@
 
 			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(YandexLoginWindow.Authorize(this)));
 
-			HistoryPath.Folder = StockSharp.Samples.HistoryDataHelper.DataPath;
+			HistoryPath.Folder = Paths.HistoryDataPath;
 
 			Chart.SecurityProvider = _securityProvider;
 

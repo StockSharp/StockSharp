@@ -22,6 +22,7 @@
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Configuration;
 
 	public partial class MainWindow
 	{
@@ -79,7 +80,7 @@
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
 			InitCharts();
-			LoadData(StockSharp.Samples.HistoryDataHelper.DataPath);
+			LoadData(Paths.HistoryDataPath);
 		}
 
 		private void InitCharts()

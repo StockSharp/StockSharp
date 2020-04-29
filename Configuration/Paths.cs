@@ -163,5 +163,10 @@
 		{
 			return $"{GetWebSiteUrl()}/forgot/";
 		}
+
+		/// <summary>
+		/// Sample history data.
+		/// </summary>
+		public static string HistoryDataPath => SampleDataHelper.DataPath;
 	}
 }

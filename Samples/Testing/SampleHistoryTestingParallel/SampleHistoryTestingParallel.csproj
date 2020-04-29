@@ -15,9 +15,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\HistoryDataHelper.cs" Link="HistoryDataHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="StockSharp.SampleHistoryData" Version="$(SampleHistoryDataVersion)" />
   </ItemGroup>
   <ItemGroup>

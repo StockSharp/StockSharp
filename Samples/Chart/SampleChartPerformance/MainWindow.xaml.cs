@@ -22,6 +22,7 @@
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Configuration;
 
 	public partial class MainWindow
 	{
@@ -40,7 +41,7 @@
 			}
 		}
 
-		private static readonly string _historyPath = StockSharp.Samples.HistoryDataHelper.DataPath;
+		private static readonly string _historyPath = Paths.HistoryDataPath;
 		private const string _securityId = "RIZ2@FORTS";
 		private const int _timeframe = 1; //minutes
 		private const int _priceStep = 10;
