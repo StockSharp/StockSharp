@@ -1171,7 +1171,9 @@ namespace StockSharp.Algo.Storages
 					{
 						IMarketDataStorage storage;
 
-						switch (msg.BuildFrom)
+						var buildFrom = msg.BuildFrom;
+
+						switch (buildFrom)
 						{
 							case null:
 							case MarketDataTypes.Trades:
@@ -1191,19 +1193,27 @@ namespace StockSharp.Algo.Storages
 								break;
 
 							default:
-								throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildFrom, LocalizedStrings.Str1219);
+								throw new ArgumentOutOfRangeException(nameof(msg), buildFrom, LocalizedStrings.Str1219);
 						}
 
 						var range = GetRange(storage, from, to, TimeSpan.FromDays(2));
+
+						if (range == null && buildFrom == null)
+						{
+							storage = GetStorage<Level1ChangeMessage>(secId, null);
+							range = GetRange(storage, from, to, TimeSpan.FromDays(2));
+
+							if (range != null)
+								buildFrom = MarketDataTypes.Level1;
+						}
 
 						if (range != null)
 						{
 							var mdMsg = msg.TypedClone();
 							mdMsg.From = mdMsg.To = null;
 
-							switch (msg.BuildFrom)
+							switch (buildFrom)
 							{
-								case null:
 								case MarketDataTypes.Trades:
 									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 									                        .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
