@@ -17,6 +17,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SampleHistoryTesting\SmaStrategy.cs" Link="SmaStrategy.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
   </ItemGroup>
   <ItemGroup>

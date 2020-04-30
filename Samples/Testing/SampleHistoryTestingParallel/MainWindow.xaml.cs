@@ -186,7 +186,7 @@ namespace SampleHistoryTestingParallel
 					var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 					// create strategy based SMA
-					var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
+					var strategy = new SampleHistoryTesting.SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 }, null, null, null, null, null)
 					{
 						Volume = 1,
 						Security = security,

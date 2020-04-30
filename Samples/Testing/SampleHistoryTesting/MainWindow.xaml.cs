@@ -460,7 +460,7 @@ namespace SampleHistoryTesting
 				chart.AddElement(_area, _longElem);
 
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, series)
+				var strategy = new SmaStrategy(series, _longMa, _shortMa, chart, _candlesElem, _tradesElem, _longElem, _shortElem)
 				{
 					Volume = 1,
 					Portfolio = portfolio,

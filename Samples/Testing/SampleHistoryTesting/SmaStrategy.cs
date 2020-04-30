@@ -42,21 +42,21 @@ namespace SampleHistoryTesting
 		private bool? _isShortLessThenLong;
 		private bool _candlesStarted;
 
-		public SmaStrategy(IChart chart, ChartCandleElement candlesElem, ChartTradeElement tradesElem, 
-			SimpleMovingAverage shortMa, ChartIndicatorElement shortElem,
-			SimpleMovingAverage longMa, ChartIndicatorElement longElem,
-			CandleSeries series)
+		public SmaStrategy(CandleSeries series,
+			SimpleMovingAverage longSma, SimpleMovingAverage shortSma,
+			IChart chart, ChartCandleElement candlesElem, ChartTradeElement tradesElem, 
+			ChartIndicatorElement longElem, ChartIndicatorElement shortElem)
 		{
+			_series = new Subscription(series);
+
+			ShortSma = shortSma;
+			LongSma = longSma;
+
 			_chart = chart;
 			_candlesElem = candlesElem;
 			_tradesElem = tradesElem;
 			_shortElem = shortElem;
 			_longElem = longElem;
-
-			_series = new Subscription(series);
-
-			ShortSma = shortMa;
-			LongSma = longMa;
 		}
 
 		public SimpleMovingAverage LongSma { get; }
@@ -141,6 +141,9 @@ namespace SampleHistoryTesting
 					_isShortLessThenLong = isShortLessThenLong;
 				}
 			}
+
+			if (_chart == null)
+				return;
 
 			var trade = _myTrades.FirstOrDefault();
 			_myTrades.Clear();
