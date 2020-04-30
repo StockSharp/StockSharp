@@ -32,6 +32,8 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector
 	{
+		private readonly bool _ownInnerAdapter;
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
@@ -80,10 +82,23 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
 		public HistoryEmulationConnector(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry)
-			: base(new EmulationMessageAdapter(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider) { StorageRegistry = storageRegistry }, new MessageByLocalTimeQueue(), true) { OwnInnerAdapter = true }, securityProvider, portfolioProvider)
+			: this(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider) { StorageRegistry = storageRegistry }, true, new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", err => err.LogError()), securityProvider, portfolioProvider)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
+		/// </summary>
+		/// <param name="innerAdapter">Underlying adapter.</param>
+		/// <param name="ownInnerAdapter">Control <paramref name="innerAdapter"/> lifetime.</param>
+		/// <param name="inChannel">Incoming messages channel.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		public HistoryEmulationConnector(IMessageAdapter innerAdapter, bool ownInnerAdapter, IMessageChannel inChannel, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
+			: base(new EmulationMessageAdapter(innerAdapter, inChannel, true) { OwnInnerAdapter = true }, false, securityProvider, portfolioProvider)
 		{
 			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
-			TransactionIdGenerator = EmulationAdapter.TransactionIdGenerator;
+			TransactionIdGenerator = innerAdapter.TransactionIdGenerator;
 
 			Adapter.LatencyManager = null;
 			Adapter.CommissionManager = null;
@@ -104,6 +119,8 @@ namespace StockSharp.Algo.Testing
 			Adapter.SupportLookupTracking = false;
 			Adapter.SupportOrderBookTruncate = false;
 			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
+
+			_ownInnerAdapter = ownInnerAdapter;
 		}
 
 		/// <inheritdoc />
@@ -136,19 +153,40 @@ namespace StockSharp.Algo.Testing
 				{
 					case EmulationStates.Stopped:
 						throwError = _state != EmulationStates.Stopping;
+
+						if (_ownInnerAdapter)
+							EmulationAdapter.InChannel.Close();
+
 						break;
 					case EmulationStates.Stopping:
 						throwError = _state != EmulationStates.Started && _state != EmulationStates.Suspended
 							&& State != EmulationStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
+
+						if (_ownInnerAdapter)
+						{
+							EmulationAdapter.InChannel.Clear();
+
+							if (_state == EmulationStates.Suspended)
+								EmulationAdapter.InChannel.Resume();
+						}
+
 						break;
 					case EmulationStates.Starting:
 						throwError = _state != EmulationStates.Stopped && _state != EmulationStates.Suspended;
+
+						if (_ownInnerAdapter && _state == EmulationStates.Suspended)
+							EmulationAdapter.InChannel.Resume();
+
 						break;
 					case EmulationStates.Started:
 						throwError = _state != EmulationStates.Starting;
 						break;
 					case EmulationStates.Suspending:
 						throwError = _state != EmulationStates.Started;
+
+						if (_ownInnerAdapter)
+							EmulationAdapter.InChannel.Suspend();
+
 						break;
 					case EmulationStates.Suspended:
 						throwError = _state != EmulationStates.Suspending;
@@ -249,7 +287,7 @@ namespace StockSharp.Algo.Testing
 						{
 							IsFinished = !lastMsg.IsError;
 
-							// все данных пришли без ошибок или в процессе чтения произошла ошибка - начинаем остановку
+							// все данные пришли без ошибок или в процессе чтения произошла ошибка - начинаем остановку
 							SendEmulationState(EmulationStates.Stopping);
 						}
 
@@ -313,6 +351,12 @@ namespace StockSharp.Algo.Testing
 				case EmulationStates.Starting:
 				{
 					SendEmulationState(EmulationStates.Started);
+					break;
+				}
+
+				case EmulationStates.Suspending:
+				{
+					SendEmulationState(EmulationStates.Suspended);
 					break;
 				}
 			}

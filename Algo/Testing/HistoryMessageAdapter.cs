@@ -35,10 +35,6 @@ namespace StockSharp.Algo.Testing
 		private CancellationTokenSource _cancellationToken;
 
 		private bool _isChanged;
-
-		private bool _isSuspended;
-		private readonly SyncObject _suspendLock = new SyncObject();
-
 		private bool _isStarted;
 
 		/// <summary>
@@ -203,6 +199,9 @@ namespace StockSharp.Algo.Testing
 		public override bool IsFullCandlesOnly => false;
 
 		/// <inheritdoc />
+		public override bool IsSupportCandlesUpdates => true;
+
+		/// <inheritdoc />
 		public override IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			var drive = DriveInternal;
@@ -242,9 +241,6 @@ namespace StockSharp.Algo.Testing
 			{
 				case MessageTypes.Reset:
 				{
-					_isSuspended = false;
-					_suspendLock.Pulse();
-
 					_currentTime = default;
 
 					_generators.Clear();
@@ -274,9 +270,6 @@ namespace StockSharp.Algo.Testing
 
 				case MessageTypes.Disconnect:
 				{
-					_isSuspended = false;
-					_suspendLock.Pulse();
-
 					_isStarted = false;
 
 					SendOutMessage(new DisconnectMessage { LocalTime = StopDate });
@@ -326,48 +319,25 @@ namespace StockSharp.Algo.Testing
 				case ExtendedMessageTypes.EmulationState:
 				{
 					var stateMsg = (EmulationStateMessage)message;
-					var isSuspended = false;
 
 					switch (stateMsg.State)
 					{
 						case EmulationStates.Starting:
 						{
-							if (_isStarted)
-							{
-								_isSuspended = false;
-								_suspendLock.Pulse();
-							}
-							else
-							{
-								_isStarted = true;
+							if (!_isStarted)
 								Start(stateMsg.StartDate.IsDefault() ? StartDate : stateMsg.StartDate, stateMsg.StopDate.IsDefault() ? StopDate : stateMsg.StopDate);
-							}
 
-							break;
-						}
-
-						case EmulationStates.Suspending:
-						{
-							_isSuspended = true;
-							isSuspended = true;
 							break;
 						}
 
 						case EmulationStates.Stopping:
 						{
-							_isSuspended = false;
-							_suspendLock.Pulse();
-
 							Stop();
 							break;
 						}
 					}
 
-					SendOutMessage(message);
-
-					if (isSuspended)
-						SendOutMessage(new EmulationStateMessage { State = EmulationStates.Suspended });
-
+					SendOutMessage(stateMsg);
 					break;
 				}
 
@@ -598,6 +568,8 @@ namespace StockSharp.Algo.Testing
 		/// <param name="stopDate">Date in history to stop the paper trading (date is included).</param>
 		private void Start(DateTimeOffset startDate, DateTimeOffset stopDate)
 		{
+			_isStarted = true;
+
 			_cancellationToken = new CancellationTokenSource();
 
 			ThreadingHelper
@@ -684,9 +656,6 @@ namespace StockSharp.Algo.Testing
 			{
 				if (_isChanged || token.IsCancellationRequested)
 					break;
-
-				while (_isSuspended)
-					_suspendLock.Wait();
 
 				var serverTime = msg.GetServerTime();
 

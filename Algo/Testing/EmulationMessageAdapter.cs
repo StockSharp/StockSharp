@@ -42,23 +42,21 @@ namespace StockSharp.Algo.Testing
 		private readonly SynchronizedSet<long> _realSubscribeIds = new SynchronizedSet<long>();
 		private readonly SynchronizedSet<long> _emuOrderIds = new SynchronizedSet<long>();
 
-		private readonly ChannelMessageAdapter _channelEmulator;
-		private readonly IMessageQueue _queue;
+		private readonly IMessageAdapter _inAdapter;
 		private readonly bool _isEmulationOnly;
 
 		/// <summary>
 		/// Initialize <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		/// <param name="queue">Message queue.</param>
+		/// <param name="inChannel">Incoming messages channel.</param>
 		/// <param name="isEmulationOnly">Send <see cref="TimeMessage"/> to emulator.</param>
-		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageQueue queue, bool isEmulationOnly)
+		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly)
 			: base(innerAdapter)
 		{
 			Emulator = new MarketEmulator
 			{
 				Parent = this,
-				//SendBackSecurities = true,
 				Settings =
 				{
 					ConvertTime = true,
@@ -67,9 +65,11 @@ namespace StockSharp.Algo.Testing
 				}
 			};
 
-			_channelEmulator = new ChannelMessageAdapter(new SubscriptionOnlineMessageAdapter(Emulator), new InMemoryMessageChannel(queue, "Emulator in", err => RaiseNewOutMessage(new ErrorMessage { Error = err })), new PassThroughMessageChannel());
-			_channelEmulator.NewOutMessage += OnMarketEmulatorNewOutMessage;
-			_queue = queue;
+			InChannel = inChannel;
+
+			_inAdapter = new SubscriptionOnlineMessageAdapter(Emulator);
+			_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
+			_inAdapter.NewOutMessage += OnMarketEmulatorNewOutMessage;
 			_isEmulationOnly = isEmulationOnly;
 		}
 
@@ -83,6 +83,11 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public MarketEmulatorSettings Settings => Emulator.Settings;
 
+		/// <summary>
+		/// Incoming messages channel.
+		/// </summary>
+		public IMessageChannel InChannel { get; }
+
 		/// <inheritdoc />
 		public override IEnumerable<MessageTypes> SupportedInMessages => InnerAdapter.SupportedInMessages.Concat(Emulator.SupportedInMessages).Except(OwnInnerAdapter ? ArrayHelper.Empty<MessageTypes>() : new[] { MessageTypes.SecurityLookup }).Distinct().ToArray();
 		
@@ -91,7 +96,7 @@ namespace StockSharp.Algo.Testing
 
 		private void SendToEmulator(Message message)
 		{
-			_channelEmulator.SendInMessage(message);
+			_inAdapter.SendInMessage(message);
 		}
 
 		/// <inheritdoc />
@@ -269,36 +274,6 @@ namespace StockSharp.Algo.Testing
 					SendToEmulator(message);
 					break;
 
-				case ExtendedMessageTypes.EmulationState:
-				{
-					var stateMsg = (EmulationStateMessage)message;
-
-					switch (stateMsg.State)
-					{
-						case EmulationStates.Suspending:
-						case EmulationStates.Starting:
-						case EmulationStates.Stopping:
-							break;
-						case EmulationStates.Suspended:
-							_channelEmulator.InputChannel.Suspend();
-							break;
-						case EmulationStates.Stopped:
-							_channelEmulator.InputChannel.Close();
-							_channelEmulator.InputChannel.Resume();
-							break;
-						case EmulationStates.Started:
-							_channelEmulator.InputChannel.Resume();
-							break;
-						default:
-							throw new ArgumentOutOfRangeException(stateMsg.State.ToString());
-					}
-
-					if (OwnInnerAdapter)
-						base.OnInnerAdapterNewOutMessage(message);
-
-					break;
-				}
-
 				case MessageTypes.Time:
 				{
 					if (OwnInnerAdapter)
@@ -353,6 +328,7 @@ namespace StockSharp.Algo.Testing
 
 						var pfMsg = pf.ToMessage();
 						pfMsg.IsSubscribe = true;
+						pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
 						SendToEmulator(pfMsg);
 						SendToEmulator(pf.ToChangeMessage());
 					}
@@ -436,6 +412,7 @@ namespace StockSharp.Algo.Testing
 		/// Create a copy of <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone() => new EmulationMessageAdapter(InnerAdapter.TypedClone(), _queue, _isEmulationOnly);
+		public override IMessageChannel Clone()
+			=> new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel, _isEmulationOnly);
 	}
 }
