@@ -55,6 +55,11 @@ namespace StockSharp.Messages
 		void Resume();
 
 		/// <summary>
+		/// Clear.
+		/// </summary>
+		void Clear();
+
+		/// <summary>
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
@@ -104,6 +109,10 @@ namespace StockSharp.Messages
 		}
 
 		void IMessageChannel.Resume()
+		{
+		}
+
+		void IMessageChannel.Clear()
 		{
 		}
 

@@ -1931,6 +1931,10 @@ namespace StockSharp.Algo
 		{
 		}
 
+		void IMessageChannel.Clear()
+		{
+		}
+
 		event Action IMessageChannel.StateChanged
 		{
 			add { }

@@ -288,6 +288,10 @@ namespace StockSharp.Messages
 		{
 		}
 
+		void IMessageChannel.Clear()
+		{
+		}
+
 		event Action IMessageChannel.StateChanged
 		{
 			add { }

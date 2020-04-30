@@ -142,6 +142,9 @@ namespace StockSharp.Messages
 		{
 			_queue.Close();
 			_queue.Clear();
+
+			_isSuspended = false;
+			_suspendLock.Pulse();
 		}
 
 		void IMessageChannel.Suspend()
@@ -155,11 +158,24 @@ namespace StockSharp.Messages
 			_suspendLock.Pulse();
 		}
 
+		void IMessageChannel.Clear()
+		{
+			_queue.Clear();
+		}
+
 		/// <inheritdoc />
 		public bool SendInMessage(Message message)
 		{
 			if (!IsOpened)
 				throw new InvalidOperationException();
+
+			if (_isSuspended)
+			{
+				_suspendLock.Wait();
+
+				if (!IsOpened)
+					return false;
+			}
 
 			_msgStat.Add(message);
 			_queue.Enqueue(message);

@@ -2359,6 +2359,10 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
+		void IMessageChannel.Clear()
+		{
+		}
+
 		event Action IMessageChannel.StateChanged
 		{
 			add { }
