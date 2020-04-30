@@ -1102,7 +1102,7 @@ namespace StockSharp.Algo.Testing
 						_candleInfo.Remove(pair.Key);
 
 						foreach (var trade in pair.Value.Item2)
-							Process(trade, result);
+							result.Add(trade);
 
 						// change current time before the candle will be processed
 						result.Add(new TimeMessage { LocalTime = message.LocalTime });
