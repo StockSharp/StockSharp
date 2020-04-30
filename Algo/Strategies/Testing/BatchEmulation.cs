@@ -19,11 +19,9 @@ namespace StockSharp.Algo.Strategies.Testing
 	/// <summary>
 	/// The batch emulator of strategies.
 	/// </summary>
-	public class BatchEmulation
+	public class BatchEmulation : BaseLogReceiver
 	{
 		private readonly SynchronizedDictionary<Strategy, Tuple<Portfolio, Security>> _strategyInfo = new SynchronizedDictionary<Strategy, Tuple<Portfolio, Security>>();
-
-		private EmulationStates _prev = EmulationStates.Stopped;
 
 		private IEnumerator<IEnumerable<Strategy>> _batches;
 		private Strategy[] _batch = ArrayHelper.Empty<Strategy>();
@@ -37,8 +35,6 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private readonly ISecurityProvider _securityProvider;
 		private readonly IPortfolioProvider _portfolioProvider;
-
-		private readonly StorageCoreSettings _storageSettings;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BatchEmulation"/>.
@@ -66,13 +62,18 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			EmulationSettings = new EmulationSettings();
 
-			_storageSettings = new StorageCoreSettings
+			StorageSettings = new StorageCoreSettings
 			{
 				StorageRegistry = storageRegistry,
 				Drive = drive,
 				Format = storageFormat,
 			};
 		}
+
+		/// <summary>
+		/// Storage settings.
+		/// </summary>
+		public StorageCoreSettings StorageSettings { get; }
 
 		/// <summary>
 		/// Emulation settings.
@@ -116,7 +117,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// The event of paper trade progress change.
 		/// </summary>
-		public event Action<int> ProgressChanged;
+		public event Action<Connector, int, int> ProgressChanged;
+
+		/// <summary>
+		/// Server time changed <see cref="Connector.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
+		/// </summary>
+		public event Action<Connector, TimeSpan> MarketTimeChanged;
 
 		/// <summary>
 		/// Start emulation.
@@ -180,11 +186,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			_histAdapter = new SubscriptionOnlineMessageAdapter(new HistoryMessageAdapter(new IncrementalIdGenerator(), _securityProvider)
 			{
-				StorageRegistry = _storageSettings.StorageRegistry,
-				Drive = _storageSettings.Drive,
-				StorageFormat = _storageSettings.Format,
+				StorageRegistry = StorageSettings.StorageRegistry,
+				Drive = StorageSettings.Drive,
+				StorageFormat = StorageSettings.Format,
 				StartDate = EmulationSettings.StartTime,
 				StopDate = EmulationSettings.StopTime,
+				Parent = this,
 			});
 
 			_currChannel = new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", _histAdapter.AddErrorLog);
@@ -198,7 +205,10 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				_strategyInfo[strategy] = Tuple.Create(strategy.Portfolio, strategy.Security);
 
-				var connector = new HistoryEmulationConnector(_histAdapter, false, _currChannel, _securityProvider, _portfolioProvider);
+				var connector = new HistoryEmulationConnector(_histAdapter, false, _currChannel, _securityProvider, _portfolioProvider)
+				{
+					Parent = this,
+				};
 				connector.EmulationAdapter.Settings.Load(EmulationSettings.Save());
 				
 				strategy.Connector = connector;
@@ -220,8 +230,10 @@ namespace StockSharp.Algo.Strategies.Testing
 						avgStep = progress.Values.Average();
 					}
 
-					ProgressChanged?.Invoke((int)(_currentBatch * _batchWeight + ((avgStep * _batchWeight) / 100)));
+					ProgressChanged?.Invoke(connector, step, (int)(_currentBatch * _batchWeight + ((avgStep * _batchWeight) / 100)));
 				};
+
+				connector.MarketTimeChanged += diff => MarketTimeChanged?.Invoke(connector, diff);
 
 				connector.StateChanged += () =>
 				{
