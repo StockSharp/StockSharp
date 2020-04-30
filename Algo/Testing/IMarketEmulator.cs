@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
+	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -32,5 +33,15 @@ namespace StockSharp.Algo.Testing
 		/// The number of processed messages.
 		/// </summary>
 		long ProcessedMessageCount { get; }
+
+		/// <summary>
+		/// The provider of information about instruments.
+		/// </summary>
+		ISecurityProvider SecurityProvider { get; }
+
+		/// <summary>
+		/// The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.
+		/// </summary>
+		IPortfolioProvider PortfolioProvider { get; }
 	}
 }

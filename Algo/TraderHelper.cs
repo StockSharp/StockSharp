@@ -1305,6 +1305,9 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
+			if (depth.Security != order.Security)
+				throw new ArgumentException(nameof(order));
+
 			order = order.ReRegisterClone();
 			depth = depth.Clone();
 
@@ -1316,7 +1319,7 @@ namespace StockSharp.Algo
 
 			var trades = new List<MyTrade>();
 
-			using (IMarketEmulator emulator = new MarketEmulator())
+			using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf })))
 			{
 				var errors = new List<Exception>();
 

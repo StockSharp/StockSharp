@@ -23,14 +23,13 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.PnL;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
+	using StockSharp.BusinessEntities;
 
 	class LevelQuotes : IEnumerable<ExecutionMessage>
 	{
@@ -1724,10 +1723,25 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketEmulator"/>.
 		/// </summary>
-		public MarketEmulator()
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		public MarketEmulator(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
 		{
+			SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
+			PortfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
+		
 			((IMessageAdapter)this).SupportedInMessages = ((IMessageAdapter)this).PossibleSupportedMessages.Select(i => i.Type).ToArray();
 		}
+
+		/// <summary>
+		/// The provider of information about instruments.
+		/// </summary>
+		public ISecurityProvider SecurityProvider { get; }
+
+		/// <summary>
+		/// The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.
+		/// </summary>
+		public IPortfolioProvider PortfolioProvider { get; }
 
 		/// <inheritdoc />
 		public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
@@ -2086,6 +2100,11 @@ namespace StockSharp.Algo.Testing
 
 				_securityEmulatorsByBoard.SafeAdd(securityId.BoardCode).Add(emulator);
 
+				var sec = SecurityProvider.LookupById(securityId);
+
+				if (sec != null)
+					emulator.Process(sec.ToMessage(), new List<Message>());
+
 				var board = _boardDefinitions.TryGetValue(securityId.BoardCode);
 
 				if (board != null)
@@ -2371,7 +2390,7 @@ namespace StockSharp.Algo.Testing
 
 		IMessageChannel ICloneable<IMessageChannel>.Clone()
 		{
-			return new MarketEmulator();
+			return new MarketEmulator(SecurityProvider, PortfolioProvider);
 		}
 
 		object ICloneable.Clone()

@@ -51,10 +51,12 @@ namespace StockSharp.Algo.Testing
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		/// <param name="inChannel">Incoming messages channel.</param>
 		/// <param name="isEmulationOnly">Send <see cref="TimeMessage"/> to emulator.</param>
-		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly)
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
 			: base(innerAdapter)
 		{
-			Emulator = new MarketEmulator
+			Emulator = new MarketEmulator(securityProvider, portfolioProvider)
 			{
 				Parent = this,
 				Settings =
@@ -70,6 +72,7 @@ namespace StockSharp.Algo.Testing
 			_inAdapter = new SubscriptionOnlineMessageAdapter(Emulator);
 			_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
 			_inAdapter.NewOutMessage += OnMarketEmulatorNewOutMessage;
+
 			_isEmulationOnly = isEmulationOnly;
 		}
 
@@ -413,6 +416,6 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
-			=> new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel, _isEmulationOnly);
+			=> new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel, _isEmulationOnly, Emulator.SecurityProvider, Emulator.PortfolioProvider);
 	}
 }
