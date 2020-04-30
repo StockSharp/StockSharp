@@ -20,6 +20,7 @@ namespace SampleHistoryTestingParallel
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Media;
+    using System.Collections.Generic;
 
 	using Ecng.Xaml;
 	using Ecng.Common;
@@ -35,43 +36,53 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
+	using StockSharp.Configuration;
 
 	public partial class MainWindow
 	{
 		private DateTime _startEmulationTime;
 
+		private BatchEmulation _batchEmulation;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			HistoryPath.Folder = StockSharp.Samples.HistoryDataHelper.DataPath;
+			HistoryPath.Folder = Paths.HistoryDataPath;
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
+			if (_batchEmulation != null)
+			{
+				_batchEmulation.Resume();
+				return;
+			}
+
 			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
 				MessageBox.Show(this, LocalizedStrings.Str3014);
 				return;
 			}
 
-			if (Math.Abs(TestingProcess.Value - 0) > double.Epsilon)
-			{
-				MessageBox.Show(this, LocalizedStrings.Str3015);
-				return;
-			}
+			TestingProcess.Value = 0;
+			Curve.Clear();
+			Stat.Clear();
 
 			var logManager = new LogManager();
 			var fileLogListener = new FileLogListener("sample.log");
 			logManager.Listeners.Add(fileLogListener);
 
 			// SMA periods
-			var periods = new[]
+			var periods = new List<Tuple<int, int, Color>>();
+
+			for (var l = 100; l >= 50; l -= 10)
 			{
-				new Tuple<int, int, Color>(80, 10, Colors.DarkGreen),
-				new Tuple<int, int, Color>(70, 8, Colors.Red),
-				new Tuple<int, int, Color>(60, 6, Colors.DarkBlue)
-			};
+				for (var s = 10; s >= 5; s -= 1)
+				{
+					periods.Add(Tuple.Create(l, s, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
+				}
+			}
 
 			// storage to historical data
 			var storageRegistry = new StorageRegistry
@@ -110,7 +121,7 @@ namespace SampleHistoryTestingParallel
 			var portfolio = Portfolio.CreateSimulator();
 
 			// create backtesting connector
-			var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
+			_batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
 			{
 				EmulationSettings =
 				{
@@ -119,46 +130,53 @@ namespace SampleHistoryTestingParallel
 					StopTime = stopTime,
 
 					// count of parallel testing strategies
-					BatchSize = periods.Length,
+					// if not set, then CPU count * 2
+					//BatchSize = 3,
 				}
 			};
 
 			// handle historical time for update ProgressBar
-			batchEmulation.ProgressChanged += (curr, total) => this.GuiAsync(() => TestingProcess.Value = total);
+			_batchEmulation.ProgressChanged += step => this.GuiAsync(() => TestingProcess.Value = step);
 
-			batchEmulation.StateChanged += (oldState, newState) =>
+			_batchEmulation.StateChanged += (oldState, newState) =>
 			{
-				if (batchEmulation.State != EmulationStates.Stopped)
-					return;
+				var isFinished = _batchEmulation.IsFinished;
+
+				if (_batchEmulation.State == EmulationStates.Stopped)
+					_batchEmulation = null;
 
 				this.GuiAsync(() =>
 				{
-					if (batchEmulation.IsFinished)
+					switch (newState)
 					{
-						TestingProcess.Value = TestingProcess.Maximum;
-						MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+						case EmulationStates.Stopping:
+						case EmulationStates.Starting:
+						case EmulationStates.Suspending:
+							SetIsEnabled(false, false, false);
+							break;
+						case EmulationStates.Stopped:
+							SetIsEnabled(true, false, false);
+
+							if (isFinished)
+							{
+								TestingProcess.Value = TestingProcess.Maximum;
+								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+							}
+							else
+								MessageBox.Show(this, LocalizedStrings.cancelled);
+
+							break;
+						case EmulationStates.Started:
+							SetIsEnabled(false, true, true);
+							break;
+						case EmulationStates.Suspended:
+							SetIsEnabled(true, false, true);
+							break;
+						default:
+							throw new ArgumentOutOfRangeException(newState.ToString());
 					}
-					else
-						MessageBox.Show(this, LocalizedStrings.cancelled);
 				});
 			};
-
-			// get emulation connector
-			var connector = batchEmulation.EmulationConnector;
-
-			logManager.Sources.Add(connector);
-
-			connector.NewSecurity += s =>
-			{
-				if (s != security)
-					return;
-
-				// fill level1 values
-				connector.SendInMessage(level1Info);
-			};
-
-			TestingProcess.Maximum = 100;
-			TestingProcess.Value = 0;
 
 			_startEmulationTime = DateTime.Now;
 
@@ -173,33 +191,56 @@ namespace SampleHistoryTestingParallel
 						Volume = 1,
 						Security = security,
 						Portfolio = portfolio,
-						Connector = connector,
+						//Connector = connector,
 
 						// by default interval is 1 min,
 						// it is excessively for time range with several months
 						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 					};
 
-					var curveElem = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
-					
-					strategy.PnLChanged += () =>
+					this.GuiSync(() =>
 					{
-						var data = new ChartDrawData();
+						var curveElem = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
+					
+						strategy.PnLChanged += () =>
+						{
+							var data = new ChartDrawData();
 
-						data
-							.Group(strategy.CurrentTime)
-								.Add(curveElem, strategy.PnL);
+							data
+								.Group(strategy.CurrentTime)
+									.Add(curveElem, strategy.PnL);
 
-						Curve.Draw(data);
-					};
+							Curve.Draw(data);
+						};
 
-					Stat.AddStrategies(new[] { strategy });
+						Stat.AddStrategies(new[] { strategy });
+					});
 
 					return strategy;
 				});
 
 			// start emulation
-			batchEmulation.Start(strategies, periods.Length);
+			_batchEmulation.Start(strategies, periods.Count);
+		}
+
+		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)
+		{
+			this.GuiAsync(() =>
+			{
+				StopBtn.IsEnabled = canStop;
+				StartBtn.IsEnabled = canStart;
+				PauseBtn.IsEnabled = canSuspend;
+			});
+		}
+
+		private void StopBtnClick(object sender, RoutedEventArgs e)
+		{
+			_batchEmulation.Stop();
+		}
+
+		private void PauseBtnClick(object sender, RoutedEventArgs e)
+		{
+			_batchEmulation.Suspend();
 		}
 	}
 }

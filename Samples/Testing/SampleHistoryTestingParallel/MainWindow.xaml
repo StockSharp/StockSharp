@@ -8,7 +8,7 @@
     
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="100" />
+			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
@@ -22,8 +22,12 @@
 		<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
         <devExp:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 
-		<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="2" Grid.Column="0" Click="StartBtnClick" />
-		<ProgressBar x:Name="TestingProcess" Grid.Column="1" Grid.Row="2" />
+		<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
+			<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" />
+			<Button x:Name="PauseBtn" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
+			<Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+		</StackPanel>
+		<ProgressBar x:Name="TestingProcess" Grid.Column="1" Grid.Row="2" Maximum="100" />
 
         <TabControl Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" >
             <TabItem Header="{x:Static loc:LocalizedStrings.Equity}">

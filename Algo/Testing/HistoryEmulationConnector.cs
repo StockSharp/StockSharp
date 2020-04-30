@@ -32,8 +32,6 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector
 	{
-		private readonly bool _ownInnerAdapter;
-		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
@@ -95,10 +93,12 @@ namespace StockSharp.Algo.Testing
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		public HistoryEmulationConnector(IMessageAdapter innerAdapter, bool ownInnerAdapter, IMessageChannel inChannel, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
-			: base(new EmulationMessageAdapter(innerAdapter, inChannel, true) { OwnInnerAdapter = true }, false, securityProvider, portfolioProvider)
+			: base(new EmulationMessageAdapter(innerAdapter, inChannel, true, securityProvider, portfolioProvider) { OwnInnerAdapter = ownInnerAdapter }, false)
 		{
 			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
 			TransactionIdGenerator = innerAdapter.TransactionIdGenerator;
+
+			MarketTimeChangedInterval = HistoryMessageAdapter.MarketTimeChangedInterval;
 
 			Adapter.LatencyManager = null;
 			Adapter.CommissionManager = null;
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Testing
 			Adapter.SupportOrderBookTruncate = false;
 			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 
-			_ownInnerAdapter = ownInnerAdapter;
+			MarketTimeChanged += OnMarketTimeChanged;
 		}
 
 		/// <inheritdoc />
@@ -132,7 +132,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 		/// </summary>
-		public HistoryMessageAdapter HistoryMessageAdapter => (HistoryMessageAdapter)EmulationAdapter.InnerAdapter;
+		public HistoryMessageAdapter HistoryMessageAdapter => EmulationAdapter.FindAdapter<HistoryMessageAdapter>();
 
 		private EmulationStates _state = EmulationStates.Stopped;
 
@@ -154,7 +154,7 @@ namespace StockSharp.Algo.Testing
 					case EmulationStates.Stopped:
 						throwError = _state != EmulationStates.Stopping;
 
-						if (_ownInnerAdapter)
+						if (EmulationAdapter.OwnInnerAdapter)
 							EmulationAdapter.InChannel.Close();
 
 						break;
@@ -162,7 +162,7 @@ namespace StockSharp.Algo.Testing
 						throwError = _state != EmulationStates.Started && _state != EmulationStates.Suspended
 							&& State != EmulationStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
 
-						if (_ownInnerAdapter)
+						if (EmulationAdapter.OwnInnerAdapter)
 						{
 							EmulationAdapter.InChannel.Clear();
 
@@ -174,7 +174,7 @@ namespace StockSharp.Algo.Testing
 					case EmulationStates.Starting:
 						throwError = _state != EmulationStates.Stopped && _state != EmulationStates.Suspended;
 
-						if (_ownInnerAdapter && _state == EmulationStates.Suspended)
+						if (EmulationAdapter.OwnInnerAdapter && _state == EmulationStates.Suspended)
 							EmulationAdapter.InChannel.Resume();
 
 						break;
@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Testing
 					case EmulationStates.Suspending:
 						throwError = _state != EmulationStates.Started;
 
-						if (_ownInnerAdapter)
+						if (EmulationAdapter.OwnInnerAdapter)
 							EmulationAdapter.InChannel.Suspend();
 
 						break;
@@ -217,15 +217,41 @@ namespace StockSharp.Algo.Testing
 		public event Action StateChanged;
 
 		/// <summary>
+		/// Progress changed event.
+		/// </summary>
+		public event Action<int> ProgressChanged;
+
+		private DateTimeOffset _startTime;
+		private DateTimeOffset _stopTime;
+		private DateTimeOffset _nextTime;
+		private TimeSpan _progressStep;
+
+		private void OnMarketTimeChanged(TimeSpan diff)
+		{
+			if (_progressStep == default)
+				return;
+
+			if (CurrentTime < _nextTime && CurrentTime < _stopTime)
+				return;
+
+			var steps = (CurrentTime - _startTime).Ticks / _progressStep.Ticks + 1;
+			_nextTime = _startTime + (steps * _progressStep.Ticks).To<TimeSpan>();
+			ProgressChanged?.Invoke((int)steps);
+		}
+
+		/// <summary>
 		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="IConnector.Disconnect"/>method.
 		/// </summary>
 		public bool IsFinished { get; private set; }
-
+		
 		/// <inheritdoc />
 		public override TimeSpan MarketTimeChangedInterval
 		{
-			get => HistoryMessageAdapter.MarketTimeChangedInterval;
-			set => HistoryMessageAdapter.MarketTimeChangedInterval = value;
+			set
+			{
+				base.MarketTimeChangedInterval = value;
+				HistoryMessageAdapter.MarketTimeChangedInterval = value;
+			}
 		}
 
 		/// <inheritdoc />
@@ -234,6 +260,25 @@ namespace StockSharp.Algo.Testing
 			base.ClearCache();
 
 			IsFinished = false;
+		}
+
+		/// <inheritdoc />
+		protected override void OnConnect()
+		{
+			_startTime = HistoryMessageAdapter.StartDate;
+			_stopTime = HistoryMessageAdapter.StopDate;
+
+			_progressStep = ((_stopTime - _startTime).Ticks / 100).To<TimeSpan>();
+
+			_nextTime = _startTime + _progressStep;
+
+			base.OnConnect();
+
+			if (!EmulationAdapter.OwnInnerAdapter)
+			{
+				SendEmulationState(EmulationStates.Starting);
+				SendEmulationState(EmulationStates.Started);
+			}
 		}
 
 		/// <inheritdoc />
@@ -246,6 +291,8 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
+			MarketTimeChanged -= OnMarketTimeChanged;
+
 			base.DisposeManaged();
 
 			MarketDataAdapter.DoDispose();
@@ -269,7 +316,10 @@ namespace StockSharp.Algo.Testing
 
 		private void SendEmulationState(EmulationStates state)
 		{
-			SendInMessage(new EmulationStateMessage { State = state });
+			if (EmulationAdapter.OwnInnerAdapter)
+				SendInMessage(new EmulationStateMessage { State = state });
+			else
+				ProcessEmulationStateMessage(state);
 		}
 
 		/// <inheritdoc />

@@ -181,30 +181,6 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		//private TimeSpan? _useCandlesTimeFrame;
-
-		///// <summary>
-		///// Использовать свечи с заданным тайм-фреймом. Если тайм-фрейм равен <see langword="null"/>, свечи не используются.
-		///// </summary>
-		//[CategoryLoc(LocalizedStrings.Str1174Key)]
-		//[PropertyOrder(10)]
-		//[DisplayNameLoc(LocalizedStrings.CandlesKey)]
-		//[DescriptionLoc(LocalizedStrings.Str1188Key)]
-		//[Nullable]
-		//[DefaultValue(typeof(TimeSpan), "00:05:00")]
-		//public TimeSpan? UseCandlesTimeFrame
-		//{
-		//	get { return _useCandlesTimeFrame; }
-		//	set
-		//	{
-		//		if (value <= TimeSpan.Zero)
-		//			throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1189);
-
-		//		_useCandlesTimeFrame = value;
-		//		NotifyChanged(nameof(UseCandlesTimeFrame));
-		//	}
-		//}
-
 		private long _initialOrderId;
 
 		/// <summary>
@@ -422,10 +398,8 @@ namespace StockSharp.Algo.Testing
 			get => _priceLimitOffset;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_priceLimitOffset = value;
+				_priceLimitOffset = value ?? throw new ArgumentNullException(nameof(value));
+				NotifyChanged(nameof(PriceLimitOffset));
 			}
 		}
 
