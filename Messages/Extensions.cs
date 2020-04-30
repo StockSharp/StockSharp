@@ -1644,6 +1644,9 @@ namespace StockSharp.Messages
 			if (wrapper is TAdapter adapter)
 				return adapter;
 
+			if (wrapper.InnerAdapter is TAdapter adapter2)
+				return adapter2;
+
 			if (wrapper.InnerAdapter is IMessageAdapterWrapper w)
 				return w.FindAdapter<TAdapter>();
 
