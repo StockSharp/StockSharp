@@ -297,7 +297,7 @@
 				IsSorted = true,
 				ServerTime = quoteMsg.ServerTime,
 				OriginalTransactionId = quoteMsg.OriginalTransactionId,
-			}.SetSubscriptionIds(quoteMsg.SubscriptionIds, quoteMsg.SubscriptionId);
+			};
 		}
 
 		/// <inheritdoc />
