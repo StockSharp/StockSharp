@@ -70,5 +70,20 @@ namespace StockSharp.Community
 		/// To unsubscribe from news.
 		/// </summary>
 		void UnSubscribeNews();
+
+		/// <summary>
+		/// Get feedbacks for specified product.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <param name="offset">Offset.</param>
+		/// <param name="count">Count.</param>
+		/// <returns>Feedbacks.</returns>
+		ProductFeedbackMessage[] GetFeedbacks(ProductInfoMessage product, int offset, int count);
+
+		/// <summary>
+		/// To get all available products.
+		/// </summary>
+		/// <returns>All available products.</returns>
+		ProductInfoMessage[] GetProducts();
 	}
 }

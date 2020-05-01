@@ -21,5 +21,10 @@
 		/// <see cref="ProductCheckVersionMessage"/>.
 		/// </summary>
 		public const MessageTypes ProductCheckVersion = (MessageTypes)(-11002);
+
+		/// <summary>
+		/// <see cref="ProductFeedbackMessage"/>.
+		/// </summary>
+		public const MessageTypes ProductFeedback = (MessageTypes)(-11003);
 	}
 }

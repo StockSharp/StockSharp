@@ -57,6 +57,12 @@
 		[DataMember]
 		public int DownloadCount { get; set; }
 
+		/// <summary>
+		/// Rating.
+		/// </summary>
+		[DataMember]
+		public decimal Rating { get; set; }
+
 		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
@@ -84,6 +90,7 @@
 				Tags = Tags,
 				Author = Author,
 				DownloadCount = DownloadCount,
+				Rating = Rating,
 				OriginalTransactionId = OriginalTransactionId,
 			};
 			CopyTo(clone);

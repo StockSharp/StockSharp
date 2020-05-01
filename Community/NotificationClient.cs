@@ -97,7 +97,7 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public void SendMessage(string title, string body, FileInfoMessage[] attachments)
 		{
-			if (attachments == null)
+			if (attachments is null)
 				throw new ArgumentNullException(nameof(attachments));
 
 			ValidateError(Invoke(f => f.SendMessage(SessionId, title, body, attachments.Select(a => a.Id).ToArray(), IsEnglish)));
@@ -106,13 +106,31 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public void SendFeedback(ProductInfoMessage product, int rating, string comment)
 		{
+			if (product is null)
+				throw new ArgumentNullException(nameof(product));
+
 			ValidateError(Invoke(f => f.SendFeedback2(SessionId, product.Id, rating, comment)));
 		}
 
 		/// <inheritdoc />
 		public bool HasFeedback(ProductInfoMessage product)
 		{
+			if (product is null)
+				throw new ArgumentNullException(nameof(product));
+
 			return Invoke(f => f.HasFeedback2(SessionId, product.Id));
+		}
+
+		/// <inheritdoc />
+		public ProductFeedbackMessage[] GetFeedbacks(ProductInfoMessage product, int offset, int count)
+		{
+			return Invoke(f => f.GetFeedbacks(SessionId, product.Id, offset, count));
+		}
+
+		/// <inheritdoc />
+		public ProductInfoMessage[] GetProducts()
+		{
+			return Invoke(f => f.GetProducts(SessionId));
 		}
 
 		/// <inheritdoc />

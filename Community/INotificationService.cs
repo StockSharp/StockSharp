@@ -18,6 +18,7 @@ namespace StockSharp.Community
 	using System;
 	using System.ServiceModel;
 
+	using StockSharp.Community.Messages;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -144,5 +145,24 @@ namespace StockSharp.Community
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte SendFeedback2(Guid sessionId, long productId, int rating, string comment);
+
+		/// <summary>
+		/// Get feedbacks for specified product.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="productId">Session ID.</param>
+		/// <param name="offset">Offset.</param>
+		/// <param name="count">Count.</param>
+		/// <returns>Feedbacks.</returns>
+		[OperationContract]
+		ProductFeedbackMessage[] GetFeedbacks(Guid sessionId, long productId, int offset, int count);
+
+		/// <summary>
+		/// To get all available products.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>All available products.</returns>
+		[OperationContract]
+		ProductInfoMessage[] GetProducts(Guid sessionId);
 	}
 }

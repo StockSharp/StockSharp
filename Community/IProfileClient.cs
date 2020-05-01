@@ -1,6 +1,5 @@
 namespace StockSharp.Community
 {
-	using StockSharp.Community.Messages;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -58,11 +57,5 @@ namespace StockSharp.Community
 		/// <param name="userId">User ID.</param>
 		/// <returns>The user information.</returns>
 		UserInfoMessage GetUserProfile(long userId);
-
-		/// <summary>
-		/// To get all available products.
-		/// </summary>
-		/// <returns>All available products.</returns>
-		ProductInfoMessage[] GetProducts();
 	}
 }
