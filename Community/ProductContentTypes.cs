@@ -6,10 +6,10 @@ namespace StockSharp.Community
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Strategy content types.
+	/// Product content types.
 	/// </summary>
 	[DataContract]
-	public enum StrategyContentTypes
+	public enum ProductContentTypes
 	{
 		/// <summary>
 		/// Source code (if the strategy is distributed in source code).

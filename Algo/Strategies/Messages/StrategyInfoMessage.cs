@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Type of <see cref="Content"/>.
 		/// </summary>
 		[DataMember]
-		public StrategyContentTypes ContentType { get; set; }
+		public ProductContentTypes ContentType { get; set; }
 
 		/// <summary>
 		/// Content.

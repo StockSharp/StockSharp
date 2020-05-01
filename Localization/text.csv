@@ -13794,7 +13794,7 @@ DocStr9051;Strategy subscriptions signed by {0};Подписки на страт
 DocStr9052;A new strategy was created in the store;Новая стратегия была добавлена в магазин
 DocStr9053;Existing strategy was updated in the store;Стратегия была обновлена в магазине
 DocStr9054;Existing strategy was deleted from the store;Стратегия была удалена из магазина
-DocStr9056;Strategy content types;Типы контента стратегии
+DocStr9056;Product content types;Типы контента продукта
 DocStr9057;Schema in visual designer (if the strategy is distributed as a schema);Схема визуального дизайнера (если стратегия распространяется как схема)
 DocStr9058;Encrypted version of {0};Зашифрованная версия {0}
 DocStr9059;Strategy price types;Типы цены стратегии
