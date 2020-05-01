@@ -63,6 +63,12 @@
 		[DataMember]
 		public decimal? Rating { get; set; }
 
+		/// <summary>
+		/// Internet address of help site.
+		/// </summary>
+		[DataMember]
+		public string DocUrl { get; set; }
+
 		/// <inheritdoc />
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
@@ -91,6 +97,7 @@
 				Author = Author,
 				DownloadCount = DownloadCount,
 				Rating = Rating,
+				DocUrl = DocUrl,
 				OriginalTransactionId = OriginalTransactionId,
 			};
 			CopyTo(clone);
