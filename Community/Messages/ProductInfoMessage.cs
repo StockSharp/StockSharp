@@ -61,7 +61,7 @@
 		/// Rating.
 		/// </summary>
 		[DataMember]
-		public decimal Rating { get; set; }
+		public decimal? Rating { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
