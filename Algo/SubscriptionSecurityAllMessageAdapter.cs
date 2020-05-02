@@ -76,7 +76,7 @@
 							{
 								var info = _map[parentId];
 								info.State = SubscriptionStates.Active;
-								suspended = info.Suspended;
+								suspended = info.Suspended.CopyAndClear();
 							}
 							else if (secId == default)
 								_map.Add(mdMsg.TransactionId, new SubscriptionInfo(mdMsg.TypedClone()));
