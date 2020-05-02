@@ -102,6 +102,18 @@ namespace StockSharp.Messages
 			set => _extensionInfo = value;
 		}
 
+		/// <summary>
+		/// Is loopback message.
+		/// </summary>
+		[Ignore]
+		[XmlIgnore]
+		[Obsolete("Use BackMode property.")]
+		public bool IsBack
+		{
+			get => this.IsBack();
+			set => BackMode = value ? MessageBackModes.Direct : MessageBackModes.None;
+		}
+
 		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
