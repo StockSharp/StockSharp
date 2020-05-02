@@ -105,6 +105,8 @@ namespace StockSharp.Algo.Testing
 			Adapter.PnLManager = null;
 			Adapter.SlippageManager = null;
 
+			Adapter.SendFinishedCandlesImmediatelly = true;
+
 			InMessageChannel = new PassThroughMessageChannel();
 			OutMessageChannel = new PassThroughMessageChannel();
 

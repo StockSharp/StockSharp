@@ -478,6 +478,11 @@ namespace StockSharp.Algo
 		public bool SupportCandlesCompression { get; set; } = true;
 
 		/// <summary>
+		/// <see cref="CandleBuilderMessageAdapter.SendFinishedCandlesImmediatelly"/>.
+		/// </summary>
+		public bool SendFinishedCandlesImmediatelly { get; set; }
+
+		/// <summary>
 		/// Use <see cref="OrderLogMessageAdapter"/>.
 		/// </summary>
 		public bool SupportBuildingFromOrderLog { get; set; } = true;
@@ -604,8 +609,6 @@ namespace StockSharp.Algo
 			{
 				adapter = ApplyOwnInner(new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage));
 			}
-
-			if (SecurityMappingStorage != null)
 			{
 				adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage));
 			}
@@ -670,7 +673,7 @@ namespace StockSharp.Algo
 
 			if (SupportCandlesCompression)
 			{
-				adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, StorageProcessor.CandleBuilderProvider));
+				adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, StorageProcessor.CandleBuilderProvider) { SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly });
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())

@@ -73,6 +73,11 @@ namespace StockSharp.Algo.Candles.Compression
 			_candleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
 		}
 
+		/// <summary>
+		/// Send out finished candles when they received.
+		/// </summary>
+		public bool SendFinishedCandlesImmediatelly { get; set; }
+
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
@@ -659,7 +664,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			candleMsg = candleMsg.TypedClone();
 
-			if (candleMsg.Type == MessageTypes.CandleTimeFrame)
+			if (candleMsg.Type == MessageTypes.CandleTimeFrame && !SendFinishedCandlesImmediatelly)
 			{
 				// make all incoming candles as Active until next come
 				candleMsg.State = CandleStates.Active;
@@ -750,7 +755,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CandleBuilderMessageAdapter(InnerAdapter.TypedClone(), _candleBuilderProvider);
+			return new CandleBuilderMessageAdapter(InnerAdapter.TypedClone(), _candleBuilderProvider) { SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly };
 		}
 	}
 }
