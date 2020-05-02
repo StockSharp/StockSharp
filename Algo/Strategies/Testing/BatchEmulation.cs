@@ -307,11 +307,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			_histAdapter.SendInMessage(new EmulationStateMessage { State = EmulationStates.Stopping });
 			_histAdapter.SendInMessage(new DisconnectMessage());
 
-			foreach (var connector in _currentConnectors)
-			{
-				if (connector.ConnectionState == ConnectionStates.Connected)
-					connector.Disconnect();
-			}
+			_currentConnectors.Clear();
 		}
 	}
 }
