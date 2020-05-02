@@ -513,6 +513,11 @@ namespace StockSharp.Algo
 		public bool IgnoreExtraAdapters { get; set; }
 
 		/// <summary>
+		/// Use <see cref="SubscriptionSecurityAllMessageAdapter"/>.
+		/// </summary>
+		public bool SupportSecurityAll { get; set; } = true;
+
+		/// <summary>
 		/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 		/// </summary>
 		public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
@@ -615,6 +620,16 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage));
 			}
 
+			if (adapter.IsSupportSubscriptions)
+			{
+				adapter = ApplyOwnInner(new SubscriptionOnlineMessageAdapter(adapter));
+			}
+
+			if (SupportSecurityAll)
+			{
+				adapter = ApplyOwnInner(new SubscriptionSecurityAllMessageAdapter(adapter));
+			}
+
 			if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
 			{
 				adapter = ApplyOwnInner(new PnLMessageAdapter(adapter) { PnLManager = PnLManager.Clone() });
@@ -623,11 +638,6 @@ namespace StockSharp.Algo
 			if (CommissionManager != null)
 			{
 				adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() });
-			}
-
-			if (adapter.IsSupportSubscriptions)
-			{
-				adapter = ApplyOwnInner(new SubscriptionOnlineMessageAdapter(adapter));
 			}
 
 			if (SupportPartialDownload)

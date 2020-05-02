@@ -94,5 +94,10 @@
 		/// <see cref="StrategyBacktestResultMessage"/>.
 		/// </summary>
 		public const MessageTypes StrategyBacktestResult = (MessageTypes)(-25);
+
+		/// <summary>
+		/// <see cref="SubscriptionSecurityAllMessage"/>.
+		/// </summary>
+		public const MessageTypes SubscriptionSecurityAll = (MessageTypes)(-26);
 	}
 }

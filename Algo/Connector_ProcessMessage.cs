@@ -79,7 +79,7 @@ namespace StockSharp.Algo
 
 		private void AdapterOnNewOutMessage(Message message)
 		{
-			if (message.IsBack)
+			if (message.IsBack())
 			{
 				//message.IsBack = false;
 
@@ -100,6 +100,11 @@ namespace StockSharp.Algo
 					var cancelMsg = (OrderGroupCancelMessage)message;
 					// offline (back) and risk managers can generate the message
 					_entityCache.TryAddMassCancelationId(cancelMsg.TransactionId);
+				}
+				else if (message.Type == ExtendedMessageTypes.SubscriptionSecurityAll)
+				{
+					_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message);
+					return;
 				}
 				
 				SendInMessage(message);

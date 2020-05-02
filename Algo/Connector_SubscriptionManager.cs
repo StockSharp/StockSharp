@@ -78,7 +78,8 @@ namespace StockSharp.Algo
 			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new Dictionary<long, Tuple<ISubscriptionMessage, Subscription>>();
 			private readonly List<SubscriptionInfo> _keeped = new List<SubscriptionInfo>();
 			private readonly HashSet<long> _notFound = new HashSet<long>();
-
+			private readonly Dictionary<long, long> _subscriptionAllMap = new Dictionary<long, long>();
+			
 			private readonly Connector _connector;
 
 			public SubscriptionManager(Connector connector)
@@ -107,6 +108,7 @@ namespace StockSharp.Algo
 					_requests.Clear();
 					_keeped.Clear();
 					_notFound.Clear();
+					_subscriptionAllMap.Clear();
 				}
 			}
 
@@ -131,6 +133,9 @@ namespace StockSharp.Algo
 			{
 				lock (_syncObject)
 				{
+					if (_subscriptionAllMap.TryGetValue(id, out var parentId))
+						id = parentId;
+
 					if (_subscriptions.TryGetValue(id, out var info))
 					{
 						if (remove)
@@ -312,7 +317,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void Subscribe(Subscription subscription)
+			public void Subscribe(Subscription subscription, bool keepBackMode = false)
 			{
 				if (subscription == null)
 					throw new ArgumentNullException(nameof(subscription));
@@ -334,6 +339,10 @@ namespace StockSharp.Algo
 
 				var clone = subscrMsg.TypedClone();
 				clone.Adapter = subscrMsg.Adapter;
+
+				if (keepBackMode)
+					clone.BackMode = subscrMsg.BackMode;
+
 				SendRequest(clone, subscription);
 			}
 
@@ -534,6 +543,20 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(portfolio));
 
 				return Subscriptions.FirstOrDefault(s => s.Portfolio == portfolio);
+			}
+
+			public void SubscribeAll(SubscriptionSecurityAllMessage allMsg)
+			{
+				lock (_syncObject)
+					_subscriptionAllMap.Add(allMsg.TransactionId, allMsg.ParentTransactionId);
+
+				var mdMsg = new MarketDataMessage
+				{
+					Adapter = allMsg.Adapter,
+					BackMode = allMsg.BackMode,
+				};
+				allMsg.CopyTo(mdMsg);
+				Subscribe(new Subscription(mdMsg), true);
 			}
 		}
 	}
