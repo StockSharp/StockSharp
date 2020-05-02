@@ -51,6 +51,9 @@
 			}
 		}
 
+		private const long _error = -1;
+		private const long _finished = -2;
+
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
@@ -67,19 +70,42 @@
 					if (mdMsg.IsSubscribe)
 					{
 						var secId = IsSecurityRequired(mdMsg.ToDataType()) ? mdMsg.SecurityId : default;
+
+						var transId = mdMsg.TransactionId;
 						
 						IEnumerable<Message> suspended = null;
 
 						lock (_sync)
 						{
-							if (_pendingBacks.TryGetAndRemove(mdMsg.TransactionId, out var parentId))
+							if (_pendingBacks.TryGetAndRemove(transId, out var parentId))
 							{
+								// parent subscription was deleted early
+								if (parentId == _error)
+								{
+									RaiseNewOutMessage(new SubscriptionResponseMessage
+									{
+										OriginalTransactionId = transId,
+										Error = new InvalidOperationException(),
+									});
+
+									return true;
+								}
+								else if (parentId == _finished)
+								{
+									RaiseNewOutMessage(new SubscriptionFinishedMessage
+									{
+										OriginalTransactionId = transId,
+									});
+
+									return true;
+								}
+
 								var info = _map[parentId];
 								info.State = SubscriptionStates.Active;
 								suspended = info.Suspended.CopyAndClear();
 							}
 							else if (secId == default)
-								_map.Add(mdMsg.TransactionId, new SubscriptionInfo(mdMsg.TypedClone()));
+								_map.Add(transId, new SubscriptionInfo(mdMsg.TypedClone()));
 						}
 
 						if (suspended != null)
@@ -120,12 +146,61 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			List<Message> extra = null;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Disconnect:
 				case ExtendedMessageTypes.ReconnectingFinished:
 				{
 					ClearState();
+					break;
+				}
+				case MessageTypes.SubscriptionResponse:
+				{
+					var responseMsg = (SubscriptionResponseMessage)message;
+
+					if (responseMsg.Error != null)
+					{
+						lock (_sync)
+						{
+							if (_map.TryGetAndRemove(responseMsg.OriginalTransactionId, out var info))
+							{
+								extra = new List<Message>();
+
+								foreach (var childId in info.Map.Values)
+								{
+									if (_pendingBacks.ContainsKey(childId))
+										_pendingBacks[childId] = _error;
+									else
+										extra.Add(new SubscriptionResponseMessage { OriginalTransactionId = childId, Error = responseMsg.Error });
+								}
+							}
+						}
+					}
+
+					break;
+				}
+				case MessageTypes.SubscriptionFinished:
+				{
+					var finishMsg = (SubscriptionFinishedMessage)message;
+
+					lock (_sync)
+					{
+						if (_map.TryGetAndRemove(finishMsg.OriginalTransactionId, out var info))
+						{
+							extra = new List<Message>();
+
+							foreach (var childId in info.Map.Values)
+							{
+								if (_pendingBacks.ContainsKey(childId))
+									_pendingBacks[childId] = _finished;
+								else
+									extra.Add(new SubscriptionFinishedMessage { OriginalTransactionId = childId });
+							}
+						}
+					}
+
 					break;
 				}
 				default:
@@ -192,6 +267,12 @@
 
 			if (message != null)
 				base.OnInnerAdapterNewOutMessage(message);
+
+			if (extra != null)
+			{
+				foreach (var m in extra)
+					base.OnInnerAdapterNewOutMessage(m);
+			}
 		}
 
 		/// <summary>

@@ -134,7 +134,12 @@ namespace StockSharp.Algo
 				lock (_syncObject)
 				{
 					if (_subscriptionAllMap.TryGetValue(id, out var parentId))
+					{
+						if (remove)
+							_subscriptionAllMap.Remove(id);
+
 						id = parentId;
+					}
 
 					if (_subscriptions.TryGetValue(id, out var info))
 					{
