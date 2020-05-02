@@ -762,7 +762,7 @@ namespace StockSharp.Algo
 			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 				throw new ArgumentException(message.ToString());
 
-			if (message.IsBack)
+			if (message.IsBack())
 			{
 				var adapter = message.Adapter;
 
@@ -918,6 +918,11 @@ namespace StockSharp.Algo
 
 		private void ProcessAdapterMessage(IMessageAdapter adapter, Message message)
 		{
+			if (message.BackMode == MessageBackModes.Chain)
+			{
+				adapter = _adapterWrappers[GetUnderlyingAdapter(adapter)];
+			}
+
 			if (message is ISubscriptionMessage subscrMsg)
 				SendRequest(subscrMsg.TypedClone(), adapter);
 			else
@@ -1398,7 +1403,7 @@ namespace StockSharp.Algo
 		{
 			List<Message> extra = null;
 
-			if (!message.IsBack)
+			if (!message.IsBack())
 			{
 				if (message.Adapter == null)
 					message.Adapter = innerAdapter;

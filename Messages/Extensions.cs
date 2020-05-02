@@ -2141,23 +2141,21 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Made the specified message as <see cref="Message.IsBack"/>.
+		/// Made the specified message as <see cref="Message.BackMode"/>.
 		/// </summary>
 		/// <typeparam name="TMessage">Message type.</typeparam>
 		/// <param name="message">Message.</param>
 		/// <param name="adapter">Adapter.</param>
+		/// <param name="mode">Back mode.</param>
 		/// <returns>Message.</returns>
-		public static TMessage LoopBack<TMessage>(this TMessage message, IMessageAdapter adapter)
+		public static TMessage LoopBack<TMessage>(this TMessage message, IMessageAdapter adapter, MessageBackModes mode = MessageBackModes.Direct)
 			where TMessage : Message
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			message.IsBack = true;
-			message.Adapter = adapter;
+			message.BackMode = mode;
+			message.Adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 
 			return message;
 		}
@@ -2174,10 +2172,23 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			message.IsBack = false;
+			message.BackMode = MessageBackModes.None;
 			message.Adapter = null;
 
 			return message;
+		}
+
+		/// <summary>
+		/// Determines the specified message is loopback.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Is loopback message.</returns>
+		public static bool IsBack(this Message message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.BackMode != MessageBackModes.None;
 		}
 
 		/// <summary>

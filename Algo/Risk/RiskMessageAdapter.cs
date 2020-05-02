@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Risk
 		/// <inheritdoc />
 		public override bool SendInMessage(Message message)
 		{
-			if (message.IsBack)
+			if (message.IsBack())
 			{
 				if (message.Adapter == this)
 				{

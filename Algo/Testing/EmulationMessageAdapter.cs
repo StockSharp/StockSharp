@@ -201,14 +201,14 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		protected override void InnerAdapterNewOutMessage(Message message)
 		{
-			if (OwnInnerAdapter || !message.IsBack)
+			if (OwnInnerAdapter || !message.IsBack())
 				base.InnerAdapterNewOutMessage(message);
 		}
 
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
+			if (message.IsBack())
 			{
 				if (OwnInnerAdapter)
 					base.OnInnerAdapterNewOutMessage(message);

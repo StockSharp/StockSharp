@@ -1,14 +1,11 @@
 namespace StockSharp.Algo.Storages
 {
 	using System;
-	using System.Collections.Generic;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>

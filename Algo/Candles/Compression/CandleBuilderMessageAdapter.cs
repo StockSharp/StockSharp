@@ -584,7 +584,7 @@ namespace StockSharp.Algo.Candles.Compression
 							series.NonFinishedCandle = null;
 
 							// loopback
-							series.Current.IsBack = true;
+							series.Current.BackMode = MessageBackModes.Direct;
 							RaiseNewOutMessage(series.Current);
 
 							return;
@@ -641,7 +641,7 @@ namespace StockSharp.Algo.Candles.Compression
 			series.Current = current;
 
 			// loopback
-			current.IsBack = true;
+			current.BackMode = MessageBackModes.Direct;
 			RaiseNewOutMessage(current);
 		}
 

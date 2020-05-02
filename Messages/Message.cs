@@ -47,6 +47,27 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// Message loopback modes.
+	/// </summary>
+	public enum MessageBackModes
+	{
+		/// <summary>
+		/// None.
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// Direct.
+		/// </summary>
+		Direct,
+
+		/// <summary>
+		/// Via whole adapters chain.
+		/// </summary>
+		Chain,
+	}
+
+	/// <summary>
 	/// A message containing market data or command.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
@@ -82,11 +103,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Is loopback message.
+		/// Back mode.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		public bool IsBack { get; set; }
+		public MessageBackModes BackMode { get; set; }
 
 		/// <summary>
 		/// Offline mode handling message.
