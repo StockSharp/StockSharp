@@ -609,6 +609,8 @@ namespace StockSharp.Algo
 			{
 				adapter = ApplyOwnInner(new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage));
 			}
+
+			if (SecurityMappingStorage != null)
 			{
 				adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage));
 			}
