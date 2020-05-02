@@ -102,9 +102,7 @@ namespace StockSharp.Messages
 			set => _extensionInfo = value;
 		}
 
-		/// <summary>
-		/// Back mode.
-		/// </summary>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		public MessageBackModes BackMode { get; set; }

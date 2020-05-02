@@ -21,5 +21,10 @@ namespace StockSharp.Messages
 		/// Source adapter. Can be <see langword="null" />.
 		/// </summary>
 		IMessageAdapter Adapter { get; set; }
+
+		/// <summary>
+		/// Back mode.
+		/// </summary>
+		MessageBackModes BackMode { get; set; }
 	}
 }
