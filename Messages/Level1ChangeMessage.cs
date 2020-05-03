@@ -793,6 +793,20 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LastTradeVolumeHighKey, Description = LocalizedStrings.LastTradeVolumeHighDescKey)]
 		LastTradeVolumeHigh,
+
+		/// <summary>
+		/// Option margin leverage.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OptionMarginKey, Description = LocalizedStrings.OptionMarginDescKey)]
+		OptionMargin,
+
+		/// <summary>
+		/// Synthetic option position margin leverage.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OptionSyntheticMarginKey, Description = LocalizedStrings.OptionSyntheticMarginDescKey)]
+		OptionSyntheticMargin,
 	}
 
 	/// <summary>

@@ -5180,6 +5180,10 @@ OrdersMargin;Orders (margin);Заявки (маржа)
 LicenseNotSupportPlatform;License N{0} is not support on current platform.;Лицензия N{0} не поддерживается на текущей платформе.
 OS;OS;ОС
 UdpDumper;UDP Dumper;UDP Dumper
+OptionMargin;Option margin;Опционы ГО
+OptionMarginDesc;Option margin leverage.;Гарантийное обеспечение на опцион.
+OptionSyntheticMargin;Option (synthetic);Опцион (синтетика)
+OptionSyntheticMarginDesc;Synthetic option position margin leverage.;Гарантийное обеспечение на синтетическую опционную позицию.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
