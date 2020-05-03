@@ -1136,5 +1136,14 @@ namespace StockSharp.BusinessEntities
 			Name = "B3",
 			FullNameLoc = LocalizedStrings.BrasilBolsaKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="IQFeed"/>.
+		/// </summary>
+		public static Exchange IQFeed { get; } = new Exchange
+		{
+			Name = "IQFD",
+			FullNameLoc = LocalizedStrings.IQFeedKey,
+		};
 	}
 }

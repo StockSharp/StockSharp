@@ -3559,5 +3559,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Bovespa.Name,
 			Exchange = Exchange.Bovespa,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="Exchange.IQFeed"/>.
+		/// </summary>
+		public static ExchangeBoard IQFeed { get; } = new ExchangeBoard
+		{
+			Code = Exchange.IQFeed.Name,
+			Exchange = Exchange.IQFeed,
+		};
 	}
 }
