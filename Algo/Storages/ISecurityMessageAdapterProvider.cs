@@ -217,7 +217,22 @@ namespace StockSharp.Algo.Storages
 						BoardCode = reader.ReadString()
 					};
 
-					var dataType = reader.ReadString().ToDataType(reader.ReadString());
+					DataType dataType = null;
+
+					var typeStr = reader.ReadString();
+
+					if (!typeStr.IsEmpty())
+					{
+						if (reader.ColumnCount == 4)
+						{
+							// TODO remove after few releases later
+							// 2020-05-04
+							dataType = typeStr.To<MarketDataTypes>().ToDataType(null);
+						}
+						else
+							dataType = typeStr.ToDataType(reader.ReadString());
+					}
+
 					var adapterId = reader.ReadString().To<Guid>();
 
 					_inMemory.SetAdapter(securityId, dataType, adapterId);
@@ -248,14 +263,14 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in adapters)
 					{
-						var (type, arg) = pair.Key.Item2.FormatToString();
+						var dataType = pair.Key.Item2?.FormatToString();
 
 						writer.WriteRow(new[]
 						{
 							pair.Key.Item1.SecurityCode,
 							pair.Key.Item1.BoardCode,
-							type,
-							arg,
+							dataType?.type,
+							dataType?.arg,
 							pair.Value.To<string>()
 						});
 					}
