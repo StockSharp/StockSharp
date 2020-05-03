@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
+	using System.Linq;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
@@ -23,6 +24,7 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.Serialization;
+	using Ecng.Collections;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -107,6 +109,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
@@ -132,10 +135,9 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Copy.</returns>
 		public override Quote Clone()
 		{
-			return new Quote(Security, Price, Volume, OrderDirection, OrdersCount, Condition)
-			{
-				ExtensionInfo = ExtensionInfo,
-			};
+			var clone = new Quote(Security, Price, Volume, OrderDirection, OrdersCount, Condition);
+			this.CopyExtensionInfo(clone);
+			return clone;
 		}
 
 		/// <inheritdoc />

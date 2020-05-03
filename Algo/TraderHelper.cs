@@ -1814,19 +1814,19 @@ namespace StockSharp.Algo
 			if (criteria.ExpiryDate != null && security.ExpiryDate != null && security.ExpiryDate != criteria.ExpiryDate)
 				return false;
 
-			if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
-			{
-				if (security.ExtensionInfo == null)
-					return false;
+			//if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
+			//{
+			//	if (security.ExtensionInfo == null)
+			//		return false;
 
-				foreach (var pair in criteria.ExtensionInfo)
-				{
-					var value = security.ExtensionInfo.TryGetValue(pair.Key);
+			//	foreach (var pair in criteria.ExtensionInfo)
+			//	{
+			//		var value = security.ExtensionInfo.TryGetValue(pair.Key);
 
-					if (!pair.Value.Equals(value))
-						return false;
-				}
-			}
+			//		if (!pair.Value.Equals(value))
+			//			return false;
+			//	}
+			//}
 
 			return true;
 		}

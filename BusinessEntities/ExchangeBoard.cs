@@ -65,7 +65,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public ExchangeBoard()
 		{
-			ExtensionInfo = new Dictionary<string, object>();
 		}
 
 		private string _code = string.Empty;
@@ -235,28 +234,29 @@ namespace StockSharp.BusinessEntities
 		}
 
 		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo = new Dictionary<string, object>();
 
 		/// <inheritdoc />
 		[XmlIgnore]
 		[Browsable(false)]
 		[DataMember]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
 			set
 			{
-				_extensionInfo = value ?? throw new ArgumentNullException(nameof(value));
+				_extensionInfo = value/* ?? throw new ArgumentNullException(nameof(value))*/;
 				Notify(nameof(ExtensionInfo));
 			}
 		}
 
-		[OnDeserialized]
-		private void AfterDeserialization(StreamingContext ctx)
-		{
-			if (ExtensionInfo == null)
-				ExtensionInfo = new Dictionary<string, object>();
-		}
+		//[OnDeserialized]
+		//private void AfterDeserialization(StreamingContext ctx)
+		//{
+		//	if (ExtensionInfo == null)
+		//		ExtensionInfo = new Dictionary<string, object>();
+		//}
 
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;

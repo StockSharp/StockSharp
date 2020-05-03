@@ -574,8 +574,8 @@ namespace StockSharp.Algo
 						o.Portfolio = ProcessPortfolio(message.PortfolioName).Item1;
 					}
 
-					if (o.ExtensionInfo == null)
-						o.ExtensionInfo = new Dictionary<string, object>();
+					//if (o.ExtensionInfo == null)
+					//	o.ExtensionInfo = new Dictionary<string, object>();
 
 					AddOrder(o);
 					_allOrdersByTransactionId.Add(Tuple.Create(transactionId, false), o);
@@ -754,8 +754,8 @@ namespace StockSharp.Algo
 
 				var t = EntityFactory.CreateMyTrade(order, trade);
 
-				if (t.ExtensionInfo == null)
-					t.ExtensionInfo = new Dictionary<string, object>();
+				//if (t.ExtensionInfo == null)
+				//	t.ExtensionInfo = new Dictionary<string, object>();
 
 				if (message.Commission != null)
 					t.Commission = message.Commission;
@@ -992,8 +992,8 @@ namespace StockSharp.Algo
 				if (p == null)
 					throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name));
 
-				if (p.ExtensionInfo == null)
-					p.ExtensionInfo = new Dictionary<string, object>();
+				//if (p.ExtensionInfo == null)
+				//	p.ExtensionInfo = new Dictionary<string, object>();
 
 				return p;
 			}, out var isNew);

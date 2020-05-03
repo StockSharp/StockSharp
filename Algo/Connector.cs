@@ -884,8 +884,8 @@ namespace StockSharp.Algo
 		{
 			order.Balance = order.Volume;
 
-			if (order.ExtensionInfo == null)
-				order.ExtensionInfo = new Dictionary<string, object>();
+			//if (order.ExtensionInfo == null)
+			//	order.ExtensionInfo = new Dictionary<string, object>();
 
 			if (order.TransactionId == 0)
 				order.TransactionId = TransactionIdGenerator.GetNextId();

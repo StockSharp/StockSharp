@@ -155,6 +155,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str427Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 100)]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;

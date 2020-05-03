@@ -486,6 +486,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
