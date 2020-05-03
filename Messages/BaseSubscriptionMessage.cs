@@ -26,6 +26,10 @@
 		/// <inheritdoc />
 		[DataMember]
 		public virtual DateTimeOffset? To { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public virtual long? Count { get; set; }
 		
 		/// <inheritdoc />
 		[DataMember]
@@ -50,6 +54,7 @@
 
 			destination.From = From;
 			destination.To = To;
+			destination.Count = Count;
 			destination.IsSubscribe = IsSubscribe;
 			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;

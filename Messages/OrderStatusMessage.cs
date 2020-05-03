@@ -43,6 +43,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
+		public long? Count { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
 		public bool IsSubscribe { get; set; }
 
 		/// <summary>
@@ -63,6 +67,7 @@ namespace StockSharp.Messages
 
 			destination.From = From;
 			destination.To = To;
+			destination.Count = Count;
 			destination.IsSubscribe = IsSubscribe;
 		}
 
@@ -89,6 +94,9 @@ namespace StockSharp.Messages
 
 			if (To != null)
 				str += $",To={To.Value}";
+
+			if (Count != null)
+				str += $",Count={Count.Value}";
 
 			return str;
 		}

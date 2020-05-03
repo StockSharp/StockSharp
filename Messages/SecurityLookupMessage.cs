@@ -99,6 +99,12 @@ namespace StockSharp.Messages
 			set { }
 		}
 
+		long? ISubscriptionMessage.Count
+		{
+			get => null;
+			set { }
+		}
+
 		bool ISubscriptionMessage.IsSubscribe
 		{
 			get => true;

@@ -121,6 +121,10 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public long? Count { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
@@ -161,6 +165,9 @@ namespace StockSharp.Messages
 			if (To != null)
 				str += $",To={To.Value}";
 
+			if (Count != null)
+				str += $",Count={Count.Value}";
+
 			return str;
 		}
 
@@ -178,6 +185,7 @@ namespace StockSharp.Messages
 			destination.ClientCode = ClientCode;
 			destination.From = From;
 			destination.To = To;
+			destination.Count = Count;
 		}
 	}
 }

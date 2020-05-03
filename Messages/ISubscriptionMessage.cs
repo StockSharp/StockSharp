@@ -21,5 +21,10 @@ namespace StockSharp.Messages
 		/// The message is subscription.
 		/// </summary>
 		bool IsSubscribe { get; set; }
+
+		/// <summary>
+		/// Max count.
+		/// </summary>
+		long? Count { get; set; }
 	}
 }
