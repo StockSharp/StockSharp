@@ -215,6 +215,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str382Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 6)]
+		[EditorExtension(AutoComplete = true, Sorted = true)]
 		public CurrencyTypes? Currency
 		{
 			get => _currency;
