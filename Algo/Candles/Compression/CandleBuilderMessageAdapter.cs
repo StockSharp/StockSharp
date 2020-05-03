@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Candles.Compression
 						{
 							if (InnerAdapter.IsCandlesSupported(mdMsg))
 							{
-								this.AddInfoLog("Origin arg: {0}", mdMsg.GetArg<object>());
+								this.AddInfoLog("Origin arg: {0}", mdMsg.GetArg());
 
 								var original = mdMsg.TypedClone();
 
@@ -294,7 +294,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			original.CopyTo(current, false);
 
-			this.AddInfoLog("Build tf: {0}->{1}", buildFrom, original.GetArg<object>());
+			this.AddInfoLog("Build tf: {0}->{1}", buildFrom, original.GetArg());
 
 			return current;
 		}

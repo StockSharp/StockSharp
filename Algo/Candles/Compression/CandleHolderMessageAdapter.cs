@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						var info = _infos.SafeAdd(mdMsg.TransactionId, k => mdMsg.DataType2.MessageType.CreateInstance<CandleMessage>());
 						info.SecurityId = mdMsg.SecurityId;
-						info.Arg = mdMsg.GetArg<object>();
+						info.Arg = mdMsg.GetArg();
 					}
 
 					break;

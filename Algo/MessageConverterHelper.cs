@@ -1843,7 +1843,7 @@ namespace StockSharp.Algo
 			if (message.DataType2.IsCandles)
 			{
 				series.CandleType = message.DataType2.MessageType.ToCandleType();
-				series.Arg = message.GetArg<object>();
+				series.Arg = message.GetArg();
 			}
 			else
 			{
@@ -1876,7 +1876,7 @@ namespace StockSharp.Algo
 			var str = message.DataType2.MessageType.GetDisplayName();
 
 			if (message.DataType2.IsCandles)
-				str += " " + message.GetArg<object>();
+				str += " " + message.GetArg();
 
 			return str;
 		}

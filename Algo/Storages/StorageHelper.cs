@@ -1305,7 +1305,7 @@ namespace StockSharp.Algo.Storages
 				}
 				else
 				{
-					var storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, msg.DataType2.MessageType, msg.GetArg<object>());
+					var storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, msg.DataType2.MessageType, msg.GetArg());
 
 					var range = GetRange(storage, from, to, settings.DaysLoad);
 

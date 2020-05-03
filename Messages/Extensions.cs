@@ -788,7 +788,7 @@ namespace StockSharp.Messages
 			if (args.IsEmpty())
 				return true;
 
-			return args.Contains(subscription.GetArg<object>());
+			return args.Contains(subscription.GetArg());
 		}
 
 		/// <summary>
@@ -1840,15 +1840,25 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get typed argument.
 		/// </summary>
+		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <returns>The additional argument, associated with data. For example, candle argument.</returns>
+		public static object GetArg(this MarketDataMessage mdMsg)
+		{
+			if (mdMsg is null)
+				throw new ArgumentNullException(nameof(mdMsg));
+
+			return mdMsg.DataType2.Arg;
+		}
+
+		/// <summary>
+		/// Get typed argument.
+		/// </summary>
 		/// <typeparam name="TArg">Arg type.</typeparam>
 		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <returns>The additional argument, associated with data. For example, candle argument.</returns>
 		public static TArg GetArg<TArg>(this MarketDataMessage mdMsg)
 		{
-			if (mdMsg is null)
-				throw new ArgumentNullException(nameof(mdMsg));
-
-			if (!(mdMsg.DataType2.Arg is TArg arg))
+			if (!(mdMsg.GetArg() is TArg arg))
 				throw new InvalidOperationException(LocalizedStrings.WrongCandleArg.Put(mdMsg.DataType2.Arg));
 
 			return arg;

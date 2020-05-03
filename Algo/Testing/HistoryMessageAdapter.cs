@@ -519,7 +519,7 @@ namespace StockSharp.Algo.Testing
 
 					var historySource = GetHistorySource();
 					var candleType = dataType.MessageType;
-					var arg = message.GetArg<object>();
+					var arg = message.GetArg();
 
 					AddStorage(historySource == null
 							? StorageRegistry.GetCandleMessageStorage(candleType, securityId, arg, Drive, StorageFormat)
