@@ -919,7 +919,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 			}
 
-			protected override object GetKey(MarketDataMessage item) => Tuple.Create(item.SecurityId, item.DataType, item.Arg);
+			protected override object GetKey(MarketDataMessage item) => Tuple.Create(item.SecurityId, item.DataType2);
 
 			protected override void Write(CsvFileWriter writer, MarketDataMessage data)
 			{
@@ -929,13 +929,15 @@ namespace StockSharp.Algo.Storages.Csv
 				if (!data.IsSubscribe)
 					throw new ArgumentException(nameof(data));
 
+				var (type, arg) = data.DataType2.FormatToString();
+
 				writer.WriteRow(new[]
 				{
 					string.Empty,//data.TransactionId.To<string>(),
 					data.SecurityId.SecurityCode,
 					data.SecurityId.BoardCode,
-					data.DataType.To<string>(),
-					data.DataType.IsCandleDataType() ? data.DataType.ToCandleMessage().CandleArgToFolderName(data.Arg) : data.Arg.To<string>(),
+					type,
+					arg,
 					data.IsCalcVolumeProfile.To<string>(),
 					data.AllowBuildFromSmallerTimeFrame.To<string>(),
 					data.IsRegularTradingHours.To<string>(),
@@ -954,6 +956,7 @@ namespace StockSharp.Algo.Storages.Csv
 			protected override MarketDataMessage Read(FastCsvReader reader)
 			{
 				reader.Skip();
+
 				var message = new MarketDataMessage
 				{
 					//TransactionId = reader.ReadLong(),
@@ -962,19 +965,17 @@ namespace StockSharp.Algo.Storages.Csv
 						SecurityCode = reader.ReadString(),
 						BoardCode = reader.ReadString(),
 					},
-					DataType = reader.ReadEnum<MarketDataTypes>(),
+
 					IsSubscribe = true,
+
+					DataType2 = reader.ReadString().ToDataType(reader.ReadString()),
+					IsCalcVolumeProfile = reader.ReadBool(),
+					AllowBuildFromSmallerTimeFrame = reader.ReadBool(),
+					IsRegularTradingHours = reader.ReadBool(),
+
+					MaxDepth = reader.ReadNullableInt(),
+					NewsId = reader.ReadString(),
 				};
-
-				var argStr = reader.ReadString();
-				message.Arg = message.DataType.IsCandleDataType() ? message.DataType.ToCandleMessage().ToCandleArg(argStr) : argStr;
-
-				message.IsCalcVolumeProfile = reader.ReadBool();
-				message.AllowBuildFromSmallerTimeFrame = reader.ReadBool();
-				message.IsRegularTradingHours = reader.ReadBool();
-
-				message.MaxDepth = reader.ReadNullableInt();
-				message.NewsId = reader.ReadString();
 
 				var str = reader.ReadString();
 				message.From = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();

@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public override MarketDataTypes DataType => MarketDataTypes.Trades;
+		public override DataType DataType => DataType.Ticks;
 
 		private IdGenerator _idGenerator;
 

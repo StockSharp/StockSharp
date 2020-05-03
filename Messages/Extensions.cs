@@ -603,6 +603,22 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Convert candle parameter into folder name replacing the reserved symbols.
 		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Directory name.</returns>
+		public static string CandleArgToFolderName(this DataType dataType)
+		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			if (!dataType.IsCandles)
+				throw new ArgumentException(dataType.ToString(), nameof(dataType));
+
+			return dataType.MessageType.CandleArgToFolderName(dataType.Arg);
+		}
+
+		/// <summary>
+		/// Convert candle parameter into folder name replacing the reserved symbols.
+		/// </summary>
 		/// <param name="messageType">The type of candle message.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <returns>Directory name.</returns>
@@ -665,7 +681,7 @@ namespace StockSharp.Messages
 			if (dataType.MessageType.IsCandleMessage())
 			{
 				if (_fileNames.TryGetValue(DataType.Create(dataType.MessageType, null), out var fileName))
-					return "candles_{0}_{1}".Put(fileName, dataType.MessageType.CandleArgToFolderName(dataType.Arg));
+					return "candles_{0}_{1}".Put(fileName, dataType.CandleArgToFolderName());
 
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.WrongCandleType);
 			}
@@ -764,15 +780,15 @@ namespace StockSharp.Messages
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			if (!adapter.SupportedMarketDataTypes.Contains(subscription.ToDataType()))
+			if (!adapter.SupportedMarketDataTypes.Contains(subscription.DataType2))
 				return false;
 
-			var args = adapter.GetCandleArgs(subscription.DataType.ToCandleMessage(), subscription.SecurityId, subscription.From, subscription.To).ToArray();
+			var args = adapter.GetCandleArgs(subscription.DataType2.MessageType, subscription.SecurityId, subscription.From, subscription.To).ToArray();
 
 			if (args.IsEmpty())
 				return true;
 
-			return args.Contains(subscription.Arg);
+			return args.Contains(subscription.GetArg<object>());
 		}
 
 		/// <summary>
@@ -809,6 +825,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <returns>Data type info.</returns>
+		[Obsolete("Use MarketDataMessage.DataType2 property.")]
 		public static DataType ToDataType(this MarketDataMessage message)
 		{
 			if (message == null)
@@ -875,6 +892,44 @@ namespace StockSharp.Messages
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="string"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">type.</param>
+		/// <param name="arg">Arg.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this string type, string arg)
+		{
+			if (type.IsEmpty())
+				throw new ArgumentNullException(nameof(type));
+
+			if (type.Contains(','))
+			{
+				var messageType = type.To<Type>();
+				return DataType.Create(messageType, messageType.IsCandleMessage() ? messageType.ToCandleArg(arg) : arg);
+			}
+			else
+			{
+				var dataType = type.To<MarketDataTypes>();
+				return dataType.ToDataType(dataType.IsCandleDataType() ? dataType.ToCandleMessage().ToCandleArg(arg) : arg);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="string"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns><see cref="string"/> value.</returns>
+		public static (string type, string arg) FormatToString(this DataType dataType)
+		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			var type = dataType.MessageType.To<string>();
+			var arg = dataType.IsCandles ? dataType.CandleArgToFolderName() : dataType.Arg.To<string>();
+			return (type, arg);
 		}
 
 		/// <summary>
@@ -1783,20 +1838,45 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Get typed argument.
+		/// </summary>
+		/// <typeparam name="TArg">Arg type.</typeparam>
+		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <returns>The additional argument, associated with data. For example, candle argument.</returns>
+		public static TArg GetArg<TArg>(this MarketDataMessage mdMsg)
+		{
+			if (mdMsg is null)
+				throw new ArgumentNullException(nameof(mdMsg));
+
+			if (!(mdMsg.DataType2.Arg is TArg arg))
+				throw new InvalidOperationException(LocalizedStrings.WrongCandleArg.Put(mdMsg.DataType2.Arg));
+
+			return arg;
+		}
+
+		/// <summary>
+		/// Set typed argument.
+		/// </summary>
+		/// <typeparam name="TArg">Arg type.</typeparam>
+		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
+		public static MarketDataMessage SetArg<TArg>(this MarketDataMessage mdMsg, TArg arg)
+		{
+			if (mdMsg is null)
+				throw new ArgumentNullException(nameof(mdMsg));
+
+			mdMsg.DataType2.Arg = arg;
+			return mdMsg;
+		}
+
+		/// <summary>
 		/// Get time-frame from the specified market-data message.
 		/// </summary>
 		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <returns>Time-frame.</returns>
 		public static TimeSpan GetTimeFrame(this MarketDataMessage mdMsg)
-		{
-			if (mdMsg == null)
-				throw new ArgumentNullException(nameof(mdMsg));
-
-			if (!(mdMsg.Arg is TimeSpan timeFrame))
-				throw new InvalidOperationException(LocalizedStrings.WrongCandleArg.Put(mdMsg.Arg));
-
-			return timeFrame;
-		}
+			=> mdMsg.GetArg<TimeSpan>();
 
 		/// <summary>
 		/// 
@@ -1949,6 +2029,14 @@ namespace StockSharp.Messages
 		/// <returns>Check result.</returns>
 		public static bool IsSecurityRequired(this MarketDataTypes type)
 			=> type != MarketDataTypes.News && type != MarketDataTypes.Board;
+
+		/// <summary>
+		/// Is the data type required security info.
+		/// </summary>
+		/// <param name="type">Data type info.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsSecurityRequired(this DataType type)
+			=> type != DataType.News && type != DataType.Board;
 
 		/// <summary>
 		/// Remove lookup messages support.

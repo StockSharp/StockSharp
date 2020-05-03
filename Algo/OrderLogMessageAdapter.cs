@@ -50,45 +50,37 @@
 
 				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == MarketDataTypes.OrderLog;
 					
-				switch (message.DataType)
+				if (message.DataType2 == DataType.MarketDepth)
 				{
-					case MarketDataTypes.MarketDepth:
+					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
 					{
-						if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
-						{
-							var secId = GetSecurityId(message.SecurityId);
+						var secId = GetSecurityId(message.SecurityId);
 
-							IOrderLogMarketDepthBuilder builder = null;
+						IOrderLogMarketDepthBuilder builder = null;
 
-							if (InnerAdapter.IsSecurityRequired(DataType.OrderLog))
-								builder = message.DepthBuilder ?? InnerAdapter.CreateOrderLogMarketDepthBuilder(secId);
+						if (InnerAdapter.IsSecurityRequired(DataType.OrderLog))
+							builder = message.DepthBuilder ?? InnerAdapter.CreateOrderLogMarketDepthBuilder(secId);
 
-							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(true, builder, new SyncObject()));
+						_subscriptionIds.Add(message.TransactionId, RefTuple.Create(true, builder, new SyncObject()));
 
-							message = message.TypedClone();
-							message.DataType = MarketDataTypes.OrderLog;
+						message = message.TypedClone();
+						message.DataType2 = DataType.OrderLog;
 
-							this.AddInfoLog("OL->MD subscribed {0}/{1}.", secId, message.TransactionId);
-						}
-
-						break;
+						this.AddInfoLog("OL->MD subscribed {0}/{1}.", secId, message.TransactionId);
 					}
-
-					case MarketDataTypes.Trades:
+				}
+				else if (message.DataType2 == DataType.Ticks)
+				{
+					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
 					{
-						if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
-						{
-							var secId = GetSecurityId(message.SecurityId);
+						var secId = GetSecurityId(message.SecurityId);
 
-							_subscriptionIds.Add(message.TransactionId, RefTuple.Create(false, (IOrderLogMarketDepthBuilder)null, new SyncObject()));
+						_subscriptionIds.Add(message.TransactionId, RefTuple.Create(false, (IOrderLogMarketDepthBuilder)null, new SyncObject()));
 
-							message = message.TypedClone();
-							message.DataType = MarketDataTypes.OrderLog;
+						message = message.TypedClone();
+						message.DataType2 = DataType.OrderLog;
 
-							this.AddInfoLog("OL->TICK subscribed {0}/{1}.", secId, message.TransactionId);
-						}
-
-						break;
+						this.AddInfoLog("OL->TICK subscribed {0}/{1}.", secId, message.TransactionId);
 					}
 				}
 			}

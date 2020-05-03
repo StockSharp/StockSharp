@@ -505,7 +505,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			return FirstInitCandle(message, new TickCandleMessage
 			{
-				MaxTradeCount = (int)message.Arg,
+				MaxTradeCount = message.GetArg<int>(),
 				OpenTime = time,
 				CloseTime = time,
 				HighTime = time,
@@ -541,7 +541,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			return FirstInitCandle(message, new VolumeCandleMessage
 			{
-				Volume = (decimal)message.Arg,
+				Volume = message.GetArg<decimal>(),
 				OpenTime = time,
 				CloseTime = time,
 				HighTime = time,
@@ -577,7 +577,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			return FirstInitCandle(message, new RangeCandleMessage
 			{
-				PriceRange = (Unit)message.Arg,
+				PriceRange = message.GetArg<Unit>(),
 				OpenTime = time,
 				CloseTime = time,
 				HighTime = time,
@@ -617,7 +617,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var side = transform.Side;
 			var oi = transform.OpenInterest;
 
-			var pnf = (PnFArg)message.Arg;
+			var pnf = message.GetArg<PnFArg>();
 			var pnfStep = (decimal)(1 * pnf.BoxSize);
 
 			if (currentPnFCandle == null)
@@ -769,7 +769,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var side = transform.Side;
 			var oi = transform.OpenInterest;
 
-			var boxSize = (Unit)message.Arg;
+			var boxSize = message.GetArg<Unit>();
 			var renkoStep = (decimal)(1 * boxSize);
 
 			if (currentRenkoCandle == null)

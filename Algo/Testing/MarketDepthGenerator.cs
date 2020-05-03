@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public override MarketDataTypes DataType => MarketDataTypes.MarketDepth;
+		public override DataType DataType => DataType.MarketDepth;
 
 		/// <summary>
 		/// To use to generate best quotes in the order book volume of history trades.

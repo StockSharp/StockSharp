@@ -1776,7 +1776,6 @@ namespace StockSharp.Algo
 
 			var mdMsg = new MarketDataMessage
 			{
-				Arg = series.Arg,
 				IsSubscribe = isSubscribe,
 				From = from ?? series.From,
 				To = to ?? series.To,
@@ -1798,10 +1797,11 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				mdMsg.DataType = series
+				var msgType = series
 					.CandleType
-					.ToCandleMessageType()
-					.ToCandleMarketDataType();
+					.ToCandleMessageType();
+
+				mdMsg.DataType2 = DataType.Create(msgType, series.Arg);
 			}
 
 			mdMsg.ValidateBounds().FillSecurityInfo(series.Security);
@@ -1840,15 +1840,15 @@ namespace StockSharp.Algo
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			if (message.DataType.IsCandleDataType())
+			if (message.DataType2.IsCandles)
 			{
-				series.CandleType = message.DataType.ToCandleMessage().ToCandleType();
-				series.Arg = message.Arg;
+				series.CandleType = message.DataType2.MessageType.ToCandleType();
+				series.Arg = message.GetArg<object>();
 			}
 			else
 			{
 				if (throwIfInvalidType)
-					throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(message.DataType), nameof(message));
+					throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(message.DataType2), nameof(message));
 			}
 			
 			series.From = message.From;
@@ -1873,72 +1873,40 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var str = message.DataType.GetDisplayName();
+			var str = message.DataType2.MessageType.GetDisplayName();
 
-			if (message.DataType.IsCandleDataType())
-				str += " " + message.Arg;
+			if (message.DataType2.IsCandles)
+				str += " " + message.GetArg<object>();
 
 			return str;
 		}
+
+		private static readonly SynchronizedDictionary<Type, MessageTypes> _messageTypes = new SynchronizedDictionary<Type, MessageTypes>();
 
 		/// <summary>
 		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
 		/// </summary>
 		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>
 		/// <returns>Message type.</returns>
-		public static MessageTypes ToMessageType2(this MarketDataTypes type)
+		public static MessageTypes ToMessageType2(this DataType type)
 		{
-			switch (type)
-			{
-				case MarketDataTypes.Level1:
-					return MessageTypes.Level1Change;
-				case MarketDataTypes.MarketDepth:
-					return MessageTypes.QuoteChange;
-				case MarketDataTypes.Trades:
-				case MarketDataTypes.OrderLog:
-					return MessageTypes.Execution;
-				case MarketDataTypes.News:
-					return MessageTypes.News;
-				case MarketDataTypes.Board:
-					return MessageTypes.BoardState;
-				default:
-				{
-					if (type.IsCandleDataType())
-						return type.ToCandleMessageType();
-					else 
-						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-				}
-			}
-		}
+			if (type is null)
+				throw new ArgumentNullException(nameof(type));
 
-		/// <summary>
-		/// Convert <see cref="MarketDataTypes"/> to <see cref="Type"/> value.
-		/// </summary>
-		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>
-		/// <returns>Message type.</returns>
-		public static Type ToMessageType(this MarketDataTypes type)
-		{
-			switch (type)
-			{
-				case MarketDataTypes.Level1:
-					return typeof(Level1ChangeMessage);
-				case MarketDataTypes.MarketDepth:
-					return typeof(QuoteChangeMessage);
-				case MarketDataTypes.Trades:
-				case MarketDataTypes.OrderLog:
-					return typeof(ExecutionMessage);
-				case MarketDataTypes.News:
-					return typeof(NewsMessage);
-				case MarketDataTypes.Board:
-					return typeof(BoardStateMessage);
-				default:
-				{
-					if (type.IsCandleDataType())
-						return type.ToCandleMessage();
-					else 
-						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-				}
-			}
+			if (type == DataType.Level1)
+				return MessageTypes.Level1Change;
+			else if (type == DataType.MarketDepth)
+				return MessageTypes.QuoteChange;
+			else if (type == DataType.Ticks || type == DataType.OrderLog)
+				return MessageTypes.Execution;
+			else if (type == DataType.News)
+				return MessageTypes.News;
+			else if (type == DataType.Board)
+				return MessageTypes.BoardState;
+			else if (type.IsCandles)
+				return _messageTypes.SafeAdd(type.MessageType, key => key.CreateInstance<Message>().Type);
+			else 
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 		}
 
 		/// <summary>
@@ -2046,13 +2014,7 @@ namespace StockSharp.Algo
 			else if (dataType == DataType.TimeFrames)
 				return new TimeFrameLookupMessage();
 			else if (dataType.IsMarketData)
-			{
-				return new MarketDataMessage
-				{
-					DataType = dataType.ToMarketDataType().Value,
-					Arg = dataType.Arg,
-				};
-			}
+				return new MarketDataMessage { DataType2 = dataType };
 			else if (dataType == DataType.Transactions)
 				return new OrderStatusMessage();
 			else if (dataType == DataType.PositionChanges)
@@ -2076,8 +2038,7 @@ namespace StockSharp.Algo
 			switch (message)
 			{
 				case MarketDataMessage mdMsg:
-					// prevent stack overflow
-					return Messages.Extensions.ToDataType(mdMsg);
+					return mdMsg.DataType2;
 				case SecurityLookupMessage _:
 					return DataType.Securities;
 				case BoardLookupMessage _:

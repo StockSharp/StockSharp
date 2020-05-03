@@ -38,7 +38,7 @@
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType == MarketDataTypes.MarketDepth)
+					if (mdMsg.DataType2 == DataType.MarketDepth)
 					{
 						if (mdMsg.IsSubscribe)
 						{

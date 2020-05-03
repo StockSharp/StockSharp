@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Candles
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			if (!provider.IsRegistered(subscription.ToDataType().MessageType))
+			if (!provider.IsRegistered(subscription.DataType2.MessageType))
 				return null;
 
 			if (subscription.BuildMode == MarketDataBuildModes.Load)
@@ -483,7 +483,7 @@ namespace StockSharp.Algo.Candles
 				if (candleBuilderProvider == null)
 					candleBuilderProvider = ConfigManager.TryGetService<CandleBuilderProvider>() ?? new CandleBuilderProvider(ServicesRegistry.EnsureGetExchangeInfoProvider());
 
-				return candleBuilderProvider.Get(mdMsg.ToDataType().MessageType);
+				return candleBuilderProvider.Get(mdMsg.DataType2.MessageType);
 			}
 		}
 

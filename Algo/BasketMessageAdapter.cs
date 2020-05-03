@@ -253,7 +253,7 @@ namespace StockSharp.Algo
 		private ConnectionStates _currState = ConnectionStates.Disconnected;
 
 		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes?>, IMessageAdapter>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter>();
 
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>>();
 		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
@@ -1000,9 +1000,9 @@ namespace StockSharp.Algo
 			if (adapter != null)
 				adapter = GetUnderlyingAdapter(adapter);
 
-			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType.IsSecurityRequired() && mdMsg.SecurityId != default)
+			if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType2.IsSecurityRequired() && mdMsg.SecurityId != default)
 			{
-				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)mdMsg.DataType)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (MarketDataTypes?)null));
+				adapter = _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, mdMsg.DataType2)) ?? _securityAdapters.TryGetValue(Tuple.Create(mdMsg.SecurityId, (DataType)null));
 
 				if (adapter != null && !adapter.IsMessageSupported(message.Type))
 				{
@@ -1037,7 +1037,7 @@ namespace StockSharp.Algo
 						{
 							adapters = adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a))).ToArray();
 						}
-						else if (mdMsg1.DataType == MarketDataTypes.News && mdMsg1.SecurityId == default)
+						else if (mdMsg1.DataType2 == DataType.News && mdMsg1.SecurityId == default)
 						{
 							adapters = adapters.Where(a => !a.IsSecurityNewsOnly).ToArray();
 						}
@@ -1089,57 +1089,48 @@ namespace StockSharp.Algo
 				if (skipSupportedMessages)
 					return true;
 
-				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
+				if (mdMsg.DataType2.MessageType != typeof(TimeFrameCandleMessage))
 				{
-					var isCandles = mdMsg.DataType.IsCandleDataType();
+					var isCandles = mdMsg.DataType2.IsCandles;
 
 					if (a.IsMarketDataTypeSupported(mdMsg.ToDataType()) && (!isCandles || a.IsCandlesSupported(mdMsg)))
 						return true;
 					else
 					{
-						switch (mdMsg.DataType)
+						if (mdMsg.DataType2 == DataType.MarketDepth)
 						{
-							case MarketDataTypes.Level1:
-							case MarketDataTypes.OrderLog:
-							case MarketDataTypes.News:
-							case MarketDataTypes.Board:
+							if (mdMsg.BuildMode == MarketDataBuildModes.Load)
 								return false;
-							case MarketDataTypes.MarketDepth:
-							{
-								if (mdMsg.BuildMode == MarketDataBuildModes.Load)
-									return false;
 
-								switch (mdMsg.BuildFrom)
+							switch (mdMsg.BuildFrom)
+							{
+								case MarketDataTypes.Level1:
+									return a.IsMarketDataTypeSupported(DataType.Level1);
+								case MarketDataTypes.OrderLog:
+									return a.IsMarketDataTypeSupported(DataType.OrderLog);
+								case null:
 								{
-									case MarketDataTypes.Level1:
-										return a.IsMarketDataTypeSupported(DataType.Level1);
-									case MarketDataTypes.OrderLog:
-										return a.IsMarketDataTypeSupported(DataType.OrderLog);
-									case null:
-									{
-										if (a.IsMarketDataTypeSupported(DataType.OrderLog))
-											mdMsg.BuildFrom = MarketDataTypes.OrderLog;
-										else if (a.IsMarketDataTypeSupported(DataType.Level1))
-											mdMsg.BuildFrom = MarketDataTypes.Level1;
-										else
-											return false;
+									if (a.IsMarketDataTypeSupported(DataType.OrderLog))
+										mdMsg.BuildFrom = MarketDataTypes.OrderLog;
+									else if (a.IsMarketDataTypeSupported(DataType.Level1))
+										mdMsg.BuildFrom = MarketDataTypes.Level1;
+									else
+										return false;
 
-										return true;
-									}
-								}
-
-								return false;
-							}
-							case MarketDataTypes.Trades:
-								return a.IsMarketDataTypeSupported(DataType.OrderLog);
-							default:
-							{
-								if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, StorageProcessor.CandleBuilderProvider) != null)
 									return true;
-
-								return false;
-								//throw new ArgumentOutOfRangeException(mdMsg.DataType.ToString());
+								}
 							}
+
+							return false;
+						}
+						else if (mdMsg.DataType2 == DataType.Ticks)
+							return a.IsMarketDataTypeSupported(DataType.OrderLog);
+						else
+						{
+							if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, StorageProcessor.CandleBuilderProvider) != null)
+								return true;
+
+							return false;
 						}
 					}
 				}
@@ -1238,59 +1229,51 @@ namespace StockSharp.Algo
 				return adapters;
 			}
 
-			switch (mdMsg.DataType)
+			if (mdMsg.DataType2 == DataType.News || mdMsg.DataType2 == DataType.Board)
 			{
-				case MarketDataTypes.News:
-				case MarketDataTypes.Board:
+				var adapters = GetAdapters();
+
+				if (mdMsg.IsSubscribe)
 				{
-					var adapters = GetAdapters();
+					if (adapters == null)
+						return;
 
-					if (mdMsg.IsSubscribe)
-					{
-						if (adapters == null)
-							return;
-
-						_subscription.TryAdd(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.ToDataType()));
-					}
+					_subscription.TryAdd(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2));
+				}
 					
-					foreach (var pair in ToChild(mdMsg, adapters))
-						SendRequest(pair.Key, pair.Value);
+				foreach (var pair in ToChild(mdMsg, adapters))
+					SendRequest(pair.Key, pair.Value);
+			}
+			else
+			{
+				IMessageAdapter adapter;
 
-					break;
-				}
-
-				default:
+				if (mdMsg.IsSubscribe)
 				{
-					IMessageAdapter adapter;
+					adapter = GetAdapters()?.First();
 
-					if (mdMsg.IsSubscribe)
-					{
-						adapter = GetAdapters()?.First();
+					if (adapter == null)
+						return;
 
-						if (adapter == null)
-							return;
-
-						mdMsg = (MarketDataMessage)mdMsg.Clone();
-						_subscription.TryAdd(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.ToDataType()));
-					}
-					else
-					{
-						var originTransId = mdMsg.OriginalTransactionId;
-
-						if (!_subscription.TryGetValue(originTransId, out var tuple))
-						{
-							this.AddInfoLog("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
-							break;
-						}
-						
-						adapter = tuple.Item2.First();
-
-						mdMsg = mdMsg.TypedClone();
-					}
-
-					SendRequest(mdMsg, adapter);
-					break;
+					mdMsg = (MarketDataMessage)mdMsg.Clone();
+					_subscription.TryAdd(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2));
 				}
+				else
+				{
+					var originTransId = mdMsg.OriginalTransactionId;
+
+					if (!_subscription.TryGetValue(originTransId, out var tuple))
+					{
+						this.AddInfoLog("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
+						return;
+					}
+						
+					adapter = tuple.Item2.First();
+
+					mdMsg = mdMsg.TypedClone();
+				}
+
+				SendRequest(mdMsg, adapter);
 			}
 		}
 
@@ -1793,7 +1776,7 @@ namespace StockSharp.Algo
 			return message;
 		}
 
-		private void SecurityAdapterProviderOnChanged(Tuple<SecurityId, MarketDataTypes?> key, Guid adapterId, bool changeType)
+		private void SecurityAdapterProviderOnChanged(Tuple<SecurityId, DataType> key, Guid adapterId, bool changeType)
 		{
 			if (changeType)
 			{

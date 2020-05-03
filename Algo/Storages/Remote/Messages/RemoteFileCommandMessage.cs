@@ -26,13 +26,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Market data type.
 		/// </summary>
 		[DataMember]
-		public MarketDataTypes DataType { get; set; }
-
-		/// <summary>
-		/// Additional argument for market data request.
-		/// </summary>
-		[DataMember]
-		public object Arg { get; set; }
+		public DataType DataType { get; set; }
 
 		/// <summary>
 		/// Start date.
@@ -68,7 +62,6 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 			{
 				SecurityId = SecurityId,
 				DataType = DataType,
-				Arg = Arg,
 				StartDate = StartDate,
 				EndDate = EndDate,
 				Format = Format,
@@ -82,7 +75,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},Type={DataType},Arg={Arg},Start={StartDate},End={EndDate},Fmt={Format}";
+			return base.ToString() + $",SecId={SecurityId},Type={DataType},Start={StartDate},End={EndDate},Fmt={Format}";
 		}
 	}
 }

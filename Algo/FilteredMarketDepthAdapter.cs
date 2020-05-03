@@ -164,7 +164,7 @@ namespace StockSharp.Algo
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType != MarketDataTypes.MarketDepth)
+					if (mdMsg.DataType2.MessageType != typeof(QuoteChangeMessage))
 						break;
 
 					var isFilteredMsg = mdMsg is FilteredMarketDepthMessage;
@@ -175,7 +175,7 @@ namespace StockSharp.Algo
 						if (!isFilteredMsg)
 							break;
 
-						var data = (Tuple<QuoteChangeMessage, ExecutionMessage[]>)mdMsg.Arg;
+						var data = mdMsg.GetArg<Tuple<QuoteChangeMessage, ExecutionMessage[]>>();
 
 						QuoteChangeMessage filtered = null;
 

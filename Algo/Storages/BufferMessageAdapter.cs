@@ -127,54 +127,45 @@ namespace StockSharp.Algo.Storages
 					RaiseNewOutMessage(msg);
 				}
 
-				switch (message.DataType)
+				if (message.DataType2 == DataType.Level1)
 				{
-					case MarketDataTypes.Level1:
+					var l1Storage = GetSnapshotStorage(message.DataType2);
+
+					if (message.SecurityId == default)
 					{
-						var l1Storage = GetSnapshotStorage(DataType.Level1);
-
-						if (message.SecurityId == default)
-						{
-							foreach (Level1ChangeMessage msg in l1Storage.GetAll())
-								SendSnapshot(msg);
-						}
-						else
-						{
-							var level1Msg = (Level1ChangeMessage)l1Storage.Get(message.SecurityId);
-
-							if (level1Msg != null)
-							{
-								//SendReply();
-								SendSnapshot(level1Msg);
-							}
-						}
-
-						break;
+						foreach (Level1ChangeMessage msg in l1Storage.GetAll())
+							SendSnapshot(msg);
 					}
-					case MarketDataTypes.MarketDepth:
+					else
 					{
-						var	quotesStorage = GetSnapshotStorage(DataType.MarketDepth);
+						var level1Msg = (Level1ChangeMessage)l1Storage.Get(message.SecurityId);
 
-						if (message.SecurityId == default)
+						if (level1Msg != null)
 						{
-							foreach (QuoteChangeMessage msg in quotesStorage.GetAll())
-								SendSnapshot(msg);
+							//SendReply();
+							SendSnapshot(level1Msg);
 						}
-						else
-						{
-							var quotesMsg = (QuoteChangeMessage)quotesStorage.Get(message.SecurityId);
-
-							if (quotesMsg != null)
-							{
-								//SendReply();
-								SendSnapshot(quotesMsg);
-							}
-						}
-
-						break;
 					}
-					default:
-						break;
+				}
+				else if (message.DataType2 == DataType.MarketDepth)
+				{
+					var	quotesStorage = GetSnapshotStorage(message.DataType2);
+
+					if (message.SecurityId == default)
+					{
+						foreach (QuoteChangeMessage msg in quotesStorage.GetAll())
+							SendSnapshot(msg);
+					}
+					else
+					{
+						var quotesMsg = (QuoteChangeMessage)quotesStorage.Get(message.SecurityId);
+
+						if (quotesMsg != null)
+						{
+							//SendReply();
+							SendSnapshot(quotesMsg);
+						}
+					}
 				}
 			}
 		}

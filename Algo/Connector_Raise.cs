@@ -638,8 +638,7 @@ namespace StockSharp.Algo
 
 			var security = subscription.Security;
 
-			var msg = LocalizedStrings.SubscribedOk.Put(security?.Id,
-				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
+			var msg = LocalizedStrings.SubscribedOk.Put(security?.Id, message.DataType2);
 
 			if (message.From != null && message.To != null)
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
@@ -668,7 +667,7 @@ namespace StockSharp.Algo
 			if (reply.IsNotSupported())
 				this.AddWarningLog(LocalizedStrings.SubscriptionNotSupported, origin);
 			else
-				this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, origin.DataType, error.Message);
+				this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, origin.DataType2, error.Message);
 
 			MarketDataSubscriptionFailed?.Invoke(security, origin, error);
 			MarketDataSubscriptionFailed2?.Invoke(security, origin, reply);
@@ -689,8 +688,7 @@ namespace StockSharp.Algo
 
 			var security = subscription.Security;
 
-			var msg = LocalizedStrings.UnSubscribedOk.Put(security?.Id,
-				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
+			var msg = LocalizedStrings.UnSubscribedOk.Put(security?.Id,	message.DataType2);
 
 			if (message.From != null && message.To != null)
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
@@ -718,7 +716,7 @@ namespace StockSharp.Algo
 			var security = subscription.Security;
 			var error = reply.Error ?? new NotSupportedException();
 
-			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, origin.DataType, error.Message);
+			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, origin.DataType2, error.Message);
 			MarketDataUnSubscriptionFailed?.Invoke(security, origin, error);
 			MarketDataUnSubscriptionFailed2?.Invoke(security, origin, reply);
 
@@ -757,7 +755,7 @@ namespace StockSharp.Algo
 
 			var security = subscription.Security;
 
-			this.AddErrorLog(LocalizedStrings.SubscriptionUnexpectedCancelled, security?.Id, message.DataType, error.Message);
+			this.AddErrorLog(LocalizedStrings.SubscriptionUnexpectedCancelled, security?.Id, message.DataType2, error.Message);
 			MarketDataUnexpectedCancelled?.Invoke(security, message, error);
 
 			RaiseSubscriptionStopped(subscription, error);

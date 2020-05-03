@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Storages
 
 				if (lastTime != null)
 				{
-					if (!(message.DataType == MarketDataTypes.MarketDepth && message.From == null && message.To == null))
+					if (!(message.DataType2 == DataType.MarketDepth && message.From == null && message.To == null))
 					{
 						var clone = message.TypedClone();
 						clone.From = lastTime;

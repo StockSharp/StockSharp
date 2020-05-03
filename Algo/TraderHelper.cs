@@ -4027,7 +4027,7 @@ namespace StockSharp.Algo
 			{
 				SecurityId = securityId,
 				IsSubscribe = true,
-				DataType = MarketDataTypes.Level1,
+				DataType2 = DataType.Level1,
 				From = beginDate,
 				To = endDate,
 				BuildField = fields?.FirstOr(),
@@ -4050,7 +4050,7 @@ namespace StockSharp.Algo
 			{
 				SecurityId = securityId,
 				IsSubscribe = true,
-				DataType = MarketDataTypes.Trades,
+				DataType2 = DataType.Ticks,
 				From = beginDate,
 				To = endDate,
 			};
@@ -4072,7 +4072,7 @@ namespace StockSharp.Algo
 			{
 				SecurityId = securityId,
 				IsSubscribe = true,
-				DataType = MarketDataTypes.OrderLog,
+				DataType2 = DataType.OrderLog,
 				From = beginDate,
 				To = endDate,
 			};
@@ -4108,8 +4108,7 @@ namespace StockSharp.Algo
 			{
 				SecurityId = securityId,
 				IsSubscribe = true,
-				DataType = MarketDataTypes.CandleTimeFrame,
-				Arg = timeFrame,
+				DataType2 = DataType.TimeFrame(timeFrame),
 				From = from,
 				To = to,
 				Count = count,

@@ -519,8 +519,7 @@ namespace StockSharp.Algo.Storages
 				_compressors = GetSmallerTimeFrames().ToDictionary(tf => tf, tf => new BiggerTimeFrameCandleCompressor(new MarketDataMessage
 				{
 					SecurityId = securityId,
-					DataType = MarketDataTypes.CandleTimeFrame,
-					Arg = timeFrame,
+					DataType2 = DataType.TimeFrame(timeFrame),
 					IsSubscribe = true,
 				}, provider.Get(typeof(TimeFrameCandleMessage))));
 			}
@@ -1039,132 +1038,130 @@ namespace StockSharp.Algo.Storages
 
 			var secId = msg.SecurityId;
 
-			switch (msg.DataType)
+			if (msg.DataType2 == DataType.Level1)
 			{
-				case MarketDataTypes.Level1:
-					if (msg.BuildMode != MarketDataBuildModes.Build)
+				if (msg.BuildMode != MarketDataBuildModes.Build)
+				{
+					if (settings.IsMode(StorageModes.Incremental))
+						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId, SendReply, SendOut);
+				}
+				else
+				{
+					if (msg.BuildFrom == MarketDataTypes.OrderLog)
 					{
-						if (settings.IsMode(StorageModes.Incremental))
-							lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId, SendReply, SendOut);
-					}
-					else
-					{
-						if (msg.BuildFrom == MarketDataTypes.OrderLog)
+						var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+
+						var range = GetRange(storage, from, to, TimeSpan.Zero);
+
+						if (range != null)
 						{
-							var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
-
-							var range = GetRange(storage, from, to, TimeSpan.Zero);
-
-							if (range != null)
-							{
-								lastTime = LoadMessages(storage
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToLevel1(msg.DepthBuilder, msg.RefreshSpeed ?? default, msg.MaxDepth ?? int.MaxValue), range.Item1, transactionId, SendReply, SendOut);
-							}
-						}
-						else if (msg.BuildFrom == MarketDataTypes.MarketDepth)
-						{
-							var storage = GetStorage<QuoteChangeMessage>(secId, null);
-
-							var range = GetRange(storage, from, to, TimeSpan.Zero);
-
-							if (range != null)
-							{
-								lastTime = LoadMessages(storage
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToLevel1(), range.Item1, transactionId, SendReply, SendOut);
-							}
+							lastTime = LoadMessages(storage
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToLevel1(msg.DepthBuilder, msg.RefreshSpeed ?? default, msg.MaxDepth ?? int.MaxValue), range.Item1, transactionId, SendReply, SendOut);
 						}
 					}
-						
-					break;
-
-				case MarketDataTypes.MarketDepth:
-					if (msg.BuildMode != MarketDataBuildModes.Build)
+					else if (msg.BuildFrom == MarketDataTypes.MarketDepth)
 					{
-						if (settings.IsMode(StorageModes.Incremental))
-							lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId, SendReply, SendOut);
-					}
-					else
-					{
-						if (msg.BuildFrom == MarketDataTypes.OrderLog)
+						var storage = GetStorage<QuoteChangeMessage>(secId, null);
+
+						var range = GetRange(storage, from, to, TimeSpan.Zero);
+
+						if (range != null)
 						{
-							var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
-
-							var range = GetRange(storage, from, to, TimeSpan.Zero);
-
-							if (range != null)
-							{
-								lastTime = LoadMessages(storage
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToOrderBooks(msg.DepthBuilder, msg.RefreshSpeed ?? default, msg.MaxDepth ?? int.MaxValue), range.Item1, transactionId, SendReply, SendOut);
-							}
-						}
-						else if (msg.BuildFrom == MarketDataTypes.Level1)
-						{
-							var storage = GetStorage<Level1ChangeMessage>(secId, null);
-
-							var range = GetRange(storage, from, to, TimeSpan.Zero);
-
-							if (range != null)
-							{
-								lastTime = LoadMessages(storage
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToOrderBooks(), range.Item1, transactionId, SendReply, SendOut);
-							}
+							lastTime = LoadMessages(storage
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToLevel1(), range.Item1, transactionId, SendReply, SendOut);
 						}
 					}
-
-					break;
-
-				case MarketDataTypes.Trades:
-					if (msg.BuildMode != MarketDataBuildModes.Build)
-						lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
-					else
+				}
+			}
+			else if (msg.DataType2 == DataType.MarketDepth)
+			{
+				if (msg.BuildMode != MarketDataBuildModes.Build)
+				{
+					if (settings.IsMode(StorageModes.Incremental))
+						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(secId, null), from, to, TimeSpan.Zero, transactionId, SendReply, SendOut);
+				}
+				else
+				{
+					if (msg.BuildFrom == MarketDataTypes.OrderLog)
 					{
-						if (msg.BuildFrom == MarketDataTypes.OrderLog)
+						var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+
+						var range = GetRange(storage, from, to, TimeSpan.Zero);
+
+						if (range != null)
 						{
-							var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
-
-							var range = GetRange(storage, from, to, TimeSpan.Zero);
-
-							if (range != null)
-							{
-								lastTime = LoadMessages(storage
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToTicks(), range.Item1, transactionId, SendReply, SendOut);
-							}
-						}
-						else if (msg.BuildFrom == MarketDataTypes.Level1)
-						{
-							var storage = GetStorage<Level1ChangeMessage>(secId, null);
-
-							var range = GetRange(storage, from, to, TimeSpan.Zero);
-
-							if (range != null)
-							{
-								lastTime = LoadMessages(storage
-									.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									.ToTicks(), range.Item1, transactionId, SendReply, SendOut);
-							}
+							lastTime = LoadMessages(storage
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToOrderBooks(msg.DepthBuilder, msg.RefreshSpeed ?? default, msg.MaxDepth ?? int.MaxValue), range.Item1, transactionId, SendReply, SendOut);
 						}
 					}
+					else if (msg.BuildFrom == MarketDataTypes.Level1)
+					{
+						var storage = GetStorage<Level1ChangeMessage>(secId, null);
 
-					break;
+						var range = GetRange(storage, from, to, TimeSpan.Zero);
 
-				case MarketDataTypes.OrderLog:
-					lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
-					break;
+						if (range != null)
+						{
+							lastTime = LoadMessages(storage
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToOrderBooks(), range.Item1, transactionId, SendReply, SendOut);
+						}
+					}
+				}
+			}
+			else if (msg.DataType2 == DataType.Ticks)
+			{
+				if (msg.BuildMode != MarketDataBuildModes.Build)
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
+				else
+				{
+					if (msg.BuildFrom == MarketDataTypes.OrderLog)
+					{
+						var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
 
-				case MarketDataTypes.News:
-					lastTime = LoadMessages(GetStorage<NewsMessage>(default, null), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
-					break;
+						var range = GetRange(storage, from, to, TimeSpan.Zero);
 
-				case MarketDataTypes.Board:
-					lastTime = LoadMessages(GetStorage<BoardStateMessage>(default, null), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
-					break;
+						if (range != null)
+						{
+							lastTime = LoadMessages(storage
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToTicks(), range.Item1, transactionId, SendReply, SendOut);
+						}
+					}
+					else if (msg.BuildFrom == MarketDataTypes.Level1)
+					{
+						var storage = GetStorage<Level1ChangeMessage>(secId, null);
 
-				case MarketDataTypes.CandleTimeFrame:
+						var range = GetRange(storage, from, to, TimeSpan.Zero);
+
+						if (range != null)
+						{
+							lastTime = LoadMessages(storage
+								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+								.ToTicks(), range.Item1, transactionId, SendReply, SendOut);
+						}
+					}
+				}
+			}
+			else if (msg.DataType2 == DataType.OrderLog)
+			{
+				lastTime = LoadMessages(GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
+			}
+			else if (msg.DataType2 == DataType.News)
+			{
+				lastTime = LoadMessages(GetStorage<NewsMessage>(default, null), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
+			}
+			else if (msg.DataType2 == DataType.Board)
+			{
+				lastTime = LoadMessages(GetStorage<BoardStateMessage>(default, null), from, to, settings.DaysLoad, transactionId, SendReply, SendOut);
+			}
+			else if (msg.DataType2.IsCandles)
+			{
+				if (msg.DataType2.MessageType == typeof(TimeFrameCandleMessage))
+				{
 					var tf = msg.GetTimeFrame();
 
 					if (msg.IsBuildOnly())
@@ -1305,26 +1302,18 @@ namespace StockSharp.Algo.Storages
 
 						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, days, transactionId, SendReply, SendOut);
 					}
-					
-					break;
-
-				default:
+				}
+				else
 				{
-					if (msg.DataType.IsCandleDataType())
+					var storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, msg.DataType2.MessageType, msg.GetArg<object>());
+
+					var range = GetRange(storage, from, to, settings.DaysLoad);
+
+					if (range != null)
 					{
-						var storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, msg.DataType.ToCandleMessage(), msg.Arg);
-
-						var range = GetRange(storage, from, to, settings.DaysLoad);
-
-						if (range != null)
-						{
-							var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
-							lastTime = LoadMessages(messages, range.Item1, transactionId, SendReply, SendOut);
-						}
+						var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
+						lastTime = LoadMessages(messages, range.Item1, transactionId, SendReply, SendOut);
 					}
-
-					break;
-					// throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
 				}
 			}
 
@@ -1388,6 +1377,20 @@ namespace StockSharp.Algo.Storages
 			}
 
 			return lastTime;
+		}
+
+		/// <summary>
+		/// To get the market-data storage.
+		/// </summary>
+		/// <param name="registry">Market-data storage.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>Market-data storage.</returns>
+		public static IMarketDataStorage GetStorage(this IStorageRegistry registry, Security security, DataType dataType, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			return registry.GetStorage(security, dataType.MessageType, dataType.Arg, drive, format);
 		}
 	}
 }

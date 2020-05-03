@@ -289,7 +289,7 @@
 								_partialRequests.Add(info.CurrTransId, info);
 							}
 
-							this.AddInfoLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType, mdMsg.From, mdMsg.To);
+							this.AddInfoLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType2, mdMsg.From, mdMsg.To);
 						}
 						else
 						{
@@ -345,7 +345,7 @@
 						message = mdMsg;
 					}
 
-					this.AddInfoLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType, mdMsg.From, mdMsg.To);
+					this.AddInfoLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType2, mdMsg.From, mdMsg.To);
 
 					break;
 				}

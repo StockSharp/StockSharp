@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public override MarketDataTypes DataType => MarketDataTypes.OrderLog;
+		public override DataType DataType => DataType.OrderLog;
 
 		/// <summary>
 		/// Tick trades generator using random method.

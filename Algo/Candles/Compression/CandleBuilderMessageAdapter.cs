@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (!_candleBuilderProvider.IsRegistered(mdMsg.ToDataType().MessageType))
+					if (!_candleBuilderProvider.IsRegistered(mdMsg.DataType2.MessageType))
 						break;
 
 					var transactionId = mdMsg.TransactionId;
@@ -117,7 +117,7 @@ namespace StockSharp.Algo.Candles.Compression
 							return true;
 						}
 
-						if (mdMsg.DataType == MarketDataTypes.CandleTimeFrame)
+						if (mdMsg.DataType2.MessageType == typeof(TimeFrameCandleMessage))
 						{
 							var originalTf = mdMsg.GetTimeFrame();
 							var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Candles.Compression
 									var original = mdMsg.TypedClone();
 
 									var current = original.TypedClone();
-									current.Arg = smaller;
+									current.SetArg(smaller);
 
 									lock (_syncObject)
 									{
@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Candles.Compression
 						{
 							if (InnerAdapter.IsCandlesSupported(mdMsg))
 							{
-								this.AddInfoLog("Origin arg: {0}", mdMsg.Arg);
+								this.AddInfoLog("Origin arg: {0}", mdMsg.GetArg<object>());
 
 								var original = mdMsg.TypedClone();
 
@@ -283,7 +283,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var current = new MarketDataMessage
 			{
-				DataType = buildFrom.Value,
+				DataType2 = buildFrom.Value.ToDataType(null),
 				From = lastTime,
 				To = original.To,
 				Count = original.Count,
@@ -294,7 +294,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			original.CopyTo(current, false);
 
-			this.AddInfoLog("Build tf: {0}->{1}", buildFrom, original.Arg);
+			this.AddInfoLog("Build tf: {0}->{1}", buildFrom, original.GetArg<object>());
 
 			return current;
 		}
@@ -311,7 +311,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var series = new SeriesInfo(original.TypedClone(), current)
 			{
 				LastTime = current.From,
-				Transform = CreateTransform(current.DataType, current.BuildField),
+				Transform = CreateTransform(current.DataType2, current.BuildField),
 				State = SeriesStates.Compress,
 			};
 
@@ -322,46 +322,41 @@ namespace StockSharp.Algo.Candles.Compression
 			return true;
 		}
 
-		private static ICandleBuilderValueTransform CreateTransform(MarketDataTypes dataType, Level1Fields? field)
+		private static ICandleBuilderValueTransform CreateTransform(DataType dataType, Level1Fields? field)
 		{
-			switch (dataType)
+			if (dataType == DataType.Ticks)
 			{
-				case MarketDataTypes.Trades:
-					return new TickCandleBuilderValueTransform();
-
-				case MarketDataTypes.MarketDepth:
-				{
-					var t = new QuoteCandleBuilderValueTransform();
-
-					if (field != null)
-						t.Type = field.Value;
-
-					return t;
-				}
-
-				case MarketDataTypes.Level1:
-				{
-					var t = new Level1CandleBuilderValueTransform();
-
-					if (field != null)
-						t.Type = field.Value;
-
-					return t;
-				}
-
-				case MarketDataTypes.OrderLog:
-				{
-					var t = new OrderLogCandleBuilderValueTransform();
-
-					if (field != null)
-						t.Type = field.Value;
-
-					return t;
-				}
-
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+				return new TickCandleBuilderValueTransform();
 			}
+			else if (dataType == DataType.MarketDepth)
+			{
+				var t = new QuoteCandleBuilderValueTransform();
+
+				if (field != null)
+					t.Type = field.Value;
+
+				return t;
+			}
+			else if (dataType == DataType.Level1)
+			{
+				var t = new Level1CandleBuilderValueTransform();
+
+				if (field != null)
+					t.Type = field.Value;
+
+				return t;
+			}
+			else if (dataType == DataType.OrderLog)
+			{
+				var t = new OrderLogCandleBuilderValueTransform();
+
+				if (field != null)
+					t.Type = field.Value;
+
+				return t;
+			}
+			else
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}
 
 		/// <inheritdoc />
@@ -559,7 +554,7 @@ namespace StockSharp.Algo.Candles.Compression
 					var isLoadOnly = series.Original.BuildMode == MarketDataBuildModes.Load;
 
 					// upgrade to smaller tf only in case failed subscription
-					if (response != null && original.DataType == MarketDataTypes.CandleTimeFrame && original.AllowBuildFromSmallerTimeFrame)
+					if (response != null && original.DataType2.MessageType == typeof(TimeFrameCandleMessage) && original.AllowBuildFromSmallerTimeFrame)
 					{
 						if (isLoadOnly)
 						{
@@ -576,7 +571,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (smaller != null)
 						{
 							series.Current = original.TypedClone();
-							series.Current.Arg = smaller;
+							series.Current.SetArg(smaller);
 							series.Current.TransactionId = TransactionIdGenerator.GetNextId();
 
 							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)));
@@ -637,7 +632,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			this.AddInfoLog("Series compress: ids {0}->{1}", original.TransactionId, current.TransactionId);
 
-			series.Transform = CreateTransform(current.DataType, current.BuildField);
+			series.Transform = CreateTransform(current.DataType2, current.BuildField);
 			series.Current = current;
 
 			// loopback
@@ -714,7 +709,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				series.LastTime = time;
 
-				var builder = _candleBuilderProvider.Get(origin.ToDataType().MessageType);
+				var builder = _candleBuilderProvider.Get(origin.DataType2.MessageType);
 
 				var result = builder.Process(origin, series.CurrentCandleMessage, transform);
 

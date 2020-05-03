@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Market data type.
 		/// </summary>
-		public abstract MarketDataTypes DataType { get; }
+		public abstract DataType DataType { get; }
 
 		/// <summary>
 		/// The length of massive of preliminarily generated random numbers. The default is 100.

@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Testing
 				IsSubscribe = isSubscribe,
 				SecurityId = generator.SecurityId,
 				Generator = generator,
-				DataType = generator.DataType,
+				DataType2 = generator.DataType,
 			});
 		}
 

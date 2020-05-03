@@ -404,39 +404,21 @@ namespace StockSharp.Algo.Testing
 					{
 						var generatorMsg = (GeneratorMessage)message;
 
-						switch (generatorMsg.DataType)
-						{
-							case MarketDataTypes.MarketDepth:
-							{
-								_depthGenerator = generatorMsg.IsSubscribe
-										? (MarketDepthGenerator)generatorMsg.Generator
-										: null;
-
-								break;
-							}
-							case MarketDataTypes.Trades:
-							{
-								_tradeGenerator = generatorMsg.IsSubscribe
-										? (TradeGenerator)generatorMsg.Generator
-										: null;
-
-								break;
-							}
-							case MarketDataTypes.OrderLog:
-							{
-								_olGenerator = generatorMsg.IsSubscribe
-										? (OrderLogGenerator)generatorMsg.Generator
-										: null;
-
-								break;
-							}
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-
 						if (generatorMsg.IsSubscribe)
 						{
-							generatorMsg.Generator.Init();
+							var generator = generatorMsg.Generator;
+							var dataType = generatorMsg.DataType2;
+							
+							if (dataType == DataType.MarketDepth)
+								_depthGenerator = (MarketDepthGenerator)generator;
+							else if (dataType == DataType.Ticks)
+								_tradeGenerator = (TradeGenerator)generator;
+							else if (dataType == DataType.OrderLog)
+								_olGenerator = (OrderLogGenerator)generator;
+							else
+								throw new ArgumentOutOfRangeException();
+
+							generator.Init();
 
 							if (_securityDefinition != null)
 							{
@@ -448,8 +430,8 @@ namespace StockSharp.Algo.Testing
 									break;
 								}
 
-								ProcessGenerator(generatorMsg.Generator, _securityDefinition, result);
-								ProcessGenerator(generatorMsg.Generator, board, result);
+								ProcessGenerator(generator, _securityDefinition, result);
+								ProcessGenerator(generator, board, result);
 							}
 							else
 								this.AddWarningLog(LocalizedStrings.Str1150);
