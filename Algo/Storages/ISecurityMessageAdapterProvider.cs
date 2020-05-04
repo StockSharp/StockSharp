@@ -217,20 +217,20 @@ namespace StockSharp.Algo.Storages
 						BoardCode = reader.ReadString()
 					};
 
-					DataType dataType = null;
+					DataType dataType;
 
 					var typeStr = reader.ReadString();
 
-					if (!typeStr.IsEmpty())
+					if (reader.ColumnCount == 4)
 					{
-						if (reader.ColumnCount == 4)
-						{
-							// TODO remove after few releases later
-							// 2020-05-04
-							dataType = typeStr.To<MarketDataTypes>().ToDataType(null);
-						}
-						else
-							dataType = typeStr.ToDataType(reader.ReadString());
+						// TODO remove after few releases later
+						// 2020-05-04
+						dataType = typeStr.IsEmpty() ? null : typeStr.To<MarketDataTypes>().ToDataType(null);
+					}
+					else
+					{
+						var argStr = reader.ReadString();
+						dataType = typeStr.IsEmpty() ? null : typeStr.ToDataType(argStr);
 					}
 
 					var adapterId = reader.ReadString().To<Guid>();
