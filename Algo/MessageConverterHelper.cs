@@ -1781,7 +1781,7 @@ namespace StockSharp.Algo
 				To = to ?? series.To,
 				Count = count ?? series.Count,
 				BuildMode = series.BuildCandlesMode,
-				BuildFrom = series.BuildCandlesFrom,
+				BuildFrom = series.BuildCandlesFrom?.ToDataType(null),
 				BuildField = series.BuildCandlesField,
 				IsCalcVolumeProfile = series.IsCalcVolumeProfile,
 				AllowBuildFromSmallerTimeFrame = series.AllowBuildFromSmallerTimeFrame,
@@ -1855,7 +1855,7 @@ namespace StockSharp.Algo
 			series.To = message.To;
 			series.Count = message.Count;
 			series.BuildCandlesMode = message.BuildMode;
-			series.BuildCandlesFrom = message.BuildFrom;
+			series.BuildCandlesFrom = message.BuildFrom?.ToMarketDataType();
 			series.BuildCandlesField = message.BuildField;
 			series.IsCalcVolumeProfile = message.IsCalcVolumeProfile;
 			series.AllowBuildFromSmallerTimeFrame = message.AllowBuildFromSmallerTimeFrame;

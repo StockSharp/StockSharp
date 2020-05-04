@@ -1102,23 +1102,18 @@ namespace StockSharp.Algo
 							if (mdMsg.BuildMode == MarketDataBuildModes.Load)
 								return false;
 
-							switch (mdMsg.BuildFrom)
+							if (mdMsg.BuildFrom == DataType.Level1 || mdMsg.BuildFrom == DataType.OrderLog)
+								return a.IsMarketDataTypeSupported(mdMsg.BuildFrom);
+							else if (mdMsg.BuildFrom == null)
 							{
-								case MarketDataTypes.Level1:
-									return a.IsMarketDataTypeSupported(DataType.Level1);
-								case MarketDataTypes.OrderLog:
-									return a.IsMarketDataTypeSupported(DataType.OrderLog);
-								case null:
-								{
-									if (a.IsMarketDataTypeSupported(DataType.OrderLog))
-										mdMsg.BuildFrom = MarketDataTypes.OrderLog;
-									else if (a.IsMarketDataTypeSupported(DataType.Level1))
-										mdMsg.BuildFrom = MarketDataTypes.Level1;
-									else
-										return false;
+								if (a.IsMarketDataTypeSupported(DataType.OrderLog))
+									mdMsg.BuildFrom = DataType.OrderLog;
+								else if (a.IsMarketDataTypeSupported(DataType.Level1))
+									mdMsg.BuildFrom = DataType.Level1;
+								else
+									return false;
 
-									return true;
-								}
+								return true;
 							}
 
 							return false;

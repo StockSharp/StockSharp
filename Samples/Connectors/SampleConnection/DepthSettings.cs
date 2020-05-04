@@ -12,7 +12,7 @@
 
 		public int? MaxDepth { get; set; }
 
-		public MarketDataTypes? BuildFrom { get; set; } = MarketDataTypes.OrderLog;
+		public DataType BuildFrom { get; set; } = DataType.OrderLog;
 
 		public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.Build;
 	}

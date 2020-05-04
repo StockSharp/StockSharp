@@ -253,7 +253,7 @@ namespace StockSharp.Messages
 		/// Which market-data type is used as a source value.
 		/// </summary>
 		[DataMember]
-		public MarketDataTypes? BuildFrom { get; set; }
+		public DataType BuildFrom { get; set; }
 
 		/// <summary>
 		/// Extra info for the <see cref="BuildFrom"/>.
@@ -344,7 +344,7 @@ namespace StockSharp.Messages
 			destination.MaxDepth = MaxDepth;
 			destination.NewsId = NewsId;
 			destination.BuildMode = BuildMode;
-			destination.BuildFrom = BuildFrom;
+			destination.BuildFrom = BuildFrom?.TypedClone();
 			destination.BuildField = BuildField;
 			destination.IsCalcVolumeProfile = IsCalcVolumeProfile;
 			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;

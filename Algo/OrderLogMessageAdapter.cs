@@ -48,7 +48,7 @@
 				if (!InnerAdapter.IsMarketDataTypeSupported(DataType.OrderLog))
 					return message;
 
-				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == MarketDataTypes.OrderLog;
+				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == DataType.OrderLog;
 					
 				if (message.DataType2 == DataType.MarketDepth)
 				{

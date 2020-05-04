@@ -986,7 +986,7 @@ namespace StockSharp.Algo.Storages.Csv
 				message.Count = reader.ReadNullableLong();
 
 				message.BuildMode = reader.ReadEnum<MarketDataBuildModes>();
-				message.BuildFrom = reader.ReadNullableEnum<MarketDataTypes>();
+				message.BuildFrom = reader.ReadString().ToDataType(null);
 				message.BuildField = reader.ReadNullableEnum<Level1Fields>();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)

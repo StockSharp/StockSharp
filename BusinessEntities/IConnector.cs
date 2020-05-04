@@ -371,7 +371,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="maxDepth">Max depth of requested order book.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		[Obsolete("Use SubscribeMarketDepth method instead.")]
-		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null);
+		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting quotes by the instrument.
@@ -391,7 +391,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		[Obsolete("Use SubscribeTrades method instead.")]
-		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
@@ -411,7 +411,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		[Obsolete("Use SubscribeLevel1 method instead.")]
-		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting new information.

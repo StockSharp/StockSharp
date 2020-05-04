@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="subscription">Subscription.</param>
 		/// <param name="provider">Candle builders provider.</param>
 		/// <returns>Which market-data type is used as a source value. <see langword="null"/> is compression is impossible.</returns>
-		public static MarketDataTypes? TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
+		public static DataType TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -77,12 +77,12 @@ namespace StockSharp.Algo.Candles
 					return 3;
 				else
 					return 4;
-			}).FirstOrDefault()?.ToMarketDataType();
+			}).FirstOrDefault();
 
-			if (buildFrom == null || !adapter.SupportedMarketDataTypes.Contains(buildFrom.Value.ToDataType(null)))
+			if (buildFrom == null || !adapter.SupportedMarketDataTypes.Contains(buildFrom))
 				return null;
 
-			return buildFrom.Value;
+			return buildFrom;
 		}
 
 		/// <summary>
