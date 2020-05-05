@@ -118,7 +118,7 @@ namespace StockSharp.Algo.Storages
 
 			Buffer.ProcessMessage(message);
 
-			if (message.IsSubscribe && Settings.IsMode(StorageModes.Snapshot))
+			if (message.IsSubscribe && message.From == null && message.To == null && Settings.IsMode(StorageModes.Snapshot))
 			{
 				void SendSnapshot<TMessage>(TMessage msg)
 					where TMessage : Message, ISubscriptionIdMessage
