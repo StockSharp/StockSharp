@@ -172,7 +172,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var price = transform.Price;
 			var volume = transform.Volume;
-			var oi = transform.OpenInterest;
 
 			candle.SecurityId = message.SecurityId;
 
@@ -190,7 +189,8 @@ namespace StockSharp.Algo.Candles.Compression
 			if (volume != null)
 				candle.TotalVolume = volume.Value;
 
-			candle.OpenInterest = oi;
+			candle.OpenInterest = transform.OpenInterest;
+			candle.PriceLevels = transform.PriceLevels;
 
 			candle.TotalTicks = 1;
 
@@ -214,7 +214,6 @@ namespace StockSharp.Algo.Candles.Compression
 			var price = transform.Price;
 			var time = transform.Time;
 			var volume = transform.Volume;
-			var oi = transform.OpenInterest;
 
 			if (price < candle.LowPrice)
 			{
@@ -248,7 +247,49 @@ namespace StockSharp.Algo.Candles.Compression
 
 			candle.CloseTime = time;
 
-			candle.OpenInterest = oi;
+			candle.OpenInterest = transform.OpenInterest;
+
+			if (transform.PriceLevels != null)
+			{
+				if (candle.PriceLevels == null)
+					candle.PriceLevels = transform.PriceLevels.Select(l => l.TypedClone());
+				else
+				{
+					var dict = candle.PriceLevels.ToDictionary(l => l.Price);
+
+					foreach (var level in transform.PriceLevels)
+					{
+						if (dict.TryGetValue(level.Price, out var currLevel))
+						{
+							currLevel.BuyCount += level.BuyCount;
+							currLevel.SellCount += level.SellCount;
+							currLevel.BuyVolume += level.BuyVolume;
+							currLevel.SellVolume += level.SellVolume;
+							currLevel.TotalVolume += level.TotalVolume;
+							
+							if (level.BuyVolumes != null)
+							{
+								if (currLevel.BuyVolumes == null)
+									currLevel.BuyVolumes = level.BuyVolumes.ToArray();
+								else
+									currLevel.BuyVolumes = currLevel.BuyVolumes.Concat(level.BuyVolumes).ToArray();
+							}
+
+							if (currLevel.SellVolumes != null && level.SellVolumes != null)
+							{
+								if (currLevel.SellVolumes == null)
+									currLevel.SellVolumes = level.SellVolumes.ToArray();
+								else
+									currLevel.SellVolumes = currLevel.SellVolumes.Concat(level.SellVolumes).ToArray();
+							}
+						}
+						else
+							dict.Add(level.Price, level);
+					}
+
+					candle.PriceLevels = dict.Values.ToArray();
+				}
+			}
 
 			if (candle.TotalTicks != null)
 				candle.TotalTicks++;

@@ -27,7 +27,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Volume profile.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class CandleMessageVolumeProfile
 	{
