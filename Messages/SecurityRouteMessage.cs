@@ -3,6 +3,8 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// Security route response message.
 	/// </summary>
@@ -34,7 +36,7 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
-			destination.DataType = DataType;
+			destination.DataType = DataType?.TypedClone();
 		}
 	}
 }

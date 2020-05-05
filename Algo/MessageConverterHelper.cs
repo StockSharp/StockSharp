@@ -1884,9 +1884,9 @@ namespace StockSharp.Algo
 		private static readonly SynchronizedDictionary<Type, MessageTypes> _messageTypes = new SynchronizedDictionary<Type, MessageTypes>();
 
 		/// <summary>
-		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
+		/// Convert <see cref="DataType"/> to <see cref="MessageTypes"/> value.
 		/// </summary>
-		/// <param name="type"><see cref="MarketDataTypes"/> value.</param>
+		/// <param name="type"><see cref="DataType"/> value.</param>
 		/// <returns>Message type.</returns>
 		public static MessageTypes ToMessageType2(this DataType type)
 		{

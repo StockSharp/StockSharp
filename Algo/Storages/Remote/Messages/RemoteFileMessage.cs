@@ -3,6 +3,8 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Community.Messages;
 	using StockSharp.Messages;
 
@@ -27,13 +29,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Market data type.
 		/// </summary>
 		[DataMember]
-		public MarketDataTypes DataType { get; set; }
-
-		/// <summary>
-		/// Additional argument for market data request.
-		/// </summary>
-		[DataMember]
-		public object Arg { get; set; }
+		public DataType DataType { get; set; }
 
 		/// <summary>
 		/// Date.
@@ -56,8 +52,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 			var clone = new RemoteFileMessage
 			{
 				SecurityId = SecurityId,
-				DataType = DataType,
-				Arg = Arg,
+				DataType = DataType?.TypedClone(),
 				Date = Date,
 				Format = Format,
 			};
@@ -69,7 +64,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},Type={DataType},Arg={Arg},Date={Date},Fmt={Format}";
+			return base.ToString() + $",SecId={SecurityId},Type={DataType},Date={Date},Fmt={Format}";
 		}
 	}
 }
