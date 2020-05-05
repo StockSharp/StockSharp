@@ -194,7 +194,9 @@ namespace StockSharp.Messages
 		public MarketDataTypes DataType
 		{
 			get => DataType2.ToMarketDataType().Value;
+#pragma warning disable CS0618 // Type or member is obsolete
 			set => DataType2 = value.ToDataType(Arg);
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		/// <summary>
@@ -204,7 +206,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str347Key)]
 		[DescriptionLoc(LocalizedStrings.Str348Key)]
 		[MainCategory]
-		//[Obsolete("Use DataType2 property.")]
+		[Obsolete("Use DataType2 property.")]
 		public object Arg
 		{
 			get => DataType2.Arg;
