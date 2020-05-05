@@ -315,6 +315,9 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
 
 		/// <inheritdoc />
+		public virtual bool IsSupportCandlesPriceLevels => InnerAdapter.IsSupportCandlesPriceLevels;
+
+		/// <inheritdoc />
 		public virtual MessageAdapterCategories Categories => InnerAdapter.Categories;
 
 		/// <inheritdoc />

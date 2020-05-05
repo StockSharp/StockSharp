@@ -199,6 +199,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsSupportCandlesPriceLevels => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual MessageAdapterCategories Categories { get; }
 
 		/// <inheritdoc />

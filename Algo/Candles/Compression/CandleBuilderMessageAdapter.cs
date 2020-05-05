@@ -107,13 +107,29 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						var isLoadOnly = mdMsg.BuildMode == MarketDataBuildModes.Load;
 
-						if (mdMsg.IsBuildOnly())
+						if (mdMsg.IsCalcVolumeProfile)
 						{
-							if (isLoadOnly || !TrySubscribeBuild(mdMsg))
+							if (!IsSupportCandlesPriceLevels)
 							{
-								RaiseNewOutMessage(transactionId.CreateNotSupported());
-							}
+								if (isLoadOnly)
+								{
+									RaiseNewOutMessage(transactionId.CreateNotSupported());
+								}
+								else
+								{
+									if (!TrySubscribeBuild(mdMsg))
+										RaiseNewOutMessage(transactionId.CreateNotSupported());
+								}
 
+								return true;
+							}
+						}
+						
+						if (mdMsg.BuildMode == MarketDataBuildModes.Build)
+						{
+							if (!TrySubscribeBuild(mdMsg))
+								RaiseNewOutMessage(transactionId.CreateNotSupported());
+							
 							return true;
 						}
 

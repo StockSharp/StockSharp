@@ -130,6 +130,11 @@ namespace StockSharp.Messages
 		bool IsSupportCandlesUpdates { get; }
 
 		/// <summary>
+		/// Support candles <see cref="CandleMessage.PriceLevels"/>.
+		/// </summary>
+		bool IsSupportCandlesPriceLevels { get; }
+
+		/// <summary>
 		/// Message adapter categories.
 		/// </summary>
 		MessageAdapterCategories Categories { get; }

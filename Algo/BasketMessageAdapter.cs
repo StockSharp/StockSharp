@@ -412,6 +412,8 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.IsSupportCandlesUpdates => GetSortedAdapters().Any(a => a.IsSupportCandlesUpdates);
 
+		bool IMessageAdapter.IsSupportCandlesPriceLevels => GetSortedAdapters().Any(a => a.IsSupportCandlesPriceLevels);
+
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
 		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();

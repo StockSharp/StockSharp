@@ -2315,6 +2315,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsFullCandlesOnly => false;
 		bool IMessageAdapter.IsSupportSubscriptions => true;
 		bool IMessageAdapter.IsSupportCandlesUpdates => true;
+		bool IMessageAdapter.IsSupportCandlesPriceLevels => false;
 
 		MessageAdapterCategories IMessageAdapter.Categories => default;
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => null;
