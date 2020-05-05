@@ -267,24 +267,29 @@ namespace StockSharp.Algo.Storages
 
 				try
 				{
+					var incremental = Settings.IsMode(StorageModes.Incremental);
+					var snapshot = Settings.IsMode(StorageModes.Snapshot);
+
 					foreach (var pair in Buffer.GetTicks())
 					{
-						Settings.GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Tick).Save(pair.Value);
+						if (incremental)
+							Settings.GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Tick).Save(pair.Value);
 					}
 
 					foreach (var pair in Buffer.GetOrderLog())
 					{
-						Settings.GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.OrderLog).Save(pair.Value);
+						if (incremental)
+							Settings.GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.OrderLog).Save(pair.Value);
 					}
 
 					foreach (var pair in Buffer.GetTransactions())
 					{
 						var secId = pair.Key;
 
-						if (Settings.IsMode(StorageModes.Incremental))
+						if (incremental)
 							Settings.GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction).Save(pair.Value);
 
-						if (Settings.IsMode(StorageModes.Snapshot))
+						if (snapshot)
 						{
 							var snapshotStorage = GetSnapshotStorage(DataType.Transactions);
 
@@ -397,10 +402,10 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in Buffer.GetOrderBooks())
 					{
-						if (Settings.IsMode(StorageModes.Incremental))
+						if (incremental)
 							Settings.GetStorage<QuoteChangeMessage>(pair.Key, null).Save(pair.Value);
 						
-						if (Settings.IsMode(StorageModes.Snapshot))
+						if (snapshot)
 						{
 							var snapshotStorage = GetSnapshotStorage(DataType.MarketDepth);
 
@@ -413,21 +418,14 @@ namespace StockSharp.Algo.Storages
 					{
 						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
 
-						var dt = DateTime.Today;
-
-						var historical = messages.Where(m => m.ServerTime < dt).ToArray();
-						var today = messages.Where(m => m.ServerTime >= dt).ToArray();
-
-						Settings.GetStorage<Level1ChangeMessage>(pair.Key, null).Save(historical);
-
-						if (Settings.IsMode(StorageModes.Incremental))
-							Settings.GetStorage<Level1ChangeMessage>(pair.Key, null).Save(today);
+						if (incremental)
+							Settings.GetStorage<Level1ChangeMessage>(pair.Key, null).Save(messages);
 						
 						if (Settings.IsMode(StorageModes.Snapshot))
 						{
 							var snapshotStorage = GetSnapshotStorage(DataType.Level1);
 
-							foreach (var message in today)
+							foreach (var message in messages)
 								snapshotStorage.Update(message);
 						}
 					}
@@ -441,10 +439,10 @@ namespace StockSharp.Algo.Storages
 					{
 						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
 
-						if (Settings.IsMode(StorageModes.Incremental))
+						if (incremental)
 							Settings.GetStorage<PositionChangeMessage>(pair.Key, null).Save(messages);
 						
-						if (Settings.IsMode(StorageModes.Snapshot))
+						if (snapshot)
 						{
 							var snapshotStorage = GetSnapshotStorage(DataType.PositionChanges);
 
