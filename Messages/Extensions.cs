@@ -2399,19 +2399,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines the specified message is required build only mode.
-		/// </summary>
-		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		/// <returns>Check result.</returns>
-		public static bool IsBuildOnly(this MarketDataMessage mdMsg)
-		{
-			if (mdMsg is null)
-				throw new ArgumentNullException(nameof(mdMsg));
-
-			return mdMsg.IsCalcVolumeProfile || mdMsg.BuildMode == MarketDataBuildModes.Build;
-		}
-
-		/// <summary>
 		/// Simulator.
 		/// </summary>
 		public static string SimulatorPortfolioName = "Simulator (S#)";

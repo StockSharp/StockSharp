@@ -1036,6 +1036,9 @@ namespace StockSharp.Algo.Storages
 
 			DateTimeOffset? lastTime = null;
 
+			if (from == null && to == null)
+				return lastTime;
+
 			var secId = msg.SecurityId;
 
 			if (msg.DataType2 == DataType.Level1)
@@ -1164,7 +1167,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var tf = msg.GetTimeFrame();
 
-					if (msg.IsBuildOnly())
+					if (msg.BuildMode == MarketDataBuildModes.Build)
 					{
 						IMarketDataStorage storage;
 
@@ -1258,20 +1261,6 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var days = settings.DaysLoad;
-
-						//if (tf.Ticks > 1)
-						//{
-						//	if (tf.TotalMinutes < 15)
-						//		days = TimeSpan.FromTicks(tf.Ticks * 10000);
-						//	else if (tf.TotalHours < 2)
-						//		days = TimeSpan.FromTicks(tf.Ticks * 1000);
-						//	else if (tf.TotalDays < 2)
-						//		days = TimeSpan.FromTicks(tf.Ticks * 100);
-						//	else
-						//		days = TimeSpan.FromTicks(tf.Ticks * 50);	
-						//}
-
 						IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
 						{
 							if (!allowBuildFromSmallerTimeFrame)
@@ -1280,7 +1269,11 @@ namespace StockSharp.Algo.Storages
 							return candleBuilderProvider.GetCandleMessageBuildableStorage(settings.StorageRegistry, securityId, timeFrame, settings.Drive, settings.Format);
 						}
 
-						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, days, transactionId, SendReply, SendOut);
+						var filter = msg.IsCalcVolumeProfile
+							? (Func<CandleMessage, bool>)(c => c.PriceLevels != null)
+							: null;
+
+						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, settings.DaysLoad, transactionId, SendReply, SendOut, filter);
 					}
 				}
 				else
@@ -1316,7 +1309,7 @@ namespace StockSharp.Algo.Storages
 			return Tuple.Create(from.Value, to.Value);
 		}
 
-		private static DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad, long transactionId, Action sendReply, Action<Message> newOutMessage) 
+		private static DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null) 
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
 			var range = GetRange(storage, from, to, daysLoad);
@@ -1326,10 +1319,10 @@ namespace StockSharp.Algo.Storages
 
 			var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
 
-			return LoadMessages(messages, range.Item1, transactionId, sendReply, newOutMessage);
+			return LoadMessages(messages, range.Item1, transactionId, sendReply, newOutMessage, filter);
 		}
 
-		private static DateTimeOffset? LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long transactionId, Action sendReply, Action<Message> newOutMessage)
+		private static DateTimeOffset? LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
 			if (messages == null)
@@ -1337,6 +1330,9 @@ namespace StockSharp.Algo.Storages
 
 			if (sendReply == null)
 				throw new ArgumentNullException(nameof(sendReply));
+
+			if (filter != null)
+				messages = messages.Where(filter);
 
 			var replySent = false;
 
