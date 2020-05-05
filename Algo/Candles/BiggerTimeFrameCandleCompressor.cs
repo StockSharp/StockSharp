@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Candles
 		private class PartCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 		{
 			public PartCandleBuilderValueTransform()
-				: base(MarketDataTypes.Trades)
+				: base(DataType.Ticks)
 			{
 			}
 

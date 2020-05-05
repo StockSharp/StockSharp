@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Candles.Compression
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Runtime.InteropServices;
 
 	using Ecng.Collections;
 
@@ -16,7 +15,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Which market-data type is used as a source value.
 		/// </summary>
-		MarketDataTypes BuildFrom { get; }
+		DataType BuildFrom { get; }
 
 		/// <summary>
 		/// Process message to update current state.
@@ -65,14 +64,14 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="BaseCandleBuilderValueTransform"/>.
 		/// </summary>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-		protected BaseCandleBuilderValueTransform(MarketDataTypes buildFrom)
+		protected BaseCandleBuilderValueTransform(DataType buildFrom)
 		{
 			_buildFrom = buildFrom;
 		}
 
-		private readonly MarketDataTypes _buildFrom;
+		private readonly DataType _buildFrom;
 
-		MarketDataTypes ICandleBuilderValueTransform.BuildFrom => _buildFrom;
+		DataType ICandleBuilderValueTransform.BuildFrom => _buildFrom;
 
 		/// <inheritdoc />
 		public virtual bool Process(Message message)
@@ -141,7 +140,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="TickCandleBuilderValueTransform"/>.
 		/// </summary>
 		public TickCandleBuilderValueTransform()
-			: base(MarketDataTypes.Trades)
+			: base(DataType.Ticks)
 		{
 		}
 
@@ -166,7 +165,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="QuoteCandleBuilderValueTransform"/>.
 		/// </summary>
 		public QuoteCandleBuilderValueTransform()
-			: base(MarketDataTypes.MarketDepth)
+			: base(DataType.MarketDepth)
 		{
 		}
 
@@ -235,7 +234,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="Level1CandleBuilderValueTransform"/>.
 		/// </summary>
 		public Level1CandleBuilderValueTransform()
-			: base(MarketDataTypes.Level1)
+			: base(DataType.Level1)
 		{
 		}
 
@@ -339,7 +338,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="OrderLogCandleBuilderValueTransform"/>.
 		/// </summary>
 		public OrderLogCandleBuilderValueTransform()
-			: base(MarketDataTypes.OrderLog)
+			: base(DataType.OrderLog)
 		{
 		}
 
