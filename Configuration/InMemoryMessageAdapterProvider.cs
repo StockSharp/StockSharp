@@ -27,7 +27,18 @@ namespace StockSharp.Configuration
 			CurrentAdapters = currentAdapters ?? throw new ArgumentNullException(nameof(currentAdapters));
 
 			var idGenerator = new IncrementalIdGenerator();
-			PossibleAdapters = GetAdapters().Select(t => t.CreateAdapter(idGenerator)).ToArray();
+			PossibleAdapters = GetAdapters().Select(t =>
+			{
+				try
+				{
+					return t.CreateAdapter(idGenerator);
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
+					return null;
+				}
+			}).Where(a => a != null).ToArray();
 		}
 
 		/// <inheritdoc />
