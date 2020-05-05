@@ -32,6 +32,7 @@ namespace StockSharp.Messages
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
+	using System.ComponentModel.DataAnnotations;
 
 	/// <summary>
 	/// Extension class.
@@ -2944,5 +2945,16 @@ namespace StockSharp.Messages
 		/// <returns>Possible time-frames.</returns>
 		public static IEnumerable<TimeSpan> FilterTimeFrames(this IEnumerable<DataType> dataTypes)
 			=> dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage) && t.Arg != null).Select(t => (TimeSpan)t.Arg);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="TField"></typeparam>
+		/// <param name="field"></param>
+		/// <returns></returns>
+		public static string GetFieldDescription<TField>(this TField field)
+		{
+			return field.GetType().GetField(field.ToString()).GetAttribute<DisplayAttribute>()?.GetDescription();
+		}
 	}
 }

@@ -197,62 +197,13 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<Level1ChangeMessage, DateTimeOffset>(GetDateField(nameof(Level1ChangeMessage.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 				fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(Level1ChangeMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 
-				fields.Add(new FieldMapping<Level1ChangeMessage, long>(GetChangesField(Level1Fields.LastTradeId), Level1Fields.LastTradeId.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.LastTradeId, v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetChangesField(Level1Fields.LastTradeTime), Level1Fields.LastTradeTime.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.LastTradeTime, i.ServerTime - i.ServerTime.TimeOfDay + v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetChangesField(Level1Fields.BestBidTime), Level1Fields.BestBidTime.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BestBidTime, i.ServerTime - i.ServerTime.TimeOfDay + v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetChangesField(Level1Fields.BestAskTime), Level1Fields.BestAskTime.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BestAskTime, i.ServerTime - i.ServerTime.TimeOfDay + v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, DateTimeOffset>(GetChangesField(Level1Fields.BuyBackDate), Level1Fields.BuyBackDate.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BuyBackDate, v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, DateTimeOffset>(GetChangesField(Level1Fields.CouponDate), Level1Fields.CouponDate.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.CouponDate, v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, int>(GetChangesField(Level1Fields.BidsCount), Level1Fields.BidsCount.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.BidsCount, v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, int>(GetChangesField(Level1Fields.AsksCount), Level1Fields.AsksCount.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.AsksCount, v)));
-				fields.Add(new FieldMapping<Level1ChangeMessage, int>(GetChangesField(Level1Fields.TradesCount), Level1Fields.TradesCount.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(Level1Fields.TradesCount, v)));
-
-				foreach (var f in new[]
-				{
-					Level1Fields.LastTradePrice,
-					Level1Fields.LastTradeVolume,
-					Level1Fields.BestBidPrice,
-					Level1Fields.BestBidVolume,
-					Level1Fields.BestAskPrice,
-					Level1Fields.BestAskVolume,
-					Level1Fields.BidsVolume,
-					Level1Fields.AsksVolume,
-					Level1Fields.HighBidPrice,
-					Level1Fields.LowAskPrice,
-					Level1Fields.MaxPrice,
-					Level1Fields.MinPrice,
-					Level1Fields.OpenInterest,
-					Level1Fields.OpenPrice,
-					Level1Fields.HighPrice,
-					Level1Fields.LowPrice,
-					Level1Fields.ClosePrice,
-					Level1Fields.Volume,
-					Level1Fields.HistoricalVolatility,
-					Level1Fields.ImpliedVolatility,
-					Level1Fields.Delta,
-					Level1Fields.Gamma,
-					Level1Fields.Theta,
-					Level1Fields.Vega,
-					Level1Fields.Rho,
-					Level1Fields.TheorPrice,
-					Level1Fields.Change,
-					Level1Fields.AccruedCouponIncome,
-					Level1Fields.AveragePrice,
-					Level1Fields.MarginBuy,
-					Level1Fields.MarginSell,
-					Level1Fields.SettlementPrice,
-					Level1Fields.VWAP,
-					Level1Fields.Yield,
-					Level1Fields.Duration,
-					Level1Fields.IssueSize,
-					Level1Fields.BuyBackPrice,
-				})
+				foreach (var f in Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()))
 				{
 					var field = f;
 
-					fields.Add(new FieldMapping<Level1ChangeMessage, decimal>(GetChangesField(field), field.GetDisplayName(), string.Empty, (i, v) =>
+					fields.Add(new FieldMapping<Level1ChangeMessage, object>(GetChangesField(field), field.GetDisplayName(), field.GetFieldDescription(), field.ToType(), (i, v) =>
 					{
-						if (v == 0m)
+						if (v is decimal d && d == 0m)
 							return;
 
 						i.Changes.Add(field, v);
@@ -267,31 +218,16 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<PositionChangeMessage, DateTimeOffset>(GetDateField(nameof(PositionChangeMessage.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 				fields.Add(new FieldMapping<PositionChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(PositionChangeMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 
-				fields.Add(new FieldMapping<PositionChangeMessage, CurrencyTypes>(GetChangesField(PositionChangeTypes.Currency), PositionChangeTypes.Currency.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(PositionChangeTypes.Currency, v)));
-				fields.Add(new FieldMapping<PositionChangeMessage, PortfolioStates>(GetChangesField(PositionChangeTypes.State), PositionChangeTypes.State.GetDisplayName(), string.Empty, (i, v) => i.Changes.Add(PositionChangeTypes.State, v)));
-
-				foreach (var t in new[]
+				foreach (var f in Enumerator.GetValues<PositionChangeTypes>().Where(l1 => !l1.IsObsolete()))
 				{
-					PositionChangeTypes.BeginValue,
-					PositionChangeTypes.CurrentValue,
-					PositionChangeTypes.BlockedValue,
-					PositionChangeTypes.AveragePrice,
-					PositionChangeTypes.Commission,
-					PositionChangeTypes.CurrentPrice,
-					PositionChangeTypes.Leverage,
-					PositionChangeTypes.RealizedPnL,
-					PositionChangeTypes.UnrealizedPnL,
-					PositionChangeTypes.VariationMargin,
-				})
-				{
-					var type = t;
+					var field = f;
 
-					fields.Add(new FieldMapping<PositionChangeMessage, decimal>(GetChangesField(type), type.GetDisplayName(), string.Empty, (i, v) =>
+					fields.Add(new FieldMapping<PositionChangeMessage, object>(GetChangesField(field), field.GetDisplayName(), field.GetFieldDescription(), field.ToType(), (i, v) =>
 					{
-						if (v == 0m)
+						if (v is decimal d && d == 0m)
 							return;
 
-						i.Changes.Add(type, v);
+						i.Changes.Add(field, v);
 					}));
 				}
 			}
