@@ -22,6 +22,7 @@ namespace StockSharp.Messages
 	using System.Linq;
 	using System.Net;
 	using System.Security;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -32,7 +33,6 @@ namespace StockSharp.Messages
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
-	using System.ComponentModel.DataAnnotations;
 
 	/// <summary>
 	/// Extension class.

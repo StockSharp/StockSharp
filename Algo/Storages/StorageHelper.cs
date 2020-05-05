@@ -964,11 +964,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Convert <see cref="string"/> to <see cref="MarketDataMessage.Arg"/> value.
+		/// Convert <see cref="string"/> to <see cref="DataType.Arg"/> value.
 		/// </summary>
 		/// <param name="messageType">Message type.</param>
 		/// <param name="strValue"><see cref="string"/> value.</param>
-		/// <returns><see cref="MarketDataMessage.Arg"/> value.</returns>
+		/// <returns><see cref="DataType.Arg"/> value.</returns>
 		public static object StringToMessageArg(this Type messageType, string strValue)
 		{
 			if (messageType == null)
@@ -983,10 +983,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Convert <see cref="MarketDataMessage.Arg"/> to <see cref="string"/> value.
+		/// Convert <see cref="DataType.Arg"/> to <see cref="string"/> value.
 		/// </summary>
 		/// <param name="messageType">Message type.</param>
-		/// <param name="arg"><see cref="MarketDataMessage.Arg"/> value.</param>
+		/// <param name="arg"><see cref="DataType.Arg"/> value.</param>
 		/// <returns><see cref="string"/> value.</returns>
 		public static string MessageArgToString(this Type messageType, object arg)
 		{
