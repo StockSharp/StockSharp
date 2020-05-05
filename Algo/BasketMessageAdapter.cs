@@ -247,7 +247,7 @@ namespace StockSharp.Algo
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = new CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
-		private readonly Queue<Message> _pendingMessages = new Queue<Message>();
+		private readonly List<Message> _pendingMessages = new List<Message>();
 		
 		private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = new Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>>();
 		private ConnectionStates _currState = ConnectionStates.Disconnected;
@@ -1061,7 +1061,7 @@ namespace StockSharp.Algo
 					if (HasPendingAdapters() || _adapterStates.Count == 0 || _adapterStates.All(p => p.Value.Item1 == ConnectionStates.Disconnected || p.Value.Item1 == ConnectionStates.Failed))
 					{
 						isPended = true;
-						_pendingMessages.Enqueue(message.Clone());
+						_pendingMessages.Add(message.Clone());
 						return ArrayHelper.Empty<IMessageAdapter>();
 					}
 				}
@@ -1261,10 +1261,22 @@ namespace StockSharp.Algo
 
 					if (!_subscription.TryGetValue(originTransId, out var tuple))
 					{
+						lock (_connectedResponseLock)
+						{
+							var suspended = _pendingMessages.FirstOrDefault(m => m is MarketDataMessage prevMdMsg && prevMdMsg.TransactionId == originTransId);
+
+							if (suspended != null)
+							{
+								_pendingMessages.Remove(suspended);
+								SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId });
+								return;
+							}
+						}
+
 						this.AddInfoLog("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
 						return;
 					}
-						
+
 					adapter = tuple.Item2.First();
 
 					mdMsg = mdMsg.TypedClone();
