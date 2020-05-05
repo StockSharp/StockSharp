@@ -2194,6 +2194,9 @@ namespace StockSharp.Algo.Testing
 			if (secState == SecurityStates.Stoped)
 				return LocalizedStrings.SecurityStopped.Put(execMsg.SecurityId);
 
+			if (securityDefinition?.BasketCode.IsEmpty() == false)
+				return LocalizedStrings.SecurityNonTradable.Put(execMsg.SecurityId);
+
 			var priceStep = securityDefinition?.PriceStep;
 			var volumeStep = securityDefinition?.VolumeStep;
 			var minVolume = securityDefinition?.MinVolume;

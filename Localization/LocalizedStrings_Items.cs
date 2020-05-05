@@ -51506,5 +51506,15 @@ namespace StockSharp.Localization
 		/// Synthetic option position margin leverage.
 		/// </summary>
 		public static string OptionSyntheticMarginDesc => GetString(OptionSyntheticMarginDescKey);
+
+		/// <summary>
+		/// Security '{0}' is no tradable.
+		/// </summary>
+		public const string SecurityNonTradableKey = nameof(SecurityNonTradable);
+
+		/// <summary>
+		/// Security '{0}' is no tradable.
+		/// </summary>
+		public static string SecurityNonTradable => GetString(SecurityNonTradableKey);
 	}
 }
