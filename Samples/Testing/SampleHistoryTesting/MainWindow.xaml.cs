@@ -436,7 +436,7 @@ namespace SampleHistoryTesting
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 				{
 					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? MarketDataBuildModes.Build : MarketDataBuildModes.Load,
-					BuildCandlesFrom = emulationInfo.UseOrderLog ? (MarketDataTypes?)MarketDataTypes.OrderLog : null,
+					BuildCandlesFrom2 = emulationInfo.UseOrderLog ? DataType.OrderLog : null,
 				};
 
 				_shortMa = new SimpleMovingAverage { Length = 10 };
