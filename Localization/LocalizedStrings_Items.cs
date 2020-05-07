@@ -27308,12 +27308,12 @@ namespace StockSharp.Localization
 		public static string Str2853 => GetString(Str2853Key);
 
 		/// <summary>
-		/// Number (row)
+		/// Number (string)
 		/// </summary>
 		public const string Str2856Key = nameof(Str2856);
 
 		/// <summary>
-		/// Number (row)
+		/// Number (string)
 		/// </summary>
 		public static string Str2856 => GetString(Str2856Key);
 
