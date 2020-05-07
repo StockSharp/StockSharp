@@ -91,13 +91,14 @@ namespace StockSharp.BusinessEntities
 		//	set { _connector = value; }
 		//}
 
-		/// <summary>
-		/// Automatically check for quotes by <see cref="Verify()"/>.
-		/// </summary>
-		/// <remarks>
-		/// The default is disabled for performance.
-		/// </remarks>
-		public bool AutoVerify { get; set; }
+		///// <summary>
+		///// Automatically check for quotes by <see cref="Verify()"/>.
+		///// </summary>
+		///// <remarks>
+		///// The default is disabled for performance.
+		///// </remarks>
+		//[Obsolete]
+		//public bool AutoVerify { get; set; }
 
 		/// <summary>
 		/// Whether to use aggregated quotes <see cref="AggregatedQuote"/> at the join of the volumes with the same price.
@@ -105,6 +106,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The default is disabled for performance.
 		/// </remarks>
+		[Obsolete]
 		public bool UseAggregatedQuotes { get; set; }
 
 		/// <summary>
@@ -275,6 +277,7 @@ namespace StockSharp.BusinessEntities
 		/// To reduce the order book to the required depth.
 		/// </summary>
 		/// <param name="newDepth">New order book depth.</param>
+		[Obsolete]
 		public void Decrease(int newDepth)
 		{
 			var currentDepth = Depth;
@@ -431,6 +434,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The old quotes will be removed from the book.
 		/// </remarks>
+		[Obsolete]
 		public MarketDepth Update(IEnumerable<Quote> quotes, DateTimeOffset lastChangeTime = default)
 		{
 			if (quotes == null)
@@ -461,6 +465,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The old quotes will be removed from the book.
 		/// </remarks>
+		[Obsolete]
 		public MarketDepth Update(IEnumerable<Quote> bids, IEnumerable<Quote> asks, bool isSorted = false, DateTimeOffset lastChangeTime = default)
 		{
 			if (bids == null)
@@ -478,11 +483,11 @@ namespace StockSharp.BusinessEntities
 			var bidsArr = bids.ToArray();
 			var asksArr = asks.ToArray();
 
-			if (AutoVerify)
-			{
-				if (!Verify(bidsArr, asksArr))
-					throw new ArgumentException(LocalizedStrings.Str485);
-			}
+			//if (AutoVerify)
+			//{
+			//	if (!Verify(bidsArr, asksArr))
+			//		throw new ArgumentException(LocalizedStrings.Str485);
+			//}
 
 			//Truncate(bidsArr, asksArr, lastChangeTime);
 			
@@ -491,48 +496,13 @@ namespace StockSharp.BusinessEntities
 			return this;
 		}
 
-		//private void Truncate(Quote[] bids, Quote[] asks, DateTimeOffset lastChangeTime)
-		//{
-		//	Quote[] outOfRangeBids;
-		//	Quote[] outOfRangeAsks;
-
-		//	lock (_syncRoot)
-		//	{
-		//		Update(Truncate(bids, out outOfRangeBids), Truncate(asks, out outOfRangeAsks), lastChangeTime);
-		//	}
-
-		//	var evt = QuoteOutOfDepth;
-
-		//	if (evt != null)
-		//	{
-		//		outOfRangeBids?.ForEach(evt);
-		//		outOfRangeAsks?.ForEach(evt);
-		//	}
-		//}
-
-		//private Quote[] Truncate(Quote[] quotes, out Quote[] outOfRangeQuotes)
-		//{
-		//	if (quotes.Length > MaxDepth)
-		//	{
-		//		outOfRangeQuotes = new Quote[quotes.Length - MaxDepth];
-		//		Array.Copy(quotes, MaxDepth, outOfRangeQuotes, 0, outOfRangeQuotes.Length);
-
-		//		Array.Resize(ref quotes, MaxDepth);
-		//	}
-		//	else
-		//	{
-		//		outOfRangeQuotes = null;
-		//	}
-
-		//	return quotes;
-		//}
-
 		/// <summary>
 		/// To update the order book. The version without checks and blockings.
 		/// </summary>
 		/// <param name="bids">Sorted bids.</param>
 		/// <param name="asks">Sorted asks.</param>
 		/// <param name="lastChangeTime">Change time.</param>
+		[Obsolete]
 		public void Update(Quote[] bids, Quote[] asks, DateTimeOffset lastChangeTime)
 		{
 			//_bidsCache = null;
@@ -549,6 +519,7 @@ namespace StockSharp.BusinessEntities
 		/// To refresh the quote. If a quote with the same price is already in the order book, it is updated as passed. Otherwise, it automatically rebuilds the order book.
 		/// </summary>
 		/// <param name="quote">The new quote.</param>
+		[Obsolete]
 		public void UpdateQuote(Quote quote)
 		{
 			SetQuote(quote, false);
@@ -559,6 +530,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="price">Buy price.</param>
 		/// <param name="volume">Buy volume.</param>
+		[Obsolete]
 		public void AddBid(decimal price, decimal volume)
 		{
 			AddQuote(new Quote
@@ -575,6 +547,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="price">Sell price.</param>
 		/// <param name="volume">Sell volume.</param>
+		[Obsolete]
 		public void AddAsk(decimal price, decimal volume)
 		{
 			AddQuote(new Quote
@@ -590,6 +563,7 @@ namespace StockSharp.BusinessEntities
 		/// To add the quote. If a quote with the same price is already in the order book, they are combined into the <see cref="AggregatedQuote"/>.
 		/// </summary>
 		/// <param name="quote">The new quote.</param>
+		[Obsolete]
 		public void AddQuote(Quote quote)
 		{
 			SetQuote(quote, true);
@@ -724,6 +698,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="quote">The quote to remove.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
+		[Obsolete]
 		public void Remove(Quote quote, DateTimeOffset lastChangeTime = default)
 		{
 			if (quote == null)
@@ -738,6 +713,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="price">Remove the quote for the price.</param>
 		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
+		[Obsolete]
 		public void Remove(decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
 			var dir = GetDirection(price);
@@ -755,6 +731,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="price">Remove the quote for the price.</param>
 		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
+		[Obsolete]
 		public void Remove(Sides direction, decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
 			if (price <= 0)
@@ -973,11 +950,12 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Copy.</returns>
 		public override MarketDepth Clone()
 		{
+#pragma warning disable CS0612 // Type or member is obsolete
 			var clone = new MarketDepth(Security)
 			{
 				//MaxDepth = MaxDepth,
 				UseAggregatedQuotes = UseAggregatedQuotes,
-				AutoVerify = AutoVerify,
+				//AutoVerify = AutoVerify,
 				Currency = Currency,
 			};
 
@@ -985,83 +963,13 @@ namespace StockSharp.BusinessEntities
 			clone.LocalTime = LocalTime;
 
 			return clone;
+#pragma warning restore CS0612 // Type or member is obsolete
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
 			return this.Select(q => q.ToString()).Join(Environment.NewLine);
-		}
-
-		/// <summary>
-		/// To determine whether the order book is in the right state.
-		/// </summary>
-		/// <returns><see langword="true" />, if the order book contains correct data, otherwise <see langword="false" />.</returns>
-		/// <remarks>
-		/// It is used in cases when the trading system by mistake sends the wrong quotes.
-		/// </remarks>
-		public bool Verify()
-		{
-			return Verify(_bids, _asks);
-		}
-
-		private bool Verify(Quote[] bids, Quote[] asks)
-		{
-			var bestBid = bids.FirstOrDefault();
-			var bestAsk = asks.FirstOrDefault();
-
-			if (bestBid != null && bestAsk != null)
-			{
-				return bids.All(b => b.Price < bestAsk.Price) && asks.All(a => a.Price > bestBid.Price) && Verify(bids, true) && Verify(asks, false);
-			}
-			else
-			{
-				return Verify(bids, true) && Verify(asks, false);
-			}
-		}
-
-		private bool Verify(Quote[] quotes, bool isBids)
-		{
-			if (quotes.IsEmpty())
-				return true;
-
-			if (quotes.Any(q => !Verify(q, isBids)))
-				return false;
-
-			if (quotes.GroupBy(q => q.Price).Any(g => g.Count() > 1))
-				return false;
-
-			var prev = quotes.First();
-
-			foreach (var current in quotes.Skip(1))
-			{
-				if (isBids)
-				{
-					if (current.Price > prev.Price)
-						return false;
-				}
-				else
-				{
-					if (current.Price < prev.Price)
-						return false;
-				}
-
-				prev = current;
-			}
-
-			return true;
-		}
-
-		private bool Verify(Quote quote, bool isBids)
-		{
-			if (quote == null)
-				throw new ArgumentNullException(nameof(quote));
-
-			return
-				quote.Price > 0 &&
-				quote.Volume > 0 &&
-				quote.OrderDirection == (isBids ? Sides.Buy : Sides.Sell) &&
-				quote.Security == Security;
 		}
 	}
 }

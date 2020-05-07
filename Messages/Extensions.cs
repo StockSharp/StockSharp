@@ -2943,5 +2943,74 @@ namespace StockSharp.Messages
 		{
 			return field.GetType().GetField(field.ToString()).GetAttribute<DisplayAttribute>()?.GetDescription();
 		}
+
+		/// <summary>
+		/// To determine whether the order book is in the right state.
+		/// </summary>
+		/// <param name="book">Order book.</param>
+		/// <returns><see langword="true" />, if the order book contains correct data, otherwise <see langword="false" />.</returns>
+		/// <remarks>
+		/// It is used in cases when the trading system by mistake sends the wrong quotes.
+		/// </remarks>
+		public static bool Verify(this QuoteChangeMessage book)
+		{
+			if (book is null)
+				throw new ArgumentNullException(nameof(book));
+
+			var bids = book.IsSorted ? book.Bids : book.Bids.OrderByDescending(b => b.Price).ToArray();
+			var asks = book.IsSorted ? book.Asks : book.Asks.OrderBy(b => b.Price).ToArray();
+
+			var bestBid = bids.FirstOrDefault();
+			var bestAsk = asks.FirstOrDefault();
+
+			if (bestBid != null && bestAsk != null)
+			{
+				return bids.All(b => b.Price < bestAsk.Price) && asks.All(a => a.Price > bestBid.Price) && Verify(bids, true) && Verify(asks, false);
+			}
+			else
+			{
+				return Verify(bids, true) && Verify(asks, false);
+			}
+		}
+
+		private static bool Verify(QuoteChange[] quotes, bool isBids)
+		{
+			if (quotes.IsEmpty())
+				return true;
+
+			if (quotes.Any(q => !Verify(q)))
+				return false;
+
+			if (quotes.GroupBy(q => q.Price).Any(g => g.Count() > 1))
+				return false;
+
+			var prev = quotes.First();
+
+			foreach (var current in quotes.Skip(1))
+			{
+				if (isBids)
+				{
+					if (current.Price > prev.Price)
+						return false;
+				}
+				else
+				{
+					if (current.Price < prev.Price)
+						return false;
+				}
+
+				prev = current;
+			}
+
+			return true;
+		}
+
+		private static bool Verify(QuoteChange quote)
+		{
+			if (quote is null)
+				throw new ArgumentNullException(nameof(quote));
+
+			return quote.Price > 0 && quote.Volume > 0;
+		}
 	}
 }

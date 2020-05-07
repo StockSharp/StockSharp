@@ -4226,5 +4226,18 @@ namespace StockSharp.Algo
 		/// Indicator value.
 		/// </summary>
 		public static DataType IndicatorValue { get; } = DataType.Create(typeof(Indicators.IIndicatorValue), null);//.Immutable();
+
+		/// <summary>
+		/// To determine whether the order book is in the right state.
+		/// </summary>
+		/// <param name="depth">Order book.</param>
+		/// <returns><see langword="true" />, if the order book contains correct data, otherwise <see langword="false" />.</returns>
+		/// <remarks>
+		/// It is used in cases when the trading system by mistake sends the wrong quotes.
+		/// </remarks>
+		public static bool Verify(this MarketDepth depth)
+		{
+			return depth.ToMessage().Verify();
+		}
 	}
 }
