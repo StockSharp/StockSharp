@@ -241,13 +241,13 @@
 										allMsg.TransactionId = TransactionIdGenerator.GetNextId();
 										allMsg.SecurityId = secIdMsg.SecurityId;
 
-										this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
-
 										child = new ChildSubscription(allMsg.TypedClone());
 										parent.Child.Add(secIdMsg.SecurityId, child);
 
 										allMsg.LoopBack(this, MessageBackModes.Chain);
 										_pendingBacks.Add(allMsg.TransactionId, parentId);
+
+										this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
 									}
 
 									var subscriptionIds = subscrMsg.GetSubscriptionIds().Where(i => i != parentId).Append(child.Origin.TransactionId);
