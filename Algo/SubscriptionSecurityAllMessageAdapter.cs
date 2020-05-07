@@ -7,6 +7,7 @@
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -112,6 +113,8 @@
 								var child = _map[parentId].Child[mdMsg.SecurityId];
 								child.State = SubscriptionStates.Active;
 								suspended = child.Suspended.CopyAndClear();
+
+								this.AddDebugLog("New ALL map (active): {0}/{1} TrId={2}", child.Origin.SecurityId, child.Origin.DataType2, mdMsg.TransactionId);
 							}
 							else if (secId == default)
 								_map.Add(transId, new ParentSubscription(mdMsg.TypedClone()));
@@ -238,6 +241,8 @@
 										allMsg.TransactionId = TransactionIdGenerator.GetNextId();
 										allMsg.SecurityId = secIdMsg.SecurityId;
 
+										this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
+
 										child = new ChildSubscription(allMsg.TypedClone());
 										parent.Child.Add(secIdMsg.SecurityId, child);
 
@@ -252,6 +257,8 @@
 									{
 										child.Suspended.Add(message);
 										message = null;
+
+										this.AddDebugLog("ALL suspended: {0}/{1}, cnt={2}", child.Origin.SecurityId, child.Origin.DataType2, child.Suspended.Count);
 									}
 
 									return true;
