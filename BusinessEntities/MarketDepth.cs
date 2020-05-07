@@ -97,7 +97,6 @@ namespace StockSharp.BusinessEntities
 		///// <remarks>
 		///// The default is disabled for performance.
 		///// </remarks>
-		//[Obsolete]
 		//public bool AutoVerify { get; set; }
 
 		/// <summary>
@@ -106,7 +105,6 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The default is disabled for performance.
 		/// </remarks>
-		[Obsolete]
 		public bool UseAggregatedQuotes { get; set; }
 
 		/// <summary>
@@ -277,7 +275,6 @@ namespace StockSharp.BusinessEntities
 		/// To reduce the order book to the required depth.
 		/// </summary>
 		/// <param name="newDepth">New order book depth.</param>
-		[Obsolete]
 		public void Decrease(int newDepth)
 		{
 			var currentDepth = Depth;
@@ -434,7 +431,6 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The old quotes will be removed from the book.
 		/// </remarks>
-		[Obsolete]
 		public MarketDepth Update(IEnumerable<Quote> quotes, DateTimeOffset lastChangeTime = default)
 		{
 			if (quotes == null)
@@ -465,7 +461,6 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The old quotes will be removed from the book.
 		/// </remarks>
-		[Obsolete]
 		public MarketDepth Update(IEnumerable<Quote> bids, IEnumerable<Quote> asks, bool isSorted = false, DateTimeOffset lastChangeTime = default)
 		{
 			if (bids == null)
@@ -502,7 +497,6 @@ namespace StockSharp.BusinessEntities
 		/// <param name="bids">Sorted bids.</param>
 		/// <param name="asks">Sorted asks.</param>
 		/// <param name="lastChangeTime">Change time.</param>
-		[Obsolete]
 		public void Update(Quote[] bids, Quote[] asks, DateTimeOffset lastChangeTime)
 		{
 			//_bidsCache = null;
@@ -519,7 +513,6 @@ namespace StockSharp.BusinessEntities
 		/// To refresh the quote. If a quote with the same price is already in the order book, it is updated as passed. Otherwise, it automatically rebuilds the order book.
 		/// </summary>
 		/// <param name="quote">The new quote.</param>
-		[Obsolete]
 		public void UpdateQuote(Quote quote)
 		{
 			SetQuote(quote, false);
@@ -530,7 +523,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="price">Buy price.</param>
 		/// <param name="volume">Buy volume.</param>
-		[Obsolete]
 		public void AddBid(decimal price, decimal volume)
 		{
 			AddQuote(new Quote
@@ -547,7 +539,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="price">Sell price.</param>
 		/// <param name="volume">Sell volume.</param>
-		[Obsolete]
 		public void AddAsk(decimal price, decimal volume)
 		{
 			AddQuote(new Quote
@@ -563,7 +554,6 @@ namespace StockSharp.BusinessEntities
 		/// To add the quote. If a quote with the same price is already in the order book, they are combined into the <see cref="AggregatedQuote"/>.
 		/// </summary>
 		/// <param name="quote">The new quote.</param>
-		[Obsolete]
 		public void AddQuote(Quote quote)
 		{
 			SetQuote(quote, true);
@@ -698,7 +688,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="quote">The quote to remove.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
-		[Obsolete]
 		public void Remove(Quote quote, DateTimeOffset lastChangeTime = default)
 		{
 			if (quote == null)
@@ -713,7 +702,6 @@ namespace StockSharp.BusinessEntities
 		/// <param name="price">Remove the quote for the price.</param>
 		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
-		[Obsolete]
 		public void Remove(decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
 			var dir = GetDirection(price);
@@ -731,7 +719,6 @@ namespace StockSharp.BusinessEntities
 		/// <param name="price">Remove the quote for the price.</param>
 		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
 		/// <param name="lastChangeTime">Order book change time.</param>
-		[Obsolete]
 		public void Remove(Sides direction, decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
 			if (price <= 0)
@@ -950,7 +937,6 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Copy.</returns>
 		public override MarketDepth Clone()
 		{
-#pragma warning disable CS0612 // Type or member is obsolete
 			var clone = new MarketDepth(Security)
 			{
 				//MaxDepth = MaxDepth,
@@ -963,7 +949,6 @@ namespace StockSharp.BusinessEntities
 			clone.LocalTime = LocalTime;
 
 			return clone;
-#pragma warning restore CS0612 // Type or member is obsolete
 		}
 
 		/// <inheritdoc />
