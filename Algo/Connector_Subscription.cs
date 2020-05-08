@@ -59,7 +59,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var subscription = _subscriptionManager.TryFindSubscription(0, message.ToDataType(), security);
+			var subscription = _subscriptionManager.TryFindSubscription(0, message.DataType2, security);
 
 			if (subscription != null)
 				UnSubscribe(subscription);

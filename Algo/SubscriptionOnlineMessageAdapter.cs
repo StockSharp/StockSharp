@@ -219,7 +219,7 @@
 
 		private bool ProcessInMarketDataMessage(MarketDataMessage message)
 		{
-			var dataType = message.ToDataType();
+			var dataType = message.DataType2;
 			var secId = GetSecurityId(dataType, message.SecurityId);
 
 			return ProcessInSubscriptionMessage(message, dataType, secId);

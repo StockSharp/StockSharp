@@ -1095,7 +1095,7 @@ namespace StockSharp.Algo
 				{
 					var isCandles = mdMsg.DataType2.IsCandles;
 
-					if (a.IsMarketDataTypeSupported(mdMsg.ToDataType()) && (!isCandles || a.IsCandlesSupported(mdMsg)))
+					if (a.IsMarketDataTypeSupported(mdMsg.DataType2) && (!isCandles || a.IsCandlesSupported(mdMsg)))
 						return true;
 					else
 					{

@@ -254,7 +254,7 @@
 
 						if (from != null || to != null)
 						{
-							var step = InnerAdapter.GetHistoryStepSize(mdMsg.ToDataType(), out var iterationInterval);
+							var step = InnerAdapter.GetHistoryStepSize(mdMsg.DataType2, out var iterationInterval);
 
 							// adapter do not provide historical request
 							if (step == TimeSpan.Zero)

@@ -52,7 +52,7 @@
 					
 				if (message.DataType2 == DataType.MarketDepth)
 				{
-					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
+					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
 					{
 						var secId = GetSecurityId(message.SecurityId);
 
@@ -71,7 +71,7 @@
 				}
 				else if (message.DataType2 == DataType.Ticks)
 				{
-					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.ToDataType()))
+					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
 					{
 						var secId = GetSecurityId(message.SecurityId);
 

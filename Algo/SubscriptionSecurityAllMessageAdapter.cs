@@ -79,7 +79,7 @@
 
 					if (mdMsg.IsSubscribe)
 					{
-						var secId = IsSecurityRequired(mdMsg.ToDataType()) ? mdMsg.SecurityId : default;
+						var secId = IsSecurityRequired(mdMsg.DataType2) ? mdMsg.SecurityId : default;
 
 						var transId = mdMsg.TransactionId;
 						
