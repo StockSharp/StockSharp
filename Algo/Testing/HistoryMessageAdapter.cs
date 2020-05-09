@@ -508,7 +508,6 @@ namespace StockSharp.Algo.Testing
 			}
 			else if (dataType.IsCandles)
 			{
-
 				if (isSubscribe)
 				{
 					if (_generators.ContainsKey(Tuple.Create(securityId, DataType.Ticks)))
@@ -535,6 +534,9 @@ namespace StockSharp.Algo.Testing
 			}
 
 			SendSubscriptionReply(transId, error);
+
+			if (error == null)
+				SendSubscriptionOnline(transId);
 		}
 
 		/// <summary>
