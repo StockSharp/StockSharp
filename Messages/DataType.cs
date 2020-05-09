@@ -254,6 +254,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		public bool IsMarketData =>
 			IsSecurityRequired	||
+			this == News		||
 			this == Board		||
 			this == TimeFrames;
 
@@ -264,7 +265,6 @@ namespace StockSharp.Messages
 			IsCandles			||
 			this == MarketDepth ||
 			this == Level1		||
-			this == News		||
 			this == Securities	||
 			this == Ticks		||
 			this == OrderLog;
