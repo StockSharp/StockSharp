@@ -9,6 +9,7 @@
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Security ALL subscription counter adapter.
@@ -40,7 +41,7 @@
 
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly Dictionary<long, long> _pendingBacks = new Dictionary<long, long>();
+		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _allChilds = new Dictionary<long, RefPair<long, SubscriptionStates>>();
 		private readonly Dictionary<long, ParentSubscription> _map = new Dictionary<long, ParentSubscription>();
 		
 		/// <summary>
@@ -57,12 +58,9 @@
 			lock (_sync)
 			{
 				_map.Clear();
-				_pendingBacks.Clear();
+				_allChilds.Clear();
 			}
 		}
-
-		private const long _error = -1;
-		private const long _finished = -2;
 
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
@@ -79,49 +77,61 @@
 
 					if (mdMsg.IsSubscribe)
 					{
-						var secId = IsSecurityRequired(mdMsg.DataType2) ? mdMsg.SecurityId : default;
-
 						var transId = mdMsg.TransactionId;
 						
-						IEnumerable<Message> suspended = null;
+						Message[] suspended = null;
 
 						lock (_sync)
 						{
-							if (_pendingBacks.TryGetAndRemove(transId, out var parentId))
+							if (_allChilds.TryGetValue(transId, out var tuple))
 							{
-								// parent subscription was deleted early
-								if (parentId == _error)
+								if (tuple.Second != SubscriptionStates.Stopped)
 								{
-									RaiseNewOutMessage(new SubscriptionResponseMessage
+									if (tuple.Second == SubscriptionStates.Finished)
 									{
-										OriginalTransactionId = transId,
-										Error = new InvalidOperationException(),
-									});
+										RaiseNewOutMessage(new SubscriptionFinishedMessage
+										{
+											OriginalTransactionId = transId,
+										});
+
+										return true;
+									}
+									else
+									{
+										RaiseNewOutMessage(new SubscriptionResponseMessage
+										{
+											OriginalTransactionId = transId,
+											Error = new InvalidOperationException(LocalizedStrings.SubscriptionInvalidState.Put(transId, tuple.Second)),
+										});
+									}
 
 									return true;
 								}
-								else if (parentId == _finished)
-								{
-									RaiseNewOutMessage(new SubscriptionFinishedMessage
-									{
-										OriginalTransactionId = transId,
-									});
 
-									return true;
-								}
-
-								var child = _map[parentId].Child[mdMsg.SecurityId];
+								var child = _map[tuple.First].Child[mdMsg.SecurityId];
 								child.State = SubscriptionStates.Active;
 								suspended = child.Suspended.CopyAndClear();
 
 								this.AddDebugLog("New ALL map (active): {0}/{1} TrId={2}", child.Origin.SecurityId, child.Origin.DataType2, mdMsg.TransactionId);
 							}
-							else if (secId == default)
-								_map.Add(transId, new ParentSubscription(mdMsg.TypedClone()));
+							else
+							{
+								if (!IsSecurityRequired(mdMsg.DataType2) || mdMsg.SecurityId == default)
+								{
+									_map.Add(transId, new ParentSubscription(mdMsg.TypedClone()));
+
+									// do not specify security cause adapter doesn't require it
+									mdMsg.SecurityId = default;
+								}
+							}
 						}
 
 						if (suspended != null)
 						{
+							RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
+
+							this.AddDebugLog("Flush {0} suspended: {1}/{2}/{3}.", suspended.Length, mdMsg.SecurityId, mdMsg.DataType, mdMsg.TransactionId);
+
 							foreach (var msg in suspended)
 								RaiseNewOutMessage(msg);
 
@@ -130,16 +140,35 @@
 					}
 					else
 					{
-						long[] childIds;
+						var childIds = ArrayHelper.Empty<long>();
 
 						lock (_sync)
 						{
-							var tuple = _map.TryGetAndRemove(mdMsg.OriginalTransactionId);
+							if (_allChilds.TryGetAndRemove(mdMsg.OriginalTransactionId, out var tuple))
+							{
+								var childs = _map[tuple.First].Child;
 
-							if (tuple == null)
-								break;
+								var childSubscription = childs.FirstOrDefault(p => p.Value.Origin.TransactionId == mdMsg.OriginalTransactionId);
+								childs.Remove(childSubscription.Key);
 
-							childIds = tuple.Child.Values.Select(s => s.Origin.TransactionId).ToArray();
+								Exception error = null;
+
+								if (childSubscription.Value == null)
+									error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId));
+								else if (!tuple.Second.IsActive())
+									error = new InvalidOperationException(LocalizedStrings.SubscriptionInvalidState.Put(mdMsg.OriginalTransactionId, tuple.Second));
+
+								RaiseNewOutMessage(new SubscriptionResponseMessage
+								{
+									OriginalTransactionId = mdMsg.OriginalTransactionId,
+									Error = error,
+								});
+
+								return true;
+							}
+
+							if (_map.TryGetAndRemove(mdMsg.OriginalTransactionId, out var tuple2))
+								childIds = tuple2.Child.Values.Select(s => s.Origin.TransactionId).ToArray();
 						}
 
 						foreach (var id in childIds)
@@ -184,8 +213,8 @@
 								{
 									var childId = child.Origin.TransactionId;
 
-									if (_pendingBacks.ContainsKey(childId))
-										_pendingBacks[childId] = _error;
+									if (_allChilds.ContainsKey(childId))
+										_allChilds[childId].Second = SubscriptionStates.Error;
 									else
 										extra.Add(new SubscriptionResponseMessage { OriginalTransactionId = childId, Error = responseMsg.Error });
 								}
@@ -209,8 +238,8 @@
 							{
 								var childId = child.Origin.TransactionId;
 
-								if (_pendingBacks.ContainsKey(childId))
-									_pendingBacks[childId] = _finished;
+								if (_allChilds.ContainsKey(childId))
+									_allChilds[childId].Second = SubscriptionStates.Finished;
 								else
 									extra.Add(new SubscriptionFinishedMessage { OriginalTransactionId = childId });
 							}
@@ -231,6 +260,10 @@
 							{
 								if (_map.TryGetValue(parentId, out var parent))
 								{
+									// parent subscription has security id (not null)
+									if (parent.Origin.SecurityId == secIdMsg.SecurityId)
+										return true;
+
 									if (!parent.Child.TryGetValue(secIdMsg.SecurityId, out var child))
 									{
 										allMsg = new SubscriptionSecurityAllMessage();
@@ -245,7 +278,7 @@
 										parent.Child.Add(secIdMsg.SecurityId, child);
 
 										allMsg.LoopBack(this, MessageBackModes.Chain);
-										_pendingBacks.Add(allMsg.TransactionId, parentId);
+										_allChilds.Add(allMsg.TransactionId, RefTuple.Create(parentId, SubscriptionStates.Stopped));
 
 										this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
 									}
@@ -268,13 +301,10 @@
 							return false;
 						}
 
-						if (!CheckSubscription(subscrMsg.OriginalTransactionId))
+						foreach (var id in subscrMsg.GetSubscriptionIds())
 						{
-							foreach (var id in subscrMsg.GetSubscriptionIds())
-							{
-								if (CheckSubscription(id))
-									break;
-							}
+							if (CheckSubscription(id))
+								break;
 						}
 
 						if (allMsg != null)

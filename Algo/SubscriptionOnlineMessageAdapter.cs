@@ -54,7 +54,7 @@
 					return ProcessReset(message);
 
 				case MessageTypes.MarketData:
-					return ProcessInMarketDataMessage((MarketDataMessage)message);
+					return ProcessInSubscriptionMessage((MarketDataMessage)message);
 
 				case MessageTypes.Portfolio:
 				case MessageTypes.SecurityLookup:
@@ -176,7 +176,7 @@
 								var dataType = message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType);
 								var secId = dataType.IsLookup()
 									? default
-									: GetSecurityId(dataType, (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
+									: (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default;
 
 								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info) && !_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, default(SecurityId)), out info))
 									break;
@@ -216,17 +216,6 @@
 
 			return ProcessInSubscriptionMessage(message);
 		}
-
-		private bool ProcessInMarketDataMessage(MarketDataMessage message)
-		{
-			var dataType = message.DataType2;
-			var secId = GetSecurityId(dataType, message.SecurityId);
-
-			return ProcessInSubscriptionMessage(message, dataType, secId);
-		}
-
-		private SecurityId GetSecurityId(DataType dataType, SecurityId securityId)
-			=> IsSecurityRequired(dataType) ? securityId : default;
 
 		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
 		{

@@ -14,6 +14,7 @@
 	public class OrderLogMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly SynchronizedDictionary<long, RefTriple<bool, IOrderLogMarketDepthBuilder, SyncObject>> _subscriptionIds = new SynchronizedDictionary<long, RefTriple<bool, IOrderLogMarketDepthBuilder, SyncObject>>();
+		private readonly SynchronizedSet<long> _warningSubscriptionIds = new SynchronizedSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
@@ -31,6 +32,7 @@
 			{
 				case MessageTypes.Reset:
 					_subscriptionIds.Clear();
+					_warningSubscriptionIds.Clear();
 					break;
 
 				case MessageTypes.MarketData:
@@ -54,33 +56,29 @@
 				{
 					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
 					{
-						var secId = GetSecurityId(message.SecurityId);
-
 						IOrderLogMarketDepthBuilder builder = null;
 
-						if (InnerAdapter.IsSecurityRequired(DataType.OrderLog))
-							builder = message.DepthBuilder ?? InnerAdapter.CreateOrderLogMarketDepthBuilder(secId);
+						if (message.SecurityId != default)
+							builder = message.DepthBuilder ?? InnerAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId);
 
 						_subscriptionIds.Add(message.TransactionId, RefTuple.Create(true, builder, new SyncObject()));
 
 						message = message.TypedClone();
 						message.DataType2 = DataType.OrderLog;
 
-						this.AddInfoLog("OL->MD subscribed {0}/{1}.", secId, message.TransactionId);
+						this.AddInfoLog("OL->MD subscribed {0}/{1}.", message.SecurityId, message.TransactionId);
 					}
 				}
 				else if (message.DataType2 == DataType.Ticks)
 				{
 					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
 					{
-						var secId = GetSecurityId(message.SecurityId);
-
 						_subscriptionIds.Add(message.TransactionId, RefTuple.Create(false, (IOrderLogMarketDepthBuilder)null, new SyncObject()));
 
 						message = message.TypedClone();
 						message.DataType2 = DataType.OrderLog;
 
-						this.AddInfoLog("OL->TICK subscribed {0}/{1}.", secId, message.TransactionId);
+						this.AddInfoLog("OL->TICK subscribed {0}/{1}.", message.SecurityId, message.TransactionId);
 					}
 				}
 			}
@@ -129,13 +127,6 @@
 			}
 		}
 
-		private SecurityId GetSecurityId(SecurityId securityId)
-		{
-			return InnerAdapter.IsSecurityRequired(DataType.OrderLog)
-				? securityId
-				: default;
-		}
-
 		private void ProcessBuilders(ExecutionMessage execMsg)
 		{
 			if (execMsg.IsSystem == false)
@@ -150,20 +141,19 @@
 					continue;
 				}
 
-				var secId = GetSecurityId(execMsg.SecurityId);
-
 				if (tuple.First)
 				{
 					var sync = tuple.Third;
 
-					IOrderLogMarketDepthBuilder builder;
+					IOrderLogMarketDepthBuilder builder = tuple.Second;
 
-					lock (sync)
+					if (builder == null)
 					{
-						builder = tuple.Second;
+						if (_warningSubscriptionIds.TryAdd(subscriptionId))
+							this.AddWarningLog("Subscription {0} for ALL security.", subscriptionId);
 
-						if (builder == null)
-							tuple.Second = builder = new OrderLogMarketDepthBuilder(execMsg.SecurityId);
+						//tuple.Second = builder = new OrderLogMarketDepthBuilder(execMsg.SecurityId);
+						continue;
 					}
 
 					try
@@ -190,7 +180,7 @@
 				}
 				else
 				{
-					this.AddDebugLog("OL->TICK processing {0}.", secId);
+					this.AddDebugLog("OL->TICK processing {0}.", execMsg.SecurityId);
 					base.OnInnerAdapterNewOutMessage(execMsg.ToTick());
 				}
 			}
