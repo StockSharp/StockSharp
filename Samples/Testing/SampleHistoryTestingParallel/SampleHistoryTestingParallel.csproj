@@ -18,7 +18,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.SampleHistoryData" Version="$(SampleHistoryDataVersion)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />

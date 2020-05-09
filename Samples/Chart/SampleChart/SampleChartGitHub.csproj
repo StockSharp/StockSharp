@@ -12,10 +12,10 @@
     <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.SampleHistoryData" Version="$(SampleHistoryDataVersion)" />
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />

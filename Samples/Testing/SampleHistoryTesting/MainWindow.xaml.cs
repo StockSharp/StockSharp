@@ -79,24 +79,12 @@ namespace SampleHistoryTesting
 
 			HistoryPath.Folder = Paths.HistoryDataPath;
 
-			if (LocalizedStrings.ActiveLanguage == Languages.Russian)
-			{
-				SecId.Text = "RIZ2@FORTS";
+			SecId.Text = "SBER@TQBR";
 
-				From.EditValue = new DateTime(2012, 10, 1);
-				To.EditValue = new DateTime(2012, 10, 25);
+			From.EditValue = new DateTime(2020, 4, 1);
+			To.EditValue = new DateTime(2020, 4, 30);
 
-				TimeFrame.SelectedIndex = 1;
-			}
-			else
-			{
-				SecId.Text = "@ES#@CMEMINI";
-
-				From.EditValue = new DateTime(2015, 8, 1);
-				To.EditValue = new DateTime(2015, 8, 31);
-
-				TimeFrame.SelectedIndex = 0;
-			}
+			TimeFrame.SelectedIndex = 0;
 
 			_progressBars.AddRange(new[]
 			{
@@ -380,9 +368,9 @@ namespace SampleHistoryTesting
 					SecurityId = secId,
 					ServerTime = startTime,
 				}
-				.TryAdd(Level1Fields.PriceStep, secCode == "RIZ2" ? 10m : 0.05m)
-				.TryAdd(Level1Fields.StepPrice, 6m)
-				.TryAdd(Level1Fields.MinPrice, 10m)
+				.TryAdd(Level1Fields.PriceStep, 0.01m)
+				.TryAdd(Level1Fields.StepPrice, 0.01m)
+				.TryAdd(Level1Fields.MinPrice, 0.01m)
 				.TryAdd(Level1Fields.MaxPrice, 1000000m)
 				.TryAdd(Level1Fields.MarginBuy, 10000m)
 				.TryAdd(Level1Fields.MarginSell, 10000m);
