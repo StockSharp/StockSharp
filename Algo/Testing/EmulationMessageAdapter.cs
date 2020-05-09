@@ -182,7 +182,9 @@ namespace StockSharp.Algo.Testing
 				{
 					var transId = ((ISubscriptionMessage)message).TransactionId;
 					_subscriptionIds.Add(transId);
-					_realSubscribeIds.Add(transId);
+
+					if (!OwnInnerAdapter)
+						_realSubscribeIds.Add(transId);
 
 					SendToEmulator(message);
 					return base.OnSendInMessage(message);
@@ -229,8 +231,9 @@ namespace StockSharp.Algo.Testing
 						if (_realSubscribeIds.Contains(originId.OriginalTransactionId))
 							base.OnInnerAdapterNewOutMessage(message);
 					}
-					else
-						base.OnInnerAdapterNewOutMessage(message);
+					// responses for own adapter will be send via MarketEmulator
+					//else
+					//	base.OnInnerAdapterNewOutMessage(message);
 
 					break;
 				}
@@ -345,18 +348,6 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Disconnect:
 				{
 					if (OwnInnerAdapter)
-						return;
-
-					break;
-				}
-
-				case MessageTypes.SubscriptionOnline:
-				case MessageTypes.SubscriptionFinished:
-				case MessageTypes.SubscriptionResponse:
-				{
-					var originId = (IOriginalTransactionIdMessage)message;
-					
-					if (_realSubscribeIds.Contains(originId.OriginalTransactionId))
 						return;
 
 					break;
