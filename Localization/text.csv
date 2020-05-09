@@ -4427,6 +4427,7 @@ SecuritiesNotFound;Securities '{0}' not found.;Инструменты '{0}' не
 CyclicDependency;Cyclic dependency of '{0}'.;Циклическая зависимость '{0}'.
 SubscriptionNonExist;Subscription '{0}' does not exist.;Подписка '{0}' не существует.
 SubscriptionOnline;Subscription '{0}' for '{1}' is online.;Подписка '{0}' для '{1}' перешла в онлайн.
+SubscriptionInvalidState;Subscription {0} has state {1}.;Подписка {0} имеет состояние {1}.
 CandleDownloadInterval;Sleep interval while batch candles downloading.;Интервал скачивания данных.
 DownloadSecurities;Download securities;Скачать инструменты
 NotSupportSecurityDownload;The source does not support automatically instruments downloading. Manually create an instrument?;Источник не предоставляет возможность автоматической загрузки инструментов. Создать инструмент напрямую?

@@ -43878,6 +43878,16 @@ namespace StockSharp.Localization
 		public static string SubscriptionNonExist => GetString(SubscriptionNonExistKey);
 
 		/// <summary>
+		/// Subscription {0} has state {1}.
+		/// </summary>
+		public const string SubscriptionInvalidStateKey = nameof(SubscriptionInvalidState);
+
+		/// <summary>
+		/// Subscription {0} has state {1}.
+		/// </summary>
+		public static string SubscriptionInvalidState => GetString(SubscriptionInvalidStateKey);
+
+		/// <summary>
 		/// Subscription '{0}' for '{1}' is online.
 		/// </summary>
 		public const string SubscriptionOnlineKey = nameof(SubscriptionOnline);

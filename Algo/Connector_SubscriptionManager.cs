@@ -358,7 +358,7 @@ namespace StockSharp.Algo
 
 				if (!subscription.State.IsActive())
 				{
-					_connector.AddWarningLog("Subscription {0} has state {1}. Cannot unsubscribe.", subscription.TransactionId, subscription.State);
+					_connector.AddWarningLog(LocalizedStrings.SubscriptionInvalidState, subscription.TransactionId, subscription.State);
 					return;
 				}
 
