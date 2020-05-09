@@ -249,6 +249,17 @@ namespace StockSharp.Algo.Candles
 			Order = 23)]
 		public bool IsFinished { get; set; }
 
+		/// <summary>
+		/// Try fill gaps.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.GapsKey,
+			Description = LocalizedStrings.FillGapsKey,
+			GroupName = LocalizedStrings.BuildKey,
+			Order = 24)]
+		public bool FillGaps { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -292,6 +303,7 @@ namespace StockSharp.Algo.Candles
 			IsRegularTradingHours = storage.GetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 			Count = storage.GetValue(nameof(Count), Count);
 			IsFinished = storage.GetValue(nameof(IsFinished), IsFinished);
+			FillGaps = storage.GetValue(nameof(FillGaps), FillGaps);
 		}
 
 		/// <summary>
@@ -327,6 +339,7 @@ namespace StockSharp.Algo.Candles
 			storage.SetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 			storage.SetValue(nameof(Count), Count);
 			storage.SetValue(nameof(IsFinished), IsFinished);
+			storage.SetValue(nameof(FillGaps), FillGaps);
 		}
 	}
 }

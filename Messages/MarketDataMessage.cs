@@ -300,6 +300,12 @@ namespace StockSharp.Messages
 		/// Order log to market depth builder.
 		/// </summary>
 		public IOrderLogMarketDepthBuilder DepthBuilder { get; set; }
+		
+		/// <summary>
+		/// Try fill gaps.
+		/// </summary>
+		[DataMember]
+		public bool FillGaps { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
@@ -355,6 +361,7 @@ namespace StockSharp.Messages
 			destination.BoardCode = BoardCode;
 			destination.RefreshSpeed = RefreshSpeed;
 			destination.DepthBuilder = DepthBuilder;
+			destination.FillGaps = FillGaps;
 		}
 
 		/// <inheritdoc />
@@ -400,6 +407,9 @@ namespace StockSharp.Messages
 
 			if (RefreshSpeed != null)
 				str += $",Speed={RefreshSpeed}";
+
+			if (FillGaps)
+				str += $",Gaps={FillGaps}";
 
 			return str;
 		}

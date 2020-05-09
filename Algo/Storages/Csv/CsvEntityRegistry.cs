@@ -950,6 +950,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.BuildFrom.To<string>(),
 					data.BuildField.To<string>(),
 					data.IsFinished.To<string>(),
+					data.FillGaps.To<string>(),
 				});
 			}
 
@@ -991,6 +992,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					message.IsFinished = reader.ReadBool();
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					message.FillGaps = reader.ReadBool();
 
 				return message;
 			}

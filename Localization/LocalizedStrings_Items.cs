@@ -51388,6 +51388,16 @@ namespace StockSharp.Localization
 		public static string GapsDesc => GetString(GapsDescKey);
 
 		/// <summary>
+		/// Try fill gaps.
+		/// </summary>
+		public const string FillGapsKey = nameof(FillGaps);
+
+		/// <summary>
+		/// Try fill gaps.
+		/// </summary>
+		public static string FillGaps => GetString(FillGapsKey);
+
+		/// <summary>
 		/// Heikin Ashi
 		/// </summary>
 		public const string HeikinAshiKey = nameof(HeikinAshi);
