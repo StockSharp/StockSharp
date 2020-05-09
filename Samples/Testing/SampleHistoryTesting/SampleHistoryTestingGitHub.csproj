@@ -17,7 +17,7 @@
     <PackageReference Include="StockSharp.Yahoo" Version="5.*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.SampleHistoryData" Version="$(SampleHistoryDataVersion)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\stocksharp.ico">
@@ -30,5 +30,6 @@
     <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
     <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
     <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
+    <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj" />
   </ItemGroup>
 </Project>

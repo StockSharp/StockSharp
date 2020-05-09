@@ -37,7 +37,7 @@
 		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
 		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
 
-		private const decimal _priceStep = 10m;
+		private const decimal _priceStep = 0.01m;
 		private const int _timeframe = 1;
 
 		private bool NeedToDelay => DelayCtrl.IsChecked == true;
@@ -46,9 +46,9 @@
 
 		private readonly Security _security = new Security
 		{
-			Id = "RIZ2@FORTS",
+			Id = "SBER@TQBR",
 			PriceStep = _priceStep,
-			Board = ExchangeBoard.Forts
+			Board = ExchangeBoard.Micex
 		};
 
 		private readonly PortfolioDataSource _portfolios = new PortfolioDataSource();
@@ -219,9 +219,6 @@
 
 				_candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;
 			}
-
-			if (time < _candle.OpenTime)
-				throw new InvalidOperationException("invalid time");
 
 			if (price > _candle.HighPrice)
 				_candle.HighPrice = price;

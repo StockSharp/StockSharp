@@ -15,7 +15,7 @@
 
 			while (dir != null)
 			{
-				var hdRoot = FindHistoryDataSubfolder(new DirectoryInfo(Path.Combine(dir.FullName, "packages", "stocksharp.samplehistorydata")));
+				var hdRoot = FindHistoryDataSubfolder(new DirectoryInfo(Path.Combine(dir.FullName, "packages", "stocksharp.samples.historydata")));
 				if (hdRoot != null)
 				{
 					DataPath = hdRoot.FullName;
