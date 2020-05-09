@@ -362,7 +362,7 @@ namespace StockSharp.Algo
 					return;
 				}
 
-				var unsubscribe = subscription.DataType.ToSubscriptionMessage();
+				var unsubscribe = subscription.SubscriptionMessage.TypedClone();
 
 				unsubscribe.TransactionId = _connector.TransactionIdGenerator.GetNextId();
 				unsubscribe.OriginalTransactionId = subscription.TransactionId;
