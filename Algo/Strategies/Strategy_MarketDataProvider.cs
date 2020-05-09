@@ -254,15 +254,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public Subscription RegisterFilteredMarketDepth(Security security)
+		public Subscription SubscribeFilteredMarketDepth(Security security)
 		{
-			return MarketDataProvider.RegisterFilteredMarketDepth(security);
-		}
-
-		/// <inheritdoc />
-		public void UnRegisterFilteredMarketDepth(Security security)
-		{
-			MarketDataProvider.UnRegisterFilteredMarketDepth(security);
+			return MarketDataProvider.SubscribeFilteredMarketDepth(security);
 		}
 
 		/// <inheritdoc />

@@ -43,13 +43,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		/// <returns>Subscription.</returns>
-		Subscription RegisterFilteredMarketDepth(Security security);
-
-		/// <summary>
-		/// To stop getting filtered quotes by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
-		void UnRegisterFilteredMarketDepth(Security security);
+		Subscription SubscribeFilteredMarketDepth(Security security);
 
 		/// <summary>
 		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IMarketDataProvider.MarketDepthChanged"/>.

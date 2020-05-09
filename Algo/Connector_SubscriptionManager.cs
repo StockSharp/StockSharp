@@ -532,16 +532,6 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public Subscription TryFindFilteredMarketDepth(Security security)
-			{
-				var subscription = Subscriptions.FirstOrDefault(s => s.SubscriptionMessage is FilteredMarketDepthMessage && s.Security == security);
-
-				if (subscription == null)
-					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, $"Filtered({security?.Id})");
-
-				return subscription;
-			}
-
 			public Subscription TryGetSubscription(Portfolio portfolio)
 			{
 				if (portfolio == null)

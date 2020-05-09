@@ -7,7 +7,6 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -162,15 +161,12 @@ namespace StockSharp.Algo
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType2.MessageType != typeof(QuoteChangeMessage))
-						break;
-
-					var transId = mdMsg.TransactionId;
-
 					if (mdMsg.IsSubscribe)
 					{
 						if (!(mdMsg is FilteredMarketDepthMessage filteredMsg))
 							break;
+
+						var transId = mdMsg.TransactionId;
 
 						var data = mdMsg.GetArg<Tuple<QuoteChangeMessage, ExecutionMessage[]>>();
 
@@ -293,13 +289,12 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Execution:
 				{
-					if (_infosBySecId.Count == 0)
+					if (_infosBySecId.Count == 0 || _infos.Count == 0)
 						break;
 
 					var execMsg = (ExecutionMessage)message;
 
 					if	(
-						_infos.Count == 0 ||
 						execMsg.ExecutionType != ExecutionTypes.Transaction ||
 						!execMsg.HasOrderInfo() ||
 						execMsg.OrderPrice == 0 || // ignore market orders

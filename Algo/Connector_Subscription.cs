@@ -94,7 +94,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Subscription RegisterFilteredMarketDepth(Security security)
+		public Subscription SubscribeFilteredMarketDepth(Security security)
 		{
 			var quotes = GetMarketDepth(security).ToMessage();
 			var executions = _entityCache
@@ -107,17 +107,6 @@ namespace StockSharp.Algo
 				DataType2 = DataType.Create(typeof(QuoteChangeMessage), Tuple.Create(quotes, executions)),
 				IsSubscribe = true,
 			});
-		}
-
-		/// <inheritdoc />
-		public void UnRegisterFilteredMarketDepth(Security security)
-		{
-			var subscription = _subscriptionManager.TryFindFilteredMarketDepth(security);
-
-			if (subscription == null)
-				return;
-
-			UnSubscribe(subscription);
 		}
 
 		/// <inheritdoc />
