@@ -1061,7 +1061,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
 
-						var range = GetRange(storage, subscription.From, subscription.To, TimeSpan.Zero);
+						var range = GetRange(storage, subscription, TimeSpan.Zero);
 
 						if (range != null)
 						{
@@ -1074,7 +1074,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var storage = GetStorage<QuoteChangeMessage>(secId, null);
 
-						var range = GetRange(storage, subscription.From, subscription.To, TimeSpan.Zero);
+						var range = GetRange(storage, subscription, TimeSpan.Zero);
 
 						if (range != null)
 						{
@@ -1098,7 +1098,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
 
-						var range = GetRange(storage, subscription.From, subscription.To, TimeSpan.Zero);
+						var range = GetRange(storage, subscription, TimeSpan.Zero);
 
 						if (range != null)
 						{
@@ -1111,7 +1111,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var storage = GetStorage<Level1ChangeMessage>(secId, null);
 
-						var range = GetRange(storage, subscription.From, subscription.To, TimeSpan.Zero);
+						var range = GetRange(storage, subscription, TimeSpan.Zero);
 
 						if (range != null)
 						{
@@ -1132,7 +1132,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var storage = GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
 
-						var range = GetRange(storage, subscription.From, subscription.To, TimeSpan.Zero);
+						var range = GetRange(storage, subscription, TimeSpan.Zero);
 
 						if (range != null)
 						{
@@ -1145,7 +1145,7 @@ namespace StockSharp.Algo.Storages
 					{
 						var storage = GetStorage<Level1ChangeMessage>(secId, null);
 
-						var range = GetRange(storage, subscription.From, subscription.To, TimeSpan.Zero);
+						var range = GetRange(storage, subscription, TimeSpan.Zero);
 
 						if (range != null)
 						{
@@ -1191,12 +1191,12 @@ namespace StockSharp.Algo.Storages
 						else
 							throw new ArgumentOutOfRangeException(nameof(subscription), buildFrom, LocalizedStrings.Str1219);
 
-						var range = GetRange(storage, subscription.From, subscription.To, TimeSpan.FromDays(2));
+						var range = GetRange(storage, subscription, TimeSpan.FromDays(2));
 
 						if (range == null && buildFrom == null)
 						{
 							storage = GetStorage<Level1ChangeMessage>(secId, null);
-							range = GetRange(storage, subscription.From, subscription.To, TimeSpan.FromDays(2));
+							range = GetRange(storage, subscription, TimeSpan.FromDays(2));
 
 							if (range != null)
 								buildFrom = DataType.Level1;
@@ -1287,7 +1287,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var storage = (IMarketDataStorage<CandleMessage>)settings.GetStorage(secId, subscription.DataType2.MessageType, subscription.GetArg());
 
-					var range = GetRange(storage, subscription.From, subscription.To, settings.DaysLoad);
+					var range = GetRange(storage, subscription, settings.DaysLoad);
 
 					if (range != null)
 					{
@@ -1300,15 +1300,19 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad)
+		private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription, TimeSpan daysLoad)
 		{
 			var last = storage.Dates.LastOr();
 
 			if (last == null)
 				return null;
 
+			var to = subscription.To;
+
 			if (to == null)
 				to = last.Value;
+
+			var from = subscription.From;
 
 			if (from == null)
 				from = to.Value - daysLoad;
@@ -1319,7 +1323,7 @@ namespace StockSharp.Algo.Storages
 		private static DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, TimeSpan daysLoad, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null) 
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
-			var range = GetRange(storage, subscription.From, subscription.To, daysLoad);
+			var range = GetRange(storage, subscription, daysLoad);
 
 			if (range == null)
 				return null;
