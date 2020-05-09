@@ -283,7 +283,9 @@ namespace StockSharp.Algo
 						message = null;
 					}
 
-					base.OnInnerAdapterNewOutMessage(filtered);
+					if (filtered != null)
+						base.OnInnerAdapterNewOutMessage(filtered);
+
 					break;
 				}
 
