@@ -479,7 +479,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 										foreach (var bigCandle in candles)
 										{
-											bigCandle.OriginalTransactionId = series.Id;
+											bigCandle.SetSubscriptionIds(subscriptionId: series.Id);
 											bigCandle.Adapter = candleMsg.Adapter;
 											series.LastTime = bigCandle.CloseTime;
 											base.OnInnerAdapterNewOutMessage(bigCandle);
