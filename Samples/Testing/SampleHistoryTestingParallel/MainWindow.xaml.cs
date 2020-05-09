@@ -91,7 +91,7 @@ namespace SampleHistoryTestingParallel
 				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 			};
 
-			var timeFrame = TimeSpan.FromMinutes(5);
+			var timeFrame = TimeSpan.FromMinutes(1);
 
 			// create test security
 			var security = new Security
