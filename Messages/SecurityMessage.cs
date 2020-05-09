@@ -313,7 +313,6 @@ namespace StockSharp.Messages
 		{
 			base.CopyTo(destination);
 
-			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.SecurityId = SecurityId;
 			destination.Name = Name;
 			destination.ShortName = ShortName;
