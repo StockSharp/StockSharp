@@ -73,6 +73,9 @@
 				{
 					var mdMsg = (MarketDataMessage)message;
 
+					if (mdMsg.SecurityId == default)
+						break;
+
 					if (mdMsg.DataType2 == DataType.MarketDepth)
 					{
 						if (mdMsg.IsSubscribe)

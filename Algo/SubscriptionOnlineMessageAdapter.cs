@@ -54,8 +54,6 @@
 					return ProcessReset(message);
 
 				case MessageTypes.MarketData:
-					return ProcessInSubscriptionMessage((MarketDataMessage)message);
-
 				case MessageTypes.Portfolio:
 				case MessageTypes.SecurityLookup:
 				case MessageTypes.BoardLookup:
@@ -65,7 +63,14 @@
 					return ProcessInSubscriptionMessage((ISubscriptionMessage)message);
 
 				case MessageTypes.OrderStatus:
-					return ProcessOrderStatusMessage((OrderStatusMessage)message);
+				{
+					var statusMsg = (OrderStatusMessage)message;
+
+					if (statusMsg.HasOrderId())
+						return base.OnSendInMessage(message);
+
+					return ProcessInSubscriptionMessage(statusMsg);
+				}
 
 				default:
 					return base.OnSendInMessage(message);
@@ -209,27 +214,10 @@
 			return base.OnSendInMessage(message);
 		}
 
-		private bool ProcessOrderStatusMessage(OrderStatusMessage message)
-		{
-			if (message.HasOrderId())
-				return base.OnSendInMessage(message);
-
-			return ProcessInSubscriptionMessage(message);
-		}
-
 		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
-		{
-			return ProcessInSubscriptionMessage(message, message.ToDataType());
-		}
-
-		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message,
-			DataType dataType, SecurityId securityId = default)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
-
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
 
 			var transId = message.TransactionId;
 
@@ -244,7 +232,20 @@
 				{
 					if (message.To == null)
 					{
-						var key = Tuple.Create(dataType, securityId);
+						var dataType = message.ToDataType();
+						var secId = default(SecurityId);
+
+						if (message is ISecurityIdMessage secIdMsg)
+						{
+							secId = secIdMsg.SecurityId;
+
+							if (secId == default && IsSecurityRequired(dataType))
+								this.AddWarningLog("Subscription {0} required security id.", dataType);
+							else if (secId != default && !IsSecurityRequired(dataType))
+								this.AddWarningLog("Subscription {0} doesn't required security id.", dataType);
+						}
+
+						var key = Tuple.Create(dataType, secId);
 
 						if (!_subscriptionsByKey.TryGetValue(key, out var info))
 						{

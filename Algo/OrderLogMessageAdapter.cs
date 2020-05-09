@@ -14,7 +14,6 @@
 	public class OrderLogMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly SynchronizedDictionary<long, RefTriple<bool, IOrderLogMarketDepthBuilder, SyncObject>> _subscriptionIds = new SynchronizedDictionary<long, RefTriple<bool, IOrderLogMarketDepthBuilder, SyncObject>>();
-		private readonly SynchronizedSet<long> _warningSubscriptionIds = new SynchronizedSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.
@@ -32,7 +31,6 @@
 			{
 				case MessageTypes.Reset:
 					_subscriptionIds.Clear();
-					_warningSubscriptionIds.Clear();
 					break;
 
 				case MessageTypes.MarketData:
@@ -47,7 +45,7 @@
 		{
 			if (message.IsSubscribe)
 			{
-				if (!InnerAdapter.IsMarketDataTypeSupported(DataType.OrderLog))
+				if (message.SecurityId == default || !InnerAdapter.IsMarketDataTypeSupported(DataType.OrderLog))
 					return message;
 
 				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == DataType.OrderLog;
@@ -56,10 +54,7 @@
 				{
 					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
 					{
-						IOrderLogMarketDepthBuilder builder = null;
-
-						if (message.SecurityId != default)
-							builder = message.DepthBuilder ?? InnerAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId);
+						var builder = message.DepthBuilder ?? InnerAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId);
 
 						_subscriptionIds.Add(message.TransactionId, RefTuple.Create(true, builder, new SyncObject()));
 
@@ -146,15 +141,6 @@
 					var sync = tuple.Third;
 
 					IOrderLogMarketDepthBuilder builder = tuple.Second;
-
-					if (builder == null)
-					{
-						if (_warningSubscriptionIds.TryAdd(subscriptionId))
-							this.AddWarningLog("Subscription {0} for ALL security.", subscriptionId);
-
-						//tuple.Second = builder = new OrderLogMarketDepthBuilder(execMsg.SecurityId);
-						continue;
-					}
 
 					try
 					{

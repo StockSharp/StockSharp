@@ -16,33 +16,41 @@
 	/// </summary>
 	public class SubscriptionSecurityAllMessageAdapter : MessageAdapterWrapper
 	{
-		private class ChildSubscription
+		private abstract class BaseSubscription
 		{
-			public ChildSubscription(MarketDataMessage origin)
+			protected BaseSubscription(MarketDataMessage origin)
 			{
 				Origin = origin ?? throw new ArgumentNullException(nameof(origin));
 			}
 
 			public MarketDataMessage Origin { get; }
+		}
+
+		private class ChildSubscription : BaseSubscription
+		{
+			public ChildSubscription(MarketDataMessage origin)
+				: base(origin)
+			{
+			}
+
 			public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 			public IList<Message> Suspended { get; } = new List<Message>();
 		}
 
-		private class ParentSubscription
+		private class ParentSubscription : BaseSubscription
 		{
 			public ParentSubscription(MarketDataMessage origin)
+				: base(origin)
 			{
-				Origin = origin ?? throw new ArgumentNullException(nameof(origin));
 			}
 
-			public MarketDataMessage Origin { get; }
 			public IDictionary<SecurityId, ChildSubscription> Child { get; } = new Dictionary<SecurityId, ChildSubscription>();
 		}
 
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _allChilds = new Dictionary<long, RefPair<long, SubscriptionStates>>();
-		private readonly Dictionary<long, ParentSubscription> _map = new Dictionary<long, ParentSubscription>();
+		private readonly Dictionary<long, ParentSubscription> _parents = new Dictionary<long, ParentSubscription>();
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionSecurityAllMessageAdapter"/>.
@@ -57,7 +65,7 @@
 		{
 			lock (_sync)
 			{
-				_map.Clear();
+				_parents.Clear();
 				_allChilds.Clear();
 			}
 		}
@@ -108,7 +116,7 @@
 									return true;
 								}
 
-								var child = _map[tuple.First].Child[mdMsg.SecurityId];
+								var child = _parents[tuple.First].Child[mdMsg.SecurityId];
 								child.State = SubscriptionStates.Active;
 								suspended = child.Suspended.CopyAndClear();
 
@@ -118,7 +126,7 @@
 							{
 								if (!IsSecurityRequired(mdMsg.DataType2) || mdMsg.SecurityId == default)
 								{
-									_map.Add(transId, new ParentSubscription(mdMsg.TypedClone()));
+									_parents.Add(transId, new ParentSubscription(mdMsg.TypedClone()));
 
 									// do not specify security cause adapter doesn't require it
 									mdMsg.SecurityId = default;
@@ -146,7 +154,7 @@
 						{
 							if (_allChilds.TryGetAndRemove(mdMsg.OriginalTransactionId, out var tuple))
 							{
-								var childs = _map[tuple.First].Child;
+								var childs = _parents[tuple.First].Child;
 
 								var childSubscription = childs.FirstOrDefault(p => p.Value.Origin.TransactionId == mdMsg.OriginalTransactionId);
 								childs.Remove(childSubscription.Key);
@@ -167,7 +175,7 @@
 								return true;
 							}
 
-							if (_map.TryGetAndRemove(mdMsg.OriginalTransactionId, out var tuple2))
+							if (_parents.TryGetAndRemove(mdMsg.OriginalTransactionId, out var tuple2))
 								childIds = tuple2.Child.Values.Select(s => s.Origin.TransactionId).ToArray();
 						}
 
@@ -205,7 +213,7 @@
 					{
 						lock (_sync)
 						{
-							if (_map.TryGetAndRemove(responseMsg.OriginalTransactionId, out var parent))
+							if (_parents.TryGetAndRemove(responseMsg.OriginalTransactionId, out var parent))
 							{
 								extra = new List<Message>();
 
@@ -230,7 +238,7 @@
 
 					lock (_sync)
 					{
-						if (_map.TryGetAndRemove(finishMsg.OriginalTransactionId, out var parent))
+						if (_parents.TryGetAndRemove(finishMsg.OriginalTransactionId, out var parent))
 						{
 							extra = new List<Message>();
 
@@ -258,7 +266,7 @@
 						{
 							lock (_sync)
 							{
-								if (_map.TryGetValue(parentId, out var parent))
+								if (_parents.TryGetValue(parentId, out var parent))
 								{
 									// parent subscription has security id (not null)
 									if (parent.Origin.SecurityId == secIdMsg.SecurityId)
