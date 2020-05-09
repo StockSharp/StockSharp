@@ -2248,7 +2248,7 @@ namespace StockSharp.Messages
 		/// <param name="mode">Back mode.</param>
 		/// <returns>Message.</returns>
 		public static TMessage LoopBack<TMessage>(this TMessage message, IMessageAdapter adapter, MessageBackModes mode = MessageBackModes.Direct)
-			where TMessage : Message
+			where TMessage : IMessage
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -2266,7 +2266,7 @@ namespace StockSharp.Messages
 		/// <param name="message">Message.</param>
 		/// <returns>Message.</returns>
 		public static TMessage UndoBack<TMessage>(this TMessage message)
-			where TMessage : Message
+			where TMessage : IMessage
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -2282,7 +2282,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <returns>Is loopback message.</returns>
-		public static bool IsBack(this Message message)
+		public static bool IsBack(this IMessage message)
 		{
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
