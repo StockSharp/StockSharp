@@ -528,7 +528,7 @@ namespace StockSharp.Messages
 		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;
 
 		/// <inheritdoc />
-		public virtual bool IsSecurityRequired(DataType dataType) => true;
+		public virtual bool IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
 
 		/// <inheritdoc />
 		[ReadOnly(false)]

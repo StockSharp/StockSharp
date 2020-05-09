@@ -2346,7 +2346,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => false;
-		bool IMessageAdapter.IsSecurityRequired(DataType dataType) => true;
+		bool IMessageAdapter.IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
 
 		void IMessageChannel.Open()
 		{
