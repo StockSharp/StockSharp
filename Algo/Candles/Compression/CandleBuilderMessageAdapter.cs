@@ -105,6 +105,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 					if (mdMsg.IsSubscribe)
 					{
+						if (mdMsg.SecurityId == default)
+							break;
+
 						var isLoadOnly = mdMsg.BuildMode == MarketDataBuildModes.Load;
 
 						if (mdMsg.IsCalcVolumeProfile)

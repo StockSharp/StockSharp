@@ -166,6 +166,9 @@ namespace StockSharp.Algo
 						if (!(mdMsg is FilteredMarketDepthMessage filteredMsg))
 							break;
 
+						if (mdMsg.SecurityId == default)
+							break;
+
 						var transId = mdMsg.TransactionId;
 
 						var data = mdMsg.GetArg<Tuple<QuoteChangeMessage, ExecutionMessage[]>>();
