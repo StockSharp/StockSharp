@@ -39,7 +39,6 @@ namespace StockSharp.Algo.Testing
 	public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageAdapter
 	{
 		private readonly SynchronizedSet<long> _subscriptionIds = new SynchronizedSet<long>();
-		private readonly SynchronizedSet<long> _realSubscribeIds = new SynchronizedSet<long>();
 		private readonly SynchronizedSet<long> _emuOrderIds = new SynchronizedSet<long>();
 
 		private readonly IMessageAdapter _inAdapter;
@@ -92,7 +91,7 @@ namespace StockSharp.Algo.Testing
 		public IMessageChannel InChannel { get; }
 
 		/// <inheritdoc />
-		public override IEnumerable<MessageTypes> SupportedInMessages => InnerAdapter.SupportedInMessages.Concat(Emulator.SupportedInMessages).Except(OwnInnerAdapter ? ArrayHelper.Empty<MessageTypes>() : new[] { MessageTypes.SecurityLookup }).Distinct().ToArray();
+		public override IEnumerable<MessageTypes> SupportedInMessages => InnerAdapter.SupportedInMessages.Concat(Emulator.SupportedInMessages).Distinct().ToArray();
 		
 		/// <inheritdoc />
 		public override IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages.Concat(Emulator.SupportedOutMessages).Distinct().ToArray();
@@ -142,7 +141,6 @@ namespace StockSharp.Algo.Testing
 					if (message.Type == MessageTypes.Reset)
 					{
 						_subscriptionIds.Clear();
-						_realSubscribeIds.Clear();
 						_emuOrderIds.Clear();
 					}
 
@@ -166,25 +164,10 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.SecurityLookup:
 				case MessageTypes.TimeFrameLookup:
 				case MessageTypes.BoardLookup:
-				{
-					if (OwnInnerAdapter)
-						base.OnSendInMessage(message);
-					else
-					{
-						_subscriptionIds.Add(((ISubscriptionMessage)message).TransactionId);
-						SendToEmulator(message);
-					}
-
-					return true;
-				}
-
 				case MessageTypes.MarketData:
 				{
 					var transId = ((ISubscriptionMessage)message).TransactionId;
 					_subscriptionIds.Add(transId);
-
-					if (!OwnInnerAdapter)
-						_realSubscribeIds.Add(transId);
 
 					//SendToEmulator(message);
 					return base.OnSendInMessage(message);
@@ -228,7 +211,7 @@ namespace StockSharp.Algo.Testing
 					{
 						var originId = (IOriginalTransactionIdMessage)message;
 					
-						if (_realSubscribeIds.Contains(originId.OriginalTransactionId))
+						if (_subscriptionIds.Contains(originId.OriginalTransactionId))
 							base.OnInnerAdapterNewOutMessage(message);
 					}
 					else
