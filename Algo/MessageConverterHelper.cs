@@ -578,17 +578,34 @@ namespace StockSharp.Algo
 		/// Convert <see cref="Security"/> criteria to <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		/// <param name="criteria">Criteria.</param>
-		/// <param name="securityId">Security ID.</param>
 		/// <returns>Message.</returns>
-		public static SecurityLookupMessage ToLookupMessage(this Security criteria, SecurityId? securityId = null)
+		public static SecurityLookupMessage ToLookupMessage(this Security criteria)
 		{
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return criteria.FillMessage(new SecurityLookupMessage
+			var message = new SecurityLookupMessage();
+
+			if (criteria.Id.IsEmpty())
 			{
-				SecurityId = securityId ?? (criteria.Id.IsEmpty() && criteria.Code.IsEmpty() ? default : criteria.ToSecurityId(boardIsRequired: false, copyExtended: true)),
-			});
+				var secId = message.SecurityId;
+
+				// if set both sec + board codes it means exact sec id
+				if (criteria.Code.IsEmpty())
+					secId.BoardCode = criteria.Board?.Code;
+				else
+					secId.SecurityCode = criteria.Code;
+
+				message.SecurityId = criteria.ExternalId.ToSecurityId(secId);
+				
+				criteria.FillMessage(message);
+			}
+			else
+			{
+				message.SecurityId = criteria.Id.ToSecurityId();
+			}
+
+			return message;
 		}
 
 		/// <summary>
@@ -1576,22 +1593,34 @@ namespace StockSharp.Algo
 		/// <returns><see cref="SecurityId"/>.</returns>
 		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode)
 		{
-			//if (externalId == null)
-			//	throw new ArgumentNullException(nameof(externalId));
-
-			return new SecurityId
+			return externalId.ToSecurityId(new SecurityId
 			{
 				SecurityCode = securityCode,
 				BoardCode = boardCode,
-				Bloomberg = externalId.Bloomberg,
-				Cusip = externalId.Cusip,
-				IQFeed = externalId.IQFeed,
-				Isin = externalId.Isin,
-				Ric = externalId.Ric,
-				Sedol = externalId.Sedol,
-				InteractiveBrokers = externalId.InteractiveBrokers,
-				Plaza = externalId.Plaza,
-			};
+			});
+		}
+
+		/// <summary>
+		/// Cast <see cref="SecurityExternalId"/> to the <see cref="SecurityId"/>.
+		/// </summary>
+		/// <param name="externalId"><see cref="SecurityExternalId"/>.</param>
+		/// <param name="secId"><see cref="SecurityId"/>.</param>
+		/// <returns><see cref="SecurityId"/>.</returns>
+		public static SecurityId ToSecurityId(this SecurityExternalId externalId, SecurityId secId)
+		{
+			if (externalId == null)
+				throw new ArgumentNullException(nameof(externalId));
+
+			secId.Bloomberg = externalId.Bloomberg;
+			secId.Cusip = externalId.Cusip;
+			secId.IQFeed = externalId.IQFeed;
+			secId.Isin = externalId.Isin;
+			secId.Ric = externalId.Ric;
+			secId.Sedol = externalId.Sedol;
+			secId.InteractiveBrokers = externalId.InteractiveBrokers;
+			secId.Plaza = externalId.Plaza;
+
+			return secId;
 		}
 
 		/// <summary>

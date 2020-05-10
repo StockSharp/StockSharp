@@ -242,24 +242,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void LookupSecurities(Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None)
 		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			var boardCode = criteria.Board?.Code;
-			var securityCode = criteria.Code;
-
-			if (!criteria.Id.IsEmpty())
-			{
-				var id = SecurityIdGenerator.Split(criteria.Id);
-
-				if (boardCode.IsEmpty())
-					boardCode = GetBoardCode(id.BoardCode);
-
-				if (securityCode.IsEmpty())
-					securityCode = id.SecurityCode;
-			}
-
-			var msg = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode));
+			var msg = criteria.ToLookupMessage();
 			
 			msg.Adapter = adapter;
 			msg.OfflineMode = offlineMode;

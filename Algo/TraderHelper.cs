@@ -1763,6 +1763,13 @@ namespace StockSharp.Algo
 			if (!secId.BoardCode.IsEmpty() && !security.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
 				return false;
 
+			// sec + board codes means exact id
+			if (!secId.SecurityCode.IsEmpty() && !secId.BoardCode.IsEmpty())
+			{
+				if (security.SecurityId != secId)
+					return false;
+			}
+
 			if (secTypes.Count > 0)
 			{
 				if (security.SecurityType == null || !secTypes.Contains(security.SecurityType.Value))
