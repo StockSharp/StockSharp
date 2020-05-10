@@ -1743,6 +1743,11 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IncrementalIdGenerator TradeIdGenerator { get; set; } = new IncrementalIdGenerator();
 
+		private DateTimeOffset _currentTime;
+
+		/// <inheritdoc />
+		public override DateTimeOffset CurrentTime => _currentTime;
+
 		/// <inheritdoc />
 		public bool SendInMessage(Message message)
 		{
@@ -2018,22 +2023,19 @@ namespace StockSharp.Algo.Testing
 				}
 
 				case MessageTypes.MarketData:
-				{
-					var mdMsg = (MarketDataMessage)message;
-
-					if (mdMsg.IsSubscribe)
-						retVal.Add(new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId });
-
-					retVal.Add(mdMsg.CreateResult());
-					break;
-				}
-
 				case MessageTypes.SecurityLookup:
 				case MessageTypes.BoardLookup:
 				case MessageTypes.TimeFrameLookup:
 				{
-					var subscrMsg = (ISubscriptionMessage)message;
-					retVal.Add(subscrMsg.CreateResult());
+					this.AddWarningLog(LocalizedStrings.Str888Params.Put(message.Type));
+					break;
+				}
+
+				case MessageTypes.SubscriptionResponse:
+				case MessageTypes.SubscriptionFinished:
+				case MessageTypes.SubscriptionOnline:
+				{
+					retVal.Add(message);
 					break;
 				}
 
@@ -2071,6 +2073,7 @@ namespace StockSharp.Algo.Testing
 
 		private void RaiseNewOutMessage(Message message)
 		{
+			_currentTime = message.LocalTime;
 			NewOutMessage?.Invoke(message);
 		}
 
@@ -2263,16 +2266,16 @@ namespace StockSharp.Algo.Testing
 
 		IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } = new[]
 		{
-			MessageTypes.SecurityLookup.ToInfo(),
+			//MessageTypes.SecurityLookup.ToInfo(),
 			MessageTypes.PortfolioLookup.ToInfo(),
-			MessageTypes.TimeFrameLookup.ToInfo(),
-			MessageTypes.BoardLookup.ToInfo(),
+			//MessageTypes.TimeFrameLookup.ToInfo(),
+			//MessageTypes.BoardLookup.ToInfo(),
 			MessageTypes.OrderStatus.ToInfo(),
 			MessageTypes.OrderRegister.ToInfo(),
 			MessageTypes.OrderCancel.ToInfo(),
 			MessageTypes.OrderReplace.ToInfo(),
 			MessageTypes.OrderGroupCancel.ToInfo(),
-			MessageTypes.MarketData.ToInfo(),
+			//MessageTypes.MarketData.ToInfo(),
 			MessageTypes.BoardState.ToInfo(),
 			MessageTypes.Security.ToInfo(),
 			MessageTypes.Portfolio.ToInfo(),

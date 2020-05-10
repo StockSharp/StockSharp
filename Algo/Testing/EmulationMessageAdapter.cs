@@ -186,7 +186,7 @@ namespace StockSharp.Algo.Testing
 					if (!OwnInnerAdapter)
 						_realSubscribeIds.Add(transId);
 
-					SendToEmulator(message);
+					//SendToEmulator(message);
 					return base.OnSendInMessage(message);
 				}
 
@@ -231,9 +231,12 @@ namespace StockSharp.Algo.Testing
 						if (_realSubscribeIds.Contains(originId.OriginalTransactionId))
 							base.OnInnerAdapterNewOutMessage(message);
 					}
-					// responses for own adapter will be send via MarketEmulator
-					//else
-					//	base.OnInnerAdapterNewOutMessage(message);
+					else
+					{
+						// responses for own adapter will be send via MarketEmulator
+						// to make local timestamp with emulation time
+						SendToEmulator(message.TypedClone());
+					}
 
 					break;
 				}
