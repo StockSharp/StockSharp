@@ -1851,6 +1851,13 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
+				case MessageTypes.Connect:
+				{
+					_portfolios.SafeAdd(Extensions.SimulatorPortfolioName, key => new PortfolioEmulator(this, key));
+					retVal.Add(new ConnectMessage());
+					break;
+				}
+
 				//case ExtendedMessageTypes.Clearing:
 				//{
 				//	var clearingMsg = (ClearingMessage)message;
@@ -1941,40 +1948,39 @@ namespace StockSharp.Algo.Testing
 
 				case MessageTypes.PortfolioLookup:
 				{
-					var pfMsg = (PortfolioLookupMessage)message;
+					var lookupMsg = (PortfolioLookupMessage)message;
 
-					if (!pfMsg.IsSubscribe)
+					if (!lookupMsg.IsSubscribe)
 						break;
 
-					if (pfMsg.PortfolioName.IsEmpty())
+					if (lookupMsg.PortfolioName.IsEmpty())
 					{
 						foreach (var pair in _portfolios)
 						{
 							retVal.Add(new PortfolioMessage
 							{
 								PortfolioName = pair.Key,
-								OriginalTransactionId = pfMsg.TransactionId
+								OriginalTransactionId = lookupMsg.TransactionId
 							});
 
-							pair.Value.RequestState(pfMsg, retVal);
+							pair.Value.RequestState(lookupMsg, retVal);
 						}
 					}
 					else
 					{
 						retVal.Add(new PortfolioMessage
 						{
-							PortfolioName = pfMsg.PortfolioName,
-							OriginalTransactionId = pfMsg.TransactionId
+							PortfolioName = lookupMsg.PortfolioName,
+							OriginalTransactionId = lookupMsg.TransactionId
 						});
 
-						if (_portfolios.TryGetValue(pfMsg.PortfolioName, out var pfEmu))
+						if (_portfolios.TryGetValue(lookupMsg.PortfolioName, out var pfEmu))
 						{
-							pfEmu.RequestState(pfMsg, retVal);
+							pfEmu.RequestState(lookupMsg, retVal);
 						}
 					}
 
-					if (pfMsg.To == null)
-						retVal.Add(new SubscriptionOnlineMessage { OriginalTransactionId = pfMsg.TransactionId });
+					retVal.Add(lookupMsg.CreateResult());
 
 					break;
 				}
@@ -2027,7 +2033,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.BoardLookup:
 				case MessageTypes.TimeFrameLookup:
 				{
-					this.AddWarningLog(LocalizedStrings.Str888Params.Put(message.Type));
+					// result will be sends as a loopback from underlying market data adapter
 					break;
 				}
 
@@ -2035,7 +2041,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.SubscriptionFinished:
 				case MessageTypes.SubscriptionOnline:
 				{
-					retVal.Add(message);
+					retVal.Add(message.TypedClone());
 					break;
 				}
 
@@ -2266,16 +2272,16 @@ namespace StockSharp.Algo.Testing
 
 		IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } = new[]
 		{
-			//MessageTypes.SecurityLookup.ToInfo(),
+			MessageTypes.SecurityLookup.ToInfo(),
+			MessageTypes.TimeFrameLookup.ToInfo(),
+			MessageTypes.BoardLookup.ToInfo(),
+			MessageTypes.MarketData.ToInfo(),
 			MessageTypes.PortfolioLookup.ToInfo(),
-			//MessageTypes.TimeFrameLookup.ToInfo(),
-			//MessageTypes.BoardLookup.ToInfo(),
 			MessageTypes.OrderStatus.ToInfo(),
 			MessageTypes.OrderRegister.ToInfo(),
 			MessageTypes.OrderCancel.ToInfo(),
 			MessageTypes.OrderReplace.ToInfo(),
 			MessageTypes.OrderGroupCancel.ToInfo(),
-			//MessageTypes.MarketData.ToInfo(),
 			MessageTypes.BoardState.ToInfo(),
 			MessageTypes.Security.ToInfo(),
 			MessageTypes.Portfolio.ToInfo(),

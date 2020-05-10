@@ -70,9 +70,16 @@ namespace StockSharp.Algo.Testing
 
 			_inAdapter = new SubscriptionOnlineMessageAdapter(Emulator);
 			_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
-			_inAdapter.NewOutMessage += OnMarketEmulatorNewOutMessage;
+			_inAdapter.NewOutMessage += RaiseNewOutMessage;
 
 			_isEmulationOnly = isEmulationOnly;
+		}
+
+		/// <inheritdoc />
+		public override void Dispose()
+		{
+			_inAdapter.NewOutMessage -= RaiseNewOutMessage;
+			base.Dispose();
 		}
 
 		/// <summary>
@@ -166,10 +173,11 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.BoardLookup:
 				case MessageTypes.MarketData:
 				{
-					var transId = ((ISubscriptionMessage)message).TransactionId;
-					_subscriptionIds.Add(transId);
+					_subscriptionIds.Add(((ISubscriptionMessage)message).TransactionId);
 
-					//SendToEmulator(message);
+					// sends to emu for init subscription ids
+					SendToEmulator(message);
+
 					return base.OnSendInMessage(message);
 				}
 
@@ -203,29 +211,19 @@ namespace StockSharp.Algo.Testing
 
 			switch (message.Type)
 			{
+				case MessageTypes.Connect:
+				case MessageTypes.Disconnect:
+				case MessageTypes.Reset:
+					break;
 				case MessageTypes.SubscriptionResponse:
 				case MessageTypes.SubscriptionFinished:
 				case MessageTypes.SubscriptionOnline:
 				{
-					if (!OwnInnerAdapter)
-					{
-						var originId = (IOriginalTransactionIdMessage)message;
-					
-						if (_subscriptionIds.Contains(originId.OriginalTransactionId))
-							base.OnInnerAdapterNewOutMessage(message);
-					}
-					else
-					{
-						// responses for own adapter will be send via MarketEmulator
-						// to make local timestamp with emulation time
-						SendToEmulator(message.TypedClone());
-					}
+					if (_subscriptionIds.Contains(((IOriginalTransactionIdMessage)message).OriginalTransactionId))
+						SendToEmulator(message);
 
 					break;
 				}
-				case MessageTypes.Connect:
-				case MessageTypes.Disconnect:
-				case MessageTypes.Reset:
 				//case MessageTypes.BoardState:
 				case MessageTypes.Portfolio:
 				case MessageTypes.PositionChange:
@@ -304,43 +302,6 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 			}
-		}
-
-		private void OnMarketEmulatorNewOutMessage(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Connect:
-				{
-					var connectMsg = (ConnectMessage)message;
-
-					if (connectMsg.Error == null)
-					{
-						var pf = Portfolio.CreateSimulator();
-
-						var pfMsg = pf.ToMessage();
-						pfMsg.IsSubscribe = true;
-						pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
-						SendToEmulator(pfMsg);
-						SendToEmulator(pf.ToChangeMessage());
-					}
-
-					if (OwnInnerAdapter)
-						return;
-
-					break;
-				}
-				case MessageTypes.Reset:
-				case MessageTypes.Disconnect:
-				{
-					if (OwnInnerAdapter)
-						return;
-
-					break;
-				}
-			}
-
-			RaiseNewOutMessage(message);
 		}
 
 		private void ProcessOrderMessage(string portfolioName, OrderMessage message)
