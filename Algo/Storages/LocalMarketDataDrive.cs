@@ -510,7 +510,7 @@ namespace StockSharp.Algo.Storages
 							Name = id.SecurityCode,
 						};
 
-						if (security.IsMatch(criteria, criteria.GetSecurityTypes()))
+						if (security.IsMatch(criteria))
 							newSecurity(security);
 
 						existingIds.Add(securityId);

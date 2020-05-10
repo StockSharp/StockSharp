@@ -1751,6 +1751,17 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="criteria">Message security lookup for specified criteria.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this SecurityMessage security, SecurityLookupMessage criteria)
+		{
+			return security.IsMatch(criteria, criteria.GetSecurityTypes());
+		}
+
+		/// <summary>
+		/// Determines the specified security is matched lookup criteria.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="criteria">Message security lookup for specified criteria.</param>
 		/// <param name="secTypes">Securities types.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsMatch(this SecurityMessage security, SecurityLookupMessage criteria, HashSet<SecurityTypes> secTypes)
@@ -1852,7 +1863,9 @@ namespace StockSharp.Algo
 			if (criteria.IsLookupAll())
 				return securities.ToArray();
 
-			return securities.Where(s => s.IsMatch(criteria, criteria.GetSecurityTypes())).ToArray();
+			var secTypes = criteria.GetSecurityTypes();
+
+			return securities.Where(s => s.IsMatch(criteria, secTypes)).ToArray();
 		}
 
 		/// <summary>
