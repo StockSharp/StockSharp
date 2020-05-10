@@ -346,7 +346,7 @@ namespace SampleRealTimeEmulation
 			if (!wnd.ShowModal(this))
 				return;
 
-			_emuConnector.LookupSecurities(wnd.Criteria);
+			_emuConnector.LookupSecurities(wnd.CriteriaMessage);
 		}
 	}
 }

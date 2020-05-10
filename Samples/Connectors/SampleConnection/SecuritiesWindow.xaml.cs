@@ -241,7 +241,7 @@ namespace SampleConnection
 			if (!wnd.ShowModal(this))
 				return;
 
-			Connector.LookupSecurities(wnd.Criteria);
+			Connector.LookupSecurities(wnd.CriteriaMessage);
 		}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
