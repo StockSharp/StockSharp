@@ -1136,9 +1136,11 @@ namespace StockSharp.Algo
 
 			var hasOnline = false;
 
+			var receivedEvt = MarketDepthReceived;
+
 			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
 			{
-				MarketDepth depth;
+				MarketDepth depth = null;
 
 				if (!hasOnline)
 				{
@@ -1160,20 +1162,24 @@ namespace StockSharp.Algo
 						else
 						{
 							_entityCache.UpdateMarketDepth(security, message);
-							continue;
 						}
 					}
 					else
 					{
-						depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
+						if (receivedEvt != null)
+							depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
 					}
 				}
 				else
 				{
-					depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
+					if (receivedEvt != null)
+						depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
 				}
 
-				MarketDepthReceived?.Invoke(subscription, depth);
+				OrderBookReceived?.Invoke(subscription, message);
+
+				if (depth != null)
+					receivedEvt.Invoke(subscription, depth);
 			}
 			
 			if (!hasOnline || message.IsFiltered)

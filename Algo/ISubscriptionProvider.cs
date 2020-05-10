@@ -23,6 +23,11 @@ namespace StockSharp.Algo
 		event Action<Subscription, Level1ChangeMessage> Level1Received;
 
 		/// <summary>
+		/// Order book received.
+		/// </summary>
+		event Action<Subscription, QuoteChangeMessage> OrderBookReceived;
+
+		/// <summary>
 		/// Tick trade received.
 		/// </summary>
 		event Action<Subscription, Trade> TickTradeReceived;

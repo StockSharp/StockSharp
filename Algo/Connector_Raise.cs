@@ -252,6 +252,9 @@ namespace StockSharp.Algo
 		public event Action<Subscription, Level1ChangeMessage> Level1Received;
 
 		/// <inheritdoc />
+		public event Action<Subscription, QuoteChangeMessage> OrderBookReceived;
+
+		/// <inheritdoc />
 		public event Action<Subscription, Trade> TickTradeReceived;
 
 		/// <inheritdoc />

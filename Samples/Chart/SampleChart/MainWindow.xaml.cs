@@ -788,6 +788,7 @@
 			IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => throw new NotImplementedException();
 
 			event Action<Subscription, Level1ChangeMessage> ISubscriptionProvider.Level1Received { add { } remove { } }
+			event Action<Subscription, QuoteChangeMessage> ISubscriptionProvider.OrderBookReceived { add { } remove { } }
 			event Action<Subscription, Trade> ISubscriptionProvider.TickTradeReceived { add { } remove { } }
 			event Action<Subscription, Security> ISubscriptionProvider.SecurityReceived { add { } remove { } }
 			event Action<Subscription, ExchangeBoard> ISubscriptionProvider.BoardReceived { add { } remove { } }
