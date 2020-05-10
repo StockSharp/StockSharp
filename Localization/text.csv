@@ -16179,3 +16179,51 @@ DocStr11740;Current value type in the combo box;Current value type in the combo 
 DocStr11741;Load messages;Load messages
 DocStr11742;Last date;Last date
 DocStr11743;Extract time frames from the specified data types set;Extract time frames from the specified data types set
+DocStr11744;Send out finished candles when they received;Send out finished candles when they received
+DocStr11745;To resume the emulation;To resume the emulation
+DocStr11746;Subscription ALL parent-child mapping message;Subscription ALL parent-child mapping message
+DocStr11747;Parent {0};Parent {0}
+DocStr11748;Security ALL subscription counter adapter;Security ALL subscription counter adapter
+DocStr11749;Progress changed event;Progress changed event
+DocStr11750;Get feedbacks for specified product;Get feedbacks for specified product
+DocStr11751;Feedbacks;Feedbacks
+DocStr11752;To get all available products;To get all available products
+DocStr11753;Product feedback message;Product feedback message
+DocStr11754;Package id;Package id
+DocStr11755;Tags;Tags
+DocStr11756;Download count;Download count
+DocStr11757;Product required connectors;Product required connectors
+DocStr11758;Application updater locator;Application updater locator
+DocStr11759;Singleton instance;Singleton instance
+DocStr11760;Updater directory;Updater directory
+DocStr11761;Updater version;Updater version
+DocStr11762;Get filesystem path to check_updates.exe utility;Get filesystem path to check_updates.exe utility
+DocStr11763;Get filesystem path to Installer.exe app;Get filesystem path to Installer.exe app
+DocStr11764;Save locator data;Save locator data
+DocStr11765;Check if caller is a valid updater;Check if caller is a valid updater
+DocStr11766;The path to the installer directory;The path to the installer directory
+DocStr11767;Sample history data;Sample history data
+DocStr11768;App installer client;App installer client
+DocStr11769;Update status;Update status
+DocStr11770;Unknown status;Unknown status
+DocStr11771;Update in progress;Update in progress
+DocStr11772;Updates are available;Updates are available
+DocStr11773;No updates available;No updates available
+DocStr11774;Installer not found;Installer not found
+DocStr11775;Upate check error;Upate check error
+DocStr11776;Check for current application updates;Check for current application updates
+DocStr11777;Server credentials for private repository updates;Server credentials for private repository updates
+DocStr11778;Update check status event;Update check status event
+DocStr11779;Replay group;Replay group
+DocStr11780;License feature;License feature
+DocStr11781;type;type
+DocStr11782;Arg;Arg
+DocStr11783;Get typed argument;Get typed argument
+DocStr11784;Arg type;Arg type
+DocStr11785;Set typed argument;Set typed argument
+DocStr11786;Back mode;Back mode
+DocStr11787;Determines the specified message is loopback;Determines the specified message is loopback
+DocStr11788;Support candles {0};Support candles {0}
+DocStr11789;Message loopback modes;Message loopback modes
+DocStr11790;Direct;Direct
+DocStr11791;Via whole adapters chain;Via whole adapters chain

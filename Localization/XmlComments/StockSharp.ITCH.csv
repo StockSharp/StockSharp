@@ -25,7 +25,6 @@ M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.Secur
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr1
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)/param/depth;MarketDepth
-P:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Depth/inheritdoc;DocStr8459
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)/inheritdoc;DocStr8459
 T:StockSharp.ITCH.ItchTrader/summary;DocStr2539
 M:StockSharp.ITCH.ItchTrader.#ctor/summary;DocStr1

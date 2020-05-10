@@ -27,9 +27,6 @@ P:StockSharp.Xaml.AutoCompletePopUp.SelectedSecurity/summary;DocStr8068
 E:StockSharp.Xaml.AutoCompletePopUp.MatchKeyDown/summary;DocStr8069
 M:StockSharp.Xaml.AutoCompletePopUp.DoFocus/summary;DocStr8065
 M:StockSharp.Xaml.AutoCompletePopUp.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.AutomaticUpdaterExtensions/summary;DocStr9443
-M:StockSharp.Xaml.AutomaticUpdaterExtensions.Translate(Ecng.Xaml.AutoUpdater.AutomaticUpdater)/summary;DocStr8189
-M:StockSharp.Xaml.AutomaticUpdaterExtensions.Translate(Ecng.Xaml.AutoUpdater.AutomaticUpdater)/param/automaticUpdater;DocStr608
 T:StockSharp.Xaml.BaseApplication/summary;DocStr8070
 M:StockSharp.Xaml.BaseApplication.#ctor/summary;DocStr93
 P:StockSharp.Xaml.BaseApplication.ShowExceptions/summary;DocStr8076
@@ -210,10 +207,6 @@ P:StockSharp.Xaml.DataSourcePanel.Configure/summary;DocStr9360
 E:StockSharp.Xaml.DataSourcePanel.SelectedItemChanged/summary;DocStr10071
 M:StockSharp.Xaml.DataSourcePanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.DataSourcePanel.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.DataTypeWindow/summary;DocStr8182
-M:StockSharp.Xaml.DataTypeWindow.#ctor/summary;DocStr1
-P:StockSharp.Xaml.DataTypeWindow.DataType/summary;Str1942
-M:StockSharp.Xaml.DataTypeWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.DriveComboBox/summary;DocStr11300
 E:StockSharp.Xaml.DriveComboBox.Changed/summary;DocStr11301
 M:StockSharp.Xaml.DriveComboBox.CreateEditorSettings/summary;DocStr8459
@@ -434,7 +427,7 @@ P:StockSharp.Xaml.ThemedIconsExtension.Key/summary;DocStr11707
 M:StockSharp.Xaml.ThemedIconsExtension.#ctor/summary;DocStr1
 M:StockSharp.Xaml.ThemedIconsExtension.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Xaml.ThemedIconsExtension.GetImage(System.String)/summary;DocStr11708
-M:StockSharp.Xaml.ThemedIconsExtension.GetImage(System.String)/param/key;DocStr11709
+M:StockSharp.Xaml.ThemedIconsExtension.GetImage(System.String)/param/key;DocStr11707
 M:StockSharp.Xaml.ThemedIconsExtension.GetImage(System.String)/returns;DocStr9851
 T:StockSharp.Xaml.ColoredIconExtension/summary;DocStr11710
 P:StockSharp.Xaml.ColoredIconExtension.Color/summary;DocStr11711
@@ -967,7 +960,7 @@ P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings/summary;Str1942
 M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor/summary;DocStr8144
 M:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor.#ctor/summary;DocStr1
-T:StockSharp.Xaml.PropertyGrid.DataTypeEditor/summary;DocStr8144
+T:StockSharp.Xaml.PropertyGrid.DataTypeEditor/summary;DocStr9240
 M:StockSharp.Xaml.PropertyGrid.DataTypeEditor.#ctor/summary;DocStr1
 T:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor/summary;DocStr8144
 M:StockSharp.Xaml.PropertyGrid.DriveComboBoxEditor.#ctor/summary;DocStr1

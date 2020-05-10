@@ -13,14 +13,6 @@ F:StockSharp.InteractiveBrokers.CandleDataTypes.YieldLast/summary;DocStr3593
 F:StockSharp.InteractiveBrokers.CandleDataTypes.AdjustedLast/summary;DocStr10412
 F:StockSharp.InteractiveBrokers.CandleDataTypes.RebateRate/summary;DocStr10413
 F:StockSharp.InteractiveBrokers.CandleDataTypes.FeeRate/summary;DocStr10414
-T:StockSharp.InteractiveBrokers.ExchangeNewsTypes/summary;DocStr3459
-F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.Unknown/summary;DocStr3460
-F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.Bbs/summary;DocStr8459
-F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.LiveExchange/summary;DocStr8459
-F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.DeadExchange/summary;DocStr8459
-F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.Html/summary;DocStr8459
-F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.PopupText/summary;DocStr8459
-F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.PopupHtml/summary;DocStr8459
 T:StockSharp.InteractiveBrokers.FinancialAdviseMessage/summary;DocStr3623
 M:StockSharp.InteractiveBrokers.FinancialAdviseMessage.#ctor/summary;DocStr1
 P:StockSharp.InteractiveBrokers.FinancialAdviseMessage.IsReplace/summary;DocStr9548
