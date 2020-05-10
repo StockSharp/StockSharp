@@ -40,6 +40,9 @@ namespace StockSharp.Algo.Testing
 			TimeChange = false;
 
 			EntityFactory = new StorageEntityFactory(emulationAdapter.Emulator.SecurityProvider, emulationAdapter.Emulator.PortfolioProvider);
+
+			// sync transaction ids with underlying adapter
+			TransactionIdGenerator = emulationAdapter.TransactionIdGenerator;
 		}
 
 		/// <summary>

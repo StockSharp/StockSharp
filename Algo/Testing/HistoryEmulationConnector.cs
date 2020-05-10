@@ -95,9 +95,6 @@ namespace StockSharp.Algo.Testing
 		public HistoryEmulationConnector(IMessageAdapter innerAdapter, bool ownInnerAdapter, IMessageChannel inChannel, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
 			: base(new EmulationMessageAdapter(innerAdapter, inChannel, true, securityProvider, portfolioProvider) { OwnInnerAdapter = ownInnerAdapter }, false)
 		{
-			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
-			TransactionIdGenerator = innerAdapter.TransactionIdGenerator;
-
 			MarketTimeChangedInterval = HistoryMessageAdapter.MarketTimeChangedInterval;
 
 			Adapter.LatencyManager = null;

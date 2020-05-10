@@ -61,14 +61,12 @@ namespace StockSharp.Algo.Testing
 			UpdateSecurityByLevel1 = false;
 			UpdateSecurityLastQuotes = false;
 
-			UnderlyngMarketDataAdapter = underlyngMarketDataAdapter;
-
 			Adapter.IgnoreExtraAdapters = true;
 		}
 
 		/// <summary>
 		/// <see cref="IMessageAdapter"/>, through which market data will be got.
 		/// </summary>
-		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter { get; }
+		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter => (TUnderlyingMarketDataAdapter)EmulationAdapter.InnerAdapter;
 	}
 }
