@@ -3568,5 +3568,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.IQFeed.Name,
 			Exchange = Exchange.IQFeed,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="Exchange.IBKR"/>.
+		/// </summary>
+		public static ExchangeBoard IBKR { get; } = new ExchangeBoard
+		{
+			Code = Exchange.IBKR.Name,
+			Exchange = Exchange.IBKR,
+		};
 	}
 }

@@ -1145,5 +1145,14 @@ namespace StockSharp.BusinessEntities
 			Name = "IQFD",
 			FullNameLoc = LocalizedStrings.IQFeedKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="IBKR"/>.
+		/// </summary>
+		public static Exchange IBKR { get; } = new Exchange
+		{
+			Name = "IBKR",
+			FullNameLoc = LocalizedStrings.InteractiveBrokersKey,
+		};
 	}
 }
