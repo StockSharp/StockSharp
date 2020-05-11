@@ -3,6 +3,8 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -31,6 +33,9 @@ namespace StockSharp.Algo.Storages
 
 		Portfolio IPortfolioProvider.LookupByPortfolioName(string portfolioName)
 		{
+			if (portfolioName.IsEmpty())
+				throw new ArgumentNullException(nameof(portfolioName));
+
 			return _entityRegistry.Portfolios.ReadById(portfolioName);
 		}
 

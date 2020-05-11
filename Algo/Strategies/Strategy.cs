@@ -2525,8 +2525,8 @@ namespace StockSharp.Algo.Strategies
 
 					var order = new Order
 					{
-						Security = secId == null ? Security : this.LookupById(secId),
-						Portfolio = pfName == null ? Portfolio : Connector.LookupByPortfolioName(pfName),
+						Security = secId.IsEmpty() ? Security : this.LookupById(secId),
+						Portfolio = pfName.IsEmpty() ? Portfolio : Connector.LookupByPortfolioName(pfName),
 						Direction = side,
 						Volume = volume,
 						Price = price,

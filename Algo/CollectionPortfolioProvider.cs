@@ -48,7 +48,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Portfolio LookupByPortfolioName(string name) => this.TryGetValue(name);
+		public Portfolio LookupByPortfolioName(string name)
+		{
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			return this.TryGetValue(name);
+		}
 
 		/// <inheritdoc />
 		public IEnumerable<Portfolio> Portfolios => CachedValues;

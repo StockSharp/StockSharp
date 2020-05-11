@@ -73,6 +73,9 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
+			if (pfName.IsEmpty())
+				throw new ArgumentNullException(nameof(pfName));
+
 			var time = adapter.CurrentTime;
 
 			return new PositionChangeMessage
@@ -95,6 +98,9 @@ namespace StockSharp.Messages
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
+
+			if (pfName.IsEmpty())
+				throw new ArgumentNullException(nameof(pfName));
 
 			var time = adapter.CurrentTime;
 
