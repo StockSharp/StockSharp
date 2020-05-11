@@ -672,8 +672,9 @@ M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Or
 M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order,System.Decimal,StockSharp.Messages.OrderStates)/param/state;OrderState
 M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)/summary;DocStr8248
 M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)/param/depth;MarketDepth
-M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr8248
-M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage)/param/message;MarketDepth
+M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage,StockSharp.BusinessEntities.Security)/summary;DocStr8248
+M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage,StockSharp.BusinessEntities.Security)/param/message;MarketDepth
+M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage,StockSharp.BusinessEntities.Security)/param/security;DocStr2831
 M:StockSharp.Xaml.MarketDepthControl.Clear/summary;DocStr8249
 M:StockSharp.Xaml.MarketDepthControl.GetColumnIndex(DevExpress.Xpf.Grid.GridColumn)/summary;DocStr8250
 M:StockSharp.Xaml.MarketDepthControl.GetColumnIndex(DevExpress.Xpf.Grid.GridColumn)/param/column;DocStr9001
