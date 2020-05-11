@@ -546,7 +546,7 @@ namespace SampleHistoryTesting
 
 					data
 						.Group(strategy.CurrentTime)
-							.Add(pnlCurve, strategy.PnL - strategy.Commission ?? 0)
+							.Add(pnlCurve, strategy.PnL - (strategy.Commission ?? 0))
 							.Add(unrealizedPnLCurve, strategy.PnLManager.UnrealizedPnL ?? 0)
 							.Add(commissionCurve, strategy.Commission ?? 0);
 
