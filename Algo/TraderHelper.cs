@@ -1747,128 +1747,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Determines the specified security is matched lookup criteria.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="criteria">Message security lookup for specified criteria.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsMatch(this SecurityMessage security, SecurityLookupMessage criteria)
-		{
-			return security.IsMatch(criteria, criteria.GetSecurityTypes());
-		}
-
-		/// <summary>
-		/// Determines the specified security is matched lookup criteria.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="criteria">Message security lookup for specified criteria.</param>
-		/// <param name="secTypes">Securities types.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsMatch(this SecurityMessage security, SecurityLookupMessage criteria, HashSet<SecurityTypes> secTypes)
-		{
-			var secId = criteria.SecurityId;
-
-			if (!secId.SecurityCode.IsEmpty() && !security.SecurityId.SecurityCode.ContainsIgnoreCase(secId.SecurityCode))
-				return false;
-
-			if (!secId.BoardCode.IsEmpty() && !security.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
-				return false;
-
-			// sec + board codes means exact id
-			if (!secId.SecurityCode.IsEmpty() && !secId.BoardCode.IsEmpty())
-			{
-				if (security.SecurityId != secId)
-					return false;
-			}
-
-			if (secTypes.Count > 0)
-			{
-				if (security.SecurityType == null || !secTypes.Contains(security.SecurityType.Value))
-					return false;
-			}
-
-			if (!criteria.UnderlyingSecurityCode.IsEmpty() && security.UnderlyingSecurityCode != criteria.UnderlyingSecurityCode)
-				return false;
-
-			if (criteria.Strike != null && security.Strike != criteria.Strike)
-				return false;
-
-			if (criteria.OptionType != null && security.OptionType != criteria.OptionType)
-				return false;
-
-			if (criteria.Currency != null && security.Currency != criteria.Currency)
-				return false;
-
-			if (!criteria.Class.IsEmptyOrWhiteSpace() && !security.Class.ContainsIgnoreCase(criteria.Class))
-				return false;
-
-			if (!criteria.Name.IsEmptyOrWhiteSpace() && !security.Name.ContainsIgnoreCase(criteria.Name))
-				return false;
-
-			if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !security.ShortName.ContainsIgnoreCase(criteria.ShortName))
-				return false;
-
-			if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !security.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
-				return false;
-
-			if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !security.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
-				return false;
-
-			if (!secId.Cusip.IsEmptyOrWhiteSpace() && !security.SecurityId.Cusip.ContainsIgnoreCase(secId.Cusip))
-				return false;
-
-			if (!secId.IQFeed.IsEmptyOrWhiteSpace() && !security.SecurityId.IQFeed.ContainsIgnoreCase(secId.IQFeed))
-				return false;
-
-			if (!secId.Isin.IsEmptyOrWhiteSpace() && !security.SecurityId.Isin.ContainsIgnoreCase(secId.Isin))
-				return false;
-
-			if (!secId.Ric.IsEmptyOrWhiteSpace() && !security.SecurityId.Ric.ContainsIgnoreCase(secId.Ric))
-				return false;
-
-			if (!secId.Sedol.IsEmptyOrWhiteSpace() && !security.SecurityId.Sedol.ContainsIgnoreCase(secId.Sedol))
-				return false;
-
-			if (criteria.ExpiryDate != null && security.ExpiryDate != null && security.ExpiryDate != criteria.ExpiryDate)
-				return false;
-
-			//if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
-			//{
-			//	if (security.ExtensionInfo == null)
-			//		return false;
-
-			//	foreach (var pair in criteria.ExtensionInfo)
-			//	{
-			//		var value = security.ExtensionInfo.TryGetValue(pair.Key);
-
-			//		if (!pair.Value.Equals(value))
-			//			return false;
-			//	}
-			//}
-
-			return true;
-		}
-
-		/// <summary>
-		/// To filter instruments by the given criteria.
-		/// </summary>
-		/// <param name="securities">Securities.</param>
-		/// <param name="criteria">Message security lookup for specified criteria.</param>
-		/// <returns>Instruments filtered.</returns>
-		public static IEnumerable<SecurityMessage> Filter(this IEnumerable<SecurityMessage> securities, SecurityLookupMessage criteria)
-		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
-
-			if (criteria.IsLookupAll())
-				return securities.ToArray();
-
-			var secTypes = criteria.GetSecurityTypes();
-
-			return securities.Where(s => s.IsMatch(criteria, secTypes)).ToArray();
-		}
-
-		/// <summary>
 		/// To filter instruments by the given criteria.
 		/// </summary>
 		/// <param name="securities">Securities.</param>
@@ -2844,6 +2722,12 @@ namespace StockSharp.Algo
 					security.FaceValue = message.FaceValue;
 			}
 
+			if (message.PrimaryId != default)
+			{
+				if (isOverride || security.PrimaryId == default)
+					security.PrimaryId = message.PrimaryId.ToStringId();
+			}
+
 			message.CopyExtensionInfo(security);
 		}
 
@@ -2933,11 +2817,6 @@ namespace StockSharp.Algo
 		public static readonly Security LookupAllCriteria = new Security();
 
 		/// <summary>
-		/// Lookup all securities predefined criteria.
-		/// </summary>
-		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = LookupAllCriteria.ToLookupMessage();
-
-		/// <summary>
 		/// Determine the <paramref name="criteria"/> contains lookup all filter.
 		/// </summary>
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
@@ -2951,39 +2830,6 @@ namespace StockSharp.Algo
 				return true;
 
 			return criteria.ToLookupMessage().IsLookupAll();
-		}
-
-		/// <summary>
-		/// Determine the <paramref name="criteria"/> contains lookup all filter.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsLookupAll(this SecurityLookupMessage criteria)
-		{
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (criteria == LookupAllCriteriaMessage)
-				return true;
-
-			return
-				criteria.SecurityId.IsDefault() &&
-				criteria.GetSecurityTypes().Count == 0 &&
-				criteria.Name.IsEmpty() &&
-				criteria.ShortName.IsEmpty() &&
-				criteria.UnderlyingSecurityCode.IsEmpty() &&
-				criteria.UnderlyingSecurityType == null &&
-				criteria.ExpiryDate == null &&
-				criteria.OptionType == null &&
-				criteria.Strike == null &&
-				criteria.Currency == null &&
-				criteria.Decimals == null &&
-				criteria.Multiplier == null &&
-				criteria.PriceStep == null &&
-				criteria.VolumeStep == null &&
-				criteria.IssueDate == null &&
-				criteria.IssueSize == null &&
-				criteria.BinaryOptionType.IsEmpty();
 		}
 
 		/// <summary>
