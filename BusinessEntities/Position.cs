@@ -645,7 +645,7 @@ namespace StockSharp.BusinessEntities
 		/// Create a copy of <see cref="Position"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public Position Clone()
+		public virtual Position Clone()
 		{
 			var clone = new Position();
 			CopyTo(clone);

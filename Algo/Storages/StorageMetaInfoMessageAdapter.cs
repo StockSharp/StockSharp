@@ -340,5 +340,14 @@ namespace StockSharp.Algo.Storages
 				OverrideSecurityData = OverrideSecurityData,
 			};
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		public void SaveDirect(PositionChangeMessage message)
+		{
+			OnInnerAdapterNewOutMessage(message);
+		}
 	}
 }

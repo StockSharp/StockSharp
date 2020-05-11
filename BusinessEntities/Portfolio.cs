@@ -19,7 +19,6 @@ namespace StockSharp.BusinessEntities
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -152,11 +151,8 @@ namespace StockSharp.BusinessEntities
 			return Name;
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="Portfolio"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public new Portfolio Clone()
+		/// <inheritdoc />
+		public override Position Clone()
 		{
 			var clone = new Portfolio();
 			CopyTo(clone);
