@@ -32,13 +32,23 @@ namespace StockSharp.Algo
 
 			public bool ProcessTime(TimeSpan diff)
 			{
-				var left = _left - diff;
+				try
+				{
+					if (diff <= TimeSpan.Zero)
+						return true;
 
-				if (left <= TimeSpan.Zero)
-					return true;
+					var left = _left - diff;
 
-				_left = left;
-				return false;
+					if (left <= TimeSpan.Zero)
+						return true;
+
+					_left = left;
+					return false;
+				}
+				catch (OverflowException ex)
+				{
+					throw new InvalidOperationException($"Left='{_left}' Diff='{diff}'", ex);
+				}
 			}
 
 			public void IncreaseTimeOut()
