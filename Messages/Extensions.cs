@@ -2040,22 +2040,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Is the data type required security info.
-		/// </summary>
-		/// <param name="type">Market data type.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsSecurityRequired(this MarketDataTypes type)
-			=> type != MarketDataTypes.News && type != MarketDataTypes.Board;
-
-		/// <summary>
-		/// Is the data type required security info.
-		/// </summary>
-		/// <param name="type">Data type info.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsSecurityRequired(this DataType type)
-			=> type != DataType.News && type != DataType.Board;
-
-		/// <summary>
 		/// Remove lookup messages support.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
