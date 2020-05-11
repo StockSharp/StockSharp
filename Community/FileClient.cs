@@ -62,7 +62,7 @@ namespace StockSharp.Community
 		public int PartSize { get; set; } = 40 * 1024; // 40kb
 
 		/// <inheritdoc />
-		public FileInfoMessage GetFile(long id, Action<long> progress = null, Func<bool> cancel = null)
+		public FileInfoMessage GetFile(long id, Action<long, long> progress = null, Func<bool> cancel = null)
 		{
 			var data = GetFileInfo(id);
 			Download(data, progress, cancel);
@@ -76,7 +76,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public bool Download(FileInfoMessage data, Action<long> progress = null, Func<bool> cancel = null)
+		public bool Download(FileInfoMessage data, Action<long, long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -97,7 +97,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public bool DownloadTemp(FileInfoMessage data, Guid operationId, Action<long> progress = null, Func<bool> cancel = null)
+		public bool DownloadTemp(FileInfoMessage data, Guid operationId, Action<long, long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -111,7 +111,7 @@ namespace StockSharp.Community
 			return true;
 		}
 
-		private byte[] Download(Guid operationId, long size, bool checkHash, string hash, Action<long> progress, Func<bool> cancel)
+		private byte[] Download(Guid operationId, long size, bool checkHash, string hash, Action<long, long> progress, Func<bool> cancel)
 		{
 			if (operationId == Guid.Empty)
 				throw new ArgumentNullException(nameof(operationId));
@@ -132,7 +132,7 @@ namespace StockSharp.Community
 					part = part.DeflateFrom();
 
 				list.AddRange(part);
-				progress?.Invoke(list.Count);
+				progress?.Invoke(list.Count, size);
 			}
 
 			Invoke(f => f.FinishDownload(operationId, false));
@@ -151,7 +151,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public void Update(FileInfoMessage data, Action<long> progress = null, Func<bool> cancel = null)
+		public void Update(FileInfoMessage data, Action<long, long> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -166,7 +166,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public FileInfoMessage Upload(string fileName, byte[] body, bool isPublic, Action<long> progress = null, Func<bool> cancel = null)
+		public FileInfoMessage Upload(string fileName, byte[] body, bool isPublic, Action<long, long> progress = null, Func<bool> cancel = null)
 		{
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
@@ -191,7 +191,7 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public Guid? UploadTemp(string fileName, byte[] body, Action<long> progress = null, Func<bool> cancel = null)
+		public Guid? UploadTemp(string fileName, byte[] body, Action<long, long> progress = null, Func<bool> cancel = null)
 		{
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
@@ -217,7 +217,7 @@ namespace StockSharp.Community
 			return operationId;
 		}
 
-		private long? Upload(Guid operationId, FileInfoMessage file, Action<long> progress, Func<bool> cancel)
+		private long? Upload(Guid operationId, FileInfoMessage file, Action<long, long> progress, Func<bool> cancel)
 		{
 			if (file == null)
 				throw new ArgumentNullException(nameof(file));
@@ -242,7 +242,7 @@ namespace StockSharp.Community
 				ValidateError(Invoke(f => f.ProcessUpload(operationId, arr)));
 
 				sentCount += arr.Length;
-				progress?.Invoke(sentCount);
+				progress?.Invoke(sentCount, body.Length);
 			}
 
 			var id = Invoke(f => f.FinishUpload(operationId, false));

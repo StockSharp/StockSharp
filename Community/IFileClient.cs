@@ -31,7 +31,7 @@ namespace StockSharp.Community
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>The file data.</returns>
-		FileInfoMessage GetFile(long id, Action<long> progress = null, Func<bool> cancel = null);
+		FileInfoMessage GetFile(long id, Action<long, long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
 		/// To get the file data.
@@ -47,7 +47,7 @@ namespace StockSharp.Community
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>If the operation was cancelled by <paramref name="cancel"/>, <see langword="false"/> will return.</returns>
-		bool Download(FileInfoMessage data, Action<long> progress = null, Func<bool> cancel = null);
+		bool Download(FileInfoMessage data, Action<long, long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
 		/// Download file.
@@ -57,7 +57,7 @@ namespace StockSharp.Community
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>If the operation was cancelled by <paramref name="cancel"/>, <see langword="false"/> will return.</returns>
-		bool DownloadTemp(FileInfoMessage data, Guid operationId, Action<long> progress = null, Func<bool> cancel = null);
+		bool DownloadTemp(FileInfoMessage data, Guid operationId, Action<long, long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
 		/// To upload the existing file.
@@ -65,7 +65,7 @@ namespace StockSharp.Community
 		/// <param name="data">File data.</param>
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
-		void Update(FileInfoMessage data, Action<long> progress = null, Func<bool> cancel = null);
+		void Update(FileInfoMessage data, Action<long, long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
 		/// To upload the file to the site.
@@ -76,7 +76,7 @@ namespace StockSharp.Community
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/>, <see langword="null"/> will return.</returns>
-		FileInfoMessage Upload(string fileName, byte[] body, bool isPublic, Action<long> progress = null, Func<bool> cancel = null);
+		FileInfoMessage Upload(string fileName, byte[] body, bool isPublic, Action<long, long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
 		/// To start uploading temp file to the site.
@@ -86,7 +86,7 @@ namespace StockSharp.Community
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/>, <see langword="null"/> will return.</returns>
-		Guid? UploadTemp(string fileName, byte[] body, Action<long> progress = null, Func<bool> cancel = null);
+		Guid? UploadTemp(string fileName, byte[] body, Action<long, long> progress = null, Func<bool> cancel = null);
 
 		/// <summary>
 		/// To get a upload size limit.
