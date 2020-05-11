@@ -37,6 +37,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Extension class for <see cref="IExtendableEntity.ExtensionInfo"/>.
 	/// </summary>
+	[Obsolete]
 	public static class ExtandableEntityHelper
 	{
 		/// <summary>
