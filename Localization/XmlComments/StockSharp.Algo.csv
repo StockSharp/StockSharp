@@ -1097,6 +1097,7 @@ E:StockSharp.Algo.Connector.MarketDataSubscriptionOnline/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.SessionStateChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.ValuesChanged/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.Level1Received/inheritdoc;DocStr8459
+E:StockSharp.Algo.Connector.OrderBookReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.TickTradeReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.SecurityReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Connector.BoardReceived/inheritdoc;DocStr8459
@@ -3082,6 +3083,7 @@ M:StockSharp.Algo.Indicators.ZigZagEquis.Save(Ecng.Serialization.SettingsStorage
 T:StockSharp.Algo.ISubscriptionProvider/summary;DocStr11384
 P:StockSharp.Algo.ISubscriptionProvider.Subscriptions/summary;Subscriptions
 E:StockSharp.Algo.ISubscriptionProvider.Level1Received/summary;DocStr11385
+E:StockSharp.Algo.ISubscriptionProvider.OrderBookReceived/summary;DocStr8557
 E:StockSharp.Algo.ISubscriptionProvider.TickTradeReceived/summary;DocStr8547
 E:StockSharp.Algo.ISubscriptionProvider.SecurityReceived/summary;DocStr8552
 E:StockSharp.Algo.ISubscriptionProvider.BoardReceived/summary;DocStr11386
@@ -3591,10 +3593,9 @@ M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.Messages.Se
 M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.Messages.SecurityLookupMessage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/message;Str3166
 M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.Messages.SecurityLookupMessage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/exchangeInfoProvider;DocStr9509
 M:StockSharp.Algo.MessageConverterHelper.ToLookupCriteria(StockSharp.Messages.SecurityLookupMessage,StockSharp.Algo.Storages.IExchangeInfoProvider)/returns;DocStr3836
-M:StockSharp.Algo.MessageConverterHelper.ToLookupMessage(StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityId})/summary;DocStr8643
-M:StockSharp.Algo.MessageConverterHelper.ToLookupMessage(StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityId})/param/criteria;DocStr3836
-M:StockSharp.Algo.MessageConverterHelper.ToLookupMessage(StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityId})/param/securityId;SecurityId
-M:StockSharp.Algo.MessageConverterHelper.ToLookupMessage(StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityId})/returns;Str3166
+M:StockSharp.Algo.MessageConverterHelper.ToLookupMessage(StockSharp.BusinessEntities.Security)/summary;DocStr8643
+M:StockSharp.Algo.MessageConverterHelper.ToLookupMessage(StockSharp.BusinessEntities.Security)/param/criteria;DocStr3836
+M:StockSharp.Algo.MessageConverterHelper.ToLookupMessage(StockSharp.BusinessEntities.Security)/returns;Str3166
 M:StockSharp.Algo.MessageConverterHelper.ToSecurity(StockSharp.Messages.SecurityMessage,StockSharp.Algo.Storages.IExchangeInfoProvider)/summary;DocStr2150
 M:StockSharp.Algo.MessageConverterHelper.ToSecurity(StockSharp.Messages.SecurityMessage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/message;Str3166
 M:StockSharp.Algo.MessageConverterHelper.ToSecurity(StockSharp.Messages.SecurityMessage,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/exchangeInfoProvider;DocStr9509
@@ -3757,6 +3758,10 @@ M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntitie
 M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntities.SecurityExternalId,System.String,System.String)/param/securityCode;DocStr3307
 M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntities.SecurityExternalId,System.String,System.String)/param/boardCode;BoardCode
 M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntities.SecurityExternalId,System.String,System.String)/returns;DocStr608
+M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntities.SecurityExternalId,StockSharp.Messages.SecurityId)/summary;DocStr2127
+M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntities.SecurityExternalId,StockSharp.Messages.SecurityId)/param/externalId;DocStr608
+M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntities.SecurityExternalId,StockSharp.Messages.SecurityId)/param/secId;DocStr608
+M:StockSharp.Algo.MessageConverterHelper.ToSecurityId(StockSharp.BusinessEntities.SecurityExternalId,StockSharp.Messages.SecurityId)/returns;DocStr608
 M:StockSharp.Algo.MessageConverterHelper.FillSecurityInfo(StockSharp.Messages.MarketDataMessage,StockSharp.BusinessEntities.Security)/summary;DocStr2173
 M:StockSharp.Algo.MessageConverterHelper.FillSecurityInfo(StockSharp.Messages.MarketDataMessage,StockSharp.BusinessEntities.Security)/param/message;DocStr2174
 M:StockSharp.Algo.MessageConverterHelper.FillSecurityInfo(StockSharp.Messages.MarketDataMessage,StockSharp.BusinessEntities.Security)/param/security;DocStr2831
@@ -5981,6 +5986,8 @@ M:StockSharp.Algo.Storages.StorageMetaInfoMessageAdapter.Save(Ecng.Serialization
 M:StockSharp.Algo.Storages.StorageMetaInfoMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.StorageMetaInfoMessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.Storages.StorageMetaInfoMessageAdapter.Clone/returns;DocStr1116
+M:StockSharp.Algo.Storages.StorageMetaInfoMessageAdapter.SaveDirect(StockSharp.Messages.PositionChangeMessage)/summary;DocStr8459
+M:StockSharp.Algo.Storages.StorageMetaInfoMessageAdapter.SaveDirect(StockSharp.Messages.PositionChangeMessage)/param/message;DocStr8459
 T:StockSharp.Algo.Storages.StorageProcessor/summary;DocStr11638
 M:StockSharp.Algo.Storages.StorageProcessor.#ctor(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider)/summary;DocStr1
 M:StockSharp.Algo.Storages.StorageProcessor.#ctor(StockSharp.Algo.Storages.StorageCoreSettings,StockSharp.Algo.Candles.Compression.CandleBuilderProvider)/param/settings;StorageSettings
@@ -6422,6 +6429,7 @@ M:StockSharp.Algo.Strategies.Strategy.SubscribeBoard(StockSharp.BusinessEntities
 M:StockSharp.Algo.Strategies.Strategy.UnSubscribeBoard(StockSharp.BusinessEntities.ExchangeBoard)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Strategy.UnSubscribe(System.Int64)/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.Level1Received/inheritdoc;DocStr8459
+E:StockSharp.Algo.Strategies.Strategy.OrderBookReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.TickTradeReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.SecurityReceived/inheritdoc;DocStr8459
 E:StockSharp.Algo.Strategies.Strategy.BoardReceived/inheritdoc;DocStr8459
@@ -6790,6 +6798,7 @@ M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMes
 M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,System.Boolean,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IPortfolioProvider)/param/isEmulationOnly;DocStr11736
 M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,System.Boolean,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IPortfolioProvider)/param/securityProvider;DocStr972
 M:StockSharp.Algo.Testing.EmulationMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,System.Boolean,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IPortfolioProvider)/param/portfolioProvider;DocStr2244
+M:StockSharp.Algo.Testing.EmulationMessageAdapter.Dispose/inheritdoc;DocStr8459
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.Emulator/summary;Str1125
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.Settings/summary;DocStr1883
 P:StockSharp.Algo.Testing.EmulationMessageAdapter.InChannel/summary;DocStr4081
@@ -6992,6 +7001,7 @@ P:StockSharp.Algo.Testing.MarketEmulator.Settings/inheritdoc;DocStr8459
 P:StockSharp.Algo.Testing.MarketEmulator.ProcessedMessageCount/summary;DocStr2113
 P:StockSharp.Algo.Testing.MarketEmulator.OrderIdGenerator/summary;DocStr2235
 P:StockSharp.Algo.Testing.MarketEmulator.TradeIdGenerator/summary;DocStr2236
+P:StockSharp.Algo.Testing.MarketEmulator.CurrentTime/inheritdoc;DocStr8459
 M:StockSharp.Algo.Testing.MarketEmulator.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 E:StockSharp.Algo.Testing.MarketEmulator.NewOutMessage/inheritdoc;DocStr8459
 T:StockSharp.Algo.Testing.MarketEmulatorSettings/summary;DocStr1883
@@ -7365,15 +7375,6 @@ M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{Sto
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security},StockSharp.BusinessEntities.ExchangeBoard)/param/securities;Securities
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security},StockSharp.BusinessEntities.ExchangeBoard)/param/board;DocStr1311
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security},StockSharp.BusinessEntities.ExchangeBoard)/returns;DocStr1016
-M:StockSharp.Algo.TraderHelper.IsMatch(StockSharp.Messages.SecurityMessage,StockSharp.Messages.SecurityLookupMessage,System.Collections.Generic.HashSet{StockSharp.Messages.SecurityTypes})/summary;DocStr11293
-M:StockSharp.Algo.TraderHelper.IsMatch(StockSharp.Messages.SecurityMessage,StockSharp.Messages.SecurityLookupMessage,System.Collections.Generic.HashSet{StockSharp.Messages.SecurityTypes})/param/security;DocStr2831
-M:StockSharp.Algo.TraderHelper.IsMatch(StockSharp.Messages.SecurityMessage,StockSharp.Messages.SecurityLookupMessage,System.Collections.Generic.HashSet{StockSharp.Messages.SecurityTypes})/param/criteria;DocStr4431
-M:StockSharp.Algo.TraderHelper.IsMatch(StockSharp.Messages.SecurityMessage,StockSharp.Messages.SecurityLookupMessage,System.Collections.Generic.HashSet{StockSharp.Messages.SecurityTypes})/param/secTypes;Str2539
-M:StockSharp.Algo.TraderHelper.IsMatch(StockSharp.Messages.SecurityMessage,StockSharp.Messages.SecurityLookupMessage,System.Collections.Generic.HashSet{StockSharp.Messages.SecurityTypes})/returns;DocStr8659
-M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityMessage},StockSharp.Messages.SecurityLookupMessage)/summary;DocStr2432
-M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityMessage},StockSharp.Messages.SecurityLookupMessage)/param/securities;Securities
-M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityMessage},StockSharp.Messages.SecurityLookupMessage)/param/criteria;DocStr4431
-M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityMessage},StockSharp.Messages.SecurityLookupMessage)/returns;DocStr1016
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security},StockSharp.BusinessEntities.Security)/summary;DocStr2432
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security},StockSharp.BusinessEntities.Security)/param/securities;Securities
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security},StockSharp.BusinessEntities.Security)/param/criteria;DocStr111
@@ -7478,13 +7479,9 @@ M:StockSharp.Algo.TraderHelper.LookupByCode(StockSharp.BusinessEntities.ISecurit
 M:StockSharp.Algo.TraderHelper.LookupByCode(StockSharp.BusinessEntities.ISecurityProvider,System.String,System.Nullable{StockSharp.Messages.SecurityTypes})/param/type;Str360
 M:StockSharp.Algo.TraderHelper.LookupByCode(StockSharp.BusinessEntities.ISecurityProvider,System.String,System.Nullable{StockSharp.Messages.SecurityTypes})/returns;DocStr2510
 F:StockSharp.Algo.TraderHelper.LookupAllCriteria/summary;DocStr8657
-F:StockSharp.Algo.TraderHelper.LookupAllCriteriaMessage/summary;DocStr8657
 M:StockSharp.Algo.TraderHelper.IsLookupAll(StockSharp.BusinessEntities.Security)/summary;DocStr8658
 M:StockSharp.Algo.TraderHelper.IsLookupAll(StockSharp.BusinessEntities.Security)/param/criteria;DocStr111
 M:StockSharp.Algo.TraderHelper.IsLookupAll(StockSharp.BusinessEntities.Security)/returns;DocStr8659
-M:StockSharp.Algo.TraderHelper.IsLookupAll(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr8658
-M:StockSharp.Algo.TraderHelper.IsLookupAll(StockSharp.Messages.SecurityLookupMessage)/param/criteria;DocStr111
-M:StockSharp.Algo.TraderHelper.IsLookupAll(StockSharp.Messages.SecurityLookupMessage)/returns;DocStr8659
 M:StockSharp.Algo.TraderHelper.LookupAll(StockSharp.BusinessEntities.ISecurityProvider)/summary;DocStr2512
 M:StockSharp.Algo.TraderHelper.LookupAll(StockSharp.BusinessEntities.ISecurityProvider)/param/provider;DocStr972
 M:StockSharp.Algo.TraderHelper.LookupAll(StockSharp.BusinessEntities.ISecurityProvider)/returns;DocStr2513

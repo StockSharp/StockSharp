@@ -2255,6 +2255,8 @@ F:StockSharp.Fix.Native.FixTags.City/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Gender/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Subscription/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Token/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.PrimaryCode/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.PrimaryBoard/summary;DocStr8459
 T:StockSharp.Fix.Native.IFixReader/summary;DocStr3208
 P:StockSharp.Fix.Native.IFixReader.Stream/summary;DocStr1295
 P:StockSharp.Fix.Native.IFixReader.BytesRead/summary;DocStr3201

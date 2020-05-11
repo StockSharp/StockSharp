@@ -16229,3 +16229,4 @@ DocStr11788;Support candles {0};Support candles {0}
 DocStr11789;Message loopback modes;Message loopback modes
 DocStr11790;Direct;Direct
 DocStr11791;Via whole adapters chain;Via whole adapters chain
+DocStr11792;Address (demo);Address (demo)

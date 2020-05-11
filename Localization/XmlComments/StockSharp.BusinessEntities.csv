@@ -133,6 +133,7 @@ P:StockSharp.BusinessEntities.Exchange.PrizmBit/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.DigitexFutures/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.Bovespa/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.IQFeed/summary;DocStr11334
+P:StockSharp.BusinessEntities.Exchange.IBKR/summary;DocStr11334
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -377,6 +378,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.PrizmBit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.DigitexFutures/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Bovespa/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.IQFeed/summary;DocStr2809
+P:StockSharp.BusinessEntities.ExchangeBoard.IBKR/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
 E:StockSharp.BusinessEntities.IConnector.NewTrades/summary;DocStr868
@@ -840,8 +842,7 @@ M:StockSharp.BusinessEntities.Portfolio.CreateSimulator/returns;Str1209
 M:StockSharp.BusinessEntities.Portfolio.CopyTo(StockSharp.BusinessEntities.Portfolio)/summary;DocStr2929
 M:StockSharp.BusinessEntities.Portfolio.CopyTo(StockSharp.BusinessEntities.Portfolio)/param/destination;DocStr2930
 M:StockSharp.BusinessEntities.Portfolio.ToString/inheritdoc;DocStr8459
-M:StockSharp.BusinessEntities.Portfolio.Clone/summary;DocStr643
-M:StockSharp.BusinessEntities.Portfolio.Clone/returns;DocStr1116
+M:StockSharp.BusinessEntities.Portfolio.Clone/inheritdoc;DocStr8459
 T:StockSharp.BusinessEntities.Position/summary;PositionDesc
 M:StockSharp.BusinessEntities.Position.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Position.BeginValue/summary;Str424
@@ -921,6 +922,7 @@ P:StockSharp.BusinessEntities.Security.ExpiryDate/summary;Str371
 P:StockSharp.BusinessEntities.Security.SettlementDate/summary;Str373
 P:StockSharp.BusinessEntities.Security.CfiCode/summary;CfiCodeDesc
 P:StockSharp.BusinessEntities.Security.FaceValue/summary;FaceValue
+P:StockSharp.BusinessEntities.Security.PrimaryId/summary;PrimaryIdDesc
 P:StockSharp.BusinessEntities.Security.ExtensionInfo/inheritdoc;DocStr8459
 P:StockSharp.BusinessEntities.Security.StepPrice/summary;Str290
 P:StockSharp.BusinessEntities.Security.LastTrade/summary;DocStr2626
