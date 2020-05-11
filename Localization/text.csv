@@ -5187,6 +5187,8 @@ OptionMarginDesc;Option margin leverage.;Гарантийное обеспече
 OptionSyntheticMargin;Option (synthetic);Опцион (синтетика)
 OptionSyntheticMarginDesc;Synthetic option position margin leverage.;Гарантийное обеспечение на синтетическую опционную позицию.
 SecurityNonTradable;Security '{0}' is no tradable.;Инструмент '{0}' не является торгуемым.
+PrimaryId;Primary id;Локальный
+PrimaryIdDesc;Identifier on primary exchange.;Идентификатор на основной бирже.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

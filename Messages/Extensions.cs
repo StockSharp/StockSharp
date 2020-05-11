@@ -3099,6 +3099,9 @@ namespace StockSharp.Messages
 			if (criteria.ExpiryDate != null && security.ExpiryDate != null && security.ExpiryDate != criteria.ExpiryDate)
 				return false;
 
+			if (criteria.PrimaryId != default && security.PrimaryId != criteria.PrimaryId)
+				return false;
+
 			//if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
 			//{
 			//	if (security.ExtensionInfo == null)

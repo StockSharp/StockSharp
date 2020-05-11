@@ -545,6 +545,9 @@ namespace StockSharp.Algo
 			message.BasketExpression = security.BasketExpression;
 			message.FaceValue = security.FaceValue;
 
+			if (!security.PrimaryId.IsEmpty())
+				message.PrimaryId = security.PrimaryId.ToSecurityId();
+
 			return message;
 		}
 

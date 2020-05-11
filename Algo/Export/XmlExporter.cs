@@ -396,6 +396,12 @@ namespace StockSharp.Algo.Export
 				if (security.FaceValue != null)
 					writer.WriteAttribute("faceValue", security.FaceValue.Value);
 
+				if (!security.PrimaryId.SecurityCode.IsEmpty())
+					writer.WriteAttribute("primaryCode", security.PrimaryId.SecurityCode);
+
+				if (!security.PrimaryId.BoardCode.IsEmpty())
+					writer.WriteAttribute("primaryBoard", security.PrimaryId.BoardCode);
+
 				if (!security.SecurityId.Bloomberg.IsEmpty())
 					writer.WriteAttribute("bloomberg", security.SecurityId.Bloomberg);
 

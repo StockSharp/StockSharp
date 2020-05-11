@@ -277,6 +277,12 @@ namespace StockSharp.Messages
 		public decimal? FaceValue { get; set; }
 
 		/// <summary>
+		/// Identifier on primary exchange.
+		/// </summary>
+		[DataMember]
+		public SecurityId PrimaryId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		public SecurityMessage()
@@ -340,6 +346,7 @@ namespace StockSharp.Messages
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
 			destination.FaceValue = FaceValue;
+			destination.PrimaryId = PrimaryId;
 		}
 
 		/// <inheritdoc />
@@ -409,6 +416,9 @@ namespace StockSharp.Messages
 
 			if (FaceValue != null)
 				str += $",FaceValue={FaceValue}";
+
+			if (PrimaryId != default)
+				str += $",Primary={PrimaryId}";
 
 			return str;
 		}

@@ -349,6 +349,7 @@ namespace StockSharp.Algo.Storages.Csv
 				public bool? Shortable { get; set; }
 				public string BasketCode { get; set; }
 				public string BasketExpression { get; set; }
+				public string PrimaryId { get; set; }
 
 				public Security ToSecurity(SecurityCsvList list)
 				{
@@ -388,6 +389,7 @@ namespace StockSharp.Algo.Storages.Csv
 						Shortable = Shortable,
 						BasketCode = BasketCode,
 						BasketExpression = BasketExpression,
+						PrimaryId = PrimaryId
 					};
 				}
 
@@ -421,6 +423,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Shortable = security.Shortable;
 					BasketCode = security.BasketCode;
 					BasketExpression = security.BasketExpression;
+					PrimaryId = security.PrimaryId;
 				}
 			}
 
@@ -542,6 +545,9 @@ namespace StockSharp.Algo.Storages.Csv
 				if (IsChanged(security.BasketExpression, liteSec.BasketExpression, forced))
 					return true;
 
+				if (IsChanged(security.PrimaryId, liteSec.PrimaryId, forced))
+					return true;
+
 				return false;
 			}
 
@@ -633,6 +639,9 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					liteSec.MaxVolume = reader.ReadNullableDecimal();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					liteSec.PrimaryId = reader.ReadString();
+
 				return liteSec.ToSecurity(this);
 			}
 
@@ -676,6 +685,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Shortable.To<string>(),
 					data.UnderlyingSecurityMinVolume.To<string>(),
 					data.MaxVolume.To<string>(),
+					data.PrimaryId,
 				});
 			}
 

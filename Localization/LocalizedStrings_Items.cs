@@ -51536,5 +51536,25 @@ namespace StockSharp.Localization
 		/// Security '{0}' is no tradable.
 		/// </summary>
 		public static string SecurityNonTradable => GetString(SecurityNonTradableKey);
+
+		/// <summary>
+		/// Primary id
+		/// </summary>
+		public const string PrimaryIdKey = nameof(PrimaryId);
+
+		/// <summary>
+		/// Primary id
+		/// </summary>
+		public static string PrimaryId => GetString(PrimaryIdKey);
+
+		/// <summary>
+		/// Identifier on primary exchange.
+		/// </summary>
+		public const string PrimaryIdDescKey = nameof(PrimaryIdDesc);
+
+		/// <summary>
+		/// Identifier on primary exchange.
+		/// </summary>
+		public static string PrimaryIdDesc => GetString(PrimaryIdDescKey);
 	}
 }

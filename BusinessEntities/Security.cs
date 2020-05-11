@@ -559,6 +559,31 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private string _primaryId;
+
+		/// <summary>
+		/// Identifier on primary exchange.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PrimaryIdKey,
+			Description = LocalizedStrings.PrimaryIdDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 18)]
+		public string PrimaryId
+		{
+			get => _primaryId;
+			set
+			{
+				if (_primaryId == value)
+					return;
+
+				_primaryId = value;
+				Notify(nameof(PrimaryId));
+			}
+		}
+
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
@@ -2050,6 +2075,7 @@ namespace StockSharp.BusinessEntities
 			destination.CommissionTaker = CommissionTaker;
 			destination.CommissionMaker = CommissionMaker;
 			destination.FaceValue = FaceValue;
+			destination.PrimaryId = PrimaryId;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();
