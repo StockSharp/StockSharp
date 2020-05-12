@@ -1514,6 +1514,9 @@ namespace StockSharp.Algo
 					changed = true;
 				}
 
+				if (msg.OriginalTransactionId == ids[i])
+					msg.OriginalTransactionId = parentId.Value;
+
 				ids[i] = parentId.Value;
 			}
 
