@@ -1426,34 +1426,32 @@ namespace StockSharp.Algo
 		{
 			if (message.OrderState != OrderStates.Failed && message.Error == null)
 			{
-				var changes = _entityCache.ProcessOrderMessage(o, security, message, transactionId, out var pfInfo);
-
-				if (changes == null)
+				foreach (var change in _entityCache.ProcessOrderMessage(o, security, message, transactionId))
 				{
-					this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
-
-					if (transactionId == 0 && !isStatusRequest)
+					if (change == EntityCache.OrderChangeInfo.NotExist)
 					{
-						if (message.OrderId != null)
+						this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
+
+						if (transactionId == 0 && !isStatusRequest)
 						{
-							this.AddInfoLog("{0} info suspended.", message.OrderId.Value);
-							_nonAssociatedOrderIds.SafeAdd(message.OrderId.Value).Add(message.TypedClone());
+							if (message.OrderId != null)
+							{
+								this.AddInfoLog("{0} info suspended.", message.OrderId.Value);
+								_nonAssociatedOrderIds.SafeAdd(message.OrderId.Value).Add(message.TypedClone());
+							}
+							else if (!message.OrderStringId.IsEmpty())
+							{
+								this.AddInfoLog("{0} info suspended.", message.OrderStringId);
+								_nonAssociatedStringOrderIds.SafeAdd(message.OrderStringId).Add(message.TypedClone());
+							}
 						}
-						else if (!message.OrderStringId.IsEmpty())
-						{
-							this.AddInfoLog("{0} info suspended.", message.OrderStringId);
-							_nonAssociatedStringOrderIds.SafeAdd(message.OrderStringId).Add(message.TypedClone());
-						}
+
+						continue;
 					}
-					
-					return;
-				}
 
-				if (pfInfo != null)
-					ProcessPortfolio(pfInfo);
+					if (change.PfInfo != null)
+						ProcessPortfolio(change.PfInfo);
 
-				foreach (var change in changes)
-				{
 					var order = change.Order;
 
 					//if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))

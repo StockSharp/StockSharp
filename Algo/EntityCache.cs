@@ -36,22 +36,21 @@ namespace StockSharp.Algo
 
 		public class OrderChangeInfo
 		{
-			public static OrderChangeInfo Create(Order order, bool isNew, bool isChanged)
-			{
-				if (order == null)
-					throw new ArgumentNullException(nameof(order));
+			private OrderChangeInfo() { }
 
-				return new OrderChangeInfo
-				{
-					Order = order,
-					IsNew = isNew,
-					IsChanged = isChanged,
-				};
+			public OrderChangeInfo(Order order, bool isNew, bool isChanged)
+			{
+				Order = order ?? throw new ArgumentNullException(nameof(order));
+				IsNew = isNew;
+				IsChanged = isChanged;
 			}
 
 			public Order Order { get; private set; }
 			public bool IsNew { get; private set; }
 			public bool IsChanged { get; private set; }
+			public Tuple<Portfolio, bool, bool> PfInfo { get; set; }
+
+			public static readonly OrderChangeInfo NotExist = new OrderChangeInfo();
 		}
 
 		private sealed class OrderInfo
@@ -80,10 +79,10 @@ namespace StockSharp.Algo
 				if (order.State == OrderStates.Done)
 				{
 					// данные о заявке могут приходить из маркет-дата и транзакционного адаптеров
-					retVal = OrderChangeInfo.Create(order, _raiseNewOrder, false);
+					retVal = new OrderChangeInfo(order, _raiseNewOrder, false);
 					_raiseNewOrder = false;
 					process(order);
-					return new[] { retVal };
+					yield return retVal;
 					//throw new InvalidOperationException("Изменение заявки в состоянии Done невозможно.");
 				}
 				else if (order.State == OrderStates.Failed)
@@ -91,7 +90,7 @@ namespace StockSharp.Algo
 					// some adapters can resend order's info
 
 					//throw new InvalidOperationException();
-					return null;
+					yield break;
 				}
 
 				var isPending = order.State == OrderStates.Pending;
@@ -162,10 +161,10 @@ namespace StockSharp.Algo
 
 				message.CopyExtensionInfo(order);
 
-				retVal = OrderChangeInfo.Create(order, _raiseNewOrder, true);
+				retVal = new OrderChangeInfo(order, _raiseNewOrder, true);
 				_raiseNewOrder = false;
 				process(order);
-				return new[] { retVal };
+				yield return retVal;
 			}
 		}
 
@@ -452,7 +451,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public IEnumerable<OrderChangeInfo> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId, out Tuple<Portfolio, bool, bool> pfInfo)
+		public IEnumerable<OrderChangeInfo> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -467,8 +466,6 @@ namespace StockSharp.Algo
 
 			if (transactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str719);
-
-			pfInfo = null;
 
 			if (transactionId == 0)
 			{
@@ -485,11 +482,14 @@ namespace StockSharp.Algo
 
 				if (info == null)
 				{
-					return null;
+					yield return OrderChangeInfo.NotExist;
 					//throw new InvalidOperationException(LocalizedStrings.Str1156Params.Put(orderId.To<string>() ?? orderStringId));
 				}
-
-				return info.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData));
+				else
+				{
+					foreach (var i in info.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)))
+						yield return i;
+				}
 			}
 			else
 			{
@@ -502,9 +502,13 @@ namespace StockSharp.Algo
 					var cancellationOrder = cancelledInfo.Order;
 
 					if (registeredInfo == null)
-						return cancelledInfo.ApplyChanges(message, true, o => UpdateOrderIds(o, securityData));
+					{
+						foreach (var i in cancelledInfo.ApplyChanges(message, true, o => UpdateOrderIds(o, securityData)))
+							yield return i;
 
-					var retVal = new List<OrderChangeInfo>();
+						yield break;
+					}
+
 					var orderState = message.OrderState;
 
 					if (orderState != null && cancellationOrder.State != OrderStates.Done && orderState != OrderStates.None && orderState != OrderStates.Pending)
@@ -514,7 +518,7 @@ namespace StockSharp.Algo
 						if (message.Latency != null)
 							cancellationOrder.LatencyCancellation = message.Latency.Value;
 
-						retVal.Add(OrderChangeInfo.Create(cancellationOrder, false, true));
+						yield return new OrderChangeInfo(cancellationOrder, false, true);
 					}
 
 					var isCancelOrder = (message.OrderId != null && message.OrderId == cancellationOrder.Id)
@@ -524,10 +528,15 @@ namespace StockSharp.Algo
 					var regOrder = registeredInfo.Order;
 
 					if (!isCancelOrder)
-						retVal.AddRange(registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)));
+					{
+						foreach (var i in registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)))
+							yield return i;
 
-					return retVal;
+						yield break;
+					}
 				}
+
+				Tuple<Portfolio, bool, bool> pfInfo = null;
 
 				if (registeredInfo == null)
 				{
@@ -566,7 +575,7 @@ namespace StockSharp.Algo
 					else
 					{
 						pfInfo = ProcessPortfolio(message.PortfolioName);
-						o.Portfolio = ProcessPortfolio(message.PortfolioName).Item1;
+						o.Portfolio = pfInfo.Item1;
 					}
 
 					//if (o.ExtensionInfo == null)
@@ -579,8 +588,12 @@ namespace StockSharp.Algo
 					securityData.Orders.Add(CreateOrderKey(o.Type, transactionId, false), registeredInfo);
 				}
 
-				return registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData))
-					?? Enumerable.Empty<OrderChangeInfo>();
+				foreach (var i in registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)))
+				{
+					i.PfInfo = pfInfo;
+					pfInfo = null;
+					yield return i;
+				}
 			}
 		}
 
