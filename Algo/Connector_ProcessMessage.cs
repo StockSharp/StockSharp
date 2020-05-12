@@ -1137,6 +1137,7 @@ namespace StockSharp.Algo
 			var hasOnline = false;
 
 			var receivedEvt = MarketDepthReceived;
+			var hasReceivedEvt = receivedEvt != null;
 
 			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
 			{
@@ -1148,7 +1149,7 @@ namespace StockSharp.Algo
 					{
 						hasOnline = true;
 
-						if (MarketDepthChanged != null || MarketDepthsChanged != null || MarketDepthReceived != null || FilteredMarketDepthChanged != null)
+						if (MarketDepthChanged != null || MarketDepthsChanged != null || hasReceivedEvt || FilteredMarketDepthChanged != null)
 						{
 							depth = GetMarketDepth(security, message.IsFiltered);
 
@@ -1166,19 +1167,19 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						if (receivedEvt != null)
+						if (hasReceivedEvt)
 							depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
 					}
 				}
 				else
 				{
-					if (receivedEvt != null)
+					if (hasReceivedEvt)
 						depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security), GetSecurity);
 				}
 
 				OrderBookReceived?.Invoke(subscription, message);
 
-				if (depth != null)
+				if (hasReceivedEvt)
 					receivedEvt.Invoke(subscription, depth);
 			}
 			
