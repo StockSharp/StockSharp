@@ -68,8 +68,11 @@ namespace StockSharp.Algo
 
 			public Order Order { get; }
 
-			public OrderChangeInfo ApplyChanges(ExecutionMessage message, bool isCancel)
+			public IEnumerable<OrderChangeInfo> ApplyChanges(ExecutionMessage message, bool isCancel, Action<Order> process)
 			{
+				if (process is null)
+					throw new ArgumentNullException(nameof(process));
+
 				var order = Order;
 
 				OrderChangeInfo retVal;
@@ -79,7 +82,8 @@ namespace StockSharp.Algo
 					// данные о заявке могут приходить из маркет-дата и транзакционного адаптеров
 					retVal = OrderChangeInfo.Create(order, _raiseNewOrder, false);
 					_raiseNewOrder = false;
-					return retVal;
+					process(order);
+					return new[] { retVal };
 					//throw new InvalidOperationException("Изменение заявки в состоянии Done невозможно.");
 				}
 				else if (order.State == OrderStates.Failed)
@@ -160,7 +164,8 @@ namespace StockSharp.Algo
 
 				retVal = OrderChangeInfo.Create(order, _raiseNewOrder, true);
 				_raiseNewOrder = false;
-				return retVal;
+				process(order);
+				return new[] { retVal };
 			}
 		}
 
@@ -484,9 +489,7 @@ namespace StockSharp.Algo
 					//throw new InvalidOperationException(LocalizedStrings.Str1156Params.Put(orderId.To<string>() ?? orderStringId));
 				}
 
-				var orderInfo = info.ApplyChanges(message, false);
-				UpdateOrderIds(info.Order, securityData);
-				return new[] { orderInfo };
+				return info.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData));
 			}
 			else
 			{
@@ -499,11 +502,7 @@ namespace StockSharp.Algo
 					var cancellationOrder = cancelledInfo.Order;
 
 					if (registeredInfo == null)
-					{
-						var i = cancelledInfo.ApplyChanges(message, true);
-						UpdateOrderIds(cancellationOrder, securityData);
-						return new[] { i };
-					}
+						return cancelledInfo.ApplyChanges(message, true, o => UpdateOrderIds(o, securityData));
 
 					var retVal = new List<OrderChangeInfo>();
 					var orderState = message.OrderState;
@@ -525,11 +524,7 @@ namespace StockSharp.Algo
 					var regOrder = registeredInfo.Order;
 
 					if (!isCancelOrder)
-					{
-						var replacedInfo = registeredInfo.ApplyChanges(message, false);
-						UpdateOrderIds(regOrder, securityData);
-						retVal.Add(replacedInfo);
-					}
+						retVal.AddRange(registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)));
 
 					return retVal;
 				}
@@ -584,15 +579,8 @@ namespace StockSharp.Algo
 					securityData.Orders.Add(CreateOrderKey(o.Type, transactionId, false), registeredInfo);
 				}
 
-				var orderInfo = registeredInfo.ApplyChanges(message, false);
-
-				if (orderInfo != null)
-				{
-					UpdateOrderIds(registeredInfo.Order, securityData);
-					return new[] { orderInfo };
-				}
-				else
-					return Enumerable.Empty<OrderChangeInfo>();
+				return registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData))
+					?? Enumerable.Empty<OrderChangeInfo>();
 			}
 		}
 
