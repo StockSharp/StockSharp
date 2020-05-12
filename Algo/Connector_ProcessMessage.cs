@@ -916,16 +916,11 @@ namespace StockSharp.Algo
 				return b.ApplyChanges(message);
 			});
 
-			if (message.OriginalTransactionId == 0)
-				return;
-
-			if (isNew)
-				_subscriptionManager.ProcessLookupResponse(message, board);
-
-			RaiseReceived(board, message, BoardReceived);
+			var subscriptions = _subscriptionManager.ProcessLookupResponse(message, board);
+			RaiseReceived(board, subscriptions, BoardReceived);
 		}
 
-		private void ProcessSecurityMessage(SecurityMessage message/*, string boardCode = null*/)
+		private void ProcessSecurityMessage(SecurityMessage message)
 		{
 			var secId = CreateSecurityId(message.SecurityId.SecurityCode, message.SecurityId.BoardCode);
 
@@ -938,20 +933,12 @@ namespace StockSharp.Algo
 				return true;
 			}, out var isNew);
 
-			if (message.OriginalTransactionId == 0)
-				return;
-
-			if (isNew)
-				_subscriptionManager.ProcessLookupResponse(message, security);
-
-			RaiseReceived(security, message, SecurityReceived);
+			var subscriptions = _subscriptionManager.ProcessLookupResponse(message, security);
+			RaiseReceived(security, subscriptions, SecurityReceived);
 		}
 
 		private void ProcessTimeFrameInfoMessage(TimeFrameInfoMessage message)
 		{
-			if (message.OriginalTransactionId == 0)
-				return;
-
 			_subscriptionManager.ProcessLookupResponse(message, message.TimeFrames);
 
 			// TODO

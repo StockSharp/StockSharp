@@ -442,13 +442,15 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void ProcessLookupResponse<T>(ISubscriptionIdMessage message, T item)
+			public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T item)
 			{
-				ProcessLookupResponse(message, new[] { item });
+				return ProcessLookupResponse(message, new[] { item });
 			}
 
-			public void ProcessLookupResponse<T>(ISubscriptionIdMessage message, T[] items)
+			public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T[] items)
 			{
+				var subscriptions = new List<Subscription>();
+
 				foreach (var id in message.GetSubscriptionIds())
 				{
 					var info = TryGetInfo(id, false);
@@ -462,8 +464,11 @@ namespace StockSharp.Algo
 						continue;
 					}
 
-					info.LookupItems.AddRange(items.Cast<object>());	
+					info.LookupItems.AddRange(items.Cast<object>());
+					subscriptions.Add(info.Subscription);
 				}
+
+				return subscriptions;
 			}
 
 			public Subscription ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message, out object[] items)

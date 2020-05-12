@@ -881,9 +881,17 @@ namespace StockSharp.Algo
 
 		private bool? RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
 		{
+			return RaiseReceived(entity, _subscriptionManager.GetSubscriptions(message), evt);
+		}
+
+		private bool? RaiseReceived<TEntity>(TEntity entity, IEnumerable<Subscription> subscriptions, Action<Subscription, TEntity> evt)
+		{
+			if (subscriptions is null)
+				throw new ArgumentNullException(nameof(subscriptions));
+
 			bool? anyOnline = null;
 
-			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
+			foreach (var subscription in subscriptions)
 			{
 				anyOnline = false;
 
