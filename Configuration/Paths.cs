@@ -2,6 +2,8 @@
 {
 	using System;
 	using System.IO;
+	using System.Linq;
+	using System.Reflection;
 
 	using Ecng.Common;
 	using Ecng.Configuration;
@@ -31,6 +33,37 @@
 			StorageDir = Path.Combine(AppDataPath, "Storage");
 			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
+
+			// ReSharper disable once AssignNullToNotNullAttribute
+			var dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+			while (dir != null)
+			{
+				var hdRoot = FindHistoryDataSubfolder(new DirectoryInfo(Path.Combine(dir.FullName, "packages", "stocksharp.samples.historydata")));
+				if (hdRoot != null)
+				{
+					HistoryDataPath = hdRoot.FullName;
+					break;
+				}
+
+				dir = dir.Parent;
+			}
+		}
+
+		private static DirectoryInfo FindHistoryDataSubfolder(DirectoryInfo packageRoot)
+		{
+			if (!packageRoot.Exists)
+				return null;
+
+			foreach (var di in packageRoot.GetDirectories().OrderByDescending(di => di.Name))
+			{
+				var d = new DirectoryInfo(Path.Combine(di.FullName, "HistoryData"));
+
+				if (d.Exists)
+					return d;
+			}
+
+			return null;
 		}
 
 		/// <summary>
@@ -167,6 +200,6 @@
 		/// <summary>
 		/// Sample history data.
 		/// </summary>
-		public static string HistoryDataPath => SampleDataHelper.DataPath;
+		public static readonly string HistoryDataPath;
 	}
 }
