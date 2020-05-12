@@ -51556,5 +51556,15 @@ namespace StockSharp.Localization
 		/// Identifier on primary exchange.
 		/// </summary>
 		public static string PrimaryIdDesc => GetString(PrimaryIdDescKey);
+
+		/// <summary>
+		/// Soft Dollar Tier
+		/// </summary>
+		public const string SoftDollarTierKey = nameof(SoftDollarTier);
+
+		/// <summary>
+		/// Soft Dollar Tier
+		/// </summary>
+		public static string SoftDollarTier => GetString(SoftDollarTierKey);
 	}
 }
