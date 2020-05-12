@@ -1310,7 +1310,7 @@ namespace StockSharp.Algo
 			order.MinVolume = message.MinVolume;
 
 			if (message.OrderState != null)
-				order.State = order.State.CheckModification((OrderStates)message.OrderState);
+				order.ApplyNewState(message.OrderState.Value);
 
 			return order;
 		}
@@ -1435,10 +1435,7 @@ namespace StockSharp.Algo
 			order.IsSystem = message.IsSystem;
 			order.Currency = message.Currency;
 
-			if (message.OrderState != null)
-				order.State = order.State.CheckModification(message.OrderState.Value);
-			else
-				order.State = order.State.CheckModification(message.TradeId != null ? OrderStates.Done : OrderStates.Active);
+			order.ApplyNewState(message.OrderState ?? (message.TradeId != null ? OrderStates.Done : OrderStates.Active));
 
 			if (message.TradeId != null)
 			{

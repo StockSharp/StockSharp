@@ -896,7 +896,7 @@ namespace StockSharp.Algo
 			//	order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
 
 			order.LocalTime = CurrentTime;
-			order.State = order.State.CheckModification(OrderStates.Pending);
+			order.ApplyNewState(OrderStates.Pending, this);
 
 			_entityCache.AddOrderByRegistrationId(order);
 

@@ -118,7 +118,7 @@ namespace StockSharp.Algo
 				}
 
 				if (message.OrderState != null)
-					order.State = order.State.CheckModification(message.OrderState.Value);
+					order.ApplyNewState(message.OrderState.Value, _parent._logReceiver);
 
 				if (order.Time == DateTimeOffset.MinValue)
 					order.Time = message.ServerTime;
@@ -513,7 +513,7 @@ namespace StockSharp.Algo
 
 					if (orderState != null && cancellationOrder.State != OrderStates.Done && orderState != OrderStates.None && orderState != OrderStates.Pending)
 					{
-						cancellationOrder.State = cancellationOrder.State.CheckModification(OrderStates.Done);
+						cancellationOrder.ApplyNewState(OrderStates.Done, _logReceiver);
 						
 						if (message.Latency != null)
 							cancellationOrder.LatencyCancellation = message.Latency.Value;
@@ -700,7 +700,7 @@ namespace StockSharp.Algo
 
 				//для ошибок снятия не надо менять состояние заявки
 				if (!isCancelTransaction)
-					o.State = o.State.CheckModification(OrderStates.Failed);
+					o.ApplyNewState(OrderStates.Failed, _logReceiver);
 
 				if (message.Commission != null)
 					o.Commission = message.Commission;

@@ -79,7 +79,7 @@ namespace StockSharp.Algo
 			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.None] = false;
 			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Pending] = true;
 			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Active] = true;
-			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Done] = true;
+			//_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Done] = true;
 			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Failed] = true;
 
 			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.None] = false;
@@ -106,15 +106,18 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Check the possibility order's state change.
 		/// </summary>
-		/// <param name="prev">Previous order's state.</param>
-		/// <param name="curr">Current order's state.</param>
-		/// <returns>The current order's state.</returns>
-		public static OrderStates CheckModification(this OrderStates prev, OrderStates curr)
+		/// <param name="order">Order.</param>
+		/// <param name="state">Current order's state.</param>
+		/// <param name="logs">Logs.</param>
+		public static void ApplyNewState(this Order order, OrderStates state, ILogReceiver logs = null)
 		{
-			if (!_stateChangePossibilities[(int)prev][(int)curr])
-				throw new InvalidOperationException($"{prev} -> {curr}");
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
 
-			return curr;
+			if (!_stateChangePossibilities[(int)order.State][(int)state] && logs != null)
+				logs.AddWarningLog($"Order {order.TransactionId} invalid state change: {order.State} -> {state}");
+
+			order.State = state;
 		}
 
 		/// <summary>
