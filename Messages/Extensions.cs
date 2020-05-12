@@ -2924,17 +2924,6 @@ namespace StockSharp.Messages
 			=> dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage) && t.Arg != null).Select(t => (TimeSpan)t.Arg);
 
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <typeparam name="TField"></typeparam>
-		/// <param name="field"></param>
-		/// <returns></returns>
-		public static string GetFieldDescription<TField>(this TField field)
-		{
-			return field.GetType().GetField(field.ToString()).GetAttribute<DisplayAttribute>()?.GetDescription();
-		}
-
-		/// <summary>
 		/// To determine whether the order book is in the right state.
 		/// </summary>
 		/// <param name="book">Order book.</param>
