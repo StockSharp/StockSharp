@@ -761,8 +761,11 @@ namespace StockSharp.Algo.Testing
 		{
 			_securityDefinition = securityDefinition ?? throw new ArgumentNullException(nameof(securityDefinition));
 
-			_priceStepUpdated = _securityDefinition.PriceStep != null;
-			_volumeStepUpdated = _securityDefinition.VolumeStep != null;
+			if (_securityDefinition.PriceStep != null)
+				_priceStepUpdated = true;
+
+			if (_securityDefinition.VolumeStep != null)
+				_volumeStepUpdated = true;
 		}
 	}
 }

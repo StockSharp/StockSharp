@@ -544,6 +544,8 @@ namespace StockSharp.Algo.Testing
 							break;
 					}
 				}
+
+				_execLogConverter.UpdateSecurityDefinition(_securityDefinition);
 			}
 
 			private decimal GetVolumeStep()

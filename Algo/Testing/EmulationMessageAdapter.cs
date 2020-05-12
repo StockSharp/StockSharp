@@ -181,6 +181,12 @@ namespace StockSharp.Algo.Testing
 					return base.OnSendInMessage(message);
 				}
 
+				case MessageTypes.Level1Change:
+				{
+					SendToEmulator(message);
+					return true;
+				}
+
 				default:
 				{
 					if (OwnInnerAdapter)
