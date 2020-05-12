@@ -95,6 +95,18 @@ namespace StockSharp.Algo
 
 				var isPending = order.State == OrderStates.Pending;
 
+				// is we have Pending order and received Done event
+				// add intermediate Active event
+				if (isPending && message.OrderState == OrderStates.Done)
+				{
+					var clone = message.TypedClone();
+					clone.OrderState = OrderStates.Active;
+					clone.Balance = null;
+
+					foreach (var i in ApplyChanges(clone, false, process))
+						yield return i;
+				}
+
 				if (message.OrderId != null)
 					order.Id = message.OrderId.Value;
 
