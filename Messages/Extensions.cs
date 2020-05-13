@@ -3154,5 +3154,25 @@ namespace StockSharp.Messages
 				criteria.IssueSize == null &&
 				criteria.BinaryOptionType.IsEmpty();
 		}
+
+		/// <summary>
+		/// Change <see cref="IMessageAdapter.SupportedInMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="add">Command.</param>
+		/// <param name="isMarketData">Message types.</param>
+		public static void ChangeSupported(this IMessageAdapter adapter, bool add, bool isMarketData)
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			var types = adapter.PossibleSupportedMessages.Where(i => i.IsMarketData == isMarketData).Select(i => i.Type);
+
+			var supported = add
+				? adapter.SupportedInMessages.Concat(types)
+				: adapter.SupportedInMessages.Except(types);
+
+			adapter.SupportedInMessages = supported.Distinct().ToArray();
+		}
 	}
 }
