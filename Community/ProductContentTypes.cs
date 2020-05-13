@@ -54,10 +54,17 @@ namespace StockSharp.Community
 		Indicator,
 
 		/// <summary>
-		/// Connector.
+		/// Crypto connector.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ConnectorKey)]
-		Connector,
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CryptocurrencyKey)]
+		CryptoConnector,
+
+		/// <summary>
+		/// Stock connector.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StockKey)]
+		StockConnector,
 	}
 }
