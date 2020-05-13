@@ -562,10 +562,19 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
 		/// <param name="format">Storage format. If set an extension will be added to the file name.</param>
+		/// <param name="throwIfUnknown">Throw exception if the specified type is unknown.</param>
 		/// <returns>The file name.</returns>
-		public static string GetFileName(DataType dataType, StorageFormats? format = null)
+		public static string GetFileName(DataType dataType, StorageFormats? format = null, bool throwIfUnknown = true)
 		{
 			var fileName = dataType.DataTypeToFileName();
+
+			if (fileName == null)
+			{
+				if (throwIfUnknown)
+					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.ToString()));
+
+				return null;
+			}
 
 			if (format != null)
 				fileName += GetExtension(format.Value);

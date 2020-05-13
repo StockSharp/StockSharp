@@ -685,21 +685,19 @@ namespace StockSharp.Messages
 		/// <returns>File name.</returns>
 		public static string DataTypeToFileName(this DataType dataType)
 		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
 			if (dataType.MessageType.IsCandleMessage())
 			{
 				if (_fileNames.TryGetValue(DataType.Create(dataType.MessageType, null), out var fileName))
 					return "candles_{0}_{1}".Put(fileName, dataType.CandleArgToFolderName());
 
-				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.WrongCandleType);
+				return null;
 			}
 			else
 			{
-				var fileName = _fileNames.TryGetValue(dataType);
-
-				if (fileName == null)
-					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.ToString()));
-
-				return fileName;
+				return _fileNames.TryGetValue(dataType);
 			}
 		}
 
