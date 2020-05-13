@@ -1063,12 +1063,6 @@ M:StockSharp.Messages.Extensions.SetSubscriptionIds``1(``0,System.Int64[],System
 M:StockSharp.Messages.Extensions.GetSubscriptionIds(StockSharp.Messages.ISubscriptionIdMessage)/summary;DocStr11400
 M:StockSharp.Messages.Extensions.GetSubscriptionIds(StockSharp.Messages.ISubscriptionIdMessage)/param/message;Str3166
 M:StockSharp.Messages.Extensions.GetSubscriptionIds(StockSharp.Messages.ISubscriptionIdMessage)/returns;Identifiers
-M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.MarketDataTypes)/summary;DocStr11393
-M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.MarketDataTypes)/param/type;Str1670
-M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.MarketDataTypes)/returns;DocStr8659
-M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.DataType)/summary;DocStr11393
-M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.DataType)/param/type;DocStr8490
-M:StockSharp.Messages.Extensions.IsSecurityRequired(StockSharp.Messages.DataType)/returns;DocStr8659
 M:StockSharp.Messages.Extensions.RemoveLookupMessages(StockSharp.Messages.MessageAdapter)/summary;DocStr11401
 M:StockSharp.Messages.Extensions.RemoveLookupMessages(StockSharp.Messages.MessageAdapter)/param/adapter;Adapter
 M:StockSharp.Messages.Extensions.IsMarketData(StockSharp.Messages.ExecutionMessage)/summary;DocStr11407
@@ -1201,10 +1195,6 @@ M:StockSharp.Messages.Extensions.ToLevel1(System.Collections.Generic.IEnumerable
 M:StockSharp.Messages.Extensions.FilterTimeFrames(System.Collections.Generic.IEnumerable{StockSharp.Messages.DataType})/summary;DocStr11743
 M:StockSharp.Messages.Extensions.FilterTimeFrames(System.Collections.Generic.IEnumerable{StockSharp.Messages.DataType})/param/dataTypes;DataTypes
 M:StockSharp.Messages.Extensions.FilterTimeFrames(System.Collections.Generic.IEnumerable{StockSharp.Messages.DataType})/returns;DocStr206
-M:StockSharp.Messages.Extensions.GetFieldDescription``1(``0)/summary;DocStr8459
-M:StockSharp.Messages.Extensions.GetFieldDescription``1(``0)/typeparam/TField;DocStr8459
-M:StockSharp.Messages.Extensions.GetFieldDescription``1(``0)/param/field;DocStr8459
-M:StockSharp.Messages.Extensions.GetFieldDescription``1(``0)/returns;DocStr8459
 M:StockSharp.Messages.Extensions.Verify(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr2882
 M:StockSharp.Messages.Extensions.Verify(StockSharp.Messages.QuoteChangeMessage)/param/book;DocStr2829
 M:StockSharp.Messages.Extensions.Verify(StockSharp.Messages.QuoteChangeMessage)/returns;DocStr2884

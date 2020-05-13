@@ -7088,10 +7088,10 @@ F:StockSharp.Algo.ShrinkRules.Auto/summary;DocStr2250
 F:StockSharp.Algo.ShrinkRules.Less/summary;DocStr2251
 F:StockSharp.Algo.ShrinkRules.More/summary;DocStr2252
 T:StockSharp.Algo.TraderHelper/summary;DocStr2256
-M:StockSharp.Algo.TraderHelper.CheckModification(StockSharp.Messages.OrderStates,StockSharp.Messages.OrderStates)/summary;DocStr8648
-M:StockSharp.Algo.TraderHelper.CheckModification(StockSharp.Messages.OrderStates,StockSharp.Messages.OrderStates)/param/prev;DocStr8649
-M:StockSharp.Algo.TraderHelper.CheckModification(StockSharp.Messages.OrderStates,StockSharp.Messages.OrderStates)/param/curr;DocStr8650
-M:StockSharp.Algo.TraderHelper.CheckModification(StockSharp.Messages.OrderStates,StockSharp.Messages.OrderStates)/returns;DocStr8651
+M:StockSharp.Algo.TraderHelper.ApplyNewState(StockSharp.BusinessEntities.Order,StockSharp.Messages.OrderStates,StockSharp.Logging.ILogReceiver)/summary;DocStr8648
+M:StockSharp.Algo.TraderHelper.ApplyNewState(StockSharp.BusinessEntities.Order,StockSharp.Messages.OrderStates,StockSharp.Logging.ILogReceiver)/param/order;Str504
+M:StockSharp.Algo.TraderHelper.ApplyNewState(StockSharp.BusinessEntities.Order,StockSharp.Messages.OrderStates,StockSharp.Logging.ILogReceiver)/param/state;DocStr8650
+M:StockSharp.Algo.TraderHelper.ApplyNewState(StockSharp.BusinessEntities.Order,StockSharp.Messages.OrderStates,StockSharp.Logging.ILogReceiver)/param/logs;Str3237
 M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/summary;DocStr2259
 M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/quotes;DocStr2260
 M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/ownOrders;DocStr2261

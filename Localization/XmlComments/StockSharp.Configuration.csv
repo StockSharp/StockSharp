@@ -81,7 +81,7 @@ M:StockSharp.Configuration.Paths.GetSignUpUrl/summary;DocStr11262
 M:StockSharp.Configuration.Paths.GetSignUpUrl/returns;DocStr9248
 M:StockSharp.Configuration.Paths.GetForgotUrl/summary;DocStr11263
 M:StockSharp.Configuration.Paths.GetForgotUrl/returns;DocStr9248
-P:StockSharp.Configuration.Paths.HistoryDataPath/summary;DocStr11767
+F:StockSharp.Configuration.Paths.HistoryDataPath/summary;DocStr11767
 T:StockSharp.Configuration.StockSharpSection/summary;DocStr8737
 P:StockSharp.Configuration.StockSharpSection.CustomCandles/summary;DocStr8739
 P:StockSharp.Configuration.StockSharpSection.CustomIndicators/summary;DocStr8740
