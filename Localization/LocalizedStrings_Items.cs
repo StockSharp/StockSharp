@@ -51566,5 +51566,15 @@ namespace StockSharp.Localization
 		/// Soft Dollar Tier
 		/// </summary>
 		public static string SoftDollarTier => GetString(SoftDollarTierKey);
+
+		/// <summary>
+		/// Do not send Account field.
+		/// </summary>
+		public const string DoNotSendAccountKey = nameof(DoNotSendAccount);
+
+		/// <summary>
+		/// Do not send Account field.
+		/// </summary>
+		public static string DoNotSendAccount => GetString(DoNotSendAccountKey);
 	}
 }

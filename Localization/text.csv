@@ -5190,6 +5190,7 @@ SecurityNonTradable;Security '{0}' is no tradable.;Инструмент '{0}' н
 PrimaryId;Primary id;Локальный
 PrimaryIdDesc;Identifier on primary exchange.;Идентификатор на основной бирже.
 SoftDollarTier;Soft Dollar Tier;Soft Dollar Tier
+DoNotSendAccount;Do not send Account field.;Не отправлять поле Account.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
