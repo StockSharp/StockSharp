@@ -7,7 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Serialization.FieldFactories" Version="$(EcngVer)" />
-    <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />

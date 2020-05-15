@@ -27,7 +27,6 @@ namespace StockSharp.Algo.Storages
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
@@ -77,7 +76,7 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var dates = InteropHelper
+						var dates = IOHelper
 							.GetDirectories(_path)
 							.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
 							.Select(dir => GetDate(IOPath.GetFileName(dir)));
@@ -128,7 +127,7 @@ namespace StockSharp.Algo.Storages
 					if (Directory.EnumerateFiles(dir).IsEmpty())
 					{
 						lock (_cacheSync)
-							InteropHelper.BlockDeleteDir(dir);
+							IOHelper.BlockDeleteDir(dir);
 					}
 				}
 
@@ -365,7 +364,7 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<DataType> GetDataTypes(string secPath)
 			{
-				return InteropHelper
+				return IOHelper
 				       .GetDirectories(secPath)
 				       .SelectMany(dateDir => Directory.GetFiles(dateDir, "*" + ext))
 				       .Select(IOPath.GetFileNameWithoutExtension)
@@ -445,7 +444,7 @@ namespace StockSharp.Algo.Storages
 			var securityPaths = new List<string>();
 			var progress = 0;
 
-			foreach (var letterDir in InteropHelper.GetDirectories(Path))
+			foreach (var letterDir in IOHelper.GetDirectories(Path))
 			{
 				if (isCancelled())
 					break;
@@ -455,7 +454,7 @@ namespace StockSharp.Algo.Storages
 				if (name == null || name.Length != 1)
 					continue;
 
-				securityPaths.AddRange(InteropHelper.GetDirectories(letterDir));
+				securityPaths.AddRange(IOHelper.GetDirectories(letterDir));
 			}
 
 			if (isCancelled())

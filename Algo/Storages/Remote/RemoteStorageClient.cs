@@ -7,7 +7,9 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.Net;
 	using System.Security;
 	using System.ServiceModel;
+#if NETFRAMEWORK
 	using System.ServiceModel.Description;
+#endif
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -182,6 +184,7 @@ namespace StockSharp.Algo.Storages.Remote
 			}
 		}
 
+#if NETFRAMEWORK
 		/// <inheritdoc />
 		[CLSCompliant(false)]
 		protected override ChannelFactory<IRemoteStorage> CreateChannel()
@@ -210,6 +213,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 			return f;
 		}
+#endif
 
 		/// <summary>
 		/// Download securities by the specified criteria.

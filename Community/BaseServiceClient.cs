@@ -63,6 +63,7 @@ namespace StockSharp.Community
 		[CLSCompliant(false)]
 		protected virtual ChannelFactory<TService> CreateChannel()
 		{
+#if NETFRAMEWORK
 			return new ChannelFactory<TService>(new WSHttpBinding
 			{
 				Security =
@@ -76,6 +77,9 @@ namespace StockSharp.Community
 				},
 				UseDefaultWebProxy = true
 			}, new EndpointAddress(Address));
+#else
+			throw new PlatformNotSupportedException();
+#endif
 		}
 
 		/// <summary>

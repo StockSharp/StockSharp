@@ -24,7 +24,6 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Interop;
 	using Ecng.Serialization;
 
 	using StockSharp.Logging;
