@@ -96,9 +96,9 @@
 			base.CopyTo(destination);
 
 			destination.OriginalTransactionId = OriginalTransactionId;
+			destination.FileName = FileName;
 			destination.BodyLength = BodyLength;
 			destination.Body = Body;
-			destination.FileName = FileName;
 			destination.Id = Id;
 			destination.GroupId = GroupId;
 			destination.IsPublic = IsPublic;
@@ -123,10 +123,10 @@
 		{
 			var str = base.ToString() + $",OrigTrId={OriginalTransactionId}";
 
+			str += $",BodyLen={Body?.Length ?? BodyLength}";
+
 			if (!FileName.IsEmpty())
 				str += $",FileName={FileName}";
-
-			str += $",BodyLen={BodyLength}";
 
 			if (Id != 0)
 				str += $",Id={Id}";
@@ -134,9 +134,19 @@
 			if (GroupId != 0)
 				str += $",Id={GroupId}";
 
+			if (IsPublic)
+				str += $",Public={IsPublic}";
+
+			if (!Url.IsEmpty())
+				str += $",Hash={Url}";
+
+			if (!Hash.IsEmpty())
+				str += $",Hash={Hash}";
+
+			if (CreationDate != default)
+				str += $",Created={CreationDate}";
+
 			return str;
 		}
 	}
-
-
 }

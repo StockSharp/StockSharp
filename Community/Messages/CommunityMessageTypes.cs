@@ -17,10 +17,10 @@
 		/// </summary>
 		public const MessageTypes ProductInfo = (MessageTypes)(-11001);
 
-		/// <summary>
-		/// <see cref="ProductCheckVersionMessage"/>.
-		/// </summary>
-		public const MessageTypes ProductCheckVersion = (MessageTypes)(-11002);
+		///// <summary>
+		///// <see cref="ProductCheckVersionMessage"/>.
+		///// </summary>
+		//public const MessageTypes ProductCheckVersion = (MessageTypes)(-11002);
 
 		/// <summary>
 		/// <see cref="ProductFeedbackMessage"/>.
