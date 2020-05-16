@@ -184,7 +184,7 @@ namespace SampleRealTimeEmulation
 				if (error == null)
 					return;
 
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType2, security)));
 			};
 		}
 

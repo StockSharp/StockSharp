@@ -121,7 +121,7 @@
 
 			// subscribe on error of market data subscription event
 			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
-				this.GuiAsync(() => MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+				this.GuiAsync(() => MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType2, security)));
 
 			Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
 			Connector.TickTradeReceived += (s, t) => _tradesWindow.TradeGrid.Trades.Add(t);
