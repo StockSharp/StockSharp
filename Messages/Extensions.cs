@@ -22,7 +22,6 @@ namespace StockSharp.Messages
 	using System.Linq;
 	using System.Net;
 	using System.Security;
-	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -547,43 +546,28 @@ namespace StockSharp.Messages
 			return adapter.SupportedOutMessages.Contains(type);
 		}
 
-		private static readonly SynchronizedPairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new SynchronizedPairSet<MessageTypes, MarketDataTypes>();
-
-		/// <summary>
-		/// Determine the <paramref name="type"/> is candle data type.
-		/// </summary>
-		/// <param name="type">The data type.</param>
-		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
-		public static bool IsCandleDataType(this MarketDataTypes type)
-			=> _candleDataTypes.ContainsValue(type);
+		private static readonly CachedSynchronizedPairSet<MessageTypes, Type> _candleDataTypes = new CachedSynchronizedPairSet<MessageTypes, Type>();
 
 		/// <summary>
 		/// Determine the <paramref name="type"/> is candle data type.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
-		public static bool IsCandle(this MessageTypes type)
-			=> _candleDataTypes.ContainsKey(type);
+		public static bool IsCandle(this MessageTypes type)	=> _candleDataTypes.ContainsKey(type);
 
 		/// <summary>
-		/// To convert the type of candles <see cref="MarketDataTypes"/> into type of message <see cref="MessageTypes"/>.
+		/// To convert the type of candles <see cref="CandleMessage"/> into type of message <see cref="MessageTypes"/>.
 		/// </summary>
 		/// <param name="type">Candles type.</param>
 		/// <returns>Message type.</returns>
-		public static MessageTypes ToCandleMessageType(this MarketDataTypes type)
-		{
-			return _candleDataTypes[type];
-		}
+		public static MessageTypes ToMessageType(this Type type) => _candleDataTypes[type];
 
 		/// <summary>
-		/// To convert the type of message <see cref="MessageTypes"/> into type of candles <see cref="MarketDataTypes"/>.
+		/// To convert the type of message <see cref="MessageTypes"/> into type of candles <see cref="CandleMessage"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		/// <returns>Candles type.</returns>
-		public static MarketDataTypes ToCandleMarketDataType(this MessageTypes type)
-		{
-			return _candleDataTypes[type];
-		}
+		public static Type ToCandleMessageType(this MessageTypes type) => _candleDataTypes[type];
 
 		private static readonly SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>> _candleArgConverters = new SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>>();
 
@@ -701,12 +685,10 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private static readonly CachedSynchronizedPairSet<Type, MarketDataTypes> _candleMarketDataTypes = new CachedSynchronizedPairSet<Type, MarketDataTypes>();
-
 		/// <summary>
 		/// All registered candle types.
 		/// </summary>
-		public static IEnumerable<Type> AllCandleTypes => _candleMarketDataTypes.CachedKeys;
+		public static IEnumerable<Type> AllCandleTypes => _candleDataTypes.CachedValues;
 
 		/// <summary>
 		/// Register new candle type.
@@ -733,42 +715,26 @@ namespace StockSharp.Messages
 			Func<string, object> p1 = str => Do(() => argParserTo(str));
 			Func<object, string> p2 = arg => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
 
+#pragma warning disable CS0612 // Type or member is obsolete
 			_messageTypeMap.Add(dataType, Tuple.Create(type, default(object)));
-			_candleDataTypes.Add(type, dataType);
-			_candleMarketDataTypes.Add(messageType, dataType);
+#pragma warning restore CS0612 // Type or member is obsolete
+
+			_candleDataTypes.Add(type, messageType);
 			_candleArgConverters.Add(messageType, Tuple.Create(p1, p2));
 			_fileNames.Add(DataType.Create(messageType, null), fileName);
 		}
 
 		/// <summary>
-		/// Cast candle type <see cref="MarketDataTypes"/> to the message <see cref="CandleMessage"/>.
+		/// Cast candle type <see cref="MessageTypes"/> to the message <see cref="CandleMessage"/>.
 		/// </summary>
 		/// <param name="type">Candle type.</param>
 		/// <returns>Message type <see cref="CandleMessage"/>.</returns>
-		public static Type ToCandleMessage(this MarketDataTypes type)
+		public static Type ToCandleMessage(this MessageTypes type)
 		{
-			var messageType = _candleMarketDataTypes.TryGetKey(type);
-
-			if (messageType == null)
+			if (!_candleDataTypes.TryGetValue(type, out var messageType))
 				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.WrongCandleType);
 
 			return messageType;
-		}
-
-		/// <summary>
-		/// Cast message type <see cref="CandleMessage"/> to the <see cref="MarketDataTypes"/>.
-		/// </summary>
-		/// <param name="messageType">The type of the message <see cref="CandleMessage"/>.</param>
-		/// <returns><see cref="MarketDataTypes"/>.</returns>
-		public static MarketDataTypes ToCandleMarketDataType(this Type messageType)
-		{
-			if (messageType == null)
-				throw new ArgumentNullException(nameof(messageType));
-
-			if (!_candleMarketDataTypes.TryGetValue(messageType, out var dataType))
-				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
-
-			return dataType;
 		}
 
 		/// <summary>
@@ -826,80 +792,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert <see cref="MarketDataMessage"/> to <see cref="DataType"/> value.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		/// <returns>Data type info.</returns>
-		[Obsolete("Use MarketDataMessage.DataType2 property.")]
-		public static DataType ToDataType(this MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			return message.DataType.ToDataType(message.Arg);
-		}
-
-		private static readonly SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>> _messageTypeMap = new SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>>
-		{
-			{ MarketDataTypes.Level1, Tuple.Create(MessageTypes.Level1Change, default(object)) },
-			{ MarketDataTypes.MarketDepth, Tuple.Create(MessageTypes.QuoteChange, default(object)) },
-			{ MarketDataTypes.Trades, Tuple.Create(MessageTypes.Execution, (object)ExecutionTypes.Tick) },
-			{ MarketDataTypes.OrderLog, Tuple.Create(MessageTypes.Execution, (object)ExecutionTypes.OrderLog) },
-			{ MarketDataTypes.News, Tuple.Create(MessageTypes.News, default(object)) },
-			{ MarketDataTypes.Board, Tuple.Create(MessageTypes.Board, default(object)) },
-		};
-
-		/// <summary>
-		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
-		/// <returns>Market data type.</returns>
-		public static MarketDataTypes ToMarketDataType(this MessageTypes type, object arg)
-		{
-			if (_messageTypeMap.TryGetKey(Tuple.Create(type, arg), out var dataType))
-				return dataType;
-
-			throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-		}
-
-		/// <summary>
-		/// Convert <see cref="MarketDataTypes"/> to <see cref="MessageTypes"/> value.
-		/// </summary>
-		/// <param name="type">Market data type.</param>
-		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
-		/// <returns>Message type.</returns>
-		public static MessageTypes ToMessageType(this MarketDataTypes type, out object arg)
-		{
-			arg = null;
-
-			switch (type)
-			{
-				case MarketDataTypes.Level1:
-					return MessageTypes.Level1Change;
-				case MarketDataTypes.MarketDepth:
-					return MessageTypes.QuoteChange;
-				case MarketDataTypes.Trades:
-					arg = ExecutionTypes.Tick;
-					return MessageTypes.Execution;
-				case MarketDataTypes.OrderLog:
-					arg = ExecutionTypes.OrderLog;
-					return MessageTypes.Execution;
-				case MarketDataTypes.News:
-					return MessageTypes.News;
-				case MarketDataTypes.Board:
-					return MessageTypes.Board;
-				default:
-				{
-					if (type.IsCandleDataType())
-						return type.ToCandleMessageType();
-
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-				}
-			}
-		}
-
-		/// <summary>
 		/// Convert <see cref="string"/> to <see cref="DataType"/> value.
 		/// </summary>
 		/// <param name="type">type.</param>
@@ -917,8 +809,10 @@ namespace StockSharp.Messages
 			}
 			else
 			{
+#pragma warning disable CS0612 // Type or member is obsolete
 				var dataType = type.To<MarketDataTypes>();
-				return dataType.ToDataType(dataType.IsCandleDataType() ? dataType.ToCandleMessage().ToCandleArg(arg) : arg);
+				return dataType.ToDataType(dataType.IsCandleDataType() ? dataType.ToMessageType(out _).ToCandleMessage().ToCandleArg(arg) : arg);
+#pragma warning restore CS0612 // Type or member is obsolete
 			}
 		}
 
@@ -935,17 +829,6 @@ namespace StockSharp.Messages
 			var type = dataType.MessageType.To<string>();
 			var arg = dataType.IsCandles ? dataType.CandleArgToFolderName() : dataType.Arg.To<string>();
 			return (type, arg);
-		}
-
-		/// <summary>
-		/// Convert <see cref="MarketDataTypes"/> to <see cref="DataType"/> value.
-		/// </summary>
-		/// <param name="type">Market data type.</param>
-		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
-		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this MarketDataTypes type, object arg)
-		{
-			return type.ToMessageType(out var arg2).ToDataType(arg2 ?? arg);
 		}
 
 		/// <summary>
@@ -992,7 +875,7 @@ namespace StockSharp.Messages
 				default:
 				{
 					if (type.IsCandle())
-						return DataType.Create(type.ToCandleMarketDataType().ToCandleMessage(), arg);
+						return DataType.Create(type.ToCandleMessage(), arg);
 
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 				}
@@ -1017,34 +900,6 @@ namespace StockSharp.Messages
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}
-		}
-
-		/// <summary>
-		/// Convert <see cref="DataType"/> to <see cref="MarketDataTypes"/> value.
-		/// </summary>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
-		public static MarketDataTypes? ToMarketDataType(this DataType dataType)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			if (dataType == DataType.Ticks)
-				return MarketDataTypes.Trades;
-			else if (dataType == DataType.Level1)
-				return MarketDataTypes.Level1;
-			else if (dataType == DataType.OrderLog)
-				return MarketDataTypes.OrderLog;
-			else if (dataType == DataType.MarketDepth)
-				return MarketDataTypes.MarketDepth;
-			else if (dataType == DataType.News)
-				return MarketDataTypes.News;
-			else if (dataType == DataType.Board)
-				return MarketDataTypes.Board;
-			else if (dataType.IsCandles)
-				return dataType.MessageType.ToCandleMarketDataType();
-			else
-				return null;
 		}
 
 		/// <summary>

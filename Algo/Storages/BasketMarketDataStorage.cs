@@ -238,7 +238,7 @@ namespace StockSharp.Algo.Storages
 						dataTypes.Add(MessageTypes.Time);
 
 					if (s.DataType.IsCandleMessage())
-						dataTypes.Add(s.DataType.ToCandleMarketDataType().ToCandleMessageType());
+						dataTypes.Add(s.DataType.ToMessageType());
 				}
 
 				DataTypes = dataTypes.ToArray();
