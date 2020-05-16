@@ -162,7 +162,7 @@
 						{
 							RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
 
-							this.AddDebugLog("Flush {0} suspended: {1}/{2}/{3}.", suspended.Length, mdMsg.SecurityId, mdMsg.DataType, mdMsg.TransactionId);
+							this.AddDebugLog("Flush {0} suspended: {1}/{2}/{3}.", suspended.Length, mdMsg.SecurityId, mdMsg.DataType2, mdMsg.TransactionId);
 
 							foreach (var msg in suspended)
 								RaiseNewOutMessage(msg);

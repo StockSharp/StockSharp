@@ -176,7 +176,7 @@ namespace StockSharp.Messages
 		private DataType _dataType2 = Messages.DataType.Level1;
 
 		/// <summary>
-		/// Interval for data refresh.
+		/// Market data type.
 		/// </summary>
 		[DataMember]
 		public DataType DataType2
@@ -193,9 +193,11 @@ namespace StockSharp.Messages
 		//[Obsolete("Use DataType2 property.")]
 		public MarketDataTypes DataType
 		{
-			get => DataType2.ToMarketDataType().Value;
 #pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0612 // Type or member is obsolete
+			get => DataType2.ToMarketDataType().Value;
 			set => DataType2 = value.ToDataType(Arg);
+#pragma warning restore CS0612 // Type or member is obsolete
 #pragma warning restore CS0618 // Type or member is obsolete
 		}
 
@@ -228,7 +230,7 @@ namespace StockSharp.Messages
 		public long? Count { get; set; }
 
 		/// <summary>
-		/// Max depth of requested order book. Uses in case <see cref="MarketDataMessage.DataType"/> = <see cref="MarketDataTypes.MarketDepth"/>.
+		/// Max depth of requested order book. Uses in case <see cref="DataType2"/> = <see cref="DataType.MarketDepth"/>.
 		/// </summary>
 		[DataMember]
 		public int? MaxDepth { get; set; }

@@ -1796,7 +1796,7 @@ namespace StockSharp.Algo
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Candles count.</param>
-		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType"/> isn't candle type.</param>
+		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType2"/> isn't candle type.</param>
 		/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
 		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, bool throwIfInvalidType = true)
 		{
@@ -1843,7 +1843,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="security">Security.</param>
-		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType"/> isn't candle type.</param>
+		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType2"/> isn't candle type.</param>
 		/// <returns>Candles series.</returns>
 		public static CandleSeries ToCandleSeries(this MarketDataMessage message, Security security, bool throwIfInvalidType)
 		{
@@ -1860,7 +1860,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="series">Candles series.</param>
-		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType"/> isn't candle type.</param>
+		/// <param name="throwIfInvalidType">Throw an error if <see cref="MarketDataMessage.DataType2"/> isn't candle type.</param>
 		public static void ToCandleSeries(this MarketDataMessage message, CandleSeries series, bool throwIfInvalidType)
 		{
 			if (message == null)
