@@ -826,7 +826,7 @@ namespace StockSharp.Messages
 			if (dataType is null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			var type = dataType.MessageType.To<string>();
+			var type = dataType.MessageType.GetTypeName(false);
 			var arg = dataType.IsCandles ? dataType.CandleArgToFolderName() : dataType.Arg.To<string>();
 			return (type, arg);
 		}

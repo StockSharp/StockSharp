@@ -940,6 +940,7 @@ namespace StockSharp.Algo.Storages.Csv
 					throw new ArgumentException(nameof(data));
 
 				var (type, arg) = data.DataType2.FormatToString();
+				var buildFromTuples = data.BuildFrom?.FormatToString();
 
 				writer.WriteRow(new[]
 				{
@@ -957,10 +958,12 @@ namespace StockSharp.Algo.Storages.Csv
 					data.To?.UtcDateTime.ToString(_dateTimeFormat),
 					data.Count.To<string>(),
 					data.BuildMode.To<string>(),
-					data.BuildFrom.To<string>(),
+					null,
 					data.BuildField.To<string>(),
 					data.IsFinished.To<string>(),
 					data.FillGaps.To<string>(),
+					buildFromTuples?.type,
+					buildFromTuples?.arg,
 				});
 			}
 
@@ -997,7 +1000,7 @@ namespace StockSharp.Algo.Storages.Csv
 				message.Count = reader.ReadNullableLong();
 
 				message.BuildMode = reader.ReadEnum<MarketDataBuildModes>();
-				message.BuildFrom = reader.ReadString().ToDataType(null);
+				reader.ReadString();
 				message.BuildField = reader.ReadNullableEnum<Level1Fields>();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -1005,6 +1008,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					message.FillGaps = reader.ReadBool();
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					message.BuildFrom = reader.ReadString().ToDataType(reader.ReadString());
 
 				return message;
 			}
