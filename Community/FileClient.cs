@@ -72,7 +72,7 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public FileInfoMessage GetFileInfo(long id)
 		{
-			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo2(NullableSessionId ?? Guid.Empty, id)));
+			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo2(SessionId, id)));
 		}
 
 		/// <inheritdoc />

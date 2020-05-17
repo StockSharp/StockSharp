@@ -149,11 +149,6 @@ namespace StockSharp.Algo.Storages.Remote
 		/// </summary>
 		public ServerCredentials Credentials { get; }
 
-		private Guid _sessionId;
-
-		/// <inheritdoc />
-		protected override Guid SessionId => _sessionId;
-
 		private int _securityBatchSize;
 
 		/// <summary>
@@ -639,7 +634,7 @@ namespace StockSharp.Algo.Storages.Remote
 		{
 			var tuple = base.Invoke(f => f.Login4(Products.Hydra.FromEnum().Id, GetType().Assembly.GetName().Version.To<string>(), Credentials.Email, Credentials.Password.UnSecure()));
 			//tuple.Item1.ToErrorCode().ThrowIfError();
-			_sessionId = tuple.Item1;
+			SessionId = tuple.Item1;
 		}
 
 		/// <inheritdoc />
@@ -668,7 +663,7 @@ namespace StockSharp.Algo.Storages.Remote
 			if (SessionId != default)
 			{
 				Invoke(f => f.Logout(SessionId));
-				_sessionId = default;
+				SessionId = default;
 			}
 
 			base.DisposeManaged();

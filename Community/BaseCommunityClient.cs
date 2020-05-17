@@ -17,6 +17,7 @@ namespace StockSharp.Community
 {
 	using System;
 
+	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Localization;
 
@@ -40,17 +41,18 @@ namespace StockSharp.Community
 		{
 		}
 
-		private static IAuthenticationClient Client => ConfigManager.GetService<IAuthenticationClient>();
+		private static IAuthenticationClient AuthClient => ConfigManager.GetService<IAuthenticationClient>();
+
+		private Guid? _sessionId;
 
 		/// <summary>
 		/// The session identifier received from <see cref="IAuthenticationService.Login4"/>.
 		/// </summary>
-		protected virtual Guid SessionId => Client.SessionId;
-
-		/// <summary>
-		/// To get the <see cref="SessionId"/> if the user was authorized.
-		/// </summary>
-		protected virtual Guid? NullableSessionId => Client.NullableSessionId;
+		public virtual Guid SessionId
+		{
+			get => _sessionId ?? AuthClient.SessionId;
+			set => _sessionId = value.DefaultAsNull();
+		}
 
 		/// <summary>
 		/// Is current language is English.

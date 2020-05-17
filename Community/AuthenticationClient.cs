@@ -61,7 +61,9 @@ namespace StockSharp.Community
 		public Version Version { get; set; }
 
 		/// <inheritdoc />
-		public bool IsLoggedIn => NullableSessionId != null;
+		public bool IsLoggedIn => _sessionId != null;
+
+		private Guid? _sessionId;
 
 		/// <inheritdoc />
 		public Guid SessionId
@@ -71,30 +73,27 @@ namespace StockSharp.Community
 				if (!IsLoggedIn)
 					Login();
 
-				return NullableSessionId.Value;
+				return _sessionId.Value;
 			}
 		}
-
-		/// <inheritdoc />
-		public Guid? NullableSessionId { get; private set; }
 
 		/// <inheritdoc />
 		public long UserId { get; private set; }
 
 		/// <inheritdoc />
-		public void Login()
+		public Tuple<Guid, long> Login()
 		{
-			Login(Product, Version, Credentials.Email, Credentials.Password);
+			return Login(Product, Version, Credentials.Email, Credentials.Password);
 		}
 
 		/// <inheritdoc />
-		public void Login(ProductInfoMessage product, Version version, SecureString token)
+		public Tuple<Guid, long> Login(ProductInfoMessage product, Version version, SecureString token)
 		{
-			HandleResponse(product, Invoke(f => f.Login5(product?.Id ?? 0, version.To<string>(), token.UnSecure())));
+			return HandleResponse(product, Invoke(f => f.Login5(product?.Id ?? 0, version.To<string>(), token.UnSecure())));
 		}
 
 		/// <inheritdoc />
-		public void Login(ProductInfoMessage product, Version version, string login, SecureString password)
+		public Tuple<Guid, long> Login(ProductInfoMessage product, Version version, string login, SecureString password)
 		{
 			//if (login.IsEmpty())
 			//	throw new ArgumentNullException(nameof(login));
@@ -102,17 +101,17 @@ namespace StockSharp.Community
 			if (password.IsEmpty())
 				throw new ArgumentNullException(nameof(password));
 
-			HandleResponse(product, Invoke(f => f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure())));
+			return HandleResponse(product, Invoke(f => f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure())));
 		}
 
-		private void HandleResponse(ProductInfoMessage product, Tuple<Guid, long> tuple)
+		private Tuple<Guid, long> HandleResponse(ProductInfoMessage product, Tuple<Guid, long> tuple)
 		{
 			if (tuple is null)
 				throw new ArgumentNullException(nameof(tuple));
 
 			tuple.Item1.ToErrorCode().ThrowIfError();
 
-			NullableSessionId = tuple.Item1;
+			_sessionId = tuple.Item1;
 			UserId = tuple.Item2;
 
 			if (product != null)
@@ -121,7 +120,7 @@ namespace StockSharp.Community
 				{
 					try
 					{
-						var session = NullableSessionId;
+						var session = _sessionId;
 
 						if (session == null)
 							return;
@@ -137,13 +136,15 @@ namespace StockSharp.Community
 					}
 				}).Interval(TimeSpan.FromMinutes(10));
 			}
+
+			return tuple;
 		}
 
 		/// <inheritdoc />
 		public void Logout()
 		{
 			Invoke(f => f.Logout(SessionId));
-			NullableSessionId = null;
+			_sessionId = null;
 			UserId = 0;
 
 			_pingTimer.Dispose();

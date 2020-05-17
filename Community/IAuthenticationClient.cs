@@ -38,11 +38,6 @@ namespace StockSharp.Community
 		Guid SessionId { get; }
 
 		/// <summary>
-		/// To get the <see cref="SessionId"/> if the user was authorized.
-		/// </summary>
-		Guid? NullableSessionId { get; }
-
-		/// <summary>
 		/// The user identifier for <see cref="SessionId"/>.
 		/// </summary>
 		long UserId { get; }
@@ -50,7 +45,8 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To log in.
 		/// </summary>
-		void Login();
+		/// <returns>Session ID.</returns>
+		Tuple<Guid, long> Login();
 
 		/// <summary>
 		/// To log in.
@@ -59,7 +55,8 @@ namespace StockSharp.Community
 		/// <param name="version">Version.</param>
 		/// <param name="login">Login.</param>
 		/// <param name="password">Password.</param>
-		void Login(ProductInfoMessage product, Version version, string login, SecureString password);
+		/// <returns>Session ID.</returns>
+		Tuple<Guid, long> Login(ProductInfoMessage product, Version version, string login, SecureString password);
 
 		/// <summary>
 		/// To log in.
@@ -67,18 +64,12 @@ namespace StockSharp.Community
 		/// <param name="product">Product.</param>
 		/// <param name="version">Version.</param>
 		/// <param name="token">Token.</param>
-		void Login(ProductInfoMessage product, Version version, SecureString token);
+		/// <returns>Session ID.</returns>
+		Tuple<Guid, long> Login(ProductInfoMessage product, Version version, SecureString token);
 
 		/// <summary>
 		/// Logout.
 		/// </summary>
 		void Logout();
-
-		/// <summary>
-		/// Get a user id.
-		/// </summary>
-		/// <param name="sessionId">Session ID.</param>
-		/// <returns>User id.</returns>
-		long GetId(Guid sessionId);
 	}
 }

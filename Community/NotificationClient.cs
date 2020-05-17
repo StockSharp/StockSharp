@@ -176,7 +176,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews3(NullableSessionId ?? Guid.Empty, IsEnglish, 0));
+			var news = Invoke(f => f.GetNews3(SessionId, IsEnglish, 0));
 
 			//if (news.Length <= 0)
 			//	return;
