@@ -9,5 +9,10 @@ namespace StockSharp.Algo.Server
 		/// Identifier.
 		/// </summary>
 		string Id { get; }
+
+		/// <summary>
+		/// Is connected.
+		/// </summary>
+		bool IsConnected { get; }
 	}
 }

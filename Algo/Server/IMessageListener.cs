@@ -31,6 +31,11 @@ namespace StockSharp.Algo.Server
 		new event Action<IMessageListenerSession, Message> NewOutMessage;
 
 		/// <summary>
+		/// Session disconnected event.
+		/// </summary>
+		event Action<IMessageListenerSession> SessionDisconnected;
+
+		/// <summary>
 		/// Send message.
 		/// </summary>
 		/// <param name="session">Session.</param>
