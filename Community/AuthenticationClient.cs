@@ -108,8 +108,8 @@ namespace StockSharp.Community
 
 			return HandleResponse(product, Invoke(f =>
 				IsToken
-					? f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure())
-					: f.Login5(product?.Id ?? 0, version.To<string>(), password.UnSecure())));
+					? f.Login5(product?.Id ?? 0, version.To<string>(), password.UnSecure())
+					: f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure())));
 		}
 
 		private Tuple<Guid, long> HandleResponse(ProductInfoMessage product, Tuple<Guid, long> tuple)
