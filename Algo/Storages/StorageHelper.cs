@@ -964,49 +964,6 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Convert <see cref="string"/> to <see cref="DataType.Arg"/> value.
-		/// </summary>
-		/// <param name="messageType">Message type.</param>
-		/// <param name="strValue"><see cref="string"/> value.</param>
-		/// <returns><see cref="DataType.Arg"/> value.</returns>
-		public static object StringToMessageArg(this Type messageType, string strValue)
-		{
-			if (messageType == null)
-				throw new ArgumentNullException(nameof(messageType));
-
-			if (messageType == typeof(ExecutionMessage))
-				return strValue.To<ExecutionTypes>();
-			else if (messageType.IsCandleMessage())
-				return messageType.ToCandleArg(strValue);
-			else
-				return strValue;
-		}
-
-		/// <summary>
-		/// Convert <see cref="DataType.Arg"/> to <see cref="string"/> value.
-		/// </summary>
-		/// <param name="messageType">Message type.</param>
-		/// <param name="arg"><see cref="DataType.Arg"/> value.</param>
-		/// <returns><see cref="string"/> value.</returns>
-		public static string MessageArgToString(this Type messageType, object arg)
-		{
-			if (messageType == null)
-				throw new ArgumentNullException(nameof(messageType));
-
-			if (messageType == typeof(ExecutionMessage))
-			{
-				if (arg is null)
-					throw new ArgumentNullException(nameof(arg));
-
-				return arg.ToString();
-			}
-			else if (messageType.IsCandleMessage())
-				return messageType.CandleArgToFolderName(arg);
-			else
-				return arg?.ToString();
-		}
-
-		/// <summary>
 		/// Load messages.
 		/// </summary>
 		/// <param name="settings">Storage settings.</param>

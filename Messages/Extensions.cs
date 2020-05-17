@@ -569,7 +569,10 @@ namespace StockSharp.Messages
 		/// <returns>Candles type.</returns>
 		public static Type ToCandleMessageType(this MessageTypes type) => _candleDataTypes[type];
 
-		private static readonly SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>> _candleArgConverters = new SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>>();
+		private static readonly SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>> _dataTypeArgConverters = new SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>>
+		{
+			{ typeof(ExecutionMessage), Tuple.Create((Func<string, object>)(str => str.To<ExecutionTypes>()), (Func<object, string>)(arg => arg.To<string>())) }
+		};
 
 		/// <summary>
 		/// To convert string representation of the candle argument into typified.
@@ -577,18 +580,19 @@ namespace StockSharp.Messages
 		/// <param name="messageType">The type of candle message.</param>
 		/// <param name="str">The string representation of the argument.</param>
 		/// <returns>Argument.</returns>
-		public static object ToCandleArg(this Type messageType, string str)
+		public static object ToDataTypeArg(this Type messageType, string str)
 		{
-			if (messageType == null)
+			if (messageType is null)
 				throw new ArgumentNullException(nameof(messageType));
 
 			if (str.IsEmpty())
 				throw new ArgumentNullException(nameof(str));
 
-			if (_candleArgConverters.TryGetValue(messageType, out var converter))
+			if (_dataTypeArgConverters.TryGetValue(messageType, out var converter))
 				return converter.Item1(str);
 
-			throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
+			return str;
+			//throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 		}
 
 		/// <summary>
@@ -596,15 +600,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
 		/// <returns>Directory name.</returns>
-		public static string CandleArgToFolderName(this DataType dataType)
+		public static string DataTypeArgToString(this DataType dataType)
 		{
 			if (dataType is null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			if (!dataType.IsCandles)
-				throw new ArgumentException(dataType.ToString(), nameof(dataType));
-
-			return dataType.MessageType.CandleArgToFolderName(dataType.Arg);
+			return dataType.MessageType.DataTypeArgToString(dataType.Arg);
 		}
 
 		/// <summary>
@@ -613,15 +614,16 @@ namespace StockSharp.Messages
 		/// <param name="messageType">The type of candle message.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <returns>Directory name.</returns>
-		public static string CandleArgToFolderName(this Type messageType, object arg)
+		public static string DataTypeArgToString(this Type messageType, object arg)
 		{
 			if (messageType == null)
 				throw new ArgumentNullException(nameof(messageType));
 
-			if (_candleArgConverters.TryGetValue(messageType, out var converter))
+			if (_dataTypeArgConverters.TryGetValue(messageType, out var converter))
 				return converter.Item2(arg);
 
-			throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
+			return arg.To<string>();
+			//throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 		}
 
 		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new SynchronizedPairSet<DataType, string>(EqualityComparer<DataType>.Default, StringComparer.InvariantCultureIgnoreCase)
@@ -659,7 +661,7 @@ namespace StockSharp.Messages
 			if (!_fileNames.TryGetKey(parts[1], out var type))
 				return null;
 
-			return DataType.Create(type.MessageType, type.MessageType.ToCandleArg(parts[2]));
+			return DataType.Create(type.MessageType, type.MessageType.ToDataTypeArg(parts[2]));
 		}
 
 		/// <summary>
@@ -675,7 +677,7 @@ namespace StockSharp.Messages
 			if (dataType.MessageType.IsCandleMessage())
 			{
 				if (_fileNames.TryGetValue(DataType.Create(dataType.MessageType, null), out var fileName))
-					return "candles_{0}_{1}".Put(fileName, dataType.CandleArgToFolderName());
+					return $"candles_{fileName}_{dataType.DataTypeArgToString()}";
 
 				return null;
 			}
@@ -720,7 +722,7 @@ namespace StockSharp.Messages
 #pragma warning restore CS0612 // Type or member is obsolete
 
 			_candleDataTypes.Add(type, messageType);
-			_candleArgConverters.Add(messageType, Tuple.Create(p1, p2));
+			_dataTypeArgConverters.Add(messageType, Tuple.Create(p1, p2));
 			_fileNames.Add(DataType.Create(messageType, null), fileName);
 		}
 
@@ -805,13 +807,13 @@ namespace StockSharp.Messages
 			if (type.Contains(','))
 			{
 				var messageType = type.To<Type>();
-				return DataType.Create(messageType, messageType.IsCandleMessage() ? messageType.ToCandleArg(arg) : arg);
+				return DataType.Create(messageType, messageType.ToDataTypeArg(arg));
 			}
 			else
 			{
 #pragma warning disable CS0612 // Type or member is obsolete
 				var dataType = type.To<MarketDataTypes>();
-				return dataType.ToDataType(dataType.IsCandleDataType() ? dataType.ToMessageType(out _).ToCandleMessage().ToCandleArg(arg) : arg);
+				return dataType.ToDataType(dataType.ToMessageType(out _).ToCandleMessage().ToDataTypeArg(arg));
 #pragma warning restore CS0612 // Type or member is obsolete
 			}
 		}
@@ -827,7 +829,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(dataType));
 
 			var type = dataType.MessageType.GetTypeName(false);
-			var arg = dataType.IsCandles ? dataType.CandleArgToFolderName() : dataType.Arg.To<string>();
+			var arg = dataType.DataTypeArgToString();
 			return (type, arg);
 		}
 

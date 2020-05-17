@@ -178,12 +178,10 @@ namespace StockSharp.Algo.Storages.Remote
 
 		private IMarketDataStorage GetStorage(Security security, string dataType, string arg, IMarketDataDrive drive, StorageFormats format)
 		{
-			var type = _dataTypes.TryGetValue(dataType);
-
-			if (type == null)
+			if (!_dataTypes.TryGetValue(dataType, out var type))
 				throw new InvalidOperationException(LocalizedStrings.Str2082Params.Put(dataType));
 
-			return StorageRegistry.GetStorage(security, type, type.StringToMessageArg(arg), drive, format);
+			return StorageRegistry.GetStorage(security, type, type.ToDataTypeArg(arg), drive, format);
 		}
 
 		Guid IAuthenticationService.Login(string email, string password)
@@ -353,7 +351,7 @@ namespace StockSharp.Algo.Storages.Remote
 			return GetDrives()
 						.SelectMany(drive => drive.GetAvailableDataTypes(securityId, format))
 						.Distinct()
-						.Select(t => Tuple.Create(t.MessageType.GetTypeAsString(false), t.MessageType.MessageArgToString(t.Arg)))
+						.Select(t => Tuple.Create(t.MessageType.GetTypeAsString(false), t.MessageType.DataTypeArgToString(t.Arg)))
 						.ToArray();
 		}
 

@@ -622,7 +622,7 @@ namespace StockSharp.Algo.Storages.Remote
 				.Select(t =>
 				{
 					var messageType = t.Item1.Contains(',') ? t.Item1.To<Type>() : typeof(CandleMessage).To<string>().Replace(typeof(CandleMessage).Name, t.Item1).To<Type>();
-					return DataType.Create(messageType, messageType.StringToMessageArg(t.Item2));
+					return DataType.Create(messageType, messageType.ToDataTypeArg(t.Item2));
 				})
 				.ToArray();
 		}
