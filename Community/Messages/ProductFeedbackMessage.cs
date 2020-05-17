@@ -17,6 +17,12 @@
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
+		/// Product.
+		/// </summary>
+		[DataMember]
+		public long ProductId { get; set; }
+
+		/// <summary>
 		/// Identifier.
 		/// </summary>
 		[DataMember]
@@ -38,7 +44,7 @@
 		/// Rating.
 		/// </summary>
 		[DataMember]
-		public decimal Rating { get; set; }
+		public int Rating { get; set; }
 
 		/// <summary>
 		/// Rating.
@@ -63,6 +69,7 @@
 			var clone = new ProductFeedbackMessage
 			{
 				OriginalTransactionId = OriginalTransactionId,
+				ProductId = ProductId,
 				Id = Id,
 				Text = Text,
 				Author = Author,
@@ -76,7 +83,7 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",OrigTrId={OriginalTransactionId}";
+			var str = base.ToString() + $",OrigTrId={OriginalTransactionId},Product={ProductId}";
 
 			if (Id != 0)
 				str += $",Id={Id}";
