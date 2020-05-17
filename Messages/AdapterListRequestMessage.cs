@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class AdapterListRequestMessage : Message, ITransactionIdMessage
+	public class AdapterListRequestMessage : BaseSubscriptionMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="AdapterListRequestMessage"/>.
@@ -18,27 +18,15 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <inheritdoc />
-		[DataMember]
-		public long TransactionId { get; set; }
-
 		/// <summary>
 		/// Create a copy of <see cref="AdapterListRequestMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new AdapterListRequestMessage
-			{
-				TransactionId = TransactionId,
-			};
-
+			var clone = new AdapterListRequestMessage();
 			CopyTo(clone);
-
 			return clone;
 		}
-
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $",TrId={TransactionId}";
 	}
 }

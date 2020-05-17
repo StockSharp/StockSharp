@@ -1926,6 +1926,8 @@ namespace StockSharp.Messages
 			MessageTypes.TimeFrameLookup,
 			MessageTypes.PortfolioLookup,
 			MessageTypes.OrderStatus,
+			MessageTypes.SubscriptionListRequest,
+			MessageTypes.AdapterListRequest,
 		};
 
 		/// <summary>
