@@ -10,6 +10,8 @@
 	/// <summary>
 	/// Product feedback message.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ProductFeedbackMessage : Message, IOriginalTransactionIdMessage
 	{
 		/// <inheritdoc />

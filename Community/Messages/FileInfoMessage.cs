@@ -10,6 +10,8 @@
 	/// <summary>
 	/// File info message.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class FileInfoMessage : Message, IOriginalTransactionIdMessage
 	{
 		/// <summary>

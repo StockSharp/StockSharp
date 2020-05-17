@@ -1,10 +1,15 @@
 ﻿namespace StockSharp.Community.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// Product lookup message.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ProductLookupMessage : BaseSubscriptionMessage
 	{
 		/// <summary>

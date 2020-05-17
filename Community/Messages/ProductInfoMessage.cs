@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Community.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -9,6 +10,8 @@
 	/// <summary>
 	/// Product info message.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ProductInfoMessage : Message, IOriginalTransactionIdMessage
 	{
 		/// <inheritdoc />
