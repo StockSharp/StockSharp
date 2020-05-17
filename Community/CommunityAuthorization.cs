@@ -20,6 +20,8 @@ namespace StockSharp.Community
 	using System.Net;
 	using System.Security;
 
+	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Security;
 
 	using StockSharp.Community.Messages;
@@ -33,6 +35,8 @@ namespace StockSharp.Community
 		private readonly ProductInfoMessage _product;
 		private readonly Version _version;
 		private readonly IAuthenticationClient _client;
+
+		private readonly SynchronizedDictionary<string, Guid> _sessionIds = new SynchronizedDictionary<string, Guid>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CommunityAuthorization"/>.
@@ -48,6 +52,13 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
+		/// Try get session id by the specified login.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <returns>Session ID.</returns>
+		public Guid? TryGetSessionId(string login) => _sessionIds.TryGetValue(login);
+
+		/// <summary>
 		/// To check the username and password on correctness.
 		/// </summary>
 		/// <param name="login">Login.</param>
@@ -58,8 +69,9 @@ namespace StockSharp.Community
 		{
 			try
 			{
-				_client.Login(_product, _version, login, password);
-				return Guid.NewGuid();
+				var sessionId = _client.Login(_product, _version, login, password).Item1;
+				_sessionIds[login] = sessionId;
+				return sessionId;
 			}
 			catch (Exception ex)
 			{
