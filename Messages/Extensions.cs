@@ -586,7 +586,10 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(messageType));
 
 			if (str.IsEmpty())
-				throw new ArgumentNullException(nameof(str));
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(str));
+			}
 
 			if (_dataTypeArgConverters.TryGetValue(messageType, out var converter))
 				return converter.Item1(str);
