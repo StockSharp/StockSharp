@@ -54,6 +54,11 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public ServerCredentials Credentials { get; }
 
+		/// <summary>
+		/// Authorize by token.
+		/// </summary>
+		public bool IsToken { get; set; }
+
 		/// <inheritdoc />
 		public ProductInfoMessage Product { get; set; }
 
@@ -101,7 +106,10 @@ namespace StockSharp.Community
 			if (password.IsEmpty())
 				throw new ArgumentNullException(nameof(password));
 
-			return HandleResponse(product, Invoke(f => f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure())));
+			return HandleResponse(product, Invoke(f =>
+				IsToken
+					? f.Login4(product?.Id ?? 0, version.To<string>(), login, password.UnSecure())
+					: f.Login5(product?.Id ?? 0, version.To<string>(), password.UnSecure())));
 		}
 
 		private Tuple<Guid, long> HandleResponse(ProductInfoMessage product, Tuple<Guid, long> tuple)
