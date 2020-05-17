@@ -1154,5 +1154,14 @@ namespace StockSharp.BusinessEntities
 			Name = "IBKR",
 			FullNameLoc = LocalizedStrings.InteractiveBrokersKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="STSH"/>.
+		/// </summary>
+		public static Exchange STSH { get; } = new Exchange
+		{
+			Name = "STSH",
+			FullNameLoc = LocalizedStrings.StockSharpKey,
+		};
 	}
 }
