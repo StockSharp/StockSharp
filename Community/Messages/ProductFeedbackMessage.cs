@@ -12,12 +12,8 @@
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ProductFeedbackMessage : Message, IOriginalTransactionIdMessage
+	public class ProductFeedbackMessage : BaseSubscriptionIdMessage<ProductFeedbackMessage>
 	{
-		/// <inheritdoc />
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
-
 		/// <summary>
 		/// Product.
 		/// </summary>
@@ -77,14 +73,13 @@
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
-		protected void CopyTo(ProductFeedbackMessage destination)
+		public override void CopyTo(ProductFeedbackMessage destination)
 		{
 			if (destination == null)
 				throw new ArgumentNullException(nameof(destination));
 
 			base.CopyTo(destination);
 
-			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.ProductId = ProductId;
 			destination.Id = Id;
 			destination.Text = Text;
@@ -97,7 +92,7 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",OrigTrId={OriginalTransactionId},Product={ProductId}";
+			var str = base.ToString() + $",Product={ProductId}";
 
 			if (Id != 0)
 				str += $",Id={Id}";
