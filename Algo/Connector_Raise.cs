@@ -305,6 +305,9 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public event Action<Subscription, Exception, bool> SubscriptionFailed;
 
+		/// <inheritdoc />
+		public event Action<Subscription, Message> SubscriptionReceived;
+
 		/// <summary>
 		/// Connection restored.
 		/// </summary>
@@ -902,6 +905,17 @@ namespace StockSharp.Algo
 			}
 
 			return anyOnline;
+		}
+
+		private void RaiseSubscriptionReceived(Subscription subscription, Message message)
+		{
+			SubscriptionReceived?.Invoke(subscription, message);
+		}
+
+		private void RaiseLevel1Received(Subscription subscription, Level1ChangeMessage message)
+		{
+			Level1Received?.Invoke(subscription, message);
+			RaiseSubscriptionReceived(subscription, message);
 		}
 	}
 }

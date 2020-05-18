@@ -119,6 +119,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<Subscription, Message> SubscriptionReceived
+		{
+			add => SubscriptionProvider.SubscriptionReceived += value;
+			remove => SubscriptionProvider.SubscriptionReceived -= value;
+		}
+
+		/// <inheritdoc />
 		public event Action<Subscription> SubscriptionOnline
 		{
 			add => SubscriptionProvider.SubscriptionOnline += value;

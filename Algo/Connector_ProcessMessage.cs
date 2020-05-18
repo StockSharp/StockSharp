@@ -676,6 +676,8 @@ namespace StockSharp.Algo
 					{
 						if (message is CandleMessage candleMsg)
 							ProcessCandleMessage(candleMsg);
+						else if (message is ISubscriptionIdMessage subscrMsg)
+							ProcessSubscriptionMessage(subscrMsg);
 
 						// если адаптеры передают специфичные сообщения
 						// throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
@@ -947,7 +949,7 @@ namespace StockSharp.Algo
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
 		{
-			if (RaiseReceived(message, message, Level1Received) == false)
+			if (RaiseReceived(message, message, RaiseLevel1Received) == false)
 				return;
 
 			var security = EnsureGetSecurity(message);
@@ -1165,6 +1167,7 @@ namespace StockSharp.Algo
 				}
 
 				OrderBookReceived?.Invoke(subscription, message);
+				RaiseSubscriptionReceived(subscription, message);
 
 				if (hasReceivedEvt)
 					receivedEvt.Invoke(subscription, depth);
@@ -1684,12 +1687,18 @@ namespace StockSharp.Algo
 				RaiseCandleSeriesProcessing(subscription.CandleSeries, candle);
 
 				CandleReceived?.Invoke(subscription, candle);
+				RaiseSubscriptionReceived(subscription, message);
 			}
 		}
 
 		private void ProcessChangePasswordMessage(ChangePasswordMessage message)
 		{
 			RaiseChangePassword(message.OriginalTransactionId, message.Error);
+		}
+
+		private void ProcessSubscriptionMessage(ISubscriptionIdMessage subscrMsg)
+		{
+			RaiseReceived((Message)subscrMsg, subscrMsg, RaiseSubscriptionReceived);
 		}
 	}
 }
