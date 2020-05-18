@@ -2,6 +2,8 @@ namespace StockSharp.Algo.Server
 {
 	using System;
 
+	using Ecng.Security;
+
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -13,7 +15,7 @@ namespace StockSharp.Algo.Server
 		/// <summary>
 		/// The customer authentication.
 		/// </summary>
-		IRemoteAuthorization Authorization { get; }
+		IAuthorization Authorization { get; }
 
 		/// <summary>
 		/// Transaction and request identifiers storage.
