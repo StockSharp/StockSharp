@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SubscriptionListRequestMessage : BaseSubscriptionMessage
+	public class SubscriptionListRequestMessage : BaseRequestMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SubscriptionListRequestMessage"/>.

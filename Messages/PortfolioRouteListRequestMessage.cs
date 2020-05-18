@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class PortfolioRouteListRequestMessage : BaseSubscriptionMessage
+	public class PortfolioRouteListRequestMessage : BaseRequestMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="PortfolioRouteListRequestMessage"/>.
@@ -33,21 +33,5 @@ namespace StockSharp.Messages
 
 			return clone;
 		}
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? From => null;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? To => DateTimeOffset.MaxValue /* prevent for online mode */;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override bool IsSubscribe => true;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override long OriginalTransactionId => 0;
 	}
 }

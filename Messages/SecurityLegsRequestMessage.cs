@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityLegsRequestMessage : BaseSubscriptionMessage
+	public class SecurityLegsRequestMessage : BaseRequestMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityLegsRequestMessage"/>.
@@ -42,27 +42,5 @@ namespace StockSharp.Messages
 
 			return clone;
 		}
-
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",Like={Like},TrId={TransactionId}";
-		}
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? From => null;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? To => DateTimeOffset.MaxValue /* prevent for online mode */;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override bool IsSubscribe => true;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override long OriginalTransactionId => 0;
 	}
 }

@@ -166,7 +166,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class CommandMessage : BaseSubscriptionMessage
+	public class CommandMessage : BaseRequestMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="CommandMessage"/>.
@@ -181,7 +181,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		protected CommandMessage(MessageTypes type)
-			: base(MessageTypes.Command)
+			: base(type)
 		{
 		}
 
