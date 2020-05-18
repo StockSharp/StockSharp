@@ -1762,29 +1762,6 @@ namespace StockSharp.Messages
 					return true;
 				}
 
-				case MessageTypes.MarketData:
-				case MessageTypes.Portfolio:
-				case MessageTypes.OrderStatus:
-				case MessageTypes.SecurityLookup:
-				case MessageTypes.BoardLookup:
-				case MessageTypes.PortfolioLookup:
-				case MessageTypes.UserLookup:
-				{
-					sendOut(((ISubscriptionMessage)message).CreateResponse(ex));
-					return true;
-				}
-
-				case MessageTypes.UserRequest:
-				{
-					var requestMsg = (UserRequestMessage)message;
-					sendOut(new UserRequestMessage
-					{
-						OriginalTransactionId = requestMsg.TransactionId,
-						Error = ex
-					});
-					return true;
-				}
-
 				case MessageTypes.ChangePassword:
 				{
 					var pwdMsg = (ChangePasswordMessage)message;
@@ -1795,9 +1772,18 @@ namespace StockSharp.Messages
 					});
 					return true;
 				}
-			}
 
-			return false;
+				default:
+				{
+					if (message is ISubscriptionMessage subscrMsg)
+					{
+						sendOut(subscrMsg.CreateResponse(ex));
+						return true;
+					}
+
+					return false;
+				}
+			}
 		}
 
 		/// <summary>
