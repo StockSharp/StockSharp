@@ -193,7 +193,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		[DataMember]
 		//[Obsolete("Use DataType2 property.")]
-		public MarketDataTypes DataType
+		public new MarketDataTypes DataType
 		{
 #pragma warning disable CS0618 // Type or member is obsolete
 #pragma warning disable CS0612 // Type or member is obsolete

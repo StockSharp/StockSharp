@@ -19,7 +19,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType => DataType.Create(typeof(SecurityMappingMessage), null);
+		public override DataType DataType => DataType.SecurityMapping;
 
 		/// <summary>
 		/// Create a copy of <see cref="SecurityMappingRequestMessage"/>.

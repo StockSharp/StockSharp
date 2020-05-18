@@ -79,6 +79,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.BoardState;
+
 		/// <summary>
 		/// Board code.
 		/// </summary>

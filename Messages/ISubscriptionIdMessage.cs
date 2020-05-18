@@ -14,5 +14,10 @@ namespace StockSharp.Messages
 		/// Identifiers.
 		/// </summary>
 		long[] SubscriptionIds { get; set; }
+
+		/// <summary>
+		/// Data type info.
+		/// </summary>
+		DataType DataType { get; }
 	}
 }

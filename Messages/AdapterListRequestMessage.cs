@@ -19,7 +19,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType => DataType.Create(typeof(AdapterResponseMessage), null);
+		public override DataType DataType => DataType.Adapters;
 
 		/// <summary>
 		/// Create a copy of <see cref="AdapterListRequestMessage"/>.

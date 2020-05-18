@@ -282,6 +282,9 @@ namespace StockSharp.Messages
 		[DataMember]
 		public SecurityId PrimaryId { get; set; }
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Securities;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>

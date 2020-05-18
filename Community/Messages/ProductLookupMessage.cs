@@ -21,7 +21,7 @@
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType => DataType.Create(typeof(ProductInfoMessage), null);
+		public override DataType DataType => CommunityMessageTypes.ProductInfoType;
 
 		/// <summary>
 		/// Create a copy of <see cref="ProductFeedbackMessage"/>.

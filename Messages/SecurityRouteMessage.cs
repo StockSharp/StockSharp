@@ -21,6 +21,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.SecurityRoute;
+
+		/// <inheritdoc />
 		[DataMember]
 		public SecurityId SecurityId { get; set; }
 
@@ -28,7 +31,7 @@ namespace StockSharp.Messages
 		/// Market data type.
 		/// </summary>
 		[DataMember]
-		public DataType DataType { get; set; }
+		public DataType SecurityDataType { get; set; }
 
 		/// <inheritdoc />
 		public override void CopyTo(SecurityRouteMessage destination)
@@ -36,7 +39,7 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
-			destination.DataType = DataType?.TypedClone();
+			destination.SecurityDataType = SecurityDataType?.TypedClone();
 		}
 	}
 }

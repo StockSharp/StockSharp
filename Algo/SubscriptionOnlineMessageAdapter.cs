@@ -174,12 +174,10 @@
 							}
 							else
 							{
-								var dataType = message.ToDataType();
-								var secId = dataType.IsLookup()
-									? default
-									: (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default;
+								var dataType = subscrMsg.DataType;
+								var secId = (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default;
 
-								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info) && !_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, default(SecurityId)), out info))
+								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info) && (secId == default || !_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, default(SecurityId)), out info)))
 									break;
 							}
 

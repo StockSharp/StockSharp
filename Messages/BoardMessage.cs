@@ -124,6 +124,9 @@ namespace StockSharp.Messages
 			}
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Board;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BoardMessage"/>.
 		/// </summary>

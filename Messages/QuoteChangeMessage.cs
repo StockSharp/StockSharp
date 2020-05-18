@@ -150,6 +150,9 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool HasPositions { get; set; }
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.MarketDepth;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChangeMessage"/>.
 		/// </summary>

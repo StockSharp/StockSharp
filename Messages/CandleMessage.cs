@@ -267,6 +267,8 @@ namespace StockSharp.Messages
 		[Ignore]
 		public abstract object Arg { get; set; }
 
+		DataType ISubscriptionIdMessage.DataType => DataType.Create(GetType(), Arg);
+
 		/// <summary>
 		/// Initialize <see cref="CandleMessage"/>.
 		/// </summary>

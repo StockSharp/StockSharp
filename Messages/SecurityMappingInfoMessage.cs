@@ -24,6 +24,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.SecurityMapping;
+
 		private IDictionary<string, IEnumerable<SecurityIdMapping>> _mapping = new Dictionary<string, IEnumerable<SecurityIdMapping>>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>

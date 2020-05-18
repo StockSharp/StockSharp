@@ -21,14 +21,6 @@ namespace StockSharp.Messages
 	public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITransactionIdMessage
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
-		/// </summary>
-		public UserInfoMessage()
-			: base(MessageTypes.UserInfo)
-		{
-		}
-
-		/// <summary>
 		/// Login.
 		/// </summary>
 		[DataMember]
@@ -163,6 +155,17 @@ namespace StockSharp.Messages
 		/// Permission set.
 		/// </summary>
 		public IDictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>>();
+
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Users;
+		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
+		/// </summary>
+		public UserInfoMessage()
+			: base(MessageTypes.UserInfo)
+		{
+		}
 
 		/// <inheritdoc />
 		public override string ToString()

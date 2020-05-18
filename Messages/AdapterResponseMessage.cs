@@ -36,6 +36,9 @@ namespace StockSharp.Messages
 		public IDictionary<string, Tuple<string, string>> Parameters { get; private set; } = new Dictionary<string, Tuple<string, string>>();
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.Adapters;
+
+		/// <inheritdoc />
 		public override void CopyTo(AdapterResponseMessage destination)
 		{
 			base.CopyTo(destination);

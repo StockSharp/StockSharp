@@ -84,7 +84,7 @@
 		[Obsolete]
 		public static DataType ToDataType(this MarketDataTypes type, object arg)
 		{
-			return type.ToMessageType(out var arg2).ToDataType(arg2 ?? arg, true);
+			return type.ToMessageType(out var arg2).ToDataType(arg2 ?? arg);
 		}
 
 		/// <summary>
@@ -123,5 +123,77 @@
 		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
 		[Obsolete]
 		public static bool IsCandleDataType(this MarketDataTypes type) => _candleDataTypes.ContainsKey(type.ToMessageType(out _));
+
+		/// <summary>
+		/// Convert <see cref="MessageTypes"/> to <see cref="DataType"/> value.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <returns>Data type info.</returns>
+		[Obsolete]
+		public static DataType ToDataType(this MessageTypes type, object arg)
+		{
+			switch (type)
+			{
+				case MessageTypes.Security:
+					return DataType.Securities;
+
+				case MessageTypes.Board:
+					return DataType.Board;
+
+				case MessageTypes.Portfolio:
+				case MessageTypes.PositionChange:
+					return DataType.PositionChanges;
+
+				case MessageTypes.News:
+					return DataType.News;
+
+				case MessageTypes.BoardState:
+					return DataType.Board;
+
+				case MessageTypes.Level1Change:
+					return DataType.Level1;
+
+				case MessageTypes.QuoteChange:
+					return DataType.MarketDepth;
+
+				case MessageTypes.Execution:
+					return ((ExecutionTypes)arg).ToDataType();
+
+				case MessageTypes.TimeFrameInfo:
+					return DataType.TimeFrames;
+
+				case MessageTypes.UserInfo:
+					return DataType.Users;
+
+				default:
+				{
+					if (type.IsCandle())
+						return DataType.Create(type.ToCandleMessage(), arg);
+
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Determines the specified type is lookup.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Check result.</returns>
+		[Obsolete]
+		public static bool IsLookup(this DataType dataType)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			return
+				dataType == DataType.Transactions ||
+				dataType == DataType.Securities ||
+				dataType == DataType.PositionChanges ||
+				dataType == DataType.TimeFrames ||
+				dataType == DataType.Users ||
+				dataType == DataType.Transactions;
+		}
 	}
 }

@@ -151,6 +151,9 @@ namespace StockSharp.Messages
 		[DataMember]
 		public DateTimeOffset? ExpiryDate { get; set; }
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.News;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NewsMessage"/>.
 		/// </summary>

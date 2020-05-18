@@ -23,6 +23,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.SecurityLegs;
+
 		private IDictionary<SecurityId, IEnumerable<SecurityId>> _legs = new Dictionary<SecurityId, IEnumerable<SecurityId>>();
 
 		/// <summary>

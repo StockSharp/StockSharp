@@ -301,6 +301,9 @@ namespace StockSharp.Messages
 		//{
 		//}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.PositionChanges;
+
 		/// <summary>
 		/// Create a copy of <see cref="PositionChangeMessage"/>.
 		/// </summary>

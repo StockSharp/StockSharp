@@ -837,76 +837,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert <see cref="Message"/> to <see cref="DataType"/>.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this Message message)
-		{
-			if (message is null)
-				throw new ArgumentNullException(nameof(message));
-
-			return
-				message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType, false) ??
-				 DataType.Create(message.GetType(), null);
-		}
-
-		/// <summary>
-		/// Convert <see cref="MessageTypes"/> to <see cref="DataType"/> value.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
-		/// <param name="throwIfUnknown">Throw an error is unknown <paramref name="type"/>.</param>
-		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this MessageTypes type, object arg, bool throwIfUnknown)
-		{
-			switch (type)
-			{
-				case MessageTypes.Security:
-					return DataType.Securities;
-
-				case MessageTypes.Board:
-					return DataType.Board;
-
-				case MessageTypes.Portfolio:
-				case MessageTypes.PositionChange:
-					return DataType.PositionChanges;
-
-				case MessageTypes.News:
-					return DataType.News;
-
-				case MessageTypes.BoardState:
-					return DataType.Board;
-
-				case MessageTypes.Level1Change:
-					return DataType.Level1;
-
-				case MessageTypes.QuoteChange:
-					return DataType.MarketDepth;
-
-				case MessageTypes.Execution:
-					return ((ExecutionTypes)arg).ToDataType();
-
-				case MessageTypes.TimeFrameInfo:
-					return DataType.TimeFrames;
-
-				case MessageTypes.UserInfo:
-					return DataType.Users;
-
-				default:
-				{
-					if (type.IsCandle())
-						return DataType.Create(type.ToCandleMessage(), arg);
-
-					if (throwIfUnknown)
-						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-					else
-						return null;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Convert <see cref="ExecutionTypes"/> to <see cref="DataType"/> value.
 		/// </summary>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
@@ -2180,25 +2110,6 @@ namespace StockSharp.Messages
 		/// <param name="type">Currency type.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsCrypto(this CurrencyTypes type) => type.GetAttributeOfType<CryptoAttribute>() != null;
-
-		/// <summary>
-		/// Determines the specified type is lookup.
-		/// </summary>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsLookup(this DataType dataType)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			return
-				dataType == DataType.Transactions ||
-				dataType == DataType.Securities ||
-				dataType == DataType.PositionChanges ||
-				dataType == DataType.TimeFrames ||
-				dataType == DataType.Users ||
-				dataType == DataType.Transactions;
-		}
 
 		/// <summary>
 		/// StockSharp news source.

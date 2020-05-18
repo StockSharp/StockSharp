@@ -58,6 +58,9 @@
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => CommunityMessageTypes.ProductFeedbackType;
+
 		/// <summary>
 		/// Create a copy of <see cref="ProductFeedbackMessage"/>.
 		/// </summary>

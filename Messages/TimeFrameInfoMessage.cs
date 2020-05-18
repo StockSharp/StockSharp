@@ -34,6 +34,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.TimeFrames;
+
+		/// <inheritdoc />
 		public override void CopyTo(TimeFrameInfoMessage destination)
 		{
 			base.CopyTo(destination);

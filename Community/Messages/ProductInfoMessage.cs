@@ -94,6 +94,9 @@
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => CommunityMessageTypes.ProductInfoType;
+
 		/// <summary>
 		/// Create a copy of <see cref="ProductInfoMessage"/>.
 		/// </summary>

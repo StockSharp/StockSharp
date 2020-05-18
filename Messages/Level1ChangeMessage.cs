@@ -825,6 +825,9 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public SecurityId SecurityId { get; set; }
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Level1;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1ChangeMessage"/>.
 		/// </summary>
