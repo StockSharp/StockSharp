@@ -53,6 +53,11 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
+		/// Disable refresh.
+		/// </summary>
+		public bool DisableRefresh { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyClient"/>.
 		/// </summary>
 		/// <param name="address">Server address.</param>
@@ -117,6 +122,12 @@ namespace StockSharp.Community
 
 		private void EnsureInit()
 		{
+			if (DisableRefresh)
+			{
+				Refresh();
+				return;
+			}
+
 			lock (_syncObject)
 			{
 				if (_refreshTimer != null)
@@ -343,7 +354,7 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public StrategyInfoMessage GetDescription(long id)
 		{
-			return Invoke(f => f.GetDescription2(new[] { id }))?.FirstOrDefault();
+			return Invoke(f => f.GetDescription2(new[] { id }))?.FirstOrDefault()?.TypedClone();
 		}
 
 		private static void ValidateError(byte errorCode, params object[] args)

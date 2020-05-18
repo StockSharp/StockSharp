@@ -82,13 +82,13 @@ namespace StockSharp.Community
 		/// <inheritdoc />
 		public UserInfoMessage GetProfile()
 		{
-			return Invoke(f => f.GetProfile2(SessionId));
+			return Invoke(f => f.GetProfile2(SessionId)).TypedClone();
 		}
 
 		/// <inheritdoc />
 		public UserInfoMessage GetUserProfile(long userId)
 		{
-			return Invoke(f => f.GetUserProfile2(userId));
+			return Invoke(f => f.GetUserProfile2(userId)).TypedClone();
 		}
 
 		private static void ValidateError(byte errorCode)
