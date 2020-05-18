@@ -243,14 +243,8 @@
 							break;
 						case MessageOfflineModes.Cancel:
 						{
-							switch (message.Type)
-							{
-								case MessageTypes.SecurityLookup:
-								case MessageTypes.PortfolioLookup:
-								case MessageTypes.OrderStatus:
-									RaiseNewOutMessage(((ISubscriptionMessage)message).CreateResult());
-									break;
-							}
+							if (message is ISubscriptionMessage subscrMsg)
+								RaiseNewOutMessage(subscrMsg.CreateResult());
 
 							return true;
 						}

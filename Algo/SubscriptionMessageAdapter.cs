@@ -61,20 +61,16 @@ namespace StockSharp.Algo
 				case MessageTypes.Reset:
 					return ProcessReset(message);
 
-				case MessageTypes.MarketData:
-				case MessageTypes.Portfolio:
-				case MessageTypes.SecurityLookup:
-				case MessageTypes.BoardLookup:
-				case MessageTypes.TimeFrameLookup:
-				case MessageTypes.UserLookup:
-				case MessageTypes.PortfolioLookup:
-					return ProcessInSubscriptionMessage((ISubscriptionMessage)message);
-
 				case MessageTypes.OrderStatus:
 					return ProcessOrderStatusMessage((OrderStatusMessage)message);
 
 				default:
-					return base.OnSendInMessage(message);
+				{
+					if (message is ISubscriptionMessage subscrMsg)
+						return ProcessInSubscriptionMessage(subscrMsg);
+					else
+						return base.OnSendInMessage(message);
+				}
 			}
 		}
 

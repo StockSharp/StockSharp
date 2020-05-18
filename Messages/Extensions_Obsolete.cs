@@ -84,7 +84,7 @@
 		[Obsolete]
 		public static DataType ToDataType(this MarketDataTypes type, object arg)
 		{
-			return type.ToMessageType(out var arg2).ToDataType(arg2 ?? arg);
+			return type.ToMessageType(out var arg2).ToDataType(arg2 ?? arg, true);
 		}
 
 		/// <summary>

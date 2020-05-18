@@ -837,12 +837,28 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Convert <see cref="Message"/> to <see cref="DataType"/>.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType ToDataType(this Message message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			return
+				message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType, false) ??
+				 DataType.Create(message.GetType(), null);
+		}
+
+		/// <summary>
 		/// Convert <see cref="MessageTypes"/> to <see cref="DataType"/> value.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <param name="throwIfUnknown">Throw an error is unknown <paramref name="type"/>.</param>
 		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this MessageTypes type, object arg)
+		public static DataType ToDataType(this MessageTypes type, object arg, bool throwIfUnknown)
 		{
 			switch (type)
 			{
@@ -882,7 +898,10 @@ namespace StockSharp.Messages
 					if (type.IsCandle())
 						return DataType.Create(type.ToCandleMessage(), arg);
 
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+					if (throwIfUnknown)
+						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+					else
+						return null;
 				}
 			}
 		}
