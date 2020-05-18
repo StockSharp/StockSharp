@@ -183,7 +183,7 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.IsBlocked = IsBlocked;
-			destination.IpRestrictions = IpRestrictions.ToArray();
+			destination.IpRestrictions = IpRestrictions?.ToArray() ?? Enumerable.Empty<IPAddress>();
 			destination.Id = Id;
 			destination.DisplayName = DisplayName;
 			destination.Phone = Phone;
@@ -197,7 +197,9 @@ namespace StockSharp.Messages
 			destination.Avatar = Avatar;
 			destination.CreationDate = CreationDate;
 			destination.AuthToken = AuthToken;
-			destination.Permissions.AddRange(Permissions.ToDictionary());
+
+			if (Permissions != null)
+				destination.Permissions.AddRange(Permissions.ToDictionary());
 		}
 	}
 }
