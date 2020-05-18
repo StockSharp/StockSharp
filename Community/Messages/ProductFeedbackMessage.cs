@@ -68,18 +68,30 @@
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new ProductFeedbackMessage
-			{
-				OriginalTransactionId = OriginalTransactionId,
-				ProductId = ProductId,
-				Id = Id,
-				Text = Text,
-				Author = Author,
-				Rating = Rating,
-				CreationDate = CreationDate,
-			};
+			var clone = new ProductFeedbackMessage();
 			CopyTo(clone);
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected void CopyTo(ProductFeedbackMessage destination)
+		{
+			if (destination == null)
+				throw new ArgumentNullException(nameof(destination));
+
+			base.CopyTo(destination);
+
+			destination.OriginalTransactionId = OriginalTransactionId;
+			destination.ProductId = ProductId;
+			destination.Id = Id;
+			destination.Text = Text;
+			destination.Author = Author;
+			destination.Rating = Rating;
+			destination.Author = Author;
+			destination.CreationDate = CreationDate;
 		}
 
 		/// <inheritdoc />

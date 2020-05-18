@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading;
 
@@ -122,15 +123,15 @@ namespace StockSharp.Community
 		}
 
 		/// <inheritdoc />
-		public ProductFeedbackMessage[] GetFeedbacks(ProductInfoMessage product, int offset, int count)
+		public IEnumerable<ProductFeedbackMessage> GetFeedbacks(ProductInfoMessage product, int offset, int count)
 		{
-			return Invoke(f => f.GetFeedbacks(SessionId, product.Id, offset, count));
+			return Invoke(f => f.GetFeedbacks(SessionId, product.Id, offset, count)).Select(m => m.TypedClone());
 		}
 
 		/// <inheritdoc />
-		public ProductInfoMessage[] GetProducts()
+		public IEnumerable<ProductInfoMessage> GetProducts()
 		{
-			return Invoke(f => f.GetProducts(SessionId));
+			return Invoke(f => f.GetProducts(SessionId)).Select(m => m.TypedClone());
 		}
 
 		/// <inheritdoc />

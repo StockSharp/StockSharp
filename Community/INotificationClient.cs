@@ -1,6 +1,7 @@
 namespace StockSharp.Community
 {
 	using System;
+	using System.Collections.Generic;
 
 	using StockSharp.Community.Messages;
 	using StockSharp.Messages;
@@ -78,12 +79,12 @@ namespace StockSharp.Community
 		/// <param name="offset">Offset.</param>
 		/// <param name="count">Count.</param>
 		/// <returns>Feedbacks.</returns>
-		ProductFeedbackMessage[] GetFeedbacks(ProductInfoMessage product, int offset, int count);
+		IEnumerable<ProductFeedbackMessage> GetFeedbacks(ProductInfoMessage product, int offset, int count);
 
 		/// <summary>
 		/// To get all available products.
 		/// </summary>
 		/// <returns>All available products.</returns>
-		ProductInfoMessage[] GetProducts();
+		IEnumerable<ProductInfoMessage> GetProducts();
 	}
 }

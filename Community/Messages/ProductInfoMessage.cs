@@ -104,24 +104,35 @@
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new ProductInfoMessage
-			{
-				OriginalTransactionId = OriginalTransactionId,
-				Id = Id,
-				Name = Name,
-				Description = Description,
-				PackageId = PackageId,
-				Tags = Tags,
-				Author = Author,
-				Price = Price?.Clone(),
-				DownloadCount = DownloadCount,
-				Rating = Rating,
-				DocUrl = DocUrl,
-				IsRequiredConnectors = IsRequiredConnectors,
-				ContentType = ContentType,
-			};
+			var clone = new ProductInfoMessage();
 			CopyTo(clone);
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected void CopyTo(ProductInfoMessage destination)
+		{
+			if (destination == null)
+				throw new ArgumentNullException(nameof(destination));
+
+			base.CopyTo(destination);
+
+			destination.OriginalTransactionId = OriginalTransactionId;
+			destination.Id = Id;
+			destination.Name = Name;
+			destination.Description = Description;
+			destination.PackageId = PackageId;
+			destination.Tags = Tags;
+			destination.Author = Author;
+			destination.Price = Price?.Clone();
+			destination.DownloadCount = DownloadCount;
+			destination.Rating = Rating;
+			destination.DocUrl = DocUrl;
+			destination.IsRequiredConnectors = IsRequiredConnectors;
+			destination.ContentType = ContentType;
 		}
 
 		/// <inheritdoc />
