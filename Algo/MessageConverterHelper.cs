@@ -366,6 +366,7 @@ namespace StockSharp.Algo
 				IsMargin = order.IsMargin,
 				Slippage = order.Slippage,
 				IsManual = order.IsManual,
+				MinOrderVolume = order.MinVolume,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);

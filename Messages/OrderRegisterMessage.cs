@@ -122,6 +122,12 @@ namespace StockSharp.Messages
 		public bool? IsManual { get; set; }
 
 		/// <summary>
+		/// Minimum quantity of an order to be executed.
+		/// </summary>
+		[DataMember]
+		public decimal? MinOrderVolume { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -145,9 +151,7 @@ namespace StockSharp.Messages
 		public override Message Clone()
 		{
 			var clone = new OrderRegisterMessage(Type);
-
 			CopyTo(clone);
-
 			return clone;
 		}
 
@@ -169,12 +173,13 @@ namespace StockSharp.Messages
 			destination.IsMargin = IsMargin;
 			destination.Slippage = Slippage;
 			destination.IsManual = IsManual;
+			destination.MinOrderVolume = MinOrderVolume;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},MR={IsMargin},SLP={Slippage},MN={IsManual}";
+			return base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume}/{MinOrderVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},MR={IsMargin},SLP={Slippage},MN={IsManual}";
 		}
 	}
 }
