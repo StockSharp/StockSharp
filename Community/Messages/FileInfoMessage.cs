@@ -12,7 +12,7 @@
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class FileInfoMessage : Message, IOriginalTransactionIdMessage
+	public class FileInfoMessage : BaseSubscriptionIdMessage<FileInfoMessage>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
@@ -30,10 +30,6 @@
 			: base(type)
 		{
 		}
-
-		/// <inheritdoc />
-		[DataMember]
-		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
 		/// File name.
@@ -89,15 +85,17 @@
 		[DataMember]
 		public DateTime CreationDate { get; set; }
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Create(typeof(FileInfoMessage), null);
+
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
-		protected virtual void CopyTo(FileInfoMessage destination)
+		public override void CopyTo(FileInfoMessage destination)
 		{
 			base.CopyTo(destination);
 
-			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.FileName = FileName;
 			destination.BodyLength = BodyLength;
 			destination.Body = Body;
@@ -123,7 +121,7 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",OrigTrId={OriginalTransactionId}";
+			var str = base.ToString();
 
 			str += $",BodyLen={Body?.Length ?? BodyLength}";
 
@@ -140,7 +138,7 @@
 				str += $",Public={IsPublic}";
 
 			if (!Url.IsEmpty())
-				str += $",Hash={Url}";
+				str += $",Url={Url}";
 
 			if (!Hash.IsEmpty())
 				str += $",Hash={Hash}";
