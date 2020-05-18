@@ -582,6 +582,11 @@ namespace StockSharp.Algo
 				VisibleVolume = oldOrder.VisibleVolume,
 				BrokerCode = oldOrder.BrokerCode,
 				ClientCode = oldOrder.ClientCode,
+				Condition = oldOrder.Condition?.TypedClone(),
+				IsManual = oldOrder.IsManual,
+				IsMarketMaker = oldOrder.IsMarketMaker,
+				IsMargin = oldOrder.IsMargin,
+				MinVolume = oldOrder.MinVolume,
 			};
 		}
 

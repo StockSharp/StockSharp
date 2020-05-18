@@ -354,7 +354,7 @@ namespace StockSharp.Algo
 				VisibleVolume = order.VisibleVolume,
 				OrderType = order.Type,
 				Comment = order.Comment,
-				Condition = order.Condition,
+				Condition = order.Condition?.TypedClone(),
 				TimeInForce = order.TimeInForce,
 				TillDate = order.ExpiryDate,
 				//IsSystem = order.IsSystem,
