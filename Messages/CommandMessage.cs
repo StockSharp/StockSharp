@@ -166,7 +166,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class CommandMessage : Message, ITransactionIdMessage
+	public class CommandMessage : BaseSubscriptionMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="CommandMessage"/>.
@@ -185,10 +185,6 @@ namespace StockSharp.Messages
 		{
 		}
 
-		/// <inheritdoc />
-		[DataMember]
-		public long TransactionId { get; set; }
-
 		/// <summary>
 		/// Command.
 		/// </summary>
@@ -202,10 +198,10 @@ namespace StockSharp.Messages
 		public CommandScopes Scope { get; set; }
 
 		/// <summary>
-		/// Adapter identifier.
+		/// Identifier.
 		/// </summary>
 		[DataMember]
-		public Guid ObjectId { get; set; }
+		public string ObjectId { get; set; }
 
 		/// <summary>
 		/// Parameters.
@@ -222,7 +218,6 @@ namespace StockSharp.Messages
 		{
 			var clone = new CommandMessage
 			{
-				TransactionId = TransactionId,
 				Command = Command,
 				Scope = Scope,
 				ObjectId = ObjectId,
@@ -235,7 +230,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.Create(typeof(CommandMessage), null);
+
+		/// <inheritdoc />
 		public override string ToString()
-			=> base.ToString() + $",TrId={TransactionId},Cmd={Command},Scp={Scope},Id={ObjectId}";
+			=> base.ToString() + $",Cmd={Command},Scp={Scope},Id={ObjectId}";
 	}
 }
