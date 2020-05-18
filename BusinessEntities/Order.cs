@@ -602,8 +602,19 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return LocalizedStrings.Str534Params
+			var str = LocalizedStrings.Str534Params
 				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance, Type);
+
+			if (Condition != null)
+				str += $" Condition={Condition}";
+
+			if (AveragePrice != null)
+				str += $" Condition={AveragePrice}";
+
+			if (MinVolume != null)
+				str += $" MinVolume={MinVolume}";
+
+			return str;
 		}
 	}
 }

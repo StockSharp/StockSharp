@@ -771,6 +771,8 @@ namespace StockSharp.Algo
 
 		private bool InternalSendInMessage(Message message)
 		{
+			this.AddDebugLog("In: {0}", message);
+
 			if (message is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 				throw new ArgumentException(message.ToString());
 
