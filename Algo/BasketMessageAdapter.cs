@@ -949,10 +949,8 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			if (message.Type.IsLookup())
+			if (message is ISubscriptionMessage subscrMsg)
 			{
-				var subscrMsg = (ISubscriptionMessage)message;
-
 				IMessageAdapter[] adapters;
 
 				if (subscrMsg.IsSubscribe)

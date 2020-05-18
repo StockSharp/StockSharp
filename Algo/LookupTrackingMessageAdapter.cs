@@ -108,7 +108,7 @@ namespace StockSharp.Algo
 				}
 
 				default:
-					if (message.Type.IsLookup() && !ProcessLookupMessage((ISubscriptionMessage)message))
+					if (message is ISubscriptionMessage subscrMsg && !ProcessLookupMessage(subscrMsg))
 						return true;
 
 					break;

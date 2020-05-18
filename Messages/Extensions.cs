@@ -1898,19 +1898,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove lookup messages support.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		public static void RemoveLookupMessages(this MessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			foreach (var type in _lookupResults)
-				adapter.RemoveSupportedMessage(type);
-		}
-
-		/// <summary>
 		/// Determines whether the <paramref name="execMsg"/> contains market-data info.
 		/// </summary>
 		/// <param name="execMsg">The message contains information about the execution.</param>
@@ -1922,25 +1909,6 @@ namespace StockSharp.Messages
 
 			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
 		}
-
-		private static readonly HashSet<MessageTypes> _lookupResults = new HashSet<MessageTypes>
-		{
-			MessageTypes.SecurityLookup,
-			MessageTypes.BoardLookup,
-			MessageTypes.UserLookup,
-			MessageTypes.TimeFrameLookup,
-			MessageTypes.PortfolioLookup,
-			MessageTypes.OrderStatus,
-			MessageTypes.SubscriptionListRequest,
-			MessageTypes.AdapterListRequest,
-		};
-
-		/// <summary>
-		/// Determines the specified type is lookup.
-		/// </summary>
-		/// <param name="type">Message type.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsLookup(this MessageTypes type) => _lookupResults.Contains(type);
 		
 		/// <summary>
 		/// Get <see cref="ExecutionMessage.TradePrice"/>.
