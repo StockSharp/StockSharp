@@ -18,6 +18,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Create(typeof(MarketDataMessage), null);
+
 		/// <summary>
 		/// Create a copy of <see cref="SubscriptionListRequestMessage"/>.
 		/// </summary>

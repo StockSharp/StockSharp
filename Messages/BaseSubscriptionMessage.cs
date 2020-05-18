@@ -43,6 +43,9 @@
 		[DataMember]
 		public virtual long OriginalTransactionId { get; set; }
 
+		/// <inheritdoc />
+		public abstract DataType DataType { get; }
+
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
@@ -60,6 +63,12 @@
 			destination.OriginalTransactionId = OriginalTransactionId;
 
 			return destination;
+		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return base.ToString() + $",TrId={TransactionId}";
 		}
 	}
 }

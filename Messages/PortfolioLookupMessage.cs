@@ -34,6 +34,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.PositionChanges;
+
+		/// <inheritdoc />
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>

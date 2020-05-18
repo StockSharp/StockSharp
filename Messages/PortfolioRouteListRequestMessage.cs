@@ -18,6 +18,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Create(typeof(PortfolioRouteMessage), null);
+
 		/// <summary>
 		/// Create a copy of <see cref="PortfolioRouteListRequestMessage"/>.
 		/// </summary>
@@ -30,9 +33,6 @@ namespace StockSharp.Messages
 
 			return clone;
 		}
-
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $",TrId={TransactionId}";
 
 		/// <inheritdoc />
 		[DataMember]

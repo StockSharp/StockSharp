@@ -232,7 +232,7 @@
 				{
 					if (message.To == null)
 					{
-						var dataType = message.ToDataType();
+						var dataType = message.DataType;
 						var secId = default(SecurityId);
 
 						if (message is ISecurityIdMessage secIdMsg)

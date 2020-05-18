@@ -67,7 +67,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Data type info.
 		/// </summary>
-		public DataType DataType { get; }
+		public DataType DataType => SubscriptionMessage.DataType;
 
 		/// <summary>
 		/// Subscription message.
@@ -138,7 +138,6 @@ namespace StockSharp.Algo
 			SubscriptionMessage = subscriptionMessage ?? throw new ArgumentNullException(nameof(subscriptionMessage));
 			SubscriptionMessage.IsSubscribe = true;
 
-			DataType = subscriptionMessage.ToDataType();
 			Security = security;
 
 			if (Security == null)

@@ -265,7 +265,7 @@ namespace StockSharp.Algo
 
 		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
 		{
-			return ProcessInSubscriptionMessage(message, message.ToDataType());
+			return ProcessInSubscriptionMessage(message, message.DataType);
 		}
 
 		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message, DataType dataType)

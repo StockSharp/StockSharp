@@ -968,7 +968,7 @@ namespace StockSharp.Algo
 						return;
 					}
 
-					_subscription.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg.TypedClone(), adapters, subscrMsg.ToDataType()));
+					_subscription.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg.TypedClone(), adapters, subscrMsg.DataType));
 				}
 				else
 					adapters = null;

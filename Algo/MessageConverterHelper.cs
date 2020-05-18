@@ -2053,38 +2053,5 @@ namespace StockSharp.Algo
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}
-
-		/// <summary>
-		/// Convert <see cref="ISubscriptionMessage"/> to <see cref="DataType"/> value.
-		/// </summary>
-		/// <param name="message">Subscription message.</param>
-		/// <returns>Data type info.</returns>
-		public static DataType ToDataType(this ISubscriptionMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			switch (message)
-			{
-				case MarketDataMessage mdMsg:
-					return mdMsg.DataType2;
-				case SecurityLookupMessage _:
-					return DataType.Securities;
-				case BoardLookupMessage _:
-					return DataType.Board;
-				case OrderStatusMessage _:
-					return DataType.Transactions;
-				case PortfolioLookupMessage _:
-					return DataType.PositionChanges;
-				case TimeFrameLookupMessage _:
-					return DataType.TimeFrames;
-				case UserLookupMessage _:
-					return DataType.Users;
-				case PortfolioMessage pfMsg:
-					return DataType.Portfolio(pfMsg.PortfolioName);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(message), message.GetType(), LocalizedStrings.Str1219);
-			}
-		}
 	}
 }

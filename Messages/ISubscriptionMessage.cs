@@ -26,5 +26,10 @@ namespace StockSharp.Messages
 		/// Max count.
 		/// </summary>
 		long? Count { get; set; }
+
+		/// <summary>
+		/// Data type info.
+		/// </summary>
+		DataType DataType { get; }
 	}
 }

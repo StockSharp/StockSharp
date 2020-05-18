@@ -18,6 +18,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Create(typeof(SecurityLegsInfoMessage), null);
+
 		/// <summary>
 		/// The filter for securities search.
 		/// </summary>

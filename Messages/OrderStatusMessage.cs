@@ -57,6 +57,8 @@ namespace StockSharp.Messages
 		{
 		}
 
+		DataType ISubscriptionMessage.DataType => DataType.Transactions;
+
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>

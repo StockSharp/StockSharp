@@ -54,6 +54,8 @@ namespace StockSharp.Messages
 		{
 		}
 
+		DataType ISubscriptionMessage.DataType => DataType.Securities;
+
 		/// <summary>
 		/// Create a copy of <see cref="SecurityLookupMessage"/>.
 		/// </summary>

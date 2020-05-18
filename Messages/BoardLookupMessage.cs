@@ -24,6 +24,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Board;
+
 		/// <summary>
 		/// Create a copy of <see cref="BoardLookupMessage"/>.
 		/// </summary>
@@ -50,7 +53,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Like={Like},TrId={TransactionId}";
+			return base.ToString() + $",Like={Like}";
 		}
 
 		/// <inheritdoc />

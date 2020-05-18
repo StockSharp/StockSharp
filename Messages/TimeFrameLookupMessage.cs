@@ -19,10 +19,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",TrId={TransactionId}";
-		}
+		public override DataType DataType => DataType.TimeFrames;
 
 		/// <summary>
 		/// Create a copy of <see cref="TimeFrameLookupMessage"/>.

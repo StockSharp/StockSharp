@@ -143,6 +143,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual DataType DataType => DataType.Portfolio(PortfolioName);
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			var str = base.ToString() + $",Name={PortfolioName}";

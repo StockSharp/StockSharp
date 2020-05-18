@@ -173,6 +173,8 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }
 
+		DataType ISubscriptionMessage.DataType => DataType2;
+
 		private DataType _dataType2 = Messages.DataType.Level1;
 
 		/// <summary>
