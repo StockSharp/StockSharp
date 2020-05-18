@@ -1452,16 +1452,6 @@ namespace StockSharp.Algo
 						break;
 					}
 
-					case MessageTypes.Board:
-					case MessageTypes.BoardState:
-					case MessageTypes.TimeFrameInfo:
-					case MessageTypes.SecurityLegsInfo:
-					case MessageTypes.SecurityMappingInfo:
-					case MessageTypes.SecurityRoute:
-					case MessageTypes.PortfolioRoute:
-						ApplyParentLookupId((ISubscriptionIdMessage)message);
-						break;
-
 					case MessageTypes.Execution:
 					{
 						var execMsg = (ExecutionMessage)message;
@@ -1476,6 +1466,14 @@ namespace StockSharp.Algo
 							if (execMsg.HasOrderInfo)
 								_orderAdapters.TryAdd(execMsg.TransactionId, innerAdapter);
 						}
+
+						break;
+					}
+
+					default:
+					{
+						if (message is ISubscriptionIdMessage subscrIdMsg)
+							ApplyParentLookupId(subscrIdMsg);
 
 						break;
 					}
