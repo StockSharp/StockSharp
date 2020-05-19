@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Market data type.
 		/// </summary>
 		[DataMember]
-		public DataType DataType { get; set; }
+		public DataType FileDataType { get; set; }
 
 		/// <summary>
 		/// Date.
@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 			var clone = new RemoteFileMessage
 			{
 				SecurityId = SecurityId,
-				DataType = DataType?.TypedClone(),
+				FileDataType = FileDataType?.TypedClone(),
 				Date = Date,
 				Format = Format,
 			};
@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},Type={DataType},Date={Date},Fmt={Format}";
+			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Date={Date},Fmt={Format}";
 		}
 	}
 }
