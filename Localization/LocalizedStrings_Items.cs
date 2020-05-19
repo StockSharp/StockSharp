@@ -51576,5 +51576,15 @@ namespace StockSharp.Localization
 		/// Do not send Account field.
 		/// </summary>
 		public static string DoNotSendAccount => GetString(DoNotSendAccountKey);
+
+		/// <summary>
+		/// Windows
+		/// </summary>
+		public const string WindowsKey = nameof(Windows);
+
+		/// <summary>
+		/// Windows
+		/// </summary>
+		public static string Windows => GetString(WindowsKey);
 	}
 }
