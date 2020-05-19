@@ -214,7 +214,7 @@ namespace StockSharp.Algo
 					var responseMsg = (SubscriptionResponseMessage)message;
 
 					if (!_infos.TryGetValue(responseMsg.OriginalTransactionId, out var info))
-						return;
+						break;
 
 					if (responseMsg.Error == null)
 						info.State = SubscriptionStates.Active;
