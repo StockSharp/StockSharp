@@ -4,8 +4,6 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
-	using System.Net;
-	using System.Security;
 	using System.ServiceModel;
 #if NETFRAMEWORK
 	using System.ServiceModel.Description;
@@ -322,15 +320,6 @@ namespace StockSharp.Algo.Storages.Remote
 		/// Save securities.
 		/// </summary>
 		/// <param name="securities">Securities.</param>
-		public void SaveSecurities(Security[] securities)
-		{
-			SaveSecurities(securities.Select(s => s.ToMessage()).ToArray());
-		}
-
-		/// <summary>
-		/// Save securities.
-		/// </summary>
-		/// <param name="securities">Securities.</param>
 		public void SaveSecurities(SecurityMessage[] securities)
 		{
 			if (securities == null)
@@ -340,80 +329,6 @@ namespace StockSharp.Algo.Storages.Remote
 				throw new ArgumentOutOfRangeException(nameof(securities));
 
 			Invoke(f => f.SaveSecurities(SessionId, securities));
-		}
-
-		/// <summary>
-		/// Delete securities.
-		/// </summary>
-		/// <param name="securities">Securities.</param>
-		public void DeleteSecurities(Security[] securities)
-		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
-
-			if (securities.IsEmpty())
-				throw new ArgumentOutOfRangeException(nameof(securities));
-
-			Invoke(f => f.DeleteSecurities(SessionId, securities.Select(s => s.Id).ToArray()));
-		}
-
-		/// <summary>
-		/// Save exchanges.
-		/// </summary>
-		/// <param name="exchanges">Exchanges.</param>
-		public void SaveExchanges(Exchange[] exchanges)
-		{
-			if (exchanges == null)
-				throw new ArgumentNullException(nameof(exchanges));
-
-			if (exchanges.IsEmpty())
-				throw new ArgumentOutOfRangeException(nameof(exchanges));
-
-			Invoke(f => f.SaveExchanges(SessionId, exchanges.Select(e => e.Name).ToArray()));
-		}
-
-		/// <summary>
-		/// Delete exchanges.
-		/// </summary>
-		/// <param name="exchanges">Exchanges.</param>
-		public void DeleteExchanges(Exchange[] exchanges)
-		{
-			if (exchanges == null)
-				throw new ArgumentNullException(nameof(exchanges));
-
-			if (exchanges.IsEmpty())
-				throw new ArgumentOutOfRangeException(nameof(exchanges));
-
-			Invoke(f => f.DeleteExchanges(SessionId, exchanges.Select(e => e.Name).ToArray()));
-		}
-
-		/// <summary>
-		/// Save exchange boards.
-		/// </summary>
-		/// <param name="boards">Boards.</param>
-		public void SaveExchangeBoards(ExchangeBoard[] boards)
-		{
-			var messages = boards.Select(b => b.ToMessage()).ToArray();
-
-			if (messages.IsEmpty())
-				throw new ArgumentOutOfRangeException(nameof(boards));
-
-			Invoke(f => f.SaveExchangeBoards(SessionId, messages));
-		}
-
-		/// <summary>
-		/// Delete exchange boards.
-		/// </summary>
-		/// <param name="boards">Boards.</param>
-		public void DeleteExchangeBoards(ExchangeBoard[] boards)
-		{
-			if (boards == null)
-				throw new ArgumentNullException(nameof(boards));
-
-			if (boards.IsEmpty())
-				throw new ArgumentOutOfRangeException(nameof(boards));
-
-			Invoke(f => f.DeleteExchangeBoards(SessionId, boards.Select(e => e.Code).ToArray()));
 		}
 
 		private class RemoteExtendedStorage : IRemoteExtendedStorage
@@ -528,63 +443,6 @@ namespace StockSharp.Algo.Storages.Remote
 		public IRemoteExtendedStorage GetExtendedStorage(string storageName)
 		{
 			return _extendedStorages.SafeAdd(storageName, key => new RemoteExtendedStorage(this, storageName));
-		}
-
-		/// <summary>
-		/// Get users.
-		/// </summary>
-		/// <returns>Users info.</returns>
-		public Tuple<string, IPAddress[], UserPermissions>[] GetUsers()
-		{
-			return Invoke(f => f.GetUsers(SessionId))
-				.Select(t => Tuple.Create(t.Item1, t.Item2.Select(s => s.To<IPAddress>()).ToArray(), t.Item3))
-				.ToArray();
-		}
-
-		/// <summary>
-		/// Save user info.
-		/// </summary>
-		/// <param name="login">Login.</param>
-		/// <param name="password">Password.</param>
-		/// <param name="ipAddresses">IP address list.</param>
-		/// <param name="permissions">Permissions.</param>
-		public void SaveUser(string login, SecureString password, IPAddress[] ipAddresses, UserPermissions permissions)
-		{
-			Invoke(f => f.SaveUser(SessionId, login, password.UnSecure(), ipAddresses.Select(i => i.To<string>()).ToArray(), permissions));
-		}
-
-		/// <summary>
-		/// Delete existing user.
-		/// </summary>
-		/// <param name="login">Login.</param>
-		public void DeleteUser(string login)
-		{
-			Invoke(f => f.DeleteUser(SessionId, login));
-		}
-
-		/// <summary>
-		/// Restart server.
-		/// </summary>
-		public void Restart()
-		{
-			Invoke(f => f.Restart(SessionId));
-		}
-
-		/// <summary>
-		/// Start downloading.
-		/// </summary>
-		/// <returns><see langword="true"/>, if downloading was start, otherwise, <see langword="false"/>.</returns>
-		public bool StartDownloading()
-		{
-			return Invoke(f => f.StartDownloading(SessionId));
-		}
-
-		/// <summary>
-		/// Stop downloading.
-		/// </summary>
-		public void StopDownloading()
-		{
-			Invoke(f => f.StopDownloading(SessionId));
 		}
 
 		/// <summary>
