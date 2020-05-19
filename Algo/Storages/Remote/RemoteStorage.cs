@@ -5,12 +5,13 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.IO;
 	using System.Linq;
 	using System.Net;
+	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Net;
+	using Ecng.Security;
 
-	using StockSharp.Algo.Server;
 	using StockSharp.Community;
 	using StockSharp.Logging;
 	using StockSharp.Algo.Storages;
@@ -23,7 +24,7 @@ namespace StockSharp.Algo.Storages.Remote
 	/// </summary>
 	public abstract class RemoteStorage : BaseLogReceiver, IRemoteStorage
 	{
-		private readonly SynchronizedDictionary<Guid, SynchronizedDictionary<UserPermissions, SynchronizedDictionary<Tuple<string, string, string, DateTime?>, bool>>> _sessions = new SynchronizedDictionary<Guid, SynchronizedDictionary<UserPermissions, SynchronizedDictionary<Tuple<string, string, string, DateTime?>, bool>>>();
+		private readonly SynchronizedDictionary<Guid, string> _sessions = new SynchronizedDictionary<Guid, string>();
 		private readonly SynchronizedDictionary<string, Type> _dataTypes = new SynchronizedDictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
@@ -72,12 +73,12 @@ namespace StockSharp.Algo.Storages.Remote
 		/// </summary>
 		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
-		private IRemoteAuthorization _authorization = new AnonymousRemoteAuthorization();
+		private IAuthorization _authorization = new AnonymousAuthorization();
 
 		/// <summary>
 		/// Authorization module.
 		/// </summary>
-		public IRemoteAuthorization Authorization
+		public IAuthorization Authorization
 		{
 			get => _authorization;
 			set => _authorization = value ?? throw new ArgumentNullException(nameof(value));
@@ -138,20 +139,33 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <returns>Market data storages.</returns>
 		protected abstract IEnumerable<IMarketDataDrive> GetDrives();
 
-		private void CheckSession(Guid sessionId, UserPermissions requestedPermission, string securityId = null, string dataType = null, string arg = null, DateTime? date = null)
-		{
-			var info = _sessions.TryGetValue(sessionId);
+		/// <summary>
+		/// Get permission for request.
+		/// </summary>
+		public event Func<string, UserPermissions, string, DataType, DateTime?, bool> HasPermissions;
 
-			if (info == null)
+		/// <summary>
+		/// Delete user by login.
+		/// </summary>
+		public event Action<string> UserDeleting;
+
+		/// <summary>
+		/// Save user.
+		/// </summary>
+		public event Action<string, SecureString, IEnumerable<IPAddress>, UserPermissions> UserSaving;
+
+		/// <summary>
+		/// All available users.
+		/// </summary>
+		public event Func<IEnumerable<Tuple<string, IEnumerable<IPAddress>, UserPermissions>>> UsersRequesting;
+
+		private void CheckSession(Guid sessionId, UserPermissions requested, string securityId = null, string dataType = null, string arg = null, DateTime? date = null)
+		{
+			if (!_sessions.TryGetValue(sessionId, out var login))
 				throw new UnauthorizedAccessException(LocalizedStrings.Str2080Params.Put(sessionId));
 
-			var dict = info.SafeAdd(requestedPermission);
-
-			var hasPermissions = dict.SafeAdd(Tuple.Create(securityId, dataType, arg, date),
-				key => _authorization.HasPermissions(sessionId, requestedPermission, securityId, dataType, arg, date));
-
-			if (!hasPermissions)
-				throw new UnauthorizedAccessException(LocalizedStrings.Str2081Params.Put(sessionId, requestedPermission, securityId, dataType, arg, date));
+			if (!HasPermissions?.Invoke(login, requested, securityId, dataType.ToDataType(dataType), date) == false)
+				throw new UnauthorizedAccessException(LocalizedStrings.Str2081Params.Put(sessionId, requested, securityId, dataType, arg, date));
 		}
 
 		private Security ToSecurity(string securityId, bool check = true)
@@ -203,7 +217,7 @@ namespace StockSharp.Algo.Storages.Remote
 		{
 			var sessionId = Authorization.ValidateCredentials(email, password.Secure(), NetworkHelper.UserAddress);
 
-			_sessions.Add(sessionId, new SynchronizedDictionary<UserPermissions, SynchronizedDictionary<Tuple<string, string, string, DateTime?>, bool>>());
+			_sessions.Add(sessionId, email);
 
 			this.AddInfoLog(LocalizedStrings.Str2084Params, sessionId, email, productId, version);
 
@@ -642,7 +656,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 			this.AddInfoLog(LocalizedStrings.RemoteStorageGetUsers, sessionId);
 
-			return _authorization.AllRemoteUsers.Select(c => Tuple.Create(c.Email, c.IpRestrictions.Cache.Select(a => a.To<string>()).ToArray(), c.Permissions.SyncGet(d => d.Keys.JoinMask()))).ToArray();
+			return UsersRequesting?.Invoke()?.Select(c => Tuple.Create(c.Item1, c.Item2.Select(a => a.To<string>()).ToArray(), c.Item3)).ToArray() ?? ArrayHelper.Empty<Tuple<string, string[], UserPermissions>>();
 		}
 
 		void IRemoteStorage.SaveUser(Guid sessionId, string login, string password, string[] ipAddresses, UserPermissions permissions)
@@ -651,7 +665,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 			this.AddInfoLog(LocalizedStrings.RemoteStorageSaveUser, sessionId, login, ipAddresses.JoinComma(), permissions);
 
-			_authorization.SaveRemoteUser(login, password.Secure(), ipAddresses.Select(s => s.To<IPAddress>()).ToArray(), permissions);
+			UserSaving?.Invoke(login, password.Secure(), ipAddresses.Select(s => s.To<IPAddress>()).ToArray(), permissions);
 		}
 
 		void IRemoteStorage.DeleteUser(Guid sessionId, string login)
@@ -660,7 +674,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 			this.AddInfoLog(LocalizedStrings.RemoteStorageDeleteUser, sessionId, login);
 
-			_authorization.DeleteRemoteUser(login);
+			UserDeleting?.Invoke(login);
 		}
 
 		void IRemoteStorage.Restart(Guid sessionId)
