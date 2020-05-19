@@ -59,6 +59,11 @@ namespace StockSharp.Community
 		/// </summary>
 		public bool IsToken { get; set; }
 
+		/// <summary>
+		/// Disable refresh.
+		/// </summary>
+		public bool DisableRefresh { get; set; }
+
 		/// <inheritdoc />
 		public ProductInfoMessage Product { get; set; }
 
@@ -119,11 +124,11 @@ namespace StockSharp.Community
 
 			tuple.Item1.ToErrorCode().ThrowIfError();
 
-			_sessionId = tuple.Item1;
-			UserId = tuple.Item2;
-
-			if (product != null)
+			if (product != null && !DisableRefresh)
 			{
+				_sessionId = tuple.Item1;
+				UserId = tuple.Item2;
+
 				_pingTimer = ThreadingHelper.Timer(() =>
 				{
 					try
