@@ -134,7 +134,7 @@ namespace StockSharp.Algo
 		private class ParentChildMap
 		{
 			private readonly SyncObject _syncObject = new SyncObject();
-			private readonly Dictionary<long, RefTriple<long, SubscriptionStates, IMessageAdapter>> _childToParentIds = new Dictionary<long, RefTriple<long, SubscriptionStates, IMessageAdapter>>();
+			private readonly Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>> _childToParentIds = new Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>>();
 
 			public void AddMapping(long childId, ISubscriptionMessage parentMsg, IMessageAdapter adapter)
 			{
@@ -148,7 +148,7 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(adapter));
 
 				lock (_syncObject)
-					_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, SubscriptionStates.Stopped, adapter));
+					_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, SubscriptionStates.Stopped, adapter, default(Exception)));
 			}
 
 			public IDictionary<long, IMessageAdapter> GetChild(long parentId)
@@ -160,12 +160,13 @@ namespace StockSharp.Algo
 					return FilterByParent(parentId).Where(p => p.Value.Second.IsActive()).ToDictionary(p => p.Key, p => p.Value.Third);
 			}
 
-			private IEnumerable<KeyValuePair<long, RefTriple<long, SubscriptionStates, IMessageAdapter>>> FilterByParent(long parentId) => _childToParentIds.Where(p => p.Value.First == parentId);
+			private IEnumerable<KeyValuePair<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>>> FilterByParent(long parentId) => _childToParentIds.Where(p => p.Value.First == parentId);
 
-			public long? ProcessChildResponse(long childId, bool isOk, out bool needParentResponse, out bool allError)
+			public long? ProcessChildResponse(long childId, Exception error, out bool needParentResponse, out bool allError, out IEnumerable<Exception> innerErrors)
 			{
 				allError = true;
 				needParentResponse = true;
+				innerErrors = Enumerable.Empty<Exception>();
 
 				if (childId == 0)
 					return null;
@@ -176,7 +177,10 @@ namespace StockSharp.Algo
 						return null;
 					
 					var parentId = tuple.First;
-					tuple.Second = isOk ? SubscriptionStates.Active : SubscriptionStates.Error;
+					tuple.Second = error == null ? SubscriptionStates.Active : SubscriptionStates.Error;
+					tuple.Fourth = error;
+
+					var errors = new List<Exception>();
 
 					foreach (var pair in FilterByParent(parentId))
 					{
@@ -191,8 +195,11 @@ namespace StockSharp.Algo
 						
 						if (t.Second != SubscriptionStates.Error)
 							allError = false;
+						else if (t.Fourth != null)
+							errors.Add(t.Fourth);
 					}
 
+					innerErrors = errors;
 					return parentId;
 				}
 			}
@@ -1733,10 +1740,10 @@ namespace StockSharp.Algo
 			if (!_requestsById.TryGetValue(originalTransactionId, out var tuple))
 				return message;
 
-			var isOk = message.IsOk();
+			var error = message.Error;
 			var originMsg = tuple.Item1;
 
-			if (!isOk)
+			if (error != null)
 			{
 				this.AddWarningLog("Subscription Error out: {0}", message);
 				_subscription.Remove(originalTransactionId);
@@ -1749,7 +1756,7 @@ namespace StockSharp.Algo
 				_requestsById.Remove(originalTransactionId);
 			}
 
-			var parentId = _parentChildMap.ProcessChildResponse(originalTransactionId, isOk, out var needParentResponse, out var allError);
+			var parentId = _parentChildMap.ProcessChildResponse(originalTransactionId, error, out var needParentResponse, out var allError, out var innerErrors);
 
 			if (parentId != null)
 			{
@@ -1757,7 +1764,7 @@ namespace StockSharp.Algo
 					_subscription.Remove(parentId.Value);
 
 				return needParentResponse
-					? parentId.Value.CreateSubscriptionResponse(allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null)
+					? parentId.Value.CreateSubscriptionResponse(allError ? new AggregateException(LocalizedStrings.Str629Params.Put(originMsg), innerErrors) : null)
 					: null;
 			}
 			else
