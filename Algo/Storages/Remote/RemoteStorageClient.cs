@@ -4,6 +4,7 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
+	using System.Net;
 	using System.ServiceModel;
 #if NETFRAMEWORK
 	using System.ServiceModel.Description;
@@ -115,7 +116,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <summary>
 		/// Default address.
 		/// </summary>
-		public static readonly Uri DefaultUrl = "net.tcp://localhost:8000".To<Uri>();
+		public static readonly EndPoint DefaultAddress = "localhost:8000".To<EndPoint>();
 
 		private readonly SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, RemoteStorageDrive>();
 
@@ -123,7 +124,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
 		/// </summary>
 		public RemoteStorageClient()
-			: this(DefaultUrl)
+			: this(DefaultAddress)
 		{
 		}
 
@@ -132,8 +133,8 @@ namespace StockSharp.Algo.Storages.Remote
 		/// </summary>
 		/// <param name="address">Server address.</param>
 		/// <param name="streaming">Data transfer via WCF Streaming.</param>
-		public RemoteStorageClient(Uri address, bool streaming = true)
-			: base(address, "remoteStorage")
+		public RemoteStorageClient(EndPoint address, bool streaming = true)
+			: base(("net.tcp://" + address.To<string>()).To<Uri>(), "remoteStorage")
 		{
 			_streaming = streaming;
 			Credentials = new ServerCredentials();

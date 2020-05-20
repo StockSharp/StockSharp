@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Net;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -58,7 +59,19 @@ namespace StockSharp.Algo.Storages
 		public override string Path
 		{
 			get => Client.Address.ToString();
-			set => Client = new RemoteStorageClient(value.To<Uri>());
+			set
+			{
+				if (value.IsEmpty())
+					throw new ArgumentNullException(nameof(value));
+
+				if (value.StartsWithIgnoreCase("net.tcp://"))
+				{
+					var uri = value.To<Uri>();
+					value = $"{uri.Host}:{uri.Port}";
+				}
+
+				Client = new RemoteStorageClient(value.To<EndPoint>());
+			}
 		}
 
 		/// <inheritdoc />
@@ -85,7 +98,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
 		{
-			using (var client = new RemoteStorageClient(new Uri(Path)))
+			using (var client = new RemoteStorageClient(Path.To<EndPoint>()))
 			{
 				client.Credentials.Load(Client.Credentials.Save());
 
