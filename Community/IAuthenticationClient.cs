@@ -38,6 +38,11 @@ namespace StockSharp.Community
 		Guid SessionId { get; }
 
 		/// <summary>
+		/// To get the <see cref="SessionId"/> if the user was authorized.
+		/// </summary>
+		Guid? NullableSessionId { get; }
+
+		/// <summary>
 		/// The user identifier for <see cref="SessionId"/>.
 		/// </summary>
 		long UserId { get; }

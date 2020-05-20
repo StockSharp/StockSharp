@@ -50,7 +50,7 @@ namespace StockSharp.Community
 		/// </summary>
 		public virtual Guid SessionId
 		{
-			get => _sessionId ?? AuthClient.SessionId;
+			get => _sessionId ?? AuthClient.NullableSessionId ?? default;
 			set => _sessionId = value.DefaultAsNull();
 		}
 

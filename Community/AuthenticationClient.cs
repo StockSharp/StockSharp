@@ -71,9 +71,7 @@ namespace StockSharp.Community
 		public Version Version { get; set; }
 
 		/// <inheritdoc />
-		public bool IsLoggedIn => _sessionId != null;
-
-		private Guid? _sessionId;
+		public bool IsLoggedIn => NullableSessionId != null;
 
 		/// <inheritdoc />
 		public Guid SessionId
@@ -83,9 +81,12 @@ namespace StockSharp.Community
 				if (!IsLoggedIn)
 					Login();
 
-				return _sessionId.Value;
+				return NullableSessionId.Value;
 			}
 		}
+
+		/// <inheritdoc />
+		public Guid? NullableSessionId { get; private set; }
 
 		/// <inheritdoc />
 		public long UserId { get; private set; }
@@ -126,14 +127,14 @@ namespace StockSharp.Community
 
 			if (product != null && !DisableRefresh)
 			{
-				_sessionId = tuple.Item1;
+				NullableSessionId = tuple.Item1;
 				UserId = tuple.Item2;
 
 				_pingTimer = ThreadingHelper.Timer(() =>
 				{
 					try
 					{
-						var session = _sessionId;
+						var session = NullableSessionId;
 
 						if (session == null)
 							return;
@@ -157,7 +158,7 @@ namespace StockSharp.Community
 		public void Logout()
 		{
 			Invoke(f => f.Logout(SessionId));
-			_sessionId = null;
+			NullableSessionId = null;
 			UserId = 0;
 
 			_pingTimer.Dispose();
