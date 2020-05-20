@@ -1,4 +1,6 @@
-﻿ApplicationUpdate;Application update;Обновление приложения
+﻿UnitTypeAbsolute;Absolute;Абсолютное
+UnitTypePoint;Point;Пункт
+ApplicationUpdate;Application update;Обновление приложения
 FollowingUpdatesAvailable;Following updates are available;Доступны следующие обновления
 ElementNotFoundParams;{0} is not found;{0} не найден
 ExitingApplication;Exiting the application;Завершение приложения

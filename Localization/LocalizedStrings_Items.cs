@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Absolute
+		/// </summary>
+		public const string UnitTypeAbsoluteKey = nameof(UnitTypeAbsolute);
+
+		/// <summary>
+		/// Absolute
+		/// </summary>
+		public static string UnitTypeAbsolute => GetString(UnitTypeAbsoluteKey);
+
+		/// <summary>
+		/// Point
+		/// </summary>
+		public const string UnitTypePointKey = nameof(UnitTypePoint);
+
+		/// <summary>
+		/// Point
+		/// </summary>
+		public static string UnitTypePoint => GetString(UnitTypePointKey);
+
+		/// <summary>
 		/// Application update
 		/// </summary>
 		public const string ApplicationUpdateKey = nameof(ApplicationUpdate);
