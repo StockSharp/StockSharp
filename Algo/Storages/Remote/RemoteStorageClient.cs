@@ -113,20 +113,7 @@ namespace StockSharp.Algo.Storages.Remote
 			}
 		}
 
-		/// <summary>
-		/// Default address.
-		/// </summary>
-		public static readonly EndPoint DefaultAddress = "localhost:8000".To<EndPoint>();
-
 		private readonly SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, RemoteStorageDrive>();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
-		/// </summary>
-		public RemoteStorageClient()
-			: this(DefaultAddress)
-		{
-		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.

@@ -17,10 +17,15 @@ namespace StockSharp.Algo.Storages
 	public class RemoteMarketDataDrive : BaseMarketDataDrive
 	{
 		/// <summary>
+		/// Default address.
+		/// </summary>
+		public static readonly EndPoint DefaultAddress = "localhost:8000".To<EndPoint>();
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
 		/// </summary>
 		public RemoteMarketDataDrive()
-			: this(new RemoteStorageClient())
+			: this(new RemoteStorageClient(DefaultAddress))
 		{
 		}
 
