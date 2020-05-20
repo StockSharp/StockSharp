@@ -90,7 +90,7 @@ namespace StockSharp.Messages
 			set => _supportedOutMessages = CheckDuplicate(value, nameof(SupportedOutMessages));
 		}
 
-		private IEnumerable<MessageTypes> _supportedResultMessages = Enumerable.Empty<MessageTypes>();
+		private IEnumerable<MessageTypes> _supportedResultMessages = new[] { MessageTypes.MarketData };
 
 		/// <inheritdoc />
 		[Browsable(false)]
