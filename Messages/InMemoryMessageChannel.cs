@@ -85,6 +85,40 @@ namespace StockSharp.Messages
 			set => _queue.MaxSize = value;
 		}
 
+		private int _suspendMaxCount = 10000;
+
+		/// <summary>
+		/// Suspend on <see cref="SuspendTimeout"/> if message queue is more than the specified count.
+		/// </summary>
+		public int SuspendMaxCount
+		{
+			get => _suspendMaxCount;
+			set
+			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
+				_suspendMaxCount = value;
+			}
+		}
+
+		private TimeSpan _suspendTimeout = TimeSpan.FromSeconds(1);
+
+		/// <summary>
+		/// <see cref="SuspendMaxCount"/>.
+		/// </summary>
+		public TimeSpan SuspendTimeout
+		{
+			get => _suspendTimeout;
+			set
+			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
+				_suspendTimeout = value;
+			}
+		}
+
 		/// <inheritdoc />
 		public bool IsOpened => !_queue.IsClosed;
 
@@ -179,6 +213,10 @@ namespace StockSharp.Messages
 
 			_msgStat.Add(message);
 			_queue.Enqueue(message);
+
+			if (_queue.Count > SuspendMaxCount)
+				SuspendTimeout.Sleep();
+
 			return true;
 		}
 
