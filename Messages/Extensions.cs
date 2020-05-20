@@ -2777,6 +2777,12 @@ namespace StockSharp.Messages
 					return false;
 			}
 
+			if (criteria.SecurityIds.Length > 0)
+			{
+				if (!criteria.SecurityIds.Contains(security.SecurityId))
+					return false;
+			}
+
 			if (!criteria.UnderlyingSecurityCode.IsEmpty() && security.UnderlyingSecurityCode != criteria.UnderlyingSecurityCode)
 				return false;
 
@@ -2858,7 +2864,12 @@ namespace StockSharp.Messages
 
 			var secTypes = criteria.GetSecurityTypes();
 
-			return securities.Where(s => s.IsMatch(criteria, secTypes)).ToArray();
+			var result = securities.Where(s => s.IsMatch(criteria, secTypes));
+
+			if (criteria.Count != null)
+				result = result.Take(criteria.Count.Value);
+
+			return result.ToArray();
 		}
 
 		/// <summary>
