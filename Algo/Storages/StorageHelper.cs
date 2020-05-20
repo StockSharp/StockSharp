@@ -1150,7 +1150,9 @@ namespace StockSharp.Algo.Storages
 
 						var range = GetRange(storage, subscription, TimeSpan.FromDays(2));
 
-						if (range == null && buildFrom == null)
+						if (range != null && buildFrom == null)
+							buildFrom = DataType.Ticks;
+						else if (range == null && buildFrom == null)
 						{
 							storage = GetStorage<Level1ChangeMessage>(secId, null);
 							range = GetRange(storage, subscription, TimeSpan.FromDays(2));
