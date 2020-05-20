@@ -1330,6 +1330,18 @@ namespace StockSharp.Algo
 
 				return;
 			}
+			else
+			{
+				if (message is OrderReplaceMessage replace)
+				{
+					_orderAdapters.TryAdd(replace.TransactionId, adapter);
+				}
+				else if (message is OrderPairReplaceMessage pairReplace)
+				{
+					_orderAdapters.TryAdd(pairReplace.Message1.TransactionId, adapter);
+					_orderAdapters.TryAdd(pairReplace.Message2.TransactionId, adapter);
+				}
+			}
 
 			adapter.SendInMessage(message);
 		}
