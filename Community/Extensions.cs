@@ -8,8 +8,6 @@ namespace StockSharp.Community
 	using Ecng.Common;
 	using Ecng.Security;
 
-	using StockSharp.Community.Messages;
-
 	/// <summary>
 	/// Extensions for <see cref="Community"/>.
 	/// </summary>

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Community.Messages
+﻿namespace StockSharp.Community
 {
 	using StockSharp.Messages;
 

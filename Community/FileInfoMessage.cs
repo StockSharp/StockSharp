@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Community.Messages
+﻿namespace StockSharp.Community
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -118,12 +118,18 @@
 			return clone;
 		}
 
+		/// <summary>
+		/// Get body length.
+		/// </summary>
+		/// <returns>File body length.</returns>
+		public long GetBodyLength() => Body?.Length ?? BodyLength;
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
 			var str = base.ToString();
 
-			str += $",BodyLen={Body?.Length ?? BodyLength}";
+			str += $",BodyLen={GetBodyLength()}";
 
 			if (!FileName.IsEmpty())
 				str += $",FileName={FileName}";
