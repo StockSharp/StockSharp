@@ -1152,15 +1152,15 @@ SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 					}
 				}
 
-				var ids = Send(nameof(IRemoteStorage.LookupSecurityIds), "criteria", criteria).UTF8().SplitByDotComma();
+				var ids = Send("LookupSecurityIds", "criteria", criteria).UTF8().SplitByDotComma();
 
 				var newSecurityIds = ids.Where(id => !existingIds.Contains(id)).ToArray();
 
-				foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
+				foreach (var b in newSecurityIds.Batch(1000))
 				{
 					var batch = b.ToArray();
 
-					var response = Send(nameof(IRemoteStorage.GetSecurities), "securityIds", batch);
+					var response = Send("GetSecurities", "securityIds", batch);
 					securities.AddRange(response.To<Stream>().DeserializeDataContract<SecurityMessage[]>());
 				}
 

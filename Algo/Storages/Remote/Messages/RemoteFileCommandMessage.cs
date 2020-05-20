@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		public RemoteFileCommandMessage()
 			: base(ExtendedMessageTypes.RemoteFileCommand)
 		{
+			Scope = CommandScopes.File;
 		}
 
 		/// <inheritdoc />

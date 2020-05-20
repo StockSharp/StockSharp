@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
 		/// </summary>
-		/// <param name="client">The client for access to the history server <see cref="IRemoteStorage"/>.</param>
+		/// <param name="client">The client for access to the history server.</param>
 		public RemoteMarketDataDrive(RemoteStorageClient client)
 		{
 			Client = client;
@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Storages
 		private RemoteStorageClient _client;
 
 		/// <summary>
-		/// The client for access to the history server <see cref="IRemoteStorage"/>.
+		/// The client for access to the history server.
 		/// </summary>
 		public RemoteStorageClient Client
 		{
@@ -97,7 +97,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public override void Verify()
 		{
-			Client.Login();
+			Client.Verify();
 		}
 
 		/// <inheritdoc />

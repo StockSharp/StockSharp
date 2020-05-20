@@ -5350,7 +5350,7 @@ DocStr171;To get a list of available market data storages;Получить сп�
 DocStr172;Market data storages;Хранилища маркет-данных
 DocStr173;Authorization module;Модуль проверки доступа
 DocStr174;The maximum number of instruments which can be requested from the server via the {0} method. The default is {1};Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. По умолчанию равно {1}
-DocStr175;The client for access to the history server {0};Клиент для доступа к серверу истории {0}
+DocStr175;The client for access to the history server;Клиент для доступа к серверу истории
 DocStr176;Data transfer via WCF Streaming;Передача данных через WCF Streaming
 DocStr177;Create WCF channel;Создать WCF канал
 DocStr178;WCF channel;WCF канал

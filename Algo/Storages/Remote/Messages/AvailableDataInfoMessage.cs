@@ -1,23 +1,20 @@
-namespace StockSharp.Algo.Storages.Remote.Messages
+﻿namespace StockSharp.Algo.Storages.Remote.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
-	using StockSharp.Community;
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Remove file message (upload or download).
+	/// Available data info message.
 	/// </summary>
-	public class RemoteFileMessage : FileInfoMessage, ISecurityIdMessage
+	public class AvailableDataInfoMessage : Message, ISecurityIdMessage
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RemoteFileMessage"/>.
+		/// Initializes a new instance of the <see cref="AvailableDataInfoMessage"/>.
 		/// </summary>
-		public RemoteFileMessage()
-			: base(ExtendedMessageTypes.RemoteFile)
+		public AvailableDataInfoMessage()
+			: base(ExtendedMessageTypes.AvailableDataInfo)
 		{
 		}
 
@@ -32,7 +29,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		public DataType FileDataType { get; set; }
 
 		/// <summary>
-		/// Date.
+		/// Start date.
 		/// </summary>
 		[DataMember]
 		public DateTimeOffset Date { get; set; }
@@ -44,15 +41,15 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		public StorageFormats Format { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="RemoteFileMessage"/>.
+		/// Create a copy of <see cref="AvailableDataInfoMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new RemoteFileMessage
+			var clone = new AvailableDataInfoMessage
 			{
 				SecurityId = SecurityId,
-				FileDataType = FileDataType?.TypedClone(),
+				FileDataType = FileDataType,
 				Date = Date,
 				Format = Format,
 			};

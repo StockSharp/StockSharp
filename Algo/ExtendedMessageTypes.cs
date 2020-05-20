@@ -99,5 +99,15 @@
 		/// <see cref="SubscriptionSecurityAllMessage"/>.
 		/// </summary>
 		public const MessageTypes SubscriptionSecurityAll = (MessageTypes)(-26);
+
+		/// <summary>
+		/// <see cref="AvailableDataRequestMessage"/>.
+		/// </summary>
+		public const MessageTypes AvailableDataRequest = (MessageTypes)(-27);
+
+		/// <summary>
+		/// <see cref="AvailableDataInfoMessage"/>.
+		/// </summary>
+		public const MessageTypes AvailableDataInfo = (MessageTypes)(-28);
 	}
 }

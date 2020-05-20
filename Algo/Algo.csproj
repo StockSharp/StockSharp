@@ -7,12 +7,17 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
+  
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\Community\Community.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <Reference Include="System.Core" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
+    <ProjectReference Include="..\Community\Community.csproj" />
   </ItemGroup>
 </Project>
