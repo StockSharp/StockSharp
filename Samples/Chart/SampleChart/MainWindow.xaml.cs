@@ -11,7 +11,6 @@
 	using System.Windows.Media;
 
 	using DevExpress.Xpf.Core;
-	using DXTheme = DevExpress.Xpf.Core.Theme;
 
 	using MoreLinq;
 
@@ -92,8 +91,6 @@
 				.Timer(OnDataTimer)
 				.Interval(TimeSpan.FromMilliseconds(1));
 
-			Theme.SelectedIndex = 1;
-
 			SeriesEditor.Settings = new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
@@ -103,8 +100,12 @@
 			ConfigManager.RegisterService<IMarketDataProvider>(_testMdProvider);
 			ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
 
-			Theme.ItemsSource = DXTheme.Themes.Where(t => t.ShowInThemeSelector);
 			ThemeExtensions.ApplyDefaultTheme();
+		}
+
+		private void Theme_OnClick(object sender, RoutedEventArgs e)
+		{
+			ThemeExtensions.Invert();
 		}
 
 		private void HistoryPath_OnFolderChanged(string path)
@@ -149,15 +150,6 @@
 		{
 			_dataTimer.Dispose();
 			base.OnClosing(e);
-		}
-
-		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var theme = (DXTheme)Theme.SelectedItem;
-			if (theme == null)
-				return;
-
-			ApplicationThemeHelper.ApplicationThemeName = theme.Name;
 		}
 
 		private void Chart_OnSubscribeCandleElement(ChartCandleElement el, CandleSeries ser)

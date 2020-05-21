@@ -236,6 +236,11 @@
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
 		}
 
+		private void ThemeSwitchClick(object sender, RoutedEventArgs e)
+		{
+			ThemeExtensions.Invert();
+		}
+
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_securitiesWindow);
