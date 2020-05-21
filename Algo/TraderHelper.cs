@@ -3786,9 +3786,8 @@ namespace StockSharp.Algo
 		/// <typeparam name="TRequest">Request type.</typeparam>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="request">Request.</param>
-		/// <param name="secId">Security ID.</param>
 		/// <returns>Downloaded data.</returns>
-		public static IEnumerable<TResult> Download<TResult, TRequest>(this IMessageAdapter adapter, TRequest request, SecurityId? secId)
+		public static IEnumerable<TResult> Download<TResult, TRequest>(this IMessageAdapter adapter, TRequest request)
 			where TResult : Message
 			where TRequest : Message
 		{
@@ -3841,14 +3840,16 @@ namespace StockSharp.Algo
 			if (request is ITransactionIdMessage transMsg)
 				transMsg.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
-			if (secId != null && adapter.IsNativeIdentifiers && !adapter.StorageName.IsEmpty() && request is SecurityMessage secMsg)
+			if (request is ISecurityIdMessage secIdMsg && secIdMsg.SecurityId != default && adapter.IsNativeIdentifiers && !adapter.StorageName.IsEmpty())
 			{
 				var nativeIdAdapter = adapter.FindAdapter<SecurityNativeIdMessageAdapter>();
 				
 				if (nativeIdAdapter != null)
 				{
-					var native = nativeIdAdapter.Storage.TryGetBySecurityId(adapter.StorageName, secId.Value);
-					secMsg.SetNativeId(native);
+					var secId = secIdMsg.SecurityId;
+					var native = nativeIdAdapter.Storage.TryGetBySecurityId(adapter.StorageName, secId);
+					secId.Native = native;
+					secIdMsg.SecurityId = secId;
 				}
 			}
 
@@ -3907,7 +3908,7 @@ namespace StockSharp.Algo
 				BuildField = fields?.FirstOr(),
 			};
 			
-			return adapter.Download<Level1ChangeMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+			return adapter.Download<Level1ChangeMessage, MarketDataMessage>(mdMsg);
 		}
 
 		/// <summary>
@@ -3929,7 +3930,7 @@ namespace StockSharp.Algo
 				To = endDate,
 			};
 			
-			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg);
 		}
 
 		/// <summary>
@@ -3951,7 +3952,7 @@ namespace StockSharp.Algo
 				To = endDate,
 			};
 			
-			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg);
 		}
 
 		/// <summary>
@@ -3962,7 +3963,7 @@ namespace StockSharp.Algo
 		/// <returns>All securities.</returns>
 		public static IEnumerable<SecurityMessage> GetSecurities(this IMessageAdapter adapter, SecurityLookupMessage lookupMsg)
 		{
-			return adapter.Download<SecurityMessage, SecurityLookupMessage>(lookupMsg, null);
+			return adapter.Download<SecurityMessage, SecurityLookupMessage>(lookupMsg);
 		}
 
 		/// <summary>
@@ -3989,7 +3990,7 @@ namespace StockSharp.Algo
 				BuildField = buildField,
 			};
 
-			return adapter.Download<TimeFrameCandleMessage, MarketDataMessage>(mdMsg, mdMsg.SecurityId);
+			return adapter.Download<TimeFrameCandleMessage, MarketDataMessage>(mdMsg);
 		}
 
 		/// <summary>
