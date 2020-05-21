@@ -20,22 +20,22 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Absolute
 		/// </summary>
-		public const string UnitTypeAbsoluteKey = nameof(UnitTypeAbsolute);
+		public const string AbsoluteKey = nameof(Absolute);
 
 		/// <summary>
 		/// Absolute
 		/// </summary>
-		public static string UnitTypeAbsolute => GetString(UnitTypeAbsoluteKey);
+		public static string Absolute => GetString(AbsoluteKey);
 
 		/// <summary>
 		/// Point
 		/// </summary>
-		public const string UnitTypePointKey = nameof(UnitTypePoint);
+		public const string PointKey = nameof(Point);
 
 		/// <summary>
 		/// Point
 		/// </summary>
-		public static string UnitTypePoint => GetString(UnitTypePointKey);
+		public static string Point => GetString(PointKey);
 
 		/// <summary>
 		/// Application update
@@ -39626,16 +39626,6 @@ namespace StockSharp.Localization
 		/// Elapsed:
 		/// </summary>
 		public static string XamlStr588 => GetString(XamlStr588Key);
-
-		/// <summary>
-		/// Point
-		/// </summary>
-		public const string XamlStr589Key = nameof(XamlStr589);
-
-		/// <summary>
-		/// Point
-		/// </summary>
-		public static string XamlStr589 => GetString(XamlStr589Key);
 
 		/// <summary>
 		/// Path to dll

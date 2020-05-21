@@ -1,5 +1,5 @@
-﻿UnitTypeAbsolute;Absolute;Абсолютное
-UnitTypePoint;Point;Пункт
+﻿Absolute;Absolute;Абсолютное
+Point;Point;Пункт
 ApplicationUpdate;Application update;Обновление приложения
 FollowingUpdatesAvailable;Following updates are available;Доступны следующие обновления
 ElementNotFoundParams;{0} is not found;{0} не найден
@@ -3976,7 +3976,6 @@ XamlStr585;Transparency;Прозрачность
 XamlStr586;Slippage:;Проскаль.:
 XamlStr587;Available market data;Просмотр доступных данных
 XamlStr588;Elapsed:;Прошло:
-XamlStr589;Point;Пункт
 XamlStr591;Path to dll;Путь к dll с кодом стратегии
 XamlStr592;Quik's path:;Путь к Quik:
 XamlStr593;Historical data:;Путь к истории:

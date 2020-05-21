@@ -40,7 +40,7 @@ namespace StockSharp.Messages
 		/// The absolute value. Incremental change is a given number.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnitTypeAbsoluteKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AbsoluteKey)]
 		Absolute,
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace StockSharp.Messages
 		/// Point.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnitTypePointKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PointKey)]
 		Point,
 
 		/// <summary>
