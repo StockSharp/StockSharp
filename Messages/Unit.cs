@@ -13,12 +13,14 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Messages
 {
 	using System;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -38,30 +40,35 @@ namespace StockSharp.Messages
 		/// The absolute value. Incremental change is a given number.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnitTypeAbsoluteKey)]
 		Absolute,
 
 		/// <summary>
 		/// Percents.Step change - one hundredth of a percent.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2343Key)]
 		Percent,
 
 		/// <summary>
 		/// Point.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnitTypePointKey)]
 		Point,
 
 		/// <summary>
 		/// Price step.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceStepKey)]
 		Step,
 
 		/// <summary>
 		/// The limited value. This unit allows to set a specific change number, which cannot be used in arithmetic operations <see cref="Unit"/>.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str272Key)]
 		Limit,
 	}
 

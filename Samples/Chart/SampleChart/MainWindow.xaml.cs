@@ -256,7 +256,7 @@
 											 _security,
 											 SeriesEditor.Settings.Arg) { IsCalcVolumeProfile = true };
 
-				_candleElement = new ChartCandleElement { FullTitle = "Candles" };
+				_candleElement = new ChartCandleElement();
 				Chart.AddElement(_areaComb, _candleElement, series);
 			});
 		}
