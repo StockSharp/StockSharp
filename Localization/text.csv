@@ -16234,3 +16234,45 @@ DocStr11789;Message loopback modes;Message loopback modes
 DocStr11790;Direct;Direct
 DocStr11791;Via whole adapters chain;Via whole adapters chain
 DocStr11792;Address (demo);Address (demo)
+DocStr11793;Database provider;Database provider
+DocStr11794;Create table if not exist;Create table if not exist
+DocStr11795;Insert new values;Insert new values
+DocStr11796;Restriction;Restriction
+DocStr11797;{0} restriction;{0} restriction
+DocStr11798;Max length;Max length
+DocStr11799;Fixed size;Fixed size
+DocStr11800;Precision;Precision
+DocStr11801;Message received;Message received
+DocStr11802;Session disconnected event;Session disconnected event
+DocStr11803;Is connected;Is connected
+DocStr11804;Throw exception if the specified type is unknown;Throw exception if the specified type is unknown
+DocStr11805;Available data info message;Available data info message
+DocStr11806;Available data info request;Available data info request
+DocStr11807;Get body length;Get body length
+DocStr11808;Crypto connector;Crypto connector
+DocStr11809;Stock connector;Stock connector
+DocStr11810;Product lookup message;Product lookup message
+DocStr11811;Write {0} value;Write {0} value
+DocStr11812;Writer;Writer
+DocStr11813;Do not send {0};Do not send {0}
+DocStr11814;{0} disabled;{0} disabled
+DocStr11815;Total read/write bytes;Total read/write bytes
+DocStr11816;Add to the data log a news byte;Add to the data log a news byte
+DocStr11817;The number of bytes write;The number of bytes write
+DocStr11818;License targets;License targets
+DocStr11819;Machine;Machine
+DocStr11820;Base implementation of {0} interface with non-online mode;Base implementation of {0} interface with non-online mode
+DocStr11821;Make immutable;Make immutable
+DocStr11822;Board state;Board state
+DocStr11823;Portfolio route;Portfolio route
+DocStr11824;Security route;Security route
+DocStr11825;Security mapping;Security mapping
+DocStr11826;Change {0};Change {0}
+DocStr11827;Message types;Message types
+DocStr11828;Suspend on {0} if message queue is more than the specified count;Suspend on {0} if message queue is more than the specified count
+DocStr11829;Request only {0};Request only {0}
+DocStr11830;Get colored icon;Get colored icon
+DocStr11831;Fill brush;Fill brush
+DocStr11832;Stroke brush;Stroke brush
+DocStr11833;Processing event;Processing event
+DocStr11834;Send message event;Send message event

@@ -34,7 +34,6 @@ P:StockSharp.Sterling.SterlingOrderCondition.ExecutionPriceLimit/summary;DocStr7
 P:StockSharp.Sterling.SterlingOrderCondition.PegDiff/summary;DocStr8456
 P:StockSharp.Sterling.SterlingOrderCondition.TrailingVolume/summary;Str2457
 P:StockSharp.Sterling.SterlingOrderCondition.TrailingIncrement/summary;DocStr7577
-P:StockSharp.Sterling.SterlingOrderCondition.MinVolume/summary;Str2451
 P:StockSharp.Sterling.SterlingOrderCondition.AveragePriceLimit/summary;AveragePrice
 P:StockSharp.Sterling.SterlingOrderCondition.Duration/summary;Duration
 P:StockSharp.Sterling.SterlingOrderCondition.LocateBroker/summary;Broker
