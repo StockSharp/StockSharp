@@ -1336,7 +1336,27 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Market-data storage.</returns>
 		public static IMarketDataStorage GetStorage(this IStorageRegistry registry, Security security, DataType dataType, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
 			return registry.GetStorage(security, dataType.MessageType, dataType.Arg, drive, format);
+		}
+
+		/// <summary>
+		/// To get the market-data storage.
+		/// </summary>
+		/// <param name="registry">Market-data storage.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>Market-data storage.</returns>
+		public static IMarketDataStorage GetStorage(this IStorageRegistry registry, SecurityId securityId, DataType dataType, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			return registry.GetStorage(securityId, dataType.MessageType, dataType.Arg, drive, format);
 		}
 	}
 }

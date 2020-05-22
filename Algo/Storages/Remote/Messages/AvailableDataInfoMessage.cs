@@ -8,7 +8,7 @@
 	/// <summary>
 	/// Available data info message.
 	/// </summary>
-	public class AvailableDataInfoMessage : Message, ISecurityIdMessage
+	public class AvailableDataInfoMessage : BaseSubscriptionIdMessage<AvailableDataInfoMessage>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AvailableDataInfoMessage"/>.
@@ -39,6 +39,9 @@
 		/// </summary>
 		[DataMember]
 		public StorageFormats Format { get; set; }
+
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Create(typeof(AvailableDataInfoMessage), null);
 
 		/// <summary>
 		/// Create a copy of <see cref="AvailableDataInfoMessage"/>.
