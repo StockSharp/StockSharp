@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -230,5 +231,71 @@ namespace StockSharp.Messages
 		/// <param name="dataType">Data type info.</param>
 		/// <returns>Check result.</returns>
 		bool IsSecurityRequired(DataType dataType);
+	}
+
+	/// <summary>
+	/// Message adapter, provided <see cref="Key"/> and <see cref="Secret"/> properties.
+	/// </summary>
+	public interface IKeySecretAdapter
+	{
+		/// <summary>
+		/// Key.
+		/// </summary>
+		SecureString Key { get; set; }
+
+		/// <summary>
+		/// Secret.
+		/// </summary>
+		SecureString Secret { get; set; }
+	}
+
+	/// <summary>
+	/// Message adapter, provided <see cref="Login"/> and <see cref="Password"/> properties.
+	/// </summary>
+	public interface ILoginPasswordAdapter
+	{
+		/// <summary>
+		/// Login.
+		/// </summary>
+		string Login { get; set; }
+
+		/// <summary>
+		/// Password.
+		/// </summary>
+		SecureString Password { get; set; }
+	}
+
+	/// <summary>
+	/// Message adapter, provided <see cref="Token"/> property.
+	/// </summary>
+	public interface ITokenAdapter
+	{
+		/// <summary>
+		/// Token.
+		/// </summary>
+		SecureString Token { get; set; }
+	}
+
+	/// <summary>
+	/// Message adapter, provided <see cref="IsDemo"/> property.
+	/// </summary>
+	public interface IDemoAdapter
+	{
+		/// <summary>
+		/// Connect to demo trading instead of real trading server.
+		/// </summary>
+		bool IsDemo { get; set; }
+	}
+
+	/// <summary>
+	/// Message adapter, provided <see cref="Address"/> property.
+	/// </summary>
+	/// <typeparam name="TAddress">Address type.</typeparam>
+	public interface IAddressAdapter<TAddress>
+	{
+		/// <summary>
+		/// Server address.
+		/// </summary>
+		TAddress Address { get; set; }
 	}
 }
