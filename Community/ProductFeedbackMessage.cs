@@ -12,8 +12,12 @@
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ProductFeedbackMessage : BaseSubscriptionIdMessage<ProductFeedbackMessage>
+	public class ProductFeedbackMessage : BaseSubscriptionIdMessage<ProductFeedbackMessage>, ITransactionIdMessage
 	{
+		/// <inheritdoc />
+		[DataMember]
+		public long TransactionId { get; set; }
+
 		/// <summary>
 		/// Product.
 		/// </summary>
@@ -83,6 +87,7 @@
 
 			base.CopyTo(destination);
 
+			destination.TransactionId = TransactionId;
 			destination.ProductId = ProductId;
 			destination.Id = Id;
 			destination.Text = Text;
@@ -96,6 +101,9 @@
 		public override string ToString()
 		{
 			var str = base.ToString() + $",Product={ProductId}";
+
+			if (TransactionId > 0)
+				str += $",TrId={TransactionId}";
 
 			if (Id != 0)
 				str += $",Id={Id}";

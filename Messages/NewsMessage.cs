@@ -58,8 +58,12 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>, IServerTimeMessage, INullableSecurityIdMessage
+	public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>, IServerTimeMessage, INullableSecurityIdMessage, ITransactionIdMessage
 	{
+		/// <inheritdoc />
+		[DataMember]
+		public long TransactionId { get; set; }
+
 		/// <summary>
 		/// News ID.
 		/// </summary>
@@ -180,7 +184,12 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",Time={ServerTime:yyyy/MM/dd HH:mm:ss},Sec={SecurityId},Head={Headline}";
+			var str = base.ToString();
+
+			if (TransactionId > 0)
+				str += $",TrId={TransactionId}";
+
+			str += $",Time={ServerTime:yyyy/MM/dd HH:mm:ss},Sec={SecurityId},Head={Headline}";
 
 			if (Attachments.Length > 0)
 				str += $",Attachments={Attachments.Select(id => id.To<string>()).JoinComma()}";
@@ -193,6 +202,7 @@ namespace StockSharp.Messages
 		{
 			base.CopyTo(destination);
 			
+			destination.TransactionId = TransactionId;
 			destination.Id = Id;
 			destination.BoardCode = BoardCode;
 			destination.SecurityId = SecurityId;
