@@ -4,7 +4,6 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using MoreLinq;
@@ -17,7 +16,7 @@ namespace StockSharp.Algo.Storages.Remote
 	/// <summary>
 	/// The client for access to the history server.
 	/// </summary>
-	public class RemoteStorageClient : Disposable
+	public class RemoteStorageClient
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.

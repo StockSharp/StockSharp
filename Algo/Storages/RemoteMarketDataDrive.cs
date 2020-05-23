@@ -15,6 +15,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 	using StockSharp.Algo.Storages.Remote;
 	using StockSharp.Algo.Storages.Remote.Messages;
+	using Ecng.Configuration;
 
 	/// <summary>
 	/// Remote storage of market data working via <see cref="RemoteStorageClient"/>.
@@ -23,12 +24,12 @@ namespace StockSharp.Algo.Storages
 	{
 		private sealed class RemoteStorageDrive : IMarketDataStorageDrive
 		{
-			private readonly RemoteStorageClient _parent;
+			private readonly RemoteMarketDataDrive _parent;
 			private readonly SecurityId _securityId;
 			private readonly DataType _dataType;
 			private readonly StorageFormats _format;
 
-			public RemoteStorageDrive(RemoteStorageClient parent, SecurityId securityId, DataType dataType, StorageFormats format, IMarketDataDrive drive)
+			public RemoteStorageDrive(RemoteMarketDataDrive parent, SecurityId securityId, DataType dataType, StorageFormats format)
 			{
 				if (securityId.IsDefault())
 					throw new ArgumentNullException(nameof(securityId));
@@ -44,12 +45,9 @@ namespace StockSharp.Algo.Storages
 				_securityId = securityId;
 				_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 				_format = format;
-				_drive = drive;
 			}
 
-			private readonly IMarketDataDrive _drive;
-
-			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
+			IMarketDataDrive IMarketDataStorageDrive.Drive => _parent;
 
 			private IEnumerable<DateTime> _dates;
 			private DateTime _prevDatesSync;
@@ -60,7 +58,7 @@ namespace StockSharp.Algo.Storages
 				{
 					if (_prevDatesSync.IsDefault() || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
 					{
-						_dates = _parent.Do<AvailableDataRequestMessage, AvailableDataInfoMessage>(new AvailableDataRequestMessage
+						_dates = _parent.CreateClient().Do<AvailableDataRequestMessage, AvailableDataInfoMessage>(new AvailableDataRequestMessage
 						{
 							SecurityId = _securityId,
 							RequestDataType = _dataType,
@@ -81,7 +79,7 @@ namespace StockSharp.Algo.Storages
 
 			void IMarketDataStorageDrive.Delete(DateTime date)
 			{
-				_parent.Do(new RemoteFileCommandMessage
+				_parent.CreateClient().Do(new RemoteFileCommandMessage
 				{
 					Command = CommandTypes.Remove,
 					Scope = CommandScopes.File,
@@ -95,7 +93,7 @@ namespace StockSharp.Algo.Storages
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
 			{
-				_parent.Do(new RemoteFileCommandMessage
+				_parent.CreateClient().Do(new RemoteFileCommandMessage
 				{
 					Command = CommandTypes.Update,
 					Scope = CommandScopes.File,
@@ -110,7 +108,7 @@ namespace StockSharp.Algo.Storages
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
 			{
-				return _parent.Do<RemoteFileCommandMessage, RemoteFileMessage>(new RemoteFileCommandMessage
+				return _parent.CreateClient().Do<RemoteFileCommandMessage, RemoteFileMessage>(new RemoteFileCommandMessage
 				{
 					Command = CommandTypes.Get,
 					Scope = CommandScopes.File,
@@ -124,6 +122,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive>();
+		private readonly IMessageAdapter _adapter;
 
 		/// <summary>
 		/// Default address.
@@ -143,15 +142,25 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="address">Server address.</param>
 		public RemoteMarketDataDrive(EndPoint address)
+			: this(null, address)
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
+		/// </summary>
+		/// <param name="address">Server address.</param>
+		/// <param name="adapter">Message adapter.</param>
+		public RemoteMarketDataDrive(IMessageAdapter adapter, EndPoint address)
+		{
+			_adapter = adapter;
 			Address = address;
-			Credentials = new ServerCredentials();
 		}
 
 		/// <summary>
 		/// Information about the login and password for access to remote storage.
 		/// </summary>
-		public ServerCredentials Credentials { get; }
+		public ServerCredentials Credentials { get; } = new ServerCredentials();
 
 		private EndPoint _address = DefaultAddress;
 
@@ -161,33 +170,7 @@ namespace StockSharp.Algo.Storages
 		public EndPoint Address
 		{
 			get => _address;
-			set
-			{
-				_address = value ?? throw new ArgumentNullException(nameof(value));
-				// TODO
-				Client = new RemoteStorageClient(null);
-			}
-		}
-
-		private RemoteStorageClient _client;
-
-		/// <summary>
-		/// The client for access to the history server.
-		/// </summary>
-		public RemoteStorageClient Client
-		{
-			get => _client;
-			private set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				if (value == _client)
-					return;
-
-				_client?.Dispose();
-				_client = value;
-			}
+			set => _address = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <inheritdoc />
@@ -209,13 +192,24 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private RemoteStorageClient CreateClient()
+		{
+			var adapter = _adapter?.TypedClone() ?? ConfigManager.GetService<IMessageAdapterProvider>().CreateTransportAdapter(new IncrementalIdGenerator());
+			
+			((IAddressAdapter<EndPoint>)adapter).Address = Address;
+			((ILoginPasswordAdapter)adapter).Login = Credentials.Email;
+			((ILoginPasswordAdapter)adapter).Password = Credentials.Password;
+
+			return new RemoteStorageClient(adapter);
+		}
+
 		/// <inheritdoc />
 		public override IEnumerable<SecurityId> AvailableSecurities
-			=> Client.AvailableSecurities;
+			=> CreateClient().AvailableSecurities;
 
 		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
-			=> Client.GetAvailableDataTypes(securityId, format);
+			=> CreateClient().GetAvailableDataTypes(securityId, format);
 
 		/// <inheritdoc />
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
@@ -223,15 +217,15 @@ namespace StockSharp.Algo.Storages
 			var dt = DataType.Create(dataType, arg);
 
 			return _remoteStorages.SafeAdd(Tuple.Create(securityId, dt, format),
-				key => new RemoteStorageDrive(Client, securityId, dt, format, this));
+				key => new RemoteStorageDrive(this, securityId, dt, format));
 		}
 
 		/// <inheritdoc />
-		public override void Verify() => Client.Verify();
+		public override void Verify() => CreateClient().Verify();
 
 		/// <inheritdoc />
 		public override void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
-			=> Client.LookupSecurities(criteria, securityProvider, newSecurity, isCancelled, updateProgress);
+			=> CreateClient().LookupSecurities(criteria, securityProvider, newSecurity, isCancelled, updateProgress);
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
@@ -247,15 +241,6 @@ namespace StockSharp.Algo.Storages
 			base.Save(storage);
 
 			storage.SetValue(nameof(Credentials), Credentials.Save());
-		}
-
-		/// <summary>
-		/// Release resources.
-		/// </summary>
-		protected override void DisposeManaged()
-		{
-			Client.Dispose();
-			base.DisposeManaged();
 		}
 	}
 }
