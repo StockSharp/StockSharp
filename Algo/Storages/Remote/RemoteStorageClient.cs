@@ -2,13 +2,10 @@ namespace StockSharp.Algo.Storages.Remote
 {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Linq;
-	using System.Net;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
@@ -22,134 +19,21 @@ namespace StockSharp.Algo.Storages.Remote
 	/// </summary>
 	public class RemoteStorageClient : Disposable
 	{
-		private sealed class RemoteStorageDrive : IMarketDataStorageDrive
-		{
-			private readonly RemoteStorageClient _parent;
-			private readonly SecurityId _securityId;
-			private readonly DataType _dataType;
-			private readonly StorageFormats _format;
-
-			public RemoteStorageDrive(RemoteStorageClient parent, SecurityId securityId, DataType dataType, StorageFormats format, IMarketDataDrive drive)
-			{
-				if (securityId.IsDefault())
-					throw new ArgumentNullException(nameof(securityId));
-
-				if (dataType == null)
-					throw new ArgumentNullException(nameof(dataType));
-
-				// TODO
-				//if (drive == null)
-				//	throw new ArgumentNullException(nameof(drive));
-
-				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-				_securityId = securityId;
-				_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
-				_format = format;
-				_drive = drive;
-			}
-
-			private readonly IMarketDataDrive _drive;
-
-			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
-
-			private IEnumerable<DateTime> _dates;
-			private DateTime _prevDatesSync;
-
-			IEnumerable<DateTime> IMarketDataStorageDrive.Dates
-			{
-				get
-				{
-					if (_prevDatesSync.IsDefault() || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
-					{
-						_dates = _parent.Do<AvailableDataRequestMessage, AvailableDataInfoMessage>(new AvailableDataRequestMessage
-						{
-							SecurityId = _securityId,
-							RequestDataType = _dataType,
-							Format = _format,
-						}).Select(i => i.Date.UtcDateTime).ToArray();
-
-						_prevDatesSync = DateTime.Now;
-					}
-
-					return _dates;
-				}
-			}
-
-			void IMarketDataStorageDrive.ClearDatesCache()
-			{
-				//_parent.Invoke(f => f.ClearDatesCache(_parent.SessionId, _security.Id, _dataType, _arg));
-			}
-
-			void IMarketDataStorageDrive.Delete(DateTime date)
-			{
-				_parent.Do(new RemoteFileCommandMessage
-				{
-					Command = CommandTypes.Remove,
-					Scope = CommandScopes.File,
-					SecurityId = _securityId,
-					FileDataType = _dataType,
-					Format = _format,
-					StartDate = date,
-					EndDate = date,
-				});
-			}
-
-			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
-			{
-				_parent.Do(new RemoteFileCommandMessage
-				{
-					Command = CommandTypes.Update,
-					Scope = CommandScopes.File,
-					SecurityId = _securityId,
-					FileDataType = _dataType,
-					StartDate = date,
-					EndDate = date,
-					Format = _format,
-					Body = stream.To<byte[]>(),
-				});
-			}
-
-			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
-			{
-				return _parent.Do<RemoteFileCommandMessage, RemoteFileMessage>(new RemoteFileCommandMessage
-				{
-					Command = CommandTypes.Get,
-					Scope = CommandScopes.File,
-					SecurityId = _securityId,
-					FileDataType = _dataType,
-					StartDate = date,
-					EndDate = date,
-					Format = _format,
-				}).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
-			}
-		}
-
-		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive>();
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
 		/// </summary>
-		/// <param name="address">Server address.</param>
-		public RemoteStorageClient(EndPoint address)
+		/// <param name="adapter">Message adapter.</param>
+		public RemoteStorageClient(IMessageAdapter adapter)
 		{
-			Address = address ?? throw new ArgumentNullException(nameof(address));
-			Credentials = new ServerCredentials();
-			SecurityBatchSize = 1000;
+			Adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 		}
 
 		/// <summary>
-		/// Server address.
+		/// Message adapter.
 		/// </summary>
-		public EndPoint Address { get; }
+		public IMessageAdapter Adapter { get; }
 
-		internal RemoteMarketDataDrive Drive { get; set; }
-
-		/// <summary>
-		/// Information about the login and password for access to remote storage.
-		/// </summary>
-		public ServerCredentials Credentials { get; }
-
-		private int _securityBatchSize;
+		private int _securityBatchSize = 1000;
 
 		/// <summary>
 		/// The new instruments request block size. By default it does not exceed 1000 elements.
@@ -394,25 +278,6 @@ namespace StockSharp.Algo.Storages.Remote
 		//}
 
 		/// <summary>
-		/// To get a wrapper for access to remote market data.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="format">Format type.</param>
-		/// <returns>The wrapper for access to remote market data.</returns>
-		public IMarketDataStorageDrive GetRemoteStorage(SecurityId securityId, Type dataType, object arg, StorageFormats format)
-		{
-			if (securityId == default)
-				throw new ArgumentNullException(nameof(securityId));
-
-			var dt = DataType.Create(dataType, arg);
-
-			return _remoteStorages.SafeAdd(Tuple.Create(securityId, dt, format),
-				key => new RemoteStorageDrive(this, securityId, dt, format, Drive));
-		}
-
-		/// <summary>
 		/// Get all available data types.
 		/// </summary>
 		/// <param name="securityId">Instrument identifier.</param>
@@ -435,19 +300,23 @@ namespace StockSharp.Algo.Storages.Remote
 			Do(new TimeMessage());
 		}
 
-		private void Do<TMessage>(TMessage message)
+		internal void Do<TMessage>(TMessage message)
+			where TMessage : Message
 		{
-			//return default;
+			Do(new[] { message });
 		}
 
-		private void Do<TMessage>(IEnumerable<TMessage> message)
+		internal void Do<TMessage>(IEnumerable<TMessage> message)
+			where TMessage : Message
 		{
-			//return default;
+			Adapter.Upload(message);
 		}
 
-		private IEnumerable<TResult> Do<TMessage, TResult>(TMessage message)
+		internal IEnumerable<TResult> Do<TMessage, TResult>(TMessage message)
+			where TResult : Message, IOriginalTransactionIdMessage
+			where TMessage : Message, ITransactionIdMessage
 		{
-			return default;
+			return Adapter.Download<TResult, TMessage>(message);
 		}
 	}
 }

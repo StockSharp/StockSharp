@@ -128,7 +128,7 @@
 				if (pair.Item2 == null)
 					drive = new LocalMarketDataDrive(path);
 				else
-					drive = new RemoteMarketDataDrive(new RemoteStorageClient(pair.Item2));
+					drive = new RemoteMarketDataDrive(pair.Item2);
 
 				NewDriveCreated?.Invoke(drive);
 
