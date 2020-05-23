@@ -515,6 +515,8 @@ namespace StockSharp.Algo
 
 					if (registeredInfo == null)
 					{
+						_logReceiver.AddDebugLog("Сancel '{0}': {1}", cancellationOrder.TransactionId, message);
+						
 						foreach (var i in cancelledInfo.ApplyChanges(message, true, o => UpdateOrderIds(o, securityData)))
 							yield return i;
 
@@ -523,29 +525,34 @@ namespace StockSharp.Algo
 
 					var orderState = message.OrderState;
 
-					if (orderState != null && cancellationOrder.State != OrderStates.Done && orderState != OrderStates.None && orderState != OrderStates.Pending)
+					if (orderState != null && cancellationOrder.State != OrderStates.Done && orderState == OrderStates.Done)
 					{
+						_logReceiver.AddDebugLog("Replace-cancel '{0}': {1}", cancellationOrder.TransactionId, message);
+						
 						cancellationOrder.ApplyNewState(OrderStates.Done, _logReceiver);
 						
 						if (message.Latency != null)
 							cancellationOrder.LatencyCancellation = message.Latency.Value;
 
 						yield return new OrderChangeInfo(cancellationOrder, false, true);
+
+						var isCancelOrderOnly = (message.OrderId != null && message.OrderId == cancellationOrder.Id)
+							|| (message.OrderStringId != null && message.OrderStringId == cancellationOrder.StringId)
+							|| (message.OrderBoardId != null && message.OrderBoardId == cancellationOrder.BoardId);
+
+						if (isCancelOrderOnly)
+						{
+							_logReceiver.AddDebugLog("Replace-reg empty");
+							yield break;
+						}
 					}
 
-					var isCancelOrder = (message.OrderId != null && message.OrderId == cancellationOrder.Id)
-						|| (message.OrderStringId != null && message.OrderStringId == cancellationOrder.StringId)
-						|| (message.OrderBoardId != null && message.OrderBoardId == cancellationOrder.BoardId);
+					_logReceiver.AddDebugLog("Replace-reg '{0}': {1}", registeredInfo.Order.TransactionId, message);
 
-					var regOrder = registeredInfo.Order;
+					foreach (var i in registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)))
+						yield return i;
 
-					if (!isCancelOrder)
-					{
-						foreach (var i in registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)))
-							yield return i;
-
-						yield break;
-					}
+					yield break;
 				}
 
 				Tuple<Portfolio, bool, bool> pfInfo = null;
