@@ -3779,6 +3779,87 @@ namespace StockSharp.Algo
 			return newOrder;
 		}
 
+		private static void DoConnect(this IMessageAdapter adapter, Func<IMessageAdapter, bool> connected, Func<Message, Tuple<bool, Exception>> newMessage)
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (connected is null)
+				throw new ArgumentNullException(nameof(connected));
+
+			if (newMessage is null)
+				throw new ArgumentNullException(nameof(newMessage));
+
+			var sync = new SyncObject();
+			
+			adapter.NewOutMessage += msg =>
+			{
+				if (msg is ConnectMessage conMsg)
+					sync.PulseSignal(conMsg.Error);
+				else
+				{
+					var tuple = newMessage(msg);
+
+					if (tuple != null)
+						sync.PulseSignal(tuple.Item2);
+				}
+			};
+
+			CultureInfo.InvariantCulture.DoInCulture(() =>
+			{
+				adapter.SendInMessage(new ConnectMessage());
+
+				lock (sync)
+				{
+					if (!sync.WaitSignal(adapter.ReConnectionSettings.TimeOutInterval, out var error))
+						throw new TimeoutException();
+
+					if (error != null)
+						throw new InvalidOperationException(LocalizedStrings.Str2959, (Exception)error);
+				}
+
+				if (!connected(adapter))
+				{
+					lock (sync)
+					{
+						if (!sync.WaitSignal(TimeSpan.FromMinutes(10), out var error))
+							throw new TimeoutException("Processing too long.");
+
+						if (error != null)
+							throw new InvalidOperationException(LocalizedStrings.Str2955, (Exception)error);
+					}
+				}
+				
+				adapter.SendInMessage(new DisconnectMessage());
+			});
+		}
+
+		/// <summary>
+		/// Upload data.
+		/// </summary>
+		/// <typeparam name="TMessage">Request type.</typeparam>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="messages">Messages.</param>
+		public static void Upload<TMessage>(this IMessageAdapter adapter, IEnumerable<TMessage> messages)
+			where TMessage : Message
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (messages is null)
+				throw new ArgumentNullException(nameof(messages));
+
+			adapter.DoConnect(
+				a =>
+				{
+					foreach (var message in messages)
+						adapter.SendInMessage(message);
+
+					return true;
+				},
+				msg => null);
+		}
+
 		/// <summary>
 		/// Download data.
 		/// </summary>
@@ -3788,57 +3869,14 @@ namespace StockSharp.Algo
 		/// <param name="request">Request.</param>
 		/// <returns>Downloaded data.</returns>
 		public static IEnumerable<TResult> Download<TResult, TRequest>(this IMessageAdapter adapter, TRequest request)
-			where TResult : Message
-			where TRequest : Message
+			where TResult : Message, IOriginalTransactionIdMessage
+			where TRequest : Message, ITransactionIdMessage
 		{
-			if (adapter == null)
+			if (adapter is null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			var retVal = new List<TResult>();
-
-			Exception error = null;
-
-			var sync = new SyncObject();
-			var responseReceived = false;
-			
-			adapter.NewOutMessage += msg =>
-			{
-				if (msg is TResult typedMsg)
-					retVal.Add(typedMsg);
-				else if (msg is SubscriptionResponseMessage responseMsg)
-				{
-					lock (sync)
-					{
-						responseReceived = true;
-						error = responseMsg.Error;
-
-						if (error != null)
-							sync.PulseSignal();
-					}
-				}
-				else if (msg is SubscriptionFinishedMessage)
-				{
-					lock (sync)
-					{
-						responseReceived = true;
-
-						sync.PulseSignal();
-					}
-				}
-				else if (msg is ConnectMessage conMsg)
-				{
-					lock (sync)
-					{
-						responseReceived = true;
-						error = conMsg.Error;
-
-						sync.PulseSignal();
-					}
-				}
-			};
-
-			if (request is ITransactionIdMessage transMsg)
-				transMsg.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+			if (request is null)
+				throw new ArgumentNullException(nameof(request));
 
 			if (request is ISecurityIdMessage secIdMsg && secIdMsg.SecurityId != default && adapter.IsNativeIdentifiers && !adapter.StorageName.IsEmpty())
 			{
@@ -3853,36 +3891,35 @@ namespace StockSharp.Algo
 				}
 			}
 
-			CultureInfo.InvariantCulture.DoInCulture(() =>
-			{
-				adapter.SendInMessage(new ConnectMessage());
+			var retVal = new List<TResult>();
 
-				lock (sync)
+			adapter.DoConnect(
+				a =>
 				{
-					if (!responseReceived)
-						sync.WaitSignal();
+					if (request.TransactionId == 0)
+						request.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
-					if (error != null)
-						throw new InvalidOperationException(LocalizedStrings.Str2959, error);
+					adapter.SendInMessage(request);
 
-					responseReceived = false;
-				}
-
-				adapter.SendInMessage(request);
-
-				lock (sync)
+					return false;
+				},
+				msg =>
 				{
-					if (!responseReceived)
-						sync.WaitSignal();
+					if (msg is IOriginalTransactionIdMessage origIdMsg)
+					{
+						if (origIdMsg.OriginalTransactionId == request.TransactionId)
+						{
+							if (msg is TResult resMsg)
+								retVal.Add(resMsg);
+							else if (msg is SubscriptionResponseMessage responseMsg)
+								return Tuple.Create(true, responseMsg.Error);
+							else if (msg is SubscriptionFinishedMessage)
+								return Tuple.Create(true, (Exception)null);
+						}
+					}
 
-					if (error != null)
-						throw new InvalidOperationException(LocalizedStrings.Str2955, error);
-
-					responseReceived = false;
-				}
-
-				adapter.SendInMessage(new DisconnectMessage());
-			});
+					return null;
+				});
 
 			return retVal;
 		}
