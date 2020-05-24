@@ -308,14 +308,14 @@ namespace StockSharp.Algo.Storages.Remote
 		internal void Do<TMessage>(IEnumerable<TMessage> message)
 			where TMessage : Message
 		{
-			Adapter.Upload(message);
+			Adapter.TypedClone().Upload(message);
 		}
 
 		internal IEnumerable<TResult> Do<TMessage, TResult>(TMessage message)
 			where TResult : Message, IOriginalTransactionIdMessage
 			where TMessage : Message, ITransactionIdMessage
 		{
-			return Adapter.Download<TResult, TMessage>(message);
+			return Adapter.TypedClone().Download<TResult, TMessage>(message);
 		}
 	}
 }

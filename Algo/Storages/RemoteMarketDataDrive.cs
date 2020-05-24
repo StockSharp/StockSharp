@@ -10,12 +10,12 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
+	using Ecng.Configuration;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Algo.Storages.Remote;
 	using StockSharp.Algo.Storages.Remote.Messages;
-	using Ecng.Configuration;
 
 	/// <summary>
 	/// Remote storage of market data working via <see cref="RemoteStorageClient"/>.
@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Default address.
 		/// </summary>
-		public static readonly EndPoint DefaultAddress = "localhost:8000".To<EndPoint>();
+		public static readonly EndPoint DefaultAddress = "127.0.0.1:5002".To<EndPoint>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
