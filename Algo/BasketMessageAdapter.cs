@@ -766,12 +766,7 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				this.AddErrorLog(ex);
-
-				message.HandleErrorResponse(ex, CurrentTime, SendOutMessage, GetSubscribers);
-
-				SendOutError(ex);
-
+				message.HandleErrorResponse(ex, this, SendOutMessage, GetSubscribers);
 				return false;
 			}
 		}

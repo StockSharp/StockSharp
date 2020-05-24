@@ -1708,11 +1708,10 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="ex"></param>
-		/// <param name="currentTime"></param>
+		/// <param name="logs"></param>
 		/// <param name="sendOut"></param>
 		/// <param name="getSubscribers"></param>
-		/// <returns></returns>
-		public static bool HandleErrorResponse(this Message message, Exception ex, DateTimeOffset currentTime, Action<Message> sendOut, Func<DataType, long[]> getSubscribers = null)
+		public static void HandleErrorResponse(this Message message, Exception ex, ILogReceiver logs, Action<Message> sendOut, Func<DataType, long[]> getSubscribers = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1723,9 +1722,11 @@ namespace StockSharp.Messages
 			if (sendOut == null)
 				throw new ArgumentNullException(nameof(sendOut));
 
+			logs.AddErrorLog(ex);
+
 			void SendOutErrorExecution(ExecutionMessage execMsg)
 			{
-				execMsg.ServerTime = currentTime;
+				execMsg.ServerTime = logs.CurrentTime;
 				execMsg.Error = ex;
 				execMsg.OrderState = OrderStates.Failed;
 
@@ -1741,11 +1742,11 @@ namespace StockSharp.Messages
 			{
 				case MessageTypes.Connect:
 					sendOut(new ConnectMessage { Error = ex });
-					return true;
+					break;
 
 				case MessageTypes.Disconnect:
 					sendOut(new DisconnectMessage { Error = ex });
-					return true;
+					break;
 
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
@@ -1754,13 +1755,13 @@ namespace StockSharp.Messages
 				{
 					var replyMsg = ((OrderMessage)message).CreateReply();
 					SendOutErrorExecution(replyMsg);
-					return true;
+					break;
 				}
 				case MessageTypes.OrderPairReplace:
 				{
 					var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply();
 					SendOutErrorExecution(replyMsg);
-					return true;
+					break;
 				}
 
 				case MessageTypes.ChangePassword:
@@ -1771,18 +1772,17 @@ namespace StockSharp.Messages
 						OriginalTransactionId = pwdMsg.TransactionId,
 						Error = ex
 					});
-					return true;
+					break;
 				}
 
 				default:
 				{
 					if (message is ISubscriptionMessage subscrMsg)
-					{
 						sendOut(subscrMsg.CreateResponse(ex));
-						return true;
-					}
+					else
+						sendOut(ex.ToErrorMessage((message as ITransactionIdMessage)?.TransactionId ?? 0));
 
-					return false;
+					break;
 				}
 			}
 		}

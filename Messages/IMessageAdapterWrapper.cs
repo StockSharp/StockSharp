@@ -181,10 +181,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				this.AddErrorLog(ex);
-
-				message.HandleErrorResponse(ex, CurrentTime, RaiseNewOutMessage);
-
+				message.HandleErrorResponse(ex, this, RaiseNewOutMessage);
 				throw;
 			}
 		}
