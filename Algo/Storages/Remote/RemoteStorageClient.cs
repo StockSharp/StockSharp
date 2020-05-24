@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="securities">Securities.</param>
 		public void SaveSecurities(IEnumerable<SecurityMessage> securities)
 		{
-			Do(securities);
+			Do(securities.ToArray());
 		}
 
 		//private class RemoteExtendedStorage : IRemoteExtendedStorage
@@ -383,14 +383,9 @@ namespace StockSharp.Algo.Storages.Remote
 			});
 		}
 
-		private void Do(Message message)
+		private void Do(params Message[] messages)
 		{
-			Do(new[] { message });
-		}
-
-		private void Do(IEnumerable<Message> message)
-		{
-			Adapter.TypedClone().Upload(message);
+			Adapter.TypedClone().Upload(messages);
 		}
 
 		private IEnumerable<TResult> Do<TResult>(Message message)

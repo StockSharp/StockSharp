@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive>();
-		private readonly IMessageAdapter _adapter;
+		private readonly Func<IMessageAdapter> _createAdapter;
 
 		/// <summary>
 		/// Default address.
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="address">Server address.</param>
 		public RemoteMarketDataDrive(EndPoint address)
-			: this(address, ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
+			: this(address, () => ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
 		{
 		}
 
@@ -110,9 +110,16 @@ namespace StockSharp.Algo.Storages
 		/// <param name="address">Server address.</param>
 		/// <param name="adapter">Message adapter.</param>
 		public RemoteMarketDataDrive(EndPoint address, IMessageAdapter adapter)
+			: this(address, adapter.TypedClone)
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+		}
+
+		private RemoteMarketDataDrive(EndPoint address, Func<IMessageAdapter> createAdapter)
 		{
 			Address = address;
-			_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+			_createAdapter = createAdapter;
 		}
 
 		/// <summary>
@@ -131,10 +138,27 @@ namespace StockSharp.Algo.Storages
 			set => _address = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
+		private string _targetCompId = "StockSharpHydraMD";
+
+		/// <summary>
+		/// Target ID.
+		/// </summary>
+		public string TargetCompId
+		{
+			get => _targetCompId;
+			set
+			{
+				if (value.IsEmpty())
+					throw new ArgumentNullException(nameof(value));
+
+				_targetCompId = value;
+			}
+		}
+
 		/// <inheritdoc />
 		public override string Path
 		{
-			get => Address.ToString();
+			get => Address.To<string>();
 			set
 			{
 				if (value.IsEmpty())
@@ -152,13 +176,16 @@ namespace StockSharp.Algo.Storages
 
 		private RemoteStorageClient CreateClient()
 		{
-			var adapter = _adapter.TypedClone();
-			
+			var adapter = _createAdapter();
+
 			((IAddressAdapter<EndPoint>)adapter).Address = Address;
 			((ILoginPasswordAdapter)adapter).Password = Credentials.Password;
 
-			((ISenderTargetAdapter)adapter).SenderCompId = Credentials.Email;
-			((ISenderTargetAdapter)adapter).TargetCompId = "StockSharpMD";
+			var login = Credentials.Email;
+			if (login.IsEmpty())
+				login = "stocksharp";
+			((ISenderTargetAdapter)adapter).SenderCompId = login;
+			((ISenderTargetAdapter)adapter).TargetCompId = TargetCompId;
 
 			return new RemoteStorageClient(adapter);
 		}
