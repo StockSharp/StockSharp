@@ -3842,6 +3842,8 @@ namespace StockSharp.Algo
 				{
 					if (request is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 						transIdMsg.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+
+					adapter.SendInMessage(request);
 				}
 
 				if (waitResponse)
