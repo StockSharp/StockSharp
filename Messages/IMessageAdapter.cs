@@ -298,4 +298,20 @@ namespace StockSharp.Messages
 		/// </summary>
 		TAddress Address { get; set; }
 	}
+
+	/// <summary>
+	/// Message adapter, provided <see cref="SenderCompId"/> and <see cref="TargetCompId"/> properties.
+	/// </summary>
+	public interface ISenderTargetAdapter
+	{
+		/// <summary>
+		/// Sender ID.
+		/// </summary>
+		string SenderCompId { get; set; }
+
+		/// <summary>
+		/// Target ID.
+		/// </summary>
+		string TargetCompId { get; set; }
+	}
 }

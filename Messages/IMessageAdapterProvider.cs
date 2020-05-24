@@ -6,7 +6,7 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 
 	/// <summary>
-	/// The message adapter's provider interface. 
+	/// The message adapter's provider interface.
 	/// </summary>
 	public interface IMessageAdapterProvider
 	{

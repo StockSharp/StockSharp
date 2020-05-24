@@ -9,7 +9,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
-	using Ecng.Configuration;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -101,7 +100,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="address">Server address.</param>
 		public RemoteMarketDataDrive(EndPoint address)
-			: this(address, ConfigManager.GetService<IMessageAdapterProvider>().CreateTransportAdapter(new IncrementalIdGenerator()))
+			: this(address, ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
 		{
 		}
 
@@ -156,8 +155,10 @@ namespace StockSharp.Algo.Storages
 			var adapter = _adapter.TypedClone();
 			
 			((IAddressAdapter<EndPoint>)adapter).Address = Address;
-			((ILoginPasswordAdapter)adapter).Login = Credentials.Email;
 			((ILoginPasswordAdapter)adapter).Password = Credentials.Password;
+
+			((ISenderTargetAdapter)adapter).SenderCompId = Credentials.Email;
+			((ISenderTargetAdapter)adapter).TargetCompId = "StockSharpMD";
 
 			return new RemoteStorageClient(adapter);
 		}
