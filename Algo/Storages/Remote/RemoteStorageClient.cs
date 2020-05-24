@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Storages.Remote
 			//	throw new ArgumentNullException(nameof(securityId));
 
 			return Do<AvailableDataRequestMessage, AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = format })
-				.Select(t => t.FileDataType).ToArray();
+				.Select(t => t.FileDataType).Distinct().ToArray();
 		}
 
 		/// <summary>
