@@ -208,7 +208,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[XmlIgnore]
-		public IDictionary<string, Tuple<string, string>> Parameters { get; private set; } = new Dictionary<string, Tuple<string, string>>();
+		public IDictionary<string, Tuple<string, string>> Parameters { get; } = new Dictionary<string, Tuple<string, string>>();
 
 		/// <summary>
 		/// Create a copy of <see cref="CommandMessage"/>.
@@ -216,17 +216,26 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new CommandMessage
-			{
-				Command = Command,
-				Scope = Scope,
-				ObjectId = ObjectId,
-				Parameters = Parameters.ToDictionary(),
-			};
+			var clone = new CommandMessage();
 
 			CopyTo(clone);
 
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		/// <returns>The object, to which copied information.</returns>
+		protected void CopyTo(CommandMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.Command = Command;
+			destination.Scope = Scope;
+			destination.ObjectId = ObjectId;
+			destination.Parameters.AddRange(Parameters);
 		}
 
 		/// <inheritdoc />

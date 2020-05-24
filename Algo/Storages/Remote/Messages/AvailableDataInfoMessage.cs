@@ -3,6 +3,8 @@
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -52,7 +54,7 @@
 			var clone = new AvailableDataInfoMessage
 			{
 				SecurityId = SecurityId,
-				FileDataType = FileDataType,
+				FileDataType = FileDataType?.TypedClone(),
 				Date = Date,
 				Format = Format,
 			};
