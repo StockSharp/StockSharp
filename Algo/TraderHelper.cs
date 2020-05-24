@@ -3779,22 +3779,42 @@ namespace StockSharp.Algo
 			return newOrder;
 		}
 
-		private static void DoConnect(this IMessageAdapter adapter, Func<IMessageAdapter, bool> connected, Func<Message, Tuple<bool, Exception>> newMessage)
+		private static void DoConnect(this IMessageAdapter adapter, IEnumerable<Message> requests, bool waitResponse, Func<Message, Tuple<bool, Exception>> newMessage)
 		{
 			if (adapter is null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			if (connected is null)
-				throw new ArgumentNullException(nameof(connected));
+			if (requests is null)
+				throw new ArgumentNullException(nameof(requests));
 
 			if (newMessage is null)
 				throw new ArgumentNullException(nameof(newMessage));
+
+			if (adapter.IsNativeIdentifiers && !adapter.StorageName.IsEmpty())
+			{
+				var nativeIdAdapter = adapter.FindAdapter<SecurityNativeIdMessageAdapter>();
+				
+				if (nativeIdAdapter != null)
+				{
+					foreach (var secIdMsg in requests.OfType<ISecurityIdMessage>())
+					{
+						var secId = secIdMsg.SecurityId;
+
+						if (secId == default)
+							continue;
+
+						var native = nativeIdAdapter.Storage.TryGetBySecurityId(adapter.StorageName, secId);
+						secId.Native = native;
+						secIdMsg.SecurityId = secId;
+					}
+				}
+			}
 
 			var sync = new SyncObject();
 			
 			adapter.NewOutMessage += msg =>
 			{
-				if (msg is ConnectMessage conMsg)
+				if (msg is BaseConnectionMessage conMsg)
 					sync.PulseSignal(conMsg.Error);
 				else
 				{
@@ -3818,7 +3838,13 @@ namespace StockSharp.Algo
 						throw new InvalidOperationException(LocalizedStrings.Str2959, (Exception)error);
 				}
 
-				if (!connected(adapter))
+				foreach (var request in requests)
+				{
+					if (request is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
+						transIdMsg.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+				}
+
+				if (waitResponse)
 				{
 					lock (sync)
 					{
@@ -3843,76 +3869,36 @@ namespace StockSharp.Algo
 		public static void Upload<TMessage>(this IMessageAdapter adapter, IEnumerable<TMessage> messages)
 			where TMessage : Message
 		{
-			if (adapter is null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			if (messages is null)
-				throw new ArgumentNullException(nameof(messages));
-
-			adapter.DoConnect(
-				a =>
-				{
-					foreach (var message in messages)
-						adapter.SendInMessage(message);
-
-					return true;
-				},
-				msg => null);
+			adapter.DoConnect(messages,	false, msg => null);
 		}
 
 		/// <summary>
 		/// Download data.
 		/// </summary>
 		/// <typeparam name="TResult">Result message.</typeparam>
-		/// <typeparam name="TRequest">Request type.</typeparam>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="request">Request.</param>
 		/// <returns>Downloaded data.</returns>
-		public static IEnumerable<TResult> Download<TResult, TRequest>(this IMessageAdapter adapter, TRequest request)
+		public static IEnumerable<TResult> Download<TResult>(this IMessageAdapter adapter, Message request)
 			where TResult : Message, IOriginalTransactionIdMessage
-			where TRequest : Message, ITransactionIdMessage
 		{
-			if (adapter is null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			if (request is null)
-				throw new ArgumentNullException(nameof(request));
-
-			if (request is ISecurityIdMessage secIdMsg && secIdMsg.SecurityId != default && adapter.IsNativeIdentifiers && !adapter.StorageName.IsEmpty())
-			{
-				var nativeIdAdapter = adapter.FindAdapter<SecurityNativeIdMessageAdapter>();
-				
-				if (nativeIdAdapter != null)
-				{
-					var secId = secIdMsg.SecurityId;
-					var native = nativeIdAdapter.Storage.TryGetBySecurityId(adapter.StorageName, secId);
-					secId.Native = native;
-					secIdMsg.SecurityId = secId;
-				}
-			}
-
 			var retVal = new List<TResult>();
 
-			adapter.DoConnect(
-				a =>
-				{
-					if (request.TransactionId == 0)
-						request.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+			var transIdMsg = request as ITransactionIdMessage;
 
-					adapter.SendInMessage(request);
-
-					return false;
-				},
+			adapter.DoConnect(new[] { request }, true,
 				msg =>
 				{
-					if (msg is IOriginalTransactionIdMessage origIdMsg)
+					if (transIdMsg != null && msg is IOriginalTransactionIdMessage origIdMsg)
 					{
-						if (origIdMsg.OriginalTransactionId == request.TransactionId)
+						if (origIdMsg.OriginalTransactionId == transIdMsg.TransactionId)
 						{
 							if (msg is TResult resMsg)
 								retVal.Add(resMsg);
 							else if (msg is SubscriptionResponseMessage responseMsg && responseMsg.Error != null)
 								return Tuple.Create(true, responseMsg.Error);
+							else if (msg is ErrorMessage errorMsg)
+								return Tuple.Create(true, errorMsg.Error);
 							else if (msg is SubscriptionFinishedMessage)
 								return Tuple.Create(true, (Exception)null);
 						}
@@ -3945,7 +3931,7 @@ namespace StockSharp.Algo
 				BuildField = fields?.FirstOr(),
 			};
 			
-			return adapter.Download<Level1ChangeMessage, MarketDataMessage>(mdMsg);
+			return adapter.Download<Level1ChangeMessage>(mdMsg);
 		}
 
 		/// <summary>
@@ -3967,7 +3953,7 @@ namespace StockSharp.Algo
 				To = endDate,
 			};
 			
-			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg);
+			return adapter.Download<ExecutionMessage>(mdMsg);
 		}
 
 		/// <summary>
@@ -3989,7 +3975,7 @@ namespace StockSharp.Algo
 				To = endDate,
 			};
 			
-			return adapter.Download<ExecutionMessage, MarketDataMessage>(mdMsg);
+			return adapter.Download<ExecutionMessage>(mdMsg);
 		}
 
 		/// <summary>
@@ -4000,7 +3986,7 @@ namespace StockSharp.Algo
 		/// <returns>All securities.</returns>
 		public static IEnumerable<SecurityMessage> GetSecurities(this IMessageAdapter adapter, SecurityLookupMessage lookupMsg)
 		{
-			return adapter.Download<SecurityMessage, SecurityLookupMessage>(lookupMsg);
+			return adapter.Download<SecurityMessage>(lookupMsg);
 		}
 
 		/// <summary>
@@ -4027,7 +4013,7 @@ namespace StockSharp.Algo
 				BuildField = buildField,
 			};
 
-			return adapter.Download<TimeFrameCandleMessage, MarketDataMessage>(mdMsg);
+			return adapter.Download<TimeFrameCandleMessage>(mdMsg);
 		}
 
 		/// <summary>

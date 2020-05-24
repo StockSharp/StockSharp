@@ -4,7 +4,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Net;
 	using System.IO;
-	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -15,7 +14,6 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Algo.Storages.Remote;
-	using StockSharp.Algo.Storages.Remote.Messages;
 
 	/// <summary>
 	/// Remote storage of market data working via <see cref="RemoteStorageClient"/>.
@@ -58,12 +56,7 @@ namespace StockSharp.Algo.Storages
 				{
 					if (_prevDatesSync.IsDefault() || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
 					{
-						_dates = _parent.CreateClient().Do<AvailableDataRequestMessage, AvailableDataInfoMessage>(new AvailableDataRequestMessage
-						{
-							SecurityId = _securityId,
-							RequestDataType = _dataType,
-							Format = _format,
-						}).Select(i => i.Date.UtcDateTime).ToArray();
+						_dates = _parent.CreateClient().GetDates(_securityId, _dataType, _format);
 
 						_prevDatesSync = DateTime.Now;
 					}
@@ -78,47 +71,13 @@ namespace StockSharp.Algo.Storages
 			}
 
 			void IMarketDataStorageDrive.Delete(DateTime date)
-			{
-				_parent.CreateClient().Do(new RemoteFileCommandMessage
-				{
-					Command = CommandTypes.Remove,
-					Scope = CommandScopes.File,
-					SecurityId = _securityId,
-					FileDataType = _dataType,
-					Format = _format,
-					StartDate = date,
-					EndDate = date,
-				});
-			}
+				=> _parent.CreateClient().Delete(_securityId, _dataType, _format, date);
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
-			{
-				_parent.CreateClient().Do(new RemoteFileCommandMessage
-				{
-					Command = CommandTypes.Update,
-					Scope = CommandScopes.File,
-					SecurityId = _securityId,
-					FileDataType = _dataType,
-					StartDate = date,
-					EndDate = date,
-					Format = _format,
-					Body = stream.To<byte[]>(),
-				});
-			}
+				=> _parent.CreateClient().SaveStream(_securityId, _dataType, _format, date, stream);
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
-			{
-				return _parent.CreateClient().Do<RemoteFileCommandMessage, RemoteFileMessage>(new RemoteFileCommandMessage
-				{
-					Command = CommandTypes.Get,
-					Scope = CommandScopes.File,
-					SecurityId = _securityId,
-					FileDataType = _dataType,
-					StartDate = date,
-					EndDate = date,
-					Format = _format,
-				}).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
-			}
+				=> _parent.CreateClient().LoadStream(_securityId, _dataType, _format, date);
 		}
 
 		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive>();
@@ -142,7 +101,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="address">Server address.</param>
 		public RemoteMarketDataDrive(EndPoint address)
-			: this(null, address)
+			: this(address, ConfigManager.GetService<IMessageAdapterProvider>().CreateTransportAdapter(new IncrementalIdGenerator()))
 		{
 		}
 
@@ -151,10 +110,10 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="address">Server address.</param>
 		/// <param name="adapter">Message adapter.</param>
-		public RemoteMarketDataDrive(IMessageAdapter adapter, EndPoint address)
+		public RemoteMarketDataDrive(EndPoint address, IMessageAdapter adapter)
 		{
-			_adapter = adapter;
 			Address = address;
+			_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 		}
 
 		/// <summary>
@@ -194,7 +153,7 @@ namespace StockSharp.Algo.Storages
 
 		private RemoteStorageClient CreateClient()
 		{
-			var adapter = _adapter?.TypedClone() ?? ConfigManager.GetService<IMessageAdapterProvider>().CreateTransportAdapter(new IncrementalIdGenerator());
+			var adapter = _adapter.TypedClone();
 			
 			((IAddressAdapter<EndPoint>)adapter).Address = Address;
 			((ILoginPasswordAdapter)adapter).Login = Credentials.Email;

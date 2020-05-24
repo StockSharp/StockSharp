@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Storages.Remote
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.IO;
 
 	using Ecng.Common;
 
@@ -56,7 +57,7 @@ namespace StockSharp.Algo.Storages.Remote
 		{
 			get
 			{
-				return Do<SecurityLookupMessage, SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true })
+				return Do<SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true })
 					.Select(s => s.SecurityId)
 					.ToArray();
 			}
@@ -105,7 +106,7 @@ namespace StockSharp.Algo.Storages.Remote
 			criteria = criteria.TypedClone();
 			criteria.OnlySecurityId = true;
 
-			var securities = Do<SecurityLookupMessage, SecurityMessage>(criteria).Select(s => s.SecurityId).ToArray();
+			var securities = Do<SecurityMessage>(criteria).Select(s => s.SecurityId).ToArray();
 
 			var newSecurityIds = securities
 				.Where(id => !existingIds.Contains(id))
@@ -122,7 +123,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 				var batch = b.ToArray();
 
-				foreach (var security in Do<SecurityLookupMessage, SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch.ToArray() }))
+				foreach (var security in Do<SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch.ToArray() }))
 					newSecurity(security);
 
 				count += batch.Length;
@@ -150,7 +151,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <returns>Exchange boards.</returns>
 		public IEnumerable<BoardMessage> LoadExchangeBoards(BoardLookupMessage criteria)
 		{
-			return Do<BoardLookupMessage, BoardMessage>(criteria);
+			return Do<BoardMessage>(criteria);
 		}
 
 		/// <summary>
@@ -287,7 +288,7 @@ namespace StockSharp.Algo.Storages.Remote
 			//if (securityId.IsDefault())
 			//	throw new ArgumentNullException(nameof(securityId));
 
-			return Do<AvailableDataRequestMessage, AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = format })
+			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = format })
 				.Select(t => t.FileDataType).Distinct().ToArray();
 		}
 
@@ -299,23 +300,103 @@ namespace StockSharp.Algo.Storages.Remote
 			Do(new TimeMessage());
 		}
 
-		internal void Do<TMessage>(TMessage message)
-			where TMessage : Message
+		/// <summary>
+		/// To get all the dates for which market data are recorded.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="format">Storage format.</param>
+		/// <returns>Dates.</returns>
+		public IEnumerable<DateTime> GetDates(SecurityId securityId, DataType dataType, StorageFormats format)
+		{
+			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
+			{
+				SecurityId = securityId,
+				RequestDataType = dataType,
+				Format = format,
+			}).Select(i => i.Date.UtcDateTime).ToArray();
+		}
+
+		/// <summary>
+		/// To save data in the format of StockSharp storage.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="format">Storage format.</param>
+		/// <param name="date">Date.</param>
+		/// <param name="stream"></param>
+		public void SaveStream(SecurityId securityId, DataType dataType, StorageFormats format, DateTime date, Stream stream)
+		{
+			Do(new RemoteFileCommandMessage
+			{
+				Command = CommandTypes.Update,
+				Scope = CommandScopes.File,
+				SecurityId = securityId,
+				FileDataType = dataType,
+				StartDate = date,
+				EndDate = date,
+				Format = format,
+				Body = stream.To<byte[]>(),
+			});
+		}
+
+		/// <summary>
+		/// To load data in the format of StockSharp storage.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="format">Storage format.</param>
+		/// <param name="date">Date.</param>
+		/// <returns>Data in the format of StockSharp storage. If no data exists, <see cref="Stream.Null"/> will be returned.</returns>
+		public Stream LoadStream(SecurityId securityId, DataType dataType, StorageFormats format, DateTime date)
+		{
+			return Do<RemoteFileMessage>(new RemoteFileCommandMessage
+			{
+				Command = CommandTypes.Get,
+				Scope = CommandScopes.File,
+				SecurityId = securityId,
+				FileDataType = dataType,
+				StartDate = date,
+				EndDate = date,
+				Format = format,
+			}).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
+		}
+
+		/// <summary>
+		/// To remove market data on specified date from the storage.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="format">Storage format.</param>
+		/// <param name="date">Date.</param>
+		public void Delete(SecurityId securityId, DataType dataType, StorageFormats format, DateTime date)
+		{
+			Do(new RemoteFileCommandMessage
+			{
+				Command = CommandTypes.Remove,
+				Scope = CommandScopes.File,
+				SecurityId = securityId,
+				FileDataType = dataType,
+				Format = format,
+				StartDate = date,
+				EndDate = date,
+			});
+		}
+
+		private void Do(Message message)
 		{
 			Do(new[] { message });
 		}
 
-		internal void Do<TMessage>(IEnumerable<TMessage> message)
-			where TMessage : Message
+		private void Do(IEnumerable<Message> message)
 		{
 			Adapter.TypedClone().Upload(message);
 		}
 
-		internal IEnumerable<TResult> Do<TMessage, TResult>(TMessage message)
+		private IEnumerable<TResult> Do<TResult>(Message message)
 			where TResult : Message, IOriginalTransactionIdMessage
-			where TMessage : Message, ITransactionIdMessage
 		{
-			return Adapter.TypedClone().Download<TResult, TMessage>(message);
+			return Adapter.TypedClone().Download<TResult>(message);
 		}
 	}
 }
