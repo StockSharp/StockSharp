@@ -938,13 +938,14 @@ namespace StockSharp.Messages
 		/// Convert error info into <see cref="ErrorMessage"/>.
 		/// </summary>
 		/// <param name="error">Error info.</param>
+		/// <param name="originalTransactionId">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
 		/// <returns>Error message.</returns>
-		public static ErrorMessage ToErrorMessage(this Exception error)
+		public static ErrorMessage ToErrorMessage(this Exception error, long originalTransactionId = 0)
 		{
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
 
-			return new ErrorMessage { Error = error };
+			return new ErrorMessage { Error = error, OriginalTransactionId = originalTransactionId };
 		}
 
 		/// <summary>

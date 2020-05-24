@@ -3911,7 +3911,7 @@ namespace StockSharp.Algo
 						{
 							if (msg is TResult resMsg)
 								retVal.Add(resMsg);
-							else if (msg is SubscriptionResponseMessage responseMsg)
+							else if (msg is SubscriptionResponseMessage responseMsg && responseMsg.Error != null)
 								return Tuple.Create(true, responseMsg.Error);
 							else if (msg is SubscriptionFinishedMessage)
 								return Tuple.Create(true, (Exception)null);
