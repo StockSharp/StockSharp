@@ -16,12 +16,10 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-    using System.Collections.Generic;
     using System.Linq;
 
 	using System.Runtime.Serialization;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.Localization;
