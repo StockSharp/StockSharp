@@ -3,12 +3,14 @@
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// Available data info message.
 	/// </summary>
-	public class AvailableDataInfoMessage : Message, ISecurityIdMessage
+	public class AvailableDataInfoMessage : BaseSubscriptionIdMessage<AvailableDataInfoMessage>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AvailableDataInfoMessage"/>.
@@ -40,6 +42,9 @@
 		[DataMember]
 		public StorageFormats Format { get; set; }
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Create(typeof(AvailableDataInfoMessage), null);
+
 		/// <summary>
 		/// Create a copy of <see cref="AvailableDataInfoMessage"/>.
 		/// </summary>
@@ -49,7 +54,7 @@
 			var clone = new AvailableDataInfoMessage
 			{
 				SecurityId = SecurityId,
-				FileDataType = FileDataType,
+				FileDataType = FileDataType?.TypedClone(),
 				Date = Date,
 				Format = Format,
 			};

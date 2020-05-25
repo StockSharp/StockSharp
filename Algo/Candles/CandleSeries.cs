@@ -292,7 +292,7 @@ namespace StockSharp.Algo.Candles
 			BuildCandlesMode = storage.GetValue(nameof(BuildCandlesMode), BuildCandlesMode);
 
 			if (storage.ContainsKey(nameof(BuildCandlesFrom2)))
-				BuildCandlesFrom2.Load(storage.GetValue<SettingsStorage>(nameof(BuildCandlesFrom2)));
+				BuildCandlesFrom2 = storage.GetValue<SettingsStorage>(nameof(BuildCandlesFrom2)).Load<Messages.DataType>();
 #pragma warning disable CS0618 // Type or member is obsolete
 			else if (storage.ContainsKey(nameof(BuildCandlesFrom)))
 				BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);

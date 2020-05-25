@@ -938,13 +938,14 @@ namespace StockSharp.Messages
 		/// Convert error info into <see cref="ErrorMessage"/>.
 		/// </summary>
 		/// <param name="error">Error info.</param>
+		/// <param name="originalTransactionId">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
 		/// <returns>Error message.</returns>
-		public static ErrorMessage ToErrorMessage(this Exception error)
+		public static ErrorMessage ToErrorMessage(this Exception error, long originalTransactionId = 0)
 		{
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
 
-			return new ErrorMessage { Error = error };
+			return new ErrorMessage { Error = error, OriginalTransactionId = originalTransactionId };
 		}
 
 		/// <summary>
@@ -1707,11 +1708,10 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="ex"></param>
-		/// <param name="currentTime"></param>
+		/// <param name="logs"></param>
 		/// <param name="sendOut"></param>
 		/// <param name="getSubscribers"></param>
-		/// <returns></returns>
-		public static bool HandleErrorResponse(this Message message, Exception ex, DateTimeOffset currentTime, Action<Message> sendOut, Func<DataType, long[]> getSubscribers = null)
+		public static void HandleErrorResponse(this Message message, Exception ex, ILogReceiver logs, Action<Message> sendOut, Func<DataType, long[]> getSubscribers = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1722,9 +1722,11 @@ namespace StockSharp.Messages
 			if (sendOut == null)
 				throw new ArgumentNullException(nameof(sendOut));
 
+			logs.AddErrorLog(ex);
+
 			void SendOutErrorExecution(ExecutionMessage execMsg)
 			{
-				execMsg.ServerTime = currentTime;
+				execMsg.ServerTime = logs.CurrentTime;
 				execMsg.Error = ex;
 				execMsg.OrderState = OrderStates.Failed;
 
@@ -1740,11 +1742,11 @@ namespace StockSharp.Messages
 			{
 				case MessageTypes.Connect:
 					sendOut(new ConnectMessage { Error = ex });
-					return true;
+					break;
 
 				case MessageTypes.Disconnect:
 					sendOut(new DisconnectMessage { Error = ex });
-					return true;
+					break;
 
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
@@ -1753,13 +1755,13 @@ namespace StockSharp.Messages
 				{
 					var replyMsg = ((OrderMessage)message).CreateReply();
 					SendOutErrorExecution(replyMsg);
-					return true;
+					break;
 				}
 				case MessageTypes.OrderPairReplace:
 				{
 					var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply();
 					SendOutErrorExecution(replyMsg);
-					return true;
+					break;
 				}
 
 				case MessageTypes.ChangePassword:
@@ -1770,18 +1772,17 @@ namespace StockSharp.Messages
 						OriginalTransactionId = pwdMsg.TransactionId,
 						Error = ex
 					});
-					return true;
+					break;
 				}
 
 				default:
 				{
 					if (message is ISubscriptionMessage subscrMsg)
-					{
 						sendOut(subscrMsg.CreateResponse(ex));
-						return true;
-					}
+					else
+						sendOut(ex.ToErrorMessage((message as ITransactionIdMessage)?.TransactionId ?? 0));
 
-					return false;
+					break;
 				}
 			}
 		}
@@ -2783,30 +2784,6 @@ namespace StockSharp.Messages
 					return false;
 			}
 
-			if (!criteria.UnderlyingSecurityCode.IsEmpty() && security.UnderlyingSecurityCode != criteria.UnderlyingSecurityCode)
-				return false;
-
-			if (criteria.Strike != null && security.Strike != criteria.Strike)
-				return false;
-
-			if (criteria.OptionType != null && security.OptionType != criteria.OptionType)
-				return false;
-
-			if (criteria.Currency != null && security.Currency != criteria.Currency)
-				return false;
-
-			if (!criteria.Class.IsEmptyOrWhiteSpace() && !security.Class.ContainsIgnoreCase(criteria.Class))
-				return false;
-
-			if (!criteria.Name.IsEmptyOrWhiteSpace() && !security.Name.ContainsIgnoreCase(criteria.Name))
-				return false;
-
-			if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !security.ShortName.ContainsIgnoreCase(criteria.ShortName))
-				return false;
-
-			if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !security.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
-				return false;
-
 			if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !security.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
 				return false;
 
@@ -2825,25 +2802,83 @@ namespace StockSharp.Messages
 			if (!secId.Sedol.IsEmptyOrWhiteSpace() && !security.SecurityId.Sedol.ContainsIgnoreCase(secId.Sedol))
 				return false;
 
-			if (criteria.ExpiryDate != null && security.ExpiryDate != null && security.ExpiryDate != criteria.ExpiryDate)
+			if (!criteria.Name.IsEmptyOrWhiteSpace() && !security.Name.ContainsIgnoreCase(criteria.Name))
+				return false;
+
+			if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !security.ShortName.ContainsIgnoreCase(criteria.ShortName))
+				return false;
+
+			if (criteria.VolumeStep != null && security.VolumeStep != criteria.VolumeStep)
+				return false;
+
+			if (criteria.MinVolume != null && security.MinVolume != criteria.MinVolume)
+				return false;
+
+			if (criteria.MaxVolume != null && security.MaxVolume != criteria.MaxVolume)
+				return false;
+
+			if (criteria.Multiplier != null && security.Multiplier != criteria.Multiplier)
+				return false;
+
+			if (criteria.Decimals != null && security.Decimals != criteria.Decimals)
+				return false;
+
+			if (criteria.PriceStep != null && security.PriceStep != criteria.PriceStep)
+				return false;
+
+			if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !security.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
+				return false;
+
+			if (criteria.ExpiryDate != null && security.ExpiryDate != criteria.ExpiryDate)
+				return false;
+
+			if (criteria.SettlementDate != null && security.SettlementDate != criteria.SettlementDate)
+				return false;
+
+			if (!criteria.UnderlyingSecurityCode.IsEmpty() && !security.UnderlyingSecurityCode.ContainsIgnoreCase(criteria.UnderlyingSecurityCode))
+				return false;
+
+			if (criteria.UnderlyingSecurityMinVolume != null && security.UnderlyingSecurityMinVolume != criteria.UnderlyingSecurityMinVolume)
+				return false;
+
+			if (criteria.Strike != null && security.Strike != criteria.Strike)
+				return false;
+
+			if (criteria.OptionType != null && security.OptionType != criteria.OptionType)
+				return false;
+
+			if (!criteria.BinaryOptionType.IsEmptyOrWhiteSpace() && !security.BinaryOptionType.ContainsIgnoreCase(criteria.BinaryOptionType))
+				return false;
+
+			if (criteria.Currency != null && security.Currency != criteria.Currency)
+				return false;
+
+			if (!criteria.Class.IsEmptyOrWhiteSpace() && !security.Class.ContainsIgnoreCase(criteria.Class))
+				return false;
+
+			if (criteria.IssueSize != null && security.IssueSize != criteria.IssueSize)
+				return false;
+
+			if (criteria.IssueDate != null && security.IssueDate != criteria.IssueDate)
+				return false;
+
+			if (criteria.UnderlyingSecurityType != null && security.UnderlyingSecurityType != criteria.UnderlyingSecurityType)
+				return false;
+
+			if (criteria.Shortable != null && security.Shortable != criteria.Shortable)
+				return false;
+
+			if (!criteria.BasketCode.IsEmptyOrWhiteSpace() && !security.BasketCode.ContainsIgnoreCase(criteria.BasketCode))
+				return false;
+
+			if (!criteria.BasketExpression.IsEmptyOrWhiteSpace() && !security.BasketExpression.CompareIgnoreCase(criteria.BasketExpression))
+				return false;
+
+			if (criteria.FaceValue != default && security.FaceValue != criteria.FaceValue)
 				return false;
 
 			if (criteria.PrimaryId != default && security.PrimaryId != criteria.PrimaryId)
 				return false;
-
-			//if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
-			//{
-			//	if (security.ExtensionInfo == null)
-			//		return false;
-
-			//	foreach (var pair in criteria.ExtensionInfo)
-			//	{
-			//		var value = security.ExtensionInfo.TryGetValue(pair.Key);
-
-			//		if (!pair.Value.Equals(value))
-			//			return false;
-			//	}
-			//}
 
 			return true;
 		}
@@ -2892,22 +2927,36 @@ namespace StockSharp.Messages
 
 			return
 				criteria.SecurityId.IsDefault() &&
-				criteria.GetSecurityTypes().Count == 0 &&
 				criteria.Name.IsEmpty() &&
 				criteria.ShortName.IsEmpty() &&
-				criteria.UnderlyingSecurityCode.IsEmpty() &&
-				criteria.UnderlyingSecurityType == null &&
-				criteria.ExpiryDate == null &&
-				criteria.OptionType == null &&
-				criteria.Strike == null &&
-				criteria.Currency == null &&
-				criteria.Decimals == null &&
-				criteria.Multiplier == null &&
-				criteria.PriceStep == null &&
 				criteria.VolumeStep == null &&
-				criteria.IssueDate == null &&
+				criteria.MinVolume == null &&
+				criteria.MaxVolume == null &&
+				criteria.Multiplier == null &&
+				criteria.Decimals == null &&
+				criteria.PriceStep == null &&
+				criteria.SecurityType == null &&
+				criteria.CfiCode.IsEmpty() &&
+				criteria.ExpiryDate == null &&
+				criteria.SettlementDate == null &&
+				criteria.UnderlyingSecurityCode.IsEmpty() &&
+				criteria.UnderlyingSecurityMinVolume == null &&
+				criteria.Strike == null &&
+				criteria.OptionType == null &&
+				criteria.BinaryOptionType.IsEmpty() &&
+				criteria.Currency == null &&
+				criteria.Class.IsEmpty() &&
 				criteria.IssueSize == null &&
-				criteria.BinaryOptionType.IsEmpty();
+				criteria.IssueDate == null &&
+				criteria.UnderlyingSecurityType == null &&
+				criteria.Shortable == null &&
+				criteria.BasketCode.IsEmpty() &&
+				criteria.BasketExpression.IsEmpty() &&
+				criteria.FaceValue == null &&
+				criteria.PrimaryId == default &&
+				(criteria.SecurityTypes == null || criteria.SecurityTypes.Length == 0) &&
+				criteria.Count == null &&
+				criteria.SecurityIds.Length == 0;
 		}
 
 		/// <summary>

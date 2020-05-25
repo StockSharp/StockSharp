@@ -61,7 +61,7 @@ namespace StockSharp.Configuration
 			"StockSharp.Logging",
 			"StockSharp.Messages",
 			"StockSharp.Xaml",
-			"StockSharp.Xaml.Actipro",
+			"StockSharp.Xaml.CodeEditor",
 			"StockSharp.Xaml.Charting",
 			"StockSharp.Xaml.Diagram",
 			"StockSharp.Studio.Core",
@@ -116,5 +116,8 @@ namespace StockSharp.Configuration
 
 		/// <inheritdoc />
 		public virtual IEnumerable<IMessageAdapter> CreateStockSharpAdapters(IdGenerator transactionIdGenerator, string login, SecureString password) => Enumerable.Empty<IMessageAdapter>();
+
+		/// <inheritdoc />
+		public virtual IMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator) => throw new NotSupportedException();
 	}
 }

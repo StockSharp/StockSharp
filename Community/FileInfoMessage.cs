@@ -12,7 +12,7 @@
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class FileInfoMessage : BaseSubscriptionIdMessage<FileInfoMessage>
+	public class FileInfoMessage : BaseSubscriptionIdMessage<FileInfoMessage>, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
@@ -30,6 +30,10 @@
 			: base(type)
 		{
 		}
+
+		/// <inheritdoc />
+		[DataMember]
+		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// File name.
@@ -96,6 +100,7 @@
 		{
 			base.CopyTo(destination);
 
+			destination.TransactionId = TransactionId;
 			destination.FileName = FileName;
 			destination.BodyLength = BodyLength;
 			destination.Body = Body;
@@ -128,6 +133,9 @@
 		public override string ToString()
 		{
 			var str = base.ToString();
+
+			if (TransactionId > 0)
+				str += $",TrId={TransactionId}";
 
 			str += $",BodyLen={GetBodyLength()}";
 

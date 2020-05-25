@@ -9,7 +9,7 @@
 	/// <summary>
 	/// Available data info request.
 	/// </summary>
-	public class AvailableDataRequestMessage : Message, ISecurityIdMessage
+	public class AvailableDataRequestMessage : Message, ISecurityIdMessage, ITransactionIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AvailableDataRequestMessage"/>.
@@ -21,6 +21,10 @@
 
 		/// <inheritdoc />
 		[DataMember]
+		public long TransactionId { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
 		public SecurityId SecurityId { get; set; }
 
 		/// <inheritdoc />
@@ -29,7 +33,7 @@
 
 		/// <inheritdoc />
 		[DataMember]
-		public StorageFormats Format { get; set; }
+		public StorageFormats? Format { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="AvailableDataRequestMessage"/>.
@@ -39,6 +43,7 @@
 		{
 			var clone = new AvailableDataRequestMessage
 			{
+				TransactionId = TransactionId,
 				SecurityId = SecurityId,
 				Format = Format,
 				RequestDataType = RequestDataType?.TypedClone(),
@@ -51,7 +56,7 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},Fmt={Format}";
+			return base.ToString() + $",TrId={TransactionId},SecId={SecurityId},Fmt={Format}";
 		}
 	}
 }

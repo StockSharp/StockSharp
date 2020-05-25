@@ -1576,6 +1576,8 @@ namespace StockSharp.Algo
 
 		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
 		{
+			this.AddDebugLog("Order '{0}': {1}", order?.TransactionId, message);
+
 			var processed = false;
 
 			if (message.HasOrderInfo())

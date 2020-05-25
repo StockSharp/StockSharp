@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 			var clone = new RemoteFileCommandMessage
 			{
 				SecurityId = SecurityId,
-				FileDataType = FileDataType,
+				FileDataType = FileDataType?.TypedClone(),
 				StartDate = StartDate,
 				EndDate = EndDate,
 				Format = Format,

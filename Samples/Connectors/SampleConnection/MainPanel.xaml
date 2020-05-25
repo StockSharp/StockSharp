@@ -14,6 +14,7 @@
 		<WrapPanel Grid.Row="0">
 			<Button x:Name="SettingsBtn" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" Width="100"/>
 			<Button x:Name="ConnectBtn" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Width="100" Background="LightPink" />
+			<Button x:Name="ThemeSwitch" Content="{x:Static loc:LocalizedStrings.Themes}" Click="ThemeSwitchClick" Width="100"/>
 		</WrapPanel>
 		<WrapPanel Grid.Row="2">
 			<Button x:Name="ShowSecurities" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" Width="100"/>

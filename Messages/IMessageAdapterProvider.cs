@@ -6,7 +6,7 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 
 	/// <summary>
-	/// The message adapter's provider interface. 
+	/// The message adapter's provider interface.
 	/// </summary>
 	public interface IMessageAdapterProvider
 	{
@@ -19,6 +19,13 @@ namespace StockSharp.Messages
 		/// All possible adapters.
 		/// </summary>
 		IEnumerable<IMessageAdapter> PossibleAdapters { get; }
+
+		/// <summary>
+		/// Create adapter for client-server communication.
+		/// </summary>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		/// <returns>Message adapter.</returns>
+		IMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator);
 
 		/// <summary>
 		/// Create adapters for StockSharp server connections.

@@ -3,6 +3,8 @@ namespace StockSharp.Configuration
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
+
 	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
 	using StockSharp.AlphaVantage;
@@ -233,5 +235,8 @@ namespace StockSharp.Configuration
 			() => typeof(PrizmBitMessageAdapter),
 			() => typeof(DigitexFuturesMessageAdapter),
 		});
+
+		/// <inheritdoc />
+		public override IMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator) => new FixMessageAdapter(transactionIdGenerator);
 	}
 }
