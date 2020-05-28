@@ -202,16 +202,12 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<Security, SecurityData> _securityData = new SynchronizedDictionary<Security, SecurityData>();
 
 		private SecurityData GetData(Security security)
-		{
-			return _securityData.SafeAdd(security);
-		}
+			=> _securityData.SafeAdd(security);
 
 		private readonly CachedSynchronizedList<Trade> _trades = new CachedSynchronizedList<Trade>();
 
 		public IEnumerable<Trade> Trades
-		{
-			get { return _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStringId.SyncGet(t => t.Values.ToArray()))).ToArray()); }
-		}
+			=> _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStringId.SyncGet(t => t.Values.ToArray()))).ToArray());
 
 		private readonly SynchronizedDictionary<Tuple<long, bool>, Order> _allOrdersByTransactionId = new SynchronizedDictionary<Tuple<long, bool>, Order>();
 		private readonly SynchronizedDictionary<Tuple<long, bool>, OrderFail> _allOrdersByFailedId = new SynchronizedDictionary<Tuple<long, bool>, OrderFail>();
@@ -333,25 +329,20 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
 
-		public IEnumerable<OrderFail> OrderRegisterFails
-		{
-			get { return _orderRegisterFails.SyncGet(c => c.ToArray()); }
-		}
+		public IEnumerable<OrderFail> OrderRegisterFails => _orderRegisterFails.SyncGet(c => c.ToArray());
 
 		private readonly SynchronizedList<OrderFail> _orderCancelFails = new SynchronizedList<OrderFail>();
 
-		public IEnumerable<OrderFail> OrderCancelFails
-		{
-			get { return _orderCancelFails.SyncGet(c => c.ToArray()); }
-		}
+		public IEnumerable<OrderFail> OrderCancelFails => _orderCancelFails.SyncGet(c => c.ToArray());
 
-		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
 		private readonly ILogReceiver _logReceiver;
 
 		public EntityCache(ILogReceiver logReceiver)
 		{
 			_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 		}
+
+		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
 
 		public IEnumerable<Position> Positions => _positions.CachedValues;
 
@@ -523,9 +514,9 @@ namespace StockSharp.Algo
 						yield break;
 					}
 
-					var orderState = message.OrderState;
+					var newOrderState = message.OrderState;
 
-					if (orderState != null && cancellationOrder.State != OrderStates.Done && orderState == OrderStates.Done)
+					if ((newOrderState == OrderStates.Active || newOrderState == OrderStates.Done) && cancellationOrder.State != OrderStates.Done)
 					{
 						_logReceiver.AddDebugLog("Replace-cancel '{0}': {1}", cancellationOrder.TransactionId, message);
 						
@@ -536,15 +527,15 @@ namespace StockSharp.Algo
 
 						yield return new OrderChangeInfo(cancellationOrder, false, true);
 
-						var isCancelOrderOnly = (message.OrderId != null && message.OrderId == cancellationOrder.Id)
-							|| (message.OrderStringId != null && message.OrderStringId == cancellationOrder.StringId)
-							|| (message.OrderBoardId != null && message.OrderBoardId == cancellationOrder.BoardId);
+						//var isCancelOrderOnly = (message.OrderId != null && message.OrderId == cancellationOrder.Id)
+						//	|| (message.OrderStringId != null && message.OrderStringId == cancellationOrder.StringId)
+						//	|| (message.OrderBoardId != null && message.OrderBoardId == cancellationOrder.BoardId);
 
-						if (isCancelOrderOnly)
-						{
-							_logReceiver.AddDebugLog("Replace-reg empty");
-							yield break;
-						}
+						//if (isCancelOrderOnly)
+						//{
+						//	_logReceiver.AddDebugLog("Replace-reg empty");
+						//	yield break;
+						//}
 					}
 
 					_logReceiver.AddDebugLog("Replace-reg '{0}': {1}", registeredInfo.Order.TransactionId, message);
