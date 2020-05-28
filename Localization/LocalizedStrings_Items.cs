@@ -18,6 +18,27 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// {0} ({1})
+		/// </summary>
+		public const string ChartSeriesTitleParamsKey = nameof(ChartSeriesTitleParams);
+
+		/// <summary>
+		/// {0} ({1})
+		/// </summary>
+		public static string ChartSeriesTitleParams => GetString(ChartSeriesTitleParamsKey);
+
+
+		/// <summary>
+		/// {0} ({1})
+		/// </summary>
+		public const string ChartTranElementTitleParamsKey = nameof(ChartTranElementTitleParams);
+
+		/// <summary>
+		/// {0} ({1})
+		/// </summary>
+		public static string ChartTranElementTitleParams => GetString(ChartTranElementTitleParamsKey);
+
+		/// <summary>
 		/// Absolute
 		/// </summary>
 		public const string AbsoluteKey = nameof(Absolute);

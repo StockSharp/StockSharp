@@ -434,6 +434,9 @@ namespace StockSharp.Messages
 			if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
 				return false;
 
+			if(GetTypeValue == null || other.GetTypeValue == null)
+				return false;
+
 			var curr = this;
 
 			if (other.Type == UnitTypes.Absolute)

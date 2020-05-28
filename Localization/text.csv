@@ -1,4 +1,6 @@
-﻿Absolute;Absolute;Абсолютное
+﻿ChartSeriesTitleParams;{0} ({1});{0} ({1})
+ChartTranElementTitleParams;{0} ({1});{0} ({1})
+Absolute;Absolute;Абсолютное
 Point;Point;Пункт
 ApplicationUpdate;Application update;Обновление приложения
 FollowingUpdatesAvailable;Following updates are available;Доступны следующие обновления

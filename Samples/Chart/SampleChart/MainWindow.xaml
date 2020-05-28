@@ -21,7 +21,7 @@
 					<CheckBox x:Name="BuildFromTicks" Content="Build from ticks" IsChecked="True" VerticalAlignment="Center"/>
 
 					<devExp:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
-					
+
 					<ComboBox x:Name="Securities" Width="150" SelectionChanged="Securities_OnSelectionChanged" />
 
 					<sx:StorageFormatComboBox x:Name="Format" Margin="10,0,0,0"/>
@@ -50,6 +50,18 @@
 				<StackPanel Orientation="Horizontal">
 					<Button x:Name="NewAnnotationBtn" Content="new" Margin="4,0" IsEnabled="False" Click="NewAnnotation_Click" ToolTip="Create new annotation from code" VerticalAlignment="Center"/>
 					<Button x:Name="ModifyAnnotationBtn" Content="modify" Margin="4,0" IsEnabled="False" Click="ModifyAnnotation_Click" ToolTip="Modify annotation from code" VerticalAlignment="Center"/>
+				</StackPanel>
+			</GroupBox>
+
+			<GroupBox Header="allow settings" Margin="3,2" Padding="0">
+				<StackPanel Orientation="Horizontal">
+					<CheckBox ToolTip="IsInteracted" IsChecked="{Binding ElementName=Chart, Path=IsInteracted}" Margin="10,0"/>
+					<CheckBox ToolTip="allow add areas" IsChecked="{Binding ElementName=Chart, Path=AllowAddArea}"/>
+					<CheckBox ToolTip="allow add axis" IsChecked="{Binding ElementName=Chart, Path=AllowAddAxis}"/>
+					<CheckBox ToolTip="allow add candles" IsChecked="{Binding ElementName=Chart, Path=AllowAddCandles}"/>
+					<CheckBox ToolTip="allow add indicators" IsChecked="{Binding ElementName=Chart, Path=AllowAddIndicators}"/>
+					<CheckBox ToolTip="allow add trades" IsChecked="{Binding ElementName=Chart, Path=AllowAddOwnTrades}"/>
+					<CheckBox ToolTip="allow add orders" IsChecked="{Binding ElementName=Chart, Path=AllowAddOrders}"/>
 				</StackPanel>
 			</GroupBox>
 		</WrapPanel>
