@@ -534,6 +534,15 @@ namespace StockSharp.Messages
 			get => base.Name;
 			set => base.Name = value;
 		}
+		
+		/// <inheritdoc />
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.EnqueueSubscriptionsKey,
+			Description = LocalizedStrings.EnqueueSubscriptionsDescKey,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 301)]
+		public virtual bool EnqueueSubscriptions { get; set; }
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
@@ -554,6 +563,8 @@ namespace StockSharp.Messages
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
+			EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
+
 			base.Load(storage);
 		}
 
@@ -564,6 +575,7 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
 			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
+			storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 
 			base.Save(storage);
 		}

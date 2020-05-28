@@ -465,6 +465,12 @@ namespace StockSharp.Algo
 		
 		bool IMessageAdapter.IsSecurityRequired(DataType dataType) => GetSortedAdapters().Any(a => a.IsSecurityRequired(dataType));
 
+		bool IMessageAdapter.EnqueueSubscriptions
+		{
+			get => GetSortedAdapters().Any(a => a.EnqueueSubscriptions);
+			set { }
+		}
+
 		/// <inheritdoc />
 		public bool IsSecurityNewsOnly => GetSortedAdapters().All(a => a.IsSecurityNewsOnly);
 

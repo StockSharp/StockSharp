@@ -5193,6 +5193,8 @@ PrimaryIdDesc;Identifier on primary exchange.;Идентификатор на о
 SoftDollarTier;Soft Dollar Tier;Soft Dollar Tier
 DoNotSendAccount;Do not send Account field.;Не отправлять поле Account.
 Windows;Windows;Windows
+EnqueueSubscriptions;Enqueue subscriptions;Подписки в очередь
+EnqueueSubscriptionsDesc;Do not send new request before received confirmation for previous.;Не отправлять новый запрос пока не получено подтверждение по предыдущему.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

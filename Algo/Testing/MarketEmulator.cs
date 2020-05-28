@@ -2343,6 +2343,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.HeartbeatBeforConnect => false;
 		Uri IMessageAdapter.Icon => null;
 		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => true;
+		bool IMessageAdapter.EnqueueSubscriptions { get; set; }
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

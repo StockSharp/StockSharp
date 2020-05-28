@@ -171,6 +171,14 @@ namespace StockSharp.Messages
 		bool IsSecurityNewsOnly { get; }
 
 		/// <summary>
+		/// Enqueue subscriptions.
+		/// </summary>
+		/// <remarks>
+		/// Do not send new request before received confirmation for previous.
+		/// </remarks>
+		bool EnqueueSubscriptions { get; set; }
+
+		/// <summary>
 		/// Type of <see cref="OrderCondition"/>.
 		/// </summary>
 		/// <remarks>

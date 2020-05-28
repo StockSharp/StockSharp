@@ -345,6 +345,12 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => InnerAdapter.IsAutoReplyOnTransactonalUnsubscription;
 
+		bool IMessageAdapter.EnqueueSubscriptions
+		{
+			get => InnerAdapter.EnqueueSubscriptions;
+			set => InnerAdapter.EnqueueSubscriptions = value;
+		}
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

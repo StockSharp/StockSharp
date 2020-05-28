@@ -51596,5 +51596,25 @@ namespace StockSharp.Localization
 		/// Windows
 		/// </summary>
 		public static string Windows => GetString(WindowsKey);
+
+		/// <summary>
+		/// Enqueue subscriptions
+		/// </summary>
+		public const string EnqueueSubscriptionsKey = nameof(EnqueueSubscriptions);
+
+		/// <summary>
+		/// Enqueue subscriptions
+		/// </summary>
+		public static string EnqueueSubscriptions => GetString(EnqueueSubscriptionsKey);
+
+		/// <summary>
+		/// Do not send new request before received confirmation for previous.
+		/// </summary>
+		public const string EnqueueSubscriptionsDescKey = nameof(EnqueueSubscriptionsDesc);
+
+		/// <summary>
+		/// Do not send new request before received confirmation for previous.
+		/// </summary>
+		public static string EnqueueSubscriptionsDesc => GetString(EnqueueSubscriptionsDescKey);
 	}
 }
