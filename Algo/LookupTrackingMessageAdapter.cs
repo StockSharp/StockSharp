@@ -176,9 +176,9 @@ namespace StockSharp.Algo
 		{
 			base.OnInnerAdapterNewOutMessage(message);
 
-			Message TryInitNextLookup(MessageTypes type, long id)
+			Message TryInitNextLookup(MessageTypes type, long removingId)
 			{
-				if (!_queue.TryGetValue(type, out var queue) || !queue.Remove(id))
+				if (!_queue.TryGetValue(type, out var queue) || !queue.Remove(removingId))
 					return null;
 
 				if (queue.Count == 0)
@@ -202,9 +202,8 @@ namespace StockSharp.Algo
 
 					lock (_lookups.SyncRoot)
 					{
-						if (_lookups.TryGetValue(id, out var info))
+						if (_lookups.TryGetAndRemove(id, out var info))
 						{
-							_lookups.Remove(originIdMsg.OriginalTransactionId);
 							this.AddInfoLog("Lookup response {0}.", id);
 
 							nextLookup = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
