@@ -132,24 +132,27 @@ namespace StockSharp.Algo
 
 			try
 			{
-				lock (_lookups.SyncRoot)
+				if (message.IsSubscribe)
 				{
-					var queue = _queue.SafeAdd(message.Type);
-
-					// not prev queued lookup
-					if (queue.TryAdd(transId, message.TypedClone()))
+					lock (_lookups.SyncRoot)
 					{
-						if (queue.Count > 1)
+						var queue = _queue.SafeAdd(message.Type);
+
+						// not prev queued lookup
+						if (queue.TryAdd(transId, message.TypedClone()))
 						{
-							isEnqueue = true;
-							return false;
+							if (queue.Count > 1)
+							{
+								isEnqueue = true;
+								return false;
+							}
 						}
-					}
 
-					if (message.IsSubscribe && !this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
-					{
-						_lookups.Add(transId, new LookupInfo(message.TypedClone(), TimeOut));
-						isStarted = true;
+						if (!this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
+						{
+							_lookups.Add(transId, new LookupInfo(message.TypedClone(), TimeOut));
+							isStarted = true;
+						}
 					}
 				}
 			
@@ -172,10 +175,7 @@ namespace StockSharp.Algo
 
 			Message TryInitNextLookup(MessageTypes type, long id)
 			{
-				if (!_queue.TryGetValue(type, out var queue))
-					return null;
-
-				if (!queue.Remove(id))
+				if (!_queue.TryGetValue(type, out var queue) || !queue.Remove(id))
 					return null;
 
 				if (queue.Count == 0)
