@@ -48,10 +48,52 @@
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
+			void TryAddOrderSubscription(OrderMessage orderMsg)
+			{
+				var transId = orderMsg.TransactionId;
+
+				lock (_sync)
+				{
+					if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, default(SecurityId)), out var info))
+					{
+						if (info.Subscribers.TryAdd(transId))
+							_subscriptionsById.Add(transId, info);
+					}
+
+					if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, orderMsg.SecurityId), out info))
+					{
+						if (info.Subscribers.TryAdd(transId))
+							_subscriptionsById.Add(transId, info);
+					}
+				}
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
 					return ProcessReset(message);
+
+				case MessageTypes.OrderRegister:
+				case MessageTypes.OrderReplace:
+				case MessageTypes.OrderCancel:
+				case MessageTypes.OrderGroupCancel:
+				{
+					var orderMsg = (OrderMessage)message;
+
+					TryAddOrderSubscription(orderMsg);
+
+					return base.OnSendInMessage(message);
+				}
+
+				case MessageTypes.OrderPairReplace:
+				{
+					var pairMsg = (OrderPairReplaceMessage)message;
+
+					TryAddOrderSubscription(pairMsg.Message1);
+					TryAddOrderSubscription(pairMsg.Message2);
+
+					return base.OnSendInMessage(message);
+				}
 
 				case MessageTypes.OrderStatus:
 				{
@@ -171,6 +213,14 @@
 						{
 							if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
 							{
+								if (message is ExecutionMessage execMsg &&
+									execMsg.ExecutionType == ExecutionTypes.Transaction &&
+									execMsg.TransactionId != 0 &&
+									info.Subscription.DataType == DataType.Transactions)
+								{
+									if (info.Subscribers.TryAdd(execMsg.TransactionId))
+										_subscriptionsById.TryAdd(execMsg.TransactionId, info);
+								}
 							}
 							else
 							{
