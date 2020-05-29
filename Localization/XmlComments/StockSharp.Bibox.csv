@@ -6,8 +6,8 @@ M:StockSharp.Bibox.BiboxMessageAdapter.GetTimeFrames(StockSharp.Messages.Securit
 M:StockSharp.Bibox.BiboxMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Bibox.BiboxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bibox.BiboxMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Bibox.BiboxMessageAdapter.Key/summary;Str3304
-P:StockSharp.Bibox.BiboxMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bibox.BiboxMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Bibox.BiboxMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Bibox.BiboxMessageAdapter.AdminPassword/summary;AdminPassword
 M:StockSharp.Bibox.BiboxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bibox.BiboxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

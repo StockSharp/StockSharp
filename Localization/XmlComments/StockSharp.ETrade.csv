@@ -2,9 +2,9 @@ T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.ETrade.ETradeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerKey/summary;Str3304
-P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerSecret/summary;DocStr3146
-P:StockSharp.ETrade.ETradeMessageAdapter.Sandbox/summary;Str3369
+P:StockSharp.ETrade.ETradeMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.ETrade.ETradeMessageAdapter.Secret/inheritdoc;DocStr8459
+P:StockSharp.ETrade.ETradeMessageAdapter.IsDemo/inheritdoc;DocStr8459
 P:StockSharp.ETrade.ETradeMessageAdapter.AccessToken/summary;DocStr3136
 P:StockSharp.ETrade.ETradeMessageAdapter.VerificationCode/summary;Str3371
 M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

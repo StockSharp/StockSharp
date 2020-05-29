@@ -8,8 +8,8 @@ P:StockSharp.Okex.OkexMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr84
 P:StockSharp.Okex.OkexMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Okex.OkexMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Okex.OkexMessageAdapter.Key/summary;Str3304
-P:StockSharp.Okex.OkexMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Okex.OkexMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Okex.OkexMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Okex.OkexMessageAdapter.Passphrase/summary;Passphrase
 P:StockSharp.Okex.OkexMessageAdapter.IsFutures/summary;FuturesSection
 P:StockSharp.Okex.OkexMessageAdapter.IsSpot/summary;SpotSection

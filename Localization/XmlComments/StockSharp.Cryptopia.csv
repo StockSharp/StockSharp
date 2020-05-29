@@ -5,8 +5,8 @@ M:StockSharp.Cryptopia.CryptopiaMessageAdapter.IsAllDownloadingSupported(StockSh
 P:StockSharp.Cryptopia.CryptopiaMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Cryptopia.CryptopiaMessageAdapter.Key/summary;Str3304
-P:StockSharp.Cryptopia.CryptopiaMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Cryptopia.CryptopiaMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Cryptopia.CryptopiaMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Cryptopia.CryptopiaMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Cryptopia.CryptopiaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

@@ -7,8 +7,8 @@ P:StockSharp.Bitbank.BitbankMessageAdapter.IsSupportCandlesUpdates/inheritdoc;Do
 M:StockSharp.Bitbank.BitbankMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Bitbank.BitbankMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitbank.BitbankMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Bitbank.BitbankMessageAdapter.Key/summary;Str3304
-P:StockSharp.Bitbank.BitbankMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bitbank.BitbankMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Bitbank.BitbankMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Bitbank.BitbankMessageAdapter.RequestWithdrawAccounts/summary;DocStr10590
 P:StockSharp.Bitbank.BitbankMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Bitbank.BitbankMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

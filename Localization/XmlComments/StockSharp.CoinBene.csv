@@ -8,8 +8,8 @@ P:StockSharp.CoinBene.CoinBeneMessageAdapter.IsSupportOrderBookIncrements/inheri
 M:StockSharp.CoinBene.CoinBeneMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.CoinBene.CoinBeneMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.CoinBene.CoinBeneMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.CoinBene.CoinBeneMessageAdapter.Key/summary;Str3304
-P:StockSharp.CoinBene.CoinBeneMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.CoinBene.CoinBeneMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.CoinBene.CoinBeneMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.CoinBene.CoinBeneMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.CoinBene.CoinBeneMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.CoinBene.CoinBeneMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

@@ -3,8 +3,8 @@ M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocS
 M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Fxcm.FxcmMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/summary;Str3388
-P:StockSharp.Fxcm.FxcmMessageAdapter.Token/summary;AccessToken
+P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/inheritdoc;DocStr8459
+P:StockSharp.Fxcm.FxcmMessageAdapter.Token/inheritdoc;DocStr8459
 P:StockSharp.Fxcm.FxcmMessageAdapter.AllTimeFrames/summary;DocStr206
 M:StockSharp.Fxcm.FxcmMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

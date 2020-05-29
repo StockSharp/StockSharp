@@ -8,8 +8,8 @@ P:StockSharp.Binance.BinanceMessageAdapter.IsSupportOrderBookIncrements/inheritd
 M:StockSharp.Binance.BinanceMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Binance.BinanceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Binance.BinanceMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Binance.BinanceMessageAdapter.Key/summary;Str3304
-P:StockSharp.Binance.BinanceMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Binance.BinanceMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Binance.BinanceMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Binance.BinanceMessageAdapter.IsFutures/summary;FuturesSection
 P:StockSharp.Binance.BinanceMessageAdapter.IsSpot/summary;SpotSection
 P:StockSharp.Binance.BinanceMessageAdapter.IsMargin/summary;MarginSection

@@ -8,8 +8,8 @@ P:StockSharp.Hotbit.HotbitMessageAdapter.SupportedOrderBookDepths/inheritdoc;Doc
 P:StockSharp.Hotbit.HotbitMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Hotbit.HotbitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Hotbit.HotbitMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Hotbit.HotbitMessageAdapter.Key/summary;Str3304
-P:StockSharp.Hotbit.HotbitMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Hotbit.HotbitMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Hotbit.HotbitMessageAdapter.Secret/inheritdoc;DocStr8459
 M:StockSharp.Hotbit.HotbitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Hotbit.HotbitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Hotbit.HotbitMessageAdapter.ToString/inheritdoc;DocStr8459

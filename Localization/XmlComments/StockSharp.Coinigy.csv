@@ -5,8 +5,8 @@ M:StockSharp.Coinigy.CoinigyMessageAdapter.IsAllDownloadingSupported(StockSharp.
 M:StockSharp.Coinigy.CoinigyMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Coinigy.CoinigyMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Coinigy.CoinigyMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Coinigy.CoinigyMessageAdapter.Key/summary;Str3304
-P:StockSharp.Coinigy.CoinigyMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Coinigy.CoinigyMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Coinigy.CoinigyMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Coinigy.CoinigyMessageAdapter.WebSocketId/summary;WebSocketId
 P:StockSharp.Coinigy.CoinigyMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Coinigy.CoinigyMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

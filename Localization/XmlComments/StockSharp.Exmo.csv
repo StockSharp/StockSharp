@@ -4,8 +4,8 @@ M:StockSharp.Exmo.ExmoMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Exmo.ExmoMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Exmo.ExmoMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
 M:StockSharp.Exmo.ExmoMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Exmo.ExmoMessageAdapter.Key/summary;Str3304
-P:StockSharp.Exmo.ExmoMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Exmo.ExmoMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Exmo.ExmoMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Exmo.ExmoMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Exmo.ExmoMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Exmo.ExmoMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

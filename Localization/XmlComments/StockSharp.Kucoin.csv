@@ -6,10 +6,10 @@ M:StockSharp.Kucoin.KucoinMessageAdapter.GetTimeFrames(StockSharp.Messages.Secur
 P:StockSharp.Kucoin.KucoinMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Kucoin.KucoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Kucoin.KucoinMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Kucoin.KucoinMessageAdapter.Key/summary;Str3304
-P:StockSharp.Kucoin.KucoinMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Kucoin.KucoinMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Kucoin.KucoinMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Kucoin.KucoinMessageAdapter.Passphrase/summary;Passphrase
-P:StockSharp.Kucoin.KucoinMessageAdapter.IsDemo/summary;Str3388
+P:StockSharp.Kucoin.KucoinMessageAdapter.IsDemo/inheritdoc;DocStr8459
 P:StockSharp.Kucoin.KucoinMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Kucoin.KucoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Kucoin.KucoinMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

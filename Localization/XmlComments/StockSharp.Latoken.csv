@@ -4,8 +4,8 @@ M:StockSharp.LATOKEN.LatokenMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/
 M:StockSharp.LATOKEN.LatokenMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.LATOKEN.LatokenMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.LATOKEN.LatokenMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.LATOKEN.LatokenMessageAdapter.Key/summary;Str3304
-P:StockSharp.LATOKEN.LatokenMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.LATOKEN.LatokenMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.LATOKEN.LatokenMessageAdapter.Secret/inheritdoc;DocStr8459
 M:StockSharp.LATOKEN.LatokenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LATOKEN.LatokenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LATOKEN.LatokenMessageAdapter.ToString/inheritdoc;DocStr8459

@@ -7,8 +7,8 @@ P:StockSharp.Huobi.HuobiMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr
 M:StockSharp.Huobi.HuobiMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Huobi.HuobiMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Huobi.HuobiMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Huobi.HuobiMessageAdapter.Key/summary;Str3304
-P:StockSharp.Huobi.HuobiMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Huobi.HuobiMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Huobi.HuobiMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Huobi.HuobiMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Huobi.HuobiMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Huobi.HuobiMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

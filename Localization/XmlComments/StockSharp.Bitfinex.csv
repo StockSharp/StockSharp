@@ -8,8 +8,8 @@ M:StockSharp.Bitfinex.BitfinexMessageAdapter.GetTimeFrames(StockSharp.Messages.S
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Bitfinex.BitfinexMessageAdapter.Key/summary;Str3304
-P:StockSharp.Bitfinex.BitfinexMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bitfinex.BitfinexMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Bitfinex.BitfinexMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.CancelOnDisconnect/summary;CancelOnDisconnect
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

@@ -10,8 +10,8 @@ M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.GetHistoryStepSize(Stoc
 P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 M:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.Token/summary;DocStr3145
-P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.IsDemo/summary;Str3388
+P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.Token/inheritdoc;DocStr8459
+P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.IsDemo/inheritdoc;DocStr8459
 P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.TraderId/summary;Str3308
 P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.AddressReal/summary;Address
 P:StockSharp.DigitexFutures.DigitexFuturesMessageAdapter.AddressDemo/summary;DocStr11792

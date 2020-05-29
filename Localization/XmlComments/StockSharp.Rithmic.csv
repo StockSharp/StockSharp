@@ -4,10 +4,10 @@ M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Rithmic.RithmicMessageAdapter.UserName/summary;Login
-P:StockSharp.Rithmic.RithmicMessageAdapter.Password/summary;Password
+P:StockSharp.Rithmic.RithmicMessageAdapter.Login/inheritdoc;DocStr8459
+P:StockSharp.Rithmic.RithmicMessageAdapter.Password/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.CertFile/summary;Str3466
-P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionalUserName/summary;Str3468
+P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionalLogin/summary;Str3468
 P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionalPassword/summary;Str3470
 P:StockSharp.Rithmic.RithmicMessageAdapter.LogFileName/summary;Str3472
 P:StockSharp.Rithmic.RithmicMessageAdapter.Server/summary;Str3473

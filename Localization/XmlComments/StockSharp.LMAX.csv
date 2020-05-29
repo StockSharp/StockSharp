@@ -11,9 +11,9 @@ P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.StorageName/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 F:StockSharp.LMAX.LmaxMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
-P:StockSharp.LMAX.LmaxMessageAdapter.Login/summary;Login
-P:StockSharp.LMAX.LmaxMessageAdapter.Password/summary;Password
-P:StockSharp.LMAX.LmaxMessageAdapter.IsDemo/summary;Str3388
+P:StockSharp.LMAX.LmaxMessageAdapter.Login/inheritdoc;DocStr8459
+P:StockSharp.LMAX.LmaxMessageAdapter.Password/inheritdoc;DocStr8459
+P:StockSharp.LMAX.LmaxMessageAdapter.IsDemo/inheritdoc;DocStr8459
 P:StockSharp.LMAX.LmaxMessageAdapter.IsDownloadSecurityFromSite/summary;Str3389
 P:StockSharp.LMAX.LmaxMessageAdapter.SecuritiesLocation/summary;LmaxLocation
 P:StockSharp.LMAX.LmaxMessageAdapter.CandleDownloadInterval/summary;DocStr9347

@@ -4,8 +4,8 @@ M:StockSharp.MBTrading.MBTradingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/pa
 M:StockSharp.MBTrading.MBTradingMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.MBTrading.MBTradingMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.MBTrading.MBTradingMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.MBTrading.MBTradingMessageAdapter.Login/summary;Login
-P:StockSharp.MBTrading.MBTradingMessageAdapter.Password/summary;Password
+P:StockSharp.MBTrading.MBTradingMessageAdapter.Login/inheritdoc;DocStr8459
+P:StockSharp.MBTrading.MBTradingMessageAdapter.Password/inheritdoc;DocStr8459
 P:StockSharp.MBTrading.MBTradingMessageAdapter.Pin/summary;Pin
 P:StockSharp.MBTrading.MBTradingMessageAdapter.MaxAttempt/summary;DocStr131
 M:StockSharp.MBTrading.MBTradingMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

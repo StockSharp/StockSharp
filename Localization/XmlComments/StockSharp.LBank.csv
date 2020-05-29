@@ -8,8 +8,8 @@ P:StockSharp.LBank.LBankMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr
 M:StockSharp.LBank.LBankMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.LBank.LBankMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.LBank.LBankMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.LBank.LBankMessageAdapter.Key/summary;Str3304
-P:StockSharp.LBank.LBankMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.LBank.LBankMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.LBank.LBankMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.LBank.LBankMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.LBank.LBankMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.LBank.LBankMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

@@ -5,8 +5,8 @@ M:StockSharp.Coincheck.CoincheckMessageAdapter.IsAllDownloadingSupported(StockSh
 P:StockSharp.Coincheck.CoincheckMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Coincheck.CoincheckMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Coincheck.CoincheckMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Coincheck.CoincheckMessageAdapter.Key/summary;Str3304
-P:StockSharp.Coincheck.CoincheckMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Coincheck.CoincheckMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Coincheck.CoincheckMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Coincheck.CoincheckMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Coincheck.CoincheckMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Coincheck.CoincheckMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

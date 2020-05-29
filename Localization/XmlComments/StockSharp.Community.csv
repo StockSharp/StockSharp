@@ -23,6 +23,7 @@ T:StockSharp.Community.FileInfoMessage/summary;DocStr11663
 M:StockSharp.Community.FileInfoMessage.#ctor/summary;DocStr1
 M:StockSharp.Community.FileInfoMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
 M:StockSharp.Community.FileInfoMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
+P:StockSharp.Community.FileInfoMessage.TransactionId/inheritdoc;DocStr8459
 P:StockSharp.Community.FileInfoMessage.FileName/summary;Str2002
 P:StockSharp.Community.FileInfoMessage.BodyLength/summary;DocStr9124
 P:StockSharp.Community.FileInfoMessage.Body/summary;DocStr2995
@@ -50,6 +51,7 @@ F:StockSharp.Community.ProductContentTypes.Indicator/summary;Str1981
 F:StockSharp.Community.ProductContentTypes.CryptoConnector/summary;DocStr11808
 F:StockSharp.Community.ProductContentTypes.StockConnector/summary;DocStr11809
 T:StockSharp.Community.ProductFeedbackMessage/summary;DocStr11753
+P:StockSharp.Community.ProductFeedbackMessage.TransactionId/inheritdoc;DocStr8459
 P:StockSharp.Community.ProductFeedbackMessage.ProductId/summary;Product
 P:StockSharp.Community.ProductFeedbackMessage.Id/summary;Str361
 P:StockSharp.Community.ProductFeedbackMessage.Text/summary;Str217

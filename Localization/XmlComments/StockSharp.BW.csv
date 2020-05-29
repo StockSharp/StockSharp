@@ -6,8 +6,8 @@ M:StockSharp.BW.BWMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,Sy
 P:StockSharp.BW.BWMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.BW.BWMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.BW.BWMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.BW.BWMessageAdapter.Key/summary;Str3304
-P:StockSharp.BW.BWMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.BW.BWMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.BW.BWMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.BW.BWMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.BW.BWMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.BW.BWMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

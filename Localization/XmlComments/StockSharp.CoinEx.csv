@@ -6,8 +6,8 @@ M:StockSharp.CoinEx.CoinExMessageAdapter.GetTimeFrames(StockSharp.Messages.Secur
 P:StockSharp.CoinEx.CoinExMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.CoinEx.CoinExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.CoinEx.CoinExMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.CoinEx.CoinExMessageAdapter.Key/summary;Str3304
-P:StockSharp.CoinEx.CoinExMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.CoinEx.CoinExMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.CoinEx.CoinExMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.CoinEx.CoinExMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.CoinEx.CoinExMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.CoinEx.CoinExMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

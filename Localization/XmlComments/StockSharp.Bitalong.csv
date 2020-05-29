@@ -3,10 +3,10 @@ M:StockSharp.Bitalong.BitalongMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summ
 M:StockSharp.Bitalong.BitalongMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Bitalong.BitalongMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Bitalong.BitalongMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Bitalong.BitalongMessageAdapter.Key/summary;Str3304
-P:StockSharp.Bitalong.BitalongMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Bitalong.BitalongMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Bitalong.BitalongMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Bitalong.BitalongMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
-P:StockSharp.Bitalong.BitalongMessageAdapter.Domain/summary;Str3486
+P:StockSharp.Bitalong.BitalongMessageAdapter.Address/inheritdoc;DocStr8459
 M:StockSharp.Bitalong.BitalongMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bitalong.BitalongMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bitalong.BitalongMessageAdapter.ToString/inheritdoc;DocStr8459

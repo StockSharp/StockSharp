@@ -7,9 +7,9 @@ P:StockSharp.Bitmex.BitmexMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocS
 M:StockSharp.Bitmex.BitmexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Bitmex.BitmexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitmex.BitmexMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Bitmex.BitmexMessageAdapter.Key/summary;Str3304
-P:StockSharp.Bitmex.BitmexMessageAdapter.Secret/summary;DocStr3146
-P:StockSharp.Bitmex.BitmexMessageAdapter.IsDemo/summary;Str3388
+P:StockSharp.Bitmex.BitmexMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Bitmex.BitmexMessageAdapter.Secret/inheritdoc;DocStr8459
+P:StockSharp.Bitmex.BitmexMessageAdapter.IsDemo/inheritdoc;DocStr8459
 M:StockSharp.Bitmex.BitmexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bitmex.BitmexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Bitmex.BitmexMessageAdapter.ToString/inheritdoc;DocStr8459

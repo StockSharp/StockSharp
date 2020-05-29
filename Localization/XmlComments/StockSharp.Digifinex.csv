@@ -7,9 +7,9 @@ P:StockSharp.Digifinex.DigifinexMessageAdapter.IsSupportOrderBookIncrements/inhe
 M:StockSharp.Digifinex.DigifinexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Digifinex.DigifinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Digifinex.DigifinexMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Digifinex.DigifinexMessageAdapter.Key/summary;Str3304
-P:StockSharp.Digifinex.DigifinexMessageAdapter.Secret/summary;DocStr3146
-P:StockSharp.Digifinex.DigifinexMessageAdapter.Domain/summary;Str3486
+P:StockSharp.Digifinex.DigifinexMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Digifinex.DigifinexMessageAdapter.Secret/inheritdoc;DocStr8459
+P:StockSharp.Digifinex.DigifinexMessageAdapter.Address/inheritdoc;DocStr8459
 P:StockSharp.Digifinex.DigifinexMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Digifinex.DigifinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Digifinex.DigifinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

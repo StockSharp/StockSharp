@@ -16280,3 +16280,16 @@ DocStr11831;Fill brush;Fill brush
 DocStr11832;Stroke brush;Stroke brush
 DocStr11833;Processing event;Processing event
 DocStr11834;Send message event;Send message event
+DocStr11835;Dates;Dates
+DocStr11836;Upload data;Upload data
+DocStr11837;Gap fill;Gap fill
+DocStr11838;New sequence number;New sequence number
+DocStr11839;The resend request is sent by the receiving application to initiate the retransmission of messages. This function is utilized if a sequence number gap is detected, if the receiving application lost a message, or as a function of the initialization process;The resend request is sent by the receiving application to initiate the retransmission of messages. This function is utilized if a sequence number gap is detected, if the receiving application lost a message, or as a function of the initialization process
+DocStr11840;Message sequence number of first message in range to be resent;Message sequence number of first message in range to be resent
+DocStr11841;"Message sequence number of last message in range to be resent. If request is for a single message {0} = {1}. If request is for all messages subsequent to a particular message, {2} = ""0"" (representing infinity)";"Message sequence number of last message in range to be resent. If request is for a single message {0} = {1}. If request is for all messages subsequent to a particular message, {2} = ""0"" (representing infinity)"
+DocStr11842;Sequence reset message;Sequence reset message
+DocStr11843;Source for {0};Source for {0}
+DocStr11844;Message adapter, provided {0} and {1} properties;Message adapter, provided {0} and {1} properties
+DocStr11845;Message adapter, provided {0} property;Message adapter, provided {0} property
+DocStr11846;Address type;Address type
+DocStr11847;Create adapter for client-server communication;Create adapter for client-server communication

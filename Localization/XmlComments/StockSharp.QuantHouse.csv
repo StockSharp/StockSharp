@@ -3,9 +3,9 @@ M:StockSharp.QuantHouse.QuantFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/s
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.QuantHouse.QuantFeedMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Address/summary;ServerAddress
-P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Login/summary;Login
-P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Password/summary;Password
+P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Address/inheritdoc;DocStr8459
+P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Login/inheritdoc;DocStr8459
+P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Password/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.ToString/inheritdoc;DocStr8459

@@ -6,9 +6,9 @@ P:StockSharp.Btce.BtceMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;Doc
 M:StockSharp.Btce.BtceMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Btce.BtceMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
-P:StockSharp.Btce.BtceMessageAdapter.Key/summary;Str3304
-P:StockSharp.Btce.BtceMessageAdapter.Secret/summary;DocStr3146
-P:StockSharp.Btce.BtceMessageAdapter.Domain/summary;Str3486
+P:StockSharp.Btce.BtceMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Btce.BtceMessageAdapter.Secret/inheritdoc;DocStr8459
+P:StockSharp.Btce.BtceMessageAdapter.Address/inheritdoc;DocStr8459
 P:StockSharp.Btce.BtceMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 F:StockSharp.Btce.BtceMessageAdapter.DefaultDomain/summary;DocStr9884
 M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
