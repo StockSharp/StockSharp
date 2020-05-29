@@ -36,11 +36,6 @@ namespace StockSharp.Algo.Candles
 	public static class CandleHelper
 	{
 		/// <summary>
-		/// Possible data types that can be used as candles source.
-		/// </summary>
-		public static IEnumerable<DataType> CandleDataSources { get; } = new[] { DataType.Level1, DataType.Ticks, DataType.MarketDepth, DataType.OrderLog };
-
-		/// <summary>
 		/// Try get suitable market-data type for candles compression.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
@@ -64,7 +59,7 @@ namespace StockSharp.Algo.Candles
 			if (subscription.BuildMode == MarketDataBuildModes.Load)
 				return null;
 
-			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(CandleDataSources).OrderBy(t =>
+			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(BuildCandlesFromSource.CandleDataSources).OrderBy(t =>
 			{
 				// by priority
 				if (t == DataType.Ticks)
