@@ -225,9 +225,19 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			return message.TransactionId.CreateOrderReply();
+		}
+
+		/// <summary>
+		/// Create order's transaction reply.
+		/// </summary>
+		/// <param name="transactionId">Transaction ID.</param>
+		/// <returns>The message contains information about the execution.</returns>
+		public static ExecutionMessage CreateOrderReply(this long transactionId)
+		{
 			return new ExecutionMessage
 			{
-				OriginalTransactionId = message.TransactionId,
+				OriginalTransactionId = transactionId,
 				ExecutionType = ExecutionTypes.Transaction,
 				HasOrderInfo = true,
 			};
