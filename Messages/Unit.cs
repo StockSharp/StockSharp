@@ -287,14 +287,14 @@ namespace StockSharp.Messages
 			if (u1.IsNull())
 			{
 				return null;
-				//throw new ArgumentNullException(nameof(u1));	
+				//throw new ArgumentNullException(nameof(u1));
 			}
 
 			//if (u2 == null)
 			if (u2.IsNull())
 			{
 				return null;
-				//throw new ArgumentNullException(nameof(u2));	
+				//throw new ArgumentNullException(nameof(u2));
 			}
 
 			if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
@@ -486,22 +486,20 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
+		public override string ToString() => Value.To<string>() + GetTypeSuffix(Type);
+
+		/// <summary>Get Unit type string suffix.</summary>
+		public static string GetTypeSuffix(UnitTypes type)
 		{
-			switch (Type)
+			switch (type)
 			{
-				case UnitTypes.Percent:
-					return Value + "%";
-				case UnitTypes.Absolute:
-					return Value.To<string>();
-				case UnitTypes.Step:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
-				case UnitTypes.Point:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
-				case UnitTypes.Limit:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
+				case UnitTypes.Percent:   return  "%";
+				case UnitTypes.Absolute:  return string.Empty;
+				case UnitTypes.Step:      return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
+				case UnitTypes.Point:     return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
+				case UnitTypes.Limit:     return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
 				default:
-					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(Type));
+					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type));
 			}
 		}
 
@@ -760,7 +758,7 @@ namespace StockSharp.Messages
 				case 'p':
 					if (getTypeValue == null)
 						throw new ArgumentNullException(nameof(getTypeValue));
-			
+
 					type = UnitTypes.Point;
 					break;
 				case '%':
