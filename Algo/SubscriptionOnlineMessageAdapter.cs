@@ -50,21 +50,13 @@
 		{
 			void TryAddOrderSubscription(OrderMessage orderMsg)
 			{
-				var transId = orderMsg.TransactionId;
-
 				lock (_sync)
 				{
 					if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, default(SecurityId)), out var info))
-					{
-						if (info.Subscribers.TryAdd(transId))
-							_subscriptionsById.Add(transId, info);
-					}
+						TryAddOrderTransaction(info, orderMsg.TransactionId);
 
-					if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, orderMsg.SecurityId), out info))
-					{
-						if (info.Subscribers.TryAdd(transId))
-							_subscriptionsById.Add(transId, info);
-					}
+					//if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, orderMsg.SecurityId), out info))
+					//	TryAddOrderTransaction(info, orderMsg.TransactionId);
 				}
 			}
 
@@ -218,8 +210,7 @@
 									execMsg.TransactionId != 0 &&
 									info.Subscription.DataType == DataType.Transactions)
 								{
-									if (info.Subscribers.TryAdd(execMsg.TransactionId))
-										_subscriptionsById.TryAdd(execMsg.TransactionId, info);
+									TryAddOrderTransaction(info, execMsg.TransactionId);
 								}
 							}
 							else
@@ -240,6 +231,21 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+		}
+
+		private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId)
+		{
+			if (/*statusInfo.Subscribers.TryAdd(transactionId) && */!_subscriptionsById.ContainsKey(transactionId))
+			{
+				var orderSubscription = new SubscriptionInfo(statusInfo.Subscription.TypedClone());
+
+				//orderSubscription.Subscribers.Add(transactionId);
+				orderSubscription.Subscribers.Add(statusInfo.Subscription.TransactionId);
+
+				_subscriptionsById.Add(transactionId, orderSubscription);
+			}
+			else
+				this.AddWarningLog("Order's transaction {0} was handled before.", transactionId);
 		}
 
 		private void ClearState()
