@@ -28,6 +28,8 @@
 
 			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
 
+			public List<long> Linked { get; } = new List<long>();
+
 			public override string ToString() => Subscription.ToString();
 		}
 
@@ -210,7 +212,9 @@
 									execMsg.TransactionId != 0 &&
 									info.Subscription.DataType == DataType.Transactions)
 								{
-									TryAddOrderTransaction(info, execMsg.TransactionId);
+									TryAddOrderTransaction(info, execMsg.TransactionId,
+										false // lookup history can request order changes (registered, filled, cancelled)
+									);
 								}
 							}
 							else
@@ -233,7 +237,7 @@
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId)
+		private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
 		{
 			if (/*statusInfo.Subscribers.TryAdd(transactionId) && */!_subscriptionsById.ContainsKey(transactionId))
 			{
@@ -243,8 +247,10 @@
 				orderSubscription.Subscribers.Add(statusInfo.Subscription.TransactionId);
 
 				_subscriptionsById.Add(transactionId, orderSubscription);
+
+				statusInfo.Linked.Add(transactionId);
 			}
-			else
+			else if (warnOnDuplicate)
 				this.AddWarningLog("Order's transaction {0} was handled before.", transactionId);
 		}
 
@@ -353,6 +359,12 @@
 						}
 						else
 						{
+							if (info.Linked.Count > 0)
+							{
+								foreach (var linked in info.Linked)
+									_subscriptionsById.Remove(linked);
+							}
+
 							if (info.Subscribers.Count == 0)
 							{
 								_subscriptionsByKey.RemoveByValue(info);
