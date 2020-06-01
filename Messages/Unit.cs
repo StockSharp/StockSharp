@@ -476,10 +476,10 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the values are equals, otherwise, <see langword="false" />.</returns>
 		public static bool operator ==(Unit u1, Unit u2)
 		{
-			if (ReferenceEquals(u1, null))
-				return u2.IsNull();
+			if (u1 is null)
+				return u2 is null;
 
-			if (ReferenceEquals(u2, null))
+			if (u2 is null)
 				return false;
 
 			return u1.OnEquals(u2);

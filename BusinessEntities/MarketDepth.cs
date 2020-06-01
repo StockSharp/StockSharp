@@ -872,9 +872,9 @@ namespace StockSharp.BusinessEntities
 
 		private Sides? GetDirection(decimal price)
 		{
-			if (!ReferenceEquals(BestBid, null) && BestBid.Price >= price)
+			if (BestBid is object && BestBid.Price >= price)
 				return Sides.Buy;
-			else if (!ReferenceEquals(BestAsk, null) && BestAsk.Price <= price)
+			else if (BestAsk is object && BestAsk.Price <= price)
 				return Sides.Sell;
 			else
 				return null;

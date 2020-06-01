@@ -150,7 +150,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if rule is not required any more. Otherwise, <see langword="false" />.</returns>
 		protected virtual bool CanFinish()
 		{
-			return ReferenceEquals(_container, null) || _container.ProcessState != ProcessStates.Started;
+			return _container is null || _container.ProcessState != ProcessStates.Started;
 		}
 
 		private string _name;
@@ -397,7 +397,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public bool IsReady => !IsDisposed && !ReferenceEquals(_container, null);
+		public bool IsReady => !IsDisposed && !(_container is null);
 
 		/// <inheritdoc />
 		public bool IsActive { get; set; }

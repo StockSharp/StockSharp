@@ -252,7 +252,7 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public bool Equals(SecurityExternalId other)
 		{
-			if (ReferenceEquals(other, null))
+			if (other is null)
 				return false;
 
 			if (Bloomberg != other.Bloomberg)
