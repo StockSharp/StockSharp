@@ -689,6 +689,8 @@ namespace StockSharp.Algo
 
 			try
 			{
+				this.AddOrderInfoLog(oldOrder, nameof(ReRegisterOrder));
+
 				if (oldOrder.Security != newOrder.Security)
 					throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
 
