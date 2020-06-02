@@ -183,9 +183,9 @@ namespace StockSharp.Algo.Storages
 			if (!message.IsSubscribe)
 				return message;
 
-			_orderStatusIds.Add(message.TransactionId);
-
 			var transId = message.TransactionId;
+
+			_orderStatusIds.Add(transId);
 
 			if (!message.HasOrderId() && message.OriginalTransactionId == 0 && Settings.DaysLoad > TimeSpan.Zero)
 			{

@@ -828,17 +828,16 @@ namespace StockSharp.Algo
 
 						if (LookupMessagesOnConnect)
 						{
-							if (Adapter.IsMessageSupported(MessageTypes.SecurityLookup))
-								_subscriptionManager.Subscribe(new Subscription(DataType.Securities, null));
-							
-							if (Adapter.IsMessageSupported(MessageTypes.PortfolioLookup))
-								_subscriptionManager.Subscribe(new Subscription(DataType.PositionChanges, null));
-							
-							if (Adapter.IsMessageSupported(MessageTypes.OrderStatus))
-								_subscriptionManager.Subscribe(new Subscription(DataType.Transactions, null));
+							void TrySend(MessageTypes type, DataType dataType)
+							{
+								if (Adapter.IsMessageSupported(type) && !_subscriptionManager.Subscriptions.Any(s => s.SubscriptionMessage.DataType == dataType && s.SubscriptionMessage.To == null))
+									_subscriptionManager.Subscribe(new Subscription(dataType, null));
+							}
 
-							if (Adapter.IsMessageSupported(MessageTypes.TimeFrameLookup))
-								_subscriptionManager.Subscribe(new Subscription(DataType.TimeFrames, null));
+							TrySend(MessageTypes.SecurityLookup, DataType.Securities);
+							TrySend(MessageTypes.PortfolioLookup, DataType.PositionChanges);
+							TrySend(MessageTypes.OrderStatus, DataType.Transactions);
+							TrySend(MessageTypes.TimeFrameLookup, DataType.TimeFrames);
 						}
 					}
 
