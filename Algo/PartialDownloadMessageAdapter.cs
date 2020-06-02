@@ -164,6 +164,7 @@
 		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
 		private readonly Dictionary<long, bool> _liveRequests = new Dictionary<long, bool>();
+		private readonly HashSet<long> _finished = new HashSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.
@@ -405,7 +406,12 @@
 						}
 
 						if (!_partialRequests.TryGetValue(originId, out var info))
+						{
+							if (_finished.Contains(originId))
+								this.AddWarningLog("Subscription {0} already finished.", originId);
+
 							break;
+						}
 
 						var requestId = info.Origin.TransactionId;
 
@@ -441,6 +447,8 @@
 					{
 						if (_partialRequests.TryGetAndRemove(finishMsg.OriginalTransactionId, out var info))
 						{
+							_finished.Add(finishMsg.OriginalTransactionId);
+
 							var origin = info.Origin;
 
 							if (info.LastIteration)
@@ -456,7 +464,12 @@
 							}
 						}
 						else
+						{
+							if (_finished.Contains(finishMsg.OriginalTransactionId))
+								this.AddWarningLog("Subscription {0} already finished.", finishMsg.OriginalTransactionId);
+
 							break;
+						}
 					}
 
 					this.AddInfoLog("Partial {0} finished.", finishMsg.OriginalTransactionId);

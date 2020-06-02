@@ -129,6 +129,13 @@ namespace StockSharp.Algo
 					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
 			}
 
+			private void Remove(long id)
+			{
+				// keed subscription instancies for tracing purpose
+				//_subscriptions.Remove(id);
+				_connector.AddInfoLog("Subscription {0} removed.", id);
+			}
+
 			private SubscriptionInfo TryGetInfo(long id, bool remove, DateTimeOffset? time = null, bool addLog = true)
 			{
 				lock (_syncObject)
@@ -144,7 +151,7 @@ namespace StockSharp.Algo
 					if (_subscriptions.TryGetValue(id, out var info))
 					{
 						if (remove)
-							_subscriptions.Remove(id);
+							Remove(id);
 						else if (time != null)
 						{
 							if (!info.UpdateLastTime(time.Value))
@@ -241,14 +248,7 @@ namespace StockSharp.Algo
 
 			private void ChangeState(Subscription subscription, SubscriptionStates state)
 			{
-				const string text = "Subscription {0} {1}->{2}.";
-
-				if (subscription.State.IsOk(state))
-					_connector.AddInfoLog(text, subscription.TransactionId, subscription.State, state);
-				else
-					_connector.AddWarningLog(text, subscription.TransactionId, subscription.State, state);
-
-				subscription.State = state;
+				subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, _connector);
 			}
 
 			public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled)
@@ -294,7 +294,7 @@ namespace StockSharp.Algo
 							{
 								ChangeState(subscription, SubscriptionStates.Error);
 
-								_subscriptions.Remove(subscription.TransactionId);
+								Remove(subscription.TransactionId);
 
 								unexpectedCancelled = subscription.State.IsActive();
 
@@ -305,7 +305,7 @@ namespace StockSharp.Algo
 						{
 							ChangeState(subscription, SubscriptionStates.Stopped);
 
-							_subscriptions.Remove(subscription.TransactionId);
+							Remove(subscription.TransactionId);
 
 							// remove subscribe and unsubscribe requests
 							_requests.Remove(subscription.TransactionId);

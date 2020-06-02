@@ -7,6 +7,7 @@
 	using Ecng.Common;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -298,6 +299,8 @@
 				throw new InvalidOperationException(LocalizedStrings.MaxMessageCountExceed);
 
 			_pendingMessages.Add(message);
+
+			this.AddInfoLog("Message {0} stored in offline.", message);
 		}
 
 		/// <inheritdoc />

@@ -2097,6 +2097,50 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Change subscription state.
+		/// </summary>
+		/// <param name="currState">Current state.</param>
+		/// <param name="newState">New state.</param>
+		/// <param name="subscriptionId">Subscription id.</param>
+		/// <param name="receiver">Logs.</param>
+		/// <returns>New state.</returns>
+		public static SubscriptionStates ChangeSubscriptionState(this SubscriptionStates currState, SubscriptionStates newState, long subscriptionId, ILogReceiver receiver)
+		{
+			bool isOk;
+
+			if (currState == newState)
+				isOk = false;
+			else
+			{
+				switch (currState)
+				{
+					case SubscriptionStates.Stopped:
+					case SubscriptionStates.Active:
+						isOk = true;
+						break;
+					case SubscriptionStates.Error:
+					case SubscriptionStates.Finished:
+						isOk = false;
+						break;
+					case SubscriptionStates.Online:
+						isOk = newState != SubscriptionStates.Active;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(currState), currState, LocalizedStrings.Str1219);
+				}
+			}
+
+			const string text = "Subscription {0} {1}->{2}.";
+
+			if (isOk)
+				receiver.AddInfoLog(text, subscriptionId, currState, newState);
+			else
+				receiver.AddWarningLog(text, subscriptionId, currState, newState);
+
+			return newState;
+		}
+
+		/// <summary>
 		/// Apply changes to the portfolio object.
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
@@ -4076,27 +4120,6 @@ namespace StockSharp.Algo
 			init(adapter);
 			connector.Adapter.InnerAdapters.Add(adapter);
 			return connector;
-		}
-
-		internal static bool IsOk(this SubscriptionStates fromState, SubscriptionStates toState)
-		{
-			if (fromState == toState)
-				return false;
-
-			switch (fromState)
-			{
-				case SubscriptionStates.Stopped:
-					return true;
-				case SubscriptionStates.Active:
-					return true;
-				case SubscriptionStates.Error:
-				case SubscriptionStates.Finished:
-					return false;
-				case SubscriptionStates.Online:
-					return toState != SubscriptionStates.Active;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(fromState), fromState, LocalizedStrings.Str1219);
-			}
 		}
 
 		/// <summary>

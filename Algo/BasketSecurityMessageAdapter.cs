@@ -143,16 +143,7 @@ namespace StockSharp.Algo
 
 		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 		{
-			var id = info.TransactionId;
-
-			const string text = "Subscription {0} {1}->{2}.";
-
-			if (info.State.IsOk(state))
-				this.AddInfoLog(text, id, info.State, state);
-			else
-				this.AddWarningLog(text, id, info.State, state);
-
-			info.State = state;
+			info.State = info.State.ChangeSubscriptionState(state, info.TransactionId, this);
 		}
 
 		/// <inheritdoc />

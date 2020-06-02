@@ -111,21 +111,12 @@
 
 		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 		{
-			var id = info.Subscription.TransactionId;
-
-			const string text = "Subscription {0} {1}->{2}.";
-
-			if (info.State.IsOk(state))
-				this.AddInfoLog(text, id, info.State, state);
-			else
-				this.AddWarningLog(text, id, info.State, state);
-
-			info.State = state;
+			info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, this);
 
 			if (!state.IsActive())
 			{
 				_subscriptionsByKey.RemoveByValue(info);
-				this.AddInfoLog(LocalizedStrings.OnlineSubscriptionRemoved, id);
+				this.AddInfoLog(LocalizedStrings.OnlineSubscriptionRemoved, info.Subscription.TransactionId);
 			}
 		}
 
@@ -305,6 +296,8 @@
 
 						if (!_subscriptionsByKey.TryGetValue(key, out var info))
 						{
+							this.AddInfoLog("Subscription {0} initial.", transId);
+
 							sendInMsg = message;
 
 							info = new SubscriptionInfo(message.TypedClone());
@@ -313,6 +306,8 @@
 						}
 						else
 						{
+							this.AddInfoLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
+
 							var resultMsg = message.CreateResult();
 
 							if (message.Type == MessageTypes.MarketData)
