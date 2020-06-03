@@ -237,7 +237,6 @@ Str144;Limit order execution condition.;Условие исполнения ли
 Str145;Trade ID.;Идентификатор сделки.
 Str146;Trade ID (as string, if electronic board does not use numeric order ID representation).;Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки).
 Str147;Trade price.;Цена сделки.
-Str148;Deal initiator;Инициатор сделки
 Str149;Deal initiator (seller or buyer).;Инициатор сделки (продавец или покупатель).
 Str150;Open interest;Открытый интерес
 Str151;Number of open positions (open interest).;Количество открытых позиций (открытый интерес).
@@ -5208,6 +5207,8 @@ OpenOnly;Open only;На открытие
 PositionEffectOpenOnly;A trade should open a position.;Сделка должна закрывать позицию.
 CloseOnly;Close only;На закрытие
 PositionEffectCloseOnly;A trade should bring the position towards zero, i.e. close as much as possible of any existing position and open an opposite position for any remainder.;Сделка должна привести позицию к нулю, то есть максимально закрыть любую существующую позицию и открыть противоположную позицию для любого остатка.
+Initiator;Initiator;Инициатор
+InitiatorTrade;Used to identify whether the order initiator is an aggressor or not in the trade.;Используется для определения, является ли инициатор заявки агрессором или нет в сделке.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

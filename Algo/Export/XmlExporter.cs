@@ -154,6 +154,7 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("minVolume", item.MinVolume);
 				writer.WriteAttribute("positionEffect", item.PositionEffect);
 				writer.WriteAttribute("postOnly", item.PostOnly);
+				writer.WriteAttribute("initiator", item.Initiator);
 
 				writer.WriteEndElement();
 			});

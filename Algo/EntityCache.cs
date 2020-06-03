@@ -785,6 +785,9 @@ namespace StockSharp.Algo
 				if (message.Position != null)
 					t.Position = message.Position;
 
+				if (message.Initiator != null)
+					t.Initiator = message.Initiator;
+
 				message.CopyExtensionInfo(t);
 
 				_myTrades.Add(t);

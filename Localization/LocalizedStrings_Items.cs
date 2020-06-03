@@ -51747,5 +51747,25 @@ namespace StockSharp.Localization
 		/// A trade should bring the position towards zero, i.e. close as much as possible of any existing position and open an opposite position for any remainder.
 		/// </summary>
 		public static string PositionEffectCloseOnly => GetString(PositionEffectCloseOnlyKey);
+
+		/// <summary>
+		/// Initiator
+		/// </summary>
+		public const string InitiatorKey = nameof(Initiator);
+
+		/// <summary>
+		/// Initiator
+		/// </summary>
+		public static string Initiator => GetString(InitiatorKey);
+
+		/// <summary>
+		/// Used to identify whether the order initiator is an aggressor or not in the trade.
+		/// </summary>
+		public const string InitiatorTradeKey = nameof(InitiatorTrade);
+
+		/// <summary>
+		/// Used to identify whether the order initiator is an aggressor or not in the trade.
+		/// </summary>
+		public static string InitiatorTrade => GetString(InitiatorTradeKey);
 	}
 }

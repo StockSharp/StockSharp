@@ -98,6 +98,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.MinVolume.To<string>(),
 				data.PositionEffect.To<string>(),
 				data.PostOnly.To<string>(),
+				data.Initiator.To<string>(),
 			};
 			writer.WriteRow(row);
 
@@ -190,6 +191,7 @@ namespace StockSharp.Algo.Storages.Csv
 				msg.MinVolume = reader.ReadNullableDecimal();
 				msg.PositionEffect = reader.ReadNullableEnum<OrderPositionEffects>();
 				msg.PostOnly = reader.ReadNullableBool();
+				msg.Initiator = reader.ReadNullableBool();
 			}
 
 			return msg;

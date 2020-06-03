@@ -542,6 +542,12 @@ namespace StockSharp.Messages
 		public bool? PostOnly { get; set; }
 
 		/// <summary>
+		/// Used to identify whether the order initiator is an aggressor or not in the trade.
+		/// </summary>
+		[DataMember]
+		public bool? Initiator { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -562,6 +568,9 @@ namespace StockSharp.Messages
 
 			if (PostOnly != null)
 				str += $",PostOnly={PostOnly.Value}";
+
+			if (Initiator != null)
+				str += $",Initiator={Initiator.Value}";
 
 			return str;
 		}
@@ -634,6 +643,7 @@ namespace StockSharp.Messages
 			destination.MinVolume = MinVolume;
 			destination.PositionEffect = PositionEffect;
 			destination.PostOnly = PostOnly;
+			destination.Initiator = Initiator;
 		}
 	}
 }

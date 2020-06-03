@@ -462,6 +462,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (msg.PostOnly != null)
 					writer.Write(msg.PostOnly.Value);
+
+				writer.Write(msg.Initiator != null);
+
+				if (msg.Initiator != null)
+					writer.Write(msg.Initiator.Value);
 			}
 		}
 
@@ -646,6 +651,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (reader.Read())
 				msg.PostOnly = reader.Read();
+
+			if (reader.Read())
+				msg.Initiator = reader.Read();
 
 			return msg;
 		}
