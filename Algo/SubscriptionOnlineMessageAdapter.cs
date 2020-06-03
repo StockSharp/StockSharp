@@ -17,20 +17,56 @@
 	{
 		private class SubscriptionInfo
 		{
+			private readonly SubscriptionInfo _main;
+
 			public ISubscriptionMessage Subscription { get; }
 
 			public SubscriptionInfo(ISubscriptionMessage subscription)
 			{
 				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+				Subscribers = new CachedSynchronizedSet<long>();
 			}
 
-			public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
+			public SubscriptionInfo(SubscriptionInfo main)
+			{
+				_main = main ?? throw new ArgumentNullException(nameof(main));
 
-			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
+				Subscription = main.Subscription;
+				Subscribers = main.Subscribers;
+			}
 
-			public List<long> Linked { get; } = new List<long>();
+			private void CheckOnLinked()
+			{
+				if (_main != null)
+					throw new InvalidOperationException();
+			}
 
-			public override string ToString() => Subscription.ToString();
+			private SubscriptionStates _state = SubscriptionStates.Stopped;
+
+			public SubscriptionStates State
+			{
+				get => _main?.State ?? _state;
+				set
+				{
+					CheckOnLinked();
+					_state = value;
+				}
+			}
+
+			public readonly CachedSynchronizedSet<long> Subscribers;
+
+			private readonly List<long> _linked = new List<long>();
+
+			public List<long> Linked
+			{
+				get
+				{
+					CheckOnLinked();
+					return _linked;
+				}
+			}
+
+			public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
 		}
 
 		private readonly SyncObject _sync = new SyncObject();
@@ -230,12 +266,9 @@
 
 		private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
 		{
-			if (/*statusInfo.Subscribers.TryAdd(transactionId) && */!_subscriptionsById.ContainsKey(transactionId))
+			if (!_subscriptionsById.ContainsKey(transactionId))
 			{
-				var orderSubscription = new SubscriptionInfo(statusInfo.Subscription.TypedClone());
-
-				//orderSubscription.Subscribers.Add(transactionId);
-				orderSubscription.Subscribers.Add(statusInfo.Subscription.TransactionId);
+				var orderSubscription = new SubscriptionInfo(statusInfo);
 
 				_subscriptionsById.Add(transactionId, orderSubscription);
 
