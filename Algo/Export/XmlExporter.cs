@@ -153,6 +153,7 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("yield", item.Yield);
 				writer.WriteAttribute("minVolume", item.MinVolume);
 				writer.WriteAttribute("positionEffect", item.PositionEffect);
+				writer.WriteAttribute("postOnly", item.PostOnly);
 
 				writer.WriteEndElement();
 			});

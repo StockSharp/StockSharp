@@ -588,6 +588,7 @@ namespace StockSharp.Algo
 				IsMargin = oldOrder.IsMargin,
 				MinVolume = oldOrder.MinVolume,
 				PositionEffect = oldOrder.PositionEffect,
+				PostOnly = oldOrder.PostOnly,
 			};
 		}
 

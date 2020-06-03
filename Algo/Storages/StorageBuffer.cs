@@ -205,6 +205,7 @@ namespace StockSharp.Algo.Storages
 						Condition = regMsg.Condition?.Clone(),
 						MinVolume = regMsg.MinOrderVolume,
 						PositionEffect = regMsg.PositionEffect,
+						PostOnly = regMsg.PostOnly,
 					});
 
 					break;
@@ -231,7 +232,6 @@ namespace StockSharp.Algo.Storages
 						OrderStringId = cancelMsg.OrderStringId,
 						OriginalTransactionId = cancelMsg.OriginalTransactionId,
 						OrderVolume = cancelMsg.Volume,
-						PositionEffect = cancelMsg.PositionEffect,
 						//Side = cancelMsg.Side,
 					});
 

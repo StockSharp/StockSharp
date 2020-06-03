@@ -457,6 +457,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (msg.PositionEffect != null)
 					writer.WriteInt((int)msg.PositionEffect.Value);
+
+				writer.Write(msg.PostOnly != null);
+
+				if (msg.PostOnly != null)
+					writer.Write(msg.PostOnly.Value);
 			}
 		}
 
@@ -638,6 +643,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (reader.Read())
 				msg.PositionEffect = (OrderPositionEffects)reader.ReadInt();
+
+			if (reader.Read())
+				msg.PostOnly = reader.Read();
 
 			return msg;
 		}

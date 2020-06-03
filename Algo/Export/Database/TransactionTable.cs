@@ -137,6 +137,7 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(ExecutionMessage.Yield)) { DbType = typeof(decimal?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.MinVolume)) { DbType = typeof(decimal?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.PositionEffect)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.PostOnly)) { DbType = typeof(bool?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
@@ -193,6 +194,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.Yield), value.Yield },
 				{ nameof(ExecutionMessage.MinVolume), value.MinVolume },
 				{ nameof(ExecutionMessage.PositionEffect), (int?)value.PositionEffect },
+				{ nameof(ExecutionMessage.PostOnly), value.PostOnly },
 			};
 			return result;
 		}

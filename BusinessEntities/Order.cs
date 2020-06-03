@@ -605,6 +605,12 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public OrderPositionEffects? PositionEffect { get; set; }
 
+		/// <summary>
+		/// Post-only order.
+		/// </summary>
+		[DataMember]
+		public bool? PostOnly { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -622,6 +628,9 @@ namespace StockSharp.BusinessEntities
 
 			if (PositionEffect != null)
 				str += $" PosEffect={PositionEffect.Value}";
+
+			if (PostOnly != null)
+				str += $",PostOnly={PostOnly.Value}";
 
 			return str;
 		}

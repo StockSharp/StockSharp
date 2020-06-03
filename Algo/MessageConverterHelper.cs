@@ -368,6 +368,7 @@ namespace StockSharp.Algo
 				IsManual = order.IsManual,
 				MinOrderVolume = order.MinVolume,
 				PositionEffect = order.PositionEffect,
+				PostOnly = order.PostOnly,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -457,6 +458,7 @@ namespace StockSharp.Algo
 
 				MinOrderVolume = newOrder.MinVolume,
 				PositionEffect = newOrder.PositionEffect,
+				PostOnly = newOrder.PostOnly,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -1314,6 +1316,7 @@ namespace StockSharp.Algo
 			order.Yield = message.Yield;
 			order.MinVolume = message.MinVolume;
 			order.PositionEffect = message.PositionEffect;
+			order.PostOnly = message.PostOnly;
 
 			if (message.OrderState != null)
 				order.ApplyNewState(message.OrderState.Value);

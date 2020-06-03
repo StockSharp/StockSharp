@@ -536,6 +536,12 @@ namespace StockSharp.Messages
 		public OrderPositionEffects? PositionEffect { get; set; }
 
 		/// <summary>
+		/// Post-only order.
+		/// </summary>
+		[DataMember]
+		public bool? PostOnly { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -553,6 +559,9 @@ namespace StockSharp.Messages
 
 			if (PositionEffect != null)
 				str += $",PosEffect={PositionEffect.Value}";
+
+			if (PostOnly != null)
+				str += $",PostOnly={PostOnly.Value}";
 
 			return str;
 		}
@@ -624,6 +633,7 @@ namespace StockSharp.Messages
 			destination.Yield = Yield;
 			destination.MinVolume = MinVolume;
 			destination.PositionEffect = PositionEffect;
+			destination.PostOnly = PostOnly;
 		}
 	}
 }
