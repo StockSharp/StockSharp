@@ -128,6 +128,18 @@ namespace StockSharp.Messages
 		public decimal? MinOrderVolume { get; set; }
 
 		/// <summary>
+		/// Position effect.
+		/// </summary>
+		[DataMember]
+		public OrderPositionEffects? PositionEffect { get; set; }
+
+		/// <summary>
+		/// Post-only order.
+		/// </summary>
+		[DataMember]
+		public bool? PostOnly { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -174,12 +186,22 @@ namespace StockSharp.Messages
 			destination.Slippage = Slippage;
 			destination.IsManual = IsManual;
 			destination.MinOrderVolume = MinOrderVolume;
+			destination.PositionEffect = PositionEffect;
+			destination.PostOnly = PostOnly;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume}/{MinOrderVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},MR={IsMargin},SLP={Slippage},MN={IsManual},MinOrdVol={MinOrderVolume}";
+			var str = base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume}/{MinOrderVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},MR={IsMargin},SLP={Slippage},MN={IsManual}";
+
+			if (PositionEffect != null)
+				str += $",PosEffect={PositionEffect.Value}";
+
+			if (PostOnly != null)
+				str += $",PostOnly={PostOnly.Value}";
+
+			return str;
 		}
 	}
 }
