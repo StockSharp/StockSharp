@@ -485,8 +485,10 @@ Str402;Completed;Завершена
 Str403;Buy;Покупка
 Str404;Sell;Продажа
 Str405;Put in queue;Поставить в очередь
-FOK;Fill Or Kill;Немедленно или отклонить
-IOC;Immediate Or Cancel;Снять остаток
+FOK;FOK;FOK
+FillOrKill;Fill Or Kill;Немедленно или отклонить
+IOC;IOC;IOC
+ImmediateOrCancel;Immediate Or Cancel;Снять остаток
 Str408;Work schedule (time, holidays etc.).;Режим работы (время, выходные дни и т.д.).
 Str409;Periods;Периоды
 Str410;Schedule validity periods.;Периоды действия расписания.
@@ -1526,8 +1528,10 @@ Str1535;Put option parameters.;Параметры Put опциона.
 Str1536;EXPIRED;ИСТЕКЛА
 Str1537; days; дней
 Str1538;Error processing request to refresh the table.;Ошибка обработки запроса обновления таблицы.
-GTC;Good til cancelled;До отмены
+GTC;GTC;GTC
+GoodTilCancelled;Good til cancelled;До отмены
 GTD;Good til date;До даты
+GoodTilDate;Good til date;До даты
 Session;Session;Сессия
 Str1541;Unsupported action time.;Неподдерживаемое время действия.
 Str1542Params;For portfolio {0} adapter is already specified.;Для портфеля {0} уже указан адаптер.

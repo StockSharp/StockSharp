@@ -4889,24 +4889,44 @@ namespace StockSharp.Localization
 		public static string Str405 => GetString(Str405Key);
 
 		/// <summary>
-		/// Fill Or Kill
+		/// FOK
 		/// </summary>
 		public const string FOKKey = nameof(FOK);
 
 		/// <summary>
-		/// Fill Or Kill
+		/// FOK
 		/// </summary>
 		public static string FOK => GetString(FOKKey);
 
 		/// <summary>
-		/// Immediate Or Cancel
+		/// Fill Or Kill
+		/// </summary>
+		public const string FillOrKillKey = nameof(FillOrKill);
+
+		/// <summary>
+		/// Fill Or Kill
+		/// </summary>
+		public static string FillOrKill => GetString(FillOrKillKey);
+
+		/// <summary>
+		/// IOC
 		/// </summary>
 		public const string IOCKey = nameof(IOC);
 
 		/// <summary>
-		/// Immediate Or Cancel
+		/// IOC
 		/// </summary>
 		public static string IOC => GetString(IOCKey);
+
+		/// <summary>
+		/// Immediate Or Cancel
+		/// </summary>
+		public const string ImmediateOrCancelKey = nameof(ImmediateOrCancel);
+
+		/// <summary>
+		/// Immediate Or Cancel
+		/// </summary>
+		public static string ImmediateOrCancel => GetString(ImmediateOrCancelKey);
 
 		/// <summary>
 		/// Work schedule (time, holidays etc.).
@@ -15249,24 +15269,44 @@ namespace StockSharp.Localization
 		public static string Str1538 => GetString(Str1538Key);
 
 		/// <summary>
-		/// Good til cancelled
+		/// GTC
 		/// </summary>
 		public const string GTCKey = nameof(GTC);
 
 		/// <summary>
-		/// Good til cancelled
+		/// GTC
 		/// </summary>
 		public static string GTC => GetString(GTCKey);
 
 		/// <summary>
-		/// Good til date
+		/// Good til cancelled
+		/// </summary>
+		public const string GoodTilCancelledKey = nameof(GoodTilCancelled);
+
+		/// <summary>
+		/// Good til cancelled
+		/// </summary>
+		public static string GoodTilCancelled => GetString(GoodTilCancelledKey);
+
+		/// <summary>
+		/// GTD
 		/// </summary>
 		public const string GTDKey = nameof(GTD);
 
 		/// <summary>
-		/// Good til date
+		/// GTD
 		/// </summary>
 		public static string GTD => GetString(GTDKey);
+
+		/// <summary>
+		/// Good til date
+		/// </summary>
+		public const string GoodTilDateKey = nameof(GoodTilDate);
+
+		/// <summary>
+		/// Good til date
+		/// </summary>
+		public static string GoodTilDate => GetString(GoodTilDateKey);
 
 		/// <summary>
 		/// Session
