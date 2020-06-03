@@ -571,6 +571,7 @@ namespace StockSharp.Algo
 					o.Slippage = message.Slippage;
 					o.IsManual = message.IsManual;
 					o.MinVolume = message.MinVolume;
+					o.PositionEffect = message.PositionEffect;
 
 					if (message.Balance != null)
 					{

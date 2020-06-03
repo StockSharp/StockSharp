@@ -587,6 +587,7 @@ namespace StockSharp.Algo
 				IsMarketMaker = oldOrder.IsMarketMaker,
 				IsMargin = oldOrder.IsMargin,
 				MinVolume = oldOrder.MinVolume,
+				PositionEffect = oldOrder.PositionEffect,
 			};
 		}
 

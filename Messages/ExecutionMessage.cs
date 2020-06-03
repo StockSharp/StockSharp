@@ -530,6 +530,12 @@ namespace StockSharp.Messages
 		public decimal? MinVolume { get; set; }
 
 		/// <summary>
+		/// Position effect.
+		/// </summary>
+		[DataMember]
+		public OrderPositionEffects? PositionEffect { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -543,7 +549,12 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},Type={OrderType},State={OrderState},Cond={Condition}";
+			var str = base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},Type={OrderType},State={OrderState},Cond={Condition}";
+
+			if (PositionEffect != null)
+				str += $",PosEffect={PositionEffect.Value}";
+
+			return str;
 		}
 
 		/// <inheritdoc />
@@ -612,6 +623,7 @@ namespace StockSharp.Messages
 			destination.AveragePrice = AveragePrice;
 			destination.Yield = Yield;
 			destination.MinVolume = MinVolume;
+			destination.PositionEffect = PositionEffect;
 		}
 	}
 }

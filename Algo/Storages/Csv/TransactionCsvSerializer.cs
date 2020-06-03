@@ -95,6 +95,8 @@ namespace StockSharp.Algo.Storages.Csv
 				data.CommissionCurrency,
 				data.IsMargin.ToString(),
 				data.IsManual.ToString(),
+				data.MinVolume.To<string>(),
+				data.PositionEffect.To<string>(),
 			};
 			writer.WriteRow(row);
 
@@ -180,6 +182,12 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				msg.IsMargin = reader.ReadNullableBool();
 				msg.IsManual = reader.ReadNullableBool();
+			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				msg.MinVolume = reader.ReadNullableDecimal();
+				msg.PositionEffect = reader.ReadNullableEnum<OrderPositionEffects>();
 			}
 
 			return msg;

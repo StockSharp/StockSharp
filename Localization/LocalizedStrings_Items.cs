@@ -51637,5 +51637,75 @@ namespace StockSharp.Localization
 		/// Do not send new request before received confirmation for previous.
 		/// </summary>
 		public static string EnqueueSubscriptionsDesc => GetString(EnqueueSubscriptionsDescKey);
+
+		/// <summary>
+		/// Position effect
+		/// </summary>
+		public const string PositionEffectKey = nameof(PositionEffect);
+
+		/// <summary>
+		/// Position effect
+		/// </summary>
+		public static string PositionEffect => GetString(PositionEffectKey);
+
+		/// <summary>
+		/// Indicates whether the resulting position after a trade should be an opening position or closing position.
+		/// </summary>
+		public const string PositionEffectDescKey = nameof(PositionEffectDesc);
+
+		/// <summary>
+		/// Indicates whether the resulting position after a trade should be an opening position or closing position.
+		/// </summary>
+		public static string PositionEffectDesc => GetString(PositionEffectDescKey);
+
+		/// <summary>
+		/// Default behaviour.
+		/// </summary>
+		public const string DefaultBehaviourKey = nameof(DefaultBehaviour);
+
+		/// <summary>
+		/// Default behaviour.
+		/// </summary>
+		public static string DefaultBehaviour => GetString(DefaultBehaviourKey);
+
+		/// <summary>
+		/// Open only
+		/// </summary>
+		public const string OpenOnlyKey = nameof(OpenOnly);
+
+		/// <summary>
+		/// Open only
+		/// </summary>
+		public static string OpenOnly => GetString(OpenOnlyKey);
+
+		/// <summary>
+		/// A trade should open a position.
+		/// </summary>
+		public const string PositionEffectOpenOnlyKey = nameof(PositionEffectOpenOnly);
+
+		/// <summary>
+		/// A trade should open a position.
+		/// </summary>
+		public static string PositionEffectOpenOnly => GetString(PositionEffectOpenOnlyKey);
+
+		/// <summary>
+		/// Close only
+		/// </summary>
+		public const string CloseOnlyKey = nameof(CloseOnly);
+
+		/// <summary>
+		/// Close only
+		/// </summary>
+		public static string CloseOnly => GetString(CloseOnlyKey);
+
+		/// <summary>
+		/// A trade should bring the position towards zero, i.e. close as much as possible of any existing position and open an opposite position for any remainder.
+		/// </summary>
+		public const string PositionEffectCloseOnlyKey = nameof(PositionEffectCloseOnly);
+
+		/// <summary>
+		/// A trade should bring the position towards zero, i.e. close as much as possible of any existing position and open an opposite position for any remainder.
+		/// </summary>
+		public static string PositionEffectCloseOnly => GetString(PositionEffectCloseOnlyKey);
 	}
 }

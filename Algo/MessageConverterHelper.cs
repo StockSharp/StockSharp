@@ -367,6 +367,7 @@ namespace StockSharp.Algo
 				Slippage = order.Slippage,
 				IsManual = order.IsManual,
 				MinOrderVolume = order.MinVolume,
+				PositionEffect = order.PositionEffect,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -453,6 +454,9 @@ namespace StockSharp.Algo
 				IsMargin = newOrder.IsMargin,
 
 				Slippage = newOrder.Slippage,
+
+				MinOrderVolume = newOrder.MinVolume,
+				PositionEffect = newOrder.PositionEffect,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -1309,6 +1313,7 @@ namespace StockSharp.Algo
 			order.AveragePrice = message.AveragePrice;
 			order.Yield = message.Yield;
 			order.MinVolume = message.MinVolume;
+			order.PositionEffect = message.PositionEffect;
 
 			if (message.OrderState != null)
 				order.ApplyNewState(message.OrderState.Value);

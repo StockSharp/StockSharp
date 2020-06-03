@@ -599,6 +599,12 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public decimal? MinVolume { get; set; }
 
+		/// <summary>
+		/// Position effect.
+		/// </summary>
+		[DataMember]
+		public OrderPositionEffects? PositionEffect { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -613,6 +619,9 @@ namespace StockSharp.BusinessEntities
 
 			if (MinVolume != null)
 				str += $" MinVolume={MinVolume}";
+
+			if (PositionEffect != null)
+				str += $" PosEffect={PositionEffect.Value}";
 
 			return str;
 		}

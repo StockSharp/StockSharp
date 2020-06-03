@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), LocalizedStrings.Str150, LocalizedStrings.Str151, (i, v) => i.OpenInterest = v));
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.Str342, LocalizedStrings.Str140, (i, v) => i.IsSystem = v));
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsUpTick), LocalizedStrings.Str157, LocalizedStrings.Str158, (i, v) => i.IsUpTick = v));
-						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382Key, (i, v) => i.Currency = v));
+						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));
 
 						break;
 					}
@@ -138,6 +138,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.Str144, (i, v) => i.TimeInForce = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.Str145, (i, v) => i.TradeId = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Str724, LocalizedStrings.Str147, (i, v) => { i.TradePrice = v; i.HasTradeInfo = true; }) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, OrderPositionEffects>(nameof(ExecutionMessage.PositionEffect), LocalizedStrings.PositionEffect, LocalizedStrings.PositionEffectDesc, (i, v) => i.PositionEffect = v) { IsRequired = false });
 
 						break;
 					}

@@ -97,6 +97,12 @@ namespace StockSharp.Messages
 		public string Comment { get; set; }
 
 		/// <summary>
+		/// Position effect.
+		/// </summary>
+		[DataMember]
+		public OrderPositionEffects? PositionEffect { get; set; }
+
+		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
@@ -112,6 +118,7 @@ namespace StockSharp.Messages
 			destination.ClientCode = ClientCode;
 			destination.Condition = Condition?.Clone();
 			destination.Comment = Comment;
+			destination.PositionEffect = PositionEffect;
 		}
 
 		/// <summary>
@@ -136,6 +143,9 @@ namespace StockSharp.Messages
 
 			if (!BrokerCode.IsEmpty())
 				str += $",BrID={BrokerCode}";
+
+			if (PositionEffect != null)
+				str += $",PosEffect={PositionEffect.Value}";
 
 			return str;
 		}

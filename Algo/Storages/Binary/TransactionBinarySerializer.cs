@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Transaction, 200, MarketDataVersions.Version64, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.Transaction, 200, MarketDataVersions.Version65, exchangeInfoProvider)
 		{
 		}
 
@@ -449,6 +449,14 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (msg.IsManual != null)
 					writer.Write(msg.IsManual.Value);
+
+				if (metaInfo.Version < MarketDataVersions.Version65)
+					continue;
+
+				writer.Write(msg.PositionEffect != null);
+
+				if (msg.PositionEffect != null)
+					writer.WriteInt((int)msg.PositionEffect.Value);
 			}
 		}
 
@@ -624,6 +632,12 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (reader.Read())
 				msg.IsManual = reader.Read();
+
+			if (metaInfo.Version < MarketDataVersions.Version65)
+				return msg;
+
+			if (reader.Read())
+				msg.PositionEffect = (OrderPositionEffects)reader.ReadInt();
 
 			return msg;
 		}
