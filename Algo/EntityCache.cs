@@ -182,7 +182,7 @@ namespace StockSharp.Algo
 
 		private class SecurityData
 		{
-			public readonly CachedSynchronizedDictionary<Tuple<long, long>, MyTrade> MyTrades = new CachedSynchronizedDictionary<Tuple<long, long>, MyTrade>();
+			public readonly CachedSynchronizedDictionary<Tuple<long, long, string>, MyTrade> MyTrades = new CachedSynchronizedDictionary<Tuple<long, long, string>, MyTrade>();
 			public readonly CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo>();
 
 			public OrderInfo TryGetOrder(OrderTypes? type, long transactionId, bool isCancel)
@@ -744,7 +744,7 @@ namespace StockSharp.Algo
 			if (transactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(message), transactionId, LocalizedStrings.Str715);
 
-			var myTrade = securityData.MyTrades.TryGetValue(Tuple.Create(transactionId, message.TradeId ?? 0));
+			var myTrade = securityData.MyTrades.TryGetValue(Tuple.Create(transactionId, message.TradeId ?? 0, message.TradeStringId));
 
 			if (myTrade != null)
 				return Tuple.Create(myTrade, false);
@@ -757,13 +757,13 @@ namespace StockSharp.Algo
 					return null;
 			}
 
-			var trade = message.ToTrade(EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId));
-
 			var isNew = false;
 
-			myTrade = securityData.MyTrades.SafeAdd(Tuple.Create(order.TransactionId, trade.Id), key =>
+			myTrade = securityData.MyTrades.SafeAdd(Tuple.Create(order.TransactionId, message.TradeId ?? 0, message.TradeStringId), key =>
 			{
 				isNew = true;
+
+				var trade = message.ToTrade(EntityFactory.CreateTrade(security, key.Item2, key.Item3));
 
 				var t = EntityFactory.CreateMyTrade(order, trade);
 
