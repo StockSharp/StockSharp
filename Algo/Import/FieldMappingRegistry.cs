@@ -138,6 +138,12 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.Str144, (i, v) => i.TimeInForce = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.Str145, (i, v) => i.TradeId = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Str724, LocalizedStrings.Str147, (i, v) => { i.TradePrice = v; i.HasTradeInfo = true; }) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.UserOrderId), LocalizedStrings.Str165, LocalizedStrings.Str166, (i, v) => i.UserOrderId = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMarketMaker), LocalizedStrings.MarketMaker, LocalizedStrings.MarketMakerOrder, (i, v) => i.IsMarketMaker = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMargin), LocalizedStrings.Margin, LocalizedStrings.IsMargin, (i, v) => i.IsMargin = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsManual), LocalizedStrings.Manual, LocalizedStrings.IsOrderManual, (i, v) => i.IsManual = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.MinVolume), LocalizedStrings.MinVolume, LocalizedStrings.MinVolumeDesc, (i, v) => i.MinVolume = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, OrderPositionEffects>(nameof(ExecutionMessage.PositionEffect), LocalizedStrings.PositionEffect, LocalizedStrings.PositionEffectDesc, (i, v) => i.PositionEffect = v) { IsRequired = false });
 
 						break;

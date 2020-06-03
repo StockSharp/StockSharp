@@ -140,14 +140,19 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("latency", item.Latency);
 				writer.WriteAttribute("slippage", item.Slippage);
 				writer.WriteAttribute("error", item.Error?.Message);
-				writer.WriteAttribute("currency", item.Currency);
 				writer.WriteAttribute("openInterest", item.OpenInterest);
 				writer.WriteAttribute("isCancelled", item.IsCancellation);
 				writer.WriteAttribute("isSystem", item.IsSystem);
 				writer.WriteAttribute("isUpTick", item.IsUpTick);
+				writer.WriteAttribute("userOrderId", item.UserOrderId);
+				writer.WriteAttribute("currency", item.Currency);
 				writer.WriteAttribute("isMargin", item.IsMargin);
 				writer.WriteAttribute("isMarketMaker", item.IsMarketMaker);
 				writer.WriteAttribute("isManual", item.IsManual);
+				writer.WriteAttribute("averagePrice", item.AveragePrice);
+				writer.WriteAttribute("yield", item.Yield);
+				writer.WriteAttribute("minVolume", item.MinVolume);
+				writer.WriteAttribute("positionEffect", item.PositionEffect);
 
 				writer.WriteEndElement();
 			});
