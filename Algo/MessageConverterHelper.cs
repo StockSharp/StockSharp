@@ -1919,7 +1919,7 @@ namespace StockSharp.Algo
 			return str;
 		}
 
-		private static readonly SynchronizedDictionary<Type, MessageTypes> _messageTypes = new SynchronizedDictionary<Type, MessageTypes>();
+		private static readonly SynchronizedDictionary<DataType, MessageTypes> _messageTypes = new SynchronizedDictionary<DataType, MessageTypes>();
 
 		/// <summary>
 		/// Convert <see cref="DataType"/> to <see cref="MessageTypes"/> value.
@@ -1941,8 +1941,16 @@ namespace StockSharp.Algo
 				return MessageTypes.News;
 			else if (type == DataType.Board)
 				return MessageTypes.BoardState;
+			else if (type == DataType.Securities)
+				return MessageTypes.Security;
+			else if (type == DataType.SecurityLegs)
+				return MessageTypes.SecurityLegsInfo;
+			else if (type == DataType.SecurityRoute)
+				return MessageTypes.SecurityRoute;
+			else if (type == DataType.TimeFrames)
+				return MessageTypes.TimeFrameInfo;
 			else if (type.IsCandles)
-				return _messageTypes.SafeAdd(type.MessageType, key => key.CreateInstance<Message>().Type);
+				return _messageTypes.SafeAdd(type.Clone(), key => key.MessageType.CreateInstance<Message>().Type);
 			else 
 				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 		}
