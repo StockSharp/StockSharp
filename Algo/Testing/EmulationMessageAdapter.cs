@@ -182,11 +182,6 @@ namespace StockSharp.Algo.Testing
 				}
 
 				case MessageTypes.Level1Change:
-				{
-					SendToEmulator(message);
-					return true;
-				}
-
 				case ExtendedMessageTypes.CommissionRule:
 				{
 					SendToEmulator(message);

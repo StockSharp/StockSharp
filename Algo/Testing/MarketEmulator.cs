@@ -2279,6 +2279,7 @@ namespace StockSharp.Algo.Testing
 			MessageTypes.Board.ToInfo(),
 			MessageTypes.Reset.ToInfo(),
 			MessageTypes.QuoteChange.ToInfo(),
+			MessageTypes.Level1Change.ToInfo(),
 			ExtendedMessageTypes.Last.ToInfo(),
 			ExtendedMessageTypes.Generator.ToInfo(),
 			ExtendedMessageTypes.CommissionRule.ToInfo(),
