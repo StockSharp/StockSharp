@@ -10,6 +10,7 @@ namespace StockSharp.Algo
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	partial class Connector
 	{
@@ -63,6 +64,8 @@ namespace StockSharp.Algo
 
 			if (subscription != null)
 				UnSubscribe(subscription);
+			else
+				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, message);
 		}
 
 		private Subscription SubscribeMarketData(Security security, DataType type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, IMessageAdapter adapter = null)
@@ -381,6 +384,8 @@ namespace StockSharp.Algo
 
 			if (security != null)
 				UnSubscribe(security);
+			else
+				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, originalTransactionId);
 		}
 
 		/// <inheritdoc />
@@ -456,10 +461,10 @@ namespace StockSharp.Algo
 		{
 			var subscription = _subscriptionManager.TryFindSubscription(series);
 
-			if (subscription == null)
-				return;
-
-			UnSubscribe(subscription);
+			if (subscription != null)
+				UnSubscribe(subscription);
+			else
+				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, series);
 		}
 
 		/// <inheritdoc />
@@ -489,22 +494,18 @@ namespace StockSharp.Algo
 
 			if (security != null)
 				UnSubscribe(security);
+			else
+				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, originalTransactionId);
 		}
 
 		/// <inheritdoc />
 		public IEnumerable<Subscription> Subscriptions => _subscriptionManager.Subscriptions;
 
 		/// <inheritdoc />
-		public void Subscribe(Subscription subscription)
-		{
-			_subscriptionManager.Subscribe(subscription);
-		}
+		public void Subscribe(Subscription subscription) => _subscriptionManager.Subscribe(subscription);
 
 		/// <inheritdoc />
-		public void UnSubscribe(Subscription subscription)
-		{
-			_subscriptionManager.UnSubscribe(subscription);
-		}
+		public void UnSubscribe(Subscription subscription) => _subscriptionManager.UnSubscribe(subscription);
 
 		/// <summary>
 		/// Try get subscription by id.
@@ -512,8 +513,6 @@ namespace StockSharp.Algo
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>Subscription.</returns>
 		public Subscription TryGetSubscriptionById(long subscriptionId)
-		{
-			return _subscriptionManager.TryGetSubscription(subscriptionId, false);
-		}
+			=> _subscriptionManager.TryGetSubscription(subscriptionId, false);
 	}
 }
