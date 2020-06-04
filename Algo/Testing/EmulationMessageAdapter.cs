@@ -187,6 +187,12 @@ namespace StockSharp.Algo.Testing
 					return true;
 				}
 
+				case ExtendedMessageTypes.CommissionRule:
+				{
+					SendToEmulator(message);
+					return true;
+				}
+
 				default:
 				{
 					if (OwnInnerAdapter)
