@@ -831,7 +831,7 @@ namespace StockSharp.Algo
 							void TrySend(MessageTypes type, DataType dataType)
 							{
 								if (Adapter.IsMessageSupported(type) && !_subscriptionManager.Subscriptions.Any(s => s.SubscriptionMessage.DataType == dataType && s.SubscriptionMessage.To == null))
-									_subscriptionManager.Subscribe(new Subscription(dataType, null));
+									_subscriptionManager.Subscribe(new Subscription(dataType, (SecurityMessage)null));
 							}
 
 							TrySend(MessageTypes.SecurityLookup, DataType.Securities);

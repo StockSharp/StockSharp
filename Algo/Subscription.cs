@@ -60,9 +60,9 @@ namespace StockSharp.Algo
 	public class Subscription
 	{
 		/// <summary>
-		/// Security.
+		/// Security ID.
 		/// </summary>
-		public Security Security { get; }
+		public SecurityId? SecurityId => (SubscriptionMessage as ISecurityIdMessage)?.SecurityId;
 
 		/// <summary>
 		/// Data type info.
@@ -103,6 +103,16 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
 		/// <param name="security">Security.</param>
+		public Subscription(DataType dataType, SecurityMessage security)
+			: this(dataType.ToSubscriptionMessage(), security)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Subscription"/>.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <param name="security">Security.</param>
 		public Subscription(DataType dataType, Security security)
 			: this(dataType.ToSubscriptionMessage(), security)
 		{
@@ -123,7 +133,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">Portfolio, describing the trading account and the size of its generated commission.</param>
 		public Subscription(Portfolio portfolio)
-			: this(portfolio.ToMessage())
+			: this(portfolio.ToMessage(), (SecurityMessage)null)
 		{
 			Portfolio = portfolio;
 		}
@@ -134,25 +144,33 @@ namespace StockSharp.Algo
 		/// <param name="subscriptionMessage">Subscription message.</param>
 		/// <param name="security">Security.</param>
 		public Subscription(ISubscriptionMessage subscriptionMessage, Security security = null)
+			: this(subscriptionMessage, security?.ToMessage(copyExtendedId: true))
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Subscription"/>.
+		/// </summary>
+		/// <param name="subscriptionMessage">Subscription message.</param>
+		/// <param name="security">Security.</param>
+		public Subscription(ISubscriptionMessage subscriptionMessage, SecurityMessage security = null)
 		{
 			SubscriptionMessage = subscriptionMessage ?? throw new ArgumentNullException(nameof(subscriptionMessage));
 			SubscriptionMessage.IsSubscribe = true;
 
-			Security = security;
-
-			if (Security == null)
+			if (security == null)
 				return;
 
 			switch (subscriptionMessage)
 			{
 				case MarketDataMessage mdMsg:
-					mdMsg.FillSecurityInfo(Security);
+					security.CopyTo(mdMsg, false);
 					break;
 				case ISecurityIdMessage secIdMsg:
-					secIdMsg.SecurityId = security.ToSecurityId();
+					secIdMsg.SecurityId = security.SecurityId;
 					break;
 				case INullableSecurityIdMessage nullSecIdMsg:
-					nullSecIdMsg.SecurityId = security.ToSecurityId();
+					nullSecIdMsg.SecurityId = security.SecurityId;
 					break;
 			}
 		}

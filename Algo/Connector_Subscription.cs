@@ -253,13 +253,13 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void LookupSecurities(SecurityLookupMessage criteria)
 		{
-			Subscribe(new Subscription(criteria));
+			Subscribe(new Subscription(criteria, (SecurityMessage)null));
 		}
 
 		/// <inheritdoc />
 		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
 		{
-			Subscribe(new Subscription(criteria));
+			Subscribe(new Subscription(criteria, (SecurityMessage)null));
 		}
 
 		/// <inheritdoc />
@@ -323,7 +323,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void LookupBoards(BoardLookupMessage criteria)
 		{
-			Subscribe(new Subscription(criteria));
+			Subscribe(new Subscription(criteria, (SecurityMessage)null));
 		}
 
 		/// <inheritdoc />
@@ -371,7 +371,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void SubscribeOrders(OrderStatusMessage criteria)
 		{
-			Subscribe(new Subscription(criteria));
+			Subscribe(new Subscription(criteria, (SecurityMessage)null));
 		}
 
 		/// <inheritdoc />
@@ -479,7 +479,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void SubscribePositions(PortfolioLookupMessage criteria)
 		{
-			Subscribe(new Subscription(criteria));
+			Subscribe(new Subscription(criteria, (SecurityMessage)null));
 		}
 
 		/// <inheritdoc />

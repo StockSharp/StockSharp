@@ -634,6 +634,9 @@ namespace StockSharp.Algo
 			LookupPortfoliosResult2?.Invoke(message, portfolios, newPortfolios, error);
 		}
 
+		private Security TryGetSecurity(SecurityId? securityId)
+			=> securityId == null ? null : GetSecurity(securityId.Value);
+
 		private void RaiseMarketDataSubscriptionSucceeded(MarketDataMessage message, Subscription subscription)
 		{
 			if (message == null)
@@ -642,16 +645,16 @@ namespace StockSharp.Algo
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var security = subscription.Security;
+			var securityId = subscription.SecurityId;
 
-			var msg = LocalizedStrings.SubscribedOk.Put(security?.Id, message.DataType2);
+			var msg = LocalizedStrings.SubscribedOk.Put(securityId, message.DataType2);
 
 			if (message.From != null && message.To != null)
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
 
 			this.AddDebugLog(msg + ".");
 
-			MarketDataSubscriptionSucceeded?.Invoke(security, message);
+			MarketDataSubscriptionSucceeded?.Invoke(TryGetSecurity(securityId), message);
 
 			RaiseSubscriptionStarted(subscription);
 		}
@@ -667,13 +670,15 @@ namespace StockSharp.Algo
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var security = subscription.Security;
+			var securityId = subscription.SecurityId;
 			var error = reply.Error ?? new NotSupportedException(LocalizedStrings.SubscriptionNotSupported.Put(origin));
 
 			if (reply.IsNotSupported())
 				this.AddWarningLog(LocalizedStrings.SubscriptionNotSupported, origin);
 			else
-				this.AddErrorLog(LocalizedStrings.SubscribedError, security?.Id, origin.DataType2, error.Message);
+				this.AddErrorLog(LocalizedStrings.SubscribedError, securityId, origin.DataType2, error.Message);
+
+			var security = TryGetSecurity(securityId);
 
 			MarketDataSubscriptionFailed?.Invoke(security, origin, error);
 			MarketDataSubscriptionFailed2?.Invoke(security, origin, reply);
@@ -692,15 +697,15 @@ namespace StockSharp.Algo
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var security = subscription.Security;
+			var securityId = subscription.SecurityId;
 
-			var msg = LocalizedStrings.UnSubscribedOk.Put(security?.Id,	message.DataType2);
+			var msg = LocalizedStrings.UnSubscribedOk.Put(securityId,	message.DataType2);
 
 			if (message.From != null && message.To != null)
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
 
 			this.AddDebugLog(msg + ".");
-			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
+			MarketDataUnSubscriptionSucceeded?.Invoke(TryGetSecurity(securityId), message);
 
 			RaiseSubscriptionStopped(subscription, null);
 
@@ -719,10 +724,12 @@ namespace StockSharp.Algo
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var security = subscription.Security;
+			var securityId = subscription.SecurityId;
 			var error = reply.Error ?? new NotSupportedException();
 
-			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security?.Id, origin.DataType2, error.Message);
+			this.AddErrorLog(LocalizedStrings.UnSubscribedError, securityId, origin.DataType2, error.Message);
+
+			var security = TryGetSecurity(securityId);
 			MarketDataUnSubscriptionFailed?.Invoke(security, origin, error);
 			MarketDataUnSubscriptionFailed2?.Invoke(security, origin, reply);
 
@@ -737,10 +744,10 @@ namespace StockSharp.Algo
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var security = subscription.Security;
+			var securityId = subscription.SecurityId;
 
-			this.AddDebugLog(LocalizedStrings.SubscriptionFinished, security?.Id, message);
-			MarketDataSubscriptionFinished?.Invoke(security, message);
+			this.AddDebugLog(LocalizedStrings.SubscriptionFinished, securityId, message);
+			MarketDataSubscriptionFinished?.Invoke(TryGetSecurity(securityId), message);
 
 			RaiseSubscriptionStopped(subscription, null);
 
@@ -759,10 +766,10 @@ namespace StockSharp.Algo
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var security = subscription.Security;
+			var securityId = subscription.SecurityId;
 
-			this.AddErrorLog(LocalizedStrings.SubscriptionUnexpectedCancelled, security?.Id, message.DataType2, error.Message);
-			MarketDataUnexpectedCancelled?.Invoke(security, message, error);
+			this.AddErrorLog(LocalizedStrings.SubscriptionUnexpectedCancelled, securityId, message.DataType2, error.Message);
+			MarketDataUnexpectedCancelled?.Invoke(TryGetSecurity(securityId), message, error);
 
 			RaiseSubscriptionStopped(subscription, error);
 
@@ -810,12 +817,12 @@ namespace StockSharp.Algo
 			if (subscription == null)
 				throw new ArgumentNullException(nameof(subscription));
 
-			var security = subscription.Security;
+			var securityId = subscription.SecurityId;
 			
-			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, security?.Id, subscription.SubscriptionMessage);
+			this.AddDebugLog(LocalizedStrings.SubscriptionOnline, securityId, subscription.SubscriptionMessage);
 
 			if (subscription.SubscriptionMessage is MarketDataMessage mdMsg)
-				MarketDataSubscriptionOnline?.Invoke(security, mdMsg);
+				MarketDataSubscriptionOnline?.Invoke(TryGetSecurity(securityId), mdMsg);
 
 			RaiseSubscriptionOnline(subscription);
 		}

@@ -115,8 +115,9 @@ namespace StockSharp.Algo
 			public IEnumerable<Security> GetSubscribers(DataType dataType)
 			{
 				return Subscriptions
-				       .Where(s => s.DataType == dataType && s.Security != null)
-				       .Select(s => s.Security);
+				       .Where(s => s.DataType == dataType)
+				       .Select(s => _connector.TryGetSecurity(s.SecurityId))
+					   .Where(s => s != null);
 			}
 
 			public IEnumerable<Portfolio> SubscribedPortfolios => Subscriptions.Select(s => s.Portfolio).Where(p => p != null);
@@ -194,9 +195,11 @@ namespace StockSharp.Algo
 
 			public Subscription TryFindSubscription(long id, DataType dataType, Security security = null)
 			{
+				var secId = security?.ToSecurityId();
+
 				var subscription = id > 0
 					? TryGetSubscription(id, false)
-					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.Security == security);
+					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.SecurityId == secId);
 
 				if (subscription == null && id == 0)
 					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, Tuple.Create(dataType, security));
@@ -380,7 +383,7 @@ namespace StockSharp.Algo
 				lock (_syncObject)
 					_requests.Add(request.TransactionId, Tuple.Create(request, subscription));
 
-				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.Security?.Id, request);
+				_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
 				_connector.SendInMessage((Message)request);
 			}
 
@@ -556,7 +559,7 @@ namespace StockSharp.Algo
 					BackMode = allMsg.BackMode,
 				};
 				allMsg.CopyTo(mdMsg);
-				Subscribe(new Subscription(mdMsg), true);
+				Subscribe(new Subscription(mdMsg, (SecurityMessage)null), true);
 			}
 		}
 	}

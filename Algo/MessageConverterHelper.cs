@@ -496,15 +496,16 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
+		/// <param name="copyExtendedId">Copy <see cref="Security.ExternalId"/> and <see cref="Security.Type"/>.</param>
 		/// <returns>Message.</returns>
-		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null, long originalTransactionId = 0)
+		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null, long originalTransactionId = 0, bool copyExtendedId = false)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
 			return security.FillMessage(new SecurityMessage
 			{
-				SecurityId = securityId ?? security.ToSecurityId(),
+				SecurityId = securityId ?? security.ToSecurityId(copyExtended: copyExtendedId),
 				OriginalTransactionId = originalTransactionId,
 			});
 		}
@@ -1633,51 +1634,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To fill the message with information about instrument.
-		/// </summary>
-		/// <param name="message">The message for market data subscription.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>The message for market data subscription.</returns>
-		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Security security)
-		{
-			return message.FillSecurityInfo(security.ToSecurityId(copyExtended: true), security);
-		}
-
-		/// <summary>
-		/// To fill the message with information about instrument.
-		/// </summary>
-		/// <param name="message">The message for market data subscription.</param>
-		/// <param name="connector">Connection to the trading system.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>The message for market data subscription.</returns>
-		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, IConnector connector, Security security)
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			return message.FillSecurityInfo(connector.GetSecurityId(security), security);
-		}
-
-		/// <summary>
-		/// To fill the message with information about instrument.
-		/// </summary>
-		/// <param name="message">The message for market data subscription.</param>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>The message for market data subscription.</returns>
-		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, SecurityId securityId, Security security)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			security.ToMessage(securityId).CopyTo(message, false);
-			return message;
-		}
-
-		/// <summary>
 		/// Cast <see cref="Level1ChangeMessage"/> to the <see cref="MarketDepth"/>.
 		/// </summary>
 		/// <param name="message">Message.</param>
@@ -1842,7 +1798,8 @@ namespace StockSharp.Algo
 				mdMsg.DataType2 = DataType.Create(msgType, series.Arg);
 			}
 
-			mdMsg.ValidateBounds().FillSecurityInfo(series.Security);
+			mdMsg.ValidateBounds();
+			series.Security.ToMessage(copyExtendedId: true).CopyTo(mdMsg, false);
 
 			return mdMsg;
 		}
