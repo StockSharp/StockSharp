@@ -535,7 +535,7 @@ namespace StockSharp.Algo.Testing
 
 			SendSubscriptionReply(transId, error);
 
-			if (error == null)
+			if (isSubscribe && error == null)
 				SendSubscriptionOnline(transId);
 		}
 
