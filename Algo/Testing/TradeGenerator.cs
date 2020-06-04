@@ -69,6 +69,14 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
+		/// <inheritdoc />
+		public override void Init()
+		{
+			base.Init();
+
+			_lastTradePrice = default;
+		}
+
 		/// <summary>
 		/// To generate the value for <see cref="ExecutionMessage.OriginSide"/>. By default is disabled.
 		/// </summary>
@@ -157,20 +165,15 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
-			return new RandomWalkTradeGenerator(SecurityId)
+			var clone = new RandomWalkTradeGenerator(SecurityId)
 			{
-				_lastTradePrice = _lastTradePrice,
-
-				MaxVolume = MaxVolume,
-				MinVolume = MinVolume,
-				MaxPriceStepCount = MaxPriceStepCount,
-				Interval = Interval,
-				Volumes = Volumes,
-				Steps = Steps,
-
 				GenerateOriginSide = GenerateOriginSide,
 				IdGenerator = IdGenerator
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 	}
 }

@@ -78,8 +78,10 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public override void Init()
 		{
-			TradeGenerator.Init();
 			base.Init();
+		
+			_lastOrderPrice = default;
+			TradeGenerator.Init();
 		}
 
 		/// <inheritdoc />
@@ -236,11 +238,15 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
-			return new OrderLogGenerator(SecurityId, TradeGenerator.TypedClone())
+			var clone = new OrderLogGenerator(SecurityId, TradeGenerator.TypedClone())
 			{
 				_lastOrderPrice = _lastOrderPrice,
 				IdGenerator = IdGenerator
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 	}
 }

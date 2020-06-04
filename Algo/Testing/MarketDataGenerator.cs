@@ -214,5 +214,19 @@ namespace StockSharp.Algo.Testing
 			}
 			protected set => _steps = value ?? throw new ArgumentNullException(nameof(value));
 		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected void CopyTo(MarketDataGenerator destination)
+		{
+			destination.Interval = Interval;
+			destination.MinVolume = MinVolume;
+			destination.MaxVolume = MaxVolume;
+			destination.MaxPriceStepCount = MaxPriceStepCount;
+			destination._volumes = _volumes;
+			destination._steps = _steps;
+		}
 	}
 }

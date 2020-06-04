@@ -181,6 +181,22 @@ namespace StockSharp.Algo.Testing
 
 			return new QuoteChange(price, Volumes.Next(), ordersCount);
 		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected void CopyTo(MarketDepthGenerator destination)
+		{
+			base.CopyTo(destination);
+
+			destination.UseTradeVolume = UseTradeVolume;
+			destination.MinSpreadStepCount = MinSpreadStepCount;
+			destination.MaxSpreadStepCount = MaxSpreadStepCount;
+			destination.MaxBidsDepth = MaxBidsDepth;
+			destination.MaxAsksDepth = MaxAsksDepth;
+			destination.MaxGenerations = MaxGenerations;
+		}
 	}
 
 	/// <summary>
@@ -447,22 +463,9 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
-			return new TrendMarketDepthGenerator(SecurityId)
-			{
-				MaxVolume = MaxVolume,
-				MinVolume = MinVolume,
-				MaxPriceStepCount = MaxPriceStepCount,
-				Interval = Interval,
-				Volumes = Volumes,
-				Steps = Steps,
-
-				UseTradeVolume = UseTradeVolume,
-				MinSpreadStepCount = MinSpreadStepCount,
-				MaxSpreadStepCount = MaxSpreadStepCount,
-				MaxBidsDepth = MaxBidsDepth,
-				MaxAsksDepth = MaxAsksDepth,
-				MaxGenerations = MaxGenerations,
-			};
+			var clone = new TrendMarketDepthGenerator(SecurityId);
+			CopyTo(clone);
+			return clone;
 		}
 	}
 }
