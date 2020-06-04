@@ -122,9 +122,6 @@ namespace StockSharp.Algo.Testing
 			private readonly ExecutionLogConverter _execLogConverter;
 			private int _volumeDecimals;
 			private readonly SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>> _candleInfo = new SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>>();
-			private TradeGenerator _tradeGenerator;
-			private MarketDepthGenerator _depthGenerator;
-			private OrderLogGenerator _olGenerator;
 			private LogLevels? _logLevel;
 			private DateTime _lastStripDate;
 
@@ -386,46 +383,6 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Board:
 					{
 						//_execLogConverter.UpdateBoardDefinition((BoardMessage)message);
-						break;
-					}
-
-					case ExtendedMessageTypes.Generator:
-					{
-						var generatorMsg = (GeneratorMessage)message;
-
-						if (generatorMsg.IsSubscribe)
-						{
-							var generator = generatorMsg.Generator;
-							var dataType = generatorMsg.DataType2;
-							
-							if (dataType == DataType.MarketDepth)
-								_depthGenerator = (MarketDepthGenerator)generator;
-							else if (dataType == DataType.Ticks)
-								_tradeGenerator = (TradeGenerator)generator;
-							else if (dataType == DataType.OrderLog)
-								_olGenerator = (OrderLogGenerator)generator;
-							else
-								throw new ArgumentOutOfRangeException();
-
-							generator.Init();
-
-							if (_securityDefinition != null)
-							{
-								var board = _parent._boardDefinitions.TryGetValue(_securityDefinition.SecurityId.BoardCode);
-
-								if (board == null)
-								{
-									this.AddWarningLog(LocalizedStrings.Str1149);
-									break;
-								}
-
-								ProcessGenerator(generator, _securityDefinition, result);
-								ProcessGenerator(generator, board, result);
-							}
-							else
-								this.AddWarningLog(LocalizedStrings.Str1150);
-						}
-
 						break;
 					}
 
@@ -1042,25 +999,6 @@ namespace StockSharp.Algo.Testing
 				ProcessExpirableOrders(message, result);
 				ProcessPendingExecutions(message, result);
 				ProcessCandleTrades(message, result);
-				ProcessGenerators(message, result);
-			}
-
-			private void ProcessGenerators(Message message, ICollection<Message> result)
-			{
-				ProcessGenerator(_tradeGenerator, message, result);
-				ProcessGenerator(_olGenerator, message, result);
-				ProcessGenerator(_depthGenerator, message, result);
-			}
-
-			private void ProcessGenerator(MarketDataGenerator generator, Message message, ICollection<Message> result)
-			{
-				var msg = generator?.Process(message);
-
-				if (msg == null)
-					return;
-
-				result.Add(msg);
-				Process(msg, result);
 			}
 
 			private void ProcessCandleTrades(Message message, ICollection<Message> result)
@@ -1986,13 +1924,6 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case ExtendedMessageTypes.Generator:
-				{
-					var generatorMsg = (GeneratorMessage)message;
-					GetEmulator(generatorMsg.SecurityId).Process(generatorMsg, retVal);
-					break;
-				}
-
 				case ExtendedMessageTypes.CommissionRule:
 				{
 					var ruleMsg = (CommissionRuleMessage)message;
@@ -2281,7 +2212,6 @@ namespace StockSharp.Algo.Testing
 			MessageTypes.QuoteChange.ToInfo(),
 			MessageTypes.Level1Change.ToInfo(),
 			ExtendedMessageTypes.Last.ToInfo(),
-			ExtendedMessageTypes.Generator.ToInfo(),
 			ExtendedMessageTypes.CommissionRule.ToInfo(),
 			//ExtendedMessageTypes.Clearing.ToInfo(),
 		};
