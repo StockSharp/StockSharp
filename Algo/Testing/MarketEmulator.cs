@@ -76,20 +76,11 @@ namespace StockSharp.Algo.Testing
 				_quotesByTrId.Remove(quote.TransactionId);
 		}
 
-		public void Remove(ExecutionMessage quote)
-		{
-			RemoveAt(_quotes.IndexOf(quote), quote);
-		}
+		public void Remove(ExecutionMessage quote) => RemoveAt(_quotes.IndexOf(quote), quote);
 
-		public IEnumerator<ExecutionMessage> GetEnumerator()
-		{
-			return _quotes.GetEnumerator();
-		}
+		public IEnumerator<ExecutionMessage> GetEnumerator() => _quotes.GetEnumerator();
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 
 	/// <summary>
@@ -114,10 +105,7 @@ namespace StockSharp.Algo.Testing
 					return _messageQueue.Dequeue();
 			}
 
-			public void Free(TMessage message)
-			{
-				_messageQueue.Enqueue(message);
-			}
+			public void Free(TMessage message) => _messageQueue.Enqueue(message);
 		}
 
 		private sealed class SecurityMarketEmulator : BaseLogReceiver//, IMarketEmulator
@@ -202,6 +190,7 @@ namespace StockSharp.Algo.Testing
 									execMsg.SecurityId,
 									execMsg.LocalTime,
 									execMsg.ServerTime));
+
 								break;
 							}
 							case ExecutionTypes.Transaction:
