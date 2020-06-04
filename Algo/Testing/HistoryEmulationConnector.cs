@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Testing
 {
 	using System;
+	using System.Linq;
 	using System.Collections.Generic;
 
 	using Ecng.Common;
@@ -417,10 +418,21 @@ namespace StockSharp.Algo.Testing
 		/// <param name="security">Instrument. If passed <see langword="null"/> the source will be applied for all subscriptions.</param>
 		/// <param name="dataType">Data type.</param>
 		/// <param name="getMessages">Historical data source.</param>
+		/// <returns>Subscription.</returns>
 		[Obsolete("Uses custom adapter implementation.")]
-		public void RegisterHistorySource(Security security, DataType dataType, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
+		public Subscription RegisterHistorySource(Security security, DataType dataType, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
 		{
-			SendInHistorySourceMessage(security, dataType, getMessages);
+			var subscription = new Subscription(new HistorySourceMessage
+			{
+				IsSubscribe = true,
+				SecurityId = security?.ToSecurityId(copyExtended: true) ?? default,
+				DataType2 = dataType,
+				GetMessages = getMessages
+			}, security);
+
+			Subscribe(subscription);
+
+			return subscription;
 		}
 
 		/// <summary>
@@ -428,21 +440,17 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <param name="security">Instrument. If passed <see langword="null"/> the source will be removed for all subscriptions.</param>
 		/// <param name="dataType">Data type.</param>
-		[Obsolete]
+		[Obsolete("Uses UnSubscribe method.")]
 		public void UnRegisterHistorySource(Security security, DataType dataType)
 		{
-			SendInHistorySourceMessage(security, dataType, null);
-		}
-
-		private void SendInHistorySourceMessage(Security security, DataType dataType, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
-		{
-			SendInMessage(new HistorySourceMessage
-			{
-				IsSubscribe = getMessages != null,
-				SecurityId = security?.ToSecurityId(copyExtended: true) ?? default,
-				DataType2 = dataType,
-				GetMessages = getMessages
-			});
+			var secId = security?.ToSecurityId();
+			
+			var subscription = Subscriptions.FirstOrDefault(s => s.SubscriptionMessage is HistorySourceMessage sourceMsg && sourceMsg.SecurityId == secId && sourceMsg.DataType2 == dataType);
+			
+			if (subscription != null)
+				UnSubscribe(subscription);
+			else
+				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, dataType);
 		}
 	}
 }
