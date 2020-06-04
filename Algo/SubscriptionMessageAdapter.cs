@@ -189,7 +189,9 @@ namespace StockSharp.Algo
 					{
 						lock (_sync)
 						{
-							if (subscrMsg.GetSubscriptionIds().Length == 0)
+							var ids = subscrMsg.GetSubscriptionIds();
+
+							if (ids.Length == 0)
 							{
 								if (subscrMsg.OriginalTransactionId != 0 && _historicalRequests.ContainsKey(subscrMsg.OriginalTransactionId))
 									subscrMsg.SetSubscriptionIds(subscriptionId: subscrMsg.OriginalTransactionId);
@@ -199,7 +201,7 @@ namespace StockSharp.Algo
 								lock (_sync)
 								{
 									if (_replaceId.Count > 0)
-										subscrMsg.SetSubscriptionIds(subscrMsg.GetSubscriptionIds().Select(id => _replaceId.TryGetValue2(id) ?? id).ToArray());
+										subscrMsg.SetSubscriptionIds(ids.Select(id => _replaceId.TryGetValue2(id) ?? id).ToArray());
 								}
 							}
 						}
