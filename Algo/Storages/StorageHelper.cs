@@ -522,6 +522,8 @@ namespace StockSharp.Algo.Storages
 					DataType2 = DataType.TimeFrame(timeFrame),
 					IsSubscribe = true,
 				}, provider.Get(typeof(TimeFrameCandleMessage))));
+
+				_dataType = DataType.Create(typeof(TimeFrameCandleMessage), _original.DataType.Arg);
 			}
 
 			private IEnumerable<TimeSpan> GetSmallerTimeFrames()
@@ -541,10 +543,10 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<DateTime> IMarketDataStorage.Dates => GetStorages().SelectMany(s => s.Dates).OrderBy().Distinct();
 
-			Type IMarketDataStorage.DataType => typeof(TimeFrameCandleMessage);
-			SecurityId IMarketDataStorage.SecurityId => _original.SecurityId;
+			private readonly DataType _dataType;
+			DataType IMarketDataStorage.DataType => _dataType;
 
-			object IMarketDataStorage.Arg => _original.Arg;
+			SecurityId IMarketDataStorage.SecurityId => _original.SecurityId;
 
 			IMarketDataStorageDrive IMarketDataStorage.Drive => _original.Drive;
 
@@ -581,7 +583,7 @@ namespace StockSharp.Algo.Storages
 						return data;
 					else
 					{
-						var compressor = _compressors.TryGetValue((TimeSpan)s.Arg);
+						var compressor = _compressors.TryGetValue((TimeSpan)s.DataType.Arg);
 
 						if (compressor == null)
 							return Enumerable.Empty<CandleMessage>();
@@ -723,11 +725,9 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<DateTime> IMarketDataStorage.Dates => _messageStorage.Dates;
 
-			Type IMarketDataStorage.DataType => _messageStorage.DataType;
+			DataType IMarketDataStorage.DataType => _messageStorage.DataType;
 
 			SecurityId IMarketDataStorage.SecurityId => _messageStorage.SecurityId;
-
-			object IMarketDataStorage.Arg => _messageStorage.Arg;
 
 			IMarketDataStorageDrive IMarketDataStorage.Drive => _messageStorage.Drive;
 

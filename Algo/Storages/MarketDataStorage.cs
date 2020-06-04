@@ -41,23 +41,22 @@ namespace StockSharp.Algo.Storages
 
 			AppendOnlyNew = true;
 
+			_dataType = DataType.Create(typeof(TMessage), arg);
+
 			_getTime = getTime ?? throw new ArgumentNullException(nameof(getTime));
 			_getSecurityId = getSecurityId ?? throw new ArgumentNullException(nameof(getSecurityId));
 			_getId = getId ?? throw new ArgumentNullException(nameof(getId));
 			Drive = drive ?? throw new ArgumentNullException(nameof(drive));
 			Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-			_arg = arg;
 			_isValid = isValid ?? throw new ArgumentNullException(nameof(isValid));
 		}
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates => Drive.Dates;
 
-		Type IMarketDataStorage.DataType => typeof(TMessage);
+		private readonly DataType _dataType;
+		DataType IMarketDataStorage.DataType => _dataType;
 
 		public SecurityId SecurityId { get; }
-
-		private readonly object _arg;
-		object IMarketDataStorage.Arg => _arg;
 
 		public bool AppendOnlyNew { get; set; }
 

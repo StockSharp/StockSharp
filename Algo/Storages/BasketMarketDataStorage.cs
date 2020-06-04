@@ -225,20 +225,7 @@ namespace StockSharp.Algo.Storages
 					if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
 						continue;
 
-					if (s.DataType == typeof(ExecutionMessage))
-						dataTypes.Add(MessageTypes.Execution);
-
-					if (s.DataType == typeof(QuoteChangeMessage))
-						dataTypes.Add(MessageTypes.QuoteChange);
-
-					if (s.DataType == typeof(Level1ChangeMessage))
-						dataTypes.Add(MessageTypes.Level1Change);
-
-					if (s.DataType == typeof(TimeMessage))
-						dataTypes.Add(MessageTypes.Time);
-
-					if (s.DataType.IsCandleMessage())
-						dataTypes.Add(s.DataType.ToMessageType());
+					dataTypes.Add(s.DataType.ToMessageType2());
 				}
 
 				DataTypes = dataTypes.ToArray();
@@ -345,13 +332,10 @@ namespace StockSharp.Algo.Storages
 			=> _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct();
 
 		/// <inheritdoc />
-		public virtual Type DataType => throw new NotSupportedException();
+		public virtual DataType DataType => throw new NotSupportedException();
 
 		/// <inheritdoc />
 		public virtual SecurityId SecurityId => throw new NotSupportedException();
-
-		/// <inheritdoc />
-		public virtual object Arg => throw new NotSupportedException();
 
 		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
 
