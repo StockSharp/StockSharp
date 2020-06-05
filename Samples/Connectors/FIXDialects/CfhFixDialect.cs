@@ -18,7 +18,7 @@ namespace StockSharp.Fix.Dialects
 	[Icon("Dialects/CFH_logo.png")]
 	[DisplayNameLoc(LocalizedStrings.CFHKey)]
 #if !IGNORE_LICENSE
-	[LicenseFeature("CFH")]
+	[Licensing.LicenseFeature("CFH")]
 #endif
 	public class CfhFixDialect : BaseFixDialect
 	{
