@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_connectors.props" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="BitStamp_logo.png" />
+  </ItemGroup>
+</Project>
