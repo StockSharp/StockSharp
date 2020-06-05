@@ -4,6 +4,7 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;
