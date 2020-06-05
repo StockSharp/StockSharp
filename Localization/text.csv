@@ -16305,3 +16305,59 @@ DocStr11844;Message adapter, provided {0} and {1} properties;Message adapter, pr
 DocStr11845;Message adapter, provided {0} property;Message adapter, provided {0} property
 DocStr11846;Address type;Address type
 DocStr11847;Create adapter for client-server communication;Create adapter for client-server communication
+DocStr11848;Write {0};Write {0}
+DocStr11849;Process extra tags for {0};Process extra tags for {0}
+DocStr11850;Get order type;Get order type
+DocStr11851;Override {0} by native identifier (if present in FIX message);Override {0} by native identifier (if present in FIX message)
+DocStr11852;FIFO;FIFO
+DocStr11853;Close but notify on open;Close but notify on open
+DocStr11854;Rolled;Rolled
+DocStr11855;Indicates if the order was initially received manually (as opposed to electronically);Indicates if the order was initially received manually (as opposed to electronically)
+DocStr11856;Extra fields;Extra fields
+DocStr11857;FIX/FAST extension methods;FIX/FAST extension methods
+DocStr11858;Default UTCDateOnly format;Default UTCDateOnly format
+DocStr11859;Default MonthYear format;Default MonthYear format
+DocStr11860;Default UTCTimeOnly format;Default UTCTimeOnly format
+DocStr11861;Default UTCTimestamp format;Default UTCTimestamp format
+DocStr11862;Copy content;Copy content
+DocStr11863;Destination;Destination
+DocStr11864;Write FIX message;Write FIX message
+DocStr11865;Whole message writer;Whole message writer
+DocStr11866;Body only writer;Body only writer
+DocStr11867;Sequence number;Sequence number
+DocStr11868;Handler;Handler
+DocStr11869;Empty tag;Empty tag
+DocStr11870;Read message;Read message
+DocStr11871;Reader;Reader
+DocStr11872;Tag handler;Tag handler
+DocStr11873;{0} if the message was successfully read, othewise, returns {1};{0} if the message was successfully read, othewise, returns {1}
+DocStr11874;Read FIX header;Read FIX header
+DocStr11875;Skip read {0};Skip read {0}
+DocStr11876;Expected {0} value;Expected {0} value
+DocStr11877;Read FIX trailer;Read FIX trailer
+DocStr11878;Skip reading message;Skip reading message
+DocStr11879;Possible error;Possible error
+DocStr11880;Get {0} value;Get {0} value
+DocStr11881;Set {0} value;Set {0} value
+DocStr11882;Check the specified type is candle;Check the specified type is candle
+DocStr11883;Write {0} and {1};Write {0} and {1}
+DocStr11884;Get request id;Get request id
+DocStr11885;{0} if the tag was handled, {1} if the tag is unknown;{0} if the tag was handled, {1} if the tag is unknown
+DocStr11886;Read time;Read time
+DocStr11887;Write time;Write time
+DocStr11888;Write {0} list;Write {0} list
+DocStr11889;Convert texts to latin;Convert texts to latin
+DocStr11890;Last message;Last message
+DocStr11891;Total count;Total count
+DocStr11892;Init security id;Init security id
+DocStr11893;Extra tags handler;Extra tags handler
+DocStr11894;{0} message read ok, {1} message read with errors, {2} network problem;{0} message read ok, {1} message read with errors, {2} network problem
+DocStr11895;Write parameters;Write parameters
+DocStr11896;Create transaction id;Create transaction id
+DocStr11897;Get transaction id;Get transaction id
+DocStr11898;Extra tag reader;Extra tag reader
+DocStr11899;Scaled numbers, like floating point numbers are represented as a mantissa and an exponent;Scaled numbers, like floating point numbers are represented as a mantissa and an exponent
+DocStr11900;Exponent;Exponent
+DocStr11901;Mantissa;Mantissa
+DocStr11902;The numerical value is obtained by multiplying the mantissa with the base-10 power of the exponent;The numerical value is obtained by multiplying the mantissa with the base-10 power of the exponent
+DocStr11903;License feature attribute;License feature attribute

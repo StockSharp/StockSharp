@@ -30,6 +30,10 @@ P:StockSharp.Licensing.LicenseFeature.ExpireAction/summary;DocStr8817
 P:StockSharp.Licensing.LicenseFeature.HardwareId/summary;DocStr3872
 P:StockSharp.Licensing.LicenseFeature.Target/summary;Str1666
 P:StockSharp.Licensing.LicenseFeature.Account/summary;DocStr3873
+T:StockSharp.Licensing.LicenseFeatureAttribute/summary;DocStr11903
+P:StockSharp.Licensing.LicenseFeatureAttribute.FeatureName/summary;DocStr11780
+M:StockSharp.Licensing.LicenseFeatureAttribute.#ctor(System.String)/summary;DocStr1
+M:StockSharp.Licensing.LicenseFeatureAttribute.#ctor(System.String)/param/featureName;DocStr11780
 T:StockSharp.Licensing.LicenseHelper/summary;DocStr3886
 E:StockSharp.Licensing.LicenseHelper.LicenseChanged/summary;DocStr3900
 E:StockSharp.Licensing.LicenseHelper.LicenseError/summary;DocStr3901
