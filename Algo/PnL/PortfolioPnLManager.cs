@@ -167,6 +167,9 @@ namespace StockSharp.Algo.PnL
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
+					if (quoteMsg.State != null)
+						break;
+
 					var queue = _securityPnLs.TryGetValue(quoteMsg.SecurityId);
 
 					if (queue == null)

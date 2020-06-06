@@ -96,7 +96,7 @@ namespace StockSharp.Algo
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					if (quoteMsg.SecurityId.IsDefault())
+					if (quoteMsg.State != null || quoteMsg.SecurityId.IsDefault())
 						return;
 
 					//if (IsAssociated(quoteMsg.SecurityId.BoardCode))

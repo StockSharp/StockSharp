@@ -57,9 +57,10 @@ namespace StockSharp.Algo
 		/// <param name="maxDepth">Max depth of requested order book.</param>
 		/// <param name="refreshSpeed">Interval for data refresh.</param>
 		/// <param name="depthBuilder">Order log to market depth builder.</param>
+		/// <param name="passThroughOrderBookInrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <returns>Subscription.</returns>
-		Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, IMessageAdapter adapter = null);
+		Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool passThroughOrderBookInrement = false, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting quotes by the instrument.

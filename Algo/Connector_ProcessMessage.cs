@@ -1172,7 +1172,7 @@ namespace StockSharp.Algo
 					receivedEvt.Invoke(subscription, depth);
 			}
 			
-			if (!hasOnline || message.IsFiltered)
+			if (!hasOnline || message.IsFiltered || message.State != null)
 				return;
 
 			var bestBid = message.GetBestBid();

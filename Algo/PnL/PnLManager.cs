@@ -220,7 +220,7 @@ namespace StockSharp.Algo.PnL
 				}
 				case MessageTypes.QuoteChange:
 				{
-					if (!UseOrderBook)
+					if (!UseOrderBook || ((QuoteChangeMessage)message).State != null)
 						return null;
 
 					break;

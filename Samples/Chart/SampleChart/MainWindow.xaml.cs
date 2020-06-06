@@ -811,7 +811,7 @@
 
 			Subscription IMarketDataProviderEx.SubscribeFilteredMarketDepth(Security security) => null;
 
-			Subscription IMarketDataProviderEx.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, int? maxDepth, TimeSpan? refreshSpeed, IOrderLogMarketDepthBuilder depthBuilder, IMessageAdapter adapter) => null;
+			Subscription IMarketDataProviderEx.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, int? maxDepth, TimeSpan? refreshSpeed, IOrderLogMarketDepthBuilder depthBuilder, bool passThroughOrderBookInrement, IMessageAdapter adapter) => null;
 			void IMarketDataProviderEx.UnSubscribeMarketDepth(Security security) { }
 
 			Subscription IMarketDataProviderEx.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, IMessageAdapter adapter) => null;

@@ -85,6 +85,10 @@ namespace StockSharp.Algo.Slippage
 				case MessageTypes.QuoteChange:
 				{
 					var quotesMsg = (QuoteChangeMessage)message;
+
+					if (quotesMsg.State != null)
+						break;
+
 					var pair = _bestPrices.SafeAdd(quotesMsg.SecurityId);
 
 					var bid = quotesMsg.GetBestBid();

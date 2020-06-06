@@ -93,6 +93,10 @@ namespace StockSharp.Algo
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
+
+					if (quoteMsg.State != null)
+						break;
+
 					GetBuilder(quoteMsg.SecurityId).HasDepth = true;
 					break;
 				}

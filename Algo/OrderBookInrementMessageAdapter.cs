@@ -63,6 +63,9 @@
 					{
 						if (mdMsg.IsSubscribe)
 						{
+							if (mdMsg.PassThroughOrderBookInrement)
+								break;
+
 							lock (_syncObject)
 							{
 								var info = new BookInfo(mdMsg.SecurityId, this);

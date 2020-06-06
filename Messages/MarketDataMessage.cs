@@ -312,6 +312,12 @@ namespace StockSharp.Messages
 		public bool FillGaps { get; set; }
 
 		/// <summary>
+		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
+		/// </summary>
+		[DataMember]
+		public bool PassThroughOrderBookInrement { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>
 		public MarketDataMessage()
@@ -366,6 +372,7 @@ namespace StockSharp.Messages
 			destination.RefreshSpeed = RefreshSpeed;
 			destination.DepthBuilder = DepthBuilder;
 			destination.FillGaps = FillGaps;
+			destination.PassThroughOrderBookInrement = PassThroughOrderBookInrement;
 		}
 
 		/// <inheritdoc />
@@ -414,6 +421,9 @@ namespace StockSharp.Messages
 
 			if (FillGaps)
 				str += $",Gaps={FillGaps}";
+
+			if (PassThroughOrderBookInrement)
+				str += $",IncOnly={PassThroughOrderBookInrement}";
 
 			return str;
 		}

@@ -45,6 +45,9 @@
 					{
 						if (mdMsg.IsSubscribe)
 						{
+							if (mdMsg.PassThroughOrderBookInrement)
+								break;
+
 							if (mdMsg.MaxDepth != null)
 							{
 								var actualDepth = mdMsg.MaxDepth.Value;
@@ -105,6 +108,9 @@
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
+
+					if (quoteMsg.State != null)
+						break;
 
 					foreach (var group in quoteMsg.GetSubscriptionIds().GroupBy(_depths.TryGetValue2))
 					{

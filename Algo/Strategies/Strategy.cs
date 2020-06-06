@@ -1881,11 +1881,14 @@ namespace StockSharp.Algo.Strategies
 
 					var quoteMsg = (QuoteChangeMessage)message;
 
+					if (quoteMsg.State != null)
+						return;
+
 					// TODO на истории когда в стакане будут свои заявки по планкам, то противополжная сторона стакана будет пустой
 					// необходимо исключать свои заявки как-то иначе.
 					if (quoteMsg.Asks.IsEmpty() || quoteMsg.Bids.IsEmpty())
 						return;
-					
+
 					PnLManager.ProcessMessage(message);
 					msgTime = quoteMsg.ServerTime;
 

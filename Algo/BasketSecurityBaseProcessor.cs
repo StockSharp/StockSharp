@@ -94,7 +94,7 @@ namespace StockSharp.Algo
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					if (!ContainsLeg(quoteMsg.SecurityId))
+					if (quoteMsg.State != null || !ContainsLeg(quoteMsg.SecurityId))
 						yield break;
 
 					var bestBid = quoteMsg.GetBestBid();
@@ -314,7 +314,7 @@ namespace StockSharp.Algo
 				case MessageTypes.QuoteChange:
 					var quotesMsg = (QuoteChangeMessage)message;
 
-					if (!ContainsLeg(quotesMsg.SecurityId))
+					if (quotesMsg.State != null || !ContainsLeg(quotesMsg.SecurityId))
 						yield break;
 
 					foreach (var msg in ProcessMessage(GetDict<QuoteChangeMessage>(message.Type), quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage

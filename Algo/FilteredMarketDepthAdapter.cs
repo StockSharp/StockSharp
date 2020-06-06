@@ -259,6 +259,9 @@ namespace StockSharp.Algo
 
 					var quoteMsg = (QuoteChangeMessage)message;
 
+					if (quoteMsg.State != null)
+						break;
+
 					var ids = quoteMsg.GetSubscriptionIds();
 					var set = new HashSet<long>(quoteMsg.GetSubscriptionIds());
 

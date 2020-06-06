@@ -439,6 +439,9 @@ namespace StockSharp.Algo.Candles.Compression
 				case MessageTypes.QuoteChange:
 				case MessageTypes.Level1Change:
 				{
+					if (message.Type == MessageTypes.QuoteChange && ((QuoteChangeMessage)message).State != null)
+						break;
+
 					if (message.Type == MessageTypes.Execution && !((ExecutionMessage)message).IsMarketData())
 						break;
 
