@@ -288,69 +288,11 @@
 				}
 				default:
 				{
-					if (message is ISubscriptionIdMessage subscrMsg && message is ISecurityIdMessage secIdMsg)
-					{
-						SubscriptionSecurityAllMessage allMsg = null;
+					var allMsg = CheckSubscription(ref message);
 
-						bool CheckSubscription(long parentId)
-						{
-							lock (_sync)
-							{
-								if (_parents.TryGetValue(parentId, out var parent))
-								{
-									// parent subscription has security id (not null)
-									if (parent.Origin.SecurityId == secIdMsg.SecurityId)
-										return true;
-
-									if (!parent.Child.TryGetValue(secIdMsg.SecurityId, out var child))
-									{
-										allMsg = new SubscriptionSecurityAllMessage();
-
-										parent.Origin.CopyTo(allMsg);
-
-										allMsg.ParentTransactionId = parentId;
-										allMsg.TransactionId = TransactionIdGenerator.GetNextId();
-										allMsg.SecurityId = secIdMsg.SecurityId;
-
-										child = new ChildSubscription(allMsg.TypedClone());
-										child.Subscribers.Add(allMsg.TransactionId, child.Origin);
-
-										parent.Child.Add(secIdMsg.SecurityId, child);
-
-										allMsg.LoopBack(this, MessageBackModes.Chain);
-										_allChilds.Add(allMsg.TransactionId, RefTuple.Create(parentId, SubscriptionStates.Stopped));
-
-										this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
-									}
-
-									//var subscriptionIds = subscrMsg.GetSubscriptionIds().Where(i => i != parentId).Concat(child.Subscribers.Cache);
-									subscrMsg.SetSubscriptionIds(child.Subscribers.CachedKeys);
-
-									if (!child.State.IsActive())
-									{
-										child.Suspended.Add(message);
-										message = null;
-
-										this.AddDebugLog("ALL suspended: {0}/{1}, cnt={2}", child.Origin.SecurityId, child.Origin.DataType2, child.Suspended.Count);
-									}
-
-									return true;
-								}
-							}
-
-							return false;
-						}
-
-						foreach (var id in subscrMsg.GetSubscriptionIds())
-						{
-							if (CheckSubscription(id))
-								break;
-						}
-
-						if (allMsg != null)
-							base.OnInnerAdapterNewOutMessage(allMsg);
-					}
-
+					if (allMsg != null)
+						base.OnInnerAdapterNewOutMessage(allMsg);
+					
 					break;
 				}
 			}
@@ -363,6 +305,66 @@
 				foreach (var m in extra)
 					base.OnInnerAdapterNewOutMessage(m);
 			}
+		}
+
+		private SubscriptionSecurityAllMessage CheckSubscription(ref Message message)
+		{
+			lock (_sync)
+			{
+				if (_parents.Count == 0)
+					return null;
+
+				if (message is ISubscriptionIdMessage subscrMsg && message is ISecurityIdMessage secIdMsg)
+				{
+					foreach (var parentId in subscrMsg.GetSubscriptionIds())
+					{
+						if (_parents.TryGetValue(parentId, out var parent))
+						{
+							// parent subscription has security id (not null)
+							if (parent.Origin.SecurityId == secIdMsg.SecurityId)
+								return null;
+
+							SubscriptionSecurityAllMessage allMsg = null;
+
+							if (!parent.Child.TryGetValue(secIdMsg.SecurityId, out var child))
+							{
+								allMsg = new SubscriptionSecurityAllMessage();
+
+								parent.Origin.CopyTo(allMsg);
+
+								allMsg.ParentTransactionId = parentId;
+								allMsg.TransactionId = TransactionIdGenerator.GetNextId();
+								allMsg.SecurityId = secIdMsg.SecurityId;
+
+								child = new ChildSubscription(allMsg.TypedClone());
+								child.Subscribers.Add(allMsg.TransactionId, child.Origin);
+
+								parent.Child.Add(secIdMsg.SecurityId, child);
+
+								allMsg.LoopBack(this, MessageBackModes.Chain);
+								_allChilds.Add(allMsg.TransactionId, RefTuple.Create(parentId, SubscriptionStates.Stopped));
+
+								this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", child.Origin.SecurityId, child.Origin.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
+							}
+
+							//var subscriptionIds = subscrMsg.GetSubscriptionIds().Where(i => i != parentId).Concat(child.Subscribers.Cache);
+							subscrMsg.SetSubscriptionIds(child.Subscribers.CachedKeys);
+
+							if (!child.State.IsActive())
+							{
+								child.Suspended.Add(message);
+								message = null;
+
+								this.AddDebugLog("ALL suspended: {0}/{1}, cnt={2}", child.Origin.SecurityId, child.Origin.DataType2, child.Suspended.Count);
+							}
+
+							return allMsg;
+						}
+					}
+				}
+			}
+
+			return null;
 		}
 
 		/// <summary>
