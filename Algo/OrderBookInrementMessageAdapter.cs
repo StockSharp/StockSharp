@@ -1,42 +1,25 @@
 ﻿namespace StockSharp.Algo
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, System.Tuple<decimal, int?, Messages.QuoteConditions>>;
-	using QuotesByPosList = System.Collections.Generic.List<System.Tuple<decimal, decimal, int?, Messages.QuoteConditions>>;
 
 	/// <summary>
 	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
 	/// </summary>
 	public class OrderBookInrementMessageAdapter : MessageAdapterWrapper
 	{
-		private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
-
 		private class BookInfo
 		{
-			public BookInfo(SecurityId securityId)
-			{
-				SecurityId = securityId;
-			}
+			public BookInfo(SecurityId securityId, ILogReceiver logs)
+				=> Builder = new OrderBookInrementBuilder(securityId, logs);
 
-			public SecurityId SecurityId { get; }
-
-			public QuoteChangeStates State { get; set; } = _none;
-
-			public readonly QuotesDict Bids = new QuotesDict(new BackwardComparer<decimal>());
-			public readonly QuotesDict Asks = new QuotesDict();
-
-			public readonly QuotesByPosList BidsByPos = new QuotesByPosList();
-			public readonly QuotesByPosList AsksByPos = new QuotesByPosList();
-
+			public readonly OrderBookInrementBuilder Builder;
 			public readonly CachedSynchronizedSet<long> SubscriptionIds = new CachedSynchronizedSet<long>();
 		}
 
@@ -82,7 +65,7 @@
 						{
 							lock (_syncObject)
 							{
-								var info = new BookInfo(mdMsg.SecurityId);
+								var info = new BookInfo(mdMsg.SecurityId, this);
 
 								info.SubscriptionIds.Add(mdMsg.TransactionId);
 								
@@ -120,7 +103,9 @@
 						return;
 				}
 
-				if (info != _online.TryGetValue(info.SecurityId))
+				var secId = info.Builder.SecurityId;
+
+				if (info != _online.TryGetValue(secId))
 					return;
 
 				info.SubscriptionIds.Remove(id);
@@ -128,179 +113,12 @@
 				var ids = info.SubscriptionIds.Cache;
 
 				if (ids.Length == 0)
-					_online.Remove(info.SecurityId);
+					_online.Remove(secId);
 				else if (changeId)
 					_byId.Add(ids[0], info);
 			}
 
 			this.AddInfoLog("Unsubscribed {0}.", id);
-		}
-
-		private QuoteChangeMessage ApplyNewState(BookInfo info, QuoteChangeMessage quoteMsg, QuoteChangeStates newState)
-		{
-			var currState = info.State;
-
-			void CheckSwitch()
-			{
-				switch (currState)
-				{
-					case _none:
-					case QuoteChangeStates.SnapshotStarted:
-					{
-						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							this.AddDebugLog($"{currState}->{newState}");
-
-						break;
-					}
-					case QuoteChangeStates.SnapshotBuilding:
-					{
-						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							this.AddDebugLog($"{currState}->{newState}");
-
-						break;
-					}
-					case QuoteChangeStates.SnapshotComplete:
-					case QuoteChangeStates.Increment:
-					{
-						if (newState == QuoteChangeStates.SnapshotBuilding)
-							this.AddDebugLog($"{currState}->{newState}");
-
-						break;
-					}
-				}
-			}
-
-			if (currState != newState)
-			{
-				CheckSwitch();
-
-				if (newState == QuoteChangeStates.SnapshotStarted)
-				{
-					info.Bids.Clear();
-					info.Asks.Clear();
-				}
-
-				switch (currState)
-				{
-					case _none:
-					{
-						info.Bids.Clear();
-						info.Asks.Clear();
-
-						break;
-					}
-					case QuoteChangeStates.SnapshotStarted:
-						break;
-					case QuoteChangeStates.SnapshotBuilding:
-						break;
-					case QuoteChangeStates.SnapshotComplete:
-					{
-						if (newState == QuoteChangeStates.SnapshotComplete)
-						{
-							info.Bids.Clear();
-							info.Asks.Clear();
-						}
-
-						break;
-					}
-					case QuoteChangeStates.Increment:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(currState.ToString());
-				}
-
-				info.State = currState = newState;
-			}
-
-			void Apply(IEnumerable<QuoteChange> from, QuotesDict to)
-			{
-				foreach (var quote in from)
-				{
-					if (quote.Volume == 0)
-						to.Remove(quote.Price);
-					else
-						to[quote.Price] = Tuple.Create(quote.Volume, quote.OrdersCount, quote.Condition);
-				}
-			}
-
-			void ApplyByPos(IEnumerable<QuoteChange> from, QuotesByPosList to)
-			{
-				foreach (var quote in from)
-				{
-					var startPos = quote.StartPosition.Value;
-
-					switch (quote.Action)
-					{
-						case QuoteChangeActions.New:
-						{
-							var tuple = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
-
-							if (startPos > to.Count)
-								throw new InvalidOperationException($"Pos={startPos}>Count={to.Count}");
-							else if (startPos == to.Count)
-								to.Add(tuple);
-							else
-								to.Insert(startPos, tuple);
-
-							break;
-						}
-						case QuoteChangeActions.Update:
-						{
-							to[startPos] = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
-							break;
-						}
-						case QuoteChangeActions.Delete:
-						{
-							if (quote.EndPosition == null)
-								to.RemoveAt(startPos);
-							else
-								to.RemoveRange(startPos, (quote.EndPosition.Value - startPos) + 1);
-
-							break;
-						}
-						default:
-							throw new ArgumentOutOfRangeException(nameof(from), quote.Action, LocalizedStrings.Str1219);
-					}
-				}
-			}
-
-			if (quoteMsg.HasPositions)
-			{
-				ApplyByPos(quoteMsg.Bids, info.BidsByPos);
-				ApplyByPos(quoteMsg.Asks, info.AsksByPos);
-			}
-			else
-			{
-				Apply(quoteMsg.Bids, info.Bids);
-				Apply(quoteMsg.Asks, info.Asks);
-			}
-
-			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
-				return null;
-
-			IEnumerable<QuoteChange> bids;
-			IEnumerable<QuoteChange> asks;
-
-			if (quoteMsg.HasPositions)
-			{
-				bids = info.BidsByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3, p.Item4));
-				asks = info.AsksByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3, p.Item4));
-			}
-			else
-			{
-				bids = info.Bids.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2, p.Value.Item3));
-				asks = info.Asks.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2, p.Value.Item3));
-			}
-
-			return new QuoteChangeMessage
-			{
-				SecurityId = quoteMsg.SecurityId,
-				Bids = bids.ToArray(),
-				Asks = asks.ToArray(),
-				IsSorted = true,
-				ServerTime = quoteMsg.ServerTime,
-				OriginalTransactionId = quoteMsg.OriginalTransactionId,
-			};
 		}
 
 		/// <inheritdoc />
@@ -336,14 +154,16 @@
 
 						if (info != null)
 						{
-							if (_online.TryGetValue(info.SecurityId, out var online))
+							var secId = info.Builder.SecurityId;
+
+							if (_online.TryGetValue(secId, out var online))
 							{
 								online.SubscriptionIds.Add(id);
 								_byId.Remove(id);
 							}
 							else
 							{
-								_online.Add(info.SecurityId, info);
+								_online.Add(secId, info);
 							}
 						}
 					}
@@ -355,9 +175,7 @@
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					var state = quoteMsg.State;
-
-					if (state == null)
+					if (quoteMsg.State == null)
 						break;
 
 					foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
@@ -370,7 +188,7 @@
 								continue;
 						}
 
-						var newQuoteMsg = ApplyNewState(info, quoteMsg, state.Value);
+						var newQuoteMsg = info.Builder.TryApply(quoteMsg);
 
 						if (newQuoteMsg == null)
 							continue;
