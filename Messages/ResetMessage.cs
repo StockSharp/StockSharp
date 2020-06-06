@@ -37,9 +37,6 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="ResetMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			throw new NotSupportedException();
-		}
+		public override Message Clone() => new ResetMessage();
 	}
 }
