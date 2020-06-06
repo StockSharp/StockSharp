@@ -26,6 +26,7 @@
 		private readonly SyncObject _syncObject = new SyncObject();
 		private readonly Dictionary<long, BookInfo> _byId = new Dictionary<long, BookInfo>();
 		private readonly Dictionary<SecurityId, BookInfo> _online = new Dictionary<SecurityId, BookInfo>();
+		private readonly HashSet<long> _passThrough = new HashSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookInrementMessageAdapter"/>.
@@ -47,6 +48,7 @@
 					{
 						_byId.Clear();
 						_online.Clear();
+						_passThrough.Clear();
 					}
 
 					break;
@@ -63,11 +65,14 @@
 					{
 						if (mdMsg.IsSubscribe)
 						{
-							if (mdMsg.PassThroughOrderBookInrement)
-								break;
-
 							lock (_syncObject)
 							{
+								if (mdMsg.PassThroughOrderBookInrement)
+								{
+									_passThrough.Add(mdMsg.TransactionId);
+									break;
+								}
+
 								var info = new BookInfo(mdMsg.SecurityId, this);
 
 								info.SubscriptionIds.Add(mdMsg.TransactionId);
@@ -181,6 +186,8 @@
 					if (quoteMsg.State == null)
 						break;
 
+					List<long> passThrough = null;
+
 					foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
 					{
 						BookInfo info;
@@ -188,7 +195,17 @@
 						lock (_syncObject)
 						{
 							if (!_byId.TryGetValue(subscriptionId, out info))
+							{
+								if (_passThrough.Contains(subscriptionId))
+								{
+									if (passThrough is null)
+										passThrough = new List<long>();
+
+									passThrough.Add(subscriptionId);
+								}
+
 								continue;
+							}
 						}
 
 						var newQuoteMsg = info.Builder.TryApply(quoteMsg);
@@ -203,7 +220,10 @@
 						clones.Add(newQuoteMsg);
 					}
 
-					message = null;
+					if (passThrough is null)
+						message = null;
+					else
+						quoteMsg.SetSubscriptionIds(passThrough.ToArray());
 
 					break;
 				}
