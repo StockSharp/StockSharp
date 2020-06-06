@@ -138,9 +138,9 @@ namespace StockSharp.Algo.Storages
 		/// Process message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		public void ProcessMessage(Message message)
+		public void SendInMessage(Message message)
 		{
-			if (message == null)
+			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
 			if (message.OfflineMode != MessageOfflineModes.None)
@@ -148,7 +148,6 @@ namespace StockSharp.Algo.Storages
 
 			switch (message.Type)
 			{
-				// in message
 				case MessageTypes.Reset:
 				{
 					_subscriptionsById.Clear();
@@ -251,8 +250,23 @@ namespace StockSharp.Algo.Storages
 
 					break;
 				}
+			}
+		}
 
-				// out messages
+		/// <summary>
+		/// Process message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public void SendOutMessage(Message message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (message.OfflineMode != MessageOfflineModes.None)
+				return;
+
+			switch (message.Type)
+			{
 				case MessageTypes.Level1Change:
 				{
 					var level1Msg = (Level1ChangeMessage)message;

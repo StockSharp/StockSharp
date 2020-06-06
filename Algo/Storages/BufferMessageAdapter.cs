@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Reset:
 					Reset();
-					Buffer.ProcessMessage(message);
+					Buffer.SendInMessage(message);
 					break;
 
 				case MessageTypes.Connect:
@@ -116,7 +116,7 @@ namespace StockSharp.Algo.Storages
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			Buffer.ProcessMessage(message);
+			Buffer.SendInMessage(message);
 
 			if (message.IsSubscribe && message.From == null && message.To == null && Settings.IsMode(StorageModes.Snapshot))
 			{
@@ -234,7 +234,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			Buffer.ProcessMessage(message);
+			Buffer.SendOutMessage(message);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}
