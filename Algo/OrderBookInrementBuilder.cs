@@ -35,6 +35,9 @@
 		/// <param name="logs">Logs.</param>
 		public OrderBookInrementBuilder(SecurityId securityId, ILogReceiver logs)
 		{
+			if (securityId == default)
+				throw new ArgumentNullException(nameof(securityId));
+
 			SecurityId = securityId;
 			_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 		}
@@ -211,7 +214,7 @@
 
 			return new QuoteChangeMessage
 			{
-				SecurityId = change.SecurityId,
+				SecurityId = SecurityId,
 				Bids = bids.ToArray(),
 				Asks = asks.ToArray(),
 				IsSorted = true,
