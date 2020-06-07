@@ -300,7 +300,7 @@ namespace StockSharp.Algo.Storages.Csv
 				Remove(security);
 			}
 
-			void ISecurityStorage.DeleteBy(Security criteria)
+			void ISecurityStorage.DeleteBy(SecurityLookupMessage criteria)
 			{
 				this.Filter(criteria).ForEach(s => Remove(s));
 			}

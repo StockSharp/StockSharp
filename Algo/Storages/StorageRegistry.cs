@@ -45,7 +45,17 @@ namespace StockSharp.Algo.Storages
 		/// Initializes a new instance of the <see cref="StorageRegistry"/>.
 		/// </summary>
 		public StorageRegistry()
+			: this(new InMemoryExchangeInfoProvider())
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StorageRegistry"/>.
+		/// </summary>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public StorageRegistry(IExchangeInfoProvider exchangeInfoProvider)
+		{
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
 		/// <summary>
@@ -76,14 +86,8 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-
 		/// <inheritdoc />
-		public IExchangeInfoProvider ExchangeInfoProvider
-		{
-			get => _exchangeInfoProvider;
-			set => _exchangeInfoProvider = value ?? throw new ArgumentNullException(nameof(value));
-		}
+		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		/// <inheritdoc />
 		public void RegisterTradeStorage(IMarketDataStorage<ExecutionMessage> storage)

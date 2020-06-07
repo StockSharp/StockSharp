@@ -2396,6 +2396,8 @@ namespace StockSharp.Algo.Strategies
 
 		int ISecurityProvider.Count => SecurityProvider.Count;
 
+		SyncObject ISecurityProvider.SyncRoot => SecurityProvider.SyncRoot;
+
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
 			add => SecurityProvider.Added += value;
