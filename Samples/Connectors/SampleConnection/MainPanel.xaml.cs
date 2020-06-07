@@ -123,7 +123,7 @@
 			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 				this.GuiAsync(() => MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType2, security)));
 
-			Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+			Connector.SecurityReceived += (s, sec) => _securitiesWindow.SecurityPicker.Securities.Add(sec);
 			Connector.TickTradeReceived += (s, t) => _tradesWindow.TradeGrid.Trades.Add(t);
 			Connector.OrderLogItemReceived += (s, ol) => _orderLogWindow.OrderLogGrid.LogItems.Add(ol);
 			Connector.Level1Received += (s, l) => _level1Window.Level1Grid.Messages.Add(l);

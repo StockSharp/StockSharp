@@ -291,7 +291,7 @@ namespace SampleOptionQuoting
 			});
 
 			// fill underlying asset's list
-			Connector.NewSecurity += security =>
+			Connector.SecurityReceived += (sub, security) =>
 			{
 				if (security.Type == SecurityTypes.Future)
 					_assets.Add(security);

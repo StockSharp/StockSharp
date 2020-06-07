@@ -85,6 +85,7 @@ namespace StockSharp.Algo
 #pragma warning restore 67
 
 		/// <inheritdoc />
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<Security> NewSecurity;
 
 		/// <inheritdoc />
