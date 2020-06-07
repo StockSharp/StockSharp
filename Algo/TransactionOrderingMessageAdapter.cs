@@ -28,6 +28,7 @@
 		}
 
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new SynchronizedDictionary<long, SubscriptionInfo>();
+		private readonly SynchronizedDictionary<long, long> _orders = new SynchronizedDictionary<long, long>();
 
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
@@ -47,6 +48,7 @@
 		private void Reset()
 		{
 			_transactionLogSubscriptions.Clear();
+			_orders.Clear();
 
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();
@@ -125,8 +127,14 @@
 					if (execMsg.IsMarketData())
 						break;
 
-					if (_transactionLogSubscriptions.TryGetValue(execMsg.OriginalTransactionId, out var subscription))
-						break;
+					if (!_transactionLogSubscriptions.TryGetValue(execMsg.OriginalTransactionId, out var subscription))
+					{
+						if (!_orders.TryGetValue(execMsg.OriginalTransactionId, out var orderTransId))
+							break;
+
+						if (!_transactionLogSubscriptions.TryGetValue(orderTransId, out subscription))
+							break;
+					}
 
 					var transId = execMsg.TransactionId;
 
@@ -196,10 +204,13 @@
 							}
 						}
 						else
+						{
+							_orders.Add(transId, execMsg.OriginalTransactionId);
 							subscription.Transactions.Add(transId, Tuple.Create(execMsg.TypedClone(), new List<ExecutionMessage>()));
+						}
 					}
 
-					break;
+					return;
 				}
 			}
 
