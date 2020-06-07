@@ -55,26 +55,31 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Tick trade received.
 		/// </summary>
+		[Obsolete("Use TickTradeReceived event.")]
 		event Action<Trade> NewTrade;
 
 		/// <summary>
 		/// Security received.
 		/// </summary>
+		[Obsolete("Use SecurityReceived event.")]
 		event Action<Security> NewSecurity;
 
 		/// <summary>
 		/// Security changed.
 		/// </summary>
+		[Obsolete("Use SecurityReceived event.")]
 		event Action<Security> SecurityChanged;
 
 		/// <summary>
 		/// Order book received.
 		/// </summary>
+		[Obsolete("Use OrderBookReceived event.")]
 		event Action<MarketDepth> NewMarketDepth;
 
 		/// <summary>
 		/// Order book changed.
 		/// </summary>
+		[Obsolete("Use OrderBookReceived event.")]
 		event Action<MarketDepth> MarketDepthChanged;
 
 		/// <summary>
@@ -85,16 +90,19 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Order log received.
 		/// </summary>
+		[Obsolete("Use OrderLogItemReceived event.")]
 		event Action<OrderLogItem> NewOrderLogItem;
 
 		/// <summary>
 		/// News received.
 		/// </summary>
+		[Obsolete("Use NewsReceived event.")]
 		event Action<News> NewNews;
 
 		/// <summary>
 		/// News updated (news body received <see cref="News.Story"/>).
 		/// </summary>
+		[Obsolete("Use NewsReceived event.")]
 		event Action<News> NewsChanged;
 
 		/// <summary>

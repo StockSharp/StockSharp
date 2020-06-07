@@ -17,24 +17,28 @@ namespace StockSharp.Algo
 		public event Action<MyTrade> NewMyTrade;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <inheritdoc />
 		public event Action<Trade> NewTrade;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Trade>> NewTrades;
 
 		/// <inheritdoc />
 		public event Action<Order> NewOrder;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Order>> NewOrders;
 
 		/// <inheritdoc />
 		public event Action<Order> OrderChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Order>> OrdersChanged;
 
 		/// <inheritdoc />
@@ -84,9 +88,11 @@ namespace StockSharp.Algo
 		public event Action<Security> NewSecurity;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<OrderFail>> OrdersRegisterFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
 
 		/// <inheritdoc />
@@ -105,36 +111,42 @@ namespace StockSharp.Algo
 		public event Action<long, Exception> OrderStatusFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Security>> NewSecurities;
 
 		/// <inheritdoc />
 		public event Action<Security> SecurityChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Security>> SecuritiesChanged;
 
 		/// <inheritdoc />
 		public event Action<Portfolio> NewPortfolio;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <inheritdoc />
 		public event Action<Portfolio> PortfolioChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
 		/// <inheritdoc />
 		public event Action<Position> NewPosition;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Position>> NewPositions;
 
 		/// <inheritdoc />
 		public event Action<Position> PositionChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <inheritdoc />
@@ -147,15 +159,18 @@ namespace StockSharp.Algo
 		public event Action<MarketDepth> FilteredMarketDepthChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<MarketDepth>> NewMarketDepths;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
 
 		/// <inheritdoc />
 		public event Action<OrderLogItem> NewOrderLogItem;
 
 		/// <inheritdoc />
+		[Obsolete("Use single item event overload.")]
 		public event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
 
 		/// <inheritdoc />

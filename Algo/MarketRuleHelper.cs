@@ -306,13 +306,17 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				_marketDataProvider.MarketDepthChanged += OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				_marketDataProvider.MarketDepthChanged -= OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				Provider.NewMyTrade -= OnNewMyTrade;
 			}
 
@@ -792,7 +796,9 @@ namespace StockSharp.Algo
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1046 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged += OnSecurityChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -811,7 +817,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged -= OnSecurityChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -822,7 +830,9 @@ namespace StockSharp.Algo
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1047 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade += OnNewTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnNewTrade(Trade trade)
@@ -839,7 +849,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade -= OnNewTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -850,7 +862,9 @@ namespace StockSharp.Algo
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1048 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewOrderLogItem += OnNewOrderLogItem;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnNewOrderLogItem(OrderLogItem item)
@@ -867,7 +881,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewOrderLogItem -= OnNewOrderLogItem;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -883,8 +899,10 @@ namespace StockSharp.Algo
 
 				Name = LocalizedStrings.Str1049 + " " + security;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged += OnSecurityChanged;
 				Provider.NewTrade += OnNewTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -920,8 +938,10 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade -= OnNewTrade;
 				Provider.SecurityChanged -= OnSecurityChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 
 				base.DisposeManaged();
 			}
@@ -940,7 +960,9 @@ namespace StockSharp.Algo
 				if (_isFiltered)
 					Provider.FilteredMarketDepthChanged += OnMarketDepthChanged;
 				else
+#pragma warning disable CS0618 // Type or member is obsolete
 					Provider.MarketDepthChanged += OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -956,7 +978,9 @@ namespace StockSharp.Algo
 				if (_isFiltered)
 					Provider.FilteredMarketDepthChanged -= OnMarketDepthChanged;
 				else
+#pragma warning disable CS0618 // Type or member is obsolete
 					Provider.MarketDepthChanged -= OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 
 				base.DisposeManaged();
 			}
@@ -968,7 +992,9 @@ namespace StockSharp.Algo
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged += OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -986,7 +1012,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged -= OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -1332,7 +1360,9 @@ namespace StockSharp.Algo
 				else
 				{
 					_provider = provider;
+#pragma warning disable CS0618 // Type or member is obsolete
 					_provider.MarketDepthChanged += ProviderOnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				}
 			}
 
@@ -1357,7 +1387,11 @@ namespace StockSharp.Algo
 #pragma warning restore 612
 				}
 				else
+				{
+#pragma warning disable CS0618 // Type or member is obsolete
 					_provider.MarketDepthChanged -= ProviderOnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
+				}
 
 				base.DisposeManaged();
 			}

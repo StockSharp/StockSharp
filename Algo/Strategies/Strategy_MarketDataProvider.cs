@@ -38,6 +38,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use TickTradeReceived event.")]
 		public event Action<Trade> NewTrade
 		{
 			add => MarketDataProvider.NewTrade += value;
@@ -45,6 +46,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<Security> NewSecurity
 		{
 			add => MarketDataProvider.NewSecurity += value;
@@ -52,6 +54,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<Security> SecurityChanged
 		{
 			add => MarketDataProvider.SecurityChanged += value;
@@ -59,6 +62,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<MarketDepth> NewMarketDepth
 		{
 			add => MarketDataProvider.NewMarketDepth += value;
@@ -66,6 +70,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<MarketDepth> MarketDepthChanged
 		{
 			add => MarketDataProvider.MarketDepthChanged += value;
@@ -80,6 +85,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderLogItemReceived event.")]
 		public event Action<OrderLogItem> NewOrderLogItem
 		{
 			add => MarketDataProvider.NewOrderLogItem += value;
@@ -87,6 +93,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use NewsReceived event.")]
 		public event Action<News> NewNews
 		{
 			add => MarketDataProvider.NewNews += value;
@@ -94,6 +101,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use NewsReceived event.")]
 		public event Action<News> NewsChanged
 		{
 			add => MarketDataProvider.NewsChanged += value;

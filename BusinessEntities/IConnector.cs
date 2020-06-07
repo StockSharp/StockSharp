@@ -31,96 +31,115 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Own trades received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <summary>
 		/// Tick trades received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Trade>> NewTrades;
 
 		/// <summary>
 		/// Orders received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> NewOrders;
 
 		/// <summary>
 		/// Orders changed (cancelled, matched).
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> OrdersChanged;
 
 		/// <summary>
 		/// Order registration errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> OrdersRegisterFailed;
 
 		/// <summary>
 		/// Order cancellation errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
 
 		/// <summary>
 		/// Stop-order registration errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
 
 		/// <summary>
 		/// Stop-order cancellation errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
 
 		/// <summary>
 		/// Stop-orders received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> NewStopOrders;
 
 		/// <summary>
 		/// Stop orders state change event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
 		/// Securities received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Security>> NewSecurities;
 
 		/// <summary>
 		/// Securities changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Security>> SecuritiesChanged;
 
 		/// <summary>
 		/// Portfolios received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
 		/// <summary>
 		/// Positions received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Position>> NewPositions;
 
 		/// <summary>
 		/// Positions changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <summary>
 		/// Order books received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<MarketDepth>> NewMarketDepths;
 
 		/// <summary>
 		/// Order books changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
 
 		/// <summary>
 		/// Order log received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
 
 		/// <summary>
