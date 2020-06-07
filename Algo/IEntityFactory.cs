@@ -136,99 +136,60 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual Security CreateSecurity(string id)
-		{
-			return new Security { Id = id };
-		}
+		public virtual Security CreateSecurity(string id) => new Security { Id = id };
 
 		/// <inheritdoc />
-		public virtual Portfolio CreatePortfolio(string name)
-		{
-			return new Portfolio { Name = name };
-		}
+		public virtual Portfolio CreatePortfolio(string name) => new Portfolio { Name = name };
 
 		/// <inheritdoc />
-		public virtual Position CreatePosition(Portfolio portfolio, Security security)
+		public virtual Position CreatePosition(Portfolio portfolio, Security security) => new Position
 		{
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return new Position
-			{
-				Portfolio = portfolio,
-				Security = security,
-			};
-		}
+			Portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio)),
+			Security = security ?? throw new ArgumentNullException(nameof(security)),
+		};
 
 		/// <inheritdoc />
 		public virtual Trade CreateTrade(Security security, long? id, string stringId)
-		{
-			return new Trade { Security = security, Id = id ?? 0, StringId = stringId };
-		}
+			=> new Trade { Security = security, Id = id ?? 0, StringId = stringId };
 
 		/// <inheritdoc />
 		public virtual Order CreateOrder(Security security, OrderTypes? type, long transactionId)
-		{
-			return new Order
+			=> new Order
 			{
 				Security = security,
 				TransactionId = transactionId,
 				Type = type,
 			};
-		}
 
 		/// <inheritdoc />
 		public virtual OrderFail CreateOrderFail(Order order, Exception error)
-		{
-			return new OrderFail { Order = order, Error = error };
-		}
+			=> new OrderFail { Order = order, Error = error };
 
 		/// <inheritdoc />
-		public virtual MyTrade CreateMyTrade(Order order, Trade trade)
+		public virtual MyTrade CreateMyTrade(Order order, Trade trade) => new MyTrade
 		{
-			return new MyTrade
-			{
-				Order = order,
-				Trade = trade,
-			};
-		}
+			Order = order,
+			Trade = trade,
+		};
 
 		/// <inheritdoc />
-		public virtual MarketDepth CreateMarketDepth(Security security)
-		{
-			return new MarketDepth(security);
-		}
+		public virtual MarketDepth CreateMarketDepth(Security security) => new MarketDepth(security);
 
 		/// <inheritdoc />
-		public virtual OrderLogItem CreateOrderLogItem(Order order, Trade trade)
+		public virtual OrderLogItem CreateOrderLogItem(Order order, Trade trade) => new OrderLogItem
 		{
-			return new OrderLogItem
-			{
-				Order = order,
-				Trade = trade,
-			};
-		}
+			Order = order,
+			Trade = trade,
+		};
 
 		/// <inheritdoc />
-		public virtual News CreateNews()
-		{
-			return new News();
-		}
+		public virtual News CreateNews() => new News();
 
 		/// <inheritdoc />
-		public Exchange CreateExchange(string code)
-		{
-			return new Exchange { Name = code };
-		}
+		public Exchange CreateExchange(string code) => new Exchange { Name = code };
 
 		/// <inheritdoc />
-		public ExchangeBoard CreateBoard(string code, Exchange exchange)
-		{
-			return new ExchangeBoard { Code = code, Exchange = exchange };
-		}
+		public ExchangeBoard CreateBoard(string code, Exchange exchange) => new ExchangeBoard { Code = code, Exchange = exchange };
 
 		long IStorage.GetCount<TEntity>() => throw new NotSupportedException();
 
