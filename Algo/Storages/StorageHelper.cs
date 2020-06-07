@@ -489,13 +489,23 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityId">Identifier.</param>
 		public static void DeleteById(this ISecurityStorage securityStorage, string securityId)
 		{
+			securityStorage.DeleteById(securityId.ToSecurityId());
+		}
+
+		/// <summary>
+		/// Delete instrument by identifier.
+		/// </summary>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="securityId">Identifier.</param>
+		public static void DeleteById(this ISecurityStorage securityStorage, SecurityId securityId)
+		{
 			if (securityStorage == null)
 				throw new ArgumentNullException(nameof(securityStorage));
 
-			if (securityId.IsEmpty())
+			if (securityId == default)
 				throw new ArgumentNullException(nameof(securityId));
 
-			securityStorage.DeleteBy(new Security { Id = securityId });
+			securityStorage.DeleteBy(new SecurityLookupMessage { SecurityId = securityId });
 		}
 
 		private class CandleMessageBuildableStorage : IMarketDataStorage<CandleMessage>, IMarketDataStorageInfo<CandleMessage>
@@ -1357,6 +1367,33 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(dataType));
 
 			return registry.GetStorage(securityId, dataType.MessageType, dataType.Arg, drive, format);
+		}
+
+		/// <summary>
+		/// Try build books by <see cref="OrderBookInrementBuilder"/> in case of <paramref name="books"/> is incremental changes.
+		/// </summary>
+		/// <param name="books">Order books.</param>
+		/// <returns>Order books.</returns>
+		public static IEnumerable<QuoteChangeMessage> BuildIfNeed(this IEnumerable<QuoteChangeMessage> books)
+		{
+			if (books is null)
+				throw new ArgumentNullException(nameof(books));
+
+			var builders = new Dictionary<SecurityId, OrderBookInrementBuilder>();
+
+			foreach (var book in books)
+			{
+				if (book.State != null)
+				{
+					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookInrementBuilder(key, GlobalLogReceiver.Instance));
+					var change = builder.TryApply(book);
+
+					if (change != null)
+						yield return change;
+				}
+				else
+					yield return book;
+			}
 		}
 	}
 }

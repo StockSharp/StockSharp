@@ -1038,6 +1038,9 @@ namespace StockSharp.Algo
 		public static IEnumerable<TEntity> ToEntities<TMessage, TEntity>(this IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider = null)
 			where TMessage : Message
 		{
+			if (messages is IEnumerable<QuoteChangeMessage> books)
+				messages = books.BuildIfNeed().To<IEnumerable<TMessage>>();
+
 			return new ToEntitiesEnumerable<TMessage, TEntity>(messages, security, exchangeInfoProvider);
 		}
 
