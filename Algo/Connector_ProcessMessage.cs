@@ -304,7 +304,7 @@ namespace StockSharp.Algo
 						_inAdapter = new BufferMessageAdapter(_inAdapter, _adapter.StorageSettings, Buffer, SnapshotRegistry);
 
 					if (SupportBasketSecurities)
-						_inAdapter = new BasketSecurityMessageAdapter(_inAdapter, this, BasketSecurityProcessorProvider, _entityCache.ExchangeInfoProvider) { OwnInnerAdapter = true };
+						_inAdapter = new BasketSecurityMessageAdapter(_inAdapter, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true };
 
 					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdapter = true };
@@ -802,10 +802,13 @@ namespace StockSharp.Algo
 
 			var securityId = message.SecurityId;
 
-			var removedSecurity = _entityCache.TryRemoveSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode));
+			var security = SecurityStorage.LookupById(securityId);
 
-			if (removedSecurity != null)
-				_removed?.Invoke(new[] { removedSecurity });
+			if (security != null)
+			{
+				SecurityStorage.Delete(security);
+				_removed?.Invoke(new[] { security });
+			}
 		}
 
 		private void ProcessConnectMessage(ConnectMessage message)
@@ -900,7 +903,7 @@ namespace StockSharp.Algo
 				board = null;
 			else
 			{
-				board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
+				board = ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 				_entityCache.SetSessionState(board, message.State);
 			}
 
@@ -910,7 +913,7 @@ namespace StockSharp.Algo
 
 		private void ProcessBoardMessage(BoardMessage message)
 		{
-			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, out var isNew, code =>
+			var board = ExchangeInfoProvider.GetOrCreateBoard(message.Code, out var isNew, code =>
 			{
 				var exchange = message.ToExchange(EntityFactory.CreateExchange(message.ExchangeCode));
 				var b = EntityFactory.CreateBoard(code, exchange);
@@ -930,7 +933,7 @@ namespace StockSharp.Algo
 				if (!UpdateSecurityByDefinition)
 					return false;
 
-				s.ApplyChanges(message, _entityCache.ExchangeInfoProvider, OverrideSecurityData);
+				s.ApplyChanges(message, ExchangeInfoProvider, OverrideSecurityData);
 				return true;
 			}, out var isNew);
 
@@ -1048,7 +1051,7 @@ namespace StockSharp.Algo
 		{
 			var portfolio = GetPortfolio(message.PortfolioName, p =>
 			{
-				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
+				message.ToPortfolio(p, ExchangeInfoProvider);
 				return true;
 			}, out var isNew);
 
@@ -1070,7 +1073,7 @@ namespace StockSharp.Algo
 			{
 				portfolio = GetPortfolio(message.PortfolioName, pf =>
 				{
-					pf.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
+					pf.ApplyChanges(message, ExchangeInfoProvider);
 					return true;
 				}, out _);
 

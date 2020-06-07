@@ -1329,7 +1329,7 @@ namespace StockSharp.Algo
 
 			var trades = new List<MyTrade>();
 
-			using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf })))
+			using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf }), new InMemoryExchangeInfoProvider()))
 			{
 				var errors = new List<Exception>();
 
@@ -2900,15 +2900,51 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Get or create (if not exist).
+		/// </summary>
+		/// <param name="storage">Securities meta info storage.</param>
+		/// <param name="id">Security ID.</param>
+		/// <param name="creator">Creator.</param>
+		/// <param name="isNew">Is newly created.</param>
+		/// <returns>Security.</returns>
+		public static Security GetOrCreate(this ISecurityStorage storage, string id, Func<string, Security> creator, out bool isNew)
+		{
+			if (storage is null)
+				throw new ArgumentNullException(nameof(storage));
+
+			if (id.IsEmpty())
+				throw new ArgumentNullException(nameof(storage));
+
+			if (creator is null)
+				throw new ArgumentNullException(nameof(creator));
+
+			lock (storage.SyncRoot)
+			{
+				var security = storage.LookupById(id);
+
+				if (security == null)
+				{
+					security = creator(id);
+					storage.Save(security, false);
+					isNew = true;
+				}
+				else
+					isNew = false;
+
+				return security;
+			}
+		}
+
+		/// <summary>
 		/// To delete all instruments.
 		/// </summary>
 		/// <param name="storage">Securities meta info storage.</param>
 		public static void DeleteAll(this ISecurityStorage storage)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
-			storage.DeleteBy(LookupAllCriteria);
+			storage.DeleteBy(Extensions.LookupAllCriteriaMessage);
 		}
 
 		/// <summary>

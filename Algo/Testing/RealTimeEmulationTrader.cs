@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
     using StockSharp.Logging;
     using StockSharp.Messages;
@@ -44,7 +45,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolio">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, ISecurityProvider securityProvider, Portfolio portfolio, bool ownAdapter = true)
-			: this(underlyngMarketDataAdapter, securityProvider, new CollectionPortfolioProvider(new[] { portfolio }), ownAdapter)
+			: this(underlyngMarketDataAdapter, securityProvider, new CollectionPortfolioProvider(new[] { portfolio }), new InMemoryExchangeInfoProvider(), ownAdapter)
 		{
 		}
 
@@ -55,8 +56,9 @@ namespace StockSharp.Algo.Testing
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
-		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, bool ownAdapter = true)
-			: base(new EmulationMessageAdapter(underlyngMarketDataAdapter, new InMemoryMessageChannel(new MessageByOrderQueue(), "Emulator in", err => err.LogError()), false, securityProvider, portfolioProvider) { OwnInnerAdapter = ownAdapter }, ownAdapter)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, bool ownAdapter = true)
+			: base(new EmulationMessageAdapter(underlyngMarketDataAdapter, new InMemoryMessageChannel(new MessageByOrderQueue(), "Emulator in", err => err.LogError()), false, securityProvider, portfolioProvider, exchangeInfoProvider) { OwnInnerAdapter = ownAdapter }, ownAdapter)
 		{
 			UpdateSecurityByLevel1 = false;
 			UpdateSecurityLastQuotes = false;

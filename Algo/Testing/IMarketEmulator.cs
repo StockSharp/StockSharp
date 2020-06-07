@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -43,5 +44,10 @@ namespace StockSharp.Algo.Testing
 		/// The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.
 		/// </summary>
 		IPortfolioProvider PortfolioProvider { get; }
+
+		/// <summary>
+		/// Exchanges and trading boards provider.
+		/// </summary>
+		IExchangeInfoProvider ExchangeInfoProvider { get; }
 	}
 }

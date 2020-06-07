@@ -466,14 +466,16 @@ namespace SampleHistoryTesting
 				if (emulationInfo.CustomHistoryAdapter != null)
 				{
 					connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
-					connector.Adapter.InnerAdapters.Add(new EmulationMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "History out", err => err.LogError()), true, connector.EmulationAdapter.Emulator.SecurityProvider, connector.EmulationAdapter.Emulator.PortfolioProvider));
+
+					var emu = connector.EmulationAdapter.Emulator;
+					connector.Adapter.InnerAdapters.Add(new EmulationMessageAdapter(emulationInfo.CustomHistoryAdapter(connector.TransactionIdGenerator), new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "History out", err => err.LogError()), true, emu.SecurityProvider, emu.PortfolioProvider, emu.ExchangeInfoProvider));
 				}
 
 				// set history range
 				connector.HistoryMessageAdapter.StartDate = startTime;
 				connector.HistoryMessageAdapter.StopDate = stopTime;
 
-				connector.NewSecurity += s =>
+				connector.SecurityReceived += (subscr, s) =>
 				{
 					if (s != security)
 						return;

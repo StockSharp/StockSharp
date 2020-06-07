@@ -44,7 +44,7 @@ namespace SampleConnection
 
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
 
-			return new Connector(entityRegistry, storageRegistry, snapshotRegistry, new StorageBuffer());
+			return new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer());
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

@@ -634,9 +634,6 @@ namespace StockSharp.Algo
 			LookupPortfoliosResult2?.Invoke(message, portfolios, newPortfolios, error);
 		}
 
-		private Security TryGetSecurity(SecurityId? securityId)
-			=> securityId == null ? null : GetSecurity(securityId.Value);
-
 		private void RaiseMarketDataSubscriptionSucceeded(MarketDataMessage message, Subscription subscription)
 		{
 			if (message == null)

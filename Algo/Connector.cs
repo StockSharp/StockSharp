@@ -70,31 +70,8 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="Connector"/>.
 		/// </summary>
 		public Connector()
-			: this(null)
+			: this(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider())
 		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Connector"/>.
-		/// </summary>
-		public Connector(StorageBuffer buffer)
-			: this(true, buffer: buffer)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Connector"/>.
-		/// </summary>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		/// <param name="buffer">Storage buffer.</param>
-		/// <param name="initManagers">Initialize managers.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
-			StorageBuffer buffer = null, bool initManagers = true)
-			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry, buffer, initManagers)
-		{
-			EntityRegistry = entityRegistry;
 		}
 
 		/// <summary>
@@ -102,55 +79,27 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="securityStorage">Securities meta info storage.</param>
 		/// <param name="positionStorage">Position storage.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
 		/// <param name="buffer">Storage buffer.</param>
-		/// <param name="initManagers">Initialize managers.</param>
+		/// <param name="initAdapter">Initialize basket adapter.</param>
+		/// <param name="initChannels">Initialize channels.</param>
 		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage,
-			IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
-			StorageBuffer buffer = null, bool initManagers = true)
-			: this(false, true, storageRegistry, snapshotRegistry, buffer, initManagers)
+			IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry = null,
+			SnapshotRegistry snapshotRegistry = null, StorageBuffer buffer = null, bool initAdapter = true, bool initChannels = true)
 		{
-			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
+			Buffer = buffer;
 
 			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
-			EntityFactory = new StorageEntityFactory(SecurityStorage, PositionStorage, true);
-
-			InitAdapter(storageRegistry, snapshotRegistry);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Connector"/>.
-		/// </summary>
-		/// <param name="initAdapter">Initialize basket adapter.</param>
-		/// <param name="initChannels">Initialize channels.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		/// <param name="buffer">Storage buffer.</param>
-		/// <param name="initManagers">Initialize managers.</param>
-		protected Connector(bool initAdapter, bool initChannels = true,
-			IStorageRegistry storageRegistry = null, SnapshotRegistry snapshotRegistry = null,
-			StorageBuffer buffer = null, bool initManagers = true)
-		{
-			Buffer = buffer;
-
-			_entityCache = new EntityCache(this)
-			{
-				ExchangeInfoProvider = new InMemoryExchangeInfoProvider()
-			};
+			_entityCache = new EntityCache(this, new EntityFactory(), exchangeInfoProvider);
 
 			_subscriptionManager = new SubscriptionManager(this);
 
 			SupportLevel1DepthBuilder = true;
 			SupportFilteredMarketDepth = true;
-
-			if (initManagers)
-			{
-				//PnLManager = new PnLManager();
-				RiskManager = new RiskManager();
-			}
 
 			_connectorStat.Add(this);
 
@@ -160,8 +109,15 @@ namespace StockSharp.Algo
 				OutMessageChannel = new InMemoryMessageChannel(new MessageByOrderQueue(), $"Connector Out ({Name})", RaiseError);
 			}
 
+			SnapshotRegistry = snapshotRegistry;
+
 			if (initAdapter)
-				InitAdapter(storageRegistry, snapshotRegistry);
+			{
+				Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(ExchangeInfoProvider), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider());
+
+				if (storageRegistry != null)
+					Adapter.StorageSettings.StorageRegistry = storageRegistry;
+			}
 		}
 
 		/// <summary>
@@ -178,6 +134,11 @@ namespace StockSharp.Algo
 		/// Position storage.
 		/// </summary>
 		public IPositionStorage PositionStorage { get; }
+
+		/// <summary>
+		/// Exchanges and trading boards provider.
+		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider => _entityCache.ExchangeInfoProvider;
 
 		/// <summary>
 		/// The storage of market data.
@@ -220,15 +181,6 @@ namespace StockSharp.Algo
 		/// <remarks>By default is <see langword="true"/>.</remarks>
 		public bool IsAutoPortfoliosSubscribe { get; set; } = true;
 
-		private void InitAdapter(IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
-		{
-			SnapshotRegistry = snapshotRegistry;
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(_entityCache.ExchangeInfoProvider), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider())
-			{
-				StorageSettings = { StorageRegistry = storageRegistry }
-			};
-		}
-
 		/// <summary>
 		/// Settings of the connection control <see cref="IConnector"/> to the trading system.
 		/// </summary>
@@ -238,11 +190,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 		/// </summary>
-		public IEntityFactory EntityFactory
-		{
-			get => _entityCache.EntityFactory;
-			set => _entityCache.EntityFactory = value;
-		}
+		public IEntityFactory EntityFactory => _entityCache.EntityFactory;
 
 		/// <summary>
 		/// Number of tick trades for storage. The default is 100000. If the value is set to <see cref="int.MaxValue"/>, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
@@ -298,12 +246,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<ExchangeBoard> ExchangeBoards => _entityCache.ExchangeBoards;
+		public IEnumerable<ExchangeBoard> ExchangeBoards => ExchangeInfoProvider.Boards;
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Securities => _entityCache.Securities;
+		public IEnumerable<Security> Securities => SecurityStorage.LookupAll();
 
-		int ISecurityProvider.Count => _entityCache.SecurityCount;
+		int ISecurityProvider.Count => SecurityStorage.Count;
+
+		SyncObject ISecurityProvider.SyncRoot => SecurityStorage.SyncRoot;
 
 		private Action<IEnumerable<Security>> _added;
 
@@ -377,7 +327,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Risk control manager.
 		/// </summary>
-		public virtual IRiskManager RiskManager { get; set; }
+		public virtual IRiskManager RiskManager { get; set; } = new RiskManager();
 
 		/// <summary>
 		/// Orders registration delay calculation manager.
@@ -1071,6 +1021,9 @@ namespace StockSharp.Algo
 			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
 		}
 
+		private Security TryGetSecurity(SecurityId? securityId)
+			=> securityId == null || securityId == default ? null : GetSecurity(securityId.Value);
+
 		private Security EnsureGetSecurity(ISecurityIdMessage message)
 		{
 			var secId = message.SecurityId;
@@ -1078,7 +1031,12 @@ namespace StockSharp.Algo
 			if (secId == default)
 				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str1025);
 
-			return GetSecurity(secId);
+			var security = TryGetSecurity(secId);
+
+			if (security == null)
+				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str704Params.Put());
+
+			return security;
 		}
 
 		/// <summary>
@@ -1096,20 +1054,38 @@ namespace StockSharp.Algo
 			if (changeSecurity == null)
 				throw new ArgumentNullException(nameof(changeSecurity));
 
-			var security = _entityCache.TryAddSecurity(id, idStr =>
+			var security = SecurityStorage.GetOrCreate(id, key =>
 			{
-				var idInfo = SecurityIdGenerator.Split(idStr);
-				return Tuple.Create(idInfo.SecurityCode, _entityCache.ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
+				var s = EntityFactory.CreateSecurity(key);
+
+				if (s == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1102Params.Put(key));
+
+				var idInfo = SecurityIdGenerator.Split(key);
+
+				var code = idInfo.SecurityCode;
+				var board = ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode));
+
+				if (s.Board == null)
+					s.Board = board;
+
+				if (s.Code.IsEmpty())
+					s.Code = code;
+
+				if (s.Name.IsEmpty())
+					s.Name = code;
+
+				//if (s.Class.IsEmpty())
+				//	s.Class = board.Code;
+
+				return s;
 			}, out isNew);
 
 			var isChanged = changeSecurity(security);
 
 			if (isNew)
 			{
-				if (security.Board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str903Params.Put(id));
-
-				_entityCache.TryAddBoard(security.Board);
+				ExchangeInfoProvider.Save(security.Board);
 				RaiseNewSecurity(security);
 			}
 			else if (isChanged)

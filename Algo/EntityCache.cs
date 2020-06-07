@@ -289,25 +289,12 @@ namespace StockSharp.Algo
 			RecycleOrders();
 		}
 
-		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
 		private readonly HashSet<long> _orderStatusTransactions = new HashSet<long>();
 		private readonly HashSet<long> _massCancelationTransactions = new HashSet<long>();
 
-		private IEntityFactory _entityFactory = new EntityFactory();
-
-		public IEntityFactory EntityFactory
-		{
-			get => _entityFactory;
-			set => _entityFactory = value ?? throw new ArgumentNullException(nameof(value));
-		}
-
-		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-
-		public IExchangeInfoProvider ExchangeInfoProvider
-		{
-			get => _exchangeInfoProvider;
-			set => _exchangeInfoProvider = value ?? throw new ArgumentNullException(nameof(value));
-		}
+		public IEntityFactory EntityFactory { get; }
+		
+		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();
 
@@ -317,15 +304,9 @@ namespace StockSharp.Algo
 
 		public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
+		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
+
 		public virtual IEnumerable<Portfolio> Portfolios => _portfolios.CachedValues;
-
-		private readonly CachedSynchronizedSet<ExchangeBoard> _exchangeBoards = new CachedSynchronizedSet<ExchangeBoard>();
-
-		public IEnumerable<ExchangeBoard> ExchangeBoards => _exchangeBoards.Cache;
-
-		private readonly CachedSynchronizedDictionary<string, Security> _securities = new CachedSynchronizedDictionary<string, Security>(StringComparer.InvariantCultureIgnoreCase);
-
-		public IEnumerable<Security> Securities => _securities.CachedValues;
 
 		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
 
@@ -337,16 +318,16 @@ namespace StockSharp.Algo
 
 		private readonly ILogReceiver _logReceiver;
 
-		public EntityCache(ILogReceiver logReceiver)
+		public EntityCache(ILogReceiver logReceiver, IEntityFactory entityFactory, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
+			EntityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
 
 		public IEnumerable<Position> Positions => _positions.CachedValues;
-
-		public int SecurityCount => _securities.Count;
 
 		public void Clear()
 		{
@@ -368,9 +349,6 @@ namespace StockSharp.Algo
 
 			_orderStatusTransactions.Clear();
 			_massCancelationTransactions.Clear();
-
-			_exchangeBoards.Clear();
-			_securities.Clear();
 
 			_orderCancelFails.Clear();
 			_orderRegisterFails.Clear();
@@ -1025,59 +1003,6 @@ namespace StockSharp.Algo
 				return Tuple.Create(portfolio, false, true);
 
 			return Tuple.Create(portfolio, false, false);
-		}
-
-		public Security GetSecurityById(string id)
-		{
-			return _securities.TryGetValue(id);
-		}
-
-		public Security TryAddSecurity(string id, Func<string, Tuple<string, ExchangeBoard>> idConvert, out bool isNew)
-		{
-			if (idConvert == null)
-				throw new ArgumentNullException(nameof(idConvert));
-
-			return _securities.SafeAdd(id, key =>
-			{
-				var s = EntityFactory.CreateSecurity(key);
-
-				if (s == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1102Params.Put(key));
-
-				var info = idConvert(key);
-
-				var code = info.Item1;
-				var board = info.Item2;
-
-				if (s.Board == null)
-					s.Board = board;
-
-				if (s.Code.IsEmpty())
-					s.Code = code;
-
-				if (s.Name.IsEmpty())
-					s.Name = code;
-
-				//if (s.Class.IsEmpty())
-				//	s.Class = board.Code;
-
-				return s;
-			}, out isNew);
-		}
-
-		public Security TryRemoveSecurity(string id)
-		{
-			lock (_securities.SyncRoot)
-			{
-				var security = _securities.TryGetValue(id);
-				_securities.Remove(id);
-				return security;
-			}
-		}
-
-		public void TryAddBoard(ExchangeBoard board)
-		{
-			_exchangeBoards.TryAdd(board);
 		}
 
 		public void AddRegisterFail(OrderFail fail)

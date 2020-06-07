@@ -30,6 +30,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Algo.Storages;
 
 	class LevelQuotes : IEnumerable<ExecutionMessage>
 	{
@@ -1636,23 +1637,24 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
-		public MarketEmulator(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public MarketEmulator(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 			PortfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
+			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		
 			((IMessageAdapter)this).SupportedInMessages = ((IMessageAdapter)this).PossibleSupportedMessages.Select(i => i.Type).ToArray();
 		}
 
-		/// <summary>
-		/// The provider of information about instruments.
-		/// </summary>
+		/// <inheritdoc />
 		public ISecurityProvider SecurityProvider { get; }
 
-		/// <summary>
-		/// The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.
-		/// </summary>
+		/// <inheritdoc />
 		public IPortfolioProvider PortfolioProvider { get; }
+
+		/// <inheritdoc />
+		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		/// <inheritdoc />
 		public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
@@ -2308,7 +2310,7 @@ namespace StockSharp.Algo.Testing
 
 		IMessageChannel ICloneable<IMessageChannel>.Clone()
 		{
-			return new MarketEmulator(SecurityProvider, PortfolioProvider);
+			return new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider);
 		}
 
 		object ICloneable.Clone()

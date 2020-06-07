@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Testing
 
     using StockSharp.BusinessEntities;
     using StockSharp.Messages;
+	using StockSharp.Algo.Storages;
 
 	/// <summary>
 	/// The interface of the real time market data adapter.
@@ -52,10 +53,11 @@ namespace StockSharp.Algo.Testing
 		/// <param name="isEmulationOnly">Send <see cref="TimeMessage"/> to emulator.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
-		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider)
 			: base(innerAdapter)
 		{
-			Emulator = new MarketEmulator(securityProvider, portfolioProvider)
+			Emulator = new MarketEmulator(securityProvider, portfolioProvider, exchangeInfoProvider)
 			{
 				Parent = this,
 				Settings =
@@ -361,6 +363,6 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
-			=> new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel, _isEmulationOnly, Emulator.SecurityProvider, Emulator.PortfolioProvider);
+			=> new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel, _isEmulationOnly, Emulator.SecurityProvider, Emulator.PortfolioProvider, Emulator.ExchangeInfoProvider);
 	}
 }

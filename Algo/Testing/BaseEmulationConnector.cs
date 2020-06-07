@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Testing
     using System.Linq;
 	using System.Collections.Generic;
 
-	using Ecng.Collections;
+	using Ecng.Common;
     using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -37,14 +37,16 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <param name="emulationAdapter">Emulation message adapter.</param>
 		/// <param name="applyHeartbeat">Apply on/off heartbeat mode for the specified adapter.</param>
-		public BaseEmulationConnector(EmulationMessageAdapter emulationAdapter, bool applyHeartbeat)
+		protected BaseEmulationConnector(EmulationMessageAdapter emulationAdapter, bool applyHeartbeat)
+			: base(
+				new InMemorySecurityStorage(emulationAdapter.CheckOnNull().Emulator.SecurityProvider),
+				new InMemoryPositionStorage(emulationAdapter.Emulator.PortfolioProvider),
+				emulationAdapter.Emulator.ExchangeInfoProvider)
 		{
 			Adapter.InnerAdapters.Add(emulationAdapter ?? throw new ArgumentNullException(nameof(emulationAdapter)));
 			Adapter.ApplyHeartbeat(EmulationAdapter, applyHeartbeat);
 
 			TimeChange = false;
-
-			EntityFactory = new StorageEntityFactory(emulationAdapter.Emulator.SecurityProvider, emulationAdapter.Emulator.PortfolioProvider);
 
 			// sync transaction ids with underlying adapter
 			TransactionIdGenerator = emulationAdapter.TransactionIdGenerator;
