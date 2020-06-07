@@ -62,10 +62,6 @@ namespace StockSharp.Algo
 			remove => _removed -= value;
 		}
 
-		void IDisposable.Dispose()
-		{
-		}
-
 		/// <inheritdoc />
 		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => this.Filter(criteria);
 	}

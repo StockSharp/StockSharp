@@ -60,6 +60,9 @@ namespace StockSharp.Algo
 		public int Count => _trie.Count;
 
 		/// <inheritdoc />
+		public SyncObject SyncRoot => _provider.SyncRoot;
+
+		/// <inheritdoc />
 		public event Action<IEnumerable<Security>> Added;
 
 		/// <inheritdoc />
@@ -114,9 +117,6 @@ namespace StockSharp.Algo
 			_provider.Added -= AddSecurities;
 			_provider.Removed -= RemoveSecurities;
 			_provider.Cleared -= ClearSecurities;
-
-			if (_ownProvider)
-				_provider.Dispose();
 
 			base.DisposeManaged();
 		}

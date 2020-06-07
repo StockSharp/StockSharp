@@ -18,13 +18,20 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface for access to provider of information about instruments.
 	/// </summary>
-	public interface ISecurityProvider : IDisposable
+	public interface ISecurityProvider
 	{
+		/// <summary>
+		/// Sync object.
+		/// </summary>
+		SyncObject SyncRoot { get; }
+
 		/// <summary>
 		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
 		/// </summary>

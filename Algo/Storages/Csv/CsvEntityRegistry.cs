@@ -268,10 +268,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 			#region IStorageSecurityList
 
-			void IDisposable.Dispose()
-			{
-			}
-
 			private Action<IEnumerable<Security>> _added;
 
 			event Action<IEnumerable<Security>> ISecurityProvider.Added
