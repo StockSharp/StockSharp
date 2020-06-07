@@ -98,6 +98,15 @@ namespace StockSharp.Algo.Storages.Binary
 
 			IncrementalOnly = stream.Read<bool>();
 		}
+
+		public override void CopyFrom(BinaryMetaInfo src)
+		{
+			base.CopyFrom(src);
+
+			var quoteInfo = (QuoteMetaInfo)src;
+
+			IncrementalOnly = quoteInfo.IncrementalOnly;
+		}
 	}
 
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
@@ -288,16 +297,16 @@ namespace StockSharp.Algo.Storages.Binary
 					diff.Asks = diff.Asks.OrderBy(q => q.Price).ToArray();
 				}
 
-				quoteMsg = isFull ? diff : prevDepth.AddDelta(diff);	
+				quoteMsg = isFull ? diff : prevDepth.AddDelta(diff);
+
+				//if (depth.BestBid != null && depth.BestAsk != null && depth.BestBid.Price >= depth.BestAsk.Price)
+				//	throw new InvalidOperationException("Лучший бид {0} больше или равен лучшему офферу {1}.".Put(depth.BestBid.Price, depth.BestAsk.Price));
+
+				//metaInfo.FirstPrice = GetDepthPrice(quoteMsg);
+
+				if (metaInfo.Version < MarketDataVersions.Version40)
+					return quoteMsg;
 			}
-
-			//if (depth.BestBid != null && depth.BestAsk != null && depth.BestBid.Price >= depth.BestAsk.Price)
-			//	throw new InvalidOperationException("Лучший бид {0} больше или равен лучшему офферу {1}.".Put(depth.BestBid.Price, depth.BestAsk.Price));
-
-			//metaInfo.FirstPrice = GetDepthPrice(quoteMsg);
-
-			if (metaInfo.Version < MarketDataVersions.Version40)
-				return quoteMsg;
 
 			if (metaInfo.Version < MarketDataVersions.Version46)
 				quoteMsg.LocalTime = quoteMsg.ServerTime - reader.ReadLong().To<TimeSpan>() + metaInfo.LocalOffset;
@@ -341,6 +350,10 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo == null)
 				throw new ArgumentNullException(nameof(metaInfo));
 
+			var isLess56 = metaInfo.Version < MarketDataVersions.Version56;
+			var isLess57 = metaInfo.Version < MarketDataVersions.Version57;
+			var isLess58 = metaInfo.Version < MarketDataVersions.Version58;
+
 			writer.WriteInt(quotes.Length);
 
 			foreach (var quote in quotes)
@@ -360,18 +373,45 @@ namespace StockSharp.Algo.Storages.Binary
 
 				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
 
-				if (metaInfo.Version < MarketDataVersions.Version56)
+				if (isLess56)
 					continue;
 
 				writer.WriteNullableInt(quote.OrdersCount);
 
-				if (metaInfo.Version < MarketDataVersions.Version57)
+				if (isLess57)
 					continue;
 
 				if (quote.Condition != default)
 				{
 					writer.Write(true);
 					writer.WriteInt((int)quote.Condition);
+				}
+				else
+					writer.Write(false);
+
+				if (isLess58)
+					continue;
+
+				if (quote.Action != null)
+				{
+					writer.Write(true);
+					writer.WriteInt((int)quote.Action.Value);
+				}
+				else
+					writer.Write(false);
+
+				if (quote.StartPosition != null)
+				{
+					writer.Write(true);
+					writer.WriteInt(quote.StartPosition.Value);
+				}
+				else
+					writer.Write(false);
+
+				if (quote.EndPosition != null)
+				{
+					writer.Write(true);
+					writer.WriteInt(quote.EndPosition.Value);
 				}
 				else
 					writer.Write(false);
@@ -386,14 +426,18 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo == null)
 				throw new ArgumentNullException(nameof(metaInfo));
 
-			var deltaCount = reader.ReadInt();
+			var count = reader.ReadInt();
 
-			if (deltaCount == 0)
+			if (count == 0)
 				return ArrayHelper.Empty<QuoteChange>();
 
-			var quotes = new QuoteChange[deltaCount];
+			var is56 = metaInfo.Version >= MarketDataVersions.Version56;
+			var is57 = metaInfo.Version >= MarketDataVersions.Version57;
+			var is58 = metaInfo.Version >= MarketDataVersions.Version58;
 
-			for (var i = 0; i < deltaCount; i++)
+			var quotes = new QuoteChange[count];
+
+			for (var i = 0; i < count; i++)
 			{
 				var prevPrice = metaInfo.FirstPrice;
 				var price = reader.ReadPrice(ref prevPrice, metaInfo, useLong, nonAdjustPrice);
@@ -401,15 +445,29 @@ namespace StockSharp.Algo.Storages.Binary
 
 				var volume = reader.ReadVolume(metaInfo);
 
-				var ordersCount = metaInfo.Version >= MarketDataVersions.Version56
+				var ordersCount = is56
 					? reader.ReadNullableInt()
 					: null;
 
-				var condition = metaInfo.Version >= MarketDataVersions.Version57
-					? reader.Read() ? (QuoteConditions)reader.ReadInt() : default
+				var condition = is57
+					? (QuoteConditions)(reader.ReadNullableInt() ?? 0)
 					: default;
 
-				quotes[i] = new QuoteChange(price, volume, ordersCount, condition);
+				var quote = new QuoteChange(price, volume, ordersCount, condition);
+
+				if (is58)
+				{
+					if (reader.Read())
+						quote.Action = (QuoteChangeActions)reader.ReadInt();
+
+					if (reader.Read())
+						quote.StartPosition = reader.ReadInt();
+
+					if (reader.Read())
+						quote.EndPosition = reader.ReadInt();
+				}
+
+				quotes[i] = quote;
 			}
 
 			return quotes;
