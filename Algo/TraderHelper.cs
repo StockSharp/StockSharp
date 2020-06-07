@@ -111,13 +111,45 @@ namespace StockSharp.Algo
 		/// <param name="logs">Logs.</param>
 		public static void ApplyNewState(this Order order, OrderStates state, ILogReceiver logs = null)
 		{
-			if (order is null)
-				throw new ArgumentNullException(nameof(order));
+			order.State = ((OrderStates?)order.State).ApplyNewState(state, order.TransactionId, logs);
+		}
 
-			if (!_stateChangePossibilities[(int)order.State][(int)state] && logs != null)
-				logs.AddWarningLog($"Order {order.TransactionId} invalid state change: {order.State} -> {state}");
+		/// <summary>
+		/// Check the possibility <see cref="Order.State"/> change.
+		/// </summary>
+		/// <param name="currState">Current order's state.</param>
+		/// <param name="newState">New state.</param>
+		/// <param name="transactionId">Transaction id.</param>
+		/// <param name="logs">Logs.</param>
+		/// <returns>New state.</returns>
+		public static OrderStates ApplyNewState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs = null)
+		{
+			if (logs != null && currState != null && !_stateChangePossibilities[(int)currState.Value][(int)newState])
+				logs.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
 
-			order.State = state;
+			return newState;
+		}
+
+		/// <summary>
+		/// Check the possibility <see cref="Order.Balance"/> change.
+		/// </summary>
+		/// <param name="currBal">Current balance.</param>
+		/// <param name="newBal">New balance.</param>
+		/// <param name="transactionId">Transaction id.</param>
+		/// <param name="logs">Logs.</param>
+		/// <returns>New balance.</returns>
+		public static decimal ApplyNewBalance(this decimal? currBal, decimal newBal, long transactionId, ILogReceiver logs)
+		{
+			if (logs is null)
+				throw new ArgumentNullException(nameof(logs));
+
+			if (newBal < 0)
+				logs.AddErrorLog($"Order {transactionId}: balance {newBal} < 0");
+
+			if (currBal < newBal)
+				logs.AddErrorLog($"Order {transactionId}: bal_old {currBal} -> bal_new {newBal}");
+
+			return newBal;
 		}
 
 		/// <summary>

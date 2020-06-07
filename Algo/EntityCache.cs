@@ -117,17 +117,7 @@ namespace StockSharp.Algo
 					order.BoardId = message.OrderBoardId;
 
 				if (message.Balance != null)
-				{
-					var newBalance = message.Balance.Value;
-
-					if (newBalance < 0)
-						_parent._logReceiver.AddErrorLog($"Order {order.TransactionId}: balance {newBalance} < 0");
-
-					if (order.Balance < newBalance)
-						_parent._logReceiver.AddErrorLog($"Order {order.TransactionId}: bal_old {order.Balance} -> bal_new {newBalance}");
-
-					order.Balance = message.Balance.Value;
-				}
+					order.Balance = ((decimal?)order.Balance).ApplyNewBalance(message.Balance.Value, order.TransactionId, _parent._logReceiver);
 
 				if (message.OrderState != null)
 					order.ApplyNewState(message.OrderState.Value, _parent._logReceiver);
@@ -709,7 +699,7 @@ namespace StockSharp.Algo
 			});
 		}
 
-		public Tuple<MyTrade, bool> ProcessMyTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
+		public Tuple<MyTrade, bool> ProcessOwnTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
