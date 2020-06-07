@@ -1402,7 +1402,7 @@ namespace StockSharp.Algo
 
 			foreach (var msg in retVal)
 			{
-				var tuple = _entityCache.ProcessMyTradeMessage(order, order.Security, msg, _entityCache.GetTransactionId(msg.OriginalTransactionId));
+				var tuple = _entityCache.ProcessOwnTradeMessage(order, order.Security, msg, _entityCache.GetTransactionId(msg.OriginalTransactionId));
 
 				if (tuple?.Item2 != true)
 					continue;
@@ -1423,21 +1423,6 @@ namespace StockSharp.Algo
 					if (change == EntityCache.OrderChangeInfo.NotExist)
 					{
 						this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
-
-						if (transactionId == 0 && !isStatusRequest)
-						{
-							if (message.OrderId != null)
-							{
-								this.AddInfoLog("{0} info suspended.", message.OrderId.Value);
-								_nonAssociatedOrderIds.SafeAdd(message.OrderId.Value).Add(message.TypedClone());
-							}
-							else if (!message.OrderStringId.IsEmpty())
-							{
-								this.AddInfoLog("{0} info suspended.", message.OrderStringId);
-								_nonAssociatedStringOrderIds.SafeAdd(message.OrderStringId).Add(message.TypedClone());
-							}
-						}
-
 						continue;
 					}
 
@@ -1446,64 +1431,19 @@ namespace StockSharp.Algo
 
 					var order = change.Order;
 
-					//if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
-					//{
-					//	var derivedOrder = _entityCache.GetOrder(order.Security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
-
-					//	if (derivedOrder == null)
-					//		_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o1) => s.DerivedOrder = o1));
-					//	else
-					//		order.DerivedOrder = derivedOrder;
-					//}
-
 					if (change.IsNew)
 					{
 						this.AddOrderInfoLog(order, "New order");
 
 						RaiseNewOrder(order);
-
 						RaiseReceived(order, message, OrderReceived);
-
-						if (isStatusRequest && order.State == OrderStates.Pending)
-						{
-							// TODO temp disabled (need more tests)
-							//RegisterOrder(order, false);
-						}
 					}
 					else if (change.IsChanged)
 					{
 						this.AddOrderInfoLog(order, "Order changed");
 
 						RaiseOrderChanged(order);
-
 						RaiseReceived(order, message, OrderReceived);
-					}
-
-					if (order.Id != null)
-						ProcessMyTrades(order, order.Id.Value, _nonAssociatedByIdMyTrades);
-
-					ProcessMyTrades(order, order.TransactionId, _nonAssociatedByTransactionIdMyTrades);
-
-					if (!order.StringId.IsEmpty())
-						ProcessMyTrades(order, order.StringId, _nonAssociatedByStringIdMyTrades);
-
-					//ProcessConditionOrders(order);
-
-					List<ExecutionMessage> suspended = null;
-
-					if (order.Id != null)
-						suspended = _nonAssociatedOrderIds.TryGetAndRemove(order.Id.Value);
-					else if (!order.StringId.IsEmpty())
-						suspended = _nonAssociatedStringOrderIds.TryGetAndRemove(order.StringId);
-
-					if (suspended != null)
-					{
-						this.AddInfoLog("{0} resumed.", order.Id);
-
-						foreach (var s in suspended)
-						{
-							ProcessOrderMessage(order, order.Security, s, transactionId, isStatusRequest);
-						}
 					}
 				}
 			}
@@ -1547,27 +1487,9 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessMyTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
+		private void ProcessOwnTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{
-			var tuple = _entityCache.ProcessMyTradeMessage(order, security, message, transactionId);
-
-			if (tuple == null)
-			{
-				List<ExecutionMessage> nonOrderedMyTrades;
-
-				if (message.OrderId != null)
-					nonOrderedMyTrades = _nonAssociatedByIdMyTrades.SafeAdd(message.OrderId.Value);
-				else if (message.OriginalTransactionId != 0)
-					nonOrderedMyTrades = _nonAssociatedByTransactionIdMyTrades.SafeAdd(message.OriginalTransactionId);
-				else
-					nonOrderedMyTrades = _nonAssociatedByStringIdMyTrades.SafeAdd(message.OrderStringId);
-
-				this.AddInfoLog("My trade delayed: {0}", message);
-
-				nonOrderedMyTrades.Add(message.TypedClone());
-
-				return;
-			}
+			var tuple = _entityCache.ProcessOwnTradeMessage(order, security, message, transactionId);
 
 			if (tuple.Item2)
 				RaiseNewMyTrade(tuple.Item1);
@@ -1591,7 +1513,7 @@ namespace StockSharp.Algo
 			if (message.HasTradeInfo())
 			{
 				processed = true;
-				ProcessMyTradeMessage(order, security, message, transactionId);
+				ProcessOwnTradeMessage(order, security, message, transactionId);
 			}
 
 			if (!processed)

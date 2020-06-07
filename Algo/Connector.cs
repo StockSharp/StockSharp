@@ -42,25 +42,7 @@ namespace StockSharp.Algo
 	/// </summary>
 	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, IMarketDataProviderEx
 	{
-		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
-		private static readonly MemoryStatisticsValue<Connector> _connectorStat = new MemoryStatisticsValue<Connector>(LocalizedStrings.Str1093);
-		private static readonly MemoryStatisticsValue<Message> _messageStat = new MemoryStatisticsValue<Message>(LocalizedStrings.Str1094);
-
-		static Connector()
-		{
-			MemoryStatistics.Instance.Values.Add(_tradeStat);
-			MemoryStatistics.Instance.Values.Add(_connectorStat);
-			MemoryStatistics.Instance.Values.Add(_messageStat);
-		}
-
 		private readonly EntityCache _entityCache;
-
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
-
 		private readonly SubscriptionManager _subscriptionManager;
 
 		private bool _notFirstTimeConnected;
@@ -100,8 +82,6 @@ namespace StockSharp.Algo
 
 			SupportLevel1DepthBuilder = true;
 			SupportFilteredMarketDepth = true;
-
-			_connectorStat.Add(this);
 
 			if (initChannels)
 			{
@@ -1131,13 +1111,6 @@ namespace StockSharp.Algo
 			_prevTime = default;
 			_currentTime = default;
 
-			_nonAssociatedByIdMyTrades.Clear();
-			_nonAssociatedByStringIdMyTrades.Clear();
-			_nonAssociatedByTransactionIdMyTrades.Clear();
-
-			_nonAssociatedOrderIds.Clear();
-			_nonAssociatedStringOrderIds.Clear();
-
 			ConnectionState = ConnectionStates.Disconnected;
 
 			_subscriptionManager.ClearCache();
@@ -1169,8 +1142,6 @@ namespace StockSharp.Algo
 			}
 
 			base.DisposeManaged();
-
-			_connectorStat.Remove(this);
 
 			//if (ConnectionState == ConnectionStates.Disconnected || ConnectionState == ConnectionStates.Failed)
 			//	TransactionAdapter = null;

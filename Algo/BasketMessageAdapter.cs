@@ -533,6 +533,11 @@ namespace StockSharp.Algo
 		public bool SupportSecurityAll { get; set; } = true;
 
 		/// <summary>
+		/// Use <see cref="TransactionOrderingMessageAdapter"/>.
+		/// </summary>
+		public bool IsSupportTransactionLog { get; set; } = true;
+
+		/// <summary>
 		/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 		/// </summary>
 		public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
@@ -633,6 +638,11 @@ namespace StockSharp.Algo
 			if (SecurityMappingStorage != null)
 			{
 				adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage));
+			}
+
+			if (IsSupportTransactionLog)
+			{
+				adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
 			}
 
 			if (adapter.IsSupportSubscriptions)
@@ -1937,6 +1947,7 @@ namespace StockSharp.Algo
 				NativeIdStorage = NativeIdStorage,
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
 				UseSeparatedChannels = UseSeparatedChannels,
+				IsSupportTransactionLog = IsSupportTransactionLog,
 			};
 
 			clone.Load(this.Save());

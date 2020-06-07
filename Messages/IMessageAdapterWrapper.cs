@@ -337,6 +337,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public IEnumerable<Level1Fields> CandlesBuildFrom => InnerAdapter.CandlesBuildFrom;
 
+		/// <inheritdoc />
+		public bool IsSupportTransactionLog => InnerAdapter.IsSupportTransactionLog;
+
 		Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
 
 		bool IMessageAdapter.HeartbeatBeforConnect => InnerAdapter.HeartbeatBeforConnect;

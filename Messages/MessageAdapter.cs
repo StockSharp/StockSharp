@@ -545,6 +545,9 @@ namespace StockSharp.Messages
 		public virtual bool EnqueueSubscriptions { get; set; }
 
 		/// <inheritdoc />
+		public virtual bool IsSupportTransactionLog => false;
+
+		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			Id = storage.GetValue(nameof(Id), Id);
