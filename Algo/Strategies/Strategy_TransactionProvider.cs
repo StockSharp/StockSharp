@@ -51,16 +51,6 @@ namespace StockSharp.Algo.Strategies
 			return _positions.TryGetValue(Tuple.Create(security, portfolio));
 		}
 
-		void IPositionProvider.SubscribePositions(Security security, Portfolio portfolio, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
-		{
-			SafeGetConnector().SubscribePositions(security, portfolio, from, to, count, adapter);
-		}
-
-		void IPositionProvider.UnSubscribePositions(long originalTransactionId)
-		{
-			SafeGetConnector().UnSubscribePositions(originalTransactionId);
-		}
-
 		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)
 		{
 			return SafeGetConnector().LookupByPortfolioName(name);
