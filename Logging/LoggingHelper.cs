@@ -205,7 +205,7 @@ namespace StockSharp.Logging
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
 
-			ConfigManager.TryGetService<LogManager>()?.Application.AddErrorLog(error, format);
+			LogManager.Instance?.Application.AddErrorLog(error, format);
 		}
 
 		/// <summary>
