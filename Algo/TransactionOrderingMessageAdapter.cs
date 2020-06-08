@@ -127,6 +127,9 @@
 					if (execMsg.IsMarketData())
 						break;
 
+					if (_transactionLogSubscriptions.Count == 0)
+						break;
+
 					if (!_transactionLogSubscriptions.TryGetValue(execMsg.OriginalTransactionId, out var subscription))
 					{
 						if (!_orders.TryGetValue(execMsg.OriginalTransactionId, out var orderTransId))
