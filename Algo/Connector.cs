@@ -45,6 +45,8 @@ namespace StockSharp.Algo
 		private readonly EntityCache _entityCache;
 		private readonly SubscriptionManager _subscriptionManager;
 
+		private readonly HashSet<Security> _existingSecurities = new HashSet<Security>();
+
 		private bool _notFirstTimeConnected;
 		private bool _isDisposing;
 
@@ -1063,13 +1065,16 @@ namespace StockSharp.Algo
 
 			var isChanged = changeSecurity(security);
 
-			if (isNew)
+			if (_existingSecurities.Add(security))
 			{
 				ExchangeInfoProvider.Save(security.Board);
 				RaiseNewSecurity(security);
 			}
-			else if (isChanged)
-				RaiseSecurityChanged(security);
+			else
+			{
+				if (isChanged)
+					RaiseSecurityChanged(security);
+			}
 
 			return security;
 		}
@@ -1105,6 +1110,8 @@ namespace StockSharp.Algo
 		public virtual void ClearCache()
 		{
 			_entityCache.Clear();
+
+			_existingSecurities.Clear();
 
 			_notFirstTimeConnected = default;
 
