@@ -55,7 +55,7 @@ namespace SampleStrategies
 			if (connector != null)
 			{
 				if (_initialized)
-					connector.MarketDepthChanged -= TraderOnMarketDepthChanged;
+					connector.MarketDepthReceived -= TraderOnMarketDepthReceived;
 			}
 
 			base.OnClosed(e);
@@ -109,7 +109,7 @@ namespace SampleStrategies
 
 				if (!_initialized)
 				{
-					connector.MarketDepthChanged += TraderOnMarketDepthChanged;
+					connector.MarketDepthReceived += TraderOnMarketDepthReceived;
 					_initialized = true;
 				}
 			}
@@ -128,7 +128,7 @@ namespace SampleStrategies
 			}
 		}
 
-		private void TraderOnMarketDepthChanged(MarketDepth depth)
+		private void TraderOnMarketDepthReceived(Subscription subscription, MarketDepth depth)
 		{
 			var wnd = _quotesWindows.TryGetValue(depth.Security);
 

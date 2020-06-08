@@ -142,7 +142,7 @@ namespace SampleConnection
 				// subscribe on order book flow
 				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
-				_quotesWindows.Add(security, window);
+				_quotesWindows[security] = window;
 
 				window.Closed += (s, e) =>
 				{

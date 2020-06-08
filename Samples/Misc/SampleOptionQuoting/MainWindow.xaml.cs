@@ -294,23 +294,20 @@ namespace SampleOptionQuoting
 			Connector.SecurityReceived += (sub, security) =>
 			{
 				if (security.Type == SecurityTypes.Future)
-					_assets.Add(security);
-			};
+					_assets.TryAdd(security);
 
-			Connector.SecurityChanged += security =>
-			{
 				if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
 					_isDirty = true;
 			};
 
 			// subscribing on tick prices and updating asset price
-			Connector.NewTrade += trade =>
+			Connector.TickTradeReceived += (sub, trade) =>
 			{
 				if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
 					_isDirty = true;
 			};
 
-			Connector.NewPosition += position => this.GuiAsync(() =>
+			Connector.PositionReceived += (sub, position) => this.GuiAsync(() =>
 			{
 				var asset = SelectedAsset;
 
@@ -323,22 +320,11 @@ namespace SampleOptionQuoting
 				if (!assetPos && !newPos)
 					return;
 
-				//if (assetPos)
-				//	PosChart.AssetPosition = position;
-
-				//if (newPos)
-				//	PosChart.Positions.Add(position);
-
-				RefreshChart();
-			});
-
-			Connector.PositionChanged += position => this.GuiAsync(() =>
-			{
 				if ((PosChart.UnderlyingAsset != null && PosChart.UnderlyingAsset == position.Security) || PosChart.Options.Contains(position.Security))
 					RefreshChart();
 			});
 
-			Connector.MarketDepthChanged += TryUpdateDepth;
+			Connector.MarketDepthReceived += TryUpdateDepth;
 
 			try
 			{
@@ -527,7 +513,7 @@ namespace SampleOptionQuoting
 			var wnd = new QuotesWindow { Title = option.Name };
 			_quotesWindows.Add(option, wnd);
 
-			TryUpdateDepth(Connector.GetMarketDepth(option));
+			//TryUpdateDepth(Connector.GetMarketDepth(option));
 
 			// create delta hedge strategy
 			var hedge = new DeltaHedgeStrategy(_model.ExchangeInfoProvider)
@@ -564,7 +550,7 @@ namespace SampleOptionQuoting
 			wnd.Show();
 		}
 
-		private void TryUpdateDepth(MarketDepth depth)
+		private void TryUpdateDepth(Subscription subscription, MarketDepth depth)
 		{
 			if (!_quotesWindows.TryGetValue(depth.Security, out var wnd))
 				return;

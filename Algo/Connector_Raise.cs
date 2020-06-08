@@ -21,6 +21,7 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <inheritdoc />
+		[Obsolete("Use TickTradeReceived event.")]
 		public event Action<Trade> NewTrade;
 
 		/// <inheritdoc />
@@ -116,6 +117,7 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Security>> NewSecurities;
 
 		/// <inheritdoc />
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<Security> SecurityChanged;
 
 		/// <inheritdoc />
@@ -123,6 +125,7 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Security>> SecuritiesChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use PortfolioReceived event.")]
 		public event Action<Portfolio> NewPortfolio;
 
 		/// <inheritdoc />
@@ -130,6 +133,7 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <inheritdoc />
+		[Obsolete("Use PortfolioReceived event.")]
 		public event Action<Portfolio> PortfolioChanged;
 
 		/// <inheritdoc />
@@ -137,6 +141,7 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use PositionReceived event.")]
 		public event Action<Position> NewPosition;
 
 		/// <inheritdoc />
@@ -144,6 +149,7 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Position>> NewPositions;
 
 		/// <inheritdoc />
+		[Obsolete("Use PositionReceived event.")]
 		public event Action<Position> PositionChanged;
 
 		/// <inheritdoc />
@@ -151,9 +157,11 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public event Action<MarketDepth> NewMarketDepth;
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public event Action<MarketDepth> MarketDepthChanged;
 
 		/// <inheritdoc />
@@ -168,6 +176,7 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderLogItemReceived event.")]
 		public event Action<OrderLogItem> NewOrderLogItem;
 
 		/// <inheritdoc />
@@ -175,16 +184,18 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
 
 		/// <inheritdoc />
-		public event Action<TimeSpan> MarketTimeChanged;
-
-		/// <inheritdoc />
+		[Obsolete("Use NewsReceived event.")]
 		public event Action<News> NewNews;
 
 		/// <inheritdoc />
+		[Obsolete("Use NewsReceived event.")]
 		public event Action<News> NewsChanged;
 
 		/// <inheritdoc />
 		public event Action<Message> NewMessage;
+
+		/// <inheritdoc />
+		public event Action<TimeSpan> MarketTimeChanged;
 
 		/// <inheritdoc />
 		public event Action Connected;

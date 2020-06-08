@@ -153,11 +153,10 @@ namespace SampleRealTimeEmulation
 				//MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 			});
 
-			_emuConnector.NewMarketDepth += OnDepth;
-			_emuConnector.MarketDepthChanged += OnDepth;
+			_emuConnector.OrderBookReceived += OnDepth;
 
-			_emuConnector.NewPortfolio += PortfolioGrid.Positions.Add;
-			_emuConnector.NewPosition += PortfolioGrid.Positions.Add;
+			_emuConnector.PortfolioReceived += (sub, p) => PortfolioGrid.Positions.TryAdd(p);
+			_emuConnector.PositionReceived += (sub, p) => PortfolioGrid.Positions.TryAdd(p);
 
 			_emuConnector.NewOrder += OrderGrid.Orders.Add;
 			_emuConnector.NewMyTrade += TradeGrid.Trades.Add;
@@ -229,12 +228,12 @@ namespace SampleRealTimeEmulation
 			}
 		}
 
-		private void OnDepth(MarketDepth depth)
+		private void OnDepth(Subscription subscription, QuoteChangeMessage depth)
 		{
-			if (depth.Security != _security)
+			if (depth.SecurityId != _security.ToSecurityId())
 				return;
 
-			DepthControl.UpdateDepth(depth);
+			DepthControl.UpdateDepth(depth, _security);
 		}
 
 		private void ChangeConnectStatus(bool isConnected)

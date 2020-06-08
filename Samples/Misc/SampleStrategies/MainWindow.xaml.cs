@@ -24,6 +24,7 @@ namespace SampleStrategies
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+	using Ecng.Collections;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -77,7 +78,7 @@ namespace SampleStrategies
 			var storageRegistry = ServicesRegistry.StorageRegistry;
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine("Data", "Snapshots"));
 
-			Connector = new Connector(entityRegistry, storageRegistry, snapshotRegistry)
+			Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry)
 			{
 				Adapter =
 				{
@@ -121,7 +122,7 @@ namespace SampleStrategies
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 			};
 
-			Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+			Connector.SecurityReceived += (sub, s) => _securitiesWindow.SecurityPicker.Securities.Add(s);
 
 			Connector.NewOrder += order =>
 			{
@@ -137,8 +138,8 @@ namespace SampleStrategies
 
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
-			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Positions.Add;
-			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
+			Connector.PortfolioReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
+			Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
