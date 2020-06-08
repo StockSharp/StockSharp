@@ -22,6 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj" />
+    <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj" />
   </ItemGroup>
 </Project>
