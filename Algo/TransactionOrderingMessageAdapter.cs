@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Algo
 {
+	using System;
 	using System.Collections.Generic;
 
 	using Ecng.Common;
@@ -7,7 +8,6 @@
 
 	using StockSharp.Messages;
 	using StockSharp.Logging;
-	using System;
 
 	/// <summary>
 	/// 
@@ -29,6 +29,7 @@
 
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new SynchronizedDictionary<long, SubscriptionInfo>();
 		private readonly SynchronizedDictionary<long, long> _orders = new SynchronizedDictionary<long, long>();
+		private readonly SynchronizedDictionary<long, SecurityId> _secIds = new SynchronizedDictionary<long, SecurityId>();
 
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
@@ -50,6 +51,8 @@
 			_transactionLogSubscriptions.Clear();
 			_orders.Clear();
 
+			_secIds.Clear();
+
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();
 			_nonAssociatedByTransactionIdMyTrades.Clear();
@@ -66,6 +69,33 @@
 				case MessageTypes.Reset:
 				{
 					Reset();
+					break;
+				}
+				case MessageTypes.OrderRegister:
+				{
+					var regMsg = (OrderRegisterMessage)message;
+					_secIds.TryAdd(regMsg.TransactionId, regMsg.SecurityId);
+					break;
+				}
+				case MessageTypes.OrderReplace:
+				{
+					var replaceMsg = (OrderReplaceMessage)message;
+
+					if (_secIds.TryGetValue(replaceMsg.OriginalTransactionId, out var secId))
+						_secIds.TryAdd(replaceMsg.TransactionId, secId);
+
+					break;
+				}
+				case MessageTypes.OrderPairReplace:
+				{
+					var replaceMsg = (OrderPairReplaceMessage)message;
+
+					if (_secIds.TryGetValue(replaceMsg.Message1.OriginalTransactionId, out var secId))
+						_secIds.TryAdd(replaceMsg.Message1.TransactionId, secId);
+
+					if (_secIds.TryGetValue(replaceMsg.Message2.OriginalTransactionId, out secId))
+						_secIds.TryAdd(replaceMsg.Message2.TransactionId, secId);
+
 					break;
 				}
 				case MessageTypes.OrderStatus:
@@ -127,6 +157,16 @@
 					if (execMsg.IsMarketData())
 						break;
 
+					var transId = execMsg.TransactionId;
+
+					if (transId != 0)
+						_secIds.TryAdd(transId, execMsg.SecurityId);
+					else
+					{
+						if (_secIds.TryGetValue(execMsg.OriginalTransactionId, out var secId))
+							execMsg.SecurityId = secId;
+					}
+
 					if (_transactionLogSubscriptions.Count == 0)
 						break;
 
@@ -138,8 +178,6 @@
 						if (!_transactionLogSubscriptions.TryGetValue(orderTransId, out subscription))
 							break;
 					}
-
-					var transId = execMsg.TransactionId;
 
 					if (transId == 0)
 					{
