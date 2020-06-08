@@ -3,6 +3,8 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The position provider interface.
 	/// </summary>
@@ -30,7 +32,8 @@ namespace StockSharp.BusinessEntities
 		/// <param name="security">The instrument on which the position should be found.</param>
 		/// <param name="clientCode">The client code.</param>
 		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
+		/// <param name="limitType">Limit type for Ò+ market.</param>
 		/// <returns>Position.</returns>
-		Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "");
+		Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limitType = null);
 	}
 }

@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Strategies
 			remove => _positionChanged -= value;
 		}
 
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName)
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType)
 		{
 			return _positions.TryGetValue(Tuple.Create(security, portfolio));
 		}

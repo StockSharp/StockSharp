@@ -912,7 +912,7 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
-			public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
+			public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
 			{
 				return ((IStorageEntityList<Position>)this).ReadById(Tuple.Create(portfolio, security));
 			}
