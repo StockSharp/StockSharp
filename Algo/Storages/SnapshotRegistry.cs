@@ -514,7 +514,7 @@ namespace StockSharp.Algo.Storages
 					var errors = _snapshotStorages.CachedValues.SelectMany(s => s.FlushChanges()).ToArray();
 
 					if (errors.Length > 0)
-						throw errors.SingleOrAggr();
+						throw new AggregateException(errors);
 				}
 				catch (Exception ex)
 				{

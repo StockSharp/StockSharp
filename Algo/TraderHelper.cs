@@ -1394,7 +1394,7 @@ namespace StockSharp.Algo
 				emulator.SendInMessage(regMsg);
 
 				if (errors.Count > 0)
-					throw errors.SingleOrAggr();
+					throw new AggregateException(errors);
 			}
 
 			return trades;
