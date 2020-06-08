@@ -1004,7 +1004,7 @@ namespace StockSharp.Algo
 		}
 
 		private Security TryGetSecurity(SecurityId? securityId)
-			=> securityId == null || securityId == default ? null : GetSecurity(securityId.Value);
+			=> securityId == null || securityId.Value == default ? null : GetSecurity(securityId.Value);
 
 		private Security EnsureGetSecurity(ISecurityIdMessage message)
 		{
