@@ -621,7 +621,7 @@ namespace StockSharp.BusinessEntities
 				str += $" Condition={Condition}";
 
 			if (AveragePrice != null)
-				str += $" Condition={AveragePrice}";
+				str += $" AvgPrice={AveragePrice}";
 
 			if (MinVolume != null)
 				str += $" MinVolume={MinVolume}";
