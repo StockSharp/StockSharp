@@ -95,17 +95,12 @@ namespace StockSharp.Algo
 
 			if (initAdapter)
 			{
-				Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(ExchangeInfoProvider), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider());
-
-				if (storageRegistry != null)
-					Adapter.StorageSettings.StorageRegistry = storageRegistry;
+				Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(ExchangeInfoProvider), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider())
+				{
+					StorageSettings = { StorageRegistry = storageRegistry }
+				};
 			}
 		}
-
-		/// <summary>
-		/// The storage of trade objects.
-		/// </summary>
-		public IEntityRegistry EntityRegistry { get; }
 
 		/// <summary>
 		/// Securities meta info storage.

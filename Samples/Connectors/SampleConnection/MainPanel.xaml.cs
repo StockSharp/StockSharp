@@ -9,6 +9,7 @@
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+	using Ecng.Collections;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -131,8 +132,8 @@
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
-			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Positions.Add;
-			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
+			Connector.PortfolioReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
+			Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 
 			// subscribe on error of order registration event
 			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
@@ -169,14 +170,8 @@
 
 			if (Connector.StorageAdapter != null)
 			{
-				try
-				{
-					Connector.EntityRegistry.Init();
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(this.GetWindow(), ex.ToString());
-				}
+				LoggingHelper.DoWithLog(ServicesRegistry.EntityRegistry.Init);
+				LoggingHelper.DoWithLog(ServicesRegistry.ExchangeInfoProvider.Init);
 
 				Connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(3);
 				Connector.Adapter.StorageSettings.Mode = StorageModes.Snapshot;
@@ -185,7 +180,6 @@
 				Connector.SnapshotRegistry.Init();
 			}
 
-			ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 
 			try
