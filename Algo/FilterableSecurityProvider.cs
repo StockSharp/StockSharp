@@ -60,9 +60,6 @@ namespace StockSharp.Algo
 		public int Count => _trie.Count;
 
 		/// <inheritdoc />
-		public SyncObject SyncRoot => _provider.SyncRoot;
-
-		/// <inheritdoc />
 		public event Action<IEnumerable<Security>> Added;
 
 		/// <inheritdoc />

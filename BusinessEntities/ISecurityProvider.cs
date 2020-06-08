@@ -28,11 +28,6 @@ namespace StockSharp.BusinessEntities
 	public interface ISecurityProvider
 	{
 		/// <summary>
-		/// Sync object.
-		/// </summary>
-		SyncObject SyncRoot { get; }
-
-		/// <summary>
 		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
 		/// </summary>
 		int Count { get; }

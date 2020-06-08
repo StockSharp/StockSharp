@@ -31,6 +31,11 @@ namespace StockSharp.Algo.Storages
 	public interface ISecurityStorage : ISecurityProvider
 	{
 		/// <summary>
+		/// Sync object.
+		/// </summary>
+		SyncObject SyncRoot { get; }
+
+		/// <summary>
 		/// Save security.
 		/// </summary>
 		/// <param name="security">Security.</param>
@@ -75,9 +80,9 @@ namespace StockSharp.Algo.Storages
 			_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 		}
 
-		SyncObject ISecurityProvider.SyncRoot => _inner.SyncRoot;
+		SyncObject ISecurityStorage.SyncRoot => _inner.SyncRoot;
 
-		int ISecurityProvider.Count => _underlying.Count + _inner.Count;
+		int ISecurityProvider.Count => _inner.Count;
 
 		/// <inheritdoc />
 		public event Action<IEnumerable<Security>> Added;
