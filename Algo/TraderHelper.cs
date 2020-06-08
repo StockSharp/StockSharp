@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
@@ -2964,6 +2963,82 @@ namespace StockSharp.Algo
 					isNew = false;
 
 				return security;
+			}
+		}
+
+		/// <summary>
+		/// Get or create (if not exist).
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		/// <param name="portfolioName">Portfolio code name.</param>
+		/// <param name="creator">Creator.</param>
+		/// <param name="isNew">Is newly created.</param>
+		/// <returns>Portfolio.</returns>
+		public static Portfolio GetOrCreatePortfolio(this IPositionStorage storage, string portfolioName, Func<string, Portfolio> creator, out bool isNew)
+		{
+			if (storage is null)
+				throw new ArgumentNullException(nameof(storage));
+
+			if (creator is null)
+				throw new ArgumentNullException(nameof(creator));
+
+			lock (storage.SyncRoot)
+			{
+				var portfolio = storage.LookupByPortfolioName(portfolioName);
+
+				if (portfolio == null)
+				{
+					portfolio = creator(portfolioName);
+					storage.Save(portfolio);
+					isNew = true;
+				}
+				else
+					isNew = false;
+
+				return portfolio;
+			}
+		}
+
+		/// <summary>
+		/// Get or create (if not exist).
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="clientCode">Client code.</param>
+		/// <param name="depoName">Depo name.</param>
+		/// <param name="limitType">Limit type.</param>
+		/// <param name="creator">Creator.</param>
+		/// <param name="isNew">Is newly created.</param>
+		/// <returns>Position.</returns>
+		public static Position GetOrCreatePosition(this IPositionStorage storage, Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, Func<Portfolio, Security, string, string, TPlusLimits?, Position> creator, out bool isNew)
+		{
+			if (storage is null)
+				throw new ArgumentNullException(nameof(storage));
+
+			if (portfolio is null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			if (security is null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (creator is null)
+				throw new ArgumentNullException(nameof(creator));
+
+			lock (storage.SyncRoot)
+			{
+				var position = storage.GetPosition(portfolio, security, clientCode, depoName, limitType);
+
+				if (position == null)
+				{
+					position = creator(portfolio, security, clientCode, depoName, limitType);
+					storage.Save(position);
+					isNew = true;
+				}
+				else
+					isNew = false;
+
+				return position;
 			}
 		}
 

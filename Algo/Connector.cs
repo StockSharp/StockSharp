@@ -45,7 +45,9 @@ namespace StockSharp.Algo
 		private readonly EntityCache _entityCache;
 		private readonly SubscriptionManager _subscriptionManager;
 
+		// backward compatibility for NewXXX events
 		private readonly HashSet<Security> _existingSecurities = new HashSet<Security>();
+		private readonly HashSet<Portfolio> _existingPortfolios = new HashSet<Portfolio>();
 
 		private bool _notFirstTimeConnected;
 		private bool _isDisposing;
@@ -230,8 +232,6 @@ namespace StockSharp.Algo
 
 		int ISecurityProvider.Count => SecurityStorage.Count;
 
-		SyncObject ISecurityProvider.SyncRoot => SecurityStorage.SyncRoot;
-
 		private Action<IEnumerable<Security>> _added;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
@@ -296,10 +296,10 @@ namespace StockSharp.Algo
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <inheritdoc />
-		public IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
+		public IEnumerable<Portfolio> Portfolios => PositionStorage.Portfolios;
 
 		/// <inheritdoc />
-		public IEnumerable<Position> Positions => _entityCache.Positions;
+		public IEnumerable<Position> Positions => PositionStorage.Positions;
 
 		/// <summary>
 		/// Risk control manager.
@@ -513,9 +513,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
+		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
-			return GetPosition(portfolio, security, clientCode, depoName, null, string.Empty);
+			return GetPosition(portfolio, security, clientCode, depoName, limitType, string.Empty);
 		}
 
 		private Position GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, string description)
@@ -526,7 +526,17 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var position = _entityCache.TryAddPosition(portfolio, security, clientCode, depoName, limitType, description, out var isNew);
+			var position = PositionStorage.GetOrCreatePosition(portfolio, security, clientCode, depoName, limitType, (pf, sec, clCode, ddep, limit) =>
+			{
+				var p = EntityFactory.CreatePosition(portfolio, security);
+
+				p.DepoName = depoName;
+				p.LimitType = limitType;
+				p.Description = description;
+				p.ClientCode = clientCode;
+
+				return p;
+			}, out var isNew);
 
 			if (isNew)
 				RaiseNewPosition(position);
@@ -1058,18 +1068,15 @@ namespace StockSharp.Algo
 				return s;
 			}, out isNew);
 
+			if (isNew)
+				ExchangeInfoProvider.Save(security.Board);
+
 			var isChanged = changeSecurity(security);
 
 			if (_existingSecurities.Add(security))
-			{
-				ExchangeInfoProvider.Save(security.Board);
 				RaiseNewSecurity(security);
-			}
-			else
-			{
-				if (isChanged)
-					RaiseSecurityChanged(security);
-			}
+			else if (isChanged)
+				RaiseSecurityChanged(security);
 
 			return security;
 		}
@@ -1107,6 +1114,7 @@ namespace StockSharp.Algo
 			_entityCache.Clear();
 
 			_existingSecurities.Clear();
+			_existingPortfolios.Clear();
 
 			_notFirstTimeConnected = default;
 

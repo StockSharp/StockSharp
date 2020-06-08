@@ -41,6 +41,8 @@ namespace StockSharp.Algo.Storages
 
 		IEnumerable<Portfolio> IPortfolioProvider.Portfolios => _entityRegistry.Portfolios;
 
+		SyncObject IPositionStorage.SyncRoot => _entityRegistry.Portfolios.SyncRoot;
+
 		event Action<Portfolio> IPortfolioProvider.NewPortfolio
 		{
 			add => throw new NotSupportedException();
@@ -73,9 +75,9 @@ namespace StockSharp.Algo.Storages
 			_entityRegistry.Positions.Remove(position);
 		}
 
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName)
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limit)
 		{
-			return _entityRegistry.Positions.GetPosition(portfolio, security, clientCode, depoName);
+			return _entityRegistry.Positions.GetPosition(portfolio, security, clientCode, depoName, limit);
 		}
 	}
 }

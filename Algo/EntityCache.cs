@@ -48,7 +48,6 @@ namespace StockSharp.Algo
 			public Order Order { get; private set; }
 			public bool IsNew { get; private set; }
 			public bool IsChanged { get; private set; }
-			public Tuple<Portfolio, bool, bool> PfInfo { get; set; }
 
 			public static readonly OrderChangeInfo NotExist = new OrderChangeInfo();
 		}
@@ -294,10 +293,6 @@ namespace StockSharp.Algo
 
 		public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
-		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
-
-		public virtual IEnumerable<Portfolio> Portfolios => _portfolios.CachedValues;
-
 		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
 
 		public IEnumerable<OrderFail> OrderRegisterFails => _orderRegisterFails.SyncGet(c => c.ToArray());
@@ -314,10 +309,6 @@ namespace StockSharp.Algo
 			EntityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
 			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
-
-		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
-
-		public IEnumerable<Position> Positions => _positions.CachedValues;
 
 		public void Clear()
 		{
@@ -342,8 +333,6 @@ namespace StockSharp.Algo
 
 			_orderCancelFails.Clear();
 			_orderRegisterFails.Clear();
-
-			_positions.Clear();
 
 			_marketDepths.Clear();
 
@@ -422,13 +411,16 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public IEnumerable<OrderChangeInfo> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId)
+		public IEnumerable<OrderChangeInfo> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId, Func<string, Portfolio> getPortfolio)
 		{
-			if (security == null)
+			if (security is null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (message == null)
+			if (message is null)
 				throw new ArgumentNullException(nameof(message));
+
+			if (getPortfolio is null)
+				throw new ArgumentNullException(nameof(getPortfolio));
 
 			if (message.Error != null)
 				throw new ArgumentException(LocalizedStrings.Str714Params.PutEx(message));
@@ -514,8 +506,6 @@ namespace StockSharp.Algo
 					yield break;
 				}
 
-				Tuple<Portfolio, bool, bool> pfInfo = null;
-
 				if (registeredInfo == null)
 				{
 					var o = EntityFactory.CreateOrder(security, message.OrderType, transactionId);
@@ -550,13 +540,7 @@ namespace StockSharp.Algo
 						o.Balance = message.Balance.Value;
 					}
 					
-					if (message.PortfolioName.IsEmpty())
-						o.Portfolio = _portfolios.FirstOrDefault().Value;
-					else
-					{
-						pfInfo = ProcessPortfolio(message.PortfolioName);
-						o.Portfolio = pfInfo.Item1;
-					}
+					o.Portfolio = getPortfolio(message.PortfolioName);
 
 					//if (o.ExtensionInfo == null)
 					//	o.ExtensionInfo = new Dictionary<string, object>();
@@ -570,8 +554,6 @@ namespace StockSharp.Algo
 
 				foreach (var i in registeredInfo.ApplyChanges(message, false, o => UpdateOrderIds(o, securityData)))
 				{
-					i.PfInfo = pfInfo;
-					pfInfo = null;
 					yield return i;
 				}
 			}
@@ -964,37 +946,6 @@ namespace StockSharp.Algo
 			return Tuple.Create(trade, isNew);
 		}
 
-		public Tuple<Portfolio, bool, bool> ProcessPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
-		{
-			if (name.IsEmpty())
-				throw new ArgumentNullException(nameof(name));
-
-			var portfolio = _portfolios.SafeAdd(name, key =>
-			{
-				var p = EntityFactory.CreatePortfolio(key);
-
-				if (p == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name));
-
-				//if (p.ExtensionInfo == null)
-				//	p.ExtensionInfo = new Dictionary<string, object>();
-
-				return p;
-			}, out var isNew);
-
-			var isChanged = false;
-			if (changePortfolio != null)
-				isChanged = changePortfolio(portfolio);
-
-			if (isNew)
-				return Tuple.Create(portfolio, true, false);
-
-			if (changePortfolio != null && isChanged)
-				return Tuple.Create(portfolio, false, true);
-
-			return Tuple.Create(portfolio, false, false);
-		}
-
 		public void AddRegisterFail(OrderFail fail)
 		{
 			_orderRegisterFails.Add(fail);
@@ -1003,37 +954,6 @@ namespace StockSharp.Algo
 		public void AddCancelFail(OrderFail fail)
 		{
 			_orderCancelFails.Add(fail);
-		}
-
-		public Position TryAddPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, string description, out bool isNew)
-		{
-			isNew = false;
-			Position position;
-
-			lock (_positions.SyncRoot)
-			{
-				if (depoName == null)
-					depoName = string.Empty;
-
-				if (clientCode == null)
-					clientCode = string.Empty;
-
-				var key = Tuple.Create(portfolio, security, clientCode, depoName, limitType);
-
-				if (!_positions.TryGetValue(key, out position))
-				{
-					isNew = true;
-
-					position = EntityFactory.CreatePosition(portfolio, security);
-					position.DepoName = depoName;
-					position.LimitType = limitType;
-					position.Description = description;
-					position.ClientCode = clientCode;
-					_positions.Add(key, position);
-				}
-			}
-
-			return position;
 		}
 
 		private void RecycleTrades()

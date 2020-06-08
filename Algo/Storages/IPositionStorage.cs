@@ -4,14 +4,21 @@
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface for access to the position storage.
 	/// </summary>
 	public interface IPositionStorage : IPositionProvider
 	{
+		/// <summary>
+		/// Sync object.
+		/// </summary>
+		SyncObject SyncRoot { get; }
+
 		/// <summary>
 		/// Save portfolio.
 		/// </summary>
@@ -43,7 +50,9 @@
 	public class InMemoryPositionStorage : IPositionStorage
 	{
 		private readonly IPortfolioProvider _underlying;
-		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _inner = new CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position>();
+
+		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryPositionStorage"/>.
@@ -63,10 +72,13 @@
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Position> Positions => _inner.CachedValues;
+		public IEnumerable<Position> Positions => _positions.CachedValues;
 
 		/// <inheritdoc />
-		public IEnumerable<Portfolio> Portfolios => _underlying.Portfolios;
+		public IEnumerable<Portfolio> Portfolios => _portfolios.CachedValues;
+
+		/// <inheritdoc />
+		public SyncObject SyncRoot => _positions.SyncRoot;
 
 		/// <inheritdoc />
 		public event Action<Position> NewPosition;
@@ -83,37 +95,94 @@
 		/// <inheritdoc />
 		public void Delete(Portfolio portfolio)
 		{
-			throw new NotImplementedException();
+			if (portfolio is null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			_portfolios.Remove(portfolio.Name);
 		}
 
 		/// <inheritdoc />
 		public void Delete(Position position)
 		{
-			throw new NotImplementedException();
+			_positions.Remove(CreateKey(position));
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
+		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
-			throw new NotImplementedException();
+			return _positions.TryGetValue(CreateKey(portfolio, security, clientCode, depoName, limitType));
 		}
 
 		/// <inheritdoc />
 		public Portfolio LookupByPortfolioName(string name)
 		{
-			throw new NotImplementedException();
+			return _portfolios.TryGetValue(name) ?? _underlying.LookupByPortfolioName(name);
 		}
 
 		/// <inheritdoc />
 		public void Save(Portfolio portfolio)
 		{
-			throw new NotImplementedException();
+			if (portfolio is null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			var isNew = false;
+
+			lock (_portfolios.SyncRoot)
+			{
+				if (!_portfolios.ContainsKey(portfolio.Name))
+				{
+					isNew = true;
+					_portfolios.Add(portfolio.Name, portfolio);
+				}
+			}
+
+			(isNew ? NewPortfolio : PortfolioChanged)?.Invoke(portfolio);
 		}
 
 		/// <inheritdoc />
 		public void Save(Position position)
 		{
-			throw new NotImplementedException();
+			if (position is null)
+				throw new ArgumentNullException(nameof(position));
+
+			var key = CreateKey(position);
+			var isNew = false;
+
+			lock (_positions.SyncRoot)
+			{
+				if (!_positions.ContainsKey(key))
+				{
+					isNew = true;
+					_positions.Add(key, position);
+				}
+			}
+
+			(isNew ? NewPosition : PositionChanged)?.Invoke(position);
+		}
+
+		private Tuple<Portfolio, Security, string, string, TPlusLimits?> CreateKey(Position position)
+		{
+			if (position is null)
+				throw new ArgumentNullException(nameof(position));
+
+			return CreateKey(position.Portfolio, position.Security, position.ClientCode, position.DepoName, position.LimitType);
+		}
+
+		private Tuple<Portfolio, Security, string, string, TPlusLimits?> CreateKey(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType)
+		{
+			if (portfolio is null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			if (security is null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (depoName == null)
+				depoName = string.Empty;
+
+			if (clientCode == null)
+				clientCode = string.Empty;
+
+			return Tuple.Create(portfolio, security, clientCode.ToLowerInvariant(), depoName.ToLowerInvariant(), limitType);
 		}
 	}
 }

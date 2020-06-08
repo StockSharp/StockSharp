@@ -1015,25 +1015,32 @@ namespace StockSharp.Algo
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
-			var result = _entityCache.ProcessPortfolio(name, changePortfolio);
-			ProcessPortfolio(result);
-			isNew = result.Item2;
-			return result.Item1;
-		}
+			var portfolio = PositionStorage.GetOrCreatePortfolio(name, key =>
+			{
+				var p = EntityFactory.CreatePortfolio(key);
 
-		private void ProcessPortfolio(Tuple<Portfolio, bool, bool> info)
-		{
-			var portfolio = info.Item1;
-			var isNew = info.Item2;
-			var isChanged = info.Item3;
+				if (p == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name));
 
-			if (isNew)
+				//if (p.ExtensionInfo == null)
+				//	p.ExtensionInfo = new Dictionary<string, object>();
+
+				return p;
+			}, out isNew);
+
+			var isChanged = false;
+			if (changePortfolio != null)
+				isChanged = changePortfolio(portfolio);
+
+			if (_existingPortfolios.Add(portfolio))
 			{
 				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
 				RaiseNewPortfolio(portfolio);
 			}
 			else if (isChanged)
 				RaisePortfolioChanged(portfolio);
+
+			return portfolio;
 		}
 
 		private void TrySubscribePortfolio(Portfolio portfolio, IMessageAdapter adapter)
@@ -1414,20 +1421,17 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
+		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId/*, bool isStatusRequest*/)
 		{
 			if (message.OrderState != OrderStates.Failed && message.Error == null)
 			{
-				foreach (var change in _entityCache.ProcessOrderMessage(o, security, message, transactionId))
+				foreach (var change in _entityCache.ProcessOrderMessage(o, security, message, transactionId, LookupByPortfolioName))
 				{
 					if (change == EntityCache.OrderChangeInfo.NotExist)
 					{
 						this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
 						continue;
 					}
-
-					if (change.PfInfo != null)
-						ProcessPortfolio(change.PfInfo);
 
 					var order = change.Order;
 
@@ -1507,7 +1511,7 @@ namespace StockSharp.Algo
 			if (message.HasOrderInfo())
 			{
 				processed = true;
-				ProcessOrderMessage(order, security, message, transactionId, isStatusRequest);
+				ProcessOrderMessage(order, security, message, transactionId/*, isStatusRequest*/);
 			}
 
 			if (message.HasTradeInfo())
