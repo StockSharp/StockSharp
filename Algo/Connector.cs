@@ -105,6 +105,19 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="Connector"/>.
+		/// </summary>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		/// <param name="buffer">Storage buffer.</param>
+		[Obsolete]
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, StorageBuffer buffer = null)
+			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.CheckOnNull().ExchangeInfoProvider, storageRegistry, snapshotRegistry, buffer)
+		{
+		}
+
+		/// <summary>
 		/// Securities meta info storage.
 		/// </summary>
 		public ISecurityStorage SecurityStorage { get; }
