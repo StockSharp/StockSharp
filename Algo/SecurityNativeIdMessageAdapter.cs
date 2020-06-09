@@ -193,9 +193,6 @@
 				{
 					var quotesMsg = (QuoteChangeMessage)message;
 
-					if (quotesMsg.State != null)
-						break;
-
 					ProcessMessage(quotesMsg, true, (prev, curr) => curr);
 					break;
 				}
