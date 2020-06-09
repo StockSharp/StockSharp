@@ -18,8 +18,6 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 
-	using Ecng.Common;
-
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -46,6 +44,13 @@ namespace StockSharp.BusinessEntities
 		/// The storage was cleared.
 		/// </summary>
 		event Action Cleared;
+
+		/// <summary>
+		/// To get the instrument by the identifier.
+		/// </summary>
+		/// <param name="id">Security ID.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+		Security LookupById(SecurityId id);
 
 		/// <summary>
 		/// Lookup securities by criteria <paramref name="criteria" />.

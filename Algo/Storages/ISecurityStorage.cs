@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Storages
 	public class InMemorySecurityStorage : ISecurityStorage
 	{
 		private readonly ISecurityProvider _underlying;
-		private readonly SynchronizedDictionary<string, Security> _inner = new SynchronizedDictionary<string, Security>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<SecurityId, Security> _inner = new SynchronizedDictionary<SecurityId, Security>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemorySecurityStorage"/>.
@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Storages
 			if (security is null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (_inner.Remove(security.Id))
+			if (_inner.Remove(security.ToSecurityId()))
 				Removed?.Invoke(new[] { security });
 		}
 
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Storages
 				toDelete = _inner.Values.Filter(criteria).ToArray();
 
 				foreach (var security in toDelete)
-					_inner.Remove(security.Id);
+					_inner.Remove(security.ToSecurityId());
 			}
 
 			Removed?.Invoke(toDelete);
@@ -133,12 +133,18 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
+		public Security LookupById(SecurityId id)
+		{
+			return _inner.TryGetValue(id) ?? _underlying.LookupById(id);
+		}
+
+		/// <inheritdoc />
 		public void Save(Security security, bool forced)
 		{
 			if (security is null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (_inner.TryAdd(security.Id, security))
+			if (_inner.TryAdd(security.ToSecurityId(), security))
 				Added?.Invoke(new[] { security });
 		}
 	}

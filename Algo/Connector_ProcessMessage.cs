@@ -926,9 +926,7 @@ namespace StockSharp.Algo
 
 		private void ProcessSecurityMessage(SecurityMessage message)
 		{
-			var secId = CreateSecurityId(message.SecurityId.SecurityCode, message.SecurityId.BoardCode);
-
-			var security = GetSecurity(secId, s =>
+			var security = GetSecurity(message.SecurityId, s =>
 			{
 				if (!UpdateSecurityByDefinition)
 					return false;

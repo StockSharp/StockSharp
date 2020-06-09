@@ -284,6 +284,10 @@ namespace StockSharp.Algo.Storages.Csv
 				remove => _removed -= value;
 			}
 
+			private Security GetById(SecurityId id) => ((IStorageSecurityList)this).ReadById(id.ToStringId());
+
+			Security ISecurityProvider.LookupById(SecurityId id) => GetById(id);
+
 			IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria)
 			{
 				var secId = criteria.SecurityId.ToStringId(nullIfEmpty: true);
@@ -291,7 +295,7 @@ namespace StockSharp.Algo.Storages.Csv
 				if (secId.IsEmpty())
 					return this.Filter(criteria);
 
-				var security = ((IStorageSecurityList)this).ReadById(secId);
+				var security = GetById(criteria.SecurityId);
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 

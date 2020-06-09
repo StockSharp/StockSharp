@@ -5,6 +5,7 @@ namespace StockSharp.Algo
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -60,6 +61,15 @@ namespace StockSharp.Algo
 		{
 			add => _removed += value;
 			remove => _removed -= value;
+		}
+
+		/// <inheritdoc />
+		public Security LookupById(SecurityId id)
+		{
+			var idStr = id.ToStringId();
+
+			lock (SyncRoot)
+				return this.FirstOrDefault(s => s.Id.CompareIgnoreCase(idStr));
 		}
 
 		/// <inheritdoc />

@@ -2419,6 +2419,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public Security LookupById(SecurityId id) => SecurityProvider.LookupById(id);
+
+		/// <inheritdoc />
 		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => SecurityProvider.Lookup(criteria);
 
 		/// <summary>

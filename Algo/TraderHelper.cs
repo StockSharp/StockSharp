@@ -2822,9 +2822,9 @@ namespace StockSharp.Algo
 		/// <param name="provider">The provider of information about instruments.</param>
 		/// <param name="id">Security ID.</param>
 		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-		public static Security LookupById(this ISecurityProvider provider, SecurityId id)
+		public static Security LookupById(this ISecurityProvider provider, string id)
 		{
-			return provider.LookupById(id.ToStringId());
+			return provider.LookupById(id.ToSecurityId());
 		}
 
 		/// <summary>
@@ -2839,20 +2839,6 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(provider));
 
 			return provider.Lookup(criteria.ToLookupMessage());
-		}
-
-		/// <summary>
-		/// To get the instrument by the identifier.
-		/// </summary>
-		/// <param name="provider">The provider of information about instruments.</param>
-		/// <param name="id">Security ID.</param>
-		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-		public static Security LookupById(this ISecurityProvider provider, string id)
-		{
-			if (id.IsEmpty())
-				throw new ArgumentNullException(nameof(id));
-
-			return provider.Lookup(new Security { Id = id }).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -2938,12 +2924,12 @@ namespace StockSharp.Algo
 		/// <param name="creator">Creator.</param>
 		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Security.</returns>
-		public static Security GetOrCreate(this ISecurityStorage storage, string id, Func<string, Security> creator, out bool isNew)
+		public static Security GetOrCreate(this ISecurityStorage storage, SecurityId id, Func<string, Security> creator, out bool isNew)
 		{
 			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
-			if (id.IsEmpty())
+			if (id == default)
 				throw new ArgumentNullException(nameof(storage));
 
 			if (creator is null)
@@ -2955,7 +2941,7 @@ namespace StockSharp.Algo
 
 				if (security == null)
 				{
-					security = creator(id);
+					security = creator(id.ToStringId());
 					storage.Save(security, false);
 					isNew = true;
 				}

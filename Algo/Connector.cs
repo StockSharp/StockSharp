@@ -270,7 +270,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => Securities.Filter(criteria);
+		public Security LookupById(SecurityId id) => SecurityStorage.LookupById(id);
+
+		IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria) => SecurityStorage.Lookup(criteria);
 
 		private DateTimeOffset _currentTime;
 
@@ -1018,7 +1020,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public Security GetSecurity(SecurityId securityId)
 		{
-			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
+			return GetSecurity(securityId, s => false, out _);
 		}
 
 		private Security TryGetSecurity(SecurityId? securityId)
@@ -1046,9 +1048,9 @@ namespace StockSharp.Algo
 		/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="IConnector.SecuritiesChanged"/> should be called.</param>
 		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Security.</returns>
-		private Security GetSecurity(string id, Func<Security, bool> changeSecurity, out bool isNew)
+		private Security GetSecurity(SecurityId id, Func<Security, bool> changeSecurity, out bool isNew)
 		{
-			if (id.IsEmpty())
+			if (id == default)
 				throw new ArgumentNullException(nameof(id));
 
 			if (changeSecurity == null)
