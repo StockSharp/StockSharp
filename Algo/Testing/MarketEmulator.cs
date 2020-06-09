@@ -610,7 +610,7 @@ namespace StockSharp.Algo.Testing
 
 						if (replyMsg.OrderState == OrderStates.Active)
 						{
-							_activeOrders.Add(replyMsg.TransactionId, replyMsg);
+							_activeOrders.Add(execution.TransactionId, replyMsg);
 
 							if (replyMsg.ExpiryDate != null)
 								_expirableOrders.Add(replyMsg, replyMsg.ExpiryDate.Value.EndOfDay() - replyMsg.LocalTime);

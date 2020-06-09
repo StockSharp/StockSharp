@@ -102,8 +102,6 @@
 										{
 											OriginalTransactionId = transId,
 										});
-
-										return true;
 									}
 									else
 									{
