@@ -50,6 +50,12 @@ P:StockSharp.Xaml.Charting.Chart.ShowLegend/summary;DocStr7732
 P:StockSharp.Xaml.Charting.Chart.ShowOverview/summary;DocStr7733
 P:StockSharp.Xaml.Charting.Chart.ShowPerfStats/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.Chart.IsInteracted/summary;DocStr7734
+P:StockSharp.Xaml.Charting.Chart.AllowAddArea/summary;DocStr12185
+P:StockSharp.Xaml.Charting.Chart.AllowAddAxis/summary;DocStr12186
+P:StockSharp.Xaml.Charting.Chart.AllowAddCandles/summary;DocStr12187
+P:StockSharp.Xaml.Charting.Chart.AllowAddIndicators/summary;DocStr12188
+P:StockSharp.Xaml.Charting.Chart.AllowAddOrders/summary;DocStr12189
+P:StockSharp.Xaml.Charting.Chart.AllowAddOwnTrades/summary;DocStr12190
 P:StockSharp.Xaml.Charting.Chart.CrossHair/summary;DocStr7735
 P:StockSharp.Xaml.Charting.Chart.CrossHairTooltip/summary;DocStr7736
 P:StockSharp.Xaml.Charting.Chart.CrossHairAxisLabels/summary;DocStr7737
@@ -387,7 +393,7 @@ T:StockSharp.Xaml.Charting.ChartElement`1/summary;DocStr7767
 T:StockSharp.Xaml.Charting.ChartElement`1/typeparam/T;DocStr7746
 P:StockSharp.Xaml.Charting.ChartElement`1.Chart/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartElement`1.ChartArea/inheritdoc;DocStr8459
-P:StockSharp.Xaml.Charting.ChartElement`1.FullTitle/summary;DocStr7771
+P:StockSharp.Xaml.Charting.ChartElement`1.FullTitle/summary;DocStr12191
 P:StockSharp.Xaml.Charting.ChartElement`1.IsVisible/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartElement`1.IsLegend/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Charting.ChartElement`1.XAxisId/inheritdoc;DocStr8459
@@ -406,6 +412,7 @@ M:StockSharp.Xaml.Charting.ChartElement`1.OnReset/summary;DocStr10705
 M:StockSharp.Xaml.Charting.ChartElement`1.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)/summary;DocStr10706
 M:StockSharp.Xaml.Charting.ChartElement`1.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)/param/data;DocStr8967
 M:StockSharp.Xaml.Charting.ChartElement`1.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)/returns;DocStr11168
+M:StockSharp.Xaml.Charting.ChartElement`1.GetTitle/summary;DocStr12192
 M:StockSharp.Xaml.Charting.ChartElement`1.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartElement`1.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartElement`1.CreateClone/summary;DocStr10757
@@ -492,6 +499,7 @@ P:StockSharp.Xaml.Charting.ChartIndicatorElement.DrawTemplate/summary;DocStr1071
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.OnDraw(StockSharp.Xaml.Charting.ChartDrawData)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.OnReset/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.CreateClone/inheritdoc;DocStr8459
+M:StockSharp.Xaml.Charting.ChartIndicatorElement.GetTitle/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Charting.ChartLineElement/summary;DocStr7855
@@ -565,6 +573,12 @@ M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartE
 M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)/param/element;DocStr7710
 M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)/param/source;Str213
 P:StockSharp.Xaml.Charting.ChartPanel.IsInteracted/summary;DocStr7734
+P:StockSharp.Xaml.Charting.ChartPanel.AllowAddArea/summary;DocStr12185
+P:StockSharp.Xaml.Charting.ChartPanel.AllowAddAxis/summary;DocStr12186
+P:StockSharp.Xaml.Charting.ChartPanel.AllowAddCandles/summary;DocStr12187
+P:StockSharp.Xaml.Charting.ChartPanel.AllowAddIndicators/summary;DocStr12188
+P:StockSharp.Xaml.Charting.ChartPanel.AllowAddOrders/summary;DocStr12189
+P:StockSharp.Xaml.Charting.ChartPanel.AllowAddOwnTrades/summary;DocStr12190
 P:StockSharp.Xaml.Charting.ChartPanel.OrderCreationMode/summary;DocStr7739
 P:StockSharp.Xaml.Charting.ChartPanel.MinimumRange/summary;DocStr7730
 P:StockSharp.Xaml.Charting.ChartPanel.ShowOverview/summary;DocStr7733
@@ -652,6 +666,7 @@ P:StockSharp.Xaml.Charting.ChartTransactionElement`1.SellColor/summary;Str2011
 P:StockSharp.Xaml.Charting.ChartTransactionElement`1.SellStrokeColor/summary;Str2013
 P:StockSharp.Xaml.Charting.ChartTransactionElement`1.UseAltIcon/summary;DocStr11359
 P:StockSharp.Xaml.Charting.ChartTransactionElement`1.DrawSize/summary;DrawSize
+M:StockSharp.Xaml.Charting.ChartTransactionElement`1.GetTitle/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Charting.ChartVolatilitySmileElement/summary;DocStr10679

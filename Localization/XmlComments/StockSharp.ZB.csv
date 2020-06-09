@@ -5,8 +5,8 @@ M:StockSharp.ZB.ZBMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.D
 M:StockSharp.ZB.ZBMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.ZB.ZBMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.ZB.ZBMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.ZB.ZBMessageAdapter.Key/summary;Str3304
-P:StockSharp.ZB.ZBMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.ZB.ZBMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.ZB.ZBMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.ZB.ZBMessageAdapter.AdminPassword/summary;AdminPassword
 P:StockSharp.ZB.ZBMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.ZB.ZBMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

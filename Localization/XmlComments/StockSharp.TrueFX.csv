@@ -4,8 +4,8 @@ M:StockSharp.TrueFX.TrueFXMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tr
 M:StockSharp.TrueFX.TrueFXMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.TrueFX.TrueFXMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.TrueFX.TrueFXMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.TrueFX.TrueFXMessageAdapter.Login/summary;Login
-P:StockSharp.TrueFX.TrueFXMessageAdapter.Password/summary;Password
+P:StockSharp.TrueFX.TrueFXMessageAdapter.Login/inheritdoc;DocStr8459
+P:StockSharp.TrueFX.TrueFXMessageAdapter.Password/inheritdoc;DocStr8459
 M:StockSharp.TrueFX.TrueFXMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.TrueFX.TrueFXMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.TrueFX.TrueFXMessageAdapter.ToString/inheritdoc;DocStr8459

@@ -29,6 +29,7 @@ P:StockSharp.Fix.Dialects.BaseFastDialect.IsFullCandlesOnly/inheritdoc;DocStr845
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptions/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.CandlesBuildFrom/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.EnqueueSubscriptions/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportTransactionLog/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsOpened/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
@@ -112,6 +113,7 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSubscriptions/inheritdoc;DocSt
 P:StockSharp.Fix.Dialects.BaseFixDialect.SecurityClassInfo/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.CandlesBuildFrom/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.EnqueueSubscriptions/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTransactionLog/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.CurrentCounter/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset/summary;Str3282
 M:StockSharp.Fix.Dialects.BaseFixDialect.RaiseNewOutMessage(StockSharp.Messages.Message)/summary;DocStr11497
@@ -737,6 +739,7 @@ P:StockSharp.Fix.FastMessageAdapter.IsFullCandlesOnly/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.IsSupportSubscriptions/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.CandlesBuildFrom/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.EnqueueSubscriptions/inheritdoc;DocStr8459
+P:StockSharp.Fix.FastMessageAdapter.IsSupportTransactionLog/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
@@ -781,6 +784,7 @@ P:StockSharp.Fix.FixMessageAdapter.IsFullCandlesOnly/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsSupportSubscriptions/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.CandlesBuildFrom/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.EnqueueSubscriptions/inheritdoc;DocStr8459
+P:StockSharp.Fix.FixMessageAdapter.IsSupportTransactionLog/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

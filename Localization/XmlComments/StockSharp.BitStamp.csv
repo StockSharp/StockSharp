@@ -1,3 +1,9 @@
+T:StockSharp.BitStamp.BitStampTrader/summary;DocStr2539
+M:StockSharp.BitStamp.BitStampTrader.#ctor/summary;DocStr1
+P:StockSharp.BitStamp.BitStampTrader.Key/summary;Str3304
+P:StockSharp.BitStamp.BitStampTrader.Secret/summary;DocStr3146
+P:StockSharp.BitStamp.BitStampTrader.ClientId/summary;Str3308
+P:StockSharp.BitStamp.BitStampTrader.BalanceCheckInterval/summary;BalanceCheckInterval
 T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
 M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
@@ -16,9 +22,3 @@ M:StockSharp.BitStamp.BitStampMessageAdapter.ToString/inheritdoc;DocStr8459
 T:StockSharp.BitStamp.BitStampOrderCondition/summary;DocStr60
 M:StockSharp.BitStamp.BitStampOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.BitStamp.BitStampOrderCondition.StopPrice/summary;Str3460
-T:StockSharp.BitStamp.BitStampTrader/summary;DocStr2539
-M:StockSharp.BitStamp.BitStampTrader.#ctor/summary;DocStr1
-P:StockSharp.BitStamp.BitStampTrader.Key/summary;Str3304
-P:StockSharp.BitStamp.BitStampTrader.Secret/summary;DocStr3146
-P:StockSharp.BitStamp.BitStampTrader.ClientId/summary;Str3308
-P:StockSharp.BitStamp.BitStampTrader.BalanceCheckInterval/summary;BalanceCheckInterval

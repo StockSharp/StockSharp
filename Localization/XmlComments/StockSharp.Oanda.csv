@@ -3,6 +3,7 @@ M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;Do
 M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Oanda.OandaMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportExecutionsPnL/inheritdoc;DocStr8459
+P:StockSharp.Oanda.OandaMessageAdapter.IsSupportTransactionLog/inheritdoc;DocStr8459
 M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Oanda.OandaMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Oanda.OandaMessageAdapter.Server/summary;Str3416

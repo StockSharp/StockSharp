@@ -5,8 +5,8 @@ M:StockSharp.Upbit.UpbitMessageAdapter.IsAllDownloadingSupported(StockSharp.Mess
 M:StockSharp.Upbit.UpbitMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Upbit.UpbitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Upbit.UpbitMessageAdapter.AllTimeFrames/summary;DocStr206
-P:StockSharp.Upbit.UpbitMessageAdapter.Key/summary;Str3304
-P:StockSharp.Upbit.UpbitMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Upbit.UpbitMessageAdapter.Key/inheritdoc;DocStr8459
+P:StockSharp.Upbit.UpbitMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Upbit.UpbitMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Upbit.UpbitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Upbit.UpbitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
