@@ -20,7 +20,6 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="CollectionPortfolioProvider"/>.
 		/// </summary>
 		public CollectionPortfolioProvider()
-			: this(Enumerable.Empty<Portfolio>())
 		{
 		}
 

@@ -20,7 +20,6 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
 		/// </summary>
 		public CollectionSecurityProvider()
-			: this(Enumerable.Empty<Security>())
 		{
 		}
 
@@ -70,10 +69,8 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		public void Add(Security security)
 		{
-			if (security is null)
-				throw new ArgumentNullException(nameof(security));
-
-			AddRange(new[] { security });
+			if (_inner.TryAdd(security.ToSecurityId(), security))
+				_added?.Invoke(new[] { security });
 		}
 
 		/// <summary>
@@ -99,10 +96,15 @@ namespace StockSharp.Algo
 			if (securities is null)
 				throw new ArgumentNullException(nameof(securities));
 
-			foreach (var security in securities)
-				_inner.TryAdd(security.ToSecurityId(), security);
+			var added = new HashSet<Security>(securities);
 
-			_added?.Invoke(securities);
+			foreach (var security in securities)
+			{
+				if (!_inner.TryAdd(security.ToSecurityId(), security))
+					added.Remove(security);
+			}
+
+			_added?.Invoke(added);
 		}
 
 		/// <summary>
@@ -114,10 +116,15 @@ namespace StockSharp.Algo
 			if (securities is null)
 				throw new ArgumentNullException(nameof(securities));
 
-			foreach (var security in securities)
-				_inner.Remove(security.ToSecurityId());
+			var removed = new HashSet<Security>(securities);
 
-			_removed?.Invoke(securities);
+			foreach (var security in securities)
+			{
+				if (!_inner.Remove(security.ToSecurityId()))
+					removed.Remove(security);
+			}
+
+			_removed?.Invoke(removed);
 		}
 
 		/// <summary>
