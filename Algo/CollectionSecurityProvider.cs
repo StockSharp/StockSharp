@@ -5,7 +5,6 @@ namespace StockSharp.Algo
 	using System.Linq;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -13,8 +12,10 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The supplier of information on instruments, getting data from the collection.
 	/// </summary>
-	public class CollectionSecurityProvider : SynchronizedList<Security>, ISecurityProvider
+	public class CollectionSecurityProvider : ISecurityProvider
 	{
+		private readonly SynchronizedDictionary<SecurityId, Security> _inner = new SynchronizedDictionary<SecurityId, Security>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
 		/// </summary>
@@ -28,24 +29,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="securities">The instruments collection.</param>
 		public CollectionSecurityProvider(IEnumerable<Security> securities)
-		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
+			=> AddRange(securities);
 
-			CheckNullableItems = true;
-
-			AddRange(securities);
-
-			AddedRange += s => _added?.Invoke(s);
-			RemovedRange += s => _removed?.Invoke(s);
-
-			if (securities is INotifyList<Security> notifyList)
-			{
-				notifyList.Added += Add;
-				notifyList.Removed += s => Remove(s);
-				notifyList.Cleared += Clear;
-			}
-		}
+		/// <inheritdoc />
+		public int Count => _inner.Count;
 
 		private Action<IEnumerable<Security>> _added;
 
@@ -63,16 +50,83 @@ namespace StockSharp.Algo
 			remove => _removed -= value;
 		}
 
-		/// <inheritdoc />
-		public Security LookupById(SecurityId id)
-		{
-			var idStr = id.ToStringId();
+		private Action _cleared;
 
-			lock (SyncRoot)
-				return this.FirstOrDefault(s => s.Id.CompareIgnoreCase(idStr));
+		event Action ISecurityProvider.Cleared
+		{
+			add => _cleared += value;
+			remove => _cleared -= value;
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => this.Filter(criteria);
+		public Security LookupById(SecurityId id) => _inner.TryGetValue(id);
+
+		/// <inheritdoc />
+		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => _inner.SyncGet(d => d.Values.Filter(criteria));
+
+		/// <summary>
+		/// Add security.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		public void Add(Security security)
+		{
+			if (security is null)
+				throw new ArgumentNullException(nameof(security));
+
+			AddRange(new[] { security });
+		}
+
+		/// <summary>
+		/// Remove security.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public bool Remove(Security security)
+		{
+			if (security is null)
+				throw new ArgumentNullException(nameof(security));
+
+			RemoveRange(new[] { security });
+			return true;
+		}
+
+		/// <summary>
+		/// Add securities.
+		/// </summary>
+		/// <param name="securities">Securities.</param>
+		public void AddRange(IEnumerable<Security> securities)
+		{
+			if (securities is null)
+				throw new ArgumentNullException(nameof(securities));
+
+			foreach (var security in securities)
+				_inner.TryAdd(security.ToSecurityId(), security);
+
+			_added?.Invoke(securities);
+		}
+
+		/// <summary>
+		/// Remove securities.
+		/// </summary>
+		/// <param name="securities">Securities.</param>
+		public void RemoveRange(IEnumerable<Security> securities)
+		{
+			if (securities is null)
+				throw new ArgumentNullException(nameof(securities));
+
+			foreach (var security in securities)
+				_inner.Remove(security.ToSecurityId());
+
+			_removed?.Invoke(securities);
+		}
+
+		/// <summary>
+		/// Clear.
+		/// </summary>
+		public void Clear()
+		{
+			_inner.Clear();
+			_cleared?.Invoke();
+		}
 	}
 }
