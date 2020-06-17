@@ -15,7 +15,7 @@
 	/// <summary>
 	/// Order book builder, used incremental <see cref="QuoteChangeMessage"/>.
 	/// </summary>
-	public class OrderBookInrementBuilder
+	public class OrderBookIncrementBuilder
 	{
 		private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
 		private QuoteChangeStates State = _none;
@@ -29,11 +29,11 @@
 		private readonly QuotesByPosList _asksByPos = new QuotesByPosList();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderBookInrementBuilder"/>.
+		/// Initializes a new instance of the <see cref="OrderBookIncrementBuilder"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="logs">Logs.</param>
-		public OrderBookInrementBuilder(SecurityId securityId, ILogReceiver logs)
+		public OrderBookIncrementBuilder(SecurityId securityId, ILogReceiver logs)
 		{
 			if (securityId == default)
 				throw new ArgumentNullException(nameof(securityId));

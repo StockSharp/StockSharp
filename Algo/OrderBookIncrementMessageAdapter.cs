@@ -12,14 +12,14 @@
 	/// <summary>
 	/// The messages adapter build order book from incremental updates <see cref="QuoteChangeStates.Increment"/>.
 	/// </summary>
-	public class OrderBookInrementMessageAdapter : MessageAdapterWrapper
+	public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 	{
 		private class BookInfo
 		{
 			public BookInfo(SecurityId securityId, ILogReceiver logs)
-				=> Builder = new OrderBookInrementBuilder(securityId, logs);
+				=> Builder = new OrderBookIncrementBuilder(securityId, logs);
 
-			public readonly OrderBookInrementBuilder Builder;
+			public readonly OrderBookIncrementBuilder Builder;
 			public readonly CachedSynchronizedSet<long> SubscriptionIds = new CachedSynchronizedSet<long>();
 		}
 
@@ -29,10 +29,10 @@
 		private readonly HashSet<long> _passThrough = new HashSet<long>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OrderBookInrementMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="OrderBookIncrementMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		public OrderBookInrementMessageAdapter(IMessageAdapter innerAdapter)
+		public OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
 		}
@@ -240,12 +240,12 @@
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="OrderBookInrementMessageAdapter"/>.
+		/// Create a copy of <see cref="OrderBookIncrementMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OrderBookInrementMessageAdapter(InnerAdapter.TypedClone());
+			return new OrderBookIncrementMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

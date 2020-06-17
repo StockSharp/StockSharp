@@ -695,7 +695,7 @@ namespace StockSharp.Algo
 
 			if (adapter.IsSupportOrderBookIncrements)
 			{
-				adapter = ApplyOwnInner(new OrderBookInrementMessageAdapter(adapter));
+				adapter = ApplyOwnInner(new OrderBookIncrementMessageAdapter(adapter));
 			}
 
 			if (StorageProcessor.Settings.StorageRegistry != null)
