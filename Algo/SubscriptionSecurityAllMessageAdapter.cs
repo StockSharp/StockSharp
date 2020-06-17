@@ -132,7 +132,11 @@
 
 									if (existing == null)
 									{
-										_parents.Add(transId, new ParentSubscription(mdMsg.TypedClone()));
+										var parent = new ParentSubscription(mdMsg.TypedClone());
+										_parents.Add(transId, parent);
+
+										// first child is parent
+										_allChilds.Add(transId, RefTuple.Create(transId, SubscriptionStates.Stopped));
 
 										// do not specify security cause adapter doesn't require it
 										mdMsg.SecurityId = default;
@@ -167,21 +171,36 @@
 						{
 							if (_allChilds.TryGetAndRemove(mdMsg.OriginalTransactionId, out var tuple))
 							{
-								var childs = _parents[tuple.First].Child;
-
-								var childSubscription = childs.FirstOrDefault(p => p.Value.Origin.TransactionId == mdMsg.OriginalTransactionId);
-								childs.Remove(childSubscription.Key);
+								this.AddDebugLog("Sec ALL child {0} unsubscribe.", mdMsg.OriginalTransactionId);
 
 								Exception error = null;
 
-								if (childSubscription.Value == null)
-									error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId));
-								else if (!tuple.Second.IsActive())
+								if (!tuple.Second.IsActive())
 									error = new InvalidOperationException(LocalizedStrings.SubscriptionInvalidState.Put(mdMsg.OriginalTransactionId, tuple.Second));
+								else
+								{
+									var childs = _parents[tuple.First].Child;
+
+									var pair = childs.FirstOrDefault(p => p.Value.Origin.TransactionId == mdMsg.OriginalTransactionId);
+									var childSubscription = pair.Value;
+
+									if (childSubscription == null)
+										error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId));
+									else
+									{
+										if (childSubscription.Subscribers.Remove(mdMsg.OriginalTransactionId))
+										{
+											if (childSubscription.Subscribers.Count == 0)
+												childs.Remove(pair.Key);
+										}
+										else
+											error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId));
+									}
+								}
 
 								RaiseNewOutMessage(new SubscriptionResponseMessage
 								{
-									OriginalTransactionId = mdMsg.OriginalTransactionId,
+									OriginalTransactionId = mdMsg.TransactionId,
 									Error = error,
 								});
 
