@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Type of <see cref="Price"/>.
 		/// </summary>
 		[DataMember]
-		public StrategyPriceTypes PriceType { get; set; }
+		public ProductPriceTypes PriceType { get; set; }
 
 		/// <summary>
 		/// The purchase price.
@@ -155,20 +155,21 @@ namespace StockSharp.Algo.Strategies.Messages
 			base.CopyTo(destination);
 
 			destination.Id = Id;
+			destination.StrategyId = StrategyId;
 			destination.Name = Name;
 			destination.Description = Description;
-			destination.Tags = Tags;
-			destination.StrategyId = StrategyId;
 			destination.CreationDate = CreationDate;
-			destination.Price = Price;
-			destination.Revision = Revision;
+			destination.Tags = Tags;
 			destination.Topic = Topic;
-			destination.Content = Content;
+			destination.PriceType = PriceType;
+			destination.Price = Price;
 			destination.ContentType = ContentType;
-			destination.Picture = Picture;
+			destination.Content = Content;
 			destination.Author = Author;
-			destination.IsColocation = IsColocation;
+			destination.Picture = Picture;
+			destination.Revision = Revision;
 			destination.IsPrivate = IsPrivate;
+			destination.IsColocation = IsColocation;
 			destination.PromoPrice = PromoPrice;
 			destination.PromoEnd = PromoEnd;
 			destination.Parameters.AddRange(Parameters);
