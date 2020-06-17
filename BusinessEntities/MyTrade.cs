@@ -155,6 +155,12 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public bool? Initiator { get; set; }
 
+		/// <summary>
+		/// Yield.
+		/// </summary>
+		[DataMember]
+		public decimal? Yield { get; set; }
+
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 

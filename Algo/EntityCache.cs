@@ -738,6 +738,9 @@ namespace StockSharp.Algo
 				if (message.Initiator != null)
 					t.Initiator = message.Initiator;
 
+				if (message.Yield != null)
+					t.Yield = message.Yield;
+
 				message.CopyExtensionInfo(t);
 
 				_myTrades.Add(t);
