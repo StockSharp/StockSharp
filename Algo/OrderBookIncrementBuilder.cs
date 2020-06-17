@@ -9,6 +9,7 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+
 	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, System.Tuple<decimal, int?, Messages.QuoteConditions>>;
 	using QuotesByPosList = System.Collections.Generic.List<System.Tuple<decimal, decimal, int?, Messages.QuoteConditions>>;
 

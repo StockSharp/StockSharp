@@ -190,11 +190,12 @@
 
 					foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
 					{
-						BookInfo info;
+						QuoteChangeMessage newQuoteMsg;
+						long[] ids;
 
 						lock (_syncObject)
 						{
-							if (!_byId.TryGetValue(subscriptionId, out info))
+							if (!_byId.TryGetValue(subscriptionId, out var info))
 							{
 								if (_passThrough.Contains(subscriptionId))
 								{
@@ -206,17 +207,19 @@
 
 								continue;
 							}
+
+							newQuoteMsg = info.Builder.TryApply(quoteMsg);
+
+							if (newQuoteMsg == null)
+								continue;
+
+							ids = info.SubscriptionIds.Cache;
 						}
-
-						var newQuoteMsg = info.Builder.TryApply(quoteMsg);
-
-						if (newQuoteMsg == null)
-							continue;
 
 						if (clones == null)
 							clones = new List<QuoteChangeMessage>();
 
-						newQuoteMsg.SetSubscriptionIds(info.SubscriptionIds.Cache);
+						newQuoteMsg.SetSubscriptionIds(ids);
 						clones.Add(newQuoteMsg);
 					}
 
