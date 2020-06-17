@@ -281,35 +281,53 @@ namespace StockSharp.Algo.Storages
 			var min = range.Min.UtcDateTime;
 			var max = range.Max.UtcDateTime.EndOfDay();
 
-			for (var date = min; date <= max; date = date.AddDays(1))
+			for (var time = min; time <= max; time = time.AddDays(1))
 			{
-				if (date == min)
+				var date = time.Date;
+
+				if (from == null && to == null)
 				{
-					var metaInfo = storage.GetMetaInfo(date.Date);
+					storage.Delete(date);
+					continue;
+				}
+				else if (from == null && date < to.Value.UtcDateTime.Date)
+				{
+					storage.Delete(date);
+					continue;
+				}
+				else if (to == null && date > from.Value.UtcDateTime.Date)
+				{
+					storage.Delete(date);
+					continue;
+				}
+
+				if (time == min)
+				{
+					var metaInfo = storage.GetMetaInfo(date);
 
 					if (metaInfo == null)
 						continue;
 
-					if (metaInfo.FirstTime >= date && max.Date != min.Date)
+					if (metaInfo.FirstTime >= time && max.Date != min.Date)
 					{
-						storage.Delete(date.Date);
+						storage.Delete(date);
 					}
 					else
 					{
-						var data = storage.Load(date.Date).ToList();
+						var data = storage.Load(date).ToList();
 						data.RemoveWhere(d =>
 						{
-							var time = info.GetTime(d);
-							return time.UtcDateTime < min || time > range.Max;
+							var t = info.GetTime(d);
+							return t.UtcDateTime < min || t > range.Max;
 						});
 						storage.Delete(data);
 					}
 				}
-				else if (date.Date < max.Date)
-					storage.Delete(date.Date);
+				else if (date < max.Date)
+					storage.Delete(date);
 				else
 				{
-					var data = storage.Load(date.Date).ToList();
+					var data = storage.Load(date).ToList();
 					data.RemoveWhere(d => info.GetTime(d) > range.Max);
 					storage.Delete(data);
 				}
