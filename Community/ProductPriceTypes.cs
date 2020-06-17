@@ -6,10 +6,10 @@ namespace StockSharp.Community
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Strategy price types.
+	/// Product price types.
 	/// </summary>
 	[DataContract]
-	public enum StrategyPriceTypes
+	public enum ProductPriceTypes
 	{
 		/// <summary>
 		/// Lifetime.
