@@ -320,7 +320,18 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override void CopyTo(SecurityMessage destination)
 		{
-			base.CopyTo(destination);
+			CopyEx(destination, true);
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		/// <param name="copyBase">Copy <see cref="BaseSubscriptionIdMessage{TMessage}"/>.</param>
+		public void CopyEx(SecurityMessage destination, bool copyBase)
+		{
+			if (copyBase)
+				base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
 			destination.Name = Name;

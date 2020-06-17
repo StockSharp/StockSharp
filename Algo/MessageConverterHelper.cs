@@ -500,8 +500,16 @@ namespace StockSharp.Algo
 		/// <returns>Message.</returns>
 		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null, long originalTransactionId = 0, bool copyExtendedId = false)
 		{
-			if (security == null)
+			if (security is null)
 				throw new ArgumentNullException(nameof(security));
+
+			if (security == TraderHelper.AllSecurity)
+			{
+				return new SecurityMessage();
+
+				// not immutable
+				//return Messages.Extensions.AllSecurity;
+			}
 
 			return security.FillMessage(new SecurityMessage
 			{

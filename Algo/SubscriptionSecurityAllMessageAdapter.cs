@@ -89,7 +89,7 @@
 					if (mdMsg.IsSubscribe)
 					{
 						var transId = mdMsg.TransactionId;
-						
+
 						lock (_sync)
 						{
 							if (_allChilds.TryGetValue(transId, out var tuple))
@@ -140,6 +140,7 @@
 
 										// do not specify security cause adapter doesn't require it
 										mdMsg.SecurityId = default;
+										Extensions.AllSecurity.CopyEx(mdMsg, false);
 									}
 									else
 									{

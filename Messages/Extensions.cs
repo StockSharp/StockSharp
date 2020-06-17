@@ -2918,6 +2918,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// "All securities" instance.
+		/// </summary>
+		public static SecurityMessage AllSecurity { get; } = new SecurityMessage();
+
+		/// <summary>
 		/// Lookup all securities predefined criteria.
 		/// </summary>
 		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = new SecurityLookupMessage();
