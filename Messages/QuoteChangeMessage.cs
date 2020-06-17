@@ -59,7 +59,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Messages containing quotes.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMessage>, IServerTimeMessage, ISecurityIdMessage
 	{

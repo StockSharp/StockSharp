@@ -265,7 +265,6 @@
 									// finishing current history request
 									outMsg = new SubscriptionFinishedMessage { OriginalTransactionId = transId };
 									message = null;
-									break;
 								}
 								else
 								{
@@ -275,9 +274,9 @@
 
 									lock (_syncObject)
 										_liveRequests.Add(transId, false);
-
-									break;
 								}
+
+								break;
 							}
 
 							var info = new DownloadInfo(this, mdMsg.TypedClone(), step, iterationInterval);
