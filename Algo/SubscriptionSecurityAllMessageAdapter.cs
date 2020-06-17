@@ -52,7 +52,8 @@
 
 		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _allChilds = new Dictionary<long, RefPair<long, SubscriptionStates>>();
 		private readonly Dictionary<long, ParentSubscription> _parents = new Dictionary<long, ParentSubscription>();
-		
+		private readonly List<Message> _toFlush = new List<Message>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionSecurityAllMessageAdapter"/>.
 		/// </summary>
@@ -68,6 +69,7 @@
 			{
 				_parents.Clear();
 				_allChilds.Clear();
+				_toFlush.Clear();
 			}
 		}
 
@@ -88,8 +90,6 @@
 					{
 						var transId = mdMsg.TransactionId;
 						
-						Message[] suspended = null;
-
 						lock (_sync)
 						{
 							if (_allChilds.TryGetValue(transId, out var tuple))
@@ -117,17 +117,20 @@
 
 								var child = _parents[tuple.First].Child[mdMsg.SecurityId];
 								child.State = SubscriptionStates.Active;
-								suspended = child.Suspended.CopyAndClear();
+								_toFlush.AddRange(child.Suspended.CopyAndClear());
 
 								this.AddDebugLog("New ALL map (active): {0}/{1} TrId={2}", child.Origin.SecurityId, child.Origin.DataType2, mdMsg.TransactionId);
+								
+								RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
+								return true;
 							}
 							else
 							{
 								if (!IsSecurityRequired(mdMsg.DataType2) || mdMsg.SecurityId == default)
 								{
-									var existing = _parents.FirstOrDefault(p => p.Value.Origin.DataType2 == mdMsg.DataType2);
+									var existing = _parents.FirstOrDefault(p => p.Value.Origin.DataType2 == mdMsg.DataType2).Value;
 
-									if (existing.Value == null)
+									if (existing == null)
 									{
 										_parents.Add(transId, new ParentSubscription(mdMsg.TypedClone()));
 
@@ -136,7 +139,7 @@
 									}
 									else
 									{
-										var childs = existing.Value.Child;
+										var childs = existing.Child;
 
 										if (mdMsg.SecurityId != default)
 										{
@@ -154,18 +157,6 @@
 									}
 								}
 							}
-						}
-
-						if (suspended != null)
-						{
-							RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
-
-							this.AddDebugLog("Flush {0} suspended: {1}/{2}/{3}.", suspended.Length, mdMsg.SecurityId, mdMsg.DataType2, mdMsg.TransactionId);
-
-							foreach (var msg in suspended)
-								RaiseNewOutMessage(msg);
-
-							return true;
 						}
 					}
 					else
@@ -309,6 +300,16 @@
 		{
 			lock (_sync)
 			{
+				if (_toFlush.Count > 0)
+				{
+					var toFlush = _toFlush.CopyAndClear();
+					
+					this.AddDebugLog("Flush {0} suspended.", toFlush.Length);
+
+					foreach (var msg in toFlush)
+						RaiseNewOutMessage(msg);
+				}
+
 				if (_parents.Count == 0)
 					return null;
 
