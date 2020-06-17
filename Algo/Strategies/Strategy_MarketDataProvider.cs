@@ -14,28 +14,17 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public MarketDepth GetMarketDepth(Security security)
-		{
-			return MarketDataProvider.GetMarketDepth(security);
-		}
+			=> MarketDataProvider.GetMarketDepth(security);
 
 		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return MarketDataProvider.GetSecurityValue(security, field);
-		}
+			=> MarketDataProvider.GetSecurityValue(security, field);
 
 		/// <inheritdoc />
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return MarketDataProvider.GetLevel1Fields(security);
-		}
+			=> MarketDataProvider.GetLevel1Fields(security);
 
 		/// <inheritdoc />
 		[Obsolete("Use TickTradeReceived event.")]

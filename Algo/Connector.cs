@@ -575,10 +575,8 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public MarketDepth GetMarketDepth(Security security)
-		{
-			return GetMarketDepth(security, false);
-		}
+		[Obsolete("Use MarketDepthReceived event.")]
+		public MarketDepth GetMarketDepth(Security security) => GetMarketDepth(security, false);
 
 		/// <inheritdoc />
 		public MarketDepth GetFilteredMarketDepth(Security security)

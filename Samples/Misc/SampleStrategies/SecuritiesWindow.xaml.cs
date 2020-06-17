@@ -104,7 +104,7 @@ namespace SampleStrategies
 				else
 				{
 					window.Show();
-					window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+					//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
 				}
 
 				if (!_initialized)

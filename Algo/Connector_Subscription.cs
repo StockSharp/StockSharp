@@ -100,7 +100,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public Subscription SubscribeFilteredMarketDepth(Security security)
 		{
-			var quotes = GetMarketDepth(security).ToMessage();
+			var quotes = GetMarketDepth(security, false).ToMessage();
 			var executions = _entityCache
 				.GetOrders(security, OrderStates.Active)
 				.Select(o => o.ToMessage())

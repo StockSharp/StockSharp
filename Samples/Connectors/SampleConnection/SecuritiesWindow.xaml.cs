@@ -136,7 +136,7 @@ namespace SampleConnection
 					Title = security.Id + " " + LocalizedStrings.MarketDepth
 				};
 
-				window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+				//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
 				window.Show();
 				
 				// subscribe on order book flow

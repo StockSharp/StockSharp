@@ -35,6 +35,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="security">The instrument by which an order book should be got.</param>
 		/// <returns>Order book.</returns>
+		[Obsolete("Use MarketDepthReceived event.")]
 		MarketDepth GetMarketDepth(Security security);
 
 		/// <summary>

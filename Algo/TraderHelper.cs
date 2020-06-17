@@ -239,17 +239,10 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			var depth = provider.GetMarketDepth(security);
-
 			decimal? currentPrice = null;
 
 			if (direction != null)
 			{
-				var result = depth.GetCurrentPrice((Sides)direction, priceType, orders);
-
-				if (result != null)
-					return result;
-
 				currentPrice = (decimal?)provider.GetSecurityValue(security,
 					direction == Sides.Buy ? Level1Fields.BestAskPrice : Level1Fields.BestBidPrice);
 			}
