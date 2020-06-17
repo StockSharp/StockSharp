@@ -260,6 +260,19 @@ namespace StockSharp.Messages
 		public virtual bool IsAutoReplyOnTransactonalUnsubscription => true;
 
 		/// <inheritdoc />
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.EnqueueSubscriptionsKey,
+			Description = LocalizedStrings.EnqueueSubscriptionsDescKey,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 301)]
+		public virtual bool EnqueueSubscriptions { get; set; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportTransactionLog => false;
+
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
@@ -534,18 +547,6 @@ namespace StockSharp.Messages
 			get => base.Name;
 			set => base.Name = value;
 		}
-		
-		/// <inheritdoc />
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.EnqueueSubscriptionsKey,
-			Description = LocalizedStrings.EnqueueSubscriptionsDescKey,
-			GroupName = LocalizedStrings.Str186Key,
-			Order = 301)]
-		public virtual bool EnqueueSubscriptions { get; set; }
-
-		/// <inheritdoc />
-		public virtual bool IsSupportTransactionLog => false;
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
