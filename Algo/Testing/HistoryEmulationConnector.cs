@@ -106,6 +106,9 @@ namespace StockSharp.Algo.Testing
 			Adapter.PnLManager = null;
 			Adapter.SlippageManager = null;
 
+			Adapter.IsSupportTransactionLog = false;
+			Adapter.SupportSecurityAll = false;
+
 			Adapter.SendFinishedCandlesImmediatelly = true;
 
 			InMessageChannel = new PassThroughMessageChannel();
