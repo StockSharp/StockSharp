@@ -167,7 +167,7 @@ namespace StockSharp.Algo.Testing
 						break;
 					case EmulationStates.Stopping:
 						throwError = _state != EmulationStates.Started && _state != EmulationStates.Suspended
-							&& State != EmulationStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
+							&& _state != EmulationStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
 
 						if (EmulationAdapter.OwnInnerAdapter)
 						{
@@ -277,11 +277,6 @@ namespace StockSharp.Algo.Testing
 			_nextTime = _startTime + _progressStep;
 
 			base.OnConnect();
-
-			if (!EmulationAdapter.OwnInnerAdapter)
-			{
-				SendEmulationState(EmulationStates.Starting);
-			}
 		}
 
 		/// <inheritdoc />

@@ -25,8 +25,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private IEnumerator<IEnumerable<Strategy>> _batches;
 		private Strategy[] _batch = ArrayHelper.Empty<Strategy>();
-		private IMessageChannel _currChannel;
-		private readonly List<HistoryEmulationConnector> _currentConnectors = new List<HistoryEmulationConnector>();
+		private readonly CachedSynchronizedList<HistoryEmulationConnector> _currentConnectors = new CachedSynchronizedList<HistoryEmulationConnector>();
 		private IMessageAdapter _histAdapter;
 		private bool _cancelEmulation;
 		private int _totalBatches;
@@ -158,12 +157,6 @@ namespace StockSharp.Algo.Strategies.Testing
 				State = EmulationStates.Stopping;
 				State = EmulationStates.Stopped;
 
-				if (_currChannel != null)
-				{
-					_currChannel.Dispose();
-					_currChannel = null;
-				}
-
 				if (_histAdapter != null)
 				{
 					_histAdapter.Dispose();
@@ -197,8 +190,6 @@ namespace StockSharp.Algo.Strategies.Testing
 				Parent = this,
 			});
 
-			_currChannel = new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", _histAdapter.AddErrorLog);
-
 			var progress = new SynchronizedDictionary<HistoryEmulationConnector, int>();
 			var left = _batch.Length;
 
@@ -208,7 +199,9 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				_strategyInfo[strategy] = Tuple.Create(strategy.Portfolio, strategy.Security);
 
-				var connector = new HistoryEmulationConnector(_histAdapter, false, _currChannel, _securityProvider, _portfolioProvider, _exchangeInfoProvider)
+				var inChannel = new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", _histAdapter.AddErrorLog);
+
+				var connector = new HistoryEmulationConnector(_histAdapter, false, inChannel, _securityProvider, _portfolioProvider, _exchangeInfoProvider)
 				{
 					Parent = this,
 				};
@@ -263,12 +256,8 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			State = EmulationStates.Suspending;
 
-			var channel = _currChannel;
-
-			if (channel == null)
-				throw new InvalidOperationException();
-
-			channel.Suspend();
+			foreach (var connector in _currentConnectors.Cache)
+				connector.Suspend();
 
 			State = EmulationStates.Suspended;
 		}
@@ -280,12 +269,8 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			State = EmulationStates.Starting;
 
-			var channel = _currChannel;
-
-			if (channel == null)
-				throw new InvalidOperationException();
-
-			channel.Resume();
+			foreach (var connector in _currentConnectors.Cache)
+				connector.Start();
 
 			State = EmulationStates.Started;
 		}
@@ -295,13 +280,8 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Stop()
 		{
-			var channel = _currChannel;
-
-			if (channel == null)
-				throw new InvalidOperationException();
-
-			channel.Clear();
-			channel.Resume();
+			foreach (var connector in _currentConnectors.Cache)
+				connector.Disconnect();
 
 			State = EmulationStates.Stopping;
 
