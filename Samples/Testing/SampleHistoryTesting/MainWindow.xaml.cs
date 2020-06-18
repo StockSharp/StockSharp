@@ -26,7 +26,6 @@ namespace SampleHistoryTesting
 	using Ecng.Xaml;
 	using Ecng.Common;
 	using Ecng.Collections;
-	using Ecng.Localization;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;

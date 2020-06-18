@@ -10,8 +10,6 @@
 	using System.Windows.Controls;
 	using System.Windows.Media;
 
-	using DevExpress.Xpf.Core;
-
 	using MoreLinq;
 
 	using Ecng.Backup;
