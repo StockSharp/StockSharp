@@ -189,7 +189,7 @@ namespace StockSharp.Messages
 		void IMessageChannel.Resume()
 		{
 			_isSuspended = false;
-			_suspendLock.Pulse();
+			_suspendLock.PulseAll();
 		}
 
 		void IMessageChannel.Clear()
