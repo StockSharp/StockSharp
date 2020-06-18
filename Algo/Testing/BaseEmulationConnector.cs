@@ -37,11 +37,12 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <param name="emulationAdapter">Emulation message adapter.</param>
 		/// <param name="applyHeartbeat">Apply on/off heartbeat mode for the specified adapter.</param>
-		protected BaseEmulationConnector(EmulationMessageAdapter emulationAdapter, bool applyHeartbeat)
+		/// <param name="initChannels">Initialize channels.</param>
+		protected BaseEmulationConnector(EmulationMessageAdapter emulationAdapter, bool applyHeartbeat, bool initChannels)
 			: base(
 				new InMemorySecurityStorage(emulationAdapter.CheckOnNull().Emulator.SecurityProvider),
 				new InMemoryPositionStorage(emulationAdapter.Emulator.PortfolioProvider),
-				emulationAdapter.Emulator.ExchangeInfoProvider)
+				emulationAdapter.Emulator.ExchangeInfoProvider, initChannels: initChannels)
 		{
 			Adapter.InnerAdapters.Add(emulationAdapter ?? throw new ArgumentNullException(nameof(emulationAdapter)));
 			Adapter.ApplyHeartbeat(EmulationAdapter, applyHeartbeat);
