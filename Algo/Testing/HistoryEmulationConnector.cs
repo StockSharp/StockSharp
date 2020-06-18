@@ -127,6 +127,7 @@ namespace StockSharp.Algo.Testing
 			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 
 			MarketTimeChanged += OnMarketTimeChanged;
+			Disconnected += OnDisconnected;
 		}
 
 		/// <inheritdoc />
@@ -291,12 +292,20 @@ namespace StockSharp.Algo.Testing
 
 			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
 				SendEmulationState(EmulationStates.Stopping);
+
+			base.OnDisconnect();
+		}
+
+		private void OnDisconnected()
+		{
+			State = EmulationStates.Stopped;
 		}
 
 		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
 			MarketTimeChanged -= OnMarketTimeChanged;
+			Disconnected -= OnDisconnected;
 
 			base.DisposeManaged();
 
@@ -345,8 +354,8 @@ namespace StockSharp.Algo.Testing
 
 					default:
 					{
-						if (State == EmulationStates.Stopping && message.Type != MessageTypes.Disconnect)
-							break;
+						//if (State == EmulationStates.Stopping && message.Type != MessageTypes.Disconnect)
+						//	break;
 
 						base.OnProcessMessage(message);
 						break;
@@ -374,8 +383,6 @@ namespace StockSharp.Algo.Testing
 					if (ConnectionState != ConnectionStates.Disconnecting)
 						Disconnect();
 
-					SendInMessage(new DisconnectMessage());
-					State = EmulationStates.Stopped;
 					break;
 				}
 
