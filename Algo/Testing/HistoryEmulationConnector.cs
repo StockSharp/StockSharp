@@ -292,8 +292,6 @@ namespace StockSharp.Algo.Testing
 
 			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
 				SendEmulationState(EmulationStates.Stopping);
-
-			base.OnDisconnect();
 		}
 
 		private void OnDisconnected()
@@ -354,9 +352,6 @@ namespace StockSharp.Algo.Testing
 
 					default:
 					{
-						//if (State == EmulationStates.Stopping && message.Type != MessageTypes.Disconnect)
-						//	break;
-
 						base.OnProcessMessage(message);
 						break;
 					}
@@ -382,6 +377,9 @@ namespace StockSharp.Algo.Testing
 					// change ConnectionState to Disconnecting
 					if (ConnectionState != ConnectionStates.Disconnecting)
 						Disconnect();
+
+					// base method cannot be invoked from OnDisconnect HistConnector.OnDisconnect
+					base.OnDisconnect();
 
 					break;
 				}
