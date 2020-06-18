@@ -25,12 +25,14 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private IEnumerator<IEnumerable<Strategy>> _batches;
 		private Strategy[] _batch = ArrayHelper.Empty<Strategy>();
-		private readonly CachedSynchronizedList<HistoryEmulationConnector> _currentConnectors = new CachedSynchronizedList<HistoryEmulationConnector>();
+		private readonly List<HistoryEmulationConnector> _currentConnectors = new List<HistoryEmulationConnector>();
 		private IMessageAdapter _histAdapter;
 		private bool _cancelEmulation;
 		private int _totalBatches;
 		private int _currentBatch;
 		private double _batchWeight;
+
+		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly ISecurityProvider _securityProvider;
 		private readonly IPortfolioProvider _portfolioProvider;
@@ -133,7 +135,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <param name="iterationCount">Iteration count.</param>
 		public void Start(IEnumerable<Strategy> strategies, int iterationCount)
 		{
-			if (strategies == null)
+			if (strategies is null)
 				throw new ArgumentNullException(nameof(strategies));
 
 			_cancelEmulation = false;
@@ -150,32 +152,35 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void TryStartNextBatch()
 		{
-			if (_cancelEmulation || !_batches.MoveNext())
+			lock (_sync)
 			{
-				IsFinished = !_cancelEmulation;
-
-				State = EmulationStates.Stopping;
-				State = EmulationStates.Stopped;
-
-				if (_histAdapter != null)
+				if (_cancelEmulation || !_batches.MoveNext())
 				{
-					_histAdapter.Dispose();
-					_histAdapter = null;
+					IsFinished = !_cancelEmulation;
+
+					State = EmulationStates.Stopping;
+					State = EmulationStates.Stopped;
+
+					if (_histAdapter != null)
+					{
+						_histAdapter.Dispose();
+						_histAdapter = null;
+					}
+
+					return;
 				}
 
-				return;
+				_batch = _batches.Current.ToArray();
+				_currentBatch++;
+
+				if (_currentBatch == 0)
+				{
+					State = EmulationStates.Starting;
+					State = EmulationStates.Started;
+				}
+
+				InitAdapters();
 			}
-
-			_batch = _batches.Current.ToArray();
-			_currentBatch++;
-
-			if (_currentBatch == 0)
-			{
-				State = EmulationStates.Starting;
-				State = EmulationStates.Started;
-			}
-
-			InitAdapters();
 		}
 
 		private void InitAdapters()
@@ -254,12 +259,21 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Suspend()
 		{
-			State = EmulationStates.Suspending;
+			lock (_sync)
+			{
+				if (State != EmulationStates.Started)
+					return;
 
-			foreach (var connector in _currentConnectors.Cache)
-				connector.Suspend();
+				State = EmulationStates.Suspending;
 
-			State = EmulationStates.Suspended;
+				foreach (var connector in _currentConnectors)
+				{
+					if (connector.State == EmulationStates.Started)
+						connector.Suspend();
+				}
+
+				State = EmulationStates.Suspended;
+			}
 		}
 
 		/// <summary>
@@ -267,12 +281,21 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Resume()
 		{
-			State = EmulationStates.Starting;
+			lock (_sync)
+			{
+				if (State != EmulationStates.Suspended)
+					return;
 
-			foreach (var connector in _currentConnectors.Cache)
-				connector.Start();
+				State = EmulationStates.Starting;
 
-			State = EmulationStates.Started;
+				foreach (var connector in _currentConnectors)
+				{
+					if (connector.State == EmulationStates.Suspended)
+						connector.Start();
+				}
+
+				State = EmulationStates.Started;
+			}
 		}
 
 		/// <summary>
@@ -280,17 +303,24 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Stop()
 		{
-			foreach (var connector in _currentConnectors.Cache)
-				connector.Disconnect();
+			lock (_sync)
+			{
+				if (!(State == EmulationStates.Started || State == EmulationStates.Suspended))
+					return;
 
-			State = EmulationStates.Stopping;
+				State = EmulationStates.Stopping;
 
-			_cancelEmulation = true;
+				_cancelEmulation = true;
+
+				foreach (var connector in _currentConnectors)
+				{
+					if (connector.State == EmulationStates.Suspended)
+						connector.Start();
+				}
 			
-			_histAdapter.SendInMessage(new EmulationStateMessage { State = EmulationStates.Stopping });
-			_histAdapter.SendInMessage(new DisconnectMessage());
-
-			_currentConnectors.Clear();
+				_histAdapter.SendInMessage(new EmulationStateMessage { State = EmulationStates.Stopping });
+				_histAdapter.SendInMessage(new DisconnectMessage());
+			}
 		}
 	}
 }

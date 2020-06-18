@@ -161,7 +161,7 @@ namespace StockSharp.Algo.Testing
 					case EmulationStates.Stopped:
 						throwError = _state != EmulationStates.Stopping;
 
-						if (EmulationAdapter.OwnInnerAdapter)
+						//if (EmulationAdapter.OwnInnerAdapter)
 							EmulationAdapter.InChannel.Close();
 
 						break;
@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Testing
 						throwError = _state != EmulationStates.Started && _state != EmulationStates.Suspended
 							&& _state != EmulationStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
 
-						if (EmulationAdapter.OwnInnerAdapter)
+						//if (EmulationAdapter.OwnInnerAdapter)
 						{
 							EmulationAdapter.InChannel.Clear();
 
@@ -190,7 +190,7 @@ namespace StockSharp.Algo.Testing
 					case EmulationStates.Suspended:
 						throwError = _state != EmulationStates.Suspending;
 
-						if (EmulationAdapter.OwnInnerAdapter)
+						//if (EmulationAdapter.OwnInnerAdapter)
 							EmulationAdapter.InChannel.Suspend();
 
 						break;
@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		protected override void OnDisconnect()
 		{
-			if (EmulationAdapter.OwnInnerAdapter && State == EmulationStates.Suspended)
+			if (/*EmulationAdapter.OwnInnerAdapter && */State == EmulationStates.Suspended)
 				EmulationAdapter.InChannel.Resume();
 
 			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
@@ -310,7 +310,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public void Start()
 		{
-			if (EmulationAdapter.OwnInnerAdapter && State == EmulationStates.Suspended)
+			if (/*EmulationAdapter.OwnInnerAdapter && */State == EmulationStates.Suspended)
 				EmulationAdapter.InChannel.Resume();
 
 			SendEmulationState(EmulationStates.Starting);
