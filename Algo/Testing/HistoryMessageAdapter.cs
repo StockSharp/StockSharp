@@ -617,6 +617,8 @@ namespace StockSharp.Algo.Testing
 									LocalTime = stopDate,
 									State = EmulationStates.Stopping,
 								});
+
+								break;
 							}
 						}
 					}
