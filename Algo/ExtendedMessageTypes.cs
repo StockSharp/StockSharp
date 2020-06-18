@@ -10,10 +10,10 @@
 	/// </summary>
 	public static class ExtendedMessageTypes
 	{
-		/// <summary>
-		/// The last message identifier.
-		/// </summary>
-		public const MessageTypes Last = (MessageTypes)(-1);
+		///// <summary>
+		///// The last message identifier.
+		///// </summary>
+		//public const MessageTypes Last = (MessageTypes)(-1);
 
 		///// <summary>
 		///// <see cref="ClearingMessage"/>.

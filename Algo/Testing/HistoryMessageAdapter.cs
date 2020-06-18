@@ -611,13 +611,25 @@ namespace StockSharp.Algo.Testing
 							}
 
 							if (!_isChanged)
-								SendOutMessage(new LastMessage { LocalTime = stopDate });
+							{
+								SendOutMessage(new EmulationStateMessage
+								{
+									LocalTime = stopDate,
+									State = EmulationStates.Stopping,
+								});
+							}
 						}
 					}
 					catch (Exception ex)
 					{
 						SendOutMessage(ex.ToErrorMessage());
-						SendOutMessage(new LastMessage { IsError = true });
+
+						SendOutMessage(new EmulationStateMessage
+						{
+							LocalTime = stopDate,
+							State = EmulationStates.Stopping,
+							Error = ex,
+						});
 					}
 				}))
 				.Name(Name)

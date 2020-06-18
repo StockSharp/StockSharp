@@ -176,23 +176,19 @@ namespace StockSharp.Algo.Testing
 						break;
 					case EmulationStates.Starting:
 						throwError = _state != EmulationStates.Stopped && _state != EmulationStates.Suspended;
-
-						if (EmulationAdapter.OwnInnerAdapter && _state == EmulationStates.Suspended)
-							EmulationAdapter.InChannel.Resume();
-
 						break;
 					case EmulationStates.Started:
 						throwError = _state != EmulationStates.Starting;
 						break;
 					case EmulationStates.Suspending:
 						throwError = _state != EmulationStates.Started;
+						break;
+					case EmulationStates.Suspended:
+						throwError = _state != EmulationStates.Suspending;
 
 						if (EmulationAdapter.OwnInnerAdapter)
 							EmulationAdapter.InChannel.Suspend();
 
-						break;
-					case EmulationStates.Suspended:
-						throwError = _state != EmulationStates.Suspending;
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
@@ -201,6 +197,7 @@ namespace StockSharp.Algo.Testing
 				if (throwError)
 					throw new InvalidOperationException(LocalizedStrings.Str2189Params.Put(_state, value));
 
+				this.AddInfoLog(LocalizedStrings.Str1121Params, _state, value);
 				_state = value;
 
 				try
@@ -280,13 +277,15 @@ namespace StockSharp.Algo.Testing
 			if (!EmulationAdapter.OwnInnerAdapter)
 			{
 				SendEmulationState(EmulationStates.Starting);
-				SendEmulationState(EmulationStates.Started);
 			}
 		}
 
 		/// <inheritdoc />
 		protected override void OnDisconnect()
 		{
+			if (EmulationAdapter.OwnInnerAdapter && State == EmulationStates.Suspended)
+				EmulationAdapter.InChannel.Resume();
+
 			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
 				SendEmulationState(EmulationStates.Stopping);
 		}
@@ -306,6 +305,9 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public void Start()
 		{
+			if (EmulationAdapter.OwnInnerAdapter && State == EmulationStates.Suspended)
+				EmulationAdapter.InChannel.Resume();
+
 			SendEmulationState(EmulationStates.Starting);
 		}
 
@@ -319,10 +321,12 @@ namespace StockSharp.Algo.Testing
 
 		private void SendEmulationState(EmulationStates state)
 		{
+			var message = new EmulationStateMessage { State = state };
+
 			if (EmulationAdapter.OwnInnerAdapter)
-				SendInMessage(new EmulationStateMessage { State = state });
+				SendInMessage(message);
 			else
-				ProcessEmulationStateMessage(state);
+				ProcessEmulationStateMessage(message);
 		}
 
 		/// <inheritdoc />
@@ -332,32 +336,8 @@ namespace StockSharp.Algo.Testing
 			{
 				switch (message.Type)
 				{
-					case ExtendedMessageTypes.Last:
-					{
-						var lastMsg = (LastMessage)message;
-
-						if (State == EmulationStates.Started)
-						{
-							IsFinished = !lastMsg.IsError;
-
-							// все данные пришли без ошибок или в процессе чтения произошла ошибка - начинаем остановку
-							SendEmulationState(EmulationStates.Stopping);
-						}
-
-						if (State == EmulationStates.Stopping)
-						{
-							// тестирование было отменено и пришли все ранее прочитанные данные
-							SendEmulationState(EmulationStates.Stopped);
-						}
-
-						break;
-					}
-
-					//case ExtendedMessageTypes.Clearing:
-					//	break;
-
 					case ExtendedMessageTypes.EmulationState:
-						ProcessEmulationStateMessage(((EmulationStateMessage)message).State);
+						ProcessEmulationStateMessage((EmulationStateMessage)message);
 						break;
 
 					default:
@@ -377,39 +357,34 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private void ProcessEmulationStateMessage(EmulationStates newState)
+		private void ProcessEmulationStateMessage(EmulationStateMessage message)
 		{
-			this.AddInfoLog(LocalizedStrings.Str1121Params, State, newState);
+			State = message.State;
 
-			State = newState;
-
-			switch (newState)
+			switch (State)
 			{
 				case EmulationStates.Stopping:
 				{
-					SendEmulationState(EmulationStates.Stopped);
-					break;
-				}
-
-				case EmulationStates.Stopped:
-				{
+					IsFinished = message.Error == null;
+					
 					// change ConnectionState to Disconnecting
 					if (ConnectionState != ConnectionStates.Disconnecting)
 						Disconnect();
 
 					SendInMessage(new DisconnectMessage());
+					State = EmulationStates.Stopped;
 					break;
 				}
 
 				case EmulationStates.Starting:
 				{
-					SendEmulationState(EmulationStates.Started);
+					State = EmulationStates.Started;
 					break;
 				}
 
 				case EmulationStates.Suspending:
 				{
-					SendEmulationState(EmulationStates.Suspended);
+					State = EmulationStates.Suspended;
 					break;
 				}
 			}
