@@ -130,7 +130,7 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			if (_connectors.Any(t => t.State != EmulationStates.Stopped))
+			if (_connectors.Any(t => t.State != ChannelStates.Stopped))
 			{
 				MessageBox.Show(this, LocalizedStrings.Str3015);
 				return;
@@ -571,13 +571,13 @@ namespace SampleHistoryTesting
 
 				connector.StateChanged += () =>
 				{
-					if (connector.State == EmulationStates.Stopped)
+					if (connector.State == ChannelStates.Stopped)
 					{
 						strategy.Stop();
 
 						SetIsChartEnabled(chart, false);
 
-						if (_connectors.All(c => c.State == EmulationStates.Stopped))
+						if (_connectors.All(c => c.State == ChannelStates.Stopped))
 						{
 							logManager.Dispose();
 							_connectors.Clear();
@@ -596,16 +596,16 @@ namespace SampleHistoryTesting
 								MessageBox.Show(this, LocalizedStrings.cancelled, title);
 						});
 					}
-					else if (connector.State == EmulationStates.Started)
+					else if (connector.State == ChannelStates.Started)
 					{
-						if (_connectors.All(c => c.State == EmulationStates.Started))
+						if (_connectors.All(c => c.State == ChannelStates.Started))
 							SetIsEnabled(false, true, true);
 
 						SetIsChartEnabled(chart, true);
 					}
-					else if (connector.State == EmulationStates.Suspended)
+					else if (connector.State == ChannelStates.Suspended)
 					{
-						if (_connectors.All(c => c.State == EmulationStates.Suspended))
+						if (_connectors.All(c => c.State == ChannelStates.Suspended))
 							SetIsEnabled(true, false, true);
 					}
 				};

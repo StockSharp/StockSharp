@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// State.
 		/// </summary>
-		public EmulationStates State { get; set; }
+		public ChannelStates State { get; set; }
 
 		/// <inheritdoc />
 		public Exception Error { get; set; }

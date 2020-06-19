@@ -320,7 +320,7 @@ namespace StockSharp.Algo.Testing
 
 					switch (stateMsg.State)
 					{
-						case EmulationStates.Starting:
+						case ChannelStates.Starting:
 						{
 							if (!_isStarted)
 								Start(stateMsg.StartDate.IsDefault() ? StartDate : stateMsg.StartDate, stateMsg.StopDate.IsDefault() ? StopDate : stateMsg.StopDate);
@@ -328,7 +328,7 @@ namespace StockSharp.Algo.Testing
 							break;
 						}
 
-						case EmulationStates.Stopping:
+						case ChannelStates.Stopping:
 						{
 							Stop();
 							break;
@@ -615,7 +615,7 @@ namespace StockSharp.Algo.Testing
 								SendOutMessage(new EmulationStateMessage
 								{
 									LocalTime = stopDate,
-									State = EmulationStates.Stopping,
+									State = ChannelStates.Stopping,
 								});
 
 								break;
@@ -629,7 +629,7 @@ namespace StockSharp.Algo.Testing
 						SendOutMessage(new EmulationStateMessage
 						{
 							LocalTime = stopDate,
-							State = EmulationStates.Stopping,
+							State = ChannelStates.Stopping,
 							Error = ex,
 						});
 					}

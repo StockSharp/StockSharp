@@ -142,19 +142,19 @@ namespace SampleHistoryTestingParallel
 			{
 				var isFinished = _batchEmulation.IsFinished;
 
-				if (_batchEmulation.State == EmulationStates.Stopped)
+				if (_batchEmulation.State == ChannelStates.Stopped)
 					_batchEmulation = null;
 
 				this.GuiAsync(() =>
 				{
 					switch (newState)
 					{
-						case EmulationStates.Stopping:
-						case EmulationStates.Starting:
-						case EmulationStates.Suspending:
+						case ChannelStates.Stopping:
+						case ChannelStates.Starting:
+						case ChannelStates.Suspending:
 							SetIsEnabled(false, false, false);
 							break;
-						case EmulationStates.Stopped:
+						case ChannelStates.Stopped:
 							SetIsEnabled(true, false, false);
 
 							if (isFinished)
@@ -166,10 +166,10 @@ namespace SampleHistoryTestingParallel
 								MessageBox.Show(this, LocalizedStrings.cancelled);
 
 							break;
-						case EmulationStates.Started:
+						case ChannelStates.Started:
 							SetIsEnabled(false, true, true);
 							break;
-						case EmulationStates.Suspended:
+						case ChannelStates.Suspended:
 							SetIsEnabled(true, false, true);
 							break;
 						default:

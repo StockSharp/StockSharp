@@ -89,12 +89,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public bool IsFinished { get; private set; }
 
-		private EmulationStates _state = EmulationStates.Stopped;
+		private ChannelStates _state = ChannelStates.Stopped;
 		
 		/// <summary>
 		/// The emulator state.
 		/// </summary>
-		public EmulationStates State
+		public ChannelStates State
 		{
 			get => _state;
 			private set
@@ -116,7 +116,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// The event on change of paper trade state.
 		/// </summary>
-		public event Action<EmulationStates, EmulationStates> StateChanged;
+		public event Action<ChannelStates, ChannelStates> StateChanged;
 
 		/// <summary>
 		/// The event of paper trade progress change.
@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			_currentBatch = -1;
 			_batchWeight = 100.0 / _totalBatches;
 
-			State = EmulationStates.Starting;
+			State = ChannelStates.Starting;
 
 			_batches = strategies.Batch(EmulationSettings.BatchSize).GetEnumerator();
 
@@ -158,8 +158,8 @@ namespace StockSharp.Algo.Strategies.Testing
 				{
 					IsFinished = !_cancelEmulation;
 
-					State = EmulationStates.Stopping;
-					State = EmulationStates.Stopped;
+					State = ChannelStates.Stopping;
+					State = ChannelStates.Stopped;
 
 					if (_histAdapter != null)
 					{
@@ -175,8 +175,8 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				if (_currentBatch == 0)
 				{
-					State = EmulationStates.Starting;
-					State = EmulationStates.Started;
+					State = ChannelStates.Starting;
+					State = ChannelStates.Started;
 				}
 
 				InitAdapters();
@@ -238,7 +238,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				connector.StateChanged += () =>
 				{
-					if (connector.State == EmulationStates.Stopped)
+					if (connector.State == ChannelStates.Stopped)
 					{
 						left--;
 
@@ -251,7 +251,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 
 			_histAdapter.SendInMessage(new ConnectMessage());
-			_histAdapter.SendInMessage(new EmulationStateMessage { State = EmulationStates.Starting });
+			_histAdapter.SendInMessage(new EmulationStateMessage { State = ChannelStates.Starting });
 		}
 
 		/// <summary>
@@ -261,18 +261,18 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			lock (_sync)
 			{
-				if (State != EmulationStates.Started)
+				if (State != ChannelStates.Started)
 					return;
 
-				State = EmulationStates.Suspending;
+				State = ChannelStates.Suspending;
 
 				foreach (var connector in _currentConnectors)
 				{
-					if (connector.State == EmulationStates.Started)
+					if (connector.State == ChannelStates.Started)
 						connector.Suspend();
 				}
 
-				State = EmulationStates.Suspended;
+				State = ChannelStates.Suspended;
 			}
 		}
 
@@ -283,18 +283,18 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			lock (_sync)
 			{
-				if (State != EmulationStates.Suspended)
+				if (State != ChannelStates.Suspended)
 					return;
 
-				State = EmulationStates.Starting;
+				State = ChannelStates.Starting;
 
 				foreach (var connector in _currentConnectors)
 				{
-					if (connector.State == EmulationStates.Suspended)
+					if (connector.State == ChannelStates.Suspended)
 						connector.Start();
 				}
 
-				State = EmulationStates.Started;
+				State = ChannelStates.Started;
 			}
 		}
 
@@ -305,20 +305,20 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			lock (_sync)
 			{
-				if (!(State == EmulationStates.Started || State == EmulationStates.Suspended))
+				if (!(State == ChannelStates.Started || State == ChannelStates.Suspended))
 					return;
 
-				State = EmulationStates.Stopping;
+				State = ChannelStates.Stopping;
 
 				_cancelEmulation = true;
 
 				foreach (var connector in _currentConnectors)
 				{
-					if (connector.State == EmulationStates.Suspended)
+					if (connector.State == ChannelStates.Suspended)
 						connector.Start();
 				}
 			
-				_histAdapter.SendInMessage(new EmulationStateMessage { State = EmulationStates.Stopping });
+				_histAdapter.SendInMessage(new EmulationStateMessage { State = ChannelStates.Stopping });
 				_histAdapter.SendInMessage(new DisconnectMessage());
 			}
 		}

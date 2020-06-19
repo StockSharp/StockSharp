@@ -141,12 +141,12 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public HistoryMessageAdapter HistoryMessageAdapter => EmulationAdapter.FindAdapter<HistoryMessageAdapter>();
 
-		private EmulationStates _state = EmulationStates.Stopped;
+		private ChannelStates _state = ChannelStates.Stopped;
 
 		/// <summary>
 		/// The emulator state.
 		/// </summary>
-		public EmulationStates State
+		public ChannelStates State
 		{
 			get => _state;
 			private set
@@ -158,37 +158,37 @@ namespace StockSharp.Algo.Testing
 
 				switch (value)
 				{
-					case EmulationStates.Stopped:
-						throwError = _state != EmulationStates.Stopping;
+					case ChannelStates.Stopped:
+						throwError = _state != ChannelStates.Stopping;
 
 						//if (EmulationAdapter.OwnInnerAdapter)
 							EmulationAdapter.InChannel.Close();
 
 						break;
-					case EmulationStates.Stopping:
-						throwError = _state != EmulationStates.Started && _state != EmulationStates.Suspended
-							&& _state != EmulationStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
+					case ChannelStates.Stopping:
+						throwError = _state != ChannelStates.Started && _state != ChannelStates.Suspended
+							&& _state != ChannelStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
 
 						//if (EmulationAdapter.OwnInnerAdapter)
 						{
 							EmulationAdapter.InChannel.Clear();
 
-							if (_state == EmulationStates.Suspended)
+							if (_state == ChannelStates.Suspended)
 								EmulationAdapter.InChannel.Resume();
 						}
 
 						break;
-					case EmulationStates.Starting:
-						throwError = _state != EmulationStates.Stopped && _state != EmulationStates.Suspended;
+					case ChannelStates.Starting:
+						throwError = _state != ChannelStates.Stopped && _state != ChannelStates.Suspended;
 						break;
-					case EmulationStates.Started:
-						throwError = _state != EmulationStates.Starting;
+					case ChannelStates.Started:
+						throwError = _state != ChannelStates.Starting;
 						break;
-					case EmulationStates.Suspending:
-						throwError = _state != EmulationStates.Started;
+					case ChannelStates.Suspending:
+						throwError = _state != ChannelStates.Started;
 						break;
-					case EmulationStates.Suspended:
-						throwError = _state != EmulationStates.Suspending;
+					case ChannelStates.Suspended:
+						throwError = _state != ChannelStates.Suspending;
 
 						//if (EmulationAdapter.OwnInnerAdapter)
 							EmulationAdapter.InChannel.Suspend();
@@ -282,16 +282,16 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		protected override void OnDisconnect()
 		{
-			if (/*EmulationAdapter.OwnInnerAdapter && */State == EmulationStates.Suspended)
+			if (/*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended)
 				EmulationAdapter.InChannel.Resume();
 
-			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
-				SendEmulationState(EmulationStates.Stopping);
+			if (State != ChannelStates.Stopped && State != ChannelStates.Stopping)
+				SendEmulationState(ChannelStates.Stopping);
 		}
 
 		private void OnDisconnected()
 		{
-			State = EmulationStates.Stopped;
+			State = ChannelStates.Stopped;
 		}
 
 		/// <inheritdoc />
@@ -310,10 +310,10 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public void Start()
 		{
-			if (/*EmulationAdapter.OwnInnerAdapter && */State == EmulationStates.Suspended)
+			if (/*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended)
 				EmulationAdapter.InChannel.Resume();
 
-			SendEmulationState(EmulationStates.Starting);
+			SendEmulationState(ChannelStates.Starting);
 		}
 
 		/// <summary>
@@ -321,10 +321,10 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public void Suspend()
 		{
-			SendEmulationState(EmulationStates.Suspending);
+			SendEmulationState(ChannelStates.Suspending);
 		}
 
-		private void SendEmulationState(EmulationStates state)
+		private void SendEmulationState(ChannelStates state)
 		{
 			var message = new EmulationStateMessage { State = state };
 
@@ -365,7 +365,7 @@ namespace StockSharp.Algo.Testing
 
 			switch (State)
 			{
-				case EmulationStates.Stopping:
+				case ChannelStates.Stopping:
 				{
 					IsFinished = message.Error == null;
 					
@@ -379,15 +379,15 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case EmulationStates.Starting:
+				case ChannelStates.Starting:
 				{
-					State = EmulationStates.Started;
+					State = ChannelStates.Started;
 					break;
 				}
 
-				case EmulationStates.Suspending:
+				case ChannelStates.Suspending:
 				{
-					State = EmulationStates.Suspended;
+					State = ChannelStates.Suspended;
 					break;
 				}
 			}
