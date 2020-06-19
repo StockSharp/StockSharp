@@ -64,8 +64,8 @@ namespace StockSharp.Algo
 
 			if (subscription != null)
 				UnSubscribe(subscription);
-			else
-				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, message);
+			//else
+			//	this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, message);
 		}
 
 		private Subscription SubscribeMarketData(Security security, DataType type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool passThroughOrderBookInrement = false, IMessageAdapter adapter = null)
@@ -385,8 +385,8 @@ namespace StockSharp.Algo
 
 			if (security != null)
 				UnSubscribe(security);
-			else
-				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, originalTransactionId);
+			//else
+			//	this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, originalTransactionId);
 		}
 
 		/// <inheritdoc />
@@ -495,8 +495,8 @@ namespace StockSharp.Algo
 
 			if (security != null)
 				UnSubscribe(security);
-			else
-				this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, originalTransactionId);
+			//else
+			//	this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, originalTransactionId);
 		}
 
 		/// <inheritdoc />

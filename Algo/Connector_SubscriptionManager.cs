@@ -201,8 +201,8 @@ namespace StockSharp.Algo
 					? TryGetSubscription(id, false)
 					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.SecurityId == secId && s.State.IsActive());
 
-				if (subscription == null && id == 0)
-					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, Tuple.Create(dataType, security));
+				if (subscription == null)
+					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id > 0 ? (object)id : Tuple.Create(dataType, security));
 
 				return subscription;
 			}
