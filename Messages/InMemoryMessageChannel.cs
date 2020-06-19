@@ -59,7 +59,7 @@ namespace StockSharp.Messages
 			_queue = queue ?? throw new ArgumentNullException(nameof(queue));
 			_errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
 			
-			Close();
+			_queue.Close();
 		}
 
 		/// <summary>
@@ -118,8 +118,21 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private ChannelStates _state = ChannelStates.Stopped;
+
 		/// <inheritdoc />
-		public ChannelStates State { get; private set; } = ChannelStates.Stopped;
+		public ChannelStates State
+		{
+			get => _state;
+			set
+			{
+				if (_state == value)
+					return;
+
+				_state = value;
+				StateChanged?.Invoke();
+			}
+		}
 
 		/// <inheritdoc />
 		public event Action StateChanged;
@@ -127,8 +140,8 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public void Open()
 		{
+			State = ChannelStates.Started;
 			_queue.Open();
-			StateChanged?.Invoke();
 
 			var version = Interlocked.Increment(ref _version);
 
@@ -162,8 +175,7 @@ namespace StockSharp.Messages
 						}
 					}
 
-					//Closed?.Invoke();
-					StateChanged?.Invoke();
+					State = ChannelStates.Stopped;
 				}))
 				.Name($"{Name} channel thread.")
 				//.Culture(CultureInfo.InvariantCulture)
@@ -173,7 +185,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public void Close()
 		{
-			State = ChannelStates.Stopped;
+			State = ChannelStates.Stopping;
 
 			_queue.Close();
 			_queue.Clear();
