@@ -1590,27 +1590,23 @@ namespace StockSharp.Algo
 
 			lock (_connectedResponseLock)
 			{
-				if (error != null)
-				{
-					if (!HasPendingAdapters())
-					{
-						notSupportedMsgs = _pendingMessages.ToArray();
-						_pendingMessages.Clear();
-					}
-				}
-				else
+				if (error == null)
 				{
 					foreach (var supportedMessage in innerAdapter.SupportedInMessages)
-					{
 						_messageTypeAdapters.SafeAdd(supportedMessage).Add(wrapper);
-					}
-
-					extra.AddRange(_pendingMessages.Select(m => m.LoopBack(this)));
-
-					_pendingMessages.Clear();
 				}
 
 				UpdateAdapterState(underlyingAdapter, true, error, extra);
+
+				if (!HasPendingAdapters())
+				{
+					var pending = _pendingMessages.CopyAndClear();
+
+					if (_adapterStates.Any(p => p.Value.Item1 == ConnectionStates.Connected))
+						extra.AddRange(pending.Select(m => m.LoopBack(this)));
+					else
+						notSupportedMsgs = pending;
+				}
 			}
 
 			if (notSupportedMsgs != null)
@@ -1796,21 +1792,21 @@ namespace StockSharp.Algo
 					_subscription.Remove(originMsg.OriginalTransactionId);
 			}
 
-			if (message.IsNotSupported() && originMsg is MarketDataMessage mdMsg)
+			if (message.IsNotSupported() && originMsg is ISubscriptionMessage subscrMsg)
 			{
 				lock (_connectedResponseLock)
 				{
 					// try loopback only subscribe messages
-					if (mdMsg.IsSubscribe)
+					if (subscrMsg.IsSubscribe)
 					{
 						var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, k => new HashSet<IMessageAdapter>());
 						set.Add(GetUnderlyingAdapter(adapter));
 
-						mdMsg.LoopBack(this);
+						subscrMsg.LoopBack(this);
 					}
 				}
 
-				return mdMsg;
+				return (Message)subscrMsg;
 			}
 			
 			return message;
