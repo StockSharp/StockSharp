@@ -115,7 +115,7 @@ namespace StockSharp.Algo
 			public IEnumerable<Security> GetSubscribers(DataType dataType)
 			{
 				return Subscriptions
-				       .Where(s => s.DataType == dataType)
+				       .Where(s => s.DataType == dataType && s.State.IsActive())
 				       .Select(s => _connector.TryGetSecurity(s.SecurityId))
 					   .Where(s => s != null);
 			}
@@ -199,7 +199,7 @@ namespace StockSharp.Algo
 
 				var subscription = id > 0
 					? TryGetSubscription(id, false)
-					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.SecurityId == secId);
+					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.SecurityId == secId && s.State.IsActive());
 
 				if (subscription == null && id == 0)
 					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, Tuple.Create(dataType, security));
