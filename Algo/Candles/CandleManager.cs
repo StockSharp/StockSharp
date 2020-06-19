@@ -16,6 +16,7 @@ namespace StockSharp.Algo.Candles
 	/// <summary>
 	/// The candles manager.
 	/// </summary>
+	[Obsolete("Use Connector directly.")]
 	public class CandleManager : BaseLogReceiver, ICandleManager
 	{
 		private sealed class CandleManagerSourceList : SynchronizedList<ICandleSource<Candle>>
@@ -111,7 +112,11 @@ namespace StockSharp.Algo.Candles
 
 			public event Action<CandleSeries> Stopped;
 
-			public event Action<Exception> Error;
+			event Action<Exception> ICandleSource<Candle>.Error
+			{
+				add { }
+				remove { }
+			}
 
 			public ConnectorCandleSource(Connector connector)
 			{
