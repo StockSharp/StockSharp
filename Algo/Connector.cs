@@ -23,6 +23,7 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
@@ -46,8 +47,8 @@ namespace StockSharp.Algo
 		private readonly SubscriptionManager _subscriptionManager;
 
 		// backward compatibility for NewXXX events
-		private readonly HashSet<Security> _existingSecurities = new HashSet<Security>();
-		private readonly HashSet<Portfolio> _existingPortfolios = new HashSet<Portfolio>();
+		private readonly CachedSynchronizedSet<Security> _existingSecurities = new CachedSynchronizedSet<Security>();
+		private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = new CachedSynchronizedSet<Portfolio>();
 
 		private bool _notFirstTimeConnected;
 		private bool _isDisposing;
@@ -241,7 +242,7 @@ namespace StockSharp.Algo
 		public IEnumerable<ExchangeBoard> ExchangeBoards => ExchangeInfoProvider.Boards;
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Securities => SecurityStorage.LookupAll();
+		public IEnumerable<Security> Securities => _existingSecurities.Cache;
 
 		int ISecurityProvider.Count => SecurityStorage.Count;
 
@@ -311,7 +312,7 @@ namespace StockSharp.Algo
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <inheritdoc />
-		public IEnumerable<Portfolio> Portfolios => PositionStorage.Portfolios;
+		public IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;
 
 		/// <inheritdoc />
 		public IEnumerable<Position> Positions => PositionStorage.Positions;
@@ -1086,7 +1087,7 @@ namespace StockSharp.Algo
 
 			var isChanged = changeSecurity(security);
 
-			if (_existingSecurities.Add(security))
+			if (_existingSecurities.TryAdd(security))
 				RaiseNewSecurity(security);
 			else if (isChanged)
 				RaiseSecurityChanged(security);

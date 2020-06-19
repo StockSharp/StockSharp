@@ -1030,7 +1030,7 @@ namespace StockSharp.Algo
 			if (changePortfolio != null)
 				isChanged = changePortfolio(portfolio);
 
-			if (_existingPortfolios.Add(portfolio))
+			if (_existingPortfolios.TryAdd(portfolio))
 			{
 				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
 				RaiseNewPortfolio(portfolio);
