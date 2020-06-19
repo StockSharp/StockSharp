@@ -538,7 +538,7 @@ namespace StockSharp.Algo
 		{
 			message.TryInitLocalTime(this);
 
-			if (!InMessageChannel.IsOpened)
+			if (!InMessageChannel.IsOpened())
 				InMessageChannel.Open();
 
 			return InMessageChannel.SendInMessage(message);
@@ -549,7 +549,7 @@ namespace StockSharp.Algo
 		{
 			message.TryInitLocalTime(this);
 
-			if (!OutMessageChannel.IsOpened)
+			if (!OutMessageChannel.IsOpened())
 				OutMessageChannel.Open();
 
 			OutMessageChannel.SendInMessage(message);

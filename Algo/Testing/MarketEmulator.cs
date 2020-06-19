@@ -2190,7 +2190,7 @@ namespace StockSharp.Algo.Testing
 			_portfoliosPrevRecalc = time;
 		}
 
-		bool IMessageChannel.IsOpened => true;
+		ChannelStates IMessageChannel.State => ChannelStates.Started;
 
 		IdGenerator IMessageAdapter.TransactionIdGenerator { get; } = new IncrementalIdGenerator();
 

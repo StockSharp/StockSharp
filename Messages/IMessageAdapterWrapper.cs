@@ -119,7 +119,7 @@ namespace StockSharp.Messages
 			NewOutMessage?.Invoke(message);
 		}
 
-		bool IMessageChannel.IsOpened => InnerAdapter.IsOpened;
+		ChannelStates IMessageChannel.State => InnerAdapter.State;
 
 		void IMessageChannel.Open()
 		{

@@ -68,7 +68,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (!OutputChannel.IsOpened)
+			if (!OutputChannel.IsOpened())
 				OutputChannel.Open();
 
 			OutputChannel.SendInMessage(message);
@@ -97,7 +97,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
-			if (!InputChannel.IsOpened)
+			if (!InputChannel.IsOpened())
 				InputChannel.Open();
 
 			return InputChannel.SendInMessage(message);
@@ -109,7 +109,7 @@ namespace StockSharp.Messages
 		/// <param name="message">Message.</param>
 		public void SendOutMessage(Message message)
 		{
-			if (!OutputChannel.IsOpened)
+			if (!OutputChannel.IsOpened())
 				OutputChannel.Open();
 
 			OutputChannel.SendInMessage(message);

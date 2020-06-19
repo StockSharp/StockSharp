@@ -3032,5 +3032,18 @@ namespace StockSharp.Messages
 				//throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}
 		}
+
+		/// <summary>
+		/// Is channel opened.
+		/// </summary>
+		/// <param name="channel">Message channel.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsOpened(this IMessageChannel channel)
+		{
+			if (channel is null)
+				throw new ArgumentNullException(nameof(channel));
+
+			return channel.State != ChannelStates.Stopped;
+		}
 	}
 }

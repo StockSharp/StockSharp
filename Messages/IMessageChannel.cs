@@ -16,8 +16,53 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
+
+	using StockSharp.Localization;
+
+	/// <summary>
+	/// States <see cref="IMessageChannel"/>.
+	/// </summary>
+	public enum ChannelStates
+	{
+		/// <summary>
+		/// Stopped.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1128Key)]
+		Stopped,
+
+		/// <summary>
+		/// Stopping.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1114Key)]
+		Stopping,
+
+		/// <summary>
+		/// Starting.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1129Key)]
+		Starting,
+
+		/// <summary>
+		/// Working.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1130Key)]
+		Started,
+
+		/// <summary>
+		/// In the process of suspension.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1131Key)]
+		Suspending, 
+
+		/// <summary>
+		/// Suspended.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1132Key)]
+		Suspended,
+	}
 
 	/// <summary>
 	/// Message channel base interface.
@@ -25,12 +70,12 @@ namespace StockSharp.Messages
 	public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>
 	{
 		/// <summary>
-		/// Is channel opened.
+		/// State.
 		/// </summary>
-		bool IsOpened { get; }
+		ChannelStates State { get; }
 
 		/// <summary>
-		/// <see cref="IsOpened"/> change event.
+		/// <see cref="State"/> change event.
 		/// </summary>
 		event Action StateChanged;
 
@@ -88,7 +133,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		bool IMessageChannel.IsOpened => true;
+		ChannelStates IMessageChannel.State => ChannelStates.Started;
 
 		event Action IMessageChannel.StateChanged
 		{

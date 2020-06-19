@@ -289,7 +289,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
-		bool IMessageChannel.IsOpened => true;
+		ChannelStates IMessageChannel.State => ChannelStates.Started;
 
 		void IMessageChannel.Open()
 		{

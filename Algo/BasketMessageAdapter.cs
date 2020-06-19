@@ -1957,7 +1957,7 @@ namespace StockSharp.Algo
 
 		object ICloneable.Clone() => Clone();
 
-		bool IMessageChannel.IsOpened => true;
+		ChannelStates IMessageChannel.State => ChannelStates.Started;
 
 		void IMessageChannel.Open()
 		{

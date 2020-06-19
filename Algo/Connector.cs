@@ -1289,7 +1289,7 @@ namespace StockSharp.Algo
 			remove => _newOutMessage -= value;
 		}
 
-		bool IMessageChannel.IsOpened => ConnectionState == ConnectionStates.Connected;
+		ChannelStates IMessageChannel.State => ConnectionState == ConnectionStates.Connected ? ChannelStates.Started : ChannelStates.Stopped;
 
 		private Action _stateChanged;
 
