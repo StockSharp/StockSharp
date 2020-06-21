@@ -54,16 +54,16 @@ namespace StockSharp.Algo
 				return quotes
 					.Select(quote =>
 					{
-						var res = quote.Clone();
+						var res = quote;
 						var key = Tuple.Create(side, res.Price);
 
 						var own = _executions.TryGetValue(key)?.Second;
 						if (own != null)
 							res.Volume -= own.Value;
 
-						return res.Volume <= 0 ? null : res;
+						return res.Volume <= 0 ? default : res;
 					})
-					.Where(q => q != null)
+					.Where(q => q.Price != default)
 					.ToArray();
 			}
 

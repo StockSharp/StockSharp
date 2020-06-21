@@ -93,11 +93,11 @@ namespace StockSharp.Algo.Slippage
 
 					var bid = quotesMsg.GetBestBid();
 					if (bid != null)
-						pair.First = bid.Price;
+						pair.First = bid.Value.Price;
 
 					var ask = quotesMsg.GetBestAsk();
 					if (ask != null)
-						pair.Second = ask.Price;
+						pair.Second = ask.Value.Price;
 
 					break;
 				}

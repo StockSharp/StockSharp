@@ -659,7 +659,7 @@ namespace StockSharp.Algo.Testing
 			{
 				return quotes.Count == 0
 					? ArrayHelper.Empty<QuoteChange>()
-					: quotes.Select(p => p.Value.Second.Clone()).ToArray();
+					: quotes.Select(p => p.Value.Second).ToArray();
 			}
 
 			private void UpdateQuotes(ExecutionMessage message, ICollection<Message> result)
@@ -1095,7 +1095,9 @@ namespace StockSharp.Algo.Testing
 
 					AddTotalVolume(message.Side, volume);
 
-					pair.Second.Volume += volume;
+					var q = pair.Second;
+					q.Volume += volume;
+					pair.Second = q;
 					level.Add(clone);
 				}
 				else
@@ -1130,7 +1132,10 @@ namespace StockSharp.Algo.Testing
 
 								var diff = leftBalance - balance;
 								AddTotalVolume(message.Side, diff);
-								pair.Second.Volume += diff;
+
+								var q1 = pair.Second;
+								q1.Volume += diff;
+								pair.Second = q1;
 
 								level[i] = clone;
 								break;
@@ -1138,7 +1143,9 @@ namespace StockSharp.Algo.Testing
 
 							AddTotalVolume(message.Side, -balance);
 
-							pair.Second.Volume -= balance;
+							var q = pair.Second;
+							q.Volume -= balance;
+							pair.Second = q;
 							level.RemoveAt(i, quote);
 							_messagePool.Free(quote);
 						}
@@ -1157,7 +1164,9 @@ namespace StockSharp.Algo.Testing
 
 							AddTotalVolume(message.Side, -balance);
 
-							pair.Second.Volume -= balance;
+							var q = pair.Second;
+							q.Volume -= balance;
+							pair.Second = q;
 							level.Remove(quote);
 							_messagePool.Free(quote);
 						}

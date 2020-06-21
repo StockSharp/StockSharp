@@ -134,9 +134,7 @@ namespace StockSharp.Messages
 						{
 							if (_orders.TryGetValue(id, out var prevVolume))
 							{
-								var quote = quotes.TryGetValue(item.OrderPrice);
-
-								if (quote != null)
+								if (quotes.TryGetValue(item.OrderPrice, out var quote))
 								{
 									quote.Volume -= volume.Value;
 
@@ -158,9 +156,7 @@ namespace StockSharp.Messages
 
 						if (_orders.TryGetValue(id, out var prevVolume))
 						{
-							var quote = quotes.TryGetValue(item.OrderPrice);
-
-							if (quote != null)
+							if (quotes.TryGetValue(item.OrderPrice, out var quote))
 							{
 								quote.Volume -= prevVolume;
 

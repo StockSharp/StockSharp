@@ -117,12 +117,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message">Market depth.</param>
 		/// <returns>Best bid, or <see langword="null" />, if no bids are empty.</returns>
-		public static QuoteChange GetBestBid(this QuoteChangeMessage message)
+		public static QuoteChange? GetBestBid(this QuoteChangeMessage message)
 		{
-			if (message == null)
+			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (message.IsSorted ? (IEnumerable<QuoteChange>)message.Bids : message.Bids.OrderByDescending(q => q.Price)).FirstOrDefault();
+			return (message.IsSorted ? (IEnumerable<QuoteChange>)message.Bids : message.Bids.OrderByDescending(q => q.Price)).FirstOr();
 		}
 
 		/// <summary>
@@ -130,12 +130,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message">Market depth.</param>
 		/// <returns>Best ask, or <see langword="null" />, if no asks are empty.</returns>
-		public static QuoteChange GetBestAsk(this QuoteChangeMessage message)
+		public static QuoteChange? GetBestAsk(this QuoteChangeMessage message)
 		{
-			if (message == null)
+			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (message.IsSorted ? (IEnumerable<QuoteChange>)message.Asks : message.Asks.OrderBy(q => q.Price)).FirstOrDefault();
+			return (message.IsSorted ? (IEnumerable<QuoteChange>)message.Asks : message.Asks.OrderBy(q => q.Price)).FirstOr();
 		}
 
 		/// <summary>
@@ -2567,8 +2567,8 @@ namespace StockSharp.Messages
 		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
 		public static Level1ChangeMessage ToLevel1(this QuoteChangeMessage message)
 		{
-			var bestBid = message.GetBestBid();
-			var bestAsk = message.GetBestAsk();
+			var b = message.GetBestBid();
+			var a = message.GetBestAsk();
 
 			var level1 = new Level1ChangeMessage
 			{
@@ -2576,14 +2576,18 @@ namespace StockSharp.Messages
 				ServerTime = message.ServerTime,
 			};
 
-			if (bestBid != null)
+			if (b != null)
 			{
+				var bestBid = b.Value;
+
 				level1.Add(Level1Fields.BestBidPrice, bestBid.Price);
 				level1.Add(Level1Fields.BestBidVolume, bestBid.Volume);
 			}
 
-			if (bestAsk != null)
+			if (a != null)
 			{
+				var bestAsk = a.Value;
+
 				level1.Add(Level1Fields.BestAskPrice, bestAsk.Price);
 				level1.Add(Level1Fields.BestAskVolume, bestAsk.Volume);
 			}
@@ -2694,12 +2698,12 @@ namespace StockSharp.Messages
 			var bids = book.IsSorted ? book.Bids : book.Bids.OrderByDescending(b => b.Price).ToArray();
 			var asks = book.IsSorted ? book.Asks : book.Asks.OrderBy(b => b.Price).ToArray();
 
-			var bestBid = bids.FirstOrDefault();
-			var bestAsk = asks.FirstOrDefault();
+			var bestBid = bids.FirstOr();
+			var bestAsk = asks.FirstOr();
 
 			if (bestBid != null && bestAsk != null)
 			{
-				return bids.All(b => b.Price < bestAsk.Price) && asks.All(a => a.Price > bestBid.Price) && Verify(bids, true) && Verify(asks, false);
+				return bids.All(b => b.Price < bestAsk.Value.Price) && asks.All(a => a.Price > bestBid.Value.Price) && Verify(bids, true) && Verify(asks, false);
 			}
 			else
 			{
@@ -2741,9 +2745,6 @@ namespace StockSharp.Messages
 
 		private static bool Verify(QuoteChange quote)
 		{
-			if (quote is null)
-				throw new ArgumentNullException(nameof(quote));
-
 			return quote.Price > 0 && quote.Volume > 0;
 		}
 

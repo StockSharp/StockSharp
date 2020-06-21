@@ -108,7 +108,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Flag sorted by price quotes (<see cref="QuoteChangeMessage.Bids"/> by descending, <see cref="QuoteChangeMessage.Asks"/> by ascending).
+		/// Flag sorted by price quotes (<see cref="Bids"/> by descending, <see cref="Asks"/> by ascending).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str285Key)]
@@ -167,8 +167,13 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
-			destination.Bids = Bids.Select(q => q.Clone()).ToArray();
-			destination.Asks = Asks.Select(q => q.Clone()).ToArray();
+
+			destination.Bids = new QuoteChange[Bids.Length];
+			Bids.CopyTo(destination.Bids, 0);
+
+			destination.Asks = new QuoteChange[Asks.Length];
+			Asks.CopyTo(destination.Asks, 0);
+
 			destination.ServerTime = ServerTime;
 			destination.IsSorted = IsSorted;
 			destination.Currency = Currency;

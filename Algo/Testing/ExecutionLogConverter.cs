@@ -87,15 +87,17 @@ namespace StockSharp.Algo.Testing
 
 				if (quote != null)
 				{
+					var v = quote.Value;
+
 					if (!_priceStepUpdated)
 					{
-						_securityDefinition.PriceStep = quote.Price.GetDecimalInfo().EffectiveScale.GetPriceStep();
+						_securityDefinition.PriceStep = v.Price.GetDecimalInfo().EffectiveScale.GetPriceStep();
 						_priceStepUpdated = true;
 					}
 
 					if (!_volumeStepUpdated)
 					{
-						_securityDefinition.VolumeStep = quote.Volume.GetDecimalInfo().EffectiveScale.GetPriceStep();
+						_securityDefinition.VolumeStep = v.Volume.GetDecimalInfo().EffectiveScale.GetPriceStep();
 						_volumeStepUpdated = true;
 					}
 				}
@@ -146,8 +148,8 @@ namespace StockSharp.Algo.Testing
 			var canProcessFrom = true;
 			var canProcessTo = true;
 
-			QuoteChange currFrom = null;
-			QuoteChange currTo = null;
+			QuoteChange? currFrom = null;
+			QuoteChange? currTo = null;
 
 			// TODO
 			//List<ExecutionMessage> currOrders = null;
@@ -180,7 +182,7 @@ namespace StockSharp.Algo.Testing
 							currTo = toEnum.Current;
 
 							if (newBestPrice == 0)
-								newBestPrice = currTo.Price;
+								newBestPrice = currTo.Value.Price;
 						}
 					}
 
@@ -190,7 +192,9 @@ namespace StockSharp.Algo.Testing
 							break;
 						else
 						{
-							AddExecMsg(diff, time, serverTime, currTo, currTo.Volume, side, false);
+							var v = currTo.Value;
+
+							AddExecMsg(diff, time, serverTime, v, v.Volume, side, false);
 							currTo = null;
 						}
 					}
@@ -198,28 +202,32 @@ namespace StockSharp.Algo.Testing
 					{
 						if (currTo == null)
 						{
-							AddExecMsg(diff, time, serverTime, currFrom, -currFrom.Volume, side, isSpread.Value);
+							var v = currFrom.Value;
+							AddExecMsg(diff, time, serverTime, v, -v.Volume, side, isSpread.Value);
 							currFrom = null;
 						}
 						else
 						{
-							if (currFrom.Price == currTo.Price)
+							var f = currFrom.Value;
+							var t = currTo.Value;
+
+							if (f.Price == t.Price)
 							{
-								if (currFrom.Volume != currTo.Volume)
+								if (f.Volume != t.Volume)
 								{
-									AddExecMsg(diff, time, serverTime, currTo, currTo.Volume - currFrom.Volume, side, isSpread.Value);
+									AddExecMsg(diff, time, serverTime, t, t.Volume - f.Volume, side, isSpread.Value);
 								}
 
 								currFrom = currTo = null;
 							}
-							else if (currFrom.Price * mult > currTo.Price * mult)
+							else if (f.Price * mult > t.Price * mult)
 							{
-								AddExecMsg(diff, time, serverTime, currTo, currTo.Volume, side, isSpread.Value);
+								AddExecMsg(diff, time, serverTime, t, t.Volume, side, isSpread.Value);
 								currTo = null;
 							}
 							else
 							{
-								AddExecMsg(diff, time, serverTime, currFrom, -currFrom.Volume, side, isSpread.Value);
+								AddExecMsg(diff, time, serverTime, f, -f.Volume, side, isSpread.Value);
 								currFrom = null;
 							}
 						}

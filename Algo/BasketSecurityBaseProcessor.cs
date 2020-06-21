@@ -103,7 +103,7 @@ namespace StockSharp.Algo
 					var volume = bestBid?.Volume;
 					
 					if (bestAsk?.Volume != null)
-						volume = volume ?? 0 + bestAsk.Volume;
+						volume = volume ?? 0 + bestAsk?.Volume;
 
 					if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price), volume, null))
 						yield break;

@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Export
 				Description = LocalizedStrings.TemplateTxtDepthKey,
 				GroupName = LocalizedStrings.GeneralKey,
 				Order = 0)]
-		public string TemplateTxtDepth { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Price};{Volume};{Side}";
+		public string TemplateTxtDepth { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Quote.Price};{Quote.Volume};{Side}";
 
 		/// <summary>
 		/// Ticks txt export template.

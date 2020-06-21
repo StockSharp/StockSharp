@@ -192,11 +192,31 @@ namespace StockSharp.Algo.Import
 
 				fields.Add(new FieldMapping<TimeQuoteChange, DateTimeOffset>(GetDateField(nameof(TimeQuoteChange.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, TimeSpan>(GetTimeOfDayField(nameof(TimeQuoteChange.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
-				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(TimeQuoteChange.Price), LocalizedStrings.Price, LocalizedStrings.Str275, (i, v) => i.Price = v) { IsRequired = true });
-				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(TimeQuoteChange.Volume), LocalizedStrings.Volume, LocalizedStrings.Str276, (i, v) => i.Volume = v) { IsRequired = true });
+				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Price), LocalizedStrings.Price, LocalizedStrings.Str275, (i, v) =>
+				{
+					var q = i.Quote;
+					q.Price = v;
+					i.Quote = q;
+				}) { IsRequired = true });
+				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Volume), LocalizedStrings.Volume, LocalizedStrings.Str276, (i, v) =>
+				{
+					var q = i.Quote;
+					q.Volume = v;
+					i.Quote = q;
+				}) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Str128, LocalizedStrings.Str277, (i, v) => i.Side = v) { IsRequired = true });
-				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(TimeQuoteChange.OrdersCount), LocalizedStrings.Str668, LocalizedStrings.XamlStr248, (i, v) => i.OrdersCount = v));
-				fields.Add(new FieldMapping<TimeQuoteChange, QuoteConditions>(nameof(TimeQuoteChange.Condition), LocalizedStrings.Str154, LocalizedStrings.QuoteCondition, (i, v) => i.Condition = v));
+				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.OrdersCount), LocalizedStrings.Str668, LocalizedStrings.XamlStr248, (i, v) =>
+				{
+					var q = i.Quote;
+					q.OrdersCount = v;
+					i.Quote = q;
+				}));
+				fields.Add(new FieldMapping<TimeQuoteChange, QuoteConditions>(nameof(QuoteChange.Condition), LocalizedStrings.Str154, LocalizedStrings.QuoteCondition, (i, v) =>
+				{
+					var q = i.Quote;
+					q.Condition = v;
+					i.Quote = q;
+				}));
 			}
 			else if (msgType == typeof(Level1ChangeMessage))
 			{

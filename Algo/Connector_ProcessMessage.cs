@@ -1196,25 +1196,29 @@ namespace StockSharp.Algo
 
 				if (bestBid != null)
 				{
-					info.SetValue(Level1Fields.BestBidPrice, bestBid.Price);
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, bestBid.Price));
+					var q = bestBid.Value;
 
-					if (bestBid.Volume != 0)
+					info.SetValue(Level1Fields.BestBidPrice, q.Price);
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, q.Price));
+
+					if (q.Volume != 0)
 					{
-						info.SetValue(Level1Fields.BestBidVolume, bestBid.Volume);
-						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidVolume, bestBid.Volume));
+						info.SetValue(Level1Fields.BestBidVolume, q.Volume);
+						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidVolume, q.Volume));
 					}
 				}
 
 				if (bestAsk != null)
 				{
-					info.SetValue(Level1Fields.BestAskPrice, bestAsk.Price);
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, bestAsk.Price));
+					var q = bestAsk.Value;
 
-					if (bestAsk.Volume != 0)
+					info.SetValue(Level1Fields.BestAskPrice, q.Price);
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, q.Price));
+
+					if (q.Volume != 0)
 					{
-						info.SetValue(Level1Fields.BestAskVolume, bestAsk.Volume);
-						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskVolume, bestAsk.Volume));
+						info.SetValue(Level1Fields.BestAskVolume, q.Volume);
+						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskVolume, q.Volume));
 					}
 				}
 
@@ -1228,13 +1232,13 @@ namespace StockSharp.Algo
 				if (!fromLevel1 || bestBid != null)
 				{
 					updated = true;
-					security.BestBid = bestBid == null ? null : new Quote(security, bestBid.Price, bestBid.Volume, Sides.Buy);
+					security.BestBid = bestBid == null ? null : new Quote(security, bestBid.Value.Price, bestBid.Value.Volume, Sides.Buy);
 				}
 
 				if (!fromLevel1 || bestAsk != null)
 				{
 					updated = true;
-					security.BestAsk = bestAsk == null ? null : new Quote(security, bestAsk.Price, bestAsk.Volume, Sides.Sell);
+					security.BestAsk = bestAsk == null ? null : new Quote(security, bestAsk.Value.Price, bestAsk.Value.Volume, Sides.Sell);
 				}
 
 				if (updated)

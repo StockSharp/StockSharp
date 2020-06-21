@@ -1038,9 +1038,7 @@ namespace StockSharp.Algo
 				var price = pair.Key;
 				var quoteFrom = pair.Value;
 
-				var quoteTo = mapTo.TryGetValue(price);
-
-				if (quoteTo != null)
+				if (mapTo.TryGetValue(price, out var quoteTo))
 				{
 					if (quoteTo.Volume == quoteFrom.Volume &&
 						quoteTo.OrdersCount == quoteFrom.OrdersCount &&
@@ -1054,8 +1052,8 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					var empty = quoteFrom.Clone();
-					empty.Volume = 0;				// была, а теперь нет
+					// была, а теперь нет
+					var empty = new QuoteChange { Price = price };
 					mapTo[price] = empty;
 				}
 			}
@@ -3596,7 +3594,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.Asks.Select(q => new TimeQuoteChange(Sides.Sell, q, message)).Concat(message.Bids.Select(q => new TimeQuoteChange(Sides.Buy, q, message))).OrderByDescending(q => q.Price);
+			return message.Asks.Select(q => new TimeQuoteChange(Sides.Sell, q, message)).Concat(message.Bids.Select(q => new TimeQuoteChange(Sides.Buy, q, message))).OrderByDescending(q => q.Quote.Price);
 		}
 
 		/// <summary>
