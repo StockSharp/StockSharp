@@ -32,7 +32,6 @@ namespace StockSharp.Algo.Candles
 					_manager = manager;
 
 					_source.Processing += OnProcessing;
-					_source.Error += _manager.RaiseError;
 				}
 
 				private void OnProcessing(CandleSeries series, Candle candle)
@@ -45,7 +44,6 @@ namespace StockSharp.Algo.Candles
 					base.DisposeManaged();
 
 					_source.Processing -= OnProcessing;
-					_source.Error -= _manager.RaiseError;
 					_source.Dispose();
 				}
 			}
@@ -111,12 +109,6 @@ namespace StockSharp.Algo.Candles
 			public event Action<CandleSeries, Candle> Processing;
 
 			public event Action<CandleSeries> Stopped;
-
-			event Action<Exception> ICandleSource<Candle>.Error
-			{
-				add { }
-				remove { }
-			}
 
 			public ConnectorCandleSource(Connector connector)
 			{
@@ -218,9 +210,6 @@ namespace StockSharp.Algo.Candles
 		public event Action<CandleSeries> Stopped;
 
 		/// <inheritdoc />
-		public event Action<Exception> Error;
-
-		/// <inheritdoc />
 		public virtual IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -279,16 +268,6 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentNullException(nameof(series));
 
 			_series.TryGetValue(series)?.Stop();
-		}
-
-		/// <summary>
-		/// To call the event <see cref="CandleManager.Error"/>.
-		/// </summary>
-		/// <param name="error">Error info.</param>
-		protected virtual void RaiseError(Exception error)
-		{
-			Error?.Invoke(error);
-			this.AddErrorLog(error);
 		}
 
 		/// <summary>

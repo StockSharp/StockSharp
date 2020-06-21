@@ -11,12 +11,6 @@ namespace StockSharp.Algo.Strategies
 	{
 		private ICandleManager CandleManager => (ICandleManager)SafeGetConnector();
 
-		event Action<Exception> ICandleSource<Candle>.Error
-		{
-			add => CandleManager.Error += value;
-			remove => CandleManager.Error -= value;
-		}
-
 		/// <inheritdoc />
 		int ICandleSource<Candle>.SpeedPriority => CandleManager.SpeedPriority;
 
