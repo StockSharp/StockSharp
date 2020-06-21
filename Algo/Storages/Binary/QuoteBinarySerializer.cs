@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				metaInfo.ServerOffset = (firstDepth ?? messages.First()).ServerTime.Offset;
 
-				metaInfo.IncrementalOnly = firstDepth.State != null;
+				metaInfo.IncrementalOnly = firstDepth?.State != null;
 			}
 
 			writer.WriteInt(messages.Count());
