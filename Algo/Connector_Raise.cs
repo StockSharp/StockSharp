@@ -591,12 +591,10 @@ namespace StockSharp.Algo
 		/// <param name="exception">Data processing error.</param>
 		protected void RaiseError(Exception exception)
 		{
-			if (exception == null)
+			if (exception is null)
 				throw new ArgumentNullException(nameof(exception));
 
 			ErrorCount++;
-
-			this.AddErrorLog(exception);
 			Error?.Invoke(exception);
 		}
 

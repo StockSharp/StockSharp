@@ -660,8 +660,7 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Error:
-						var errorMsg = (ErrorMessage)message;
-						RaiseError(errorMsg.Error);
+						ProcessErrorMessage((ErrorMessage)message);
 						break;
 
 					case ExtendedMessageTypes.RemoveSecurity:
@@ -1627,6 +1626,18 @@ namespace StockSharp.Algo
 		private void ProcessSubscriptionMessage(ISubscriptionIdMessage subscrMsg)
 		{
 			RaiseReceived((Message)subscrMsg, subscrMsg, RaiseSubscriptionReceived);
+		}
+
+		private void ProcessErrorMessage(ErrorMessage message)
+		{
+			var error = message.Error;
+
+			RaiseError(error);
+
+			if (message.Adapter is object && !(message.Adapter is BasketMessageAdapter))
+				message.Adapter.AddErrorLog(error);
+			else
+				this.AddErrorLog(error);
 		}
 	}
 }
