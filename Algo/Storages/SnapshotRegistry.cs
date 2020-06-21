@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private class SnapshotStorage<TKey, TMessage> : SnapshotStorage, ISnapshotStorage<TKey, TMessage>
-			where TMessage : Message
+			where TMessage : Message, ISecurityIdMessage
 		{
 			private class SnapshotStorageDate
 			{
@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Storages
 
 				public void Update(TMessage curr)
 				{
-					if (curr == null)
+					if (curr is null)
 						throw new ArgumentNullException(nameof(curr));
 
 					var key = _serializer.GetKey(curr);
@@ -154,9 +154,12 @@ namespace StockSharp.Algo.Storages
 					{
 						var prev = _snapshots.TryGetValue(key);
 
-						if (prev == null)
+						if (prev is null)
 						{
-							_snapshots.Add(key, _serializer.CreateCopy(curr));
+							if (curr.SecurityId == default)
+								throw new ArgumentException(curr.ToString());
+
+							_snapshots.Add(key, curr.TypedClone());
 						}
 						else
 						{

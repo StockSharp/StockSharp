@@ -161,11 +161,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			return message.SecurityId;
 		}
 
-		QuoteChangeMessage ISnapshotSerializer<SecurityId, QuoteChangeMessage>.CreateCopy(QuoteChangeMessage message)
-		{
-			return message.TypedClone();
-		}
-
 		void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)
 		{
 			if (!changes.IsSorted)

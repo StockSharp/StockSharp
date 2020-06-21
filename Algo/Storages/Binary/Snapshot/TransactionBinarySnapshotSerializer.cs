@@ -489,21 +489,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			return key.ToLowerInvariant();
 		}
 
-		ExecutionMessage ISnapshotSerializer<string, ExecutionMessage>.CreateCopy(ExecutionMessage message)
-		{
-			if (message.SecurityId.IsDefault())
-				throw new ArgumentException(message.ToString());
-
-			var copy = message.TypedClone();
-
-			//if (copy.TransactionId == 0)
-			//	copy.TransactionId = message.OriginalTransactionId;
-
-			//copy.OriginalTransactionId = 0;
-
-			return copy;
-		}
-
 		void ISnapshotSerializer<string, ExecutionMessage>.Update(ExecutionMessage message, ExecutionMessage changes)
 		{
 			if (!changes.BrokerCode.IsEmpty())
@@ -539,8 +524,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (changes.IsMarketMaker != null)
 				message.IsMarketMaker = changes.IsMarketMaker;
 
-			if (changes.HasOrderInfo)
-				message.Side = changes.Side;
+			//if (changes.HasOrderInfo)
+			//	message.Side = changes.Side;
 
 			if (changes.OrderId != null)
 				message.OrderId = changes.OrderId;
