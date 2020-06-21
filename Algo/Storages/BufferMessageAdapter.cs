@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Storages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Threading;
 	using System.Linq;
 
@@ -18,8 +17,9 @@ namespace StockSharp.Algo.Storages
 	public class BufferMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly SynchronizedSet<long> _orderStatusIds = new SynchronizedSet<long>();
-		
 		private readonly SynchronizedDictionary<long, long> _cancellationTransactions = new SynchronizedDictionary<long, long>();
+		private readonly SynchronizedDictionary<long, long> _replaceTransactions = new SynchronizedDictionary<long, long>();
+		private readonly SynchronizedDictionary<long, long> _replaceTransactionsByTransId = new SynchronizedDictionary<long, long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BufferMessageAdapter"/>.
@@ -56,8 +56,10 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		private void Reset()
 		{
-			_cancellationTransactions.Clear();
 			_orderStatusIds.Clear();
+			_cancellationTransactions.Clear();
+			_replaceTransactions.Clear();
+			_replaceTransactionsByTransId.Clear();
 		}
 
 		private ISnapshotStorage GetSnapshotStorage(DataType dataType)
@@ -83,29 +85,57 @@ namespace StockSharp.Algo.Storages
 					if (message.Adapter != null && message.Adapter != this)
 						break;
 
-					message = ProcessOrderStatus((OrderStatusMessage)message);
+					if (Buffer.EnabledTransactions)
+						message = ProcessOrderStatus((OrderStatusMessage)message);
+
 					break;
 				}
 
 				case MessageTypes.OrderRegister:
 				{
-					Buffer.SendInMessage(message);
+					if (Buffer.EnabledTransactions)
+						Buffer.SendInMessage(message);
+
 					break;
 				}
 				case MessageTypes.OrderReplace:
+				{
+					if (Buffer.EnabledTransactions)
+					{
+						var replaceMsg = (OrderReplaceMessage)message;
+
+						_replaceTransactions.TryAdd(replaceMsg.TransactionId, replaceMsg.OriginalTransactionId);
+
+						Buffer.SendInMessage(replaceMsg);
+					}
+					
+					break;
+				}
 				case MessageTypes.OrderPairReplace:
 				{
-					Buffer.SendInMessage(message);
+					if (Buffer.EnabledTransactions)
+					{
+						var pairMsg = (OrderPairReplaceMessage)message;
+						
+						_replaceTransactions.TryAdd(pairMsg.Message1.TransactionId, pairMsg.Message1.OriginalTransactionId);
+						_replaceTransactions.TryAdd(pairMsg.Message2.TransactionId, pairMsg.Message2.OriginalTransactionId);
+
+						Buffer.SendInMessage(message);
+					}
+
 					break;
 				}
 
 				case MessageTypes.OrderCancel:
 				{
-					var cancelMsg = (OrderCancelMessage)message;
+					if (Buffer.EnabledTransactions)
+					{
+						var cancelMsg = (OrderCancelMessage)message;
 
-					// can be looped back from offline
-					_cancellationTransactions.TryAdd(cancelMsg.TransactionId, cancelMsg.OriginalTransactionId);
-
+						// can be looped back from offline
+						_cancellationTransactions.TryAdd(cancelMsg.TransactionId, cancelMsg.OriginalTransactionId);
+					}
+					
 					break;
 				}
 				case MessageTypes.MarketData:
@@ -307,20 +337,34 @@ namespace StockSharp.Algo.Storages
 								if (originTransId == 0)
 									continue;
 
-								if (_cancellationTransactions.TryGetValue(originTransId, out var temp))
+								if (_cancellationTransactions.TryGetValue(originTransId, out var cancelledId))
 								{
 									// do not store cancellation errors
 									if (message.Error != null)
 										continue;
 
 									// override cancel trans id by original order's registration trans id
-									originTransId = temp;
+									originTransId = cancelledId;
 								}
-
-								if (_orderStatusIds.Contains(originTransId))
+								else if (_orderStatusIds.Contains(originTransId))
 								{
 									// override status request trans id by original order's registration trans id
 									originTransId = message.TransactionId;
+								}
+								else if (_replaceTransactions.TryGetAndRemove(originTransId, out var replacedId))
+								{
+									if (message.Error == null)
+									{
+										var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId);
+
+										if (replaced == null)
+											this.AddWarningLog("Replaced order {0} not found.", replacedId);
+										else
+										{
+											if (replaced.OrderState != OrderStates.Done)
+												replaced.OrderState = OrderStates.Done;
+										}
+									}
 								}
 
 								message.SecurityId = secId;
