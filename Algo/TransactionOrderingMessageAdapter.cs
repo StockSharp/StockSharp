@@ -31,6 +31,9 @@
 		private readonly SynchronizedDictionary<long, long> _orders = new SynchronizedDictionary<long, long>();
 		private readonly SynchronizedDictionary<long, SecurityId> _secIds = new SynchronizedDictionary<long, SecurityId>();
 
+		private readonly SynchronizedPairSet<long, long> _orderIds = new SynchronizedPairSet<long, long>();
+		private readonly SynchronizedPairSet<string, long> _orderStringIds = new SynchronizedPairSet<string, long>(StringComparer.InvariantCultureIgnoreCase);
+
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
@@ -52,6 +55,9 @@
 			_orders.Clear();
 
 			_secIds.Clear();
+
+			_orderIds.Clear();
+			_orderStringIds.Clear();
 
 			_nonAssociatedByIdMyTrades.Clear();
 			_nonAssociatedByStringIdMyTrades.Clear();
@@ -165,6 +171,51 @@
 					{
 						if (_secIds.TryGetValue(execMsg.OriginalTransactionId, out var secId))
 							execMsg.SecurityId = secId;
+					}
+
+					if (transId != 0 || execMsg.OriginalTransactionId != 0)
+					{
+						if (transId == 0)
+							transId = execMsg.OriginalTransactionId;
+
+						if (execMsg.OrderId != null)
+						{
+							_orderIds.TryAdd(execMsg.OrderId.Value, transId);
+						}
+						else if (!execMsg.OrderStringId.IsEmpty())
+						{
+							_orderStringIds.TryAdd(execMsg.OrderStringId, transId);
+						}
+					}
+
+					if (/*execMsg.TransactionId == 0 && */execMsg.OriginalTransactionId == 0)
+					{
+						if (!execMsg.HasTradeInfo)
+						{
+							this.AddWarningLog("Order doesn't have origin trans id: {0}", execMsg);
+							break;
+						}
+
+						if (execMsg.OrderId != null)
+						{
+							if (_orderIds.TryGetValue(execMsg.OrderId.Value, out var originId))
+								execMsg.OriginalTransactionId = originId;
+							else
+							{
+								this.AddWarningLog("Trade doesn't have origin trans id: {0}", execMsg);
+								break;
+							}
+						}
+						else if (!execMsg.OrderStringId.IsEmpty())
+						{
+							if (_orderStringIds.TryGetValue(execMsg.OrderStringId, out var originId))
+								execMsg.OriginalTransactionId = originId;
+							else
+							{
+								this.AddWarningLog("Trade doesn't have origin trans id: {0}", execMsg);
+								break;
+							}
+						}
 					}
 
 					if (_transactionLogSubscriptions.Count == 0)
