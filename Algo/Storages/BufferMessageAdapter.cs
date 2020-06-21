@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private ISnapshotStorage GetSnapshotStorage(DataType dataType)
-			=> SnapshotRegistry.GetSnapshotStorage(dataType.MessageType, dataType.Arg);
+			=> SnapshotRegistry.GetSnapshotStorage(dataType);
 
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)

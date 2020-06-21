@@ -1413,5 +1413,22 @@ namespace StockSharp.Algo.Storages
 					yield return book;
 			}
 		}
+
+		/// <summary>
+		/// To get the snapshot storage.
+		/// </summary>
+		/// <param name="registry">Snapshot storage registry.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>The snapshot storage.</returns>
+		public static ISnapshotStorage GetSnapshotStorage(this SnapshotRegistry registry, DataType dataType)
+		{
+			if (registry is null)
+				throw new ArgumentNullException(nameof(registry));
+
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			return registry.GetSnapshotStorage(dataType.MessageType, dataType.Arg);
+		}
 	}
 }
