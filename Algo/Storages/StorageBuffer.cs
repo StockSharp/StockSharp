@@ -57,6 +57,16 @@ namespace StockSharp.Algo.Storages
 		public bool Enabled { get; set; } = true;
 
 		/// <summary>
+		/// Enable positions storage.
+		/// </summary>
+		public bool EnabledPositions { get; set; } = true;
+
+		/// <summary>
+		/// Enable transactions storage.
+		/// </summary>
+		public bool EnabledTransactions { get; set; } = true;
+
+		/// <summary>
 		/// Interpret tick messages as level1.
 		/// </summary>
 		public bool TicksAsLevel1 { get; set; } = true;
@@ -122,7 +132,7 @@ namespace StockSharp.Algo.Storages
 		public IEnumerable<NewsMessage> GetNews()
 			=> _newsBuffer.SyncGet(c => c.CopyAndClear());
 
-		private bool CanStore(ISubscriptionIdMessage message)
+		private bool CanStore(Message message)
 		{
 			if (!Enabled)
 				return false;
@@ -130,7 +140,30 @@ namespace StockSharp.Algo.Storages
 			if (!FilterSubscription)
 				return true;
 
-			return message.GetSubscriptionIds().Any(_subscriptionsById.Contains);
+			switch (message.Type)
+			{
+				case MessageTypes.Portfolio:
+				case MessageTypes.PositionChange:
+					return EnabledPositions;
+
+				case MessageTypes.OrderRegister:
+				case MessageTypes.OrderReplace:
+				case MessageTypes.OrderCancel:
+				case MessageTypes.OrderPairReplace:
+				case MessageTypes.OrderGroupCancel:
+					return EnabledTransactions;
+
+				case MessageTypes.Execution:
+					if (((ExecutionMessage)message).IsMarketData())
+						break;
+
+					return EnabledTransactions;
+			}
+
+			if (message is ISubscriptionIdMessage subscrMsg)
+				return subscrMsg.GetSubscriptionIds().Any(_subscriptionsById.Contains);
+
+			return false;
 		}
 
 		/// <summary>
@@ -144,6 +177,40 @@ namespace StockSharp.Algo.Storages
 
 			if (message.OfflineMode != MessageOfflineModes.None)
 				return;
+
+			ExecutionMessage ToExec(OrderRegisterMessage regMsg) => new ExecutionMessage
+			{
+				ServerTime = DateTimeOffset.Now,
+				ExecutionType = ExecutionTypes.Transaction,
+				SecurityId = regMsg.SecurityId,
+				TransactionId = regMsg.TransactionId,
+				OriginalTransactionId = regMsg.TransactionId,
+				HasOrderInfo = true,
+				OrderPrice = regMsg.Price,
+				OrderVolume = regMsg.Volume,
+				Currency = regMsg.Currency,
+				PortfolioName = regMsg.PortfolioName,
+				ClientCode = regMsg.ClientCode,
+				BrokerCode = regMsg.BrokerCode,
+				Comment = regMsg.Comment,
+				Side = regMsg.Side,
+				TimeInForce = regMsg.TimeInForce,
+				ExpiryDate = regMsg.TillDate,
+				Balance = regMsg.Volume,
+				VisibleVolume = regMsg.VisibleVolume,
+				LocalTime = regMsg.LocalTime,
+				IsMarketMaker = regMsg.IsMarketMaker,
+				IsMargin = regMsg.IsMargin,
+				Slippage = regMsg.Slippage,
+				IsManual = regMsg.IsManual,
+				OrderType = regMsg.OrderType,
+				UserOrderId = regMsg.UserOrderId,
+				OrderState = OrderStates.Pending,
+				Condition = regMsg.Condition?.Clone(),
+				MinVolume = regMsg.MinOrderVolume,
+				PositionEffect = regMsg.PositionEffect,
+				PostOnly = regMsg.PostOnly,
+			};
 
 			switch (message.Type)
 			{
@@ -167,68 +234,57 @@ namespace StockSharp.Algo.Storages
 				{
 					var regMsg = (OrderRegisterMessage)message;
 
-					//if (!CanStore<ExecutionMessage>(regMsg.SecurityId, ExecutionTypes.Transaction))
-					//	break;
+					if (!CanStore(regMsg))
+						break;
 
-					_transactionsBuffer.Add(regMsg.SecurityId, new ExecutionMessage
-					{
-						ServerTime = DateTimeOffset.Now,
-						ExecutionType = ExecutionTypes.Transaction,
-						SecurityId = regMsg.SecurityId,
-						TransactionId = regMsg.TransactionId,
-						HasOrderInfo = true,
-						OrderPrice = regMsg.Price,
-						OrderVolume = regMsg.Volume,
-						Currency = regMsg.Currency,
-						PortfolioName = regMsg.PortfolioName,
-						ClientCode = regMsg.ClientCode,
-						BrokerCode = regMsg.BrokerCode,
-						Comment = regMsg.Comment,
-						Side = regMsg.Side,
-						TimeInForce = regMsg.TimeInForce,
-						ExpiryDate = regMsg.TillDate,
-						Balance = regMsg.Volume,
-						VisibleVolume = regMsg.VisibleVolume,
-						LocalTime = regMsg.LocalTime,
-						IsMarketMaker = regMsg.IsMarketMaker,
-						IsMargin = regMsg.IsMargin,
-						Slippage = regMsg.Slippage,
-						IsManual = regMsg.IsManual,
-						OrderType = regMsg.OrderType,
-						UserOrderId = regMsg.UserOrderId,
-						OrderState = OrderStates.Pending,
-						Condition = regMsg.Condition?.Clone(),
-						MinVolume = regMsg.MinOrderVolume,
-						PositionEffect = regMsg.PositionEffect,
-						PostOnly = regMsg.PostOnly,
-					});
-
+					_transactionsBuffer.Add(regMsg.SecurityId, ToExec(regMsg));
 					break;
 				}
-				case MessageTypes.OrderCancel:
+				case MessageTypes.OrderReplace:
 				{
-					var cancelMsg = (OrderCancelMessage)message;
+					var replaceMsg = (OrderReplaceMessage)message;
 
-					//if (!CanStore<ExecutionMessage>(cancelMsg.SecurityId, ExecutionTypes.Transaction))
-					//	break;
+					if (!CanStore(replaceMsg))
+						break;
 
-					_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
-					{
-						ServerTime = DateTimeOffset.Now,
-						ExecutionType = ExecutionTypes.Transaction,
-						SecurityId = cancelMsg.SecurityId,
-						HasOrderInfo = true,
-						TransactionId = cancelMsg.TransactionId,
-						IsCancellation = true,
-						OrderId = cancelMsg.OrderId,
-						OrderStringId = cancelMsg.OrderStringId,
-						OriginalTransactionId = cancelMsg.OriginalTransactionId,
-						OrderVolume = cancelMsg.Volume,
-						//Side = cancelMsg.Side,
-					});
-
+					_transactionsBuffer.Add(replaceMsg.SecurityId, ToExec(replaceMsg));
 					break;
 				}
+				case MessageTypes.OrderPairReplace:
+				{
+					var pairMsg = (OrderPairReplaceMessage)message;
+
+					if (!CanStore(pairMsg))
+						break;
+
+					_transactionsBuffer.Add(pairMsg.Message1.SecurityId, ToExec(pairMsg.Message1));
+					_transactionsBuffer.Add(pairMsg.Message2.SecurityId, ToExec(pairMsg.Message2));
+					break;
+				}
+				//case MessageTypes.OrderCancel:
+				//{
+				//	var cancelMsg = (OrderCancelMessage)message;
+
+				//	//if (!CanStore(cancelMsg))
+				//	//	break;
+
+				//	_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
+				//	{
+				//		ServerTime = DateTimeOffset.Now,
+				//		ExecutionType = ExecutionTypes.Transaction,
+				//		SecurityId = cancelMsg.SecurityId,
+				//		HasOrderInfo = true,
+				//		TransactionId = cancelMsg.TransactionId,
+				//		IsCancellation = true,
+				//		OrderId = cancelMsg.OrderId,
+				//		OrderStringId = cancelMsg.OrderStringId,
+				//		OriginalTransactionId = cancelMsg.OriginalTransactionId,
+				//		OrderVolume = cancelMsg.Volume,
+				//		//Side = cancelMsg.Side,
+				//	});
+
+				//	break;
+				//}
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
@@ -302,10 +358,7 @@ namespace StockSharp.Algo.Storages
 							throw new ArgumentOutOfRangeException(nameof(message), execType, LocalizedStrings.Str1695Params.Put(message));
 					}
 
-					//if (execType == ExecutionTypes.Transaction && execMsg.TransactionId == 0)
-					//	break;
-
-					if (execType == ExecutionTypes.Transaction || CanStore(execMsg))
+					if (CanStore(execMsg))
 						buffer.Add(secId, execMsg.TypedClone());
 
 					break;
@@ -324,8 +377,8 @@ namespace StockSharp.Algo.Storages
 					var posMsg = (PositionChangeMessage)message;
 					var secId = posMsg.SecurityId;
 
-					//if (CanStore<PositionChangeMessage>(secId))
-					_positionChangesBuffer.Add(secId, posMsg.TypedClone());
+					if (CanStore(posMsg))
+						_positionChangesBuffer.Add(secId, posMsg.TypedClone());
 
 					break;
 				}
@@ -346,6 +399,8 @@ namespace StockSharp.Algo.Storages
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Enabled), Enabled);
+			storage.SetValue(nameof(EnabledPositions), EnabledPositions);
+			storage.SetValue(nameof(EnabledTransactions), EnabledTransactions);
 			storage.SetValue(nameof(FilterSubscription), FilterSubscription);
 			storage.SetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 			storage.SetValue(nameof(DisableStorageTimer), DisableStorageTimer);
@@ -354,6 +409,8 @@ namespace StockSharp.Algo.Storages
 		void IPersistable.Load(SettingsStorage storage)
 		{
 			Enabled = storage.GetValue(nameof(Enabled), Enabled);
+			EnabledPositions = storage.GetValue(nameof(EnabledPositions), EnabledPositions);
+			EnabledTransactions = storage.GetValue(nameof(EnabledTransactions), EnabledTransactions);
 			FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
 			TicksAsLevel1 = storage.GetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 			DisableStorageTimer = storage.GetValue(nameof(DisableStorageTimer), DisableStorageTimer);

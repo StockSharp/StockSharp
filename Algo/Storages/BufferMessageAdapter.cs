@@ -87,6 +87,18 @@ namespace StockSharp.Algo.Storages
 					break;
 				}
 
+				case MessageTypes.OrderRegister:
+				{
+					Buffer.SendInMessage(message);
+					break;
+				}
+				case MessageTypes.OrderReplace:
+				case MessageTypes.OrderPairReplace:
+				{
+					Buffer.SendInMessage(message);
+					break;
+				}
+
 				case MessageTypes.OrderCancel:
 				{
 					var cancelMsg = (OrderCancelMessage)message;
@@ -284,8 +296,9 @@ namespace StockSharp.Algo.Storages
 							foreach (var message in pair.Value)
 							{
 								// do not store cancellation commands into snapshot
-								if (message.IsCancellation/* && message.TransactionId != 0*/)
+								if (message.IsCancellation)
 								{
+									this.AddWarningLog("Cancellation transaction: {0}", message);
 									continue;
 								}
 
