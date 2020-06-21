@@ -45,7 +45,6 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
 		private readonly SynchronizedSet<long> _subscriptionsById = new SynchronizedSet<long>();
-		private readonly SynchronizedDictionary<long, SecurityId> _securityIds = new SynchronizedDictionary<long, SecurityId>();
 
 		/// <summary>
 		/// Save data only for subscriptions.
@@ -171,9 +170,6 @@ namespace StockSharp.Algo.Storages
 					//if (!CanStore<ExecutionMessage>(regMsg.SecurityId, ExecutionTypes.Transaction))
 					//	break;
 
-					// try - cause looped back messages from offline adapter
-					_securityIds.TryAdd(regMsg.TransactionId, regMsg.SecurityId);
-
 					_transactionsBuffer.Add(regMsg.SecurityId, new ExecutionMessage
 					{
 						ServerTime = DateTimeOffset.Now,
@@ -215,9 +211,6 @@ namespace StockSharp.Algo.Storages
 
 					//if (!CanStore<ExecutionMessage>(cancelMsg.SecurityId, ExecutionTypes.Transaction))
 					//	break;
-
-					// try - cause looped back messages from offline adapter
-					_securityIds.TryAdd(cancelMsg.TransactionId, cancelMsg.SecurityId);
 
 					_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
 					{
@@ -300,14 +293,8 @@ namespace StockSharp.Algo.Storages
 							buffer = _ticksBuffer;
 							break;
 						case ExecutionTypes.Transaction:
-						{
-							// some responses do not contains sec id
-							if (secId.IsDefault() && !_securityIds.TryGetValue(execMsg.OriginalTransactionId, out secId))
-								return;
-
 							buffer = _transactionsBuffer;
 							break;
-						}
 						case ExecutionTypes.OrderLog:
 							buffer = _orderLogBuffer;
 							break;

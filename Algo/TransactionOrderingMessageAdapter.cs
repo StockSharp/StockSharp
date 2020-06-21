@@ -169,7 +169,7 @@
 						_secIds.TryAdd(transId, execMsg.SecurityId);
 					else
 					{
-						if (_secIds.TryGetValue(execMsg.OriginalTransactionId, out var secId))
+						if (execMsg.SecurityId == default && _secIds.TryGetValue(execMsg.OriginalTransactionId, out var secId))
 							execMsg.SecurityId = secId;
 					}
 
