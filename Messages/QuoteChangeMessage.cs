@@ -113,7 +113,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str285Key)]
 		[DescriptionLoc(LocalizedStrings.Str285Key, true)]
 		[MainCategory]
-		public bool IsSorted { get; set; }
+		public bool IsSorted { get; set; } = true;
 
 		/// <summary>
 		/// The quote change was built by level1.

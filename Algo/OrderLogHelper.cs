@@ -157,7 +157,7 @@ namespace StockSharp.Algo
 						var item = _itemsEnumerator.Current;
 
 						//if (_builder == null)
-						//	_builder = new OrderLogMarketDepthBuilder(new QuoteChangeMessage { SecurityId = item.SecurityId, IsSorted = true }, _maxDepth);
+						//	_builder = new OrderLogMarketDepthBuilder(new QuoteChangeMessage { SecurityId = item.SecurityId }, _maxDepth);
 
 						var depth = _builder.Update(item);
 						if (depth == null)

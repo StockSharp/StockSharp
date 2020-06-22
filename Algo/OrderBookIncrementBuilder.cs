@@ -218,7 +218,6 @@
 				SecurityId = SecurityId,
 				Bids = bids,
 				Asks = asks,
-				IsSorted = true,
 				ServerTime = change.ServerTime,
 				OriginalTransactionId = change.OriginalTransactionId,
 			};

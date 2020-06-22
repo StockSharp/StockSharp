@@ -268,7 +268,6 @@ namespace StockSharp.Algo.Storages.Binary
 					LocalTime = metaInfo.FirstTime,
 					SecurityId = SecurityId,
 					ServerTime = serverTime,
-					IsSorted = true,
 
 					State = (QuoteChangeStates)reader.ReadInt(),
 
@@ -288,7 +287,6 @@ namespace StockSharp.Algo.Storages.Binary
 					ServerTime = serverTime,
 					Bids = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice),
 					Asks = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice),
-					IsSorted = true,
 				};
 
 				if (metaInfo.Version < MarketDataVersions.Version48)

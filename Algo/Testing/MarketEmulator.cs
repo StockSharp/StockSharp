@@ -651,7 +651,6 @@ namespace StockSharp.Algo.Testing
 					ServerTime = time,
 					Bids = BuildQuoteChanges(_bids),
 					Asks = BuildQuoteChanges(_asks),
-					IsSorted = true,
 				};
 			}
 

@@ -59,7 +59,6 @@ namespace StockSharp.Algo.Storages.Csv
 								SecurityId = _securityId,
 								ServerTime = quote.ServerTime,
 								LocalTime = quote.LocalTime,
-								IsSorted = true,
 							};
 						}
 						else if (Current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))

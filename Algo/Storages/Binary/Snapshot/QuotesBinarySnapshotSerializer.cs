@@ -151,7 +151,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 					Bids = bids,
 					Asks = asks,
-					IsSorted = true,
 				};
 			}
 		}
@@ -163,16 +162,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		void ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Update(QuoteChangeMessage message, QuoteChangeMessage changes)
 		{
-			if (!changes.IsSorted)
-			{
-				message.Bids = changes.Bids.OrderByDescending(q => q.Price).ToArray();
-				message.Asks = changes.Asks.OrderBy(q => q.Price).ToArray();
-			}
-			else
-			{
-				message.Bids = changes.Bids.ToArray();
-				message.Asks = changes.Asks.ToArray();
-			}
+			message.Bids = changes.Bids.ToArray();
+			message.Asks = changes.Asks.ToArray();
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;

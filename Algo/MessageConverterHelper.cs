@@ -66,7 +66,6 @@ namespace StockSharp.Algo
 				Bids = depth.Bids2.CopyArray(),
 				Asks = depth.Asks2.CopyArray(),
 				ServerTime = depth.LastChangeTime,
-				IsSorted = true,
 				Currency = depth.Currency,
 			};
 		}
