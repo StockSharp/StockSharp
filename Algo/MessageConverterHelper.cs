@@ -63,8 +63,8 @@ namespace StockSharp.Algo
 			{
 				LocalTime = depth.LocalTime,
 				SecurityId = securityId,
-				Bids = depth.Bids2.CopyArray(),
-				Asks = depth.Asks2.CopyArray(),
+				Bids = depth.Bids2.ToArray(),
+				Asks = depth.Asks2.ToArray(),
 				ServerTime = depth.LastChangeTime,
 				Currency = depth.Currency,
 			};

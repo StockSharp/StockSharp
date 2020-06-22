@@ -204,13 +204,13 @@
 
 			if (change.HasPositions)
 			{
-				bids = _bidsByPos.CopyArray();
-				asks = _asksByPos.CopyArray();
+				bids = _bidsByPos.ToArray();
+				asks = _asksByPos.ToArray();
 			}
 			else
 			{
-				bids = _bids.Values.CopyArray();
-				asks = _asks.Values.CopyArray();
+				bids = _bids.Values.ToArray();
+				asks = _asks.Values.ToArray();
 			}
 
 			return new QuoteChangeMessage

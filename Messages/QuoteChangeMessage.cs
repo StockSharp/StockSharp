@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Linq;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
@@ -166,8 +167,8 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
-			destination.Bids = Bids.CopyArray();
-			destination.Asks = Asks.CopyArray();
+			destination.Bids = Bids.ToArray();
+			destination.Asks = Asks.ToArray();
 			destination.ServerTime = ServerTime;
 			destination.IsSorted = IsSorted;
 			destination.Currency = Currency;

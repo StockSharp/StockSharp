@@ -552,8 +552,8 @@ namespace StockSharp.BusinessEntities
 			if (asks is null)
 				throw new ArgumentNullException(nameof(asks));
 
-			_bids2 = bids.CopyArray();
-			_asks2 = asks.CopyArray();
+			_bids2 = bids.ToArray();
+			_asks2 = asks.ToArray();
 			
 			UpdateDepthAndTime(lastChangeTime, false);
 			RaiseQuotesChanged();
@@ -977,8 +977,8 @@ namespace StockSharp.BusinessEntities
 				Currency = Currency,
 				LocalTime = LocalTime,
 				LastChangeTime = LastChangeTime,
-				_bids2 = _bids2.CopyArray(),
-				_asks2 = _asks2.CopyArray()
+				_bids2 = _bids2.ToArray(),
+				_asks2 = _asks2.ToArray()
 			};
 		}
 
