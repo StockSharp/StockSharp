@@ -24,17 +24,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 	class NullableTimeQuoteChange
 	{
-		public NullableTimeQuoteChange()
-		{
-		}
-
-		public NullableTimeQuoteChange(Sides side, QuoteChange quote, QuoteChangeMessage message)
-		{
-			ServerTime = message.ServerTime;
-			LocalTime = message.LocalTime;
-			Side = side;
-		}
-
 		public DateTimeOffset ServerTime { get; set; }
 		public DateTimeOffset LocalTime { get; set; }
 		public QuoteChange? Quote { get; set; }
