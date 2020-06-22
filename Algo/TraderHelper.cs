@@ -152,83 +152,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To filter the order book from own orders.
-		/// </summary>
-		/// <param name="bids">Bids.</param>
-		/// <param name="asks">Asks.</param>
-		/// <param name="ownOrders">Active orders for this instrument.</param>
-		/// <param name="orders">Orders to be ignored.</param>
-		/// <returns>The filtered order book.</returns>
-		public static (QuoteChange[] bids, QuoteChange[] asks) GetFilteredQuotes(this QuoteChange[] bids, QuoteChange[] asks, IEnumerable<Order> ownOrders, IEnumerable<Order> orders)
-		{
-			if (bids == null)
-				throw new ArgumentNullException(nameof(bids));
-
-			if (asks == null)
-				throw new ArgumentNullException(nameof(asks));
-
-			if (ownOrders == null)
-				throw new ArgumentNullException(nameof(ownOrders));
-
-			if (orders == null)
-				throw new ArgumentNullException(nameof(orders));
-
-			var dict = new Dictionary<Tuple<Sides, decimal>, HashSet<Order>>();
-
-			foreach (var order in ownOrders)
-			{
-				if (!dict.SafeAdd(Tuple.Create(order.Direction, order.Price)).Add(order))
-					throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
-			}
-
-			var retValBids = bids.ToList();
-
-			//foreach (var quote in bids)
-			//{
-			//	if (dict.TryGetValue(Tuple.Create(Sides.Buy, quote.Price), out var bidOrders))
-			//	{
-			//		foreach (var order in bidOrders)
-			//		{
-			//			if (!orders.Contains(order))
-			//				quote.Volume -= order.Balance;
-			//		}
-
-			//		if (quote.Volume <= 0)
-			//			retValBids.Remove(quote);
-			//	}
-			//}
-
-			//return retVal;
-			throw new NotImplementedException();
-		}
-
-		///// <summary>
-		///// To get market price for the instrument by maximal and minimal possible prices.
-		///// </summary>
-		///// <param name="security">The instrument used for the market price calculation.</param>
-		///// <param name="provider">The market data provider.</param>
-		///// <param name="side">Order side.</param>
-		///// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
-		//public static decimal? GetMarketPrice(this Security security, IMarketDataProvider provider, Sides side)
-		//{
-		//	var board = security.CheckExchangeBoard();
-
-		//	if (board.IsSupportMarketOrders)
-		//		throw new ArgumentException(LocalizedStrings.Str1210Params.Put(board.Code), nameof(security));
-
-		//	var minPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MinPrice);
-		//	var maxPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MaxPrice);
-
-		//	if (side == Sides.Buy && maxPrice != null)
-		//		return maxPrice.Value;
-		//	else if (side == Sides.Sell && minPrice != null)
-		//		return minPrice.Value;
-		//	else
-		//		return null;
-		//		//throw new ArgumentException("У инструмента {0} отсутствует информация о планках.".Put(security), "security");
-		//}
-
-		/// <summary>
 		/// To calculate the current price by the instrument depending on the order direction.
 		/// </summary>
 		/// <param name="security">The instrument used for the current price calculation.</param>
@@ -277,8 +200,62 @@ namespace StockSharp.Algo
 
 			if (orders != null)
 			{
-				var (bids, asks) = depth.Bids2.GetFilteredQuotes(depth.Asks2, Enumerable.Empty<Order>(), orders);
-				depth = new MarketDepth(depth.Security).Update(bids, asks, depth.LastChangeTime);
+				var dict = new Dictionary<Tuple<Sides, decimal>, HashSet<Order>>();
+
+				foreach (var order in orders)
+				{
+					if (!dict.SafeAdd(Tuple.Create(order.Direction, order.Price)).Add(order))
+						throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
+				}
+
+				var bids = depth.Bids2.ToList();
+				var asks = depth.Asks2.ToList();
+
+				for (var i = 0; i < bids.Count; i++)
+				{
+					var quote = bids[i];
+
+					if (dict.TryGetValue(Tuple.Create(Sides.Buy, quote.Price), out var bidOrders))
+					{
+						foreach (var order in bidOrders)
+						{
+							if (!orders.Contains(order))
+								quote.Volume -= order.Balance;
+						}
+
+						if (quote.Volume <= 0)
+						{
+							bids.RemoveAt(i);
+							i--;
+						}
+						else
+							bids[i] = quote;
+					}
+				}
+
+				for (var i = 0; i < asks.Count; i++)
+				{
+					var quote = asks[i];
+
+					if (dict.TryGetValue(Tuple.Create(Sides.Sell, quote.Price), out var asksOrders))
+					{
+						foreach (var order in asksOrders)
+						{
+							if (!orders.Contains(order))
+								quote.Volume -= order.Balance;
+						}
+
+						if (quote.Volume <= 0)
+						{
+							asks.RemoveAt(i);
+							i--;
+						}
+						else
+							asks[i] = quote;
+					}
+				}
+
+				depth = new MarketDepth(depth.Security).Update(bids.ToArray(), asks.ToArray(), depth.LastChangeTime);
 			}
 
 			var pair = depth.BestPair;
@@ -775,7 +752,6 @@ namespace StockSharp.Algo
 		/// <param name="original">The initial order book.</param>
 		/// <param name="rare">The sparse order book.</param>
 		/// <returns>The merged order book.</returns>
-		[Obsolete]
 		public static MarketDepth Join(this MarketDepth original, MarketDepth rare)
 		{
 			if (original == null)
@@ -784,7 +760,7 @@ namespace StockSharp.Algo
 			if (rare == null)
 				throw new ArgumentNullException(nameof(rare));
 
-			return new MarketDepth(original.Security).Update(original.Bids.Concat(rare.Bids), original.Asks.Concat(rare.Asks), false, original.LastChangeTime);
+			return new MarketDepth(original.Security).Update(original.Bids2.Concat(rare.Bids2).OrderByDescending(q => q.Price).ToArray(), original.Asks2.Concat(rare.Asks2).OrderBy(q => q.Price).ToArray(), original.LastChangeTime);
 		}
 
 		/// <summary>
@@ -793,10 +769,9 @@ namespace StockSharp.Algo
 		/// <param name="depth">The order book to be grouped.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>The grouped order book.</returns>
-		[Obsolete]
 		public static MarketDepth Group(this MarketDepth depth, Unit priceRange)
 		{
-			return new MarketDepth(depth.Security).Update(depth.Bids.Group(priceRange), depth.Asks.Group(priceRange), true, depth.LastChangeTime);
+			return new MarketDepth(depth.Security).Update(depth.Bids2.Group(Sides.Buy, priceRange), depth.Asks2.Group(Sides.Sell, priceRange), depth.LastChangeTime);
 		}
 
 		/// <summary>
@@ -937,10 +912,10 @@ namespace StockSharp.Algo
 		/// To group quotes by the price range.
 		/// </summary>
 		/// <param name="quotes">Quotes to be grouped.</param>
+		/// <param name="side">Side.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>Grouped quotes.</returns>
-		[Obsolete]
-		public static IEnumerable<AggregatedQuote> Group(this IEnumerable<Quote> quotes, Unit priceRange)
+		public static QuoteChange[] Group(this QuoteChange[] quotes, Sides side, Unit priceRange)
 		{
 			if (quotes == null)
 				throw new ArgumentNullException(nameof(quotes));
@@ -954,25 +929,45 @@ namespace StockSharp.Algo
 			//if (quotes.Count() < 2)
 			//	return Enumerable.Empty<AggregatedQuote>();
 
-			var firstQuote = quotes.FirstOrDefault();
+			var firstQuote = quotes.FirstOr();
 
 			if (firstQuote == null)
-				return Enumerable.Empty<AggregatedQuote>();
+				return ArrayHelper.Empty<QuoteChange>();
 
-			var retVal = quotes.GroupBy(q => priceRange.AlignPrice(firstQuote.Price, q.Price)).Select(g =>
+			var retVal = quotes.GroupBy(q => priceRange.AlignPrice(firstQuote.Value.Price, q.Price)).Select(g =>
 			{
-				var aggQuote = new AggregatedQuote(false) { Price = g.Key };
-				aggQuote.InnerQuotes.AddRange(g);
-				aggQuote.OrdersCount = aggQuote.InnerQuotes.Sum(q => q.OrdersCount ?? 0).DefaultAsNull();
-				return aggQuote;
+				decimal volume = 0;
+				int? orderCount = null;
+
+				foreach (var q in g)
+				{
+					volume += q.Volume;
+
+					var oq = q.OrdersCount;
+
+					if (oq != null)
+					{
+						if (orderCount == null)
+							orderCount = oq;
+						else
+							orderCount = oq.Value;
+					}
+				}
+
+				return new QuoteChange
+				{
+					Price = g.Key,
+					Volume = volume,
+					OrdersCount = orderCount,
+				};
 			});
 			
-			retVal = firstQuote.OrderDirection == Sides.Sell ? retVal.OrderBy(q => q.Price) : retVal.OrderByDescending(q => q.Price);
+			retVal = side == Sides.Sell ? retVal.OrderBy(q => q.Price) : retVal.OrderByDescending(q => q.Price);
 
-			return retVal;
+			return retVal.ToArray();
 		}
 
-		internal static decimal AlignPrice(this Unit priceRange, decimal firstPrice, decimal price)
+		private static decimal AlignPrice(this Unit priceRange, decimal firstPrice, decimal price)
 		{
 			if (priceRange == null)
 				throw new ArgumentNullException(nameof(priceRange));
@@ -1008,7 +1003,6 @@ namespace StockSharp.Algo
 				Bids = GetDelta(from.Bids, to.Bids, Sides.Buy),
 				Asks = GetDelta(from.Asks, to.Asks, Sides.Sell),
 				ServerTime = to.ServerTime,
-				IsSorted = true,
 			};
 		}
 
@@ -1100,7 +1094,6 @@ namespace StockSharp.Algo
 				Bids = AddDelta(from.Bids, delta.Bids, true),
 				Asks = AddDelta(from.Asks, delta.Asks, false),
 				ServerTime = delta.ServerTime,
-				IsSorted = true,
 			};
 		}
 
@@ -2369,16 +2362,6 @@ namespace StockSharp.Algo
 						case Level1Fields.ClosePrice:
 							security.ClosePrice = (decimal)value;
 							break;
-						case Level1Fields.LastTrade:
-						{
-							lastTrade = (Trade)value;
-
-							lastTrade.Security = security;
-							//lastTrade.LocalTime = message.LocalTime;
-
-							lastTradeChanged = true;
-							break;
-						}
 						case Level1Fields.StepPrice:
 							security.StepPrice = (decimal)value;
 							break;
@@ -2393,14 +2376,6 @@ namespace StockSharp.Algo
 							break;
 						case Level1Fields.Multiplier:
 							security.Multiplier = (decimal)value;
-							break;
-						case Level1Fields.BestBid:
-							bestBid = (QuoteChange)value;
-							bidChanged = true;
-							break;
-						case Level1Fields.BestAsk:
-							bestAsk = (QuoteChange)value;
-							askChanged = true;
 							break;
 						case Level1Fields.BestBidPrice:
 							bestBid.Price = (decimal)value;

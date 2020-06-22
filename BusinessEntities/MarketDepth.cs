@@ -65,8 +65,6 @@ namespace StockSharp.BusinessEntities
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str480);
 
 				_maxDepth = value;
-
-				//Truncate(Bids, Asks, default(DateTimeOffset));
 			}
 		}
 
@@ -74,29 +72,6 @@ namespace StockSharp.BusinessEntities
 		/// Security.
 		/// </summary>
 		public Security Security { get; }
-
-		//[field: NonSerialized]
-		//private IConnector _connector;
-
-		///// <summary>
-		///// Connection to the trading system.
-		///// </summary>
-		//[Ignore]
-		//[XmlIgnore]
-		//[Obsolete("The property Connector was obsoleted and is always null.")]
-		//public IConnector Connector
-		//{
-		//	get { return _connector; }
-		//	set { _connector = value; }
-		//}
-
-		///// <summary>
-		///// Automatically check for quotes by <see cref="Verify()"/>.
-		///// </summary>
-		///// <remarks>
-		///// The default is disabled for performance.
-		///// </remarks>
-		//public bool AutoVerify { get; set; }
 
 		/// <summary>
 		/// Whether to use aggregated quotes <see cref="AggregatedQuote"/> at the join of the volumes with the same price.
@@ -590,10 +565,10 @@ namespace StockSharp.BusinessEntities
 		/// To refresh the quote. If a quote with the same price is already in the order book, it is updated as passed. Otherwise, it automatically rebuilds the order book.
 		/// </summary>
 		/// <param name="quote">The new quote.</param>
-		[Obsolete]
-		public void UpdateQuote(Quote quote)
+		/// <param name="side">Side.</param>
+		public void UpdateQuote(QuoteChange quote, Sides side)
 		{
-			SetQuote(quote, false);
+			SetQuote(quote, side, false);
 		}
 
 		/// <summary>
@@ -601,16 +576,13 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="price">Buy price.</param>
 		/// <param name="volume">Buy volume.</param>
-		[Obsolete]
 		public void AddBid(decimal price, decimal volume)
 		{
-			AddQuote(new Quote
+			AddQuote(new QuoteChange
 			{
-				Security = Security,
 				Price = price,
 				Volume = volume,
-				OrderDirection = Sides.Buy,
-			});
+			}, Sides.Buy);
 		}
 
 		/// <summary>
@@ -618,38 +590,34 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="price">Sell price.</param>
 		/// <param name="volume">Sell volume.</param>
-		[Obsolete]
 		public void AddAsk(decimal price, decimal volume)
 		{
-			AddQuote(new Quote
+			AddQuote(new QuoteChange
 			{
-				Security = Security,
 				Price = price,
 				Volume = volume,
-				OrderDirection = Sides.Sell,
-			});
+			}, Sides.Sell);
 		}
 
 		/// <summary>
 		/// To add the quote. If a quote with the same price is already in the order book, they are combined into the <see cref="AggregatedQuote"/>.
 		/// </summary>
 		/// <param name="quote">The new quote.</param>
-		[Obsolete]
-		public void AddQuote(Quote quote)
+		/// <param name="side">Side.</param>
+		public void AddQuote(QuoteChange quote, Sides side)
 		{
-			SetQuote(quote, true);
+			SetQuote(quote, side, true);
 		}
 
-		[Obsolete]
-		private void SetQuote(Quote quote, bool isAggregate)
+		private void SetQuote(QuoteChange quote, Sides side, bool isAggregate)
 		{
-			CheckQuote(quote);
+			//CheckQuote(quote);
 
 			//Quote outOfDepthQuote = null;
 
 			//lock (_syncRoot)
 			//{
-				var quotes = GetQuotes(quote.OrderDirection);
+				var quotes = GetQuotes(side);
 
 				var index = GetQuoteIndex(quotes, quote.Price);
 
@@ -682,7 +650,7 @@ namespace StockSharp.BusinessEntities
 					}
 					else
 					{
-						quotes[index] = quote.ToQuoteChange();
+						quotes[index] = quote;
 					}
 				}
 				else
@@ -691,7 +659,7 @@ namespace StockSharp.BusinessEntities
 					{
 						var currentPrice = quotes[index].Price;
 
-						if (quote.OrderDirection == Sides.Buy)
+						if (side == Sides.Buy)
 						{
 							if (quote.Price > currentPrice)
 								break;
@@ -708,7 +676,7 @@ namespace StockSharp.BusinessEntities
 					if (index < (quotes.Length - 1))
 						Array.Copy(quotes, index, quotes, index + 1, quotes.Length - 1 - index);
 
-					quotes[index] = quote.ToQuoteChange();
+					quotes[index] = quote;
 
 					//if (quotes.Length > MaxDepth)
 					//{
@@ -716,7 +684,7 @@ namespace StockSharp.BusinessEntities
 					//	quotes = RemoveAt(quotes, quotes.Length - 1);
 					//}
 
-					if (quote.OrderDirection == Sides.Buy)
+					if (side == Sides.Buy)
 						Bids2 = quotes;
 					else
 						Asks2 = quotes;
@@ -961,26 +929,6 @@ namespace StockSharp.BusinessEntities
 				return Sides.Sell;
 			else
 				return null;
-		}
-
-		[Obsolete]
-		private void CheckQuote(Quote quote)
-		{
-			if (quote == null)
-				throw new ArgumentNullException(nameof(quote));
-
-			if (quote.Security != null && quote.Security != Security)
-				throw new ArgumentException(LocalizedStrings.Str491Params.Put(quote.Security.Id, Security.Id), nameof(quote));
-
-			if (quote.Security == null)
-				quote.Security = Security;
-
-			// quotes for indices may have zero prices
-			//if (quote.Price <= 0)
-			//	throw new ArgumentOutOfRangeException(nameof(quote), quote.Price, LocalizedStrings.Str488);
-
-			if (quote.Volume < 0)
-				throw new ArgumentOutOfRangeException(nameof(quote), quote.Volume, LocalizedStrings.Str489);
 		}
 
 		private void UpdateDepthAndTime(DateTimeOffset lastChangeTime = default, bool depthChangedEventNeeded = true)
