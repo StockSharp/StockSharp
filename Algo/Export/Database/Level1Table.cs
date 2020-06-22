@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(Level1ChangeMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(Level1ChangeMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
 
-			foreach (var field in Enumerator.GetValues<Level1Fields>())
+			foreach (var field in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
 			{
 				var columnType = GetDbType(field);
 

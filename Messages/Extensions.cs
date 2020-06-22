@@ -1011,19 +1011,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="field"><see cref="Level1Fields"/> value.</param>
 		/// <returns><see langword="true" />, if obsolete, otherwise, not obsolete.</returns>
-		public static bool IsObsolete(this Level1Fields field)
-		{
-			switch (field)
-			{
-				case Level1Fields.LastTrade:
-				case Level1Fields.BestBid:
-				case Level1Fields.BestAsk:
-				case Level1Fields.ExtensionInfo:
-					return true;
-			}
-
-			return false;
-		}
+		public static bool IsObsolete(this Level1Fields field) => field.GetAttributeOfType<ObsoleteAttribute>() != null;
 
 		/// <summary>
 		/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTime"/>.

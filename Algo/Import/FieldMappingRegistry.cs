@@ -226,7 +226,7 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<Level1ChangeMessage, DateTimeOffset>(GetDateField(nameof(Level1ChangeMessage.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 				fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(Level1ChangeMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 
-				foreach (var f in Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()))
+				foreach (var f in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
 				{
 					var field = f;
 

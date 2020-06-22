@@ -521,10 +521,12 @@ namespace StockSharp.Algo.Storages.Binary
 			{ Level1Fields.HighPrice,				1 << 1 },
 			{ Level1Fields.LowPrice,				1 << 2 },
 			{ Level1Fields.ClosePrice,				1 << 3 },
+#pragma warning disable CS0612 // Type or member is obsolete
 			{ Level1Fields.LastTrade,				1 << 4 },
-			{ Level1Fields.StepPrice,				1 << 5 },
 			{ Level1Fields.BestBid,					1 << 6 },
 			{ Level1Fields.BestAsk,					1 << 7 },
+#pragma warning restore CS0612 // Type or member is obsolete
+			{ Level1Fields.StepPrice,				1 << 5 },
 			{ Level1Fields.ImpliedVolatility,		1 << 8 },
 			{ Level1Fields.TheorPrice,				1 << 9 },
 			{ Level1Fields.OpenInterest,			1 << 10 },
@@ -791,6 +793,7 @@ namespace StockSharp.Algo.Storages.Binary
 							SerializeChange(writer, metaInfo.StepPrice, (decimal)value);
 							break;
 						}
+#pragma warning disable CS0612 // Type or member is obsolete
 						case Level1Fields.LastTrade:
 						{
 							var trade = (Trade)value;
@@ -811,6 +814,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 							break;
 						}
+#pragma warning restore CS0612 // Type or member is obsolete
 						case Level1Fields.State:
 						{
 							writer.WriteInt((int)(SecurityStates)value);
@@ -1340,13 +1344,15 @@ namespace StockSharp.Algo.Storages.Binary
 						l1Msg.Add(field, DeserializeChange(reader, metaInfo.StepPrice));
 						break;
 					}
+#pragma warning disable CS0612 // Type or member is obsolete
 					case Level1Fields.LastTrade:
 					{
 						var price = DeserializePrice(reader, metaInfo, useLong, nonAdjustPrice);
 
-						l1Msg.Add(Level1Fields.LastTradePrice, price);
-						l1Msg.Add(Level1Fields.LastTradeVolume, reader.ReadVolume(metaInfo));
-						l1Msg.Add(Level1Fields.LastTradeTime, metaInfo.FirstTime.ApplyTimeZone(metaInfo.ServerOffset));
+						l1Msg
+							.Add(Level1Fields.LastTradePrice, price)
+							.Add(Level1Fields.LastTradeVolume, reader.ReadVolume(metaInfo))
+							.Add(Level1Fields.LastTradeTime, metaInfo.FirstTime.ApplyTimeZone(metaInfo.ServerOffset));
 
 						var origin = reader.ReadSide();
 
@@ -1359,18 +1365,23 @@ namespace StockSharp.Algo.Storages.Binary
 					{
 						var price = DeserializePrice(reader, metaInfo, useLong, nonAdjustPrice);
 
-						l1Msg.Add(Level1Fields.BestBidPrice, price);
-						l1Msg.Add(Level1Fields.BestBidVolume, reader.ReadVolume(metaInfo));
+						l1Msg
+							.Add(Level1Fields.BestBidPrice, price)
+							.Add(Level1Fields.BestBidVolume, reader.ReadVolume(metaInfo));
+
 						break;
 					}
 					case Level1Fields.BestAsk:
 					{
 						var price = DeserializePrice(reader, metaInfo, useLong, nonAdjustPrice);
 
-						l1Msg.Add(Level1Fields.BestAskPrice, price);
-						l1Msg.Add(Level1Fields.BestAskVolume, reader.ReadVolume(metaInfo));
+						l1Msg
+							.Add(Level1Fields.BestAskPrice, price)
+							.Add(Level1Fields.BestAskVolume, reader.ReadVolume(metaInfo));
+
 						break;
 					}
+#pragma warning restore CS0612 // Type or member is obsolete
 					case Level1Fields.State:
 					{
 						l1Msg.Add(field, (SecurityStates)reader.ReadInt());

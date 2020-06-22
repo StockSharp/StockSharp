@@ -64,6 +64,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str289Key)]
+		[Obsolete]
 		LastTrade,
 
 		/// <summary>
@@ -78,6 +79,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str291Key)]
+		[Obsolete]
 		BestBid,
 
 		/// <summary>
@@ -85,6 +87,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str292Key)]
+		[Obsolete]
 		BestAsk,
 
 		/// <summary>
@@ -218,6 +221,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ExtendedInfoKey)]
+		[Obsolete]
 		ExtensionInfo,
 
 		/// <summary>
