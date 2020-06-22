@@ -804,7 +804,7 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.BestBid:
 						case Level1Fields.BestAsk:
 						{
-							var quote = (Quote)value;
+							var quote = (QuoteChange)value;
 
 							SerializePrice(writer, metaInfo, quote.Price, useLong, nonAdjustPrice);
 							writer.WriteVolume(quote.Volume, metaInfo, SecurityId);

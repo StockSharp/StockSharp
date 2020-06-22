@@ -63,8 +63,8 @@ namespace StockSharp.Algo
 			{
 				LocalTime = depth.LocalTime,
 				SecurityId = securityId,
-				Bids = depth.Bids.Select(q => q.ToQuoteChange()).ToArray(),
-				Asks = depth.Asks.Select(q => q.ToQuoteChange()).ToArray(),
+				Bids = depth.Bids2.CopyArray(),
+				Asks = depth.Asks2.CopyArray(),
 				ServerTime = depth.LastChangeTime,
 				IsSorted = true,
 				Currency = depth.Currency,
@@ -1363,45 +1363,15 @@ namespace StockSharp.Algo
 			if (marketDepth == null)
 				throw new ArgumentNullException(nameof(marketDepth));
 
-			var security = marketDepth.Security;
+			marketDepth.Update(
+				message.Bids,
+				message.Asks,
+				message.ServerTime);
 
-			var depth = marketDepth.Update(
-				message.Bids.Select(c => c.ToQuote(Sides.Buy, security, getSecurity)),
-				message.Asks.Select(c => c.ToQuote(Sides.Sell, security, getSecurity)),
-				message.IsSorted, message.ServerTime);
+			marketDepth.LocalTime = message.LocalTime;
+			marketDepth.Currency = message.Currency;
 
-			depth.LocalTime = message.LocalTime;
-			depth.Currency = message.Currency;
-
-			return depth;
-		}
-
-		/// <summary>
-		/// To convert the quote into message.
-		/// </summary>
-		/// <param name="quote">Quote.</param>
-		/// <returns>Message.</returns>
-		public static QuoteChange ToQuoteChange(this Quote quote)
-		{
-			return new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
-		}
-
-		/// <summary>
-		/// To convert the message into quote.
-		/// </summary>
-		/// <param name="change">Message.</param>
-		/// <param name="side">Direction (buy or sell).</param>
-		/// <param name="security">Security.</param>
-		/// <param name="getSecurity">The function for getting instrument.</param>
-		/// <returns>Quote.</returns>
-		public static Quote ToQuote(this QuoteChange change, Sides side, Security security, Func<SecurityId, Security> getSecurity = null)
-		{
-			if (!change.BoardCode.IsEmpty() && getSecurity != null)
-				security = getSecurity(new SecurityId { SecurityCode = security.Code, BoardCode = change.BoardCode });
-
-			var quote = new Quote(security, change.Price, change.Volume, side, change.OrdersCount, change.Condition);
-			change.CopyExtensionInfo(quote);
-			return quote;
+			return marketDepth;
 		}
 
 		/// <summary>
@@ -1653,15 +1623,15 @@ namespace StockSharp.Algo
 		public static MarketDepth ToMarketDepth(this Level1ChangeMessage message, Security security)
 		{
 			return new MarketDepth(security) { LocalTime = message.LocalTime }.Update(
-				new[] { message.CreateQuote(security, Sides.Buy, Level1Fields.BestBidPrice, Level1Fields.BestBidVolume) },
-				new[] { message.CreateQuote(security, Sides.Sell, Level1Fields.BestAskPrice, Level1Fields.BestAskVolume) },
-				true, message.ServerTime);
+				new[] { message.CreateQuote(Level1Fields.BestBidPrice, Level1Fields.BestBidVolume) },
+				new[] { message.CreateQuote(Level1Fields.BestAskPrice, Level1Fields.BestAskVolume) },
+				message.ServerTime);
 		}
 
-		private static Quote CreateQuote(this Level1ChangeMessage message, Security security, Sides side, Level1Fields priceField, Level1Fields volumeField)
+		private static QuoteChange CreateQuote(this Level1ChangeMessage message, Level1Fields priceField, Level1Fields volumeField)
 		{
 			var changes = message.Changes;
-			return new Quote(security, (decimal)changes[priceField], (decimal?)changes.TryGetValue(volumeField) ?? 0m, side);
+			return new QuoteChange((decimal)changes[priceField], (decimal?)changes.TryGetValue(volumeField) ?? 0m);
 		}
 
 		/// <summary>

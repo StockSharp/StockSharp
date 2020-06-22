@@ -350,12 +350,12 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The converter, taking from the order book the best bid price <see cref="MarketDepth.BestBid"/>.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByBestBid = d => d.BestBid?.Price;
+		public static readonly Func<MarketDepth, decimal?> ByBestBid = d => d.BestBid2?.Price;
 
 		/// <summary>
 		/// The converter, taking from the order book the best offer price <see cref="MarketDepth.BestAsk"/>.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByBestAsk = d => d.BestAsk?.Price;
+		public static readonly Func<MarketDepth, decimal?> ByBestAsk = d => d.BestAsk2?.Price;
 
 		/// <summary>
 		/// The converter, taking from the order book the middle of the spread <see cref="MarketDepthPair.MiddlePrice"/>.

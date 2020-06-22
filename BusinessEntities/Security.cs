@@ -791,7 +791,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private Quote _bestBid;
+		private QuoteChange? _bestBid;
 
 		//[DataMember]
 		/// <summary>
@@ -807,7 +807,7 @@ namespace StockSharp.BusinessEntities
 			Order = 206)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
-		public Quote BestBid
+		public QuoteChange? BestBid
 		{
 			get => _bestBid;
 			set
@@ -823,7 +823,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private Quote _bestAsk;
+		private QuoteChange? _bestAsk;
 
 		//[DataMember]
 		/// <summary>
@@ -839,7 +839,7 @@ namespace StockSharp.BusinessEntities
 			Order = 207)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
-		public Quote BestAsk
+		public QuoteChange? BestAsk
 		{
 			get => _bestAsk;
 			set

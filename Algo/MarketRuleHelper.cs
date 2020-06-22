@@ -325,8 +325,8 @@ namespace StockSharp.Algo
 				if (depth.Security != Order.Security)
 					return;
 
-				_bestBidPrice = depth.BestBid?.Price;
-				_bestAskPrice = depth.BestAsk?.Price;
+				_bestBidPrice = depth.BestBid2?.Price;
+				_bestAskPrice = depth.BestAsk2?.Price;
 
 				TryActivate();
 			}
@@ -1451,7 +1451,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, false))
 			{
 				Name = LocalizedStrings.Str1059Params.Put(depth.Security, price)
 			};
@@ -1466,7 +1466,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, true))
 			{
 				Name = LocalizedStrings.Str1060Params.Put(depth.Security, price)
 			};
@@ -1481,7 +1481,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, false))
 			{
 				Name = LocalizedStrings.Str1061Params.Put(depth.Security, price)
 			};
@@ -1496,13 +1496,13 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, true))
 			{
 				Name = LocalizedStrings.Str1062Params.Put(depth.Security, price)
 			};
 		}
 
-		private static Func<MarketDepth, bool> CreateDepthCondition(Unit price, Func<Quote> currentQuote, bool isLess)
+		private static Func<MarketDepth, bool> CreateDepthCondition(Unit price, Func<QuoteChange?> currentQuote, bool isLess)
 		{
 			if (price == null)
 				throw new ArgumentNullException(nameof(price));
@@ -1516,9 +1516,11 @@ namespace StockSharp.Algo
 			if (price.Value < 0)
 				throw new ArgumentException(LocalizedStrings.Str1052, nameof(price));
 
-			var curQuote = currentQuote();
-			if (curQuote == null)
+			var q = currentQuote();
+			if (q == null)
 				throw new ArgumentException(LocalizedStrings.Str1063, nameof(currentQuote));
+
+			var curQuote = q.Value;
 
 			if (isLess)
 			{
@@ -1526,7 +1528,7 @@ namespace StockSharp.Algo
 				return depth =>
 				{
 					var quote = currentQuote();
-					return quote != null && quote.Price < finishPrice;
+					return quote != null && quote.Value.Price < finishPrice;
 				};
 			}
 			else
@@ -1535,7 +1537,7 @@ namespace StockSharp.Algo
 				return depth =>
 				{
 					var quote = currentQuote();
-					return quote != null && quote.Price > finishPrice;
+					return quote != null && quote.Value.Price > finishPrice;
 				};
 			}
 		}

@@ -1232,13 +1232,13 @@ namespace StockSharp.Algo
 				if (!fromLevel1 || bestBid != null)
 				{
 					updated = true;
-					security.BestBid = bestBid == null ? null : new Quote(security, bestBid.Value.Price, bestBid.Value.Volume, Sides.Buy);
+					security.BestBid = bestBid;
 				}
 
 				if (!fromLevel1 || bestAsk != null)
 				{
 					updated = true;
-					security.BestAsk = bestAsk == null ? null : new Quote(security, bestAsk.Value.Price, bestAsk.Value.Volume, Sides.Sell);
+					security.BestAsk = bestAsk;
 				}
 
 				if (updated)
@@ -1271,7 +1271,7 @@ namespace StockSharp.Algo
 
 							info.First = true;
 
-							innerSecurity.BestBid = new Quote(innerSecurity, bid.Price, bid.Volume, Sides.Buy);
+							innerSecurity.BestBid = bid;
 							innerSecurity.LocalTime = message.LocalTime;
 							innerSecurity.LastChangeTime = message.ServerTime;
 						}
@@ -1294,7 +1294,7 @@ namespace StockSharp.Algo
 
 							info.Second = true;
 
-							innerSecurity.BestAsk = new Quote(innerSecurity, ask.Price, ask.Volume, Sides.Sell);
+							innerSecurity.BestAsk = ask;
 							innerSecurity.LocalTime = message.LocalTime;
 							innerSecurity.LastChangeTime = message.ServerTime;
 						}

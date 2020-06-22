@@ -25,7 +25,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// Extension class for <see cref="Unit"/>.
 	/// </summary>
-	public static class UnitHelper2
+	public static class EntitiesExtensions
 	{
 		/// <summary>
 		/// To create from <see cref="int"/> the pips values.
@@ -167,6 +167,36 @@ namespace StockSharp.BusinessEntities
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1291);
 			}
+		}
+
+		/// <summary>
+		/// To convert the quote into message.
+		/// </summary>
+		/// <param name="quote">Quote.</param>
+		/// <returns>Message.</returns>
+		[Obsolete]
+		public static QuoteChange ToQuoteChange(this Quote quote)
+		{
+			return new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
+		}
+
+		/// <summary>
+		/// To convert the message into quote.
+		/// </summary>
+		/// <param name="change">Message.</param>
+		/// <param name="side">Direction (buy or sell).</param>
+		/// <param name="security">Security.</param>
+		/// <param name="getSecurity">The function for getting instrument.</param>
+		/// <returns>Quote.</returns>
+		[Obsolete]
+		public static Quote ToQuote(this QuoteChange change, Sides side, Security security, Func<SecurityId, Security> getSecurity = null)
+		{
+			if (!change.BoardCode.IsEmpty() && getSecurity != null)
+				security = getSecurity(new SecurityId { SecurityCode = security.Code, BoardCode = change.BoardCode });
+
+			var quote = new Quote(security, change.Price, change.Volume, side, change.OrdersCount, change.Condition);
+			change.CopyExtensionInfo(quote);
+			return quote;
 		}
 	}
 }

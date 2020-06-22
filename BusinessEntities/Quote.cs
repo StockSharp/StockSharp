@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Linq;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
@@ -24,7 +23,6 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Collections;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -37,6 +35,7 @@ namespace StockSharp.BusinessEntities
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Obsolete("Use QuoteChange type.")]
 	public class Quote : Cloneable<Quote>, IExtendableEntity
 	{
 		/// <summary>

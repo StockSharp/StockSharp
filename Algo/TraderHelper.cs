@@ -154,14 +154,18 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To filter the order book from own orders.
 		/// </summary>
-		/// <param name="quotes">The initial order book to be filtered.</param>
+		/// <param name="bids">Bids.</param>
+		/// <param name="asks">Asks.</param>
 		/// <param name="ownOrders">Active orders for this instrument.</param>
 		/// <param name="orders">Orders to be ignored.</param>
 		/// <returns>The filtered order book.</returns>
-		public static IEnumerable<Quote> GetFilteredQuotes(this IEnumerable<Quote> quotes, IEnumerable<Order> ownOrders, IEnumerable<Order> orders)
+		public static (QuoteChange[] bids, QuoteChange[] asks) GetFilteredQuotes(this QuoteChange[] bids, QuoteChange[] asks, IEnumerable<Order> ownOrders, IEnumerable<Order> orders)
 		{
-			if (quotes == null)
-				throw new ArgumentNullException(nameof(quotes));
+			if (bids == null)
+				throw new ArgumentNullException(nameof(bids));
+
+			if (asks == null)
+				throw new ArgumentNullException(nameof(asks));
 
 			if (ownOrders == null)
 				throw new ArgumentNullException(nameof(ownOrders));
@@ -177,26 +181,25 @@ namespace StockSharp.Algo
 					throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
 			}
 
-			var retVal = new List<Quote>(quotes.Select(q => q.Clone()));
+			var retValBids = bids.ToList();
 
-			foreach (var quote in retVal.ToArray())
-			{
-				var o = dict.TryGetValue(Tuple.Create(quote.OrderDirection, quote.Price));
+			//foreach (var quote in bids)
+			//{
+			//	if (dict.TryGetValue(Tuple.Create(Sides.Buy, quote.Price), out var bidOrders))
+			//	{
+			//		foreach (var order in bidOrders)
+			//		{
+			//			if (!orders.Contains(order))
+			//				quote.Volume -= order.Balance;
+			//		}
 
-				if (o != null)
-				{
-					foreach (var order in o)
-					{
-						if (!orders.Contains(order))
-							quote.Volume -= order.Balance;
-					}
+			//		if (quote.Volume <= 0)
+			//			retValBids.Remove(quote);
+			//	}
+			//}
 
-					if (quote.Volume <= 0)
-						retVal.Remove(quote);
-				}
-			}
-
-			return retVal;
+			//return retVal;
+			throw new NotImplementedException();
 		}
 
 		///// <summary>
@@ -274,8 +277,8 @@ namespace StockSharp.Algo
 
 			if (orders != null)
 			{
-				var quotes = depth.GetFilteredQuotes(Enumerable.Empty<Order>(), orders);
-				depth = new MarketDepth(depth.Security).Update(quotes, depth.LastChangeTime);
+				var (bids, asks) = depth.Bids2.GetFilteredQuotes(depth.Asks2, Enumerable.Empty<Order>(), orders);
+				depth = new MarketDepth(depth.Security).Update(bids, asks, depth.LastChangeTime);
 			}
 
 			var pair = depth.BestPair;
@@ -303,20 +306,20 @@ namespace StockSharp.Algo
 			{
 				case MarketPriceTypes.Opposite:
 				{
-					var quote = (side == Sides.Buy ? bestPair.Ask : bestPair.Bid);
+					var quote = side == Sides.Buy ? bestPair.Ask : bestPair.Bid;
 					currentPrice = quote?.Price;
 					break;
 				}
 				case MarketPriceTypes.Following:
 				{
-					var quote = (side == Sides.Buy ? bestPair.Bid : bestPair.Ask);
+					var quote = side == Sides.Buy ? bestPair.Bid : bestPair.Ask;
 					currentPrice = quote?.Price;
 					break;
 				}
 				case MarketPriceTypes.Middle:
 				{
 					if (bestPair.IsFull)
-						currentPrice = bestPair.Bid.Price + bestPair.SpreadPrice / 2;
+						currentPrice = bestPair.Bid.Value.Price + bestPair.SpreadPrice / 2;
 					else
 						currentPrice = null;
 					break;
@@ -646,16 +649,16 @@ namespace StockSharp.Algo
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			var bids = depth.Bids.Sparse(priceStep);
-			var asks = depth.Asks.Sparse(priceStep);
+			var bids = depth.Bids2.Sparse(Sides.Buy, priceStep);
+			var asks = depth.Asks2.Sparse(Sides.Sell, priceStep);
 
 			var pair = depth.BestPair;
-			var spreadQuotes = pair?.Sparse(priceStep).ToArray() ?? ArrayHelper.Empty<Quote>();
+			var spreadQuotes = pair?.Sparse(priceStep);
 
 			return new MarketDepth(depth.Security).Update(
-				bids.Concat(spreadQuotes.Where(q => q.OrderDirection == Sides.Buy)),
-				asks.Concat(spreadQuotes.Where(q => q.OrderDirection == Sides.Sell)),
-				false, depth.LastChangeTime);
+				bids.Concat(spreadQuotes?.bids ?? ArrayHelper.Empty<QuoteChange>()).OrderByDescending(q => q.Price).ToArray(),
+				asks.Concat(spreadQuotes?.asks ?? ArrayHelper.Empty<QuoteChange>()).ToArray(),
+				depth.LastChangeTime);
 		}
 
 		/// <summary>
@@ -667,7 +670,7 @@ namespace StockSharp.Algo
 		/// <param name="pair">The pair of regular quotes.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
-		public static IEnumerable<Quote> Sparse(this MarketDepthPair pair, decimal priceStep)
+		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this MarketDepthPair pair, decimal priceStep)
 		{
 			if (pair == null)
 				throw new ArgumentNullException(nameof(pair));
@@ -676,14 +679,13 @@ namespace StockSharp.Algo
 				throw new ArgumentOutOfRangeException(nameof(priceStep), priceStep, LocalizedStrings.Str1213);
 
 			if (pair.SpreadPrice == null)
-				return Enumerable.Empty<Quote>();
+				return (ArrayHelper.Empty<QuoteChange>(), ArrayHelper.Empty<QuoteChange>());
 
-			var security = pair.Bid.Security;
+			var bids = new List<QuoteChange>();
+			var asks = new List<QuoteChange>();
 
-			var retVal = new List<Quote>();
-
-			var bidPrice = pair.Bid.Price;
-			var askPrice = pair.Ask.Price;
+			var bidPrice = pair.Bid.Value.Price;
+			var askPrice = pair.Ask.Value.Price;
 
 			while (true)
 			{
@@ -693,25 +695,25 @@ namespace StockSharp.Algo
 				if (bidPrice > askPrice)
 					break;
 
-				retVal.Add(new Quote
+				bids.Add(new QuoteChange
 				{
-					Security = security,
+					//Security = security,
 					Price = bidPrice,
-					OrderDirection = Sides.Buy,
+					//OrderDirection = Sides.Buy,
 				});
 
 				if (bidPrice == askPrice)
 					break;
 
-				retVal.Add(new Quote
+				asks.Add(new QuoteChange
 				{
-					Security = security,
+					//Security = security,
 					Price = askPrice,
-					OrderDirection = Sides.Sell,
+					//OrderDirection = Sides.Sell,
 				});
 			}
 
-			return retVal.OrderBy(q => q.Price);
+			return (bids.ToArray(), asks.ToArray());
 		}
 
 		/// <summary>
@@ -721,9 +723,10 @@ namespace StockSharp.Algo
 		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
 		/// </remarks>
 		/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
+		/// <param name="side">Side.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
-		public static IEnumerable<Quote> Sparse(this IEnumerable<Quote> quotes, decimal priceStep)
+		public static IEnumerable<QuoteChange> Sparse(this IEnumerable<QuoteChange> quotes, Sides side, decimal priceStep)
 		{
 			if (quotes == null)
 				throw new ArgumentNullException(nameof(quotes));
@@ -734,33 +737,33 @@ namespace StockSharp.Algo
 			var list = quotes.OrderBy(q => q.Price).ToList();
 
 			if (list.Count < 2)
-				return ArrayHelper.Empty<Quote>();
+				return ArrayHelper.Empty<QuoteChange>();
 
-			var firstQuote = list[0];
+			//var firstQuote = list[0];
 
-			var retVal = new List<Quote>();
+			var retVal = new List<QuoteChange>();
 
 			for (var i = 0; i < (list.Count - 1); i++)
 			{
 				var from = list[i];
 
-				if (from.OrderDirection != firstQuote.OrderDirection)
-					throw new ArgumentException(LocalizedStrings.Str1214, nameof(quotes));
+				//if (from.OrderDirection != firstQuote.OrderDirection)
+				//	throw new ArgumentException(LocalizedStrings.Str1214, nameof(quotes));
 
 				var toPrice = list[i + 1].Price;
 
 				for (var price = (from.Price + priceStep); price < toPrice; price += priceStep)
 				{
-					retVal.Add(new Quote
+					retVal.Add(new QuoteChange
 					{
-						Security = firstQuote.Security,
+						//Security = firstQuote.Security,
 						Price = price,
-						OrderDirection = firstQuote.OrderDirection,
+						//OrderDirection = firstQuote.OrderDirection,
 					});
 				}
 			}
 
-			if (firstQuote.OrderDirection == Sides.Buy)
+			if (side == Sides.Buy)
 				return retVal.OrderByDescending(q => q.Price);
 			else
 				return retVal;
@@ -772,6 +775,7 @@ namespace StockSharp.Algo
 		/// <param name="original">The initial order book.</param>
 		/// <param name="rare">The sparse order book.</param>
 		/// <returns>The merged order book.</returns>
+		[Obsolete]
 		public static MarketDepth Join(this MarketDepth original, MarketDepth rare)
 		{
 			if (original == null)
@@ -780,7 +784,7 @@ namespace StockSharp.Algo
 			if (rare == null)
 				throw new ArgumentNullException(nameof(rare));
 
-			return new MarketDepth(original.Security).Update(original.Concat(rare), original.LastChangeTime);
+			return new MarketDepth(original.Security).Update(original.Bids.Concat(rare.Bids), original.Asks.Concat(rare.Asks), false, original.LastChangeTime);
 		}
 
 		/// <summary>
@@ -789,6 +793,7 @@ namespace StockSharp.Algo
 		/// <param name="depth">The order book to be grouped.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>The grouped order book.</returns>
+		[Obsolete]
 		public static MarketDepth Group(this MarketDepth depth, Unit priceRange)
 		{
 			return new MarketDepth(depth.Security).Update(depth.Bids.Group(priceRange), depth.Asks.Group(priceRange), true, depth.LastChangeTime);
@@ -799,6 +804,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The grouped order book.</param>
 		/// <returns>The de-grouped order book.</returns>
+		[Obsolete]
 		public static MarketDepth UnGroup(this MarketDepth depth)
 		{
 			return new MarketDepth(depth.Security).Update(
@@ -832,10 +838,12 @@ namespace StockSharp.Algo
 				minTradePrice = minTradePrice.Min(price);
 				maxTradePrice = maxTradePrice.Max(price);
 
-				var quote = depth.GetQuote(price);
+				var q = depth.GetQuote(price);
 
-				if (null == quote)
+				if (q is null)
 					continue;
+
+				var quote = q.Value;
 
 				if (!changedVolume.TryGetValue(price, out var vol))
 					vol = quote.Volume;
@@ -844,16 +852,16 @@ namespace StockSharp.Algo
 				changedVolume[quote.Price] = vol;
 			}
 
-			var bids = new Quote[depth.Bids.Length];
+			var bids = new QuoteChange[depth.Bids2.Length];
 
 			void B1()
 			{
 				var i = 0;
 				var count = 0;
 
-				for (; i < depth.Bids.Length; i++)
+				for (; i < depth.Bids2.Length; i++)
 				{
-					var quote = depth.Bids[i];
+					var quote = depth.Bids2[i];
 					var price = quote.Price;
 
 					if (price > minTradePrice)
@@ -866,7 +874,7 @@ namespace StockSharp.Algo
 							if (vol <= 0)
 								continue;
 
-							quote = quote.Clone();
+							//quote = quote.Clone();
 							quote.Volume = vol;
 						}
 					}
@@ -877,22 +885,22 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				Array.Copy(depth.Bids, i, bids, count, depth.Bids.Length - i);
-				Array.Resize(ref bids, count + (depth.Bids.Length - i));
+				Array.Copy(depth.Bids2, i, bids, count, depth.Bids2.Length - i);
+				Array.Resize(ref bids, count + (depth.Bids2.Length - i));
 			}
 
 			B1();
 
-			var asks = new Quote[depth.Asks.Length];
+			var asks = new QuoteChange[depth.Asks2.Length];
 
 			void A1()
 			{
 				var i = 0;
 				var count = 0;
 
-				for (; i < depth.Asks.Length; i++)
+				for (; i < depth.Asks2.Length; i++)
 				{
-					var quote = depth.Asks[i];
+					var quote = depth.Asks2[i];
 					var price = quote.Price;
 
 					if (price < maxTradePrice)
@@ -905,7 +913,7 @@ namespace StockSharp.Algo
 							if (vol <= 0)
 								continue;
 
-							quote = quote.Clone();
+							//quote = quote.Clone();
 							quote.Volume = vol;
 						}
 					}
@@ -916,8 +924,8 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				Array.Copy(depth.Asks, i, asks, count, depth.Asks.Length - i);
-				Array.Resize(ref asks, count + (depth.Asks.Length - i));
+				Array.Copy(depth.Asks2, i, asks, count, depth.Asks2.Length - i);
+				Array.Resize(ref asks, count + (depth.Asks2.Length - i));
 			}
 
 			A1();
@@ -931,6 +939,7 @@ namespace StockSharp.Algo
 		/// <param name="quotes">Quotes to be grouped.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>Grouped quotes.</returns>
+		[Obsolete]
 		public static IEnumerable<AggregatedQuote> Group(this IEnumerable<Quote> quotes, Unit priceRange)
 		{
 			if (quotes == null)
@@ -1817,7 +1826,7 @@ namespace StockSharp.Algo
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			return depth.Bids.Length ==0 && depth.Asks.Length == 0;
+			return depth.Bids2.Length ==0 && depth.Asks2.Length == 0;
 		}
 
 		/// <summary>
@@ -1830,7 +1839,12 @@ namespace StockSharp.Algo
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			return (depth.BestPair.Bid == null || depth.BestPair.Ask == null) && (depth.BestPair.Bid != depth.BestPair.Ask);
+			var pair = depth.BestPair;
+
+			if (pair.Bid == null)
+				return pair.Ask != null;
+			else
+				return pair.Ask == null;
 		}
 
 		/// <summary>
@@ -2324,8 +2338,8 @@ namespace StockSharp.Algo
 			var bidChanged = false;
 			var askChanged = false;
 			var lastTradeChanged = false;
-			var bestBid = security.BestBid != null ? security.BestBid.Clone() : new Quote(security, 0, 0, Sides.Buy);
-			var bestAsk = security.BestAsk != null ? security.BestAsk.Clone() : new Quote(security, 0, 0, Sides.Sell);
+			var bestBid = security.BestBid ?? new QuoteChange();
+			var bestAsk = security.BestAsk ?? new QuoteChange();
 
 			var lastTrade = new Trade { Security = security };
 
@@ -2381,11 +2395,11 @@ namespace StockSharp.Algo
 							security.Multiplier = (decimal)value;
 							break;
 						case Level1Fields.BestBid:
-							bestBid = (Quote)value;
+							bestBid = (QuoteChange)value;
 							bidChanged = true;
 							break;
 						case Level1Fields.BestAsk:
-							bestAsk = (Quote)value;
+							bestAsk = (QuoteChange)value;
 							askChanged = true;
 							break;
 						case Level1Fields.BestBidPrice:
@@ -3639,7 +3653,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(depth));
 
 			var result = depth.Clone();
-			result.Update(result.Bids.Take(maxDepth), result.Asks.Take(maxDepth), true);
+			result.Update(result.Bids2.Take(maxDepth).ToArray(), result.Asks2.Take(maxDepth).ToArray(), depth.LastChangeTime);
 			return result;
 		}
 
