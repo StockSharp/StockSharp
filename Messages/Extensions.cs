@@ -3046,5 +3046,37 @@ namespace StockSharp.Messages
 
 			return channel.State != ChannelStates.Stopped;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		public static T[] CopyArray<T>(this T[] source)
+		{
+			if (source is null)
+				throw new ArgumentNullException(nameof(source));
+
+			var copy = new T[source.Length];
+			source.CopyTo(copy, 0);
+			return copy;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		public static T[] CopyArray<T>(this ICollection<T> source)
+		{
+			if (source is null)
+				throw new ArgumentNullException(nameof(source));
+
+			var copy = new T[source.Count];
+			source.CopyTo(copy, 0);
+			return copy;
+		}
 	}
 }

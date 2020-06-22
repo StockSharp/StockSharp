@@ -17,7 +17,6 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -167,13 +166,8 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
-
-			destination.Bids = new QuoteChange[Bids.Length];
-			Bids.CopyTo(destination.Bids, 0);
-
-			destination.Asks = new QuoteChange[Asks.Length];
-			Asks.CopyTo(destination.Asks, 0);
-
+			destination.Bids = Bids.CopyArray();
+			destination.Asks = Asks.CopyArray();
 			destination.ServerTime = ServerTime;
 			destination.IsSorted = IsSorted;
 			destination.Currency = Currency;
