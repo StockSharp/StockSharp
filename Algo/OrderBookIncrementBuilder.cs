@@ -10,8 +10,8 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
-	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, System.Tuple<decimal, int?, Messages.QuoteConditions>>;
-	using QuotesByPosList = System.Collections.Generic.List<System.Tuple<decimal, decimal, int?, Messages.QuoteConditions>>;
+	using QuotesDict = System.Collections.Generic.SortedList<decimal, Messages.QuoteChange>;
+	using QuotesByPosList = System.Collections.Generic.List<Messages.QuoteChange>;
 
 	/// <summary>
 	/// Order book builder, used incremental <see cref="QuoteChangeMessage"/>.
@@ -140,7 +140,7 @@
 					if (quote.Volume == 0)
 						to.Remove(quote.Price);
 					else
-						to[quote.Price] = Tuple.Create(quote.Volume, quote.OrdersCount, quote.Condition);
+						to[quote.Price] = quote;
 				}
 			}
 
@@ -154,7 +154,7 @@
 					{
 						case QuoteChangeActions.New:
 						{
-							var tuple = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
+							var tuple = new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 
 							if (startPos > to.Count)
 								throw new InvalidOperationException($"Pos={startPos}>Count={to.Count}");
@@ -167,7 +167,7 @@
 						}
 						case QuoteChangeActions.Update:
 						{
-							to[startPos] = Tuple.Create(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
+							to[startPos] = new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 							break;
 						}
 						case QuoteChangeActions.Delete:
@@ -199,25 +199,25 @@
 			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
 				return null;
 
-			IEnumerable<QuoteChange> bids;
-			IEnumerable<QuoteChange> asks;
+			QuoteChange[] bids;
+			QuoteChange[] asks;
 
 			if (change.HasPositions)
 			{
-				bids = _bidsByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3, p.Item4));
-				asks = _asksByPos.Select(p => new QuoteChange(p.Item1, p.Item2, p.Item3, p.Item4));
+				bids = _bidsByPos.CopyArray();
+				asks = _asksByPos.CopyArray();
 			}
 			else
 			{
-				bids = _bids.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2, p.Value.Item3));
-				asks = _asks.Select(p => new QuoteChange(p.Key, p.Value.Item1, p.Value.Item2, p.Value.Item3));
+				bids = _bids.Values.CopyArray();
+				asks = _asks.Values.CopyArray();
 			}
 
 			return new QuoteChangeMessage
 			{
 				SecurityId = SecurityId,
-				Bids = bids.ToArray(),
-				Asks = asks.ToArray(),
+				Bids = bids,
+				Asks = asks,
 				IsSorted = true,
 				ServerTime = change.ServerTime,
 				OriginalTransactionId = change.OriginalTransactionId,
