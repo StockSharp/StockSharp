@@ -538,6 +538,11 @@ namespace StockSharp.Algo
 		public bool IsSupportTransactionLog { get; set; } = true;
 
 		/// <summary>
+		/// Use <see cref="OrderBookSortMessageAdapter"/>.
+		/// </summary>
+		public bool IsSupportOrderBookSort { get; set; } = true;
+
+		/// <summary>
 		/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 		/// </summary>
 		public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
@@ -643,6 +648,11 @@ namespace StockSharp.Algo
 			if (IsSupportTransactionLog)
 			{
 				adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
+			}
+
+			if (IsSupportOrderBookSort)
+			{
+				adapter = ApplyOwnInner(new OrderBookSortMessageAdapter(adapter));
 			}
 
 			if (adapter.IsSupportSubscriptions)
@@ -1944,6 +1954,7 @@ namespace StockSharp.Algo
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
 				UseSeparatedChannels = UseSeparatedChannels,
 				IsSupportTransactionLog = IsSupportTransactionLog,
+				IsSupportOrderBookSort = IsSupportOrderBookSort,
 			};
 
 			clone.Load(this.Save());
