@@ -77,6 +77,8 @@
 		private bool _drawWithColor;
 		private Color _candleDrawColor;
 
+		private VolumeProfileBuilder _volumeProfile;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -293,7 +295,7 @@
 
 						if (_candleTransform.Process(tick))
 						{
-							var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform);
+							var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform, ref _volumeProfile);
 
 							foreach (var candle in candles)
 							{
@@ -427,7 +429,7 @@
 
 				if (_candleTransform.Process(nextTick))
 				{
-					var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform);
+					var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform, ref _volumeProfile);
 
 					foreach (var candle in candles)
 					{
