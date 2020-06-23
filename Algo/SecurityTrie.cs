@@ -38,7 +38,7 @@ namespace StockSharp.Algo
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly Dictionary<SecurityId, Security> _allSecurities = new Dictionary<SecurityId, Security>();
-		private readonly ITrie<Security> _trie = new SuffixTrie<Security>(1);
+		private readonly ITrie<Security> _trie = new PatriciaSuffixTrie<Security>(1);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityTrie"/>.
