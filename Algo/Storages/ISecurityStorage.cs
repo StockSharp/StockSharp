@@ -49,6 +49,12 @@ namespace StockSharp.Algo.Storages
 		void Delete(Security security);
 
 		/// <summary>
+		/// Delete securities.
+		/// </summary>
+		/// <param name="securities">Securities.</param>
+		void DeleteRange(IEnumerable<Security> securities);
+
+		/// <summary>
 		/// To delete instruments by the criterion.
 		/// </summary>
 		/// <param name="criteria">The criterion.</param>
@@ -121,6 +127,31 @@ namespace StockSharp.Algo.Storages
 
 				foreach (var security in toDelete)
 					_inner.Remove(security.ToSecurityId());
+			}
+
+			Removed?.Invoke(toDelete);
+		}
+
+		/// <inheritdoc />
+		public void DeleteRange(IEnumerable<Security> securities)
+		{
+			if (securities is null)
+				throw new ArgumentNullException(nameof(securities));
+
+			ISet<Security> toDelete = null;
+
+			lock (_inner.SyncRoot)
+			{
+				foreach (var security in securities)
+				{
+					if (!_inner.Remove(security.ToSecurityId()))
+					{
+						if (toDelete == null)
+							toDelete = securities.ToHashSet();
+
+						toDelete.Remove(security);
+					}
+				}
 			}
 
 			Removed?.Invoke(toDelete);

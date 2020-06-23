@@ -309,6 +309,11 @@ namespace StockSharp.Algo.Storages.Csv
 				this.Filter(criteria).ForEach(s => Remove(s));
 			}
 
+			void ISecurityStorage.DeleteRange(IEnumerable<Security> securities)
+			{
+				RemoveRange(securities);
+			}
+
 			#endregion
 
 			#region CsvEntityList
