@@ -16,7 +16,7 @@
 	public class OrderBookIncrementBuilder
 	{
 		private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
-		private QuoteChangeStates State = _none;
+		private QuoteChangeStates _state = _none;
 
 		private readonly ILogReceiver _logs;
 
@@ -55,7 +55,7 @@
 			if (change is null)
 				throw new ArgumentNullException(nameof(change));
 
-			var currState = State;
+			var currState = _state;
 			var newState = change.State.Value;
 
 			void CheckSwitch()
@@ -88,7 +88,7 @@
 				}
 			}
 
-			if (currState != newState)
+			if (currState != newState || newState == QuoteChangeStates.SnapshotComplete)
 			{
 				CheckSwitch();
 
@@ -127,7 +127,7 @@
 						throw new ArgumentOutOfRangeException(currState.ToString());
 				}
 
-				State = currState = newState;
+				_state = currState = newState;
 			}
 
 			void Apply(IEnumerable<QuoteChange> from, SortedList<decimal, QuoteChange> to)
