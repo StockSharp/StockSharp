@@ -10,9 +10,6 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
-	using QuotesDict = System.Collections.Generic.SortedList<decimal, Messages.QuoteChange>;
-	using QuotesByPosList = System.Collections.Generic.List<Messages.QuoteChange>;
-
 	/// <summary>
 	/// Order book builder, used incremental <see cref="QuoteChangeMessage"/>.
 	/// </summary>
@@ -23,11 +20,11 @@
 
 		private readonly ILogReceiver _logs;
 
-		private readonly QuotesDict _bids = new QuotesDict(new BackwardComparer<decimal>());
-		private readonly QuotesDict _asks = new QuotesDict();
+		private readonly SortedList<decimal, QuoteChange> _bids = new SortedList<decimal, QuoteChange>(new BackwardComparer<decimal>());
+		private readonly SortedList<decimal, QuoteChange> _asks = new SortedList<decimal, QuoteChange>();
 
-		private readonly QuotesByPosList _bidsByPos = new QuotesByPosList();
-		private readonly QuotesByPosList _asksByPos = new QuotesByPosList();
+		private readonly List<QuoteChange> _bidsByPos = new List<QuoteChange>();
+		private readonly List<QuoteChange> _asksByPos = new List<QuoteChange>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookIncrementBuilder"/>.
@@ -133,7 +130,7 @@
 				State = currState = newState;
 			}
 
-			void Apply(IEnumerable<QuoteChange> from, QuotesDict to)
+			void Apply(IEnumerable<QuoteChange> from, SortedList<decimal, QuoteChange> to)
 			{
 				foreach (var quote in from)
 				{
@@ -144,7 +141,7 @@
 				}
 			}
 
-			void ApplyByPos(IEnumerable<QuoteChange> from, QuotesByPosList to)
+			void ApplyByPos(IEnumerable<QuoteChange> from, List<QuoteChange> to)
 			{
 				foreach (var quote in from)
 				{

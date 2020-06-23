@@ -1000,9 +1000,10 @@ namespace StockSharp.Algo
 			{
 				LocalTime = to.LocalTime,
 				SecurityId = to.SecurityId,
-				Bids = GetDelta(from.Bids, to.Bids, Sides.Buy),
-				Asks = GetDelta(from.Asks, to.Asks, Sides.Sell),
+				Bids = GetDelta(from.Bids, to.Bids, new BackwardComparer<decimal>()),
+				Asks = GetDelta(from.Asks, to.Asks, null),
 				ServerTime = to.ServerTime,
+				State = QuoteChangeStates.Increment,
 			};
 		}
 
@@ -1011,9 +1012,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="from">First quotes.</param>
 		/// <param name="to">Second quotes.</param>
-		/// <param name="side">The direction, showing the type of quotes.</param>
+		/// <param name="comparer">The direction, showing the type of quotes.</param>
 		/// <returns>Changes.</returns>
-		public static QuoteChange[] GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side)
+		private static QuoteChange[] GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, IComparer<decimal> comparer)
 		{
 			if (from == null)
 				throw new ArgumentNullException(nameof(from));
@@ -1021,8 +1022,8 @@ namespace StockSharp.Algo
 			if (to == null)
 				throw new ArgumentNullException(nameof(to));
 
-			var mapFrom = new Dictionary<decimal, QuoteChange>();
-			var mapTo = new Dictionary<decimal, QuoteChange>();
+			var mapFrom = new SortedList<decimal, QuoteChange>(comparer);
+			var mapTo = new SortedList<decimal, QuoteChange>(comparer);
 
 			foreach (var change in from)
 			{
@@ -1050,21 +1051,18 @@ namespace StockSharp.Algo
 						quoteTo.StartPosition == quoteFrom.StartPosition &&
 						quoteTo.EndPosition == quoteFrom.EndPosition)
 					{
-						mapTo.Remove(price);		// то же самое
+						// nothing was changes, remove this
+						mapTo.Remove(price);
 					}
 				}
 				else
 				{
-					// была, а теперь нет
-					var empty = new QuoteChange { Price = price };
-					mapTo[price] = empty;
+					// zero volume means remove price level
+					mapTo[price] = new QuoteChange { Price = price };
 				}
 			}
 
-			return mapTo
-				.Values
-				.OrderBy(q => q.Price * (side == Sides.Buy ? -1 : 1))
-				.ToArray();
+			return mapTo.Values.ToArray();
 		}
 
 		/// <summary>
