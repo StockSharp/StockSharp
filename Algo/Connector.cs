@@ -452,10 +452,18 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
+		private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new CachedSynchronizedSet<MessageTypes>(new[]
+		{
+			MessageTypes.SecurityLookup,
+			MessageTypes.PortfolioLookup,
+			MessageTypes.OrderStatus,
+			MessageTypes.TimeFrameLookup,
+		});
+
 		/// <summary>
 		/// Send lookup messages on connect. By default is <see langword="true"/>.
 		/// </summary>
-		public bool LookupMessagesOnConnect { get; set; } = true;
+		public ISet<MessageTypes> LookupMessagesOnConnect => _lookupMessagesOnConnect;
 
 		/// <inheritdoc />
 		public void Connect()
@@ -1202,7 +1210,18 @@ namespace StockSharp.Algo
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-			LookupMessagesOnConnect = storage.GetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
+			var lookupMessagesOnConnect = storage.GetValue<object>(nameof(LookupMessagesOnConnect));
+			if (lookupMessagesOnConnect is bool b)
+			{
+				if (!b)
+					LookupMessagesOnConnect.Clear();
+			}
+			else if (lookupMessagesOnConnect is string str)
+			{
+				LookupMessagesOnConnect.Clear();
+				LookupMessagesOnConnect.AddRange(str.SplitByComma(true).Select(s => s.To<MessageTypes>()));
+			}
+
 			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 			IsAutoUnSubscribeOnDisconnect = storage.GetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 			IsAutoPortfoliosSubscribe = storage.GetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
@@ -1237,7 +1256,7 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
+			storage.SetValue(nameof(LookupMessagesOnConnect), _lookupMessagesOnConnect.Cache.Select(t => t.To<string>()).JoinComma());
 			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 			storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 			storage.SetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);

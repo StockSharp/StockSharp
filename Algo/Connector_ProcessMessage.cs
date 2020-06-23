@@ -827,19 +827,36 @@ namespace StockSharp.Algo
 					else
 					{
 						_notFirstTimeConnected = true;
-
-						if (LookupMessagesOnConnect)
+						
+						void TrySend(MessageTypes type)
 						{
-							void TrySend(MessageTypes type, DataType dataType)
+							DataType dataType;
+
+							switch (type)
 							{
-								if (Adapter.IsMessageSupported(type) && !_subscriptionManager.Subscriptions.Any(s => s.SubscriptionMessage.DataType == dataType && s.SubscriptionMessage.To == null))
-									_subscriptionManager.Subscribe(new Subscription(dataType, (SecurityMessage)null));
+								case MessageTypes.SecurityLookup:
+									dataType = DataType.Securities;
+									break;
+								case MessageTypes.PortfolioLookup:
+									dataType = DataType.PositionChanges;
+									break;
+								case MessageTypes.OrderStatus:
+									dataType = DataType.Transactions;
+									break;
+								case MessageTypes.TimeFrameLookup:
+									dataType = DataType.TimeFrames;
+									break;
+								default:
+									return;
 							}
 
-							TrySend(MessageTypes.SecurityLookup, DataType.Securities);
-							TrySend(MessageTypes.PortfolioLookup, DataType.PositionChanges);
-							TrySend(MessageTypes.OrderStatus, DataType.Transactions);
-							TrySend(MessageTypes.TimeFrameLookup, DataType.TimeFrames);
+							if (Adapter.IsMessageSupported(type) && !_subscriptionManager.Subscriptions.Any(s => s.SubscriptionMessage.DataType == dataType && s.SubscriptionMessage.To == null))
+								_subscriptionManager.Subscribe(new Subscription(dataType, (SecurityMessage)null));
+						}
+
+						foreach (var type in _lookupMessagesOnConnect.Cache)
+						{
+							TrySend(type);
 						}
 					}
 
