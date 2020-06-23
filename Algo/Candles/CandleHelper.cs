@@ -327,6 +327,7 @@ namespace StockSharp.Algo.Candles
 				private readonly IEnumerable<Message> _messages;
 
 				private ICandleBuilderValueTransform _transform;
+				private VolumeProfileBuilder _profile;
 
 				private CandleMessage _lastActiveCandle;
 				private CandleMessage _lastCandle;
@@ -414,7 +415,7 @@ namespace StockSharp.Algo.Candles
 
 						_lastActiveCandle = null;
 
-						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _transform))
+						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _transform, ref _profile))
 						{
 							_lastCandle = candleMessage;
 
@@ -1165,9 +1166,9 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candles">Candles.</param>
 		/// <returns>The area.</returns>
-		public static CandleMessageVolumeProfile GetValueArea(this IEnumerable<Candle> candles)
+		public static VolumeProfileBuilder GetValueArea(this IEnumerable<Candle> candles)
 		{
-			var area = new CandleMessageVolumeProfile();
+			var area = new VolumeProfileBuilder(new List<CandlePriceLevel>());
 
 			foreach (var candle in candles)
 			{

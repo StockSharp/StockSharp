@@ -244,23 +244,6 @@ namespace StockSharp.Messages
 		[XmlIgnore]
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
-		private CandleMessageVolumeProfile _volumeProfile;
-
-		/// <summary>
-		/// Volume profile.
-		/// </summary>
-		[Ignore]
-		[XmlIgnore]
-		public CandleMessageVolumeProfile VolumeProfile
-		{
-			get => _volumeProfile;
-			set
-			{
-				_volumeProfile = value;
-				PriceLevels = value?.PriceLevels;
-			}
-		}
-
 		/// <summary>
 		/// Candle arg.
 		/// </summary>

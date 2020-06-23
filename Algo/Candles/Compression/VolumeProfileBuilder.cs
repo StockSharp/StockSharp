@@ -1,71 +1,43 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.Algo.Candles.Compression.Algo
-File: VolumeProfile.cs
-Created: 2015, 12, 2, 8:18 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Messages
+ï»¿namespace StockSharp.Algo.Candles.Compression
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Runtime.Serialization;
 
 	using Ecng.Collections;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Volume profile.
 	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class CandleMessageVolumeProfile
+	public class VolumeProfileBuilder
 	{
 		private readonly Dictionary<decimal, CandlePriceLevel> _volumeProfileInfo = new Dictionary<decimal, CandlePriceLevel>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CandleMessageVolumeProfile"/>.
+		/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/>.
 		/// </summary>
-		public CandleMessageVolumeProfile()
-			: this(new List<CandlePriceLevel>())
+		/// <param name="levels">Price levels.</param>
+		public VolumeProfileBuilder(IList<CandlePriceLevel> levels)
 		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CandleMessageVolumeProfile"/>.
-		/// </summary>
-		/// <param name="priceLevels">Price levels.</param>
-		public CandleMessageVolumeProfile(IList<CandlePriceLevel> priceLevels)
-		{
-			PriceLevels = priceLevels ?? throw new ArgumentNullException(nameof(priceLevels));
+			_levels = levels ?? throw new ArgumentNullException(nameof(levels));
 		}
 
 		/// <summary>
 		/// The upper price level.
 		/// </summary>
-		[DataMember]
 		public CandlePriceLevel High { get; private set; }
 
 		/// <summary>
 		/// The lower price level.
 		/// </summary>
-		[DataMember]
 		public CandlePriceLevel Low { get; private set; }
 
 		/// <summary>
 		/// Point of control.
 		/// </summary>
-		[DataMember]
 		public CandlePriceLevel PoC { get; private set; }
 
 		private decimal _volumePercent = 70;
@@ -73,7 +45,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The percentage of total volume (the default is 70%).
 		/// </summary>
-		[DataMember]
 		public decimal VolumePercent
 		{
 			get => _volumePercent;
@@ -86,11 +57,12 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private readonly IList<CandlePriceLevel> _levels;
+
 		/// <summary>
 		/// Price levels.
 		/// </summary>
-		[DataMember]
-		public IEnumerable<CandlePriceLevel> PriceLevels { get; }
+		public IEnumerable<CandlePriceLevel> PriceLevels => _levels;
 
 		/// <summary>
 		/// To update the profile with new value.
@@ -121,25 +93,28 @@ namespace StockSharp.Messages
 
 			level.TotalVolume += priceLevel.TotalVolume;
 
-			if (priceLevel.BuyVolumes != null)
-				((List<decimal>)level.BuyVolumes).AddRange(priceLevel.BuyVolumes);
+			if (priceLevel.BuyVolumes is ICollection<decimal> buys)
+				buys.AddRange(priceLevel.BuyVolumes);
 
-			if (priceLevel.SellVolumes != null)
-				((List<decimal>)level.SellVolumes).AddRange(priceLevel.SellVolumes);
+			if (priceLevel.SellVolumes is ICollection<decimal> sells)
+				sells.AddRange(priceLevel.SellVolumes);
 		}
 
 		private CandlePriceLevel GetPriceLevel(decimal price)
 		{
+			if (price == 0)
+				throw new ArgumentOutOfRangeException(nameof(price));
+
 			return _volumeProfileInfo.SafeAdd(price, key =>
 			{
 				var level = new CandlePriceLevel
 				{
 					Price = key,
-					BuyVolumes = new List<decimal>(),
-					SellVolumes = new List<decimal>()
+					//BuyVolumes = new List<decimal>(),
+					//SellVolumes = new List<decimal>()
 				};
 
-				((IList<CandlePriceLevel>)PriceLevels).Add(level);
+				_levels.Add(level);
 
 				return level;
 			});
@@ -147,7 +122,7 @@ namespace StockSharp.Messages
 
 		private void UpdatePriceLevel(CandlePriceLevel level, decimal? volume, Sides? side)
 		{
-			if (level == null)
+			if (level.Price == default)
 				throw new ArgumentNullException(nameof(level));
 
 			//var side = value.OrderDirection;
@@ -167,14 +142,16 @@ namespace StockSharp.Messages
 				level.BuyVolume += v;
 				level.BuyCount++;
 
-				((List<decimal>)level.BuyVolumes).Add(v);
+				if (level.BuyVolumes is ICollection<decimal> vols)
+					vols.Add(v);
 			}
 			else if (side == Sides.Sell)
 			{
 				level.SellVolume += v;
 				level.SellCount++;
 
-				((List<decimal>)level.SellVolumes).Add(v);
+				if (level.SellVolumes is ICollection<decimal> vols)
+					vols.Add(v);
 			}
 		}
 
@@ -183,26 +160,26 @@ namespace StockSharp.Messages
 		/// </summary>
 		public void Calculate()
 		{
-			// Îñíîâíàÿ ñóòü:
-			// Åñòü POC Vol îò íåãî âûøå è íèæå áåðåòñÿ ïî äâà çíà÷åíèÿ(îáúåìû)
-			// Ñóììèðóþòñÿ è ñðàâíèâàþòñÿ, òå ÷òî â ñóììå áîëüøå, ñêëàäûâàþòñÿ â îáùèé îáúåì, â êîòîðîì èçíà÷àëüíî ëåæèò POC Vol.
-			// Íà ñëåäóþùåé èòåðàöèè áåðóòñÿ ñëåäóþùèå äâà îáúåìà ñóììèðóþòñÿ è ñðàâíèâàþòñÿ, è îïÿòü áîëüøàÿ ñóììà ëîæèòñÿ â îáùèé îáúåì
-			// È òàê äî òåõ ïîð ïîêà îáùèé îáúåì íå ïðåâûñèò ïîðîã, êîòîðûé óñòàíàâëèâàåòñÿ â ïðîöåíòíîì îòíîøåíèè ê âñåìó îáúåìó.
-			// Ïîñëå ïðåâûøåíèÿ ïîðîãà, ñàìûé âåðõíèé è ñàìûé íèæíèé îáúåì, èç êîòîðûõ ñêëàäûâàëñÿ îáùèé îáúåì áóäóò VAH è VAL.
-			// Âîçìîæíûå òðàáëû:
-			// Åñëè POC Vol íàõîäèòñÿ íà ãðàíèöå öåíîâîãî äèàïàçîíà, òî ñâåðõó/ñíèçó áðàòü íå÷åãî, òî "íàáîð" îáúåìîâ òîëüêî â îäíó ñòîðîíó.
-			// Åñëè POC Vol íàõîäèòñÿ íà îäèí øàã íèæå/âûøå öåíîâîãî äèàïàçîíà, òî ñâåðõó/ñíèçó ìîæíî âçÿòü òîëüêî îäíî çíà÷åíèå äëÿ ñðàâíåíèÿ ñ äâóìÿ äðóãèìè çíà÷åíèÿìè.
-			// Òåîðåòè÷åñêè â öåíîâîì äèàïàçîíå ìîæåò áûòü íåñêîëüêî POC Vol, åñëè áóäåò íåñêîëüêî öåíîâûõ óðîâíåé ñ îäèíàêîâûìè îáúåìîì,
-			//   â òàêîì ñëó÷àå äîëæåí áðàòüñÿ POC Vol êîòîðûé áëèæå ê öåíòðó. Òåîðåòè÷åñêè îíè ìîãóò áûòü ðàâíî óäàëåíû îò öåíòðà.)))
-			// Åñëè ñóììà ñðàâíèâàåìûõ îáúåìîâ ðàâíà, õ.ç. êàêèå áðàòü.
+			// ÐžÑÐ½Ð¾Ð²Ð½Ð°Ñ ÑÑƒÑ‚ÑŒ:
+			// Ð•ÑÑ‚ÑŒ POC Vol Ð¾Ñ‚ Ð½ÐµÐ³Ð¾ Ð²Ñ‹ÑˆÐµ Ð¸ Ð½Ð¸Ð¶Ðµ Ð±ÐµÑ€ÐµÑ‚ÑÑ Ð¿Ð¾ Ð´Ð²Ð° Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ(Ð¾Ð±ÑŠÐµÐ¼Ñ‹)
+			// Ð¡ÑƒÐ¼Ð¼Ð¸Ñ€ÑƒÑŽÑ‚ÑÑ Ð¸ ÑÑ€Ð°Ð²Ð½Ð¸Ð²Ð°ÑŽÑ‚ÑÑ, Ñ‚Ðµ Ñ‡Ñ‚Ð¾ Ð² ÑÑƒÐ¼Ð¼Ðµ Ð±Ð¾Ð»ÑŒÑˆÐµ, ÑÐºÐ»Ð°Ð´Ñ‹Ð²Ð°ÑŽÑ‚ÑÑ Ð² Ð¾Ð±Ñ‰Ð¸Ð¹ Ð¾Ð±ÑŠÐµÐ¼, Ð² ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¼ Ð¸Ð·Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ð¾ Ð»ÐµÐ¶Ð¸Ñ‚ POC Vol.
+			// ÐÐ° ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ¹ Ð¸Ñ‚ÐµÑ€Ð°Ñ†Ð¸Ð¸ Ð±ÐµÑ€ÑƒÑ‚ÑÑ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ðµ Ð´Ð²Ð° Ð¾Ð±ÑŠÐµÐ¼Ð° ÑÑƒÐ¼Ð¼Ð¸Ñ€ÑƒÑŽÑ‚ÑÑ Ð¸ ÑÑ€Ð°Ð²Ð½Ð¸Ð²Ð°ÑŽÑ‚ÑÑ, Ð¸ Ð¾Ð¿ÑÑ‚ÑŒ Ð±Ð¾Ð»ÑŒÑˆÐ°Ñ ÑÑƒÐ¼Ð¼Ð° Ð»Ð¾Ð¶Ð¸Ñ‚ÑÑ Ð² Ð¾Ð±Ñ‰Ð¸Ð¹ Ð¾Ð±ÑŠÐµÐ¼
+			// Ð˜ Ñ‚Ð°Ðº Ð´Ð¾ Ñ‚ÐµÑ… Ð¿Ð¾Ñ€ Ð¿Ð¾ÐºÐ° Ð¾Ð±Ñ‰Ð¸Ð¹ Ð¾Ð±ÑŠÐµÐ¼ Ð½Ðµ Ð¿Ñ€ÐµÐ²Ñ‹ÑÐ¸Ñ‚ Ð¿Ð¾Ñ€Ð¾Ð³, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ ÑƒÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÑ‚ÑÑ Ð² Ð¿Ñ€Ð¾Ñ†ÐµÐ½Ñ‚Ð½Ð¾Ð¼ Ð¾Ñ‚Ð½Ð¾ÑˆÐµÐ½Ð¸Ð¸ Ðº Ð²ÑÐµÐ¼Ñƒ Ð¾Ð±ÑŠÐµÐ¼Ñƒ.
+			// ÐŸÐ¾ÑÐ»Ðµ Ð¿Ñ€ÐµÐ²Ñ‹ÑˆÐµÐ½Ð¸Ñ Ð¿Ð¾Ñ€Ð¾Ð³Ð°, ÑÐ°Ð¼Ñ‹Ð¹ Ð²ÐµÑ€Ñ…Ð½Ð¸Ð¹ Ð¸ ÑÐ°Ð¼Ñ‹Ð¹ Ð½Ð¸Ð¶Ð½Ð¸Ð¹ Ð¾Ð±ÑŠÐµÐ¼, Ð¸Ð· ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ñ… ÑÐºÐ»Ð°Ð´Ñ‹Ð²Ð°Ð»ÑÑ Ð¾Ð±Ñ‰Ð¸Ð¹ Ð¾Ð±ÑŠÐµÐ¼ Ð±ÑƒÐ´ÑƒÑ‚ VAH Ð¸ VAL.
+			// Ð’Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ñ‹Ðµ Ñ‚Ñ€Ð°Ð±Ð»Ñ‹:
+			// Ð•ÑÐ»Ð¸ POC Vol Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚ÑÑ Ð½Ð° Ð³Ñ€Ð°Ð½Ð¸Ñ†Ðµ Ñ†ÐµÐ½Ð¾Ð²Ð¾Ð³Ð¾ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ð°, Ñ‚Ð¾ ÑÐ²ÐµÑ€Ñ…Ñƒ/ÑÐ½Ð¸Ð·Ñƒ Ð±Ñ€Ð°Ñ‚ÑŒ Ð½ÐµÑ‡ÐµÐ³Ð¾, Ñ‚Ð¾ "Ð½Ð°Ð±Ð¾Ñ€" Ð¾Ð±ÑŠÐµÐ¼Ð¾Ð² Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð² Ð¾Ð´Ð½Ñƒ ÑÑ‚Ð¾Ñ€Ð¾Ð½Ñƒ.
+			// Ð•ÑÐ»Ð¸ POC Vol Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚ÑÑ Ð½Ð° Ð¾Ð´Ð¸Ð½ ÑˆÐ°Ð³ Ð½Ð¸Ð¶Ðµ/Ð²Ñ‹ÑˆÐµ Ñ†ÐµÐ½Ð¾Ð²Ð¾Ð³Ð¾ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ð°, Ñ‚Ð¾ ÑÐ²ÐµÑ€Ñ…Ñƒ/ÑÐ½Ð¸Ð·Ñƒ Ð¼Ð¾Ð¶Ð½Ð¾ Ð²Ð·ÑÑ‚ÑŒ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¾Ð´Ð½Ð¾ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð´Ð»Ñ ÑÑ€Ð°Ð²Ð½ÐµÐ½Ð¸Ñ Ñ Ð´Ð²ÑƒÐ¼Ñ Ð´Ñ€ÑƒÐ³Ð¸Ð¼Ð¸ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸ÑÐ¼Ð¸.
+			// Ð¢ÐµÐ¾Ñ€ÐµÑ‚Ð¸Ñ‡ÐµÑÐºÐ¸ Ð² Ñ†ÐµÐ½Ð¾Ð²Ð¾Ð¼ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð½ÐµÑÐºÐ¾Ð»ÑŒÐºÐ¾ POC Vol, ÐµÑÐ»Ð¸ Ð±ÑƒÐ´ÐµÑ‚ Ð½ÐµÑÐºÐ¾Ð»ÑŒÐºÐ¾ Ñ†ÐµÐ½Ð¾Ð²Ñ‹Ñ… ÑƒÑ€Ð¾Ð²Ð½ÐµÐ¹ Ñ Ð¾Ð´Ð¸Ð½Ð°ÐºÐ¾Ð²Ñ‹Ð¼Ð¸ Ð¾Ð±ÑŠÐµÐ¼Ð¾Ð¼,
+			//   Ð² Ñ‚Ð°ÐºÐ¾Ð¼ ÑÐ»ÑƒÑ‡Ð°Ðµ Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ€Ð°Ñ‚ÑŒÑÑ POC Vol ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ Ð±Ð»Ð¸Ð¶Ðµ Ðº Ñ†ÐµÐ½Ñ‚Ñ€Ñƒ. Ð¢ÐµÐ¾Ñ€ÐµÑ‚Ð¸Ñ‡ÐµÑÐºÐ¸ Ð¾Ð½Ð¸ Ð¼Ð¾Ð³ÑƒÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ñ€Ð°Ð²Ð½Ð¾ ÑƒÐ´Ð°Ð»ÐµÐ½Ñ‹ Ð¾Ñ‚ Ñ†ÐµÐ½Ñ‚Ñ€Ð°.)))
+			// Ð•ÑÐ»Ð¸ ÑÑƒÐ¼Ð¼Ð° ÑÑ€Ð°Ð²Ð½Ð¸Ð²Ð°ÐµÐ¼Ñ‹Ñ… Ð¾Ð±ÑŠÐµÐ¼Ð¾Ð² Ñ€Ð°Ð²Ð½Ð°, Ñ….Ð·. ÐºÐ°ÐºÐ¸Ðµ Ð±Ñ€Ð°Ñ‚ÑŒ.
 
-			var maxVolume = Math.Round(PriceLevels.Sum(p => p.BuyVolume + p.SellVolume) * VolumePercent / 100, 0);
-			var currVolume = PriceLevels.Select(p => p.BuyVolume + p.SellVolume).Max();
+			var maxVolume = Math.Round(_levels.Sum(p => p.BuyVolume + p.SellVolume) * VolumePercent / 100, 0);
+			var currVolume = _levels.Select(p => p.BuyVolume + p.SellVolume).Max();
 
-			PoC = PriceLevels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == currVolume);
+			PoC = _levels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == currVolume);
 
-			var abovePoc = Combine(PriceLevels.Where(p => p.Price > PoC.Price).OrderBy(p => p.Price));
-			var belowePoc = Combine(PriceLevels.Where(p => p.Price < PoC.Price).OrderByDescending(p => p.Price));
+			var abovePoc = Combine(_levels.Where(p => p.Price > PoC.Price).OrderBy(p => p.Price));
+			var belowePoc = Combine(_levels.Where(p => p.Price < PoC.Price).OrderByDescending(p => p.Price));
 
 			if (abovePoc.Count == 0)
 			{
@@ -299,8 +276,10 @@ namespace StockSharp.Messages
 						break;
 					}
 
-					var buyVolumes = enumerator.Current.BuyVolumes.Concat(pl.BuyVolumes).ToArray();
-					var sellVolumes = enumerator.Current.SellVolumes.Concat(pl.SellVolumes).ToArray();
+					var curr = enumerator.Current;
+
+					var buyVolumes = curr.BuyVolumes.Concat(pl.BuyVolumes).ToArray();
+					var sellVolumes = curr.SellVolumes.Concat(pl.SellVolumes).ToArray();
 
 					list.AddLast(new CandlePriceLevel
 					{

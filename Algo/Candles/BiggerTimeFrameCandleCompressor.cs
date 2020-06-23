@@ -64,6 +64,8 @@ namespace StockSharp.Algo.Candles
 		private readonly PartCandleBuilderValueTransform _transform;
 		private readonly ICandleBuilder _builder;
 
+		private VolumeProfileBuilder _volumeProfile;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BiggerTimeFrameCandleCompressor"/>.
 		/// </summary>
@@ -119,7 +121,7 @@ namespace StockSharp.Algo.Candles
 			_transform.Part = part;
 			_transform.Process(message);
 
-			foreach (var builtCandle in _builder.Process(Subscription, CurrentCandle, _transform))
+			foreach (var builtCandle in _builder.Process(Subscription, CurrentCandle, _transform, ref _volumeProfile))
 			{
 				CurrentCandle = builtCandle;
 				yield return builtCandle;

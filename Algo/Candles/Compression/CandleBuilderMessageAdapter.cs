@@ -55,6 +55,8 @@ namespace StockSharp.Algo.Candles.Compression
 			public CandleMessage CurrentCandleMessage { get; set; }
 
 			public CandleMessage NonFinishedCandle { get; set; }
+
+			public VolumeProfileBuilder VolumeProfile;
 		}
 
 		private readonly SyncObject _syncObject = new SyncObject();
@@ -733,7 +735,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				var builder = _candleBuilderProvider.Get(origin.DataType2.MessageType);
 
-				var result = builder.Process(origin, series.CurrentCandleMessage, transform);
+				var result = builder.Process(origin, series.CurrentCandleMessage, transform, ref series.VolumeProfile);
 
 				foreach (var candleMessage in result)
 				{

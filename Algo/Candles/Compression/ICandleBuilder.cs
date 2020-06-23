@@ -36,12 +36,8 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="transform">The data source transformation.</param>
+		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>A new candles changes.</returns>
-		IEnumerable<CandleMessage> Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderValueTransform transform);
-
-		///// <summary>
-		///// Reset state.
-		///// </summary>
-		//void Reset();
+		IEnumerable<CandleMessage> Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderValueTransform transform, ref VolumeProfileBuilder volumeProfile);
 	}
 }
