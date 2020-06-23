@@ -313,7 +313,7 @@ namespace StockSharp.Messages
 			copy.DownTicks = DownTicks;
 			copy.UpTicks = UpTicks;
 			copy.TotalTicks = TotalTicks;
-			copy.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
+			copy.PriceLevels = PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			copy.State = State;
 
 			return copy;

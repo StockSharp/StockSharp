@@ -14,7 +14,7 @@
 	/// </summary>
 	public class VolumeProfileBuilder
 	{
-		private readonly Dictionary<decimal, CandlePriceLevel> _volumeProfileInfo = new Dictionary<decimal, CandlePriceLevel>();
+		private readonly Dictionary<decimal, int> _volumeProfileInfo = new Dictionary<decimal, int>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/>.
@@ -75,7 +75,10 @@
 			//if (value.OrderDirection == null)
 			//	return;
 
-			UpdatePriceLevel(GetPriceLevel(price), volume, side);
+			var idx = GetPriceLevelIdx(price);
+			var level = _levels[idx];
+			UpdatePriceLevel(ref level, volume, side);
+			_levels[idx] = level;
 		}
 
 		/// <summary>
@@ -84,7 +87,9 @@
 		/// <param name="priceLevel">Value.</param>
 		public void Update(CandlePriceLevel priceLevel)
 		{
-			var level = GetPriceLevel(priceLevel.Price);
+			var idx = GetPriceLevelIdx(priceLevel.Price);
+
+			var level = _levels[idx];
 
 			level.BuyVolume += priceLevel.BuyVolume;
 			level.BuyCount += priceLevel.BuyCount;
@@ -98,29 +103,35 @@
 
 			if (priceLevel.SellVolumes is ICollection<decimal> sells)
 				sells.AddRange(priceLevel.SellVolumes);
+
+			_levels[idx] = level;
 		}
 
-		private CandlePriceLevel GetPriceLevel(decimal price)
+		private int GetPriceLevelIdx(decimal price)
 		{
 			if (price == 0)
 				throw new ArgumentOutOfRangeException(nameof(price));
 
-			return _volumeProfileInfo.SafeAdd(price, key =>
+			if (!_volumeProfileInfo.TryGetValue(price, out var index))
 			{
+				index = _levels.Count;
+				_volumeProfileInfo.Add(price, index);
+				
 				var level = new CandlePriceLevel
 				{
-					Price = key,
+					Price = price,
 					//BuyVolumes = new List<decimal>(),
 					//SellVolumes = new List<decimal>()
 				};
 
 				_levels.Add(level);
 
-				return level;
-			});
+			}
+
+			return index;
 		}
 
-		private void UpdatePriceLevel(CandlePriceLevel level, decimal? volume, Sides? side)
+		private void UpdatePriceLevel(ref CandlePriceLevel level, decimal? volume, Sides? side)
 		{
 			if (level.Price == default)
 				throw new ArgumentNullException(nameof(level));

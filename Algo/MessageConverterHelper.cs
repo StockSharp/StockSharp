@@ -141,7 +141,7 @@ namespace StockSharp.Algo
 			message.CloseVolume = candle.CloseVolume;
 			message.RelativeVolume = candle.RelativeVolume;
 			message.Arg = candle.Arg;
-			message.PriceLevels = candle.PriceLevels?.Select(l => l.Clone()).ToArray();
+			message.PriceLevels = candle.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			message.State = candle.State;
 
 			return message;
@@ -1225,7 +1225,7 @@ namespace StockSharp.Algo
 			candle.UpTicks = message.UpTicks;
 			candle.DownTicks = message.DownTicks;
 
-			candle.PriceLevels = message.PriceLevels?.Select(l => l.Clone()).ToArray();
+			candle.PriceLevels = message.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 
 			candle.State = message.State;
 
