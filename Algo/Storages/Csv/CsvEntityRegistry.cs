@@ -312,6 +312,7 @@ namespace StockSharp.Algo.Storages.Csv
 			void ISecurityStorage.DeleteRange(IEnumerable<Security> securities)
 			{
 				RemoveRange(securities);
+				OnRemovedRange(securities);
 			}
 
 			#endregion
