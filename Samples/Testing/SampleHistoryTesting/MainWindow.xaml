@@ -6,7 +6,7 @@
 		xmlns:sx="http://schemas.stocksharp.com/xaml"
 		xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
-		xmlns:devExp="clr-namespace:Ecng.Xaml.DevExp;assembly=Ecng.Xaml.DevExp"
+		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
 
 	<Window.Resources>
@@ -43,7 +43,7 @@
 				</Grid.RowDefinitions>
 
 				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
-                <devExp:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
+                <xaml:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 
                 <Grid Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2">
 					<Grid.ColumnDefinitions>

@@ -18,8 +18,7 @@
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Xaml;
-	using Ecng.Xaml.Charting.Visuals.Annotations;
-	using Ecng.Xaml.DevExp.Yandex;
+	using Ecng.Xaml.Yandex;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -31,8 +30,9 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Xaml;
+	using StockSharp.Xaml.Charting.Visuals.Annotations;
 	using StockSharp.Xaml.Charting;
-    using StockSharp.Xaml;
 	using StockSharp.Configuration;
 
 	public partial class MainWindow
@@ -726,7 +726,7 @@
 
 				if (RandomGen.GetBool())
 					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, price - RandomGen.GetInt(1, 10) * ps));
-				
+
 				if (RandomGen.GetBool())
 					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, price + RandomGen.GetInt(1, 10) * ps));
 
@@ -764,14 +764,14 @@
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
 
 			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }
-			
+
 			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
 			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }
 			void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria) { }
 
 			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security) { yield break; }
 			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field) => null;
-			
+
 			MarketDepth IMarketDataProvider.GetMarketDepth(Security security) => null;
 			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security) => null;
 
