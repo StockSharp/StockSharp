@@ -2275,6 +2275,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => true;
 		bool IMessageAdapter.EnqueueSubscriptions { get; set; }
 		bool IMessageAdapter.IsSupportTransactionLog => false;
+		bool IMessageAdapter.UseChannels => false;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

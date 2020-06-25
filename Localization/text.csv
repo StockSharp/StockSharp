@@ -15897,7 +15897,7 @@ DocStr11419;Message adapter that tracks multiple lookups requests and put them i
 DocStr11420;Subscription message;Сообщение подписки
 DocStr11421;"""Money"" security instance";"Объект инструмента ""Money"""
 DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
-DocStr11423;Use separated {0} for each adapters;Использовать отдельные {0} для каждого адаптера
+DocStr11423;Use {0} for in and out messages;Использовать {0} для входящих и исходящих сообщений
 DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
 DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой
 DocStr11428;Request for the appearance of a new indicator in the pre-market;Запрос на получение индикативного значения пре-маркета

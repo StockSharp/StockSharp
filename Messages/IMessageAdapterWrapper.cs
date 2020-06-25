@@ -354,6 +354,8 @@ namespace StockSharp.Messages
 			set => InnerAdapter.EnqueueSubscriptions = value;
 		}
 
+		bool IMessageAdapter.UseChannels => InnerAdapter.UseChannels;
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

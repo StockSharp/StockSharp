@@ -552,10 +552,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public StorageProcessor StorageProcessor { get; }
 
-		/// <summary>
-		/// Use separated <see cref="IMessageChannel"/> for each adapters.
-		/// </summary>
-		public bool UseSeparatedChannels { get; set; }
+		/// <inheritdoc />
+		public bool UseChannels { get; set; } = true;
 
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
@@ -618,7 +616,7 @@ namespace StockSharp.Algo
 			if (IgnoreExtraAdapters)
 				return adapter;
 
-			if (UseSeparatedChannels)
+			if (UseChannels && adapter.UseChannels)
 			{
 				adapter = ApplyOwnInner(new ChannelMessageAdapter(adapter,
 					new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} In", SendOutError), 
@@ -1952,7 +1950,7 @@ namespace StockSharp.Algo
 				IgnoreExtraAdapters = IgnoreExtraAdapters,
 				NativeIdStorage = NativeIdStorage,
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
-				UseSeparatedChannels = UseSeparatedChannels,
+				UseChannels = UseChannels,
 				IsSupportTransactionLog = IsSupportTransactionLog,
 				IsSupportOrderBookSort = IsSupportOrderBookSort,
 			};
