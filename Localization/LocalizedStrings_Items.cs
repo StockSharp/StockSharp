@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Switch axis location
+		/// </summary>
+		public const string SwitchAxisLocationKey = nameof(SwitchAxisLocation);
+
+		/// <summary>
+		/// Switch axis location
+		/// </summary>
+		public static string SwitchAxisLocation => GetString(SwitchAxisLocationKey);
+
+		/// <summary>
 		/// {0} ({1})
 		/// </summary>
 		public const string ChartSeriesTitleParamsKey = nameof(ChartSeriesTitleParams);
@@ -26,7 +36,6 @@ namespace StockSharp.Localization
 		/// {0} ({1})
 		/// </summary>
 		public static string ChartSeriesTitleParams => GetString(ChartSeriesTitleParamsKey);
-
 
 		/// <summary>
 		/// {0} ({1})
@@ -237,7 +246,7 @@ namespace StockSharp.Localization
 		/// Update fail details
 		/// </summary>
 		public static string UpdateFailDetails => GetString(UpdateFailDetailsKey);
-	
+
 		/// <summary>
 		/// S#.Installer
 		/// </summary>
@@ -322,7 +331,7 @@ namespace StockSharp.Localization
 		/// Orders with no errors
 		/// </summary>
 		public const string  NoErrorOrdersOnlyKey = nameof(NoErrorOrdersOnly);
-		
+
 		/// <summary>
 		/// Orders with no errors
 		/// </summary>
