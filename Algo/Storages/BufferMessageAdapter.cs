@@ -104,7 +104,9 @@ namespace StockSharp.Algo.Storages
 					{
 						var replaceMsg = (OrderReplaceMessage)message;
 
-						_replaceTransactions.TryAdd(replaceMsg.TransactionId, replaceMsg.OriginalTransactionId);
+						// can be looped back from offline
+						if (!_replaceTransactions.ContainsKey(replaceMsg.TransactionId))
+							_replaceTransactions.Add(replaceMsg.TransactionId, replaceMsg.OriginalTransactionId);
 
 						Buffer.SendInMessage(replaceMsg);
 					}
@@ -117,8 +119,12 @@ namespace StockSharp.Algo.Storages
 					{
 						var pairMsg = (OrderPairReplaceMessage)message;
 						
-						_replaceTransactions.TryAdd(pairMsg.Message1.TransactionId, pairMsg.Message1.OriginalTransactionId);
-						_replaceTransactions.TryAdd(pairMsg.Message2.TransactionId, pairMsg.Message2.OriginalTransactionId);
+						// can be looped back from offline
+						if (!_replaceTransactions.ContainsKey(pairMsg.Message1.TransactionId))
+						{
+							_replaceTransactions.Add(pairMsg.Message1.TransactionId, pairMsg.Message1.OriginalTransactionId);
+							_replaceTransactions.Add(pairMsg.Message2.TransactionId, pairMsg.Message2.OriginalTransactionId);
+						}
 
 						Buffer.SendInMessage(message);
 					}
@@ -133,7 +139,8 @@ namespace StockSharp.Algo.Storages
 						var cancelMsg = (OrderCancelMessage)message;
 
 						// can be looped back from offline
-						_cancellationTransactions.TryAdd(cancelMsg.TransactionId, cancelMsg.OriginalTransactionId);
+						if (!_cancellationTransactions.ContainsKey(cancelMsg.TransactionId))
+							_cancellationTransactions.Add(cancelMsg.TransactionId, cancelMsg.OriginalTransactionId);
 					}
 					
 					break;
