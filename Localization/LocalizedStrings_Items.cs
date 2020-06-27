@@ -9148,12 +9148,12 @@ namespace StockSharp.Localization
 		public static string Str894 => GetString(Str894Key);
 
 		/// <summary>
-		/// Order volume cannot be less than zero.
+		/// Volume for the price {0} cannot be less than zero.
 		/// </summary>
 		public const string Str895Key = nameof(Str895);
 
 		/// <summary>
-		/// Order volume cannot be less than zero.
+		/// Volume for the price {0} cannot be less than zero.
 		/// </summary>
 		public static string Str895 => GetString(Str895Key);
 

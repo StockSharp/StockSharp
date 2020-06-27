@@ -915,7 +915,7 @@ Str891;Portfolio was not found.;Портфель не был найден.
 Str892;Order price must be positive.;Цена заявки должна быть положительной.
 Str893;Limit order price cannot be equal 0.;Цена лимитной заявки не может быть равной 0.
 Str894;Order volume cannot be zero.;Объем заявки не может быть нулевым.
-Str895;Order volume cannot be less than zero.;Объем заявки не может быть отрицательным.
+Str895;Volume for the price {0} cannot be less than zero.;Объем для цены {0} не может быть отрицательным.
 Str896Params;Order already has a ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор '{0}'. Возможно, она уже была зарегистрирована.
 Str897Params;Order already has a transaction ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор транзакции '{0}'. Возможно, она уже была зарегистрирована.
 Str898Params;Order already has state '{0}'. Possibly, it was already registered.;Заявка уже имеет состояние '{0}'. Возможно, она уже была зарегистрирована.
