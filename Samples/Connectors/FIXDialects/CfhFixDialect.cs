@@ -53,7 +53,7 @@ namespace StockSharp.Fix.Dialects
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; set; } = new[]
+		public override IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; } = new[]
 		{
 			MessageTypes.MarketData.ToInfo(),
 			//MessageTypes.SecurityLookup.ToInfo(),
