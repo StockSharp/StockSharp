@@ -2224,6 +2224,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.EnqueueSubscriptions { get; set; }
 		bool IMessageAdapter.IsSupportTransactionLog => false;
 		bool IMessageAdapter.UseChannels => false;
+		string IMessageAdapter.FeatureName => string.Empty;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

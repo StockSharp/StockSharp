@@ -356,6 +356,8 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.UseChannels => InnerAdapter.UseChannels;
 
+		string IMessageAdapter.FeatureName => InnerAdapter.FeatureName;
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

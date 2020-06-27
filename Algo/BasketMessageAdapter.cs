@@ -555,6 +555,8 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public bool UseChannels { get; set; } = true;
 
+		string IMessageAdapter.FeatureName => string.Empty;
+
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>

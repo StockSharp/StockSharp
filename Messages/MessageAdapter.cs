@@ -221,6 +221,12 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public Platforms Platform { get; protected set; }
 
+		/// <summary>
+		/// Feature name.
+		/// </summary>
+		[Browsable(false)]
+		public virtual string FeatureName => string.Empty;
+
 		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual IEnumerable<Tuple<string, Type>> SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();

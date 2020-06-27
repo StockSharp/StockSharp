@@ -249,6 +249,11 @@ namespace StockSharp.Messages
 		/// Use <see cref="IMessageChannel"/> for in and out messages.
 		/// </summary>
 		bool UseChannels { get; }
+
+		/// <summary>
+		/// Feature name.
+		/// </summary>
+		string FeatureName { get; }
 	}
 
 	/// <summary>
