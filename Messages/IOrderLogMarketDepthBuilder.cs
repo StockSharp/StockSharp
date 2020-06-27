@@ -42,8 +42,9 @@ namespace StockSharp.Messages
 	public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 	{
 		private readonly Dictionary<long, decimal> _orders = new Dictionary<long, decimal>();
-		private readonly SortedDictionary<decimal, QuoteChange> _bids = new SortedDictionary<decimal, QuoteChange>(new BackwardComparer<decimal>());
-		private readonly SortedDictionary<decimal, QuoteChange> _asks = new SortedDictionary<decimal, QuoteChange>();
+
+		private readonly SortedList<decimal, QuoteChange> _bids = new SortedList<decimal, QuoteChange>(new BackwardComparer<decimal>());
+		private readonly SortedList<decimal, QuoteChange> _asks = new SortedList<decimal, QuoteChange>();
 
 		private readonly QuoteChangeMessage _depth;
 
@@ -119,6 +120,7 @@ namespace StockSharp.Messages
 								_orders.Add(id, volume);
 							}
 
+							quotes[item.OrderPrice] = quote;
 							changed = true;
 						}
 					}
@@ -140,6 +142,8 @@ namespace StockSharp.Messages
 
 									if (quote.Volume <= 0)
 										quotes.Remove(item.OrderPrice);
+
+									quotes[item.OrderPrice] = quote;
 								}
 
 								_orders[id] = prevVolume - volume.Value;
@@ -162,6 +166,8 @@ namespace StockSharp.Messages
 
 								if (quote.Volume <= 0)
 									quotes.Remove(item.OrderPrice);
+
+								quotes[item.OrderPrice] = quote;
 							}
 
 							_orders.Remove(id);
