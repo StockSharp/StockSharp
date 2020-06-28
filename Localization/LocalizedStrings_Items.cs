@@ -21568,12 +21568,12 @@ namespace StockSharp.Localization
 		public static string Str2220 => GetString(Str2220Key);
 
 		/// <summary>
-		/// Auto-stop
+		/// Autostop
 		/// </summary>
 		public const string Str2221Key = nameof(Str2221);
 
 		/// <summary>
-		/// Auto-stop
+		/// Autostop
 		/// </summary>
 		public static string Str2221 => GetString(Str2221Key);
 
@@ -21588,12 +21588,12 @@ namespace StockSharp.Localization
 		public static string Str2222 => GetString(Str2222Key);
 
 		/// <summary>
-		/// Time for auto-stop
+		/// Time for autostop
 		/// </summary>
 		public const string Str2223Key = nameof(Str2223);
 
 		/// <summary>
-		/// Time for auto-stop
+		/// Time for autostop
 		/// </summary>
 		public static string Str2223 => GetString(Str2223Key);
 
@@ -51776,5 +51776,25 @@ namespace StockSharp.Localization
 		/// Used to identify whether the order initiator is an aggressor or not in the trade.
 		/// </summary>
 		public static string InitiatorTrade => GetString(InitiatorTradeKey);
+
+		/// <summary>
+		/// Dark
+		/// </summary>
+		public const string DarkKey = nameof(Dark);
+
+		/// <summary>
+		/// Dark
+		/// </summary>
+		public static string Dark => GetString(DarkKey);
+
+		/// <summary>
+		/// Dark theme.
+		/// </summary>
+		public const string DarkThemeKey = nameof(DarkTheme);
+
+		/// <summary>
+		/// Dark theme.
+		/// </summary>
+		public static string DarkTheme => GetString(DarkThemeKey);
 	}
 }
