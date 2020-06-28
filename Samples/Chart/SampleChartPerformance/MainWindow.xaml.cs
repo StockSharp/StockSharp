@@ -100,8 +100,6 @@
 
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
-			Theme.SelectedItem = "Chrome";
-
 			Chart.FillIndicators();
 			InitCharts();
 			LoadData();
@@ -346,12 +344,6 @@
 				.Error()
 				.Text(msg)
 				.Show();
-		}
-
-		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var theme = (string)Theme.SelectedValue;
-			Chart.ChartTheme = theme;
 		}
 	}
 
