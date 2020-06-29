@@ -59,6 +59,16 @@ namespace StockSharp.Messages
 		public abstract void Enqueue(Message message);
 
 		/// <summary>
+		/// Add new message.
+		/// </summary>
+		/// <param name="sort">Sort order.</param>
+		/// <param name="message">Message.</param>
+		protected void Enqueue(long sort, Message message)
+		{
+			Enqueue(new KeyValuePair<long, Message>(sort, message));
+		}
+
+		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="item"></param>
@@ -100,10 +110,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override void Enqueue(Message message)
-		{
-			Enqueue(new KeyValuePair<long, Message>(message.LocalTime.UtcTicks, message));
-		}
+		public override void Enqueue(Message message) => Enqueue(message.LocalTime.UtcTicks, message);
 	}
 
 	/// <summary>
@@ -121,9 +128,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override void Enqueue(Message message)
-		{
-			Enqueue(new KeyValuePair<long, Message>(_idGen.GetNextId(), message));
-		}
+		public override void Enqueue(Message message) => Enqueue(_idGen.GetNextId(), message);
 	}
 }

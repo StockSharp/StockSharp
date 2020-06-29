@@ -1280,7 +1280,7 @@ namespace StockSharp.Algo
 					if (adapter == null)
 						return;
 
-					mdMsg = (MarketDataMessage)mdMsg.Clone();
+					mdMsg = mdMsg.TypedClone();
 					_subscription.TryAdd(mdMsg.TransactionId, Tuple.Create((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2));
 				}
 				else
