@@ -244,6 +244,16 @@ namespace StockSharp.Messages
 		/// <param name="dataType">Data type info.</param>
 		/// <returns>Check result.</returns>
 		bool IsSecurityRequired(DataType dataType);
+
+		/// <summary>
+		/// Use <see cref="IMessageChannel"/> for in and out messages.
+		/// </summary>
+		bool UseChannels { get; }
+
+		/// <summary>
+		/// Feature name.
+		/// </summary>
+		string FeatureName { get; }
 	}
 
 	/// <summary>

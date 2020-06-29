@@ -154,10 +154,18 @@ namespace StockSharp.Algo.Storages
 					return EnabledTransactions;
 
 				case MessageTypes.Execution:
-					if (((ExecutionMessage)message).IsMarketData())
+				{
+					var execMsg = (ExecutionMessage)message;
+
+					if (execMsg.IsMarketData())
 						break;
 
+					// do not store cancellation commands into snapshot
+					if (execMsg.IsCancellation)
+						return false;
+
 					return EnabledTransactions;
+				}
 			}
 
 			if (message is ISubscriptionIdMessage subscrMsg)

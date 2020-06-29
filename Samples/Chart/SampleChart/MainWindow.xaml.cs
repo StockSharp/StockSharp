@@ -30,9 +30,9 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using StockSharp.Xaml;
-	using StockSharp.Xaml.Charting.Visuals.Annotations;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Xaml.Charting.Visuals.Annotations;
+    using StockSharp.Xaml;
 	using StockSharp.Configuration;
 
 	public partial class MainWindow

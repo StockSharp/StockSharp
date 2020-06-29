@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Server
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Security;
 
@@ -36,6 +37,29 @@ namespace StockSharp.Algo.Server
 		/// Session disconnected event.
 		/// </summary>
 		event Action<IMessageListenerSession> SessionDisconnected;
+
+		/// <summary>
+		/// Subscriptions.
+		/// </summary>
+		IEnumerable<Subscription> Subscriptions { get; }
+
+		/// <summary>
+		/// Client subscription changed event.
+		/// </summary>
+		event Action<IMessageListenerSession, Subscription> SubscriptionChanged;
+
+		/// <summary>
+		/// Remove subscription.
+		/// </summary>
+		/// <param name="subscription">Subscription.</param>
+		/// <returns><see langword="true"/> if subscription was found, otherwise <see langword="false"/>.</returns>
+		bool RemoveSubscription(Subscription subscription);
+
+		/// <summary>
+		/// Disconnect session.
+		/// </summary>
+		/// <param name="session">Session.</param>
+		void Disconnect(IMessageListenerSession session);
 
 		/// <summary>
 		/// Send message.

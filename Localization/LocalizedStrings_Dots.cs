@@ -628,5 +628,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string TransactionIdDot => AppendDot(TransactionId);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str254Dot => AppendDot(Str254);
 	}
 }

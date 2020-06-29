@@ -65,80 +65,71 @@ namespace StockSharp.BitStamp
 
 			var currency = mdMsg.SecurityId.ToCurrency();
 
-			switch (mdMsg.DataType)
+			if (mdMsg.DataType2 == DataType.OrderLog)
 			{
-				case MarketDataTypes.OrderLog:
+				if (mdMsg.IsSubscribe)
+					_pusherClient.SubscribeOrderLog(currency);
+				else
+					_pusherClient.UnSubscribeOrderLog(currency);
+			}
+			else if (mdMsg.DataType2 == DataType.MarketDepth)
+			{
+				if (mdMsg.IsSubscribe)
+					_pusherClient.SubscribeOrderBook(currency);
+				else
+					_pusherClient.UnSubscribeOrderBook(currency);
+			}
+			else if (mdMsg.DataType2 == DataType.Ticks)
+			{
+				if (mdMsg.IsSubscribe)
 				{
-					if (mdMsg.IsSubscribe)
-						_pusherClient.SubscribeOrderLog(currency);
-					else
-						_pusherClient.UnSubscribeOrderLog(currency);
-
-					break;
-				}
-				case MarketDataTypes.MarketDepth:
-				{
-					if (mdMsg.IsSubscribe)
-						_pusherClient.SubscribeOrderBook(currency);
-					else
-						_pusherClient.UnSubscribeOrderBook(currency);
-
-					break;
-				}
-				case MarketDataTypes.Trades:
-				{
-					if (mdMsg.IsSubscribe)
+					if (mdMsg.To != null)
 					{
-						if (mdMsg.To != null)
-						{
-							SendSubscriptionReply(mdMsg.TransactionId);
+						SendSubscriptionReply(mdMsg.TransactionId);
 
-							var diff = DateTimeOffset.Now - (mdMsg.From ?? DateTime.Today);
+						var diff = DateTimeOffset.Now - (mdMsg.From ?? DateTime.Today);
 
-							string interval;
+						string interval;
 
-							if (diff.TotalMinutes < 1)
-								interval = "minute";
-							else if (diff.TotalDays < 1)
-								interval = "hour";
-							else
-								interval = "day";
-
-							var trades = _httpClient.RequestTransactions(currency, interval);
-
-							foreach (var trade in trades.OrderBy(t => t.Time))
-							{
-								SendOutMessage(new ExecutionMessage
-								{
-									ExecutionType = ExecutionTypes.Tick,
-									SecurityId = mdMsg.SecurityId,
-									TradeId = trade.Id,
-									TradePrice = (decimal)trade.Price,
-									TradeVolume = trade.Amount.ToDecimal(),
-									ServerTime = trade.Time,
-									OriginSide = trade.Type.ToSide(),
-									OriginalTransactionId = mdMsg.TransactionId
-								});
-							}
-
-							SendSubscriptionResult(mdMsg);
-							return;
-						}
+						if (diff.TotalMinutes < 1)
+							interval = "minute";
+						else if (diff.TotalDays < 1)
+							interval = "hour";
 						else
-							_pusherClient.SubscribeTrades(currency);
+							interval = "day";
+
+						var trades = _httpClient.RequestTransactions(currency, interval);
+
+						foreach (var trade in trades.OrderBy(t => t.Time))
+						{
+							SendOutMessage(new ExecutionMessage
+							{
+								ExecutionType = ExecutionTypes.Tick,
+								SecurityId = mdMsg.SecurityId,
+								TradeId = trade.Id,
+								TradePrice = (decimal)trade.Price,
+								TradeVolume = trade.Amount.ToDecimal(),
+								ServerTime = trade.Time,
+								OriginSide = trade.Type.ToSide(),
+								OriginalTransactionId = mdMsg.TransactionId
+							});
+						}
+
+						SendSubscriptionResult(mdMsg);
+						return;
 					}
 					else
-					{
-						_pusherClient.UnSubscribeTrades(currency);
-					}
-
-					break;
+						_pusherClient.SubscribeTrades(currency);
 				}
-				default:
+				else
 				{
-					SendSubscriptionNotSupported(mdMsg.TransactionId);
-					return;
+					_pusherClient.UnSubscribeTrades(currency);
 				}
+			}
+			else
+			{
+				SendSubscriptionNotSupported(mdMsg.TransactionId);
+				return;
 			}
 
 			SendSubscriptionReply(mdMsg.TransactionId);

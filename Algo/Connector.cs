@@ -615,7 +615,7 @@ namespace StockSharp.Algo
 							throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
 
 						if (order.Volume < 0)
-							throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895);
+							throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895.Put(order.Price));
 					}
 
 					if (order.Type == null)

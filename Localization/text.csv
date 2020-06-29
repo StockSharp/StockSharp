@@ -915,7 +915,7 @@ Str891;Portfolio was not found.;Портфель не был найден.
 Str892;Order price must be positive.;Цена заявки должна быть положительной.
 Str893;Limit order price cannot be equal 0.;Цена лимитной заявки не может быть равной 0.
 Str894;Order volume cannot be zero.;Объем заявки не может быть нулевым.
-Str895;Order volume cannot be less than zero.;Объем заявки не может быть отрицательным.
+Str895;Volume for the price {0} cannot be less than zero.;Объем для цены {0} не может быть отрицательным.
 Str896Params;Order already has a ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор '{0}'. Возможно, она уже была зарегистрирована.
 Str897Params;Order already has a transaction ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор транзакции '{0}'. Возможно, она уже была зарегистрирована.
 Str898Params;Order already has state '{0}'. Possibly, it was already registered.;Заявка уже имеет состояние '{0}'. Возможно, она уже была зарегистрирована.
@@ -2157,9 +2157,9 @@ Str2217;Autostart;Автостарт
 Str2218;Autostart of quotes downloading at startup.;Автостарт скачивания котировок при запуске.
 Str2219;Tray;Трей
 Str2220;Collapse to tray.;Сворачивать в трей.
-Str2221;Auto-stop;Авто-стоп
+Str2221;Autostop;Автостоп
 Str2222;Stop work on time.;Остановка работы по времени.
-Str2223;Time for auto-stop;Время для Авто-стоп
+Str2223;Time for autostop;Время для Автостоп
 Str2225;Errors (quantity);Ошибки (кол-во)
 Str2226;Errors count, after which an email about the error will be sent. Value of 0 means a disabled.;Количество ошибок, после которых будет отправлено письмо на почту с сообщение об ошибке. Значение 0 означает выключенный режим.
 Str2227;Errors (email);Ошибки (email)
@@ -5210,6 +5210,8 @@ CloseOnly;Close only;На закрытие
 PositionEffectCloseOnly;A trade should bring the position towards zero, i.e. close as much as possible of any existing position and open an opposite position for any remainder.;Сделка должна привести позицию к нулю, то есть максимально закрыть любую существующую позицию и открыть противоположную позицию для любого остатка.
 Initiator;Initiator;Инициатор
 InitiatorTrade;Used to identify whether the order initiator is an aggressor or not in the trade.;Используется для определения, является ли инициатор заявки агрессором или нет в сделке.
+Dark;Dark;Темная
+DarkTheme;Dark theme.;Темная тема.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -15897,7 +15899,7 @@ DocStr11419;Message adapter that tracks multiple lookups requests and put them i
 DocStr11420;Subscription message;Сообщение подписки
 DocStr11421;"""Money"" security instance";"Объект инструмента ""Money"""
 DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
-DocStr11423;Use separated {0} for each adapters;Использовать отдельные {0} для каждого адаптера
+DocStr11423;Use {0} for in and out messages;Использовать {0} для входящих и исходящих сообщений
 DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
 DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой
 DocStr11428;Request for the appearance of a new indicator in the pre-market;Запрос на получение индикативного значения пре-маркета

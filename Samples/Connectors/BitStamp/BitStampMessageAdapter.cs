@@ -82,6 +82,9 @@ namespace StockSharp.BitStamp
 		}
 
 		/// <inheritdoc />
+		public override string FeatureName => nameof(BitStamp);
+
+		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
 			switch (message.Type)

@@ -382,7 +382,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Extended info for <see cref="MessageTypes"/>.
 	/// </summary>
-	public class MessageTypeInfo
+	public class MessageTypeInfo : IEquatable<MessageTypeInfo>
 	{
 		/// <summary>
 		/// Message type.
@@ -431,5 +431,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override string ToString() => DisplayName;
+
+		bool IEquatable<MessageTypeInfo>.Equals(MessageTypeInfo other) => other?.Type == Type;
 	}
 }

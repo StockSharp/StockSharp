@@ -163,6 +163,10 @@
 					if (execMsg.IsMarketData())
 						break;
 
+					// skip cancellation cause they are reply on action and no have transaction state
+					if (execMsg.IsCancellation)
+						break;
+
 					var transId = execMsg.TransactionId;
 
 					if (transId != 0)

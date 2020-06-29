@@ -53,7 +53,7 @@ namespace StockSharp.Fix.Dialects
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; set; } = new[]
+		public override IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; } = new[]
 		{
 			MessageTypes.MarketData.ToInfo(),
 			//MessageTypes.SecurityLookup.ToInfo(),
@@ -310,14 +310,8 @@ namespace StockSharp.Fix.Dialects
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					switch (mdMsg.DataType)
-					{
-						case MarketDataTypes.Level1:
-						case MarketDataTypes.MarketDepth:
-							break;
-						default:
-							return null;
-					}
+					if (!(mdMsg.DataType2 == DataType.Level1 || mdMsg.DataType2 == DataType.MarketDepth))
+						return null;
 
 					writer.Write(FixTags.QuoteReqID);
 					writer.Write(mdMsg.TransactionId);
