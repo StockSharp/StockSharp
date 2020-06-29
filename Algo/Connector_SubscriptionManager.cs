@@ -137,12 +137,15 @@ namespace StockSharp.Algo
 				_connector.AddInfoLog("Subscription {0} removed.", id);
 			}
 
-			private SubscriptionInfo TryGetInfo(long id, bool remove, DateTimeOffset? time = null, bool addLog = true)
+			private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTimeOffset? time, bool addLog)
 			{
 				lock (_syncObject)
 				{
 					if (_subscriptionAllMap.TryGetValue(id, out var parentId))
 					{
+						if (ignoreAll)
+							return null;
+
 						if (remove)
 							_subscriptionAllMap.Remove(id);
 
@@ -175,22 +178,22 @@ namespace StockSharp.Algo
 
 				foreach (var id in message.GetSubscriptionIds())
 				{
-					var subscription = TryGetSubscription(id, false, time);
+					var subscription = TryGetSubscription(id, true, false, time);
 
 					if (subscription != null)
 						yield return subscription;
 				}
 			}
 
-			private Subscription TryGetSubscription(long id, bool remove, DateTimeOffset? time, out SubscriptionInfo info)
+			private Subscription TryGetSubscription(long id, bool ignoreAll, bool remove, DateTimeOffset? time, out SubscriptionInfo info)
 			{
-				info = TryGetInfo(id, remove, time);
+				info = TryGetInfo(id, ignoreAll, remove, time, true);
 				return info?.Subscription;
 			}
 
-			public Subscription TryGetSubscription(long id, bool remove, DateTimeOffset? time = null)
+			public Subscription TryGetSubscription(long id, bool ignoreAll, bool remove, DateTimeOffset? time = null)
 			{
-				return TryGetSubscription(id, remove, time, out _);
+				return TryGetSubscription(id, ignoreAll, remove, time, out _);
 			}
 
 			public Subscription TryFindSubscription(long id, DataType dataType, Security security = null)
@@ -198,7 +201,7 @@ namespace StockSharp.Algo
 				var secId = security?.ToSecurityId();
 
 				var subscription = id > 0
-					? TryGetSubscription(id, false)
+					? TryGetSubscription(id, true, false)
 					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.SecurityId == secId && s.State.IsActive());
 
 				if (subscription == null)
@@ -276,8 +279,8 @@ namespace StockSharp.Algo
 						originalMsg = tuple.Item1;
 
 						var info = originalMsg.IsSubscribe
-							? TryGetInfo(originalMsg.TransactionId, false, addLog: false)
-							: TryGetInfo(originalMsg.OriginalTransactionId, true, addLog: false);
+							? TryGetInfo(originalMsg.TransactionId, false, false, null, false)
+							: TryGetInfo(originalMsg.OriginalTransactionId, false, true, null, false);
 
 						if (info == null)
 						{
@@ -456,7 +459,7 @@ namespace StockSharp.Algo
 
 				foreach (var id in message.GetSubscriptionIds())
 				{
-					var info = TryGetInfo(id, false);
+					var info = TryGetInfo(id, true, false, null, true);
 
 					if (info == null || info.HasResult)
 						continue;
@@ -478,7 +481,7 @@ namespace StockSharp.Algo
 			{
 				lock (_syncObject)
 				{
-					var subscription = TryGetSubscription(message.OriginalTransactionId, true, null, out var info);
+					var subscription = TryGetSubscription(message.OriginalTransactionId, false, true, null, out var info);
 
 					if (subscription != null)
 					{
@@ -498,7 +501,7 @@ namespace StockSharp.Algo
 			{
 				lock (_syncObject)
 				{
-					var subscription = TryGetSubscription(message.OriginalTransactionId, false, null, out var info);
+					var subscription = TryGetSubscription(message.OriginalTransactionId, false, false, null, out var info);
 
 					if (subscription != null)
 					{

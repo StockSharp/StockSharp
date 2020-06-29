@@ -514,6 +514,6 @@ namespace StockSharp.Algo
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>Subscription.</returns>
 		public Subscription TryGetSubscriptionById(long subscriptionId)
-			=> _subscriptionManager.TryGetSubscription(subscriptionId, false);
+			=> _subscriptionManager.TryGetSubscription(subscriptionId, true, false, null);
 	}
 }
