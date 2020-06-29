@@ -5,7 +5,6 @@
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-		xmlns:devExp="clr-namespace:Ecng.Xaml.DevExp;assembly=Ecng.Xaml.DevExp"
 		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="1000">
 	<Grid>
 		<Grid.RowDefinitions>
@@ -20,7 +19,7 @@
 					<sx:CandleSettingsEditor x:Name="SeriesEditor" Margin="3,0" />
 					<CheckBox x:Name="BuildFromTicks" Content="Build from ticks" IsChecked="True" VerticalAlignment="Center"/>
 
-					<devExp:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
+					<xaml:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
 
 					<ComboBox x:Name="Securities" Width="150" SelectionChanged="Securities_OnSelectionChanged" />
 

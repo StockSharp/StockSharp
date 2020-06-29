@@ -4,13 +4,13 @@
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		Title="{x:Static loc:LocalizedStrings.XamlStr562}" Height="520" Width="834"
 		xmlns:sx="http://schemas.stocksharp.com/xaml"
-		xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:exc="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
-		xmlns:devExp="clr-namespace:Ecng.Xaml.DevExp;assembly=Ecng.Xaml.DevExp"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
 
 	<Window.Resources>
-		<ex:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseVisibilityValue="Hidden" />
+		<exc:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseVisibilityValue="Hidden" />
 	</Window.Resources>
 
 	<Grid>
@@ -43,7 +43,7 @@
 				</Grid.RowDefinitions>
 
 				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
-                <devExp:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
+                <ex:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 
                 <Grid Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2">
 					<Grid.ColumnDefinitions>

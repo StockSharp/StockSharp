@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
-        xmlns:devExp="clr-namespace:Ecng.Xaml.DevExp;assembly=Ecng.Xaml.DevExp"
+        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
         Title="{x:Static loc:LocalizedStrings.XamlStr563}" Height="430" Width="525">
     
 	<Grid>
@@ -20,7 +20,7 @@
 		</Grid.RowDefinitions>
 
 		<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
-        <devExp:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
+        <ex:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 
 		<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
 			<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" />

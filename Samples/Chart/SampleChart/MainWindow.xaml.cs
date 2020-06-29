@@ -18,8 +18,7 @@
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Xaml;
-	using Ecng.Xaml.Charting.Visuals.Annotations;
-	using Ecng.Xaml.DevExp.Yandex;
+	using Ecng.Xaml.Yandex;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -32,6 +31,7 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Xaml.Charting.Visuals.Annotations;
     using StockSharp.Xaml;
 	using StockSharp.Configuration;
 
