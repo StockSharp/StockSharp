@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			if (metaInfo.IsEmpty())
 			{
-				var firstDepth = messages.FirstOrDefault(d => !d.Bids.IsEmpty() || !d.Asks.IsEmpty());
+				var firstDepth = messages.First();//FirstOrDefault(d => !d.Bids.IsEmpty() || !d.Asks.IsEmpty());
 
 				//var price = firstDepth != null ? GetDepthPrice(firstDepth) : 0;
 
@@ -132,9 +132,8 @@ namespace StockSharp.Algo.Storages.Binary
 				//		metaInfo.LastFractionalPrice = metaInfo.FirstFractionalPrice = price;
 				//}
 
-				metaInfo.ServerOffset = (firstDepth ?? messages.First()).ServerTime.Offset;
-
-				metaInfo.IncrementalOnly = firstDepth?.State != null;
+				metaInfo.ServerOffset = firstDepth.ServerTime.Offset;
+				metaInfo.IncrementalOnly = firstDepth.State != null;
 			}
 
 			writer.WriteInt(messages.Count());
