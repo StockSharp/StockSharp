@@ -38,6 +38,36 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using System.Runtime.Serialization;
+
+	/// <summary>
+	/// <see cref="Order.Comment"/> auto-fill modes.
+	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
+	public enum StrategyCommentModes
+	{
+		/// <summary>
+		/// Disabled.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2558Key)]
+		Disabled,
+
+		/// <summary>
+		/// By <see cref="Strategy.Id"/>.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IdKey)]
+		Id,
+
+		/// <summary>
+		/// By <see cref="Strategy.Name"/>.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NameKey)]
+		Name,
+	}
 
 	/// <summary>
 	/// The base class for all trade strategies.
@@ -247,7 +277,7 @@ namespace StockSharp.Algo.Strategies
 			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
 			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
 			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
-			_commentOrders = this.Param<bool>(nameof(CommentOrders));
+			_commentMode = this.Param<StrategyCommentModes>(nameof(CommentMode));
 			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1));
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
@@ -1025,19 +1055,19 @@ namespace StockSharp.Algo.Strategies
 			set => _waitAllTrades.Value = value;
 		}
 
-		private readonly StrategyParam<bool> _commentOrders;
+		private readonly StrategyParam<StrategyCommentModes> _commentMode;
 
 		/// <summary>
-		/// To add to <see cref="Order.Comment"/> the name of the strategy <see cref="Strategy.Name"/>, registering the order.
+		/// To add to <see cref="Order.Comment"/> the name of the strategy <see cref="Name"/>, registering the order.
 		/// </summary>
 		/// <remarks>
 		/// It is disabled by default.
 		/// </remarks>
 		[Browsable(false)]
-		public bool CommentOrders
+		public StrategyCommentModes CommentMode
 		{
-			get => _commentOrders.Value;
-			set => _commentOrders.Value = value;
+			get => _commentMode.Value;
+			set => _commentMode.Value = value;
 		}
 
 		/// <inheritdoc />
@@ -1210,10 +1240,21 @@ namespace StockSharp.Algo.Strategies
 			if (order.Portfolio == null)
 				order.Portfolio = Portfolio;
 
-			if (CommentOrders)
+			if (order.Comment.IsEmpty())
 			{
-				if (order.Comment.IsEmpty())
-					order.Comment = Name;
+				switch (CommentMode)
+				{
+					case StrategyCommentModes.Disabled:
+						break;
+					case StrategyCommentModes.Id:
+						order.Comment = EnsureGetId();
+						break;
+					case StrategyCommentModes.Name:
+						order.Comment = Name;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(CommentMode.To<string>());
+				}
 			}
 
 			AddOrder(order);
