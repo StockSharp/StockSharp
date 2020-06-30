@@ -151,7 +151,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 								if (mdMsg.To == null &&
 									mdMsg.BuildMode == MarketDataBuildModes.LoadAndBuild &&
-									!mdMsg.IsFinished &&
+									!mdMsg.IsFinishedOnly &&
 									!InnerAdapter.IsSupportCandlesUpdates &&
 									InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
 								{
@@ -741,7 +741,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					series.CurrentCandleMessage = candleMessage;
 
-					if (series.Original.IsFinished && candleMessage.State != CandleStates.Finished)
+					if (series.Original.IsFinishedOnly && candleMessage.State != CandleStates.Finished)
 						continue;
 
 					SendCandle(series, candleMessage.TypedClone());
