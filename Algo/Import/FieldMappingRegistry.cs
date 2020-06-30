@@ -147,6 +147,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, OrderPositionEffects>(nameof(ExecutionMessage.PositionEffect), LocalizedStrings.PositionEffect, LocalizedStrings.PositionEffectDesc, (i, v) => i.PositionEffect = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.PostOnly), LocalizedStrings.PostOnly, LocalizedStrings.PostOnlyOrder, (i, v) => i.PostOnly = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.Initiator), LocalizedStrings.Initiator, LocalizedStrings.InitiatorTrade, (i, v) => i.Initiator = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.SeqNum), LocalizedStrings.Str1916, LocalizedStrings.SequenceNumber, (i, v) => i.SeqNum = v) { IsRequired = false });
 
 						break;
 					}

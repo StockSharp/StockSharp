@@ -99,6 +99,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.PositionEffect.To<string>(),
 				data.PostOnly.To<string>(),
 				data.Initiator.To<string>(),
+				data.SeqNum.To<string>(),
 			};
 			writer.WriteRow(row);
 
@@ -193,6 +194,9 @@ namespace StockSharp.Algo.Storages.Csv
 				msg.PostOnly = reader.ReadNullableBool();
 				msg.Initiator = reader.ReadNullableBool();
 			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				msg.SeqNum = reader.ReadLong();
 
 			return msg;
 		}

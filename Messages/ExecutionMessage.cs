@@ -548,6 +548,13 @@ namespace StockSharp.Messages
 		public bool? Initiator { get; set; }
 
 		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		/// <remarks>Zero means no information.</remarks>
+		[DataMember]
+		public long SeqNum { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -571,6 +578,9 @@ namespace StockSharp.Messages
 
 			if (Initiator != null)
 				str += $",Initiator={Initiator.Value}";
+
+			if (SeqNum != 0)
+				str += $",SeqNum={SeqNum}";
 
 			return str;
 		}
@@ -644,6 +654,7 @@ namespace StockSharp.Messages
 			destination.PositionEffect = PositionEffect;
 			destination.PostOnly = PostOnly;
 			destination.Initiator = Initiator;
+			destination.SeqNum = SeqNum;
 		}
 	}
 }

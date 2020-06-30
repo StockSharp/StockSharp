@@ -5212,6 +5212,7 @@ Initiator;Initiator;Инициатор
 InitiatorTrade;Used to identify whether the order initiator is an aggressor or not in the trade.;Используется для определения, является ли инициатор заявки агрессором или нет в сделке.
 Dark;Dark;Темная
 DarkTheme;Dark theme.;Темная тема.
+SequenceNumber;Sequence number.;Sequence number.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -16327,7 +16328,6 @@ DocStr11863;Destination;Destination
 DocStr11864;Write FIX message;Write FIX message
 DocStr11865;Whole message writer;Whole message writer
 DocStr11866;Body only writer;Body only writer
-DocStr11867;Sequence number;Sequence number
 DocStr11868;Handler;Handler
 DocStr11869;Empty tag;Empty tag
 DocStr11870;Read message;Read message

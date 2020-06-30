@@ -155,6 +155,7 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("positionEffect", item.PositionEffect);
 				writer.WriteAttribute("postOnly", item.PostOnly);
 				writer.WriteAttribute("initiator", item.Initiator);
+				writer.WriteAttribute("seqNum", item.SeqNum);
 
 				writer.WriteEndElement();
 			});
