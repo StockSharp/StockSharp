@@ -1058,16 +1058,35 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<StrategyCommentModes> _commentMode;
 
 		/// <summary>
+		/// Set <see cref="Order.Comment"/> by <see cref="Name"/> or <see cref="Id"/>.
+		/// </summary>
+		/// <remarks>
+		/// By default is <see cref="StrategyCommentModes.Disabled"/>.
+		/// </remarks>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str135Key,
+			Description = LocalizedStrings.Str136Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 10)]
+		public StrategyCommentModes CommentMode
+		{
+			get => _commentMode.Value;
+			set => _commentMode.Value = value;
+		}
+
+		/// <summary>
 		/// To add to <see cref="Order.Comment"/> the name of the strategy <see cref="Name"/>, registering the order.
 		/// </summary>
 		/// <remarks>
 		/// It is disabled by default.
 		/// </remarks>
 		[Browsable(false)]
-		public StrategyCommentModes CommentMode
+		[Obsolete("Use CommentMode property.")]
+		public bool CommentOrders
 		{
-			get => _commentMode.Value;
-			set => _commentMode.Value = value;
+			get => CommentMode == StrategyCommentModes.Name;
+			set => CommentMode = value ? StrategyCommentModes.Name : StrategyCommentModes.Disabled;
 		}
 
 		/// <inheritdoc />
