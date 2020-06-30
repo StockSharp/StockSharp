@@ -1556,7 +1556,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">The order, for which the strategy identifier shall be set.</param>
 		protected virtual void AssignOrderStrategyId(Order order)
 		{
-			order.UserOrderId = Id.To<string>();
+			order.UserOrderId = EnsureGetId();
 		}
 
 		private void RecycleOrders()
@@ -2003,11 +2003,16 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorNewOrder(Order order)
 		{
-			if (_idStr == null)
-				_idStr = Id.ToString();
-
-			if (!_ordersInfo.ContainsKey(order) && order.UserOrderId == _idStr)
+			if (!_ordersInfo.ContainsKey(order) && order.UserOrderId == EnsureGetId())
 				AttachOrder(order);
+		}
+
+		private string EnsureGetId()
+		{
+			if (_idStr == null)
+				_idStr = Id.To<string>();
+
+			return _idStr;
 		}
 
 		private void OnConnectorOrderChanged(Order order)
