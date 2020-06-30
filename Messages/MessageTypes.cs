@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 
 	/// <summary>
@@ -382,7 +383,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Extended info for <see cref="MessageTypes"/>.
 	/// </summary>
-	public class MessageTypeInfo : IEquatable<MessageTypeInfo>
+	public class MessageTypeInfo : Equatable<MessageTypeInfo>
 	{
 		/// <summary>
 		/// Message type.
@@ -432,6 +433,20 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString() => DisplayName;
 
-		bool IEquatable<MessageTypeInfo>.Equals(MessageTypeInfo other) => other?.Type == Type;
+		/// <summary>
+		/// Compare <see cref="MessageTypeInfo"/> on the equivalence.
+		/// </summary>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
+		protected override bool OnEquals(MessageTypeInfo other) => other.Type == Type;
+
+		/// <inheritdoc />
+		public override int GetHashCode() => Type.GetHashCode();
+
+		/// <summary>
+		/// Create a copy of <see cref="MessageTypeInfo"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override MessageTypeInfo Clone() => new MessageTypeInfo(Type, IsMarketData, DisplayName, Description);
 	}
 }
