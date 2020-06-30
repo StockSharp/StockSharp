@@ -22,7 +22,7 @@ namespace SampleConnection
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
 		private bool _appClosing;
@@ -63,7 +63,7 @@ namespace SampleConnection
 		protected override void OnClosed(EventArgs e)
 		{
 			_appClosing = true;
-			_quotesWindows.SyncDo(d => d.Values.ForEach(w => w.Close()));
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w => w.Cache.ForEach(w1 => w1.Close())));
 
 			_chartWindows.SyncDo(c => c.ToArray().ForEach(w =>
 			{
@@ -88,7 +88,11 @@ namespace SampleConnection
 
 			var newOrder = new OrderWindow
 			{
-				Order = new Order { Security = SecurityPicker.SelectedSecurity },
+				Order = new Order
+				{
+					Security = SecurityPicker.SelectedSecurity,
+					Portfolio = Connector.Portfolios.FirstOrDefault(),
+				},
 			}.Init(connector);
 
 			if (newOrder.ShowModal(this))
@@ -142,7 +146,7 @@ namespace SampleConnection
 				// subscribe on order book flow
 				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
-				_quotesWindows[security] = window;
+				_quotesWindows.SafeAdd(security).Add(window);
 
 				window.Closed += (s, e) =>
 				{
@@ -226,8 +230,8 @@ namespace SampleConnection
 
 		private void TraderOnMarketDepthChanged(Subscription subscription, MarketDepth depth)
 		{
-			if (_quotesWindows.TryGetValue(depth.Security, out var wnd))
-				wnd.DepthCtrl.UpdateDepth(depth);
+			if (_quotesWindows.TryGetValue(depth.Security, out var list))
+				list.Cache.ForEach(wnd => wnd.DepthCtrl.UpdateDepth(depth));
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
