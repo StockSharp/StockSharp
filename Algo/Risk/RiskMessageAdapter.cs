@@ -83,7 +83,8 @@ namespace StockSharp.Algo.Risk
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			ProcessRisk(message);
+			if (message.Type != MessageTypes.Reset)
+				ProcessRisk(message);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

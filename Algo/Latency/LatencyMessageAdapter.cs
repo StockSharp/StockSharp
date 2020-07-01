@@ -59,25 +59,20 @@ namespace StockSharp.Algo.Latency
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			ProcessExecution(message);
+			if (message.Type == MessageTypes.Execution)
+			{
+				var execMsg = (ExecutionMessage)message;
+
+				if (execMsg.HasOrderInfo())
+				{
+					var latency = LatencyManager.ProcessMessage(execMsg);
+
+					if (latency != null)
+						execMsg.Latency = latency;
+				}
+			}
 
 			base.OnInnerAdapterNewOutMessage(message);
-		}
-
-		private void ProcessExecution(Message message)
-		{
-			if (message.Type != MessageTypes.Execution)
-				return;
-
-			var execMsg = (ExecutionMessage)message;
-
-			if (!execMsg.HasOrderInfo())
-				return;
-
-			var latency = LatencyManager.ProcessMessage(execMsg);
-
-			if (latency != null)
-				execMsg.Latency = latency;
 		}
 
 		/// <summary>
