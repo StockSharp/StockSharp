@@ -8,11 +8,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
+	using Key = System.Tuple<StockSharp.Messages.SecurityId, string>;
 
 	/// <summary>
 	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="PositionChangeMessage"/>.
 	/// </summary>
-	public class PositionBinarySnapshotSerializer : ISnapshotSerializer<SecurityId, PositionChangeMessage>
+	public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, PositionChangeMessage>
 	{
 		[StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
 		private struct PositionSnapshot
@@ -60,11 +61,11 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public BlittableDecimal? SettlementPrice;
 		}
 
-		Version ISnapshotSerializer<SecurityId, PositionChangeMessage>.Version { get; } = SnapshotVersions.V21;
+		Version ISnapshotSerializer<Key, PositionChangeMessage>.Version { get; } = SnapshotVersions.V22;
 
-		string ISnapshotSerializer<SecurityId, PositionChangeMessage>.Name => "Positions";
+		string ISnapshotSerializer<Key, PositionChangeMessage>.Name => "Positions";
 
-		byte[] ISnapshotSerializer<SecurityId, PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message)
+		byte[] ISnapshotSerializer<Key, PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -154,7 +155,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			return buffer;
 		}
 
-		PositionChangeMessage ISnapshotSerializer<SecurityId, PositionChangeMessage>.Deserialize(Version version, byte[] buffer)
+		PositionChangeMessage ISnapshotSerializer<Key, PositionChangeMessage>.Deserialize(Version version, byte[] buffer)
 		{
 			if (version == null)
 				throw new ArgumentNullException(nameof(version));
@@ -201,22 +202,32 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		SecurityId ISnapshotSerializer<SecurityId, PositionChangeMessage>.GetKey(PositionChangeMessage message)
-		{
-			return message.SecurityId;
-		}
+		Key ISnapshotSerializer<Key, PositionChangeMessage>.GetKey(PositionChangeMessage message)
+			=> Tuple.Create(message.SecurityId, message.PortfolioName);
 
-		void ISnapshotSerializer<SecurityId, PositionChangeMessage>.Update(PositionChangeMessage message, PositionChangeMessage changes)
+		void ISnapshotSerializer<Key, PositionChangeMessage>.Update(PositionChangeMessage message, PositionChangeMessage changes)
 		{
 			foreach (var pair in changes.Changes)
 			{
 				message.Changes[pair.Key] = pair.Value;
 			}
 
+			if (changes.LimitType != null)
+				message.LimitType = changes.LimitType;
+
+			if (!changes.DepoName.IsEmpty())
+				message.DepoName = changes.DepoName;
+
+			if (!changes.ClientCode.IsEmpty())
+				message.ClientCode = changes.ClientCode;
+
+			if (!changes.BoardCode.IsEmpty())
+				message.BoardCode = changes.BoardCode;
+
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;
 		}
 
-		DataType ISnapshotSerializer<SecurityId, PositionChangeMessage>.DataType => DataType.PositionChanges;
+		DataType ISnapshotSerializer<Key, PositionChangeMessage>.DataType => DataType.PositionChanges;
 	}
 }

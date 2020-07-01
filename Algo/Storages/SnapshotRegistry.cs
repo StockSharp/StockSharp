@@ -562,7 +562,7 @@ namespace StockSharp.Algo.Storages
 				else if (dataType == typeof(QuoteChangeMessage))
 					storage = new SnapshotStorage<SecurityId, QuoteChangeMessage>(_path, new QuotesBinarySnapshotSerializer());
 				else if (dataType == typeof(PositionChangeMessage))
-					storage = new SnapshotStorage<SecurityId, PositionChangeMessage>(_path, new PositionBinarySnapshotSerializer());
+					storage = new SnapshotStorage<Tuple<SecurityId, string>, PositionChangeMessage>(_path, new PositionBinarySnapshotSerializer());
 				else if (dataType == typeof(ExecutionMessage))
 				{
 					switch ((ExecutionTypes)arg)
