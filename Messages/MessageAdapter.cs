@@ -547,9 +547,11 @@ namespace StockSharp.Messages
 		public virtual bool IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
 
 		/// <inheritdoc />
+		[ReadOnly(false)]
 		public virtual bool UseChannels => false;
 
 		/// <inheritdoc />
+		[ReadOnly(false)]
 		public virtual bool IsPositionsEmulationRequired => false;
 
 		/// <inheritdoc />
