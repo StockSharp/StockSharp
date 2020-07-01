@@ -927,7 +927,7 @@ namespace StockSharp.Algo.Testing
 
 					var info = _parent.GetPortfolioInfo(order.PortfolioName);
 
-					info.ProcessMyTrade(tradeMsg, result);
+					info.ProcessMyTrade(order.Side, tradeMsg, result);
 
 					result.Add(new ExecutionMessage
 					{
@@ -1434,17 +1434,20 @@ namespace StockSharp.Algo.Testing
 				return commission;
 			}
 
-			public void ProcessMyTrade(ExecutionMessage tradeMsg, ICollection<Message> result)
+			public void ProcessMyTrade(Sides side, ExecutionMessage tradeMsg, ICollection<Message> result)
 			{
 				var time = tradeMsg.ServerTime;
 
 				PnLManager.ProcessMyTrade(tradeMsg, out _);
 				tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
 
-				var position = tradeMsg.GetPosition(false);
+				var position = tradeMsg.TradeVolume;
 
 				if (position == null)
 					return;
+
+				if (side == Sides.Sell)
+					position *= -1;
 
 				var money = GetMoney(tradeMsg.SecurityId/*, time, result*/);
 
@@ -2225,6 +2228,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsSupportTransactionLog => false;
 		bool IMessageAdapter.UseChannels => false;
 		string IMessageAdapter.FeatureName => string.Empty;
+		bool IMessageAdapter.IsPositionsEmulationRequired => false;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

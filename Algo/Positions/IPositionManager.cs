@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Positions
 		/// <summary>
 		/// Positions, grouped by instruments and portfolios.
 		/// </summary>
-		IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions { get; set; }
+		IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions { get; }
 
 		/// <summary>
 		/// The event of new position occurrence in <see cref="Positions"/>.
@@ -49,11 +49,6 @@ namespace StockSharp.Algo.Positions
 		/// The event of position change in <see cref="Positions"/>.
 		/// </summary>
 		event Action<Tuple<SecurityId, string>, decimal> PositionChanged;
-
-		/// <summary>
-		/// To null position.
-		/// </summary>
-		void Reset();
 
 		/// <summary>
 		/// To calculate position.

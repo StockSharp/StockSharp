@@ -265,6 +265,7 @@ namespace StockSharp.Algo.Strategies
 		/// 4. Positions (IEnumerable[Position]) - strategy positions.
 		/// If any of the parameters is missing, data will not be restored.
 		/// </remarks>
+		[Obsolete]
 		public static void LoadState(this Strategy strategy, SettingsStorage storage)
 		{
 			if (strategy == null)
@@ -310,11 +311,11 @@ namespace StockSharp.Algo.Strategies
 				}
 			}
 
-			var positions = storage.GetValue<IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>>>("Positions");
-			if (positions != null)
-			{
-				strategy.PositionManager.Positions = positions;
-			}
+			//var positions = storage.GetValue<IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>>>("Positions");
+			//if (positions != null)
+			//{
+			//	strategy.PositionManager.Positions = positions;
+			//}
 		}
 
 		/// <summary>
@@ -346,6 +347,7 @@ namespace StockSharp.Algo.Strategies
 		//	return strategy.Security.GetMarketPrice(strategy.SafeGetConnector(), side);
 		//}
 
+		[Obsolete]
 		private sealed class EquityStrategy : Strategy
 		{
 			private readonly Dictionary<DateTimeOffset, Order[]> _orders;
@@ -388,6 +390,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storageRegistry">The external storage for access to history data.</param>
 		/// <param name="openedPositions">Trades, describing initial open positions.</param>
 		/// <returns>The virtual strategy, containing progress of paper trades.</returns>
+		[Obsolete]
 		public static Strategy EmulateOrders(this IEnumerable<Order> orders, IStorageRegistry storageRegistry, IDictionary<Security, decimal> openedPositions)
 		{
 			if (openedPositions == null)

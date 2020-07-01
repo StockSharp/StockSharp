@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Strategies
 
 			RiskManager = new RiskManager { Parent = this };
 
-			PositionManager = new PositionManager(true);
+			PositionManager = new PositionManager(this);
 		}
 
 		private readonly StrategyParam<Guid> _id;
@@ -1585,6 +1585,7 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// It is used to restore a state of the strategy, when it is necessary to subscribe for getting data on orders, registered earlier.
 		/// </remarks>
+		[Obsolete]
 		public virtual void AttachOrder(Order order, IEnumerable<MyTrade> myTrades)
 		{
 			if (order == null)
@@ -1634,9 +1635,7 @@ namespace StockSharp.Algo.Strategies
 			_ordersInfo.SyncDo(d => d.RemoveWhere(o => o.Key.State == OrderStates.Done && o.Key.Time < _firstOrderTime));
 		}
 
-		/// <summary>
-		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public override DateTimeOffset CurrentTime => Connector?.CurrentTime ?? TimeHelper.NowWithOffset;
 
 		/// <inheritdoc />
@@ -1719,7 +1718,7 @@ namespace StockSharp.Algo.Strategies
 			Latency = null;
 			//LatencyManager.Reset();
 
-			PositionManager.Reset();
+			PositionManager.ProcessMessage(new ResetMessage());
 
 			Slippage = null;
 			//SlippageManager.Reset();

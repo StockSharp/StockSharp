@@ -20,7 +20,9 @@ namespace StockSharp.Algo.Positions
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -28,14 +30,17 @@ namespace StockSharp.Algo.Positions
 	/// </summary>
 	public class PositionManager : IPositionManager
 	{
-		private readonly Dictionary<long, Tuple<Sides, decimal>> _byOrderPositions = new Dictionary<long, Tuple<Sides, decimal>>();
+		private readonly ILogReceiver _logs;
+		private readonly Dictionary<long, RefTriple<Sides, decimal, decimal>> _ordersInfo = new Dictionary<long, RefTriple<Sides, decimal, decimal>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionManager"/>.
 		/// </summary>
+		/// <param name="logs">Logs.</param>
 		/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-		public PositionManager(bool byOrders)
+		public PositionManager(ILogReceiver logs, bool byOrders = true)
 		{
+			_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 			ByOrders = byOrders;
 		}
 
@@ -77,7 +82,7 @@ namespace StockSharp.Algo.Positions
 
 				lock (_positions.SyncRoot)
 				{
-					_byOrderPositions.Clear();
+					_ordersInfo.Clear();
 
 					_positions.Clear();
 					_positions.AddRange(value);
@@ -103,19 +108,35 @@ namespace StockSharp.Algo.Positions
 		public event Action<Tuple<SecurityId, string>, decimal> PositionChanged;
 
 		/// <inheritdoc />
-		public virtual void Reset()
-		{
-			Positions = Enumerable.Empty<KeyValuePair<Tuple<SecurityId, string>, decimal>>();
-		}
-
-		/// <inheritdoc />
 		public decimal? ProcessMessage(Message message)
 		{
+			void ProcessRegOrder(OrderRegisterMessage regMsg)
+			{
+				_ordersInfo.Add(regMsg.TransactionId, RefTuple.Create(regMsg.Side, regMsg.Volume, regMsg.Volume));
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
 				{
-					Reset();
+					Positions = Enumerable.Empty<KeyValuePair<Tuple<SecurityId, string>, decimal>>();
+					break;
+				}
+
+				case MessageTypes.OrderRegister:
+				case MessageTypes.OrderReplace:
+				{
+					ProcessRegOrder((OrderRegisterMessage)message);
+					break;
+				}
+
+				case MessageTypes.OrderPairReplace:
+				{
+					var pairMsg = (OrderPairReplaceMessage)message;
+
+					ProcessRegOrder(pairMsg.Message1);
+					ProcessRegOrder(pairMsg.Message2);
+
 					break;
 				}
 
@@ -124,57 +145,89 @@ namespace StockSharp.Algo.Positions
 					var execMsg = (ExecutionMessage)message;
 					var key = Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName);
 
-					if (ByOrders && execMsg.HasOrderInfo())
+					if (execMsg.HasOrderInfo())
 					{
-						var orderId = execMsg.OriginalTransactionId;
-						var newPosition = execMsg.GetPosition(true);
-
-						if (newPosition == null)
-							break;
-
-						bool isNew;
-						decimal diff;
-						decimal abs;
-
-						lock (_positions.SyncRoot)
+						if (execMsg.TransactionId != 0)
 						{
-							isNew = !_positions.TryGetValue(key, out var prev);
+							_ordersInfo.Add(execMsg.TransactionId, RefTuple.Create(execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0));
 
-							if (_byOrderPositions.TryGetValue(orderId, out var oldPosition))
+							if (ByOrders)
 							{
-								if (newPosition.Value != oldPosition.Item2)
-									_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition.Value);
+								var pos = (execMsg.Side == Sides.Buy ? 1 : -1) * (execMsg.OrderVolume - execMsg.Balance);
 
-								diff = newPosition.Value - oldPosition.Item2;
-							}
-							else
-							{
-								_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition.Value));
-								diff = newPosition.Value;
+								if (pos != null && pos != 0)
+								{
+
+								}
 							}
 
-							abs = prev + diff;
-
-							_positions[key] = abs;
-
-							if (SecurityId == null || SecurityId.Value == execMsg.SecurityId)
-								Position += diff;
+							return null;
 						}
-
-						if (isNew)
-							NewPosition?.Invoke(key, abs);
 						else
-							PositionChanged?.Invoke(key, abs);
+						{
+							var balance = execMsg.Balance;
 
-						return diff;
+							if (balance == null)
+								break;
+
+							var transId = execMsg.OriginalTransactionId;
+
+							if (!_ordersInfo.TryGetValue(transId, out var info))
+								break;
+
+							var balDiff = info.Third - balance.Value;
+
+							if (balDiff > 0)
+							{
+								info.Third = balance.Value;
+
+								if (ByOrders)
+								{
+									bool isNew;
+									decimal diff;
+									decimal abs;
+
+									lock (_positions.SyncRoot)
+									{
+										isNew = !_positions.TryGetValue(key, out var position);
+
+										diff = (info.First == Sides.Buy ? 1 : -1) * balDiff;
+
+										position += diff;
+
+										_positions[key] = position;
+
+										if (SecurityId == null || SecurityId.Value == execMsg.SecurityId)
+											Position += diff;
+
+										abs = position;
+									}
+
+									if (isNew)
+										NewPosition?.Invoke(key, abs);
+									else
+										PositionChanged?.Invoke(key, abs);
+
+									return diff;
+								}
+							}
+						}
 					}
 
-					if (!ByOrders && execMsg.HasTradeInfo())
+					if (!ByOrders && execMsg.HasTradeInfo() && _ordersInfo.TryGetValue(execMsg.OriginalTransactionId, out var info1))
 					{
-						var diff = execMsg.GetPosition(false);
+						var tradeVol = execMsg.TradeVolume;
 
-						if (diff == null || diff == 0)
+						if (tradeVol == null)
 							break;
+						else if (tradeVol == 0)
+						{
+							_logs.AddWarningLog("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
+							break;
+						}
+
+						if (info1.First == Sides.Sell)
+							tradeVol *= -1;
 
 						bool isNew;
 						decimal abs;
@@ -182,12 +235,12 @@ namespace StockSharp.Algo.Positions
 						lock (_positions.SyncRoot)
 						{
 							isNew = !_positions.TryGetValue(key, out var prev);
-							abs = prev + diff.Value;
+							abs = prev + tradeVol.Value;
 
 							_positions[key] = abs;
 
 							if (SecurityId == null || SecurityId.Value == execMsg.SecurityId)
-								Position += diff.Value;
+								Position += tradeVol.Value;
 						}
 
 						if (isNew)
@@ -195,7 +248,7 @@ namespace StockSharp.Algo.Positions
 						else
 							PositionChanged?.Invoke(key, abs);
 
-						return diff;
+						return tradeVol;
 					}
 
 					break;

@@ -375,7 +375,12 @@ namespace StockSharp.Algo
 			if (trade == null)
 				throw new ArgumentNullException(nameof(trade));
 
-			return trade.ToMessage().GetPosition(false);
+			var position = trade.Trade.Volume;
+
+			if (trade.Order.Direction == Sides.Sell)
+				position *= -1;
+
+			return position;
 		}
 
 		/// <summary>
@@ -384,6 +389,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Own trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
 		/// <returns>Position.</returns>
+		[Obsolete]
 		public static decimal? GetPosition(this ExecutionMessage message, bool byOrder)
 		{
 			if (message == null)
@@ -2061,11 +2067,6 @@ namespace StockSharp.Algo
 			{
 				get => throw new NotSupportedException();
 				set => throw new NotSupportedException();
-			}
-
-			void IPositionManager.Reset()
-			{
-				throw new NotSupportedException();
 			}
 
 			decimal? IPositionManager.ProcessMessage(Message message)
