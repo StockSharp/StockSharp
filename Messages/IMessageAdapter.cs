@@ -202,9 +202,14 @@ namespace StockSharp.Messages
 		bool IsAutoReplyOnTransactonalUnsubscription { get; }
 
 		/// <summary>
-		/// Adapters translates orders changes on reply of <see cref="OrderStatusMessage"/>.
+		/// Adapter translates orders changes on reply of <see cref="OrderStatusMessage"/>.
 		/// </summary>
 		bool IsSupportTransactionLog { get; }
+
+		/// <summary>
+		/// Adapter required emulation <see cref="PositionChangeMessage"/>.
+		/// </summary>
+		bool IsPositionsEmulationRequired { get; }
 
 		/// <summary>
 		/// Create market depth builder.

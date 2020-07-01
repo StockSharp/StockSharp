@@ -550,6 +550,9 @@ namespace StockSharp.Messages
 		public virtual bool UseChannels => false;
 
 		/// <inheritdoc />
+		public virtual bool IsPositionsEmulationRequired => false;
+
+		/// <inheritdoc />
 		[ReadOnly(false)]
 		public override string Name
 		{

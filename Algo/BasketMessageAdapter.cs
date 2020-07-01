@@ -34,6 +34,7 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.Slippage;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
+	using StockSharp.Algo.Positions;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -557,6 +558,8 @@ namespace StockSharp.Algo
 
 		string IMessageAdapter.FeatureName => string.Empty;
 
+		bool IMessageAdapter.IsPositionsEmulationRequired => false;
+
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>
@@ -653,6 +656,11 @@ namespace StockSharp.Algo
 			if (IsSupportOrderBookSort)
 			{
 				adapter = ApplyOwnInner(new OrderBookSortMessageAdapter(adapter));
+			}
+
+			if (adapter.IsPositionsEmulationRequired)
+			{
+				adapter = ApplyOwnInner(new PositionMessageAdapter(adapter));
 			}
 
 			if (adapter.IsSupportSubscriptions)
