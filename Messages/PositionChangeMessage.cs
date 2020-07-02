@@ -345,6 +345,9 @@ namespace StockSharp.Messages
 			if (!StrategyId.IsEmpty())
 				str += $",Strategy={StrategyId}";
 
+			if (!Description.IsEmpty())
+				str += $",Description={Description}";
+
 			return str;
 		}
 	}

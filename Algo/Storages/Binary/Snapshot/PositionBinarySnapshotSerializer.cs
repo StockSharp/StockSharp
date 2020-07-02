@@ -178,6 +178,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					DepoName = snapshot.DepoName,
 					BoardCode = snapshot.BoardCode,
 					LimitType = (TPlusLimits?)snapshot.LimitType,
+					Description = snapshot.Description,
 					StrategyId = snapshot.StrategyId,
 				}
 				.TryAdd(PositionChangeTypes.BeginValue, snapshot.BeginValue, true)
@@ -228,6 +229,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (!changes.BoardCode.IsEmpty())
 				message.BoardCode = changes.BoardCode;
+
+			if (!changes.Description.IsEmpty())
+				message.Description = changes.Description;
 
 			if (!changes.StrategyId.IsEmpty())
 				message.StrategyId = changes.StrategyId;

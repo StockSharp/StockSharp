@@ -55,6 +55,7 @@ namespace StockSharp.Algo.Storages.Csv
 					row.Add(value?.ToString());
 			}
 
+			row.Add(data.Description);
 			row.Add(data.StrategyId);
 
 			writer.WriteRow(row);
@@ -125,7 +126,10 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				posMsg.Description = reader.ReadString();
 				posMsg.StrategyId = reader.ReadString();
+			}
 
 			return posMsg;
 		}

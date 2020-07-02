@@ -318,6 +318,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version34)
 					continue;
 
+				writer.WriteStringEx(message.Description);
 				writer.WriteStringEx(message.StrategyId);
 			}
 		}
@@ -430,8 +431,11 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 			}
 
-			if (metaInfo.Version >= MarketDataVersions.Version34)
-				posMsg.StrategyId = reader.ReadStringEx();
+			if (metaInfo.Version < MarketDataVersions.Version34)
+				return posMsg;
+
+			posMsg.Description = reader.ReadStringEx();
+			posMsg.StrategyId = reader.ReadStringEx();
 
 			return posMsg;
 		}
