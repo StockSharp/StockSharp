@@ -178,12 +178,25 @@ namespace StockSharp.Algo
 			{
 				var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTimeOffset?)null;
 
+				var processed = new HashSet<SubscriptionInfo>();
+
 				foreach (var id in message.GetSubscriptionIds())
 				{
-					var info = TryGetSubscription(id, true, false, time);
+					var info = TryGetSubscription(id, false, false, time);
 
-					if (info != null)
+					if (info == null)
+						continue;
+
+					if (!processed.Add(info))
+						continue;
+
+					if (info.Parent == null)
 						yield return info.Subscription;
+
+					if (!processed.Add(info.Parent))
+						continue;
+
+					yield return info.Parent.Subscription;
 				}
 			}
 
@@ -257,6 +270,8 @@ namespace StockSharp.Algo
 			{
 				originalMsg = null;
 
+				SubscriptionInfo info = null;
+
 				try
 				{
 					lock (_syncObject)
@@ -274,7 +289,7 @@ namespace StockSharp.Algo
 
 						originalMsg = tuple.Item1;
 
-						var info = originalMsg.IsSubscribe
+						info = originalMsg.IsSubscribe
 							? TryGetInfo(originalMsg.TransactionId, false, false, null, false)
 							: TryGetInfo(originalMsg.OriginalTransactionId, false, true, null, false);
 
@@ -325,7 +340,7 @@ namespace StockSharp.Algo
 				}
 				finally
 				{
-					if (originalMsg == null)
+					if (info == null)
 						TryWriteLog(response.OriginalTransactionId);
 				}
 			}
