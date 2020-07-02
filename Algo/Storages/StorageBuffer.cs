@@ -41,8 +41,8 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _orderLogBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly DataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new DataBuffer<SecurityId, Level1ChangeMessage>();
 		private readonly DataBuffer<SecurityId, PositionChangeMessage> _positionChangesBuffer = new DataBuffer<SecurityId, PositionChangeMessage>();
-		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
+		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
 		private readonly SynchronizedSet<long> _subscriptionsById = new SynchronizedSet<long>();
 
@@ -213,6 +213,7 @@ namespace StockSharp.Algo.Storages
 				IsManual = regMsg.IsManual,
 				OrderType = regMsg.OrderType,
 				UserOrderId = regMsg.UserOrderId,
+				StrategyId = regMsg.StrategyId,
 				OrderState = OrderStates.Pending,
 				Condition = regMsg.Condition?.Clone(),
 				MinVolume = regMsg.MinOrderVolume,
@@ -224,16 +225,15 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Reset:
 				{
-					_subscriptionsById.Clear();
-
 					_ticksBuffer.Clear();
-					_level1Buffer.Clear();
-					_candleBuffer.Clear();
-					_orderLogBuffer.Clear();
 					_orderBooksBuffer.Clear();
-					_transactionsBuffer.Clear();
-					_newsBuffer.Clear();
+					_orderLogBuffer.Clear();
+					_level1Buffer.Clear();
 					_positionChangesBuffer.Clear();
+					_transactionsBuffer.Clear();
+					_candleBuffer.Clear();
+					_newsBuffer.Clear();
+					_subscriptionsById.Clear();
 
 					//SendOutMessage(new ResetMessage());
 					break;
@@ -310,6 +310,13 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private void TryStore<TMessage>(DataBuffer<SecurityId, TMessage> buffer, TMessage message)
+			where TMessage : Message, ISecurityIdMessage
+		{
+			if (CanStore(message))
+				buffer.Add(message.SecurityId, message.TypedClone());
+		}
+
 		/// <summary>
 		/// Process message.
 		/// </summary>
@@ -326,20 +333,12 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Level1Change:
 				{
-					var level1Msg = (Level1ChangeMessage)message;
-
-					if (CanStore(level1Msg))
-						_level1Buffer.Add(level1Msg.SecurityId, level1Msg.TypedClone());
-
+					TryStore(_level1Buffer, (Level1ChangeMessage)message);
 					break;
 				}
 				case MessageTypes.QuoteChange:
 				{
-					var quotesMsg = (QuoteChangeMessage)message;
-
-					if (CanStore(quotesMsg))
-						_orderBooksBuffer.Add(quotesMsg.SecurityId, quotesMsg.TypedClone());
-
+					TryStore(_orderBooksBuffer, (QuoteChangeMessage)message);
 					break;
 				}
 				case MessageTypes.Execution:
@@ -348,7 +347,6 @@ namespace StockSharp.Algo.Storages
 
 					DataBuffer<SecurityId, ExecutionMessage> buffer;
 
-					var secId = execMsg.SecurityId;
 					var execType = execMsg.ExecutionType;
 
 					switch (execType)
@@ -366,9 +364,7 @@ namespace StockSharp.Algo.Storages
 							throw new ArgumentOutOfRangeException(nameof(message), execType, LocalizedStrings.Str1695Params.Put(message));
 					}
 
-					if (CanStore(execMsg))
-						buffer.Add(secId, execMsg.TypedClone());
-
+					TryStore(buffer, execMsg);
 					break;
 				}
 				case MessageTypes.News:
@@ -382,12 +378,7 @@ namespace StockSharp.Algo.Storages
 				}
 				case MessageTypes.PositionChange:
 				{
-					var posMsg = (PositionChangeMessage)message;
-					var secId = posMsg.SecurityId;
-
-					if (CanStore(posMsg))
-						_positionChangesBuffer.Add(secId, posMsg.TypedClone());
-
+					TryStore(_positionChangesBuffer, (PositionChangeMessage)message);
 					break;
 				}
 
