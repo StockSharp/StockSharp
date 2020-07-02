@@ -26,7 +26,6 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Positions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
@@ -381,30 +380,6 @@ namespace StockSharp.Algo
 				position *= -1;
 
 			return position;
-		}
-
-		/// <summary>
-		/// To get the position on own trade.
-		/// </summary>
-		/// <param name="message">Own trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
-		/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
-		/// <returns>Position.</returns>
-		[Obsolete]
-		public static decimal? GetPosition(this ExecutionMessage message, bool byOrder)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			var sign = message.Side == Sides.Buy ? 1 : -1;
-
-			decimal? position;
-
-			if (byOrder)
-				position = message.OrderVolume - message.Balance;
-			else
-				position = message.TradeVolume;
-
-			return position * sign;
 		}
 
 		/// <summary>
@@ -2025,67 +2000,6 @@ namespace StockSharp.Algo
 
 				continuousSecurity.ExpirationJumps.Add(security.ToSecurityId(), expDate.Value);
 			}
-		}
-
-		private sealed class NativePositionManager : IPositionManager
-		{
-			private readonly Position _position;
-
-			public NativePositionManager(Position position)
-			{
-				_position = position ?? throw new ArgumentNullException(nameof(position));
-			}
-
-			/// <summary>
-			/// The position aggregate value.
-			/// </summary>
-			decimal IPositionManager.Position
-			{
-				get => _position.CurrentValue ?? 0;
-				set => throw new NotSupportedException();
-			}
-
-			SecurityId? IPositionManager.SecurityId
-			{
-				get => _position.Security.ToSecurityId();
-				set => throw new NotSupportedException();
-			}
-
-			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.NewPosition
-			{
-				add { }
-				remove { }
-			}
-
-			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.PositionChanged
-			{
-				add { }
-				remove { }
-			}
-
-			IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.Positions
-			{
-				get => throw new NotSupportedException();
-				set => throw new NotSupportedException();
-			}
-
-			decimal? IPositionManager.ProcessMessage(Message message)
-			{
-				throw new NotSupportedException();
-			}
-		}
-
-		/// <summary>
-		/// Convert the position object to the type <see cref="IPositionManager"/>.
-		/// </summary>
-		/// <param name="position">Position.</param>
-		/// <returns>Position calc manager.</returns>
-		public static IPositionManager ToPositionManager(this Position position)
-		{
-			if (position == null)
-				throw new ArgumentNullException(nameof(position));
-
-			return new NativePositionManager(position);
 		}
 
 		/// <summary>

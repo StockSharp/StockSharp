@@ -2,9 +2,7 @@ namespace StockSharp.Algo.Strategies
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
@@ -12,68 +10,6 @@ namespace StockSharp.Algo.Strategies
 
 	partial class Strategy
 	{
-		private Position ProcessPositionInfo(Tuple<SecurityId, string> key, decimal value)
-		{
-			var security = SafeGetConnector().LookupById(key.Item1);
-			var pf = SafeGetConnector().LookupByPortfolioName(key.Item2);
-			var position = _positions.SafeAdd(Tuple.Create(security, pf), k => new Position
-			{
-				Security = security,
-				Portfolio = pf,
-			});
-			position.LocalTime = position.LastChangeTime = CurrentTime;
-			position.CurrentValue = value;
-			return position;
-		}
-
-		private readonly Dictionary<Tuple<Security, Portfolio>, Position> _positions = new Dictionary<Tuple<Security, Portfolio>, Position>();
-
-		IEnumerable<Position> IPositionProvider.Positions => _positions.Values.ToArray();
-
-		private Action<Position> _newPosition;
-
-		event Action<Position> IPositionProvider.NewPosition
-		{
-			add => _newPosition += value;
-			remove => _newPosition -= value;
-		}
-
-		private Action<Position> _positionChanged;
-
-		event Action<Position> IPositionProvider.PositionChanged
-		{
-			add => _positionChanged += value;
-			remove => _positionChanged -= value;
-		}
-
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType)
-		{
-			return _positions.TryGetValue(Tuple.Create(security, portfolio));
-		}
-
-		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)
-		{
-			return SafeGetConnector().LookupByPortfolioName(name);
-		}
-
-		IEnumerable<Portfolio> IPortfolioProvider.Portfolios => Portfolio == null ? Enumerable.Empty<Portfolio>() : new[] { Portfolio };
-
-		private Action<Portfolio> _newPortfolio;
-
-		event Action<Portfolio> IPortfolioProvider.NewPortfolio
-		{
-			add => _newPortfolio += value;
-			remove => _newPortfolio -= value;
-		}
-
-		private Action<Portfolio> _portfolioChanged;
-
-		event Action<Portfolio> IPortfolioProvider.PortfolioChanged
-		{
-			add => _portfolioChanged += value;
-			remove => _portfolioChanged -= value;
-		}
-
 		IdGenerator ITransactionProvider.TransactionIdGenerator => SafeGetConnector().TransactionIdGenerator;
 
 		private Action<Order> _newOrder;

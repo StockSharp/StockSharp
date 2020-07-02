@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Strategies
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
+	using System.Runtime.Serialization;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -38,7 +39,6 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using System.Runtime.Serialization;
 
 	/// <summary>
 	/// <see cref="Order.Comment"/> auto-fill modes.
@@ -256,8 +256,6 @@ namespace StockSharp.Algo.Strategies
 		private DateTimeOffset _prevTradeDate;
 		private bool _isPrevDateTradable;
 
-		private string _idStr;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Strategy"/>.
 		/// </summary>
@@ -288,7 +286,7 @@ namespace StockSharp.Algo.Strategies
 
 			RiskManager = new RiskManager { Parent = this };
 
-			PositionManager = new PositionManager(this);
+			_positionManager = new PositionManager(this);
 		}
 
 		private readonly StrategyParam<Guid> _id;
@@ -488,7 +486,7 @@ namespace StockSharp.Algo.Strategies
 				
 				RaiseParametersChanged(nameof(Security));
 
-				PositionManager.SecurityId = value?.ToSecurityId();
+				//PositionManager.SecurityId = value?.ToSecurityId();
 			}
 		}
 
@@ -506,7 +504,7 @@ namespace StockSharp.Algo.Strategies
 		public decimal? Slippage { get; private set; }
 
 		/// <summary>
-		/// <see cref="Strategy.Slippage"/> change event.
+		/// <see cref="Slippage"/> change event.
 		/// </summary>
 		public event Action SlippageChanged;
 
@@ -564,35 +562,11 @@ namespace StockSharp.Algo.Strategies
 		/// The position manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="Strategy.ChildStrategies"/>.
 		/// </summary>
 		[Browsable(false)]
+		[Obsolete("Use Positions property.")]
 		public IPositionManager PositionManager
 		{
 			get => _positionManager;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				if (_positionManager != null)
-				{
-					_positionManager.NewPosition -= PositionManager_OnNewPosition;
-					_positionManager.PositionChanged -= PositionManager_OnPositionChanged;
-				}
-
-				_positionManager = value;
-
-				_positionManager.NewPosition += PositionManager_OnNewPosition;
-				_positionManager.PositionChanged += PositionManager_OnPositionChanged;
-			}
-		}
-
-		private void PositionManager_OnNewPosition(Tuple<SecurityId, string> key, decimal value)
-		{
-			_newPosition?.Invoke(ProcessPositionInfo(key, value));
-		}
-
-		private void PositionManager_OnPositionChanged(Tuple<SecurityId, string> key, decimal value)
-		{
-			_positionChanged?.Invoke(ProcessPositionInfo(key, value));
+			set => _positionManager = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -601,15 +575,9 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public decimal Position
 		{
-			get => PositionManager.Position;
-			set
-			{
-				if (Position == value)
-					return;
-
-				PositionManager.Position = value;
-				RaisePositionChanged();
-			}
+			get => GetPositionValue(Security, Portfolio) ?? 0;
+			[Obsolete]
+			set	{ }
 		}
 
 		/// <summary>
@@ -839,10 +807,10 @@ namespace StockSharp.Algo.Strategies
 			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, Parent != null ? ParentStrategy.ChildStrategies.Count : -1, Position);
 		}
 
-		private Strategy ParentStrategy => (Strategy)Parent;
+		private Strategy ParentStrategy => Parent as Strategy;
 
 		/// <summary>
-		/// <see cref="Strategy.ProcessState"/> change event.
+		/// <see cref="ProcessState"/> change event.
 		/// </summary>
 		public event Action<Strategy> ProcessStateChanged;
 
@@ -1520,8 +1488,6 @@ namespace StockSharp.Algo.Strategies
 
 						//SlippageManager.Registered(order);
 
-						var pos = PositionManager.ProcessMessage(order.ToMessage());
-
 						StatisticManager.AddNewOrder(order);
 
 						if (order.Commission != null)
@@ -1529,9 +1495,6 @@ namespace StockSharp.Algo.Strategies
 							Commission += order.Commission;
 							RaiseCommissionChanged();
 						}
-
-						if (pos != null)
-							RaisePositionChanged();
 					}
 
 					if (_firstOrderTime == default)
@@ -1566,13 +1529,9 @@ namespace StockSharp.Algo.Strategies
 				}
 				else if (isChanging)
 				{
-					var pos = PositionManager.ProcessMessage(order.ToMessage());
 					StatisticManager.AddChangedOrder(order);
 
 					OnOrderChanged(order);
-
-					if (pos != null)
-						RaisePositionChanged();
 				}
 			});
 		}
@@ -1603,9 +1562,6 @@ namespace StockSharp.Algo.Strategies
 		{
 			AddOrder(order);
 
-			if (order.Type != OrderTypes.Conditional)
-				PositionManager.ProcessMessage(order.ToMessage());
-
 			ProcessOrder(order);
 
 			OnOrderRegistering(order);
@@ -1618,6 +1574,7 @@ namespace StockSharp.Algo.Strategies
 		protected virtual void AssignOrderStrategyId(Order order)
 		{
 			order.UserOrderId = EnsureGetId();
+			order.StrategyId = EnsureGetRootId();
 		}
 
 		private void RecycleOrders()
@@ -1718,8 +1675,6 @@ namespace StockSharp.Algo.Strategies
 			Latency = null;
 			//LatencyManager.Reset();
 
-			PositionManager.ProcessMessage(new ResetMessage());
-
 			Slippage = null;
 			//SlippageManager.Reset();
 
@@ -1787,8 +1742,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				//Trace.WriteLine(Name+" strategy-dispose-on-stop");
 
-				if (Parent != null)
-					ParentStrategy.ChildStrategies.Remove(this);
+				ParentStrategy?.ChildStrategies.Remove(this);
 
 				Dispose();
 			}
@@ -2013,6 +1967,12 @@ namespace StockSharp.Algo.Strategies
 					return;
 				}
 
+				case MessageTypes.PositionChange:
+				{
+					ProcessPositionChange((PositionChangeMessage)message);
+					break;
+				}
+
 				default:
 					return;
 			}
@@ -2050,7 +2010,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 			}
 
-			if (PositionManager.Positions.Any())
+			if (Positions.Any())
 				RaisePnLChanged();
 		}
 
@@ -2066,12 +2026,31 @@ namespace StockSharp.Algo.Strategies
 				AttachOrder(order);
 		}
 
+		private string _idStr;
+
 		private string EnsureGetId()
 		{
 			if (_idStr == null)
 				_idStr = Id.To<string>();
 
 			return _idStr;
+		}
+
+		private string _rootIdStr;
+
+		private string EnsureGetRootId()
+		{
+			if (_rootIdStr == null)
+			{
+				var root = this;
+
+				while (root.ParentStrategy != null)
+					root = root.ParentStrategy;
+
+				_rootIdStr = root.Id.To<string>();
+			}
+
+			return _rootIdStr;
 		}
 
 		private void OnConnectorOrderChanged(Order order)
@@ -2147,8 +2126,6 @@ namespace StockSharp.Algo.Strategies
 				StatisticManager.AddMyTrade(tradeInfo);
 			}
 
-			var pos = PositionManager.ProcessMessage(execMsg);
-
 			if (trade.Slippage != null)
 			{
 				if (Slippage == null)
@@ -2166,9 +2143,6 @@ namespace StockSharp.Algo.Strategies
 				if (isPnLChanged)
 					RaisePnLChanged();
 
-				if (pos != null)
-					RaisePositionChanged();
-
 				if (isSlipChanged)
 					RaiseSlippageChanged();
 			});
@@ -2182,19 +2156,6 @@ namespace StockSharp.Algo.Strategies
 			SlippageChanged?.Invoke();
 
 			RaiseNewStateMessage(nameof(Slippage), Slippage);
-		}
-
-		private void RaisePositionChanged()
-		{
-			this.AddInfoLog(LocalizedStrings.Str1399Params, PositionManager.Positions.Select(pos => pos.Key + "=" + pos.Value).Join(", "));
-
-			this.Notify(nameof(Position));
-			PositionChanged?.Invoke();
-
-			StatisticManager.AddPosition(CurrentTime, Position);
-			StatisticManager.AddPnL(CurrentTime, PnL);
-
-			RaiseNewStateMessage(nameof(Position), Position);
 		}
 
 		private void RaiseCommissionChanged()
