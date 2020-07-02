@@ -286,7 +286,7 @@ namespace StockSharp.Messages
 		/// Request <see cref="CandleStates.Finished"/> only candles.
 		/// </summary>
 		[DataMember]
-		public bool IsFinished { get; set; }
+		public bool IsFinishedOnly { get; set; }
 
 		/// <summary>
 		/// Board code.
@@ -315,7 +315,7 @@ namespace StockSharp.Messages
 		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		[DataMember]
-		public bool PassThroughOrderBookInrement { get; set; }
+		public bool DoNotBuildOrderBookInrement { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
@@ -367,12 +367,12 @@ namespace StockSharp.Messages
 			destination.IsCalcVolumeProfile = IsCalcVolumeProfile;
 			destination.AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame;
 			destination.IsRegularTradingHours = IsRegularTradingHours;
-			destination.IsFinished = IsFinished;
+			destination.IsFinishedOnly = IsFinishedOnly;
 			destination.BoardCode = BoardCode;
 			destination.RefreshSpeed = RefreshSpeed;
 			destination.DepthBuilder = DepthBuilder;
 			destination.FillGaps = FillGaps;
-			destination.PassThroughOrderBookInrement = PassThroughOrderBookInrement;
+			destination.DoNotBuildOrderBookInrement = DoNotBuildOrderBookInrement;
 		}
 
 		/// <inheritdoc />
@@ -407,8 +407,8 @@ namespace StockSharp.Messages
 			if (IsRegularTradingHours)
 				str += $",RTH={IsRegularTradingHours}";
 
-			if (IsFinished)
-				str += $",Fin={IsFinished}";
+			if (IsFinishedOnly)
+				str += $",FinOnly={IsFinishedOnly}";
 
 			if (IsCalcVolumeProfile)
 				str += $",Profile={IsCalcVolumeProfile}";
@@ -422,8 +422,8 @@ namespace StockSharp.Messages
 			if (FillGaps)
 				str += $",Gaps={FillGaps}";
 
-			if (PassThroughOrderBookInrement)
-				str += $",IncOnly={PassThroughOrderBookInrement}";
+			if (DoNotBuildOrderBookInrement)
+				str += $",NotBuildInc={DoNotBuildOrderBookInrement}";
 
 			return str;
 		}

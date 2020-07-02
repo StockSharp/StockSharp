@@ -1760,7 +1760,7 @@ namespace StockSharp.Algo
 				IsCalcVolumeProfile = series.IsCalcVolumeProfile,
 				AllowBuildFromSmallerTimeFrame = series.AllowBuildFromSmallerTimeFrame,
 				IsRegularTradingHours = series.IsRegularTradingHours,
-				IsFinished = series.IsFinished,
+				IsFinishedOnly = series.IsFinishedOnly,
 				//ExtensionInfo = extensionInfo
 			};
 
@@ -1835,7 +1835,7 @@ namespace StockSharp.Algo
 			series.IsCalcVolumeProfile = message.IsCalcVolumeProfile;
 			series.AllowBuildFromSmallerTimeFrame = message.AllowBuildFromSmallerTimeFrame;
 			series.IsRegularTradingHours = message.IsRegularTradingHours;
-			series.IsFinished = message.IsFinished;
+			series.IsFinishedOnly = message.IsFinishedOnly;
 		}
 
 		/// <summary>

@@ -698,6 +698,11 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter));
 			}
 
+			if (StorageProcessor.Settings.StorageRegistry != null)
+			{
+				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
+			}
+
 			if (SupportBuildingFromOrderLog)
 			{
 				adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
@@ -706,11 +711,6 @@ namespace StockSharp.Algo
 			if (adapter.IsSupportOrderBookIncrements)
 			{
 				adapter = ApplyOwnInner(new OrderBookIncrementMessageAdapter(adapter));
-			}
-
-			if (StorageProcessor.Settings.StorageRegistry != null)
-			{
-				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
 			}
 
 			if (SupportOrderBookTruncate)

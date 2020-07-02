@@ -68,7 +68,7 @@ namespace StockSharp.Algo
 			//	this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, message);
 		}
 
-		private Subscription SubscribeMarketData(Security security, DataType type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool passThroughOrderBookInrement = false, IMessageAdapter adapter = null)
+		private Subscription SubscribeMarketData(Security security, DataType type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool doNotBuildOrderBookInrement = false, IMessageAdapter adapter = null)
 		{
 			return SubscribeMarketData(security, new MarketDataMessage
 			{
@@ -83,7 +83,7 @@ namespace StockSharp.Algo
 				MaxDepth = maxDepth,
 				RefreshSpeed = refreshSpeed,
 				DepthBuilder = depthBuilder,
-				PassThroughOrderBookInrement = passThroughOrderBookInrement,
+				DoNotBuildOrderBookInrement = doNotBuildOrderBookInrement,
 				Adapter = adapter
 			});
 		}

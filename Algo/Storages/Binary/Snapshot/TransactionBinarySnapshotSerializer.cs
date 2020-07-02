@@ -103,6 +103,15 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public byte? IsMargin;
 			public byte? IsManual;
 
+			public BlittableDecimal? AveragePrice;
+			public BlittableDecimal? Yield;
+			public BlittableDecimal? MinVolume;
+			public byte? PositionEffect;
+			public byte? PostOnly;
+			public byte? Initiator;
+
+			public long SeqNum;
+
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S256)]
 			public string ConditionType;
 
@@ -124,9 +133,17 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public int StringValueLen;
 		}
 
-		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V21;
+		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V22;
 
 		string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
+
+		private bool? ToNullBool(byte? value) => value == null ? (bool?)null : (value.Value == 1);
+		private byte? ToByte(bool? value) => value == null ? (byte?)null : (byte)(value.Value ? 1 : 0);
+
+		private T? ToNullEnum<T>(byte? value) where T : struct
+			=> value == null ? (T?)null : ((int)value.Value).To<T>();
+		private byte? ToByte<T>(T? value) where T : struct
+			=> value == null ? (byte?)null : (byte)value.Value.To<int>();
 
 		byte[] ISnapshotSerializer<string, ExecutionMessage>.Serialize(Version version, ExecutionMessage message)
 		{
@@ -163,9 +180,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				DepoName = message.DepoName.VerifySize(Sizes.S100),
 				Error = (message.Error?.Message).VerifySize(Sizes.S200),
 				ExpiryDate = message.ExpiryDate?.To<long>(),
-				IsMarketMaker = message.IsMarketMaker == null ? (byte?)null : (byte)(message.IsMarketMaker.Value ? 1 : 0),
-				IsMargin = message.IsMargin == null ? (byte?)null : (byte)(message.IsMargin.Value ? 1 : 0),
-				IsManual = message.IsManual == null ? (byte?)null : (byte)(message.IsManual.Value ? 1 : 0),
+				IsMarketMaker = ToByte(message.IsMarketMaker),
+				IsMargin = ToByte(message.IsMargin),
+				IsManual = ToByte(message.IsManual),
 				Side = (byte)message.Side,
 				OrderId = message.OrderId,
 				OrderStringId = message.OrderStringId.VerifySize(Sizes.S100),
@@ -173,12 +190,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				OrderPrice = (BlittableDecimal)message.OrderPrice,
 				OrderVolume = (BlittableDecimal?)message.OrderVolume,
 				VisibleVolume = (BlittableDecimal?)message.VisibleVolume,
-				OrderType = message.OrderType == null ? (byte?)null : (byte)message.OrderType.Value,
-				OrderState = message.OrderState == null ? (byte?)null : (byte)message.OrderState.Value,
+				OrderType = ToByte(message.OrderType),
+				OrderState = ToByte(message.OrderState),
 				OrderStatus = message.OrderStatus,
 				Balance = (BlittableDecimal?)message.Balance,
 				UserOrderId = message.UserOrderId.VerifySize(Sizes.S100),
-				OriginSide = message.OriginSide == null ? (byte?)null : (byte)message.OriginSide.Value,
+				OriginSide = ToByte(message.OriginSide),
 				Latency = message.Latency?.Ticks,
 				PnL = (BlittableDecimal?)message.PnL,
 				Position = (BlittableDecimal?)message.Position,
@@ -190,8 +207,17 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				TradeId = message.TradeId,
 				TradeStringId = message.TradeStringId.VerifySize(Sizes.S100),
 				OpenInterest = (BlittableDecimal?)message.OpenInterest,
-				IsSystem = message.IsSystem == null ? (byte?)null : (byte)(message.IsSystem.Value ? 1 : 0),
-				OrderTif = message.TimeInForce == null ? (byte?)null : (byte)message.TimeInForce.Value,
+				IsSystem = ToByte(message.IsSystem),
+				OrderTif = ToByte(message.TimeInForce),
+
+				AveragePrice = (BlittableDecimal?)message.AveragePrice,
+				Yield = (BlittableDecimal?)message.Yield,
+				MinVolume = (BlittableDecimal?)message.MinVolume,
+				PositionEffect = ToByte(message.PositionEffect),
+				PostOnly = ToByte(message.PostOnly),
+				Initiator = ToByte(message.Initiator),
+				SeqNum = message.SeqNum,
+
 				ConditionType = (message.Condition?.GetType().GetTypeName(false)).VerifySize(Sizes.S256),
 			};
 
@@ -366,9 +392,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error),
 
 					ExpiryDate = snapshot.ExpiryDate?.To<DateTimeOffset>(),
-					IsMarketMaker = snapshot.IsMarketMaker == null ? (bool?)null : (snapshot.IsMarketMaker.Value == 1),
-					IsMargin = snapshot.IsMargin == null ? (bool?)null : (snapshot.IsMargin.Value == 1),
-					IsManual = snapshot.IsManual == null ? (bool?)null : (snapshot.IsManual.Value == 1),
+					IsMarketMaker = ToNullBool(snapshot.IsMarketMaker),
+					IsMargin = ToNullBool(snapshot.IsMargin),
+					IsManual = ToNullBool(snapshot.IsManual),
 					Side = (Sides)snapshot.Side,
 					OrderId = snapshot.OrderId,
 					OrderStringId = snapshot.OrderStringId,
@@ -376,12 +402,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					OrderPrice = snapshot.OrderPrice,
 					OrderVolume = snapshot.OrderVolume,
 					VisibleVolume = snapshot.VisibleVolume,
-					OrderType = snapshot.OrderType == null ? (OrderTypes?)null : (OrderTypes)snapshot.OrderType.Value,
-					OrderState = snapshot.OrderState == null ? (OrderStates?)null : (OrderStates)snapshot.OrderState.Value,
+					OrderType = ToNullEnum<OrderTypes>(snapshot.OrderType),
+					OrderState = ToNullEnum<OrderStates>(snapshot.OrderState),
 					OrderStatus = snapshot.OrderStatus,
 					Balance = snapshot.Balance,
 					UserOrderId = snapshot.UserOrderId,
-					OriginSide = snapshot.OriginSide == null ? (Sides?)null : (Sides)snapshot.OriginSide.Value,
+					OriginSide = ToNullEnum<Sides>(snapshot.OriginSide),
 					Latency = snapshot.Latency == null ? (TimeSpan?)null : TimeSpan.FromTicks(snapshot.Latency.Value),
 					PnL = snapshot.PnL,
 					Position = snapshot.Position,
@@ -393,8 +419,16 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					TradeId = snapshot.TradeId,
 					TradeStringId = snapshot.TradeStringId,
 					OpenInterest = snapshot.OpenInterest,
-					IsSystem = snapshot.IsSystem == null ? (bool?)null : (snapshot.IsSystem.Value == 1),
-					TimeInForce = snapshot.OrderTif == null ? (TimeInForce?)null : (TimeInForce)snapshot.OrderTif.Value,
+					IsSystem = ToNullBool(snapshot.IsSystem),
+					TimeInForce = ToNullEnum<TimeInForce>(snapshot.OrderTif),
+
+					AveragePrice = snapshot.AveragePrice,
+					Yield = snapshot.Yield,
+					MinVolume = snapshot.MinVolume,
+					PositionEffect = ToNullEnum<OrderPositionEffects>(snapshot.PositionEffect),
+					PostOnly = ToNullBool(snapshot.PostOnly),
+					Initiator = ToNullBool(snapshot.Initiator),
+					SeqNum = snapshot.SeqNum,
 				};
 
 				//var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
@@ -631,6 +665,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (changes.Initiator != null)
 				message.Initiator = changes.Initiator;
+
+			if (changes.SeqNum != 0)
+				message.SeqNum = changes.SeqNum;
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;

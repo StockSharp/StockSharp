@@ -45,7 +45,7 @@
 					{
 						if (mdMsg.IsSubscribe)
 						{
-							if (mdMsg.PassThroughOrderBookInrement)
+							if (mdMsg.DoNotBuildOrderBookInrement)
 								break;
 
 							if (mdMsg.MaxDepth != null)

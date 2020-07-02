@@ -38,6 +38,36 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using System.Runtime.Serialization;
+
+	/// <summary>
+	/// <see cref="Order.Comment"/> auto-fill modes.
+	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
+	public enum StrategyCommentModes
+	{
+		/// <summary>
+		/// Disabled.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2558Key)]
+		Disabled,
+
+		/// <summary>
+		/// By <see cref="Strategy.Id"/>.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IdKey)]
+		Id,
+
+		/// <summary>
+		/// By <see cref="Strategy.Name"/>.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NameKey)]
+		Name,
+	}
 
 	/// <summary>
 	/// The base class for all trade strategies.
@@ -247,7 +277,7 @@ namespace StockSharp.Algo.Strategies
 			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
 			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
 			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
-			_commentOrders = this.Param<bool>(nameof(CommentOrders));
+			_commentMode = this.Param<StrategyCommentModes>(nameof(CommentMode));
 			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1));
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
@@ -1025,19 +1055,38 @@ namespace StockSharp.Algo.Strategies
 			set => _waitAllTrades.Value = value;
 		}
 
-		private readonly StrategyParam<bool> _commentOrders;
+		private readonly StrategyParam<StrategyCommentModes> _commentMode;
 
 		/// <summary>
-		/// To add to <see cref="Order.Comment"/> the name of the strategy <see cref="Strategy.Name"/>, registering the order.
+		/// Set <see cref="Order.Comment"/> by <see cref="Name"/> or <see cref="Id"/>.
+		/// </summary>
+		/// <remarks>
+		/// By default is <see cref="StrategyCommentModes.Disabled"/>.
+		/// </remarks>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str135Key,
+			Description = LocalizedStrings.Str136Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 10)]
+		public StrategyCommentModes CommentMode
+		{
+			get => _commentMode.Value;
+			set => _commentMode.Value = value;
+		}
+
+		/// <summary>
+		/// To add to <see cref="Order.Comment"/> the name of the strategy <see cref="Name"/>, registering the order.
 		/// </summary>
 		/// <remarks>
 		/// It is disabled by default.
 		/// </remarks>
 		[Browsable(false)]
+		[Obsolete("Use CommentMode property.")]
 		public bool CommentOrders
 		{
-			get => _commentOrders.Value;
-			set => _commentOrders.Value = value;
+			get => CommentMode == StrategyCommentModes.Name;
+			set => CommentMode = value ? StrategyCommentModes.Name : StrategyCommentModes.Disabled;
 		}
 
 		/// <inheritdoc />
@@ -1210,10 +1259,21 @@ namespace StockSharp.Algo.Strategies
 			if (order.Portfolio == null)
 				order.Portfolio = Portfolio;
 
-			if (CommentOrders)
+			if (order.Comment.IsEmpty())
 			{
-				if (order.Comment.IsEmpty())
-					order.Comment = Name;
+				switch (CommentMode)
+				{
+					case StrategyCommentModes.Disabled:
+						break;
+					case StrategyCommentModes.Id:
+						order.Comment = EnsureGetId();
+						break;
+					case StrategyCommentModes.Name:
+						order.Comment = Name;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(CommentMode.To<string>());
+				}
 			}
 
 			AddOrder(order);
@@ -1556,7 +1616,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">The order, for which the strategy identifier shall be set.</param>
 		protected virtual void AssignOrderStrategyId(Order order)
 		{
-			order.UserOrderId = Id.To<string>();
+			order.UserOrderId = EnsureGetId();
 		}
 
 		private void RecycleOrders()
@@ -2003,11 +2063,16 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorNewOrder(Order order)
 		{
-			if (_idStr == null)
-				_idStr = Id.ToString();
-
-			if (!_ordersInfo.ContainsKey(order) && order.UserOrderId == _idStr)
+			if (!_ordersInfo.ContainsKey(order) && order.UserOrderId == EnsureGetId())
 				AttachOrder(order);
+		}
+
+		private string EnsureGetId()
+		{
+			if (_idStr == null)
+				_idStr = Id.To<string>();
+
+			return _idStr;
 		}
 
 		private void OnConnectorOrderChanged(Order order)

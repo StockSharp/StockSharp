@@ -194,46 +194,46 @@
 						{
 							var found = false;
 
-							if (_requests.TryGetAndRemove(originId, out var tuple))
+							if (!_requests.TryGetAndRemove(originId, out var tuple))
+								break;
+
+							//this.AddDebugLog("Sec ALL child {0} unsubscribe.", originId);
+
+							var parent = tuple.Item1;
+							var request = tuple.Item2;
+
+							if (parent.Alls.RemoveByValue(request))
+								found = true;
+							else
 							{
-								//this.AddDebugLog("Sec ALL child {0} unsubscribe.", originId);
-
-								var parent = tuple.Item1;
-								var request = tuple.Item2;
-
-								if (parent.Alls.RemoveByValue(request))
-									found = true;
-								else
+								if (parent.Child.TryGetValue(request.SecurityId, out var child))
 								{
-									if (parent.Child.TryGetValue(request.SecurityId, out var child))
+									if (child.Subscribers.Remove(request.TransactionId))
 									{
-										if (child.Subscribers.Remove(request.TransactionId))
-										{
-											found = true;
+										found = true;
 
-											if (child.Subscribers.Count == 0)
-												parent.Child.Remove(request.SecurityId);
-										}
+										if (child.Subscribers.Count == 0)
+											parent.Child.Remove(request.SecurityId);
 									}
 								}
+							}
 
-								if (found)
+							if (found)
+							{
+								if (parent.Alls.Count == 0 && parent.Child.Count == 0)
 								{
-									if (parent.Alls.Count == 0 && parent.Child.Count == 0)
+									// last unsubscribe is not initial subscription
+									if (parent.Origin.TransactionId != originId)
 									{
-										// last unsubscribe is not initial subscription
-										if (parent.Origin.TransactionId != originId)
-										{
-											mdMsg = mdMsg.TypedClone();
-											mdMsg.OriginalTransactionId = parent.Origin.TransactionId;
+										mdMsg = mdMsg.TypedClone();
+										mdMsg.OriginalTransactionId = parent.Origin.TransactionId;
 											
-											message = mdMsg;
-										}
-
-										_unsubscribes.Add(mdMsg.TransactionId, parent);
-										
-										break;
+										message = mdMsg;
 									}
+
+									_unsubscribes.Add(mdMsg.TransactionId, parent);
+										
+									break;
 								}
 							}
 

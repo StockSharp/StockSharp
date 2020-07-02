@@ -51806,5 +51806,15 @@ namespace StockSharp.Localization
 		/// Dark theme.
 		/// </summary>
 		public static string DarkTheme => GetString(DarkThemeKey);
+
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		public const string SequenceNumberKey = nameof(SequenceNumber);
+
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		public static string SequenceNumber => GetString(SequenceNumberKey);
 	}
 }

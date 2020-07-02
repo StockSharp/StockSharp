@@ -966,7 +966,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.BuildMode.To<string>(),
 					null,
 					data.BuildField.To<string>(),
-					data.IsFinished.To<string>(),
+					data.IsFinishedOnly.To<string>(),
 					data.FillGaps.To<string>(),
 					buildFromTuples?.type,
 					buildFromTuples?.arg,
@@ -1010,7 +1010,7 @@ namespace StockSharp.Algo.Storages.Csv
 				message.BuildField = reader.ReadNullableEnum<Level1Fields>();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					message.IsFinished = reader.ReadBool();
+					message.IsFinishedOnly = reader.ReadBool();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					message.FillGaps = reader.ReadBool();
