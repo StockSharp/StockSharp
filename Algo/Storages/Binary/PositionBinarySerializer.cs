@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class PositionBinarySerializer : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>
 	{
 		public PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 20, MarketDataVersions.Version33, exchangeInfoProvider)
+			: base(securityId, null, 20, MarketDataVersions.Version34, exchangeInfoProvider)
 		{
 		}
 
@@ -314,6 +314,11 @@ namespace StockSharp.Algo.Storages.Binary
 							throw new ArgumentOutOfRangeException();
 					}
 				}
+
+				if (metaInfo.Version < MarketDataVersions.Version34)
+					continue;
+
+				writer.WriteStringEx(message.StrategyId);
 			}
 		}
 
@@ -424,6 +429,9 @@ namespace StockSharp.Algo.Storages.Binary
 						throw new ArgumentOutOfRangeException();
 				}
 			}
+
+			if (metaInfo.Version >= MarketDataVersions.Version34)
+				posMsg.StrategyId = reader.ReadStringEx();
 
 			return posMsg;
 		}

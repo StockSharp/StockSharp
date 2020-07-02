@@ -249,6 +249,8 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<PositionChangeMessage, DateTimeOffset>(GetDateField(nameof(PositionChangeMessage.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 				fields.Add(new FieldMapping<PositionChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(PositionChangeMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 
+				fields.Add(new FieldMapping<PositionChangeMessage, string>(nameof(PositionChangeMessage.StrategyId), LocalizedStrings.Strategy, LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
+
 				foreach (var f in Enumerator.GetValues<PositionChangeTypes>().Where(l1 => !l1.IsObsolete()))
 				{
 					var field = f;

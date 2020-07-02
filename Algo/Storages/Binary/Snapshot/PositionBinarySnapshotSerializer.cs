@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
-	using Key = System.Tuple<StockSharp.Messages.SecurityId, string>;
+	using Key = System.Tuple<Messages.SecurityId, string, string>;
 
 	/// <summary>
 	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="PositionChangeMessage"/>.
@@ -59,6 +59,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public BlittableDecimal? CommissionTaker;
 			public BlittableDecimal? CommissionMaker;
 			public BlittableDecimal? SettlementPrice;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
+			public string StrategyId;
 		}
 
 		Version ISnapshotSerializer<Key, PositionChangeMessage>.Version { get; } = SnapshotVersions.V22;
@@ -84,6 +87,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				BoardCode = message.BoardCode,
 				ClientCode = message.ClientCode,
 				Description = message.Description,
+				StrategyId = message.StrategyId,
 			};
 
 			foreach (var change in message.Changes)
@@ -174,6 +178,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					DepoName = snapshot.DepoName,
 					BoardCode = snapshot.BoardCode,
 					LimitType = (TPlusLimits?)snapshot.LimitType,
+					StrategyId = snapshot.StrategyId,
 				}
 				.TryAdd(PositionChangeTypes.BeginValue, snapshot.BeginValue, true)
 				.TryAdd(PositionChangeTypes.CurrentValue, snapshot.CurrentValue, true)
@@ -203,7 +208,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 		}
 
 		Key ISnapshotSerializer<Key, PositionChangeMessage>.GetKey(PositionChangeMessage message)
-			=> Tuple.Create(message.SecurityId, message.PortfolioName);
+			=> Tuple.Create(message.SecurityId, message.PortfolioName, message.StrategyId ?? string.Empty);
 
 		void ISnapshotSerializer<Key, PositionChangeMessage>.Update(PositionChangeMessage message, PositionChangeMessage changes)
 		{
@@ -223,6 +228,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (!changes.BoardCode.IsEmpty())
 				message.BoardCode = changes.BoardCode;
+
+			if (!changes.StrategyId.IsEmpty())
+				message.StrategyId = changes.StrategyId;
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;

@@ -285,21 +285,26 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
+		/// Strategy id.
+		/// </summary>
+		public string StrategyId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		public PositionChangeMessage()
-			: base(MessageTypes.PositionChange)
+			: this(MessageTypes.PositionChange)
 		{
 		}
 
-		///// <summary>
-		///// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
-		///// </summary>
-		///// <param name="type">Message type.</param>
-		//protected PositionChangeMessage(MessageTypes type)
-		//	: base(type)
-		//{
-		//}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		protected PositionChangeMessage(MessageTypes type)
+			: base(type)
+		{
+		}
 
 		/// <inheritdoc />
 		public override DataType DataType => DataType.PositionChanges;
@@ -329,12 +334,18 @@ namespace StockSharp.Messages
 			destination.PortfolioName = PortfolioName;
 			destination.ClientCode = ClientCode;
 			destination.BoardCode = BoardCode;
+			destination.StrategyId = StrategyId;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},P={PortfolioName},CL={ClientCode},L={LimitType},Changes={Changes.Select(c => c.ToString()).JoinComma()}";
+			var str = base.ToString() + $",Sec={SecurityId},P={PortfolioName},CL={ClientCode},L={LimitType},Changes={Changes.Select(c => c.ToString()).JoinComma()}";
+
+			if (!StrategyId.IsEmpty())
+				str += $",Strategy={StrategyId}";
+
+			return str;
 		}
 	}
 }

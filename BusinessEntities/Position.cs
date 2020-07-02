@@ -21,6 +21,7 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
@@ -453,6 +454,11 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public TPlusLimits? LimitType { get; set; }
 
+		/// <summary>
+		/// Strategy id.
+		/// </summary>
+		public string StrategyId { get; set; }
+
 		private decimal? _leverage;
 
 		/// <summary>
@@ -682,6 +688,7 @@ namespace StockSharp.BusinessEntities
 			destination.Security = Security;
 			destination.DepoName = DepoName;
 			destination.LimitType = LimitType;
+			destination.StrategyId = StrategyId;
 
 			destination.Leverage = Leverage;
 			destination.CommissionMaker = CommissionMaker;
@@ -698,7 +705,12 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return $"{Portfolio}-{Security}";
+			var str = $"{Portfolio}-{Security}";
+
+			if (!StrategyId.IsEmpty())
+				str += $"-{StrategyId}";
+
+			return str;
 		}
 	}
 }
