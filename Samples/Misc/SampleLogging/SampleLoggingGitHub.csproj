@@ -10,7 +10,7 @@
     <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml" Version="5.*" />
+    <PackageReference Include="StockSharp.Xaml" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />

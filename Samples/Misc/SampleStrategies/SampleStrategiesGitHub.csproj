@@ -8,8 +8,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml" Version="5.*" />
-    <PackageReference Include="StockSharp.Algo.Strategies" Version="5.*" />
+    <PackageReference Include="StockSharp.Xaml" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Algo.Strategies" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\stocksharp.ico">

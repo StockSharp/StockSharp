@@ -5,6 +5,6 @@
     <AssemblyName>StockSharp.Fix.Dialects</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Fix" Version="5.*" />
+    <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>

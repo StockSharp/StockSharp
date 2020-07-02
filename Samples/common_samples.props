@@ -1,8 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\common_target_fw_core.props" />
   <PropertyGroup>
-    <SampleHistoryDataVersion>1.0.0</SampleHistoryDataVersion>
-    <XamlChartingVer>5.*</XamlChartingVer>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
