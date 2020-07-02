@@ -10,7 +10,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml.Charting" Version="5.*" />
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="$(XamlChartingVer)" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="..\SampleConnection\App.xaml">

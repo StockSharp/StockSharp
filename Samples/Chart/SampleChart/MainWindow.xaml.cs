@@ -726,7 +726,7 @@
 
 				if (RandomGen.GetBool())
 					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, price - RandomGen.GetInt(1, 10) * ps));
-				
+
 				if (RandomGen.GetBool())
 					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, price + RandomGen.GetInt(1, 10) * ps));
 
@@ -764,14 +764,14 @@
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
 
 			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }
-			
+
 			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
 			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }
 			void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria) { }
 
 			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security) { yield break; }
 			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field) => null;
-			
+
 			MarketDepth IMarketDataProvider.GetMarketDepth(Security security) => null;
 			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security) => null;
 
