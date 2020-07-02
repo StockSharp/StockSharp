@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// This connection uses paid options. Click for detailed info.
+		/// </summary>
+		public const string PaidConnectorToolipKey = nameof(PaidConnectorToolip);
+
+		/// <summary>
+		/// This connection uses paid options. Click for detailed info.
+		/// </summary>
+		public static string PaidConnectorToolip => GetString(PaidConnectorToolipKey);
+
+		/// <summary>
 		/// Switch axis location
 		/// </summary>
 		public const string SwitchAxisLocationKey = nameof(SwitchAxisLocation);
