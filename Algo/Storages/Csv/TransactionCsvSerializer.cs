@@ -100,6 +100,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.PostOnly.To<string>(),
 				data.Initiator.To<string>(),
 				data.SeqNum.To<string>(),
+				data.StrategyId,
 			};
 			writer.WriteRow(row);
 
@@ -196,7 +197,10 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
 				msg.SeqNum = reader.ReadLong();
+				msg.StrategyId = reader.ReadString();
+			}
 
 			return msg;
 		}

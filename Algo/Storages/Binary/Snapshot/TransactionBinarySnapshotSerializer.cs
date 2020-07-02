@@ -88,6 +88,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string UserOrderId;
 
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
+			public string StrategyId;
+
 			public byte? OriginSide;
 			public long? Latency;
 			public BlittableDecimal? PnL;
@@ -195,6 +198,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				OrderStatus = message.OrderStatus,
 				Balance = (BlittableDecimal?)message.Balance,
 				UserOrderId = message.UserOrderId.VerifySize(Sizes.S100),
+				StrategyId = message.StrategyId.VerifySize(Sizes.S100),
 				OriginSide = ToByte(message.OriginSide),
 				Latency = message.Latency?.Ticks,
 				PnL = (BlittableDecimal?)message.PnL,
@@ -407,6 +411,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					OrderStatus = snapshot.OrderStatus,
 					Balance = snapshot.Balance,
 					UserOrderId = snapshot.UserOrderId,
+					StrategyId = snapshot.StrategyId,
 					OriginSide = ToNullEnum<Sides>(snapshot.OriginSide),
 					Latency = snapshot.Latency == null ? (TimeSpan?)null : TimeSpan.FromTicks(snapshot.Latency.Value),
 					PnL = snapshot.PnL,
@@ -593,6 +598,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (!changes.UserOrderId.IsEmpty())
 				message.UserOrderId = changes.UserOrderId;
+
+			if (!changes.StrategyId.IsEmpty())
+				message.StrategyId = changes.StrategyId;
 
 			if (changes.OriginSide != null)
 				message.OriginSide = changes.OriginSide;

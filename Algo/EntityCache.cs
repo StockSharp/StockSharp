@@ -522,6 +522,7 @@ namespace StockSharp.Algo
 					o.ExpiryDate = message.ExpiryDate;
 					o.Condition = message.Condition;
 					o.UserOrderId = message.UserOrderId;
+					o.StrategyId = message.StrategyId;
 					o.ClientCode = message.ClientCode;
 					o.BrokerCode = message.BrokerCode;
 					o.IsMarketMaker = message.IsMarketMaker;

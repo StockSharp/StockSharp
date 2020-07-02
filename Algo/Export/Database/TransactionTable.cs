@@ -124,6 +124,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
+			yield return new ColumnDescription(nameof(ExecutionMessage.StrategyId))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(32)
+			};
 			yield return new ColumnDescription(nameof(ExecutionMessage.Currency)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Error))
 			{
@@ -187,6 +192,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.PnL), value.PnL },
 				{ nameof(ExecutionMessage.OpenInterest), value.OpenInterest },
 				{ nameof(ExecutionMessage.UserOrderId), value.UserOrderId },
+				{ nameof(ExecutionMessage.StrategyId), value.StrategyId },
 				{ nameof(ExecutionMessage.Currency), (int?)value.Currency },
 				{ nameof(ExecutionMessage.Error), value.Error?.Message },
 				{ nameof(ExecutionMessage.IsMargin), value.IsMargin },

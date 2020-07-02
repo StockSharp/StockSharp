@@ -139,6 +139,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.Str145, (i, v) => i.TradeId = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Str724, LocalizedStrings.Str147, (i, v) => { i.TradePrice = v; i.HasTradeInfo = true; }) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.UserOrderId), LocalizedStrings.Str165, LocalizedStrings.Str166, (i, v) => i.UserOrderId = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.StrategyId), LocalizedStrings.Strategy, LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMarketMaker), LocalizedStrings.MarketMaker, LocalizedStrings.MarketMakerOrder, (i, v) => i.IsMarketMaker = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMargin), LocalizedStrings.Margin, LocalizedStrings.IsMargin, (i, v) => i.IsMargin = v) { IsRequired = false });

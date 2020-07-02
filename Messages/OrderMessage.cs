@@ -63,6 +63,12 @@ namespace StockSharp.Messages
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Strategy id.
+		/// </summary>
+		[DataMember]
+		public string StrategyId { get; set; }
+
+		/// <summary>
 		/// Broker firm code.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2593Key)]
@@ -108,6 +114,7 @@ namespace StockSharp.Messages
 			destination.PortfolioName = PortfolioName;
 			destination.OrderType = OrderType;
 			destination.UserOrderId = UserOrderId;
+			destination.StrategyId = StrategyId;
 			destination.BrokerCode = BrokerCode;
 			destination.ClientCode = ClientCode;
 			destination.Condition = Condition?.Clone();
@@ -133,6 +140,9 @@ namespace StockSharp.Messages
 
 			if (!UserOrderId.IsEmpty())
 				str += $",UID={UserOrderId}";
+
+			if (!StrategyId.IsEmpty())
+				str += $",Strategy={StrategyId}";
 
 			if (!BrokerCode.IsEmpty())
 				str += $",BrID={BrokerCode}";

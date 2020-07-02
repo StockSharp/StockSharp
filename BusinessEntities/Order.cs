@@ -522,6 +522,12 @@ namespace StockSharp.BusinessEntities
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Strategy id.
+		/// </summary>
+		[DataMember]
+		public string StrategyId { get; set; }
+
+		/// <summary>
 		/// Broker firm code.
 		/// </summary>
 		[DataMember]
@@ -616,6 +622,12 @@ namespace StockSharp.BusinessEntities
 		{
 			var str = LocalizedStrings.Str534Params
 				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance, Type);
+
+			if (!UserOrderId.IsEmpty())
+				str += $" UID={UserOrderId}";
+
+			if (!StrategyId.IsEmpty())
+				str += $" Strategy={StrategyId}";
 
 			if (Condition != null)
 				str += $" Condition={Condition}";

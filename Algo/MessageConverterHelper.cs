@@ -220,6 +220,7 @@ namespace StockSharp.Algo
 				LocalTime = order.LocalTime,
 				ExpiryDate = order.ExpiryDate,
 				UserOrderId = order.UserOrderId,
+				StrategyId = order.StrategyId,
 				Commission = order.Commission,
 				CommissionCurrency = order.CommissionCurrency,
 				IsSystem = order.IsSystem,
@@ -358,6 +359,7 @@ namespace StockSharp.Algo
 				TillDate = order.ExpiryDate,
 				//IsSystem = order.IsSystem,
 				UserOrderId = order.UserOrderId,
+				StrategyId = order.StrategyId,
 				BrokerCode = order.BrokerCode,
 				ClientCode = order.ClientCode,
 				Currency = order.Currency,
@@ -398,6 +400,7 @@ namespace StockSharp.Algo
 				OrderStringId = order.StringId,
 				Volume = volume,
 				UserOrderId = order.UserOrderId,
+				StrategyId = order.StrategyId,
 				BrokerCode = order.BrokerCode,
 				ClientCode = order.ClientCode,
 				Side = order.Direction
@@ -443,6 +446,7 @@ namespace StockSharp.Algo
 				OriginalTransactionId = oldOrder.TransactionId,
 
 				UserOrderId = oldOrder.UserOrderId,
+				StrategyId = oldOrder.StrategyId,
 
 				BrokerCode = oldOrder.BrokerCode,
 				ClientCode = oldOrder.ClientCode,
@@ -770,6 +774,7 @@ namespace StockSharp.Algo
 				OrderStringId = criteria.StringId,
 				OrderType = criteria.Type,
 				UserOrderId = criteria.UserOrderId,
+				StrategyId = criteria.StrategyId,
 				BrokerCode = criteria.BrokerCode,
 				ClientCode = criteria.ClientCode,
 				Volume = volume,
@@ -1315,6 +1320,7 @@ namespace StockSharp.Algo
 			order.TimeInForce = message.TimeInForce;
 			order.ExpiryDate = message.ExpiryDate;
 			order.UserOrderId = message.UserOrderId;
+			order.StrategyId = message.StrategyId;
 			order.Comment = message.Comment;
 			order.Commission = message.Commission;
 			order.CommissionCurrency = message.CommissionCurrency;

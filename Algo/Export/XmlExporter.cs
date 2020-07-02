@@ -145,6 +145,7 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("isSystem", item.IsSystem);
 				writer.WriteAttribute("isUpTick", item.IsUpTick);
 				writer.WriteAttribute("userOrderId", item.UserOrderId);
+				writer.WriteAttribute("strategyId", item.StrategyId);
 				writer.WriteAttribute("currency", item.Currency);
 				writer.WriteAttribute("isMargin", item.IsMargin);
 				writer.WriteAttribute("isMarketMaker", item.IsMarketMaker);

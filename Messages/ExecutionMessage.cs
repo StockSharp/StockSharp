@@ -20,6 +20,7 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -458,6 +459,12 @@ namespace StockSharp.Messages
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Strategy id.
+		/// </summary>
+		[DataMember]
+		public string StrategyId { get; set; }
+
+		/// <summary>
 		/// Trading security currency.
 		/// </summary>
 		[DataMember]
@@ -570,6 +577,9 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},Type={OrderType},State={OrderState},Cond={Condition}";
 
+			if (!StrategyId.IsEmpty())
+				str += $",Strategy={StrategyId}";
+
 			if (PositionEffect != null)
 				str += $",PosEffect={PositionEffect.Value}";
 
@@ -632,6 +642,7 @@ namespace StockSharp.Messages
 			destination.Latency = Latency;
 			destination.Slippage = Slippage;
 			destination.UserOrderId = UserOrderId;
+			destination.StrategyId = StrategyId;
 
 			//destination.DerivedOrderId = DerivedOrderId;
 			//destination.DerivedOrderStringId = DerivedOrderStringId;

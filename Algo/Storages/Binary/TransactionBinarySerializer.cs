@@ -42,6 +42,7 @@ namespace StockSharp.Algo.Storages.Binary
 			BrokerCodes = new List<string>();
 			DepoNames = new List<string>();
 			UserOrderIds = new List<string>();
+			StrategyIds = new List<string>();
 			Comments = new List<string>();
 			SystemComments = new List<string>();
 			Errors = new List<string>();
@@ -79,6 +80,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public IList<string> DepoNames { get; }
 
 		public IList<string> UserOrderIds { get; }
+		public IList<string> StrategyIds { get; }
 
 		public IList<string> Comments { get; }
 		public IList<string> SystemComments { get; }
@@ -128,6 +130,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			WriteItemLocalTime(stream, MarketDataVersions.Version59);
 			WriteItemLocalOffset(stream, MarketDataVersions.Version59);
+
+			if (Version < MarketDataVersions.Version66)
+				return;
+
+			WriteList(stream, StrategyIds);
 		}
 
 		private static void WriteList(Stream stream, IList<string> list)
@@ -189,6 +196,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			ReadItemLocalTime(stream, MarketDataVersions.Version59);
 			ReadItemLocalOffset(stream, MarketDataVersions.Version59);
+
+			if (Version < MarketDataVersions.Version66)
+				return;
+
+			ReadList(stream, StrategyIds);
 		}
 
 		public override void CopyFrom(BinaryMetaInfo src)
@@ -237,6 +249,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 			Errors.Clear();
 			Errors.AddRange(tsInfo.Errors);
+
+			StrategyIds.Clear();
+			StrategyIds.AddRange(tsInfo.StrategyIds);
 		}
 	}
 
@@ -472,6 +487,7 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteLong(msg.SeqNum);
+				WriteString(writer, metaInfo.StrategyIds, msg.StrategyId);
 			}
 		}
 
@@ -664,6 +680,7 @@ namespace StockSharp.Algo.Storages.Binary
 				return msg;
 
 			msg.SeqNum = reader.ReadLong();
+			msg.StrategyId = ReadString(reader, metaInfo.StrategyIds);
 
 			return msg;
 		}

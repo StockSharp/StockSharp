@@ -623,7 +623,8 @@ namespace StockSharp.Algo.Testing
 						Side = regMsg.Side,
 						PortfolioName = regMsg.PortfolioName,
 						OrderType = regMsg.OrderType,
-						UserOrderId = regMsg.UserOrderId
+						UserOrderId = regMsg.UserOrderId,
+						StrategyId = regMsg.StrategyId,
 					};
 
 					yield break;
@@ -668,7 +669,8 @@ namespace StockSharp.Algo.Testing
 						Side = replaceMsg.Side,
 						PortfolioName = replaceMsg.PortfolioName,
 						OrderType = replaceMsg.OrderType,
-						UserOrderId = replaceMsg.UserOrderId
+						UserOrderId = replaceMsg.UserOrderId,
+						StrategyId = replaceMsg.StrategyId,
 					};
 
 					yield break;
