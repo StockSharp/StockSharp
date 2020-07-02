@@ -2047,8 +2047,9 @@ namespace StockSharp.Algo
 		/// <param name="newState">New state.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="receiver">Logs.</param>
+		/// <param name="isInfoLevel">Use <see cref="LogLevels.Info"/> for log message.</param>
 		/// <returns>New state.</returns>
-		public static SubscriptionStates ChangeSubscriptionState(this SubscriptionStates currState, SubscriptionStates newState, long subscriptionId, ILogReceiver receiver)
+		public static SubscriptionStates ChangeSubscriptionState(this SubscriptionStates currState, SubscriptionStates newState, long subscriptionId, ILogReceiver receiver, bool isInfoLevel = true)
 		{
 			bool isOk;
 
@@ -2077,7 +2078,12 @@ namespace StockSharp.Algo
 			const string text = "Subscription {0} {1}->{2}.";
 
 			if (isOk)
-				receiver.AddInfoLog(text, subscriptionId, currState, newState);
+			{
+				if (isInfoLevel)
+					receiver.AddInfoLog(text, subscriptionId, currState, newState);
+				else
+					receiver.AddDebugLog(text, subscriptionId, currState, newState);
+			}
 			else
 				receiver.AddWarningLog(text, subscriptionId, currState, newState);
 

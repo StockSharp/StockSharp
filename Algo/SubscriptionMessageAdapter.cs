@@ -35,6 +35,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = new Dictionary<long, ISubscriptionMessage>();
 		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new Dictionary<long, SubscriptionInfo>();
 		private readonly Dictionary<long, long> _replaceId = new Dictionary<long, long>();
+		private readonly HashSet<long> _allSecIdChilds = new HashSet<long>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -81,6 +82,7 @@ namespace StockSharp.Algo
 				_historicalRequests.Clear();
 				_subscriptionsById.Clear();
 				_replaceId.Clear();
+				_allSecIdChilds.Clear();
 			}
 
 			return base.OnSendInMessage(message);
@@ -88,7 +90,7 @@ namespace StockSharp.Algo
 
 		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 		{
-			info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, this);
+			info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, this, !_allSecIdChilds.Contains(info.Subscription.TransactionId));
 		}
 
 		/// <inheritdoc />
@@ -244,6 +246,25 @@ namespace StockSharp.Algo
 			}
 		}
 
+		/// <inheritdoc />
+		protected override void InnerAdapterNewOutMessage(Message message)
+		{
+			switch (message.Type)
+			{
+				case ExtendedMessageTypes.SubscriptionSecurityAll:
+				{
+					var allMsg = (SubscriptionSecurityAllMessage)message;
+
+					lock (_sync)
+						_allSecIdChilds.Add(allMsg.TransactionId);
+
+					break;
+				}
+			}
+
+			base.InnerAdapterNewOutMessage(message);
+		}
+
 		private bool ProcessOrderStatusMessage(OrderStatusMessage message)
 		{
 			if (message.HasOrderId())
@@ -272,6 +293,8 @@ namespace StockSharp.Algo
 			ISubscriptionMessage sendInMsg = null;
 			Message[] sendOutMsgs = null;
 
+			var isInfoLevel = true;
+
 			lock (_sync)
 			{
 				if (isSubscribe)
@@ -291,6 +314,8 @@ namespace StockSharp.Algo
 
 						sendInMsg = message;
 					}
+
+					isInfoLevel = !_allSecIdChilds.Contains(transId);
 				}
 				else
 				{
@@ -328,6 +353,9 @@ namespace StockSharp.Algo
 							(Message)originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 						};
 					}
+
+					if (sendInMsg != null)
+						isInfoLevel = !_allSecIdChilds.Contains(originId);
 				}
 			}
 
@@ -335,7 +363,11 @@ namespace StockSharp.Algo
 
 			if (sendInMsg != null)
 			{
-				this.AddInfoLog("In: {0}", sendInMsg);
+				if (isInfoLevel)
+					this.AddInfoLog("In: {0}", sendInMsg);
+				else
+					this.AddDebugLog("In: {0}", sendInMsg);
+
 				retVal = base.OnSendInMessage((Message)sendInMsg);
 			}
 

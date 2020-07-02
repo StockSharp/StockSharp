@@ -261,9 +261,10 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private void ChangeState(Subscription subscription, SubscriptionStates state)
+			private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 			{
-				subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, _connector);
+				var subscription = info.Subscription;
+				subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, _connector, info.Parent == null);
 			}
 
 			public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled)
@@ -305,11 +306,11 @@ namespace StockSharp.Algo
 						{
 							if (response.IsOk())
 							{
-								ChangeState(subscription, SubscriptionStates.Active);
+								ChangeState(info, SubscriptionStates.Active);
 							}
 							else
 							{
-								ChangeState(subscription, SubscriptionStates.Error);
+								ChangeState(info, SubscriptionStates.Error);
 
 								Remove(subscription.TransactionId);
 
@@ -320,7 +321,7 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							ChangeState(subscription, SubscriptionStates.Stopped);
+							ChangeState(info, SubscriptionStates.Stopped);
 
 							Remove(subscription.TransactionId);
 
@@ -513,7 +514,7 @@ namespace StockSharp.Algo
 					else
 						items = ArrayHelper.Empty<object>();
 
-					ChangeState(info.Subscription, SubscriptionStates.Finished);
+					ChangeState(info, SubscriptionStates.Finished);
 					_requests.Remove(message.OriginalTransactionId);
 
 					if (info.Parent != null)
@@ -540,7 +541,7 @@ namespace StockSharp.Algo
 					else
 						items = ArrayHelper.Empty<object>();
 
-					ChangeState(info.Subscription, SubscriptionStates.Online);
+					ChangeState(info, SubscriptionStates.Online);
 
 					if (info.Parent != null)
 						return null;
