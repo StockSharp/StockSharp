@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <Import Project="..\common.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.Media</RootNamespace>
+    <AssemblyName>StockSharp.Media</AssemblyName>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ecng.Common" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
+    
+    <ProjectReference Include="..\Localization\Localization.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="logos\*.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="*.gif" />
+    <None Remove="logos\*.png" />
+  </ItemGroup>
+</Project>
