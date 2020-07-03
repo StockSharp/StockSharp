@@ -45,15 +45,11 @@ namespace StockSharp.Algo.Positions
 			public Sides Side { get; }
 			public decimal Volume { get; }
 			public decimal Balance { get; set; }
-
-			public string StrategyId { get; set; }
 		}
 
 		private class PositionInfo
 		{
 			public decimal Value { get; set; }
-
-			public IDictionary<string, decimal> StrategyPositions { get; } = new Dictionary<string, decimal>();
 		}
 
 		private readonly ILogReceiver _logs;
@@ -68,7 +64,7 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		/// <param name="logs">Logs.</param>
 		/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-		public PositionManager(ILogReceiver logs, bool byOrders = true)
+		public PositionManager(ILogReceiver logs, bool byOrders)
 		{
 			_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 			ByOrders = byOrders;
@@ -79,23 +75,15 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		public bool ByOrders { get; }
 
-		/// <summary>
-		/// Adapter required emulation <see cref="PositionChangeMessage"/>.
-		/// </summary>
-		public bool IsPositionsEmulationRequired { get; set; }
-
 		/// <inheritdoc />
-		public IEnumerable<PositionChangeMessage> ProcessMessage(Message message)
+		public virtual PositionChangeMessage ProcessMessage(Message message)
 		{
 			void ProcessRegOrder(OrderRegisterMessage regMsg)
 			{
-				if (!IsPositionsEmulationRequired && regMsg.StrategyId.IsEmpty())
-					return;
-				
-				_ordersInfo.Add(regMsg.TransactionId, new OrderInfo(regMsg.SecurityId, regMsg.PortfolioName, regMsg.Side, regMsg.Volume, regMsg.Volume) { StrategyId = regMsg.StrategyId });
+				_ordersInfo.Add(regMsg.TransactionId, new OrderInfo(regMsg.SecurityId, regMsg.PortfolioName, regMsg.Side, regMsg.Volume, regMsg.Volume));
 			}
 
-			IEnumerable<PositionChangeMessage> UpdatePositions(OrderInfo info, decimal diff)
+			PositionChangeMessage UpdatePositions(OrderInfo info, decimal diff)
 			{
 				var secId = info.SecurityId;
 				var pf = info.PortfolioName;
@@ -103,38 +91,11 @@ namespace StockSharp.Algo.Positions
 				var position = _positions.SafeAdd(Tuple.Create(secId, pf));
 				position.Value += diff;
 
-				var positions = new List<PositionChangeMessage>();
-
-				if (IsPositionsEmulationRequired)
+				return new PositionChangeMessage
 				{
-					positions.Add(new PositionChangeMessage
-					{
-						SecurityId = secId,
-						PortfolioName = pf,
-					}.Add(PositionChangeTypes.CurrentValue, position.Value));
-				}
-
-				var strategyId = info.StrategyId;
-
-				if (!strategyId.IsEmpty())
-				{
-					if (position.StrategyPositions.TryGetValue(strategyId, out var strategyPos))
-					{
-						strategyPos += diff;
-						position.StrategyPositions[strategyId] = strategyPos;
-					}
-					else
-						position.StrategyPositions.Add(strategyId, strategyPos);
-
-					positions.Add(new PositionChangeMessage
-					{
-						SecurityId = secId,
-						PortfolioName = pf,
-						StrategyId = strategyId,
-					}.Add(PositionChangeTypes.CurrentValue, strategyPos));
-				}
-
-				return positions;
+					SecurityId = secId,
+					PortfolioName = pf,
+				}.Add(PositionChangeTypes.CurrentValue, position.Value);
 			}
 
 			switch (message.Type)
@@ -174,16 +135,13 @@ namespace StockSharp.Algo.Positions
 					if (execMsg.IsMarketData())
 						break;
 
-					if (!IsPositionsEmulationRequired && execMsg.StrategyId.IsEmpty())
-						break;
-
 					lock (_sync)
 					{
 						if (execMsg.HasOrderInfo())
 						{
 							if (execMsg.TransactionId != 0)
 							{
-								var info = new OrderInfo(execMsg.SecurityId, execMsg.PortfolioName, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0) { StrategyId = execMsg.StrategyId };
+								var info = new OrderInfo(execMsg.SecurityId, execMsg.PortfolioName, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
 								_ordersInfo.Add(execMsg.TransactionId, info);
 
 								if (ByOrders)
