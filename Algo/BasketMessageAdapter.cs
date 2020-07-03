@@ -1322,17 +1322,22 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessPortfolioMessage(string portfolioName, Message message)
+		private void ProcessPortfolioMessage(string portfolioName, OrderMessage message)
 		{
 			var adapter = message.Adapter;
 
 			if (adapter == null)
 			{
-				adapter = GetAdapter(portfolioName, message);
+				adapter = GetAdapter(portfolioName, message, out var isPending);
 
 				if (adapter == null)
 				{
+					if (isPending)
+						return;
+
 					this.AddDebugLog("No adapter for {0}", message);
+
+					SendOutMessage(message.CreateReply(new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))));
 					return;
 				}
 			}
@@ -1379,10 +1384,13 @@ namespace StockSharp.Algo
 		{
 			if (message.IsSubscribe)
 			{
-				var adapter = GetAdapter(message.PortfolioName, message);
+				var adapter = GetAdapter(message.PortfolioName, message, out var isPended);
 
 				if (adapter == null)
 				{
+					if (isPended)
+						return;
+
 					this.AddDebugLog("No adapter for {0}", message);
 
 					SendOutMessage(message.CreateResponse(new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))));
@@ -1421,7 +1429,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private IMessageAdapter GetAdapter(string portfolioName, Message message)
+		private IMessageAdapter GetAdapter(string portfolioName, Message message, out bool isPended)
 		{
 			if (portfolioName.IsEmpty())
 				throw new ArgumentNullException(nameof(portfolioName));
@@ -1431,10 +1439,12 @@ namespace StockSharp.Algo
 
 			if (!_portfolioAdapters.TryGetValue(portfolioName, out var adapter))
 			{
-				return GetAdapters(message, out _, out _).FirstOrDefault();
+				return GetAdapters(message, out isPended, out _).FirstOrDefault();
 			}
 			else
 			{
+				isPended = false;
+
 				var a = _adapterWrappers.TryGetValue(adapter);
 
 				if (a == null)

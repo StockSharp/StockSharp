@@ -219,27 +219,37 @@ namespace StockSharp.Messages
 		/// Cast <see cref="OrderMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		/// <param name="message"><see cref="OrderMessage"/>.</param>
+		/// <param name="error">Error info.</param>
 		/// <returns><see cref="ExecutionMessage"/>.</returns>
-		public static ExecutionMessage CreateReply(this OrderMessage message)
+		public static ExecutionMessage CreateReply(this OrderMessage message, Exception error = null)
 		{
-			if (message == null)
+			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.TransactionId.CreateOrderReply();
+			var reply = message.TransactionId.CreateOrderReply(message.LocalTime);
+
+			reply.Error = error;
+
+			if (error != null)
+				reply.OrderState = OrderStates.Failed;
+
+			return reply;
 		}
 
 		/// <summary>
 		/// Create order's transaction reply.
 		/// </summary>
 		/// <param name="transactionId">Transaction ID.</param>
+		/// <param name="serverTime">Server time.</param>
 		/// <returns>The message contains information about the execution.</returns>
-		public static ExecutionMessage CreateOrderReply(this long transactionId)
+		public static ExecutionMessage CreateOrderReply(this long transactionId, DateTimeOffset serverTime)
 		{
 			return new ExecutionMessage
 			{
 				OriginalTransactionId = transactionId,
 				ExecutionType = ExecutionTypes.Transaction,
 				HasOrderInfo = true,
+				ServerTime = serverTime,
 			};
 		}
 
@@ -1724,10 +1734,6 @@ namespace StockSharp.Messages
 
 			void SendOutErrorExecution(ExecutionMessage execMsg)
 			{
-				execMsg.ServerTime = logs.CurrentTime;
-				execMsg.Error = ex;
-				execMsg.OrderState = OrderStates.Failed;
-
 				var subscribers = getSubscribers?.Invoke(DataType.Transactions);
 
 				if (subscribers != null)
@@ -1751,13 +1757,13 @@ namespace StockSharp.Messages
 				case MessageTypes.OrderCancel:
 				case MessageTypes.OrderGroupCancel:
 				{
-					var replyMsg = ((OrderMessage)message).CreateReply();
+					var replyMsg = ((OrderMessage)message).CreateReply(ex);
 					SendOutErrorExecution(replyMsg);
 					break;
 				}
 				case MessageTypes.OrderPairReplace:
 				{
-					var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply();
+					var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply(ex);
 					SendOutErrorExecution(replyMsg);
 					break;
 				}
