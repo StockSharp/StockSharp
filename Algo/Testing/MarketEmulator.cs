@@ -456,13 +456,20 @@ namespace StockSharp.Algo.Testing
 					.RemoveTrailingZeros();
 			}
 
-			private static ExecutionMessage CreateReply(ExecutionMessage original, DateTimeOffset time)
+			private static ExecutionMessage CreateReply(ExecutionMessage original, DateTimeOffset time, Exception error)
 			{
-				var replyMsg = original.TypedClone();
+				var replyMsg = new ExecutionMessage
+				{
+					HasOrderInfo = true,
+					ExecutionType = ExecutionTypes.Transaction,
+					ServerTime = time,
+					LocalTime = time,
+					OriginalTransactionId = original.TransactionId,
+					Error = error,
+				};
 
-				replyMsg.ServerTime = time;
-				replyMsg.LocalTime = time;
-				replyMsg.OriginalTransactionId = original.TransactionId;
+				if (error != null)
+					replyMsg.OrderState = OrderStates.Failed;
 
 				return replyMsg;
 			}
@@ -475,12 +482,10 @@ namespace StockSharp.Algo.Testing
 					{
 						this.AddErrorLog(LocalizedStrings.Str1151Params, execution.IsCancellation ? LocalizedStrings.Str1152 : LocalizedStrings.Str1153, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
 
-						var replyMsg = CreateReply(execution, time);
+						var replyMsg = CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.Str1154));
 
 						replyMsg.Balance = execution.OrderVolume;
-						replyMsg.OrderState = OrderStates.Failed;
-						replyMsg.Error = new InvalidOperationException(LocalizedStrings.Str1154);
-						replyMsg.LocalTime = time;
+
 						result.Add(replyMsg);
 						return;
 					}
@@ -488,24 +493,23 @@ namespace StockSharp.Algo.Testing
 
 				if (execution.IsCancellation)
 				{
-					var order = _activeOrders.TryGetValue(execution.OriginalTransactionId);
-
-					if (_activeOrders.Remove(execution.OriginalTransactionId))
+					if (_activeOrders.TryGetAndRemove(execution.OriginalTransactionId, out var order))
 					{
-						var replyMsg = CreateReply(order, time);
-
-						replyMsg.OriginalTransactionId = execution.OriginalTransactionId;
-						replyMsg.OrderState = OrderStates.Done;
-						_expirableOrders.Remove(replyMsg);
+						_expirableOrders.Remove(order);
 
 						// изменяем текущие котировки, добавляя туда наши цену и объем
 						UpdateQuote(order, false);
 
 						// отправляем измененный стакан
 						result.Add(CreateQuoteMessage(
-							replyMsg.SecurityId,
+							order.SecurityId,
 							time,
 							GetServerTime(time)));
+
+						var replyMsg = CreateReply(order, time, null);
+
+						//replyMsg.OriginalTransactionId = execution.OriginalTransactionId;
+						replyMsg.OrderState = OrderStates.Done;
 
 						result.Add(replyMsg);
 
@@ -517,12 +521,7 @@ namespace StockSharp.Algo.Testing
 					}
 					else
 					{
-						var replyMsg = CreateReply(execution, time);
-
-						replyMsg.OrderState = OrderStates.Failed;
-						replyMsg.Error = new InvalidOperationException(LocalizedStrings.Str1156Params.Put(replyMsg.OrderId));
-
-						result.Add(replyMsg);
+						result.Add(CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.Str1156Params.Put(execution.OriginalTransactionId))));
 
 						this.AddErrorLog(LocalizedStrings.Str1156Params, execution.OriginalTransactionId);
 					}
@@ -531,59 +530,54 @@ namespace StockSharp.Algo.Testing
 				{
 					var message = _parent.CheckRegistration(execution, _securityDefinition/*, result*/);
 
-					var replyMsg = CreateReply(execution, time);
+					var replyMsg = CreateReply(execution, time, message == null ? null : new InvalidOperationException(message));
+					result.Add(replyMsg);
 
 					if (message == null)
 					{
 						this.AddInfoLog(LocalizedStrings.Str1157Params, execution.TransactionId);
 
 						// при восстановлении заявки у нее уже есть номер
-						if (replyMsg.OrderId == null)
+						if (execution.OrderId == null)
 						{
-							replyMsg.Balance = execution.OrderVolume;
-							replyMsg.OrderState = OrderStates.Active;
-							replyMsg.OrderId = _parent.OrderIdGenerator.GetNextId();
+							execution.Balance = execution.OrderVolume;
+							execution.OrderState = OrderStates.Active;
+							execution.OrderId = _parent.OrderIdGenerator.GetNextId();
 						}
 						else
-							replyMsg.ServerTime = execution.ServerTime; // при восстановлении не меняем время
-
-						result.Add(replyMsg);
+							execution.ServerTime = execution.ServerTime; // при восстановлении не меняем время
 
 						replyMsg.Commission = _parent
 							.GetPortfolioInfo(execution.PortfolioName)
 							.ProcessOrder(execution, null, result);
 
-						MatchOrder(execution.LocalTime, replyMsg, result, true);
+						MatchOrder(execution.LocalTime, execution, result, true);
 
-						if (replyMsg.OrderState == OrderStates.Active)
+						if (execution.OrderState == OrderStates.Active)
 						{
-							_activeOrders.Add(execution.TransactionId, replyMsg);
+							_activeOrders.Add(execution.TransactionId, execution);
 
-							if (replyMsg.ExpiryDate != null)
-								_expirableOrders.Add(replyMsg, replyMsg.ExpiryDate.Value.EndOfDay() - replyMsg.LocalTime);
+							if (execution.ExpiryDate != null)
+								_expirableOrders.Add(execution, execution.ExpiryDate.Value.EndOfDay() - time);
 
 							// изменяем текущие котировки, добавляя туда наши цену и объем
-							UpdateQuote(replyMsg, true);
+							UpdateQuote(execution, true);
 						}
-						else if (replyMsg.IsCanceled())
+						else if (execution.IsCanceled())
 						{
 							_parent
 								.GetPortfolioInfo(execution.PortfolioName)
-								.ProcessOrder(replyMsg, replyMsg.Balance.Value, result);
+								.ProcessOrder(execution, execution.Balance.Value, result);
 						}
 
 						// отправляем измененный стакан
 						result.Add(CreateQuoteMessage(
-							replyMsg.SecurityId,
+							execution.SecurityId,
 							time,
 							GetServerTime(time)));
 					}
 					else
 					{
-						replyMsg.OrderState = OrderStates.Failed;
-						replyMsg.Error = new InvalidOperationException(message);
-						result.Add(replyMsg);
-
 						this.AddInfoLog(LocalizedStrings.Str1158Params, execution.TransactionId, message);
 					}
 				}
@@ -905,7 +899,7 @@ namespace StockSharp.Algo.Testing
 
 				if (isCrossTrade)
 				{
-					var reply = CreateReply(order, time);
+					var reply = CreateReply(order, time, null);
 
 					//reply.OrderState = OrderStates.Failed;
 					//reply.OrderStatus = (long?)OrderStatus.RejectedBySystem;
