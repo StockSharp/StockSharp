@@ -360,16 +360,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public void SubscribeOrders(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
+		public void SubscribeOrders(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IEnumerable<OrderStates> states = null, IMessageAdapter adapter = null)
 		{
-			SubscribeOrders(new OrderStatusMessage
+			var message = new OrderStatusMessage
 			{
 				IsSubscribe = true,
 				SecurityId = security?.ToSecurityId() ?? default,
 				From = from,
 				To = to,
 				Adapter = adapter,
-			});
+			};
+
+			if (states != null)
+				message.States = states.ToArray();
+
+			SubscribeOrders(message);
 		}
 
 		/// <inheritdoc />

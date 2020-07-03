@@ -237,12 +237,17 @@ namespace StockSharp.Algo.Storages
 				var from = message.From ?? DateTime.UtcNow.Date - Settings.DaysLoad;
 				var to = message.To;
 
+				var states = message.States.ToHashSet();
+
 				if (Settings.IsMode(StorageModes.Snapshot))
 				{
 					var storage = (ISnapshotStorage<string, ExecutionMessage>)GetSnapshotStorage(DataType.Transactions);
 
 					foreach (var snapshot in storage.GetAll(from, to))
 					{
+						if (states.Count > 0 && snapshot.OrderState != null && !states.Contains(snapshot.OrderState.Value))
+							continue;
+
 						snapshot.OriginalTransactionId = transId;
 						snapshot.SetSubscriptionIds(subscriptionId: transId);
 						RaiseNewOutMessage(snapshot);
