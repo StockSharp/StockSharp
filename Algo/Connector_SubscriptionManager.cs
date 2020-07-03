@@ -191,12 +191,16 @@ namespace StockSharp.Algo
 						continue;
 
 					if (info.Parent == null)
+					{
 						yield return info.Subscription;
+					}
+					else
+					{
+						if (!processed.Add(info.Parent))
+							continue;
 
-					if (!processed.Add(info.Parent))
-						continue;
-
-					yield return info.Parent.Subscription;
+						yield return info.Parent.Subscription;
+					}
 				}
 			}
 
