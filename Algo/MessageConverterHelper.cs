@@ -1334,6 +1334,7 @@ namespace StockSharp.Algo
 			order.MinVolume = message.MinVolume;
 			order.PositionEffect = message.PositionEffect;
 			order.PostOnly = message.PostOnly;
+			order.SeqNum = message.SeqNum;
 
 			if (message.OrderState != null)
 				order.ApplyNewState(message.OrderState.Value);

@@ -617,6 +617,13 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public bool? PostOnly { get; set; }
 
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		/// <remarks>Zero means no information.</remarks>
+		[DataMember]
+		public long SeqNum { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -643,6 +650,9 @@ namespace StockSharp.BusinessEntities
 
 			if (PostOnly != null)
 				str += $",PostOnly={PostOnly.Value}";
+
+			if (SeqNum != 0)
+				str += $",SeqNum={SeqNum}";
 
 			return str;
 		}

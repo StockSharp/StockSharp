@@ -532,6 +532,7 @@ namespace StockSharp.Algo
 					o.MinVolume = message.MinVolume;
 					o.PositionEffect = message.PositionEffect;
 					o.PostOnly = message.PostOnly;
+					o.SeqNum = message.SeqNum;
 
 					if (message.Balance != null)
 					{
