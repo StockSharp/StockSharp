@@ -13,10 +13,8 @@
 	/// <summary>
 	/// The position calculation manager.
 	/// </summary>
-	public class StrategyPositionManager : IPositionManager
+	public class StrategyPositionManager : BaseLogReceiver, IPositionManager
 	{
-		private readonly ILogReceiver _logs;
-
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly Dictionary<string, IPositionManager> _managersByStrategyId = new Dictionary<string, IPositionManager>(StringComparer.InvariantCultureIgnoreCase);
@@ -25,11 +23,9 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyPositionManager"/>.
 		/// </summary>
-		/// <param name="logs">Logs.</param>
 		/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-		public StrategyPositionManager(ILogReceiver logs, bool byOrders)
+		public StrategyPositionManager(bool byOrders)
 		{
-			_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 			ByOrders = byOrders;
 		}
 
@@ -43,7 +39,7 @@
 		{
 			IPositionManager CreateManager(long transId, string strategyId)
 			{
-				var manager = _managersByStrategyId.SafeAdd(strategyId, key => new PositionManager(_logs, ByOrders));
+				var manager = _managersByStrategyId.SafeAdd(strategyId, key => new PositionManager(ByOrders) { Parent = this });
 				_managersByTransId.Add(transId, Tuple.Create(manager, strategyId));
 				return manager;
 			}

@@ -15,8 +15,10 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Positions
 {
+	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -26,6 +28,8 @@ namespace StockSharp.Algo.Positions
 	{
 		private readonly PositionManager _positionManager;
 
+		private readonly CachedSynchronizedSet<long> _subscriptions = new CachedSynchronizedSet<long>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionMessageAdapter"/>.
 		/// </summary>
@@ -34,7 +38,7 @@ namespace StockSharp.Algo.Positions
 		public PositionMessageAdapter(IMessageAdapter innerAdapter, bool byOrders)
 			: base(innerAdapter)
 		{
-			_positionManager = new PositionManager(this, byOrders);
+			_positionManager = new PositionManager(byOrders) { Parent = this };
 		}
 
 		/// <inheritdoc />
@@ -47,9 +51,22 @@ namespace StockSharp.Algo.Positions
 					var lookupMsg = (PortfolioLookupMessage)message;
 
 					if (lookupMsg.IsSubscribe)
+					{
+						if (lookupMsg.To == null)
+						{
+							this.AddDebugLog("Subscription {0} added.", lookupMsg.TransactionId);
+							_subscriptions.Add(lookupMsg.TransactionId);
+						}
+
 						RaiseNewOutMessage(lookupMsg.CreateResult());
-					//else
-					//	RaiseNewOutMessage(lookupMsg.CreateResponse());
+					}
+					else
+					{
+						if (_subscriptions.Remove(lookupMsg.OriginalTransactionId))
+							this.AddDebugLog("Subscription {0} removed.", lookupMsg.OriginalTransactionId);
+
+						//RaiseNewOutMessage(lookupMsg.CreateResponse());
+					}
 
 					return true;
 				}
@@ -73,7 +90,14 @@ namespace StockSharp.Algo.Positions
 			base.OnInnerAdapterNewOutMessage(message);
 
 			if (change != null)
+			{
+				var subscriptions = _subscriptions.Cache;
+
+				if (subscriptions.Length > 0)
+					change.SetSubscriptionIds(subscriptions);
+
 				base.OnInnerAdapterNewOutMessage(change);
+			}
 		}
 
 		/// <summary>

@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Positions
 	/// <summary>
 	/// The position calculation manager.
 	/// </summary>
-	public class PositionManager : IPositionManager
+	public class PositionManager : BaseLogReceiver, IPositionManager
 	{
 		private class OrderInfo
 		{
@@ -52,8 +52,6 @@ namespace StockSharp.Algo.Positions
 			public decimal Value { get; set; }
 		}
 
-		private readonly ILogReceiver _logs;
-
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly Dictionary<long, OrderInfo> _ordersInfo = new Dictionary<long, OrderInfo>();
@@ -62,11 +60,9 @@ namespace StockSharp.Algo.Positions
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionManager"/>.
 		/// </summary>
-		/// <param name="logs">Logs.</param>
 		/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-		public PositionManager(ILogReceiver logs, bool byOrders)
+		public PositionManager(bool byOrders)
 		{
-			_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 			ByOrders = byOrders;
 		}
 
@@ -81,6 +77,7 @@ namespace StockSharp.Algo.Positions
 			OrderInfo EnsureGetInfo<TMessage>(TMessage msg, Sides side, decimal volume, decimal balance)
 				where TMessage : Message, ITransactionIdMessage, ISecurityIdMessage, IPortfolioNameMessage
 			{
+				this.AddDebugLog("{0} bal_new {1}/{2}.", msg.TransactionId, balance, volume);
 				return _ordersInfo.SafeAdd(msg.TransactionId, key => new OrderInfo(msg.SecurityId, msg.PortfolioName, side, volume, balance));
 			}
 
@@ -175,6 +172,8 @@ namespace StockSharp.Algo.Positions
 								{
 									info.Balance = balance.Value;
 
+									this.AddDebugLog("{0} bal_upd {1}/{2}.", transId, info.Balance, info.Volume);
+
 									if (ByOrders)
 									{
 										var posDiff = balDiff;
@@ -199,7 +198,7 @@ namespace StockSharp.Algo.Positions
 								break;
 							else if (tradeVol == 0)
 							{
-								_logs.AddWarningLog("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
+								this.AddWarningLog("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
 								break;
 							}
 

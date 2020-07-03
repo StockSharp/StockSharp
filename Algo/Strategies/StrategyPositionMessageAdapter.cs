@@ -22,7 +22,7 @@
 		public StrategyPositionMessageAdapter(IMessageAdapter innerAdapter, bool byOrders, StorageBuffer buffer)
 			: base(innerAdapter)
 		{
-			_positionManager = new StrategyPositionManager(this, byOrders);
+			_positionManager = new StrategyPositionManager(byOrders) { Parent = this };
 			_buffer = buffer;
 		}
 
