@@ -648,6 +648,11 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage));
 			}
 
+			if (SupportLookupTracking)
+			{
+				adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter));
+			}
+
 			if (IsSupportTransactionLog)
 			{
 				adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
@@ -699,11 +704,6 @@ namespace StockSharp.Algo
 			if (adapter.IsFullCandlesOnly)
 			{
 				adapter = ApplyOwnInner(new CandleHolderMessageAdapter(adapter));
-			}
-
-			if (SupportLookupTracking)
-			{
-				adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter));
 			}
 
 			if (StorageProcessor.Settings.StorageRegistry != null)
@@ -1470,6 +1470,10 @@ namespace StockSharp.Algo
 
 				switch (message.Type)
 				{
+					case MessageTypes.Time:
+						// out time messages required for LookupTrackingMessageAdapter
+						return;
+
 					case MessageTypes.Connect:
 						extra = new List<Message>();
 						ProcessConnectMessage(innerAdapter, (ConnectMessage)message, extra);

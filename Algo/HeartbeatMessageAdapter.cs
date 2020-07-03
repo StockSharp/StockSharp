@@ -331,6 +331,9 @@ namespace StockSharp.Algo
 				period = period.Min(HeartbeatInterval);
 			}
 
+			var outMsgIntervalInitial = TimeSpan.FromSeconds(10);
+			var outMsgInterval = outMsgIntervalInitial;
+
 			_timer = ThreadingHelper
 			    .Timer(() =>
 			    {
@@ -354,6 +357,14 @@ namespace StockSharp.Algo
 					    }
 
 					    ProcessReconnection(diff);
+
+						outMsgInterval -= diff;
+
+						if (outMsgInterval <= TimeSpan.Zero)
+						{
+							outMsgInterval = outMsgIntervalInitial;
+							RaiseNewOutMessage(new TimeMessage());
+						}
 
 					    time = now;
 				    }
