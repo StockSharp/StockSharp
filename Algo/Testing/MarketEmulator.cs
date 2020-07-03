@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Testing
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -2228,7 +2227,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsSupportTransactionLog => false;
 		bool IMessageAdapter.UseChannels => false;
 		string IMessageAdapter.FeatureName => string.Empty;
-		bool IMessageAdapter.IsPositionsEmulationRequired => false;
+		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

@@ -558,7 +558,7 @@ namespace StockSharp.Algo
 
 		string IMessageAdapter.FeatureName => string.Empty;
 
-		bool IMessageAdapter.IsPositionsEmulationRequired => false;
+		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
@@ -658,9 +658,9 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new OrderBookSortMessageAdapter(adapter));
 			}
 
-			if (adapter.IsPositionsEmulationRequired)
+			if (adapter.IsPositionsEmulationRequired != null)
 			{
-				adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, true));
+				adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, adapter.IsPositionsEmulationRequired.Value));
 			}
 
 			if (adapter.IsSupportSubscriptions)

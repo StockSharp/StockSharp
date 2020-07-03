@@ -286,7 +286,7 @@ namespace StockSharp.Algo.Strategies
 
 			RiskManager = new RiskManager { Parent = this };
 
-			_positionManager = new PositionManager(this);
+			_positionManager = new PositionManager(this, true);
 		}
 
 		private readonly StrategyParam<Guid> _id;

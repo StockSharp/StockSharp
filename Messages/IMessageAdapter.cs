@@ -209,7 +209,8 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Adapter required emulation <see cref="PositionChangeMessage"/>.
 		/// </summary>
-		bool IsPositionsEmulationRequired { get; }
+		/// <remarks><see langword="null"/> means no emulatior, <see langword="true"/> by order balance, <see langword="false"/> by trades.</remarks>
+		bool? IsPositionsEmulationRequired { get; }
 
 		/// <summary>
 		/// Create market depth builder.
