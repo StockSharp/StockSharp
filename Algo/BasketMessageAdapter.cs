@@ -660,7 +660,7 @@ namespace StockSharp.Algo
 
 			if (adapter.IsPositionsEmulationRequired)
 			{
-				adapter = ApplyOwnInner(new PositionMessageAdapter(adapter));
+				adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, true));
 			}
 
 			if (adapter.IsSupportSubscriptions)
