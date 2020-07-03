@@ -1303,6 +1303,8 @@ namespace StockSharp.Algo.Strategies
 
 			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
 
+			order.StrategyId = EnsureGetRootId();
+
 			if (!order.State.IsFinal())
 				ApplyMonitorRules(order);
 
@@ -1565,16 +1567,6 @@ namespace StockSharp.Algo.Strategies
 			ProcessOrder(order);
 
 			OnOrderRegistering(order);
-		}
-
-		/// <summary>
-		/// To set the strategy identifier for the order.
-		/// </summary>
-		/// <param name="order">The order, for which the strategy identifier shall be set.</param>
-		protected virtual void AssignOrderStrategyId(Order order)
-		{
-			order.UserOrderId = EnsureGetId();
-			order.StrategyId = EnsureGetRootId();
 		}
 
 		private void RecycleOrders()
@@ -1879,8 +1871,6 @@ namespace StockSharp.Algo.Strategies
 				if (info == null)
 					_ordersInfo.Add(order, new OrderInfo { IsOwn = false });
 			}
-
-			AssignOrderStrategyId(order);
 		}
 
 		private void OnConnectorNewMessage(Message message)

@@ -38,6 +38,8 @@
 				_newPosition?.Invoke(position);
 			else
 				_positionChanged?.Invoke(position);
+
+			RaisePositionChanged();
 		}
 
 		private void RaisePositionChanged()
