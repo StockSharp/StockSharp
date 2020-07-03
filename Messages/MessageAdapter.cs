@@ -552,7 +552,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsPositionsEmulationRequired => false;
+		public virtual bool? IsPositionsEmulationRequired => null;
 
 		/// <inheritdoc />
 		[ReadOnly(false)]

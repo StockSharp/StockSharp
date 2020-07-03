@@ -114,9 +114,9 @@ namespace StockSharp.Algo.Strategies
 			SafeGetConnector().SubscribeOrders(criteria);
 		}
 
-		void ITransactionProvider.SubscribeOrders(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter)
+		void ITransactionProvider.SubscribeOrders(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IEnumerable<OrderStates> states, IMessageAdapter adapter)
 		{
-			SafeGetConnector().SubscribeOrders(security, from, to, count, adapter);
+			SafeGetConnector().SubscribeOrders(security, from, to, count, states, adapter);
 		}
 
 		void ITransactionProvider.UnSubscribeOrders(long originalTransactionId)

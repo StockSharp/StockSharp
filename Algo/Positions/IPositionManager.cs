@@ -15,8 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Positions
 {
-	using System.Collections.Generic;
-
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -29,6 +27,6 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <returns>The position by order or trade.</returns>
-		IEnumerable<PositionChangeMessage> ProcessMessage(Message message);
+		PositionChangeMessage ProcessMessage(Message message);
 	}
 }

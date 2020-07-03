@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Reset:
 					Reset();
-					Buffer.SendInMessage(message);
+					Buffer.ProcessInMessage(message);
 					break;
 
 				case MessageTypes.Connect:
@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.OrderRegister:
 				{
 					if (Buffer.EnabledTransactions)
-						Buffer.SendInMessage(message);
+						Buffer.ProcessInMessage(message);
 
 					break;
 				}
@@ -108,7 +108,7 @@ namespace StockSharp.Algo.Storages
 						if (!_replaceTransactions.ContainsKey(replaceMsg.TransactionId))
 							_replaceTransactions.Add(replaceMsg.TransactionId, replaceMsg.OriginalTransactionId);
 
-						Buffer.SendInMessage(replaceMsg);
+						Buffer.ProcessInMessage(replaceMsg);
 					}
 					
 					break;
@@ -126,7 +126,7 @@ namespace StockSharp.Algo.Storages
 							_replaceTransactions.Add(pairMsg.Message2.TransactionId, pairMsg.Message2.OriginalTransactionId);
 						}
 
-						Buffer.SendInMessage(message);
+						Buffer.ProcessInMessage(message);
 					}
 
 					break;
@@ -161,7 +161,7 @@ namespace StockSharp.Algo.Storages
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			Buffer.SendInMessage(message);
+			Buffer.ProcessInMessage(message);
 
 			if (message.IsSubscribe && message.From == null && message.To == null && Settings.IsMode(StorageModes.Snapshot))
 			{
@@ -237,12 +237,17 @@ namespace StockSharp.Algo.Storages
 				var from = message.From ?? DateTime.UtcNow.Date - Settings.DaysLoad;
 				var to = message.To;
 
+				var states = message.States.ToHashSet();
+
 				if (Settings.IsMode(StorageModes.Snapshot))
 				{
 					var storage = (ISnapshotStorage<string, ExecutionMessage>)GetSnapshotStorage(DataType.Transactions);
 
 					foreach (var snapshot in storage.GetAll(from, to))
 					{
+						if (states.Count > 0 && snapshot.OrderState != null && !states.Contains(snapshot.OrderState.Value))
+							continue;
+
 						snapshot.OriginalTransactionId = transId;
 						snapshot.SetSubscriptionIds(subscriptionId: transId);
 						RaiseNewOutMessage(snapshot);
@@ -274,7 +279,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			Buffer.SendOutMessage(message);
+			Buffer.ProcessOutMessage(message);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

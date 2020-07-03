@@ -441,10 +441,7 @@ namespace StockSharp.Algo
 				//_position = position ?? throw new ArgumentNullException(nameof(position));
 			}
 
-			IEnumerable<PositionChangeMessage> IPositionManager.ProcessMessage(Message message)
-			{
-				return Enumerable.Empty<PositionChangeMessage>();
-			}
+			PositionChangeMessage IPositionManager.ProcessMessage(Message message) => null;
 		}
 
 		/// <summary>

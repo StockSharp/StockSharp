@@ -178,7 +178,7 @@ namespace StockSharp.Algo.Storages
 		/// Process message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		public void SendInMessage(Message message)
+		public void ProcessInMessage(Message message)
 		{
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
@@ -186,7 +186,7 @@ namespace StockSharp.Algo.Storages
 			if (message.OfflineMode != MessageOfflineModes.None)
 				return;
 
-			ExecutionMessage ToExec(OrderRegisterMessage regMsg) => new ExecutionMessage
+			static ExecutionMessage ToExec(OrderRegisterMessage regMsg) => new ExecutionMessage
 			{
 				ServerTime = DateTimeOffset.Now,
 				ExecutionType = ExecutionTypes.Transaction,
@@ -321,7 +321,7 @@ namespace StockSharp.Algo.Storages
 		/// Process message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		public void SendOutMessage(Message message)
+		public void ProcessOutMessage(Message message)
 		{
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));

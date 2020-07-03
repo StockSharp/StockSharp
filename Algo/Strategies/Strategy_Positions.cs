@@ -15,24 +15,22 @@
 
 	partial class Strategy
 	{
-		private Position GetPosition(Security security, Portfolio portfolio, out bool isNew)
-		{
-			return _positions.SafeAdd(CreateKey(security, portfolio), k => new Position
-			{
-				Security = security,
-				Portfolio = portfolio,
-			}, out isNew);
-		}
-
 		private void ProcessPositionChange(PositionChangeMessage message)
 		{
 			if (message.StrategyId != EnsureGetId())
 				return;
 
-			var security = SafeGetConnector().LookupById(message.SecurityId);
-			var pf = SafeGetConnector().LookupByPortfolioName(message.PortfolioName);
+			var connector = SafeGetConnector();
 
-			var position = GetPosition(security, pf, out var isNew);
+			var security = connector.LookupById(message.SecurityId);
+			var portfolio = connector.LookupByPortfolioName(message.PortfolioName);
+
+			var position = _positions.SafeAdd(CreateKey(security, portfolio), k => new Position
+			{
+				Security = security,
+				Portfolio = portfolio,
+				StrategyId = message.StrategyId,
+			}, out var isNew);
 
 			position.ApplyChanges(message);
 
@@ -40,6 +38,8 @@
 				_newPosition?.Invoke(position);
 			else
 				_positionChanged?.Invoke(position);
+
+			RaisePositionChanged();
 		}
 
 		private void RaisePositionChanged()
@@ -66,15 +66,8 @@
 		/// <param name="security">Security.</param>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <returns>Position.</returns>
-		protected decimal? GetPositionValue(Security security, Portfolio portfolio) => _positions.TryGetValue(CreateKey(security, portfolio))?.CurrentValue;
-
-		/// <summary>
-		/// Set position.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="portfolio">Portfolio.</param>
-		/// <param name="position">Position.</param>
-		protected void SetPositionValue(Security security, Portfolio portfolio, decimal position) => GetPosition(security, portfolio, out _).CurrentValue = position;
+		protected decimal? GetPositionValue(Security security, Portfolio portfolio)
+			=> _positions.TryGetValue(CreateKey(security, portfolio))?.CurrentValue;
 
 		/// <inheritdoc />
 		public IEnumerable<Position> Positions => _positions.CachedValues;
