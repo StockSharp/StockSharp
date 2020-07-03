@@ -78,10 +78,14 @@ namespace StockSharp.Algo.Positions
 		/// <inheritdoc />
 		public virtual PositionChangeMessage ProcessMessage(Message message)
 		{
-			void ProcessRegOrder(OrderRegisterMessage regMsg)
+			OrderInfo EnsureGetInfo<TMessage>(TMessage msg, Sides side, decimal volume, decimal balance)
+				where TMessage : Message, ITransactionIdMessage, ISecurityIdMessage, IPortfolioNameMessage
 			{
-				_ordersInfo.Add(regMsg.TransactionId, new OrderInfo(regMsg.SecurityId, regMsg.PortfolioName, regMsg.Side, regMsg.Volume, regMsg.Volume));
+				return _ordersInfo.SafeAdd(msg.TransactionId, key => new OrderInfo(msg.SecurityId, msg.PortfolioName, side, volume, balance));
 			}
+
+			void ProcessRegOrder(OrderRegisterMessage regMsg)
+				=> EnsureGetInfo(regMsg, regMsg.Side, regMsg.Volume, regMsg.Volume);
 
 			PositionChangeMessage UpdatePositions(OrderInfo info, decimal diff)
 			{
@@ -141,8 +145,7 @@ namespace StockSharp.Algo.Positions
 						{
 							if (execMsg.TransactionId != 0)
 							{
-								var info = new OrderInfo(execMsg.SecurityId, execMsg.PortfolioName, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
-								_ordersInfo.Add(execMsg.TransactionId, info);
+								var info = EnsureGetInfo(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
 
 								if (ByOrders)
 								{
@@ -174,10 +177,15 @@ namespace StockSharp.Algo.Positions
 
 									if (ByOrders)
 									{
-										var position = _positions.SafeAdd(Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName));
-										position.Value += balDiff;
+										var posDiff = balDiff;
 
-										return UpdatePositions(info, balDiff);
+										if (info.Side == Sides.Sell)
+											posDiff = -posDiff;
+										
+										var position = _positions.SafeAdd(Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName));
+										position.Value += posDiff;
+
+										return UpdatePositions(info, posDiff);
 									}
 								}
 							}
@@ -196,7 +204,7 @@ namespace StockSharp.Algo.Positions
 							}
 
 							if (info1.Side == Sides.Sell)
-								tradeVol *= -1;
+								tradeVol = -tradeVol;
 
 							return UpdatePositions(info1, tradeVol.Value);
 						}
