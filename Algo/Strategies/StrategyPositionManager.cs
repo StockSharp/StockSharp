@@ -1,10 +1,11 @@
-﻿namespace StockSharp.Algo.Positions
+﻿namespace StockSharp.Algo.Strategies
 {
 	using System;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Positions;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -14,9 +15,8 @@
 	public class StrategyPositionManager : IPositionManager
 	{
 		private readonly ILogReceiver _logs;
-		private readonly bool _byOrders;
 
-		private readonly SynchronizedDictionary<string, PositionManager> _managers = new SynchronizedDictionary<string, PositionManager>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<string, IPositionManager> _managers = new SynchronizedDictionary<string, IPositionManager>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyPositionManager"/>.
@@ -26,11 +26,16 @@
 		public StrategyPositionManager(ILogReceiver logs, bool byOrders)
 		{
 			_logs = logs ?? throw new ArgumentNullException(nameof(logs));
-			_byOrders = byOrders;
+			ByOrders = byOrders;
 		}
 
-		private PositionManager EnsureGetManager(string strategyId)
-			=> _managers.SafeAdd(strategyId, key => new PositionManager(_logs, _byOrders));
+		/// <summary>
+		/// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
+		/// </summary>
+		public bool ByOrders { get; }
+
+		private IPositionManager EnsureGetManager(string strategyId)
+			=> _managers.SafeAdd(strategyId, key => new PositionManager(_logs, ByOrders));
 
 		/// <inheritdoc />
 		public PositionChangeMessage ProcessMessage(Message message)
