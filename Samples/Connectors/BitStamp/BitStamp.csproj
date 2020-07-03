@@ -7,7 +7,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="BitStamp_logo.png" />
-  </ItemGroup>
 </Project>

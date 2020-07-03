@@ -259,7 +259,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual Uri Icon => GetType().GetIconUrl();
+		public virtual Uri Icon => GetType().GetConnectorIconUrl();
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -577,7 +577,7 @@ namespace StockSharp.Messages
 
 					return i.To<MessageTypes>();
 				}).ToArray();
-			
+
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
