@@ -257,6 +257,8 @@ namespace StockSharp.Algo
 			private readonly IPositionManager _nonStrategyManager;
 			private readonly IPositionManager _strategyManager;
 
+			private readonly Dictionary<long, IPositionManager> _managersByTransId = new Dictionary<long, IPositionManager>();
+
 			private readonly BasketMessageAdapter _adapter;
 			private readonly Connector _connector;
 
@@ -280,6 +282,8 @@ namespace StockSharp.Algo
 						_nonStrategyManager?.ProcessMessage(message);
 						_strategyManager.ProcessMessage(message);
 
+						_managersByTransId.Clear();
+
 						break;
 					}
 					case MessageTypes.PortfolioLookup:
@@ -295,7 +299,60 @@ namespace StockSharp.Algo
 					default:
 					{
 						if (message is IStrategyIdMessage stratMsg)
-							return GetManager(stratMsg.StrategyId)?.ProcessMessage(message);
+						{
+							if (message is ExecutionMessage execMsg)
+							{
+								if (execMsg.IsMarketData())
+									break;
+
+								if (execMsg.TransactionId == 0)
+								{
+									if (_managersByTransId.TryGetValue(execMsg.OriginalTransactionId, out var manager))
+										return manager.ProcessMessage(message);
+								}
+								else
+								{
+									var manager = GetManager(execMsg.StrategyId);
+
+									if (manager != null)
+									{
+										_managersByTransId[execMsg.TransactionId] = manager;
+										return manager.ProcessMessage(message);
+									}
+								}
+							}
+							else
+							{
+								var manager = GetManager(stratMsg.StrategyId);
+
+								if (manager == null)
+									break;
+
+								switch (message.Type)
+								{
+									case MessageTypes.OrderRegister:
+									case MessageTypes.OrderReplace:
+									{
+										var regMsg = (OrderRegisterMessage)message;
+
+										_managersByTransId[regMsg.TransactionId] = manager;
+
+										break;
+									}
+									case MessageTypes.OrderPairReplace:
+									{
+										var pairMsg = (OrderPairReplaceMessage)message;
+
+										_managersByTransId[pairMsg.Message1.TransactionId] = manager;
+										_managersByTransId[pairMsg.Message2.TransactionId] = manager;
+
+										break;
+									}
+								}
+
+								return manager.ProcessMessage(message);
+							}
+						}
 
 						break;
 					}
@@ -327,7 +384,17 @@ namespace StockSharp.Algo
 						foreach (var snapshot in storage.GetAll(from, to))
 						{
 							if (snapshot.OrderState == OrderStates.Active || snapshot.HasTradeInfo)
-								GetManager(snapshot.StrategyId)?.ProcessMessage(snapshot);
+							{
+								var manager = GetManager(snapshot.StrategyId);
+
+								if (manager == null)
+									continue;
+
+								if (snapshot.HasOrderInfo)
+									_managersByTransId[snapshot.TransactionId] = manager;
+
+								manager.ProcessMessage(snapshot);
+							}
 						}
 					}
 				}
