@@ -15,8 +15,6 @@
 	/// </summary>
 	public class StrategyPositionManager : BaseLogReceiver, IPositionManager
 	{
-		private readonly SyncObject _sync = new SyncObject();
-
 		private readonly Dictionary<string, IPositionManager> _managersByStrategyId = new Dictionary<string, IPositionManager>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<long, Tuple<IPositionManager, string>> _managersByTransId = new Dictionary<long, Tuple<IPositionManager, string>>();
 
@@ -49,19 +47,15 @@
 				if (regMsg.StrategyId.IsEmpty())
 					return;
 
-				lock (_sync)
-					CreateManager(regMsg.TransactionId, regMsg.StrategyId).ProcessMessage(message);
+				CreateManager(regMsg.TransactionId, regMsg.StrategyId).ProcessMessage(message);
 			}
 
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
 				{
-					lock (_sync)
-					{
-						_managersByStrategyId.Clear();
-						_managersByTransId.Clear();
-					}
+					_managersByStrategyId.Clear();
+					_managersByTransId.Clear();
 
 					break;
 				}
@@ -91,38 +85,34 @@
 						break;
 
 					string strategyId = null;
+					IPositionManager manager = null;
 
-					lock (_sync)
+					if (execMsg.TransactionId == 0)
 					{
-						IPositionManager manager = null;
-
-						if (execMsg.TransactionId == 0)
+						if (_managersByTransId.TryGetValue(execMsg.OriginalTransactionId, out var tuple))
 						{
-							if (_managersByTransId.TryGetValue(execMsg.OriginalTransactionId, out var tuple))
-							{
-								manager = tuple.Item1;
-								strategyId = tuple.Item2;
-							}
+							manager = tuple.Item1;
+							strategyId = tuple.Item2;
 						}
-						else
-						{
-							if (!execMsg.StrategyId.IsEmpty())
-							{
-								strategyId = execMsg.StrategyId;
-								manager = CreateManager(execMsg.TransactionId, strategyId);
-							}
-						}
-
-						if (manager == null)
-							break;
-
-						var change = manager.ProcessMessage(message);
-
-						if (change != null)
-							change.StrategyId = strategyId;
-
-						return change;
 					}
+					else
+					{
+						if (!execMsg.StrategyId.IsEmpty())
+						{
+							strategyId = execMsg.StrategyId;
+							manager = CreateManager(execMsg.TransactionId, strategyId);
+						}
+					}
+
+					if (manager == null)
+						break;
+
+					var change = manager.ProcessMessage(message);
+
+					if (change != null)
+						change.StrategyId = strategyId;
+
+					return change;
 				}
 				case MessageTypes.PositionChange:
 				{
@@ -131,12 +121,9 @@
 					if (posMsg.StrategyId.IsEmpty())
 						break;
 
-					lock (_sync)
-					{
-						_managersByStrategyId
-							.SafeAdd(posMsg.StrategyId, key => new PositionManager(ByOrders) { Parent = this })
-							.ProcessMessage(posMsg);
-					}
+					_managersByStrategyId
+						.SafeAdd(posMsg.StrategyId, key => new PositionManager(ByOrders) { Parent = this })
+						.ProcessMessage(posMsg);
 
 					break;
 				}

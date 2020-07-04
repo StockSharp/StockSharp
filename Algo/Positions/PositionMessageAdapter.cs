@@ -15,9 +15,12 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Positions
 {
+	using System;
+
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -27,7 +30,9 @@ namespace StockSharp.Algo.Positions
 	public class PositionMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly SyncObject _sync = new SyncObject();
-		private readonly PositionManager _positionManager;
+		private readonly IPositionManager _positionManager;
+
+		private readonly StorageBuffer _buffer;
 
 		private readonly CachedSynchronizedSet<long> _subscriptions = new CachedSynchronizedSet<long>();
 
@@ -35,11 +40,16 @@ namespace StockSharp.Algo.Positions
 		/// Initializes a new instance of the <see cref="PositionMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-		public PositionMessageAdapter(IMessageAdapter innerAdapter, bool byOrders)
+		/// <param name="positionManager">The position calculation manager..</param>
+		/// <param name="buffer">Storage buffer.</param>
+		public PositionMessageAdapter(IMessageAdapter innerAdapter, IPositionManager positionManager, StorageBuffer buffer)
 			: base(innerAdapter)
 		{
-			_positionManager = new PositionManager(byOrders) { Parent = this };
+			_positionManager = positionManager ?? throw new ArgumentNullException(nameof(positionManager));
+			_buffer = buffer;
+
+			if (_positionManager is ILogSource source && source.Parent == null)
+				source.Parent = this;
 		}
 
 		/// <inheritdoc />
@@ -58,18 +68,14 @@ namespace StockSharp.Algo.Positions
 							this.AddDebugLog("Subscription {0} added.", lookupMsg.TransactionId);
 							_subscriptions.Add(lookupMsg.TransactionId);
 						}
-
-						RaiseNewOutMessage(lookupMsg.CreateResult());
 					}
 					else
 					{
 						if (_subscriptions.Remove(lookupMsg.OriginalTransactionId))
 							this.AddDebugLog("Subscription {0} removed.", lookupMsg.OriginalTransactionId);
-
-						//RaiseNewOutMessage(lookupMsg.CreateResponse());
 					}
 
-					return true;
+					break;
 				}
 
 				default:
@@ -87,7 +93,9 @@ namespace StockSharp.Algo.Positions
 		{
 			PositionChangeMessage change = null;
 
-			if (message.Type != MessageTypes.Reset)
+			if (message.Type != MessageTypes.Reset &&
+				message.Type != MessageTypes.Connect &&
+				message.Type != MessageTypes.Disconnect)
 			{
 				lock (_sync)
 					change = _positionManager.ProcessMessage(message);
@@ -97,6 +105,8 @@ namespace StockSharp.Algo.Positions
 
 			if (change != null)
 			{
+				_buffer?.ProcessOutMessage(change);
+
 				var subscriptions = _subscriptions.Cache;
 
 				if (subscriptions.Length > 0)
@@ -110,6 +120,6 @@ namespace StockSharp.Algo.Positions
 		/// Create a copy of <see cref="PositionMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone() => new PositionMessageAdapter(InnerAdapter.TypedClone(), _positionManager.ByOrders);
+		public override IMessageChannel Clone() => new PositionMessageAdapter(InnerAdapter.TypedClone(), _positionManager, _buffer);
 	}
 }

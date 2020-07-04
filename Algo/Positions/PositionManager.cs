@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Positions
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -31,8 +30,9 @@ namespace StockSharp.Algo.Positions
 	{
 		private class OrderInfo
 		{
-			public OrderInfo(SecurityId securityId, string portfolioName, Sides side, decimal volume, decimal balance)
+			public OrderInfo(long transactionId, SecurityId securityId, string portfolioName, Sides side, decimal volume, decimal balance)
 			{
+				TransactionId = transactionId;
 				SecurityId = securityId;
 				PortfolioName = portfolioName;
 				Side = side;
@@ -40,16 +40,21 @@ namespace StockSharp.Algo.Positions
 				Balance = balance;
 			}
 
+			public long TransactionId { get; }
 			public SecurityId SecurityId { get; }
 			public string PortfolioName { get; }
 			public Sides Side { get; }
 			public decimal Volume { get; }
 			public decimal Balance { get; set; }
+
+			public override string ToString() => $"{TransactionId}: {Balance}/{Volume}";
 		}
 
 		private class PositionInfo
 		{
 			public decimal Value { get; set; }
+
+			public override string ToString() => Value.ToString();
 		}
 
 		private readonly Dictionary<long, OrderInfo> _ordersInfo = new Dictionary<long, OrderInfo>();
@@ -83,7 +88,7 @@ namespace StockSharp.Algo.Positions
 				where TMessage : Message, ITransactionIdMessage, ISecurityIdMessage, IPortfolioNameMessage
 			{
 				this.AddDebugLog("{0} bal_new {1}/{2}.", msg.TransactionId, balance, volume);
-				return _ordersInfo.SafeAdd(msg.TransactionId, key => new OrderInfo(msg.SecurityId, msg.PortfolioName, side, volume, balance));
+				return _ordersInfo.SafeAdd(msg.TransactionId, key => new OrderInfo(key, msg.SecurityId, msg.PortfolioName, side, volume, balance));
 			}
 
 			void ProcessRegOrder(OrderRegisterMessage regMsg)
