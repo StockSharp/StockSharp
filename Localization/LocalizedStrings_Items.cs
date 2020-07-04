@@ -51816,5 +51816,15 @@ namespace StockSharp.Localization
 		/// Sequence number.
 		/// </summary>
 		public static string SequenceNumber => GetString(SequenceNumberKey);
+
+		/// <summary>
+		/// Will be available soon.
+		/// </summary>
+		public const string AvailableSoonKey = nameof(AvailableSoon);
+
+		/// <summary>
+		/// Will be available soon.
+		/// </summary>
+		public static string AvailableSoon => GetString(AvailableSoonKey);
 	}
 }

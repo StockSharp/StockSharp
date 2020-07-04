@@ -5214,6 +5214,7 @@ InitiatorTrade;Used to identify whether the order initiator is an aggressor or n
 Dark;Dark;Темная
 DarkTheme;Dark theme.;Темная тема.
 SequenceNumber;Sequence number.;Sequence number.
+AvailableSoon;Will be available soon.;Будет доступно скоро.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
