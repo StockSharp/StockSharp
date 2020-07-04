@@ -52,8 +52,6 @@ namespace StockSharp.Algo.Positions
 			public decimal Value { get; set; }
 		}
 
-		private readonly SyncObject _sync = new SyncObject();
-
 		private readonly Dictionary<long, OrderInfo> _ordersInfo = new Dictionary<long, OrderInfo>();
 		private readonly Dictionary<Tuple<SecurityId, string>, PositionInfo> _positions = new Dictionary<Tuple<SecurityId, string>, PositionInfo>();
 
@@ -103,11 +101,8 @@ namespace StockSharp.Algo.Positions
 			{
 				case MessageTypes.Reset:
 				{
-					lock (_sync)
-					{
-						_ordersInfo.Clear();
-						_positions.Clear();
-					}
+					_ordersInfo.Clear();
+					_positions.Clear();
 
 					break;
 				}
@@ -136,77 +131,74 @@ namespace StockSharp.Algo.Positions
 					if (execMsg.IsMarketData())
 						break;
 
-					lock (_sync)
+					if (execMsg.HasOrderInfo())
 					{
-						if (execMsg.HasOrderInfo())
+						if (execMsg.TransactionId != 0)
 						{
-							if (execMsg.TransactionId != 0)
+							var info = EnsureGetInfo(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
+
+							if (ByOrders)
 							{
-								var info = EnsureGetInfo(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
+								var orderPos = (execMsg.Side == Sides.Buy ? 1 : -1) * (execMsg.OrderVolume - execMsg.Balance);
+
+								if (orderPos != null && orderPos != 0)
+									return UpdatePositions(info, orderPos.Value);
+							}
+
+							break;
+						}
+						else
+						{
+							var balance = execMsg.Balance;
+
+							if (balance == null)
+								break;
+
+							var transId = execMsg.OriginalTransactionId;
+
+							if (!_ordersInfo.TryGetValue(transId, out var info))
+								break;
+
+							var balDiff = info.Balance - balance.Value;
+
+							if (balDiff > 0)
+							{
+								info.Balance = balance.Value;
+
+								this.AddDebugLog("{0} bal_upd {1}/{2}.", transId, info.Balance, info.Volume);
 
 								if (ByOrders)
 								{
-									var orderPos = (execMsg.Side == Sides.Buy ? 1 : -1) * (execMsg.OrderVolume - execMsg.Balance);
+									var posDiff = balDiff;
 
-									if (orderPos != null && orderPos != 0)
-										return UpdatePositions(info, orderPos.Value);
-								}
-
-								break;
-							}
-							else
-							{
-								var balance = execMsg.Balance;
-
-								if (balance == null)
-									break;
-
-								var transId = execMsg.OriginalTransactionId;
-
-								if (!_ordersInfo.TryGetValue(transId, out var info))
-									break;
-
-								var balDiff = info.Balance - balance.Value;
-
-								if (balDiff > 0)
-								{
-									info.Balance = balance.Value;
-
-									this.AddDebugLog("{0} bal_upd {1}/{2}.", transId, info.Balance, info.Volume);
-
-									if (ByOrders)
-									{
-										var posDiff = balDiff;
-
-										if (info.Side == Sides.Sell)
-											posDiff = -posDiff;
+									if (info.Side == Sides.Sell)
+										posDiff = -posDiff;
 										
-										var position = _positions.SafeAdd(Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName));
-										position.Value += posDiff;
+									var position = _positions.SafeAdd(Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName));
+									position.Value += posDiff;
 
-										return UpdatePositions(info, posDiff);
-									}
+									return UpdatePositions(info, posDiff);
 								}
 							}
 						}
+					}
 
-						if (!ByOrders && execMsg.HasTradeInfo() && _ordersInfo.TryGetValue(execMsg.OriginalTransactionId, out var info1))
+					if (!ByOrders && execMsg.HasTradeInfo() && _ordersInfo.TryGetValue(execMsg.OriginalTransactionId, out var info1))
+					{
+						var tradeVol = execMsg.TradeVolume;
+
+						if (tradeVol == null)
+							break;
+						else if (tradeVol == 0)
 						{
-							var tradeVol = execMsg.TradeVolume;
-
-							if (tradeVol == null)
-								break;
-							else if (tradeVol == 0)
-							{
-								this.AddWarningLog("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
-								break;
-							}
-
-							if (info1.Side == Sides.Sell)
-								tradeVol = -tradeVol;
-
-							return UpdatePositions(info1, tradeVol.Value);
+							this.AddWarningLog("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
+							break;
 						}
+
+						if (info1.Side == Sides.Sell)
+							tradeVol = -tradeVol;
+
+						return UpdatePositions(info1, tradeVol.Value);
 					}
 
 					break;

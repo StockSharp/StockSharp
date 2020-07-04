@@ -49,12 +49,8 @@
 				if (regMsg.StrategyId.IsEmpty())
 					return;
 
-				IPositionManager manager;
-
 				lock (_sync)
-					manager = CreateManager(regMsg.TransactionId, regMsg.StrategyId);
-
-				manager.ProcessMessage(message);
+					CreateManager(regMsg.TransactionId, regMsg.StrategyId).ProcessMessage(message);
 			}
 
 			switch (message.Type)
@@ -94,11 +90,12 @@
 					if (execMsg.IsMarketData())
 						break;
 
-					IPositionManager manager = null;
 					string strategyId = null;
 
 					lock (_sync)
 					{
+						IPositionManager manager = null;
+
 						if (execMsg.TransactionId == 0)
 						{
 							if (_managersByTransId.TryGetValue(execMsg.OriginalTransactionId, out var tuple))
@@ -115,17 +112,17 @@
 								manager = CreateManager(execMsg.TransactionId, strategyId);
 							}
 						}
+
+						if (manager == null)
+							break;
+
+						var change = manager.ProcessMessage(message);
+
+						if (change != null)
+							change.StrategyId = strategyId;
+
+						return change;
 					}
-
-					if (manager == null)
-						break;
-
-					var change = manager.ProcessMessage(message);
-
-					if (change != null)
-						change.StrategyId = strategyId;
-
-					return change;
 				}
 			}
 

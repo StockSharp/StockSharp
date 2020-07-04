@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Positions
 	/// </summary>
 	public class PositionMessageAdapter : MessageAdapterWrapper
 	{
+		private readonly SyncObject _sync = new SyncObject();
 		private readonly PositionManager _positionManager;
 
 		private readonly CachedSynchronizedSet<long> _subscriptions = new CachedSynchronizedSet<long>();
@@ -72,7 +73,9 @@ namespace StockSharp.Algo.Positions
 				}
 
 				default:
-					_positionManager.ProcessMessage(message);
+					lock (_sync)
+						_positionManager.ProcessMessage(message);
+
 					break;
 			}
 			
@@ -85,7 +88,10 @@ namespace StockSharp.Algo.Positions
 			PositionChangeMessage change = null;
 
 			if (message.Type != MessageTypes.Reset)
-				change = _positionManager.ProcessMessage(message);
+			{
+				lock (_sync)
+					change = _positionManager.ProcessMessage(message);
+			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 
