@@ -542,31 +542,31 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (!changes.SystemComment.IsEmpty())
 				message.SystemComment = changes.SystemComment;
 
-			if (changes.Currency != null)
+			if (changes.Currency != default)
 				message.Currency = changes.Currency;
 
-			if (changes.Condition != null)
+			if (changes.Condition != default)
 				message.Condition = changes.Condition.Clone();
 
 			if (!changes.DepoName.IsEmpty())
 				message.DepoName = changes.DepoName;
 
-			if (changes.Error != null)
+			if (changes.Error != default)
 				message.Error = changes.Error;
 
-			if (changes.ExpiryDate != null)
+			if (changes.ExpiryDate != default)
 				message.ExpiryDate = changes.ExpiryDate;
 
 			if (!changes.PortfolioName.IsEmpty())
 				message.PortfolioName = changes.PortfolioName;
 
-			if (changes.IsMarketMaker != null)
+			if (changes.IsMarketMaker != default)
 				message.IsMarketMaker = changes.IsMarketMaker;
 
 			//if (changes.HasOrderInfo)
 			//	message.Side = changes.Side;
 
-			if (changes.OrderId != null)
+			if (changes.OrderId != default)
 				message.OrderId = changes.OrderId;
 
 			if (!changes.OrderBoardId.IsEmpty())
@@ -575,25 +575,25 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (!changes.OrderStringId.IsEmpty())
 				message.OrderStringId = changes.OrderStringId;
 
-			if (changes.OrderType != null)
+			if (changes.OrderType != default)
 				message.OrderType = changes.OrderType;
 
-			if (changes.OrderPrice != 0)
+			if (changes.OrderPrice != default)
 				message.OrderPrice = changes.OrderPrice;
 
-			if (changes.OrderVolume != null)
+			if (changes.OrderVolume != default)
 				message.OrderVolume = changes.OrderVolume;
 
-			if (changes.VisibleVolume != null)
+			if (changes.VisibleVolume != default)
 				message.VisibleVolume = changes.VisibleVolume;
 
-			if (changes.OrderState != null)
+			if (changes.OrderState != default)
 				message.OrderState = changes.OrderState;
 
-			if (changes.OrderStatus != null)
+			if (changes.OrderStatus != default)
 				message.OrderStatus = changes.OrderStatus;
 
-			if (changes.Balance != null)
+			if (changes.Balance != default)
 				message.Balance = changes.Balance;
 
 			if (!changes.UserOrderId.IsEmpty())
@@ -602,52 +602,52 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (!changes.StrategyId.IsEmpty())
 				message.StrategyId = changes.StrategyId;
 
-			if (changes.OriginSide != null)
+			if (changes.OriginSide != default)
 				message.OriginSide = changes.OriginSide;
 
-			if (changes.Latency != null)
+			if (changes.Latency != default)
 				message.Latency = changes.Latency;
 
-			if (changes.PnL != null)
+			if (changes.PnL != default)
 				message.PnL = changes.PnL;
 
-			if (changes.Position != null)
+			if (changes.Position != default)
 				message.Position = changes.Position;
 
-			if (changes.Slippage != null)
+			if (changes.Slippage != default)
 				message.Slippage = changes.Slippage;
 
-			if (changes.Commission != null)
+			if (changes.Commission != default)
 				message.Commission = changes.Commission;
 
-			if (changes.TradePrice != null)
+			if (changes.TradePrice != default)
 				message.TradePrice = changes.TradePrice;
 
-			if (changes.TradeVolume != null)
+			if (changes.TradeVolume != default)
 				message.TradeVolume = changes.TradeVolume;
 
-			if (changes.TradeStatus != null)
+			if (changes.TradeStatus != default)
 				message.TradeStatus = changes.TradeStatus;
 
-			if (changes.TradeId != null)
+			if (changes.TradeId != default)
 				message.TradeId = changes.TradeId;
 
 			if (!changes.TradeStringId.IsEmpty())
 				message.TradeStringId = changes.TradeStringId;
 
-			if (changes.OpenInterest != null)
+			if (changes.OpenInterest != default)
 				message.OpenInterest = changes.OpenInterest;
 
-			if (changes.IsMargin != null)
+			if (changes.IsMargin != default)
 				message.IsMargin = changes.IsMargin;
 
-			if (changes.TimeInForce != null)
+			if (changes.TimeInForce != default)
 				message.TimeInForce = changes.TimeInForce;
 
-			//if (changes.OriginalTransactionId != 0)
+			//if (changes.OriginalTransactionId != default)
 			//	message.OriginalTransactionId = changes.OriginalTransactionId;
 
-			//if (changes.TransactionId != 0)
+			//if (changes.TransactionId != default)
 			//	message.TransactionId = changes.TransactionId;
 
 			if (changes.HasOrderInfo)
@@ -656,25 +656,25 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (changes.HasTradeInfo)
 				message.HasTradeInfo = true;
 
-			if (changes.AveragePrice != null)
+			if (changes.AveragePrice != default)
 				message.AveragePrice = changes.AveragePrice;
 
-			if (changes.MinVolume != null)
+			if (changes.MinVolume != default)
 				message.MinVolume = changes.MinVolume;
 
-			if (changes.Yield != null)
+			if (changes.Yield != default)
 				message.Yield = changes.Yield;
 
-			if (changes.PositionEffect != null)
+			if (changes.PositionEffect != default)
 				message.PositionEffect = changes.PositionEffect;
 
-			if (changes.PostOnly != null)
+			if (changes.PostOnly != default)
 				message.PostOnly = changes.PostOnly;
 
-			if (changes.Initiator != null)
+			if (changes.Initiator != default)
 				message.Initiator = changes.Initiator;
 
-			if (changes.SeqNum != 0)
+			if (changes.SeqNum != default)
 				message.SeqNum = changes.SeqNum;
 
 			message.LocalTime = changes.LocalTime;

@@ -331,7 +331,7 @@ namespace StockSharp.Algo
 				period = period.Min(HeartbeatInterval);
 			}
 
-			var outMsgIntervalInitial = TimeSpan.FromSeconds(10);
+			var outMsgIntervalInitial = TimeSpan.FromSeconds(5);
 			var outMsgInterval = outMsgIntervalInitial;
 
 			_timer = ThreadingHelper
