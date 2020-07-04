@@ -10,6 +10,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Server time.
 		/// </summary>
-		DateTimeOffset ServerTime { get; }
+		DateTimeOffset ServerTime { get; set; }
 	}
 }

@@ -325,7 +325,11 @@ namespace StockSharp.Messages
 			return $"{Type},Sec={SecurityId},A={Arg},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume},S={State},TransId={OriginalTransactionId}";
 		}
 
-		DateTimeOffset IServerTimeMessage.ServerTime => OpenTime;
+		DateTimeOffset IServerTimeMessage.ServerTime
+		{
+			get => OpenTime;
+			set => OpenTime = value;
+		}
 	}
 
 	/// <summary>
