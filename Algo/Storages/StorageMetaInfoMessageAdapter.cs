@@ -251,20 +251,27 @@ namespace StockSharp.Algo.Storages
 			var now = CurrentTime;
 			var transId = msg.TransactionId;
 
+			void SendOut<TMessage>(TMessage outMsg)
+				where TMessage : Message, ISubscriptionIdMessage
+			{
+				outMsg.SetSubscriptionIds(subscriptionId: transId);
+
+				if (outMsg is IServerTimeMessage timeMsg)
+					timeMsg.ServerTime = now;
+
+				outMsg.OfflineMode = MessageOfflineModes.Ignore;
+				RaiseNewOutMessage(outMsg);
+			}
+
 			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 			{
-				RaiseNewOutMessage(portfolio.ToMessage(transId).SetSubscriptionIds(subscriptionId: transId));
-
-				var changeMsg = portfolio.ToChangeMessage().SetSubscriptionIds(subscriptionId: transId);
-				changeMsg.ServerTime = now;
-				RaiseNewOutMessage(changeMsg);
+				SendOut(portfolio.ToMessage(transId));
+				SendOut(portfolio.ToChangeMessage());
 			}
 
 			foreach (var position in _positionStorage.Positions.Filter(msg))
 			{
-				var changeMsg = position.ToChangeMessage(transId).SetSubscriptionIds(subscriptionId: transId);
-				changeMsg.ServerTime = now;
-				RaiseNewOutMessage(changeMsg);
+				SendOut(position.ToChangeMessage(transId));
 			}
 
 			return base.OnSendInMessage(msg);
