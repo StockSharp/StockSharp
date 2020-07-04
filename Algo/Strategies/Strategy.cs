@@ -1457,7 +1457,7 @@ namespace StockSharp.Algo.Strategies
 			var info = _ordersInfo.TryGetValue(order);
 
 			var isRegistered = (info != null && !info.IsOwn && !isChanging) || //иначе не добавляются заявки дочерних стратегий
-			                   info != null && info.IsOwn && info.PrevState == OrderStates.None && order.State != OrderStates.Pending;
+			                   info != null && info.IsOwn && info.PrevState == OrderStates.Pending && (order.State == OrderStates.Active || order.State == OrderStates.Done);
 
 			if (info != null && info.IsOwn)
 				info.PrevState = order.State;
