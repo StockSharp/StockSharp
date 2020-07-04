@@ -1406,42 +1406,6 @@ namespace StockSharp.Algo
 			RaiseSecurityChanged(security);
 		}
 
-		private void ProcessMyTrades<T>(Order order, T id, Dictionary<T, List<ExecutionMessage>> nonOrderedMyTrades)
-		{
-			var value = nonOrderedMyTrades.TryGetValue(id);
-
-			if (value == null)
-				return;
-
-			var retVal = new List<ExecutionMessage>();
-
-			foreach (var message in value.ToArray())
-			{
-				// проверяем совпадение по дате, исключая ситуация сопоставления сделки с заявкой, имеющая неуникальный идентификатор
-				if (message.ServerTime.Date != order.Time.Date)
-					continue;
-
-				retVal.Add(message);
-				value.Remove(message);
-			}
-
-			if (value.IsEmpty())
-				nonOrderedMyTrades.Remove(id);
-
-			foreach (var msg in retVal)
-			{
-				var tuple = _entityCache.ProcessOwnTradeMessage(order, order.Security, msg, _entityCache.GetTransactionId(msg.OriginalTransactionId));
-
-				if (tuple?.Item2 != true)
-					continue;
-
-				var trade = tuple.Item1;
-
-				RaiseNewMyTrade(trade);
-				RaiseReceived(trade, msg, OwnTradeReceived);
-			}
-		}
-
 		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId/*, bool isStatusRequest*/)
 		{
 			if (message.OrderState != OrderStates.Failed && message.Error == null)
