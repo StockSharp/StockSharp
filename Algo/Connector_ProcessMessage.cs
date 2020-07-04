@@ -12,7 +12,6 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Strategies;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -304,9 +303,6 @@ namespace StockSharp.Algo
 					if (Buffer != null)
 						_inAdapter = new BufferMessageAdapter(_inAdapter, _adapter.StorageSettings, Buffer, SnapshotRegistry);
 
-					if (TrackStrategiesPositions)
-						_inAdapter = new StrategyPositionMessageAdapter(_inAdapter, true, Buffer);
-
 					if (SupportBasketSecurities)
 						_inAdapter = new BasketSecurityMessageAdapter(_inAdapter, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true };
 
@@ -323,11 +319,6 @@ namespace StockSharp.Algo
 				}
 			}
 		}
-
-		/// <summary>
-		/// Use <see cref="StrategyPositionMessageAdapter"/>.
-		/// </summary>
-		public virtual bool TrackStrategiesPositions => true;
 
 		/// <summary>
 		/// Use <see cref="BasketSecurityMessageAdapter"/>.
@@ -1524,6 +1515,9 @@ namespace StockSharp.Algo
 		private void ProcessOwnTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{
 			var tuple = _entityCache.ProcessOwnTradeMessage(order, security, message, transactionId);
+
+			if (tuple == null)
+				return;
 
 			if (tuple.Item2)
 				RaiseNewMyTrade(tuple.Item1);
