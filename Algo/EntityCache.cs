@@ -134,16 +134,16 @@ namespace StockSharp.Algo
 				if (order.Volume == 0 && message.OrderVolume != null)
 					order.Volume = message.OrderVolume.Value;
 
-				if (message.Commission != null)
+				if (message.Commission != default)
 					order.Commission = message.Commission;
 
 				if (!message.CommissionCurrency.IsEmpty())
 					order.CommissionCurrency = message.CommissionCurrency;
 
-				if (message.TimeInForce != null)
+				if (message.TimeInForce != default)
 					order.TimeInForce = message.TimeInForce.Value;
 
-				if (message.Latency != null)
+				if (message.Latency != default)
 				{
 					if (isCancel)
 						order.LatencyCancellation = message.Latency.Value;
@@ -154,11 +154,14 @@ namespace StockSharp.Algo
 					}
 				}
 
-				if (message.AveragePrice != null)
+				if (message.AveragePrice != default)
 					order.AveragePrice = message.AveragePrice;
 
-				if (message.Yield != null)
+				if (message.Yield != default)
 					order.Yield = message.Yield;
+
+				if (message.SeqNum != default)
+					order.SeqNum = message.SeqNum;
 
 				message.CopyExtensionInfo(order);
 
