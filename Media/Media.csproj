@@ -11,7 +11,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logos\*.png" />
+    <Resource Include="logos\*.svg" />
     <None Remove="logos\*.png" />
+    <None Remove="logos\*.svg" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="*.gif" />
