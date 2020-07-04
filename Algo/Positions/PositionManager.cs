@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Positions
 			void ProcessRegOrder(OrderRegisterMessage regMsg)
 				=> EnsureGetInfo(regMsg, regMsg.Side, regMsg.Volume, regMsg.Volume);
 
-			PositionChangeMessage UpdatePositions(OrderInfo info, decimal diff)
+			PositionChangeMessage UpdatePositions(OrderInfo info, decimal diff, DateTimeOffset time)
 			{
 				var secId = info.SecurityId;
 				var pf = info.PortfolioName;
@@ -106,6 +106,7 @@ namespace StockSharp.Algo.Positions
 				{
 					SecurityId = secId,
 					PortfolioName = pf,
+					ServerTime = time,
 				}.Add(PositionChangeTypes.CurrentValue, position.Value);
 			}
 
@@ -151,10 +152,15 @@ namespace StockSharp.Algo.Positions
 
 							if (ByOrders)
 							{
-								var orderPos = (execMsg.Side == Sides.Buy ? 1 : -1) * (execMsg.OrderVolume - execMsg.Balance);
+								var orderPos = execMsg.OrderVolume - execMsg.Balance;
 
 								if (orderPos != null && orderPos != 0)
-									return UpdatePositions(info, orderPos.Value);
+								{
+									if (execMsg.Side == Sides.Sell)
+										orderPos = -orderPos;
+
+									return UpdatePositions(info, orderPos.Value, execMsg.ServerTime);
+								}
 							}
 
 							break;
@@ -186,10 +192,7 @@ namespace StockSharp.Algo.Positions
 									if (info.Side == Sides.Sell)
 										posDiff = -posDiff;
 										
-									var position = _positions.SafeAdd(CreateKey2(execMsg));
-									position.Value += posDiff;
-
-									return UpdatePositions(info, posDiff);
+									return UpdatePositions(info, posDiff, execMsg.ServerTime);
 								}
 							}
 						}
@@ -210,7 +213,7 @@ namespace StockSharp.Algo.Positions
 						if (info1.Side == Sides.Sell)
 							tradeVol = -tradeVol;
 
-						return UpdatePositions(info1, tradeVol.Value);
+						return UpdatePositions(info1, tradeVol.Value, execMsg.ServerTime);
 					}
 
 					break;
