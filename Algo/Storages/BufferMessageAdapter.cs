@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.Threading;
 	using System.Linq;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -237,15 +238,21 @@ namespace StockSharp.Algo.Storages
 				var from = message.From ?? DateTime.UtcNow.Date - Settings.DaysLoad;
 				var to = message.To;
 
-				var states = message.States.ToHashSet();
-
 				if (Settings.IsMode(StorageModes.Snapshot))
 				{
+					var states = message.States.ToHashSet();
+					var ordersIds = new HashSet<long>();
+					
 					var storage = (ISnapshotStorage<string, ExecutionMessage>)GetSnapshotStorage(DataType.Transactions);
 
 					foreach (var snapshot in storage.GetAll(from, to))
 					{
 						if (states.Count > 0 && snapshot.OrderState != null && !states.Contains(snapshot.OrderState.Value))
+							continue;
+
+						if (snapshot.HasOrderInfo)
+							ordersIds.Add(snapshot.TransactionId);
+						else if (!ordersIds.Contains(snapshot.TransactionId))
 							continue;
 
 						snapshot.OriginalTransactionId = transId;
