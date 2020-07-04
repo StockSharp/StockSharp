@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Enable positions storage.
 		/// </summary>
-		public bool EnabledPositions { get; set; } = true;
+		public bool EnabledPositions { get; set; }
 
 		/// <summary>
 		/// Enable transactions storage.

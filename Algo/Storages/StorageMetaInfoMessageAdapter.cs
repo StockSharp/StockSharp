@@ -168,9 +168,6 @@ namespace StockSharp.Algo.Storages
 				{
 					var positionMsg = (PositionChangeMessage)message;
 
-					if (!positionMsg.StrategyId.IsEmpty())
-						break;
-
 					if (positionMsg.IsMoney())
 					{
 						var portfolio = _positionStorage.LookupByPortfolioName(positionMsg.PortfolioName) ?? new Portfolio
