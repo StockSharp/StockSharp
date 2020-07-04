@@ -259,7 +259,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual Uri Icon => GetType().GetConnectorIconUrl();
+		public virtual Uri Icon => GetType().GetIconUrl();
 
 		/// <inheritdoc />
 		[Browsable(false)]

@@ -13,7 +13,7 @@ namespace StockSharp.BitStamp
 	/// <summary>
 	/// The message adapter for <see cref="BitStamp"/>.
 	/// </summary>
-	[Icon("BitStamp_logo.png")]
+	[StockSharpIcon("BitStamp_logo.png")]
 	[Doc("345fa341-661d-4992-a9a6-9c89af399feb.htm")]
 	[DisplayNameLoc(LocalizedStrings.BitStampKey)]
 	[CategoryLoc(LocalizedStrings.CryptocurrencyKey)]

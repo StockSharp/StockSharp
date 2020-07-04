@@ -15,7 +15,7 @@ namespace StockSharp.Fix.Dialects
 	/// <summary>
 	/// CFH FIX protocol dialect.
 	/// </summary>
-	[Icon("Dialects/CFH_logo.png")]
+	[StockSharpIcon("CFH_logo.png")]
 	[DisplayNameLoc(LocalizedStrings.CFHKey)]
 #if !IGNORE_LICENSE
 	[Licensing.LicenseFeature("CFH")]
