@@ -28,7 +28,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class OrderMessage : SecurityMessage, ITransactionIdMessage, IPortfolioNameMessage
+	public abstract class OrderMessage : SecurityMessage,
+		ITransactionIdMessage, IPortfolioNameMessage, IStrategyIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -62,9 +63,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string UserOrderId { get; set; }
 
-		/// <summary>
-		/// Strategy id.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public string StrategyId { get; set; }
 

@@ -65,7 +65,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage,
-		IPortfolioNameMessage, IErrorMessage
+		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -458,9 +458,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string UserOrderId { get; set; }
 
-		/// <summary>
-		/// Strategy id.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public string StrategyId { get; set; }
 

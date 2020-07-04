@@ -224,7 +224,8 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage, PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage
+	public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
+		PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage, IStrategyIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -284,9 +285,8 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string BoardCode { get; set; }
 
-		/// <summary>
-		/// Strategy id.
-		/// </summary>
+		/// <inheritdoc />
+		[DataMember]
 		public string StrategyId { get; set; }
 
 		/// <summary>
