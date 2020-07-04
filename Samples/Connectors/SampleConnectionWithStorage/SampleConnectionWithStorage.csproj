@@ -130,6 +130,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharp (GitLab)\Connectors\Deribit\Deribit.csproj" />
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>

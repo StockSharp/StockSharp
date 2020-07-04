@@ -124,6 +124,22 @@
 						return change;
 					}
 				}
+				case MessageTypes.PositionChange:
+				{
+					var posMsg = (PositionChangeMessage)message;
+
+					if (posMsg.StrategyId.IsEmpty())
+						break;
+
+					lock (_sync)
+					{
+						_managersByStrategyId
+							.SafeAdd(posMsg.StrategyId, key => new PositionManager(ByOrders) { Parent = this })
+							.ProcessMessage(posMsg);
+					}
+
+					break;
+				}
 			}
 
 			return null;

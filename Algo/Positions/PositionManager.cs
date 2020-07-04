@@ -72,6 +72,13 @@ namespace StockSharp.Algo.Positions
 		/// <inheritdoc />
 		public virtual PositionChangeMessage ProcessMessage(Message message)
 		{
+			static Tuple<SecurityId, string> CreateKey(SecurityId secId, string pf)
+				=> Tuple.Create(secId, pf.ToLowerInvariant());
+
+			static Tuple<SecurityId, string> CreateKey2<TMessage>(TMessage message)
+				where TMessage : Message, ISecurityIdMessage, IPortfolioNameMessage
+				=> CreateKey(message.SecurityId, message.PortfolioName);
+
 			OrderInfo EnsureGetInfo<TMessage>(TMessage msg, Sides side, decimal volume, decimal balance)
 				where TMessage : Message, ITransactionIdMessage, ISecurityIdMessage, IPortfolioNameMessage
 			{
@@ -87,7 +94,7 @@ namespace StockSharp.Algo.Positions
 				var secId = info.SecurityId;
 				var pf = info.PortfolioName;
 
-				var position = _positions.SafeAdd(Tuple.Create(secId, pf));
+				var position = _positions.SafeAdd(CreateKey(secId, pf));
 				position.Value += diff;
 
 				return new PositionChangeMessage
@@ -174,7 +181,7 @@ namespace StockSharp.Algo.Positions
 									if (info.Side == Sides.Sell)
 										posDiff = -posDiff;
 										
-									var position = _positions.SafeAdd(Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName));
+									var position = _positions.SafeAdd(CreateKey2(execMsg));
 									position.Value += posDiff;
 
 									return UpdatePositions(info, posDiff);
@@ -200,6 +207,16 @@ namespace StockSharp.Algo.Positions
 
 						return UpdatePositions(info1, tradeVol.Value);
 					}
+
+					break;
+				}
+
+				case MessageTypes.PositionChange:
+				{
+					var posMsg = (PositionChangeMessage)message;
+
+					if (posMsg.Changes.TryGetValue(PositionChangeTypes.CurrentValue, out var curr))
+						_positions.SafeAdd(CreateKey2(posMsg)).Value = (decimal)curr;
 
 					break;
 				}
