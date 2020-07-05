@@ -40,7 +40,13 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ClientCode,
 				data.DepoName,
 				data.LimitType.To<string>(),
+				data.Description,
+				data.StrategyId,
 			});
+
+			row.AddRange(data.BuildFrom.ToCsv());
+
+			row.Add(_types.Length.To<string>());
 
 			foreach (var type in _types)
 			{
@@ -54,11 +60,6 @@ namespace StockSharp.Algo.Storages.Csv
 				else
 					row.Add(value?.ToString());
 			}
-
-			row.Add(data.Description);
-			row.Add(data.StrategyId);
-
-			row.AddRange(data.BuildFrom.ToCsv());
 
 			writer.WriteRow(row);
 
@@ -76,9 +77,14 @@ namespace StockSharp.Algo.Storages.Csv
 				ClientCode = reader.ReadString(),
 				DepoName = reader.ReadString(),
 				LimitType = reader.ReadString().To<TPlusLimits?>(),
+				Description = reader.ReadString(),
+				StrategyId = reader.ReadString(),
+				BuildFrom = reader.ReadBuildFrom(),
 			};
 
-			foreach (var type in _types)
+			var count = reader.ReadInt();
+
+			foreach (var type in _types.Take(count))
 			{
 				switch (type)
 				{
@@ -126,15 +132,6 @@ namespace StockSharp.Algo.Storages.Csv
 					}
 				}
 			}
-
-			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-			{
-				posMsg.Description = reader.ReadString();
-				posMsg.StrategyId = reader.ReadString();
-			}
-
-			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				posMsg.BuildFrom = reader.ReadBuildFrom();
 
 			return posMsg;
 		}
