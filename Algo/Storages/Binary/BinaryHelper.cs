@@ -590,28 +590,59 @@ namespace StockSharp.Algo.Storages.Binary
 			if (buildFrom == null)
 				return;
 
-			var (messageType, arg1, arg2, arg3) = buildFrom.Extract();
-
-			writer.WriteInt(messageType);
-			writer.WriteLong(arg1);
-
-			if (arg2 == 0)
-				writer.Write(false);
+			if (buildFrom == DataType.Level1)
+				writer.WriteInt(0);
+			else if (buildFrom == DataType.MarketDepth)
+				writer.WriteInt(1);
+			else if (buildFrom == DataType.OrderLog)
+				writer.WriteInt(2);
+			else if (buildFrom == DataType.Ticks)
+				writer.WriteInt(3);
+			else if (buildFrom == DataType.Transactions)
+				writer.WriteInt(4);
 			else
 			{
-				writer.Write(true);
-				writer.WriteDecimal(arg2, 0);
-			}
+				writer.WriteInt(5);
 
-			writer.WriteInt(arg3);
+				var (messageType, arg1, arg2, arg3) = buildFrom.Extract();
+
+				writer.WriteInt(messageType);
+				writer.WriteLong(arg1);
+
+				if (arg2 == 0)
+					writer.Write(false);
+				else
+				{
+					writer.Write(true);
+					writer.WriteDecimal(arg2, 0);
+				}
+
+				writer.WriteInt(arg3);
+			}
 		}
 
 		public static DataType ReadBuildFrom(this BitArrayReader reader)
 		{
-			if (reader.Read())
-				return reader.ReadInt().ToDataType(reader.ReadLong(), reader.Read() ? reader.ReadDecimal(0) : 0M, reader.ReadInt());
+			if (!reader.Read())
+				return null;
 
-			return null;
+			switch (reader.ReadInt())
+			{
+				case 0:
+					return DataType.Level1;
+				case 1:
+					return DataType.MarketDepth;
+				case 2:
+					return DataType.OrderLog;
+				case 3:
+					return DataType.Ticks;
+				case 4:
+					return DataType.Transactions;
+				case 5:
+					return reader.ReadInt().ToDataType(reader.ReadLong(), reader.Read() ? reader.ReadDecimal(0) : 0M, reader.ReadInt());
+				default:
+					throw new InvalidOperationException();
+			}
 		}
 	}
 }
