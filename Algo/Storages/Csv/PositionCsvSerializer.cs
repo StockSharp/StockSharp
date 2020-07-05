@@ -58,6 +58,8 @@ namespace StockSharp.Algo.Storages.Csv
 			row.Add(data.Description);
 			row.Add(data.StrategyId);
 
+			row.AddRange(data.BuildFrom.ToCsv());
+
 			writer.WriteRow(row);
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -130,6 +132,9 @@ namespace StockSharp.Algo.Storages.Csv
 				posMsg.Description = reader.ReadString();
 				posMsg.StrategyId = reader.ReadString();
 			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				posMsg.BuildFrom = reader.ReadBuildFrom();
 
 			return posMsg;
 		}

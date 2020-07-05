@@ -62,6 +62,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
 			public string StrategyId;
+
+			public SnapshotDataType? BuildFrom;
 		}
 
 		Version ISnapshotSerializer<Key, PositionChangeMessage>.Version { get; } = SnapshotVersions.V22;
@@ -88,6 +90,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				ClientCode = message.ClientCode,
 				Description = message.Description,
 				StrategyId = message.StrategyId,
+				BuildFrom = (SnapshotDataType?)message.BuildFrom,
 			};
 
 			foreach (var change in message.Changes)
@@ -180,6 +183,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					LimitType = (TPlusLimits?)snapshot.LimitType,
 					Description = snapshot.Description,
 					StrategyId = snapshot.StrategyId,
+					BuildFrom = snapshot.BuildFrom,
 				}
 				.TryAdd(PositionChangeTypes.BeginValue, snapshot.BeginValue, true)
 				.TryAdd(PositionChangeTypes.CurrentValue, snapshot.CurrentValue, true)
@@ -235,6 +239,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (!changes.StrategyId.IsEmpty())
 				message.StrategyId = changes.StrategyId;
+
+			if (changes.BuildFrom != default)
+				message.BuildFrom = changes.BuildFrom;
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;

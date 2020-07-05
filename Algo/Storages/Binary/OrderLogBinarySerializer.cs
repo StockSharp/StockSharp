@@ -172,7 +172,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
 		public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.OrderLog, 200, MarketDataVersions.Version54, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.OrderLog, 200, MarketDataVersions.Version55, exchangeInfoProvider)
 		{
 		}
 
@@ -193,6 +193,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
+			var useBalance = metaInfo.Version >= MarketDataVersions.Version54;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version55;
 
 			foreach (var message in messages)
 			{
@@ -369,7 +371,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				writer.WriteNullableInt((int?)message.Currency);
 
-				if (metaInfo.Version < MarketDataVersions.Version54)
+				if (!useBalance)
 					continue;
 
 				if (message.Balance == null)
@@ -386,6 +388,11 @@ namespace StockSharp.Algo.Storages.Binary
 						writer.WriteDecimal(message.Balance.Value, 0);
 					}
 				}
+
+				if (!buildFrom)
+					continue;
+
+				writer.WriteBuildFrom(message.BuildFrom);
 			}
 		}
 
@@ -422,6 +429,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
+			var useBalance = metaInfo.Version >= MarketDataVersions.Version54;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version55;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -524,11 +533,16 @@ namespace StockSharp.Algo.Storages.Binary
 					execMsg.Currency = (CurrencyTypes)reader.ReadInt();
 			}
 
-			if (metaInfo.Version >= MarketDataVersions.Version54)
-			{
-				if (reader.Read())
-					execMsg.Balance = reader.Read() ? reader.ReadDecimal(0) : 0M;
-			}
+			if (!useBalance)
+				return execMsg;
+
+			if (reader.Read())
+				execMsg.Balance = reader.Read() ? reader.ReadDecimal(0) : 0M;
+
+			if (!buildFrom)
+				return execMsg;
+			
+			execMsg.BuildFrom = reader.ReadBuildFrom();
 
 			return execMsg;
 		}

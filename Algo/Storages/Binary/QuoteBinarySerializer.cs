@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version58, exchangeInfoProvider)
+			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version59, exchangeInfoProvider)
 		{
 		}
 
@@ -146,6 +146,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
+			var buildFrom = metaInfo.Version < MarketDataVersions.Version59;
 
 			foreach (var m in messages)
 			{
@@ -237,6 +238,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (quoteMsg.Currency != null)
 					writer.WriteInt((int)quoteMsg.Currency.Value);
+
+				if (!buildFrom)
+					continue;
+
+				writer.WriteBuildFrom(quoteMsg.BuildFrom);
 			}
 		}
 
@@ -251,6 +257,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
+			var buildFrom = metaInfo.Version < MarketDataVersions.Version59;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -332,6 +339,11 @@ namespace StockSharp.Algo.Storages.Binary
 				if (reader.Read())
 					quoteMsg.Currency = (CurrencyTypes)reader.ReadInt();
 			}
+
+			if (!buildFrom)
+				return quoteMsg;
+				
+			quoteMsg.BuildFrom = reader.ReadBuildFrom();
 
 			return quoteMsg;
 		}

@@ -53,7 +53,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		public OrderLogMarketDepthBuilder(SecurityId securityId)
-			: this(new QuoteChangeMessage { SecurityId = securityId })
+			: this(new QuoteChangeMessage { SecurityId = securityId, BuildFrom = DataType.OrderLog })
 		{
 		}
 

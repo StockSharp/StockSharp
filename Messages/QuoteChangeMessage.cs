@@ -61,7 +61,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMessage>, IServerTimeMessage, ISecurityIdMessage
+	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMessage>,
+		IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -116,11 +117,9 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public bool IsSorted { get; set; } = true;
 
-		/// <summary>
-		/// The quote change was built by level1.
-		/// </summary>
-		[Browsable(false)]
-		public bool IsByLevel1 { get; set; }
+		/// <inheritdoc />
+		[DataMember]
+		public DataType BuildFrom { get; set; }
 
 		/// <summary>
 		/// The quote change contains filtered quotes.
@@ -172,7 +171,7 @@ namespace StockSharp.Messages
 			destination.ServerTime = ServerTime;
 			destination.IsSorted = IsSorted;
 			destination.Currency = Currency;
-			destination.IsByLevel1 = IsByLevel1;
+			destination.BuildFrom = BuildFrom;
 			destination.IsFiltered = IsFiltered;
 			destination.State = State;
 			destination.HasPositions = HasPositions;

@@ -89,7 +89,7 @@ namespace StockSharp.Algo.Storages.Binary
 		where TCandleMessage : CandleMessage, new()
 	{
 		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, arg, 74, MarketDataVersions.Version58, exchangeInfoProvider)
+			: base(securityId, arg, 74, MarketDataVersions.Version59, exchangeInfoProvider)
 		{
 		}
 
@@ -114,9 +114,11 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version49;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
+			var useLevels = metaInfo.Version >= MarketDataVersions.Version54;
 			var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
 			var isTickPrecision = bigRange;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
 
 			foreach (var candle in candles)
 			{
@@ -328,7 +330,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (candle.TotalTicks != null)
 					writer.WriteInt(candle.TotalTicks.Value);
 
-				if (metaInfo.Version < MarketDataVersions.Version54)
+				if (!useLevels)
 					continue;
 
 				var priceLevels = candle.PriceLevels;
@@ -400,6 +402,11 @@ namespace StockSharp.Algo.Storages.Binary
 						}
 					}
 				}
+
+				if (!buildFrom)
+					continue;
+
+				writer.WriteBuildFrom(candle.BuildFrom);
 			}
 		}
 
@@ -421,8 +428,10 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var timeZone = metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider);
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
+			var useLevels = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version57;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
 
 			if (metaInfo.Version < MarketDataVersions.Version56)
 			{
@@ -526,7 +535,7 @@ namespace StockSharp.Algo.Storages.Binary
 				candle.TotalTicks = reader.Read() ? reader.ReadInt() : (int?)null;
 			}
 
-			if (metaInfo.Version >= MarketDataVersions.Version54 && reader.Read())
+			if (useLevels && reader.Read())
 			{
 				var priceLevels = new CandlePriceLevel[reader.ReadInt()];
 
@@ -573,6 +582,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 				candle.PriceLevels = priceLevels;
 			}
+
+			if (buildFrom)
+				candle.BuildFrom = reader.ReadBuildFrom();
 
 			return candle;
 		}

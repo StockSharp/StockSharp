@@ -72,6 +72,7 @@ namespace StockSharp.Algo.PnL
 						SecurityId = SecurityId.Money,
 						ServerTime = message.LocalTime,
 						PortfolioName = manager.PortfolioName,
+						BuildFrom = DataType.Transactions,
 					}
 					.Add(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
 					.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL));

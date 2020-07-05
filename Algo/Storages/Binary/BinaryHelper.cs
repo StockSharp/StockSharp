@@ -582,5 +582,36 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			return reader.Read() ? reader.ReadLong().To<DateTime>().ApplyTimeZone(new TimeSpan(reader.ReadInt(), reader.ReadInt(), 0)) : (DateTimeOffset?)null;
 		}
+
+		public static void WriteBuildFrom(this BitArrayWriter writer, DataType buildFrom)
+		{
+			writer.Write(buildFrom != null);
+
+			if (buildFrom == null)
+				return;
+
+			var (messageType, arg1, arg2, arg3) = buildFrom.Extract();
+
+			writer.WriteInt(messageType);
+			writer.WriteLong(arg1);
+
+			if (arg2 == 0)
+				writer.Write(false);
+			else
+			{
+				writer.Write(true);
+				writer.WriteDecimal(arg2, 0);
+			}
+
+			writer.WriteInt(arg3);
+		}
+
+		public static DataType ReadBuildFrom(this BitArrayReader reader)
+		{
+			if (reader.Read())
+				return reader.ReadInt().ToDataType(reader.ReadLong(), reader.Read() ? reader.ReadDecimal(0) : 0M, reader.ReadInt());
+
+			return null;
+		}
 	}
 }

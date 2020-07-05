@@ -61,7 +61,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public abstract class CandleMessage : Message, ISubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage
+	public abstract class CandleMessage : Message,
+		ISubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -281,6 +282,10 @@ namespace StockSharp.Messages
 		[XmlIgnore]
 		public long[] SubscriptionIds { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public DataType BuildFrom { get; set; }
+
 		/// <summary>
 		/// Copy parameters.
 		/// </summary>
@@ -315,6 +320,7 @@ namespace StockSharp.Messages
 			copy.TotalTicks = TotalTicks;
 			copy.PriceLevels = PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			copy.State = State;
+			copy.BuildFrom = BuildFrom;
 
 			return copy;
 		}

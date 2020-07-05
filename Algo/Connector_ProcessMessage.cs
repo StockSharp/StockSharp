@@ -1204,7 +1204,7 @@ namespace StockSharp.Algo
 
 			var bestBid = message.GetBestBid();
 			var bestAsk = message.GetBestAsk();
-			var fromLevel1 = message.IsByLevel1;
+			var fromLevel1 = message.BuildFrom == DataType.Level1;
 
 			if (!fromLevel1 && (bestBid != null || bestAsk != null))
 			{

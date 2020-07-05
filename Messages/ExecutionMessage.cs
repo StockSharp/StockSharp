@@ -65,7 +65,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage,
-		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage
+		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -559,6 +559,10 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long SeqNum { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public DataType BuildFrom { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
@@ -664,6 +668,7 @@ namespace StockSharp.Messages
 			destination.PostOnly = PostOnly;
 			destination.Initiator = Initiator;
 			destination.SeqNum = SeqNum;
+			destination.BuildFrom = BuildFrom;
 		}
 	}
 }

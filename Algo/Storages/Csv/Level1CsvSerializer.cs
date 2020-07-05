@@ -64,6 +64,8 @@ namespace StockSharp.Algo.Storages.Csv
                 }
 			}
 
+			row.AddRange(data.BuildFrom.ToCsv());
+
 			writer.WriteRow(row);
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -142,6 +144,9 @@ namespace StockSharp.Algo.Storages.Csv
 						level1.Changes.Add(field, value.Value);
 				}
 			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				level1.BuildFrom = reader.ReadBuildFrom();
 
 			return level1;
 		}

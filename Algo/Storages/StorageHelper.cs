@@ -1430,5 +1430,82 @@ namespace StockSharp.Algo.Storages
 
 			return registry.GetSnapshotStorage(dataType.MessageType, dataType.Arg);
 		}
+
+		internal static (int messageType, long arg1, decimal arg2, int arg3) Extract(this DataType dataType)
+		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			var messageType = (int)dataType.MessageType.ToMessageType();
+
+			var arg1 = 0L;
+			var arg2 = 0M;
+			var arg3 = 0;
+
+			if (dataType.Arg is ExecutionTypes execType)
+				arg1 = (int)execType;
+			else if (dataType.Arg is TimeSpan tf)
+				arg1 = tf.Ticks;
+			else if (dataType.Arg is Unit unit)
+			{
+				arg1 = (int)unit.Type;
+				arg2 = unit.Value;
+			}
+			else if (dataType.Arg is int i)
+				arg1 = i;
+			else if (dataType.Arg is long l)
+				arg1 = l;
+			else if (dataType.Arg is decimal d)
+				arg2 = d;
+			else if (dataType.Arg is PnFArg pnf)
+			{
+				arg1 = (int)pnf.BoxSize.Type;
+				arg2 = pnf.BoxSize.Value;
+				arg3 = pnf.ReversalAmount;
+			}
+			else
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+
+			return (messageType, arg1, arg2, arg3);
+		}
+
+		internal static DataType ToDataType(this int messageType, long arg1, decimal arg2, int arg3)
+		{
+			var type = ((MessageTypes)messageType).ToMessageType();
+
+			object arg;
+
+			if (type == typeof(ExecutionMessage))
+				arg = (ExecutionTypes)arg1;
+			else if (type.IsCandleMessage())
+			{
+				var candleArg = type.CreateInstance<CandleMessage>().Arg;
+
+				if (candleArg is TimeSpan)
+					arg = arg1.To<TimeSpan>();
+				else if (candleArg is Unit)
+					arg = new Unit(arg2, (UnitTypes)arg1);
+				else if (candleArg is int)
+					arg = (int)arg1;
+				else if (candleArg is long)
+					arg = arg1;
+				else if (candleArg is decimal)
+					arg = arg2;
+				else if (candleArg is PnFArg)
+				{
+					arg = new PnFArg
+					{
+						BoxSize = new Unit(arg2, (UnitTypes)arg1),
+						ReversalAmount = arg3,
+					};
+				}
+				else
+					throw new ArgumentOutOfRangeException(nameof(messageType), candleArg, LocalizedStrings.Str1219);
+			}
+			else
+				throw new ArgumentOutOfRangeException(nameof(messageType), type, LocalizedStrings.Str1219);
+			
+			return DataType.Create(type, arg);
+		}
 	}
 }

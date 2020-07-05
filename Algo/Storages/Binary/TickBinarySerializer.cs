@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
 		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version57, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version58, exchangeInfoProvider)
 		{
 		}
 
@@ -125,6 +125,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version56;
+			var stringId = metaInfo.Version >= MarketDataVersions.Version57;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
 
 			foreach (var msg in messages)
 			{
@@ -251,10 +253,15 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.Currency != null)
 					writer.WriteInt((int)msg.Currency.Value);
 
-				if (metaInfo.Version < MarketDataVersions.Version57)
+				if (!stringId)
 					continue;
 
 				writer.WriteStringEx(msg.TradeStringId);
+
+				if (!buildFrom)
+					continue;
+
+				writer.WriteBuildFrom(msg.BuildFrom);
 			}
 		}
 
@@ -268,6 +275,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version56;
+			var stringId = metaInfo.Version >= MarketDataVersions.Version57;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
 
 			metaInfo.FirstId += reader.ReadLong();
 
@@ -353,8 +362,15 @@ namespace StockSharp.Algo.Storages.Binary
 					msg.Currency = (CurrencyTypes)reader.ReadInt();
 			}
 
-			if (metaInfo.Version >= MarketDataVersions.Version57)
-				msg.TradeStringId = reader.ReadStringEx();
+			if (!stringId)
+				return msg;
+			
+			msg.TradeStringId = reader.ReadStringEx();
+
+			if (!buildFrom)
+				return msg;
+
+			msg.BuildFrom = reader.ReadBuildFrom();
 
 			return msg;
 		}

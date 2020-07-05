@@ -144,9 +144,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="transform">The data source transformation.</param>
 		/// <returns>Created candle.</returns>
 		protected virtual TCandleMessage CreateCandle(MarketDataMessage message, TCandleMessage currentCandle, ICandleBuilderValueTransform transform)
-		{
-			throw new NotSupportedException(LocalizedStrings.Str637);
-		}
+			=> throw new NotSupportedException(LocalizedStrings.Str637);
 
 		/// <summary>
 		/// Whether the candle is created before data adding.
@@ -156,9 +154,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="transform">The data source transformation.</param>
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected virtual bool IsCandleFinishedBeforeChange(MarketDataMessage message, TCandleMessage candle, ICandleBuilderValueTransform transform)
-		{
-			return false;
-		}
+			=> false;
 
 		/// <summary>
 		/// To fill in the initial candle settings.
@@ -178,6 +174,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var price = transform.Price;
 			var volume = transform.Volume;
 
+			candle.BuildFrom = transform.BuildFrom;
 			candle.SecurityId = message.SecurityId;
 
 			candle.OpenPrice = price;
@@ -662,6 +659,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var time = transform.Time;
 			var side = transform.Side;
 			var oi = transform.OpenInterest;
+			var buildFrom = transform.BuildFrom;
 
 			var pnf = message.GetArg<PnFArg>();
 			var pnfStep = (decimal)(1 * pnf.BoxSize);
@@ -671,7 +669,7 @@ namespace StockSharp.Algo.Candles.Compression
 				var openPrice = price.Floor(pnfStep);
 				var highPrice = openPrice + pnfStep;
 
-				changes.Add(CreateCandle(message, pnf, openPrice, highPrice, openPrice, highPrice, price, volume, side, time, oi, ref volumeProfile));
+				changes.Add(CreateCandle(message, buildFrom, pnf, openPrice, highPrice, openPrice, highPrice, price, volume, side, time, oi, ref volumeProfile));
 			}
 			else
 			{
@@ -700,7 +698,7 @@ namespace StockSharp.Algo.Candles.Compression
 							var highPrice = currentPnFCandle.HighPrice - pnfStep;
 							var lowPrice = price.Floor(pnfStep);
 
-							currentPnFCandle = CreateCandle(message, pnf, highPrice, highPrice, lowPrice, lowPrice, price, volume, side, time, oi, ref volumeProfile);
+							currentPnFCandle = CreateCandle(message, buildFrom, pnf, highPrice, highPrice, lowPrice, lowPrice, price, volume, side, time, oi, ref volumeProfile);
 							changes.Add(currentPnFCandle);
 						}
 						else
@@ -725,7 +723,7 @@ namespace StockSharp.Algo.Candles.Compression
 							var highPrice = price.Floor(pnfStep) + pnfStep;
 							var lowPrice = currentPnFCandle.LowPrice + pnfStep;
 
-							currentPnFCandle = CreateCandle(message, pnf, lowPrice, highPrice, lowPrice, highPrice, price, volume, side, time, oi, ref volumeProfile);
+							currentPnFCandle = CreateCandle(message, buildFrom, pnf, lowPrice, highPrice, lowPrice, highPrice, price, volume, side, time, oi, ref volumeProfile);
 							changes.Add(currentPnFCandle);
 						}
 						else
@@ -760,10 +758,14 @@ namespace StockSharp.Algo.Candles.Compression
 			currentPnFCandle.OpenInterest = oi;
 		}
 
-		private static PnFCandleMessage CreateCandle(MarketDataMessage message, PnFArg pnfArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal price, decimal? volume, Sides? side, DateTimeOffset time, decimal? oi, ref VolumeProfileBuilder volumeProfile)
+		private static PnFCandleMessage CreateCandle(MarketDataMessage message, DataType buildFrom, PnFArg pnfArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal price, decimal? volume, Sides? side, DateTimeOffset time, decimal? oi, ref VolumeProfileBuilder volumeProfile)
 		{
 			var candle = new PnFCandleMessage
 			{
+				SecurityId = message.SecurityId,
+				PnFArg = pnfArg,
+				BuildFrom = buildFrom,
+
 				OpenPrice = openPrice,
 				ClosePrice = closePrice,
 				HighPrice = highPrice,
@@ -772,12 +774,10 @@ namespace StockSharp.Algo.Candles.Compression
 				//CloseVolume = volume,
 				HighVolume = volume,
 				LowVolume = volume,
-				SecurityId = message.SecurityId,
 				OpenTime = time,
 				//CloseTime = time,
 				HighTime = time,
 				LowTime = time,
-				PnFArg = pnfArg,
 				State = CandleStates.Active,
 			};
 
@@ -818,6 +818,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var time = transform.Time;
 			var side = transform.Side;
 			var oi = transform.OpenInterest;
+			var buildFrom = transform.BuildFrom;
 
 			var boxSize = message.GetArg<Unit>();
 			var renkoStep = (decimal)(1 * boxSize);
@@ -826,7 +827,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				var openPrice = price.Floor(renkoStep);
 
-				changes.Add(CreateCandle(message, ref volumeProfile, boxSize, openPrice, renkoStep, price, volume, side, time, oi));
+				changes.Add(CreateCandle(message, buildFrom, ref volumeProfile, boxSize, openPrice, renkoStep, price, volume, side, time, oi));
 			}
 			else
 			{
@@ -877,13 +878,13 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						if (isUp)
 						{
-							currentRenkoCandle = CreateCandle(message, ref volumeProfile, boxSize, openPrice, renkoStep, price, volume, side, time, oi);
+							currentRenkoCandle = CreateCandle(message, buildFrom, ref volumeProfile, boxSize, openPrice, renkoStep, price, volume, side, time, oi);
 							changes.Add(currentRenkoCandle);
 							openPrice += renkoStep;
 						}
 						else
 						{
-							currentRenkoCandle = CreateCandle(message, ref volumeProfile, boxSize, openPrice, -renkoStep, price, volume, side, time, oi);
+							currentRenkoCandle = CreateCandle(message, buildFrom, ref volumeProfile, boxSize, openPrice, -renkoStep, price, volume, side, time, oi);
 							changes.Add(currentRenkoCandle);
 							openPrice -= renkoStep;
 						}
@@ -896,10 +897,14 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private static RenkoCandleMessage CreateCandle(MarketDataMessage message, ref VolumeProfileBuilder volumeProfile, Unit boxSize, decimal openPrice, decimal renkoStep, decimal price, decimal? volume, Sides? side, DateTimeOffset time, decimal? oi)
+		private static RenkoCandleMessage CreateCandle(MarketDataMessage message, DataType buildFrom, ref VolumeProfileBuilder volumeProfile, Unit boxSize, decimal openPrice, decimal renkoStep, decimal price, decimal? volume, Sides? side, DateTimeOffset time, decimal? oi)
 		{
 			var candle = new RenkoCandleMessage
 			{
+				SecurityId = message.SecurityId,
+				BoxSize = boxSize,
+				BuildFrom = buildFrom,
+
 				OpenPrice = openPrice,
 				ClosePrice = openPrice + renkoStep,
 				//HighPrice = openPrice + renkoStep,
@@ -908,12 +913,10 @@ namespace StockSharp.Algo.Candles.Compression
 				CloseVolume = volume,
 				HighVolume = volume,
 				LowVolume = volume,
-				SecurityId = message.SecurityId,
 				OpenTime = time,
 				CloseTime = time,
 				HighTime = time,
 				LowTime = time,
-				BoxSize = boxSize,
 				RelativeVolume = side == null ? null : (side == Sides.Buy ? volume : -volume),
 				TotalTicks = 1,
 				State = CandleStates.Active,

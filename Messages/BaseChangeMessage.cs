@@ -32,7 +32,8 @@ namespace StockSharp.Messages
 	/// <typeparam name="TField">Changes type.</typeparam>
 	[DataContract]
 	[Serializable]
-	public abstract class BaseChangeMessage<TMessage, TField> : BaseSubscriptionIdMessage<TMessage>, IServerTimeMessage
+	public abstract class BaseChangeMessage<TMessage, TField> :	BaseSubscriptionIdMessage<TMessage>,
+		IServerTimeMessage, IGeneratedMessage
 		where TMessage : BaseChangeMessage<TMessage, TField>, new()
 	{
 		/// <inheritdoc />
@@ -41,6 +42,10 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str168Key)]
 		[MainCategory]
 		public DateTimeOffset ServerTime { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public DataType BuildFrom { get; set; }
 
 		/// <summary>
 		/// Changes.
@@ -65,6 +70,8 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.ServerTime = ServerTime;
+			destination.BuildFrom = BuildFrom;
+
 			destination.Changes.AddRange(Changes);
 		}
 

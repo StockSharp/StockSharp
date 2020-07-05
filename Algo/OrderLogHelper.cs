@@ -373,6 +373,7 @@ namespace StockSharp.Algo
 				//OriginSide = prevItem.Item2 == Sides.Buy
 				//	? (prevItem.Item1 > item.OrderId ? Sides.Buy : Sides.Sell)
 				//	: (prevItem.Item1 > item.OrderId ? Sides.Sell : Sides.Buy),
+				BuildFrom = DataType.OrderLog,
 			};
 		}
 

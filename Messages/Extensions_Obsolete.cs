@@ -34,7 +34,7 @@
 		}
 
 		[Obsolete]
-		private static readonly SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>> _messageTypeMap = new SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>>
+		private static readonly SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>> _messageTypeMapOld = new SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>>
 		{
 			{ MarketDataTypes.Level1, Tuple.Create(MessageTypes.Level1Change, default(object)) },
 			{ MarketDataTypes.MarketDepth, Tuple.Create(MessageTypes.QuoteChange, default(object)) },
@@ -53,7 +53,7 @@
 		[Obsolete]
 		public static MarketDataTypes ToMarketDataType(this MessageTypes type, object arg)
 		{
-			if (_messageTypeMap.TryGetKey(Tuple.Create(type, arg), out var dataType))
+			if (_messageTypeMapOld.TryGetKey(Tuple.Create(type, arg), out var dataType))
 				return dataType;
 
 			throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
@@ -68,7 +68,7 @@
 		[Obsolete]
 		public static MessageTypes ToMessageType(this MarketDataTypes type, out object arg)
 		{
-			if (!_messageTypeMap.TryGetValue(type, out var tuple))
+			if (!_messageTypeMapOld.TryGetValue(type, out var tuple))
 				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 
 			arg = tuple.Item2;

@@ -157,7 +157,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage
+	public class MarketDataMessage : SecurityMessage, ISubscriptionMessage, IGeneratedMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -214,7 +214,7 @@ namespace StockSharp.Messages
 		public object Arg
 		{
 			get => DataType2.Arg;
-			set => DataType2.Arg = value;
+			set => DataType2 = Messages.DataType.Create(DataType2.MessageType, value);
 		}
 
 		/// <inheritdoc />
@@ -255,9 +255,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public MarketDataBuildModes BuildMode { get; set; }
 
-		/// <summary>
-		/// Which market-data type is used as a source value.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public DataType BuildFrom { get; set; }
 

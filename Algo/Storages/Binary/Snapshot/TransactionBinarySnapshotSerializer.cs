@@ -114,6 +114,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public byte? Initiator;
 
 			public long SeqNum;
+			public SnapshotDataType? BuildFrom;
 
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S256)]
 			public string ConditionType;
@@ -221,6 +222,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				PostOnly = ToByte(message.PostOnly),
 				Initiator = ToByte(message.Initiator),
 				SeqNum = message.SeqNum,
+				BuildFrom = (SnapshotDataType?)message.BuildFrom,
 
 				ConditionType = (message.Condition?.GetType().GetTypeName(false)).VerifySize(Sizes.S256),
 			};
@@ -434,6 +436,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					PostOnly = ToNullBool(snapshot.PostOnly),
 					Initiator = ToNullBool(snapshot.Initiator),
 					SeqNum = snapshot.SeqNum,
+					BuildFrom = snapshot.BuildFrom,
 				};
 
 				//var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
@@ -676,6 +679,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (changes.SeqNum != default)
 				message.SeqNum = changes.SeqNum;
+
+			if (changes.BuildFrom != default)
+				message.BuildFrom = changes.BuildFrom;
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;

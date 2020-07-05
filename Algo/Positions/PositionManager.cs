@@ -107,6 +107,7 @@ namespace StockSharp.Algo.Positions
 					SecurityId = secId,
 					PortfolioName = pf,
 					ServerTime = time,
+					BuildFrom = DataType.Transactions,
 				}.Add(PositionChangeTypes.CurrentValue, position.Value);
 			}
 

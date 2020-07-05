@@ -78,7 +78,7 @@ namespace StockSharp.Algo
 					ServerTime = message.ServerTime,
 					LocalTime = message.LocalTime,
 					IsSorted = message.IsSorted,
-					IsByLevel1 = message.IsByLevel1,
+					BuildFrom = message.BuildFrom,
 					Currency = message.Currency,
 					IsFiltered = true,
 					Bids = Filter(Sides.Buy, message.Bids),

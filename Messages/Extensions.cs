@@ -40,8 +40,8 @@ namespace StockSharp.Messages
 	{
 		static Extensions()
 		{
-			string TimeSpanToString(TimeSpan arg) => arg.ToString().Replace(':', '-');
-			TimeSpan StringToTimeSpan(string str) => str.Replace('-', ':').To<TimeSpan>();
+			static string TimeSpanToString(TimeSpan arg) => arg.ToString().Replace(':', '-');
+			static TimeSpan StringToTimeSpan(string str) => str.Replace('-', ':').To<TimeSpan>();
 
 			RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString);
 			RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, typeof(TickCandleMessage).Name.Remove(nameof(Message)), str => str.To<int>(), arg => arg.ToString());
@@ -575,12 +575,59 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
 		public static bool IsCandle(this MessageTypes type)	=> _candleDataTypes.ContainsKey(type);
 
+		private static readonly SynchronizedPairSet<MessageTypes, Type> _messageTypeMap = new SynchronizedPairSet<MessageTypes, Type>();
+
 		/// <summary>
-		/// To convert the type of candles <see cref="CandleMessage"/> into type of message <see cref="MessageTypes"/>.
+		/// Convert <see cref="Type"/> to <see cref="MessageTypes"/> value.
 		/// </summary>
-		/// <param name="type">Candles type.</param>
-		/// <returns>Message type.</returns>
-		public static MessageTypes ToMessageType(this Type type) => _candleDataTypes[type];
+		/// <param name="type"><see cref="Type"/> value.</param>
+		/// <returns><see cref="MessageTypes"/> value.</returns>
+		public static MessageTypes ToMessageType(this Type type)
+		{
+			lock (_messageTypeMap.SyncRoot)
+			{
+				if (_messageTypeMap.TryGetKey(type, out var enumVal))
+					return enumVal;
+
+				if (!_candleDataTypes.TryGetKey(type, out enumVal))
+					enumVal = type.CreateInstance<Message>().Type;
+
+				_messageTypeMap.Add(enumVal, type);
+				return enumVal;
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="MessageTypes"/> to <see cref="Type"/> value.
+		/// </summary>
+		/// <param name="type"><see cref="MessageTypes"/> value.</param>
+		/// <returns><see cref="Type"/> value.</returns>
+		public static Type ToMessageType(this MessageTypes type)
+		{
+			lock (_messageTypeMap.SyncRoot)
+			{
+				if (_messageTypeMap.TryGetValue(type, out var typeVal))
+					return typeVal;
+
+				if (_candleDataTypes.TryGetValue(type, out typeVal))
+					_messageTypeMap.Add(type, typeVal);
+				else
+				{
+					var types = typeof(Message)
+						.Assembly
+						.GetTypes()
+						.Where(t => !t.IsAbstract && !t.IsInterface && t.IsSubclassOf(typeof(Message)));
+
+					foreach (var type1 in types)
+						type1.ToMessageType();
+
+					if (!_messageTypeMap.TryGetValue(type, out typeVal))
+						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				}
+				
+				return typeVal;
+			}
+		}
 
 		/// <summary>
 		/// To convert the type of message <see cref="MessageTypes"/> into type of candles <see cref="CandleMessage"/>.
@@ -735,13 +782,13 @@ namespace StockSharp.Messages
 			if (argParserFrom is null)
 				throw new ArgumentNullException(nameof(argParserFrom));
 
-			T Do<T>(Func<T> func) => CultureInfo.InvariantCulture.DoInCulture(func);
+			static T Do<T>(Func<T> func) => CultureInfo.InvariantCulture.DoInCulture(func);
 
 			Func<string, object> p1 = str => Do(() => argParserTo(str));
 			Func<object, string> p2 = arg => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
 
 #pragma warning disable CS0612 // Type or member is obsolete
-			_messageTypeMap.Add(dataType, Tuple.Create(type, default(object)));
+			_messageTypeMapOld.Add(dataType, Tuple.Create(type, default(object)));
 #pragma warning restore CS0612 // Type or member is obsolete
 
 			_candleDataTypes.Add(type, messageType);
@@ -2260,6 +2307,7 @@ namespace StockSharp.Messages
 				ServerTime = (DateTimeOffset?)level1.Changes.TryGetValue(Level1Fields.LastTradeTime) ?? level1.ServerTime,
 				IsUpTick = (bool?)level1.Changes.TryGetValue(Level1Fields.LastTradeUpDown),
 				LocalTime = level1.LocalTime,
+				BuildFrom = level1.BuildFrom ?? DataType.Level1,
 			};
 		}
 
@@ -2316,6 +2364,7 @@ namespace StockSharp.Messages
 							ServerTime = level1.ServerTime,
 							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
 							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
+							BuildFrom = level1.BuildFrom ?? DataType.Level1,
 						};
 
 						return true;
@@ -2648,6 +2697,7 @@ namespace StockSharp.Messages
 				{
 					SecurityId = quote.SecurityId,
 					ServerTime = quote.ServerTime,
+					BuildFrom = quote.BuildFrom ?? DataType.MarketDepth,
 				};
 
 				if (quote.Bids.Length > 0)
@@ -3023,7 +3073,7 @@ namespace StockSharp.Messages
 				return type.MessageType.ToMessageType();
 			else 
 			{
-				return _messageTypes.SafeAdd(type, key => key.MessageType.CreateInstance<Message>().Type);
+				return _messageTypes.SafeAdd(type, key => key.MessageType.ToMessageType());
 				//throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}
 		}

@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.Initiator.To<string>(),
 				data.SeqNum.To<string>(),
 				data.StrategyId,
-			};
+			}.Concat(data.BuildFrom.ToCsv());
 			writer.WriteRow(row);
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -201,6 +201,9 @@ namespace StockSharp.Algo.Storages.Csv
 				msg.SeqNum = reader.ReadLong();
 				msg.StrategyId = reader.ReadString();
 			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				msg.BuildFrom = reader.ReadBuildFrom();
 
 			return msg;
 		}
