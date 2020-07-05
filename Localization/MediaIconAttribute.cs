@@ -5,13 +5,13 @@
 	/// <summary>
 	/// Specify icon, located in S#.Media library.
 	/// </summary>
-	public class StockSharpIconAttribute : IconAttribute
+	public class MediaIconAttribute : IconAttribute
 	{
 		/// <summary>
-		/// Create <see cref="StockSharpIconAttribute"/>.
+		/// Create <see cref="MediaIconAttribute"/>.
 		/// </summary>
 		/// <param name="icon">Icon url.</param>
-		public StockSharpIconAttribute(string icon)
+		public MediaIconAttribute(string icon)
 			: base($"/StockSharp.Media;component/logos/{icon}", true)
 		{
 		}
