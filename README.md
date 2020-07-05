@@ -149,7 +149,7 @@ public class SimpleStrategy : Strategy
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
 |![](./Media/logos/Bibox_logo.png) |Bibox | <a href="//doc.stocksharp.com/html/8f22e760-96c8-493a-aef0-569cbc42a9da.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/8f22e760-96c8-493a-aef0-569cbc42a9da.htm" target="_blank">Ru</a> |
-|![](./Media/logos/Binance_logo.png) |Binance | <a href="//doc.stocksharp.com/html/9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2.htm" target="_blank">Ru</a> |
+|![](./Media/logos/Binance_logo.svg) |Binance | <a href="//doc.stocksharp.com/html/9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2.htm" target="_blank">Ru</a> |
 |![](./Media/logos/bitalong_logo.png) |Bitalong | <a href="TODO" target="_blank">Eng</a> | <a href="TODO" target="_blank">Ru</a> |
 |![](./Media/logos/Bitbank_logo.png) |Bitbank | <a href="//doc.stocksharp.com/html/02e5e6b3-4436-4c1d-ae39-776c6d398cd3.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/02e5e6b3-4436-4c1d-ae39-776c6d398cd3.htm" target="_blank">Ru</a> |
 |![](./Media/logos/Bitexbook_logo.png) |Bitexbook | <a href="//doc.stocksharp.com/html/4f6d317f-8788-48cb-b8d7-5e621481181c.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/4f6d317f-8788-48cb-b8d7-5e621481181c.htm" target="_blank">Ru</a> |
