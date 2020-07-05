@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Storages.Csv
 			reader.ReadString();
 
 			msg.IsUpTick = reader.ReadNullableBool();
-			/*msg.IsCancellation = */reader.ReadBool();
+			/*msg.IsCancellation = */reader.Skip();
 			msg.OpenInterest = reader.ReadNullableDecimal();
 			msg.PnL = reader.ReadNullableDecimal();
 			msg.Position = reader.ReadNullableDecimal();
