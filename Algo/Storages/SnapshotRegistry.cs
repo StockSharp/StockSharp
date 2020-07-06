@@ -71,6 +71,8 @@ namespace StockSharp.Algo.Storages
 
 						try
 						{
+							var allError = true;
+
 							using (var stream = File.OpenRead(_fileName))
 							{
 								_version = new Version(stream.ReadByte(), stream.ReadByte());
@@ -92,6 +94,7 @@ namespace StockSharp.Algo.Storages
 									try
 									{
 										message = _serializer.Deserialize(_version, buffer);
+										allError = false;
 									}
 									catch (Exception ex)
 									{
@@ -106,6 +109,11 @@ namespace StockSharp.Algo.Storages
 								}
 
 								//_currOffset = stream.Length;
+							}
+
+							if (allError)
+							{
+								File.Delete(_fileName);
 							}
 						}
 						catch (Exception ex)
