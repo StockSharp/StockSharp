@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			}
 		}
 
-		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = SnapshotVersions.V21;
+		Version ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Version { get; } = SnapshotVersions.V22;
 
 		string ISnapshotSerializer<SecurityId, QuoteChangeMessage>.Name => "OrderBook";
 
