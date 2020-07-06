@@ -358,7 +358,8 @@ namespace StockSharp.Messages
 
 		string IMessageAdapter.FeatureName => InnerAdapter.FeatureName;
 
-		bool? IMessageAdapter.IsPositionsEmulationRequired => InnerAdapter.IsPositionsEmulationRequired;
+		/// <inheritdoc />
+		public virtual bool? IsPositionsEmulationRequired => InnerAdapter.IsPositionsEmulationRequired;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);

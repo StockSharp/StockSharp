@@ -105,6 +105,9 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		public override IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages.Concat(Emulator.SupportedOutMessages).Distinct().ToArray();
 
+		/// <inheritdoc />
+		public override bool? IsPositionsEmulationRequired => false;
+
 		private void SendToEmulator(Message message)
 		{
 			_inAdapter.SendInMessage(message);
