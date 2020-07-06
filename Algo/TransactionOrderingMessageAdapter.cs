@@ -294,8 +294,11 @@
 							if (execMsg.HasTradeInfo)
 							{
 								var clone = execMsg.TypedClone();
+
 								// all order's info in snapshot
+								execMsg.HasTradeInfo = false;
 								clone.HasOrderInfo = false;
+
 								tuple.Item2.Add(clone);
 							}
 						}
