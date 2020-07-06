@@ -137,9 +137,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			var totalBatches = (int)((decimal)iterationCount / EmulationSettings.BatchSize).Ceiling();
 
 			if (totalBatches == 0)
-			{
-				// TODO
-			}
+				throw new ArgumentOutOfRangeException("totalBatches == 0");
 
 			var batchWeight = 100.0 / totalBatches;
 
@@ -224,8 +222,6 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategy.Reset();
 				strategy.Start();
 
-				connector.Connect();
-
 				progress.Add(connector, 0);
 
 				connector.ProgressChanged += step =>
@@ -261,6 +257,9 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				_currentConnectors.Add(connector);
 			}
+
+			foreach (var connectors in _currentConnectors)
+				connectors.Connect();
 
 			_histAdapter.SendInMessage(new ConnectMessage());
 			_histAdapter.SendInMessage(new EmulationStateMessage { State = ChannelStates.Starting });
