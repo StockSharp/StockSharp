@@ -2,6 +2,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 {
 	using System;
 
+	using Ecng.Common;
+
 	static class Sizes
 	{
 		public const int S100 = 100;
@@ -17,5 +19,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			return value;
 		}
+
+		public static bool ToBool(this byte value) => value == 1;
+		public static byte ToByte(this bool value) => (byte)(value ? 1 : 0);
+
+		public static T ToEnum<T>(this byte value) where T : struct
+			=> ((int)value).To<T>();
+		public static byte ToByte<T>(this T value) where T : struct
+			=> (byte)value.To<int>();
 	}
 }
