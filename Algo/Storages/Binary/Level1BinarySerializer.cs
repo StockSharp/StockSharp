@@ -1118,6 +1118,11 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.VWAPPrev:
 						case Level1Fields.YieldVWAP:
 						case Level1Fields.YieldVWAPPrev:
+						case Level1Fields.Index:
+						case Level1Fields.Imbalance:
+						case Level1Fields.UnderlyingPrice:
+						case Level1Fields.OptionMargin:
+						case Level1Fields.OptionSyntheticMargin:
 						{
 							writer.WriteDecimal((decimal)value, 0);
 							break;
