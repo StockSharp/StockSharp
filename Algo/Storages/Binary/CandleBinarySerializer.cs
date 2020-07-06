@@ -337,68 +337,68 @@ namespace StockSharp.Algo.Storages.Binary
 
 				writer.Write(priceLevels != null);
 
-				if (priceLevels == null)
-					continue;
-
-				priceLevels = priceLevels.ToArray();
-
-				writer.WriteInt(priceLevels.Count());
-
-				foreach (var level in priceLevels)
+				if (priceLevels != null)
 				{
-					if (metaInfo.Version < MarketDataVersions.Version56)
+					priceLevels = priceLevels.ToArray();
+
+					writer.WriteInt(priceLevels.Count());
+
+					foreach (var level in priceLevels)
 					{
-						var prevPrice = metaInfo.LastPrice;
-						writer.WritePrice(level.Price, ref prevPrice, metaInfo, SecurityId);
-						metaInfo.LastPrice = prevPrice;
-					}
-					else
-						writer.WritePriceEx(level.Price, metaInfo, SecurityId);
-
-					writer.WriteInt(level.BuyCount);
-					writer.WriteInt(level.SellCount);
-
-					writer.WriteVolume(level.BuyVolume, metaInfo, SecurityId);
-					writer.WriteVolume(level.SellVolume, metaInfo, SecurityId);
-
-					if (metaInfo.Version >= MarketDataVersions.Version55)
-					{
-						writer.WriteVolume(level.TotalVolume, metaInfo, SecurityId);
-					}
-
-					var volumes = level.BuyVolumes;
-
-					if (volumes == null)
-						writer.Write(false);
-					else
-					{
-						writer.Write(true);
-
-						volumes = volumes.ToArray();
-
-						writer.WriteInt(volumes.Count());
-
-						foreach (var volume in volumes)
+						if (metaInfo.Version < MarketDataVersions.Version56)
 						{
-							writer.WriteVolume(volume, metaInfo, SecurityId);
+							var prevPrice = metaInfo.LastPrice;
+							writer.WritePrice(level.Price, ref prevPrice, metaInfo, SecurityId);
+							metaInfo.LastPrice = prevPrice;
 						}
-					}
+						else
+							writer.WritePriceEx(level.Price, metaInfo, SecurityId);
 
-					volumes = level.SellVolumes;
+						writer.WriteInt(level.BuyCount);
+						writer.WriteInt(level.SellCount);
 
-					if (volumes == null)
-						writer.Write(false);
-					else
-					{
-						writer.Write(true);
+						writer.WriteVolume(level.BuyVolume, metaInfo, SecurityId);
+						writer.WriteVolume(level.SellVolume, metaInfo, SecurityId);
 
-						volumes = volumes.ToArray();
-
-						writer.WriteInt(volumes.Count());
-
-						foreach (var volume in volumes)
+						if (metaInfo.Version >= MarketDataVersions.Version55)
 						{
-							writer.WriteVolume(volume, metaInfo, SecurityId);
+							writer.WriteVolume(level.TotalVolume, metaInfo, SecurityId);
+						}
+
+						var volumes = level.BuyVolumes;
+
+						if (volumes == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+
+							volumes = volumes.ToArray();
+
+							writer.WriteInt(volumes.Count());
+
+							foreach (var volume in volumes)
+							{
+								writer.WriteVolume(volume, metaInfo, SecurityId);
+							}
+						}
+
+						volumes = level.SellVolumes;
+
+						if (volumes == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+
+							volumes = volumes.ToArray();
+
+							writer.WriteInt(volumes.Count());
+
+							foreach (var volume in volumes)
+							{
+								writer.WriteVolume(volume, metaInfo, SecurityId);
+							}
 						}
 					}
 				}
@@ -535,7 +535,10 @@ namespace StockSharp.Algo.Storages.Binary
 				candle.TotalTicks = reader.Read() ? reader.ReadInt() : (int?)null;
 			}
 
-			if (useLevels && reader.Read())
+			if (!useLevels)
+				return candle;
+
+			if (reader.Read())
 			{
 				var priceLevels = new CandlePriceLevel[reader.ReadInt()];
 
@@ -583,8 +586,10 @@ namespace StockSharp.Algo.Storages.Binary
 				candle.PriceLevels = priceLevels;
 			}
 
-			if (buildFrom)
-				candle.BuildFrom = reader.ReadBuildFrom();
+			if (!buildFrom)
+				return candle;
+			
+			candle.BuildFrom = reader.ReadBuildFrom();
 
 			return candle;
 		}
