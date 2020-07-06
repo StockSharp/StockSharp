@@ -154,7 +154,12 @@ namespace StockSharp.Algo.Testing
 				if (_state == value)
 					return;
 
+				if (!EmulationAdapter.OwnInnerAdapter && _state == ChannelStates.Stopped && value == ChannelStates.Stopping)
+					return;
+
 				bool throwError;
+
+				var channel = EmulationAdapter.InChannel;
 
 				switch (value)
 				{
@@ -162,7 +167,10 @@ namespace StockSharp.Algo.Testing
 						throwError = _state != ChannelStates.Stopping;
 
 						//if (EmulationAdapter.OwnInnerAdapter)
-							EmulationAdapter.InChannel.Close();
+							if (!EmulationAdapter.OwnInnerAdapter && channel is InMemoryMessageChannel inMem)
+								inMem.Disabled = true;
+
+							channel.Close();
 
 						break;
 					case ChannelStates.Stopping:
@@ -171,10 +179,10 @@ namespace StockSharp.Algo.Testing
 
 						//if (EmulationAdapter.OwnInnerAdapter)
 						{
-							EmulationAdapter.InChannel.Clear();
+							channel.Clear();
 
 							if (_state == ChannelStates.Suspended)
-								EmulationAdapter.InChannel.Resume();
+								channel.Resume();
 						}
 
 						break;
@@ -191,7 +199,7 @@ namespace StockSharp.Algo.Testing
 						throwError = _state != ChannelStates.Suspending;
 
 						//if (EmulationAdapter.OwnInnerAdapter)
-							EmulationAdapter.InChannel.Suspend();
+							channel.Suspend();
 
 						break;
 					default:
