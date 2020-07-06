@@ -455,6 +455,13 @@ namespace StockSharp.Algo.Storages
 					{
 						Settings.GetStorage<NewsMessage>(default, null).Save(news);
 					}
+
+					var boardStates = Buffer.GetBoardStates().ToArray();
+
+					if (boardStates.Length > 0)
+					{
+						Settings.GetStorage<BoardStateMessage>(default, null).Save(boardStates);
+					}
 				}
 				catch (Exception excp)
 				{

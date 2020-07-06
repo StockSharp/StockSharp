@@ -706,6 +706,7 @@ namespace StockSharp.Messages
 			{ DataType.PositionChanges, "position" },
 			{ DataType.News, "news" },
 			{ DataType.Board, "board" },
+			{ DataType.BoardState, "board_state" },
 		};
 
 		/// <summary>
@@ -3060,6 +3061,8 @@ namespace StockSharp.Messages
 			else if (type == DataType.News)
 				return MessageTypes.News;
 			else if (type == DataType.Board)
+				return MessageTypes.Board;
+			else if (type == DataType.BoardState)
 				return MessageTypes.BoardState;
 			else if (type == DataType.Securities)
 				return MessageTypes.Security;

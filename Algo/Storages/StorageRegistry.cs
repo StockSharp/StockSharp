@@ -422,6 +422,8 @@ namespace StockSharp.Algo.Storages
 				return GetQuoteMessageStorage(securityId, drive, format);
 			else if (dataType == typeof(NewsMessage))
 				return GetNewsMessageStorage(drive, format);
+			else if (dataType == typeof(BoardStateMessage))
+				return GetBoardStateMessageStorage(drive, format);
 			else if (dataType.IsCandleMessage())
 				return GetCandleMessageStorage(dataType, securityId, arg, drive, format);
 			else

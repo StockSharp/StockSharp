@@ -42,6 +42,7 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new DataBuffer<SecurityId, Level1ChangeMessage>();
 		private readonly DataBuffer<SecurityId, PositionChangeMessage> _positionChangesBuffer = new DataBuffer<SecurityId, PositionChangeMessage>();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
+		private readonly SynchronizedSet<BoardStateMessage> _boardStatesBuffer = new SynchronizedSet<BoardStateMessage>();
 		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
 		private readonly SynchronizedSet<long> _subscriptionsById = new SynchronizedSet<long>();
@@ -77,60 +78,67 @@ namespace StockSharp.Algo.Storages
 		public bool DisableStorageTimer { get; set; }
 
 		/// <summary>
-		/// Get accumulated ticks.
+		/// Get accumulated <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
 		/// <returns>Ticks.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTicks()
 			=> _ticksBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated order log.
+		/// Get accumulated <see cref="ExecutionTypes.OrderLog"/>.
 		/// </summary>
 		/// <returns>Order log.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetOrderLog()
 			=> _orderLogBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated transactions.
+		/// Get accumulated <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		/// <returns>Transactions.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTransactions()
 			=> _transactionsBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated candles.
+		/// Get accumulated <see cref="CandleMessage"/>.
 		/// </summary>
 		/// <returns>Candles.</returns>
 		public IDictionary<Tuple<SecurityId, Type, object>, IEnumerable<CandleMessage>> GetCandles()
 			=> _candleBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated level1.
+		/// Get accumulated <see cref="Level1ChangeMessage"/>.
 		/// </summary>
 		/// <returns>Level1.</returns>
 		public IDictionary<SecurityId, IEnumerable<Level1ChangeMessage>> GetLevel1()
 			=> _level1Buffer.Get();
 
 		/// <summary>
-		/// Get accumulated position changes.
+		/// Get accumulated <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		/// <returns>Position changes.</returns>
 		public IDictionary<SecurityId, IEnumerable<PositionChangeMessage>> GetPositionChanges()
 			=> _positionChangesBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated order books.
+		/// Get accumulated <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		/// <returns>Order books.</returns>
 		public IDictionary<SecurityId, IEnumerable<QuoteChangeMessage>> GetOrderBooks()
 			=> _orderBooksBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated news.
+		/// Get accumulated <see cref="NewsMessage"/>.
 		/// </summary>
 		/// <returns>News.</returns>
 		public IEnumerable<NewsMessage> GetNews()
 			=> _newsBuffer.SyncGet(c => c.CopyAndClear());
+
+		/// <summary>
+		/// Get accumulated <see cref="BoardStateMessage"/>.
+		/// </summary>
+		/// <returns>States.</returns>
+		public IEnumerable<BoardStateMessage> GetBoardStates()
+			=> _boardStatesBuffer.SyncGet(c => c.CopyAndClear());
 
 		private bool CanStore(Message message)
 		{
@@ -373,6 +381,15 @@ namespace StockSharp.Algo.Storages
 
 					if (CanStore(newsMsg))
 						_newsBuffer.Add(newsMsg.TypedClone());
+
+					break;
+				}
+				case MessageTypes.BoardState:
+				{
+					var stateMsg = (BoardStateMessage)message;
+
+					if (CanStore(stateMsg))
+						_boardStatesBuffer.Add(stateMsg.TypedClone());
 
 					break;
 				}

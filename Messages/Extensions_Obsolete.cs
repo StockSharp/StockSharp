@@ -149,7 +149,7 @@
 					return DataType.News;
 
 				case MessageTypes.BoardState:
-					return DataType.Board;
+					return DataType.BoardState;
 
 				case MessageTypes.Level1Change:
 					return DataType.Level1;

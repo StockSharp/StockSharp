@@ -336,16 +336,22 @@ namespace StockSharp.Algo
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
-			return SubscribeMarketData(null, DataType.Board, from, to, count, adapter: adapter);
+			return SubscribeMarketData(null, DataType.BoardState, from, to, count, adapter: adapter);
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use UnSubscribe method.")]
 		public void UnSubscribeBoard(ExchangeBoard board)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
-			UnSubscribeMarketData(null, DataType.Board);
+			var subscription = _subscriptionManager.TryFindSubscription(0, DataType.BoardState);
+
+			if (subscription == null)
+				return;
+
+			UnSubscribe(subscription);
 		}
 
 		/// <inheritdoc />

@@ -323,6 +323,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use UnSubscribe method.")]
 		public void UnSubscribeBoard(ExchangeBoard board)
 		{
 			MarketDataProvider.UnSubscribeBoard(board);

@@ -155,6 +155,7 @@ namespace StockSharp.Algo
 		/// Unsubscribe from the board changes.
 		/// </summary>
 		/// <param name="board">Board for unsubscription.</param>
+		[Obsolete("Use UnSubscribe method.")]
 		void UnSubscribeBoard(ExchangeBoard board);
 
 		/// <summary>

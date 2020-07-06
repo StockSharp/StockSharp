@@ -1149,7 +1149,7 @@ namespace StockSharp.Algo.Storages
 			{
 				lastTime = LoadMessages(GetStorage<NewsMessage>(default, null), subscription, settings.DaysLoad, SendReply, SendOut);
 			}
-			else if (subscription.DataType2 == DataType.Board)
+			else if (subscription.DataType2 == DataType.BoardState)
 			{
 				lastTime = LoadMessages(GetStorage<BoardStateMessage>(default, null), subscription, settings.DaysLoad, SendReply, SendOut);
 			}
