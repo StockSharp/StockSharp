@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				ClientCode = message.ClientCode,
 				Description = message.Description,
 				StrategyId = message.StrategyId,
-				BuildFrom = (SnapshotDataType?)message.BuildFrom,
+				BuildFrom = message.BuildFrom == null ? default(SnapshotDataType?) : (SnapshotDataType)message.BuildFrom,
 			};
 
 			foreach (var change in message.Changes)

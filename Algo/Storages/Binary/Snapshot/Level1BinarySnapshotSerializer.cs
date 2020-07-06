@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				SecurityId = message.SecurityId.ToStringId().VerifySize(Sizes.S100),
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
-				BuildFrom = (SnapshotDataType?)message.BuildFrom,
+				BuildFrom = message.BuildFrom == null ? default(SnapshotDataType?) : (SnapshotDataType)message.BuildFrom,
 			};
 
 			foreach (var change in message.Changes)

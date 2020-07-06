@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				PostOnly = ToByte(message.PostOnly),
 				Initiator = ToByte(message.Initiator),
 				SeqNum = message.SeqNum,
-				BuildFrom = (SnapshotDataType?)message.BuildFrom,
+				BuildFrom = message.BuildFrom == null ? default(SnapshotDataType?) : (SnapshotDataType)message.BuildFrom,
 
 				ConditionType = (message.Condition?.GetType().GetTypeName(false)).VerifySize(Sizes.S256),
 			};
