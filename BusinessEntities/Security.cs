@@ -300,8 +300,8 @@ namespace StockSharp.BusinessEntities
 				if (_priceStep == value)
 					return;
 
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+				//if (value < 0)
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_priceStep = value;
 				Notify(nameof(PriceStep));
@@ -628,8 +628,8 @@ namespace StockSharp.BusinessEntities
 			get => _stepPrice;
 			set
 			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str556);
+				//if (value < 0)
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str556);
 
 				if (_stepPrice == value)
 					return;
@@ -1110,8 +1110,8 @@ namespace StockSharp.BusinessEntities
 				if (_strike == value)
 					return;
 
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+				//if (value < 0)
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_strike = value;
 				Notify(nameof(Strike));
