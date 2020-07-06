@@ -47,6 +47,8 @@ namespace StockSharp.Algo.Testing
 			Adapter.InnerAdapters.Add(emulationAdapter ?? throw new ArgumentNullException(nameof(emulationAdapter)));
 			Adapter.ApplyHeartbeat(EmulationAdapter, applyHeartbeat);
 
+			Adapter.IsSupportTransactionLog = emulationAdapter.IsSupportTransactionLog;
+
 			TimeChange = false;
 
 			// sync transaction ids with underlying adapter
