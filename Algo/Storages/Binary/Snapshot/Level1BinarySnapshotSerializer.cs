@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public SnapshotDataType? BuildFrom;
 		}
 
-		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = SnapshotVersions.V20;
+		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = SnapshotVersions.V22;
 
 		string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Name => "Level1";
 
