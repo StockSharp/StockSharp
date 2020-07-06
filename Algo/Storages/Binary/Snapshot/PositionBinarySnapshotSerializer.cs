@@ -40,6 +40,17 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public BlittableDecimal? Commission;
 			public BlittableDecimal? CurrentValueInLots;
 			public byte? State;
+			public long? ExpirationDate;
+			public BlittableDecimal? CommissionTaker;
+			public BlittableDecimal? CommissionMaker;
+			public BlittableDecimal? SettlementPrice;
+			public int? BuyOrdersCount;
+			public int? SellOrdersCount;
+			public BlittableDecimal? BuyOrdersMargin;
+			public BlittableDecimal? SellOrdersMargin;
+			public BlittableDecimal? OrdersMargin;
+			public int? OrdersCount;
+			public int? TradesCount;
 
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string DepoName;
@@ -54,13 +65,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public string Description;
 
 			public int? LimitType;
-			public long? ExpirationDate;
 
-			public BlittableDecimal? CommissionTaker;
-			public BlittableDecimal? CommissionMaker;
-			public BlittableDecimal? SettlementPrice;
-
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S32)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string StrategyId;
 
 			public SnapshotDataType? BuildFrom;
@@ -148,6 +154,27 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case PositionChangeTypes.SettlementPrice:
 						snapshot.SettlementPrice = (BlittableDecimal)(decimal)change.Value;
 						break;
+					case PositionChangeTypes.BuyOrdersCount:
+						snapshot.BuyOrdersCount = (int)change.Value;
+						break;
+					case PositionChangeTypes.SellOrdersCount:
+						snapshot.SellOrdersCount = (int)change.Value;
+						break;
+					case PositionChangeTypes.BuyOrdersMargin:
+						snapshot.BuyOrdersMargin = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case PositionChangeTypes.SellOrdersMargin:
+						snapshot.SellOrdersMargin = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case PositionChangeTypes.OrdersMargin:
+						snapshot.OrdersMargin = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case PositionChangeTypes.OrdersCount:
+						snapshot.OrdersCount = (int)change.Value;
+						break;
+					case PositionChangeTypes.TradesCount:
+						snapshot.TradesCount = (int)change.Value;
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -200,13 +227,18 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				.TryAdd(PositionChangeTypes.CommissionMaker, snapshot.CommissionMaker, true)
 				.TryAdd(PositionChangeTypes.SettlementPrice, snapshot.SettlementPrice, true)
 				.TryAdd(PositionChangeTypes.ExpirationDate, snapshot.ExpirationDate.To<DateTimeOffset?>())
+				.TryAdd(PositionChangeTypes.BuyOrdersCount, snapshot.BuyOrdersCount, true)
+				.TryAdd(PositionChangeTypes.SellOrdersCount, snapshot.SellOrdersCount, true)
+				.TryAdd(PositionChangeTypes.BuyOrdersMargin, snapshot.BuyOrdersMargin, true)
+				.TryAdd(PositionChangeTypes.SellOrdersMargin, snapshot.SellOrdersMargin, true)
+				.TryAdd(PositionChangeTypes.OrdersMargin, snapshot.OrdersMargin, true)
+				.TryAdd(PositionChangeTypes.OrdersCount, snapshot.OrdersCount, true)
+				.TryAdd(PositionChangeTypes.TradesCount, snapshot.TradesCount, true)
+				.TryAdd(PositionChangeTypes.State, snapshot.State?.ToEnum<PortfolioStates>())
 				;
 
 				if (snapshot.Currency != null)
 					posMsg.Add(PositionChangeTypes.Currency, (CurrencyTypes)snapshot.Currency.Value);
-
-				if (snapshot.State != null)
-					posMsg.Add(PositionChangeTypes.State, (PortfolioStates)snapshot.State.Value);
 
 				return posMsg;
 			}
