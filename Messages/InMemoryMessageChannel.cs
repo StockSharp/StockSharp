@@ -145,6 +145,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public void Open()
 		{
+			if (Disabled)
+				return;
+
 			State = ChannelStates.Started;
 			_queue.Open();
 
