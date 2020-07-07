@@ -279,7 +279,8 @@ namespace StockSharp.Algo.Strategies
 			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1));
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
-
+			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
+			
 			InitMaxOrdersKeepTime();
 
 			_strategyStat.Add(this);
@@ -869,6 +870,18 @@ namespace StockSharp.Algo.Strategies
 				InitMaxOrdersKeepTime();
 				RecycleOrders();
 			}
+		}
+
+		private readonly StrategyParam<bool> _restoreChildOrders;
+
+		/// <summary>
+		/// Restore orders last time was registered by child strategies.
+		/// </summary>
+		[Browsable(false)]
+		public bool RestoreChildOrders
+		{
+			get => _restoreChildOrders.Value;
+			set => _restoreChildOrders.Value = value;
 		}
 
 		private void InitMaxOrdersKeepTime()
@@ -1562,6 +1575,8 @@ namespace StockSharp.Algo.Strategies
 
 		private void AttachOrder(Order order)
 		{
+			this.AddInfoLog("Order {0} attached.", order.TransactionId);
+
 			AddOrder(order);
 
 			ProcessOrder(order);
@@ -1573,6 +1588,8 @@ namespace StockSharp.Algo.Strategies
 		{
 			if (OrdersKeepTime == TimeSpan.Zero)
 				return;
+
+			this.AddInfoLog(nameof(RecycleOrders));
 
 			var diff = _lastOrderTime - _firstOrderTime;
 
@@ -2012,7 +2029,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorNewOrder(Order order)
 		{
-			if (!_ordersInfo.ContainsKey(order) && order.UserOrderId == EnsureGetId())
+			if (!_ordersInfo.ContainsKey(order) && (order.UserOrderId.CompareIgnoreCase(EnsureGetId()) || (RestoreChildOrders && order.StrategyId.CompareIgnoreCase(EnsureGetId()))))
 				AttachOrder(order);
 		}
 
@@ -2347,10 +2364,7 @@ namespace StockSharp.Algo.Strategies
 				Stop();
 		}
 
-		object ICloneable.Clone()
-		{
-			return Clone();
-		}
+		object ICloneable.Clone() => Clone();
 
 		/// <summary>
 		/// Create a copy of <see cref="Strategy"/>.
