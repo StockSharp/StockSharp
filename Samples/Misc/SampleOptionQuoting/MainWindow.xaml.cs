@@ -17,6 +17,7 @@ namespace SampleOptionQuoting
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
@@ -50,8 +51,8 @@ namespace SampleOptionQuoting
 
 		public readonly Connector Connector = new Connector();
 
-		private readonly ThreadSafeObservableCollection<Security> _assets;
-		private readonly ThreadSafeObservableCollection<Security> _options;
+		private readonly ObservableCollection<Security> _assets;
+		private readonly ObservableCollection<Security> _options;
 		private readonly OptionDeskModel _model;
 		private readonly ICollection<LineData<double>> _putBidSmile;
 		private readonly ICollection<LineData<double>> _putAskSmile;
@@ -74,14 +75,11 @@ namespace SampleOptionQuoting
 		{
 			InitializeComponent();
 
-			var assetsSource = new ObservableCollectionEx<Security>();
-			var optionsSource = new ObservableCollectionEx<Security>();
+			_assets = new ObservableCollection<Security>();
+			_options = new ObservableCollection<Security>();
 
-			Options.ItemsSource = optionsSource;
-			Assets.ItemsSource = assetsSource;
-
-			_assets = new ThreadSafeObservableCollection<Security>(assetsSource);
-			_options = new ThreadSafeObservableCollection<Security>(optionsSource);
+			Assets.ItemsSource = _assets;
+			Options.ItemsSource = _options;
 
 			_model = new OptionDeskModel();
 			Desk.Model = _model;
@@ -113,7 +111,7 @@ namespace SampleOptionQuoting
 			};
 			timer.Start();
 
-			Level1FieldsCtrl.ItemsSource = new[]
+			Level1FieldsCtrl.SetItemsSource(new[]
 			{
 				Level1Fields.ImpliedVolatility,
 				Level1Fields.Delta,
@@ -121,8 +119,8 @@ namespace SampleOptionQuoting
 				Level1Fields.Vega,
 				Level1Fields.Theta,
 				Level1Fields.Rho,
-			}.ToDictionary(t => t, t => t.GetDisplayName());
-			Level1FieldsCtrl.SelectedFields = _model.EvaluateFildes.ToArray();
+			});
+			Level1FieldsCtrl.SetSelected(_model.EvaluateFields.ToArray());
 
 			Instance = this;
 
@@ -294,7 +292,7 @@ namespace SampleOptionQuoting
 			Connector.SecurityReceived += (sub, security) =>
 			{
 				if (security.Type == SecurityTypes.Future)
-					_assets.TryAdd(security);
+					this.GuiAsync(() => _assets.TryAdd(security));
 
 				if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
 					_isDirty = true;
@@ -359,8 +357,8 @@ namespace SampleOptionQuoting
 
 		private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)
 		{
-			_model.EvaluateFildes.Clear();
-			_model.EvaluateFildes.AddRange(Level1FieldsCtrl.SelectedFields);
+			_model.EvaluateFields.Clear();
+			_model.EvaluateFields.AddRange(Level1FieldsCtrl.GetSelecteds<Level1Fields>());
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -452,7 +450,7 @@ namespace SampleOptionQuoting
 			_callLastSmile?.Clear();
 		}
 
-		private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void Assets_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 		{
 			var asset = SelectedAsset;
 
@@ -492,7 +490,7 @@ namespace SampleOptionQuoting
 			RefreshChart();
 		}
 
-		private void Options_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void Options_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 		{
 			var option = SelectedOption;
 
