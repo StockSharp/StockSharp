@@ -1,7 +1,10 @@
 ﻿namespace SampleStrategies
 {
+	using System;
+	using System.IO;
 	using System.Windows;
 
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
@@ -9,13 +12,46 @@
 	using StockSharp.Algo.Strategies.Protective;
 	using StockSharp.Algo.Strategies.Quoting;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Logging;
 	using StockSharp.Xaml;
 
 	public partial class StrategiesWindow
 	{
+		private string _dir;
+
 		public StrategiesWindow()
 		{
 			InitializeComponent();
+
+			var connector = MainWindow.Instance.Connector;
+
+			Dashboard.SecurityProvider = connector;
+			Dashboard.Portfolios = new PortfolioDataSource(connector);
+		}
+
+		public void LoadStrategies(string path)
+		{
+			_dir = Path.Combine(path, "Strategies");
+
+			Directory.CreateDirectory(_dir);
+
+			var serializer = new XmlSerializer<SettingsStorage>();
+
+			var connector = MainWindow.Instance.Connector;
+
+			foreach (var xml in Directory.GetFiles(_dir, "*.xml"))
+			{
+				try
+				{
+					var strategy = serializer.Deserialize(xml).LoadEntire<Strategy>();
+					strategy.Connector = connector;
+					Dashboard.Items.Add(new StrategiesDashboardItem(strategy.Name, strategy, null));
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
+				}
+			}
 		}
 
 		private void QuotingClick(object sender, RoutedEventArgs e)
@@ -73,7 +109,9 @@
 
 			Dashboard.Items.Add(new StrategiesDashboardItem(name, strategy, null));
 			MainWindow.Instance.LogManager.Sources.Add(strategy);
-			strategy.Start();
+
+			SaveStrategy(strategy);
+			//strategy.Start();
 		}
 
 		private bool Dashboard_OnCanExecuteStart(StrategiesDashboardItem item)
@@ -88,12 +126,21 @@
 
 		private void Dashboard_OnExecuteStart(StrategiesDashboardItem item)
 		{
+			SaveStrategy(item.Strategy);
 			item.Strategy.Start();
 		}
 
 		private void Dashboard_OnExecuteStop(StrategiesDashboardItem item)
 		{
 			item.Strategy.Stop();
+		}
+
+		private void SaveStrategy(Strategy strategy)
+		{
+			if (strategy is null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			new XmlSerializer<SettingsStorage>().Serialize(strategy.SaveEntire(false), Path.Combine(_dir, $"{strategy.Id}.xml"));
 		}
 	}
 }

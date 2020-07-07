@@ -20,17 +20,25 @@
 			<RowDefinition MinHeight="300" />
 		</Grid.RowDefinitions>
 
-
 		<Button x:Name="SettingsBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="1" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		<Button x:Name="ShowStrategies" Grid.Column="2" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Str1355}" Click="ShowStrategiesClick" />
 
-		<Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
-		<Button x:Name="ShowPortfolios" Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />
+		<Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
 
-		<Button x:Name="ShowMyTrades" Grid.Column="0" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
-		<Button x:Name="ShowOrders" Grid.Column="1" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
+			<Button x:Name="ShowSecurities" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
+			<Button x:Name="ShowPortfolios" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />
 
+			<Button x:Name="ShowMyTrades" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
+			<Button x:Name="ShowOrders" Grid.Column="3" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
+		</Grid>
+		
 		<xaml:Monitor x:Name="Monitor" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" />
 	</Grid>
 </Window>
