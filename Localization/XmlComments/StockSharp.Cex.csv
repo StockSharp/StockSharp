@@ -6,6 +6,7 @@ P:StockSharp.Cex.CexMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr845
 M:StockSharp.Cex.CexMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Cex.CexMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Cex.CexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Cex.CexMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Cex.CexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Cex.CexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Cex.CexMessageAdapter.Key/inheritdoc;DocStr8459

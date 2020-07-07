@@ -58,7 +58,7 @@ M:StockSharp.Logging.ILogReceiver.AddLog(StockSharp.Logging.LogMessage)/summary;
 M:StockSharp.Logging.ILogReceiver.AddLog(StockSharp.Logging.LogMessage)/param/message;DocStr1653
 T:StockSharp.Logging.BaseLogReceiver/summary;DocStr1579
 M:StockSharp.Logging.BaseLogReceiver.#ctor/summary;DocStr93
-T:StockSharp.Logging.GlobalLogReceiver/summary;DocStr12181
+T:StockSharp.Logging.GlobalLogReceiver/summary;DocStr11953
 P:StockSharp.Logging.GlobalLogReceiver.Instance/summary;DocStr9981
 T:StockSharp.Logging.ILogSource/summary;DocStr3954
 P:StockSharp.Logging.ILogSource.Id/summary;DocStr1678

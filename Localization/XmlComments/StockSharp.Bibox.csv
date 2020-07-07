@@ -4,6 +4,7 @@ M:StockSharp.Bibox.BiboxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tran
 M:StockSharp.Bibox.BiboxMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Bibox.BiboxMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Bibox.BiboxMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Bibox.BiboxMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Bibox.BiboxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bibox.BiboxMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bibox.BiboxMessageAdapter.Key/inheritdoc;DocStr8459

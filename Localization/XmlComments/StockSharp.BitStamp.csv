@@ -9,6 +9,7 @@ M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summ
 M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.BitStamp.BitStampMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.BitStamp.BitStampMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.BitStamp.BitStampMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.BitStamp.BitStampMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.BitStamp.BitStampMessageAdapter.Key/inheritdoc;DocStr8459

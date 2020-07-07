@@ -3,6 +3,7 @@ M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summar
 M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Bithumb.BithumbMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Bithumb.BithumbMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Bithumb.BithumbMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Bithumb.BithumbMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Bithumb.BithumbMessageAdapter.Key/inheritdoc;DocStr8459

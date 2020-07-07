@@ -6,6 +6,7 @@ M:StockSharp.Hotbit.HotbitMessageAdapter.GetTimeFrames(StockSharp.Messages.Secur
 P:StockSharp.Hotbit.HotbitMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 P:StockSharp.Hotbit.HotbitMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
 P:StockSharp.Hotbit.HotbitMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+P:StockSharp.Hotbit.HotbitMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Hotbit.HotbitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Hotbit.HotbitMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Hotbit.HotbitMessageAdapter.Key/inheritdoc;DocStr8459

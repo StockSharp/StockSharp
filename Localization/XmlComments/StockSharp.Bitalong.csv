@@ -2,6 +2,7 @@ T:StockSharp.Bitalong.BitalongMessageAdapter/summary;DocStr2538
 M:StockSharp.Bitalong.BitalongMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Bitalong.BitalongMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Bitalong.BitalongMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.Bitalong.BitalongMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Bitalong.BitalongMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitalong.BitalongMessageAdapter.Key/inheritdoc;DocStr8459
 P:StockSharp.Bitalong.BitalongMessageAdapter.Secret/inheritdoc;DocStr8459

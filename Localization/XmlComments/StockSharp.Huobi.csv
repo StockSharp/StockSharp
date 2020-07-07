@@ -5,6 +5,7 @@ M:StockSharp.Huobi.HuobiMessageAdapter.IsAllDownloadingSupported(StockSharp.Mess
 M:StockSharp.Huobi.HuobiMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Huobi.HuobiMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Huobi.HuobiMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Huobi.HuobiMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Huobi.HuobiMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Huobi.HuobiMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Huobi.HuobiMessageAdapter.Key/inheritdoc;DocStr8459

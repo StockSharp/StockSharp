@@ -5,6 +5,7 @@ M:StockSharp.Digifinex.DigifinexMessageAdapter.IsAllDownloadingSupported(StockSh
 M:StockSharp.Digifinex.DigifinexMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Digifinex.DigifinexMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Digifinex.DigifinexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Digifinex.DigifinexMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Digifinex.DigifinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Digifinex.DigifinexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Digifinex.DigifinexMessageAdapter.Key/inheritdoc;DocStr8459

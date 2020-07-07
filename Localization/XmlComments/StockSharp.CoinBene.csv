@@ -6,6 +6,7 @@ M:StockSharp.CoinBene.CoinBeneMessageAdapter.GetTimeFrames(StockSharp.Messages.S
 P:StockSharp.CoinBene.CoinBeneMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
 P:StockSharp.CoinBene.CoinBeneMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.CoinBene.CoinBeneMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.CoinBene.CoinBeneMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.CoinBene.CoinBeneMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.CoinBene.CoinBeneMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.CoinBene.CoinBeneMessageAdapter.Key/inheritdoc;DocStr8459

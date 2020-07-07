@@ -6,6 +6,7 @@ P:StockSharp.LBank.LBankMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocSt
 M:StockSharp.LBank.LBankMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.LBank.LBankMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.LBank.LBankMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.LBank.LBankMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.LBank.LBankMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.LBank.LBankMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.LBank.LBankMessageAdapter.Key/inheritdoc;DocStr8459

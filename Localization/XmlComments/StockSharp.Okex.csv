@@ -6,6 +6,7 @@ P:StockSharp.Okex.OkexMessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8
 M:StockSharp.Okex.OkexMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Okex.OkexMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Okex.OkexMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.Okex.OkexMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Okex.OkexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Okex.OkexMessageAdapter.Key/inheritdoc;DocStr8459
@@ -15,6 +16,8 @@ P:StockSharp.Okex.OkexMessageAdapter.IsFutures/summary;FuturesSection
 P:StockSharp.Okex.OkexMessageAdapter.IsSpot/summary;SpotSection
 P:StockSharp.Okex.OkexMessageAdapter.IsSwap/summary;SwapSection
 P:StockSharp.Okex.OkexMessageAdapter.AdminPassword/summary;AdminPassword
+P:StockSharp.Okex.OkexMessageAdapter.RestAddress/summary;DocStr11964
+P:StockSharp.Okex.OkexMessageAdapter.WebSocketAddress/summary;DocStr11965
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.ToString/inheritdoc;DocStr8459

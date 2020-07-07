@@ -2,6 +2,7 @@ T:StockSharp.ITCH.ItchMessageAdapter/summary;DocStr3789
 M:StockSharp.ITCH.ItchMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.ITCH.ItchMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.ITCH.ItchMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.ITCH.ItchMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.ITCH.ItchMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.ITCH.ItchMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/summary;DocStr3790
 M:StockSharp.ITCH.ItchMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/param/securityId;SecurityId

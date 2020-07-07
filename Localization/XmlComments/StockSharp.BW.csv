@@ -4,6 +4,7 @@ M:StockSharp.BW.BWMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactio
 M:StockSharp.BW.BWMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.BW.BWMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.BW.BWMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.BW.BWMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.BW.BWMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.BW.BWMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.BW.BWMessageAdapter.Key/inheritdoc;DocStr8459

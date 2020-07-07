@@ -4,6 +4,7 @@ M:StockSharp.Idax.IdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Idax.IdaxMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Idax.IdaxMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Idax.IdaxMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.Idax.IdaxMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Idax.IdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Idax.IdaxMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Idax.IdaxMessageAdapter.Key/inheritdoc;DocStr8459

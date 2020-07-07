@@ -3,6 +3,7 @@ M:StockSharp.CoinExchange.CoinExchangeMessageAdapter.#ctor(Ecng.Common.IdGenerat
 M:StockSharp.CoinExchange.CoinExchangeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.CoinExchange.CoinExchangeMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
+P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.CoinExchange.CoinExchangeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.Key/inheritdoc;DocStr8459
 P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.Secret/inheritdoc;DocStr8459

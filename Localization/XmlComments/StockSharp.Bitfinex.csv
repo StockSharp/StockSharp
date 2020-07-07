@@ -6,6 +6,7 @@ P:StockSharp.Bitfinex.BitfinexMessageAdapter.SupportedOrderBookDepths/inheritdoc
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Bitfinex.BitfinexMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.Key/inheritdoc;DocStr8459

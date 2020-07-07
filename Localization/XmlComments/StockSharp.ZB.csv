@@ -3,6 +3,7 @@ M:StockSharp.ZB.ZBMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.ZB.ZBMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.ZB.ZBMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.ZB.ZBMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.ZB.ZBMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.ZB.ZBMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.ZB.ZBMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.ZB.ZBMessageAdapter.Key/inheritdoc;DocStr8459
