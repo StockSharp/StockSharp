@@ -137,7 +137,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public int StringValueLen;
 		}
 
-		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V22;
+		Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V23;
 
 		string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
 

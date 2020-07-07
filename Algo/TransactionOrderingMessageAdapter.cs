@@ -28,6 +28,8 @@
 		}
 
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new SynchronizedDictionary<long, SubscriptionInfo>();
+		private readonly SynchronizedSet<long> _orderStatusIds = new SynchronizedSet<long>();
+		
 		private readonly SynchronizedDictionary<long, long> _orders = new SynchronizedDictionary<long, long>();
 		private readonly SynchronizedDictionary<long, SecurityId> _secIds = new SynchronizedDictionary<long, SecurityId>();
 
@@ -52,8 +54,9 @@
 		private void Reset()
 		{
 			_transactionLogSubscriptions.Clear();
+			_orderStatusIds.Clear();
+			
 			_orders.Clear();
-
 			_secIds.Clear();
 
 			_orderIds.Clear();
@@ -112,6 +115,8 @@
 					{
 						if (IsSupportTransactionLog)
 							_transactionLogSubscriptions.Add(statusMsg.TransactionId, new SubscriptionInfo(statusMsg.TypedClone()));
+						else
+							_orderStatusIds.Add(statusMsg.TransactionId);
 					}
 
 					break;
@@ -190,6 +195,12 @@
 						{
 							_orderStringIds.TryAdd(execMsg.OrderStringId, transId);
 						}
+					}
+
+					if (execMsg.TransactionId == 0 && execMsg.HasTradeInfo && _orderStatusIds.Contains(execMsg.OriginalTransactionId))
+					{
+						// below the code will try find order's transaction
+						execMsg.OriginalTransactionId = 0;
 					}
 
 					if (/*execMsg.TransactionId == 0 && */execMsg.OriginalTransactionId == 0)
@@ -294,8 +305,11 @@
 							if (execMsg.HasTradeInfo)
 							{
 								var clone = execMsg.TypedClone();
+
 								// all order's info in snapshot
+								execMsg.HasTradeInfo = false;
 								clone.HasOrderInfo = false;
+
 								tuple.Item2.Add(clone);
 							}
 						}

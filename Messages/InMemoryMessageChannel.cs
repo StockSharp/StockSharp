@@ -118,13 +118,18 @@ namespace StockSharp.Messages
 			}
 		}
 
+		/// <summary>
+		/// The channel cannot be opened.
+		/// </summary>
+		public bool Disabled { get; set; }
+
 		private ChannelStates _state = ChannelStates.Stopped;
 
 		/// <inheritdoc />
 		public ChannelStates State
 		{
 			get => _state;
-			set
+			private set
 			{
 				if (_state == value)
 					return;
@@ -140,6 +145,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public void Open()
 		{
+			if (Disabled)
+				return;
+
 			State = ChannelStates.Started;
 			_queue.Open();
 
@@ -213,7 +221,10 @@ namespace StockSharp.Messages
 		public bool SendInMessage(Message message)
 		{
 			if (!this.IsOpened())
-				throw new InvalidOperationException();
+			{
+				//throw new InvalidOperationException();
+				return false;
+			}
 
 			if (State == ChannelStates.Suspended)
 			{

@@ -699,9 +699,9 @@ namespace StockSharp.Algo
 			if (transactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(message), transactionId, LocalizedStrings.Str715);
 
-			var myTrade = securityData.MyTrades.TryGetValue(Tuple.Create(transactionId, message.TradeId ?? 0, message.TradeStringId));
+			var tradeKey = Tuple.Create(transactionId, message.TradeId ?? 0, message.TradeStringId ?? string.Empty);
 
-			if (myTrade != null)
+			if (securityData.MyTrades.TryGetValue(tradeKey, out var myTrade))
 				return Tuple.Create(myTrade, false);
 
 			if (order == null)
@@ -714,7 +714,7 @@ namespace StockSharp.Algo
 
 			var isNew = false;
 
-			myTrade = securityData.MyTrades.SafeAdd(Tuple.Create(order.TransactionId, message.TradeId ?? 0, message.TradeStringId), key =>
+			myTrade = securityData.MyTrades.SafeAdd(tradeKey, key =>
 			{
 				isNew = true;
 
@@ -764,7 +764,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var trade = GetTrade(security, message.TradeId, message.TradeStringId, (id, stringId) =>
+			var trade = GetTrade(security, message.TradeId, message.TradeStringId ?? string.Empty, (id, stringId) =>
 			{
 				var t = message.ToTrade(EntityFactory.CreateTrade(security, id, stringId));
 				t.LocalTime = message.LocalTime;
@@ -873,7 +873,7 @@ namespace StockSharp.Algo
 			if (order != null)
 				return order;
 
-			return orderStringId == null ? null : data.OrdersByStringId.TryGetValue(orderStringId);
+			return orderStringId.IsEmpty() ? null : data.OrdersByStringId.TryGetValue(orderStringId);
 		}
 
 		public long GetTransactionId(long originalTransactionId)

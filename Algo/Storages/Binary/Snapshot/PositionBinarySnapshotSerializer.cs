@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public SnapshotDataType? BuildFrom;
 		}
 
-		Version ISnapshotSerializer<Key, PositionChangeMessage>.Version { get; } = SnapshotVersions.V22;
+		Version ISnapshotSerializer<Key, PositionChangeMessage>.Version { get; } = SnapshotVersions.V23;
 
 		string ISnapshotSerializer<Key, PositionChangeMessage>.Name => "Positions";
 

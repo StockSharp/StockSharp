@@ -1328,7 +1328,7 @@ namespace StockSharp.Algo
 		private void ProcessOrderLogMessage(Security security, ExecutionMessage message)
 		{
 			var trade = (message.TradeId != null || !message.TradeStringId.IsEmpty())
-				? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId)
+				? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId ?? string.Empty)
 				: null;
 
 			var logItem = message.ToOrderLog(EntityFactory.CreateOrderLogItem(new Order { Security = security }, trade));

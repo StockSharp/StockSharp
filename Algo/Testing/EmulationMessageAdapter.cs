@@ -108,6 +108,9 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		public override bool? IsPositionsEmulationRequired => Emulator.IsPositionsEmulationRequired;
 
+		/// <inheritdoc />
+		public override bool IsSupportTransactionLog => Emulator.IsSupportTransactionLog;
+
 		private void SendToEmulator(Message message)
 		{
 			_inAdapter.SendInMessage(message);
