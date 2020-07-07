@@ -576,7 +576,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public decimal Position
 		{
-			get => GetPositionValue(Security, Portfolio) ?? 0;
+			get => Security == null || Portfolio == null ? 0m : GetPositionValue(Security, Portfolio) ?? 0;
 			[Obsolete]
 			set	{ }
 		}
