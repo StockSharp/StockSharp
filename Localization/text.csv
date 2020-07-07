@@ -1,4 +1,5 @@
-﻿PaidConnectorToolip;This connection uses paid options. Click for detailed info.;Это подключение использует платные опции. Кликните для получения дополнительной информации.
+﻿SessionNotSelected;Session was not selected.;Сессия не выбрана.
+PaidConnectorToolip;This connection uses paid options. Click for detailed info.;Это подключение использует платные опции. Кликните для получения дополнительной информации.
 SwitchAxisLocation;Switch axis location;Переключить расположение оси
 ChartSeriesTitleParams;{0} ({1});{0} ({1})
 ChartTranElementTitleParams;{0} ({1});{0} ({1})

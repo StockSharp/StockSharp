@@ -13,10 +13,12 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
+	using System.ComponentModel;
 
 	/// <summary>
 	/// Message portfolio lookup for specified criteria.
@@ -37,6 +39,7 @@ namespace StockSharp.Messages
 		public override DataType DataType => DataType.PositionChanges;
 
 		/// <inheritdoc />
+		[TypeConverter(typeof(StringToSecurityIdTypeConverter))]
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>

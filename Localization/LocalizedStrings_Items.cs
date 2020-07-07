@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Session was not selected.
+		/// </summary>
+		public const string SessionNotSelectedKey = nameof(SessionNotSelected);
+
+		/// <summary>
+		/// Session was not selected.
+		/// </summary>
+		public static string SessionNotSelected => GetString(SessionNotSelectedKey);
+
+		/// <summary>
 		/// This connection uses paid options. Click for detailed info.
 		/// </summary>
 		public const string PaidConnectorToolipKey = nameof(PaidConnectorToolip);
