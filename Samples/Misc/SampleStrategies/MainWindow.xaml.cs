@@ -93,6 +93,7 @@ namespace SampleStrategies
 					}
 				},
 				CheckSteps = true,
+				KeepStrategiesPositions = true,
 			};
 			LogManager.Sources.Add(Connector);
 

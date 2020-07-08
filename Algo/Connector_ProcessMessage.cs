@@ -1088,7 +1088,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
-			if (!message.StrategyId.IsEmpty())
+			if (!KeepStrategiesPositions && !message.StrategyId.IsEmpty())
 				return;
 
 			Portfolio portfolio;

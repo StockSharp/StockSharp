@@ -452,6 +452,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
+		/// <summary>
+		/// Process strategies positions and store it into <see cref="Positions"/>.
+		/// </summary>
+		public bool KeepStrategiesPositions { get; set; }
+
 		private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new CachedSynchronizedSet<MessageTypes>(new[]
 		{
 			MessageTypes.SecurityLookup,
@@ -554,11 +559,11 @@ namespace StockSharp.Algo
 			{
 				var p = EntityFactory.CreatePosition(portfolio, security);
 
-				p.StrategyId = strategyId;
 				p.DepoName = depoName;
 				p.LimitType = limitType;
 				p.Description = description;
 				p.ClientCode = clientCode;
+				p.StrategyId = strategyId;
 
 				return p;
 			}, out var isNew);
@@ -1200,7 +1205,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			TradesKeepCount = storage.GetValue(nameof(TradesKeepCount), TradesKeepCount);
@@ -1211,6 +1216,7 @@ namespace StockSharp.Algo
 			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 			CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
+			KeepStrategiesPositions = storage.GetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
 
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
@@ -1247,7 +1253,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			storage.SetValue(nameof(TradesKeepCount), TradesKeepCount);
@@ -1258,6 +1264,7 @@ namespace StockSharp.Algo
 			//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 			storage.SetValue(nameof(CheckSteps), CheckSteps);
+			storage.SetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
 			
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
