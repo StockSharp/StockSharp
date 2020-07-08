@@ -537,12 +537,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
+		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
-			return GetPosition(portfolio, security, clientCode, depoName, limitType, string.Empty);
+			return GetPosition(portfolio, security, strategyId, clientCode, depoName, limitType, string.Empty);
 		}
 
-		private Position GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, string description)
+		private Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType, string description)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -550,10 +550,11 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var position = PositionStorage.GetOrCreatePosition(portfolio, security, clientCode, depoName, limitType, (pf, sec, clCode, ddep, limit) =>
+			var position = PositionStorage.GetOrCreatePosition(portfolio, security, strategyId, clientCode, depoName, limitType, (pf, sec, sid, clCode, ddep, limit) =>
 			{
 				var p = EntityFactory.CreatePosition(portfolio, security);
 
+				p.StrategyId = strategyId;
 				p.DepoName = depoName;
 				p.LimitType = limitType;
 				p.Description = description;

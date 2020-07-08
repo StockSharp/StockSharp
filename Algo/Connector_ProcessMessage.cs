@@ -1120,7 +1120,7 @@ namespace StockSharp.Algo
 					message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
 				}
 
-				var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+				var position = GetPosition(portfolio, security, message.StrategyId, message.ClientCode, message.DepoName, message.LimitType, message.Description);
 				position.ApplyChanges(message);
 
 				RaisePositionChanged(position);

@@ -803,9 +803,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 
 			protected override object GetKey(Position item)
-			{
-				return Tuple.Create(item.Portfolio, item.Security);
-			}
+				=> CreateKey(item.Portfolio, item.Security, item.StrategyId);
 
 			private Portfolio GetPortfolio(string id)
 			{
@@ -926,10 +924,11 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
-			public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
-			{
-				return ((IStorageEntityList<Position>)this).ReadById(Tuple.Create(portfolio, security));
-			}
+			public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
+				=> ((IStorageEntityList<Position>)this).ReadById(CreateKey(portfolio, security, strategyId));
+
+			private Tuple<Portfolio, Security, string> CreateKey(Portfolio portfolio, Security security, string strategyId)
+				=> Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty);
 		}
 
 		private class SubscriptionCsvList : CsvEntityList<MarketDataMessage>

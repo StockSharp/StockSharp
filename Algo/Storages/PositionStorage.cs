@@ -55,29 +55,13 @@ namespace StockSharp.Algo.Storages
 			remove => throw new NotSupportedException();
 		}
 
-		void IPositionStorage.Save(Portfolio portfolio)
-		{
-			_entityRegistry.Portfolios.Save(portfolio);
-		}
+		void IPositionStorage.Save(Portfolio portfolio) => _entityRegistry.Portfolios.Save(portfolio);
+		void IPositionStorage.Delete(Portfolio portfolio) => _entityRegistry.Portfolios.Remove(portfolio);
 
-		void IPositionStorage.Delete(Portfolio portfolio)
-		{
-			_entityRegistry.Portfolios.Remove(portfolio);
-		}
+		void IPositionStorage.Save(Position position) => _entityRegistry.Positions.Save(position);
+		void IPositionStorage.Delete(Position position) => _entityRegistry.Positions.Remove(position);
 
-		void IPositionStorage.Save(Position position)
-		{
-			_entityRegistry.Positions.Save(position);
-		}
-
-		void IPositionStorage.Delete(Position position)
-		{
-			_entityRegistry.Positions.Remove(position);
-		}
-
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limit)
-		{
-			return _entityRegistry.Positions.GetPosition(portfolio, security, clientCode, depoName, limit);
-		}
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limit)
+			=> _entityRegistry.Positions.GetPosition(portfolio, security, strategyId, clientCode, depoName, limit);
 	}
 }
