@@ -99,6 +99,7 @@
 		private void AddStrategy(string name, Strategy strategy)
 		{
 			strategy.Connector = MainWindow.Instance.Connector;
+			strategy.DisposeOnStop = false;
 
 			Dashboard.Items.Add(new StrategiesDashboardItem(name, strategy, null));
 			MainWindow.Instance.LogManager.Sources.Add(strategy);
@@ -148,7 +149,10 @@
 			if (!wnd.ShowModal(this))
 				return;
 
+			var id = item.Strategy.Id;
 			item.Strategy.Apply(wnd.Strategy);
+			item.Strategy.Id = id;
+			SaveStrategy(item.Strategy);
 		}
 	}
 }

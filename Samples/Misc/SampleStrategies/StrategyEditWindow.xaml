@@ -16,6 +16,6 @@
 
 		<sx:PropertyGridEx x:Name="SettingsGrid" Grid.Row="0" />
 
-		<dx:SimpleButton x:Name="Send" Content="{x:Static loc:LocalizedStrings.XamlStr427}" xaml:XamlHelper.DialogResult="True" IsDefault="True" Grid.Column="0" Grid.Row="2" Width="100" />
+		<dx:SimpleButton x:Name="Send" Content="{x:Static loc:LocalizedStrings.OK}" xaml:XamlHelper.DialogResult="True" IsDefault="True" Grid.Column="0" Grid.Row="2" Width="100" />
 	</Grid>
 </Window>
