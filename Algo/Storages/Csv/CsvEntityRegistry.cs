@@ -882,6 +882,9 @@ namespace StockSharp.Algo.Storages.Csv
 					position.TradesCount = reader.ReadNullableInt();
 				}
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					position.StrategyId = reader.ReadString();
+
 				return position;
 			}
 
@@ -919,6 +922,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.OrdersMargin.To<string>(),
 					data.OrdersCount.To<string>(),
 					data.TradesCount.To<string>(),
+					data.StrategyId,
 				});
 			}
 
