@@ -15,7 +15,9 @@
 								  CanExecuteStart="Dashboard_OnCanExecuteStart"
 								  CanExecuteStop="Dashboard_OnCanExecuteStop"
 								  ExecuteStart="Dashboard_OnExecuteStart"
-								  ExecuteStop="Dashboard_OnExecuteStop"/>
+								  ExecuteStop="Dashboard_OnExecuteStop"
+								  CanExecuteSettings="Dashboard_OnCanExecuteSettings"
+								  ExecuteSettings="Dashboard_OnExecuteSettings"/>
 
 		<StackPanel Grid.Row="2" Orientation="Horizontal">
 			<Button x:Name="Quoting" Width="100" Click="QuotingClick">
