@@ -83,7 +83,7 @@ namespace SampleStrategies
 
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
 
-			Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry)
+			Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer())
 			{
 				Adapter =
 				{
@@ -91,7 +91,8 @@ namespace SampleStrategies
 					{
 						DaysLoad = TimeSpan.FromDays(3),
 					}
-				}
+				},
+				CheckSteps = true,
 			};
 			LogManager.Sources.Add(Connector);
 

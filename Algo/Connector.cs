@@ -589,41 +589,35 @@ namespace StockSharp.Algo
 		public MarketDepth GetMarketDepth(Security security) => GetMarketDepth(security, false);
 
 		/// <inheritdoc />
-		public MarketDepth GetFilteredMarketDepth(Security security)
-		{
-			return GetMarketDepth(security, true);
-		}
+		public MarketDepth GetFilteredMarketDepth(Security security) => GetMarketDepth(security, true);
+
+		/// <summary>
+		/// Check <see cref="Order.Price"/> and <see cref="Order.Volume"/> are they multiply to step.
+		/// </summary>
+		public bool CheckSteps { get; set; }
 
 		/// <inheritdoc />
 		public void RegisterOrder(Order order)
-		{
-			RegisterOrder(order, true);
-		}
-
-		private void RegisterOrder(Order order, bool initOrder)
 		{
 			try
 			{
 				this.AddOrderInfoLog(order, nameof(RegisterOrder));
 
-				if (initOrder)
+				CheckOnNew(order);
+
+				if (order.Type != OrderTypes.Conditional)
 				{
-					CheckOnNew(order);
+					if (order.Volume == 0)
+						throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
 
-					if (order.Type != OrderTypes.Conditional)
-					{
-						if (order.Volume == 0)
-							throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
-
-						if (order.Volume < 0)
-							throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895.Put(order.Price));
-					}
-
-					if (order.Type == null)
-						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
-
-					InitNewOrder(order);
+					if (order.Volume < 0)
+						throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895.Put(order.Price));
 				}
+
+				if (order.Type == null)
+					order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
+
+				InitNewOrder(order);
 
 				OnRegisterOrder(order);
 			}
@@ -795,7 +789,7 @@ namespace StockSharp.Algo
 			SendOutMessage(fail.ToMessage(originalTransactionId));
 		}
 
-		private static void CheckOnNew(Order order)
+		private void CheckOnNew(Order order)
 		{
 			CheckOrderState(order);
 
@@ -807,6 +801,22 @@ namespace StockSharp.Algo
 
 			if (order.Id != null || !order.StringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
+
+			if (CheckSteps)
+			{
+				if (order.Price > 0)
+				{
+					var priceStep = order.Security.PriceStep;
+
+					if (priceStep != null && (order.Price % priceStep.Value) != 0)
+						throw new ArgumentException(LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(order.Price, order, priceStep.Value));
+				}
+					
+				var volumeStep = order.Security.VolumeStep;
+
+				if (volumeStep != null && (order.Volume % volumeStep.Value) != 0)
+					throw new ArgumentException(LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(order.Volume, order, volumeStep.Value));
+			}
 		}
 
 		private static void CheckOnOld(Order order)
@@ -1200,6 +1210,7 @@ namespace StockSharp.Algo
 			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
+			CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
 
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
@@ -1246,7 +1257,8 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
-
+			storage.SetValue(nameof(CheckSteps), CheckSteps);
+			
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
