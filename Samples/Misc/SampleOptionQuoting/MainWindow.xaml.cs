@@ -450,11 +450,29 @@ namespace SampleOptionQuoting
 			_callLastSmile?.Clear();
 		}
 
+		private readonly List<Subscription> _prevLevel1 = new List<Subscription>();
+
 		private void Assets_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 		{
+			foreach (var subscription in _prevLevel1)
+			{
+				Connector.UnSubscribe(subscription);
+			}
+
+			_prevLevel1.Clear();
+
+			void Subscribe(Security security)
+			{
+				_prevLevel1.Add(Connector.SubscribeLevel1(security));
+				_prevLevel1.Add(Connector.SubscribeMarketDepth(security));
+				_prevLevel1.Add(Connector.SubscribeTrades(security));
+			}
+
 			var asset = SelectedAsset;
 
 			_model.UnderlyingAsset = asset;
+
+			Subscribe(asset);
 
 			_model.Clear();
 			_options.Clear();
@@ -465,9 +483,12 @@ namespace SampleOptionQuoting
 			{
 				_model.Add(security);
 				_options.Add(security);
+
+				Subscribe(security);
 			}
 
 			ProcessPositions();
+			RefreshSmile();
 		}
 
 		private void Portfolio_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
