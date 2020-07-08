@@ -280,6 +280,7 @@ namespace StockSharp.Algo.Strategies
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
+			_allowTrading = this.Param(nameof(AllowTrading), true);
 			
 			InitMaxOrdersKeepTime();
 
@@ -884,6 +885,23 @@ namespace StockSharp.Algo.Strategies
 			set => _restoreChildOrders.Value = value;
 		}
 
+		private readonly StrategyParam<bool> _allowTrading;
+
+		/// <summary>
+		/// Allow trading.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str3599Key,
+			Description = LocalizedStrings.AllowTradingKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 10)]
+		public bool AllowTrading
+		{
+			get => _allowTrading.Value;
+			set => _allowTrading.Value = value;
+		}
+
 		private void InitMaxOrdersKeepTime()
 		{
 			_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
@@ -1234,6 +1252,12 @@ namespace StockSharp.Algo.Strategies
 				return;
 			}
 
+			if (!AllowTrading)
+			{
+				this.AddWarningLog(LocalizedStrings.AllowTrading);
+				return;
+			}
+
 			if (order.Security == null)
 				order.Security = Security;
 
@@ -1281,6 +1305,12 @@ namespace StockSharp.Algo.Strategies
 			if (ProcessState != ProcessStates.Started)
 			{
 				this.AddWarningLog(LocalizedStrings.Str1385Params, ProcessState);
+				return;
+			}
+
+			if (!AllowTrading)
+			{
+				this.AddWarningLog(LocalizedStrings.AllowTrading);
 				return;
 			}
 
