@@ -794,7 +794,7 @@ namespace StockSharp.Algo
 		/// <returns>Message.</returns>
 		public static PositionChangeMessage ToChangeMessage(this Position position, long originalTransactionId = 0)
 		{
-			if (position == null)
+			if (position is null)
 				throw new ArgumentNullException(nameof(position));
 
 			return new PositionChangeMessage
@@ -804,6 +804,7 @@ namespace StockSharp.Algo
 				PortfolioName = position.Portfolio.Name,
 				SecurityId = position.Security.ToSecurityId(),
 				ClientCode = position.ClientCode,
+				StrategyId = position.StrategyId,
 				OriginalTransactionId = originalTransactionId,
 			}
 			.TryAdd(PositionChangeTypes.BeginValue, position.BeginValue, true)
