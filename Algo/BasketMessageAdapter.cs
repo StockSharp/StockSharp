@@ -311,18 +311,25 @@ namespace StockSharp.Algo
 								if (execMsg.IsMarketData())
 									break;
 
-								if (execMsg.TransactionId == 0)
+								var transId = execMsg.TransactionId;
+
+								if (transId == 0)
 								{
 									if (_managersByTransId.TryGetValue(execMsg.OriginalTransactionId, out var manager))
 										return manager.ProcessMessage(message);
 								}
 								else
 								{
-									var manager = GetManager(execMsg.StrategyId);
-
-									if (manager != null)
+									if (_managersByTransId.TryGetValue(transId, out var manager))
+										return manager.ProcessMessage(message);
+									else
 									{
-										_managersByTransId[execMsg.TransactionId] = manager;
+										manager = GetManager(execMsg.StrategyId);
+
+										if (manager == null)
+											break;
+
+										_managersByTransId[transId] = manager;
 										return manager.ProcessMessage(message);
 									}
 								}
