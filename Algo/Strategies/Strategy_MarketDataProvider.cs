@@ -211,7 +211,9 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public Subscription SubscribeFilteredMarketDepth(Security security)
 		{
-			return MarketDataProvider.SubscribeFilteredMarketDepth(security);
+			var subscription = MarketDataProvider.SubscribeFilteredMarketDepth(security);
+			_subscriptions.Add(subscription, false);
+			return subscription;
 		}
 	}
 }
