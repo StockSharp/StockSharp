@@ -2067,6 +2067,10 @@ namespace StockSharp.Algo.Strategies
 					break;
 				}
 
+				case MessageTypes.PositionChange:
+					ProcessPositionChangeMessage((PositionChangeMessage)message);
+					break;
+
 				case MessageTypes.Time:
 					break;
 
