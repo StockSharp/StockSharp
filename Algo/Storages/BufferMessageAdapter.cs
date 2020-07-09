@@ -384,7 +384,7 @@ namespace StockSharp.Algo.Storages
 								{
 									if (message.Error == null)
 									{
-										var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId);
+										var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId.To<string>());
 
 										if (replaced == null)
 											this.AddWarningLog("Replaced order {0} not found.", replacedId);
