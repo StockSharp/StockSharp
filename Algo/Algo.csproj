@@ -6,22 +6,18 @@
     <ProjectGuid>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Common" Version="1.0.0" />
-    <PackageReference Include="Ecng.Data" Version="1.0.0" />
-    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
-    <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
-    <PackageReference Include="Ecng.Serialization" Version="1.0.0" />
-    <PackageReference Include="Ecng.Interop" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
-    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\Community\Community.csproj" />
-    <ProjectReference Include="..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
+  
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netstandard2.1' ">
-    <Reference Include="Microsoft.CSharp" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <Reference Include="System.Core" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
+    <ProjectReference Include="..\Community\Community.csproj" />
   </ItemGroup>
 </Project>

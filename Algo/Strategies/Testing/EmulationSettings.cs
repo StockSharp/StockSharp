@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private int _batchSize = 10;
+		private int _batchSize = Environment.ProcessorCount * 2;
 
 		/// <summary>
 		/// Number of simultaneously tested strategies.

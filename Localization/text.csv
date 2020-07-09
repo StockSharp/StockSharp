@@ -1,4 +1,32 @@
-﻿DrawSize;Draw size;Размер отрисовки
+﻿PaidConnectorToolip;This connection uses paid options. Click for detailed info.;Это подключение использует платные опции. Кликните для получения дополнительной информации.
+SwitchAxisLocation;Switch axis location;Переключить расположение оси
+ChartSeriesTitleParams;{0} ({1});{0} ({1})
+ChartTranElementTitleParams;{0} ({1});{0} ({1})
+Absolute;Absolute;Абсолютное
+Point;Point;Пункт
+ApplicationUpdate;Application update;Обновление приложения
+FollowingUpdatesAvailable;Following updates are available;Доступны следующие обновления
+ElementNotFoundParams;{0} is not found;{0} не найден
+ExitingApplication;Exiting the application;Завершение приложения
+ExitingAppForInstaller;The application will be stopped in order to run installer;Для запуска установщика приложение будет закрыто
+UpdateIsNotRequired;Update is not required;Обновление не требуется
+InstallerNotFound;The installer was not found;Установщик не найден
+InstallerNotFoundDetailParams;The installer was not found. In order to be able to update the applications you need to download application installer at {0}.;Программа-установщик обновлений не найдена. Чтобы использовать функцию обновления приложений, необходимо скачать установщик обновлений по адресу {0}.
+AppInstallDir;Application install folder;Папка для установки приложения
+Install;install;установить
+ResetApp;reset;сбросить
+Installing;installing;установка
+Installed;installed;установлено
+NotInstalled;not installed;не установлено
+Applications;Applications;Приложения
+Plugins;Plugins;Плагины
+UpdateDetails;Update information;Информация об обновлении
+UpdateFailDetails;Update fail details;Информация об ошибке
+StockSharpInstaller;S#.Installer;S#.Установщик
+SetupType;Setup type;Тип установки
+PackageVersion;Package version;Версия пакета
+OutputDirectory;Output directory;Выходная папка
+DrawSize;Draw size;Размер отрисовки
 OrdersDisplayFilter;Orders display filter;Фильтр отображения заявок
 AllOrders;All orders;Все заявки
 ErrorOrdersOnly;Orders with errors;Заявки с ошибками
@@ -211,7 +239,6 @@ Str144;Limit order execution condition.;Условие исполнения ли
 Str145;Trade ID.;Идентификатор сделки.
 Str146;Trade ID (as string, if electronic board does not use numeric order ID representation).;Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки).
 Str147;Trade price.;Цена сделки.
-Str148;Deal initiator;Инициатор сделки
 Str149;Deal initiator (seller or buyer).;Инициатор сделки (продавец или покупатель).
 Str150;Open interest;Открытый интерес
 Str151;Number of open positions (open interest).;Количество открытых позиций (открытый интерес).
@@ -459,8 +486,10 @@ Str402;Completed;Завершена
 Str403;Buy;Покупка
 Str404;Sell;Продажа
 Str405;Put in queue;Поставить в очередь
-FOK;Fill Or Kill;Немедленно или отклонить
-IOC;Immediate Or Cancel;Снять остаток
+FOK;FOK;FOK
+FillOrKill;Fill Or Kill;Немедленно или отклонить
+IOC;IOC;IOC
+ImmediateOrCancel;Immediate Or Cancel;Снять остаток
 Str408;Work schedule (time, holidays etc.).;Режим работы (время, выходные дни и т.д.).
 Str409;Periods;Периоды
 Str410;Schedule validity periods.;Периоды действия расписания.
@@ -550,7 +579,7 @@ Str535;Orders log item.;Строка лога заявок.
 Str536Params;{0} orders {1};{0} заявки {1}
 Str537;Cancellation;Снятие
 Str538;Registration;Регистрация
-Str539;Combination;Сведение
+Str539;Matching;Сведение
 Str540Params;per trade {0};на сделку {0}
 Str541;Portfolio, describing the trading account and the size of its generated commission.;Портфель, описывающий торговый счет и размер сгенерированной комиссии по нему.
 Leverage;Leverage;Плечо
@@ -887,7 +916,7 @@ Str891;Portfolio was not found.;Портфель не был найден.
 Str892;Order price must be positive.;Цена заявки должна быть положительной.
 Str893;Limit order price cannot be equal 0.;Цена лимитной заявки не может быть равной 0.
 Str894;Order volume cannot be zero.;Объем заявки не может быть нулевым.
-Str895;Order volume cannot be less than zero.;Объем заявки не может быть отрицательным.
+Str895;Volume for the price {0} cannot be less than zero.;Объем для цены {0} не может быть отрицательным.
 Str896Params;Order already has a ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор '{0}'. Возможно, она уже была зарегистрирована.
 Str897Params;Order already has a transaction ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор транзакции '{0}'. Возможно, она уже была зарегистрирована.
 Str898Params;Order already has state '{0}'. Possibly, it was already registered.;Заявка уже имеет состояние '{0}'. Возможно, она уже была зарегистрирована.
@@ -1500,8 +1529,10 @@ Str1535;Put option parameters.;Параметры Put опциона.
 Str1536;EXPIRED;ИСТЕКЛА
 Str1537; days; дней
 Str1538;Error processing request to refresh the table.;Ошибка обработки запроса обновления таблицы.
-GTC;Good til cancelled;До отмены
+GTC;GTC;GTC
+GoodTilCancelled;Good til cancelled;До отмены
 GTD;Good til date;До даты
+GoodTilDate;Good til date;До даты
 Session;Session;Сессия
 Str1541;Unsupported action time.;Неподдерживаемое время действия.
 Str1542Params;For portfolio {0} adapter is already specified.;Для портфеля {0} уже указан адаптер.
@@ -2127,9 +2158,9 @@ Str2217;Autostart;Автостарт
 Str2218;Autostart of quotes downloading at startup.;Автостарт скачивания котировок при запуске.
 Str2219;Tray;Трей
 Str2220;Collapse to tray.;Сворачивать в трей.
-Str2221;Auto-stop;Авто-стоп
+Str2221;Autostop;Автостоп
 Str2222;Stop work on time.;Остановка работы по времени.
-Str2223;Time for auto-stop;Время для Авто-стоп
+Str2223;Time for autostop;Время для Автостоп
 Str2225;Errors (quantity);Ошибки (кол-во)
 Str2226;Errors count, after which an email about the error will be sent. Value of 0 means a disabled.;Количество ошибок, после которых будет отправлено письмо на почту с сообщение об ошибке. Значение 0 означает выключенный режим.
 Str2227;Errors (email);Ошибки (email)
@@ -2712,7 +2743,7 @@ Str2850;Security code. Must be completed, if the data file does not contain the 
 Str2851;Board code. Must be completed, if the data file does not contain the board code.;Код площадки. Необходимо заполнить, если файл с данными не содержит кода площадки.
 Str2852;Date. Column can contain just a date or date with time.;Дата. Колонка может содержать как просто дату, так и дату со временем.
 Str2853;Time. This column is optional and is only necessary in case the date and time are separate in file being exported.;Время. Колонка является необязательно и необходима только в том случае, если дата и время в экспортируемом файле разделены.
-Str2856;Number (line);Номер (строка)
+Str2856;Number (string);Номер (строка)
 Date;Date;Дата
 Str2858;orders log;лога заявок
 Str2859;candles;свечей
@@ -3952,7 +3983,6 @@ XamlStr585;Transparency;Прозрачность
 XamlStr586;Slippage:;Проскаль.:
 XamlStr587;Available market data;Просмотр доступных данных
 XamlStr588;Elapsed:;Прошло:
-XamlStr589;Point;Пункт
 XamlStr591;Path to dll;Путь к dll с кодом стратегии
 XamlStr592;Quik's path:;Путь к Quik:
 XamlStr593;Historical data:;Путь к истории:
@@ -4405,6 +4435,7 @@ SecuritiesNotFound;Securities '{0}' not found.;Инструменты '{0}' не
 CyclicDependency;Cyclic dependency of '{0}'.;Циклическая зависимость '{0}'.
 SubscriptionNonExist;Subscription '{0}' does not exist.;Подписка '{0}' не существует.
 SubscriptionOnline;Subscription '{0}' for '{1}' is online.;Подписка '{0}' для '{1}' перешла в онлайн.
+SubscriptionInvalidState;Subscription {0} has state {1}.;Подписка {0} имеет состояние {1}.
 CandleDownloadInterval;Sleep interval while batch candles downloading.;Интервал скачивания данных.
 DownloadSecurities;Download securities;Скачать инструменты
 NotSupportSecurityDownload;The source does not support automatically instruments downloading. Manually create an instrument?;Источник не предоставляет возможность автоматической загрузки инструментов. Создать инструмент напрямую?
@@ -5149,12 +5180,41 @@ LastTradeVolumeHighDesc;Highest last trade volume.;Наибольший объе
 MaxSupportVersion;Max support version.;Максимальная поддерживаемая версия.
 Gaps;Gaps;Пропуски
 GapsDesc;Make gap in incremental messages for test purpose.;Сделать пропуски в инкрементальных сообщениях в тестовых целях.
+FillGaps;Try fill gaps.;Попытаться заполнить пропуски.
 HeikinAshi;Heikin Ashi;Heikin Ashi
 SubscriptionInState;Subscription {0} in state {1} and cannot be stopped.;Подписка {0} в состоянии {1} и не может быть остановлена.
 SubscriptionNotifySubscriber;Subscription {0} notify subscriber {1}.;Подписка {0} уведомляет подписчика {1}.
 OnlineSubscriptionRemoved;Online subscription {0} removed.;Онлайн подписку {0} удалена.
 DigitexFutures;Digitex Futures;Digitex Futures
 OrdersMargin;Orders (margin);Заявки (маржа)
+LicenseNotSupportPlatform;License N{0} is not support on current platform.;Лицензия N{0} не поддерживается на текущей платформе.
+OS;OS;ОС
+UdpDumper;UDP Dumper;UDP Dumper
+OptionMargin;Option margin;Опционы ГО
+OptionMarginDesc;Option margin leverage.;Гарантийное обеспечение на опцион.
+OptionSyntheticMargin;Option (synthetic);Опцион (синтетика)
+OptionSyntheticMarginDesc;Synthetic option position margin leverage.;Гарантийное обеспечение на синтетическую опционную позицию.
+SecurityNonTradable;Security '{0}' is no tradable.;Инструмент '{0}' не является торгуемым.
+PrimaryId;Primary id;Локальный
+PrimaryIdDesc;Identifier on primary exchange.;Идентификатор на основной бирже.
+SoftDollarTier;Soft Dollar Tier;Soft Dollar Tier
+DoNotSendAccount;Do not send Account field.;Не отправлять поле Account.
+Windows;Windows;Windows
+EnqueueSubscriptions;Enqueue subscriptions;Подписки в очередь
+EnqueueSubscriptionsDesc;Do not send new request before received confirmation for previous.;Не отправлять новый запрос пока не получено подтверждение по предыдущему.
+PositionEffect;Position effect;Действие позиции
+PositionEffectDesc;Indicates whether the resulting position after a trade should be an opening position or closing position.;Указывает, должна ли результирующая позиция после сделки быть открытой или закрытой.
+DefaultBehaviour;Default behaviour.;Поведение по-умолчанию.
+OpenOnly;Open only;На открытие
+PositionEffectOpenOnly;A trade should open a position.;Сделка должна закрывать позицию.
+CloseOnly;Close only;На закрытие
+PositionEffectCloseOnly;A trade should bring the position towards zero, i.e. close as much as possible of any existing position and open an opposite position for any remainder.;Сделка должна привести позицию к нулю, то есть максимально закрыть любую существующую позицию и открыть противоположную позицию для любого остатка.
+Initiator;Initiator;Инициатор
+InitiatorTrade;Used to identify whether the order initiator is an aggressor or not in the trade.;Используется для определения, является ли инициатор заявки агрессором или нет в сделке.
+Dark;Dark;Темная
+DarkTheme;Dark theme.;Темная тема.
+SequenceNumber;Sequence number.;Sequence number.
+AvailableSoon;Will be available soon.;Будет доступно скоро.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5313,7 +5373,7 @@ DocStr171;To get a list of available market data storages;Получить сп�
 DocStr172;Market data storages;Хранилища маркет-данных
 DocStr173;Authorization module;Модуль проверки доступа
 DocStr174;The maximum number of instruments which can be requested from the server via the {0} method. The default is {1};Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. По умолчанию равно {1}
-DocStr175;The client for access to the history server {0};Клиент для доступа к серверу истории {0}
+DocStr175;The client for access to the history server;Клиент для доступа к серверу истории
 DocStr176;Data transfer via WCF Streaming;Передача данных через WCF Streaming
 DocStr177;Create WCF channel;Создать WCF канал
 DocStr178;WCF channel;WCF канал
@@ -6541,17 +6601,17 @@ DocStr1437;The order re-registration;Перерегистрация заявки
 DocStr1438;Group canceling of orders;Групповая отмена заявок
 DocStr1439;The sign of deletion of order residual due to cross-trade;Признак удаления остатка заявки по причине кросс-сделки
 DocStr1440;Building order book by the orders log;Построение стакана по логу заявок
-DocStr1441;To check, does the string contain the order registration;Проверить, содержит ли строчка регистрацию заявки
+DocStr1441;To check, does the order log contain the order registration;Проверить, содержит ли лог заявок регистрацию заявки
 DocStr1442;Order log item;Строчка лога заявок
-DocStr1443;{0}, if the string contains the order registration, otherwise, {1};{0}, если строчка содержит регистрацию заявки, иначе, {1}
-DocStr1444;To check, does the string contain the cancelled order;Проверить, содержит ли строчка отмененные заявки
-DocStr1445;{0}, if the string contain the cancelled order, otherwise, {1};{0}, если строчка содержит отмененные заявки, иначе, {1}
-DocStr1446;To check, does the string contain the order matching;Проверить, содержит ли строчка исполнение заявки
-DocStr1447;{0}, if the string contains order matching, otherwise, {1};{0}, если строчка содержит исполнение заявки, иначе, {1}
+DocStr1443;{0}, if the order log contains the order registration, otherwise, {1};{0}, если лог заявок содержит регистрацию заявки, иначе, {1}
+DocStr1444;To check, does the order log contain the cancelled order;Проверить, содержит ли лог заявок отмененные заявки
+DocStr1445;{0}, if the order log contain the cancelled order, otherwise, {1};{0}, если лог заявок содержит отмененные заявки, иначе, {1}
+DocStr1446;To check, does the order log contain the order matching;Проверить, содержит ли лог заявок исполнение заявки
+DocStr1447;{0}, if the order log contains order matching, otherwise, {1};{0}, если лог заявок содержит исполнение заявки, иначе, {1}
 DocStr1448;To get the reason for cancelling order in orders log;Получить причину отмены заявки в логе заявок
 DocStr1449;The reason for order cancelling in order log;Причина отмены заявки в логе заявок
 DocStr1450;Order log to market depth builder;Построитель стакана
-DocStr1451;The interval of the order book generation. The default is {0}, which means order books generation at each new string of orders log;Интервал генерации стакана. По умолчанию равен {0}, что означает генерацию стаканов при каждой новой строчке лога заявок
+DocStr1451;The interval of the order book generation. The default is {0}, which means order books generation at each new item of orders log;Интервал генерации стакана. По умолчанию равен {0}, что означает генерацию стаканов при каждой новой строчке лога заявок
 DocStr1452;The maximal depth of order book. The default is {0}, which means endless depth;Максимальная глубина стакана. По умолчанию равно {0}, что означает бесконечную глубину
 DocStr1453;To build tick trades from the orders log;Построить тиковые сделки из лога заявок
 DocStr1454;The timer, based on trading system time;Таймер, основанный на времени торговой системы
@@ -13769,7 +13829,7 @@ DocStr9051;Strategy subscriptions signed by {0};Подписки на страт
 DocStr9052;A new strategy was created in the store;Новая стратегия была добавлена в магазин
 DocStr9053;Existing strategy was updated in the store;Стратегия была обновлена в магазине
 DocStr9054;Existing strategy was deleted from the store;Стратегия была удалена из магазина
-DocStr9056;Strategy content types;Типы контента стратегии
+DocStr9056;Product content types;Типы контента продукта
 DocStr9057;Schema in visual designer (if the strategy is distributed as a schema);Схема визуального дизайнера (если стратегия распространяется как схема)
 DocStr9058;Encrypted version of {0};Зашифрованная версия {0}
 DocStr9059;Strategy price types;Типы цены стратегии
@@ -14784,7 +14844,6 @@ DocStr10194;Implementation of {0} in binary format;Реализация {0} в �
 DocStr10195;Storage modes;Режимы хранилищ
 DocStr10196;Full;Полное
 DocStr10197;Full and snapshot;Полное и снэпшот
-DocStr10198;Storage mode. By default is {0};Режим хранилища. По-умолчанию равно {0}
 DocStr10199;Implementation of {0} in binary format for {1};Реализация {0} в бинарном формате для {1}
 DocStr10200;The interface for serialize snapshots;Интерфейс сериализации снэпшотов
 DocStr10201;Version of data format;Версия формата данных
@@ -15843,7 +15902,7 @@ DocStr11419;Message adapter that tracks multiple lookups requests and put them i
 DocStr11420;Subscription message;Сообщение подписки
 DocStr11421;"""Money"" security instance";"Объект инструмента ""Money"""
 DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
-DocStr11423;Use separated {0} for each adapters;Использовать отдельные {0} для каждого адаптера
+DocStr11423;Use {0} for in and out messages;Использовать {0} для входящих и исходящих сообщений
 DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
 DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой
 DocStr11428;Request for the appearance of a new indicator in the pre-market;Запрос на получение индикативного значения пре-маркета
@@ -15857,7 +15916,6 @@ DocStr11435;Determines the specified type is lookup;Определить, явл
 DocStr11436;Determines the specified type is lookup result message;Определить, является ли переданный тип сообщением результата поиска
 DocStr11437;Create message by the specified type;Создать сообщение по указанному типу
 DocStr11438;Replace security id by the specified;Заменить идентификатор инструмента указанным
-DocStr11439;Determines the security id required for the specified message;Определить, необходим ли идентификатор инструмента для указанного сообщения
 DocStr11440;Determines the specified message contains {0} position;Определить, содержит ли позицию {0} переданное сообщение
 DocStr11441;The interface describing an message with {0} method;Интерфейс, описывающий сообщение с методом {0}
 DocStr11442;Create security id with board code set as {0};Создать идентификатор инструмента с кодом площадки, установленным в {0}
@@ -16098,3 +16156,213 @@ DocStr11683;Txt templates registry;Txt templates registry
 DocStr11684;Create item source;Create item source
 DocStr11685;Try get security ID from the specified message;Try get security ID from the specified message
 DocStr11686;Security ID or {0} if message do not provide it;Security ID or {0} if message do not provide it
+DocStr11687;Online subscription counter adapter;Online subscription counter adapter
+DocStr11688;Download securities info;Download securities info
+DocStr11689;Get hash for the specified input;Get hash for the specified input
+DocStr11691;Defines the different types of data that can be returned;Defines the different types of data that can be returned
+DocStr11692;Bid Prices;Bid Prices
+DocStr11693;Ask Prices;Ask Prices
+DocStr11694;The format the historic market data is returned in;The format the historic market data is returned in
+DocStr11695;Comma Separated Values, not a fixed format, the columns will be different according to the different types of data returned;Comma Separated Values, not a fixed format, the columns will be different according to the different types of data returned
+DocStr11696;The product type used to connect to the LMAX Trader platform;The product type used to connect to the LMAX Trader platform
+DocStr11697;The order book has been newly created;The order book has been newly created
+DocStr11698;The order book is accepting orders;The order book is accepting orders
+DocStr11699;The order book is temporarily not accepting orders;The order book is temporarily not accepting orders
+DocStr11700;The order book is closed and waiting to be opened;The order book is closed and waiting to be opened
+DocStr11701;The trades on the order book have been settled;The trades on the order book have been settled
+DocStr11702;The order book is no longer trading;The order book is no longer trading
+DocStr11703;Base implementation of {0} interface;Base implementation of {0} interface
+DocStr11706;Xaml extension to use themed SVG icons;Xaml extension to use themed SVG icons
+DocStr11707;Icon key;Icon key
+DocStr11708;Get icon image source;Get icon image source
+DocStr11710;Xaml extension to apply color to SVG icons;Xaml extension to apply color to SVG icons
+DocStr11711;New icon color;New icon color
+DocStr11712;To build level1 from the orders log;To build level1 from the orders log
+DocStr11713;Check the specified mode turned on;Check the specified mode turned on
+DocStr11714;Storage mode;Режим хранилища
+DocStr11715;To build level1 from the order books;To build level1 from the order books
+DocStr11716;To check, does the string contain the order registration;To check, does the string contain the order registration
+DocStr11717;{0}, if the string contains the order registration, otherwise, {1};{0}, if the string contains the order registration, otherwise, {1}
+DocStr11718;To check, does the string contain the cancelled order;To check, does the string contain the cancelled order
+DocStr11719;{0}, if the string contain the cancelled order, otherwise, {1};{0}, if the string contain the cancelled order, otherwise, {1}
+DocStr11720;To check, does the string contain the order matching;To check, does the string contain the order matching
+DocStr11721;{0}, if the string contains order matching, otherwise, {1};{0}, if the string contains order matching, otherwise, {1}
+DocStr11722;Determines the specified message is required build only mode;Determines the specified message is required build only mode
+DocStr11723;Emulation message adapter;Emulation message adapter
+DocStr11724;Allow store generated by {0} messages;Allow store generated by {0} messages
+DocStr11725;REST protocol port;REST protocol port
+DocStr11726;order id (the taker's order);order id (the taker's order)
+DocStr11727;T for taker, M for maker;T for taker, M for maker
+DocStr11728;Supported platforms (Windows, Linux etc.);Supported platforms (Windows, Linux etc.)
+DocStr11729;Convert {0} to file name;Convert {0} to file name
+DocStr11730;Convert file name to {0};Convert file name to {0}
+DocStr11733;Convert key to numeric identifier;Convert key to numeric identifier
+DocStr11734;Get current chart theme;Get current chart theme
+DocStr11735;Determines the {0} is dark;Determines the {0} is dark
+DocStr11736;Send {0} to emulator;Send {0} to emulator
+DocStr11737;Suspend;Suspend
+DocStr11738;Get values;Get values
+DocStr11739;Interaction logic for SubsetComboBox.xaml;Interaction logic for SubsetComboBox.xaml
+DocStr11740;Current value type in the combo box;Current value type in the combo box
+DocStr11741;Load messages;Load messages
+DocStr11742;Last date;Last date
+DocStr11743;Extract time frames from the specified data types set;Extract time frames from the specified data types set
+DocStr11744;Send out finished candles when they received;Send out finished candles when they received
+DocStr11745;To resume the emulation;To resume the emulation
+DocStr11746;Subscription ALL parent-child mapping message;Subscription ALL parent-child mapping message
+DocStr11747;Parent {0};Parent {0}
+DocStr11748;Security ALL subscription counter adapter;Security ALL subscription counter adapter
+DocStr11749;Progress changed event;Progress changed event
+DocStr11750;Get feedbacks for specified product;Get feedbacks for specified product
+DocStr11751;Feedbacks;Feedbacks
+DocStr11752;To get all available products;To get all available products
+DocStr11753;Product feedback message;Product feedback message
+DocStr11754;Package id;Package id
+DocStr11755;Tags;Tags
+DocStr11756;Download count;Download count
+DocStr11757;Product required connectors;Product required connectors
+DocStr11758;Application updater locator;Application updater locator
+DocStr11759;Singleton instance;Singleton instance
+DocStr11760;Updater directory;Updater directory
+DocStr11761;Updater version;Updater version
+DocStr11762;Get filesystem path to check_updates.exe utility;Get filesystem path to check_updates.exe utility
+DocStr11763;Get filesystem path to Installer.exe app;Get filesystem path to Installer.exe app
+DocStr11764;Save locator data;Save locator data
+DocStr11765;Check if caller is a valid updater;Check if caller is a valid updater
+DocStr11766;The path to the installer directory;The path to the installer directory
+DocStr11767;Sample history data;Sample history data
+DocStr11768;App installer client;App installer client
+DocStr11769;Update status;Update status
+DocStr11770;Unknown status;Unknown status
+DocStr11771;Update in progress;Update in progress
+DocStr11772;Updates are available;Updates are available
+DocStr11773;No updates available;No updates available
+DocStr11774;Installer not found;Installer not found
+DocStr11775;Upate check error;Upate check error
+DocStr11776;Check for current application updates;Check for current application updates
+DocStr11777;Server credentials for private repository updates;Server credentials for private repository updates
+DocStr11778;Update check status event;Update check status event
+DocStr11779;Replay group;Replay group
+DocStr11780;License feature;License feature
+DocStr11781;type;type
+DocStr11782;Arg;Arg
+DocStr11783;Get typed argument;Get typed argument
+DocStr11784;Arg type;Arg type
+DocStr11785;Set typed argument;Set typed argument
+DocStr11786;Back mode;Back mode
+DocStr11787;Determines the specified message is loopback;Determines the specified message is loopback
+DocStr11788;Support candles {0};Support candles {0}
+DocStr11789;Message loopback modes;Message loopback modes
+DocStr11790;Direct;Direct
+DocStr11791;Via whole adapters chain;Via whole adapters chain
+DocStr11792;Address (demo);Address (demo)
+DocStr11793;Database provider;Database provider
+DocStr11794;Create table if not exist;Create table if not exist
+DocStr11795;Insert new values;Insert new values
+DocStr11796;Restriction;Restriction
+DocStr11797;{0} restriction;{0} restriction
+DocStr11798;Max length;Max length
+DocStr11799;Fixed size;Fixed size
+DocStr11800;Precision;Precision
+DocStr11801;Message received;Message received
+DocStr11802;Session disconnected event;Session disconnected event
+DocStr11803;Is connected;Is connected
+DocStr11804;Throw exception if the specified type is unknown;Throw exception if the specified type is unknown
+DocStr11805;Available data info message;Available data info message
+DocStr11806;Available data info request;Available data info request
+DocStr11807;Get body length;Get body length
+DocStr11808;Crypto connector;Crypto connector
+DocStr11809;Stock connector;Stock connector
+DocStr11810;Product lookup message;Product lookup message
+DocStr11811;Write {0} value;Write {0} value
+DocStr11812;Writer;Writer
+DocStr11813;Do not send {0};Do not send {0}
+DocStr11814;{0} disabled;{0} disabled
+DocStr11815;Total read/write bytes;Total read/write bytes
+DocStr11816;Add to the data log a news byte;Add to the data log a news byte
+DocStr11817;The number of bytes write;The number of bytes write
+DocStr11818;License targets;License targets
+DocStr11819;Machine;Machine
+DocStr11820;Base implementation of {0} interface with non-online mode;Base implementation of {0} interface with non-online mode
+DocStr11821;Make immutable;Make immutable
+DocStr11822;Board state;Board state
+DocStr11823;Portfolio route;Portfolio route
+DocStr11824;Security route;Security route
+DocStr11825;Security mapping;Security mapping
+DocStr11826;Change {0};Change {0}
+DocStr11827;Message types;Message types
+DocStr11828;Suspend on {0} if message queue is more than the specified count;Suspend on {0} if message queue is more than the specified count
+DocStr11829;Request only {0};Request only {0}
+DocStr11830;Get colored icon;Get colored icon
+DocStr11831;Fill brush;Fill brush
+DocStr11832;Stroke brush;Stroke brush
+DocStr11833;Processing event;Processing event
+DocStr11834;Send message event;Send message event
+DocStr11835;Dates;Dates
+DocStr11836;Upload data;Upload data
+DocStr11837;Gap fill;Gap fill
+DocStr11838;New sequence number;New sequence number
+DocStr11839;The resend request is sent by the receiving application to initiate the retransmission of messages. This function is utilized if a sequence number gap is detected, if the receiving application lost a message, or as a function of the initialization process;The resend request is sent by the receiving application to initiate the retransmission of messages. This function is utilized if a sequence number gap is detected, if the receiving application lost a message, or as a function of the initialization process
+DocStr11840;Message sequence number of first message in range to be resent;Message sequence number of first message in range to be resent
+DocStr11841;"Message sequence number of last message in range to be resent. If request is for a single message {0} = {1}. If request is for all messages subsequent to a particular message, {2} = ""0"" (representing infinity)";"Message sequence number of last message in range to be resent. If request is for a single message {0} = {1}. If request is for all messages subsequent to a particular message, {2} = ""0"" (representing infinity)"
+DocStr11842;Sequence reset message;Sequence reset message
+DocStr11843;Source for {0};Source for {0}
+DocStr11844;Message adapter, provided {0} and {1} properties;Message adapter, provided {0} and {1} properties
+DocStr11845;Message adapter, provided {0} property;Message adapter, provided {0} property
+DocStr11846;Address type;Address type
+DocStr11847;Create adapter for client-server communication;Create adapter for client-server communication
+DocStr11848;Write {0};Write {0}
+DocStr11849;Process extra tags for {0};Process extra tags for {0}
+DocStr11850;Get order type;Get order type
+DocStr11851;Override {0} by native identifier (if present in FIX message);Override {0} by native identifier (if present in FIX message)
+DocStr11852;FIFO;FIFO
+DocStr11853;Close but notify on open;Close but notify on open
+DocStr11854;Rolled;Rolled
+DocStr11855;Indicates if the order was initially received manually (as opposed to electronically);Indicates if the order was initially received manually (as opposed to electronically)
+DocStr11856;Extra fields;Extra fields
+DocStr11857;FIX/FAST extension methods;FIX/FAST extension methods
+DocStr11858;Default UTCDateOnly format;Default UTCDateOnly format
+DocStr11859;Default MonthYear format;Default MonthYear format
+DocStr11860;Default UTCTimeOnly format;Default UTCTimeOnly format
+DocStr11861;Default UTCTimestamp format;Default UTCTimestamp format
+DocStr11862;Copy content;Copy content
+DocStr11863;Destination;Destination
+DocStr11864;Write FIX message;Write FIX message
+DocStr11865;Whole message writer;Whole message writer
+DocStr11866;Body only writer;Body only writer
+DocStr11868;Handler;Handler
+DocStr11869;Empty tag;Empty tag
+DocStr11870;Read message;Read message
+DocStr11871;Reader;Reader
+DocStr11872;Tag handler;Tag handler
+DocStr11873;{0} if the message was successfully read, othewise, returns {1};{0} if the message was successfully read, othewise, returns {1}
+DocStr11874;Read FIX header;Read FIX header
+DocStr11875;Skip read {0};Skip read {0}
+DocStr11876;Expected {0} value;Expected {0} value
+DocStr11877;Read FIX trailer;Read FIX trailer
+DocStr11878;Skip reading message;Skip reading message
+DocStr11879;Possible error;Possible error
+DocStr11880;Get {0} value;Get {0} value
+DocStr11881;Set {0} value;Set {0} value
+DocStr11882;Check the specified type is candle;Check the specified type is candle
+DocStr11883;Write {0} and {1};Write {0} and {1}
+DocStr11884;Get request id;Get request id
+DocStr11885;{0} if the tag was handled, {1} if the tag is unknown;{0} if the tag was handled, {1} if the tag is unknown
+DocStr11886;Read time;Read time
+DocStr11887;Write time;Write time
+DocStr11888;Write {0} list;Write {0} list
+DocStr11889;Convert texts to latin;Convert texts to latin
+DocStr11890;Last message;Last message
+DocStr11891;Total count;Total count
+DocStr11892;Init security id;Init security id
+DocStr11893;Extra tags handler;Extra tags handler
+DocStr11894;{0} message read ok, {1} message read with errors, {2} network problem;{0} message read ok, {1} message read with errors, {2} network problem
+DocStr11895;Write parameters;Write parameters
+DocStr11896;Create transaction id;Create transaction id
+DocStr11897;Get transaction id;Get transaction id
+DocStr11898;Extra tag reader;Extra tag reader
+DocStr11899;Scaled numbers, like floating point numbers are represented as a mantissa and an exponent;Scaled numbers, like floating point numbers are represented as a mantissa and an exponent
+DocStr11900;Exponent;Exponent
+DocStr11901;Mantissa;Mantissa
+DocStr11902;The numerical value is obtained by multiplying the mantissa with the base-10 power of the exponent;The numerical value is obtained by multiplying the mantissa with the base-10 power of the exponent
+DocStr11903;License feature attribute;License feature attribute

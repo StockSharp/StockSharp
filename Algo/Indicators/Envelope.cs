@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -44,8 +45,8 @@ namespace StockSharp.Algo.Indicators
 		public Envelope(LengthIndicator<decimal> ma)
 		{
 			InnerIndicators.Add(Middle = ma);
-			InnerIndicators.Add(Upper = (LengthIndicator<decimal>)ma.Clone());
-			InnerIndicators.Add(Lower = (LengthIndicator<decimal>)ma.Clone());
+			InnerIndicators.Add(Upper = ma.TypedClone());
+			InnerIndicators.Add(Lower = ma.TypedClone());
 
 			Upper.Name = "Upper";
 			Lower.Name = "Lower";

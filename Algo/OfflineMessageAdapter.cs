@@ -7,6 +7,7 @@
 	using Ecng.Common;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -110,7 +111,7 @@
 						{
 							var timeMsg = (TimeMessage)message;
 
-							if (timeMsg.OfflineMode == MessageOfflineModes.Force)
+							if (timeMsg.OfflineMode == MessageOfflineModes.Ignore)
 								break;
 
 							return true;
@@ -239,18 +240,12 @@
 							}
 
 							break;
-						case MessageOfflineModes.Force:
+						case MessageOfflineModes.Ignore:
 							break;
 						case MessageOfflineModes.Cancel:
 						{
-							switch (message.Type)
-							{
-								case MessageTypes.SecurityLookup:
-								case MessageTypes.PortfolioLookup:
-								case MessageTypes.OrderStatus:
-									RaiseNewOutMessage(((ISubscriptionMessage)message).CreateResult());
-									break;
-							}
+							if (message is ISubscriptionMessage subscrMsg)
+								RaiseNewOutMessage(subscrMsg.CreateResult());
 
 							return true;
 						}
@@ -304,6 +299,8 @@
 				throw new InvalidOperationException(LocalizedStrings.MaxMessageCountExceed);
 
 			_pendingMessages.Add(message);
+
+			this.AddInfoLog("Message {0} stored in offline.", message);
 		}
 
 		/// <inheritdoc />
@@ -382,7 +379,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OfflineMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new OfflineMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

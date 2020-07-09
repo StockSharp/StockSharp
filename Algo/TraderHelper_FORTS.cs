@@ -13,6 +13,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+    using StockSharp.Algo.Storages;
 
 	partial class TraderHelper
 	{
@@ -120,7 +121,7 @@ namespace StockSharp.Algo
 			using (var client = new WebClient())
 			{
 				var url = "https://moex.com/export/derivatives/currency-rate.aspx?language=en&currency={0}&moment_start={1:yyyy-MM-dd}&moment_end={2:yyyy-MM-dd}"
-					.Put(securityId.SecurityCode.Replace("/", TraderHelper.SecurityPairSeparator), fromDate, toDate);
+					.Put(securityId.SecurityCode.Replace("/", StorageHelper.SecurityPairSeparator), fromDate, toDate);
 
 				var stream = client.OpenRead(url);
 

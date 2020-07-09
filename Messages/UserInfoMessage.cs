@@ -21,14 +21,6 @@ namespace StockSharp.Messages
 	public class UserInfoMessage : BaseSubscriptionIdMessage<UserInfoMessage>, ITransactionIdMessage
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
-		/// </summary>
-		public UserInfoMessage()
-			: base(MessageTypes.UserInfo)
-		{
-		}
-
-		/// <summary>
 		/// Login.
 		/// </summary>
 		[DataMember]
@@ -136,6 +128,12 @@ namespace StockSharp.Messages
 		public long? Avatar { get; set; }
 
 		/// <summary>
+		/// Token.
+		/// </summary>
+		[DataMember]
+		public string AuthToken { get; set; }
+
+		/// <summary>
 		/// Date of registration.
 		/// </summary>
 		[DataMember]
@@ -159,6 +157,17 @@ namespace StockSharp.Messages
 		public IDictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>>();
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.Users;
+		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
+		/// </summary>
+		public UserInfoMessage()
+			: base(MessageTypes.UserInfo)
+		{
+		}
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return base.ToString() + $",Name={Login}";
@@ -174,7 +183,7 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.IsBlocked = IsBlocked;
-			destination.IpRestrictions = IpRestrictions.ToArray();
+			destination.IpRestrictions = IpRestrictions?.ToArray() ?? Enumerable.Empty<IPAddress>();
 			destination.Id = Id;
 			destination.DisplayName = DisplayName;
 			destination.Phone = Phone;
@@ -187,7 +196,10 @@ namespace StockSharp.Messages
 			destination.Balance = Balance;
 			destination.Avatar = Avatar;
 			destination.CreationDate = CreationDate;
-			destination.Permissions.AddRange(Permissions.ToDictionary());
+			destination.AuthToken = AuthToken;
+
+			if (Permissions != null)
+				destination.Permissions.AddRange(Permissions.ToDictionary());
 		}
 	}
 }

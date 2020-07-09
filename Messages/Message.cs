@@ -38,12 +38,33 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Ignore offline mode and continue processing.
 		/// </summary>
-		Force,
+		Ignore,
 
 		/// <summary>
 		/// Cancel message processing and create reply.
 		/// </summary>
 		Cancel,
+	}
+
+	/// <summary>
+	/// Message loopback modes.
+	/// </summary>
+	public enum MessageBackModes
+	{
+		/// <summary>
+		/// None.
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// Direct.
+		/// </summary>
+		Direct,
+
+		/// <summary>
+		/// Via whole adapters chain.
+		/// </summary>
+		Chain,
 	}
 
 	/// <summary>
@@ -86,7 +107,17 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		public bool IsBack { get; set; }
+		[Obsolete("Use BackMode property.")]
+		public bool IsBack
+		{
+			get => this.IsBack();
+			set => BackMode = value ? MessageBackModes.Direct : MessageBackModes.None;
+		}
+
+		/// <inheritdoc />
+		[Ignore]
+		[XmlIgnore]
+		public MessageBackModes BackMode { get; set; }
 
 		/// <summary>
 		/// Offline mode handling message.
@@ -95,9 +126,7 @@ namespace StockSharp.Messages
 		[XmlIgnore]
 		public MessageOfflineModes OfflineMode { get; set; }
 
-		/// <summary>
-		/// Source adapter. Can be <see langword="null" />.
-		/// </summary>
+		/// <inheritdoc />
 		[Ignore]
 		[XmlIgnore]
 		public IMessageAdapter Adapter { get; set; }
@@ -109,10 +138,14 @@ namespace StockSharp.Messages
 		protected Message(MessageTypes type)
 		{
 			_type = type;
-			//StackTrace = Environment.StackTrace;
+#if MSG_TRACE
+			StackTrace = Environment.StackTrace;
+#endif
 		}
 
-		//internal readonly string StackTrace;
+#if MSG_TRACE
+		internal string StackTrace;
+#endif
 
 		/// <inheritdoc />
 		public override string ToString() => Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";
@@ -122,8 +155,6 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public abstract override Message Clone();
-
-		IMessage IMessage.Clone() => Clone();
 
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
@@ -135,7 +166,9 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(destination));
 
 			destination.LocalTime = LocalTime;
-
+#if MSG_TRACE
+			destination.StackTrace = StackTrace;
+#endif
 			this.CopyExtensionInfo(destination);
 		}
 	}

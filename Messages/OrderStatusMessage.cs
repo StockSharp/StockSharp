@@ -16,7 +16,10 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Linq;
 	using System.Runtime.Serialization;
+
+	using Ecng.Common;
 
 	using StockSharp.Localization;
 
@@ -43,7 +46,23 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
+		public long? Count { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
 		public bool IsSubscribe { get; set; }
+
+		private OrderStates[] _states = new[] { OrderStates.Active };
+
+		/// <summary>
+		/// Filter order by the specified states.
+		/// </summary>
+		[DataMember]
+		public OrderStates[] States
+		{
+			get => _states;
+			set => _states = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
@@ -52,6 +71,8 @@ namespace StockSharp.Messages
 			: base(MessageTypes.OrderStatus)
 		{
 		}
+
+		DataType ISubscriptionMessage.DataType => DataType.Transactions;
 
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
@@ -63,7 +84,9 @@ namespace StockSharp.Messages
 
 			destination.From = From;
 			destination.To = To;
+			destination.Count = Count;
 			destination.IsSubscribe = IsSubscribe;
+			destination.States = States.ToArray();
 		}
 
 		/// <summary>
@@ -89,6 +112,12 @@ namespace StockSharp.Messages
 
 			if (To != null)
 				str += $",To={To.Value}";
+
+			if (Count != null)
+				str += $",Count={Count.Value}";
+
+			if (States.Length > 0)
+				str += $",States={States.Select(s => s.To<string>()).JoinComma()}";
 
 			return str;
 		}

@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public override MarketDataTypes DataType => MarketDataTypes.Trades;
+		public override DataType DataType => DataType.Ticks;
 
 		private IdGenerator _idGenerator;
 
@@ -67,6 +67,14 @@ namespace StockSharp.Algo.Testing
 		public RandomWalkTradeGenerator(SecurityId securityId)
 			: base(securityId)
 		{
+		}
+
+		/// <inheritdoc />
+		public override void Init()
+		{
+			base.Init();
+
+			_lastTradePrice = default;
 		}
 
 		/// <summary>
@@ -157,20 +165,15 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
-			return new RandomWalkTradeGenerator(SecurityId)
+			var clone = new RandomWalkTradeGenerator(SecurityId)
 			{
-				_lastTradePrice = _lastTradePrice,
-
-				MaxVolume = MaxVolume,
-				MinVolume = MinVolume,
-				MaxPriceStepCount = MaxPriceStepCount,
-				Interval = Interval,
-				Volumes = Volumes,
-				Steps = Steps,
-
 				GenerateOriginSide = GenerateOriginSide,
 				IdGenerator = IdGenerator
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 	}
 }

@@ -215,6 +215,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str382Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 6)]
+		[EditorExtension(AutoComplete = true, Sorted = true)]
 		public CurrencyTypes? Currency
 		{
 			get => _currency;
@@ -299,8 +300,8 @@ namespace StockSharp.BusinessEntities
 				if (_priceStep == value)
 					return;
 
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+				//if (value < 0)
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_priceStep = value;
 				Notify(nameof(PriceStep));
@@ -558,6 +559,31 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private string _primaryId;
+
+		/// <summary>
+		/// Identifier on primary exchange.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PrimaryIdKey,
+			Description = LocalizedStrings.PrimaryIdDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 18)]
+		public string PrimaryId
+		{
+			get => _primaryId;
+			set
+			{
+				if (_primaryId == value)
+					return;
+
+				_primaryId = value;
+				Notify(nameof(PrimaryId));
+			}
+		}
+
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
@@ -602,8 +628,8 @@ namespace StockSharp.BusinessEntities
 			get => _stepPrice;
 			set
 			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str556);
+				//if (value < 0)
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str556);
 
 				if (_stepPrice == value)
 					return;
@@ -765,7 +791,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private Quote _bestBid;
+		private QuoteChange? _bestBid;
 
 		//[DataMember]
 		/// <summary>
@@ -781,7 +807,7 @@ namespace StockSharp.BusinessEntities
 			Order = 206)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
-		public Quote BestBid
+		public QuoteChange? BestBid
 		{
 			get => _bestBid;
 			set
@@ -797,7 +823,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private Quote _bestAsk;
+		private QuoteChange? _bestAsk;
 
 		//[DataMember]
 		/// <summary>
@@ -813,7 +839,7 @@ namespace StockSharp.BusinessEntities
 			Order = 207)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
-		public Quote BestAsk
+		public QuoteChange? BestAsk
 		{
 			get => _bestAsk;
 			set
@@ -1084,8 +1110,8 @@ namespace StockSharp.BusinessEntities
 				if (_strike == value)
 					return;
 
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+				//if (value < 0)
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_strike = value;
 				Notify(nameof(Strike));
@@ -2049,6 +2075,7 @@ namespace StockSharp.BusinessEntities
 			destination.CommissionTaker = CommissionTaker;
 			destination.CommissionMaker = CommissionMaker;
 			destination.FaceValue = FaceValue;
+			destination.PrimaryId = PrimaryId;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

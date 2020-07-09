@@ -4,5 +4,5 @@
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
     Title="{x:Static loc:LocalizedStrings.Orders}" Height="410" Width="930">
-	<xaml:OrderGrid x:Name="OrderGrid" x:FieldModifier="public" OrderCanceling="OrderGrid_OnOrderCanceling" />
+	<xaml:OrderGrid x:Name="OrderGrid" x:FieldModifier="public" OrderReRegistering="OrderGrid_OrderReRegistering"  OrderCanceling="OrderGrid_OnOrderCanceling" />
 </Window>

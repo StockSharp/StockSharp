@@ -210,37 +210,34 @@ namespace StockSharp.BusinessEntities
 			var str = string.Empty;
 
 			if (!Bloomberg.IsEmpty())
-				str += " Bloom {0}".Put(Bloomberg);
+				str += $" Bloom {Bloomberg}";
 
 			if (!Cusip.IsEmpty())
-				str += " CUSIP {0}".Put(Cusip);
+				str += $" CUSIP {Cusip}";
 
 			if (!IQFeed.IsEmpty())
-				str += " IQFeed {0}".Put(IQFeed);
+				str += $" IQFeed {IQFeed}";
 
 			if (!Isin.IsEmpty())
-				str += " ISIN {0}".Put(Isin);
+				str += $" ISIN {Isin}";
 
 			if (!Ric.IsEmpty())
-				str += " RIC {0}".Put(Ric);
+				str += $" RIC {Ric}";
 
 			if (!Sedol.IsEmpty())
-				str += " SEDOL {0}".Put(Sedol);
+				str += $" SEDOL {Sedol}";
 
 			if (InteractiveBrokers != null)
-				str += " InteractiveBrokers {0}".Put(InteractiveBrokers);
+				str += $" InteractiveBrokers {InteractiveBrokers}";
 
 			if (!Plaza.IsEmpty())
-				str += " Plaza {0}".Put(Plaza);
+				str += $" Plaza {Plaza}";
 
 			return str;
 		}
 
 		/// <inheritdoc />
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
+		public override int GetHashCode() => base.GetHashCode();
 
 		/// <summary>
 		/// Compare <see cref="SecurityExternalId"/> on the equivalence.
@@ -255,7 +252,7 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public bool Equals(SecurityExternalId other)
 		{
-			if (ReferenceEquals(other, null))
+			if (other is null)
 				return false;
 
 			if (Bloomberg != other.Bloomberg)

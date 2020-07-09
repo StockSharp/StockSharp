@@ -24,31 +24,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 	class NullableTimeQuoteChange
 	{
-		public NullableTimeQuoteChange()
-		{
-		}
-
-		public NullableTimeQuoteChange(Sides side, QuoteChange quote, QuoteChangeMessage message)
-		{
-			if (quote == null)
-				throw new ArgumentNullException(nameof(quote));
-
-			ServerTime = message.ServerTime;
-			LocalTime = message.LocalTime;
-			Price = quote.Price;
-			Volume = quote.Volume;
-			Side = side;
-			OrdersCount = quote.OrdersCount;
-			Condition = quote.Condition;
-		}
-
 		public DateTimeOffset ServerTime { get; set; }
 		public DateTimeOffset LocalTime { get; set; }
-		public decimal? Price { get; set; }
-		public decimal Volume { get; set; }
+		public QuoteChange? Quote { get; set; }
 		public Sides Side { get; set; }
-		public int? OrdersCount { get; set; }
-		public QuoteConditions Condition { get; set; }
 	}
 
 	/// <summary>
@@ -69,15 +48,17 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, NullableTimeQuoteChange data, IMarketDataMetaInfo metaInfo)
 		{
+			var quote = data.Quote;
+
 			writer.WriteRow(new[]
 			{
 				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
-				data.Price.To<string>(),
-				data.Volume.To<string>(),
+				quote?.Price.To<string>(),
+				quote?.Volume.To<string>(),
 				data.Side.To<string>(),
-				data.OrdersCount.To<string>(),
-				data.Condition == default ? null : data.Condition.To<string>(),
+				quote?.OrdersCount.To<string>(),
+				quote?.Condition.To<string>(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -89,16 +70,33 @@ namespace StockSharp.Algo.Storages.Csv
 			var quote = new NullableTimeQuoteChange
 			{
 				ServerTime = reader.ReadTime(metaInfo.Date),
-				Price = reader.ReadNullableDecimal(),
-				Volume = reader.ReadDecimal(),
-				Side = reader.ReadEnum<Sides>()
 			};
 
-			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				quote.OrdersCount = reader.ReadNullableInt();
+			var price = reader.ReadNullableDecimal();
+			var volume = reader.ReadNullableDecimal();
+
+			quote.Side = reader.ReadEnum<Sides>();
+
+			int? ordersCount = null;
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				quote.Condition = reader.ReadNullableEnum<QuoteConditions>() ?? default;
+				ordersCount = reader.ReadNullableInt();
+
+			QuoteConditions condition = default;
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				condition = reader.ReadNullableEnum<QuoteConditions>() ?? default;
+
+			if (price != null)
+			{
+				quote.Quote = new QuoteChange
+				{
+					Price = price.Value,
+					Volume = volume ?? 0,
+					OrdersCount = ordersCount,
+					Condition = condition,
+				};
+			}
 
 			return quote;
 		}

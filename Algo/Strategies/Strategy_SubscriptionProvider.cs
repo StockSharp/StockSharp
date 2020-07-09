@@ -21,6 +21,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<Subscription, QuoteChangeMessage> OrderBookReceived
+		{
+			add => SubscriptionProvider.OrderBookReceived += value;
+			remove => SubscriptionProvider.OrderBookReceived -= value;
+		}
+
+		/// <inheritdoc />
 		public event Action<Subscription, Trade> TickTradeReceived
 		{
 			add => SubscriptionProvider.TickTradeReceived += value;
@@ -109,6 +116,13 @@ namespace StockSharp.Algo.Strategies
 		{
 			add => SubscriptionProvider.PositionReceived += value;
 			remove => SubscriptionProvider.PositionReceived -= value;
+		}
+
+		/// <inheritdoc />
+		public event Action<Subscription, Message> SubscriptionReceived
+		{
+			add => SubscriptionProvider.SubscriptionReceived += value;
+			remove => SubscriptionProvider.SubscriptionReceived -= value;
 		}
 
 		/// <inheritdoc />

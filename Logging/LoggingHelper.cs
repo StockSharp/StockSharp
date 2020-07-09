@@ -205,7 +205,7 @@ namespace StockSharp.Logging
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
 
-			ConfigManager.TryGetService<LogManager>()?.Application.AddErrorLog(error, format);
+			LogManager.Instance?.Application.AddErrorLog(error, format);
 		}
 
 		/// <summary>
@@ -290,7 +290,7 @@ namespace StockSharp.Logging
 
 				foreach (var pair in dict)
 				{
-					new InvalidOperationException(pair.Key.ToString()).LogError(LocalizedStrings.CorruptedFile);
+					new InvalidOperationException(pair.Key.ToString(), pair.Value).LogError(LocalizedStrings.CorruptedFile);
 				}
 			}
 			catch (Exception ex)

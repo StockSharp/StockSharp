@@ -77,7 +77,7 @@ namespace StockSharp.Community
 		/// Type of <see cref="Price"/>.
 		/// </summary>
 		[DataMember]
-		public StrategyPriceTypes PriceType { get; set; }
+		public ProductPriceTypes PriceType { get; set; }
 
 		/// <summary>
 		/// The purchase price.
@@ -95,7 +95,7 @@ namespace StockSharp.Community
 		/// Type of <see cref="Content"/>.
 		/// </summary>
 		[DataMember]
-		public StrategyContentTypes ContentType { get; set; }
+		public ProductContentTypes ContentType { get; set; }
 
 		///// <summary>
 		///// Content name (file name etc.).

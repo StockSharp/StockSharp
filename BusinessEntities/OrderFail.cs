@@ -65,6 +65,7 @@ namespace StockSharp.BusinessEntities
 
 		/// <inheritdoc />
 		[XmlIgnore]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => Order.ExtensionInfo;

@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Export
 				Description = LocalizedStrings.TemplateTxtDepthKey,
 				GroupName = LocalizedStrings.GeneralKey,
 				Order = 0)]
-		public string TemplateTxtDepth { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Price};{Volume};{Side}";
+		public string TemplateTxtDepth { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{Quote.Price};{Quote.Volume};{Side}";
 
 		/// <summary>
 		/// Ticks txt export template.
@@ -120,6 +120,17 @@ namespace StockSharp.Algo.Export
 		public string TemplateTxtNews { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss};{Headline};{Source};{Url}";
 
 		/// <summary>
+		/// Board txt export template.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TemplateBoardKey,
+			Description = LocalizedStrings.TemplateTxtBoardKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 9)]
+		public string TemplateTxtBoard { get; set; } = "{ExchangeCode};{Code};{ExpiryTime};{TimeZone}";
+
+		/// <summary>
 		/// Board state txt export template.
 		/// </summary>
 		[Display(
@@ -128,7 +139,7 @@ namespace StockSharp.Algo.Export
 			Description = LocalizedStrings.TemplateTxtBoardKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 9)]
-		public string TemplateTxtBoard { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss};{BoardCode};{State}";
+		public string TemplateTxtBoardState { get; set; } = "{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss};{BoardCode};{State}";
 
 		/// <summary>
 		/// Indicator's value txt export template.
@@ -176,6 +187,7 @@ namespace StockSharp.Algo.Export
 			TemplateTxtSecurity = storage.GetValue(nameof(TemplateTxtSecurity), TemplateTxtSecurity);
 			TemplateTxtNews = storage.GetValue(nameof(TemplateTxtNews), TemplateTxtNews);
 			TemplateTxtBoard = storage.GetValue(nameof(TemplateTxtBoard), TemplateTxtBoard);
+			TemplateTxtBoardState = storage.GetValue(nameof(TemplateTxtBoardState), TemplateTxtBoardState);
 			TemplateTxtIndicator = storage.GetValue(nameof(TemplateTxtIndicator), TemplateTxtIndicator);
 			TemplateTxtPositionChange = storage.GetValue(nameof(TemplateTxtPositionChange), TemplateTxtPositionChange);
 
@@ -194,6 +206,7 @@ namespace StockSharp.Algo.Export
 			storage.SetValue(nameof(TemplateTxtSecurity), TemplateTxtSecurity);
 			storage.SetValue(nameof(TemplateTxtNews), TemplateTxtNews);
 			storage.SetValue(nameof(TemplateTxtBoard), TemplateTxtBoard);
+			storage.SetValue(nameof(TemplateTxtBoardState), TemplateTxtBoardState);
 			storage.SetValue(nameof(TemplateTxtIndicator), TemplateTxtIndicator);
 			storage.SetValue(nameof(TemplateTxtPositionChange), TemplateTxtPositionChange);
 

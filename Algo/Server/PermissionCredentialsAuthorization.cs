@@ -45,49 +45,49 @@ namespace StockSharp.Algo.Server
 			return Guid.NewGuid();
 		}
 
-		void IAuthorization.SaveUser(string login, SecureString password, IEnumerable<IPAddress> possibleAddresses)
-		{
-			var user = _storage.TryGetByLogin(login);
+		//void IAuthorization.SaveUser(string login, SecureString password, IEnumerable<IPAddress> possibleAddresses)
+		//{
+		//	var user = _storage.TryGetByLogin(login);
 
-			if (user == null)
-			{
-				user = new PermissionCredentials { Email = login };
-				_storage.Add(user);
-			}
+		//	if (user == null)
+		//	{
+		//		user = new PermissionCredentials { Email = login };
+		//		_storage.Add(user);
+		//	}
 
-			user.Password = password;
+		//	user.Password = password;
 
-			lock (user.IpRestrictions.SyncRoot)
-			{
-				user.IpRestrictions.Clear();
-				user.IpRestrictions.AddRange(possibleAddresses);
-			}
+		//	lock (user.IpRestrictions.SyncRoot)
+		//	{
+		//		user.IpRestrictions.Clear();
+		//		user.IpRestrictions.AddRange(possibleAddresses);
+		//	}
 
-			_storage.SaveCredentials();
-		}
+		//	_storage.SaveCredentials();
+		//}
 
-		void IAuthorization.ChangePassword(string login, SecureString oldPassword, SecureString newPassword)
-		{
-			var user = _storage.TryGetByLogin(login);
+		//void IAuthorization.ChangePassword(string login, SecureString oldPassword, SecureString newPassword)
+		//{
+		//	var user = _storage.TryGetByLogin(login);
 
-			if (user == null)
-				throw new ArgumentException(LocalizedStrings.Str1637Params.Put(login));
+		//	if (user == null)
+		//		throw new ArgumentException(LocalizedStrings.Str1637Params.Put(login));
 
-			if (!user.Password.IsEqualTo(oldPassword))
-				throw new ArgumentException(LocalizedStrings.UserNotFound.Put(login));
+		//	if (!user.Password.IsEqualTo(oldPassword))
+		//		throw new ArgumentException(LocalizedStrings.UserNotFound.Put(login));
 
-			user.Password = newPassword;
+		//	user.Password = newPassword;
 
-			_storage.SaveCredentials();
-		}
+		//	_storage.SaveCredentials();
+		//}
 
-		bool IAuthorization.DeleteUser(string login)
-		{
-			if (!_storage.DeleteByLogin(login))
-				return false;
+		//bool IAuthorization.DeleteUser(string login)
+		//{
+		//	if (!_storage.DeleteByLogin(login))
+		//		return false;
 
-			_storage.SaveCredentials();
-			return true;
-		}
+		//	_storage.SaveCredentials();
+		//	return true;
+		//}
 	}
 }

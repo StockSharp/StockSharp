@@ -33,10 +33,10 @@
 
 				if (Equals(x.Item2, y.Item2))
 				{
-					if (!ReferenceEquals(x.Item2, null))
-						return true;
-					else
+					if (x.Item2 is null)
 						return x.Item1.ComparePaths(y.Item1);
+					else
+						return true;
 				}
 				else
 					return false;
@@ -128,7 +128,7 @@
 				if (pair.Item2 == null)
 					drive = new LocalMarketDataDrive(path);
 				else
-					drive = new RemoteMarketDataDrive(new RemoteStorageClient(new Uri(pair.Item2.To<string>())));
+					drive = new RemoteMarketDataDrive(pair.Item2);
 
 				NewDriveCreated?.Invoke(drive);
 

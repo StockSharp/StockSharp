@@ -5,7 +5,6 @@
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-		xmlns:devExp="clr-namespace:Ecng.Xaml.DevExp;assembly=Ecng.Xaml.DevExp"
 		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="1000">
 	<Grid>
 		<Grid.RowDefinitions>
@@ -20,8 +19,8 @@
 					<sx:CandleSettingsEditor x:Name="SeriesEditor" Margin="3,0" />
 					<CheckBox x:Name="BuildFromTicks" Content="Build from ticks" IsChecked="True" VerticalAlignment="Center"/>
 
-					<devExp:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
-					
+					<xaml:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
+
 					<ComboBox x:Name="Securities" Width="150" SelectionChanged="Securities_OnSelectionChanged" />
 
 					<sx:StorageFormatComboBox x:Name="Format" Margin="10,0,0,0"/>
@@ -30,12 +29,7 @@
 				</StackPanel>
 			</GroupBox>
 
-			<ComboBox Margin="5,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="100">
-				<ComboBoxItem Content="{x:Static dx:Theme.Office2016BlackName}"/>
-				<ComboBoxItem Content="{x:Static dx:Theme.Office2016WhiteName}"/>
-				<ComboBoxItem Content="{x:Static dx:Theme.MetropolisDarkName}"/>
-				<ComboBoxItem Content="{x:Static dx:Theme.MetropolisLightName}"/>
-			</ComboBox>
+			<Button Margin="5,0,0,0" x:Name="Theme" Content="{x:Static loc:LocalizedStrings.Themes}" VerticalAlignment="Center" Width="100" Click="Theme_OnClick" />
 
 			<GroupBox Margin="0" Padding="0" VerticalAlignment="Center">
 				<StackPanel Orientation="Vertical">
@@ -55,6 +49,18 @@
 				<StackPanel Orientation="Horizontal">
 					<Button x:Name="NewAnnotationBtn" Content="new" Margin="4,0" IsEnabled="False" Click="NewAnnotation_Click" ToolTip="Create new annotation from code" VerticalAlignment="Center"/>
 					<Button x:Name="ModifyAnnotationBtn" Content="modify" Margin="4,0" IsEnabled="False" Click="ModifyAnnotation_Click" ToolTip="Modify annotation from code" VerticalAlignment="Center"/>
+				</StackPanel>
+			</GroupBox>
+
+			<GroupBox Header="allow settings" Margin="3,2" Padding="0">
+				<StackPanel Orientation="Horizontal">
+					<CheckBox ToolTip="IsInteracted" IsChecked="{Binding ElementName=Chart, Path=IsInteracted}" Margin="10,0"/>
+					<CheckBox ToolTip="allow add areas" IsChecked="{Binding ElementName=Chart, Path=AllowAddArea}"/>
+					<CheckBox ToolTip="allow add axis" IsChecked="{Binding ElementName=Chart, Path=AllowAddAxis}"/>
+					<CheckBox ToolTip="allow add candles" IsChecked="{Binding ElementName=Chart, Path=AllowAddCandles}"/>
+					<CheckBox ToolTip="allow add indicators" IsChecked="{Binding ElementName=Chart, Path=AllowAddIndicators}"/>
+					<CheckBox ToolTip="allow add trades" IsChecked="{Binding ElementName=Chart, Path=AllowAddOwnTrades}"/>
+					<CheckBox ToolTip="allow add orders" IsChecked="{Binding ElementName=Chart, Path=AllowAddOrders}"/>
 				</StackPanel>
 			</GroupBox>
 		</WrapPanel>

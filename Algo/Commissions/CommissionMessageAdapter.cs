@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Commissions
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -66,7 +68,7 @@ namespace StockSharp.Algo.Commissions
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CommissionMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new CommissionMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

@@ -28,7 +28,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class OrderMessage : SecurityMessage, ITransactionIdMessage, IPortfolioNameMessage
+	public abstract class OrderMessage : SecurityMessage,
+		ITransactionIdMessage, IPortfolioNameMessage, IStrategyIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -61,6 +62,10 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str166Key)]
 		[MainCategory]
 		public string UserOrderId { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public string StrategyId { get; set; }
 
 		/// <summary>
 		/// Broker firm code.
@@ -108,6 +113,7 @@ namespace StockSharp.Messages
 			destination.PortfolioName = PortfolioName;
 			destination.OrderType = OrderType;
 			destination.UserOrderId = UserOrderId;
+			destination.StrategyId = StrategyId;
 			destination.BrokerCode = BrokerCode;
 			destination.ClientCode = ClientCode;
 			destination.Condition = Condition?.Clone();
@@ -133,6 +139,9 @@ namespace StockSharp.Messages
 
 			if (!UserOrderId.IsEmpty())
 				str += $",UID={UserOrderId}";
+
+			if (!StrategyId.IsEmpty())
+				str += $",Strategy={StrategyId}";
 
 			if (!BrokerCode.IsEmpty())
 				str += $",BrID={BrokerCode}";

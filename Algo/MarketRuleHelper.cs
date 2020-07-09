@@ -306,13 +306,17 @@ namespace StockSharp.Algo
 
 			protected override void Subscribe()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				_marketDataProvider.MarketDepthChanged += OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				_marketDataProvider.MarketDepthChanged -= OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				Provider.NewMyTrade -= OnNewMyTrade;
 			}
 
@@ -321,8 +325,8 @@ namespace StockSharp.Algo
 				if (depth.Security != Order.Security)
 					return;
 
-				_bestBidPrice = depth.BestBid?.Price;
-				_bestAskPrice = depth.BestAsk?.Price;
+				_bestBidPrice = depth.BestBid2?.Price;
+				_bestAskPrice = depth.BestAsk2?.Price;
 
 				TryActivate();
 			}
@@ -792,7 +796,9 @@ namespace StockSharp.Algo
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1046 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged += OnSecurityChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -811,7 +817,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged -= OnSecurityChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -822,7 +830,9 @@ namespace StockSharp.Algo
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1047 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade += OnNewTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnNewTrade(Trade trade)
@@ -839,7 +849,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade -= OnNewTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -850,7 +862,9 @@ namespace StockSharp.Algo
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1048 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewOrderLogItem += OnNewOrderLogItem;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnNewOrderLogItem(OrderLogItem item)
@@ -867,7 +881,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewOrderLogItem -= OnNewOrderLogItem;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -883,8 +899,10 @@ namespace StockSharp.Algo
 
 				Name = LocalizedStrings.Str1049 + " " + security;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged += OnSecurityChanged;
 				Provider.NewTrade += OnNewTrade;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -920,8 +938,10 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade -= OnNewTrade;
 				Provider.SecurityChanged -= OnSecurityChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 
 				base.DisposeManaged();
 			}
@@ -940,7 +960,9 @@ namespace StockSharp.Algo
 				if (_isFiltered)
 					Provider.FilteredMarketDepthChanged += OnMarketDepthChanged;
 				else
+#pragma warning disable CS0618 // Type or member is obsolete
 					Provider.MarketDepthChanged += OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -956,7 +978,9 @@ namespace StockSharp.Algo
 				if (_isFiltered)
 					Provider.FilteredMarketDepthChanged -= OnMarketDepthChanged;
 				else
+#pragma warning disable CS0618 // Type or member is obsolete
 					Provider.MarketDepthChanged -= OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 
 				base.DisposeManaged();
 			}
@@ -968,7 +992,9 @@ namespace StockSharp.Algo
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged += OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -986,7 +1012,9 @@ namespace StockSharp.Algo
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged -= OnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -1332,7 +1360,9 @@ namespace StockSharp.Algo
 				else
 				{
 					_provider = provider;
+#pragma warning disable CS0618 // Type or member is obsolete
 					_provider.MarketDepthChanged += ProviderOnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
 				}
 			}
 
@@ -1357,7 +1387,11 @@ namespace StockSharp.Algo
 #pragma warning restore 612
 				}
 				else
+				{
+#pragma warning disable CS0618 // Type or member is obsolete
 					_provider.MarketDepthChanged -= ProviderOnMarketDepthChanged;
+#pragma warning restore CS0618 // Type or member is obsolete
+				}
 
 				base.DisposeManaged();
 			}
@@ -1417,7 +1451,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, false))
 			{
 				Name = LocalizedStrings.Str1059Params.Put(depth.Security, price)
 			};
@@ -1432,7 +1466,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, true))
 			{
 				Name = LocalizedStrings.Str1060Params.Put(depth.Security, price)
 			};
@@ -1447,7 +1481,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, false))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, false))
 			{
 				Name = LocalizedStrings.Str1061Params.Put(depth.Security, price)
 			};
@@ -1462,13 +1496,13 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
 		{
-			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk, true))
+			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, true))
 			{
 				Name = LocalizedStrings.Str1062Params.Put(depth.Security, price)
 			};
 		}
 
-		private static Func<MarketDepth, bool> CreateDepthCondition(Unit price, Func<Quote> currentQuote, bool isLess)
+		private static Func<MarketDepth, bool> CreateDepthCondition(Unit price, Func<QuoteChange?> currentQuote, bool isLess)
 		{
 			if (price == null)
 				throw new ArgumentNullException(nameof(price));
@@ -1482,9 +1516,11 @@ namespace StockSharp.Algo
 			if (price.Value < 0)
 				throw new ArgumentException(LocalizedStrings.Str1052, nameof(price));
 
-			var curQuote = currentQuote();
-			if (curQuote == null)
+			var q = currentQuote();
+			if (q == null)
 				throw new ArgumentException(LocalizedStrings.Str1063, nameof(currentQuote));
+
+			var curQuote = q.Value;
 
 			if (isLess)
 			{
@@ -1492,7 +1528,7 @@ namespace StockSharp.Algo
 				return depth =>
 				{
 					var quote = currentQuote();
-					return quote != null && quote.Price < finishPrice;
+					return quote != null && quote.Value.Price < finishPrice;
 				};
 			}
 			else
@@ -1501,7 +1537,7 @@ namespace StockSharp.Algo
 				return depth =>
 				{
 					var quote = currentQuote();
-					return quote != null && quote.Price > finishPrice;
+					return quote != null && quote.Value.Price > finishPrice;
 				};
 			}
 		}

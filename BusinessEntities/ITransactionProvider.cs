@@ -139,8 +139,9 @@ namespace StockSharp.BusinessEntities
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Max count.</param>
+		/// <param name="states">Filter order by the specified states.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void SubscribeOrders(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
+		void SubscribeOrders(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IEnumerable<OrderStates> states = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// Unsubscribe from orders changes.

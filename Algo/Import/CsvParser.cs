@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Import
 
 				void AddQuote(TimeQuoteChange quote)
 				{
-					(quote.Side == Sides.Buy ? bids : asks).Add(quote);
+					(quote.Side == Sides.Buy ? bids : asks).Add(quote.Quote);
 				}
 
 				void FillQuote(TimeQuoteChange quote)

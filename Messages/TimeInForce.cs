@@ -29,24 +29,24 @@ namespace StockSharp.Messages
 	public enum TimeInForce
 	{
 		/// <summary>
-		/// Put in queue.
+		/// Good til cancelled.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str405Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GTCKey, Description = LocalizedStrings.GoodTilCancelledKey)]
 		PutInQueue,
 
 		/// <summary>
 		/// Fill Or Kill.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FOKKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FOKKey, Description = LocalizedStrings.FillOrKillKey)]
 		MatchOrCancel,
 
 		/// <summary>
 		/// Immediate Or Cancel.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IOCKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IOCKey, Description = LocalizedStrings.ImmediateOrCancelKey)]
 		CancelBalance,
 	}
 }

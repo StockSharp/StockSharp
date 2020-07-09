@@ -51,13 +51,6 @@ namespace StockSharp.Algo.Storages
 		TKey GetKey(TMessage message);
 
 		/// <summary>
-		/// Create copy for the new snapshot.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <returns>Copy.</returns>
-		TMessage CreateCopy(TMessage message);
-
-		/// <summary>
 		/// Update the specified message by new changes.
 		/// </summary>
 		/// <param name="message">Message.</param>

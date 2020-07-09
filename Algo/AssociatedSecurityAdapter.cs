@@ -70,7 +70,7 @@ namespace StockSharp.Algo
 					var secMsg = (SecurityMessage)message;
 					if (!IsAssociated(secMsg.SecurityId.BoardCode))
 					{
-						var clone = (SecurityMessage)secMsg.Clone();
+						var clone = secMsg.TypedClone();
 						clone.SecurityId = CreateAssociatedId(clone.SecurityId);
 						base.OnInnerAdapterNewOutMessage(clone);
 					}
@@ -84,7 +84,7 @@ namespace StockSharp.Algo
 					if (!IsAssociated(level1Msg.SecurityId.BoardCode))
 					{
 						// обновление BestXXX для ALL из конкретных тикеров
-						var clone = (Level1ChangeMessage)level1Msg.Clone();
+						var clone = level1Msg.TypedClone();
 						clone.SecurityId = CreateAssociatedId(clone.SecurityId);
 						base.OnInnerAdapterNewOutMessage(clone);
 					}
@@ -96,8 +96,11 @@ namespace StockSharp.Algo
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
+					if (quoteMsg.State != null)
+						break;
+
 					if (quoteMsg.SecurityId.IsDefault())
-						return;
+						break;
 
 					//if (IsAssociated(quoteMsg.SecurityId.BoardCode))
 					//	return;
@@ -123,7 +126,7 @@ namespace StockSharp.Algo
 						{
 							if (!IsAssociated(executionMsg.SecurityId.BoardCode))
 							{
-								var clone = (ExecutionMessage)executionMsg.Clone();
+								var clone = executionMsg.TypedClone();
 								clone.SecurityId = CreateAssociatedId(clone.SecurityId);
 								base.OnInnerAdapterNewOutMessage(clone);
 							}

@@ -21,6 +21,7 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
@@ -129,6 +130,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
@@ -452,6 +454,11 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public TPlusLimits? LimitType { get; set; }
 
+		/// <summary>
+		/// Strategy id.
+		/// </summary>
+		public string StrategyId { get; set; }
+
 		private decimal? _leverage;
 
 		/// <summary>
@@ -644,7 +651,7 @@ namespace StockSharp.BusinessEntities
 		/// Create a copy of <see cref="Position"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public Position Clone()
+		public virtual Position Clone()
 		{
 			var clone = new Position();
 			CopyTo(clone);
@@ -681,6 +688,7 @@ namespace StockSharp.BusinessEntities
 			destination.Security = Security;
 			destination.DepoName = DepoName;
 			destination.LimitType = LimitType;
+			destination.StrategyId = StrategyId;
 
 			destination.Leverage = Leverage;
 			destination.CommissionMaker = CommissionMaker;
@@ -697,7 +705,12 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return $"{Portfolio}-{Security}";
+			var str = $"{Portfolio}-{Security}";
+
+			if (!StrategyId.IsEmpty())
+				str += $"-{StrategyId}";
+
+			return str;
 		}
 	}
 }

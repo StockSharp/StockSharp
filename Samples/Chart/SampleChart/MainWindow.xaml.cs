@@ -10,8 +10,6 @@
 	using System.Windows.Controls;
 	using System.Windows.Media;
 
-	using DevExpress.Xpf.Core;
-
 	using MoreLinq;
 
 	using Ecng.Backup;
@@ -20,8 +18,7 @@
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Xaml;
-	using Ecng.Xaml.Charting.Visuals.Annotations;
-	using Ecng.Xaml.DevExp.Yandex;
+	using Ecng.Xaml.Yandex;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -34,6 +31,9 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Xaml.Charting.Visuals.Annotations;
+    using StockSharp.Xaml;
+	using StockSharp.Configuration;
 
 	public partial class MainWindow
 	{
@@ -77,6 +77,8 @@
 		private bool _drawWithColor;
 		private Color _candleDrawColor;
 
+		private VolumeProfileBuilder _volumeProfile;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -89,8 +91,6 @@
 				.Timer(OnDataTimer)
 				.Interval(TimeSpan.FromMilliseconds(1));
 
-			Theme.SelectedIndex = 1;
-
 			SeriesEditor.Settings = new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
@@ -99,6 +99,13 @@
 
 			ConfigManager.RegisterService<IMarketDataProvider>(_testMdProvider);
 			ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
+
+			ThemeExtensions.ApplyDefaultTheme();
+		}
+
+		private void Theme_OnClick(object sender, RoutedEventArgs e)
+		{
+			ThemeExtensions.Invert();
 		}
 
 		private void HistoryPath_OnFolderChanged(string path)
@@ -127,9 +134,9 @@
 				MessageBox.Show($"RegisterOrder: sec={order.Security.Id}, {order.Direction} {order.Volume}@{order.Price}");
 			};
 
-			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(YandexLoginWindow.Authorize));
+			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(YandexLoginWindow.Authorize(this)));
 
-			HistoryPath.Folder = @"..\..\..\..\..\Testing\HistoryData\".ToFullPath();
+			HistoryPath.Folder = Paths.HistoryDataPath;
 
 			Chart.SecurityProvider = _securityProvider;
 
@@ -143,15 +150,6 @@
 		{
 			_dataTimer.Dispose();
 			base.OnClosing(e);
-		}
-
-		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var theme = (string)((ComboBoxItem)Theme.SelectedValue).Content;
-			if (theme.IsEmpty())
-				return;
-
-			ApplicationThemeHelper.ApplicationThemeName = theme;
 		}
 
 		private void Chart_OnSubscribeCandleElement(ChartCandleElement el, CandleSeries ser)
@@ -250,7 +248,7 @@
 											 _security,
 											 SeriesEditor.Settings.Arg) { IsCalcVolumeProfile = true };
 
-				_candleElement = new ChartCandleElement { FullTitle = "Candles" };
+				_candleElement = new ChartCandleElement();
 				Chart.AddElement(_areaComb, _candleElement, series);
 			});
 		}
@@ -297,12 +295,12 @@
 
 						if (_candleTransform.Process(tick))
 						{
-							var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform);
+							var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform, ref _volumeProfile);
 
 							foreach (var candle in candles)
 							{
 								_currCandle = candle;
-								_updatedCandles.Add((CandleMessage)candle.Clone());
+								_updatedCandles.Add(candle.TypedClone());
 							}
 						}
 
@@ -431,12 +429,12 @@
 
 				if (_candleTransform.Process(nextTick))
 				{
-					var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform);
+					var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform, ref _volumeProfile);
 
 					foreach (var candle in candles)
 					{
 						_currCandle = candle;
-						_updatedCandles.Add((CandleMessage)candle.Clone());
+						_updatedCandles.Add(candle.TypedClone());
 					}
 				}
 			}
@@ -728,7 +726,7 @@
 
 				if (RandomGen.GetBool())
 					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, price - RandomGen.GetInt(1, 10) * ps));
-				
+
 				if (RandomGen.GetBool())
 					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, price + RandomGen.GetInt(1, 10) * ps));
 
@@ -766,14 +764,14 @@
 			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
 
 			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }
-			
+
 			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
 			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }
 			void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria) { }
 
 			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security) { yield break; }
 			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field) => null;
-			
+
 			MarketDepth IMarketDataProvider.GetMarketDepth(Security security) => null;
 			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security) => null;
 
@@ -781,7 +779,9 @@
 
 			IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => throw new NotImplementedException();
 
+			event Action<Subscription, Message> ISubscriptionProvider.SubscriptionReceived { add { } remove { } }
 			event Action<Subscription, Level1ChangeMessage> ISubscriptionProvider.Level1Received { add { } remove { } }
+			event Action<Subscription, QuoteChangeMessage> ISubscriptionProvider.OrderBookReceived { add { } remove { } }
 			event Action<Subscription, Trade> ISubscriptionProvider.TickTradeReceived { add { } remove { } }
 			event Action<Subscription, Security> ISubscriptionProvider.SecurityReceived { add { } remove { } }
 			event Action<Subscription, ExchangeBoard> ISubscriptionProvider.BoardReceived { add { } remove { } }
@@ -809,16 +809,15 @@
 			Subscription IMarketDataProviderEx.SubscribeMarketData(MarketDataMessage message) => null;
 			void IMarketDataProviderEx.UnSubscribeMarketData(MarketDataMessage message) { }
 
-			Subscription IMarketDataProviderEx.RegisterFilteredMarketDepth(Security security) => null;
-			void IMarketDataProviderEx.UnRegisterFilteredMarketDepth(Security security) { }
+			Subscription IMarketDataProviderEx.SubscribeFilteredMarketDepth(Security security) => null;
 
-			Subscription IMarketDataProviderEx.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, int? maxDepth, TimeSpan? refreshSpeed, IMessageAdapter adapter) => null;
+			Subscription IMarketDataProviderEx.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, int? maxDepth, TimeSpan? refreshSpeed, IOrderLogMarketDepthBuilder depthBuilder, bool passThroughOrderBookInrement, IMessageAdapter adapter) => null;
 			void IMarketDataProviderEx.UnSubscribeMarketDepth(Security security) { }
 
-			Subscription IMarketDataProviderEx.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) => null;
+			Subscription IMarketDataProviderEx.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, IMessageAdapter adapter) => null;
 			void IMarketDataProviderEx.UnSubscribeTrades(Security security) { }
 
-			Subscription IMarketDataProviderEx.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, MarketDataTypes? buildFrom, IMessageAdapter adapter) => null;
+			Subscription IMarketDataProviderEx.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, IMessageAdapter adapter) => null;
 			void IMarketDataProviderEx.UnSubscribeLevel1(Security security) { }
 
 			Subscription IMarketDataProviderEx.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => null;

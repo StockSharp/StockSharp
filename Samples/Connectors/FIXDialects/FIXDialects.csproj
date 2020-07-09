@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_connectors.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.Fix.Dialects</RootNamespace>
+    <AssemblyName>StockSharp.Fix.Dialects</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
+  </ItemGroup>
+</Project>

@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <inheritdoc />
-		public override MarketDataTypes DataType => MarketDataTypes.OrderLog;
+		public override DataType DataType => DataType.OrderLog;
 
 		/// <summary>
 		/// Tick trades generator using random method.
@@ -78,8 +78,10 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public override void Init()
 		{
-			TradeGenerator.Init();
 			base.Init();
+		
+			_lastOrderPrice = default;
+			TradeGenerator.Init();
 		}
 
 		/// <inheritdoc />
@@ -175,13 +177,13 @@ namespace StockSharp.Algo.Testing
 					ExecutionType = ExecutionTypes.OrderLog,
 				};
 
-				_activeOrders.Enqueue((ExecutionMessage)item.Clone());
+				_activeOrders.Enqueue(item.TypedClone());
 			}
 			else
 			{
 				var activeOrder = _activeOrders.Peek();
 
-				item = (ExecutionMessage)activeOrder.Clone();
+				item = activeOrder.TypedClone();
 				item.ServerTime = time;
 
 				var isMatched = action == 5;
@@ -236,11 +238,15 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
-			return new OrderLogGenerator(SecurityId, (TradeGenerator)TradeGenerator.Clone())
+			var clone = new OrderLogGenerator(SecurityId, TradeGenerator.TypedClone())
 			{
 				_lastOrderPrice = _lastOrderPrice,
 				IdGenerator = IdGenerator
 			};
+
+			CopyTo(clone);
+
+			return clone;
 		}
 	}
 }

@@ -236,6 +236,24 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="items"></param>
+		protected void OnRemovedRange(IEnumerable<T> items)
+		{
+			lock (SyncRoot)
+			{
+				foreach (var item in items)
+				{
+					_items.Remove(GetNormalizedKey(item));
+					RemoveCache(item);
+				}
+				
+				WriteMany(_items.Values.ToArray());
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		protected override void OnCleared()
 		{
 			base.OnCleared();

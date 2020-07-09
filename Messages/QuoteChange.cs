@@ -81,15 +81,8 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
-	public class QuoteChange : Cloneable<QuoteChange>, IExtendableEntity
+	public struct QuoteChange : IExtendableEntity
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="QuoteChange"/>.
-		/// </summary>
-		public QuoteChange()
-		{
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChange"/>.
 		/// </summary>
@@ -103,6 +96,13 @@ namespace StockSharp.Messages
 			Volume = volume;
 			OrdersCount = ordersCount;
 			Condition = condition;
+
+			StartPosition = null;
+			EndPosition = null;
+			Action = null;
+
+			BoardCode = null;
+			_extensionInfo = null;
 		}
 
 		/// <summary>
@@ -141,6 +141,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
@@ -180,22 +181,6 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		public QuoteConditions Condition { get; set; }
-
-		/// <summary>
-		/// Create a copy of <see cref="QuoteChange"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override QuoteChange Clone()
-		{
-			var clone = new QuoteChange(Price, Volume, OrdersCount, Condition)
-			{
-				StartPosition = StartPosition,
-				EndPosition = EndPosition,
-				Action = Action,
-			};
-			this.CopyExtensionInfo(clone);
-			return clone;
-		}
 
 		/// <inheritdoc />
 		public override string ToString()

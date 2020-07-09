@@ -42,11 +42,6 @@ namespace StockSharp.Algo.Candles
 		event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// The data transfer error event.
-		/// </summary>
-		event Action<Exception> Error;
-
-		/// <summary>
 		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
 		/// <param name="series">Candles series.</param>

@@ -28,10 +28,11 @@ namespace StockSharp.Algo.Storages
 		private readonly Func<TMessage, DateTimeOffset> _getTime;
 		private readonly Func<TMessage, SecurityId> _getSecurityId;
 		private readonly Func<TMessage, TId> _getId;
+		private readonly Func<TMessage, bool> _isValid;
 		private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new SynchronizedDictionary<DateTime, SyncObject>();
 		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new SynchronizedDictionary<DateTime, IMarketDataMetaInfo>();
 
-		protected MarketDataStorage(SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
+		protected MarketDataStorage(SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
 		{
 			if (securityId.IsDefault())
 				throw new ArgumentException(LocalizedStrings.Str1025, nameof(securityId));
@@ -40,22 +41,22 @@ namespace StockSharp.Algo.Storages
 
 			AppendOnlyNew = true;
 
+			_dataType = DataType.Create(typeof(TMessage), arg);
+
 			_getTime = getTime ?? throw new ArgumentNullException(nameof(getTime));
 			_getSecurityId = getSecurityId ?? throw new ArgumentNullException(nameof(getSecurityId));
 			_getId = getId ?? throw new ArgumentNullException(nameof(getId));
 			Drive = drive ?? throw new ArgumentNullException(nameof(drive));
 			Serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-			_arg = arg;
+			_isValid = isValid ?? throw new ArgumentNullException(nameof(isValid));
 		}
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates => Drive.Dates;
 
-		Type IMarketDataStorage.DataType => typeof(TMessage);
+		private readonly DataType _dataType;
+		DataType IMarketDataStorage.DataType => _dataType;
 
 		public SecurityId SecurityId { get; }
-
-		private readonly object _arg;
-		object IMarketDataStorage.Arg => _arg;
 
 		public bool AppendOnlyNew { get; set; }
 
@@ -64,25 +65,13 @@ namespace StockSharp.Algo.Storages
 
 		public IMarketDataStorageDrive Drive { get; }
 
-		protected DateTime GetTruncatedTime(TMessage data)
-		{
-			return _getTime(data).StorageTruncate(Serializer.TimePrecision).UtcDateTime;
-		}
+		protected DateTime GetTruncatedTime(TMessage data) => _getTime(data).StorageTruncate(Serializer.TimePrecision).UtcDateTime;
 
-		private SyncObject GetSync(DateTime time)
-		{
-			return _syncRoots.SafeAdd(time);
-		}
+		private SyncObject GetSync(DateTime time) => _syncRoots.SafeAdd(time);
 
-		private Stream LoadStream(DateTime date)
-		{
-			return Drive.LoadStream(date);
-		}
+		private Stream LoadStream(DateTime date) => Drive.LoadStream(date);
 
-		private bool SecurityIdEqual(SecurityId securityId)
-		{
-			return securityId.SecurityCode.CompareIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.BoardCode);
-		}
+		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.CompareIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.BoardCode);
 
 		public int Save(IEnumerable<TMessage> data)
 		{
@@ -91,7 +80,7 @@ namespace StockSharp.Algo.Storages
 
 			var count = 0;
 
-			foreach (var group in data.GroupBy(d =>
+			foreach (var group in data.Where(_isValid).GroupBy(d =>
 			{
 				var securityId = _getSecurityId(d);
 

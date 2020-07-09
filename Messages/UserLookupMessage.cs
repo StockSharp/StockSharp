@@ -18,6 +18,9 @@ namespace StockSharp.Messages
 		{
 		}
 
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Users;
+
 		/// <summary>
 		/// The filter for user search.
 		/// </summary>
@@ -27,7 +30,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Like={Like},TrId={TransactionId}";
+			return base.ToString() + $",Like={Like}";
 		}
 
 		/// <summary>

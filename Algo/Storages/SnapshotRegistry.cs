@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private class SnapshotStorage<TKey, TMessage> : SnapshotStorage, ISnapshotStorage<TKey, TMessage>
-			where TMessage : Message
+			where TMessage : Message, ISecurityIdMessage
 		{
 			private class SnapshotStorageDate
 			{
@@ -71,6 +71,8 @@ namespace StockSharp.Algo.Storages
 
 						try
 						{
+							var allError = true;
+
 							using (var stream = File.OpenRead(_fileName))
 							{
 								_version = new Version(stream.ReadByte(), stream.ReadByte());
@@ -92,6 +94,7 @@ namespace StockSharp.Algo.Storages
 									try
 									{
 										message = _serializer.Deserialize(_version, buffer);
+										allError = false;
 									}
 									catch (Exception ex)
 									{
@@ -106,6 +109,11 @@ namespace StockSharp.Algo.Storages
 								}
 
 								//_currOffset = stream.Length;
+							}
+
+							if (allError)
+							{
+								File.Delete(_fileName);
 							}
 						}
 						catch (Exception ex)
@@ -145,7 +153,7 @@ namespace StockSharp.Algo.Storages
 
 				public void Update(TMessage curr)
 				{
-					if (curr == null)
+					if (curr is null)
 						throw new ArgumentNullException(nameof(curr));
 
 					var key = _serializer.GetKey(curr);
@@ -154,9 +162,12 @@ namespace StockSharp.Algo.Storages
 					{
 						var prev = _snapshots.TryGetValue(key);
 
-						if (prev == null)
+						if (prev is null)
 						{
-							_snapshots.Add(key, _serializer.CreateCopy(curr));
+							if (curr.SecurityId == default)
+								throw new ArgumentException(curr.ToString());
+
+							_snapshots.Add(key, curr.TypedClone());
 						}
 						else
 						{
@@ -191,7 +202,7 @@ namespace StockSharp.Algo.Storages
 								return false;
 
 							return true;
-						}).Select(m => (TMessage)m.Clone()).ToArray();
+						}).Select(m => m.TypedClone()).ToArray();
 					}
 				}
 
@@ -235,7 +246,7 @@ namespace StockSharp.Algo.Storages
 
 						foreach (var buffer in buffers)
 						{
-							stream.Write(buffer);
+							stream.WriteEx(buffer);
 						}
 					}
 				}
@@ -273,7 +284,7 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var dates = InteropHelper
+						var dates = IOHelper
 						            .GetDirectories(_path)
 						            .Where(dir => File.Exists(Path.Combine(dir, _fileNameWithExtension)))
 						            .Select(dir => LocalMarketDataDrive.GetDate(Path.GetFileName(dir)));
@@ -514,7 +525,7 @@ namespace StockSharp.Algo.Storages
 					var errors = _snapshotStorages.CachedValues.SelectMany(s => s.FlushChanges()).ToArray();
 
 					if (errors.Length > 0)
-						throw errors.SingleOrAggr();
+						throw new AggregateException(errors);
 				}
 				catch (Exception ex)
 				{
@@ -559,7 +570,7 @@ namespace StockSharp.Algo.Storages
 				else if (dataType == typeof(QuoteChangeMessage))
 					storage = new SnapshotStorage<SecurityId, QuoteChangeMessage>(_path, new QuotesBinarySnapshotSerializer());
 				else if (dataType == typeof(PositionChangeMessage))
-					storage = new SnapshotStorage<SecurityId, PositionChangeMessage>(_path, new PositionBinarySnapshotSerializer());
+					storage = new SnapshotStorage<Tuple<SecurityId, string, string>, PositionChangeMessage>(_path, new PositionBinarySnapshotSerializer());
 				else if (dataType == typeof(ExecutionMessage))
 				{
 					switch ((ExecutionTypes)arg)

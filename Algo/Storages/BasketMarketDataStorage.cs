@@ -108,7 +108,14 @@ namespace StockSharp.Algo.Storages
 					{
 						case ActionTypes.Add:
 						{
-							var enu = storage.Load(_date).GetEnumerator();
+							var loaded = storage.Load(_date);
+
+							if (!_storage.PassThroughOrderBookInrement && loaded is IEnumerable<QuoteChangeMessage> quotes)
+							{
+								loaded = quotes.BuildIfNeed();
+							}
+
+							var enu = loaded.GetEnumerator();
 							var lastTime = Current?.GetServerTime() ?? DateTimeOffset.MinValue;
 
 							var hasValues = true;
@@ -172,12 +179,8 @@ namespace StockSharp.Algo.Storages
 			{
 				if (transactionId > 0)
 				{
-					if (message is CandleMessage candleMsg)
-						candleMsg.OriginalTransactionId = transactionId;
-					//else if (message is ExecutionMessage execMsg && execMsg.ExecutionType != ExecutionTypes.Transaction)
-					//	execMsg.OriginalTransactionId = transactionId;
-					else if (message is NewsMessage newsMsg)
-						newsMsg.OriginalTransactionId = transactionId;
+					if (message is ISubscriptionIdMessage subscrMsg)
+						subscrMsg.SetSubscriptionIds(subscriptionId: transactionId);
 				}
 
 				return (TMessage)message;
@@ -229,20 +232,7 @@ namespace StockSharp.Algo.Storages
 					if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
 						continue;
 
-					if (s.DataType == typeof(ExecutionMessage))
-						dataTypes.Add(MessageTypes.Execution);
-
-					if (s.DataType == typeof(QuoteChangeMessage))
-						dataTypes.Add(MessageTypes.QuoteChange);
-
-					if (s.DataType == typeof(Level1ChangeMessage))
-						dataTypes.Add(MessageTypes.Level1Change);
-
-					if (s.DataType == typeof(TimeMessage))
-						dataTypes.Add(MessageTypes.Time);
-
-					if (s.DataType.IsCandleMessage())
-						dataTypes.Add(s.DataType.ToCandleMarketDataType().ToCandleMessageType());
+					dataTypes.Add(s.DataType.ToMessageType2());
 				}
 
 				DataTypes = dataTypes.ToArray();
@@ -325,6 +315,11 @@ namespace StockSharp.Algo.Storages
 			base.DisposeManaged();
 		}
 
+		/// <summary>
+		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
+		/// </summary>
+		public bool PassThroughOrderBookInrement { get; set; }
+
 		private void InnerStoragesOnAdded(IMarketDataStorage storage)
 		{
 			AddAction(ActionTypes.Add, storage, _innerStorages.TryGetTransactionId(storage));
@@ -349,13 +344,10 @@ namespace StockSharp.Algo.Storages
 			=> _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct();
 
 		/// <inheritdoc />
-		public virtual Type DataType => throw new NotSupportedException();
+		public virtual DataType DataType => throw new NotSupportedException();
 
 		/// <inheritdoc />
 		public virtual SecurityId SecurityId => throw new NotSupportedException();
-
-		/// <inheritdoc />
-		public virtual object Arg => throw new NotSupportedException();
 
 		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
 

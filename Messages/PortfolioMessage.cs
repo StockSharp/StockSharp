@@ -107,12 +107,6 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
-		/// <summary>
-		/// Internal identifier.
-		/// </summary>
-		[DataMember]
-		public Guid? InternalId { get; set; }
-
 		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
@@ -126,6 +120,10 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str346Key)]
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public long? Count { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
@@ -143,6 +141,9 @@ namespace StockSharp.Messages
 			: base(type)
 		{
 		}
+
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Portfolio(PortfolioName);
 
 		/// <inheritdoc />
 		public override string ToString()
@@ -167,6 +168,9 @@ namespace StockSharp.Messages
 			if (To != null)
 				str += $",To={To.Value}";
 
+			if (Count != null)
+				str += $",Count={Count.Value}";
+
 			return str;
 		}
 
@@ -182,9 +186,9 @@ namespace StockSharp.Messages
 			//destination.State = State;
 			destination.TransactionId = TransactionId;
 			destination.ClientCode = ClientCode;
-			destination.InternalId = InternalId;
 			destination.From = From;
 			destination.To = To;
+			destination.Count = Count;
 		}
 	}
 }

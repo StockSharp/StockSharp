@@ -6,9 +6,6 @@
     <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlorHistory\AlorHistory.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlphaVantage\AlphaVantage.csproj" />
@@ -97,9 +94,5 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Zaif\Zaif.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ZB\ZB.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\DigitexFutures\DigitexFutures.csproj" />
-    <ProjectReference Include="..\Configuration\Configuration.csproj" />
-    <ProjectReference Include="..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

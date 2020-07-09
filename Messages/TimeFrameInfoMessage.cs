@@ -34,6 +34,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.TimeFrames;
+
+		/// <inheritdoc />
 		public override void CopyTo(TimeFrameInfoMessage destination)
 		{
 			base.CopyTo(destination);
@@ -43,6 +46,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override string ToString()
-			=> base.ToString() + $",TF={TimeFrames.Select(t => t.ToString()).Join(",")}";
+			=> base.ToString() + $",TF={TimeFrames.Select(t => t.ToString()).JoinComma()}";
 	}
 }

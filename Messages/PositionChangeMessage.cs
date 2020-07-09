@@ -224,7 +224,8 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage, PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage
+	public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
+		PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage, IStrategyIdMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -284,22 +285,29 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string BoardCode { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public string StrategyId { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		public PositionChangeMessage()
-			: base(MessageTypes.PositionChange)
+			: this(MessageTypes.PositionChange)
 		{
 		}
 
-		///// <summary>
-		///// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
-		///// </summary>
-		///// <param name="type">Message type.</param>
-		//protected PositionChangeMessage(MessageTypes type)
-		//	: base(type)
-		//{
-		//}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		protected PositionChangeMessage(MessageTypes type)
+			: base(type)
+		{
+		}
+
+		/// <inheritdoc />
+		public override DataType DataType => DataType.PositionChanges;
 
 		/// <summary>
 		/// Create a copy of <see cref="PositionChangeMessage"/>.
@@ -326,12 +334,21 @@ namespace StockSharp.Messages
 			destination.PortfolioName = PortfolioName;
 			destination.ClientCode = ClientCode;
 			destination.BoardCode = BoardCode;
+			destination.StrategyId = StrategyId;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},P={PortfolioName},CL={ClientCode},L={LimitType},Changes={Changes.Select(c => c.ToString()).Join(",")}";
+			var str = base.ToString() + $",Sec={SecurityId},P={PortfolioName},CL={ClientCode},L={LimitType},Changes={Changes.Select(c => c.ToString()).JoinComma()}";
+
+			if (!StrategyId.IsEmpty())
+				str += $",Strategy={StrategyId}";
+
+			if (!Description.IsEmpty())
+				str += $",Description={Description}";
+
+			return str;
 		}
 	}
 }

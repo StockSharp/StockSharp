@@ -668,14 +668,13 @@ namespace StockSharp.Algo.Derivatives
 			if (model == null)
 				throw new ArgumentNullException(nameof(model));
 
-			Quote Convert(Quote quote)
+			QuoteChange Convert(QuoteChange quote)
 			{
-				quote = quote.Clone();
 				quote.Price = model.ImpliedVolatility(currentTime, quote.Price) ?? 0;
 				return quote;
 			}
 
-			return new MarketDepth(depth.Security).Update(depth.Bids.Select(Convert), depth.Asks.Select(Convert), true, depth.LastChangeTime);
+			return new MarketDepth(depth.Security).Update(depth.Bids2.Select(Convert).ToArray(), depth.Asks2.Select(Convert).ToArray(), depth.LastChangeTime);
 		}
 
 		/// <summary>

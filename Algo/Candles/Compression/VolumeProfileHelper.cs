@@ -21,16 +21,16 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Extension class for <see cref="CandleMessageVolumeProfile"/>.
+	/// Extension class for <see cref="VolumeProfileBuilder"/>.
 	/// </summary>
 	public static class VolumeProfileHelper
 	{
 		/// <summary>
-		/// The total volume of bids in the <see cref="CandleMessageVolumeProfile"/>.
+		/// The total volume of bids in the <see cref="VolumeProfileBuilder"/>.
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total volume of bids.</returns>
-		public static decimal TotalBuyVolume(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal TotalBuyVolume(this VolumeProfileBuilder volumeProfile)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
@@ -39,11 +39,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// The total volume of asks in the <see cref="CandleMessageVolumeProfile"/>.
+		/// The total volume of asks in the <see cref="VolumeProfileBuilder"/>.
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total volume of asks.</returns>
-		public static decimal TotalSellVolume(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal TotalSellVolume(this VolumeProfileBuilder volumeProfile)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
@@ -52,11 +52,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// The total number of bids in the <see cref="CandleMessageVolumeProfile"/>.
+		/// The total number of bids in the <see cref="VolumeProfileBuilder"/>.
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total number of bids.</returns>
-		public static decimal TotalBuyCount(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal TotalBuyCount(this VolumeProfileBuilder volumeProfile)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
@@ -65,11 +65,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// The total number of asks in the <see cref="CandleMessageVolumeProfile"/>.
+		/// The total number of asks in the <see cref="VolumeProfileBuilder"/>.
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total number of asks.</returns>
-		public static decimal TotalSellCount(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal TotalSellCount(this VolumeProfileBuilder volumeProfile)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The <see cref="CandlePriceLevel"/> which had the maximum volume.</returns>
-		public static CandlePriceLevel PoC(this CandleMessageVolumeProfile volumeProfile)
+		public static CandlePriceLevel PoC(this VolumeProfileBuilder volumeProfile)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total volume of bids.</returns>
-		public static decimal BuyVolAbovePoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal BuyVolAbovePoC(this VolumeProfileBuilder volumeProfile)
 		{
 			var poc = volumeProfile.PoC();
 			return volumeProfile.PriceLevels.Where(p => p.Price > poc.Price).Select(p => p.BuyVolume).Sum();
@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total volume of bids.</returns>
-		public static decimal BuyVolBelowPoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal BuyVolBelowPoC(this VolumeProfileBuilder volumeProfile)
 		{
 			var poc = volumeProfile.PoC();
 			return volumeProfile.PriceLevels.Where(p => p.Price < poc.Price).Select(p => p.BuyVolume).Sum();
@@ -118,7 +118,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total volume of asks.</returns>
-		public static decimal SellVolAbovePoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal SellVolAbovePoC(this VolumeProfileBuilder volumeProfile)
 		{
 			var poc = volumeProfile.PoC();
 			return volumeProfile.PriceLevels.Where(p => p.Price > poc.Price).Select(p => p.SellVolume).Sum();
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The total volume of asks.</returns>
-		public static decimal SellVolBelowPoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal SellVolBelowPoC(this VolumeProfileBuilder volumeProfile)
 		{
 			var poc = volumeProfile.PoC();
 			return volumeProfile.PriceLevels.Where(p => p.Price < poc.Price).Select(p => p.SellVolume).Sum();
@@ -140,7 +140,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>Total volume.</returns>
-		public static decimal VolumeAbovePoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal VolumeAbovePoC(this VolumeProfileBuilder volumeProfile)
 		{
 			return volumeProfile.BuyVolAbovePoC() + volumeProfile.SellVolAbovePoC();
 		}
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>Total volume.</returns>
-		public static decimal VolumeBelowPoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal VolumeBelowPoC(this VolumeProfileBuilder volumeProfile)
 		{
 			return volumeProfile.BuyVolBelowPoC() + volumeProfile.SellVolBelowPoC();
 		}
@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>Delta.</returns>
-		public static decimal Delta(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal Delta(this VolumeProfileBuilder volumeProfile)
 		{
 			return volumeProfile.TotalBuyVolume() - volumeProfile.TotalSellVolume();
 		}
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns><see cref="CandlePriceLevel"/>.</returns>
-		public static CandlePriceLevel PriceLevelOfMaxDelta(this CandleMessageVolumeProfile volumeProfile)
+		public static CandlePriceLevel PriceLevelOfMaxDelta(this VolumeProfileBuilder volumeProfile)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>The price level.</returns>
-		public static CandlePriceLevel PriceLevelOfMinDelta(this CandleMessageVolumeProfile volumeProfile)
+		public static CandlePriceLevel PriceLevelOfMinDelta(this VolumeProfileBuilder volumeProfile)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>Delta.</returns>
-		public static decimal DeltaAbovePoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal DeltaAbovePoC(this VolumeProfileBuilder volumeProfile)
 		{
 			return volumeProfile.BuyVolAbovePoC() - volumeProfile.SellVolAbovePoC();
 		}
@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns>Delta.</returns>
-		public static decimal DeltaBelowPoC(this CandleMessageVolumeProfile volumeProfile)
+		public static decimal DeltaBelowPoC(this VolumeProfileBuilder volumeProfile)
 		{
 			return volumeProfile.BuyVolBelowPoC() - volumeProfile.SellVolBelowPoC();
 		}
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
 		/// <param name="transform">The data source transformation.</param>
-		public static void Update(this CandleMessageVolumeProfile volumeProfile, ICandleBuilderValueTransform transform)
+		public static void Update(this VolumeProfileBuilder volumeProfile, ICandleBuilderValueTransform transform)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));

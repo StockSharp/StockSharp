@@ -1,0 +1,6 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="common_target_common.props" />
+  <PropertyGroup>
+    <TargetFrameworks>net48;netcoreapp3.1;netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+</Project>

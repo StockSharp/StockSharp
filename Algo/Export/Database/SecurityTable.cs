@@ -200,6 +200,16 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
 			};
+			yield return new ColumnDescription(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.SecurityCode))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(64)
+			};
+			yield return new ColumnDescription(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.BoardCode))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(32)
+			};
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(SecurityMessage value)
@@ -241,6 +251,8 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityId.Plaza), value.SecurityId.Plaza },
 				{ nameof(SecurityId.Ric), value.SecurityId.Ric },
 				{ nameof(SecurityId.Sedol), value.SecurityId.Sedol },
+				{ nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.SecurityCode), value.PrimaryId.SecurityCode },
+				{ nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.BoardCode), value.PrimaryId.BoardCode },
 			};
 			return result;
 		}

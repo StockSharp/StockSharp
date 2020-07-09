@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Slippage
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -54,14 +56,17 @@ namespace StockSharp.Algo.Slippage
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			var slippage = SlippageManager.ProcessMessage(message);
-
-			if (slippage != null)
+			if (message.Type != MessageTypes.Reset)
 			{
-				var execMsg = (ExecutionMessage)message;
+				var slippage = SlippageManager.ProcessMessage(message);
 
-				if (execMsg.Slippage == null)
-					execMsg.Slippage = slippage;
+				if (slippage != null)
+				{
+					var execMsg = (ExecutionMessage)message;
+
+					if (execMsg.Slippage == null)
+						execMsg.Slippage = slippage;
+				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
@@ -73,7 +78,7 @@ namespace StockSharp.Algo.Slippage
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SlippageMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new SlippageMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

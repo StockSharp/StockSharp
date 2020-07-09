@@ -24,7 +24,6 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Interop;
 	using Ecng.Serialization;
 
 	using StockSharp.Logging;
@@ -91,7 +90,10 @@ namespace StockSharp.Messages
 			set => _supportedOutMessages = CheckDuplicate(value, nameof(SupportedOutMessages));
 		}
 
-		private IEnumerable<MessageTypes> _supportedResultMessages = Enumerable.Empty<MessageTypes>();
+		private IEnumerable<MessageTypes> _supportedResultMessages = new[]
+		{
+			MessageTypes.MarketData, MessageTypes.Portfolio,
+		};
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -199,6 +201,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsSupportCandlesPriceLevels => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual MessageAdapterCategories Categories { get; }
 
 		/// <inheritdoc />
@@ -214,6 +220,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Browsable(false)]
 		public Platforms Platform { get; protected set; }
+
+		/// <summary>
+		/// Feature name.
+		/// </summary>
+		[Browsable(false)]
+		public virtual string FeatureName => string.Empty;
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -254,6 +266,19 @@ namespace StockSharp.Messages
 		public virtual bool IsAutoReplyOnTransactonalUnsubscription => true;
 
 		/// <inheritdoc />
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.EnqueueSubscriptionsKey,
+			Description = LocalizedStrings.EnqueueSubscriptionsDescKey,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 301)]
+		public virtual bool EnqueueSubscriptions { get; set; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportTransactionLog => false;
+
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
@@ -270,13 +295,25 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public event Action<Message> NewOutMessage;
 
-		bool IMessageChannel.IsOpened => true;
+		ChannelStates IMessageChannel.State => ChannelStates.Started;
 
 		void IMessageChannel.Open()
 		{
 		}
 
 		void IMessageChannel.Close()
+		{
+		}
+
+		void IMessageChannel.Suspend()
+		{
+		}
+
+		void IMessageChannel.Resume()
+		{
+		}
+
+		void IMessageChannel.Clear()
 		{
 		}
 
@@ -329,12 +366,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				this.AddErrorLog(ex);
-
-				message.HandleErrorResponse(ex, CurrentTime, SendOutMessage);
-
-				SendOutError(ex);
-
+				message.HandleErrorResponse(ex, this, SendOutMessage);
 				return false;
 			}
 		}
@@ -512,7 +544,15 @@ namespace StockSharp.Messages
 		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;
 
 		/// <inheritdoc />
-		public virtual bool IsSecurityRequired(DataType dataType) => true;
+		public virtual bool IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool UseChannels => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool? IsPositionsEmulationRequired => null;
 
 		/// <inheritdoc />
 		[ReadOnly(false)]
@@ -537,9 +577,11 @@ namespace StockSharp.Messages
 
 					return i.To<MessageTypes>();
 				}).ToArray();
-			
+
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
+
+			EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 
 			base.Load(storage);
 		}
@@ -551,6 +593,7 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
 			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
+			storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 
 			base.Save(storage);
 		}

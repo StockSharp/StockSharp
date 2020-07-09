@@ -4,7 +4,6 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
-	using System.Net;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -1074,7 +1073,7 @@ GOLD
 RTS
 GMKR
 GAZR
-SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
 		#endregion
 
@@ -1097,7 +1096,7 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 			if (secProvider != null)
 			{
 				var found = (board.IsEmpty() ? null : new[] { secProvider.LookupById(new SecurityId { SecurityCode = code, BoardCode = board }) }.Where(f1 => f1 != null)) ??
-							secProvider.LookupByCode(code, type) ??
+							secProvider.LookupByCode(code, type).Where(s => s.ToSecurityId().SecurityCode.CompareIgnoreCase(code)) ??
 				            secProvider.Lookup(new SecurityLookupMessage { ShortName = code, SecurityType = type }) ??
 				            secProvider.Lookup(new SecurityLookupMessage { Name = code, SecurityType = type });
 
@@ -1136,7 +1135,9 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 				if (criteria == null)
 					throw new ArgumentNullException(nameof(criteria));
 
-				var existingIds = ServicesRegistry.TrySecurityProvider?.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase) ?? new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+				var existingSecurities = ServicesRegistry.TrySecurityProvider?.Lookup(criteria).Select(s => s.ToMessage()).Where(s => !s.SecurityId.IsAllSecurity()).ToArray() ?? Enumerable.Empty<SecurityMessage>();
+				var existingIds = existingSecurities.Select(s => s.SecurityId.ToStringId()).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
 				var securities = new List<SecurityMessage>();
 
 				byte[] Send<T>(string method, string argName, T arg)
@@ -1146,24 +1147,24 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 
 					using (var client = new WebClientEx { Timeout = TimeSpan.FromMinutes(1) })
 					{
-						client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-						var response = client.UploadString("https://stocksharp.com/services/instrumentprovider.ashx", $"method={method}&{argName}={request.To<byte[]>().DeflateTo().UTF8()}");
-						return client.Encoding.GetBytes(response).DeflateFrom();
+						var response = client.UploadData($"https://stocksharp.com/services/instrumentprovider.ashx?method={method}", request.To<byte[]>().DeflateTo());
+						return response.DeflateFrom();
 					}
 				}
 
-				var ids = Send(nameof(IRemoteStorage.LookupSecurityIds),"criteria", criteria).UTF8().Split(";");
+				var ids = Send("LookupSecurityIds", "criteria", criteria).UTF8().SplitByDotComma();
 
 				var newSecurityIds = ids.Where(id => !existingIds.Contains(id)).ToArray();
 
-				foreach (var b in newSecurityIds.Batch(RemoteStorage.DefaultMaxSecurityCount))
+				foreach (var b in newSecurityIds.Batch(1000))
 				{
 					var batch = b.ToArray();
 
-					var response = Send(nameof(IRemoteStorage.GetSecurities), "securityIds", batch);
+					var response = Send("GetSecurities", "securityIds", batch);
 					securities.AddRange(response.To<Stream>().DeserializeDataContract<SecurityMessage[]>());
 				}
 
+				securities.AddRange(existingSecurities);
 				return securities;
 			}
 		}
@@ -1251,13 +1252,13 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 			}
 			else
 			{
-				var byCode = new Dictionary<Tuple<string, SecurityTypes>, List<SecurityMessage>>();
-				var byShortName = new Dictionary<Tuple<string, SecurityTypes>, List<SecurityMessage>>();
-				var byName = new Dictionary<Tuple<string, SecurityTypes>, List<SecurityMessage>>();
+				var byCode = new Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>>();
+				var byShortName = new Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>>();
+				var byName = new Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>>();
 
-				foreach (var message in client.LookupSecurities(LookupAllCriteriaMessage))
+				foreach (var message in client.LookupSecurities(Extensions.LookupAllCriteriaMessage))
 				{
-					var secType = message.SecurityType.Value;
+					var secType = message.SecurityType;
 
 					byCode.SafeAdd(Tuple.Create(message.SecurityId.SecurityCode.ToUpperInvariant(), secType)).Add(message);
 						
@@ -1268,9 +1269,16 @@ SPFB.1MFR".Split(Environment.NewLine).ToHashSet(StringComparer.InvariantCultureI
 						byName.SafeAdd(Tuple.Create(message.Name.ToUpperInvariant(), secType)).Add(message);
 				}
 
+				List<SecurityMessage> TryFind(Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>> dict, Tuple<string, SecurityTypes> key)
+				{
+					return
+						dict.TryGetValue(Tuple.Create(key.Item1, (SecurityTypes?)key.Item2)) ??
+						dict.TryGetValue(Tuple.Create(key.Item1, (SecurityTypes?)null));
+				}
+
 				foreach (var pair in securities)
 				{
-					var found = byCode.TryGetValue(pair.Key) ?? byShortName.TryGetValue(pair.Key) ?? byName.TryGetValue(pair.Key);
+					var found = TryFind(byCode, pair.Key) ?? TryFind(byShortName, pair.Key) ?? TryFind(byName, pair.Key);
 					MostAppropriated(found, pair.Key, pair.Value);
 				}
 			}

@@ -14,30 +14,20 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public MarketDepth GetMarketDepth(Security security)
-		{
-			return MarketDataProvider.GetMarketDepth(security);
-		}
+			=> MarketDataProvider.GetMarketDepth(security);
 
 		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return MarketDataProvider.GetSecurityValue(security, field);
-		}
+			=> MarketDataProvider.GetSecurityValue(security, field);
 
 		/// <inheritdoc />
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return MarketDataProvider.GetLevel1Fields(security);
-		}
+			=> MarketDataProvider.GetLevel1Fields(security);
 
 		/// <inheritdoc />
+		[Obsolete("Use TickTradeReceived event.")]
 		public event Action<Trade> NewTrade
 		{
 			add => MarketDataProvider.NewTrade += value;
@@ -45,6 +35,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<Security> NewSecurity
 		{
 			add => MarketDataProvider.NewSecurity += value;
@@ -52,6 +43,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<Security> SecurityChanged
 		{
 			add => MarketDataProvider.SecurityChanged += value;
@@ -59,6 +51,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<MarketDepth> NewMarketDepth
 		{
 			add => MarketDataProvider.NewMarketDepth += value;
@@ -66,6 +59,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<MarketDepth> MarketDepthChanged
 		{
 			add => MarketDataProvider.MarketDepthChanged += value;
@@ -80,6 +74,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderLogItemReceived event.")]
 		public event Action<OrderLogItem> NewOrderLogItem
 		{
 			add => MarketDataProvider.NewOrderLogItem += value;
@@ -87,6 +82,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use NewsReceived event.")]
 		public event Action<News> NewNews
 		{
 			add => MarketDataProvider.NewNews += value;
@@ -94,6 +90,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use NewsReceived event.")]
 		public event Action<News> NewsChanged
 		{
 			add => MarketDataProvider.NewsChanged += value;
@@ -254,21 +251,15 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public Subscription RegisterFilteredMarketDepth(Security security)
+		public Subscription SubscribeFilteredMarketDepth(Security security)
 		{
-			return MarketDataProvider.RegisterFilteredMarketDepth(security);
+			return MarketDataProvider.SubscribeFilteredMarketDepth(security);
 		}
 
 		/// <inheritdoc />
-		public void UnRegisterFilteredMarketDepth(Security security)
+		public Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool passThroughOrderBookInrement = false, IMessageAdapter adapter = null)
 		{
-			MarketDataProvider.UnRegisterFilteredMarketDepth(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IMessageAdapter adapter = null)
-		{
-			return MarketDataProvider.SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, refreshSpeed, adapter);
+			return MarketDataProvider.SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, refreshSpeed, depthBuilder, passThroughOrderBookInrement, adapter);
 		}
 
 		/// <inheritdoc />
@@ -278,7 +269,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public Subscription SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null)
 		{
 			return MarketDataProvider.SubscribeTrades(security, from, to, count, buildMode, buildFrom, adapter);
 		}
@@ -290,7 +281,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public Subscription SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null)
+		public Subscription SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null)
 		{
 			return MarketDataProvider.SubscribeLevel1(security, from, to, count, buildMode, buildFrom, adapter);
 		}
@@ -332,6 +323,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use UnSubscribe method.")]
 		public void UnSubscribeBoard(ExchangeBoard board)
 		{
 			MarketDataProvider.UnSubscribeBoard(board);

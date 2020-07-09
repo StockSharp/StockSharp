@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class TimeFrameLookupMessage : BaseSubscriptionMessage
+	public class TimeFrameLookupMessage : BaseRequestMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeFrameLookupMessage"/>.
@@ -19,10 +19,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",TrId={TransactionId}";
-		}
+		public override DataType DataType => DataType.TimeFrames;
 
 		/// <summary>
 		/// Create a copy of <see cref="TimeFrameLookupMessage"/>.
@@ -32,33 +29,5 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new TimeFrameLookupMessage());
 		}
-
-		/// <summary>
-		/// Copy the message into the <paramref name="destination" />.
-		/// </summary>
-		/// <param name="destination">The object, to which copied information.</param>
-		/// <returns>The object, to which copied information.</returns>
-		protected TimeFrameLookupMessage CopyTo(TimeFrameLookupMessage destination)
-		{
-			base.CopyTo(destination);
-
-			return destination;
-		}
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? From => null;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? To => DateTimeOffset.MaxValue /* prevent for online mode */;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override bool IsSubscribe => true;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override long OriginalTransactionId => 0;
 	}
 }

@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.Logging;
@@ -37,10 +38,16 @@
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType == MarketDataTypes.MarketDepth)
+					if (mdMsg.SecurityId == default)
+						break;
+
+					if (mdMsg.DataType2 == DataType.MarketDepth)
 					{
 						if (mdMsg.IsSubscribe)
 						{
+							if (mdMsg.DoNotBuildOrderBookInrement)
+								break;
+
 							if (mdMsg.MaxDepth != null)
 							{
 								var actualDepth = mdMsg.MaxDepth.Value;
@@ -49,7 +56,7 @@
 
 								if (supportedDepth != actualDepth)
 								{
-									mdMsg = (MarketDataMessage)mdMsg.Clone();
+									mdMsg = mdMsg.TypedClone();
 									mdMsg.MaxDepth = supportedDepth;
 
 									_depths.Add(mdMsg.TransactionId, actualDepth);
@@ -102,6 +109,9 @@
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
+					if (quoteMsg.State != null)
+						break;
+
 					foreach (var group in quoteMsg.GetSubscriptionIds().GroupBy(_depths.TryGetValue2))
 					{
 						if (group.Key == null)
@@ -112,7 +122,7 @@
 
 						var maxDepth = group.Key.Value;
 
-						var clone = (QuoteChangeMessage)quoteMsg.Clone();
+						var clone = quoteMsg.TypedClone();
 
 						clone.SetSubscriptionIds(group.ToArray());
 
@@ -155,7 +165,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new OrderBookTruncateMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

@@ -95,7 +95,7 @@ namespace StockSharp.Messages
 		/// <param name="message">The message.</param>
 		protected virtual void InnerAdapterNewOutMessage(Message message)
 		{
-			if (message.IsBack)
+			if (message.IsBack())
 				RaiseNewOutMessage(message);
 			else
 				OnInnerAdapterNewOutMessage(message);
@@ -119,7 +119,7 @@ namespace StockSharp.Messages
 			NewOutMessage?.Invoke(message);
 		}
 
-		bool IMessageChannel.IsOpened => InnerAdapter.IsOpened;
+		ChannelStates IMessageChannel.State => InnerAdapter.State;
 
 		void IMessageChannel.Open()
 		{
@@ -131,6 +131,21 @@ namespace StockSharp.Messages
 			InnerAdapter.Close();
 		}
 
+		void IMessageChannel.Suspend()
+		{
+			InnerAdapter.Suspend();
+		}
+
+		void IMessageChannel.Resume()
+		{
+			InnerAdapter.Resume();
+		}
+
+		void IMessageChannel.Clear()
+		{
+			InnerAdapter.Clear();
+		}
+
 		event Action IMessageChannel.StateChanged
 		{
 			add => InnerAdapter.StateChanged += value;
@@ -138,14 +153,14 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Auto send <see cref="Message.IsBack"/> messages to <see cref="InnerAdapter"/>.
+		/// Auto send <see cref="Message.BackMode"/> messages to <see cref="InnerAdapter"/>.
 		/// </summary>
 		protected virtual bool SendInBackFurther => true;
 
 		/// <inheritdoc />
 		public virtual bool SendInMessage(Message message)
 		{
-			if (message.IsBack)
+			if (message.IsBack())
 			{
 				if (message.Adapter == this)
 				{
@@ -166,10 +181,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				this.AddErrorLog(ex);
-
-				message.HandleErrorResponse(ex, CurrentTime, RaiseNewOutMessage);
-
+				message.HandleErrorResponse(ex, this, RaiseNewOutMessage);
 				throw;
 			}
 		}
@@ -254,11 +266,7 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypeInfo> PossibleSupportedMessages
-		{
-			get => InnerAdapter.PossibleSupportedMessages;
-			set => InnerAdapter.PossibleSupportedMessages = value;
-		}
+		public virtual IEnumerable<MessageTypeInfo> PossibleSupportedMessages => InnerAdapter.PossibleSupportedMessages;
 
 		/// <inheritdoc />
 		public virtual IEnumerable<MessageTypes> SupportedInMessages
@@ -268,25 +276,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypes> SupportedOutMessages
-		{
-			get => InnerAdapter.SupportedOutMessages;
-			set => InnerAdapter.SupportedOutMessages = value;
-		}
+		public virtual IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypes> SupportedResultMessages
-		{
-			get => InnerAdapter.SupportedResultMessages;
-			set => InnerAdapter.SupportedResultMessages = value;
-		}
+		public virtual IEnumerable<MessageTypes> SupportedResultMessages => InnerAdapter.SupportedResultMessages;
 
 		/// <inheritdoc />
-		public virtual IEnumerable<DataType> SupportedMarketDataTypes
-		{
-			get => InnerAdapter.SupportedMarketDataTypes;
-			set => InnerAdapter.SupportedMarketDataTypes = value;
-		}
+		public virtual IEnumerable<DataType> SupportedMarketDataTypes => InnerAdapter.SupportedMarketDataTypes;
 
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo => InnerAdapter.SecurityClassInfo;
 
@@ -316,6 +312,9 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportCandlesUpdates => InnerAdapter.IsSupportCandlesUpdates;
 
 		/// <inheritdoc />
+		public virtual bool IsSupportCandlesPriceLevels => InnerAdapter.IsSupportCandlesPriceLevels;
+
+		/// <inheritdoc />
 		public virtual MessageAdapterCategories Categories => InnerAdapter.Categories;
 
 		/// <inheritdoc />
@@ -338,6 +337,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public IEnumerable<Level1Fields> CandlesBuildFrom => InnerAdapter.CandlesBuildFrom;
 
+		/// <inheritdoc />
+		public virtual bool IsSupportTransactionLog => InnerAdapter.IsSupportTransactionLog;
+
 		Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
 
 		bool IMessageAdapter.HeartbeatBeforConnect => InnerAdapter.HeartbeatBeforConnect;
@@ -345,6 +347,19 @@ namespace StockSharp.Messages
 		Uri IMessageAdapter.Icon => InnerAdapter.Icon;
 
 		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => InnerAdapter.IsAutoReplyOnTransactonalUnsubscription;
+
+		bool IMessageAdapter.EnqueueSubscriptions
+		{
+			get => InnerAdapter.EnqueueSubscriptions;
+			set => InnerAdapter.EnqueueSubscriptions = value;
+		}
+
+		bool IMessageAdapter.UseChannels => InnerAdapter.UseChannels;
+
+		string IMessageAdapter.FeatureName => InnerAdapter.FeatureName;
+
+		/// <inheritdoc />
+		public virtual bool? IsPositionsEmulationRequired => InnerAdapter.IsPositionsEmulationRequired;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);

@@ -17,18 +17,56 @@
 	{
 		private class SubscriptionInfo
 		{
+			private readonly SubscriptionInfo _main;
+
 			public ISubscriptionMessage Subscription { get; }
 
 			public SubscriptionInfo(ISubscriptionMessage subscription)
 			{
 				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+				Subscribers = new CachedSynchronizedSet<long>();
 			}
 
-			public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
+			public SubscriptionInfo(SubscriptionInfo main)
+			{
+				_main = main ?? throw new ArgumentNullException(nameof(main));
 
-			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
+				Subscription = main.Subscription;
+				Subscribers = main.Subscribers;
+			}
 
-			public override string ToString() => Subscription.ToString();
+			private void CheckOnLinked()
+			{
+				if (_main != null)
+					throw new InvalidOperationException();
+			}
+
+			private SubscriptionStates _state = SubscriptionStates.Stopped;
+
+			public SubscriptionStates State
+			{
+				get => _main?.State ?? _state;
+				set
+				{
+					CheckOnLinked();
+					_state = value;
+				}
+			}
+
+			public readonly CachedSynchronizedSet<long> Subscribers;
+
+			private readonly List<long> _linked = new List<long>();
+
+			public List<long> Linked
+			{
+				get
+				{
+					CheckOnLinked();
+					return _linked;
+				}
+			}
+
+			public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
 		}
 
 		private readonly SyncObject _sync = new SyncObject();
@@ -48,47 +86,73 @@
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
+			void TryAddOrderSubscription(OrderMessage orderMsg)
+			{
+				lock (_sync)
+				{
+					if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, default(SecurityId)), out var info))
+						TryAddOrderTransaction(info, orderMsg.TransactionId);
+
+					//if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, orderMsg.SecurityId), out info))
+					//	TryAddOrderTransaction(info, orderMsg.TransactionId);
+				}
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
 					return ProcessReset(message);
 
-				case MessageTypes.MarketData:
-					return ProcessInMarketDataMessage((MarketDataMessage)message);
+				case MessageTypes.OrderRegister:
+				case MessageTypes.OrderReplace:
+				case MessageTypes.OrderCancel:
+				case MessageTypes.OrderGroupCancel:
+				{
+					var orderMsg = (OrderMessage)message;
 
-				case MessageTypes.Portfolio:
-				case MessageTypes.SecurityLookup:
-				case MessageTypes.BoardLookup:
-				case MessageTypes.TimeFrameLookup:
-				case MessageTypes.UserLookup:
-				case MessageTypes.PortfolioLookup:
-					return ProcessInSubscriptionMessage((ISubscriptionMessage)message);
+					TryAddOrderSubscription(orderMsg);
+
+					return base.OnSendInMessage(message);
+				}
+
+				case MessageTypes.OrderPairReplace:
+				{
+					var pairMsg = (OrderPairReplaceMessage)message;
+
+					TryAddOrderSubscription(pairMsg.Message1);
+					TryAddOrderSubscription(pairMsg.Message2);
+
+					return base.OnSendInMessage(message);
+				}
 
 				case MessageTypes.OrderStatus:
-					return ProcessOrderStatusMessage((OrderStatusMessage)message);
+				{
+					var statusMsg = (OrderStatusMessage)message;
+
+					if (statusMsg.HasOrderId())
+						return base.OnSendInMessage(message);
+
+					return ProcessInSubscriptionMessage(statusMsg);
+				}
 
 				default:
-					return base.OnSendInMessage(message);
+				{
+					if (message is ISubscriptionMessage subscrMsg)
+						return ProcessInSubscriptionMessage(subscrMsg);
+					else
+						return base.OnSendInMessage(message);
+				}
 			}
 		}
 
 		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 		{
-			var id = info.Subscription.TransactionId;
-
-			const string text = "Subscription {0} {1}->{2}.";
-
-			if (info.State.IsOk(state))
-				this.AddInfoLog(text, id, info.State, state);
-			else
-				this.AddWarningLog(text, id, info.State, state);
-
-			info.State = state;
+			info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, this);
 
 			if (!state.IsActive())
 			{
 				_subscriptionsByKey.RemoveByValue(info);
-				this.AddInfoLog(LocalizedStrings.OnlineSubscriptionRemoved, id);
+				this.AddInfoLog(LocalizedStrings.OnlineSubscriptionRemoved, info.Subscription.TransactionId);
 			}
 		}
 
@@ -170,15 +234,22 @@
 						{
 							if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
 							{
+								if (message is ExecutionMessage execMsg &&
+									execMsg.ExecutionType == ExecutionTypes.Transaction &&
+									execMsg.TransactionId != 0 &&
+									info.Subscription.DataType == DataType.Transactions)
+								{
+									TryAddOrderTransaction(info, execMsg.TransactionId,
+										false // lookup history can request order changes (registered, filled, cancelled)
+									);
+								}
 							}
 							else
 							{
-								var dataType = message.Type.ToDataType((message as CandleMessage)?.Arg ?? (message as ExecutionMessage)?.ExecutionType);
-								var secId = dataType.IsLookup()
-									? default
-									: GetSecurityId(dataType, (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default);
+								var dataType = subscrMsg.DataType;
+								var secId = (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default;
 
-								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info))
+								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info) && (secId == default || !_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, default(SecurityId)), out info)))
 									break;
 							}
 
@@ -191,6 +262,20 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+		}
+
+		private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
+		{
+			if (!_subscriptionsById.ContainsKey(transactionId))
+			{
+				var orderSubscription = new SubscriptionInfo(statusInfo);
+
+				_subscriptionsById.Add(transactionId, orderSubscription);
+
+				statusInfo.Linked.Add(transactionId);
+			}
+			else if (warnOnDuplicate)
+				this.AddWarningLog("Order's transaction {0} was handled before.", transactionId);
 		}
 
 		private void ClearState()
@@ -209,38 +294,10 @@
 			return base.OnSendInMessage(message);
 		}
 
-		private bool ProcessOrderStatusMessage(OrderStatusMessage message)
-		{
-			if (message.HasOrderId())
-				return base.OnSendInMessage(message);
-
-			return ProcessInSubscriptionMessage(message);
-		}
-
-		private bool ProcessInMarketDataMessage(MarketDataMessage message)
-		{
-			var dataType = message.ToDataType();
-			var secId = GetSecurityId(dataType, message.SecurityId);
-
-			return ProcessInSubscriptionMessage(message, dataType, secId);
-		}
-
-		private SecurityId GetSecurityId(DataType dataType, SecurityId securityId)
-			=> IsSecurityRequired(dataType) ? securityId : default;
-
 		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message)
-		{
-			return ProcessInSubscriptionMessage(message, message.ToDataType());
-		}
-
-		private bool ProcessInSubscriptionMessage(ISubscriptionMessage message,
-			DataType dataType, SecurityId securityId = default)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
-
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
 
 			var transId = message.TransactionId;
 
@@ -255,18 +312,35 @@
 				{
 					if (message.To == null)
 					{
-						var key = Tuple.Create(dataType, securityId);
+						var dataType = message.DataType;
+						var secId = default(SecurityId);
+
+						if (message is ISecurityIdMessage secIdMsg)
+						{
+							secId = secIdMsg.SecurityId;
+
+							if (secId == default && IsSecurityRequired(dataType))
+								this.AddWarningLog("Subscription {0} required security id.", dataType);
+							else if (secId != default && !IsSecurityRequired(dataType))
+								this.AddWarningLog("Subscription {0} doesn't required security id.", dataType);
+						}
+
+						var key = Tuple.Create(dataType, secId);
 
 						if (!_subscriptionsByKey.TryGetValue(key, out var info))
 						{
+							this.AddInfoLog("Subscription {0} initial.", transId);
+
 							sendInMsg = message;
 
-							info = new SubscriptionInfo((ISubscriptionMessage)message.Clone());
+							info = new SubscriptionInfo(message.TypedClone());
 						
 							_subscriptionsByKey.Add(key, info);
 						}
 						else
 						{
+							this.AddInfoLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
+
 							var resultMsg = message.CreateResult();
 
 							if (message.Type == MessageTypes.MarketData)
@@ -313,6 +387,12 @@
 						}
 						else
 						{
+							if (info.Linked.Count > 0)
+							{
+								foreach (var linked in info.Linked)
+									_subscriptionsById.Remove(linked);
+							}
+
 							if (info.Subscribers.Count == 0)
 							{
 								_subscriptionsByKey.RemoveByValue(info);
@@ -321,7 +401,7 @@
 								if (info.State.IsActive())
 								{
 									// copy full subscription's details into unsubscribe request
-									sendInMsg = MakeUnsubscribe((ISubscriptionMessage)info.Subscription.Clone(), info.Subscription.TransactionId);
+									sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
 								}
 								else
 									this.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
@@ -368,7 +448,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SubscriptionOnlineMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new SubscriptionOnlineMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

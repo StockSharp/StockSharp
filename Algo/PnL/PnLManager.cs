@@ -18,6 +18,7 @@ namespace StockSharp.Algo.PnL
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
@@ -219,7 +220,7 @@ namespace StockSharp.Algo.PnL
 				}
 				case MessageTypes.QuoteChange:
 				{
-					if (!UseOrderBook)
+					if (!UseOrderBook || ((QuoteChangeMessage)message).State != null)
 						return null;
 
 					break;

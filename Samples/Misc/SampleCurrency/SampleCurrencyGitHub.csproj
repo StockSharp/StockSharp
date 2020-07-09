@@ -6,21 +6,18 @@
     <RootNamespace>SampleCurrency</RootNamespace>
     <AssemblyName>SampleCurrency</AssemblyName>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Xaml" Version="1.0.0" />
+    <PackageReference Include="Ecng.Xaml" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\References\stocksharp.ico">
+    <Resource Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

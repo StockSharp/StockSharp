@@ -17,6 +17,8 @@ namespace StockSharp.Messages
 {
 	using System;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>
@@ -66,7 +68,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (!OutputChannel.IsOpened)
+			if (!OutputChannel.IsOpened())
 				OutputChannel.Open();
 
 			OutputChannel.SendInMessage(message);
@@ -95,7 +97,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
-			if (!InputChannel.IsOpened)
+			if (!InputChannel.IsOpened())
 				InputChannel.Open();
 
 			return InputChannel.SendInMessage(message);
@@ -107,7 +109,7 @@ namespace StockSharp.Messages
 		/// <param name="message">Message.</param>
 		public void SendOutMessage(Message message)
 		{
-			if (!OutputChannel.IsOpened)
+			if (!OutputChannel.IsOpened())
 				OutputChannel.Open();
 
 			OutputChannel.SendInMessage(message);
@@ -119,7 +121,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new ChannelMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), InputChannel.Clone(), OutputChannel.Clone());
+			return new ChannelMessageAdapter(InnerAdapter.TypedClone(), InputChannel.Clone(), OutputChannel.Clone());
 		}
 	}
 }

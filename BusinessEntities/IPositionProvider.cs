@@ -8,7 +8,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The position provider interface.
 	/// </summary>
-	public interface IPositionProvider
+	public interface IPositionProvider : IPortfolioProvider
 	{
 		/// <summary>
 		/// Get all positions.
@@ -30,26 +30,11 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="portfolio">The portfolio on which the position should be found.</param>
 		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="strategyId">Strategy ID.</param>
 		/// <param name="clientCode">The client code.</param>
 		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
+		/// <param name="limitType">Limit type for Ò+ market.</param>
 		/// <returns>Position.</returns>
-		Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "");
-
-		/// <summary>
-		/// Subscribe on positions changes.
-		/// </summary>
-		/// <param name="security">The instrument on which the position should be found.</param>
-		/// <param name="portfolio">The portfolio on which the position should be found.</param>
-		/// <param name="from">The initial date from which you need to get data.</param>
-		/// <param name="to">The final date by which you need to get data.</param>
-		/// <param name="count">Max count.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void SubscribePositions(Security security = null, Portfolio portfolio = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
-
-		/// <summary>
-		/// Unsubscribe from positions changes.
-		/// </summary>
-		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribePositions"/> for which this message is a response.</param>
-		void UnSubscribePositions(long originalTransactionId = 0);
+		Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limitType = null);
 	}
 }

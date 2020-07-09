@@ -29,6 +29,9 @@ namespace StockSharp.Messages
 		[XmlIgnore]
 		public long[] SubscriptionIds { get; set; }
 
+		/// <inheritdoc />
+		public abstract DataType DataType { get; }
+
 		/// <summary>
 		/// Initialize <see cref="BaseSubscriptionIdMessage{TMessage}"/>.
 		/// </summary>

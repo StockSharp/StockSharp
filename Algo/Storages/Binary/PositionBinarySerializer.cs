@@ -71,20 +71,20 @@ namespace StockSharp.Algo.Storages.Binary
 			Write(stream, Commission);
 			Write(stream, CurrentValueInLots);
 			
-			stream.Write(Portfolios.Count);
+			stream.WriteEx(Portfolios.Count);
 
 			foreach (var portfolio in Portfolios)
-				stream.Write(portfolio);
+				stream.WriteEx(portfolio);
 
-			stream.Write(ClientCodes.Count);
+			stream.WriteEx(ClientCodes.Count);
 
 			foreach (var clientCode in ClientCodes)
-				stream.Write(clientCode);
+				stream.WriteEx(clientCode);
 
-			stream.Write(DepoNames.Count);
+			stream.WriteEx(DepoNames.Count);
 
 			foreach (var depoName in DepoNames)
-				stream.Write(depoName);
+				stream.WriteEx(depoName);
 
 			if (Version < MarketDataVersions.Version33)
 				return;
@@ -131,8 +131,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
 		{
-			stream.Write(info.First);
-			stream.Write(info.Second);
+			stream.WriteEx(info.First);
+			stream.WriteEx(info.Second);
 		}
 
 		private static RefPair<decimal, decimal> ReadInfo(Stream stream)
@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class PositionBinarySerializer : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>
 	{
 		public PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 20, MarketDataVersions.Version33, exchangeInfoProvider)
+			: base(securityId, null, 20, MarketDataVersions.Version35, exchangeInfoProvider)
 		{
 		}
 
@@ -193,6 +193,8 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 
 			writer.WriteInt(messages.Count());
+
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version35;
 
 			foreach (var message in messages)
 			{
@@ -314,6 +316,17 @@ namespace StockSharp.Algo.Storages.Binary
 							throw new ArgumentOutOfRangeException();
 					}
 				}
+
+				if (metaInfo.Version < MarketDataVersions.Version34)
+					continue;
+
+				writer.WriteStringEx(message.Description);
+				writer.WriteStringEx(message.StrategyId);
+
+				if (!buildFrom)
+					continue;
+
+				writer.WriteBuildFrom(message.BuildFrom);
 			}
 		}
 
@@ -321,6 +334,8 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			var reader = enumerator.Reader;
 			var metaInfo = enumerator.MetaInfo;
+
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version35;
 
 			var posMsg = new PositionChangeMessage { SecurityId = SecurityId };
 
@@ -424,6 +439,17 @@ namespace StockSharp.Algo.Storages.Binary
 						throw new ArgumentOutOfRangeException();
 				}
 			}
+
+			if (metaInfo.Version < MarketDataVersions.Version34)
+				return posMsg;
+
+			posMsg.Description = reader.ReadStringEx();
+			posMsg.StrategyId = reader.ReadStringEx();
+
+			if (!buildFrom)
+				return posMsg;
+
+			posMsg.BuildFrom = reader.ReadBuildFrom();
 
 			return posMsg;
 		}

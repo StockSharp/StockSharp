@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class SecurityRouteListRequestMessage : BaseSubscriptionMessage
+	public class SecurityRouteListRequestMessage : BaseRequestMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityRouteListRequestMessage"/>.
@@ -17,6 +17,9 @@ namespace StockSharp.Messages
 			: base(MessageTypes.SecurityRouteListRequest)
 		{
 		}
+
+		/// <inheritdoc />
+		public override DataType DataType => DataType.SecurityRoute;
 
 		/// <summary>
 		/// Create a copy of <see cref="SecurityRouteListRequestMessage"/>.
@@ -28,24 +31,5 @@ namespace StockSharp.Messages
 			CopyTo(clone);
 			return clone;
 		}
-
-		/// <inheritdoc />
-		public override string ToString() => base.ToString() + $",TrId={TransactionId}";
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? From => null;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override DateTimeOffset? To => DateTimeOffset.MaxValue /* prevent for online mode */;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override bool IsSubscribe => true;
-
-		/// <inheritdoc />
-		[DataMember]
-		public override long OriginalTransactionId => 0;
 	}
 }

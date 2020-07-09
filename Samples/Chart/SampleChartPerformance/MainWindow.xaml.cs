@@ -22,6 +22,7 @@
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Configuration;
 
 	public partial class MainWindow
 	{
@@ -40,10 +41,10 @@
 			}
 		}
 
-		private static readonly string _historyPath = @"..\..\..\..\..\Testing\HistoryData\".ToFullPath();
-		private const string _securityId = "RIZ2@FORTS";
+		private static readonly string _historyPath = Paths.HistoryDataPath;
+		private const string _securityId = "SBER@TQBR";
 		private const int _timeframe = 1; //minutes
-		private const int _priceStep = 10;
+		private const decimal _priceStep = 0.01m;
 		private const int _candlesPacketSize = 10;
 		private const bool _addIndicator = true;
 		//private const int _tradeEveryNCandles = 100;
@@ -99,8 +100,6 @@
 
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
-			Theme.SelectedItem = "Chrome";
-
 			Chart.FillIndicators();
 			InitCharts();
 			LoadData();
@@ -260,7 +259,7 @@
 			AppendTick(new ExecutionMessage
 			{
 				ServerTime = _lastTime,
-				TradePrice = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * _priceStep), _priceStep),
+				TradePrice = Round(_lastPrice + ((RandomGen.GetDouble().To<decimal>() - 0.5m) * 5 * _priceStep), _priceStep),
 				TradeVolume = RandomGen.GetInt(50) + 1
 			});
 
@@ -303,7 +302,7 @@
 		{
 			var time = tick.ServerTime;
 			var candle = _candles.LastOrDefault();
-			var price = (int)tick.TradePrice.Value;
+			var price = tick.TradePrice.Value;
 			var volume = (int)tick.TradeVolume.Value;
 
 			if (candle == null || time >= candle.TimeTo)
@@ -346,23 +345,17 @@
 				.Text(msg)
 				.Show();
 		}
-
-		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var theme = (string)Theme.SelectedValue;
-			Chart.ChartTheme = theme;
-		}
 	}
 
 	class LightCandle
 	{
 		public DateTimeOffset TimeFrom { get; set; }
 		public DateTimeOffset TimeTo { get; set; }
-		public int Open { get; set; }
-		public int High { get; set; }
-		public int Low { get; set; }
-		public int Close { get; set; }
-		public int Volume { get; set; }
+		public decimal Open { get; set; }
+		public decimal High { get; set; }
+		public decimal Low { get; set; }
+		public decimal Close { get; set; }
+		public decimal Volume { get; set; }
 
 		public TimeFrameCandle ToCandle(TimeSpan ts, Security security)
 		{

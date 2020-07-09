@@ -143,6 +143,24 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public decimal? Position { get; set; }
 
+		/// <summary>
+		/// Used to identify whether the order initiator is an aggressor or not in the trade.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.InitiatorKey,
+			Description = LocalizedStrings.InitiatorTradeKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 3)]
+		[Nullable]
+		public bool? Initiator { get; set; }
+
+		/// <summary>
+		/// Yield.
+		/// </summary>
+		[DataMember]
+		public decimal? Yield { get; set; }
+
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
@@ -155,6 +173,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str427Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 100)]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;

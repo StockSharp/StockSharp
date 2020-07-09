@@ -34,20 +34,14 @@ namespace StockSharp.Algo
 		private readonly SecurityTrie _trie = new SecurityTrie();
 
 		private readonly ISecurityProvider _provider;
-		private readonly bool _ownProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 		/// </summary>
 		/// <param name="provider">Security meta info provider.</param>
-		/// <param name="ownProvider"><see langword="true"/> to leave the <paramref name="provider"/> open after the <see cref="FilterableSecurityProvider"/> object is disposed; otherwise, <see langword="false"/>.</param>
-		///// <param name="excludeFilter">Filter for instruments exclusion.</param>
-		public FilterableSecurityProvider(ISecurityProvider provider, bool ownProvider = false/*, Func<Security, bool> excludeFilter = null*/)
+		public FilterableSecurityProvider(ISecurityProvider provider)
 		{
 			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-			_ownProvider = ownProvider;
-
-			//ExcludeFilter = excludeFilter;
 
 			_provider.Added += AddSecurities;
 			_provider.Removed += RemoveSecurities;
@@ -67,6 +61,9 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public event Action Cleared;
+
+		/// <inheritdoc />
+		public Security LookupById(SecurityId id) => _trie.GetById(id);
 
 		/// <inheritdoc />
 		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
@@ -114,9 +111,6 @@ namespace StockSharp.Algo
 			_provider.Added -= AddSecurities;
 			_provider.Removed -= RemoveSecurities;
 			_provider.Cleared -= ClearSecurities;
-
-			if (_ownProvider)
-				_provider.Dispose();
 
 			base.DisposeManaged();
 		}

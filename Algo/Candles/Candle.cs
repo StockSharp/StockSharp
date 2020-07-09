@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Candles
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -218,12 +219,12 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// <see cref="PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.
 		/// </summary>
-		public CandlePriceLevel MinPriceLevel => PriceLevels?.OrderBy(l => l.TotalVolume).FirstOrDefault();
+		public CandlePriceLevel? MinPriceLevel => PriceLevels?.OrderBy(l => l.TotalVolume).FirstOr();
 
 		/// <summary>
 		/// <see cref="PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.
 		/// </summary>
-		public CandlePriceLevel MaxPriceLevel => PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOrDefault();
+		public CandlePriceLevel? MaxPriceLevel => PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOr();
 
 		/// <summary>
 		/// Open interest.
@@ -279,7 +280,7 @@ namespace StockSharp.Algo.Candles
 			destination.TotalTicks = TotalTicks;
 			destination.TotalVolume = TotalVolume;
 			//destination.VolumeProfileInfo = VolumeProfileInfo;
-			destination.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
+			destination.PriceLevels = PriceLevels?./*Select(l => l.Clone()).*/ToArray();
 
 			return destination;
 		}

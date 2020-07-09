@@ -59,6 +59,11 @@ namespace StockSharp.Algo.Export.Database
 			{
 				DbType = typeof(int?),
 			};
+			yield return new ColumnDescription(nameof(PositionChangeMessage.StrategyId))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(32)
+			};
 			yield return new ColumnDescription(nameof(Level1ChangeMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(Level1ChangeMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
 
@@ -102,6 +107,7 @@ namespace StockSharp.Algo.Export.Database
 						{ nameof(PositionChangeMessage.ClientCode), m.ClientCode },
 						{ nameof(PositionChangeMessage.DepoName), m.DepoName },
 						{ nameof(PositionChangeMessage.LimitType), (int?)m.LimitType },
+						{ nameof(PositionChangeMessage.StrategyId), m.StrategyId },
 						{ nameof(PositionChangeMessage.ServerTime), m.ServerTime },
 						{ nameof(PositionChangeMessage.LocalTime), m.LocalTime },
 					};

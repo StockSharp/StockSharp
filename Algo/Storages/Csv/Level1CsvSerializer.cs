@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
 	{
-		private static readonly Dictionary<Level1Fields, Type> _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()).OrderBy(l1 => (int)l1).ToDictionary(f => f, f => f.ToType());
+		private static readonly Dictionary<Level1Fields, Type> _level1Fields = Enumerator.GetValues<Level1Fields>().ExcludeObsolete().OrderBy(l1 => (int)l1).ToDictionary(f => f, f => f.ToType());
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CsvSerializer"/>.
@@ -42,12 +42,20 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
+		private static readonly string[] _reserved = new string[10];
+
 		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, Level1ChangeMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			var row = new List<string>();
 
 			row.AddRange(new[] { data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz") });
+
+			row.AddRange(data.BuildFrom.ToCsv());
+
+			row.AddRange(_reserved);
+
+			row.Add(_level1Fields.Count.To<string>());
 
 			foreach (var pair in _level1Fields)
 			{
@@ -76,9 +84,14 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				ServerTime = reader.ReadTime(metaInfo.Date),
+				BuildFrom = reader.ReadBuildFrom(),
 			};
 
-			foreach (var pair in _level1Fields)
+			reader.Skip(_reserved.Length);
+
+			var count = reader.ReadInt();
+
+			foreach (var pair in _level1Fields.Take(count))
 			{
 				// backward compatibility
 				if (reader.ColumnCurr == reader.ColumnCount)

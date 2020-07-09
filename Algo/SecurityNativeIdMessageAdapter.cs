@@ -88,20 +88,6 @@
 					break;
 				}
 
-				case MessageTypes.Reset:
-				{
-					lock (_syncRoot)
-					{
-						_securityIds.Clear();
-						_suspendedOutMessages.Clear();
-						_suspendedInMessages.Clear();
-						_skipTransactions.Clear();
-					}
-
-					base.OnInnerAdapterNewOutMessage(message);
-					break;
-				}
-
 				case MessageTypes.Security:
 				{
 					var secMsg = (SecurityMessage)message;
@@ -114,8 +100,8 @@
 					if (securityCode.IsEmpty())
 						throw new InvalidOperationException();
 
-					// external code shouldn't receive native ids
-					securityId.Native = null;
+					var noNative = securityId;
+					noNative.Native = null;
 					
 					if (!boardCode.IsEmpty())
 					{
@@ -123,21 +109,33 @@
 						{
 							var storageName = StorageName;
 
-							if (!Storage.TryAdd(storageName, securityId, nativeSecurityId, IsNativeIdentifiersPersistable))
+							if (!Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable))
 							{
 								var prevId = Storage.TryGetByNativeId(storageName, nativeSecurityId);
 
 								if (prevId != null)
 								{
-									if (securityId != prevId.Value)
-										throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
+									if (noNative != prevId.Value)
+									{
+										//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
+										this.AddWarningLog(LocalizedStrings.Str687Params.Put(noNative, prevId.Value, nativeSecurityId));
+										
+										Storage.RemoveBySecurityId(storageName, prevId.Value);
+										Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
+									}
 								}
 								else
-									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
+								{
+									//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
+									this.AddWarningLog(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, noNative), nativeSecurityId, noNative));
+									
+									Storage.RemoveByNativeId(storageName, nativeSecurityId);
+									Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
+								}
 							}
 
 							lock (_syncRoot)
-								_securityIds[nativeSecurityId] = securityId;
+								_securityIds[nativeSecurityId] = noNative;
 						}
 					}
 					else
@@ -145,9 +143,12 @@
 						// TODO
 					}
 
+					// external code shouldn't receive native ids
+					secMsg.SecurityId = noNative;
+
 					base.OnInnerAdapterNewOutMessage(message);
 
-					ProcessSuspendedSecurityMessages(secMsg.SecurityId);
+					ProcessSuspendedSecurityMessages(securityId);
 
 					break;
 				}
@@ -194,6 +195,7 @@
 				case MessageTypes.QuoteChange:
 				{
 					var quotesMsg = (QuoteChangeMessage)message;
+
 					ProcessMessage(quotesMsg, true, (prev, curr) => curr);
 					break;
 				}
@@ -227,6 +229,18 @@
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					lock (_syncRoot)
+					{
+						_securityIds.Clear();
+						_suspendedOutMessages.Clear();
+						_suspendedInMessages.Clear();
+						_skipTransactions.Clear();
+					}
+
+					break;
+				}
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderCancel:
@@ -235,7 +249,7 @@
 				{
 					var secMsg = (SecurityMessage)message;
 
-					if (secMsg.NotRequiredSecurityId())
+					if (secMsg.SecurityId == default)
 						break;
 
 					var securityId = secMsg.SecurityId;
@@ -324,7 +338,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SecurityNativeIdMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), Storage);
+			return new SecurityNativeIdMessageAdapter(InnerAdapter.TypedClone(), Storage);
 		}
 
 		private void ProcessMessage<TMessage>(TMessage message, bool throwIfSecIdEmpty, Func<TMessage, TMessage, TMessage> processSuspend)

@@ -4,11 +4,11 @@
 
 [S#.Data](https://stocksharp.com/products/hydra/) - stable.
 
-[S#.Terminal](https://stocksharp.com/products/terminal/) - beta.
+[S#.Terminal](https://stocksharp.com/products/terminal/) - stable.
 
 [S#.API](https://stocksharp.com/products/api/) - stable.
 
-# Connectors development stage
+# Connectors development stage !!!! Obsolete, please check our [official documentation](https://doc.stocksharp.com/html/db1de349-84ef-4e59-a30b-c34a9d47bed2.htm)
 
 ## International
 

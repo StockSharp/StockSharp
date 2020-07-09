@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// The message, informing about the emulator state change.
 	/// </summary>
-	public class EmulationStateMessage : Message
+	public class EmulationStateMessage : Message, IErrorMessage
 	{
 		/// <summary>
 		/// Date in history for starting the paper trading.
@@ -35,9 +35,12 @@ namespace StockSharp.Algo.Testing
 		public DateTimeOffset StopDate { get; set; }
 
 		/// <summary>
-		/// The state been transferred.
+		/// State.
 		/// </summary>
-		public EmulationStates State { get; set; }
+		public ChannelStates State { get; set; }
+
+		/// <inheritdoc />
+		public Exception Error { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EmulationStateMessage"/>.
@@ -58,6 +61,7 @@ namespace StockSharp.Algo.Testing
 				State = State,
 				StartDate = StartDate,
 				StopDate = StopDate,
+				Error = Error,
 			};
 		}
 	}

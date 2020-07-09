@@ -4,6 +4,7 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.Localization;
@@ -31,13 +32,23 @@ namespace StockSharp.Algo
 
 			public bool ProcessTime(TimeSpan diff)
 			{
-				var left = _left - diff;
+				try
+				{
+					if (diff <= TimeSpan.Zero)
+						return true;
 
-				if (left <= TimeSpan.Zero)
-					return true;
+					var left = _left - diff;
 
-				_left = left;
-				return false;
+					if (left <= TimeSpan.Zero)
+						return true;
+
+					_left = left;
+					return false;
+				}
+				catch (OverflowException ex)
+				{
+					throw new InvalidOperationException($"Left='{_left}' Diff='{diff}'", ex);
+				}
 			}
 
 			public void IncreaseTimeOut()
@@ -47,7 +58,7 @@ namespace StockSharp.Algo
 		}
 
 		private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = new CachedSynchronizedDictionary<long, LookupInfo>();
-		private readonly Dictionary<MessageTypes, Dictionary<long, ITransactionIdMessage>> _queue = new Dictionary<MessageTypes, Dictionary<long, ITransactionIdMessage>>();
+		private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = new Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>>();
 		private DateTimeOffset _prevTime;
 
 		/// <summary>
@@ -97,7 +108,7 @@ namespace StockSharp.Algo
 				}
 
 				default:
-					if (message.Type.IsLookup() && !ProcessLookupMessage((ISubscriptionMessage)message))
+					if (message is ISubscriptionMessage subscrMsg && !ProcessLookupMessage(subscrMsg))
 						return true;
 
 					break;
@@ -121,24 +132,30 @@ namespace StockSharp.Algo
 
 			try
 			{
-				lock (_lookups.SyncRoot)
+				if (message.IsSubscribe)
 				{
-					var queue = _queue.SafeAdd(message.Type);
-
-					// not prev queued lookup
-					if (queue.TryAdd(transId, (ITransactionIdMessage)message.Clone()))
+					lock (_lookups.SyncRoot)
 					{
-						if (queue.Count > 1)
+						if (InnerAdapter.EnqueueSubscriptions)
 						{
-							isEnqueue = true;
-							return false;
-						}
-					}
+							var queue = _queue.SafeAdd(message.Type);
 
-					if (message.IsSubscribe && !this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
-					{
-						_lookups.Add(transId, new LookupInfo((ISubscriptionMessage)message.Clone(), TimeOut));
-						isStarted = true;
+							// not prev queued lookup
+							if (queue.TryAdd(transId, message.TypedClone()))
+							{
+								if (queue.Count > 1)
+								{
+									isEnqueue = true;
+									return false;
+								}
+							}
+						}
+						
+						if (!this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
+						{
+							_lookups.Add(transId, new LookupInfo(message.TypedClone(), TimeOut));
+							isStarted = true;
+						}
 					}
 				}
 			
@@ -159,12 +176,9 @@ namespace StockSharp.Algo
 		{
 			base.OnInnerAdapterNewOutMessage(message);
 
-			Message TryInitNextLookup(MessageTypes type, long id)
+			Message TryInitNextLookup(MessageTypes type, long removingId)
 			{
-				if (!_queue.TryGetValue(type, out var queue))
-					return null;
-
-				if (!queue.Remove(id))
+				if (!_queue.TryGetValue(type, out var queue) || !queue.Remove(removingId))
 					return null;
 
 				if (queue.Count == 0)
@@ -188,10 +202,9 @@ namespace StockSharp.Algo
 
 					lock (_lookups.SyncRoot)
 					{
-						if (_lookups.TryGetValue(id, out var info))
+						if (_lookups.TryGetAndRemove(id, out var info))
 						{
-							_lookups.Remove(originIdMsg.OriginalTransactionId);
-							this.AddInfoLog("Lookup finished {0}.", id);
+							this.AddInfoLog("Lookup response {0}.", id);
 
 							nextLookup = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
 						}
@@ -276,7 +289,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new LookupTrackingMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { TimeOut = TimeOut };
+			return new LookupTrackingMessageAdapter(InnerAdapter.TypedClone()) { TimeOut = TimeOut };
 		}
 	}
 }

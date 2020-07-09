@@ -29,16 +29,11 @@ namespace StockSharp.Messages
 	public interface IOrderLogMarketDepthBuilder
 	{
 		/// <summary>
-		/// Market depth.
-		/// </summary>
-		QuoteChangeMessage Depth { get; }
-
-		/// <summary>
 		/// Process order log item.
 		/// </summary>
 		/// <param name="item">Order log item.</param>
-		/// <returns>Order book was changed.</returns>
-		bool Update(ExecutionMessage item);
+		/// <returns>Market depth.</returns>
+		QuoteChangeMessage Update(ExecutionMessage item);
 	}
 
 	/// <summary>
@@ -47,15 +42,18 @@ namespace StockSharp.Messages
 	public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 	{
 		private readonly Dictionary<long, decimal> _orders = new Dictionary<long, decimal>();
-		private readonly SortedDictionary<decimal, QuoteChange> _bids = new SortedDictionary<decimal, QuoteChange>(new BackwardComparer<decimal>());
-		private readonly SortedDictionary<decimal, QuoteChange> _asks = new SortedDictionary<decimal, QuoteChange>();
+
+		private readonly SortedList<decimal, QuoteChange> _bids = new SortedList<decimal, QuoteChange>(new BackwardComparer<decimal>());
+		private readonly SortedList<decimal, QuoteChange> _asks = new SortedList<decimal, QuoteChange>();
+
+		private readonly QuoteChangeMessage _depth;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMarketDepthBuilder"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		public OrderLogMarketDepthBuilder(SecurityId securityId)
-			: this(new QuoteChangeMessage { SecurityId = securityId, IsSorted = true })
+			: this(new QuoteChangeMessage { SecurityId = securityId, BuildFrom = DataType.OrderLog })
 		{
 		}
 
@@ -83,11 +81,7 @@ namespace StockSharp.Messages
 			_depth.Asks = _asks.Values.ToArray();
 		}
 
-		private readonly QuoteChangeMessage _depth;
-
-		QuoteChangeMessage IOrderLogMarketDepthBuilder.Depth => _depth;
-
-		bool IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)
+		QuoteChangeMessage IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)
 		{
 			if (item == null)
 				throw new ArgumentNullException(nameof(item));
@@ -96,7 +90,7 @@ namespace StockSharp.Messages
 				throw new ArgumentException(nameof(item));
 
 			if (item.OrderPrice == 0)
-				return false;
+				return null;
 
 			var changed = false;
 
@@ -126,6 +120,7 @@ namespace StockSharp.Messages
 								_orders.Add(id, volume);
 							}
 
+							quotes[item.OrderPrice] = quote;
 							changed = true;
 						}
 					}
@@ -141,14 +136,14 @@ namespace StockSharp.Messages
 						{
 							if (_orders.TryGetValue(id, out var prevVolume))
 							{
-								var quote = quotes.TryGetValue(item.OrderPrice);
-
-								if (quote != null)
+								if (quotes.TryGetValue(item.OrderPrice, out var quote))
 								{
 									quote.Volume -= volume.Value;
 
 									if (quote.Volume <= 0)
 										quotes.Remove(item.OrderPrice);
+
+									quotes[item.OrderPrice] = quote;
 								}
 
 								_orders[id] = prevVolume - volume.Value;
@@ -165,14 +160,14 @@ namespace StockSharp.Messages
 
 						if (_orders.TryGetValue(id, out var prevVolume))
 						{
-							var quote = quotes.TryGetValue(item.OrderPrice);
-
-							if (quote != null)
+							if (quotes.TryGetValue(item.OrderPrice, out var quote))
 							{
 								quote.Volume -= prevVolume;
 
 								if (quote.Volume <= 0)
 									quotes.Remove(item.OrderPrice);
+
+								quotes[item.OrderPrice] = quote;
 							}
 
 							_orders.Remove(id);
@@ -193,7 +188,7 @@ namespace StockSharp.Messages
 				}
 			}
 
-			return changed;
+			return changed ? _depth : null;
 		}
 	}
 }

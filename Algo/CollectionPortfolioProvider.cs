@@ -4,6 +4,7 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;
@@ -11,13 +12,14 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Collection based implementation of <see cref="IPortfolioProvider"/>.
 	/// </summary>
-	public class CollectionPortfolioProvider : CachedSynchronizedDictionary<string, Portfolio>, IPortfolioProvider
+	public class CollectionPortfolioProvider : IPortfolioProvider
 	{
+		private readonly CachedSynchronizedDictionary<string, Portfolio> _inner = new CachedSynchronizedDictionary<string, Portfolio>(StringComparer.InvariantCultureIgnoreCase);
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionPortfolioProvider"/>.
 		/// </summary>
 		public CollectionPortfolioProvider()
-			: this(Enumerable.Empty<Portfolio>())
 		{
 		}
 
@@ -26,40 +28,60 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolios">The portfolios collection.</param>
 		public CollectionPortfolioProvider(IEnumerable<Portfolio> portfolios)
-			: base(StringComparer.InvariantCultureIgnoreCase)
 		{
-			if (portfolios == null)
+			if (portfolios is null)
 				throw new ArgumentNullException(nameof(portfolios));
 
 			foreach (var portfolio in portfolios)
-			{
-				Add(portfolio.Name, portfolio);
-			}
-
-			//Added += p => NewPortfolio?.Invoke(p);
-			//Removed += p => PortfolioChanged?.Invoke(p);
-
-			if (portfolios is INotifyList<Portfolio> notifyList)
-			{
-				notifyList.Added += pf => Add(pf.Name, pf);;
-				notifyList.Removed += pf => Remove(pf.Name);
-				notifyList.Cleared += Clear;
-			}
+				Add(portfolio);
 		}
 
 		/// <inheritdoc />
-		public Portfolio GetPortfolio(string name)
+		public Portfolio LookupByPortfolioName(string name)
 		{
-			return this.TryGetValue(name);
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			return _inner.TryGetValue(name);
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Portfolio> Portfolios => CachedValues;
+		public IEnumerable<Portfolio> Portfolios => _inner.CachedValues;
 
 		/// <inheritdoc />
 		public event Action<Portfolio> NewPortfolio;
 
 		/// <inheritdoc />
 		public event Action<Portfolio> PortfolioChanged;
+
+		/// <summary>
+		/// Add security.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		public void Add(Portfolio portfolio)
+		{
+			if (portfolio is null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			_inner.Add(portfolio.Name, portfolio);
+			NewPortfolio?.Invoke(portfolio);
+		}
+
+		/// <summary>
+		/// Remove security.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Check result.</returns>
+		public bool Remove(Portfolio portfolio)
+		{
+			if (portfolio is null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			if (!_inner.Remove(portfolio.Name))
+				return false;
+
+			PortfolioChanged?.Invoke(portfolio);
+			return true;
+		}
 	}
 }

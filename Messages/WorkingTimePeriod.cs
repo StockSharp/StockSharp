@@ -110,15 +110,10 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(SpecialDays), SpecialDays);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return Times.Select(t => t.ToString()).Join(",");
+			return Times.Select(t => t.ToString()).JoinComma();
 		}
 	}
 }

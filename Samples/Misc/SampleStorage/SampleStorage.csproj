@@ -3,22 +3,15 @@
   <PropertyGroup>
     <ProjectGuid>{9E39C9C9-C05C-4D79-ADAA-22C287E02F78}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Serialization" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\References\stocksharp.ico">
+    <Content Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Content>
   </ItemGroup>

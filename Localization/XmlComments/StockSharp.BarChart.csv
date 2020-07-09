@@ -1,8 +1,8 @@
 T:StockSharp.BarChart.BarChartMessageAdapter/summary;DocStr2538
 M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.BarChart.BarChartMessageAdapter.Login/summary;Login
-P:StockSharp.BarChart.BarChartMessageAdapter.Password/summary;Password
+P:StockSharp.BarChart.BarChartMessageAdapter.Login/inheritdoc;DocStr8459
+P:StockSharp.BarChart.BarChartMessageAdapter.Password/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.AllTimeFrames/summary;DocStr206
 M:StockSharp.BarChart.BarChartMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459

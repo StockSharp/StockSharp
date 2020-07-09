@@ -54,9 +54,8 @@ namespace StockSharp.Algo.Storages
 		public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTimeOffset, IEnumerable<T>> getData, Type dataType = null)
 		{
 			_securityId = securityId;
-			_arg = arg;
 			_getData = getData ?? throw new ArgumentNullException(nameof(getData));
-			_dataType = dataType ?? typeof(T);
+			_dataType = DataType.Create(dataType ?? typeof(T), arg);
 		}
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates => throw new NotSupportedException();
@@ -64,15 +63,12 @@ namespace StockSharp.Algo.Storages
 		private readonly SecurityId _securityId;
 		SecurityId IMarketDataStorage.SecurityId => _securityId;
 
-		private readonly object _arg;
-		object IMarketDataStorage.Arg => _arg;
-
 		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
 
 		bool IMarketDataStorage.AppendOnlyNew { get; set; }
 
-		private readonly Type _dataType;
-		Type IMarketDataStorage.DataType => _dataType;
+		private readonly DataType _dataType;
+		DataType IMarketDataStorage.DataType => _dataType;
 
 		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
 		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => throw new NotSupportedException();

@@ -5,13 +5,9 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>SampleConnection</RootNamespace>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Ecng.Xaml" Version="1.0.0" />
-  </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="..\SampleConnection\App.xaml">
       <Link>App.xaml</Link>
@@ -129,19 +125,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\References\stocksharp.ico">
+    <Resource Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharp (GitLab)\Connectors\Deribit\Deribit.csproj" />
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj" />
-    <ProjectReference Include="..\..\..\Configuration\Configuration.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj" />
   </ItemGroup>
 </Project>

@@ -140,7 +140,6 @@ namespace StockSharp.Algo.Server
 		}
 
 		private readonly IdGenerator _idGenerator;
-		private readonly SynchronizedDictionary<string, ISessionTransactionIdStorage> _sessionStorages = new SynchronizedDictionary<string, ISessionTransactionIdStorage>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryTransactionIdStorage"/>.
@@ -153,7 +152,7 @@ namespace StockSharp.Algo.Server
 
 		ISessionTransactionIdStorage ITransactionIdStorage.Get(string sessionId)
 		{
-			return _sessionStorages.SafeAdd(sessionId, key => new InMemorySessionTransactionIdStorage(_idGenerator));
+			return new InMemorySessionTransactionIdStorage(_idGenerator);
 		}
 	}
 

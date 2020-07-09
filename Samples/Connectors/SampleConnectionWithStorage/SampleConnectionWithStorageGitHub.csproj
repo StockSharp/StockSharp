@@ -6,12 +6,11 @@
     <RootNamespace>SampleConnection</RootNamespace>
     <AssemblyName>SampleConnectionWithStorage</AssemblyName>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Xaml" Version="1.0.0" />
+    <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="..\SampleConnection\App.xaml">
@@ -130,7 +129,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\References\stocksharp.ico">
+    <Resource Include="..\..\..\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>

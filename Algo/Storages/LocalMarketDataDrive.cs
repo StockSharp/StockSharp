@@ -27,10 +27,8 @@ namespace StockSharp.Algo.Storages
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -55,7 +53,9 @@ namespace StockSharp.Algo.Storages
 
 			public LocalMarketDataStorageDrive(Type dataType, object arg, string path, StorageFormats format, LocalMarketDataDrive drive)
 			{
-				var fileName = GetFileName(dataType, arg);
+				_dataType = DataType.Create(dataType, arg);
+
+				var fileName = GetFileName(_dataType);
 
 				if (path.IsEmpty())
 					throw new ArgumentNullException(nameof(path));
@@ -64,8 +64,6 @@ namespace StockSharp.Algo.Storages
 				_drive = drive ?? throw new ArgumentNullException(nameof(drive));
 				_fileNameWithExtension = fileName + GetExtension(format);
 				_datesPath = IOPath.Combine(_path, fileName + format + "Dates.txt");
-
-				_dataType = DataType.Create(dataType, arg);
 
 				_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
 				{
@@ -78,7 +76,7 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var dates = InteropHelper
+						var dates = IOHelper
 							.GetDirectories(_path)
 							.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
 							.Select(dir => GetDate(IOPath.GetFileName(dir)));
@@ -129,7 +127,7 @@ namespace StockSharp.Algo.Storages
 					if (Directory.EnumerateFiles(dir).IsEmpty())
 					{
 						lock (_cacheSync)
-							InteropHelper.BlockDeleteDir(dir);
+							IOHelper.BlockDeleteDir(dir);
 					}
 				}
 
@@ -327,25 +325,6 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		//private bool _useAlphabeticPath = true;
-
-		///// <summary>
-		///// Whether to use the alphabetical path to data. The default is enabled.
-		///// </summary>
-		//[Obsolete]
-		//public bool UseAlphabeticPath
-		//{
-		//	get { return _useAlphabeticPath; }
-		//	set
-		//	{
-		//		if (value == UseAlphabeticPath)
-		//			return;
-
-		//		_useAlphabeticPath = value;
-		//		ResetDrives();
-		//	}
-		//}
-
 		private void ResetDrives()
 		{
 			lock (_drives.SyncRoot)
@@ -371,7 +350,7 @@ namespace StockSharp.Algo.Storages
 				.EnumerateDirectories(path)
 				.SelectMany(Directory.EnumerateDirectories)
 				.Select(IOPath.GetFileName)
-				.Select(TraderHelper.FolderNameToSecurityId)
+				.Select(StorageHelper.FolderNameToSecurityId)
 				.Select(n => idGenerator.Split(n, true))
 				.Where(t => !t.IsDefault());
 		}
@@ -385,7 +364,7 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<DataType> GetDataTypes(string secPath)
 			{
-				return InteropHelper
+				return IOHelper
 				       .GetDirectories(secPath)
 				       .SelectMany(dateDir => Directory.GetFiles(dateDir, "*" + ext))
 				       .Select(IOPath.GetFileNameWithoutExtension)
@@ -465,7 +444,7 @@ namespace StockSharp.Algo.Storages
 			var securityPaths = new List<string>();
 			var progress = 0;
 
-			foreach (var letterDir in InteropHelper.GetDirectories(Path))
+			foreach (var letterDir in IOHelper.GetDirectories(Path))
 			{
 				if (isCancelled())
 					break;
@@ -475,7 +454,7 @@ namespace StockSharp.Algo.Storages
 				if (name == null || name.Length != 1)
 					continue;
 
-				securityPaths.AddRange(InteropHelper.GetDirectories(letterDir));
+				securityPaths.AddRange(IOHelper.GetDirectories(letterDir));
 			}
 
 			if (isCancelled())
@@ -530,7 +509,7 @@ namespace StockSharp.Algo.Storages
 							Name = id.SecurityCode,
 						};
 
-						if (security.IsMatch(criteria, criteria.GetSecurityTypes()))
+						if (security.IsMatch(criteria))
 							newSecurity(security);
 
 						existingIds.Add(securityId);
@@ -559,18 +538,6 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new SynchronizedPairSet<DataType, string>
-		{
-			{ DataType.Ticks, "trades" },
-			{ DataType.OrderLog, "orderLog" },
-			{ DataType.Transactions, "transactions" },
-			{ DataType.MarketDepth, "quotes" },
-			{ DataType.Level1, "security" },
-			{ DataType.PositionChanges, "position" },
-			{ DataType.News, "news" },
-			{ DataType.Board, "board" },
-		};
-
 		/// <summary>
 		/// Get data type and parameter for the specified file name.
 		/// </summary>
@@ -578,25 +545,9 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Data type and parameter associated with the type. For example, <see cref="CandleMessage.Arg"/>.</returns>
 		public static DataType GetDataType(string fileName)
 		{
-			var info = _fileNames.TryGetKey(fileName);
-
-			if (info != null)
-				return info;
-
-			if (!fileName.StartsWithIgnoreCase("candles_"))
-				return null;
-
-			var parts = fileName.Split('_');
-
-			if (parts.Length < 2)
-				return null;
-
 			try
 			{
-				var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
-				var arg = type.ToCandleArg(parts[2]);
-
-				return DataType.Create(type, arg);
+				return fileName.FileNameToDataType();
 			}
 			catch (Exception ex)
 			{
@@ -608,31 +559,42 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// To get the file name by the type of data.
 		/// </summary>
-		/// <param name="dataType">Data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="format">Storage format. If set an extension will be added to the file name.</param>
+		/// <param name="throwIfUnknown">Throw exception if the specified type is unknown.</param>
 		/// <returns>The file name.</returns>
-		public static string GetFileName(Type dataType, object arg, StorageFormats? format = null)
+		public static string GetFileName(DataType dataType, StorageFormats? format = null, bool throwIfUnknown = true)
 		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
+			var fileName = dataType.DataTypeToFileName();
 
-			string fileName;
-
-			if (dataType.IsCandleMessage())
-				fileName = "candles_{0}_{1}".Put(dataType.Name.Remove(nameof(Message)), TraderHelper.CandleArgToFolderName(arg));
-			else
+			if (fileName == null)
 			{
-				fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));
+				if (throwIfUnknown)
+					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.ToString()));
 
-				if (fileName == null)
-					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));
+				return null;
 			}
 
 			if (format != null)
 				fileName += GetExtension(format.Value);
 
 			return fileName;
+		}
+
+		/// <summary>
+		/// To get the file name by the type of data.
+		/// </summary>
+		/// <param name="dataType">Data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="format">Storage format. If set an extension will be added to the file name.</param>
+		/// <returns>The file name.</returns>
+		[Obsolete]
+		public static string GetFileName(Type dataType, object arg, StorageFormats? format = null)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			return GetFileName(DataType.Create(dataType, arg), format);
 		}
 
 		private const string _dateFormat = "yyyy_MM_dd";
@@ -657,29 +619,6 @@ namespace StockSharp.Algo.Storages
 			return date.ToString(_dateFormat);
 		}
 
-//#pragma warning disable 612
-		///// <summary>
-		///// Load settings.
-		///// </summary>
-		///// <param name="storage">Settings storage.</param>
-		//public override void Load(SettingsStorage storage)
-		//{
-		//	base.Load(storage);
-
-		//	UseAlphabeticPath = storage.GetValue<bool>(nameof(UseAlphabeticPath));
-		//}
-
-		///// <summary>
-		///// Save settings.
-		///// </summary>
-		///// <param name="storage">Settings storage.</param>
-		//public override void Save(SettingsStorage storage)
-		//{
-		//	base.Save(storage);
-
-		//	storage.SetValue(nameof(UseAlphabeticPath), UseAlphabeticPath);
-		//}
-
 		/// <summary>
 		/// To get the path to the folder with market data for the instrument.
 		/// </summary>
@@ -694,10 +633,7 @@ namespace StockSharp.Algo.Storages
 
 			var folderName = id.SecurityIdToFolderName();
 
-			return //UseAlphabeticPath
-				IOPath.Combine(Path, folderName.Substring(0, 1), folderName);
-			//: IOPath.Combine(Path, folderName);
+			return IOPath.Combine(Path, folderName.Substring(0, 1), folderName);
 		}
-//#pragma warning restore 612
 	}
 }

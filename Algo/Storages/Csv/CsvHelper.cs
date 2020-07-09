@@ -4,6 +4,8 @@ namespace StockSharp.Algo.Storages.Csv
 
 	using Ecng.Common;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// CSV helper class.
 	/// </summary>
@@ -86,6 +88,34 @@ namespace StockSharp.Algo.Storages.Csv
 		public static DateTime ToDateTime(this string str)
 		{
 			return DateParser.Parse(str);
+		}
+
+		private static readonly string[] _emptyDataType = new string[4];
+
+		public static string[] ToCsv(this DataType dataType)
+		{
+			if (dataType is null)
+				return _emptyDataType;
+
+			var (messageType, arg1, arg2, arg3) = dataType.Extract();
+
+			return new[] { messageType.To<string>(), arg1.To<string>(), arg2.To<string>(), arg3.To<string>() };
+		}
+
+		public static DataType ReadBuildFrom(this FastCsvReader reader)
+		{
+			if (reader is null)
+				throw new ArgumentNullException(nameof(reader));
+
+			var str = reader.ReadString();
+
+			if (str.IsEmpty())
+			{
+				reader.Skip(3);
+				return null;
+			}
+			
+			return str.To<int>().ToDataType(reader.ReadLong(), reader.ReadDecimal(), reader.ReadInt());
 		}
 	}
 }

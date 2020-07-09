@@ -49,7 +49,7 @@ namespace SampleHistoryTesting
 				{
 					var lookupMsg = (SecurityLookupMessage)message;
 
-					foreach (var id in new[] { "RIZ2@FORTS", "@ES#@CMEMINI" })
+					foreach (var id in new[] { "SBER@TQBR" })
 					{
 						SendOutMessage(new SecurityMessage
 						{

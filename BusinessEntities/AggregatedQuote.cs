@@ -29,6 +29,7 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[Obsolete]
 	public class AggregatedQuote : Quote
 	{
 		private sealed class InnerQuotesList : BaseList<Quote>

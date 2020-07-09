@@ -10,15 +10,15 @@
 	/// </summary>
 	public static class ExtendedMessageTypes
 	{
-		/// <summary>
-		/// The last message identifier.
-		/// </summary>
-		public const MessageTypes Last = (MessageTypes)(-1);
+		///// <summary>
+		///// The last message identifier.
+		///// </summary>
+		//public const MessageTypes Last = (MessageTypes)(-1);
 
-		/// <summary>
-		/// <see cref="ClearingMessage"/>.
-		/// </summary>
-		public const MessageTypes Clearing = (MessageTypes)(-2);
+		///// <summary>
+		///// <see cref="ClearingMessage"/>.
+		///// </summary>
+		//public const MessageTypes Clearing = (MessageTypes)(-2);
 
 		/// <summary>
 		/// <see cref="EmulationStateMessage"/>.
@@ -94,5 +94,20 @@
 		/// <see cref="StrategyBacktestResultMessage"/>.
 		/// </summary>
 		public const MessageTypes StrategyBacktestResult = (MessageTypes)(-25);
+
+		/// <summary>
+		/// <see cref="SubscriptionSecurityAllMessage"/>.
+		/// </summary>
+		public const MessageTypes SubscriptionSecurityAll = (MessageTypes)(-26);
+
+		/// <summary>
+		/// <see cref="AvailableDataRequestMessage"/>.
+		/// </summary>
+		public const MessageTypes AvailableDataRequest = (MessageTypes)(-27);
+
+		/// <summary>
+		/// <see cref="AvailableDataInfoMessage"/>.
+		/// </summary>
+		public const MessageTypes AvailableDataInfo = (MessageTypes)(-28);
 	}
 }

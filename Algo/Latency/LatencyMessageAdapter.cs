@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Latency
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -57,25 +59,20 @@ namespace StockSharp.Algo.Latency
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			ProcessExecution(message);
+			if (message.Type == MessageTypes.Execution)
+			{
+				var execMsg = (ExecutionMessage)message;
+
+				if (execMsg.HasOrderInfo())
+				{
+					var latency = LatencyManager.ProcessMessage(execMsg);
+
+					if (latency != null)
+						execMsg.Latency = latency;
+				}
+			}
 
 			base.OnInnerAdapterNewOutMessage(message);
-		}
-
-		private void ProcessExecution(Message message)
-		{
-			if (message.Type != MessageTypes.Execution)
-				return;
-
-			var execMsg = (ExecutionMessage)message;
-
-			if (!execMsg.HasOrderInfo())
-				return;
-
-			var latency = LatencyManager.ProcessMessage(execMsg);
-
-			if (latency != null)
-				execMsg.Latency = latency;
 		}
 
 		/// <summary>
@@ -84,7 +81,7 @@ namespace StockSharp.Algo.Latency
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new LatencyMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new LatencyMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

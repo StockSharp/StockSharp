@@ -35,6 +35,7 @@ namespace StockSharp.BusinessEntities
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[Obsolete("Use QuoteChange type.")]
 	public class Quote : Cloneable<Quote>, IExtendableEntity
 	{
 		/// <summary>
@@ -107,6 +108,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
+		[Obsolete]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
@@ -132,10 +134,9 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Copy.</returns>
 		public override Quote Clone()
 		{
-			return new Quote(Security, Price, Volume, OrderDirection, OrdersCount, Condition)
-			{
-				ExtensionInfo = ExtensionInfo,
-			};
+			var clone = new Quote(Security, Price, Volume, OrderDirection, OrdersCount, Condition);
+			this.CopyExtensionInfo(clone);
+			return clone;
 		}
 
 		/// <inheritdoc />

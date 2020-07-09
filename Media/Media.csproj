@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <Import Project="..\common.props" />
+  <PropertyGroup>
+    <ProjectGuid>{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}</ProjectGuid>
+    <RootNamespace>StockSharp.Media</RootNamespace>
+    <AssemblyName>StockSharp.Media</AssemblyName>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Localization\Localization.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logos\*.png" />
+    <Resource Include="logos\*.svg" />
+    <None Remove="logos\*.png" />
+    <None Remove="logos\*.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="*.gif" />
+    <None Remove="*.png" />
+  </ItemGroup>
+</Project>

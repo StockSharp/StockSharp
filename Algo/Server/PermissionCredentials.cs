@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Server
 			get
 			{
 				lock (IpRestrictions.SyncRoot)
-					return IpRestrictions.Select(e => e.To<string>()).Join(",");
+					return IpRestrictions.Select(e => e.To<string>()).JoinComma();
 			}
 			set
 			{
@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Server
 
 					if (ipRestrictions != null)
 					{
-						IpRestrictions.AddRange(ipRestrictions.Split(",").Select(s => s.To<IPAddress>()));
+						IpRestrictions.AddRange(ipRestrictions.SplitByComma().Select(s => s.To<IPAddress>()));
 					}
 				}
 

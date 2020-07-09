@@ -6,16 +6,9 @@
     <AssemblyName>StockSharp.BusinessEntities</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Common" Version="1.0.0" />
-    <PackageReference Include="Ecng.Collections" Version="1.0.0" />
-    <PackageReference Include="Ecng.ComponentModel" Version="1.0.0" />
-    <PackageReference Include="Ecng.Serialization" Version="1.0.0" />
-    <PackageReference Include="Ecng.Serialization.FieldFactories" Version="1.0.0" />
-    <PackageReference Include="Ecng.Localization" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Messages\Messages.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
 </Project>

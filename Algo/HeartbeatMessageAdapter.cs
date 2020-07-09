@@ -77,7 +77,7 @@ namespace StockSharp.Algo
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
 		private readonly SyncObject _timeSync = new SyncObject();
-		private readonly TimeMessage _timeMessage = new TimeMessage { OfflineMode = MessageOfflineModes.Force };
+		private readonly TimeMessage _timeMessage = new TimeMessage { OfflineMode = MessageOfflineModes.Ignore };
 
 		private readonly ReConnectionSettings _reConnectionSettings;
 
@@ -331,6 +331,9 @@ namespace StockSharp.Algo
 				period = period.Min(HeartbeatInterval);
 			}
 
+			var outMsgIntervalInitial = TimeSpan.FromSeconds(5);
+			var outMsgInterval = outMsgIntervalInitial;
+
 			_timer = ThreadingHelper
 			    .Timer(() =>
 			    {
@@ -354,6 +357,14 @@ namespace StockSharp.Algo
 					    }
 
 					    ProcessReconnection(diff);
+
+						outMsgInterval -= diff;
+
+						if (outMsgInterval <= TimeSpan.Zero)
+						{
+							outMsgInterval = outMsgIntervalInitial;
+							RaiseNewOutMessage(new TimeMessage());
+						}
 
 					    time = now;
 				    }
@@ -508,7 +519,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new HeartbeatMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
+			return new HeartbeatMessageAdapter(InnerAdapter.TypedClone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
 		}
 	}
 }

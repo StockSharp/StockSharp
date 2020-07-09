@@ -19,20 +19,17 @@ namespace StockSharp.Algo.Export
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Data;
-
 	using MoreLinq;
 
 	using StockSharp.Messages;
 	using StockSharp.Algo.Export.Database;
-	using StockSharp.Algo.Export.Database.DbProviders;
 
 	/// <summary>
 	/// The export into database.
 	/// </summary>
 	public class DatabaseExporter : BaseExporter
 	{
-		private readonly DatabaseConnectionPair _connection;
+		private readonly Func<IDbProvider> _connection;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DatabaseExporter"/>.
@@ -42,12 +39,12 @@ namespace StockSharp.Algo.Export
 		/// <param name="dataType">Data type info.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="connection">The connection to DB.</param>
-		public DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, Func<int, bool> isCancelled, DatabaseConnectionPair connection)
-			: base(dataType, isCancelled, connection.ToString())
+		public DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, Func<int, bool> isCancelled, Func<IDbProvider> connection)
+			: base(dataType, isCancelled, nameof(DatabaseExporter))
 		{
 			PriceStep = priceStep;
 			VolumeStep = volumeStep;
-			_connection = connection;
+			_connection = connection ?? throw new ArgumentNullException(nameof(connection));
 			CheckUnique = true;
 		}
 
@@ -150,7 +147,7 @@ namespace StockSharp.Algo.Export
 			if (getTable == null)
 				throw new ArgumentNullException(nameof(getTable));
 
-			using (var provider = BaseDbProvider.Create(_connection))
+			using (var provider = _connection())
 			{
 				provider.CheckUnique = CheckUnique;
 

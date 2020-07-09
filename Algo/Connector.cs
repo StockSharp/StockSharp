@@ -23,6 +23,7 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
@@ -42,26 +43,12 @@ namespace StockSharp.Algo
 	/// </summary>
 	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, IMarketDataProviderEx
 	{
-		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
-		private static readonly MemoryStatisticsValue<Connector> _connectorStat = new MemoryStatisticsValue<Connector>(LocalizedStrings.Str1093);
-		private static readonly MemoryStatisticsValue<Message> _messageStat = new MemoryStatisticsValue<Message>(LocalizedStrings.Str1094);
-
-		static Connector()
-		{
-			MemoryStatistics.Instance.Values.Add(_tradeStat);
-			MemoryStatistics.Instance.Values.Add(_connectorStat);
-			MemoryStatistics.Instance.Values.Add(_messageStat);
-		}
-
 		private readonly EntityCache _entityCache;
-
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
-
 		private readonly SubscriptionManager _subscriptionManager;
+
+		// backward compatibility for NewXXX events
+		private readonly CachedSynchronizedSet<Security> _existingSecurities = new CachedSynchronizedSet<Security>();
+		private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = new CachedSynchronizedSet<Portfolio>();
 
 		private bool _notFirstTimeConnected;
 		private bool _isDisposing;
@@ -70,8 +57,52 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="Connector"/>.
 		/// </summary>
 		public Connector()
-			: this(true)
+			: this(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider())
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Connector"/>.
+		/// </summary>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="positionStorage">Position storage.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
+		/// <param name="buffer">Storage buffer.</param>
+		/// <param name="initAdapter">Initialize basket adapter.</param>
+		/// <param name="initChannels">Initialize channels.</param>
+		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage,
+			IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry = null,
+			SnapshotRegistry snapshotRegistry = null, StorageBuffer buffer = null, bool initAdapter = true, bool initChannels = true)
+		{
+			Buffer = buffer;
+
+			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
+			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
+
+			_entityCache = new EntityCache(this, new EntityFactory(), exchangeInfoProvider);
+
+			_subscriptionManager = new SubscriptionManager(this);
+
+			SupportLevel1DepthBuilder = true;
+			SupportFilteredMarketDepth = true;
+
+			if (initChannels)
+			{
+				InMessageChannel = new InMemoryMessageChannel(new MessageByOrderQueue(), $"Connector In ({Name})", RaiseError);
+				OutMessageChannel = new InMemoryMessageChannel(new MessageByOrderQueue(), $"Connector Out ({Name})", RaiseError);
+			}
+
+			SnapshotRegistry = snapshotRegistry;
+
+			if (initAdapter)
+			{
+				Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(ExchangeInfoProvider), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider())
+				{
+					StorageSettings = { StorageRegistry = storageRegistry }
+				};
+			}
 		}
 
 		/// <summary>
@@ -80,83 +111,12 @@ namespace StockSharp.Algo
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		/// <param name="initManagers">Initialize managers.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
-			bool initManagers = true)
-			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry, snapshotRegistry, initManagers)
+		/// <param name="buffer">Storage buffer.</param>
+		[Obsolete]
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry, StorageBuffer buffer = null)
+			: this(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.CheckOnNull().ExchangeInfoProvider, storageRegistry, snapshotRegistry, buffer)
 		{
-			EntityRegistry = entityRegistry;
 		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Connector"/>.
-		/// </summary>
-		/// <param name="securityStorage">Securities meta info storage.</param>
-		/// <param name="positionStorage">Position storage.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		/// <param name="initManagers">Initialize managers.</param>
-		public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage,
-			IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry,
-			bool initManagers = true)
-			: this(false, true, storageRegistry, snapshotRegistry, initManagers)
-		{
-			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
-
-			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
-			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
-
-			EntityFactory = new StorageEntityFactory(SecurityStorage, PositionStorage, true);
-
-			InitAdapter(storageRegistry, snapshotRegistry);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Connector"/>.
-		/// </summary>
-		/// <param name="initAdapter">Initialize basket adapter.</param>
-		/// <param name="initChannels">Initialize channels.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		/// <param name="snapshotRegistry">Snapshot storage registry.</param>
-		/// <param name="initManagers">Initialize managers.</param>
-		protected Connector(bool initAdapter, bool initChannels = true,
-			IStorageRegistry storageRegistry = null, SnapshotRegistry snapshotRegistry = null,
-			bool initManagers = true)
-		{
-			_entityCache = new EntityCache(this)
-			{
-				ExchangeInfoProvider = new InMemoryExchangeInfoProvider()
-			};
-
-			_subscriptionManager = new SubscriptionManager(this);
-
-			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = UpdateSecurityByDefinition = true;
-
-			SupportLevel1DepthBuilder = true;
-			SupportFilteredMarketDepth = true;
-
-			if (initManagers)
-			{
-				//PnLManager = new PnLManager();
-				RiskManager = new RiskManager();
-			}
-
-			_connectorStat.Add(this);
-
-			if (initChannels)
-			{
-				InMessageChannel = new InMemoryMessageChannel(new MessageByOrderQueue(), $"Connector In ({Name})", RaiseError);
-				OutMessageChannel = new InMemoryMessageChannel(new MessageByOrderQueue(), $"Connector Out ({Name})", RaiseError);
-			}
-
-			if (initAdapter)
-				InitAdapter(storageRegistry, snapshotRegistry);
-		}
-
-		/// <summary>
-		/// The storage of trade objects.
-		/// </summary>
-		public IEntityRegistry EntityRegistry { get; }
 
 		/// <summary>
 		/// Securities meta info storage.
@@ -169,14 +129,19 @@ namespace StockSharp.Algo
 		public IPositionStorage PositionStorage { get; }
 
 		/// <summary>
+		/// Exchanges and trading boards provider.
+		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider => _entityCache.ExchangeInfoProvider;
+
+		/// <summary>
 		/// The storage of market data.
 		/// </summary>
-		public IStorageRegistry StorageRegistry => Adapter?.StorageProcessor.StorageRegistry;
+		public IStorageRegistry StorageRegistry => Adapter?.StorageSettings.StorageRegistry;
 
 		/// <summary>
 		/// Snapshot storage registry.
 		/// </summary>
-		public SnapshotRegistry SnapshotRegistry => Adapter?.StorageProcessor.SnapshotRegistry;
+		public SnapshotRegistry SnapshotRegistry { get; private set; }
 
 		private IBasketSecurityProcessorProvider _basketSecurityProcessorProvider = new BasketSecurityProcessorProvider();
 
@@ -209,11 +174,6 @@ namespace StockSharp.Algo
 		/// <remarks>By default is <see langword="true"/>.</remarks>
 		public bool IsAutoPortfoliosSubscribe { get; set; } = true;
 
-		private void InitAdapter(IStorageRegistry storageRegistry, SnapshotRegistry snapshotRegistry)
-		{
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), new StorageProcessor(storageRegistry, snapshotRegistry, new CandleBuilderProvider(_entityCache.ExchangeInfoProvider)));
-		}
-
 		/// <summary>
 		/// Settings of the connection control <see cref="IConnector"/> to the trading system.
 		/// </summary>
@@ -223,11 +183,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 		/// </summary>
-		public IEntityFactory EntityFactory
-		{
-			get => _entityCache.EntityFactory;
-			set => _entityCache.EntityFactory = value;
-		}
+		public IEntityFactory EntityFactory => _entityCache.EntityFactory;
 
 		/// <summary>
 		/// Number of tick trades for storage. The default is 100000. If the value is set to <see cref="int.MaxValue"/>, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
@@ -283,12 +239,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<ExchangeBoard> ExchangeBoards => _entityCache.ExchangeBoards;
+		public IEnumerable<ExchangeBoard> ExchangeBoards => ExchangeInfoProvider.Boards;
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Securities => _entityCache.Securities;
+		public IEnumerable<Security> Securities => _existingSecurities.Cache;
 
-		int ISecurityProvider.Count => _entityCache.SecurityCount;
+		int ISecurityProvider.Count => SecurityStorage.Count;
 
 		private Action<IEnumerable<Security>> _added;
 
@@ -315,7 +271,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => Securities.Filter(criteria);
+		public Security LookupById(SecurityId id) => SecurityStorage.LookupById(id);
+
+		IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria) => SecurityStorage.Lookup(criteria);
 
 		private DateTimeOffset _currentTime;
 
@@ -354,15 +312,15 @@ namespace StockSharp.Algo
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <inheritdoc />
-		public IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
+		public IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;
 
 		/// <inheritdoc />
-		public IEnumerable<Position> Positions => _entityCache.Positions;
+		public IEnumerable<Position> Positions => PositionStorage.Positions;
 
 		/// <summary>
 		/// Risk control manager.
 		/// </summary>
-		public IRiskManager RiskManager { get; set; }
+		public virtual IRiskManager RiskManager { get; set; } = new RiskManager();
 
 		/// <summary>
 		/// Orders registration delay calculation manager.
@@ -428,17 +386,17 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To update <see cref="Security.LastTrade"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
 		/// </summary>
-		public bool UpdateSecurityLastQuotes { get; set; }
+		public bool UpdateSecurityLastQuotes { get; set; } = true;
 
 		/// <summary>
 		/// To update <see cref="Security"/> fields when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 		/// </summary>
-		public bool UpdateSecurityByLevel1 { get; set; }
+		public bool UpdateSecurityByLevel1 { get; set; } = true;
 
 		/// <summary>
 		/// To update <see cref="Security"/> fields when the <see cref="SecurityMessage"/> message appears. By default is enabled.
 		/// </summary>
-		public bool UpdateSecurityByDefinition { get; set; }
+		public bool UpdateSecurityByDefinition { get; set; } = true;
 
 		/// <summary>
 		/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
@@ -495,9 +453,22 @@ namespace StockSharp.Algo
 		public bool TimeChange { get; set; } = true;
 
 		/// <summary>
+		/// Process strategies positions and store it into <see cref="Positions"/>.
+		/// </summary>
+		public bool KeepStrategiesPositions { get; set; }
+
+		private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new CachedSynchronizedSet<MessageTypes>(new[]
+		{
+			MessageTypes.SecurityLookup,
+			MessageTypes.PortfolioLookup,
+			MessageTypes.OrderStatus,
+			MessageTypes.TimeFrameLookup,
+		});
+
+		/// <summary>
 		/// Send lookup messages on connect. By default is <see langword="true"/>.
 		/// </summary>
-		public bool LookupMessagesOnConnect { get; set; } = true;
+		public ISet<MessageTypes> LookupMessagesOnConnect => _lookupMessagesOnConnect;
 
 		/// <inheritdoc />
 		public void Connect()
@@ -571,12 +542,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
+		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
-			return GetPosition(portfolio, security, clientCode, depoName, null, string.Empty);
+			return GetPosition(portfolio, security, strategyId, clientCode, depoName, limitType, string.Empty);
 		}
 
-		private Position GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, string description)
+		private Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType, string description)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -584,7 +555,18 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var position = _entityCache.TryAddPosition(portfolio, security, clientCode, depoName, limitType, description, out var isNew);
+			var position = PositionStorage.GetOrCreatePosition(portfolio, security, strategyId, clientCode, depoName, limitType, (pf, sec, sid, clCode, ddep, limit) =>
+			{
+				var p = EntityFactory.CreatePosition(portfolio, security);
+
+				p.DepoName = depoName;
+				p.LimitType = limitType;
+				p.Description = description;
+				p.ClientCode = clientCode;
+				p.StrategyId = strategyId;
+
+				return p;
+			}, out var isNew);
 
 			if (isNew)
 				RaiseNewPosition(position);
@@ -608,47 +590,39 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public MarketDepth GetMarketDepth(Security security)
-		{
-			return GetMarketDepth(security, false);
-		}
+		[Obsolete("Use MarketDepthReceived event.")]
+		public MarketDepth GetMarketDepth(Security security) => GetMarketDepth(security, false);
 
 		/// <inheritdoc />
-		public MarketDepth GetFilteredMarketDepth(Security security)
-		{
-			return GetMarketDepth(security, true);
-		}
+		public MarketDepth GetFilteredMarketDepth(Security security) => GetMarketDepth(security, true);
+
+		/// <summary>
+		/// Check <see cref="Order.Price"/> and <see cref="Order.Volume"/> are they multiply to step.
+		/// </summary>
+		public bool CheckSteps { get; set; }
 
 		/// <inheritdoc />
 		public void RegisterOrder(Order order)
-		{
-			RegisterOrder(order, true);
-		}
-
-		private void RegisterOrder(Order order, bool initOrder)
 		{
 			try
 			{
 				this.AddOrderInfoLog(order, nameof(RegisterOrder));
 
-				if (initOrder)
+				CheckOnNew(order);
+
+				if (order.Type != OrderTypes.Conditional)
 				{
-					CheckOnNew(order);
+					if (order.Volume == 0)
+						throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
 
-					if (order.Type != OrderTypes.Conditional)
-					{
-						if (order.Volume == 0)
-							throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
-
-						if (order.Volume < 0)
-							throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895);
-					}
-
-					if (order.Type == null)
-						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
-
-					InitNewOrder(order);
+					if (order.Volume < 0)
+						throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895.Put(order.Price));
 				}
+
+				if (order.Type == null)
+					order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
+
+				InitNewOrder(order);
 
 				OnRegisterOrder(order);
 			}
@@ -674,6 +648,8 @@ namespace StockSharp.Algo
 
 			try
 			{
+				this.AddOrderInfoLog(oldOrder, nameof(ReRegisterOrder));
+
 				if (oldOrder.Security != newOrder.Security)
 					throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
 
@@ -818,7 +794,7 @@ namespace StockSharp.Algo
 			SendOutMessage(fail.ToMessage(originalTransactionId));
 		}
 
-		private static void CheckOnNew(Order order)
+		private void CheckOnNew(Order order)
 		{
 			CheckOrderState(order);
 
@@ -830,6 +806,22 @@ namespace StockSharp.Algo
 
 			if (order.Id != null || !order.StringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
+
+			if (CheckSteps)
+			{
+				if (order.Price > 0)
+				{
+					var priceStep = order.Security.PriceStep;
+
+					if (priceStep != null && (order.Price % priceStep.Value) != 0)
+						throw new ArgumentException(LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(order.Price, order, priceStep.Value));
+				}
+					
+				var volumeStep = order.Security.VolumeStep;
+
+				if (volumeStep != null && (order.Volume % volumeStep.Value) != 0)
+					throw new ArgumentException(LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(order.Volume, order, volumeStep.Value));
+			}
 		}
 
 		private static void CheckOnOld(Order order)
@@ -869,8 +861,8 @@ namespace StockSharp.Algo
 		{
 			order.Balance = order.Volume;
 
-			if (order.ExtensionInfo == null)
-				order.ExtensionInfo = new Dictionary<string, object>();
+			//if (order.ExtensionInfo == null)
+			//	order.ExtensionInfo = new Dictionary<string, object>();
 
 			if (order.TransactionId == 0)
 				order.TransactionId = TransactionIdGenerator.GetNextId();
@@ -881,7 +873,7 @@ namespace StockSharp.Algo
 			//	order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
 
 			order.LocalTime = CurrentTime;
-			order.State = order.State.CheckModification(OrderStates.Pending);
+			order.ApplyNewState(OrderStates.Pending, this);
 
 			_entityCache.AddOrderByRegistrationId(order);
 
@@ -1051,8 +1043,11 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public Security GetSecurity(SecurityId securityId)
 		{
-			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false, out _);
+			return GetSecurity(securityId, s => false, out _);
 		}
+
+		private Security TryGetSecurity(SecurityId? securityId)
+			=> securityId == null || securityId.Value == default ? null : GetSecurity(securityId.Value);
 
 		private Security EnsureGetSecurity(ISecurityIdMessage message)
 		{
@@ -1061,7 +1056,12 @@ namespace StockSharp.Algo
 			if (secId == default)
 				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str1025);
 
-			return GetSecurity(secId);
+			var security = TryGetSecurity(secId);
+
+			if (security == null)
+				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str704Params.Put());
+
+			return security;
 		}
 
 		/// <summary>
@@ -1071,30 +1071,48 @@ namespace StockSharp.Algo
 		/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="IConnector.SecuritiesChanged"/> should be called.</param>
 		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Security.</returns>
-		private Security GetSecurity(string id, Func<Security, bool> changeSecurity, out bool isNew)
+		private Security GetSecurity(SecurityId id, Func<Security, bool> changeSecurity, out bool isNew)
 		{
-			if (id.IsEmpty())
+			if (id == default)
 				throw new ArgumentNullException(nameof(id));
 
 			if (changeSecurity == null)
 				throw new ArgumentNullException(nameof(changeSecurity));
 
-			var security = _entityCache.TryAddSecurity(id, idStr =>
+			var security = SecurityStorage.GetOrCreate(id, key =>
 			{
-				var idInfo = SecurityIdGenerator.Split(idStr);
-				return Tuple.Create(idInfo.SecurityCode, _entityCache.ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
+				var s = EntityFactory.CreateSecurity(key);
+
+				if (s == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1102Params.Put(key));
+
+				var idInfo = SecurityIdGenerator.Split(key);
+
+				var code = idInfo.SecurityCode;
+				var board = ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode));
+
+				if (s.Board == null)
+					s.Board = board;
+
+				if (s.Code.IsEmpty())
+					s.Code = code;
+
+				if (s.Name.IsEmpty())
+					s.Name = code;
+
+				//if (s.Class.IsEmpty())
+				//	s.Class = board.Code;
+
+				return s;
 			}, out isNew);
+
+			if (isNew)
+				ExchangeInfoProvider.Save(security.Board);
 
 			var isChanged = changeSecurity(security);
 
-			if (isNew)
-			{
-				if (security.Board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str903Params.Put(id));
-
-				_entityCache.TryAddBoard(security.Board);
+			if (_existingSecurities.TryAdd(security))
 				RaiseNewSecurity(security);
-			}
 			else if (isChanged)
 				RaiseSecurityChanged(security);
 
@@ -1133,17 +1151,13 @@ namespace StockSharp.Algo
 		{
 			_entityCache.Clear();
 
+			_existingSecurities.Clear();
+			_existingPortfolios.Clear();
+
 			_notFirstTimeConnected = default;
 
 			_prevTime = default;
 			_currentTime = default;
-
-			_nonAssociatedByIdMyTrades.Clear();
-			_nonAssociatedByStringIdMyTrades.Clear();
-			_nonAssociatedByTransactionIdMyTrades.Clear();
-
-			_nonAssociatedOrderIds.Clear();
-			_nonAssociatedStringOrderIds.Clear();
 
 			ConnectionState = ConnectionStates.Disconnected;
 
@@ -1177,8 +1191,6 @@ namespace StockSharp.Algo
 
 			base.DisposeManaged();
 
-			_connectorStat.Remove(this);
-
 			//if (ConnectionState == ConnectionStates.Disconnected || ConnectionState == ConnectionStates.Failed)
 			//	TransactionAdapter = null;
 
@@ -1193,16 +1205,18 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			TradesKeepCount = storage.GetValue(nameof(TradesKeepCount), TradesKeepCount);
 			OrdersKeepCount = storage.GetValue(nameof(OrdersKeepCount), OrdersKeepCount);
-			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), true);
-			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), true);
-			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), true);
+			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
+			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
+			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
+			CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
+			KeepStrategiesPositions = storage.GetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
 
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
@@ -1214,10 +1228,24 @@ namespace StockSharp.Algo
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-			LookupMessagesOnConnect = storage.GetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
+			var lookupMessagesOnConnect = storage.GetValue<object>(nameof(LookupMessagesOnConnect));
+			if (lookupMessagesOnConnect is bool b)
+			{
+				if (!b)
+					LookupMessagesOnConnect.Clear();
+			}
+			else if (lookupMessagesOnConnect is string str)
+			{
+				LookupMessagesOnConnect.Clear();
+				LookupMessagesOnConnect.AddRange(str.SplitByComma(true).Select(s => s.To<MessageTypes>()));
+			}
+
 			IsRestoreSubscriptionOnNormalReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 			IsAutoUnSubscribeOnDisconnect = storage.GetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 			IsAutoPortfoliosSubscribe = storage.GetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
+
+			if (Buffer != null && storage.ContainsKey(nameof(Buffer)))
+				Buffer.ForceLoad(storage.GetValue<SettingsStorage>(nameof(Buffer)));
 
 			base.Load(storage);
 		}
@@ -1225,7 +1253,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			storage.SetValue(nameof(TradesKeepCount), TradesKeepCount);
@@ -1235,7 +1263,9 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
-
+			storage.SetValue(nameof(CheckSteps), CheckSteps);
+			storage.SetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
+			
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
@@ -1246,10 +1276,13 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
+			storage.SetValue(nameof(LookupMessagesOnConnect), _lookupMessagesOnConnect.Cache.Select(t => t.To<string>()).JoinComma());
 			storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 			storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 			storage.SetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
+
+			if (Buffer != null)
+				storage.SetValue(nameof(Buffer), Buffer.Save());
 
 			base.Save(storage);
 		}
@@ -1296,7 +1329,7 @@ namespace StockSharp.Algo
 			remove => _newOutMessage -= value;
 		}
 
-		bool IMessageChannel.IsOpened => ConnectionState == ConnectionStates.Connected;
+		ChannelStates IMessageChannel.State => ConnectionState == ConnectionStates.Connected ? ChannelStates.Started : ChannelStates.Stopped;
 
 		private Action _stateChanged;
 
@@ -1314,6 +1347,18 @@ namespace StockSharp.Algo
 		void IMessageChannel.Close()
 		{
 			Disconnect();
+		}
+
+		void IMessageChannel.Suspend()
+		{
+		}
+
+		void IMessageChannel.Resume()
+		{
+		}
+
+		void IMessageChannel.Clear()
+		{
 		}
 
 		IMessageChannel ICloneable<IMessageChannel>.Clone()

@@ -42,18 +42,11 @@ namespace StockSharp.Messages
 		SecurityLookup = Delete << 1,
 
 		/// <summary>
-		/// Exchange lookup.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadExchangesKey)]
-		[EnumMember]
-		ExchangeLookup = SecurityLookup << 1,
-
-		/// <summary>
 		/// Exchange board lookup.
 		/// </summary>
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LoadBoardsKey)]
 		[EnumMember]
-		ExchangeBoardLookup = ExchangeLookup << 1,
+		ExchangeBoardLookup = SecurityLookup << 1,
 
 		/// <summary>
 		/// Edit securities.
@@ -63,18 +56,11 @@ namespace StockSharp.Messages
 		EditSecurities = ExchangeBoardLookup << 1,
 
 		/// <summary>
-		/// Edit exchanges.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditExchangesKey)]
-		[EnumMember]
-		EditExchanges = EditSecurities << 1,
-
-		/// <summary>
 		/// Edit boards.
 		/// </summary>
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EditBoardsKey)]
 		[EnumMember]
-		EditBoards = EditExchanges << 1,
+		EditBoards = EditSecurities << 1,
 
 		/// <summary>
 		/// Delete securities.
@@ -84,18 +70,11 @@ namespace StockSharp.Messages
 		DeleteSecurities = EditBoards << 1,
 
 		/// <summary>
-		/// Delete exchanges.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteExchangesKey)]
-		[EnumMember]
-		DeleteExchanges = DeleteSecurities << 1,
-
-		/// <summary>
 		/// Delete boards.
 		/// </summary>
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DeleteBoardsKey)]
 		[EnumMember]
-		DeleteBoards = DeleteExchanges << 1,
+		DeleteBoards = DeleteSecurities << 1,
 
 		/// <summary>
 		/// Get users.

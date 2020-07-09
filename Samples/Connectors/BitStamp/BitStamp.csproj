@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_connectors.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.BitStamp</RootNamespace>
+    <AssemblyName>StockSharp.BitStamp</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
+  </ItemGroup>
+</Project>

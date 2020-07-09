@@ -43,13 +43,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		/// <returns>Subscription.</returns>
-		Subscription RegisterFilteredMarketDepth(Security security);
-
-		/// <summary>
-		/// To stop getting filtered quotes by the instrument.
-		/// </summary>
-		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
-		void UnRegisterFilteredMarketDepth(Security security);
+		Subscription SubscribeFilteredMarketDepth(Security security);
 
 		/// <summary>
 		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IMarketDataProvider.MarketDepthChanged"/>.
@@ -62,9 +56,11 @@ namespace StockSharp.Algo
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="maxDepth">Max depth of requested order book.</param>
 		/// <param name="refreshSpeed">Interval for data refresh.</param>
+		/// <param name="depthBuilder">Order log to market depth builder.</param>
+		/// <param name="passThroughOrderBookInrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <returns>Subscription.</returns>
-		Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IMessageAdapter adapter = null);
+		Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool passThroughOrderBookInrement = false, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting quotes by the instrument.
@@ -83,7 +79,7 @@ namespace StockSharp.Algo
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <returns>Subscription.</returns>
-		Subscription SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		Subscription SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
@@ -102,7 +98,7 @@ namespace StockSharp.Algo
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <returns>Subscription.</returns>
-		Subscription SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		Subscription SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting new information.
@@ -159,6 +155,7 @@ namespace StockSharp.Algo
 		/// Unsubscribe from the board changes.
 		/// </summary>
 		/// <param name="board">Board for unsubscription.</param>
+		[Obsolete("Use UnSubscribe method.")]
 		void UnSubscribeBoard(ExchangeBoard board);
 
 		/// <summary>

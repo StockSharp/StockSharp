@@ -38,15 +38,15 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			base.Write(stream);
 
-			stream.Write(FirstPrice);
-			stream.Write(LastPrice);
+			stream.WriteEx(FirstPrice);
+			stream.WriteEx(LastPrice);
 
 			WriteFractionalVolume(stream);
 
 			if (Version < MarketDataVersions.Version50)
 				return;
 
-			stream.Write(ServerOffset);
+			stream.WriteEx(ServerOffset);
 
 			if (Version < MarketDataVersions.Version53)
 				return;
@@ -89,7 +89,7 @@ namespace StockSharp.Algo.Storages.Binary
 		where TCandleMessage : CandleMessage, new()
 	{
 		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, arg, 74, MarketDataVersions.Version58, exchangeInfoProvider)
+			: base(securityId, arg, 74, MarketDataVersions.Version59, exchangeInfoProvider)
 		{
 		}
 
@@ -114,9 +114,11 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version49;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
+			var useLevels = metaInfo.Version >= MarketDataVersions.Version54;
 			var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
 			var isTickPrecision = bigRange;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
 
 			foreach (var candle in candles)
 			{
@@ -328,78 +330,83 @@ namespace StockSharp.Algo.Storages.Binary
 				if (candle.TotalTicks != null)
 					writer.WriteInt(candle.TotalTicks.Value);
 
-				if (metaInfo.Version < MarketDataVersions.Version54)
+				if (!useLevels)
 					continue;
 
 				var priceLevels = candle.PriceLevels;
 
 				writer.Write(priceLevels != null);
 
-				if (priceLevels == null)
-					continue;
-
-				priceLevels = priceLevels.ToArray();
-
-				writer.WriteInt(priceLevels.Count());
-
-				foreach (var level in priceLevels)
+				if (priceLevels != null)
 				{
-					if (metaInfo.Version < MarketDataVersions.Version56)
+					priceLevels = priceLevels.ToArray();
+
+					writer.WriteInt(priceLevels.Count());
+
+					foreach (var level in priceLevels)
 					{
-						var prevPrice = metaInfo.LastPrice;
-						writer.WritePrice(level.Price, ref prevPrice, metaInfo, SecurityId);
-						metaInfo.LastPrice = prevPrice;
-					}
-					else
-						writer.WritePriceEx(level.Price, metaInfo, SecurityId);
-
-					writer.WriteInt(level.BuyCount);
-					writer.WriteInt(level.SellCount);
-
-					writer.WriteVolume(level.BuyVolume, metaInfo, SecurityId);
-					writer.WriteVolume(level.SellVolume, metaInfo, SecurityId);
-
-					if (metaInfo.Version >= MarketDataVersions.Version55)
-					{
-						writer.WriteVolume(level.TotalVolume, metaInfo, SecurityId);
-					}
-
-					var volumes = level.BuyVolumes;
-
-					if (volumes == null)
-						writer.Write(false);
-					else
-					{
-						writer.Write(true);
-
-						volumes = volumes.ToArray();
-
-						writer.WriteInt(volumes.Count());
-
-						foreach (var volume in volumes)
+						if (metaInfo.Version < MarketDataVersions.Version56)
 						{
-							writer.WriteVolume(volume, metaInfo, SecurityId);
+							var prevPrice = metaInfo.LastPrice;
+							writer.WritePrice(level.Price, ref prevPrice, metaInfo, SecurityId);
+							metaInfo.LastPrice = prevPrice;
 						}
-					}
+						else
+							writer.WritePriceEx(level.Price, metaInfo, SecurityId);
 
-					volumes = level.SellVolumes;
+						writer.WriteInt(level.BuyCount);
+						writer.WriteInt(level.SellCount);
 
-					if (volumes == null)
-						writer.Write(false);
-					else
-					{
-						writer.Write(true);
+						writer.WriteVolume(level.BuyVolume, metaInfo, SecurityId);
+						writer.WriteVolume(level.SellVolume, metaInfo, SecurityId);
 
-						volumes = volumes.ToArray();
-
-						writer.WriteInt(volumes.Count());
-
-						foreach (var volume in volumes)
+						if (metaInfo.Version >= MarketDataVersions.Version55)
 						{
-							writer.WriteVolume(volume, metaInfo, SecurityId);
+							writer.WriteVolume(level.TotalVolume, metaInfo, SecurityId);
+						}
+
+						var volumes = level.BuyVolumes;
+
+						if (volumes == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+
+							volumes = volumes.ToArray();
+
+							writer.WriteInt(volumes.Count());
+
+							foreach (var volume in volumes)
+							{
+								writer.WriteVolume(volume, metaInfo, SecurityId);
+							}
+						}
+
+						volumes = level.SellVolumes;
+
+						if (volumes == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+
+							volumes = volumes.ToArray();
+
+							writer.WriteInt(volumes.Count());
+
+							foreach (var volume in volumes)
+							{
+								writer.WriteVolume(volume, metaInfo, SecurityId);
+							}
 						}
 					}
 				}
+
+				if (!buildFrom)
+					continue;
+
+				writer.WriteBuildFrom(candle.BuildFrom);
 			}
 		}
 
@@ -421,8 +428,10 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var timeZone = metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider);
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
+			var useLevels = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version57;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
 
 			if (metaInfo.Version < MarketDataVersions.Version56)
 			{
@@ -526,7 +535,10 @@ namespace StockSharp.Algo.Storages.Binary
 				candle.TotalTicks = reader.Read() ? reader.ReadInt() : (int?)null;
 			}
 
-			if (metaInfo.Version >= MarketDataVersions.Version54 && reader.Read())
+			if (!useLevels)
+				return candle;
+
+			if (reader.Read())
 			{
 				var priceLevels = new CandlePriceLevel[reader.ReadInt()];
 
@@ -573,6 +585,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				candle.PriceLevels = priceLevels;
 			}
+
+			if (!buildFrom)
+				return candle;
+			
+			candle.BuildFrom = reader.ReadBuildFrom();
 
 			return candle;
 		}

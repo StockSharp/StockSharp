@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Server
 		/// <summary>
 		/// Windows authorization.
 		/// </summary>
-		[Display(Name = "Windows")]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.WindowsKey)]
 		Windows,
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Server
 		/// <summary>
 		/// StockSharp.
 		/// </summary>
-		[Display(Name = "StockSharp")]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StockSharpKey)]
 		Community
 	}
 }

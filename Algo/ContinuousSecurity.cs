@@ -284,7 +284,7 @@ namespace StockSharp.Algo
 		protected override string ToSerializedString()
 		{
 			lock (_expirationJumps.SyncRoot)
-				return _expirationJumps.Select(j => $"{j.Key.ToStringId()}={j.Value.UtcDateTime.ToString(_dateFormat)}").Join(",");
+				return _expirationJumps.Select(j => $"{j.Key.ToStringId()}={j.Value.UtcDateTime.ToString(_dateFormat)}").JoinComma();
 		}
 
 		/// <inheritdoc />
@@ -297,9 +297,9 @@ namespace StockSharp.Algo
 				if (text.IsEmpty())
 					return;
 
-				_expirationJumps.AddRange(text.Split(",").Select(p =>
+				_expirationJumps.AddRange(text.SplitByComma().Select(p =>
 				{
-					var parts = p.Split("=");
+					var parts = p.SplitBySep("=");
 					return new KeyValuePair<SecurityId, DateTimeOffset>(parts[0].ToSecurityId(), parts[1].ToDateTime(_dateFormat).UtcKind());
 				}));
 			}
@@ -392,14 +392,14 @@ namespace StockSharp.Algo
 		{
 			lock (InnerSecurities.SyncRoot)
 			{
-				return $"{IsOpenInterest},{VolumeLevel}," + InnerSecurities.Select(id => id.ToStringId()).Join(",");
+				return $"{IsOpenInterest},{VolumeLevel}," + InnerSecurities.Select(id => id.ToStringId()).JoinComma();
 			}
 		}
 
 		/// <inheritdoc />
 		protected override void FromSerializedString(string text)
 		{
-			var parts = text.Split(",");
+			var parts = text.SplitByComma();
 
 			IsOpenInterest = parts[0].To<bool>();
 			VolumeLevel = parts[1].ToUnit();

@@ -22,7 +22,7 @@ namespace SampleConnection
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Subscription, QuotesWindow>();
+		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
 		private bool _appClosing;
@@ -36,7 +36,14 @@ namespace SampleConnection
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			UpdateTimeFrames(Connector.Adapter.GetTimeFrames());
+			var timeFrames = Connector.Adapter.GetTimeFrames().ToArray();
+
+			if (timeFrames.Length == 0 && Connector.Adapter.IsMarketDataTypeSupported(DataType.Ticks))
+			{
+				timeFrames = new[] { TimeSpan.FromMinutes(1) };
+			}
+
+			UpdateTimeFrames(timeFrames);
 		}
 
 		public void UpdateTimeFrames(IEnumerable<TimeSpan> timeFrames)
@@ -56,7 +63,7 @@ namespace SampleConnection
 		protected override void OnClosed(EventArgs e)
 		{
 			_appClosing = true;
-			_quotesWindows.SyncDo(d => d.Values.ForEach(w => w.Close()));
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w => w.Cache.ForEach(w1 => w1.Close())));
 
 			_chartWindows.SyncDo(c => c.ToArray().ForEach(w =>
 			{
@@ -81,7 +88,11 @@ namespace SampleConnection
 
 			var newOrder = new OrderWindow
 			{
-				Order = new Order { Security = SecurityPicker.SelectedSecurity },
+				Order = new Order
+				{
+					Security = SecurityPicker.SelectedSecurity,
+					Portfolio = Connector.Portfolios.FirstOrDefault(),
+				},
 			}.Init(connector);
 
 			if (newOrder.ShowModal(this))
@@ -123,14 +134,20 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
-
 				// create order book window
 				var window = new QuotesWindow
 				{
 					Title = security.Id + " " + LocalizedStrings.MarketDepth
 				};
+
+				//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+				window.Show();
+				
+				// subscribe on order book flow
+				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
+
+				_quotesWindows.SafeAdd(security).Add(window);
+
 				window.Closed += (s, e) =>
 				{
 					if (_appClosing)
@@ -139,11 +156,6 @@ namespace SampleConnection
 					if (subscription.State.IsActive())
 						connector.UnSubscribe(subscription);
 				};
-
-				window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
-				window.Show();
-
-				_quotesWindows.Add(subscription, window);
 			}
 		}
 
@@ -218,8 +230,8 @@ namespace SampleConnection
 
 		private void TraderOnMarketDepthChanged(Subscription subscription, MarketDepth depth)
 		{
-			if (_quotesWindows.TryGetValue(subscription, out var wnd))
-				wnd.DepthCtrl.UpdateDepth(depth);
+			if (_quotesWindows.TryGetValue(depth.Security, out var list))
+				list.Cache.ForEach(wnd => wnd.DepthCtrl.UpdateDepth(depth));
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
@@ -233,7 +245,7 @@ namespace SampleConnection
 			if (!wnd.ShowModal(this))
 				return;
 
-			Connector.LookupSecurities(wnd.Criteria);
+			Connector.LookupSecurities(wnd.CriteriaMessage);
 		}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
@@ -255,7 +267,7 @@ namespace SampleConnection
 				var chartWnd = new ChartWindow(new CandleSeries(typeof(TimeFrameCandle), security, tf)
 				{
 					From = wnd.From,
-					To = wnd.To
+					To = wnd.To,
 				});
 
 				_chartWindows.Add(chartWnd);

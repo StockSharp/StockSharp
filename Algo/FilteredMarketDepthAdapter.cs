@@ -7,9 +7,6 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -38,40 +35,41 @@ namespace StockSharp.Algo
 		{
 			private readonly Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>> _executions = new Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>>();
 
-			public FilteredMarketDepthInfo(long transactionId, IEnumerable<ExecutionMessage> orders)
+			public FilteredMarketDepthInfo(FilteredMarketDepthMessage origin, IEnumerable<ExecutionMessage> orders)
 			{
-				if (orders == null)
+				if (orders is null)
 					throw new ArgumentNullException(nameof(orders));
 
-				TransactionId = transactionId;
+				Origin = origin ?? throw new ArgumentNullException(nameof(origin));
 
-				orders.ForEach(Process);
+				foreach (var order in orders)
+					Process(order);
 			}
 
-			public long TransactionId { get; }
-			public HashSet<long> Subscriptions { get; } = new HashSet<long>();
+			public FilteredMarketDepthMessage Origin { get; }
+			public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 
 			private QuoteChange[] Filter(Sides side, IEnumerable<QuoteChange> quotes)
 			{
 				return quotes
 					.Select(quote =>
 					{
-						var res = quote.Clone();
+						var res = quote;
 						var key = Tuple.Create(side, res.Price);
 
 						var own = _executions.TryGetValue(key)?.Second;
 						if (own != null)
 							res.Volume -= own.Value;
 
-						return res.Volume <= 0 ? null : res;
+						return res.Volume <= 0 ? default : res;
 					})
-					.Where(q => q != null)
+					.Where(q => q.Price != default)
 					.ToArray();
 			}
 
 			public QuoteChangeMessage Process(QuoteChangeMessage message)
 			{
-				if (message == null)
+				if (message is null)
 					throw new ArgumentNullException(nameof(message));
 
 				return new QuoteChangeMessage
@@ -80,7 +78,7 @@ namespace StockSharp.Algo
 					ServerTime = message.ServerTime,
 					LocalTime = message.LocalTime,
 					IsSorted = message.IsSorted,
-					IsByLevel1 = message.IsByLevel1,
+					BuildFrom = message.BuildFrom,
 					Currency = message.Currency,
 					IsFiltered = true,
 					Bids = Filter(Sides.Buy, message.Bids),
@@ -90,7 +88,7 @@ namespace StockSharp.Algo
 
 			public void Process(ExecutionMessage message)
 			{
-				if (message == null)
+				if (message is null)
 					throw new ArgumentNullException(nameof(message));
 
 				var key = Tuple.Create(message.Side, message.OrderPrice);
@@ -135,8 +133,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SyncObject _syncObject = new SyncObject();
-		private readonly Dictionary<SecurityId, FilteredMarketDepthInfo> _infos = new Dictionary<SecurityId, FilteredMarketDepthInfo>();
+		private readonly SynchronizedDictionary<long, FilteredMarketDepthInfo> _infos = new SynchronizedDictionary<long, FilteredMarketDepthInfo>();
+		private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> _infosBySecId = new SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssociatedSecurityAdapter"/>.
@@ -154,9 +152,8 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.Reset:
 				{
-					lock (_syncObject)
-						_infos.Clear();
-
+					_infos.Clear();
+					_infosBySecId.Clear();
 					break;
 				}
 
@@ -164,86 +161,40 @@ namespace StockSharp.Algo
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType != MarketDataTypes.MarketDepth)
-						break;
-
-					var isFilteredMsg = mdMsg is FilteredMarketDepthMessage;
-					var transId = mdMsg.TransactionId;
-
 					if (mdMsg.IsSubscribe)
 					{
-						if (!isFilteredMsg)
+						if (!(mdMsg is FilteredMarketDepthMessage filteredMsg))
 							break;
 
-						var data = (Tuple<QuoteChangeMessage, ExecutionMessage[]>)mdMsg.Arg;
+						if (mdMsg.SecurityId == default)
+							break;
 
-						QuoteChangeMessage filtered = null;
+						var transId = mdMsg.TransactionId;
 
-						lock (_syncObject)
-						{
-							var info = _infos.SafeAdd(mdMsg.SecurityId, key => new FilteredMarketDepthInfo(transId, data.Item2));
-							info.Subscriptions.Add(transId);
+						var data = mdMsg.GetArg<Tuple<QuoteChangeMessage, ExecutionMessage[]>>();
 
-							if (info.Subscriptions.Count == 1)
-							{
-								var clone = new MarketDataMessage();
-								mdMsg.CopyTo(clone);
-								message = clone;
+						var info = new FilteredMarketDepthInfo(filteredMsg.TypedClone(), data.Item2);
+						_infos.Add(transId, info);
+						_infosBySecId.SafeAdd(mdMsg.SecurityId).Add(transId);
 
-								filtered = info.Process(data.Item1);
-							}
-						}
+						mdMsg = new MarketDataMessage();
+						filteredMsg.CopyTo(mdMsg);
+						mdMsg.DataType2 = DataType.MarketDepth;
+						message = mdMsg;
 
-						if (filtered == null)
-						{
-							RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = transId });
-							return true;
-						}
-						else
-							RaiseNewOutMessage(filtered);
+						RaiseNewOutMessage(info.Process(data.Item1));
 					}
 					else
 					{
-						SubscriptionResponseMessage reply;
-
-						lock (_syncObject)
+						if (_infos.TryGetAndRemove(mdMsg.OriginalTransactionId, out var info))
 						{
-							var info = _infos.FirstOrDefault(p => p.Value.Subscriptions.Contains(mdMsg.OriginalTransactionId)).Value;
+							info.State = SubscriptionStates.Stopped;
+							_infosBySecId.TryGetValue(info.Origin.SecurityId)?.Remove(mdMsg.OriginalTransactionId);
 
-							if (info != null)
-							{
-								info.Subscriptions.Remove(mdMsg.OriginalTransactionId);
-
-								if (info.Subscriptions.Count > 0)
-								{
-									reply = new SubscriptionResponseMessage
-									{
-										OriginalTransactionId = transId,
-									};
-								}
-								else
-								{
-									message = new MarketDataMessage
-									{
-										IsSubscribe = false,
-										TransactionId = transId,
-										OriginalTransactionId = info.TransactionId,
-									};
-
-									break;
-								}
-							}
-							else
-							{
-								if (!isFilteredMsg)
-									break;
-
-								reply = mdMsg.CreateResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)));
-							}
+							var clone = new MarketDataMessage();
+							mdMsg.CopyTo(clone);
+							message = clone;
 						}
-
-						RaiseNewOutMessage(reply);
-						return true;
 					}
 
 					break;
@@ -258,54 +209,114 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.QuoteChange:
+				case MessageTypes.SubscriptionResponse:
 				{
-					var quoteMsg = (QuoteChangeMessage)message;
+					var responseMsg = (SubscriptionResponseMessage)message;
 
-					QuoteChangeMessage filtered;
+					if (!_infos.TryGetValue(responseMsg.OriginalTransactionId, out var info))
+						break;
 
-					lock (_syncObject)
+					if (responseMsg.Error == null)
+						info.State = SubscriptionStates.Active;
+					else
 					{
-						var info = _infos.TryGetValue(quoteMsg.SecurityId);
+						info.State = SubscriptionStates.Error;
 
-						if (info == null)
-							break;
-
-						filtered = info.Process(quoteMsg);
-
-						filtered.SetSubscriptionIds(subscriptionId: info.TransactionId);
-
-						// subscription for origin book was initialized only by filtered book
-						if ((quoteMsg.SubscriptionIds?.Length == 1 && quoteMsg.SubscriptionIds[0] == info.TransactionId) || quoteMsg.SubscriptionId == info.TransactionId)
-							message = null;
+						_infos.Remove(responseMsg.OriginalTransactionId);
+						_infosBySecId.TryGetValue(info.Origin.SecurityId)?.Remove(responseMsg.OriginalTransactionId);
 					}
 
-					base.OnInnerAdapterNewOutMessage(filtered);
+					break;
+				}
+
+				case MessageTypes.SubscriptionFinished:
+				{
+					var finishMsg = (SubscriptionFinishedMessage)message;
+
+					if (_infos.TryGetAndRemove(finishMsg.OriginalTransactionId, out var info))
+					{
+						info.State = SubscriptionStates.Finished;
+						_infosBySecId.TryGetValue(info.Origin.SecurityId)?.Remove(finishMsg.OriginalTransactionId);
+					}
+
+					break;
+				}
+
+				case MessageTypes.SubscriptionOnline:
+				{
+					var onlineMsg = (SubscriptionOnlineMessage)message;
+
+					if (_infos.TryGetValue(onlineMsg.OriginalTransactionId, out var info))
+						info.State = SubscriptionStates.Online;
+
+					break;
+				}
+
+				case MessageTypes.QuoteChange:
+				{
+					if (_infos.Count == 0)
+						break;
+
+					var quoteMsg = (QuoteChangeMessage)message;
+
+					if (quoteMsg.State != null)
+						break;
+
+					var ids = quoteMsg.GetSubscriptionIds();
+					var set = new HashSet<long>(quoteMsg.GetSubscriptionIds());
+
+					QuoteChangeMessage filtered = null;
+
+					foreach (var id in ids)
+					{
+						if (_infos.TryGetValue(id, out var info) && info.State.IsActive())
+						{
+							var newIds = _infosBySecId[info.Origin.SecurityId].Cache;
+
+							filtered = info.Process(quoteMsg);
+							filtered.SetSubscriptionIds(newIds);
+							
+							set.RemoveRange(newIds);
+							break;
+						}
+					}
+
+					if (set.Count > 0)
+						quoteMsg.SetSubscriptionIds(set.ToArray());
+					else
+					{
+						// subscription for origin book was initialized only by filtered book
+						message = null;
+					}
+
+					if (filtered != null)
+						base.OnInnerAdapterNewOutMessage(filtered);
+
 					break;
 				}
 
 				case MessageTypes.Execution:
 				{
+					if (_infosBySecId.Count == 0 || _infos.Count == 0)
+						break;
+
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType != ExecutionTypes.Transaction)
-						break;
-
-					if (!execMsg.HasOrderInfo())
-						break;
-
-					// ignore market orders
-					if (execMsg.OrderPrice == 0)
-						break;
-
-					// ignore unknown orders
-					if (execMsg.OriginalTransactionId == 0)
+					if	(
+						execMsg.ExecutionType != ExecutionTypes.Transaction ||
+						!execMsg.HasOrderInfo() ||
+						execMsg.OrderPrice == 0 || // ignore market orders
+						execMsg.OriginalTransactionId == 0 // ignore unknown orders
+						)
 						break;
 
 					if (execMsg.OrderState == OrderStates.Active || execMsg.OrderState == OrderStates.Done)
 					{
-						lock (_syncObject)
-							_infos.TryGetValue(execMsg.SecurityId)?.Process(execMsg);
+						if (!_infosBySecId.TryGetValue(execMsg.SecurityId, out var set))
+							break;
+
+						foreach (var id in set.Cache)
+							_infos.TryGetValue(id)?.Process(execMsg);
 					}
 
 					break;

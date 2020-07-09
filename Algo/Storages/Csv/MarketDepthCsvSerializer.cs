@@ -59,7 +59,6 @@ namespace StockSharp.Algo.Storages.Csv
 								SecurityId = _securityId,
 								ServerTime = quote.ServerTime,
 								LocalTime = quote.LocalTime,
-								IsSorted = true,
 							};
 						}
 						else if (Current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))
@@ -75,10 +74,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 						side = quote.Side;
 
-						if (quote.Price != null)
+						if (quote.Quote != null)
 						{
+							var qq = quote.Quote.Value;
+
 							var quotes = quote.Side == Sides.Buy ? bids : asks;
-							quotes.Add(new QuoteChange(quote.Price.Value, quote.Volume, quote.OrdersCount, quote.Condition));
+							quotes.Add(new QuoteChange(qq.Price, qq.Volume, qq.OrdersCount, qq.Condition));
 						}
 					}
 					while (_enumerator.MoveNext());
@@ -132,13 +133,27 @@ namespace StockSharp.Algo.Storages.Csv
 			return _quoteSerializer.CreateMetaInfo(date);
 		}
 
+		private NullableTimeQuoteChange ToNullQuote(Sides side, QuoteChange quote, QuoteChangeMessage message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			return new NullableTimeQuoteChange
+			{
+				ServerTime = message.ServerTime,
+				LocalTime = message.LocalTime,
+				Side = side,
+				Quote = quote,
+			};
+		}
+
 		public override void Serialize(Stream stream, IEnumerable<QuoteChangeMessage> data, IMarketDataMetaInfo metaInfo)
 		{
 			var list = data.SelectMany(d =>
 			{
 				var items = new List<NullableTimeQuoteChange>();
 
-				items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => new NullableTimeQuoteChange(Sides.Buy, q, d)));
+				items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => ToNullQuote(Sides.Buy, q, d)));
 
 				if (items.Count == 0)
 				{
@@ -151,7 +166,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				var bidsCount = items.Count;
 
-				items.AddRange(d.Asks.OrderBy(q => q.Price).Select(q => new NullableTimeQuoteChange(Sides.Sell, q, d)));
+				items.AddRange(d.Asks.OrderBy(q => q.Price).Select(q => ToNullQuote(Sides.Sell, q, d)));
 
 				if (items.Count == bidsCount)
 				{

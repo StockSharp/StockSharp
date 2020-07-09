@@ -44,6 +44,10 @@ namespace StockSharp.Messages
 			return clone;
 		}
 
-		DateTimeOffset IServerTimeMessage.ServerTime => LocalTime;
+		DateTimeOffset IServerTimeMessage.ServerTime
+		{
+			get => LocalTime;
+			set => LocalTime = value;
+		}
 	}
 }

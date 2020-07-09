@@ -55,7 +55,7 @@ namespace SampleStrategies
 			if (connector != null)
 			{
 				if (_initialized)
-					connector.MarketDepthChanged -= TraderOnMarketDepthChanged;
+					connector.MarketDepthReceived -= TraderOnMarketDepthReceived;
 			}
 
 			base.OnClosed(e);
@@ -104,12 +104,12 @@ namespace SampleStrategies
 				else
 				{
 					window.Show();
-					window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+					//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
 				}
 
 				if (!_initialized)
 				{
-					connector.MarketDepthChanged += TraderOnMarketDepthChanged;
+					connector.MarketDepthReceived += TraderOnMarketDepthReceived;
 					_initialized = true;
 				}
 			}
@@ -128,7 +128,7 @@ namespace SampleStrategies
 			}
 		}
 
-		private void TraderOnMarketDepthChanged(MarketDepth depth)
+		private void TraderOnMarketDepthReceived(Subscription subscription, MarketDepth depth)
 		{
 			var wnd = _quotesWindows.TryGetValue(depth.Security);
 

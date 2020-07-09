@@ -13,12 +13,14 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Messages
 {
 	using System;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -38,30 +40,35 @@ namespace StockSharp.Messages
 		/// The absolute value. Incremental change is a given number.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AbsoluteKey)]
 		Absolute,
 
 		/// <summary>
 		/// Percents.Step change - one hundredth of a percent.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2343Key)]
 		Percent,
 
 		/// <summary>
 		/// Point.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PointKey)]
 		Point,
 
 		/// <summary>
 		/// Price step.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PriceStepKey)]
 		Step,
 
 		/// <summary>
 		/// The limited value. This unit allows to set a specific change number, which cannot be used in arithmetic operations <see cref="Unit"/>.
 		/// </summary>
 		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str272Key)]
 		Limit,
 	}
 
@@ -280,14 +287,14 @@ namespace StockSharp.Messages
 			if (u1.IsNull())
 			{
 				return null;
-				//throw new ArgumentNullException(nameof(u1));	
+				//throw new ArgumentNullException(nameof(u1));
 			}
 
 			//if (u2 == null)
 			if (u2.IsNull())
 			{
 				return null;
-				//throw new ArgumentNullException(nameof(u2));	
+				//throw new ArgumentNullException(nameof(u2));
 			}
 
 			if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
@@ -427,6 +434,9 @@ namespace StockSharp.Messages
 			if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
 				return false;
 
+			if(GetTypeValue == null || other.GetTypeValue == null)
+				return false;
+
 			var curr = this;
 
 			if (other.Type == UnitTypes.Absolute)
@@ -466,32 +476,30 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the values are equals, otherwise, <see langword="false" />.</returns>
 		public static bool operator ==(Unit u1, Unit u2)
 		{
-			if (ReferenceEquals(u1, null))
-				return u2.IsNull();
+			if (u1 is null)
+				return u2 is null;
 
-			if (ReferenceEquals(u2, null))
+			if (u2 is null)
 				return false;
 
 			return u1.OnEquals(u2);
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
+		public override string ToString() => Value.To<string>() + GetTypeSuffix(Type);
+
+		/// <summary>Get Unit type string suffix.</summary>
+		public static string GetTypeSuffix(UnitTypes type)
 		{
-			switch (Type)
+			switch (type)
 			{
-				case UnitTypes.Percent:
-					return Value + "%";
-				case UnitTypes.Absolute:
-					return Value.To<string>();
-				case UnitTypes.Step:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
-				case UnitTypes.Point:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
-				case UnitTypes.Limit:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
+				case UnitTypes.Percent:   return  "%";
+				case UnitTypes.Absolute:  return string.Empty;
+				case UnitTypes.Step:      return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
+				case UnitTypes.Point:     return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
+				case UnitTypes.Limit:     return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
 				default:
-					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(Type));
+					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type));
 			}
 		}
 
@@ -750,7 +758,7 @@ namespace StockSharp.Messages
 				case 'p':
 					if (getTypeValue == null)
 						throw new ArgumentNullException(nameof(getTypeValue));
-			
+
 					type = UnitTypes.Point;
 					break;
 				case '%':

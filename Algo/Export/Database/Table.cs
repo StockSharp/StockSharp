@@ -21,8 +21,16 @@ namespace StockSharp.Algo.Export.Database
 
 	using Ecng.Common;
 
-	abstract class Table
+	/// <summary>
+	/// Table.
+	/// </summary>
+	public abstract class Table
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Table"/>.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="columns">Columns.</param>
 		protected Table(string name, IEnumerable<ColumnDescription> columns)
 		{
 			if (name.IsEmpty())
@@ -35,7 +43,14 @@ namespace StockSharp.Algo.Export.Database
 			Columns = columns.ToArray();
 		}
 
+		/// <summary>
+		/// Name.
+		/// </summary>
 		public string Name { get; }
+
+		/// <summary>
+		/// Columns.
+		/// </summary>
 		public IEnumerable<ColumnDescription> Columns { get; }
 	}
 
@@ -55,44 +70,88 @@ namespace StockSharp.Algo.Export.Database
 			=> throw new NotSupportedException();
 	}
 
-	class ColumnDescription
+	/// <summary>
+	/// Column.
+	/// </summary>
+	public class ColumnDescription
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ColumnDescription"/>.
+		/// </summary>
+		/// <param name="name">Name.</param>
 		public ColumnDescription(string name)
 		{
 			Name = name;
 		}
 
+		/// <summary>
+		/// Name.
+		/// </summary>
 		public string Name { get; set; }
 
+		/// <summary>
+		/// Identifier.
+		/// </summary>
 		public bool IsPrimaryKey { get; set; }
 
+		/// <summary>
+		/// Type.
+		/// </summary>
 		public Type DbType { get; set; }
 
+		/// <summary>
+		/// Restriction.
+		/// </summary>
 		public object ValueRestriction { get; set; }
 	}
 
-	class StringRestriction
+	/// <summary>
+	/// <see cref="string"/> restriction.
+	/// </summary>
+	public class StringRestriction
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StringRestriction"/>.
+		/// </summary>
+		/// <param name="maxLength"></param>
 		public StringRestriction(int maxLength)
 		{
 			MaxLength = maxLength;
 		}
 
+		/// <summary>
+		/// Max length.
+		/// </summary>
 		public int MaxLength { get; set; }
 
+		/// <summary>
+		/// Fixed size.
+		/// </summary>
 		public bool IsFixedSize { get; set; }
 	}
 
-	class DecimalRestriction
+	/// <summary>
+	/// <see cref="decimal"/> restriction.
+	/// </summary>
+	public class DecimalRestriction
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DecimalRestriction"/>.
+		/// </summary>
 		public DecimalRestriction()
 		{
 			Precision = 15;
 			Scale = 5;
 		}
 
+		/// <summary>
+		/// Precision.
+		/// </summary>
 		public int Precision { get; set; }
 
+		/// <summary>
+		/// Scale.
+		/// </summary>
 		public int Scale { get; set; }
 	}
 }

@@ -8,8 +8,6 @@ namespace StockSharp.Community
 	using Ecng.Common;
 	using Ecng.Security;
 
-	using StockSharp.Community.Messages;
-
 	/// <summary>
 	/// Extensions for <see cref="Community"/>.
 	/// </summary>
@@ -18,14 +16,14 @@ namespace StockSharp.Community
 		private static readonly Dictionary<Products, ProductInfoMessage> _productsMapping = new Dictionary<Products, ProductInfoMessage>
 		{
 			{ Products.Api, new ProductInfoMessage { Id = 5, Name = "S#.API" } },
-			{ Products.Hydra, new ProductInfoMessage { Id = 8, Name = "S#.Data" } },
-			{ Products.Designer, new ProductInfoMessage { Id = 9, Name = "S#.Designer" } },
-			{ Products.Terminal, new ProductInfoMessage { Id = 10, Name = "S#.Terminal" } },
-			{ Products.Shell, new ProductInfoMessage { Id = 11, Name = "S#.Shell" } },
-			{ Products.MatLab, new ProductInfoMessage { Id = 12, Name = "S#.MatLab" } },
-			{ Products.Lci, new ProductInfoMessage { Id = 13, Name = "S#.Ë×È" } },
-			{ Products.Server, new ProductInfoMessage { Id = 14, Name = "S#.Server" } },
-			{ Products.Updater, new ProductInfoMessage { Id = 16, Name = "S#.Updater" } },
+			{ Products.Hydra, new ProductInfoMessage { Id = 8, Name = "S#.Data", PackageId = "Hydra" } },
+			{ Products.Designer, new ProductInfoMessage { Id = 9, Name = "S#.Designer", PackageId = "Designer" } },
+			{ Products.Terminal, new ProductInfoMessage { Id = 10, Name = "S#.Terminal", PackageId = "Terminal" } },
+			{ Products.Shell, new ProductInfoMessage { Id = 11, Name = "S#.Shell", PackageId = "Shell" } },
+			{ Products.MatLab, new ProductInfoMessage { Id = 12, Name = "S#.MatLab", PackageId = "MatLab" } },
+			{ Products.Lci, new ProductInfoMessage { Id = 13, Name = "S#.Ë×È", PackageId = "Lci" } },
+			{ Products.Server, new ProductInfoMessage { Id = 14, Name = "S#.Server", PackageId = "Server" } },
+			{ Products.Installer, new ProductInfoMessage { Id = 16, Name = "S#.Installer" } },
 		};
 
 		/// <summary>
@@ -92,7 +90,7 @@ namespace StockSharp.Community
 		/// Get hash for the specified input.
 		/// </summary>
 		/// <param name="input">Input.</param>
-		/// <returns>Hash.</returns>
+		/// <returns>File hash.</returns>
 		public static string Hash(this byte[] input) => input.Md5();
 	}
 }

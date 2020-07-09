@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages.Csv
 				/*data.DerivedOrderId.ToString()*/string.Empty,
 				/*data.DerivedOrderStringId*/string.Empty,
 				data.IsUpTick.ToString(),
-				data.IsCancellation.ToString(),
+				/*data.IsCancellation.ToString()*/string.Empty,
 				data.OpenInterest.ToString(),
 				data.PnL.ToString(),
 				data.Position.ToString(),
@@ -95,7 +95,13 @@ namespace StockSharp.Algo.Storages.Csv
 				data.CommissionCurrency,
 				data.IsMargin.ToString(),
 				data.IsManual.ToString(),
-			};
+				data.MinVolume.To<string>(),
+				data.PositionEffect.To<string>(),
+				data.PostOnly.To<string>(),
+				data.Initiator.To<string>(),
+				data.SeqNum.To<string>(),
+				data.StrategyId,
+			}.Concat(data.BuildFrom.ToCsv());
 			writer.WriteRow(row);
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -147,7 +153,7 @@ namespace StockSharp.Algo.Storages.Csv
 			reader.ReadString();
 
 			msg.IsUpTick = reader.ReadNullableBool();
-			msg.IsCancellation = reader.ReadBool();
+			/*msg.IsCancellation = */reader.Skip();
 			msg.OpenInterest = reader.ReadNullableDecimal();
 			msg.PnL = reader.ReadNullableDecimal();
 			msg.Position = reader.ReadNullableDecimal();
@@ -181,6 +187,23 @@ namespace StockSharp.Algo.Storages.Csv
 				msg.IsMargin = reader.ReadNullableBool();
 				msg.IsManual = reader.ReadNullableBool();
 			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				msg.MinVolume = reader.ReadNullableDecimal();
+				msg.PositionEffect = reader.ReadNullableEnum<OrderPositionEffects>();
+				msg.PostOnly = reader.ReadNullableBool();
+				msg.Initiator = reader.ReadNullableBool();
+			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				msg.SeqNum = reader.ReadLong();
+				msg.StrategyId = reader.ReadString();
+			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				msg.BuildFrom = reader.ReadBuildFrom();
 
 			return msg;
 		}

@@ -30,7 +30,11 @@ namespace StockSharp.Messages
 
 		private bool _immutable;
 
-		private DataType Immutable()
+		/// <summary>
+		/// Make immutable.
+		/// </summary>
+		/// <returns>Data type info.</returns>
+		public DataType Immutable()
 		{
 			_immutable = true;
 			return this;
@@ -79,7 +83,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Board info.
 		/// </summary>
-		public static DataType Board { get; } = Create(typeof(BoardStateMessage), null).Immutable();
+		public static DataType Board { get; } = Create(typeof(BoardMessage), null).Immutable();
+
+		/// <summary>
+		/// Board state.
+		/// </summary>
+		public static DataType BoardState { get; } = Create(typeof(BoardStateMessage), null).Immutable();
 
 		/// <summary>
 		/// User info.
@@ -120,6 +129,31 @@ namespace StockSharp.Messages
 		/// <see cref="PnFCandleMessage"/> data type.
 		/// </summary>
 		public static DataType CandlePnF { get; } = Create(typeof(PnFCandleMessage), null).Immutable();
+		
+		/// <summary>
+		/// Adapters.
+		/// </summary>
+		public static DataType Adapters { get; } = Create(typeof(AdapterResponseMessage), null).Immutable();
+
+		/// <summary>
+		/// Portfolio route.
+		/// </summary>
+		public static DataType PortfolioRoute { get; } = Create(typeof(PortfolioRouteMessage), null).Immutable();
+
+		/// <summary>
+		/// Security route.
+		/// </summary>
+		public static DataType SecurityRoute { get; } = Create(typeof(SecurityRouteMessage), null).Immutable();
+
+		/// <summary>
+		/// Security legs.
+		/// </summary>
+		public static DataType SecurityLegs { get; } = Create(typeof(SecurityLegsInfoMessage), null).Immutable();
+
+		/// <summary>
+		/// Security mapping.
+		/// </summary>
+		public static DataType SecurityMapping { get; } = Create(typeof(SecurityMappingInfoMessage), null).Immutable();
 
 		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
@@ -233,12 +267,8 @@ namespace StockSharp.Messages
 				return LocalizedStrings.News;
 			else if (this == Securities)
 				return LocalizedStrings.Securities;
-			else if (MessageType?.IsCandleMessage() == true)
-			{
-				return $"{MessageType.GetDisplayName()}: {Arg}";
-			}
 			else
-				return $"{MessageType}: {Arg}";
+				return $"{MessageType.GetDisplayName()}: {Arg}";
 		}
 
 		/// <summary>
@@ -255,20 +285,25 @@ namespace StockSharp.Messages
 		/// Determines whether the specified message type is market-data.
 		/// </summary>
 		public bool IsMarketData =>
-			IsCandles			||
-			this == MarketDepth ||
-			this == Level1		||
-			this == News		||
-			this == Securities	||
-			this == Ticks		||
-			this == OrderLog	||
-			this == Board		||
+			IsSecurityRequired		||
+			this == News			||
+			this == Board			||
+			this == BoardState		||
+			this == SecurityLegs	||
+			this == SecurityRoute	||
+			this == SecurityMapping	||
 			this == TimeFrames;
 
 		/// <summary>
 		/// Is the data type required security info.
 		/// </summary>
-		public bool IsSecurityRequired => this != News && this == Board;
+		public bool IsSecurityRequired =>
+			IsCandles			||
+			this == MarketDepth ||
+			this == Level1		||
+			this == Securities	||
+			this == Ticks		||
+			this == OrderLog;
 
 		/// <summary>
 		/// Load settings.
@@ -278,10 +313,8 @@ namespace StockSharp.Messages
 		{
 			MessageType = storage.GetValue<Type>(nameof(MessageType));
 
-			if (MessageType == typeof(ExecutionMessage))
-				Arg = storage.GetValue<ExecutionTypes?>(nameof(Arg));
-			else if (MessageType.IsCandleMessage())
-				Arg = storage.GetValue(nameof(Arg), Arg);
+			if (storage.ContainsKey(nameof(Arg)))
+				Arg = storage.GetValue<object>(nameof(Arg));
 		}
 
 		/// <summary>
@@ -292,9 +325,7 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue(nameof(MessageType), MessageType.GetTypeName(false));
 
-			if (MessageType == typeof(ExecutionMessage))
-				storage.SetValue(nameof(Arg), (ExecutionTypes?)Arg);
-			else
+			if (Arg != null)
 				storage.SetValue(nameof(Arg), Arg);
 		}
 	}

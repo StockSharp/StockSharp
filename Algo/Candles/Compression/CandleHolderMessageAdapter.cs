@@ -43,11 +43,11 @@ namespace StockSharp.Algo.Candles.Compression
 						break;
 					}
 
-					if (mdMsg.DataType.IsCandleDataType())
+					if (mdMsg.DataType2.IsCandles)
 					{
-						var info = _infos.SafeAdd(mdMsg.TransactionId, k => mdMsg.DataType.ToCandleMessage().CreateInstance<CandleMessage>());
+						var info = _infos.SafeAdd(mdMsg.TransactionId, k => mdMsg.DataType2.MessageType.CreateInstance<CandleMessage>());
 						info.SecurityId = mdMsg.SecurityId;
-						info.Arg = mdMsg.Arg;
+						info.Arg = mdMsg.GetArg();
 					}
 
 					break;
@@ -167,7 +167,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new CandleHolderMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new CandleHolderMessageAdapter(InnerAdapter.TypedClone());
 		}
 	}
 }

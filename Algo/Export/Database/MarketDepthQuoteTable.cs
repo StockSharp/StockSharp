@@ -44,34 +44,36 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription(nameof(TimeQuoteChange.Price))
+			yield return new ColumnDescription(nameof(QuoteChange.Price))
 			{
 				DbType = typeof(decimal),
 				ValueRestriction = new DecimalRestriction { Scale = priceStep?.GetCachedDecimals() ?? 1 }
 			};
-			yield return new ColumnDescription(nameof(TimeQuoteChange.Volume))
+			yield return new ColumnDescription(nameof(QuoteChange.Volume))
 			{
 				DbType = typeof(decimal),
 				ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 }
 			};
 			yield return new ColumnDescription(nameof(TimeQuoteChange.Side)) { IsPrimaryKey = true, DbType = typeof(int) };
-			yield return new ColumnDescription(nameof(TimeQuoteChange.OrdersCount)) { DbType = typeof(int?) };
-			yield return new ColumnDescription(nameof(TimeQuoteChange.Condition)) { DbType = typeof(byte) };
+			yield return new ColumnDescription(nameof(QuoteChange.OrdersCount)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(QuoteChange.Condition)) { DbType = typeof(byte) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.ServerTime)) { IsPrimaryKey = true, DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.LocalTime)) { DbType = typeof(DateTimeOffset) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(TimeQuoteChange value)
 		{
+			var quote = value.Quote;
+
 			var result = new Dictionary<string, object>
 			{
 				{ nameof(SecurityId.SecurityCode), value.SecurityId.SecurityCode },
 				{ nameof(SecurityId.BoardCode), value.SecurityId.BoardCode },
-				{ nameof(TimeQuoteChange.Price), value.Price },
-				{ nameof(TimeQuoteChange.Volume), value.Volume },
+				{ nameof(QuoteChange.Price), quote.Price },
+				{ nameof(QuoteChange.Volume), quote.Volume },
 				{ nameof(TimeQuoteChange.Side), (int)value.Side },
-				{ nameof(TimeQuoteChange.OrdersCount), value.OrdersCount },
-				{ nameof(TimeQuoteChange.Condition), (byte)value.Condition },
+				{ nameof(QuoteChange.OrdersCount), quote.OrdersCount },
+				{ nameof(QuoteChange.Condition), (byte)quote.Condition },
 				{ nameof(TimeQuoteChange.ServerTime), value.ServerTime },
 				{ nameof(TimeQuoteChange.LocalTime), value.LocalTime },
 			};

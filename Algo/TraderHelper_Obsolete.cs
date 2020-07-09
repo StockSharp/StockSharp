@@ -4,6 +4,7 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using StockSharp.Algo.Positions;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -405,6 +406,56 @@ namespace StockSharp.Algo
 				throw new ArgumentException(nameof(order));
 
 			return order.GetTrades(connector).Sum(o => o.Trade.Volume);
+		}
+
+		/// <summary>
+		/// To get the position on own trade.
+		/// </summary>
+		/// <param name="message">Own trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
+		/// <returns>Position.</returns>
+		[Obsolete]
+		public static decimal? GetPosition(this ExecutionMessage message, bool byOrder)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var sign = message.Side == Sides.Buy ? 1 : -1;
+
+			decimal? position;
+
+			if (byOrder)
+				position = message.OrderVolume - message.Balance;
+			else
+				position = message.TradeVolume;
+
+			return position * sign;
+		}
+
+		private sealed class NativePositionManager : IPositionManager
+		{
+			//private readonly Position _position;
+
+			public NativePositionManager(Position position)
+			{
+				//_position = position ?? throw new ArgumentNullException(nameof(position));
+			}
+
+			PositionChangeMessage IPositionManager.ProcessMessage(Message message) => null;
+		}
+
+		/// <summary>
+		/// Convert the position object to the type <see cref="IPositionManager"/>.
+		/// </summary>
+		/// <param name="position">Position.</param>
+		/// <returns>Position calc manager.</returns>
+		[Obsolete]
+		public static IPositionManager ToPositionManager(this Position position)
+		{
+			if (position == null)
+				throw new ArgumentNullException(nameof(position));
+
+			return new NativePositionManager(position);
 		}
 	}
 }

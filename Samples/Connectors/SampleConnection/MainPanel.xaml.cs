@@ -9,6 +9,7 @@
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+	using Ecng.Collections;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -121,9 +122,9 @@
 
 			// subscribe on error of market data subscription event
 			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
-				this.GuiAsync(() => MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+				this.GuiAsync(() => MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType2, security)));
 
-			Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+			Connector.SecurityReceived += (s, sec) => _securitiesWindow.SecurityPicker.Securities.Add(sec);
 			Connector.TickTradeReceived += (s, t) => _tradesWindow.TradeGrid.Trades.Add(t);
 			Connector.OrderLogItemReceived += (s, ol) => _orderLogWindow.OrderLogGrid.LogItems.Add(ol);
 			Connector.Level1Received += (s, l) => _level1Window.Level1Grid.Messages.Add(l);
@@ -131,8 +132,8 @@
 			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
-			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Positions.Add;
-			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
+			Connector.PortfolioReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
+			Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 
 			// subscribe on error of order registration event
 			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
@@ -169,23 +170,16 @@
 
 			if (Connector.StorageAdapter != null)
 			{
-				try
-				{
-					Connector.EntityRegistry.Init();
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(this.GetWindow(), ex.ToString());
-				}
+				LoggingHelper.DoWithLog(ServicesRegistry.EntityRegistry.Init);
+				LoggingHelper.DoWithLog(ServicesRegistry.ExchangeInfoProvider.Init);
 
-				Connector.Adapter.StorageProcessor.DaysLoad = TimeSpan.FromDays(3);
-				Connector.Adapter.StorageProcessor.Mode = StorageModes.Snapshot;
+				Connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(3);
+				Connector.Adapter.StorageSettings.Mode = StorageModes.Snapshot;
 				Connector.LookupAll();
 
 				Connector.SnapshotRegistry.Init();
 			}
 
-			ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 
 			try
@@ -234,6 +228,11 @@
 		{
 			_isConnected = isConnected;
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
+		}
+
+		private void ThemeSwitchClick(object sender, RoutedEventArgs e)
+		{
+			ThemeExtensions.Invert();
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)

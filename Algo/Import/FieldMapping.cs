@@ -263,12 +263,17 @@ namespace StockSharp.Algo.Import
 			{
 				if (value is string str)
 				{
-					str = str.Replace(',', '.').RemoveSpaces().ReplaceWhiteSpaces().Trim();
+					if (str.ContainsIgnoreCase("e")) // exponential notation
+						value = str.To<double>();
+					else
+					{
+						str = str.Replace(',', '.').RemoveSpaces().ReplaceWhiteSpaces().Trim();
 
-					if (str.IsEmpty())
-						return;
+						if (str.IsEmpty())
+							return;
 
-					value = str;
+						value = str;
+					}
 				}
 			}
 			else if (Type.IsDateTime())
@@ -369,7 +374,20 @@ namespace StockSharp.Algo.Import
 		/// <param name="description">Description.</param>
 		/// <param name="apply">Apply field value action.</param>
 		public FieldMapping(string name, string displayName, string description, Action<TInstance, TValue> apply)
-			: base(name, displayName, description, typeof(TValue))
+			: this(name, displayName, description, typeof(TValue), apply)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FieldMapping{TInstance,TValue}"/>.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="displayName">Display name.</param>
+		/// <param name="description">Description.</param>
+		/// <param name="type">Field type.</param>
+		/// <param name="apply">Apply field value action.</param>
+		public FieldMapping(string name, string displayName, string description, Type type, Action<TInstance, TValue> apply)
+			: base(name, displayName, description, type)
 		{
 			_apply = apply ?? throw new ArgumentNullException(nameof(apply));
 		}

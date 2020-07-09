@@ -36,18 +36,13 @@ namespace StockSharp.Algo.Candles
 	public static class CandleHelper
 	{
 		/// <summary>
-		/// Possible data types that can be used as candles source.
-		/// </summary>
-		public static IEnumerable<DataType> CandleDataSources { get; } = new[] { DataType.Level1, DataType.Ticks, DataType.MarketDepth, DataType.OrderLog };
-
-		/// <summary>
 		/// Try get suitable market-data type for candles compression.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="subscription">Subscription.</param>
 		/// <param name="provider">Candle builders provider.</param>
 		/// <returns>Which market-data type is used as a source value. <see langword="null"/> is compression is impossible.</returns>
-		public static MarketDataTypes? TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
+		public static DataType TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -58,13 +53,13 @@ namespace StockSharp.Algo.Candles
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			if (!provider.IsRegistered(subscription.ToDataType().MessageType))
+			if (!provider.IsRegistered(subscription.DataType2.MessageType))
 				return null;
 
 			if (subscription.BuildMode == MarketDataBuildModes.Load)
 				return null;
 
-			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(CandleDataSources).OrderBy(t =>
+			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(BuildCandlesFromSource.CandleDataSources).OrderBy(t =>
 			{
 				// by priority
 				if (t == DataType.Ticks)
@@ -77,12 +72,12 @@ namespace StockSharp.Algo.Candles
 					return 3;
 				else
 					return 4;
-			}).FirstOrDefault()?.ToMarketDataType();
+			}).FirstOrDefault();
 
-			if (buildFrom == null || !adapter.SupportedMarketDataTypes.Contains(buildFrom.Value.ToDataType(null)))
+			if (buildFrom == null || !adapter.SupportedMarketDataTypes.Contains(buildFrom))
 				return null;
 
-			return buildFrom.Value;
+			return buildFrom;
 		}
 
 		/// <summary>
@@ -332,6 +327,7 @@ namespace StockSharp.Algo.Candles
 				private readonly IEnumerable<Message> _messages;
 
 				private ICandleBuilderValueTransform _transform;
+				private VolumeProfileBuilder _profile;
 
 				private CandleMessage _lastActiveCandle;
 				private CandleMessage _lastCandle;
@@ -419,7 +415,7 @@ namespace StockSharp.Algo.Candles
 
 						_lastActiveCandle = null;
 
-						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _transform))
+						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _transform, ref _profile))
 						{
 							_lastCandle = candleMessage;
 
@@ -483,7 +479,7 @@ namespace StockSharp.Algo.Candles
 				if (candleBuilderProvider == null)
 					candleBuilderProvider = ConfigManager.TryGetService<CandleBuilderProvider>() ?? new CandleBuilderProvider(ServicesRegistry.EnsureGetExchangeInfoProvider());
 
-				return candleBuilderProvider.Get(mdMsg.ToDataType().MessageType);
+				return candleBuilderProvider.Get(mdMsg.DataType2.MessageType);
 			}
 		}
 
@@ -1170,9 +1166,9 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candles">Candles.</param>
 		/// <returns>The area.</returns>
-		public static CandleMessageVolumeProfile GetValueArea(this IEnumerable<Candle> candles)
+		public static VolumeProfileBuilder GetValueArea(this IEnumerable<Candle> candles)
 		{
-			var area = new CandleMessageVolumeProfile();
+			var area = new VolumeProfileBuilder(new List<CandlePriceLevel>());
 
 			foreach (var candle in candles)
 			{

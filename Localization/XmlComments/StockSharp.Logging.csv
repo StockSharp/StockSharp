@@ -58,6 +58,8 @@ M:StockSharp.Logging.ILogReceiver.AddLog(StockSharp.Logging.LogMessage)/summary;
 M:StockSharp.Logging.ILogReceiver.AddLog(StockSharp.Logging.LogMessage)/param/message;DocStr1653
 T:StockSharp.Logging.BaseLogReceiver/summary;DocStr1579
 M:StockSharp.Logging.BaseLogReceiver.#ctor/summary;DocStr93
+T:StockSharp.Logging.GlobalLogReceiver/summary;DocStr11953
+P:StockSharp.Logging.GlobalLogReceiver.Instance/summary;DocStr9981
 T:StockSharp.Logging.ILogSource/summary;DocStr3954
 P:StockSharp.Logging.ILogSource.Id/summary;DocStr1678
 P:StockSharp.Logging.ILogSource.Name/summary;DocStr3955
@@ -177,6 +179,7 @@ M:StockSharp.Logging.LogListener.Load(Ecng.Serialization.SettingsStorage)/param/
 M:StockSharp.Logging.LogListener.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Logging.LogListener.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Logging.LogManager/summary;DocStr3986
+P:StockSharp.Logging.LogManager.Instance/summary;DocStr9981
 M:StockSharp.Logging.LogManager.#ctor/summary;DocStr1
 M:StockSharp.Logging.LogManager.#ctor(System.Boolean)/summary;DocStr1
 M:StockSharp.Logging.LogManager.#ctor(System.Boolean)/param/asyncMode;Str1781

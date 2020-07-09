@@ -19,6 +19,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public override DataType DataType => DataType.PortfolioRoute;
+
+		/// <inheritdoc />
 		[DataMember]
 		public string PortfolioName { get; set; }
 

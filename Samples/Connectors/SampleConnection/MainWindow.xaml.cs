@@ -3,6 +3,9 @@ namespace SampleConnection
 	using System.ComponentModel;
 
 	using Ecng.Common;
+	using Ecng.Configuration;
+
+	using StockSharp.Algo.Storages;
 
 	public partial class MainWindow
 	{
@@ -12,6 +15,8 @@ namespace SampleConnection
 			Instance = this;
 
 			Title = Title.Put("Connections");
+
+			ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

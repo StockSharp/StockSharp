@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
-	using Key = System.Tuple<Messages.SecurityId, Messages.MarketDataTypes?>;
+	using Key = System.Tuple<Messages.SecurityId, Messages.DataType>;
 
 	/// <summary>
 	/// The security based message adapter's provider interface.
@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="dataType">Data type.</param>
 		/// <returns>Found adapter identifier or <see langword="null"/>.</returns>
-		Guid? TryGetAdapter(SecurityId securityId, MarketDataTypes? dataType);
+		Guid? TryGetAdapter(SecurityId securityId, DataType dataType);
 
 		/// <summary>
 		/// Make association with adapter.
@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="dataType">Data type.</param>
 		/// <param name="adapterId">Adapter identifier.</param>
 		/// <returns><see langword="true"/> if the association is successfully changed, otherwise, <see langword="false"/>.</returns>
-		bool SetAdapter(SecurityId securityId, MarketDataTypes? dataType, Guid adapterId);
+		bool SetAdapter(SecurityId securityId, DataType dataType, Guid adapterId);
 	}
 
 	/// <summary>
@@ -102,13 +102,13 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public Guid? TryGetAdapter(SecurityId securityId, MarketDataTypes? dataType)
+		public Guid? TryGetAdapter(SecurityId securityId, DataType dataType)
 		{
 			return TryGetAdapter(Tuple.Create(securityId, dataType));
 		}
 
 		/// <inheritdoc />
-		public bool SetAdapter(SecurityId securityId, MarketDataTypes? dataType, Guid adapterId)
+		public bool SetAdapter(SecurityId securityId, DataType dataType, Guid adapterId)
 		{
 			return SetAdapter(Tuple.Create(securityId, dataType), adapterId);
 		}
@@ -186,11 +186,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public Guid? TryGetAdapter(SecurityId securityId, MarketDataTypes? dataType)
+		public Guid? TryGetAdapter(SecurityId securityId, DataType dataType)
 			=> _inMemory.TryGetAdapter(securityId, dataType);
 
 		/// <inheritdoc />
-		public bool SetAdapter(SecurityId securityId, MarketDataTypes? dataType, Guid adapterId)
+		public bool SetAdapter(SecurityId securityId, DataType dataType, Guid adapterId)
 		{
 			var has = _inMemory.TryGetAdapter(securityId, dataType) != null;
 
@@ -217,7 +217,24 @@ namespace StockSharp.Algo.Storages
 						BoardCode = reader.ReadString()
 					};
 
-					var dataType = reader.ReadNullableEnum<MarketDataTypes>();
+					DataType dataType;
+
+					var typeStr = reader.ReadString();
+
+					if (reader.ColumnCount == 4)
+					{
+						// TODO remove after few releases later
+						// 2020-05-04
+#pragma warning disable CS0612 // Type or member is obsolete
+						dataType = typeStr.IsEmpty() ? null : typeStr.To<MarketDataTypes>().ToDataType(null);
+#pragma warning restore CS0612 // Type or member is obsolete
+					}
+					else
+					{
+						var argStr = reader.ReadString();
+						dataType = typeStr.IsEmpty() ? null : typeStr.ToDataType(argStr);
+					}
+
 					var adapterId = reader.ReadString().To<Guid>();
 
 					_inMemory.SetAdapter(securityId, dataType, adapterId);
@@ -240,18 +257,22 @@ namespace StockSharp.Algo.Storages
 						{
 							"Symbol",
 							"Board",
-							"DataType",
+							"MessageType",
+							"Arg",
 							"Adapter"
 						});
 					}
 
 					foreach (var pair in adapters)
 					{
+						var dataType = pair.Key.Item2?.FormatToString();
+
 						writer.WriteRow(new[]
 						{
 							pair.Key.Item1.SecurityCode,
 							pair.Key.Item1.BoardCode,
-							pair.Key.Item2.To<string>(),
+							dataType?.type,
+							dataType?.arg,
 							pair.Value.To<string>()
 						});
 					}

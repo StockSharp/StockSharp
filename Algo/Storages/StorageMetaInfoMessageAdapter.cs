@@ -90,22 +90,9 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.MarketData:
 					return ProcessMarketData((MarketDataMessage)message);
 
-				case MessageTypes.OrderStatus:
-					return ProcessOrderStatus((OrderStatusMessage)message);
-
 				default:
 					return base.OnSendInMessage(message);
 			}
-		}
-
-		private bool ProcessOrderStatus(OrderStatusMessage message)
-		{
-			if (message.Adapter != null && message.Adapter != this)
-				return base.OnSendInMessage(message);
-
-			message = _storageProcessor.ProcessOrderStatus(message, RaiseNewOutMessage);
-
-			return message == null || base.OnSendInMessage(message);
 		}
 
 		private bool ProcessMarketData(MarketDataMessage message)
@@ -166,7 +153,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var portfolioMsg = (PortfolioMessage)message;
 
-					var portfolio = _positionStorage.GetPortfolio(portfolioMsg.PortfolioName) ?? new Portfolio
+					var portfolio = _positionStorage.LookupByPortfolioName(portfolioMsg.PortfolioName) ?? new Portfolio
 					{
 						Name = portfolioMsg.PortfolioName
 					};
@@ -183,7 +170,7 @@ namespace StockSharp.Algo.Storages
 
 					if (positionMsg.IsMoney())
 					{
-						var portfolio = _positionStorage.GetPortfolio(positionMsg.PortfolioName) ?? new Portfolio
+						var portfolio = _positionStorage.LookupByPortfolioName(positionMsg.PortfolioName) ?? new Portfolio
 						{
 							Name = positionMsg.PortfolioName
 						};
@@ -193,7 +180,7 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
+						var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName, positionMsg.StrategyId);
 
 						if (position == null)
 							break;
@@ -223,11 +210,13 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (msg.Adapter != null && msg.Adapter != this)
+			if (/*!msg.IsSubscribe || */(msg.Adapter != null && msg.Adapter != this))
 				return base.OnSendInMessage(msg);
 
+			var transId = msg.TransactionId;
+
 			foreach (var security in _securityStorage.Lookup(msg))
-				RaiseNewOutMessage(security.ToMessage(originalTransactionId: msg.TransactionId));
+				RaiseNewOutMessage(security.ToMessage(originalTransactionId: transId).SetSubscriptionIds(subscriptionId: transId));
 
 			return base.OnSendInMessage(msg);
 		}
@@ -237,10 +226,13 @@ namespace StockSharp.Algo.Storages
 			if (msg == null)
 				throw new ArgumentNullException(nameof(msg));
 
-			if (msg.Adapter != null && msg.Adapter != this)
+			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
 				return base.OnSendInMessage(msg);
+
+			var transId = msg.TransactionId;
+
 			foreach (var board in _exchangeInfoProvider.LookupBoards(msg))
-				RaiseNewOutMessage(board.ToMessage(msg.TransactionId));
+				RaiseNewOutMessage(board.ToMessage(transId).SetSubscriptionIds(subscriptionId: transId));
 
 			return base.OnSendInMessage(msg);
 		}
@@ -251,25 +243,38 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(msg));
 
 			if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			{
 				return base.OnSendInMessage(msg);
+
+			var now = CurrentTime;
+			var transId = msg.TransactionId;
+
+			void SendOut<TMessage>(TMessage outMsg)
+				where TMessage : Message, ISubscriptionIdMessage
+			{
+				outMsg.SetSubscriptionIds(subscriptionId: transId);
+
+				if (outMsg is IServerTimeMessage timeMsg)
+					timeMsg.ServerTime = now;
+
+				outMsg.OfflineMode = MessageOfflineModes.Ignore;
+				RaiseNewOutMessage(outMsg);
 			}
 
 			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 			{
-				RaiseNewOutMessage(portfolio.ToMessage(msg.TransactionId));
-				RaiseNewOutMessage(portfolio.ToChangeMessage());
+				SendOut(portfolio.ToMessage(transId));
+				SendOut(portfolio.ToChangeMessage());
 			}
 
 			foreach (var position in _positionStorage.Positions.Filter(msg))
 			{
-				RaiseNewOutMessage(position.ToChangeMessage(msg.TransactionId));
+				SendOut(position.ToChangeMessage(transId));
 			}
 
 			return base.OnSendInMessage(msg);
 		}
 
-		private Position GetPosition(SecurityId securityId, string portfolioName)
+		private Position GetPosition(SecurityId securityId, string portfolioName, string strategyId)
 		{
 			var security = (!securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
 			{
@@ -279,7 +284,7 @@ namespace StockSharp.Algo.Storages
 			if (security == null)
 				return null;
 
-			var portfolio = _positionStorage.GetPortfolio(portfolioName);
+			var portfolio = _positionStorage.LookupByPortfolioName(portfolioName);
 
 			if (portfolio == null)
 			{
@@ -291,10 +296,11 @@ namespace StockSharp.Algo.Storages
 				_positionStorage.Save(portfolio);
 			}
 
-			return _positionStorage.GetPosition(portfolio, security) ?? new Position
+			return _positionStorage.GetPosition(portfolio, security, strategyId) ?? new Position
 			{
 				Security = security,
-				Portfolio = portfolio
+				Portfolio = portfolio,
+				StrategyId = strategyId,
 			};
 		}
 
@@ -337,10 +343,19 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMetaInfoMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _securityStorage, _positionStorage, _exchangeInfoProvider, _storageProcessor)
+			return new StorageMetaInfoMessageAdapter(InnerAdapter.TypedClone(), _securityStorage, _positionStorage, _exchangeInfoProvider, _storageProcessor)
 			{
 				OverrideSecurityData = OverrideSecurityData,
 			};
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		public void SaveDirect(PositionChangeMessage message)
+		{
+			OnInnerAdapterNewOutMessage(message);
 		}
 	}
 }

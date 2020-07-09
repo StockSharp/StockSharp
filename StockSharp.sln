@@ -2,59 +2,65 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo", "Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algo", "Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessEntities", "BusinessEntities\BusinessEntities.csproj", "{DCE69DB8-53CA-4B7F-9368-02F175A31074}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessEntities", "BusinessEntities\BusinessEntities.csproj", "{DCE69DB8-53CA-4B7F-9368-02F175A31074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community", "Community\Community.csproj", "{E8E18F8F-97BD-41AE-8888-F54F2411D575}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community", "Community\Community.csproj", "{E8E18F8F-97BD-41AE-8888-F54F2411D575}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization", "Localization\Localization.csproj", "{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization", "Localization\Localization.csproj", "{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{C4476ADD-A3D5-41BB-9D43-55D865863B78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{C4476ADD-A3D5-41BB-9D43-55D865863B78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "Messages\Messages.csproj", "{B47F9C23-A4BD-46A9-BF27-54CB3D653503}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages", "Messages\Messages.csproj", "{B47F9C23-A4BD-46A9-BF27-54CB3D653503}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{9990074D-A630-405C-BEA6-71B521D8DDA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationGitHub", "Configuration\ConfigurationGitHub.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationGitHub", "Configuration\ConfigurationGitHub.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{880DD952-EC23-463F-BC5B-E92B47BB2041}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{AE4A1640-9963-41C6-9F1F-CABDF10C0A4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCurrencyGitHub", "Samples\Misc\SampleCurrency\SampleCurrencyGitHub.csproj", "{76EB6796-F693-4EA8-BFC6-5CD7478EE85A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleCurrencyGitHub", "Samples\Misc\SampleCurrency\SampleCurrencyGitHub.csproj", "{76EB6796-F693-4EA8-BFC6-5CD7478EE85A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConnectionWithStorageGitHub", "Samples\Connectors\SampleConnectionWithStorage\SampleConnectionWithStorageGitHub.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleConnectionWithStorageGitHub", "Samples\Connectors\SampleConnectionWithStorage\SampleConnectionWithStorageGitHub.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleStrategiesGitHub", "Samples\Misc\SampleStrategies\SampleStrategiesGitHub.csproj", "{04A22C35-9D49-41FA-9E09-881680D658AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleStrategiesGitHub", "Samples\Misc\SampleStrategies\SampleStrategiesGitHub.csproj", "{04A22C35-9D49-41FA-9E09-881680D658AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleStorageGitHub", "Samples\Misc\SampleStorage\SampleStorageGitHub.csproj", "{9E39C9C9-C05C-4D79-ADAA-22C287E02F78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleStorageGitHub", "Samples\Misc\SampleStorage\SampleStorageGitHub.csproj", "{9E39C9C9-C05C-4D79-ADAA-22C287E02F78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleUnitGitHub", "Samples\Misc\SampleUnit\SampleUnitGitHub.csproj", "{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleUnitGitHub", "Samples\Misc\SampleUnit\SampleUnitGitHub.csproj", "{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOptionQuotingGitHub", "Samples\Misc\SampleOptionQuoting\SampleOptionQuotingGitHub.csproj", "{3A39B4AA-55BC-4E74-8F2D-27CDD67B7E13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleOptionQuotingGitHub", "Samples\Misc\SampleOptionQuoting\SampleOptionQuotingGitHub.csproj", "{3A39B4AA-55BC-4E74-8F2D-27CDD67B7E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHistoryTestingGitHub", "Samples\Testing\SampleHistoryTesting\SampleHistoryTestingGitHub.csproj", "{20A454D0-A030-4266-80C0-D7CB07CE6876}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleHistoryTestingGitHub", "Samples\Testing\SampleHistoryTesting\SampleHistoryTestingGitHub.csproj", "{20A454D0-A030-4266-80C0-D7CB07CE6876}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHistoryTestingParallelGitHub", "Samples\Testing\SampleHistoryTestingParallel\SampleHistoryTestingParallelGitHub.csproj", "{6D7AC972-0EE2-44A8-B259-6C2046202670}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleHistoryTestingParallelGitHub", "Samples\Testing\SampleHistoryTestingParallel\SampleHistoryTestingParallelGitHub.csproj", "{6D7AC972-0EE2-44A8-B259-6C2046202670}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRealTimeEmulationGitHub", "Samples\Testing\SampleRealTimeEmulation\SampleRealTimeEmulationGitHub.csproj", "{2AFA8980-ACE8-4C5C-9D7C-7DE0D9C276F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleRealTimeEmulationGitHub", "Samples\Testing\SampleRealTimeEmulation\SampleRealTimeEmulationGitHub.csproj", "{2AFA8980-ACE8-4C5C-9D7C-7DE0D9C276F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLoggingGitHub", "Samples\Misc\SampleLogging\SampleLoggingGitHub.csproj", "{FE5CE31E-0461-410F-874F-65EDE074C89C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleLoggingGitHub", "Samples\Misc\SampleLogging\SampleLoggingGitHub.csproj", "{FE5CE31E-0461-410F-874F-65EDE074C89C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chart", "Chart", "{223279C5-1EB1-4978-B9AC-152A1C1D563E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartGitHub", "Samples\Chart\SampleChart\SampleChartGitHub.csproj", "{8B430A27-B392-4129-9AA2-731A52427E40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleChartGitHub", "Samples\Chart\SampleChart\SampleChartGitHub.csproj", "{8B430A27-B392-4129-9AA2-731A52427E40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartPerformanceGitHub", "Samples\Chart\SampleChartPerformance\SampleChartPerformanceGitHub.csproj", "{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleChartPerformanceGitHub", "Samples\Chart\SampleChartPerformance\SampleChartPerformanceGitHub.csproj", "{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartActiveOrdersGitHub", "Samples\Chart\SampleChartActiveOrders\SampleChartActiveOrdersGitHub.csproj", "{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleChartActiveOrdersGitHub", "Samples\Chart\SampleChartActiveOrders\SampleChartActiveOrdersGitHub.csproj", "{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration.AdaptersGitHub", "Configuration.Adapters\Configuration.AdaptersGitHub.csproj", "{7D6C7AD7-2735-4BC0-8E37-B21584E43264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration.AdaptersGitHub", "Configuration.Adapters\Configuration.AdaptersGitHub.csproj", "{7D6C7AD7-2735-4BC0-8E37-B21584E43264}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{95016DD0-E34D-4006-9EBF-7048C5F35E04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConnectionGitHub", "Samples\Connectors\SampleConnection\SampleConnectionGitHub.csproj", "{9E26FE45-AE68-4374-8A2F-94E43BD8400F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleConnectionGitHub", "Samples\Connectors\SampleConnection\SampleConnectionGitHub.csproj", "{9E26FE45-AE68-4374-8A2F-94E43BD8400F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitStamp", "Samples\Connectors\BitStamp\BitStamp.csproj", "{43ECFB7C-86B0-45B9-92C4-F14CA7204E34}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIXDialects", "Samples\Connectors\FIXDialects\FIXDialects.csproj", "{11FDEA93-3E5D-4448-85C1-5EA355454081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media", "Media\Media.csproj", "{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +156,18 @@ Global
 		{9E26FE45-AE68-4374-8A2F-94E43BD8400F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E26FE45-AE68-4374-8A2F-94E43BD8400F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E26FE45-AE68-4374-8A2F-94E43BD8400F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43ECFB7C-86B0-45B9-92C4-F14CA7204E34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43ECFB7C-86B0-45B9-92C4-F14CA7204E34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43ECFB7C-86B0-45B9-92C4-F14CA7204E34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43ECFB7C-86B0-45B9-92C4-F14CA7204E34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11FDEA93-3E5D-4448-85C1-5EA355454081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11FDEA93-3E5D-4448-85C1-5EA355454081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11FDEA93-3E5D-4448-85C1-5EA355454081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11FDEA93-3E5D-4448-85C1-5EA355454081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +191,8 @@ Global
 		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7} = {223279C5-1EB1-4978-B9AC-152A1C1D563E}
 		{95016DD0-E34D-4006-9EBF-7048C5F35E04} = {9990074D-A630-405C-BEA6-71B521D8DDA5}
 		{9E26FE45-AE68-4374-8A2F-94E43BD8400F} = {95016DD0-E34D-4006-9EBF-7048C5F35E04}
+		{43ECFB7C-86B0-45B9-92C4-F14CA7204E34} = {95016DD0-E34D-4006-9EBF-7048C5F35E04}
+		{11FDEA93-3E5D-4448-85C1-5EA355454081} = {95016DD0-E34D-4006-9EBF-7048C5F35E04}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05C6C3D9-0063-47AB-BC11-315B396BEBD0}

@@ -33,17 +33,12 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The type of market-data, operated by given storage.
 		/// </summary>
-		Type DataType { get; }
+		DataType DataType { get; }
 
 		/// <summary>
 		/// The instrument, operated by the external storage.
 		/// </summary>
 		SecurityId SecurityId { get; }
-
-		/// <summary>
-		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
-		/// </summary>
-		object Arg { get; }
 
 		/// <summary>
 		/// The storage (database, file etc.).

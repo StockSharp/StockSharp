@@ -31,96 +31,115 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Own trades received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <summary>
 		/// Tick trades received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Trade>> NewTrades;
 
 		/// <summary>
 		/// Orders received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> NewOrders;
 
 		/// <summary>
 		/// Orders changed (cancelled, matched).
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> OrdersChanged;
 
 		/// <summary>
 		/// Order registration errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> OrdersRegisterFailed;
 
 		/// <summary>
 		/// Order cancellation errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
 
 		/// <summary>
 		/// Stop-order registration errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
 
 		/// <summary>
 		/// Stop-order cancellation errors event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
 
 		/// <summary>
 		/// Stop-orders received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> NewStopOrders;
 
 		/// <summary>
 		/// Stop orders state change event.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
 		/// Securities received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Security>> NewSecurities;
 
 		/// <summary>
 		/// Securities changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Security>> SecuritiesChanged;
 
 		/// <summary>
 		/// Portfolios received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
 		/// <summary>
 		/// Positions received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Position>> NewPositions;
 
 		/// <summary>
 		/// Positions changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <summary>
 		/// Order books received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<MarketDepth>> NewMarketDepths;
 
 		/// <summary>
 		/// Order books changed.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
 
 		/// <summary>
 		/// Order log received.
 		/// </summary>
+		[Obsolete("Use single item event overload.")]
 		event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
 
 		/// <summary>
@@ -371,7 +390,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="maxDepth">Max depth of requested order book.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		[Obsolete("Use SubscribeMarketDepth method instead.")]
-		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null);
+		void RegisterMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting quotes by the instrument.
@@ -391,7 +410,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		[Obsolete("Use SubscribeTrades method instead.")]
-		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		void RegisterTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting trades (tick data) by the instrument.
@@ -411,7 +430,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		[Obsolete("Use SubscribeLevel1 method instead.")]
-		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, MarketDataTypes? buildFrom = null, IMessageAdapter adapter = null);
+		void RegisterSecurity(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null);
 
 		/// <summary>
 		/// To stop getting new information.
@@ -452,5 +471,22 @@ namespace StockSharp.BusinessEntities
 		/// <param name="security">Security for subscription.</param>
 		[Obsolete("Use UnSubscribeNews method instead.")]
 		void UnRegisterNews(Security security = null);
+
+		/// <summary>
+		/// Subscribe on positions changes.
+		/// </summary>
+		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="portfolio">The portfolio on which the position should be found.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Max count.</param>
+		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
+		void SubscribePositions(Security security = null, Portfolio portfolio = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
+
+		/// <summary>
+		/// Unsubscribe from positions changes.
+		/// </summary>
+		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribePositions"/> for which this message is a response.</param>
+		void UnSubscribePositions(long originalTransactionId = 0);
 	}
 }

@@ -277,6 +277,15 @@ namespace StockSharp.Messages
 		public decimal? FaceValue { get; set; }
 
 		/// <summary>
+		/// Identifier on primary exchange.
+		/// </summary>
+		[DataMember]
+		public SecurityId PrimaryId { get; set; }
+
+		/// <inheritdoc />
+		public override DataType DataType => DataType.Securities;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		public SecurityMessage()
@@ -311,9 +320,19 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override void CopyTo(SecurityMessage destination)
 		{
-			base.CopyTo(destination);
+			CopyEx(destination, true);
+		}
 
-			destination.OriginalTransactionId = OriginalTransactionId;
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		/// <param name="copyBase">Copy <see cref="BaseSubscriptionIdMessage{TMessage}"/>.</param>
+		public void CopyEx(SecurityMessage destination, bool copyBase)
+		{
+			if (copyBase)
+				base.CopyTo(destination);
+
 			destination.SecurityId = SecurityId;
 			destination.Name = Name;
 			destination.ShortName = ShortName;
@@ -341,6 +360,7 @@ namespace StockSharp.Messages
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
 			destination.FaceValue = FaceValue;
+			destination.PrimaryId = PrimaryId;
 		}
 
 		/// <inheritdoc />
@@ -410,6 +430,9 @@ namespace StockSharp.Messages
 
 			if (FaceValue != null)
 				str += $",FaceValue={FaceValue}";
+
+			if (PrimaryId != default)
+				str += $",Primary={PrimaryId}";
 
 			return str;
 		}

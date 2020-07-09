@@ -26,7 +26,10 @@ namespace SampleConnection
 
 			var entityRegistry = new CsvEntityRegistry(path);
 
-			var storageRegistry = new StorageRegistry
+			var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
+			ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
+
+			var storageRegistry = new StorageRegistry(exchangeInfoProvider)
 			{
 				DefaultDrive = new LocalMarketDataDrive(path)
 			};
@@ -44,7 +47,7 @@ namespace SampleConnection
 
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
 
-			return new Connector(entityRegistry, storageRegistry, snapshotRegistry);
+			return new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, exchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer());
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -65,7 +68,7 @@ namespace SampleConnection
 			if (connector == null)
 				return;
 
-			connector.Adapter.StorageProcessor.Drive = new LocalMarketDataDrive(path.ToFullPath());
+			connector.Adapter.StorageSettings.Drive = new LocalMarketDataDrive(path.ToFullPath());
 			connector.LookupAll();
 		}
 	}

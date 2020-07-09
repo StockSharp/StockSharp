@@ -19,7 +19,6 @@ namespace StockSharp.BusinessEntities
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -119,16 +118,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static Portfolio AnonymousPortfolio { get; } = new Portfolio
 		{
-			Name = LocalizedStrings.Str545,
-			InternalId = "00000000-0000-0000-0000-000000000001".To<Guid>(),
+			Name = Extensions.AnonymousPortfolioName,
 		};
-
-		/// <summary>
-		/// Internal identifier.
-		/// </summary>
-		[Browsable(false)]
-		[DataMember]
-		public Guid? InternalId { get; set; }
 
 		/// <summary>
 		/// Create virtual portfolio for simulation.
@@ -136,9 +127,8 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Simulator.</returns>
 		public static Portfolio CreateSimulator() => new Portfolio
 		{
-			Name = LocalizedStrings.Str1209,
+			Name = Extensions.SimulatorPortfolioName,
 			BeginValue = 1000000,
-			InternalId = "00000000-0000-0000-0000-000000000002".To<Guid>(),
 		};
 
 		/// <summary>
@@ -153,7 +143,6 @@ namespace StockSharp.BusinessEntities
 			destination.Board = Board;
 			//destination.Connector = Connector;
 			destination.State = State;
-			destination.InternalId = InternalId;
 		}
 
 		/// <inheritdoc />
@@ -162,11 +151,8 @@ namespace StockSharp.BusinessEntities
 			return Name;
 		}
 
-		/// <summary>
-		/// Create a copy of <see cref="Portfolio"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public new Portfolio Clone()
+		/// <inheritdoc />
+		public override Position Clone()
 		{
 			var clone = new Portfolio();
 			CopyTo(clone);

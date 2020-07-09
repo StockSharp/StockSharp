@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Storages
 	/// <summary>
 	/// Storage based message adapter.
 	/// </summary>
-	public class StorageMessageAdapter : BufferMessageAdapter
+	public class StorageMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly StorageProcessor _storageProcessor;
 
@@ -21,9 +21,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		/// <param name="storageProcessor">Storage processor.</param>
 		public StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcessor storageProcessor)
-			: base(innerAdapter, storageProcessor.CheckOnNull().Buffer)
+			: base(innerAdapter)
 		{
-			_storageProcessor = storageProcessor;
+			_storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
 		}
 
 		/// <inheritdoc />
@@ -31,12 +31,14 @@ namespace StockSharp.Algo.Storages
 		{
 			var args = base.GetCandleArgs(candleType, securityId, from, to);
 
-			var drive = _storageProcessor.Drive ?? _storageProcessor.StorageRegistry.DefaultDrive;
+			var settings = _storageProcessor.Settings;
+
+			var drive = settings.Drive ?? settings.StorageRegistry.DefaultDrive;
 
 			if (drive == null)
 				return args;
 
-			return args.Concat(drive.GetCandleArgs(_storageProcessor.Format, candleType, securityId, from, to)).Distinct();
+			return args.Concat(drive.GetCandleArgs(settings.Format, candleType, securityId, from, to)).Distinct();
 		}
 
 		/// <inheritdoc />
@@ -51,32 +53,9 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.MarketData:
 					return ProcessMarketData((MarketDataMessage)message);
 
-				case MessageTypes.OrderStatus:
-					return ProcessOrderStatus((OrderStatusMessage)message);
-
-				case MessageTypes.OrderCancel:
-					return ProcessOrderCancel((OrderCancelMessage)message);
-
 				default:
 					return base.OnSendInMessage(message);
 			}
-		}
-
-		private bool ProcessOrderCancel(OrderCancelMessage message)
-		{
-			message = _storageProcessor.ProcessOrderCancel(message);
-
-			return message == null || base.OnSendInMessage(message);
-		}
-
-		private bool ProcessOrderStatus(OrderStatusMessage message)
-		{
-			if (message.Adapter != null && message.Adapter != this)
-				return base.OnSendInMessage(message);
-
-			message = _storageProcessor.ProcessOrderStatus(message, RaiseStorageMessage);
-
-			return message == null || base.OnSendInMessage(message);
 		}
 
 		private bool ProcessMarketData(MarketDataMessage message)
@@ -99,7 +78,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new StorageMessageAdapter((IMessageAdapter)InnerAdapter.Clone(), _storageProcessor);
+			return new StorageMessageAdapter(InnerAdapter.TypedClone(), _storageProcessor);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ## v5.0.0:
+* (feature) .NET 4.8 and .NET Core 3.1
 * (feature) INativeIdStorage. Clear method added.
 * (bug) FinamHistorySource. Fix https://stocksharp.ru/forum/10395/skachivanie-tikovyh-i-svechnyh-istoricheskih-dannyh-gidroi-s-finama/
 * (bug) DiMinus, DiPlus, IchimokuChinkouLine, IchimokuLine, RelativeVigorIndexAverage, RelativeVigorIndexSignal excluded from indicators list.
@@ -179,7 +180,6 @@ StockSharp API Change log
 * (feature) BuySellGrid. AddPanel, RemovePanel methods added.
 * (feature) GuiConnector removed.
 * (feature) SampleSync removed as obsolete.
-* (feature) Portfolio. InternalId added.
 * (feature) Connector. CandleSeriesError event added.
 * (feature) IMarketDataProvider. Added adapter parameter to subscription methods.
 * (feature) Micex TEAP. Stock32, Stock33, Stock34, Currency32, Currency33, Currency34 interfaces added.
@@ -344,6 +344,9 @@ StockSharp API Change log
 * (feature) Heikin Ashi candles.
 * (feature) DigitexFutures connector.
 * (feature) Position. BuyOrdersCount, SellOrdersCount, BuyOrdersMargin, SellOrdersMargin, OrdersMargin, OrdersCount, TradesCount.
+* (bug) FileLogListener. Clean out of date writers.
+* (feature) INativeIdStorage. Supports variable tuple based ids. Support remove operations.
+* (feature) IPortfolioProvider. GetPortfolio -> LookupByPortfolioName.
 
 ## v4.4.16:
 * (feature) Alerts. Message made optional for sound based events.

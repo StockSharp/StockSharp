@@ -94,7 +94,7 @@ namespace StockSharp.Algo
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					if (!ContainsLeg(quoteMsg.SecurityId))
+					if (quoteMsg.State != null || !ContainsLeg(quoteMsg.SecurityId))
 						yield break;
 
 					var bestBid = quoteMsg.GetBestBid();
@@ -103,7 +103,7 @@ namespace StockSharp.Algo
 					var volume = bestBid?.Volume;
 					
 					if (bestAsk?.Volume != null)
-						volume = volume ?? 0 + bestAsk.Volume;
+						volume = volume ?? 0 + bestAsk?.Volume;
 
 					if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price), volume, null))
 						yield break;
@@ -314,7 +314,7 @@ namespace StockSharp.Algo
 				case MessageTypes.QuoteChange:
 					var quotesMsg = (QuoteChangeMessage)message;
 
-					if (!ContainsLeg(quotesMsg.SecurityId))
+					if (quotesMsg.State != null || !ContainsLeg(quotesMsg.SecurityId))
 						yield break;
 
 					foreach (var msg in ProcessMessage(GetDict<QuoteChangeMessage>(message.Type), quotesMsg.SecurityId, quotesMsg, quotes => new QuoteChangeMessage
@@ -404,7 +404,7 @@ namespace StockSharp.Algo
 
 					var dict = _candles.SafeAdd(candleMsg.OpenTime);
 					
-					dict[candleMsg.SecurityId] = (CandleMessage)candleMsg.Clone();
+					dict[candleMsg.SecurityId] = candleMsg.TypedClone();
 
 					if (dict.Count == BasketLegs.Length)
 					{
@@ -551,7 +551,7 @@ namespace StockSharp.Algo
 		private IEnumerable<Message> ProcessMessage<TMessage>(Dictionary<SecurityId, TMessage> dict, SecurityId securityId, TMessage message, Func<TMessage[], TMessage> convert)
 			where TMessage : Message
 		{
-			dict[securityId] = (TMessage)message.Clone();
+			dict[securityId] = message.TypedClone();
 
 			if (dict.Count != BasketLegs.Length)
 				yield break;
@@ -570,7 +570,7 @@ namespace StockSharp.Algo
 			}
 			catch (ArithmeticException excp)
 			{
-				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, BasketLegs.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
+				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, BasketLegs.Zip(values, (s, v) => $"{s}: {v}").JoinCommaSpace()), excp);
 			}
 		}
 

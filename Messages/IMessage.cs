@@ -3,9 +3,9 @@ namespace StockSharp.Messages
 	using System;
 
 	/// <summary>
-	/// The interface describing an message with <see cref="Clone"/> method.
+	/// The interface describing an message with <see cref="Type"/> method.
 	/// </summary>
-	public interface IMessage
+	public interface IMessage : ICloneable
 	{
 		/// <summary>
 		/// Message type.
@@ -18,9 +18,13 @@ namespace StockSharp.Messages
 		DateTimeOffset LocalTime { get; set; }
 
 		/// <summary>
-		/// Create a copy of <see cref="IMessage"/>.
+		/// Source adapter. Can be <see langword="null" />.
 		/// </summary>
-		/// <returns>Copy.</returns>
-		IMessage Clone();
+		IMessageAdapter Adapter { get; set; }
+
+		/// <summary>
+		/// Back mode.
+		/// </summary>
+		MessageBackModes BackMode { get; set; }
 	}
 }

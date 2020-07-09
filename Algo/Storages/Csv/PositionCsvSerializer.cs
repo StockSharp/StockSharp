@@ -27,6 +27,8 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
+		private static readonly string[] _reserved = new string[10];
+
 		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, PositionChangeMessage data, IMarketDataMetaInfo metaInfo)
 		{
@@ -40,7 +42,15 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ClientCode,
 				data.DepoName,
 				data.LimitType.To<string>(),
+				data.Description,
+				data.StrategyId,
 			});
+
+			row.AddRange(data.BuildFrom.ToCsv());
+
+			row.AddRange(_reserved);
+
+			row.Add(_types.Length.To<string>());
 
 			foreach (var type in _types)
 			{
@@ -71,9 +81,16 @@ namespace StockSharp.Algo.Storages.Csv
 				ClientCode = reader.ReadString(),
 				DepoName = reader.ReadString(),
 				LimitType = reader.ReadString().To<TPlusLimits?>(),
+				Description = reader.ReadString(),
+				StrategyId = reader.ReadString(),
+				BuildFrom = reader.ReadBuildFrom(),
 			};
 
-			foreach (var type in _types)
+			reader.Skip(_reserved.Length);
+
+			var count = reader.ReadInt();
+
+			foreach (var type in _types.Take(count))
 			{
 				switch (type)
 				{

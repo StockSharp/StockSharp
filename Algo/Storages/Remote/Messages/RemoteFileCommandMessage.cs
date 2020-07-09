@@ -3,6 +3,8 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -16,6 +18,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		public RemoteFileCommandMessage()
 			: base(ExtendedMessageTypes.RemoteFileCommand)
 		{
+			Scope = CommandScopes.File;
 		}
 
 		/// <inheritdoc />
@@ -26,13 +29,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Market data type.
 		/// </summary>
 		[DataMember]
-		public MarketDataTypes DataType { get; set; }
-
-		/// <summary>
-		/// Additional argument for market data request.
-		/// </summary>
-		[DataMember]
-		public object Arg { get; set; }
+		public DataType FileDataType { get; set; }
 
 		/// <summary>
 		/// Start date.
@@ -52,11 +49,17 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		[DataMember]
 		public StorageFormats Format { get; set; }
 
+		private byte[] _body = ArrayHelper.Empty<byte>();
+
 		/// <summary>
-		/// File body.
+		/// License body.
 		/// </summary>
 		[DataMember]
-		public byte[] Body { get; set; }
+		public byte[] Body
+		{
+			get => _body;
+			set => _body = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
 		/// <summary>
 		/// Create a copy of <see cref="RemoteFileCommandMessage"/>.
@@ -67,8 +70,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 			var clone = new RemoteFileCommandMessage
 			{
 				SecurityId = SecurityId,
-				DataType = DataType,
-				Arg = Arg,
+				FileDataType = FileDataType?.TypedClone(),
 				StartDate = StartDate,
 				EndDate = EndDate,
 				Format = Format,
@@ -82,7 +84,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},Type={DataType},Arg={Arg},Start={StartDate},End={EndDate},Fmt={Format}";
+			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Start={StartDate},End={EndDate},Fmt={Format},BodyLen={Body.Length}";
 		}
 	}
 }

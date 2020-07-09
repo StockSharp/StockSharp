@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Candles.Compression
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Collections;
 
@@ -14,7 +15,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Which market-data type is used as a source value.
 		/// </summary>
-		MarketDataTypes BuildFrom { get; }
+		DataType BuildFrom { get; }
 
 		/// <summary>
 		/// Process message to update current state.
@@ -47,6 +48,11 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Open interest.
 		/// </summary>
 		decimal? OpenInterest { get; }
+
+		/// <summary>
+		/// Price levels.
+		/// </summary>
+		IEnumerable<CandlePriceLevel> PriceLevels { get; }
 	}
 
 	/// <summary>
@@ -58,14 +64,14 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="BaseCandleBuilderValueTransform"/>.
 		/// </summary>
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
-		protected BaseCandleBuilderValueTransform(MarketDataTypes buildFrom)
+		protected BaseCandleBuilderValueTransform(DataType buildFrom)
 		{
 			_buildFrom = buildFrom;
 		}
 
-		private readonly MarketDataTypes _buildFrom;
+		private readonly DataType _buildFrom;
 
-		MarketDataTypes ICandleBuilderValueTransform.BuildFrom => _buildFrom;
+		DataType ICandleBuilderValueTransform.BuildFrom => _buildFrom;
 
 		/// <inheritdoc />
 		public virtual bool Process(Message message)
@@ -89,13 +95,15 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="volume">Volume.</param>
 		/// <param name="side">Side.</param>
 		/// <param name="openInterest">Open interest.</param>
-		protected void Update(DateTimeOffset time, decimal price, decimal? volume, Sides? side, decimal? openInterest)
+		/// <param name="priceLevels">Price levels.</param>
+		protected void Update(DateTimeOffset time, decimal price, decimal? volume, Sides? side, decimal? openInterest, IEnumerable<CandlePriceLevel> priceLevels)
 		{
 			_time = time;
 			_price = price;
 			_volume = volume;
 			_side = side;
 			_openInterest = openInterest;
+			_priceLevels = priceLevels;
 		}
 
 		private DateTimeOffset _time;
@@ -117,6 +125,10 @@ namespace StockSharp.Algo.Candles.Compression
 		private decimal? _openInterest;
 
 		decimal? ICandleBuilderValueTransform.OpenInterest => _openInterest;
+
+		private IEnumerable<CandlePriceLevel> _priceLevels;
+
+		IEnumerable<CandlePriceLevel> ICandleBuilderValueTransform.PriceLevels => _priceLevels;
 	}
 
 	/// <summary>
@@ -128,7 +140,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="TickCandleBuilderValueTransform"/>.
 		/// </summary>
 		public TickCandleBuilderValueTransform()
-			: base(MarketDataTypes.Trades)
+			: base(DataType.Ticks)
 		{
 		}
 
@@ -138,7 +150,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!(message is ExecutionMessage tick) || tick.ExecutionType != ExecutionTypes.Tick)
 				return base.Process(message);
 
-			Update(tick.ServerTime, tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide, tick.OpenInterest);
+			Update(tick.ServerTime, tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide, tick.OpenInterest, null);
 
 			return true;
 		}
@@ -153,7 +165,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="QuoteCandleBuilderValueTransform"/>.
 		/// </summary>
 		public QuoteCandleBuilderValueTransform()
-			: base(MarketDataTypes.MarketDepth)
+			: base(DataType.MarketDepth)
 		{
 		}
 
@@ -177,7 +189,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (quote == null)
 						return false;
 
-					Update(md.ServerTime, quote.Price, quote.Volume, Sides.Buy, null);
+					Update(md.ServerTime, quote.Value.Price, quote.Value.Volume, Sides.Buy, null, null);
 					return true;
 				}
 
@@ -188,7 +200,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (quote == null)
 						return false;
 
-					Update(md.ServerTime, quote.Price, quote.Volume, Sides.Sell, null);
+					Update(md.ServerTime, quote.Value.Price, quote.Value.Volume, Sides.Sell, null, null);
 					return true;
 				}
 
@@ -200,7 +212,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(md.ServerTime, price.Value, null, null, null);
+					Update(md.ServerTime, price.Value, null, null, null, null);
 					return true;
 				}
 
@@ -222,7 +234,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="Level1CandleBuilderValueTransform"/>.
 		/// </summary>
 		public Level1CandleBuilderValueTransform()
-			: base(MarketDataTypes.Level1)
+			: base(DataType.Level1)
 		{
 		}
 
@@ -256,7 +268,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestBidVolume), Sides.Buy, null);
+					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestBidVolume), Sides.Buy, null, null);
 					return true;
 				}
 				case Level1Fields.BestAskPrice:
@@ -266,7 +278,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestAskVolume), Sides.Sell, null);
+					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestAskVolume), Sides.Sell, null, null);
 					return true;
 				}
 				case Level1Fields.LastTradePrice:
@@ -279,7 +291,8 @@ namespace StockSharp.Algo.Candles.Compression
 					Update(time, price.Value,
 						(decimal?)changes.TryGetValue(Level1Fields.LastTradeVolume),
 						(Sides?)changes.TryGetValue(Level1Fields.LastTradeOrigin),
-						(decimal?)changes.TryGetValue(Level1Fields.OpenInterest));
+						(decimal?)changes.TryGetValue(Level1Fields.OpenInterest),
+						null);
 
 					return true;
 				}
@@ -306,7 +319,7 @@ namespace StockSharp.Algo.Candles.Compression
 						spreadMiddle = _prevBestBid.Value.GetSpreadMiddle(_prevBestAsk.Value);
 					}
 
-					Update(time, spreadMiddle.Value, null, null, null);
+					Update(time, spreadMiddle.Value, null, null, null, null);
 					return true;
 				}
 
@@ -325,7 +338,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="OrderLogCandleBuilderValueTransform"/>.
 		/// </summary>
 		public OrderLogCandleBuilderValueTransform()
-			: base(MarketDataTypes.OrderLog)
+			: base(DataType.OrderLog)
 		{
 		}
 
@@ -344,7 +357,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				case Level1Fields.PriceBook:
 				{
-					Update(ol.ServerTime, ol.OrderPrice, ol.OrderVolume, ol.Side, ol.OpenInterest);
+					Update(ol.ServerTime, ol.OrderPrice, ol.OrderVolume, ol.Side, ol.OpenInterest, null);
 					return true;
 				}
 
@@ -356,7 +369,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(ol.ServerTime, price.Value, ol.TradeVolume, ol.OriginSide, ol.OpenInterest);
+					Update(ol.ServerTime, price.Value, ol.TradeVolume, ol.OriginSide, ol.OpenInterest, null);
 					return true;
 				}
 

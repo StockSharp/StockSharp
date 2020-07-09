@@ -5,8 +5,8 @@ P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Cqg.Com.CqgComMessageAdapter.UserName/summary;Login
-P:StockSharp.Cqg.Com.CqgComMessageAdapter.Password/summary;Password
+P:StockSharp.Cqg.Com.CqgComMessageAdapter.Login/inheritdoc;DocStr8459
+P:StockSharp.Cqg.Com.CqgComMessageAdapter.Password/inheritdoc;DocStr8459
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.AllTimeFrames/summary;DocStr206
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459

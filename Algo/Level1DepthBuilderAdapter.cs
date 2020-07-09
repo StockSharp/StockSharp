@@ -49,8 +49,7 @@ namespace StockSharp.Algo
 					SecurityId = _securityId,
 					ServerTime = message.ServerTime,
 					LocalTime = message.LocalTime,
-					IsByLevel1 = true,
-					IsSorted = true,
+					BuildFrom = DataType.Level1,
 					Bids = bidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(bidPrice.Value, bidVolume ?? 0) },
 					Asks = askPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(askPrice.Value, askVolume ?? 0) },
 				};
@@ -93,6 +92,10 @@ namespace StockSharp.Algo
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
+
+					if (quoteMsg.State != null)
+						break;
+
 					GetBuilder(quoteMsg.SecurityId).HasDepth = true;
 					break;
 				}

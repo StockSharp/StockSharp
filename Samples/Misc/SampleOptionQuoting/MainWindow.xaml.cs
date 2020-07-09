@@ -17,6 +17,7 @@ namespace SampleOptionQuoting
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
@@ -50,8 +51,8 @@ namespace SampleOptionQuoting
 
 		public readonly Connector Connector = new Connector();
 
-		private readonly ThreadSafeObservableCollection<Security> _assets;
-		private readonly ThreadSafeObservableCollection<Security> _options;
+		private readonly ObservableCollection<Security> _assets;
+		private readonly ObservableCollection<Security> _options;
 		private readonly OptionDeskModel _model;
 		private readonly ICollection<LineData<double>> _putBidSmile;
 		private readonly ICollection<LineData<double>> _putAskSmile;
@@ -74,14 +75,11 @@ namespace SampleOptionQuoting
 		{
 			InitializeComponent();
 
-			var assetsSource = new ObservableCollectionEx<Security>();
-			var optionsSource = new ObservableCollectionEx<Security>();
+			_assets = new ObservableCollection<Security>();
+			_options = new ObservableCollection<Security>();
 
-			Options.ItemsSource = optionsSource;
-			Assets.ItemsSource = assetsSource;
-
-			_assets = new ThreadSafeObservableCollection<Security>(assetsSource);
-			_options = new ThreadSafeObservableCollection<Security>(optionsSource);
+			Assets.ItemsSource = _assets;
+			Options.ItemsSource = _options;
 
 			_model = new OptionDeskModel();
 			Desk.Model = _model;
@@ -113,7 +111,7 @@ namespace SampleOptionQuoting
 			};
 			timer.Start();
 
-			Level1FieldsCtrl.ItemsSource = new[]
+			Level1FieldsCtrl.SetItemsSource(new[]
 			{
 				Level1Fields.ImpliedVolatility,
 				Level1Fields.Delta,
@@ -121,8 +119,8 @@ namespace SampleOptionQuoting
 				Level1Fields.Vega,
 				Level1Fields.Theta,
 				Level1Fields.Rho,
-			}.ToDictionary(t => t, t => t.GetDisplayName());
-			Level1FieldsCtrl.SelectedFields = _model.EvaluateFildes.ToArray();
+			});
+			Level1FieldsCtrl.SetSelected(_model.EvaluateFields.ToArray());
 
 			Instance = this;
 
@@ -259,8 +257,8 @@ namespace SampleOptionQuoting
 				Type = SecurityTypes.Option
 			};
 
-			s.BestBid = new Quote(s, s.StepPrice ?? 1m * RandomGen.GetInt(100), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Buy);
-			s.BestAsk = new Quote(s, s.BestBid.Price.Max(s.StepPrice ?? 1m * RandomGen.GetInt(100)), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Sell);
+			s.BestBid = new QuoteChange(s.StepPrice ?? 1m * RandomGen.GetInt(100), s.VolumeStep ?? 1m * RandomGen.GetInt(100));
+			s.BestAsk = new QuoteChange(s.BestBid.Value.Price.Max(s.StepPrice ?? 1m * RandomGen.GetInt(100)), s.VolumeStep ?? 1m * RandomGen.GetInt(100));
 
 			return s;
 		}
@@ -291,26 +289,23 @@ namespace SampleOptionQuoting
 			});
 
 			// fill underlying asset's list
-			Connector.NewSecurity += security =>
+			Connector.SecurityReceived += (sub, security) =>
 			{
 				if (security.Type == SecurityTypes.Future)
-					_assets.Add(security);
-			};
+					this.GuiAsync(() => _assets.TryAdd(security));
 
-			Connector.SecurityChanged += security =>
-			{
 				if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
 					_isDirty = true;
 			};
 
 			// subscribing on tick prices and updating asset price
-			Connector.NewTrade += trade =>
+			Connector.TickTradeReceived += (sub, trade) =>
 			{
 				if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
 					_isDirty = true;
 			};
 
-			Connector.NewPosition += position => this.GuiAsync(() =>
+			Connector.PositionReceived += (sub, position) => this.GuiAsync(() =>
 			{
 				var asset = SelectedAsset;
 
@@ -323,22 +318,11 @@ namespace SampleOptionQuoting
 				if (!assetPos && !newPos)
 					return;
 
-				//if (assetPos)
-				//	PosChart.AssetPosition = position;
-
-				//if (newPos)
-				//	PosChart.Positions.Add(position);
-
-				RefreshChart();
-			});
-
-			Connector.PositionChanged += position => this.GuiAsync(() =>
-			{
 				if ((PosChart.UnderlyingAsset != null && PosChart.UnderlyingAsset == position.Security) || PosChart.Options.Contains(position.Security))
 					RefreshChart();
 			});
 
-			Connector.MarketDepthChanged += TryUpdateDepth;
+			Connector.MarketDepthReceived += TryUpdateDepth;
 
 			try
 			{
@@ -373,8 +357,8 @@ namespace SampleOptionQuoting
 
 		private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)
 		{
-			_model.EvaluateFildes.Clear();
-			_model.EvaluateFildes.AddRange(Level1FieldsCtrl.SelectedFields);
+			_model.EvaluateFields.Clear();
+			_model.EvaluateFields.AddRange(Level1FieldsCtrl.GetSelecteds<Level1Fields>());
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -466,11 +450,29 @@ namespace SampleOptionQuoting
 			_callLastSmile?.Clear();
 		}
 
-		private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private readonly List<Subscription> _prevLevel1 = new List<Subscription>();
+
+		private void Assets_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 		{
+			foreach (var subscription in _prevLevel1)
+			{
+				Connector.UnSubscribe(subscription);
+			}
+
+			_prevLevel1.Clear();
+
+			void Subscribe(Security security)
+			{
+				_prevLevel1.Add(Connector.SubscribeLevel1(security));
+				_prevLevel1.Add(Connector.SubscribeMarketDepth(security));
+				_prevLevel1.Add(Connector.SubscribeTrades(security));
+			}
+
 			var asset = SelectedAsset;
 
 			_model.UnderlyingAsset = asset;
+
+			Subscribe(asset);
 
 			_model.Clear();
 			_options.Clear();
@@ -481,9 +483,12 @@ namespace SampleOptionQuoting
 			{
 				_model.Add(security);
 				_options.Add(security);
+
+				Subscribe(security);
 			}
 
 			ProcessPositions();
+			RefreshSmile();
 		}
 
 		private void Portfolio_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -506,7 +511,7 @@ namespace SampleOptionQuoting
 			RefreshChart();
 		}
 
-		private void Options_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void Options_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 		{
 			var option = SelectedOption;
 
@@ -527,7 +532,7 @@ namespace SampleOptionQuoting
 			var wnd = new QuotesWindow { Title = option.Name };
 			_quotesWindows.Add(option, wnd);
 
-			TryUpdateDepth(Connector.GetMarketDepth(option));
+			//TryUpdateDepth(Connector.GetMarketDepth(option));
 
 			// create delta hedge strategy
 			var hedge = new DeltaHedgeStrategy(_model.ExchangeInfoProvider)
@@ -564,7 +569,7 @@ namespace SampleOptionQuoting
 			wnd.Show();
 		}
 
-		private void TryUpdateDepth(MarketDepth depth)
+		private void TryUpdateDepth(Subscription subscription, MarketDepth depth)
 		{
 			if (!_quotesWindows.TryGetValue(depth.Security, out var wnd))
 				return;
