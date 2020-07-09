@@ -485,6 +485,8 @@ namespace StockSharp.Algo.Strategies
 				}
 
 				RaiseParametersChanged(nameof(Portfolio));
+
+				this.Notify(nameof(Position));
 			}
 		}
 
@@ -516,6 +518,8 @@ namespace StockSharp.Algo.Strategies
 				}
 				
 				RaiseParametersChanged(nameof(Security));
+
+				this.Notify(nameof(Position));
 
 				//PositionManager.SecurityId = value?.ToSecurityId();
 			}
