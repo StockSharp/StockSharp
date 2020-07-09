@@ -34,6 +34,8 @@ namespace StockSharp.Algo.Positions
 		private readonly IPositionManager _positionManager;
 
 		private readonly CachedSynchronizedSet<long> _subscriptions = new CachedSynchronizedSet<long>();
+		private readonly SynchronizedDictionary<string, CachedSynchronizedSet<long>> _strategySubscriptions = new SynchronizedDictionary<string, CachedSynchronizedSet<long>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<long, string> _strategyIdMap = new SynchronizedDictionary<long, string>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionMessageAdapter"/>.
@@ -64,12 +66,32 @@ namespace StockSharp.Algo.Positions
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_subscriptions.Clear();
+					_strategyIdMap.Clear();
+					_strategySubscriptions.Clear();
+
+					lock (_sync)
+						_positionManager.ProcessMessage(message);
+
+					break;
+				}
 				case MessageTypes.PortfolioLookup:
 				{
 					var lookupMsg = (PortfolioLookupMessage)message;
 
 					if (lookupMsg.IsSubscribe)
 					{
+						if (!lookupMsg.StrategyId.IsEmpty())
+						{
+							this.AddDebugLog("Subscription (strategy='{1}') {0} added.", lookupMsg.TransactionId, lookupMsg.StrategyId);
+							_strategyIdMap.Add(lookupMsg.TransactionId, lookupMsg.StrategyId);
+							_strategySubscriptions.SafeAdd(lookupMsg.StrategyId).Add(lookupMsg.TransactionId);
+							RaiseNewOutMessage(lookupMsg.CreateResult());
+							return true;
+						}
+
 						if (lookupMsg.To == null)
 						{
 							this.AddDebugLog("Subscription {0} added.", lookupMsg.TransactionId);
@@ -93,6 +115,12 @@ namespace StockSharp.Algo.Positions
 
 							lock (_sync)
 								_positionManager.ProcessMessage(message);
+						}
+						else if (_strategyIdMap.TryGetAndRemove(lookupMsg.OriginalTransactionId, out var strategyId))
+						{
+							_strategySubscriptions.TryGetValue(strategyId)?.Remove(lookupMsg.OriginalTransactionId);
+							this.AddDebugLog("Subscription (strategy='{1}') {0} removed.", lookupMsg.OriginalTransactionId, strategyId);
+							return true;
 						}
 
 						if (IsEmulate)
@@ -134,9 +162,9 @@ namespace StockSharp.Algo.Positions
 
 			if (change != null)
 			{
-				var subscriptions = _subscriptions.Cache;
+				var subscriptions = change.StrategyId.IsEmpty() ? _subscriptions.Cache : _strategySubscriptions.TryGetAndRemove(change.StrategyId)?.Cache;
 
-				if (subscriptions.Length > 0)
+				if (subscriptions?.Length > 0)
 					change.SetSubscriptionIds(subscriptions);
 
 				base.OnInnerAdapterNewOutMessage(change);

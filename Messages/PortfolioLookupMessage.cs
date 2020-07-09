@@ -23,7 +23,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessage
+	public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessage, IStrategyIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioLookupMessage"/>.
@@ -76,6 +76,9 @@ namespace StockSharp.Messages
 
 			if (SecurityId != null)
 				str += $",Sec={SecurityId}";
+
+			if (StrategyId != null)
+				str += $",Strategy={StrategyId}";
 
 			return str;
 		}

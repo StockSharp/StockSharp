@@ -22,7 +22,7 @@
 
 			if (position.StrategyId != EnsureGetId())
 			{
-				this.AddWarningLog("Position {0} has StategyId '{1}' insteaf of '{2}'.", position, position.StrategyId, EnsureGetId());
+				this.AddWarningLog("Position {0} has StrategyId '{1}' insteaf of '{2}'.", position, position.StrategyId, EnsureGetId());
 				return;
 			}
 

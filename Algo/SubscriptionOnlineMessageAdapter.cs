@@ -312,8 +312,7 @@
 				{
 					if (message is IStrategyIdMessage strategyMsg && !strategyMsg.StrategyId.IsEmpty())
 					{
-						sendOutMsgs = new[] { message.CreateResult() };
-						return true;
+						sendInMsg = message;
 					}
 					else if (message.To == null)
 					{
