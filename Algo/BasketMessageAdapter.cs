@@ -262,6 +262,9 @@ namespace StockSharp.Algo
 			private readonly BasketMessageAdapter _adapter;
 			private readonly Connector _connector;
 
+			private bool _posLookupProcessed;
+			private bool _transLookupProcessed;
+
 			public EmulationPositionManager(bool? isPositionsEmulationRequired, BasketMessageAdapter adapter)
 			{
 				if (isPositionsEmulationRequired != null)
@@ -283,6 +286,9 @@ namespace StockSharp.Algo
 						_strategyManager.ProcessMessage(message);
 
 						_managersByTransId.Clear();
+
+						_posLookupProcessed = false;
+						_transLookupProcessed = false;
 
 						break;
 					}
@@ -369,6 +375,11 @@ namespace StockSharp.Algo
 				if (!message.IsSubscribe || (message.Adapter != null && message.Adapter != this))
 					return;
 
+				if (_transLookupProcessed)
+					return;
+
+				_transLookupProcessed = true;
+
 				var buffer = _connector.Buffer;
 				var snapshotRegistry = _connector.SnapshotRegistry;
 
@@ -407,6 +418,11 @@ namespace StockSharp.Algo
 
 				if (!message.IsSubscribe || (message.Adapter != null && message.Adapter != this))
 					return;
+
+				if (_posLookupProcessed)
+					return;
+
+				_posLookupProcessed = true;
 
 				foreach (var position in _connector.PositionStorage.Positions.Filter(message))
 				{
