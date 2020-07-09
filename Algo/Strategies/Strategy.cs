@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Strategies
 
 		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new CachedSynchronizedDictionary<Order, OrderInfo>();
 
-		private readonly CachedSynchronizedSet<Subscription> _subscriptions = new CachedSynchronizedSet<Subscription>();
+		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new CachedSynchronizedDictionary<Subscription, bool>();
 
 		private DateTimeOffset _firstOrderTime;
 		private DateTimeOffset _lastOrderTime;
@@ -285,6 +285,7 @@ namespace StockSharp.Algo.Strategies
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
 			_allowTrading = this.Param(nameof(AllowTrading), true);
+			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			
 			InitMaxOrdersKeepTime();
 
@@ -386,7 +387,7 @@ namespace StockSharp.Algo.Strategies
 #pragma warning restore CS0618 // Type or member is obsolete
 					_connector.PositionReceived -= OnConnectorPositionReceived;
 
-					UnSubscribe();
+					UnSubscribe(true);
 				}
 
 				_connector = value;
@@ -416,23 +417,17 @@ namespace StockSharp.Algo.Strategies
 
 					if (ParentStrategy == null)
 					{
-						var posSubscription = new Subscription(new PortfolioLookupMessage
+						Subscribe(new Subscription(new PortfolioLookupMessage
 						{
 							IsSubscribe = true,
 							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null);
-						_subscriptions.Add(posSubscription);
+						}, (SecurityMessage)null), true);
 
-						Subscribe(posSubscription);
-
-						var ordersSubscription = new Subscription(new OrderStatusMessage
+						Subscribe(new Subscription(new OrderStatusMessage
 						{
 							IsSubscribe = true,
 							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null);
-						_subscriptions.Add(ordersSubscription);
-
-						Subscribe(ordersSubscription);
+						}, (SecurityMessage)null), true);
 					}
 				}
 
@@ -975,6 +970,22 @@ namespace StockSharp.Algo.Strategies
 			set => _allowTrading.Value = value;
 		}
 
+		private readonly StrategyParam<bool> _unsubscribeOnStop;
+
+		/// <summary>
+		/// Unsubscribe all active subscription while strategy become stopping.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.XamlStr426Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 11)]
+		public bool UnsubscribeOnStop
+		{
+			get => _unsubscribeOnStop.Value;
+			set => _unsubscribeOnStop.Value = value;
+		}
+
 		private void InitMaxOrdersKeepTime()
 		{
 			_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
@@ -1301,6 +1312,8 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		protected virtual void OnStopping()
 		{
+			if (UnsubscribeOnStop)
+				UnSubscribe(false);
 		}
 
 		/// <summary>
@@ -2733,12 +2746,20 @@ namespace StockSharp.Algo.Strategies
 		//	return info != null && !info.IsOwn;
 		//}
 
-		private void UnSubscribe()
+		private void UnSubscribe(bool globalAndLocal)
 		{
-			foreach (var subscription in _subscriptions.Cache)
-				UnSubscribe(subscription);
+			foreach (var pair in _subscriptions.CachedPairs)
+			{
+				if (globalAndLocal || !pair.Value)
+				{
+					var subscription = pair.Key;
 
-			_subscriptions.Clear();
+					if (subscription.State.IsActive())
+						UnSubscribe(subscription);
+
+					_subscriptions.Remove(subscription);
+				}
+			}
 		}
 
 		/// <summary>
@@ -2751,7 +2772,7 @@ namespace StockSharp.Algo.Strategies
 			ChildStrategies.ForEach(s => s.Dispose());
 			ChildStrategies.Clear();
 
-			UnSubscribe();
+			UnSubscribe(true);
 
 			Connector = null;
 			//});
