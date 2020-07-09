@@ -1369,16 +1369,17 @@ namespace StockSharp.Algo.Strategies
 
 		private void AddOrder(Order order)
 		{
-			ProcessRisk(order);
-
 			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
 
+			order.UserOrderId = EnsureGetId();
 			order.StrategyId = EnsureGetRootId();
 
 			if (!order.State.IsFinal())
 				ApplyMonitorRules(order);
 
 			_newOrder?.Invoke(order);
+
+			ProcessRisk(order);
 		}
 
 		private void ProcessRegisterOrderAction(Order oOrder, Order nOrder, Action<Order, Order> action)
