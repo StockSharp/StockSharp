@@ -745,6 +745,8 @@ namespace StockSharp.Algo
 
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 
+		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
+
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>

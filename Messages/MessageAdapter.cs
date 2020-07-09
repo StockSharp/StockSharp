@@ -279,6 +279,10 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportTransactionLog => false;
 
 		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsReplaceCommandEditCurrent => false;
+
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 

@@ -1323,32 +1323,40 @@ namespace StockSharp.Algo.Strategies
 		{
 		}
 
-		/// <inheritdoc />
-		public virtual void RegisterOrder(Order order)
+		private bool CanTrade()
 		{
-			if (order == null)
-				throw new ArgumentNullException(nameof(order));
-
-			this.AddInfoLog(LocalizedStrings.Str1382Params,
-				order.Type, order.Direction, order.Price, order.Volume, order.Comment, order.GetHashCode());
-
 			if (ProcessState != ProcessStates.Started)
 			{
 				this.AddWarningLog(LocalizedStrings.Str1383Params, ProcessState);
-				return;
+				return false;
 			}
 
 			if (!AllowTrading)
 			{
 				this.AddWarningLog(LocalizedStrings.AllowTrading);
-				return;
+				return false;
 			}
 
 			if (_stopping)
 			{
 				this.AddWarningLog("Strategy is stopping.");
-				return;
+				return false;
 			}
+
+			return true;
+		}
+
+		/// <inheritdoc />
+		public virtual void RegisterOrder(Order order)
+		{
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
+
+			this.AddInfoLog(LocalizedStrings.Str1382Params,
+				order.Type, order.Direction, order.Price, order.Volume, order.Comment, order.GetHashCode());
+
+			if (!CanTrade())
+				return;
 
 			if (order.Security == null)
 				order.Security = Security;
@@ -1383,6 +1391,20 @@ namespace StockSharp.Algo.Strategies
 			});
 		}
 
+		bool? ITransactionProvider.IsOrderEditable(Order order)
+			=> SafeGetConnector().IsOrderEditable(order);
+
+		/// <inheritdoc />
+		public virtual void EditOrder(Order order, Order changes)
+		{
+			this.AddInfoLog("EditOrder: {0}", order);
+
+			if (!CanTrade())
+				return;
+
+			SafeGetConnector().EditOrder(order, changes);	
+		}
+
 		/// <inheritdoc />
 		public virtual void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
@@ -1394,23 +1416,8 @@ namespace StockSharp.Algo.Strategies
 
 			this.AddInfoLog(LocalizedStrings.Str1384Params, oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
-			if (ProcessState != ProcessStates.Started)
-			{
-				this.AddWarningLog(LocalizedStrings.Str1385Params, ProcessState);
+			if (!CanTrade())
 				return;
-			}
-
-			if (!AllowTrading)
-			{
-				this.AddWarningLog(LocalizedStrings.AllowTrading);
-				return;
-			}
-
-			if (_stopping)
-			{
-				this.AddWarningLog("Strategy is stopping.");
-				return;
-			}
 
 			AddOrder(newOrder);
 

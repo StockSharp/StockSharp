@@ -130,8 +130,10 @@ namespace StockSharp.Algo
 				order.LastChangeTime = _raiseNewOrder ? message.ServerTime : message.LocalTime;
 				order.LocalTime = message.LocalTime;
 
-				//нулевой объем может быть при перерегистрации
-				if (order.Volume == 0 && message.OrderVolume != null)
+				if (message.OrderPrice != 0)
+					order.Price = message.OrderPrice;
+
+				if (message.OrderVolume != null)
 					order.Volume = message.OrderVolume.Value;
 
 				if (message.Commission != default)
@@ -276,7 +278,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(order));
 
 			if (OrdersKeepCount > 0)
-				_orders.Add(order);
+				_orders.Add(order, null);
 
 			RecycleOrders();
 		}
@@ -288,9 +290,9 @@ namespace StockSharp.Algo
 		
 		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
-		private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();
+		private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = new CachedSynchronizedDictionary<Order, IMessageAdapter>();
 
-		public IEnumerable<Order> Orders => _orders.Cache;
+		public IEnumerable<Order> Orders => _orders.CachedKeys;
 
 		private readonly CachedSynchronizedList<MyTrade> _myTrades = new CachedSynchronizedList<MyTrade>();
 
@@ -412,6 +414,25 @@ namespace StockSharp.Algo
 				securityData.OrdersByStringId[order.StringId] = order;
 				_allOrdersByStringId[order.StringId] = order;
 			}
+		}
+
+		public IMessageAdapter TryGetAdapter(Order order)
+		{
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
+
+			return _orders.TryGetValue(order);
+		}
+
+		public void TrySetAdapter(Order order, IMessageAdapter adapter)
+		{
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
+
+			if (adapter is null || adapter is BasketMessageAdapter)
+				return;
+
+			_orders[order] = adapter;
 		}
 
 		public IEnumerable<OrderChangeInfo> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId, Func<string, Portfolio> getPortfolio)
@@ -1047,8 +1068,11 @@ namespace StockSharp.Algo
 			{
 				var toRemove = _orders.SyncGet(d =>
 				{
-					var tmp = d.Where(o => o.State.IsFinal()).Take(countToRemove).ToHashSet();
-					d.RemoveRange(tmp);
+					var tmp = d.Where(o => o.Key.State.IsFinal()).Take(countToRemove).Select(p => p.Key).ToHashSet();
+
+					foreach (var order in tmp)
+						d.Remove(order);
+
 					return tmp;
 				});
 

@@ -638,12 +638,44 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		public bool? IsOrderEditable(Order order)
+			=> _entityCache.TryGetAdapter(order)?.IsReplaceCommandEditCurrent == true;
+
+		/// <inheritdoc />
+		public void EditOrder(Order order, Order changes)
+		{
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
+
+			if (changes is null)
+				throw new ArgumentNullException(nameof(changes));
+
+			var transactionId = TransactionIdGenerator.GetNextId();
+
+			try
+			{
+				this.AddOrderInfoLog(order, nameof(EditOrder));
+
+				CheckOnOld(order);
+				CheckOnNew(changes);
+
+				changes.TransactionId = transactionId;
+
+				OnEditOrder(order, changes);
+			}
+			catch (Exception ex)
+			{
+				SendOrderFailed(order, true, ex, transactionId);
+			}
+		}
+
+		/// <inheritdoc />
 		public void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
-			if (oldOrder == null)
+			if (oldOrder is null)
 				throw new ArgumentNullException(nameof(oldOrder));
 
-			if (newOrder == null)
+			if (newOrder is null)
 				throw new ArgumentNullException(nameof(newOrder));
 
 			try
@@ -887,6 +919,16 @@ namespace StockSharp.Algo
 		protected void OnRegisterOrder(Order order)
 		{
 			SendInMessage(order.CreateRegisterMessage(GetSecurityId(order.Security)));
+		}
+
+		/// <summary>
+		/// Edit the order.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <param name="changes">Order changes.</param>
+		protected void OnEditOrder(Order order, Order changes)
+		{
+			SendInMessage(order.CreateReplaceMessage(changes, GetSecurityId(order.Security)));
 		}
 
 		/// <summary>

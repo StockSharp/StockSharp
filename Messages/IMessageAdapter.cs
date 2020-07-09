@@ -213,6 +213,11 @@ namespace StockSharp.Messages
 		bool? IsPositionsEmulationRequired { get; }
 
 		/// <summary>
+		/// Is the <see cref="OrderReplaceMessage"/> command edit a current order.
+		/// </summary>
+		bool IsReplaceCommandEditCurrent { get; }
+
+		/// <summary>
 		/// Create market depth builder.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>

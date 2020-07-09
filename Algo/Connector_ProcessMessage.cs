@@ -1420,6 +1420,8 @@ namespace StockSharp.Algo
 
 					var order = change.Order;
 
+					_entityCache.TrySetAdapter(order, message.Adapter);
+
 					if (change.IsNew)
 					{
 						this.AddOrderInfoLog(order, "New order");
@@ -1447,6 +1449,9 @@ namespace StockSharp.Algo
 				foreach (var tuple in _entityCache.ProcessOrderFailMessage(o, security, message))
 				{
 					var fail = tuple.Item1;
+					var order = fail.Order;
+
+					_entityCache.TrySetAdapter(order, message.Adapter);
 
 					//TryProcessFilteredMarketDepth(fail.Order.Security, message);
 
@@ -1454,7 +1459,7 @@ namespace StockSharp.Algo
 					var isCancelTransaction = tuple.Item2;
 
 					this.AddErrorLog(() => (isCancelTransaction ? "OrderCancelFailed" : "OrderRegisterFailed")
-						+ Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);
+						+ Environment.NewLine + order + Environment.NewLine + fail.Error);
 
 					if (!isCancelTransaction)
 					{
