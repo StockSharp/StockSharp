@@ -257,6 +257,7 @@ namespace StockSharp.Algo.Strategies
 		private DateTimeOffset _lastPnlRefreshTime;
 		private DateTimeOffset _prevTradeDate;
 		private bool _isPrevDateTradable;
+		private bool _stopping;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Strategy"/>.
@@ -274,6 +275,7 @@ namespace StockSharp.Algo.Strategies
 			_volume = this.Param<decimal>(nameof(Volume), 1);
 			_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
 			_maxErrorCount = this.Param(nameof(MaxErrorCount), 1);
+			_maxOrderRegisterErrorCount = this.Param(nameof(MaxOrderRegisterErrorCount), 10);
 			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
 			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
 			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
@@ -720,6 +722,46 @@ namespace StockSharp.Algo.Strategies
 
 				_errorCount = value;
 				this.Notify(nameof(ErrorCount));
+			}
+		}
+
+		private readonly StrategyParam<int> _maxOrderRegisterErrorCount;
+
+		/// <summary>
+		/// The maximal number of errors registration orders, which strategy shall receive prior to stop operation.
+		/// </summary>
+		/// <remarks>
+		/// The default value is 10.
+		/// </remarks>
+		//[Browsable(false)]
+		public int MaxOrderRegisterErrorCount
+		{
+			get => _maxOrderRegisterErrorCount.Value;
+			set
+			{
+				if (value < -1)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_maxOrderRegisterErrorCount.Value = value;
+			}
+		}
+
+		private int _orderRegisterErrorCount;
+
+		/// <summary>
+		/// The current number of errors registration orders.
+		/// </summary>
+		[Browsable(false)]
+		public int OrderRegisterErrorCount
+		{
+			get => _orderRegisterErrorCount;
+			private set
+			{
+				if (_orderRegisterErrorCount == value)
+					return;
+
+				_orderRegisterErrorCount = value;
+				this.Notify(nameof(OrderRegisterErrorCount));
 			}
 		}
 
@@ -1285,6 +1327,12 @@ namespace StockSharp.Algo.Strategies
 				return;
 			}
 
+			if (_stopping)
+			{
+				this.AddWarningLog("Strategy is stopping.");
+				return;
+			}
+
 			if (order.Security == null)
 				order.Security = Security;
 
@@ -1338,6 +1386,12 @@ namespace StockSharp.Algo.Strategies
 			if (!AllowTrading)
 			{
 				this.AddWarningLog(LocalizedStrings.AllowTrading);
+				return;
+			}
+
+			if (_stopping)
+			{
+				this.AddWarningLog("Strategy is stopping.");
 				return;
 			}
 
@@ -1691,6 +1745,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Start()
 		{
+			_stopping = false;
 			SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Started));
 		}
 
@@ -1699,6 +1754,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Stop()
 		{
+			_stopping = true;
 			SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Stopping));
 		}
 
@@ -1878,16 +1934,17 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.OrderRegistered"/>.
+		/// To call the event <see cref="OrderRegistered"/>.
 		/// </summary>
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderRegistered(Order order)
 		{
+			OrderRegisterErrorCount = 0;
 			OrderRegistered?.Invoke(order);
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.OrderRegistered"/>.
+		/// To call the event <see cref="OrderCanceling"/>.
 		/// </summary>
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderCanceling(Order order)
@@ -1896,7 +1953,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.OrderReRegistering"/>.
+		/// To call the event <see cref="OrderReRegistering"/>.
 		/// </summary>
 		/// <param name="oldOrder">Cancelling order.</param>
 		/// <param name="newOrder">New order to register.</param>
@@ -2381,9 +2438,11 @@ namespace StockSharp.Algo.Strategies
 
 		private void ProcessRegisterOrderFail(OrderFail fail, Action<OrderFail> evt)
 		{
+			OrderInfo info;
+
 			lock (_ordersInfo.SyncRoot)
 			{
-				var info = _ordersInfo.TryGetValue(fail.Order);
+				info = _ordersInfo.TryGetValue(fail.Order);
 
 				if (info == null)
 					return;
@@ -2395,6 +2454,16 @@ namespace StockSharp.Algo.Strategies
 			//SlippageManager.RegisterFailed(fail);
 
 			TryInvoke(() => evt?.Invoke(fail));
+
+			if (info.IsOwn && MaxOrderRegisterErrorCount != -1)
+			{
+				OrderRegisterErrorCount++;
+
+				this.AddInfoLog("OrderRegError {0}/{1}.", OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
+
+				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
+					Stop();
+			}
 		}
 
 		/// <summary>
