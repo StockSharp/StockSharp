@@ -64,7 +64,7 @@ namespace SampleStrategies
 			_settingsFile = Path.Combine(path, "connection.xml");
 
 			LogManager = new LogManager();
-			LogManager.Listeners.Add(new FileLogListener(Path.Combine(path, "sample.log")));
+			LogManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
 			LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
 			var entityRegistry = new CsvEntityRegistry(path);
@@ -90,10 +90,10 @@ namespace SampleStrategies
 					StorageSettings =
 					{
 						DaysLoad = TimeSpan.FromDays(3),
+						Mode = StorageModes.Snapshot,
 					}
 				},
 				CheckSteps = true,
-				KeepStrategiesPositions = true,
 			};
 			LogManager.Sources.Add(Connector);
 
