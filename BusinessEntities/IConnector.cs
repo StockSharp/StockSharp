@@ -327,43 +327,11 @@ namespace StockSharp.BusinessEntities
 		void Disconnect();
 
 		/// <summary>
-		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="IMarketDataProvider.LookupSecuritiesResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		/// <param name="offlineMode">Offline mode handling message.</param>
-		void LookupSecurities(Security criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
-
-		/// <summary>
 		/// Get <see cref="SecurityId"/>.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <returns>Security ID.</returns>
 		SecurityId GetSecurityId(Security security);
-
-		/// <summary>
-		/// To find boards that match the filter <paramref name="criteria" />. Found boards will be passed through the event <see cref="IMarketDataProvider.LookupBoardsResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		/// <param name="offlineMode">Offline mode handling message.</param>
-		void LookupBoards(ExchangeBoard criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
-
-		/// <summary>
-		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="ITransactionProvider.LookupPortfoliosResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		/// <param name="offlineMode">Offline mode handling message.</param>
-		void LookupPortfolios(Portfolio criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
-
-		/// <summary>
-		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="ITransactionProvider.NewOrder"/>.
-		/// </summary>
-		/// <param name="criteria">The order which fields will be used as a filter.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		/// <param name="offlineMode">Offline mode handling message.</param>
-		void LookupOrders(Order criteria, IMessageAdapter adapter = null, MessageOfflineModes offlineMode = MessageOfflineModes.None);
 
 		/// <summary>
 		/// Get security by identifier.
@@ -471,22 +439,5 @@ namespace StockSharp.BusinessEntities
 		/// <param name="security">Security for subscription.</param>
 		[Obsolete("Use UnSubscribeNews method instead.")]
 		void UnRegisterNews(Security security = null);
-
-		/// <summary>
-		/// Subscribe on positions changes.
-		/// </summary>
-		/// <param name="security">The instrument on which the position should be found.</param>
-		/// <param name="portfolio">The portfolio on which the position should be found.</param>
-		/// <param name="from">The initial date from which you need to get data.</param>
-		/// <param name="to">The final date by which you need to get data.</param>
-		/// <param name="count">Max count.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void SubscribePositions(Security security = null, Portfolio portfolio = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null);
-
-		/// <summary>
-		/// Unsubscribe from positions changes.
-		/// </summary>
-		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribePositions"/> for which this message is a response.</param>
-		void UnSubscribePositions(long originalTransactionId = 0);
 	}
 }

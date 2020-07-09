@@ -90,40 +90,6 @@ namespace StockSharp.Algo.Strategies
 			remove => _lookupPortfoliosResult2 -= value;
 		}
 
-		void ITransactionProvider.LookupPortfolios(PortfolioLookupMessage criteria)
-		{
-#pragma warning disable 618
-			SafeGetConnector().LookupPortfolios(criteria);
-#pragma warning restore 618
-		}
-
-		void ITransactionProvider.LookupOrders(OrderStatusMessage criteria)
-		{
-#pragma warning disable 618
-			SafeGetConnector().LookupOrders(criteria);
-#pragma warning restore 618
-		}
-
-		void ITransactionProvider.SubscribePositions(PortfolioLookupMessage criteria)
-		{
-			SafeGetConnector().SubscribePositions(criteria);
-		}
-
-		void ITransactionProvider.SubscribeOrders(OrderStatusMessage criteria)
-		{
-			SafeGetConnector().SubscribeOrders(criteria);
-		}
-
-		void ITransactionProvider.SubscribeOrders(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IEnumerable<OrderStates> states, IMessageAdapter adapter)
-		{
-			SafeGetConnector().SubscribeOrders(security, from, to, count, states, adapter);
-		}
-
-		void ITransactionProvider.UnSubscribeOrders(long originalTransactionId)
-		{
-			SafeGetConnector().UnSubscribeOrders(originalTransactionId);
-		}
-
 		void ITransactionProvider.CancelOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)
 		{
 			SafeGetConnector().CancelOrders(isStopOrder, portfolio, direction, board, security, securityType, transactionId);

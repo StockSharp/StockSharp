@@ -97,57 +97,14 @@ namespace StockSharp.BusinessEntities
 		event Action<Order> StopOrderChanged;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupPortfolios"/> received.
+		/// Lookup result <see cref="PortfolioLookupMessage"/> received.
 		/// </summary>
 		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupPortfolios"/> received.
+		/// Lookup result <see cref="PortfolioLookupMessage"/> received.
 		/// </summary>
 		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
-
-		/// <summary>
-		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		[Obsolete("Use SubscribePositions method.")]
-		void LookupPortfolios(PortfolioLookupMessage criteria);
-
-		/// <summary>
-		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
-		/// </summary>
-		/// <param name="criteria">The order which fields will be used as a filter.</param>
-		[Obsolete("Use SubscribeOrders method.")]
-		void LookupOrders(OrderStatusMessage criteria);
-
-		/// <summary>
-		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		void SubscribePositions(PortfolioLookupMessage criteria);
-
-		/// <summary>
-		/// To find orders that match the filter <paramref name="criteria" />. Found orders will be passed through the event <see cref="NewOrder"/>.
-		/// </summary>
-		/// <param name="criteria">The order which fields will be used as a filter.</param>
-		void SubscribeOrders(OrderStatusMessage criteria);
-
-		/// <summary>
-		/// Subscribe on orders changes.
-		/// </summary>
-		/// <param name="security">Security for subscription.</param>
-		/// <param name="from">The initial date from which you need to get data.</param>
-		/// <param name="to">The final date by which you need to get data.</param>
-		/// <param name="count">Max count.</param>
-		/// <param name="states">Filter order by the specified states.</param>
-		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
-		void SubscribeOrders(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IEnumerable<OrderStates> states = null, IMessageAdapter adapter = null);
-
-		/// <summary>
-		/// Unsubscribe from orders changes.
-		/// </summary>
-		/// <param name="originalTransactionId">ID of the original message <see cref="SubscribeOrders(StockSharp.Messages.OrderStatusMessage)"/> for which this message is a response.</param>
-		void UnSubscribeOrders(long originalTransactionId = 0);
 
 		/// <summary>
 		/// Register new order.

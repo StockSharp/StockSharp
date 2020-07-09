@@ -765,17 +765,11 @@
 
 			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }
 
-			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
-			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }
-			void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria) { }
-
 			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security) { yield break; }
 			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field) => null;
 
 			MarketDepth IMarketDataProvider.GetMarketDepth(Security security) => null;
 			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security) => null;
-
-			#endregion
 
 			IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => throw new NotImplementedException();
 
@@ -803,33 +797,9 @@
 			void ISubscriptionProvider.Subscribe(Subscription subscription) { }
 			void ISubscriptionProvider.UnSubscribe(Subscription subscription) { }
 
-			Subscription IMarketDataProviderEx.SubscribeMarketData(Security security, MarketDataMessage message) => null;
-			void IMarketDataProviderEx.UnSubscribeMarketData(Security security, MarketDataMessage message) { }
-
-			Subscription IMarketDataProviderEx.SubscribeMarketData(MarketDataMessage message) => null;
-			void IMarketDataProviderEx.UnSubscribeMarketData(MarketDataMessage message) { }
-
 			Subscription IMarketDataProviderEx.SubscribeFilteredMarketDepth(Security security) => null;
 
-			Subscription IMarketDataProviderEx.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, int? maxDepth, TimeSpan? refreshSpeed, IOrderLogMarketDepthBuilder depthBuilder, bool passThroughOrderBookInrement, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeMarketDepth(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeTrades(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeLevel1(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeOrderLog(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeNews(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeBoard(ExchangeBoard board) { }
-
-			void IMarketDataProviderEx.UnSubscribe(long subscriptionId) { }
+			#endregion
 		}
 	}
 }

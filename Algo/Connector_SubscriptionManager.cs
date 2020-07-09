@@ -209,33 +209,6 @@ namespace StockSharp.Algo
 				return TryGetInfo(id, ignoreAll, remove, time, true);
 			}
 
-			public Subscription TryFindSubscription(long id, DataType dataType, Security security = null)
-			{
-				var secId = security?.ToSecurityId();
-
-				var subscription = id > 0
-					? TryGetSubscription(id, true, false, null)?.Subscription
-					: Subscriptions.FirstOrDefault(s => s.DataType == dataType && s.SecurityId == secId && s.State.IsActive());
-
-				if (subscription == null)
-					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id > 0 ? (object)id : Tuple.Create(dataType, security));
-
-				return subscription;
-			}
-
-			public Subscription TryFindSubscription(CandleSeries series)
-			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
-
-				var subscription = Subscriptions.FirstOrDefault(s => s.CandleSeries == series);
-
-				if (subscription == null)
-					_connector.AddWarningLog(LocalizedStrings.SubscriptionNonExist, series);
-
-				return subscription;
-			}
-
 			public void RegisterPortfolio(Portfolio portfolio)
 			{
 				if (portfolio == null)

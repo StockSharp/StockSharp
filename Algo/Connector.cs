@@ -1307,9 +1307,12 @@ namespace StockSharp.Algo
 			=> Enumerable.Empty<Range<DateTimeOffset>>();
 
 		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
-			=> SubscribeCandles(series, from, to);
+			=> this.SubscribeCandles(series, from, to);
 
-		void ICandleSource<Candle>.Stop(CandleSeries series) => UnSubscribeCandles(series);
+		void ICandleSource<Candle>.Stop(CandleSeries series)
+#pragma warning disable CS0618 // Type or member is obsolete
+			=> this.UnSubscribeCandles(series);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		ICandleManagerContainer ICandleManager.Container { get; } = new CandleManagerContainer();
 

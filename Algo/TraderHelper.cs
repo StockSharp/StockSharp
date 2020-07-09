@@ -3525,15 +3525,17 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <param name="offlineMode">Offline mode handling message.</param>
-		public static void LookupAll(this IConnector connector, MessageOfflineModes offlineMode = MessageOfflineModes.Cancel)
+		public static void LookupAll(this Connector connector, MessageOfflineModes offlineMode = MessageOfflineModes.Cancel)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
+#pragma warning disable CS0618 // Type or member is obsolete
 			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
 			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
 			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
 			connector.LookupOrders(new Order(), offlineMode: offlineMode);
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		/// <summary>

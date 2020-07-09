@@ -203,136 +203,15 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void LookupSecurities(SecurityLookupMessage criteria)
-		{
-			MarketDataProvider.LookupSecurities(criteria);
-		}
-
-		/// <inheritdoc />
-		public void LookupBoards(BoardLookupMessage criteria)
-		{
-			MarketDataProvider.LookupBoards(criteria);
-		}
-
-		/// <inheritdoc />
-		public void LookupTimeFrames(TimeFrameLookupMessage criteria)
-		{
-			MarketDataProvider.LookupTimeFrames(criteria);
-		}
-
-		/// <inheritdoc />
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
 			return MarketDataProvider.GetFilteredMarketDepth(security);
 		}
 
 		/// <inheritdoc />
-		public Subscription SubscribeMarketData(Security security, MarketDataMessage message)
-		{
-			return MarketDataProvider.SubscribeMarketData(security, message);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeMarketData(Security security, MarketDataMessage message)
-		{
-			MarketDataProvider.UnSubscribeMarketData(security, message);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeMarketData(MarketDataMessage message)
-		{
-			return MarketDataProvider.SubscribeMarketData(message);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeMarketData(MarketDataMessage message)
-		{
-			MarketDataProvider.UnSubscribeMarketData(message);
-		}
-
-		/// <inheritdoc />
 		public Subscription SubscribeFilteredMarketDepth(Security security)
 		{
 			return MarketDataProvider.SubscribeFilteredMarketDepth(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeMarketDepth(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool passThroughOrderBookInrement = false, IMessageAdapter adapter = null)
-		{
-			return MarketDataProvider.SubscribeMarketDepth(security, from, to, count, buildMode, buildFrom, maxDepth, refreshSpeed, depthBuilder, passThroughOrderBookInrement, adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeMarketDepth(Security security)
-		{
-			MarketDataProvider.UnSubscribeMarketDepth(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeTrades(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null)
-		{
-			return MarketDataProvider.SubscribeTrades(security, from, to, count, buildMode, buildFrom, adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeTrades(Security security)
-		{
-			MarketDataProvider.UnSubscribeTrades(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeLevel1(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null)
-		{
-			return MarketDataProvider.SubscribeLevel1(security, from, to, count, buildMode, buildFrom, adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeLevel1(Security security)
-		{
-			MarketDataProvider.UnSubscribeLevel1(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeOrderLog(Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
-		{
-			return MarketDataProvider.SubscribeOrderLog(security, from, to, count, adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeOrderLog(Security security)
-		{
-			MarketDataProvider.UnSubscribeOrderLog(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeNews(Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
-		{
-			return MarketDataProvider.SubscribeNews(security, from, to, count, adapter);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribeNews(Security security = null)
-		{
-			MarketDataProvider.UnSubscribeNews(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeBoard(ExchangeBoard board, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null)
-		{
-			return MarketDataProvider.SubscribeBoard(board, from, to, count, adapter);
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use UnSubscribe method.")]
-		public void UnSubscribeBoard(ExchangeBoard board)
-		{
-			MarketDataProvider.UnSubscribeBoard(board);
-		}
-
-		/// <inheritdoc />
-		public void UnSubscribe(long subscriptionId)
-		{
-			MarketDataProvider.UnSubscribe(subscriptionId);
 		}
 	}
 }

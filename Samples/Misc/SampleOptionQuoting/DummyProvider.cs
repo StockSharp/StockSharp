@@ -228,21 +228,6 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
-		void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria)
-		{
-			throw new NotSupportedException();
-		}
-
 		MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security)
 		{
 			throw new NotSupportedException();
