@@ -162,7 +162,7 @@ namespace StockSharp.Algo.Positions
 
 			if (change != null)
 			{
-				var subscriptions = change.StrategyId.IsEmpty() ? _subscriptions.Cache : _strategySubscriptions.TryGetAndRemove(change.StrategyId)?.Cache;
+				var subscriptions = change.StrategyId.IsEmpty() ? _subscriptions.Cache : _strategySubscriptions.TryGetValue(change.StrategyId)?.Cache;
 
 				if (subscriptions?.Length > 0)
 					change.SetSubscriptionIds(subscriptions);
