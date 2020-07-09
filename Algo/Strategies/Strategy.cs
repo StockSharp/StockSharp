@@ -249,6 +249,8 @@ namespace StockSharp.Algo.Strategies
 
 		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new CachedSynchronizedDictionary<Order, OrderInfo>();
 
+		private readonly CachedSynchronizedSet<Subscription> _subscriptions = new CachedSynchronizedSet<Subscription>();
+
 		private DateTimeOffset _firstOrderTime;
 		private DateTimeOffset _lastOrderTime;
 		private TimeSpan _maxOrdersKeepTime;
@@ -380,6 +382,9 @@ namespace StockSharp.Algo.Strategies
 					_connector.NewPortfolio -= OnConnectorNewPortfolio;
 					_connector.PortfolioChanged -= OnConnectorPortfolioChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
+					_connector.PositionReceived -= OnConnectorPositionReceived;
+
+					UnSubscribe();
 				}
 
 				_connector = value;
@@ -405,6 +410,28 @@ namespace StockSharp.Algo.Strategies
 					_connector.NewPortfolio += OnConnectorNewPortfolio;
 					_connector.PortfolioChanged += OnConnectorPortfolioChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
+					_connector.PositionReceived += OnConnectorPositionReceived;
+
+					if (ParentStrategy == null)
+					{
+						var posSubscription = new Subscription(new PortfolioLookupMessage
+						{
+							IsSubscribe = true,
+							StrategyId = EnsureGetId(),
+						}, (SecurityMessage)null);
+						_subscriptions.Add(posSubscription);
+
+						Subscribe(posSubscription);
+
+						var ordersSubscription = new Subscription(new OrderStatusMessage
+						{
+							IsSubscribe = true,
+							StrategyId = EnsureGetId(),
+						}, (SecurityMessage)null);
+						_subscriptions.Add(ordersSubscription);
+
+						Subscribe(ordersSubscription);
+					}
 				}
 
 				foreach (var strategy in ChildStrategies)
@@ -2004,12 +2031,6 @@ namespace StockSharp.Algo.Strategies
 					return;
 				}
 
-				case MessageTypes.PositionChange:
-				{
-					ProcessPositionChange((PositionChangeMessage)message);
-					break;
-				}
-
 				default:
 					return;
 			}
@@ -2638,6 +2659,14 @@ namespace StockSharp.Algo.Strategies
 		//	return info != null && !info.IsOwn;
 		//}
 
+		private void UnSubscribe()
+		{
+			foreach (var subscription in _subscriptions.Cache)
+				UnSubscribe(subscription);
+
+			_subscriptions.Clear();
+		}
+
 		/// <summary>
 		/// Release resources.
 		/// </summary>
@@ -2647,6 +2676,8 @@ namespace StockSharp.Algo.Strategies
 			//{
 			ChildStrategies.ForEach(s => s.Dispose());
 			ChildStrategies.Clear();
+
+			UnSubscribe();
 
 			Connector = null;
 			//});

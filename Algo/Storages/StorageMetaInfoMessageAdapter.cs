@@ -260,14 +260,22 @@ namespace StockSharp.Algo.Storages
 				RaiseNewOutMessage(outMsg);
 			}
 
-			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
-			{
-				SendOut(portfolio.ToMessage(transId));
-				SendOut(portfolio.ToChangeMessage());
-			}
+			var strategyId = msg.StrategyId;
 
+			if (strategyId.IsEmpty())
+			{
+				foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
+				{
+					SendOut(portfolio.ToMessage(transId));
+					SendOut(portfolio.ToChangeMessage());
+				}
+			}
+			
 			foreach (var position in _positionStorage.Positions.Filter(msg))
 			{
+				if (!strategyId.IsEmpty() && !strategyId.CompareIgnoreCase(position.StrategyId))
+					continue;
+
 				SendOut(position.ToChangeMessage(transId));
 			}
 

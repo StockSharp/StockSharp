@@ -15,24 +15,18 @@
 
 	partial class Strategy
 	{
-		private void ProcessPositionChange(PositionChangeMessage message)
+		private void OnConnectorPositionReceived(Subscription subscription, Position position)
 		{
-			if (message.StrategyId != EnsureGetId())
+			if (!_subscriptions.Contains(subscription))
 				return;
 
-			var connector = SafeGetConnector();
-
-			var security = connector.LookupById(message.SecurityId);
-			var portfolio = connector.LookupByPortfolioName(message.PortfolioName);
-
-			var position = _positions.SafeAdd(CreateKey(security, portfolio), k => new Position
+			if (position.StrategyId != EnsureGetId())
 			{
-				Security = security,
-				Portfolio = portfolio,
-				StrategyId = message.StrategyId,
-			}, out var isNew);
+				this.AddWarningLog("Position {0} has StategyId '{1}' insteaf of '{2}'.", position, position.StrategyId, EnsureGetId());
+				return;
+			}
 
-			position.ApplyChanges(message);
+			_positions.SafeAdd(CreateKey(position.Security, position.Portfolio), k => position, out var isNew);
 
 			if (isNew)
 				_newPosition?.Invoke(position);

@@ -241,17 +241,27 @@ namespace StockSharp.Algo.Storages
 				if (Settings.IsMode(StorageModes.Snapshot))
 				{
 					var states = message.States.ToHashSet();
+					var strategyId = message.StrategyId;
+
 					var ordersIds = new HashSet<long>();
 					
 					var storage = (ISnapshotStorage<string, ExecutionMessage>)GetSnapshotStorage(DataType.Transactions);
 
 					foreach (var snapshot in storage.GetAll(from, to))
 					{
-						if (states.Count > 0 && snapshot.OrderState != null && !states.Contains(snapshot.OrderState.Value))
-							continue;
-
 						if (snapshot.HasOrderInfo)
+						{
+							if (!strategyId.IsEmpty() && !strategyId.CompareIgnoreCase(snapshot.StrategyId))
+								continue;
+
+							if (states.Count > 0 && snapshot.OrderState != null && !states.Contains(snapshot.OrderState.Value))
+							{
+								if (snapshot.ServerTime.Date != DateTime.Today)
+									continue;
+							}
+
 							ordersIds.Add(snapshot.TransactionId);
+						}
 						else if (!ordersIds.Contains(snapshot.TransactionId))
 							continue;
 

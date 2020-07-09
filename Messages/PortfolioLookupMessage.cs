@@ -34,6 +34,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[DataMember]
+		public string StrategyId { get; set; }
+
+		/// <inheritdoc />
 		public override DataType DataType => DataType.PositionChanges;
 
 		/// <inheritdoc />
@@ -45,9 +49,21 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new PortfolioLookupMessage { SecurityId = SecurityId };
+			var clone = new PortfolioLookupMessage();
 			CopyTo(clone);
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		protected virtual void CopyTo(PortfolioLookupMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.SecurityId = SecurityId;
+			destination.StrategyId = StrategyId;
 		}
 
 		/// <inheritdoc />

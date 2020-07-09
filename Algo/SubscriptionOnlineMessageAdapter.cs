@@ -310,7 +310,12 @@
 			{
 				if (isSubscribe)
 				{
-					if (message.To == null)
+					if (message is IStrategyIdMessage strategyMsg && !strategyMsg.StrategyId.IsEmpty())
+					{
+						sendOutMsgs = new[] { message.CreateResult() };
+						return true;
+					}
+					else if (message.To == null)
 					{
 						var dataType = message.DataType;
 						var secId = default(SecurityId);
