@@ -2522,7 +2522,7 @@ namespace StockSharp.Algo.Strategies
 		public virtual Strategy Clone()
 		{
 			var clone = GetType().CreateInstance<Strategy>();
-			clone.Connector = Connector;
+			//clone.Connector = Connector;
 			clone.Security = Security;
 			clone.Portfolio = Portfolio;
 
