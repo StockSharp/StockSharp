@@ -78,6 +78,16 @@ namespace StockSharp.Algo.Storages
 		public bool DisableStorageTimer { get; set; }
 
 		/// <summary>
+		/// Ignore market-data messages with <see cref="IGeneratedMessage.BuildFrom"/> is not <see langword="null"/>.
+		/// </summary>
+		public bool IgnoreGeneratedMarketData { get; set; } = true;
+
+		/// <summary>
+		/// Ignore transactional messages with <see cref="IGeneratedMessage.BuildFrom"/> is not <see langword="null"/>.
+		/// </summary>
+		public bool IgnoreGeneratedTransactional { get; set; } = true;
+
+		/// <summary>
 		/// Get accumulated <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
 		/// <returns>Ticks.</returns>
@@ -140,6 +150,17 @@ namespace StockSharp.Algo.Storages
 		public IEnumerable<BoardStateMessage> GetBoardStates()
 			=> _boardStatesBuffer.SyncGet(c => c.CopyAndClear());
 
+		private bool CanStore(Message message, bool canStore, bool ignoreGenerated)
+		{
+			if (!canStore)
+				return false;
+
+			if (ignoreGenerated && message is IGeneratedMessage genMsg)
+				return genMsg.BuildFrom == null;
+
+			return true;
+		}
+
 		private bool CanStore(Message message)
 		{
 			if (!Enabled)
@@ -152,14 +173,14 @@ namespace StockSharp.Algo.Storages
 			{
 				case MessageTypes.Portfolio:
 				case MessageTypes.PositionChange:
-					return EnabledPositions;
+					return CanStore(message, EnabledPositions, IgnoreGeneratedTransactional);
 
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderCancel:
 				case MessageTypes.OrderPairReplace:
 				case MessageTypes.OrderGroupCancel:
-					return EnabledTransactions;
+					return CanStore(message, EnabledTransactions, IgnoreGeneratedTransactional);
 
 				case MessageTypes.Execution:
 				{
@@ -172,12 +193,12 @@ namespace StockSharp.Algo.Storages
 					if (execMsg.IsCancellation)
 						return false;
 
-					return EnabledTransactions;
+					return CanStore(message, EnabledTransactions, IgnoreGeneratedTransactional);
 				}
 			}
 
 			if (message is ISubscriptionIdMessage subscrMsg)
-				return subscrMsg.GetSubscriptionIds().Any(_subscriptionsById.Contains);
+				return CanStore(message, subscrMsg.GetSubscriptionIds().Any(_subscriptionsById.Contains), IgnoreGeneratedMarketData);
 
 			return false;
 		}
@@ -420,6 +441,8 @@ namespace StockSharp.Algo.Storages
 			storage.SetValue(nameof(FilterSubscription), FilterSubscription);
 			storage.SetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 			storage.SetValue(nameof(DisableStorageTimer), DisableStorageTimer);
+			storage.SetValue(nameof(IgnoreGeneratedMarketData), IgnoreGeneratedMarketData);
+			storage.SetValue(nameof(IgnoreGeneratedTransactional), IgnoreGeneratedTransactional);
 		}
 
 		void IPersistable.Load(SettingsStorage storage)
@@ -430,6 +453,8 @@ namespace StockSharp.Algo.Storages
 			FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
 			TicksAsLevel1 = storage.GetValue(nameof(TicksAsLevel1), TicksAsLevel1);
 			DisableStorageTimer = storage.GetValue(nameof(DisableStorageTimer), DisableStorageTimer);
+			IgnoreGeneratedMarketData = storage.GetValue(nameof(IgnoreGeneratedMarketData), IgnoreGeneratedMarketData);
+			IgnoreGeneratedTransactional = storage.GetValue(nameof(IgnoreGeneratedTransactional), IgnoreGeneratedTransactional);
 		}
 	}
 }
