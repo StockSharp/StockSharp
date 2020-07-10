@@ -90,6 +90,12 @@ namespace StockSharp.Algo
 						if (mdMsg.SecurityId == default || mdMsg.DataType2 != DataType.MarketDepth)
 							break;
 
+						if (mdMsg.BuildMode == MarketDataBuildModes.Load)
+							break;
+
+						if (mdMsg.BuildFrom != null && mdMsg.BuildFrom != DataType.Level1)
+							break;
+
 						_subscriptions.Add(mdMsg.TransactionId, new Level1DepthBuilder(mdMsg.SecurityId));
 						
 						mdMsg = mdMsg.TypedClone();
