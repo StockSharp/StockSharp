@@ -198,12 +198,15 @@
 					if (quoteMsg.State == null)
 						break;
 
-					if (_allSecSubscriptions.Count == 0 &&
-						_allSecSubscriptionsPassThrough.Count == 0 &&
-						_byId.Count == 0 &&
-						_passThrough.Count == 0 &&
-						_online.Count == 0)
-						break;
+					lock (_syncObject)
+					{
+						if (_allSecSubscriptions.Count == 0 &&
+							_allSecSubscriptionsPassThrough.Count == 0 &&
+							_byId.Count == 0 &&
+							_passThrough.Count == 0 &&
+							_online.Count == 0)
+							break;
+					}
 
 					List<long> passThrough = null;
 
