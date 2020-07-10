@@ -37,8 +37,8 @@ M:StockSharp.Licensing.LicenseFeatureAttribute.#ctor(System.String)/param/featur
 T:StockSharp.Licensing.LicenseHelper/summary;DocStr3886
 E:StockSharp.Licensing.LicenseHelper.LicensesChanged/summary;DocStr3900
 E:StockSharp.Licensing.LicenseHelper.LicenseError/summary;DocStr3901
-F:StockSharp.Licensing.LicenseHelper.ExcludeCurrentDirectory/summary;DocStr11951
-P:StockSharp.Licensing.LicenseHelper.Licenses/summary;DocStr11952
+F:StockSharp.Licensing.LicenseHelper.ExcludeCurrentDirectory/summary;DocStr11961
+P:StockSharp.Licensing.LicenseHelper.Licenses/summary;DocStr11962
 F:StockSharp.Licensing.LicenseHelper.RenewOffset/summary;DocStr3888
 M:StockSharp.Licensing.LicenseHelper.CanRenew(StockSharp.Licensing.License)/summary;DocStr3889
 M:StockSharp.Licensing.LicenseHelper.CanRenew(StockSharp.Licensing.License)/param/license;License

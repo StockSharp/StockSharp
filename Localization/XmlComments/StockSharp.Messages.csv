@@ -681,7 +681,7 @@ P:StockSharp.Messages.ExecutionMessage.PositionEffect/summary;PositionEffect
 P:StockSharp.Messages.ExecutionMessage.PostOnly/summary;PostOnlyOrder
 P:StockSharp.Messages.ExecutionMessage.Initiator/summary;InitiatorTrade
 P:StockSharp.Messages.ExecutionMessage.SeqNum/summary;SequenceNumber
-P:StockSharp.Messages.ExecutionMessage.SeqNum/remarks;DocStr11942
+P:StockSharp.Messages.ExecutionMessage.SeqNum/remarks;DocStr11952
 P:StockSharp.Messages.ExecutionMessage.BuildFrom/inheritdoc;DocStr8459
 M:StockSharp.Messages.ExecutionMessage.#ctor/summary;DocStr1
 P:StockSharp.Messages.ExecutionMessage.DataType/inheritdoc;DocStr8459
@@ -725,7 +725,7 @@ M:StockSharp.Messages.Extensions.CreateReply(StockSharp.Messages.OrderMessage,Sy
 M:StockSharp.Messages.Extensions.CreateReply(StockSharp.Messages.OrderMessage,System.Exception)/param/message;DocStr608
 M:StockSharp.Messages.Extensions.CreateReply(StockSharp.Messages.OrderMessage,System.Exception)/param/error;DocStr4509
 M:StockSharp.Messages.Extensions.CreateReply(StockSharp.Messages.OrderMessage,System.Exception)/returns;DocStr608
-M:StockSharp.Messages.Extensions.CreateOrderReply(System.Int64,System.DateTimeOffset)/summary;DocStr11954
+M:StockSharp.Messages.Extensions.CreateOrderReply(System.Int64,System.DateTimeOffset)/summary;DocStr11964
 M:StockSharp.Messages.Extensions.CreateOrderReply(System.Int64,System.DateTimeOffset)/param/transactionId;TransactionId
 M:StockSharp.Messages.Extensions.CreateOrderReply(System.Int64,System.DateTimeOffset)/param/serverTime;ServerTime
 M:StockSharp.Messages.Extensions.CreateOrderReply(System.Int64,System.DateTimeOffset)/returns;DocStr4283
@@ -1220,7 +1220,7 @@ M:StockSharp.Messages.Extensions.ToMessageType2(StockSharp.Messages.DataType)/su
 M:StockSharp.Messages.Extensions.ToMessageType2(StockSharp.Messages.DataType)/param/type;DocStr65
 M:StockSharp.Messages.Extensions.ToMessageType2(StockSharp.Messages.DataType)/returns;DocStr9
 M:StockSharp.Messages.Extensions.IsOpened(StockSharp.Messages.IMessageChannel)/summary;DocStr4078
-M:StockSharp.Messages.Extensions.IsOpened(StockSharp.Messages.IMessageChannel)/param/channel;DocStr11955
+M:StockSharp.Messages.Extensions.IsOpened(StockSharp.Messages.IMessageChannel)/param/channel;DocStr11965
 M:StockSharp.Messages.Extensions.IsOpened(StockSharp.Messages.IMessageChannel)/returns;DocStr8659
 M:StockSharp.Messages.Extensions.ToDataType(StockSharp.Messages.MarketDataMessage)/summary;DocStr8644
 M:StockSharp.Messages.Extensions.ToDataType(StockSharp.Messages.MarketDataMessage)/param/message;DocStr4473
@@ -1449,7 +1449,7 @@ M:StockSharp.Messages.ExtandableEntityHelper.GetValue``1(StockSharp.Messages.IEx
 M:StockSharp.Messages.ExtandableEntityHelper.GetValue``1(StockSharp.Messages.IExtendableEntity,System.String)/param/key;Str3304
 M:StockSharp.Messages.ExtandableEntityHelper.GetValue``1(StockSharp.Messages.IExtendableEntity,System.String)/returns;Str3099
 T:StockSharp.Messages.IGeneratedMessage/summary;DocStr11086
-P:StockSharp.Messages.IGeneratedMessage.BuildFrom/summary;DocStr11956
+P:StockSharp.Messages.IGeneratedMessage.BuildFrom/summary;DocStr11966
 T:StockSharp.Messages.IMessage/summary;DocStr11441
 P:StockSharp.Messages.IMessage.Type/summary;DocStr9
 P:StockSharp.Messages.IMessage.LocalTime/summary;Str204
@@ -1491,9 +1491,10 @@ P:StockSharp.Messages.IMessageAdapter.OrderConditionType/remarks;DocStr11382
 P:StockSharp.Messages.IMessageAdapter.HeartbeatBeforConnect/summary;DocStr11468
 P:StockSharp.Messages.IMessageAdapter.Icon/summary;DocStr7908
 P:StockSharp.Messages.IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription/summary;DocStr11548
-P:StockSharp.Messages.IMessageAdapter.IsSupportTransactionLog/summary;DocStr11957
-P:StockSharp.Messages.IMessageAdapter.IsPositionsEmulationRequired/summary;DocStr11958
-P:StockSharp.Messages.IMessageAdapter.IsPositionsEmulationRequired/remarks;DocStr11959
+P:StockSharp.Messages.IMessageAdapter.IsSupportTransactionLog/summary;DocStr11967
+P:StockSharp.Messages.IMessageAdapter.IsPositionsEmulationRequired/summary;DocStr11968
+P:StockSharp.Messages.IMessageAdapter.IsPositionsEmulationRequired/remarks;DocStr11969
+P:StockSharp.Messages.IMessageAdapter.IsReplaceCommandEditCurrent/summary;DocStr11970
 M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/summary;DocStr3790
 M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/returns;DocStr1450
@@ -1514,7 +1515,7 @@ M:StockSharp.Messages.IMessageAdapter.IsSecurityRequired(StockSharp.Messages.Dat
 M:StockSharp.Messages.IMessageAdapter.IsSecurityRequired(StockSharp.Messages.DataType)/param/dataType;DocStr8490
 M:StockSharp.Messages.IMessageAdapter.IsSecurityRequired(StockSharp.Messages.DataType)/returns;DocStr8659
 P:StockSharp.Messages.IMessageAdapter.UseChannels/summary;DocStr11423
-P:StockSharp.Messages.IMessageAdapter.FeatureName/summary;DocStr11960
+P:StockSharp.Messages.IMessageAdapter.FeatureName/summary;DocStr11971
 T:StockSharp.Messages.IKeySecretAdapter/summary;DocStr11844
 P:StockSharp.Messages.IKeySecretAdapter.Key/summary;Str3304
 P:StockSharp.Messages.IKeySecretAdapter.Secret/summary;DocStr3146
@@ -1648,7 +1649,7 @@ P:StockSharp.Messages.InMemoryMessageChannel.MaxMessageCount/summary;DocStr4314
 P:StockSharp.Messages.InMemoryMessageChannel.MaxMessageCount/remarks;DocStr4315
 P:StockSharp.Messages.InMemoryMessageChannel.SuspendMaxCount/summary;DocStr11828
 P:StockSharp.Messages.InMemoryMessageChannel.SuspendTimeout/summary;DocStr608
-P:StockSharp.Messages.InMemoryMessageChannel.Disabled/summary;DocStr11961
+P:StockSharp.Messages.InMemoryMessageChannel.Disabled/summary;DocStr11972
 P:StockSharp.Messages.InMemoryMessageChannel.State/inheritdoc;DocStr8459
 E:StockSharp.Messages.InMemoryMessageChannel.StateChanged/inheritdoc;DocStr8459
 M:StockSharp.Messages.InMemoryMessageChannel.Open/inheritdoc;DocStr8459
@@ -1677,7 +1678,7 @@ P:StockSharp.Messages.INullableSecurityIdMessage.SecurityId/summary;SecurityId
 T:StockSharp.Messages.IServerTimeMessage/summary;DocStr11086
 P:StockSharp.Messages.IServerTimeMessage.ServerTime/summary;ServerTime
 T:StockSharp.Messages.IStrategyIdMessage/summary;DocStr11086
-P:StockSharp.Messages.IStrategyIdMessage.StrategyId/summary;DocStr11941
+P:StockSharp.Messages.IStrategyIdMessage.StrategyId/summary;DocStr11951
 T:StockSharp.Messages.ISubscriptionIdMessage/summary;DocStr11086
 P:StockSharp.Messages.ISubscriptionIdMessage.SubscriptionId/summary;DocStr9420
 P:StockSharp.Messages.ISubscriptionIdMessage.SubscriptionIds/summary;Identifiers
@@ -1849,7 +1850,7 @@ P:StockSharp.Messages.MarketDataMessage.BoardCode/summary;BoardCode
 P:StockSharp.Messages.MarketDataMessage.RefreshSpeed/summary;DocStr11568
 P:StockSharp.Messages.MarketDataMessage.DepthBuilder/summary;DocStr1450
 P:StockSharp.Messages.MarketDataMessage.FillGaps/summary;FillGaps
-P:StockSharp.Messages.MarketDataMessage.DoNotBuildOrderBookInrement/summary;DocStr11908
+P:StockSharp.Messages.MarketDataMessage.DoNotBuildOrderBookInrement/summary;DocStr11921
 M:StockSharp.Messages.MarketDataMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
@@ -1903,7 +1904,7 @@ P:StockSharp.Messages.MessageAdapter.Categories/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.StorageName/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.OrderCancelVolumeRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.Platform/summary;DocStr4335
-P:StockSharp.Messages.MessageAdapter.FeatureName/summary;DocStr11960
+P:StockSharp.Messages.MessageAdapter.FeatureName/summary;DocStr11971
 P:StockSharp.Messages.MessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SupportedOrderBookDepths/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
@@ -1915,6 +1916,7 @@ P:StockSharp.Messages.MessageAdapter.Icon/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsAutoReplyOnTransactonalUnsubscription/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.EnqueueSubscriptions/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportTransactionLog/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.ReConnectionSettings/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.TransactionIdGenerator/inheritdoc;DocStr8459
 E:StockSharp.Messages.MessageAdapter.NewOutMessage/inheritdoc;DocStr8459
@@ -1995,7 +1997,7 @@ T:StockSharp.Messages.MessageAdapterCategoryAttribute/summary;DocStr10477
 P:StockSharp.Messages.MessageAdapterCategoryAttribute.Categories/summary;DocStr10478
 M:StockSharp.Messages.MessageAdapterCategoryAttribute.#ctor(StockSharp.Messages.MessageAdapterCategories)/summary;DocStr1
 M:StockSharp.Messages.MessageAdapterCategoryAttribute.#ctor(StockSharp.Messages.MessageAdapterCategories)/param/categories;DocStr10478
-T:StockSharp.Messages.MessageAdapterStubAttribute/summary;DocStr11962
+T:StockSharp.Messages.MessageAdapterStubAttribute/summary;DocStr11973
 P:StockSharp.Messages.MessageAdapterStubAttribute.PackageId/summary;DocStr11754
 T:StockSharp.Messages.MessageTypes/summary;DocStr4347
 F:StockSharp.Messages.MessageTypes.Security/summary;DocStr608
@@ -2261,7 +2263,7 @@ P:StockSharp.Messages.OrderStatusMessage.From/inheritdoc;DocStr8459
 P:StockSharp.Messages.OrderStatusMessage.To/inheritdoc;DocStr8459
 P:StockSharp.Messages.OrderStatusMessage.Count/inheritdoc;DocStr8459
 P:StockSharp.Messages.OrderStatusMessage.IsSubscribe/inheritdoc;DocStr8459
-P:StockSharp.Messages.OrderStatusMessage.States/summary;DocStr11940
+P:StockSharp.Messages.OrderStatusMessage.States/summary;DocStr11948
 M:StockSharp.Messages.OrderStatusMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderStatusMessage.CopyTo(StockSharp.Messages.OrderStatusMessage)/summary;DocStr629
 M:StockSharp.Messages.OrderStatusMessage.CopyTo(StockSharp.Messages.OrderStatusMessage)/param/destination;DocStr630
@@ -2274,10 +2276,13 @@ F:StockSharp.Messages.OrderTypes.Market/summary;Str241
 F:StockSharp.Messages.OrderTypes.Conditional/summary;DocStr4424
 T:StockSharp.Messages.PortfolioLookupMessage/summary;DocStr11390
 M:StockSharp.Messages.PortfolioLookupMessage.#ctor/summary;DocStr1
+P:StockSharp.Messages.PortfolioLookupMessage.StrategyId/inheritdoc;DocStr8459
 P:StockSharp.Messages.PortfolioLookupMessage.DataType/inheritdoc;DocStr8459
 P:StockSharp.Messages.PortfolioLookupMessage.SecurityId/inheritdoc;DocStr8459
 M:StockSharp.Messages.PortfolioLookupMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.PortfolioLookupMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.PortfolioLookupMessage.CopyTo(StockSharp.Messages.PortfolioLookupMessage)/summary;DocStr629
+M:StockSharp.Messages.PortfolioLookupMessage.CopyTo(StockSharp.Messages.PortfolioLookupMessage)/param/destination;DocStr630
 M:StockSharp.Messages.PortfolioLookupMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.PortfolioStates/summary;DocStr4437
 F:StockSharp.Messages.PortfolioStates.Active/summary;DocStr4511
@@ -2754,7 +2759,7 @@ M:StockSharp.Messages.Unit.op_Equality(StockSharp.Messages.Unit,StockSharp.Messa
 M:StockSharp.Messages.Unit.op_Equality(StockSharp.Messages.Unit,StockSharp.Messages.Unit)/param/u2;DocStr4556
 M:StockSharp.Messages.Unit.op_Equality(StockSharp.Messages.Unit,StockSharp.Messages.Unit)/returns;DocStr4559
 M:StockSharp.Messages.Unit.ToString/inheritdoc;DocStr8459
-M:StockSharp.Messages.Unit.GetTypeSuffix(StockSharp.Messages.UnitTypes)/summary;DocStr11963
+M:StockSharp.Messages.Unit.GetTypeSuffix(StockSharp.Messages.UnitTypes)/summary;DocStr11974
 M:StockSharp.Messages.Unit.Convert(StockSharp.Messages.UnitTypes)/summary;DocStr2949
 M:StockSharp.Messages.Unit.Convert(StockSharp.Messages.UnitTypes)/param/destinationType;DocStr2951
 M:StockSharp.Messages.Unit.Convert(StockSharp.Messages.UnitTypes)/returns;DocStr2952

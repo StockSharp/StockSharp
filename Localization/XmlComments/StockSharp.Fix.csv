@@ -34,6 +34,7 @@ P:StockSharp.Fix.Dialects.BaseFastDialect.CheckTimeFrameByRequest/inheritdoc;Doc
 P:StockSharp.Fix.Dialects.BaseFastDialect.UseChannels/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsPositionsEmulationRequired/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFastDialect.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.State/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage/inheritdoc;DocStr8459
@@ -120,6 +121,7 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTransactionLog/inheritdoc;DocS
 P:StockSharp.Fix.Dialects.BaseFixDialect.UseChannels/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsPositionsEmulationRequired/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.CurrentCounter/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.TryParseNextMsqSeqNum(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset/summary;Str3282
@@ -426,7 +428,7 @@ M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,Stoc
 M:StockSharp.Fix.Dialects.IFixDialect.Read(System.Action{StockSharp.Messages.Message})/summary;DocStr8775
 M:StockSharp.Fix.Dialects.IFixDialect.Read(System.Action{StockSharp.Messages.Message})/param/messageHandler;DocStr10483
 M:StockSharp.Fix.Dialects.IFixDialect.Read(System.Action{StockSharp.Messages.Message})/returns;DocStr10345
-M:StockSharp.Fix.Dialects.IFixDialect.TryParseNextMsqSeqNum(System.String)/summary;DocStr11944
+M:StockSharp.Fix.Dialects.IFixDialect.TryParseNextMsqSeqNum(System.String)/summary;DocStr11954
 M:StockSharp.Fix.Dialects.IFixDialect.TryParseNextMsqSeqNum(System.String)/param/errorMessage;DocStr4329
 M:StockSharp.Fix.Dialects.IFixDialect.TryParseNextMsqSeqNum(System.String)/returns;DocStr11582
 T:StockSharp.Fix.Dialects.InteractiveBrokersFixDialect/summary;DocStr11600
@@ -674,7 +676,7 @@ P:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.SupportedMarketDataTypes/in
 M:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.GetSecurityType(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.SuperDerivativesFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/inheritdoc;DocStr8459
-T:StockSharp.Fix.Dialects.SuspendedFullException/summary;DocStr11945
+T:StockSharp.Fix.Dialects.SuspendedFullException/summary;DocStr11955
 M:StockSharp.Fix.Dialects.SuspendedFullException.#ctor/summary;DocStr1
 T:StockSharp.Fix.Dialects.SwissQuoteFixDialect/summary;DocStr11598
 M:StockSharp.Fix.Dialects.SwissQuoteFixDialect.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
@@ -759,6 +761,7 @@ M:StockSharp.Fix.FastMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataT
 P:StockSharp.Fix.FastMessageAdapter.UseChannels/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.IsPositionsEmulationRequired/inheritdoc;DocStr8459
+P:StockSharp.Fix.FastMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.Dialect/summary;DocStr9958
 P:StockSharp.Fix.FastMessageAdapter.DialectSettings/summary;FastSettings
@@ -807,6 +810,7 @@ M:StockSharp.Fix.FixMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataTy
 P:StockSharp.Fix.FixMessageAdapter.UseChannels/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsPositionsEmulationRequired/inheritdoc;DocStr8459
+P:StockSharp.Fix.FixMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.FixDialect/summary;DocStr9454
 P:StockSharp.Fix.FixMessageAdapter.Address/inheritdoc;DocStr8459
@@ -947,7 +951,7 @@ M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.DataType,StockSh
 M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.DataType,StockSharp.Messages.SecurityId)/param/dataType;Str1670
 M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.DataType,StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Fix.FixServer.HasSubscriptions(StockSharp.Messages.DataType,StockSharp.Messages.SecurityId)/returns;DocStr3171
-T:StockSharp.Fix.FixServerChannel/summary;DocStr11946
+T:StockSharp.Fix.FixServerChannel/summary;DocStr11956
 M:StockSharp.Fix.FixServerChannel.#ctor(StockSharp.Fix.FixServer)/summary;DocStr1
 M:StockSharp.Fix.FixServerChannel.#ctor(StockSharp.Fix.FixServer)/param/server;DocStr3152
 P:StockSharp.Fix.FixServerChannel.Server/summary;DocStr3152
@@ -2522,7 +2526,7 @@ F:StockSharp.Fix.Native.FixTags.OrdStatus/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrdType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrigClOrdID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrigTime/summary;DocStr8459
-F:StockSharp.Fix.Native.FixTags.PossDupFlag/summary;DocStr11947
+F:StockSharp.Fix.Native.FixTags.PossDupFlag/summary;DocStr11957
 F:StockSharp.Fix.Native.FixTags.Price/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RefSeqNum/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityID/summary;DocStr8459
@@ -2544,7 +2548,7 @@ F:StockSharp.Fix.Native.FixTags.PositionEffect/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RptSeq/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RawDataLength/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RawData/summary;DocStr8459
-F:StockSharp.Fix.Native.FixTags.PossResend/summary;DocStr11948
+F:StockSharp.Fix.Native.FixTags.PossResend/summary;DocStr11958
 F:StockSharp.Fix.Native.FixTags.EncryptMethod/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StopPx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ExDestination/summary;DocStr8459
@@ -2557,7 +2561,7 @@ F:StockSharp.Fix.Native.FixTags.MaxFloor/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TestReqID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SettlCurrency/summary;DocStr8459
-F:StockSharp.Fix.Native.FixTags.OrigSendingTime/summary;DocStr11949
+F:StockSharp.Fix.Native.FixTags.OrigSendingTime/summary;DocStr11959
 F:StockSharp.Fix.Native.FixTags.GapFillFlag/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ExpireTime/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteReqID/summary;DocStr8459
@@ -2943,7 +2947,7 @@ P:StockSharp.Fix.Native.MDEntry.Price/summary;Price
 P:StockSharp.Fix.Native.MDEntry.Size/summary;DocStr3526
 P:StockSharp.Fix.Native.MDEntry.Action/summary;DocStr3285
 P:StockSharp.Fix.Native.MDEntry.Position/summary;Str862
-P:StockSharp.Fix.Native.MDEntry.PositionExtra/summary;DocStr11950
+P:StockSharp.Fix.Native.MDEntry.PositionExtra/summary;DocStr11960
 P:StockSharp.Fix.Native.MDEntry.EntryId/summary;Str361
 P:StockSharp.Fix.Native.MDEntry.TickDirection/summary;DocStr3286
 P:StockSharp.Fix.Native.MDEntry.SecurityId/summary;SecurityId

@@ -117,7 +117,6 @@ P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.PriceOffset/summary;D
 P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.QuotingVolume/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.GetNotificationRules/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStarted/inheritdoc;DocStr8459
-M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStopping/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnReseted/inheritdoc;DocStr8459
 P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ClosePositionPrice/summary;DocStr402
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProcessTimeOut/inheritdoc;DocStr8459
