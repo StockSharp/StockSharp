@@ -38,13 +38,13 @@
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.SecurityId == default)
-						break;
-
-					if (mdMsg.DataType2 == DataType.MarketDepth)
+					if (mdMsg.IsSubscribe)
 					{
-						if (mdMsg.IsSubscribe)
+						if (mdMsg.DataType2 == DataType.MarketDepth)
 						{
+							if (mdMsg.SecurityId == default)
+								break;
+
 							if (mdMsg.DoNotBuildOrderBookInrement)
 								break;
 
@@ -65,10 +65,10 @@
 								}
 							}
 						}
-						else
-						{
-							RemoveSubscription(mdMsg.OriginalTransactionId);
-						}
+					}
+					else
+					{
+						RemoveSubscription(mdMsg.OriginalTransactionId);
 					}
 
 					break;
@@ -107,6 +107,9 @@
 				}
 				case MessageTypes.QuoteChange:
 				{
+					if (_depths.Count == 0)
+						break;
+
 					var quoteMsg = (QuoteChangeMessage)message;
 
 					if (quoteMsg.State != null)

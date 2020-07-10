@@ -112,6 +112,9 @@
 				}
 				case MessageTypes.Execution:
 				{
+					if (_subscriptionIds.Count == 0)
+						break;
+
 					var execMsg = (ExecutionMessage)message;
 
 					if (execMsg.ExecutionType == ExecutionTypes.OrderLog)

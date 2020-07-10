@@ -63,9 +63,9 @@
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType2 == DataType.MarketDepth)
+					if (mdMsg.IsSubscribe)
 					{
-						if (mdMsg.IsSubscribe)
+						if (mdMsg.DataType2 == DataType.MarketDepth)
 						{
 							var transId = mdMsg.TransactionId;
 
@@ -96,10 +96,10 @@
 
 							this.AddInfoLog("OB incr subscribed {0}/{1}.", mdMsg.SecurityId, transId);
 						}
-						else
-						{
-							RemoveSubscription(mdMsg.OriginalTransactionId);
-						}
+					}
+					else
+					{
+						RemoveSubscription(mdMsg.OriginalTransactionId);
 					}
 
 					break;
@@ -196,6 +196,13 @@
 					var quoteMsg = (QuoteChangeMessage)message;
 
 					if (quoteMsg.State == null)
+						break;
+
+					if (_allSecSubscriptions.Count == 0 &&
+						_allSecSubscriptionsPassThrough.Count == 0 &&
+						_byId.Count == 0 &&
+						_passThrough.Count == 0 &&
+						_online.Count == 0)
 						break;
 
 					List<long> passThrough = null;
