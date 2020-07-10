@@ -363,6 +363,12 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual bool? IsPositionsEmulationRequired => InnerAdapter.IsPositionsEmulationRequired;
 
+		bool IMessageAdapter.GenerateOrderBookFromLevel
+		{
+			get => InnerAdapter.GenerateOrderBookFromLevel;
+			set => InnerAdapter.GenerateOrderBookFromLevel = value;
+		}
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

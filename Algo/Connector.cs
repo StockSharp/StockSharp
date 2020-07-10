@@ -542,7 +542,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
+		public Position GetPosition(Portfolio portfolio, Security security, string strategyId = "", string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
 			return GetPosition(portfolio, security, strategyId, clientCode, depoName, limitType, string.Empty);
 		}
@@ -1265,8 +1265,6 @@ namespace StockSharp.Algo
 
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
 
-			SupportLevel1DepthBuilder = storage.GetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
-
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
@@ -1312,8 +1310,6 @@ namespace StockSharp.Algo
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
 			storage.SetValue(nameof(Adapter), Adapter.Save());
-
-			storage.SetValue(nameof(SupportLevel1DepthBuilder), SupportLevel1DepthBuilder);
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);

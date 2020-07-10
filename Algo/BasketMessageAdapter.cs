@@ -754,6 +754,8 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 
+		bool IMessageAdapter.GenerateOrderBookFromLevel { get; set; }
+
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>
@@ -867,6 +869,11 @@ namespace StockSharp.Algo
 			if (SupportSecurityAll)
 			{
 				adapter = ApplyOwnInner(new SubscriptionSecurityAllMessageAdapter(adapter));
+			}
+
+			if (adapter.GenerateOrderBookFromLevel && !adapter.SupportedMarketDataTypes.Contains(DataType.MarketDepth))
+			{
+				adapter = ApplyOwnInner(new Level1DepthBuilderAdapter(adapter));
 			}
 
 			if (PnLManager != null && !adapter.IsSupportExecutionsPnL)

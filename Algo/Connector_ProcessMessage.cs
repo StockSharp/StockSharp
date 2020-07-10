@@ -306,9 +306,6 @@ namespace StockSharp.Algo
 					if (SupportBasketSecurities)
 						_inAdapter = new BasketSecurityMessageAdapter(_inAdapter, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true };
 
-					if (SupportLevel1DepthBuilder)
-						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdapter = true };
-
 					if (SupportAssociatedSecurity)
 						_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdapter = true };
 
@@ -369,27 +366,11 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private bool _supportLevel1DepthBuilder;
-
 		/// <summary>
 		/// Use <see cref="Level1DepthBuilderAdapter"/>.
 		/// </summary>
-		public bool SupportLevel1DepthBuilder
-		{
-			get => _supportLevel1DepthBuilder;
-			set
-			{
-				if (_supportLevel1DepthBuilder == value)
-					return;
-
-				if (value)
-					EnableAdapter(a => new Level1DepthBuilderAdapter(a) { OwnInnerAdapter = true }, typeof(AssociatedSecurityAdapter), false);
-				else
-					DisableAdapter<Level1DepthBuilderAdapter>();
-
-				_supportLevel1DepthBuilder = value;
-			}
-		}
+		[Obsolete("Use IMessageAdapter.GenerateOrderBookFromLevel property.")]
+		public bool SupportLevel1DepthBuilder { get; set; }
 
 		/// <summary>
 		/// Storage buffer.

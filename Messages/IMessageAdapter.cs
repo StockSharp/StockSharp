@@ -218,6 +218,11 @@ namespace StockSharp.Messages
 		bool IsReplaceCommandEditCurrent { get; }
 
 		/// <summary>
+		/// Generate <see cref="QuoteChangeMessage"/> from <see cref="Level1ChangeMessage"/>.
+		/// </summary>
+		bool GenerateOrderBookFromLevel { get; set; }
+
+		/// <summary>
 		/// Create market depth builder.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>

@@ -283,6 +283,15 @@ namespace StockSharp.Messages
 		public virtual bool IsReplaceCommandEditCurrent => false;
 
 		/// <inheritdoc />
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Level1Key,
+			Description = LocalizedStrings.Level1ToOrderBooksKey,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 302)]
+		public virtual bool GenerateOrderBookFromLevel { get; set; } = true;
+
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
@@ -586,6 +595,7 @@ namespace StockSharp.Messages
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
 			EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
+			GenerateOrderBookFromLevel = storage.GetValue(nameof(GenerateOrderBookFromLevel), GenerateOrderBookFromLevel);
 
 			base.Load(storage);
 		}
@@ -598,6 +608,7 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
+			storage.SetValue(nameof(GenerateOrderBookFromLevel), GenerateOrderBookFromLevel);
 
 			base.Save(storage);
 		}

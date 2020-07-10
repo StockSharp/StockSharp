@@ -1,5 +1,8 @@
 namespace StockSharp.Algo
 {
+	using System.Collections.Generic;
+	using System.Linq;
+
 	using Ecng.Collections;
 	using Ecng.Common;
 
@@ -56,7 +59,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
+		private readonly SynchronizedDictionary<long, Level1DepthBuilder> _subscriptions = new SynchronizedDictionary<long, Level1DepthBuilder>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1DepthBuilderAdapter"/>.
@@ -68,35 +71,116 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		protected override void OnInnerAdapterNewOutMessage(Message message)
+		public override bool SendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					_level1DepthBuilders.Clear();
-					break;
-
-				case MessageTypes.Level1Change:
 				{
-					var level1Msg = (Level1ChangeMessage)message;
-
-					// генерация стакана из Level1
-					var quoteMsg = GetBuilder(level1Msg.SecurityId).Process(level1Msg);
-
-					if (quoteMsg != null)
-						base.OnInnerAdapterNewOutMessage(quoteMsg);
-
+					_subscriptions.Clear();
 					break;
 				}
 
-				case MessageTypes.QuoteChange:
+				case MessageTypes.MarketData:
 				{
-					var quoteMsg = (QuoteChangeMessage)message;
+					var mdMsg = (MarketDataMessage)message;
 
-					if (quoteMsg.State != null)
+					if (mdMsg.IsSubscribe)
+					{
+						if (mdMsg.SecurityId == default || mdMsg.DataType2 != DataType.MarketDepth)
+							break;
+
+						_subscriptions.Add(mdMsg.TransactionId, new Level1DepthBuilder(mdMsg.SecurityId));
+						
+						mdMsg = mdMsg.TypedClone();
+						mdMsg.DataType2 = DataType.Level1;
+						message = mdMsg;
+					}
+					else
+					{
+						if (_subscriptions.Remove(mdMsg.OriginalTransactionId))
+						{
+						}
+					}
+
+					break;
+				}
+			}
+
+			return base.SendInMessage(message);
+		}
+
+		/// <inheritdoc />
+		protected override void OnInnerAdapterNewOutMessage(Message message)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.SubscriptionResponse:
+				{
+					var responseMsg = (SubscriptionResponseMessage)message;
+
+					if (!responseMsg.IsOk())
+						_subscriptions.Remove(responseMsg.OriginalTransactionId);
+
+					break;
+				}
+				case MessageTypes.SubscriptionFinished:
+				{
+					var finishedMsg = (SubscriptionFinishedMessage)message;
+					_subscriptions.Remove(finishedMsg.OriginalTransactionId);
+					break;
+				}
+				case MessageTypes.Level1Change:
+				{
+					if (_subscriptions.Count == 0)
 						break;
 
-					GetBuilder(quoteMsg.SecurityId).HasDepth = true;
+					var level1Msg = (Level1ChangeMessage)message;
+
+					var ids = level1Msg.GetSubscriptionIds();
+
+					List<QuoteChangeMessage> books = null;
+					HashSet<long> leftIds = null;
+
+					foreach (var id in ids)
+					{
+						if (!_subscriptions.TryGetValue(id, out var builder))
+							continue;
+						
+						var quoteMsg = builder.Process(level1Msg);
+
+						if (quoteMsg == null)
+							continue;
+							
+						quoteMsg.SubscriptionId = id;
+
+						if (books == null)
+							books = new List<QuoteChangeMessage>();
+
+						books.Add(quoteMsg);
+
+						if (leftIds == null)
+							leftIds = new HashSet<long>(ids);
+
+						leftIds.Remove(id);
+					}
+
+					if (books != null)
+					{
+						foreach (var book in books)
+						{
+							base.OnInnerAdapterNewOutMessage(book);
+						}
+					}
+
+					if (leftIds != null)
+					{
+						if (leftIds.Count == 0)
+							return;
+
+						level1Msg.SetSubscriptionIds(leftIds.ToArray());
+					}
+
 					break;
 				}
 			}
@@ -104,18 +188,10 @@ namespace StockSharp.Algo
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private Level1DepthBuilder GetBuilder(SecurityId securityId)
-		{
-			return _level1DepthBuilders.SafeAdd(securityId, c => new Level1DepthBuilder(c));
-		}
-
 		/// <summary>
 		/// Create a copy of <see cref="Level1DepthBuilderAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
-		{
-			return new Level1DepthBuilderAdapter(InnerAdapter);
-		}
+		public override IMessageChannel Clone() => new Level1DepthBuilderAdapter(InnerAdapter.TypedClone());
 	}
 }

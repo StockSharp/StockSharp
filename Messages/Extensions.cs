@@ -470,11 +470,11 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Concat(dataType).ToArray();
+			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Concat(dataType).Distinct().ToArray();
 		}
 
 		/// <summary>
-		/// Remove market data type from <see cref="IMessageAdapter.SupportedInMessages"/>.
+		/// Remove market data type from <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="type">Market data type.</param>
@@ -939,7 +939,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove all market data types from <see cref="IMessageAdapter.SupportedInMessages"/>.
+		/// Remove all market data types from <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void RemoveSupportedAllMarketDataTypes(this MessageAdapter adapter)

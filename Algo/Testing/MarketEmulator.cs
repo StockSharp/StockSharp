@@ -2223,6 +2223,7 @@ namespace StockSharp.Algo.Testing
 		string IMessageAdapter.FeatureName => string.Empty;
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
+		bool IMessageAdapter.GenerateOrderBookFromLevel { get; set; }
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
