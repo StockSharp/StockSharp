@@ -3,6 +3,7 @@ M:StockSharp.Upbit.UpbitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;Do
 M:StockSharp.Upbit.UpbitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Upbit.UpbitMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Upbit.UpbitMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Upbit.UpbitMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Upbit.UpbitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Upbit.UpbitMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Upbit.UpbitMessageAdapter.Key/inheritdoc;DocStr8459

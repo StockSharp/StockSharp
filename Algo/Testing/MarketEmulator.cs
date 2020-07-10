@@ -2222,6 +2222,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.UseChannels => false;
 		string IMessageAdapter.FeatureName => string.Empty;
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
+		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

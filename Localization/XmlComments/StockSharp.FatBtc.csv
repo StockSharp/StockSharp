@@ -4,6 +4,7 @@ M:StockSharp.FatBTC.FatBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tr
 M:StockSharp.FatBTC.FatBtcMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.FatBTC.FatBtcMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.FatBTC.FatBtcMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+P:StockSharp.FatBTC.FatBtcMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.FatBTC.FatBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.FatBTC.FatBtcMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.FatBTC.FatBtcMessageAdapter.Key/inheritdoc;DocStr8459

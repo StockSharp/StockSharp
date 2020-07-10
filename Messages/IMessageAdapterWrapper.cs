@@ -348,6 +348,8 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => InnerAdapter.IsAutoReplyOnTransactonalUnsubscription;
 
+		bool IMessageAdapter.IsReplaceCommandEditCurrent => InnerAdapter.IsReplaceCommandEditCurrent;
+
 		bool IMessageAdapter.EnqueueSubscriptions
 		{
 			get => InnerAdapter.EnqueueSubscriptions;

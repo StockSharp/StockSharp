@@ -3,6 +3,7 @@ M:StockSharp.LATOKEN.LatokenMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summar
 M:StockSharp.LATOKEN.LatokenMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.LATOKEN.LatokenMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.LATOKEN.LatokenMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.LATOKEN.LatokenMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.LATOKEN.LatokenMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.LATOKEN.LatokenMessageAdapter.Key/inheritdoc;DocStr8459
 P:StockSharp.LATOKEN.LatokenMessageAdapter.Secret/inheritdoc;DocStr8459

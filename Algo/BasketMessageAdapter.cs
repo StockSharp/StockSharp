@@ -262,6 +262,9 @@ namespace StockSharp.Algo
 			private readonly BasketMessageAdapter _adapter;
 			private readonly Connector _connector;
 
+			private bool _posLookupProcessed;
+			private bool _transLookupProcessed;
+
 			public EmulationPositionManager(bool? isPositionsEmulationRequired, BasketMessageAdapter adapter)
 			{
 				if (isPositionsEmulationRequired != null)
@@ -284,6 +287,9 @@ namespace StockSharp.Algo
 
 						_managersByTransId.Clear();
 
+						_posLookupProcessed = false;
+						_transLookupProcessed = false;
+
 						break;
 					}
 					case MessageTypes.PortfolioLookup:
@@ -305,18 +311,25 @@ namespace StockSharp.Algo
 								if (execMsg.IsMarketData())
 									break;
 
-								if (execMsg.TransactionId == 0)
+								var transId = execMsg.TransactionId;
+
+								if (transId == 0)
 								{
 									if (_managersByTransId.TryGetValue(execMsg.OriginalTransactionId, out var manager))
 										return manager.ProcessMessage(message);
 								}
 								else
 								{
-									var manager = GetManager(execMsg.StrategyId);
-
-									if (manager != null)
+									if (_managersByTransId.TryGetValue(transId, out var manager))
+										return manager.ProcessMessage(message);
+									else
 									{
-										_managersByTransId[execMsg.TransactionId] = manager;
+										manager = GetManager(execMsg.StrategyId);
+
+										if (manager == null)
+											break;
+
+										_managersByTransId[transId] = manager;
 										return manager.ProcessMessage(message);
 									}
 								}
@@ -369,6 +382,11 @@ namespace StockSharp.Algo
 				if (!message.IsSubscribe || (message.Adapter != null && message.Adapter != this))
 					return;
 
+				if (_transLookupProcessed)
+					return;
+
+				_transLookupProcessed = true;
+
 				var buffer = _connector.Buffer;
 				var snapshotRegistry = _connector.SnapshotRegistry;
 
@@ -407,6 +425,11 @@ namespace StockSharp.Algo
 
 				if (!message.IsSubscribe || (message.Adapter != null && message.Adapter != this))
 					return;
+
+				if (_posLookupProcessed)
+					return;
+
+				_posLookupProcessed = true;
 
 				foreach (var position in _connector.PositionStorage.Positions.Filter(message))
 				{
@@ -728,6 +751,8 @@ namespace StockSharp.Algo
 		string IMessageAdapter.FeatureName => string.Empty;
 
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
+
+		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.

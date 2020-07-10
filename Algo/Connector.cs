@@ -452,6 +452,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
+		/// <summary>
+		/// Process strategies positions and store it into <see cref="Positions"/>.
+		/// </summary>
+		public bool KeepStrategiesPositions { get; set; }
+
 		private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new CachedSynchronizedSet<MessageTypes>(new[]
 		{
 			MessageTypes.SecurityLookup,
@@ -537,12 +542,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
+		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
-			return GetPosition(portfolio, security, clientCode, depoName, limitType, string.Empty);
+			return GetPosition(portfolio, security, strategyId, clientCode, depoName, limitType, string.Empty);
 		}
 
-		private Position GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, string description)
+		private Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType, string description)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -550,7 +555,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var position = PositionStorage.GetOrCreatePosition(portfolio, security, clientCode, depoName, limitType, (pf, sec, clCode, ddep, limit) =>
+			var position = PositionStorage.GetOrCreatePosition(portfolio, security, strategyId, clientCode, depoName, limitType, (pf, sec, sid, clCode, ddep, limit) =>
 			{
 				var p = EntityFactory.CreatePosition(portfolio, security);
 
@@ -558,6 +563,7 @@ namespace StockSharp.Algo
 				p.LimitType = limitType;
 				p.Description = description;
 				p.ClientCode = clientCode;
+				p.StrategyId = strategyId;
 
 				return p;
 			}, out var isNew);
@@ -588,41 +594,35 @@ namespace StockSharp.Algo
 		public MarketDepth GetMarketDepth(Security security) => GetMarketDepth(security, false);
 
 		/// <inheritdoc />
-		public MarketDepth GetFilteredMarketDepth(Security security)
-		{
-			return GetMarketDepth(security, true);
-		}
+		public MarketDepth GetFilteredMarketDepth(Security security) => GetMarketDepth(security, true);
+
+		/// <summary>
+		/// Check <see cref="Order.Price"/> and <see cref="Order.Volume"/> are they multiply to step.
+		/// </summary>
+		public bool CheckSteps { get; set; }
 
 		/// <inheritdoc />
 		public void RegisterOrder(Order order)
-		{
-			RegisterOrder(order, true);
-		}
-
-		private void RegisterOrder(Order order, bool initOrder)
 		{
 			try
 			{
 				this.AddOrderInfoLog(order, nameof(RegisterOrder));
 
-				if (initOrder)
+				CheckOnNew(order);
+
+				if (order.Type != OrderTypes.Conditional)
 				{
-					CheckOnNew(order);
+					if (order.Volume == 0)
+						throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
 
-					if (order.Type != OrderTypes.Conditional)
-					{
-						if (order.Volume == 0)
-							throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
-
-						if (order.Volume < 0)
-							throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895.Put(order.Price));
-					}
-
-					if (order.Type == null)
-						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
-
-					InitNewOrder(order);
+					if (order.Volume < 0)
+						throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895.Put(order.Price));
 				}
+
+				if (order.Type == null)
+					order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
+
+				InitNewOrder(order);
 
 				OnRegisterOrder(order);
 			}
@@ -638,12 +638,44 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
+		public bool? IsOrderEditable(Order order)
+			=> _entityCache.TryGetAdapter(order)?.IsReplaceCommandEditCurrent == true;
+
+		/// <inheritdoc />
+		public void EditOrder(Order order, Order changes)
+		{
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
+
+			if (changes is null)
+				throw new ArgumentNullException(nameof(changes));
+
+			var transactionId = TransactionIdGenerator.GetNextId();
+
+			try
+			{
+				this.AddOrderInfoLog(order, nameof(EditOrder));
+
+				CheckOnOld(order);
+				CheckOnNew(changes);
+
+				changes.TransactionId = transactionId;
+
+				OnEditOrder(order, changes);
+			}
+			catch (Exception ex)
+			{
+				SendOrderFailed(order, true, ex, transactionId);
+			}
+		}
+
+		/// <inheritdoc />
 		public void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
-			if (oldOrder == null)
+			if (oldOrder is null)
 				throw new ArgumentNullException(nameof(oldOrder));
 
-			if (newOrder == null)
+			if (newOrder is null)
 				throw new ArgumentNullException(nameof(newOrder));
 
 			try
@@ -794,7 +826,7 @@ namespace StockSharp.Algo
 			SendOutMessage(fail.ToMessage(originalTransactionId));
 		}
 
-		private static void CheckOnNew(Order order)
+		private void CheckOnNew(Order order)
 		{
 			CheckOrderState(order);
 
@@ -806,6 +838,22 @@ namespace StockSharp.Algo
 
 			if (order.Id != null || !order.StringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
+
+			if (CheckSteps)
+			{
+				if (order.Price > 0)
+				{
+					var priceStep = order.Security.PriceStep;
+
+					if (priceStep != null && (order.Price % priceStep.Value) != 0)
+						throw new ArgumentException(LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(order.Price, order, priceStep.Value));
+				}
+					
+				var volumeStep = order.Security.VolumeStep;
+
+				if (volumeStep != null && (order.Volume % volumeStep.Value) != 0)
+					throw new ArgumentException(LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(order.Volume, order, volumeStep.Value));
+			}
 		}
 
 		private static void CheckOnOld(Order order)
@@ -871,6 +919,16 @@ namespace StockSharp.Algo
 		protected void OnRegisterOrder(Order order)
 		{
 			SendInMessage(order.CreateRegisterMessage(GetSecurityId(order.Security)));
+		}
+
+		/// <summary>
+		/// Edit the order.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <param name="changes">Order changes.</param>
+		protected void OnEditOrder(Order order, Order changes)
+		{
+			SendInMessage(order.CreateReplaceMessage(changes, GetSecurityId(order.Security)));
 		}
 
 		/// <summary>
@@ -1189,7 +1247,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			TradesKeepCount = storage.GetValue(nameof(TradesKeepCount), TradesKeepCount);
@@ -1199,6 +1257,8 @@ namespace StockSharp.Algo
 			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 			OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
+			CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
+			KeepStrategiesPositions = storage.GetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
 
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
@@ -1235,7 +1295,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			storage.SetValue(nameof(TradesKeepCount), TradesKeepCount);
@@ -1245,7 +1305,9 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
-
+			storage.SetValue(nameof(CheckSteps), CheckSteps);
+			storage.SetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
+			
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
@@ -1287,9 +1349,12 @@ namespace StockSharp.Algo
 			=> Enumerable.Empty<Range<DateTimeOffset>>();
 
 		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
-			=> SubscribeCandles(series, from, to);
+			=> this.SubscribeCandles(series, from, to);
 
-		void ICandleSource<Candle>.Stop(CandleSeries series) => UnSubscribeCandles(series);
+		void ICandleSource<Candle>.Stop(CandleSeries series)
+#pragma warning disable CS0618 // Type or member is obsolete
+			=> this.UnSubscribeCandles(series);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		ICandleManagerContainer ICandleManager.Container { get; } = new CandleManagerContainer();
 

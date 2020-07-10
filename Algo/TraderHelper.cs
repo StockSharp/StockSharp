@@ -2890,13 +2890,14 @@ namespace StockSharp.Algo
 		/// <param name="storage">Storage.</param>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <param name="security">Security.</param>
+		/// <param name="strategyId">Strategy ID.</param>
 		/// <param name="clientCode">Client code.</param>
 		/// <param name="depoName">Depo name.</param>
 		/// <param name="limitType">Limit type.</param>
 		/// <param name="creator">Creator.</param>
 		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Position.</returns>
-		public static Position GetOrCreatePosition(this IPositionStorage storage, Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, Func<Portfolio, Security, string, string, TPlusLimits?, Position> creator, out bool isNew)
+		public static Position GetOrCreatePosition(this IPositionStorage storage, Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType, Func<Portfolio, Security, string, string, string, TPlusLimits?, Position> creator, out bool isNew)
 		{
 			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
@@ -2912,11 +2913,11 @@ namespace StockSharp.Algo
 
 			lock (storage.SyncRoot)
 			{
-				var position = storage.GetPosition(portfolio, security, clientCode, depoName, limitType);
+				var position = storage.GetPosition(portfolio, security, strategyId, clientCode, depoName, limitType);
 
 				if (position == null)
 				{
-					position = creator(portfolio, security, clientCode, depoName, limitType);
+					position = creator(portfolio, security, strategyId, clientCode, depoName, limitType);
 					storage.Save(position);
 					isNew = true;
 				}
@@ -3524,15 +3525,17 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <param name="offlineMode">Offline mode handling message.</param>
-		public static void LookupAll(this IConnector connector, MessageOfflineModes offlineMode = MessageOfflineModes.Cancel)
+		public static void LookupAll(this Connector connector, MessageOfflineModes offlineMode = MessageOfflineModes.Cancel)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
+#pragma warning disable CS0618 // Type or member is obsolete
 			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
 			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
 			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
 			connector.LookupOrders(new Order(), offlineMode: offlineMode);
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		/// <summary>

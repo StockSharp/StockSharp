@@ -90,6 +90,10 @@ M:StockSharp.Community.ProductLookupMessage.#ctor/summary;DocStr1
 P:StockSharp.Community.ProductLookupMessage.DataType/inheritdoc;DocStr8459
 M:StockSharp.Community.ProductLookupMessage.Clone/summary;DocStr643
 M:StockSharp.Community.ProductLookupMessage.Clone/returns;DocStr1116
+T:StockSharp.Community.ProductPriceTypes/summary;DocStr11943
+F:StockSharp.Community.ProductPriceTypes.Lifetime/summary;Lifetime
+F:StockSharp.Community.ProductPriceTypes.PerMonth/summary;PerMonth
+F:StockSharp.Community.ProductPriceTypes.Annual/summary;Annual
 T:StockSharp.Community.Products/summary;DocStr2998
 F:StockSharp.Community.Products.Api/summary;DocStr2999
 F:StockSharp.Community.Products.Hydra/summary;DocStr3000

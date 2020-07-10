@@ -58,7 +58,7 @@
 		private readonly SyncObject _timerLock = new SyncObject();
 		private readonly SynchronizedList<Action> _dataThreadActions = new SynchronizedList<Action>();
 		private readonly CollectionSecurityProvider _securityProvider = new CollectionSecurityProvider();
-		private readonly TestMarketDataProvider _testMdProvider = new TestMarketDataProvider();
+		private readonly TestMarketSubscriptionProvider _testProvider = new TestMarketSubscriptionProvider();
 
 		private static readonly TimeSpan _realtimeInterval = TimeSpan.FromMilliseconds(100);
 		private static readonly TimeSpan _drawInterval = TimeSpan.FromMilliseconds(100);
@@ -97,7 +97,7 @@
 				Arg = TimeSpan.FromMinutes(1)
 			};
 
-			ConfigManager.RegisterService<IMarketDataProvider>(_testMdProvider);
+			ConfigManager.RegisterService<ISubscriptionProvider>(_testProvider);
 			ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
 
 			ThemeExtensions.ApplyDefaultTheme();
@@ -425,7 +425,7 @@
 			if (nextTick != null)
 			{
 				if(nextTick.TradePrice != null)
-					_testMdProvider.UpdateData(_security, nextTick.TradePrice.Value);
+					_testProvider.UpdateData(_security, nextTick.TradePrice.Value);
 
 				if (_candleTransform.Process(nextTick))
 				{
@@ -714,122 +714,90 @@
 			}
 		}
 
-		private class TestMarketDataProvider : IMarketDataProviderEx
+		private class TestMarketSubscriptionProvider : ISubscriptionProvider
 		{
-			public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
+			private readonly HashSet<Subscription> _l1Subscriptions = new HashSet<Subscription>();
 
 			public void UpdateData(Security sec, decimal price)
 			{
 				var ps = sec.PriceStep ?? 1;
 
-				var list = new List<KeyValuePair<Level1Fields, object>>();
+				var msg = new Level1ChangeMessage
+				{
+					SecurityId = sec.ToSecurityId(),
+					ServerTime = DateTimeOffset.Now,
+				};
 
 				if (RandomGen.GetBool())
-					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, price - RandomGen.GetInt(1, 10) * ps));
+					msg.Changes.TryAdd(Level1Fields.BestBidPrice, price - RandomGen.GetInt(1, 10) * ps);
 
 				if (RandomGen.GetBool())
-					list.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, price + RandomGen.GetInt(1, 10) * ps));
+					msg.Changes.TryAdd(Level1Fields.BestAskPrice, price + RandomGen.GetInt(1, 10) * ps);
 
-				var now = DateTimeOffset.Now;
-				ValuesChanged?.Invoke(sec, list, now, now);
+				foreach (var l1Subscriptions in _l1Subscriptions)
+				{
+					_level1Received?.Invoke(l1Subscriptions, msg);
+				}
 			}
 
-			#region not implemented
+			private event Action<Subscription, Level1ChangeMessage> _level1Received;
 
-			event Action<Trade> IMarketDataProvider.NewTrade { add { } remove { } }
-			event Action<Security> IMarketDataProvider.NewSecurity { add { } remove { } }
-			event Action<MarketDepth> IMarketDataProvider.NewMarketDepth { add { } remove { } }
-			event Action<MarketDepth> IMarketDataProvider.MarketDepthChanged { add { } remove { } }
-			event Action<MarketDepth> IMarketDataProvider.FilteredMarketDepthChanged { add { } remove { } }
-			event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem { add { } remove { } }
-			event Action<News> IMarketDataProvider.NewNews { add { } remove { } }
-			event Action<News> IMarketDataProvider.NewsChanged { add { } remove { } }
-			event Action<Security> IMarketDataProvider.SecurityChanged { add { } remove { } }
-			event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult { add { } remove { } }
-			event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> IMarketDataProvider.LookupSecuritiesResult2 { add { } remove { } }
-			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult { add { } remove { } }
-			event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> IMarketDataProvider.LookupBoardsResult2 { add { } remove { } }
-			event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult { add { } remove { } }
-			event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> IMarketDataProvider.LookupTimeFramesResult2 { add { } remove { } }
+			event Action<Subscription, Level1ChangeMessage> ISubscriptionProvider.Level1Received
+			{
+				add => _level1Received += value;
+				remove => _level1Received -= value;
+			}
 
-			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionSucceeded { add { } remove { } }
-			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataSubscriptionFailed { add { } remove { } }
-			event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataSubscriptionFailed2 { add { } remove { } }
-
-			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataUnSubscriptionSucceeded { add { } remove { } }
-			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnSubscriptionFailed { add { } remove { } }
-			event Action<Security, MarketDataMessage, SubscriptionResponseMessage> IMarketDataProvider.MarketDataUnSubscriptionFailed2 { add { } remove { } }
-
-			event Action<Security, SubscriptionFinishedMessage> IMarketDataProvider.MarketDataSubscriptionFinished { add { } remove { } }
-			event Action<Security, MarketDataMessage, Exception> IMarketDataProvider.MarketDataUnexpectedCancelled { add { } remove { } }
-
-			event Action<Security, MarketDataMessage> IMarketDataProvider.MarketDataSubscriptionOnline { add { } remove { } }
-
-			void IMarketDataProvider.LookupSecurities(SecurityLookupMessage criteria) { }
-			void IMarketDataProvider.LookupBoards(BoardLookupMessage criteria) { }
-			void IMarketDataProvider.LookupTimeFrames(TimeFrameLookupMessage criteria) { }
-
-			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security) { yield break; }
-			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field) => null;
-
-			MarketDepth IMarketDataProvider.GetMarketDepth(Security security) => null;
-			MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security) => null;
-
-			#endregion
-
-			IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => throw new NotImplementedException();
+			IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => _l1Subscriptions;
 
 			event Action<Subscription, Message> ISubscriptionProvider.SubscriptionReceived { add { } remove { } }
-			event Action<Subscription, Level1ChangeMessage> ISubscriptionProvider.Level1Received { add { } remove { } }
+
 			event Action<Subscription, QuoteChangeMessage> ISubscriptionProvider.OrderBookReceived { add { } remove { } }
+
 			event Action<Subscription, Trade> ISubscriptionProvider.TickTradeReceived { add { } remove { } }
+
 			event Action<Subscription, Security> ISubscriptionProvider.SecurityReceived { add { } remove { } }
+
 			event Action<Subscription, ExchangeBoard> ISubscriptionProvider.BoardReceived { add { } remove { } }
+
 			event Action<Subscription, MarketDepth> ISubscriptionProvider.MarketDepthReceived { add { } remove { } }
+
 			event Action<Subscription, OrderLogItem> ISubscriptionProvider.OrderLogItemReceived { add { } remove { } }
+
 			event Action<Subscription, News> ISubscriptionProvider.NewsReceived { add { } remove { } }
+
 			event Action<Subscription, Candle> ISubscriptionProvider.CandleReceived { add { } remove { } }
+
 			event Action<Subscription, MyTrade> ISubscriptionProvider.OwnTradeReceived { add { } remove { } }
+
 			event Action<Subscription, Order> ISubscriptionProvider.OrderReceived { add { } remove { } }
+
 			event Action<Subscription, OrderFail> ISubscriptionProvider.OrderRegisterFailReceived { add { } remove { } }
+
 			event Action<Subscription, OrderFail> ISubscriptionProvider.OrderCancelFailReceived { add { } remove { } }
+
 			event Action<Subscription, Portfolio> ISubscriptionProvider.PortfolioReceived { add { } remove { } }
+
 			event Action<Subscription, Position> ISubscriptionProvider.PositionReceived { add { } remove { } }
+
 			event Action<Subscription> ISubscriptionProvider.SubscriptionOnline { add { } remove { } }
+
 			event Action<Subscription> ISubscriptionProvider.SubscriptionStarted { add { } remove { } }
+
 			event Action<Subscription, Exception> ISubscriptionProvider.SubscriptionStopped { add { } remove { } }
+
 			event Action<Subscription, Exception, bool> ISubscriptionProvider.SubscriptionFailed { add { } remove { } }
 
-			void ISubscriptionProvider.Subscribe(Subscription subscription) { }
-			void ISubscriptionProvider.UnSubscribe(Subscription subscription) { }
+			void ISubscriptionProvider.Subscribe(Subscription subscription)
+			{
+				if (subscription.DataType == DataType.Level1)
+					_l1Subscriptions.Add(subscription);
+			}
 
-			Subscription IMarketDataProviderEx.SubscribeMarketData(Security security, MarketDataMessage message) => null;
-			void IMarketDataProviderEx.UnSubscribeMarketData(Security security, MarketDataMessage message) { }
-
-			Subscription IMarketDataProviderEx.SubscribeMarketData(MarketDataMessage message) => null;
-			void IMarketDataProviderEx.UnSubscribeMarketData(MarketDataMessage message) { }
-
-			Subscription IMarketDataProviderEx.SubscribeFilteredMarketDepth(Security security) => null;
-
-			Subscription IMarketDataProviderEx.SubscribeMarketDepth(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, int? maxDepth, TimeSpan? refreshSpeed, IOrderLogMarketDepthBuilder depthBuilder, bool passThroughOrderBookInrement, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeMarketDepth(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeTrades(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeTrades(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeLevel1(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, MarketDataBuildModes buildMode, DataType buildFrom, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeLevel1(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeOrderLog(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeOrderLog(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeNews(Security security, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeNews(Security security) { }
-
-			Subscription IMarketDataProviderEx.SubscribeBoard(ExchangeBoard board, DateTimeOffset? from, DateTimeOffset? to, long? count, IMessageAdapter adapter) => null;
-			void IMarketDataProviderEx.UnSubscribeBoard(ExchangeBoard board) { }
-
-			void IMarketDataProviderEx.UnSubscribe(long subscriptionId) { }
+			void ISubscriptionProvider.UnSubscribe(Subscription subscription)
+			{
+				_l1Subscriptions.Remove(subscription);
+			}
 		}
 	}
 }

@@ -107,32 +107,32 @@ namespace StockSharp.BusinessEntities
 		event Action<News> NewsChanged;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupSecurities"/> received.
+		/// Lookup result <see cref="SecurityLookupMessage"/> received.
 		/// </summary>
 		event Action<SecurityLookupMessage, IEnumerable<Security>, Exception> LookupSecuritiesResult;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupSecurities"/> received.
+		/// Lookup result <see cref="SecurityLookupMessage"/> received.
 		/// </summary>
 		event Action<SecurityLookupMessage, IEnumerable<Security>, IEnumerable<Security>, Exception> LookupSecuritiesResult2;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupBoards"/> received.
+		/// Lookup result <see cref="BoardLookupMessage"/> received.
 		/// </summary>
 		event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupBoards"/> received.
+		/// Lookup result <see cref="BoardLookupMessage"/> received.
 		/// </summary>
 		event Action<BoardLookupMessage, IEnumerable<ExchangeBoard>, IEnumerable<ExchangeBoard>, Exception> LookupBoardsResult2;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupTimeFrames"/> received.
+		/// Lookup result <see cref="TimeFrameLookupMessage"/> received.
 		/// </summary>
 		event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupTimeFrames"/> received.
+		/// Lookup result <see cref="TimeFrameLookupMessage"/> received.
 		/// </summary>
 		event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
 
@@ -180,24 +180,6 @@ namespace StockSharp.BusinessEntities
 		/// Subscription is online.
 		/// </summary>
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
-
-		/// <summary>
-		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		void LookupSecurities(SecurityLookupMessage criteria);
-
-		/// <summary>
-		/// To find boards that match the filter <paramref name="criteria" />. Found boards will be passed through the event <see cref="LookupBoardsResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		void LookupBoards(BoardLookupMessage criteria);
-
-		/// <summary>
-		/// To find time-frames that match the filter <paramref name="criteria" />. Found time-frames will be passed through the event <see cref="LookupTimeFramesResult"/>.
-		/// </summary>
-		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
-		void LookupTimeFrames(TimeFrameLookupMessage criteria);
 
 		/// <summary>
 		/// Get filtered order book.

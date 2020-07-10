@@ -5,6 +5,7 @@ M:StockSharp.Poloniex.PoloniexMessageAdapter.IsAllDownloadingSupported(StockShar
 P:StockSharp.Poloniex.PoloniexMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Poloniex.PoloniexMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Poloniex.PoloniexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Poloniex.PoloniexMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Poloniex.PoloniexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Poloniex.PoloniexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Poloniex.PoloniexMessageAdapter.Key/inheritdoc;DocStr8459

@@ -3,6 +3,7 @@ M:StockSharp.Coinigy.CoinigyMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summar
 M:StockSharp.Coinigy.CoinigyMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Coinigy.CoinigyMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Coinigy.CoinigyMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Coinigy.CoinigyMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Coinigy.CoinigyMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Coinigy.CoinigyMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Coinigy.CoinigyMessageAdapter.Key/inheritdoc;DocStr8459

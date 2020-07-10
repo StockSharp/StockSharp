@@ -86,6 +86,16 @@ namespace StockSharp.Algo
 		public static IMarketDataProvider TryMarketDataProvider => ConfigManager.TryGetService<IMarketDataProvider>();
 
 		/// <summary>
+		/// Subscription provider.
+		/// </summary>
+		public static ISubscriptionProvider SubscriptionProvider => ConfigManager.GetService<ISubscriptionProvider>();
+
+		/// <summary>
+		/// Subscription provider.
+		/// </summary>
+		public static ISubscriptionProvider TrySubscriptionProvider => ConfigManager.TryGetService<ISubscriptionProvider>();
+
+		/// <summary>
 		/// The storage of market data.
 		/// </summary>
 		public static IStorageRegistry StorageRegistry => ConfigManager.GetService<IStorageRegistry>();

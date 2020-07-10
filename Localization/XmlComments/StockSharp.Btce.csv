@@ -4,6 +4,7 @@ M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 M:StockSharp.Btce.BtceMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Btce.BtceMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 M:StockSharp.Btce.BtceMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Btce.BtceMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Btce.BtceMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Btce.BtceMessageAdapter.Key/inheritdoc;DocStr8459

@@ -73,7 +73,8 @@
 
 		private readonly PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo> _subscriptionsByKey = new PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo>();
 		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new Dictionary<long, SubscriptionInfo>();
-		
+		private readonly HashSet<long> _strategyPosSubscriptions = new HashSet<long>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionOnlineMessageAdapter"/>.
 		/// </summary>
@@ -284,6 +285,7 @@
 			{
 				_subscriptionsByKey.Clear();
 				_subscriptionsById.Clear();
+				_strategyPosSubscriptions.Clear();
 			}
 		}
 
@@ -310,7 +312,12 @@
 			{
 				if (isSubscribe)
 				{
-					if (message.To == null)
+					if (message is PortfolioLookupMessage posMsg && !posMsg.StrategyId.IsEmpty())
+					{
+						_strategyPosSubscriptions.Add(posMsg.TransactionId);
+						sendInMsg = message;
+					}
+					else if (message.To == null)
 					{
 						var dataType = message.DataType;
 						var secId = default(SecurityId);
@@ -411,6 +418,10 @@
 								sendOutMsgs = new[] { message.CreateResult() };
 							}
 						}
+					}
+					else if (_strategyPosSubscriptions.Remove(originId))
+					{
+						sendInMsg = message;
 					}
 					else
 					{

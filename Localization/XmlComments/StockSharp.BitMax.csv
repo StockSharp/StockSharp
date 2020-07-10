@@ -4,6 +4,7 @@ M:StockSharp.BitMax.BitMaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/tr
 M:StockSharp.BitMax.BitMaxMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.BitMax.BitMaxMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.BitMax.BitMaxMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.BitMax.BitMaxMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.BitMax.BitMaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.BitMax.BitMaxMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.BitMax.BitMaxMessageAdapter.Key/inheritdoc;DocStr8459

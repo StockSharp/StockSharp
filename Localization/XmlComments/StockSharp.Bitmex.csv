@@ -2,9 +2,10 @@ T:StockSharp.Bitmex.BitmexMessageAdapter/summary;DocStr2538
 M:StockSharp.Bitmex.BitmexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Bitmex.BitmexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Bitmex.BitmexMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
-M:StockSharp.Bitmex.BitmexMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Bitmex.BitmexMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+M:StockSharp.Bitmex.BitmexMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Bitmex.BitmexMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
+P:StockSharp.Bitmex.BitmexMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Bitmex.BitmexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitmex.BitmexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bitmex.BitmexMessageAdapter.Key/inheritdoc;DocStr8459

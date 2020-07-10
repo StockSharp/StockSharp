@@ -5,6 +5,7 @@ M:StockSharp.Okcoin.OkcoinMessageAdapter.IsAllDownloadingSupported(StockSharp.Me
 M:StockSharp.Okcoin.OkcoinMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.Okcoin.OkcoinMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Okcoin.OkcoinMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
+P:StockSharp.Okcoin.OkcoinMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Okcoin.OkcoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Okcoin.OkcoinMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Okcoin.OkcoinMessageAdapter.Key/inheritdoc;DocStr8459

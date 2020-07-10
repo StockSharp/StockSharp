@@ -8,6 +8,7 @@
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+	using Key = System.Tuple<StockSharp.BusinessEntities.Portfolio, StockSharp.BusinessEntities.Security, string, string, string, StockSharp.Messages.TPlusLimits?>;
 
 	/// <summary>
 	/// The interface for access to the position storage.
@@ -52,7 +53,7 @@
 		private readonly IPortfolioProvider _underlying;
 
 		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
+		private readonly CachedSynchronizedDictionary<Key, Position> _positions = new CachedSynchronizedDictionary<Key, Position>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryPositionStorage"/>.
@@ -108,9 +109,9 @@
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
+		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
-			return _positions.TryGetValue(CreateKey(portfolio, security, clientCode, depoName, limitType));
+			return _positions.TryGetValue(CreateKey(portfolio, security, strategyId, clientCode, depoName, limitType));
 		}
 
 		/// <inheritdoc />
@@ -160,15 +161,15 @@
 			(isNew ? NewPosition : PositionChanged)?.Invoke(position);
 		}
 
-		private Tuple<Portfolio, Security, string, string, TPlusLimits?> CreateKey(Position position)
+		private Key CreateKey(Position position)
 		{
 			if (position is null)
 				throw new ArgumentNullException(nameof(position));
 
-			return CreateKey(position.Portfolio, position.Security, position.ClientCode, position.DepoName, position.LimitType);
+			return CreateKey(position.Portfolio, position.Security, position.StrategyId, position.ClientCode, position.DepoName, position.LimitType);
 		}
 
-		private Tuple<Portfolio, Security, string, string, TPlusLimits?> CreateKey(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType)
+		private Key CreateKey(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType)
 		{
 			if (portfolio is null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -176,13 +177,13 @@
 			if (security is null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (depoName == null)
+			if (depoName is null)
 				depoName = string.Empty;
 
-			if (clientCode == null)
+			if (clientCode is null)
 				clientCode = string.Empty;
 
-			return Tuple.Create(portfolio, security, clientCode.ToLowerInvariant(), depoName.ToLowerInvariant(), limitType);
+			return Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, clientCode?.ToLowerInvariant() ?? string.Empty, depoName?.ToLowerInvariant() ?? string.Empty, limitType);
 		}
 	}
 }

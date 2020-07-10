@@ -2,6 +2,7 @@ T:StockSharp.TradeOgre.TradeOgreMessageAdapter/summary;DocStr2538
 M:StockSharp.TradeOgre.TradeOgreMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.TradeOgre.TradeOgreMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.TradeOgre.TradeOgreMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.TradeOgre.TradeOgreMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.TradeOgre.TradeOgreMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.TradeOgre.TradeOgreMessageAdapter.Key/inheritdoc;DocStr8459
 P:StockSharp.TradeOgre.TradeOgreMessageAdapter.Secret/inheritdoc;DocStr8459

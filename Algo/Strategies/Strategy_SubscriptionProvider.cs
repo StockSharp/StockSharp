@@ -156,6 +156,12 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public void Subscribe(Subscription subscription)
 		{
+			Subscribe(subscription, false);
+		}
+
+		private void Subscribe(Subscription subscription, bool isGlobal)
+		{
+			_subscriptions.Add(subscription, isGlobal);
 			SubscriptionProvider.Subscribe(subscription);
 		}
 

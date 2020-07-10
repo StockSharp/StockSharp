@@ -40,7 +40,6 @@ namespace SampleHistoryTesting
 		private readonly List<MyTrade> _myTrades = new List<MyTrade>();
 		private readonly Subscription _series;
 		private bool? _isShortLessThenLong;
-		private bool _candlesStarted;
 
 		public SmaStrategy(CandleSeries series,
 			SimpleMovingAverage longSma, SimpleMovingAverage shortSma,
@@ -76,24 +75,9 @@ namespace SampleHistoryTesting
 
 			_isShortLessThenLong = null;
 
-			_candlesStarted = false;
-
-			this
-				.WhenSubscriptionStarted(_series)
-			    .Do(() => _candlesStarted = true)
-			    .Apply(this);
-
 			Subscribe(_series);
 
 			base.OnStarted();
-		}
-
-		protected override void OnStopped()
-		{
-			if (_candlesStarted)
-				UnSubscribe(_series);
-
-			base.OnStopped();
 		}
 
 		private void ProcessCandle(Candle candle)

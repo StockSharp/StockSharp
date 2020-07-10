@@ -3,6 +3,7 @@ M:StockSharp.Bitexbook.BitexbookMessageAdapter.#ctor(Ecng.Common.IdGenerator)/su
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Bitexbook.BitexbookMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.Bitexbook.BitexbookMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Bitexbook.BitexbookMessageAdapter.Key/inheritdoc;DocStr8459

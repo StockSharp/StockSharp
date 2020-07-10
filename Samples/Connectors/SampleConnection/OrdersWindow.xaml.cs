@@ -33,7 +33,12 @@
 				OrderTypeEnabled = false,
 			}.Init(Connector);
 
-			if (window.ShowModal(this))
+			if (!window.ShowModal(this))
+				return;
+
+			if (Connector.IsOrderEditable(order) == true)
+				Connector.EditOrder(order, window.Order);
+			else
 				Connector.ReRegisterOrder(order, window.Order);
 		}
 	}

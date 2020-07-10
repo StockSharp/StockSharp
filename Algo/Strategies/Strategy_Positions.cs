@@ -15,8 +15,11 @@
 
 	partial class Strategy
 	{
-		private void ProcessPositionChange(PositionChangeMessage message)
+		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
+			if (Connector.KeepStrategiesPositions)
+				return;
+
 			if (message.StrategyId != EnsureGetId())
 				return;
 
@@ -33,6 +36,27 @@
 			}, out var isNew);
 
 			position.ApplyChanges(message);
+
+			if (isNew)
+				_newPosition?.Invoke(position);
+			else
+				_positionChanged?.Invoke(position);
+
+			RaisePositionChanged();
+		}
+
+		private void OnConnectorPositionReceived(Subscription subscription, Position position)
+		{
+			if (!_subscriptions.ContainsKey(subscription))
+				return;
+
+			if (position.StrategyId != EnsureGetId())
+			{
+				this.AddWarningLog("Position {0} has StrategyId '{1}' insteaf of '{2}'.", position, position.StrategyId, EnsureGetId());
+				return;
+			}
+
+			_positions.SafeAdd(CreateKey(position.Security, position.Portfolio), k => position, out var isNew);
 
 			if (isNew)
 				_newPosition?.Invoke(position);
@@ -88,7 +112,7 @@
 			remove => _positionChanged -= value;
 		}
 
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType)
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType)
 			=> _positions.TryGetValue(Tuple.Create(security, portfolio));
 
 		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)

@@ -42,15 +42,15 @@ namespace SampleStrategies
 		public readonly Connector Connector;
 		public readonly LogManager LogManager;
 
-		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
-		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
-		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
-		private readonly StrategiesWindow _strategiesWindow = new StrategiesWindow();
+		private readonly SecuritiesWindow _securitiesWindow;
+		private readonly OrdersWindow _ordersWindow;
+		private readonly PortfoliosWindow _portfoliosWindow;
+		private readonly MyTradesWindow _myTradesWindow;
+		private readonly StrategiesWindow _strategiesWindow;
 
 		public static MainWindow Instance { get; private set; }
 
-		private const string _settingsFile = "connection.xml";
+		private readonly string _settingsFile;
 
 		public MainWindow()
 		{
@@ -59,38 +59,59 @@ namespace SampleStrategies
 
 			Title = Title.Put(LocalizedStrings.Str1355);
 
-			_ordersWindow.MakeHideable();
-			_myTradesWindow.MakeHideable();
-			_strategiesWindow.MakeHideable();
-			_securitiesWindow.MakeHideable();
-			_portfoliosWindow.MakeHideable();
+			const string path = "Data";
+
+			_settingsFile = Path.Combine(path, "connection.xml");
 
 			LogManager = new LogManager();
-			LogManager.Listeners.Add(new FileLogListener("Data\\sample.log"));
+			LogManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
 			LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
-			var entityRegistry = new CsvEntityRegistry("Data");
+			var entityRegistry = new CsvEntityRegistry(path);
 
 			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 			// ecng.serialization invoke in several places IStorage obj
 			ConfigManager.RegisterService(entityRegistry.Storage);
 
-			var storageRegistry = ServicesRegistry.StorageRegistry;
-			var snapshotRegistry = new SnapshotRegistry(Path.Combine("Data", "Snapshots"));
+			var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
+			ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
 
-			Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry)
+			var storageRegistry = new StorageRegistry(exchangeInfoProvider)
+			{
+				DefaultDrive = new LocalMarketDataDrive(path)
+			};
+
+			var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
+
+			Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer())
 			{
 				Adapter =
 				{
 					StorageSettings =
 					{
 						DaysLoad = TimeSpan.FromDays(3),
+						Mode = StorageModes.Snapshot,
 					}
-				}
+				},
+				CheckSteps = true,
 			};
 			LogManager.Sources.Add(Connector);
 
+			_securitiesWindow = new SecuritiesWindow();
+			_ordersWindow = new OrdersWindow();
+			_portfoliosWindow = new PortfoliosWindow();
+			_myTradesWindow = new MyTradesWindow();
+
 			InitConnector(entityRegistry, snapshotRegistry);
+
+			_strategiesWindow = new StrategiesWindow();
+			_strategiesWindow.LoadStrategies(path);
+
+			_ordersWindow.MakeHideable();
+			_myTradesWindow.MakeHideable();
+			_strategiesWindow.MakeHideable();
+			_securitiesWindow.MakeHideable();
+			_portfoliosWindow.MakeHideable();
 		}
 
 		private void InitConnector(IEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
@@ -148,10 +169,10 @@ namespace SampleStrategies
 				return;
 
 			entityRegistry.Init();
-
 			snapshotRegistry.Init();
 
-			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
+			Connector.LookupAll();
+
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new FullInMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 
 			try
