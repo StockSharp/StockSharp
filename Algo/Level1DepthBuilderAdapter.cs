@@ -6,6 +6,7 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -101,11 +102,14 @@ namespace StockSharp.Algo
 						mdMsg = mdMsg.TypedClone();
 						mdMsg.DataType2 = DataType.Level1;
 						message = mdMsg;
+
+						this.AddDebugLog("L1->OB {0} added.", mdMsg.TransactionId);
 					}
 					else
 					{
 						if (_subscriptions.Remove(mdMsg.OriginalTransactionId))
 						{
+							this.AddDebugLog("L1->OB {0} removed.", mdMsg.OriginalTransactionId);
 						}
 					}
 
@@ -126,14 +130,20 @@ namespace StockSharp.Algo
 					var responseMsg = (SubscriptionResponseMessage)message;
 
 					if (!responseMsg.IsOk())
-						_subscriptions.Remove(responseMsg.OriginalTransactionId);
+					{
+						if (_subscriptions.Remove(responseMsg.OriginalTransactionId))
+							this.AddDebugLog("L1->OB {0} removed.", responseMsg.OriginalTransactionId);
+					}
 
 					break;
 				}
 				case MessageTypes.SubscriptionFinished:
 				{
 					var finishedMsg = (SubscriptionFinishedMessage)message;
-					_subscriptions.Remove(finishedMsg.OriginalTransactionId);
+					
+					if (_subscriptions.Remove(finishedMsg.OriginalTransactionId))
+						this.AddDebugLog("L1->OB {0} removed.", finishedMsg.OriginalTransactionId);
+
 					break;
 				}
 				case MessageTypes.Level1Change:
