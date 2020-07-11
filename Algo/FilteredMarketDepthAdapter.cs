@@ -145,6 +145,11 @@ namespace StockSharp.Algo
 		{
 		}
 
+		/// <summary>
+		/// Data type.
+		/// </summary>
+		public static readonly DataType Filtered = DataType.Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction);
+
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{

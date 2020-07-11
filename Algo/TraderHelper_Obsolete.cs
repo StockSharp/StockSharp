@@ -1066,6 +1066,17 @@ namespace StockSharp.Algo
 			provider.UnSubscribeMarketData(null, message);
 		}
 
+		/// <summary>
+		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="IMarketDataProvider.FilteredMarketDepthChanged"/>.
+		/// </summary>
+		/// <param name="provider">Subscription provider.</param>
+		/// <param name="security">The instrument by which quotes getting should be started.</param>
+		/// <returns>Subscription.</returns>
+		public static Subscription SubscribeFilteredMarketDepth(this ISubscriptionProvider provider, Security security)
+		{
+			return provider.SubscribeMarketData(security, FilteredMarketDepthAdapter.Filtered);
+		}
+
 		private static Subscription SubscribeMarketData(this ISubscriptionProvider provider, Security security, DataType type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool doNotBuildOrderBookInrement = false, IMessageAdapter adapter = null)
 		{
 			return provider.SubscribeMarketData(security, new MarketDataMessage

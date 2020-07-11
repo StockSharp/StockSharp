@@ -41,7 +41,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, IMarketDataProviderEx
+	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager, IMarketDataProvider, ISubscriptionProvider
 	{
 		private readonly EntityCache _entityCache;
 		private readonly SubscriptionManager _subscriptionManager;

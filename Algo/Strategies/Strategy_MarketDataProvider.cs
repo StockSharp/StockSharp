@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Strategies
 
 	partial class Strategy
 	{
-		private IMarketDataProviderEx MarketDataProvider => (IMarketDataProviderEx)SafeGetConnector();
+		private IMarketDataProvider MarketDataProvider => (IMarketDataProvider)SafeGetConnector();
 
 		/// <inheritdoc />
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
@@ -206,14 +206,6 @@ namespace StockSharp.Algo.Strategies
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
 			return MarketDataProvider.GetFilteredMarketDepth(security);
-		}
-
-		/// <inheritdoc />
-		public Subscription SubscribeFilteredMarketDepth(Security security)
-		{
-			var subscription = MarketDataProvider.SubscribeFilteredMarketDepth(security);
-			_subscriptions.Add(subscription, false);
-			return subscription;
 		}
 	}
 }
