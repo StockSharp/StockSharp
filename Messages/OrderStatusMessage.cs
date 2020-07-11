@@ -52,7 +52,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
-		private OrderStates[] _states = new[] { OrderStates.Active };
+		private OrderStates[] _states = ArrayHelper.Empty<OrderStates>();
 
 		/// <summary>
 		/// Filter order by the specified states.
