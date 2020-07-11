@@ -55,6 +55,9 @@
 			if (change is null)
 				throw new ArgumentNullException(nameof(change));
 
+			if (change.State == null)
+				throw new ArgumentException(nameof(change));
+
 			var currState = _state;
 			var newState = change.State.Value;
 
