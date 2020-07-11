@@ -371,6 +371,8 @@ namespace StockSharp.Algo.Strategies
 					_connector.OrderRegisterFailed -= OnConnectorOrderRegisterFailed;
 					_connector.OrderCancelFailed -= ProcessCancelOrderFail;
 					_connector.NewMyTrade -= OnConnectorNewMyTrade;
+					_connector.OrderEdited -= OnConnectorOrderEdited;
+					_connector.OrderEditFailed -= OnConnectorOrderEditFailed;
 					_connector.NewMessage -= OnConnectorNewMessage;
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
 					_connector.OrderStatusFailed -= OnConnectorOrderStatusFailed;
@@ -399,6 +401,8 @@ namespace StockSharp.Algo.Strategies
 					_connector.OrderRegisterFailed += OnConnectorOrderRegisterFailed;
 					_connector.OrderCancelFailed += ProcessCancelOrderFail;
 					_connector.NewMyTrade += OnConnectorNewMyTrade;
+					_connector.OrderEdited += OnConnectorOrderEdited;
+					_connector.OrderEditFailed += OnConnectorOrderEditFailed;
 					_connector.NewMessage += OnConnectorNewMessage;
 					_connector.ValuesChanged += OnConnectorValuesChanged;
 					_connector.OrderStatusFailed += OnConnectorOrderStatusFailed;
@@ -1391,9 +1395,6 @@ namespace StockSharp.Algo.Strategies
 			});
 		}
 
-		bool? ITransactionProvider.IsOrderEditable(Order order)
-			=> SafeGetConnector().IsOrderEditable(order);
-
 		/// <inheritdoc />
 		public virtual void EditOrder(Order order, Order changes)
 		{
@@ -1615,16 +1616,6 @@ namespace StockSharp.Algo.Strategies
 			{
 				if (isRegistered)
 				{
-					var isLatChanged = order.LatencyRegistration != null;
-
-					if (isLatChanged)
-					{
-						if (Latency == null)
-							Latency = TimeSpan.Zero;
-							
-						Latency += order.LatencyRegistration.Value;
-					}
-
 					if (order.Type == OrderTypes.Conditional)
 					{
 						//_stopOrders.Add(order);
@@ -1653,10 +1644,9 @@ namespace StockSharp.Algo.Strategies
 
 					_lastOrderTime = order.Time;
 
-					RecycleOrders();
+					ChangeLatency(order.LatencyRegistration);
 
-					if (isLatChanged)
-						RaiseLatencyChanged();
+					RecycleOrders();
 
 					if (ProcessState == ProcessStates.Stopping && CancelOrdersWhenStopping)
 					{
@@ -1995,17 +1985,7 @@ namespace StockSharp.Algo.Strategies
 		protected virtual void OnOrderChanged(Order order)
 		{
 			OrderChanged?.Invoke(order);
-
-			var latency = order.LatencyCancellation;
-
-			if (latency == null)
-				return;
-
-			if (Latency == null)
-				Latency = TimeSpan.Zero;
-
-			Latency += latency.Value;
-			RaiseLatencyChanged();
+			ChangeLatency(order.LatencyCancellation);
 		}
 
 		/// <summary>
@@ -2170,6 +2150,21 @@ namespace StockSharp.Algo.Strategies
 				AttachOrder(order);
 		}
 
+		private void OnConnectorOrderEditFailed(long transactionId, OrderFail fail)
+		{
+			if (IsOwnOrder(fail.Order))
+				_orderEditFailed?.Invoke(transactionId, fail);
+		}
+
+		private void OnConnectorOrderEdited(long transactionId, Order order)
+		{
+			if (IsOwnOrder(order))
+			{
+				_orderEdited?.Invoke(transactionId, order);
+				ChangeLatency(order.LatencyEdition);
+			}
+		}
+
 		private string _idStr;
 
 		private string EnsureGetId()
@@ -2326,6 +2321,18 @@ namespace StockSharp.Algo.Strategies
 			LatencyChanged?.Invoke();
 
 			RaiseNewStateMessage(nameof(Latency), Latency);
+		}
+
+		private void ChangeLatency(TimeSpan? diff)
+		{
+			if (diff == null || diff == TimeSpan.Zero)
+				return;
+
+			if (Latency == null)
+				Latency = TimeSpan.Zero;
+
+			Latency += diff.Value;
+			RaiseLatencyChanged();
 		}
 
 		/// <summary>

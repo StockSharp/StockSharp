@@ -633,12 +633,11 @@ namespace StockSharp.Algo
 				if (transactionId == 0 || order.State != OrderStates.None)
 					transactionId = TransactionIdGenerator.GetNextId();
 
-				SendOrderFailed(order, false, ex, transactionId);
+				SendOrderFailed(order, OrderOperations.Register, ex, transactionId);
 			}
 		}
 
-		/// <inheritdoc />
-		public bool? IsOrderEditable(Order order)
+		private bool? IsOrderEditable(Order order)
 			=> _entityCache.TryGetAdapter(order)?.IsReplaceCommandEditCurrent == true;
 
 		/// <inheritdoc />
@@ -650,7 +649,7 @@ namespace StockSharp.Algo
 			if (changes is null)
 				throw new ArgumentNullException(nameof(changes));
 
-			var transactionId = TransactionIdGenerator.GetNextId();
+			var isEdit = IsOrderEditable(order) == true;
 
 			try
 			{
@@ -659,13 +658,46 @@ namespace StockSharp.Algo
 				CheckOnOld(order);
 				CheckOnNew(changes);
 
-				changes.TransactionId = transactionId;
+				if (isEdit)
+				{
+					var transactionId = TransactionIdGenerator.GetNextId();
+					
+					changes.TransactionId = transactionId;
+					_entityCache.AddOrderByEditionId(order, transactionId);
 
-				OnEditOrder(order, changes);
+					OnEditOrder(order, changes);
+				}
+				else
+				{
+					var oldOrder = order;
+					var newOrder = changes;
+
+					if (oldOrder.Security != newOrder.Security)
+						throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
+					
+					InitNewOrder(newOrder);
+					_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
+
+					OnReRegisterOrder(oldOrder, newOrder);
+				}
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(order, true, ex, transactionId);
+				if (isEdit)
+					SendOrderFailed(order, OrderOperations.Edit, ex, changes.TransactionId);
+				else
+				{
+					var oldOrder = order;
+					var newOrder = changes;
+
+					var transactionId = newOrder.TransactionId;
+
+					if (transactionId == 0 || newOrder.State != OrderStates.None)
+						transactionId = TransactionIdGenerator.GetNextId();
+
+					SendOrderFailed(oldOrder, OrderOperations.Cancel, ex, transactionId);
+					SendOrderFailed(newOrder, OrderOperations.Register, ex, transactionId);
+				}
 			}
 		}
 
@@ -685,24 +717,13 @@ namespace StockSharp.Algo
 				if (oldOrder.Security != newOrder.Security)
 					throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
 
-				if (oldOrder.Type == OrderTypes.Conditional)
-				{
-					CancelOrder(oldOrder);
-					RegisterOrder(newOrder);
-				}
-				else
-				{
-					CheckOnOld(oldOrder);
-					CheckOnNew(newOrder);
+				CheckOnOld(oldOrder);
+				CheckOnNew(newOrder);
 
-					if (oldOrder.Comment.IsEmpty())
-						oldOrder.Comment = newOrder.Comment;
+				InitNewOrder(newOrder);
+				_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
 
-					InitNewOrder(newOrder);
-					_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
-
-					OnReRegisterOrder(oldOrder, newOrder);
-				}
+				OnReRegisterOrder(oldOrder, newOrder);
 			}
 			catch (Exception ex)
 			{
@@ -711,8 +732,8 @@ namespace StockSharp.Algo
 				if (transactionId == 0 || newOrder.State != OrderStates.None)
 					transactionId = TransactionIdGenerator.GetNextId();
 
-				SendOrderFailed(oldOrder, true, ex, transactionId);
-				SendOrderFailed(newOrder, false, ex, transactionId);
+				SendOrderFailed(oldOrder, OrderOperations.Cancel, ex, transactionId);
+				SendOrderFailed(newOrder, OrderOperations.Register, ex, transactionId);
 			}
 		}
 
@@ -783,11 +804,11 @@ namespace StockSharp.Algo
 				if (transactionId == 0)
 					transactionId = TransactionIdGenerator.GetNextId();
 
-				SendOrderFailed(oldOrder1, true, ex, transactionId);
-				SendOrderFailed(newOrder1, false, ex, transactionId);
+				SendOrderFailed(oldOrder1, OrderOperations.Cancel, ex, transactionId);
+				SendOrderFailed(newOrder1, OrderOperations.Register, ex, transactionId);
 
-				SendOrderFailed(oldOrder2, true, ex, transactionId);
-				SendOrderFailed(newOrder2, false, ex, transactionId);
+				SendOrderFailed(oldOrder2, OrderOperations.Cancel, ex, transactionId);
+				SendOrderFailed(newOrder2, OrderOperations.Register, ex, transactionId);
 			}
 		}
 
@@ -812,16 +833,16 @@ namespace StockSharp.Algo
 				if (transactionId == 0)
 					transactionId = TransactionIdGenerator.GetNextId();
 
-				SendOrderFailed(order, true, ex, transactionId);
+				SendOrderFailed(order, OrderOperations.Cancel, ex, transactionId);
 			}
 		}
 
-		private void SendOrderFailed(Order order, bool isCancel, Exception error, long originalTransactionId)
+		private void SendOrderFailed(Order order, OrderOperations operation, Exception error, long originalTransactionId)
 		{
 			var fail = EntityFactory.CreateOrderFail(order, error);
 			fail.ServerTime = CurrentTime;
 
-			_entityCache.AddOrderFailById(fail, isCancel, originalTransactionId);
+			_entityCache.AddOrderFailById(fail, operation, originalTransactionId);
 
 			SendOutMessage(fail.ToMessage(originalTransactionId));
 		}

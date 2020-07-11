@@ -43,10 +43,16 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Order>> OrdersChanged;
 
 		/// <inheritdoc />
+		public event Action<long, Order> OrderEdited;
+
+		/// <inheritdoc />
 		public event Action<OrderFail> OrderRegisterFailed;
 
 		/// <inheritdoc />
 		public event Action<OrderFail> OrderCancelFailed;
+
+		/// <inheritdoc />
+		public event Action<long, OrderFail> OrderEditFailed;
 
 		/// <inheritdoc />
 		public event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
@@ -315,6 +321,9 @@ namespace StockSharp.Algo
 		public event Action<Subscription, OrderFail> OrderCancelFailReceived;
 
 		/// <inheritdoc />
+		public event Action<Subscription, OrderFail> OrderEditFailReceived;
+
+		/// <inheritdoc />
 		public event Action<Subscription, Portfolio> PortfolioReceived;
 
 		/// <inheritdoc />
@@ -397,16 +406,33 @@ namespace StockSharp.Algo
 			OrdersChanged?.Invoke(new[] { order });
 		}
 
-		private void RaiseOrderRegisterFailed(OrderFail fail)
+		private void RaiseOrderEdited(long transactionId, Order order)
 		{
-			OrderRegisterFailed?.Invoke(fail);
+			this.AddDebugLog("Order {0} edited by transaction {1}.", order, transactionId);
+			OrderEdited?.Invoke(transactionId, order);
+		}
+
+		private void RaiseOrderFailed(string name, long transactionId, OrderFail fail, Action<long, OrderFail> failed)
+		{
+			this.AddErrorLog(() => name + Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);
+			failed?.Invoke(transactionId, fail);
+		}
+
+		private void RaiseOrderRegisterFailed(long transactionId, OrderFail fail)
+		{
+			RaiseOrderFailed(nameof(OrderRegisterFailed), transactionId, fail, (id, f) => OrderRegisterFailed?.Invoke(f));
 			OrdersRegisterFailed?.Invoke(new[] { fail });
 		}
 
-		private void RaiseOrderCancelFailed(OrderFail fail)
+		private void RaiseOrderCancelFailed(long transactionId, OrderFail fail)
 		{
-			OrderCancelFailed?.Invoke(fail);
+			RaiseOrderFailed(nameof(OrderCancelFailed), transactionId, fail, (id, f) => OrderCancelFailed?.Invoke(f));
 			OrdersCancelFailed?.Invoke(new[] { fail });
+		}
+
+		private void RaiseOrderEditFailed(long transactionId, OrderFail fail)
+		{
+			RaiseOrderFailed(nameof(OrderEditFailed), transactionId, fail, OrderEditFailed);
 		}
 
 		private void RaiseMassOrderCanceled(long transactionId, DateTimeOffset time)

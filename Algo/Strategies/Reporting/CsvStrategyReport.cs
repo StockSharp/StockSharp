@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					{
 						WriteValues(writer, order.Id, order.TransactionId, Format(order.Direction), order.Time, order.Price,
 							Format(order.State), order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : string.Empty), order.Balance,
-								order.Volume, Format(order.Type), Format(order.LatencyRegistration), Format(order.LatencyCancellation));
+								order.Volume, Format(order.Type), Format(order.LatencyRegistration), Format(order.LatencyCancellation), Format(order.LatencyEdition));
 					}
 
 					WriteValues(writer, LocalizedStrings.Str985);

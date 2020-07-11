@@ -105,6 +105,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		public event Action<Subscription, OrderFail> OrderEditFailReceived
+		{
+			add => SubscriptionProvider.OrderEditFailReceived += value;
+			remove => SubscriptionProvider.OrderEditFailReceived -= value;
+		}
+
+		/// <inheritdoc />
 		public event Action<Subscription, Portfolio> PortfolioReceived
 		{
 			add => SubscriptionProvider.PortfolioReceived += value;

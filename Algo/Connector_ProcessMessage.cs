@@ -1416,6 +1416,9 @@ namespace StockSharp.Algo
 
 						RaiseOrderChanged(order);
 						RaiseReceived(order, message, OrderReceived);
+
+						if (change.IsEdit)
+							RaiseOrderEdited(transactionId, order);
 					}
 				}
 			}
@@ -1437,26 +1440,32 @@ namespace StockSharp.Algo
 					//TryProcessFilteredMarketDepth(fail.Order.Security, message);
 
 					//var isRegisterFail = (fail.Order.Id == null && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
-					var isCancelTransaction = tuple.Item2;
+					var operation = tuple.Item2;
 
-					this.AddErrorLog(() => (isCancelTransaction ? "OrderCancelFailed" : "OrderRegisterFailed")
-						+ Environment.NewLine + order + Environment.NewLine + fail.Error);
+					_entityCache.AddFail(operation, fail);
 
-					if (!isCancelTransaction)
+					switch (operation)
 					{
-						_entityCache.AddRegisterFail(fail);
-
-						RaiseOrderRegisterFailed(fail);
-
-						RaiseReceived(fail, message, OrderRegisterFailReceived);
-					}
-					else
-					{
-						_entityCache.AddCancelFail(fail);
-
-						RaiseOrderCancelFailed(fail);
-
-						RaiseReceived(fail, message, OrderCancelFailReceived);
+						case OrderOperations.Register:
+						{
+							RaiseOrderRegisterFailed(message.OriginalTransactionId, fail);
+							RaiseReceived(fail, message, OrderRegisterFailReceived);
+							break;
+						}
+						case OrderOperations.Cancel:
+						{
+							RaiseOrderCancelFailed(message.OriginalTransactionId, fail);
+							RaiseReceived(fail, message, OrderCancelFailReceived);
+							break;
+						}
+						case OrderOperations.Edit:
+						{
+							RaiseOrderEditFailed(message.OriginalTransactionId, fail);
+							RaiseReceived(fail, message, OrderEditFailReceived);
+							break;
+						}
+						default:
+							throw new ArgumentOutOfRangeException(operation.ToString());
 					}
 				}
 			}
@@ -1476,7 +1485,7 @@ namespace StockSharp.Algo
 			RaiseReceived(tuple.Item1, message, OwnTradeReceived);
 		}
 
-		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId, bool isStatusRequest)
+		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId/*, bool isStatusRequest*/)
 		{
 			this.AddDebugLog("Order '{0}': {1}", order?.TransactionId, message);
 
@@ -1552,7 +1561,7 @@ namespace StockSharp.Algo
 					else
 						security = order.Security;
 
-					ProcessTransactionMessage(order, security, message, transactionId, isStatusRequest);
+					ProcessTransactionMessage(order, security, message, transactionId/*, isStatusRequest*/);
 
 					break;
 				}

@@ -33,6 +33,11 @@ namespace StockSharp.BusinessEntities
 		event Action<Order> OrderChanged;
 
 		/// <summary>
+		/// <see cref="EditOrder"/> success result event.
+		/// </summary>
+		event Action<long, Order> OrderEdited;
+
+		/// <summary>
 		/// Order registration error event.
 		/// </summary>
 		event Action<OrderFail> OrderRegisterFailed;
@@ -41,6 +46,11 @@ namespace StockSharp.BusinessEntities
 		/// Order cancellation error event.
 		/// </summary>
 		event Action<OrderFail> OrderCancelFailed;
+
+		/// <summary>
+		/// <see cref="EditOrder"/> error result event.
+		/// </summary>
+		event Action<long, OrderFail> OrderEditFailed;
 
 		/// <summary>
 		/// Mass order cancellation event.
@@ -105,13 +115,6 @@ namespace StockSharp.BusinessEntities
 		/// Lookup result <see cref="PortfolioLookupMessage"/> received.
 		/// </summary>
 		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> LookupPortfoliosResult2;
-
-		/// <summary>
-		/// Determines the specified order can be <see cref="EditOrder"/> or <see cref="ReRegisterOrder"/>.
-		/// </summary>
-		/// <param name="order">Order.</param>
-		/// <returns><see langword="true"/> if order is editable, <see langword="false"/> order can changed by new instance, <see langword="null"/> no information.</returns>
-		bool? IsOrderEditable(Order order);
 
 		/// <summary>
 		/// Register new order.

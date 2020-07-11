@@ -776,6 +776,8 @@
 
 			event Action<Subscription, OrderFail> ISubscriptionProvider.OrderCancelFailReceived { add { } remove { } }
 
+			event Action<Subscription, OrderFail> ISubscriptionProvider.OrderEditFailReceived { add { } remove { } }
+
 			event Action<Subscription, Portfolio> ISubscriptionProvider.PortfolioReceived { add { } remove { } }
 
 			event Action<Subscription, Position> ISubscriptionProvider.PositionReceived { add { } remove { } }

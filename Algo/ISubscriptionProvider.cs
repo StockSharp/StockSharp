@@ -88,6 +88,11 @@ namespace StockSharp.Algo
 		event Action<Subscription, OrderFail> OrderCancelFailReceived;
 
 		/// <summary>
+		/// Order edition error event.
+		/// </summary>
+		event Action<Subscription, OrderFail> OrderEditFailReceived;
+
+		/// <summary>
 		/// Portfolio received.
 		/// </summary>
 		event Action<Subscription, Portfolio> PortfolioReceived;

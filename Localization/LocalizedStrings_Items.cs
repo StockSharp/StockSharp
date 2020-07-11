@@ -51826,5 +51826,25 @@ namespace StockSharp.Localization
 		/// Will be available soon.
 		/// </summary>
 		public static string AvailableSoon => GetString(AvailableSoonKey);
+
+		/// <summary>
+		/// Edition
+		/// </summary>
+		public const string EditionKey = nameof(Edition);
+
+		/// <summary>
+		/// Edition
+		/// </summary>
+		public static string Edition => GetString(EditionKey);
+
+		/// <summary>
+		/// Time taken to edit an order.
+		/// </summary>
+		public const string EditionLatencyKey = nameof(EditionLatency);
+
+		/// <summary>
+		/// Time taken to edit an order.
+		/// </summary>
+		public static string EditionLatency => GetString(EditionLatencyKey);
 	}
 }

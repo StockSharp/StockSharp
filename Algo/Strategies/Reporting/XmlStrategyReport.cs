@@ -92,6 +92,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 									new XElement("type", o.Type),
 									new XElement("latencyRegistration", Format(o.LatencyRegistration)),
 									new XElement("latencyCancellation", Format(o.LatencyCancellation)),
+									new XElement("latencyEdition", Format(o.LatencyEdition)),
 									new XElement("parameters", o.Condition?.Parameters.Select(p => new XElement(p.Key, p.Value)))
 									))),
 						new XElement("trades",
