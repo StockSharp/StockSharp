@@ -220,7 +220,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Generate <see cref="QuoteChangeMessage"/> from <see cref="Level1ChangeMessage"/>.
 		/// </summary>
-		bool GenerateOrderBookFromLevel { get; set; }
+		bool GenerateOrderBookFromLevel1 { get; set; }
 
 		/// <summary>
 		/// Create market depth builder.

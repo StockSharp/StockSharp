@@ -289,7 +289,7 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.Level1ToOrderBooksKey,
 			GroupName = LocalizedStrings.Str186Key,
 			Order = 302)]
-		public virtual bool GenerateOrderBookFromLevel { get; set; } = true;
+		public virtual bool GenerateOrderBookFromLevel1 { get; set; } = true;
 
 		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -595,7 +595,7 @@ namespace StockSharp.Messages
 				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
 			EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
-			GenerateOrderBookFromLevel = storage.GetValue(nameof(GenerateOrderBookFromLevel), GenerateOrderBookFromLevel);
+			GenerateOrderBookFromLevel1 = storage.GetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);
 
 			base.Load(storage);
 		}
@@ -608,7 +608,7 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(SupportedInMessages), SupportedInMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
-			storage.SetValue(nameof(GenerateOrderBookFromLevel), GenerateOrderBookFromLevel);
+			storage.SetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);
 
 			base.Save(storage);
 		}

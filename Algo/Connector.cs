@@ -85,7 +85,7 @@ namespace StockSharp.Algo
 
 			_subscriptionManager = new SubscriptionManager(this);
 
-			SupportLevel1DepthBuilder = true;
+			//SupportLevel1DepthBuilder = true;
 			SupportFilteredMarketDepth = true;
 
 			if (initChannels)
