@@ -28,6 +28,9 @@
 				<Button x:Name="DepthAdvanced" IsEnabled="False" Click="DepthAdvancedClick" Padding="5,0,5,0">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" /> (advanced)...</TextBlock>
 				</Button>
+				<Button x:Name="DepthFiltered" IsEnabled="False" Click="DepthFilteredClick" Padding="5,0,5,0">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" /> (filtered)...</TextBlock>
+				</Button>
 				<Button x:Name="Ticks" Content="{x:Static loc:LocalizedStrings.Ticks}" Width="50" Margin="5,0,0,0" IsEnabled="False" Click="TicksClick" />
 				<Button x:Name="TicksHist" Content="{x:Static loc:LocalizedStrings.XamlStr223}" IsEnabled="False" Width="100" Click="TicksHistClick" />
 				<Button x:Name="OrderLog" Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="100" Margin="5,0,0,0" IsEnabled="False" Click="OrderLogClick" />

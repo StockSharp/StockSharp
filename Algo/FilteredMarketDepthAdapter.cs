@@ -10,23 +10,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Filtered market depth data type.
-	/// </summary>
-	public class FilteredMarketDepthMessage : MarketDataMessage
-	{
-		/// <summary>
-		/// Create a copy of <see cref="FilteredMarketDepthMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new FilteredMarketDepthMessage();
-			CopyTo(clone);
-			return clone;
-		}
-	}
-
-	/// <summary>
 	/// Filtered market depth adapter.
 	/// </summary>
 	public class FilteredMarketDepthAdapter : MessageAdapterWrapper
@@ -34,20 +17,29 @@ namespace StockSharp.Algo
 		private class FilteredMarketDepthInfo
 		{
 			private readonly Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>> _executions = new Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>>();
+			private readonly Dictionary<long, ExecutionMessage> _activeOrders = new Dictionary<long, ExecutionMessage>();
+			private QuoteChangeMessage _lastSnapshot;
 
-			public FilteredMarketDepthInfo(FilteredMarketDepthMessage origin, IEnumerable<ExecutionMessage> orders)
+			public FilteredMarketDepthInfo(long subscribeId, Subscription bookSubscription, Subscription ordersSubscription)
 			{
-				if (orders is null)
-					throw new ArgumentNullException(nameof(orders));
+				SubscribeId = subscribeId;
 
-				Origin = origin ?? throw new ArgumentNullException(nameof(origin));
+				BookSubscription = bookSubscription ?? throw new ArgumentNullException(nameof(bookSubscription));
+				OrdersSubscription = ordersSubscription ?? throw new ArgumentNullException(nameof(ordersSubscription));
 
-				foreach (var order in orders)
-					Process(order);
+				//BookSubscribers.Add(bookSubscription.TransactionId);
+				//OrdersSubscribers.Add(ordersSubscription.TransactionId);
 			}
 
-			public FilteredMarketDepthMessage Origin { get; }
-			public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
+			public long SubscribeId { get; }
+			public long UnSubscribeId { get; set; }
+
+			public Subscription BookSubscription { get; }
+			public Subscription OrdersSubscription { get; }
+
+			public OnlineInfo Online { get; set; }
+
+			//public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 
 			private QuoteChange[] Filter(Sides side, IEnumerable<QuoteChange> quotes)
 			{
@@ -67,74 +59,111 @@ namespace StockSharp.Algo
 					.ToArray();
 			}
 
+			private QuoteChangeMessage CreateFilteredBook()
+			{
+				var book = new QuoteChangeMessage
+				{
+					SecurityId = _lastSnapshot.SecurityId,
+					ServerTime = _lastSnapshot.ServerTime,
+					LocalTime = _lastSnapshot.LocalTime,
+					IsSorted = _lastSnapshot.IsSorted,
+					BuildFrom = _lastSnapshot.BuildFrom,
+					Currency = _lastSnapshot.Currency,
+					IsFiltered = true,
+					Bids = Filter(Sides.Buy, _lastSnapshot.Bids),
+					Asks = Filter(Sides.Sell, _lastSnapshot.Asks),
+				};
+
+				if (Online == null)
+					book.SetSubscriptionIds(subscriptionId: BookSubscription.TransactionId);
+				else
+					book.SetSubscriptionIds(Online.Subscribers.Cache);
+
+				return book;
+			}
+
 			public QuoteChangeMessage Process(QuoteChangeMessage message)
 			{
 				if (message is null)
 					throw new ArgumentNullException(nameof(message));
 
-				return new QuoteChangeMessage
-				{
-					SecurityId = message.SecurityId,
-					ServerTime = message.ServerTime,
-					LocalTime = message.LocalTime,
-					IsSorted = message.IsSorted,
-					BuildFrom = message.BuildFrom,
-					Currency = message.Currency,
-					IsFiltered = true,
-					Bids = Filter(Sides.Buy, message.Bids),
-					Asks = Filter(Sides.Sell, message.Asks),
-				};
+				_lastSnapshot = message.TypedClone();
+
+				return CreateFilteredBook();
 			}
 
-			public void Process(ExecutionMessage message)
+			public QuoteChangeMessage Process(ExecutionMessage message)
 			{
 				if (message is null)
 					throw new ArgumentNullException(nameof(message));
 
-				var key = Tuple.Create(message.Side, message.OrderPrice);
-
-				switch (message.OrderState)
+				if (message.TransactionId != 0)
 				{
-					case OrderStates.Done:
-					case OrderStates.Failed:
+					_activeOrders[message.TransactionId] = message.TypedClone();
+				}
+				else if (_activeOrders.TryGetValue(message.OriginalTransactionId, out var prevState))
+				{
+					var key = Tuple.Create(message.Side, message.OrderPrice);
+
+					switch (message.OrderState)
 					{
-						var pair = _executions.TryGetValue(key);
-
-						if (pair == null)
-							break;
-
-						var balance = pair.First.TryGetAndRemove(message.OriginalTransactionId);
-
-						if (pair.First.Count == 0)
-							_executions.Remove(key);
-						else
-							pair.Second -= balance;
-
-						break;
-					}
-
-					case OrderStates.Active:
-					{
-						var balance = message.Balance;
-
-						if (balance != null)
+						case OrderStates.Done:
+						case OrderStates.Failed:
 						{
-							var pair = _executions.SafeAdd(key, k => RefTuple.Create(new Dictionary<long, decimal>(), 0M));
+							var pair = _executions.TryGetValue(key);
 
-							var prev = pair.First.TryGetValue(message.OriginalTransactionId);
+							if (pair == null)
+								break;
 
-							pair.First[message.OriginalTransactionId] = balance.Value;
-							pair.Second += balance.Value - prev;
+							var balance = pair.First.TryGetAndRemove(message.OriginalTransactionId);
+
+							if (pair.First.Count == 0)
+								_executions.Remove(key);
+							else
+								pair.Second -= balance;
+
+							break;
 						}
 
-						break;
+						case OrderStates.Active:
+						{
+							var balance = message.Balance;
+
+							if (balance != null)
+							{
+								var pair = _executions.SafeAdd(key, k => RefTuple.Create(new Dictionary<long, decimal>(), 0M));
+
+								var prev = pair.First.TryGetValue(message.OriginalTransactionId);
+
+								pair.First[message.OriginalTransactionId] = balance.Value;
+								pair.Second += balance.Value - prev;
+							}
+
+							break;
+						}
 					}
 				}
+				else
+					return null;
+
+				return CreateFilteredBook();
 			}
 		}
 
-		private readonly SynchronizedDictionary<long, FilteredMarketDepthInfo> _infos = new SynchronizedDictionary<long, FilteredMarketDepthInfo>();
-		private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> _infosBySecId = new SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>>();
+		private class OnlineInfo
+		{
+			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
+			
+			public readonly CachedSynchronizedSet<long> BookSubscribers = new CachedSynchronizedSet<long>();
+			public readonly CachedSynchronizedSet<long> OrdersSubscribers = new CachedSynchronizedSet<long>();
+		}
+
+		private readonly SyncObject _sync = new SyncObject();
+
+		private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = new Dictionary<long, FilteredMarketDepthInfo>();
+		private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = new Dictionary<long, FilteredMarketDepthInfo>();
+		private readonly Dictionary<SecurityId, OnlineInfo> _online = new Dictionary<SecurityId, OnlineInfo>();
+		private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = new Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssociatedSecurityAdapter"/>.
@@ -148,7 +177,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Data type.
 		/// </summary>
-		public static readonly DataType Filtered = DataType.Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction);
+		public static readonly DataType Filtered = DataType.Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).Immutable();
 
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
@@ -157,8 +186,14 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.Reset:
 				{
-					_infos.Clear();
-					_infosBySecId.Clear();
+					lock (_sync)
+					{
+						_byBookId.Clear();
+						_byOrderStatusId.Clear();
+						_online.Clear();
+						_unsubscribeRequests.Clear();
+					}
+					
 					break;
 				}
 
@@ -168,41 +203,84 @@ namespace StockSharp.Algo
 
 					if (mdMsg.IsSubscribe)
 					{
-						if (!(mdMsg is FilteredMarketDepthMessage filteredMsg))
+						if (mdMsg.SecurityId == default)
 							break;
 
-						if (mdMsg.SecurityId == default)
+						if (mdMsg.DataType2 != Filtered)
 							break;
 
 						var transId = mdMsg.TransactionId;
 
-						var data = mdMsg.GetArg<Tuple<QuoteChangeMessage, ExecutionMessage[]>>();
-
-						var info = new FilteredMarketDepthInfo(filteredMsg.TypedClone(), data.Item2);
-						_infos.Add(transId, info);
-						_infosBySecId.SafeAdd(mdMsg.SecurityId).Add(transId);
-
-						mdMsg = new MarketDataMessage();
-						filteredMsg.CopyTo(mdMsg);
+						mdMsg = mdMsg.TypedClone();
+						mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
 						mdMsg.DataType2 = DataType.MarketDepth;
-						message = mdMsg;
 
-						RaiseNewOutMessage(info.Process(data.Item1));
+						var orderStatus = new OrderStatusMessage
+						{
+							TransactionId = TransactionIdGenerator.GetNextId(),
+							IsSubscribe = true,
+							States = new[] { OrderStates.Active },
+							SecurityId = mdMsg.SecurityId,
+						};
+
+						var info = new FilteredMarketDepthInfo(transId, new Subscription(mdMsg, mdMsg), new Subscription(orderStatus, orderStatus));
+
+						lock (_sync)
+						{
+							_byBookId.Add(mdMsg.TransactionId, info);
+							_byOrderStatusId.Add(orderStatus.TransactionId, info);
+						}
+
+						base.OnSendInMessage(mdMsg);
+						base.OnSendInMessage(orderStatus);
+
+						return true;
 					}
 					else
 					{
-						if (_infos.TryGetAndRemove(mdMsg.OriginalTransactionId, out var info))
+						MarketDataMessage bookUnsubscribe = null;
+						OrderStatusMessage ordersUnsubscribe = null;
+
+						lock (_sync)
 						{
-							info.State = SubscriptionStates.Stopped;
-							_infosBySecId.TryGetValue(info.Origin.SecurityId)?.Remove(mdMsg.OriginalTransactionId);
+							if (!_byBookId.TryGetValue(mdMsg.OriginalTransactionId, out var info))
+								break;
 
-							var clone = new MarketDataMessage();
-							mdMsg.CopyTo(clone);
-							message = clone;
+							info.UnSubscribeId = mdMsg.TransactionId;
+
+							if (info.BookSubscription.State.IsActive())
+							{
+								bookUnsubscribe = new MarketDataMessage
+								{
+									TransactionId = TransactionIdGenerator.GetNextId(),
+									OriginalTransactionId = info.BookSubscription.TransactionId,
+									IsSubscribe = false,
+								};
+
+								_unsubscribeRequests.Add(bookUnsubscribe.TransactionId, Tuple.Create(info, true));
+							}
+
+							if (info.OrdersSubscription.State.IsActive())
+							{
+								ordersUnsubscribe = new OrderStatusMessage
+								{
+									TransactionId = TransactionIdGenerator.GetNextId(),
+									OriginalTransactionId = info.OrdersSubscription.TransactionId,
+									IsSubscribe = false,
+								};
+
+								_unsubscribeRequests.Add(ordersUnsubscribe.TransactionId, Tuple.Create(info, false));
+							}
 						}
-					}
+						
+						if (bookUnsubscribe != null)
+							base.OnSendInMessage(bookUnsubscribe);
 
-					break;
+						if (ordersUnsubscribe != null)
+							base.OnSendInMessage(ordersUnsubscribe);
+							
+						return true;
+					}
 				}
 			}
 
@@ -212,117 +290,253 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			Message TryApplyState(IOriginalTransactionIdMessage msg, SubscriptionStates state)
+			{
+				void TryCheckOnline(FilteredMarketDepthInfo info)
+				{
+					if (state != SubscriptionStates.Online)
+						return;
+
+					var book = info.BookSubscription;
+					var orders = info.OrdersSubscription;
+
+					if (info.BookSubscription.State == SubscriptionStates.Online && orders.State == SubscriptionStates.Online)
+					{
+						var online = _online.SafeAdd(book.SecurityId.Value);
+
+						online.Subscribers.Add(info.SubscribeId);
+						online.BookSubscribers.Add(book.TransactionId);
+						online.OrdersSubscribers.Add(orders.TransactionId);
+
+						info.Online = online;
+					}
+				}
+
+				var id = msg.OriginalTransactionId;
+
+				lock (_sync)
+				{
+					if (_byBookId.TryGetValue(id, out var info))
+					{
+						var book = info.BookSubscription;
+
+						book.State = book.State.ChangeSubscriptionState(state, id, this);
+
+						var subscribeId = info.SubscribeId;
+
+						if (!state.IsActive())
+						{
+							if (info.Online != null)
+							{
+								info.Online.BookSubscribers.Remove(id);
+								info.Online.OrdersSubscribers.Remove(info.OrdersSubscription.TransactionId);
+
+								info.Online.Subscribers.Remove(subscribeId);
+								info.Online = null;
+							}
+						}
+						else
+							TryCheckOnline(info);
+
+						switch (book.State)
+						{
+							case SubscriptionStates.Stopped:
+							case SubscriptionStates.Active:
+							case SubscriptionStates.Error:
+								return new SubscriptionResponseMessage { OriginalTransactionId = subscribeId, Error = (msg as IErrorMessage)?.Error };
+							case SubscriptionStates.Finished:
+								return new SubscriptionFinishedMessage { OriginalTransactionId = subscribeId };
+							case SubscriptionStates.Online:
+								return new SubscriptionOnlineMessage { OriginalTransactionId = subscribeId };
+							default:
+								throw new ArgumentOutOfRangeException(book.State.ToString());
+						}
+					}
+					else if (_byOrderStatusId.TryGetValue(id, out info))
+					{
+						info.OrdersSubscription.State = info.OrdersSubscription.State.ChangeSubscriptionState(state, id, this);
+
+						if (!state.IsActive())
+							info.Online?.OrdersSubscribers.Remove(id);
+						else
+							TryCheckOnline(info);
+
+						return null;
+					}
+					else if (_unsubscribeRequests.TryGetAndRemove(id, out var tuple))
+					{
+						info = tuple.Item1;
+
+						if (tuple.Item2)
+						{
+							var book = info.BookSubscription;
+							book.State = book.State.ChangeSubscriptionState(SubscriptionStates.Stopped, book.TransactionId, this);
+
+							return new SubscriptionResponseMessage
+							{
+								OriginalTransactionId = info.UnSubscribeId,
+								Error = (msg as IErrorMessage)?.Error,
+							};
+						}
+						else
+						{
+							var orders = info.OrdersSubscription;
+							orders.State = orders.State.ChangeSubscriptionState(SubscriptionStates.Stopped, orders.TransactionId, this);
+							return null;
+						}
+					}
+					else
+						return (Message)msg;
+				}
+			}
+
+			List<QuoteChangeMessage> filtered = null;
+
 			switch (message.Type)
 			{
 				case MessageTypes.SubscriptionResponse:
 				{
 					var responseMsg = (SubscriptionResponseMessage)message;
 
-					if (!_infos.TryGetValue(responseMsg.OriginalTransactionId, out var info))
-						break;
-
 					if (responseMsg.Error == null)
-						info.State = SubscriptionStates.Active;
+						message = TryApplyState(responseMsg, SubscriptionStates.Error);
 					else
-					{
-						info.State = SubscriptionStates.Error;
-
-						_infos.Remove(responseMsg.OriginalTransactionId);
-						_infosBySecId.TryGetValue(info.Origin.SecurityId)?.Remove(responseMsg.OriginalTransactionId);
-					}
+						message = TryApplyState(responseMsg, SubscriptionStates.Active);
 
 					break;
 				}
 
 				case MessageTypes.SubscriptionFinished:
 				{
-					var finishMsg = (SubscriptionFinishedMessage)message;
-
-					if (_infos.TryGetAndRemove(finishMsg.OriginalTransactionId, out var info))
-					{
-						info.State = SubscriptionStates.Finished;
-						_infosBySecId.TryGetValue(info.Origin.SecurityId)?.Remove(finishMsg.OriginalTransactionId);
-					}
-
+					message = TryApplyState((SubscriptionFinishedMessage)message, SubscriptionStates.Finished);
 					break;
 				}
 
 				case MessageTypes.SubscriptionOnline:
 				{
-					var onlineMsg = (SubscriptionOnlineMessage)message;
-
-					if (_infos.TryGetValue(onlineMsg.OriginalTransactionId, out var info))
-						info.State = SubscriptionStates.Online;
-
+					message = TryApplyState((SubscriptionOnlineMessage)message, SubscriptionStates.Online);
 					break;
 				}
 
 				case MessageTypes.QuoteChange:
 				{
-					if (_infos.Count == 0)
-						break;
-
 					var quoteMsg = (QuoteChangeMessage)message;
 
 					if (quoteMsg.State != null)
 						break;
 
-					var ids = quoteMsg.GetSubscriptionIds();
-					var set = new HashSet<long>(quoteMsg.GetSubscriptionIds());
+					HashSet<long> leftIds = null;
 
-					QuoteChangeMessage filtered = null;
-
-					foreach (var id in ids)
+					lock (_sync)
 					{
-						if (_infos.TryGetValue(id, out var info) && info.State.IsActive())
-						{
-							var newIds = _infosBySecId[info.Origin.SecurityId].Cache;
-
-							filtered = info.Process(quoteMsg);
-							filtered.SetSubscriptionIds(newIds);
-							
-							set.RemoveRange(newIds);
+						if (_byBookId.Count == 0)
 							break;
+
+						var ids = quoteMsg.GetSubscriptionIds();
+						HashSet<long> processed = null;
+
+						foreach (var id in ids)
+						{
+							if (processed != null && processed.Contains(id))
+								continue;
+
+							if (!_byBookId.TryGetValue(id, out var info))
+								continue;
+
+							var book = info.Process(quoteMsg);
+
+							if (leftIds == null)
+								leftIds = new HashSet<long>(ids);
+
+							if (info.Online == null)
+								leftIds.Remove(id);
+							else
+							{
+								if (processed == null)
+									processed = new HashSet<long>();
+
+								processed.AddRange(info.Online.BookSubscribers.Cache);
+								leftIds.RemoveRange(info.Online.BookSubscribers.Cache);
+							}
+
+							if (filtered == null)
+								filtered = new List<QuoteChangeMessage>();
+
+							filtered.Add(book);
 						}
 					}
 
-					if (set.Count > 0)
-						quoteMsg.SetSubscriptionIds(set.ToArray());
-					else
-					{
-						// subscription for origin book was initialized only by filtered book
+					if (leftIds == null)
+						break;
+					else if (leftIds.Count == 0)
 						message = null;
-					}
-
-					if (filtered != null)
-						base.OnInnerAdapterNewOutMessage(filtered);
+					else
+						quoteMsg.SetSubscriptionIds(leftIds.ToArray());
 
 					break;
 				}
 
 				case MessageTypes.Execution:
 				{
-					if (_infosBySecId.Count == 0 || _infos.Count == 0)
-						break;
-
 					var execMsg = (ExecutionMessage)message;
 
 					if	(
-						execMsg.ExecutionType != ExecutionTypes.Transaction ||
-						!execMsg.HasOrderInfo() ||
-						execMsg.OrderPrice == 0 || // ignore market orders
-						execMsg.OriginalTransactionId == 0 // ignore unknown orders
+							execMsg.ExecutionType != ExecutionTypes.Transaction ||
+							!execMsg.HasOrderInfo() ||
+							execMsg.OrderPrice == 0 // ignore market orders
 						)
 						break;
 
-					if (execMsg.OrderState == OrderStates.Active || execMsg.OrderState == OrderStates.Done)
+					HashSet<long> leftIds = null;
+
+					lock (_sync)
 					{
-						if (!_infosBySecId.TryGetValue(execMsg.SecurityId, out var set))
+						if (_byOrderStatusId.Count == 0)
 							break;
 
-						foreach (var id in set.Cache)
-							_infos.TryGetValue(id)?.Process(execMsg);
+						var ids = execMsg.GetSubscriptionIds();
+						HashSet<long> processed = null;
+
+						foreach (var id in ids)
+						{
+							if (processed != null && processed.Contains(id))
+								continue;
+
+							if (!_byOrderStatusId.TryGetValue(id, out var info))
+								continue;
+
+							var book = info.Process(execMsg);
+
+							if (book == null)
+								continue;
+
+							if (leftIds == null)
+								leftIds = new HashSet<long>(ids);
+
+							if (info.Online == null)
+								leftIds.Remove(id);
+							else
+							{
+								if (processed == null)
+									processed = new HashSet<long>();
+
+								processed.AddRange(info.Online.BookSubscribers.Cache);
+								leftIds.RemoveRange(info.Online.OrdersSubscribers.Cache);
+							}
+
+							if (filtered == null)
+								filtered = new List<QuoteChangeMessage>();
+
+							filtered.Add(book);
+						}
 					}
+
+					if (leftIds == null)
+						break;
+					else if (leftIds.Count == 0)
+						message = null;
+					else
+						execMsg.SetSubscriptionIds(leftIds.ToArray());
 
 					break;
 				}
@@ -330,15 +544,18 @@ namespace StockSharp.Algo
 
 			if (message != null)
 				base.OnInnerAdapterNewOutMessage(message);
+
+			if (filtered != null)
+			{
+				foreach (var book in filtered)
+					base.OnInnerAdapterNewOutMessage(book);
+			}
 		}
 
 		/// <summary>
 		/// Create a copy of <see cref="FilteredMarketDepthAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
-		{
-			return new FilteredMarketDepthAdapter(InnerAdapter);
-		}
+		public override IMessageChannel Clone() => new FilteredMarketDepthAdapter(InnerAdapter);
 	}
 }
