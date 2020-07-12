@@ -8,6 +8,8 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 
 	using StockSharp.Messages;
+	using StockSharp.Logging;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Filtered market depth adapter.
@@ -16,8 +18,9 @@ namespace StockSharp.Algo
 	{
 		private class FilteredMarketDepthInfo
 		{
-			private readonly Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>> _executions = new Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>>();
-			private readonly Dictionary<long, ExecutionMessage> _activeOrders = new Dictionary<long, ExecutionMessage>();
+			private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = new Dictionary<ValueTuple<Sides, decimal>, decimal>();
+			private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _activeOrders = new Dictionary<long, RefTriple<Sides, decimal, decimal?>>();
+			
 			private QuoteChangeMessage _lastSnapshot;
 
 			public FilteredMarketDepthInfo(long subscribeId, Subscription bookSubscription, Subscription ordersSubscription)
@@ -26,9 +29,6 @@ namespace StockSharp.Algo
 
 				BookSubscription = bookSubscription ?? throw new ArgumentNullException(nameof(bookSubscription));
 				OrdersSubscription = ordersSubscription ?? throw new ArgumentNullException(nameof(ordersSubscription));
-
-				//BookSubscribers.Add(bookSubscription.TransactionId);
-				//OrdersSubscribers.Add(ordersSubscription.TransactionId);
 			}
 
 			public long SubscribeId { get; }
@@ -46,16 +46,12 @@ namespace StockSharp.Algo
 				return quotes
 					.Select(quote =>
 					{
-						var res = quote;
-						var key = Tuple.Create(side, res.Price);
+						if (_totals.TryGetValue((side, quote.Price), out var total))
+							quote.Volume -= total;
 
-						var own = _executions.TryGetValue(key)?.Second;
-						if (own != null)
-							res.Volume -= own.Value;
-
-						return res.Volume <= 0 ? default : res;
+						return quote;
 					})
-					.Where(q => q.Price != default)
+					.Where(q => q.Volume > 0)
 					.ToArray();
 			}
 
@@ -75,7 +71,7 @@ namespace StockSharp.Algo
 				};
 
 				if (Online == null)
-					book.SetSubscriptionIds(subscriptionId: BookSubscription.TransactionId);
+					book.SetSubscriptionIds(subscriptionId: SubscribeId);
 				else
 					book.SetSubscriptionIds(Online.Subscribers.Cache);
 
@@ -99,44 +95,87 @@ namespace StockSharp.Algo
 
 				if (message.TransactionId != 0)
 				{
-					_activeOrders[message.TransactionId] = message.TypedClone();
+					if (message.OrderState != OrderStates.Done && message.OrderState != OrderStates.Failed)
+					{
+						var balance = message.Balance;
+
+						_activeOrders[message.TransactionId] = RefTuple.Create(message.Side, message.OrderPrice, balance);
+
+						if (balance == null)
+							return null;
+
+						var valKey = (message.Side, message.OrderPrice);
+
+						if (_totals.TryGetValue(valKey, out var total))
+						{
+							total += balance.Value;
+							_totals[valKey] = total;
+						}
+						else
+							_totals.Add(valKey, balance.Value);
+					}
 				}
-				else if (_activeOrders.TryGetValue(message.OriginalTransactionId, out var prevState))
+				else if (_activeOrders.TryGetValue(message.OriginalTransactionId, out var key))
 				{
-					var key = Tuple.Create(message.Side, message.OrderPrice);
+					var valKey = (key.First, key.Second);
 
 					switch (message.OrderState)
 					{
 						case OrderStates.Done:
 						case OrderStates.Failed:
 						{
-							var pair = _executions.TryGetValue(key);
+							_activeOrders.Remove(message.OriginalTransactionId);
 
-							if (pair == null)
-								break;
+							var balance = key.Third;
 
-							var balance = pair.First.TryGetAndRemove(message.OriginalTransactionId);
+							if (balance == null)
+								return null;
 
-							if (pair.First.Count == 0)
-								_executions.Remove(key);
+							var total = _totals[valKey];
+							total -= balance.Value;
+
+							if (total > 0)
+								_totals[valKey] = total;
 							else
-								pair.Second -= balance;
+								_totals.Remove(valKey);
 
 							break;
 						}
 
 						case OrderStates.Active:
 						{
-							var balance = message.Balance;
+							var newBalance = message.Balance;
 
-							if (balance != null)
+							if (newBalance == null)
+								return null;
+
+							var prevBalance = key.Third;
+							key.Third = newBalance;
+
+							if (prevBalance == null)
 							{
-								var pair = _executions.SafeAdd(key, k => RefTuple.Create(new Dictionary<long, decimal>(), 0M));
+								if (_totals.TryGetValue(valKey, out var total))
+								{
+									total += newBalance.Value;
+									_totals[valKey] = total;
+								}
+								else
+									_totals.Add(valKey, newBalance.Value);
+							}
+							else
+							{
+								var delta = prevBalance.Value - newBalance.Value;
 
-								var prev = pair.First.TryGetValue(message.OriginalTransactionId);
+								if (delta == 0)
+									return null;
 
-								pair.First[message.OriginalTransactionId] = balance.Value;
-								pair.Second += balance.Value - prev;
+								var total = _totals[valKey];
+								total -= delta;
+
+								if (total > 0)
+									_totals[valKey] = total;
+								else
+									_totals.Remove(valKey);
 							}
 
 							break;
@@ -146,7 +185,7 @@ namespace StockSharp.Algo
 				else
 					return null;
 
-				return CreateFilteredBook();
+				return _lastSnapshot is null ? null : CreateFilteredBook();
 			}
 		}
 
@@ -160,6 +199,7 @@ namespace StockSharp.Algo
 
 		private readonly SyncObject _sync = new SyncObject();
 
+		private readonly Dictionary<long, FilteredMarketDepthInfo> _byId = new Dictionary<long, FilteredMarketDepthInfo>();
 		private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = new Dictionary<long, FilteredMarketDepthInfo>();
 		private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = new Dictionary<long, FilteredMarketDepthInfo>();
 		private readonly Dictionary<SecurityId, OnlineInfo> _online = new Dictionary<SecurityId, OnlineInfo>();
@@ -188,6 +228,7 @@ namespace StockSharp.Algo
 				{
 					lock (_sync)
 					{
+						_byId.Clear();
 						_byBookId.Clear();
 						_byOrderStatusId.Clear();
 						_online.Clear();
@@ -227,6 +268,7 @@ namespace StockSharp.Algo
 
 						lock (_sync)
 						{
+							_byId.Add(transId, info);
 							_byBookId.Add(mdMsg.TransactionId, info);
 							_byOrderStatusId.Add(orderStatus.TransactionId, info);
 						}
@@ -243,7 +285,7 @@ namespace StockSharp.Algo
 
 						lock (_sync)
 						{
-							if (!_byBookId.TryGetValue(mdMsg.OriginalTransactionId, out var info))
+							if (!_byId.TryGetValue(mdMsg.OriginalTransactionId, out var info))
 								break;
 
 							info.UnSubscribeId = mdMsg.TransactionId;
@@ -272,12 +314,23 @@ namespace StockSharp.Algo
 								_unsubscribeRequests.Add(ordersUnsubscribe.TransactionId, Tuple.Create(info, false));
 							}
 						}
-						
-						if (bookUnsubscribe != null)
-							base.OnSendInMessage(bookUnsubscribe);
 
-						if (ordersUnsubscribe != null)
-							base.OnSendInMessage(ordersUnsubscribe);
+						if (bookUnsubscribe == null && ordersUnsubscribe == null)
+						{
+							RaiseNewOutMessage(new SubscriptionResponseMessage
+							{
+								OriginalTransactionId = mdMsg.TransactionId,
+								Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),
+							});
+						}
+						else
+						{
+							if (bookUnsubscribe != null)
+								base.OnSendInMessage(bookUnsubscribe);
+
+							if (ordersUnsubscribe != null)
+								base.OnSendInMessage(ordersUnsubscribe);
+						}
 							
 						return true;
 					}
@@ -397,12 +450,7 @@ namespace StockSharp.Algo
 				case MessageTypes.SubscriptionResponse:
 				{
 					var responseMsg = (SubscriptionResponseMessage)message;
-
-					if (responseMsg.Error == null)
-						message = TryApplyState(responseMsg, SubscriptionStates.Error);
-					else
-						message = TryApplyState(responseMsg, SubscriptionStates.Active);
-
+					message = TryApplyState(responseMsg, responseMsg.Error == null ? SubscriptionStates.Active : SubscriptionStates.Error);
 					break;
 				}
 
@@ -445,14 +493,14 @@ namespace StockSharp.Algo
 
 							var book = info.Process(quoteMsg);
 
-							if (leftIds == null)
+							if (leftIds is null)
 								leftIds = new HashSet<long>(ids);
 
-							if (info.Online == null)
+							if (info.Online is null)
 								leftIds.Remove(id);
 							else
 							{
-								if (processed == null)
+								if (processed is null)
 									processed = new HashSet<long>();
 
 								processed.AddRange(info.Online.BookSubscribers.Cache);
@@ -466,7 +514,7 @@ namespace StockSharp.Algo
 						}
 					}
 
-					if (leftIds == null)
+					if (leftIds is null)
 						break;
 					else if (leftIds.Count == 0)
 						message = null;
@@ -505,33 +553,31 @@ namespace StockSharp.Algo
 							if (!_byOrderStatusId.TryGetValue(id, out var info))
 								continue;
 
-							var book = info.Process(execMsg);
-
-							if (book == null)
-								continue;
-
-							if (leftIds == null)
+							if (leftIds is null)
 								leftIds = new HashSet<long>(ids);
 
-							if (info.Online == null)
+							if (info.Online is null)
 								leftIds.Remove(id);
 							else
 							{
-								if (processed == null)
+								if (processed is null)
 									processed = new HashSet<long>();
 
-								processed.AddRange(info.Online.BookSubscribers.Cache);
+								processed.AddRange(info.Online.OrdersSubscribers.Cache);
 								leftIds.RemoveRange(info.Online.OrdersSubscribers.Cache);
 							}
 
-							if (filtered == null)
+							if (filtered is null)
 								filtered = new List<QuoteChangeMessage>();
 
-							filtered.Add(book);
+							var book = info.Process(execMsg);
+
+							if (book is object)
+								filtered.Add(book);
 						}
 					}
 
-					if (leftIds == null)
+					if (leftIds is null)
 						break;
 					else if (leftIds.Count == 0)
 						message = null;
