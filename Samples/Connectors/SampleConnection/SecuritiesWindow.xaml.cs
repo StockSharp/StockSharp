@@ -209,14 +209,21 @@ namespace SampleConnection
 			}
 		}
 
+		private Subscription FindSubscription(Security security, DataType dataType)
+		{
+			return Connector.FindSubscriptions(security, dataType).Where(s => s.SubscriptionMessage.To == null && s.State.IsActive()).FirstOrDefault();
+		}
+
 		private void Level1Click(object sender, RoutedEventArgs e)
 		{
 			var connector = Connector;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				if (connector.RegisteredSecurities.Contains(security))
-					connector.UnSubscribeLevel1(security);
+				var subscription = FindSubscription(security, DataType.Level1);
+
+				if (subscription != null)
+					connector.UnSubscribe(subscription);
 				else
 					connector.SubscribeLevel1(security);
 			}
@@ -243,8 +250,10 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				if (connector.RegisteredTrades.Contains(security))
-					connector.UnSubscribeTrades(security);
+				var subscription = FindSubscription(security, DataType.Ticks);
+
+				if (subscription != null)
+					connector.UnSubscribe(subscription);
 				else
 					connector.SubscribeTrades(security);
 			}
@@ -271,8 +280,10 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				if (connector.RegisteredOrderLogs.Contains(security))
-					connector.UnSubscribeOrderLog(security);
+				var subscription = FindSubscription(security, DataType.OrderLog);
+
+				if (subscription != null)
+					connector.UnSubscribe(subscription);
 				else
 					connector.SubscribeOrderLog(security);
 			}

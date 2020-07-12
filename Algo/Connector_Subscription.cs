@@ -2,6 +2,7 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 
@@ -11,6 +12,21 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
+		/// <summary>
+		/// Find subscriptions for the specified security and data type.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Subscriptions.</returns>
+		public IEnumerable<Subscription> FindSubscriptions(Security security, DataType dataType)
+		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			var secId = security.ToSecurityId();
+			return Subscriptions.Where(s => s.DataType == dataType && s.SecurityId == secId);
+		}
+
 		/// <inheritdoc />
 		public IEnumerable<Security> RegisteredSecurities => _subscriptionManager.GetSubscribers(DataType.Level1);
 
