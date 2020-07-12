@@ -166,9 +166,6 @@
 		/// Create a copy of <see cref="OrderBookTruncateMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
-		{
-			return new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
-		}
+		public override IMessageChannel Clone() => new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
 	}
 }

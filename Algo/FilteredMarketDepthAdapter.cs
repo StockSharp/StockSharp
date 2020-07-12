@@ -450,7 +450,7 @@ namespace StockSharp.Algo
 				case MessageTypes.SubscriptionResponse:
 				{
 					var responseMsg = (SubscriptionResponseMessage)message;
-					message = TryApplyState(responseMsg, responseMsg.Error == null ? SubscriptionStates.Active : SubscriptionStates.Error);
+					message = TryApplyState(responseMsg, responseMsg.IsOk() ? SubscriptionStates.Active : SubscriptionStates.Error);
 					break;
 				}
 

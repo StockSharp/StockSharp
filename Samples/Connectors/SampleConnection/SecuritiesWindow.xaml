@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 	xmlns:sx="http://schemas.stocksharp.com/xaml" Loaded="SecuritiesWindow_OnLoaded"
-	Title="{x:Static loc:LocalizedStrings.Securities}" Height="415" Width="1081">
+	Title="{x:Static loc:LocalizedStrings.Securities}" Height="500" Width="1200">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
