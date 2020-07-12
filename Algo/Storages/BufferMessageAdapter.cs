@@ -241,7 +241,6 @@ namespace StockSharp.Algo.Storages
 				if (Settings.IsMode(StorageModes.Snapshot))
 				{
 					var states = message.States.ToHashSet();
-					var strategyId = message.StrategyId;
 
 					var ordersIds = new HashSet<long>();
 					
@@ -251,14 +250,8 @@ namespace StockSharp.Algo.Storages
 					{
 						if (snapshot.HasOrderInfo)
 						{
-							if (!strategyId.IsEmpty() && !strategyId.CompareIgnoreCase(snapshot.StrategyId))
+							if (!snapshot.IsMatch(message, states))
 								continue;
-
-							if (states.Count > 0 && snapshot.OrderState != null && !states.Contains(snapshot.OrderState.Value))
-							{
-								if (snapshot.ServerTime.Date != DateTime.Today)
-									continue;
-							}
 
 							ordersIds.Add(snapshot.TransactionId);
 						}

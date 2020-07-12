@@ -2794,6 +2794,59 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Determines the specified transaction is matched lookup criteria.
+		/// </summary>
+		/// <param name="transaction">Transaction.</param>
+		/// <param name="criteria">The order which fields will be used as a filter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this ExecutionMessage transaction, OrderStatusMessage criteria)
+		{
+			if (transaction.IsMarketData())
+				throw new ArgumentException(nameof(transaction));
+
+			if (criteria is null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			return transaction.IsMatch(criteria, criteria.States.ToHashSet());
+		}
+
+		/// <summary>
+		/// Determines the specified transaction is matched lookup criteria.
+		/// </summary>
+		/// <param name="transaction">Transaction.</param>
+		/// <param name="criteria">The order which fields will be used as a filter.</param>
+		/// <param name="states">Filter order by the specified states.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this ExecutionMessage transaction, OrderStatusMessage criteria, ISet<OrderStates> states)
+		{
+			if (transaction.IsMarketData())
+				throw new ArgumentException(nameof(transaction));
+
+			if (criteria is null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (states is null)
+				throw new ArgumentNullException(nameof(states));
+
+			if (criteria.SecurityId != default && criteria.SecurityId != transaction.SecurityId)
+				return false;
+
+			if (states.Count > 0 && transaction.OrderState != null && !states.Contains(transaction.OrderState.Value))
+				return false;
+
+			if (criteria.Side != default && criteria.Side != transaction.Side)
+				return false;
+
+			if (criteria.Volume != default && criteria.Volume != transaction.OrderVolume)
+				return false;
+
+			if (!criteria.StrategyId.IsEmpty() && !criteria.StrategyId.CompareIgnoreCase(transaction.StrategyId))
+				return false;
+
+			return true;
+		}
+
+		/// <summary>
 		/// Determines the specified security is matched lookup criteria.
 		/// </summary>
 		/// <param name="security">Security.</param>
