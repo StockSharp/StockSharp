@@ -64,6 +64,12 @@ namespace StockSharp.Messages
 			set => _states = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
+		bool ISubscriptionMessage.FilterEnabled
+			=>
+			States.Length != 0 || SecurityId != default ||
+			!PortfolioName.IsEmpty() || Side != null ||
+			Volume != null || !StrategyId.IsEmpty();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
 		/// </summary>

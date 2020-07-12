@@ -20,6 +20,9 @@
 		}
 
 		/// <inheritdoc />
+		public virtual bool FilterEnabled => false;
+
+		/// <inheritdoc />
 		[DataMember]
 		public virtual DateTimeOffset? From { get; set; }
 		

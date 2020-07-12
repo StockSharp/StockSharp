@@ -2794,10 +2794,183 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines the specified transaction is matched lookup criteria.
+		/// Determines the specified message is matched lookup criteria.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="criteria">The message which fields will be used as a filter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this ISubscriptionIdMessage message, ISubscriptionMessage criteria)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.Security:
+				{
+					if (criteria is SecurityLookupMessage lookupMsg)
+						return ((SecurityMessage)message).IsMatch(lookupMsg);
+
+					return true;
+				}
+				case MessageTypes.Board:
+				{
+					if (criteria is BoardLookupMessage lookupMsg)
+						return ((BoardMessage)message).IsMatch(lookupMsg);
+
+					return true;
+				}
+				case MessageTypes.Portfolio:
+				{
+					if (criteria is PortfolioLookupMessage lookupMsg)
+						return ((PortfolioMessage)message).IsMatch(lookupMsg, true);
+
+					return true;
+				}
+				case MessageTypes.PositionChange:
+				{
+					if (criteria is PortfolioLookupMessage lookupMsg)
+						return ((PositionChangeMessage)message).IsMatch(lookupMsg, true);
+
+					return true;
+				}
+				case MessageTypes.Execution:
+				{
+					var execMsg = (ExecutionMessage)message;
+
+					if (execMsg.IsMarketData())
+					{
+						//if (criteria is MarketDataMessage mdMsg)
+						//	return execMsg.IsMatch(mdMsg);
+
+						return true;
+					}
+					else
+					{
+						if (criteria is OrderStatusMessage statusMsg)
+							return execMsg.IsMatch(statusMsg);
+
+						return true;
+					}
+				}
+				//case MessageTypes.QuoteChange:
+				//{
+				//	if (criteria is MarketDataMessage mdMsg)
+				//		return ((QuoteChangeMessage)message).IsMatch(mdMsg);
+
+				//	return true;
+				//}
+
+				default:
+				{
+					//if (message.Type.IsCandle())
+					//{
+					//	if (criteria is MarketDataMessage mdMsg)
+					//		return message.IsMatch(mdMsg);
+
+					//	return true;
+					//}
+
+					return true;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Determines the specified message is matched lookup criteria.
+		/// </summary>
+		/// <param name="board">Board.</param>
+		/// <param name="criteria">The message which fields will be used as a filter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this BoardMessage board, BoardLookupMessage criteria)
+		{
+			if (board is null)
+				throw new ArgumentNullException(nameof(board));
+
+			if (criteria is null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.Like.IsEmpty() && !board.Code.ContainsIgnoreCase(criteria.Like))
+				return false;
+
+			return true;
+		}
+
+		/// <summary>
+		/// Determines the specified message is matched lookup criteria.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="criteria">The message which fields will be used as a filter.</param>
+		/// <param name="compareName">Fully compare <see cref="PortfolioMessage.PortfolioName"/>.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this PortfolioMessage portfolio, PortfolioLookupMessage criteria, bool compareName)
+		{
+			if (portfolio is null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			if (criteria is null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.PortfolioName.IsEmpty())
+			{
+				if (compareName && !!portfolio.PortfolioName.CompareIgnoreCase(criteria.PortfolioName))
+					return false;
+				else if (!compareName && !portfolio.PortfolioName.ContainsIgnoreCase(criteria.PortfolioName))
+					return false;
+			}
+
+			if (!criteria.BoardCode.IsEmpty() && !portfolio.BoardCode.CompareIgnoreCase(criteria.BoardCode))
+				return false;
+
+			if (!criteria.ClientCode.IsEmpty() && !portfolio.ClientCode.CompareIgnoreCase(criteria.ClientCode))
+				return false;
+
+			if (criteria.Currency != null && portfolio.Currency != criteria.Currency)
+				return false;
+
+			return true;
+		}
+
+		/// <summary>
+		/// Determines the specified message is matched lookup criteria.
+		/// </summary>
+		/// <param name="position">Position.</param>
+		/// <param name="criteria">The message which fields will be used as a filter.</param>
+		/// <param name="compareName">Fully compare <see cref="PositionChangeMessage.PortfolioName"/>.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMatch(this PositionChangeMessage position, PortfolioLookupMessage criteria, bool compareName)
+		{
+			if (position is null)
+				throw new ArgumentNullException(nameof(position));
+
+			if (criteria is null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (!criteria.PortfolioName.IsEmpty())
+			{
+				if (compareName && !!position.PortfolioName.CompareIgnoreCase(criteria.PortfolioName))
+					return false;
+				else if (!compareName && !position.PortfolioName.ContainsIgnoreCase(criteria.PortfolioName))
+					return false;
+			}
+
+			if (criteria.SecurityId != null && position.SecurityId != criteria.SecurityId.Value)
+				return false;
+
+			if (!criteria.BoardCode.IsEmpty() && !position.BoardCode.CompareIgnoreCase(criteria.BoardCode))
+				return false;
+
+			if (!criteria.ClientCode.IsEmpty() && !position.ClientCode.CompareIgnoreCase(criteria.ClientCode))
+				return false;
+
+			if (!criteria.StrategyId.IsEmpty() && !position.StrategyId.CompareIgnoreCase(criteria.StrategyId))
+				return false;
+
+			return true;
+		}
+
+		/// <summary>
+		/// Determines the specified message is matched lookup criteria.
 		/// </summary>
 		/// <param name="transaction">Transaction.</param>
-		/// <param name="criteria">The order which fields will be used as a filter.</param>
+		/// <param name="criteria">The message which fields will be used as a filter.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsMatch(this ExecutionMessage transaction, OrderStatusMessage criteria)
 		{
@@ -2841,6 +3014,9 @@ namespace StockSharp.Messages
 				return false;
 
 			if (!criteria.StrategyId.IsEmpty() && !criteria.StrategyId.CompareIgnoreCase(transaction.StrategyId))
+				return false;
+
+			if (!criteria.PortfolioName.IsEmpty() && !criteria.PortfolioName.CompareIgnoreCase(transaction.PortfolioName))
 				return false;
 
 			return true;

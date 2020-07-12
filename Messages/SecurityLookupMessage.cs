@@ -81,6 +81,19 @@ namespace StockSharp.Messages
 
 		DataType ISubscriptionMessage.DataType => DataType.Securities;
 
+		bool ISubscriptionMessage.FilterEnabled
+			=>
+			SecurityType != null || SecurityId != default ||
+			!Name.IsEmpty() || !ShortName.IsEmpty() ||
+			SecurityTypes?.Length > 0 || OptionType != null ||
+			Strike != null || VolumeStep != null || PriceStep != null ||
+			!CfiCode.IsEmpty() || MinVolume != null || MaxVolume != null ||
+			Multiplier != null || Decimals != null || ExpiryDate != null ||
+			SettlementDate != null || IssueDate != null || IssueSize != null ||
+			!UnderlyingSecurityCode.IsEmpty() || UnderlyingSecurityMinVolume != null ||
+			UnderlyingSecurityType != null || !Class.IsEmpty() || Currency != null ||
+			!BinaryOptionType.IsEmpty() || Shortable != null || FaceValue != null;
+
 		/// <summary>
 		/// Create a copy of <see cref="SecurityLookupMessage"/>.
 		/// </summary>

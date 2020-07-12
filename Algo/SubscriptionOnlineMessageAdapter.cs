@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -24,7 +25,6 @@
 			public SubscriptionInfo(ISubscriptionMessage subscription)
 			{
 				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-				Subscribers = new CachedSynchronizedSet<long>();
 			}
 
 			public SubscriptionInfo(SubscriptionInfo main)
@@ -53,7 +53,8 @@
 				}
 			}
 
-			public readonly CachedSynchronizedSet<long> Subscribers;
+			public readonly HashSet<long> ExtraFilters = new HashSet<long>();
+			public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = new CachedSynchronizedDictionary<long, ISubscriptionMessage>();
 
 			private readonly List<long> _linked = new List<long>();
 
@@ -254,7 +255,23 @@
 									break;
 							}
 
-							subscrMsg.SetSubscriptionIds(info.Subscribers.Cache);
+							var ids = info.Subscribers.CachedKeys;
+
+							if (info.ExtraFilters.Count > 0)
+							{
+								var set = new HashSet<long>(ids);
+
+								foreach (var filterId in info.ExtraFilters)
+								{
+									if (!subscrMsg.IsMatch(info.Subscribers[filterId]))
+										set.Remove(filterId);
+								}
+
+								if (ids.Length != set.Count)
+									ids = set.ToArray();
+							}
+
+							subscrMsg.SetSubscriptionIds(ids);
 						}
 					}
 
@@ -322,6 +339,8 @@
 						var dataType = message.DataType;
 						var secId = default(SecurityId);
 
+						var extraFilter = false;
+
 						if (message is ISecurityIdMessage secIdMsg)
 						{
 							secId = secIdMsg.SecurityId;
@@ -329,8 +348,14 @@
 							if (secId == default && IsSecurityRequired(dataType))
 								this.AddWarningLog("Subscription {0} required security id.", dataType);
 							else if (secId != default && !IsSecurityRequired(dataType))
-								this.AddWarningLog("Subscription {0} doesn't required security id.", dataType);
+							{
+								//this.AddWarningLog("Subscription {0} doesn't required security id.", dataType);
+								extraFilter = true;
+							}
 						}
+
+						if (!extraFilter)
+							extraFilter = message.FilterEnabled;
 
 						var key = Tuple.Create(dataType, secId);
 
@@ -365,7 +390,11 @@
 						}
 
 						_subscriptionsById.Add(transId, info);
-						info.Subscribers.Add(transId);
+
+						info.Subscribers.Add(transId, message.TypedClone());
+
+						if (extraFilter)
+							info.ExtraFilters.Add(transId);
 					}
 					else
 						sendInMsg = message;
@@ -394,6 +423,8 @@
 						}
 						else
 						{
+							info.ExtraFilters.Remove(originId);
+
 							if (info.Linked.Count > 0)
 							{
 								foreach (var linked in info.Linked)

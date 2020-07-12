@@ -315,6 +315,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool DoNotBuildOrderBookInrement { get; set; }
 
+		bool ISubscriptionMessage.FilterEnabled => false;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>

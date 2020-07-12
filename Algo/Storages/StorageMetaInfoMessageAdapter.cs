@@ -260,9 +260,7 @@ namespace StockSharp.Algo.Storages
 				RaiseNewOutMessage(outMsg);
 			}
 
-			var strategyId = msg.StrategyId;
-
-			if (strategyId.IsEmpty())
+			if (msg.StrategyId.IsEmpty())
 			{
 				foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 				{
@@ -271,12 +269,14 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 			
-			foreach (var position in _positionStorage.Positions.Filter(msg))
+			foreach (var position in _positionStorage.Positions)
 			{
-				if (!strategyId.IsEmpty() && !strategyId.CompareIgnoreCase(position.StrategyId))
+				var posMsg = position.ToChangeMessage(transId);
+
+				if (!posMsg.IsMatch(msg, false))
 					continue;
 
-				SendOut(position.ToChangeMessage(transId));
+				SendOut(posMsg);
 			}
 
 			return base.OnSendInMessage(msg);

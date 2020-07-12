@@ -145,6 +145,11 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Portfolio(PortfolioName);
 
+		bool ISubscriptionMessage.FilterEnabled
+			=>
+			!PortfolioName.IsEmpty() || Currency != null ||
+			!BoardCode.IsEmpty() || !ClientCode.IsEmpty();
+
 		/// <inheritdoc />
 		public override string ToString()
 		{

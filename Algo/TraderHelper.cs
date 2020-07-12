@@ -3770,18 +3770,7 @@ namespace StockSharp.Algo
 		/// <param name="criteria">Criteria.</param>
 		/// <returns>Found boards.</returns>
 		public static IEnumerable<ExchangeBoard> Filter(this IEnumerable<ExchangeBoard> boards, BoardLookupMessage criteria)
-		{
-			if (boards == null)
-				throw new ArgumentNullException(nameof(boards));
-
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (!criteria.Like.IsEmpty())
-				boards = boards.Where(b => b.Code.ContainsIgnoreCase(criteria.Like));
-
-			return boards;
-		}
+			=> boards.Where(b => b.ToMessage().IsMatch(criteria));
 
 		/// <summary>
 		/// Filter portfolios by the specified criteria.
@@ -3790,24 +3779,7 @@ namespace StockSharp.Algo
 		/// <param name="criteria">Criteria.</param>
 		/// <returns>Found portfolios.</returns>
 		public static IEnumerable<Portfolio> Filter(this IEnumerable<Portfolio> portfolios, PortfolioLookupMessage criteria)
-		{
-			if (portfolios == null)
-				throw new ArgumentNullException(nameof(portfolios));
-
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (!criteria.PortfolioName.IsEmpty())
-				portfolios = portfolios.Where(p => p.Name.ContainsIgnoreCase(criteria.PortfolioName));
-
-			if (criteria.Currency != null)
-				portfolios = portfolios.Where(p => p.Currency == criteria.Currency);
-
-			if (!criteria.BoardCode.IsEmpty())
-				portfolios = portfolios.Where(p => p.Board?.Code.ContainsIgnoreCase(criteria.BoardCode) == true);
-
-			return portfolios;
-		}
+			=> portfolios.Where(p => p.ToMessage().IsMatch(criteria, false));
 
 		/// <summary>
 		/// Filter positions the specified criteria.
@@ -3816,27 +3788,7 @@ namespace StockSharp.Algo
 		/// <param name="criteria">Criteria.</param>
 		/// <returns>Found positions.</returns>
 		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, PortfolioLookupMessage criteria)
-		{
-			if (positions == null)
-				throw new ArgumentNullException(nameof(positions));
-
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			if (!criteria.PortfolioName.IsEmpty())
-				positions = positions.Where(p => p.Portfolio.Name.ContainsIgnoreCase(criteria.PortfolioName));
-
-			if (criteria.Currency != null)
-				positions = positions.Where(p => p.Currency == criteria.Currency);
-
-			if (criteria.SecurityId != null)
-				positions = positions.Where(p => p.Security.ToSecurityId() == criteria.SecurityId.Value);
-
-			if (!criteria.BoardCode.IsEmpty())
-				positions = positions.Where(p => p.Security.ToSecurityId().BoardCode.ContainsIgnoreCase(criteria.BoardCode));
-
-			return positions;
-		}
+			=> positions.Where(p => p.ToChangeMessage().IsMatch(criteria, false));
 
 		/// <summary>
 		/// Reregister the order.
