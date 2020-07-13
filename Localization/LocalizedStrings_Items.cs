@@ -18,6 +18,47 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Cancel '{0}' orders with price {1}.
+		/// </summary>
+		public const string CancelOrdersWithPriceParamsKey = nameof(CancelOrdersWithPriceParams);
+
+		/// <summary>
+		/// Cancel '{0}' orders with price {1}.
+		/// </summary>
+		public static string CancelOrdersWithPriceParams => GetString(CancelOrdersWithPriceParamsKey);
+
+		/// <summary>
+		/// Press Escape to cancel operation.
+		/// </summary>
+		public const string PressEscToCancelKey = nameof(PressEscToCancel);
+
+		/// <summary>
+		/// Press Escape to cancel operation.
+		/// </summary>
+		public static string PressEscToCancel => GetString(PressEscToCancelKey);
+
+
+		/// <summary>
+		/// Move '{0}' orders from price {1} to {2}.
+		/// </summary>
+		public const string MovingOrdersParamsKey = nameof(MovingOrdersParams);
+
+		/// <summary>
+		/// Move '{0}' orders from price {1} to {2}.
+		/// </summary>
+		public static string MovingOrdersParams => GetString(MovingOrdersParamsKey);
+
+		/// <summary>
+		/// Session was not selected.
+		/// </summary>
+		public const string SessionNotSelectedKey = nameof(SessionNotSelected);
+
+		/// <summary>
+		/// Session was not selected.
+		/// </summary>
+		public static string SessionNotSelected => GetString(SessionNotSelectedKey);
+
+		/// <summary>
 		/// This connection uses paid options. Click for detailed info.
 		/// </summary>
 		public const string PaidConnectorToolipKey = nameof(PaidConnectorToolip);

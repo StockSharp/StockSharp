@@ -13,11 +13,13 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
+	using System.Globalization;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -330,4 +332,30 @@ namespace StockSharp.Messages
 			BoardCode = AssociatedBoardCode
 		};
 	}
+
+	/// <summary>
+	/// Converter to use with <see cref="SecurityId"/> properties.
+	/// </summary>
+	public class StringToSecurityIdTypeConverter : TypeConverter
+	{
+		/// <inheritdoc />
+		public override bool CanConvertFrom(ITypeDescriptorContext ctx, Type sourceType)
+			=> sourceType == typeof(string) || base.CanConvertFrom(ctx, sourceType);
+
+		/// <inheritdoc />
+		public override object ConvertFrom(ITypeDescriptorContext ctx, CultureInfo culture, object value)
+		{
+			if(!(value is string securityId))
+				return base.ConvertFrom(ctx, culture, value);
+
+			var isNullable = ctx.PropertyDescriptor?.PropertyType.IsNullable() == true;
+
+			const string delimiter = "@";
+			var index = securityId.LastIndexOf(delimiter, StringComparison.InvariantCulture);
+			return index < 0 ?
+				isNullable ? (SecurityId?)null : default(SecurityId) :
+				new SecurityId { SecurityCode = securityId.Substring(0, index), BoardCode = securityId.Substring(index + delimiter.Length, securityId.Length - index - delimiter.Length) };
+		}
+	}
+
 }

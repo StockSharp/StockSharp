@@ -1,4 +1,8 @@
-﻿PaidConnectorToolip;This connection uses paid options. Click for detailed info.;Это подключение использует платные опции. Кликните для получения дополнительной информации.
+﻿PressEscToCancel;Press Escape to cancel operation.;Нажмите Escape для отмены операции.
+MovingOrdersParams;Move '{0}' orders from price {1} to {2}.;Переместить заявки '{0}' с цены {1} на {2}.
+CancelOrdersWithPriceParams;Cancel '{0}' orders with price {1}.;Отменить заявки '{0}' с ценой {1}.
+SessionNotSelected;Session was not selected.;Сессия не выбрана.
+PaidConnectorToolip;This connection uses paid options. Click for detailed info.;Это подключение использует платные опции. Кликните для получения дополнительной информации.
 SwitchAxisLocation;Switch axis location;Переключить расположение оси
 ChartSeriesTitleParams;{0} ({1});{0} ({1})
 ChartTranElementTitleParams;{0} ({1});{0} ({1})
