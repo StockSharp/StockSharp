@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Positions
 
 						if (IsEmulate)
 						{
-							//RaiseNewOutMessage(lookupMsg.CreateResponse());
+							RaiseNewOutMessage(lookupMsg.CreateResponse());
 							return true;
 						}
 					}
