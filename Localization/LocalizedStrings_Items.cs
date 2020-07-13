@@ -51846,5 +51846,15 @@ namespace StockSharp.Localization
 		/// Time taken to edit an order.
 		/// </summary>
 		public static string EditionLatency => GetString(EditionLatencyKey);
+
+		/// <summary>
+		/// Filtered book
+		/// </summary>
+		public const string FilteredBookKey = nameof(FilteredBook);
+
+		/// <summary>
+		/// Filtered book
+		/// </summary>
+		public static string FilteredBook => GetString(FilteredBookKey);
 	}
 }

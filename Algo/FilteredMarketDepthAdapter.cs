@@ -19,7 +19,7 @@ namespace StockSharp.Algo
 		private class FilteredMarketDepthInfo
 		{
 			private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = new Dictionary<ValueTuple<Sides, decimal>, decimal>();
-			private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _activeOrders = new Dictionary<long, RefTriple<Sides, decimal, decimal?>>();
+			private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _ordersInfo = new Dictionary<long, RefTriple<Sides, decimal, decimal?>>();
 			
 			private QuoteChangeMessage _lastSnapshot;
 
@@ -88,18 +88,32 @@ namespace StockSharp.Algo
 				return CreateFilteredBook();
 			}
 
+			public void AddOrder(OrderRegisterMessage message)
+			{
+				if (message is null)
+					throw new ArgumentNullException(nameof(message));
+
+				_ordersInfo[message.TransactionId] = RefTuple.Create(message.Side, message.Price, (decimal?)message.Volume);
+			}
+
 			public QuoteChangeMessage Process(ExecutionMessage message)
 			{
 				if (message is null)
 					throw new ArgumentNullException(nameof(message));
 
+				if (!message.HasOrderInfo)
+					return null;
+
 				if (message.TransactionId != 0)
 				{
 					if (message.OrderState != OrderStates.Done && message.OrderState != OrderStates.Failed)
 					{
+						if (message.OrderPrice == 0)
+							return null;
+
 						var balance = message.Balance;
 
-						_activeOrders[message.TransactionId] = RefTuple.Create(message.Side, message.OrderPrice, balance);
+						_ordersInfo[message.TransactionId] = RefTuple.Create(message.Side, message.OrderPrice, balance);
 
 						if (balance == null)
 							return null;
@@ -115,7 +129,7 @@ namespace StockSharp.Algo
 							_totals.Add(valKey, balance.Value);
 					}
 				}
-				else if (_activeOrders.TryGetValue(message.OriginalTransactionId, out var key))
+				else if (_ordersInfo.TryGetValue(message.OriginalTransactionId, out var key))
 				{
 					var valKey = (key.First, key.Second);
 
@@ -124,14 +138,16 @@ namespace StockSharp.Algo
 						case OrderStates.Done:
 						case OrderStates.Failed:
 						{
-							_activeOrders.Remove(message.OriginalTransactionId);
+							_ordersInfo.Remove(message.OriginalTransactionId);
 
 							var balance = key.Third;
 
 							if (balance == null)
 								return null;
 
-							var total = _totals[valKey];
+							if (!_totals.TryGetValue(valKey, out var total))
+								return null;
+
 							total -= balance.Value;
 
 							if (total > 0)
@@ -164,18 +180,22 @@ namespace StockSharp.Algo
 							}
 							else
 							{
-								var delta = prevBalance.Value - newBalance.Value;
+								if (_totals.TryGetValue(valKey, out var total))
+								{
+									var delta = prevBalance.Value - newBalance.Value;
 
-								if (delta == 0)
-									return null;
+									if (delta == 0)
+										return null;
 
-								var total = _totals[valKey];
-								total -= delta;
+									total -= delta;
 
-								if (total > 0)
-									_totals[valKey] = total;
-								else
-									_totals.Remove(valKey);
+									if (total > 0)
+										_totals[valKey] = total;
+									else
+										_totals.Remove(valKey);
+								}
+								else if (newBalance > 0)
+									_totals.Add(valKey, newBalance.Value);
 							}
 
 							break;
@@ -214,14 +234,30 @@ namespace StockSharp.Algo
 		{
 		}
 
-		/// <summary>
-		/// Data type.
-		/// </summary>
-		public static readonly DataType Filtered = DataType.Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).Immutable();
-
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
 		{
+			void AddInfo(OrderRegisterMessage regMsg)
+			{
+				if (regMsg is null)
+					throw new ArgumentNullException(nameof(regMsg));
+
+				if (regMsg.OrderType == OrderTypes.Market || regMsg.Price == 0)
+					return;
+
+				if (regMsg.TimeInForce == TimeInForce.MatchOrCancel || regMsg.TimeInForce == TimeInForce.CancelBalance)
+					return;
+
+				lock (_sync)
+				{
+					foreach (var info in _byId.Values)
+					{
+						if (info.BookSubscription.SecurityId == regMsg.SecurityId)
+							info.AddOrder(regMsg);
+					}
+				}
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -238,6 +274,23 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.OrderRegister:
+				case MessageTypes.OrderReplace:
+				{
+					AddInfo((OrderRegisterMessage)message);
+					break;
+				}
+
+				case MessageTypes.OrderPairReplace:
+				{
+					var pairMsg = (OrderPairReplaceMessage)message;
+
+					AddInfo(pairMsg.Message1);
+					AddInfo(pairMsg.Message2);
+
+					break;
+				}
+
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
@@ -247,7 +300,7 @@ namespace StockSharp.Algo
 						if (mdMsg.SecurityId == default)
 							break;
 
-						if (mdMsg.DataType2 != Filtered)
+						if (mdMsg.DataType2 != DataType.FilteredMarketDepth)
 							break;
 
 						var transId = mdMsg.TransactionId;
@@ -528,11 +581,7 @@ namespace StockSharp.Algo
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if	(
-							execMsg.ExecutionType != ExecutionTypes.Transaction ||
-							!execMsg.HasOrderInfo() ||
-							execMsg.OrderPrice == 0 // ignore market orders
-						)
+					if (execMsg.IsMarketData())
 						break;
 
 					HashSet<long> leftIds = null;

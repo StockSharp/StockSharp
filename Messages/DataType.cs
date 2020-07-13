@@ -51,6 +51,11 @@ namespace StockSharp.Messages
 		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).Immutable();
 
 		/// <summary>
+		/// Filtered market depth.
+		/// </summary>
+		public static DataType FilteredMarketDepth { get; } = Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).Immutable();
+
+		/// <summary>
 		/// Position changes.
 		/// </summary>
 		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).Immutable();
@@ -259,6 +264,8 @@ namespace StockSharp.Messages
 				return LocalizedStrings.OrderLog;
 			else if (this == MarketDepth)
 				return LocalizedStrings.MarketDepth;
+			else if (this == FilteredMarketDepth)
+				return LocalizedStrings.FilteredBook;
 			else if (this == Transactions)
 				return LocalizedStrings.Transactions;
 			else if (this == PositionChanges)
@@ -298,11 +305,12 @@ namespace StockSharp.Messages
 		/// Is the data type required security info.
 		/// </summary>
 		public bool IsSecurityRequired =>
-			IsCandles			||
-			this == MarketDepth ||
-			this == Level1		||
-			this == Securities	||
-			this == Ticks		||
+			IsCandles					||
+			this == MarketDepth			||
+			this == FilteredMarketDepth ||
+			this == Level1				||
+			this == Securities			||
+			this == Ticks				||
 			this == OrderLog;
 
 		/// <summary>

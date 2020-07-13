@@ -26,7 +26,6 @@ namespace SampleConnection
 		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindowsBySubscription = new SynchronizedDictionary<Subscription, QuotesWindow>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
 		private bool _initialized;
-		private bool _initializedSubscriptions;
 		private bool _appClosing;
 
 		public SecuritiesWindow()
@@ -79,9 +78,6 @@ namespace SampleConnection
 			if (connector != null)
 			{
 				if (_initialized)
-					connector.MarketDepthReceived -= TraderOnMarketDepthChanged;
-
-				if (_initializedSubscriptions)
 					connector.MarketDepthReceived -= TraderOnMarketDepthReceived;
 			}
 
@@ -131,18 +127,26 @@ namespace SampleConnection
 
 		private void TraderOnMarketDepthReceived(Subscription subscription, MarketDepth depth)
 		{
-			if (_quotesWindowsBySubscription.TryGetValue(subscription, out var wnd))
-				wnd.DepthCtrl.UpdateDepth(depth);
+			if (subscription.DataType == DataType.FilteredMarketDepth)
+			{
+				if (_quotesWindowsBySubscription.TryGetValue(subscription, out var wnd))
+					wnd.DepthCtrl.UpdateDepth(depth);
+			}
+			else
+			{
+				if (_quotesWindows.TryGetValue(depth.Security, out var list))
+					list.Cache.ForEach(wnd => wnd.DepthCtrl.UpdateDepth(depth));
+			}
 		}
 
 		private void DepthFilteredClick(object sender, RoutedEventArgs e)
 		{
 			var connector = Connector;
 
-			if (!_initializedSubscriptions)
+			if (!_initialized)
 			{
 				connector.MarketDepthReceived += TraderOnMarketDepthReceived;
-				_initializedSubscriptions = true;
+				_initialized = true;
 			}
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
@@ -178,7 +182,7 @@ namespace SampleConnection
 
 			if (!_initialized)
 			{
-				connector.MarketDepthReceived += TraderOnMarketDepthChanged;
+				connector.MarketDepthReceived += TraderOnMarketDepthReceived;
 				_initialized = true;
 			}
 
@@ -287,12 +291,6 @@ namespace SampleConnection
 				else
 					connector.SubscribeOrderLog(security);
 			}
-		}
-
-		private void TraderOnMarketDepthChanged(Subscription subscription, MarketDepth depth)
-		{
-			if (_quotesWindows.TryGetValue(depth.Security, out var list))
-				list.Cache.ForEach(wnd => wnd.DepthCtrl.UpdateDepth(depth));
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
