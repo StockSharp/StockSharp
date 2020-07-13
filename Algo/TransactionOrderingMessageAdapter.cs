@@ -10,7 +10,7 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// 
+	/// Transactional messages ordering adapter.
 	/// </summary>
 	public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 	{
