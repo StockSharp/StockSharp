@@ -351,6 +351,7 @@
 							{
 								//this.AddWarningLog("Subscription {0} doesn't required security id.", dataType);
 								extraFilter = true;
+								secId = default;
 							}
 						}
 
