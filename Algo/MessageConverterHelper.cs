@@ -1347,11 +1347,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <param name="security">Security.</param>
-		/// <param name="getSecurity">The function for getting instrument.</param>
 		/// <returns>Market depth.</returns>
-		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, Security security, Func<SecurityId, Security> getSecurity = null)
+		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, Security security)
 		{
-			return message.ToMarketDepth(new MarketDepth(security), getSecurity);
+			return message.ToMarketDepth(new MarketDepth(security));
 		}
 
 		/// <summary>
@@ -1359,9 +1358,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <param name="marketDepth">Market depth.</param>
-		/// <param name="getSecurity">The function for getting instrument.</param>
 		/// <returns>Market depth.</returns>
-		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, MarketDepth marketDepth, Func<SecurityId, Security> getSecurity = null)
+		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, MarketDepth marketDepth)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));

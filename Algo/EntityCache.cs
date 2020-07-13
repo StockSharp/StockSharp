@@ -37,7 +37,7 @@ namespace StockSharp.Algo
 		Edit,
 	}
 
-	class EntityCache
+	class EntityCache : ISnapshotHolder
 	{
 		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
 
@@ -237,14 +237,37 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<string, News> _newsById = new SynchronizedDictionary<string, News>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedList<News> _newsWithoutId = new SynchronizedList<News>();
 
-		private class MarketDepthInfo : RefTriple<MarketDepth, QuoteChange[], QuoteChange[]>
+		private class MarketDepthInfo
 		{
+			private QuoteChangeMessage _snapshot;
+			private bool _hasChanges;
+
 			public MarketDepthInfo(MarketDepth depth)
-				: base(depth, null, null)
 			{
+				Depth = depth ?? throw new ArgumentNullException(nameof(depth));
 			}
 
-			public bool HasChanges => Second != null;
+			public readonly MarketDepth Depth;
+
+			public void TryFlushChanges()
+			{
+				if (_hasChanges == false)
+					return;
+
+				_hasChanges = false;
+				_snapshot.ToMarketDepth(Depth);
+			}
+
+			public void UpdateSnapshot(QuoteChangeMessage snapshot)
+			{
+				if (snapshot is null)
+					throw new ArgumentNullException(nameof(snapshot));
+
+				_snapshot = snapshot;
+				_hasChanges = true;
+			}
+
+			public QuoteChangeMessage GetCopy() => _snapshot?.TypedClone();
 		}
 
 		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
@@ -337,12 +360,16 @@ namespace StockSharp.Algo
 		public IEnumerable<OrderFail> OrderEditFails => _orderEditFails.SyncGet(c => c.ToArray());
 
 		private readonly ILogReceiver _logReceiver;
+		private readonly Func<SecurityId?, Security> _tryGetSecurity;
+		private readonly IPositionProvider _positionProvider;
 
-		public EntityCache(ILogReceiver logReceiver, IEntityFactory entityFactory, IExchangeInfoProvider exchangeInfoProvider)
+		public EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IEntityFactory entityFactory, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
 		{
 			_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
+			_tryGetSecurity = tryGetSecurity ?? throw new ArgumentNullException(nameof(tryGetSecurity));
 			EntityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
 			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
+			_positionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 		}
 
 		public void Clear()
@@ -1158,24 +1185,27 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public MarketDepth GetMarketDepth(Security security, bool isFiltered, Func<SecurityId, Security> getSecurity, out bool isNew)
+		public MarketDepth GetMarketDepth(Security security, QuoteChangeMessage message, out bool isNew)
 		{
-			if (security == null)
+			if (security is null)
 				throw new ArgumentNullException(nameof(security));
+
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
 
 			isNew = false;
 
-			MarketDepthInfo info;
-
 			lock (_marketDepths.SyncRoot)
 			{
-				var key = Tuple.Create(security, isFiltered);
+				var key = Tuple.Create(security, message.IsFiltered);
 
-				if (!_marketDepths.TryGetValue(key, out info))
+				if (!_marketDepths.TryGetValue(key, out var info))
 				{
 					isNew = true;
 
 					info = new MarketDepthInfo(EntityFactory.CreateMarketDepth(security));
+
+					message.ToMarketDepth(info.Depth);
 
 					// стакан из лога заявок бесконечен
 					//if (CreateDepthFromOrdersLog)
@@ -1185,23 +1215,11 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					if (info.HasChanges)
-					{
-						new QuoteChangeMessage
-						{
-							LocalTime = info.First.LocalTime,
-							ServerTime = info.First.LastChangeTime,
-							Bids = info.Second,
-							Asks = info.Third
-						}.ToMarketDepth(info.First, getSecurity);
-
-						info.Second = null;
-						info.Third = null;
-					}
+					info.TryFlushChanges();
 				}
-			}
 
-			return info.First;
+				return info.Depth;
+			}
 		}
 
 		public void UpdateMarketDepth(Security security, QuoteChangeMessage message)
@@ -1209,62 +1227,78 @@ namespace StockSharp.Algo
 			lock (_marketDepths.SyncRoot)
 			{
 				var info = _marketDepths.SafeAdd(Tuple.Create(security, message.IsFiltered), key => new MarketDepthInfo(EntityFactory.CreateMarketDepth(security)));
-
-				info.First.LocalTime = message.LocalTime;
-				info.First.LastChangeTime = message.ServerTime;
-
-				info.Second = message.Bids;
-				info.Third = message.Asks;
+				info.UpdateSnapshot(message);
 			}
 		}
 
 		public class Level1Info
 		{
-			public readonly object[] Values = new object[Enumerator.GetValues<Level1Fields>().Count()];
+			private readonly SyncObject _sync = new SyncObject();
+			private readonly Level1ChangeMessage _snapshot;
+
+			public Level1Info(SecurityId securityId, DateTimeOffset serverTime)
+			{
+				_snapshot = new Level1ChangeMessage
+				{
+					SecurityId = securityId,
+					ServerTime = serverTime,
+				};
+			}
+
+			public Level1ChangeMessage GetCopy()
+			{
+				lock (_sync)
+					return _snapshot.TypedClone();
+			}
+
 			public bool CanBestQuotes { get; private set; } = true;
 			public bool CanLastTrade { get; private set; } = true;
 
-			public void SetValue(Level1Fields field, object value)
+			public IEnumerable<Level1Fields> Level1Fields
 			{
-				var idx = (int)field;
+				get
+				{
+					lock (_sync)
+						return _snapshot.Changes.Keys.ToArray();
+				}
+			}
 
-				if (idx >= Values.Length)
-					return;
-
-				Values[idx] = value;
+			public void SetValue(DateTimeOffset serverTime, Level1Fields field, object value)
+			{
+				lock (_sync)
+				{
+					_snapshot.ServerTime = serverTime;
+					_snapshot.Changes[field] = value;
+				}
 			}
 
 			public object GetValue(Level1Fields field)
 			{
-				var idx = (int)field;
-
-				if (idx >= Values.Length)
-					return null;
-
-				return Values[idx];
+				lock (_sync)
+					return _snapshot.Changes.TryGetValue(field);
 			}
 
-			public void ClearBestQuotes()
+			public void ClearBestQuotes(DateTimeOffset serverTime)
 			{
 				if (!CanBestQuotes)
 					return;
 
-				foreach (var field in Messages.Extensions.BestBidFields.Cache)
-					SetValue(field, null);
+				foreach (var field in Extensions.BestBidFields.Cache)
+					SetValue(serverTime, field, null);
 
-				foreach (var field in Messages.Extensions.BestAskFields.Cache)
-					SetValue(field, null);
+				foreach (var field in Extensions.BestAskFields.Cache)
+					SetValue(serverTime, field, null);
 
 				CanBestQuotes = false;
 			}
 
-			public void ClearLastTrade()
+			public void ClearLastTrade(DateTimeOffset serverTime)
 			{
 				if (!CanLastTrade)
 					return;
 
-				foreach (var field in Messages.Extensions.LastTradeFields.Cache)
-					SetValue(field, null);
+				foreach (var field in Extensions.LastTradeFields.Cache)
+					SetValue(serverTime, field, null);
 
 				CanLastTrade = false;
 			}
@@ -1290,23 +1324,63 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var info = _securityValues.TryGetValue(security);
+			if (_securityValues.TryGetValue(security, out var info))
+				return info.Level1Fields;
 
-			if (info == null)
-				return Enumerable.Empty<Level1Fields>();
-
-			var fields = new List<Level1Fields>(30);
-
-			for (var i = 0; i < info.Values.Length; i++)
-			{
-				if (info.Values[i] != null)
-					fields.Add((Level1Fields)i);
-			}
-
-			return fields;
+			return Enumerable.Empty<Level1Fields>();
 		}
 
-		public Level1Info GetSecurityValues(Security security)
-			=> _securityValues.SafeAdd(security, key => new Level1Info());
+		public Level1Info GetSecurityValues(Security security, DateTimeOffset serverTime)
+			=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));
+
+		IEnumerable<Message> ISnapshotHolder.GetSnapshot(ISubscriptionMessage subscription)
+		{
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var security = subscription is ISecurityIdMessage secIdMsg ? _tryGetSecurity(secIdMsg.SecurityId) : null;
+			var dataType = subscription.DataType;
+
+			if (dataType == DataType.Level1)
+			{
+				if (security == null)
+					return Enumerable.Empty<Message>();
+
+				if (_securityValues.TryGetValue(security, out var info))
+					return new[] { info.GetCopy() };
+			}
+			else if (dataType == DataType.MarketDepth)
+			{
+				if (security == null)
+					return Enumerable.Empty<Message>();
+
+				lock (_marketDepths.SyncRoot)
+				{
+					if (_marketDepths.TryGetValue(Tuple.Create(security, false), out var info))
+					{
+						var copy = info.GetCopy();
+
+						if (copy != null)
+							return new[] { copy };
+					}
+				}
+			}
+			else if (dataType == DataType.Transactions)
+			{
+				lock (_orders.SyncRoot)
+					return _orders.Keys.Select(o => o.ToMessage()).Where(m => m.IsMatch(subscription)).ToArray();
+			}
+			else if (dataType == DataType.PositionChanges)
+			{
+				var positions = _positionProvider.Positions;
+
+				if (subscription is PortfolioLookupMessage lookupMsg)
+					positions = positions.Filter(lookupMsg);
+
+				return positions.Select(p => p.ToChangeMessage()).ToArray();
+			}
+
+			return Enumerable.Empty<Message>();
+		}
 	}
 }

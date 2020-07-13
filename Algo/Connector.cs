@@ -81,7 +81,7 @@ namespace StockSharp.Algo
 			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
-			_entityCache = new EntityCache(this, new EntityFactory(), exchangeInfoProvider);
+			_entityCache = new EntityCache(this, TryGetSecurity, new EntityFactory(), exchangeInfoProvider, PositionStorage);
 
 			_subscriptionManager = new SubscriptionManager(this);
 
@@ -574,13 +574,13 @@ namespace StockSharp.Algo
 			return position;
 		}
 
-		private MarketDepth GetMarketDepth(Security security, bool isFiltered)
+		private MarketDepth GetMarketDepth(Security security, QuoteChangeMessage message)
 		{
-			var depth = _entityCache.GetMarketDepth(security, isFiltered, GetSecurity, out var isNew);
+			var depth = _entityCache.GetMarketDepth(security, message, out var isNew);
 
 			if (isNew)
 			{
-				if (isFiltered)
+				if (message.IsFiltered)
 					RaiseFilteredMarketDepthChanged(depth);
 				else
 					RaiseNewMarketDepth(depth);
@@ -589,11 +589,23 @@ namespace StockSharp.Algo
 			return depth;
 		}
 
+		private MarketDepth GetMarketDepth(Security security, bool isFiltered)
+		{
+			return GetMarketDepth(security, new QuoteChangeMessage
+			{
+				IsFiltered = isFiltered,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = CurrentTime,
+				LocalTime = CurrentTime,
+			});
+		}
+
 		/// <inheritdoc />
 		[Obsolete("Use MarketDepthReceived event.")]
 		public MarketDepth GetMarketDepth(Security security) => GetMarketDepth(security, false);
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public MarketDepth GetFilteredMarketDepth(Security security) => GetMarketDepth(security, true);
 
 		/// <summary>

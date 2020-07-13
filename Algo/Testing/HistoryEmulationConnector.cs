@@ -135,6 +135,9 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		public override bool SupportBasketSecurities => true;
 
+		/// <inheritdoc />
+		public override bool SupportSnapshots => false;
+
 		/// <summary>
 		/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 		/// </summary>
