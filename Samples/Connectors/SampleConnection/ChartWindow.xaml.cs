@@ -1,6 +1,7 @@
 ﻿namespace SampleConnection
 {
 	using System;
+	using System.ComponentModel;
 	using System.Windows.Media;
 
 	using StockSharp.Algo;
@@ -56,12 +57,12 @@
 			Chart.Draw(_candleElem, candle);
 		}
 
-		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+		protected override void OnClosing(CancelEventArgs e)
 		{
 			_connector.CandleSeriesProcessing -= ProcessNewCandle;
 
 			if (!SeriesInactive && _subscription.State.IsActive())
-				_connector.UnSubscribeCandles(_candleSeries);
+				_connector.UnSubscribe(_subscription);
 
 			base.OnClosing(e);
 		}
