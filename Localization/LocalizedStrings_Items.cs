@@ -37,7 +37,6 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static string PressEscToCancel => GetString(PressEscToCancelKey);
 
-
 		/// <summary>
 		/// Move '{0}' orders from price {1} to {2}.
 		/// </summary>
