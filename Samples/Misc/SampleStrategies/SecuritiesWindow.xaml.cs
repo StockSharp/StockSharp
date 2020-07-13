@@ -115,14 +115,21 @@ namespace SampleStrategies
 			}
 		}
 
+		private Subscription FindSubscription(Security security, DataType dataType)
+		{
+			return Connector.FindSubscriptions(security, dataType).Where(s => s.SubscriptionMessage.To == null && s.State.IsActive()).FirstOrDefault();
+		}
+
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
 			var connector = Connector;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				if (connector.RegisteredSecurities.Contains(security))
-					connector.UnSubscribeLevel1(security);
+				var subscription = FindSubscription(security, DataType.Level1);
+
+				if (subscription != null)
+					connector.UnSubscribe(subscription);
 				else
 					connector.SubscribeLevel1(security);
 			}
