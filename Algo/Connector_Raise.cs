@@ -171,6 +171,7 @@ namespace StockSharp.Algo
 		public event Action<MarketDepth> MarketDepthChanged;
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public event Action<MarketDepth> FilteredMarketDepthChanged;
 
 		/// <inheritdoc />

@@ -201,10 +201,10 @@
 				_isFiltered = isFiltered;
 				Name = LocalizedStrings.Str1050 + (_isFiltered ? " (filtered)" : string.Empty) + " " + security;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 				if (_isFiltered)
 					Provider.FilteredMarketDepthChanged += OnMarketDepthChanged;
 				else
-#pragma warning disable CS0618 // Type or member is obsolete
 					Provider.MarketDepthChanged += OnMarketDepthChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
 			}
@@ -219,10 +219,10 @@
 
 			protected override void DisposeManaged()
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				if (_isFiltered)
 					Provider.FilteredMarketDepthChanged -= OnMarketDepthChanged;
 				else
-#pragma warning disable CS0618 // Type or member is obsolete
 					Provider.MarketDepthChanged -= OnMarketDepthChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
 

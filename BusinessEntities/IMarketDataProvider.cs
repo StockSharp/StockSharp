@@ -86,6 +86,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Order book changed.
 		/// </summary>
+		[Obsolete("Use MarketDepthReceived event.")]
 		event Action<MarketDepth> FilteredMarketDepthChanged;
 
 		/// <summary>
@@ -186,6 +187,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="security">The instrument by which an order book should be got.</param>
 		/// <returns>Filtered order book.</returns>
+		[Obsolete("Use MarketDepthReceived event.")]
 		MarketDepth GetFilteredMarketDepth(Security security);
 	}
 }

@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Strategies
 
 	partial class Strategy
 	{
-		private IMarketDataProvider MarketDataProvider => (IMarketDataProvider)SafeGetConnector();
+		private IMarketDataProvider MarketDataProvider => SafeGetConnector();
 
 		/// <inheritdoc />
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
@@ -67,6 +67,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public event Action<MarketDepth> FilteredMarketDepthChanged
 		{
 			add => MarketDataProvider.FilteredMarketDepthChanged += value;
@@ -203,9 +204,8 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use MarketDepthReceived event.")]
 		public MarketDepth GetFilteredMarketDepth(Security security)
-		{
-			return MarketDataProvider.GetFilteredMarketDepth(security);
-		}
+			=> MarketDataProvider.GetFilteredMarketDepth(security);
 	}
 }
