@@ -129,16 +129,18 @@
 			Connector.OrderLogItemReceived += (s, ol) => _orderLogWindow.OrderLogGrid.LogItems.Add(ol);
 			Connector.Level1Received += (s, l) => _level1Window.Level1Grid.Messages.Add(l);
 
-			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+			Connector.NewOrder += Connector_OnNewOrder;
+			Connector.OrderChanged += Connector_OnOrderChanged;
+
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
 			Connector.PortfolioReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 			Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 
 			// subscribe on error of order registration event
-			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+			Connector.OrderRegisterFailed += Connector_OnOrderRegisterFailed;
 			// subscribe on error of order cancelling event
-			Connector.OrderCancelFailed += OrderFailed;
+			Connector.OrderCancelFailed += Connector_OnOrderCancelFailed;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -198,6 +200,33 @@
 			}
 		}
 
+		private void Connector_OnNewOrder(Order order)
+		{
+			_ordersWindow.OrderGrid.Orders.Add(order);
+			_securitiesWindow.ProcessOrder(order);
+		}
+
+		private void Connector_OnOrderChanged(Order order)
+		{
+			_securitiesWindow.ProcessOrder(order);
+		}
+
+		private void Connector_OnOrderRegisterFailed(OrderFail fail)
+		{
+			_ordersWindow.OrderGrid.AddRegistrationFail(fail);
+			_securitiesWindow.ProcessOrderRegisterFail(fail);
+		}
+
+		private void Connector_OnOrderCancelFailed(OrderFail fail)
+		{
+			_securitiesWindow.ProcessOrderCancelFail(fail);
+
+			this.GuiAsync(() =>
+			{
+				MessageBox.Show(this.GetWindow(), fail.Error.ToString(), LocalizedStrings.Str153);
+			});
+		}
+
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
 			if (Connector.Configure(this.GetWindow()))
@@ -214,14 +243,6 @@
 			{
 				Connector.Disconnect();
 			}
-		}
-
-		private void OrderFailed(OrderFail fail)
-		{
-			this.GuiAsync(() =>
-			{
-				MessageBox.Show(this.GetWindow(), fail.Error.ToString(), LocalizedStrings.Str153);
-			});
 		}
 
 		private void ChangeConnectStatus(bool isConnected)

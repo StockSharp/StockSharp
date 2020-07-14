@@ -3,5 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
     Title="QuotesWindow" Height="600" Width="280">
-	<xaml:MarketDepthControl x:Name="DepthCtrl" x:FieldModifier="public" />
+	<xaml:MarketDepthControl x:Name="DepthCtrl" x:FieldModifier="public"
+        MouseLeftButtonDown="DepthCtrl_MouseLeftButtonDown" MovingOrder="DepthCtrl_MovingOrder" CancelingOrder="DepthCtrl_CancelingOrder" />
 </Window>

@@ -84,6 +84,48 @@ namespace SampleConnection
 			base.OnClosed(e);
 		}
 
+		public void ProcessOrder(Order order)
+		{
+			lock (_quotesWindows.SyncRoot)
+			{
+				foreach (var pair in _quotesWindows)
+				{
+					if (pair.Key != order.Security)
+						continue;
+
+					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrder(order));
+				}
+			}
+		}
+
+		public void ProcessOrderCancelFail(OrderFail fail)
+		{
+			lock (_quotesWindows.SyncRoot)
+			{
+				foreach (var pair in _quotesWindows)
+				{
+					if (pair.Key != fail.Order.Security)
+						continue;
+
+					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderCancelFail(fail));
+				}
+			}
+		}
+
+		public void ProcessOrderRegisterFail(OrderFail fail)
+		{
+			lock (_quotesWindows.SyncRoot)
+			{
+				foreach (var pair in _quotesWindows)
+				{
+					if (pair.Key != fail.Order.Security)
+						continue;
+
+					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderRegisterFail(fail));
+				}
+			}
+		}
+
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
 			var connector = Connector;
@@ -93,7 +135,7 @@ namespace SampleConnection
 				Order = new Order
 				{
 					Security = SecurityPicker.SelectedSecurity,
-					Portfolio = Connector.Portfolios.FirstOrDefault(),
+					Portfolio = connector.Portfolios.FirstOrDefault(),
 				},
 			}.Init(connector);
 
@@ -154,7 +196,8 @@ namespace SampleConnection
 				// create order book window
 				var window = new QuotesWindow
 				{
-					Title = security.Id + " " + LocalizedStrings.MarketDepth
+					Title = security.Id + " " + LocalizedStrings.MarketDepth,
+					Security = security,
 				};
 
 				//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
@@ -191,7 +234,8 @@ namespace SampleConnection
 				// create order book window
 				var window = new QuotesWindow
 				{
-					Title = security.Id + " " + LocalizedStrings.MarketDepth
+					Title = security.Id + " " + LocalizedStrings.MarketDepth,
+					Security = security,
 				};
 
 				//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
