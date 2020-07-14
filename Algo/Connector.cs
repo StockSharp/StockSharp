@@ -649,9 +649,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private bool? IsOrderEditable(Order order)
-			=> _entityCache.TryGetAdapter(order)?.IsReplaceCommandEditCurrent == true;
-
 		/// <inheritdoc />
 		public void EditOrder(Order order, Order changes)
 		{
@@ -661,55 +658,65 @@ namespace StockSharp.Algo
 			if (changes is null)
 				throw new ArgumentNullException(nameof(changes));
 
-			var isEdit = IsOrderEditable(order) == true;
+			var adapter = _entityCache.TryGetAdapter(order);
 
-			try
+			if (adapter?.IsMessageSupported(MessageTypes.OrderReplace) == true)
 			{
-				this.AddOrderInfoLog(order, nameof(EditOrder));
-
-				CheckOnOld(order);
-				CheckOnNew(changes);
-
-				if (isEdit)
+				var isEdit = adapter?.IsReplaceCommandEditCurrent == true;
+				
+				try
 				{
-					var transactionId = TransactionIdGenerator.GetNextId();
-					
-					changes.TransactionId = transactionId;
-					_entityCache.AddOrderByEditionId(order, transactionId);
+					this.AddOrderInfoLog(order, nameof(EditOrder));
 
-					OnEditOrder(order, changes);
+					CheckOnOld(order);
+					CheckOnNew(changes);
+
+					if (isEdit)
+					{
+						var transactionId = TransactionIdGenerator.GetNextId();
+					
+						changes.TransactionId = transactionId;
+						_entityCache.AddOrderByEditionId(order, transactionId);
+
+						OnEditOrder(order, changes);
+					}
+					else
+					{
+						var oldOrder = order;
+						var newOrder = changes;
+
+						if (oldOrder.Security != newOrder.Security)
+							throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
+					
+						InitNewOrder(newOrder);
+						_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
+
+						OnReRegisterOrder(oldOrder, newOrder);
+					}
 				}
-				else
+				catch (Exception ex)
 				{
-					var oldOrder = order;
-					var newOrder = changes;
+					if (isEdit)
+						SendOrderFailed(order, OrderOperations.Edit, ex, changes.TransactionId);
+					else
+					{
+						var oldOrder = order;
+						var newOrder = changes;
 
-					if (oldOrder.Security != newOrder.Security)
-						throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
-					
-					InitNewOrder(newOrder);
-					_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
+						var transactionId = newOrder.TransactionId;
 
-					OnReRegisterOrder(oldOrder, newOrder);
+						if (transactionId == 0 || newOrder.State != OrderStates.None)
+							transactionId = TransactionIdGenerator.GetNextId();
+
+						SendOrderFailed(oldOrder, OrderOperations.Cancel, ex, transactionId);
+						SendOrderFailed(newOrder, OrderOperations.Register, ex, transactionId);
+					}
 				}
 			}
-			catch (Exception ex)
+			else
 			{
-				if (isEdit)
-					SendOrderFailed(order, OrderOperations.Edit, ex, changes.TransactionId);
-				else
-				{
-					var oldOrder = order;
-					var newOrder = changes;
-
-					var transactionId = newOrder.TransactionId;
-
-					if (transactionId == 0 || newOrder.State != OrderStates.None)
-						transactionId = TransactionIdGenerator.GetNextId();
-
-					SendOrderFailed(oldOrder, OrderOperations.Cancel, ex, transactionId);
-					SendOrderFailed(newOrder, OrderOperations.Register, ex, transactionId);
-				}
+				CancelOrder(order);
+				RegisterOrder(changes);
 			}
 		}
 
