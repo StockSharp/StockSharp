@@ -165,5 +165,19 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="portfolio">Portfolio for unsubscription.</param>
 		void UnRegisterPortfolio(Portfolio portfolio);
+
+		/// <summary>
+		/// Determines the specified order can be edited by <see cref="EditOrder"/>.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <returns><see langword="true"/> if the order is editable, <see langword="false"/> order cannot be changed, <see langword="null"/> means no information.</returns>
+		bool? IsOrderEditable(Order order);
+
+		/// <summary>
+		/// Determines the specified order can be replaced by <see cref="ReRegisterOrder"/>.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <returns><see langword="true"/> if the order is replaceable, <see langword="false"/> order cannot be replaced, <see langword="null"/> means no information.</returns>
+		bool? IsOrderReplaceable(Order order);
 	}
 }

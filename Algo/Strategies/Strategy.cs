@@ -1351,7 +1351,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public virtual void RegisterOrder(Order order)
+		public void RegisterOrder(Order order)
 		{
 			if (order is null)
 				throw new ArgumentNullException(nameof(order));
@@ -1396,7 +1396,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public virtual void EditOrder(Order order, Order changes)
+		public bool? IsOrderEditable(Order order) => SafeGetConnector().IsOrderEditable(order);
+
+		/// <inheritdoc />
+		public bool? IsOrderReplaceable(Order order) => SafeGetConnector().IsOrderReplaceable(order);
+
+		/// <inheritdoc />
+		public void EditOrder(Order order, Order changes)
 		{
 			this.AddInfoLog("EditOrder: {0}", order);
 
@@ -1407,7 +1413,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public virtual void ReRegisterOrder(Order oldOrder, Order newOrder)
+		public void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
 				throw new ArgumentNullException(nameof(oldOrder));
@@ -1543,7 +1549,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public virtual void CancelOrder(Order order)
+		public void CancelOrder(Order order)
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
