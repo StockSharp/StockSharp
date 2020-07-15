@@ -131,6 +131,7 @@
 
 			Connector.NewOrder += Connector_OnNewOrder;
 			Connector.OrderChanged += Connector_OnOrderChanged;
+			Connector.OrderEdited += Connector_OnOrderEdited;
 
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
@@ -141,6 +142,8 @@
 			Connector.OrderRegisterFailed += Connector_OnOrderRegisterFailed;
 			// subscribe on error of order cancelling event
 			Connector.OrderCancelFailed += Connector_OnOrderCancelFailed;
+			// subscribe on error of order edition event
+			Connector.OrderEditFailed += Connector_OnOrderEditFailed;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -211,10 +214,20 @@
 			_securitiesWindow.ProcessOrder(order);
 		}
 
+		private void Connector_OnOrderEdited(long transactionId, Order order)
+		{
+			_securitiesWindow.ProcessOrder(order);
+		}
+
 		private void Connector_OnOrderRegisterFailed(OrderFail fail)
 		{
 			_ordersWindow.OrderGrid.AddRegistrationFail(fail);
 			_securitiesWindow.ProcessOrderRegisterFail(fail);
+		}
+
+		private void Connector_OnOrderEditFailed(long transactionId, OrderFail fail)
+		{
+			_securitiesWindow.ProcessOrderEditFail(fail);
 		}
 
 		private void Connector_OnOrderCancelFailed(OrderFail fail)

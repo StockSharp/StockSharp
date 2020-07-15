@@ -1,6 +1,5 @@
 ﻿namespace SampleConnection
 {
-	using System.Windows.Input;
 	using System.Linq;
 
 	using Ecng.Xaml;
@@ -8,6 +7,7 @@
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo;
 	using StockSharp.Xaml;
+	using StockSharp.Messages;
 
 	public partial class QuotesWindow
 	{
@@ -22,7 +22,7 @@
 
 		private void DepthCtrl_MovingOrder(Order order, decimal newPrice)
 		{
-			Connector.EditOrder(order, order.ReRegisterClone(newPrice));
+			Connector.ReRegisterOrderEx(order, order.ReRegisterClone(newPrice));
 		}
 
 		private void DepthCtrl_CancelingOrder(Order order)
@@ -30,32 +30,28 @@
 			Connector.CancelOrder(order);
 		}
 
-		private void DepthCtrl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		private void DepthCtrl_RegisteringOrder(Sides side, decimal price)
 		{
-			if (e.ClickCount == 2)
+			var connector = Connector;
+
+			var wnd = new OrderWindow
 			{
-				var connector = Connector;
-
-				var quote = DepthCtrl.SelectedQuote;
-
-				var wnd = new OrderWindow
+				Order = new Order
 				{
-					Order = new Order
-					{
-						Price = quote?.Price ?? 0,
-						Security = Security,
-						Portfolio = connector.Portfolios.FirstOrDefault(),
-					},
-				}.Init(connector);
+					Direction = side,
+					Price = price,
+					Security = Security,
+					Portfolio = connector.Portfolios.FirstOrDefault(),
+				},
+			}.Init(connector);
 
-				if (wnd.ShowModal(this))
-					connector.RegisterOrder(wnd.Order);
-			}
+			if (wnd.ShowModal(this))
+				connector.RegisterOrder(wnd.Order);
 		}
 
 		public void ProcessOrder(Order order)
 		{
-			DepthCtrl.ProcessOrder(order, order.Balance, order.State);
+			DepthCtrl.ProcessOrder(order, order.Price, order.Balance, order.State);
 		}
 
 		public void ProcessOrderRegisterFail(OrderFail fail)
@@ -66,6 +62,11 @@
 		public void ProcessOrderCancelFail(OrderFail fail)
 		{
 			DepthCtrl.ProcessOrderCancelFail(fail);
+		}
+
+		public void ProcessOrderEditFail(OrderFail fail)
+		{
+			DepthCtrl.ProcessOrderEditFail(fail);
 		}
 	}
 }

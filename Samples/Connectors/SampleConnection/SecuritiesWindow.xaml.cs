@@ -126,6 +126,20 @@ namespace SampleConnection
 			}
 		}
 
+		public void ProcessOrderEditFail(OrderFail fail)
+		{
+			lock (_quotesWindows.SyncRoot)
+			{
+				foreach (var pair in _quotesWindows)
+				{
+					if (pair.Key != fail.Order.Security)
+						continue;
+
+					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderEditFail(fail));
+				}
+			}
+		}
+
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
 			var connector = Connector;
