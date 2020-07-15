@@ -18,6 +18,46 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Left click
+		/// </summary>
+		public const string LeftClickKey = nameof(LeftClick);
+
+		/// <summary>
+		/// Left click
+		/// </summary>
+		public static string LeftClick => GetString(LeftClickKey);
+
+		/// <summary>
+		/// Right click
+		/// </summary>
+		public const string RightClickKey = nameof(RightClick);
+
+		/// <summary>
+		/// Right click
+		/// </summary>
+		public static string RightClick => GetString(RightClickKey);
+
+		/// <summary>
+		/// Left double-click
+		/// </summary>
+		public const string LeftDoubleClickKey = nameof(LeftDoubleClick);
+
+		/// <summary>
+		/// Left double-click
+		/// </summary>
+		public static string LeftDoubleClick => GetString(LeftDoubleClickKey);
+
+		/// <summary>
+		/// Right double-click
+		/// </summary>
+		public const string RightDoubleClickKey = nameof(RightDoubleClick);
+
+		/// <summary>
+		/// Right double-click
+		/// </summary>
+		public static string RightDoubleClick => GetString(RightDoubleClickKey);
+
+		/// <summary>
 		/// Cancel '{0}' orders with price {1}.
 		/// </summary>
 		public const string CancelOrdersWithPriceParamsKey = nameof(CancelOrdersWithPriceParams);
