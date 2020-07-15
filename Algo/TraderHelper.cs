@@ -543,42 +543,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create copy of the order for re-registration.
-		/// </summary>
-		/// <param name="oldOrder">The original order.</param>
-		/// <param name="newPrice">Price of the new order.</param>
-		/// <param name="newVolume">Volume of the new order.</param>
-		/// <returns>New order.</returns>
-		public static Order ReRegisterClone(this Order oldOrder, decimal? newPrice = null, decimal? newVolume = null)
-		{
-			if (oldOrder == null)
-				throw new ArgumentNullException(nameof(oldOrder));
-
-			return new Order
-			{
-				Portfolio = oldOrder.Portfolio,
-				Direction = oldOrder.Direction,
-				TimeInForce = oldOrder.TimeInForce,
-				Security = oldOrder.Security,
-				Type = oldOrder.Type,
-				Price = newPrice ?? oldOrder.Price,
-				Volume = newVolume ?? oldOrder.Volume,
-				ExpiryDate = oldOrder.ExpiryDate,
-				VisibleVolume = oldOrder.VisibleVolume,
-				BrokerCode = oldOrder.BrokerCode,
-				ClientCode = oldOrder.ClientCode,
-				Condition = oldOrder.Condition?.TypedClone(),
-				IsManual = oldOrder.IsManual,
-				IsMarketMaker = oldOrder.IsMarketMaker,
-				IsMargin = oldOrder.IsMargin,
-				MinVolume = oldOrder.MinVolume,
-				PositionEffect = oldOrder.PositionEffect,
-				PostOnly = oldOrder.PostOnly,
-				StrategyId = oldOrder.StrategyId,
-			};
-		}
-
-		/// <summary>
 		/// To create from regular order book a sparse on, with minimal price step of <see cref="Security.PriceStep"/>.
 		/// </summary>
 		/// <remarks>

@@ -142,7 +142,7 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Unit.</returns>
 		public static Unit SetSecurity(this Unit unit, Security security)
 		{
-			if (unit == null)
+			if (unit is null)
 				throw new ArgumentNullException(nameof(unit));
 
 			unit.GetTypeValue = type => GetTypeValue(security, type);
@@ -197,6 +197,67 @@ namespace StockSharp.BusinessEntities
 			var quote = new Quote(security, change.Price, change.Volume, side, change.OrdersCount, change.Condition);
 			change.CopyExtensionInfo(quote);
 			return quote;
+		}
+
+		/// <summary>
+		/// Reregister the order.
+		/// </summary>
+		/// <param name="provider">The transactional provider.</param>
+		/// <param name="order">Order.</param>
+		/// <param name="clone">Changes.</param>
+		public static void ReRegisterOrderEx(this ITransactionProvider provider, Order order, Order clone)
+		{
+			if (provider is null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (provider.IsOrderReplaceable(order) == true)
+			{
+				if (provider.IsOrderEditable(order) == true)
+					provider.EditOrder(order, clone);
+				else
+					provider.ReRegisterOrder(order, clone);
+			}
+			else
+			{
+				provider.CancelOrder(order);
+				provider.RegisterOrder(clone);
+			}
+		}
+
+		/// <summary>
+		/// To create copy of the order for re-registration.
+		/// </summary>
+		/// <param name="oldOrder">The original order.</param>
+		/// <param name="newPrice">Price of the new order.</param>
+		/// <param name="newVolume">Volume of the new order.</param>
+		/// <returns>New order.</returns>
+		public static Order ReRegisterClone(this Order oldOrder, decimal? newPrice = null, decimal? newVolume = null)
+		{
+			if (oldOrder == null)
+				throw new ArgumentNullException(nameof(oldOrder));
+
+			return new Order
+			{
+				Portfolio = oldOrder.Portfolio,
+				Direction = oldOrder.Direction,
+				TimeInForce = oldOrder.TimeInForce,
+				Security = oldOrder.Security,
+				Type = oldOrder.Type,
+				Price = newPrice ?? oldOrder.Price,
+				Volume = newVolume ?? oldOrder.Volume,
+				ExpiryDate = oldOrder.ExpiryDate,
+				VisibleVolume = oldOrder.VisibleVolume,
+				BrokerCode = oldOrder.BrokerCode,
+				ClientCode = oldOrder.ClientCode,
+				Condition = oldOrder.Condition?.TypedClone(),
+				IsManual = oldOrder.IsManual,
+				IsMarketMaker = oldOrder.IsMarketMaker,
+				IsMargin = oldOrder.IsMargin,
+				MinVolume = oldOrder.MinVolume,
+				PositionEffect = oldOrder.PositionEffect,
+				PostOnly = oldOrder.PostOnly,
+				StrategyId = oldOrder.StrategyId,
+			};
 		}
 	}
 }
