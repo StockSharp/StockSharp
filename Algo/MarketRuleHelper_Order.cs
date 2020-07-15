@@ -156,6 +156,58 @@
 			}
 		}
 
+		private sealed class EditedOrderRule : OrderRule<Order>
+		{
+			public EditedOrderRule(Order order, ITransactionProvider provider)
+				: base(order, provider)
+			{
+				Name = "Order edit";
+				TrySubscribe();
+			}
+
+			protected override void Subscribe()
+			{
+				Provider.OrderEdited += OnOrderEdited;
+			}
+
+			protected override void UnSubscribe()
+			{
+				Provider.OrderEdited -= OnOrderEdited;
+			}
+
+			private void OnOrderEdited(long transactionId, Order order)
+			{
+				if (order == Order)
+					Activate(order);
+			}
+		}
+
+		private sealed class EditFailedOrderRule : OrderRule<OrderFail>
+		{
+			public EditFailedOrderRule(Order order, ITransactionProvider provider)
+				: base(order, provider)
+			{
+				Name = "Order edit failed";
+				TrySubscribe();
+			}
+
+			protected override void Subscribe()
+			{
+				Provider.OrderEditFailed += OnOrderEditFailed;
+			}
+
+			protected override void UnSubscribe()
+			{
+				Provider.OrderEditFailed -= OnOrderEditFailed;
+			}
+
+			private void OnOrderEditFailed(long transactionId, OrderFail fail)
+			{
+				if (fail.Order == Order)
+					Activate(fail);
+			}
+		}
+
 		private class NewTradeOrderRule : OrderRule<MyTrade>
 		{
 			private decimal _receivedVolume;
@@ -476,6 +528,28 @@
 		public static MarketRule<Order, Order> WhenChanged(this Order order, ITransactionProvider provider)
 		{
 			return new ChangedOrNewOrderRule(order, provider);
+		}
+
+		/// <summary>
+		/// To create a rule for the order <see cref="ITransactionProvider.OrderEdited"/> event.
+		/// </summary>
+		/// <param name="order">The order to be traced.</param>
+		/// <param name="provider">The transactional provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, Order> WhenEdited(this Order order, ITransactionProvider provider)
+		{
+			return new EditedOrderRule(order, provider);
+		}
+
+		/// <summary>
+		/// To create a rule for the order <see cref="ITransactionProvider.OrderEditFailed"/> event.
+		/// </summary>
+		/// <param name="order">The order to be traced.</param>
+		/// <param name="provider">The transactional provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, OrderFail> WhenEditFailed(this Order order, ITransactionProvider provider)
+		{
+			return new EditFailedOrderRule(order, provider);
 		}
 
 		/// <summary>
