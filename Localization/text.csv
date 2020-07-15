@@ -1,6 +1,10 @@
-﻿PressEscToCancel;Press Escape to cancel operation.;Нажмите Escape для отмены операции.
-MovingOrdersParams;Move '{0}' orders from price {1} to {2}.;Переместить заявки '{0}' с цены {1} на {2}.
-CancelOrdersWithPriceParams;Cancel '{0}' orders with price {1}.;Отменить заявки '{0}' с ценой {1}.
+﻿LeftClick;Left click;Левая кнопка мыши
+RightClick;Right click;Правая кнопка мыши
+LeftDoubleClick;Left double-click;Левая кнопка мыши (двойное нажатие)
+RightDoubleClick;Right double-click;Правая кнопка мыши (двойное нажатие)
+PressEscToCancel;Press Escape to cancel operation.;Нажмите Escape для отмены операции.
+MovingOrdersParams;{0} {1} → {2};{0} {1} → {2}
+CancelOrdersWithPriceParams;{0} {1} → cancel orders;{0} {1} → отменить заявки
 SessionNotSelected;Session was not selected.;Сессия не выбрана.
 PaidConnectorToolip;This connection uses paid options. Click for detailed info.;Это подключение использует платные опции. Кликните для получения дополнительной информации.
 SwitchAxisLocation;Switch axis location;Переключить расположение оси
