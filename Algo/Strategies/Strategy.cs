@@ -1231,6 +1231,12 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public event Action<Order> OrderChanged;
 
+		/// <inheritdoc />
+		public event Action<long, Order> OrderEdited;
+
+		/// <inheritdoc />
+		public event Action<long, OrderFail> OrderEditFailed;
+
 #pragma warning disable 67
 		/// <inheritdoc />
 		[Obsolete("Use OrderRegisterFailed event.")]
@@ -2159,14 +2165,14 @@ namespace StockSharp.Algo.Strategies
 		private void OnConnectorOrderEditFailed(long transactionId, OrderFail fail)
 		{
 			if (IsOwnOrder(fail.Order))
-				_orderEditFailed?.Invoke(transactionId, fail);
+				OrderEditFailed?.Invoke(transactionId, fail);
 		}
 
 		private void OnConnectorOrderEdited(long transactionId, Order order)
 		{
 			if (IsOwnOrder(order))
 			{
-				_orderEdited?.Invoke(transactionId, order);
+				OrderEdited?.Invoke(transactionId, order);
 				ChangeLatency(order.LatencyEdition);
 			}
 		}

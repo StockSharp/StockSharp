@@ -20,22 +20,6 @@ namespace StockSharp.Algo.Strategies
 			remove => _newOrder -= value;
 		}
 
-		private Action<long, Order> _orderEdited;
-
-		event Action<long, Order> ITransactionProvider.OrderEdited
-		{
-			add => _orderEdited += value;
-			remove => _orderEdited -= value;
-		}
-
-		private Action<long, OrderFail> _orderEditFailed;
-
-		event Action<long, OrderFail> ITransactionProvider.OrderEditFailed
-		{
-			add => _orderEditFailed += value;
-			remove => _orderEditFailed -= value;
-		}
-
 		private Action<long> _massOrderCanceled;
 
 		event Action<long> ITransactionProvider.MassOrderCanceled
