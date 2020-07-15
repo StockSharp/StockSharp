@@ -13228,12 +13228,12 @@ namespace StockSharp.Localization
 		public static string Str1313 => GetString(Str1313Key);
 
 		/// <summary>
-		/// Requoting registered for order {0} to {1} with price {2}.
+		/// Requoting registered for order {0} with price {1} and volume {2}.
 		/// </summary>
 		public const string Str1314ParamsKey = nameof(Str1314Params);
 
 		/// <summary>
-		/// Requoting registered for order {0} to {1} with price {2}.
+		/// Requoting registered for order {0} with price {1} and volume {2}.
 		/// </summary>
 		public static string Str1314Params => GetString(Str1314ParamsKey);
 

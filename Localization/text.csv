@@ -1322,7 +1322,7 @@ Str1310Params;Price of current {0} and best {1}.;Цена текущей {0} и 
 Str1311Params;Best bid {0} and best ask {1}.;Лучший бид {0} и лучший аск {1}.
 Str1312Params;Quoting order {0} to {1} with price {2} volume {3}.;Котирование заявки {0} на {1} с ценой {2} объемом {3}.
 Str1313;Cannot change order price to 0.;Невозможно изменить цену заявки в 0.
-Str1314Params;Requoting registered for order {0} to {1} with price {2}.;Перекотирование зарегистрировано для заявки {0} на {1} с ценой {2}.
+Str1314Params;Requoting registered for order {0} with price {1} and volume {2}.;Перекотирование зарегистрировано для заявки {0} с ценой {1} и объемом {2}.
 Str1315Params;Cancel order {0}.;Отмена заявки {0}.
 Str1316Params;Order {0} was canceled. Cancellation time {1}.;Заявка {0} была снята. Время снятия {1}.
 Str1317Params;Cannot requote. Maximum number {0} of tries was made.;Невозможно перекотировать. Было совершено максимальное количество {0} попыток.
