@@ -40,6 +40,18 @@ namespace StockSharp.Messages
 		public string OldOrderStringId { get; set; }
 
 		/// <summary>
+		/// Replaced price.
+		/// </summary>
+		[DataMember]
+		public decimal? OldOrderPrice { get; set; }
+
+		/// <summary>
+		/// Replaced volume.
+		/// </summary>
+		[DataMember]
+		public decimal? OldOrderVolume { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderReplaceMessage"/>.
 		/// </summary>
 		public OrderReplaceMessage()
@@ -57,6 +69,8 @@ namespace StockSharp.Messages
 			{
 				OldOrderId = OldOrderId,
 				OldOrderStringId = OldOrderStringId,
+				OldOrderPrice = OldOrderPrice,
+				OldOrderVolume = OldOrderVolume,
 			};
 
 			CopyTo(clone);
@@ -69,11 +83,14 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString();
 
-			if (OldOrderId != null)
-				str += $"OldOrdId={OldOrderId.Value}";
+			if (OldOrderId != null || !OldOrderStringId.IsEmpty())
+				str += $"OldOrdId={OldOrderId}/{OldOrderStringId}";
 
-			if (!OldOrderStringId.IsEmpty())
-				str += $"OldOrdId={OldOrderStringId}";
+			if (OldOrderPrice != null)
+				str += $"OldOrderPrice={OldOrderPrice.Value}";
+
+			if (OldOrderVolume != null)
+				str += $"OldOrderVol={OldOrderVolume.Value}";
 
 			return str;
 		}

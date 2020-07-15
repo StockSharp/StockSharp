@@ -444,6 +444,9 @@ namespace StockSharp.Algo
 				OldOrderStringId = oldOrder.StringId,
 				OriginalTransactionId = oldOrder.TransactionId,
 
+				OldOrderPrice = oldOrder.Price,
+				OldOrderVolume = oldOrder.Volume,
+
 				UserOrderId = oldOrder.UserOrderId,
 				StrategyId = oldOrder.StrategyId,
 
