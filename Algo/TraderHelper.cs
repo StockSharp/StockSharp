@@ -574,6 +574,7 @@ namespace StockSharp.Algo
 				MinVolume = oldOrder.MinVolume,
 				PositionEffect = oldOrder.PositionEffect,
 				PostOnly = oldOrder.PostOnly,
+				StrategyId = oldOrder.StrategyId,
 			};
 		}
 
