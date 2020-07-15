@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -35,10 +36,8 @@
 
 		private readonly SynchronizedPairSet<long, long> _orderIds = new SynchronizedPairSet<long, long>();
 		private readonly SynchronizedPairSet<string, long> _orderStringIds = new SynchronizedPairSet<string, long>(StringComparer.InvariantCultureIgnoreCase);
-
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
+		
+		private readonly SyncObject _nonAssociatedLock = new SyncObject();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
 
@@ -62,12 +61,11 @@
 			_orderIds.Clear();
 			_orderStringIds.Clear();
 
-			_nonAssociatedByIdMyTrades.Clear();
-			_nonAssociatedByStringIdMyTrades.Clear();
-			_nonAssociatedByTransactionIdMyTrades.Clear();
-
-			_nonAssociatedOrderIds.Clear();
-			_nonAssociatedStringOrderIds.Clear();
+			lock (_nonAssociatedLock)
+			{
+				_nonAssociatedOrderIds.Clear();
+				_nonAssociatedStringOrderIds.Clear();
+			}
 		}
 
 		/// <inheritdoc />
@@ -129,6 +127,8 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			var processSuspended = false;
+
 			switch (message.Type)
 			{
 				case MessageTypes.SubscriptionResponse:
@@ -150,11 +150,20 @@
 					if (!_transactionLogSubscriptions.TryGetAndRemove(originMsg.OriginalTransactionId, out var subscription))
 						break;
 
-					foreach (var pair in subscription.Transactions)
-					{
-						base.OnInnerAdapterNewOutMessage(pair.Value.Item1);
+					Tuple<ExecutionMessage, List<ExecutionMessage>>[] tuples;
+					
+					lock (subscription.Sync)
+						tuples = subscription.Transactions.Values.ToArray();
 
-						foreach (var trade in pair.Value.Item2)
+					foreach (var tuple in tuples)
+					{
+						var order = tuple.Item1;
+
+						base.OnInnerAdapterNewOutMessage(order);
+
+						ProcessSuspended(order);
+
+						foreach (var trade in tuple.Item2)
 							base.OnInnerAdapterNewOutMessage(trade);
 					}
 
@@ -233,8 +242,33 @@
 						}
 					}
 
+					if (execMsg.HasTradeInfo && !execMsg.HasOrderInfo)
+					{
+						if (execMsg.OrderId != null && !_orderIds.ContainsKey(execMsg.OrderId.Value) && (execMsg.OriginalTransactionId == 0 || !_secIds.ContainsKey(execMsg.OriginalTransactionId)))
+						{
+							this.AddInfoLog("{0} suspended.", execMsg);
+
+							lock (_nonAssociatedLock)
+								_nonAssociatedOrderIds.SafeAdd(execMsg.OrderId.Value).Add(execMsg.TypedClone());
+							
+							return;
+						}
+						else if (!execMsg.OrderStringId.IsEmpty() && !_orderStringIds.ContainsKey(execMsg.OrderStringId) && (execMsg.OriginalTransactionId == 0 || !_secIds.ContainsKey(execMsg.OriginalTransactionId)))
+						{
+							this.AddInfoLog("{0} suspended.", execMsg);
+
+							lock (_nonAssociatedLock)
+								_nonAssociatedStringOrderIds.SafeAdd(execMsg.OrderStringId).Add(execMsg.TypedClone());
+
+							return;
+						}
+					}
+
 					if (_transactionLogSubscriptions.Count == 0)
+					{
+						processSuspended = true;
 						break;
+					}
 
 					if (!_transactionLogSubscriptions.TryGetValue(execMsg.OriginalTransactionId, out var subscription))
 					{
@@ -277,7 +311,7 @@
 								if (execMsg.OrderId != null)
 									snapshot.OrderId = execMsg.OrderId;
 
-								if (execMsg.OrderStringId != null)
+								if (!execMsg.OrderStringId.IsEmpty())
 									snapshot.OrderStringId = execMsg.OrderStringId;
 
 								if (execMsg.OrderBoardId != null)
@@ -325,77 +359,43 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+
+			if (processSuspended)
+				ProcessSuspended((ExecutionMessage)message);
 		}
 
-		//private void ProcessOrderMessage(ExecutionMessage message)
-		//{
-		//	if (notFound)
-		//	{
-		//		if (transactionId == 0 && !isStatusRequest)
-		//		{
-		//			if (message.OrderId != null)
-		//			{
-		//				this.AddInfoLog("{0} info suspended.", message.OrderId.Value);
-		//				_nonAssociatedOrderIds.SafeAdd(message.OrderId.Value).Add(message.TypedClone());
-		//			}
-		//			else if (!message.OrderStringId.IsEmpty())
-		//			{
-		//				this.AddInfoLog("{0} info suspended.", message.OrderStringId);
-		//				_nonAssociatedStringOrderIds.SafeAdd(message.OrderStringId).Add(message.TypedClone());
-		//			}
-		//		}
-		//	}
-		//	else
-		//	{
-		//		if (order.Id != null)
-		//			ProcessMyTrades(order, order.Id.Value, _nonAssociatedByIdMyTrades);
+		private void ProcessSuspended(ExecutionMessage execMsg)
+		{
+			if (!execMsg.HasOrderInfo)
+				return;
 
-		//		ProcessMyTrades(order, order.TransactionId, _nonAssociatedByTransactionIdMyTrades);
+			if (execMsg.OrderId != null)
+				ProcessSuspended(_nonAssociatedOrderIds, execMsg.OrderId.Value);
 
-		//		if (!order.StringId.IsEmpty())
-		//			ProcessMyTrades(order, order.StringId, _nonAssociatedByStringIdMyTrades);
+			if (!execMsg.OrderStringId.IsEmpty())
+				ProcessSuspended(_nonAssociatedStringOrderIds, execMsg.OrderStringId);
+		}
 
-		//		//ProcessConditionOrders(order);
+		private void ProcessSuspended<TKey>(Dictionary<TKey, List<ExecutionMessage>> nonAssociated, TKey key)
+		{
+			List<ExecutionMessage> trades;
+			
+			lock (_nonAssociatedLock)
+			{
+				if (nonAssociated.Count > 0)
+				{
+					if (!nonAssociated.TryGetAndRemove(key, out trades))
+						return;
+				}
+				else
+					return;
+			}
 
-		//		List<ExecutionMessage> suspended = null;
+			this.AddInfoLog("{0} resumed.", key);
 
-		//		if (order.Id != null)
-		//			suspended = _nonAssociatedOrderIds.TryGetAndRemove(order.Id.Value);
-		//		else if (!order.StringId.IsEmpty())
-		//			suspended = _nonAssociatedStringOrderIds.TryGetAndRemove(order.StringId);
-
-		//		if (suspended != null)
-		//		{
-		//			this.AddInfoLog("{0} resumed.", order.Id);
-
-		//			foreach (var s in suspended)
-		//			{
-		//				ProcessOrderMessage(order, order.Security, s, transactionId, isStatusRequest);
-		//			}
-		//		}
-		//	}
-		//}
-
-		//private void UnknownOwnTrade()
-		//{
-		//	if (tuple == null)
-		//	{
-		//		List<ExecutionMessage> nonOrderedMyTrades;
-
-		//		if (message.OrderId != null)
-		//			nonOrderedMyTrades = _nonAssociatedByIdMyTrades.SafeAdd(message.OrderId.Value);
-		//		else if (message.OriginalTransactionId != 0)
-		//			nonOrderedMyTrades = _nonAssociatedByTransactionIdMyTrades.SafeAdd(message.OriginalTransactionId);
-		//		else
-		//			nonOrderedMyTrades = _nonAssociatedByStringIdMyTrades.SafeAdd(message.OrderStringId);
-
-		//		this.AddInfoLog("My trade delayed: {0}", message);
-
-		//		nonOrderedMyTrades.Add(message.TypedClone());
-
-		//		return;
-		//	}
-		//}
+			foreach (var trade in trades)
+				RaiseNewOutMessage(trade);
+		}
 
 		/// <summary>
 		/// Create a copy of <see cref="TransactionOrderingMessageAdapter"/>.
