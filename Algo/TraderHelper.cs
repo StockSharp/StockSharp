@@ -3755,24 +3755,6 @@ namespace StockSharp.Algo
 		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, PortfolioLookupMessage criteria)
 			=> positions.Where(p => p.ToChangeMessage().IsMatch(criteria, false));
 
-		/// <summary>
-		/// Reregister the order.
-		/// </summary>
-		/// <param name="provider">The transactional provider.</param>
-		/// <param name="oldOrder">Changing order.</param>
-		/// <param name="price">Price of the new order.</param>
-		/// <param name="volume">Volume of the new order.</param>
-		/// <returns>New order.</returns>
-		public static Order ReRegisterOrder(this ITransactionProvider provider, Order oldOrder, decimal price, decimal volume)
-		{
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
-
-			var newOrder = oldOrder.ReRegisterClone(price, volume);
-			provider.ReRegisterOrder(oldOrder, newOrder);
-			return newOrder;
-		}
-
 		private static void DoConnect(this IMessageAdapter adapter, IEnumerable<Message> requests, bool waitResponse, Func<Message, Tuple<bool, Exception>> newMessage)
 		{
 			if (adapter is null)
