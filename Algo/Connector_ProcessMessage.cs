@@ -1541,19 +1541,27 @@ namespace StockSharp.Algo
 				}
 			}
 
-			Security security;
-
-			Order order;
+			Order order = null;
 
 			var transactionId = message.TransactionId;
 
 			if (transactionId == 0)
 			{
 				transactionId = isStatusRequest || _entityCache.IsMassCancelation(originId) ? 0 : originId;
-				order = _entityCache.TryGetOrder(message.OrderId, message.OrderStringId);
+
+				if (transactionId == 0)
+					order = _entityCache.TryGetOrder(message.OrderId, message.OrderStringId);
 			}
-			else
-				order = _entityCache.TryGetOrder(transactionId, OrderOperations.Cancel) ?? _entityCache.TryGetOrder(transactionId, OrderOperations.Register);
+
+			if (transactionId != 0)
+			{
+				if (message.HasTradeInfo())
+					order = _entityCache.TryGetOrder(transactionId, OrderOperations.Register);
+				else
+					order = _entityCache.TryGetOrder(transactionId, OrderOperations.Edit) ?? _entityCache.TryGetOrder(transactionId, OrderOperations.Cancel) ?? _entityCache.TryGetOrder(transactionId, OrderOperations.Register);
+			}
+
+			Security security;
 
 			if (order == null)
 			{
