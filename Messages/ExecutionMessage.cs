@@ -564,6 +564,12 @@ namespace StockSharp.Messages
 		public DataType BuildFrom { get; set; }
 
 		/// <summary>
+		/// Margin leverage.
+		/// </summary>
+		[DataMember]
+		public int? Leverage { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -593,6 +599,9 @@ namespace StockSharp.Messages
 
 			if (SeqNum != 0)
 				str += $",SeqNum={SeqNum}";
+
+			if (Leverage != null)
+				str += $",Leverage={Leverage.Value}";
 
 			return str;
 		}
@@ -669,6 +678,7 @@ namespace StockSharp.Messages
 			destination.Initiator = Initiator;
 			destination.SeqNum = SeqNum;
 			destination.BuildFrom = BuildFrom;
+			destination.Leverage = Leverage;
 		}
 	}
 }

@@ -188,8 +188,14 @@ namespace StockSharp.Algo
 				if (message.Yield != default)
 					order.Yield = message.Yield;
 
+				if (message.PostOnly != default)
+					order.PostOnly = message.PostOnly;
+
 				if (message.SeqNum != default)
 					order.SeqNum = message.SeqNum;
+
+				if (message.Leverage != default)
+					order.Leverage = message.Leverage;
 
 				message.CopyExtensionInfo(order);
 
@@ -634,6 +640,7 @@ namespace StockSharp.Algo
 					o.PositionEffect = message.PositionEffect;
 					o.PostOnly = message.PostOnly;
 					o.SeqNum = message.SeqNum;
+					o.Leverage = message.Leverage;
 
 					if (message.Balance != null)
 					{

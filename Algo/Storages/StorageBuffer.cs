@@ -248,6 +248,7 @@ namespace StockSharp.Algo.Storages
 				MinVolume = regMsg.MinOrderVolume,
 				PositionEffect = regMsg.PositionEffect,
 				PostOnly = regMsg.PostOnly,
+				Leverage = regMsg.Leverage,
 			};
 
 			switch (message.Type)

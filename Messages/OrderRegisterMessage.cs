@@ -140,6 +140,12 @@ namespace StockSharp.Messages
 		public bool? PostOnly { get; set; }
 
 		/// <summary>
+		/// Margin leverage.
+		/// </summary>
+		[DataMember]
+		public int? Leverage { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -188,6 +194,7 @@ namespace StockSharp.Messages
 			destination.MinOrderVolume = MinOrderVolume;
 			destination.PositionEffect = PositionEffect;
 			destination.PostOnly = PostOnly;
+			destination.Leverage = Leverage;
 		}
 
 		/// <inheritdoc />
@@ -200,6 +207,9 @@ namespace StockSharp.Messages
 
 			if (PostOnly != null)
 				str += $",PostOnly={PostOnly.Value}";
+
+			if (Leverage != null)
+				str += $",Leverage={Leverage.Value}";
 
 			return str;
 		}

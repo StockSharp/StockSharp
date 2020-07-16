@@ -657,6 +657,15 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public long SeqNum { get; set; }
 
+		/// <summary>
+		/// Margin leverage.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.LeverageKey)]
+		[DescriptionLoc(LocalizedStrings.Str261Key)]
+		[MainCategory]
+		public int? Leverage { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -686,6 +695,9 @@ namespace StockSharp.BusinessEntities
 
 			if (SeqNum != 0)
 				str += $",SeqNum={SeqNum}";
+
+			if (Leverage != null)
+				str += $",Leverage={Leverage.Value}";
 
 			return str;
 		}

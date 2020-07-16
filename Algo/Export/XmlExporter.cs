@@ -157,6 +157,7 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("postOnly", item.PostOnly);
 				writer.WriteAttribute("initiator", item.Initiator);
 				writer.WriteAttribute("seqNum", item.SeqNum);
+				writer.WriteAttribute("leverage", item.Leverage);
 
 				writer.WriteEndElement();
 			});

@@ -101,6 +101,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.Initiator.To<string>(),
 				data.SeqNum.To<string>(),
 				data.StrategyId,
+				data.Leverage.To<string>(),
 			}.Concat(data.BuildFrom.ToCsv());
 			writer.WriteRow(row);
 
@@ -204,6 +205,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				msg.BuildFrom = reader.ReadBuildFrom();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				msg.Leverage = reader.ReadInt();
 
 			return msg;
 		}

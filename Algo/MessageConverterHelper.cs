@@ -369,6 +369,7 @@ namespace StockSharp.Algo
 				MinOrderVolume = order.MinVolume,
 				PositionEffect = order.PositionEffect,
 				PostOnly = order.PostOnly,
+				Leverage = order.Leverage,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -464,6 +465,7 @@ namespace StockSharp.Algo
 				MinOrderVolume = newOrder.MinVolume,
 				PositionEffect = newOrder.PositionEffect,
 				PostOnly = newOrder.PostOnly,
+				Leverage = newOrder.Leverage,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -1338,6 +1340,7 @@ namespace StockSharp.Algo
 			order.PositionEffect = message.PositionEffect;
 			order.PostOnly = message.PostOnly;
 			order.SeqNum = message.SeqNum;
+			order.Leverage = message.Leverage;
 
 			if (message.OrderState != null)
 				order.ApplyNewState(message.OrderState.Value);
