@@ -17,23 +17,6 @@
 	/// </summary>
 	public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	{
-		private sealed class ProcessSuspendedSecurityMessage : Message
-		{
-			public SecurityId SecurityId { get; }
-
-			public ProcessSuspendedSecurityMessage(IMessageAdapter adapter, SecurityId securityId)
-				: base(ExtendedMessageTypes.ProcessSuspendedSecurityMessages)
-			{
-				this.LoopBack(adapter);
-				SecurityId = securityId;
-			}
-
-			public override Message Clone()
-			{
-				return new ProcessSuspendedSecurityMessage(Adapter, SecurityId);
-			}
-		}
-
 		private readonly PairSet<object, SecurityId> _securityIds = new PairSet<object, SecurityId>();
 		private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = new Dictionary<SecurityId, List<Message>>();
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
@@ -267,9 +250,9 @@
 					break;
 				}
 
-				case ExtendedMessageTypes.ProcessSuspendedSecurityMessages:
-					ProcessInSuspended(((ProcessSuspendedSecurityMessage)message).SecurityId);
-					break;
+				case ExtendedMessageTypes.ProcessSuspended:
+					ProcessInSuspended(((ProcessSuspendedMessage)message).SecurityId);
+					return true;
 
 				default:
 				{
@@ -565,7 +548,7 @@
 			{
 				var temp = securityId;
 				temp.Native = nativeId;
-				RaiseNewOutMessage(new ProcessSuspendedSecurityMessage(this, temp));
+				RaiseNewOutMessage(new ProcessSuspendedMessage(this, temp));
 			}
 		}
 	}

@@ -17,7 +17,7 @@
 	{
 		private bool _connected;
 		private readonly SyncObject _syncObject = new SyncObject();
-		private readonly List<Message> _pendingMessages = new List<Message>();
+		private readonly List<Message> _suspendedIn = new List<Message>();
 		private readonly PairSet<long, PortfolioMessage> _pfSubscriptions = new PairSet<long, PortfolioMessage>();
 		private readonly PairSet<long, MarketDataMessage> _mdSubscriptions = new PairSet<long, MarketDataMessage>();
 		private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = new PairSet<long, OrderRegisterMessage>();
@@ -60,10 +60,10 @@
 			void ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 			{
 				if (!_pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId, out var originOrderMsg))
-					_pendingMessages.Add(replaceMsg);
+					_suspendedIn.Add(replaceMsg);
 				else
 				{
-					_pendingMessages.Remove(originOrderMsg);
+					_suspendedIn.Remove(originOrderMsg);
 
 					RaiseNewOutMessage(new ExecutionMessage
 					{
@@ -92,7 +92,7 @@
 					{
 						_connected = false;
 
-						_pendingMessages.Clear();
+						_suspendedIn.Clear();
 						_mdSubscriptions.Clear();
 						_pfSubscriptions.Clear();
 					}
@@ -146,10 +146,10 @@
 							var cancelMsg = (OrderCancelMessage)message.Clone();
 
 							if (!_pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId, out var originOrderMsg))
-								_pendingMessages.Add(cancelMsg);
+								_suspendedIn.Add(cancelMsg);
 							else
 							{
-								_pendingMessages.Remove(originOrderMsg);
+								_suspendedIn.Remove(originOrderMsg);
 
 								RaiseNewOutMessage(new ExecutionMessage
 								{
@@ -225,6 +225,27 @@
 
 					break;
 				}
+				case ExtendedMessageTypes.ProcessSuspended:
+				{
+					Message[] msgs;
+
+					lock (_syncObject)
+						msgs = _suspendedIn.CopyAndClear();
+
+					foreach (var msg in msgs)
+					{
+						if (msg is MarketDataMessage mdMsg)
+							_mdSubscriptions.RemoveByValue(mdMsg);
+						else if (msg is PortfolioMessage pfMsg)
+							_pfSubscriptions.RemoveByValue(pfMsg);
+						else if (msg is OrderRegisterMessage orderMsg)
+							_pendingRegistration.RemoveByValue(orderMsg);
+
+						base.OnSendInMessage(message);
+					}
+
+					return true;
+				}
 				default:
 				{
 					switch (message.OfflineMode)
@@ -281,7 +302,7 @@
 					if (originMsg != null)
 					{
 						subscriptions.Remove(originalTransactionId);
-						_pendingMessages.Remove(originMsg);
+						_suspendedIn.Remove(originMsg);
 						return;
 					}
 				}
@@ -295,10 +316,10 @@
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (_maxMessageCount > 0 && _pendingMessages.Count == _maxMessageCount)
+			if (_maxMessageCount > 0 && _suspendedIn.Count == _maxMessageCount)
 				throw new InvalidOperationException(LocalizedStrings.MaxMessageCountExceed);
 
-			_pendingMessages.Add(message);
+			_suspendedIn.Add(message);
 
 			this.AddInfoLog("Message {0} stored in offline.", message);
 		}
@@ -340,7 +361,7 @@
 
 			base.OnInnerAdapterNewOutMessage(message);
 
-			Message[] msgs = null;
+			ProcessSuspendedMessage processMsg = null;
 
 			if ((connectMessage != null && connectMessage.Error == null) || message.Type == ExtendedMessageTypes.ReconnectingFinished)
 			{
@@ -348,28 +369,13 @@
 				{
 					_connected = true;
 
-					msgs = _pendingMessages.CopyAndClear();
-
-					foreach (var msg in msgs)
-					{
-						if (msg is MarketDataMessage mdMsg)
-							_mdSubscriptions.RemoveByValue(mdMsg);
-						else if (msg is PortfolioMessage pfMsg)
-							_pfSubscriptions.RemoveByValue(pfMsg);
-						else if (msg is OrderRegisterMessage orderMsg)
-							_pendingRegistration.RemoveByValue(orderMsg);
-					}
+					processMsg = new ProcessSuspendedMessage(this);
 				}
 			}
 
-			if (msgs != null)
+			if (processMsg != null)
 			{
-				foreach (var msg in msgs)
-				{
-					msg.LoopBack(this);
-
-					base.OnInnerAdapterNewOutMessage(msg);
-				}
+				base.OnInnerAdapterNewOutMessage(processMsg);
 			}
 		}
 
