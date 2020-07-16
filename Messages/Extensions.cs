@@ -3165,6 +3165,9 @@ namespace StockSharp.Messages
 			if (criteria.PrimaryId != default && security.PrimaryId != criteria.PrimaryId)
 				return false;
 
+			if (!criteria.BoardCode.IsEmptyOrWhiteSpace() && !security.SecurityId.BoardCode.CompareIgnoreCase(criteria.BoardCode))
+				return false;
+
 			return true;
 		}
 

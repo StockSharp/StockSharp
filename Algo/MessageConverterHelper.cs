@@ -625,6 +625,8 @@ namespace StockSharp.Algo
 				message.SecurityId = criteria.ExternalId.ToSecurityId(secId);
 				
 				criteria.FillMessage(message);
+
+				message.BoardCode = criteria.Board?.Code;
 			}
 			else
 			{
