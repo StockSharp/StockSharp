@@ -820,10 +820,31 @@ namespace StockSharp.Algo
 
 			if (order == null)
 			{
-				order = GetOrder(security, transactionId, message.OrderId, message.OrderStringId, OrderTypes.Limit, OrderOperations.Register);
+				if (security == null)
+					throw new ArgumentNullException(nameof(security));
+
+				var orderId = message.OrderId;
+				var orderStringId = message.OrderStringId;
+
+				if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
+					throw new ArgumentException(LocalizedStrings.Str719);
+
+				var data = GetData(security);
+
+				if (transactionId != 0)
+					order = data.TryGetOrder(OrderTypes.Limit, transactionId, OrderOperations.Register)?.Order;
 
 				if (order == null)
-					return null;
+				{
+					if (orderId != null)
+						order = data.OrdersById.TryGetValue(orderId.Value);
+
+					if (order == null)
+						order = orderStringId.IsEmpty() ? null : data.OrdersByStringId.TryGetValue(orderStringId);
+
+					if (order == null)
+						return null;
+				}
 			}
 
 			var isNew = false;
@@ -963,45 +984,12 @@ namespace StockSharp.Algo
 			return Tuple.Create(transactionId, type == OrderTypes.Conditional, operation);
 		}
 
-		private Order GetOrder(Security security, long transactionId, long? orderId, string orderStringId, OrderTypes orderType, OrderOperations operation)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str719);
-
-			var data = GetData(security);
-
-			Order order = null;
-
-			if (transactionId != 0)
-				order = data.TryGetOrder(orderType, transactionId, operation)?.Order;
-
-			if (order != null)
-				return order;
-
-			if (orderId != null)
-				order = data.OrdersById.TryGetValue(orderId.Value);
-
-			if (order != null)
-				return order;
-
-			return orderStringId.IsEmpty() ? null : data.OrdersByStringId.TryGetValue(orderStringId);
-		}
-
-		public long GetTransactionId(long originalTransactionId)
-		{
-			// ExecMsg.OriginalTransactionId == OrderStatMsg.TransactionId when orders info requested by OrderStatMsg
-			return IsOrderStatusRequest(originalTransactionId) || IsMassCancelation(originalTransactionId) ? 0 : originalTransactionId;
-		}
-
 		public Order GetOrder(ExecutionMessage message, out long transactionId)
 		{
 			transactionId = message.TransactionId;
 
 			if (transactionId == 0)
-				transactionId = GetTransactionId(message.OriginalTransactionId);
+				transactionId = IsOrderStatusRequest(message.OriginalTransactionId) || IsMassCancelation(message.OriginalTransactionId) ? 0 : message.OriginalTransactionId;
 
 			if (transactionId == 0)
 			{
