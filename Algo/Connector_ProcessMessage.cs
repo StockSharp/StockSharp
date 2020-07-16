@@ -1331,8 +1331,10 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessOrderLogMessage(Security security, ExecutionMessage message)
+		private void ProcessOrderLogMessage(ExecutionMessage message)
 		{
+			var security = EnsureGetSecurity(message);
+
 			var trade = (message.TradeId != null || !message.TradeStringId.IsEmpty())
 				? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId ?? string.Empty)
 				: null;
@@ -1346,8 +1348,10 @@ namespace StockSharp.Algo
 			RaiseNewOrderLogItem(logItem);
 		}
 
-		private void ProcessTradeMessage(Security security, ExecutionMessage message)
+		private void ProcessTradeMessage(ExecutionMessage message)
 		{
+			var security = EnsureGetSecurity(message);
+			
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
 
 			if (RaiseReceived(tuple.Item1, message, TickTradeReceived) == false)
@@ -1511,8 +1515,53 @@ namespace StockSharp.Algo
 			RaiseReceived(tuple.Item1, message, OwnTradeReceived);
 		}
 
-		private void ProcessTransactionMessage(Order order, Security security, ExecutionMessage message, long transactionId/*, bool isStatusRequest*/)
+		private void ProcessTransactionMessage(ExecutionMessage message)
 		{
+			var originId = message.OriginalTransactionId;
+
+			if (_entityCache.IsMassCancelation(originId))
+			{
+				if (message.Error == null)
+					RaiseMassOrderCanceled(originId, message.ServerTime);
+				else
+					RaiseMassOrderCancelFailed(originId, message.Error, message.ServerTime);
+
+				return;
+			}
+
+			var isStatusRequest = _entityCache.IsOrderStatusRequest(originId);
+
+			if (message.Error != null && isStatusRequest)
+			{
+				// TransId != 0 means contains failed order info (not just status response)
+				if (message.TransactionId == 0)
+				{
+					RaiseOrderStatusFailed(originId, message.Error, message.ServerTime);
+					return;
+				}
+			}
+
+			Security security;
+
+			var order = _entityCache.GetOrder(message, out var transactionId);
+
+			if (order == null)
+			{
+				if (message.SecurityId == default)
+				{
+					this.AddWarningLog(LocalizedStrings.Str1025);
+					this.AddWarningLog(message.ToString());
+					return;
+				}
+
+				security = EnsureGetSecurity(message);
+
+				if (transactionId == 0 && isStatusRequest)
+					transactionId = TransactionIdGenerator.GetNextId();
+			}
+			else
+				security = order.Security;
+
 			this.AddDebugLog("Order '{0}': {1}", order?.TransactionId, message);
 
 			var processed = false;
@@ -1520,7 +1569,7 @@ namespace StockSharp.Algo
 			if (message.HasOrderInfo())
 			{
 				processed = true;
-				ProcessOrderMessage(order, security, message, transactionId/*, isStatusRequest*/);
+				ProcessOrderMessage(order, security, message, transactionId);
 			}
 
 			if (message.HasTradeInfo())
@@ -1535,79 +1584,21 @@ namespace StockSharp.Algo
 
 		private void ProcessExecutionMessage(ExecutionMessage message)
 		{
-			if (message.ExecutionType == null)
-				throw new ArgumentException(LocalizedStrings.Str688Params.Put(message));
-
 			switch (message.ExecutionType)
 			{
 				case ExecutionTypes.Transaction:
 				{
-					var originId = message.OriginalTransactionId;
-
-					if (_entityCache.IsMassCancelation(originId))
-					{
-						if (message.Error == null)
-							RaiseMassOrderCanceled(originId, message.ServerTime);
-						else
-							RaiseMassOrderCancelFailed(originId, message.Error, message.ServerTime);
-
-						break;
-					}
-
-					var isStatusRequest = _entityCache.IsOrderStatusRequest(originId);
-
-					if (message.Error != null && isStatusRequest)
-					{
-						// TransId != 0 means contains failed order info (not just status response)
-						if (message.TransactionId == 0)
-						{
-							RaiseOrderStatusFailed(originId, message.Error, message.ServerTime);
-							break;
-						}
-					}
-
-					Security security;
-
-					var order = _entityCache.GetOrder(message, out var transactionId);
-
-					if (order == null)
-					{
-						if (message.SecurityId == default)
-						{
-							this.AddWarningLog(LocalizedStrings.Str1025);
-							this.AddWarningLog(message.ToString());
-							break;
-						}
-
-						security = EnsureGetSecurity(message);
-
-						if (transactionId == 0 && isStatusRequest)
-							transactionId = TransactionIdGenerator.GetNextId();
-					}
-					else
-						security = order.Security;
-
-					ProcessTransactionMessage(order, security, message, transactionId/*, isStatusRequest*/);
-
+					ProcessTransactionMessage(message);
 					break;
 				}
-
 				case ExecutionTypes.Tick:
-				case ExecutionTypes.OrderLog:
-				//case null:
 				{
-					var security = EnsureGetSecurity(message);
-
-					switch (message.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-							ProcessTradeMessage(security, message);
-							break;
-						case ExecutionTypes.OrderLog:
-							ProcessOrderLogMessage(security, message);
-							break;
-					}
-
+					ProcessTradeMessage(message);
+					break;
+				}
+				case ExecutionTypes.OrderLog:
+				{
+					ProcessOrderLogMessage(message);
 					break;
 				}
 				

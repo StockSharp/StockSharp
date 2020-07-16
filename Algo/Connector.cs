@@ -1102,12 +1102,24 @@ namespace StockSharp.Algo
 		private Security TryGetSecurity(SecurityId? securityId)
 			=> securityId == null || securityId.Value == default ? null : GetSecurity(securityId.Value);
 
-		private Security EnsureGetSecurity(ISecurityIdMessage message)
+		private Security EnsureGetSecurity<TMessage>(TMessage message)
+			where TMessage : ISecurityIdMessage, ISubscriptionIdMessage
 		{
 			var secId = message.SecurityId;
 
 			if (secId == default)
-				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str1025);
+			{
+				var subscrSecId = message
+					.GetSubscriptionIds()
+					.Select(id => TryGetSubscriptionById(id)?.SecurityId)
+					.Where(id => id != null && id.Value != default)
+					.FirstOrDefault();
+
+				if (subscrSecId == null || subscrSecId.Value == default)
+					throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str1025);
+
+				secId = subscrSecId.Value;
+			}
 
 			var security = TryGetSecurity(secId);
 
