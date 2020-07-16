@@ -3586,5 +3586,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.STSH.Name,
 			Exchange = Exchange.STSH,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="Exchange.STRLG"/>.
+		/// </summary>
+		public static ExchangeBoard STRLG { get; } = new ExchangeBoard
+		{
+			Code = Exchange.STRLG.Name,
+			Exchange = Exchange.STRLG,
+		};
 	}
 }

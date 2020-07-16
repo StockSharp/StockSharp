@@ -1163,5 +1163,14 @@ namespace StockSharp.BusinessEntities
 			Name = "STSH",
 			FullNameLoc = LocalizedStrings.StockSharpKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="STRLG"/>.
+		/// </summary>
+		public static Exchange STRLG { get; } = new Exchange
+		{
+			Name = "STRLG",
+			FullNameLoc = LocalizedStrings.SterlingKey,
+		};
 	}
 }
