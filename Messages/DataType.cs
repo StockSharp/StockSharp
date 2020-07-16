@@ -43,47 +43,47 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Level1.
 		/// </summary>
-		public static DataType Level1 { get; } = Create(typeof(Level1ChangeMessage), null).Immutable();
+		public static DataType Level1 { get; } = Create(typeof(Level1ChangeMessage), null).SetName(LocalizedStrings.Level1).Immutable();
 
 		/// <summary>
 		/// Market depth.
 		/// </summary>
-		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).Immutable();
+		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).SetName(LocalizedStrings.MarketDepth).Immutable();
 
 		/// <summary>
 		/// Filtered market depth.
 		/// </summary>
-		public static DataType FilteredMarketDepth { get; } = Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).Immutable();
+		public static DataType FilteredMarketDepth { get; } = Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).SetName(LocalizedStrings.FilteredBook).Immutable();
 
 		/// <summary>
 		/// Position changes.
 		/// </summary>
-		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).Immutable();
+		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).SetName(LocalizedStrings.Str972).Immutable();
 
 		/// <summary>
 		/// News.
 		/// </summary>
-		public static DataType News { get; } = Create(typeof(NewsMessage), null).Immutable();
+		public static DataType News { get; } = Create(typeof(NewsMessage), null).SetName(LocalizedStrings.News).Immutable();
 
 		/// <summary>
 		/// Securities.
 		/// </summary>
-		public static DataType Securities { get; } = Create(typeof(SecurityMessage), null).Immutable();
+		public static DataType Securities { get; } = Create(typeof(SecurityMessage), null).SetName(LocalizedStrings.Securities).Immutable();
 
 		/// <summary>
 		/// Ticks.
 		/// </summary>
-		public static DataType Ticks { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Tick).Immutable();
+		public static DataType Ticks { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Tick).SetName(LocalizedStrings.Ticks).Immutable();
 
 		/// <summary>
 		/// Order log.
 		/// </summary>
-		public static DataType OrderLog { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog).Immutable();
+		public static DataType OrderLog { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog).SetName(LocalizedStrings.OrderLog).Immutable();
 
 		/// <summary>
 		/// Transactions.
 		/// </summary>
-		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).Immutable();
+		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).SetName(LocalizedStrings.Transactions).Immutable();
 
 		/// <summary>
 		/// Board info.
@@ -253,29 +253,31 @@ namespace StockSharp.Messages
 			};
 		}
 
+		/// <summary>
+		/// Name.
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
+		/// Set <see cref="Name"/>.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <returns>Data type info.</returns>
+		public DataType SetName(string name)
+		{
+			Name = name;
+			return this;
+		}
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			if (this == Ticks)
-				return LocalizedStrings.Ticks;
-			else if (this == Level1)
-				return LocalizedStrings.Level1;
-			else if (this == OrderLog)
-				return LocalizedStrings.OrderLog;
-			else if (this == MarketDepth)
-				return LocalizedStrings.MarketDepth;
-			else if (this == FilteredMarketDepth)
-				return LocalizedStrings.FilteredBook;
-			else if (this == Transactions)
-				return LocalizedStrings.Transactions;
-			else if (this == PositionChanges)
-				return LocalizedStrings.Str972;
-			else if (this == News)
-				return LocalizedStrings.News;
-			else if (this == Securities)
-				return LocalizedStrings.Securities;
-			else
-				return $"{MessageType.GetDisplayName()}: {Arg}";
+			var name = Name;
+
+			if (name.IsEmpty())
+				name = $"{MessageType.GetDisplayName()}: {Arg}";
+
+			return name;
 		}
 
 		/// <summary>
