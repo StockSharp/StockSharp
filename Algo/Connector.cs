@@ -673,6 +673,9 @@ namespace StockSharp.Algo
 				CheckOnOld(order);
 				CheckOnNew(changes);
 
+				if (IsOrderEditable(order) != true)
+					this.AddWarningLog("Order {0} is not editable.", order.TransactionId);
+
 				var transactionId = TransactionIdGenerator.GetNextId();
 				_entityCache.AddOrderByEditionId(order, transactionId);
 					
@@ -703,6 +706,9 @@ namespace StockSharp.Algo
 
 				CheckOnOld(oldOrder);
 				CheckOnNew(newOrder);
+
+				if (IsOrderReplaceable(oldOrder) != true)
+					this.AddWarningLog("Order {0} is not replaceable.", oldOrder.TransactionId);
 
 				InitNewOrder(newOrder);
 				_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);

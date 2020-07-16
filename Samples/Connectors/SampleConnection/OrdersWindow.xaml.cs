@@ -36,7 +36,7 @@
 			if (!window.ShowModal(this))
 				return;
 
-			Connector.EditOrder(order, window.Order);
+			Connector.ReRegisterOrderEx(order, window.Order);
 		}
 	}
 }
