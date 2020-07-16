@@ -468,6 +468,14 @@ namespace StockSharp.Algo
 			_allOrdersByTransactionId.Add(Tuple.Create(transactionId, operation), order);
 		}
 
+		public Order TryGetOrder(long? orderId, string orderStringId)
+			=> orderId != null
+				? _allOrdersById.TryGetValue(orderId.Value)
+				: (orderStringId.IsEmpty() ? null : _allOrdersByStringId.TryGetValue(orderStringId));
+
+		public Order TryGetOrder(long transactionId, OrderOperations operation)
+			=> _allOrdersByTransactionId.TryGetValue(Tuple.Create(transactionId, operation));
+
 		private void UpdateOrderIds(Order order, SecurityData securityData)
 		{
 			// так как биржевые идентифиаторы могут повторяться, то переписываем старые заявки новыми как наиболее актуальными
@@ -982,22 +990,6 @@ namespace StockSharp.Algo
 				throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.Str718);
 
 			return Tuple.Create(transactionId, type == OrderTypes.Conditional, operation);
-		}
-
-		public Order GetOrder(ExecutionMessage message, out long transactionId)
-		{
-			transactionId = message.TransactionId;
-
-			if (transactionId == 0)
-				transactionId = IsOrderStatusRequest(message.OriginalTransactionId) || IsMassCancelation(message.OriginalTransactionId) ? 0 : message.OriginalTransactionId;
-
-			if (transactionId == 0)
-			{
-				return message.OrderId == null ? null : _allOrdersById.TryGetValue(message.OrderId.Value);
-				//return null;
-			}
-
-			return _allOrdersByTransactionId.TryGetValue(Tuple.Create(transactionId, OrderOperations.Cancel)) ?? _allOrdersByTransactionId.TryGetValue(Tuple.Create(transactionId, OrderOperations.Register));
 		}
 
 		public Tuple<Trade, bool> GetTrade(Security security, long? id, string strId, Func<long?, string, Trade> createTrade)

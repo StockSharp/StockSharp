@@ -1543,7 +1543,17 @@ namespace StockSharp.Algo
 
 			Security security;
 
-			var order = _entityCache.GetOrder(message, out var transactionId);
+			Order order;
+
+			var transactionId = message.TransactionId;
+
+			if (transactionId == 0)
+			{
+				transactionId = isStatusRequest || _entityCache.IsMassCancelation(originId) ? 0 : originId;
+				order = _entityCache.TryGetOrder(message.OrderId, message.OrderStringId);
+			}
+			else
+				order = _entityCache.TryGetOrder(transactionId, OrderOperations.Cancel) ?? _entityCache.TryGetOrder(transactionId, OrderOperations.Register);
 
 			if (order == null)
 			{
