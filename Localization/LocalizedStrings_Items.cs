@@ -51936,5 +51936,15 @@ namespace StockSharp.Localization
 		/// Filtered book
 		/// </summary>
 		public static string FilteredBook => GetString(FilteredBookKey);
+
+		/// <summary>
+		/// Status (sys)
+		/// </summary>
+		public const string SystemStatusKey = nameof(SystemStatus);
+
+		/// <summary>
+		/// Status (sys)
+		/// </summary>
+		public static string SystemStatus => GetString(SystemStatusKey);
 	}
 }
