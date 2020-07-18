@@ -259,6 +259,7 @@ namespace StockSharp.BusinessEntities
 		public Portfolio Portfolio { get; set; }
 
 		[field: NonSerialized]
+		[Obsolete]
 		private readonly Lazy<SynchronizedList<string>> _messages = new Lazy<SynchronizedList<string>>(() => new SynchronizedList<string>());
 
 		/// <summary>
@@ -269,6 +270,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str526Key)]
 		[DescriptionLoc(LocalizedStrings.Str527Key)]
 		[MainCategory]
+		[Obsolete]
 		public ISynchronizedCollection<string> Messages => _messages.Value;
 
 		private DateTimeOffset _lastChangeTime;

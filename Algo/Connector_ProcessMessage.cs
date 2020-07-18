@@ -394,7 +394,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Use <see cref="Level1DepthBuilderAdapter"/>.
 		/// </summary>
-		[Obsolete("Use IMessageAdapter.GenerateOrderBookFromLevel property.")]
+		[Obsolete("Use IMessageAdapter.GenerateOrderBookFromLevel1 property.")]
 		public bool SupportLevel1DepthBuilder { get; set; }
 
 		/// <summary>
