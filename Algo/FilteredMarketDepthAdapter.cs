@@ -326,6 +326,8 @@ namespace StockSharp.Algo
 							_byOrderStatusId.Add(orderStatus.TransactionId, info);
 						}
 
+						this.AddInfoLog("Filtered book {0} started (Book={1} / Orders={2}).", transId, mdMsg.TransactionId, orderStatus.TransactionId);
+
 						base.OnSendInMessage(mdMsg);
 						base.OnSendInMessage(orderStatus);
 
@@ -378,6 +380,8 @@ namespace StockSharp.Algo
 						}
 						else
 						{
+							this.AddInfoLog("Filtered book {0} unsubscribing.", mdMsg.OriginalTransactionId);
+
 							if (bookUnsubscribe != null)
 								base.OnSendInMessage(bookUnsubscribe);
 
