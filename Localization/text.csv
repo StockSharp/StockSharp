@@ -5227,6 +5227,8 @@ Edition;Edition;Редактирование
 EditionLatency;Time taken to edit an order.;Время, затраченное на редактирование заявки.
 FilteredBook;Filtered book;Отфильтрованный стакан
 SystemStatus;Status (sys);Статус (систем)
+MaxOrderRegisterErrorCount;Max reg error;Макс ошибок рег-ии
+MaxOrderRegisterErrorCountDesc;The maximum number of order registration errors above which the algorithm will be stopped;Максимальное количество ошибок регистрации заявки, при превышении которого алгоритм будет остановлен
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5537,7 +5539,6 @@ DocStr331;The order with which the quoting strategy is currently operating;За�
 DocStr332;The maximum number of order changes above which the algorithm will be stopped;Максимальное количество изменений заявки, при превышении которого алгоритм будет остановлен
 DocStr333;The default value is {0};Значение по умолчанию равно {0}
 DocStr334;Current number of order changes;Текущее количество изменений заявки
-DocStr335;The maximum number of order registration errors above which the algorithm will be stopped;Максимальное количество ошибок регистрации заявки, при превышении которого алгоритм будет остановлен
 DocStr336;The default value is 100;Значение по умолчанию равно 100
 DocStr337;Current number of order registration errors;Текущее количество ошибок регистрации заявки
 DocStr338;The volume which is left to fulfill before the quoting end;Объем, который осталось реализовать до завершения котирования

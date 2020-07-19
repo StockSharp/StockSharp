@@ -51946,5 +51946,25 @@ namespace StockSharp.Localization
 		/// Status (sys)
 		/// </summary>
 		public static string SystemStatus => GetString(SystemStatusKey);
+
+		/// <summary>
+		/// Max reg error
+		/// </summary>
+		public const string MaxOrderRegisterErrorCountKey = nameof(MaxOrderRegisterErrorCount);
+
+		/// <summary>
+		/// Max reg error
+		/// </summary>
+		public static string MaxOrderRegisterErrorCount => GetString(MaxOrderRegisterErrorCountKey);
+
+		/// <summary>
+		/// The maximum number of order registration errors above which the algorithm will be stopped
+		/// </summary>
+		public const string MaxOrderRegisterErrorCountDescKey = nameof(MaxOrderRegisterErrorCountDesc);
+
+		/// <summary>
+		/// The maximum number of order registration errors above which the algorithm will be stopped
+		/// </summary>
+		public static string MaxOrderRegisterErrorCountDesc => GetString(MaxOrderRegisterErrorCountDescKey);
 	}
 }

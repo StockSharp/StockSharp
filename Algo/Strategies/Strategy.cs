@@ -731,13 +731,18 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<int> _maxOrderRegisterErrorCount;
 
 		/// <summary>
-		/// The maximal number of errors registration orders, which strategy shall receive prior to stop operation.
+		/// The maximum number of order registration errors above which the algorithm will be stopped.
 		/// </summary>
 		/// <remarks>
 		/// The default value is 10.
 		/// </remarks>
-		//[Browsable(false)]
-		public int MaxOrderRegisterErrorCount
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MaxOrderRegisterErrorCountKey,
+			Description = LocalizedStrings.MaxOrderRegisterErrorCountDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 12)]
+		public virtual int MaxOrderRegisterErrorCount
 		{
 			get => _maxOrderRegisterErrorCount.Value;
 			set
@@ -752,7 +757,7 @@ namespace StockSharp.Algo.Strategies
 		private int _orderRegisterErrorCount;
 
 		/// <summary>
-		/// The current number of errors registration orders.
+		/// Current number of order registration errors.
 		/// </summary>
 		[Browsable(false)]
 		public int OrderRegisterErrorCount
@@ -968,7 +973,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.AllowTradingKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		public bool AllowTrading
+		public virtual bool AllowTrading
 		{
 			get => _allowTrading.Value;
 			set => _allowTrading.Value = value;
@@ -984,7 +989,7 @@ namespace StockSharp.Algo.Strategies
 			Name = LocalizedStrings.XamlStr426Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
-		public bool UnsubscribeOnStop
+		public virtual bool UnsubscribeOnStop
 		{
 			get => _unsubscribeOnStop.Value;
 			set => _unsubscribeOnStop.Value = value;
@@ -1156,7 +1161,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.Str136Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		public StrategyCommentModes CommentMode
+		public virtual StrategyCommentModes CommentMode
 		{
 			get => _commentMode.Value;
 			set => _commentMode.Value = value;
@@ -1313,8 +1318,10 @@ namespace StockSharp.Algo.Strategies
 					unit.SetSecurity(Security);
 			}
 
-			ErrorCount = 0;
+			ErrorCount = default;
 			ErrorState = LogLevels.Info;
+
+			OrderRegisterErrorCount = default;
 		}
 
 		/// <summary>
@@ -2506,8 +2513,8 @@ namespace StockSharp.Algo.Strategies
 			{
 				OrderRegisterErrorCount++;
 
-				this.AddInfoLog("OrderRegError {0}/{1}.", OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
-
+				this.AddInfoLog(LocalizedStrings.Str1297Params, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
+			
 				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
 					Stop();
 			}

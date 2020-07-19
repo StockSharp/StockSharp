@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Algo.Strategies
 {
 	using System;
+	using System.ComponentModel;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -94,6 +95,7 @@
 			=> _positions.TryGetValue(CreateKey(security, portfolio))?.CurrentValue;
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public IEnumerable<Position> Positions => _positions.CachedValues;
 
 		private Action<Position> _newPosition;

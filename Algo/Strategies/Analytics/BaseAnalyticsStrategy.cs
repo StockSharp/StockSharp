@@ -128,6 +128,46 @@ namespace StockSharp.Algo.Strategies.Analytics
 			set => base.Portfolio = value;
 		}
 
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override decimal Volume
+		{
+			get => base.Volume;
+			set => base.Volume = value;
+		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override StrategyCommentModes CommentMode
+		{
+			get => base.CommentMode;
+			set => base.CommentMode = value;
+		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override bool AllowTrading
+		{
+			get => base.AllowTrading;
+			set => base.AllowTrading = value;
+		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override bool UnsubscribeOnStop
+		{
+			get => base.UnsubscribeOnStop;
+			set => base.UnsubscribeOnStop = value;
+		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override int MaxOrderRegisterErrorCount
+		{
+			get => base.MaxOrderRegisterErrorCount;
+			set => base.MaxOrderRegisterErrorCount = value;
+		}
+
 		/// <summary>
 		/// Initialize <see cref="BaseAnalyticsStrategy"/>.
 		/// </summary>
