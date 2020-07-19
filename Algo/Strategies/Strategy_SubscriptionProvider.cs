@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Strategies
 	{
 		private ISubscriptionProvider SubscriptionProvider => (ISubscriptionProvider)SafeGetConnector();
 
-		IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => SubscriptionProvider.Subscriptions;
+		IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => _subscriptions.CachedKeys;
 
 		/// <inheritdoc />
 		public event Action<Subscription, Level1ChangeMessage> Level1Received

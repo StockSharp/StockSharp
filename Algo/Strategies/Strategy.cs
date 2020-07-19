@@ -983,7 +983,7 @@ namespace StockSharp.Algo.Strategies
 			_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
 		}
 
-		private readonly CachedSynchronizedSet<MyTrade> _myTrades = new CachedSynchronizedSet<MyTrade> { ThrowIfDuplicate = true };
+		private readonly CachedSynchronizedSet<MyTrade> _myTrades = new CachedSynchronizedSet<MyTrade>();
 
 		/// <summary>
 		/// Trades, matched during the strategy operation.
@@ -1381,7 +1381,7 @@ namespace StockSharp.Algo.Strategies
 				}
 			}
 
-			AddOrder(order);
+			AddOrder(order, false);
 
 			ProcessRegisterOrderAction(null, order, (oOrder, nOrder) =>
 			{
@@ -1422,7 +1422,7 @@ namespace StockSharp.Algo.Strategies
 			if (!CanTrade())
 				return;
 
-			AddOrder(newOrder);
+			AddOrder(newOrder, false);
 
 			ProcessRegisterOrderAction(oldOrder, newOrder, (oOrder, nOrder) =>
 			{
@@ -1448,11 +1448,13 @@ namespace StockSharp.Algo.Strategies
 			ProcessRisk(order);
 		}
 
-		private void AddOrder(Order order)
+		private void AddOrder(Order order, bool restored)
 		{
 			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
 
-			order.UserOrderId = EnsureGetId();
+			if (!restored)
+				order.UserOrderId = EnsureGetId();
+
 			order.StrategyId = EnsureGetRootId();
 
 			if (!order.State.IsFinal())
@@ -1696,16 +1698,16 @@ namespace StockSharp.Algo.Strategies
 			if (myTrades == null)
 				throw new ArgumentNullException(nameof(myTrades));
 
-			AttachOrder(order);
+			AttachOrder(order, true);
 
 			//myTrades.ForEach(OnConnectorNewMyTrade);
 		}
 
-		private void AttachOrder(Order order)
+		private void AttachOrder(Order order, bool restored)
 		{
 			this.AddInfoLog("Order {0} attached.", order.TransactionId);
 
-			AddOrder(order);
+			AddOrder(order, restored);
 
 			ProcessOrder(order);
 
@@ -2149,13 +2151,28 @@ namespace StockSharp.Algo.Strategies
 				AddMyTrade(trade);
 		}
 
+		/// <summary>
+		/// Determines the specified order can be owned by the strategy.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <returns>Check result.</returns>
+		protected virtual bool CanAttach(Order order)
+		{
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
+
+			var id = EnsureGetId();
+
+			return order.UserOrderId.CompareIgnoreCase(id) || (RestoreChildOrders && order.StrategyId.CompareIgnoreCase(id));
+		}
+
 		private void OnConnectorOrderReceived(Subscription subscription, Order order)
 		{
 			if (_orderSubscription != subscription)
 				return;
 
-			if (!_ordersInfo.ContainsKey(order) && (order.UserOrderId.CompareIgnoreCase(EnsureGetId()) || (RestoreChildOrders && order.StrategyId.CompareIgnoreCase(EnsureGetId()))))
-				AttachOrder(order);
+			if (!_ordersInfo.ContainsKey(order) && CanAttach(order))
+				AttachOrder(order, true);
 			else if (IsOwnOrder(order))
 				TryInvoke(() => ProcessOrder(order, true));
 		}
