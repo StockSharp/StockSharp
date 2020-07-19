@@ -123,20 +123,30 @@
 		IEnumerable<Portfolio> IPortfolioProvider.Portfolios
 			=> Portfolio == null ? Enumerable.Empty<Portfolio>() : new[] { Portfolio };
 
-		private Action<Portfolio> _newPortfolio;
+		//private Action<Portfolio> _newPortfolio;
 
 		event Action<Portfolio> IPortfolioProvider.NewPortfolio
 		{
-			add => _newPortfolio += value;
-			remove => _newPortfolio -= value;
+			add { }
+			remove { }
 		}
 
-		private Action<Portfolio> _portfolioChanged;
+		//private Action<Portfolio> _portfolioChanged;
 
 		event Action<Portfolio> IPortfolioProvider.PortfolioChanged
 		{
-			add => _portfolioChanged += value;
-			remove => _portfolioChanged -= value;
+			add { }
+			remove { }
 		}
+
+		//private void OnConnectorPortfolioChanged(Portfolio portfolio)
+		//{
+		//	_portfolioChanged?.Invoke(portfolio);
+		//}
+
+		//private void OnConnectorNewPortfolio(Portfolio portfolio)
+		//{
+		//	_newPortfolio?.Invoke(portfolio);
+		//}
 	}
 }

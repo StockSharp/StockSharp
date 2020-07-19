@@ -135,16 +135,6 @@ namespace StockSharp.Algo.Strategies
 			_massOrderCanceled2?.Invoke(transactionId, time);
 		}
 
-		private void OnConnectorPortfolioChanged(Portfolio portfolio)
-		{
-			_portfolioChanged?.Invoke(portfolio);
-		}
-
-		private void OnConnectorNewPortfolio(Portfolio portfolio)
-		{
-			_newPortfolio?.Invoke(portfolio);
-		}
-
 		private void OnConnectorOrderStatusFailed(long transactionId, Exception error)
 		{
 			_orderStatusFailed?.Invoke(transactionId, error);

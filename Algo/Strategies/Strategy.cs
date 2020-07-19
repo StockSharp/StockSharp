@@ -383,10 +383,6 @@ namespace StockSharp.Algo.Strategies
 					_connector.MassOrderCancelFailed2 -= OnConnectorMassOrderCancelFailed2;
 					_connector.MassOrderCanceled -= OnConnectorMassOrderCanceled;
 					_connector.MassOrderCanceled2 -= OnConnectorMassOrderCanceled2;
-#pragma warning disable CS0618 // Type or member is obsolete
-					_connector.NewPortfolio -= OnConnectorNewPortfolio;
-					_connector.PortfolioChanged -= OnConnectorPortfolioChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 					_connector.PositionReceived -= OnConnectorPositionReceived;
 
 					UnSubscribe(true);
@@ -413,10 +409,6 @@ namespace StockSharp.Algo.Strategies
 					_connector.MassOrderCancelFailed2 += OnConnectorMassOrderCancelFailed2;
 					_connector.MassOrderCanceled += OnConnectorMassOrderCanceled;
 					_connector.MassOrderCanceled2 += OnConnectorMassOrderCanceled2;
-#pragma warning disable CS0618 // Type or member is obsolete
-					_connector.NewPortfolio += OnConnectorNewPortfolio;
-					_connector.PortfolioChanged += OnConnectorPortfolioChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 					_connector.PositionReceived += OnConnectorPositionReceived;
 
 					if (ParentStrategy == null)
