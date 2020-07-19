@@ -48,7 +48,7 @@
 
 		private void OnConnectorPositionReceived(Subscription subscription, Position position)
 		{
-			if (!_subscriptions.ContainsKey(subscription))
+			if (_pfSubscription != subscription)
 				return;
 
 			if (position.StrategyId != EnsureGetId())

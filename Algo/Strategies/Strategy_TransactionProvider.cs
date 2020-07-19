@@ -20,52 +20,52 @@ namespace StockSharp.Algo.Strategies
 			remove => _newOrder -= value;
 		}
 
-		private Action<long> _massOrderCanceled;
+		//private Action<long> _massOrderCanceled;
 
 		event Action<long> ITransactionProvider.MassOrderCanceled
 		{
-			add => _massOrderCanceled += value;
-			remove => _massOrderCanceled -= value;
+			add { }
+			remove { }
 		}
 
-		private Action<long, DateTimeOffset> _massOrderCanceled2;
+		//private Action<long, DateTimeOffset> _massOrderCanceled2;
 
 		event Action<long, DateTimeOffset> ITransactionProvider.MassOrderCanceled2
 		{
-			add => _massOrderCanceled2 += value;
-			remove => _massOrderCanceled2 -= value;
+			add { }
+			remove { }
 		}
 
-		private Action<long, Exception> _massOrderCancelFailed;
+		//private Action<long, Exception> _massOrderCancelFailed;
 
 		event Action<long, Exception> ITransactionProvider.MassOrderCancelFailed
 		{
-			add => _massOrderCancelFailed += value;
-			remove => _massOrderCancelFailed -= value;
+			add { }
+			remove { }
 		}
 
-		private Action<long, Exception, DateTimeOffset> _massOrderCancelFailed2;
+		//private Action<long, Exception, DateTimeOffset> _massOrderCancelFailed2;
 
 		event Action<long, Exception, DateTimeOffset> ITransactionProvider.MassOrderCancelFailed2
 		{
-			add => _massOrderCancelFailed2 += value;
-			remove => _massOrderCancelFailed2 -= value;
+			add { }
+			remove { }
 		}
 
-		private Action<long, Exception> _orderStatusFailed;
+		//private Action<long, Exception> _orderStatusFailed;
 
 		event Action<long, Exception> ITransactionProvider.OrderStatusFailed
 		{
-			add => _orderStatusFailed += value;
-			remove => _orderStatusFailed -= value;
+			add { }
+			remove { }
 		}
 
-		private Action<long, Exception, DateTimeOffset> _orderStatusFailed2;
+		//private Action<long, Exception, DateTimeOffset> _orderStatusFailed2;
 
 		event Action<long, Exception, DateTimeOffset> ITransactionProvider.OrderStatusFailed2
 		{
-			add => _orderStatusFailed2 += value;
-			remove => _orderStatusFailed2 -= value;
+			add { }
+			remove { }
 		}
 
 		event Action<Order> ITransactionProvider.NewStopOrder
@@ -74,20 +74,20 @@ namespace StockSharp.Algo.Strategies
 			remove { }
 		}
 
-		private Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> _lookupPortfoliosResult;
+		//private Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> _lookupPortfoliosResult;
 
 		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, Exception> ITransactionProvider.LookupPortfoliosResult
 		{
-			add => _lookupPortfoliosResult += value;
-			remove => _lookupPortfoliosResult -= value;
+			add { }
+			remove { }
 		}
 
-		private Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> _lookupPortfoliosResult2;
+		//private Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> _lookupPortfoliosResult2;
 
 		event Action<PortfolioLookupMessage, IEnumerable<Portfolio>, IEnumerable<Portfolio>, Exception> ITransactionProvider.LookupPortfoliosResult2
 		{
-			add => _lookupPortfoliosResult2 += value;
-			remove => _lookupPortfoliosResult2 -= value;
+			add { }
+			remove { }
 		}
 
 		void ITransactionProvider.CancelOrders(bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, Security security, SecurityTypes? securityType, long? transactionId)
@@ -105,44 +105,44 @@ namespace StockSharp.Algo.Strategies
 			SafeGetConnector().UnRegisterPortfolio(portfolio);
 		}
 
-		private void OnConnectorLookupPortfoliosResult2(PortfolioLookupMessage criteria, IEnumerable<Portfolio> portfolios, IEnumerable<Portfolio> newPortfolios, Exception error)
-		{
-			_lookupPortfoliosResult2?.Invoke(criteria, portfolios, newPortfolios, error);
-		}
+		//private void OnConnectorLookupPortfoliosResult2(PortfolioLookupMessage criteria, IEnumerable<Portfolio> portfolios, IEnumerable<Portfolio> newPortfolios, Exception error)
+		//{
+		//	_lookupPortfoliosResult2?.Invoke(criteria, portfolios, newPortfolios, error);
+		//}
 
-		private void OnConnectorLookupPortfoliosResult(PortfolioLookupMessage criteria, IEnumerable<Portfolio> portfolios, Exception error)
-		{
-			_lookupPortfoliosResult?.Invoke(criteria, portfolios, error);
-		}
+		//private void OnConnectorLookupPortfoliosResult(PortfolioLookupMessage criteria, IEnumerable<Portfolio> portfolios, Exception error)
+		//{
+		//	_lookupPortfoliosResult?.Invoke(criteria, portfolios, error);
+		//}
 
-		private void OnConnectorMassOrderCancelFailed(long transactionId, Exception error)
-		{
-			_massOrderCancelFailed?.Invoke(transactionId, error);
-		}
+		//private void OnConnectorMassOrderCancelFailed(long transactionId, Exception error)
+		//{
+		//	_massOrderCancelFailed?.Invoke(transactionId, error);
+		//}
 
-		private void OnConnectorMassOrderCancelFailed2(long transactionId, Exception error, DateTimeOffset time)
-		{
-			_massOrderCancelFailed2?.Invoke(transactionId, error, time);
-		}
+		//private void OnConnectorMassOrderCancelFailed2(long transactionId, Exception error, DateTimeOffset time)
+		//{
+		//	_massOrderCancelFailed2?.Invoke(transactionId, error, time);
+		//}
 
-		private void OnConnectorMassOrderCanceled(long transactionId)
-		{
-			_massOrderCanceled?.Invoke(transactionId);
-		}
+		//private void OnConnectorMassOrderCanceled(long transactionId)
+		//{
+		//	_massOrderCanceled?.Invoke(transactionId);
+		//}
 
-		private void OnConnectorMassOrderCanceled2(long transactionId, DateTimeOffset time)
-		{
-			_massOrderCanceled2?.Invoke(transactionId, time);
-		}
+		//private void OnConnectorMassOrderCanceled2(long transactionId, DateTimeOffset time)
+		//{
+		//	_massOrderCanceled2?.Invoke(transactionId, time);
+		//}
 
-		private void OnConnectorOrderStatusFailed(long transactionId, Exception error)
-		{
-			_orderStatusFailed?.Invoke(transactionId, error);
-		}
+		//private void OnConnectorOrderStatusFailed(long transactionId, Exception error)
+		//{
+		//	_orderStatusFailed?.Invoke(transactionId, error);
+		//}
 
-		private void OnConnectorOrderStatusFailed2(long transactionId, Exception error, DateTimeOffset time)
-		{
-			_orderStatusFailed2?.Invoke(transactionId, error, time);
-		}
+		//private void OnConnectorOrderStatusFailed2(long transactionId, Exception error, DateTimeOffset time)
+		//{
+		//	_orderStatusFailed2?.Invoke(transactionId, error, time);
+		//}
 	}
 }

@@ -250,6 +250,8 @@ namespace StockSharp.Algo.Strategies
 		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new CachedSynchronizedDictionary<Order, OrderInfo>();
 
 		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new CachedSynchronizedDictionary<Subscription, bool>();
+		private Subscription _pfSubscription;
+		private Subscription _orderSubscription;
 
 		private DateTimeOffset _firstOrderTime;
 		private DateTimeOffset _lastOrderTime;
@@ -364,25 +366,19 @@ namespace StockSharp.Algo.Strategies
 				if (Connector == value)
 					return;
 
+				_pfSubscription = null;
+				_orderSubscription = null;
+
 				if (_connector != null)
 				{
-					_connector.NewOrder -= OnConnectorNewOrder;
-					_connector.OrderChanged -= OnConnectorOrderChanged;
+					_connector.OrderReceived -= OnConnectorOrderReceived;
+					_connector.OwnTradeReceived -= OnConnectorOwnTradeReceived;
 					_connector.OrderRegisterFailed -= OnConnectorOrderRegisterFailed;
 					_connector.OrderCancelFailed -= ProcessCancelOrderFail;
-					_connector.NewMyTrade -= OnConnectorNewMyTrade;
 					_connector.OrderEdited -= OnConnectorOrderEdited;
 					_connector.OrderEditFailed -= OnConnectorOrderEditFailed;
 					_connector.NewMessage -= OnConnectorNewMessage;
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
-					_connector.OrderStatusFailed -= OnConnectorOrderStatusFailed;
-					_connector.OrderStatusFailed2 -= OnConnectorOrderStatusFailed2;
-					_connector.LookupPortfoliosResult -= OnConnectorLookupPortfoliosResult;
-					_connector.LookupPortfoliosResult2 -= OnConnectorLookupPortfoliosResult2;
-					_connector.MassOrderCancelFailed -= OnConnectorMassOrderCancelFailed;
-					_connector.MassOrderCancelFailed2 -= OnConnectorMassOrderCancelFailed2;
-					_connector.MassOrderCanceled -= OnConnectorMassOrderCanceled;
-					_connector.MassOrderCanceled2 -= OnConnectorMassOrderCanceled2;
 					_connector.PositionReceived -= OnConnectorPositionReceived;
 
 					UnSubscribe(true);
@@ -392,38 +388,33 @@ namespace StockSharp.Algo.Strategies
 
 				if (_connector != null)
 				{
-					_connector.NewOrder += OnConnectorNewOrder;
-					_connector.OrderChanged += OnConnectorOrderChanged;
+					_connector.OrderReceived += OnConnectorOrderReceived;
+					_connector.OwnTradeReceived += OnConnectorOwnTradeReceived;
 					_connector.OrderRegisterFailed += OnConnectorOrderRegisterFailed;
 					_connector.OrderCancelFailed += ProcessCancelOrderFail;
-					_connector.NewMyTrade += OnConnectorNewMyTrade;
 					_connector.OrderEdited += OnConnectorOrderEdited;
 					_connector.OrderEditFailed += OnConnectorOrderEditFailed;
 					_connector.NewMessage += OnConnectorNewMessage;
 					_connector.ValuesChanged += OnConnectorValuesChanged;
-					_connector.OrderStatusFailed += OnConnectorOrderStatusFailed;
-					_connector.OrderStatusFailed2 += OnConnectorOrderStatusFailed2;
-					_connector.LookupPortfoliosResult += OnConnectorLookupPortfoliosResult;
-					_connector.LookupPortfoliosResult2 += OnConnectorLookupPortfoliosResult2;
-					_connector.MassOrderCancelFailed += OnConnectorMassOrderCancelFailed;
-					_connector.MassOrderCancelFailed2 += OnConnectorMassOrderCancelFailed2;
-					_connector.MassOrderCanceled += OnConnectorMassOrderCanceled;
-					_connector.MassOrderCanceled2 += OnConnectorMassOrderCanceled2;
 					_connector.PositionReceived += OnConnectorPositionReceived;
 
 					if (ParentStrategy == null)
 					{
-						Subscribe(new Subscription(new PortfolioLookupMessage
+						_pfSubscription = new Subscription(new PortfolioLookupMessage
 						{
 							IsSubscribe = true,
 							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null), true);
+						}, (SecurityMessage)null);
 
-						Subscribe(new Subscription(new OrderStatusMessage
+						Subscribe(_pfSubscription, true);
+
+						_orderSubscription = new Subscription(new OrderStatusMessage
 						{
 							IsSubscribe = true,
 							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null), true);
+						}, (SecurityMessage)null);
+
+						Subscribe(_orderSubscription, true);
 					}
 				}
 
@@ -1707,7 +1698,7 @@ namespace StockSharp.Algo.Strategies
 
 			AttachOrder(order);
 
-			myTrades.ForEach(OnConnectorNewMyTrade);
+			//myTrades.ForEach(OnConnectorNewMyTrade);
 		}
 
 		private void AttachOrder(Order order)
@@ -2149,16 +2140,24 @@ namespace StockSharp.Algo.Strategies
 				RaisePnLChanged();
 		}
 
-		private void OnConnectorNewMyTrade(MyTrade trade)
+		private void OnConnectorOwnTradeReceived(Subscription subscription, MyTrade trade)
 		{
+			if (_orderSubscription != subscription)
+				return;
+
 			if (IsOwnOrder(trade.Order))
 				AddMyTrade(trade);
 		}
 
-		private void OnConnectorNewOrder(Order order)
+		private void OnConnectorOrderReceived(Subscription subscription, Order order)
 		{
+			if (_orderSubscription != subscription)
+				return;
+
 			if (!_ordersInfo.ContainsKey(order) && (order.UserOrderId.CompareIgnoreCase(EnsureGetId()) || (RestoreChildOrders && order.StrategyId.CompareIgnoreCase(EnsureGetId()))))
 				AttachOrder(order);
+			else if (IsOwnOrder(order))
+				TryInvoke(() => ProcessOrder(order, true));
 		}
 
 		private void OnConnectorOrderEditFailed(long transactionId, OrderFail fail)
@@ -2201,12 +2200,6 @@ namespace StockSharp.Algo.Strategies
 			}
 
 			return _rootIdStr;
-		}
-
-		private void OnConnectorOrderChanged(Order order)
-		{
-			if (IsOwnOrder(order))
-				TryInvoke(() => ProcessOrder(order, true));
 		}
 
 		private void OnConnectorOrderRegisterFailed(OrderFail fail)
