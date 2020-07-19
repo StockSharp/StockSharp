@@ -327,6 +327,9 @@ namespace StockSharp.Algo
 						m.OriginalTransactionId = m.TransactionId;
 						m.TransactionId = transId;
 
+						if (_replaceId.TryGetValue(m.OriginalTransactionId, out var prev))
+							m.OriginalTransactionId = prev;
+
 						return m;
 					}
 
