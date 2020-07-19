@@ -36,6 +36,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new Dictionary<long, SubscriptionInfo>();
 		private readonly Dictionary<long, long> _replaceId = new Dictionary<long, long>();
 		private readonly HashSet<long> _allSecIdChilds = new HashSet<long>();
+		private readonly List<Message> _reMapSubscriptions = new List<Message>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -65,6 +66,19 @@ namespace StockSharp.Algo
 				case MessageTypes.OrderStatus:
 					return ProcessOrderStatusMessage((OrderStatusMessage)message);
 
+				case ExtendedMessageTypes.ProcessSuspended:
+				{
+					Message[] reMapSubscriptions;
+
+					lock (_sync)
+						reMapSubscriptions = _reMapSubscriptions.CopyAndClear();
+
+					foreach (var reMapSubscription in reMapSubscriptions)
+						base.OnSendInMessage(reMapSubscription);
+
+					return true;
+				}
+
 				default:
 				{
 					if (message is ISubscriptionMessage subscrMsg)
@@ -83,6 +97,7 @@ namespace StockSharp.Algo
 				_subscriptionsById.Clear();
 				_replaceId.Clear();
 				_allSecIdChilds.Clear();
+				_reMapSubscriptions.Clear();
 			}
 
 			return base.OnSendInMessage(message);
@@ -219,13 +234,14 @@ namespace StockSharp.Algo
 			{
 				case ExtendedMessageTypes.ReconnectingFinished:
 				{
-					Message[] subscriptions;
+					ProcessSuspendedMessage supended = null;
 
 					lock (_sync)
 					{
 						_replaceId.Clear();
+						_reMapSubscriptions.Clear();
 
-						subscriptions = _subscriptionsById.Values.Distinct().Select(i =>
+						_reMapSubscriptions.AddRange(_subscriptionsById.Values.Distinct().Select(i =>
 						{
 							var subscription = i.Subscription.TypedClone();
 							subscription.TransactionId = TransactionIdGenerator.GetNextId();
@@ -234,12 +250,15 @@ namespace StockSharp.Algo
 
 							this.AddInfoLog("Re-map subscription: {0}->{1} for '{2}'.", i.Subscription.TransactionId, subscription.TransactionId, i.Subscription);
 
-							return ((Message)subscription).LoopBack(this);
-						}).ToArray();
+							return (Message)subscription;
+						}));
+
+						if (_reMapSubscriptions.Count > 0)
+							supended = new ProcessSuspendedMessage(this);
 					}
 
-					foreach (var subscription in subscriptions)
-						base.OnInnerAdapterNewOutMessage(subscription);
+					if (supended != null)
+						base.OnInnerAdapterNewOutMessage(supended);
 
 					break;
 				}
