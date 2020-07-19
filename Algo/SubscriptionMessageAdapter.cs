@@ -34,7 +34,7 @@ namespace StockSharp.Algo
 
 		private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = new Dictionary<long, ISubscriptionMessage>();
 		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new Dictionary<long, SubscriptionInfo>();
-		private readonly Dictionary<long, long> _replaceId = new Dictionary<long, long>();
+		private readonly PairSet<long, long> _replaceId = new PairSet<long, long>();
 		private readonly HashSet<long> _allSecIdChilds = new HashSet<long>();
 		private readonly List<Message> _reMapSubscriptions = new List<Message>();
 
@@ -346,8 +346,8 @@ namespace StockSharp.Algo
 						m.OriginalTransactionId = m.TransactionId;
 						m.TransactionId = transId;
 
-						if (_replaceId.TryGetValue(m.OriginalTransactionId, out var prev))
-							m.OriginalTransactionId = prev;
+						if (_replaceId.TryGetKey(m.OriginalTransactionId, out var oldOriginId))
+							m.OriginalTransactionId = oldOriginId;
 
 						return m;
 					}
