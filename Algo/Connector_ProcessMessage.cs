@@ -1438,18 +1438,18 @@ namespace StockSharp.Algo
 						this.AddOrderInfoLog(order, "New order");
 
 						RaiseNewOrder(order);
-						RaiseReceived(order, message, OrderReceived);
 					}
 					else if (change.IsChanged)
 					{
 						this.AddOrderInfoLog(order, "Order changed");
 
 						RaiseOrderChanged(order);
-						RaiseReceived(order, message, OrderReceived);
 
 						if (change.IsEdit)
 							RaiseOrderEdited(transactionId, order);
 					}
+
+					RaiseReceived(order, message, OrderReceived);
 				}
 			}
 			else
