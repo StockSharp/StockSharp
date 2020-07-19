@@ -279,6 +279,7 @@ namespace StockSharp.Algo.Strategies
 			_maxErrorCount = this.Param(nameof(MaxErrorCount), 1);
 			_maxOrderRegisterErrorCount = this.Param(nameof(MaxOrderRegisterErrorCount), 10);
 			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
+			_waitRulesOnStop = this.Param(nameof(WaitRulesOnStop), true);
 			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
 			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
 			_commentMode = this.Param<StrategyCommentModes>(nameof(CommentMode));
@@ -1115,6 +1116,18 @@ namespace StockSharp.Algo.Strategies
 			set => _disposeOnStop.Value = value;
 		}
 
+		private readonly StrategyParam<bool> _waitRulesOnStop;
+
+		/// <summary>
+		/// Wait <see cref="Rules"/> to finish before strategy become into <see cref="ProcessStates.Stopped"/> state.
+		/// </summary>
+		[Browsable(false)]
+		public bool WaitRulesOnStop
+		{
+			get => _waitRulesOnStop.Value;
+			set => _waitRulesOnStop.Value = value;
+		}
+
 		private readonly StrategyParam<bool> _waitAllTrades;
 
 		/// <summary>
@@ -1871,10 +1884,20 @@ namespace StockSharp.Algo.Strategies
 		{
 			if (!Rules.IsEmpty())
 			{
-				this.AddLog(LogLevels.Debug,
-					() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.ToString()).JoinCommaSpace()));
+				if (WaitRulesOnStop)
+				{
+					this.AddLog(LogLevels.Info,
+						() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.ToString()).JoinCommaSpace()));
 
-				return;
+					return;
+				}
+				else
+				{
+					foreach (var rule in Rules)
+						rule.Dispose();
+
+					Rules.Clear();
+				}
 			}
 
 			ProcessState = ProcessStates.Stopped;
