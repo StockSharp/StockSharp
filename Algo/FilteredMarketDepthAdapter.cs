@@ -226,7 +226,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = new Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AssociatedSecurityAdapter"/>.
+		/// Initializes a new instance of the <see cref="FilteredMarketDepthAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Inner message adapter.</param>
 		public FilteredMarketDepthAdapter(IMessageAdapter innerAdapter)
