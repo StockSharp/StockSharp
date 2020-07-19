@@ -43,47 +43,47 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Level1.
 		/// </summary>
-		public static DataType Level1 { get; } = Create(typeof(Level1ChangeMessage), null).SetName(LocalizedStrings.Level1).Immutable();
+		public static DataType Level1 { get; } = Create(typeof(Level1ChangeMessage), null).Immutable();
 
 		/// <summary>
 		/// Market depth.
 		/// </summary>
-		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).SetName(LocalizedStrings.MarketDepth).Immutable();
+		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).Immutable();
 
 		/// <summary>
 		/// Filtered market depth.
 		/// </summary>
-		public static DataType FilteredMarketDepth { get; } = Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).SetName(LocalizedStrings.FilteredBook).Immutable();
+		public static DataType FilteredMarketDepth { get; } = Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).Immutable();
 
 		/// <summary>
 		/// Position changes.
 		/// </summary>
-		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).SetName(LocalizedStrings.Str972).Immutable();
+		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).Immutable();
 
 		/// <summary>
 		/// News.
 		/// </summary>
-		public static DataType News { get; } = Create(typeof(NewsMessage), null).SetName(LocalizedStrings.News).Immutable();
+		public static DataType News { get; } = Create(typeof(NewsMessage), null).Immutable();
 
 		/// <summary>
 		/// Securities.
 		/// </summary>
-		public static DataType Securities { get; } = Create(typeof(SecurityMessage), null).SetName(LocalizedStrings.Securities).Immutable();
+		public static DataType Securities { get; } = Create(typeof(SecurityMessage), null).Immutable();
 
 		/// <summary>
 		/// Ticks.
 		/// </summary>
-		public static DataType Ticks { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Tick).SetName(LocalizedStrings.Ticks).Immutable();
+		public static DataType Ticks { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Tick).Immutable();
 
 		/// <summary>
 		/// Order log.
 		/// </summary>
-		public static DataType OrderLog { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog).SetName(LocalizedStrings.OrderLog).Immutable();
+		public static DataType OrderLog { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog).Immutable();
 
 		/// <summary>
 		/// Transactions.
 		/// </summary>
-		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).SetName(LocalizedStrings.Transactions).Immutable();
+		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).Immutable();
 
 		/// <summary>
 		/// Board info.
@@ -272,12 +272,33 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var name = Name;
+			if (this == Ticks)
+				return LocalizedStrings.Ticks;
+			else if (this == Level1)
+				return LocalizedStrings.Level1;
+			else if (this == OrderLog)
+				return LocalizedStrings.OrderLog;
+			else if (this == MarketDepth)
+				return LocalizedStrings.MarketDepth;
+			else if (this == FilteredMarketDepth)
+				return LocalizedStrings.FilteredBook;
+			else if (this == Transactions)
+				return LocalizedStrings.Transactions;
+			else if (this == PositionChanges)
+				return LocalizedStrings.Str972;
+			else if (this == News)
+				return LocalizedStrings.News;
+			else if (this == Securities)
+				return LocalizedStrings.Securities;
+			else
+			{
+				var name = Name;
 
-			if (name.IsEmpty())
-				name = $"{MessageType.GetDisplayName()}: {Arg}";
+				if (name.IsEmpty())
+					name = $"{MessageType.GetDisplayName()}: {Arg}";
 
-			return name;
+				return name;
+			}
 		}
 
 		/// <summary>
