@@ -53,7 +53,7 @@ namespace StockSharp.BitStamp
 
 			var price = regMsg.OrderType == OrderTypes.Market ? (decimal?)null : regMsg.Price;
 			
-			var result = _httpClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.Side.ToString().ToLowerInvariant(), price, regMsg.Volume, condition?.StopPrice, regMsg.TillDate == DateTime.Today, regMsg.TimeInForce == TimeInForce.CancelBalance);
+			var result = _httpClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.Side.ToString().ToLowerInvariant(), price, regMsg.Volume, condition?.StopPrice, regMsg.TillDate.IsToday(), regMsg.TimeInForce == TimeInForce.CancelBalance);
 
 			_orderInfo.Add(result.Id, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
 

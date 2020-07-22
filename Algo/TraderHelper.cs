@@ -3185,16 +3185,6 @@ namespace StockSharp.Algo
 			throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str925);
 		}
 
-		/// <summary>
-		/// To check the specified date is today.
-		/// </summary>
-		/// <param name="date">The specified date.</param>
-		/// <returns><see langword="true"/> if the specified date is today, otherwise, <see langword="false"/>.</returns>
-		public static bool IsToday(this DateTimeOffset date)
-		{
-			return date.DateTime == DateTime.Today;
-		}
-
 		///// <summary>
 		///// To check the specified date is GTC.
 		///// </summary>

@@ -3325,5 +3325,47 @@ namespace StockSharp.Messages
 
 			return channel.State != ChannelStates.Stopped;
 		}
+
+		/// <summary>
+		/// Constant value for <see cref="OrderRegisterMessage.TillDate"/> means Today(=Session).
+		/// </summary>
+		public static DateTimeOffset Today = new DateTimeOffset(2100, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
+		/// <summary>
+		/// To check the specified date is today.
+		/// </summary>
+		/// <param name="date">The specified date.</param>
+		/// <returns><see langword="true"/> if the specified date is today, otherwise, <see langword="false"/>.</returns>
+		public static bool IsToday(this DateTimeOffset? date)
+		{
+			return date != null && date.Value.IsToday();
+		}
+
+		/// <summary>
+		/// To check the specified date is today.
+		/// </summary>
+		/// <param name="date">The specified date.</param>
+		/// <returns><see langword="true"/> if the specified date is today, otherwise, <see langword="false"/>.</returns>
+		public static bool IsToday(this DateTimeOffset date)
+		{
+			return date == Today;
+		}
+
+		/// <summary>
+		/// Determines the specified date equals is <see cref="Today"/> and returns <see cref="DateTime.Today"/>.
+		/// </summary>
+		/// <param name="date">The specified date.</param>
+		/// <returns>Result value.</returns>
+		public static DateTimeOffset? EnsureToday(this DateTimeOffset? date)
+			=> date.EnsureToday(DateTime.Today.ApplyUtc());
+
+		/// <summary>
+		/// Determines the specified date equals is <see cref="Today"/> and returns <paramref name="todayValue"/>.
+		/// </summary>
+		/// <param name="date">The specified date.</param>
+		/// <param name="todayValue">Today value.</param>
+		/// <returns>Result value.</returns>
+		public static DateTimeOffset? EnsureToday(this DateTimeOffset? date, DateTimeOffset? todayValue)
+			=> date == null ? null : (date.IsToday() ? todayValue : date);
 	}
 }
