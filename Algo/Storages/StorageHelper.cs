@@ -1159,7 +1159,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var tf = subscription.GetTimeFrame();
 
-					if (subscription.BuildMode == MarketDataBuildModes.Build)
+					DateTimeOffset? TryBuildCandles()
 					{
 						IMarketDataStorage storage;
 
@@ -1196,7 +1196,7 @@ namespace StockSharp.Algo.Storages
 
 							if (buildFrom == DataType.Ticks)
 							{
-								lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+								return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 												.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
 							}
@@ -1206,11 +1206,9 @@ namespace StockSharp.Algo.Storages
 								{
 									case null:
 									case Level1Fields.LastTradePrice:
-										lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-											                .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											                .ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
-
-										break;
+										return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+															.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+															.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
 											
 									// TODO
 									//case Level1Fields.SpreadMiddle:
@@ -1227,31 +1225,36 @@ namespace StockSharp.Algo.Storages
 								{
 									case null:
 									case Level1Fields.LastTradePrice:
-										lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-											                .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											                .ToTicks()
-											                .ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
-										break;
+										return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+															.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+															.ToTicks()
+															.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
 
 									case Level1Fields.BestBidPrice:
 									case Level1Fields.BestAskPrice:
 									case Level1Fields.SpreadMiddle:
-										lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-											                .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-											                .ToOrderBooks()
-											                .ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
-										break;
+										return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+															.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+															.ToOrderBooks()
+															.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
 								}
 							}
 							else if (buildFrom == DataType.MarketDepth)
 							{
-								lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
+								return LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
 													.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-									                .ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
+													.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
 							}
 							else
 								throw new ArgumentOutOfRangeException(nameof(subscription), subscription.BuildFrom, LocalizedStrings.Str1219);
 						}
+
+						return null;
+					}
+
+					if (subscription.BuildMode == MarketDataBuildModes.Build)
+					{
+						lastTime = TryBuildCandles();
 					}
 					else
 					{
@@ -1268,6 +1271,9 @@ namespace StockSharp.Algo.Storages
 							: null;
 
 						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(secId, tf, subscription.AllowBuildFromSmallerTimeFrame), subscription, settings.DaysLoad, SendReply, SendOut, filter);
+
+						if (lastTime == null && subscription.BuildMode == MarketDataBuildModes.LoadAndBuild)
+							lastTime = TryBuildCandles();
 					}
 				}
 				else
@@ -1320,7 +1326,7 @@ namespace StockSharp.Algo.Storages
 			return LoadMessages(messages, range.Item1, subscription.TransactionId, sendReply, newOutMessage, filter);
 		}
 
-		private static DateTimeOffset? LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
+		private static DateTimeOffset LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
 			if (messages == null)
