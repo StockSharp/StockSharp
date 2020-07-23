@@ -93,9 +93,9 @@
 		/// <param name="dataType">Data type info.</param>
 		/// <returns><see cref="MarketDataTypes"/> value or <see langword="null"/> if cannot be converted.</returns>
 		[Obsolete]
-		public static MarketDataTypes? ToMarketDataType(this DataType dataType)
+		public static MarketDataTypes ToMarketDataType(this DataType dataType)
 		{
-			if (dataType == null)
+			if (dataType is null)
 				throw new ArgumentNullException(nameof(dataType));
 
 			if (dataType == DataType.Ticks)
@@ -112,8 +112,10 @@
 				return MarketDataTypes.Board;
 			else if (dataType.IsCandles)
 				return dataType.MessageType.ToCandleMarketDataType();
+			else if (dataType == DataType.FilteredMarketDepth)
+				return MarketDataTypes.MarketDepth;
 			else
-				return null;
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}
 
 		/// <summary>

@@ -197,7 +197,7 @@ namespace StockSharp.Messages
 		{
 #pragma warning disable CS0618 // Type or member is obsolete
 #pragma warning disable CS0612 // Type or member is obsolete
-			get => DataType2.ToMarketDataType().Value;
+			get => DataType2.ToMarketDataType();
 			set => DataType2 = value.ToDataType(Arg);
 #pragma warning restore CS0612 // Type or member is obsolete
 #pragma warning restore CS0618 // Type or member is obsolete
