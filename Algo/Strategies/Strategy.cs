@@ -260,6 +260,7 @@ namespace StockSharp.Algo.Strategies
 		private DateTimeOffset _prevTradeDate;
 		private bool _isPrevDateTradable;
 		private bool _stopping;
+		private DateTimeOffset _lastRegisterTime;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Strategy"/>.
@@ -289,6 +290,8 @@ namespace StockSharp.Algo.Strategies
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
 			_allowTrading = this.Param(nameof(AllowTrading), true);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
+			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
+			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
 			
 			InitMaxOrdersKeepTime();
 
@@ -757,6 +760,52 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
+		/// <summary>
+		/// Current number of order changes.
+		/// </summary>
+		[Browsable(false)]
+		public int CurrentRegisterCount { get; private set; }
+
+		private readonly StrategyParam<int> _maxRegisterCount;
+
+		/// <summary>
+		/// The maximum number of orders above which the algorithm will be stopped.
+		/// </summary>
+		/// <remarks>
+		/// The default value is <see cref="int.MaxValue"/>.
+		/// </remarks>
+		public int MaxRegisterCount
+		{
+			get => _maxRegisterCount.Value;
+			set
+			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1291);
+
+				_maxRegisterCount.Value = value;
+			}
+		}
+
+		private readonly StrategyParam<TimeSpan> _registerInterval;
+
+		/// <summary>
+		/// The order registration interval above which the new order would not be registered.
+		/// </summary>
+		/// <remarks>
+		/// By default, the interval is disabled and it is equal to <see cref="TimeSpan.Zero"/>.
+		/// </remarks>
+		public TimeSpan RegisterInterval
+		{
+			get => _registerInterval.Value;
+			set
+			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
+
+				_registerInterval.Value = value;
+			}
+		}
+
 		private ProcessStates _processState;
 
 		/// <summary>
@@ -1121,7 +1170,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Wait <see cref="Rules"/> to finish before strategy become into <see cref="ProcessStates.Stopped"/> state.
 		/// </summary>
-		[Browsable(false)]
+		//[Browsable(false)]
 		public bool WaitRulesOnStop
 		{
 			get => _waitRulesOnStop.Value;
@@ -1318,6 +1367,8 @@ namespace StockSharp.Algo.Strategies
 			ErrorState = LogLevels.Info;
 
 			OrderRegisterErrorCount = default;
+			CurrentRegisterCount = default;
+			_lastRegisterTime = default;
 		}
 
 		/// <summary>
@@ -1334,6 +1385,42 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		protected virtual void OnStopped()
 		{
+		}
+
+		private bool CheckRegisterLimits()
+		{
+			if (CurrentRegisterCount >= MaxRegisterCount)
+			{
+				this.AddWarningLog(LocalizedStrings.Str1317Params, MaxRegisterCount);
+				Stop();
+				return false;
+			}
+
+			CurrentRegisterCount++;
+
+			return true;
+		}
+
+		private bool CheckIntervalLimit()
+		{
+			if (RegisterInterval == default)
+				return true;
+
+			var now = CurrentTime;
+			var diff = (_lastRegisterTime + RegisterInterval) - now;
+
+			if (diff >= TimeSpan.Zero)
+			{
+				this.AddInfoLog(LocalizedStrings.Str1318 + " " +
+					LocalizedStrings.Str1319Params, diff, _lastRegisterTime, now, RegisterInterval);
+
+				return false;
+			}
+			else
+			{
+				_lastRegisterTime = now;
+				return true;
+			}
 		}
 
 		private bool CanTrade()
@@ -1355,6 +1442,12 @@ namespace StockSharp.Algo.Strategies
 				this.AddWarningLog("Strategy is stopping.");
 				return false;
 			}
+
+			if (!CheckRegisterLimits())
+				return false;
+
+			if (!CheckIntervalLimit())
+				return false;
 
 			return true;
 		}
