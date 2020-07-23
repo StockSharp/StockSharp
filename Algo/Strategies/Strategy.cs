@@ -774,7 +774,7 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// The default value is <see cref="int.MaxValue"/>.
 		/// </remarks>
-		public int MaxRegisterCount
+		public virtual int MaxRegisterCount
 		{
 			get => _maxRegisterCount.Value;
 			set
@@ -794,7 +794,7 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// By default, the interval is disabled and it is equal to <see cref="TimeSpan.Zero"/>.
 		/// </remarks>
-		public TimeSpan RegisterInterval
+		public virtual TimeSpan RegisterInterval
 		{
 			get => _registerInterval.Value;
 			set
@@ -1171,7 +1171,7 @@ namespace StockSharp.Algo.Strategies
 		/// Wait <see cref="Rules"/> to finish before strategy become into <see cref="ProcessStates.Stopped"/> state.
 		/// </summary>
 		//[Browsable(false)]
-		public bool WaitRulesOnStop
+		public virtual bool WaitRulesOnStop
 		{
 			get => _waitRulesOnStop.Value;
 			set => _waitRulesOnStop.Value = value;

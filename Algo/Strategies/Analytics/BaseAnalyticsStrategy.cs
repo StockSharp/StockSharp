@@ -168,6 +168,30 @@ namespace StockSharp.Algo.Strategies.Analytics
 			set => base.MaxOrderRegisterErrorCount = value;
 		}
 
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override bool WaitRulesOnStop
+		{
+			get => base.WaitRulesOnStop;
+			set => base.WaitRulesOnStop = value;
+		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override int MaxRegisterCount
+		{
+			get => base.MaxRegisterCount;
+			set => base.MaxRegisterCount = value;
+		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override TimeSpan RegisterInterval
+		{
+			get => base.RegisterInterval;
+			set => base.RegisterInterval = value;
+		}
+
 		/// <summary>
 		/// Initialize <see cref="BaseAnalyticsStrategy"/>.
 		/// </summary>
