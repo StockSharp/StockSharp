@@ -54,7 +54,7 @@
 					копирования: 1) в поле <legacyBold>Хранилище</legacyBold> нужно будет ввести имя бакета, 2) в поле <legacyBold>Адрес</legacyBold> нужно использовать не имя, а адрес регионального дата центра, который можно узнать <externalLink>
 					<linkText>здесь</linkText>
 						<linkAlternateText>Optional alternate text</linkAlternateText>
-							<linkUri>//http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</linkUri>
+							<linkUri>https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</linkUri>
 						<linkTarget>_blank</linkTarget>
 					</externalLink>.</para>
 					<mediaLink>
