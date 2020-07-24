@@ -62,8 +62,8 @@ namespace StockSharp.Algo.Export
 		/// To export values.
 		/// </summary>
 		/// <param name="values">Value.</param>
-		/// <returns>Count of expored values.</returns>
-		public int Export(IEnumerable values)
+		/// <returns>Count and last time.</returns>
+		public (int, DateTimeOffset?) Export(IEnumerable values)
 		{
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
@@ -111,70 +111,70 @@ namespace StockSharp.Algo.Export
 		/// To export <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int Export(IEnumerable<QuoteChangeMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="Level1ChangeMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int Export(IEnumerable<Level1ChangeMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int ExportTicks(IEnumerable<ExecutionMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="ExecutionTypes.OrderLog"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int ExportOrderLog(IEnumerable<ExecutionMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int ExportTransactions(IEnumerable<ExecutionMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="CandleMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int Export(IEnumerable<CandleMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="NewsMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int Export(IEnumerable<NewsMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="SecurityMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int Export(IEnumerable<SecurityMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int Export(IEnumerable<PositionChangeMessage> messages);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="IndicatorValue"/>.
 		/// </summary>
 		/// <param name="values">Values.</param>
-		/// <returns>Count of expored values.</returns>
-		protected abstract int Export(IEnumerable<IndicatorValue> values);
+		/// <returns>Count and last time.</returns>
+		protected abstract (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values);
 	}
 }

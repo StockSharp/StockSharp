@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -72,6 +72,7 @@ namespace StockSharp.Algo.Export
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
 				var row = 1;
+				var lastTime = default(DateTimeOffset?);
 
 				foreach (var message in messages)
 				{
@@ -93,16 +94,18 @@ namespace StockSharp.Algo.Export
 							.SetCell(10, row, message.OpenInterest);
 					}
 
+					lastTime = message.ServerTime;
+
 					if (!Check(++row))
 						break;
 				}
 
-				return row - 1;
+				return (row - 1, lastTime);
 			});
 		}
 
 		/// <inheritdoc />
-		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -120,6 +123,7 @@ namespace StockSharp.Algo.Export
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
 				var row = 1;
+				var lastTime = default(DateTimeOffset?);
 
 				foreach (var message in messages)
 				{
@@ -133,16 +137,18 @@ namespace StockSharp.Algo.Export
 						.SetCell(6, row, message.IsUpTick)
 						.SetCell(7, row, message.Currency);
 
+					lastTime = message.ServerTime;
+
 					if (!Check(++row))
 						break;
 				}
 
-				return row;
+				return (row - 1, lastTime);
 			});
 		}
 
 		/// <inheritdoc />
-		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -168,6 +174,7 @@ namespace StockSharp.Algo.Export
 				//worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Failed), null, Colors.Red);
 
 				var row = 1;
+				var lastTime = default(DateTimeOffset?);
 
 				foreach (var message in messages)
 				{
@@ -187,20 +194,23 @@ namespace StockSharp.Algo.Export
 						.SetCell(12, row, message.HasOrderInfo)
 						.SetCell(13, row, message.HasTradeInfo);
 
+					lastTime = message.ServerTime;
+
 					if (!Check(++row))
 						break;
 				}
 
-				return row - 1;
+				return (row - 1, lastTime);
 			});
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			return Do(worker =>
 			{
 				var count = 0;
+				var lastTime = default(DateTimeOffset?);
 
 				var rowIndex = 0;
 
@@ -229,18 +239,20 @@ namespace StockSharp.Algo.Export
 						count++;
 					}
 
+					lastTime = message.ServerTime;
+
 					rowIndex += 5;
 
 					if (!Check(rowIndex))
 						break;
 				}
 
-				return count;
+				return (count, lastTime);
 			});
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -279,6 +291,7 @@ namespace StockSharp.Algo.Export
 				//}
 
 				var row = 1;
+				var lastTime = default(DateTimeOffset?);
 
 				foreach (var message in messages)
 				{
@@ -300,11 +313,13 @@ namespace StockSharp.Algo.Export
 						worker.SetCell(columns[field], row, pair.Value);
 					}
 
+					lastTime = message.ServerTime;
+
 					if (!Check(++row))
 						break;
 				}
 
-				return row - 1;
+				return (row - 1, lastTime);
 			});
 		}
 
@@ -317,7 +332,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<PositionChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -327,6 +342,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
 
 				var row = 1;
+				var lastTime = default(DateTimeOffset?);
 
 				foreach (var message in messages)
 				{
@@ -348,16 +364,18 @@ namespace StockSharp.Algo.Export
 						worker.SetCell(columns[type], row, pair.Value);
 					}
 
+					lastTime = message.ServerTime;
+
 					if (!Check(++row))
 						break;
 				}
 
-				return row - 1;
+				return (row - 1, lastTime);
 			});
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<IndicatorValue> values)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
 		{
 			return Do(worker =>
 			{
@@ -369,6 +387,8 @@ namespace StockSharp.Algo.Export
 
 				row++;
 
+				var lastTime = default(DateTimeOffset?);
+
 				foreach (var value in values)
 				{
 					worker.SetCell(0, row, value.Time);
@@ -376,12 +396,14 @@ namespace StockSharp.Algo.Export
 					var col = 1;
 					foreach (var indVal in value.ValuesAsDecimal)
 						worker.SetCell(col++, row, indVal);
+
+					lastTime = value.Time;
 				
 					if (!Check(++row))
 						break;
 				}
 
-				return row - 1;
+				return (row - 1, lastTime);
 			});
 		}
 
@@ -400,7 +422,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<CandleMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -417,6 +439,8 @@ namespace StockSharp.Algo.Export
 
 				row++;
 
+				var lastTime = default(DateTimeOffset?);
+
 				foreach (var candle in messages)
 				{
 					worker
@@ -428,16 +452,18 @@ namespace StockSharp.Algo.Export
 						.SetCell(5, row, candle.TotalVolume)
 						.SetCell(6, row, candle.OpenInterest);
 
+					lastTime = candle.OpenTime;
+
 					if (!Check(++row))
 						break;
 				}
 
-				return row - 1;
+				return (row - 1, lastTime);
 			});
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<NewsMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -455,6 +481,8 @@ namespace StockSharp.Algo.Export
 
 				row++;
 
+				var lastTime = default(DateTimeOffset?);
+
 				foreach (var n in messages)
 				{
 					worker
@@ -467,16 +495,18 @@ namespace StockSharp.Algo.Export
 						.SetCell(6, row, n.Source)
 						.SetCell(7, row, n.Url);
 
+					lastTime = n.ServerTime;
+
 					if (!Check(++row))
 						break;
 				}
 
-				return row - 1;
+				return (row - 1, lastTime);
 			});
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<SecurityMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
 		{
 			return Do(worker =>
 			{
@@ -522,6 +552,8 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, "SEDOL").SetStyle(colIndex, typeof(string));
 
 				var rowIndex = 1;
+
+				var lastTime = default(DateTimeOffset?);
 
 				foreach (var security in messages)
 				{
@@ -572,13 +604,13 @@ namespace StockSharp.Algo.Export
 						break;
 				}
 
-				return rowIndex - 1;
+				return (rowIndex - 1, lastTime);
 			});
 		}
 
-		private int Do(Func<IExcelWorker, int> action)
+		private (int, DateTimeOffset?) Do(Func<IExcelWorker, (int, DateTimeOffset?)> action)
 		{
-			if (action == null)
+			if (action is null)
 				throw new ArgumentNullException(nameof(action));
 
 			using (var stream = File.OpenWrite(Path))

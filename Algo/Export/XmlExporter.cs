@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
 		{
 			return Do(messages, "orderLog", (writer, item) =>
 			{
@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
 		{
 			return Do(messages, "ticks", (writer, trade) =>
 			{
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
 		{
 			return Do(messages, "transactions", (writer, item) =>
 			{
@@ -164,7 +164,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			return Do(messages, "depths", (writer, depth) =>
 			{
@@ -197,7 +197,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			return Do(messages, "level1", (writer, message) =>
 			{
@@ -214,7 +214,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<PositionChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
 		{
 			return Do(messages, "positions", (writer, message) =>
 			{
@@ -237,7 +237,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<IndicatorValue> values)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
 		{
 			return Do(values, "values", (writer, value) =>
 			{
@@ -254,7 +254,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<CandleMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
 		{
 			return Do(messages, "candles", (writer, candle) =>
 			{
@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<NewsMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
 		{
 			return Do(messages, "news", (writer, n) =>
 			{
@@ -320,7 +320,7 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<SecurityMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
 		{
 			return Do(messages, "securities", (writer, security) =>
 			{
@@ -441,9 +441,10 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private int Do<TValue>(IEnumerable<TValue> values, string rootElem, Action<XmlWriter, TValue> action)
+		private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values, string rootElem, Action<XmlWriter, TValue> action)
 		{
 			var count = 0;
+			var lastTime = default(DateTimeOffset?);
 			
 			using (var writer = XmlWriter.Create(Path, new XmlWriterSettings { Indent = true }))
 			{
@@ -455,13 +456,17 @@ namespace StockSharp.Algo.Export
 						break;
 
 					action(writer, value);
+
 					count++;
+
+					if (value is IServerTimeMessage timeMsg)
+						lastTime = timeMsg.ServerTime;
 				}
 
 				writer.WriteEndElement();
 			}
 
-			return count;
+			return (count, lastTime);
 		}
 	}
 }

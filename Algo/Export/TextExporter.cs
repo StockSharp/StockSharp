@@ -53,48 +53,49 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		protected override (int, DateTimeOffset?) ExportTransactions(IEnumerable<ExecutionMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
 			=> Do(messages.ToTimeQuotes());
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<CandleMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<CandleMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<NewsMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<NewsMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<SecurityMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<SecurityMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<PositionChangeMessage> messages)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<PositionChangeMessage> messages)
 			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override int Export(IEnumerable<IndicatorValue> values)
+		protected override (int, DateTimeOffset?) Export(IEnumerable<IndicatorValue> values)
 			=> Do(values);
 
-		private int Do<TValue>(IEnumerable<TValue> values)
+		private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values)
 		{
 			var count = 0;
+			var lastTime = default(DateTimeOffset?);
 
 			using (var writer = new StreamWriter(Path, true))
 			{
@@ -110,13 +111,17 @@ namespace StockSharp.Algo.Export
 						break;
 
 					writer.WriteLine(formater.FormatWithCache(ref templateCache, _template, value));
+					
 					count++;
+
+					if (value is IServerTimeMessage timeMsg)
+						lastTime = timeMsg.ServerTime;
 				}
 
 				//writer.Flush();
 			}
 
-			return count;
+			return (count, lastTime);
 		}
 	}
 }

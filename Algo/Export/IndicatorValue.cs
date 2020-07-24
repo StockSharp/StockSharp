@@ -13,7 +13,7 @@ namespace StockSharp.Algo.Export
 	/// <summary>
 	/// Indicator value with time.
 	/// </summary>
-	public class IndicatorValue
+	public class IndicatorValue : IServerTimeMessage
 	{
 		/// <summary>
 		/// Security.
@@ -111,5 +111,22 @@ namespace StockSharp.Algo.Export
 			else
 				throw new ArgumentOutOfRangeException(nameof(value), value.GetType(), LocalizedStrings.Str1655);
 		}
+
+		DateTimeOffset IServerTimeMessage.ServerTime
+		{
+			get => Time;
+			set => Time = value;
+		}
+
+		DateTimeOffset IMessage.LocalTime
+		{
+			get => Time;
+			set => Time = value;
+		}
+		
+		MessageTypes IMessage.Type => throw new NotSupportedException();
+		IMessageAdapter IMessage.Adapter { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		MessageBackModes IMessage.BackMode { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		object ICloneable.Clone() => throw new NotSupportedException();
 	}
 }
