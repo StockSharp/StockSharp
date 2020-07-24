@@ -63,21 +63,6 @@
 
 			this.AddInfoLog(LocalizedStrings.Str2870Params.Put(fileName, DataType.MessageType.Name));
 
-			Func<Message, SecurityId> getSecurityId = null;
-
-			if (DataType == DataType.Securities)
-				getSecurityId = m => ((SecurityMessage)m).SecurityId;
-			else if (DataType == DataType.MarketDepth)
-				getSecurityId = m => ((QuoteChangeMessage)m).SecurityId;
-			else if (DataType == DataType.Level1)
-				getSecurityId = m => ((Level1ChangeMessage)m).SecurityId;
-			else if (DataType == DataType.PositionChanges)
-				getSecurityId = m => ((PositionChangeMessage)m).SecurityId;
-			else if (DataType == DataType.Ticks || DataType == DataType.OrderLog || DataType == DataType.Transactions)
-				getSecurityId = m => ((ExecutionMessage)m).SecurityId;
-			else if (DataType.IsCandles)
-				getSecurityId = m => ((CandleMessage)m).SecurityId;
-
 			try
 			{
 				var len = new FileInfo(fileName).Length;
@@ -94,7 +79,7 @@
 						buffer.Add(msg);
 
 						if (buffer.Count > 1000)
-							FlushBuffer(buffer, getSecurityId);
+							FlushBuffer(buffer);
 					}
 					else
 					{
@@ -139,7 +124,7 @@
 			}
 
 			if (buffer.Count > 0)
-				FlushBuffer(buffer, getSecurityId);
+				FlushBuffer(buffer);
 		}
 
 		private SecurityId TryInitSecurity(SecurityId securityId)
@@ -162,7 +147,7 @@
 			return securityId;
 		}
 
-		private void FlushBuffer(List<Message> buffer, Func<Message, SecurityId> getSecurityId)
+		private void FlushBuffer(List<Message> buffer)
 		{
 			var registry = ServicesRegistry.StorageRegistry;
 
@@ -172,14 +157,11 @@
 			}
 			else
 			{
-				if (getSecurityId == null)
-					throw new ArgumentNullException(nameof(getSecurityId));
-
 				foreach (var typeGroup in buffer.GroupBy(i => i.GetType()))
 				{
 					var dataType = typeGroup.Key;
 
-					foreach (var secGroup in typeGroup.GroupBy(getSecurityId))
+					foreach (var secGroup in typeGroup.GroupBy(g => ((ISecurityIdMessage)g).SecurityId))
 					{
 						var secId = TryInitSecurity(secGroup.Key);
 
