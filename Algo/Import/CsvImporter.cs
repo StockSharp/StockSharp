@@ -57,9 +57,23 @@
 		/// <param name="fileName">File name.</param>
 		/// <param name="updateProgress">Progress notification.</param>
 		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
-		public void Import(string fileName, Action<int> updateProgress, Func<bool> isCancelled)
+		/// <returns>Count and last time.</returns>
+		public (int, DateTimeOffset?) Import(string fileName, Action<int> updateProgress, Func<bool> isCancelled)
 		{
+			var count = 0;
+			var lastTime = default(DateTimeOffset?);
+
 			var buffer = new List<Message>();
+
+			void Flush()
+			{
+				count += buffer.Count;
+
+				if (buffer.LastOrDefault() is IServerTimeMessage timeMsg)
+					lastTime = timeMsg.ServerTime;
+
+				FlushBuffer(buffer);
+			}
 
 			this.AddInfoLog(LocalizedStrings.Str2870Params.Put(fileName, DataType.MessageType.Name));
 
@@ -79,7 +93,7 @@
 						buffer.Add(msg);
 
 						if (buffer.Count > 1000)
-							FlushBuffer(buffer);
+							Flush();
 					}
 					else
 					{
@@ -124,7 +138,9 @@
 			}
 
 			if (buffer.Count > 0)
-				FlushBuffer(buffer);
+				Flush();
+
+			return (count, lastTime);
 		}
 
 		private SecurityId TryInitSecurity(SecurityId securityId)
