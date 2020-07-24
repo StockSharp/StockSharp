@@ -104,12 +104,6 @@
 
       <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
 
-      <externalLink>
-          <linkText>SHFB on CodePlex</linkText>
-          <linkAlternateText>Go to CodePlex</linkAlternateText>
-          <linkUri>http://shfb.codeplex.com</linkUri>
-      </externalLink>
-
       <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
       <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
       <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>

@@ -42,7 +42,7 @@ _connector.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSour
     <externalLink>
 	<linkText>Xceed.Wpf.Toolkit</linkText>
 <linkAlternateText>Optional alternate text</linkAlternateText>
-<linkUri>http://wpftoolkit.codeplex.com/</linkUri>
+<linkUri>https://wpftoolkit.codeplex.com/</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>. Its own graphical components are placed in the 
 <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>

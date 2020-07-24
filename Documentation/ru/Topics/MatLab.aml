@@ -7,7 +7,7 @@
 		  <token>matlab</token> создан для трейдеров, которые пишут торговые алгоритмы внутри среды <externalLink>
 			<linkText>MatLab MathWorks</linkText>
 			<linkAlternateText>MathWorks</linkAlternateText>
-			<linkUri>http://www.mathworks.com</linkUri>
+			<linkUri>https://mathworks.com</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>.
 	  </para>

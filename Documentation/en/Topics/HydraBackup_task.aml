@@ -34,7 +34,7 @@
           					<legacyBold>Region</legacyBold> - the region address. The address of the region, specified in the bucket settings. See <externalLink>
 							<linkText>Regions and Endpoints</linkText>
 								<linkAlternateText>Optional alternate text</linkAlternateText>
-								<linkUri>http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</linkUri>
+								<linkUri>https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</linkUri>
 								<linkTarget>_blank</linkTarget>
 							</externalLink>.
  						</listItem>

@@ -7,7 +7,7 @@
 		  The <token>matlab</token> is designed for traders who develop trading algorithms within the <externalLink>
 			<linkText>MatLab MathWorks</linkText>
 			<linkAlternateText>MathWorks</linkAlternateText>
-			<linkUri>http://www.mathworks.com</linkUri>
+			<linkUri>https://www.mathworks.com</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink> environment.
 	  </para>

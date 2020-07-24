@@ -291,12 +291,6 @@ batchEmulation.Start(strategies, periods.Length);
       <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
 
       <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
         <linkText>Change Log</linkText>
         <linkUri>ChangeLog.html</linkUri>
       </externalLink>

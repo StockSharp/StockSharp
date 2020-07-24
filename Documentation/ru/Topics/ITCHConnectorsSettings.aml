@@ -14,13 +14,13 @@
       Этот протокол используется биржами NASDAQ (см. <externalLink>
 <linkText>TotalView-ITCH</linkText>
 <linkAlternateText>TotalView-ITCH</linkAlternateText>
-<linkUri>http://www.nasdaqtrader.com/Trader.aspx?id=Totalview2</linkUri>
+<linkUri>https://www.nasdaqtrader.com/Trader.aspx?id=Totalview2</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>
 ) и LSE (см. <externalLink>
 <linkText>MITCH</linkText>
 <linkAlternateText>Optional alternate text</linkAlternateText>
-<linkUri>http://www.londonstockexchange.com/products-and-services/millennium-exchange/technicalinformation/technicalinformation.htm</linkUri>
+<linkUri>https://www.londonstockexchange.com</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>
 ).
