@@ -1265,29 +1265,41 @@ namespace StockSharp.Algo
 					return _snapshot.Changes.TryGetValue(field);
 			}
 
+			private void RemoveValues(CachedSynchronizedSet<Level1Fields> fields)
+			{
+				foreach (var field in fields.Cache)
+					_snapshot.Changes.Remove(field);
+			}
+
 			public void ClearBestQuotes(DateTimeOffset serverTime)
 			{
-				if (!CanBestQuotes)
-					return;
+				lock (_sync)
+				{
+					if (!CanBestQuotes)
+						return;
 
-				foreach (var field in Extensions.BestBidFields.Cache)
-					SetValue(serverTime, field, null);
+					RemoveValues(Extensions.BestBidFields);
+					RemoveValues(Extensions.BestAskFields);
 
-				foreach (var field in Extensions.BestAskFields.Cache)
-					SetValue(serverTime, field, null);
+					_snapshot.ServerTime = serverTime;
 
-				CanBestQuotes = false;
+					CanBestQuotes = false;
+				}
 			}
 
 			public void ClearLastTrade(DateTimeOffset serverTime)
 			{
-				if (!CanLastTrade)
-					return;
+				lock (_sync)
+				{
+					if (!CanLastTrade)
+						return;
 
-				foreach (var field in Extensions.LastTradeFields.Cache)
-					SetValue(serverTime, field, null);
+					RemoveValues(Extensions.LastTradeFields);
 
-				CanLastTrade = false;
+					_snapshot.ServerTime = serverTime;
+
+					CanLastTrade = false;
+				}
 			}
 		}
 
