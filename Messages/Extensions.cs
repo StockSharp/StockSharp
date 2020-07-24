@@ -2447,7 +2447,7 @@ namespace StockSharp.Messages
 			//if (security == null)
 			//	throw new ArgumentNullException(nameof(security));
 
-			return securityId.SecurityCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode);
+			return securityId == default || (securityId.SecurityCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode));
 		}
 
 		/// <summary>
