@@ -68,8 +68,10 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		private void Export(IEnumerable<Message> messages)
+		private int Export(IEnumerable<Message> messages)
 		{
+			var count = 0;
+
 			foreach (var batch in messages.Batch(BatchSize))
 			{
 				foreach (var group in batch.GroupBy(m => m.TryGetSecurityId()))
@@ -82,62 +84,49 @@ namespace StockSharp.Algo.Export
 						break;
 
 					storage.Save(b);
+					count += b.Length;
 				}
 			}
+
+			return count;
 		}
 
 		/// <inheritdoc />
-		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<PositionChangeMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int Export(IEnumerable<PositionChangeMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<IndicatorValue> values) => throw new NotSupportedException();
+		protected override int Export(IEnumerable<IndicatorValue> values) => throw new NotSupportedException();
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<CandleMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int Export(IEnumerable<CandleMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<NewsMessage> messages)
-		{
-			Export(messages);
-		}
+		protected override int Export(IEnumerable<NewsMessage> messages)
+			=> Export(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<SecurityMessage> messages) => throw new NotSupportedException();
+		protected override int Export(IEnumerable<SecurityMessage> messages) => throw new NotSupportedException();
 	}
 }

@@ -43,9 +43,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
 		{
-			Do(messages, "orderLog", (writer, item) =>
+			return Do(messages, "orderLog", (writer, item) =>
 			{
 				writer.WriteStartElement("item");
 
@@ -73,9 +73,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
+		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
 		{
-			Do(messages, "ticks", (writer, trade) =>
+			return Do(messages, "ticks", (writer, trade) =>
 			{
 				writer.WriteStartElement("trade");
 
@@ -102,9 +102,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
 		{
-			Do(messages, "transactions", (writer, item) =>
+			return Do(messages, "transactions", (writer, item) =>
 			{
 				writer.WriteStartElement("item");
 
@@ -164,9 +164,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
+		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
 		{
-			Do(messages, "depths", (writer, depth) =>
+			return Do(messages, "depths", (writer, depth) =>
 			{
 				writer.WriteStartElement("depth");
 
@@ -197,9 +197,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
+		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
 		{
-			Do(messages, "level1", (writer, message) =>
+			return Do(messages, "level1", (writer, message) =>
 			{
 				writer.WriteStartElement("change");
 
@@ -214,9 +214,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		protected override int Export(IEnumerable<PositionChangeMessage> messages)
 		{
-			Do(messages, "positions", (writer, message) =>
+			return Do(messages, "positions", (writer, message) =>
 			{
 				writer.WriteStartElement("change");
 
@@ -237,9 +237,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<IndicatorValue> values)
+		protected override int Export(IEnumerable<IndicatorValue> values)
 		{
-			Do(values, "values", (writer, value) =>
+			return Do(values, "values", (writer, value) =>
 			{
 				writer.WriteStartElement("value");
 
@@ -254,9 +254,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<CandleMessage> messages)
+		protected override int Export(IEnumerable<CandleMessage> messages)
 		{
-			Do(messages, "candles", (writer, candle) =>
+			return Do(messages, "candles", (writer, candle) =>
 			{
 				writer.WriteStartElement("candle");
 
@@ -277,9 +277,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<NewsMessage> messages)
+		protected override int Export(IEnumerable<NewsMessage> messages)
 		{
-			Do(messages, "news", (writer, n) =>
+			return Do(messages, "news", (writer, n) =>
 			{
 				writer.WriteStartElement("item");
 
@@ -320,9 +320,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<SecurityMessage> messages)
+		protected override int Export(IEnumerable<SecurityMessage> messages)
 		{
-			Do(messages, "securities", (writer, security) =>
+			return Do(messages, "securities", (writer, security) =>
 			{
 				writer.WriteStartElement("security");
 
@@ -441,8 +441,10 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		private void Do<TValue>(IEnumerable<TValue> values, string rootElem, Action<XmlWriter, TValue> action)
+		private int Do<TValue>(IEnumerable<TValue> values, string rootElem, Action<XmlWriter, TValue> action)
 		{
+			var count = 0;
+			
 			using (var writer = XmlWriter.Create(Path, new XmlWriterSettings { Indent = true }))
 			{
 				writer.WriteStartElement(rootElem);
@@ -453,10 +455,13 @@ namespace StockSharp.Algo.Export
 						break;
 
 					action(writer, value);
+					count++;
 				}
 
 				writer.WriteEndElement();
 			}
+
+			return count;
 		}
 	}
 }

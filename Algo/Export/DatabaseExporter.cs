@@ -81,71 +81,52 @@ namespace StockSharp.Algo.Export
 		public bool CheckUnique { get; set; }
 
 		/// <inheritdoc />
-		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
-		{
-			Do(messages, () => new OrderLogTable(PriceStep, VolumeStep));
-		}
+		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+			=> Do(messages, () => new OrderLogTable(PriceStep, VolumeStep));
 
 		/// <inheritdoc />
-		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
-		{
-			Do(messages, () => new TradeTable(PriceStep, VolumeStep));
-		}
+		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
+			=> Do(messages, () => new TradeTable(PriceStep, VolumeStep));
 
 		/// <inheritdoc />
-		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
-		{
-			Do(messages, () => new TransactionTable(PriceStep, VolumeStep));
-		}
+		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
+			=> Do(messages, () => new TransactionTable(PriceStep, VolumeStep));
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
-		{
-			Do(messages.ToTimeQuotes(), () => new MarketDepthQuoteTable(PriceStep, VolumeStep));
-		}
+		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
+			=> Do(messages.ToTimeQuotes(), () => new MarketDepthQuoteTable(PriceStep, VolumeStep));
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
-		{
-			Do(messages, () => new Level1Table(PriceStep, VolumeStep));
-		}
+		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
+			=> Do(messages, () => new Level1Table(PriceStep, VolumeStep));
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<CandleMessage> messages)
-		{
-			// TODO
-			Do(messages, () => new CandleTable(PriceStep, VolumeStep));
-		}
+		protected override int Export(IEnumerable<CandleMessage> messages)
+			=> Do(messages, () => new CandleTable(PriceStep, VolumeStep));
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<NewsMessage> messages)
-		{
-			Do(messages, () => new NewsTable());
-		}
+		protected override int Export(IEnumerable<NewsMessage> messages)
+			=> Do(messages, () => new NewsTable());
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<SecurityMessage> messages)
-		{
-			Do(messages, () => new SecurityTable());
-		}
+		protected override int Export(IEnumerable<SecurityMessage> messages)
+			=> Do(messages, () => new SecurityTable());
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<PositionChangeMessage> messages)
-		{
-			Do(messages, () => new PositionChangeTable(PriceStep, VolumeStep));
-		}
+		protected override int Export(IEnumerable<PositionChangeMessage> messages)
+			=> Do(messages, () => new PositionChangeTable(PriceStep, VolumeStep));
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<IndicatorValue> values)
-		{
-			Do(values, () => new IndicatorValueTable());
-		}
+		protected override int Export(IEnumerable<IndicatorValue> values)
+			=> Do(values, () => new IndicatorValueTable());
 
-		private void Do<TValue, TTable>(IEnumerable<TValue> values, Func<TTable> getTable)
+		private int Do<TValue, TTable>(IEnumerable<TValue> values, Func<TTable> getTable)
 			where TTable : Table<TValue>
 		{
 			if (getTable == null)
 				throw new ArgumentNullException(nameof(getTable));
+
+			var count = 0;
 
 			using (var provider = _connection())
 			{
@@ -161,8 +142,11 @@ namespace StockSharp.Algo.Export
 						break;
 
 					provider.InsertBatch(table, table.ConvertToParameters(batch));
+					count += batch.Length;
 				}
 			}
+
+			return count;
 		}
 	}
 }

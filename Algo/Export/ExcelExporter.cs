@@ -51,9 +51,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				worker
 					.SetCell(0, 0, LocalizedStrings.Id).SetStyle(0, typeof(string))
@@ -71,40 +71,40 @@ namespace StockSharp.Algo.Export
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
-				var index = 1;
+				var row = 1;
 
 				foreach (var message in messages)
 				{
 					worker
-						.SetCell(0, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
-						.SetCell(1, index, message.ServerTime)
-						.SetCell(2, index, message.OrderPrice)
-						.SetCell(3, index, message.OrderVolume)
-						.SetCell(4, index, message.Side)
-						.SetCell(5, index, message.OrderState)
-						.SetCell(6, index, message.TimeInForce)
-						.SetCell(7, index, message.IsSystem);
+						.SetCell(0, row, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
+						.SetCell(1, row, message.ServerTime)
+						.SetCell(2, row, message.OrderPrice)
+						.SetCell(3, row, message.OrderVolume)
+						.SetCell(4, row, message.Side)
+						.SetCell(5, row, message.OrderState)
+						.SetCell(6, row, message.TimeInForce)
+						.SetCell(7, row, message.IsSystem);
 
 					if (message.TradePrice != null)
 					{
 						worker
-							.SetCell(8, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
-							.SetCell(9, index, message.TradePrice)
-							.SetCell(10, index, message.OpenInterest);
+							.SetCell(8, row, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
+							.SetCell(9, row, message.TradePrice)
+							.SetCell(10, row, message.OpenInterest);
 					}
 
-					index++;
-
-					if (!Check(index))
+					if (!Check(++row))
 						break;
 				}
+
+				return row - 1;
 			});
 		}
 
 		/// <inheritdoc />
-		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
+		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				worker
 					.SetCell(0, 0, LocalizedStrings.Id).SetStyle(0, typeof(string))
@@ -119,32 +119,32 @@ namespace StockSharp.Algo.Export
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
-				var index = 1;
+				var row = 1;
 
 				foreach (var message in messages)
 				{
 					worker
-						.SetCell(0, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
-						.SetCell(1, index, message.ServerTime)
-						.SetCell(2, index, message.TradePrice)
-						.SetCell(3, index, message.TradeVolume)
-						.SetCell(4, index, message.OriginSide)
-						.SetCell(5, index, message.OpenInterest)
-						.SetCell(6, index, message.IsUpTick)
-						.SetCell(7, index, message.Currency);
+						.SetCell(0, row, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
+						.SetCell(1, row, message.ServerTime)
+						.SetCell(2, row, message.TradePrice)
+						.SetCell(3, row, message.TradeVolume)
+						.SetCell(4, row, message.OriginSide)
+						.SetCell(5, row, message.OpenInterest)
+						.SetCell(6, row, message.IsUpTick)
+						.SetCell(7, row, message.Currency);
 
-					index++;
-
-					if (!Check(index))
+					if (!Check(++row))
 						break;
 				}
+
+				return row;
 			});
 		}
 
 		/// <inheritdoc />
-		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
+		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				worker
 					.SetCell(0, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
@@ -167,39 +167,41 @@ namespace StockSharp.Algo.Export
 				//worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Done), null, Colors.Green);
 				//worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Failed), null, Colors.Red);
 
-				var index = 1;
+				var row = 1;
 
 				foreach (var message in messages)
 				{
 					worker
-						.SetCell(0, index, message.ServerTime)
-						.SetCell(1, index, message.PortfolioName)
-						.SetCell(2, index, message.TransactionId)
-						.SetCell(3, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
-						.SetCell(4, index, message.OrderPrice)
-						.SetCell(5, index, message.OrderVolume)
-						.SetCell(6, index, message.Balance)
-						.SetCell(7, index, message.Side)
-						.SetCell(8, index, message.OrderType)
-						.SetCell(9, index, message.OrderState)
-						.SetCell(10, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
-						.SetCell(11, index, message.TradePrice)
-						.SetCell(12, index, message.HasOrderInfo)
-						.SetCell(13, index, message.HasTradeInfo);
+						.SetCell(0, row, message.ServerTime)
+						.SetCell(1, row, message.PortfolioName)
+						.SetCell(2, row, message.TransactionId)
+						.SetCell(3, row, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
+						.SetCell(4, row, message.OrderPrice)
+						.SetCell(5, row, message.OrderVolume)
+						.SetCell(6, row, message.Balance)
+						.SetCell(7, row, message.Side)
+						.SetCell(8, row, message.OrderType)
+						.SetCell(9, row, message.OrderState)
+						.SetCell(10, row, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
+						.SetCell(11, row, message.TradePrice)
+						.SetCell(12, row, message.HasOrderInfo)
+						.SetCell(13, row, message.HasTradeInfo);
 
-					index++;
-
-					if (!Check(index))
+					if (!Check(++row))
 						break;
 				}
+
+				return row - 1;
 			});
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
+		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
+				var count = 0;
+
 				var rowIndex = 0;
 
 				foreach (var message in messages)
@@ -223,6 +225,8 @@ namespace StockSharp.Algo.Export
 							worker.SetCell(columnIndex, rowIndex + 5, quote.Condition.GetDisplayName());
 
 						columnIndex++;
+
+						count++;
 					}
 
 					rowIndex += 5;
@@ -230,13 +234,15 @@ namespace StockSharp.Algo.Export
 					if (!Check(rowIndex))
 						break;
 				}
+
+				return count;
 			});
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
+		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				var columns = new Dictionary<Level1Fields, int>();
 				//{
@@ -297,6 +303,8 @@ namespace StockSharp.Algo.Export
 					if (!Check(++row))
 						break;
 				}
+
+				return row - 1;
 			});
 		}
 
@@ -309,9 +317,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		protected override int Export(IEnumerable<PositionChangeMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				var columns = new Dictionary<PositionChangeTypes, int>();
 
@@ -343,13 +351,15 @@ namespace StockSharp.Algo.Export
 					if (!Check(++row))
 						break;
 				}
+
+				return row - 1;
 			});
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<IndicatorValue> values)
+		protected override int Export(IEnumerable<IndicatorValue> values)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				var row = 0;
 
@@ -370,6 +380,8 @@ namespace StockSharp.Algo.Export
 					if (!Check(++row))
 						break;
 				}
+
+				return row - 1;
 			});
 		}
 
@@ -388,9 +400,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<CandleMessage> messages)
+		protected override int Export(IEnumerable<CandleMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				var row = 0;
 
@@ -419,13 +431,15 @@ namespace StockSharp.Algo.Export
 					if (!Check(++row))
 						break;
 				}
+
+				return row - 1;
 			});
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<NewsMessage> messages)
+		protected override int Export(IEnumerable<NewsMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				var row = 0;
 
@@ -456,13 +470,15 @@ namespace StockSharp.Algo.Export
 					if (!Check(++row))
 						break;
 				}
+
+				return row - 1;
 			});
 		}
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<SecurityMessage> messages)
+		protected override int Export(IEnumerable<SecurityMessage> messages)
 		{
-			Do(worker =>
+			return Do(worker =>
 			{
 				var colIndex = 0;
 
@@ -555,10 +571,12 @@ namespace StockSharp.Algo.Export
 					if (!Check(rowIndex))
 						break;
 				}
+
+				return rowIndex - 1;
 			});
 		}
 
-		private void Do(Action<IExcelWorker> action)
+		private int Do(Func<IExcelWorker, int> action)
 		{
 			if (action == null)
 				throw new ArgumentNullException(nameof(action));
@@ -570,7 +588,7 @@ namespace StockSharp.Algo.Export
 					.AddSheet()
 					.RenameSheet(LocalizedStrings.Export);
 
-				action(worker);
+				return action(worker);
 			}
 		}
 

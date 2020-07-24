@@ -62,35 +62,36 @@ namespace StockSharp.Algo.Export
 		/// To export values.
 		/// </summary>
 		/// <param name="values">Value.</param>
-		public void Export(IEnumerable values)
+		/// <returns>Count of expored values.</returns>
+		public int Export(IEnumerable values)
 		{
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			return CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
 				if (DataType == DataType.MarketDepth)
-					Export((IEnumerable<QuoteChangeMessage>)values);
+					return Export((IEnumerable<QuoteChangeMessage>)values);
 				else if (DataType == DataType.Level1)
-					Export((IEnumerable<Level1ChangeMessage>)values);
+					return Export((IEnumerable<Level1ChangeMessage>)values);
 				else if (DataType == DataType.Ticks)
-					ExportTicks((IEnumerable<ExecutionMessage>)values);
+					return ExportTicks((IEnumerable<ExecutionMessage>)values);
 				else if (DataType == DataType.OrderLog)
-					ExportOrderLog((IEnumerable<ExecutionMessage>)values);
+					return ExportOrderLog((IEnumerable<ExecutionMessage>)values);
 				else if (DataType == DataType.Transactions)
-					ExportTransactions((IEnumerable<ExecutionMessage>)values);
+					return ExportTransactions((IEnumerable<ExecutionMessage>)values);
 				else if (DataType.IsCandles)
-					Export((IEnumerable<CandleMessage>)values);
+					return Export((IEnumerable<CandleMessage>)values);
 				else if (DataType == DataType.News)
-					Export((IEnumerable<NewsMessage>)values);
+					return Export((IEnumerable<NewsMessage>)values);
 				else if (DataType == DataType.Securities)
-					Export((IEnumerable<SecurityMessage>)values);
+					return Export((IEnumerable<SecurityMessage>)values);
 				else if (DataType == DataType.Securities)
-					Export((IEnumerable<SecurityMessage>)values);
+					return Export((IEnumerable<SecurityMessage>)values);
 				else if (DataType == DataType.PositionChanges)
-					Export((IEnumerable<PositionChangeMessage>)values);
+					return Export((IEnumerable<PositionChangeMessage>)values);
 				else if (DataType == TraderHelper.IndicatorValue)
-					Export((IEnumerable<IndicatorValue>)values);
+					return Export((IEnumerable<IndicatorValue>)values);
 				else
 					throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.Str721);
 			});
@@ -110,60 +111,70 @@ namespace StockSharp.Algo.Export
 		/// To export <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void Export(IEnumerable<QuoteChangeMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int Export(IEnumerable<QuoteChangeMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="Level1ChangeMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void Export(IEnumerable<Level1ChangeMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int Export(IEnumerable<Level1ChangeMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void ExportTicks(IEnumerable<ExecutionMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int ExportTicks(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="ExecutionTypes.OrderLog"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void ExportOrderLog(IEnumerable<ExecutionMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int ExportOrderLog(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void ExportTransactions(IEnumerable<ExecutionMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int ExportTransactions(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="CandleMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void Export(IEnumerable<CandleMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int Export(IEnumerable<CandleMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="NewsMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void Export(IEnumerable<NewsMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int Export(IEnumerable<NewsMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="SecurityMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void Export(IEnumerable<SecurityMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int Export(IEnumerable<SecurityMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
-		protected abstract void Export(IEnumerable<PositionChangeMessage> messages);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int Export(IEnumerable<PositionChangeMessage> messages);
 
 		/// <summary>
 		/// To export <see cref="IndicatorValue"/>.
 		/// </summary>
 		/// <param name="values">Values.</param>
-		protected abstract void Export(IEnumerable<IndicatorValue> values);
+		/// <returns>Count of expored values.</returns>
+		protected abstract int Export(IEnumerable<IndicatorValue> values);
 	}
 }

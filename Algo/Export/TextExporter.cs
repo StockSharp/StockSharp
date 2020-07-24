@@ -53,67 +53,49 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
-		protected override void ExportOrderLog(IEnumerable<ExecutionMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int ExportOrderLog(IEnumerable<ExecutionMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void ExportTicks(IEnumerable<ExecutionMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int ExportTicks(IEnumerable<ExecutionMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void ExportTransactions(IEnumerable<ExecutionMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int ExportTransactions(IEnumerable<ExecutionMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
-		{
-			Do(messages.ToTimeQuotes());
-		}
+		protected override int Export(IEnumerable<QuoteChangeMessage> messages)
+			=> Do(messages.ToTimeQuotes());
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int Export(IEnumerable<Level1ChangeMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<CandleMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int Export(IEnumerable<CandleMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<NewsMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int Export(IEnumerable<NewsMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<SecurityMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int Export(IEnumerable<SecurityMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<PositionChangeMessage> messages)
-		{
-			Do(messages);
-		}
+		protected override int Export(IEnumerable<PositionChangeMessage> messages)
+			=> Do(messages);
 
 		/// <inheritdoc />
-		protected override void Export(IEnumerable<IndicatorValue> values)
-		{
-			Do(values);
-		}
+		protected override int Export(IEnumerable<IndicatorValue> values)
+			=> Do(values);
 
-		private void Do<TValue>(IEnumerable<TValue> values)
+		private int Do<TValue>(IEnumerable<TValue> values)
 		{
+			var count = 0;
+
 			using (var writer = new StreamWriter(Path, true))
 			{
 				if (!_header.IsEmpty())
@@ -128,10 +110,13 @@ namespace StockSharp.Algo.Export
 						break;
 
 					writer.WriteLine(formater.FormatWithCache(ref templateCache, _template, value));
+					count++;
 				}
 
 				//writer.Flush();
 			}
+
+			return count;
 		}
 	}
 }
