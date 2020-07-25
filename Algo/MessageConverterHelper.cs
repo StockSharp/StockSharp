@@ -1873,16 +1873,18 @@ namespace StockSharp.Algo
 		/// Convert <see cref="DataType"/> to <see cref="CandleSeries"/> value.
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
+		/// <param name="security">The instrument to be used for candles formation.</param>
 		/// <returns>Candles series.</returns>
-		public static CandleSeries ToCandleSeries(this DataType dataType)
+		public static CandleSeries ToCandleSeries(this DataType dataType, Security security)
 		{
-			if (dataType == null)
+			if (dataType is null)
 				throw new ArgumentNullException(nameof(dataType));
 
 			return new CandleSeries
 			{
 				CandleType = dataType.MessageType.ToCandleType(),
 				Arg = dataType.Arg,
+				Security = security,
 			};
 		}
 
