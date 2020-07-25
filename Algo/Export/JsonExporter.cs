@@ -42,8 +42,8 @@
 			return Do(messages, (writer, depth) =>
 			{
 				writer
-					.WriteProperty("serverTime", depth.ServerTime.UtcDateTime)
-					.WriteProperty("localTime", depth.LocalTime.UtcDateTime);
+					.WriteProperty("s", depth.ServerTime.UtcDateTime)
+					.WriteProperty("l", depth.LocalTime.UtcDateTime);
 
 				void WriteQuotes(string name, QuoteChange[] quotes)
 				{
@@ -56,14 +56,14 @@
 						writer.WriteStartObject();
 
 						writer
-							.WriteProperty("price", quote.Price)
-							.WriteProperty("volume", quote.Volume);
+							.WriteProperty("p", quote.Price)
+							.WriteProperty("v", quote.Volume);
 
 						if (quote.OrdersCount != null)
-							writer.WriteProperty("ordersCount", quote.OrdersCount.Value);
+							writer.WriteProperty("cnt", quote.OrdersCount.Value);
 
 						if (quote.Condition != default)
-							writer.WriteProperty("condition", quote.Condition);
+							writer.WriteProperty("cond", quote.Condition);
 
 						writer.WriteEndObject();
 					}
@@ -82,8 +82,8 @@
 			return Do(messages, (writer, message) =>
 			{
 				writer
-					.WriteProperty("serverTime", message.ServerTime.UtcDateTime)
-					.WriteProperty("localTime", message.LocalTime.UtcDateTime);
+					.WriteProperty("s", message.ServerTime.UtcDateTime)
+					.WriteProperty("l", message.LocalTime.UtcDateTime);
 
 				foreach (var pair in message.Changes)
 					writer.WriteProperty(pair.Key.ToString(), pair.Value);
@@ -96,8 +96,8 @@
 			return Do(messages, (writer, candle) =>
 			{
 				writer
-					.WriteProperty("openTime", candle.OpenTime.UtcDateTime)
-					.WriteProperty("closeTime", candle.CloseTime.UtcDateTime)
+					.WriteProperty("open", candle.OpenTime.UtcDateTime)
+					.WriteProperty("close", candle.CloseTime.UtcDateTime)
 
 					.WriteProperty("O", candle.OpenPrice)
 					.WriteProperty("H", candle.HighPrice)
@@ -106,7 +106,7 @@
 					.WriteProperty("V", candle.TotalVolume);
 
 				if (candle.OpenInterest != null)
-					writer.WriteProperty("openInterest", candle.OpenInterest.Value);
+					writer.WriteProperty("oi", candle.OpenInterest.Value);
 			});
 		}
 
@@ -118,14 +118,14 @@
 				if (!n.Id.IsEmpty())
 					writer.WriteProperty("id", n.Id);
 
-				writer.WriteProperty("serverTime", n.ServerTime.UtcDateTime);
-				writer.WriteProperty("localTime", n.LocalTime.UtcDateTime);
+				writer.WriteProperty("s", n.ServerTime.UtcDateTime);
+				writer.WriteProperty("l", n.LocalTime.UtcDateTime);
 
 				if (n.SecurityId != null)
-					writer.WriteProperty("securityCode", n.SecurityId.Value.SecurityCode);
+					writer.WriteProperty("secCode", n.SecurityId.Value.SecurityCode);
 
 				if (!n.BoardCode.IsEmpty())
-					writer.WriteProperty("boardCode", n.BoardCode);
+					writer.WriteProperty("board", n.BoardCode);
 
 				writer.WriteProperty("headline", n.Headline);
 
@@ -209,22 +209,19 @@
 					writer.WriteProperty("issueDate", security.IssueDate.Value);
 
 				if (!security.UnderlyingSecurityCode.IsEmpty())
-					writer.WriteProperty("underlyingSecurityCode", security.UnderlyingSecurityCode);
+					writer.WriteProperty("underlyingCode", security.UnderlyingSecurityCode);
 
 				if (security.UnderlyingSecurityType != null)
-					writer.WriteProperty("underlyingSecurityType", security.UnderlyingSecurityType);
+					writer.WriteProperty("underlyingType", security.UnderlyingSecurityType);
 
 				if (security.UnderlyingSecurityMinVolume != null)
-					writer.WriteProperty("underlyingSecurityMinVolume", security.UnderlyingSecurityMinVolume.Value);
-
-				if (security.UnderlyingSecurityMinVolume != null)
-					writer.WriteProperty("underlyingSecurityMinVolume", security.UnderlyingSecurityMinVolume.Value);
+					writer.WriteProperty("underlyingMinVolume", security.UnderlyingSecurityMinVolume.Value);
 
 				if (security.ExpiryDate != null)
-					writer.WriteProperty("expiryDate", security.ExpiryDate.Value.ToString("yyyy-MM-dd"));
+					writer.WriteProperty("expiry", security.ExpiryDate.Value.ToString("yyyy-MM-dd"));
 
 				if (security.SettlementDate != null)
-					writer.WriteProperty("settlementDate", security.SettlementDate.Value.ToString("yyyy-MM-dd"));
+					writer.WriteProperty("settlement", security.SettlementDate.Value.ToString("yyyy-MM-dd"));
 
 				if (!security.BasketCode.IsEmpty())
 					writer.WriteProperty("basketCode", security.BasketCode);
@@ -273,12 +270,12 @@
 			return Do(messages, (writer, message) =>
 			{
 				writer
-					.WriteProperty("serverTime", message.ServerTime.UtcDateTime)
-					.WriteProperty("localTime", message.LocalTime.UtcDateTime)
+					.WriteProperty("s", message.ServerTime.UtcDateTime)
+					.WriteProperty("l", message.LocalTime.UtcDateTime)
 
-					.WriteProperty("portfolio", message.PortfolioName)
-					.WriteProperty("clientCode", message.ClientCode)
-					.WriteProperty("depoName", message.DepoName)
+					.WriteProperty("acc", message.PortfolioName)
+					.WriteProperty("client", message.ClientCode)
+					.WriteProperty("depo", message.DepoName)
 					.WriteProperty("limit", message.LimitType)
 					.WriteProperty("strategyId", message.StrategyId);
 
@@ -307,22 +304,22 @@
 			{
 				writer
 					.WriteProperty("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>())
-					.WriteProperty("serverTime", item.ServerTime.UtcDateTime)
-					.WriteProperty("localTime", item.LocalTime.UtcDateTime)
-					.WriteProperty("price", item.OrderPrice)
-					.WriteProperty("volume", item.OrderVolume)
+					.WriteProperty("s", item.ServerTime.UtcDateTime)
+					.WriteProperty("l", item.LocalTime.UtcDateTime)
+					.WriteProperty("p", item.OrderPrice)
+					.WriteProperty("v", item.OrderVolume)
 					.WriteProperty("side", item.Side)
 					.WriteProperty("state", item.OrderState)
-					.WriteProperty("timeInForce", item.TimeInForce)
-					.WriteProperty("isSystem", item.IsSystem);
+					.WriteProperty("tif", item.TimeInForce)
+					.WriteProperty("sys", item.IsSystem);
 
 				if (item.TradePrice != null)
 				{
-					writer.WriteProperty("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
-					writer.WriteProperty("tradePrice", item.TradePrice);
+					writer.WriteProperty("tid", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
+					writer.WriteProperty("tp", item.TradePrice);
 
 					if (item.OpenInterest != null)
-						writer.WriteProperty("openInterest", item.OpenInterest.Value);
+						writer.WriteProperty("oi", item.OpenInterest.Value);
 				}
 			});
 		}
@@ -334,22 +331,22 @@
 			{
 				writer
 					.WriteProperty("id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>())
-					.WriteProperty("serverTime", trade.ServerTime.UtcDateTime)
-					.WriteProperty("localTime", trade.LocalTime.UtcDateTime)
-					.WriteProperty("price", trade.TradePrice)
-					.WriteProperty("volume", trade.TradeVolume);
+					.WriteProperty("s", trade.ServerTime.UtcDateTime)
+					.WriteProperty("l", trade.LocalTime.UtcDateTime)
+					.WriteProperty("p", trade.TradePrice)
+					.WriteProperty("v", trade.TradeVolume);
 
 				if (trade.OriginSide != null)
-					writer.WriteProperty("originSide", trade.OriginSide.Value);
+					writer.WriteProperty("side", trade.OriginSide.Value);
 
 				if (trade.OpenInterest != null)
-					writer.WriteProperty("openInterest", trade.OpenInterest.Value);
+					writer.WriteProperty("oi", trade.OpenInterest.Value);
 
 				if (trade.IsUpTick != null)
-					writer.WriteProperty("isUpTick", trade.IsUpTick.Value);
+					writer.WriteProperty("up", trade.IsUpTick.Value);
 
 				if (trade.Currency != null)
-					writer.WriteProperty("currency", trade.Currency.Value);
+					writer.WriteProperty("cur", trade.Currency.Value);
 			});
 		}
 
@@ -359,12 +356,12 @@
 			return Do(messages, (writer, item) =>
 			{
 				writer
-					.WriteProperty("serverTime", item.ServerTime.UtcDateTime)
-					.WriteProperty("localTime", item.LocalTime.UtcDateTime)
-					.WriteProperty("portfolio", item.PortfolioName)
-					.WriteProperty("clientCode", item.ClientCode)
-					.WriteProperty("brokerCode", item.BrokerCode)
-					.WriteProperty("depoName", item.DepoName)
+					.WriteProperty("s", item.ServerTime.UtcDateTime)
+					.WriteProperty("l", item.LocalTime.UtcDateTime)
+					.WriteProperty("acc", item.PortfolioName)
+					.WriteProperty("client", item.ClientCode)
+					.WriteProperty("broker", item.BrokerCode)
+					.WriteProperty("depo", item.DepoName)
 					.WriteProperty("transactionId", item.TransactionId)
 					.WriteProperty("originalTransactionId", item.OriginalTransactionId)
 					.WriteProperty("orderId", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>())

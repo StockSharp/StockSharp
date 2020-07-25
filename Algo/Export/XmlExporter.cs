@@ -405,9 +405,6 @@ namespace StockSharp.Algo.Export
 				if (security.UnderlyingSecurityMinVolume != null)
 					writer.WriteAttribute("underlyingSecurityMinVolume", security.UnderlyingSecurityMinVolume.Value);
 
-				if (security.UnderlyingSecurityMinVolume != null)
-					writer.WriteAttribute("underlyingSecurityMinVolume", security.UnderlyingSecurityMinVolume.Value);
-
 				if (security.ExpiryDate != null)
 					writer.WriteAttribute("expiryDate", security.ExpiryDate.Value.ToString("yyyy-MM-dd"));
 
