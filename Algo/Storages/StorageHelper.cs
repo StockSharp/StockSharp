@@ -1052,7 +1052,7 @@ namespace StockSharp.Algo.Storages
 						{
 							lastTime = LoadMessages(storage
 								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-								.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default, subscription.MaxDepth ?? int.MaxValue), range.Item1, subscription.TransactionId, SendReply, SendOut);
+								.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default), range.Item1, subscription.TransactionId, SendReply, SendOut);
 						}
 					}
 					else if (subscription.BuildFrom == DataType.MarketDepth)

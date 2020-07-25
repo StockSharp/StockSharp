@@ -387,17 +387,88 @@ namespace StockSharp.Algo
 			return new OrderLogTickEnumerable(items);
 		}
 
+		private sealed class TickLevel1Enumerable : SimpleEnumerable<Level1ChangeMessage>
+		{
+			private sealed class TickLevel1Enumerator : IEnumerator<Level1ChangeMessage>
+			{
+				private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
+
+				public TickLevel1Enumerator(IEnumerable<ExecutionMessage> items)
+				{
+					if (items is null)
+						throw new ArgumentNullException(nameof(items));
+
+					_itemsEnumerator = items.GetEnumerator();
+				}
+
+				public Level1ChangeMessage Current { get; private set; }
+
+				bool IEnumerator.MoveNext()
+				{
+					while (_itemsEnumerator.MoveNext())
+					{
+						var tick = _itemsEnumerator.Current;
+
+						var l1Msg = new Level1ChangeMessage
+						{
+							SecurityId = tick.SecurityId,
+							ServerTime = tick.ServerTime,
+							LocalTime = tick.LocalTime,
+						}
+						.TryAdd(Level1Fields.LastTradeId, tick.TradeId)
+						.TryAdd(Level1Fields.LastTradePrice, tick.TradePrice)
+						.TryAdd(Level1Fields.LastTradeVolume, tick.TradeVolume)
+						.TryAdd(Level1Fields.LastTradeUpDown, tick.IsUpTick)
+						.TryAdd(Level1Fields.LastTradeOrigin, tick.OriginSide)
+						;
+
+						if (l1Msg.Changes.Count == 0)
+							continue;
+
+						Current = l1Msg;
+						return true;
+					}
+
+					Current = null;
+					return false;
+				}
+
+				void IEnumerator.Reset()
+				{
+					_itemsEnumerator.Reset();
+					Current = null;
+				}
+
+				object IEnumerator.Current => Current;
+
+				void IDisposable.Dispose()
+				{
+					Current = null;
+					_itemsEnumerator.Dispose();
+				}
+			}
+
+			public TickLevel1Enumerable(IEnumerable<ExecutionMessage> items)
+				: base(() => new TickLevel1Enumerator(items))
+			{
+				if (items is null)
+					throw new ArgumentNullException(nameof(items));
+			}
+		}
+
 		/// <summary>
 		/// To build level1 from the orders log.
 		/// </summary>
 		/// <param name="items">Orders log lines.</param>
 		/// <param name="builder">Order log to market depth builder.</param>
 		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new item of orders log.</param>
-		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
 		/// <returns>Tick trades.</returns>
-		public static IEnumerable<Level1ChangeMessage> ToLevel1(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue)
+		public static IEnumerable<Level1ChangeMessage> ToLevel1(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default)
 		{
-			return items.ToOrderBooks(builder, interval, maxDepth).ToLevel1();
+			if (builder == null)
+				return new TickLevel1Enumerable(items);
+			else
+				return items.ToOrderBooks(builder, interval, 1).ToLevel1();
 		}
 	}
 }
