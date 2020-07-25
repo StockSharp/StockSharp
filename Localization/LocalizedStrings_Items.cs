@@ -35808,12 +35808,12 @@ namespace StockSharp.Localization
 		public static string Str3785 => GetString(Str3785Key);
 
 		/// <summary>
-		/// Processing security {0}. Conversion {1} in {2}.
+		/// Processing security {0}. Conversion {1} to {2} at {3}.
 		/// </summary>
 		public const string Str3786ParamsKey = nameof(Str3786Params);
 
 		/// <summary>
-		/// Processing security {0}. Conversion {1} in {2}.
+		/// Processing security {0}. Conversion {1} to {2} at {3}.
 		/// </summary>
 		public static string Str3786Params => GetString(Str3786ParamsKey);
 
@@ -51966,5 +51966,15 @@ namespace StockSharp.Localization
 		/// The maximum number of order registration errors above which the algorithm will be stopped
 		/// </summary>
 		public static string MaxOrderRegisterErrorCountDesc => GetString(MaxOrderRegisterErrorCountDescKey);
+
+		/// <summary>
+		/// Cannot convert {0} to {1}.
+		/// </summary>
+		public const string CannotConvertKey = nameof(CannotConvert);
+
+		/// <summary>
+		/// Cannot convert {0} to {1}.
+		/// </summary>
+		public static string CannotConvert => GetString(CannotConvertKey);
 	}
 }

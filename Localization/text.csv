@@ -3589,7 +3589,7 @@ Str3782;Maximum depth of market depths generation.;Максимальная гл
 Str3783;Where;Куда
 Str3784;Data directory where converted data will be saved.;Директория с данными, куда будут сохраняться сконвертированные данные.
 Str3785;Task is designed to convert one data type to another (e.g. from ticks to candles).;Задача предназначена для конвертации данных из одного типа в другой (например, из тиков в свечи).
-Str3786Params;Processing security {0}. Conversion {1} in {2}.;Обработка инструмента {0}. Конвертация {1} за {2}.
+Str3786Params;Processing security {0}. Conversion {1} to {2} at {3}.;Обработка инструмента {0}. Конвертация {1} в {2} за {3}.
 Str3789;Quote type (bid or ask).;Тип котировки (бид или оффер).
 Pin;Pin;Пин
 Str3792Params;Information about security {0} not found.;Информация об инструменте {0} не найдена.
@@ -5229,6 +5229,7 @@ FilteredBook;Filtered book;Отфильтрованный стакан
 SystemStatus;Status (sys);Статус (систем)
 MaxOrderRegisterErrorCount;Max reg error;Макс ошибок рег-ии
 MaxOrderRegisterErrorCountDesc;The maximum number of order registration errors above which the algorithm will be stopped;Максимальное количество ошибок регистрации заявки, при превышении которого алгоритм будет остановлен
+CannotConvert;Cannot convert {0} to {1}.;Невозможно преобразовать {0} в {1}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
