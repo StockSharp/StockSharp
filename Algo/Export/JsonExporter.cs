@@ -45,6 +45,9 @@
 					.WriteProperty("s", depth.ServerTime.UtcDateTime)
 					.WriteProperty("l", depth.LocalTime.UtcDateTime);
 
+				if (depth.State != null)
+					writer.WriteProperty("st", depth.State.Value);
+
 				void WriteQuotes(string name, QuoteChange[] quotes)
 				{
 					writer.WritePropertyName(name);
@@ -59,8 +62,17 @@
 							.WriteProperty("p", quote.Price)
 							.WriteProperty("v", quote.Volume);
 
-						if (quote.OrdersCount != null)
+						if (quote.OrdersCount != default)
 							writer.WriteProperty("cnt", quote.OrdersCount.Value);
+
+						if (quote.StartPosition != default)
+							writer.WriteProperty("s", quote.StartPosition.Value);
+
+						if (quote.EndPosition != default)
+							writer.WriteProperty("e", quote.EndPosition.Value);
+
+						if (quote.Action != default)
+							writer.WriteProperty("a", quote.Action.Value);
 
 						if (quote.Condition != default)
 							writer.WriteProperty("cond", quote.Condition);

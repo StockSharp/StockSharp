@@ -185,6 +185,9 @@ namespace StockSharp.Algo.Export
 					.WriteAttribute("serverTime", depth.ServerTime.ToString(_timeFormat))
 					.WriteAttribute("localTime", depth.LocalTime.ToString(_timeFormat));
 
+				if (depth.State != null)
+					writer.WriteAttribute("state", depth.State.Value);
+
 				var bids = new HashSet<QuoteChange>(depth.Bids);
 
 				foreach (var quote in depth.Bids.Concat(depth.Asks).OrderByDescending(q => q.Price))
@@ -196,8 +199,17 @@ namespace StockSharp.Algo.Export
 						.WriteAttribute("volume", quote.Volume)
 						.WriteAttribute("side", bids.Contains(quote) ? Sides.Buy : Sides.Sell);
 
-					if (quote.OrdersCount != null)
+					if (quote.OrdersCount != default)
 						writer.WriteAttribute("ordersCount", quote.OrdersCount.Value);
+
+					if (quote.StartPosition != default)
+						writer.WriteAttribute("startPos", quote.StartPosition.Value);
+
+					if (quote.EndPosition != default)
+						writer.WriteAttribute("endPos", quote.EndPosition.Value);
+
+					if (quote.Action != default)
+						writer.WriteAttribute("action", quote.Action.Value);
 
 					if (quote.Condition != default)
 						writer.WriteAttribute("condition", quote.Condition);
