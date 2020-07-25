@@ -889,6 +889,9 @@ namespace StockSharp.Algo
 				if (message.Yield != null)
 					t.Yield = message.Yield;
 
+				if (message.SeqNum != default)
+					t.SeqNum = message.SeqNum;
+
 				message.CopyExtensionInfo(t);
 
 				_myTrades.Add(t);
