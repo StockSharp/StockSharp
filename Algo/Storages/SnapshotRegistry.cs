@@ -256,6 +256,8 @@ namespace StockSharp.Algo.Storages
 			private readonly string _fileNameWithExtension;
 			private readonly string _datesPath;
 
+			private bool _flushDates;
+
 			private readonly SyncObject _cacheSync = new SyncObject();
 
 			private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = new CachedSynchronizedDictionary<DateTime, SnapshotStorageDate>();
@@ -345,8 +347,11 @@ namespace StockSharp.Algo.Storages
 				
 				GetStorageDate(date).Update(curr);
 
-				if (DatesDict.TryAdd(date, date))
-					SaveDates(DatesDict.CachedValues);
+				lock (DatesDict.SyncRoot)
+				{
+					if (DatesDict.TryAdd(date, date))
+						_flushDates = true;
+				}
 			}
 
 			TMessage ISnapshotStorage<TKey, TMessage>.Get(TKey key)
@@ -484,6 +489,24 @@ namespace StockSharp.Algo.Storages
 						errors.Add(ex);
 					}
 				});
+
+				var saveDates = false;
+
+				try
+				{
+					lock (DatesDict.SyncRoot)
+					{
+						if (_flushDates)
+							saveDates = true;
+					}
+
+					if (saveDates)
+						SaveDates(DatesDict.CachedValues);
+				}
+				catch (Exception ex)
+				{
+					errors.Add(ex);
+				}
 
 				return errors;
 			}
