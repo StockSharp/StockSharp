@@ -119,6 +119,30 @@
 
 				if (candle.OpenInterest != null)
 					writer.WriteProperty("oi", candle.OpenInterest.Value);
+
+				if (candle.PriceLevels != null)
+				{
+					writer.WritePropertyName("levels");
+
+					writer.WriteStartArray();
+
+					foreach (var level in candle.PriceLevels)
+					{
+						writer.WriteStartObject();
+
+						writer
+							.WriteProperty("price", level.Price)
+							.WriteProperty("buyCount", level.BuyCount)
+							.WriteProperty("sellCount", level.SellCount)
+							.WriteProperty("buyVolume", level.BuyVolume)
+							.WriteProperty("sellVolume", level.SellVolume)
+							.WriteProperty("volume", level.TotalVolume);
+
+						writer.WriteEndObject();
+					}
+
+					writer.WriteEndArray();
+				}
 			});
 		}
 

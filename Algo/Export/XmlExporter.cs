@@ -300,6 +300,28 @@ namespace StockSharp.Algo.Export
 				if (candle.OpenInterest != null)
 					writer.WriteAttribute("openInterest", candle.OpenInterest.Value);
 
+				if (candle.PriceLevels != null)
+				{
+					writer.WriteStartElement("levels");
+
+					foreach (var level in candle.PriceLevels)
+					{
+						writer.WriteStartElement("level");
+
+						writer
+							.WriteAttribute("price", level.Price)
+							.WriteAttribute("buyCount", level.BuyCount)
+							.WriteAttribute("sellCount", level.SellCount)
+							.WriteAttribute("buyVolume", level.BuyVolume)
+							.WriteAttribute("sellVolume", level.SellVolume)
+							.WriteAttribute("volume", level.TotalVolume);
+
+						writer.WriteEndElement();
+					}
+
+					writer.WriteEndElement();
+				}
+
 				writer.WriteEndElement();
 			});
 		}
