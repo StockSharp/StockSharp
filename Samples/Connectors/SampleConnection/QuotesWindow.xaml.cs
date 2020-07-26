@@ -54,19 +54,9 @@
 			DepthCtrl.ProcessOrder(order, order.Price, order.Balance, order.State);
 		}
 
-		public void ProcessOrderRegisterFail(OrderFail fail)
+		public void ProcessOrderFail(OrderFail fail)
 		{
-			DepthCtrl.ProcessOrderRegisterFail(fail);
-		}
-
-		public void ProcessOrderCancelFail(OrderFail fail)
-		{
-			DepthCtrl.ProcessOrderCancelFail(fail);
-		}
-
-		public void ProcessOrderEditFail(OrderFail fail)
-		{
-			DepthCtrl.ProcessOrderEditFail(fail);
+			DepthCtrl.ProcessOrderFail(fail, fail.Order.State);
 		}
 	}
 }

@@ -98,7 +98,7 @@ namespace SampleConnection
 			}
 		}
 
-		public void ProcessOrderCancelFail(OrderFail fail)
+		public void ProcessOrderFail(OrderFail fail)
 		{
 			lock (_quotesWindows.SyncRoot)
 			{
@@ -107,35 +107,7 @@ namespace SampleConnection
 					if (pair.Key != fail.Order.Security)
 						continue;
 
-					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderCancelFail(fail));
-				}
-			}
-		}
-
-		public void ProcessOrderRegisterFail(OrderFail fail)
-		{
-			lock (_quotesWindows.SyncRoot)
-			{
-				foreach (var pair in _quotesWindows)
-				{
-					if (pair.Key != fail.Order.Security)
-						continue;
-
-					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderRegisterFail(fail));
-				}
-			}
-		}
-
-		public void ProcessOrderEditFail(OrderFail fail)
-		{
-			lock (_quotesWindows.SyncRoot)
-			{
-				foreach (var pair in _quotesWindows)
-				{
-					if (pair.Key != fail.Order.Security)
-						continue;
-
-					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderEditFail(fail));
+					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderFail(fail));
 				}
 			}
 		}

@@ -222,17 +222,17 @@
 		private void Connector_OnOrderRegisterFailed(OrderFail fail)
 		{
 			_ordersWindow.OrderGrid.AddRegistrationFail(fail);
-			_securitiesWindow.ProcessOrderRegisterFail(fail);
+			_securitiesWindow.ProcessOrderFail(fail);
 		}
 
 		private void Connector_OnOrderEditFailed(long transactionId, OrderFail fail)
 		{
-			_securitiesWindow.ProcessOrderEditFail(fail);
+			_securitiesWindow.ProcessOrderFail(fail);
 		}
 
 		private void Connector_OnOrderCancelFailed(OrderFail fail)
 		{
-			_securitiesWindow.ProcessOrderCancelFail(fail);
+			_securitiesWindow.ProcessOrderFail(fail);
 
 			this.GuiAsync(() =>
 			{
