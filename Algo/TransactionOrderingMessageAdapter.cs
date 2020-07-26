@@ -71,6 +71,18 @@
 		/// <inheritdoc />
 		public override bool SendInMessage(Message message)
 		{
+			static void RemoteTrailingZeros(OrderRegisterMessage regMsg)
+			{
+				if (regMsg.Price != default)
+					regMsg.Price = regMsg.Price.RemoveTrailingZeros();
+
+				if (regMsg.Volume != default)
+					regMsg.Volume = regMsg.Volume.RemoveTrailingZeros();
+
+				if (regMsg.VisibleVolume != default)
+					regMsg.VisibleVolume = regMsg.VisibleVolume?.RemoveTrailingZeros();
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -81,12 +93,17 @@
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
+					
+					RemoteTrailingZeros(regMsg);
+
 					_secIds.TryAdd(regMsg.TransactionId, regMsg.SecurityId);
 					break;
 				}
 				case MessageTypes.OrderReplace:
 				{
 					var replaceMsg = (OrderReplaceMessage)message;
+
+					RemoteTrailingZeros(replaceMsg);
 
 					if (_secIds.TryGetValue(replaceMsg.OriginalTransactionId, out var secId))
 						_secIds.TryAdd(replaceMsg.TransactionId, secId);
@@ -97,11 +114,23 @@
 				{
 					var replaceMsg = (OrderPairReplaceMessage)message;
 
+					RemoteTrailingZeros(replaceMsg.Message1);
+					RemoteTrailingZeros(replaceMsg.Message2);
+
 					if (_secIds.TryGetValue(replaceMsg.Message1.OriginalTransactionId, out var secId))
 						_secIds.TryAdd(replaceMsg.Message1.TransactionId, secId);
 
 					if (_secIds.TryGetValue(replaceMsg.Message2.OriginalTransactionId, out secId))
 						_secIds.TryAdd(replaceMsg.Message2.TransactionId, secId);
+
+					break;
+				}
+				case MessageTypes.OrderCancel:
+				{
+					var cancelMsg = (OrderCancelMessage)message;
+
+					if (cancelMsg.Volume != default)
+						cancelMsg.Volume = cancelMsg.Volume?.RemoveTrailingZeros();
 
 					break;
 				}
