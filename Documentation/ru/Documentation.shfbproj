@@ -238,7 +238,7 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.UkrExh.xml" />
     </DocumentationSources>
     <CopyrightHref>https://stocksharp.ru</CopyrightHref>
-    <CopyrightText>&amp;#169%3b 2019 - StockSharp LP</CopyrightText>
+    <CopyrightText>&amp;#169%3b 2020 - StockSharp LP</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.ru</FeedbackEMailAddress>
     <FeedbackEMailLinkText>отзыв</FeedbackEMailLinkText>
     <ApiFilter>
@@ -257,9 +257,9 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <Preliminary>False</Preliminary>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
-    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <BuildAssemblerVerbosity>OnlyErrors</BuildAssemblerVerbosity>
     <IndentHtml>False</IndentHtml>
-    <FrameworkVersion>.NET Framework 4.5.1</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.8</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
@@ -280,12 +280,41 @@
     <TopicVersion>100</TopicVersion>
     <TocOrder>-1</TocOrder>
     <ProductTitle>StockSharp</ProductTitle>
-    <VendorName>StockSharp LLC</VendorName>
+    <VendorName>StockSharp LP</VendorName>
     <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
     <BuildLogFile>doc_log.log</BuildLogFile>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
+    <ComponentConfigurations>
+      <ComponentConfig id="Syntax Component" enabled="True" xmlns="">
+        <component id="Syntax Component">
+  <syntax input="/document/reference" output="/document/syntax" renderReferenceLinks="false" />
+  <generators>
+    {@SyntaxFilters}
+</generators>
+  <containerElement name="codeSnippetGroup" addNoExampleTabs="true" includeOnSingleSnippets="false" groupingEnabled="{@CodeSnippetGrouping}" />
+  <configurations>
+    <generator id="C#" />
+    <generator id="Visual Basic">
+      <includeLineContinuation value="false" />
+    </generator>
+    <generator id="Visual Basic Usage">
+      <includeLineContinuation value="false" />
+    </generator>
+    <generator id="Managed C++" />
+    <generator id="F#" />
+    <generator id="J#" />
+    <generator id="JScript" />
+    <generator id="JavaScript" />
+    <generator id="XAML Usage" />
+    <generator id="ASP.NET" />
+    <generator id="X#" />
+  </configurations>
+</component>
+      </ComponentConfig>
+    </ComponentConfigurations>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
@@ -5025,9 +5054,6 @@
     </Reference>
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\Ecng.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Xaml.Charting">
-      <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\StockSharpReleases\LatestDocRefs\ru\Newtonsoft.Json.dll</HintPath>
