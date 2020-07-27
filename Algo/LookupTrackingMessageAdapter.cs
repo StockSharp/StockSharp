@@ -190,6 +190,7 @@ namespace StockSharp.Algo
 				return (Message)queue.First().Value;
 			}
 
+			long[] ignoreIds = null;
 			Message nextLookup = null;
 
 			if (message is IOriginalTransactionIdMessage originIdMsg)
@@ -222,12 +223,14 @@ namespace StockSharp.Algo
 				}
 				else if (message is ISubscriptionIdMessage subscrMsg)
 				{
+					ignoreIds = subscrMsg.GetSubscriptionIds();
+					
 					lock (_lookups.SyncRoot)
 					{
-						foreach (var id in subscrMsg.GetSubscriptionIds())
+						foreach (var id in ignoreIds)
 						{
 							if (_lookups.TryGetValue(id, out var info))
-								info.IncreaseTimeOut();	
+								info.IncreaseTimeOut();
 						}
 					}
 				}
@@ -239,6 +242,9 @@ namespace StockSharp.Algo
 				base.OnInnerAdapterNewOutMessage(nextLookup);
 			}
 
+			if (message.LocalTime == default)
+				return;
+
 			List<Message> nextLookups = null;
 
 			if (_prevTime != DateTimeOffset.MinValue)
@@ -248,11 +254,14 @@ namespace StockSharp.Algo
 				foreach (var pair in _lookups.CachedPairs)
 				{
 					var info = pair.Value;
+					var transId = info.Subscription.TransactionId;
+
+					if (ignoreIds != null && ignoreIds.Contains(transId))
+						continue;
 
 					if (!info.ProcessTime(diff))
 						continue;
 
-					var transId = info.Subscription.TransactionId;
 					_lookups.Remove(transId);
 					this.AddInfoLog("Lookup timeout {0}.", transId);
 
