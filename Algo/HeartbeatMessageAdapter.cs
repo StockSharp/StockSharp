@@ -363,7 +363,7 @@ namespace StockSharp.Algo
 						if (outMsgInterval <= TimeSpan.Zero)
 						{
 							outMsgInterval = outMsgIntervalInitial;
-							RaiseNewOutMessage(new TimeMessage());
+							RaiseNewOutMessage(new TimeMessage { LocalTime = CurrentTime });
 						}
 
 					    time = now;
