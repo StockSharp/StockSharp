@@ -69,7 +69,7 @@
 
 		private void RaisePositionChanged()
 		{
-			this.AddInfoLog(LocalizedStrings.Str1399Params, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value).Join(", "));
+			this.AddInfoLog(LocalizedStrings.Str1399Params, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value).JoinCommaSpace());
 
 			this.Notify(nameof(Position));
 			PositionChanged?.Invoke();
