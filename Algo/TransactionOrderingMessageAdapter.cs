@@ -184,19 +184,19 @@
 					lock (subscription.Sync)
 						tuples = subscription.Transactions.Values.ToArray();
 
-					var canProcessFailed = subscription.Original.States.Contains(OrderStates.Failed);
+					//var canProcessFailed = truesubscription.Original.States.Contains(OrderStates.Failed);
 
 					foreach (var tuple in tuples)
 					{
 						var order = tuple.Item1;
 
-						if (order.OrderState == OrderStates.Failed && !canProcessFailed)
-						{
-							if (tuple.Item2.Count > 0)
-								this.AddWarningLog("Order {0} has failed state but contains {1} trades.", order.TransactionId, tuple.Item2.Count);
+						//if (order.OrderState == OrderStates.Failed && !canProcessFailed)
+						//{
+						//	if (tuple.Item2.Count > 0)
+						//		this.AddWarningLog("Order {0} has failed state but contains {1} trades.", order.TransactionId, tuple.Item2.Count);
 
-							continue;
-						}
+						//	continue;
+						//}
 
 						base.OnInnerAdapterNewOutMessage(order);
 

@@ -164,6 +164,9 @@ namespace StockSharp.Algo.Storages
 
 						if (prev is null)
 						{
+							if (curr is ExecutionMessage execMsg && execMsg.OrderState == OrderStates.Failed)
+								return;
+
 							if (curr.SecurityId == default)
 								throw new ArgumentException(curr.ToString());
 

@@ -166,8 +166,16 @@ namespace StockSharp.Algo.Storages
 			if (!Enabled)
 				return false;
 
+			static bool IsFailed(ExecutionMessage execMsg)
+				=> execMsg.OrderState == OrderStates.Failed && execMsg.TransactionId != default;
+
 			if (!FilterSubscription)
+			{
+				if (message is ExecutionMessage execMsg && IsFailed(execMsg))
+					return false;
+
 				return true;
+			}
 
 			switch (message.Type)
 			{
@@ -191,6 +199,9 @@ namespace StockSharp.Algo.Storages
 
 					// do not store cancellation commands into snapshot
 					if (execMsg.IsCancellation)
+						return false;
+
+					if (IsFailed(execMsg))
 						return false;
 
 					return CanStore(message, EnabledTransactions, IgnoreGeneratedTransactional);
