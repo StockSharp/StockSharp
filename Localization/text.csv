@@ -8654,7 +8654,7 @@ DocStr3675;Thirty second time frame;Тридцатисекундный тайм-
 DocStr3676;Two minute time frame;Двухминутный тайм-фрейм
 DocStr3677;Three minute time frame;Трехминутный тайм-фрейм
 DocStr3679;Work hours;Часы работы
-DocStr3680;The contact identifier;Идентификатор контакта
+DocStr3680;The contract identifier;Идентификатор контракта
 DocStr3681;Information about the instrument on the specific board;Информация об инструменте на конкретной площадке
 DocStr3682;Deliverable;Поставочный
 DocStr3683;Exchange web site;Сайт биржи
