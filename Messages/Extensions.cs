@@ -3367,5 +3367,44 @@ namespace StockSharp.Messages
 		/// <returns>Result value.</returns>
 		public static DateTimeOffset? EnsureToday(this DateTimeOffset? date, DateTimeOffset? todayValue)
 			=> date == null ? null : (date.IsToday() ? todayValue : date);
+
+		/// <summary>
+		/// Get supported y adapter data types.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Supported by adapter data types.</returns>
+		public static IEnumerable<DataType> GetSupportedDataTypes(this IMessageAdapter adapter)
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			var dataTypes = new HashSet<DataType>();
+
+			foreach (var dataType in adapter.SupportedMarketDataTypes)
+			{
+				if (dataType.IsCandles)
+				{
+					if (dataType.Arg is null)
+					{
+						foreach (var arg in adapter.GetCandleArgs(dataType.MessageType))
+						{
+							dataTypes.Add(DataType.Create(dataType.MessageType, arg));
+						}
+					}
+					else
+						dataTypes.Add(dataType);
+				}
+				else
+					dataTypes.Add(dataType);
+			}
+
+			if (adapter.IsTransactional())
+			{
+				dataTypes.Add(DataType.PositionChanges);
+				dataTypes.Add(DataType.Transactions);
+			}
+
+			return dataTypes;
+		}
 	}
 }

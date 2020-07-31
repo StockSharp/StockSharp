@@ -237,7 +237,7 @@ namespace StockSharp.Messages
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <returns>Possible args.</returns>
-		IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to);
+		IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId = default, DateTimeOffset? from = default, DateTimeOffset? to = default);
 
 		/// <summary>
 		/// Get maximum size step allowed for historical download.
