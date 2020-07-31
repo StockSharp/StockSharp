@@ -378,6 +378,11 @@ namespace StockSharp.Messages
 		/// <see cref="HeikinAshiCandleMessage"/>.
 		/// </summary>
 		CandleHeikinAshi,
+
+		/// <summary>
+		/// <see cref="ProcessSuspendedMessage"/>.
+		/// </summary>
+		ProcessSuspended,
 	}
 
 	/// <summary>

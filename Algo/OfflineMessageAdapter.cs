@@ -225,7 +225,7 @@
 
 					break;
 				}
-				case ExtendedMessageTypes.ProcessSuspended:
+				case MessageTypes.ProcessSuspended:
 				{
 					Message[] msgs;
 
