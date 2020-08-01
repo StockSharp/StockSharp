@@ -51976,5 +51976,25 @@ namespace StockSharp.Localization
 		/// Cannot convert {0} to {1}.
 		/// </summary>
 		public static string CannotConvert => GetString(CannotConvertKey);
+
+		/// <summary>
+		/// Sections
+		/// </summary>
+		public const string SectionsKey = nameof(Sections);
+
+		/// <summary>
+		/// Sections
+		/// </summary>
+		public static string Sections => GetString(SectionsKey);
+
+		/// <summary>
+		/// Available for trading sections.
+		/// </summary>
+		public const string SectionsDescKey = nameof(SectionsDesc);
+
+		/// <summary>
+		/// Available for trading sections.
+		/// </summary>
+		public static string SectionsDesc => GetString(SectionsDescKey);
 	}
 }

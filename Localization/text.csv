@@ -5230,6 +5230,8 @@ SystemStatus;Status (sys);Статус (систем)
 MaxOrderRegisterErrorCount;Max reg error;Макс ошибок рег-ии
 MaxOrderRegisterErrorCountDesc;The maximum number of order registration errors above which the algorithm will be stopped;Максимальное количество ошибок регистрации заявки, при превышении которого алгоритм будет остановлен
 CannotConvert;Cannot convert {0} to {1}.;Невозможно преобразовать {0} в {1}.
+Sections;Section;Секции
+SectionsDesc;Available for trading sections.;Доступные для торговли секции.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
