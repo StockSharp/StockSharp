@@ -200,17 +200,20 @@
 					Message[] msgs;
 
 					lock (_syncObject)
+					{
 						msgs = _suspendedIn.CopyAndClear();
 
-					foreach (var msg in msgs)
-					{
-						if (msg is ISubscriptionMessage subscrMsg)
-							_pendingSubscriptions.RemoveByValue(subscrMsg);
-						else if (msg is OrderRegisterMessage orderMsg)
-							_pendingRegistration.RemoveByValue(orderMsg);
-
-						base.OnSendInMessage(message);
+						foreach (var msg in msgs)
+						{
+							if (msg is ISubscriptionMessage subscrMsg)
+								_pendingSubscriptions.RemoveByValue(subscrMsg);
+							else if (msg is OrderRegisterMessage orderMsg)
+								_pendingRegistration.RemoveByValue(orderMsg);
+						}
 					}
+
+					foreach (var msg in msgs)
+						base.OnSendInMessage(msg);
 
 					return true;
 				}
@@ -329,8 +332,6 @@
 				}
 			}
 
-			base.OnInnerAdapterNewOutMessage(message);
-
 			ProcessSuspendedMessage processMsg = null;
 
 			if ((connectMessage != null && connectMessage.Error == null) || message.Type == ExtendedMessageTypes.ReconnectingFinished)
@@ -343,10 +344,10 @@
 				}
 			}
 
+			base.OnInnerAdapterNewOutMessage(message);
+
 			if (processMsg != null)
-			{
 				base.OnInnerAdapterNewOutMessage(processMsg);
-			}
 		}
 
 		/// <summary>
