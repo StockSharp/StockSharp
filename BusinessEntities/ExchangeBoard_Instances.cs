@@ -3147,6 +3147,15 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
+		/// Information about board <see cref="BinanceCoin"/>.
+		/// </summary>
+		public static ExchangeBoard BinanceCoin { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Binance.Name + "CN",
+			Exchange = Exchange.Binance,
+		};
+
+		/// <summary>
 		/// Information about board <see cref="Bitexbook"/>.
 		/// </summary>
 		public static ExchangeBoard Bitexbook { get; } = new ExchangeBoard
