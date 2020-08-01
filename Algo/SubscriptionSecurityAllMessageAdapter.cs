@@ -140,11 +140,13 @@
 							{
 								if (!IsSecurityRequired(mdMsg.DataType2) || mdMsg.SecurityId == default)
 								{
+									mdMsg = mdMsg.TypedClone();
+									
 									var parent = _parents.FirstOrDefault(p => p.Value.Origin.DataType2 == mdMsg.DataType2).Value;
 
 									if (parent == null)
 									{
-										parent = new ParentSubscription(mdMsg.TypedClone());
+										parent = new ParentSubscription(mdMsg);
 										_parents.Add(transId, parent);
 
 										if (mdMsg.SecurityId == default)
@@ -157,15 +159,12 @@
 
 										// do not specify security cause adapter doesn't require it
 										Extensions.AllSecurity.CopyEx(mdMsg, false);
+										message = mdMsg;
 
 										this.AddInfoLog("Sec ALL {0} subscribing.", transId);
 									}
 									else
 									{
-										var childs = parent.Child;
-
-										mdMsg = mdMsg.TypedClone();
-
 										if (mdMsg.SecurityId != default)
 										{
 											parent.NonAlls.SafeAdd(mdMsg.SecurityId).Add(transId);
@@ -201,26 +200,35 @@
 
 							var parent = tuple.Item1;
 							var request = tuple.Item2;
+							var secId = request.SecurityId;
+							var transId = request.TransactionId;
 
 							if (parent.Alls.RemoveByValue(request))
 								found = true;
+							else if (parent.NonAlls.TryGetValue(secId, out var set) && set.Remove(transId))
+							{
+								if (set.Count == 0)
+									parent.NonAlls.Remove(secId);
+
+								found = true;
+							}
 							else
 							{
-								if (parent.Child.TryGetValue(request.SecurityId, out var child))
+								if (parent.Child.TryGetValue(secId, out var child))
 								{
-									if (child.Subscribers.Remove(request.TransactionId))
+									if (child.Subscribers.Remove(transId))
 									{
 										found = true;
 
 										if (child.Subscribers.Count == 0)
-											parent.Child.Remove(request.SecurityId);
+											parent.Child.Remove(secId);
 									}
 								}
 							}
 
 							if (found)
 							{
-								if (parent.Alls.Count == 0 && parent.Child.Count == 0)
+								if (parent.Alls.Count == 0 && parent.NonAlls.Count == 0 && parent.Child.Count == 0)
 								{
 									// last unsubscribe is not initial subscription
 									if (parent.Origin.TransactionId != originId)
