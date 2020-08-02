@@ -239,7 +239,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType => DataType.Create(typeof(CommandMessage), null);
+		public override DataType DataType => DataType.Command;
 
 		/// <inheritdoc />
 		public override string ToString()
