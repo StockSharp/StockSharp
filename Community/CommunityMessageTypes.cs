@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Extended <see cref="MessageTypes"/>.
 	/// </summary>
-	public class CommunityMessageTypes
+	public static class CommunityMessageTypes
 	{
 		/// <summary>
 		/// <see cref="FileInfoMessage"/>.
