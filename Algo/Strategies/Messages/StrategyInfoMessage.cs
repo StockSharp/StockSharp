@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		public DateTimeOffset? PromoEnd { get; set; }
 
 		/// <inheritdoc />
-		public override DataType DataType { get; } = DataType.Create(typeof(StrategyInfoMessage), null);
+		public override DataType DataType => StrategyDataType.Info;
 
 		/// <inheritdoc />
 		public override string ToString()
