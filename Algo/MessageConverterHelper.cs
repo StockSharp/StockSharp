@@ -26,9 +26,11 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Community;
 
 	/// <summary>
 	/// The auxiliary class for conversion of business-objects (<see cref="BusinessEntities"/>) into messages (<see cref="Messages"/>) and vice versa.
@@ -1916,6 +1918,8 @@ namespace StockSharp.Algo
 				return new SecurityLookupMessage();
 			else if (dataType == DataType.Board)
 				return new BoardLookupMessage();
+			else if (dataType == DataType.BoardState)
+				return new BoardLookupMessage();
 			else if (dataType == DataType.Users)
 				return new UserLookupMessage();
 			else if (dataType == DataType.TimeFrames)
@@ -1926,8 +1930,26 @@ namespace StockSharp.Algo
 				return new OrderStatusMessage();
 			else if (dataType == DataType.PositionChanges)
 				return new PortfolioLookupMessage();
+			else if (dataType == StrategyDataType.Info)
+				return new StrategyLookupMessage();
+			else if (dataType == StrategyDataType.State)
+				return new StrategyLookupMessage();
 			else if (dataType.IsPortfolio)
 				return new PortfolioMessage();
+			else if (dataType == DataType.SecurityLegs)
+				return new SecurityLegsRequestMessage();
+			else if (dataType == DataType.SecurityMapping)
+				return new SecurityMappingRequestMessage();
+			else if (dataType == DataType.SecurityRoute)
+				return new SecurityRouteListRequestMessage();
+			else if (dataType == DataType.PortfolioRoute)
+				return new PortfolioRouteListRequestMessage();
+			else if (dataType == DataType.Command)
+				return new CommandMessage();
+			else if (dataType == CommunityMessageTypes.ProductInfoType)
+				return new ProductLookupMessage();
+			else if (dataType == CommunityMessageTypes.ProductFeedbackType)
+				return new ProductLookupMessage();
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}

@@ -27,7 +27,14 @@
 		/// </summary>
 		public const MessageTypes ProductFeedback = (MessageTypes)(-11003);
 
-		internal static DataType ProductInfoType = DataType.Create(typeof(ProductInfoMessage), null).Immutable();
-		internal static DataType ProductFeedbackType = DataType.Create(typeof(ProductFeedbackMessage), null).Immutable();
+		/// <summary>
+		/// <see cref="ProductInfoMessage"/>.
+		/// </summary>
+		public static DataType ProductInfoType = DataType.Create(typeof(ProductInfoMessage), null).Immutable();
+
+		/// <summary>
+		/// <see cref="ProductFeedbackMessage"/>.
+		/// </summary>
+		public static DataType ProductFeedbackType = DataType.Create(typeof(ProductFeedbackMessage), null).Immutable();
 	}
 }
