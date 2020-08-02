@@ -4498,10 +4498,16 @@ FixServer;FIX server;FIX сервер
 WcfServer;WCF server;WCF сервер
 HydraFixServer;FIX server, spread live and historical market data.;Сервер, распространяющий live и исторические данные через FIX протокол.
 HydraWcfServer;WCF server, spread historical market data in S# format files.;Сервер, распространяющий исторические данные в формате S# через WCF протокол.
-CandleMaxDays;Candle max days;Количество дней для свечей
+CandleMaxDays;Candle (days);Свечи (дни)
 CandleMaxDaysDescription;The maximum number of days available to download historical candles.;Максимальное количество дней, доступных для загрузки истории свечей.
-TickMaxDays;Tick max days;Количество дней для тиков
-TickMaxDaysDescription;The maximum number of days available to download historical tick data.;Максимальное количество дней, доступных для загрузки истории тиковых данных.
+TickMaxDays;Tick (days);Тики (дни)
+TickMaxDaysDescription;The maximum number of days available to download historical tick data.;Максимальное количество дней, доступных для загрузки истории тиков.
+OrderBookMaxDays;Book (days);Стаканы (дни)
+OrderBookMaxDaysDescription;The maximum number of days available to download historical order book data.;Максимальное количество дней, доступных для загрузки истории стаканов.
+OrderLogMaxDays;OL (days);ОЛ (дни)
+OrderLogMaxDaysDescription;The maximum number of days available to download historical order log data.;Максимальное количество дней, доступных для загрузки истории лога заявок.
+TransactionsMaxDays;Transactions (days);Транзакции (дни)
+TransactionsMaxDaysDescription;The maximum number of days available to download historical transaction data.;Максимальное количество дней, доступных для загрузки истории транзакций.
 Sound;Sound;Звук
 Popup;Popup window;Всплывающее окно
 Sms;SMS;SMS
@@ -5232,6 +5238,10 @@ MaxOrderRegisterErrorCountDesc;The maximum number of order registration errors a
 CannotConvert;Cannot convert {0} to {1}.;Невозможно преобразовать {0} в {1}.
 Sections;Section;Секции
 SectionsDesc;Available for trading sections.;Доступные для торговли секции.
+Split;Split;Разделение
+SplitType;Split type.;Тип разделения.
+ExecId;Exec ID;Номер исполнения
+OverrideExecIdByNative;Override exec id by native identifier (if present in FIX message).;Перезаписывать номер исполнения номером из FIX сообщения.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -16330,7 +16340,6 @@ DocStr11847;Create adapter for client-server communication;Create adapter for cl
 DocStr11848;Write {0};Write {0}
 DocStr11849;Process extra tags for {0};Process extra tags for {0}
 DocStr11850;Get order type;Get order type
-DocStr11851;Override {0} by native identifier (if present in FIX message);Override {0} by native identifier (if present in FIX message)
 DocStr11852;FIFO;FIFO
 DocStr11853;Close but notify on open;Close but notify on open
 DocStr11854;Rolled;Rolled
