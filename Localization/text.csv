@@ -1,4 +1,46 @@
-﻿LeftClick;Left click;Левая кнопка мыши
+﻿LoggedInAsParams;User {0};Пользователь {0}
+InstallerAutoRun;Auto run the application on Windows start. The application will be available via system tray icon.;Автоматически запускать приложение в фоновом режиме при загрузке операционной системы. Приложение будет доступно через иконку в области уведомлений.
+InstallerShowNotifications;Show notifications for installed applications updates.;Показывать уведомления об обновлениях установленных приложений.
+InstallerAllowNugetCache;Allow to use Nuget cache.;Разрешить использование кэша Nuget.
+InstallerErrorCreateDir;Error creating folder.;Ошибка создания папки.
+IHaveReadAndAcceptThe;I have read and accept the;Я прочитал и принимаю
+LicenseAgreement;license agreement;лицензионное соглашение
+Products;Applications;Приложения
+InstallerNext;Continue;Продолжить
+InstallerBack;Back;Вернуться
+InstallerInstalledApps;Installed;Установлено
+InstallerNotInstalledApps;Available;Доступно
+InstallerUpdatesAvailable;Updates available;Доступны обновления
+InstallSettings;Install options;Параметры установки
+InstallErrorSelectInstallFolder;Select folder to install the application into.;Выберите папку для установки приложения.
+InstallErrorFolderMustBeEmpty;This application must be installed into an empty folder.;Это приложение должно быть установлено в пустую папку.
+InstallErrorDuplicateFolder;You must choose different folders.;Нужно выбрать разные папки.
+InstallSelectPathParam;Select main folder of {0};Выберите папку приложения {0}
+InstallReviewBeforeStart;Following actions will be executed;Будут выполнены следующие действия
+InstallExecute;Execute;Выполнить
+CacheError;Error retrieving package dependencies. Perhaps, the product is currently updating in the repository. Try again. If the error persists, try again in 5-10 minutes.;Ошибка получения всех зависимостей пакета. Возможно, продукт в репозитории прямо сейчас в процессе обновления. Попробуйте повторить операцию. При повторной ошибке повторите через 5-10 минут.
+OperationCanceled;Operation canceled;Операция отменена
+ActionInstallApplication;Installing the application;Установка приложения
+ActionRepairApplication;Reinstalling the application;Переустановка приложения
+ActionUpdateApplication;Updating the application;Обновление приложения
+ActionRemoveApplication;Removing the application;Удаление приложения
+Buy;Buy;Купить
+ConnectorIsPurchased;The connector was purchased successfully. In order to use it, you need to update applications which support connectors.;Коннектор успешно приобретен. Для использования обновите приложения, поддерживающие работу с коннекторами.
+ForceCheckUpdates;Force check updates;Принудительная проверка обновлений.
+ConflictResolverTooltipParams;Rules for conflict resolving in case same package id was found in multiple repositories.\nA rule consists of package id and nuget repository separated with colon.\nEvery rule must be on its own line. Examples:\n\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' means other packages.\Available nuget repos: {0};Правила разрешения конфликтов для случая пакетов с одинаковым id в разных nuget репозиториях.\nПравило состоит из id пакета и нугет репо разделенных двоеточием.\nКаждое правило на своей строке. Примеры:\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' означает все остальные пакеты.\nДоступные nuget репо: {0}
+InstallerInstall;Install;Установить
+InstallerUpdate;Update;Обновить
+InstallerRepair;Repair;Переустановить
+InstallerRemove;Remove;Удалить
+InstallerSkip;Skip;Пропустить
+ApplicationIsAlreadyRunning;The application is already running. Multiple instances are not supported.;Приложение уже запущено. Параллельный запуск не поддерживается.
+StatusCheckingUpdates;Checking for updates;Проверка обновлений
+StatusCheckUpdatesError;Error checking for updates;Ошибка проверки обновлений
+StatusCheckUpdatesComplete;Updates check complete;Проверка обновлений завершена
+StatusSaveError;Error saving configuration;Ошибка сохранения конфигурации
+StatusLoadError;Error loading configuration;Ошибка загрузки конфигурации
+ErrorAppIsLockedParams;{0}: some of the application files are locked. Perhaps, the the application is running. File: {1};{0}: некоторые из файлов приложения заблокированы. Возможно приложение запущено. Файл: {1}
+LeftClick;Left click;Левая кнопка мыши
 RightClick;Right click;Правая кнопка мыши
 LeftDoubleClick;Left double-click;Левая кнопка мыши (двойное нажатие)
 RightDoubleClick;Right double-click;Правая кнопка мыши (двойное нажатие)

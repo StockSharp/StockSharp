@@ -18,6 +18,426 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// User {0}
+		/// </summary>
+		public const string LoggedInAsParamsKey = nameof(LoggedInAsParams);
+
+		/// <summary>
+		/// User {0}
+		/// </summary>
+		public static string LoggedInAsParams => GetString(LoggedInAsParamsKey);
+
+		/// <summary>
+		/// Auto run the application on Windows start. The application will be available via system tray icon.
+		/// </summary>
+		public const string InstallerAutoRunKey = nameof(InstallerAutoRun);
+
+		/// <summary>
+		/// Auto run the application on Windows start. The application will be available via system tray icon.
+		/// </summary>
+		public static string InstallerAutoRun => GetString(InstallerAutoRunKey);
+
+		/// <summary>
+		/// Show notifications for installed applications updates.
+		/// </summary>
+		public const string InstallerShowNotificationsKey = nameof(InstallerShowNotifications);
+
+		/// <summary>
+		/// Show notifications for installed applications updates.
+		/// </summary>
+		public static string InstallerShowNotifications => GetString(InstallerShowNotificationsKey);
+
+		/// <summary>
+		/// Allow to use Nuget cache.
+		/// </summary>
+		public const string InstallerAllowNugetCacheKey = nameof(InstallerAllowNugetCache);
+
+		/// <summary>
+		/// Allow to use Nuget cache.
+		/// </summary>
+		public static string InstallerAllowNugetCache => GetString(InstallerAllowNugetCacheKey);
+
+		/// <summary>
+		/// Error creating folder.
+		/// </summary>
+		public const string InstallerErrorCreateDirKey = nameof(InstallerErrorCreateDir);
+
+		/// <summary>
+		/// Error creating folder.
+		/// </summary>
+		public static string InstallerErrorCreateDir => GetString(InstallerErrorCreateDirKey);
+
+		/// <summary>
+		/// I have read and accept the
+		/// </summary>
+		public const string IHaveReadAndAcceptTheKey = nameof(IHaveReadAndAcceptThe);
+
+		/// <summary>
+		/// I have read and accept the
+		/// </summary>
+		public static string IHaveReadAndAcceptThe => GetString(IHaveReadAndAcceptTheKey);
+
+		/// <summary>
+		/// license agreement
+		/// </summary>
+		public const string LicenseAgreementKey = nameof(LicenseAgreement);
+
+		/// <summary>
+		/// license agreement
+		/// </summary>
+		public static string LicenseAgreement => GetString(LicenseAgreementKey);
+
+		/// <summary>
+		/// Applications
+		/// </summary>
+		public const string ProductsKey = nameof(Products);
+
+		/// <summary>
+		/// Applications
+		/// </summary>
+		public static string Products => GetString(ProductsKey);
+
+		/// <summary>
+		/// Continue
+		/// </summary>
+		public const string InstallerNextKey = nameof(InstallerNext);
+
+		/// <summary>
+		/// Continue
+		/// </summary>
+		public static string InstallerNext => GetString(InstallerNextKey);
+
+		/// <summary>
+		/// Back
+		/// </summary>
+		public const string InstallerBackKey = nameof(InstallerBack);
+
+		/// <summary>
+		/// Back
+		/// </summary>
+		public static string InstallerBack => GetString(InstallerBackKey);
+
+		/// <summary>
+		/// Installed
+		/// </summary>
+		public const string InstallerInstalledAppsKey = nameof(InstallerInstalledApps);
+
+		/// <summary>
+		/// Installed
+		/// </summary>
+		public static string InstallerInstalledApps => GetString(InstallerInstalledAppsKey);
+
+		/// <summary>
+		/// Available
+		/// </summary>
+		public const string InstallerNotInstalledAppsKey = nameof(InstallerNotInstalledApps);
+
+		/// <summary>
+		/// Available
+		/// </summary>
+		public static string InstallerNotInstalledApps => GetString(InstallerNotInstalledAppsKey);
+
+		/// <summary>
+		/// Updates available
+		/// </summary>
+		public const string InstallerUpdatesAvailableKey = nameof(InstallerUpdatesAvailable);
+
+		/// <summary>
+		/// Updates available
+		/// </summary>
+		public static string InstallerUpdatesAvailable => GetString(InstallerUpdatesAvailableKey);
+
+		/// <summary>
+		/// Install options
+		/// </summary>
+		public const string InstallSettingsKey = nameof(InstallSettings);
+
+		/// <summary>
+		/// Install options
+		/// </summary>
+		public static string InstallSettings => GetString(InstallSettingsKey);
+
+		/// <summary>
+		/// Select folder to install the application into.
+		/// </summary>
+		public const string InstallErrorSelectInstallFolderKey = nameof(InstallErrorSelectInstallFolder);
+
+		/// <summary>
+		/// Select folder to install the application into.
+		/// </summary>
+		public static string InstallErrorSelectInstallFolder => GetString(InstallErrorSelectInstallFolderKey);
+
+		/// <summary>
+		/// This application must be installed into an empty folder.
+		/// </summary>
+		public const string InstallErrorFolderMustBeEmptyKey = nameof(InstallErrorFolderMustBeEmpty);
+
+		/// <summary>
+		/// This application must be installed into an empty folder.
+		/// </summary>
+		public static string InstallErrorFolderMustBeEmpty => GetString(InstallErrorFolderMustBeEmptyKey);
+
+		/// <summary>
+		/// You must choose different folders.
+		/// </summary>
+		public const string InstallErrorDuplicateFolderKey = nameof(InstallErrorDuplicateFolder);
+
+		/// <summary>
+		/// You must choose different folders.
+		/// </summary>
+		public static string InstallErrorDuplicateFolder => GetString(InstallErrorDuplicateFolderKey);
+
+		/// <summary>
+		/// Select main folder of {0}
+		/// </summary>
+		public const string InstallSelectPathParamKey = nameof(InstallSelectPathParam);
+
+		/// <summary>
+		/// Select main folder of {0}
+		/// </summary>
+		public static string InstallSelectPathParam => GetString(InstallSelectPathParamKey);
+
+		/// <summary>
+		/// Following actions will be executed
+		/// </summary>
+		public const string InstallReviewBeforeStartKey = nameof(InstallReviewBeforeStart);
+
+		/// <summary>
+		/// Following actions will be executed
+		/// </summary>
+		public static string InstallReviewBeforeStart => GetString(InstallReviewBeforeStartKey);
+
+		/// <summary>
+		/// Execute
+		/// </summary>
+		public const string InstallExecuteKey = nameof(InstallExecute);
+
+		/// <summary>
+		/// Execute
+		/// </summary>
+		public static string InstallExecute => GetString(InstallExecuteKey);
+
+		/// <summary>
+		/// Error retrieving package dependencies. Perhaps, the product is currently updating in the repository. Try again. If the error persists, try again in 5-10 minutes.
+		/// </summary>
+		public const string CacheErrorKey = nameof(CacheError);
+
+		/// <summary>
+		/// Error retrieving package dependencies. Perhaps, the product is currently updating in the repository. Try again. If the error persists, try again in 5-10 minutes.
+		/// </summary>
+		public static string CacheError => GetString(CacheErrorKey);
+
+		/// <summary>
+		/// Operation canceled
+		/// </summary>
+		public const string OperationCanceledKey = nameof(OperationCanceled);
+
+		/// <summary>
+		/// Operation canceled
+		/// </summary>
+		public static string OperationCanceled => GetString(OperationCanceledKey);
+
+		/// <summary>
+		/// Installing the application
+		/// </summary>
+		public const string ActionInstallApplicationKey = nameof(ActionInstallApplication);
+
+		/// <summary>
+		/// Installing the application
+		/// </summary>
+		public static string ActionInstallApplication => GetString(ActionInstallApplicationKey);
+
+		/// <summary>
+		/// Reinstalling the application
+		/// </summary>
+		public const string ActionRepairApplicationKey = nameof(ActionRepairApplication);
+
+		/// <summary>
+		/// Reinstalling the application
+		/// </summary>
+		public static string ActionRepairApplication => GetString(ActionRepairApplicationKey);
+
+		/// <summary>
+		/// Updating the application
+		/// </summary>
+		public const string ActionUpdateApplicationKey = nameof(ActionUpdateApplication);
+
+		/// <summary>
+		/// Updating the application
+		/// </summary>
+		public static string ActionUpdateApplication => GetString(ActionUpdateApplicationKey);
+
+		/// <summary>
+		/// Removing the application
+		/// </summary>
+		public const string ActionRemoveApplicationKey = nameof(ActionRemoveApplication);
+
+		/// <summary>
+		/// Removing the application
+		/// </summary>
+		public static string ActionRemoveApplication => GetString(ActionRemoveApplicationKey);
+
+		/// <summary>
+		/// Buy
+		/// </summary>
+		public const string BuyKey = nameof(Buy);
+
+		/// <summary>
+		/// Buy
+		/// </summary>
+		public static string Buy => GetString(BuyKey);
+
+		/// <summary>
+		/// The connector was purchased successfully. In order to use it, you need to update applications which support connectors.
+		/// </summary>
+		public const string ConnectorIsPurchasedKey = nameof(ConnectorIsPurchased);
+
+		/// <summary>
+		/// The connector was purchased successfully. In order to use it, you need to update applications which support connectors.
+		/// </summary>
+		public static string ConnectorIsPurchased => GetString(ConnectorIsPurchasedKey);
+
+		/// <summary>
+		/// Force check updates
+		/// </summary>
+		public const string ForceCheckUpdatesKey = nameof(ForceCheckUpdates);
+
+		/// <summary>
+		/// Force check updates
+		/// </summary>
+		public static string ForceCheckUpdates => GetString(ForceCheckUpdatesKey);
+
+		/// <summary>
+		/// Rules for conflict resolving in case same package id was found in multiple repositories.\nA rule consists of package id and nuget repository separated with colon.\nEvery rule must be on its own line. Examples:\n\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' means other packages.\Available nuget repos: {0}
+		/// </summary>
+		public const string ConflictResolverTooltipParamsKey = nameof(ConflictResolverTooltipParams);
+
+		/// <summary>
+		/// Rules for conflict resolving in case same package id was found in multiple repositories.\nA rule consists of package id and nuget repository separated with colon.\nEvery rule must be on its own line. Examples:\n\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' means other packages.\Available nuget repos: {0}
+		/// </summary>
+		public static string ConflictResolverTooltipParams => GetString(ConflictResolverTooltipParamsKey);
+
+		/// <summary>
+		/// Install
+		/// </summary>
+		public const string InstallerInstallKey = nameof(InstallerInstall);
+
+		/// <summary>
+		/// Install
+		/// </summary>
+		public static string InstallerInstall => GetString(InstallerInstallKey);
+
+		/// <summary>
+		/// Update
+		/// </summary>
+		public const string InstallerUpdateKey = nameof(InstallerUpdate);
+
+		/// <summary>
+		/// Update
+		/// </summary>
+		public static string InstallerUpdate => GetString(InstallerUpdateKey);
+
+		/// <summary>
+		/// Repair
+		/// </summary>
+		public const string InstallerRepairKey = nameof(InstallerRepair);
+
+		/// <summary>
+		/// Repair
+		/// </summary>
+		public static string InstallerRepair => GetString(InstallerRepairKey);
+
+		/// <summary>
+		/// Remove
+		/// </summary>
+		public const string InstallerRemoveKey = nameof(InstallerRemove);
+
+		/// <summary>
+		/// Remove
+		/// </summary>
+		public static string InstallerRemove => GetString(InstallerRemoveKey);
+
+		/// <summary>
+		/// Skip
+		/// </summary>
+		public const string InstallerSkipKey = nameof(InstallerSkip);
+
+		/// <summary>
+		/// Skip
+		/// </summary>
+		public static string InstallerSkip => GetString(InstallerSkipKey);
+
+		/// <summary>
+		/// The application is already running. Multiple instances are not supported.
+		/// </summary>
+		public const string ApplicationIsAlreadyRunningKey = nameof(ApplicationIsAlreadyRunning);
+
+		/// <summary>
+		/// The application is already running. Multiple instances are not supported.
+		/// </summary>
+		public static string ApplicationIsAlreadyRunning => GetString(ApplicationIsAlreadyRunningKey);
+
+		/// <summary>
+		/// Checking for updates
+		/// </summary>
+		public const string StatusCheckingUpdatesKey = nameof(StatusCheckingUpdates);
+
+		/// <summary>
+		/// Checking for updates
+		/// </summary>
+		public static string StatusCheckingUpdates => GetString(StatusCheckingUpdatesKey);
+
+		/// <summary>
+		/// Error checking for updates
+		/// </summary>
+		public const string StatusCheckUpdatesErrorKey = nameof(StatusCheckUpdatesError);
+
+		/// <summary>
+		/// Error checking for updates
+		/// </summary>
+		public static string StatusCheckUpdatesError => GetString(StatusCheckUpdatesErrorKey);
+
+		/// <summary>
+		/// Updates check complete
+		/// </summary>
+		public const string StatusCheckUpdatesCompleteKey = nameof(StatusCheckUpdatesComplete);
+
+		/// <summary>
+		/// Updates check complete
+		/// </summary>
+		public static string StatusCheckUpdatesComplete => GetString(StatusCheckUpdatesCompleteKey);
+
+		/// <summary>
+		/// Error saving configuration
+		/// </summary>
+		public const string StatusSaveErrorKey = nameof(StatusSaveError);
+
+		/// <summary>
+		/// Error saving configuration
+		/// </summary>
+		public static string StatusSaveError => GetString(StatusSaveErrorKey);
+
+		/// <summary>
+		/// Error loading configuration
+		/// </summary>
+		public const string StatusLoadErrorKey = nameof(StatusLoadError);
+
+		/// <summary>
+		/// Error loading configuration
+		/// </summary>
+		public static string StatusLoadError => GetString(StatusLoadErrorKey);
+
+		/// <summary>
+		/// {0}: some of the application files are locked. Perhaps, the the application is running. File: {1}
+		/// </summary>
+		public const string ErrorAppIsLockedParamsKey = nameof(ErrorAppIsLockedParams);
+
+		/// <summary>
+		/// {0}: some of the application files are locked. Perhaps, the the application is running. File: {1}
+		/// </summary>
+		public static string ErrorAppIsLockedParams => GetString(ErrorAppIsLockedParamsKey);
+
+		/// <summary>
 		/// Left click
 		/// </summary>
 		public const string LeftClickKey = nameof(LeftClick);
