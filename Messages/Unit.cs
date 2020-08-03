@@ -126,7 +126,7 @@ namespace StockSharp.Messages
 			//
 			//if (type == UnitTypes.Point || type == UnitTypes.Step)
 			//{
-			//    if (security == null)
+			//    if (security is null)
 			//        throw new ArgumentException("Type has invalid value '{0}' while security is not set.".Put(type), "type");
 			//}
 
@@ -218,7 +218,7 @@ namespace StockSharp.Messages
 		/// <returns><see cref="decimal"/> value.</returns>
 		public static explicit operator decimal(Unit unit)
 		{
-			if (unit == null)
+			if (unit is null)
 				throw new ArgumentNullException(nameof(unit));
 
 			switch (unit.Type)
@@ -261,7 +261,7 @@ namespace StockSharp.Messages
 		{
 			var func = GetTypeValue ?? getTypeValue;
 
-			if (func == null)
+			if (func is null)
 				throw new InvalidOperationException(LocalizedStrings.UnitHandlerNotSet);
 
 			var value = func(Type);
@@ -269,7 +269,7 @@ namespace StockSharp.Messages
 			if (value != null && value != 0)
 				return value.Value;
 
-			if (getTypeValue == null)
+			if (getTypeValue is null)
 				throw new ArgumentNullException(nameof(getTypeValue));
 
 			value = getTypeValue(Type);
@@ -283,27 +283,19 @@ namespace StockSharp.Messages
 		private static Unit CreateResult(Unit u1, Unit u2, Func<decimal, decimal, decimal> operation, Func<decimal, decimal, decimal> percentOperation)
 		{
 			//  prevent operator '==' call
-			//if (u1 == null)
-			if (u1.IsNull())
-			{
+			if (u1 is null)
 				return null;
-				//throw new ArgumentNullException(nameof(u1));
-			}
 
-			//if (u2 == null)
-			if (u2.IsNull())
-			{
+			if (u2 is null)
 				return null;
-				//throw new ArgumentNullException(nameof(u2));
-			}
 
 			if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
 				throw new ArgumentException(LocalizedStrings.LimitedValueNotMath);
 
-			if (operation == null)
+			if (operation is null)
 				throw new ArgumentNullException(nameof(operation));
 
-			if (percentOperation == null)
+			if (percentOperation is null)
 				throw new ArgumentNullException(nameof(percentOperation));
 
 			//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
@@ -434,7 +426,7 @@ namespace StockSharp.Messages
 			if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
 				return false;
 
-			if(GetTypeValue == null || other.GetTypeValue == null)
+			if (GetTypeValue is null || other.GetTypeValue is null)
 				return false;
 
 			var curr = this;
@@ -531,7 +523,7 @@ namespace StockSharp.Messages
 
 			if (destinationType == UnitTypes.Point || destinationType == UnitTypes.Step)
 			{
-				if (getTypeValue == null)
+				if (getTypeValue is null)
 					throw new ArgumentException(LocalizedStrings.UnitHandlerNotSet, nameof(destinationType));
 
 				switch (destinationType)
@@ -632,7 +624,7 @@ namespace StockSharp.Messages
 		/// <returns>Opposite value.</returns>
 		public static Unit operator -(Unit u)
 		{
-			if (u == null)
+			if (u is null)
 				throw new ArgumentNullException(nameof(u));
 
 			return new Unit
@@ -749,14 +741,14 @@ namespace StockSharp.Messages
 			{
 				case 'ш':
 				case 's':
-					if (getTypeValue == null)
+					if (getTypeValue is null)
 						throw new ArgumentNullException(nameof(getTypeValue));
 
 					type = UnitTypes.Step;
 					break;
 				case 'п':
 				case 'p':
-					if (getTypeValue == null)
+					if (getTypeValue is null)
 						throw new ArgumentNullException(nameof(getTypeValue));
 
 					type = UnitTypes.Point;
