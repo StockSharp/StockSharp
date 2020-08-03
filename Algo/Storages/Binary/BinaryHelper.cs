@@ -644,5 +644,18 @@ namespace StockSharp.Algo.Storages.Binary
 					throw new InvalidOperationException();
 			}
 		}
+
+		public static void WriteSeqNum<TMessage>(this BitArrayWriter writer, TMessage message, BinaryMetaInfo metaInfo)
+			where TMessage : ISeqNumMessage
+		{
+			metaInfo.PrevSeqNum = writer.SerializeId(message.SeqNum, metaInfo.PrevSeqNum);
+		}
+
+		public static void ReadSeqNum<TMessage>(this BitArrayReader reader, TMessage message, BinaryMetaInfo metaInfo)
+			where TMessage : ISeqNumMessage
+		{
+			metaInfo.FirstSeqNum += reader.ReadLong();
+			message.SeqNum = metaInfo.FirstSeqNum;
+		}
 	}
 }

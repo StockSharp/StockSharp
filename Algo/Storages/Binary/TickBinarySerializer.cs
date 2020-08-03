@@ -63,6 +63,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteOffsets(stream);
+
+			if (Version < MarketDataVersions.Version59)
+				return;
+
+			WriteSeqNums(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -88,6 +93,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadOffsets(stream);
+
+			if (Version < MarketDataVersions.Version59)
+				return;
+
+			ReadSeqNums(stream);
 		}
 
 		public override void CopyFrom(BinaryMetaInfo src)
@@ -104,7 +114,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
 		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version58, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version59, exchangeInfoProvider)
 		{
 		}
 
@@ -116,6 +126,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				metaInfo.FirstId = metaInfo.PrevId = first.TradeId ?? 0;
 				metaInfo.ServerOffset = first.ServerTime.Offset;
+				metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = first.SeqNum;
 			}
 
 			writer.WriteInt(messages.Count());
@@ -127,6 +138,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var useLong = metaInfo.Version >= MarketDataVersions.Version56;
 			var stringId = metaInfo.Version >= MarketDataVersions.Version57;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
 
 			foreach (var msg in messages)
 			{
@@ -262,6 +274,11 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteBuildFrom(msg.BuildFrom);
+
+				if (!seqNum)
+					continue;
+
+				writer.WriteSeqNum(msg, metaInfo);
 			}
 		}
 
@@ -277,6 +294,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var useLong = metaInfo.Version >= MarketDataVersions.Version56;
 			var stringId = metaInfo.Version >= MarketDataVersions.Version57;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
 
 			metaInfo.FirstId += reader.ReadLong();
 
@@ -371,6 +389,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return msg;
 
 			msg.BuildFrom = reader.ReadBuildFrom();
+
+			if (!seqNum)
+				return msg;
+
+			reader.ReadSeqNum(msg, metaInfo);
 
 			return msg;
 		}

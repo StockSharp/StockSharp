@@ -47,6 +47,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadOffsets(stream);
+
+			if (Version < MarketDataVersions.Version51)
+				return;
+
+			ReadSeqNums(stream);
 		}
 
 		public override void Write(Stream stream)
@@ -62,33 +67,39 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteOffsets(stream);
+
+			if (Version < MarketDataVersions.Version51)
+				return;
+
+			WriteSeqNums(stream);
 		}
 	}
 
 	class NewsBinarySerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
 	{
 		public NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
-			: base(default, null, 200, MarketDataVersions.Version50, exchangeInfoProvider)
+			: base(default, null, 200, MarketDataVersions.Version51, exchangeInfoProvider)
 		{
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<NewsMessage> messages, NewsMetaInfo metaInfo)
 		{
-			var isMetaEmpty = metaInfo.IsEmpty();
+			if (metaInfo.IsEmpty())
+			{
+				var first = messages.First();
+
+				metaInfo.ServerOffset = first.ServerTime.Offset;
+				metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = first.SeqNum;
+			}
 
 			writer.WriteInt(messages.Count());
 
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version46;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version47;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version51;
 
 			foreach (var news in messages)
 			{
-				if (isMetaEmpty)
-				{
-					metaInfo.ServerOffset = news.ServerTime.Offset;
-					isMetaEmpty = false;
-				}
-
 				writer.WriteStringEx(news.Id);
 
 				writer.WriteString(news.Headline);
@@ -125,6 +136,11 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WriteLong(news.ExpiryDate.Value.To<long>());
 
 				writer.WriteStringEx(news.SecurityId?.BoardCode);
+
+				if (!seqNum)
+					continue;
+
+				writer.WriteSeqNum(news, metaInfo);
 			}
 		}
 
@@ -146,6 +162,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version46;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version47;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version51;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -176,6 +193,11 @@ namespace StockSharp.Algo.Storages.Binary
 				secId.BoardCode = secBoard;
 				message.SecurityId = secId;
 			}
+
+			if (!seqNum)
+				return message;
+
+			reader.ReadSeqNum(message, metaInfo);
 
 			return message;
 		}

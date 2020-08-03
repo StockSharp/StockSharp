@@ -106,6 +106,9 @@ namespace StockSharp.Algo.Storages.Binary
 		public DateTime FirstItemLocalTime { get; set; }
 		public DateTime LastItemLocalTime { get; set; }
 
+		public long FirstSeqNum { get; set; }
+		public long PrevSeqNum { get; set; }
+
 		public override object LastId
 		{
 			get => LastTime;
@@ -257,6 +260,18 @@ namespace StockSharp.Algo.Storages.Binary
 			LastServerOffset = stream.Read<TimeSpan>();
 		}
 
+		protected void WriteSeqNums(Stream stream)
+		{
+			stream.WriteEx(FirstSeqNum);
+			stream.WriteEx(PrevSeqNum);
+		}
+
+		protected void ReadSeqNums(Stream stream)
+		{
+			FirstSeqNum = stream.Read<long>();
+			PrevSeqNum = stream.Read<long>();
+		}
+
 		protected void WriteItemLocalOffset(Stream stream, Version minVersion)
 		{
 			if (Version < minVersion)
@@ -329,6 +344,9 @@ namespace StockSharp.Algo.Storages.Binary
 			LastPriceStep = src.LastPriceStep;
 			FirstPrice = src.FirstPrice;
 			LastPrice = src.LastPrice;
+
+			FirstSeqNum = src.FirstSeqNum;
+			PrevSeqNum = src.PrevSeqNum;
 		}
 	}
 

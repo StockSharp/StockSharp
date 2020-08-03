@@ -59,7 +59,10 @@ namespace StockSharp.Algo.Storages.Csv
 				data.IsUpTick.ToString(),
 				data.TradeStringId,
 				data.Currency.ToString(),
-			}.Concat(data.BuildFrom.ToCsv()));
+			}.Concat(data.BuildFrom.ToCsv()).Concat(new[]
+			{
+				data.SeqNum.DefaultAsNull().ToString(),
+			}));
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 			metaInfo.LastId = data.TradeId;
@@ -90,6 +93,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				execMsg.BuildFrom = reader.ReadBuildFrom();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				execMsg.SeqNum = reader.ReadNullableLong() ?? 0L;
 
 			return execMsg;
 		}
