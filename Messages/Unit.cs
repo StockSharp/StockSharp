@@ -218,6 +218,16 @@ namespace StockSharp.Messages
 		/// <returns><see cref="decimal"/> value.</returns>
 		public static explicit operator decimal(Unit unit)
 		{
+			return ((decimal?)unit).Value;
+		}
+
+		/// <summary>
+		/// Cast object from <see cref="Unit"/> to nullable <see cref="decimal"/>.
+		/// </summary>
+		/// <param name="unit">Object <see cref="Unit"/>.</param>
+		/// <returns><see cref="decimal"/> value.</returns>
+		public static explicit operator decimal?(Unit unit)
+		{
 			if (unit is null)
 				throw new ArgumentNullException(nameof(unit));
 
@@ -229,9 +239,9 @@ namespace StockSharp.Messages
 				case UnitTypes.Percent:
 					throw new ArgumentException(LocalizedStrings.PercentagesConvert, nameof(unit));
 				case UnitTypes.Point:
-					return unit.Value * unit.SafeGetTypeValue(null);
+					return unit.Value * unit.GetTypeValue?.Invoke(unit.Type);
 				case UnitTypes.Step:
-					return unit.Value * unit.SafeGetTypeValue(null);
+					return unit.Value * unit.GetTypeValue?.Invoke(unit.Type);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.Str1219);
 			}
@@ -254,7 +264,17 @@ namespace StockSharp.Messages
 		/// <returns><see cref="double"/> value.</returns>
 		public static explicit operator double(Unit unit)
 		{
-			return (double)(decimal)unit;
+			return ((double?)unit).Value;
+		}
+
+		/// <summary>
+		/// Cast object from <see cref="Unit"/> to nullable <see cref="double"/>.
+		/// </summary>
+		/// <param name="unit">Object <see cref="Unit"/>.</param>
+		/// <returns><see cref="double"/> value.</returns>
+		public static explicit operator double?(Unit unit)
+		{
+			return (double?)(decimal?)unit;
 		}
 
 		private decimal SafeGetTypeValue(Func<UnitTypes, decimal?> getTypeValue)
@@ -403,12 +423,7 @@ namespace StockSharp.Messages
 			return Type.GetHashCode() ^ Value.GetHashCode();
 		}
 
-		/// <summary>
-		/// Compare <see cref="Unit"/> on the equivalence.
-		/// </summary>
-		/// <param name="other">Another value with which to compare.</param>
-		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-		protected override bool OnEquals(Unit other)
+		private bool? EqualsImpl(Unit other)
 		{
 			//var retVal = Type == other.Type && Value == other.Value;
 
@@ -426,17 +441,37 @@ namespace StockSharp.Messages
 			if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
 				return false;
 
-			if (GetTypeValue is null || other.GetTypeValue is null)
-				return false;
+			//if (GetTypeValue is null || other.GetTypeValue is null)
+			//	return false;
 
 			var curr = this;
 
 			if (other.Type == UnitTypes.Absolute)
-				curr = Convert(other.Type);
+			{
+				curr = Convert(other.Type, false);
+
+				if (curr is null)
+					return null;
+			}
 			else
-				other = other.Convert(Type);
+			{
+				other = other.Convert(Type, false);
+
+				if (other is null)
+					return null;
+			}
 
 			return curr.Value == other.Value;
+		}
+
+		/// <summary>
+		/// Compare <see cref="Unit"/> on the equivalence.
+		/// </summary>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
+		protected override bool OnEquals(Unit other)
+		{
+			return EqualsImpl(other) == true;
 		}
 
 		/// <summary>
@@ -457,7 +492,18 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the values are equals, otherwise, <see langword="false" />.</returns>
 		public static bool operator !=(Unit u1, Unit u2)
 		{
-			return !(u1 == u2);
+			if (u1 is null)
+				return u2 is null;
+
+			if (u2 is null)
+				return false;
+
+			var res = u1.EqualsImpl(u2);
+
+			if (res == null)
+				return false;
+
+			return !res.Value;
 		}
 
 		/// <summary>
@@ -480,16 +526,21 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString() => Value.To<string>() + GetTypeSuffix(Type);
 
-		/// <summary>Get Unit type string suffix.</summary>
+		/// <summary>
+		/// Get string suffix.
+		/// </summary>
+		/// <param name="type">Measure unit.</param>
+		/// <returns>String suffix.</returns>
 		public static string GetTypeSuffix(UnitTypes type)
 		{
 			switch (type)
 			{
-				case UnitTypes.Percent:   return  "%";
+				case UnitTypes.Percent:   return "%";
 				case UnitTypes.Absolute:  return string.Empty;
-				case UnitTypes.Step:      return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
-				case UnitTypes.Point:     return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
-				case UnitTypes.Limit:     return (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
+				case UnitTypes.Step:      return LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s";
+				case UnitTypes.Point:     return LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p";
+				case UnitTypes.Limit:     return LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l";
+
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type));
 			}
@@ -499,10 +550,11 @@ namespace StockSharp.Messages
 		/// Cast the value to another type.
 		/// </summary>
 		/// <param name="destinationType">Destination value type.</param>
+		/// <param name="throwException">Throw exception in case of impossible conversion. Otherwise, returns <see langword="null"/>.</param>
 		/// <returns>Converted value.</returns>
-		public Unit Convert(UnitTypes destinationType)
+		public Unit Convert(UnitTypes destinationType, bool throwException = true)
 		{
-			return Convert(destinationType, GetTypeValue);
+			return Convert(destinationType, GetTypeValue, throwException);
 		}
 
 		/// <summary>
@@ -510,8 +562,9 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="destinationType">Destination value type.</param>
 		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
+		/// <param name="throwException">Throw exception in case of impossible conversion. Otherwise, returns <see langword="null"/>.</param>
 		/// <returns>Converted value.</returns>
-		public Unit Convert(UnitTypes destinationType, Func<UnitTypes, decimal?> getTypeValue)
+		public Unit Convert(UnitTypes destinationType, Func<UnitTypes, decimal?> getTypeValue, bool throwException = true)
 		{
 			if (Type == destinationType)
 				return Clone();
@@ -519,12 +572,25 @@ namespace StockSharp.Messages
 			if (Type == UnitTypes.Percent || destinationType == UnitTypes.Percent)
 				throw new InvalidOperationException(LocalizedStrings.PercentagesConvert);
 
-			var value = (decimal)this;
+			var value = (decimal?)this;
+
+			if (value is null)
+			{
+				if (throwException)
+					throw new InvalidOperationException();
+
+				return null;
+			}
 
 			if (destinationType == UnitTypes.Point || destinationType == UnitTypes.Step)
 			{
 				if (getTypeValue is null)
-					throw new ArgumentException(LocalizedStrings.UnitHandlerNotSet, nameof(destinationType));
+				{
+					if (throwException)
+						throw new ArgumentException(LocalizedStrings.UnitHandlerNotSet, nameof(destinationType));
+
+					return null;
+				}
 
 				switch (destinationType)
 				{
@@ -532,36 +598,40 @@ namespace StockSharp.Messages
 						var point = getTypeValue(UnitTypes.Point);
 
 						if (point == null || point == 0)
-							throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
+						{
+							if (throwException)
+								throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
 
-						value /= point.Value;
+							return null;
+						}
+
+						value = value.Value / point.Value;
 						break;
 					case UnitTypes.Step:
 						var step = getTypeValue(UnitTypes.Step);
 
 						if (step == null || step == 0)
-							throw new InvalidOperationException(LocalizedStrings.Str2925);
+						{
+							if (throwException)
+								throw new InvalidOperationException(LocalizedStrings.Str2925);
 
-						value /= step.Value;
+							return null;
+						}
+
+						value = value.Value / step.Value;
 						break;
 				}
 			}
 
-			return new Unit(value, destinationType, getTypeValue);
+			return new Unit(value.Value, destinationType, getTypeValue);
 		}
 
-		/// <summary>
-		/// Check whether the first value is greater than the second.
-		/// </summary>
-		/// <param name="u1">First unit.</param>
-		/// <param name="u2">Second unit.</param>
-		/// <returns><see langword="true" />, if the first value is greater than the second, <see langword="false" />.</returns>
-		public static bool operator >(Unit u1, Unit u2)
+		private static bool? MoreThan(Unit u1, Unit u2)
 		{
-			if (u1.IsNull())
+			if (u1 is null)
 				throw new ArgumentNullException(nameof(u1));
 
-			if (u2.IsNull())
+			if (u2 is null)
 				throw new ArgumentNullException(nameof(u2));
 
 			//if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
@@ -576,12 +646,33 @@ namespace StockSharp.Messages
 					throw new ArgumentException(LocalizedStrings.PercentagesCannotCompare.Put(u1, u2));
 
 				if (u2.Type == UnitTypes.Absolute)
-					u1 = u1.Convert(u2.Type);
+				{
+					u1 = u1.Convert(u2.Type, false);
+
+					if (u1 is null)
+						return null;
+				}
 				else
-					u2 = u2.Convert(u1.Type);
+				{
+					u2 = u2.Convert(u1.Type, false);
+
+					if (u2 is null)
+						return null;
+				}
 			}
 
 			return u1.Value > u2.Value;
+		}
+
+		/// <summary>
+		/// Check whether the first value is greater than the second.
+		/// </summary>
+		/// <param name="u1">First unit.</param>
+		/// <param name="u2">Second unit.</param>
+		/// <returns><see langword="true" />, if the first value is greater than the second, <see langword="false" />.</returns>
+		public static bool operator >(Unit u1, Unit u2)
+		{
+			return MoreThan(u1, u2) == true;
 		}
 
 		/// <summary>
@@ -603,7 +694,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the first value is less than the second, <see langword="false" />.</returns>
 		public static bool operator <(Unit u1, Unit u2)
 		{
-			return u1 != u2 && !(u1 > u2);
+			return MoreThan(u2, u1) == true;
 		}
 
 		/// <summary>
@@ -614,7 +705,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the first value is less than or equal to the second, <see langword="false" />.</returns>
 		public static bool operator <=(Unit u1, Unit u2)
 		{
-			return !(u1 > u2);
+			return u1 == u2 || MoreThan(u2, u1) == true;
 		}
 
 		/// <summary>
