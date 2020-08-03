@@ -1,14 +1,28 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	/// <summary>
 	/// Process suspended action.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ProcessSuspendedMessage : Message
 	{
 		/// <summary>
 		/// Additional argument.
 		/// </summary>
+		[DataMember]
 		public object Arg { get; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/>.
+		/// </summary>
+		public ProcessSuspendedMessage()
+			: base(MessageTypes.ProcessSuspended)
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/>.
@@ -16,7 +30,7 @@
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="arg">Additional argument.</param>
 		public ProcessSuspendedMessage(IMessageAdapter adapter, object arg = default)
-			: base(MessageTypes.ProcessSuspended)
+			: this()
 		{
 			this.LoopBack(adapter);
 			Arg = arg;
