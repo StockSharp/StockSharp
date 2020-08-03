@@ -74,12 +74,11 @@ namespace StockSharp.BusinessEntities
 		public Security Security { get; }
 
 		/// <summary>
-		/// Whether to use aggregated quotes <see cref="AggregatedQuote"/> at the join of the volumes with the same price.
+		/// Whether to use aggregated quotes <see cref="QuoteChange.InnerQuotes"/> at the join of the volumes with the same price.
 		/// </summary>
 		/// <remarks>
 		/// The default is disabled for performance.
 		/// </remarks>
-		[Obsolete]
 		public bool UseAggregatedQuotes { get; set; }
 
 		/// <summary>
@@ -606,7 +605,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// To add the quote. If a quote with the same price is already in the order book, they are combined into the <see cref="AggregatedQuote"/>.
+		/// To add the quote. If a quote with the same price is already in the order book, they are combined into the <see cref="QuoteChange.InnerQuotes"/>.
 		/// </summary>
 		/// <param name="quote">The new quote.</param>
 		/// <param name="side">Side.</param>

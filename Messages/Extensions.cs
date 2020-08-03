@@ -3406,5 +3406,449 @@ namespace StockSharp.Messages
 
 			return dataTypes;
 		}
+
+		private static void CheckIsSnapshot(this QuoteChangeMessage depth)
+		{
+			if (depth is null)
+				throw new ArgumentNullException(nameof(depth));
+
+			if (!(depth.State == null || depth.State == QuoteChangeStates.SnapshotComplete))
+				throw new ArgumentException(nameof(depth));
+		}
+
+		/// <summary>
+		/// To create from regular order book a sparse one.
+		/// </summary>
+		/// <remarks>
+		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
+		/// <param name="depth">The regular order book.</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <returns>The sparse order book.</returns>
+		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, Unit priceStep)
+		{
+			depth.CheckIsSnapshot();
+
+			if (!depth.IsSorted)
+			{
+				depth.Bids = depth.Bids.OrderByDescending(q => q.Price).ToArray();
+				depth.Asks = depth.Asks.OrderBy(q => q.Price).ToArray();
+			}
+
+			var bids = depth.Bids.Sparse(Sides.Buy, priceStep);
+			var asks = depth.Asks.Sparse(Sides.Sell, priceStep);
+
+			var bestBid = depth.GetBestBid();
+			var bestAsk = depth.GetBestAsk();
+
+			var spreadQuotes = bestBid is null || bestAsk is null
+				? (ArrayHelper.Empty<QuoteChange>(), ArrayHelper.Empty<QuoteChange>())
+				: bestBid.Value.Sparse(bestAsk.Value, priceStep);
+
+			return new QuoteChangeMessage
+			{
+				SecurityId = depth.SecurityId,
+				ServerTime = depth.ServerTime,
+				BuildFrom = DataType.MarketDepth,
+				Bids = spreadQuotes.Item1.Concat(bids),
+				Asks = spreadQuotes.Item2.Concat(asks),
+			};
+		}
+
+		/// <summary>
+		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair.
+		/// </summary>
+		/// <remarks>
+		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
+		/// <param name="bid">Bid.</param>
+		/// <param name="ask">Ask.</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <returns>The sparse collection of quotes.</returns>
+		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, Unit priceStep)
+		{
+			if (priceStep is null)
+				throw new ArgumentNullException(nameof(priceStep));
+
+			if (priceStep <= 0)
+				throw new ArgumentOutOfRangeException(nameof(priceStep), priceStep, LocalizedStrings.Str1213);
+
+			var bidPrice = bid.Price;
+			var askPrice = ask.Price;
+
+			if (bidPrice == default || askPrice == default || bidPrice == askPrice)
+				return (ArrayHelper.Empty<QuoteChange>(), ArrayHelper.Empty<QuoteChange>());
+
+			var bids = new List<QuoteChange>();
+			var asks = new List<QuoteChange>();
+
+			while (true)
+			{
+				bidPrice = (decimal)(bidPrice + priceStep);
+				askPrice = (decimal)(askPrice - priceStep);
+
+				if (bidPrice > askPrice)
+					break;
+
+				bids.Add(new QuoteChange { Price = bidPrice });
+
+				if (bidPrice == askPrice)
+					break;
+
+				asks.Add(new QuoteChange { Price = askPrice });
+			}
+
+			bids.Reverse();
+			asks.Reverse();
+
+			return (bids.ToArray(), asks.ToArray());
+		}
+
+		/// <summary>
+		/// To create the sparse collection of quotes from regular quotes.
+		/// </summary>
+		/// <remarks>
+		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
+		/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
+		/// <param name="side">Side.</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <returns>The sparse collection of quotes.</returns>
+		public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, Unit priceStep)
+		{
+			if (quotes == null)
+				throw new ArgumentNullException(nameof(quotes));
+
+			if (priceStep <= 0)
+				throw new ArgumentOutOfRangeException(nameof(priceStep), priceStep, LocalizedStrings.Str1213);
+
+			if (quotes.Length < 2)
+				return ArrayHelper.Empty<QuoteChange>();
+
+			var retVal = new List<QuoteChange>();
+
+			for (var i = 0; i < (quotes.Length - 1); i++)
+			{
+				var from = quotes[i];
+				var toPrice = quotes[i + 1].Price;
+
+				if (side == Sides.Buy)
+				{
+					for (var price = (from.Price - priceStep); price > toPrice; price -= priceStep)
+					{
+						retVal.Add(new QuoteChange { Price = (decimal)price });
+					}
+				}
+				else
+				{
+					for (var price = (from.Price + priceStep); price < toPrice; price += priceStep)
+					{
+						retVal.Add(new QuoteChange { Price = (decimal)price });
+					}
+				}
+			}
+
+			return retVal.ToArray();
+		}
+
+		/// <summary>
+		/// To group the order book by the price range.
+		/// </summary>
+		/// <param name="depth">The order book to be grouped.</param>
+		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
+		/// <returns>The grouped order book.</returns>
+		public static QuoteChangeMessage Group(this QuoteChangeMessage depth, Unit priceRange)
+		{
+			depth.CheckIsSnapshot();
+
+			return new QuoteChangeMessage
+			{
+				SecurityId = depth.SecurityId,
+				ServerTime = depth.ServerTime,
+				Bids = depth.Bids.Group(Sides.Buy, priceRange),
+				Asks = depth.Asks.Group(Sides.Sell, priceRange),
+				BuildFrom = DataType.MarketDepth,
+			};
+		}
+
+		/// <summary>
+		/// To de-group the order book, grouped using the method <see cref="Group(QuoteChangeMessage,Unit)"/>.
+		/// </summary>
+		/// <param name="depth">The grouped order book.</param>
+		/// <returns>The de-grouped order book.</returns>
+		public static QuoteChangeMessage UnGroup(this QuoteChangeMessage depth)
+		{
+			static QuoteChange[] GetInner(QuoteChange quote)
+			{
+				var inner = quote.InnerQuotes;
+
+				if (inner == null)
+					throw new ArgumentException(quote.ToString(), nameof(quote));
+
+				return inner;
+			}
+
+			depth.CheckIsSnapshot();
+
+			return new QuoteChangeMessage
+			{
+				SecurityId = depth.SecurityId,
+				ServerTime = depth.ServerTime,
+				Bids = depth.Bids.SelectMany(GetInner).OrderByDescending(q => q.Price).ToArray(),
+				Asks = depth.Asks.SelectMany(GetInner).OrderBy(q => q.Price).ToArray(),
+				BuildFrom = DataType.MarketDepth,
+			};
+		}
+
+		/// <summary>
+		/// To group quotes by the price range.
+		/// </summary>
+		/// <param name="quotes">Quotes to be grouped.</param>
+		/// <param name="side">Side.</param>
+		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
+		/// <returns>Grouped quotes.</returns>
+		public static QuoteChange[] Group(this QuoteChange[] quotes, Sides side, Unit priceRange)
+		{
+			if (quotes is null)
+				throw new ArgumentNullException(nameof(quotes));
+
+			if (priceRange is null)
+				throw new ArgumentNullException(nameof(priceRange));
+
+			if (quotes.Length < 2)
+				return quotes.ToArray();
+
+			if (side == Sides.Buy)
+				priceRange = -priceRange;
+
+			var retVal = new List<QuoteChange>();
+
+			var groupedQuote = new QuoteChange { Price = quotes[0].Price };
+			var innerQuotes = new List<QuoteChange> { quotes[0] };
+			retVal.Add(groupedQuote);
+
+			var nextPrice = (decimal)(groupedQuote.Price + priceRange);
+
+			for (int i = 1; i < quotes.Length; i++)
+			{
+				var currQuote = quotes[i];
+
+				if (side == Sides.Buy)
+				{
+					if (currQuote.Price >= nextPrice)
+					{
+						innerQuotes.Add(currQuote);
+						continue;
+					}
+				}
+				else
+				{
+					if (currQuote.Price <= nextPrice)
+					{
+						innerQuotes.Add(currQuote);
+						continue;
+					}
+				}
+
+				groupedQuote.InnerQuotes = innerQuotes.ToArray();
+				innerQuotes.Clear();
+
+				groupedQuote = new QuoteChange { Price = currQuote.Price };
+				innerQuotes.Add(currQuote);
+				retVal.Add(groupedQuote);
+
+				nextPrice = (decimal)(groupedQuote.Price + priceRange);
+			}
+
+			return retVal.ToArray();
+		}
+
+		/// <summary>
+		/// To calculate the change between order books.
+		/// </summary>
+		/// <param name="from">First order book.</param>
+		/// <param name="to">Second order book.</param>
+		/// <returns>The order book, storing only increments.</returns>
+		public static QuoteChangeMessage GetDelta(this QuoteChangeMessage from, QuoteChangeMessage to)
+		{
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			if (to == null)
+				throw new ArgumentNullException(nameof(to));
+
+			return new QuoteChangeMessage
+			{
+				LocalTime = to.LocalTime,
+				SecurityId = to.SecurityId,
+				Bids = GetDelta(from.Bids, to.Bids, new BackwardComparer<decimal>()),
+				Asks = GetDelta(from.Asks, to.Asks, null),
+				ServerTime = to.ServerTime,
+				State = QuoteChangeStates.Increment,
+			};
+		}
+
+		/// <summary>
+		/// To calculate the change between quotes.
+		/// </summary>
+		/// <param name="from">First quotes.</param>
+		/// <param name="to">Second quotes.</param>
+		/// <param name="comparer">The direction, showing the type of quotes.</param>
+		/// <returns>Changes.</returns>
+		private static QuoteChange[] GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, IComparer<decimal> comparer)
+		{
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			if (to == null)
+				throw new ArgumentNullException(nameof(to));
+
+			var mapFrom = new SortedList<decimal, QuoteChange>(comparer);
+			var mapTo = new SortedList<decimal, QuoteChange>(comparer);
+
+			foreach (var change in from)
+			{
+				if (!mapFrom.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(from));
+			}
+
+			foreach (var change in to)
+			{
+				if (!mapTo.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(to));
+			}
+
+			foreach (var pair in mapFrom)
+			{
+				var price = pair.Key;
+				var quoteFrom = pair.Value;
+
+				if (mapTo.TryGetValue(price, out var quoteTo))
+				{
+					if (quoteTo.Volume == quoteFrom.Volume &&
+						quoteTo.OrdersCount == quoteFrom.OrdersCount &&
+						quoteTo.Action == quoteFrom.Action &&
+						quoteTo.Condition == quoteFrom.Condition &&
+						quoteTo.StartPosition == quoteFrom.StartPosition &&
+						quoteTo.EndPosition == quoteFrom.EndPosition)
+					{
+						// nothing was changes, remove this
+						mapTo.Remove(price);
+					}
+				}
+				else
+				{
+					// zero volume means remove price level
+					mapTo[price] = new QuoteChange { Price = price };
+				}
+			}
+
+			return mapTo.Values.ToArray();
+		}
+
+		/// <summary>
+		/// To add change to the first order book.
+		/// </summary>
+		/// <param name="from">First order book.</param>
+		/// <param name="delta">Change.</param>
+		/// <returns>The changed order book.</returns>
+		public static QuoteChangeMessage AddDelta(this QuoteChangeMessage from, QuoteChangeMessage delta)
+		{
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			if (delta == null)
+				throw new ArgumentNullException(nameof(delta));
+
+			if (!from.IsSorted)
+				throw new ArgumentException(nameof(from));
+
+			if (!delta.IsSorted)
+				throw new ArgumentException(nameof(delta));
+
+			return new QuoteChangeMessage
+			{
+				LocalTime = delta.LocalTime,
+				SecurityId = from.SecurityId,
+				Bids = AddDelta(from.Bids, delta.Bids, true),
+				Asks = AddDelta(from.Asks, delta.Asks, false),
+				ServerTime = delta.ServerTime,
+			};
+		}
+
+		/// <summary>
+		/// To add change to quote.
+		/// </summary>
+		/// <param name="fromQuotes">Quotes.</param>
+		/// <param name="deltaQuotes">Changes.</param>
+		/// <param name="isBids">The indication of quotes direction.</param>
+		/// <returns>Changed quotes.</returns>
+		public static QuoteChange[] AddDelta(this IEnumerable<QuoteChange> fromQuotes, IEnumerable<QuoteChange> deltaQuotes, bool isBids)
+		{
+			var result = new List<QuoteChange>();
+
+			using (var fromEnu = fromQuotes.GetEnumerator())
+			{
+				var hasFrom = fromEnu.MoveNext();
+
+				foreach (var quoteChange in deltaQuotes)
+				{
+					var canAdd = true;
+
+					while (hasFrom)
+					{
+						var current = fromEnu.Current;
+
+						if (isBids)
+						{
+							if (current.Price > quoteChange.Price)
+								result.Add(current);
+							else if (current.Price == quoteChange.Price)
+							{
+								if (quoteChange.Volume != 0)
+									result.Add(quoteChange);
+
+								hasFrom = fromEnu.MoveNext();
+								canAdd = false;
+
+								break;
+							}
+							else
+								break;
+						}
+						else
+						{
+							if (current.Price < quoteChange.Price)
+								result.Add(current);
+							else if (current.Price == quoteChange.Price)
+							{
+								if (quoteChange.Volume != 0)
+									result.Add(quoteChange);
+
+								hasFrom = fromEnu.MoveNext();
+								canAdd = false;
+
+								break;
+							}
+							else
+								break;
+						}
+
+						hasFrom = fromEnu.MoveNext();
+					}
+
+					if (canAdd && quoteChange.Volume != 0)
+						result.Add(quoteChange);
+				}
+
+				while (hasFrom)
+				{
+					result.Add(fromEnu.Current);
+					hasFrom = fromEnu.MoveNext();
+				}
+			}
+
+			return result.ToArray();
+		}
 	}
 }
