@@ -234,6 +234,13 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.OpenInterestKey)]
 		public decimal? OpenInterest { get; set; }
 
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		/// <remarks>Zero means no information.</remarks>
+		[DataMember]
+		public long SeqNum { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -281,6 +288,7 @@ namespace StockSharp.Algo.Candles
 			destination.TotalVolume = TotalVolume;
 			//destination.VolumeProfileInfo = VolumeProfileInfo;
 			destination.PriceLevels = PriceLevels?./*Select(l => l.Clone()).*/ToArray();
+			destination.SeqNum = SeqNum;
 
 			return destination;
 		}

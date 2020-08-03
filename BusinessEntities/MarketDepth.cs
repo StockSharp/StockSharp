@@ -104,6 +104,12 @@ namespace StockSharp.BusinessEntities
 			Order = 3)]
 		public DateTimeOffset LocalTime { get; set; }
 
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		/// <remarks>Zero means no information.</remarks>
+		public long SeqNum { get; set; }
+
 		private bool _bidsInitialized;
 
 		[Obsolete]

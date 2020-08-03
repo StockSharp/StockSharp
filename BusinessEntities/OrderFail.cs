@@ -63,6 +63,13 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public DateTimeOffset LocalTime { get; set; }
 
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		/// <remarks>Zero means no information.</remarks>
+		[DataMember]
+		public long SeqNum { get; set; }
+
 		/// <inheritdoc />
 		[XmlIgnore]
 		[Obsolete]

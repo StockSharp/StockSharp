@@ -58,7 +58,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>, IServerTimeMessage, INullableSecurityIdMessage, ITransactionIdMessage
+	public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
+		IServerTimeMessage, INullableSecurityIdMessage, ITransactionIdMessage, ISeqNumMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -173,6 +174,10 @@ namespace StockSharp.Messages
 			set => _attachments = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
+		/// <inheritdoc />
+		[DataMember]
+		public long SeqNum { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NewsMessage"/>.
 		/// </summary>
@@ -193,6 +198,9 @@ namespace StockSharp.Messages
 
 			if (Attachments.Length > 0)
 				str += $",Attachments={Attachments.Select(id => id.To<string>()).JoinComma()}";
+
+			if (SeqNum != default)
+				str += $",SQ={SeqNum}";
 
 			return str;
 		}
@@ -215,6 +223,7 @@ namespace StockSharp.Messages
 			destination.Language = Language;
 			destination.ExpiryDate = ExpiryDate;
 			destination.Attachments = Attachments.ToArray();
+			destination.SeqNum = SeqNum;
 		}
 	}
 }

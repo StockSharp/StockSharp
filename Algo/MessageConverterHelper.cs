@@ -144,6 +144,7 @@ namespace StockSharp.Algo
 			message.Arg = candle.Arg;
 			message.PriceLevels = candle.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			message.State = candle.State;
+			message.SeqNum = candle.SeqNum;
 
 			return message;
 		}
@@ -186,6 +187,7 @@ namespace StockSharp.Algo
 				Slippage = trade.Slippage,
 				Commission = trade.Commission,
 				CommissionCurrency = trade.CommissionCurrency,
+				SeqNum = trade.Trade.SeqNum,
 			};
 		}
 
@@ -228,6 +230,7 @@ namespace StockSharp.Algo
 				Comment = order.Comment,
 				VisibleVolume = order.VisibleVolume,
 				Currency = order.Currency,
+				SeqNum = order.SeqNum,
 			};
 
 			return message;
@@ -263,6 +266,7 @@ namespace StockSharp.Algo
 				OrderState = OrderStates.Failed,
 				ServerTime = fail.ServerTime,
 				LocalTime = fail.LocalTime,
+				SeqNum = fail.SeqNum,
 			};
 		}
 
@@ -292,6 +296,7 @@ namespace StockSharp.Algo
 				OriginSide = trade.OrderDirection,
 				IsUpTick = trade.IsUpTick,
 				Currency = trade.Currency,
+				SeqNum = trade.SeqNum,
 			};
 		}
 
@@ -331,6 +336,7 @@ namespace StockSharp.Algo
 				TradeId = trade?.Id,
 				TradePrice = trade?.Price,
 				Currency = order.Currency,
+				SeqNum = order.SeqNum,
 			};
 		}
 
@@ -1243,6 +1249,7 @@ namespace StockSharp.Algo
 			candle.PriceLevels = message.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 
 			candle.State = message.State;
+			candle.SeqNum = message.SeqNum;
 
 			return candle;
 		}
@@ -1283,6 +1290,7 @@ namespace StockSharp.Algo
 			trade.OrderDirection = message.OriginSide;
 			trade.IsUpTick = message.IsUpTick;
 			trade.Currency = message.Currency;
+			trade.SeqNum = message.SeqNum;
 
 			return trade;
 		}
@@ -1385,6 +1393,7 @@ namespace StockSharp.Algo
 
 			marketDepth.LocalTime = message.LocalTime;
 			marketDepth.Currency = message.Currency;
+			marketDepth.SeqNum = message.SeqNum;
 
 			return marketDepth;
 		}
@@ -1440,6 +1449,7 @@ namespace StockSharp.Algo
 			order.TimeInForce = message.TimeInForce;
 			order.IsSystem = message.IsSystem;
 			order.Currency = message.Currency;
+			order.SeqNum = message.SeqNum;
 
 			order.ApplyNewState(message.OrderState ?? (message.TradeId != null ? OrderStates.Done : OrderStates.Active));
 
@@ -1482,6 +1492,7 @@ namespace StockSharp.Algo
 				Priority = news.Priority,
 				Language = news.Language,
 				ExpiryDate = news.ExpiryDate,
+				SeqNum = news.SeqNum,
 			};
 		}
 
@@ -1673,7 +1684,8 @@ namespace StockSharp.Algo
 				Security = message.SecurityId == null ? null : new Security
 				{
 					Id = message.SecurityId.Value.SecurityCode
-				}
+				},
+				SeqNum = message.SeqNum,
 			};
 		}
 

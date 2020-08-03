@@ -64,7 +64,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
 	public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
-		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage,
+		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISeqNumMessage,
 		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage
 	{
 		/// <inheritdoc />
@@ -552,10 +552,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool? Initiator { get; set; }
 
-		/// <summary>
-		/// Sequence number.
-		/// </summary>
-		/// <remarks>Zero means no information.</remarks>
+		/// <inheritdoc />
 		[DataMember]
 		public long SeqNum { get; set; }
 
@@ -597,7 +594,7 @@ namespace StockSharp.Messages
 			if (Initiator != null)
 				str += $",Initiator={Initiator.Value}";
 
-			if (SeqNum != 0)
+			if (SeqNum != default)
 				str += $",SeqNum={SeqNum}";
 
 			if (Leverage != null)

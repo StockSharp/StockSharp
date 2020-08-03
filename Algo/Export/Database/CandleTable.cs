@@ -77,6 +77,7 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(CandleMessage.TotalTicks)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(CandleMessage.UpTicks)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(CandleMessage.DownTicks)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(CandleMessage.SeqNum)) { DbType = typeof(long?) };
 		}
 
 		private static ColumnDescription CreateDecimalColumn(string name, decimal? step)
@@ -107,6 +108,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(CandleMessage.TotalTicks), value.TotalTicks },
 				{ nameof(CandleMessage.UpTicks), value.UpTicks },
 				{ nameof(CandleMessage.DownTicks), value.DownTicks },
+				{ nameof(CandleMessage.SeqNum), value.SeqNum.DefaultAsNull() },
 			};
 			return result;
 		}

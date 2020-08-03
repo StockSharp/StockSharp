@@ -820,7 +820,8 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Level1Key)]
 	[DescriptionLoc(LocalizedStrings.Level1MarketDataKey)]
-	public class Level1ChangeMessage : BaseChangeMessage<Level1ChangeMessage, Level1Fields>, ISecurityIdMessage
+	public class Level1ChangeMessage : BaseChangeMessage<Level1ChangeMessage, Level1Fields>,
+		ISecurityIdMessage, ISeqNumMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -828,6 +829,10 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
 		[MainCategory]
 		public SecurityId SecurityId { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public long SeqNum { get; set; }
 
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Level1;
@@ -846,12 +851,18 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.SecurityId = SecurityId;
+			destination.SeqNum = SeqNum;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},Changes={Changes.Select(c => c.ToString()).JoinComma()}";
+			var str = base.ToString() + $",Sec={SecurityId},Changes={Changes.Select(c => c.ToString()).JoinComma()}";
+
+			if (SeqNum != default)
+				str += $",SQ={SeqNum}";
+
+			return str;
 		}
 	}
 }

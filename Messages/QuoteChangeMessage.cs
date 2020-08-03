@@ -62,7 +62,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMessage>,
-		IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage
+		IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage, ISeqNumMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -150,6 +150,10 @@ namespace StockSharp.Messages
 		public bool HasPositions { get; set; }
 
 		/// <inheritdoc />
+		[DataMember]
+		public long SeqNum { get; set; }
+
+		/// <inheritdoc />
 		public override DataType DataType => DataType.MarketDepth;
 
 		/// <summary>
@@ -175,12 +179,21 @@ namespace StockSharp.Messages
 			destination.IsFiltered = IsFiltered;
 			destination.State = State;
 			destination.HasPositions = HasPositions;
+			destination.SeqNum = SeqNum;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},B={Bids.Length},A={Asks.Length},State={State}";
+			var str = base.ToString() + $",Sec={SecurityId},T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},B={Bids.Length},A={Asks.Length}";
+
+			if (State != default)
+				str += $",State={State.Value}";
+
+			if (SeqNum != default)
+				str += $",SQ={SeqNum}";
+
+			return str;
 		}
 	}
 }

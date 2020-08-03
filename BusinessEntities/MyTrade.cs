@@ -161,13 +161,6 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public decimal? Yield { get; set; }
 
-		/// <summary>
-		/// Sequence number.
-		/// </summary>
-		/// <remarks>Zero means no information.</remarks>
-		[DataMember]
-		public long SeqNum { get; set; }
-
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
