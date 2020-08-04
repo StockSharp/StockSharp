@@ -135,10 +135,16 @@ namespace StockSharp.Algo.Import
 				var quoteMsg = isDepth ? new QuoteChangeMessage() : null;
 				var bids = isDepth ? new List<QuoteChange>() : null;
 				var asks = isDepth ? new List<QuoteChange>() : null;
+				var hasPos = false;
 
 				void AddQuote(TimeQuoteChange quote)
 				{
-					(quote.Side == Sides.Buy ? bids : asks).Add(quote.Quote);
+					var qq = quote.Quote;
+
+					if (qq.StartPosition != default || qq.EndPosition != default)
+						hasPos = true;
+
+					(quote.Side == Sides.Buy ? bids : asks).Add(qq);
 				}
 
 				void FillQuote(TimeQuoteChange quote)
@@ -154,6 +160,7 @@ namespace StockSharp.Algo.Import
 				{
 					quoteMsg.Bids = bids.ToArray();
 					quoteMsg.Asks = asks.ToArray();
+					quoteMsg.HasPositions = hasPos;
 				}
 
 				var adapters = new Dictionary<Type, IMessageAdapter>();
@@ -276,6 +283,7 @@ namespace StockSharp.Algo.Import
 								quoteMsg = new QuoteChangeMessage();
 								bids = new List<QuoteChange>();
 								asks = new List<QuoteChange>();
+								hasPos = false;
 								FillQuote(quote);
 							}
 						}

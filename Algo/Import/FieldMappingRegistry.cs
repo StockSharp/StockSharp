@@ -220,6 +220,24 @@ namespace StockSharp.Algo.Import
 					q.Condition = v;
 					i.Quote = q;
 				}));
+				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.StartPosition), LocalizedStrings.Str2421, LocalizedStrings.Str2421, (i, v) =>
+				{
+					var q = i.Quote;
+					q.StartPosition = v;
+					i.Quote = q;
+				}));
+				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.EndPosition), LocalizedStrings.End, LocalizedStrings.End, (i, v) =>
+				{
+					var q = i.Quote;
+					q.EndPosition = v;
+					i.Quote = q;
+				}));
+				fields.Add(new FieldMapping<TimeQuoteChange, QuoteChangeActions>(nameof(QuoteChange.Action), LocalizedStrings.Str722, LocalizedStrings.Str722, (i, v) =>
+				{
+					var q = i.Quote;
+					q.Action = v;
+					i.Quote = q;
+				}));
 			}
 			else if (msgType == typeof(Level1ChangeMessage))
 			{
