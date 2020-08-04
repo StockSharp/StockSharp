@@ -1172,5 +1172,14 @@ namespace StockSharp.BusinessEntities
 			Name = "STRLG",
 			FullNameLoc = LocalizedStrings.SterlingKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="QNDL"/>.
+		/// </summary>
+		public static Exchange QNDL { get; } = new Exchange
+		{
+			Name = "QNDL",
+			FullNameLoc = LocalizedStrings.QuandlKey,
+		};
 	}
 }
