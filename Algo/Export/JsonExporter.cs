@@ -48,6 +48,9 @@
 				if (depth.State != null)
 					writer.WriteProperty("st", depth.State.Value);
 
+				if (depth.HasPositions)
+					writer.WriteProperty("pos", true);
+
 				if (depth.SeqNum != default)
 					writer.WriteProperty("sn", depth.SeqNum);
 
