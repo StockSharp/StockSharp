@@ -144,8 +144,8 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(ExecutionMessage.PositionEffect)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.PostOnly)) { DbType = typeof(bool?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Initiator)) { DbType = typeof(bool?) };
-			yield return new ColumnDescription(nameof(ExecutionMessage.SeqNum)) { DbType = typeof(long) };
-			yield return new ColumnDescription(nameof(ExecutionMessage.Leverage)) { DbType = typeof(int) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.SeqNum)) { DbType = typeof(long?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.Leverage)) { DbType = typeof(int?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
@@ -205,7 +205,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.PositionEffect), (int?)value.PositionEffect },
 				{ nameof(ExecutionMessage.PostOnly), value.PostOnly },
 				{ nameof(ExecutionMessage.Initiator), value.Initiator },
-				{ nameof(ExecutionMessage.SeqNum), value.SeqNum },
+				{ nameof(ExecutionMessage.SeqNum), value.SeqNum.DefaultAsNull() },
 				{ nameof(ExecutionMessage.Leverage), value.Leverage },
 			};
 			return result;

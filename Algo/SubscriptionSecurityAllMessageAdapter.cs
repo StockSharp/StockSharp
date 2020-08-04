@@ -48,6 +48,7 @@
 			}
 
 			public CachedSynchronizedPairSet<long, MarketDataMessage> Alls = new CachedSynchronizedPairSet<long, MarketDataMessage>();
+			public SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> NonAlls = new SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>>();
 			public Dictionary<SecurityId, ChildSubscription> Child { get; } = new Dictionary<SecurityId, ChildSubscription>();
 		}
 
@@ -139,11 +140,13 @@
 							{
 								if (!IsSecurityRequired(mdMsg.DataType2) || mdMsg.SecurityId == default)
 								{
+									mdMsg = mdMsg.TypedClone();
+									
 									var parent = _parents.FirstOrDefault(p => p.Value.Origin.DataType2 == mdMsg.DataType2).Value;
 
 									if (parent == null)
 									{
-										parent = new ParentSubscription(mdMsg.TypedClone());
+										parent = new ParentSubscription(mdMsg);
 										_parents.Add(transId, parent);
 
 										if (mdMsg.SecurityId == default)
@@ -156,19 +159,15 @@
 
 										// do not specify security cause adapter doesn't require it
 										Extensions.AllSecurity.CopyEx(mdMsg, false);
+										message = mdMsg;
 
 										this.AddInfoLog("Sec ALL {0} subscribing.", transId);
 									}
 									else
 									{
-										var childs = parent.Child;
-
-										mdMsg = mdMsg.TypedClone();
-
 										if (mdMsg.SecurityId != default)
 										{
-											var child = childs.SafeAdd(mdMsg.SecurityId, key => new ChildSubscription(parent, mdMsg));
-											child.Subscribers.Add(transId, mdMsg);
+											parent.NonAlls.SafeAdd(mdMsg.SecurityId).Add(transId);
 										}
 										else
 										{
@@ -201,26 +200,35 @@
 
 							var parent = tuple.Item1;
 							var request = tuple.Item2;
+							var secId = request.SecurityId;
+							var transId = request.TransactionId;
 
 							if (parent.Alls.RemoveByValue(request))
 								found = true;
+							else if (parent.NonAlls.TryGetValue(secId, out var set) && set.Remove(transId))
+							{
+								if (set.Count == 0)
+									parent.NonAlls.Remove(secId);
+
+								found = true;
+							}
 							else
 							{
-								if (parent.Child.TryGetValue(request.SecurityId, out var child))
+								if (parent.Child.TryGetValue(secId, out var child))
 								{
-									if (child.Subscribers.Remove(request.TransactionId))
+									if (child.Subscribers.Remove(transId))
 									{
 										found = true;
 
 										if (child.Subscribers.Count == 0)
-											parent.Child.Remove(request.SecurityId);
+											parent.Child.Remove(secId);
 									}
 								}
 							}
 
 							if (found)
 							{
-								if (parent.Alls.Count == 0 && parent.Child.Count == 0)
+								if (parent.Alls.Count == 0 && parent.NonAlls.Count == 0 && parent.Child.Count == 0)
 								{
 									// last unsubscribe is not initial subscription
 									if (parent.Origin.TransactionId != originId)
@@ -356,16 +364,26 @@
 			}
 		}
 
-		private void ApplySubscriptionIds(ISubscriptionIdMessage message, ChildSubscription child)
+		private void ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ParentSubscription parent, long[] newIds)
 		{
-			var ids = message.GetSubscriptionIds();
-			var initialId = child.Parent.Origin.TransactionId;
-			var newIds = child.Subscribers.CachedKeys.Concat(child.Parent.Alls.CachedKeys);
+			var ids = subscrMsg.GetSubscriptionIds();
+			var initialId = parent.Origin.TransactionId;
+			newIds = newIds.Concat(parent.Alls.CachedKeys);
+
+			if (subscrMsg is ISecurityIdMessage secIdMsg && parent.NonAlls.TryGetValue(secIdMsg.SecurityId, out var set))
+			{
+				newIds = newIds.Concat(set.Cache);
+			}
 
 			if (ids.Length == 1 && ids[0] == initialId)
-				message.SetSubscriptionIds(newIds);
+				subscrMsg.SetSubscriptionIds(newIds);
 			else
-				message.SetSubscriptionIds(ids.Where(id => id != initialId).Concat(newIds).ToArray());
+				subscrMsg.SetSubscriptionIds(ids.Where(id => id != initialId).Concat(newIds).ToArray());
+		}
+
+		private void ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ChildSubscription child)
+		{
+			ApplySubscriptionIds(subscrMsg, child.Parent, child.Subscribers.CachedKeys);
 		}
 
 		private SubscriptionSecurityAllMessage CheckSubscription(ref Message message)
@@ -400,16 +418,7 @@
 							// parent subscription has security id (not null)
 							if (parent.Origin.SecurityId == secIdMsg.SecurityId)
 							{
-								var ids = subscrMsg.GetSubscriptionIds();
-								var initialId = parent.Origin.TransactionId;
-								var newIds = parent.Alls.CachedKeys.Concat(new[] { initialId });
-
-								if (ids.Length == 1 && ids[0] == initialId)
-									subscrMsg.SetSubscriptionIds(newIds);
-								else
-									subscrMsg.SetSubscriptionIds(ids.Where(id => id != initialId).Concat(newIds).ToArray());
-							
-								subscrMsg.SetSubscriptionIds();
+								ApplySubscriptionIds(subscrMsg, parent, new[] { parent.Origin.TransactionId });
 								return null;
 							}
 

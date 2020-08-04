@@ -197,6 +197,13 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		/// <remarks>Zero means no information.</remarks>
+		[DataMember]
+		public long SeqNum { get; set; }
+
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
@@ -237,6 +244,7 @@ namespace StockSharp.BusinessEntities
 				OpenInterest = OpenInterest,
 				IsUpTick = IsUpTick,
 				Currency = Currency,
+				SeqNum = SeqNum,
 			};
 		}
 

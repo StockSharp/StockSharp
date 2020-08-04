@@ -6,6 +6,8 @@
 	/// <summary>
 	/// Base implementation of <see cref="ISubscriptionMessage"/> interface with non-online mode.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public abstract class BaseRequestMessage : BaseSubscriptionMessage
 	{
 		/// <summary>

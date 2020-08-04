@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 		}
 
-		private static readonly string[] _reserved = new string[10];
+		private static readonly string[] _reserved = new string[9];
 
 		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, Level1ChangeMessage data, IMarketDataMetaInfo metaInfo)
@@ -52,6 +52,8 @@ namespace StockSharp.Algo.Storages.Csv
 			row.AddRange(new[] { data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz") });
 
 			row.AddRange(data.BuildFrom.ToCsv());
+
+			row.Add(data.SeqNum.DefaultAsNull().ToString());
 
 			row.AddRange(_reserved);
 
@@ -85,6 +87,7 @@ namespace StockSharp.Algo.Storages.Csv
 				SecurityId = SecurityId,
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				BuildFrom = reader.ReadBuildFrom(),
+				SeqNum = reader.ReadNullableLong() ?? 0L,
 			};
 
 			reader.Skip(_reserved.Length);

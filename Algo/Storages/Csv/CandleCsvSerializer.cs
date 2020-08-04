@@ -180,7 +180,10 @@ namespace StockSharp.Algo.Storages.Csv
 				data.LowPrice.ToString(),
 				data.ClosePrice.ToString(),
 				data.TotalVolume.ToString()
-			}.Concat(data.BuildFrom.ToCsv()));
+			}.Concat(data.BuildFrom.ToCsv()).Concat(new[]
+			{
+				data.SeqNum.DefaultAsNull().ToString(),
+			}));
 		}
 
 		/// <inheritdoc />
@@ -201,6 +204,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				message.BuildFrom = reader.ReadBuildFrom();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				message.SeqNum = reader.ReadNullableLong() ?? 0L;
 
 			return message;
 		}

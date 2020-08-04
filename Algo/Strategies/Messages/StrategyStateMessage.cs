@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType { get; } = DataType.Create(typeof(StrategyStateMessage), null);
+		public override DataType DataType => StrategyDataType.State;
 
 		/// <summary>
 		/// Strategy ID.

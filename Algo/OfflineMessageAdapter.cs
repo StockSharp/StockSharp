@@ -18,8 +18,7 @@
 		private bool _connected;
 		private readonly SyncObject _syncObject = new SyncObject();
 		private readonly List<Message> _suspendedIn = new List<Message>();
-		private readonly PairSet<long, PortfolioMessage> _pfSubscriptions = new PairSet<long, PortfolioMessage>();
-		private readonly PairSet<long, MarketDataMessage> _mdSubscriptions = new PairSet<long, MarketDataMessage>();
+		private readonly PairSet<long, ISubscriptionMessage> _pendingSubscriptions = new PairSet<long, ISubscriptionMessage>();
 		private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = new PairSet<long, OrderRegisterMessage>();
 
 		/// <summary>
@@ -93,8 +92,7 @@
 						_connected = false;
 
 						_suspendedIn.Clear();
-						_mdSubscriptions.Clear();
-						_pfSubscriptions.Clear();
+						_pendingSubscriptions.Clear();
 					}
 
 					break;
@@ -197,52 +195,25 @@
 
 					break;
 				}
-				case MessageTypes.Portfolio:
-				{
-					lock (_syncObject)
-					{
-						if (!_connected)
-						{
-							var pfMsg = (PortfolioMessage)message;
-							ProcessSubscriptionMessage(pfMsg, pfMsg.IsSubscribe, pfMsg.TransactionId, pfMsg.OriginalTransactionId, _pfSubscriptions);
-							return true;
-						}
-					}
-
-					break;
-				}
-				case MessageTypes.MarketData:
-				{
-					lock (_syncObject)
-					{
-						if (!_connected)
-						{
-							var mdMsg = (MarketDataMessage)message;
-							ProcessSubscriptionMessage(mdMsg, mdMsg.IsSubscribe, mdMsg.TransactionId, mdMsg.OriginalTransactionId, _mdSubscriptions);
-							return true;
-						}
-					}
-
-					break;
-				}
-				case ExtendedMessageTypes.ProcessSuspended:
+				case MessageTypes.ProcessSuspended:
 				{
 					Message[] msgs;
 
 					lock (_syncObject)
+					{
 						msgs = _suspendedIn.CopyAndClear();
 
-					foreach (var msg in msgs)
-					{
-						if (msg is MarketDataMessage mdMsg)
-							_mdSubscriptions.RemoveByValue(mdMsg);
-						else if (msg is PortfolioMessage pfMsg)
-							_pfSubscriptions.RemoveByValue(pfMsg);
-						else if (msg is OrderRegisterMessage orderMsg)
-							_pendingRegistration.RemoveByValue(orderMsg);
-
-						base.OnSendInMessage(message);
+						foreach (var msg in msgs)
+						{
+							if (msg is ISubscriptionMessage subscrMsg)
+								_pendingSubscriptions.RemoveByValue(subscrMsg);
+							else if (msg is OrderRegisterMessage orderMsg)
+								_pendingRegistration.RemoveByValue(orderMsg);
+						}
 					}
+
+					foreach (var msg in msgs)
+						base.OnSendInMessage(msg);
 
 					return true;
 				}
@@ -255,7 +226,11 @@
 							{
 								if (!_connected)
 								{
-									StoreMessage(message.Clone());
+									if (message is ISubscriptionMessage subscrMsg)
+										ProcessSubscriptionMessage(subscrMsg);
+									else
+										StoreMessage(message.Clone());
+
 									return true;
 								}
 							}
@@ -281,33 +256,31 @@
 			return base.OnSendInMessage(message);
 		}
 
-		private void ProcessSubscriptionMessage<TMessage>(TMessage message, bool isSubscribe, long transactionId, long originalTransactionId, PairSet<long, TMessage> subscriptions)
-			where TMessage : Message
+		private void ProcessSubscriptionMessage(ISubscriptionMessage subscrMsg)
 		{
-			if (isSubscribe)
+			if (subscrMsg.IsSubscribe)
 			{
-				var clone = (TMessage)message.Clone();
+				var clone = subscrMsg.TypedClone();
 
-				if (transactionId != 0)
-					subscriptions.Add(transactionId, clone);
+				if (subscrMsg.TransactionId != 0)
+					_pendingSubscriptions.Add(subscrMsg.TransactionId, clone);
 
-				StoreMessage(clone);
+				StoreMessage((Message)clone);
 			}
 			else
 			{
-				if (originalTransactionId != 0)
+				if (subscrMsg.OriginalTransactionId != 0)
 				{
-					var originMsg = subscriptions.TryGetValue(originalTransactionId);
-
-					if (originMsg != null)
+					if (_pendingSubscriptions.TryGetAndRemove(subscrMsg.OriginalTransactionId, out var originMsg))
 					{
-						subscriptions.Remove(originalTransactionId);
-						_suspendedIn.Remove(originMsg);
+						_suspendedIn.Remove((Message)originMsg);
+
+						RaiseNewOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = subscrMsg.TransactionId });
 						return;
 					}
 				}
 								
-				StoreMessage(message.Clone());
+				StoreMessage((Message)subscrMsg.Clone());
 			}
 		}
 
@@ -359,8 +332,6 @@
 				}
 			}
 
-			base.OnInnerAdapterNewOutMessage(message);
-
 			ProcessSuspendedMessage processMsg = null;
 
 			if ((connectMessage != null && connectMessage.Error == null) || message.Type == ExtendedMessageTypes.ReconnectingFinished)
@@ -373,10 +344,10 @@
 				}
 			}
 
+			base.OnInnerAdapterNewOutMessage(message);
+
 			if (processMsg != null)
-			{
 				base.OnInnerAdapterNewOutMessage(processMsg);
-			}
 		}
 
 		/// <summary>

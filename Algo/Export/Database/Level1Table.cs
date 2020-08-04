@@ -57,6 +57,7 @@ namespace StockSharp.Algo.Export.Database
 			};
 			yield return new ColumnDescription(nameof(Level1ChangeMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(Level1ChangeMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(Level1ChangeMessage.SeqNum)) { DbType = typeof(long?) };
 
 			foreach (var field in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
 			{
@@ -114,6 +115,7 @@ namespace StockSharp.Algo.Export.Database
 						{ nameof(SecurityId.BoardCode), m.SecurityId.BoardCode },
 						{ nameof(Level1ChangeMessage.ServerTime), m.ServerTime },
 						{ nameof(Level1ChangeMessage.LocalTime), m.LocalTime },
+						{ nameof(Level1ChangeMessage.SeqNum), m.SeqNum.DefaultAsNull() },
 					};
 
 					foreach (var pair in m.Changes)

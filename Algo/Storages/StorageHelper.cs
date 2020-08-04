@@ -1513,5 +1513,23 @@ namespace StockSharp.Algo.Storages
 			
 			return DataType.Create(type, arg);
 		}
+
+		/// <summary>
+		/// Make association with adapter.
+		/// </summary>
+		/// <param name="provider">Message adapter's provider interface.</param>
+		/// <param name="key">Key.</param>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns><see langword="true"/> if the association is successfully changed, otherwise, <see langword="false"/>.</returns>
+		public static bool SetAdapter<TKey>(this IMappingMessageAdapterProvider<TKey> provider, TKey key, IMessageAdapter adapter)
+		{
+			if (provider is null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return provider.SetAdapter(key, adapter.Id);
+		}
 	}
 }

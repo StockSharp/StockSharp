@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Storages.Csv
 	using Ecng.Common;
 
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	class NullableTimeQuoteChange
 	{
@@ -49,6 +50,9 @@ namespace StockSharp.Algo.Storages.Csv
 		protected override void Write(CsvFileWriter writer, NullableTimeQuoteChange data, IMarketDataMetaInfo metaInfo)
 		{
 			var quote = data.Quote;
+
+			if (quote != null && quote.Value.Volume < 0)
+				throw new ArgumentOutOfRangeException(nameof(data), quote.Value.Volume, LocalizedStrings.Str936);
 
 			writer.WriteRow(new[]
 			{

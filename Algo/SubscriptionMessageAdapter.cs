@@ -66,7 +66,7 @@ namespace StockSharp.Algo
 				case MessageTypes.OrderStatus:
 					return ProcessOrderStatusMessage((OrderStatusMessage)message);
 
-				case ExtendedMessageTypes.ProcessSuspended:
+				case MessageTypes.ProcessSuspended:
 				{
 					Message[] reMapSubscriptions;
 

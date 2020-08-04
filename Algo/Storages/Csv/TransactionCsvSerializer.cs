@@ -207,7 +207,7 @@ namespace StockSharp.Algo.Storages.Csv
 				msg.BuildFrom = reader.ReadBuildFrom();
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-				msg.Leverage = reader.ReadInt();
+				msg.Leverage = reader.ReadNullableInt();
 
 			return msg;
 		}

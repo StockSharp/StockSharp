@@ -66,6 +66,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			stream.WriteEx(IncrementalOnly);
+
+			if (Version < MarketDataVersions.Version60)
+				return;
+
+			WriteSeqNums(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -97,6 +102,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			IncrementalOnly = stream.Read<bool>();
+
+			if (Version < MarketDataVersions.Version60)
+				return;
+
+			ReadSeqNums(stream);
 		}
 
 		public override void CopyFrom(BinaryMetaInfo src)
@@ -112,7 +122,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version59, exchangeInfoProvider)
+			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version60, exchangeInfoProvider)
 		{
 		}
 
@@ -134,6 +144,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				metaInfo.ServerOffset = firstDepth.ServerTime.Offset;
 				metaInfo.IncrementalOnly = firstDepth.State != null;
+				metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = firstDepth.SeqNum;
 			}
 
 			writer.WriteInt(messages.Count());
@@ -146,7 +157,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
-			var buildFrom = metaInfo.Version < MarketDataVersions.Version59;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version60;
 
 			foreach (var m in messages)
 			{
@@ -243,6 +255,11 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteBuildFrom(quoteMsg.BuildFrom);
+
+				if (!seqNum)
+					continue;
+
+				writer.WriteSeqNum(quoteMsg, metaInfo);
 			}
 		}
 
@@ -257,7 +274,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
-			var buildFrom = metaInfo.Version < MarketDataVersions.Version59;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version60;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -344,6 +362,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return quoteMsg;
 				
 			quoteMsg.BuildFrom = reader.ReadBuildFrom();
+
+			if (!seqNum)
+				return quoteMsg;
+
+			reader.ReadSeqNum(quoteMsg, metaInfo);
 
 			return quoteMsg;
 		}

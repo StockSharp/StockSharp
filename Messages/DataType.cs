@@ -161,6 +161,11 @@ namespace StockSharp.Messages
 		public static DataType SecurityMapping { get; } = Create(typeof(SecurityMappingInfoMessage), null).Immutable();
 
 		/// <summary>
+		/// <see cref="CommandMessage"/>.
+		/// </summary>
+		public static DataType Command { get; } = Create(typeof(CommandMessage), null);
+
+		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <param name="tf">Candle arg.</param>

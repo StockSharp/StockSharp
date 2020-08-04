@@ -57,6 +57,7 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(ExecutionMessage.OpenInterest)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = volumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.IsUpTick)) { DbType = typeof(bool?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Currency)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.SeqNum)) { DbType = typeof(long?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
@@ -74,6 +75,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.OpenInterest), value.OpenInterest },
 				{ nameof(ExecutionMessage.IsUpTick), value.IsUpTick },
 				{ nameof(ExecutionMessage.Currency), (int?)value.Currency },
+				{ nameof(ExecutionMessage.SeqNum), value.SeqNum.DefaultAsNull() },
 			};
 			return result;
 		}

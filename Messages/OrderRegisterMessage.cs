@@ -97,15 +97,6 @@ namespace StockSharp.Messages
 		public bool? IsMarketMaker { get; set; }
 
 		/// <summary>
-		/// Is margin enabled.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarginKey)]
-		[DescriptionLoc(LocalizedStrings.IsMarginKey)]
-		[MainCategory]
-		public bool? IsMargin { get; set; }
-
-		/// <summary>
 		/// Slippage in trade price.
 		/// </summary>
 		[DataMember]
@@ -188,7 +179,6 @@ namespace StockSharp.Messages
 			destination.TillDate = TillDate;
 			destination.TimeInForce = TimeInForce;
 			destination.IsMarketMaker = IsMarketMaker;
-			destination.IsMargin = IsMargin;
 			destination.Slippage = Slippage;
 			destination.IsManual = IsManual;
 			destination.MinOrderVolume = MinOrderVolume;
@@ -200,7 +190,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume}/{MinOrderVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},MR={IsMargin},SLP={Slippage},MN={IsManual}";
+			var str = base.ToString() + $",Price={Price},Side={Side},Vol={Volume}/{VisibleVolume}/{MinOrderVolume},Till={TillDate},TIF={TimeInForce},MM={IsMarketMaker},SLP={Slippage},MN={IsManual}";
 
 			if (PositionEffect != null)
 				str += $",PosEffect={PositionEffect.Value}";

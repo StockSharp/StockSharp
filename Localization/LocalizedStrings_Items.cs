@@ -45038,12 +45038,12 @@ namespace StockSharp.Localization
 		public static string HydraWcfServer => GetString(HydraWcfServerKey);
 
 		/// <summary>
-		/// Candle max days
+		/// Candle (days)
 		/// </summary>
 		public const string CandleMaxDaysKey = nameof(CandleMaxDays);
 
 		/// <summary>
-		/// Candle max days
+		/// Candle (days)
 		/// </summary>
 		public static string CandleMaxDays => GetString(CandleMaxDaysKey);
 
@@ -45058,12 +45058,12 @@ namespace StockSharp.Localization
 		public static string CandleMaxDaysDescription => GetString(CandleMaxDaysDescriptionKey);
 
 		/// <summary>
-		/// Tick max days
+		/// Tick (days)
 		/// </summary>
 		public const string TickMaxDaysKey = nameof(TickMaxDays);
 
 		/// <summary>
-		/// Tick max days
+		/// Tick (days)
 		/// </summary>
 		public static string TickMaxDays => GetString(TickMaxDaysKey);
 
@@ -45076,6 +45076,66 @@ namespace StockSharp.Localization
 		/// The maximum number of days available to download historical tick data.
 		/// </summary>
 		public static string TickMaxDaysDescription => GetString(TickMaxDaysDescriptionKey);
+
+		/// <summary>
+		/// Book (days)
+		/// </summary>
+		public const string OrderBookMaxDaysKey = nameof(OrderBookMaxDays);
+
+		/// <summary>
+		/// Book (days)
+		/// </summary>
+		public static string OrderBookMaxDays => GetString(OrderBookMaxDaysKey);
+
+		/// <summary>
+		/// The maximum number of days available to download historical order book data.
+		/// </summary>
+		public const string OrderBookMaxDaysDescriptionKey = nameof(OrderBookMaxDaysDescription);
+
+		/// <summary>
+		/// The maximum number of days available to download historical order book data.
+		/// </summary>
+		public static string OrderBookMaxDaysDescription => GetString(OrderBookMaxDaysDescriptionKey);
+
+		/// <summary>
+		/// OL (days)
+		/// </summary>
+		public const string OrderLogMaxDaysKey = nameof(OrderLogMaxDays);
+
+		/// <summary>
+		/// OL (days)
+		/// </summary>
+		public static string OrderLogMaxDays => GetString(OrderLogMaxDaysKey);
+
+		/// <summary>
+		/// The maximum number of days available to download historical order log data.
+		/// </summary>
+		public const string OrderLogMaxDaysDescriptionKey = nameof(OrderLogMaxDaysDescription);
+
+		/// <summary>
+		/// The maximum number of days available to download historical order log data.
+		/// </summary>
+		public static string OrderLogMaxDaysDescription => GetString(OrderLogMaxDaysDescriptionKey);
+
+		/// <summary>
+		/// Transactions (days)
+		/// </summary>
+		public const string TransactionsMaxDaysKey = nameof(TransactionsMaxDays);
+
+		/// <summary>
+		/// Transactions (days)
+		/// </summary>
+		public static string TransactionsMaxDays => GetString(TransactionsMaxDaysKey);
+
+		/// <summary>
+		/// The maximum number of days available to download historical transaction data.
+		/// </summary>
+		public const string TransactionsMaxDaysDescriptionKey = nameof(TransactionsMaxDaysDescription);
+
+		/// <summary>
+		/// The maximum number of days available to download historical transaction data.
+		/// </summary>
+		public static string TransactionsMaxDaysDescription => GetString(TransactionsMaxDaysDescriptionKey);
 
 		/// <summary>
 		/// Sound
@@ -52396,5 +52456,65 @@ namespace StockSharp.Localization
 		/// Cannot convert {0} to {1}.
 		/// </summary>
 		public static string CannotConvert => GetString(CannotConvertKey);
+
+		/// <summary>
+		/// Sections
+		/// </summary>
+		public const string SectionsKey = nameof(Sections);
+
+		/// <summary>
+		/// Sections
+		/// </summary>
+		public static string Sections => GetString(SectionsKey);
+
+		/// <summary>
+		/// Available for trading sections.
+		/// </summary>
+		public const string SectionsDescKey = nameof(SectionsDesc);
+
+		/// <summary>
+		/// Available for trading sections.
+		/// </summary>
+		public static string SectionsDesc => GetString(SectionsDescKey);
+
+		/// <summary>
+		/// Split
+		/// </summary>
+		public const string SplitKey = nameof(Split);
+
+		/// <summary>
+		/// Split
+		/// </summary>
+		public static string Split => GetString(SplitKey);
+
+		/// <summary>
+		/// Split type.
+		/// </summary>
+		public const string SplitTypeKey = nameof(SplitType);
+
+		/// <summary>
+		/// Split type.
+		/// </summary>
+		public static string SplitType => GetString(SplitTypeKey);
+
+		/// <summary>
+		/// Exec ID
+		/// </summary>
+		public const string ExecIdKey = nameof(ExecId);
+
+		/// <summary>
+		/// Exec ID
+		/// </summary>
+		public static string ExecId => GetString(ExecIdKey);
+
+		/// <summary>
+		/// Override exec id by native identifier (if present in FIX message).
+		/// </summary>
+		public const string OverrideExecIdByNativeKey = nameof(OverrideExecIdByNative);
+
+		/// <summary>
+		/// Override exec id by native identifier (if present in FIX message).
+		/// </summary>
+		public static string OverrideExecIdByNative => GetString(OverrideExecIdByNativeKey);
 	}
 }

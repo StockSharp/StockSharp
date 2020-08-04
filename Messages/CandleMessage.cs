@@ -62,7 +62,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public abstract class CandleMessage : Message,
-		ISubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage
+		ISubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage, ISeqNumMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -286,6 +286,10 @@ namespace StockSharp.Messages
 		[DataMember]
 		public DataType BuildFrom { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public long SeqNum { get; set; }
+
 		/// <summary>
 		/// Copy parameters.
 		/// </summary>
@@ -321,6 +325,7 @@ namespace StockSharp.Messages
 			copy.PriceLevels = PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			copy.State = State;
 			copy.BuildFrom = BuildFrom;
+			copy.SeqNum = SeqNum;
 
 			return copy;
 		}
@@ -328,7 +333,12 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return $"{Type},Sec={SecurityId},A={Arg},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume},S={State},TransId={OriginalTransactionId}";
+			var str = $"{Type},Sec={SecurityId},A={Arg},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume},S={State},TransId={OriginalTransactionId}";
+
+			if (SeqNum != default)
+				str += $",SQ={SeqNum}";
+
+			return str;
 		}
 
 		DateTimeOffset IServerTimeMessage.ServerTime

@@ -10,7 +10,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public class SecurityMappingMessage : Message
+	public class SecurityMappingMessage : Message, ISubscriptionMessage
 	{
 		/// <summary>
 		/// Initialize <see cref="SecurityMappingMessage"/>.
@@ -37,6 +37,44 @@ namespace StockSharp.Messages
 		[DataMember]
 		public string StorageName { get; set; }
 
+		bool ISubscriptionMessage.FilterEnabled => false;
+
+		DateTimeOffset? ISubscriptionMessage.From
+		{
+			get => null;
+			set { }
+		}
+
+		DateTimeOffset? ISubscriptionMessage.To
+		{
+			// prevent for online mode
+			get => DateTimeOffset.MaxValue;
+			set { }
+		}
+
+		long? ISubscriptionMessage.Count
+		{
+			get => null;
+			set { }
+		}
+
+		bool ISubscriptionMessage.IsSubscribe
+		{
+			get => true;
+			set { }
+		}
+
+		/// <inheritdoc />
+		public DataType DataType { get; } = DataType.Create(typeof(SecurityMappingMessage), null).Immutable();
+
+		/// <inheritdoc />
+		[DataMember]
+		public long TransactionId { get; set; }
+		
+		/// <inheritdoc />
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
+
 		/// <summary>
 		/// Create a copy of <see cref="SecurityMappingMessage"/>.
 		/// </summary>
@@ -48,6 +86,8 @@ namespace StockSharp.Messages
 				Mapping = Mapping.Clone(),
 				StorageName = StorageName,
 				IsDelete = IsDelete,
+				TransactionId = TransactionId,
+				OriginalTransactionId = OriginalTransactionId,
 			};
 
 			CopyTo(clone);
@@ -57,6 +97,16 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override string ToString()
-			=> base.ToString() + $"Storage={StorageName},Mapping={Mapping},Del={IsDelete}";
+		{
+			var str = base.ToString() + $"Storage={StorageName},Mapping={Mapping},Del={IsDelete}";
+
+			if (TransactionId != default)
+				str += $",TrId={TransactionId}";
+
+			if (OriginalTransactionId != default)
+				str += $",OrigTrId={OriginalTransactionId}";
+
+			return str;
+		}
 	}
 }

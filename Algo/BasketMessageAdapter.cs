@@ -1700,7 +1700,7 @@ namespace StockSharp.Algo
 					{
 						var pfMsg = (IPortfolioNameMessage)message;
 						ApplyParentLookupId((ISubscriptionIdMessage)message);
-						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter).Id);
+						PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 						break;
 					}
 

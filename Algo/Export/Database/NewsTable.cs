@@ -78,6 +78,7 @@ namespace StockSharp.Algo.Export.Database
 				ValueRestriction = new StringRestriction(8)
 			};
 			yield return new ColumnDescription(nameof(NewsMessage.ExpiryDate)) { DbType = typeof(DateTimeOffset?) };
+			yield return new ColumnDescription(nameof(NewsMessage.SeqNum)) { DbType = typeof(long?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(NewsMessage value)
@@ -96,6 +97,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(NewsMessage.Priority), value.Priority.To<int?>() },
 				{ nameof(NewsMessage.Language), value.Language },
 				{ nameof(NewsMessage.ExpiryDate), value.ExpiryDate },
+				{ nameof(NewsMessage.SeqNum), value.SeqNum.DefaultAsNull() },
 			};
 			return result;
 		}

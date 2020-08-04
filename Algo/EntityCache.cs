@@ -804,6 +804,7 @@ namespace StockSharp.Algo
 				var fail = EntityFactory.CreateOrderFail(o, error);
 				fail.ServerTime = message.ServerTime;
 				fail.LocalTime = message.LocalTime;
+				fail.SeqNum = message.SeqNum;
 				return Tuple.Create(fail, operation);
 			});
 		}
@@ -863,6 +864,9 @@ namespace StockSharp.Algo
 
 				var trade = message.ToTrade(EntityFactory.CreateTrade(security, key.Item2, key.Item3));
 
+				if (message.SeqNum != default)
+					trade.SeqNum = message.SeqNum;
+
 				var t = EntityFactory.CreateMyTrade(order, trade);
 
 				//if (t.ExtensionInfo == null)
@@ -888,9 +892,6 @@ namespace StockSharp.Algo
 
 				if (message.Yield != null)
 					t.Yield = message.Yield;
-
-				if (message.SeqNum != default)
-					t.SeqNum = message.SeqNum;
 
 				message.CopyExtensionInfo(t);
 

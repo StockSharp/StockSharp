@@ -250,8 +250,12 @@
 					break;
 				}
 
-				case ExtendedMessageTypes.ProcessSuspended:
-					ProcessInSuspended(((ProcessSuspendedMessage)message).SecurityId);
+				case MessageTypes.ProcessSuspended:
+					var suspendMsg = (ProcessSuspendedMessage)message;
+
+					if (suspendMsg.Arg is SecurityId secId)
+						ProcessInSuspended(secId);
+
 					return true;
 
 				default:

@@ -171,6 +171,13 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public DateTimeOffset? ExpiryDate { get; set; }
 
+		/// <summary>
+		/// Sequence number.
+		/// </summary>
+		/// <remarks>Zero means no information.</remarks>
+		[DataMember]
+		public long SeqNum { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{

@@ -57,6 +57,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteFractionalPrice(stream);
+
+			if (Version < MarketDataVersions.Version60)
+				return;
+
+			WriteSeqNums(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -82,6 +87,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadFractionalPrice(stream);
+
+			if (Version < MarketDataVersions.Version60)
+				return;
+
+			ReadSeqNums(stream);
 		}
 	}
 
@@ -89,7 +99,7 @@ namespace StockSharp.Algo.Storages.Binary
 		where TCandleMessage : CandleMessage, new()
 	{
 		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, arg, 74, MarketDataVersions.Version59, exchangeInfoProvider)
+			: base(securityId, arg, 74, MarketDataVersions.Version60, exchangeInfoProvider)
 		{
 		}
 
@@ -107,6 +117,7 @@ namespace StockSharp.Algo.Storages.Binary
 					metaInfo.FirstFractionalPrice = metaInfo.LastFractionalPrice = low;
 
 				metaInfo.ServerOffset = firstCandle.OpenTime.Offset;
+				metaInfo.FirstSeqNum = metaInfo.PrevSeqNum = firstCandle.SeqNum;
 			}
 
 			writer.WriteInt(candles.Count());
@@ -119,6 +130,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = bigRange;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version60;
 
 			foreach (var candle in candles)
 			{
@@ -407,6 +419,11 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteBuildFrom(candle.BuildFrom);
+
+				if (!seqNum)
+					continue;
+
+				writer.WriteSeqNum(candle, metaInfo);
 			}
 		}
 
@@ -432,6 +449,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version57;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version60;
 
 			if (metaInfo.Version < MarketDataVersions.Version56)
 			{
@@ -590,6 +608,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return candle;
 			
 			candle.BuildFrom = reader.ReadBuildFrom();
+
+			if (!seqNum)
+				return candle;
+
+			reader.ReadSeqNum(candle, metaInfo);
 
 			return candle;
 		}

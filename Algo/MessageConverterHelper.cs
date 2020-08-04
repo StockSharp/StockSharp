@@ -26,9 +26,11 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Community;
 
 	/// <summary>
 	/// The auxiliary class for conversion of business-objects (<see cref="BusinessEntities"/>) into messages (<see cref="Messages"/>) and vice versa.
@@ -142,6 +144,7 @@ namespace StockSharp.Algo
 			message.Arg = candle.Arg;
 			message.PriceLevels = candle.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			message.State = candle.State;
+			message.SeqNum = candle.SeqNum;
 
 			return message;
 		}
@@ -184,6 +187,7 @@ namespace StockSharp.Algo
 				Slippage = trade.Slippage,
 				Commission = trade.Commission,
 				CommissionCurrency = trade.CommissionCurrency,
+				SeqNum = trade.Trade.SeqNum,
 			};
 		}
 
@@ -226,6 +230,7 @@ namespace StockSharp.Algo
 				Comment = order.Comment,
 				VisibleVolume = order.VisibleVolume,
 				Currency = order.Currency,
+				SeqNum = order.SeqNum,
 			};
 
 			return message;
@@ -261,6 +266,7 @@ namespace StockSharp.Algo
 				OrderState = OrderStates.Failed,
 				ServerTime = fail.ServerTime,
 				LocalTime = fail.LocalTime,
+				SeqNum = fail.SeqNum,
 			};
 		}
 
@@ -290,6 +296,7 @@ namespace StockSharp.Algo
 				OriginSide = trade.OrderDirection,
 				IsUpTick = trade.IsUpTick,
 				Currency = trade.Currency,
+				SeqNum = trade.SeqNum,
 			};
 		}
 
@@ -329,6 +336,7 @@ namespace StockSharp.Algo
 				TradeId = trade?.Id,
 				TradePrice = trade?.Price,
 				Currency = order.Currency,
+				SeqNum = order.SeqNum,
 			};
 		}
 
@@ -396,14 +404,15 @@ namespace StockSharp.Algo
 				OrderType = order.Type,
 				OriginalTransactionId = order.TransactionId,
 				TransactionId = transactionId,
-				OrderId = order.Id,
-				OrderStringId = order.StringId,
-				Volume = volume,
 				UserOrderId = order.UserOrderId,
 				StrategyId = order.StrategyId,
 				BrokerCode = order.BrokerCode,
 				ClientCode = order.ClientCode,
-				Side = order.Direction
+				OrderId = order.Id,
+				OrderStringId = order.StringId,
+				Volume = volume,
+				Side = order.Direction,
+				IsMargin = order.IsMargin,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -1240,6 +1249,7 @@ namespace StockSharp.Algo
 			candle.PriceLevels = message.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 
 			candle.State = message.State;
+			candle.SeqNum = message.SeqNum;
 
 			return candle;
 		}
@@ -1280,6 +1290,7 @@ namespace StockSharp.Algo
 			trade.OrderDirection = message.OriginSide;
 			trade.IsUpTick = message.IsUpTick;
 			trade.Currency = message.Currency;
+			trade.SeqNum = message.SeqNum;
 
 			return trade;
 		}
@@ -1382,6 +1393,7 @@ namespace StockSharp.Algo
 
 			marketDepth.LocalTime = message.LocalTime;
 			marketDepth.Currency = message.Currency;
+			marketDepth.SeqNum = message.SeqNum;
 
 			return marketDepth;
 		}
@@ -1437,6 +1449,7 @@ namespace StockSharp.Algo
 			order.TimeInForce = message.TimeInForce;
 			order.IsSystem = message.IsSystem;
 			order.Currency = message.Currency;
+			order.SeqNum = message.SeqNum;
 
 			order.ApplyNewState(message.OrderState ?? (message.TradeId != null ? OrderStates.Done : OrderStates.Active));
 
@@ -1479,6 +1492,7 @@ namespace StockSharp.Algo
 				Priority = news.Priority,
 				Language = news.Language,
 				ExpiryDate = news.ExpiryDate,
+				SeqNum = news.SeqNum,
 			};
 		}
 
@@ -1670,7 +1684,8 @@ namespace StockSharp.Algo
 				Security = message.SecurityId == null ? null : new Security
 				{
 					Id = message.SecurityId.Value.SecurityCode
-				}
+				},
+				SeqNum = message.SeqNum,
 			};
 		}
 
@@ -1915,6 +1930,8 @@ namespace StockSharp.Algo
 				return new SecurityLookupMessage();
 			else if (dataType == DataType.Board)
 				return new BoardLookupMessage();
+			else if (dataType == DataType.BoardState)
+				return new BoardLookupMessage();
 			else if (dataType == DataType.Users)
 				return new UserLookupMessage();
 			else if (dataType == DataType.TimeFrames)
@@ -1925,8 +1942,26 @@ namespace StockSharp.Algo
 				return new OrderStatusMessage();
 			else if (dataType == DataType.PositionChanges)
 				return new PortfolioLookupMessage();
+			else if (dataType == StrategyDataType.Info)
+				return new StrategyLookupMessage();
+			else if (dataType == StrategyDataType.State)
+				return new StrategyLookupMessage();
 			else if (dataType.IsPortfolio)
 				return new PortfolioMessage();
+			else if (dataType == DataType.SecurityLegs)
+				return new SecurityLegsRequestMessage();
+			else if (dataType == DataType.SecurityMapping)
+				return new SecurityMappingRequestMessage();
+			else if (dataType == DataType.SecurityRoute)
+				return new SecurityRouteListRequestMessage();
+			else if (dataType == DataType.PortfolioRoute)
+				return new PortfolioRouteListRequestMessage();
+			else if (dataType == DataType.Command)
+				return new CommandMessage();
+			else if (dataType == CommunityMessageTypes.ProductInfoType)
+				return new ProductLookupMessage();
+			else if (dataType == CommunityMessageTypes.ProductFeedbackType)
+				return new ProductLookupMessage();
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}

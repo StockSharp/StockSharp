@@ -62,6 +62,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.PortfolioName,
 				data.IsSystem.ToString(),
 				data.Balance.ToString(),
+				data.SeqNum.DefaultAsNull().ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -91,6 +92,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				ol.Balance = reader.ReadNullableDecimal();
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				ol.SeqNum = reader.ReadNullableLong() ?? 0L;
 
 			return ol;
 		}
