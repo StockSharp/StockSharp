@@ -129,7 +129,7 @@
 				_state = currState = newState;
 			}
 
-			void Apply(IEnumerable<QuoteChange> from, SortedList<decimal, QuoteChange> to)
+			static void Apply(IEnumerable<QuoteChange> from, SortedList<decimal, QuoteChange> to)
 			{
 				foreach (var quote in from)
 				{
@@ -140,7 +140,7 @@
 				}
 			}
 
-			void ApplyByPos(IEnumerable<QuoteChange> from, List<QuoteChange> to)
+			static void ApplyByPos(IEnumerable<QuoteChange> from, List<QuoteChange> to)
 			{
 				foreach (var quote in from)
 				{
