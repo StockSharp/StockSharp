@@ -13,12 +13,10 @@
 	/// <summary>
 	/// Order book builder, used incremental <see cref="QuoteChangeMessage"/>.
 	/// </summary>
-	public class OrderBookIncrementBuilder
+	public class OrderBookIncrementBuilder : BaseLogReceiver
 	{
 		private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
 		private QuoteChangeStates _state = _none;
-
-		private readonly ILogReceiver _logs;
 
 		private readonly SortedList<decimal, QuoteChange> _bids = new SortedList<decimal, QuoteChange>(new BackwardComparer<decimal>());
 		private readonly SortedList<decimal, QuoteChange> _asks = new SortedList<decimal, QuoteChange>();
@@ -30,14 +28,12 @@
 		/// Initializes a new instance of the <see cref="OrderBookIncrementBuilder"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="logs">Logs.</param>
-		public OrderBookIncrementBuilder(SecurityId securityId, ILogReceiver logs)
+		public OrderBookIncrementBuilder(SecurityId securityId)
 		{
 			if (securityId == default)
 				throw new ArgumentNullException(nameof(securityId));
 
 			SecurityId = securityId;
-			_logs = logs ?? throw new ArgumentNullException(nameof(logs));
 		}
 
 		/// <summary>
@@ -69,14 +65,14 @@
 					case QuoteChangeStates.SnapshotStarted:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							_logs.AddDebugLog($"{currState}->{newState}");
+							this.AddDebugLog($"{currState}->{newState}");
 
 						break;
 					}
 					case QuoteChangeStates.SnapshotBuilding:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							_logs.AddDebugLog($"{currState}->{newState}");
+							this.AddDebugLog($"{currState}->{newState}");
 
 						break;
 					}
@@ -84,7 +80,7 @@
 					case QuoteChangeStates.Increment:
 					{
 						if (newState == QuoteChangeStates.SnapshotBuilding)
-							_logs.AddDebugLog($"{currState}->{newState}");
+							this.AddDebugLog($"{currState}->{newState}");
 
 						break;
 					}
