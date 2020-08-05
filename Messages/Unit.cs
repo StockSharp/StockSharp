@@ -493,10 +493,10 @@ namespace StockSharp.Messages
 		public static bool operator !=(Unit u1, Unit u2)
 		{
 			if (u1 is null)
-				return u2 is null;
+				return u2 is object;
 
 			if (u2 is null)
-				return false;
+				return u1 is object;
 
 			var res = u1.EqualsImpl(u2);
 
