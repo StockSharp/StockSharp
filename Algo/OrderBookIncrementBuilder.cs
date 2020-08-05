@@ -87,43 +87,16 @@
 				}
 			}
 
-			if (currState != newState || newState == QuoteChangeStates.SnapshotComplete)
+			var resetState = newState == QuoteChangeStates.SnapshotStarted || newState == QuoteChangeStates.SnapshotComplete;
+
+			if (currState != newState || resetState)
 			{
 				CheckSwitch();
 
-				if (newState == QuoteChangeStates.SnapshotStarted)
+				if (currState == _none || resetState)
 				{
 					_bids.Clear();
 					_asks.Clear();
-				}
-
-				switch (currState)
-				{
-					case _none:
-					{
-						_bids.Clear();
-						_asks.Clear();
-
-						break;
-					}
-					case QuoteChangeStates.SnapshotStarted:
-						break;
-					case QuoteChangeStates.SnapshotBuilding:
-						break;
-					case QuoteChangeStates.SnapshotComplete:
-					{
-						if (newState == QuoteChangeStates.SnapshotComplete)
-						{
-							_bids.Clear();
-							_asks.Clear();
-						}
-
-						break;
-					}
-					case QuoteChangeStates.Increment:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(currState.ToString());
 				}
 
 				_state = currState = newState;
