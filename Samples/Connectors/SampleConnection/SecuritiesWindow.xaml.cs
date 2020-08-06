@@ -357,6 +357,7 @@ namespace SampleConnection
 				{
 					From = wnd.From,
 					To = wnd.To,
+					BuildCandlesMode = wnd.BuildMode,
 				});
 
 				_chartWindows.Add(chartWnd);

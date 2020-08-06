@@ -284,7 +284,7 @@ namespace StockSharp.Algo.Storages.Csv
 				remove => _removed -= value;
 			}
 
-			private Security GetById(SecurityId id) => ((IStorageSecurityList)this).ReadById(id.ToStringId());
+			private Security GetById(SecurityId id) => ((IStorageSecurityList)this).ReadById(id);
 
 			Security ISecurityProvider.LookupById(SecurityId id) => GetById(id);
 
@@ -319,10 +319,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			#region CsvEntityList
 
-			protected override object GetKey(Security item)
-			{
-				return item.Id;
-			}
+			protected override object GetKey(Security item) => item.ToSecurityId();
 
 			private class LiteSecurity
 			{
@@ -359,6 +356,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 				public Security ToSecurity(SecurityCsvList list)
 				{
+					if (Id.CompareIgnoreCase(TraderHelper.AllSecurity.Id))
+						return TraderHelper.AllSecurity;
+
 					var board = Board;
 
 					if (board.IsEmpty())
@@ -433,7 +433,7 @@ namespace StockSharp.Algo.Storages.Csv
 				}
 			}
 
-			private readonly Dictionary<string, LiteSecurity> _cache = new Dictionary<string, LiteSecurity>(StringComparer.InvariantCultureIgnoreCase);
+			private readonly Dictionary<SecurityId, LiteSecurity> _cache = new Dictionary<SecurityId, LiteSecurity>();
 
 			private static bool IsChanged(string original, string cached, bool forced)
 			{
@@ -454,7 +454,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override bool IsChanged(Security security, bool forced)
 			{
-				var liteSec = _cache.TryGetValue(security.Id);
+				var liteSec = _cache.TryGetValue(security.ToSecurityId());
 
 				if (liteSec == null)
 					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
@@ -566,17 +566,17 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				var sec = new LiteSecurity { Id = item.Id };
 				sec.Update(item);
-				_cache.Add(item.Id, sec);
+				_cache.Add(item.ToSecurityId(), sec);
 			}
 
 			protected override void RemoveCache(Security item)
 			{
-				_cache.Remove(item.Id);
+				_cache.Remove(item.ToSecurityId());
 			}
 
 			protected override void UpdateCache(Security item)
 			{
-				_cache[item.Id].Update(item);
+				_cache[item.ToSecurityId()].Update(item);
 			}
 
 			//protected override void WriteMany(Security[] values)
@@ -817,7 +817,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private Security GetSecurity(string id)
 			{
-				var security = Registry.Securities.ReadById(id);
+				var security = Registry.Securities.ReadById(id.ToSecurityId());
 
 				if (security == null)
 					throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id));

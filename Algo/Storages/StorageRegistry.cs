@@ -458,9 +458,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IMarketDataStorage<BoardStateMessage> GetBoardStateMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			var securityId = SecurityId.All;
-
-			return _boardStateStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(BoardStateMessage), null, format), key =>
+			return _boardStateStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(default, typeof(BoardStateMessage), null, format), key =>
 			{
 				IMarketDataSerializer<BoardStateMessage> serializer;
 
@@ -476,7 +474,7 @@ namespace StockSharp.Algo.Storages
 						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 				}
 
-				return new BoardStateStorage(securityId, serializer, key);
+				return new BoardStateStorage(default, serializer, key);
 			});
 		}
 	}

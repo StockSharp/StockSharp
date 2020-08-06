@@ -4,9 +4,11 @@
 
 	using Ecng.ComponentModel;
 
+	using StockSharp.Messages;
+
 	public partial class DatesWindow
 	{
-		private class DatesRange : NotifiableObject
+		private class SettingsObject : NotifiableObject
 		{
 			private DateTimeOffset? _from;
 
@@ -31,27 +33,35 @@
 					NotifyChanged(nameof(To));
 				}
 			}
+
+			public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.LoadAndBuild;
 		}
 
-		private readonly DatesRange _range = new DatesRange();
+		private readonly SettingsObject _settings = new SettingsObject();
 
 		public DatesWindow()
 		{
 			InitializeComponent();
 
-			PropGrid.SelectedObject = _range;
+			PropGrid.SelectedObject = _settings;
 		}
 
 		public DateTimeOffset? From
 		{
-			get => _range.From;
-			set => _range.From = value?.Date;
+			get => _settings.From;
+			set => _settings.From = value?.Date;
 		}
 
 		public DateTimeOffset? To
 		{
-			get => _range.To;
-			set => _range.To = value?.Date;
+			get => _settings.To;
+			set => _settings.To = value?.Date;
+		}
+
+		public MarketDataBuildModes BuildMode
+		{
+			get => _settings.BuildMode;
+			set => _settings.BuildMode = value;
 		}
 	}
 }

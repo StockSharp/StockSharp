@@ -141,6 +141,7 @@ namespace StockSharp.Algo.Candles.Compression
 									return true;
 								}
 
+								tuple.Second = SubscriptionStates.Active;
 								this.AddDebugLog("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
 								
 								RaiseNewOutMessage(mdMsg.CreateResponse());
@@ -800,7 +801,7 @@ namespace StockSharp.Algo.Candles.Compression
 							allMsg.LoopBack(this, MessageBackModes.Chain);
 							_pendingLoopbacks.Add(allMsg.TransactionId, RefTuple.Create(allMsg.ParentTransactionId, SubscriptionStates.Stopped));
 
-							this.AddDebugLog("New ALL map: {0}/{1} TrId={2}-{3}", key, series.Original.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
+							this.AddDebugLog("New ALL candle-map: {0}/{1} TrId={2}-{3}", key, series.Original.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
 							
 							return new SeriesInfo(allMsg, allMsg)
 							{

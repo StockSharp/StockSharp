@@ -2945,7 +2945,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public static Security AllSecurity { get; } = new Security
 		{
-			Id = SecurityId.All.ToStringId(),
+			Id = "ALL@ALL",
 			Code = SecurityId.AssociatedBoardCode,
 			//Class = task.GetDisplayName(),
 			Name = LocalizedStrings.Str2835,
@@ -2969,7 +2969,7 @@ namespace StockSharp.Algo
 		/// <returns>Found instance.</returns>
 		public static Security GetAllSecurity(this ISecurityProvider provider)
 		{
-			return provider.LookupById(SecurityId.All);
+			return provider.LookupById(default);
 		}
 
 		/// <summary>
