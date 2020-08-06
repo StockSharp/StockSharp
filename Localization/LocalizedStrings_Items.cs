@@ -52536,5 +52536,25 @@ namespace StockSharp.Localization
 		/// Supports only mapped securities.
 		/// </summary>
 		public static string OnlyMappedSecurities => GetString(OnlyMappedSecuritiesKey);
+
+		/// <summary>
+		/// Received
+		/// </summary>
+		public const string ReceivedKey = nameof(Received);
+
+		/// <summary>
+		/// Received
+		/// </summary>
+		public static string Received => GetString(ReceivedKey);
+
+		/// <summary>
+		/// Sent
+		/// </summary>
+		public const string SentKey = nameof(Sent);
+
+		/// <summary>
+		/// Sent
+		/// </summary>
+		public static string Sent => GetString(SentKey);
 	}
 }
