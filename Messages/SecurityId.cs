@@ -322,15 +322,6 @@ namespace StockSharp.Messages
 			SecurityCode = "NEWS",
 			BoardCode = AssociatedBoardCode
 		};
-
-		/// <summary>
-		/// "ALL" security id.
-		/// </summary>
-		public static readonly SecurityId All = new SecurityId
-		{
-			SecurityCode = "ALL",
-			BoardCode = AssociatedBoardCode
-		};
 	}
 
 	/// <summary>

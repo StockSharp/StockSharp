@@ -2438,10 +2438,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Check if the specified identifier is <see cref="SecurityId.All"/>.
+		/// Check if the specified identifier is <see cref="IsAllSecurity"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
-		/// <returns><see langword="true"/>, if the specified identifier is <see cref="SecurityId.All"/>, otherwise, <see langword="false"/>.</returns>
+		/// <returns><see langword="true"/>, if the specified identifier is <see cref="IsAllSecurity"/>, otherwise, <see langword="false"/>.</returns>
 		public static bool IsAllSecurity(this SecurityId securityId)
 		{
 			//if (security == null)

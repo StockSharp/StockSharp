@@ -519,7 +519,7 @@ namespace StockSharp.Algo
 			if (security is null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (security == TraderHelper.AllSecurity)
+			if (security.IsAllSecurity())
 			{
 				return new SecurityMessage();
 
@@ -702,6 +702,9 @@ namespace StockSharp.Algo
 		/// <returns><see cref="SecurityId"/> value.</returns>
 		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
 		{
+			if (id.CompareIgnoreCase(TraderHelper.AllSecurity.Id))
+				return default;
+
 			return GetGenerator(generator).Split(id);
 		}
 
@@ -1509,7 +1512,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (security == TraderHelper.AllSecurity)
+			if (security.IsAllSecurity())
 				return default;
 
 			string secCode;
