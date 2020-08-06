@@ -97,6 +97,9 @@
 				{
 					_bids.Clear();
 					_asks.Clear();
+
+					_bidsByPos.Clear();
+					_asksByPos.Clear();
 				}
 
 				_state = currState = newState;
@@ -167,6 +170,15 @@
 
 			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
 				return null;
+
+			if (currState == QuoteChangeStates.SnapshotComplete)
+			{
+				if (!change.HasPositions)
+				{
+					_bidsByPos.AddRange(_bids.Values);
+					_asksByPos.AddRange(_asks.Values);
+				}
+			}
 
 			QuoteChange[] bids;
 			QuoteChange[] asks;
