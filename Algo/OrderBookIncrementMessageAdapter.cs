@@ -16,8 +16,8 @@
 	{
 		private class BookInfo
 		{
-			public BookInfo(SecurityId securityId, ILogReceiver logs)
-				=> Builder = new OrderBookIncrementBuilder(securityId, logs);
+			public BookInfo(SecurityId securityId)
+				=> Builder = new OrderBookIncrementBuilder(securityId);
 
 			public readonly OrderBookIncrementBuilder Builder;
 			public readonly CachedSynchronizedSet<long> SubscriptionIds = new CachedSynchronizedSet<long>();
@@ -87,7 +87,10 @@
 									break;
 								}
 
-								var info = new BookInfo(mdMsg.SecurityId, this);
+								var info = new BookInfo(mdMsg.SecurityId)
+								{
+									Builder = { Parent = this }
+								};
 
 								info.SubscriptionIds.Add(transId);
 								

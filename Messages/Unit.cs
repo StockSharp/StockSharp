@@ -493,10 +493,10 @@ namespace StockSharp.Messages
 		public static bool operator !=(Unit u1, Unit u2)
 		{
 			if (u1 is null)
-				return u2 is null;
+				return u2 is object;
 
 			if (u2 is null)
-				return false;
+				return u1 is object;
 
 			var res = u1.EqualsImpl(u2);
 
@@ -856,6 +856,20 @@ namespace StockSharp.Messages
 			}
 
 			return new Unit(value, type, getTypeValue);
+		}
+
+		/// <summary>
+		/// Multiple <see cref="Unit.Value"/> on the specified times.
+		/// </summary>
+		/// <param name="unit">Unit.</param>
+		/// <param name="times">Multiply value.</param>
+		/// <returns>Result.</returns>
+		public static Unit Times(this Unit unit, int times)
+		{
+			if (unit is null)
+				throw new ArgumentNullException(nameof(unit));
+
+			return new Unit(unit.Value * times, unit.Type, unit.GetTypeValue);
 		}
 	}
 }

@@ -45,6 +45,15 @@ namespace StockSharp.Algo.Storages.Csv
 					var bids = new List<QuoteChange>();
 					var asks = new List<QuoteChange>();
 
+					var hasPos = false;
+
+					void Flush()
+					{
+						Current.Bids = bids.ToArray();
+						Current.Asks = asks.ToArray();
+						Current.HasPositions = hasPos;
+					}
+
 					do
 					{
 						var quote = _enumerator.Current;
@@ -66,9 +75,7 @@ namespace StockSharp.Algo.Storages.Csv
 							_resetCurrent = true;
 							_needMoveNext = false;
 
-							Current.Bids = bids.ToArray();
-							Current.Asks = asks.ToArray();
-
+							Flush();
 							return true;
 						}
 
@@ -77,6 +84,9 @@ namespace StockSharp.Algo.Storages.Csv
 						if (quote.Quote != null)
 						{
 							var qq = quote.Quote.Value;
+
+							if (qq.StartPosition != default || qq.EndPosition != default)
+								hasPos = true;
 
 							var quotes = quote.Side == Sides.Buy ? bids : asks;
 							quotes.Add(new QuoteChange(qq.Price, qq.Volume, qq.OrdersCount, qq.Condition));
@@ -87,11 +97,10 @@ namespace StockSharp.Algo.Storages.Csv
 					if (Current == null)
 						return false;
 
-					Current.Bids = bids.ToArray();
-					Current.Asks = asks.ToArray();
-
 					_resetCurrent = true;
 					_needMoveNext = true;
+
+					Flush();
 					return true;
 				}
 

@@ -52516,5 +52516,45 @@ namespace StockSharp.Localization
 		/// Override exec id by native identifier (if present in FIX message).
 		/// </summary>
 		public static string OverrideExecIdByNative => GetString(OverrideExecIdByNativeKey);
+
+		/// <summary>
+		/// Security mapping
+		/// </summary>
+		public const string SecurityMappingKey = nameof(SecurityMapping);
+
+		/// <summary>
+		/// Security mapping
+		/// </summary>
+		public static string SecurityMapping => GetString(SecurityMappingKey);
+
+		/// <summary>
+		/// Supports only mapped securities.
+		/// </summary>
+		public const string OnlyMappedSecuritiesKey = nameof(OnlyMappedSecurities);
+
+		/// <summary>
+		/// Supports only mapped securities.
+		/// </summary>
+		public static string OnlyMappedSecurities => GetString(OnlyMappedSecuritiesKey);
+
+		/// <summary>
+		/// Received
+		/// </summary>
+		public const string ReceivedKey = nameof(Received);
+
+		/// <summary>
+		/// Received
+		/// </summary>
+		public static string Received => GetString(ReceivedKey);
+
+		/// <summary>
+		/// Sent
+		/// </summary>
+		public const string SentKey = nameof(Sent);
+
+		/// <summary>
+		/// Sent
+		/// </summary>
+		public static string Sent => GetString(SentKey);
 	}
 }

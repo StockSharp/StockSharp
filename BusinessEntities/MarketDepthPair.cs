@@ -70,7 +70,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str496Key)]
 		[DescriptionLoc(LocalizedStrings.Str497Key)]
-		public decimal? SpreadPrice => _isFull ? Security.ShrinkPrice(Ask.Value.Price - Bid.Value.Price) : (decimal?)null;
+		public decimal? SpreadPrice => _isFull ? (Ask.Value.Price - Bid.Value.Price) : (decimal?)null;
 
 		/// <summary>
 		/// Spread by volume. If negative, it best ask has a greater volume than the best bid. Is <see langword="null" />, if one of the quotes is empty.

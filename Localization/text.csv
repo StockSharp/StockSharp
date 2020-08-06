@@ -5284,6 +5284,10 @@ Split;Split;Разделение
 SplitType;Split type.;Тип разделения.
 ExecId;Exec ID;Номер исполнения
 OverrideExecIdByNative;Override exec id by native identifier (if present in FIX message).;Перезаписывать номер исполнения номером из FIX сообщения.
+SecurityMapping;Security mapping;Security mapping
+OnlyMappedSecurities;Supports only mapped securities.;Передавать только указанные инструменты.
+Received;Received;Received
+Sent;Sent;Sent
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -16356,7 +16360,6 @@ DocStr11821;Make immutable;Make immutable
 DocStr11822;Board state;Board state
 DocStr11823;Portfolio route;Portfolio route
 DocStr11824;Security route;Security route
-DocStr11825;Security mapping;Security mapping
 DocStr11826;Change {0};Change {0}
 DocStr11827;Message types;Message types
 DocStr11828;Suspend on {0} if message queue is more than the specified count;Suspend on {0} if message queue is more than the specified count

@@ -1409,7 +1409,7 @@ namespace StockSharp.Algo.Storages
 			{
 				if (book.State != null)
 				{
-					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key, GlobalLogReceiver.Instance));
+					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = GlobalLogReceiver.Instance });
 					var change = builder.TryApply(book);
 
 					if (change != null)

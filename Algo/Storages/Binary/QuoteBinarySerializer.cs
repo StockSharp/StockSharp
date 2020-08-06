@@ -158,7 +158,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
-			var seqNum = metaInfo.Version >= MarketDataVersions.Version60;
+			var seqNumAndPos = metaInfo.Version >= MarketDataVersions.Version60;
 
 			foreach (var m in messages)
 			{
@@ -256,10 +256,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				writer.WriteBuildFrom(quoteMsg.BuildFrom);
 
-				if (!seqNum)
+				if (!seqNumAndPos)
 					continue;
 
 				writer.WriteSeqNum(quoteMsg, metaInfo);
+				writer.Write(quoteMsg.HasPositions);
 			}
 		}
 
@@ -275,7 +276,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
-			var seqNum = metaInfo.Version >= MarketDataVersions.Version60;
+			var seqNumAndPos = metaInfo.Version >= MarketDataVersions.Version60;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -363,10 +364,12 @@ namespace StockSharp.Algo.Storages.Binary
 				
 			quoteMsg.BuildFrom = reader.ReadBuildFrom();
 
-			if (!seqNum)
+			if (!seqNumAndPos)
 				return quoteMsg;
 
 			reader.ReadSeqNum(quoteMsg, metaInfo);
+
+			quoteMsg.HasPositions = reader.Read();
 
 			return quoteMsg;
 		}

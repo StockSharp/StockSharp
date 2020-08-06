@@ -1632,7 +1632,8 @@ namespace StockSharp.Algo
 				var subscription = tuple.Item1;
 				var candle = tuple.Item2;
 
-				RaiseCandleSeriesProcessing(subscription.CandleSeries, candle);
+				if (subscription.CandleSeries != null)
+					RaiseCandleSeriesProcessing(subscription.CandleSeries, candle);
 
 				CandleReceived?.Invoke(subscription, candle);
 				RaiseSubscriptionReceived(subscription, message);

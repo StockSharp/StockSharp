@@ -194,6 +194,9 @@ namespace StockSharp.Algo.Export
 				if (depth.State != null)
 					writer.WriteAttribute("state", depth.State.Value);
 
+				if (depth.HasPositions)
+					writer.WriteAttribute("pos", true);
+
 				if (depth.SeqNum != default)
 					writer.WriteAttribute("seqNum", depth.SeqNum);
 

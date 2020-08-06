@@ -59,6 +59,9 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(QuoteChange.Condition)) { DbType = typeof(byte) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.ServerTime)) { IsPrimaryKey = true, DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription(nameof(TimeQuoteChange.LocalTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(QuoteChange.StartPosition)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(QuoteChange.EndPosition)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(QuoteChange.Action)) { DbType = typeof(byte?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(TimeQuoteChange value)
@@ -76,6 +79,9 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(QuoteChange.Condition), (byte)quote.Condition },
 				{ nameof(TimeQuoteChange.ServerTime), value.ServerTime },
 				{ nameof(TimeQuoteChange.LocalTime), value.LocalTime },
+				{ nameof(QuoteChange.StartPosition), quote.EndPosition },
+				{ nameof(QuoteChange.EndPosition), quote.EndPosition },
+				{ nameof(QuoteChange.Action), (byte?)quote.Action },
 			};
 			return result;
 		}

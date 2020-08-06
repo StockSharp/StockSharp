@@ -63,6 +63,9 @@ namespace StockSharp.Algo.Storages.Csv
 				data.Side.To<string>(),
 				quote?.OrdersCount.To<string>(),
 				quote?.Condition.To<string>(),
+				quote?.StartPosition.To<string>(),
+				quote?.EndPosition.To<string>(),
+				quote?.Action.To<string>(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -93,13 +96,22 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (price != null)
 			{
-				quote.Quote = new QuoteChange
+				var qq = new QuoteChange
 				{
 					Price = price.Value,
 					Volume = volume ?? 0,
 					OrdersCount = ordersCount,
 					Condition = condition,
 				};
+
+				quote.Quote = qq;
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					qq.StartPosition = reader.ReadNullableInt();
+					qq.EndPosition = reader.ReadNullableInt();
+					qq.Action = reader.ReadNullableEnum<QuoteChangeActions>();
+				}
 			}
 
 			return quote;

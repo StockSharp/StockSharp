@@ -3423,9 +3423,10 @@ namespace StockSharp.Messages
 		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
 		/// </remarks>
 		/// <param name="depth">The regular order book.</param>
-		/// <param name="priceStep">Minimum price step.</param>
+		/// <param name="priceRange">Minimum price step.</param>
+		/// <param name="priceStep">Security price step.</param>
 		/// <returns>The sparse order book.</returns>
-		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, Unit priceStep)
+		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, Unit priceRange, decimal? priceStep)
 		{
 			depth.CheckIsSnapshot();
 
@@ -3435,15 +3436,15 @@ namespace StockSharp.Messages
 				depth.Asks = depth.Asks.OrderBy(q => q.Price).ToArray();
 			}
 
-			var bids = depth.Bids.Sparse(Sides.Buy, priceStep);
-			var asks = depth.Asks.Sparse(Sides.Sell, priceStep);
+			var bids = depth.Bids.Sparse(Sides.Buy, priceRange, priceStep);
+			var asks = depth.Asks.Sparse(Sides.Sell, priceRange, priceStep);
 
 			var bestBid = depth.GetBestBid();
 			var bestAsk = depth.GetBestAsk();
 
 			var spreadQuotes = bestBid is null || bestAsk is null
 				? (ArrayHelper.Empty<QuoteChange>(), ArrayHelper.Empty<QuoteChange>())
-				: bestBid.Value.Sparse(bestAsk.Value, priceStep);
+				: bestBid.Value.Sparse(bestAsk.Value, priceRange, priceStep);
 
 			return new QuoteChangeMessage
 			{
@@ -3455,6 +3456,15 @@ namespace StockSharp.Messages
 			};
 		}
 
+		private static void ValidatePriceRange(Unit priceRange)
+		{
+			if (priceRange is null)
+				throw new ArgumentNullException(nameof(priceRange));
+
+			if (priceRange.Value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(priceRange), priceRange, LocalizedStrings.Str1213);
+		}
+
 		/// <summary>
 		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair.
 		/// </summary>
@@ -3463,39 +3473,44 @@ namespace StockSharp.Messages
 		/// </remarks>
 		/// <param name="bid">Bid.</param>
 		/// <param name="ask">Ask.</param>
-		/// <param name="priceStep">Minimum price step.</param>
+		/// <param name="priceRange">Minimum price step.</param>
+		/// <param name="priceStep">Security price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
-		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, Unit priceStep)
+		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, Unit priceRange, decimal? priceStep)
 		{
-			if (priceStep is null)
-				throw new ArgumentNullException(nameof(priceStep));
-
-			if (priceStep <= 0)
-				throw new ArgumentOutOfRangeException(nameof(priceStep), priceStep, LocalizedStrings.Str1213);
-
+			ValidatePriceRange(priceRange);
+			
 			var bidPrice = bid.Price;
 			var askPrice = ask.Price;
 
 			if (bidPrice == default || askPrice == default || bidPrice == askPrice)
 				return (ArrayHelper.Empty<QuoteChange>(), ArrayHelper.Empty<QuoteChange>());
 
+			const int maxLimit = 1000;
+
 			var bids = new List<QuoteChange>();
 			var asks = new List<QuoteChange>();
 
 			while (true)
 			{
-				bidPrice = (decimal)(bidPrice + priceStep);
-				askPrice = (decimal)(askPrice - priceStep);
+				bidPrice = ((decimal)(bidPrice + priceRange)).ShrinkPrice(priceStep, null, ShrinkRules.More);
+				askPrice = ((decimal)(askPrice - priceRange)).ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
 				if (bidPrice > askPrice)
 					break;
 
 				bids.Add(new QuoteChange { Price = bidPrice });
 
+				if (bids.Count > maxLimit)
+					break;
+
 				if (bidPrice == askPrice)
 					break;
 
 				asks.Add(new QuoteChange { Price = askPrice });
+
+				if (asks.Count > maxLimit)
+					break;
 			}
 
 			bids.Reverse();
@@ -3512,18 +3527,20 @@ namespace StockSharp.Messages
 		/// </remarks>
 		/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
 		/// <param name="side">Side.</param>
-		/// <param name="priceStep">Minimum price step.</param>
+		/// <param name="priceRange">Minimum price step.</param>
+		/// <param name="priceStep">Security price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
-		public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, Unit priceStep)
+		public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, Unit priceRange, decimal? priceStep)
 		{
-			if (quotes == null)
+			if (quotes is null)
 				throw new ArgumentNullException(nameof(quotes));
 
-			if (priceStep <= 0)
-				throw new ArgumentOutOfRangeException(nameof(priceStep), priceStep, LocalizedStrings.Str1213);
+			ValidatePriceRange(priceRange);
 
 			if (quotes.Length < 2)
 				return ArrayHelper.Empty<QuoteChange>();
+
+			const int maxLimit = 10000;
 
 			var retVal = new List<QuoteChange>();
 
@@ -3534,18 +3551,37 @@ namespace StockSharp.Messages
 
 				if (side == Sides.Buy)
 				{
-					for (var price = (from.Price - priceStep); price > toPrice; price -= priceStep)
+					for (var price = (from.Price - priceRange); price > toPrice; price -= priceRange)
 					{
-						retVal.Add(new QuoteChange { Price = (decimal)price });
+						var p = ((decimal)price).ShrinkPrice(priceStep, null, ShrinkRules.Less);
+
+						if (p <= toPrice)
+							break;
+
+						retVal.Add(new QuoteChange { Price = p });
+
+						if (retVal.Count > maxLimit)
+							break;
 					}
 				}
 				else
 				{
-					for (var price = (from.Price + priceStep); price < toPrice; price += priceStep)
+					for (var price = (from.Price + priceRange); price < toPrice; price += priceRange)
 					{
-						retVal.Add(new QuoteChange { Price = (decimal)price });
+						var p = ((decimal)price).ShrinkPrice(priceStep, null, ShrinkRules.More);
+
+						if (p >= toPrice)
+							break;
+
+						retVal.Add(new QuoteChange { Price = p });
+
+						if (retVal.Count > maxLimit)
+							break;
 					}
 				}
+
+				if (retVal.Count > maxLimit)
+					break;
 			}
 
 			return retVal.ToArray();
@@ -3612,8 +3648,7 @@ namespace StockSharp.Messages
 			if (quotes is null)
 				throw new ArgumentNullException(nameof(quotes));
 
-			if (priceRange is null)
-				throw new ArgumentNullException(nameof(priceRange));
+			ValidatePriceRange(priceRange);
 
 			if (quotes.Length < 2)
 				return quotes.ToArray();
@@ -3621,11 +3656,12 @@ namespace StockSharp.Messages
 			if (side == Sides.Buy)
 				priceRange = -priceRange;
 
+			const int maxLimit = 10000;
+
 			var retVal = new List<QuoteChange>();
 
 			var groupedQuote = new QuoteChange { Price = quotes[0].Price };
 			var innerQuotes = new List<QuoteChange> { quotes[0] };
-			retVal.Add(groupedQuote);
 
 			var nextPrice = (decimal)(groupedQuote.Price + priceRange);
 
@@ -3638,6 +3674,10 @@ namespace StockSharp.Messages
 					if (currQuote.Price >= nextPrice)
 					{
 						innerQuotes.Add(currQuote);
+
+						if (innerQuotes.Count > maxLimit)
+							break;
+
 						continue;
 					}
 				}
@@ -3646,18 +3686,30 @@ namespace StockSharp.Messages
 					if (currQuote.Price <= nextPrice)
 					{
 						innerQuotes.Add(currQuote);
+
+						if (innerQuotes.Count > maxLimit)
+							break;
+
 						continue;
 					}
 				}
 
-				groupedQuote.InnerQuotes = innerQuotes.ToArray();
-				innerQuotes.Clear();
+				groupedQuote.InnerQuotes = innerQuotes.CopyAndClear();
+				retVal.Add(groupedQuote);
+
+				if (innerQuotes.Count > maxLimit)
+					break;
 
 				groupedQuote = new QuoteChange { Price = currQuote.Price };
 				innerQuotes.Add(currQuote);
-				retVal.Add(groupedQuote);
 
 				nextPrice = (decimal)(groupedQuote.Price + priceRange);
+			}
+
+			if (innerQuotes.Count > 0)
+			{
+				groupedQuote.InnerQuotes = innerQuotes.CopyAndClear();
+				retVal.Add(groupedQuote);
 			}
 
 			return retVal.ToArray();
@@ -3849,6 +3901,51 @@ namespace StockSharp.Messages
 			}
 
 			return result.ToArray();
+		}
+
+
+		/// <summary>
+		/// To merge the initial order book and its sparse representation.
+		/// </summary>
+		/// <param name="original">The initial order book.</param>
+		/// <param name="rare">The sparse order book.</param>
+		/// <returns>The merged order book.</returns>
+		public static QuoteChangeMessage Join(this QuoteChangeMessage original, QuoteChangeMessage rare)
+		{
+			if (original is null)
+				throw new ArgumentNullException(nameof(original));
+
+			if (rare is null)
+				throw new ArgumentNullException(nameof(rare));
+
+			return new QuoteChangeMessage
+			{
+				ServerTime = original.ServerTime,
+				SecurityId = original.SecurityId,
+				BuildFrom = DataType.MarketDepth,
+
+				Bids = original.Bids.Concat(rare.Bids).OrderByDescending(q => q.Price).ToArray(),
+				Asks = original.Asks.Concat(rare.Asks).OrderBy(q => q.Price).ToArray(),
+			};
+		}
+
+		/// <summary>
+		/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
+		/// </summary>
+		/// <param name="price">The price to be made multiple.</param>
+		/// <param name="priceStep">Price step.</param>
+		/// <param name="decimals">Number of digits in price after coma.</param>
+		/// <param name="rule">The price rounding rule.</param>
+		/// <returns>The multiple price.</returns>
+		public static decimal ShrinkPrice(this decimal price, decimal? priceStep, int? decimals, ShrinkRules rule = ShrinkRules.Auto)
+		{
+			var rounding = rule == ShrinkRules.Auto
+				? (MidpointRounding?)null
+				: (rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven);
+
+			var result = price.Round(priceStep ?? 0.01m, decimals, rounding);
+
+			return result.RemoveTrailingZeros();
 		}
 	}
 }

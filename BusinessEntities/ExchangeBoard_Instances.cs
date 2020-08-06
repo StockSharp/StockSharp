@@ -3604,5 +3604,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.STRLG.Name,
 			Exchange = Exchange.STRLG,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="QNDL"/>.
+		/// </summary>
+		public static ExchangeBoard QNDL { get; } = new ExchangeBoard
+		{
+			Code = Exchange.QNDL.Name,
+			Exchange = Exchange.QNDL,
+		};
 	}
 }
