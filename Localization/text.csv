@@ -1,4 +1,7 @@
-﻿LoggedInAsParams;User {0};Пользователь {0}
+﻿InstallPrereleaseVersions;Install prerelease versions.;Устанавливать предрелизные версии.
+InstallPrereleaseVersionsWarning;WARNING! This feature is for advanced users only. Prerelease versions of applications may be unstable.;ПРЕДУПРЕЖДЕНИЕ! Эта функция предназначена только для продвинутых пользователей. Предрелизные версии приложений могут быть нестабильными.
+FilterProducts;Filter available products by type.;Фильтр доступных продуктов по типу.
+LoggedInAsParams;User {0};Пользователь {0}
 InstallerAutoRun;Auto run the application on Windows start. The application will be available via system tray icon.;Автоматически запускать приложение в фоновом режиме при загрузке операционной системы. Приложение будет доступно через иконку в области уведомлений.
 InstallerShowNotifications;Show notifications for installed applications updates.;Показывать уведомления об обновлениях установленных приложений.
 InstallerAllowNugetCache;Allow to use Nuget cache.;Разрешить использование кэша Nuget.
