@@ -34,27 +34,6 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Price rounding rules.
-	/// </summary>
-	public enum ShrinkRules
-	{
-		/// <summary>
-		/// Automatically to determine rounding to lesser or to bigger value.
-		/// </summary>
-		Auto,
-
-		/// <summary>
-		/// To round to lesser value.
-		/// </summary>
-		Less,
-
-		/// <summary>
-		/// To round to bigger value.
-		/// </summary>
-		More,
-	}
-
-	/// <summary>
 	/// The auxiliary class for provision of various algorithmic functionalities.
 	/// </summary>
 	public static partial class TraderHelper
@@ -341,7 +320,7 @@ namespace StockSharp.Algo
 		/// <param name="rule">The price rounding rule.</param>
 		public static void ShrinkPrice(this Order order, ShrinkRules rule = ShrinkRules.Auto)
 		{
-			if (order == null)
+			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
 			order.Price = order.Security.ShrinkPrice(order.Price, rule);
@@ -356,12 +335,10 @@ namespace StockSharp.Algo
 		/// <returns>The multiple price.</returns>
 		public static decimal ShrinkPrice(this Security security, decimal price, ShrinkRules rule = ShrinkRules.Auto)
 		{
-			//var priceStep = security.CheckPriceStep();
+			if (security is null)
+				throw new ArgumentNullException(nameof(security));
 
-			return price.Round(security.PriceStep ?? 0.01m, security.Decimals ?? 0,
-				rule == ShrinkRules.Auto
-					? (MidpointRounding?)null
-					: (rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven)).RemoveTrailingZeros();
+			return price.ShrinkPrice(security.PriceStep, security.Decimals, rule);
 		}
 
 		/// <summary>

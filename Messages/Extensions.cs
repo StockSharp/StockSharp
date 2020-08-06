@@ -3928,5 +3928,24 @@ namespace StockSharp.Messages
 				Asks = original.Asks.Concat(rare.Asks).OrderBy(q => q.Price).ToArray(),
 			};
 		}
+
+		/// <summary>
+		/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
+		/// </summary>
+		/// <param name="price">The price to be made multiple.</param>
+		/// <param name="priceStep">Price step.</param>
+		/// <param name="decimals">Number of digits in price after coma.</param>
+		/// <param name="rule">The price rounding rule.</param>
+		/// <returns>The multiple price.</returns>
+		public static decimal ShrinkPrice(this decimal price, decimal? priceStep, int? decimals, ShrinkRules rule = ShrinkRules.Auto)
+		{
+			var rounding = rule == ShrinkRules.Auto
+				? (MidpointRounding?)null
+				: (rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven);
+
+			var result = price.Round(priceStep ?? 0.01m, decimals, rounding);
+
+			return result.RemoveTrailingZeros();
+		}
 	}
 }
