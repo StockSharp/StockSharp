@@ -295,7 +295,7 @@ namespace StockSharp.Algo
 				case MarketPriceTypes.Middle:
 				{
 					if (bestPair.IsFull)
-						currentPrice = bestPair.Bid.Value.Price + bestPair.SpreadPrice / 2;
+						currentPrice = bestPair.MiddlePrice;
 					else
 						currentPrice = null;
 					break;
@@ -569,7 +569,7 @@ namespace StockSharp.Algo
 		/// <returns>The sparse order book.</returns>
 		public static MarketDepth Sparse(this MarketDepth depth, Unit priceStep)
 		{
-			return depth.ToMessage().Sparse(priceStep).ToMarketDepth(depth.Security);
+			return depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
 		}
 
 		/// <summary>
@@ -586,7 +586,7 @@ namespace StockSharp.Algo
 			if (rare is null)
 				throw new ArgumentNullException(nameof(rare));
 
-			return new MarketDepth(original.Security).Update(original.Bids2.Concat(rare.Bids2).OrderByDescending(q => q.Price).ToArray(), original.Asks2.Concat(rare.Asks2).OrderBy(q => q.Price).ToArray(), original.LastChangeTime);
+			return original.ToMessage().Join(rare.ToMessage()).ToMarketDepth(original.Security);
 		}
 
 		/// <summary>

@@ -3902,5 +3902,31 @@ namespace StockSharp.Messages
 
 			return result.ToArray();
 		}
+
+
+		/// <summary>
+		/// To merge the initial order book and its sparse representation.
+		/// </summary>
+		/// <param name="original">The initial order book.</param>
+		/// <param name="rare">The sparse order book.</param>
+		/// <returns>The merged order book.</returns>
+		public static QuoteChangeMessage Join(this QuoteChangeMessage original, QuoteChangeMessage rare)
+		{
+			if (original is null)
+				throw new ArgumentNullException(nameof(original));
+
+			if (rare is null)
+				throw new ArgumentNullException(nameof(rare));
+
+			return new QuoteChangeMessage
+			{
+				ServerTime = original.ServerTime,
+				SecurityId = original.SecurityId,
+				BuildFrom = DataType.MarketDepth,
+
+				Bids = original.Bids.Concat(rare.Bids).OrderByDescending(q => q.Price).ToArray(),
+				Asks = original.Asks.Concat(rare.Asks).OrderBy(q => q.Price).ToArray(),
+			};
+		}
 	}
 }
