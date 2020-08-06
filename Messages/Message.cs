@@ -148,7 +148,18 @@ namespace StockSharp.Messages
 #endif
 
 		/// <inheritdoc />
-		public override string ToString() => Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";
+		public override string ToString()
+		{
+			var str = Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";
+
+			if (BackMode != default)
+				str += $",Back={BackMode}";
+
+			if (OfflineMode != default)
+				str += $",Offline={OfflineMode}";
+
+			return str;
+		}
 
 		/// <summary>
 		/// Create a copy of <see cref="Message"/>.
