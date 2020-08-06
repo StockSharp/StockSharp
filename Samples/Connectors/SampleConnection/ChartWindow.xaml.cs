@@ -43,15 +43,15 @@
 
 			area.Elements.Add(_candleElem);
 
-			_connector.CandleSeriesProcessing += ProcessNewCandle;
-			_subscription = _connector.SubscribeCandles(_candleSeries);
+			_connector.CandleReceived += OnCandleReceived;
+			_subscription = _connector.SubscribeMarketData(_candleSeries.ToMarketDataMessage(true));
 		}
 
 		public bool SeriesInactive { get; set; }
 
-		private void ProcessNewCandle(CandleSeries series, Candle candle)
+		private void OnCandleReceived(Subscription subscription, Candle candle)
 		{
-			if (series != _candleSeries)
+			if (subscription != _subscription)
 				return;
 
 			Chart.Draw(_candleElem, candle);
@@ -59,7 +59,7 @@
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_connector.CandleSeriesProcessing -= ProcessNewCandle;
+			_connector.CandleReceived -= OnCandleReceived;
 
 			if (!SeriesInactive && _subscription.State.IsActive())
 				_connector.UnSubscribe(_subscription);
