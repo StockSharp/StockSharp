@@ -141,7 +141,7 @@ namespace StockSharp.Messages
 			if (!_checkDates)
 				return dates;
 
-			if (dates == null)
+			if (dates is null)
 				throw new ArgumentNullException(nameof(dates));
 
 			var dupDate = dates.GroupBy(d => d).FirstOrDefault(g => g.Count() > 1);
@@ -151,43 +151,32 @@ namespace StockSharp.Messages
 
 			return dates;
 		}
-
-		/// <summary>
-		/// Create a copy of <see cref="WorkingTime"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override WorkingTime Clone()
-		{
-			var clone = new WorkingTime
-			{
-				_checkDates = false,
-				Periods = Periods.Select(t => t.Clone()).ToList(),
-				//SpecialWorkingDays = SpecialWorkingDays.ToList(),
-				//SpecialHolidays = SpecialHolidays.ToList(),
-				SpecialDays = SpecialDays.ToDictionary(p => p.Key, p => p.Value.ToArray()),
-			};
-
-			clone._checkDates = true;
-
-			return clone;
-		}
-
 		/// <summary>
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToList();
+			_checkDates = false;
 
-			if (storage.ContainsKey(nameof(SpecialDays)))
+			try
 			{
-				SpecialDays = storage.GetValue<IDictionary<DateTime, Range<TimeSpan>[]>>(nameof(SpecialDays));
+				IsEnabled = storage.GetValue<bool>(nameof(IsEnabled));
+				Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToList();
+
+				if (storage.ContainsKey(nameof(SpecialDays)))
+				{
+					SpecialDays = storage.GetValue<IDictionary<DateTime, Range<TimeSpan>[]>>(nameof(SpecialDays));
+				}
+				else
+				{
+					SpecialWorkingDays = storage.GetValue<List<DateTime>>(nameof(SpecialWorkingDays)).ToArray();
+					SpecialHolidays = storage.GetValue<List<DateTime>>(nameof(SpecialHolidays)).ToArray();
+				}
 			}
-			else
+			finally
 			{
-				SpecialWorkingDays = storage.GetValue<List<DateTime>>(nameof(SpecialWorkingDays)).ToArray();
-				SpecialHolidays = storage.GetValue<List<DateTime>>(nameof(SpecialHolidays)).ToArray();
+				_checkDates = true;
 			}
 		}
 
@@ -197,6 +186,7 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
+			storage.SetValue(nameof(IsEnabled), IsEnabled);
 			storage.SetValue(nameof(Periods), Periods.Select(p => p.Save()).ToArray());
 			storage.SetValue(nameof(SpecialDays), SpecialDays);
 			//storage.SetValue(nameof(SpecialWorkingDays), SpecialWorkingDays);

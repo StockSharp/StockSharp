@@ -21,6 +21,7 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
