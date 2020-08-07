@@ -400,23 +400,6 @@ namespace StockSharp.Algo.Storages
 			return dates;
 		}
 
-		/// <summary>
-		/// Read instrument by identifier.
-		/// </summary>
-		/// <param name="securities">Instrument storage collection.</param>
-		/// <param name="securityId">Identifier.</param>
-		/// <returns>Instrument.</returns>
-		public static Security ReadBySecurityId(this IStorageEntityList<Security> securities, SecurityId securityId)
-		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
-
-			if (securityId.IsDefault())
-				throw new ArgumentNullException(nameof(securityId));
-
-			return securities.ReadById(securityId.ToStringId());
-		}
-
 		internal static DateTimeOffset StorageTruncate(this DateTimeOffset time, TimeSpan precision)
 		{
 			var ticks = precision.Ticks;

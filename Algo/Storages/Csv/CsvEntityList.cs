@@ -115,10 +115,22 @@ namespace StockSharp.Algo.Storages.Csv
 			return NormalizedKey(GetKey(entity));
 		}
 
+		private static readonly bool _isSecId = typeof(TKey) == typeof(SecurityId);
+
 		private static TKey NormalizedKey(object key)
 		{
 			if (key is string str)
-				key = str.ToLowerInvariant();
+			{
+				str = str.ToLowerInvariant();
+
+				if (_isSecId)
+				{
+					// backward compatibility when SecurityList accept as a key string
+					key = str.ToSecurityId();
+				}
+				else
+					key = str;
+			}
 
 			return (TKey)key;
 		}
