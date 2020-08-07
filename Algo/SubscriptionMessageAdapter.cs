@@ -195,6 +195,9 @@ namespace StockSharp.Algo
 							return;
 
 						_historicalRequests.Remove(prevOriginId);
+
+						if (_subscriptionsById.TryGetValue(newOriginId, out var info))
+							ChangeState(info, SubscriptionStates.Finished);
 					}
 					
 					break;
@@ -241,7 +244,7 @@ namespace StockSharp.Algo
 						_replaceId.Clear();
 						_reMapSubscriptions.Clear();
 
-						_reMapSubscriptions.AddRange(_subscriptionsById.Values.Distinct().Select(i =>
+						_reMapSubscriptions.AddRange(_subscriptionsById.Values.Distinct().Where(i => i.State.IsActive()).Select(i =>
 						{
 							var subscription = i.Subscription.TypedClone();
 							subscription.TransactionId = TransactionIdGenerator.GetNextId();
@@ -364,6 +367,7 @@ namespace StockSharp.Algo
 						{
 							// copy full subscription's details into unsubscribe request
 							sendInMsg = MakeUnsubscribe(info.Subscription);
+							ChangeState(info, SubscriptionStates.Stopped);
 						}
 						else
 							this.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
