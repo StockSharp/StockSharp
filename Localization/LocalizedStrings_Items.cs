@@ -52586,5 +52586,25 @@ namespace StockSharp.Localization
 		/// Sent
 		/// </summary>
 		public static string Sent => GetString(SentKey);
+
+		/// <summary>
+		/// Crypto
+		/// </summary>
+		public const string CryptoKey = nameof(Crypto);
+
+		/// <summary>
+		/// Crypto
+		/// </summary>
+		public static string Crypto => GetString(CryptoKey);
+
+		/// <summary>
+		/// The day {0:d} isn't working.
+		/// </summary>
+		public const string NotWorkingDayKey = nameof(NotWorkingDay);
+
+		/// <summary>
+		/// The day {0:d} isn't working.
+		/// </summary>
+		public static string NotWorkingDay => GetString(NotWorkingDayKey);
 	}
 }

@@ -57,7 +57,7 @@ namespace StockSharp.Community
 		/// Crypto connector.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CryptocurrencyKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CryptoKey)]
 		CryptoConnector,
 
 		/// <summary>

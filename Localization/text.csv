@@ -5291,6 +5291,8 @@ SecurityMapping;Security mapping;Security mapping
 OnlyMappedSecurities;Supports only mapped securities.;Передавать только указанные инструменты.
 Received;Received;Received
 Sent;Sent;Sent
+Crypto;Crypto;Крипто
+NotWorkingDay;The day {0:d} isn't working.;День {0:d} не является рабочим.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
