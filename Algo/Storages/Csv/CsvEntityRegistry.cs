@@ -98,14 +98,14 @@ namespace StockSharp.Algo.Storages.Csv
 			public event Action<object> Removed;
 		}
 
-		private class ExchangeCsvList : CsvEntityList<Exchange>
+		private class ExchangeCsvList : CsvEntityList<string, Exchange>
 		{
 			public ExchangeCsvList(CsvEntityRegistry registry)
 				: base(registry, "exchange.csv")
 			{
 			}
 
-			protected override object GetKey(Exchange item)
+			protected override string GetKey(Exchange item)
 			{
 				return item.Name;
 			}
@@ -149,14 +149,14 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private class ExchangeBoardCsvList : CsvEntityList<ExchangeBoard>
+		private class ExchangeBoardCsvList : CsvEntityList<string, ExchangeBoard>
 		{
 			public ExchangeBoardCsvList(CsvEntityRegistry registry)
 				: base(registry, "exchangeboard.csv")
 			{
 			}
 
-			protected override object GetKey(ExchangeBoard item)
+			protected override string GetKey(ExchangeBoard item)
 			{
 				return item.Code;
 			}
@@ -257,7 +257,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private class SecurityCsvList : CsvEntityList<Security>, IStorageSecurityList
+		private class SecurityCsvList : CsvEntityList<SecurityId, Security>, IStorageSecurityList
 		{
 			public SecurityCsvList(CsvEntityRegistry registry)
 				: base(registry, "security.csv")
@@ -290,12 +290,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 			IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria)
 			{
-				var secId = criteria.SecurityId.ToStringId(nullIfEmpty: true);
+				var secId = criteria.SecurityId;
 
-				if (secId.IsEmpty())
+				if (secId == default)
 					return this.Filter(criteria);
 
-				var security = GetById(criteria.SecurityId);
+				var security = GetById(secId);
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 
@@ -319,7 +319,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			#region CsvEntityList
 
-			protected override object GetKey(Security item) => item.ToSecurityId();
+			protected override SecurityId GetKey(Security item) => item.ToSecurityId();
 
 			private class LiteSecurity
 			{
@@ -709,14 +709,14 @@ namespace StockSharp.Algo.Storages.Csv
 			#endregion
 		}
 
-		private class PortfolioCsvList : CsvEntityList<Portfolio>
+		private class PortfolioCsvList : CsvEntityList<string, Portfolio>
 		{
 			public PortfolioCsvList(CsvEntityRegistry registry)
 				: base(registry, "portfolio.csv")
 			{
 			}
 
-			protected override object GetKey(Portfolio item)
+			protected override string GetKey(Portfolio item)
 			{
 				return item.Name;
 			}
@@ -795,14 +795,14 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private class PositionCsvList : CsvEntityList<Position>, IStoragePositionList
+		private class PositionCsvList : CsvEntityList<Tuple<Portfolio, Security, string>, Position>, IStoragePositionList
 		{
 			public PositionCsvList(CsvEntityRegistry registry)
 				: base(registry, "position.csv")
 			{
 			}
 
-			protected override object GetKey(Position item)
+			protected override Tuple<Portfolio, Security, string> GetKey(Position item)
 				=> CreateKey(item.Portfolio, item.Security, item.StrategyId);
 
 			private Portfolio GetPortfolio(string id)
@@ -931,14 +931,14 @@ namespace StockSharp.Algo.Storages.Csv
 				=> Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty);
 		}
 
-		private class SubscriptionCsvList : CsvEntityList<MarketDataMessage>
+		private class SubscriptionCsvList : CsvEntityList<Tuple<SecurityId, DataType>, MarketDataMessage>
 		{
 			public SubscriptionCsvList(CsvEntityRegistry registry)
 				: base(registry, "subscription.csv")
 			{
 			}
 
-			protected override object GetKey(MarketDataMessage item) => Tuple.Create(item.SecurityId, item.DataType2);
+			protected override Tuple<SecurityId, DataType> GetKey(MarketDataMessage item) => Tuple.Create(item.SecurityId, item.DataType2);
 
 			protected override void Write(CsvFileWriter writer, MarketDataMessage data)
 			{
@@ -1137,10 +1137,11 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// Add list of trade objects.
 		/// </summary>
-		/// <typeparam name="T">Entity type.</typeparam>
+		/// <typeparam name="TKey">Key type.</typeparam>
+		/// <typeparam name="TEntity">Entity type.</typeparam>
 		/// <param name="list">List of trade objects.</param>
-		public void Add<T>(CsvEntityList<T> list)
-			where T : class
+		public void Add<TKey, TEntity>(CsvEntityList<TKey, TEntity> list)
+			where TEntity : class
 		{
 			if (list == null)
 				throw new ArgumentNullException(nameof(list));
