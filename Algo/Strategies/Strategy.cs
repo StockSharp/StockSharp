@@ -292,6 +292,7 @@ namespace StockSharp.Algo.Strategies
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
+			_workingTime = this.Param<WorkingTime>(nameof(WorkingTime));
 			
 			InitMaxOrdersKeepTime();
 
@@ -803,6 +804,32 @@ namespace StockSharp.Algo.Strategies
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_registerInterval.Value = value;
+			}
+		}
+
+		private readonly StrategyParam<WorkingTime> _workingTime;
+
+		/// <summary>
+		/// Working schedule.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.WorkingTimeKey,
+			Description = LocalizedStrings.WorkingHoursKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 15)]
+		public WorkingTime WorkingTime
+		{
+			get => _workingTime.Value;
+			set
+			{
+				if (value is null)
+					throw new ArgumentNullException(nameof(value));
+
+				if (WorkingTime == value)
+					return;
+
+				_workingTime.Value = value;
 			}
 		}
 
@@ -1385,6 +1412,33 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		protected virtual void OnStopped()
 		{
+		}
+
+		private void CheckTime()
+		{
+			if (!WorkingTime.IsEnabled)
+				return;
+
+			var now = CurrentTime.LocalDateTime;
+
+			if (WorkingTime.IsTradeTime(now, out var isWorkingDay, out var period))
+				return;
+
+			if (isWorkingDay == false)
+			{
+				this.AddInfoLog(LocalizedStrings.NotWorkingDay, now);
+			}
+			else
+			{
+				var range = period?.Times.FirstOrDefault();
+
+				this.AddInfoLog(LocalizedStrings.Str1126Params, now.ToString("T"), range?.HasMinValue == true ? range.Min : default, range?.HasMaxValue == true ? range.Max : default);
+
+				if (range?.HasMaxValue == true)
+					this.AddInfoLog(LocalizedStrings.Str2197Params, range.Max);
+			}
+
+			Stop();
 		}
 
 		private bool CheckRegisterLimits()
@@ -2179,7 +2233,16 @@ namespace StockSharp.Algo.Strategies
 					break;
 
 				case MessageTypes.Time:
+				{
+					var timeMsg = (TimeMessage)message;
+
+					if (timeMsg.BackMode != default)
+						return;
+
+					CheckTime();
+					msgTime = CurrentTime;
 					break;
+				}
 
 				case ExtendedMessageTypes.StrategyChangeState:
 				{
