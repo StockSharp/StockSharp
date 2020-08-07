@@ -18,6 +18,36 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Install prerelease versions.
+		/// </summary>
+		public const string InstallPrereleaseVersionsKey = nameof(InstallPrereleaseVersions);
+
+		/// <summary>
+		/// Install prerelease versions.
+		/// </summary>
+		public static string InstallPrereleaseVersions => GetString(InstallPrereleaseVersionsKey);
+
+		/// <summary>
+		/// WARNING! This feature is for advanced users only. Prerelease versions of applications may be unstable.
+		/// </summary>
+		public const string InstallPrereleaseVersionsWarningKey = nameof(InstallPrereleaseVersionsWarning);
+
+		/// <summary>
+		/// WARNING! This feature is for advanced users only. Prerelease versions of applications may be unstable.
+		/// </summary>
+		public static string InstallPrereleaseVersionsWarning => GetString(InstallPrereleaseVersionsWarningKey);
+
+		/// <summary>
+		/// Filter available products by type.
+		/// </summary>
+		public const string FilterProductsKey = nameof(FilterProducts);
+
+		/// <summary>
+		/// Filter available products by type.
+		/// </summary>
+		public static string FilterProducts => GetString(FilterProductsKey);
+
+		/// <summary>
 		/// User {0}
 		/// </summary>
 		public const string LoggedInAsParamsKey = nameof(LoggedInAsParams);
