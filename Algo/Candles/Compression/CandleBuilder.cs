@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (board == null)
 				return true;
 
-			return board.IsTradeTime(time, out _);
+			return board.IsTradeTime(time, out _, out _);
 		}
 
 		/// <summary>
