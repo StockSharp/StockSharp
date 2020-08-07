@@ -906,7 +906,7 @@ namespace StockSharp.Algo.Testing
 					//reply.Error = new InvalidOperationException(matchError);
 
 					reply.OrderState = OrderStates.Done;
-					reply.OrderStatus = (long?)OrderStatus.CanceledByManager;
+					//reply.OrderStatus = (long?)OrderStatus.CanceledByManager;
 
 					result.Add(reply);
 				}
