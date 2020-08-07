@@ -36,7 +36,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str184Key)]
 	[DescriptionLoc(LocalizedStrings.Str408Key)]
-	public class WorkingTime : Cloneable<WorkingTime>, IPersistable
+	public class WorkingTime : NotifiableObject, IPersistable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WorkingTime"/>.
@@ -44,6 +44,30 @@ namespace StockSharp.Messages
 		public WorkingTime()
 		{
         }
+
+		private bool _isEnabled;
+
+		/// <summary>
+		/// Is enabled.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2229Key,
+			Description = LocalizedStrings.Str2230Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
+		public bool IsEnabled
+		{
+			get => _isEnabled;
+			set
+			{
+				if (_isEnabled == value)
+					return;
+
+				_isEnabled = value;
+				NotifyChanged(nameof(IsEnabled));
+			}
+		}
 
 		private List<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
 
@@ -56,7 +80,7 @@ namespace StockSharp.Messages
 			Name = LocalizedStrings.Str409Key,
 			Description = LocalizedStrings.Str410Key,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 0)]
+			Order = 1)]
 		public List<WorkingTimePeriod> Periods
 		{
 			get => _periods;
@@ -126,7 +150,7 @@ namespace StockSharp.Messages
 			Name = LocalizedStrings.SpecialDaysKey,
 			Description = LocalizedStrings.SpecialDaysDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 1)]
+			Order = 2)]
 		[XmlIgnore]
 		public IDictionary<DateTime, Range<TimeSpan>[]> SpecialDays
 		{
