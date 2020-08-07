@@ -19,12 +19,14 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Serialization;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// The message contains information about the electronic board.
 	/// </summary>
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class BoardMessage : BaseSubscriptionIdMessage<BoardMessage>
 	{
