@@ -67,6 +67,7 @@ namespace StockSharp.Algo.Storages.Csv
 				quote?.StartPosition.To<string>(),
 				quote?.EndPosition.To<string>(),
 				quote?.Action.To<int?>().ToString(),
+				data?.State.To<int?>().ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -95,25 +96,39 @@ namespace StockSharp.Algo.Storages.Csv
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				condition = reader.ReadNullableEnum<QuoteConditions>() ?? default;
 
+			QuoteChange? qq = null;
+
 			if (price != null)
 			{
-				var qq = new QuoteChange
+				qq = quote.Quote = new QuoteChange
 				{
 					Price = price.Value,
 					Volume = volume ?? 0,
 					OrdersCount = ordersCount,
 					Condition = condition,
 				};
+			}
 
-				quote.Quote = qq;
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				var startPosition = reader.ReadNullableInt();
+				var endPosition = reader.ReadNullableInt();
+				var action = reader.ReadNullableEnum<QuoteChangeActions>();
 
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				if (qq != null)
 				{
-					qq.StartPosition = reader.ReadNullableInt();
-					qq.EndPosition = reader.ReadNullableInt();
-					qq.Action = reader.ReadNullableEnum<QuoteChangeActions>();
+					var temp = qq.Value;
+
+					temp.StartPosition = startPosition;
+					temp.EndPosition = endPosition;
+					temp.Action = action;
+
+					quote.Quote = temp;
 				}
 			}
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				quote.State = reader.ReadNullableEnum<QuoteChangeStates>();
 
 			return quote;
 		}

@@ -68,6 +68,7 @@ namespace StockSharp.Algo.Storages.Csv
 								SecurityId = _securityId,
 								ServerTime = quote.ServerTime,
 								LocalTime = quote.LocalTime,
+								State = quote.State,
 							};
 						}
 						else if (Current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))
@@ -152,6 +153,7 @@ namespace StockSharp.Algo.Storages.Csv
 				ServerTime = message.ServerTime,
 				LocalTime = message.LocalTime,
 				Side = side,
+				State = message.State,
 				Quote = quote,
 			};
 		}
@@ -170,6 +172,7 @@ namespace StockSharp.Algo.Storages.Csv
 					{
 						Side = Sides.Buy,
 						ServerTime = d.ServerTime,
+						State = d.State,
 					});
 				}
 
@@ -183,6 +186,7 @@ namespace StockSharp.Algo.Storages.Csv
 					{
 						Side = Sides.Sell,
 						ServerTime = d.ServerTime,
+						State = d.State,
 					});
 				}
 
