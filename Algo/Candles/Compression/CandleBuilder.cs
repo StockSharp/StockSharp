@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.BusinessEntities;
 
 	/// <summary>
 	/// Candles builder.
@@ -501,7 +502,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var timeFrame = subscription.Message.GetTimeFrame();
 
-			var board = ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode);
+			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
 			var bounds = timeFrame.GetCandleBounds(transform.Time, board, board.WorkingTime);
 
 			if (transform.Time < bounds.Min)
@@ -978,7 +979,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var timeFrame = subscription.Message.GetTimeFrame();
 
-			var board = ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode);
+			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
 			var bounds = timeFrame.GetCandleBounds(transform.Time, board, board.WorkingTime);
 
 			if (transform.Time < bounds.Min)
