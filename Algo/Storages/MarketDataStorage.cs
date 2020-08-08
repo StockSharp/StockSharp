@@ -179,12 +179,37 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			if (_dataType == DataType.MarketDepth)
+			if (!isOverride && _dataType == DataType.MarketDepth)
 			{
+				var isEmpty = metaInfo.Count == 0;
+				var isIncremental = default(bool?);
+
 				for (int i = 0; i < data.Length; i++)
 				{
-					if (data[i] is QuoteChangeMessage quoteMsg && !quoteMsg.IsSorted)
-						data[i] = quoteMsg.TypedClone().TrySort().To<TMessage>();
+					if (data[i] is QuoteChangeMessage quoteMsg)
+					{
+						if (isEmpty)
+						{
+							if (isIncremental == null)
+								isIncremental = quoteMsg.State != null;
+							else
+							{
+								if (isIncremental.Value)
+								{
+									if (quoteMsg.State == null)
+										throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(true));
+								}
+								else
+								{
+									if (quoteMsg.State != null)
+										throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(false));
+								}
+							}
+						}
+
+						if (!quoteMsg.IsSorted)
+							data[i] = quoteMsg.TypedClone().TrySort().To<TMessage>();
+					}
 				}
 			}
 
