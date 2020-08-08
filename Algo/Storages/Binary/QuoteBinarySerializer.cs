@@ -167,12 +167,12 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.IncrementalOnly)
 				{
 					if (quoteMsg.State == null)
-						throw new InvalidOperationException("Storage required incremental book only.");
+						throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(true));
 				}
 				else
 				{
 					if (quoteMsg.State != null)
-						throw new InvalidOperationException("Storage required non-incremental book only.");
+						throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(false));
 				}
 
 				//if (m.IsFullEmpty())

@@ -126,14 +126,14 @@
 					{
 						case QuoteChangeActions.New:
 						{
-							var tuple = new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
+							var newQuote = new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 
 							if (startPos > to.Count)
 								throw new InvalidOperationException($"Pos={startPos}>Count={to.Count}");
 							else if (startPos == to.Count)
-								to.Add(tuple);
+								to.Add(newQuote);
 							else
-								to.Insert(startPos, tuple);
+								to.Insert(startPos, newQuote);
 
 							break;
 						}

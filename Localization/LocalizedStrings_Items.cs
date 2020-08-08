@@ -52606,5 +52606,15 @@ namespace StockSharp.Localization
 		/// The day {0:d} isn't working.
 		/// </summary>
 		public static string NotWorkingDay => GetString(NotWorkingDayKey);
+
+		/// <summary>
+		/// Storage required incremental={0} book only.
+		/// </summary>
+		public const string StorageRequiredIncrementalKey = nameof(StorageRequiredIncremental);
+
+		/// <summary>
+		/// Storage required incremental={0} book only.
+		/// </summary>
+		public static string StorageRequiredIncremental => GetString(StorageRequiredIncrementalKey);
 	}
 }
