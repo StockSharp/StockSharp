@@ -317,24 +317,21 @@ namespace StockSharp.Algo.Candles
 
 		private sealed class CandleMessageEnumerable : SimpleEnumerable<CandleMessage>
 		{
-			private sealed class CandleMessageEnumerator : SimpleEnumerator<CandleMessage>
+			private sealed class CandleMessageEnumerator : SimpleEnumerator<CandleMessage>, ICandleBuilderSubscription
 			{
 				private IEnumerator<Message> _messagesEnumerator;
 				private readonly List<CandleMessage> _finishedCandles = new List<CandleMessage>();
 				private readonly ICandleBuilder _candleBuilder;
-				private readonly MarketDataMessage _mdMsg;
 				private readonly bool _onlyFormed;
 				private readonly IEnumerable<Message> _messages;
 
 				private ICandleBuilderValueTransform _transform;
-				private VolumeProfileBuilder _profile;
 
 				private CandleMessage _lastActiveCandle;
-				private CandleMessage _lastCandle;
 
 				public CandleMessageEnumerator(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<Message> messages, ICandleBuilderValueTransform transform, ICandleBuilder candleBuilder)
 				{
-					_mdMsg = mdMsg ?? throw new ArgumentNullException(nameof(mdMsg));
+					Message = mdMsg ?? throw new ArgumentNullException(nameof(mdMsg));
 					_onlyFormed = onlyFormed;
 					_messages = messages ?? throw new ArgumentNullException(nameof(messages));
 					_transform = transform;
@@ -343,6 +340,10 @@ namespace StockSharp.Algo.Candles
 					_candleBuilder = candleBuilder ?? throw new ArgumentNullException(nameof(candleBuilder));
 				}
 
+				public MarketDataMessage Message { get; }
+				public VolumeProfileBuilder VolumeProfile { get; set; }
+				public CandleMessage CurrentCandle { get; set; }
+
 				public override void Reset()
 				{
 					base.Reset();
@@ -350,7 +351,7 @@ namespace StockSharp.Algo.Candles
 					_finishedCandles.Clear();
 					_messagesEnumerator = _messages.GetEnumerator();
 					_lastActiveCandle = null;
-					_lastCandle = null;
+					CurrentCandle = null;
 					//_candleBuilder.Reset();
 				}
 
@@ -358,7 +359,7 @@ namespace StockSharp.Algo.Candles
 				{
 					_finishedCandles.Clear();
 					_lastActiveCandle = null;
-					_lastCandle = null;
+					CurrentCandle = null;
 
 					_messagesEnumerator.Dispose();
 					_candleBuilder.Dispose();
@@ -415,10 +416,8 @@ namespace StockSharp.Algo.Candles
 
 						_lastActiveCandle = null;
 
-						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _transform, ref _profile))
+						foreach (var candleMessage in _candleBuilder.Process(this, _transform))
 						{
-							_lastCandle = candleMessage;
-
 							if (candleMessage.State == CandleStates.Finished)
 								_finishedCandles.Add(candleMessage);
 

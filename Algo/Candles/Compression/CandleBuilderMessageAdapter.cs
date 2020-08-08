@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Candles.Compression
 			Compress,
 		}
 
-		private class SeriesInfo
+		private class SeriesInfo : ICandleBuilderSubscription
 		{
 			public SeriesInfo(MarketDataMessage original, MarketDataMessage current)
 			{
@@ -33,6 +33,8 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			public long Id => Original.TransactionId;
+
+			MarketDataMessage ICandleBuilderSubscription.Message => Original;
 
 			public MarketDataMessage Original { get; }
 
@@ -54,11 +56,11 @@ namespace StockSharp.Algo.Candles.Compression
 
 			public DateTimeOffset? LastTime { get; set; }
 
-			public CandleMessage CurrentCandleMessage { get; set; }
+			public CandleMessage CurrentCandle { get; set; }
 
 			public CandleMessage NonFinishedCandle { get; set; }
 
-			public VolumeProfileBuilder VolumeProfile;
+			public VolumeProfileBuilder VolumeProfile { get; set; }
 
 			public bool Stopped;
 		}
@@ -843,12 +845,10 @@ namespace StockSharp.Algo.Candles.Compression
 
 				var builder = _candleBuilderProvider.Get(origin.DataType2.MessageType);
 
-				var result = builder.Process(origin, series.CurrentCandleMessage, transform, ref series.VolumeProfile);
+				var result = builder.Process(series, transform);
 
 				foreach (var candleMessage in result)
 				{
-					series.CurrentCandleMessage = candleMessage;
-
 					if (series.Original.IsFinishedOnly && candleMessage.State != CandleStates.Finished)
 						continue;
 
