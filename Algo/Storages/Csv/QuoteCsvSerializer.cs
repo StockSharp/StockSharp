@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Storages.Csv
 		public DateTimeOffset LocalTime { get; set; }
 		public QuoteChange? Quote { get; set; }
 		public Sides Side { get; set; }
+		public QuoteChangeStates? State { get; set; }
 	}
 
 	/// <summary>
@@ -60,12 +61,12 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ServerTime.ToString("zzz"),
 				quote?.Price.To<string>(),
 				quote?.Volume.To<string>(),
-				data.Side.To<string>(),
+				data.Side.To<int>().ToString(),
 				quote?.OrdersCount.To<string>(),
-				quote?.Condition.To<string>(),
+				quote?.Condition.To<int>().ToString(),
 				quote?.StartPosition.To<string>(),
 				quote?.EndPosition.To<string>(),
-				quote?.Action.To<string>(),
+				quote?.Action.To<int?>().ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
