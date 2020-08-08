@@ -70,6 +70,8 @@ namespace StockSharp.Algo.Storages.Csv
 								ServerTime = quote.ServerTime,
 								LocalTime = quote.LocalTime,
 								State = quote.State,
+								BuildFrom = quote.BuildFrom,
+								SeqNum = quote.SeqNum ?? 0L,
 							};
 						}
 						else if (Current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))
@@ -156,6 +158,8 @@ namespace StockSharp.Algo.Storages.Csv
 				Side = side,
 				State = message.State,
 				Quote = quote,
+				BuildFrom = message.BuildFrom,
+				SeqNum = message.SeqNum.DefaultAsNull(),
 			};
 		}
 
@@ -191,6 +195,8 @@ namespace StockSharp.Algo.Storages.Csv
 						Side = Sides.Buy,
 						ServerTime = d.ServerTime,
 						State = d.State,
+						BuildFrom = d.BuildFrom,
+						SeqNum = d.SeqNum.DefaultAsNull(),
 					});
 				}
 
@@ -205,6 +211,8 @@ namespace StockSharp.Algo.Storages.Csv
 						Side = Sides.Sell,
 						ServerTime = d.ServerTime,
 						State = d.State,
+						BuildFrom = d.BuildFrom,
+						SeqNum = d.SeqNum.DefaultAsNull(),
 					});
 				}
 

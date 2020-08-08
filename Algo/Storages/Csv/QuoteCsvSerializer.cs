@@ -30,6 +30,8 @@ namespace StockSharp.Algo.Storages.Csv
 		public QuoteChange? Quote { get; set; }
 		public Sides Side { get; set; }
 		public QuoteChangeStates? State { get; set; }
+		public DataType BuildFrom { get; set; }
+		public long? SeqNum { get; set; }
 	}
 
 	/// <summary>
@@ -78,7 +80,8 @@ namespace StockSharp.Algo.Storages.Csv
 				quote?.EndPosition.To<string>(),
 				quote?.Action.To<int?>().ToString(),
 				data?.State.To<int?>().ToString(),
-			});
+				data?.SeqNum.ToString(),
+			}.Concat(data.BuildFrom.ToCsv()));
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		}
@@ -138,7 +141,11 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
 				quote.State = reader.ReadNullableEnum<QuoteChangeStates>();
+				quote.SeqNum = reader.ReadNullableLong();
+				quote.BuildFrom = reader.ReadBuildFrom();
+			}
 
 			return quote;
 		}
