@@ -34,14 +34,14 @@ namespace StockSharp.Algo.Storages
 
 		protected MarketDataStorage(SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
 		{
-			if (securityId.IsDefault())
+			_dataType = DataType.Create(typeof(TMessage), arg);
+
+			if (_dataType.IsSecurityRequired && securityId == default)
 				throw new ArgumentException(LocalizedStrings.Str1025, nameof(securityId));
 
 			SecurityId = securityId;
 
 			AppendOnlyNew = true;
-
-			_dataType = DataType.Create(typeof(TMessage), arg);
 
 			_getTime = getTime ?? throw new ArgumentNullException(nameof(getTime));
 			_getSecurityId = getSecurityId ?? throw new ArgumentNullException(nameof(getSecurityId));

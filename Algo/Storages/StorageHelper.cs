@@ -465,7 +465,7 @@ namespace StockSharp.Algo.Storages
 								break;
 
 							drive
-								.GetStorageDrive(secId, dataType.MessageType, dataType.Arg, format)
+								.GetStorageDrive(secId, dataType, format)
 								.ClearDatesCache();
 						}
 					}
@@ -693,7 +693,7 @@ namespace StockSharp.Algo.Storages
 					args.Add(arg);
 				else
 				{
-					var dates = drive.GetStorageDrive(securityId, candleType, arg, format).Dates;
+					var dates = drive.GetStorageDrive(securityId, DataType.Create(candleType, arg), format).Dates;
 					
 					if (from != null)
 						dates = dates.Where(d => d >= from.Value);

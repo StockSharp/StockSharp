@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorageDrive GetStorageDrive(IMarketDataSerializer serializer, Type messageType, object arg = null)
 		{
-			return Drive.GetStorageDrive(SecurityId, messageType, arg, ToFormat(serializer));
+			return Drive.GetStorageDrive(SecurityId, DataType.Create(messageType, arg), ToFormat(serializer));
 		}
 
 		/// <inheritdoc />

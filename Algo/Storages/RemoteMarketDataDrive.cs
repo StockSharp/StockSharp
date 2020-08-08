@@ -199,12 +199,13 @@ namespace StockSharp.Algo.Storages
 			=> CreateClient().GetAvailableDataTypes(securityId, format);
 
 		/// <inheritdoc />
-		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
+		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
 		{
-			var dt = DataType.Create(dataType, arg);
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
 
-			return _remoteStorages.SafeAdd(Tuple.Create(securityId, dt, format),
-				key => new RemoteStorageDrive(this, securityId, dt, format));
+			return _remoteStorages.SafeAdd(Tuple.Create(securityId, dataType, format),
+				key => new RemoteStorageDrive(this, securityId, dataType, format));
 		}
 
 		/// <inheritdoc />

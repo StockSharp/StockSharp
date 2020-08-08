@@ -107,11 +107,10 @@ namespace StockSharp.Algo.Storages
 		/// To get the storage for <see cref="IMarketDataStorage"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="dataType">Data type info.</param>
 		/// <param name="format">Format type.</param>
 		/// <returns>Storage for <see cref="IMarketDataStorage"/>.</returns>
-		IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format);
+		IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format);
 
 		/// <summary>
 		/// Verify settings.
@@ -163,7 +162,7 @@ namespace StockSharp.Algo.Storages
 		public abstract IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
 
 		/// <inheritdoc />
-		public abstract IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format);
+		public abstract IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format);
 
 		/// <inheritdoc />
 		public abstract void Verify();
