@@ -204,6 +204,11 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public long SeqNum { get; set; }
 
+		/// <summary>
+		/// Determines the message is generated from the specified <see cref="Messages.DataType"/>.
+		/// </summary>
+		public Messages.DataType BuildFrom { get; set; }
+
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
@@ -245,6 +250,7 @@ namespace StockSharp.BusinessEntities
 				IsUpTick = IsUpTick,
 				Currency = Currency,
 				SeqNum = SeqNum,
+				BuildFrom = BuildFrom,
 			};
 		}
 

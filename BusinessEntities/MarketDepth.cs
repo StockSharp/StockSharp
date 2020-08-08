@@ -109,6 +109,11 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>Zero means no information.</remarks>
 		public long SeqNum { get; set; }
 
+		/// <summary>
+		/// Determines the message is generated from the specified <see cref="Messages.DataType"/>.
+		/// </summary>
+		public Messages.DataType BuildFrom { get; set; }
+
 		private bool _bidsInitialized;
 
 		[Obsolete]
@@ -983,7 +988,9 @@ namespace StockSharp.BusinessEntities
 				LocalTime = LocalTime,
 				LastChangeTime = LastChangeTime,
 				_bids2 = _bids2.ToArray(),
-				_asks2 = _asks2.ToArray()
+				_asks2 = _asks2.ToArray(),
+				SeqNum = SeqNum,
+				BuildFrom = BuildFrom,
 			};
 		}
 

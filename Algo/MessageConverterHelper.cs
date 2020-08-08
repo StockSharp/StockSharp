@@ -69,6 +69,8 @@ namespace StockSharp.Algo
 				Asks = depth.Asks2.ToArray(),
 				ServerTime = depth.LastChangeTime,
 				Currency = depth.Currency,
+				SeqNum = depth.SeqNum,
+				BuildFrom = depth.BuildFrom,
 			};
 		}
 
@@ -146,6 +148,7 @@ namespace StockSharp.Algo
 			message.PriceLevels = candle.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			message.State = candle.State;
 			message.SeqNum = candle.SeqNum;
+			message.BuildFrom = candle.BuildFrom;
 
 			return message;
 		}
@@ -298,6 +301,7 @@ namespace StockSharp.Algo
 				IsUpTick = trade.IsUpTick,
 				Currency = trade.Currency,
 				SeqNum = trade.SeqNum,
+				BuildFrom = trade.BuildFrom,
 			};
 		}
 
@@ -1254,6 +1258,7 @@ namespace StockSharp.Algo
 
 			candle.State = message.State;
 			candle.SeqNum = message.SeqNum;
+			candle.BuildFrom = message.BuildFrom;
 
 			return candle;
 		}
@@ -1295,6 +1300,7 @@ namespace StockSharp.Algo
 			trade.IsUpTick = message.IsUpTick;
 			trade.Currency = message.Currency;
 			trade.SeqNum = message.SeqNum;
+			trade.BuildFrom = message.BuildFrom;
 
 			return trade;
 		}
@@ -1398,6 +1404,7 @@ namespace StockSharp.Algo
 			marketDepth.LocalTime = message.LocalTime;
 			marketDepth.Currency = message.Currency;
 			marketDepth.SeqNum = message.SeqNum;
+			marketDepth.BuildFrom = message.BuildFrom;
 
 			return marketDepth;
 		}
