@@ -370,6 +370,7 @@ namespace StockSharp.BusinessEntities
 				Code = "FORTS",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -394,6 +395,7 @@ namespace StockSharp.BusinessEntities
 
 			var micexWorkingTime = new WorkingTime
 			{
+				IsEnabled = true,
 				Periods = new List<WorkingTimePeriod>
 				{
 					new WorkingTimePeriod
@@ -1440,6 +1442,7 @@ namespace StockSharp.BusinessEntities
 				Code = "UX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1464,6 +1467,7 @@ namespace StockSharp.BusinessEntities
 				Code = "GTS",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1485,6 +1489,7 @@ namespace StockSharp.BusinessEntities
 				Code = "AMEX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1535,6 +1540,7 @@ namespace StockSharp.BusinessEntities
 				Code = "NYSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1564,6 +1570,7 @@ namespace StockSharp.BusinessEntities
 				Code = "NASDAQ",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1593,6 +1600,7 @@ namespace StockSharp.BusinessEntities
 				Code = "TSX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1614,6 +1622,7 @@ namespace StockSharp.BusinessEntities
 				Code = "LSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1635,6 +1644,7 @@ namespace StockSharp.BusinessEntities
 				Code = "LME",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1656,6 +1666,7 @@ namespace StockSharp.BusinessEntities
 				Code = "TSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1678,6 +1689,7 @@ namespace StockSharp.BusinessEntities
 				Code = "HKEX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1700,6 +1712,7 @@ namespace StockSharp.BusinessEntities
 				Code = "HKFE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1722,6 +1735,7 @@ namespace StockSharp.BusinessEntities
 				Code = "SSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1744,6 +1758,7 @@ namespace StockSharp.BusinessEntities
 				Code = "SZSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1766,6 +1781,7 @@ namespace StockSharp.BusinessEntities
 				Code = "TSEC",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1789,6 +1805,7 @@ namespace StockSharp.BusinessEntities
 				Code = "SGX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1810,6 +1827,7 @@ namespace StockSharp.BusinessEntities
 				Code = "PSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1832,6 +1850,7 @@ namespace StockSharp.BusinessEntities
 				Code = "KLSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1856,6 +1875,7 @@ namespace StockSharp.BusinessEntities
 				Code = "IDX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1877,6 +1897,7 @@ namespace StockSharp.BusinessEntities
 				Code = "SET",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1901,6 +1922,7 @@ namespace StockSharp.BusinessEntities
 				Code = "BSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1922,6 +1944,7 @@ namespace StockSharp.BusinessEntities
 				Code = "NSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1943,6 +1966,7 @@ namespace StockSharp.BusinessEntities
 				Code = "CSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1964,6 +1988,7 @@ namespace StockSharp.BusinessEntities
 				Code = "KRX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -1985,6 +2010,7 @@ namespace StockSharp.BusinessEntities
 				Code = "ASX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -2006,6 +2032,7 @@ namespace StockSharp.BusinessEntities
 				Code = "NZX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -2027,6 +2054,7 @@ namespace StockSharp.BusinessEntities
 				Code = "TASE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -2048,6 +2076,7 @@ namespace StockSharp.BusinessEntities
 				Code = "FWB",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -2069,6 +2098,7 @@ namespace StockSharp.BusinessEntities
 				Code = "MSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -2090,6 +2120,7 @@ namespace StockSharp.BusinessEntities
 				Code = "SWX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -2111,6 +2142,7 @@ namespace StockSharp.BusinessEntities
 				Code = "JSE",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
@@ -2132,6 +2164,7 @@ namespace StockSharp.BusinessEntities
 				Code = "LMAX",
 				WorkingTime = new WorkingTime
 				{
+					IsEnabled = true,
 					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod

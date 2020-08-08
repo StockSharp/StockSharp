@@ -176,7 +176,7 @@ namespace StockSharp.BusinessEntities
 		//	}
 		//}
 
-		private WorkingTime _workingTime = new WorkingTime();
+		private WorkingTime _workingTime = new WorkingTime { IsEnabled = true };
 
 		/// <summary>
 		/// Board working hours.
