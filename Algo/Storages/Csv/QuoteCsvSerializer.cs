@@ -48,6 +48,16 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <inheritdoc />
+		public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
+		{
+			return new CsvMetaInfo(date, Encoding, null, r =>
+			{
+				r.Skip(8);
+				return r.ReadNullableEnum<QuoteChangeStates>() != null;
+			});
+		}
+
+		/// <inheritdoc />
 		protected override void Write(CsvFileWriter writer, NullableTimeQuoteChange data, IMarketDataMetaInfo metaInfo)
 		{
 			var quote = data.Quote;

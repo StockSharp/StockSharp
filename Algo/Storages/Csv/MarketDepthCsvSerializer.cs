@@ -9,6 +9,7 @@ namespace StockSharp.Algo.Storages.Csv
 	using Ecng.Common;
 
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	class MarketDepthCsvSerializer : CsvMarketDataSerializer<QuoteChangeMessage>
 	{
@@ -160,8 +161,25 @@ namespace StockSharp.Algo.Storages.Csv
 
 		public override void Serialize(Stream stream, IEnumerable<QuoteChangeMessage> data, IMarketDataMetaInfo metaInfo)
 		{
+			var csvInfo = (CsvMetaInfo)metaInfo;
+			var incOnly = csvInfo.IncrementalOnly;
+
 			var list = data.SelectMany(d =>
 			{
+				if (incOnly != null)
+				{
+					if (incOnly.Value)
+					{
+						if (d.State == null)
+							throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(true));
+					}
+					else
+					{
+						if (d.State != null)
+							throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(false));
+					}
+				}
+
 				var items = new List<NullableTimeQuoteChange>();
 
 				items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => ToNullQuote(Sides.Buy, q, d)));
