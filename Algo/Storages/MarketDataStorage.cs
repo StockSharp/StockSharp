@@ -179,6 +179,15 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
+			if (_dataType == DataType.MarketDepth)
+			{
+				for (int i = 0; i < data.Length; i++)
+				{
+					if (data[i] is QuoteChangeMessage quoteMsg && !quoteMsg.IsSorted)
+						data[i] = quoteMsg.TypedClone().TrySort().To<TMessage>();
+				}
+			}
+
 			var newDayData = new MemoryStream();
 
 			Serializer.Serialize(newDayData, data, metaInfo);

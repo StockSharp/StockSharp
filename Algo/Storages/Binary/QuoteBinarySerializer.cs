@@ -178,14 +178,6 @@ namespace StockSharp.Algo.Storages.Binary
 				//if (m.IsFullEmpty())
 				//	throw new ArgumentException(LocalizedStrings.Str1309, nameof(messages));
 
-				if (!quoteMsg.IsSorted)
-				{
-					quoteMsg = quoteMsg.TypedClone();
-
-					quoteMsg.Bids = quoteMsg.Bids.OrderByDescending(q => q.Price).ToArray();
-					quoteMsg.Asks = quoteMsg.Asks.OrderBy(q => q.Price).ToArray();
-				}
-
 				//var bid = quoteMsg.GetBestBid();
 				//var ask = quoteMsg.GetBestAsk();
 
