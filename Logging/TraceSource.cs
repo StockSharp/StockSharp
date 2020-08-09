@@ -100,12 +100,15 @@ namespace StockSharp.Logging
 			RaiseLog(new LogMessage(this, TimeHelper.NowWithOffset, LogLevels.Debug, message));
 		}
 
+		private readonly TraceListenerEx _listenerEx;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TraceSource"/>.
 		/// </summary>
 		public TraceSource()
 		{
-			Trace.Listeners.Add(new TraceListenerEx(this));
+			_listenerEx = new TraceListenerEx(this);
+			Trace.Listeners.Add(_listenerEx);
 		}
 
 		/// <inheritdoc />
@@ -116,7 +119,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			Trace.Listeners.Remove(new TraceListenerEx(this));
+			Trace.Listeners.Remove(_listenerEx);
 			base.DisposeManaged();
 		}
 	}
