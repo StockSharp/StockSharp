@@ -199,6 +199,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 				//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					time.IsEnabled = reader.ReadBool();
+
 				return board;
 			}
 
@@ -218,6 +221,7 @@ namespace StockSharp.Algo.Storages.Csv
 					//Serialize(data.WorkingTime.SpecialHolidays),
 					data.WorkingTime.SpecialDays.EncodeToString(),
 					//Serialize(data.ExtensionInfo)
+					data.WorkingTime.IsEnabled.ToString(),
 				});
 			}
 
