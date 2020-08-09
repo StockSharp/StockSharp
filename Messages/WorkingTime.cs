@@ -36,7 +36,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str184Key)]
 	[DescriptionLoc(LocalizedStrings.Str408Key)]
-	public class WorkingTime : NotifiableObject, IPersistable
+	public class WorkingTime : IPersistable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WorkingTime"/>.
@@ -44,8 +44,6 @@ namespace StockSharp.Messages
 		public WorkingTime()
 		{
         }
-
-		private bool _isEnabled;
 
 		/// <summary>
 		/// Is enabled.
@@ -56,18 +54,7 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.Str2230Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
-		public bool IsEnabled
-		{
-			get => _isEnabled;
-			set
-			{
-				if (_isEnabled == value)
-					return;
-
-				_isEnabled = value;
-				NotifyChanged(nameof(IsEnabled));
-			}
-		}
+		public bool IsEnabled { get; set; }
 
 		private List<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
 
