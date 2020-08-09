@@ -1086,9 +1086,8 @@ namespace StockSharp.Algo
 		/// <typeparam name="TCandle">The candle type.</typeparam>
 		/// <param name="messages">Messages.</param>
 		/// <param name="security">Security.</param>
-		/// <param name="candleType">The type of the candle. It is used, if <typeparamref name="TCandle" /> equals to <see cref="Candle"/>.</param>
 		/// <returns>Trading objects.</returns>
-		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<CandleMessage> messages, Security security, Type candleType = null)
+		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<CandleMessage> messages, Security security)
 		{
 			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, null);
 		}
