@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Testing
 					return;
 
 				_matchOnTouch = value;
-				NotifyChanged(nameof(MatchOnTouch));
+				NotifyChanged();
 			}
 		}
 
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Testing
 					return;
 
 				_depthExpirationTime = value;
-				NotifyChanged(nameof(DepthExpirationTime));
+				NotifyChanged();
 			}
 		}
 
@@ -108,7 +108,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1183);
 
 				_failing = value;
-				NotifyChanged(nameof(Failing));
+				NotifyChanged();
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1185);
 
 				_latency = value;
-				NotifyChanged(nameof(Latency));
+				NotifyChanged();
 			}
 		}
 
@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_isSupportAtomicReRegister = value;
-				NotifyChanged(nameof(_isSupportAtomicReRegister));
+				NotifyChanged();
 			}
 		}
 
@@ -177,7 +177,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_bufferTime = value;
-				NotifyChanged(nameof(BufferTime));
+				NotifyChanged();
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_initialOrderId = value;
-				NotifyChanged(nameof(InitialOrderId));
+				NotifyChanged();
 			}
 		}
 
@@ -219,7 +219,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_initialTradeId = value;
-				NotifyChanged(nameof(InitialTradeId));
+				NotifyChanged();
 			}
 		}
 
@@ -240,7 +240,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_initialTransactionId = value;
-				NotifyChanged(nameof(InitialTransactionId));
+				NotifyChanged();
 			}
 		}
 
@@ -264,7 +264,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException();
 
 				_spreadSize = value;
-				NotifyChanged(nameof(SpreadSize));
+				NotifyChanged();
 			}
 		}
 
@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException();
 
 				_maxDepth = value;
-				NotifyChanged(nameof(MaxDepth));
+				NotifyChanged();
 			}
 		}
 
@@ -312,7 +312,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException();
 
 				_volumeMultiplier = value;
-				NotifyChanged(nameof(VolumeMultiplier));
+				NotifyChanged();
 			}
 		}
 
@@ -336,7 +336,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_portfolioRecalcInterval = value;
-				NotifyChanged(nameof(PortfolioRecalcInterval));
+				NotifyChanged();
 			}
 		}
 
@@ -357,7 +357,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_convertTime = value;
-				NotifyChanged(nameof(ConvertTime));
+				NotifyChanged();
 			}
 		}
 
@@ -378,7 +378,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_timeZone = value;
-				NotifyChanged(nameof(TimeZone));
+				NotifyChanged();
 			}
 		}
 
@@ -399,7 +399,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_priceLimitOffset = value ?? throw new ArgumentNullException(nameof(value));
-				NotifyChanged(nameof(PriceLimitOffset));
+				NotifyChanged();
 			}
 		}
 
@@ -420,7 +420,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_increaseDepthVolume = value;
-				NotifyChanged(nameof(IncreaseDepthVolume));
+				NotifyChanged();
 			}
 		}
 
@@ -441,7 +441,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_checkTradingState = value;
-				NotifyChanged(nameof(CheckTradingState));
+				NotifyChanged();
 			}
 		}
 
@@ -462,7 +462,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_checkMoney = value;
-				NotifyChanged(nameof(CheckMoney));
+				NotifyChanged();
 			}
 		}
 

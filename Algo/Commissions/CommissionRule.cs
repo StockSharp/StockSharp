@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Commissions
 					throw new ArgumentNullException(nameof(value));
 
 				_value = value;
-				NotifyChanged(nameof(Value));
+				NotifyChanged();
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Commissions
 			protected set
 			{
 				_title = value;
-				NotifyChanged(nameof(Title));
+				NotifyChanged();
 			}
 		}
 

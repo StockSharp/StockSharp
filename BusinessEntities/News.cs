@@ -99,7 +99,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_story = value;
-				NotifyChanged(nameof(Story));
+				NotifyChanged();
 			}
 		}
 
