@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Strategies
 	/// </summary>
 	public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
 	    ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider, ICandleManager,
-	    ITransactionProvider
+	    ITransactionProvider, IScheduledTask
 	{
 		private class StrategyChangeStateMessage : Message
 		{
@@ -292,7 +292,7 @@ namespace StockSharp.Algo.Strategies
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
-			_workingTime = this.Param<WorkingTime>(nameof(WorkingTime));
+			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
 			
 			InitMaxOrdersKeepTime();
 
@@ -807,11 +807,12 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
+		bool IScheduledTask.CanStart => ProcessState == ProcessStates.Stopped;
+		bool IScheduledTask.CanStop => ProcessState == ProcessStates.Started;
+
 		private readonly StrategyParam<WorkingTime> _workingTime;
 
-		/// <summary>
-		/// Working schedule.
-		/// </summary>
+		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.WorkingTimeKey,
@@ -1412,33 +1413,6 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		protected virtual void OnStopped()
 		{
-		}
-
-		private void CheckTime()
-		{
-			if (!WorkingTime.IsEnabled)
-				return;
-
-			var now = CurrentTime.LocalDateTime;
-
-			if (WorkingTime.IsTradeTime(now, out var isWorkingDay, out var period))
-				return;
-
-			if (isWorkingDay == false)
-			{
-				this.AddInfoLog(LocalizedStrings.NotWorkingDay, now);
-			}
-			else
-			{
-				var range = period?.Times.FirstOrDefault();
-
-				this.AddInfoLog(LocalizedStrings.Str1126Params, now.ToString("T"), range?.HasMinValue == true ? range.Min : default, range?.HasMaxValue == true ? range.Max : default);
-
-				if (range?.HasMaxValue == true)
-					this.AddInfoLog(LocalizedStrings.Str2197Params, range.Max);
-			}
-
-			Stop();
 		}
 
 		private bool CheckRegisterLimits()
@@ -2239,7 +2213,6 @@ namespace StockSharp.Algo.Strategies
 					if (timeMsg.BackMode != default)
 						return;
 
-					CheckTime();
 					msgTime = CurrentTime;
 					break;
 				}
