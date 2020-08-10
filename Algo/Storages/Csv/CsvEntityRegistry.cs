@@ -296,7 +296,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				var secId = criteria.SecurityId;
 
-				if (secId == default)
+				if (secId == default || secId.BoardCode.IsEmpty())
 					return this.Filter(criteria);
 
 				var security = GetById(secId);
