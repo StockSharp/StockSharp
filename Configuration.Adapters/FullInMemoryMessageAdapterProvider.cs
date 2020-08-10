@@ -77,7 +77,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Poloniex;
 	using StockSharp.PrizmBit;
 	using StockSharp.Quandl;
-	using StockSharp.QuantHouse;
+	//using StockSharp.QuantHouse;
 	//using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Quoinex;
@@ -170,7 +170,7 @@ namespace StockSharp.Configuration
 			() => typeof(TwimeMessageAdapter),
 			() => typeof(SpbExMessageAdapter),
 			() => typeof(FxcmMessageAdapter),
-			() => typeof(QuantFeedMessageAdapter),
+			//() => typeof(QuantFeedMessageAdapter),
 			() => typeof(BitfinexMessageAdapter),
 			() => typeof(BithumbMessageAdapter),
 			() => typeof(BittrexMessageAdapter),
