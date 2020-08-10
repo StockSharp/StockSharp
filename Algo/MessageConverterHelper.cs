@@ -1817,7 +1817,7 @@ namespace StockSharp.Algo
 			}
 
 			mdMsg.ValidateBounds();
-			series.Security.ToMessage(copyExtendedId: true).CopyTo(mdMsg, false);
+			series.Security?.ToMessage(copyExtendedId: true).CopyTo(mdMsg, false);
 
 			return mdMsg;
 		}
