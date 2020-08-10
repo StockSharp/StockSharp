@@ -195,12 +195,12 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					time.Periods.AddRange(reader.ReadString().DecodeToPeriods());
 					time.SpecialDays.AddRange(reader.ReadString().DecodeToSpecialDays());
+
+					reader.Skip();
+					
+					if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+						time.IsEnabled = reader.ReadBool();
 				}
-
-				//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
-
-				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					time.IsEnabled = reader.ReadBool();
 
 				return board;
 			}
@@ -220,7 +220,7 @@ namespace StockSharp.Algo.Storages.Csv
 					//Serialize(data.WorkingTime.SpecialWorkingDays),
 					//Serialize(data.WorkingTime.SpecialHolidays),
 					data.WorkingTime.SpecialDays.EncodeToString(),
-					//Serialize(data.ExtensionInfo)
+					string.Empty,
 					data.WorkingTime.IsEnabled.ToString(),
 				});
 			}
