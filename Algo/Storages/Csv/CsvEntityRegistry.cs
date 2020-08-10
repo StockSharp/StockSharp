@@ -196,10 +196,12 @@ namespace StockSharp.Algo.Storages.Csv
 					time.Periods.AddRange(reader.ReadString().DecodeToPeriods());
 					time.SpecialDays.AddRange(reader.ReadString().DecodeToSpecialDays());
 
-					reader.Skip();
-					
 					if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					{
+						reader.Skip();
+
 						time.IsEnabled = reader.ReadBool();
+					}
 				}
 
 				return board;
