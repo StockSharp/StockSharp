@@ -33,8 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	//[EntityFactory(typeof(UnitializedEntityFactory<MarketDepth>))]
-	public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>//, ISynchronizedCollection
+	public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>
 	{
 		/// <summary>
 		/// Create order book.
@@ -114,11 +113,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public Messages.DataType BuildFrom { get; set; }
 
-		private bool _bidsInitialized;
-
-		[Obsolete]
-		private Quote[] _bids;
-
 		/// <summary>
 		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
 		/// </summary>
@@ -129,24 +123,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str1559Key,
 			Order = 0)]
 		[Obsolete("Use Bids2 property.")]
-		public Quote[] Bids 
-		{
-			get
-			{
-				if (!_bidsInitialized)
-				{
-					_bids = _bids2.Select(c => c.ToQuote(Sides.Buy, Security)).ToArray();
-					_bidsInitialized = true;
-				}
-
-				return _bids;
-			}
-		}
-
-		private bool _asksInitialized;
-
-		[Obsolete]
-		private Quote[] _asks;
+		public Quote[] Bids => Bids2.Select(c => c.ToQuote(Sides.Buy, Security)).ToArray();
 
 		/// <summary>
 		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
@@ -158,19 +135,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str1559Key,
 			Order = 1)]
 		[Obsolete("Use Asks2 property.")]
-		public Quote[] Asks 
-		{ 
-			get
-			{
-				if (!_asksInitialized)
-				{
-					_asks = _asks2.Select(c => c.ToQuote(Sides.Sell, Security)).ToArray();
-					_asksInitialized = true;
-				}
-
-				return _asks;
-			}
-		}
+		public Quote[] Asks => Asks2.Select(c => c.ToQuote(Sides.Sell, Security)).ToArray();
 
 		private QuoteChange[] _bids2 = ArrayHelper.Empty<QuoteChange>();
 
