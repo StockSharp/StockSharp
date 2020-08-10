@@ -1550,6 +1550,14 @@ namespace StockSharp.Algo
 		{
 			if (!_orderAdapters.TryGetValue(originId, out var adapter))
 			{
+				if (message is OrderMessage ordMsg && !ordMsg.PortfolioName.IsEmpty())
+					adapter = GetAdapter(ordMsg.PortfolioName, message, out _);
+				else if (message is OrderPairReplaceMessage pairMsg)
+					adapter = GetAdapter(pairMsg.Message1.PortfolioName, message, out _);
+			}
+
+			if (adapter == null)
+			{
 				this.AddErrorLog(LocalizedStrings.UnknownTransactionId, originId);
 
 				SendOutMessage(new ExecutionMessage
