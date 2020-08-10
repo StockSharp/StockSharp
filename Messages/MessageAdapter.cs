@@ -122,7 +122,7 @@ namespace StockSharp.Messages
 				_possibleSupportedMessages = value;
 				OnPropertyChanged(nameof(PossibleSupportedMessages));
 
-				SupportedInMessages = value.Select(t => t.Type);
+				SupportedInMessages = value.Select(t => t.Type).ToArray();
 			}
 		}
 
