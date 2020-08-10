@@ -143,10 +143,10 @@ namespace StockSharp.BitStamp
 					}
 
 #if !IGNORE_LICENSE
-					var msg = "Crypto".ValidateLicense(component: GetType().Assembly);
+					var msg = "Crypto".ValidateLicense(component: GetType());
 					if (!msg.IsEmpty())
 					{
-						msg = nameof(BitStamp).ValidateLicense(component: GetType().Assembly);
+						msg = nameof(BitStamp).ValidateLicense(component: GetType());
 						
 						if (!msg.IsEmpty())
 							throw new InvalidOperationException(msg);
