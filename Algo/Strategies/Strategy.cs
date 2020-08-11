@@ -2210,7 +2210,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					var timeMsg = (TimeMessage)message;
 
-					if (timeMsg.BackMode != default)
+					if (timeMsg.IsBack())
 						return;
 
 					msgTime = CurrentTime;

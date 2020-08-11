@@ -328,7 +328,7 @@ namespace SampleConnection
 			var wnd = new SecurityLookupWindow
 			{
 				ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll(),
-				Criteria = new Security { Code = "EUR", Currency = CurrencyTypes.USD, Type = SecurityTypes.Currency, }
+				Criteria = new Security { Code = "EUR"/*, Currency = CurrencyTypes.USD, Type = SecurityTypes.Currency*/, }
 			};
 
 			if (!wnd.ShowModal(this))

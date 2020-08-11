@@ -1380,8 +1380,9 @@ namespace StockSharp.Algo.Storages
 		/// Try build books by <see cref="OrderBookIncrementBuilder"/> in case of <paramref name="books"/> is incremental changes.
 		/// </summary>
 		/// <param name="books">Order books.</param>
+		/// <param name="logs">Logs.</param>
 		/// <returns>Order books.</returns>
-		public static IEnumerable<QuoteChangeMessage> BuildIfNeed(this IEnumerable<QuoteChangeMessage> books)
+		public static IEnumerable<QuoteChangeMessage> BuildIfNeed(this IEnumerable<QuoteChangeMessage> books, ILogReceiver logs = null)
 		{
 			if (books is null)
 				throw new ArgumentNullException(nameof(books));
@@ -1392,7 +1393,7 @@ namespace StockSharp.Algo.Storages
 			{
 				if (book.State != null)
 				{
-					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = GlobalLogReceiver.Instance });
+					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = logs ?? GlobalLogReceiver.Instance });
 					var change = builder.TryApply(book);
 
 					if (change != null)
