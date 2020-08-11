@@ -120,6 +120,9 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						lock (_syncObject)
 						{
+							if (_replaceId.ContainsKey(transactionId))
+								break;
+
 							if (_pendingLoopbacks.TryGetAndRemove(transactionId, out var tuple))
 							{
 								if (tuple.Second != SubscriptionStates.Stopped)
@@ -663,16 +666,23 @@ namespace StockSharp.Algo.Candles.Compression
 
 						if (smaller != null)
 						{
+							var newTransId = TransactionIdGenerator.GetNextId();
+
 							series.Current = original.TypedClone();
 							series.Current.SetArg(smaller);
-							series.Current.TransactionId = TransactionIdGenerator.GetNextId();
+							series.Current.TransactionId = newTransId;
 
 							series.BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)));
 							series.State = SeriesStates.SmallTimeFrame;
 							series.NonFinishedCandle = null;
 
+							lock (_syncObject)
+								_replaceId.Add(series.Current.TransactionId, series.Id);
+
+							this.AddInfoLog("Series smaller tf: ids {0}->{1}", original.TransactionId, newTransId);
+
 							// loopback
-							series.Current.BackMode = MessageBackModes.Direct;
+							series.Current.LoopBack(this);
 							RaiseNewOutMessage(series.Current);
 
 							return;
@@ -729,7 +739,7 @@ namespace StockSharp.Algo.Candles.Compression
 			series.Current = current;
 
 			// loopback
-			current.BackMode = MessageBackModes.Direct;
+			current.LoopBack(this);
 			RaiseNewOutMessage(current);
 		}
 
