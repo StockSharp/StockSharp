@@ -36,6 +36,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public int BidCount;
 			public int AskCount;
 
+			public long SeqNum;
 			public SnapshotDataType? BuildFrom;
 		}
 
@@ -76,6 +77,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 
 				BuildFrom = message.BuildFrom == null ? default(SnapshotDataType?) : (SnapshotDataType)message.BuildFrom,
+				SeqNum = message.SeqNum,
 			};
 
 			var bids = message.Bids.ToArray();
@@ -156,6 +158,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					Bids = bids,
 					Asks = asks,
 					BuildFrom = snapshot.BuildFrom,
+					SeqNum = snapshot.SeqNum,
 				};
 			}
 		}
@@ -172,6 +175,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (changes.BuildFrom != default)
 				message.BuildFrom = changes.BuildFrom;
+
+			if (changes.SeqNum != default)
+				message.SeqNum = changes.SeqNum;
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;

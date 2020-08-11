@@ -380,7 +380,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
-			return board.ToMessage().IsTradeTime(time, out _);
+			return board.ToMessage().IsTradeTime(time, out _, out _);
 		}
 
 		/// <summary>
@@ -388,11 +388,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="board">Board info.</param>
 		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
 		/// <param name="period">Current working time period.</param>
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time, out WorkingTimePeriod period)
+		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time, out bool? isWorkingDay, out WorkingTimePeriod period)
 		{
-			return board.ToMessage().IsTradeTime(time, out period);
+			return board.ToMessage().IsTradeTime(time, out isWorkingDay, out period);
 		}
 
 		/// <summary>
@@ -403,7 +404,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
-			return board.IsTradeTime(time, out _);
+			return board.IsTradeTime(time, out _, out _);
 		}
 
 		/// <summary>
@@ -411,17 +412,18 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="board">Board info.</param>
 		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
 		/// <param name="period">Current working time period.</param>
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time, out WorkingTimePeriod period)
+		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time, out bool? isWorkingDay, out WorkingTimePeriod period)
 		{
-			if (board == null)
+			if (board is null)
 				throw new ArgumentNullException(nameof(board));
 
 			var exchangeTime = time.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
-			return workingTime.IsTradeTime(exchangeTime, out period);
+			return workingTime.IsTradeTime(exchangeTime, out isWorkingDay, out period);
 		}
 
 		/// <summary>
@@ -429,17 +431,24 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="workingTime">Board working hours.</param>
 		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
 		/// <param name="period">Current working time period.</param>
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-		public static bool IsTradeTime(this WorkingTime workingTime, DateTime time, out WorkingTimePeriod period)
+		public static bool IsTradeTime(this WorkingTime workingTime, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
 		{
-			var isWorkingDay = workingTime.IsTradeDate(time);
+			if (workingTime is null)
+				throw new ArgumentNullException(nameof(workingTime));
 
-			if (!isWorkingDay)
-			{
-				period = null;
+			period = null;
+			isWorkingDay = null;
+
+			if (!workingTime.IsEnabled)
+				return true;
+
+			isWorkingDay = workingTime.IsTradeDate(time);
+
+			if (isWorkingDay == false)
 				return false;
-			}
 
 			period = workingTime.GetPeriod(time);
 

@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Strategies
 	/// </summary>
 	public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
 	    ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider, ICandleManager,
-	    ITransactionProvider
+	    ITransactionProvider, IScheduledTask
 	{
 		private class StrategyChangeStateMessage : Message
 		{
@@ -292,6 +292,7 @@ namespace StockSharp.Algo.Strategies
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
+			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
 			
 			InitMaxOrdersKeepTime();
 
@@ -803,6 +804,33 @@ namespace StockSharp.Algo.Strategies
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_registerInterval.Value = value;
+			}
+		}
+
+		bool IScheduledTask.CanStart => ProcessState == ProcessStates.Stopped;
+		bool IScheduledTask.CanStop => ProcessState == ProcessStates.Started;
+
+		private readonly StrategyParam<WorkingTime> _workingTime;
+
+		/// <inheritdoc />
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.WorkingTimeKey,
+			Description = LocalizedStrings.WorkingHoursKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 15)]
+		public WorkingTime WorkingTime
+		{
+			get => _workingTime.Value;
+			set
+			{
+				if (value is null)
+					throw new ArgumentNullException(nameof(value));
+
+				if (WorkingTime == value)
+					return;
+
+				_workingTime.Value = value;
 			}
 		}
 
@@ -2179,7 +2207,15 @@ namespace StockSharp.Algo.Strategies
 					break;
 
 				case MessageTypes.Time:
+				{
+					var timeMsg = (TimeMessage)message;
+
+					if (timeMsg.BackMode != default)
+						return;
+
+					msgTime = CurrentTime;
 					break;
+				}
 
 				case ExtendedMessageTypes.StrategyChangeState:
 				{

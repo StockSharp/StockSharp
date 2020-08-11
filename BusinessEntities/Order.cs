@@ -68,7 +68,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_latencyRegistration = value;
-				NotifyChanged(nameof(LatencyRegistration));
+				NotifyChanged();
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_latencyCancellation = value;
-				NotifyChanged(nameof(LatencyCancellation));
+				NotifyChanged();
 			}
 		}
 
@@ -120,7 +120,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_latencyEdition = value;
-				NotifyChanged(nameof(LatencyEdition));
+				NotifyChanged();
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_id = value;
-				NotifyChanged(nameof(Id));
+				NotifyChanged();
 			}
 		}
 
@@ -161,7 +161,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_stringId = value;
-				NotifyChanged(nameof(StringId));
+				NotifyChanged();
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_boardId = value;
-				NotifyChanged(nameof(BoardId));
+				NotifyChanged();
 			}
 		}
 
@@ -202,7 +202,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_time = value;
-				NotifyChanged(nameof(Time));
+				NotifyChanged();
 			}
 		}
 
@@ -244,7 +244,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_state = value;
-				NotifyChanged(nameof(State));
+				NotifyChanged();
 			}
 		}
 
@@ -292,7 +292,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_lastChangeTime = value;
-				NotifyChanged(nameof(LastChangeTime));
+				NotifyChanged();
 			}
 		}
 
@@ -314,7 +314,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_localTime = value;
-				NotifyChanged(nameof(LocalTime));
+				NotifyChanged();
 			}
 		}
 
@@ -373,7 +373,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_balance = value;
-				NotifyChanged(nameof(Balance));
+				NotifyChanged();
 			}
 		}
 
@@ -394,7 +394,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_status = value;
-				NotifyChanged(nameof(Status));
+				NotifyChanged();
 			}
 		}
 
@@ -417,7 +417,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_isSystem = value;
-				NotifyChanged(nameof(IsSystem));
+				NotifyChanged();
 			}
 		}
 
@@ -461,7 +461,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_expiryDate = value;
-				NotifyChanged(nameof(ExpiryDate));
+				NotifyChanged();
 			}
 		}
 
@@ -508,7 +508,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_derivedOrder = value;
-				NotifyChanged(nameof(DerivedOrder));
+				NotifyChanged();
 			}
 		}
 
@@ -528,7 +528,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_extensionInfo = value.Sync();
-				NotifyChanged(nameof(ExtensionInfo));
+				NotifyChanged();
 			}
 		}
 

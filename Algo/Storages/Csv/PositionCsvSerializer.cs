@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.PortfolioName,
 				data.ClientCode,
 				data.DepoName,
-				data.LimitType.To<string>(),
+				data.LimitType.To<int?>().ToString(),
 				data.Description,
 				data.StrategyId,
 			});

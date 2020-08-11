@@ -36,7 +36,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str184Key)]
 	[DescriptionLoc(LocalizedStrings.Str408Key)]
-	public class WorkingTime : NotifiableObject, IPersistable
+	public class WorkingTime : IPersistable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WorkingTime"/>.
@@ -44,8 +44,6 @@ namespace StockSharp.Messages
 		public WorkingTime()
 		{
         }
-
-		private bool _isEnabled;
 
 		/// <summary>
 		/// Is enabled.
@@ -56,18 +54,7 @@ namespace StockSharp.Messages
 			Description = LocalizedStrings.Str2230Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
-		public bool IsEnabled
-		{
-			get => _isEnabled;
-			set
-			{
-				if (_isEnabled == value)
-					return;
-
-				_isEnabled = value;
-				NotifyChanged(nameof(IsEnabled));
-			}
-		}
+		public bool IsEnabled { get; set; }
 
 		private List<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
 
@@ -87,15 +74,16 @@ namespace StockSharp.Messages
 			set => _periods = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		//private List<DateTime> _specialWorkingDays = new List<DateTime>();
-
 		/// <summary>
 		/// Working days, falling on Saturday and Sunday.
 		/// </summary>
+		//[Display(
+		//	ResourceType = typeof(LocalizedStrings),
+		//	Name = LocalizedStrings.Str411Key,
+		//	Description = LocalizedStrings.Str412Key,
+		//	GroupName = LocalizedStrings.GeneralKey,
+		//	Order = 2)]
 		//[DataMember]
-		//[CategoryLoc(LocalizedStrings.GeneralKey)]
-		//[DisplayNameLoc(LocalizedStrings.Str411Key)]
-		//[DescriptionLoc(LocalizedStrings.Str412Key)]
 		[XmlIgnore]
 		[Ignore]
 		[Browsable(false)]
@@ -115,15 +103,16 @@ namespace StockSharp.Messages
 			}
 		}
 
-		//private List<DateTime> _specialHolidays = new List<DateTime>();
-
 		/// <summary>
 		/// Holidays that fall on workdays.
 		/// </summary>
 		//[DataMember]
-		//[CategoryLoc(LocalizedStrings.GeneralKey)]
-		//[DisplayNameLoc(LocalizedStrings.Str413Key)]
-		//[DescriptionLoc(LocalizedStrings.Str414Key)]
+		//[Display(
+		//	ResourceType = typeof(LocalizedStrings),
+		//	Name = LocalizedStrings.Str413Key,
+		//	Description = LocalizedStrings.Str414Key,
+		//	GroupName = LocalizedStrings.GeneralKey,
+		//	Order = 3)]
 		[XmlIgnore]
 		[Ignore]
 		[Browsable(false)]
@@ -132,8 +121,6 @@ namespace StockSharp.Messages
 			get => _specialDays.Where(p => p.Value.Length == 0).Select(p => p.Key).ToArray();
 			set
 			{
-				//_specialHolidays = CheckDates(value);
-
 				foreach (var day in CheckDates(value))
 					_specialDays[day] = ArrayHelper.Empty<Range<TimeSpan>>();
 			}
@@ -175,6 +162,7 @@ namespace StockSharp.Messages
 
 			return dates;
 		}
+
 		/// <summary>
 		/// Load settings.
 		/// </summary>
@@ -185,7 +173,7 @@ namespace StockSharp.Messages
 
 			try
 			{
-				IsEnabled = storage.GetValue<bool>(nameof(IsEnabled));
+				IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
 				Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToList();
 
 				if (storage.ContainsKey(nameof(SpecialDays)))
@@ -218,9 +206,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return Periods.Select(p => p.ToString()).JoinComma();
-		}
+		public override string ToString() => Periods.Select(p => p.ToString()).JoinComma();
 	}
 }

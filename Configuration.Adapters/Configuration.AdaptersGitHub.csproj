@@ -74,7 +74,6 @@
     <PackageReference Include="StockSharp.PoloniexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.PrizmBitStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Quandl" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.QuantHouse" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Quik" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.QuoinexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Rithmic" Version="$(StockSharpVer)" />

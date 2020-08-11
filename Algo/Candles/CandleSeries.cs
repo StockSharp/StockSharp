@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Candles
 			set
 			{
 				_security = value;
-				NotifyChanged(nameof(Security));
+				NotifyChanged();
 			}
 		}
 
@@ -88,9 +88,9 @@ namespace StockSharp.Algo.Candles
 			get => _candleType;
 			set
 			{
-				NotifyChanging(nameof(CandleType));
+				NotifyChanging();
 				_candleType = value;
-				NotifyChanged(nameof(CandleType));
+				NotifyChanged();
 			}
 		}
 
@@ -105,9 +105,9 @@ namespace StockSharp.Algo.Candles
 			get => _arg;
 			set
 			{
-				NotifyChanging(nameof(Arg));
+				NotifyChanging();
 				_arg = value;
-				NotifyChanged(nameof(Arg));
+				NotifyChanged();
 			}
 		}
 

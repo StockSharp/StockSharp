@@ -62,7 +62,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_sedol = value;
-				NotifyChanged(nameof(Sedol));
+				NotifyChanged();
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_cusip = value;
-				NotifyChanged(nameof(Cusip));
+				NotifyChanged();
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_isin = value;
-				NotifyChanged(nameof(Isin));
+				NotifyChanged();
 			}
 		}
 
@@ -110,7 +110,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_ric = value;
-				NotifyChanged(nameof(Ric));
+				NotifyChanged();
 			}
 		}
 
@@ -126,7 +126,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_bloomberg = value;
-				NotifyChanged(nameof(Bloomberg));
+				NotifyChanged();
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_iqFeed = value;
-				NotifyChanged(nameof(IQFeed));
+				NotifyChanged();
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_interactiveBrokers = value;
-				NotifyChanged(nameof(InteractiveBrokers));
+				NotifyChanged();
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_plaza = value;
-				NotifyChanged(nameof(Plaza));
+				NotifyChanged();
 			}
 		}
 

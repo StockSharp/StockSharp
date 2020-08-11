@@ -9,7 +9,7 @@ namespace StockSharp.Algo.Candles
 	/// <summary>
 	/// Compressor of candles from smaller time-frames to bigger.
 	/// </summary>
-	public class BiggerTimeFrameCandleCompressor
+	public class BiggerTimeFrameCandleCompressor : ICandleBuilderSubscription
 	{
 		private class PartCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 		{
@@ -64,29 +64,26 @@ namespace StockSharp.Algo.Candles
 		private readonly PartCandleBuilderValueTransform _transform;
 		private readonly ICandleBuilder _builder;
 
-		private VolumeProfileBuilder _volumeProfile;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BiggerTimeFrameCandleCompressor"/>.
 		/// </summary>
-		/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="builder">The builder of candles of <see cref="TimeFrameCandleMessage"/> type.</param>
-		public BiggerTimeFrameCandleCompressor(MarketDataMessage subscription, ICandleBuilder builder)
+		public BiggerTimeFrameCandleCompressor(MarketDataMessage message, ICandleBuilder builder)
 		{
-			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+			Message = message ?? throw new ArgumentNullException(nameof(message));
 			_transform = new PartCandleBuilderValueTransform();
 			_builder = builder ?? throw new ArgumentNullException(nameof(builder));
 		}
 
-		/// <summary>
-		/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
-		/// </summary>
-		public MarketDataMessage Subscription { get; private set; }
+		/// <inheritdoc />
+		public MarketDataMessage Message { get; private set; }
 
-		/// <summary>
-		/// The current candle.
-		/// </summary>
-		public CandleMessage CurrentCandle { get; private set; }
+		/// <inheritdoc />
+		public VolumeProfileBuilder VolumeProfile { get; set; }
+
+		/// <inheritdoc />
+		public CandleMessage CurrentCandle { get; set; }
 
 		/// <summary>
 		/// Reset state.
@@ -121,11 +118,7 @@ namespace StockSharp.Algo.Candles
 			_transform.Part = part;
 			_transform.Process(message);
 
-			foreach (var builtCandle in _builder.Process(Subscription, CurrentCandle, _transform, ref _volumeProfile))
-			{
-				CurrentCandle = builtCandle;
-				yield return builtCandle;
-			}
+			return _builder.Process(this, _transform);
 		}
 	}
 }

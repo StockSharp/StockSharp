@@ -167,24 +167,16 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.IncrementalOnly)
 				{
 					if (quoteMsg.State == null)
-						throw new InvalidOperationException("Storage required incremental book only.");
+						throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(true));
 				}
 				else
 				{
 					if (quoteMsg.State != null)
-						throw new InvalidOperationException("Storage required non-incremental book only.");
+						throw new InvalidOperationException(LocalizedStrings.StorageRequiredIncremental.Put(false));
 				}
 
 				//if (m.IsFullEmpty())
 				//	throw new ArgumentException(LocalizedStrings.Str1309, nameof(messages));
-
-				if (!quoteMsg.IsSorted)
-				{
-					quoteMsg = quoteMsg.TypedClone();
-
-					quoteMsg.Bids = quoteMsg.Bids.OrderByDescending(q => q.Price).ToArray();
-					quoteMsg.Asks = quoteMsg.Asks.OrderBy(q => q.Price).ToArray();
-				}
 
 				//var bid = quoteMsg.GetBestBid();
 				//var ask = quoteMsg.GetBestAsk();

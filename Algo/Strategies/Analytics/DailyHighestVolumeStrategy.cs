@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 				set
 				{
 					_volume = value;
-					NotifyChanged(nameof(Volume));
+					NotifyChanged();
 				}
 			}
 		}

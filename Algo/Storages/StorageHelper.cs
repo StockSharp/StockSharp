@@ -400,23 +400,6 @@ namespace StockSharp.Algo.Storages
 			return dates;
 		}
 
-		/// <summary>
-		/// Read instrument by identifier.
-		/// </summary>
-		/// <param name="securities">Instrument storage collection.</param>
-		/// <param name="securityId">Identifier.</param>
-		/// <returns>Instrument.</returns>
-		public static Security ReadBySecurityId(this IStorageEntityList<Security> securities, SecurityId securityId)
-		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
-
-			if (securityId.IsDefault())
-				throw new ArgumentNullException(nameof(securityId));
-
-			return securities.ReadById(securityId.ToStringId());
-		}
-
 		internal static DateTimeOffset StorageTruncate(this DateTimeOffset time, TimeSpan precision)
 		{
 			var ticks = precision.Ticks;
@@ -482,7 +465,7 @@ namespace StockSharp.Algo.Storages
 								break;
 
 							drive
-								.GetStorageDrive(secId, dataType.MessageType, dataType.Arg, format)
+								.GetStorageDrive(secId, dataType, format)
 								.ClearDatesCache();
 						}
 					}
@@ -710,7 +693,7 @@ namespace StockSharp.Algo.Storages
 					args.Add(arg);
 				else
 				{
-					var dates = drive.GetStorageDrive(securityId, candleType, arg, format).Dates;
+					var dates = drive.GetStorageDrive(securityId, DataType.Create(candleType, arg), format).Dates;
 					
 					if (from != null)
 						dates = dates.Where(d => d >= from.Value);

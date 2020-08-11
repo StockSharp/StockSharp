@@ -241,6 +241,12 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		public long SeqNum { get; set; }
 
+		/// <summary>
+		/// Determines the message is generated from the specified <see cref="DataType"/>.
+		/// </summary>
+		[DataMember]
+		public DataType BuildFrom { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
@@ -289,6 +295,7 @@ namespace StockSharp.Algo.Candles
 			//destination.VolumeProfileInfo = VolumeProfileInfo;
 			destination.PriceLevels = PriceLevels?./*Select(l => l.Clone()).*/ToArray();
 			destination.SeqNum = SeqNum;
+			destination.BuildFrom = BuildFrom;
 
 			return destination;
 		}

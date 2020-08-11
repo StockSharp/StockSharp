@@ -51,9 +51,9 @@ namespace StockSharp.Algo.Storages
 
 			//private static readonly Version _dateVersion = new Version(1, 0);
 
-			public LocalMarketDataStorageDrive(Type dataType, object arg, string path, StorageFormats format, LocalMarketDataDrive drive)
+			public LocalMarketDataStorageDrive(DataType dataType, string path, StorageFormats format, LocalMarketDataDrive drive)
 			{
-				_dataType = DataType.Create(dataType, arg);
+				_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 
 				var fileName = GetFileName(_dataType);
 
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, LocalMarketDataStorageDrive> _drives = new SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, LocalMarketDataStorageDrive>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, LocalMarketDataStorageDrive> _drives = new SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, LocalMarketDataStorageDrive>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
@@ -407,13 +407,16 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
+		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
 		{
-			if (securityId.IsDefault())
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			if (dataType.IsSecurityRequired && securityId == default)
 				throw new ArgumentNullException(nameof(securityId));
 
-			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
-				key => new LocalMarketDataStorageDrive(dataType, arg, GetSecurityPath(securityId), format, this));
+			return _drives.SafeAdd(Tuple.Create(securityId, dataType, format),
+				key => new LocalMarketDataStorageDrive(dataType, GetSecurityPath(securityId), format, this));
 		}
 
 		/// <inheritdoc />
@@ -626,10 +629,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The path to the folder with market data.</returns>
 		public string GetSecurityPath(SecurityId securityId)
 		{
-			if (securityId.IsDefault())
-				throw new ArgumentNullException(nameof(securityId));
-
-			var id = securityId.ToStringId();
+			var id = securityId == default ? TraderHelper.AllSecurity.Id : securityId.ToStringId();
 
 			var folderName = id.SecurityIdToFolderName();
 

@@ -131,6 +131,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public BlittableDecimal? OptionMargin;
 			public BlittableDecimal? OptionSyntheticMargin;
 
+			public long SeqNum;
 			public SnapshotDataType? BuildFrom;
 		}
 
@@ -152,6 +153,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
 				BuildFrom = message.BuildFrom == null ? default(SnapshotDataType?) : (SnapshotDataType)message.BuildFrom,
+				SeqNum = message.SeqNum,
 			};
 
 			foreach (var change in message.Changes)
@@ -506,6 +508,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
 					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 					BuildFrom = snapshot.BuildFrom,
+					SeqNum = snapshot.SeqNum,
 				};
 
 				level1Msg
@@ -708,6 +711,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			if (changes.BuildFrom != default)
 				message.BuildFrom = changes.BuildFrom;
+
+			if (changes.SeqNum != default)
+				message.SeqNum = changes.SeqNum;
 		}
 
 		DataType ISnapshotSerializer<SecurityId, Level1ChangeMessage>.DataType => DataType.Level1;

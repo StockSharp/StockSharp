@@ -35,11 +35,10 @@
     using StockSharp.Xaml;
 	using StockSharp.Configuration;
 
-	public partial class MainWindow
+	public partial class MainWindow : ICandleBuilderSubscription
 	{
 		private ChartArea _areaComb;
 		private ChartCandleElement _candleElement;
-		private CandleMessage _currCandle;
 		private readonly SynchronizedList<CandleMessage> _updatedCandles = new SynchronizedList<CandleMessage>();
 		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle> _allCandles = new CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle>();
 		private Security _security;
@@ -77,7 +76,9 @@
 		private bool _drawWithColor;
 		private Color _candleDrawColor;
 
-		private VolumeProfileBuilder _volumeProfile;
+		MarketDataMessage ICandleBuilderSubscription.Message => _mdMsg;
+		VolumeProfileBuilder ICandleBuilderSubscription.VolumeProfile { get; set; }
+		public CandleMessage CurrentCandle { get; set; }
 
 		public MainWindow()
 		{
@@ -154,7 +155,7 @@
 
 		private void Chart_OnSubscribeCandleElement(ChartCandleElement el, CandleSeries ser)
 		{
-			_currCandle = null;
+			CurrentCandle = null;
 			_historyLoaded = false;
 			_allCandles.Clear();
 			_updatedCandles.Clear();
@@ -295,11 +296,10 @@
 
 						if (_candleTransform.Process(tick))
 						{
-							var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform, ref _volumeProfile);
+							var candles = _candleBuilder.Process(this, _candleTransform);
 
 							foreach (var candle in candles)
 							{
-								_currCandle = candle;
 								_updatedCandles.Add(candle.TypedClone());
 							}
 						}
@@ -327,7 +327,7 @@
 						if (candleMsg.State != CandleStates.Finished)
 							candleMsg.State = CandleStates.Finished;
 
-						_currCandle = candleMsg;
+						CurrentCandle = candleMsg;
 						_updatedCandles.Add(candleMsg);
 
 						_lastTime = candleMsg.OpenTime;
@@ -429,11 +429,10 @@
 
 				if (_candleTransform.Process(nextTick))
 				{
-					var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform, ref _volumeProfile);
+					var candles = _candleBuilder.Process(this, _candleTransform);
 
 					foreach (var candle in candles)
 					{
-						_currCandle = candle;
 						_updatedCandles.Add(candle.TypedClone());
 					}
 				}
@@ -668,7 +667,7 @@
 
 		private void NewAnnotation_Click(object sender, RoutedEventArgs e)
 		{
-			if (_currCandle == null)
+			if (CurrentCandle == null)
 				return;
 
 			var values = Enumerator.GetValues<ChartAnnotationTypes>().ToArray();

@@ -3947,5 +3947,26 @@ namespace StockSharp.Messages
 
 			return result.RemoveTrailingZeros();
 		}
+
+		/// <summary>
+		/// Sort order book.
+		/// </summary>
+		/// <param name="quoteMsg">Order book.</param>
+		/// <returns>Order book.</returns>
+		public static QuoteChangeMessage TrySort(this QuoteChangeMessage quoteMsg)
+		{
+			if (quoteMsg is null)
+				throw new ArgumentNullException(nameof(quoteMsg));
+
+			if (!quoteMsg.IsSorted)
+			{
+				quoteMsg.Bids = quoteMsg.Bids.OrderByDescending(q => q.Price).ToArray();
+				quoteMsg.Asks = quoteMsg.Asks.OrderBy(q => q.Price).ToArray();
+				
+				quoteMsg.IsSorted = true;
+			}
+
+			return quoteMsg;
+		}
 	}
 }

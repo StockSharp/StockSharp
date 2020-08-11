@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Import
 					return f.GetOrClone();
 				}).ToArray();
 
-				NotifyChanged(nameof(DataType));
+				NotifyChanged();
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				_fileName = value?.Trim();
-				NotifyChanged(nameof(FileName));
+				NotifyChanged();
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				_directory = value?.Trim();
-				NotifyChanged(nameof(Directory));
+				NotifyChanged();
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace StockSharp.Algo.Import
 					throw new ArgumentNullException();
 
 				_fileMask = value;
-				NotifyChanged(nameof(FileMask));
+				NotifyChanged();
 			}
 		}
 
@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				_includeSubDirectories = value;
-				NotifyChanged(nameof(IncludeSubDirectories));
+				NotifyChanged();
 			}
 		}
 
@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Import
 					throw new ArgumentNullException(nameof(value));
 
 				_columnSeparator = value;
-				NotifyChanged(nameof(ColumnSeparator));
+				NotifyChanged();
 			}
 		}
 
@@ -205,7 +205,7 @@ namespace StockSharp.Algo.Import
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_skipFromHeader = value;
-				NotifyChanged(nameof(SkipFromHeader));
+				NotifyChanged();
 			}
 		}
 
@@ -226,7 +226,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				_timeZone = value ?? throw new ArgumentNullException(nameof(value));
-				NotifyChanged(nameof(TimeZone));
+				NotifyChanged();
 			}
 		}
 
@@ -251,7 +251,7 @@ namespace StockSharp.Algo.Import
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_interval = value;
-				NotifyChanged(nameof(Interval));
+				NotifyChanged();
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Import
 				if (_extendedStorage != null)
 					AllFields = AllFields.Concat(FieldMappingRegistry.CreateExtendedFields(_extendedStorage)).ToArray();
 
-				NotifyChanged(nameof(ExtendedStorage));
+				NotifyChanged();
 			}
 		}
 
@@ -303,7 +303,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				_updateDuplicateSecurities = value;
-				NotifyChanged(nameof(UpdateDuplicateSecurities));
+				NotifyChanged();
 			}
 		}
 
@@ -324,7 +324,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				_ignoreNonIdSecurities = value;
-				NotifyChanged(nameof(IgnoreNonIdSecurities));
+				NotifyChanged();
 			}
 		}
 
@@ -360,7 +360,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				_selectedFields = value ?? throw new ArgumentNullException(nameof(value));
-				NotifyChanged(nameof(SelectedFields));
+				NotifyChanged();
 			}
 		}
 

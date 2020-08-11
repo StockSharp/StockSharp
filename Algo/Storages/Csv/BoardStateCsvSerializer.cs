@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
 				data.BoardCode,
-				data.State.To<string>(),
+				((int)data.State).To<string>(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;

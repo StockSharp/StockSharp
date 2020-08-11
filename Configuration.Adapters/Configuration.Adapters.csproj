@@ -74,7 +74,6 @@
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Poloniex\Poloniex.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\PrizmBit\PrizmBit.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quandl\Quandl.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\QuantHouse\QuantHouse.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quoinex\Quoinex.csproj" />
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj" />

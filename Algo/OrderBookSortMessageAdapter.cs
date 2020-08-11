@@ -28,16 +28,7 @@
 			{
 				case MessageTypes.QuoteChange:
 				{
-					var quotesMsg = (QuoteChangeMessage)message;
-
-					if (!quotesMsg.IsSorted)
-					{
-						quotesMsg.Bids = quotesMsg.Bids.OrderByDescending(q => q.Price).ToArray();
-						quotesMsg.Asks = quotesMsg.Asks.OrderBy(q => q.Price).ToArray();
-
-						quotesMsg.IsSorted = true;
-					}
-
+					((QuoteChangeMessage)message).TrySort();
 					break;
 				}
 			}

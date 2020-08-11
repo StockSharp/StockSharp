@@ -10,6 +10,8 @@ namespace StockSharp.Algo.Storages.Csv
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The interface for presentation in the form of list of trade objects, received from the external storage.
 	/// </summary>
@@ -30,11 +32,12 @@ namespace StockSharp.Algo.Storages.Csv
 	/// <summary>
 	/// List of trade objects, received from the CSV storage.
 	/// </summary>
-	/// <typeparam name="T">Entity type.</typeparam>
-	public abstract class CsvEntityList<T> : SynchronizedList<T>, IStorageEntityList<T>, ICsvEntityList
-		where T : class
+	/// <typeparam name="TKey">Key type.</typeparam>
+	/// <typeparam name="TEntity">Entity type.</typeparam>
+	public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList
+		where TEntity : class
 	{
-		private readonly Dictionary<object, T> _items = new Dictionary<object, T>();
+		private readonly Dictionary<TKey, TEntity> _items = new Dictionary<TKey, TEntity>();
 
 		/// <summary>
 		/// The CSV storage of trading objects.
@@ -42,7 +45,7 @@ namespace StockSharp.Algo.Storages.Csv
 		protected CsvEntityRegistry Registry { get; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CsvEntityList{T}"/>.
+		/// Initializes a new instance of the <see cref="CsvEntityList{TKey,TEntity}"/>.
 		/// </summary>
 		/// <param name="registry">The CSV storage of trading objects.</param>
 		/// <param name="fileName">CSV file name.</param>
@@ -96,32 +99,44 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <inheritdoc />
-		void IStorageEntityList<T>.WaitFlush()
+		void IStorageEntityList<TEntity>.WaitFlush()
 		{
 			_delayActionGroup?.WaitFlush(false);
 		}
 
-		T IStorageEntityList<T>.ReadById(object id)
+		TEntity IStorageEntityList<TEntity>.ReadById(object id)
 		{
 			lock (SyncRoot)
 				return _items.TryGetValue(NormalizedKey(id));
 		}
 
-		private object GetNormalizedKey(T entity)
+		private TKey GetNormalizedKey(TEntity entity)
 		{
 			return NormalizedKey(GetKey(entity));
 		}
 
-		private static object NormalizedKey(object key)
+		private static readonly bool _isSecId = typeof(TKey) == typeof(SecurityId);
+
+		private static TKey NormalizedKey(object key)
 		{
 			if (key is string str)
-				return str.ToLowerInvariant();
+			{
+				str = str.ToLowerInvariant();
 
-			return key;
+				if (_isSecId)
+				{
+					// backward compatibility when SecurityList accept as a key string
+					key = str.ToSecurityId();
+				}
+				else
+					key = str;
+			}
+
+			return (TKey)key;
 		}
 
 		/// <inheritdoc />
-		public void Save(T entity)
+		public void Save(TEntity entity)
 		{
 			Save(entity, false);
 		}
@@ -131,7 +146,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="entity">Trade object.</param>
 		/// <param name="forced">Forced update.</param>
-		public virtual void Save(T entity, bool forced)
+		public virtual void Save(TEntity entity, bool forced)
 		{
 			lock (SyncRoot)
 			{
@@ -159,7 +174,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="entity">Trade object.</param>
 		/// <param name="forced">Forced update.</param>
 		/// <returns>Is changed.</returns>
-		protected virtual bool IsChanged(T entity, bool forced)
+		protected virtual bool IsChanged(TEntity entity, bool forced)
 		{
 			return true;
 		}
@@ -169,28 +184,28 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="item">Trade object.</param>
 		/// <returns>The key.</returns>
-		protected abstract object GetKey(T item);
+		protected abstract TKey GetKey(TEntity item);
 
 		/// <summary>
 		/// Write data into CSV.
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Trade object.</param>
-		protected abstract void Write(CsvFileWriter writer, T data);
+		protected abstract void Write(CsvFileWriter writer, TEntity data);
 
 		/// <summary>
 		/// Read data from CSV.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
 		/// <returns>Trade object.</returns>
-		protected abstract T Read(FastCsvReader reader);
+		protected abstract TEntity Read(FastCsvReader reader);
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public override bool Contains(T item)
+		public override bool Contains(TEntity item)
 		{
 			lock (SyncRoot)
 				return _items.ContainsKey(GetNormalizedKey(item));
@@ -201,7 +216,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="item">Trade object.</param>
 		/// <returns></returns>
-		protected override bool OnAdding(T item)
+		protected override bool OnAdding(TEntity item)
 		{
 			lock (SyncRoot)
 			{
@@ -220,7 +235,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// 
 		/// </summary>
 		/// <param name="item">Trade object.</param>
-		protected override void OnRemoved(T item)
+		protected override void OnRemoved(TEntity item)
 		{
 			base.OnRemoved(item);
 
@@ -237,7 +252,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// 
 		/// </summary>
 		/// <param name="items"></param>
-		protected void OnRemovedRange(IEnumerable<T> items)
+		protected void OnRemovedRange(IEnumerable<TEntity> items)
 		{
 			lock (SyncRoot)
 			{
@@ -271,7 +286,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Write data into storage.
 		/// </summary>
 		/// <param name="values">Trading objects.</param>
-		private void WriteMany(T[] values)
+		private void WriteMany(TEntity[] values)
 		{
 			_delayActionGroup.Add((writer, state) =>
 			{
@@ -380,7 +395,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Add item to cache.
 		/// </summary>
 		/// <param name="item">New item.</param>
-		protected virtual void AddCache(T item)
+		protected virtual void AddCache(TEntity item)
 		{
 		}
 
@@ -388,7 +403,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Update item in cache.
 		/// </summary>
 		/// <param name="item">Item.</param>
-		protected virtual void UpdateCache(T item)
+		protected virtual void UpdateCache(TEntity item)
 		{
 		}
 
@@ -396,7 +411,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Remove item from cache.
 		/// </summary>
 		/// <param name="item">Item.</param>
-		protected virtual void RemoveCache(T item)
+		protected virtual void RemoveCache(TEntity item)
 		{
 		}
 

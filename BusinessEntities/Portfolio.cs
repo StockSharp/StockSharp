@@ -59,7 +59,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_name = value;
-				NotifyChanged(nameof(Name));
+				NotifyChanged();
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_state = value;
-				NotifyChanged(nameof(State));
+				NotifyChanged();
 			}
 		}
 

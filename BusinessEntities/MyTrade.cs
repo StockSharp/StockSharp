@@ -126,7 +126,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_pnL = value;
-				NotifyChanged(nameof(PnL));
+				NotifyChanged();
 			}
 		}
 

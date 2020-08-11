@@ -53,12 +53,12 @@ namespace StockSharp.Algo.Storages.Csv
 				data.TradeId.ToString(),
 				data.TradePrice.ToString(),
 				data.TradeVolume.ToString(),
-				data.OriginSide.ToString(),
+				data.OriginSide.To<int?>().ToString(),
 				data.OpenInterest.ToString(),
-				data.IsSystem.ToString(),
-				data.IsUpTick.ToString(),
+				data.IsSystem.To<int?>().ToString(),
+				data.IsUpTick.To<int?>().ToString(),
 				data.TradeStringId,
-				data.Currency.ToString(),
+				data.Currency.To<int?>().ToString(),
 			}.Concat(data.BuildFrom.ToCsv()).Concat(new[]
 			{
 				data.SeqNum.DefaultAsNull().ToString(),

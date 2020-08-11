@@ -32,12 +32,14 @@ namespace StockSharp.Algo.Storages.Csv
 	{
 		private readonly Encoding _encoding;
 		private readonly Func<FastCsvReader, object> _readId;
+		private readonly Func<FastCsvReader, bool> _readIncrementalOnly;
 
-		public CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> readId)
+		public CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> readId, Func<FastCsvReader, bool> readIncrementalOnly = null)
 			: base(date)
 		{
 			_encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
 			_readId = readId;
+			_readIncrementalOnly = readIncrementalOnly;
 		}
 
 		//public override CsvMetaInfo Clone()
@@ -59,6 +61,8 @@ namespace StockSharp.Algo.Storages.Csv
 			get => _lastId;
 			set => _lastId = value;
 		}
+
+		public bool? IncrementalOnly { get; set; }
 
 		public override void Write(Stream stream)
 		{
@@ -99,6 +103,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 					LastTime = reader.ReadTime(Date).UtcDateTime;
 					_lastId = _readId?.Invoke(reader);
+					IncrementalOnly = _readIncrementalOnly?.Invoke(reader);
 				}
 
 				stream.Position = 0;
