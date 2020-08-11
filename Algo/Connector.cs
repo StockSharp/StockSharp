@@ -49,6 +49,7 @@ namespace StockSharp.Algo
 		// backward compatibility for NewXXX events
 		private readonly CachedSynchronizedSet<Security> _existingSecurities = new CachedSynchronizedSet<Security>();
 		private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = new CachedSynchronizedSet<Portfolio>();
+		private readonly CachedSynchronizedSet<Position> _existingPositions = new CachedSynchronizedSet<Position>();
 
 		private bool _notFirstTimeConnected;
 		private bool _isDisposing;
@@ -315,7 +316,7 @@ namespace StockSharp.Algo
 		public IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;
 
 		/// <inheritdoc />
-		public IEnumerable<Position> Positions => PositionStorage.Positions;
+		public IEnumerable<Position> Positions => _existingPositions.Cache;
 
 		/// <summary>
 		/// Risk control manager.
@@ -566,9 +567,9 @@ namespace StockSharp.Algo
 				p.StrategyId = strategyId;
 
 				return p;
-			}, out var isNew);
+			}, out _);
 
-			if (isNew)
+			if (_existingPositions.TryAdd(position))
 				RaiseNewPosition(position);
 
 			return position;
@@ -1218,6 +1219,7 @@ namespace StockSharp.Algo
 
 			_existingSecurities.Clear();
 			_existingPortfolios.Clear();
+			_existingPositions.Clear();
 
 			_notFirstTimeConnected = default;
 
