@@ -51,13 +51,13 @@
 			if (change is null)
 				throw new ArgumentNullException(nameof(change));
 
-			if (change.State == null)
+			if (change.State is null)
 				throw new ArgumentException(nameof(change));
 
 			var currState = _state;
 			var newState = change.State.Value;
 
-			void CheckSwitch()
+			bool CheckSwitch()
 			{
 				switch (currState)
 				{
@@ -65,14 +65,20 @@
 					case QuoteChangeStates.SnapshotStarted:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
+						{
 							this.AddDebugLog($"{currState}->{newState}");
+							return false;
+						}
 
 						break;
 					}
 					case QuoteChangeStates.SnapshotBuilding:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
+						{
 							this.AddDebugLog($"{currState}->{newState}");
+							return false;
+						}
 
 						break;
 					}
@@ -80,18 +86,24 @@
 					case QuoteChangeStates.Increment:
 					{
 						if (newState == QuoteChangeStates.SnapshotBuilding)
+						{
 							this.AddDebugLog($"{currState}->{newState}");
+							return false;
+						}
 
 						break;
 					}
 				}
+
+				return true;
 			}
 
 			var resetState = newState == QuoteChangeStates.SnapshotStarted || newState == QuoteChangeStates.SnapshotComplete;
 
 			if (currState != newState || resetState)
 			{
-				CheckSwitch();
+				if (!CheckSwitch())
+					return null;
 
 				if (currState == _none || resetState)
 				{
