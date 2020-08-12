@@ -211,10 +211,6 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual string StorageName { get; }
 
-		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; } = null;
-
 		/// <summary>
 		/// Bit process, which can run the adapter.
 		/// </summary>

@@ -972,25 +972,7 @@ namespace StockSharp.Algo
 		/// <param name="transactionId">Order cancellation transaction id.</param>
 		protected void OnCancelOrder(Order order, long transactionId)
 		{
-			decimal? volume;
-
-			switch (TransactionAdapter?.OrderCancelVolumeRequired)
-			{
-				case null:
-					volume = null;
-					break;
-				case OrderCancelVolumeRequireTypes.Balance:
-					volume = order.Balance;
-					break;
-				case OrderCancelVolumeRequireTypes.Volume:
-					volume = order.Volume;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			var cancelMsg = order.CreateCancelMessage(GetSecurityId(order.Security), transactionId, volume);
-			SendInMessage(cancelMsg);
+			SendInMessage(order.CreateCancelMessage(GetSecurityId(order.Security), transactionId));
 		}
 
 		/// <inheritdoc />

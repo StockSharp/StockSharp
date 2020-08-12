@@ -396,11 +396,10 @@ namespace StockSharp.Algo
 		/// <param name="order">Order.</param>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="transactionId">The transaction number.</param>
-		/// <param name="volume">The volume been cancelled.</param>
 		/// <returns>Message.</returns>
-		public static OrderCancelMessage CreateCancelMessage(this Order order, SecurityId securityId, long transactionId, decimal? volume = null)
+		public static OrderCancelMessage CreateCancelMessage(this Order order, SecurityId securityId, long transactionId)
 		{
-			if (order == null)
+			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
 			var msg = new OrderCancelMessage
@@ -415,7 +414,8 @@ namespace StockSharp.Algo
 				ClientCode = order.ClientCode,
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
-				Volume = volume,
+				Balance = order.Balance,
+				Volume = order.Volume,
 				Side = order.Direction,
 				IsMargin = order.IsMargin,
 			};

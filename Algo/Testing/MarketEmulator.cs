@@ -2206,7 +2206,6 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsSupportCandlesPriceLevels => false;
 
 		MessageAdapterCategories IMessageAdapter.Categories => default;
-		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => null;
 
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields { get; } = Enumerable.Empty<Tuple<string, Type>>();
 		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => throw new NotImplementedException();

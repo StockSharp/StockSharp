@@ -40,6 +40,12 @@ namespace StockSharp.Messages
 		public string OrderStringId { get; set; }
 
 		/// <summary>
+		/// Cancelling balance.
+		/// </summary>
+		[DataMember]
+		public decimal? Balance { get; set; }
+
+		/// <summary>
 		/// Cancelling volume. If not specified, then it canceled the entire balance.
 		/// </summary>
 		[DataMember]
@@ -78,6 +84,7 @@ namespace StockSharp.Messages
 
 			destination.OrderId = OrderId;
 			destination.OrderStringId = OrderStringId;
+			destination.Balance = Balance;
 			destination.Volume = Volume;
 			destination.Side = Side;
 		}
@@ -103,6 +110,9 @@ namespace StockSharp.Messages
 
 			if (!OrderStringId.IsEmpty())
 				str += $",OrdStrId={OrderStringId}";
+
+			if (Balance != null)
+				str += $",Bal={Balance.Value}";
 
 			if (Volume != null)
 				str += $",Vol={Volume.Value}";

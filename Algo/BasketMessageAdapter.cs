@@ -624,8 +624,6 @@ namespace StockSharp.Algo
 
 		MessageAdapterCategories IMessageAdapter.Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
 
-		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => GetSortedAdapters().FirstOrDefault()?.OrderCancelVolumeRequired;
-
 		Type IMessageAdapter.OrderConditionType => null;
 		
 		bool IMessageAdapter.HeartbeatBeforConnect => false;
