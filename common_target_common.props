@@ -3,7 +3,7 @@
     <ProductVersion>9.0.30729</ProductVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <!--<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>-->
-    <EcngVer>1.0.24</EcngVer>
+    <EcngVer>1.0.25</EcngVer>
     <LangVersion>default</LangVersion>
     <SampleHistoryDataVersion>1.*</SampleHistoryDataVersion>
     <StockSharpVer>5.*</StockSharpVer>

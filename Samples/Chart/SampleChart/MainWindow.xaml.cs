@@ -231,7 +231,7 @@
 					Id = id.ToStringId(),
 					Code = id.SecurityCode,
 					Type = SecurityTypes.Future,
-					PriceStep = id.SecurityCode.StartsWith("RI", StringComparison.InvariantCultureIgnoreCase) ? 10 :
+					PriceStep = id.SecurityCode.StartsWithIgnoreCase("RI") ? 10 :
 						id.SecurityCode.Contains("ES") ? 0.25m :
 						0.01m,
 					Board = ExchangeBoard.Associated

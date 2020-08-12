@@ -342,7 +342,7 @@ namespace StockSharp.Messages
 			var isNullable = ctx.PropertyDescriptor?.PropertyType.IsNullable() == true;
 
 			const string delimiter = "@";
-			var index = securityId.LastIndexOf(delimiter, StringComparison.InvariantCulture);
+			var index = securityId.LastIndexOfIgnoreCase(delimiter);
 			return index < 0 ?
 				isNullable ? (SecurityId?)null : default(SecurityId) :
 				new SecurityId { SecurityCode = securityId.Substring(0, index), BoardCode = securityId.Substring(index + delimiter.Length, securityId.Length - index - delimiter.Length) };
