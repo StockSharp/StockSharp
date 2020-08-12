@@ -422,6 +422,8 @@
 							if (info.ReplyReceived)
 							{
 								// unexpected subscription stop
+
+								message = responseMsg = responseMsg.TypedClone();
 								responseMsg.OriginalTransactionId = requestId;
 								break;
 							}
@@ -432,6 +434,7 @@
 
 						info.ReplyReceived = true;
 						
+						message = responseMsg = responseMsg.TypedClone();
 						responseMsg.OriginalTransactionId = requestId;
 					}
 
