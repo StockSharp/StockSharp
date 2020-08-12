@@ -46,7 +46,7 @@ namespace StockSharp.Logging
 		{
 			public ApplicationReceiver()
 			{
-				Name = TypeHelper.ApplicationName;
+				Name = ConfigManager.TryGet("appName", TypeHelper.ApplicationName);
 				LogLevel = LogLevels.Info;
 			}
 		}
