@@ -40,8 +40,6 @@ namespace StockSharp.Messages
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		protected MessageAdapter(IdGenerator transactionIdGenerator)
 		{
-			Platform = Platforms.AnyCPU;
-
 			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
