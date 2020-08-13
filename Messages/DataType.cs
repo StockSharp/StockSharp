@@ -1,6 +1,8 @@
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Linq;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -340,6 +342,16 @@ namespace StockSharp.Messages
 			this == Securities			||
 			this == Ticks				||
 			this == OrderLog;
+
+		/// <summary>
+		/// Is the data type can be used as candles compression source.
+		/// </summary>
+		public bool IsCandleSource => CandleSources.Contains(this);
+
+		/// <summary>
+		/// Possible data types that can be used as candles source.
+		/// </summary>
+		public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>(new[] { Ticks, Level1, MarketDepth, OrderLog });
 
 		/// <summary>
 		/// Load settings.
