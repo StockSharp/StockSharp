@@ -912,7 +912,7 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
 			}
 
-			if (adapter.IsSupportOrderBookIncrements)
+			if (SupportBuildingFromOrderLog || adapter.IsSupportOrderBookIncrements)
 			{
 				adapter = ApplyOwnInner(new OrderBookIncrementMessageAdapter(adapter));
 			}

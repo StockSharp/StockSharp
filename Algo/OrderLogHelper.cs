@@ -26,6 +26,7 @@ namespace StockSharp.Algo
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Algo.Storages;
 
 	/// <summary>
 	/// Reasons for orders cancelling in the orders log.
@@ -231,6 +232,7 @@ namespace StockSharp.Algo
 
 			return items.ToMessages<OrderLogItem, ExecutionMessage>()
 				.ToOrderBooks(builder, interval)
+				.BuildIfNeed()
 				.ToEntities<QuoteChangeMessage, MarketDepth>(first.Order.Security);
 		}
 
@@ -468,7 +470,7 @@ namespace StockSharp.Algo
 			if (builder == null)
 				return new TickLevel1Enumerable(items);
 			else
-				return items.ToOrderBooks(builder, interval, 1).ToLevel1();
+				return items.ToOrderBooks(builder, interval, 1).BuildIfNeed().ToLevel1();
 		}
 	}
 }
