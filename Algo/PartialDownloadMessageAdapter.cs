@@ -376,29 +376,19 @@
 
 					lock (_syncObject)
 					{
-						if (_liveRequests.TryGetAndRemove(originId, out var isPartial))
+						if (_liveRequests.TryGetValue(originId, out var isPartial))
 						{
 							if (responseMsg.IsOk())
 							{
-								if (!this.IsOutMessageSupported(MessageTypes.SubscriptionOnline))
+								if (isPartial)
 								{
-									if (isPartial)
-									{
-										// reply was sent previously for the first partial request,
-										// now sending "online" message
-										message = new SubscriptionOnlineMessage
-										{
-											OriginalTransactionId = originId
-										};
-									}
-									else
-									{
-										extra = new SubscriptionOnlineMessage
-										{
-											OriginalTransactionId = originId
-										};
-									}
+									// reply was sent previously for a first partial request,
+									return;
 								}
+							}
+							else
+							{
+								_liveRequests.Remove(originId);
 							}
 
 							break;
@@ -441,15 +431,37 @@
 					break;
 				}
 
-				case MessageTypes.SubscriptionFinished:
+				case MessageTypes.SubscriptionOnline:
 				{
-					var finishMsg = (SubscriptionFinishedMessage)message;
+					var onlineMsg = (SubscriptionOnlineMessage)message;
+					var id = onlineMsg.OriginalTransactionId;
 
 					lock (_syncObject)
 					{
-						if (_partialRequests.TryGetAndRemove(finishMsg.OriginalTransactionId, out var info))
+						if (_partialRequests.TryGetValue(id, out var info))
 						{
-							_finished.Add(finishMsg.OriginalTransactionId);
+							this.AddWarningLog("Partial {0} ({1}) became online.", id, info.Origin.TransactionId);
+							message = null;
+						}
+						else if (_liveRequests.TryGetAndRemove(id, out _))
+						{
+							this.AddInfoLog("Downloading {0} is online.", id);
+						}
+					}
+
+					break;
+				}
+
+				case MessageTypes.SubscriptionFinished:
+				{
+					var finishMsg = (SubscriptionFinishedMessage)message;
+					var id = finishMsg.OriginalTransactionId;
+
+					lock (_syncObject)
+					{
+						if (_partialRequests.TryGetAndRemove(id, out var info))
+						{
+							_finished.Add(id);
 
 							var origin = info.Origin;
 
@@ -467,14 +479,14 @@
 						}
 						else
 						{
-							if (_finished.Contains(finishMsg.OriginalTransactionId))
-								this.AddWarningLog("Subscription {0} already finished.", finishMsg.OriginalTransactionId);
+							if (_finished.Contains(id))
+								this.AddWarningLog("Subscription {0} already finished.", id);
 
 							break;
 						}
 					}
 
-					this.AddInfoLog("Partial {0} finished.", finishMsg.OriginalTransactionId);
+					this.AddInfoLog("Partial {0} finished.", id);
 
 					break;
 				}
