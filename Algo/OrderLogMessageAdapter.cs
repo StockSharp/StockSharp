@@ -160,7 +160,7 @@
 
 					QuoteChangeMessage snapshot = null;
 
-					if (TryRemoveSubscription(id, out var info))
+					if (_subscriptionIds.TryGetValue(id, out var info))
 					{
 						lock (info.Lock)
 						{
@@ -188,7 +188,7 @@
 
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType == ExecutionTypes.OrderLog)
+					if (execMsg.ExecutionType == ExecutionTypes.OrderLog && execMsg.IsSystem != false)
 						message = ProcessBuilders(execMsg);
 
 					break;
@@ -201,9 +201,6 @@
 
 		private Message ProcessBuilders(ExecutionMessage execMsg)
 		{
-			if (execMsg.IsSystem == false || _subscriptionIds.Count == 0)
-				return execMsg;
-
 			List<long> nonBuilderIds = null;
 
 			foreach (var subscriptionId in execMsg.GetSubscriptionIds())
