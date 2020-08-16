@@ -1590,12 +1590,14 @@ namespace StockSharp.Algo.Testing
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public MarketEmulator(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider)
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		public MarketEmulator(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IdGenerator transactionIdGenerator)
 		{
 			SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 			PortfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
 			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
-		
+			TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
+
 			((IMessageAdapter)this).SupportedInMessages = ((IMessageAdapter)this).PossibleSupportedMessages.Select(i => i.Type).ToArray();
 		}
 
@@ -1607,6 +1609,11 @@ namespace StockSharp.Algo.Testing
 
 		/// <inheritdoc />
 		public IExchangeInfoProvider ExchangeInfoProvider { get; }
+
+		/// <summary>
+		/// Transaction id generator.
+		/// </summary>
+		public IdGenerator TransactionIdGenerator { get; }
 
 		/// <inheritdoc />
 		public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
@@ -2266,13 +2273,8 @@ namespace StockSharp.Algo.Testing
 		}
 
 		IMessageChannel ICloneable<IMessageChannel>.Clone()
-		{
-			return new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider);
-		}
+			=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator);
 
-		object ICloneable.Clone()
-		{
-			return ((ICloneable<IMessageChannel>)this).Clone();
-		}
+		object ICloneable.Clone() => ((ICloneable<IMessageChannel>)this).Clone();
 	}
 }

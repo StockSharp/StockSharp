@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Testing
 		public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider)
 			: base(innerAdapter)
 		{
-			Emulator = new MarketEmulator(securityProvider, portfolioProvider, exchangeInfoProvider)
+			Emulator = new MarketEmulator(securityProvider, portfolioProvider, exchangeInfoProvider, TransactionIdGenerator)
 			{
 				Parent = this,
 				Settings =
