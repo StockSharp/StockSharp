@@ -3968,5 +3968,93 @@ namespace StockSharp.Messages
 
 			return quoteMsg;
 		}
+
+		/// <summary>
+		/// Convert <see cref="ExecutionMessage"/> to <see cref="OrderRegisterMessage"/>.
+		/// </summary>
+		/// <param name="execMsg">The message contains information about the execution.</param>
+		/// <returns>The message containing the information for the order registration.</returns>
+		public static OrderRegisterMessage ToReg(this ExecutionMessage execMsg)
+		{
+			if (execMsg is null)
+				throw new ArgumentNullException(nameof(execMsg));
+
+			return new OrderRegisterMessage
+			{
+				SecurityId = execMsg.SecurityId,
+				TransactionId = execMsg.TransactionId,
+				Price = execMsg.OrderPrice,
+				Volume = execMsg.Balance ?? execMsg.OrderVolume ?? 0L,
+				Currency = execMsg.Currency,
+				PortfolioName = execMsg.PortfolioName,
+				ClientCode = execMsg.ClientCode,
+				BrokerCode = execMsg.BrokerCode,
+				Comment = execMsg.Comment,
+				Side = execMsg.Side,
+				TimeInForce = execMsg.TimeInForce,
+				TillDate = execMsg.ExpiryDate,
+				VisibleVolume = execMsg.VisibleVolume,
+				LocalTime = execMsg.LocalTime,
+				IsMarketMaker = execMsg.IsMarketMaker,
+				IsMargin = execMsg.IsMargin,
+				Slippage = execMsg.Slippage,
+				IsManual = execMsg.IsManual,
+				OrderType = execMsg.OrderType,
+				UserOrderId = execMsg.UserOrderId,
+				StrategyId = execMsg.StrategyId,
+				Condition = execMsg.Condition?.Clone(),
+				MinOrderVolume = execMsg.MinVolume,
+				PositionEffect = execMsg.PositionEffect,
+				PostOnly = execMsg.PostOnly,
+				Leverage = execMsg.Leverage,
+			};
+		}
+
+		/// <summary>
+		/// Convert <see cref="OrderRegisterMessage"/> to <see cref="ExecutionMessage"/>.
+		/// </summary>
+		/// <param name="regMsg">The message containing the information for the order registration.</param>
+		/// <returns>The message contains information about the execution.</returns>
+		public static ExecutionMessage ToExec(this OrderRegisterMessage regMsg)
+		{
+			if (regMsg is null)
+				throw new ArgumentNullException(nameof(regMsg));
+
+			return new ExecutionMessage
+			{
+				ServerTime = DateTimeOffset.Now,
+				ExecutionType = ExecutionTypes.Transaction,
+				SecurityId = regMsg.SecurityId,
+				TransactionId = regMsg.TransactionId,
+				OriginalTransactionId = regMsg.TransactionId,
+				HasOrderInfo = true,
+				OrderPrice = regMsg.Price,
+				OrderVolume = regMsg.Volume,
+				Currency = regMsg.Currency,
+				PortfolioName = regMsg.PortfolioName,
+				ClientCode = regMsg.ClientCode,
+				BrokerCode = regMsg.BrokerCode,
+				Comment = regMsg.Comment,
+				Side = regMsg.Side,
+				TimeInForce = regMsg.TimeInForce,
+				ExpiryDate = regMsg.TillDate,
+				Balance = regMsg.Volume,
+				VisibleVolume = regMsg.VisibleVolume,
+				LocalTime = regMsg.LocalTime,
+				IsMarketMaker = regMsg.IsMarketMaker,
+				IsMargin = regMsg.IsMargin,
+				Slippage = regMsg.Slippage,
+				IsManual = regMsg.IsManual,
+				OrderType = regMsg.OrderType,
+				UserOrderId = regMsg.UserOrderId,
+				StrategyId = regMsg.StrategyId,
+				OrderState = OrderStates.Pending,
+				Condition = regMsg.Condition?.Clone(),
+				MinVolume = regMsg.MinOrderVolume,
+				PositionEffect = regMsg.PositionEffect,
+				PostOnly = regMsg.PostOnly,
+				Leverage = regMsg.Leverage,
+			};
+		}
 	}
 }
