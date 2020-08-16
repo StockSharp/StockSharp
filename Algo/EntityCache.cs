@@ -1266,7 +1266,7 @@ namespace StockSharp.Algo
 			public object GetValue(Level1Fields field)
 			{
 				lock (_sync)
-					return _snapshot.Changes.TryGetValue(field);
+					return _snapshot.TryGet(field);
 			}
 
 			private void RemoveValues(CachedSynchronizedSet<Level1Fields> fields)

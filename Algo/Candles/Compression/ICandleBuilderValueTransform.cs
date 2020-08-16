@@ -256,29 +256,28 @@ namespace StockSharp.Algo.Candles.Compression
 				return base.Process(message);
 			}
 
-			var changes = l1.Changes;
 			var time = l1.ServerTime;
 
 			switch (Type)
 			{
 				case Level1Fields.BestBidPrice:
 				{
-					var price = (decimal?)changes.TryGetValue(Type);
+					var price = l1.TryGetDecimal(Type);
 
 					if (price == null)
 						return false;
 
-					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestBidVolume), Sides.Buy, null, null);
+					Update(time, price.Value, l1.TryGetDecimal(Level1Fields.BestBidVolume), Sides.Buy, null, null);
 					return true;
 				}
 				case Level1Fields.BestAskPrice:
 				{
-					var price = (decimal?)changes.TryGetValue(Type);
+					var price = l1.TryGetDecimal(Type);
 
 					if (price == null)
 						return false;
 
-					Update(time, price.Value, (decimal?)changes.TryGetValue(Level1Fields.BestAskVolume), Sides.Sell, null, null);
+					Update(time, price.Value, l1.TryGetDecimal(Level1Fields.BestAskVolume), Sides.Sell, null, null);
 					return true;
 				}
 				case Level1Fields.LastTradePrice:
@@ -289,9 +288,9 @@ namespace StockSharp.Algo.Candles.Compression
 						return false;
 
 					Update(time, price.Value,
-						(decimal?)changes.TryGetValue(Level1Fields.LastTradeVolume),
-						(Sides?)changes.TryGetValue(Level1Fields.LastTradeOrigin),
-						(decimal?)changes.TryGetValue(Level1Fields.OpenInterest),
+						l1.TryGetDecimal(Level1Fields.LastTradeVolume),
+						(Sides?)l1.TryGet(Level1Fields.LastTradeOrigin),
+						l1.TryGetDecimal(Level1Fields.OpenInterest),
 						null);
 
 					return true;
@@ -300,13 +299,13 @@ namespace StockSharp.Algo.Candles.Compression
 				//case Level1Fields.SpreadMiddle:
 				default:
 				{
-					var currBidPrice = (decimal?)changes.TryGetValue(Level1Fields.BestBidPrice);
-					var currAskPrice = (decimal?)changes.TryGetValue(Level1Fields.BestAskPrice);
+					var currBidPrice = l1.TryGetDecimal(Level1Fields.BestBidPrice);
+					var currAskPrice = l1.TryGetDecimal(Level1Fields.BestAskPrice);
 
 					_prevBestBid = currBidPrice ?? _prevBestBid;
 					_prevBestAsk = currAskPrice ?? _prevBestAsk;
 
-					var spreadMiddle = (decimal?)changes.TryGetValue(Level1Fields.SpreadMiddle);
+					var spreadMiddle = l1.TryGetDecimal(Level1Fields.SpreadMiddle);
 
 					if (spreadMiddle == null)
 					{

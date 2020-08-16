@@ -161,12 +161,12 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var spreadMiddle = (decimal?)message.Changes.TryGetValue(Level1Fields.SpreadMiddle);
+			var spreadMiddle = message.TryGetDecimal(Level1Fields.SpreadMiddle);
 
 			if (spreadMiddle == null)
 			{
-				var bestBid = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
-				var bestAsk = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+				var bestBid = message.TryGetDecimal(Level1Fields.BestBidPrice);
+				var bestAsk = message.TryGetDecimal(Level1Fields.BestAskPrice);
 
 				spreadMiddle = bestBid.GetSpreadMiddle(bestAsk);
 			}
@@ -212,7 +212,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (decimal?)message.Changes.TryGetValue(Level1Fields.LastTradePrice);
+			return message.TryGetDecimal(Level1Fields.LastTradePrice);
 		}
 
 		/// <summary>
@@ -2301,12 +2301,12 @@ namespace StockSharp.Messages
 			{
 				ExecutionType = ExecutionTypes.Tick,
 				SecurityId = level1.SecurityId,
-				TradeId = (long?)level1.Changes.TryGetValue(Level1Fields.LastTradeId),
-				TradePrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradePrice),
-				TradeVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
-				OriginSide = (Sides?)level1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
-				ServerTime = (DateTimeOffset?)level1.Changes.TryGetValue(Level1Fields.LastTradeTime) ?? level1.ServerTime,
-				IsUpTick = (bool?)level1.Changes.TryGetValue(Level1Fields.LastTradeUpDown),
+				TradeId = (long?)level1.TryGet(Level1Fields.LastTradeId),
+				TradePrice = level1.TryGetDecimal(Level1Fields.LastTradePrice),
+				TradeVolume = level1.TryGetDecimal(Level1Fields.LastTradeVolume),
+				OriginSide = (Sides?)level1.TryGet(Level1Fields.LastTradeOrigin),
+				ServerTime = (DateTimeOffset?)level1.TryGet(Level1Fields.LastTradeTime) ?? level1.ServerTime,
+				IsUpTick = (bool?)level1.TryGet(Level1Fields.LastTradeUpDown),
 				LocalTime = level1.LocalTime,
 				BuildFrom = level1.BuildFrom ?? DataType.Level1,
 			};
@@ -2344,10 +2344,10 @@ namespace StockSharp.Messages
 						var prevAskPrice = _prevAskPrice;
 						var prevAskVolume = _prevAskVolume;
 
-						_prevBidPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _prevBidPrice;
-						_prevBidVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _prevBidVolume;
-						_prevAskPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _prevAskPrice;
-						_prevAskVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _prevAskVolume;
+						_prevBidPrice = level1.TryGetDecimal(Level1Fields.BestBidPrice) ?? _prevBidPrice;
+						_prevBidVolume = level1.TryGetDecimal(Level1Fields.BestBidVolume) ?? _prevBidVolume;
+						_prevAskPrice = level1.TryGetDecimal(Level1Fields.BestAskPrice) ?? _prevAskPrice;
+						_prevAskVolume = level1.TryGetDecimal(Level1Fields.BestAskVolume) ?? _prevAskVolume;
 
 						if (_prevBidPrice == 0)
 							_prevBidPrice = null;

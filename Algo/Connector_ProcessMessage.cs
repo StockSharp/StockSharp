@@ -1115,7 +1115,7 @@ namespace StockSharp.Algo
 				var security = EnsureGetSecurity(message);
 				portfolio = LookupByPortfolioName(message.PortfolioName);
 
-				var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
+				var valueInLots = message.TryGetDecimal(PositionChangeTypes.CurrentValueInLots);
 				if (valueInLots != null)
 				{
 					if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))

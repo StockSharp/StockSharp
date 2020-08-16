@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			foreach (var type in _types)
 			{
-				var value = data.Changes.TryGetValue(type);
+				var value = data.TryGet(type);
 
 				if (type == PositionChangeTypes.ExpirationDate)
 				{

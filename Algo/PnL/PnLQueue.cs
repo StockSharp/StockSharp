@@ -243,42 +243,42 @@ namespace StockSharp.Algo.PnL
 		/// <param name="levelMsg">The message, containing market data.</param>
 		public void ProcessLevel1(Level1ChangeMessage levelMsg)
 		{
-			var priceStep = levelMsg.Changes.TryGetValue(Level1Fields.PriceStep);
+			var priceStep = levelMsg.TryGetDecimal(Level1Fields.PriceStep);
 			if (priceStep != null)
 			{
 				PriceStep = (decimal)priceStep;
 				_recalcUnrealizedPnL = true;
 			}
 
-			var stepPrice = levelMsg.Changes.TryGetValue(Level1Fields.StepPrice);
+			var stepPrice = levelMsg.TryGetDecimal(Level1Fields.StepPrice);
 			if (stepPrice != null)
 			{
 				StepPrice = (decimal)stepPrice;
 				_recalcUnrealizedPnL = true;
 			}
 
-			var lotMultiplier = levelMsg.Changes.TryGetValue(Level1Fields.Multiplier);
+			var lotMultiplier = levelMsg.TryGetDecimal(Level1Fields.Multiplier);
 			if (lotMultiplier != null)
 			{
 				LotMultiplier = (decimal)lotMultiplier;
 				_recalcUnrealizedPnL = true;
 			}
 
-			var tradePrice = levelMsg.Changes.TryGetValue(Level1Fields.LastTradePrice);
+			var tradePrice = levelMsg.TryGetDecimal(Level1Fields.LastTradePrice);
 			if (tradePrice != null)
 			{
 				TradePrice = (decimal)tradePrice;
 				_recalcUnrealizedPnL = true;
 			}
 
-			var bidPrice = levelMsg.Changes.TryGetValue(Level1Fields.BestBidPrice);
+			var bidPrice = levelMsg.TryGetDecimal(Level1Fields.BestBidPrice);
 			if (bidPrice != null)
 			{
 				BidPrice = (decimal)bidPrice;
 				_recalcUnrealizedPnL = true;
 			}
 
-			var askPrice = levelMsg.Changes.TryGetValue(Level1Fields.BestAskPrice);
+			var askPrice = levelMsg.TryGetDecimal(Level1Fields.BestAskPrice);
 			if (askPrice != null)
 			{
 				AskPrice = (decimal)askPrice;
