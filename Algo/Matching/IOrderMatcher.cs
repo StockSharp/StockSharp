@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo
+﻿namespace StockSharp.Algo.Matching
 {
 	using System;
 	using System.Collections;
@@ -17,6 +17,11 @@
 	/// </summary>
 	public interface IOrderMatcher
 	{
+		/// <summary>
+		/// Security ID.
+		/// </summary>
+		SecurityId SecurityId { get; }
+
 		/// <summary>
 		/// Process <see cref="OrderRegisterMessage"/> message.
 		/// </summary>
@@ -206,13 +211,19 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderMatcher"/>.
 		/// </summary>
+		/// <param name="securityId">Security ID.</param>
 		/// <param name="orderIdGenerator">The generator of identifiers for orders.</param>
 		/// <param name="tradeIdGenerator">The generator of identifiers for trades.</param>
-		public OrderMatcher(IdGenerator orderIdGenerator, IdGenerator tradeIdGenerator)
+		public OrderMatcher(SecurityId securityId, IdGenerator orderIdGenerator, IdGenerator tradeIdGenerator)
 		{
+			SecurityId = securityId;
+
 			_orderIdGenerator = orderIdGenerator ?? throw new ArgumentNullException(nameof(orderIdGenerator));
 			_tradeIdGenerator = tradeIdGenerator ?? throw new ArgumentNullException(nameof(tradeIdGenerator));
 		}
+
+		/// <inheritdoc />
+		public SecurityId SecurityId { get; }
 
 		private QuoteChangeMessage AddBookChange(SecurityId securityId, Sides side, QuoteChange changedQuote)
 		{
@@ -259,9 +270,16 @@
 			else
 				execution.ServerTime = execution.ServerTime; // при восстановлении не меняем время
 
-			var replyMsg = regMsg.CreateReply();
-			replyMsg.LocalTime = regMsg.LocalTime;
-			replyMsg.OrderState = OrderStates.Active;
+			ExecutionMessage replyMsg = null;
+
+			if (orderResult != null)
+			{
+				replyMsg = regMsg.CreateReply();
+				replyMsg.LocalTime = regMsg.LocalTime;
+				replyMsg.OrderState = OrderStates.Active;
+
+				orderResult(replyMsg);
+			}
 
 			MatchOrder(execution.LocalTime, execution, orderResult, true);
 
@@ -300,7 +318,7 @@
 			//if (replaceMsg.OldOrderVolume is null)
 			//	replaceMsg.Volume = oldOrder.Balance.Value;
 
-			var replyMsg = CancelOrderImpl(replaceMsg, orderResult, priceResult, replaceMsg.OldOrderPrice != replaceMsg.Price, out originalOrder);
+			var replyMsg = CancelOrderImpl(replaceMsg, orderResult, replaceMsg.OldOrderPrice != replaceMsg.Price ? priceResult : null, out originalOrder);
 
 			if (replyMsg.Error is null)
 			{
@@ -313,10 +331,10 @@
 		/// <inheritdoc />
 		public ExecutionMessage CancelOrder(OrderCancelMessage cancelMsg, Action<Message> orderResult, Action<Message> priceResult, out ExecutionMessage cancelledOrder)
 		{
-			return CancelOrderImpl(cancelMsg, orderResult, priceResult, true, out cancelledOrder);
+			return CancelOrderImpl(cancelMsg, orderResult, priceResult, out cancelledOrder);
 		}
 
-		private ExecutionMessage CancelOrderImpl(OrderMessage cancelMsg, Action<Message> orderResult, Action<Message> priceResult, bool bookChange, out ExecutionMessage cancelledOrder)
+		private ExecutionMessage CancelOrderImpl(OrderMessage cancelMsg, Action<Message> orderResult, Action<Message> priceResult, out ExecutionMessage cancelledOrder)
 		{
 			if (cancelMsg is null)
 				throw new ArgumentNullException(nameof(cancelMsg));
@@ -325,31 +343,7 @@
 
 			if (_activeOrders.TryGetAndRemove(cancelMsg.OriginalTransactionId, out cancelledOrder))
 			{
-				_expirableOrders.Remove(cancelledOrder);
-
-				// изменяем текущие котировки, добавляя туда наши цену и объем
-				var changedQuote = UpdateQuote(cancelledOrder, false, true);
-
-				if (orderResult != null)
-				{
-					replyMsg = cancelMsg.CreateReply();
-					replyMsg.LocalTime = cancelMsg.LocalTime;
-					//replyMsg.OriginalTransactionId = execution.OriginalTransactionId;
-					replyMsg.OrderState = OrderStates.Done;
-
-					orderResult(replyMsg);
-
-					this.AddInfoLog(LocalizedStrings.Str1155Params, cancelMsg.OriginalTransactionId);
-				}
-
-				// отправляем измененный стакан
-				//result.Add(CreateQuoteMessage(
-				//	order.SecurityId,
-				//	time,
-				//	GetServerTime(time)));
-
-				if (bookChange && changedQuote != null)
-					priceResult(AddBookChange(cancelledOrder.SecurityId, cancelledOrder.Side, changedQuote.Value));
+				replyMsg = CancelOrderImpl(cancelMsg.OriginalTransactionId, cancelMsg.LocalTime, cancelledOrder, orderResult, priceResult);
 			}
 			else
 			{
@@ -365,6 +359,39 @@
 			return replyMsg;
 		}
 
+		private ExecutionMessage CancelOrderImpl(long transactionId, DateTimeOffset time, ExecutionMessage cancelledOrder, Action<Message> orderResult, Action<Message> priceResult)
+		{
+			_expirableOrders.Remove(cancelledOrder);
+
+			ExecutionMessage replyMsg = null;
+
+			// изменяем текущие котировки, добавляя туда наши цену и объем
+			var changedQuote = UpdateQuote(cancelledOrder, false, true);
+
+			if (orderResult != null)
+			{
+				replyMsg = transactionId.CreateOrderReply(time);
+				replyMsg.LocalTime = time;
+				//replyMsg.OriginalTransactionId = execution.OriginalTransactionId;
+				replyMsg.OrderState = OrderStates.Done;
+
+				orderResult(replyMsg);
+
+				this.AddInfoLog(LocalizedStrings.Str1155Params, transactionId);
+			}
+
+			// отправляем измененный стакан
+			//result.Add(CreateQuoteMessage(
+			//	order.SecurityId,
+			//	time,
+			//	GetServerTime(time)));
+
+			if (priceResult != null && changedQuote != null)
+				priceResult(AddBookChange(cancelledOrder.SecurityId, cancelledOrder.Side, changedQuote.Value));
+
+			return replyMsg;
+		}
+
 		/// <inheritdoc />
 		public ExecutionMessage CancelOrders(OrderGroupCancelMessage message, Action<Message> result)
 		{
@@ -374,7 +401,47 @@
 			if (result is null)
 				throw new ArgumentNullException(nameof(result));
 
-			throw new NotSupportedException();
+			var checkByPf = !message.PortfolioName.IsEmpty();
+
+			var orders = _activeOrders.Values.Where(order =>
+			{
+				if (message.Side != null && message.Side.Value != order.Side)
+					return false;
+
+				if (message.SecurityId != default && message.SecurityId != order.SecurityId)
+					return false;
+
+				if (checkByPf && message.PortfolioName.CompareIgnoreCase(order.PortfolioName))
+					return false;
+
+				return true;
+			}).ToArray();
+
+			var bids = new HashSet<decimal>();
+			var asks = new HashSet<decimal>();
+
+			foreach (var order in orders)
+			{
+				CancelOrderImpl(message.TransactionId, message.LocalTime, order, result, null);
+				(order.Side == Sides.Buy ? bids : asks).Add(order.OrderPrice);
+			}
+
+			ExecutionMessage replyMsg = message.CreateReply();
+			result(replyMsg);
+
+			var book = new QuoteChangeMessage
+			{
+				SecurityId = SecurityId,
+				ServerTime = message.LocalTime,
+				LocalTime = message.LocalTime,
+				State = QuoteChangeStates.Increment,
+				Bids = bids.Select(p => _bids.TryGetValue(p)?.Second).Where(q => q != null).Select(q => q.Value).ToArray(),
+				Asks = asks.Select(p => _asks.TryGetValue(p)?.Second).Where(q => q != null).Select(q => q.Value).ToArray(),
+			};
+
+			result(book);
+
+			return replyMsg;
 		}
 
 		/// <inheritdoc />
@@ -811,17 +878,20 @@
 
 			if (isCrossTrade)
 			{
-				var reply = order.OriginalTransactionId.CreateOrderReply(time);
-				reply.LocalTime = time;
+				//var reply = order.OriginalTransactionId.CreateOrderReply(time);
+				//reply.LocalTime = time;
 
 				//reply.OrderState = OrderStates.Failed;
 				//reply.OrderStatus = (long?)OrderStatus.RejectedBySystem;
 				//reply.Error = new InvalidOperationException(matchError);
 
-				reply.OrderState = OrderStates.Done;
+				//reply.OrderState = OrderStates.Done;
 				//reply.OrderStatus = (long?)OrderStatus.CanceledByManager;
 
-				result(reply);
+				//result(reply);
+
+				order.OrderState = OrderStates.Done;
+				result(ToOrder(time, order));
 			}
 
 			foreach (var execution in executions)
