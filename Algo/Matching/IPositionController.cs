@@ -432,7 +432,7 @@
 				case OrderPositionEffects.OpenOnly:
 				{
 					if (info.PositionCurrentValue != 0)
-						return "Position for {0} can be open only by order {1}.".Put(regMsg.SecurityId, regMsg.TransactionId);
+						return LocalizedStrings.PositionCanBeActionOnly.Put(regMsg.SecurityId, LocalizedStrings.OpenOnly, regMsg.TransactionId);
 
 					break;
 				}
@@ -442,7 +442,7 @@
 						(info.PositionCurrentValue > 0 && (regMsg.Side == Sides.Buy || info.PositionCurrentValue < regMsg.Volume)) ||
 						(info.PositionCurrentValue < 0 && (regMsg.Side == Sides.Sell || info.PositionCurrentValue.Abs() < regMsg.Volume)))
 					{
-						return "Position for {0} can be close only by order {1}.".Put(regMsg.SecurityId, regMsg.TransactionId);
+						return LocalizedStrings.PositionCanBeActionOnly.Put(regMsg.SecurityId, LocalizedStrings.CloseOnly, regMsg.TransactionId);
 					}
 
 					break;

@@ -5294,6 +5294,16 @@ Sent;Sent;Sent
 Crypto;Crypto;Крипто
 NotWorkingDay;The day {0:d} isn't working.;День {0:d} не является рабочим.
 StorageRequiredIncremental;Storage required incremental={0} book only.;Хранилище требует инкрементальные={0} стаканы.
+SnapshotFormed;{0} snapshot {1} formed.;{0} снэпшот {1} сформирован.
+MessageWithError;Message '{0}' caused an error.;Сообщение '{0}' вызвало ошибку.
+SnapshotTurnedOff;Snapshot building {0} turned off. Error count {1}/{2}.;Формирование снэпшота {0} выключено. Кол-во ошибок {1}/{2}.
+PositionCanBeActionOnly;Position for {0} can be '{1}' by order {2}.;Позиция {0} может быть '{1}' заявкой {2}.
+SessionNoPermissionStorage;Session '{0}' no information in permission storage.;Сессия '{0}' не имеет информации в хранилище разрешений.
+SessionNoPermission;Session '{0}' no have permission for the action {1}.;Сессия '{0}' не имеет разрешения на выполнения действия {1}.
+MaxAllowedItems;Max allowed items is {0}.;Максимально допустимое количество {0}.
+AnonymousCannotAction;Anonymous session '{0}' cannot perform the action {1}.;Анонимная сессия '{0}' не может выполнить действие {1}.
+HistoryDisabled;History is disabled.;История недоступна.
+TradingDisabled;Trading is disabled.;Торговля недоступна.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

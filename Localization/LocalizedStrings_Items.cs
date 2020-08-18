@@ -52616,5 +52616,105 @@ namespace StockSharp.Localization
 		/// Storage required incremental={0} book only.
 		/// </summary>
 		public static string StorageRequiredIncremental => GetString(StorageRequiredIncrementalKey);
+
+		/// <summary>
+		/// {0} snapshot {1} formed.
+		/// </summary>
+		public const string SnapshotFormedKey = nameof(SnapshotFormed);
+
+		/// <summary>
+		/// {0} snapshot {1} formed.
+		/// </summary>
+		public static string SnapshotFormed => GetString(SnapshotFormedKey);
+
+		/// <summary>
+		/// Message '{0}' caused an error.
+		/// </summary>
+		public const string MessageWithErrorKey = nameof(MessageWithError);
+
+		/// <summary>
+		/// Message '{0}' caused an error.
+		/// </summary>
+		public static string MessageWithError => GetString(MessageWithErrorKey);
+
+		/// <summary>
+		/// Snapshot building {0} turned off. Error count {1}/{2}.
+		/// </summary>
+		public const string SnapshotTurnedOffKey = nameof(SnapshotTurnedOff);
+
+		/// <summary>
+		/// Snapshot building {0} turned off. Error count {1}/{2}.
+		/// </summary>
+		public static string SnapshotTurnedOff => GetString(SnapshotTurnedOffKey);
+
+		/// <summary>
+		/// Position for {0} can be '{1}' by order {2}.
+		/// </summary>
+		public const string PositionCanBeActionOnlyKey = nameof(PositionCanBeActionOnly);
+
+		/// <summary>
+		/// Position for {0} can be '{1}' by order {2}.
+		/// </summary>
+		public static string PositionCanBeActionOnly => GetString(PositionCanBeActionOnlyKey);
+
+		/// <summary>
+		/// Session '{0}' no information in permission storage.
+		/// </summary>
+		public const string SessionNoPermissionStorageKey = nameof(SessionNoPermissionStorage);
+
+		/// <summary>
+		/// Session '{0}' no information in permission storage.
+		/// </summary>
+		public static string SessionNoPermissionStorage => GetString(SessionNoPermissionStorageKey);
+
+		/// <summary>
+		/// Session '{0}' no have permission for the action {1}.
+		/// </summary>
+		public const string SessionNoPermissionKey = nameof(SessionNoPermission);
+
+		/// <summary>
+		/// Session '{0}' no have permission for the action {1}.
+		/// </summary>
+		public static string SessionNoPermission => nameof(SessionNoPermissionKey);
+
+		/// <summary>
+		/// Max allowed items is {0}.
+		/// </summary>
+		public const string MaxAllowedItemsKey = nameof(MaxAllowedItems);
+
+		/// <summary>
+		/// Max allowed items is {0}.
+		/// </summary>
+		public static string MaxAllowedItems => GetString(MaxAllowedItemsKey);
+
+		/// <summary>
+		/// Anonymous session '{0}' cannot perform the action {1}.
+		/// </summary>
+		public const string AnonymousCannotActionKey = nameof(AnonymousCannotAction);
+
+		/// <summary>
+		/// Anonymous session '{0}' cannot perform the action {1}.
+		/// </summary>
+		public static string AnonymousCannotAction => GetString(AnonymousCannotActionKey);
+
+		/// <summary>
+		/// History is disabled.
+		/// </summary>
+		public const string HistoryDisabledKey = nameof(HistoryDisabled);
+
+		/// <summary>
+		/// History is disabled.
+		/// </summary>
+		public static string HistoryDisabled => GetString(HistoryDisabledKey);
+
+		/// <summary>
+		/// Trading is disabled.
+		/// </summary>
+		public const string TradingDisabledKey = nameof(TradingDisabled);
+
+		/// <summary>
+		/// Trading is disabled.
+		/// </summary>
+		public static string TradingDisabled => GetString(TradingDisabledKey);
 	}
 }
