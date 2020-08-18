@@ -395,12 +395,12 @@
 		/// <inheritdoc />
 		public string ValidateRegistration(OrderRegisterMessage regMsg)
 		{
+			var info = GetPosition(regMsg.SecurityId);
+			
 			if (CheckMoney)
 			{
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = (regMsg as OrderReplaceMessage)?.OldOrderVolume ?? regMsg.Volume;
-
-				var info = GetPosition(regMsg.SecurityId);
 
 				var needBlock = info.GetPrice(regMsg.Side == Sides.Buy ? volume : 0, regMsg.Side == Sides.Sell ? volume : 0);
 
@@ -418,14 +418,34 @@
 
 				if (secDef?.Shortable == false)
 				{
-					var info = GetPosition(regMsg.SecurityId);
-
 					if (info.PositionCurrentValue < regMsg.Volume)
 					{
 						return LocalizedStrings
 							.CannotShortPosition
 							.Put(regMsg.PortfolioName, regMsg.TransactionId, info.PositionCurrentValue, regMsg.Volume);
 					}
+				}
+			}
+
+			switch (regMsg.PositionEffect)
+			{
+				case OrderPositionEffects.OpenOnly:
+				{
+					if (info.PositionCurrentValue != 0)
+						return "Position for {0} can be open only by order {1}.".Put(regMsg.SecurityId, regMsg.TransactionId);
+
+					break;
+				}
+				case OrderPositionEffects.CloseOnly:
+				{
+					if (info.PositionCurrentValue == 0 ||
+						(info.PositionCurrentValue > 0 && (regMsg.Side == Sides.Buy || info.PositionCurrentValue < regMsg.Volume)) ||
+						(info.PositionCurrentValue < 0 && (regMsg.Side == Sides.Sell || info.PositionCurrentValue.Abs() < regMsg.Volume)))
+					{
+						return "Position for {0} can be close only by order {1}.".Put(regMsg.SecurityId, regMsg.TransactionId);
+					}
+
+					break;
 				}
 			}
 
