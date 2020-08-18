@@ -1554,7 +1554,7 @@ namespace StockSharp.Algo
 					adapter = GetAdapter(pairMsg.Message1.PortfolioName, message, out _);
 			}
 
-			if (adapter == null)
+			if (adapter is null)
 			{
 				this.AddErrorLog(LocalizedStrings.UnknownTransactionId, originId);
 

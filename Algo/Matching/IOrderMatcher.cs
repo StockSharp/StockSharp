@@ -1009,45 +1009,7 @@
 				default:
 					throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.Str1219);
 			}
-			//return _quotes.SafeAdd(side, key => new SortedDictionary<decimal, List<ExecutionMessage>>(side == Sides.Buy ? new BackwardComparer<decimal>() : null));
 		}
-
-		//private static ExecutionMessage CreateReply(ExecutionMessage original, DateTimeOffset time, Exception error)
-		//{
-		//	var replyMsg = new ExecutionMessage
-		//	{
-		//		HasOrderInfo = true,
-		//		ExecutionType = ExecutionTypes.Transaction,
-		//		ServerTime = time,
-		//		LocalTime = time,
-		//		OriginalTransactionId = original.TransactionId,
-		//		Error = error,
-		//	};
-
-		//	if (error != null)
-		//		replyMsg.OrderState = OrderStates.Failed;
-
-		//	return replyMsg;
-		//}
-
-		//private QuoteChangeMessage CreateQuoteMessage(SecurityId securityId, DateTimeOffset timeStamp, DateTimeOffset time)
-		//{
-		//	return new QuoteChangeMessage
-		//	{
-		//		SecurityId = securityId,
-		//		LocalTime = timeStamp,
-		//		ServerTime = time,
-		//		Bids = BuildQuoteChanges(_bids),
-		//		Asks = BuildQuoteChanges(_asks),
-		//	};
-		//}
-
-		//private static QuoteChange[] BuildQuoteChanges(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
-		//{
-		//	return quotes.Count == 0
-		//		? ArrayHelper.Empty<QuoteChange>()
-		//		: quotes.Select(p => p.Value.Second).ToArray();
-		//}
 
 		decimal IOrderMatcher.GetTotalVolume(Sides side)
 			=> side == Sides.Buy ? _totalBidVolume : _totalAskVolume;
