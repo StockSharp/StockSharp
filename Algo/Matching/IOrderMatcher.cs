@@ -676,6 +676,7 @@
 			var sign = order.Side == Sides.Buy ? 1 : -1;
 			var orderPrice = order.OrderPrice;
 			var isMarket = order.OrderType == OrderTypes.Market;
+			var postOnly = order.PostOnly == true;
 
 			foreach (var pair in quotes)
 			{
@@ -694,6 +695,13 @@
 
 					//if (price == orderPrice && !Settings.MatchOnTouch)
 					//	break;
+
+					if (postOnly)
+					{
+						order.OrderState = OrderStates.Done;
+						result(ToOrder(time, order));
+						return;
+					}
 				}
 
 				// объем заявки больше или равен всему уровню в стакане, то сразу удаляем его целиком
