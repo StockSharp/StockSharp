@@ -82,12 +82,12 @@
 	/// </summary>
 	public class PositionController : IPositionController
 	{
-		private class MoneyInfo
+		private class PositionInfo
 		{
 			private readonly SecurityId _securityId;
 			private readonly Func<SecurityId, Sides, decimal> _getMarginPrice;
 
-			public MoneyInfo(SecurityId securityId, Func<SecurityId, Sides, decimal> getMarginPrice)
+			public PositionInfo(SecurityId securityId, Func<SecurityId, Sides, decimal> getMarginPrice)
 			{
 				_securityId = securityId;
 				_getMarginPrice = getMarginPrice ?? throw new ArgumentNullException(nameof(getMarginPrice));
@@ -150,7 +150,7 @@
 		private readonly Func<SecurityId, SecurityMessage> _getSecurityDefinition;
 		private readonly Func<SecurityId, Sides, decimal> _getMarginPrice;
 		private readonly string _portfolioName;
-		private readonly Dictionary<SecurityId, MoneyInfo> _moneys = new Dictionary<SecurityId, MoneyInfo>();
+		private readonly Dictionary<SecurityId, PositionInfo> _positions = new Dictionary<SecurityId, PositionInfo>();
 
 		private decimal _beginMoney;
 		private decimal _currentMoney;
@@ -198,9 +198,9 @@
 
 			RequestPortfolioState(time, result);
 
-			foreach (var pair in _moneys)
+			foreach (var pair in _positions)
 			{
-				var money = pair.Value;
+				var info = pair.Value;
 
 				result(
 					new PositionChangeMessage
@@ -211,8 +211,8 @@
 						SecurityId = pair.Key,
 						OriginalTransactionId = lookupMsg.TransactionId,
 					}
-					.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
-					.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
+					.Add(PositionChangeTypes.CurrentValue, info.PositionCurrentValue)
+					.TryAdd(PositionChangeTypes.AveragePrice, info.PositionAveragePrice)
 				);
 			}
 		}
@@ -233,30 +233,19 @@
 				return;
 			}
 
-			//if (!_moneys.ContainsKey(posMsg.SecurityId))
-			//{
-			//	result(new PositionMessage
-			//	{
-			//		SecurityId = posMsg.SecurityId,
-			//		PortfolioName = posMsg.PortfolioName,
-			//		DepoName = posMsg.DepoName,
-			//		LocalTime = posMsg.LocalTime
-			//	});
-			//}
+			var info = GetPosition(posMsg.SecurityId);
 
-			var money = GetMoney(posMsg.SecurityId/*, posMsg.LocalTime, result*/);
+			var prevPrice = info.PositionPrice;
 
-			var prevPrice = money.PositionPrice;
-
-			money.PositionBeginValue = beginValue ?? 0L;
-			money.PositionAveragePrice = posMsg.TryGetDecimal(PositionChangeTypes.AveragePrice) ?? money.PositionAveragePrice;
+			info.PositionBeginValue = beginValue ?? 0L;
+			info.PositionAveragePrice = posMsg.TryGetDecimal(PositionChangeTypes.AveragePrice) ?? info.PositionAveragePrice;
 
 			//if (beginValue == 0m)
 			//	return;
 
 			result(posMsg.Clone());
 
-			_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.PositionPrice;
+			_totalBlockedMoney = _totalBlockedMoney - prevPrice + info.PositionPrice;
 
 			result(
 				new PositionChangeMessage
@@ -269,37 +258,22 @@
 			);
 		}
 
-		private MoneyInfo GetMoney(SecurityId securityId/*, DateTimeOffset time, Action<Message> result*/)
-		{
-			//bool isNew;
-			var money = _moneys.SafeAdd(securityId, k => new MoneyInfo(k, _getMarginPrice));
-
-			//if (isNew)
-			//{
-			//	result(new PositionMessage
-			//	{
-			//		LocalTime = time,
-			//		PortfolioName = _portfolioName,
-			//		SecurityId = securityId,
-			//	});
-			//}
-
-			return money;
-		}
+		private PositionInfo GetPosition(SecurityId securityId)
+			=> _positions.SafeAdd(securityId, k => new PositionInfo(k, _getMarginPrice));
 
 		/// <inheritdoc />
 		public decimal? ProcessOrder(SecurityId securityId, Sides side, decimal volumeDelta, ExecutionMessage orderMsg, Action<Message> result)
 		{
-			var money = GetMoney(securityId/*, orderMsg.LocalTime, result*/);
+			var info = GetPosition(securityId);
 
-			var prevPrice = money.TotalPrice;
+			var prevPrice = info.TotalPrice;
 
 			if (side == Sides.Buy)
-				money.TotalBidsVolume += volumeDelta;
+				info.TotalBidsVolume += volumeDelta;
 			else
-				money.TotalAsksVolume += volumeDelta;
+				info.TotalAsksVolume += volumeDelta;
 
-			_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
+			_totalBlockedMoney = _totalBlockedMoney - prevPrice + info.TotalPrice;
 
 			var commission = _commissionManager.Process(orderMsg);
 
@@ -324,30 +298,30 @@
 			if (side == Sides.Sell)
 				position *= -1;
 
-			var money = GetMoney(tradeMsg.SecurityId/*, time, result*/);
+			var info = GetPosition(tradeMsg.SecurityId/*, time, result*/);
 
-			var prevPrice = money.TotalPrice;
+			var prevPrice = info.TotalPrice;
 
 			var tradeVol = tradeMsg.TradeVolume.Value;
 
 			if (tradeMsg.Side == Sides.Buy)
-				money.TotalBidsVolume -= tradeVol;
+				info.TotalBidsVolume -= tradeVol;
 			else
-				money.TotalAsksVolume -= tradeVol;
+				info.TotalAsksVolume -= tradeVol;
 
-			var prevPos = money.PositionCurrentValue;
+			var prevPos = info.PositionCurrentValue;
 
-			money.PositionDiff += position.Value;
+			info.PositionDiff += position.Value;
 
 			var tradePrice = tradeMsg.TradePrice.Value;
-			var currPos = money.PositionCurrentValue;
+			var currPos = info.PositionCurrentValue;
 
 			if (prevPos.Sign() == currPos.Sign())
-				money.PositionAveragePrice = (money.PositionAveragePrice * prevPos + position.Value * tradePrice) / currPos;
+				info.PositionAveragePrice = (info.PositionAveragePrice * prevPos + position.Value * tradePrice) / currPos;
 			else
-				money.PositionAveragePrice = currPos == 0 ? 0 : tradePrice;
+				info.PositionAveragePrice = currPos == 0 ? 0 : tradePrice;
 
-			_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
+			_totalBlockedMoney = _totalBlockedMoney - prevPrice + info.TotalPrice;
 
 			result(
 				new PositionChangeMessage
@@ -357,8 +331,8 @@
 					PortfolioName = _portfolioName,
 					SecurityId = tradeMsg.SecurityId,
 				}
-				.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
-				.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
+				.Add(PositionChangeTypes.CurrentValue, info.PositionCurrentValue)
+				.TryAdd(PositionChangeTypes.AveragePrice, info.PositionAveragePrice)
 			);
 
 			RequestPortfolioState(time, result);
@@ -367,14 +341,12 @@
 		/// <inheritdoc />
 		public void RequestMarginState(DateTimeOffset time, SecurityId securityId, Action<Message> result)
 		{
-			var money = _moneys.TryGetValue(securityId);
-
-			if (money == null)
+			if (!_positions.ContainsKey(securityId))
 				return;
 
 			_totalBlockedMoney = 0;
 
-			foreach (var pair in _moneys)
+			foreach (var pair in _positions)
 				_totalBlockedMoney += pair.Value.TotalPrice;
 
 			result(
@@ -428,32 +400,31 @@
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = (regMsg as OrderReplaceMessage)?.OldOrderVolume ?? regMsg.Volume;
 
-				var money = GetMoney(regMsg.SecurityId/*, execMsg.LocalTime, result*/);
+				var info = GetPosition(regMsg.SecurityId);
 
-				var needBlock = money.GetPrice(regMsg.Side == Sides.Buy ? volume : 0, regMsg.Side == Sides.Sell ? volume : 0);
+				var needBlock = info.GetPrice(regMsg.Side == Sides.Buy ? volume : 0, regMsg.Side == Sides.Sell ? volume : 0);
 
 				if (_currentMoney < needBlock)
 				{
 					return LocalizedStrings
 						.Str1169Params
-						.Put(regMsg.PortfolioName, regMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
+						.Put(regMsg.PortfolioName, regMsg.TransactionId, needBlock, _currentMoney, info.TotalPrice);
 				}
 			}
-			else if (CheckShortable && regMsg.Side == Sides.Sell)
+			
+			if (CheckShortable && regMsg.Side == Sides.Sell)
 			{
 				var secDef = _getSecurityDefinition(regMsg.SecurityId);
 
 				if (secDef?.Shortable == false)
 				{
-					var money = GetMoney(regMsg.SecurityId/*, execMsg.LocalTime, result*/);
+					var info = GetPosition(regMsg.SecurityId);
 
-					var potentialPosition = money.PositionCurrentValue - regMsg.Volume;
-
-					if (potentialPosition < 0)
+					if (info.PositionCurrentValue < regMsg.Volume)
 					{
 						return LocalizedStrings
 							.CannotShortPosition
-							.Put(regMsg.PortfolioName, regMsg.TransactionId, money.PositionCurrentValue, regMsg.Volume);
+							.Put(regMsg.PortfolioName, regMsg.TransactionId, info.PositionCurrentValue, regMsg.Volume);
 					}
 				}
 			}
