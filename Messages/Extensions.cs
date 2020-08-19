@@ -2144,6 +2144,22 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Get maximum possible items count per single subscription request.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Max items count.</returns>
+		public static int? GetDefaultMaxCount(this DataType dataType)
+		{
+			if (dataType == DataType.Ticks ||
+				dataType == DataType.Level1 ||
+				dataType == DataType.OrderLog ||
+				dataType == DataType.MarketDepth)
+				return 1000;
+
+			return null;
+		}
+
+		/// <summary>
 		/// Determines the specified type is crypto currency.
 		/// </summary>
 		/// <param name="type">Currency type.</param>
