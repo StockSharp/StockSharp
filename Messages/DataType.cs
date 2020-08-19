@@ -339,7 +339,6 @@ namespace StockSharp.Messages
 			this == MarketDepth			||
 			this == FilteredMarketDepth ||
 			this == Level1				||
-			this == Securities			||
 			this == Ticks				||
 			this == OrderLog;
 
