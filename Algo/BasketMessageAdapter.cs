@@ -1183,7 +1183,10 @@ namespace StockSharp.Algo
 			}
 
 			if (message is ISubscriptionMessage subscrMsg)
+			{
+				_subscription.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType));
 				SendRequest(subscrMsg.TypedClone(), adapter);
+			}
 			else
 				adapter.SendInMessage(message);
 		}
