@@ -3189,8 +3189,11 @@ namespace StockSharp.Messages
 
 			var result = securities.Where(s => s.IsMatch(criteria, secTypes));
 
+			if (criteria.Skip != null)
+				result = result.Skip((int)criteria.Skip.Value);
+
 			if (criteria.Count != null)
-				result = result.Take(criteria.Count.Value);
+				result = result.Take((int)criteria.Count.Value);
 
 			return result.ToArray();
 		}

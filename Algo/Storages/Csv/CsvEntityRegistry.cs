@@ -979,6 +979,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.FillGaps.To<string>(),
 					buildFromTuples?.type,
 					buildFromTuples?.arg,
+					data.Skip.To<string>(),
 				});
 			}
 
@@ -1026,6 +1027,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					message.BuildFrom = reader.ReadString().ToDataType(reader.ReadString());
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					message.Skip = reader.ReadNullableLong();
 
 				return message;
 			}

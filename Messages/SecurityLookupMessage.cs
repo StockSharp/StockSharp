@@ -53,11 +53,13 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool OnlySecurityId { get; set; }
 
-		/// <summary>
-		/// Market-data count.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
-		public int? Count { get; set; }
+		public long? Skip { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
+		public long? Count { get; set; }
 
 		private SecurityId[] _securityIds = ArrayHelper.Empty<SecurityId>();
 
@@ -123,6 +125,7 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.SecurityTypes = SecurityTypes?.ToArray();
 			destination.OnlySecurityId = OnlySecurityId;
+			destination.Skip = Skip;
 			destination.Count = Count;
 			destination.SecurityIds = SecurityIds.ToArray();
 			destination.BoardCode = BoardCode;
@@ -135,8 +138,11 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString() + $",TransId={TransactionId},SecId={SecurityId},Name={Name},SecType={this.GetSecurityTypes().Select(t => t.To<string>()).Join("|")},ExpDate={ExpiryDate}";
 
-			if (Count != null)
-				str += $",Count={Count.Value}";
+			if (Skip != default)
+				str += $",Skip={Skip}";
+
+			if (Count != default)
+				str += $",Cnt={Count}";
 
 			if (OnlySecurityId)
 				str += $",OnlyId={OnlySecurityId}";
@@ -160,12 +166,6 @@ namespace StockSharp.Messages
 		{
 			// prevent for online mode
 			get => DateTimeOffset.MaxValue;
-			set { }
-		}
-
-		long? ISubscriptionMessage.Count
-		{
-			get => null;
 			set { }
 		}
 

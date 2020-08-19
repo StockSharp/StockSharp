@@ -123,6 +123,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
+		public long? Skip { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
 		public long? Count { get; set; }
 
 		/// <summary>
@@ -158,7 +162,7 @@ namespace StockSharp.Messages
 			if (TransactionId > 0)
 				str += $",TransId={TransactionId}";
 
-			if (Currency != null)
+			if (Currency != default)
 				str += $",Curr={Currency.Value}";
 
 			if (!BoardCode.IsEmpty())
@@ -167,13 +171,16 @@ namespace StockSharp.Messages
 			if (IsSubscribe)
 				str += $",IsSubscribe={IsSubscribe}";
 
-			if (From != null)
+			if (From != default)
 				str += $",From={From.Value}";
 
-			if (To != null)
+			if (To != default)
 				str += $",To={To.Value}";
 
-			if (Count != null)
+			if (Skip != default)
+				str += $",Skip={Skip.Value}";
+
+			if (Count != default)
 				str += $",Count={Count.Value}";
 
 			return str;
@@ -193,6 +200,7 @@ namespace StockSharp.Messages
 			destination.ClientCode = ClientCode;
 			destination.From = From;
 			destination.To = To;
+			destination.Skip = Skip;
 			destination.Count = Count;
 		}
 	}

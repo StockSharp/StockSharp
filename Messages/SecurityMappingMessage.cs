@@ -52,6 +52,12 @@ namespace StockSharp.Messages
 			set { }
 		}
 
+		long? ISubscriptionMessage.Skip
+		{
+			get => null;
+			set { }
+		}
+
 		long? ISubscriptionMessage.Count
 		{
 			get => null;
