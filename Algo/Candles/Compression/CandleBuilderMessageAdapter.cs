@@ -56,6 +56,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 			public DateTimeOffset? LastTime { get; set; }
 
+			public long? Count { get; set; }
+
 			public CandleMessage CurrentCandle { get; set; }
 
 			public CandleMessage NonFinishedCandle { get; set; }
@@ -208,6 +210,7 @@ namespace StockSharp.Algo.Candles.Compression
 									{
 										State = SeriesStates.Regular,
 										LastTime = original.From,
+										Count = original.Count,
 									});
 								}
 
@@ -244,6 +247,7 @@ namespace StockSharp.Algo.Candles.Compression
 											State = SeriesStates.SmallTimeFrame,
 											BigTimeFrameCompressor = new BiggerTimeFrameCandleCompressor(original, _candleBuilderProvider.Get(typeof(TimeFrameCandleMessage))),
 											LastTime = original.From,
+											Count = original.Count,
 										});
 									}
 
@@ -270,6 +274,7 @@ namespace StockSharp.Algo.Candles.Compression
 									{
 										State = SeriesStates.Regular,
 										LastTime = original.From,
+										Count = original.Count,
 									});
 								}
 
@@ -359,7 +364,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTimeOffset? lastTime)
+		private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTimeOffset? lastTime, long? count, bool needCalcCount)
 		{
 			if (original == null)
 				throw new ArgumentNullException(nameof(original));
@@ -369,12 +374,15 @@ namespace StockSharp.Algo.Candles.Compression
 			if (buildFrom == null)
 				return null;
 
+			if (needCalcCount && count is null)
+				count = GetMaxCount(buildFrom);
+
 			var current = new MarketDataMessage
 			{
 				DataType2 = buildFrom,
 				From = lastTime,
 				To = original.To,
-				Count = original.Count,
+				Count = count,
 				MaxDepth = original.MaxDepth,
 				BuildField = original.BuildField,
 				IsSubscribe = true,
@@ -389,7 +397,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private bool TrySubscribeBuild(MarketDataMessage original)
 		{
-			var current = TryCreateBuildSubscription(original, original.From);
+			var current = TryCreateBuildSubscription(original, original.From, original.Count, false);
 
 			if (current == null)
 				return false;
@@ -399,6 +407,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var series = new SeriesInfo(original.TypedClone(), current)
 			{
 				LastTime = current.From,
+				Count = current.Count,
 				Transform = CreateTransform(current),
 				State = SeriesStates.Compress,
 			};
@@ -562,6 +571,15 @@ namespace StockSharp.Algo.Candles.Compression
 											bigCandle.SetSubscriptionIds(subscriptionId: series.Id);
 											bigCandle.Adapter = candleMsg.Adapter;
 											series.LastTime = bigCandle.CloseTime;
+
+											if (series.Count != null)
+											{
+												if (series.Count <= 0)
+													break;
+
+												series.Count--;
+											}
+
 											base.OnInnerAdapterNewOutMessage(bigCandle);
 										}
 
@@ -638,6 +656,12 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			if (original.To != null && series.LastTime != null && original.To <= series.LastTime)
+			{
+				Finish();
+				return;
+			}
+
+			if (original.Count != null && series.Count <= 0)
 			{
 				Finish();
 				return;
@@ -720,7 +744,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			series.NonFinishedCandle = null;
 
-			var current = TryCreateBuildSubscription(original, series.LastTime);
+			var current = TryCreateBuildSubscription(original, series.LastTime, null, series.Count != null);
 
 			if (current == null)
 			{
@@ -748,6 +772,9 @@ namespace StockSharp.Algo.Candles.Compression
 			if (info.LastTime != null && info.LastTime > candleMsg.OpenTime)
 				return;
 
+			if (info.Count <= 0)
+				return;
+
 			info.LastTime = candleMsg.OpenTime;
 
 			var nonFinished = info.NonFinishedCandle;
@@ -756,7 +783,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				nonFinished.State = CandleStates.Finished;
 				nonFinished.LocalTime = candleMsg.LocalTime;
-				RaiseNewOutMessage(nonFinished);
+				RaiseNewOutCandle(info, nonFinished);
 				info.NonFinishedCandle = null;
 			}
 
@@ -818,6 +845,7 @@ namespace StockSharp.Algo.Candles.Compression
 							return new SeriesInfo(allMsg, allMsg)
 							{
 								LastTime = allMsg.From,
+								Count = allMsg.Count,
 								Transform = CreateTransform(series.Current),
 								State = SeriesStates.Compress,
 							};
@@ -828,9 +856,7 @@ namespace StockSharp.Algo.Candles.Compression
 					}
 
 					if (allMsg != null)
-					{
 						RaiseNewOutMessage(allMsg);
-					}
 				}
 				
 				var transform = series.Transform;
@@ -849,6 +875,9 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				if (series.LastTime != null && series.LastTime.Value > time)
+					continue;
+
+				if (series.Count <= 0)
 					continue;
 
 				series.LastTime = time;
@@ -882,6 +911,17 @@ namespace StockSharp.Algo.Candles.Compression
 			candleMsg.Adapter = candleMsg.Adapter;
 			candleMsg.OriginalTransactionId = info.Id;
 			candleMsg.SetSubscriptionIds(subscriptionId: info.Id);
+
+			RaiseNewOutCandle(info, candleMsg);
+		}
+
+		private void RaiseNewOutCandle(SeriesInfo info, CandleMessage candleMsg)
+		{
+			if (candleMsg.State == CandleStates.Finished)
+			{
+				if (info.Count != null)
+					info.Count--;
+			}
 
 			RaiseNewOutMessage(candleMsg);
 		}

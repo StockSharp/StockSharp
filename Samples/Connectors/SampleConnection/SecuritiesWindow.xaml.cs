@@ -14,7 +14,6 @@ namespace SampleConnection
 	using MoreLinq;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -47,6 +46,30 @@ namespace SampleConnection
 				{
 					_to = value;
 					NotifyChanged(nameof(To));
+				}
+			}
+
+			private long? _skip;
+
+			public long? Skip
+			{
+				get => _skip;
+				set
+				{
+					_skip = value;
+					NotifyChanged(nameof(Skip));
+				}
+			}
+
+			private long? _count;
+
+			public long? Count
+			{
+				get => _count;
+				set
+				{
+					_count = value;
+					NotifyChanged(nameof(Count));
 				}
 			}
 
@@ -345,7 +368,7 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				connector.SubscribeLevel1(security, settings.From, settings.To);
+				connector.SubscribeLevel1(security, settings.From, settings.To, skip: settings.Skip, count: settings.Count);
 			}
 		}
 
@@ -377,7 +400,7 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				connector.SubscribeTrades(security, settings.From, settings.To);
+				connector.SubscribeTrades(security, settings.From, settings.To, skip: settings.Skip, count: settings.Count);
 			}
 		}
 
@@ -428,12 +451,18 @@ namespace SampleConnection
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var chartWnd = new ChartWindow(new CandleSeries(typeof(TimeFrameCandle), security, tf)
+				var mdMsg = new MarketDataMessage
 				{
+					SecurityId = security.ToSecurityId(),
+					IsSubscribe = true,
+					DataType2 = DataType.TimeFrame(tf),
 					From = settings.From,
 					To = settings.To,
-					BuildCandlesMode = settings.BuildMode,
-				});
+					BuildMode = settings.BuildMode,
+					Skip = settings.Skip,
+					Count = settings.Count,
+				};
+				var chartWnd = new ChartWindow(mdMsg);
 
 				_chartWindows.Add(chartWnd);
 				chartWnd.Closed += (s, e1) => _chartWindows.Remove(chartWnd);

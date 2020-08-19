@@ -68,7 +68,7 @@
 			public MarketDataMessage Origin { get; }
 
 			public long CurrTransId { get; private set; }
-			public bool LastIteration => Origin.To != null && _nextFrom >= Origin.To.Value;
+			public bool LastIteration => Origin.To != null && _nextFrom >= Origin.To.Value || (_count <= 0);
 
 			public bool ReplyReceived { get; set; }
 			public long? UnsubscribingId { get; set; }
@@ -81,6 +81,7 @@
 			private bool _firstIteration;
 			private DateTimeOffset _nextFrom;
 			private readonly DateTimeOffset _to;
+			private long? _count;
 
 			private bool IsStepMax => _step == TimeSpan.MaxValue;
 
@@ -101,12 +102,33 @@
 				_currFrom = origin.From ?? _to - (IsStepMax ? TimeSpan.FromDays(1) : step);
 
 				_firstIteration = true;
+
+				_count = origin.Count;
 			}
 
 			public void TryUpdateNextFrom(DateTimeOffset last)
 			{
 				if (_currFrom < last)
 					_nextFrom = last;
+
+				if (_count != default)
+					_count--;
+			}
+
+			private void Init(MarketDataMessage mdMsg)
+			{
+				if (_nextFrom > _to)
+					_nextFrom = _to;
+
+				mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
+				mdMsg.Count = _adapter.GetMaxCount(mdMsg.DataType2);
+				mdMsg.From = _currFrom;
+				mdMsg.To = _nextFrom;
+
+				if (mdMsg.Count > _count)
+					mdMsg.Count = _count;
+
+				CurrTransId = mdMsg.TransactionId;
 			}
 
 			public MarketDataMessage InitNext()
@@ -122,39 +144,26 @@
 
 					_nextFrom = IsStepMax ? _to : _currFrom + _step;
 
-					if (_nextFrom > _to)
-						_nextFrom = _to;
-
-					mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
-					mdMsg.Count = _adapter.GetMaxCount(mdMsg.DataType2);
-					mdMsg.From = _currFrom;
-					mdMsg.To = _nextFrom;
-
-					CurrTransId = mdMsg.TransactionId;
+					Init(mdMsg);
 				}
 				else
 				{
 					_iterationInterval.Sleep();
 
+					mdMsg.Skip = null;
+
 					if (Origin.To == null && _nextFrom >= _to)
 					{
 						// on-line
 						mdMsg.From = null;
+						mdMsg.Count = null;
 					}
 					else
 					{
 						_currFrom = _nextFrom;
 						_nextFrom += _step;
 
-						if (_nextFrom > _to)
-							_nextFrom = _to;
-
-						mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
-						mdMsg.Count = _adapter.GetMaxCount(mdMsg.DataType2);
-						mdMsg.From = _currFrom;
-						mdMsg.To = _nextFrom;
-
-						CurrTransId = mdMsg.TransactionId;
+						Init(mdMsg);
 					}
 				}
 
@@ -210,7 +219,7 @@
 						var from = subscriptionMsg.From;
 						var to = subscriptionMsg.To;
 
-						if (from != null || to != null)
+						if (from != null || to != null || subscriptionMsg.Count != null)
 						{
 							var step = InnerAdapter.GetHistoryStepSize(DataType.Transactions, out _);
 
