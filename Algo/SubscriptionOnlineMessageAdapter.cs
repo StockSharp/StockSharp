@@ -348,7 +348,7 @@
 						_strategyPosSubscriptions.Add(posMsg.TransactionId);
 						sendInMsg = message;
 					}
-					else if (message.To == null)
+					else if (!message.IsHistoryOnly())
 					{
 						var dataType = message.DataType;
 						var secId = default(SecurityId);

@@ -4075,5 +4075,21 @@ namespace StockSharp.Messages
 				Leverage = regMsg.Leverage,
 			};
 		}
+
+		/// <summary>
+		/// Determines the specified message contains historical request only.
+		/// </summary>
+		/// <param name="message">Subscription.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsHistoryOnly(this ISubscriptionMessage message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (!message.IsSubscribe)
+				throw new ArgumentException(nameof(message));
+
+			return message.To != null || message.Count != null;
+		}
 	}
 }
