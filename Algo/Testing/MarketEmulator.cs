@@ -2243,6 +2243,8 @@ namespace StockSharp.Algo.Testing
 			return TimeSpan.Zero;
 		}
 
+		int? IMessageAdapter.GetMaxCount(DataType dataType) => null;
+
 		bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => false;
 		bool IMessageAdapter.IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
 

@@ -126,6 +126,7 @@
 						_nextFrom = _to;
 
 					mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
+					mdMsg.Count = _adapter.GetMaxCount(mdMsg.DataType2);
 					mdMsg.From = _currFrom;
 					mdMsg.To = _nextFrom;
 
@@ -149,6 +150,7 @@
 							_nextFrom = _to;
 
 						mdMsg.TransactionId = _adapter.TransactionIdGenerator.GetNextId();
+						mdMsg.Count = _adapter.GetMaxCount(mdMsg.DataType2);
 						mdMsg.From = _currFrom;
 						mdMsg.To = _nextFrom;
 

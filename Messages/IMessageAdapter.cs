@@ -227,6 +227,13 @@ namespace StockSharp.Messages
 		TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval);
 
 		/// <summary>
+		/// Get maximum possible items count per single subscription request.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Max items count.</returns>
+		int? GetMaxCount(DataType dataType);
+
+		/// <summary>
 		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>

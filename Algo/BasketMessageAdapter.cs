@@ -652,6 +652,19 @@ namespace StockSharp.Algo
 			return TimeSpan.Zero;
 		}
 
+		int? IMessageAdapter.GetMaxCount(DataType dataType)
+		{
+			foreach (var adapter in GetSortedAdapters())
+			{
+				var count = adapter.GetMaxCount(dataType);
+
+				if (count != null)
+					return count;
+			}
+
+			return null;
+		}
+
 		bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => GetSortedAdapters().Any(a => a.IsAllDownloadingSupported(dataType));
 		
 		bool IMessageAdapter.IsSecurityRequired(DataType dataType) => GetSortedAdapters().Any(a => a.IsSecurityRequired(dataType));

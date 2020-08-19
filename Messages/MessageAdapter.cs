@@ -548,6 +548,9 @@ namespace StockSharp.Messages
 			=> Extensions.GetHistoryStepSize(this, dataType, out iterationInterval);
 
 		/// <inheritdoc />
+		public virtual int? GetMaxCount(DataType dataType) => null;
+
+		/// <inheritdoc />
 		public virtual bool IsAllDownloadingSupported(DataType dataType) => false;
 
 		/// <inheritdoc />
