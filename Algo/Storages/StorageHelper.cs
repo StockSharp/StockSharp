@@ -1293,6 +1293,12 @@ namespace StockSharp.Algo.Storages
 
 		private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription, TimeSpan daysLoad)
 		{
+			if (storage is null)
+				throw new ArgumentNullException(nameof(storage));
+
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
 			var last = storage.Dates.LastOr();
 
 			if (last == null)
@@ -1320,6 +1326,12 @@ namespace StockSharp.Algo.Storages
 				return null;
 
 			var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
+
+			if (subscription.Skip != default)
+				messages = messages.Skip((int)subscription.Skip.Value);
+
+			if (subscription.Count != default)
+				messages = messages.Take((int)subscription.Count.Value);
 
 			return LoadMessages(messages, range.Item1, subscription.TransactionId, sendReply, newOutMessage, filter);
 		}
