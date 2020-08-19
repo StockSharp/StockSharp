@@ -334,9 +334,16 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		internal static Range<DateTimeOffset> GetRange(this IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to)
+		/// <summary>
+		/// Get available date range for the specified storage.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Date range</returns>
+		public static Range<DateTimeOffset> GetRange(this IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			if (from > to)
@@ -350,11 +357,17 @@ namespace StockSharp.Algo.Storages
 			if (dates.IsEmpty())
 				return null;
 
-			var first = dates.First().ApplyUtc();
-			var last = dates.Last().EndOfDay().ApplyUtc();
+			var first = dates.First().UtcKind();
+			var last = dates.Last().UtcKind();
 
-			if (from > last)
+			if (from > last || to < first)
 				return null;
+
+			var firstInfo = storage.GetMetaInfo(first);
+			var lastInfo = first == last ? firstInfo : storage.GetMetaInfo(last);
+
+			first = firstInfo.FirstTime;
+			last = lastInfo.LastTime;
 
 			var timePrecision = storage.Serializer.TimePrecision;
 			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
