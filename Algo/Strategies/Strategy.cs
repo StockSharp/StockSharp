@@ -412,15 +412,15 @@ namespace StockSharp.Algo.Strategies
 						}, (SecurityMessage)null);
 
 						Subscribe(_pfSubscription, true);
-
-						_orderSubscription = new Subscription(new OrderStatusMessage
-						{
-							IsSubscribe = true,
-							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null);
-
-						Subscribe(_orderSubscription, true);
 					}
+
+					_orderSubscription = new Subscription(new OrderStatusMessage
+					{
+						IsSubscribe = true,
+						StrategyId = EnsureGetId(),
+					}, (SecurityMessage)null);
+
+					Subscribe(_orderSubscription, true);
 				}
 
 				foreach (var strategy in ChildStrategies)
