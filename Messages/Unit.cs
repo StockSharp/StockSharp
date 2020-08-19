@@ -716,7 +716,7 @@ namespace StockSharp.Messages
 		public static Unit operator -(Unit u)
 		{
 			if (u is null)
-				throw new ArgumentNullException(nameof(u));
+				return null;
 
 			return new Unit
 			{
