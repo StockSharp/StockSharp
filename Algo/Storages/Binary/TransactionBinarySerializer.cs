@@ -258,7 +258,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Transaction, 200, MarketDataVersions.Version68, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.Transaction, 200, MarketDataVersions.Version69, exchangeInfoProvider)
 		{
 		}
 
@@ -289,6 +289,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version60;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version67;
 			var leverage = metaInfo.Version >= MarketDataVersions.Version68;
+			var useLong = metaInfo.Version >= MarketDataVersions.Version69;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version69;
 
 			foreach (var msg in messages)
 			{
@@ -350,7 +352,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.OrderPrice != 0)
 				{
 					writer.Write(true);
-					writer.WritePriceEx(msg.OrderPrice, metaInfo, SecurityId);
+					writer.WritePriceEx(msg.OrderPrice, metaInfo, SecurityId, useLong, largeDecimal);
 				}
 				else
 					writer.Write(false);
@@ -358,7 +360,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.TradePrice != null)
 				{
 					writer.Write(true);
-					writer.WritePriceEx(msg.TradePrice.Value, metaInfo, SecurityId);
+					writer.WritePriceEx(msg.TradePrice.Value, metaInfo, SecurityId, useLong, largeDecimal);
 				}
 				else
 					writer.Write(false);
@@ -368,22 +370,22 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.Write(msg.OrderVolume != null);
 
 				if (msg.OrderVolume != null)
-					writer.WriteVolume(msg.OrderVolume.Value, metaInfo, SecurityId);
+					writer.WriteVolume(msg.OrderVolume.Value, metaInfo, largeDecimal);
 
 				writer.Write(msg.TradeVolume != null);
 
 				if (msg.TradeVolume != null)
-					writer.WriteVolume(msg.TradeVolume.Value, metaInfo, SecurityId);
+					writer.WriteVolume(msg.TradeVolume.Value, metaInfo, largeDecimal);
 
 				writer.Write(msg.VisibleVolume != null);
 
 				if (msg.VisibleVolume != null)
-					writer.WriteVolume(msg.VisibleVolume.Value, metaInfo, SecurityId);
+					writer.WriteVolume(msg.VisibleVolume.Value, metaInfo, largeDecimal);
 
 				writer.Write(msg.Balance != null);
 
 				if (msg.Balance != null)
-					writer.WriteVolume(msg.Balance.Value, metaInfo, SecurityId);
+					writer.WriteVolume(msg.Balance.Value, metaInfo, largeDecimal);
 
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
@@ -508,6 +510,9 @@ namespace StockSharp.Algo.Storages.Binary
 			var reader = enumerator.Reader;
 			var metaInfo = enumerator.MetaInfo;
 
+			var useLong = metaInfo.Version >= MarketDataVersions.Version69;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version69;
+
 			metaInfo.FirstTransactionId += reader.ReadLong();
 			metaInfo.FirstOriginalTransactionId += reader.ReadLong();
 
@@ -542,15 +547,15 @@ namespace StockSharp.Algo.Storages.Binary
 				tradeStringId = reader.ReadStringEx();
 			}
 
-			var orderPrice = reader.Read() ? reader.ReadPriceEx(metaInfo) : (decimal?)null;
-			var tradePrice = reader.Read() ? reader.ReadPriceEx(metaInfo) : (decimal?)null;
+			var orderPrice = reader.Read() ? reader.ReadPriceEx(metaInfo, useLong, largeDecimal) : (decimal?)null;
+			var tradePrice = reader.Read() ? reader.ReadPriceEx(metaInfo, useLong, largeDecimal) : (decimal?)null;
 
 			var side = reader.Read() ? Sides.Buy : Sides.Sell;
 
-			var orderVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
-			var tradeVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
-			var visibleVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
-			var balance = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+			var orderVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
+			var tradeVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
+			var visibleVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
+			var balance = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
 
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version60;
 

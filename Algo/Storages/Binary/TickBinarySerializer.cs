@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
 		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version59, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version60, exchangeInfoProvider)
 		{
 		}
 
@@ -139,6 +139,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var stringId = metaInfo.Version >= MarketDataVersions.Version57;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
 			var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version60;
 
 			foreach (var msg in messages)
 			{
@@ -171,7 +172,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (volume < 0)
 						throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
 
-					writer.WriteVolume(volume.Value, metaInfo, SecurityId);
+					writer.WriteVolume(volume.Value, metaInfo, false);
 				}
 				else
 				{
@@ -179,14 +180,14 @@ namespace StockSharp.Algo.Storages.Binary
 
 					if (volume != null)
 					{
-						if (volume < 0)
+						if (volume < 0 && !largeDecimal)
 							throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
 
-						writer.WriteVolume(volume.Value, metaInfo, SecurityId);
+						writer.WriteVolume(volume.Value, metaInfo, largeDecimal);
 					}
 				}
 				
-				writer.WritePriceEx(msg.GetTradePrice(), metaInfo, SecurityId, useLong);
+				writer.WritePriceEx(msg.GetTradePrice(), metaInfo, SecurityId, useLong, largeDecimal);
 				writer.WriteSide(msg.OriginSide);
 
 				var lastOffset = metaInfo.LastServerOffset;
@@ -240,13 +241,13 @@ namespace StockSharp.Algo.Storages.Binary
 				var oi = msg.OpenInterest;
 
 				if (metaInfo.Version < MarketDataVersions.Version46)
-					writer.WriteVolume(oi ?? 0m, metaInfo, SecurityId);
+					writer.WriteVolume(oi ?? 0m, metaInfo, false);
 				else
 				{
 					writer.Write(oi != null);
 
 					if (oi != null)
-						writer.WriteVolume(oi.Value, metaInfo, SecurityId);
+						writer.WriteVolume(oi.Value, metaInfo, largeDecimal);
 				}
 
 				if (metaInfo.Version < MarketDataVersions.Version45)
@@ -295,14 +296,15 @@ namespace StockSharp.Algo.Storages.Binary
 			var stringId = metaInfo.Version >= MarketDataVersions.Version57;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
 			var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version60;
 
 			metaInfo.FirstId += reader.ReadLong();
 
 			var volume = metaInfo.Version < MarketDataVersions.Version53
-				? reader.ReadVolume(metaInfo)
-				: reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+				? reader.ReadVolume(metaInfo, false)
+				: reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
 
-			var price = reader.ReadPriceEx(metaInfo, useLong);
+			var price = reader.ReadPriceEx(metaInfo, useLong, largeDecimal);
 
 			var orderDirection = reader.Read() ? (reader.Read() ? Sides.Buy : Sides.Sell) : (Sides?)null;
 
@@ -366,7 +368,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 
 			if (metaInfo.Version < MarketDataVersions.Version46 || reader.Read())
-				msg.OpenInterest = reader.ReadVolume(metaInfo);
+				msg.OpenInterest = reader.ReadVolume(metaInfo, largeDecimal);
 
 			if (metaInfo.Version < MarketDataVersions.Version45)
 				return msg;

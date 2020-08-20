@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version60, exchangeInfoProvider)
+			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version61, exchangeInfoProvider)
 		{
 		}
 
@@ -159,6 +159,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
 			var seqNumAndPos = metaInfo.Version >= MarketDataVersions.Version60;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version61;
 
 			foreach (var m in messages)
 			{
@@ -207,8 +208,8 @@ namespace StockSharp.Algo.Storages.Binary
 					prevQuoteMsg = quoteMsg;
 				}
 
-				SerializeQuotes(writer, delta.Bids, metaInfo/*, isFull*/, useLong, nonAdjustPrice);
-				SerializeQuotes(writer, delta.Asks, metaInfo/*, isFull*/, useLong, nonAdjustPrice);
+				SerializeQuotes(writer, delta.Bids, metaInfo/*, isFull*/, useLong, nonAdjustPrice, largeDecimal);
+				SerializeQuotes(writer, delta.Asks, metaInfo/*, isFull*/, useLong, nonAdjustPrice, largeDecimal);
 
 				//metaInfo.LastPrice = GetDepthPrice(quoteMsg);
 
@@ -269,6 +270,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
 			var seqNumAndPos = metaInfo.Version >= MarketDataVersions.Version60;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version61;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -288,8 +290,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 					State = (QuoteChangeStates)reader.ReadInt(),
 
-					Bids = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice),
-					Asks = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice),
+					Bids = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice, largeDecimal),
+					Asks = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice, largeDecimal),
 				};
 			}
 			else
@@ -302,8 +304,8 @@ namespace StockSharp.Algo.Storages.Binary
 					LocalTime = metaInfo.FirstTime,
 					SecurityId = SecurityId,
 					ServerTime = serverTime,
-					Bids = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice),
-					Asks = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice),
+					Bids = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice, largeDecimal),
+					Asks = DeserializeQuotes(reader, metaInfo, useLong, nonAdjustPrice, largeDecimal),
 				};
 
 				if (metaInfo.Version < MarketDataVersions.Version48)
@@ -366,7 +368,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return quoteMsg;
 		}
 
-		private void SerializeQuotes(BitArrayWriter writer, QuoteChange[] quotes, QuoteMetaInfo metaInfo/*, bool isFull*/, bool useLong, bool nonAdjustPrice)
+		private void SerializeQuotes(BitArrayWriter writer, QuoteChange[] quotes, QuoteMetaInfo metaInfo/*, bool isFull*/, bool useLong, bool nonAdjustPrice, bool largeDecimal)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -398,7 +400,7 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.WritePrice(quote.Price, ref pricePrice, metaInfo, SecurityId, useLong, nonAdjustPrice);
 				metaInfo.LastPrice = pricePrice;
 
-				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
+				writer.WriteVolume(quote.Volume, metaInfo, largeDecimal);
 
 				if (isLess56)
 					continue;
@@ -445,7 +447,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		private static QuoteChange[] DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, bool useLong, bool nonAdjustPrice)
+		private static QuoteChange[] DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, bool useLong, bool nonAdjustPrice, bool largeDecimal)
 		{
 			if (reader == null)
 				throw new ArgumentNullException(nameof(reader));
@@ -470,7 +472,7 @@ namespace StockSharp.Algo.Storages.Binary
 				var price = reader.ReadPrice(ref prevPrice, metaInfo, useLong, nonAdjustPrice);
 				metaInfo.FirstPrice = prevPrice;
 
-				var volume = reader.ReadVolume(metaInfo);
+				var volume = reader.ReadVolume(metaInfo, largeDecimal);
 
 				var ordersCount = is56
 					? reader.ReadNullableInt()
