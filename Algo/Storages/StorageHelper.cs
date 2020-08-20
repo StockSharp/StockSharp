@@ -561,9 +561,7 @@ namespace StockSharp.Algo.Storages
 			}
 
 			private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()
-			{
-				return new[] { _original }.Concat(GetSmallerTimeFrames().Select(_getStorage));
-			}
+				=> new[] { _original }.Concat(GetSmallerTimeFrames().Select(_getStorage));
 
 			IEnumerable<DateTime> IMarketDataStorage.Dates => GetStorages().SelectMany(s => s.Dates).OrderBy().Distinct();
 
@@ -580,19 +578,19 @@ namespace StockSharp.Algo.Storages
 				set => _original.AppendOnlyNew = value;
 			}
 
-			int IMarketDataStorage.Save(IEnumerable<Message> data) => ((IMarketDataStorage<CandleMessage>)this).Save(data);
+			int IMarketDataStorage.Save(IEnumerable<Message> data) => Save(data.Cast<CandleMessage>());
 
-			void IMarketDataStorage.Delete(IEnumerable<Message> data) => ((IMarketDataStorage<CandleMessage>)this).Delete(data);
+			void IMarketDataStorage.Delete(IEnumerable<Message> data) => Delete(data.Cast<CandleMessage>());
 
-			void IMarketDataStorage.Delete(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Delete(date);
+			void IMarketDataStorage.Delete(DateTime date) => _original.Delete(date);
 
-			IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Load(date);
+			IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
 
-			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) =>  ((IMarketDataStorage<CandleMessage>)this).GetMetaInfo(date);
+			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => _original.GetMetaInfo(date);
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<CandleMessage>)this).Serializer;
 
-			IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
+			public IEnumerable<CandleMessage> Load(DateTime date)
 			{
 				if (date <= _prevDate)
 					_compressors.Values.ForEach(c => c.Reset());
@@ -656,9 +654,9 @@ namespace StockSharp.Algo.Storages
 
 			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _original.Serializer;
 
-			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data) => _original.Save(data);
+			public int Save(IEnumerable<CandleMessage> data) => _original.Save(data);
 
-			void IMarketDataStorage<CandleMessage>.Delete(IEnumerable<CandleMessage> data) => _original.Delete(data);
+			public void Delete(IEnumerable<CandleMessage> data) => _original.Delete(data);
 
 			DateTimeOffset IMarketDataStorageInfo<CandleMessage>.GetTime(CandleMessage data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
 
