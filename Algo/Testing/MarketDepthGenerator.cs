@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Testing
 			get => _maxBidsDepth;
 			set
 			{
-				if (value <= 0)
+				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1139);
 
 				_maxBidsDepth = value;
@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Testing
 			get => _maxAsksDepth;
 			set
 			{
-				if (value <= 0)
+				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1140);
 
 				_maxAsksDepth = value;
