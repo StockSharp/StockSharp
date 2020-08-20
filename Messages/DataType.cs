@@ -1,7 +1,7 @@
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Linq;
+	using System.Runtime.Serialization;
 	using System.Collections.Generic;
 
 	using Ecng.Common;
@@ -13,6 +13,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Data type info.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public class DataType : Equatable<DataType>, IPersistable
 	{
 		/// <summary>
@@ -192,6 +194,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Message type.
 		/// </summary>
+		[DataMember]
 		public Type MessageType
 		{
 			get => _messageType;
@@ -210,6 +213,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The additional argument, associated with data. For example, candle argument.
 		/// </summary>
+		[DataMember]
 		public object Arg
 		{
 			get => _arg;
