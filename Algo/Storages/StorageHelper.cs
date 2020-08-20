@@ -360,7 +360,7 @@ namespace StockSharp.Algo.Storages
 			var first = dates.First().UtcKind();
 			var last = dates.Last().UtcKind();
 
-			if (from > last || to < first)
+			if (from > last.EndOfDay() || to < first)
 				return null;
 
 			var firstInfo = storage.GetMetaInfo(first);
@@ -368,6 +368,10 @@ namespace StockSharp.Algo.Storages
 
 			first = firstInfo.FirstTime;
 			last = lastInfo.LastTime;
+
+			// chech bounds again after time part loaded
+			if (from > last || to < first)
+				return null;
 
 			var timePrecision = storage.Serializer.TimePrecision;
 			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
