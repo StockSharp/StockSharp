@@ -93,6 +93,9 @@ namespace StockSharp.Algo
 		{
 			switch (message)
 			{
+				case SecurityLookupMessage _:
+					break;
+
 				case SecurityMessage secMsg:
 					ReplaceSecurityId(secMsg);
 					break;
