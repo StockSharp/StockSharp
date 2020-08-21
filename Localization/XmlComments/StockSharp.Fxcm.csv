@@ -1,6 +1,7 @@
 T:StockSharp.Fxcm.FxcmMessageAdapter/summary;DocStr2538
 M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.Fxcm.FxcmMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/inheritdoc;DocStr8459

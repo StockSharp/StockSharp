@@ -3,6 +3,8 @@ F:StockSharp.Community.CommunityMessageTypes.FileInfo/summary;DocStr608
 F:StockSharp.Community.CommunityMessageTypes.ProductInfo/summary;DocStr608
 F:StockSharp.Community.CommunityMessageTypes.ProductLookup/summary;DocStr608
 F:StockSharp.Community.CommunityMessageTypes.ProductFeedback/summary;DocStr608
+F:StockSharp.Community.CommunityMessageTypes.ProductInfoType/summary;DocStr608
+F:StockSharp.Community.CommunityMessageTypes.ProductFeedbackType/summary;DocStr608
 T:StockSharp.Community.Extensions/summary;DocStr10280
 M:StockSharp.Community.Extensions.ToEnum(StockSharp.Community.ProductInfoMessage)/summary;DocStr8644
 M:StockSharp.Community.Extensions.ToEnum(StockSharp.Community.ProductInfoMessage)/param/product;DocStr65
@@ -90,7 +92,7 @@ M:StockSharp.Community.ProductLookupMessage.#ctor/summary;DocStr1
 P:StockSharp.Community.ProductLookupMessage.DataType/inheritdoc;DocStr8459
 M:StockSharp.Community.ProductLookupMessage.Clone/summary;DocStr643
 M:StockSharp.Community.ProductLookupMessage.Clone/returns;DocStr1116
-T:StockSharp.Community.ProductPriceTypes/summary;DocStr11953
+T:StockSharp.Community.ProductPriceTypes/summary;DocStr12010
 F:StockSharp.Community.ProductPriceTypes.Lifetime/summary;Lifetime
 F:StockSharp.Community.ProductPriceTypes.PerMonth/summary;PerMonth
 F:StockSharp.Community.ProductPriceTypes.Annual/summary;Annual

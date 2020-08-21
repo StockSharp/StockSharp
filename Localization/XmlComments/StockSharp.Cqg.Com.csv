@@ -2,6 +2,7 @@ T:StockSharp.Cqg.Com.CqgComMessageAdapter/summary;DocStr3085
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
+P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

@@ -2,6 +2,7 @@ T:StockSharp.CoinHub.CoinHubMessageAdapter/summary;DocStr2538
 M:StockSharp.CoinHub.CoinHubMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.CoinHub.CoinHubMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.CoinHub.CoinHubMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.CoinHub.CoinHubMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 M:StockSharp.CoinHub.CoinHubMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.CoinHub.CoinHubMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.CoinHub.CoinHubMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

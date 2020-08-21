@@ -16452,3 +16452,297 @@ DocStr11900;Exponent;Exponent
 DocStr11901;Mantissa;Mantissa
 DocStr11902;The numerical value is obtained by multiplying the mantissa with the base-10 power of the exponent;The numerical value is obtained by multiplying the mantissa with the base-10 power of the exponent
 DocStr11903;License feature attribute;License feature attribute
+DocStr11904;Zero means no information;Zero means no information
+DocStr11905;Determines the message is generated from the specified {0};Determines the message is generated from the specified {0}
+DocStr11906;Interface described candles subscription;Interface described candles subscription
+DocStr11907;Add security;Add security
+DocStr11908;Remove security;Remove security
+DocStr11909;Remove securities;Remove securities
+DocStr11910;Process strategies positions and store it into {0};Process strategies positions and store it into {0}
+DocStr11911;Check {0} and {1} are they multiply to step;Check {0} and {1} are they multiply to step
+DocStr11912;Edit the order;Edit the order
+DocStr11913;Order changes;Order changes
+DocStr11914;Find subscriptions for the specified security and data type;Find subscriptions for the specified security and data type
+DocStr11915;Count and last time;Count and last time
+DocStr11916;The export into json;The export into json
+DocStr11917;Gets or sets a value indicating whether to indent elements;Gets or sets a value indicating whether to indent elements
+DocStr11918;Board txt export template;Board txt export template
+DocStr11919;Order edition error event;Order edition error event
+DocStr11920;To create a rule for the order {0} event;To create a rule for the order {0} event
+DocStr11921;The order to be traced;The order to be traced
+DocStr11922;To create a rule for the event of {0};To create a rule for the event of {0}
+DocStr11923;To create a rule for the event of {0} or {1};To create a rule for the event of {0} or {1}
+DocStr11924;Interface described order matching engine;Interface described order matching engine
+DocStr11925;Result messages;Result messages
+DocStr11926;Reply message;Reply message
+DocStr11927;Original order state;Original order state
+DocStr11928;Cancelled order;Cancelled order
+DocStr11929;Get best quote;Get best quote
+DocStr11930;Best quote;Best quote
+DocStr11931;Get worst quote;Get worst quote
+DocStr11932;Worst quote;Worst quote
+DocStr11933;Get all orders for the specified price level;Get all orders for the specified price level
+DocStr11934;Price level;Price level
+DocStr11935;Get quote count;Get quote count
+DocStr11936;Get quotes;Get quotes
+DocStr11937;Interface described position controller;Interface described position controller
+DocStr11938;Reqest positions states;Reqest positions states
+DocStr11939;Update position state;Update position state
+DocStr11940;Request margin state;Request margin state
+DocStr11941;Process order;Process order
+DocStr11942;Volume delta;Volume delta
+DocStr11943;Process own trade;Process own trade
+DocStr11944;Validate registration;Validate registration
+DocStr11945;{0} is not error. Otherwise, error message;{0} is not error. Otherwise, error message
+DocStr11946;Request portfolio state;Request portfolio state
+DocStr11947;Commission manager;Commission manager
+DocStr11948;Handler to get security info;Handler to get security info
+DocStr11949;Handler to get margin info;Handler to get margin info
+DocStr11950;Interface described position controller provider;Interface described position controller provider
+DocStr11951;All controllers;All controllers
+DocStr11952;Get controller for the specified portfolio name;Get controller for the specified portfolio name
+DocStr11953;Controller;Controller
+DocStr11954;Try get controller for the specified portfolio name;Try get controller for the specified portfolio name
+DocStr11955;{0} if controller was found, otherwise, {1};{0} if controller was found, otherwise, {1}
+DocStr11956;Order book builder, used incremental {0};Order book builder, used incremental {0}
+DocStr11957;Try create full book;Try create full book
+DocStr11958;Book change;Book change
+DocStr11959;Full book;Full book
+DocStr11960;The messages adapter sort unsorted order books {0};The messages adapter sort unsorted order books {0}
+DocStr11961;Interface, described snapshot holder;Interface, described snapshot holder
+DocStr11962;Get snapshot for the specified data type and security;Get snapshot for the specified data type and security
+DocStr11963;The message adapter snapshots holder;The message adapter snapshots holder
+DocStr11964;Snapshot holder;Snapshot holder
+DocStr11965;Pass through incremental {0};Pass through incremental {0}
+DocStr11966;Sync object;Sync object
+DocStr11967;Underlying provider;Underlying provider
+DocStr11968;Enable positions storage;Enable positions storage
+DocStr11969;Enable transactions storage;Enable transactions storage
+DocStr11970;Ignore market-data messages with {0} is not {1};Ignore market-data messages with {0} is not {1}
+DocStr11971;Ignore transactional messages with {0} is not {1};Ignore transactional messages with {0} is not {1}
+DocStr11972;Get accumulated {0};Get accumulated {0}
+DocStr11973;States;States
+DocStr11974;Get available date range for the specified storage;Get available date range for the specified storage
+DocStr11975;Date range;Date range
+DocStr11976;Try build books by {0} in case of {1} is incremental changes;Try build books by {0} in case of {1} is incremental changes
+DocStr11977;Message adapter's provider interface;Message adapter's provider interface
+DocStr11978;Strategy data types;Strategy data types
+DocStr11979;{0} auto-fill modes;{0} auto-fill modes
+DocStr11980;By {0};By {0}
+DocStr11981;Restore orders last time was registered by child strategies;Restore orders last time was registered by child strategies
+DocStr11982;Unsubscribe all active subscription while strategy become stopping;Unsubscribe all active subscription while strategy become stopping
+DocStr11983;Wait {0} to finish before strategy become into {1} state;Wait {0} to finish before strategy become into {1} state
+DocStr11984;Set {0} by {1} or {2};Set {0} by {1} or {2}
+DocStr11985;Determines the specified order can be owned by the strategy;Determines the specified order can be owned by the strategy
+DocStr11986;Get position;Get position
+DocStr11987;Check the possibility {0} change;Check the possibility {0} change
+DocStr11988;New state;New state
+DocStr11989;Transaction id;Transaction id
+DocStr11990;Current balance;Current balance
+DocStr11991;New balance;New balance
+DocStr11992;Change subscription state;Change subscription state
+DocStr11993;Current state;Current state
+DocStr11994;Use {0} for log message;Use {0} for log message
+DocStr11995;Get or create (if not exist);Get or create (if not exist)
+DocStr11996;Creator;Creator
+DocStr11997;Depo name;Depo name
+DocStr11998;Filter order by the specified states;Filter order by the specified states
+DocStr11999;Skip count;Skip count
+DocStr12000;Transactional messages ordering adapter;Transactional messages ordering adapter
+DocStr12001;Sections;Sections
+DocStr12002;Futures-coin;Futures-coin
+DocStr12003;{0} success result event;{0} success result event
+DocStr12004;{0} error result event;{0} error result event
+DocStr12005;Determines the specified order can be edited by {0};Determines the specified order can be edited by {0}
+DocStr12006;{0} if the order is editable, {1} order cannot be changed, {2} means no information;{0} if the order is editable, {1} order cannot be changed, {2} means no information
+DocStr12007;Determines the specified order can be replaced by {0};Determines the specified order can be replaced by {0}
+DocStr12008;{0} if the order is replaceable, {1} order cannot be replaced, {2} means no information;{0} if the order is replaceable, {1} order cannot be replaced, {2} means no information
+DocStr12009;Strategy id;Strategy id
+DocStr12010;Product price types;Product price types
+DocStr12011;Get board code;Get board code
+DocStr12012;Override {0} by native identifier (if present in FIX message);Override {0} by native identifier (if present in FIX message)
+DocStr12013;Try extract expected {0} from the specified error message;Try extract expected {0} from the specified error message
+DocStr12014;Max possible suspended messages detected;Max possible suspended messages detected
+DocStr12015;Indicates possible retransmission of message with this sequence number;Indicates possible retransmission of message with this sequence number
+DocStr12016;Indicates that message may contain information that has been sent under another sequence number;Indicates that message may contain information that has been sent under another sequence number
+DocStr12017;Original time of message transmission (always expressed in UTC) when transmitting orders as the result of a resend request;Original time of message transmission (always expressed in UTC) when transmitting orders as the result of a resend request
+DocStr12018;Position (extra);Position (extra)
+DocStr12019;Operator for {0};Operator for {0}
+DocStr12020;Opponent;Opponent
+DocStr12021;Exclude current directory for scan available licenses;Exclude current directory for scan available licenses
+DocStr12022;Available licenses;Available licenses
+DocStr12023;Global logs receiver;Global logs receiver
+DocStr12024;Add adapter;Add adapter
+DocStr12025;Initialization string;Initialization string
+DocStr12026;Filtered market depth;Filtered market depth
+DocStr12027;Set {0};Set {0}
+DocStr12028;Is the data type can be used as candles compression source;Is the data type can be used as candles compression source
+DocStr12029;Create order's transaction reply;Create order's transaction reply
+DocStr12030;Get maximum possible items count per single subscription request;Get maximum possible items count per single subscription request
+DocStr12031;Max items count;Max items count
+DocStr12032;Determines the specified message is matched lookup criteria;Determines the specified message is matched lookup criteria
+DocStr12033;The message which fields will be used as a filter;The message which fields will be used as a filter
+DocStr12034;Fully compare {0};Fully compare {0}
+DocStr12035;Determines the specified transaction is matched lookup criteria;Determines the specified transaction is matched lookup criteria
+DocStr12036;Message channel;Message channel
+DocStr12037;Constant value for {0} means Today(=Session);Constant value for {0} means Today(=Session)
+DocStr12038;Determines the specified date equals is {0} and returns {1};Determines the specified date equals is {0} and returns {1}
+DocStr12039;Result value;Result value
+DocStr12040;Today value;Today value
+DocStr12041;Get supported y adapter data types;Get supported y adapter data types
+DocStr12042;Supported by adapter data types;Supported by adapter data types
+DocStr12043;Security price step;Security price step
+DocStr12044;Sort order book;Sort order book
+DocStr12045;Determines the specified message contains historical request only;Determines the specified message contains historical request only
+DocStr12046;Try get change from message;Try get change from message
+DocStr12047;Adapter translates orders changes on reply of {0};Adapter translates orders changes on reply of {0}
+DocStr12048;Adapter required emulation {0};Adapter required emulation {0}
+DocStr12049;{0} means no emulatior, {1} by order balance, {2} by trades;{0} means no emulatior, {1} by order balance, {2} by trades
+DocStr12050;Is the {0} command edit a current order;Is the {0} command edit a current order
+DocStr12051;Generate {0} from {1};Generate {0} from {1}
+DocStr12052;Feature name;Feature name
+DocStr12053;The channel cannot be opened;The channel cannot be opened
+DocStr12054;Interface described schedule task;Interface described schedule task
+DocStr12055;Working schedule;Working schedule
+DocStr12056;Can start (not disabled, not already started);Can start (not disabled, not already started)
+DocStr12057;Can stop;Can stop
+DocStr12058;Message contains fields with non default values;Message contains fields with non default values
+DocStr12059;Shows the message adapter is stub;Shows the message adapter is stub
+DocStr12060;Cancelling balance;Cancelling balance
+DocStr12061;Replaced price;Replaced price
+DocStr12062;Replaced volume;Replaced volume
+DocStr12063;Process suspended action;Process suspended action
+DocStr12064;Additional argument;Additional argument
+DocStr12065;Converter to use with {0} properties;Converter to use with {0} properties
+DocStr12066;Cast object from {0} to nullable {1};Cast object from {0} to nullable {1}
+DocStr12067;Get string suffix;Get string suffix
+DocStr12068;String suffix;String suffix
+DocStr12069;Throw exception in case of impossible conversion. Otherwise, returns {0};Throw exception in case of impossible conversion. Otherwise, returns {0}
+DocStr12070;Multiple {0} on the specified times;Multiple {0} on the specified times
+DocStr12071;Multiply value;Multiply value
+DocStr12072;Is enabled;Is enabled
+DocStr12073;REST address;REST address
+DocStr12074;WebSocket address;WebSocket address
+DocStr12075;The class for CodeEditor based applications;The class for CodeEditor based applications
+DocStr12076;The layout changed event;The layout changed event
+DocStr12077;Application start configuration;Application start configuration
+DocStr12078;Skip {0};Skip {0}
+DocStr12079;Selected application platform;Selected application platform
+DocStr12080;Selected application language;Selected application language
+DocStr12081;Try load settings, if config file exists;Try load settings, if config file exists
+DocStr12082;Save settings into {0} if it is defined;Save settings into {0} if it is defined
+DocStr12083;Category order;Category order
+DocStr12084;Market depth action triggers;Market depth action triggers
+DocStr12085;Mouse left click;Mouse left click
+DocStr12086;Mouse left double click;Mouse left double click
+DocStr12087;Mouse right click;Mouse right click
+DocStr12088;Mouse right double click;Mouse right double click
+DocStr12089;The command for sparse market depth;The command for sparse market depth
+DocStr12090;The command for group market depth;The command for group market depth
+DocStr12091;The command for reset sparsing market depth;The command for reset sparsing market depth
+DocStr12092;The command for reset grouping market depth;The command for reset grouping market depth
+DocStr12093;Registering order;Registering order
+DocStr12094;Moving order to new price;Moving order to new price
+DocStr12095;Canceling order;Canceling order
+DocStr12096;Allow own orders drag and drop;Allow own orders drag and drop
+DocStr12097;User own order state animations;User own order state animations
+DocStr12098;True if user is dragging an order;True if user is dragging an order
+DocStr12099;Register animation color;Register animation color
+DocStr12100;Cancel animation color;Cancel animation color
+DocStr12101;Error animation color;Error animation color
+DocStr12102;Fill buy animation color;Fill buy animation color
+DocStr12103;Fill sell animation color;Fill sell animation color
+DocStr12104;Fill text color;Fill text color
+DocStr12105;Animation duration;Animation duration
+DocStr12106;Execute order register trigger;Execute order register trigger
+DocStr12107;Show order fill animation;Show order fill animation
+DocStr12108;To handle an order register/move/cancel fail;To handle an order register/move/cancel fail
+DocStr12109;Cancel orders that were added to this instance of {0}. This method does not cancel orders by itself. It just notifies subscribers with {1} event;Cancel orders that were added to this instance of {0}. This method does not cancel orders by itself. It just notifies subscribers with {1} event
+DocStr12110;The visual panel for display {0};The visual panel for display {0}
+DocStr12111;The panel for edit credentials;The panel for edit credentials
+DocStr12112;Save command;Save command
+DocStr12113;Text for Save button;Text for Save button
+DocStr12114;Save button clicked;Save button clicked
+DocStr12115;Show 'active' checkbox;Show 'active' checkbox
+DocStr12116;Is working time enabled;Is working time enabled
+DocStr12117;Container for routed commands;Container for routed commands
+DocStr12118;The command for orders cancellation;The command for orders cancellation
+DocStr12119;The panel for creation and editing of symbols mapping;The panel for creation and editing of symbols mapping
+DocStr12120;Settings window;Settings window
+DocStr12121;Settings for selected strategy command;Settings for selected strategy command
+DocStr12122;Updated time;Updated time
+DocStr12123;Total messages count;Total messages count
+DocStr12124;Last message time;Last message time
+DocStr12125;The number of errors;The number of errors
+DocStr12126;The number of bytes received;The number of bytes received
+DocStr12127;The number of bytes sent;The number of bytes sent
+DocStr12128;Refresh subscription state;Refresh subscription state
+DocStr12129;Selected subscriptions;Selected subscriptions
+DocStr12130;Selected session;Selected session
+DocStr12131;Existing subscription suspending event;Existing subscription suspending event
+DocStr12132;Existing subscription resuming event;Existing subscription resuming event
+DocStr12133;Existing session editing event;Existing session editing event
+DocStr12134;Existing session removing event;Existing session removing event
+DocStr12135;Existing session suspending event;Existing session suspending event
+DocStr12136;Existing session resuming event;Existing session resuming event
+DocStr12137;Default dark theme;Default dark theme
+DocStr12138;Default light theme;Default light theme
+DocStr12139;Invert current theme;Invert current theme
+DocStr12140;Theme xaml helper;Theme xaml helper
+DocStr12141;Singleton instance of the class;Singleton instance of the class
+DocStr12142;Whether current theme is dark;Whether current theme is dark
+DocStr12143;Unit value;Unit value
+DocStr12144;Unit type;Unit type
+DocStr12145;Edit settings for {0};Edit settings for {0}
+DocStr12146;Task scheduler used WPF timer;Task scheduler used WPF timer
+DocStr12147;By default is 30 second;By default is 30 second
+DocStr12148;Starting tasks event;Starting tasks event
+DocStr12149;Stopping tasks event;Stopping tasks event
+DocStr12150;Specify icon, located in S#.Xaml library;Specify icon, located in S#.Xaml library
+DocStr12151;Icon url;Icon url
+DocStr12152;Active sessions;Active sessions
+DocStr12153;Session connected event;Session connected event
+DocStr12154;Get subscription for the specified session;Get subscription for the specified session
+DocStr12155;Client subscription changed event;Client subscription changed event
+DocStr12156;Add subscription;Add subscription
+DocStr12157;Remove subscription;Remove subscription
+DocStr12158;{0} if subscription was found, otherwise {1};{0} if subscription was found, otherwise {1}
+DocStr12159;Suspend subscription;Suspend subscription
+DocStr12160;Resume subscription;Resume subscription
+DocStr12161;Suspend session;Suspend session
+DocStr12162;Resume session;Resume session
+DocStr12163;Disconnect session;Disconnect session
+DocStr12164;Server session;Server session
+DocStr12165;Interface, described snapshots holder;Interface, described snapshots holder
+DocStr12166;Try get snapshot for the specified security;Try get snapshot for the specified security
+DocStr12167;Process {0} change;Process {0} change
+DocStr12168;{0} change;{0} change
+DocStr12169;Need response value;Need response value
+DocStr12170;Reset snapshot for the specified security;Reset snapshot for the specified security
+DocStr12171;Reuse session identifier;Reuse session identifier
+DocStr12172;{0} snapshots holder;{0} snapshots holder
+DocStr12173;Extensions;Extensions
+DocStr12174;Server subscription;Server subscription
+DocStr12175;Subscription holder;Subscription holder
+DocStr12176;Subscription type;Subscription type
+DocStr12177;Session type;Session type
+DocStr12178;Request identifier type;Request identifier type
+DocStr12179;Subscription changed event;Subscription changed event
+DocStr12180;Add new subscription;Add new subscription
+DocStr12181;Add unsubscribe request identifier;Add unsubscribe request identifier
+DocStr12182;Remove session;Remove session
+DocStr12183;Try get subscription by the specified identifier;Try get subscription by the specified identifier
+DocStr12184;Determines has subscription for the specified data type and security;Determines has subscription for the specified data type and security
+DocStr12185;Try get and stop subscription by the specified identifier;Try get and stop subscription by the specified identifier
+DocStr12186;Try get subscription by the specified identifier and swith into new state;Try get subscription by the specified identifier and swith into new state
+DocStr12187;Get subscription for the specified message;Get subscription for the specified message
+DocStr12188;Extra argument;Extra argument
+DocStr12189;Responses;Responses
+DocStr12190;Processed level1 securities;Processed level1 securities
+DocStr12191;{0} in-memory channel;{0} in-memory channel
+DocStr12192;Authorize by token;Authorize by token
+DocStr12193;Disable refresh;Disable refresh
+DocStr12194;Try get session id by the specified login;Try get session id by the specified login
+DocStr12195;Community helper;Community helper
+DocStr12196;Feedback;Feedback
+DocStr12197;Find licenses;Find licenses

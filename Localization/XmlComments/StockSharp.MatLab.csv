@@ -22,11 +22,10 @@ T:StockSharp.MatLab.CandleEventArgs/summary;DocStr10815
 P:StockSharp.MatLab.CandleEventArgs.Series/summary;CandlesSeries
 P:StockSharp.MatLab.CandleEventArgs.Candle/summary;DocStr491
 T:StockSharp.MatLab.MatLabConnector/summary;DocStr4036
-M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.Algo.Connector)/summary;DocStr1
-M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.Algo.Connector)/param/realConnector;DocStr4037
-M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.Algo.Connector,System.Boolean)/summary;DocStr1
-M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.Algo.Connector,System.Boolean)/param/realConnector;DocStr4037
-M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.Algo.Connector,System.Boolean)/param/ownTrader;DocStr2245
+M:StockSharp.MatLab.MatLabConnector.#ctor/summary;DocStr1
+M:StockSharp.MatLab.MatLabConnector.AddAdapter(StockSharp.Messages.IMessageAdapter,System.String)/summary;DocStr12024
+M:StockSharp.MatLab.MatLabConnector.AddAdapter(StockSharp.Messages.IMessageAdapter,System.String)/param/adapter;Adapter
+M:StockSharp.MatLab.MatLabConnector.AddAdapter(StockSharp.Messages.IMessageAdapter,System.String)/param/initString;DocStr12025
 P:StockSharp.MatLab.MatLabConnector.RealConnector/summary;DocStr4037
 E:StockSharp.MatLab.MatLabConnector.Connected/summary;DocStr890
 E:StockSharp.MatLab.MatLabConnector.ConnectionError/summary;DocStr892
