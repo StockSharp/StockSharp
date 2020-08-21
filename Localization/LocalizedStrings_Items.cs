@@ -17378,12 +17378,12 @@ namespace StockSharp.Localization
 		public static string Str1701Params => GetString(Str1701ParamsKey);
 
 		/// <summary>
-		/// For type {0} no information was found.
+		/// For {0} no information was found.
 		/// </summary>
 		public const string Str1702ParamsKey = nameof(Str1702Params);
 
 		/// <summary>
-		/// For type {0} no information was found.
+		/// For {0} no information was found.
 		/// </summary>
 		public static string Str1702Params => GetString(Str1702ParamsKey);
 

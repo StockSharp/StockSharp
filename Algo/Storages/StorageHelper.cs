@@ -305,7 +305,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var metaInfo = storage.GetMetaInfo(date);
 
-					if (metaInfo == null)
+					if (metaInfo is null)
 						continue;
 
 					if (metaInfo.FirstTime >= time && max.Date != min.Date)
@@ -365,6 +365,18 @@ namespace StockSharp.Algo.Storages
 
 			var firstInfo = storage.GetMetaInfo(first);
 			var lastInfo = first == last ? firstInfo : storage.GetMetaInfo(last);
+
+			if (firstInfo is null)
+			{
+				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.Str1702Params.Put(first));
+				return null;
+			}
+
+			if (lastInfo is null)
+			{
+				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.Str1702Params.Put(last));
+				return null;
+			}
 
 			first = firstInfo.FirstTime;
 			last = lastInfo.LastTime;
@@ -740,10 +752,7 @@ namespace StockSharp.Algo.Storages
 				_toMessage = toMessage ?? throw new ArgumentNullException(nameof(toMessage));
 			}
 
-			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
-			{
-				return _messageStorage.GetMetaInfo(date);
-			}
+			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => _messageStorage.GetMetaInfo(date);
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => _messageStorage.Serializer;
 

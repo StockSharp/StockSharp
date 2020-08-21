@@ -1738,7 +1738,7 @@ Str1698Params;Receiving positions for {0} was rejected. Error code {1}, error te
 Str1699Params;Receiving positions for {0} was rejected. Error code {1}.;Получение позиций для {0} было отвергнуто. Код ошибки {1}.
 Str1700Params;Transaction ID {0} is out of range.;Идентификатор транзакции {0} вне допустимого диапазона.
 Str1701Params;Error code {0} Message {1};Код ошибки {0} Сообщение {1}
-Str1702Params;For type {0} no information was found.;Для типа {0} не было найдено информации.
+Str1702Params;For {0} no information was found.;Для {0} не было найдено информации.
 Str1703Params;Data for table '{0}' was exported in a smaller format. Value for column '{1}' was not found. The number of columns is equal to '{2}', column index '{3}'.;Данные для таблицы '{0}' экспортировались в меньшем формате. Не было найдено значение для колонки '{1}'. Количество колонок равно '{2}', индекс колонки '{3}'.
 Str1704Params;Column {0} cannot be added to this table since it is being added to another.;Колонка {0} не может быть добавлена в данную таблицу, так как она добавляется в другую.
 Str1705Params;Column {0} is already added.;Колонка {0} уже добавлена.
