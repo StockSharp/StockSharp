@@ -2665,13 +2665,14 @@ namespace StockSharp.Messages
 			var level1 = new Level1ChangeMessage
 			{
 				SecurityId = message.SecurityId,
-				ServerTime = message.OpenTime,
+				ServerTime = message.CloseTime == default ? message.OpenTime : message.CloseTime,
 			}
 			.Add(Level1Fields.OpenPrice, message.OpenPrice)
 			.Add(Level1Fields.HighPrice, message.HighPrice)
 			.Add(Level1Fields.LowPrice, message.LowPrice)
 			.Add(Level1Fields.ClosePrice, message.ClosePrice)
-			.Add(Level1Fields.Volume, message.TotalVolume)
+			.TryAdd(Level1Fields.Volume, message.TotalVolume)
+			.TryAdd(Level1Fields.TradesCount, message.TotalTicks)
 			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true);
 
 			return level1;
@@ -2692,6 +2693,7 @@ namespace StockSharp.Messages
 			.TryAdd(Level1Fields.LastTradeId, message.TradeId)
 			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
 			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
+			.TryAdd(Level1Fields.LastTradeUpDown, message.IsUpTick)
 			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true)
 			.TryAdd(Level1Fields.LastTradeOrigin, message.OriginSide);
 
