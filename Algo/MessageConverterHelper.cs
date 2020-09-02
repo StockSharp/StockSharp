@@ -302,6 +302,7 @@ namespace StockSharp.Algo
 				Currency = trade.Currency,
 				SeqNum = trade.SeqNum,
 				BuildFrom = trade.BuildFrom,
+				Yield = trade.Yield,
 			};
 		}
 
@@ -1300,6 +1301,7 @@ namespace StockSharp.Algo
 			trade.Currency = message.Currency;
 			trade.SeqNum = message.SeqNum;
 			trade.BuildFrom = message.BuildFrom;
+			trade.Yield = message.Yield;
 
 			return trade;
 		}
