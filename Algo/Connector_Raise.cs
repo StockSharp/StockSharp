@@ -940,15 +940,26 @@ namespace StockSharp.Algo
 
 		private bool? RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt)
 		{
-			return RaiseReceived(entity, _subscriptionManager.GetSubscriptions(message), evt);
+			return RaiseReceived(entity, message, evt, out _);
+		}
+
+		private bool? RaiseReceived<TEntity>(TEntity entity, ISubscriptionIdMessage message, Action<Subscription, TEntity> evt, out bool? anyCanOnline)
+		{
+			return RaiseReceived(entity, _subscriptionManager.GetSubscriptions(message), evt, out anyCanOnline);
 		}
 
 		private bool? RaiseReceived<TEntity>(TEntity entity, IEnumerable<Subscription> subscriptions, Action<Subscription, TEntity> evt)
+		{
+			return RaiseReceived(entity, subscriptions, evt, out _);
+		}
+
+		private bool? RaiseReceived<TEntity>(TEntity entity, IEnumerable<Subscription> subscriptions, Action<Subscription, TEntity> evt, out bool? anyCanOnline)
 		{
 			if (subscriptions is null)
 				throw new ArgumentNullException(nameof(subscriptions));
 
 			bool? anyOnline = null;
+			anyCanOnline = null;
 
 			foreach (var subscription in subscriptions)
 			{
@@ -956,6 +967,8 @@ namespace StockSharp.Algo
 
 				if (subscription.State == SubscriptionStates.Online)
 					anyOnline = true;
+				else if (subscription.State == SubscriptionStates.Active)
+					anyCanOnline = subscription.SubscriptionMessage.To is null;
 
 				evt?.Invoke(subscription, entity);
 			}

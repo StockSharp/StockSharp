@@ -1213,6 +1213,9 @@ namespace StockSharp.Algo
 			}
 		}
 
+		public bool HasMarketDepth(Security security, QuoteChangeMessage message)
+			=> _marketDepths.ContainsKey(Tuple.Create(security, message.IsFiltered));
+
 		public void UpdateMarketDepth(Security security, QuoteChangeMessage message)
 		{
 			lock (_marketDepths.SyncRoot)
@@ -1332,6 +1335,9 @@ namespace StockSharp.Algo
 
 			return Enumerable.Empty<Level1Fields>();
 		}
+
+		public bool HasLevel1Info(Security security)
+			=> _securityValues.ContainsKey(security);
 
 		public Level1Info GetSecurityValues(Security security, DateTimeOffset serverTime)
 			=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));

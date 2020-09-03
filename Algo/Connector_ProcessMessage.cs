@@ -971,10 +971,13 @@ namespace StockSharp.Algo
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
 		{
-			if (RaiseReceived(message, message, RaiseLevel1Received) == false)
-				return;
-
 			var security = EnsureGetSecurity(message);
+
+			if (RaiseReceived(message, message, RaiseLevel1Received, out var anyCanOnline) == false)
+			{
+				if (anyCanOnline != true || _entityCache.HasLevel1Info(security))
+					return;
+			}
 
 			if (UpdateSecurityByLevel1)
 			{
@@ -1187,6 +1190,9 @@ namespace StockSharp.Algo
 					}
 					else
 					{
+						if (subscription.State == SubscriptionStates.Active && subscription.SubscriptionMessage.To is null && !_entityCache.HasMarketDepth(security, message))
+							_entityCache.UpdateMarketDepth(security, message);
+
 						if (hasReceivedEvt)
 							depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security));
 					}
