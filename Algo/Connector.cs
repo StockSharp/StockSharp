@@ -590,6 +590,7 @@ namespace StockSharp.Algo
 			return depth;
 		}
 
+		[Obsolete]
 		private MarketDepth GetMarketDepth(Security security, bool isFiltered)
 		{
 			return GetMarketDepth(security, new QuoteChangeMessage
