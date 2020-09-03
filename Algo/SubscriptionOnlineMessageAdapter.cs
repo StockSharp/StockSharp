@@ -477,6 +477,15 @@
 						};
 					}
 				}
+
+				if (sendOutMsgs != null)
+				{
+					foreach (var sendOutMsg in sendOutMsgs)
+					{
+						this.AddInfoLog("Out: {0}", sendOutMsg);
+						RaiseNewOutMessage(sendOutMsg);
+					}
+				}
 			}
 
 			var retVal = true;
@@ -485,15 +494,6 @@
 			{
 				this.AddInfoLog("In: {0}", sendInMsg);
 				retVal = base.OnSendInMessage((Message)sendInMsg);
-			}
-
-			if (sendOutMsgs != null)
-			{
-				foreach (var sendOutMsg in sendOutMsgs)
-				{
-					this.AddInfoLog("Out: {0}", sendOutMsg);
-					RaiseNewOutMessage(sendOutMsg);	
-				}
 			}
 
 			return retVal;
