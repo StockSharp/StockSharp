@@ -1863,6 +1863,7 @@ P:StockSharp.Fix.Native.ExecutionReport.MsgSeqNum/summary;DocStr608
 P:StockSharp.Fix.Native.ExecutionReport.SecondaryOrderId/summary;DocStr608
 P:StockSharp.Fix.Native.ExecutionReport.StrategyTypeId/summary;DocStr608
 P:StockSharp.Fix.Native.ExecutionReport.Leverage/summary;DocStr608
+P:StockSharp.Fix.Native.ExecutionReport.DisplayQty/summary;DocStr608
 P:StockSharp.Fix.Native.ExecutionReport.ExtraFields/summary;DocStr11856
 T:StockSharp.Fix.Native.Extensions/summary;DocStr11857
 F:StockSharp.Fix.Native.Extensions.DateFormat/summary;DocStr11858
@@ -2021,6 +2022,7 @@ M:StockSharp.Fix.Native.Extensions.WriteHandlInst(StockSharp.Fix.Native.IFixWrit
 F:StockSharp.Fix.Native.Extensions.Commission/summary;DocStr608
 F:StockSharp.Fix.Native.Extensions.RealizedPnL/summary;DocStr608
 F:StockSharp.Fix.Native.Extensions.UnrealizedPnL/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.Leverage/summary;DocStr608
 M:StockSharp.Fix.Native.Extensions.IsSubscribe(System.Nullable{System.Char})/summary;DocStr8644
 M:StockSharp.Fix.Native.Extensions.IsSubscribe(System.Nullable{System.Char})/param/type;DocStr65
 M:StockSharp.Fix.Native.Extensions.IsSubscribe(System.Nullable{System.Char})/returns;DocStr65
@@ -2584,6 +2586,7 @@ F:StockSharp.Fix.Native.FixTags.Product/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.CFICode/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.CommCurrency/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NestedPartyID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.SecondaryClOrdID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrderCapacity/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrderRestrictions/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MassCancelRequestType/summary;DocStr8459
@@ -2686,6 +2689,7 @@ F:StockSharp.Fix.Native.FixTags.ManualOrderIndicator/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.AggressorIndicator/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ApplVerId/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.DefaultApplVerID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.DisplayQty/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MaxTradeVol/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityGroup/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ApplId/summary;DocStr8459
@@ -2894,6 +2898,7 @@ P:StockSharp.Fix.Native.MDEntry.UpTicks/summary;TickUpCount
 P:StockSharp.Fix.Native.MDEntry.DownTicks/summary;TickDownCount
 P:StockSharp.Fix.Native.MDEntry.TotalTicks/summary;TickCount
 P:StockSharp.Fix.Native.MDEntry.PriceLevels/summary;DocStr718
+P:StockSharp.Fix.Native.MDEntry.Yield/summary;Str321
 T:StockSharp.Fix.Native.ScaledNumber/summary;DocStr11899
 M:StockSharp.Fix.Native.ScaledNumber.#ctor(System.Int32,System.Int64)/summary;DocStr1
 M:StockSharp.Fix.Native.ScaledNumber.#ctor(System.Int32,System.Int64)/param/exponent;DocStr11900

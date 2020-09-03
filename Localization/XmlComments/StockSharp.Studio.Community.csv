@@ -355,6 +355,10 @@ M:StockSharp.Community.INotificationService.GetFeedbacks(System.Guid,System.Int6
 M:StockSharp.Community.INotificationService.GetProducts(System.Guid)/summary;DocStr11752
 M:StockSharp.Community.INotificationService.GetProducts(System.Guid)/param/sessionId;DocStr138
 M:StockSharp.Community.INotificationService.GetProducts(System.Guid)/returns;DocStr11619
+M:StockSharp.Community.INotificationService.GetProducts2(System.Guid,System.Boolean)/summary;DocStr11752
+M:StockSharp.Community.INotificationService.GetProducts2(System.Guid,System.Boolean)/param/sessionId;DocStr138
+M:StockSharp.Community.INotificationService.GetProducts2(System.Guid,System.Boolean)/param/isEnglish;DocStr9195
+M:StockSharp.Community.INotificationService.GetProducts2(System.Guid,System.Boolean)/returns;DocStr11619
 T:StockSharp.Community.IProfileClient/summary;DocStr11164
 M:StockSharp.Community.IProfileClient.CreateProfile(StockSharp.Messages.UserInfoMessage)/summary;DocStr3038
 M:StockSharp.Community.IProfileClient.CreateProfile(StockSharp.Messages.UserInfoMessage)/param/profile;DocStr3028

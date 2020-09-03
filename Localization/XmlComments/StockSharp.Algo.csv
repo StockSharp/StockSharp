@@ -35,6 +35,7 @@ P:StockSharp.Algo.BasketMessageAdapter.IsRestoreSubscriptionOnErrorReconnect/sum
 P:StockSharp.Algo.BasketMessageAdapter.IsRestoreSubscriptionOnErrorReconnect/remarks;DocStr10906
 P:StockSharp.Algo.BasketMessageAdapter.SuppressReconnectingErrors/summary;DocStr10373
 P:StockSharp.Algo.BasketMessageAdapter.SupportCandlesCompression/summary;DocStr9304
+P:StockSharp.Algo.BasketMessageAdapter.Level1Extend/summary;DocStr9304
 P:StockSharp.Algo.BasketMessageAdapter.SendFinishedCandlesImmediatelly/summary;DocStr608
 P:StockSharp.Algo.BasketMessageAdapter.SupportBuildingFromOrderLog/summary;DocStr9304
 P:StockSharp.Algo.BasketMessageAdapter.SupportOrderBookTruncate/summary;DocStr9304
@@ -3113,6 +3114,13 @@ M:StockSharp.Algo.Level1DepthBuilderAdapter.SendInMessage(StockSharp.Messages.Me
 M:StockSharp.Algo.Level1DepthBuilderAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Level1DepthBuilderAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.Level1DepthBuilderAdapter.Clone/returns;DocStr1116
+T:StockSharp.Algo.Level1ExtendBuilderAdapter/summary;DocStr12198
+M:StockSharp.Algo.Level1ExtendBuilderAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
+M:StockSharp.Algo.Level1ExtendBuilderAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr9208
+M:StockSharp.Algo.Level1ExtendBuilderAdapter.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Level1ExtendBuilderAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Level1ExtendBuilderAdapter.Clone/summary;DocStr643
+M:StockSharp.Algo.Level1ExtendBuilderAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.LookupTrackingMessageAdapter/summary;DocStr11419
 M:StockSharp.Algo.LookupTrackingMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.LookupTrackingMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr9208
@@ -3967,9 +3975,10 @@ T:StockSharp.Algo.OrderBookIncrementBuilder/summary;DocStr11956
 M:StockSharp.Algo.OrderBookIncrementBuilder.#ctor(StockSharp.Messages.SecurityId)/summary;DocStr1
 M:StockSharp.Algo.OrderBookIncrementBuilder.#ctor(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 F:StockSharp.Algo.OrderBookIncrementBuilder.SecurityId/summary;SecurityId
-M:StockSharp.Algo.OrderBookIncrementBuilder.TryApply(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr11957
-M:StockSharp.Algo.OrderBookIncrementBuilder.TryApply(StockSharp.Messages.QuoteChangeMessage)/param/change;DocStr11958
-M:StockSharp.Algo.OrderBookIncrementBuilder.TryApply(StockSharp.Messages.QuoteChangeMessage)/returns;DocStr11959
+M:StockSharp.Algo.OrderBookIncrementBuilder.TryApply(StockSharp.Messages.QuoteChangeMessage,System.Int64)/summary;DocStr11957
+M:StockSharp.Algo.OrderBookIncrementBuilder.TryApply(StockSharp.Messages.QuoteChangeMessage,System.Int64)/param/change;DocStr11958
+M:StockSharp.Algo.OrderBookIncrementBuilder.TryApply(StockSharp.Messages.QuoteChangeMessage,System.Int64)/param/subscriptionId;DocStr11068
+M:StockSharp.Algo.OrderBookIncrementBuilder.TryApply(StockSharp.Messages.QuoteChangeMessage,System.Int64)/returns;DocStr11959
 T:StockSharp.Algo.OrderBookIncrementMessageAdapter/summary;DocStr11314
 M:StockSharp.Algo.OrderBookIncrementMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.OrderBookIncrementMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr8563

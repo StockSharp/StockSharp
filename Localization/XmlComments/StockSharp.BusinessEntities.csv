@@ -1092,6 +1092,7 @@ P:StockSharp.BusinessEntities.Trade.Currency/summary;Str382
 P:StockSharp.BusinessEntities.Trade.SeqNum/summary;SequenceNumber
 P:StockSharp.BusinessEntities.Trade.SeqNum/remarks;DocStr11904
 P:StockSharp.BusinessEntities.Trade.BuildFrom/summary;DocStr11905
+P:StockSharp.BusinessEntities.Trade.Yield/summary;Str321
 P:StockSharp.BusinessEntities.Trade.ExtensionInfo/inheritdoc;DocStr8459
 M:StockSharp.BusinessEntities.Trade.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Trade.Clone/returns;DocStr1116
