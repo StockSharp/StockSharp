@@ -1218,7 +1218,7 @@ namespace StockSharp.Algo
 			var fromLevel1 = message.BuildFrom == DataType.Level1;
 			var time = message.ServerTime;
 
-			if (!fromLevel1 && (bestBid != null || bestAsk != null))
+			if (!fromLevel1 && !Adapter.Level1Extend && (bestBid != null || bestAsk != null))
 			{
 				var info = _entityCache.GetSecurityValues(security, time);
 

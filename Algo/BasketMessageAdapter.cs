@@ -697,6 +697,11 @@ namespace StockSharp.Algo
 		public bool SupportCandlesCompression { get; set; } = true;
 
 		/// <summary>
+		/// Use <see cref="Level1ExtendBuilderAdapter"/>.
+		/// </summary>
+		public bool Level1Extend { get; set; }
+
+		/// <summary>
 		/// <see cref="CandleBuilderMessageAdapter.SendFinishedCandlesImmediatelly"/>.
 		/// </summary>
 		public bool SendFinishedCandlesImmediatelly { get; set; }
@@ -885,6 +890,11 @@ namespace StockSharp.Algo
 			if (adapter.GenerateOrderBookFromLevel1 && !adapter.SupportedMarketDataTypes.Contains(DataType.MarketDepth))
 			{
 				adapter = ApplyOwnInner(new Level1DepthBuilderAdapter(adapter));
+			}
+
+			if (Level1Extend && !adapter.SupportedMarketDataTypes.Contains(DataType.Level1))
+			{
+				adapter = ApplyOwnInner(new Level1ExtendBuilderAdapter(adapter));
 			}
 
 			if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
@@ -1368,6 +1378,8 @@ namespace StockSharp.Algo
 
 							return false;
 						}
+						else if (mdMsg.DataType2 == DataType.Level1)
+							return Level1Extend && a.IsMarketDataTypeSupported(mdMsg.BuildFrom ?? DataType.MarketDepth);
 						else if (mdMsg.DataType2 == DataType.Ticks)
 							return a.IsMarketDataTypeSupported(DataType.OrderLog);
 						else
@@ -2186,6 +2198,7 @@ namespace StockSharp.Algo
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,
+				Level1Extend = Level1Extend,
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
