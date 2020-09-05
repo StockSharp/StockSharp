@@ -2328,6 +2328,25 @@ namespace StockSharp.Messages
 			};
 		}
 
+		/// <summary>
+		/// To check, are there <see cref="DataType.CandleTimeFrame"/> in the level1 data.
+		/// </summary>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>The test result.</returns>
+		public static bool IsContainsCandle(this Level1ChangeMessage level1)
+		{
+			if (level1 is null)
+				throw new ArgumentNullException(nameof(level1));
+
+			var changes = level1.Changes;
+
+			return
+				changes.ContainsKey(Level1Fields.OpenPrice) ||
+				changes.ContainsKey(Level1Fields.HighPrice) ||
+				changes.ContainsKey(Level1Fields.LowPrice) ||
+				changes.ContainsKey(Level1Fields.ClosePrice);
+		}
+
 		private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
 		{
 			private class OrderBookEnumerator : IEnumerator<QuoteChangeMessage>
