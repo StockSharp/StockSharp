@@ -129,8 +129,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IDictionary<string, Exception> Init()
 		{
-			if (!Directory.Exists(_path))
-				Directory.CreateDirectory(_path);
+			Directory.CreateDirectory(_path);
 
 			var errors = _inMemory.Init();
 
