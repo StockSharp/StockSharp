@@ -161,7 +161,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void Subscribe(Subscription subscription)
+		public virtual void Subscribe(Subscription subscription)
 		{
 			Subscribe(subscription, false);
 		}
@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public void UnSubscribe(Subscription subscription)
+		public virtual void UnSubscribe(Subscription subscription)
 		{
 			SubscriptionProvider.UnSubscribe(subscription);
 		}
