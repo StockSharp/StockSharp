@@ -91,7 +91,9 @@ namespace StockSharp.Algo
 			protected override bool OnRemoving(IMessageAdapter item)
 			{
 				_enables.Remove(item);
-				_parent._adapterWrappers.Remove(item);
+				
+				if (item.Parent == _parent)
+					item.Parent = null;
 
 				lock (_parent._connectedResponseLock)
 					_parent._adapterStates.Remove(item);
@@ -102,6 +104,12 @@ namespace StockSharp.Algo
 			protected override bool OnClearing()
 			{
 				_enables.Clear();
+
+				_parent._adapterWrappers.CachedKeys.ForEach(a =>
+				{
+					if (a.Parent == _parent)
+						a.Parent = null;
+				});
 				_parent._adapterWrappers.Clear();
 
 				lock (_parent._connectedResponseLock)

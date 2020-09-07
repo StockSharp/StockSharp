@@ -76,6 +76,13 @@ namespace StockSharp.Logging
 			get => App?.Parent;
 			set => throw new NotSupportedException();
 		}
+
+		/// <inheritdoc />
+		public event Action<ILogSource> ParentRemoved
+		{
+			add { }
+			remove { }
+		}
 		
 		LogLevels ILogSource.LogLevel
 		{

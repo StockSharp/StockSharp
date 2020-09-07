@@ -234,6 +234,13 @@ namespace StockSharp.Messages
 			set => InnerAdapter.Parent = value;
 		}
 
+		/// <inheritdoc />
+		public event Action<ILogSource> ParentRemoved
+		{
+			add { }
+			remove { }
+		}
+
 		LogLevels ILogSource.LogLevel
 		{
 			get => InnerAdapter.LogLevel;

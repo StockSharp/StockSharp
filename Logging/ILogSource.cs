@@ -46,6 +46,11 @@ namespace StockSharp.Logging
 		ILogSource Parent { get; set; }
 
 		/// <summary>
+		/// <see cref="Parent"/> removed.
+		/// </summary>
+		event Action<ILogSource> ParentRemoved;
+
+		/// <summary>
 		/// The logging level for the source.
 		/// </summary>
 		LogLevels LogLevel { get; set; }
@@ -131,8 +136,14 @@ namespace StockSharp.Logging
 					throw new ArgumentException(LocalizedStrings.CyclicDependency.Put(this), nameof(value));
 
 				_parent = value;
+
+				if (_parent == null)
+					ParentRemoved?.Invoke(this);
 			}
 		}
+
+		/// <inheritdoc />
+		public event Action<ILogSource> ParentRemoved;
 
 		/// <inheritdoc />
 		[Display(
