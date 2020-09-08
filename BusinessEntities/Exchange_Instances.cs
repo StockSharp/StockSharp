@@ -1181,5 +1181,14 @@ namespace StockSharp.BusinessEntities
 			Name = "QNDL",
 			FullNameLoc = LocalizedStrings.QuandlKey,
 		};
+
+		/// <summary>
+		/// Information about <see cref="QTFD"/>.
+		/// </summary>
+		public static Exchange QTFD { get; } = new Exchange
+		{
+			Name = "QTFD",
+			FullNameLoc = LocalizedStrings.QuantFeed,
+		};
 	}
 }
