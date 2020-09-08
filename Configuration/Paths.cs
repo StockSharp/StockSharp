@@ -26,7 +26,7 @@
 			AppDataPath = settingsPath.IsEmpty() ? Path.Combine(CompanyPath, AppName2) : settingsPath.ToFullPathIfNeed();
 
 			PlatformConfigurationFile = Path.Combine(AppDataPath, "platform_config.xml");
-			ProxyConfigurationFile = Path.Combine(AppDataPath, "proxy_config.xml");
+			ProxyConfigurationFile = Path.Combine(CompanyPath, "proxy_config.xml");
 			SecurityNativeIdDir = Path.Combine(AppDataPath, "NativeId");
 			SecurityMappingDir = Path.Combine(AppDataPath, "Symbol mapping");
 			SecurityExtendedInfo = Path.Combine(AppDataPath, "Extended info");
