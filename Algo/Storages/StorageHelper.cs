@@ -927,6 +927,11 @@ namespace StockSharp.Algo.Storages
 		public const string SecurityVerticalBarSeparator = "##VBAR##";
 
 		/// <summary>
+		/// The delimiter, replacing '?' in the path for instruments with id like AA-CA?SPB@SPBEX. Is equal to '##QSTN##'.
+		/// </summary>
+		public const string SecurityQuestionSeparator = "##QSTN##";
+
+		/// <summary>
 		/// The delimiter, replacing first '.' in the path for instruments with id like .AA-CA@SPBEX. Is equal to '##DOT##'.
 		/// </summary>
 		public const string SecurityFirstDot = "##DOT##";
@@ -942,6 +947,7 @@ namespace StockSharp.Algo.Storages
 			{ "*", SecurityStarSeparator },
 			{ ":", SecurityColonSeparator },
 			{ "|", SecurityVerticalBarSeparator },
+			{ "?", SecurityQuestionSeparator },
 		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
