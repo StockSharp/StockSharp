@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		public event Action<Connector, int, int, IEnumerable<Strategy>> ProgressChanged;
 
 		/// <summary>
-		/// Server time changed <see cref="Connector.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
+		/// Server time changed <see cref="ILogSource.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 		/// </summary>
 		public event Action<Connector, TimeSpan> MarketTimeChanged;
 

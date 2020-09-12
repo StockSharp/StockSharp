@@ -1866,7 +1866,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public override DateTimeOffset CurrentTime => Connector?.CurrentTime ?? TimeHelper.NowWithOffset;
+		public override DateTimeOffset CurrentTime => Connector?.CurrentTime ?? base.CurrentTime;
 
 		/// <inheritdoc />
 		protected override void RaiseLog(LogMessage message)

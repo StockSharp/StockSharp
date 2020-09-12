@@ -207,9 +207,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 		{
 		}
 
-		/// <inheritdoc />
-		public override DateTimeOffset CurrentTime => TimeHelper.NowWithOffset;
-
 		/// <summary>
 		/// Result panel.
 		/// </summary>
