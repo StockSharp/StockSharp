@@ -88,7 +88,8 @@ namespace StockSharp.Algo
 		/// <param name="logs">Logs.</param>
 		public static void ApplyNewState(this Order order, OrderStates state, ILogReceiver logs = null)
 		{
-			order.State = ((OrderStates?)order.State).ApplyNewState(state, order.TransactionId, logs);
+			((OrderStates?)order.State).VerifyOrderState(state, order.TransactionId, logs);
+			order.State = state;
 		}
 
 		/// <summary>
@@ -98,13 +99,15 @@ namespace StockSharp.Algo
 		/// <param name="newState">New state.</param>
 		/// <param name="transactionId">Transaction id.</param>
 		/// <param name="logs">Logs.</param>
-		/// <returns>New state.</returns>
-		public static OrderStates ApplyNewState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs = null)
+		/// <returns>Check result.</returns>
+		public static bool VerifyOrderState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs)
 		{
-			if (logs != null && currState != null && !_stateChangePossibilities[(int)currState.Value][(int)newState])
-				logs.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
+			var isInvalid = currState != null && !_stateChangePossibilities[(int)currState.Value][(int)newState];
 
-			return newState;
+			if (isInvalid)
+				logs?.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
+
+			return !isInvalid;
 		}
 
 		/// <summary>

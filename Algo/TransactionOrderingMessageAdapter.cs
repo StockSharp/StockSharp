@@ -342,7 +342,10 @@
 									snapshot.Balance = snapshot.Balance.ApplyNewBalance(execMsg.Balance.Value, transId, this);
 
 								if (execMsg.OrderState != null)
-									snapshot.OrderState = snapshot.OrderState.ApplyNewState(execMsg.OrderState.Value, transId, this);
+								{
+									if (snapshot.OrderState.VerifyOrderState(execMsg.OrderState.Value, transId, this))
+										snapshot.OrderState = execMsg.OrderState.Value;
+								}
 
 								if (execMsg.OrderStatus != null)
 									snapshot.OrderStatus = execMsg.OrderStatus;
