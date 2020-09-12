@@ -200,6 +200,7 @@ P:StockSharp.BusinessEntities.Exchange.IBKR/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.STSH/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.STRLG/summary;DocStr11334
 P:StockSharp.BusinessEntities.Exchange.QNDL/summary;DocStr11334
+P:StockSharp.BusinessEntities.Exchange.QTFD/summary;DocStr11334
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694

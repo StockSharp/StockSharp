@@ -16747,3 +16747,22 @@ DocStr12195;Community helper;Community helper
 DocStr12196;Feedback;Feedback
 DocStr12197;Find licenses;Find licenses
 DocStr12198;Level1 extend builder adapter;Level1 extend builder adapter
+DocStr12199;The delimiter, replacing '?' in the path for instruments with id like AA-CA?SPB@SPBEX. Is equal to '##QSTN##';The delimiter, replacing '?' in the path for instruments with id like AA-CA?SPB@SPBEX. Is equal to '##QSTN##'
+DocStr12200;Gain Futures FIX protocol dialect;Gain Futures FIX protocol dialect
+DocStr12201;Code to identify reason for an {0} message sent with {1}={2} or used when communicating an unsolicited cancel;Code to identify reason for an {0} message sent with {1}={2} or used when communicating an unsolicited cancel
+DocStr12202;GT corporate action;GT corporate action
+DocStr12203;GT renewal / restatement (no corporate action);GT renewal / restatement (no corporate action)
+DocStr12204;Verbal change;Verbal change
+DocStr12205;Repricing of order;Repricing of order
+DocStr12206;Broker option;Broker option
+DocStr12207;Partial decline of {0} (e.g. exchange initiated partial cancel);Partial decline of {0} (e.g. exchange initiated partial cancel)
+DocStr12208;Cancel on Trading Halt;Cancel on Trading Halt
+DocStr12209;Cancel on System Failure;Cancel on System Failure
+DocStr12210;Market (Exchange) option;Market (Exchange) option
+DocStr12211;Canceled, not best;Canceled, not best
+DocStr12212;Warehouse Recap;Warehouse Recap
+DocStr12213;Peg Refresh;Peg Refresh
+DocStr12214;{0} removed;{0} removed
+DocStr12215;To check, are there {0} in the level1 data;To check, are there {0} in the level1 data
+DocStr12216;{0} and {1} auto invoke;{0} and {1} auto invoke
+DocStr12217;Save changes into {0};Save changes into {0}

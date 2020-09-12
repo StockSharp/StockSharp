@@ -3194,6 +3194,7 @@ M:StockSharp.Algo.MarketRuleHelper.TryRemoveWithExclusive(StockSharp.Algo.IMarke
 M:StockSharp.Algo.MarketRuleHelper.Exclusive(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule)/summary;DocStr2028
 M:StockSharp.Algo.MarketRuleHelper.Exclusive(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule)/param/rule1;DocStr2029
 M:StockSharp.Algo.MarketRuleHelper.Exclusive(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule)/param/rule2;DocStr2030
+E:StockSharp.Algo.MarketRuleHelper.BaseComplexRule`2.ParentRemoved/inheritdoc;DocStr8459
 M:StockSharp.Algo.MarketRuleHelper.Or(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])/summary;DocStr2031
 M:StockSharp.Algo.MarketRuleHelper.Or(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])/param/rule;DocStr2029
 M:StockSharp.Algo.MarketRuleHelper.Or(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])/param/rules;DocStr2032
@@ -5761,6 +5762,7 @@ F:StockSharp.Algo.Storages.StorageHelper.SecurityPairSeparator/summary;DocStr865
 F:StockSharp.Algo.Storages.StorageHelper.SecurityStarSeparator/summary;DocStr8655
 F:StockSharp.Algo.Storages.StorageHelper.SecurityColonSeparator/summary;DocStr8656
 F:StockSharp.Algo.Storages.StorageHelper.SecurityVerticalBarSeparator/summary;DocStr9321
+F:StockSharp.Algo.Storages.StorageHelper.SecurityQuestionSeparator/summary;DocStr12199
 F:StockSharp.Algo.Storages.StorageHelper.SecurityFirstDot/summary;DocStr10589
 M:StockSharp.Algo.Storages.StorageHelper.SecurityIdToFolderName(System.String)/summary;DocStr2505
 M:StockSharp.Algo.Storages.StorageHelper.SecurityIdToFolderName(System.String)/param/id;SecurityId

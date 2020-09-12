@@ -60,10 +60,12 @@ T:StockSharp.Logging.BaseLogReceiver/summary;DocStr1579
 M:StockSharp.Logging.BaseLogReceiver.#ctor/summary;DocStr93
 T:StockSharp.Logging.GlobalLogReceiver/summary;DocStr12023
 P:StockSharp.Logging.GlobalLogReceiver.Instance/summary;DocStr9981
+E:StockSharp.Logging.GlobalLogReceiver.ParentRemoved/inheritdoc;DocStr8459
 T:StockSharp.Logging.ILogSource/summary;DocStr3954
 P:StockSharp.Logging.ILogSource.Id/summary;DocStr1678
 P:StockSharp.Logging.ILogSource.Name/summary;DocStr3955
 P:StockSharp.Logging.ILogSource.Parent/summary;DocStr3956
+E:StockSharp.Logging.ILogSource.ParentRemoved/summary;DocStr12214
 P:StockSharp.Logging.ILogSource.LogLevel/summary;DocStr3957
 P:StockSharp.Logging.ILogSource.CurrentTime/summary;DocStr910
 P:StockSharp.Logging.ILogSource.IsRoot/summary;DocStr3958
@@ -73,6 +75,7 @@ M:StockSharp.Logging.BaseLogSource.#ctor/summary;DocStr93
 P:StockSharp.Logging.BaseLogSource.Id/inheritdoc;DocStr8459
 P:StockSharp.Logging.BaseLogSource.Name/inheritdoc;DocStr8459
 P:StockSharp.Logging.BaseLogSource.Parent/inheritdoc;DocStr8459
+E:StockSharp.Logging.BaseLogSource.ParentRemoved/inheritdoc;DocStr8459
 P:StockSharp.Logging.BaseLogSource.LogLevel/inheritdoc;DocStr8459
 P:StockSharp.Logging.BaseLogSource.CurrentTime/inheritdoc;DocStr8459
 P:StockSharp.Logging.BaseLogSource.IsRoot/inheritdoc;DocStr8459

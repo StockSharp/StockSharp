@@ -1155,6 +1155,9 @@ M:StockSharp.Messages.Extensions.IsContainsTick(StockSharp.Messages.Level1Change
 M:StockSharp.Messages.Extensions.ToTick(StockSharp.Messages.Level1ChangeMessage)/summary;DocStr8449
 M:StockSharp.Messages.Extensions.ToTick(StockSharp.Messages.Level1ChangeMessage)/param/level1;DocStr8450
 M:StockSharp.Messages.Extensions.ToTick(StockSharp.Messages.Level1ChangeMessage)/returns;DocStr8451
+M:StockSharp.Messages.Extensions.IsContainsCandle(StockSharp.Messages.Level1ChangeMessage)/summary;DocStr12215
+M:StockSharp.Messages.Extensions.IsContainsCandle(StockSharp.Messages.Level1ChangeMessage)/param/level1;DocStr8450
+M:StockSharp.Messages.Extensions.IsContainsCandle(StockSharp.Messages.Level1ChangeMessage)/returns;DocStr8009
 M:StockSharp.Messages.Extensions.ToOrderBooks(System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1ChangeMessage})/summary;DocStr8453
 M:StockSharp.Messages.Extensions.ToOrderBooks(System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1ChangeMessage})/param/level1;DocStr8450
 M:StockSharp.Messages.Extensions.ToOrderBooks(System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1ChangeMessage})/returns;MarketDepths
@@ -1708,6 +1711,7 @@ M:StockSharp.Messages.MessageAdapterWrapper.Load(Ecng.Serialization.SettingsStor
 M:StockSharp.Messages.MessageAdapterWrapper.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Messages.MessageAdapterWrapper.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 P:StockSharp.Messages.MessageAdapterWrapper.Parent/inheritdoc;DocStr8459
+E:StockSharp.Messages.MessageAdapterWrapper.ParentRemoved/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.CurrentTime/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.ReConnectionSettings/inheritdoc;DocStr8459

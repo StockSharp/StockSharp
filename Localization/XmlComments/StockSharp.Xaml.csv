@@ -375,6 +375,8 @@ M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnLoaded(System.Object,System.Windows.RoutedEventArgs)/summary;DocStr8459
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnLoaded(System.Object,System.Windows.RoutedEventArgs)/param/sender;DocStr8459
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnLoaded(System.Object,System.Windows.RoutedEventArgs)/param/e;DocStr8459
+M:StockSharp.Xaml.GridControl.BaseGridControl.BeginEndUpdate(System.Action)/summary;DocStr12216
+M:StockSharp.Xaml.GridControl.BaseGridControl.BeginEndUpdate(System.Action)/param/action;Str722
 M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -1113,7 +1115,8 @@ P:StockSharp.Xaml.ProxySettings.ByPassOnLocal/summary;Str1442
 P:StockSharp.Xaml.ProxySettings.UseCredentials/summary;Str1444
 P:StockSharp.Xaml.ProxySettings.Login/summary;Login
 P:StockSharp.Xaml.ProxySettings.Password/summary;Password
-M:StockSharp.Xaml.ProxySettings.ApplyProxySettings/summary;DocStr8166
+M:StockSharp.Xaml.ProxySettings.ApplyProxySettings(System.Boolean)/summary;DocStr8166
+M:StockSharp.Xaml.ProxySettings.ApplyProxySettings(System.Boolean)/param/save;DocStr12217
 M:StockSharp.Xaml.ProxySettings.GetProxySettings/summary;DocStr8167
 M:StockSharp.Xaml.ProxySettings.GetProxySettings/returns;Str1435
 M:StockSharp.Xaml.ProxySettings.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
