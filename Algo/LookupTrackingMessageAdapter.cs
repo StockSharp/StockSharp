@@ -35,7 +35,7 @@ namespace StockSharp.Algo
 				try
 				{
 					if (diff <= TimeSpan.Zero)
-						return true;
+						return false;
 
 					var left = _left - diff;
 
