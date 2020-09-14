@@ -222,6 +222,8 @@
 
 					break;
 				}
+				case MessageTypes.SecurityLookup:
+					break;
 				case MessageTypes.OrderPairReplace:
 				{
 					var pairMsg = (OrderPairReplaceMessage)message;

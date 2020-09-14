@@ -43,7 +43,8 @@ M:StockSharp.Configuration.InMemoryMessageAdapterProvider.GetAdapters/returns;Do
 M:StockSharp.Configuration.InMemoryMessageAdapterProvider.CreateStockSharpAdapters(Ecng.Common.IdGenerator,System.String,System.Security.SecureString)/inheritdoc;DocStr8459
 M:StockSharp.Configuration.InMemoryMessageAdapterProvider.CreateTransportAdapter(Ecng.Common.IdGenerator)/inheritdoc;DocStr8459
 T:StockSharp.Configuration.Paths/summary;DocStr11264
-P:StockSharp.Configuration.Paths.Title/summary;DocStr11265
+F:StockSharp.Configuration.Paths.AppName/summary;DocStr11265
+P:StockSharp.Configuration.Paths.AppName2/summary;DocStr8459
 F:StockSharp.Configuration.Paths.CompanyPath/summary;DocStr11266
 F:StockSharp.Configuration.Paths.AppDataPath/summary;DocStr8071
 F:StockSharp.Configuration.Paths.PlatformConfigurationFile/summary;DocStr8072

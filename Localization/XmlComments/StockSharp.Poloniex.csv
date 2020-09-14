@@ -10,7 +10,6 @@ M:StockSharp.Poloniex.PoloniexMessageAdapter.OnSendInMessage(StockSharp.Messages
 P:StockSharp.Poloniex.PoloniexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Poloniex.PoloniexMessageAdapter.Key/inheritdoc;DocStr8459
 P:StockSharp.Poloniex.PoloniexMessageAdapter.Secret/inheritdoc;DocStr8459
-P:StockSharp.Poloniex.PoloniexMessageAdapter.BalanceCheckInterval/summary;BalanceCheckInterval
 M:StockSharp.Poloniex.PoloniexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Poloniex.PoloniexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Poloniex.PoloniexMessageAdapter.ToString/inheritdoc;DocStr8459

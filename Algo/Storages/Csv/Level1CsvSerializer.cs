@@ -65,12 +65,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if (pair.Value == typeof(DateTimeOffset))
 				{
-					var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
+					var date = (DateTimeOffset?)data.TryGet(field);
 					row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
 				}
 				else
 				{
-					row.Add(data.Changes.TryGetValue(field)?.ToString());
+					row.Add(data.TryGet(field)?.ToString());
                 }
 			}
 

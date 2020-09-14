@@ -91,7 +91,9 @@ namespace StockSharp.Algo
 			protected override bool OnRemoving(IMessageAdapter item)
 			{
 				_enables.Remove(item);
-				_parent._adapterWrappers.Remove(item);
+				
+				if (item.Parent == _parent)
+					item.Parent = null;
 
 				lock (_parent._connectedResponseLock)
 					_parent._adapterStates.Remove(item);
@@ -102,6 +104,12 @@ namespace StockSharp.Algo
 			protected override bool OnClearing()
 			{
 				_enables.Clear();
+
+				_parent._adapterWrappers.CachedKeys.ForEach(a =>
+				{
+					if (a.Parent == _parent)
+						a.Parent = null;
+				});
 				_parent._adapterWrappers.Clear();
 
 				lock (_parent._connectedResponseLock)
@@ -624,8 +632,6 @@ namespace StockSharp.Algo
 
 		MessageAdapterCategories IMessageAdapter.Categories => GetSortedAdapters().Select(a => a.Categories).JoinMask();
 
-		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => GetSortedAdapters().FirstOrDefault()?.OrderCancelVolumeRequired;
-
 		Type IMessageAdapter.OrderConditionType => null;
 		
 		bool IMessageAdapter.HeartbeatBeforConnect => false;
@@ -652,6 +658,19 @@ namespace StockSharp.Algo
 
 			iterationInterval = TimeSpan.Zero;
 			return TimeSpan.Zero;
+		}
+
+		int? IMessageAdapter.GetMaxCount(DataType dataType)
+		{
+			foreach (var adapter in GetSortedAdapters())
+			{
+				var count = adapter.GetMaxCount(dataType);
+
+				if (count != null)
+					return count;
+			}
+
+			return null;
 		}
 
 		bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => GetSortedAdapters().Any(a => a.IsAllDownloadingSupported(dataType));
@@ -684,6 +703,11 @@ namespace StockSharp.Algo
 		/// Use <see cref="CandleBuilderMessageAdapter"/>.
 		/// </summary>
 		public bool SupportCandlesCompression { get; set; } = true;
+
+		/// <summary>
+		/// Use <see cref="Level1ExtendBuilderAdapter"/>.
+		/// </summary>
+		public bool Level1Extend { get; set; }
 
 		/// <summary>
 		/// <see cref="CandleBuilderMessageAdapter.SendFinishedCandlesImmediatelly"/>.
@@ -876,6 +900,11 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new Level1DepthBuilderAdapter(adapter));
 			}
 
+			if (Level1Extend && !adapter.SupportedMarketDataTypes.Contains(DataType.Level1))
+			{
+				adapter = ApplyOwnInner(new Level1ExtendBuilderAdapter(adapter));
+			}
+
 			if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
 			{
 				adapter = ApplyOwnInner(new PnLMessageAdapter(adapter) { PnLManager = PnLManager.Clone() });
@@ -914,7 +943,7 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
 			}
 
-			if (adapter.IsSupportOrderBookIncrements)
+			if (SupportBuildingFromOrderLog || adapter.IsSupportOrderBookIncrements)
 			{
 				adapter = ApplyOwnInner(new OrderBookIncrementMessageAdapter(adapter));
 			}
@@ -1172,7 +1201,10 @@ namespace StockSharp.Algo
 			}
 
 			if (message is ISubscriptionMessage subscrMsg)
+			{
+				_subscription.TryAdd(subscrMsg.TransactionId, Tuple.Create(subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType));
 				SendRequest(subscrMsg.TypedClone(), adapter);
+			}
 			else
 				adapter.SendInMessage(message);
 		}
@@ -1354,6 +1386,8 @@ namespace StockSharp.Algo
 
 							return false;
 						}
+						else if (mdMsg.DataType2 == DataType.Level1)
+							return Level1Extend && a.IsMarketDataTypeSupported(mdMsg.BuildFrom ?? DataType.MarketDepth);
 						else if (mdMsg.DataType2 == DataType.Ticks)
 							return a.IsMarketDataTypeSupported(DataType.OrderLog);
 						else
@@ -1556,7 +1590,7 @@ namespace StockSharp.Algo
 					adapter = GetAdapter(pairMsg.Message1.PortfolioName, message, out _);
 			}
 
-			if (adapter == null)
+			if (adapter is null)
 			{
 				this.AddErrorLog(LocalizedStrings.UnknownTransactionId, originId);
 
@@ -2172,6 +2206,7 @@ namespace StockSharp.Algo
 			{
 				ExtendedInfoStorage = ExtendedInfoStorage,
 				SupportCandlesCompression = SupportCandlesCompression,
+				Level1Extend = Level1Extend,
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,

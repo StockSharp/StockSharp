@@ -123,7 +123,8 @@
 									return true;
 								}
 
-								var child = _parents[tuple.First].Child[mdMsg.SecurityId];
+								var parent = _parents[tuple.First];
+								var child = parent.Child[mdMsg.SecurityId];
 								child.State = SubscriptionStates.Online;
 
 								if (child.Suspended.Count > 0)
@@ -131,6 +132,8 @@
 
 								this.AddDebugLog("New ALL map (active): {0}/{1} TrId={2}", child.Origin.SecurityId, child.Origin.DataType2, mdMsg.TransactionId);
 								
+								_requests.Add(transId, Tuple.Create(parent, mdMsg.TypedClone()));
+
 								// for child subscriptions make online (or finished) immediatelly
 								RaiseNewOutMessage(mdMsg.CreateResponse());
 								//RaiseNewOutMessage(mdMsg.CreateResult());
@@ -144,20 +147,30 @@
 									
 									var parent = _parents.FirstOrDefault(p => p.Value.Origin.DataType2 == mdMsg.DataType2).Value;
 
+									void AddSubscription()
+									{
+										if (mdMsg.SecurityId == default)
+										{
+											// first ALL is initiator
+											parent.Alls.Add(transId, mdMsg);
+										}
+										else
+										{
+											parent.NonAlls.SafeAdd(mdMsg.SecurityId).Add(transId);
+										}
+
+										_requests.Add(transId, Tuple.Create(parent, mdMsg));
+									}
+
 									if (parent == null)
 									{
 										parent = new ParentSubscription(mdMsg);
 										_parents.Add(transId, parent);
 
-										if (mdMsg.SecurityId == default)
-										{
-											// first ALL is initiator
-											parent.Alls.Add(transId, parent.Origin);
-										}
-
-										_requests.Add(transId, Tuple.Create(parent, parent.Origin));
+										AddSubscription();
 
 										// do not specify security cause adapter doesn't require it
+										mdMsg = mdMsg.TypedClone();
 										Extensions.AllSecurity.CopyEx(mdMsg, false);
 										message = mdMsg;
 
@@ -165,16 +178,7 @@
 									}
 									else
 									{
-										if (mdMsg.SecurityId != default)
-										{
-											parent.NonAlls.SafeAdd(mdMsg.SecurityId).Add(transId);
-										}
-										else
-										{
-											parent.Alls.Add(transId, mdMsg);
-										}
-
-										_requests.Add(transId, Tuple.Create(parent, mdMsg));
+										AddSubscription();
 
 										// for child subscriptions make online (or finished) immediatelly
 										RaiseNewOutMessage(mdMsg.CreateResponse());

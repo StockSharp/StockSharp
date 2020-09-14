@@ -58,6 +58,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
+	[DisplayNameLoc(LocalizedStrings.NewsKey)]
 	public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
 		IServerTimeMessage, INullableSecurityIdMessage, ITransactionIdMessage, ISeqNumMessage
 	{

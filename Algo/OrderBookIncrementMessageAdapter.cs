@@ -233,7 +233,7 @@
 								continue;
 							}
 
-							newQuoteMsg = info.Builder.TryApply(quoteMsg);
+							newQuoteMsg = info.Builder.TryApply(quoteMsg, subscriptionId);
 
 							if (newQuoteMsg == null)
 								continue;

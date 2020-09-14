@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Candles
 			if (subscription.BuildMode == MarketDataBuildModes.Load)
 				return null;
 
-			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(BuildCandlesFromSource.CandleDataSources).OrderBy(t =>
+			var buildFrom = subscription.BuildFrom ?? adapter.SupportedMarketDataTypes.Intersect(DataType.CandleSources).OrderBy(t =>
 			{
 				// by priority
 				if (t == DataType.Ticks)

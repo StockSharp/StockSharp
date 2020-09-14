@@ -27,12 +27,18 @@ namespace StockSharp.Localization
 	public class DisplayNameLocAttribute : DisplayNameAttribute
 	{
 		/// <summary>
+		/// String resource id.
+		/// </summary>
+		public string ResourceId { get; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="DisplayNameLocAttribute"/> class using specified resource id for the display name.
 		/// </summary>
 		/// <param name="resourceId">String resource id.</param>
 		public DisplayNameLocAttribute(string resourceId)
 			: base(LocalizedStrings.GetString(resourceId))
 		{
+			ResourceId = resourceId;
 		}
 
 		/// <summary>
@@ -43,6 +49,7 @@ namespace StockSharp.Localization
 		public DisplayNameLocAttribute(string resourceId, string arg)
 			: base(LocalizedStrings.GetString(resourceId).Put(LocalizedStrings.GetString(arg)))
 		{
+			ResourceId = resourceId;
 		}
 
 		/// <summary>
@@ -54,6 +61,7 @@ namespace StockSharp.Localization
 		public DisplayNameLocAttribute(string resourceId, params object[] args)
 			: base(LocalizedStrings.GetString(resourceId).Put(args))
 		{
+			ResourceId = resourceId;
 		}
 	}
 }

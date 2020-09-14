@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			var message = input.GetValue<Level1ChangeMessage>();
 
-			var retVal = message.Changes.TryGetValue(Field);
+			var retVal = message.TryGet(Field);
 
 			if (!IsFormed && retVal != null && input.IsFinal)
 				IsFormed = true;

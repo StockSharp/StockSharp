@@ -897,7 +897,7 @@ namespace StockSharp.Algo
 
 			var trades = new List<MyTrade>();
 
-			using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf }), new InMemoryExchangeInfoProvider()))
+			using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf }), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()))
 			{
 				var errors = new List<Exception>();
 

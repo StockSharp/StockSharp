@@ -248,20 +248,16 @@ namespace StockSharp.Algo
 			private QuoteChangeMessage _snapshot;
 			private bool _hasChanges;
 
-			public MarketDepthInfo(MarketDepth depth)
+			public void TryFlushChanges(MarketDepth depth)
 			{
-				Depth = depth ?? throw new ArgumentNullException(nameof(depth));
-			}
+				if (depth is null)
+					throw new ArgumentNullException(nameof(depth));
 
-			public readonly MarketDepth Depth;
-
-			public void TryFlushChanges()
-			{
 				if (_hasChanges == false)
 					return;
 
 				_hasChanges = false;
-				_snapshot.ToMarketDepth(Depth);
+				_snapshot.ToMarketDepth(depth);
 			}
 
 			public void UpdateSnapshot(QuoteChangeMessage snapshot)
@@ -1186,17 +1182,16 @@ namespace StockSharp.Algo
 
 			isNew = false;
 
+			var key = Tuple.Create(security, message.IsFiltered);
+
 			lock (_marketDepths.SyncRoot)
 			{
-				var key = Tuple.Create(security, message.IsFiltered);
-
 				if (!_marketDepths.TryGetValue(key, out var info))
 				{
 					isNew = true;
 
-					info = new MarketDepthInfo(EntityFactory.CreateMarketDepth(security));
-
-					message.ToMarketDepth(info.Depth);
+					info = new MarketDepthInfo();
+					info.UpdateSnapshot(message.TypedClone());
 
 					// стакан из лога заявок бесконечен
 					//if (CreateDepthFromOrdersLog)
@@ -1204,20 +1199,21 @@ namespace StockSharp.Algo
 
 					_marketDepths.Add(key, info);
 				}
-				else
-				{
-					info.TryFlushChanges();
-				}
 
-				return info.Depth;
+				var depth = EntityFactory.CreateMarketDepth(security);
+				info.TryFlushChanges(depth);
+				return depth;
 			}
 		}
+
+		public bool HasMarketDepth(Security security, QuoteChangeMessage message)
+			=> _marketDepths.ContainsKey(Tuple.Create(security, message.IsFiltered));
 
 		public void UpdateMarketDepth(Security security, QuoteChangeMessage message)
 		{
 			lock (_marketDepths.SyncRoot)
 			{
-				var info = _marketDepths.SafeAdd(Tuple.Create(security, message.IsFiltered), key => new MarketDepthInfo(EntityFactory.CreateMarketDepth(security)));
+				var info = _marketDepths.SafeAdd(Tuple.Create(security, message.IsFiltered), key => new MarketDepthInfo());
 				info.UpdateSnapshot(message);
 			}
 		}
@@ -1266,7 +1262,7 @@ namespace StockSharp.Algo
 			public object GetValue(Level1Fields field)
 			{
 				lock (_sync)
-					return _snapshot.Changes.TryGetValue(field);
+					return _snapshot.TryGet(field);
 			}
 
 			private void RemoveValues(CachedSynchronizedSet<Level1Fields> fields)
@@ -1332,6 +1328,9 @@ namespace StockSharp.Algo
 
 			return Enumerable.Empty<Level1Fields>();
 		}
+
+		public bool HasLevel1Info(Security security)
+			=> _securityValues.ContainsKey(security);
 
 		public Level1Info GetSecurityValues(Security security, DateTimeOffset serverTime)
 			=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));

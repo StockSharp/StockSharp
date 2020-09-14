@@ -2,6 +2,7 @@ T:StockSharp.Tradier.TradierMessageAdapter/summary;DocStr2538
 M:StockSharp.Tradier.TradierMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Tradier.TradierMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Tradier.TradierMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
+P:StockSharp.Tradier.TradierMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 M:StockSharp.Tradier.TradierMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Tradier.TradierMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Tradier.TradierMessageAdapter.Token/inheritdoc;DocStr8459

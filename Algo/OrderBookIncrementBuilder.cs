@@ -24,6 +24,8 @@
 		private readonly List<QuoteChange> _bidsByPos = new List<QuoteChange>();
 		private readonly List<QuoteChange> _asksByPos = new List<QuoteChange>();
 
+		private readonly HashSet<long> _invalidSubscriptions = new HashSet<long>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookIncrementBuilder"/>.
 		/// </summary>
@@ -45,19 +47,35 @@
 		/// Try create full book.
 		/// </summary>
 		/// <param name="change">Book change.</param>
+		/// <param name="subscriptionId">Subscription.</param>
 		/// <returns>Full book.</returns>
-		public QuoteChangeMessage TryApply(QuoteChangeMessage change)
+		public QuoteChangeMessage TryApply(QuoteChangeMessage change, long subscriptionId = default)
 		{
 			if (change is null)
 				throw new ArgumentNullException(nameof(change));
 
-			if (change.State == null)
+			if (change.State is null)
 				throw new ArgumentException(nameof(change));
 
 			var currState = _state;
 			var newState = change.State.Value;
 
-			void CheckSwitch()
+			void WriteWarning()
+			{
+				var postfix = string.Empty;
+
+				if (subscriptionId != default)
+				{
+					if (!_invalidSubscriptions.Add(subscriptionId))
+						return;
+
+					postfix = $" (sub={subscriptionId})";
+				}
+
+				this.AddWarningLog($"{currState}->{newState}{postfix}");
+			}
+
+			bool CheckSwitch()
 			{
 				switch (currState)
 				{
@@ -65,14 +83,20 @@
 					case QuoteChangeStates.SnapshotStarted:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							this.AddDebugLog($"{currState}->{newState}");
+						{
+							WriteWarning();
+							return false;
+						}
 
 						break;
 					}
 					case QuoteChangeStates.SnapshotBuilding:
 					{
 						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
-							this.AddDebugLog($"{currState}->{newState}");
+						{
+							WriteWarning();
+							return false;
+						}
 
 						break;
 					}
@@ -80,18 +104,24 @@
 					case QuoteChangeStates.Increment:
 					{
 						if (newState == QuoteChangeStates.SnapshotBuilding)
-							this.AddDebugLog($"{currState}->{newState}");
+						{
+							WriteWarning();
+							return false;
+						}
 
 						break;
 					}
 				}
+
+				return true;
 			}
 
 			var resetState = newState == QuoteChangeStates.SnapshotStarted || newState == QuoteChangeStates.SnapshotComplete;
 
 			if (currState != newState || resetState)
 			{
-				CheckSwitch();
+				if (!CheckSwitch())
+					return null;
 
 				if (currState == _none || resetState)
 				{

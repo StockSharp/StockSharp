@@ -582,6 +582,13 @@ namespace StockSharp.Algo
 				set => throw new NotSupportedException();
 			}
 
+			/// <inheritdoc />
+			public event Action<ILogSource> ParentRemoved
+			{
+				add { }
+				remove { }
+			}
+
 			LogLevels ILogSource.LogLevel
 			{
 				get => Container.LogLevel;

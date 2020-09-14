@@ -2,6 +2,7 @@ T:StockSharp.PrizmBit.PrizmBitMessageAdapter/summary;DocStr2538
 M:StockSharp.PrizmBit.PrizmBitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.PrizmBit.PrizmBitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.PrizmBit.PrizmBitMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
+P:StockSharp.PrizmBit.PrizmBitMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
 M:StockSharp.PrizmBit.PrizmBitMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 P:StockSharp.PrizmBit.PrizmBitMessageAdapter.FeatureName/inheritdoc;DocStr8459
 M:StockSharp.PrizmBit.PrizmBitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

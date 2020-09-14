@@ -161,12 +161,12 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var spreadMiddle = (decimal?)message.Changes.TryGetValue(Level1Fields.SpreadMiddle);
+			var spreadMiddle = message.TryGetDecimal(Level1Fields.SpreadMiddle);
 
 			if (spreadMiddle == null)
 			{
-				var bestBid = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
-				var bestAsk = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+				var bestBid = message.TryGetDecimal(Level1Fields.BestBidPrice);
+				var bestAsk = message.TryGetDecimal(Level1Fields.BestAskPrice);
 
 				spreadMiddle = bestBid.GetSpreadMiddle(bestAsk);
 			}
@@ -212,7 +212,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (decimal?)message.Changes.TryGetValue(Level1Fields.LastTradePrice);
+			return message.TryGetDecimal(Level1Fields.LastTradePrice);
 		}
 
 		/// <summary>
@@ -2144,6 +2144,22 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Get maximum possible items count per single subscription request.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Max items count.</returns>
+		public static int? GetDefaultMaxCount(this DataType dataType)
+		{
+			if (dataType == DataType.Ticks ||
+				dataType == DataType.Level1 ||
+				dataType == DataType.OrderLog ||
+				dataType == DataType.MarketDepth)
+				return 1000;
+
+			return null;
+		}
+
+		/// <summary>
 		/// Determines the specified type is crypto currency.
 		/// </summary>
 		/// <param name="type">Currency type.</param>
@@ -2301,15 +2317,34 @@ namespace StockSharp.Messages
 			{
 				ExecutionType = ExecutionTypes.Tick,
 				SecurityId = level1.SecurityId,
-				TradeId = (long?)level1.Changes.TryGetValue(Level1Fields.LastTradeId),
-				TradePrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradePrice),
-				TradeVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
-				OriginSide = (Sides?)level1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
-				ServerTime = (DateTimeOffset?)level1.Changes.TryGetValue(Level1Fields.LastTradeTime) ?? level1.ServerTime,
-				IsUpTick = (bool?)level1.Changes.TryGetValue(Level1Fields.LastTradeUpDown),
+				TradeId = (long?)level1.TryGet(Level1Fields.LastTradeId),
+				TradePrice = level1.TryGetDecimal(Level1Fields.LastTradePrice),
+				TradeVolume = level1.TryGetDecimal(Level1Fields.LastTradeVolume),
+				OriginSide = (Sides?)level1.TryGet(Level1Fields.LastTradeOrigin),
+				ServerTime = (DateTimeOffset?)level1.TryGet(Level1Fields.LastTradeTime) ?? level1.ServerTime,
+				IsUpTick = (bool?)level1.TryGet(Level1Fields.LastTradeUpDown),
 				LocalTime = level1.LocalTime,
 				BuildFrom = level1.BuildFrom ?? DataType.Level1,
 			};
+		}
+
+		/// <summary>
+		/// To check, are there <see cref="DataType.CandleTimeFrame"/> in the level1 data.
+		/// </summary>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>The test result.</returns>
+		public static bool IsContainsCandle(this Level1ChangeMessage level1)
+		{
+			if (level1 is null)
+				throw new ArgumentNullException(nameof(level1));
+
+			var changes = level1.Changes;
+
+			return
+				changes.ContainsKey(Level1Fields.OpenPrice) ||
+				changes.ContainsKey(Level1Fields.HighPrice) ||
+				changes.ContainsKey(Level1Fields.LowPrice) ||
+				changes.ContainsKey(Level1Fields.ClosePrice);
 		}
 
 		private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
@@ -2344,10 +2379,10 @@ namespace StockSharp.Messages
 						var prevAskPrice = _prevAskPrice;
 						var prevAskVolume = _prevAskVolume;
 
-						_prevBidPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _prevBidPrice;
-						_prevBidVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _prevBidVolume;
-						_prevAskPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _prevAskPrice;
-						_prevAskVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _prevAskVolume;
+						_prevBidPrice = level1.TryGetDecimal(Level1Fields.BestBidPrice) ?? _prevBidPrice;
+						_prevBidVolume = level1.TryGetDecimal(Level1Fields.BestBidVolume) ?? _prevBidVolume;
+						_prevAskPrice = level1.TryGetDecimal(Level1Fields.BestAskPrice) ?? _prevAskPrice;
+						_prevAskVolume = level1.TryGetDecimal(Level1Fields.BestAskVolume) ?? _prevAskVolume;
 
 						if (_prevBidPrice == 0)
 							_prevBidPrice = null;
@@ -2649,13 +2684,14 @@ namespace StockSharp.Messages
 			var level1 = new Level1ChangeMessage
 			{
 				SecurityId = message.SecurityId,
-				ServerTime = message.OpenTime,
+				ServerTime = message.CloseTime == default ? message.OpenTime : message.CloseTime,
 			}
 			.Add(Level1Fields.OpenPrice, message.OpenPrice)
 			.Add(Level1Fields.HighPrice, message.HighPrice)
 			.Add(Level1Fields.LowPrice, message.LowPrice)
 			.Add(Level1Fields.ClosePrice, message.ClosePrice)
-			.Add(Level1Fields.Volume, message.TotalVolume)
+			.TryAdd(Level1Fields.Volume, message.TotalVolume)
+			.TryAdd(Level1Fields.TradesCount, message.TotalTicks)
 			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true);
 
 			return level1;
@@ -2676,6 +2712,7 @@ namespace StockSharp.Messages
 			.TryAdd(Level1Fields.LastTradeId, message.TradeId)
 			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
 			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
+			.TryAdd(Level1Fields.LastTradeUpDown, message.IsUpTick)
 			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true)
 			.TryAdd(Level1Fields.LastTradeOrigin, message.OriginSide);
 
@@ -3189,8 +3226,11 @@ namespace StockSharp.Messages
 
 			var result = securities.Where(s => s.IsMatch(criteria, secTypes));
 
+			if (criteria.Skip != null)
+				result = result.Skip((int)criteria.Skip.Value);
+
 			if (criteria.Count != null)
-				result = result.Take(criteria.Count.Value);
+				result = result.Take((int)criteria.Count.Value);
 
 			return result.ToArray();
 		}
@@ -3967,6 +4007,110 @@ namespace StockSharp.Messages
 			}
 
 			return quoteMsg;
+		}
+
+		/// <summary>
+		/// Convert <see cref="ExecutionMessage"/> to <see cref="OrderRegisterMessage"/>.
+		/// </summary>
+		/// <param name="execMsg">The message contains information about the execution.</param>
+		/// <returns>The message containing the information for the order registration.</returns>
+		public static OrderRegisterMessage ToReg(this ExecutionMessage execMsg)
+		{
+			if (execMsg is null)
+				throw new ArgumentNullException(nameof(execMsg));
+
+			return new OrderRegisterMessage
+			{
+				SecurityId = execMsg.SecurityId,
+				TransactionId = execMsg.TransactionId,
+				Price = execMsg.OrderPrice,
+				Volume = execMsg.Balance ?? execMsg.OrderVolume ?? 0L,
+				Currency = execMsg.Currency,
+				PortfolioName = execMsg.PortfolioName,
+				ClientCode = execMsg.ClientCode,
+				BrokerCode = execMsg.BrokerCode,
+				Comment = execMsg.Comment,
+				Side = execMsg.Side,
+				TimeInForce = execMsg.TimeInForce,
+				TillDate = execMsg.ExpiryDate,
+				VisibleVolume = execMsg.VisibleVolume,
+				LocalTime = execMsg.LocalTime,
+				IsMarketMaker = execMsg.IsMarketMaker,
+				IsMargin = execMsg.IsMargin,
+				Slippage = execMsg.Slippage,
+				IsManual = execMsg.IsManual,
+				OrderType = execMsg.OrderType,
+				UserOrderId = execMsg.UserOrderId,
+				StrategyId = execMsg.StrategyId,
+				Condition = execMsg.Condition?.Clone(),
+				MinOrderVolume = execMsg.MinVolume,
+				PositionEffect = execMsg.PositionEffect,
+				PostOnly = execMsg.PostOnly,
+				Leverage = execMsg.Leverage,
+			};
+		}
+
+		/// <summary>
+		/// Convert <see cref="OrderRegisterMessage"/> to <see cref="ExecutionMessage"/>.
+		/// </summary>
+		/// <param name="regMsg">The message containing the information for the order registration.</param>
+		/// <returns>The message contains information about the execution.</returns>
+		public static ExecutionMessage ToExec(this OrderRegisterMessage regMsg)
+		{
+			if (regMsg is null)
+				throw new ArgumentNullException(nameof(regMsg));
+
+			return new ExecutionMessage
+			{
+				ServerTime = DateTimeOffset.Now,
+				ExecutionType = ExecutionTypes.Transaction,
+				SecurityId = regMsg.SecurityId,
+				TransactionId = regMsg.TransactionId,
+				OriginalTransactionId = regMsg.TransactionId,
+				HasOrderInfo = true,
+				OrderPrice = regMsg.Price,
+				OrderVolume = regMsg.Volume,
+				Currency = regMsg.Currency,
+				PortfolioName = regMsg.PortfolioName,
+				ClientCode = regMsg.ClientCode,
+				BrokerCode = regMsg.BrokerCode,
+				Comment = regMsg.Comment,
+				Side = regMsg.Side,
+				TimeInForce = regMsg.TimeInForce,
+				ExpiryDate = regMsg.TillDate,
+				Balance = regMsg.Volume,
+				VisibleVolume = regMsg.VisibleVolume,
+				LocalTime = regMsg.LocalTime,
+				IsMarketMaker = regMsg.IsMarketMaker,
+				IsMargin = regMsg.IsMargin,
+				Slippage = regMsg.Slippage,
+				IsManual = regMsg.IsManual,
+				OrderType = regMsg.OrderType,
+				UserOrderId = regMsg.UserOrderId,
+				StrategyId = regMsg.StrategyId,
+				OrderState = OrderStates.Pending,
+				Condition = regMsg.Condition?.Clone(),
+				MinVolume = regMsg.MinOrderVolume,
+				PositionEffect = regMsg.PositionEffect,
+				PostOnly = regMsg.PostOnly,
+				Leverage = regMsg.Leverage,
+			};
+		}
+
+		/// <summary>
+		/// Determines the specified message contains historical request only.
+		/// </summary>
+		/// <param name="message">Subscription.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsHistoryOnly(this ISubscriptionMessage message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (!message.IsSubscribe)
+				throw new ArgumentException(nameof(message));
+
+			return message.To != null || message.Count != null;
 		}
 	}
 }

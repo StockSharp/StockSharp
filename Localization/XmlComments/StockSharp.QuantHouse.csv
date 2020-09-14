@@ -10,8 +10,3 @@ P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Password/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.ToString/inheritdoc;DocStr8459
-T:StockSharp.QuantHouse.QuantFeedTrader/summary;DocStr10023
-M:StockSharp.QuantHouse.QuantFeedTrader.#ctor/summary;DocStr1
-P:StockSharp.QuantHouse.QuantFeedTrader.Login/summary;Login
-P:StockSharp.QuantHouse.QuantFeedTrader.Password/summary;Password
-P:StockSharp.QuantHouse.QuantFeedTrader.Address/summary;ServerAddress

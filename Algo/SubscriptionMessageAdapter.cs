@@ -329,7 +329,7 @@ namespace StockSharp.Algo
 					{
 						var clone = message.TypedClone();
 
-						if (message.To != null)
+						if (message.IsHistoryOnly())
 							_historicalRequests.Add(transId, clone);
 						else
 							_subscriptionsById.Add(transId, new SubscriptionInfo(clone));

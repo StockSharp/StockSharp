@@ -27,14 +27,14 @@ namespace StockSharp.Algo
 
 			public QuoteChangeMessage Process(Level1ChangeMessage message)
 			{
-				var bidPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
-				var askPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+				var bidPrice = message.TryGetDecimal(Level1Fields.BestBidPrice);
+				var askPrice = message.TryGetDecimal(Level1Fields.BestAskPrice);
 
 				if (bidPrice == null && askPrice == null)
 					return null;
 
-				var bidVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume);
-				var askVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume);
+				var bidVolume = message.TryGetDecimal(Level1Fields.BestBidVolume);
+				var askVolume = message.TryGetDecimal(Level1Fields.BestAskVolume);
 
 				if (_bidPrice == bidPrice && _askPrice == askPrice && _bidVolume == bidVolume && _askVolume == askVolume)
 					return null;

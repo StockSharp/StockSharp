@@ -338,6 +338,10 @@ namespace StockSharp.Algo.Storages
 					{
 						var secId = pair.Key;
 
+						// failed order's response doesn't contain sec id
+						if (secId == default)
+							continue;
+
 						if (incremental)
 							Settings.GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction).Save(pair.Value);
 

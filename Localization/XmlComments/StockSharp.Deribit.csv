@@ -4,6 +4,7 @@ M:StockSharp.Deribit.DeribitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/
 M:StockSharp.Deribit.DeribitMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Deribit.DeribitMessageAdapter.IsSupportOrderBookIncrements/inheritdoc;DocStr8459
 P:StockSharp.Deribit.DeribitMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
+P:StockSharp.Deribit.DeribitMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 P:StockSharp.Deribit.DeribitMessageAdapter.FeatureName/inheritdoc;DocStr8459

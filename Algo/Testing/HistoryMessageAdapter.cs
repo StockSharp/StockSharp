@@ -559,7 +559,7 @@ namespace StockSharp.Algo.Testing
 			_cancellationToken = new CancellationTokenSource();
 
 			ThreadingHelper
-				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
+				.ThreadInvariant(() =>
 				{
 					try
 					{
@@ -633,7 +633,7 @@ namespace StockSharp.Algo.Testing
 							Error = ex,
 						});
 					}
-				}))
+				})
 				.Name(Name)
 				.Launch();
 		}

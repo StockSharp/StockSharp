@@ -161,6 +161,8 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			Message extra = null;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Disconnect:
@@ -173,6 +175,7 @@
 				case MessageTypes.SubscriptionResponse:
 				{
 					var responseMsg = (SubscriptionResponseMessage)message;
+					var id = responseMsg.OriginalTransactionId;
 
 					HashSet<long> subscribers = null;
 
@@ -180,14 +183,22 @@
 					{
 						if (responseMsg.IsOk())
 						{
-							if (_subscriptionsById.TryGetValue(responseMsg.OriginalTransactionId, out var info))
+							if (_subscriptionsById.TryGetValue(id, out var info))
 							{
 								ChangeState(info, SubscriptionStates.Active);
+
+								if (!this.IsOutMessageSupported(MessageTypes.SubscriptionOnline))
+								{
+									extra = new SubscriptionOnlineMessage
+									{
+										OriginalTransactionId = id
+									};
+								}
 							}
 						}
 						else
 						{
-							if (_subscriptionsById.TryGetAndRemove(responseMsg.OriginalTransactionId, out var info))
+							if (_subscriptionsById.TryGetAndRemove(id, out var info))
 							{
 								ChangeState(info, SubscriptionStates.Error);
 							}
@@ -280,6 +291,9 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+
+			if (extra != null)
+				base.OnInnerAdapterNewOutMessage(extra);
 		}
 
 		private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
@@ -334,7 +348,7 @@
 						_strategyPosSubscriptions.Add(posMsg.TransactionId);
 						sendInMsg = message;
 					}
-					else if (message.To == null)
+					else if (!message.IsHistoryOnly())
 					{
 						var dataType = message.DataType;
 						var secId = default(SecurityId);
@@ -463,6 +477,15 @@
 						};
 					}
 				}
+
+				if (sendOutMsgs != null)
+				{
+					foreach (var sendOutMsg in sendOutMsgs)
+					{
+						this.AddInfoLog("Out: {0}", sendOutMsg);
+						RaiseNewOutMessage(sendOutMsg);
+					}
+				}
 			}
 
 			var retVal = true;
@@ -471,15 +494,6 @@
 			{
 				this.AddInfoLog("In: {0}", sendInMsg);
 				retVal = base.OnSendInMessage((Message)sendInMsg);
-			}
-
-			if (sendOutMsgs != null)
-			{
-				foreach (var sendOutMsg in sendOutMsgs)
-				{
-					this.AddInfoLog("Out: {0}", sendOutMsg);
-					RaiseNewOutMessage(sendOutMsg);	
-				}
 			}
 
 			return retVal;

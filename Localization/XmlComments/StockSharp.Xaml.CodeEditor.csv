@@ -1,4 +1,4 @@
-T:StockSharp.Xaml.CodeEditor.CodeEditorBaseApplication/summary;DocStr16205
+T:StockSharp.Xaml.CodeEditor.CodeEditorBaseApplication/summary;DocStr12075
 M:StockSharp.Xaml.CodeEditor.CodeEditorBaseApplication.OnStartup(System.Windows.StartupEventArgs)/summary;DocStr8074
 M:StockSharp.Xaml.CodeEditor.CodeEditorBaseApplication.OnStartup(System.Windows.StartupEventArgs)/param/e;Str347
 T:StockSharp.Xaml.CodeEditor.CodePanel/summary;DocStr8091
@@ -22,7 +22,7 @@ E:StockSharp.Xaml.CodeEditor.CodePanel.CompilingCode/summary;DocStr8102
 E:StockSharp.Xaml.CodeEditor.CodePanel.SavingCode/summary;DocStr8103
 E:StockSharp.Xaml.CodeEditor.CodePanel.CodeChanged/summary;DocStr8104
 E:StockSharp.Xaml.CodeEditor.CodePanel.CanCompile/summary;DocStr8105
-E:StockSharp.Xaml.CodeEditor.CodePanel.LayoutChanged/summary;DocStr16206
+E:StockSharp.Xaml.CodeEditor.CodePanel.LayoutChanged/summary;DocStr12076
 M:StockSharp.Xaml.CodeEditor.CodePanel.ShowCompilationResult(Ecng.Common.CompilationResult,System.Boolean)/summary;DocStr8097
 M:StockSharp.Xaml.CodeEditor.CodePanel.ShowCompilationResult(Ecng.Common.CompilationResult,System.Boolean)/param/result;DocStr8098
 M:StockSharp.Xaml.CodeEditor.CodePanel.ShowCompilationResult(Ecng.Common.CompilationResult,System.Boolean)/param/isRunning;DocStr8099

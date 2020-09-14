@@ -32,6 +32,10 @@
 
 		/// <inheritdoc />
 		[DataMember]
+		public virtual long? Skip { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
 		public virtual long? Count { get; set; }
 		
 		/// <inheritdoc />
@@ -60,6 +64,7 @@
 
 			destination.From = From;
 			destination.To = To;
+			destination.Skip = Skip;
 			destination.Count = Count;
 			destination.IsSubscribe = IsSubscribe;
 			destination.TransactionId = TransactionId;
@@ -71,7 +76,21 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TrId={TransactionId}";
+			var str = base.ToString() + $",TrId={TransactionId}";
+
+			if (Skip != default)
+				str += $",Skip={Skip}";
+
+			if (Count != default)
+				str += $",Cnt={Count}";
+
+			if (From != default)
+				str += $",From={From}";
+
+			if (To != default)
+				str += $",To={To}";
+
+			return str;
 		}
 	}
 }

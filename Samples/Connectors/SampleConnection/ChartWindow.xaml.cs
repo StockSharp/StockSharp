@@ -6,25 +6,24 @@
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 
 	partial class ChartWindow
 	{
 		private readonly Connector _connector;
-		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 		private readonly Subscription _subscription;
 
-		public ChartWindow(CandleSeries candleSeries)
+		public ChartWindow(MarketDataMessage mdMsg)
 		{
-			if (candleSeries == null)
-				throw new ArgumentNullException(nameof(candleSeries));
+			if (mdMsg is null)
+				throw new ArgumentNullException(nameof(mdMsg));
 
 			InitializeComponent();
 
-			Title = candleSeries.ToString();
+			Title = mdMsg.SecurityId + " - " + mdMsg.DataType2.ToString();
 
-			_candleSeries = candleSeries;
 			_connector = MainWindow.Instance.MainPanel.Connector;
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;
@@ -44,7 +43,7 @@
 			area.Elements.Add(_candleElem);
 
 			_connector.CandleReceived += OnCandleReceived;
-			_subscription = _connector.SubscribeMarketData(_candleSeries.ToMarketDataMessage(true));
+			_subscription = _connector.SubscribeMarketData(mdMsg);
 		}
 
 		public bool SeriesInactive { get; set; }

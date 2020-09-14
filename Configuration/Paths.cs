@@ -17,16 +17,16 @@
 	{
 		static Paths()
 		{
-			var appSettings = ConfigManager.AppSettings;
-
-			var companyPath = appSettings.Get("companyPath");
+			var companyPath = ConfigManager.TryGet<string>("companyPath");
 			CompanyPath = companyPath.IsEmpty() ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSharp") : companyPath.ToFullPathIfNeed();
 
-			var settingsPath = appSettings.Get("settingsPath");
-			AppDataPath = settingsPath.IsEmpty() ? Path.Combine(CompanyPath, Title) : settingsPath.ToFullPathIfNeed();
+			AppName = ConfigManager.TryGet("appName", TypeHelper.ApplicationName);
+
+			var settingsPath = ConfigManager.TryGet<string>("settingsPath");
+			AppDataPath = settingsPath.IsEmpty() ? Path.Combine(CompanyPath, AppName2) : settingsPath.ToFullPathIfNeed();
 
 			PlatformConfigurationFile = Path.Combine(AppDataPath, "platform_config.xml");
-			ProxyConfigurationFile = Path.Combine(AppDataPath, "proxy_config.xml");
+			ProxyConfigurationFile = Path.Combine(CompanyPath, "proxy_config.xml");
 			SecurityNativeIdDir = Path.Combine(AppDataPath, "NativeId");
 			SecurityMappingDir = Path.Combine(AppDataPath, "Symbol mapping");
 			SecurityExtendedInfo = Path.Combine(AppDataPath, "Extended info");
@@ -69,7 +69,12 @@
 		/// <summary>
 		/// App title.
 		/// </summary>
-		public static string Title => TypeHelper.ApplicationName.Remove("S#.", true);
+		public static readonly string AppName;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string AppName2 => AppName.Remove("S#.", true);
 
 		/// <summary>
 		/// The path to directory with all applications.

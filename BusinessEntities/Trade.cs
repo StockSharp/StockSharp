@@ -209,6 +209,12 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public Messages.DataType BuildFrom { get; set; }
 
+		/// <summary>
+		/// Yield.
+		/// </summary>
+		[DataMember]
+		public decimal? Yield { get; set; }
+
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
@@ -251,6 +257,7 @@ namespace StockSharp.BusinessEntities
 				Currency = Currency,
 				SeqNum = SeqNum,
 				BuildFrom = BuildFrom,
+				Yield = Yield,
 			};
 		}
 

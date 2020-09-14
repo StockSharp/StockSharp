@@ -16,8 +16,8 @@ P:StockSharp.Okex.OkexMessageAdapter.IsFutures/summary;FuturesSection
 P:StockSharp.Okex.OkexMessageAdapter.IsSpot/summary;SpotSection
 P:StockSharp.Okex.OkexMessageAdapter.IsSwap/summary;SwapSection
 P:StockSharp.Okex.OkexMessageAdapter.AdminPassword/summary;AdminPassword
-P:StockSharp.Okex.OkexMessageAdapter.RestAddress/summary;DocStr11975
-P:StockSharp.Okex.OkexMessageAdapter.WebSocketAddress/summary;DocStr11976
+P:StockSharp.Okex.OkexMessageAdapter.RestAddress/summary;DocStr12073
+P:StockSharp.Okex.OkexMessageAdapter.WebSocketAddress/summary;DocStr12074
 M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Okex.OkexMessageAdapter.ToString/inheritdoc;DocStr8459

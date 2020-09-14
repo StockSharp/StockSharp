@@ -114,7 +114,7 @@ namespace StockSharp.Messages
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
-		protected virtual void CopyTo(OrderMessage destination)
+		public void CopyTo(OrderMessage destination)
 		{
 			base.CopyTo(destination);
 

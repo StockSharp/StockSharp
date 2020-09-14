@@ -46,6 +46,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
+		public long? Skip { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
 		public long? Count { get; set; }
 
 		/// <inheritdoc />
@@ -90,6 +94,7 @@ namespace StockSharp.Messages
 
 			destination.From = From;
 			destination.To = To;
+			destination.Skip = Skip;
 			destination.Count = Count;
 			destination.IsSubscribe = IsSubscribe;
 			destination.States = States.ToArray();
@@ -113,13 +118,16 @@ namespace StockSharp.Messages
 
 			str += $",IsSubscribe={IsSubscribe}";
 
-			if (From != null)
+			if (From != default)
 				str += $",From={From.Value}";
 
-			if (To != null)
+			if (To != default)
 				str += $",To={To.Value}";
 
-			if (Count != null)
+			if (Skip != default)
+				str += $",Skip={Skip.Value}";
+
+			if (Count != default)
 				str += $",Count={Count.Value}";
 
 			if (States.Length > 0)

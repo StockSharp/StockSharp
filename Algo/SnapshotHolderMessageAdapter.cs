@@ -86,7 +86,7 @@
 				{
 					var subscrMsg = (ISubscriptionMessage)message;
 
-					if (subscrMsg.IsSubscribe && subscrMsg.To == null)
+					if (subscrMsg.IsSubscribe && !subscrMsg.IsHistoryOnly())
 					{
 						lock (_sync)
 							_pending[subscrMsg.TransactionId] = subscrMsg.TypedClone();

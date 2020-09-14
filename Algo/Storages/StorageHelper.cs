@@ -305,7 +305,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var metaInfo = storage.GetMetaInfo(date);
 
-					if (metaInfo == null)
+					if (metaInfo is null)
 						continue;
 
 					if (metaInfo.FirstTime >= time && max.Date != min.Date)
@@ -334,9 +334,16 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		internal static Range<DateTimeOffset> GetRange(this IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to)
+		/// <summary>
+		/// Get available date range for the specified storage.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Date range</returns>
+		public static Range<DateTimeOffset> GetRange(this IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to)
 		{
-			if (storage == null)
+			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
 			if (from > to)
@@ -350,10 +357,32 @@ namespace StockSharp.Algo.Storages
 			if (dates.IsEmpty())
 				return null;
 
-			var first = dates.First().ApplyUtc();
-			var last = dates.Last().EndOfDay().ApplyUtc();
+			var first = dates.First().UtcKind();
+			var last = dates.Last().UtcKind();
 
-			if (from > last)
+			if (from > last.EndOfDay() || to < first)
+				return null;
+
+			var firstInfo = storage.GetMetaInfo(first);
+			var lastInfo = first == last ? firstInfo : storage.GetMetaInfo(last);
+
+			if (firstInfo is null)
+			{
+				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.Str1702Params.Put(first));
+				return null;
+			}
+
+			if (lastInfo is null)
+			{
+				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.Str1702Params.Put(last));
+				return null;
+			}
+
+			first = firstInfo.FirstTime;
+			last = lastInfo.LastTime;
+
+			// chech bounds again after time part loaded
+			if (from > last || to < first)
 				return null;
 
 			var timePrecision = storage.Serializer.TimePrecision;
@@ -548,9 +577,7 @@ namespace StockSharp.Algo.Storages
 			}
 
 			private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()
-			{
-				return new[] { _original }.Concat(GetSmallerTimeFrames().Select(_getStorage));
-			}
+				=> new[] { _original }.Concat(GetSmallerTimeFrames().Select(_getStorage));
 
 			IEnumerable<DateTime> IMarketDataStorage.Dates => GetStorages().SelectMany(s => s.Dates).OrderBy().Distinct();
 
@@ -567,19 +594,19 @@ namespace StockSharp.Algo.Storages
 				set => _original.AppendOnlyNew = value;
 			}
 
-			int IMarketDataStorage.Save(IEnumerable<Message> data) => ((IMarketDataStorage<CandleMessage>)this).Save(data);
+			int IMarketDataStorage.Save(IEnumerable<Message> data) => Save(data.Cast<CandleMessage>());
 
-			void IMarketDataStorage.Delete(IEnumerable<Message> data) => ((IMarketDataStorage<CandleMessage>)this).Delete(data);
+			void IMarketDataStorage.Delete(IEnumerable<Message> data) => Delete(data.Cast<CandleMessage>());
 
-			void IMarketDataStorage.Delete(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Delete(date);
+			void IMarketDataStorage.Delete(DateTime date) => _original.Delete(date);
 
-			IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Load(date);
+			IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
 
-			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) =>  ((IMarketDataStorage<CandleMessage>)this).GetMetaInfo(date);
+			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => _original.GetMetaInfo(date);
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<CandleMessage>)this).Serializer;
 
-			IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
+			public IEnumerable<CandleMessage> Load(DateTime date)
 			{
 				if (date <= _prevDate)
 					_compressors.Values.ForEach(c => c.Reset());
@@ -643,9 +670,9 @@ namespace StockSharp.Algo.Storages
 
 			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _original.Serializer;
 
-			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data) => _original.Save(data);
+			public int Save(IEnumerable<CandleMessage> data) => _original.Save(data);
 
-			void IMarketDataStorage<CandleMessage>.Delete(IEnumerable<CandleMessage> data) => _original.Delete(data);
+			public void Delete(IEnumerable<CandleMessage> data) => _original.Delete(data);
 
 			DateTimeOffset IMarketDataStorageInfo<CandleMessage>.GetTime(CandleMessage data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
 
@@ -725,10 +752,7 @@ namespace StockSharp.Algo.Storages
 				_toMessage = toMessage ?? throw new ArgumentNullException(nameof(toMessage));
 			}
 
-			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
-			{
-				return _messageStorage.GetMetaInfo(date);
-			}
+			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => _messageStorage.GetMetaInfo(date);
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => _messageStorage.Serializer;
 
@@ -903,6 +927,11 @@ namespace StockSharp.Algo.Storages
 		public const string SecurityVerticalBarSeparator = "##VBAR##";
 
 		/// <summary>
+		/// The delimiter, replacing '?' in the path for instruments with id like AA-CA?SPB@SPBEX. Is equal to '##QSTN##'.
+		/// </summary>
+		public const string SecurityQuestionSeparator = "##QSTN##";
+
+		/// <summary>
 		/// The delimiter, replacing first '.' in the path for instruments with id like .AA-CA@SPBEX. Is equal to '##DOT##'.
 		/// </summary>
 		public const string SecurityFirstDot = "##DOT##";
@@ -918,6 +947,7 @@ namespace StockSharp.Algo.Storages
 			{ "*", SecurityStarSeparator },
 			{ ":", SecurityColonSeparator },
 			{ "|", SecurityVerticalBarSeparator },
+			{ "?", SecurityQuestionSeparator },
 		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
@@ -1072,7 +1102,9 @@ namespace StockSharp.Algo.Storages
 						{
 							lastTime = LoadMessages(storage
 								.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
-								.ToOrderBooks(subscription.DepthBuilder, subscription.RefreshSpeed ?? default, subscription.MaxDepth ?? int.MaxValue), range.Item1, subscription.TransactionId, SendReply, SendOut);
+								.ToOrderBooks(subscription.DepthBuilder, subscription.RefreshSpeed ?? default, subscription.MaxDepth ?? int.MaxValue)
+								.BuildIfNeed(),
+							range.Item1, subscription.TransactionId, SendReply, SendOut);
 						}
 					}
 					else if (subscription.BuildFrom == DataType.Level1)
@@ -1278,6 +1310,12 @@ namespace StockSharp.Algo.Storages
 
 		private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription, TimeSpan daysLoad)
 		{
+			if (storage is null)
+				throw new ArgumentNullException(nameof(storage));
+
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
 			var last = storage.Dates.LastOr();
 
 			if (last == null)
@@ -1305,6 +1343,12 @@ namespace StockSharp.Algo.Storages
 				return null;
 
 			var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
+
+			if (subscription.Skip != default)
+				messages = messages.Skip((int)subscription.Skip.Value);
+
+			if (subscription.Count != default)
+				messages = messages.Take((int)subscription.Count.Value);
 
 			return LoadMessages(messages, range.Item1, subscription.TransactionId, sendReply, newOutMessage, filter);
 		}
@@ -1380,8 +1424,9 @@ namespace StockSharp.Algo.Storages
 		/// Try build books by <see cref="OrderBookIncrementBuilder"/> in case of <paramref name="books"/> is incremental changes.
 		/// </summary>
 		/// <param name="books">Order books.</param>
+		/// <param name="logs">Logs.</param>
 		/// <returns>Order books.</returns>
-		public static IEnumerable<QuoteChangeMessage> BuildIfNeed(this IEnumerable<QuoteChangeMessage> books)
+		public static IEnumerable<QuoteChangeMessage> BuildIfNeed(this IEnumerable<QuoteChangeMessage> books, ILogReceiver logs = null)
 		{
 			if (books is null)
 				throw new ArgumentNullException(nameof(books));
@@ -1392,7 +1437,7 @@ namespace StockSharp.Algo.Storages
 			{
 				if (book.State != null)
 				{
-					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = GlobalLogReceiver.Instance });
+					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = logs ?? GlobalLogReceiver.Instance });
 					var change = builder.TryApply(book);
 
 					if (change != null)

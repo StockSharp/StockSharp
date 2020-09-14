@@ -1,6 +1,8 @@
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Runtime.Serialization;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -11,6 +13,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Data type info.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public class DataType : Equatable<DataType>, IPersistable
 	{
 		/// <summary>
@@ -190,6 +194,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Message type.
 		/// </summary>
+		[DataMember]
 		public Type MessageType
 		{
 			get => _messageType;
@@ -208,6 +213,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The additional argument, associated with data. For example, candle argument.
 		/// </summary>
+		[DataMember]
 		public object Arg
 		{
 			get => _arg;
@@ -337,9 +343,18 @@ namespace StockSharp.Messages
 			this == MarketDepth			||
 			this == FilteredMarketDepth ||
 			this == Level1				||
-			this == Securities			||
 			this == Ticks				||
 			this == OrderLog;
+
+		/// <summary>
+		/// Is the data type can be used as candles compression source.
+		/// </summary>
+		public bool IsCandleSource => CandleSources.Contains(this);
+
+		/// <summary>
+		/// Possible data types that can be used as candles source.
+		/// </summary>
+		public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>(new[] { Ticks, Level1, MarketDepth, OrderLog });
 
 		/// <summary>
 		/// Load settings.

@@ -35,29 +35,14 @@ namespace StockSharp.Algo.Storages.Binary
 			if (value != prevValue + diff)
 				throw new ArgumentOutOfRangeException(nameof(value), LocalizedStrings.Str1006Params.Put(value, prevValue));
 
-			writer.Write(diff >= 0);
-
-			if (diff < 0)
-				diff = -diff;
-
-			var decBits = decimal.GetBits(diff);
-
-			writer.WriteInt(decBits[0]);
-			writer.WriteInt(decBits[1]);
-			writer.WriteInt(decBits[2]);
-			writer.WriteInt((decBits[3] >> 16) & 0xff);
+			writer.WriteDecimal(diff);
 
 			return value;
 		}
 
 		public static decimal ReadDecimal(this BitArrayReader reader, decimal prevPrice)
 		{
-			var isPos = reader.Read();
-
-			var diff = new decimal(new[] { reader.ReadInt(), reader.ReadInt(), reader.ReadInt(), reader.ReadInt() << 16 });
-
-			if (!isPos)
-				diff = -diff;
+			var diff = reader.ReadDecimal();
 
 			return prevPrice + diff;
 		}
@@ -151,7 +136,43 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static void WritePriceEx(this BitArrayWriter writer, decimal price, BinaryMetaInfo info, SecurityId securityId, bool useLong = false)
+		private const decimal _largeDecLimit = 792281625142643375935439503.35m;
+
+		private static bool TryWriteLargeDecimal(this BitArrayWriter writer, bool largeDecimal, decimal value)
+		{
+			if (largeDecimal)
+			{
+				if (value.Abs() > _largeDecLimit)
+				{
+					writer.Write(true);
+					writer.WriteDecimal(value);
+					return true;
+				}
+				else
+				{
+					writer.Write(false);
+				}
+			}
+
+			return false;
+		}
+
+		private static bool TryReadLargeDecimal(this BitArrayReader reader, bool largeDecimal, out decimal value)
+		{
+			if (largeDecimal)
+			{
+				if (reader.Read())
+				{
+					value = reader.ReadDecimal();
+					return true;
+				}
+			}
+
+			value = default;
+			return false;
+		}
+
+		public static void WritePriceEx(this BitArrayWriter writer, decimal price, BinaryMetaInfo info, SecurityId securityId, bool useLong, bool largeDecimal)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
@@ -161,6 +182,9 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
+				if (writer.TryWriteLargeDecimal(largeDecimal, price))
+					return;
+
 				var isAligned = (price % info.LastPriceStep) == 0;
 				writer.Write(isAligned);
 
@@ -204,7 +228,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static decimal ReadPriceEx(this BitArrayReader reader, BinaryMetaInfo info, bool useLong = false)
+		public static decimal ReadPriceEx(this BitArrayReader reader, BinaryMetaInfo info, bool useLong, bool largeDecimal)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
@@ -213,6 +237,9 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
+				if (reader.TryReadLargeDecimal(largeDecimal, out var price))
+					return price;
+
 				if (reader.Read())
 				{
 					var prevPrice = info.FirstPrice;
@@ -413,7 +440,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return (isUtc ? new DateTime(time + offset.Ticks) : prevTime).ApplyTimeZone(offset);
 		}
 
-		public static void WriteVolume(this BitArrayWriter writer, decimal volume, BinaryMetaInfo info, SecurityId securityId)
+		public static void WriteVolume(this BitArrayWriter writer, decimal volume, BinaryMetaInfo info, bool largeDecimal)
 		{
 			if (info.Version < MarketDataVersions.Version44)
 			{
@@ -432,6 +459,9 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
+				if (writer.TryWriteLargeDecimal(largeDecimal, volume))
+					return;
+
 				var isAligned = (volume % info.VolumeStep) == 0;
 				writer.Write(isAligned);
 
@@ -449,7 +479,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static decimal ReadVolume(this BitArrayReader reader, BinaryMetaInfo info)
+		public static decimal ReadVolume(this BitArrayReader reader, BinaryMetaInfo info, bool largeDecimal)
 		{
 			if (info.Version < MarketDataVersions.Version44)
 			{
@@ -460,6 +490,9 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
+				if (reader.TryReadLargeDecimal(largeDecimal, out var volume))
+					return volume;
+
 				if (reader.Read())
 					return reader.ReadLong() * info.VolumeStep;
 				else

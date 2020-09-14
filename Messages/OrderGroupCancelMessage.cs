@@ -65,15 +65,23 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new OrderGroupCancelMessage
-			{
-				IsStop = IsStop,
-				Side = Side,
-			};
+			var clone = new OrderGroupCancelMessage();
 
 			CopyTo(clone);
 
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		public void CopyTo(OrderGroupCancelMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.IsStop = IsStop;
+			destination.Side = Side;
 		}
 	}
 }

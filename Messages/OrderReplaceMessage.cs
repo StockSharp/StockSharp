@@ -65,17 +65,25 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new OrderReplaceMessage
-			{
-				OldOrderId = OldOrderId,
-				OldOrderStringId = OldOrderStringId,
-				OldOrderPrice = OldOrderPrice,
-				OldOrderVolume = OldOrderVolume,
-			};
+			var clone = new OrderReplaceMessage();
 
 			CopyTo(clone);
 
 			return clone;
+		}
+
+		/// <summary>
+		/// Copy the message into the <paramref name="destination" />.
+		/// </summary>
+		/// <param name="destination">The object, to which copied information.</param>
+		public void CopyTo(OrderReplaceMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.OldOrderId = OldOrderId;
+			destination.OldOrderStringId = OldOrderStringId;
+			destination.OldOrderPrice = OldOrderPrice;
+			destination.OldOrderVolume = OldOrderVolume;
 		}
 
 		/// <inheritdoc />

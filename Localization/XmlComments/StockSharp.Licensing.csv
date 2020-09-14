@@ -37,8 +37,8 @@ M:StockSharp.Licensing.LicenseFeatureAttribute.#ctor(System.String)/param/featur
 T:StockSharp.Licensing.LicenseHelper/summary;DocStr3886
 E:StockSharp.Licensing.LicenseHelper.LicensesChanged/summary;DocStr3900
 E:StockSharp.Licensing.LicenseHelper.LicenseError/summary;DocStr3901
-F:StockSharp.Licensing.LicenseHelper.ExcludeCurrentDirectory/summary;DocStr11961
-P:StockSharp.Licensing.LicenseHelper.Licenses/summary;DocStr11962
+F:StockSharp.Licensing.LicenseHelper.ExcludeCurrentDirectory/summary;DocStr12021
+P:StockSharp.Licensing.LicenseHelper.Licenses/summary;DocStr12022
 F:StockSharp.Licensing.LicenseHelper.RenewOffset/summary;DocStr3888
 M:StockSharp.Licensing.LicenseHelper.CanRenew(StockSharp.Licensing.License)/summary;DocStr3889
 M:StockSharp.Licensing.LicenseHelper.CanRenew(StockSharp.Licensing.License)/param/license;License
@@ -54,11 +54,11 @@ M:StockSharp.Licensing.LicenseHelper.Remove(StockSharp.Licensing.License)/param/
 M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)/summary;DocStr3898
 M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)/param/license;License
 M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)/returns;DocStr3899
-M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)/summary;DocStr3893
-M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)/param/featureName;DocStr3894
-M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)/param/portfolioName;DocStr3895
-M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)/param/component;DocStr8821
-M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)/returns;DocStr3896
+M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Type)/summary;DocStr3893
+M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Type)/param/featureName;DocStr3894
+M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Type)/param/portfolioName;DocStr3895
+M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Type)/param/component;DocStr8821
+M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Type)/returns;DocStr3896
 T:StockSharp.Licensing.LicenseTargets/summary;DocStr11818
 F:StockSharp.Licensing.LicenseTargets.Machine/summary;DocStr11819
 F:StockSharp.Licensing.LicenseTargets.Application/summary;DocStr11656
@@ -98,3 +98,4 @@ T:StockSharp.Licensing.Messages.LicensingMessageTypes/summary;DocStr10482
 F:StockSharp.Licensing.Messages.LicensingMessageTypes.Lookup/summary;DocStr608
 F:StockSharp.Licensing.Messages.LicensingMessageTypes.Request/summary;DocStr608
 F:StockSharp.Licensing.Messages.LicensingMessageTypes.Info/summary;DocStr608
+F:StockSharp.Licensing.Messages.LicensingMessageTypes.LicenseInfo/summary;DocStr608

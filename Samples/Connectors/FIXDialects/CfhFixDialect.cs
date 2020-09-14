@@ -109,8 +109,7 @@ namespace StockSharp.Fix.Dialects
 					writer.Write(FixTags.Symbol);
 					writer.Write(securityId.SecurityCode);
 
-					writer.Write(FixTags.Side);
-					writer.Write(regMsg.Side.ToFix());
+					writer.WriteSide(regMsg.Side);
 
 					writer.WriteTransactTime(TimeStampParser);
 
@@ -195,8 +194,7 @@ namespace StockSharp.Fix.Dialects
 
 					if (cancelMsg.Side != null)
 					{
-						writer.Write(FixTags.Side);
-						writer.Write(cancelMsg.Side.Value.ToFix());
+						writer.WriteSide(cancelMsg.Side.Value);
 					}
 
 					if (cancelMsg.Volume != null)
@@ -233,8 +231,7 @@ namespace StockSharp.Fix.Dialects
 					writer.Write(FixTags.Symbol);
 					writer.Write(securityId.SecurityCode);
 
-					writer.Write(FixTags.Side);
-					writer.Write(replaceMsg.Side.ToFix());
+					writer.WriteSide(replaceMsg.Side);
 
 					writer.Write(FixTags.OrderQty);
 					writer.Write(replaceMsg.Volume);

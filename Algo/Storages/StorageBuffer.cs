@@ -226,42 +226,6 @@ namespace StockSharp.Algo.Storages
 			if (message.OfflineMode != MessageOfflineModes.None)
 				return;
 
-			static ExecutionMessage ToExec(OrderRegisterMessage regMsg) => new ExecutionMessage
-			{
-				ServerTime = DateTimeOffset.Now,
-				ExecutionType = ExecutionTypes.Transaction,
-				SecurityId = regMsg.SecurityId,
-				TransactionId = regMsg.TransactionId,
-				OriginalTransactionId = regMsg.TransactionId,
-				HasOrderInfo = true,
-				OrderPrice = regMsg.Price,
-				OrderVolume = regMsg.Volume,
-				Currency = regMsg.Currency,
-				PortfolioName = regMsg.PortfolioName,
-				ClientCode = regMsg.ClientCode,
-				BrokerCode = regMsg.BrokerCode,
-				Comment = regMsg.Comment,
-				Side = regMsg.Side,
-				TimeInForce = regMsg.TimeInForce,
-				ExpiryDate = regMsg.TillDate,
-				Balance = regMsg.Volume,
-				VisibleVolume = regMsg.VisibleVolume,
-				LocalTime = regMsg.LocalTime,
-				IsMarketMaker = regMsg.IsMarketMaker,
-				IsMargin = regMsg.IsMargin,
-				Slippage = regMsg.Slippage,
-				IsManual = regMsg.IsManual,
-				OrderType = regMsg.OrderType,
-				UserOrderId = regMsg.UserOrderId,
-				StrategyId = regMsg.StrategyId,
-				OrderState = OrderStates.Pending,
-				Condition = regMsg.Condition?.Clone(),
-				MinVolume = regMsg.MinOrderVolume,
-				PositionEffect = regMsg.PositionEffect,
-				PostOnly = regMsg.PostOnly,
-				Leverage = regMsg.Leverage,
-			};
-
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -286,7 +250,7 @@ namespace StockSharp.Algo.Storages
 					if (!CanStore(regMsg))
 						break;
 
-					_transactionsBuffer.Add(regMsg.SecurityId, ToExec(regMsg));
+					_transactionsBuffer.Add(regMsg.SecurityId, regMsg.ToExec());
 					break;
 				}
 				case MessageTypes.OrderReplace:
@@ -296,7 +260,7 @@ namespace StockSharp.Algo.Storages
 					if (!CanStore(replaceMsg))
 						break;
 
-					_transactionsBuffer.Add(replaceMsg.SecurityId, ToExec(replaceMsg));
+					_transactionsBuffer.Add(replaceMsg.SecurityId, replaceMsg.ToExec());
 					break;
 				}
 				case MessageTypes.OrderPairReplace:
@@ -306,8 +270,8 @@ namespace StockSharp.Algo.Storages
 					if (!CanStore(pairMsg))
 						break;
 
-					_transactionsBuffer.Add(pairMsg.Message1.SecurityId, ToExec(pairMsg.Message1));
-					_transactionsBuffer.Add(pairMsg.Message2.SecurityId, ToExec(pairMsg.Message2));
+					_transactionsBuffer.Add(pairMsg.Message1.SecurityId, pairMsg.Message1.ToExec());
+					_transactionsBuffer.Add(pairMsg.Message2.SecurityId, pairMsg.Message2.ToExec());
 					break;
 				}
 				//case MessageTypes.OrderCancel:

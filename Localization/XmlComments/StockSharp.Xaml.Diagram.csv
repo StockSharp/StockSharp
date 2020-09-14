@@ -207,6 +207,9 @@ E:StockSharp.Xaml.Diagram.DiagramElement.SocketChanged/summary;DocStr9296
 M:StockSharp.Xaml.Diagram.DiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.DiagramElement.ProcessDoubleClick(System.Object)/summary;DocStr11296
 M:StockSharp.Xaml.Diagram.DiagramElement.ProcessDoubleClick(System.Object)/param/sender;Str1664
+M:StockSharp.Xaml.Diagram.DiagramElement.CreateDynamicSocket(System.String)/summary;DocStr11310
+M:StockSharp.Xaml.Diagram.DiagramElement.CreateDynamicSocket(System.String)/param/id;DocStr7873
+M:StockSharp.Xaml.Diagram.DiagramElement.CreateDynamicSocket(System.String)/returns;DocStr11311
 M:StockSharp.Xaml.Diagram.DiagramElement.SetElementName(System.String)/summary;DocStr9837
 M:StockSharp.Xaml.Diagram.DiagramElement.SetElementName(System.String)/param/name;Name2
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/summary;DocStr7868
@@ -319,9 +322,6 @@ M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.Object,Syst
 E:StockSharp.Xaml.Diagram.DiagramElement.ParameterValueChanged/summary;DocStr9220
 M:StockSharp.Xaml.Diagram.DiagramElement.RaiseParameterValueChanged(System.String)/summary;DocStr9257
 M:StockSharp.Xaml.Diagram.DiagramElement.RaiseParameterValueChanged(System.String)/param/parameterName;Str3570
-M:StockSharp.Xaml.Diagram.DiagramElement.CreateDynamicSocket(System.String)/summary;DocStr11310
-M:StockSharp.Xaml.Diagram.DiagramElement.CreateDynamicSocket(System.String)/param/id;DocStr7873
-M:StockSharp.Xaml.Diagram.DiagramElement.CreateDynamicSocket(System.String)/returns;DocStr11311
 M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
 M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/returns;DocStr1116

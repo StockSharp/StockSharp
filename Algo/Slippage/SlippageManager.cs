@@ -71,11 +71,11 @@ namespace StockSharp.Algo.Slippage
 					var l1Msg = (Level1ChangeMessage)message;
 					var pair = _bestPrices.SafeAdd(l1Msg.SecurityId);
 
-					var bidPrice = (decimal?)l1Msg.Changes.TryGetValue(Level1Fields.BestBidPrice);
+					var bidPrice = l1Msg.TryGetDecimal(Level1Fields.BestBidPrice);
 					if (bidPrice != null)
 						pair.First = bidPrice.Value;
 
-					var askPrice = (decimal?)l1Msg.Changes.TryGetValue(Level1Fields.BestAskPrice);
+					var askPrice = l1Msg.TryGetDecimal(Level1Fields.BestAskPrice);
 					if (askPrice != null)
 						pair.Second = askPrice.Value;
 

@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Risk
 			if (!pfMsg.IsMoney())
 				return false;
 
-			var currValue = (decimal?)pfMsg.Changes.TryGetValue(PositionChangeTypes.CurrentValue);
+			var currValue = pfMsg.TryGetDecimal(PositionChangeTypes.CurrentValue);
 
 			if (currValue == null)
 				return false;
@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Risk
 				return false;
 
 			var posMsg = (PositionChangeMessage)message;
-			var currValue = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.CurrentValue);
+			var currValue = posMsg.TryGetDecimal(PositionChangeTypes.CurrentValue);
 
 			if (currValue == null)
 				return false;
@@ -285,7 +285,7 @@ namespace StockSharp.Algo.Risk
 				case MessageTypes.PositionChange:
 				{
 					var posMsg = (PositionChangeMessage)message;
-					var currValue = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.CurrentValue);
+					var currValue = posMsg.TryGetDecimal(PositionChangeTypes.CurrentValue);
 
 					if (currValue == null)
 						return false;
@@ -392,7 +392,7 @@ namespace StockSharp.Algo.Risk
 			if (!pfMsg.IsMoney())
 				return false;
 
-			var currValue = (decimal?)pfMsg.Changes.TryGetValue(PositionChangeTypes.Commission);
+			var currValue = pfMsg.TryGetDecimal(PositionChangeTypes.Commission);
 
 			if (currValue == null)
 				return false;

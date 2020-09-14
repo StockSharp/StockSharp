@@ -412,15 +412,15 @@ namespace StockSharp.Algo.Strategies
 						}, (SecurityMessage)null);
 
 						Subscribe(_pfSubscription, true);
-
-						_orderSubscription = new Subscription(new OrderStatusMessage
-						{
-							IsSubscribe = true,
-							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null);
-
-						Subscribe(_orderSubscription, true);
 					}
+
+					_orderSubscription = new Subscription(new OrderStatusMessage
+					{
+						IsSubscribe = true,
+						StrategyId = EnsureGetId(),
+					}, (SecurityMessage)null);
+
+					Subscribe(_orderSubscription, true);
 				}
 
 				foreach (var strategy in ChildStrategies)
@@ -2210,7 +2210,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					var timeMsg = (TimeMessage)message;
 
-					if (timeMsg.BackMode != default)
+					if (timeMsg.IsBack())
 						return;
 
 					msgTime = CurrentTime;

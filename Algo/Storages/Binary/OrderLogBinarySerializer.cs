@@ -182,7 +182,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
 		public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.OrderLog, 200, MarketDataVersions.Version56, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.OrderLog, 200, MarketDataVersions.Version57, exchangeInfoProvider)
 		{
 		}
 
@@ -207,6 +207,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var useBalance = metaInfo.Version >= MarketDataVersions.Version54;
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version55;
 			var seqNum = metaInfo.Version >= MarketDataVersions.Version56;
+			var useLong = metaInfo.Version >= MarketDataVersions.Version57;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version57;
 
 			foreach (var message in messages)
 			{
@@ -249,7 +251,7 @@ namespace StockSharp.Algo.Storages.Binary
 				var orderPrice = message.OrderPrice;
 
 				if (metaInfo.Version < MarketDataVersions.Version45)
-					writer.WritePriceEx(orderPrice, metaInfo, SecurityId);
+					writer.WritePriceEx(orderPrice, metaInfo, SecurityId, false, false);
 				else
 				{
 					var isAligned = (orderPrice % metaInfo.LastPriceStep) == 0;
@@ -273,7 +275,7 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 				}
 
-				writer.WriteVolume(volume, metaInfo, SecurityId);
+				writer.WriteVolume(volume, metaInfo, largeDecimal);
 
 				writer.Write(message.Side == Sides.Buy);
 
@@ -292,7 +294,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 					metaInfo.LastTradeId = writer.SerializeId(tradeId.Value, metaInfo.LastTradeId);
 
-					writer.WritePriceEx(message.GetTradePrice(), metaInfo, SecurityId);
+					writer.WritePriceEx(message.GetTradePrice(), metaInfo, SecurityId, useLong, largeDecimal);
 
 					if (metaInfo.Version >= MarketDataVersions.Version54)
 						writer.WriteInt((int)message.OrderState);
@@ -418,13 +420,23 @@ namespace StockSharp.Algo.Storages.Binary
 			var reader = enumerator.Reader;
 			var metaInfo = enumerator.MetaInfo;
 
+			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
+			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
+			var useBalance = metaInfo.Version >= MarketDataVersions.Version54;
+			var buildFrom = metaInfo.Version >= MarketDataVersions.Version55;
+			var seqNum = metaInfo.Version >= MarketDataVersions.Version56;
+			var useLong = metaInfo.Version >= MarketDataVersions.Version57;
+			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version57;
+
 			metaInfo.FirstOrderId += reader.ReadLong();
 
 			decimal price;
 
 			if (metaInfo.Version < MarketDataVersions.Version45)
 			{
-				price = reader.ReadPriceEx(metaInfo);
+				price = reader.ReadPriceEx(metaInfo, false, false);
 			}
 			else
 			{
@@ -438,17 +450,9 @@ namespace StockSharp.Algo.Storages.Binary
 					price = metaInfo.FirstFractionalPrice = reader.ReadDecimal(metaInfo.FirstFractionalPrice);
 			}
 
-			var volume = reader.ReadVolume(metaInfo);
+			var volume = reader.ReadVolume(metaInfo, largeDecimal);
 
 			var orderDirection = reader.Read() ? Sides.Buy : Sides.Sell;
-
-			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
-			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
-			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
-			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
-			var useBalance = metaInfo.Version >= MarketDataVersions.Version54;
-			var buildFrom = metaInfo.Version >= MarketDataVersions.Version55;
-			var seqNum = metaInfo.Version >= MarketDataVersions.Version56;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -471,7 +475,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (reader.Read())
 			{
 				metaInfo.FirstTradeId += reader.ReadLong();
-				price = reader.ReadPriceEx(metaInfo);
+				price = reader.ReadPriceEx(metaInfo, useLong, largeDecimal);
 
 				execMsg.TradeId = metaInfo.FirstTradeId;
 				execMsg.TradePrice = price;

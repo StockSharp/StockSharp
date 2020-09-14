@@ -372,7 +372,7 @@ namespace StockSharp.Messages
 		/// Deal initiator (seller or buyer).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str148Key)]
+		[DisplayNameLoc(LocalizedStrings.InitiatorKey)]
 		[DescriptionLoc(LocalizedStrings.Str149Key)]
 		[MainCategory]
 		[Nullable]

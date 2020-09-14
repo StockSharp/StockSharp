@@ -33,10 +33,12 @@ namespace StockSharp.Algo.Strategies
 			=> CandleManager.GetSupportedRanges(series);
 
 		/// <inheritdoc />
+		[Obsolete("Use Subscribe method.")]
 		public virtual void Start(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null)
 			=> CandleManager.Start(series, from, to);
 
 		/// <inheritdoc />
+		[Obsolete("Use UnSubscribe method.")]
 		public virtual void Stop(CandleSeries series) => CandleManager.Stop(series);
 
 		/// <inheritdoc />

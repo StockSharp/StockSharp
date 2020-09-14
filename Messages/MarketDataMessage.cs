@@ -225,9 +225,11 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long TransactionId { get; set; }
 
-		/// <summary>
-		/// Market-data count.
-		/// </summary>
+		/// <inheritdoc />
+		[DataMember]
+		public long? Skip { get; set; }
+
+		/// <inheritdoc />
 		[DataMember]
 		public long? Count { get; set; }
 
@@ -358,6 +360,7 @@ namespace StockSharp.Messages
 			destination.To = To;
 			destination.IsSubscribe = IsSubscribe;
 			destination.TransactionId = TransactionId;
+			destination.Skip = Skip;
 			destination.Count = Count;
 			destination.MaxDepth = MaxDepth;
 			destination.NewsId = NewsId;
@@ -386,16 +389,19 @@ namespace StockSharp.Messages
 			if (OriginalTransactionId != default)
 				str += $",OrigId={OriginalTransactionId}";
 
-			if (MaxDepth != null)
+			if (MaxDepth != default)
 				str += $",MaxDepth={MaxDepth}";
 
-			if (Count != null)
+			if (Skip != default)
+				str += $",Skip={Skip}";
+
+			if (Count != default)
 				str += $",Cnt={Count}";
 
-			if (From != null)
+			if (From != default)
 				str += $",From={From}";
 
-			if (To != null)
+			if (To != default)
 				str += $",To={To}";
 
 			if (BuildMode == MarketDataBuildModes.Build)

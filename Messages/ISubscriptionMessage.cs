@@ -28,6 +28,11 @@ namespace StockSharp.Messages
 		bool IsSubscribe { get; set; }
 
 		/// <summary>
+		/// Skip count.
+		/// </summary>
+		long? Skip { get; set; }
+
+		/// <summary>
 		/// Max count.
 		/// </summary>
 		long? Count { get; set; }

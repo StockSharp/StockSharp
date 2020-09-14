@@ -8,11 +8,12 @@ namespace SampleConnection
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Xaml;
+	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -22,6 +23,92 @@ namespace SampleConnection
 
 	public partial class SecuritiesWindow
 	{
+		private class DatesSettings : NotifiableObject, IPersistable
+		{
+			private DateTimeOffset? _from;
+
+			public DateTimeOffset? From
+			{
+				get => _from;
+				set
+				{
+					_from = value;
+					NotifyChanged(nameof(From));
+				}
+			}
+
+			private DateTimeOffset? _to;
+
+			public DateTimeOffset? To
+			{
+				get => _to;
+				set
+				{
+					_to = value;
+					NotifyChanged(nameof(To));
+				}
+			}
+
+			private long? _skip;
+
+			public long? Skip
+			{
+				get => _skip;
+				set
+				{
+					_skip = value;
+					NotifyChanged(nameof(Skip));
+				}
+			}
+
+			private long? _count;
+
+			public long? Count
+			{
+				get => _count;
+				set
+				{
+					_count = value;
+					NotifyChanged(nameof(Count));
+				}
+			}
+
+			public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.LoadAndBuild;
+
+			void IPersistable.Load(SettingsStorage storage)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IPersistable.Save(SettingsStorage storage)
+			{
+				throw new NotSupportedException();
+			}
+		}
+
+		private class DepthSettings : IPersistable
+		{
+			public DateTimeOffset? From { get; set; }
+
+			public DateTimeOffset? To { get; set; }
+
+			public int? MaxDepth { get; set; }
+
+			public DataType BuildFrom { get; set; } = DataType.OrderLog;
+
+			public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.Build;
+
+			void IPersistable.Load(SettingsStorage storage)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IPersistable.Save(SettingsStorage storage)
+			{
+				throw new NotSupportedException();
+			}
+		}
+
 		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>>();
 		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindowsBySubscription = new SynchronizedDictionary<Subscription, QuotesWindow>();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
@@ -140,12 +227,17 @@ namespace SampleConnection
 
 		private void DepthAdvancedClick(object sender, RoutedEventArgs e)
 		{
-			var settingsWnd = new DepthSettingsWindow();
+			var settings = new DepthSettings();
+
+			var settingsWnd = new SettingsWindow
+			{
+				Settings = settings,
+			};
 
 			if (!settingsWnd.ShowModal(this))
 				return;
 
-			SubscribeDepths(settingsWnd.Settings);
+			SubscribeDepths(settings);
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)
@@ -267,14 +359,16 @@ namespace SampleConnection
 		{
 			var connector = Connector;
 
-			var wnd = new DatesWindow { From = DateTime.Today.AddDays(-1) };
+			var settings = new DatesSettings { From = DateTime.Today.AddDays(-1) };
+
+			var wnd = new SettingsWindow { Settings = settings };
 
 			if (!wnd.ShowModal(this))
 				return;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				connector.SubscribeLevel1(security, wnd.From, wnd.To);
+				connector.SubscribeLevel1(security, settings.From, settings.To, skip: settings.Skip, count: settings.Count);
 			}
 		}
 
@@ -297,14 +391,16 @@ namespace SampleConnection
 		{
 			var connector = Connector;
 
-			var wnd = new DatesWindow { From = DateTime.Today.AddDays(-1) };
+			var settings = new DatesSettings { From = DateTime.Today.AddDays(-1) };
+
+			var wnd = new SettingsWindow { Settings = settings };
 
 			if (!wnd.ShowModal(this))
 				return;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				connector.SubscribeTrades(security, wnd.From, wnd.To);
+				connector.SubscribeTrades(security, settings.From, settings.To, skip: settings.Skip, count: settings.Count);
 			}
 		}
 
@@ -328,7 +424,7 @@ namespace SampleConnection
 			var wnd = new SecurityLookupWindow
 			{
 				ShowAllOption = Connector.Adapter.IsSupportSecuritiesLookupAll(),
-				Criteria = new Security { Code = "EUR", Currency = CurrencyTypes.USD, Type = SecurityTypes.Currency, }
+				Criteria = new Security { Code = "EUR"/*, Currency = CurrencyTypes.USD, Type = SecurityTypes.Currency*/, }
 			};
 
 			if (!wnd.ShowModal(this))
@@ -346,19 +442,27 @@ namespace SampleConnection
 			if (range.TotalYears() > 5)
 				range = TimeSpan.FromTicks(TimeHelper.TicksPerYear * 5);
 
-			var wnd = new DatesWindow { From = DateTime.Today - range };
+			var settings = new DatesSettings { From = DateTime.Today - range };
+
+			var wnd = new SettingsWindow { Settings = settings };
 
 			if (!wnd.ShowModal(this))
 				return;
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var chartWnd = new ChartWindow(new CandleSeries(typeof(TimeFrameCandle), security, tf)
+				var mdMsg = new MarketDataMessage
 				{
-					From = wnd.From,
-					To = wnd.To,
-					BuildCandlesMode = wnd.BuildMode,
-				});
+					SecurityId = security.ToSecurityId(),
+					IsSubscribe = true,
+					DataType2 = DataType.TimeFrame(tf),
+					From = settings.From,
+					To = settings.To,
+					BuildMode = settings.BuildMode,
+					Skip = settings.Skip,
+					Count = settings.Count,
+				};
+				var chartWnd = new ChartWindow(mdMsg);
 
 				_chartWindows.Add(chartWnd);
 				chartWnd.Closed += (s, e1) => _chartWindows.Remove(chartWnd);

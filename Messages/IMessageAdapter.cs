@@ -25,22 +25,6 @@ namespace StockSharp.Messages
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Types of <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
-	/// </summary>
-	public enum OrderCancelVolumeRequireTypes
-	{
-		/// <summary>
-		/// Non filled balance.
-		/// </summary>
-		Balance,
-
-		/// <summary>
-		/// Initial volume.
-		/// </summary>
-		Volume
-	}
-
-	/// <summary>
 	/// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 	/// </summary>
 	public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
@@ -139,11 +123,6 @@ namespace StockSharp.Messages
 		/// Message adapter categories.
 		/// </summary>
 		MessageAdapterCategories Categories { get; }
-
-		/// <summary>
-		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
-		/// </summary>
-		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
 
 		/// <summary>
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
@@ -246,6 +225,13 @@ namespace StockSharp.Messages
 		/// <param name="iterationInterval">Interval between iterations.</param>
 		/// <returns>Step.</returns>
 		TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval);
+
+		/// <summary>
+		/// Get maximum possible items count per single subscription request.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Max items count.</returns>
+		int? GetMaxCount(DataType dataType);
 
 		/// <summary>
 		/// Is for the specified <paramref name="dataType"/> all securities downloading enabled.
