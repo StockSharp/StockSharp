@@ -111,6 +111,95 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Convert order changes to final snapshot.
+		/// </summary>
+		/// <param name="diffs">Changes.</param>
+		/// <param name="transactionId">Transaction ID.</param>
+		/// <param name="logs">Logs.</param>
+		/// <returns>Snapshot.</returns>
+		public static ExecutionMessage ToOrderSnapshot(this IEnumerable<ExecutionMessage> diffs, long transactionId, ILogReceiver logs)
+		{
+			if (diffs is null)
+				throw new ArgumentNullException(nameof(diffs));
+
+			diffs = diffs.OrderBy(m =>
+			{
+				switch (m.OrderState)
+				{
+					case null:
+					case OrderStates.None:
+						return 0;
+					case OrderStates.Pending:
+						return 1;
+					case OrderStates.Active:
+						return 2;
+					case OrderStates.Done:
+					case OrderStates.Failed:
+						return 3;
+					default:
+						throw new ArgumentOutOfRangeException(m.OrderState.ToString());
+				}
+			});
+
+			ExecutionMessage snapshot = null;
+
+			foreach (var execMsg in diffs)
+			{
+				if (!execMsg.HasOrderInfo)
+					throw new InvalidOperationException(LocalizedStrings.Str3794Params.Put(transactionId));
+
+				if (snapshot is null)
+					snapshot = execMsg;
+				else
+				{
+					if (execMsg.Balance != null)
+						snapshot.Balance = snapshot.Balance.ApplyNewBalance(execMsg.Balance.Value, transactionId, logs);
+
+					if (execMsg.OrderState != null)
+					{
+						snapshot.OrderState.VerifyOrderState(execMsg.OrderState.Value, transactionId, logs);
+						snapshot.OrderState = execMsg.OrderState.Value;
+					}
+
+					if (execMsg.OrderStatus != null)
+						snapshot.OrderStatus = execMsg.OrderStatus;
+
+					if (execMsg.OrderId != null)
+						snapshot.OrderId = execMsg.OrderId;
+
+					if (!execMsg.OrderStringId.IsEmpty())
+						snapshot.OrderStringId = execMsg.OrderStringId;
+
+					if (execMsg.OrderBoardId != null)
+						snapshot.OrderBoardId = execMsg.OrderBoardId;
+
+					if (execMsg.PnL != null)
+						snapshot.PnL = execMsg.PnL;
+
+					if (execMsg.Position != null)
+						snapshot.Position = execMsg.Position;
+
+					if (execMsg.Commission != null)
+						snapshot.Commission = execMsg.Commission;
+
+					if (execMsg.CommissionCurrency != null)
+						snapshot.CommissionCurrency = execMsg.CommissionCurrency;
+
+					if (execMsg.AveragePrice != null)
+						snapshot.AveragePrice = execMsg.AveragePrice;
+
+					if (execMsg.Latency != null)
+						snapshot.Latency = execMsg.Latency;
+				}
+			}
+
+			if (snapshot is null)
+				throw new InvalidOperationException(LocalizedStrings.Str1702Params.Put(transactionId));
+
+			return snapshot;
+		}
+
+		/// <summary>
 		/// Check the possibility <see cref="Order.Balance"/> change.
 		/// </summary>
 		/// <param name="currBal">Current balance.</param>
