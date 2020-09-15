@@ -39,6 +39,12 @@
 		public string PackageId { get; set; }
 
 		/// <summary>
+		/// Repository.
+		/// </summary>
+		[DataMember]
+		public PackageRepositories Repository { get; set; }
+
+		/// <summary>
 		/// Tags.
 		/// </summary>
 		[DataMember]
@@ -123,6 +129,7 @@
 			destination.Name = Name;
 			destination.Description = Description;
 			destination.PackageId = PackageId;
+			destination.Repository = Repository;
 			destination.Tags = Tags;
 			destination.Author = Author;
 			destination.Price = Price?.Clone();
@@ -148,7 +155,7 @@
 				str += $",Descr={Description}";
 
 			if (!PackageId.IsEmpty())
-				str += $",PackageId={PackageId}";
+				str += $",PackageId={PackageId},Repo={Repository}";
 
 			if (!Tags.IsEmpty())
 				str += $",Tags={Tags}";
