@@ -16766,3 +16766,20 @@ DocStr12214;{0} removed;{0} removed
 DocStr12215;To check, are there {0} in the level1 data;To check, are there {0} in the level1 data
 DocStr12216;{0} and {1} auto invoke;{0} and {1} auto invoke
 DocStr12217;Save changes into {0};Save changes into {0}
+DocStr12218;Convert order changes to final snapshot;Convert order changes to final snapshot
+DocStr12219;Content type;Content type
+DocStr12220;Indicates that the range of messages retransmitted after a {0} may not include all the application messages contained in the original range requested;Indicates that the range of messages retransmitted after a {0} may not include all the application messages contained in the original range requested
+DocStr12221;Add permission for the specified user;Add permission for the specified user
+DocStr12222;Remove permission for the specified user;Remove permission for the specified user
+DocStr12223;Get permissions for the specified product;Get permissions for the specified product
+DocStr12224;Add product;Add product
+DocStr12225;Topic with description (english);Topic with description (english)
+DocStr12226;Topic with description (russian);Topic with description (russian)
+DocStr12227;Price in RUB;Price in RUB
+DocStr12228;Price in USD;Price in USD
+DocStr12229;Demo period;Demo period
+DocStr12230;Full period;Full period
+DocStr12231;The interface describing the product store service;The interface describing the product store service
+DocStr12232;Request info in English;Request info in English
+DocStr12233;Find users;Find users
+DocStr12234;Found users;Found users
