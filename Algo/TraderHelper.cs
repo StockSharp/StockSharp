@@ -3174,15 +3174,13 @@ namespace StockSharp.Algo
 		/// <param name="offlineMode">Offline mode handling message.</param>
 		public static void LookupAll(this Connector connector, MessageOfflineModes offlineMode = MessageOfflineModes.Cancel)
 		{
-			if (connector == null)
+			if (connector is null)
 				throw new ArgumentNullException(nameof(connector));
 
-#pragma warning disable CS0618 // Type or member is obsolete
-			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
-			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
-			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
-			connector.LookupOrders(new Order(), offlineMode: offlineMode);
-#pragma warning restore CS0618 // Type or member is obsolete
+			connector.Subscribe(new Subscription(DataType.Board, (SecurityMessage)null));
+			connector.Subscribe(new Subscription(DataType.Securities, (SecurityMessage)null));
+			connector.Subscribe(new Subscription(DataType.PositionChanges, (SecurityMessage)null));
+			connector.Subscribe(new Subscription(DataType.Transactions, (SecurityMessage)null));
 		}
 
 		/// <summary>
