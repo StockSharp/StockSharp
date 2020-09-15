@@ -81,7 +81,7 @@
 		public bool IsRequiredConnectors { get; set; }
 
 		/// <summary>
-		/// Product required connectors.
+		/// Content type.
 		/// </summary>
 		[DataMember]
 		public ProductContentTypes ContentType { get; set; }
