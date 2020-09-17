@@ -2226,6 +2226,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.EnqueueSubscriptions { get; set; }
 		bool IMessageAdapter.IsSupportTransactionLog => false;
 		bool IMessageAdapter.UseChannels => false;
+		TimeSpan IMessageAdapter.IterationInterval => default;
 		string IMessageAdapter.FeatureName => string.Empty;
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;

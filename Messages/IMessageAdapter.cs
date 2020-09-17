@@ -248,7 +248,7 @@ namespace StockSharp.Messages
 		bool IsSecurityRequired(DataType dataType);
 
 		/// <summary>
-		/// Use <see cref="IMessageChannel"/> for in and out messages.
+		/// Use channels for in and out messages.
 		/// </summary>
 		bool UseChannels { get; }
 
@@ -256,6 +256,11 @@ namespace StockSharp.Messages
 		/// Feature name.
 		/// </summary>
 		string FeatureName { get; }
+
+		/// <summary>
+		/// Interval between iterations.
+		/// </summary>
+		TimeSpan IterationInterval { get; }
 	}
 
 	/// <summary>

@@ -362,6 +362,8 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.UseChannels => InnerAdapter.UseChannels;
 
+		TimeSpan IMessageAdapter.IterationInterval => InnerAdapter.IterationInterval;
+
 		string IMessageAdapter.FeatureName => InnerAdapter.FeatureName;
 
 		/// <inheritdoc />

@@ -557,8 +557,22 @@ namespace StockSharp.Messages
 		public virtual bool IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
 
 		/// <inheritdoc />
-		[Browsable(false)]
-		public virtual bool UseChannels => false;
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ChannelsKey,
+			Description = LocalizedStrings.UseChannelsKey,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 303)]
+		public virtual bool UseChannels { get; set; }
+
+		/// <inheritdoc />
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IterationsKey,
+			Description = LocalizedStrings.IterationIntervalKey,
+			GroupName = LocalizedStrings.Str186Key,
+			Order = 304)]
+		public virtual TimeSpan IterationInterval { get; set; } = TimeSpan.FromSeconds(2);
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -593,6 +607,8 @@ namespace StockSharp.Messages
 
 			EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 			GenerateOrderBookFromLevel1 = storage.GetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);
+			UseChannels = storage.GetValue(nameof(UseChannels), UseChannels);
+			IterationInterval = storage.GetValue(nameof(IterationInterval), IterationInterval);
 
 			base.Load(storage);
 		}
@@ -606,6 +622,8 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 			storage.SetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 			storage.SetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);
+			storage.SetValue(nameof(UseChannels), UseChannels);
+			storage.SetValue(nameof(IterationInterval), IterationInterval);
 
 			base.Save(storage);
 		}

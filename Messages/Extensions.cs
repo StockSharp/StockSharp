@@ -2111,7 +2111,7 @@ namespace StockSharp.Messages
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			iterationInterval = TimeSpan.FromSeconds(2);
+			iterationInterval = adapter.IterationInterval;
 
 			if (dataType.IsCandles)
 			{

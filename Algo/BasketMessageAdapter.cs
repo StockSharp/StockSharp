@@ -772,6 +772,8 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public bool UseChannels { get; set; } = true;
 
+		TimeSpan IMessageAdapter.IterationInterval => default;
+
 		string IMessageAdapter.FeatureName => string.Empty;
 
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
