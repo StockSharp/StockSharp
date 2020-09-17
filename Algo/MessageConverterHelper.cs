@@ -192,6 +192,8 @@ namespace StockSharp.Algo
 				Commission = trade.Commission,
 				CommissionCurrency = trade.CommissionCurrency,
 				SeqNum = trade.Trade.SeqNum,
+				OrderBuyId = trade.Trade.OrderBuyId,
+				OrderSellId = trade.Trade.OrderSellId,
 			};
 		}
 
@@ -303,6 +305,8 @@ namespace StockSharp.Algo
 				SeqNum = trade.SeqNum,
 				BuildFrom = trade.BuildFrom,
 				Yield = trade.Yield,
+				OrderBuyId = trade.OrderBuyId,
+				OrderSellId = trade.OrderSellId,
 			};
 		}
 
@@ -343,6 +347,8 @@ namespace StockSharp.Algo
 				TradePrice = trade?.Price,
 				Currency = order.Currency,
 				SeqNum = order.SeqNum,
+				OrderBuyId = trade?.OrderBuyId,
+				OrderSellId = trade?.OrderSellId,
 			};
 		}
 

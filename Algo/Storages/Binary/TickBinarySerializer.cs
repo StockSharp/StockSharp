@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
 		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version60, exchangeInfoProvider)
+			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version61, exchangeInfoProvider)
 		{
 		}
 
@@ -140,6 +140,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
 			var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
 			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version60;
+			var orderIds = metaInfo.Version >= MarketDataVersions.Version61;
 
 			foreach (var msg in messages)
 			{
@@ -280,6 +281,12 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteSeqNum(msg, metaInfo);
+
+				if (!orderIds)
+					continue;
+
+				writer.WriteNullableLong(msg.OrderBuyId);
+				writer.WriteNullableLong(msg.OrderSellId);
 			}
 		}
 
@@ -297,6 +304,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version58;
 			var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
 			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version60;
+			var orderIds = metaInfo.Version >= MarketDataVersions.Version61;
 
 			metaInfo.FirstId += reader.ReadLong();
 
@@ -396,6 +404,12 @@ namespace StockSharp.Algo.Storages.Binary
 				return msg;
 
 			reader.ReadSeqNum(msg, metaInfo);
+
+			if (!orderIds)
+				return msg;
+
+			msg.OrderBuyId = reader.ReadNullableLong();
+			msg.OrderSellId = reader.ReadNullableLong();
 
 			return msg;
 		}
