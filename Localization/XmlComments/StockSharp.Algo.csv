@@ -7846,7 +7846,7 @@ P:StockSharp.Community.StrategyBacktest.Id/summary;Str361
 P:StockSharp.Community.StrategyBacktest.StrategyId/summary;DocStr3053
 P:StockSharp.Community.StrategyBacktest.MarketData/summary;DocStr9132
 P:StockSharp.Community.StrategyBacktest.SecurityId/summary;DocStr9133
-P:StockSharp.Community.StrategyBacktest.Iterations/summary;DocStr9134
+P:StockSharp.Community.StrategyBacktest.Iterations/summary;Iterations
 P:StockSharp.Community.StrategyBacktest.MachineCount/summary;DocStr9135
 P:StockSharp.Community.StrategyBacktest.MaxAmount/summary;DocStr9136
 P:StockSharp.Community.StrategyBacktest.IsMaxAmountUsd/summary;DocStr9137

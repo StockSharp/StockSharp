@@ -16785,3 +16785,9 @@ DocStr12231;The interface describing the product store service;The interface des
 DocStr12232;Request info in English;Request info in English
 DocStr12233;Find users;Find users
 DocStr12234;Found users;Found users
+DocStr12235;Package repositories;Package repositories
+DocStr12236;NuGet.org;NuGet.org
+DocStr12237;StockSharp.com;StockSharp.com
+DocStr12238;Repository;Repository
+DocStr12239;Buying party in a trade;Buying party in a trade
+DocStr12240;Selling party in a trade;Selling party in a trade
