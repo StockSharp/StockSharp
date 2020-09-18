@@ -1308,6 +1308,8 @@ namespace StockSharp.Algo
 			trade.SeqNum = message.SeqNum;
 			trade.BuildFrom = message.BuildFrom;
 			trade.Yield = message.Yield;
+			trade.OrderBuyId = message.OrderBuyId;
+			trade.OrderSellId = message.OrderSellId;
 
 			return trade;
 		}

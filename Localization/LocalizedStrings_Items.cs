@@ -52746,5 +52746,25 @@ namespace StockSharp.Localization
 		/// Interval between iterations.
 		/// </summary>
 		public static string IterationInterval => GetString(IterationIntervalKey);
+
+		/// <summary>
+		/// Order id (buy).
+		/// </summary>
+		public const string OrderBuyIdKey = nameof(OrderBuyId);
+
+		/// <summary>
+		/// Order id (buy).
+		/// </summary>
+		public static string OrderBuyId => GetString(OrderBuyIdKey);
+
+		/// <summary>
+		/// Order id (sell).
+		/// </summary>
+		public const string OrderSellIdKey = nameof(OrderSellId);
+
+		/// <summary>
+		/// Order id (sell).
+		/// </summary>
+		public static string OrderSellId => GetString(OrderSellIdKey);
 	}
 }

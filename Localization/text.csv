@@ -5307,6 +5307,8 @@ Channels;Channels;Каналы
 UseChannels;Use channels for in and out messages.;Использовать каналы для входящих и исходящих сообщений.
 Iterations;Iterations;Итерации
 IterationInterval;Interval between iterations.;Интервал между итерациями.
+OrderBuyId;Order id (buy).;Заявка (покупка).
+OrderSellId;Order id (sell).;Заявка (продажа).
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

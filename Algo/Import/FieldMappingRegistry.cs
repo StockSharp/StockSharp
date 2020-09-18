@@ -97,6 +97,8 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.Str342, LocalizedStrings.Str140, (i, v) => i.IsSystem = v));
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsUpTick), LocalizedStrings.Str157, LocalizedStrings.Str158, (i, v) => i.IsUpTick = v));
 						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderBuyId), LocalizedStrings.Buy, LocalizedStrings.OrderBuyId, (i, v) => i.OrderBuyId = v));
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderSellId), LocalizedStrings.Sell, LocalizedStrings.OrderSellId, (i, v) => i.OrderSellId = v));
 
 						break;
 					}
