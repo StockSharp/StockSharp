@@ -52098,14 +52098,14 @@ namespace StockSharp.Localization
 		public static string SubscriptionNotifySubscriber => GetString(SubscriptionNotifySubscriberKey);
 
 		/// <summary>
-		/// Online subscription {0} removed.
+		/// Subscription {0} removed.
 		/// </summary>
-		public const string OnlineSubscriptionRemovedKey = nameof(OnlineSubscriptionRemoved);
+		public const string SubscriptionRemovedKey = nameof(SubscriptionRemoved);
 
 		/// <summary>
-		/// Online subscription {0} removed.
+		/// Subscription {0} removed.
 		/// </summary>
-		public static string OnlineSubscriptionRemoved => GetString(OnlineSubscriptionRemovedKey);
+		public static string SubscriptionRemoved => GetString(SubscriptionRemovedKey);
 
 		/// <summary>
 		/// Digitex Futures

@@ -154,7 +154,7 @@
 			if (!state.IsActive())
 			{
 				_subscriptionsByKey.RemoveByValue(info);
-				this.AddInfoLog(LocalizedStrings.OnlineSubscriptionRemoved, info.Subscription.TransactionId);
+				this.AddInfoLog(LocalizedStrings.SubscriptionRemoved, info.Subscription.TransactionId);
 			}
 		}
 

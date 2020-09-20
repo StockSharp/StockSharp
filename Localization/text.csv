@@ -5242,7 +5242,7 @@ FillGaps;Try fill gaps.;Попытаться заполнить пропуски
 HeikinAshi;Heikin Ashi;Heikin Ashi
 SubscriptionInState;Subscription {0} in state {1} and cannot be stopped.;Подписка {0} в состоянии {1} и не может быть остановлена.
 SubscriptionNotifySubscriber;Subscription {0} notify subscriber {1}.;Подписка {0} уведомляет подписчика {1}.
-OnlineSubscriptionRemoved;Online subscription {0} removed.;Онлайн подписку {0} удалена.
+SubscriptionRemoved;Subscription {0} removed.;Подписка {0} удалена.
 DigitexFutures;Digitex Futures;Digitex Futures
 OrdersMargin;Orders (margin);Заявки (маржа)
 LicenseNotSupportPlatform;License N{0} is not support on current platform.;Лицензия N{0} не поддерживается на текущей платформе.
