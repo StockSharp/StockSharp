@@ -93,6 +93,12 @@
 		public ProductContentTypes ContentType { get; set; }
 
 		/// <summary>
+		/// The picture identifier.
+		/// </summary>
+		[DataMember]
+		public long? Picture { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -138,6 +144,7 @@
 			destination.DocUrl = DocUrl;
 			destination.IsRequiredConnectors = IsRequiredConnectors;
 			destination.ContentType = ContentType;
+			destination.Picture = Picture;
 		}
 
 		/// <inheritdoc />
@@ -173,6 +180,9 @@
 
 			if (!DocUrl.IsEmpty())
 				str += $",Doc={DocUrl}";
+
+			if (Picture != default)
+				str += $",Picture={Picture}";
 
 			str += $",Connectors={IsRequiredConnectors},Content={ContentType}";
 
