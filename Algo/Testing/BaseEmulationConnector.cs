@@ -55,6 +55,11 @@ namespace StockSharp.Algo.Testing
 			TransactionIdGenerator = emulationAdapter.TransactionIdGenerator;
 		}
 
+		private DateTimeOffset _currentTime;
+
+		/// <inheritdoc />
+		public override DateTimeOffset CurrentTime => _currentTime;
+
 		/// <summary>
 		/// The adapter, executing messages in <see cref="IMarketEmulator"/>.
 		/// </summary>
@@ -76,6 +81,24 @@ namespace StockSharp.Algo.Testing
 				storage.SetValue(nameof(EmulationAdapter), EmulationAdapter.Save());
 
 			base.Save(storage);
+		}
+
+		/// <inheritdoc />
+		protected override void OnProcessMessage(Message message)
+		{
+			// output messages from adapters goes non ordered
+			if (_currentTime < message.LocalTime)
+				_currentTime = message.LocalTime;
+
+			base.OnProcessMessage(message);
+		}
+
+		/// <inheritdoc />
+		public override void ClearCache()
+		{
+			base.ClearCache();
+
+			_currentTime = default;
 		}
 
 		/// <inheritdoc />
