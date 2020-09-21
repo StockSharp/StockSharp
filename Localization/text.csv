@@ -29,7 +29,7 @@ ActionUpdateApplication;Updating the application;Обновление прило
 ActionRemoveApplication;Removing the application;Удаление приложения
 Buy;Buy;Купить
 ConnectorIsPurchased;The connector was purchased successfully. In order to use it, you need to update applications which support connectors.;Коннектор успешно приобретен. Для использования обновите приложения, поддерживающие работу с коннекторами.
-ForceCheckUpdates;Force check updates;Принудительная проверка обновлений.
+ForceCheckUpdates;Force check updates;Принудительная проверка обновлений
 ConflictResolverTooltipParams;Rules for conflict resolving in case same package id was found in multiple repositories.\nA rule consists of package id and nuget repository separated with colon.\nEvery rule must be on its own line. Examples:\n\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' means other packages.\nAvailable nuget repos: {0};Правила разрешения конфликтов для случая пакетов с одинаковым id в разных nuget репозиториях.\nПравило состоит из id пакета и нугет репо разделенных двоеточием.\nКаждое правило на своей строке. Примеры:\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' означает все остальные пакеты.\nДоступные nuget репо: {0}
 InstallerInstall;Install;Установить
 InstallerUpdate;Update;Обновить
@@ -16791,3 +16791,6 @@ DocStr12237;StockSharp.com;StockSharp.com
 DocStr12238;Repository;Repository
 DocStr12239;Buying party in a trade;Buying party in a trade
 DocStr12240;Selling party in a trade;Selling party in a trade
+DocStr12241;Fill optimization parameters;Fill optimization parameters
+DocStr12242;The event of total progress change;The event of total progress change
+DocStr12243;The event of single progress change;The event of single progress change

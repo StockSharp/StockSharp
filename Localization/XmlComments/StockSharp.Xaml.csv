@@ -1427,7 +1427,6 @@ P:StockSharp.Xaml.StrategiesDashboardItem.ProcessState/summary;DocStr1367
 P:StockSharp.Xaml.StrategiesDashboardItem.Error/summary;DocStr10533
 P:StockSharp.Xaml.StrategiesDashboardItem.AllowTrading/summary;DocStr10534
 T:StockSharp.Xaml.StrategiesStatisticsPanel/summary;DocStr8414
-P:StockSharp.Xaml.StrategiesStatisticsPanel.ExcludeParameters/summary;DocStr8418
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowProgress/summary;DocStr8419
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowStrategyName/summary;DocStr8420
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowSecurity/summary;DocStr9773

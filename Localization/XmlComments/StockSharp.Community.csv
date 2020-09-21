@@ -84,6 +84,7 @@ P:StockSharp.Community.ProductInfoMessage.Rating/summary;DocStr9825
 P:StockSharp.Community.ProductInfoMessage.DocUrl/summary;DocStr8142
 P:StockSharp.Community.ProductInfoMessage.IsRequiredConnectors/summary;DocStr11757
 P:StockSharp.Community.ProductInfoMessage.ContentType/summary;DocStr12219
+P:StockSharp.Community.ProductInfoMessage.Picture/summary;DocStr9070
 M:StockSharp.Community.ProductInfoMessage.#ctor/summary;DocStr1
 P:StockSharp.Community.ProductInfoMessage.DataType/inheritdoc;DocStr8459
 M:StockSharp.Community.ProductInfoMessage.Clone/summary;DocStr643
