@@ -567,6 +567,18 @@ namespace StockSharp.Messages
 		public int? Leverage { get; set; }
 
 		/// <summary>
+		/// Order id (buy).
+		/// </summary>
+		[DataMember]
+		public long? OrderBuyId { get; set; }
+
+		/// <summary>
+		/// Order id (sell).
+		/// </summary>
+		[DataMember]
+		public long? OrderSellId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -599,6 +611,12 @@ namespace StockSharp.Messages
 
 			if (Leverage != null)
 				str += $",Leverage={Leverage.Value}";
+
+			if (OrderBuyId != null)
+				str += $",buy (id)={OrderBuyId.Value}";
+
+			if (OrderSellId != null)
+				str += $",sell (id)={OrderSellId.Value}";
 
 			return str;
 		}
@@ -676,6 +694,8 @@ namespace StockSharp.Messages
 			destination.SeqNum = SeqNum;
 			destination.BuildFrom = BuildFrom;
 			destination.Leverage = Leverage;
+			destination.OrderBuyId = OrderBuyId;
+			destination.OrderSellId = OrderSellId;
 		}
 	}
 }

@@ -38138,16 +38138,6 @@ namespace StockSharp.Localization
 		public static string XamlStr257 => GetString(XamlStr257Key);
 
 		/// <summary>
-		/// Buy
-		/// </summary>
-		public const string XamlStr259Key = nameof(XamlStr259);
-
-		/// <summary>
-		/// Buy
-		/// </summary>
-		public static string XamlStr259 => GetString(XamlStr259Key);
-
-		/// <summary>
 		/// Buy by market
 		/// </summary>
 		public const string XamlStr260Key = nameof(XamlStr260);
@@ -40160,12 +40150,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Sell
 		/// </summary>
-		public const string XamlStr581Key = nameof(XamlStr581);
+		public const string SellKey = nameof(Sell);
 
 		/// <summary>
 		/// Sell
 		/// </summary>
-		public static string XamlStr581 => GetString(XamlStr581Key);
+		public static string Sell => GetString(SellKey);
 
 		/// <summary>
 		/// Sell by market
@@ -52108,14 +52098,14 @@ namespace StockSharp.Localization
 		public static string SubscriptionNotifySubscriber => GetString(SubscriptionNotifySubscriberKey);
 
 		/// <summary>
-		/// Online subscription {0} removed.
+		/// Subscription {0} removed.
 		/// </summary>
-		public const string OnlineSubscriptionRemovedKey = nameof(OnlineSubscriptionRemoved);
+		public const string SubscriptionRemovedKey = nameof(SubscriptionRemoved);
 
 		/// <summary>
-		/// Online subscription {0} removed.
+		/// Subscription {0} removed.
 		/// </summary>
-		public static string OnlineSubscriptionRemoved => GetString(OnlineSubscriptionRemovedKey);
+		public static string SubscriptionRemoved => GetString(SubscriptionRemovedKey);
 
 		/// <summary>
 		/// Digitex Futures
@@ -52716,5 +52706,65 @@ namespace StockSharp.Localization
 		/// Trading is disabled.
 		/// </summary>
 		public static string TradingDisabled => GetString(TradingDisabledKey);
+
+		/// <summary>
+		/// Channels
+		/// </summary>
+		public const string ChannelsKey = nameof(Channels);
+
+		/// <summary>
+		/// Channels
+		/// </summary>
+		public static string Channels => GetString(ChannelsKey);
+
+		/// <summary>
+		/// Use channels for in and out messages.
+		/// </summary>
+		public const string UseChannelsKey = nameof(UseChannels);
+
+		/// <summary>
+		/// Use channels for in and out messages.
+		/// </summary>
+		public static string UseChannels => GetString(UseChannelsKey);
+
+		/// <summary>
+		/// Iterations
+		/// </summary>
+		public const string IterationsKey = nameof(Iterations);
+
+		/// <summary>
+		/// Iterations
+		/// </summary>
+		public static string Iterations => GetString(IterationsKey);
+
+		/// <summary>
+		/// Interval between iterations.
+		/// </summary>
+		public const string IterationIntervalKey = nameof(IterationInterval);
+
+		/// <summary>
+		/// Interval between iterations.
+		/// </summary>
+		public static string IterationInterval => GetString(IterationIntervalKey);
+
+		/// <summary>
+		/// Order id (buy).
+		/// </summary>
+		public const string OrderBuyIdKey = nameof(OrderBuyId);
+
+		/// <summary>
+		/// Order id (buy).
+		/// </summary>
+		public static string OrderBuyId => GetString(OrderBuyIdKey);
+
+		/// <summary>
+		/// Order id (sell).
+		/// </summary>
+		public const string OrderSellIdKey = nameof(OrderSellId);
+
+		/// <summary>
+		/// Order id (sell).
+		/// </summary>
+		public static string OrderSellId => GetString(OrderSellIdKey);
 	}
 }

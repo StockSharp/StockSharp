@@ -39,6 +39,12 @@
 		public string PackageId { get; set; }
 
 		/// <summary>
+		/// Repository.
+		/// </summary>
+		[DataMember]
+		public PackageRepositories Repository { get; set; }
+
+		/// <summary>
 		/// Tags.
 		/// </summary>
 		[DataMember]
@@ -81,10 +87,16 @@
 		public bool IsRequiredConnectors { get; set; }
 
 		/// <summary>
-		/// Product required connectors.
+		/// Content type.
 		/// </summary>
 		[DataMember]
 		public ProductContentTypes ContentType { get; set; }
+
+		/// <summary>
+		/// The picture identifier.
+		/// </summary>
+		[DataMember]
+		public long? Picture { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
@@ -123,6 +135,7 @@
 			destination.Name = Name;
 			destination.Description = Description;
 			destination.PackageId = PackageId;
+			destination.Repository = Repository;
 			destination.Tags = Tags;
 			destination.Author = Author;
 			destination.Price = Price?.Clone();
@@ -131,6 +144,7 @@
 			destination.DocUrl = DocUrl;
 			destination.IsRequiredConnectors = IsRequiredConnectors;
 			destination.ContentType = ContentType;
+			destination.Picture = Picture;
 		}
 
 		/// <inheritdoc />
@@ -148,7 +162,7 @@
 				str += $",Descr={Description}";
 
 			if (!PackageId.IsEmpty())
-				str += $",PackageId={PackageId}";
+				str += $",PackageId={PackageId},Repo={Repository}";
 
 			if (!Tags.IsEmpty())
 				str += $",Tags={Tags}";
@@ -166,6 +180,9 @@
 
 			if (!DocUrl.IsEmpty())
 				str += $",Doc={DocUrl}";
+
+			if (Picture != default)
+				str += $",Picture={Picture}";
 
 			str += $",Connectors={IsRequiredConnectors},Content={ContentType}";
 

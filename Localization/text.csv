@@ -29,7 +29,7 @@ ActionUpdateApplication;Updating the application;Обновление прило
 ActionRemoveApplication;Removing the application;Удаление приложения
 Buy;Buy;Купить
 ConnectorIsPurchased;The connector was purchased successfully. In order to use it, you need to update applications which support connectors.;Коннектор успешно приобретен. Для использования обновите приложения, поддерживающие работу с коннекторами.
-ForceCheckUpdates;Force check updates;Принудительная проверка обновлений.
+ForceCheckUpdates;Force check updates;Принудительная проверка обновлений
 ConflictResolverTooltipParams;Rules for conflict resolving in case same package id was found in multiple repositories.\nA rule consists of package id and nuget repository separated with colon.\nEvery rule must be on its own line. Examples:\n\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' means other packages.\nAvailable nuget repos: {0};Правила разрешения конфликтов для случая пакетов с одинаковым id в разных nuget репозиториях.\nПравило состоит из id пакета и нугет репо разделенных двоеточием.\nКаждое правило на своей строке. Примеры:\nStockSharp.Terminal:nugetorg\n*:stocksharp\n'*' означает все остальные пакеты.\nДоступные nuget репо: {0}
 InstallerInstall;Install;Установить
 InstallerUpdate;Update;Обновить
@@ -3822,7 +3822,6 @@ XamlStr254;End:;Конец:
 XamlStr255;Configurations;Конфигурации
 Copy;Copy;Копировать
 XamlStr257;Basket portfolio;Корзина портфелей
-XamlStr259;Buy;Купить
 XamlStr260;Buy by market;Купить по рынку
 Edu;Edu;Курсы
 Level1;Level 1;Level 1
@@ -4028,7 +4027,7 @@ XamlStr576;Asks (count);Продавцы (кол-во)
 XamlStr577;Asks (volume);Продавцы (объем)
 XamlStr579;Sell (volume);Продажа (объем)
 XamlStr580;Sell (price);Продажа (цена)
-XamlStr581;Sell;Продать
+Sell;Sell;Продать
 XamlStr582;Sell by market;Продать по рынку
 XamlStr583;Renew license;Продлить лицензию
 XamlStr584;Continue;Продолжить
@@ -5243,7 +5242,7 @@ FillGaps;Try fill gaps.;Попытаться заполнить пропуски
 HeikinAshi;Heikin Ashi;Heikin Ashi
 SubscriptionInState;Subscription {0} in state {1} and cannot be stopped.;Подписка {0} в состоянии {1} и не может быть остановлена.
 SubscriptionNotifySubscriber;Subscription {0} notify subscriber {1}.;Подписка {0} уведомляет подписчика {1}.
-OnlineSubscriptionRemoved;Online subscription {0} removed.;Онлайн подписку {0} удалена.
+SubscriptionRemoved;Subscription {0} removed.;Подписка {0} удалена.
 DigitexFutures;Digitex Futures;Digitex Futures
 OrdersMargin;Orders (margin);Заявки (маржа)
 LicenseNotSupportPlatform;License N{0} is not support on current platform.;Лицензия N{0} не поддерживается на текущей платформе.
@@ -5304,6 +5303,12 @@ MaxAllowedItems;Max allowed items is {0}.;Максимально допусти�
 AnonymousCannotAction;Anonymous session '{0}' cannot perform the action {1}.;Анонимная сессия '{0}' не может выполнить действие {1}.
 HistoryDisabled;History is disabled.;История недоступна.
 TradingDisabled;Trading is disabled.;Торговля недоступна.
+Channels;Channels;Каналы
+UseChannels;Use channels for in and out messages.;Использовать каналы для входящих и исходящих сообщений.
+Iterations;Iterations;Итерации
+IterationInterval;Interval between iterations.;Интервал между итерациями.
+OrderBuyId;Order id (buy).;Заявка (покупка).
+OrderSellId;Order id (sell).;Заявка (продажа).
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13990,7 +13995,6 @@ DocStr9130;The backtesting identifier;Идентификатор сессии
 DocStr9131;Begin time;Время начала
 DocStr9132;Backtesting market-data type;Тип маркет-данных
 DocStr9133;The security identifier;Идентификатор инструмента
-DocStr9134;Iterations;Итерации
 DocStr9135;Max machine to allocate. If {0} the allocation will be automatically;Максимальное количество серверов. Если равно {0}, серверы будут созданы автоматически
 DocStr9136;The maximum possible amount of money to spend;Максимальное количество денег, которые можно потратить
 DocStr9137;Is the {0} in USD;Значение {0} в USD
@@ -15707,7 +15711,6 @@ DocStr11105;Message adapter that splits large market data requests on smaller;А
 DocStr11106;Get maximum size step allowed for historical download;Получить максимальный размер шага, доступный для скачивания истории
 DocStr11107;Is for the specified {0} all securities downloading enabled;Доступно ли для указанного {0} загрузка всех инструментов
 DocStr11108;Market data request;Запрос маркет данных
-DocStr11109;Interval between iterations;Интервал между итерациями
 DocStr11110;Zero as {0};Ноль как {0}
 DocStr11111;Get synthetic portfolio name for {0} mode;Получить синтетическое имя портфеля для режима {0}
 DocStr11112;Is the specified portfolio name generated by {0};Является ли указанное имя портфеля сгенерированным через {0}
@@ -15990,7 +15993,6 @@ DocStr11419;Message adapter that tracks multiple lookups requests and put them i
 DocStr11420;Subscription message;Сообщение подписки
 DocStr11421;"""Money"" security instance";"Объект инструмента ""Money"""
 DocStr11422;Send unsubscribe on disconnect command;Отправлять отписку при отключении
-DocStr11423;Use {0} for in and out messages;Использовать {0} для входящих и исходящих сообщений
 DocStr11425;Request imbalance volume {0} orders, which have not been filled;Запросить дисбаланс объема заявок {0}, которые не были исполнены
 DocStr11427;Request imbalance bid and ask, when best bid of one board has more price than best ask on different board;Запросить дисбаланс бид и аска, когда лучший бид одной площадки имеет большую цену, чем лучший аск на другой
 DocStr11428;Request for the appearance of a new indicator in the pre-market;Запрос на получение индикативного значения пре-маркета
@@ -16747,3 +16749,48 @@ DocStr12195;Community helper;Community helper
 DocStr12196;Feedback;Feedback
 DocStr12197;Find licenses;Find licenses
 DocStr12198;Level1 extend builder adapter;Level1 extend builder adapter
+DocStr12199;The delimiter, replacing '?' in the path for instruments with id like AA-CA?SPB@SPBEX. Is equal to '##QSTN##';The delimiter, replacing '?' in the path for instruments with id like AA-CA?SPB@SPBEX. Is equal to '##QSTN##'
+DocStr12200;Gain Futures FIX protocol dialect;Gain Futures FIX protocol dialect
+DocStr12201;Code to identify reason for an {0} message sent with {1}={2} or used when communicating an unsolicited cancel;Code to identify reason for an {0} message sent with {1}={2} or used when communicating an unsolicited cancel
+DocStr12202;GT corporate action;GT corporate action
+DocStr12203;GT renewal / restatement (no corporate action);GT renewal / restatement (no corporate action)
+DocStr12204;Verbal change;Verbal change
+DocStr12205;Repricing of order;Repricing of order
+DocStr12206;Broker option;Broker option
+DocStr12207;Partial decline of {0} (e.g. exchange initiated partial cancel);Partial decline of {0} (e.g. exchange initiated partial cancel)
+DocStr12208;Cancel on Trading Halt;Cancel on Trading Halt
+DocStr12209;Cancel on System Failure;Cancel on System Failure
+DocStr12210;Market (Exchange) option;Market (Exchange) option
+DocStr12211;Canceled, not best;Canceled, not best
+DocStr12212;Warehouse Recap;Warehouse Recap
+DocStr12213;Peg Refresh;Peg Refresh
+DocStr12214;{0} removed;{0} removed
+DocStr12215;To check, are there {0} in the level1 data;To check, are there {0} in the level1 data
+DocStr12216;{0} and {1} auto invoke;{0} and {1} auto invoke
+DocStr12217;Save changes into {0};Save changes into {0}
+DocStr12218;Convert order changes to final snapshot;Convert order changes to final snapshot
+DocStr12219;Content type;Content type
+DocStr12220;Indicates that the range of messages retransmitted after a {0} may not include all the application messages contained in the original range requested;Indicates that the range of messages retransmitted after a {0} may not include all the application messages contained in the original range requested
+DocStr12221;Add permission for the specified user;Add permission for the specified user
+DocStr12222;Remove permission for the specified user;Remove permission for the specified user
+DocStr12223;Get permissions for the specified product;Get permissions for the specified product
+DocStr12224;Add product;Add product
+DocStr12225;Topic with description (english);Topic with description (english)
+DocStr12226;Topic with description (russian);Topic with description (russian)
+DocStr12227;Price in RUB;Price in RUB
+DocStr12228;Price in USD;Price in USD
+DocStr12229;Demo period;Demo period
+DocStr12230;Full period;Full period
+DocStr12231;The interface describing the product store service;The interface describing the product store service
+DocStr12232;Request info in English;Request info in English
+DocStr12233;Find users;Find users
+DocStr12234;Found users;Found users
+DocStr12235;Package repositories;Package repositories
+DocStr12236;NuGet.org;NuGet.org
+DocStr12237;StockSharp.com;StockSharp.com
+DocStr12238;Repository;Repository
+DocStr12239;Buying party in a trade;Buying party in a trade
+DocStr12240;Selling party in a trade;Selling party in a trade
+DocStr12241;Fill optimization parameters;Fill optimization parameters
+DocStr12242;The event of total progress change;The event of total progress change
+DocStr12243;The event of single progress change;The event of single progress change

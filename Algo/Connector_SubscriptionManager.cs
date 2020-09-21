@@ -157,7 +157,7 @@ namespace StockSharp.Algo
 			{
 				// keed subscription instancies for tracing purpose
 				//_subscriptions.Remove(id);
-				_connector.AddInfoLog("Subscription {0} removed.", id);
+				_connector.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
 			}
 
 			private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTimeOffset? time, bool addLog)

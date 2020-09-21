@@ -62,6 +62,8 @@ namespace StockSharp.Algo.Storages.Csv
 			}.Concat(data.BuildFrom.ToCsv()).Concat(new[]
 			{
 				data.SeqNum.DefaultAsNull().ToString(),
+				data.OrderBuyId.ToString(),
+				data.OrderSellId.ToString(),
 			}));
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -96,6 +98,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				execMsg.SeqNum = reader.ReadNullableLong() ?? 0L;
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				execMsg.OrderBuyId = reader.ReadNullableLong();
+				execMsg.OrderSellId = reader.ReadNullableLong();
+			}
 
 			return execMsg;
 		}

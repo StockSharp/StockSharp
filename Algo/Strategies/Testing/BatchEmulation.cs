@@ -108,12 +108,17 @@ namespace StockSharp.Algo.Strategies.Testing
 		public event Action<ChannelStates, ChannelStates> StateChanged;
 
 		/// <summary>
-		/// The event of paper trade progress change.
+		/// The event of total progress change.
 		/// </summary>
-		public event Action<Connector, int, int, IEnumerable<Strategy>> ProgressChanged;
+		public event Action<IEnumerable<Strategy>, int> TotalProgressChanged;
 
 		/// <summary>
-		/// Server time changed <see cref="Connector.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
+		/// The event of single progress change.
+		/// </summary>
+		public event Action<Strategy, int> SingleProgressChanged;
+
+		/// <summary>
+		/// Server time changed <see cref="ILogSource.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 		/// </summary>
 		public event Action<Connector, TimeSpan> MarketTimeChanged;
 
@@ -226,6 +231,8 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				connector.ProgressChanged += step =>
 				{
+					SingleProgressChanged?.Invoke(strategy, step);
+
 					var avgStep = 0;
 
 					lock (progress.SyncRoot)
@@ -239,7 +246,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 					nextProgress++;
 
-					ProgressChanged?.Invoke(connector, step, (int)(currentBatch * batchWeight + ((avgStep * batchWeight) / 100)), batch);
+					TotalProgressChanged?.Invoke(batch, (int)(currentBatch * batchWeight + ((avgStep * batchWeight) / 100)));
 				};
 
 				connector.MarketTimeChanged += diff => MarketTimeChanged?.Invoke(connector, diff);

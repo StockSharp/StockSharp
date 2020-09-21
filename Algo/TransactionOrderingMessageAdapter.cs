@@ -25,7 +25,7 @@
 			public SyncObject Sync { get; } = new SyncObject();
 
 			public OrderStatusMessage Original { get; }
-			public Dictionary<long, Tuple<ExecutionMessage, List<ExecutionMessage>>> Transactions { get; } = new Dictionary<long, Tuple<ExecutionMessage, List<ExecutionMessage>>>();
+			public Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>> Transactions { get; } = new Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>>();
 		}
 
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new SynchronizedDictionary<long, SubscriptionInfo>();
@@ -179,7 +179,7 @@
 					if (!_transactionLogSubscriptions.TryGetAndRemove(originMsg.OriginalTransactionId, out var subscription))
 						break;
 
-					Tuple<ExecutionMessage, List<ExecutionMessage>>[] tuples;
+					Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>[] tuples;
 					
 					lock (subscription.Sync)
 						tuples = subscription.Transactions.Values.ToArray();
@@ -188,7 +188,7 @@
 
 					foreach (var tuple in tuples)
 					{
-						var order = tuple.Item1;
+						var order = tuple.Item1.ToOrderSnapshot(tuple.Item3, this);
 
 						//if (order.OrderState == OrderStates.Failed && !canProcessFailed)
 						//{
@@ -334,62 +334,24 @@
 					{
 						if (subscription.Transactions.TryGetValue(transId, out var tuple))
 						{
-							var snapshot = tuple.Item1;
-
 							if (execMsg.HasOrderInfo)
 							{
-								if (execMsg.Balance != null)
-									snapshot.Balance = snapshot.Balance.ApplyNewBalance(execMsg.Balance.Value, transId, this);
-
-								if (execMsg.OrderState != null)
-									snapshot.OrderState = snapshot.OrderState.ApplyNewState(execMsg.OrderState.Value, transId, this);
-
-								if (execMsg.OrderStatus != null)
-									snapshot.OrderStatus = execMsg.OrderStatus;
-
-								if (execMsg.OrderId != null)
-									snapshot.OrderId = execMsg.OrderId;
-
-								if (!execMsg.OrderStringId.IsEmpty())
-									snapshot.OrderStringId = execMsg.OrderStringId;
-
-								if (execMsg.OrderBoardId != null)
-									snapshot.OrderBoardId = execMsg.OrderBoardId;
-
-								if (execMsg.PnL != null)
-									snapshot.PnL = execMsg.PnL;
-
-								if (execMsg.Position != null)
-									snapshot.Position = execMsg.Position;
-
-								if (execMsg.Commission != null)
-									snapshot.Commission = execMsg.Commission;
-
-								if (execMsg.CommissionCurrency != null)
-									snapshot.CommissionCurrency = execMsg.CommissionCurrency;
-
-								if (execMsg.AveragePrice != null)
-									snapshot.AveragePrice = execMsg.AveragePrice;
-
-								if (execMsg.Latency != null)
-									snapshot.Latency = execMsg.Latency;
+								var order = execMsg.TypedClone();
+								order.HasTradeInfo = false;
+								tuple.Item1.Add(order);
 							}
-						
+
 							if (execMsg.HasTradeInfo)
 							{
-								var clone = execMsg.TypedClone();
-
-								// all order's info in snapshot
-								execMsg.HasTradeInfo = false;
-								clone.HasOrderInfo = false;
-
-								tuple.Item2.Add(clone);
+								var trade = execMsg.TypedClone();
+								trade.HasOrderInfo = false;
+								tuple.Item2.Add(trade);
 							}
 						}
 						else
 						{
 							_orders.Add(transId, execMsg.OriginalTransactionId);
-							subscription.Transactions.Add(transId, Tuple.Create(execMsg.TypedClone(), new List<ExecutionMessage>()));
+							subscription.Transactions.Add(transId, Tuple.Create(new List<ExecutionMessage> { execMsg.TypedClone() }, new List<ExecutionMessage>(), transId));
 						}
 					}
 

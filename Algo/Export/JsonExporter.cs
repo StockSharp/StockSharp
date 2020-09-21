@@ -404,6 +404,15 @@
 
 				if (trade.SeqNum != default)
 					writer.WriteProperty("sn", trade.SeqNum);
+
+				if (trade.Yield != default)
+					writer.WriteProperty("yield", trade.Yield);
+
+				if (trade.OrderBuyId != default)
+					writer.WriteProperty("buy", trade.OrderBuyId);
+
+				if (trade.OrderSellId != default)
+					writer.WriteProperty("sell", trade.OrderSellId);
 			});
 		}
 

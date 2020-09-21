@@ -43,6 +43,9 @@ M:StockSharp.Community.FileInfoMessage.Clone/returns;DocStr1116
 M:StockSharp.Community.FileInfoMessage.GetBodyLength/summary;DocStr11807
 M:StockSharp.Community.FileInfoMessage.GetBodyLength/returns;DocStr9124
 M:StockSharp.Community.FileInfoMessage.ToString/inheritdoc;DocStr8459
+T:StockSharp.Community.PackageRepositories/summary;DocStr12235
+F:StockSharp.Community.PackageRepositories.NuGet/summary;DocStr12236
+F:StockSharp.Community.PackageRepositories.StockSharp/summary;DocStr12237
 T:StockSharp.Community.ProductContentTypes/summary;DocStr9056
 F:StockSharp.Community.ProductContentTypes.SourceCode/summary;DocStr3079
 F:StockSharp.Community.ProductContentTypes.CompiledAssembly/summary;DocStr3080
@@ -72,6 +75,7 @@ P:StockSharp.Community.ProductInfoMessage.Id/summary;Str361
 P:StockSharp.Community.ProductInfoMessage.Name/summary;Name2
 P:StockSharp.Community.ProductInfoMessage.Description/summary;DocStr3083
 P:StockSharp.Community.ProductInfoMessage.PackageId/summary;DocStr11754
+P:StockSharp.Community.ProductInfoMessage.Repository/summary;DocStr12238
 P:StockSharp.Community.ProductInfoMessage.Tags/summary;DocStr11755
 P:StockSharp.Community.ProductInfoMessage.Author/summary;Author
 P:StockSharp.Community.ProductInfoMessage.Price/summary;Price
@@ -79,7 +83,8 @@ P:StockSharp.Community.ProductInfoMessage.DownloadCount/summary;DocStr11756
 P:StockSharp.Community.ProductInfoMessage.Rating/summary;DocStr9825
 P:StockSharp.Community.ProductInfoMessage.DocUrl/summary;DocStr8142
 P:StockSharp.Community.ProductInfoMessage.IsRequiredConnectors/summary;DocStr11757
-P:StockSharp.Community.ProductInfoMessage.ContentType/summary;DocStr11757
+P:StockSharp.Community.ProductInfoMessage.ContentType/summary;DocStr12219
+P:StockSharp.Community.ProductInfoMessage.Picture/summary;DocStr9070
 M:StockSharp.Community.ProductInfoMessage.#ctor/summary;DocStr1
 P:StockSharp.Community.ProductInfoMessage.DataType/inheritdoc;DocStr8459
 M:StockSharp.Community.ProductInfoMessage.Clone/summary;DocStr643

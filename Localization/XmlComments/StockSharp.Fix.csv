@@ -33,6 +33,7 @@ P:StockSharp.Fix.Dialects.BaseFastDialect.EnqueueSubscriptions/inheritdoc;DocStr
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportTransactionLog/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.CheckTimeFrameByRequest/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.UseChannels/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFastDialect.IterationInterval/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsPositionsEmulationRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
@@ -72,7 +73,6 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.TimeParser/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.DateParser/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.YearMonthParser/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsResetCounter/inheritdoc;DocStr8459
-P:StockSharp.Fix.Dialects.BaseFixDialect.ResendRequestBeginSeqNum/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.ReConnectionSettings/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.HeartbeatInterval/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.TimeZone/inheritdoc;DocStr8459
@@ -122,6 +122,7 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.CandlesBuildFrom/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.EnqueueSubscriptions/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportTransactionLog/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.UseChannels/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.IterationInterval/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsPositionsEmulationRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
@@ -140,6 +141,11 @@ M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/param/msgType;DocStr9
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/param/messageHandler;DocStr10483
 M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/returns;DocStr8755
+M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessSequenceResetExtraTag(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixSeqResetMessage)/summary;DocStr11849
+M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessSequenceResetExtraTag(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixSeqResetMessage)/param/tag;DocStr3155
+M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessSequenceResetExtraTag(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixSeqResetMessage)/param/reader;DocStr3327
+M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessSequenceResetExtraTag(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixSeqResetMessage)/param/message;DocStr11842
+M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessSequenceResetExtraTag(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixSeqResetMessage)/returns;Str1738
 M:StockSharp.Fix.Dialects.BaseFixDialect.IsLogoutError(System.String)/summary;DocStr10851
 M:StockSharp.Fix.Dialects.BaseFixDialect.IsLogoutError(System.String)/param/text;DocStr2045
 M:StockSharp.Fix.Dialects.BaseFixDialect.IsLogoutError(System.String)/returns;DocStr10852
@@ -155,11 +161,11 @@ M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogoutRequest(StockSharp.Fix.Nativ
 M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogoutRequest(StockSharp.Fix.Native.IFixWriter,System.String)/param/writer;DocStr8757
 M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogoutRequest(StockSharp.Fix.Native.IFixWriter,System.String)/param/text;DocStr8758
 M:StockSharp.Fix.Dialects.BaseFixDialect.WriteLogoutRequest(StockSharp.Fix.Native.IFixWriter,System.String)/returns;DocStr65
-M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Nullable{System.Int64})/summary;DocStr3291
-M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Nullable{System.Int64})/param/writer;DocStr8757
-M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Nullable{System.Int64})/param/gapFill;DocStr11837
-M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Nullable{System.Int64})/param/newSeqNo;DocStr11838
-M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Nullable{System.Int64})/returns;DocStr65
+M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Int64)/summary;DocStr3291
+M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Int64)/param/writer;DocStr8757
+M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Int64)/param/gapFill;DocStr11837
+M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Int64)/param/newSeqNo;DocStr11838
+M:StockSharp.Fix.Dialects.BaseFixDialect.WriteSequenceReset(StockSharp.Fix.Native.IFixWriter,System.Boolean,System.Int64)/returns;DocStr65
 M:StockSharp.Fix.Dialects.BaseFixDialect.WriteResendRequest(StockSharp.Fix.Native.IFixWriter,System.Int64,System.Int64)/summary;DocStr8759
 M:StockSharp.Fix.Dialects.BaseFixDialect.WriteResendRequest(StockSharp.Fix.Native.IFixWriter,System.Int64,System.Int64)/param/writer;DocStr8757
 M:StockSharp.Fix.Dialects.BaseFixDialect.WriteResendRequest(StockSharp.Fix.Native.IFixWriter,System.Int64,System.Int64)/param/beginSeqNo;DocStr3316
@@ -316,6 +322,8 @@ M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.ProcessExecutionReport(Stock
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.ProcessParties(StockSharp.Fix.Native.ExecutionReport)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.GetBoardCode(System.String,System.String,System.String)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.GetOrderType(StockSharp.Fix.Native.ExecutionReport,StockSharp.Messages.OrderCondition@)/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.Bovespa.BovespaFixDialect.ProcessSequenceResetExtraTag(StockSharp.Fix.Native.FixTags,StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixSeqResetMessage)/inheritdoc;DocStr8459
 T:StockSharp.Fix.Dialects.Bovespa.BovespaFixOrderTypes/summary;DocStr11526
 F:StockSharp.Fix.Dialects.Bovespa.BovespaFixOrderTypes.MarketLeftOverLimit/summary;DocStr11527
 F:StockSharp.Fix.Dialects.Bovespa.BovespaFixOrderTypes.RetailLiquidityProvider/summary;DocStr11528
@@ -391,6 +399,14 @@ M:StockSharp.Fix.Dialects.ExanteFixDialect.ProcessExecutionReport(StockSharp.Fix
 M:StockSharp.Fix.Dialects.ExanteFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,System.Action{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.ExanteFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,System.Action{StockSharp.Messages.Message})/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.ExanteFixDialect.InitSecId(StockSharp.Messages.SecurityMessage,System.String,System.String,System.String,System.String)/inheritdoc;DocStr8459
+T:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect/summary;DocStr12200
+M:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect.PossibleSupportedMessages/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect.SupportedMarketDataTypes/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect.IsNativeIdentifiers/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect.StorageName/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.GainFutures.GainFuturesFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Fix.Dialects.IceFixDialect/summary;DocStr11590
 M:StockSharp.Fix.Dialects.IceFixDialect.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fix.Dialects.IceFixDialect.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
@@ -428,7 +444,6 @@ P:StockSharp.Fix.Dialects.IFixDialect.TimeParser/summary;DocStr9468
 P:StockSharp.Fix.Dialects.IFixDialect.DateParser/summary;DocStr9466
 P:StockSharp.Fix.Dialects.IFixDialect.YearMonthParser/summary;DocStr10994
 P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter/summary;DocStr3313
-P:StockSharp.Fix.Dialects.IFixDialect.ResendRequestBeginSeqNum/summary;DocStr608
 P:StockSharp.Fix.Dialects.IFixDialect.CurrentCounter/summary;Counter
 P:StockSharp.Fix.Dialects.IFixDialect.TimeZone/summary;Str68
 P:StockSharp.Fix.Dialects.IFixDialect.ExchangeBoard/summary;Str1671
@@ -776,6 +791,7 @@ M:StockSharp.Fix.FastMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.
 M:StockSharp.Fix.FastMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.GetMaxCount(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.UseChannels/inheritdoc;DocStr8459
+P:StockSharp.Fix.FastMessageAdapter.IterationInterval/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.IsPositionsEmulationRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
@@ -826,6 +842,7 @@ M:StockSharp.Fix.FixMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.M
 M:StockSharp.Fix.FixMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FixMessageAdapter.GetMaxCount(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.UseChannels/inheritdoc;DocStr8459
+P:StockSharp.Fix.FixMessageAdapter.IterationInterval/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.FeatureName/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsPositionsEmulationRequired/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.IsReplaceCommandEditCurrent/inheritdoc;DocStr8459
@@ -840,7 +857,6 @@ P:StockSharp.Fix.FixMessageAdapter.Login/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.Password/inheritdoc;DocStr8459
 P:StockSharp.Fix.FixMessageAdapter.Encoding/summary;DocStr3180
 P:StockSharp.Fix.FixMessageAdapter.IsResetCounter/summary;DocStr3313
-P:StockSharp.Fix.FixMessageAdapter.ResendRequestBeginSeqNum/summary;DocStr608
 P:StockSharp.Fix.FixMessageAdapter.DateFormat/summary;DocStr3182
 P:StockSharp.Fix.FixMessageAdapter.TimeStampFormat/summary;DocStr10542
 P:StockSharp.Fix.FixMessageAdapter.TimeFormat/summary;DocStr3212
@@ -878,6 +894,8 @@ T:StockSharp.Fix.FixSeqResetMessage/summary;DocStr11842
 M:StockSharp.Fix.FixSeqResetMessage.#ctor/summary;DocStr93
 P:StockSharp.Fix.FixSeqResetMessage.GapFill/summary;DocStr11837
 P:StockSharp.Fix.FixSeqResetMessage.NewSeqNo/summary;DocStr11838
+P:StockSharp.Fix.FixSeqResetMessage.SeqNum/summary;SequenceNumber
+P:StockSharp.Fix.FixSeqResetMessage.PossMissingApplMsg/summary;DocStr12220
 M:StockSharp.Fix.FixSeqResetMessage.Clone/summary;DocStr643
 M:StockSharp.Fix.FixSeqResetMessage.Clone/returns;DocStr1116
 T:StockSharp.Fix.FixUserRequestTypes/summary;DocStr9867
@@ -920,6 +938,8 @@ F:StockSharp.Fix.FixStopOrderTypes.StopLoss/summary;StopLoss
 F:StockSharp.Fix.FixStopOrderTypes.StopLossTrailing/summary;Str3446
 F:StockSharp.Fix.FixStopOrderTypes.TakeProfit/summary;DocStr3351
 F:StockSharp.Fix.FixStopOrderTypes.TakeProfitTrailing/summary;TrailingTakeProfit
+F:StockSharp.Fix.FixStopOrderTypes.MarketOnClose/summary;MarketOnPitClose
+F:StockSharp.Fix.FixStopOrderTypes.MarketIfTouched/summary;DocStr3421
 T:StockSharp.Fix.FixOrderCondition/summary;DocStr60
 M:StockSharp.Fix.FixOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Fix.FixOrderCondition.Type/summary;Str1737
@@ -1801,6 +1821,20 @@ F:StockSharp.Fix.Native.PositionEffect.Rolled/summary;DocStr11854
 T:StockSharp.Fix.Native.QuoteCondition/summary;DocStr11565
 F:StockSharp.Fix.Native.QuoteCondition.Active/summary;DocStr4511
 F:StockSharp.Fix.Native.QuoteCondition.Indicative/summary;Indicative
+T:StockSharp.Fix.Native.ExecRestatementReason/summary;DocStr12201
+F:StockSharp.Fix.Native.ExecRestatementReason.CorporateAction/summary;DocStr12202
+F:StockSharp.Fix.Native.ExecRestatementReason.RenewalRestatement/summary;DocStr12203
+F:StockSharp.Fix.Native.ExecRestatementReason.VerbalChange/summary;DocStr12204
+F:StockSharp.Fix.Native.ExecRestatementReason.RepricingOrder/summary;DocStr12205
+F:StockSharp.Fix.Native.ExecRestatementReason.BrokerOption/summary;DocStr12206
+F:StockSharp.Fix.Native.ExecRestatementReason.PartialDecline/summary;DocStr12207
+F:StockSharp.Fix.Native.ExecRestatementReason.CancelTradingHalt/summary;DocStr12208
+F:StockSharp.Fix.Native.ExecRestatementReason.CancelSystemFailure/summary;DocStr12209
+F:StockSharp.Fix.Native.ExecRestatementReason.MarketOption/summary;DocStr12210
+F:StockSharp.Fix.Native.ExecRestatementReason.CanceledNotBest/summary;DocStr12211
+F:StockSharp.Fix.Native.ExecRestatementReason.WarehouseRecap/summary;DocStr12212
+F:StockSharp.Fix.Native.ExecRestatementReason.PegRefresh/summary;DocStr12213
+F:StockSharp.Fix.Native.ExecRestatementReason.Other/summary;XamlStr157
 T:StockSharp.Fix.Native.Party/summary;DocStr9138
 F:StockSharp.Fix.Native.Party.PartyId/summary;DocStr8459
 F:StockSharp.Fix.Native.Party.PartyRole/summary;DocStr8459
@@ -2019,6 +2053,9 @@ M:StockSharp.Fix.Native.Extensions.WriteHandlInst(StockSharp.Fix.Native.IFixWrit
 M:StockSharp.Fix.Native.Extensions.WriteHandlInst(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage,System.Char)/param/writer;DocStr11812
 M:StockSharp.Fix.Native.Extensions.WriteHandlInst(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage,System.Char)/param/message;Str3166
 M:StockSharp.Fix.Native.Extensions.WriteHandlInst(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage,System.Char)/param/defaultValue;DocStr9987
+M:StockSharp.Fix.Native.Extensions.WriteSide(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Sides)/summary;DocStr11848
+M:StockSharp.Fix.Native.Extensions.WriteSide(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Sides)/param/writer;DocStr11812
+M:StockSharp.Fix.Native.Extensions.WriteSide(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Sides)/param/side;Side
 F:StockSharp.Fix.Native.Extensions.Commission/summary;DocStr608
 F:StockSharp.Fix.Native.Extensions.RealizedPnL/summary;DocStr608
 F:StockSharp.Fix.Native.Extensions.UnrealizedPnL/summary;DocStr608
@@ -2532,6 +2569,8 @@ F:StockSharp.Fix.Native.FixTags.MDUpdateAction/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDReqRejReason/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDEntryOriginator/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OpenCloseSettleFlag/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.MDEntryBuyer/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.MDEntrySeller/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDEntryPositionNo/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoQuoteEntries/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoQuoteSets/summary;DocStr8459
@@ -2567,6 +2606,7 @@ F:StockSharp.Fix.Native.FixTags.NumberOfOrders/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RefTagID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.RefMsgType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SessionRejectReason/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.ExecRestatementReason/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.BusinessRejectReason/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.GrossTradeAmt/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoTradingSessions/summary;DocStr8459
@@ -2899,6 +2939,8 @@ P:StockSharp.Fix.Native.MDEntry.DownTicks/summary;TickDownCount
 P:StockSharp.Fix.Native.MDEntry.TotalTicks/summary;TickCount
 P:StockSharp.Fix.Native.MDEntry.PriceLevels/summary;DocStr718
 P:StockSharp.Fix.Native.MDEntry.Yield/summary;Str321
+P:StockSharp.Fix.Native.MDEntry.Buyer/summary;DocStr12239
+P:StockSharp.Fix.Native.MDEntry.Seller/summary;DocStr12240
 T:StockSharp.Fix.Native.ScaledNumber/summary;DocStr11899
 M:StockSharp.Fix.Native.ScaledNumber.#ctor(System.Int32,System.Int64)/summary;DocStr1
 M:StockSharp.Fix.Native.ScaledNumber.#ctor(System.Int32,System.Int64)/param/exponent;DocStr11900

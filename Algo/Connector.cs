@@ -276,11 +276,6 @@ namespace StockSharp.Algo
 
 		IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria) => SecurityStorage.Lookup(criteria);
 
-		private DateTimeOffset _currentTime;
-
-		/// <inheritdoc />
-		public override DateTimeOffset CurrentTime => _currentTime;
-
 		/// <inheritdoc />
 		public SessionStates? GetSessionState(ExchangeBoard board) => _entityCache.GetSessionState(board);
 
@@ -449,7 +444,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Increment periodically <see cref="MarketTimeChangedInterval"/> value of <see cref="CurrentTime"/>.
+		/// Increment periodically <see cref="MarketTimeChangedInterval"/> value of <see cref="ILogSource.CurrentTime"/>.
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
@@ -1056,32 +1051,26 @@ namespace StockSharp.Algo
 					_isMarketTimeHandled = true;	
 			}
 
-			// output messages from adapters goes non ordered
-			if (_currentTime > message.LocalTime)
-				return;
+			var currentTime = message.LocalTime;
 
-			_currentTime = message.LocalTime;
-
-			if (_prevTime.IsDefault())
+			if (_prevTime == default)
 			{
-				_prevTime = _currentTime;
+				_prevTime = currentTime;
 				return;
 			}
 
-			var diff = _currentTime - _prevTime;
+			var diff = currentTime - _prevTime;
 
-			if (diff >= MarketTimeChangedInterval)
-			{
-				_prevTime = _currentTime;
-				RaiseMarketTimeChanged(diff);
-			}
+			if (diff < MarketTimeChangedInterval)
+				return;
+
+			_prevTime = currentTime;
+			RaiseMarketTimeChanged(diff);
 		}
 
 		/// <inheritdoc />
 		public Security GetSecurity(SecurityId securityId)
-		{
-			return GetSecurity(securityId, s => false, out _);
-		}
+			=> GetSecurity(securityId, s => false, out _);
 
 		private Security TryGetSecurity(SecurityId? securityId)
 			=> securityId == null || securityId.Value == default ? null : GetSecurity(securityId.Value);
@@ -1207,7 +1196,6 @@ namespace StockSharp.Algo
 			_notFirstTimeConnected = default;
 
 			_prevTime = default;
-			_currentTime = default;
 
 			ConnectionState = ConnectionStates.Disconnected;
 

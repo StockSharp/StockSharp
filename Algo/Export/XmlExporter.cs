@@ -114,6 +114,15 @@ namespace StockSharp.Algo.Export
 				if (trade.SeqNum != default)
 					writer.WriteAttribute("seqNum", trade.SeqNum);
 
+				if (trade.Yield != default)
+					writer.WriteAttribute("yield", trade.Yield);
+
+				if (trade.OrderBuyId != default)
+					writer.WriteAttribute("buy", trade.OrderBuyId);
+
+				if (trade.OrderSellId != default)
+					writer.WriteAttribute("sell", trade.OrderSellId);
+
 				writer.WriteEndElement();
 			});
 		}

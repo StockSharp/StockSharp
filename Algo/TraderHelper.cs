@@ -88,7 +88,8 @@ namespace StockSharp.Algo
 		/// <param name="logs">Logs.</param>
 		public static void ApplyNewState(this Order order, OrderStates state, ILogReceiver logs = null)
 		{
-			order.State = ((OrderStates?)order.State).ApplyNewState(state, order.TransactionId, logs);
+			((OrderStates?)order.State).VerifyOrderState(state, order.TransactionId, logs);
+			order.State = state;
 		}
 
 		/// <summary>
@@ -98,13 +99,104 @@ namespace StockSharp.Algo
 		/// <param name="newState">New state.</param>
 		/// <param name="transactionId">Transaction id.</param>
 		/// <param name="logs">Logs.</param>
-		/// <returns>New state.</returns>
-		public static OrderStates ApplyNewState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs = null)
+		/// <returns>Check result.</returns>
+		public static bool VerifyOrderState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs)
 		{
-			if (logs != null && currState != null && !_stateChangePossibilities[(int)currState.Value][(int)newState])
-				logs.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
+			var isInvalid = currState != null && !_stateChangePossibilities[(int)currState.Value][(int)newState];
 
-			return newState;
+			if (isInvalid)
+				logs?.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
+
+			return !isInvalid;
+		}
+
+		/// <summary>
+		/// Convert order changes to final snapshot.
+		/// </summary>
+		/// <param name="diffs">Changes.</param>
+		/// <param name="transactionId">Transaction ID.</param>
+		/// <param name="logs">Logs.</param>
+		/// <returns>Snapshot.</returns>
+		public static ExecutionMessage ToOrderSnapshot(this IEnumerable<ExecutionMessage> diffs, long transactionId, ILogReceiver logs)
+		{
+			if (diffs is null)
+				throw new ArgumentNullException(nameof(diffs));
+
+			diffs = diffs.OrderBy(m =>
+			{
+				switch (m.OrderState)
+				{
+					case null:
+					case OrderStates.None:
+						return 0;
+					case OrderStates.Pending:
+						return 1;
+					case OrderStates.Active:
+						return 2;
+					case OrderStates.Done:
+					case OrderStates.Failed:
+						return 3;
+					default:
+						throw new ArgumentOutOfRangeException(m.OrderState.ToString());
+				}
+			});
+
+			ExecutionMessage snapshot = null;
+
+			foreach (var execMsg in diffs)
+			{
+				if (!execMsg.HasOrderInfo)
+					throw new InvalidOperationException(LocalizedStrings.Str3794Params.Put(transactionId));
+
+				if (snapshot is null)
+					snapshot = execMsg;
+				else
+				{
+					if (execMsg.Balance != null)
+						snapshot.Balance = snapshot.Balance.ApplyNewBalance(execMsg.Balance.Value, transactionId, logs);
+
+					if (execMsg.OrderState != null)
+					{
+						snapshot.OrderState.VerifyOrderState(execMsg.OrderState.Value, transactionId, logs);
+						snapshot.OrderState = execMsg.OrderState.Value;
+					}
+
+					if (execMsg.OrderStatus != null)
+						snapshot.OrderStatus = execMsg.OrderStatus;
+
+					if (execMsg.OrderId != null)
+						snapshot.OrderId = execMsg.OrderId;
+
+					if (!execMsg.OrderStringId.IsEmpty())
+						snapshot.OrderStringId = execMsg.OrderStringId;
+
+					if (execMsg.OrderBoardId != null)
+						snapshot.OrderBoardId = execMsg.OrderBoardId;
+
+					if (execMsg.PnL != null)
+						snapshot.PnL = execMsg.PnL;
+
+					if (execMsg.Position != null)
+						snapshot.Position = execMsg.Position;
+
+					if (execMsg.Commission != null)
+						snapshot.Commission = execMsg.Commission;
+
+					if (execMsg.CommissionCurrency != null)
+						snapshot.CommissionCurrency = execMsg.CommissionCurrency;
+
+					if (execMsg.AveragePrice != null)
+						snapshot.AveragePrice = execMsg.AveragePrice;
+
+					if (execMsg.Latency != null)
+						snapshot.Latency = execMsg.Latency;
+				}
+			}
+
+			if (snapshot is null)
+				throw new InvalidOperationException(LocalizedStrings.Str1702Params.Put(transactionId));
+
+			return snapshot;
 		}
 
 		/// <summary>
@@ -3079,18 +3171,15 @@ namespace StockSharp.Algo
 		/// Lookup securities, portfolios and orders.
 		/// </summary>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
-		/// <param name="offlineMode">Offline mode handling message.</param>
-		public static void LookupAll(this Connector connector, MessageOfflineModes offlineMode = MessageOfflineModes.Cancel)
+		public static void LookupAll(this Connector connector)
 		{
-			if (connector == null)
+			if (connector is null)
 				throw new ArgumentNullException(nameof(connector));
 
-#pragma warning disable CS0618 // Type or member is obsolete
-			connector.LookupBoards(new ExchangeBoard(), offlineMode: offlineMode);
-			connector.LookupSecurities(LookupAllCriteria, offlineMode: offlineMode);
-			connector.LookupPortfolios(new Portfolio(), offlineMode: offlineMode);
-			connector.LookupOrders(new Order(), offlineMode: offlineMode);
-#pragma warning restore CS0618 // Type or member is obsolete
+			connector.Subscribe(new Subscription(DataType.Board, (SecurityMessage)null));
+			connector.Subscribe(new Subscription(DataType.Securities, (SecurityMessage)null));
+			connector.Subscribe(new Subscription(DataType.PositionChanges, (SecurityMessage)null));
+			connector.Subscribe(new Subscription(DataType.Transactions, (SecurityMessage)null));
 		}
 
 		/// <summary>
