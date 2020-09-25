@@ -27,6 +27,7 @@
 				<CheckBox x:Name="DelayCtrl" Content="Delay transactions" IsChecked="True"/>
 				<CheckBox x:Name="FailCtrl" Content="Fail transactions"/>
 				<CheckBox x:Name="ConfirmCtrl" Content="Confirm transactions"/>
+				<CheckBox x:Name="SameOrderCtrl" Content="Use same order object for move op"/>
 			</StackPanel>
 
 			<DockPanel LastChildFill="True" Grid.Column="1">
