@@ -18,6 +18,66 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// User comments
+		/// </summary>
+		public const string UserFeedbacksKey = nameof(UserFeedbacks);
+
+		/// <summary>
+		/// User comments
+		/// </summary>
+		public static string UserFeedbacks => GetString(UserFeedbacksKey);
+
+		/// <summary>
+		/// Updating data
+		/// </summary>
+		public const string UpdatingDataKey = nameof(UpdatingData);
+
+		/// <summary>
+		/// Updating data
+		/// </summary>
+		public static string UpdatingData => GetString(UpdatingDataKey);
+
+		/// <summary>
+		/// Error updating data
+		/// </summary>
+		public const string ErrorUpdatingDataKey = nameof(ErrorUpdatingData);
+
+		/// <summary>
+		/// Error updating data
+		/// </summary>
+		public static string ErrorUpdatingData => GetString(ErrorUpdatingDataKey);
+
+		/// <summary>
+		/// Rate product
+		/// </summary>
+		public const string RateProductKey = nameof(RateProduct);
+
+		/// <summary>
+		/// Rate product
+		/// </summary>
+		public static string RateProduct => GetString(RateProductKey);
+
+		/// <summary>
+		/// You have already rated this product.
+		/// </summary>
+		public const string AlreadyRatedKey = nameof(AlreadyRated);
+
+		/// <summary>
+		/// You have already rated this product.
+		/// </summary>
+		public static string AlreadyRated => GetString(AlreadyRatedKey);
+
+		/// <summary>
+		/// Please rate the {0}.
+		/// </summary>
+		public const string PleaseRateProductParamsKey = nameof(PleaseRateProductParams);
+
+		/// <summary>
+		/// Please rate the {0}.
+		/// </summary>
+		public static string PleaseRateProductParams => GetString(PleaseRateProductParamsKey);
+	
+		/// <summary>
 		/// Install prerelease versions.
 		/// </summary>
 		public const string InstallPrereleaseVersionsKey = nameof(InstallPrereleaseVersions);

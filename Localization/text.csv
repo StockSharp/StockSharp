@@ -1,4 +1,10 @@
-﻿InstallPrereleaseVersions;Install prerelease versions.;Устанавливать предрелизные версии.
+﻿UserFeedbacks;User comments;Отзывы пользователей
+UpdatingData;Updating data;Обновление данных
+ErrorUpdatingData;Error updating data;Ошибка обновления данных
+RateProduct;Rate product;Оценить продукт
+AlreadyRated;You have already rated this product.;Вы уже оставляли оценку по данному продукту.
+PleaseRateProductParams;Please rate the {0}.;Пожалуйста, оцените {0}.
+InstallPrereleaseVersions;Install prerelease versions.;Устанавливать предрелизные версии.
 InstallPrereleaseVersionsWarning;WARNING! This feature is for advanced users only. Prerelease versions of applications may be unstable.;ПРЕДУПРЕЖДЕНИЕ! Эта функция предназначена только для продвинутых пользователей. Предрелизные версии приложений могут быть нестабильными.
 FilterProducts;Filter available products by type.;Фильтр доступных продуктов по типу.
 LoggedInAsParams;User {0};Пользователь {0}
