@@ -96,7 +96,7 @@
 		/// The picture identifier.
 		/// </summary>
 		[DataMember]
-		public long? Picture { get; set; }
+		public long Picture { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
