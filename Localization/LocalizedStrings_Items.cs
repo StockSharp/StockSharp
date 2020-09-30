@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// The license has expired.
+		/// </summary>
+		public const string ProductLicenseExpiredKey = nameof(ProductLicenseExpired);
+
+		/// <summary>
+		/// The license has expired.
+		/// </summary>
+		public static string ProductLicenseExpired => GetString(ProductLicenseExpiredKey);
+
+		/// <summary>
 		/// User comments
 		/// </summary>
 		public const string UserFeedbacksKey = nameof(UserFeedbacks);
