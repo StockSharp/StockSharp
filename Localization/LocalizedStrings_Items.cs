@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Double click to open the product details.
+		/// </summary>
+		public const string ClickProductDetailsKey = nameof(ClickProductDetails);
+
+		/// <summary>
+		/// Double click to open the product details.
+		/// </summary>
+		public static string ClickProductDetails => GetString(ClickProductDetailsKey);
+
+		/// <summary>
 		/// The license has expired.
 		/// </summary>
 		public const string ProductLicenseExpiredKey = nameof(ProductLicenseExpired);
