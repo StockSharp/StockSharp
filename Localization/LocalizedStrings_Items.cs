@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// The application is still running in background mode. You can access it via icon in the system tray.
+		/// </summary>
+		public const string ApplicationStillRunningKey = nameof(ApplicationStillRunning);
+
+		/// <summary>
+		/// The application is still running in background mode. You can access it via icon in the system tray.
+		/// </summary>
+		public static string ApplicationStillRunning => GetString(ApplicationStillRunningKey);
+
+		/// <summary>
 		/// Double click to open the product details.
 		/// </summary>
 		public const string ClickProductDetailsKey = nameof(ClickProductDetails);

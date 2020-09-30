@@ -1,4 +1,5 @@
-﻿ClickProductDetails;Double click to open the product details.;Двойной клик для перехода на страницу с подробной информацией.
+﻿ApplicationStillRunning;The application is still running in background mode. You can access it via icon in the system tray.;Приложение все еще работает в фоновом режиме. Вы можете получить к нему доступ через иконку в области уведомлений.
+ClickProductDetails;Double click to open the product details.;Двойной клик для перехода на страницу с подробной информацией.
 ProductLicenseExpired;The license has expired.;Закончился срок действия лицензии.
 UserFeedbacks;User comments;Отзывы пользователей
 UpdatingData;Updating data;Обновление данных
