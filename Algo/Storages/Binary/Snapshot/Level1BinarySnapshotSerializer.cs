@@ -133,9 +133,20 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			public long SeqNum;
 			public SnapshotDataType? BuildFrom;
+
+			public BlittableDecimal? LowBidVolume;
+			public BlittableDecimal? HighAskVolume;
+			public BlittableDecimal? UnderlyingBestBidPrice;
+			public BlittableDecimal? UnderlyingBestAskPrice;
+			public BlittableDecimal? MedianPrice;
+			public BlittableDecimal? HighPrice52Week;
+			public BlittableDecimal? LowPrice52Week;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
+			public string LastTradeStringId;
 		}
 
-		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = SnapshotVersions.V22;
+		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = SnapshotVersions.V23;
 
 		string ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Name => "Level1";
 
@@ -481,6 +492,30 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case Level1Fields.Decimals:
 						snapshot.Decimals = (int)change.Value;
 						break;
+					case Level1Fields.LowBidVolume:
+						snapshot.LowBidVolume = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case Level1Fields.HighAskVolume:
+						snapshot.HighAskVolume = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case Level1Fields.UnderlyingBestBidPrice:
+						snapshot.UnderlyingBestBidPrice = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case Level1Fields.UnderlyingBestAskPrice:
+						snapshot.UnderlyingBestAskPrice = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case Level1Fields.MedianPrice:
+						snapshot.MedianPrice = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case Level1Fields.HighPrice52Week:
+						snapshot.HighPrice52Week = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case Level1Fields.LowPrice52Week:
+						snapshot.LowPrice52Week = (BlittableDecimal)(decimal)change.Value;
+						break;
+					case Level1Fields.LastTradeStringId:
+						snapshot.LastTradeStringId = (string)change.Value;
+						break;
 				}
 			}
 
@@ -628,6 +663,14 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					.TryAdd(Level1Fields.ProfitMargin, snapshot.ProfitMargin)
 					.TryAdd(Level1Fields.IsSystem, snapshot.IsSystem?.ToBool())
 					.TryAdd(Level1Fields.Decimals, snapshot.Decimals, true)
+					.TryAdd(Level1Fields.LowBidVolume, snapshot.LowBidVolume)
+					.TryAdd(Level1Fields.HighAskVolume, snapshot.HighAskVolume)
+					.TryAdd(Level1Fields.UnderlyingBestBidPrice, snapshot.UnderlyingBestBidPrice)
+					.TryAdd(Level1Fields.UnderlyingBestAskPrice, snapshot.UnderlyingBestAskPrice)
+					.TryAdd(Level1Fields.MedianPrice, snapshot.MedianPrice)
+					.TryAdd(Level1Fields.HighPrice52Week, snapshot.HighPrice52Week)
+					.TryAdd(Level1Fields.LowPrice52Week, snapshot.LowPrice52Week)
+					.TryAdd(Level1Fields.LastTradeStringId, snapshot.LastTradeStringId)
 					;
 
 				if (snapshot.LastTradeTime != null)

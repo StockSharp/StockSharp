@@ -2035,6 +2035,10 @@ namespace StockSharp.Algo
 							lastTrade.Id = (long)value;
 							lastTradeChanged = true;
 							break;
+						case Level1Fields.LastTradeStringId:
+							lastTrade.StringId = (string)value;
+							lastTradeChanged = true;
+							break;
 						case Level1Fields.LastTradeTime:
 							lastTrade.Time = (DateTimeOffset)value;
 							lastTradeChanged = true;
