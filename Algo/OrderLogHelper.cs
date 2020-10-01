@@ -418,6 +418,7 @@ namespace StockSharp.Algo
 							LocalTime = tick.LocalTime,
 						}
 						.TryAdd(Level1Fields.LastTradeId, tick.TradeId)
+						.TryAdd(Level1Fields.LastTradeStringId, tick.TradeStringId)
 						.TryAdd(Level1Fields.LastTradePrice, tick.TradePrice)
 						.TryAdd(Level1Fields.LastTradeVolume, tick.TradeVolume)
 						.TryAdd(Level1Fields.LastTradeUpDown, tick.IsUpTick)

@@ -945,6 +945,11 @@ namespace StockSharp.Algo.Storages.Binary
 							writer.WriteLong((long)value);
 							break;
 						}
+						case Level1Fields.LastTradeStringId:
+						{
+							writer.WriteString((string)value);
+							break;
+						}
 						case Level1Fields.LastTradeUpDown:
 						{
 							writer.Write((bool)value);
@@ -1523,6 +1528,11 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.LastTradeId:
 					{
 						l1Msg.Add(field, reader.ReadLong());
+						break;
+					}
+					case Level1Fields.LastTradeStringId:
+					{
+						l1Msg.Add(field, reader.ReadString());
 						break;
 					}
 					case Level1Fields.LastTradeUpDown:

@@ -1391,6 +1391,12 @@ namespace StockSharp.Algo
 				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId.Value));
 			}
 
+			if (!message.TradeStringId.IsEmpty())
+			{
+				info.SetValue(time, Level1Fields.LastTradeStringId, message.TradeStringId);
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeStringId, message.TradeStringId));
+			}
+
 			if (message.TradeVolume != null)
 			{
 				info.SetValue(time, Level1Fields.LastTradeVolume, message.TradeVolume.Value);

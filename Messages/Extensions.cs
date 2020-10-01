@@ -1113,12 +1113,13 @@ namespace StockSharp.Messages
 		public static CachedSynchronizedSet<Level1Fields> LastTradeFields { get; } = new CachedSynchronizedSet<Level1Fields>(new[]
 		{
 			Level1Fields.LastTradeId,
+			Level1Fields.LastTradeStringId,
 			Level1Fields.LastTradeTime,
 			Level1Fields.LastTradeOrigin,
 			Level1Fields.LastTradePrice,
 			Level1Fields.LastTradeUpDown,
 			Level1Fields.LastTradeVolume,
-			Level1Fields.IsSystem
+			Level1Fields.IsSystem,
 		});
 
 		/// <summary>
@@ -2604,6 +2605,9 @@ namespace StockSharp.Messages
 
 				case Level1Fields.LastTradeOrigin:
 					return typeof(Sides);
+
+				case Level1Fields.LastTradeStringId:
+					return typeof(string);
 
 				default:
 					return field.IsObsolete() ? null : typeof(decimal);

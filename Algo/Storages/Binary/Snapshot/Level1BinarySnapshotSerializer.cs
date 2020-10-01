@@ -141,6 +141,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public BlittableDecimal? MedianPrice;
 			public BlittableDecimal? HighPrice52Week;
 			public BlittableDecimal? LowPrice52Week;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
+			public string LastTradeStringId;
 		}
 
 		Version ISnapshotSerializer<SecurityId, Level1ChangeMessage>.Version { get; } = SnapshotVersions.V23;
@@ -510,6 +513,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case Level1Fields.LowPrice52Week:
 						snapshot.LowPrice52Week = (BlittableDecimal)(decimal)change.Value;
 						break;
+					case Level1Fields.LastTradeStringId:
+						snapshot.LastTradeStringId = (string)change.Value;
+						break;
 				}
 			}
 
@@ -664,6 +670,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					.TryAdd(Level1Fields.MedianPrice, snapshot.MedianPrice)
 					.TryAdd(Level1Fields.HighPrice52Week, snapshot.HighPrice52Week)
 					.TryAdd(Level1Fields.LowPrice52Week, snapshot.LowPrice52Week)
+					.TryAdd(Level1Fields.LastTradeStringId, snapshot.LastTradeStringId)
 					;
 
 				if (snapshot.LastTradeTime != null)
