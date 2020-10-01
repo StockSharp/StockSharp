@@ -228,7 +228,7 @@
 		/// <param name="subscription">Subscription.</param>
 		/// <param name="provider">Subscription provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, MarketDepth> MarketDepthReceived(this Subscription subscription, ISubscriptionProvider provider)
+		public static MarketRule<Subscription, MarketDepth> WhenMarketDepthReceived(this Subscription subscription, ISubscriptionProvider provider)
 		{
 			return new MarketDepthReceivedRule(subscription, provider);
 		}
