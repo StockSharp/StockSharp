@@ -1937,6 +1937,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="Subscription"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Subscription.</returns>
+		public static Subscription ToSubscription(this DataType dataType) => new Subscription(dataType, (SecurityMessage)null);
+
+		/// <summary>
 		/// Convert <see cref="DataType"/> to <see cref="ISubscriptionMessage"/> value.
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
