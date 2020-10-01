@@ -3989,13 +3989,6 @@ IndexNum;Index num;Порядковый номер
 XamlStr515;Last Level 1;Послед. L1
 XamlStr516;Last OL;Послед. ОЛ
 XamlStr517;Last candle;Послед. свеча
-XamlStr518;Last trade;Послед. сделка
-XamlStr519;Last trade (time);Послед. сделка (время)
-XamlStr520;Last trade (origin);Послед. сделка (инициатор)
-XamlStr521;Last trade (id);Послед. сделка (идентификатор)
-XamlStr522;Last trade (volume);Послед. сделка (объем)
-XamlStr523;Last trade (trend);Послед. сделка (тренд)
-XamlStr524;Last trade (price);Послед. сделка (цена)
 XamlStr525;Last market depth;Послед. стакан
 XamlStr526;Last:;Послед.:
 XamlStr527;Settlement;Поставка
