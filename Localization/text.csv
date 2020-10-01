@@ -5309,6 +5309,21 @@ Iterations;Iterations;Итерации
 IterationInterval;Interval between iterations.;Интервал между итерациями.
 OrderBuyId;Order id (buy).;Заявка (покупка).
 OrderSellId;Order id (sell).;Заявка (продажа).
+LowBidVolume;Low bid (vol);Наим покупка (объем)
+LowBidVolumeDesc;Volume of the lowest bid.;Объем наименьшей покупки.
+HighAskVolume;High ask (vol);Наиб продажа (объем)
+HighAskVolumeDesc;Volume of the highest ask.;Объем наибольшей продажи.
+UnderlyingBestBidPrice;Under (bid);Актив (покупка)
+UnderlyingBestBidPriceDesc;Underlying asset best bid price.;Лучшая покупка по базовому активу.
+UnderlyingBestAskPrice;Under (ask);Актив (продажа)
+UnderlyingBestAskPriceDesc;Underlying asset best ask price.;Лучшая продажа по базовому активу.
+Median;Median;Медиана
+HighPrice52Week;High (52 week);Наибол (52 недели)
+HighPrice52WeekDesc;The highest price for 52 weeks.;Наибольшая цена за 52 недели.
+LowPrice52Week;Low (52 week);Наимен (52 недели)
+LowPrice52WeekDesc;The lowest price for 52 weeks.;Наименьшая цена за 52 недели.
+LastTradeStringId;Last ID (str);ИД сделки (строк)
+LastTradeStringIdDesc;Last trade ID (string).;ИД последней сделки (строка).
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

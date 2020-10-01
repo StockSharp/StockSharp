@@ -52766,5 +52766,155 @@ namespace StockSharp.Localization
 		/// Order id (sell).
 		/// </summary>
 		public static string OrderSellId => GetString(OrderSellIdKey);
+
+		/// <summary>
+		/// Low bid (vol)
+		/// </summary>
+		public const string LowBidVolumeKey = nameof(LowBidVolume);
+
+		/// <summary>
+		/// Low bid (vol)
+		/// </summary>
+		public static string LowBidVolume => GetString(LowBidVolumeKey);
+
+		/// <summary>
+		/// Volume of the lowest bid.
+		/// </summary>
+		public const string LowBidVolumeDescKey = nameof(LowBidVolumeDesc);
+
+		/// <summary>
+		/// Volume of the lowest bid.
+		/// </summary>
+		public static string LowBidVolumeDesc => GetString(LowBidVolumeDescKey);
+
+		/// <summary>
+		/// High ask (vol)
+		/// </summary>
+		public const string HighAskVolumeKey = nameof(HighAskVolume);
+
+		/// <summary>
+		/// High ask (vol)
+		/// </summary>
+		public static string HighAskVolume => GetString(HighAskVolumeKey);
+
+		/// <summary>
+		/// Volume of the highest ask.
+		/// </summary>
+		public const string HighAskVolumeDescKey = nameof(HighAskVolumeDesc);
+
+		/// <summary>
+		/// Volume of the highest ask.
+		/// </summary>
+		public static string HighAskVolumeDesc => GetString(HighAskVolumeDescKey);
+
+		/// <summary>
+		/// Under (bid)
+		/// </summary>
+		public const string UnderlyingBestBidPriceKey = nameof(UnderlyingBestBidPrice);
+
+		/// <summary>
+		/// Under (bid)
+		/// </summary>
+		public static string UnderlyingBestBidPrice => GetString(UnderlyingBestBidPriceKey);
+
+		/// <summary>
+		/// Underlying asset best bid price.
+		/// </summary>
+		public const string UnderlyingBestBidPriceDescKey = nameof(UnderlyingBestBidPriceDesc);
+
+		/// <summary>
+		/// Underlying asset best bid price.
+		/// </summary>
+		public static string UnderlyingBestBidPriceDesc => GetString(UnderlyingBestBidPriceDescKey);
+
+		/// <summary>
+		/// Under (ask)
+		/// </summary>
+		public const string UnderlyingBestAskPriceKey = nameof(UnderlyingBestAskPrice);
+
+		/// <summary>
+		/// Under (ask)
+		/// </summary>
+		public static string UnderlyingBestAskPrice => GetString(UnderlyingBestAskPriceKey);
+
+		/// <summary>
+		/// Underlying asset best ask price.
+		/// </summary>
+		public const string UnderlyingBestAskPriceDescKey = nameof(UnderlyingBestAskPriceDesc);
+
+		/// <summary>
+		/// Underlying asset best ask price.
+		/// </summary>
+		public static string UnderlyingBestAskPriceDesc => GetString(UnderlyingBestAskPriceDescKey);
+
+		/// <summary>
+		/// Median
+		/// </summary>
+		public const string MedianKey = nameof(Median);
+
+		/// <summary>
+		/// Median
+		/// </summary>
+		public static string Median => GetString(MedianKey);
+
+		/// <summary>
+		/// High (52 week)
+		/// </summary>
+		public const string HighPrice52WeekKey = nameof(HighPrice52Week);
+
+		/// <summary>
+		/// High (52 week)
+		/// </summary>
+		public static string HighPrice52Week => GetString(HighPrice52WeekKey);
+
+		/// <summary>
+		/// The highest price for 52 weeks.
+		/// </summary>
+		public const string HighPrice52WeekDescKey = nameof(HighPrice52WeekDesc);
+
+		/// <summary>
+		/// The highest price for 52 weeks.
+		/// </summary>
+		public static string HighPrice52WeekDesc => GetString(HighPrice52WeekDescKey);
+
+		/// <summary>
+		/// Low (52 week)
+		/// </summary>
+		public const string LowPrice52WeekKey = nameof(LowPrice52Week);
+
+		/// <summary>
+		/// Low (52 week)
+		/// </summary>
+		public static string LowPrice52Week => GetString(LowPrice52WeekKey);
+
+		/// <summary>
+		/// The lowest price for 52 weeks.
+		/// </summary>
+		public const string LowPrice52WeekDescKey = nameof(LowPrice52WeekDesc);
+
+		/// <summary>
+		/// The lowest price for 52 weeks.
+		/// </summary>
+		public static string LowPrice52WeekDesc => GetString(LowPrice52WeekDescKey);
+
+		/// <summary>
+		/// Last ID (str)
+		/// </summary>
+		public const string LastTradeStringIdKey = nameof(LastTradeStringId);
+
+		/// <summary>
+		/// Last ID (str)
+		/// </summary>
+		public static string LastTradeStringId => GetString(LastTradeStringIdKey);
+
+		/// <summary>
+		/// Last trade ID (string).
+		/// </summary>
+		public const string LastTradeStringIdDescKey = nameof(LastTradeStringIdDesc);
+
+		/// <summary>
+		/// Last trade ID (string).
+		/// </summary>
+		public static string LastTradeStringIdDesc => GetString(LastTradeStringIdDescKey);
 	}
 }
