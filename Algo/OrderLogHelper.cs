@@ -254,7 +254,9 @@ namespace StockSharp.Algo
 			private sealed class OrderLogTickEnumerator : IEnumerator<ExecutionMessage>
 			{
 				private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
-				private readonly Dictionary<long, Tuple<long, Sides>> _trades = new Dictionary<long, Tuple<long, Sides>>();
+
+				private readonly HashSet<long> _tradesByNum = new HashSet<long>();
+				private readonly HashSet<string> _tradesByString = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
 				public OrderLogTickEnumerator(IEnumerable<ExecutionMessage> items)
 				{
@@ -272,24 +274,15 @@ namespace StockSharp.Algo
 					{
 						var currItem = _itemsEnumerator.Current;
 
-						var tradeId = currItem.TradeId;
-
-						if (tradeId == null)
-							continue;
-
-						var prevItem = _trades.TryGetValue(tradeId.Value);
-
-						if (prevItem == null)
+						if (currItem.TradeId != null)
 						{
-							_trades.Add(tradeId.Value, Tuple.Create(currItem.SafeGetOrderId(), currItem.Side));
+							if (TryProcess(currItem.TradeId.Value, _tradesByNum, currItem))
+								return true;
 						}
-						else
+						else if (!currItem.TradeStringId.IsEmpty())
 						{
-							_trades.Remove(tradeId.Value);
-
-							Current = currItem.ToTick();
-
-							return true;
+							if (TryProcess(currItem.TradeStringId, _tradesByString, currItem))
+								return true;
 						}
 					}
 
@@ -297,9 +290,23 @@ namespace StockSharp.Algo
 					return false;
 				}
 
+				private bool TryProcess<T>(T tradeId, HashSet<T> trades, ExecutionMessage currItem)
+				{
+					if (!trades.Add(tradeId))
+						return false;
+
+					trades.Remove(tradeId);
+					Current = currItem.ToTick();
+					return true;
+				}
+
 				void IEnumerator.Reset()
 				{
 					_itemsEnumerator.Reset();
+					
+					_tradesByNum.Clear();
+					_tradesByString.Clear();
+
 					Current = null;
 				}
 
