@@ -565,6 +565,11 @@ namespace StockSharp.Algo.Strategies
 		public event Action PnLChanged;
 
 		/// <summary>
+		/// <see cref="PnL"/> change event.
+		/// </summary>
+		public event Action<Subscription> PnLReceived;
+
+		/// <summary>
 		/// Total commission.
 		/// </summary>
 		[Display(
@@ -2486,6 +2491,9 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.Notify(nameof(PnL));
 			PnLChanged?.Invoke();
+
+			if (_pfSubscription != null)
+				PnLReceived?.Invoke(_pfSubscription);
 
 			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
 
