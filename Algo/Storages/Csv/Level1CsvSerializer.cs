@@ -150,6 +150,13 @@ namespace StockSharp.Algo.Storages.Csv
 					if (value != null)
 						level1.Changes.Add(field, value.Value);
 				}
+				else if (pair.Value == typeof(string))
+				{
+					var value = reader.ReadString();
+
+					if (!value.IsEmpty())
+						level1.Changes.Add(field, value);
+				}
 				else
 				{
 					var value = reader.ReadNullableDecimal();
