@@ -343,12 +343,18 @@ namespace StockSharp.Algo
 				ExpiryDate = order.ExpiryDate,
 				PortfolioName = order.Portfolio?.Name,
 				ExecutionType = ExecutionTypes.OrderLog,
-				TradeId = trade?.Id,
+				TradeId = trade?.Id.DefaultAsNull(),
+				TradeStringId = trade?.StringId,
 				TradePrice = trade?.Price,
 				Currency = order.Currency,
 				SeqNum = order.SeqNum,
 				OrderBuyId = trade?.OrderBuyId,
 				OrderSellId = trade?.OrderSellId,
+				TradeStatus = trade?.Status,
+				IsUpTick = trade?.IsUpTick,
+				Yield = trade?.Yield,
+				OpenInterest = trade?.OpenInterest,
+				OriginSide = trade?.OrderDirection,
 			};
 		}
 
@@ -1477,12 +1483,19 @@ namespace StockSharp.Algo
 			{
 				var trade = item.Trade;
 
-				trade.Id = message.TradeId ?? 0;
-				trade.Price = message.TradePrice ?? 0;
+				trade.Id = message.TradeId ?? default;
+				trade.StringId = message.TradeStringId;
+				trade.Price = message.TradePrice ?? default;
 				trade.Time = message.ServerTime;
-				trade.Volume = message.OrderVolume ?? 0;
+				trade.Volume = message.OrderVolume ?? default;
 				trade.IsSystem = message.IsSystem;
 				trade.Status = message.TradeStatus;
+				trade.OrderBuyId = message.OrderBuyId;
+				trade.OrderSellId = message.OrderSellId;
+				trade.OrderDirection = message.OriginSide;
+				trade.OpenInterest = message.OpenInterest;
+				trade.IsUpTick = message.IsUpTick;
+				trade.Yield = message.Yield;
 			}
 
 			return item;
@@ -1935,6 +1948,13 @@ namespace StockSharp.Algo
 
 			return DataType.Create(series.CandleType.ToCandleMessageType(), series.Arg);
 		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="Subscription"/> value.
+		/// </summary>
+		/// <param name="dataType">Data type info.</param>
+		/// <returns>Subscription.</returns>
+		public static Subscription ToSubscription(this DataType dataType) => new Subscription(dataType, (SecurityMessage)null);
 
 		/// <summary>
 		/// Convert <see cref="DataType"/> to <see cref="ISubscriptionMessage"/> value.

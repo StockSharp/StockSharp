@@ -23,6 +23,7 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml;
 	using System.Xml.Serialization;
+	using System.Runtime.CompilerServices;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -86,7 +87,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_code = value ?? throw new ArgumentNullException(nameof(value));
-				Notify(nameof(Code));
+				Notify();
 			}
 		}
 
@@ -110,7 +111,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_expiryTime = value;
-				Notify(nameof(ExpiryTime));
+				Notify();
 			}
 		}
 
@@ -153,7 +154,7 @@ namespace StockSharp.BusinessEntities
 		//	set
 		//	{
 		//		_isSupportAtomicReRegister = value;
-		//		Notify(nameof(IsSupportAtomicReRegister));
+		//		Notify();
 		//	}
 		//}
 
@@ -172,7 +173,7 @@ namespace StockSharp.BusinessEntities
 		//	set
 		//	{
 		//		_isSupportMarketOrders = value;
-		//		Notify(nameof(IsSupportMarketOrders));
+		//		Notify();
 		//	}
 		//}
 
@@ -195,7 +196,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_workingTime = value ?? throw new ArgumentNullException(nameof(value));
-				Notify(nameof(WorkingTime));
+				Notify();
 			}
 		}
 
@@ -217,7 +218,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_timeZone = value ?? throw new ArgumentNullException(nameof(value));
-				Notify(nameof(TimeZone));
+				Notify();
 			}
 		}
 
@@ -247,7 +248,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_extensionInfo = value/* ?? throw new ArgumentNullException(nameof(value))*/;
-				Notify(nameof(ExtensionInfo));
+				Notify();
 			}
 		}
 
@@ -267,9 +268,9 @@ namespace StockSharp.BusinessEntities
 			remove => _propertyChanged -= value;
 		}
 
-		private void Notify(string info)
+		private void Notify([CallerMemberName]string propertyName = null)
 		{
-			_propertyChanged?.Invoke(this, info);
+			_propertyChanged?.Invoke(this, propertyName);
 		}
 
 		/// <inheritdoc />

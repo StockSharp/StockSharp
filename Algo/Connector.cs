@@ -1097,7 +1097,7 @@ namespace StockSharp.Algo
 			var security = TryGetSecurity(secId);
 
 			if (security == null)
-				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str704Params.Put());
+				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str704Params.Put(secId));
 
 			return security;
 		}

@@ -37,33 +37,41 @@
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
 			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, "installer_apps_installed.xml");
 
-			// ReSharper disable once AssignNullToNotNullAttribute
-			var dir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+			HistoryDataPath = GetHistoryDataPath(Assembly.GetExecutingAssembly().Location);
+		}
+
+		/// <summary>
+		/// Get history data path.
+		/// </summary>
+		/// <param name="startDir">Directory.</param>
+		/// <returns>History data path.</returns>
+		public static string GetHistoryDataPath(string startDir)
+		{
+			static DirectoryInfo FindHistoryDataSubfolder(DirectoryInfo packageRoot)
+			{
+				if (!packageRoot.Exists)
+					return null;
+
+				foreach (var di in packageRoot.GetDirectories().OrderByDescending(di => di.Name))
+				{
+					var d = new DirectoryInfo(Path.Combine(di.FullName, "HistoryData"));
+
+					if (d.Exists)
+						return d;
+				}
+
+				return null;
+			}
+
+			var dir = new DirectoryInfo(Path.GetDirectoryName(startDir));
 
 			while (dir != null)
 			{
 				var hdRoot = FindHistoryDataSubfolder(new DirectoryInfo(Path.Combine(dir.FullName, "packages", "stocksharp.samples.historydata")));
 				if (hdRoot != null)
-				{
-					HistoryDataPath = hdRoot.FullName;
-					break;
-				}
+					return hdRoot.FullName;
 
 				dir = dir.Parent;
-			}
-		}
-
-		private static DirectoryInfo FindHistoryDataSubfolder(DirectoryInfo packageRoot)
-		{
-			if (!packageRoot.Exists)
-				return null;
-
-			foreach (var di in packageRoot.GetDirectories().OrderByDescending(di => di.Name))
-			{
-				var d = new DirectoryInfo(Path.Combine(di.FullName, "HistoryData"));
-
-				if (d.Exists)
-					return d;
 			}
 
 			return null;

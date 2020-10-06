@@ -857,7 +857,7 @@ namespace StockSharp.Algo
 							}
 
 							if (Adapter.IsMessageSupported(type) && !_subscriptionManager.Subscriptions.Any(s => s.SubscriptionMessage.DataType == dataType && s.SubscriptionMessage.To == null))
-								_subscriptionManager.Subscribe(new Subscription(dataType, (SecurityMessage)null));
+								_subscriptionManager.Subscribe(dataType.ToSubscription());
 						}
 
 						foreach (var type in _lookupMessagesOnConnect.Cache)

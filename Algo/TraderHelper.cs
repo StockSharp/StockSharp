@@ -3180,10 +3180,10 @@ namespace StockSharp.Algo
 			if (connector is null)
 				throw new ArgumentNullException(nameof(connector));
 
-			connector.Subscribe(new Subscription(DataType.Board, (SecurityMessage)null));
-			connector.Subscribe(new Subscription(DataType.Securities, (SecurityMessage)null));
-			connector.Subscribe(new Subscription(DataType.PositionChanges, (SecurityMessage)null));
-			connector.Subscribe(new Subscription(DataType.Transactions, (SecurityMessage)null));
+			connector.Subscribe(DataType.Board.ToSubscription());
+			connector.Subscribe(DataType.Securities.ToSubscription());
+			connector.Subscribe(DataType.PositionChanges.ToSubscription());
+			connector.Subscribe(DataType.Transactions.ToSubscription());
 		}
 
 		/// <summary>

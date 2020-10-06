@@ -18,6 +18,7 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Runtime.CompilerServices;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -63,7 +64,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_name = value;
-				Notify(nameof(Name));
+				Notify();
 			}
 		}
 
@@ -101,7 +102,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_fullNameLoc = value;
-				Notify(nameof(FullNameLoc));
+				Notify();
 			}
 		}
 
@@ -121,7 +122,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_countryCode = value;
-				Notify(nameof(CountryCode));
+				Notify();
 			}
 		}
 
@@ -139,7 +140,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_extensionInfo = value/* ?? throw new ArgumentNullException(nameof(value))*/;
-				Notify(nameof(ExtensionInfo));
+				Notify();
 			}
 		}
 
@@ -159,9 +160,9 @@ namespace StockSharp.BusinessEntities
 			remove => _propertyChanged -= value;
 		}
 
-		private void Notify(string info)
+		private void Notify([CallerMemberName]string propertyName = null)
 		{
-			_propertyChanged?.Invoke(this, info);
+			_propertyChanged?.Invoke(this, propertyName);
 		}
 
 		/// <inheritdoc />
