@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Auto updates check interval
+		/// </summary>
+		public const string AutoUpdatesCheckIntervalKey = nameof(AutoUpdatesCheckInterval);
+
+		/// <summary>
+		/// Auto updates check interval
+		/// </summary>
+		public static string AutoUpdatesCheckInterval => GetString(AutoUpdatesCheckIntervalKey);
+
+		/// <summary>
+		/// Retry delay in case of update check error
+		/// </summary>
+		public const string AutoUpdatesRetryDelayKey = nameof(AutoUpdatesRetryDelay);
+
+		/// <summary>
+		/// Retry delay in case of update check error
+		/// </summary>
+		public static string AutoUpdatesRetryDelay => GetString(AutoUpdatesRetryDelayKey);
+
+		/// <summary>
 		/// The application is still running in background mode. You can access it via icon in the system tray.
 		/// </summary>
 		public const string ApplicationStillRunningKey = nameof(ApplicationStillRunning);
