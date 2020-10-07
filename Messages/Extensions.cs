@@ -3004,6 +3004,9 @@ namespace StockSharp.Messages
 			if (!criteria.StrategyId.IsEmpty() && !position.StrategyId.CompareIgnoreCase(criteria.StrategyId))
 				return false;
 
+			if (criteria.Side != null && position.Side != criteria.Side)
+				return false;
+
 			return true;
 		}
 

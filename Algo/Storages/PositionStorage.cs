@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Storages
 		void IPositionStorage.Save(Position position) => _entityRegistry.Positions.Save(position);
 		void IPositionStorage.Delete(Position position) => _entityRegistry.Positions.Remove(position);
 
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limit)
-			=> _entityRegistry.Positions.GetPosition(portfolio, security, strategyId, clientCode, depoName, limit);
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limit)
+			=> _entityRegistry.Positions.GetPosition(portfolio, security, strategyId, side, clientCode, depoName, limit);
 	}
 }

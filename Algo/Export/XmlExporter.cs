@@ -278,7 +278,9 @@ namespace StockSharp.Algo.Export
 					.WriteAttribute("clientCode", message.ClientCode)
 					.WriteAttribute("depoName", message.DepoName)
 					.WriteAttribute("limit", message.LimitType)
-					.WriteAttribute("strategyId", message.StrategyId);
+					.WriteAttribute("strategyId", message.StrategyId)
+					.WriteAttribute("side", message.Side)
+					;
 
 				foreach (var pair in message.Changes.Where(c => !c.Key.IsObsolete()))
 					writer.WriteAttribute(pair.Key.ToString(), (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value);

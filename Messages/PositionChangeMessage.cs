@@ -290,6 +290,12 @@ namespace StockSharp.Messages
 		public string StrategyId { get; set; }
 
 		/// <summary>
+		/// Side.
+		/// </summary>
+		[DataMember]
+		public Sides? Side { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		public PositionChangeMessage()
@@ -335,6 +341,7 @@ namespace StockSharp.Messages
 			destination.ClientCode = ClientCode;
 			destination.BoardCode = BoardCode;
 			destination.StrategyId = StrategyId;
+			destination.Side = Side;
 		}
 
 		/// <inheritdoc />
@@ -347,6 +354,9 @@ namespace StockSharp.Messages
 
 			if (!Description.IsEmpty())
 				str += $",Description={Description}";
+
+			if (Side != null)
+				str += $",Side={Side}";
 
 			return str;
 		}

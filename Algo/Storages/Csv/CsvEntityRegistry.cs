@@ -801,15 +801,15 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private class PositionCsvList : CsvEntityList<Tuple<Portfolio, Security, string>, Position>, IStoragePositionList
+		private class PositionCsvList : CsvEntityList<Tuple<Portfolio, Security, string, Sides?>, Position>, IStoragePositionList
 		{
 			public PositionCsvList(CsvEntityRegistry registry)
 				: base(registry, "position.csv")
 			{
 			}
 
-			protected override Tuple<Portfolio, Security, string> GetKey(Position item)
-				=> CreateKey(item.Portfolio, item.Security, item.StrategyId);
+			protected override Tuple<Portfolio, Security, string, Sides?> GetKey(Position item)
+				=> CreateKey(item.Portfolio, item.Security, item.StrategyId, item.Side);
 
 			private Portfolio GetPortfolio(string id)
 			{
@@ -889,6 +889,9 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					position.StrategyId = reader.ReadString();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					position.Side = reader.ReadNullableEnum<Sides>();
+
 				return position;
 			}
 
@@ -927,14 +930,15 @@ namespace StockSharp.Algo.Storages.Csv
 					data.OrdersCount.To<string>(),
 					data.TradesCount.To<string>(),
 					data.StrategyId,
+					data.Side.To<string>(),
 				});
 			}
 
-			public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
-				=> ((IStorageEntityList<Position>)this).ReadById(CreateKey(portfolio, security, strategyId));
+			public Position GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
+				=> ((IStorageEntityList<Position>)this).ReadById(CreateKey(portfolio, security, strategyId, side));
 
-			private Tuple<Portfolio, Security, string> CreateKey(Portfolio portfolio, Security security, string strategyId)
-				=> Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty);
+			private Tuple<Portfolio, Security, string, Sides?> CreateKey(Portfolio portfolio, Security security, string strategyId, Sides? side)
+				=> Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side);
 		}
 
 		private class SubscriptionCsvList : CsvEntityList<Tuple<SecurityId, DataType>, MarketDataMessage>

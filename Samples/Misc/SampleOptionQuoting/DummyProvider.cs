@@ -263,7 +263,7 @@ namespace SampleOptionQuoting
 			remove { }
 		}
 
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limit)
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limit)
 		{
 			return _positions.FirstOrDefault(p => p.Security == security && p.Portfolio == portfolio);
 		}
