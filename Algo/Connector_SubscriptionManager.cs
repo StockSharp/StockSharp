@@ -182,7 +182,9 @@ namespace StockSharp.Algo
 						else if (time != null)
 						{
 							if (!info.UpdateLastTime(time.Value))
-								return null;
+							{
+								//return null;
+							}
 						}
 
 						return info;
