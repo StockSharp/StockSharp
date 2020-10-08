@@ -389,7 +389,18 @@ namespace StockSharp.Algo.Storages
 		IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
 		IEnumerable<TMessage> IMarketDataStorage<TMessage>.Load(DateTime date) => Load(date);
 
-		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => throw new NotSupportedException();
+		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+		{
+			date = date.Date.UtcKind();
+
+			foreach (var inner in _innerStorages.Cache)
+			{
+				if (inner.Dates.Contains(date))
+					return inner.GetMetaInfo(date);
+			}
+
+			return null;
+		}
 		
 		private readonly IMarketDataSerializer<TMessage> _serializer;
 		IMarketDataSerializer<TMessage> IMarketDataStorage<TMessage>.Serializer => _serializer;
