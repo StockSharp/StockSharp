@@ -126,95 +126,6 @@ namespace StockSharp.Algo
 			return item.ToMessage().GetOrderLogCancelReason();
 		}
 
-		private sealed class DepthEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
-		{
-			private sealed class DepthEnumerator : IEnumerator<QuoteChangeMessage>
-			{
-				private readonly TimeSpan _interval;
-				private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
-				private readonly IOrderLogMarketDepthBuilder _builder;
-				private readonly int _maxDepth;
-
-				public DepthEnumerator(IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
-				{
-					if (items == null)
-						throw new ArgumentNullException(nameof(items));
-
-					if (maxDepth < 1)
-						throw new ArgumentOutOfRangeException(nameof(maxDepth), maxDepth, LocalizedStrings.Str941);
-
-					_itemsEnumerator = items.GetEnumerator();
-					_builder = builder ?? throw new ArgumentNullException(nameof(builder));
-					_interval = interval;
-					_maxDepth = maxDepth;
-				}
-
-				public QuoteChangeMessage Current { get; private set; }
-
-				bool IEnumerator.MoveNext()
-				{
-					while (_itemsEnumerator.MoveNext())
-					{
-						var item = _itemsEnumerator.Current;
-
-						//if (_builder == null)
-						//	_builder = new OrderLogMarketDepthBuilder(new QuoteChangeMessage { SecurityId = item.SecurityId }, _maxDepth);
-
-						var depth = _builder.Update(item);
-						if (depth == null)
-							continue;
-
-						if (Current != null && (depth.ServerTime - Current.ServerTime) < _interval)
-							continue;
-
-						Current = depth.TypedClone();
-
-						if (_maxDepth < int.MaxValue)
-						{
-							//Current.MaxDepth = _maxDepth;
-							Current.Bids = Current.Bids.Take(_maxDepth).ToArray();
-							Current.Asks = Current.Asks.Take(_maxDepth).ToArray();
-						}
-
-						return true;
-					}
-
-					Current = null;
-					return false;
-				}
-
-				public void Reset()
-				{
-					_itemsEnumerator.Reset();
-					Current = null;
-				}
-
-				object IEnumerator.Current => Current;
-
-				void IDisposable.Dispose()
-				{
-					Current = null;
-					_itemsEnumerator.Dispose();
-				}
-			}
-
-			//private readonly IEnumerableEx<ExecutionMessage> _items;
-
-			public DepthEnumerable(IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
-				: base(() => new DepthEnumerator(items, builder, interval, maxDepth))
-			{
-				if (items == null)
-					throw new ArgumentNullException(nameof(items));
-
-				if (interval < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.Str940);
-
-				//_items = items;
-			}
-
-			//int IEnumerableEx.Count => _items.Count;
-		}
-
 		/// <summary>
 		/// Build market depths from order log.
 		/// </summary>
@@ -246,7 +157,36 @@ namespace StockSharp.Algo
 		/// <returns>Market depths.</returns>
 		public static IEnumerable<QuoteChangeMessage> ToOrderBooks(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue)
 		{
-			return new DepthEnumerable(items, builder, interval, maxDepth);
+			var snapshotSent = false;
+			var prevTime = default(DateTimeOffset?);
+
+			foreach (var item in items)
+			{
+				if (!snapshotSent)
+				{
+					yield return builder.Snapshot.TypedClone();
+					snapshotSent = true;
+				}
+
+				var depth = builder.Update(item);
+				if (depth is null)
+					continue;
+
+				if (prevTime != null && (depth.ServerTime - prevTime.Value) < interval)
+					continue;
+
+				depth = depth.TypedClone();
+
+				if (maxDepth < int.MaxValue)
+				{
+					depth.Bids = depth.Bids.Take(maxDepth).ToArray();
+					depth.Asks = depth.Asks.Take(maxDepth).ToArray();
+				}
+
+				yield return depth;
+
+				prevTime = depth.ServerTime;
+			}
 		}
 
 		private sealed class OrderLogTickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
