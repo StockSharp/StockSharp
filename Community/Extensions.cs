@@ -16,32 +16,37 @@ namespace StockSharp.Community
 		/// <summary>
 		/// S#.API
 		/// </summary>
-		public static readonly ProductInfoMessage Api = new ProductInfoMessage { Id = 5, Name = "S#.API" };
+		public static readonly ProductInfoMessage Api = new ProductInfoMessage { Id = 5, Name = "S#.API", PackageId = "StockSharp.Samples" };
 
 		/// <summary>
 		/// S#.Data
 		/// </summary>
-		public static readonly ProductInfoMessage Hydra = new ProductInfoMessage { Id = 8, Name = "S#.Data", PackageId = "Hydra" };
+		public static readonly ProductInfoMessage Hydra = new ProductInfoMessage { Id = 8, Name = "S#.Data", PackageId = "StockSharp.Hydra" };
 
 		/// <summary>
 		/// S#.Terminal
 		/// </summary>
-		public static readonly ProductInfoMessage Terminal = new ProductInfoMessage { Id = 10, Name = "S#.Terminal", PackageId = "Terminal" };
+		public static readonly ProductInfoMessage Terminal = new ProductInfoMessage { Id = 10, Name = "S#.Terminal", PackageId = "StockSharp.Terminal" };
 
 		/// <summary>
 		/// S#.Designer
 		/// </summary>
-		public static readonly ProductInfoMessage Designer = new ProductInfoMessage { Id = 9, Name = "S#.Designer", PackageId = "Designer" };
+		public static readonly ProductInfoMessage Designer = new ProductInfoMessage { Id = 9, Name = "S#.Designer", PackageId = "StockSharp.Designer" };
 
 		/// <summary>
 		/// S#.Installer
 		/// </summary>
-		public static readonly ProductInfoMessage Installer = new ProductInfoMessage { Id = 16, Name = "S#.Installer" };
+		public static readonly ProductInfoMessage Installer = new ProductInfoMessage { Id = 16, Name = "S#.Installer", PackageId = "StockSharp.Installer.UI" };
 
 		/// <summary>
 		/// S#.Edu
 		/// </summary>
-		public static readonly ProductInfoMessage Edu = new ProductInfoMessage { Id = 83, Name = "S#.Edu" };
+		public static readonly ProductInfoMessage Edu = new ProductInfoMessage { Id = 83, Name = "S#.Edu", PackageId = "StockSharp.Lessons" };
+
+		/// <summary>
+		/// S#.Server
+		/// </summary>
+		public static readonly ProductInfoMessage Server = new ProductInfoMessage { Id = 14, Name = "S#.Server", PackageId = "StockSharp.Server" };
 
 		[Obsolete]
 		private static readonly Dictionary<Products, ProductInfoMessage> _productsMapping = new Dictionary<Products, ProductInfoMessage>
@@ -50,10 +55,10 @@ namespace StockSharp.Community
 			{ Products.Hydra, Hydra },
 			{ Products.Designer, Designer },
 			{ Products.Terminal, Terminal },
-			{ Products.Shell, new ProductInfoMessage { Id = 11, Name = "S#.Shell", PackageId = "Shell" } },
-			{ Products.MatLab, new ProductInfoMessage { Id = 12, Name = "S#.MatLab", PackageId = "MatLab" } },
-			{ Products.Lci, new ProductInfoMessage { Id = 13, Name = "S#.Ë×È", PackageId = "Lci" } },
-			{ Products.Server, new ProductInfoMessage { Id = 14, Name = "S#.Server", PackageId = "Server" } },
+			{ Products.Shell, new ProductInfoMessage { Id = 11, Name = "S#.Shell", PackageId = "StockSharp.Shell" } },
+			{ Products.MatLab, new ProductInfoMessage { Id = 12, Name = "S#.MatLab", PackageId = "StockSharp.MatLab" } },
+			{ Products.Lci, new ProductInfoMessage { Id = 13, Name = "S#.Ë×È", PackageId = "StockSharp.LciViewer" } },
+			{ Products.Server, Server },
 			{ Products.Installer, Installer },
 		};
 
