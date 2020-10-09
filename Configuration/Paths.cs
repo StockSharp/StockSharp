@@ -221,9 +221,12 @@
 		/// <summary>
 		/// Get currently installed version of the product.
 		/// </summary>
-		/// <param name="productPackageId">Product main package id (ProductInfoMessage.PackageId).</param>
-		public static string GetInstalledVersion(string productPackageId)
+		/// <param name="productInstallPath">File system path to product installation.</param>
+		public static string GetInstalledVersion(string productInstallPath)
 		{
+			if(productInstallPath.IsEmpty())
+				throw new ArgumentException(nameof(productInstallPath));
+
 			if (!File.Exists(InstallerInstallationsConfigPath))
 				return null;
 
@@ -234,7 +237,7 @@
 			if (!(installations?.Length > 0))
 				return null;
 
-			var installation = installations.FirstOrDefault(ss => ss.TryGet<string>("ProductId").CompareIgnoreCase(productPackageId));
+			var installation = installations.FirstOrDefault(ss => productInstallPath.ComparePaths(ss.TryGet<string>("InstallDirectory")));
 			if(installation == null)
 				return null;
 
