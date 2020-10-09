@@ -482,7 +482,7 @@ namespace StockSharp.Algo.Candles.Compression
 							RaiseNewOutMessage(message);
 					}
 					else
-						UpgradeSubscription(series, response);
+						UpgradeSubscription(series, response, null);
 
 					return;
 				}
@@ -497,7 +497,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (series == null)
 						break;
 
-					UpgradeSubscription(series, null);
+					UpgradeSubscription(series, null, finishMsg);
 					return;
 				}
 
@@ -634,7 +634,7 @@ namespace StockSharp.Algo.Candles.Compression
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void UpgradeSubscription(SeriesInfo series, SubscriptionResponseMessage response)
+		private void UpgradeSubscription(SeriesInfo series, SubscriptionResponseMessage response, SubscriptionFinishedMessage finish)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -654,6 +654,9 @@ namespace StockSharp.Algo.Candles.Compression
 				else
 					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = original.TransactionId });
 			}
+
+			if (finish?.NextFrom != null)
+				series.LastTime = finish.NextFrom;
 
 			if (original.To != null && series.LastTime != null && original.To <= series.LastTime)
 			{

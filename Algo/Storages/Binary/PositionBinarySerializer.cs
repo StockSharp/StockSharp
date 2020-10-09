@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class PositionBinarySerializer : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>
 	{
 		public PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 20, MarketDataVersions.Version35, exchangeInfoProvider)
+			: base(securityId, null, 20, MarketDataVersions.Version36, exchangeInfoProvider)
 		{
 		}
 
@@ -195,6 +195,7 @@ namespace StockSharp.Algo.Storages.Binary
 			writer.WriteInt(messages.Count());
 
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version35;
+			var side = metaInfo.Version >= MarketDataVersions.Version36;
 
 			foreach (var message in messages)
 			{
@@ -327,6 +328,11 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				writer.WriteBuildFrom(message.BuildFrom);
+
+				if (!side)
+					continue;
+
+				writer.WriteNullableSide(message.Side);
 			}
 		}
 
@@ -336,6 +342,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var metaInfo = enumerator.MetaInfo;
 
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version35;
+			var side = metaInfo.Version >= MarketDataVersions.Version36;
 
 			var posMsg = new PositionChangeMessage { SecurityId = SecurityId };
 
@@ -450,6 +457,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return posMsg;
 
 			posMsg.BuildFrom = reader.ReadBuildFrom();
+
+			if (!side)
+				return posMsg;
+
+			posMsg.Side = reader.ReadNullableSide();
 
 			return posMsg;
 		}

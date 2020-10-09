@@ -704,6 +704,19 @@ namespace StockSharp.Algo.Storages.Binary
 		public static bool? ReadNullableBool(this BitArrayReader reader)
 			=> reader.Read() ? reader.Read() : (bool?)null;
 
+		public static void WriteNullableSide(this BitArrayWriter writer, Sides? value)
+		{
+			writer.Write(value != null);
+
+			if (value is null)
+				return;
+
+			writer.Write(value.Value == Sides.Buy);
+		}
+
+		public static Sides? ReadNullableSide(this BitArrayReader reader)
+			=> reader.Read() ? reader.Read() ? Sides.Buy : Sides.Sell : (Sides?)null;
+
 		public static void WriteNullableDecimal(this BitArrayWriter writer, decimal? value)
 		{
 			writer.Write(value != null);

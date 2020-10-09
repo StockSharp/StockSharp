@@ -17,5 +17,30 @@ namespace StockSharp.Messages
 			: base(MessageTypes.SubscriptionFinished)
 		{
 		}
+
+		/// <summary>
+		/// Recommended value for next <see cref="ISubscriptionMessage.From"/> (in case of partial requests).
+		/// </summary>
+		[DataMember]
+		public DateTimeOffset? NextFrom { get; set; }
+
+		/// <inheritdoc />
+		protected override void CopyTo(SubscriptionFinishedMessage destination)
+		{
+			base.CopyTo(destination);
+
+			destination.NextFrom = NextFrom;
+		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			var str = base.ToString();
+
+			if (NextFrom != null)
+				str += $",Next={NextFrom}";
+
+			return str;
+		}
 	}
 }

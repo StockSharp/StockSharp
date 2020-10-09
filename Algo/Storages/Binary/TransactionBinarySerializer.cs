@@ -430,10 +430,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.Latency != null)
 					writer.WriteLong(msg.Latency.Value.Ticks);
 
-				writer.Write(msg.OriginSide != null);
-
-				if (msg.OriginSide != null)
-					writer.Write(msg.OriginSide.Value == Sides.Buy);
+				writer.WriteNullableSide(msg.OriginSide);
 
 				if (metaInfo.Version < MarketDataVersions.Version59)
 					continue;
@@ -650,8 +647,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (reader.Read())
 				msg.Latency = reader.ReadLong().To<TimeSpan>();
 
-			if (reader.Read())
-				msg.OriginSide = reader.Read() ? Sides.Buy : Sides.Sell;
+			msg.OriginSide = reader.ReadNullableSide();
 
 			if (metaInfo.Version < MarketDataVersions.Version59)
 				return msg;

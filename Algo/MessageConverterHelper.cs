@@ -841,6 +841,7 @@ namespace StockSharp.Algo
 				SecurityId = position.Security.ToSecurityId(),
 				ClientCode = position.ClientCode,
 				StrategyId = position.StrategyId,
+				Side = position.Side,
 				OriginalTransactionId = originalTransactionId,
 			}
 			.TryAdd(PositionChangeTypes.BeginValue, position.BeginValue, true)

@@ -443,6 +443,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.DepoKey)]
 		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
 		[MainCategory]
+		[DataMember]
 		public string DepoName { get; set; }
 
 		/// <summary>
@@ -452,12 +453,20 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str267Key)]
 		[MainCategory]
 		[Nullable]
+		[DataMember]
 		public TPlusLimits? LimitType { get; set; }
 
 		/// <summary>
 		/// Strategy id.
 		/// </summary>
+		[DataMember]
 		public string StrategyId { get; set; }
+
+		/// <summary>
+		/// Side.
+		/// </summary>
+		[DataMember]
+		public Sides? Side { get; set; }
 
 		private decimal? _leverage;
 
@@ -689,6 +698,7 @@ namespace StockSharp.BusinessEntities
 			destination.DepoName = DepoName;
 			destination.LimitType = LimitType;
 			destination.StrategyId = StrategyId;
+			destination.Side = Side;
 
 			destination.Leverage = Leverage;
 			destination.CommissionMaker = CommissionMaker;
@@ -709,6 +719,9 @@ namespace StockSharp.BusinessEntities
 
 			if (!StrategyId.IsEmpty())
 				str += $"-{StrategyId}";
+
+			if (Side != null)
+				str += $"-{Side.Value}";
 
 			return str;
 		}

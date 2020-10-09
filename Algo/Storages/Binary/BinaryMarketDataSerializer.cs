@@ -37,6 +37,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version33 = new Version(3, 3);
 		public static readonly Version Version34 = new Version(3, 4);
 		public static readonly Version Version35 = new Version(3, 5);
+		public static readonly Version Version36 = new Version(3, 6);
 		public static readonly Version Version40 = new Version(4, 0);
 		public static readonly Version Version41 = new Version(4, 1);
 		public static readonly Version Version42 = new Version(4, 2);

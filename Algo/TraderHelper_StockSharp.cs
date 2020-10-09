@@ -1209,7 +1209,7 @@ SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 				else
 				{
 					var native = destination.SecurityId.Native;
-					found.CopyTo(destination);
+					found.CopyTo(destination, false);
 					destination.SetNativeId(native);
 				}
 			}
@@ -1269,7 +1269,7 @@ SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 						byName.SafeAdd(Tuple.Create(message.Name.ToUpperInvariant(), secType)).Add(message);
 				}
 
-				List<SecurityMessage> TryFind(Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>> dict, Tuple<string, SecurityTypes> key)
+				static List<SecurityMessage> TryFind(Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>> dict, Tuple<string, SecurityTypes> key)
 				{
 					return
 						dict.TryGetValue(Tuple.Create(key.Item1, (SecurityTypes?)key.Item2)) ??

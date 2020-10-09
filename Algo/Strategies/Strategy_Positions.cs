@@ -114,7 +114,7 @@
 			remove => _positionChanged -= value;
 		}
 
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType)
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType)
 			=> _positions.TryGetValue(Tuple.Create(security, portfolio));
 
 		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)

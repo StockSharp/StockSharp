@@ -2552,13 +2552,14 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Portfolio.</param>
 		/// <param name="security">Security.</param>
 		/// <param name="strategyId">Strategy ID.</param>
+		/// <param name="side">Side.</param>
 		/// <param name="clientCode">Client code.</param>
 		/// <param name="depoName">Depo name.</param>
 		/// <param name="limitType">Limit type.</param>
 		/// <param name="creator">Creator.</param>
 		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Position.</returns>
-		public static Position GetOrCreatePosition(this IPositionStorage storage, Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType, Func<Portfolio, Security, string, string, string, TPlusLimits?, Position> creator, out bool isNew)
+		public static Position GetOrCreatePosition(this IPositionStorage storage, Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType, Func<Portfolio, Security, string, Sides?, string, string, TPlusLimits?, Position> creator, out bool isNew)
 		{
 			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
@@ -2574,11 +2575,11 @@ namespace StockSharp.Algo
 
 			lock (storage.SyncRoot)
 			{
-				var position = storage.GetPosition(portfolio, security, strategyId, clientCode, depoName, limitType);
+				var position = storage.GetPosition(portfolio, security, strategyId, side, clientCode, depoName, limitType);
 
 				if (position == null)
 				{
-					position = creator(portfolio, security, strategyId, clientCode, depoName, limitType);
+					position = creator(portfolio, security, strategyId, side, clientCode, depoName, limitType);
 					storage.Save(position);
 					isNew = true;
 				}
