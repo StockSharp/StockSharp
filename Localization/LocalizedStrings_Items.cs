@@ -18,6 +18,116 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Auto updates check interval
+		/// </summary>
+		public const string AutoUpdatesCheckIntervalKey = nameof(AutoUpdatesCheckInterval);
+
+		/// <summary>
+		/// Auto updates check interval
+		/// </summary>
+		public static string AutoUpdatesCheckInterval => GetString(AutoUpdatesCheckIntervalKey);
+
+		/// <summary>
+		/// Retry delay in case of update check error
+		/// </summary>
+		public const string AutoUpdatesRetryDelayKey = nameof(AutoUpdatesRetryDelay);
+
+		/// <summary>
+		/// Retry delay in case of update check error
+		/// </summary>
+		public static string AutoUpdatesRetryDelay => GetString(AutoUpdatesRetryDelayKey);
+
+		/// <summary>
+		/// The application is still running in background mode. You can access it via icon in the system tray.
+		/// </summary>
+		public const string ApplicationStillRunningKey = nameof(ApplicationStillRunning);
+
+		/// <summary>
+		/// The application is still running in background mode. You can access it via icon in the system tray.
+		/// </summary>
+		public static string ApplicationStillRunning => GetString(ApplicationStillRunningKey);
+
+		/// <summary>
+		/// Double click to open the product details.
+		/// </summary>
+		public const string ClickProductDetailsKey = nameof(ClickProductDetails);
+
+		/// <summary>
+		/// Double click to open the product details.
+		/// </summary>
+		public static string ClickProductDetails => GetString(ClickProductDetailsKey);
+
+		/// <summary>
+		/// The license has expired.
+		/// </summary>
+		public const string ProductLicenseExpiredKey = nameof(ProductLicenseExpired);
+
+		/// <summary>
+		/// The license has expired.
+		/// </summary>
+		public static string ProductLicenseExpired => GetString(ProductLicenseExpiredKey);
+
+		/// <summary>
+		/// User comments
+		/// </summary>
+		public const string UserFeedbacksKey = nameof(UserFeedbacks);
+
+		/// <summary>
+		/// User comments
+		/// </summary>
+		public static string UserFeedbacks => GetString(UserFeedbacksKey);
+
+		/// <summary>
+		/// Updating data
+		/// </summary>
+		public const string UpdatingDataKey = nameof(UpdatingData);
+
+		/// <summary>
+		/// Updating data
+		/// </summary>
+		public static string UpdatingData => GetString(UpdatingDataKey);
+
+		/// <summary>
+		/// Error updating data
+		/// </summary>
+		public const string ErrorUpdatingDataKey = nameof(ErrorUpdatingData);
+
+		/// <summary>
+		/// Error updating data
+		/// </summary>
+		public static string ErrorUpdatingData => GetString(ErrorUpdatingDataKey);
+
+		/// <summary>
+		/// Rate product
+		/// </summary>
+		public const string RateProductKey = nameof(RateProduct);
+
+		/// <summary>
+		/// Rate product
+		/// </summary>
+		public static string RateProduct => GetString(RateProductKey);
+
+		/// <summary>
+		/// You have already rated this product.
+		/// </summary>
+		public const string AlreadyRatedKey = nameof(AlreadyRated);
+
+		/// <summary>
+		/// You have already rated this product.
+		/// </summary>
+		public static string AlreadyRated => GetString(AlreadyRatedKey);
+
+		/// <summary>
+		/// Please rate the {0}.
+		/// </summary>
+		public const string PleaseRateProductParamsKey = nameof(PleaseRateProductParams);
+
+		/// <summary>
+		/// Please rate the {0}.
+		/// </summary>
+		public static string PleaseRateProductParams => GetString(PleaseRateProductParamsKey);
+	
+		/// <summary>
 		/// Install prerelease versions.
 		/// </summary>
 		public const string InstallPrereleaseVersionsKey = nameof(InstallPrereleaseVersions);

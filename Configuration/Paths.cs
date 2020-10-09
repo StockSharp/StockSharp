@@ -4,9 +4,11 @@
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
+	using System.Globalization;
 
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
@@ -33,6 +35,7 @@
 			StorageDir = Path.Combine(AppDataPath, "Storage");
 			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
+			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, "installer_apps_installed.xml");
 
 			HistoryDataPath = GetHistoryDataPath(Assembly.GetExecutingAssembly().Location);
 		}
@@ -80,7 +83,7 @@
 		public static readonly string AppName;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static string AppName2 => AppName.Remove("S#.", true);
 
@@ -133,6 +136,11 @@
 		/// The path to the installer directory.
 		/// </summary>
 		public static readonly string InstallerDir;
+
+		/// <summary>
+		/// The path to the installer directory.
+		/// </summary>
+		public static readonly string InstallerInstallationsConfigPath;
 
 		/// <summary>
 		/// Get website url.
@@ -208,6 +216,40 @@
 		public static string GetForgotUrl()
 		{
 			return $"{GetWebSiteUrl()}/forgot/";
+		}
+
+		/// <summary>
+		/// Get currently installed version of the product.
+		/// </summary>
+		/// <param name="productPackageId">Product main package id (ProductInfoMessage.PackageId).</param>
+		public static string GetInstalledVersion(string productPackageId)
+		{
+			if (!File.Exists(InstallerInstallationsConfigPath))
+				return null;
+
+			SettingsStorage storage = null;
+			CultureInfo.InvariantCulture.DoInCulture(() => storage = new XmlSerializer<SettingsStorage>().Deserialize(InstallerInstallationsConfigPath));
+
+			var installations = storage?.GetValue<SettingsStorage[]>("Installations");
+			if (!(installations?.Length > 0))
+				return null;
+
+			var installation = installations.FirstOrDefault(ss => ss.TryGet<string>("ProductId").CompareIgnoreCase(productPackageId));
+			if(installation == null)
+				return null;
+
+			var identityStr = installation
+				.TryGet<SettingsStorage>("Version")
+			   ?.TryGet<SettingsStorage>("Metadata")
+			   ?.TryGet<string>("Identity");
+
+			if(identityStr.IsEmpty())
+				return null;
+
+			// ReSharper disable once PossibleNullReferenceException
+			var parts = identityStr.Split('|');
+
+			return parts.Length != 2 ? null : parts[1];
 		}
 
 		/// <summary>

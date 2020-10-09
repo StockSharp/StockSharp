@@ -491,7 +491,7 @@ namespace SampleOptionQuoting
 			RefreshSmile();
 		}
 
-		private void Portfolio_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void Portfolio_OnSelectionChanged(object sender, EditValueChangedEventArgs editValueChangedEventArgs)
 		{
 			ProcessPositions();
 		}
