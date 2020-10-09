@@ -61,5 +61,16 @@ namespace StockSharp.Messages
 			destination.NewPassword = NewPassword;
 			destination.Error = Error;
 		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			var str = base.ToString();
+
+			if (Error != null)
+				str += $",Error={Error.Message}";
+
+			return str;
+		}
 	}
 }
