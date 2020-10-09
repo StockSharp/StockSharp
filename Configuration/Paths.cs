@@ -88,6 +88,27 @@
 		public static string AppName2 => AppName.Remove("S#.", true);
 
 		/// <summary>
+		/// App title with version.
+		/// </summary>
+		public static string AppNameWithVersion
+		{
+			get
+			{
+				string version = null;
+
+				try
+				{
+					version = InstalledVersion;
+				}
+				catch
+				{
+				}
+
+				return $"{AppName} v{version}";
+			}
+		}
+
+		/// <summary>
 		/// The path to directory with all applications.
 		/// </summary>
 		public static readonly string CompanyPath;
@@ -195,9 +216,15 @@
 		public static string GetForgotUrl() => $"{GetWebSiteUrl()}/forgot/";
 
 		/// <summary>
+		/// Installed version of the product.
+		/// </summary>
+		public static string InstalledVersion => GetInstalledVersion(Directory.GetCurrentDirectory());
+
+		/// <summary>
 		/// Get currently installed version of the product.
 		/// </summary>
 		/// <param name="productInstallPath">File system path to product installation.</param>
+		/// <returns>Installed version of the product.</returns>
 		public static string GetInstalledVersion(string productInstallPath)
 		{
 			if(productInstallPath.IsEmpty())
