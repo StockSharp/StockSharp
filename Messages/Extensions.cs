@@ -1537,6 +1537,33 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Remove adapter by the specified type.
+		/// </summary>
+		/// <typeparam name="TAdapter">The adapter type.</typeparam>
+		/// <param name="adapter">Adapter.</param>
+		/// <returns>Removed adapter or <see langword="null"/>.</returns>
+		public static TAdapter TryRemoveWrapper<TAdapter>(this IMessageAdapter adapter)
+			where TAdapter : IMessageAdapterWrapper
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			if (adapter is IMessageAdapterWrapper wrapper)
+			{
+				if (wrapper.InnerAdapter is TAdapter found)
+				{
+					wrapper.InnerAdapter = found.InnerAdapter;
+					found.InnerAdapter = null;
+					return found; 
+				}
+				else
+					return wrapper.InnerAdapter.TryRemoveWrapper<TAdapter>();
+			}
+			else
+				return default;
+		}
+
+		/// <summary>
 		/// Find adapter by the specified type.
 		/// </summary>
 		/// <typeparam name="TAdapter">The adapter type.</typeparam>

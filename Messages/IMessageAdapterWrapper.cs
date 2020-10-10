@@ -77,10 +77,8 @@ namespace StockSharp.Messages
 
 				_innerAdapter = value;
 
-				if (_innerAdapter == null)
-					throw new ArgumentException();
-
-				_innerAdapter.NewOutMessage += InnerAdapterNewOutMessage;
+				if (_innerAdapter != null)
+					_innerAdapter.NewOutMessage += InnerAdapterNewOutMessage;
 			}
 		}
 
@@ -400,6 +398,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual void Dispose()
 		{
+			if (InnerAdapter is null)
+				return;
+
 			InnerAdapter.NewOutMessage -= InnerAdapterNewOutMessage;
 
 			if (OwnInnerAdapter)

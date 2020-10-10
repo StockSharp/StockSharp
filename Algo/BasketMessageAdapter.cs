@@ -794,6 +794,9 @@ namespace StockSharp.Algo
 		{
 			Wrappers.ForEach(a =>
 			{
+				// remove channel adapter to send ResetMsg in sync
+				a.TryRemoveWrapper<ChannelMessageAdapter>()?.Dispose();
+
 				a.SendInMessage(message);
 				a.Dispose();
 			});
