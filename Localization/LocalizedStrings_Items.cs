@@ -28768,16 +28768,6 @@ namespace StockSharp.Localization
 		public static string Str2944 => GetString(Str2944Key);
 
 		/// <summary>
-		/// S#.Data is already launched.
-		/// </summary>
-		public const string Str2945Key = nameof(Str2945);
-
-		/// <summary>
-		/// S#.Data is already launched.
-		/// </summary>
-		public static string Str2945 => GetString(Str2945Key);
-
-		/// <summary>
 		/// {0}At least one task must be switched on.
 		/// </summary>
 		public const string Str2946ParamsKey = nameof(Str2946Params);

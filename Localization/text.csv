@@ -2880,7 +2880,6 @@ Str2941;Loading...;Загрузка...
 Str2942;'{0}' loading;Загрузка '{0}'
 Str2943;S#.Data — database error.;S#.Data - ошибка базы данных.
 Str2944;S#.Data is working. Stop data download?;S#.Data в процессе работы. Остановить скачивание данных?
-Str2945;S#.Data is already launched.;S#.Data уже запущена.
 Str2946Params;{0}At least one task must be switched on.;{0}Необходимо включить хотя бы одну задачу.
 Str2947;Autostart of quotes downloading is impossible.;Автостарт скачивания котировок невозможен.
 Str2949;Continue?;Продолжить?

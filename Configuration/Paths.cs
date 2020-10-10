@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.Globalization;
+	using System.Threading;
 
 	using Ecng.Common;
 	using Ecng.Configuration;
@@ -262,5 +263,18 @@
 		/// Sample history data.
 		/// </summary>
 		public static readonly string HistoryDataPath;
+
+		private static Mutex _mutex;
+
+		/// <summary>
+		/// Check if an instance of the application already started.
+		/// </summary>
+		/// <returns>Check result.</returns>
+		public static bool StartIsRunning() => ThreadingHelper.TryGetUniqueMutex(Paths.AppDataPath.GetHashCode().To<string>(), out _mutex);
+
+		/// <summary>
+		/// Release all resources allocated by <see cref="StartIsRunning"/>.
+		/// </summary>
+		public static void StopIsRunning() => _mutex?.ReleaseMutex();
 	}
 }
