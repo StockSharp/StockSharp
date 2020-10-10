@@ -270,7 +270,7 @@
 		/// Check if an instance of the application already started.
 		/// </summary>
 		/// <returns>Check result.</returns>
-		public static bool StartIsRunning() => ThreadingHelper.TryGetUniqueMutex(Paths.AppDataPath.GetHashCode().To<string>(), out _mutex);
+		public static bool StartIsRunning() => ThreadingHelper.TryGetUniqueMutex(AppDataPath.GetHashCode().To<string>(), out _mutex);
 
 		/// <summary>
 		/// Release all resources allocated by <see cref="StartIsRunning"/>.
