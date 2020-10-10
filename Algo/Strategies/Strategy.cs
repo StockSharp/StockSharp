@@ -389,6 +389,24 @@ namespace StockSharp.Algo.Strategies
 					_connector.NewMessage -= OnConnectorNewMessage;
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
 					_connector.PositionReceived -= OnConnectorPositionReceived;
+					_connector.Level1Received -= OnConnectorLevel1Received;
+					_connector.OrderBookReceived -= OnConnectorOrderBookReceived;
+					_connector.TickTradeReceived -= OnConnectorTickTradeReceived;
+					_connector.SecurityReceived -= OnConnectorSecurityReceived;
+					_connector.BoardReceived -= OnConnectorBoardReceived;
+					_connector.MarketDepthReceived -= OnConnectorMarketDepthReceived;
+					_connector.OrderLogItemReceived -= OnConnectorOrderLogItemReceived;
+					_connector.NewsReceived -= OnConnectorNewsReceived;
+					_connector.CandleReceived -= OnConnectorCandleReceived;
+					_connector.OrderRegisterFailReceived -= OnConnectorOrderRegisterFailReceived;
+					_connector.OrderCancelFailReceived -= OnConnectorOrderCancelFailReceived;
+					_connector.OrderEditFailReceived -= OnConnectorOrderEditFailReceived;
+					_connector.PortfolioReceived -= OnConnectorPortfolioReceived;
+					_connector.SubscriptionReceived -= OnConnectorSubscriptionReceived;
+					_connector.SubscriptionOnline -= OnConnectorSubscriptionOnline;
+					_connector.SubscriptionStarted -= OnConnectorSubscriptionStarted;
+					_connector.SubscriptionStopped -= OnConnectorSubscriptionStopped;
+					_connector.SubscriptionFailed -= OnConnectorSubscriptionFailed;
 
 					UnSubscribe(true);
 				}
@@ -406,6 +424,24 @@ namespace StockSharp.Algo.Strategies
 					_connector.NewMessage += OnConnectorNewMessage;
 					_connector.ValuesChanged += OnConnectorValuesChanged;
 					_connector.PositionReceived += OnConnectorPositionReceived;
+					_connector.Level1Received += OnConnectorLevel1Received;
+					_connector.OrderBookReceived += OnConnectorOrderBookReceived;
+					_connector.TickTradeReceived += OnConnectorTickTradeReceived;
+					_connector.SecurityReceived += OnConnectorSecurityReceived;
+					_connector.BoardReceived += OnConnectorBoardReceived;
+					_connector.MarketDepthReceived += OnConnectorMarketDepthReceived;
+					_connector.OrderLogItemReceived += OnConnectorOrderLogItemReceived;
+					_connector.NewsReceived += OnConnectorNewsReceived;
+					_connector.CandleReceived += OnConnectorCandleReceived;
+					_connector.OrderRegisterFailReceived += OnConnectorOrderRegisterFailReceived;
+					_connector.OrderCancelFailReceived += OnConnectorOrderCancelFailReceived;
+					_connector.OrderEditFailReceived += OnConnectorOrderEditFailReceived;
+					_connector.PortfolioReceived += OnConnectorPortfolioReceived;
+					_connector.SubscriptionReceived += OnConnectorSubscriptionReceived;
+					_connector.SubscriptionOnline += OnConnectorSubscriptionOnline;
+					_connector.SubscriptionStarted += OnConnectorSubscriptionStarted;
+					_connector.SubscriptionStopped += OnConnectorSubscriptionStopped;
+					_connector.SubscriptionFailed += OnConnectorSubscriptionFailed;
 
 					if (ParentStrategy == null)
 					{
@@ -432,6 +468,30 @@ namespace StockSharp.Algo.Strategies
 
 				ConnectorChanged?.Invoke();
 			}
+		}
+
+		private void OnConnectorPortfolioReceived(Subscription subscription, Portfolio portfolio)
+		{
+			if (_subscriptions.ContainsKey(subscription))
+				PortfolioReceived?.Invoke(subscription, portfolio);
+		}
+
+		private void OnConnectorOrderEditFailReceived(Subscription subscription, OrderFail fail)
+		{
+			if (_subscriptions.ContainsKey(subscription))
+				OrderEditFailReceived?.Invoke(subscription, fail);
+		}
+
+		private void OnConnectorOrderCancelFailReceived(Subscription subscription, OrderFail fail)
+		{
+			if (_subscriptions.ContainsKey(subscription))
+				OrderCancelFailReceived?.Invoke(subscription, fail);
+		}
+
+		private void OnConnectorOrderRegisterFailReceived(Subscription subscription, OrderFail fail)
+		{
+			if (_subscriptions.ContainsKey(subscription))
+				OrderRegisterFailReceived?.Invoke(subscription, fail);
 		}
 
 		/// <summary>
@@ -2310,6 +2370,8 @@ namespace StockSharp.Algo.Strategies
 
 			if (IsOwnOrder(trade.Order))
 				AddMyTrade(trade);
+
+			OwnTradeReceived?.Invoke(subscription, trade);
 		}
 
 		/// <summary>
@@ -2336,6 +2398,8 @@ namespace StockSharp.Algo.Strategies
 				AttachOrder(order, true);
 			else if (IsOwnOrder(order))
 				TryInvoke(() => ProcessOrder(order, true));
+
+			OrderReceived?.Invoke(subscription, order);
 		}
 
 		private void OnConnectorOrderEditFailed(long transactionId, OrderFail fail)

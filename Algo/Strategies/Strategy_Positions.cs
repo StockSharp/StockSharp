@@ -65,6 +65,8 @@
 				_positionChanged?.Invoke(position);
 
 			RaisePositionChanged();
+
+			PositionReceived?.Invoke(subscription, position);
 		}
 
 		private void RaisePositionChanged()
