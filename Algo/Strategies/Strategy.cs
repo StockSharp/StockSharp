@@ -250,6 +250,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new CachedSynchronizedDictionary<Order, OrderInfo>();
 
 		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new CachedSynchronizedDictionary<Subscription, bool>();
+		private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = new SynchronizedDictionary<long, Subscription>();
 		private Subscription _pfSubscription;
 		private Subscription _orderSubscription;
 
@@ -2036,6 +2037,9 @@ namespace StockSharp.Algo.Strategies
 
 			_positions.Clear();
 
+			_subscriptions.Clear();
+			_subscriptionsById.Clear();
+
 			OnReseted();
 
 			// события вызываем только после вызова Reseted
@@ -3025,6 +3029,7 @@ namespace StockSharp.Algo.Strategies
 						UnSubscribe(subscription);
 
 					_subscriptions.Remove(subscription);
+					_subscriptionsById.Remove(subscription.TransactionId);
 				}
 			}
 		}

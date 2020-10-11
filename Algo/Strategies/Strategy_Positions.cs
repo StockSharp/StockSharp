@@ -44,6 +44,12 @@
 				_positionChanged?.Invoke(position);
 
 			RaisePositionChanged();
+
+			foreach (var id in message.GetSubscriptionIds())
+			{
+				if (_subscriptionsById.TryGetValue(id, out var subscription))
+					PositionReceived?.Invoke(subscription, position);
+			}
 		}
 
 		private void OnConnectorPositionReceived(Subscription subscription, Position position)

@@ -85,6 +85,12 @@ namespace StockSharp.Algo.Strategies
 		private void Subscribe(Subscription subscription, bool isGlobal)
 		{
 			_subscriptions.Add(subscription, isGlobal);
+
+			if (subscription.TransactionId == default)
+				subscription.TransactionId = Connector.TransactionIdGenerator.GetNextId();
+
+			_subscriptionsById.Add(subscription.TransactionId, subscription);
+
 			SubscriptionProvider.Subscribe(subscription);
 		}
 
