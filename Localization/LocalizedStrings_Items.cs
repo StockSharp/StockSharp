@@ -52946,5 +52946,25 @@ namespace StockSharp.Localization
 		/// Last trade ID (string).
 		/// </summary>
 		public static string LastTradeStringIdDesc => GetString(LastTradeStringIdDescKey);
+
+		/// <summary>
+		/// Appearance
+		/// </summary>
+		public const string AppearanceKey = nameof(Appearance);
+
+		/// <summary>
+		/// Appearance
+		/// </summary>
+		public static string Appearance => GetString(AppearanceKey);
+
+		/// <summary>
+		/// The diagram element
+		/// </summary>
+		public const string DiagramElementKey = nameof(DiagramElement);
+
+		/// <summary>
+		/// The diagram element
+		/// </summary>
+		public static string DiagramElement => GetString(DiagramElementKey);
 	}
 }

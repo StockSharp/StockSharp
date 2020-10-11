@@ -5327,6 +5327,8 @@ LowPrice52Week;Low (52 week);Наимен (52 недели)
 LowPrice52WeekDesc;The lowest price for 52 weeks.;Наименьшая цена за 52 недели.
 LastTradeStringId;Last ID (str);ИД сделки (строк)
 LastTradeStringIdDesc;Last trade ID (string).;ИД последней сделки (строка).
+Appearance;Appearance;Вид
+DiagramElement;The diagram element;Элемент схемы
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12827,7 +12829,6 @@ DocStr7863;Option positions;Опционные позиции
 DocStr7864;To show position charts separately or as a single position. By default, it is displayed as a single position;Показывать графики позиции раздельно или как единую позицию. По умолчанию показывается как единая позиция
 DocStr7865;To show the position chart at the time of expiration. The default is enabled;Показывать график позиции на момент экспирации. По умолчанию включено
 DocStr7866;Whether to use the model {0}. By default, the model is not used;Использовать ли модель {0}. По умолчанию модель не используется
-DocStr7867;The diagram element;Элемент схемы
 DocStr7868;To add a parameter;Добавить параметр
 DocStr7869;To remove a parameter;Удалить параметр
 DocStr7870;To add an incoming connection;Добавить входящее соединение

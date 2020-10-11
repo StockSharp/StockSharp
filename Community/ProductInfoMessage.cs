@@ -84,7 +84,14 @@
 		/// Product required connectors.
 		/// </summary>
 		[DataMember]
+		[Obsolete("Use SupportedPlugins property.")]
 		public bool IsRequiredConnectors { get; set; }
+
+		/// <summary>
+		/// Supported plugins.
+		/// </summary>
+		[DataMember]
+		public ProductContentTypes2? SupportedPlugins { get; set; }
 
 		/// <summary>
 		/// Content type.
@@ -97,6 +104,12 @@
 		/// </summary>
 		[DataMember]
 		public long Picture { get; set; }
+
+		/// <summary>
+		/// Extra.
+		/// </summary>
+		[DataMember]
+		public string Extra { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
@@ -142,9 +155,13 @@
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
+#pragma warning disable CS0618 // Type or member is obsolete
 			destination.IsRequiredConnectors = IsRequiredConnectors;
+#pragma warning restore CS0618 // Type or member is obsolete
+			destination.SupportedPlugins = SupportedPlugins;
 			destination.ContentType = ContentType;
 			destination.Picture = Picture;
+			destination.Extra = Extra;
 		}
 
 		/// <inheritdoc />
@@ -184,7 +201,13 @@
 			if (Picture != default)
 				str += $",Picture={Picture}";
 
-			str += $",Connectors={IsRequiredConnectors},Content={ContentType}";
+			str += $",Content={ContentType}";
+
+			if (SupportedPlugins != null)
+				str += $",Supported={SupportedPlugins.Value}";
+
+			if (!Extra.IsEmpty())
+				str += $",Extra={Extra}";
 
 			return str;
 		}
