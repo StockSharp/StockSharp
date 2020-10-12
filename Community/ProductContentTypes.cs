@@ -88,7 +88,7 @@ namespace StockSharp.Community
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3180Key)]
-		SourceCode,
+		SourceCode = 1,
 
 		/// <summary>
 		/// The compiled build (if the strategy is distributed as a finished build).

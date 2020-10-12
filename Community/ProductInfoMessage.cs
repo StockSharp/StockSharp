@@ -91,7 +91,7 @@
 		/// Supported plugins.
 		/// </summary>
 		[DataMember]
-		public ProductContentTypes2? SupportedPlugins { get; set; }
+		public long? SupportedPlugins { get; set; }
 
 		/// <summary>
 		/// Content type.
