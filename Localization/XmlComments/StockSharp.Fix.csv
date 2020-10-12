@@ -2203,6 +2203,14 @@ F:StockSharp.Fix.Native.Extensions.LowBidPrice/summary;DocStr608
 F:StockSharp.Fix.Native.Extensions.HighAskPrice/summary;DocStr608
 F:StockSharp.Fix.Native.Extensions.LastTradeVolumeLow/summary;DocStr608
 F:StockSharp.Fix.Native.Extensions.LastTradeVolumeHigh/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.LowBidVolume/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.HighAskVolume/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.UnderlyingBestBidPrice/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.UnderlyingBestAskPrice/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.MedianPrice/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.HighPrice52Week/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.LowPrice52Week/summary;DocStr608
+F:StockSharp.Fix.Native.Extensions.LastTradeStringId/summary;DocStr608
 M:StockSharp.Fix.Native.Extensions.ToFix(StockSharp.Messages.Level1Fields)/summary;DocStr8644
 M:StockSharp.Fix.Native.Extensions.ToFix(StockSharp.Messages.Level1Fields)/param/field;DocStr65
 M:StockSharp.Fix.Native.Extensions.ToFix(StockSharp.Messages.Level1Fields)/returns;DocStr65
@@ -2772,7 +2780,6 @@ F:StockSharp.Fix.Native.FixTags.Id/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.GroupId/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Command/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Shortable/summary;DocStr8459
-F:StockSharp.Fix.Native.FixTags.StrategyTypeAssembly/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.AllowBuildFromSmallerTimeFrame/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.CalcVolumeProfile/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.FinishedCandles/summary;DocStr8459
@@ -2814,7 +2821,7 @@ F:StockSharp.Fix.Native.FixTags.Hash/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.DownloadCount/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Rating/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.DocUrl/summary;DocStr8459
-F:StockSharp.Fix.Native.FixTags.Connectors/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.SupportedPlugins/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Platform/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.HardwareId/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OnlyId/summary;DocStr8459
@@ -2837,6 +2844,7 @@ F:StockSharp.Fix.Native.FixTags.OldPrice/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OldVolume/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Leverage/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MarketDataSkip/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.Repository/summary;DocStr8459
 T:StockSharp.Fix.Native.IFixReader/summary;DocStr3208
 P:StockSharp.Fix.Native.IFixReader.Stream/summary;DocStr1295
 P:StockSharp.Fix.Native.IFixReader.BytesCount/summary;DocStr3201

@@ -641,7 +641,7 @@ P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.DataType/inheritdoc;DocStr
 M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Clone/summary;DocStr643
 M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Clone/returns;DocStr1116
 T:StockSharp.InteractiveBrokers.TickByTickDataTypes/summary;DocStr10245
-F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Last/summary;XamlStr518
+F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Last/summary;Str289
 F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Midpoint/summary;SpreadMiddle
 F:StockSharp.InteractiveBrokers.TickByTickDataTypes.BidAsk/summary;DocStr2627
 F:StockSharp.InteractiveBrokers.TickByTickDataTypes.AllLast/summary;DocStr10246

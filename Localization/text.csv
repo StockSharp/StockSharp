@@ -16813,3 +16813,33 @@ DocStr12240;Selling party in a trade;Selling party in a trade
 DocStr12241;Fill optimization parameters;Fill optimization parameters
 DocStr12242;The event of total progress change;The event of total progress change
 DocStr12243;The event of single progress change;The event of single progress change
+DocStr12244;S#.Terminal;S#.Terminal
+DocStr12245;S#.Edu;S#.Edu
+DocStr12246;Supported plugins;Supported plugins
+DocStr12247;Extra;Extra
+DocStr12248;Get history data path;Get history data path
+DocStr12249;Directory;Directory
+DocStr12250;History data path;History data path
+DocStr12251;App title with version;App title with version
+DocStr12252;Installed version of the product;Installed version of the product
+DocStr12253;Get currently installed version of the product;Get currently installed version of the product
+DocStr12254;File system path to product installation;File system path to product installation
+DocStr12255;Remove adapter by the specified type;Remove adapter by the specified type
+DocStr12256;Removed adapter or {0};Removed adapter or {0}
+DocStr12257;Recommended value for next {0} (in case of partial requests);Recommended value for next {0} (in case of partial requests)
+DocStr12258;Source ID;Source ID
+DocStr12259;Online mode implementation;Online mode implementation
+DocStr12260;Get real connector version for the specified stub;Get real connector version for the specified stub
+DocStr12261;Stub connector;Stub connector
+DocStr12262;Stub connector version;Stub connector version
+DocStr12263;Real connector version;Real connector version
+DocStr12264;Online mode;Online mode
+DocStr12265;This class is used to register attached property {0};This class is used to register attached property {0}
+DocStr12266;Attached property for help button;Attached property for help button
+DocStr12267;Set attached property value for {0};Set attached property value for {0}
+DocStr12268;Get attached property value for {0};Get attached property value for {0}
+DocStr12269;Ip address list editor;Ip address list editor
+DocStr12270;Addresses dependency property;Addresses dependency property
+DocStr12271;Prompt;Prompt
+DocStr12272;Min value;Min value
+DocStr12273;Max value;Max value
