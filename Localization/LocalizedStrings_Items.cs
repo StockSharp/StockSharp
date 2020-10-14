@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Parameter '{0}' must be defined.
+		/// </summary>
+		public const string ParameterIsEmptyParamsKey = nameof(ParameterIsEmptyParams);
+
+		/// <summary>
+		/// Parameter '{0}' must be defined.
+		/// </summary>
+		public static string ParameterIsEmptyParams => GetString(ParameterIsEmptyParamsKey);
+
+		/// <summary>
 		/// Auto updates check interval
 		/// </summary>
 		public const string AutoUpdatesCheckIntervalKey = nameof(AutoUpdatesCheckInterval);
