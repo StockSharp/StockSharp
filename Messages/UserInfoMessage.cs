@@ -156,6 +156,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		public IDictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>>();
 
+		/// <summary>
+		/// Can publish NuGet packages.
+		/// </summary>
+		[DataMember]
+		public bool CanPublish { get; set; }
+
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Users;
 		
@@ -168,10 +174,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",Name={Login}";
-		}
+		public override string ToString() => base.ToString() + $",Name={Login}";
 
 		/// <inheritdoc />
 		public override void CopyTo(UserInfoMessage destination)
@@ -197,6 +200,7 @@ namespace StockSharp.Messages
 			destination.Avatar = Avatar;
 			destination.CreationDate = CreationDate;
 			destination.AuthToken = AuthToken;
+			destination.CanPublish = CanPublish;
 
 			if (Permissions != null)
 				destination.Permissions.AddRange(Permissions.ToDictionary());
