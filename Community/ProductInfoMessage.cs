@@ -112,6 +112,12 @@
 		public string Extra { get; set; }
 
 		/// <summary>
+		/// Scope.
+		/// </summary>
+		[DataMember]
+		public ProductScopes Scope { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -162,6 +168,7 @@
 			destination.ContentType = ContentType;
 			destination.Picture = Picture;
 			destination.Extra = Extra;
+			destination.Scope = Scope;
 		}
 
 		/// <inheritdoc />
