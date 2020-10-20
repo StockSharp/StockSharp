@@ -118,6 +118,12 @@
 		public ProductScopes Scope { get; set; }
 
 		/// <summary>
+		/// Type of <see cref="Price"/>.
+		/// </summary>
+		[DataMember]
+		public ProductPriceTypes PriceType { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -169,6 +175,7 @@
 			destination.Picture = Picture;
 			destination.Extra = Extra;
 			destination.Scope = Scope;
+			destination.PriceType = PriceType;
 		}
 
 		/// <inheritdoc />
