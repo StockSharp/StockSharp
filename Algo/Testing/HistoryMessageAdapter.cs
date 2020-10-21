@@ -283,9 +283,11 @@ namespace StockSharp.Algo.Testing
 							? SecurityProvider.LookupAll() 
 							: SecurityProvider.Lookup(lookupMsg);
 
+					var processedBoards = new HashSet<ExchangeBoard>();
+
 					foreach (var security in securities)
 					{
-						if (security.Board != null)
+						if (security.Board != null && processedBoards.Add(security.Board))
 							SendOutMessage(security.Board.ToMessage());
 
 						SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));

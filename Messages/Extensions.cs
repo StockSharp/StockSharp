@@ -4146,5 +4146,14 @@ namespace StockSharp.Messages
 
 			return message.To != null || message.Count != null;
 		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
+		/// <param name="boards">All boards.</param>
+		/// <param name="criteria">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<BoardMessage> Filter(this IEnumerable<BoardMessage> boards, BoardLookupMessage criteria)
+			=> boards.Where(b => b.IsMatch(criteria));
 	}
 }

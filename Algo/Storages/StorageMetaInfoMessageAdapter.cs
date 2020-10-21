@@ -231,8 +231,8 @@ namespace StockSharp.Algo.Storages
 
 			var transId = msg.TransactionId;
 
-			foreach (var board in _exchangeInfoProvider.LookupBoards(msg))
-				RaiseNewOutMessage(board.ToMessage(transId).SetSubscriptionIds(subscriptionId: transId));
+			foreach (var board in _exchangeInfoProvider.LookupBoards2(msg))
+				RaiseNewOutMessage(board.SetSubscriptionIds(subscriptionId: transId));
 
 			return base.OnSendInMessage(msg);
 		}

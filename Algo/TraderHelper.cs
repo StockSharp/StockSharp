@@ -3415,6 +3415,20 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Filter boards by code criteria.
 		/// </summary>
+		/// <param name="provider">The exchange boards provider.</param>
+		/// <param name="criteria">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<BoardMessage> LookupBoards2(this IExchangeInfoProvider provider, BoardLookupMessage criteria)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			return provider.Boards.Select(b => b.ToMessage(criteria.TransactionId)).Filter(criteria);
+		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
 		/// <param name="boards">All boards.</param>
 		/// <param name="criteria">Criteria.</param>
 		/// <returns>Found boards.</returns>
