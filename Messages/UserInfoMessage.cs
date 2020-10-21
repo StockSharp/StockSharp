@@ -162,6 +162,12 @@ namespace StockSharp.Messages
 		[DataMember]
 		public bool CanPublish { get; set; }
 
+		/// <summary>
+		/// Is EULA accepted.
+		/// </summary>
+		[DataMember]
+		public bool? IsAgreementAccepted { get; set; }
+
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Users;
 		
@@ -201,6 +207,7 @@ namespace StockSharp.Messages
 			destination.CreationDate = CreationDate;
 			destination.AuthToken = AuthToken;
 			destination.CanPublish = CanPublish;
+			destination.IsAgreementAccepted = IsAgreementAccepted;
 
 			if (Permissions != null)
 				destination.Permissions.AddRange(Permissions.ToDictionary());
