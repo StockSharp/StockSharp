@@ -101,7 +101,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private TimeSpan _suspendTimeout = TimeSpan.Zero;
+		private TimeSpan _suspendTimeout = TimeSpan.FromSeconds(1);
 
 		/// <summary>
 		/// <see cref="SuspendMaxCount"/>.
@@ -252,7 +252,12 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public virtual IMessageChannel Clone()
 		{
-			return new InMemoryMessageChannel(_queue, Name, _errorHandler) { MaxMessageCount = MaxMessageCount };
+			return new InMemoryMessageChannel(_queue, Name, _errorHandler)
+			{
+				MaxMessageCount = MaxMessageCount,
+				SuspendMaxCount = SuspendMaxCount,
+				SuspendTimeout = SuspendTimeout,
+			};
 		}
 
 		object ICloneable.Clone()

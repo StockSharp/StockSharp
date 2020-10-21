@@ -214,7 +214,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			foreach (var strategy in batch)
 			{
-				var inChannel = new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", _histAdapter.AddErrorLog);
+				var inChannel = new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", _histAdapter.AddErrorLog) { SuspendMaxCount = int.MaxValue };
 
 				var connector = new HistoryEmulationConnector(_histAdapter, false, inChannel, _securityProvider, _portfolioProvider, _exchangeInfoProvider)
 				{
