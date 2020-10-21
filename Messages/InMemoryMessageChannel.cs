@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 
 			_queue = queue ?? throw new ArgumentNullException(nameof(queue));
 			_errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
-			
+
 			_queue.Close();
 		}
 
@@ -101,7 +101,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private TimeSpan _suspendTimeout = TimeSpan.FromSeconds(1);
+		private TimeSpan _suspendTimeout = TimeSpan.Zero;
 
 		/// <summary>
 		/// <see cref="SuspendMaxCount"/>.
