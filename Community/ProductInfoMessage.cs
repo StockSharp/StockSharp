@@ -130,6 +130,12 @@
 		public ProductPriceTypes PriceType { get; set; }
 
 		/// <summary>
+		/// Latest version.
+		/// </summary>
+		[DataMember]
+		public string LatestVersion { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -183,6 +189,7 @@
 			destination.Extra = Extra;
 			destination.Scope = Scope;
 			destination.PriceType = PriceType;
+			destination.LatestVersion = LatestVersion;
 		}
 
 		/// <inheritdoc />
@@ -232,6 +239,9 @@
 
 			if (!Extra.IsEmpty())
 				str += $",Extra={Extra}";
+
+			if (!LatestVersion.IsEmpty())
+				str += $",Ver={LatestVersion}";
 
 			return str;
 		}
