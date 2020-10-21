@@ -63,6 +63,12 @@
 		public Currency Price { get; set; }
 
 		/// <summary>
+		/// Price for renew.
+		/// </summary>
+		[DataMember]
+		public Currency RenewPrice { get; set; }
+
+		/// <summary>
 		/// Download count.
 		/// </summary>
 		[DataMember]
@@ -164,6 +170,7 @@
 			destination.Tags = Tags;
 			destination.Author = Author;
 			destination.Price = Price?.Clone();
+			destination.RenewPrice = RenewPrice?.Clone();
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
@@ -203,6 +210,9 @@
 
 			if (Price != null)
 				str += $",Price={Price}";
+
+			if (RenewPrice != null)
+				str += $",Renew={RenewPrice}";
 
 			str += $",Downloads={DownloadCount}";
 
