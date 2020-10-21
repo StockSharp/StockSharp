@@ -602,7 +602,18 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
 
-			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => _original.GetMetaInfo(date);
+			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+			{
+				foreach (var storage in GetStorages())
+				{
+					var info = storage.GetMetaInfo(date);
+
+					if (info != null)
+						return info;
+				}
+
+				return null;
+			}
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<CandleMessage>)this).Serializer;
 
