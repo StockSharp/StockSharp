@@ -512,6 +512,7 @@
           <Topic id="dda99f90-0d3f-4c1d-ada4-7a4d5280c0c7" visible="True" title="Инициализация адаптера RSS" />
         </Topic>
       </Topic>
+      <Topic id="760eabd4-07f6-452a-852e-1060e63150d2" visible="True" title="Подписки" />
       <Topic id="1d5b1223-15ba-4364-a31f-2e5592f76fe3" visible="True" title="Получение исторических данных" />
       <Topic id="42ac3a14-98fb-4725-88c5-b15d2614b841" visible="True" title="Получение новостных данных" />
       <Topic id="293859e2-6c39-486c-afde-d9ae96243618" visible="True" title="Создание собственного коннектора" />

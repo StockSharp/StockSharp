@@ -320,6 +320,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_ConnectorsSubscriptions.aml" />
     <None Include="Topics\API_GUI_Settings_Gopax.aml" />
     <None Include="Topics\API_GUI_Settings_CoinHub.aml" />
     <None Include="Topics\API_GUI_Settings_Hotbit.aml" />
