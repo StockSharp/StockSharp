@@ -597,7 +597,7 @@
     <None Include="Topics\Shell_Connection_settings.aml" />
     <None Include="Topics\Shell_Quick_start.aml" />
     <None Include="Topics\Shell_Installation.aml" />
-    <None Include="Topics\S#Shell.aml" />
+    <None Include="Topics\Shell.aml" />
     <None Include="Topics\Designer_TradeAllowedDiagramElement.aml" />
     <None Include="Topics\Designer_MarketDepthTruncateDiagramElement.aml" />
     <None Include="Topics\Designer_StrategyPnLDiagramElement.aml" />
