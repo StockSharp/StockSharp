@@ -247,6 +247,11 @@
           <Topic id="6bb5241d-149c-4670-9acd-4bc5b061b0af" visible="True" title="Графическое конфигурирование Binance" />
           <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Инициализация адаптера Binance" />
         </Topic>
+        <Topic id="8AB49C23-F7CC-4306-AE87-736D73DE11D0" visible="True" title="Bitalong">
+          <Topic id="33DB6C2D-E2B1-4582-A34D-0145236D6213" visible="True" title="Настройки коннектора Bitalong" />
+          <Topic id="126E0C12-8E04-4358-B692-59BC7835B346" visible="True" title="Графическое конфигурирование коннектора" />
+          <Topic id="DEF96E3C-B704-4798-BC2C-9CC6F5B27AA7" visible="True" title="Инициализация адаптера Bitalong" />
+        </Topic>
         <Topic id="02e5e6b3-4436-4c1d-ae39-776c6d398cd3" visible="True" title="Bitbank">
           <Topic id="46c2bb14-68dd-4c87-8390-6f968952ad77" visible="True" title="Настройки коннектора Bitbank" />
           <Topic id="c11e1907-c5a3-4abf-819d-dd3909d54df4" visible="True" title="Графическое конфигурирование Bitbank" />
@@ -357,6 +362,11 @@
           <Topic id="f293e11f-2947-4d05-be23-133898cacbd2" visible="True" title="Графическое конфигурирование Digifinex" />
           <Topic id="cceb78ff-4c1b-4ae4-a7c5-eba41a2d205f" visible="True" title="Инициализация адаптера Digifinex" />
         </Topic>
+        <Topic id="609A667B-51DC-4AA2-B5E5-076B2308350C" visible="True" title="DigitexFutures">
+          <Topic id="70A43F26-C5D9-49AF-A336-D360A240A867" visible="True" title="Настройки коннектора DigitexFutures" />
+          <Topic id="7055D5A9-2127-4EDD-B327-2B6131D3135E" visible="True" title="Графическое конфигурирование коннектора" />
+          <Topic id="AC065E8B-80F6-43B8-B04E-990622385D21" visible="True" title="Инициализация адаптера DigitexFutures" />
+        </Topic>
         <Topic id="601781f1-fae7-4c82-adb4-a5e7d9394cfb" visible="True" title="EXMO">
           <Topic id="c259cacc-d0f1-4a02-9419-dbaa805cab31" visible="True" title="Настройки коннектора EXMO" />
           <Topic id="9adb84cd-98fb-4809-8bc9-511076fa3399" visible="True" title="Графическое конфигурирование EXMO" />
@@ -441,6 +451,11 @@
           <Topic id="1a6b49de-05a2-44c3-8f67-b8acdec5aec0" visible="True" title="Настройки коннектора Poloniex" />
           <Topic id="2a4757d4-25a0-4e83-8b5c-953329b71b7c" visible="True" title="Графическое конфигурирование Poloniex" />
           <Topic id="97baac88-b5a9-4783-b381-f38c5568810e" visible="True" title="Инициализация адаптера Poloniex" />
+        </Topic>
+        <Topic id="82D496AB-E983-4B04-AB5B-CD635E42AF4D" visible="True" title="PrizmBit">
+          <Topic id="CAA27ECA-BF74-4648-A5F9-7DE28C225898" visible="True" title="Настройки коннектора PrizmBit" />
+          <Topic id="A0AAD68F-31DF-41F2-87C9-E800A29228AA" visible="True" title="Графическое конфигурирование коннектора" />
+          <Topic id="B44AF7B6-7CC2-40F5-9BBB-78D0EEE30B92" visible="True" title="Инициализация адаптера PrizmBit" />
         </Topic>
         <Topic id="713a3769-b80c-4342-89d2-031a492372df" visible="True" title="QuoineX">
           <Topic id="eb595ce4-5971-4032-9ee3-8586c6fcedf2" visible="True" title="Настройки коннектора Quoinex " />
