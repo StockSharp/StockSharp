@@ -8,7 +8,7 @@ it is possible remotely to connect to <token>hydra</token> and get the data avai
 The activation of the <token>hydra</token> server mode is described in the  
 <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
 
-<para>To connect via <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> , you need to create and configure FixTrader 
+<para>To connect via <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" /> , you need to create and configure FixTrader 
 (<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
 <code language="C#" title="C#"><![CDATA[
 ...

@@ -8,7 +8,7 @@
 Включение серверного режима <token>hydra</token> описано в 
 пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
 
-<para>Для подключения через <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> необходимо создать и настроить Fix подключение (<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
+<para>Для подключения через <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" /> необходимо создать и настроить Fix подключение (<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 private readonly Connector _connector = new Connector();

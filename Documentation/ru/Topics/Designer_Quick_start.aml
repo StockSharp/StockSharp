@@ -39,8 +39,5 @@
 <para>После нажатия кнопку <legacyBold>Старт</legacyBold> начнется эмуляция торгов.</para>
 <mediaLink><image placement="center" xlink:href="Designer_Quick_start_06"/></mediaLink>
     </introduction>
-    <relatedTopics>
-<link xlink:href="c74991fa-bad6-4196-98c0-8952e2a57b3e" />
-</relatedTopics>
   </developerConceptualDocument>
 </topic>

@@ -10,7 +10,7 @@
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
     <Topic id="db1de349-84ef-4e59-a30b-c34a9d47bed2" visible="True" isExpanded="true" title="Connectors">
       <Topic id="554da27b-900a-462a-a2c2-d2b6cb1330ae" visible="True" title="Graphical configuration" />
-      <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Connectors (Stock, Futures and Options)">
+      <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" noFile="true" isExpanded="true" title="Connectors (Stock, Futures and Options)">
         <Topic id="cd9ecaf0-caea-462c-a6a4-c2905fe9f3eb" visible="True" title="AlphaVantage">
           <Topic id="28cee4c9-f9c2-4e87-a160-991fc18221af" visible="True" title="Configuration AlphaVantage" />
           <Topic id="4091ca5f-352f-4ad8-8b7b-e017f634a486" visible="True" title="Graphical configuration AlphaVantage" />
@@ -104,7 +104,7 @@
           <Topic id="7d29e4d2-5623-4898-8183-40a9ae2a0d76" visible="True" title="Adapter initialization Yahoo" />
         </Topic>
       </Topic>
-      <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Connectors (Forex)">
+      <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" noFile="true" title="Connectors (Forex)">
         <Topic id="4e2b91c9-624d-4a4c-b71f-41de89ad032b" visible="True" title="DukasCopy">
           <Topic id="e9574d73-3af9-4628-b1df-9e599660120c" visible="True" title="Graphical configuration DukasCopy" />
           <Topic id="25161329-94c1-45be-bc29-63b56cb8739b" visible="True" title="Adapter initialization DukasCopy" />
@@ -143,7 +143,7 @@
           <Topic id="0de33529-c318-46d9-a91f-f1709304e74d" visible="True" title="Adapter initialization TrueFX" />
         </Topic>
       </Topic>
-      <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Connectors (Cryptocurrencies)">
+      <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" noFile="true" title="Connectors (Cryptocurrencies)">
         <Topic id="8f22e760-96c8-493a-aef0-569cbc42a9da" visible="True">
           <Topic id="3380fca6-bc39-403e-8dae-26e4c84a63c7" visible="True" title="Configuration Bibox" />
           <Topic id="41bad19b-9ecb-47a6-8c07-8b957b7d739a" visible="True" title="Graphical configuration Bibox" />
@@ -401,7 +401,7 @@
         </Topic>
         <Topic id="925f42ba-d6d8-41bb-bb27-b1fa56e71ea8" visible="True" title="Withdraw" />
       </Topic>
-      <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Connectors (common)">
+      <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" noFile="true" title="Connectors (common)">
         <Topic id="9695b29f-2b7b-4a9b-b915-b8c4f9b50eab" visible="True" title="CSV">
           <Topic id="5bfbb404-1728-476b-bd07-1b90bc487c96" visible="True" title="Graphical configuration CSV" />
           <Topic id="5fd956b0-0064-4081-a4d3-4d926d5b4fd9" visible="True" title="Adapter initialization CSV" />
@@ -646,7 +646,7 @@
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Installing S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Update to the new version" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Quick start" />
-    <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" title="User interface">
+    <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" noFile="true" title="User interface">
       <Topic id="45ae6713-c28b-457d-be6b-19016f54507e" visible="True" title="Quick access panel" />
       <Topic id="2f00e9bc-8ea7-4679-9688-b02c3424f03a" visible="True" title="Ribbon" />
       <Topic id="71792b34-7013-4e7d-a486-400ec92e2410" visible="True" title="Workspace" />
@@ -815,7 +815,7 @@
     <Topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" visible="True" title="Installing S#.Terminal" />
     <Topic id="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" visible="True" title="Update to the new version" />
     <Topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" visible="True" title="Quick start" />
-    <Topic id="11e13dbe-5a49-44c2-b552-38726eade631" visible="True" title="User interface">
+    <Topic id="11e13dbe-5a49-44c2-b552-38726eade631" visible="True" noFile="true" title="User interface">
       <Topic id="ec274602-6148-450d-9b59-41799d8e12cb" visible="True" title="Quick access panel" />
       <Topic id="af6c6888-e54e-4a5d-b09a-ffc8d5c0f38a" visible="True" title="Ribbon" />
       <Topic id="da986495-ba3c-450b-a3fc-8298c783ce2d" visible="True" title="Workspace" />
@@ -936,7 +936,7 @@
   <Topic id="c84e2ec8-88b4-4055-ad76-14c22c7844a6" visible="True" title="S#.Shell">
     <Topic id="1a7843d9-c1e4-4597-b02d-9a011b24df44" visible="True" title="Installing S#.Shell" />
     <Topic id="848cd34c-1768-409f-8e82-bed1c3e25102" visible="True" title="Quick start" />
-    <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" title="User interface">
+    <Topic id="1b4c10e7-34ea-4eff-b820-4d2ea04231af" visible="True" noFile="true" title="User interface">
       <Topic id="7b7075d3-9a7d-450d-8fd4-fa841c5cf9da" visible="True" title="Common" />
       <Topic id="d0744680-ba4d-44f6-8414-26fc177bbc08" visible="True" title="Real-time" />
       <Topic id="43ef3ba7-b588-43c3-a603-c5bbe8415c95" visible="True" title="Emulation" />

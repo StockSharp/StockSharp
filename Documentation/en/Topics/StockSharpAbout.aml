@@ -26,17 +26,14 @@ S#.API uses the <link xlink:href="5794f4b0-c536-4713-ad08-955a4a01b196"/> mechan
 <content>
 <legacyBold>Portability</legacyBold> - the algorithm does not depend on a broker 
 or exchange API and can work with any connection. For example, it is easy to move from 
-<token>OpenECry</token> to  <token>IB</token>, or from <link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b"/> to the stock exchange. Details are in the 
+<token>OpenECry</token> to <token>IB</token>, or from <bold>Forex</bold> to the stock exchange. Details are in the 
 <link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7" /> section.
 </content>
 </step>
 <step>
 <content>
 <para><legacyBold>Supports many sources: </legacyBold> 
-<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />, 
-<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />, 
-<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />, 
-<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />.</para>
+<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />.</para>
 </content>
 </step>
 <step>

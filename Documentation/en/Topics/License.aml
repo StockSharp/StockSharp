@@ -97,7 +97,7 @@
   		</para>
   		<list class="ordered">
 			<listItem>
-				<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - direct access to exchanges, to a range of brokers (see all list on <token>stocksharppricing</token>).</para>
+				<para><link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link> - direct access to exchanges, to a range of brokers (see all list on <token>stocksharppricing</token>).</para>
 			</listItem>
 			<listItem>
 				<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - market data connector to LSE or NASDAQ.</para>

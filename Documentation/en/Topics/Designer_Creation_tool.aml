@@ -12,7 +12,7 @@ properties and click <legacyBold>OK</legacyBold> button:</para>
 </mediaLink>
 <para>Securities from different sources have unified identifiers. This is done 
 so that the trading robot code does not depend on the connection type 
-(<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />).
+(<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />).
 The following syntax is used for the security identifier - 
 <legacyBold>[security code]@[board code]</legacyBold>. For example, for Apple 
 shares NASDAQ stock-exchange the identifier will be 
