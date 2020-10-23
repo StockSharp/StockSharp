@@ -18,6 +18,176 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// User lookup error
+		/// </summary>
+		public const string UserLookupErrorKey = nameof(UserLookupError);
+
+		/// <summary>
+		/// User lookup error
+		/// </summary>
+		public static string UserLookupError => GetString(UserLookupErrorKey);
+
+		/// <summary>
+		/// Add user
+		/// </summary>
+		public const string AddUserKey = nameof(AddUser);
+
+		/// <summary>
+		/// Add user
+		/// </summary>
+		public static string AddUser => GetString(AddUserKey);
+
+		/// <summary>
+		/// Product type
+		/// </summary>
+		public const string ProductTypeKey = nameof(ProductType);
+
+		/// <summary>
+		/// Product type
+		/// </summary>
+		public static string ProductType => GetString(ProductTypeKey);
+
+		/// <summary>
+		/// Product access
+		/// </summary>
+		public const string ProductAccessControlKey = nameof(ProductAccessControl);
+
+		/// <summary>
+		/// Product access
+		/// </summary>
+		public static string ProductAccessControl => GetString(ProductAccessControlKey);
+
+		/// <summary>
+		/// Free access
+		/// </summary>
+		public const string PublicProductKey = nameof(PublicProduct);
+
+		/// <summary>
+		/// Free access
+		/// </summary>
+		public static string PublicProduct => GetString(PublicProductKey);
+
+		/// <summary>
+		/// Visible to all, available to selected users
+		/// </summary>
+		public const string RestrictedProductKey = nameof(RestrictedProduct);
+
+		/// <summary>
+		/// Visible to all, available to selected users
+		/// </summary>
+		public static string RestrictedProduct => GetString(RestrictedProductKey);
+
+		/// <summary>
+		/// Visible and available to selected users only
+		/// </summary>
+		public const string PrivateProductKey = nameof(PrivateProduct);
+
+		/// <summary>
+		/// Visible and available to selected users only
+		/// </summary>
+		public static string PrivateProduct => GetString(PrivateProductKey);
+
+		/// <summary>
+		/// Renew price
+		/// </summary>
+		public const string RenewPriceKey = nameof(RenewPrice);
+
+		/// <summary>
+		/// Renew price
+		/// </summary>
+		public static string RenewPrice => GetString(RenewPriceKey);
+
+		/// <summary>
+		/// Purchase period
+		/// </summary>
+		public const string PurchasePeriodKey = nameof(PurchasePeriod);
+
+		/// <summary>
+		/// Purchase period
+		/// </summary>
+		public static string PurchasePeriod => GetString(PurchasePeriodKey);
+
+		/// <summary>
+		/// Users with product access
+		/// </summary>
+		public const string ProductUserListKey = nameof(ProductUserList);
+
+		/// <summary>
+		/// Users with product access
+		/// </summary>
+		public static string ProductUserList => GetString(ProductUserListKey);
+
+		/// <summary>
+		/// Start typing
+		/// </summary>
+		public const string StartTypingKey = nameof(StartTyping);
+
+		/// <summary>
+		/// Start typing
+		/// </summary>
+		public static string StartTyping => GetString(StartTypingKey);
+
+		/// <summary>
+		/// Nuget package id
+		/// </summary>
+		public const string NugetPackageIdKey = nameof(NugetPackageId);
+
+		/// <summary>
+		/// Nuget package id
+		/// </summary>
+		public static string NugetPackageId => GetString(NugetPackageIdKey);
+
+		/// <summary>
+		/// First you need to complete previous product creation.
+		/// </summary>
+		public const string SaveNewProductFirstKey = nameof(SaveNewProductFirst);
+
+		/// <summary>
+		/// First you need to complete previous product creation.
+		/// </summary>
+		public static string SaveNewProductFirst => GetString(SaveNewProductFirstKey);
+
+		/// <summary>
+		/// not saved
+		/// </summary>
+		public const string NotSavedKey = nameof(NotSaved);
+
+		/// <summary>
+		/// not saved
+		/// </summary>
+		public static string NotSaved => GetString(NotSavedKey);
+
+		/// <summary>
+		/// Select product or add a new one
+		/// </summary>
+		public const string SelectOrAddProductKey = nameof(SelectOrAddProduct);
+
+		/// <summary>
+		/// Select product or add a new one
+		/// </summary>
+		public static string SelectOrAddProduct => GetString(SelectOrAddProductKey);
+
+		/// <summary>
+		/// My products
+		/// </summary>
+		public const string MyProductsKey = nameof(MyProducts);
+
+		/// <summary>
+		/// My products
+		/// </summary>
+		public static string MyProducts => GetString(MyProductsKey);
+
+		/// <summary>
+		/// Publishing
+		/// </summary>
+		public const string PublishingKey = nameof(Publishing);
+
+		/// <summary>
+		/// Publishing
+		/// </summary>
+		public static string Publishing => GetString(PublishingKey);
+
+		/// <summary>
 		/// Parameter '{0}' must be defined.
 		/// </summary>
 		public const string ParameterIsEmptyParamsKey = nameof(ParameterIsEmptyParams);
@@ -43808,12 +43978,12 @@ namespace StockSharp.Localization
 		public static string PriceType => GetString(PriceTypeKey);
 
 		/// <summary>
-		/// Publish strategy
+		/// Publish
 		/// </summary>
 		public const string PublishStrategyKey = nameof(PublishStrategy);
 
 		/// <summary>
-		/// Publish strategy
+		/// Publish
 		/// </summary>
 		public static string PublishStrategy => GetString(PublishStrategyKey);
 

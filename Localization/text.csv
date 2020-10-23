@@ -1,4 +1,21 @@
-﻿ParameterIsEmptyParams;Parameter '{0}' must be defined.;Параметр '{0}' должен быть определен.
+﻿UserLookupError;User lookup error;Ошибка поиска пользователя
+AddUser;Add user;Добавить пользователя
+ProductType;Product type;Тип продукта
+ProductAccessControl;Product access;Доступ к продукту
+PublicProduct;Free access;Свободный доступ
+RestrictedProduct;Visible to all, available to selected users;Виден всем, доступен выбранным пользователям
+PrivateProduct;Visible and available to selected users only;Виден и доступен только выбранным пользователям
+RenewPrice;Renew price;Цена обновления
+PurchasePeriod;Purchase period;Период покупки
+ProductUserList;Пользователи с доступом к продукту;Users with product access
+StartTyping;Start typing;Начните набирать
+NugetPackageId;Nuget package id;Идентификатор пакета Nuget
+SaveNewProductFirst;First you need to complete previous product creation.;Сначала необходимо завершить создание предыдущего продукта.
+NotSaved;not saved;не сохранено
+SelectOrAddProduct;Select product or add a new one;Выберите продукт или добавьте новый
+MyProducts;My products;Мои продукты
+Publishing;Publishing;Публикация
+ParameterIsEmptyParams;Parameter '{0}' must be defined.;Параметр '{0}' должен быть определен.
 AutoUpdatesCheckInterval;Auto updates check interval;Период автоматической проверки обновлений
 AutoUpdatesRetryDelay;Retry delay in case of update check error;Задержка перед повторной попыткой в случае ошибки
 ApplicationStillRunning;The application is still running in background mode.\nYou can access it via icon in the system tray.;Приложение все еще работает в фоновом режиме.\nВы можете получить к нему доступ через иконку в области уведомлений.
