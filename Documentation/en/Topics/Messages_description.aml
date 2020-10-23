@@ -133,8 +133,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Contains portfolio information. Also, there is the <codeEntityReference>T:StockSharp.Messages.PortfolioChangeMessage</codeEntityReference>
-    		message - information on portfolio changes.</para>
+    		<para>Contains portfolio information.</para>
     	</entry>
   		</row>
   		
