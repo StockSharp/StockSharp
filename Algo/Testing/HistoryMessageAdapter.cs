@@ -133,10 +133,14 @@ namespace StockSharp.Algo.Testing
 			this.AddSupportedMessage(ExtendedMessageTypes.ChangeTimeInterval, null);
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Date in history for starting the paper trading.
+		/// </summary>
 		public DateTimeOffset StartDate { get; set; }
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Date in history to stop the paper trading (date is included).
+		/// </summary>
 		public DateTimeOffset StopDate { get; set; }
 
 		/// <summary>

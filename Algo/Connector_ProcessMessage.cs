@@ -1031,7 +1031,11 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public Portfolio LookupByPortfolioName(string name) => GetPortfolio(name, null, out _);
 
-		/// <inheritdoc />
+		/// <summary>
+		/// To get the portfolio by the code name.
+		/// </summary>
+		/// <param name="name">Portfolio code name.</param>
+		/// <returns>The got portfolio. If there is no portfolio by given criteria, <see langword="null" /> is returned.</returns>
 		public Portfolio GetPortfolio(string name) => LookupByPortfolioName(name);
 
 		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio, out bool isNew)
