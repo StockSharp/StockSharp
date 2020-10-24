@@ -136,6 +136,12 @@
 		public string LatestVersion { get; set; }
 
 		/// <summary>
+		/// Is approved.
+		/// </summary>
+		[DataMember]
+		public bool IsApproved { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -190,6 +196,7 @@
 			destination.Scope = Scope;
 			destination.PriceType = PriceType;
 			destination.LatestVersion = LatestVersion;
+			destination.IsApproved = IsApproved;
 		}
 
 		/// <inheritdoc />
@@ -242,6 +249,9 @@
 
 			if (!LatestVersion.IsEmpty())
 				str += $",Ver={LatestVersion}";
+
+			if (!IsApproved)
+				str += $",Approved={IsApproved}";
 
 			return str;
 		}
