@@ -139,6 +139,24 @@
 		}
 
 		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, string value)
+			where TMessage : BaseChangeMessage<TMessage, TChange>, new()
+		{
+			if (value.IsEmpty())
+				return message;
+
+			return message.Add(type, value);
+		}
+
+		/// <summary>
 		/// Add change into collection.
 		/// </summary>
 		/// <typeparam name="TMessage">Change message type.</typeparam>

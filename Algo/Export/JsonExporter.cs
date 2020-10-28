@@ -328,7 +328,9 @@
 					.WriteProperty("client", message.ClientCode)
 					.WriteProperty("depo", message.DepoName)
 					.WriteProperty("limit", message.LimitType)
-					.WriteProperty("strategyId", message.StrategyId);
+					.WriteProperty("strategyId", message.StrategyId)
+					.WriteProperty("side", message.Side)
+					;
 
 				foreach (var pair in message.Changes.Where(c => !c.Key.IsObsolete()))
 					writer.WriteProperty(pair.Key.ToString(), pair.Value);

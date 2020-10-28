@@ -47,7 +47,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 	{
-		private readonly Dictionary<long, decimal> _orders = new Dictionary<long, decimal>();
+		private readonly Dictionary<long, decimal> _ordersByNum = new Dictionary<long, decimal>();
+		private readonly Dictionary<string, decimal> _ordersByString = new Dictionary<string, decimal>(StringComparer.InvariantCultureIgnoreCase);
 
 		private readonly SortedList<decimal, QuoteChange> _bids = new SortedList<decimal, QuoteChange>(new BackwardComparer<decimal>());
 		private readonly SortedList<decimal, QuoteChange> _asks = new SortedList<decimal, QuoteChange>();
@@ -110,43 +111,46 @@ namespace StockSharp.Messages
 
 			if (item.IsOrderLogRegistered())
 			{
-				if (item.OrderId != null)
+				if (item.OrderVolume != null)
 				{
-					var quote = quotes.SafeAdd(item.OrderPrice, key => new QuoteChange(key, 0));
-					var id = item.OrderId.Value;
-
-					if (item.OrderVolume != null)
+					QuoteChange ProcessRegister<T>(T id, Dictionary<T, decimal> orders)
 					{
+						var quote = quotes.SafeAdd(item.OrderPrice, key => new QuoteChange(key, 0));
+
 						var volume = item.OrderVolume.Value;
 
-						if (_orders.TryGetValue(id, out var prevVolume))
+						if (orders.TryGetValue(id, out var prevVolume))
 						{
 							quote.Volume += (volume - prevVolume);
-							_orders[id] = volume;
+							orders[id] = volume;
 						}
 						else
 						{
 							quote.Volume += volume;
-							_orders.Add(id, volume);
+							orders.Add(id, volume);
 						}
 
 						quotes[item.OrderPrice] = quote;
-						changedQuote = quote;
+						return quote;
 					}
+				
+					if (item.OrderId != null)
+						changedQuote = ProcessRegister(item.OrderId.Value, _ordersByNum);
+					else if (!item.OrderStringId.IsEmpty())
+						changedQuote = ProcessRegister(item.OrderStringId, _ordersByString);
 				}
 			}
 			else if (item.IsOrderLogMatched())
 			{
-				if (item.OrderId != null)
-				{
-					var id = item.OrderId.Value;
-					var volume = item.TradeVolume ?? item.OrderVolume;
+				var volume = item.TradeVolume ?? item.OrderVolume;
 
-					if (volume != null)
+				if (volume != null)
+				{
+					QuoteChange? ProcessMatched<T>(T id, Dictionary<T, decimal> orders)
 					{
-						if (_orders.TryGetValue(id, out var prevVolume))
+						if (orders.TryGetValue(id, out var prevVolume))
 						{
-							_orders[id] = prevVolume - volume.Value;
+							orders[id] = prevVolume - volume.Value;
 								
 							if (quotes.TryGetValue(item.OrderPrice, out var quote))
 							{
@@ -156,19 +160,24 @@ namespace StockSharp.Messages
 									quotes.Remove(item.OrderPrice);
 
 								quotes[item.OrderPrice] = quote;
-								changedQuote = quote;
+								return quote;
 							}
 						}
+
+						return null;
 					}
+
+					if (item.OrderId != null)
+						changedQuote = ProcessMatched(item.OrderId.Value, _ordersByNum);
+					else if (!item.OrderStringId.IsEmpty())
+						changedQuote = ProcessMatched(item.OrderStringId, _ordersByString);
 				}
 			}
 			else if (item.IsOrderLogCanceled())
 			{
-				if (item.OrderId != null)
+				QuoteChange? ProcessCanceled<T>(T id, Dictionary<T, decimal> orders)
 				{
-					var id = item.OrderId.Value;
-
-					if (_orders.TryGetAndRemove(id, out var prevVolume))
+					if (orders.TryGetAndRemove(id, out var prevVolume))
 					{
 						if (quotes.TryGetValue(item.OrderPrice, out var quote))
 						{
@@ -178,10 +187,17 @@ namespace StockSharp.Messages
 								quotes.Remove(item.OrderPrice);
 
 							quotes[item.OrderPrice] = quote;
-							changedQuote = quote;
+							return quote;
 						}
 					}
+
+					return null;
 				}
+
+				if (item.OrderId != null)
+					changedQuote = ProcessCanceled(item.OrderId.Value, _ordersByNum);
+				else if (!item.OrderStringId.IsEmpty())
+					changedQuote = ProcessCanceled(item.OrderStringId, _ordersByString);
 			}
 
 			if (changedQuote == null)

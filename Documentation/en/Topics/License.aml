@@ -22,6 +22,7 @@
 		<para>See also <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">StockSharp installation</link>.</para>
 		<para><legacyBold>Crypto trader</legacyBold></para>
 <para><token>Binance</token>,
+<token>Bitalong</token>,
 <token>Bitbank</token>,
 <token>Bitexbook</token>,
 <token>Bitfinex</token>,
@@ -40,6 +41,7 @@
 <token>Deribit</token>,
 <token>Exmo</token>,
 <token>Digifinex</token>,
+<token>DigitexFutures</token>,
 <token>Gdax</token>,
 <token>HitBtc</token>,
 <token>Huobi</token>,
@@ -51,6 +53,7 @@
 <token>Okcoin</token>,
 <token>Okex</token>,
 <token>Poloniex</token>,
+<token>PrizmBit</token>,
 <token>Quoinex</token>,
 <token>TradeOgre</token>,
 <token>Yobit</token>,
@@ -94,7 +97,7 @@
   		</para>
   		<list class="ordered">
 			<listItem>
-				<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - direct access to exchanges, to a range of brokers (see all list on <token>stocksharppricing</token>).</para>
+				<para><link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link> - direct access to exchanges, to a range of brokers (see all list on <token>stocksharppricing</token>).</para>
 			</listItem>
 			<listItem>
 				<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - market data connector to LSE or NASDAQ.</para>

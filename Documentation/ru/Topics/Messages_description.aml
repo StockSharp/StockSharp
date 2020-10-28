@@ -133,7 +133,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию о портфеле. Также существует сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioChangeMessage</codeEntityReference> - информация об изменениях портфеля.</para>
+    		<para>Содержит информацию о портфеле.</para>
     	</entry>
   		</row>
   		
@@ -209,6 +209,53 @@
    		</entry>
     	<entry>
     		<para>Содержит информацию о текущем времени.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.TimeFrameLookupMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Запрашивает список поддерживаемых таймфреймов. Результат запроса будет возвращен при помощи сообщения
+    		<codeEntityReference>T:StockSharp.Messages.TimeFrameInfoMessage</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.TimeFrameInfoMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Содержит информацию о поддерживаемых таймфреймах.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SubscriptionResponseMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Ответ на запрос подписки или отписки. В случае ошибки выполнения запроса, описание ошибки заполняется
+    		<codeEntityReference>P:StockSharp.Messages.SubscriptionResponseMessage.Error</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SubscriptionOnlineMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение о переходе подписки в online состояние.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение об окончании подписки в случае получения всех необходимых данных.</para>
     	</entry>
   		</row>
 	</table>

@@ -44,6 +44,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.LimitType.To<int?>().ToString(),
 				data.Description,
 				data.StrategyId,
+				data.Side.To<int?>().ToString(),
 			});
 
 			row.AddRange(data.BuildFrom.ToCsv());
@@ -80,9 +81,10 @@ namespace StockSharp.Algo.Storages.Csv
 				PortfolioName = reader.ReadString(),
 				ClientCode = reader.ReadString(),
 				DepoName = reader.ReadString(),
-				LimitType = reader.ReadString().To<TPlusLimits?>(),
+				LimitType = reader.ReadNullableEnum<TPlusLimits>(),
 				Description = reader.ReadString(),
 				StrategyId = reader.ReadString(),
+				Side = reader.ReadNullableEnum<Sides>(),
 				BuildFrom = reader.ReadBuildFrom(),
 			};
 

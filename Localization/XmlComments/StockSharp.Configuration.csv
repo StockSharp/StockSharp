@@ -43,8 +43,12 @@ M:StockSharp.Configuration.InMemoryMessageAdapterProvider.GetAdapters/returns;Do
 M:StockSharp.Configuration.InMemoryMessageAdapterProvider.CreateStockSharpAdapters(Ecng.Common.IdGenerator,System.String,System.Security.SecureString)/inheritdoc;DocStr8459
 M:StockSharp.Configuration.InMemoryMessageAdapterProvider.CreateTransportAdapter(Ecng.Common.IdGenerator)/inheritdoc;DocStr8459
 T:StockSharp.Configuration.Paths/summary;DocStr11264
+M:StockSharp.Configuration.Paths.GetHistoryDataPath(System.String)/summary;DocStr12248
+M:StockSharp.Configuration.Paths.GetHistoryDataPath(System.String)/param/startDir;DocStr12249
+M:StockSharp.Configuration.Paths.GetHistoryDataPath(System.String)/returns;DocStr12250
 F:StockSharp.Configuration.Paths.AppName/summary;DocStr11265
 P:StockSharp.Configuration.Paths.AppName2/summary;DocStr8459
+P:StockSharp.Configuration.Paths.AppNameWithVersion/summary;DocStr12251
 F:StockSharp.Configuration.Paths.CompanyPath/summary;DocStr11266
 F:StockSharp.Configuration.Paths.AppDataPath/summary;DocStr8071
 F:StockSharp.Configuration.Paths.PlatformConfigurationFile/summary;DocStr8072
@@ -55,6 +59,7 @@ F:StockSharp.Configuration.Paths.SecurityExtendedInfo/summary;DocStr9960
 F:StockSharp.Configuration.Paths.StorageDir/summary;DocStr10050
 F:StockSharp.Configuration.Paths.SnapshotsDir/summary;DocStr11294
 F:StockSharp.Configuration.Paths.InstallerDir/summary;DocStr11766
+F:StockSharp.Configuration.Paths.InstallerInstallationsConfigPath/summary;DocStr11766
 M:StockSharp.Configuration.Paths.GetWebSiteUrl/summary;DocStr11255
 M:StockSharp.Configuration.Paths.GetWebSiteUrl/returns;DocStr9248
 M:StockSharp.Configuration.Paths.GetUserUrl(System.Int64)/summary;DocStr11256
@@ -75,7 +80,14 @@ M:StockSharp.Configuration.Paths.GetSignUpUrl/summary;DocStr11262
 M:StockSharp.Configuration.Paths.GetSignUpUrl/returns;DocStr9248
 M:StockSharp.Configuration.Paths.GetForgotUrl/summary;DocStr11263
 M:StockSharp.Configuration.Paths.GetForgotUrl/returns;DocStr9248
+P:StockSharp.Configuration.Paths.InstalledVersion/summary;DocStr12252
+M:StockSharp.Configuration.Paths.GetInstalledVersion(System.String)/summary;DocStr12253
+M:StockSharp.Configuration.Paths.GetInstalledVersion(System.String)/param/productInstallPath;DocStr12254
+M:StockSharp.Configuration.Paths.GetInstalledVersion(System.String)/returns;DocStr12252
 F:StockSharp.Configuration.Paths.HistoryDataPath/summary;DocStr11767
+M:StockSharp.Configuration.Paths.StartIsRunning/summary;DocStr9673
+M:StockSharp.Configuration.Paths.StartIsRunning/returns;DocStr8659
+M:StockSharp.Configuration.Paths.StopIsRunning/summary;DocStr9674
 T:StockSharp.Configuration.StockSharpSection/summary;DocStr8737
 P:StockSharp.Configuration.StockSharpSection.CustomCandles/summary;DocStr8739
 P:StockSharp.Configuration.StockSharpSection.CustomIndicators/summary;DocStr8740

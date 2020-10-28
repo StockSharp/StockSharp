@@ -44,6 +44,12 @@
 				_positionChanged?.Invoke(position);
 
 			RaisePositionChanged();
+
+			foreach (var id in message.GetSubscriptionIds())
+			{
+				if (_subscriptionsById.TryGetValue(id, out var subscription))
+					PositionReceived?.Invoke(subscription, position);
+			}
 		}
 
 		private void OnConnectorPositionReceived(Subscription subscription, Position position)
@@ -65,6 +71,8 @@
 				_positionChanged?.Invoke(position);
 
 			RaisePositionChanged();
+
+			PositionReceived?.Invoke(subscription, position);
 		}
 
 		private void RaisePositionChanged()
@@ -114,7 +122,7 @@
 			remove => _positionChanged -= value;
 		}
 
-		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType)
+		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType)
 			=> _positions.TryGetValue(Tuple.Create(security, portfolio));
 
 		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)

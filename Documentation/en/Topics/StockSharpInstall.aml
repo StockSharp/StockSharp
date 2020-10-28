@@ -2,6 +2,17 @@
 <topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+	<para>Starting from version 5.0, all installation is done through NuGet. More details, <externalLink>
+		<linkText>S#.API install</linkText>
+			<linkAlternateText>S#.API install</linkAlternateText>
+			<linkUri>https://stocksharp.com/news/266/StockSharp-API-from-Nuget-Manual/</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+    	</para>
+    	
+    	<alert class="caution">
+		  <para>The information below is relevant only for versions 4.XXX</para>
+		</alert>
     
       <para>There are two ways to install <token>stocksharp</token>:</para>
 		<list class="ordered">

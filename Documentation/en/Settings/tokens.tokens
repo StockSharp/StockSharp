@@ -26,6 +26,9 @@
 <item id="Bitmex"><ddue:link xlink:href="81f33924-b166-42c1-8ced-f7e9468f86b5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 <item id="Bittrex"><ddue:link xlink:href="0d71e2d9-6f13-435d-8697-58d41978d46b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+<item id="Bitalong"><ddue:link xlink:href="8AB49C23-F7CC-4306-AE87-736D73DE11D0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+<item id="DigitexFutures"><ddue:link xlink:href="609A667B-51DC-4AA2-B5E5-076B2308350C" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+<item id="PrizmBit"><ddue:link xlink:href="82D496AB-E983-4B04-AB5B-CD635E42AF4D" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 <item id="BitZ"><ddue:link xlink:href="66d9f9b3-1251-414a-ab9b-18060f2f62c6" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
 <item id="blackwood"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
   <item id="blackwood_external"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>

@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storageRegistry">Market data storage.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		public HistoryEmulationConnector(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry)
-			: this(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider) { StorageRegistry = storageRegistry }, true, new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", err => err.LogError()), securityProvider, portfolioProvider, exchangeInfoProvider)
+			: this(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider) { StorageRegistry = storageRegistry }, true, new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", err => err.LogError()) { SuspendMaxCount = int.MaxValue }, securityProvider, portfolioProvider, exchangeInfoProvider)
 		{
 		}
 

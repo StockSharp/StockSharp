@@ -18,6 +18,376 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// New version must be greater than current.
+		/// </summary>
+		public const string NewVersionMustBeGreaterKey = nameof(NewVersionMustBeGreater);
+
+		/// <summary>
+		/// New version must be greater than current.
+		/// </summary>
+		public static string NewVersionMustBeGreater => GetString(NewVersionMustBeGreaterKey);
+
+		/// <summary>
+		/// Current version
+		/// </summary>
+		public const string CurrentVersionKey = nameof(CurrentVersion);
+
+		/// <summary>
+		/// Current version
+		/// </summary>
+		public static string CurrentVersion => GetString(CurrentVersionKey);
+
+		/// <summary>
+		/// New version
+		/// </summary>
+		public const string NewVersionKey = nameof(NewVersion);
+
+		/// <summary>
+		/// New version
+		/// </summary>
+		public static string NewVersion => GetString(NewVersionKey);
+
+		/// <summary>
+		/// Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.
+		/// </summary>
+		public const string SelectCsprojForProductKey = nameof(SelectCsprojForProduct);
+
+		/// <summary>
+		/// Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.
+		/// </summary>
+		public static string SelectCsprojForProduct => GetString(SelectCsprojForProductKey);
+
+		/// <summary>
+		/// You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core)
+		/// </summary>
+		public const string DotNetCoreSDK31NotInstalledKey = nameof(DotNetCoreSDK31NotInstalled);
+
+		/// <summary>
+		/// You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core)
+		/// </summary>
+		public static string DotNetCoreSDK31NotInstalled => GetString(DotNetCoreSDK31NotInstalledKey);
+
+		/// <summary>
+		/// Select image
+		/// </summary>
+		public const string SelectImageKey = nameof(SelectImage);
+
+		/// <summary>
+		/// Select image
+		/// </summary>
+		public static string SelectImage => GetString(SelectImageKey);
+
+		/// <summary>
+		/// Icon
+		/// </summary>
+		public const string IconKey = nameof(Icon);
+
+		/// <summary>
+		/// Icon
+		/// </summary>
+		public static string Icon => GetString(IconKey);
+
+		/// <summary>
+		/// You cannot create products with access level '{0}'.
+		/// </summary>
+		public const string InvalidProductAccessParamsKey = nameof(InvalidProductAccessParams);
+
+		/// <summary>
+		/// You cannot create products with access level '{0}'.
+		/// </summary>
+		public static string InvalidProductAccessParams => GetString(InvalidProductAccessParamsKey);
+
+		/// <summary>
+		/// User lookup error
+		/// </summary>
+		public const string UserLookupErrorKey = nameof(UserLookupError);
+
+		/// <summary>
+		/// User lookup error
+		/// </summary>
+		public static string UserLookupError => GetString(UserLookupErrorKey);
+
+		/// <summary>
+		/// Add user
+		/// </summary>
+		public const string AddUserKey = nameof(AddUser);
+
+		/// <summary>
+		/// Add user
+		/// </summary>
+		public static string AddUser => GetString(AddUserKey);
+
+		/// <summary>
+		/// Product type
+		/// </summary>
+		public const string ProductTypeKey = nameof(ProductType);
+
+		/// <summary>
+		/// Product type
+		/// </summary>
+		public static string ProductType => GetString(ProductTypeKey);
+
+		/// <summary>
+		/// Product access
+		/// </summary>
+		public const string ProductAccessControlKey = nameof(ProductAccessControl);
+
+		/// <summary>
+		/// Product access
+		/// </summary>
+		public static string ProductAccessControl => GetString(ProductAccessControlKey);
+
+		/// <summary>
+		/// Free access
+		/// </summary>
+		public const string PublicProductKey = nameof(PublicProduct);
+
+		/// <summary>
+		/// Free access
+		/// </summary>
+		public static string PublicProduct => GetString(PublicProductKey);
+
+		/// <summary>
+		/// Visible to all, available to selected users
+		/// </summary>
+		public const string RestrictedProductKey = nameof(RestrictedProduct);
+
+		/// <summary>
+		/// Visible to all, available to selected users
+		/// </summary>
+		public static string RestrictedProduct => GetString(RestrictedProductKey);
+
+		/// <summary>
+		/// Visible and available to selected users only
+		/// </summary>
+		public const string PrivateProductKey = nameof(PrivateProduct);
+
+		/// <summary>
+		/// Visible and available to selected users only
+		/// </summary>
+		public static string PrivateProduct => GetString(PrivateProductKey);
+
+		/// <summary>
+		/// Renew price
+		/// </summary>
+		public const string RenewPriceKey = nameof(RenewPrice);
+
+		/// <summary>
+		/// Renew price
+		/// </summary>
+		public static string RenewPrice => GetString(RenewPriceKey);
+
+		/// <summary>
+		/// Purchase period
+		/// </summary>
+		public const string PurchasePeriodKey = nameof(PurchasePeriod);
+
+		/// <summary>
+		/// Purchase period
+		/// </summary>
+		public static string PurchasePeriod => GetString(PurchasePeriodKey);
+
+		/// <summary>
+		/// Users with product access
+		/// </summary>
+		public const string ProductUserListKey = nameof(ProductUserList);
+
+		/// <summary>
+		/// Users with product access
+		/// </summary>
+		public static string ProductUserList => GetString(ProductUserListKey);
+
+		/// <summary>
+		/// Start typing
+		/// </summary>
+		public const string StartTypingKey = nameof(StartTyping);
+
+		/// <summary>
+		/// Start typing
+		/// </summary>
+		public static string StartTyping => GetString(StartTypingKey);
+
+		/// <summary>
+		/// Nuget package id
+		/// </summary>
+		public const string NugetPackageIdKey = nameof(NugetPackageId);
+
+		/// <summary>
+		/// Nuget package id
+		/// </summary>
+		public static string NugetPackageId => GetString(NugetPackageIdKey);
+
+		/// <summary>
+		/// First you need to complete previous product creation.
+		/// </summary>
+		public const string SaveNewProductFirstKey = nameof(SaveNewProductFirst);
+
+		/// <summary>
+		/// First you need to complete previous product creation.
+		/// </summary>
+		public static string SaveNewProductFirst => GetString(SaveNewProductFirstKey);
+
+		/// <summary>
+		/// not saved
+		/// </summary>
+		public const string NotSavedKey = nameof(NotSaved);
+
+		/// <summary>
+		/// not saved
+		/// </summary>
+		public static string NotSaved => GetString(NotSavedKey);
+
+		/// <summary>
+		/// Select product or add a new one
+		/// </summary>
+		public const string SelectOrAddProductKey = nameof(SelectOrAddProduct);
+
+		/// <summary>
+		/// Select product or add a new one
+		/// </summary>
+		public static string SelectOrAddProduct => GetString(SelectOrAddProductKey);
+
+		/// <summary>
+		/// My products
+		/// </summary>
+		public const string MyProductsKey = nameof(MyProducts);
+
+		/// <summary>
+		/// My products
+		/// </summary>
+		public static string MyProducts => GetString(MyProductsKey);
+
+		/// <summary>
+		/// Publishing
+		/// </summary>
+		public const string PublishingKey = nameof(Publishing);
+
+		/// <summary>
+		/// Publishing
+		/// </summary>
+		public static string Publishing => GetString(PublishingKey);
+
+		/// <summary>
+		/// Parameter '{0}' must be defined.
+		/// </summary>
+		public const string ParameterIsEmptyParamsKey = nameof(ParameterIsEmptyParams);
+
+		/// <summary>
+		/// Parameter '{0}' must be defined.
+		/// </summary>
+		public static string ParameterIsEmptyParams => GetString(ParameterIsEmptyParamsKey);
+
+		/// <summary>
+		/// Auto updates check interval
+		/// </summary>
+		public const string AutoUpdatesCheckIntervalKey = nameof(AutoUpdatesCheckInterval);
+
+		/// <summary>
+		/// Auto updates check interval
+		/// </summary>
+		public static string AutoUpdatesCheckInterval => GetString(AutoUpdatesCheckIntervalKey);
+
+		/// <summary>
+		/// Retry delay in case of update check error
+		/// </summary>
+		public const string AutoUpdatesRetryDelayKey = nameof(AutoUpdatesRetryDelay);
+
+		/// <summary>
+		/// Retry delay in case of update check error
+		/// </summary>
+		public static string AutoUpdatesRetryDelay => GetString(AutoUpdatesRetryDelayKey);
+
+		/// <summary>
+		/// The application is still running in background mode. You can access it via icon in the system tray.
+		/// </summary>
+		public const string ApplicationStillRunningKey = nameof(ApplicationStillRunning);
+
+		/// <summary>
+		/// The application is still running in background mode. You can access it via icon in the system tray.
+		/// </summary>
+		public static string ApplicationStillRunning => GetString(ApplicationStillRunningKey);
+
+		/// <summary>
+		/// Double click to open the product details.
+		/// </summary>
+		public const string ClickProductDetailsKey = nameof(ClickProductDetails);
+
+		/// <summary>
+		/// Double click to open the product details.
+		/// </summary>
+		public static string ClickProductDetails => GetString(ClickProductDetailsKey);
+
+		/// <summary>
+		/// The license has expired.
+		/// </summary>
+		public const string ProductLicenseExpiredKey = nameof(ProductLicenseExpired);
+
+		/// <summary>
+		/// The license has expired.
+		/// </summary>
+		public static string ProductLicenseExpired => GetString(ProductLicenseExpiredKey);
+
+		/// <summary>
+		/// User comments
+		/// </summary>
+		public const string UserFeedbacksKey = nameof(UserFeedbacks);
+
+		/// <summary>
+		/// User comments
+		/// </summary>
+		public static string UserFeedbacks => GetString(UserFeedbacksKey);
+
+		/// <summary>
+		/// Updating data
+		/// </summary>
+		public const string UpdatingDataKey = nameof(UpdatingData);
+
+		/// <summary>
+		/// Updating data
+		/// </summary>
+		public static string UpdatingData => GetString(UpdatingDataKey);
+
+		/// <summary>
+		/// Error updating data
+		/// </summary>
+		public const string ErrorUpdatingDataKey = nameof(ErrorUpdatingData);
+
+		/// <summary>
+		/// Error updating data
+		/// </summary>
+		public static string ErrorUpdatingData => GetString(ErrorUpdatingDataKey);
+
+		/// <summary>
+		/// Rate product
+		/// </summary>
+		public const string RateProductKey = nameof(RateProduct);
+
+		/// <summary>
+		/// Rate product
+		/// </summary>
+		public static string RateProduct => GetString(RateProductKey);
+
+		/// <summary>
+		/// You have already rated this product.
+		/// </summary>
+		public const string AlreadyRatedKey = nameof(AlreadyRated);
+
+		/// <summary>
+		/// You have already rated this product.
+		/// </summary>
+		public static string AlreadyRated => GetString(AlreadyRatedKey);
+
+		/// <summary>
+		/// Please rate the {0}.
+		/// </summary>
+		public const string PleaseRateProductParamsKey = nameof(PleaseRateProductParams);
+
+		/// <summary>
+		/// Please rate the {0}.
+		/// </summary>
+		public static string PleaseRateProductParams => GetString(PleaseRateProductParamsKey);
+	
+		/// <summary>
 		/// Install prerelease versions.
 		/// </summary>
 		public const string InstallPrereleaseVersionsKey = nameof(InstallPrereleaseVersions);
@@ -28658,16 +29028,6 @@ namespace StockSharp.Localization
 		public static string Str2944 => GetString(Str2944Key);
 
 		/// <summary>
-		/// S#.Data is already launched.
-		/// </summary>
-		public const string Str2945Key = nameof(Str2945);
-
-		/// <summary>
-		/// S#.Data is already launched.
-		/// </summary>
-		public static string Str2945 => GetString(Str2945Key);
-
-		/// <summary>
 		/// {0}At least one task must be switched on.
 		/// </summary>
 		public const string Str2946ParamsKey = nameof(Str2946Params);
@@ -37728,12 +38088,12 @@ namespace StockSharp.Localization
 		public static string XamlStr192 => GetString(XamlStr192Key);
 
 		/// <summary>
-		/// From:
+		/// From
 		/// </summary>
 		public const string XamlStr193Key = nameof(XamlStr193);
 
 		/// <summary>
-		/// From:
+		/// From
 		/// </summary>
 		public static string XamlStr193 => GetString(XamlStr193Key);
 
@@ -39766,76 +40126,6 @@ namespace StockSharp.Localization
 		/// Last candle
 		/// </summary>
 		public static string XamlStr517 => GetString(XamlStr517Key);
-
-		/// <summary>
-		/// Last trade
-		/// </summary>
-		public const string XamlStr518Key = nameof(XamlStr518);
-
-		/// <summary>
-		/// Last trade
-		/// </summary>
-		public static string XamlStr518 => GetString(XamlStr518Key);
-
-		/// <summary>
-		/// Last trade (time)
-		/// </summary>
-		public const string XamlStr519Key = nameof(XamlStr519);
-
-		/// <summary>
-		/// Last trade (time)
-		/// </summary>
-		public static string XamlStr519 => GetString(XamlStr519Key);
-
-		/// <summary>
-		/// Last trade (origin)
-		/// </summary>
-		public const string XamlStr520Key = nameof(XamlStr520);
-
-		/// <summary>
-		/// Last trade (origin)
-		/// </summary>
-		public static string XamlStr520 => GetString(XamlStr520Key);
-
-		/// <summary>
-		/// Last trade (id)
-		/// </summary>
-		public const string XamlStr521Key = nameof(XamlStr521);
-
-		/// <summary>
-		/// Last trade (id)
-		/// </summary>
-		public static string XamlStr521 => GetString(XamlStr521Key);
-
-		/// <summary>
-		/// Last trade (volume)
-		/// </summary>
-		public const string XamlStr522Key = nameof(XamlStr522);
-
-		/// <summary>
-		/// Last trade (volume)
-		/// </summary>
-		public static string XamlStr522 => GetString(XamlStr522Key);
-
-		/// <summary>
-		/// Last trade (trend)
-		/// </summary>
-		public const string XamlStr523Key = nameof(XamlStr523);
-
-		/// <summary>
-		/// Last trade (trend)
-		/// </summary>
-		public static string XamlStr523 => GetString(XamlStr523Key);
-
-		/// <summary>
-		/// Last trade (price)
-		/// </summary>
-		public const string XamlStr524Key = nameof(XamlStr524);
-
-		/// <summary>
-		/// Last trade (price)
-		/// </summary>
-		public static string XamlStr524 => GetString(XamlStr524Key);
 
 		/// <summary>
 		/// Last market depth
@@ -43768,12 +44058,12 @@ namespace StockSharp.Localization
 		public static string PriceType => GetString(PriceTypeKey);
 
 		/// <summary>
-		/// Publish strategy
+		/// Publish
 		/// </summary>
 		public const string PublishStrategyKey = nameof(PublishStrategy);
 
 		/// <summary>
-		/// Publish strategy
+		/// Publish
 		/// </summary>
 		public static string PublishStrategy => GetString(PublishStrategyKey);
 
@@ -52766,5 +53056,175 @@ namespace StockSharp.Localization
 		/// Order id (sell).
 		/// </summary>
 		public static string OrderSellId => GetString(OrderSellIdKey);
+
+		/// <summary>
+		/// Low bid (vol)
+		/// </summary>
+		public const string LowBidVolumeKey = nameof(LowBidVolume);
+
+		/// <summary>
+		/// Low bid (vol)
+		/// </summary>
+		public static string LowBidVolume => GetString(LowBidVolumeKey);
+
+		/// <summary>
+		/// Volume of the lowest bid.
+		/// </summary>
+		public const string LowBidVolumeDescKey = nameof(LowBidVolumeDesc);
+
+		/// <summary>
+		/// Volume of the lowest bid.
+		/// </summary>
+		public static string LowBidVolumeDesc => GetString(LowBidVolumeDescKey);
+
+		/// <summary>
+		/// High ask (vol)
+		/// </summary>
+		public const string HighAskVolumeKey = nameof(HighAskVolume);
+
+		/// <summary>
+		/// High ask (vol)
+		/// </summary>
+		public static string HighAskVolume => GetString(HighAskVolumeKey);
+
+		/// <summary>
+		/// Volume of the highest ask.
+		/// </summary>
+		public const string HighAskVolumeDescKey = nameof(HighAskVolumeDesc);
+
+		/// <summary>
+		/// Volume of the highest ask.
+		/// </summary>
+		public static string HighAskVolumeDesc => GetString(HighAskVolumeDescKey);
+
+		/// <summary>
+		/// Under (bid)
+		/// </summary>
+		public const string UnderlyingBestBidPriceKey = nameof(UnderlyingBestBidPrice);
+
+		/// <summary>
+		/// Under (bid)
+		/// </summary>
+		public static string UnderlyingBestBidPrice => GetString(UnderlyingBestBidPriceKey);
+
+		/// <summary>
+		/// Underlying asset best bid price.
+		/// </summary>
+		public const string UnderlyingBestBidPriceDescKey = nameof(UnderlyingBestBidPriceDesc);
+
+		/// <summary>
+		/// Underlying asset best bid price.
+		/// </summary>
+		public static string UnderlyingBestBidPriceDesc => GetString(UnderlyingBestBidPriceDescKey);
+
+		/// <summary>
+		/// Under (ask)
+		/// </summary>
+		public const string UnderlyingBestAskPriceKey = nameof(UnderlyingBestAskPrice);
+
+		/// <summary>
+		/// Under (ask)
+		/// </summary>
+		public static string UnderlyingBestAskPrice => GetString(UnderlyingBestAskPriceKey);
+
+		/// <summary>
+		/// Underlying asset best ask price.
+		/// </summary>
+		public const string UnderlyingBestAskPriceDescKey = nameof(UnderlyingBestAskPriceDesc);
+
+		/// <summary>
+		/// Underlying asset best ask price.
+		/// </summary>
+		public static string UnderlyingBestAskPriceDesc => GetString(UnderlyingBestAskPriceDescKey);
+
+		/// <summary>
+		/// Median
+		/// </summary>
+		public const string MedianKey = nameof(Median);
+
+		/// <summary>
+		/// Median
+		/// </summary>
+		public static string Median => GetString(MedianKey);
+
+		/// <summary>
+		/// High (52 week)
+		/// </summary>
+		public const string HighPrice52WeekKey = nameof(HighPrice52Week);
+
+		/// <summary>
+		/// High (52 week)
+		/// </summary>
+		public static string HighPrice52Week => GetString(HighPrice52WeekKey);
+
+		/// <summary>
+		/// The highest price for 52 weeks.
+		/// </summary>
+		public const string HighPrice52WeekDescKey = nameof(HighPrice52WeekDesc);
+
+		/// <summary>
+		/// The highest price for 52 weeks.
+		/// </summary>
+		public static string HighPrice52WeekDesc => GetString(HighPrice52WeekDescKey);
+
+		/// <summary>
+		/// Low (52 week)
+		/// </summary>
+		public const string LowPrice52WeekKey = nameof(LowPrice52Week);
+
+		/// <summary>
+		/// Low (52 week)
+		/// </summary>
+		public static string LowPrice52Week => GetString(LowPrice52WeekKey);
+
+		/// <summary>
+		/// The lowest price for 52 weeks.
+		/// </summary>
+		public const string LowPrice52WeekDescKey = nameof(LowPrice52WeekDesc);
+
+		/// <summary>
+		/// The lowest price for 52 weeks.
+		/// </summary>
+		public static string LowPrice52WeekDesc => GetString(LowPrice52WeekDescKey);
+
+		/// <summary>
+		/// Last ID (str)
+		/// </summary>
+		public const string LastTradeStringIdKey = nameof(LastTradeStringId);
+
+		/// <summary>
+		/// Last ID (str)
+		/// </summary>
+		public static string LastTradeStringId => GetString(LastTradeStringIdKey);
+
+		/// <summary>
+		/// Last trade ID (string).
+		/// </summary>
+		public const string LastTradeStringIdDescKey = nameof(LastTradeStringIdDesc);
+
+		/// <summary>
+		/// Last trade ID (string).
+		/// </summary>
+		public static string LastTradeStringIdDesc => GetString(LastTradeStringIdDescKey);
+
+		/// <summary>
+		/// Appearance
+		/// </summary>
+		public const string AppearanceKey = nameof(Appearance);
+
+		/// <summary>
+		/// Appearance
+		/// </summary>
+		public static string Appearance => GetString(AppearanceKey);
+
+		/// <summary>
+		/// The diagram element
+		/// </summary>
+		public const string DiagramElementKey = nameof(DiagramElement);
+
+		/// <summary>
+		/// The diagram element
+		/// </summary>
+		public static string DiagramElement => GetString(DiagramElementKey);
 	}
 }

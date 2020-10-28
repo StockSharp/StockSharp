@@ -42,7 +42,7 @@
 
 		<ex:ComboBoxEditEx x:Name="Options" Margin="5,0,0,0" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="2" DisplayMember="Code" EditValueChanged="Options_OnSelectionChanged" />
 
-		<xaml:PortfolioComboBox x:Name="Portfolio" Grid.Row="2" Grid.Column="4" SelectionChanged="Portfolio_OnSelectionChanged" />
+		<xaml:PortfolioComboBox x:Name="Portfolio" Grid.Row="2" Grid.Column="4" EditValueChanged="Portfolio_OnSelectionChanged" />
 		<Button x:Name="Start" Content="{x:Static loc:LocalizedStrings.Str2932}" Grid.Row="2" Grid.Column="5" IsEnabled="False" Click="StartClick" />
 
 		<TextBlock Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Volatility}"/><Run Text=":"/></TextBlock>

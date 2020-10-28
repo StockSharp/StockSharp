@@ -20,6 +20,8 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.ComponentModel;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// Message portfolio lookup for specified criteria.
 	/// </summary>
@@ -38,6 +40,12 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[DataMember]
 		public string StrategyId { get; set; }
+
+		/// <summary>
+		/// Side.
+		/// </summary>
+		[DataMember]
+		public Sides? Side { get; set; }
 
 		/// <inheritdoc />
 		public override DataType DataType => DataType.PositionChanges;
@@ -67,6 +75,7 @@ namespace StockSharp.Messages
 
 			destination.SecurityId = SecurityId;
 			destination.StrategyId = StrategyId;
+			destination.Side = Side;
 		}
 
 		/// <inheritdoc />
@@ -80,8 +89,11 @@ namespace StockSharp.Messages
 			if (SecurityId != null)
 				str += $",Sec={SecurityId}";
 
-			if (StrategyId != null)
+			if (!StrategyId.IsEmpty())
 				str += $",Strategy={StrategyId}";
+
+			if (Side != null)
+				str += $",Side={Side.Value}";
 
 			return str;
 		}

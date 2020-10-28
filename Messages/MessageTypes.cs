@@ -445,7 +445,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		protected override bool OnEquals(MessageTypeInfo other) => other.Type == Type;
 
-		/// <inheritdoc />
+		/// <inheritdoc cref="object.GetHashCode" />
 		public override int GetHashCode() => Type.GetHashCode();
 
 		/// <summary>

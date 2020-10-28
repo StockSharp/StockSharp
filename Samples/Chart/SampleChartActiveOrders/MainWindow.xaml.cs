@@ -43,6 +43,7 @@
 		private bool NeedToDelay => DelayCtrl.IsChecked == true;
 		private bool NeedToFail => FailCtrl.IsChecked == true;
 		private bool NeedToConfirm => ConfirmCtrl.IsChecked == true;
+		private bool UseSingleOrderObject => SameOrderCtrl.IsChecked == true;
 
 		private readonly Security _security = new Security
 		{
@@ -264,7 +265,7 @@
 
 			Log($"Fill order: {order}");
 
-			order.Balance -= RandomGen.GetInt(1, (int)order.Balance);
+			order.Balance -= RandomGen.GetInt(1, Math.Min((int)order.Balance, 5));
 
 			if (order.Balance == 0)
 			{
@@ -355,40 +356,83 @@
 				RegAction();
 		}
 
-		private void Chart_OnMoveOrder(Order oldOrder, decimal newPrice)
+		private void Chart_OnMoveOrder(Order order, decimal newPrice)
 		{
 			if (NeedToConfirm && !Confirm($"Move order to price={newPrice}?"))
 			{
 				var d = new ChartDrawData();
-				d.Add(_activeOrdersElement, oldOrder);
+				// redraw order with old price
+				d.Add(_activeOrdersElement, order);
 				Chart.Draw(d);
 
 				return;
 			}
 
-			Log($"MoveOrder to {newPrice}: {oldOrder}");
+			var singleObject = UseSingleOrderObject;
+			Log($"MoveOrder to {newPrice}: {order}, single order object = {singleObject}");
 
-			if (IsInFinalState(oldOrder))
+			if (IsInFinalState(order))
 			{
 				Log("invalid state for re-register");
 				return;
 			}
 
+			if(singleObject)
+				Chart_OnMoveOrder1(order, newPrice);
+			else
+				Chart_OnMoveOrder2(order, newPrice);
+		}
+
+		private void Chart_OnMoveOrder1(Order order, decimal newPrice)
+		{
+			// freeze order on chart
+			Chart.Draw(new ChartDrawData()
+				.Add(_activeOrdersElement, order, true, price: newPrice, state: OrderStates.Pending));
+
+			void MoveAction()
+			{
+				if (NeedToFail)
+				{
+					Log("Move failed");
+					Chart.Draw(new ChartDrawData()
+						.Add(_activeOrdersElement, null, isError: true, price: newPrice, balance: order.Balance) // draw error animation on newprice
+						.Add(_activeOrdersElement, order, isError: true, price: order.Price)); // redraw order with old price
+				}
+				else
+				{
+					order.Price = newPrice;
+					Log($"Order moved to new price: {order}");
+
+					Chart.Draw(new ChartDrawData()
+						.Add(_activeOrdersElement, order)); // redraw/unfreeze
+
+					((OrderEx)order).Refresh();
+				}
+			}
+
+			if (NeedToDelay)
+				DelayedAction(MoveAction, "move");
+			else
+				MoveAction();
+		}
+
+		private void Chart_OnMoveOrder2(Order order, decimal newPrice)
+		{
 			var newOrder = new OrderEx
 			{
 				TransactionId = _idGenerator.GetNextId(),
 				Type = OrderTypes.Limit,
 				State = OrderStates.Pending,
 				Price = newPrice,
-				Volume = oldOrder.Balance,
-				Direction = oldOrder.Direction,
-				Balance = oldOrder.Balance,
-				Security = oldOrder.Security,
-				Portfolio = oldOrder.Portfolio,
+				Volume = order.Balance,
+				Direction = order.Direction,
+				Balance = order.Balance,
+				Security = order.Security,
+				Portfolio = order.Portfolio,
 			};
 
-			Chart.Draw(new ChartDrawData()
-				.Add(_activeOrdersElement, oldOrder, true, price: newOrder.Price));
+			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order, true, state: OrderStates.Pending)); // freeze old order on chart
+			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, newOrder, true)); // freeze new order on chart
 
 			void MoveAction()
 			{
@@ -398,21 +442,21 @@
 
 					newOrder.State = OrderStates.Failed;
 
-					Chart.Draw(new ChartDrawData()
-						.Add(_activeOrdersElement, oldOrder, isError: true, price: oldOrder.Price));
+					Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order, isError: true)); // show error on old order
+					Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, newOrder, isError: true)); // show error on new order
 				}
 				else
 				{
-					oldOrder.State = OrderStates.Done;
+					order.State = OrderStates.Done;
 					newOrder.State = OrderStates.Active;
-					
+
 					Log($"Order moved to new: {newOrder}");
 
 					Chart.Draw(new ChartDrawData()
-						.Add(_activeOrdersElement, oldOrder)
-						.Add(_activeOrdersElement, newOrder));
+							.Add(_activeOrdersElement, order)
+							.Add(_activeOrdersElement, newOrder));
 
-					_orders.Remove(oldOrder);
+					_orders.Remove(order);
 					_orders.Add(newOrder);
 				}
 			}
@@ -487,6 +531,8 @@
 						NotifyPropertyChanged(nameof(Description));
 				};
 			}
+
+			public void Refresh() => NotifyPropertyChanged(nameof(Description));
 
 			public string Description => ToString();
 		}

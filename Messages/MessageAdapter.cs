@@ -20,6 +20,7 @@ namespace StockSharp.Messages
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
+	using System.Runtime.CompilerServices;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -118,7 +119,7 @@ namespace StockSharp.Messages
 					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
 
 				_possibleSupportedMessages = value;
-				OnPropertyChanged(nameof(PossibleSupportedMessages));
+				OnPropertyChanged();
 
 				SupportedInMessages = value.Select(t => t.Type).ToArray();
 			}
@@ -141,6 +142,7 @@ namespace StockSharp.Messages
 					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
 
 				_supportedMarketDataTypes = value.ToArray();
+				OnPropertyChanged();
 			}
 		}
 
@@ -496,9 +498,10 @@ namespace StockSharp.Messages
 		/// Initialize a new message <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
 		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
-		protected void SendSubscriptionFinished(long originalTransactionId)
+		/// <param name="nextFrom"><see cref="SubscriptionFinishedMessage.NextFrom"/>.</param>
+		protected void SendSubscriptionFinished(long originalTransactionId, DateTimeOffset? nextFrom = null)
 		{
-			SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = originalTransactionId });
+			SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = originalTransactionId, NextFrom = nextFrom });
 		}
 
 		/// <summary>
@@ -656,7 +659,7 @@ namespace StockSharp.Messages
 		/// Raise <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
 		/// </summary>
 		/// <param name="propertyName">The name of the property that changed.</param>
-		protected void OnPropertyChanged(string propertyName)
+		protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
 		{
 			_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}

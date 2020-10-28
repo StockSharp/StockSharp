@@ -63,6 +63,15 @@ namespace StockSharp.Algo.Storages.Csv
 				data.IsSystem.To<int?>().ToString(),
 				data.Balance.ToString(),
 				data.SeqNum.DefaultAsNull().ToString(),
+				data.OrderStringId,
+				data.TradeStringId,
+				data.OrderBuyId.ToString(),
+				data.OrderSellId.ToString(),
+				data.IsUpTick.To<int?>().ToString(),
+				data.Yield.ToString(),
+				data.TradeStatus.ToString(),
+				data.OpenInterest.ToString(),
+				data.OriginSide.To<int?>().ToString(),
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
@@ -78,7 +87,7 @@ namespace StockSharp.Algo.Storages.Csv
 				ExecutionType = ExecutionTypes.OrderLog,
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				TransactionId = reader.ReadLong(),
-				OrderId = reader.ReadLong(),
+				OrderId = reader.ReadNullableLong(),
 				OrderPrice = reader.ReadDecimal(),
 				OrderVolume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>(),
@@ -95,6 +104,21 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 				ol.SeqNum = reader.ReadNullableLong() ?? 0L;
+
+			if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			{
+				ol.OrderStringId = reader.ReadString();
+				ol.TradeStringId = reader.ReadString();
+
+				ol.OrderBuyId = reader.ReadNullableLong();
+				ol.OrderSellId = reader.ReadNullableLong();
+
+				ol.IsUpTick = reader.ReadNullableBool();
+				ol.Yield = reader.ReadNullableDecimal();
+				ol.TradeStatus = reader.ReadNullableInt();
+				ol.OpenInterest = reader.ReadNullableDecimal();
+				ol.OriginSide = reader.ReadNullableEnum<Sides>();
+			}
 
 			return ol;
 		}

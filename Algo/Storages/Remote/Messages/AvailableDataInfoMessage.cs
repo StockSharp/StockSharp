@@ -10,7 +10,7 @@
 	/// <summary>
 	/// Available data info message.
 	/// </summary>
-	public class AvailableDataInfoMessage : BaseSubscriptionIdMessage<AvailableDataInfoMessage>
+	public class AvailableDataInfoMessage : BaseSubscriptionIdMessage<AvailableDataInfoMessage>, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AvailableDataInfoMessage"/>.

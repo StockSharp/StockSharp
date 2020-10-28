@@ -20,7 +20,7 @@ namespace StockSharp.BitStamp
 	[DescriptionLoc(LocalizedStrings.Str1770Key, LocalizedStrings.BitStampKey)]
 	[MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime |
 		MessageAdapterCategories.Free | MessageAdapterCategories.Ticks | MessageAdapterCategories.MarketDepth |
-		MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions)]
+		MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions | MessageAdapterCategories.OrderLog)]
 	public partial class BitStampMessageAdapter : IKeySecretAdapter
 	{
 		/// <summary>

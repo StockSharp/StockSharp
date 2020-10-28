@@ -1,4 +1,41 @@
-﻿InstallPrereleaseVersions;Install prerelease versions.;Устанавливать предрелизные версии.
+﻿NewVersionMustBeGreater;New version must be greater than current.;Новая версия должна быть больше текущей.
+CurrentVersion;Current version;Текущая версия
+NewVersion;New version;Новая версия
+SelectCsprojForProduct;Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.;Выберите проектный файл (.csproj) вашего продукта. Перед публикацией проект должен быть построен в Visual Studio в конфигурации Release.
+DotNetCoreSDK31NotInstalled;You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core);Чтобы публиковать пакеты, необходимо установить .NET Core SDK v3.1+ (https://dotnet.microsoft.com/download/dotnet-core)
+SelectImage;Select image;Выберите изображение
+Icon;Icon;Иконка
+InvalidProductAccessParams;You cannot create products with access level '{0}'.;Вы не можете создавать продукты с уровнем доступа '{0}'.
+UserLookupError;User lookup error;Ошибка поиска пользователя
+AddUser;Add user;Добавить пользователя
+ProductType;Product type;Тип продукта
+ProductAccessControl;Product access;Доступ к продукту
+PublicProduct;Free access;Свободный доступ
+RestrictedProduct;Visible to all, available to selected users;Виден всем, доступен выбранным пользователям
+PrivateProduct;Visible and available to selected users only;Виден и доступен только выбранным пользователям
+RenewPrice;Renew price;Цена обновления
+PurchasePeriod;Purchase period;Период покупки
+ProductUserList;Users with product access;Пользователи с доступом к продукту
+StartTyping;Start typing;Начните набирать
+NugetPackageId;Nuget package id;Идентификатор пакета Nuget
+SaveNewProductFirst;First you need to complete previous product creation.;Сначала необходимо завершить создание предыдущего продукта.
+NotSaved;not saved;не сохранено
+SelectOrAddProduct;Select product or add a new one;Выберите продукт или добавьте новый
+MyProducts;My products;Мои продукты
+Publishing;Publishing;Публикация
+ParameterIsEmptyParams;Parameter '{0}' must be defined.;Параметр '{0}' должен быть определен.
+AutoUpdatesCheckInterval;Auto updates check interval;Период автоматической проверки обновлений
+AutoUpdatesRetryDelay;Retry delay in case of update check error;Задержка перед повторной попыткой в случае ошибки
+ApplicationStillRunning;The application is still running in background mode.\nYou can access it via icon in the system tray.;Приложение все еще работает в фоновом режиме.\nВы можете получить к нему доступ через иконку в области уведомлений.
+ClickProductDetails;Double click to open the product details.;Двойной клик для перехода на страницу с подробной информацией.
+ProductLicenseExpired;The license has expired.;Закончился срок действия лицензии.
+UserFeedbacks;Ratings and reviews;Оценки и отзывы
+UpdatingData;Updating data;Обновление данных
+ErrorUpdatingData;Error updating data;Ошибка обновления данных
+RateProduct;Rate product;Оценить продукт
+AlreadyRated;You have already rated this product.;Вы уже оставляли оценку по данному продукту.
+PleaseRateProductParams;Please rate the {0}.;Пожалуйста, оцените {0}.
+InstallPrereleaseVersions;Install prerelease versions.;Устанавливать предрелизные версии.
 InstallPrereleaseVersionsWarning;WARNING! This feature is for advanced users only. Prerelease versions of applications may be unstable.;ПРЕДУПРЕЖДЕНИЕ! Эта функция предназначена только для продвинутых пользователей. Предрелизные версии приложений могут быть нестабильными.
 FilterProducts;Filter available products by type.;Фильтр доступных продуктов по типу.
 LoggedInAsParams;User {0};Пользователь {0}
@@ -2869,7 +2906,6 @@ Str2941;Loading...;Загрузка...
 Str2942;'{0}' loading;Загрузка '{0}'
 Str2943;S#.Data — database error.;S#.Data - ошибка базы данных.
 Str2944;S#.Data is working. Stop data download?;S#.Data в процессе работы. Остановить скачивание данных?
-Str2945;S#.Data is already launched.;S#.Data уже запущена.
 Str2946Params;{0}At least one task must be switched on.;{0}Необходимо включить хотя бы одну задачу.
 Str2947;Autostart of quotes downloading is impossible.;Автостарт скачивания котировок невозможен.
 Str2949;Continue?;Продолжить?
@@ -3781,7 +3817,7 @@ XamlStr187;Value (file);Значение (файл)
 XamlStr189;Loading data. Wait...;Идет загрузка данных. Подождите...
 XamlStr191;From OL;Из ОЛ
 XamlStr192;From composite element;Из составного элемента
-XamlStr193;From:;Из:
+XamlStr193;From;Из
 XamlStr196;Change orders with single transaction;Изменение заявок одной транзакцией
 XamlStr197;Price change:;Изменение цены:
 Change;Change;Изменить
@@ -3989,13 +4025,6 @@ IndexNum;Index num;Порядковый номер
 XamlStr515;Last Level 1;Послед. L1
 XamlStr516;Last OL;Послед. ОЛ
 XamlStr517;Last candle;Послед. свеча
-XamlStr518;Last trade;Послед. сделка
-XamlStr519;Last trade (time);Послед. сделка (время)
-XamlStr520;Last trade (origin);Послед. сделка (инициатор)
-XamlStr521;Last trade (id);Послед. сделка (идентификатор)
-XamlStr522;Last trade (volume);Послед. сделка (объем)
-XamlStr523;Last trade (trend);Послед. сделка (тренд)
-XamlStr524;Last trade (price);Послед. сделка (цена)
 XamlStr525;Last market depth;Послед. стакан
 XamlStr526;Last:;Послед.:
 XamlStr527;Settlement;Поставка
@@ -5309,6 +5338,23 @@ Iterations;Iterations;Итерации
 IterationInterval;Interval between iterations.;Интервал между итерациями.
 OrderBuyId;Order id (buy).;Заявка (покупка).
 OrderSellId;Order id (sell).;Заявка (продажа).
+LowBidVolume;Low bid (vol);Наим покупка (объем)
+LowBidVolumeDesc;Volume of the lowest bid.;Объем наименьшей покупки.
+HighAskVolume;High ask (vol);Наиб продажа (объем)
+HighAskVolumeDesc;Volume of the highest ask.;Объем наибольшей продажи.
+UnderlyingBestBidPrice;Under (bid);Актив (покупка)
+UnderlyingBestBidPriceDesc;Underlying asset best bid price.;Лучшая покупка по базовому активу.
+UnderlyingBestAskPrice;Under (ask);Актив (продажа)
+UnderlyingBestAskPriceDesc;Underlying asset best ask price.;Лучшая продажа по базовому активу.
+Median;Median;Медиана
+HighPrice52Week;High (52 week);Наибол (52 недели)
+HighPrice52WeekDesc;The highest price for 52 weeks.;Наибольшая цена за 52 недели.
+LowPrice52Week;Low (52 week);Наимен (52 недели)
+LowPrice52WeekDesc;The lowest price for 52 weeks.;Наименьшая цена за 52 недели.
+LastTradeStringId;Last ID (str);ИД сделки (строк)
+LastTradeStringIdDesc;Last trade ID (string).;ИД последней сделки (строка).
+Appearance;Appearance;Вид
+DiagramElement;The diagram element;Элемент схемы
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12809,7 +12855,6 @@ DocStr7863;Option positions;Опционные позиции
 DocStr7864;To show position charts separately or as a single position. By default, it is displayed as a single position;Показывать графики позиции раздельно или как единую позицию. По умолчанию показывается как единая позиция
 DocStr7865;To show the position chart at the time of expiration. The default is enabled;Показывать график позиции на момент экспирации. По умолчанию включено
 DocStr7866;Whether to use the model {0}. By default, the model is not used;Использовать ли модель {0}. По умолчанию модель не используется
-DocStr7867;The diagram element;Элемент схемы
 DocStr7868;To add a parameter;Добавить параметр
 DocStr7869;To remove a parameter;Удалить параметр
 DocStr7870;To add an incoming connection;Добавить входящее соединение
@@ -16794,3 +16839,33 @@ DocStr12240;Selling party in a trade;Selling party in a trade
 DocStr12241;Fill optimization parameters;Fill optimization parameters
 DocStr12242;The event of total progress change;The event of total progress change
 DocStr12243;The event of single progress change;The event of single progress change
+DocStr12244;S#.Terminal;S#.Terminal
+DocStr12245;S#.Edu;S#.Edu
+DocStr12246;Supported plugins;Supported plugins
+DocStr12247;Extra;Extra
+DocStr12248;Get history data path;Get history data path
+DocStr12249;Directory;Directory
+DocStr12250;History data path;History data path
+DocStr12251;App title with version;App title with version
+DocStr12252;Installed version of the product;Installed version of the product
+DocStr12253;Get currently installed version of the product;Get currently installed version of the product
+DocStr12254;File system path to product installation;File system path to product installation
+DocStr12255;Remove adapter by the specified type;Remove adapter by the specified type
+DocStr12256;Removed adapter or {0};Removed adapter or {0}
+DocStr12257;Recommended value for next {0} (in case of partial requests);Recommended value for next {0} (in case of partial requests)
+DocStr12258;Source ID;Source ID
+DocStr12259;Online mode implementation;Online mode implementation
+DocStr12260;Get real connector version for the specified stub;Get real connector version for the specified stub
+DocStr12261;Stub connector;Stub connector
+DocStr12262;Stub connector version;Stub connector version
+DocStr12263;Real connector version;Real connector version
+DocStr12264;Online mode;Online mode
+DocStr12265;This class is used to register attached property {0};This class is used to register attached property {0}
+DocStr12266;Attached property for help button;Attached property for help button
+DocStr12267;Set attached property value for {0};Set attached property value for {0}
+DocStr12268;Get attached property value for {0};Get attached property value for {0}
+DocStr12269;Ip address list editor;Ip address list editor
+DocStr12270;Addresses dependency property;Addresses dependency property
+DocStr12271;Prompt;Prompt
+DocStr12272;Min value;Min value
+DocStr12273;Max value;Max value

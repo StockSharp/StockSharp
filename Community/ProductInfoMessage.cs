@@ -63,6 +63,12 @@
 		public Currency Price { get; set; }
 
 		/// <summary>
+		/// Price for renew.
+		/// </summary>
+		[DataMember]
+		public Currency RenewPrice { get; set; }
+
+		/// <summary>
 		/// Download count.
 		/// </summary>
 		[DataMember]
@@ -84,7 +90,14 @@
 		/// Product required connectors.
 		/// </summary>
 		[DataMember]
+		[Obsolete("Use SupportedPlugins property.")]
 		public bool IsRequiredConnectors { get; set; }
+
+		/// <summary>
+		/// Supported plugins.
+		/// </summary>
+		[DataMember]
+		public long? SupportedPlugins { get; set; }
 
 		/// <summary>
 		/// Content type.
@@ -96,7 +109,37 @@
 		/// The picture identifier.
 		/// </summary>
 		[DataMember]
-		public long? Picture { get; set; }
+		public long Picture { get; set; }
+
+		/// <summary>
+		/// Extra.
+		/// </summary>
+		[DataMember]
+		public string Extra { get; set; }
+
+		/// <summary>
+		/// Scope.
+		/// </summary>
+		[DataMember]
+		public ProductScopes Scope { get; set; }
+
+		/// <summary>
+		/// Type of <see cref="Price"/>.
+		/// </summary>
+		[DataMember]
+		public ProductPriceTypes PriceType { get; set; }
+
+		/// <summary>
+		/// Latest version.
+		/// </summary>
+		[DataMember]
+		public string LatestVersion { get; set; }
+
+		/// <summary>
+		/// Is approved.
+		/// </summary>
+		[DataMember]
+		public bool IsApproved { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
@@ -139,12 +182,21 @@
 			destination.Tags = Tags;
 			destination.Author = Author;
 			destination.Price = Price?.Clone();
+			destination.RenewPrice = RenewPrice?.Clone();
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
+#pragma warning disable CS0618 // Type or member is obsolete
 			destination.IsRequiredConnectors = IsRequiredConnectors;
+#pragma warning restore CS0618 // Type or member is obsolete
+			destination.SupportedPlugins = SupportedPlugins;
 			destination.ContentType = ContentType;
 			destination.Picture = Picture;
+			destination.Extra = Extra;
+			destination.Scope = Scope;
+			destination.PriceType = PriceType;
+			destination.LatestVersion = LatestVersion;
+			destination.IsApproved = IsApproved;
 		}
 
 		/// <inheritdoc />
@@ -173,6 +225,9 @@
 			if (Price != null)
 				str += $",Price={Price}";
 
+			if (RenewPrice != null)
+				str += $",Renew={RenewPrice}";
+
 			str += $",Downloads={DownloadCount}";
 
 			if (Rating != null)
@@ -184,7 +239,19 @@
 			if (Picture != default)
 				str += $",Picture={Picture}";
 
-			str += $",Connectors={IsRequiredConnectors},Content={ContentType}";
+			str += $",Content={ContentType}";
+
+			if (SupportedPlugins != null)
+				str += $",Supported={SupportedPlugins.Value}";
+
+			if (!Extra.IsEmpty())
+				str += $",Extra={Extra}";
+
+			if (!LatestVersion.IsEmpty())
+				str += $",Ver={LatestVersion}";
+
+			if (!IsApproved)
+				str += $",Approved={IsApproved}";
 
 			return str;
 		}

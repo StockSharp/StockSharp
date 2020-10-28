@@ -6,7 +6,7 @@
 candles, tick trades and order books) from various sources and store them in a 
 local or remote storage. 
 <token>designer</token> can use sources of both historical and real-time data 
-(<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />). Further, the stored 
+(<link xlink:href="db1de349-84ef-4e59-a30b-c34a9d47bed2" />). Further, the stored 
 information is available for use by trading strategies.</para>
 <para>To open the <legacyBold>Market data</legacyBold> tab, switch to the 
 <legacyBold>Common</legacyBold> tab and click the <legacyBold>Market data</legacyBold> 

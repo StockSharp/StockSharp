@@ -2035,6 +2035,10 @@ namespace StockSharp.Algo
 							lastTrade.Id = (long)value;
 							lastTradeChanged = true;
 							break;
+						case Level1Fields.LastTradeStringId:
+							lastTrade.StringId = (string)value;
+							lastTradeChanged = true;
+							break;
 						case Level1Fields.LastTradeTime:
 							lastTrade.Time = (DateTimeOffset)value;
 							lastTradeChanged = true;
@@ -2548,13 +2552,14 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Portfolio.</param>
 		/// <param name="security">Security.</param>
 		/// <param name="strategyId">Strategy ID.</param>
+		/// <param name="side">Side.</param>
 		/// <param name="clientCode">Client code.</param>
 		/// <param name="depoName">Depo name.</param>
 		/// <param name="limitType">Limit type.</param>
 		/// <param name="creator">Creator.</param>
 		/// <param name="isNew">Is newly created.</param>
 		/// <returns>Position.</returns>
-		public static Position GetOrCreatePosition(this IPositionStorage storage, Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType, Func<Portfolio, Security, string, string, string, TPlusLimits?, Position> creator, out bool isNew)
+		public static Position GetOrCreatePosition(this IPositionStorage storage, Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType, Func<Portfolio, Security, string, Sides?, string, string, TPlusLimits?, Position> creator, out bool isNew)
 		{
 			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
@@ -2570,11 +2575,11 @@ namespace StockSharp.Algo
 
 			lock (storage.SyncRoot)
 			{
-				var position = storage.GetPosition(portfolio, security, strategyId, clientCode, depoName, limitType);
+				var position = storage.GetPosition(portfolio, security, strategyId, side, clientCode, depoName, limitType);
 
 				if (position == null)
 				{
-					position = creator(portfolio, security, strategyId, clientCode, depoName, limitType);
+					position = creator(portfolio, security, strategyId, side, clientCode, depoName, limitType);
 					storage.Save(position);
 					isNew = true;
 				}
@@ -3176,10 +3181,10 @@ namespace StockSharp.Algo
 			if (connector is null)
 				throw new ArgumentNullException(nameof(connector));
 
-			connector.Subscribe(new Subscription(DataType.Board, (SecurityMessage)null));
-			connector.Subscribe(new Subscription(DataType.Securities, (SecurityMessage)null));
-			connector.Subscribe(new Subscription(DataType.PositionChanges, (SecurityMessage)null));
-			connector.Subscribe(new Subscription(DataType.Transactions, (SecurityMessage)null));
+			connector.Subscribe(DataType.Board.ToSubscription());
+			connector.Subscribe(DataType.Securities.ToSubscription());
+			connector.Subscribe(DataType.PositionChanges.ToSubscription());
+			connector.Subscribe(DataType.Transactions.ToSubscription());
 		}
 
 		/// <summary>
@@ -3405,6 +3410,20 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(provider));
 
 			return provider.Boards.Filter(criteria);
+		}
+
+		/// <summary>
+		/// Filter boards by code criteria.
+		/// </summary>
+		/// <param name="provider">The exchange boards provider.</param>
+		/// <param name="criteria">Criteria.</param>
+		/// <returns>Found boards.</returns>
+		public static IEnumerable<BoardMessage> LookupBoards2(this IExchangeInfoProvider provider, BoardLookupMessage criteria)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			return provider.Boards.Select(b => b.ToMessage(criteria.TransactionId)).Filter(criteria);
 		}
 
 		/// <summary>

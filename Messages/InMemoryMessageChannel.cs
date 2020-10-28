@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 
 			_queue = queue ?? throw new ArgumentNullException(nameof(queue));
 			_errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
-			
+
 			_queue.Close();
 		}
 
@@ -252,7 +252,12 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public virtual IMessageChannel Clone()
 		{
-			return new InMemoryMessageChannel(_queue, Name, _errorHandler) { MaxMessageCount = MaxMessageCount };
+			return new InMemoryMessageChannel(_queue, Name, _errorHandler)
+			{
+				MaxMessageCount = MaxMessageCount,
+				SuspendMaxCount = SuspendMaxCount,
+				SuspendTimeout = SuspendTimeout,
+			};
 		}
 
 		object ICloneable.Clone()

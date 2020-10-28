@@ -281,6 +281,35 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private class BasketMarketDataSerializer : IMarketDataSerializer<TMessage>
+		{
+			private readonly BasketMarketDataStorage<TMessage> _parent;
+
+			public BasketMarketDataSerializer(BasketMarketDataStorage<TMessage> parent)
+			{
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
+			}
+
+			StorageFormats IMarketDataSerializer.Format => _parent.InnerStorages.First().Serializer.Format;
+
+			TimeSpan IMarketDataSerializer.TimePrecision => _parent.InnerStorages.First().Serializer.TimePrecision;
+
+			IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
+				=> throw new NotSupportedException();
+
+			void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
+				=> throw new NotSupportedException();
+
+			IEnumerable<TMessage> IMarketDataSerializer<TMessage>.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+				=> throw new NotSupportedException();
+
+			void IMarketDataSerializer<TMessage>.Serialize(Stream stream, IEnumerable<TMessage> data, IMarketDataMetaInfo metaInfo)
+				=> throw new NotSupportedException();
+
+			IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+				=> throw new NotSupportedException();
+		}
+
 		private readonly BasketMarketDataStorageInnerList _innerStorages = new BasketMarketDataStorageInnerList();
 		private readonly CachedSynchronizedList<BasketMarketDataStorageEnumerator> _enumerators = new CachedSynchronizedList<BasketMarketDataStorageEnumerator>();
 
@@ -321,24 +350,16 @@ namespace StockSharp.Algo.Storages
 		public bool PassThroughOrderBookInrement { get; set; }
 
 		private void InnerStoragesOnAdded(IMarketDataStorage storage)
-		{
-			AddAction(ActionTypes.Add, storage, _innerStorages.TryGetTransactionId(storage));
-		}
+			=> AddAction(ActionTypes.Add, storage, _innerStorages.TryGetTransactionId(storage));
 
 		private void InnerStoragesOnRemoved(IMarketDataStorage storage)
-		{
-			AddAction(ActionTypes.Remove, storage, 0);
-		}
+			=> AddAction(ActionTypes.Remove, storage, 0);
 
 		private void InnerStoragesOnCleared()
-		{
-			AddAction(ActionTypes.Clear, null, 0);
-		}
+			=> AddAction(ActionTypes.Clear, null, 0);
 
 		private void AddAction(ActionTypes type, IMarketDataStorage storage, long transactionId)
-		{
-			_enumerators.Cache.ForEach(e => e.AddAction(type, storage, transactionId));
-		}
+			=> _enumerators.Cache.ForEach(e => e.AddAction(type, storage, transactionId));
 
 		IEnumerable<DateTime> IMarketDataStorage.Dates
 			=> _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct();
@@ -358,47 +379,28 @@ namespace StockSharp.Algo.Storages
 		}
 
 		int IMarketDataStorage.Save(IEnumerable<Message> data) => throw new NotSupportedException();
-
+		int IMarketDataStorage<TMessage>.Save(IEnumerable<TMessage> data) => throw new NotSupportedException();
+		
 		void IMarketDataStorage.Delete(IEnumerable<Message> data) => throw new NotSupportedException();
-
+		void IMarketDataStorage<TMessage>.Delete(IEnumerable<TMessage> data) => throw new NotSupportedException();
+		
 		void IMarketDataStorage.Delete(DateTime date) => throw new NotSupportedException();
+		
+		IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => Load(date);
+		IEnumerable<TMessage> IMarketDataStorage<TMessage>.Load(DateTime date) => Load(date);
 
-		IEnumerable<TMessage> IMarketDataStorage<TMessage>.Load(DateTime date) => OnLoad(date);
-
-		private class BasketMarketDataSerializer : IMarketDataSerializer<TMessage>
+		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
 		{
-			private readonly BasketMarketDataStorage<TMessage> _parent;
+			date = date.Date.UtcKind();
 
-			public BasketMarketDataSerializer(BasketMarketDataStorage<TMessage> parent)
+			foreach (var inner in _innerStorages.Cache)
 			{
-				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
+				if (inner.Dates.Contains(date))
+					return inner.GetMetaInfo(date);
 			}
 
-			StorageFormats IMarketDataSerializer.Format => _parent.InnerStorages.First().Serializer.Format;
-
-			TimeSpan IMarketDataSerializer.TimePrecision => _parent.InnerStorages.First().Serializer.TimePrecision;
-
-			IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
-				=> throw new NotSupportedException();
-
-			void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
-				=> throw new NotSupportedException();
-
-			IEnumerable<TMessage> IMarketDataSerializer<TMessage>.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-				=> throw new NotSupportedException();
-
-			void IMarketDataSerializer<TMessage>.Serialize(Stream stream, IEnumerable<TMessage> data, IMarketDataMetaInfo metaInfo)
-				=> throw new NotSupportedException();
-
-			IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
-				=> throw new NotSupportedException();
+			return null;
 		}
-
-		int IMarketDataStorage<TMessage>.Save(IEnumerable<TMessage> data) => throw new NotSupportedException();
-		void IMarketDataStorage<TMessage>.Delete(IEnumerable<TMessage> data) => throw new NotSupportedException();
-		IEnumerable<Message> IMarketDataStorage.Load(DateTime date) => OnLoad(date);
-
-		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) => throw new NotSupportedException();
 		
 		private readonly IMarketDataSerializer<TMessage> _serializer;
 		IMarketDataSerializer<TMessage> IMarketDataStorage<TMessage>.Serializer => _serializer;
@@ -409,17 +411,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="date">Date.</param>
 		/// <returns>The messages loader.</returns>
-		public IBasketMarketDataStorageEnumerable<TMessage> Load(DateTime date)
-		{
-			return new BasketEnumerable(this, date);
-		}
-
-		/// <summary>
-		/// To load messages from embedded storages for specified date.
-		/// </summary>
-		/// <param name="date">Date.</param>
-		/// <returns>The messages.</returns>
-		protected virtual IEnumerable<TMessage> OnLoad(DateTime date) => Load(date);
+		public IBasketMarketDataStorageEnumerable<TMessage> Load(DateTime date) => new BasketEnumerable(this, date);
 
 		DateTimeOffset IMarketDataStorageInfo<TMessage>.GetTime(TMessage data) => data.GetServerTime();
 		DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((Message)data).GetServerTime();

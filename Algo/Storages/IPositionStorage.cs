@@ -8,7 +8,7 @@
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using Key = System.Tuple<StockSharp.BusinessEntities.Portfolio, StockSharp.BusinessEntities.Security, string, string, string, StockSharp.Messages.TPlusLimits?>;
+	using Key = System.Tuple<BusinessEntities.Portfolio, BusinessEntities.Security, string, Messages.Sides?, string, string, Messages.TPlusLimits?>;
 
 	/// <summary>
 	/// The interface for access to the position storage.
@@ -109,9 +109,9 @@
 		}
 
 		/// <inheritdoc />
-		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
+		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode = "", string depoName = "", TPlusLimits? limitType = null)
 		{
-			return _positions.TryGetValue(CreateKey(portfolio, security, strategyId, clientCode, depoName, limitType));
+			return _positions.TryGetValue(CreateKey(portfolio, security, strategyId, side, clientCode, depoName, limitType));
 		}
 
 		/// <inheritdoc />
@@ -166,10 +166,10 @@
 			if (position is null)
 				throw new ArgumentNullException(nameof(position));
 
-			return CreateKey(position.Portfolio, position.Security, position.StrategyId, position.ClientCode, position.DepoName, position.LimitType);
+			return CreateKey(position.Portfolio, position.Security, position.StrategyId, position.Side, position.ClientCode, position.DepoName, position.LimitType);
 		}
 
-		private Key CreateKey(Portfolio portfolio, Security security, string strategyId, string clientCode, string depoName, TPlusLimits? limitType)
+		private Key CreateKey(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType)
 		{
 			if (portfolio is null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -183,7 +183,7 @@
 			if (clientCode is null)
 				clientCode = string.Empty;
 
-			return Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, clientCode?.ToLowerInvariant() ?? string.Empty, depoName?.ToLowerInvariant() ?? string.Empty, limitType);
+			return Tuple.Create(portfolio, security, strategyId?.ToLowerInvariant() ?? string.Empty, side, clientCode?.ToLowerInvariant() ?? string.Empty, depoName?.ToLowerInvariant() ?? string.Empty, limitType);
 		}
 	}
 }

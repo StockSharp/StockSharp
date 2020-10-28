@@ -27,11 +27,15 @@
 		[DataMember]
 		public SecurityId SecurityId { get; set; }
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Data type info.
+		/// </summary>
 		[DataMember]
 		public DataType RequestDataType { get; set; }
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Format.
+		/// </summary>
 		[DataMember]
 		public StorageFormats? Format { get; set; }
 

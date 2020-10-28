@@ -133,8 +133,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Contains portfolio information. Also, there is the <codeEntityReference>T:StockSharp.Messages.PortfolioChangeMessage</codeEntityReference>
-    		message - information on portfolio changes.</para>
+    		<para>Contains portfolio information.</para>
     	</entry>
   		</row>
   		
@@ -210,6 +209,53 @@
    		</entry>
     	<entry>
     		<para>Contains current time information.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.TimeFrameLookupMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Requests list of supported timeframes. The request result returns by means of the
+    		<codeEntityReference>T:StockSharp.Messages.TimeFrameInfoMessage</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.TimeFrameInfoMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Timeframes search result message.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SubscriptionResponseMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>A response of subscription request (subscribe or unsubscribe). In case of error, a description will be put into
+    		<codeEntityReference>P:StockSharp.Messages.SubscriptionResponseMessage.Error</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SubscriptionOnlineMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Message means a subscription goes online.</para>
+    	</entry>
+  		</row>
+
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Message means a subscription finished in case of received all necessary data.</para>
     	</entry>
   		</row>
 	</table>

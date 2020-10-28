@@ -15,6 +15,7 @@ P:StockSharp.Deribit.DeribitMessageAdapter.Secret/inheritdoc;DocStr8459
 P:StockSharp.Deribit.DeribitMessageAdapter.IsDemo/inheritdoc;DocStr8459
 P:StockSharp.Deribit.DeribitMessageAdapter.Address/inheritdoc;DocStr8459
 P:StockSharp.Deribit.DeribitMessageAdapter.UseSsl/summary;SslProtocol
+P:StockSharp.Deribit.DeribitMessageAdapter.CancelOnDisconnect/summary;CancelOnDisconnect
 M:StockSharp.Deribit.DeribitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Deribit.DeribitMessageAdapter.ToString/inheritdoc;DocStr8459

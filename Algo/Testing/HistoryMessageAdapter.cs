@@ -133,10 +133,14 @@ namespace StockSharp.Algo.Testing
 			this.AddSupportedMessage(ExtendedMessageTypes.ChangeTimeInterval, null);
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Date in history for starting the paper trading.
+		/// </summary>
 		public DateTimeOffset StartDate { get; set; }
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Date in history to stop the paper trading (date is included).
+		/// </summary>
 		public DateTimeOffset StopDate { get; set; }
 
 		/// <summary>
@@ -283,9 +287,11 @@ namespace StockSharp.Algo.Testing
 							? SecurityProvider.LookupAll() 
 							: SecurityProvider.Lookup(lookupMsg);
 
+					var processedBoards = new HashSet<ExchangeBoard>();
+
 					foreach (var security in securities)
 					{
-						if (security.Board != null)
+						if (security.Board != null && processedBoards.Add(security.Board))
 							SendOutMessage(security.Board.ToMessage());
 
 						SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));

@@ -690,5 +690,44 @@ namespace StockSharp.Algo.Storages.Binary
 			metaInfo.FirstSeqNum += reader.ReadLong();
 			message.SeqNum = metaInfo.FirstSeqNum;
 		}
+
+		public static void WriteNullableBool(this BitArrayWriter writer, bool? value)
+		{
+			writer.Write(value != null);
+
+			if (value is null)
+				return;
+
+			writer.Write(value.Value);
+		}
+
+		public static bool? ReadNullableBool(this BitArrayReader reader)
+			=> reader.Read() ? reader.Read() : (bool?)null;
+
+		public static void WriteNullableSide(this BitArrayWriter writer, Sides? value)
+		{
+			writer.Write(value != null);
+
+			if (value is null)
+				return;
+
+			writer.Write(value.Value == Sides.Buy);
+		}
+
+		public static Sides? ReadNullableSide(this BitArrayReader reader)
+			=> reader.Read() ? reader.Read() ? Sides.Buy : Sides.Sell : (Sides?)null;
+
+		public static void WriteNullableDecimal(this BitArrayWriter writer, decimal? value)
+		{
+			writer.Write(value != null);
+
+			if (value is null)
+				return;
+
+			writer.WriteDecimal(value.Value);
+		}
+
+		public static decimal? ReadNullableDecimal(this BitArrayReader reader)
+			=> reader.Read() ? reader.ReadDecimal() : (decimal?)null;
 	}
 }

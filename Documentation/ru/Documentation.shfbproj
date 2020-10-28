@@ -236,6 +236,12 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.MoexLchi.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.UkrExh.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.UkrExh.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bitalong.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bitalong.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.DigitexFutures.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.DigitexFutures.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.PrizmBit.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.PrizmBit.xml" />
     </DocumentationSources>
     <CopyrightHref>https://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2020 - StockSharp LP</CopyrightText>
@@ -342,6 +348,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\API_ConnectorsSubscriptions.aml" />
     <None Include="Topics\API_GUI_Settings_Gopax.aml" />
     <None Include="Topics\API_GUI_Settings_CoinHub.aml" />
     <None Include="Topics\API_GUI_Settings_Hotbit.aml" />
@@ -475,6 +482,9 @@
     <None Include="Topics\API_GUI_Settings_AlorHistory.aml" />
     <None Include="Topics\API_GUI_Settings_AlfaDirect.aml" />
     <None Include="Topics\API_GUI_Settings_Bibox.aml" />
+    <None Include="Topics\API_GUI_Settings_Bitalong.aml" />
+    <None Include="Topics\API_GUI_Settings_DigitexFutures.aml" />
+    <None Include="Topics\API_GUI_Settings_PrizmBit.aml" />
     <None Include="Topics\HydraCommonConnectionSettings.aml" />
     <None Include="Topics\API_Getting_news_data.aml" />
     <None Include="Topics\API_Getting_historical_data.aml" />
@@ -602,6 +612,15 @@
     <None Include="Topics\BW.aml" />
     <None Include="Topics\BitMax.aml" />
     <None Include="Topics\LBank.aml" />
+    <None Include="Topics\PrizmBitSample.aml" />
+    <None Include="Topics\PrizmBitConnectorsSettings.aml" />
+    <None Include="Topics\PrizmBit.aml" />
+    <None Include="Topics\BitalongSample.aml" />
+    <None Include="Topics\BitalongConnectorsSettings.aml" />
+    <None Include="Topics\Bitalong.aml" />
+    <None Include="Topics\DigitexFuturesSample.aml" />
+    <None Include="Topics\DigitexFuturesConnectorsSettings.aml" />
+    <None Include="Topics\DigitexFutures.aml" />
     <None Include="Topics\Designer_run_strategy_on_server.aml" />
     <None Include="Topics\API.RemoteManager.aml" />
     <None Include="Topics\Shell_run_Designer_strategy.aml" />
@@ -616,7 +635,7 @@
     <None Include="Topics\Shell_Connection_settings.aml" />
     <None Include="Topics\Shell_Quick_start.aml" />
     <None Include="Topics\Shell_Installation.aml" />
-    <None Include="Topics\S#Shell.aml" />
+    <None Include="Topics\Shell.aml" />
     <None Include="Topics\Designer_TradeAllowedDiagramElement.aml" />
     <None Include="Topics\Designer_MarketDepthTruncateDiagramElement.aml" />
     <None Include="Topics\Designer_StrategyPnLDiagramElement.aml" />
@@ -4695,6 +4714,18 @@
     <Image Include="Art\API_GUI_Settings_Bibox.png">
       <ImageId>API_GUI_Settings_Bibox</ImageId>
       <AlternateText>API GUI Settings Bibox</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_Bitalong.png">
+      <ImageId>API_GUI_Settings_Bitalong</ImageId>
+      <AlternateText>API GUI Settings Bitalong</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_DigitexFutures.png">
+      <ImageId>API_GUI_Settings_DigitexFutures</ImageId>
+      <AlternateText>API GUI Settings DigitexFutures</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_PrizmBit.png">
+      <ImageId>API_GUI_Settings_PrizmBit</ImageId>
+      <AlternateText>API GUI Settings PrizmBit</AlternateText>
     </Image>
     <Image Include="Art\API_GUI_ReconnectionSettings.png">
       <ImageId>API_GUI_ReconnectionSettings</ImageId>

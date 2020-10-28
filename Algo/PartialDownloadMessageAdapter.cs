@@ -476,6 +476,9 @@
 
 							var origin = info.Origin;
 
+							if (finishMsg.NextFrom != null)
+								info.TryUpdateNextFrom(finishMsg.NextFrom.Value);
+
 							if (info.LastIteration)
 							{
 								_original.Remove(origin.TransactionId);

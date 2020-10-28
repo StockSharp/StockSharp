@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName, positionMsg.StrategyId);
+						var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName, positionMsg.StrategyId, positionMsg.Side);
 
 						if (position == null)
 							break;
@@ -231,8 +231,8 @@ namespace StockSharp.Algo.Storages
 
 			var transId = msg.TransactionId;
 
-			foreach (var board in _exchangeInfoProvider.LookupBoards(msg))
-				RaiseNewOutMessage(board.ToMessage(transId).SetSubscriptionIds(subscriptionId: transId));
+			foreach (var board in _exchangeInfoProvider.LookupBoards2(msg))
+				RaiseNewOutMessage(board.SetSubscriptionIds(subscriptionId: transId));
 
 			return base.OnSendInMessage(msg);
 		}
@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Storages
 			return base.OnSendInMessage(msg);
 		}
 
-		private Position GetPosition(SecurityId securityId, string portfolioName, string strategyId)
+		private Position GetPosition(SecurityId securityId, string portfolioName, string strategyId, Sides? side)
 		{
 			var security = (!securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
 			{
@@ -304,11 +304,12 @@ namespace StockSharp.Algo.Storages
 				_positionStorage.Save(portfolio);
 			}
 
-			return _positionStorage.GetPosition(portfolio, security, strategyId) ?? new Position
+			return _positionStorage.GetPosition(portfolio, security, strategyId, side) ?? new Position
 			{
 				Security = security,
 				Portfolio = portfolio,
 				StrategyId = strategyId,
+				Side = side,
 			};
 		}
 

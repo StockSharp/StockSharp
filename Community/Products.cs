@@ -1,11 +1,13 @@
 namespace StockSharp.Community
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
 	/// Products.
 	/// </summary>
 	[DataContract]
+	[Obsolete]
 	public enum Products
 	{
 		/// <summary>

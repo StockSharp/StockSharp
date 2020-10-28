@@ -857,7 +857,7 @@ namespace StockSharp.Algo
 							}
 
 							if (Adapter.IsMessageSupported(type) && !_subscriptionManager.Subscriptions.Any(s => s.SubscriptionMessage.DataType == dataType && s.SubscriptionMessage.To == null))
-								_subscriptionManager.Subscribe(new Subscription(dataType, (SecurityMessage)null));
+								_subscriptionManager.Subscribe(dataType.ToSubscription());
 						}
 
 						foreach (var type in _lookupMessagesOnConnect.Cache)
@@ -1031,7 +1031,11 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public Portfolio LookupByPortfolioName(string name) => GetPortfolio(name, null, out _);
 
-		/// <inheritdoc />
+		/// <summary>
+		/// To get the portfolio by the code name.
+		/// </summary>
+		/// <param name="name">Portfolio code name.</param>
+		/// <returns>The got portfolio. If there is no portfolio by given criteria, <see langword="null" /> is returned.</returns>
 		public Portfolio GetPortfolio(string name) => LookupByPortfolioName(name);
 
 		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio, out bool isNew)
@@ -1130,7 +1134,7 @@ namespace StockSharp.Algo
 					message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
 				}
 
-				var position = GetPosition(portfolio, security, message.StrategyId, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+				var position = GetPosition(portfolio, security, message.StrategyId, message.Side, message.ClientCode, message.DepoName, message.LimitType, message.Description);
 				position.ApplyChanges(message);
 
 				RaisePositionChanged(position);
@@ -1389,6 +1393,12 @@ namespace StockSharp.Algo
 			{
 				info.SetValue(time, Level1Fields.LastTradeId, message.TradeId.Value);
 				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId.Value));
+			}
+
+			if (!message.TradeStringId.IsEmpty())
+			{
+				info.SetValue(time, Level1Fields.LastTradeStringId, message.TradeStringId);
+				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeStringId, message.TradeStringId));
 			}
 
 			if (message.TradeVolume != null)

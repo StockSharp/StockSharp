@@ -20,14 +20,13 @@ Connector Connector = new Connector();
 var address = "<Address>".To<IPAddress>();
 var messageAdapter = new PlazaMessageAdapter(Connector.TransactionIdGenerator)
 {
-    Login = "<Your Login>",
-    Password = "<Your Password>".To<SecureString>(),
-    Address = SmartComAddresses.Demo,
 };
 
 Connector.Adapter.InnerAdapters.Add(messageAdapter);
-...	
-messageAdapter.Tables.Add(messageAdapter.TableRegistry.MarketMakingFuture);]]></code>
+...
+// добавляем новую таблицу к стандартным
+messageAdapter.Tables = messageAdapter.Tables.Concat(new[] { messageAdapter.TableRegistry.MarketMakingFuture.Id });
+]]></code>
 
       <para>После добавления таблицы вся информация по ней будет приходить в обработчики событий
       <codeEntityReference qualifyHint="false">E:StockSharp.Plaza.Metadata.PlazaTable.Inserted</codeEntityReference> и 
@@ -35,10 +34,14 @@ messageAdapter.Tables.Add(messageAdapter.TableRegistry.MarketMakingFuture);]]></
       
 	  <code language="C#"><![CDATA[
 //Подписка на событие добавления информации по таблице
-messageAdapter.TableRegistry.MarketMakingFuture.Inserted += OnMarketMakingFutureStreamInserted;
+messageAdapter.StreamManager.Inserted += OnStreamInserted;
 
-void OnMarketMakingFutureStreamInserted(PlazaRecord record)
+void OnStreamInserted(PlazaStream stream, PlazaTable table, PlazaRecord record)
 {
+	// обрабатываем только нужную таблицу
+	if (table != messageAdapter.TableRegistry.MarketMakingFuture)
+		return;
+		
     //Метадата для колонок таблицы обязательств ММ по фьючерсам
     var metadata = messageAdapter.TableRegistry.ColumnRegistry.MarketMakingFutureParams;
 

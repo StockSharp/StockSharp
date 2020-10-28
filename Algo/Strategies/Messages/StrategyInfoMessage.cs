@@ -33,6 +33,12 @@ namespace StockSharp.Algo.Strategies.Messages
 		public long Id { get; set; }
 
 		/// <summary>
+		/// Product ID.
+		/// </summary>
+		[DataMember]
+		public long ProductId { get; set; }
+
+		/// <summary>
 		/// Strategy ID.
 		/// </summary>
 		[DataMember]
@@ -155,6 +161,7 @@ namespace StockSharp.Algo.Strategies.Messages
 			base.CopyTo(destination);
 
 			destination.Id = Id;
+			destination.ProductId = ProductId;
 			destination.StrategyId = StrategyId;
 			destination.Name = Name;
 			destination.Description = Description;

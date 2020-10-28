@@ -236,6 +236,7 @@ P:StockSharp.Messages.ChangePasswordMessage.TransactionId/inheritdoc;DocStr8459
 P:StockSharp.Messages.ChangePasswordMessage.Error/inheritdoc;DocStr8459
 P:StockSharp.Messages.ChangePasswordMessage.NewPassword/summary;XamlStr360
 M:StockSharp.Messages.ChangePasswordMessage.CopyTo(StockSharp.Messages.ChangePasswordMessage)/inheritdoc;DocStr8459
+M:StockSharp.Messages.ChangePasswordMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.ChannelMessageAdapter/summary;DocStr2522
 M:StockSharp.Messages.ChannelMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,StockSharp.Messages.IMessageChannel)/summary;DocStr1
 M:StockSharp.Messages.ChannelMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageChannel,StockSharp.Messages.IMessageChannel)/param/innerAdapter;DocStr8563
@@ -1016,6 +1017,10 @@ M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerat
 M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerator)/param/adapterType;DocStr11202
 M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerator)/param/idGenerator;DocStr3311
 M:StockSharp.Messages.Extensions.CreateAdapter(System.Type,Ecng.Common.IdGenerator)/returns;DocStr8766
+M:StockSharp.Messages.Extensions.TryRemoveWrapper``1(StockSharp.Messages.IMessageAdapter)/summary;DocStr12255
+M:StockSharp.Messages.Extensions.TryRemoveWrapper``1(StockSharp.Messages.IMessageAdapter)/typeparam/TAdapter;DocStr2517
+M:StockSharp.Messages.Extensions.TryRemoveWrapper``1(StockSharp.Messages.IMessageAdapter)/param/adapter;Adapter
+M:StockSharp.Messages.Extensions.TryRemoveWrapper``1(StockSharp.Messages.IMessageAdapter)/returns;DocStr12256
 M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapter)/summary;DocStr11194
 M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapter)/typeparam/TAdapter;DocStr2517
 M:StockSharp.Messages.Extensions.FindAdapter``1(StockSharp.Messages.IMessageAdapter)/param/adapter;Adapter
@@ -1446,6 +1451,13 @@ M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.Nullable{StockSharp.Me
 M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.Nullable{StockSharp.Messages.SecurityStates})/param/type;DocStr2485
 M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.Nullable{StockSharp.Messages.SecurityStates})/param/value;DocStr2486
 M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.Nullable{StockSharp.Messages.SecurityStates})/returns;DocStr2484
+M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.String)/summary;DocStr9947
+M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.String)/typeparam/TMessage;DocStr2482
+M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.String)/typeparam/TChange;DocStr2485
+M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.String)/param/message;DocStr2484
+M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.String)/param/type;DocStr2485
+M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.String)/param/value;DocStr2486
+M:StockSharp.Messages.Extensions.TryAdd``2(``0,``1,System.String)/returns;DocStr2484
 M:StockSharp.Messages.Extensions.Add``2(``0,``1,StockSharp.Messages.Sides)/summary;DocStr2481
 M:StockSharp.Messages.Extensions.Add``2(``0,``1,StockSharp.Messages.Sides)/typeparam/TMessage;DocStr2482
 M:StockSharp.Messages.Extensions.Add``2(``0,``1,StockSharp.Messages.Sides)/typeparam/TChange;DocStr2485
@@ -1859,7 +1871,7 @@ F:StockSharp.Messages.Level1Fields.OpenPrice/summary;Str79
 F:StockSharp.Messages.Level1Fields.HighPrice/summary;XamlStr830
 F:StockSharp.Messages.Level1Fields.LowPrice/summary;XamlStr831
 F:StockSharp.Messages.Level1Fields.ClosePrice/summary;ClosingPrice
-F:StockSharp.Messages.Level1Fields.LastTrade/summary;XamlStr518
+F:StockSharp.Messages.Level1Fields.LastTrade/summary;Str289
 F:StockSharp.Messages.Level1Fields.StepPrice/summary;Str290
 F:StockSharp.Messages.Level1Fields.BestBid/summary;Str565
 F:StockSharp.Messages.Level1Fields.BestAsk/summary;BestAsk
@@ -1966,6 +1978,14 @@ F:StockSharp.Messages.Level1Fields.LastTradeVolumeLow/summary;LastTradeVolumeLow
 F:StockSharp.Messages.Level1Fields.LastTradeVolumeHigh/summary;LastTradeVolumeHighDesc
 F:StockSharp.Messages.Level1Fields.OptionMargin/summary;OptionMarginDesc
 F:StockSharp.Messages.Level1Fields.OptionSyntheticMargin/summary;OptionSyntheticMarginDesc
+F:StockSharp.Messages.Level1Fields.LowBidVolume/summary;LowBidVolumeDesc
+F:StockSharp.Messages.Level1Fields.HighAskVolume/summary;HighAskVolumeDesc
+F:StockSharp.Messages.Level1Fields.UnderlyingBestBidPrice/summary;UnderlyingBestBidPriceDesc
+F:StockSharp.Messages.Level1Fields.UnderlyingBestAskPrice/summary;UnderlyingBestAskPriceDesc
+F:StockSharp.Messages.Level1Fields.MedianPrice/summary;Str843
+F:StockSharp.Messages.Level1Fields.HighPrice52Week/summary;HighPrice52WeekDesc
+F:StockSharp.Messages.Level1Fields.LowPrice52Week/summary;LowPrice52WeekDesc
+F:StockSharp.Messages.Level1Fields.LastTradeStringId/summary;LastTradeStringIdDesc
 T:StockSharp.Messages.Level1ChangeMessage/summary;DocStr4470
 P:StockSharp.Messages.Level1ChangeMessage.SecurityId/inheritdoc;DocStr8459
 P:StockSharp.Messages.Level1ChangeMessage.SeqNum/inheritdoc;DocStr8459
@@ -2106,8 +2126,9 @@ M:StockSharp.Messages.MessageAdapter.SendSubscriptionReply(System.Int64,System.E
 M:StockSharp.Messages.MessageAdapter.SendSubscriptionReply(System.Int64,System.Exception)/param/error;DocStr4477
 M:StockSharp.Messages.MessageAdapter.SendSubscriptionNotSupported(System.Int64)/summary;DocStr4332
 M:StockSharp.Messages.MessageAdapter.SendSubscriptionNotSupported(System.Int64)/param/originalTransactionId;DocStr4333
-M:StockSharp.Messages.MessageAdapter.SendSubscriptionFinished(System.Int64)/summary;DocStr4332
-M:StockSharp.Messages.MessageAdapter.SendSubscriptionFinished(System.Int64)/param/originalTransactionId;DocStr4333
+M:StockSharp.Messages.MessageAdapter.SendSubscriptionFinished(System.Int64,System.Nullable{System.DateTimeOffset})/summary;DocStr4332
+M:StockSharp.Messages.MessageAdapter.SendSubscriptionFinished(System.Int64,System.Nullable{System.DateTimeOffset})/param/originalTransactionId;DocStr4333
+M:StockSharp.Messages.MessageAdapter.SendSubscriptionFinished(System.Int64,System.Nullable{System.DateTimeOffset})/param/nextFrom;DocStr608
 M:StockSharp.Messages.MessageAdapter.SendSubscriptionOnline(System.Int64)/summary;DocStr4332
 M:StockSharp.Messages.MessageAdapter.SendSubscriptionOnline(System.Int64)/param/originalTransactionId;DocStr4333
 M:StockSharp.Messages.MessageAdapter.SendSubscriptionResult(StockSharp.Messages.ISubscriptionMessage)/summary;DocStr11549
@@ -2455,6 +2476,7 @@ F:StockSharp.Messages.OrderTypes.Conditional/summary;DocStr4424
 T:StockSharp.Messages.PortfolioLookupMessage/summary;DocStr11390
 M:StockSharp.Messages.PortfolioLookupMessage.#ctor/summary;DocStr1
 P:StockSharp.Messages.PortfolioLookupMessage.StrategyId/inheritdoc;DocStr8459
+P:StockSharp.Messages.PortfolioLookupMessage.Side/summary;Side
 P:StockSharp.Messages.PortfolioLookupMessage.DataType/inheritdoc;DocStr8459
 P:StockSharp.Messages.PortfolioLookupMessage.SecurityId/inheritdoc;DocStr8459
 M:StockSharp.Messages.PortfolioLookupMessage.Clone/summary;DocStr643
@@ -2528,6 +2550,7 @@ P:StockSharp.Messages.PositionChangeMessage.LimitType/summary;DocStr2934
 P:StockSharp.Messages.PositionChangeMessage.Description/summary;Str269
 P:StockSharp.Messages.PositionChangeMessage.BoardCode/summary;DocStr4375
 P:StockSharp.Messages.PositionChangeMessage.StrategyId/inheritdoc;DocStr8459
+P:StockSharp.Messages.PositionChangeMessage.Side/summary;Side
 M:StockSharp.Messages.PositionChangeMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.PositionChangeMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
 M:StockSharp.Messages.PositionChangeMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
@@ -2835,6 +2858,9 @@ F:StockSharp.Messages.Sides.Buy/summary;Str403
 F:StockSharp.Messages.Sides.Sell/summary;Sell
 T:StockSharp.Messages.SubscriptionFinishedMessage/summary;DocStr9385
 M:StockSharp.Messages.SubscriptionFinishedMessage.#ctor/summary;DocStr93
+P:StockSharp.Messages.SubscriptionFinishedMessage.NextFrom/summary;DocStr12257
+M:StockSharp.Messages.SubscriptionFinishedMessage.CopyTo(StockSharp.Messages.SubscriptionFinishedMessage)/inheritdoc;DocStr8459
+M:StockSharp.Messages.SubscriptionFinishedMessage.ToString/inheritdoc;DocStr8459
 T:StockSharp.Messages.SubscriptionListRequestMessage/summary;DocStr11121
 M:StockSharp.Messages.SubscriptionListRequestMessage.#ctor/summary;DocStr93
 P:StockSharp.Messages.SubscriptionListRequestMessage.DataType/inheritdoc;DocStr8459

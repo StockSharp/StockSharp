@@ -22,6 +22,7 @@
 		<para>Cм. также <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.</para>
 		<para><legacyBold>Крипто-трейдер</legacyBold></para>
 <para><token>Binance</token>,
+<token>Bitalong</token>,
 <token>Bitbank</token>,
 <token>Bitexbook</token>,
 <token>Bitfinex</token>,
@@ -40,6 +41,7 @@
 <token>Deribit</token>,
 <token>Exmo</token>,
 <token>Digifinex</token>,
+<token>DigitexFutures</token>,
 <token>Gdax</token>,
 <token>HitBtc</token>,
 <token>Huobi</token>,
@@ -51,6 +53,7 @@
 <token>Okcoin</token>,
 <token>Okex</token>,
 <token>Poloniex</token>,
+<token>PrizmBit</token>,
 <token>Quoinex</token>,
 <token>TradeOgre</token>,
 <token>Yobit</token>,
@@ -107,7 +110,7 @@
   					<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - прямое подключение к торгам на биржах LSE и/или NASDAQ по протоколу ITCH.</para>
   				</listItem>
   				<listItem>
-  					<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - прямое подключение к торгам по протоколу FIX/FAST (список поддерживаемых площадок на странице <token>stocksharppricing</token>).</para>
+  					<para><link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link> - прямое подключение к торгам по протоколу FIX/FAST (список поддерживаемых площадок на странице <token>stocksharppricing</token>).</para>
   				</listItem>
   				<listItem>
   					<para><link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db">TWIME</link> - коннектор для управления заявками на срочном рынке Московской Биржи.</para>
