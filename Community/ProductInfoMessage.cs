@@ -57,10 +57,33 @@
 		public long Author { get; set; }
 
 		/// <summary>
-		/// Price.
+		/// Per month.
 		/// </summary>
 		[DataMember]
-		public Currency Price { get; set; }
+		public Currency MonthlyPrice { get; set; }
+
+		/// <summary>
+		/// Annual.
+		/// </summary>
+		[DataMember]
+		public Currency AnnualPrice { get; set; }
+
+		/// <summary>
+		/// Lifetime.
+		/// </summary>
+		[DataMember]
+		public Currency LifetimePrice { get; set; }
+
+		/// <summary>
+		/// Lifetime.
+		/// </summary>
+		[DataMember]
+		[Obsolete]
+		public Currency Price
+		{
+			get => LifetimePrice;
+			set => LifetimePrice = value;
+		}
 
 		/// <summary>
 		/// Price for renew.
@@ -127,6 +150,7 @@
 		/// Type of <see cref="Price"/>.
 		/// </summary>
 		[DataMember]
+		[Obsolete("Use MonthlyPrice, AnnualPrice or LifetimePrice properties.")]
 		public ProductPriceTypes PriceType { get; set; }
 
 		/// <summary>
@@ -181,20 +205,22 @@
 			destination.Repository = Repository;
 			destination.Tags = Tags;
 			destination.Author = Author;
-			destination.Price = Price?.Clone();
+			destination.MonthlyPrice = MonthlyPrice?.Clone();
+			destination.AnnualPrice = AnnualPrice?.Clone();
+			destination.LifetimePrice = LifetimePrice?.Clone();
 			destination.RenewPrice = RenewPrice?.Clone();
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
 #pragma warning disable CS0618 // Type or member is obsolete
 			destination.IsRequiredConnectors = IsRequiredConnectors;
+			destination.PriceType = PriceType;
 #pragma warning restore CS0618 // Type or member is obsolete
 			destination.SupportedPlugins = SupportedPlugins;
 			destination.ContentType = ContentType;
 			destination.Picture = Picture;
 			destination.Extra = Extra;
 			destination.Scope = Scope;
-			destination.PriceType = PriceType;
 			destination.LatestVersion = LatestVersion;
 			destination.IsApproved = IsApproved;
 		}
@@ -222,8 +248,14 @@
 			if (Author != 0)
 				str += $",Author={Author}";
 
-			if (Price != null)
-				str += $",Price={Price}";
+			if (MonthlyPrice != null)
+				str += $",Monthly={MonthlyPrice}";
+
+			if (AnnualPrice != null)
+				str += $",Annual={AnnualPrice}";
+
+			if (LifetimePrice != null)
+				str += $",Life={LifetimePrice}";
 
 			if (RenewPrice != null)
 				str += $",Renew={RenewPrice}";
