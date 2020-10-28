@@ -18,6 +18,86 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// New version must be greater than current.
+		/// </summary>
+		public const string NewVersionMustBeGreaterKey = nameof(NewVersionMustBeGreater);
+
+		/// <summary>
+		/// New version must be greater than current.
+		/// </summary>
+		public static string NewVersionMustBeGreater => GetString(NewVersionMustBeGreaterKey);
+
+		/// <summary>
+		/// Current version
+		/// </summary>
+		public const string CurrentVersionKey = nameof(CurrentVersion);
+
+		/// <summary>
+		/// Current version
+		/// </summary>
+		public static string CurrentVersion => GetString(CurrentVersionKey);
+
+		/// <summary>
+		/// New version
+		/// </summary>
+		public const string NewVersionKey = nameof(NewVersion);
+
+		/// <summary>
+		/// New version
+		/// </summary>
+		public static string NewVersion => GetString(NewVersionKey);
+
+		/// <summary>
+		/// Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.
+		/// </summary>
+		public const string SelectCsprojForProductKey = nameof(SelectCsprojForProduct);
+
+		/// <summary>
+		/// Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.
+		/// </summary>
+		public static string SelectCsprojForProduct => GetString(SelectCsprojForProductKey);
+
+		/// <summary>
+		/// You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core)
+		/// </summary>
+		public const string DotNetCoreSDK31NotInstalledKey = nameof(DotNetCoreSDK31NotInstalled);
+
+		/// <summary>
+		/// You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core)
+		/// </summary>
+		public static string DotNetCoreSDK31NotInstalled => GetString(DotNetCoreSDK31NotInstalledKey);
+
+		/// <summary>
+		/// Select image
+		/// </summary>
+		public const string SelectImageKey = nameof(SelectImage);
+
+		/// <summary>
+		/// Select image
+		/// </summary>
+		public static string SelectImage => GetString(SelectImageKey);
+
+		/// <summary>
+		/// Icon
+		/// </summary>
+		public const string IconKey = nameof(Icon);
+
+		/// <summary>
+		/// Icon
+		/// </summary>
+		public static string Icon => GetString(IconKey);
+
+		/// <summary>
+		/// You cannot create products with access level '{0}'.
+		/// </summary>
+		public const string InvalidProductAccessParamsKey = nameof(InvalidProductAccessParams);
+
+		/// <summary>
+		/// You cannot create products with access level '{0}'.
+		/// </summary>
+		public static string InvalidProductAccessParams => GetString(InvalidProductAccessParamsKey);
+
+		/// <summary>
 		/// User lookup error
 		/// </summary>
 		public const string UserLookupErrorKey = nameof(UserLookupError);

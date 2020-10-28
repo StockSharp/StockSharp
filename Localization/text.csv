@@ -1,4 +1,12 @@
-﻿UserLookupError;User lookup error;Ошибка поиска пользователя
+﻿NewVersionMustBeGreater;New version must be greater than current.;Новая версия должна быть больше текущей.
+CurrentVersion;Current version;Текущая версия
+NewVersion;New version;Новая версия
+SelectCsprojForProduct;Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.;Выберите проектный файл (.csproj) вашего продукта. Перед публикацией проект должен быть построен в Visual Studio в конфигурации Release.
+DotNetCoreSDK31NotInstalled;You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core);Чтобы публиковать пакеты, необходимо установить .NET Core SDK v3.1+ (https://dotnet.microsoft.com/download/dotnet-core)
+SelectImage;Select image;Выберите изображение
+Icon;Icon;Иконка
+InvalidProductAccessParams;You cannot create products with access level '{0}'.;Вы не можете создавать продукты с уровнем доступа '{0}'.
+UserLookupError;User lookup error;Ошибка поиска пользователя
 AddUser;Add user;Добавить пользователя
 ProductType;Product type;Тип продукта
 ProductAccessControl;Product access;Доступ к продукту
@@ -7,7 +15,7 @@ RestrictedProduct;Visible to all, available to selected users;Виден все�
 PrivateProduct;Visible and available to selected users only;Виден и доступен только выбранным пользователям
 RenewPrice;Renew price;Цена обновления
 PurchasePeriod;Purchase period;Период покупки
-ProductUserList;Пользователи с доступом к продукту;Users with product access
+ProductUserList;Users with product access;Пользователи с доступом к продукту
 StartTyping;Start typing;Начните набирать
 NugetPackageId;Nuget package id;Идентификатор пакета Nuget
 SaveNewProductFirst;First you need to complete previous product creation.;Сначала необходимо завершить создание предыдущего продукта.
