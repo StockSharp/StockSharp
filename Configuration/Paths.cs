@@ -91,23 +91,7 @@
 		/// <summary>
 		/// App title with version.
 		/// </summary>
-		public static string AppNameWithVersion
-		{
-			get
-			{
-				string version = null;
-
-				try
-				{
-					version = InstalledVersion;
-				}
-				catch
-				{
-				}
-
-				return $"{AppName} v{version}";
-			}
-		}
+		public static string AppNameWithVersion => $"{AppName} v{InstalledVersion}";
 
 		/// <summary>
 		/// The path to directory with all applications.
@@ -219,7 +203,25 @@
 		/// <summary>
 		/// Installed version of the product.
 		/// </summary>
-		public static string InstalledVersion => GetInstalledVersion(Directory.GetCurrentDirectory());
+		public static string InstalledVersion
+		{
+			get
+			{
+				string version;
+
+				try
+				{
+					version = GetInstalledVersion(Directory.GetCurrentDirectory());
+				}
+				catch
+				{
+
+					version = Assembly.GetEntryAssembly().GetName().Version.To<string>();
+				}
+
+				return version;
+			}
+		}
 
 		/// <summary>
 		/// Get currently installed version of the product.
