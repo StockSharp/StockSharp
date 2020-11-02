@@ -2,81 +2,73 @@
 <topic id="2a830015-5cfb-4468-8538-4e94820b3659" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Для импорта инструментов нужно выбрать вкладку <legacyBold>Импорт => Инструменты</legacyBold>.</para>
+     <para>Для импорта инструментов нужно выбрать вкладку <legacyBold>Импорт => Инструменты</legacyBold>.</para>
       
        <mediaLink>
 		  		<image placement="left" xlink:href="hydra_import_securities" />
 	   </mediaLink>
 	   
-	   <procedure>
+	   
       <title>Процесс импорта инструментов</title>
       <steps class="ordered">
         <step>
-          <content>
-          	<para> Выполнить <legacyBold>Настройки импорта из CSV</legacyBold>.</para>
-			<list class="bullet">
-			  	<listItem>
-  					<para><legacyBold>Имя файла</legacyBold> - полный путь к CSV файлу.</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>Директория с данными</legacyBold> - директория с данными.</para>
-  				</listItem>
-  				<listItem>
-  					<para>
-  					<legacyBold>Маска файла</legacyBold> - маска файла,
-  					которая используется при сканировании директории. Например, candle_*.csv.</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>Разделитель колонок</legacyBold> - разделитель колонок. Табуляция обозначается TAB.</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>Отступ с начала</legacyBold> - количество строчек с начала файла, которые нужно пропустить (если они несут метаинформацию).</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>Директория с данными</legacyBold> - папка, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.</para>
-  				</listItem>
-    			<listItem>
-  					<para><legacyBold>Часовой пояс</legacyBold> - часовой пояс.</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>Формат</legacyBold> - формат хранилища, в которое необходимо импортировать данные.</para>
-  				</listItem>
-
-			</list>
-
-          </content>
+            <para> <legacyBold>Настройки импорта</legacyBold>.</para>
+          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
+          </step>
+      
+      <step>
+           	<para>Настроить параметры импорта для полей <token>stocksharp</token>.</para>
+          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
+                 
+          <para><legacyBold>Рассмотрим пример импорта инструмента из CSV файла:</legacyBold></para>
+          
+	<list class="bullet">
+ 		 <listItem>
+ 		 <para>Файл, данные из которого необходимо импортировать, имеет следующий шаблон записи:</para>
+ 		 <code>
+  					<![CDATA[
+{SecurityId.SecurityCode};{SecurityId.BoardCode};{PriceStep};{SecurityType};{VolumeStep}
+	  				]]></code>
+	  				
+	<para>Здесь значение {SecurityId.SecurityCode} и {SecurityId.BoardCode}, соответсвуют значениям 
+	<legacyBold>Инструмент</legacyBold> и <legacyBold>Площадка</legacyBold> соответсвенно. Поэтому в поле 
+	<legacyBold>Порядок поля</legacyBold> мы присваиваем значение 0 и 1 соответсвенно.</para>
+	</listItem>
+	
+	<listItem>
+	<para>Для поля {PriceStep} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Номинал</legacyBold> и присваиваем ему значение 2.</para>
+	</listItem>
+	
+	<listItem>
+	<para>Для поля {SecurityType} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Тип</legacyBold>  - тип инструмента (акция, валюта, фьючерс и т.д.). Присваиваем ему значение 3.</para>
+	</listItem>
+	
+	<listItem>
+	<para>Для поля {VolumeStep} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Мин объем (базовый)</legacyBold> - базовый или минимальный объем инсрумента. Присваиваем ему значение 4.</para>
+	</listItem>
+	
+	<listItem>
+	<para>Окно настройки полей будет выглядить следующим образом:</para>
+	<mediaLink>
+	<image placement="center" xlink:href="hydra_import_prop_securitiy" />
+	</mediaLink>
+	</listItem>
+</list>
+<para>Пользователь может настроить большое количество свойств для скачиваемых данных. Исходя из шаблона импортируемого файла, нужно указывать свойство и присваивать ему нужный номер в последовательности. </para>
         </step>
-        <step>
-          <content>
-          	<para>Настроить параметры импорта для полей <token>stocksharp</token>.</para>
-          	<list class="bullet">
-  				<listItem>
-  					<para><legacyBold>Поле S#</legacyBold> - значение поля S#. (<legacyBold>Инструмент</legacyBold>, <legacyBold>Площадка</legacyBold> и т.д.).</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>Ассоциации</legacyBold> - задать соответствие значения колонки в файле типу в stocksharp (если это необходимо).</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>По-умолчанию</legacyBold> - значение поля по умолчанию. Например, можно использовать для повторяющихся значений полей (<legacyBold>Инструмент</legacyBold>, или <legacyBold>Площадка</legacyBold> при импорте сделок, стаканов и т.п., см. <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Сделки</link> ), если соответствующей информации нет в файле с данными.</para>
-  				</listItem>
-  				<listItem>
-  					<para><legacyBold>Формат</legacyBold> - формат данных. Обычно используется при импорте значений даты и времени (см. <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Сделки</link>).</para>
-  				</listItem>
-			</list>
-          </content>
+        
+        <step>       
+    <para>Для преварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
+    <mediaLink>
+	<image placement="center" xlink:href="hydra_import_preview_securitiy" />
+	</mediaLink>
         </step>
-        <step>
-          <content>
-          	<para>Для преварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
-          </content>
-        </step>
-        <step>
-          <content>
+        
+        <step>          
           	<para>Нажать кнопку <legacyBold>Импорт</legacyBold>.</para>
-          </content>
         </step>
       </steps>
-    </procedure>	
+   
 	   
     </introduction>
   </developerConceptualDocument>

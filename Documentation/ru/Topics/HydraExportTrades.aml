@@ -7,15 +7,9 @@
         <image placement="center" xlink:href="hydra_export_trades" />
       </mediaLink>
       
-	<para>При помощи контекстного меню можно настроить различные параметры таблицы сделок: группировку строк, доступные колонки, формат отображения и др.</para>
-	 <mediaLink>
-       <image placement="center" xlink:href="hydra_export_context" />
-     </mediaLink>
-      
-	<para>Найденные сделки можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
-    	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export" />
-    	</mediaLink>
+	<para>Для выгрузки внесистемных сделок, необхщдимо установить галочку в поле <legacyBold>Внесистемные</legacyBold>.</para>
+     	<para>Полученные значения можно <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспортировать в нужный формат</link>.</para>
+
 
 </introduction>
   </developerWalkthroughDocument>

@@ -60,11 +60,14 @@
 					<para><legacyBold>Основные</legacyBold></para>
 					
 	   				<list class="bullet">
-        				<listItem>
-          					<legacyBold>Работать с</legacyBold> - время начала работы задачи.
+	   					<listItem>
+          					<legacyBold>Заголовок</legacyBold> - заголовок задачи.
 						</listItem>
         				<listItem>
-          					<legacyBold>Работать до</legacyBold> - время окончания работы задачи.
+          					<para><legacyBold>Рабочее время</legacyBold> - время начала работы задачи. При установке галочки в поле, появляется возможность настоить расписание работы площадки.</para> 
+          					<mediaLink>
+        				<image placement="left" xlink:href="hydra_tasks_backup_desk" />
+					</mediaLink>
 						</listItem>
         				<listItem>
           					<legacyBold>Интервал работы</legacyBold> - интервал работы задачи.
@@ -81,13 +84,20 @@
 						<listItem>
           					<legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
 						</listItem>
+						</list>
+						
+						<para><legacyBold>Логирование</legacyBold></para>
+						
+						<list class="bullet">
+						<listItem>
+          					<legacyBold>Идентификатор</legacyBold> - идентификатор.
+						</listItem>
 						<listItem>
           					<legacyBold>Уровень логирования</legacyBold> - уровень логирования.
 						</listItem>
       				</list>
 				</content>
 			</step>
-			
 			<step>
 				<content>
 					<para>После настройки задачи нужно добавить инструменты, которые должны сохраняться в резервном хранилище, и нажать кнопку <legacyBold>Старт</legacyBold>.</para>

@@ -25,7 +25,14 @@
 					<para>Далее заполнить формы, которые будет предлагать веб-сервис.</para>
 				</content>
 			</step>
-			
+			<step>
+				<content>
+					<para>Заполнить данные вашей карты, это делается для подтверждения личности.</para>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_Paytest" />
+					</mediaLink>
+				</content>
+			</step>
 			<step>
 				<content>
 					<para>На одном из этапов регистрации будет предложено ввести номер телефона и инициировать звонок
@@ -41,14 +48,15 @@
 				<content>
 					<para>Далее будет предложено выбрать план поддержки. По завершению создания аккаунта нужно перейти в консоль управления.</para>
 					<mediaLink>
-        				<image placement="center" xlink:href="Aws3_console" />
+        				<image placement="left" xlink:href="Aws3_console" />
 					</mediaLink>
 				</content>
 			</step>
 			
 			<step>
 				<content>
-					<para>Первой операцией при настройке аккаунта является создание Bucket. <mediaLinkInline><image xlink:href="Aws3_CreateBucket" /></mediaLinkInline> </para>
+					<para>Первой операцией при настройке аккаунта является создание Bucket.</para> 
+					<mediaLink><image placement="left" xlink:href="Aws3_CreateBucket" /> </mediaLink>
 					<para>Bucket - это контейнер для хранения объектов в "облаке". Для Bucket необходимо задать уникальное имя, а также выбрать 
 					региональный дата-центр (Region), где физически хранятся данные. Обратите внимание, в дальнейшем при настойке задачи резервного
 					копирования: 1) в поле <legacyBold>Хранилище</legacyBold> нужно будет ввести имя бакета, 2) в поле <legacyBold>Адрес</legacyBold> нужно использовать не имя, а адрес регионального дата центра, который можно узнать <externalLink>
@@ -56,9 +64,16 @@
 						<linkAlternateText>Optional alternate text</linkAlternateText>
 							<linkUri>https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</linkUri>
 						<linkTarget>_blank</linkTarget>
-					</externalLink>.</para>
+					</externalLink>.
+					После чего продолжить настройку.</para>
 					<mediaLink>
-        				<image placement="left" xlink:href="Aws3_CreateBucketDialog"/>
+        				<image placement="left" xlink:href="Aws3_CreateBucket"/>
+					</mediaLink>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_CreateBucketName"/>
+					</mediaLink>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_CreateBucketName_propert"/>
 					</mediaLink>
 				</content>
 			</step>
@@ -78,7 +93,7 @@
 					<para>Раскрываем заголовок <legacyBold>Access Keys (Access Key ID and Secret Access Key)</legacyBold> и создаем ключи доступа при помощи кнопки
 					<mediaLinkInline><image xlink:href="Aws3_CreateNewAccessKey" /></mediaLinkInline>.</para>
 					<mediaLink>
-        				<image placement="center" xlink:href="Aws3_SecurityCredentialsCreate" />
+        				<image placement="left" xlink:href="Aws3_SecurityCredentialsCreate" />
 					</mediaLink>
 					<para>Созданные ключи можно сохранить в файл при помощи кнопки <legacyBold>Download Key File</legacyBold>.</para>
 					<para>Обратите внимание, что при настройке задачи резервного копирования <legacyBold>Access Key ID</legacyBold> должен использоваться в качестве логина, а

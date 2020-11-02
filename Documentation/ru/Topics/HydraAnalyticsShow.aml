@@ -5,15 +5,20 @@
      <para>Ниже описана последовательность действий для проведения анализа данных.</para>
     <procedure>
      	<title>
-      		<para>Запуск скрипта и отображение результатов анализа</para>
+      		<para>Запуск скрипта и отображение результатов анализа на примере инструмента SBER@TQBR:</para>
       	</title>
-	    <mediaLink>
-    	    <image placement="left" xlink:href="hydra_analitics_toolbar" />
+      	<para>Для примера мы <link xlink:href="83e7f4bb-733d-4463-a2c9-923ccc486d36">выбираем шаблон</link> <legacyBold>"Объем внутри дня"</legacyBold>.</para>
+	   
+	   <mediaLink>
+    	    <image placement="left" xlink:href="hydra_analitics_main_01" />
       	</mediaLink>
+      	
 	    <steps class="ordered">
-    	    <step>
+    	   
+    	   <step>
         	  <content>
-	          	<para>Выбрать данные для анализа:</para>
+	          	<para>Выбираем данные для анализа:</para>
+				
 				<list class="bullet">
   					<listItem>
   						<para>В окне <legacyBold>Параметры</legacyBold> расположенной в правой части программы.</para>
@@ -22,33 +27,42 @@
       					</mediaLink>
   					</listItem>
   					<listItem>
-  						<para>Выбрать инструмент, начальную и конечную дату, путь к данным и их формат.</para>
+  						<para>Устанавливаем инструмент, в нашем случае SBER@TQBR. Начальную и конечную дату, путь к данным и их формат.</para>
   					</listItem>
 				</list>
     	      </content>
         	</step>
+        	
         	<step>
           		<content>
-          			<para>Запустить скрипт при помощи кнопки <mediaLinkInline><image xlink:href="hydra_analitics_run"/></mediaLinkInline>.</para>
+          			<para>Запускаем скрипт при помощи кнопки <mediaLinkInline><image xlink:href="hydra_analitics_run"/></mediaLinkInline>.</para>
           		</content>
         	</step>
+        	
+        	<step>
+          		<content>
+          			<para>После чего отобразиться результат обработки.</para>
+          			<mediaLink>
+          			<image xlink:href="hydra_analitics_table"/>
+          			</mediaLink>.
+          		</content>
+        	</step>
+        	
         	<step>
           		<content>
           			<para>Просмотреть результаты:</para>
-					<list class="bullet">
-  					<listItem>
-  						<para>Для просмотра графика выбрать закладку <legacyBold>График</legacyBold>.</para>
+						<para>По умолчанию результат формируется ввиде таблицы. Для просмотра полученных данныхв виде графиков, 
+						необходимо выбрать один из нескольких вариантов вывода данных.</para>
+  						<mediaLink>
+    	    				<image placement="left" xlink:href="hydra_analitics_main_01" />
+      					</mediaLink>
+  					
+  					
+  						<para>После чего будет построен выбранный график по результатам процесса аналитики.</para>
   						<mediaLink>
     	    				<image placement="left" xlink:href="hydra_analitics_chart" />
       					</mediaLink>
-  					</listItem>
-  					<listItem>
-  						<para>Для просмотра таблицы выбрать закладку <legacyBold>Таблица</legacyBold>.</para>
-  						<mediaLink>
-    	    				<image placement="left" xlink:href="hydra_analitics_table" />
-      					</mediaLink>
-  					</listItem>
-					</list>
+  					
           		</content>
         	</step>
       	</steps>

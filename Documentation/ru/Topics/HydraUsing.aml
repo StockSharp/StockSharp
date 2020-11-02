@@ -2,33 +2,8 @@
 <topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-		  <steps class="ordered">
-			  <step>
-				  <content>
-		  				<para>
-							Для установки <token>hydra</token> необходимо перейти на страницу <token>download</token>.
-		  				</para>
-		  				<mediaLink><image placement="center" xlink:href="hydra_setup1" /></mediaLink>	
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-		  				<para>Скачать дистрибутив <token>hydra</token>.</para>
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-		  				<para>Разблокировать(правая кнопка мышки на файле, свойства) и распаковать Hydra.zip в пустой каталог.</para>
-		  				<mediaLink><image placement="center" xlink:href="hydra_setup3" /></mediaLink>
-				  </content>
-			  </step>			  
-			  <step>
-				  <content>
-		  				<para>Затем запустить Hydra.Update.exe и нажать кнопку <legacyBold>Установить</legacyBold>.</para>
-		  				<mediaLink><image placement="center" xlink:href="hydra_setup4" /></mediaLink>
-				  </content>
-			  </step>			  
-		  </steps>
+		  <para><link xlink:href="385c6f6d-8cac-4d90-8701-f5da0281ed43" /></para>
+		  				
 	</introduction>
   </developerConceptualDocument>
 </topic>

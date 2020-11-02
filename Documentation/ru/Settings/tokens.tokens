@@ -152,6 +152,7 @@
   </ddue:externalLink></item>
   <item id="Idax"><ddue:link xlink:href="886bcc99-7011-4c3c-85fe-d0fc646ee00f" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="IEX"><ddue:link xlink:href="fb946f86-fe4b-4e30-97f7-543178e81792" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="installer"><ddue:link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Installer</ddue:link></item>
   <item id="iqfeed"><ddue:link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">IQFeed</ddue:link></item>
   <item id="iqfeed_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>IQFeed</ddue:linkText>
@@ -363,6 +364,7 @@
    <ddue:linkText>StockSharp YouTube</ddue:linkText>
    <ddue:linkUri>https://youtube.com/user/StockSharp/</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="terminal"><ddue:link xlink:href="e4b5e112-bd08-4f40-8741-7514e7e4088e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Terminal</ddue:link></item>
   <item id="TradeOgre"><ddue:link xlink:href="989447cf-bc05-4f6a-a736-b3a916ee1ffc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Tradier"><ddue:link xlink:href="113c8f3e-3145-4899-bd5b-60ceac995be2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>

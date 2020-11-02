@@ -11,16 +11,69 @@
       <steps class="ordered">
         <step>
           <content>
-          	<para> Выполнить <legacyBold>Настройки импорта из CSV</legacyBold>.</para>
-          	<para> См. импорт <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Инструменты</link>.</para>
+          	<para> <legacyBold>Настройки импорта</legacyBold>.</para>
+          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
           </content>
         </step>
+        
         <step>
           <content>
           	<para>Настроить параметры импорта для полей <token>stocksharp</token>.</para>
-          	<para> См. импорт <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Инструменты</link>.</para>
-          </content>
+          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
+          	<para><legacyBold>Рассмотрим пример импорта сделок(тиков) из CSV файла:</legacyBold></para>
+          
+	<list class="bullet">
+ 		 <listItem>
+ 		 <para>Файл, данные из которого необходимо импортировать, имеет следующий шаблон записи:</para>
+ 		 <code>
+  					<![CDATA[
+{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume};{OriginSide}
+	  				]]></code>
+	  				
+	<para>Здесь значение {SecurityId.SecurityCode} и {SecurityId.BoardCode}, соответсвуют значениям 
+	<legacyBold>Инструмент</legacyBold> и <legacyBold>Площадка</legacyBold> соответсвенно. Поэтому в поле 
+	<legacyBold>Порядок поля</legacyBold> мы присваиваем значение 0 и 1 соответсвенно.</para>
+	</listItem>
+	
+	<listItem>
+	<para>Для полей {ServerTime:default:yyyyMMdd} и {ServerTime:default:HH:mm:ss.ffffff} выбираем из окна <legacyBold>Поле S#</legacyBold> поля
+	<legacyBold>Дата</legacyBold> и <legacyBold>Время</legacyBold> соответсвенно. Присваиваем значение 2 и 3.</para>
+	</listItem>
+	
+	<listItem>
+	<para>Для поля {TradeId} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Идентификатор</legacyBold>  - идентификатор сделки или номер сделки. Присваиваем ему значение 4.</para>
+	</listItem>
+	
+	<listItem>
+	<para>Для поля {TradePrice} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Цена</legacyBold> - цена сделки. Присваиваем ему значение 5.</para>
+	</listItem>
+	<listItem>
+	<para>Для поля {TradeVolume} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Объем</legacyBold> - объем сделки. Присваиваем ему значение 6.</para>
+	</listItem>
+	<listItem>
+	<para>Для поля {OriginSide} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Инициатор</legacyBold> - инициатор сделки (Продавец или  Покупатель). Присваиваем ему значение 7.</para>
+	</listItem>
+	<listItem>
+	<para>Окно настройки полей будет выглядить следующим образом:</para>
+	<mediaLink>
+	<image placement="center" xlink:href="hydra_import_prop_trade" />
+	</mediaLink>
+	</listItem>
+	</list> 
+	<para>Пользователь может настроить большое количество свойств для скачиваемых данных. Исходя из шаблона импортируемого файла, нужно указывать свойство и присваивать ему нужный номер в последовательности. </para>
+  
+</content>
         </step>
+        
+        <step>
+        <content>
+    <para>Для преварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
+    <mediaLink>
+	<image placement="center" xlink:href="hydra_import_preview_trade" />
+	</mediaLink>
+       </content>
+       </step>
+          
                 <step>
           <content>
           	<para>Для преварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>

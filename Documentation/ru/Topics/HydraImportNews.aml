@@ -12,13 +12,13 @@
         <step>
           <content>
           	<para> Выполнить <legacyBold>Настройки импорта из CSV</legacyBold>.</para>
-          	<para> См. импорт <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Инструменты</link>.</para>
+          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
           </content>
         </step>
         <step>
           <content>
           	<para>Настроить параметры импорта для полей <token>stocksharp</token>.</para>
-          	<para> См. импорт <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Инструменты</link>.</para>
+          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
           </content>
         </step>
                 <step>

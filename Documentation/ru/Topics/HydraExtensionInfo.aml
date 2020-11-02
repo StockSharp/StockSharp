@@ -10,14 +10,21 @@
 имеющихся в источнике для каждого из инструментов. Для каждого источника расширенной информации, расширенная информация будет уникальной.</para>
 <para>Если в источнике нет расширенной информации по инструменту, то в колонках соответствующих расширенной информации, 
 списка всех инструментов, будут отображаться пустые ячейки.</para>
-<para>Для выбора необходимой расширенной информации, нужно во вкладке инструменты нажать на кнопку <legacyBold>Расширенная информация</legacyBold>.</para>
-<mediaLink>
+<para>Для выбора необходимой расширенной информации, нужно:</para>
+
+<list class="ordered">
+  <listItem><para>во вкладке инструменты нажать на кнопку <legacyBold>Расширенная информация</legacyBold></para>
+  <mediaLink>
 <image placement="center" xlink:href="hydra_ExtensionInfo_securities"/>
 </mediaLink>
-<para>После чего появится окно выбора расширенной информации</para>
-    <mediaLink>
+  </listItem>
+  <listItem><para>После чего появиться окно, в котром необходимо выбрать путь к нужному CSV файлу.</para>
+   <mediaLink>
 <image placement="center" xlink:href="hydra_ExtensionInfo_window"/>
 </mediaLink>
+  </listItem>  
+</list>
+
 <para>Ниже представлен пример <legacyBold>CSV</legacyBold> файла расширенной информации открытый 
 в разных редакторах <legacyBold>MS Excel</legacyBold> и <legacyBold>NotePad</legacyBold></para>
 <mediaLink>

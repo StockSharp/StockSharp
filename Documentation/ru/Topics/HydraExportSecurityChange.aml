@@ -13,11 +13,8 @@
         <image placement="center" xlink:href="hydra_export_security_change_selected" />
       </mediaLink>
       
-    <para>Найденные изменения можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
-    	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export" />
-    	</mediaLink>
-      
+     	<para>Полученные значения можно <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспортировать в нужный формат</link>.</para>
+
     </introduction>
   </developerWalkthroughDocument>
 </topic>

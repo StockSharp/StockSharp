@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <introduction>
@@ -15,15 +15,8 @@
          <mediaLink>
         <image placement="center" xlink:href="hydra_option_smile_of_volatility" />
       </mediaLink>
-    <para>При помощи контекстного меню можно настроить параметры таблицы собственных транзакций: группировку строк, доступные колонки, формат отображения и др.</para>
-	 <mediaLink>
-       <image placement="center" xlink:href="hydra_export_context" />
-     </mediaLink>
-  
-    <para>Найденные транзакции можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
-    	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export" />
-    	</mediaLink>
+    <para>Полученные значения можно <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспортировать в нужный формат</link>.</para>
+
     </introduction>
   </developerConceptualDocument>
 </topic>

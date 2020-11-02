@@ -2,23 +2,12 @@
 <topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Задача выполняет экспорт биржевых данных в различные форматы: Excel, xml, sql, bin или txt.</para>
-	<table>
-	  <row>
-    	<entry>
+     <para>Задача выполняет экспорт биржевых данных в различные форматы: Excel, xml, sql, bin, Json или txt.</para>
+	  
     	    <mediaLink>
         		<image placement="left" xlink:href="hydra_tasks_export" />
       		</mediaLink>
-    	</entry>
-    	<entry>
-    	   	<mediaLink>
-        		<image placement="left" xlink:href="hydra_tasks_connstring" />
-      		</mediaLink>
-    	</entry>
-  	 </row>
-	</table>
-
-
+    	
       <para><legacyBold>База данных</legacyBold></para>
       <list class="bullet">
         <listItem>
@@ -37,6 +26,9 @@
 		</alert>
 		
 		<para><legacyBold>Новая строка подключения</legacyBold></para>
+		<mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_connstring" />
+      		</mediaLink>
        <list class="bullet">
         	<listItem>
 				<legacyBold>Провайдер</legacyBold> - настройки провайдера.
@@ -68,10 +60,13 @@
 		<para><legacyBold>Основные</legacyBold></para>
 		<list class="bullet">
         <listItem>
-          <legacyBold>Работать с</legacyBold> - время начала работы.
+          <legacyBold>Заголовок</legacyBold> - название задачи.
 		</listItem>
         <listItem>
-          <legacyBold>Работать до</legacyBold> - время окончания работы.
+          <legacyBold>Рабочее время</legacyBold> - настройка работы площадки.
+          <mediaLink>
+        <image placement="center" xlink:href="hydra_tasks_backup_desk" />
+      </mediaLink>
 		</listItem>
         <listItem>
           <legacyBold>Интервал работы</legacyBold> - интервал работы.
@@ -88,16 +83,21 @@
 		<listItem>
           <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
 		</listItem>
-		<listItem>
-          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
-		</listItem>
-      </list>
-     <para><legacyBold>Свечи</legacyBold></para>
+		</list>
+		
+     <para><legacyBold>CSV</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Параметры</legacyBold> - параметры свечей.
+			<legacyBold>Шаблоны</legacyBold> - шаблоны для каждого типа экспортируемых данных.
+		</listItem>
+		<listItem>
+			<legacyBold>Заголовок</legacyBold> - заголовок индущий первой строкой. Если передается пустая строка, то заголовок не будет добавлен в файл.
+		</listItem>
+		<listItem>
+			<legacyBold>Формат имени</legacyBold> - формат записи имени экспортируемого файла.
 		</listItem>
  	  </list>
+ 	  
       <para><legacyBold>Экспорт (авто)</legacyBold></para>
       <list class="bullet">
         <listItem>
@@ -112,7 +112,50 @@
 		<listItem>
           <legacyBold>Директория экспорта</legacyBold> - директория, куда будут экспортироваться данные.
 		</listItem>
+		<listItem>
+		<legacyBold>Формат</legacyBold> - формат данных.
+		</listItem>
+		<listItem>
+          <legacyBold>Разделение</legacyBold> - тип разделения.
+		</listItem>
  	  </list>
+ 	  
+ 	  <para><legacyBold>Логирование</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Идентификатор</legacyBold> - идентификатор.
+		</listItem>
+		<listItem>
+          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+		</listItem>
+ 	  </list>
+ 	  <para>Рассморим пример автоматического экспорта:</para>
+ 	  
+<list class="ordered">
+  <listItem><para>Выбираем инструмент.</para></listItem>
+  <listItem><para>Устанавливаем маркет данные которые необходимо экспортировать.</para>
+  <mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_export_00" />
+      		</mediaLink>
+  </listItem>
+   <listItem><para>Устанавливаем период экспорта. Если настроено скачивание маркет данных в режиме реального времени, то можно не указывать дату окончания периода. В таком случае данные будут экспортироваться в режиме реального времени, в соответствии с интервалом работы (обновления данных). </para>
+   <mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_export_01" />
+      		</mediaLink>
+   </listItem>
+  <listItem><para>Настраиваем директории. Интервал работы. Тип данных. Формат данных.</para></listItem>
+  <listItem><para>Запускаем экспорт.</para>
+  <mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_export_02" />
+      		</mediaLink>
+  </listItem>
+  
+</list>
+<para>Просмотрим экспортированные данные.</para>
+ <mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_export_03" />
+      		</mediaLink>
     </introduction>
+    <para><legacyBold>Смотреть <link xlink:href="abca211c-1ef7-4e7b-9e70-a167d8fa094e">видеоинструкцию</link></legacyBold></para>
   </developerConceptualDocument>
 </topic>

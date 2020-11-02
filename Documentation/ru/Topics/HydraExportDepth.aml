@@ -6,19 +6,12 @@
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_depth" />
       </mediaLink>
-      <alert class="note">
-        <para>Стаканы могут быть созданы из файлов лога заявок. Для этого надо поставить соответствующую галочку. Кроме того можно настроить глубину и период обновления стакана.</para>
+     <alert class="note">
+        <para>Стаканы могут быть созданы из <link xlink:href="9e4df290-b29b-4b71-bd57-f9834dc9c2fe">файлов лога заявок и Level 1</link>. Кроме того можно настроить глубину и период обновления стакана.</para>
       </alert>
-      
-      <para>При помощи контекстного меню можно настроить различные параметры таблицы стакана: группировку строк, доступные колонки, формат отображения и др.</para>
-	 <mediaLink>
-       <image placement="center" xlink:href="hydra_export_context" />
-     </mediaLink>
-      
-    <para>Найденные стаканы можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
-    	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export" />
-    	</mediaLink>
+     
+     	<para>Полученные значения можно <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспортировать в нужный формат</link>.</para>
+
     </introduction>
   </developerWalkthroughDocument>
 </topic>

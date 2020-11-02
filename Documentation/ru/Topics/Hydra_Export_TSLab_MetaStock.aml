@@ -4,14 +4,14 @@
     <introduction>
 <para>Для экспорта данных в файлы форматов TSLab и MetaStock необходимо из раскрывающегося списка выбрать формат Txt:</para>
     	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export" />
+    		<image placement="center" xlink:href="hydra_export_JSON" />
     	</mediaLink>
 
     	<para>
     	При экспорте в файлы текстового формата (Txt) появляется окно: 
     	</para>
     	<mediaLink>
-    		<image placement="center" xlink:href="hyda_export_TSLab_MetaStock" />
+    		<image placement="center" xlink:href="hydra_export_TSLab_MetaStock_2" />
     	</mediaLink>
     	    	<para>
     	В котором необходимо указать шаблон экспорта, где в фигурных скобках указаны свойства, которые необходимо экспортировать, и их порядок:

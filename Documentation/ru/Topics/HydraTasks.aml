@@ -13,9 +13,14 @@
     	<mediaLink>
         <image placement="center" xlink:href="hydra_tasks" />
       </mediaLink>
-    	<para>На текущий момент в <token>hydra</token> существуют три класса задач:</para>
+    	<para>На текущий момент в <token>hydra</token> существуют четыре класса задач:</para>
     	
       <list class="bullet">
+      <listItem>
+          <para>
+            <link xlink:href="5a056352-64c7-41ea-87a8-2e112935e3b9"><legacyBold>Бэкап данных ("Резервный") </legacyBold></link> - задача предназначена для резервного копирования данных в облачный сервис.
+          </para>
+        </listItem>
         <listItem>
           <para>
             <link xlink:href="272eef99-c7e4-4245-ae83-7efa4d2345bc"><legacyBold>Конвертер</legacyBold></link> - задача предназначена для конвертации биржевых данных в тики, свечи или стаканы.
@@ -28,9 +33,11 @@
         </listItem>
         <listItem>
           <para>
-            <link xlink:href="5a056352-64c7-41ea-87a8-2e112935e3b9"><legacyBold>Бэкап данных ("Резервный") </legacyBold></link> - задача предназначена для резервного копирования данных в облачный сервис.
+            <link xlink:href="ec33258b-c0bb-4f2b-bef3-368e607a92a4"><legacyBold>Импорт (авто)</legacyBold></link> - задача предназначена для автоматического импорта маркет данных по заданным шаблонам.
           </para>
         </listItem>
+     
+        
 
       </list> 
     </introduction>
