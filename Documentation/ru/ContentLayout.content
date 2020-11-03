@@ -737,7 +737,13 @@
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />
-      <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Адаптеры" />
+      <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Адаптеры">
+        <Topic id="fa060718-1aaa-43a4-9c37-4f57476f1932" visible="True" title="Стаканы (инкрементальные и обычные)" />
+        <Topic id="15357338-1d0d-4a6d-ae70-8118be08ecc7" visible="True" title="Исторические данные" />
+        <Topic id="42dcf014-53df-4962-a907-59ce2f165507" visible="True" title="Лог заявок" />
+        <Topic id="a90787cb-3566-4d09-835c-22a0838196fa" visible="True" title="Вспомогательные адаптеры" />
+        <Topic id="7b2d048a-1be5-4754-9da5-1fa78f30f970" visible="True" title="Потоковая модель" />
+      </Topic>
       <Topic id="a26fc10a-4aa5-4a3e-9494-823c43eb9c84" visible="True" title="Хранилище сообщений" />
       <Topic id="c883681e-f822-4f81-a7a3-542b81db8b3c" visible="True" title="Сетевое взаимодействие" />
     </Topic>
