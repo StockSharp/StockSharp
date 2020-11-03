@@ -25,7 +25,7 @@
 				OriginalTransactionId = _candleTransactions.TryGetValue(Tuple.Create(secId, tf)), // <- заполняем идентификато подписки, по которому внешний код определит, какой инструмент и тайм-фрейм был в подписке
 			});
       ]]></code>
-      <para>Специальные адаптер <codeEntityReference>T:StockSharp.Algo.PartialDownloadMessageAdapter</codeEntityReference> дробит подписки с большим диапазоном данных (подробнее <link xlink:href="a90787cb-3566-4d09-835c-22a0838196fa" />) на множество запросов с мелкими диапазонами. Каждый адаптер может передать, какой диапазон времени максимально он поддерживает через перегрузку метода <codeEntityReference qualifyHint="true">M:StockSharp.Messages.IMarketDataMessage.GetHistoryStepSize</codeEntityReference>:</para>
+      <para>Специальные адаптер <codeEntityReference>T:StockSharp.Algo.PartialDownloadMessageAdapter</codeEntityReference> дробит подписки с большим диапазоном данных (подробнее <link xlink:href="a90787cb-3566-4d09-835c-22a0838196fa" />) на множество запросов с мелкими диапазонами. Каждый адаптер может передать, какой диапазон времени максимально он поддерживает через перегрузку метода <codeEntityReference qualifyHint="true">M:StockSharp.Messages.IMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)</codeEntityReference>:</para>
       <code language="C#"><![CDATA[
 public partial class MyOwnMessageAdapter : MessageAdapter
 {

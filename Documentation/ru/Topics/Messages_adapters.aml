@@ -118,7 +118,7 @@ public class BitStampMessageAdapter : MessageAdapter
   							<listItem>
   								<para>
   								При помощи метода 
-  								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)</codeEntityReference>
+  								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.MessageAdapter,StockSharp.Messages.MessageTypeInfo)</codeEntityReference>
     							добавляем в массив <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference> типы сообщений, 
     							которые будет поддерживать адаптер.
   								</para>
@@ -562,9 +562,8 @@ private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 				</para>
 				<para>
 				 При вызове методов 
-<codeEntityReference>M:StockSharp.Algo.Connector.SubscribeTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},StockSharp.Messages.IMessageAdapter)</codeEntityReference> 
-или
-				 <codeEntityReference>M:StockSharp.Algo.Connector.UnSubscribeTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> 
+<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Subscribe(StockSharp.Algo.Subscription)</codeEntityReference> 
+или <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.UnSubscribe(StockSharp.Algo.Subscription)</codeEntityReference> 
 будет сформировано входящее сообщение 
 <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>
 .
@@ -575,7 +574,7 @@ private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 				 <para>
 				 Так как сообщение используется для работы со всеми типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
 				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType2</codeEntityReference>. Для сделок значение этого свойства равно
-				 <codeEntityReference qualifyHint="true">P:StockSharp.Messages.DataTypes.Ticks</codeEntityReference>.
+				 <codeEntityReference qualifyHint="true">P:StockSharp.Messages.DataType.Ticks</codeEntityReference>.
 				</para>
 				<para>
 				  После вызова метода <legacyBold>SubscribeTrades</legacyBold> сделки будут поступать в событии <legacyBold>SessionOnNewTrade</legacyBold>.
