@@ -13,10 +13,10 @@
        
 		<list class="ordered">
   			<listItem>
-  				<para>Написать код, преобразующий исходящие сообщения <token>stocksharp</token> в команды внешней системы.</para>
+  				<para>Написать код, преобразующий входящие сообщения <token>stocksharp</token> в команды внешней системы.</para>
   			</listItem>
   			<listItem>
-  				<para>Написать код, преобразующий информацию, поступающую от внешней системы, во входящие сообщения.</para>
+  				<para>Написать код, преобразующий информацию, поступающую от внешней системы, в исходящие сообщения.</para>
   			</listItem>
   			<listItem>
   				<para>Выполнить преобразование кодированной информации внешней системы (коды инструментов и площадок, перечисления и т.п.) в типы <token>stocksharp</token>.</para>
@@ -28,7 +28,7 @@
 		
        <para>
        	Прежде чем приступить к описанию разработки собственного адаптера, рассмотрим процесс создания и обработки входящих и исходящих сообщений в <token>stocksharp</token>
-		на примере сообщения	<codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>. Предположим, что в программе был вызван метод
+		на примере сообщения <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>. Предположим, что в программе был вызван метод
 						<codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference>, тогда в базовом классе  
 						<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> будет происходить следующее:
 		</para>
@@ -59,12 +59,10 @@ public void SendInMessage(Message message)
   				<para>В методе <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference> адаптера
   					выполняются дополнительные проверки. Если все нормально, то сообщение передается в метод
   					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> (см.ниже).
-  					Если сгенерирована ошибка, то создается создается
-  					новое входящее сообщение аналогичного типа, в свойство 
-  					<codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference>
+  					Если сгенерирована ошибка, то создается создается новое исходящее сообщение аналогичного типа, в свойство <codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference>
   					сообщения передается объект исключения. Это новое сообщение передается в метод 
   					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
-  					в котором будет сгенерировано событие появления нового входящего сообщения 
+  					в котором будет сгенерировано событие появления нового исходящего сообщения 
   					<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>,
   					сигнализирующего об ошибке.
   				</para>
@@ -72,25 +70,24 @@ public void SendInMessage(Message message)
 		</list>
 		
 		<para>
-			Входящие сообщения создаются при помощи метода 
+			Исходящие сообщения создаются при помощи метода 
 			<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
-			в который передается объект сообщения. В этом методе генерируется событие нового входящего сообщения 
+			в который передается объект сообщения. В этом методе генерируется событие нового исходящего сообщения 
 			<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>.
 			Далее это событие обрабатывается в базовом классе коннектора в защищенном методе
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>, 
 			где в зависимости от ситуации сообщение преобразуется в соответствующий тип <token>stocksharp</token> и генерируется событие коннектора, 
-			а также могут создаваться дополнительное исходящие сообщения.
+			а также могут создаваться дополнительное входящие сообщения.
 		</para>
 		
 		<para>
-		Ниже описан процесс создания собственного адаптера для <token>smartcom</token>.
+		Ниже описан процесс создания собственного адаптера для <token>bitstamp</token> (коннектор доступен с исходными кодами).
 		</para>
-       
-       
+		
     </introduction>
     
     <procedure>
-			<title>Пример создания адаптера сообщений SmartCom</title>
+			<title>Пример создания адаптера сообщений BitStamp</title>
 			<steps class="ordered">
 			   <step>
 					<content>
@@ -98,15 +95,12 @@ public void SendInMessage(Message message)
 						<legacyBold>Создание класса адаптера.</legacyBold>
 						</para>
 						<para>
-						 Вначале создаем класс адаптера сообщений <legacyBold>SmartAdapter</legacyBold> унаследованный от
-						 абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
-						 В область пространств имен, наряду с другими ссылками, необходимо добавить SmartCOM3Lib.
-						 Также создадим переменную <legacyBold>_smartCom</legacyBold> для ссылки на объект библиотеки <token>smartcom</token>.
+						 Вначале создаем класс адаптера сообщений <legacyBold>BitStampMessageAdapter</legacyBold> унаследованный от
+						 абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>:
 						</para>
 						<code language="C#">
-public class SmartAdapter: MessageAdapter 
+public class BitStampMessageAdapter : MessageAdapter 
 {
-	private SmartCOM3Lib.StServer _smartCom;
 }						
 						
 </code>
@@ -121,15 +115,6 @@ public class SmartAdapter: MessageAdapter
   							<listItem>
   								<para>В конструктор адаптера передается генератор идентификаторов транзакций, который будет использоваться для создания идентификаторов сообщений.</para>
   							</listItem>
-  							<!--<listItem>
-  								<para>Далее заполняем словарь <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityClassInfo</codeEntityReference>. 
-  								Этот словарь сопоставляет коды классов инструментов в <token>smartcom</token> с типом инструмента 
-  								<codeEntityReference>P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> и кодом площадки в <token>stocksharp</token>.</para>
-  							</listItem>
-  							<listItem>
-  								<para>Заполняется словарь <legacyBold>PortfolioBoardCodes</legacyBold>, который сопоставляет
-  								коды площадок для портфелей.</para>
-  							</listItem>-->
   							<listItem>
   								<para>
   								При помощи метода 
@@ -142,32 +127,33 @@ public class SmartAdapter: MessageAdapter
 	
 						<code language="C#">
 						<![CDATA[
-public SmartAdapter(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
+public BitStampMessageAdapter(IdGenerator transactionIdGenerator)
+	: base(transactionIdGenerator)
 {
-	// Сообщения, связанные с маркет-данными
-    this.AddSupportedMessage(MessageTypes.MarketData);
-    this.AddSupportedMessage(MessageTypes.SecurityLookup);
+	// для поддержания соединения шлем каждый 10 секунд пинг
+	HeartbeatInterval = TimeSpan.FromSeconds(10);
 
-    // Сообщения, связанные с транзакциями
-    this.AddSupportedMessage(MessageTypes.OrderCancel);
-    this.AddSupportedMessage(MessageTypes.OrderGroupCancel);
-    this.AddSupportedMessage(MessageTypes.OrderPairReplace);
-    this.AddSupportedMessage(MessageTypes.OrderRegister);
-    this.AddSupportedMessage(MessageTypes.OrderReplace);
-    // this.AddSupportedMessage(MessageTypes.OrderStatus);
-    this.AddSupportedMessage(MessageTypes.Portfolio);
-    this.AddSupportedMessage(MessageTypes.PortfolioLookup);
-    this.AddSupportedMessage(MessageTypes.Position);
-    
-    // обозначаем, что адаптер предоставляет результаты запросов поиска инструментов и портфелей
-    this.AddSupportedOutMessage(MessageTypes.SecurityLookupResult);
-	this.AddSupportedOutMessage(MessageTypes.PortfolioLookupResult);
+	// адаптер поддерживает как транзакции, так и маркет-данные
+	this.AddMarketDataSupport();
+	this.AddTransactionalSupport();
+	
+	// удаляем не поддерживаемые типы сообщий (были добавлены через AddTransactionalSupport все возможные транзакционные сообщения)
+	this.RemoveSupportedMessage(MessageTypes.Portfolio);
+	this.RemoveSupportedMessage(MessageTypes.OrderReplace);
+
+	// адаптер поддерживает тики, стаканы и лог заявок
+	this.AddSupportedMarketDataType(DataType.Ticks);
+	this.AddSupportedMarketDataType(DataType.MarketDepth);
+	//this.AddSupportedMarketDataType(DataType.Level1);
+	this.AddSupportedMarketDataType(DataType.OrderLog);
+
+	// адаптер поддерживает результирующие сообщения для поиска инструментов, позиций и заявок
+	this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
+	this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
+	this.AddSupportedResultMessage(MessageTypes.OrderStatus);
 }
 						
-]]>
-						
-						</code>
+]]></code>
 					</content>
 				</step>
 				<step>
@@ -178,8 +164,8 @@ public SmartAdapter(IdGenerator transactionIdGenerator)
 						<para>
 					    Далее необходимо переопределить метод 
 					    <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>. 
-					    Как говорилось выше, в этот метод передаются все исходящие сообщения и для каждого типа сообщения нужно написать код, 
-					    преобразующий сообщения в команды <token>smartcom</token>.
+					    Как говорилось выше, в этот метод передаются все входящие сообщения и для каждого типа сообщения нужно написать код, 
+					    преобразующий сообщения в команды <token>bitstamp</token>.
 						</para>
 						<para>
 						При получении сообщения <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> 
@@ -188,134 +174,180 @@ public SmartAdapter(IdGenerator transactionIdGenerator)
 						</para>
 						<para>
 						 При поступлении сообщения <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference> 
-						 инициализируем переменную _smartCom, подписываемся на события <token>smartcom</token> и устанавливаем соединение при помощи метода 
+						 инициализируем переменные _httpClient и _pusherClient, подписываемся на события <token>bitstamp</token> и устанавливаем соединение при помощи метода 
 						 <legacyBold>Connect</legacyBold> нативного API. В случае удачного соединения должно наступить событие 
-						 <legacyBold>StServer.Connected</legacyBold>.
+						 <legacyBold>SessionOnPusherConnected</legacyBold>.
 						</para>
 
 						<code language="C#">
 						<![CDATA[
-protected override void OnSendInMessage(Message message)
+private void SubscribePusherClient()
+{
+	_pusherClient.Connected += SessionOnPusherConnected;
+	_pusherClient.Disconnected += SessionOnPusherDisconnected;
+	_pusherClient.Error += SessionOnPusherError;
+	_pusherClient.NewOrderBook += SessionOnNewOrderBook;
+	_pusherClient.NewOrderLog += SessionOnNewOrderLog;
+	_pusherClient.NewTrade += SessionOnNewTrade;
+}
+
+private void UnsubscribePusherClient()
+{
+	_pusherClient.Connected -= SessionOnPusherConnected;
+	_pusherClient.Disconnected -= SessionOnPusherDisconnected;
+	_pusherClient.Error -= SessionOnPusherError;
+	_pusherClient.NewOrderBook -= SessionOnNewOrderBook;
+	_pusherClient.NewOrderLog -= SessionOnNewOrderLog;
+	_pusherClient.NewTrade -= SessionOnNewTrade;
+}
+		
+protected override bool OnSendInMessage(Message message)
 {
     switch (message.Type)
     {
          case MessageTypes.Reset:
          {
-              _lookupSecuritiesId = 0;
-              _lookupPortfoliosId = 0;
+         	_lastMyTradeId = 0;
+			_lastTimeBalanceCheck = null;
 
-              if (_smartCom != null)
-              {
-                  try
-                  {
-                      DisposeSmartCom();
-                  }
-                  catch (Exception ex)
-                  {
-                      SendOutError(ex);
-                  }
+			if (_httpClient != null)
+			{
+				try
+				{
+					_httpClient.Dispose();
+				}
+				catch (Exception ex)
+				{
+					SendOutError(ex);
+				}
 
-                  try
-                  {
-                      _smartCom.disconnect();
-                  }
-                  catch (Exception ex)
-                  {
-                      SendOutError(ex);
-                  }
+				_httpClient = null;
+			}
 
-                   _smartCom = null;
-              }
+			if (_pusherClient != null)
+			{
+				try
+				{
+					UnsubscribePusherClient();
+					_pusherClient.Disconnect();
+				}
+				catch (Exception ex)
+				{
+					SendOutError(ex);
+				}
 
-              SendOutMessage(new ResetMessage());
+				_pusherClient = null;
+			}
 
-              break;
+			SendOutMessage(new ResetMessage());
+
+          	break;
         }
 
         case MessageTypes.Connect:
         {
-            if (_smartCom != null)
-                throw new InvalidOperationException("smartCom != null");
+            if (_httpClient != null)
+				throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-            _smartCom = new StServer();
+			if (_pusherClient != null)
+				throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-            _smartCom.Connected += smartCom_Connected;
-            _smartCom.Disconnected += smartCom_Disconnected;
-            _smartCom.AddPortfolio += smartCom_AddPortfolio;
-            _smartCom.AddSymbol += smartCom_AddSymbol;
-            _smartCom.SetPortfolio += smartCom_SetPortfolio;
-            _smartCom.UpdatePosition += smartCom_UpdatePosition;
-            _smartCom.AddTick += smartCom_AddTick;
-            _smartCom.UpdateBidAsk += smartCom_UpdateBidAsk;
-            _smartCom.UpdateQuote +=  smartCom_UpdateQuote;
-            _smartCom.AddTrade += smartCom_AddTrade;
-            _smartCom.UpdateOrder += smartCom_UpdateOrder;
-            _smartCom.SetMyClosePos += smartCom_SetMyClosePos;
-            _smartCom.SetMyOrder += smartCom_SetMyOrder;
-            _smartCom.SetMyTrade += smartCom_SetMyTrade;
-            _smartCom.OrderSucceeded += smartCom_OrderSucceeded;
-            _smartCom.OrderFailed += smartCom_OrderFailed;
-            _smartCom.OrderCancelFailed += smartCom_OrderCancelFailed;
-            _smartCom.OrderCancelSucceeded += smartCom_OrderCancelSucceeded;
-            _smartCom.OrderMoveFailed += smartCom_OrderMoveFailed;
-            _smartCom.OrderMoveSucceeded += smartCom_OrderMoveSucceeded;
+			_httpClient = new HttpClient(ClientId, Key, Secret, AuthV2) { Parent = this };
 
-            _smartCom.connect(Address, Port, Login, Password);
+			_pusherClient = new PusherClient { Parent = this };
+			SubscribePusherClient();
+			_pusherClient.Connect();
 
             break;
         }
 
         case MessageTypes.Disconnect:
         {
-            if (_smartCom == null)
-                throw new InvalidOperationException(LocalizedStrings.Str1856);
-                
-            _smartCom.disconnect();
+            if (_httpClient == null)
+				throw new InvalidOperationException(LocalizedStrings.Str1856);
+
+			if (_pusherClient == null)
+				throw new InvalidOperationException(LocalizedStrings.Str1856);
+
+			_httpClient.Dispose();
+			_httpClient = null;
+
+			_pusherClient.Disconnect();
 
             break;
         }
-
-        case MessageTypes.OrderRegister:
-            // TODO
-            break;
-
-        case MessageTypes.OrderCancel:
-            // TODO
-            break;
-
-        case MessageTypes.OrderGroupCancel:
-             // TODO
-             break;
-
-        case MessageTypes.OrderReplace:
-             // TODO
-             break;
-
-        case MessageTypes.Portfolio:
-             // TODO
-             break;
-
+        
         case MessageTypes.PortfolioLookup:
-             ProcessPortolioLookupMessage((PortfolioLookupMessage)message);
-             break;
+		{
+			ProcessPortfolioLookup((PortfolioLookupMessage)message);
+			break;
+		}
 
-        case MessageTypes.MarketData:
-             ProcessMarketDataMessage((MarketDataMessage)message);
-             break;
+		case MessageTypes.OrderStatus:
+		{
+			ProcessOrderStatus((OrderStatusMessage)message);
+			break;
+		}
 
-        case MessageTypes.SecurityLookup:
-             ProcessSecurityLookupMessage((SecurityLookupMessage)message);
-             break;
-    }
+		case MessageTypes.OrderRegister:
+		{
+			ProcessOrderRegister((OrderRegisterMessage)message);
+			break;
+		}
+
+		case MessageTypes.OrderCancel:
+		{
+			ProcessOrderCancel((OrderCancelMessage)message);
+			break;
+		}
+
+		case MessageTypes.OrderGroupCancel:
+		{
+			ProcessOrderGroupCancel((OrderGroupCancelMessage)message);
+			break;
+		}
+				
+		case MessageTypes.SecurityLookup:
+		{
+			ProcessSecurityLookup((SecurityLookupMessage)message);
+			break;
+		}
+
+		case MessageTypes.MarketData:
+		{
+			ProcessMarketData((MarketDataMessage)message);
+			break;
+		}
+				
+		default:
+			return false;
+	}
+
+	return true;
 }
-]]>			
+
+private void SessionOnPusherConnected()
+{
+	SendOutMessage(new ConnectMessage());
+}
+
+private void SessionOnPusherError(Exception exception)
+{
+	SendOutError(exception);
+}
+
+private void SessionOnPusherDisconnected(bool expected)
+{
+	SendOutDisconnectMessage(expected);
+}
+]]>		
 						</code>
 					</content>
 				</step>
 				<step>
 				<content>
 					<para>
-					 Событие <legacyBold>StServer.Connected</legacyBold>.
+					 Событие <legacyBold>SessionOnPusherConnected</legacyBold>.
 					</para>
 					<para>
 					 В обработчике события соединения нативного API необходимо послать исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
@@ -346,14 +378,14 @@ protected override void OnSendInMessage(Message message)
 					 Если типы сообщения установлены у адаптера, то соответствующие сообщения будут посланы. В нашем примере (см. Конструктор адаптера.) в этот список
 					 были добавлены типы <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
 					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, поэтому
-					 следует ожидать получения исходящих сообщений <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> и
+					 следует ожидать получения входящих сообщений <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> и
 					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference>.
 					</para>
 					<code language="C#">
 						<![CDATA[
-private void smartCom_Connected()
+private void SessionOnPusherConnected()
 {
-    SendOutMessage(new ConnectMessage());
+	SendOutMessage(new ConnectMessage());
 }
 						]]>	
 					</code>
@@ -362,37 +394,97 @@ private void smartCom_Connected()
 				<step>
 				<content>
 				<para>
-				Исходящие сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> и <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>.
+				Входящие сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> и <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>.
 				</para>
 				<para>
-				При получении этих сообщений необходимо вызвать функции <token>smartcom</token>, запрашивающие портфели и инструменты соответственно.
-				Вызов этих функций приведет к возникновению событий 
-				<legacyBold>StServer.AddPortfolio</legacyBold> (портфели) и <legacyBold>StServer.AddSymbol</legacyBold> (инструменты).
+				При получении этих сообщений необходимо вызвать функции <token>bitstamp</token>, запрашивающие портфели и инструменты соответственно.
+				А после получения всех данных необходимо послать сообщение 
+				<codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
+				Обратите внимание, как результирующему сообщению, так и сообщениям с данными, присваивается идентификатор подписки:
 				</para>
 				<code language="C#">
 						<![CDATA[
 // Запрашиваем список портфелей
-private void ProcessPortolioLookupMessage(PortfolioLookupMessage pfMsg)
+private void ProcessPortfolioLookup(PortfolioLookupMessage message)
 {
-    if (_lookupPortfoliosId == 0)
-    {
-        _lookupPortfoliosId = pfMsg.TransactionId;
-        _smartCom.GetPrortfolioList(); 
-    }
-    else
-        SendOutError(LocalizedStrings.Str1868);
+	if (!message.IsSubscribe)
+		return;
+
+	var transactionId = message.TransactionId;
+
+	var pfName = PortfolioName;
+
+	SendOutMessage(new PortfolioMessage
+	{
+		PortfolioName = pfName,
+		BoardCode = Extensions.BitStampBoard,
+		OriginalTransactionId = transactionId, // <- идентификатор подписки
+	});
+	
+	var account = _httpClient.GetAccount(section);
+
+	SendOutMessage(new PositionChangeMessage
+	{
+		SecurityId = SecurityId.Money, // <- для денежной позиции устанавливаем спец код инструмента Money
+		PortfolioName = GetPortfolioName(section),
+		ServerTime = time,	
+	}
+	.TryAdd(PositionChangeTypes.Leverage, (decimal?)account.MarginLevel)
+	.TryAdd(PositionChangeTypes.CommissionTaker, (decimal?)account.TakerCommissionRate)
+	.TryAdd(PositionChangeTypes.CommissionMaker, (decimal?)account.MakerCommissionRate));
+
+	var tuple = _httpClient.GetBalances();
+
+	foreach (var pair in tuple.Item1)
+	{
+		var currValue = pair.Value.First;
+		var currPrice = pair.Value.Second;
+		var blockValue = pair.Value.Third;
+
+		if (currValue == null && currPrice == null && blockValue == null)
+			continue;
+
+		var msg = this.CreatePositionChangeMessage(pfName, pair.Key.ToUpperInvariant().ToStockSharp(false));
+
+		msg
+		.TryAdd(PositionChangeTypes.CurrentValue, currValue, true)
+		.TryAdd(PositionChangeTypes.CurrentPrice, currPrice, true)
+		.TryAdd(PositionChangeTypes.BlockedValue, blockValue, true);
+
+		SendOutMessage(msg);	
+	}
+	
+	SendSubscriptionResult(message); // <- завершение подписки (если To == null, то тут отправляется что подписка перешла в Online, иначе Finished)
+	
+	if (message.To == null) // подписка не только на истори, но и на online
+		_pusher.SubscribeAccount();
 }
 
 // Запрашиваем инструменты
-private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
+private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 {
-    if (_lookupSecuritiesId == 0)
-    {
-        _lookupSecuritiesId = message.TransactionId;
-        _smartCom.GetSymbols();
-    }
-    else
-        SendOutError(LocalizedStrings.Str1854);
+	var secTypes = lookupMsg.GetSecurityTypes();
+
+	foreach (var info in _httpClient.GetPairsInfo())
+	{
+		var secMsg = new SecurityMessage
+		{
+			SecurityId = info.Name.ToStockSharp(),
+			SecurityType = info.UrlSymbol == _eurusd ? SecurityTypes.Currency : SecurityTypes.CryptoCurrency,
+			MinVolume = info.MinimumOrder.Substring(0, info.MinimumOrder.IndexOf(' ')).To<decimal>(),
+			Decimals = info.BaseDecimals,
+			Name = info.Description,
+			VolumeStep = info.UrlSymbol == _eurusd ? 0.00001m : 0.00000001m,
+			OriginalTransactionId = lookupMsg.TransactionId, // <- идентификатор подписки
+		};
+
+		if (!secMsg.IsMatch(lookupMsg, secTypes))
+			continue;
+
+		SendOutMessage(secMsg);
+	}
+
+	SendSubscriptionResult(lookupMsg); // <- завершение подписки
 }
 						
 						]]>	
@@ -403,157 +495,62 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
 				<step>
 				<content>
 				<para>
-					 Событие <legacyBold>StServer.AddPortfolio</legacyBold>.
+					 Изменение счета или позиции, получаемые от внешней системы.
 				</para>
                 <para>
-					 В обработчике события <legacyBold>StServer.AddPortfolio</legacyBold> полученную информацию о портфеле
-					 необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
-					 А после получения всех портфелей необходимо послать сообщение 
-					 <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
-					 Обратите внимание, что в последнем случае свойству 
-					 <codeEntityReference>P:StockSharp.Messages.BaseResultMessage`1.OriginalTransactionId</codeEntityReference> нужно
-					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
+					 В обработчике события полученную информацию о портфеле
+					 необходимо преобразовать в исходящее сообщение <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>:
 				</para>
 				<code language="C#">
 				<![CDATA[
-private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, string portfolioExch, SmartCOM3Lib.StPortfolioStatus portfolioStatus)
-{
-	SendOutMessage(new PortfolioMessage
-    {
-		PortfolioName = portfolioName,
-		BoardCode = PortfolioBoardCodes.TryGetValue(portfolioExch),
-     });
-
-     if ((row + 1) < nrows)
-          return;
-
-     SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = _lookupPortfoliosId });
-     _lookupPortfoliosId = 0;
-}
-				]]>	
-				</code>
-				</content>
-				</step>
-				<step>
-				<content>
-				<para>
-					 Событие <legacyBold>StServer.AddSymbol</legacyBold>.
-				</para>
-				<para>
-					 В обработчике события <legacyBold>StServer.AddSymbol</legacyBold> полученную информацию об инструменте
-					 необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference>.
-					 А после получения всех инструментов необходимо послать сообщение 
-					 <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
-					 Обратите внимание, что свойству <legacyBold>OriginalTransactionId</legacyBold> обоих входящих сообщений нужно 
-					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
-				</para>
-				<code language="C#">
-				<![CDATA[
-private void smartCom_AddSymbol(int row, int rowCount, string smartId, string name, string secCode, string secClass, int decimals, int lotSize, double stepPrice, double priceStep,
-            string isin, string board, System.DateTime expiryDate, double daysBeforeExpiry, double strike)
-{
-	if (secCode.IsEmpty())
-    	secCode = smartId;
-
-    var securityId = new SecurityId
-    {
-        SecurityCode = secCode,
-        BoardCode = board,
-        Native = smartId,
-        Isin = isin
-    };
-
-    if (secClass.IsEmpty())
-        secClass = board;
-
-    DateTime? expDate = DateTime.FromOADate(0) == expiryDate ? (DateTime?)null : expiryDate;
-
-
-    var secMsg = new SecurityMessage
-    {
-        PriceStep = priceStep.ToDecimal(),
-        Decimals = decimals,
-        Multiplier = lotSize,
-        Name = name,
-        ShortName = name,
-        ExpiryDate = expDate == null ? (DateTimeOffset?)null : expDate.Value.ApplyTimeZone(TimeHelper.Moscow),
-        ExtensionInfo = new Dictionary<object, object>
+		private void SessionOnAccountUpdated(AccountUpdate account)
 		{
-					{ "Class", secClass }
-		},
-        OriginalTransactionId = _lookupSecuritiesId
-     };
+			var time = account.LastAccountUpdate ?? account.EventTime;
+			var futData = account.FuturesData;
 
-     if (secClass.CompareIgnoreCase("IDX"))
-     {
-         secMsg.SecurityType = SecurityTypes.Index;
+			if (account.Balances != null)
+			{
+				foreach (var balance in account.Balances)
+				{
+					SendOutMessage(new PositionChangeMessage
+					{
+						PortfolioName = GetPortfolioName(section),
+						SecurityId = balance.Asset.InternalCreateSecurityId(),
+						ServerTime = time,
+					}
+					.TryAdd(PositionChangeTypes.CurrentValue, (decimal)balance.Free, true)
+					.TryAdd(PositionChangeTypes.BlockedValue, (decimal)balance.Locked, true));
+				}
+			}
+			else if (futData != null)
+			{
+				foreach (var balance in futData.Balances)
+				{
+					SendOutMessage(new PositionChangeMessage
+					{
+						PortfolioName = GetPortfolioName(section),
+						SecurityId = balance.Asset.InternalCreateSecurityId(),
+						ServerTime = time,
+					}
+					.TryAdd(PositionChangeTypes.CurrentValue, (decimal)balance.Balance, true));
+				}
 
-         switch (secMsg.SecurityId.BoardCode)
-         {
-             case "RUSIDX":
-                  securityId.BoardCode = secCode.ContainsIgnoreCase("MICEX") || secCode.ContainsIgnoreCase("MCX") ? ExchangeBoard.Micex.Code : ExchangeBoard.Forts.Code;
-                  break;
-         }
-     }
-     else
-     {
-         var info = SecurityClassInfo.GetSecurityClassInfo(secClass);
-
-         secMsg.SecurityType = info.Item1;
-         securityId.BoardCode = info.Item2;
-
-         if (ExchangeBoard.GetOrCreateBoard(info.Item2).IsMicex
-             &&
-             /* проверяем, что не началась ли трансляция правильных дробных шагов */
-                    secMsg.PriceStep != null && secMsg.PriceStep == (int)secMsg.PriceStep)
-         {
-             secMsg.PriceStep = 1m / 10m.Pow(secMsg.PriceStep.Value);
-         }
-     }
-
-     secMsg.SecurityId = securityId;
-
-     if (secMsg.SecurityType == SecurityTypes.Option)
-     {
-         var optionInfo = secMsg.Name.GetOptionInfo(ExchangeBoard.Forts);
-
-         if (optionInfo != null)
-         {
-             if (!secCode.IsEmpty())
-             {
-                 var futureInfo = optionInfo.UnderlyingSecurityId.GetFutureInfo(secCode, ExchangeBoard.Forts);
-                 if (futureInfo != null)
-                        secMsg.UnderlyingSecurityCode = futureInfo.SecurityId.SecurityCode;
-             }
-
-             secMsg.ExpiryDate = optionInfo.ExpiryDate;
-             secMsg.OptionType = optionInfo.OptionType;
-             secMsg.Strike = optionInfo.Strike;
-        }
-     }
-
-     SendOutMessage(secMsg);
-
-     var stpPrice = stepPrice.ToDecimal();
-
-     if (stepPrice != null)
-     {
-         SendOutMessage(
-             new Level1ChangeMessage
-             {
-                        SecurityId = securityId,
-                        ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
-             }
-             .TryAdd(Level1Fields.StepPrice, stpPrice.Value));
-     }
-
-     if ((row + 1) < rowCount)
-          return;
-
-     SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = _lookupSecuritiesId });
-      _lookupSecuritiesId = 0;
-}
-				]]>	
+				foreach (var position in futData.Positions)
+				{
+					SendOutMessage(new PositionChangeMessage
+					{
+						PortfolioName = GetPortfolioName(),
+						SecurityId = position.Symbol.ToStockSharp(),
+						ServerTime = time,
+					}
+					.TryAdd(PositionChangeTypes.CurrentValue, (decimal)position.Amount, true)
+					.TryAdd(PositionChangeTypes.AveragePrice, (decimal?)position.EntryPrice, true)
+					.TryAdd(PositionChangeTypes.RealizedPnL, (decimal?)position.RealizedPnL, true)
+					.TryAdd(PositionChangeTypes.UnrealizedPnL, (decimal?)position.UnrealizedPnL, true)
+					);
+				}
+			}
+		}]]>	
 				</code>
 				</content>
 				</step>
@@ -561,121 +558,155 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				<step>
 				<content>
 				<para>
-				 <legacyBold>Регистрация/отмена регистрации сделок.</legacyBold>
+				 <legacyBold>Подписка на тиковые данные.</legacyBold>
 				</para>
 				<para>
 				 При вызове методов 
 <codeEntityReference>M:StockSharp.Algo.Connector.SubscribeTrades(StockSharp.BusinessEntities.Security,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},StockSharp.Messages.MarketDataBuildModes,System.Nullable{StockSharp.Messages.MarketDataTypes},StockSharp.Messages.IMessageAdapter)</codeEntityReference> 
 или
 				 <codeEntityReference>M:StockSharp.Algo.Connector.UnSubscribeTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> 
-будет получено исходящее сообщение 
+будет сформировано входящее сообщение 
 <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>
 .
 				 </para>
 				 <para>
-				 При обработке этого сообщения необходимо вызвать методы <token>smartcom</token> регистрирующий/отменяющий регистрацию получения сделок.
+				 При обработке этого сообщения необходимо вызвать методы <token>bitstamp</token> по подписке или отписке получения тиковых сделок.
 				 </para>
 				 <para>
 				 Так как сообщение используется для работы со всеми типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
-				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType</codeEntityReference>. Для сделок значение этого свойства равно
-				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
+				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType2</codeEntityReference>. Для сделок значение этого свойства равно
+				 <codeEntityReference qualifyHint="true">P:StockSharp.Messages.DataTypes.Ticks</codeEntityReference>.
 				</para>
 				<para>
-				  После вызова метода <legacyBold>StServer.ListenTicks</legacyBold> сделки будут поступать в событии <legacyBold>StServer.AddTick</legacyBold>.
+				  После вызова метода <legacyBold>SubscribeTrades</legacyBold> сделки будут поступать в событии <legacyBold>SessionOnNewTrade</legacyBold>.
 				 </para>
 				
 				<code language="C#">
                 <![CDATA[
-private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
-{
-    
-    // Получаем код инструмента, используемый в SmartCom
-    var smartId = (string)mdMsg.SecurityId.Native;
+		private void ProcessMarketData(MarketDataMessage mdMsg)
+		{
+			if (!mdMsg.SecurityId.IsAssociated())
+			{
+				SendSubscriptionNotSupported(mdMsg.TransactionId);
+				return;
+			}
 
-    if (smartId.IsEmpty())
-        throw new InvalidOperationException(LocalizedStrings.Str1853Params.Put(mdMsg.SecurityId));
+			var currency = mdMsg.SecurityId.ToCurrency();
 
-    switch (mdMsg.DataType)
-    {
-        case MarketDataTypes.Level1:
-        {
-             //TODO
-             break;
-        }
-        case MarketDataTypes.MarketDepth:
-        {
-             //TODO
-             break;
-        }
-        case MarketDataTypes.Trades:
-        {
-            if (mdMsg.From == null)
-            {
-                if (mdMsg.IsSubscribe)
-                    _smartCom.ListenTicks(smartId);
-                else
-                    _smartCom.CancelTicks(smartId);
-           }
-           else
-           {
-                //TODO
-           }
-           
-           break;
-        }
-        case MarketDataTypes.CandleTimeFrame:
-        {
-             //TODO
-             break;
-        }
-        default:
-        {
-            SendOutMarketDataNotSupported(mdMsg.TransactionId);
-            return;
-     }
-}
-				]]>	
+			if (mdMsg.DataType2 == DataType.OrderLog)
+			{
+				if (mdMsg.IsSubscribe)
+					_pusherClient.SubscribeOrderLog(currency);
+				else
+					_pusherClient.UnSubscribeOrderLog(currency);
+			}
+			else if (mdMsg.DataType2 == DataType.MarketDepth)
+			{
+				if (mdMsg.IsSubscribe)
+					_pusherClient.SubscribeOrderBook(currency);
+				else
+					_pusherClient.UnSubscribeOrderBook(currency);
+			}
+			else if (mdMsg.DataType2 == DataType.Ticks)
+			{
+				if (mdMsg.IsSubscribe)
+				{
+					if (mdMsg.To != null)
+					{
+						SendSubscriptionReply(mdMsg.TransactionId);
+
+						var diff = DateTimeOffset.Now - (mdMsg.From ?? DateTime.Today);
+
+						string interval;
+
+						if (diff.TotalMinutes < 1)
+							interval = "minute";
+						else if (diff.TotalDays < 1)
+							interval = "hour";
+						else
+							interval = "day";
+
+						var trades = _httpClient.RequestTransactions(currency, interval);
+
+						foreach (var trade in trades.OrderBy(t => t.Time))
+						{
+							SendOutMessage(new ExecutionMessage
+							{
+								ExecutionType = ExecutionTypes.Tick,
+								SecurityId = mdMsg.SecurityId,
+								TradeId = trade.Id,
+								TradePrice = (decimal)trade.Price,
+								TradeVolume = trade.Amount.ToDecimal(),
+								ServerTime = trade.Time,
+								OriginSide = trade.Type.ToSide(),
+								OriginalTransactionId = mdMsg.TransactionId
+							});
+						}
+
+						SendSubscriptionResult(mdMsg);
+						return;
+					}
+					else
+						_pusherClient.SubscribeTrades(currency);
+				}
+				else
+				{
+					_pusherClient.UnSubscribeTrades(currency);
+				}
+			}
+			else
+			{
+				SendSubscriptionNotSupported(mdMsg.TransactionId);
+				return;
+			}
+
+			SendSubscriptionReply(mdMsg.TransactionId);
+		}
+				
+]]>
 				</code>
 			</content>
 			</step>
 			<step>
 				<content>
 				<para>
-					Событие <legacyBold>StServer.AddTick</legacyBold>.
+					Событие <legacyBold>SessionOnNewTrade</legacyBold>.
 				</para>
 				<para>
-				В обработчике события <legacyBold>StServer.AddTick</legacyBold> полученную информацию о сделке 
-				необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>.
-				Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок, так и для заявок. 
+				В обработчике события <legacyBold>SessionOnNewTrade</legacyBold> полученную информацию о сделке 
+				необходимо преобразовать во исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>.
+				Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок (собственных или анонимных), так и для заявок. 
   				Поэтому в сообщении уточняется, что оно относится к сделке - 
   				<codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference> = 
   				<codeEntityReference qualifyHint="true">F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference>.
 				</para>
 				<code language="C#">
 				<![CDATA[
-private void smartCom_AddTick(string smartId, System.DateTime time, double price, double volume, string tradeId, SmartCOM3Lib.StOrder_Action action)
+private void SessionOnNewTrade(string pair, Trade trade)
 {
-    SendOutMessage(CreateTrade(smartId, time, price.ToDecimal(), volume.ToDecimal(), tradeId.To<long>(), action));
-}
-
-private static ExecutionMessage CreateTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartCOM3Lib.StOrder_Action action)
-{
-    return new ExecutionMessage
-    {
-         SecurityId = new SecurityId { Native = smartId },
-         TradeId = tradeId,
-         TradePrice = price,
-         Volume = volume,
-         OriginSide = action.ToSide(),
-         ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
-         ExecutionType = ExecutionTypes.Tick
-   };
+	SendOutMessage(new ExecutionMessage
+	{
+		ExecutionType = ExecutionTypes.Tick,
+		SecurityId = pair.ToStockSharp(),
+		TradeId = trade.Id,
+		TradePrice = (decimal)trade.Price,
+		TradeVolume = (decimal)trade.Amount,
+		ServerTime = trade.Time,
+		OriginSide = trade.Type.ToSide(),
+	});
 }
 
 
-			    ]]>	
+		  ]]>	
 			   </code>
 			</content>
+				</step>
+				<step>
+					<content>
+						<para>
+						 Код работы с заявками (отмена-регистрация), как и полный код адаптера, можно получить в репозитарии <token>stocksharpgithub</token>.
+						</para>
+					</content>
 				</step>
 			</steps>
 		</procedure>

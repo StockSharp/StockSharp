@@ -3,8 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <para>Для организации взаимодействия по сети можно использовать связку компонентов 
-       <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" />. 
-       <codeEntityReference>T:StockSharp.Fix.FastMessageAdapter</codeEntityReference> обеспечивает трансляцию fix-сообщений в сообщения s#. 
+       <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" />. <codeEntityReference>T:StockSharp.Fix.FixMessageAdapter</codeEntityReference> обеспечивает трансляцию FIX-сообщений в сообщения <token>stocksharp</token>. 
        <link xlink:href="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93">FixServer</link> позволяет выполнять обратную операцию.
        Это обеспечивает совместимость сообщений этих типов.
        </para>
