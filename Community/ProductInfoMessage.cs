@@ -39,6 +39,18 @@
 		public string DescriptionRu { get; set; }
 
 		/// <summary>
+		/// Full description (en).
+		/// </summary>
+		[DataMember]
+		public string FullDescriptionEn { get; set; }
+
+		/// <summary>
+		/// Full description (ru).
+		/// </summary>
+		[DataMember]
+		public string FullDescriptionRu { get; set; }
+
+		/// <summary>
 		/// Package id.
 		/// </summary>
 		[DataMember]
@@ -208,6 +220,8 @@
 			destination.Name = Name;
 			destination.Description = Description;
 			destination.DescriptionRu = DescriptionRu;
+			destination.FullDescriptionEn = FullDescriptionEn;
+			destination.FullDescriptionRu = FullDescriptionRu;
 			destination.PackageId = PackageId;
 			destination.Repository = Repository;
 			destination.Tags = Tags;
