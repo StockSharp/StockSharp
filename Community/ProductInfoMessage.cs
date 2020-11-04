@@ -27,10 +27,16 @@
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Description.
+		/// Description (en).
 		/// </summary>
 		[DataMember]
 		public string Description { get; set; }
+
+		/// <summary>
+		/// Description (ru).
+		/// </summary>
+		[DataMember]
+		public string DescriptionRu { get; set; }
 
 		/// <summary>
 		/// Package id.
@@ -201,6 +207,7 @@
 			destination.Id = Id;
 			destination.Name = Name;
 			destination.Description = Description;
+			destination.DescriptionRu = DescriptionRu;
 			destination.PackageId = PackageId;
 			destination.Repository = Repository;
 			destination.Tags = Tags;
