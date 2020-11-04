@@ -6,11 +6,11 @@
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
   <Topic id="6b40ff4e-2c3b-4d94-b676-f15f576ade07" visible="True" title="S#.Installer">
     <Topic id="d07ac3c7-8f0e-41d5-9357-014f16ef923b" visible="True" noFile="true" title="Видео">
-      <Topic id="cc6df22b-a360-4a2b-ac7d-2992b88d41cf" visible="True" title="Установка S#.Installer" />
-      <Topic id="ff1cd434-6aaa-4f1c-b26f-419751970547" visible="True" title="Установка программ при помощи S#.Installer" />
-      <Topic id="449efcf2-e190-43b0-91cc-653e8a15545a" visible="True" title="Обновление программ при помощи S#.Installer" />
+      <Topic id="cc6df22b-a360-4a2b-ac7d-2992b88d41cf" visible="True" title="Первый запуск" />
+      <Topic id="ff1cd434-6aaa-4f1c-b26f-419751970547" visible="True" title="Установка и удаление программ" />
+      <Topic id="449efcf2-e190-43b0-91cc-653e8a15545a" visible="True" title="Обновление программ" />
     </Topic>
-    <Topic id="8265936d-55c4-46ea-b041-06957b3f97a1" visible="True" title="Установка S#.Installer" />
+    <Topic id="8265936d-55c4-46ea-b041-06957b3f97a1" visible="True" title="Первый запуск" />
     <Topic id="385c6f6d-8cac-4d90-8701-f5da0281ed43" visible="True" title="Установка и удаление программ " />
     <Topic id="2d1ab966-b9c0-4953-bb8c-3638a491377d" visible="True" title="Обновление программ" />
   </Topic>
@@ -981,7 +981,7 @@
       </Topic>
       <Topic id="833ab88d-c30a-427e-a40b-ccbfa0eb7bd5" visible="True" title="Настройка инструментов для скачивания" />
       <Topic id="86edd5e9-ff41-48a7-9bc8-c41085886d6e" visible="True" title="Построение свечей различного типа" />
-      <Topic id="a2138fd1-faee-4fa1-8613-ea2a5bdc0f20" visible="True" isSelected="true" title="Получение Стакана из иного типа маркет-данных" />
+      <Topic id="a2138fd1-faee-4fa1-8613-ea2a5bdc0f20" visible="True" title="Получение Стакана из иного типа маркет-данных" />
       <Topic id="b6397a6f-4ab9-4867-93df-669385943f72" visible="True" title="Настройка формата сохранения" />
       <Topic id="af07f34d-edb0-4c78-99af-42d253415343" visible="True" title="Построение индикатора" />
       <Topic id="10c4fb18-bd0c-451d-9bfe-d810675503be" visible="True" title="Функция Аналитика" />

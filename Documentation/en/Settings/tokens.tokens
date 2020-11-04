@@ -151,6 +151,7 @@
     <ddue:linkUri>https://interactivebrokers.com/en/index.php?f=1537</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="Idax"><ddue:link xlink:href="886bcc99-7011-4c3c-85fe-d0fc646ee00f" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="installer"><ddue:link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Installer</ddue:link></item>
   <item id="IEX"><ddue:link xlink:href="fb946f86-fe4b-4e30-97f7-543178e81792" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="iqfeed"><ddue:link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">IQFeed</ddue:link></item>
   <item id="iqfeed_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">

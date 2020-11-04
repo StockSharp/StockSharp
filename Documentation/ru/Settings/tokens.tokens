@@ -286,7 +286,6 @@
 		  <ddue:linkUri>http://rts.ru/ru/standard/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="SchemeDis"><ddue:link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Схемы</ddue:link></item>
-  <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BitStamp</ddue:link></item>
   <item id="smartcom"><ddue:link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">SmartCOM</ddue:link></item>
   <item id="smartcom_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>SmartCOM</ddue:linkText>
@@ -365,7 +364,6 @@
    <ddue:linkText>StockSharp YouTube</ddue:linkText>
    <ddue:linkUri>https://youtube.com/user/StockSharp/</ddue:linkUri>
   </ddue:externalLink></item>
-  <item id="terminal"><ddue:link xlink:href="e4b5e112-bd08-4f40-8741-7514e7e4088e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Terminal</ddue:link></item>
   <item id="TradeOgre"><ddue:link xlink:href="989447cf-bc05-4f6a-a736-b3a916ee1ffc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="Tradier"><ddue:link xlink:href="113c8f3e-3145-4899-bd5b-60ceac995be2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
   <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
