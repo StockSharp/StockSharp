@@ -941,7 +941,6 @@
       <Topic id="6ea62882-5530-4294-8f76-02699945da67" visible="True" title="Emulation setup" />
       <Topic id="c9adb350-2d8d-4ab1-9fc7-aabbfc0cc28f" visible="True" title="Instruments mapping" />
       <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="FIX/FAST connectivity" />
-      <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Remote administration" />
     </Topic>
     <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" title="Instruments and boards">
       <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Instruments list" />
