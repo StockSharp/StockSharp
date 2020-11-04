@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
  <para>Настройка инструмента для скачивания.</para>
  <para>Для ряда источников существует возможность сделать настройки для скачивания нужных инструментов.</para>
- <para>Рассмотрим на примере скачивания инструментов с источника <legacyBold>Inteactive Brokers</legacyBold>: </para>
+ <para>Рассмотрим на примере скачивания инструментов с источника <legacyBold>Interactive Brokers</legacyBold>: </para>
  
 <list class="ordered">
   <listItem><para>Выбираем скачать инструменты и нажимаем на кнопку <legacyBold>Расширенное условие</legacyBold>.</para>
