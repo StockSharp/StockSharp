@@ -4677,6 +4677,18 @@
       <ImageId>API_GUI_Settings_Bibox</ImageId>
       <AlternateText>API GUI Settings Bibox</AlternateText>
     </Image>
+    <Image Include="Art\API_GUI_Settings_Bitalong.png">
+      <ImageId>API_GUI_Settings_Bitalong</ImageId>
+      <AlternateText>API GUI Settings Bitalong</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_DigitexFutures.png">
+      <ImageId>API_GUI_Settings_DigitexFutures</ImageId>
+      <AlternateText>API GUI Settings DigitexFutures</AlternateText>
+    </Image>
+    <Image Include="Art\API_GUI_Settings_PrizmBit.png">
+      <ImageId>API_GUI_Settings_PrizmBit</ImageId>
+      <AlternateText>API GUI Settings PrizmBit</AlternateText>
+    </Image>
     <Image Include="Art\API_GUI_ReconnectionSettings.png">
       <ImageId>API_GUI_ReconnectionSettings</ImageId>
       <AlternateText>API GUI ReconnectionSettings</AlternateText>
