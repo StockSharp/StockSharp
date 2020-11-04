@@ -1,9 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="About StockSharp" />
+  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" isDefault="true" title="About StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="StockSharp Licensing" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Source codes" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Reference materials" />
+  <Topic id="6b40ff4e-2c3b-4d94-b676-f15f576ade07" visible="True" title="S#.Installer">
+    <Topic id="d07ac3c7-8f0e-41d5-9357-014f16ef923b" visible="True" noFile="true" title="Videos">
+      <Topic id="cc6df22b-a360-4a2b-ac7d-2992b88d41cf" visible="True" title="Setup" />
+      <Topic id="ff1cd434-6aaa-4f1c-b26f-419751970547" visible="True" title="Install and remove apps" />
+      <Topic id="449efcf2-e190-43b0-91cc-653e8a15545a" visible="True" title="Update apps" />
+    </Topic>
+    <Topic id="8265936d-55c4-46ea-b041-06957b3f97a1" visible="True" title="Setup" />
+    <Topic id="385c6f6d-8cac-4d90-8701-f5da0281ed43" visible="True" title="Install  and remove apps" />
+    <Topic id="2d1ab966-b9c0-4953-bb8c-3638a491377d" visible="True" title="Update apps" />
+  </Topic>
   <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
@@ -634,7 +644,13 @@
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Messages">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Description" />
-      <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Adapters" />
+      <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Adapters">
+        <Topic id="fa060718-1aaa-43a4-9c37-4f57476f1932" visible="True" title="Order books (incremental and regular)" />
+        <Topic id="15357338-1d0d-4a6d-ae70-8118be08ecc7" visible="True" title="Historical data" />
+        <Topic id="42dcf014-53df-4962-a907-59ce2f165507" visible="True" title="Order log" />
+        <Topic id="a90787cb-3566-4d09-835c-22a0838196fa" visible="True" title="Adapters chain" />
+        <Topic id="7b2d048a-1be5-4754-9da5-1fa78f30f970" visible="True" title="Threading model" />
+      </Topic>
       <Topic id="a26fc10a-4aa5-4a3e-9494-823c43eb9c84" visible="True" title="Storage" />
       <Topic id="c883681e-f822-4f81-a7a3-542b81db8b3c" visible="True" title="Networking" />
     </Topic>
@@ -861,32 +877,60 @@
     </Topic>
   </Topic>
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
+    <Topic id="164fe4c7-f9e8-40dc-8ba8-afdbe482dac0" visible="True" noFile="true" title="Videos">
+      <Topic id="555c3a67-e605-4555-b969-1594e70b5243" visible="True" title="First start" />
+      <Topic id="a1bb103d-b405-4363-9a76-a51c947e1b9c" visible="True" title="Sources samples">
+        <Topic id="574c05af-f3e0-4a15-882d-0dd11131ae42" visible="True" title="Oanda" />
+        <Topic id="7559be6b-1371-43e2-a78a-548ca8c1d246" visible="True" title="Interactive Brokers" />
+        <Topic id="bb22563c-0c38-4629-a8ca-b7d80ce156b9" visible="True" title="Bitmex" />
+        <Topic id="49636578-c4cc-43d2-bc01-cc0b19619baf" visible="True" title="Binance" />
+      </Topic>
+      <Topic id="833ab88d-c30a-427e-a40b-ccbfa0eb7bd5" visible="True" title="Instruments downloading" />
+      <Topic id="86edd5e9-ff41-48a7-9bc8-c41085886d6e" visible="True" title="Building candles" />
+      <Topic id="a2138fd1-faee-4fa1-8613-ea2a5bdc0f20" visible="True" title="Building order books" />
+      <Topic id="b6397a6f-4ab9-4867-93df-669385943f72" visible="True" title="Saving format" />
+      <Topic id="af07f34d-edb0-4c78-99af-42d253415343" visible="True" title="Indicators" />
+      <Topic id="10c4fb18-bd0c-451d-9bfe-d810675503be" visible="True" title="Analytics" />
+      <Topic id="c670121a-8d9c-4109-b1fe-2715d5e8208e" visible="True" title="Import task" />
+      <Topic id="abca211c-1ef7-4e7b-9e70-a167d8fa094e" visible="True" title="Export task" />
+      <Topic id="49bec81c-d90e-4039-9708-4a57b52c8e17" visible="True" title="Converter task" />
+    </Topic>
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="7fc5f53a-b6b9-4f0f-8b97-983dd98f0237" visible="True" title="Update to the new version" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Configuring sources">
+    <Topic id="ac37ca9e-de2e-47ab-be3f-bb9779ef1f3a" visible="True" title="Data sources">
+      <Topic id="947eb75f-f3e7-4141-8afc-d3e280c632d8" visible="True" title="Select source" />
       <Topic id="a4028651-96b0-48fc-950a-954995c32244" visible="True" title="Common connection settings" />
     </Topic>
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="View and export">
-      <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Ticks" />
-      <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Order books" />
-      <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Candles" />
-      <Topic id="fe4f5992-a496-45bb-82e6-d353b42df894" visible="True" title="Order log" />
-      <Topic id="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99" visible="True" title="Level 1 " />
-      <Topic id="243486c1-b9d4-47af-889e-61aaaa670644" visible="True" title="News" />
-      <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Transactions" />
-      <Topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" visible="True" title="Option desk" />
-      <Topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" visible="True" title="Indicators" />
-      <Topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" visible="True" title="Positions" />
-      <Topic id="e8991383-328f-4bf6-b046-6ab823c8c1de" visible="True" title="Export to MetaStock formats" />
+    <Topic id="312782a5-afa4-48a0-a048-7043ae151c49" visible="True" noFile="true" title="Prepare for download">
+      <Topic id="2774608c-db91-4de9-af1d-b88b4374ac5b" visible="True" title="Instruments list" />
+      <Topic id="113a788c-3739-4a1d-9891-107aaa675930" visible="True" title="Custom candles" />
     </Topic>
-    <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Candle generation" />
+    <Topic id="1cd3b77c-5500-4dd5-a28e-6446daa9fe6c" visible="True" title="Working with data">
+      <Topic id="6e4047aa-1693-4dd3-807c-d07fb3119dbe" visible="True" title="View and export">
+        <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Ticks" />
+        <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Order books" />
+        <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Candles" />
+        <Topic id="fe4f5992-a496-45bb-82e6-d353b42df894" visible="True" title="Order log" />
+        <Topic id="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99" visible="True" title="Level 1 " />
+        <Topic id="243486c1-b9d4-47af-889e-61aaaa670644" visible="True" title="News" />
+        <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Transactions" />
+        <Topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" visible="True" title="Option desk" />
+        <Topic id="0d15d724-6a2d-46b5-9341-596c9209bbff" visible="True" title="Indicators" />
+        <Topic id="9acae0d2-041e-403a-b04c-de6117c3bb76" visible="True" title="Positions" />
+      </Topic>
+      <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Candles generation" />
+      <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Export data">
+        <Topic id="e8991383-328f-4bf6-b046-6ab823c8c1de" visible="True" title="Export into MetaStock" />
+      </Topic>
+      <Topic id="9e4df290-b29b-4b71-bd57-f9834dc9c2fe" visible="True" title="Any market data types" />
+    </Topic>
     <Topic id="2714f864-0d7d-4d77-8d09-a25d87981f51" visible="True" title="Indicators" />
     <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" title="Importing">
+      <Topic id="9e13ea27-629d-4403-adfa-d76bc8648c7e" visible="True" title="Candles" />
       <Topic id="2a830015-5cfb-4468-8538-4e94820b3659" visible="True" title="Instruments" />
       <Topic id="1e18851f-69f7-4fa0-a5ea-c059c7694990" visible="True" title="Ticks" />
       <Topic id="6465c049-fca8-4bb4-b00a-d3495299267d" visible="True" title="Order books" />
-      <Topic id="9e13ea27-629d-4403-adfa-d76bc8648c7e" visible="True" title="Candles" />
       <Topic id="b0088f47-8c93-46ed-a53e-820b7c66e65b" visible="True" title="Order log" />
       <Topic id="eac5ea13-e8a5-4133-82bd-4442a4df3aca" visible="True" title="Level 1" />
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="News" />
@@ -894,8 +938,9 @@
     </Topic>
     <Topic id="c9491706-3750-42e8-a63f-b50184a7da1d" visible="True" noFile="true" title="Server mode">
       <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Settings" />
+      <Topic id="6ea62882-5530-4294-8f76-02699945da67" visible="True" title="Emulation setup" />
+      <Topic id="c9adb350-2d8d-4ab1-9fc7-aabbfc0cc28f" visible="True" title="Instruments mapping" />
       <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="FIX/FAST connectivity" />
-      <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="WCF connectivity" />
       <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Remote administration" />
     </Topic>
     <Topic id="7545b685-f318-4d91-af10-52708257f452" visible="True" noFile="true" title="Instruments and boards">
@@ -918,7 +963,7 @@
     </Topic>
     <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" title="Analytics">
       <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Working with scripts" />
-      <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Displaying analysis results" />
+      <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Running and displaying results" />
     </Topic>
     <Topic id="b6131db4-4a22-48ea-b89e-8e2a79d633c1" visible="True" noFile="true" title="Misc">
       <Topic id="e088a37c-22aa-4a85-a20e-3b64c1b039d3" visible="True" title="Settings reset" />

@@ -12,9 +12,14 @@
     	<mediaLink>
         <image placement="center" xlink:href="hydra_tasks" />
       </mediaLink>
-    	<para>Currently, there are three classes of tasks in <token>hydra</token></para>
+    	<para>Currently, there are four classes of tasks in <token>hydra</token></para>
     	
       <list class="bullet">
+	<listItem>
+          <para>
+            <link xlink:href="ec33258b-c0bb-4f2b-bef3-368e607a92a4" /> - the task is to import data from CSV format.
+          </para>
+        </listItem>
         <listItem>
           <para>
             <link xlink:href="272eef99-c7e4-4245-ae83-7efa4d2345bc"/> - the task is to convert the exchange data to the ticks, candles or order books.

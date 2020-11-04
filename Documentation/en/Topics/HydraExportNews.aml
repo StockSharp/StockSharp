@@ -3,19 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    
     <introduction>
-      <para>In the appearing window select the required time range, then select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
+      <para>В появившимся окне выбрать нужный диапазон времени и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_news" />
       </mediaLink>
-    <para>By means of the context menu you can set various settings of the news table: rows grouping, columns available, the display format, and others.</para>
-	 <mediaLink>
-       <image placement="center" xlink:href="hydra_export_context" />
-     </mediaLink>
-  
-    <para>Found news can be exported to formats <token>excel</token>, xml, sql, bin or txt. This can be done by using the drop-down list:</para>
-    	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export" />
-    	</mediaLink>
+    <para>Полученные значения можно <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспортировать в нужный формат</link>.</para>
+
     </introduction>
   
   </developerConceptualDocument>

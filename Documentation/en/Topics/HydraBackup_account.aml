@@ -2,18 +2,18 @@
 <topic id="abf5321b-0c86-4557-8240-a5e7a6133059" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>The following describes the creation and configuration of AWS account.</para>
+      <para>Далее описаны создание и настройка аккаунта AWS.</para>
     </introduction>
    	<procedure>
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>To create an AWS account, please go to the <externalLink>
-			<linkText>Create AWS account</linkText>
+					<para>Для создания аккаунта AWS необходимо перейти на страницу <externalLink>
+			<linkText>Создать аккаунт AWS</linkText>
 			<linkAlternateText>Optional alternate text</linkAlternateText>
-			<linkUri>https://aws.amazon.com/</linkUri>
+			<linkUri>https://aws.amazon.com/ru/</linkUri>
 			<linkTarget>_blank</linkTarget>
-			</externalLink> page and click the <legacyBold>Create account</legacyBold> button.</para>
+			</externalLink> и щелкнуть по кнопке <legacyBold>Создать аккаунт</legacyBold>.</para>
 			<mediaLink>
         		<image placement="left" xlink:href="Aws3_CreateAccount" />
 			</mediaLink>
@@ -22,52 +22,66 @@
 			
 			<step>
 				<content>
-					<para>Next, fill in the form proposed by the web service.</para>
+					<para>Далее заполнить формы, которые будет предлагать веб-сервис.</para>
 				</content>
 			</step>
-			
 			<step>
 				<content>
-					<para>At one stage of the registration it will be prompted to enter a phone number and initiate a call to your phone using the
-					<legacyBold>Call Me Now</legacyBold> button.</para>
+					<para>Заполнить данные вашей карты, это делается для подтверждения личности.</para>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_Paytest" />
+					</mediaLink>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>На одном из этапов регистрации будет предложено ввести номер телефона и инициировать звонок
+					на Ваш телефон при помощи кнопки <legacyBold>Call Me Now</legacyBold>.</para>
 					<mediaLink>
         				<image placement="left" xlink:href="Aws3_CallMeNow" />
 					</mediaLink>
-					<para>You should pick up the phone and dial the code, which will be shown on the computer screen.</para> 
+					<para>Вам следует поднять трубку и набрать на телефоне код, который будет показан на экране компьютера.</para> 
 				</content>
 			</step>
 			
 			<step>
 				<content>
-					<para>Further it will be asked to choose a support plan. At the end of the account creation it is necessary to go to the management console.</para>
+					<para>Далее будет предложено выбрать план поддержки. По завершению создания аккаунта нужно перейти в консоль управления.</para>
 					<mediaLink>
-        				<image placement="center" xlink:href="Aws3_console" />
+        				<image placement="left" xlink:href="Aws3_console" />
 					</mediaLink>
 				</content>
 			</step>
 			
 			<step>
 				<content>
-					<para>The first step when setting up the account is to create a Bucket. <mediaLinkInline><image xlink:href="Aws3_CreateBucket" /></mediaLinkInline></para>
-					<para>Bucket is a container for objects stored in the "cloud." It is necessary to specify a unique name for Bucket, and choose a regional data
-					center (Region) where the data is physically stored. Note that in the future when configuring a backup task: 1) you will need to enter the bucket
-					name in the <legacyBold>Bucket</legacyBold> field, 2) in the <legacyBold>Address</legacyBold> field you should use not a name, but the address of the
-					regional data center, which can be found <externalLink>
-					<linkText>here</linkText>
+					<para>Первой операцией при настройке аккаунта является создание Bucket.</para> 
+					<mediaLink><image placement="left" xlink:href="Aws3_CreateBucket" /> </mediaLink>
+					<para>Bucket - это контейнер для хранения объектов в "облаке". Для Bucket необходимо задать уникальное имя, а также выбрать 
+					региональный дата-центр (Region), где физически хранятся данные. Обратите внимание, в дальнейшем при настойке задачи резервного
+					копирования: 1) в поле <legacyBold>Хранилище</legacyBold> нужно будет ввести имя бакета, 2) в поле <legacyBold>Адрес</legacyBold> нужно использовать не имя, а адрес регионального дата центра, который можно узнать <externalLink>
+					<linkText>здесь</linkText>
 						<linkAlternateText>Optional alternate text</linkAlternateText>
 							<linkUri>https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</linkUri>
 						<linkTarget>_blank</linkTarget>
-					</externalLink>.</para>
+					</externalLink>.
+					После чего продолжить настройку.</para>
 					<mediaLink>
-        				<image placement="left" xlink:href="Aws3_CreateBucketDialog"/>
+        				<image placement="left" xlink:href="Aws3_CreateBucket"/>
+					</mediaLink>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_CreateBucketName"/>
+					</mediaLink>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_CreateBucketName_propert"/>
 					</mediaLink>
 				</content>
 			</step>
 			
 			<step>
 				<content>
-					<para>Next, you need to specify the keys for programmatic access to the AWS services. To do this, click on the link 
-					<legacyBold>Security Credentials</legacyBold> in the AWS console.</para>
+					<para>Далее необходимо задать ключи для программного доступа к сервисам AWS. Для этого в консоли AWS нужно перейти по ссылке 
+					<legacyBold>Security Credentials</legacyBold>.</para>
 					<mediaLink>
         				<image placement="left" xlink:href="Aws3_SecurityCredentials"/>
 					</mediaLink>
@@ -76,21 +90,21 @@
 			
 			<step>
 				<content>
-					<para>Opening the <legacyBold>Access Keys (Access Key ID and Secret Access Key)</legacyBold> title and creating the access keys by clicking the
-					<mediaLinkInline><image xlink:href="Aws3_CreateNewAccessKey" /></mediaLinkInline> button.</para>
+					<para>Раскрываем заголовок <legacyBold>Access Keys (Access Key ID and Secret Access Key)</legacyBold> и создаем ключи доступа при помощи кнопки
+					<mediaLinkInline><image xlink:href="Aws3_CreateNewAccessKey" /></mediaLinkInline>.</para>
 					<mediaLink>
-        				<image placement="center" xlink:href="Aws3_SecurityCredentialsCreate" />
+        				<image placement="left" xlink:href="Aws3_SecurityCredentialsCreate" />
 					</mediaLink>
-					<para>Created keys can be saved to a file using the <legacyBold>Download Key File</legacyBold> button.</para>
-					<para>Note that when you set up the backup task <legacyBold>Access Key ID</legacyBold> should be used as a login and 
-					<legacyBold>Secret Access Key</legacyBold> as a password.</para>
+					<para>Созданные ключи можно сохранить в файл при помощи кнопки <legacyBold>Download Key File</legacyBold>.</para>
+					<para>Обратите внимание, что при настройке задачи резервного копирования <legacyBold>Access Key ID</legacyBold> должен использоваться в качестве логина, а
+					<legacyBold>Secret Access Key</legacyBold> в качестве пароля.</para>
 				</content>
 			</step>
 			
 		</steps>
 	</procedure>
 	 <relatedTopics>
-		<link xlink:href="8f0fbcfe-c687-4af4-9bed-fe976b18f545">S#.Data settings</link>
+		<link xlink:href="8f0fbcfe-c687-4af4-9bed-fe976b18f545">Создание и настройка задачи</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

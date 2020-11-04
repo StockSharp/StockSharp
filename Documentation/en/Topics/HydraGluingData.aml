@@ -2,47 +2,60 @@
 <topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-		<para>With <token>hydra</token> it is possible to glue together different types of market data on different contracts into one continuous instrument.</para> 
-		<para>To do this, on the <legacyBold>Common</legacyBold> tab, select <legacyBold>Instruments</legacyBold>, the <legacyBold>All Instruments</legacyBold> tab appears.</para>
-		<para>Before gluing the data, it is necessary to check which market data is 
-		available. To do this, the path is selected where the data is, and the instruments 
-		that are supposed to glue together are reviewed in turn. If there are gaps, it is 
-		necessary to download the required market data (for example, from Finam).</para>
+		<para>Программа <token>hydra</token> позволяет пользователю возможность склеить различные виды маркет-данных по разным контрактам в один непрерывный инструмент.</para> 
+		<para>Для этого на вкладке <legacyBold>Общее</legacyBold> нужно выбрать <legacyBold>Инструменты</legacyBold>, появится вкладка <legacyBold>Все инструменты.</legacyBold></para>
+		<para>Перед тем как склеивать данные, необходимо проверить, какие маркет-данные есть.
+		Для этого выбирается путь где лежат данные и по очереди просматриваются инструменты, которые предполагается склеить.
+		Если имеются пропуски, то необходимо докачать нужные маркет-данные(например, с <legacyBold>Финама</legacyBold>).</para>
 		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData" /></mediaLink>
 		
-		<para>As an example, gluing together by futures on the RTS index will be considered.</para>
-		<para>The first step is the creation of a continuous instrument. To do this, 
-		click on the <legacyBold>All Instruments</legacyBold> tab. the <legacyBold>Create Instrument=>Continuous Instrument</legacyBold> button, 
-		after which the following window will appear:</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingWindow" /></mediaLink>
+		<para>В качестве примера будет рассмотрено склеивание по фьючерсу на индекс RTS.</para>
 		
-		<para>To create a continuous futures it is necessary to specify the name and add the contracts. 
-		There are two ways to add the contracts.</para>
+<list class="ordered">
+  <listItem><para>Для создания непрерывного фьючерса необходимо нажать на вкладке <legacyBold>Все инструменты.</legacyBold>
+		кнопку <legacyBold>Создать инструмент=>Непрерывный инструмент</legacyBold>.</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData_00" /></mediaLink>
+		<para>После этого появится окно следующего вида:</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingWindow" /></mediaLink>
+</listItem>
+
+  <listItem>
+		<para>Для создания непрерывного фьючерса необходимо задать имя и добавить контракты.</para>
+		<para>Добавить контракты можно двумя способами.</para>
 		
 		<list class="bullet">
   			<listItem>
-  				<para>Manually by clicking the <mediaLinkInline><image xlink:href="hydra_add" /></mediaLinkInline> button.</para>
-  				<mediaLink><image xlink:href="HydraGluingCSCustom" /></mediaLink>
-  			</listItem>
+  				<para>Вручную, нажимая кнопку <mediaLinkInline><image xlink:href="hydra_add" /></mediaLinkInline>.</para>
+  				<mediaLink><image placement="center" xlink:href="HydraGluingCSCustom" /></mediaLink>
+  			  			</listItem>
   			<listItem>
-  				<para>If to specify for the name the first two letters of the contract, for example RI, 
-  				and to click the <legacyBold>Auto</legacyBold> button, then all the instruments found in the database will be added.</para>
-  				<mediaLink><image xlink:href="HydraGluingCSAuto" /></mediaLink>
-  			</listItem>
+  				<para>Если в качестве имени задать первые две буквы контракта, например, RI, и 
+  				нажать кнопку <legacyBold>Авто</legacyBold>, то будут добавлены все найденные в БД инструменты.</para>
+  				<mediaLink><image placement="center" xlink:href="HydraGluingCSAuto" /></mediaLink>
+  			  			</listItem>
 		</list>
+  </listItem>
   		
-  		<para>Once the contracts have been added, and the transition dates have been set, 
-  		it is necessary to click the <legacyBold>OK</legacyBold> button, after which a new instrument will be created.</para>
-		<para>Next, it is necessary to click the <link xlink:href="0adb23fa-a295-43e0-9e75-9060b1d03388" /> 
-		button on the <legacyBold>Common</legacyBold> tab, select the received instrument, the data period, 
-		in the <legacyBold>Create From:</legacyBold> field set the <legacyBold>Composite Element</legacyBold> value. Then click the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button.</para>
+  		<listItem>
+  		<para>Выбираем нужные контракты и устанавливаем даты перехода. </para>
+  		<mediaLink><image placement="center" xlink:href="HydraGluingCSAuto_00" /></mediaLink></listItem>
+  		
+  		<listItem>
+  		<para>Далее назначаем идентификатор инструмента <legacyBold>RI_long9@FORTS</legacyBold> и нажать 
+  		кнопку <legacyBold>ОК</legacyBold>, после чего создастся новый инструмент</para></listItem>
+  		<listItem>
+		<para>Далее, необходимо нажать кнопку <link xlink:href="0adb23fa-a295-43e0-9e75-9060b1d03388" /> 
+		на вкладке <legacyBold>Общее</legacyBold>, выбрать полученый инструмент, период данных, в поле <legacyBold>Построить из:</legacyBold> 
+		установить значение <legacyBold>Составной элемент</legacyBold>. После чего нажать кнопку<mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline>.</para>
 		<mediaLink>
 <image placement="center" xlink:href="HydraGluingTrades"/>
-</mediaLink>
-<para>The generated data can be exported to Excel, xml or txt formats. Export is done using the drop-down list:</para>
+</mediaLink></listItem>
+</list>
+<para>Сгенерированные данные можно экспортировать в форматы Excel, xml, Json или txt. Экспорт выполняется при помощи раскрывающегося списка:</para>
     		<mediaLink>
     			<image placement="center" xlink:href="hydra_export" />
     		</mediaLink>
+    		
 
 	</introduction>
 	</developerWalkthroughDocument>

@@ -2,75 +2,94 @@
 <topic id="ec33258b-c0bb-4f2b-bef3-368e607a92a4" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>The task performs automatic import of exchange data from files in the specified directory according to the specified file mask.</para>
-
+        <para>Задача выполняет автоматический импорт биржевых данных из файлов в указанном каталоге по заданной маске файла.</para>
+<para>Для каждого выбранного типа маркет-данных, шаблон настраивается во вкладке <link xlink:href="4edabdad-84d9-4dfa-9940-0559642b1ca2" />.</para>
     	    <mediaLink>
         		<image placement="left" xlink:href="hydra_tasks_import" />
       		</mediaLink>
 
-<para>At the bottom of the panel, you can select the instruments by which data will be imported, as well as the data type to import.</para>
-      <para><legacyBold>Import (auto)</legacyBold></para>
+<para>В нижней части панели можно выбрать инструменты, по которым будут импортироваться данные, а также тип данных для импорта.</para>
+<para>Для каждого инструмента можно указать следующие свойства импорта данных:</para>
+<mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_proper_import" />
+      		</mediaLink>
+
+
+      <para><legacyBold>Импорт (авто)</legacyBold></para>
+      <para><legacyBold>Настройки</legacyBold></para>
     <list class="bullet">
         <listItem>
-			<legacyBold>Settings</legacyBold> - settings for import from CSV.
+			<legacyBold>Тип данных</legacyBold> - тип импортируемых данных.
 		</listItem>
 		<listItem>
- 		    <legacyBold>Data directory</legacyBold> - data directory.
+			<legacyBold>Имя файла</legacyBold> - полный путь к файлу.
 		</listItem>
 		<listItem>
- 		    <legacyBold>The file mask</legacyBold> - the file mask that is used when scanning the directory. For example, candles*.csv.
+ 		    <legacyBold>Директория с данными</legacyBold> - директория с данными.
 		</listItem>
 		<listItem>
-			<legacyBold>Subdirectories</legacyBold> - include subdirectories.
+ 		    <legacyBold>Маска файла</legacyBold> - маска файла, которая используется при сканировании директории. Например, candles*.csv.
 		</listItem>
 		<listItem>
-			<legacyBold>Column separator</legacyBold> - column separator. Tabulation is denoted by TAB.
+			<legacyBold>Подкаталоги</legacyBold> - включать подкаталоги.
 		</listItem>
 		<listItem>
-			<legacyBold>Indent from the beginning</legacyBold> - the number of lines to skip from the beginning of the file (if they contain meta information).
+			<legacyBold>Разделитель колонок</legacyBold> - разделитель колонок. Табуляция обозначается TAB.
 		</listItem>
 		<listItem>
-			<legacyBold>Time zone</legacyBold> - the time zone.
+			<legacyBold>Отступ с начала</legacyBold> - количество строчек, которые нужно пропустить с начала файла (если они несут мета информацию).
+		</listItem>
+		<listItem>
+			<legacyBold>Часовой пояс</legacyBold> - часовой пояс.
+		</listItem>
+		<listItem>
+			<legacyBold>Интервал</legacyBold> - периодичность обновления данных.
+		</listItem>
+		<listItem>
+			<legacyBold>Расширенная информация</legacyBold> - сохранить расширенные импортированные поля в хранилище расширенной информации.
+		</listItem>
+		<listItem>
+			<legacyBold>Дубликаты</legacyBold> - нужно ли обновлять дубликаты инструментов, если они уже существуют .
+		</listItem>
+		<listItem>
+			<legacyBold>Игнорировать без ИД</legacyBold> - игнорировать инструменты без идентификатора.
 		</listItem>
 	</list>
 		
-	<para><legacyBold>Basic</legacyBold></para>
+	<para><legacyBold>Основные</legacyBold></para>
 		<list class="bullet">
         <listItem>
-          <legacyBold>Header</legacyBold> - the task header.
+          <legacyBold>Заголовок</legacyBold> - заголовок задачи.
 		</listItem>
         <listItem>
-          <legacyBold>Operate from</legacyBold> - the time to start operating.
+          <legacyBold>Рабочее время</legacyBold> - настройка работы площадки.
+          <mediaLink>
+        <image placement="center" xlink:href="hydra_tasks_backup_desk" />
+      </mediaLink>
+		</listItem>
+		<listItem>
+          <legacyBold>Интервал работы</legacyBold> - интервал работы.
 		</listItem>
         <listItem>
-          <legacyBold>Operate to</legacyBold> - the time to stop operating.
-		</listItem>
-        <listItem>
-          I<legacyBold>nterval of operation</legacyBold> - the interval of operation.
-		</listItem>
-        <listItem>
-          D<legacyBold>irectory with data</legacyBold> - a directory with data, where the final files in S# format will be saved.
+          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
 		</listItem>
 		<listItem>
-          <legacyBold>Format</legacyBold> - data format: BIN/CSV.
+          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
 		</listItem>
 		<listItem>
-          <legacyBold>Max. errors</legacyBold> - the maximum number of errors, upon which the task will be stopped. By default 0 - the number of errors is ignored.
+          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок, по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируется.
 		</listItem>
 		<listItem>
-          <legacyBold>Dependency</legacyBold> - a task that must be performed before running the current one.
+          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
 		</listItem>
-		<listItem>
-          <legacyBold>Logging level</legacyBold> - the logging level.
-		</listItem>
-      </list>
-     <para><legacyBold>Instruments</legacyBold></para>
+		   </list>
+     <para><legacyBold>Логирование</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Duplicates</legacyBold> - update instrument duplicates if they already exist.
+			<legacyBold>Идентификатор</legacyBold> - идентификатор.
 		</listItem>
-        <listItem>
-			<legacyBold>Ignore without an ID</legacyBold> - ignore instruments without an identifier.
+		<listItem>
+          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
 		</listItem>
  	  </list>
     </introduction>

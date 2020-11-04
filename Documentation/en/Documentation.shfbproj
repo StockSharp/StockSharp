@@ -320,7 +320,45 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Messages_adapters_orderlog.aml" />
+    <None Include="Topics\Messages_adapters_chain.aml" />
+    <None Include="Topics\Messages_adapters_threading.aml" />
+    <None Include="Topics\Messages_adapters_history.aml" />
+    <None Include="Topics\Messages_adapters_books.aml" />
     <None Include="Topics\API_ConnectorsSubscriptions.aml" />
+    <None Include="Topics\InstallerSetupPrograms.aml" />
+    <None Include="Topics\InstallerUpdateProgramsVideo.aml" />
+    <None Include="Topics\HydraConnectingBinance.aml" />
+    <None Include="Topics\HydraConnectingBitmex.aml" />
+    <None Include="Topics\HydraConnectingIBTWS.aml" />
+    <None Include="Topics\HydraConnectingOanda.aml" />
+    <None Include="Topics\HydraConnectingFinam.aml" />
+    <None Include="Topics\InstallerSetup.aml" />
+    <None Include="Topics\HydraConvectorVideo.aml" />
+    <None Include="Topics\HydraExportAutoVideo.aml" />
+    <None Include="Topics\HydraImportVideos.aml" />
+    <None Include="Topics\HydraDiffSaveFormat.aml" />
+    <None Include="Topics\HydraAnalitich.aml" />
+    <None Include="Topics\HydraBuildIndicator.aml" />
+    <None Include="Topics\HydraBuildMarkethDepthLogLevel.aml" />
+    <None Include="Topics\HydraBuildDifferentCandleType.aml" />
+    <None Include="Topics\HydraSecuritiesCongfigDowVideo.aml" />
+    <None Include="Topics\HydraConnectingSetup.aml" />
+    <None Include="Topics\HydraFirstStartVideos.aml" />
+    <None Include="Topics\HydraSymbolMappingVer5.aml" />
+    <None Include="Topics\HydraEmulation.aml" />
+    <None Include="Topics\HydraUsingDifferentTypesMarketData.aml" />
+    <None Include="Topics\HydraViewingMarketData.aml" />
+    <None Include="Topics\HydraWorkingWithMarketData.aml" />
+    <None Include="Topics\HydraCustomCandleType.aml" />
+    <None Include="Topics\HydraConfigurationSecuritiesDownload.aml" />
+    <None Include="Topics\HydraDownloadingMarketData.aml" />
+    <None Include="Topics\HydraSourceSelection.aml" />
+    <None Include="Topics\HydraDataSource.aml" />
+    <None Include="Topics\Installer_software_update.aml" />
+    <None Include="Topics\Installer_installing_removing_programs.aml" />
+    <None Include="Topics\Installer_Installation.aml" />
+    <None Include="Topics\SharpInstaller.aml" />
     <None Include="Topics\API_GUI_Settings_Gopax.aml" />
     <None Include="Topics\API_GUI_Settings_CoinHub.aml" />
     <None Include="Topics\API_GUI_Settings_Hotbit.aml" />
@@ -4726,6 +4764,462 @@
     <Image Include="Art\API_GUI_Settings_CoinEx.png">
       <ImageId>API_GUI_Settings_CoinEx</ImageId>
       <AlternateText>API GUI Settings CoinEx</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_first_started_utilities00.png">
+      <ImageId>hydra_first_started_utilities00</ImageId>
+      <AlternateText>hydra first started utilities 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_two_sourse.png">
+      <ImageId>hydra_two_sourse</ImageId>
+      <AlternateText>hydra two sourse</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_source_choose.png">
+      <ImageId>hydra_source_choose</ImageId>
+      <AlternateText>hydra source choose</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_market_data.png">
+      <ImageId>hydra_choose_market_data</ImageId>
+      <AlternateText>hydra choose market data</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securities_choose_all.png">
+      <ImageId>hydra_securities_choose_all</ImageId>
+      <AlternateText>hydra securities choose all</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_full_list.png">
+      <ImageId>hydra_security_full_list</ImageId>
+      <AlternateText>hydra security full list</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_market_data_choose.png">
+      <ImageId>hydra_type_market_data_choose</ImageId>
+      <AlternateText>hydra type market data choose</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candle_build_type.png">
+      <ImageId>hydra_candle_build_type</ImageId>
+      <AlternateText>hydra candle build type</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_00.png">
+      <ImageId>hydra_type_candle_00_00</ImageId>
+      <AlternateText>hydra type candle 00 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_proper_import.png">
+      <ImageId>hydra_tasks_proper_import</ImageId>
+      <AlternateText>hydra tasks proper import</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_emulator_prop.png">
+      <ImageId>hydra_emulator_prop</ImageId>
+      <AlternateText>hydra emulator prop</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_emulator_start.png">
+      <ImageId>hydra_emulator_start</ImageId>
+      <AlternateText>hydra emulator start</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_LEVEL1_build_depth_data_result.png">
+      <ImageId>hydra_LEVEL1_build_depth_data_result</ImageId>
+      <AlternateText>hydra LEVEL 1 build depth data result</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_LEVEL1_build_depth_data.png">
+      <ImageId>hydra_LEVEL1_build_depth_data</ImageId>
+      <AlternateText>hydra LEVEL 1 build depth data</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_indicator_view.png">
+      <ImageId>hydra_export_indicator_view</ImageId>
+      <AlternateText>hydra export indicator view</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_preview_candles.png">
+      <ImageId>hydra_import_preview_candles</ImageId>
+      <AlternateText>hydra import preview candles</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_prop_candles.png">
+      <ImageId>hydra_import_prop_candles</ImageId>
+      <AlternateText>hydra import prop candles</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_menu.png">
+      <ImageId>hydra_import_menu</ImageId>
+      <AlternateText>hydra import menu</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ext_proper_build_data.png">
+      <ImageId>hydra_ext_proper_build_data</ImageId>
+      <AlternateText>hydra ext proper build data</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candle_build_depth_data.png">
+      <ImageId>hydra_candle_build_depth_data</ImageId>
+      <AlternateText>hydra candle build depth data</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_ITCH_Plaza.png">
+      <ImageId>hydra_choose_ITCH_Plaza</ImageId>
+      <AlternateText>hydra choose ITCH Plaza</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_ITCH_Plaza_00.png">
+      <ImageId>hydra_choose_ITCH_Plaza_00</ImageId>
+      <AlternateText>hydra choose ITCH Plaza 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Level1.png">
+      <ImageId>hydra_Level1</ImageId>
+      <AlternateText>hydra Level 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_build_data.png">
+      <ImageId>hydra_type_build_data</ImageId>
+      <AlternateText>hydra type build data</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_TZ.png">
+      <ImageId>hydra_TZ</ImageId>
+      <AlternateText>hydra TZ</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_TSLab_MetaStock_2.png">
+      <ImageId>hydra_export_TSLab_MetaStock_2</ImageId>
+      <AlternateText>hydra export TSLab Meta Stock 2</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_TSLab_MetaStock_1.png">
+      <ImageId>hydra_export_TSLab_MetaStock_1</ImageId>
+      <AlternateText>hydra export TSLab Meta Stock 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tick_limit.png">
+      <ImageId>hydra_tick_limit</ImageId>
+      <AlternateText>hydra tick limit</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateBucketName_propert.png">
+      <ImageId>Aws3_CreateBucketName_propert</ImageId>
+      <AlternateText>Aws 3 Create Bucket Name propert</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateBucketName.png">
+      <ImageId>Aws3_CreateBucketName</ImageId>
+      <AlternateText>Aws 3 Create Bucket Name</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_Paytest.png">
+      <ImageId>Aws3_Paytest</ImageId>
+      <AlternateText>Aws 3 Paytest</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_backup_desk.png">
+      <ImageId>hydra_tasks_backup_desk</ImageId>
+      <AlternateText>hydra tasks backup desk</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_server_menu.png">
+      <ImageId>hydra_server_menu</ImageId>
+      <AlternateText>hydra server menu</AlternateText>
+    </Image>
+    <Image Include="Art\Installer_installation.png">
+      <ImageId>Installer_installation</ImageId>
+      <AlternateText>Installer installation</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export.png">
+      <ImageId>hydra_export</ImageId>
+      <AlternateText>hydra export</AlternateText>
+    </Image>
+    <Image Include="Art\Installer_StockSharp_Installer_bat.png">
+      <ImageId>Installer_StockSharp_Installer_bat</ImageId>
+      <AlternateText>Installer Stock Sharp Installer bat</AlternateText>
+    </Image>
+    <Image Include="Art\Installerzip_Properties.png">
+      <ImageId>Installerzip_Properties</ImageId>
+      <AlternateText>Installerzip Properties</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_securitiy_00.png">
+      <ImageId>hydra_choose_securitiy_00</ImageId>
+      <AlternateText>hydra choose securitiy 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_securitiy_03.png">
+      <ImageId>hydra_choose_securitiy_03</ImageId>
+      <AlternateText>hydra choose securitiy 03</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_securitiy_02.png">
+      <ImageId>hydra_choose_securitiy_02</ImageId>
+      <AlternateText>hydra choose securitiy 02</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_securitiy_01.png">
+      <ImageId>hydra_choose_securitiy_01</ImageId>
+      <AlternateText>hydra choose securitiy 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_securitiy.png">
+      <ImageId>hydra_choose_securitiy</ImageId>
+      <AlternateText>hydra choose securitiy</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_securitiy_05.png">
+      <ImageId>hydra_choose_securitiy_05</ImageId>
+      <AlternateText>hydra choose securitiy 05</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_choose_securitiy_04.png">
+      <ImageId>hydra_choose_securitiy_04</ImageId>
+      <AlternateText>hydra choose securitiy 04</AlternateText>
+    </Image>
+    <Image Include="Art\byu_installer.png">
+      <ImageId>byu_installer</ImageId>
+      <AlternateText>byu installer</AlternateText>
+    </Image>
+    <Image Include="Art\first_win_installer.png">
+      <ImageId>first_win_installer</ImageId>
+      <AlternateText>first win installer</AlternateText>
+    </Image>
+    <Image Include="Art\logIn_installer.png">
+      <ImageId>logIn_installer</ImageId>
+      <AlternateText>log In installer</AlternateText>
+    </Image>
+    <Image Include="Art\direction_installer.png">
+      <ImageId>direction_installer</ImageId>
+      <AlternateText>direction installer</AlternateText>
+    </Image>
+    <Image Include="Art\choose_installer.png">
+      <ImageId>choose_installer</ImageId>
+      <AlternateText>choose installer</AlternateText>
+    </Image>
+    <Image Include="Art\start_installer.png">
+      <ImageId>start_installer</ImageId>
+      <AlternateText>start installer</AlternateText>
+    </Image>
+    <Image Include="Art\updat_installer.png">
+      <ImageId>updat_installer</ImageId>
+      <AlternateText>updat installer</AlternateText>
+    </Image>
+    <Image Include="Art\repair_installer.png">
+      <ImageId>repair_installer</ImageId>
+      <AlternateText>repair installer</AlternateText>
+    </Image>
+    <Image Include="Art\properetis_installer.png">
+      <ImageId>properetis_installer</ImageId>
+      <AlternateText>properetis installer</AlternateText>
+    </Image>
+    <Image Include="Art\download_installer.png">
+      <ImageId>download_installer</ImageId>
+      <AlternateText>download installer</AlternateText>
+    </Image>
+    <Image Include="Art\force_update_installer.png">
+      <ImageId>force_update_installer</ImageId>
+      <AlternateText>force update installer</AlternateText>
+    </Image>
+    <Image Include="Art\del_installer.png">
+      <ImageId>del_installer</ImageId>
+      <AlternateText>del installer</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_full_list_01.png">
+      <ImageId>hydra_security_full_list_01</ImageId>
+      <AlternateText>hydra security full list 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_02_00.png">
+      <ImageId>hydra_Quick_start_02_00</ImageId>
+      <AlternateText>hydra Quick start 02 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_full_list_00.png">
+      <ImageId>hydra_security_full_list_00</ImageId>
+      <AlternateText>hydra security full list 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_02_01.png">
+      <ImageId>hydra_Quick_start_02_01</ImageId>
+      <AlternateText>hydra Quick start 02 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_main_start.png">
+      <ImageId>hydra_main_start</ImageId>
+      <AlternateText>hydra main start</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_main.png">
+      <ImageId>hydra_candles_main</ImageId>
+      <AlternateText>hydra candles main</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_tf.png">
+      <ImageId>hydra_candles_tf</ImageId>
+      <AlternateText>hydra candles tf</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_volume.png">
+      <ImageId>hydra_candles_volume</ImageId>
+      <AlternateText>hydra candles volume</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_tf_01.png">
+      <ImageId>hydra_candles_tf_01</ImageId>
+      <AlternateText>hydra candles tf 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_tf_10.png">
+      <ImageId>hydra_candles_tf_10</ImageId>
+      <AlternateText>hydra candles tf 10</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_volume_100.png">
+      <ImageId>hydra_candles_volume_100</ImageId>
+      <AlternateText>hydra candles volume 100</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_prop_securitiy.png">
+      <ImageId>hydra_import_prop_securitiy</ImageId>
+      <AlternateText>hydra import prop securitiy</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_preview_securitiy.png">
+      <ImageId>hydra_import_preview_securitiy</ImageId>
+      <AlternateText>hydra import preview securitiy</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_prop_trade.png">
+      <ImageId>hydra_import_prop_trade</ImageId>
+      <AlternateText>hydra import prop trade</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_preview_trade.png">
+      <ImageId>hydra_import_preview_trade</ImageId>
+      <AlternateText>hydra import preview trade</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_prop_depth.png">
+      <ImageId>hydra_import_prop_depth</ImageId>
+      <AlternateText>hydra import prop depth</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_preview_depth.png">
+      <ImageId>hydra_import_preview_depth</ImageId>
+      <AlternateText>hydra import preview depth</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_prop_orderlog.png">
+      <ImageId>hydra_import_prop_orderlog</ImageId>
+      <AlternateText>hydra import prop orderlog</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_preview_orderlog.png">
+      <ImageId>hydra_import_preview_orderlog</ImageId>
+      <AlternateText>hydra import preview orderlog</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_prop_level1.png">
+      <ImageId>hydra_import_prop_level1</ImageId>
+      <AlternateText>hydra import prop level 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_preview_level1.png">
+      <ImageId>hydra_import_preview_level1</ImageId>
+      <AlternateText>hydra import preview level 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_server.png">
+      <ImageId>hydra_server</ImageId>
+      <AlternateText>hydra server</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_09.png">
+      <ImageId>hydra_type_candle_00_09</ImageId>
+      <AlternateText>hydra type candle 00 09</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_08.png">
+      <ImageId>hydra_type_candle_00_08</ImageId>
+      <AlternateText>hydra type candle 00 08</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_07.png">
+      <ImageId>hydra_type_candle_00_07</ImageId>
+      <AlternateText>hydra type candle 00 07</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_06.png">
+      <ImageId>hydra_type_candle_00_06</ImageId>
+      <AlternateText>hydra type candle 00 06</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_04.png">
+      <ImageId>hydra_type_candle_00_04</ImageId>
+      <AlternateText>hydra type candle 00 04</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_03.png">
+      <ImageId>hydra_type_candle_00_03</ImageId>
+      <AlternateText>hydra type candle 00 03</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_02.png">
+      <ImageId>hydra_type_candle_00_02</ImageId>
+      <AlternateText>hydra type candle 00 02</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_type_candle_00_01.png">
+      <ImageId>hydra_type_candle_00_01</ImageId>
+      <AlternateText>hydra type candle 00 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_converter_01.png">
+      <ImageId>hydra_tasks_converter_01</ImageId>
+      <AlternateText>hydra tasks converter 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_converter_00.png">
+      <ImageId>hydra_tasks_converter_00</ImageId>
+      <AlternateText>hydra tasks converter 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_converter_02.png">
+      <ImageId>hydra_tasks_converter_02</ImageId>
+      <AlternateText>hydra tasks converter 02</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_export_00.png">
+      <ImageId>hydra_tasks_export_00</ImageId>
+      <AlternateText>hydra tasks export 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_export_03.png">
+      <ImageId>hydra_tasks_export_03</ImageId>
+      <AlternateText>hydra tasks export 03</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_export_02.png">
+      <ImageId>hydra_tasks_export_02</ImageId>
+      <AlternateText>hydra tasks export 02</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_export_01.png">
+      <ImageId>hydra_tasks_export_01</ImageId>
+      <AlternateText>hydra tasks export 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Security_mapping_01_00.png">
+      <ImageId>Designer_Security_mapping_01_00</ImageId>
+      <AlternateText>Designer Security mapping 01 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Security_mapping_01_03.png">
+      <ImageId>Designer_Security_mapping_01_03</ImageId>
+      <AlternateText>Designer Security mapping 01 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Security_mapping_01_02.png">
+      <ImageId>Designer_Security_mapping_01_02</ImageId>
+      <AlternateText>Designer Security mapping 01 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Security_mapping_01_01.png">
+      <ImageId>Designer_Security_mapping_01_01</ImageId>
+      <AlternateText>Designer Security mapping 01 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Security_mapping_01.png">
+      <ImageId>Designer_Security_mapping_01</ImageId>
+      <AlternateText>Designer Security mapping 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_securities.png">
+      <ImageId>hydra_ExtensionInfo_securities</ImageId>
+      <AlternateText>hydra Extension Info securities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_window.png">
+      <ImageId>hydra_ExtensionInfo_window</ImageId>
+      <AlternateText>hydra Extension Info window</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_edit_00.png">
+      <ImageId>hydra_security_edit_00</ImageId>
+      <AlternateText>hydra security edit 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securities_edit.png">
+      <ImageId>hydra_securities_edit</ImageId>
+      <AlternateText>hydra securities edit</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securities_edit_00.png">
+      <ImageId>hydra_securities_edit_00</ImageId>
+      <AlternateText>hydra securities edit 00</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCheckData_00.png">
+      <ImageId>HydraGluingCheckData_00</ImageId>
+      <AlternateText>Hydra Gluing Check Data 00</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCSAuto_00.png">
+      <ImageId>HydraGluingCSAuto_00</ImageId>
+      <AlternateText>Hydra GluingCSAuto 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_index_sec_01.png">
+      <ImageId>hydra_index_sec_01</ImageId>
+      <AlternateText>hydra index sec 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_index_sec_00.png">
+      <ImageId>hydra_index_sec_00</ImageId>
+      <AlternateText>hydra index sec 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_index_candle.png">
+      <ImageId>hydra_index_candle</ImageId>
+      <AlternateText>hydra index candle</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_main_00.png">
+      <ImageId>hydra_analitics_main_00</ImageId>
+      <AlternateText>hydra analitics main 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_main_01.png">
+      <ImageId>hydra_analitics_main_01</ImageId>
+      <AlternateText>hydra analitics main 01</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_main.png">
+      <ImageId>hydra_analitics_main</ImageId>
+      <AlternateText>hydra analitics main</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_parameters.png">
+      <ImageId>hydra_analitics_parameters</ImageId>
+      <AlternateText>hydra analitics parameters</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_table.png">
+      <ImageId>hydra_analitics_table</ImageId>
+      <AlternateText>hydra analitics table</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_chart.png">
+      <ImageId>hydra_analitics_chart</ImageId>
+      <AlternateText>hydra analitics chart</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

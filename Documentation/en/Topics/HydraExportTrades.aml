@@ -2,20 +2,14 @@
 <topic id="3a20fcda-25ba-4794-ac91-dfa227380530" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>In the appearing window select the required time range, then select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
+      <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_trades" />
       </mediaLink>
       
-	<para>By means of the context menu you can set various settings of the trades table: rows grouping, columns available, the display format, and others.</para>
-	 <mediaLink>
-       <image placement="center" xlink:href="hydra_export_context" />
-     </mediaLink>
-      
-	<para>Found trades can be exported to formats <token>excel</token>, xml, sql, bin or txt. This can be done by using the drop-down list:</para>
-    	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export" />
-    	</mediaLink>
+	<para>Для выгрузки внесистемных сделок, необхщдимо установить галочку в поле <legacyBold>Внесистемные</legacyBold>.</para>
+     	<para>Полученные значения можно <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспортировать в нужный формат</link>.</para>
+
 
 </introduction>
   </developerWalkthroughDocument>

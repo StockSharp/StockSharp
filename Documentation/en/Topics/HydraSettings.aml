@@ -2,52 +2,94 @@
 <topic id="7d845e99-6bde-437e-b7f4-059be0438894" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    <introduction>
-<para>Settings
-<token>hydra</token> can be used in server mode, in this mode you can remotely connect to <token>hydra</token> 
-and get the existing data to the storage. You can connect to <token>hydra</token> running in 
-server mode from <legacyBold>S#.Designer</legacyBold> (as described in the 
-<link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" /> item in the <legacyBold>S#.Designer</legacyBold> documentation). 
-Also, you can connect to <token>hydra</token> via <token>stocksharpapi</token> (as described in 
-<link xlink:href="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" />, 
-<link xlink:href="f143c9e7-d5a6-4464-9b01-18117183cc7a" />, 
-<link xlink:href="040cdc40-39b4-47be-b3f0-441710515562" /> items).</para>
-<para>To enable the <token>hydra</token> server mode, on the <legacyBold>Common</legacyBold> tab, click the <legacyBold>Settings</legacyBold> 
-button, the server mode setup window will open.</para>
+<para><token>hydra</token> может исользоваться в серверном режиме, в данном режиме можно 
+удаленно подключиться к <token>hydra</token> и получить имеющиеся данные в хранилище. К 
+<token>hydra</token>, работающей в серверном режиме, можно подключиться из <token>designer</token>
+ (как это сделать описано в пункте <link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" /> документации 
+ по <token>designer</token>). Также к <token>hydra</token> можно подключиться через <token>stocksharpapi</token> (как 
+ это сделать описано в пунктах <link xlink:href="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" />, <link xlink:href="040cdc40-39b4-47be-b3f0-441710515562" />).</para>
+ 
+ <para>В серверном режиме програма <token>hydra</token> позволяет пользователю работать, используя одно подключение, сразу с несколькими програмами. Путем настройки ключа доступа в настройках программы, пользователь может одновременно работать с одним источником под одной учетной записью.</para>
+ <para>Фактически подключение к источнику происходит чере S#.Hydra, к которой одновременно подключаются, например, <token>designer</token>, <token>terminal</token>.
+ Такой метод позволяет избежать переподключение между программами, покупку дополнительного подключения.
+ При такой работе, исключаются конфликты, возникновение которых обусловлено выставлением заявок или сделок с различных программ. S#.Hydra получает сигнал и передает обратно результат той программе от которой он получен, при этом других последовательность работы не нарушается.</para> 
+ <para>Для включения серверного режима <token>hydra</token> необходимо в верхнем меню программы выбрать вкладку <legacyBold>Серверный режим</legacyBold>.</para>
+<mediaLink><image placement="center" xlink:href="hydra_server_menu"/></mediaLink>  
+<para>После этого нажимаем на кнопку <legacyBold>Настройки</legacyBold> откроется 
+окно настройки серверного режима.</para>
 
    <mediaLink><image placement="center" xlink:href="hydra_server"/></mediaLink>
    
-<para><legacyBold>S#.Data server</legacyBold></para>
-<list class="bullet">
-<listItem><para><legacyBold>Server mode</legacyBold> – switch <token>hydra</token> to the server mode.</para></listItem>
-<listItem><para><legacyBold>Server running over the FIX protocol</legacyBold> - the server that distributes live and historical data via the FIX protocol</para></listItem>
-<listItem><para><legacyBold>Authorization</legacyBold> - authorization for access to the <token>hydra</token> server</para></listItem>
-<listItem><para><legacyBold>Number of instruments</legacyBold> - the maximum number of instruments that can be requested from the server</para></listItem>
-<listItem><para><legacyBold>Number of days for a candle</legacyBold> - the maximum number of days available for downloading the history of candles</para></listItem>
-<listItem><para><legacyBold>Number of days for ticks</legacyBold> - the maximum number of days available for downloading the history of tick data</para></listItem>
-
-</list>
-<para><legacyBold>CSV</legacyBold></para>
+<para><legacyBold>S#.Data сервер</legacyBold></para>
 <list class="bullet">
 <listItem>
-<legacyBold>Template</legacyBold> – the template for exporting the relevant data type
+<legacyBold>FIX сервер</legacyBold> - перевести <token>hydra</token> в серверный режим, распространяющий live торговлю и исторические данные через FIX протокол.
+<para>В данном разделе настроек пользователь настраивает подключение для работы с источниками: </para>
+<list class="ordered">
+<listItem><para><legacyBold>ConvertToLatin</legacyBold> - конвертировать кириллицу в латиницу  </para></listItem>
+  <listItem><para><legacyBold>QuotesInterval</legacyBold></para> - период обновления котировок </listItem>
+  <listItem><para><legacyBold>TransactionSession</legacyBold> - настройка торговой сессии. Настройка для торговли через программа S#.Hydra. </para>
+  <para>Настройка включает в себя возможность нстроить: Диалект FIX протокола, Отправителя и Получателя, Формат данных и другие настройки. Подробнее см. 
+
+<externalLink>
+<linkText>свойства FIXServer.</linkText>
+<linkUri>https://doc.stocksharp.ru/html/Properties_T_StockSharp_Fix_FixServer.htm</linkUri>
+<linkTarget>_blank</linkTarget>
+</externalLink></para>
+</listItem>
+ <listItem><para><legacyBold>MarketDataSession</legacyBold> - настройки передачи маркет-данных, получаемых в при помощи S#.Hydra.
+Подробнее см.
+ <externalLink>
+<linkText>свойства FIXServer.</linkText>
+<linkUri>https://doc.stocksharp.ru/html/Properties_T_StockSharp_Fix_FixServer.htm</linkUri>
+<linkTarget>_blank</linkTarget>
+</externalLink></para></listItem>
+<listItem><para><legacyBold>KeepSubscriptionsOnDisconnect</legacyBold> - сохранение подписок при отключении от источника.  </para></listItem>
+<listItem><para><legacyBold>DeadSessionCleanupInterval</legacyBold> - через какой интервал времени произойдет очистка информации, если соединение будет отключено.</para></listItem>
+</list>
+</listItem>
+
+<listItem>
+<legacyBold>Авторизация</legacyBold> - авторизация для получения доступа к S#.Data сервер
+</listItem>
+<listItem>
+<legacyBold>Количество инструментов</legacyBold> - максимальное количество инструментов, 
+которое можно запрашивать с сервера
+</listItem>
+<listItem>
+<legacyBold>Свечи (дни)</legacyBold> - максимальное количество дней, 
+доступных для загрузки истории свечей
+</listItem>
+<listItem>
+<legacyBold>Тики (дни)</legacyBold> - максимальное количество дней, 
+доступных для загрузки истории тиковых данных
+</listItem>
+<listItem>
+<legacyBold>Стаканы (дни)</legacyBold> - максимальное количество дней, 
+доступных для загрузки истории стаканов
+</listItem>
+<listItem>
+<legacyBold>ОЛ (дни)</legacyBold> - максимальное количество дней, 
+доступных для загрузки истории ОЛ данных
+</listItem>
+<listItem>
+<legacyBold>Транзакции (дни)</legacyBold> - максимальное количество дней, 
+доступных для загрузки истории транзакций
+</listItem>
+<listItem>
+<legacyBold>Симулятор</legacyBold> - включение режима симулятора
+</listItem>
+<listItem>
+<legacyBold>Security maping</legacyBold> - включить режим передачи только указанных инструментов.
 </listItem>
 </list>
-<para><legacyBold>General</legacyBold></para>
-<list class="bullet">
-<listItem><para><legacyBold>Autostart</legacyBold> - the quotes auto downloading at start</para></listItem>
-<listItem><para><legacyBold>Tray</legacyBold> – to minimize to tray</para></listItem>
-<listItem><para><legacyBold>Auto-stop</legacyBold> - stop the work at specified time</para></listItem>
-<listItem><para><legacyBold>Time for auto-sto</legacyBold>p - the time for the auto-stop option</para></listItem>
-<listItem><para><legacyBold>Errors (quantity)</legacyBold> - the number of errors after reaching that an email with an error message will be sent. A value of 0 means off mode</para></listItem>
-<listItem><para><legacyBold>Errors (email)</legacyBold> - the email address, to which a message about exceeding the maximum number of errors will be sent.</para></listItem>
-
-</list>
-      <para>If to set the <legacyBold>Authorization</legacyBold> different from <legacyBold>Anonymous</legacyBold>, the <legacyBold>Users</legacyBold> button 
-      appears on the <legacyBold>Common</legacyBold> tab, after clicking on it, the <legacyBold>Users</legacyBold> window appears</para>
+      <para>Если установить <legacyBold>Авторизацию</legacyBold> отличную от <legacyBold>Анонимно</legacyBold>, 
+    на вкладке <legacyBold>Общее</legacyBold> появится кнопка <legacyBold>Пользователи</legacyBold>, 
+    после нажатия на которую появляется окно <legacyBold>Пользователи</legacyBold></para>
 <mediaLink>
 <image placement="center" xlink:href="hydra_users"/>
 </mediaLink>
-      <para>In the left part of the window, you can add a new user, and in the right part you can set access rights for it.</para>
+      <para>В левой части окна можно добавить нового пользователя, а в правой установить для него права доступа.</para>
 
      </introduction>
 	</developerWalkthroughDocument>
