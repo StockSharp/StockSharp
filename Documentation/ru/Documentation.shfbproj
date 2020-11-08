@@ -348,6 +348,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\MT.aml" />
     <None Include="Topics\Messages_adapters_orderlog.aml" />
     <None Include="Topics\Messages_adapters_chain.aml" />
     <None Include="Topics\Messages_adapters_threading.aml" />
@@ -5172,6 +5173,46 @@
     <Image Include="Art\hydra_analitics_chart.png">
       <ImageId>hydra_analitics_chart</ImageId>
       <AlternateText>hydra analitics chart</AlternateText>
+    </Image>
+    <Image Include="Art\MT_0.png">
+      <ImageId>MT_0</ImageId>
+      <AlternateText>MT 0</AlternateText>
+    </Image>
+    <Image Include="Art\MT_1.png">
+      <ImageId>MT_1</ImageId>
+      <AlternateText>MT 1</AlternateText>
+    </Image>
+    <Image Include="Art\MT_2.png">
+      <ImageId>MT_2</ImageId>
+      <AlternateText>MT 2</AlternateText>
+    </Image>
+    <Image Include="Art\MT_3.png">
+      <ImageId>MT_3</ImageId>
+      <AlternateText>MT 3</AlternateText>
+    </Image>
+    <Image Include="Art\MT_4.png">
+      <ImageId>MT_4</ImageId>
+      <AlternateText>MT 4</AlternateText>
+    </Image>
+    <Image Include="Art\MT_5.png">
+      <ImageId>MT_5</ImageId>
+      <AlternateText>MT 5</AlternateText>
+    </Image>
+    <Image Include="Art\MT_6.png">
+      <ImageId>MT_6</ImageId>
+      <AlternateText>MT 6</AlternateText>
+    </Image>
+    <Image Include="Art\MT_7.png">
+      <ImageId>MT_7</ImageId>
+      <AlternateText>MT 7</AlternateText>
+    </Image>
+    <Image Include="Art\MT_8.png">
+      <ImageId>MT_8</ImageId>
+      <AlternateText>MT 8</AlternateText>
+    </Image>
+    <Image Include="Art\MT_9.png">
+      <ImageId>MT_9</ImageId>
+      <AlternateText>MT 9</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
