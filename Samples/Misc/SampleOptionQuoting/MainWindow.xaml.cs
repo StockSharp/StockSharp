@@ -22,7 +22,6 @@ namespace SampleOptionQuoting
 	using System.IO;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
 	using System.Windows.Media;
 	using System.Windows.Threading;
 
@@ -358,7 +357,7 @@ namespace SampleOptionQuoting
 		private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)
 		{
 			_model.EvaluateFields.Clear();
-			_model.EvaluateFields.AddRange(Level1FieldsCtrl.GetSelecteds<Level1Fields>());
+			_model.EvaluateFields.AddRange(Level1FieldsCtrl.GetSelecteds<Level1Fields>() ?? Enumerable.Empty<Level1Fields>());
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -491,7 +490,7 @@ namespace SampleOptionQuoting
 			RefreshSmile();
 		}
 
-		private void Portfolio_OnSelectionChanged(object sender, EditValueChangedEventArgs editValueChangedEventArgs)
+		private void Portfolio_OnEditValueChanged(object sender, EditValueChangedEventArgs e)
 		{
 			ProcessPositions();
 		}
