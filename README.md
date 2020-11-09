@@ -12,7 +12,7 @@
 ## [S#.Designer][8]
 <img src="./Media/Designer500.gif" align="left" />
 
-**S#.Designer** - **free** universal algorithmic strategies application for easy strategy creation::
+**S#.Designer** - **free** universal algorithmic strategies application for easy strategy creation:
   - Visual designer to create strategies by mouse clicking
   - Embedded C# editor
   - Easy to create own indicators
@@ -150,7 +150,7 @@ public class SimpleStrategy : Strategy
 |:---:|:----:|:----------------:|:---------------:|
 |<img src="./Media/logos/Bibox_logo.png" height="30" /> |Bibox | <a href="//doc.stocksharp.com/html/8f22e760-96c8-493a-aef0-569cbc42a9da.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/8f22e760-96c8-493a-aef0-569cbc42a9da.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Binance_logo.svg" height="30" /> |Binance | <a href="//doc.stocksharp.com/html/9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2.htm" target="_blank">Ru</a> |
-|<img src="./Media/logos/bitalong_logo.png" height="30" /> |Bitalong | <a href="TODO" target="_blank">Eng</a> | <a href="TODO" target="_blank">Ru</a> |
+|<img src="./Media/logos/bitalong_logo.png" height="30" /> |Bitalong | <a href="https://doc.stocksharp.com/html/8AB49C23-F7CC-4306-AE87-736D73DE11D0.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/8AB49C23-F7CC-4306-AE87-736D73DE11D0.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Bitbank_logo.png" height="30" /> |Bitbank | <a href="//doc.stocksharp.com/html/02e5e6b3-4436-4c1d-ae39-776c6d398cd3.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/02e5e6b3-4436-4c1d-ae39-776c6d398cd3.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Bitexbook_logo.png" height="30" /> |Bitexbook | <a href="//doc.stocksharp.com/html/4f6d317f-8788-48cb-b8d7-5e621481181c.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/4f6d317f-8788-48cb-b8d7-5e621481181c.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Bitfinex_logo.png" height="30" /> |Bitfinex | <a href="//doc.stocksharp.com/html/f49aab57-c1fd-4558-9241-5b42a2e619d7.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/f49aab57-c1fd-4558-9241-5b42a2e619d7.htm" target="_blank">Ru</a> |
@@ -174,7 +174,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/Cryptopia_logo.png" height="30" /> |Cryptopia | <a href="//doc.stocksharp.com/html/d4fa79a6-59fd-43a9-ac61-b9b8933618c6.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/d4fa79a6-59fd-43a9-ac61-b9b8933618c6.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Deribit_logo.png" height="30" /> |Deribit | <a href="//doc.stocksharp.com/html/0b4fde09-8808-4ef8-89df-39aebcdd64a1.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/0b4fde09-8808-4ef8-89df-39aebcdd64a1.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Digifinex_logo.png" height="30" /> |DigiFinex | <a href="//doc.stocksharp.com/html/5097b5fb-42fa-4418-9afc-de5b6ff69df6.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/5097b5fb-42fa-4418-9afc-de5b6ff69df6.htm" target="_blank">Ru</a> |
-|<img src="./Media/logos/digitexfutures_logo.png" height="30" /> |DigitexFutures | <a href="TODO" target="_blank">Eng</a> | <a href="TODO" target="_blank">Ru</a> |
+|<img src="./Media/logos/digitexfutures_logo.png" height="30" /> |DigitexFutures | <a href="https://doc.stocksharp.com/html/609A667B-51DC-4AA2-B5E5-076B2308350C.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/609A667B-51DC-4AA2-B5E5-076B2308350C.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Exmo_logo.png" height="30" /> |EXMO | <a href="//doc.stocksharp.com/html/601781f1-fae7-4c82-adb4-a5e7d9394cfb.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/601781f1-fae7-4c82-adb4-a5e7d9394cfb.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/FatBtc_logo.png" height="30" /> |FatBTC | <a href="//doc.stocksharp.com/html/d342e0f7-6bd2-4627-831a-ad669082e2a4.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/d342e0f7-6bd2-4627-831a-ad669082e2a4.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Gdax_logo.png" height="30" /> |GDAX | <a href="//doc.stocksharp.com/html/d941f537-602b-400f-91d4-d4b2b37b9767.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/d941f537-602b-400f-91d4-d4b2b37b9767.htm" target="_blank">Ru</a> |
@@ -192,7 +192,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/Okcoin_logo.png" height="30" /> |OKCoin | <a href="//doc.stocksharp.com/html/f9ec5eb4-4237-4a2a-9663-757d3d4c0689.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/f9ec5eb4-4237-4a2a-9663-757d3d4c0689.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Okex_logo.png" height="30" /> |OKEx | <a href="//doc.stocksharp.com/html/554b35f0-4110-4da0-ba30-4c450e8a996b.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/554b35f0-4110-4da0-ba30-4c450e8a996b.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/poloniex_logo.png" height="30" /> |Poloniex | <a href="//doc.stocksharp.com/html/18667328-deec-46dd-8c27-fce52733e5ce.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/18667328-deec-46dd-8c27-fce52733e5ce.htm" target="_blank">Ru</a> |
-|<img src="./Media/logos/prizmbit_logo.png" height="30" /> |PrizmBit | <a href="TODO" target="_blank">Eng</a> | <a href="TODO" target="_blank">Ru</a> |
+|<img src="./Media/logos/prizmbit_logo.png" height="30" /> |PrizmBit | <a href="https://doc.stocksharp.com/html/82D496AB-E983-4B04-AB5B-CD635E42AF4D.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/82D496AB-E983-4B04-AB5B-CD635E42AF4D.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Quoinex_logo.png" height="30" /> |QuoineX | <a href="//doc.stocksharp.com/html/713a3769-b80c-4342-89d2-031a492372df.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/713a3769-b80c-4342-89d2-031a492372df.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/TradeOgre_logo.png" height="30" /> |TradeOgre | <a href="//doc.stocksharp.com/html/989447cf-bc05-4f6a-a736-b3a916ee1ffc.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/989447cf-bc05-4f6a-a736-b3a916ee1ffc.htm" target="_blank">Ru</a> |
 |<img src="./Media/logos/Upbit_logo.png" height="30" /> |Upbit | <a href="//doc.stocksharp.com/html/c8df9244-9329-4e0d-bb80-58d0cbd0760b.htm" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/html/c8df9244-9329-4e0d-bb80-58d0cbd0760b.htm" target="_blank">Ru</a> |
