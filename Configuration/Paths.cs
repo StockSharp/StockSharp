@@ -209,14 +209,15 @@
 			{
 				string version;
 
+				static string GetAssemblyVersion() => Assembly.GetEntryAssembly().GetName().Version.To<string>();
+
 				try
 				{
-					version = GetInstalledVersion(Directory.GetCurrentDirectory());
+					version = GetInstalledVersion(Directory.GetCurrentDirectory()) ?? GetAssemblyVersion();
 				}
 				catch
 				{
-
-					version = Assembly.GetEntryAssembly().GetName().Version.To<string>();
+					version = GetAssemblyVersion();
 				}
 
 				return version;
@@ -230,7 +231,7 @@
 		/// <returns>Installed version of the product.</returns>
 		public static string GetInstalledVersion(string productInstallPath)
 		{
-			if(productInstallPath.IsEmpty())
+			if (productInstallPath.IsEmpty())
 				throw new ArgumentException(nameof(productInstallPath));
 
 			if (!File.Exists(InstallerInstallationsConfigPath))
@@ -252,7 +253,7 @@
 			   ?.TryGet<SettingsStorage>("Metadata")
 			   ?.TryGet<string>("Identity");
 
-			if(identityStr.IsEmpty())
+			if (identityStr.IsEmpty())
 				return null;
 
 			// ReSharper disable once PossibleNullReferenceException
