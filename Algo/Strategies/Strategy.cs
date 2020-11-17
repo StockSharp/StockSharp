@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			}
-			
+
 			protected override void OnAdded(Strategy item)
 			{
 				//pyh: Нельзя использовать OnAdding тк логирование включается по событию Added которое вызовет base.OnAdded
@@ -203,7 +203,7 @@ namespace StockSharp.Algo.Strategies
 					if (rule.IsReady)
 						_parent.TryRemoveRule(rule);
 
-					_childStrategyRules.Remove(item);	
+					_childStrategyRules.Remove(item);
 				}
 
 				return base.OnRemoving(item);
@@ -298,7 +298,7 @@ namespace StockSharp.Algo.Strategies
 			_maxErrorCount.CanOptimize =
 			_maxOrderRegisterErrorCount.CanOptimize =
 			_maxRegisterCount.CanOptimize = false;
-			
+
 			InitMaxOrdersKeepTime();
 
 			_strategyStat.Add(this);
@@ -538,7 +538,7 @@ namespace StockSharp.Algo.Strategies
 
 				RaiseParametersChanged(nameof(Portfolio));
 
-				this.Notify(nameof(Position));
+				this.Notify(nameof(Portfolio));
 			}
 		}
 
@@ -568,7 +568,7 @@ namespace StockSharp.Algo.Strategies
 					if (strategy.Security == null)
 						strategy.Security = value;
 				}
-				
+
 				RaiseParametersChanged(nameof(Security));
 
 				this.Notify(nameof(Position));
@@ -973,7 +973,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					OnError(this, error);
 				}
-				
+
 				if (ProcessState == ProcessStates.Stopping)
 				{
 					if (CancelOrdersWhenStopping)
@@ -1449,7 +1449,7 @@ namespace StockSharp.Algo.Strategies
 
 			InitStartValues();
 		}
-		
+
 		/// <summary>
 		/// Init.
 		/// </summary>
@@ -1609,7 +1609,7 @@ namespace StockSharp.Algo.Strategies
 			if (!CanTrade())
 				return;
 
-			SafeGetConnector().EditOrder(order, changes);	
+			SafeGetConnector().EditOrder(order, changes);
 		}
 
 		/// <inheritdoc />
@@ -1634,7 +1634,7 @@ namespace StockSharp.Algo.Strategies
 
 				//ReRegisterSlippage(oOrder, nOrder);
 
-				SafeGetConnector().ReRegisterOrder(oOrder, nOrder);	
+				SafeGetConnector().ReRegisterOrder(oOrder, nOrder);
 			});
 		}
 
@@ -1724,7 +1724,7 @@ namespace StockSharp.Algo.Strategies
 					var leftVolume = order.GetMatchedVolume() - info.ReceivedVolume;
 
 					if (leftVolume != 0)
-					{					
+					{
 						this.AddDebugLog(LocalizedStrings.OrderHasBalance, order.TransactionId, leftVolume);
 						return false;
 					}
@@ -1999,7 +1999,7 @@ namespace StockSharp.Algo.Strategies
 		public virtual void Reset()
 		{
 			this.AddInfoLog(LocalizedStrings.Str1393);
-			
+
 			//ThrowIfTraderNotRegistered();
 
 			//if (Security == null)
@@ -2013,7 +2013,7 @@ namespace StockSharp.Algo.Strategies
 			StatisticManager.Reset();
 
 			PnLManager.Reset();
-			
+
 			Commission = null;
 			//CommissionManager.Reset();
 
@@ -2195,7 +2195,7 @@ namespace StockSharp.Algo.Strategies
 		protected virtual void OnOrderReRegistering(Order oldOrder, Order newOrder)
 		{
 			TryAddChildOrder(newOrder);
-			
+
 			OrderReRegistering?.Invoke(oldOrder, newOrder);
 		}
 
@@ -2358,7 +2358,7 @@ namespace StockSharp.Algo.Strategies
 				var period = board.WorkingTime.GetPeriod(date);
 
 				var tod = _lastPnlRefreshTime.TimeOfDay;
-				
+
 				if (period != null && !period.Times.IsEmpty() && !period.Times.Any(r => r.Contains(tod)))
 					return;
 			}
@@ -2748,7 +2748,7 @@ namespace StockSharp.Algo.Strategies
 				OrderRegisterErrorCount++;
 
 				this.AddInfoLog(LocalizedStrings.Str1297Params, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
-			
+
 				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
 					Stop();
 			}
@@ -2984,7 +2984,7 @@ namespace StockSharp.Algo.Strategies
 					};
 
 					RegisterOrder(order);
-					
+
 					break;
 				}
 
@@ -3003,9 +3003,9 @@ namespace StockSharp.Algo.Strategies
 				case CommandTypes.ClosePosition:
 				{
 					var slippage = parameters.TryGetValue(nameof(Order.Slippage))?.Item2.To<decimal?>();
-					
+
 					this.ClosePosition(slippage ?? 0);
-					
+
 					break;
 				}
 			}
