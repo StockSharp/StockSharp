@@ -170,7 +170,13 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Users;
-		
+
+		/// <summary>
+		/// Upload size limit.
+		/// </summary>
+		[DataMember]
+		public long UploadLimit { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
 		/// </summary>
@@ -208,6 +214,7 @@ namespace StockSharp.Messages
 			destination.AuthToken = AuthToken;
 			destination.CanPublish = CanPublish;
 			destination.IsAgreementAccepted = IsAgreementAccepted;
+			destination.UploadLimit = UploadLimit;
 
 			if (Permissions != null)
 				destination.Permissions.AddRange(Permissions.ToDictionary());
