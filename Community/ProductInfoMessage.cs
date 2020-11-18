@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Runtime.Serialization;
+	using System.Linq;
 
 	using Ecng.Common;
 
@@ -184,6 +185,12 @@
 		public bool IsApproved { get; set; }
 
 		/// <summary>
+		/// Stub versions.
+		/// </summary>
+		[DataMember]
+		public Tuple<string, string>[] StubVersions { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -244,6 +251,7 @@
 			destination.Scope = Scope;
 			destination.LatestVersion = LatestVersion;
 			destination.IsApproved = IsApproved;
+			destination.StubVersions = StubVersions?.ToArray();
 		}
 
 		/// <inheritdoc />
