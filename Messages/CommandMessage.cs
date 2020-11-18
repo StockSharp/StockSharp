@@ -160,6 +160,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		FileGroup,
+
+		/// <summary>
+		/// Product.
+		/// </summary>
+		[EnumMember]
+		Product,
 	}
 
 	/// <summary>
