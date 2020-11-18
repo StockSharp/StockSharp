@@ -28,6 +28,21 @@
 		public const MessageTypes ProductFeedback = (MessageTypes)(-11003);
 
 		/// <summary>
+		/// <see cref="ProductFeedbackLookupMessage"/>.
+		/// </summary>
+		public const MessageTypes ProductFeedbackLookup = (MessageTypes)(-11004);
+
+		/// <summary>
+		/// <see cref="ProductPermissionLookupMessage"/>.
+		/// </summary>
+		public const MessageTypes ProductPermissionLookup = (MessageTypes)(-11005);
+
+		/// <summary>
+		/// <see cref="ProductPermissionMessage"/>.
+		/// </summary>
+		public const MessageTypes ProductPermission = (MessageTypes)(-11006);
+
+		/// <summary>
 		/// <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public static DataType ProductInfoType = DataType.Create(typeof(ProductInfoMessage), null).Immutable();
@@ -36,5 +51,10 @@
 		/// <see cref="ProductFeedbackMessage"/>.
 		/// </summary>
 		public static DataType ProductFeedbackType = DataType.Create(typeof(ProductFeedbackMessage), null).Immutable();
+
+		/// <summary>
+		/// <see cref="ProductPermissionMessage"/>.
+		/// </summary>
+		public static DataType ProductPermissionType = DataType.Create(typeof(ProductPermissionMessage), null).Immutable();
 	}
 }
