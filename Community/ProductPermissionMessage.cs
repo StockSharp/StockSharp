@@ -36,7 +36,7 @@
 		/// Command.
 		/// </summary>
 		[DataMember]
-		public CommandTypes Command { get; set; }
+		public CommandTypes? Command { get; set; }
 
 		/// <inheritdoc />
 		public override DataType DataType => CommunityMessageTypes.ProductPermissionType;
