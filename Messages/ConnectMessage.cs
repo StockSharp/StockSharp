@@ -34,12 +34,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Optional server session id.
+		/// </summary>
+		[DataMember]
+		public string SessionId { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="ConnectMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new ConnectMessage();
+			var clone = new ConnectMessage { SessionId = SessionId };
 			CopyTo(clone);
 			return clone;
 		}
