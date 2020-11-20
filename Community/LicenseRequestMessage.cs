@@ -48,6 +48,30 @@
 		public string HardwareId { get; set; }
 
 		/// <summary>
+		/// Command.
+		/// </summary>
+		[DataMember]
+		public CommandTypes? Command { get; set; }
+
+		/// <summary>
+		/// Features.
+		/// </summary>
+		[DataMember]
+		public string Features { get; set; }
+
+		/// <summary>
+		/// Issued to.
+		/// </summary>
+		[DataMember]
+		public long IssuedTo { get; set; }
+
+		/// <summary>
+		/// License expiry date.
+		/// </summary>
+		[DataMember]
+		public DateTimeOffset? ExpirationDate { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="LicenseRequestMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
@@ -73,12 +97,13 @@
 			destination.BrokerId = BrokerId;
 			destination.LicenseId = LicenseId;
 			destination.HardwareId = HardwareId;
+			destination.Command = Command;
+			destination.Features = Features;
+			destination.ExpirationDate = ExpirationDate;
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
-		{
-			return base.ToString() + $",TrId={TransactionId},HID={HardwareId},Broker={BrokerId},Account={Account},LicId={LicenseId}";
-		}
+			=> base.ToString() + $",TrId={TransactionId},HID={HardwareId},Broker={BrokerId},Account={Account},LicId={LicenseId},Cmd={Command},Ftrs={Features}";
 	}
 }

@@ -25,6 +25,12 @@
 		/// <inheritdoc />
 		public override DataType DataType => CommunityMessageTypes.LicenseInfoType;
 
+		/// <summary>
+		/// Is approved.
+		/// </summary>
+		[DataMember]
+		public bool IsApproved { get; set; }
+
 		private byte[] _body = ArrayHelper.Empty<byte>();
 
 		/// <summary>
@@ -49,23 +55,10 @@
 			base.CopyTo(destination);
 
 			destination.Body = Body;
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="LicenseInfoMessage"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			var clone = new LicenseInfoMessage();
-			CopyTo(clone);
-			return clone;
+			destination.IsApproved = IsApproved;
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return base.ToString() + $",BodyLen={Body.Length}";
-		}
+		public override string ToString() => base.ToString() + $",BodyLen={Body.Length}";
 	}
 }
