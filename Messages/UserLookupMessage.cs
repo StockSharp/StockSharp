@@ -27,10 +27,22 @@ namespace StockSharp.Messages
 		[DataMember]
 		public string Like { get; set; }
 
+		/// <summary>
+		/// Own.
+		/// </summary>
+		[DataMember]
+		public bool Own { get; set; }
+
+		/// <summary>
+		/// Identifier.
+		/// </summary>
+		[DataMember]
+		public long? UserId { get; set; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",Like={Like}";
+			return base.ToString() + $",Like={Like},Own={Own},UId={UserId}";
 		}
 
 		/// <summary>
@@ -52,6 +64,8 @@ namespace StockSharp.Messages
 			base.CopyTo(destination);
 
 			destination.Like = Like;
+			destination.Own = Own;
+			destination.UserId = UserId;
 
 			return destination;
 		}
