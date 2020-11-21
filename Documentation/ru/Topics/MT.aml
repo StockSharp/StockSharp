@@ -6,10 +6,8 @@
       Для устанвки данных коннекторов необходимо использовать <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" /> (подробнее, <link xlink:href="385c6f6d-8cac-4d90-8701-f5da0281ed43" />).</para>
       <para>Оба коннектора используются одинаково, поэтому ниже будет описал процесс подключения к MT4:</para>
     </introduction>
-    <!-- Add one or more top-level section elements.  These are collapsible.
-         If using <autoOutline />, add an address attribute to identify it
-         and specify a title so that it can be jumped to with a hyperlink. -->
-    <section>
+    <procedure>
+		<title>Настройка MT коннектора</title>
 		<steps class="ordered">
 			  <step>
 				  <content>
@@ -102,8 +100,6 @@
 				  </content>
 			  </step>
 		  </steps>
-    </section>
-    <relatedTopics>
-    </relatedTopics>
+    </procedure>
   </developerConceptualDocument>
 </topic>
