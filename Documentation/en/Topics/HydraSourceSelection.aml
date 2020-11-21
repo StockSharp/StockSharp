@@ -2,35 +2,35 @@
 <topic id="947eb75f-f3e7-4141-8afc-d3e280c632d8" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
      <introduction>
-    <para>Чтобы добавить новый источник маркет-данных необходимо:</para>
+    <para>To add a new market data source, you need to:</para>
    <list class="bulit">
-   <listItem><para>Перейти на вкладку <legacyBold>Общее</legacyBold></para></listItem>
-   <listItem><para>Выбрать <legacyBold>Добавить</legacyBold></para></listItem>
-   <listItem><para>Выбрать <legacyBold>Источники</legacyBold></para></listItem>
+   <listItem><para>Go to the <legacyBold>Common</legacyBold> tab</para></listItem>
+   <listItem><para>Select <legacyBold>Add</legacyBold></para></listItem>
+   <listItem><para>Select <legacyBold>Sources</legacyBold></para></listItem>
    </list>     				
 					<mediaLink>
 						  <image placement="center" xlink:href="hydra_source_choose" />
 					</mediaLink>
-	<para>После чего появится список источников. Пользователь может выбрать сразу несколько источников. </para>
+	<para>Then a list of sources will appear. The user can select several sources at once. </para>
 	<mediaLink>
 						  <image placement="center" xlink:href="hydra_source_add" />
 					</mediaLink>
-	<para>Так же можно создать несколько экземпляров одного источника. Например, несколько экземпляров <legacyBold>Interactive Brokers</legacyBold>, которые будут сохранять скачанные данные в разные папки.</para>
+	<para>You can also create multiple instances of the same source. For example, multiple instances of <legacyBold>Interactive Brokers</legacyBold> that will save downloaded data to different folders.</para>
 			<mediaLink>
 			<image placement="center" xlink:href="hydra_two_sourse"/>
 			</mediaLink>
-	<para>Чтобы источник после нажатия кнопки <legacyBold>Старт</legacyBold> стал скачивать данные, его нужно включить. Для этого следует выбрать значок
-					  источника на левой панели и использовать кнопку <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> для включения или выключения.
-					  Эту операцию можно выполнить до или после добавления инструментов для скачивания.</para>
+	<para>In order for the source to start downloading data after clicking the <legacyBold>Start</legacyBold> button, it should be enabled. 
+	To do this, select the source icon in the left panel and use the <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline>
+	button to switch it on or off. You can perform this operation before or after adding instruments for downloading.</para>
 					  
-	<para>Ненужные источники можно удалить при помощи кнопки <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline>.</para>
+	<para>Unnecessary sources can be deleted using the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline> button.</para>
             
-     <para>Настройки источников можно изменить в панели <legacyBold>Свойства</legacyBold>, которая расположена с правой стороны.</para>
+     <para>Source settings can be changed in the <legacyBold>Properties</legacyBold> panel on the right side.</para>
       <mediaLink> <image placement="center" xlink:href="hydra_setting_source_button" /></mediaLink>
       
-      <para>Общие настройки для всех источников можно посмотреть в пункте <link xlink:href="a4028651-96b0-48fc-950a-954995c32244" />.</para>
-      <para>Каждое подключение имеет свои особенности, по ссылке <link xlink:href="ac37ca9e-de2e-47ab-be3f-bb9779ef1f3a">"Список коннекторов"</link> приведен перечень коннекторов и их настройки.</para>
+      <para>Common settings for all sources can be found in the <link xlink:href="a4028651-96b0-48fc-950a-954995c32244" /> item.</para>
+      <para>Each connection has its own characteristics, the link <link xlink:href="ac37ca9e-de2e-47ab-be3f-bb9779ef1f3a">List of connectors</link> provides a list of connectors and their settings.</para>
  </introduction>
- <para><legacyBold>Смотреть <link xlink:href="a1bb103d-b405-4363-9a76-a51c947e1b9c">видеоинструкцию</link></legacyBold></para>		
+ <para><legacyBold>Watch <link xlink:href="a1bb103d-b405-4363-9a76-a51c947e1b9c">video tutorial</link></legacyBold></para>		
   </developerConceptualDocument>
 </topic>

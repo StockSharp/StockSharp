@@ -2,8 +2,8 @@
 <topic id="1cd3b77c-5500-4dd5-a28e-6446daa9fe6c" revisionNumber="1">
   <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
        <introduction>
-       <para>После того, как маркет-данные получены, пользователь может начать работу с ними.</para>
-       <para>Программа позволяет следующие действия:</para>
+       <para>After the market data is received, the user can start working with it.</para>
+       <para>The program allows the following actions:</para>
       <list class="order">
       <listItem>
       <para><link xlink:href="6e4047aa-1693-4dd3-807c-d07fb3119dbe" /></para>

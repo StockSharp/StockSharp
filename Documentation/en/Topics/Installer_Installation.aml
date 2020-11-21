@@ -5,7 +5,7 @@
 		  <steps class="ordered">
 			  <step>
 				  <content>
-		  				<para>Для установки <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" /> необходимо перейти на страницу <token>download</token>:</para>
+		  				<para>To install <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" /> go to the Download page <token>download</token>:</para>
 <mediaLink>
 <image placement="center" xlink:href="Installer_installation"/>
 </mediaLink>
@@ -13,12 +13,12 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Скачать дистрибутив <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" />.</para>
+		  				<para>Download the <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" /> distribution package.</para>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Разблокировать (правая кнопка мышки на файле, свойства) <legacyBold>Installer.zip</legacyBold>.</para>
+		  				<para>Unblock (right click on the file, properties) <legacyBold>Installer.zip</legacyBold>.</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Installerzip_Properties"/>
 </mediaLink>
@@ -26,8 +26,9 @@
 			  </step>
 			  			  <step>
 				  <content>
-		  				<para>Распаковать архив и, в папке с распакованным архивом, найти файл <legacyBold>StockSharp.Installer.Console.bat</legacyBold>.</para>
-		  				<para>Запустить его.</para>
+		  				<para>Unpack the archive and, in the folder with the unpacked archive, find the <legacyBold>StockSharp.Installer.Console.bat</legacyBold> file.
+</para>
+		  				<para>Run it.</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Installer_StockSharp_Installer_bat"/>
 </mediaLink>
@@ -35,8 +36,9 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Запустится режим установки. Необходимо дождаться полной установки.
-При первой установке необходимо ввести логин и пароль <legacyBold>StockSharp</legacyBold>.</para>
+		  				<para>Installation mode starts. 
+		  				You should wait for the complete installation. 
+		  				When installing for the first time, you should enter the <legacyBold>StockSharp</legacyBold> login and password.</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="logIn_installer"/>
 </mediaLink>
@@ -44,7 +46,7 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>После установки откроется окно программы.</para>
+		  				<para>After installation, the program window will open.</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="first_win_installer"/>
 </mediaLink>
@@ -52,7 +54,7 @@
 			  </step>
 		  </steps>
     </introduction>
-    <para><legacyBold>Смотреть <link xlink:href="cc6df22b-a360-4a2b-ac7d-2992b88d41cf">видеоинструкцию</link></legacyBold></para>
+    <para><legacyBold>Watch <link xlink:href="cc6df22b-a360-4a2b-ac7d-2992b88d41cf">video tutorial</link></legacyBold></para>
 
     <relatedTopics>
 <link xlink:href="385c6f6d-8cac-4d90-8701-f5da0281ed43" />

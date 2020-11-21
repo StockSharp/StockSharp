@@ -3,41 +3,47 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <para>
-       Механизм сообщений позволяет создавать собственные подключения к любой внешней торговой системе. Для этого необходимо 
-       создать собственный класс <legacyItalic>адаптера сообщений</legacyItalic>, 
-       унаследованный от абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
+       The messaging allows you to create your own connections to any external trading system. 
+       To do this, you shall create your own <legacyBold>message adapter</legacyBold> class inherited from the 
+       abstract<codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference> class.
+       
        </para>
        <para>
-       	При разработке собственного адаптера сообщений необходимо решить следующие задачи:
+       	When developing your own message adapter, you need to solve the following tasks:
        </para>
        
 		<list class="ordered">
   			<listItem>
-  				<para>Написать код, преобразующий входящие сообщения <token>stocksharp</token> в команды внешней системы.</para>
+  				<para>Write a code that translates incoming <token>stocksharp</token> messages into external system commands.</para>
   			</listItem>
   			<listItem>
-  				<para>Написать код, преобразующий информацию, поступающую от внешней системы, в исходящие сообщения.</para>
+  				<para>Write a code that converts information from an external system into outgoing messages.</para>
   			</listItem>
   			<listItem>
-  				<para>Выполнить преобразование кодированной информации внешней системы (коды инструментов и площадок, перечисления и т.п.) в типы <token>stocksharp</token>.</para>
+  				<para>Convert the encoded information of the external system (codes of instruments and boards, enumerations, etc.) to <token>stocksharp</token> types.
+  				</para>
   			</listItem>
   			<listItem>
-  				<para>Выполнить дополнительные настройки, связанные с особенностями внешней торговой системы.</para>
+  				<para>Perform additional settings related to the features of the external trading system.</para>
   			</listItem>
 		</list>
 		
        <para>
-       	Прежде чем приступить к описанию разработки собственного адаптера, рассмотрим процесс создания и обработки входящих и исходящих сообщений в <token>stocksharp</token>
-		на примере сообщения <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>. Предположим, что в программе был вызван метод
-						<codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference>, тогда в базовом классе  
-						<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> будет происходить следующее:
+       Before we start describing how to develop your own adapter, 
+       let's look at how to create and process incoming and outgoing messages in <token>stocksharp</token> using the 
+       <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference> as an example.
+       Suppose that the 
+       <codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference>
+       method was called in the program, then the following will happen in the base 
+       <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> class:
+     
 		</para>
 		<list class="ordered">
   			<listItem>
-  				<para>Вызывается защищенный метод
-  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnConnect</codeEntityReference>, 
-  				в котором создается сообщение и передается в метод
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>.</para>
+  				<para>The protected <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnConnect</codeEntityReference>
+  				method is called, in which a message is generated and passed to the
+  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference> method.
+  				</para>
   				<code language="C#">
 protected virtual void OnConnect()
 {
@@ -46,8 +52,9 @@ protected virtual void OnConnect()
   				</code>
   			</listItem>
   			<listItem>
-  			<para>В методе <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
-  			сообщение передается в одноименный метод адаптера.</para>
+  			<para> In the <codeEntityReference qualifyHint="true">method M:StockSharp.Algo.Connector.Send In Message(StockSharp.Messages.Message)</codeEntityReference>
+the message is passed to the adapter method of the same name. 			
+  		</para>
   			<code language="C#">
 public void SendInMessage(Message message)
 {
@@ -55,48 +62,46 @@ public void SendInMessage(Message message)
 }
   			</code>
   			</listItem>
-  			<listItem>
-  				<para>В методе <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference> адаптера
-  					выполняются дополнительные проверки. Если все нормально, то сообщение передается в метод
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> (см.ниже).
-  					Если сгенерирована ошибка, то создается создается новое исходящее сообщение аналогичного типа, в свойство <codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference>
-  					сообщения передается объект исключения. Это новое сообщение передается в метод 
-  					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
-  					в котором будет сгенерировано событие появления нового исходящего сообщения 
-  					<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>,
-  					сигнализирующего об ошибке.
-  				</para>
+  			<listItem>  				
+  				<para>Additional checks are performed in the adapter's <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference> method.
+  				If everything is fine, then the message is passed to the <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> 
+  				method (see below).
+  				If an error is generated, a new outgoing message of the same type is created, the exception object is passed to the <codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference>
+  				property of the message.
+  				This new message is passed to the <codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+  				 method, which will generate a new outgoing message event - 
+  				 <codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>, that signals an error.
+  				  				</para>
   			</listItem>
 		</list>
 		
 		<para>
-			Исходящие сообщения создаются при помощи метода 
-			<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
-			в который передается объект сообщения. В этом методе генерируется событие нового исходящего сообщения 
-			<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>.
-			Далее это событие обрабатывается в базовом классе коннектора в защищенном методе
-			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>, 
-			где в зависимости от ситуации сообщение преобразуется в соответствующий тип <token>stocksharp</token> и генерируется событие коннектора, 
-			а также могут создаваться дополнительное входящие сообщения.
+		Outgoing messages are created using the <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+		method, to which a message object is passed. This method generates a new outgoing message event - 
+		<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>. 
+		This event is then handled in the connector base class in the protected 
+		<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>
+		method, where, depending on the situation, the message is converted
+		to the appropriate <token>stocksharp</token> type and a connector event is generated, and additional incoming messages can also be generated.
+		
 		</para>
 		
 		<para>
-		Ниже описан процесс создания собственного адаптера для <token>bitstamp</token> (коннектор доступен с исходными кодами).
+		The following describes the process for creating your own adapter for <token>bitstamp</token> (the connector is available with the source codes).  
 		</para>
 		
     </introduction>
     
     <procedure>
-			<title>Пример создания адаптера сообщений BitStamp</title>
+			<title>Example of creating a BitStamp message adapter</title>
 			<steps class="ordered">
 			   <step>
 					<content>
 						<para>
-						<legacyBold>Создание класса адаптера.</legacyBold>
+						<legacyBold>Creating an adapter class.</legacyBold>
 						</para>
 						<para>
-						 Вначале создаем класс адаптера сообщений <legacyBold>BitStampMessageAdapter</legacyBold> унаследованный от
-						 абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>:
+						First, we create the <legacyBold>BitStampMessageAdapter</legacyBold> message adapter class inherited from the abstract <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference> class:
 						</para>
 						<code language="C#">
 public class BitStampMessageAdapter : MessageAdapter 
@@ -109,18 +114,17 @@ public class BitStampMessageAdapter : MessageAdapter
 				<step>
 					<content>
 						<para>
-						<legacyBold>Конструктор адаптера.</legacyBold>
+						<legacyBold>Adapter constructor.</legacyBold>
 						</para>
 						<list class="bullet">
   							<listItem>
-  								<para>В конструктор адаптера передается генератор идентификаторов транзакций, который будет использоваться для создания идентификаторов сообщений.</para>
+  								<para>A transaction ID generator is passed to the adapter constructor, which will be used to generate message IDs.</para>
   							</listItem>
   							<listItem>
   								<para>
-  								При помощи метода 
-  								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.MessageAdapter,StockSharp.Messages.MessageTypeInfo)</codeEntityReference>
-    							добавляем в массив <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference> типы сообщений, 
-    							которые будет поддерживать адаптер.
+  								Using the<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.MessageAdapter,StockSharp.Messages.MessageTypeInfo)</codeEntityReference>
+  								method, we add the message types that the adapter will support to the 
+  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference>array
   								</para>
   							</listItem>
 						</list>
@@ -130,24 +134,24 @@ public class BitStampMessageAdapter : MessageAdapter
 public BitStampMessageAdapter(IdGenerator transactionIdGenerator)
 	: base(transactionIdGenerator)
 {
-	// для поддержания соединения шлем каждый 10 секунд пинг
+	// to maintain the connection, ping every 10 seconds
 	HeartbeatInterval = TimeSpan.FromSeconds(10);
 
-	// адаптер поддерживает как транзакции, так и маркет-данные
+	// the adapter supports both transactions and market data
 	this.AddMarketDataSupport();
 	this.AddTransactionalSupport();
 	
-	// удаляем не поддерживаемые типы сообщий (были добавлены через AddTransactionalSupport все возможные транзакционные сообщения)
+	// deleting unsupported message types (all possible transactional messages were added via AddTransactionalSupport)
 	this.RemoveSupportedMessage(MessageTypes.Portfolio);
 	this.RemoveSupportedMessage(MessageTypes.OrderReplace);
 
-	// адаптер поддерживает тики, стаканы и лог заявок
+	// the adapter supports ticks, glasses, and logs
 	this.AddSupportedMarketDataType(DataType.Ticks);
 	this.AddSupportedMarketDataType(DataType.MarketDepth);
 	//this.AddSupportedMarketDataType(DataType.Level1);
 	this.AddSupportedMarketDataType(DataType.OrderLog);
 
-	// адаптер поддерживает результирующие сообщения для поиска инструментов, позиций и заявок
+	// the adapter supports result messages for searching for tools, positions, and bids
 	this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 	this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
 	this.AddSupportedResultMessage(MessageTypes.OrderStatus);
@@ -159,24 +163,28 @@ public BitStampMessageAdapter(IdGenerator transactionIdGenerator)
 				<step>
 					<content>
 					<para>
-					 Метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>.
+					 <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> method.
 					</para>
 						<para>
+						Next, you need to override the 
+						<codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> method.
+						As mentioned above, all incoming messages are passed to this method, and for each message type you need to write code that converts the messages into 
+						<token>bitstamp</token> commands.
+
 					    Далее необходимо переопределить метод 
-					    <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>. 
+					     
 					    Как говорилось выше, в этот метод передаются все входящие сообщения и для каждого типа сообщения нужно написать код, 
-					    преобразующий сообщения в команды <token>bitstamp</token>.
+					    преобразующий сообщения в команды 
 						</para>
-						<para>
-						При получении сообщения <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> 
-						необходимо выполнить "обнуление" состояния и освободить ресурсы.
-						По завершении этих операций нужно отправить исходящие сообщение <codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference>.
+						<para>When the <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> message is received, it is required to reset the state and free up resources. 
+						When these operations are complete, it is required to send an outgoing <codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference> message.
+								
 						</para>
-						<para>
-						 При поступлении сообщения <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference> 
-						 инициализируем переменные _httpClient и _pusherClient, подписываемся на события <token>bitstamp</token> и устанавливаем соединение при помощи метода 
-						 <legacyBold>Connect</legacyBold> нативного API. В случае удачного соединения должно наступить событие 
-						 <legacyBold>SessionOnPusherConnected</legacyBold>.
+						<para>When a
+						<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference> 
+						message arrives, we initialize the _httpClient and _pusherClient variables, subscribe to <token>bitstamp</token> events, and establish a connection using the native API's <legacyBold>Connect</legacyBold> method.
+						If the connection is successful, the <legacyBold>SessionOnPusherConnected</legacyBold> event should occur.
+						 
 						</para>
 
 						<code language="C#">
@@ -347,39 +355,45 @@ private void SessionOnPusherDisconnected(bool expected)
 				<step>
 				<content>
 					<para>
-					 Событие <legacyBold>SessionOnPusherConnected</legacyBold>.
+					 <legacyBold>SessionOnPusherConnected</legacyBold> event.
 					</para>
 					<para>
-					 В обработчике события соединения нативного API необходимо послать исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
-					 При обработке этого сообщения в коде класса <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
-					 будут проверены наличие в <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference> следующие типов сообщений:
+					It is required to send an outgoing <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>
+					message in the native API connection event handler.
+					When processing this message in the <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> class code, 
+					the following message types will be checked in <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedInMessages</codeEntityReference>:
+					
 					 </para>
 					<list class="bullet">
   						<listItem>
   							<para>
-  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference> - необходимо ли сообщение
-  								<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> для получения портфелей и позиций.
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference> - whether
+  								<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference>  message necessary for obtaining portfolios and positions.
+  							</para>
+  						</listItem>
+  						<listItem>
+  							<para>  						
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> - whether
+  								<codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> message necessary for obtaining instruments.
   							</para>
   						</listItem>
   						<listItem>
   							<para>
-  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> - необходимо ли сообщение
-  								<codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> для получения инструментов.
-  							</para>
-  						</listItem>
-  						<listItem>
-  							<para>
-  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.OrderStatus</codeEntityReference> - необходимо ли сообщение
-  								<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственных сделок.
+  							OrderStatus -  OrderStatusMessage 
+  								<codeEntityReference>F:StockSharp.Messages.MessageTypes.OrderStatus</codeEntityReference> - whether 
+  								<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> message necessary for obtaining orders and own trades.
   							</para>
   						</listItem>
 					</list>
 					<para>
-					 Если типы сообщения установлены у адаптера, то соответствующие сообщения будут посланы. В нашем примере (см. Конструктор адаптера.) в этот список
-					 были добавлены типы <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
-					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, поэтому
-					 следует ожидать получения входящих сообщений <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> и
+					If the message types are set on the adapter, then the corresponding messages will be sent. 
+					In our example (see Adapter Constructor), the 
+					<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference>
+					and <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference> 
+					types have been added to this list,
+					so you should expect to receive incoming <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> and
 					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference>.
+					
 					</para>
 					<code language="C#">
 						<![CDATA[
@@ -394,17 +408,19 @@ private void SessionOnPusherConnected()
 				<step>
 				<content>
 				<para>
-				Входящие сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> и <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>.
+				<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> and <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> incoming messages.
+ 
+						
 				</para>
 				<para>
-				При получении этих сообщений необходимо вызвать функции <token>bitstamp</token>, запрашивающие портфели и инструменты соответственно.
-				А после получения всех данных необходимо послать сообщение 
-				<codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
-				Обратите внимание, как результирующему сообщению, так и сообщениям с данными, присваивается идентификатор подписки:
+				Upon receipt of these messages, it is necessary to call the <token>bitstamp</token> functions requesting portfolios and instruments, respectively. 
+				And after receiving all the data, you need to send the <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference> message.
+				Note that the subscription ID is assigned to both the resulting message and the data messages:	
+				
 				</para>
 				<code language="C#">
 						<![CDATA[
-// Запрашиваем список портфелей
+// Requesting a list of portfolios
 private void ProcessPortfolioLookup(PortfolioLookupMessage message)
 {
 	if (!message.IsSubscribe)
@@ -418,14 +434,14 @@ private void ProcessPortfolioLookup(PortfolioLookupMessage message)
 	{
 		PortfolioName = pfName,
 		BoardCode = Extensions.BitStampBoard,
-		OriginalTransactionId = transactionId, // <- идентификатор подписки
+		OriginalTransactionId = transactionId, // <- the subscription ID
 	});
 	
 	var account = _httpClient.GetAccount(section);
 
 	SendOutMessage(new PositionChangeMessage
 	{
-		SecurityId = SecurityId.Money, // <- для денежной позиции устанавливаем спец код инструмента Money
+		SecurityId = SecurityId.Money, // <- for a money position set the special code of the Money tool
 		PortfolioName = GetPortfolioName(section),
 		ServerTime = time,	
 	}
@@ -454,13 +470,13 @@ private void ProcessPortfolioLookup(PortfolioLookupMessage message)
 		SendOutMessage(msg);	
 	}
 	
-	SendSubscriptionResult(message); // <- завершение подписки (если To == null, то тут отправляется что подписка перешла в Online, иначе Finished)
+	SendSubscriptionResult(message); // <- end of subscription (if To == null, then it is sent that the subscription went Online, otherwise Finished)
 	
-	if (message.To == null) // подписка не только на истори, но и на online
+	if (message.To == null) // subscribe not only to stories, but also to online
 		_pusher.SubscribeAccount();
 }
 
-// Запрашиваем инструменты
+// The requested tools
 private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 {
 	var secTypes = lookupMsg.GetSecurityTypes();
@@ -475,7 +491,7 @@ private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 			Decimals = info.BaseDecimals,
 			Name = info.Description,
 			VolumeStep = info.UrlSymbol == _eurusd ? 0.00001m : 0.00000001m,
-			OriginalTransactionId = lookupMsg.TransactionId, // <- идентификатор подписки
+			OriginalTransactionId = lookupMsg.TransactionId, // <- the subscription ID
 		};
 
 		if (!secMsg.IsMatch(lookupMsg, secTypes))
@@ -484,7 +500,7 @@ private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 		SendOutMessage(secMsg);
 	}
 
-	SendSubscriptionResult(lookupMsg); // <- завершение подписки
+	SendSubscriptionResult(lookupMsg); // <- the completion of the subscription
 }
 						
 						]]>	
@@ -495,11 +511,11 @@ private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 				<step>
 				<content>
 				<para>
-					 Изменение счета или позиции, получаемые от внешней системы.
+					Numeration or position changes received from an external system.
+
 				</para>
-                <para>
-					 В обработчике события полученную информацию о портфеле
-					 необходимо преобразовать в исходящее сообщение <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>:
+                <para>In the event handler, the received portfolio information should be converted into the outgoing <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference> message:
+					
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -558,26 +574,23 @@ private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 				<step>
 				<content>
 				<para>
-				 <legacyBold>Подписка на тиковые данные.</legacyBold>
+				 <legacyBold>Tick data subscription</legacyBold>
 				</para>
 				<para>
-				 При вызове методов 
-<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Subscribe(StockSharp.Algo.Subscription)</codeEntityReference> 
-или <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.UnSubscribe(StockSharp.Algo.Subscription)</codeEntityReference> 
-будет сформировано входящее сообщение 
-<codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>
-.
+				When the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Subscribe(StockSharp.Algo.Subscription)</codeEntityReference> 
+or <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.UnSubscribe(StockSharp.Algo.Subscription)</codeEntityReference> methods are called the incoming <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference> message will be generated.
+
 				 </para>
+				 <para>When processing this message, you should call the <token>bitstamp</token> methods by subscribing or unsubscribing from receiving tick trades.
+				  </para>
 				 <para>
-				 При обработке этого сообщения необходимо вызвать методы <token>bitstamp</token> по подписке или отписке получения тиковых сделок.
-				 </para>
-				 <para>
-				 Так как сообщение используется для работы со всеми типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
-				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType2</codeEntityReference>. Для сделок значение этого свойства равно
-				 <codeEntityReference qualifyHint="true">P:StockSharp.Messages.DataType.Ticks</codeEntityReference>.
+				 Since the message is used to work with all types of market data, the <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType2</codeEntityReference> property should be used to select a specific type. 
+				 For trades, this property value is equal to <codeEntityReference qualifyHint="true">P:StockSharp.Messages.DataType.Ticks</codeEntityReference>.
+
+				 
 				</para>
-				<para>
-				  После вызова метода <legacyBold>SubscribeTrades</legacyBold> сделки будут поступать в событии <legacyBold>SessionOnNewTrade</legacyBold>.
+				<para>After calling the <legacyBold>SubscribeTrades</legacyBold> method, trades will arrive in the <legacyBold>SessionOnNewTrade</legacyBold> event.
+				  
 				 </para>
 				
 				<code language="C#">
@@ -669,15 +682,16 @@ private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 			<step>
 				<content>
 				<para>
-					Событие <legacyBold>SessionOnNewTrade</legacyBold>.
+					<legacyBold>SessionOnNewTrade</legacyBold> event.
 				</para>
 				<para>
-				В обработчике события <legacyBold>SessionOnNewTrade</legacyBold> полученную информацию о сделке 
-				необходимо преобразовать во исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>.
-				Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок (собственных или анонимных), так и для заявок. 
-  				Поэтому в сообщении уточняется, что оно относится к сделке - 
-  				<codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference> = 
+				In the event handler <legacyBold>Session On New Trade</legacyBold> the received information about the transaction
+must be converted to an outgoing message <codeEntityReference>T:StockSharp.Messages.Execution Message</codeEntityReference>.
+Note that the <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> is used both for transactions (private or anonymous) and for orders.
+Therefore, the message specifies that it relates to the transaction -
+<codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference> = 
   				<codeEntityReference qualifyHint="true">F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference>.
+				
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -703,8 +717,7 @@ private void SessionOnNewTrade(string pair, Trade trade)
 				<step>
 					<content>
 						<para>
-						 Код работы с заявками (отмена-регистрация), как и полный код адаптера, можно получить в репозитарии <token>stocksharpgithub</token>.
-						</para>
+						The code for handling orders (cancel-register), as well as the full adapter code, can be obtained from the <token>stocksharpgithub</token> repository.						</para>
 					</content>
 				</step>
 			</steps>

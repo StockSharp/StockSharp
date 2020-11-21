@@ -2,17 +2,18 @@
 <topic id="621927b7-839f-4492-8dbb-162e63d57769" revisionNumber="1">
   <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para><token>hydra</token> позволяет на основе скачанных сделок формировать свечи, которые в последствии можно экспортировать в форматы
-      <token>excel</token>, xml, sql, bin, Json или txt (cм. ниже).</para>
-      <para>Это позволяет в последствии использовать данные в любых программах теханализа (WealthLab, AmiBroker и т.д.).</para>
+      <para><token>hydra</token> allows you to generate candles based on downloaded trades, which can later be exported to 
+      <token>>Excel</token>, xml, sql, bin, Json or txt formats (see below).
+</para>
+      <para>This allows you to subsequently use the data in any technical analysis programs (WealthLab, AmiBroker, etc.).</para>
     </introduction>
     
     <procedure>
-      <title>Генерация свечей</title>
+      <title>Candles generation</title>
       <steps class="ordered">
         <step>
           <content>
-            <para>На вкладке <legacyBold>Общее</legacyBold> нажать кнопку <legacyBold>Свечи</legacyBold>, откроется следующее окно:</para>
+            <para>On the <legacyBold>Common</legacyBold> tab, click the <legacyBold>Candles</legacyBold> button, the following window will open:</para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_main" />
 	  		</mediaLink>
@@ -22,20 +23,21 @@
          <step>
           <content>
             <para>
-            	Далее необходимо:
+            	Further it is necessary:
             </para>
             
 <list class="order">
-  <listItem><para>Выбрать из выпадающего списка интересующий тип 
-  свечи (поддерживаются все <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">стандартные свечи</link>)</para></listItem>
-   <listItem><para>Выбрать нужный <legacyBold>Тайм Фрейм</legacyBold>.</para>
-   <para>Для примера нами выбраны свечи с Тайс Фреймом 5 мин.</para></listItem>
+  <listItem><para>Select the required candle type from the drop-down list (all <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">standard candles</link> are supported) </para></listItem>
+   <listItem><para>oSelect the required <legacyBold>Time Frame</legacyBold></para>
+   <para>As an example, we have selected candles with a Time Frame of 5 min.</para></listItem>
   
-  <listItem><para>Выбрать инструмент (в нашем случае это SBER@TQBR) и нажать на кнопку <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline></para></listItem>
+  <listItem><para>Select an security (in our case it is SBER@TQBR) and click on the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button.
+ </para></listItem>
 </list>
 
-            	<para>После этого произойдет генерация свечей на основе найденных данных. Например, для свечей типа
-            	<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> будет сформировано следующее:</para>
+            	<para>After that, candles will be generated based on the data found. For example, for candles of <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>
+            	type the following will be generated:
+            	</para>
 
             	
             <mediaLink>
@@ -43,27 +45,28 @@
 	  		</mediaLink>
 	  		
 	  		<para>
-	  			Если есть потребность построить свечи другого типа, например <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> нужно сделать следующее:	  		</para>
+	  			If you need to build candles of a different type, for example <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference>, you need to do the following:</para>
 
 <list class="bullet">
-  <listItem><para>Выбрать тип свечи. </para>
+  <listItem><para>Select the candle type. </para>
   <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_volume_100" />
 	  		</mediaLink>
    
   </listItem>
-  <listItem><para>Выбрать период  объем.</para></listItem>
-  <listItem><para>Установить инструмент.</para></listItem> 
-   <listItem><para>Выбрать в <legacyBold>Построить из</legacyBold>, например, <legacyBold>Тики</legacyBold>. Нажать на кнопку <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> </para>
+  <listItem><para>Select period, volume.</para></listItem>
+  <listItem><para>Set the security.</para></listItem> 
+   <listItem><para>Select in <legacyBold>Build From</legacyBold>, for example <legacyBold>Ticks</legacyBold>. Click the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button.</para>
   <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_volume" />
 	  		</mediaLink></listItem>
 </list>
-<para>Если маркет-данные не удалось получить из источника, можно сгенерировать свечи выбрав в поле <link xlink:href="9e4df290-b29b-4b71-bd57-f9834dc9c2fe">"Построить из"</link> тип данных из которых они будут построены.</para>
-<para>Например:</para>
+<para>If the market data could not be received from the source, candles can be generated by selecting the data type from which they will be built in the 
+<link xlink:href="9e4df290-b29b-4b71-bd57-f9834dc9c2fe">Build From</link> field.</para>
+<para>For example:</para>
 
 <list class="bullet">
-  <listItem><para>Свечи с Тайм Фреймом 10 мин из Тиков. </para>
+  <listItem><para>Candles with Time Frame 10 min from Ticks. </para>
   <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_tf_10" />
 	  		</mediaLink>  
@@ -71,9 +74,8 @@
   
   
   <listItem>
-  <para>Можно построить свечи с большим Тайм Фреймом из свечей с меньшим, выбрав в 
-  <legacyBold>Построить из</legacyBold> построить <legacyBold>Меньший Тайм Фрейм</legacyBold>. 
-  Например из свечей с Тайм Фреймом 5 минут свечи с Тайм Фреймом 30 мин.</para>
+  <para>You can build candles with a large Time Frame from candles with a smaller one by choosing in <legacyBold>Build From</legacyBold> to build <legacyBold>Smaller Time Frame</legacyBold>. 
+  For example, from candles with Time Frame 5 minutes candles with Time Frame 30 minutes</para>
 	  		<mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_tf_01" />
 	  		</mediaLink>
@@ -81,8 +83,7 @@
 	  		</list>
 	  		
 			<alert class="note">
-  				<para>Если в <legacyBold>Построить из:</legacyBold> выбрать <legacyBold>не строить</legacyBold>, то будет произведен поиск готовых свечей, 
-  				которые были скачаны через источник.</para>
+  				<para>If you select <legacyBold>do not build</legacyBold> in the <legacyBold>Build From</legacyBold> field, then ready-made candles that were downloaded from the source will be searched for.</para>
 			</alert>
 
           </content>
@@ -90,8 +91,9 @@
         
         <step>
           <content>
-            <para>Если необходимо графически посмотреть сгенерированные свечи, то нужно нажать на кнопку <mediaLinkInline><image xlink:href="hydra_candles"/></mediaLinkInline>
-            и после этого откроется график:</para>
+            <para>3.If you need to graphically view the generated candles, then you need to click on the
+            <mediaLinkInline><image xlink:href="hydra_candles"/></mediaLinkInline> button and after that the chart will open:
+            </para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_tf_chart" />
 	  		</mediaLink>
@@ -102,9 +104,10 @@
         </step>
         <step>
           <content>
-            <para>К графику можно добавить индикаторы. Для этого нужно открыть контекстное меню, щелкнув правой кнопкой по панели графика, и выбрать пункт <legacyBold>Индикатор</legacyBold>. 
-            Кроме того, индикатор можно вывести на отдельной панели. 
-            Для этого необходимо добавить новую панель при помощи кнопки <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline> и также выбрать необходимый индикатор из контекстного меню.</para>
+            <para>You can add indicators to the chart. To do this, open the context menu by right-clicking on the chart panel and select the <legacyBold>Indicator</legacyBold> item. 
+            In addition, the indicator can be displayed on a separate panel. 
+            To do this, add a new panel using the <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>
+            button and also select the required indicator from the context menu.</para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_ind_chart" />
 	  		</mediaLink>
@@ -116,12 +119,12 @@
         
         <step>
           <content>
-    		<para>Полученные значения можно <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспортировать в нужный формат</link>.</para>
+    		<para>The received values can be <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">exported to the required format</link>.</para>
           </content>
         </step>        
       </steps>
     </procedure>
-     <para><legacyBold>Смотреть <link xlink:href="86edd5e9-ff41-48a7-9bc8-c41085886d6e">видеоинструкцию</link></legacyBold></para>	
+     <para><legacyBold>Watch <link xlink:href="86edd5e9-ff41-48a7-9bc8-c41085886d6e">video tutorial</link></legacyBold></para>	
  
   </developerHowToDocument>
 </topic>

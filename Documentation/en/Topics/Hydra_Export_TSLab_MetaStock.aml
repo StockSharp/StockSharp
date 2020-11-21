@@ -4,7 +4,7 @@
     <introduction>
 <para>To export data to MetaStock format files, select the Txt format from the drop-down list:</para>
     	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export_JSON" />
+    		<image placement="center" xlink:href="hydra_export" />
     	</mediaLink>
 
     	<para>

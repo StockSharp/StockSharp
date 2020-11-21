@@ -2,11 +2,11 @@
 <topic id="42dcf014-53df-4962-a907-59ce2f165507" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Если подключение поддерживает лог заявок, то адаптер может передавать его через сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>:</para>
+      <para>If connection supports the request log, then the adapter can transmit it via the <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> message:</para>
        	<code language="C#"><![CDATA[
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.OrderLog, // <- устанавливаем признак того, что сообщение содержил ОЛ
+				ExecutionType = ExecutionTypes.OrderLog, // <- setting the flag that the message contains olive OL
 				ServerTime = order.TradeTime,
 				SecurityId = order.Symbol.ToStockSharp(section),
 				Side = order.Side.ToSide(),
@@ -19,9 +19,18 @@
 				AveragePrice = (decimal?)order.AveragePrice,
 			});
 ]]></code>
-		<para>Если требуется поддержка генерации стаканов из приходящих данных, то будет использоваться адаптер <codeEntityReference>T:StockSharp.Algo.OrderLogMessageAdapter</codeEntityReference> (подробнее <link xlink:href="a90787cb-3566-4d09-835c-22a0838196fa" />) при подписке, требущих сбор стаканов из ОЛ данных.
-		По умолчанию, будет использовать алгоритм <codeEntityReference>T:StockSharp.Messages.OrderLogMarketDepthBuilder</codeEntityReference>. Если поведение данного класса недостаточно, то необходимо создать собственный класс, реализующий интерфейс
-		<codeEntityReference>T:StockSharp.Messages.IOrderLogMarketDepthBuilder</codeEntityReference> и переопределить метод <codeEntityReference qualifyHint="true">M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)</codeEntityReference>:</para>
+		<para>
+		If support for order book generation from incoming data is required, then the 
+		<codeEntityReference>T:StockSharp.Algo.OrderLogMessageAdapter</codeEntityReference>
+		adapter (see <link xlink:href="a90787cb-3566-4d09-835c-22a0838196fa" /> for details) will be used for subscriptions that require order book collection from order log data. 
+		By default, the <codeEntityReference>T:StockSharp.Messages.OrderLogMarketDepthBuilder</codeEntityReference> algorithm will be used. 
+		If this class behavior is not enough, then you need to create your own class that implements the 
+		<codeEntityReference>T:StockSharp.Messages.IOrderLogMarketDepthBuilder</codeEntityReference>
+		interface and override the
+		<codeEntityReference qualifyHint="true">M:StockSharp.Messages.IMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)</codeEntityReference>:
+		method:
+		 
+ </para>
 		<code language="C#"><![CDATA[
 public partial class MyOwnMessageAdapter : MessageAdapter
 {

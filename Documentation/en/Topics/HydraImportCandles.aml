@@ -2,53 +2,52 @@
 <topic id="9e13ea27-629d-4403-adfa-d76bc8648c7e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Для импорта свечей нужно выбрать пункт <legacyBold>Импорт => Свечи</legacyBold> из главного меню приложения.</para>
+      <para>To import candles, select <legacyBold>Import => Candles</legacyBold> item from the main application menu.</para>
        <mediaLink>
 		  		<image placement="left" xlink:href="hydra_import_candles" />
 	   </mediaLink>
 	   <procedure>
-      <title>Процесс импорта свечей</title>
+      <title>Candle import process</title>
        <steps class="ordered">
         <step>
           <content>
-          	<para><legacyBold>Общее</legacyBold>.</para>
+          	<para><legacyBold>Common.</legacyBold>.</para>
 			<list class="bullet">
   				<listItem>
-  					<para><legacyBold>Тип данных</legacyBold> - тип импортируемых данных.</para>
+  					<para><legacyBold>Data type</legacyBold> - type of imported data.</para>
   				</listItem>
 			  	<listItem>
-  					<para><legacyBold>Имя файла</legacyBold> - полный путь к CSV файлу.</para>
+  					<para><legacyBold>Filename</legacyBold> - full path to the CSV file.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Директория с данными</legacyBold> - папка, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.</para>
+  					<para><legacyBold>Data directory</legacyBold> - folder where the final <token>stocksharp</token> files will be saved .</para>
   				</listItem>
   				<listItem>
   					<para>
-  					<legacyBold>Маска файла</legacyBold> - маска файла,
-  					которая используется при сканировании директории. Например, candle_*.csv.</para>
+  					<legacyBold>File mask</legacyBold> - file mask that is used when scanning the directory. For example, candle _*.csv.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Разделитель колонок</legacyBold> - разделитель колонок. Табуляция обозначается TAB.</para>
+  					<para><legacyBold>Column separator</legacyBold> - column separator. Tabulation is denoted by TAB.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Отступ с начала</legacyBold> - количество строчек с начала файла, которые нужно пропустить (если они несут метаинформацию).</para>
+  					<para><legacyBold>Indent from the beginning</legacyBold> - number of lines from the beginning of file to be skipped (if they contain meta information).</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Часовой пояс</legacyBold> - часовой пояс.</para>
+  					<para><legacyBold>Time zone</legacyBold> - time zone.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Интервал</legacyBold> - периодичность обновления данных</para>
+  					<para><legacyBold>Interval</legacyBold> - frequency of data update.</para>
   				</listItem>
 			</list>
 
-<para><legacyBold>Инструменты</legacyBold></para>
+<para><legacyBold>Instruments</legacyBold></para>
                 	
 			<list class="bullet">
   				<listItem>
-  					<para><legacyBold>Расширенная информация</legacyBold> - сохранять расширенные импортированные поля в хранилище расширенной информации.</para>
+  					<para><legacyBold>Extended information</legacyBold> - save extended imported fields in the extended information storage</para>
   				</listItem>
 			  	<listItem>
-  					<para><legacyBold>Дубликаты</legacyBold> - будут ли обновляться дубликаты инструментов, если они уже существуют.</para>
+  					<para><legacyBold>Duplicates</legacyBold> - whether duplicate securities will be updated if they already exist.</para>
   				</listItem>  				
 			</list>
 
@@ -58,55 +57,62 @@
         </step>
         <step>
           <content>
-          	<para><legacyBold>Настроить параметры импорта для полей</legacyBold> <token>stocksharp</token>.</para>
+          	<para>Configure import parameters for <token>stocksharp</token> fields.</para>
           	<list class="bullet">
   				<listItem>
-  					<para><legacyBold>Поле S#</legacyBold> - значение поля S#. (<legacyBold>Инструмент</legacyBold>, <legacyBold>Площадка</legacyBold> и т.д.).</para>
+  					<para><legacyBold>S# field</legacyBold> - value of the S# field. ( <legacyBold>Security, Board</legacyBold>, etc.).</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Ассоциации</legacyBold> - задать соответствие значения колонки в файле типу в stocksharp (если это необходимо).</para>
+  					<para><legacyBold>Associations</legacyBold> - match the column value in file to the stocksharp type (if necessary).</para>
   				</listItem>  				
   				<listItem>
-  					<para><legacyBold>Формат</legacyBold> - формат данных. Обычно используется при импорте значений даты и времени (см. <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Сделки</link>).</para>
+  					<para><legacyBold>Format</legacyBold> - data format. Typically used when importing date and time values (see <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Trades</link>).</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Использовать</legacyBold> - использовать ли данные при импорте.</para>
+  					<para><legacyBold>Use</legacyBold> - whether to use the data when importing.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Порядок</legacyBold> - последовательность расположения столбцов свойств импортируемого элемента.</para>
-  					<para>Например, если импортируемый файл имеет следющий вид шаблона: </para>
+  					<para><legacyBold>Field order</legacyBold> - sequence in which the property columns of the imported item are arranged.</para>
+  					<para>For example, if the imported file has the following template type: </para>
   					<code>
   					<![CDATA[
 {SecurityId.SecurityCode},{SecurityId.BoardCode},{OpenTime:yyyyMMdd},{OpenTime:default:HH:mm:ss},{OpenPrice},{HighPrice},{LowPrice},{ClosePrice},{TotalVolume}
 	  				]]></code>
-	  				<para>То ему будет соответсвовать следющая настройка:</para>
+	  				<para>Then the following setting will correspond to it:</para>
 	  				<mediaLink>
 		  		<image placement="center" xlink:href="hydra_import_prop_candles" />
 	   </mediaLink>
-	   <para>Здесь:</para>
-	   <para>Значению <legacyBold>{SecurityId.SecurityCode}</legacyBold> соответствует значение <legacyBold>Инструмент</legacyBold> с порядковым номером <legacyBold>0</legacyBold>. </para>
+	   <para>Here:</para>
+	   <para>The <legacyBold>Security</legacyBold> value corresponds to the <legacyBold>{SecurityId.SecurityCode}</legacyBold> with the serial number <legacyBold>0</legacyBold>. </para>
   				
 <alert class="note">
-  <para>В программировании порядковый номер первого элемента всегда равен 0</para>
+  <para>In programming, the ordinal number of the first element is always 0</para>
 </alert>
-<para>Значению <legacyBold>{SecurityId.BoardCode}</legacyBold> соответствует значение <legacyBold>Площадка</legacyBold> с порядковым номером <legacyBold>1</legacyBold>. И так далее. </para>
+<para>The <legacyBold>Board</legacyBold> value corresponds to the <legacyBold>{SecurityId.BoardCode}</legacyBold> with serial number <legacyBold>1</legacyBold>. And so on. </para>
   				
   				
   				</listItem>
   				<listItem>
-  					<para><legacyBold>По умолчанию</legacyBold> - значение поля по умолчанию. Например, можно использовать для повторяющихся значений полей (<legacyBold>Инструмент</legacyBold>, или <legacyBold>Площадка</legacyBold> при импорте сделок, стаканов и т.п., см. <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Сделки</link> ), если соответствующей информации нет в файле с данными.</para>
+  					<para><legacyBold>By default</legacyBold> - default field value. For example, it can be used for repeated field values 
+  					(Security, <legacyBold>or Board</legacyBold> when importing trades, order books, etc., see <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Trades</link>),
+  					if the corresponding information is not in the data file.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Ноль</legacyBold> - в некоторых случаях при сохранении данных, некоторые свойства данных могут сохраняться как "0", что является ошибкой. Так например, значение цены, по различным причинам, может быть равняться 0, что не допустимо, а в дальнейшем приведет к неверному прочтению. Это может повлечь неверную работу стратегий, которые работают с ними и как следствие ошибочному результату.
-  					Устанавливая галочку, пользователь указывает, что данные в данном разделе, при равенсте 0, записываются как пустые, тоесть отсутствуют. При дальнейшей работе, например тестировании, пользователь будет видеть ошибку отсутствия данных, что будет указывать на некоректный импорт даннных. Фактически это защита пользователя от "битых" данных, для более корректной работы. </para>
+  					<para><legacyBold>Zero</legacyBold> - in some cases when saving data, some data properties may be saved as "0", which is an error. 
+  					For example, the price value, for various reasons, can be equal to 0, which is not acceptable, and in the future will lead to an incorrect reading. 
+  					This can lead to incorrect strategy operation that work with them and, as a consequence, an erroneous result. 
+  					By checking the box, the user specifies that data in this section, if equal to 0, is written as empty, that is, it is absent. 
+  					During further work, for example, testing, the user will see an error of no data, which will indicate an incorrect data import.
+  					In fact, this is the protection of user from "broken" data, for more correct work. </para>
   				</listItem>
 			</list>
-			<para>Пользователь может настроить большое количество свойств для скачиваемых данных. Исходя из шаблона импортируемого файла, нужно указывать свойство и присваивать ему нужный номер в последовательности. </para>
+			<para>The user can configure a large number of properties for the downloaded data. 
+			Based on the imported file template, you need to specify the property and assign it the required number in the sequence.</para>
           </content>
         </step>
         <step>
           <content>
-          	<para>Для предварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
+          	<para>To preview the data, click the <legacyBold>Preview</legacyBold> button.</para>
           	<mediaLink>
 		  		<image placement="center" xlink:href="hydra_import_preview_candles" />
 	   </mediaLink>
@@ -114,7 +120,7 @@
         </step>
         <step>
           <content>
-          	<para>Нажать кнопку <legacyBold>Импорт</legacyBold>.</para>
+          	<para>Click the <legacyBold>Import</legacyBold> button..</para>
           </content>
         </step>
       </steps>

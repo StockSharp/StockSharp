@@ -2,15 +2,28 @@
 <topic id="15357338-1d0d-4a6d-ae70-8118be08ecc7" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>В случае запроса истории, в адаптер приходит подписка, с инициализированными значениями <codeEntityReference qualifyHint="true">P:StockSharp.Messages.MarketDataMessage.From</codeEntityReference> и 
-      <codeEntityReference qualifyHint="true">P:StockSharp.Messages.MarketDataMessage.To</codeEntityReference>. Адаптер должен обработать полученный запрос, вернув запрашиваемые данные.
-      Признаком окончания запроса служит отправка сообщения <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>. Таким образом, внешний код понимает, что все запрошенные данные были получены.
-      Если данных нет (подключение не поддерживает историю или же запрашиваемый период недоступен), то так же требуется результирующее значение <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference>.
-      </para>
-      <para>Некоторые сообщения, реализующие <codeEntityReference>T:StockSharp.Messages.ISubscriptionMessage</codeEntityReference> (например, <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>), имеют всегда инициализированными <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ISubscriptionMessage.From</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ISubscriptionMessage.To</codeEntityReference>.
-      Для таких сообщение подписка на online данные невозможна, и по ним отправляются только исторические данные (или же идет запрос мета-данных, как инструменты, площадки и т.д.).
-      </para>
-      <para>При обработке результатов истории, у исторические сообщений необходимо инициализировать свойство <codeEntityReference qualifyHint="true">P:StockSharp.Messages.IOriginalTransactionIdMessage.OriginalTransactionId</codeEntityReference>. Таким образом внешний код поймет, что возвращаемые адаптером данные относятся к конкретной исторический подписке:</para>
+      <para>If a history is requested, a subscription comes to the adapter with the initialized 
+      <codeEntityReference qualifyHint="true">P:StockSharp.Messages.MarketDataMessage.From</codeEntityReference> and
+      <codeEntityReference qualifyHint="true">P:StockSharp.Messages.MarketDataMessage.To</codeEntityReference> values.
+      The adapter should process the received request by returning the requested data. Sending the 
+      <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference> message is a sign of the request end. 
+      Thereby, the external code understands that all the requested data has been received. If there is no data 
+      (the connection does not support history or the requested period is not available),
+      then the resulting <codeEntityReference>T:StockSharp.Messages.SubscriptionFinishedMessage</codeEntityReference> value is also required.
+             </para>
+      <para>
+     Some messages that implement 
+     <codeEntityReference>T:StockSharp.Messages.ISubscriptionMessage</codeEntityReference> 
+     (for example, <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>)
+     always have   <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ISubscriptionMessage.From</codeEntityReference>
+      and <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ISubscriptionMessage.To</codeEntityReference>
+    initialized. For such messages, a subscription to online data is impossible, and only historical data are sent via them (or a request for meta-data is sent, such as instruments, boards, etc.).</para>
+          <para>
+          When processing the history results, the 
+          <codeEntityReference qualifyHint="true">P:StockSharp.Messages.IOriginalTransactionIdMessage.OriginalTransactionId</codeEntityReference> property should be initialized for historical messages.
+          Thereby, the external code will understand that the data returned by the adapter is related to a specific historical subscription:
+          
+         </para>
       <code language="C#"><![CDATA[
       		SendOutMessage(new TimeFrameCandleMessage
 			{
@@ -22,10 +35,15 @@
 				OpenTime = candle.StartTime,
 				State = candle.IsFormed ? CandleStates.Finished : CandleStates.Active,
 				TotalTicks = candle.TradesCount,
-				OriginalTransactionId = _candleTransactions.TryGetValue(Tuple.Create(secId, tf)), // <- заполняем идентификато подписки, по которому внешний код определит, какой инструмент и тайм-фрейм был в подписке
+				OriginalTransactionId = _candleTransactions.TryGetValue(Tuple.Create(secId, tf)), // <- fill in the subscription ID, which is used by the external code to determine which instrument and timeframe was in the subscription
 			});
       ]]></code>
-      <para>Специальные адаптер <codeEntityReference>T:StockSharp.Algo.PartialDownloadMessageAdapter</codeEntityReference> дробит подписки с большим диапазоном данных (подробнее <link xlink:href="a90787cb-3566-4d09-835c-22a0838196fa" />) на множество запросов с мелкими диапазонами. Каждый адаптер может передать, какой диапазон времени максимально он поддерживает через перегрузку метода <codeEntityReference qualifyHint="true">M:StockSharp.Messages.IMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)</codeEntityReference>:</para>
+      <para>
+      Special <codeEntityReference>T:StockSharp.Algo.PartialDownloadMessageAdapter</codeEntityReference>
+      adapter splits subscriptions with a large range of data
+      (see <link xlink:href="a90787cb-3566-4d09-835c-22a0838196fa" /> for details) into many requests with small ranges. 
+      Each adapter can communicate the maximum time range it supports by the <codeEntityReference qualifyHint="true">M:StockSharp.Messages.IMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)</codeEntityReference> method restart:
+</para>
       <code language="C#"><![CDATA[
 public partial class MyOwnMessageAdapter : MessageAdapter
 {
@@ -36,14 +54,21 @@ public partial class MyOwnMessageAdapter : MessageAdapter
 	{
 		var step = base.GetHistoryStepSize(dataType, out iterationInterval);
 			
-		if (dataType == DataType.Ticks) // тиковые данные максимально поддерживает диапазон в один день
+		if (dataType == DataType.Ticks) // tick data supports the maximum range of one day
 			step = TimeSpan.FromDays(1);
 
 		return step;
 	}
 }
 ]]></code>
-      <para>В случае online данных заполнение <codeEntityReference qualifyHint="true">P:StockSharp.Messages.IOriginalTransactionIdMessage.OriginalTransactionId</codeEntityReference> не требуется, так как адаптер <codeEntityReference>T:StockSharp.Algo.SubscriptionOnlineMessageAdapter</codeEntityReference> передает в адаптер только одну подписку с online данными.</para>
+      <para>
+      For online data, no 
+      <codeEntityReference qualifyHint="true">P:StockSharp.Messages.IOriginalTransactionIdMessage.OriginalTransactionId</codeEntityReference>
+      filling is required because the 
+      <codeEntityReference>T:StockSharp.Algo.SubscriptionOnlineMessageAdapter</codeEntityReference> 
+      passes only one online data subscription to the adapter.
+      
+      </para>
     </introduction>
   </developerConceptualDocument>
 </topic>

@@ -2,86 +2,80 @@
 <topic id="1e18851f-69f7-4fa0-a5ea-c059c7694990" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-       <para>Для импорта сделок нужно выбрать вкладку <legacyBold>Импорт => Тики</legacyBold>.</para>
+       <para>To import trades, select the <legacyBold>Import => Ticks</legacyBold> tab.</para>
        <mediaLink>
 		  		<image placement="left" xlink:href="hydra_import_trades" />
 	   </mediaLink>
 	   <procedure>
-      <title>Процесс импорта сделок</title>
+     <title>The import process securities.</title>
       <steps class="ordered">
         <step>
-          <content>
-          	<para> <legacyBold>Настройки импорта</legacyBold>.</para>
-          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
-          </content>
-        </step>
-        
-        <step>
-          <content>
-          	<para>Настроить параметры импорта для полей <token>stocksharp</token>.</para>
-          	<para> См. импорт <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/>.</para>
-          	<para><legacyBold>Рассмотрим пример импорта сделок(тиков) из CSV файла:</legacyBold></para>
+            <para> <legacyBold>Import settings.</legacyBold>.</para>
+          	<para> See <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/> import.</para>
+          </step>
+      
+      <step>
+      <content>
+           	<para>Configure import parameters for <token>stocksharp</token> fields.</para>
+          	<para> See <link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/> import.</para>
+          	<para><legacyBold>Let's consider an example of importing trades (ticks) from a CSV file:</legacyBold></para>
           
 	<list class="bullet">
  		 <listItem>
- 		 <para>Файл, данные из которого необходимо импортировать, имеет следующий шаблон записи:</para>
+ 		 <para>The file from which you want to import data has the following template:</para>
  		 <code>
   					<![CDATA[
 {SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume};{OriginSide}
 	  				]]></code>
 	  				
-	<para>Здесь значение {SecurityId.SecurityCode} и {SecurityId.BoardCode}, соответсвуют значениям 
-	<legacyBold>Инструмент</legacyBold> и <legacyBold>Площадка</legacyBold> соответсвенно. Поэтому в поле 
-	<legacyBold>Порядок поля</legacyBold> мы присваиваем значение 0 и 1 соответсвенно.</para>
+	<para>Here the values of {SecurityId.SecurityCode} and {SecurityId.BoardCode} correspond to the values of <legacyBold>Security</legacyBold> and <legacyBold>Board</legacyBold>, respectively. 
+	Therefore, in the <legacyBold>Field order</legacyBold> field we assign the values 0 and 1, respectively.</para>
 	</listItem>
 	
 	<listItem>
-	<para>Для полей {ServerTime:default:yyyyMMdd} и {ServerTime:default:HH:mm:ss.ffffff} выбираем из окна <legacyBold>Поле S#</legacyBold> поля
-	<legacyBold>Дата</legacyBold> и <legacyBold>Время</legacyBold> соответсвенно. Присваиваем значение 2 и 3.</para>
+	<para>For the {ServerTime:default:yyyyMMdd} and {ServerTime:default:HH:mm:ss.ffffff} fields, select the <legacyBold>Date</legacyBold> and <legacyBold>Time</legacyBold> fields from the <legacyBold>S# field</legacyBold> window, respectively. 
+	We assign the values 2 and 3.</para>
 	</listItem>
 	
 	<listItem>
-	<para>Для поля {TradeId} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Идентификатор</legacyBold>  - идентификатор сделки или номер сделки. Присваиваем ему значение 4.</para>
+	<para>For the {TradeId} field, select the <legacyBold>Identifier</legacyBold> field from the <legacyBold>S# field</legacyBold> window - the trade identifier or the trade number. We assign it the value 4.</para>
 	</listItem>
 	
 	<listItem>
-	<para>Для поля {TradePrice} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Цена</legacyBold> - цена сделки. Присваиваем ему значение 5.</para>
+	<para>For the {TradePrice} field, select the <legacyBold>Price</legacyBold> field - the trade price from the <legacyBold>S# field</legacyBold> window. We assign it the value 5.</para>
 	</listItem>
 	<listItem>
-	<para>Для поля {TradeVolume} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Объем</legacyBold> - объем сделки. Присваиваем ему значение 6.</para>
+	<para>For the {TradeVolume} field, select the <legacyBold>Volume</legacyBold> field from the <legacyBold>S# field </legacyBold> window - the trade volume. We assign it the value 6.</para>
 	</listItem>
 	<listItem>
-	<para>Для поля {OriginSide} выбираем из окна <legacyBold>Поле S#</legacyBold> поле <legacyBold>Инициатор</legacyBold> - инициатор сделки (Продавец или  Покупатель). Присваиваем ему значение 7.</para>
+	<para>For the {OriginSide} field, select the <legacyBold>Initiator</legacyBold> field  from the <legacyBold>S# field</legacyBold> window - the trade initiator (Seller or Buyer). We assign it the value 7.</para>
 	</listItem>
 	<listItem>
-	<para>Окно настройки полей будет выглядить следующим образом:</para>
+	<para>The field setting window will look like this:</para>
 	<mediaLink>
 	<image placement="center" xlink:href="hydra_import_prop_trade" />
 	</mediaLink>
 	</listItem>
 	</list> 
-	<para>Пользователь может настроить большое количество свойств для скачиваемых данных. Исходя из шаблона импортируемого файла, нужно указывать свойство и присваивать ему нужный номер в последовательности. </para>
+	<para>The user can configure a large number of properties for the downloaded data. 
+	Based on the imported file template, you need to specify the property and assign it the required number in the sequence. </para>
   
 </content>
         </step>
         
         <step>
         <content>
-    <para>Для преварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
+    <para>To preview the data, click the <legacyBold>Preview</legacyBold> button.</para>
     <mediaLink>
 	<image placement="center" xlink:href="hydra_import_preview_trade" />
 	</mediaLink>
        </content>
        </step>
           
-                <step>
-          <content>
-          	<para>Для преварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
-          </content>
-        </step>
+                
         <step>
           <content>
-          	<para>Нажать кнопку <legacyBold>Импорт</legacyBold>.</para>
+          	<para>Click the <legacyBold>Import</legacyBold> button.</para>
           </content>
         </step>
       </steps>

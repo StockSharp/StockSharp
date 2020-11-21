@@ -3,19 +3,22 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
   <introduction>
-  <para>Программа <token>hydra</token> имеет подключение к различным источникам данных. 
-  Помимо получения исторических данных, программа имеет возможность получать маркет данные от бокеров, при этом маркет данные поступают в реальном времени.
-  Подключение к источникам осуществляется посредством коннекторов, предоставляемых пользователю.
+  <para><token>hydra</token> has connections to various data sources. 
+  In addition to receiving historical data, the program can receive market data from brokers, while market data is received in real time. 
+  Connection to the sources is carried out using the connectors provided to the user.
+
   </para>
-  <para>Пользователю предосталяются бесплатные коннекторы, а так же он может приобрести платные, которые позволяют получать ему маркет данные с платных источников.</para>
+  <para>The user is provided with free connectors, and he can also purchase paid ones, which allow receiving market data from paid sources.</para>
    
+<para>At the moment, <token>hydra</token> supports the following sources:</para>
+      
 <table>
-  <title>Коннекторы Америка</title>
+  <title>Stock, Futures and Options</title>
   <tableHeader>
     <row>
-      <entry><para>Коннектор</para></entry>
-      <entry><para>Настройки коннектора</para></entry>
-      <entry><para>Графическое конфигурирование</para></entry>
+      <entry><para>Connectors</para></entry>
+      <entry><para>Connector settings</para></entry>
+      <entry><para>Graphical configuration</para></entry>
     </row>
   </tableHeader>
   <row>
@@ -114,98 +117,14 @@
       <entry><link xlink:href="49160faa-7913-4237-8a78-42dc272bdd2f" /></entry>
   </row> 
 </table>
-   <table>
-  <title>Коннекторы Россия</title>
-  <tableHeader>
-    <row>
-      <entry><para>Коннектор</para></entry>
-      <entry><para>Настройки коннектора</para></entry>
-      <entry><para>Графическое конфигурирование</para></entry>
-    </row>
-  </tableHeader>
-  <row>
-      <entry><link xlink:href="3f8e07ed-6fc1-4145-8532-2a960735f112" /></entry>
-      <entry><para>----------------------------------</para></entry>
-      <entry><link xlink:href="a4fd6897-b792-4cd8-b5c4-b5cf5f3b2e52" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f" /></entry>
-      <entry><link xlink:href="ac5713e1-b841-4ace-8e8e-6fab52fc7530" /></entry>
-      <entry><link xlink:href="3af423bd-44ce-436a-aa28-3688a1988174" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" /></entry>
-      <entry><link xlink:href="2a606357-f716-491b-9292-64836fcac5fd" /></entry>
-      <entry><link xlink:href="23cd63b4-e604-4b20-b08d-4e1186eed5ea" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" /></entry>
-      <entry><link xlink:href="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" /></entry>
-      <entry><link xlink:href="3707af38-42ed-43f1-b657-0434807f40d6" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" /></entry>
-      <entry><link xlink:href="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" /></entry>
-      <entry><link xlink:href="4fff8af3-32e2-49df-982c-ca341f9295fa" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc" /></entry>
-      <entry><link xlink:href="5a43d423-1c1f-470a-b32f-92c24023de2c" /></entry>
-      <entry><link xlink:href="ec91b947-3a97-4e90-8261-7e0f5b6be96c" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" /></entry>
-      <entry><link xlink:href="bb643f2e-d235-47ea-9a71-6dbec18d188a" /></entry>
-      <entry><link xlink:href="717d8a85-0955-40db-88c3-bd0946126639" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" /></entry>
-      <entry><link xlink:href="6611fa9f-0e57-4378-954f-f582881d7504" /></entry>
-      <entry><link xlink:href="83a5cc58-21af-4363-bd46-77e607b4a7ab" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db" /></entry>
-      <entry><link xlink:href="29a2e2d4-af15-4340-be6d-3c77c66c1977" /></entry>
-      <entry><link xlink:href="784afda8-65bc-428c-915a-69deae3f43dc" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="778e03c7-d639-4b5d-b874-d5bab5a1034d" /></entry>
-      <entry><para>----------------------------------</para></entry>
-      <entry><link xlink:href="87c69bac-52ed-4532-bd60-8a351bb8fe57" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="87880b45-6311-42af-9d37-2f4ad9597658" /></entry>
-      <entry><para>----------------------------------</para></entry>
-      <entry><link xlink:href="e778e24e-41c6-4978-8d88-de2f04bfdf4e" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" /></entry>
-      <entry><link xlink:href="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" /></entry>
-      <entry><link xlink:href="cca809c9-f777-4880-a719-8de25e6c3e67" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="e0fcdbe7-d595-4cf2-ae9d-4ba5b215273f" /></entry>
-      <entry><para>----------------------------------</para></entry>
-      <entry><link xlink:href="6280057b-f6c1-4fb5-9b56-b6686b5a2b4c" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="98efb1f0-107b-4442-846f-1d517330ba39" /></entry>
-      <entry><link xlink:href="9bb0296e-ab70-4021-969f-0d2810803515" /></entry>
-      <entry><link xlink:href="3fd4882e-3fcc-4913-9f6a-41a4b2af6f54" /></entry>
-  </row>
-  <row>
-      <entry><link xlink:href="19c2bdbe-15ab-4b41-9d87-e838b5f17c8e" /></entry>
-      <entry><para>----------------------------------</para></entry>
-      <entry><link xlink:href="35990328-b984-41f8-aaed-c2fa057687a9" /></entry>
-  </row>
-</table>
+
 <table>
-  <title>Коннекторы Forex</title>
+  <title>Forex</title>
   <tableHeader>
     <row>
-      <entry><para>Коннектор</para></entry>
-      <entry><para>Настройки коннектора</para></entry>
-      <entry><para>Графическое конфигурирование</para></entry>
+      <entry><para>Connectors</para></entry>
+      <entry><para>Connector settings</para></entry>
+      <entry><para>Graphical configuration</para></entry>
     </row>
   </tableHeader>
   <row>
@@ -250,12 +169,12 @@
   </row>  
 </table>
 <table>
-  <title>Коннекторы Криптовалют</title>
+  <title>Cryptocurrencies</title>
   <tableHeader>
     <row>
-      <entry><para>Коннектор</para></entry>
-      <entry><para>Настройки коннектора</para></entry>
-      <entry><para>Графическое конфигурирование</para></entry>
+      <entry><para>Connectors</para></entry>
+      <entry><para>Connector settings</para></entry>
+      <entry><para>Graphical configuration</para></entry>
     </row>
   </tableHeader>
 <row>
@@ -502,12 +421,12 @@
   </row>
 </table>
 <table>
-  <title>Общие</title>
+  <title>Common</title>
   <tableHeader>
     <row>
-      <entry><para>Коннектор</para></entry>
-      <entry><para>Настройки коннектора</para></entry>
-      <entry><para>Графическое конфигурирование</para></entry>
+      <entry><para>Connectors</para></entry>
+      <entry><para>Connector settings</para></entry>
+      <entry><para>Graphical configuration</para></entry>
     </row>
   </tableHeader>
   <row>
@@ -533,5 +452,5 @@
   
 </table>
     </introduction>
-   </developerConceptualDocument>
+  </developerConceptualDocument>
 </topic>
