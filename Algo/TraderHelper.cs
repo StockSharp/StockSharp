@@ -1159,7 +1159,7 @@ namespace StockSharp.Algo
 			{
 				if (innerSecurity is BasketSecurity basket)
 					return basket.Contains(securityProvider, security);
-				
+
 				return innerSecurity == security;
 			});
 		}
@@ -1542,7 +1542,7 @@ namespace StockSharp.Algo
 							yield return dt;
 							break;
 						}
-						
+
 						default:
 							continue;
 					}
@@ -1609,7 +1609,7 @@ namespace StockSharp.Algo
 
 						continue;
 					}
-					
+
 					yield return security;
 				}
 			}
@@ -3098,7 +3098,7 @@ namespace StockSharp.Algo
 		/// <returns>An error message text, or <see langword="null" /> if no error.</returns>
 		public static string ValidateId(ref string id)
 		{
-			// 
+			//
 			// can be fixed via TraderHelper.SecurityIdToFolderName
 			//
 			//var invalidChars = Path.GetInvalidFileNameChars().Where(id.Contains).ToArray();
@@ -3308,7 +3308,7 @@ namespace StockSharp.Algo
 
 			return !security.BasketCode.IsEmpty();
 		}
-		
+
 		/// <summary>
 		/// Is specified security is index.
 		/// </summary>
@@ -3467,7 +3467,7 @@ namespace StockSharp.Algo
 			if (adapter.IsNativeIdentifiers && !adapter.StorageName.IsEmpty())
 			{
 				var nativeIdAdapter = adapter.FindAdapter<SecurityNativeIdMessageAdapter>();
-				
+
 				if (nativeIdAdapter != null)
 				{
 					foreach (var secIdMsg in requests.OfType<ISecurityIdMessage>())
@@ -3485,7 +3485,7 @@ namespace StockSharp.Algo
 			}
 
 			var sync = new SyncObject();
-			
+
 			adapter.NewOutMessage += msg =>
 			{
 				if (msg is BaseConnectionMessage conMsg)
@@ -3531,7 +3531,7 @@ namespace StockSharp.Algo
 							throw new InvalidOperationException(LocalizedStrings.Str2955, (Exception)error);
 					}
 				}
-				
+
 				adapter.SendInMessage(new DisconnectMessage());
 			});
 		}
@@ -3556,7 +3556,7 @@ namespace StockSharp.Algo
 		/// <param name="request">Request.</param>
 		/// <returns>Downloaded data.</returns>
 		public static IEnumerable<TResult> Download<TResult>(this IMessageAdapter adapter, Message request)
-			where TResult : Message, IOriginalTransactionIdMessage
+			where TResult : Message
 		{
 			var retVal = new List<TResult>();
 
@@ -3606,7 +3606,7 @@ namespace StockSharp.Algo
 				To = endDate,
 				BuildField = fields?.FirstOr(),
 			};
-			
+
 			return adapter.Download<Level1ChangeMessage>(mdMsg);
 		}
 
@@ -3628,7 +3628,7 @@ namespace StockSharp.Algo
 				From = beginDate,
 				To = endDate,
 			};
-			
+
 			return adapter.Download<ExecutionMessage>(mdMsg);
 		}
 
@@ -3650,7 +3650,7 @@ namespace StockSharp.Algo
 				From = beginDate,
 				To = endDate,
 			};
-			
+
 			return adapter.Download<ExecutionMessage>(mdMsg);
 		}
 
