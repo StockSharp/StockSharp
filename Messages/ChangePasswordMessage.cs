@@ -52,12 +52,33 @@ namespace StockSharp.Messages
 			set => _newPassword = value;
 		}
 
+		/// <summary>
+		/// User name.
+		/// </summary>
+		[DataMember]
+		public string UserName { get; set; }
+
+		[field: NonSerialized]
+		private SecureString _oldPassword;
+
+		/// <summary>
+		/// Old password.
+		/// </summary>
+		[DataMember]
+		public SecureString OldPassword
+		{
+			get => _oldPassword;
+			set => _oldPassword = value;
+		}
+
 		/// <inheritdoc />
 		protected override void CopyTo(ChangePasswordMessage destination)
 		{
 			base.CopyTo(destination);
 
 			destination.TransactionId = TransactionId;
+			destination.UserName = UserName;
+			destination.OldPassword = OldPassword;
 			destination.NewPassword = NewPassword;
 			destination.Error = Error;
 		}
