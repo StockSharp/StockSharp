@@ -3489,7 +3489,10 @@ namespace StockSharp.Algo
 			adapter.NewOutMessage += msg =>
 			{
 				if (msg is BaseConnectionMessage conMsg)
+				{
+					newMessage(msg);
 					sync.PulseSignal(conMsg.Error);
+				}
 				else
 				{
 					var tuple = newMessage(msg);
@@ -3556,11 +3559,12 @@ namespace StockSharp.Algo
 		/// <param name="request">Request.</param>
 		/// <returns>Downloaded data.</returns>
 		public static IEnumerable<TResult> Download<TResult>(this IMessageAdapter adapter, Message request)
-			where TResult : Message, IOriginalTransactionIdMessage
+			where TResult : Message
 		{
 			var retVal = new List<TResult>();
 
 			var transIdMsg = request as ITransactionIdMessage;
+			var isConnect = typeof(TResult) == typeof(ConnectMessage);
 
 			adapter.DoConnect(new[] { request }, true,
 				msg =>
@@ -3579,6 +3583,8 @@ namespace StockSharp.Algo
 								return Tuple.Create(true, (Exception)null);
 						}
 					}
+					else if (isConnect && msg is TResult resMsg)
+						retVal.Add(resMsg);
 
 					return null;
 				});
