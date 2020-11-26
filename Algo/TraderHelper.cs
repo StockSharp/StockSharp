@@ -3521,7 +3521,7 @@ namespace StockSharp.Algo
 						transIdMsg.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
 					if (!adapter.SendInMessage(request))
-						adapter.AddErrorLog(LocalizedStrings.Str2142Params.Put(request.Type));
+						throw new InvalidOperationException(LocalizedStrings.Str2142Params.Put(request.Type));
 				}
 
 				if (waitResponse)
