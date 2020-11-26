@@ -3520,7 +3520,8 @@ namespace StockSharp.Algo
 					if (request is ITransactionIdMessage transIdMsg && transIdMsg.TransactionId == 0)
 						transIdMsg.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
-					adapter.SendInMessage(request);
+					if (!adapter.SendInMessage(request))
+						adapter.AddErrorLog(LocalizedStrings.Str2142Params.Put(request.Type));
 				}
 
 				if (waitResponse)
@@ -3566,7 +3567,7 @@ namespace StockSharp.Algo
 			var transIdMsg = request as ITransactionIdMessage;
 			var isConnect = typeof(TResult) == typeof(ConnectMessage);
 
-			adapter.DoConnect(new[] { request }, true,
+			adapter.DoConnect(request is null ? Enumerable.Empty<Message>() : new[] { request }, !isConnect,
 				msg =>
 				{
 					if (transIdMsg != null && msg is IOriginalTransactionIdMessage origIdMsg)
