@@ -3528,7 +3528,7 @@ namespace StockSharp.Algo
 				{
 					lock (sync)
 					{
-						if (!sync.WaitSignal(TimeSpan.FromMinutes(10), out var error))
+						if (!sync.WaitSignal(TimeSpan.FromMinutes(2), out var error))
 							throw new TimeoutException("Processing too long.");
 
 						if (error != null)
