@@ -34,6 +34,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Client app version.
+		/// </summary>
+		[DataMember]
+		public string ClientVersion { get; set; }
+
+		/// <summary>
 		/// Optional server session id.
 		/// </summary>
 		[DataMember]
@@ -45,7 +51,12 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			var clone = new ConnectMessage { SessionId = SessionId };
+			var clone = new ConnectMessage
+			{
+				ClientVersion = ClientVersion,
+				SessionId = SessionId
+			};
+
 			CopyTo(clone);
 			return clone;
 		}

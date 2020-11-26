@@ -344,4 +344,15 @@ namespace StockSharp.Messages
 		/// </summary>
 		string TargetCompId { get; set; }
 	}
+
+	/// <summary>
+	/// Message adapter, provided <see cref="ClientVersion"/> property.
+	/// </summary>
+	public interface IClientVersionAdapter
+	{
+		/// <summary>
+		/// Client app version.
+		/// </summary>
+		string ClientVersion { get; set; }
+	}
 }
