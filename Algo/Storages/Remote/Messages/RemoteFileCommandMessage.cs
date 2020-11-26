@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		private byte[] _body = ArrayHelper.Empty<byte>();
 
 		/// <summary>
-		/// License body.
+		/// File body.
 		/// </summary>
 		[DataMember]
 		public byte[] Body
