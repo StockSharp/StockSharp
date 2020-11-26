@@ -87,7 +87,7 @@
 		/// Date of creation.
 		/// </summary>
 		[DataMember]
-		public DateTime CreationDate { get; set; }
+		public DateTimeOffset CreationDate { get; set; }
 
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Create(typeof(FileInfoMessage), null);
