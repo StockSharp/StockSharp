@@ -53226,5 +53226,15 @@ namespace StockSharp.Localization
 		/// The diagram element
 		/// </summary>
 		public static string DiagramElement => GetString(DiagramElementKey);
+
+		/// <summary>
+		/// Client app version.
+		/// </summary>
+		public const string ClientVersionKey = nameof(ClientVersion);
+
+		/// <summary>
+		/// Client app version.
+		/// </summary>
+		public static string ClientVersion => GetString(ClientVersionKey);
 	}
 }

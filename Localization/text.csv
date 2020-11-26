@@ -5355,6 +5355,7 @@ LastTradeStringId;Last ID (str);ИД сделки (строк)
 LastTradeStringIdDesc;Last trade ID (string).;ИД последней сделки (строка).
 Appearance;Appearance;Вид
 DiagramElement;The diagram element;Элемент схемы
+ClientVersion;Client app version.;Версия клиент-программы.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
