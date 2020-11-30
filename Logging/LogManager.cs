@@ -237,7 +237,7 @@ namespace StockSharp.Logging
 			}
 		}
 
-		private readonly CachedSynchronizedSet<ILogListener> _listeners = new CachedSynchronizedSet<ILogListener>();
+		private readonly CachedSynchronizedSet<ILogListener> _listeners = new CachedSynchronizedSet<ILogListener>(true);
 
 		/// <summary>
 		/// Messages loggers arriving from <see cref="Sources"/>.
@@ -315,7 +315,7 @@ namespace StockSharp.Logging
 
 					_pendingMessages.Add(_disposeMessage);
 				}
-			
+
 				// flushing accumulated messages and closing the timer
 
 				ImmediateFlush();
