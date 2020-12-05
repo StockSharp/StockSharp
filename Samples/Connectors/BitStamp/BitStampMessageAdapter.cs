@@ -81,8 +81,10 @@ namespace StockSharp.BitStamp
 			_pusherClient.NewTrade -= SessionOnNewTrade;
 		}
 
+#if !IGNORE_LICENSE
 		/// <inheritdoc />
 		public override string FeatureName => nameof(BitStamp);
+#endif
 
 		/// <inheritdoc />
 		protected override bool OnSendInMessage(Message message)
