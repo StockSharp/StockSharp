@@ -63,6 +63,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="container">The rules container.</param>
 		public MarketRuleList(IMarketRuleContainer container)
+			: base(true)
 		{
 			_container = container ?? throw new ArgumentNullException(nameof(container));
 		}
