@@ -53236,5 +53236,55 @@ namespace StockSharp.Localization
 		/// Client app version.
 		/// </summary>
 		public static string ClientVersion => GetString(ClientVersionKey);
+
+		/// <summary>
+		/// Unsubscribe all active subscription while strategy become stopping.
+		/// </summary>
+		public const string UnsubscribeOnStopKey = nameof(UnsubscribeOnStop);
+
+		/// <summary>
+		/// Unsubscribe all active subscription while strategy become stopping.
+		/// </summary>
+		public static string UnsubscribeOnStop => GetString(UnsubscribeOnStopKey);
+
+		/// <summary>
+		/// Max registrations
+		/// </summary>
+		public const string MaxRegisterCountKey = nameof(MaxRegisterCount);
+
+		/// <summary>
+		/// Max registrations
+		/// </summary>
+		public static string MaxRegisterCount => GetString(MaxRegisterCountKey);
+
+		/// <summary>
+		/// The maximum number of orders above which the algorithm will be stopped.
+		/// </summary>
+		public const string MaxRegisterCountDescKey = nameof(MaxRegisterCountDesc);
+
+		/// <summary>
+		/// The maximum number of orders above which the algorithm will be stopped.
+		/// </summary>
+		public static string MaxRegisterCountDesc => GetString(MaxRegisterCountDescKey);
+
+		/// <summary>
+		/// Register interval
+		/// </summary>
+		public const string RegisterIntervalKey = nameof(RegisterInterval);
+
+		/// <summary>
+		/// Register interval
+		/// </summary>
+		public static string RegisterInterval => GetString(RegisterIntervalKey);
+
+		/// <summary>
+		/// The order registration interval above which the new order would not be registered.
+		/// </summary>
+		public const string RegisterIntervalDescKey = nameof(RegisterIntervalDesc);
+
+		/// <summary>
+		/// The order registration interval above which the new order would not be registered.
+		/// </summary>
+		public static string RegisterIntervalDesc => GetString(RegisterIntervalDescKey);
 	}
 }

@@ -845,6 +845,12 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// The default value is <see cref="int.MaxValue"/>.
 		/// </remarks>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MaxRegisterCountKey,
+			Description = LocalizedStrings.MaxRegisterCountDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 13)]
 		public virtual int MaxRegisterCount
 		{
 			get => _maxRegisterCount.Value;
@@ -865,6 +871,12 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// By default, the interval is disabled and it is equal to <see cref="TimeSpan.Zero"/>.
 		/// </remarks>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.RegisterIntervalKey,
+			Description = LocalizedStrings.RegisterIntervalDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 14)]
 		public virtual TimeSpan RegisterInterval
 		{
 			get => _registerInterval.Value;
@@ -1118,6 +1130,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.XamlStr426Key,
+			Description = LocalizedStrings.UnsubscribeOnStopKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
 		public virtual bool UnsubscribeOnStop

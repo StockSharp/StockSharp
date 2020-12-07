@@ -5356,6 +5356,11 @@ LastTradeStringIdDesc;Last trade ID (string).;ИД последней сделк
 Appearance;Appearance;Вид
 DiagramElement;The diagram element;Элемент схемы
 ClientVersion;Client app version.;Версия клиент-программы.
+UnsubscribeOnStop;Unsubscribe all active subscription while strategy become stopping.;Отписаться от всех активных подписок при остановке стратегии.
+MaxRegisterCount;Max registrations;Макс регистраций
+MaxRegisterCountDesc;The maximum number of orders above which the algorithm will be stopped.;Максимальное количество заявок, при превышении которого алгоритм будет остановлен.
+RegisterInterval;Register interval;Интервал регистрации
+RegisterIntervalDesc;The order registration interval above which the new order would not be registered.;Интервал частоты регистрации заявок, при превышении которого новая заявка выставляться не будет.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5663,7 +5668,6 @@ DocStr328;The quoted order;Котируемая заявка
 DocStr329;To initiate the quoting;Инициировать котирование
 DocStr330;To use the last trade price, if the information in the order book is missed. The default is enabled;Использовать цену последней сделки, если информация в стакане отсутствует. По умолчанию включено
 DocStr331;The order with which the quoting strategy is currently operating;Заявка, с которой работает в данный момент котировщик
-DocStr332;The maximum number of orders above which the algorithm will be stopped;Максимальное количество заявок, при превышении которого алгоритм будет остановлен
 DocStr333;The default value is {0};Значение по умолчанию равно {0}
 DocStr334;Current number of order changes;Текущее количество изменений заявки
 DocStr336;The default value is 100;Значение по умолчанию равно 100
@@ -5672,7 +5676,6 @@ DocStr338;The volume which is left to fulfill before the quoting end;Объем,
 DocStr339;The time limit during which the quoting should be fulfilled. If the total volume of {0} will not be fulfilled by this time, the strategy will stop operating;Ограничение по времени, в течении которого должно отработать котирование. Если весь объем {0} не будет реализован к этому времени, то стратегия остановит свою работу
 DocStr340;By default, the limit is disabled and it is equal to {0};По умолчанию ограничение выключено, и равно {0}
 DocStr341;Is the {0} occurred;Наступил ли {0}
-DocStr342;The order registration interval above which the new order would not be registered;Интервал частоты регистрации заявок, при превышении которого новая заявка выставляться не будет
 DocStr343;By default, the interval is disabled and it is equal to {0};По умолчанию интервал выключен, и равен {0}
 DocStr344;To get the best price. If it is impossible to calculate the best price at the moment, then {0} will be returned;Получить лучшую цену. Если невозможно вычислить лучшую цену на данный момент, то будет возвращено {0}
 DocStr345;The shift from the best price, on which quoted order can be changed;Отступ от лучшей цены, на который может уйти котируемая заявка
@@ -16578,7 +16581,6 @@ DocStr11978;Strategy data types;Strategy data types
 DocStr11979;{0} auto-fill modes;{0} auto-fill modes
 DocStr11980;By {0};By {0}
 DocStr11981;Restore orders last time was registered by child strategies;Restore orders last time was registered by child strategies
-DocStr11982;Unsubscribe all active subscription while strategy become stopping;Unsubscribe all active subscription while strategy become stopping
 DocStr11983;Wait {0} to finish before strategy become into {1} state;Wait {0} to finish before strategy become into {1} state
 DocStr11984;Set {0} by {1} or {2};Set {0} by {1} or {2}
 DocStr11985;Determines the specified order can be owned by the strategy;Determines the specified order can be owned by the strategy
