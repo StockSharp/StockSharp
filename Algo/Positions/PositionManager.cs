@@ -94,18 +94,15 @@ namespace StockSharp.Algo.Positions
 			void ProcessRegOrder(OrderRegisterMessage regMsg)
 				=> EnsureGetInfo(regMsg, regMsg.Side, regMsg.Volume, regMsg.Volume);
 
-			PositionChangeMessage UpdatePositions(OrderInfo info, decimal diff, DateTimeOffset time)
+			PositionChangeMessage UpdatePositions(SecurityId secId, string portfolioName, decimal diff, DateTimeOffset time)
 			{
-				var secId = info.SecurityId;
-				var pf = info.PortfolioName;
-
-				var position = _positions.SafeAdd(CreateKey(secId, pf));
+				var position = _positions.SafeAdd(CreateKey(secId, portfolioName));
 				position.Value += diff;
 
 				return new PositionChangeMessage
 				{
 					SecurityId = secId,
-					PortfolioName = pf,
+					PortfolioName = portfolioName,
 					ServerTime = time,
 					BuildFrom = DataType.Transactions,
 				}.Add(PositionChangeTypes.CurrentValue, position.Value);
@@ -145,76 +142,63 @@ namespace StockSharp.Algo.Positions
 					if (execMsg.IsMarketData())
 						break;
 
-					if (execMsg.HasOrderInfo())
+					var info =
+						execMsg.HasOrderInfo()
+							? execMsg.TransactionId != 0
+								? EnsureGetInfo(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0)
+								: _ordersInfo.TryGetValue(execMsg.OriginalTransactionId)
+							: execMsg.OriginalTransactionId != 0 && execMsg.HasTradeInfo()
+								? _ordersInfo.TryGetValue(execMsg.OriginalTransactionId)
+								: null;
+
+					decimal? balDiff = null;
+
+					if (execMsg.HasOrderInfo() && info != null)
 					{
-						if (execMsg.TransactionId != 0)
+						var oldBalance = execMsg.TransactionId != 0 ? execMsg.OrderVolume : info.Balance;
+						balDiff = oldBalance - execMsg.Balance;
+						if (balDiff.HasValue && balDiff != 0)
 						{
-							var info = EnsureGetInfo(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
-
-							if (ByOrders)
-							{
-								var orderPos = execMsg.OrderVolume - execMsg.Balance;
-
-								if (orderPos != null && orderPos != 0)
-								{
-									if (execMsg.Side == Sides.Sell)
-										orderPos = -orderPos;
-
-									return UpdatePositions(info, orderPos.Value, execMsg.ServerTime);
-								}
-							}
-
-							break;
-						}
-						else
-						{
-							var balance = execMsg.Balance;
-
-							if (balance == null)
-								break;
-
-							var transId = execMsg.OriginalTransactionId;
-
-							if (!_ordersInfo.TryGetValue(transId, out var info))
-								break;
-
-							var balDiff = info.Balance - balance.Value;
-
-							if (balDiff > 0)
-							{
-								info.Balance = balance.Value;
-
-								this.AddDebugLog("{0} bal_upd {1}/{2}.", transId, info.Balance, info.Volume);
-
-								if (ByOrders)
-								{
-									var posDiff = balDiff;
-
-									if (info.Side == Sides.Sell)
-										posDiff = -posDiff;
-										
-									return UpdatePositions(info, posDiff, execMsg.ServerTime);
-								}
-							}
+							// ReSharper disable once PossibleInvalidOperationException
+							info.Balance = execMsg.Balance.Value;
+							this.AddDebugLog("{0} bal_upd {1}/{2}.", info.TransactionId, info.Balance, info.Volume);
 						}
 					}
 
-					if (!ByOrders && execMsg.HasTradeInfo() && _ordersInfo.TryGetValue(execMsg.OriginalTransactionId, out var info1))
+					if (ByOrders)
 					{
+						if (!execMsg.HasOrderInfo() || info == null)
+							break;
+
+						if (balDiff.HasValue && balDiff != 0)
+						{
+							var posDiff = info.Side == Sides.Buy ? balDiff.Value : -balDiff.Value;
+							return UpdatePositions(info.SecurityId, info.PortfolioName, posDiff, execMsg.ServerTime);
+						}
+					}
+					else
+					{
+						if (!execMsg.HasTradeInfo())
+							break;
+
 						var tradeVol = execMsg.TradeVolume;
 
 						if (tradeVol == null)
 							break;
-						else if (tradeVol == 0)
+
+						if (tradeVol == 0)
 						{
 							this.AddWarningLog("Trade {0}/{1} of order {2} has zero volume.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
 							break;
 						}
 
-						if (info1.Side == Sides.Sell)
+						if (execMsg.Side == Sides.Sell)
 							tradeVol = -tradeVol;
 
-						return UpdatePositions(info1, tradeVol.Value, execMsg.ServerTime);
+						var secId = info?.SecurityId ?? execMsg.SecurityId;
+						var portfolioName = info?.PortfolioName ?? execMsg.PortfolioName;
+
+						return UpdatePositions(secId, portfolioName, tradeVol.Value, execMsg.ServerTime);
 					}
 
 					break;
