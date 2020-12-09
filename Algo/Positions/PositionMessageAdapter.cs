@@ -158,8 +158,6 @@ namespace StockSharp.Algo.Positions
 					change = _positionManager.ProcessMessage(message);
 			}
 
-			base.OnInnerAdapterNewOutMessage(message);
-
 			if (change != null)
 			{
 				var subscriptions = change.StrategyId.IsEmpty() ? _subscriptions.Cache : _strategySubscriptions.TryGetValue(change.StrategyId)?.Cache;
@@ -169,6 +167,8 @@ namespace StockSharp.Algo.Positions
 
 				base.OnInnerAdapterNewOutMessage(change);
 			}
+
+			base.OnInnerAdapterNewOutMessage(message);
 		}
 
 		/// <summary>
