@@ -142,8 +142,10 @@ namespace StockSharp.Algo.Positions
 					if (execMsg.IsMarketData())
 						break;
 
+					var isOrderInfo = execMsg.HasOrderInfo();
+
 					var info =
-						execMsg.HasOrderInfo()
+						isOrderInfo
 							? execMsg.TransactionId != 0
 								? EnsureGetInfo(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0)
 								: _ordersInfo.TryGetValue(execMsg.OriginalTransactionId)
@@ -151,9 +153,11 @@ namespace StockSharp.Algo.Positions
 								? _ordersInfo.TryGetValue(execMsg.OriginalTransactionId)
 								: null;
 
+					var canUpdateOrder = isOrderInfo && info != null;
+
 					decimal? balDiff = null;
 
-					if (execMsg.HasOrderInfo() && info != null)
+					if (canUpdateOrder)
 					{
 						var oldBalance = execMsg.TransactionId != 0 ? execMsg.OrderVolume : info.Balance;
 						balDiff = oldBalance - execMsg.Balance;
@@ -167,7 +171,7 @@ namespace StockSharp.Algo.Positions
 
 					if (ByOrders)
 					{
-						if (!execMsg.HasOrderInfo() || info == null)
+						if (!canUpdateOrder)
 							break;
 
 						if (balDiff.HasValue && balDiff != 0)

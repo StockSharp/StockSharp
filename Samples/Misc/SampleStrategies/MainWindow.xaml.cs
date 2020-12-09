@@ -78,7 +78,7 @@ namespace SampleStrategies
 
 			var storageRegistry = new StorageRegistry(exchangeInfoProvider)
 			{
-				DefaultDrive = new LocalMarketDataDrive(path)
+				DefaultDrive = new LocalMarketDataDrive(Path.Combine(path, "Storage"))
 			};
 
 			var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
