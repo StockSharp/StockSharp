@@ -43,6 +43,11 @@
 		public const MessageTypes ProductPermission = (MessageTypes)(-11006);
 
 		/// <summary>
+		/// <see cref="ProductPublishMessage"/>.
+		/// </summary>
+		public const MessageTypes ProductPublish = (MessageTypes)(-11007);
+
+		/// <summary>
 		/// <see cref="LicenseLookupMessage"/>.
 		/// </summary>
 		public const MessageTypes LicenseLookup = (MessageTypes)(-10000);
