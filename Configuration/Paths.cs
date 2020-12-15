@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Configuration
 {
 	using System;
+	using System.Text;
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
@@ -273,10 +274,16 @@
 		/// Check if an instance of the application already started.
 		/// </summary>
 		/// <returns>Check result.</returns>
-		public static bool StartIsRunning() => ThreadingHelper.TryGetUniqueMutex(AppDataPath.GetHashCode().To<string>(), out _mutex);
+		public static bool StartIsRunning() => StartIsRunning(AppDataPath);
 
 		/// <summary>
-		/// Release all resources allocated by <see cref="StartIsRunning"/>.
+		/// Check if an instance of the application already started.
+		/// </summary>
+		/// <returns>Check result.</returns>
+		public static bool StartIsRunning(string appKey) => ThreadingHelper.TryGetUniqueMutex("stocksharp_app_" + Encoding.UTF8.GetBytes(appKey).Base64().Truncate(100, string.Empty), out _mutex);
+
+		/// <summary>
+		/// Release all resources allocated by <see cref="StartIsRunning()"/>.
 		/// </summary>
 		public static void StopIsRunning() => _mutex?.ReleaseMutex();
 	}
