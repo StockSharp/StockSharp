@@ -53,6 +53,11 @@ namespace StockSharp.Community
 		/// </summary>
 		public static readonly ProductInfoMessage LicenseTool = new ProductInfoMessage { Id = 194, Name = "S#.LicenseTool", PackageId = "StockSharp.LicenseTool" };
 
+		/// <summary>
+		/// S#.Terminal (mobile).
+		/// </summary>
+		public static readonly ProductInfoMessage TerminalMobile = new ProductInfoMessage { Id = 199, Name = "S#.Terminal (mobile)", PackageId = "StockSharp.Mobile.Terminal" };
+
 		[Obsolete]
 		private static readonly Dictionary<Products, ProductInfoMessage> _productsMapping = new Dictionary<Products, ProductInfoMessage>
 		{
