@@ -564,20 +564,32 @@ namespace StockSharp.Algo.Candles.Compression
 										break;
 
 									case SeriesStates.SmallTimeFrame:
-										var candles = series.BigTimeFrameCompressor.Process(candleMsg).Where(c => c.State == CandleStates.Finished);
+										if (series.Count <= 0)
+											break;
+
+										var candles = series.BigTimeFrameCompressor.Process(candleMsg);
 
 										foreach (var bigCandle in candles)
 										{
+											var isFinished = bigCandle.State == CandleStates.Finished;
+
+											if (series.Current.IsFinishedOnly && !isFinished)
+												continue;
+
 											bigCandle.SetSubscriptionIds(subscriptionId: series.Id);
 											bigCandle.Adapter = candleMsg.Adapter;
-											series.LastTime = bigCandle.CloseTime;
 
-											if (series.Count != null)
+											if (isFinished)
 											{
-												if (series.Count <= 0)
-													break;
+												series.LastTime = bigCandle.CloseTime;
 
-												series.Count--;
+												if (series.Count != null)
+												{
+													if (series.Count <= 0)
+														break;
+
+													series.Count--;
+												}
 											}
 
 											base.OnInnerAdapterNewOutMessage(bigCandle);
