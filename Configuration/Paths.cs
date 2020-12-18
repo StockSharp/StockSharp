@@ -331,6 +331,7 @@
 					catch (Exception e)
 					{
 						error = e;
+						_stopped.Set();
 						return;
 					}
 					finally
