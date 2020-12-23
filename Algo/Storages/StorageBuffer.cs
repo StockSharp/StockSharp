@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Storages
 		public bool TicksAsLevel1 { get; set; } = true;
 
 		/// <summary>
-		/// <see cref="BufferMessageAdapter.StartStorageTimer"/>.
+		/// <see cref="BufferMessageAdapter.StartStorageTask"/>.
 		/// </summary>
 		public bool DisableStorageTimer { get; set; }
 
