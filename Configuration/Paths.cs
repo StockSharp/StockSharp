@@ -210,7 +210,7 @@
 			{
 				string version;
 
-				static string GetAssemblyVersion() => Assembly.GetEntryAssembly().GetName().Version.To<string>();
+				static string GetAssemblyVersion() => (Assembly.GetEntryAssembly() ?? typeof(Paths).Assembly).GetName().Version.To<string>();
 
 				try
 				{
