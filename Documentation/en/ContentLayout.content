@@ -416,12 +416,16 @@
           <Topic id="5bfbb404-1728-476b-bd07-1b90bc487c96" visible="True" title="Graphical configuration CSV" />
           <Topic id="5fd956b0-0064-4081-a4d3-4d926d5b4fd9" visible="True" title="Adapter initialization CSV" />
         </Topic>
-        <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX">
-          <Topic id="9012c95b-9858-4ee8-948d-c6f776b128eb" visible="True" title="Configuration FIX/FAST" />
+        <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX protocol">
+          <Topic id="9012c95b-9858-4ee8-948d-c6f776b128eb" visible="True" title="Configuration FIX" />
           <Topic id="0265145f-5831-420f-8f64-99e6bb3c3ed4" visible="True" title="Graphical configuration FIX" />
-          <Topic id="76bc2cb9-f6fb-41e6-a1b6-88f43f348ee3" visible="True" title="Graphical configuration FAST" />
           <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Adapter initialization FIX" />
+        </Topic>
+        <Topic id="7864941f-ab70-4133-ae46-dc4e4ce2a261" visible="True" title="FAST protocol">
+          <Topic id="0265145f-5831-420f-8f64-99e6bb3c3ed4" visible="True" title="Graphical configuration FAST" />
           <Topic id="40b2420d-40db-492c-a66c-d5b0ea7dfc40" visible="True" title="Adapter initialization FAST" />
+          <Topic id="efb4cf8e-9bf4-495d-942e-84b2cf826eaf" visible="True" title="S#.UDP Dumper" />
+          <Topic id="875c5503-ba67-4973-adae-7ded540ab83c" visible="True" title="Dump mode" />
         </Topic>
         <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
         <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS">

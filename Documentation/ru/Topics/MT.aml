@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para><token>stocksharp</token> имеет интеграцию с терминалами MT4 и MT5 через специальные коннекторы.
-      Для устанвки данных коннекторов необходимо использовать <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" /> (подробнее, <link xlink:href="385c6f6d-8cac-4d90-8701-f5da0281ed43" />).</para>
+      Для установки данных коннекторов необходимо использовать <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" /> (подробнее, <link xlink:href="385c6f6d-8cac-4d90-8701-f5da0281ed43" />).</para>
       <para>Оба коннектора используются одинаково, поэтому ниже будет описал процесс подключения к MT4:</para>
     </introduction>
     <procedure>
