@@ -12,10 +12,12 @@ Connector Connector = new Connector();
 ...				
 var messageAdapter = new FastMessageAdapter(Connector.TransactionIdGenerator)
 {
-    Login = "<Your Login>",
-    Password = "<Your Password>".To<SecureString>(),
-	Address = "<Address>".To<EndPoint>(),
+    // задаем необходимый диалект
+    Dialect = typeof(StockSharp.Fix.Dialects.Bovespa.BovespaFastDialect),
 };
+
+// загрузить настройки диалекта из конфиг файла биржи
+messageAdapter.DialectSettings.LoadSettingsFromFile(configFile);
 
 Connector.Adapter.InnerAdapters.Add(messageAdapter);
 ...	
