@@ -8,9 +8,10 @@
     <relatedTopics>
     	 	 <externalLink>
 		<linkText>FAST protocol</linkText>
-			<linkAlternateText>FAST protocol specification.</linkAlternateText>
+			<linkAlternateText>FAST protocol спецификация.</linkAlternateText>
 			<linkUri>https://www.fixtrading.org/standards/fast/</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>
