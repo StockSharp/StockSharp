@@ -2,28 +2,28 @@
 <topic id="efb4cf8e-9bf4-495d-942e-84b2cf826eaf" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-	  <para>Программа <legacyBold>S#.UDPDumper</legacyBold> создана для накопления UDP пакетов. В помощью данной программы можно проверить корректность сетевых настроек, сделанных брокером или биржей.
-	  А также, накопить данные для последующего тестирования коннектора.</para>
-      <para>Для установки данных необходимо использовать <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" />.</para>
+	  <para>The app <legacyBold>S#.UDPDumper</legacyBold> is designed to accumulate UDP packets. Using this program, you can check the valid of the network settings made by a broker or exchange.
+	  And also, accumulate data for further tests of the connector.</para>
+      <para>To install need use <link xlink:href="6b40ff4e-2c3b-4d94-b676-f15f576ade07" />.</para>
     </introduction>
     <procedure>
-		<title>Настройка и запуск</title>
+		<title>Setup and run</title>
 		<steps class="ordered">
 			  <step>
 				  <content>
-		  				<para>При первом запуске программа показывает следующее:</para>
+		  				<para>On first launch, the app shows the following:</para>
 <mediaLink><image placement="left" xlink:href="Dumper_1" /></mediaLink>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Для добавления сетевых потоков можно добавлять как вручную, так и автоматическую загрузку всех потоков из конфиг-файлов бирж. Для этого необходимо нажать на кнопку:</para>
+		  				<para>To add network feeds, you can add both manually and automatically load all feeds from the config files of exchanges. To do this, click on the button:</para>
 		  				<mediaLink><image placement="left" xlink:href="Dumper_2" /></mediaLink>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>В появившемся окне необходимо найти нужный конфиг-файл от биржи и открыть его:</para>
+		  				<para>In the window that appears, you need to find the desired config file from the exchange and open it:</para>
 		  				<mediaLink>
 <image placement="left" xlink:href="Dumper_3"/>
 </mediaLink>
@@ -31,7 +31,7 @@
 			  </step>
 			  			  <step>
 				  <content>
-		  				<para>Все потоки с настройками IP адресов и портов будут загружены из файла:</para>
+		  				<para>All feeds with IP addresses and ports settings will be loaded from a file:</para>
 		  				<mediaLink>
 <image placement="left" xlink:href="Dumper_4"/>
 </mediaLink>
@@ -39,7 +39,7 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Необходимо выделить нужные потоки, и нажать на кнопку запуска скачивания:</para>
+		  				<para>It is necessary to select the necessary feeds, and click on the download start button:</para>
 		  				<mediaLink>
 <image placement="left" xlink:href="Dumper_5"/>
 </mediaLink>
@@ -52,15 +52,15 @@
 <image placement="left" xlink:href="Dumper_6"/>
 </mediaLink>
 						<alert class="caution">
-						  <para>В случае нулевых значений в колонке кол-ва байт стоит проверить сетевые настройки (например, отключить firewall), а также обратиться к брокеру или биржи для проверки сетевых настроек.</para>
+						  <para>If the settings are successful, the program will start receiving UDP datagrams and writing them to disk. The app will write the number of bytes received for each feed.</para>
 						</alert>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Программа <legacyBold>S#.UDPDumper</legacyBold> написана с графическим интерфейсом. В случае запуска программы без графического интерфейса (а также запуск под операционные системы Linux и т.д.)
-		  				можно использовать программу <legacyBold>S#.UDPDumper.Console</legacyBold>, что является консольной и кросс-платформенной версией.</para>
-		  				<para>Программа <legacyBold>S#.UDPDumper.Console</legacyBold> принимает на вход ввиде параметра путь к файлу, созданный UI версией (именно UI версией, а <legacyBold>не конфиг биржи</legacyBold>):</para>
+		  				<para>The app <legacyBold>S#.UDPDumper</legacyBold> is written with a graphical interface. If the program is launched without a graphical interface (as well as running under Linux operating systems, etc.)
+		  				you can use the <legacyBold>S#.UDPDumper.Console</legacyBold>, program, which is a console and cross-platform version.</para>
+		  				<para>The app <legacyBold>S#.UDPDumper.Console</legacyBold> takes as a parameter the path to the file created by the UI version (exactly the UI version, and <legacyBold>not an exchange config</legacyBold>):</para>
 		  				<code language="C#">
 		<![CDATA[
 		StockSharp.UdpDumper.Console.exe settings.xml
@@ -70,7 +70,7 @@
 			  </step>
 				<step>
 				  <content>
-		  				<para>Для тестирование на накопленных данных коннектора можно использовать dump режим. Подробнее <link xlink:href="875c5503-ba67-4973-adae-7ded540ab83c" />.</para>
+		  				<para>To test on the accumulated data of the connector, you can use the dump mode. More details <link xlink:href="875c5503-ba67-4973-adae-7ded540ab83c" />.</para>
 				  </content>
 			  </step>
 		  </steps>
