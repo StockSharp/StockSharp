@@ -2,7 +2,7 @@
 <topic id="7864941f-ab70-4133-ae46-dc4e4ce2a261" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para> <token>fast</token> позволяет создавать торговых роботов, использующих стандартные международные протоколы для доступа на биржевые рынки - <token>fast_external</token>.
+      <para> <token>fast</token> allows you to create trading robots that use standard international protocols for access to electronic markets - <token>fast_external</token>.
       </para>
     </introduction>   
     <relatedTopics>

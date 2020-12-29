@@ -35,6 +35,10 @@ var dict = dumpFiles.Select(f =>
 }).GroupBy(t => t.Item1).ToDictionary(g => g.Key, g => (IEnumerable<Stream>)g.Select(p => File.OpenRead(p.Item2)).ToArray());
 			
 fastAdapter.DialectSettings.Dump(dict);
+
+// ...
+
+connector.Connect();
 ]]>
 </code>
 		<para>После этого работа с коннектором идет в обычном режиме так, как если бы он получал данные из сети.</para>
