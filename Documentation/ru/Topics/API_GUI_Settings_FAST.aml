@@ -6,16 +6,11 @@
      выполняется в экранной форме <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />:</para>
      <mediaLink><image placement="center" xlink:href="API_GUI_Settings_FAST" /></mediaLink>
      <list class="bullet">
-<listItem><legacyBold>Диалект</legacyBold> - Диалект FIX протокола.</listItem>
-<listItem><legacyBold>Логин</legacyBold> - Логин.</listItem>
-<listItem><legacyBold>Пароль</legacyBold> - Пароль.</listItem>
-<listItem><legacyBold>Уровень логирования</legacyBold> - Уровень логирования.</listItem>
-<listItem><legacyBold>MaxRestores </legacyBold> - MaxRestores </listItem>
-<listItem><legacyBold>MaxRestoreError </legacyBold> - MaxRestoreError </listItem>
-<listItem><legacyBold>MaxIncrementalWrongOrder </legacyBold> - MaxIncrementalWrongOrder </listItem>
-<listItem><legacyBold>MaxRestoreCount </legacyBold> - MaxRestoreCount </listItem>
-<listItem><legacyBold>MaxSuspended</legacyBold> - MaxSuspended</listItem>
-<listItem><legacyBold>Файл с настройками</legacyBold> - Файл с настройками</listItem>
+<listItem><legacyBold>Диалект</legacyBold> - Диалект FIX протокола. Должен быть выбран как первый параметр. После выбора следующий парамемтр <legacyBold>FAST настройки</legacyBold> изменит список доступных настроек.</listItem>
+<listItem><legacyBold>FAST настройки</legacyBold> - Настройки IP адресов и портов диалекта, выбранного в пред настройке. Для быстрого способа настроек можно загрузить настройки из файла.</listItem>
+<listItem><legacyBold>Файл с настройками</legacyBold> - Файл с настройками. Использует конфигурационный файл от биржи или брокера.</listItem>
+<listItem><legacyBold>Логин</legacyBold> - Логин (используется для восстановления пропусков через TCP сервис).</listItem>
+<listItem><legacyBold>Пароль</legacyBold> - Пароль (используется для восстановления пропусков через TCP сервис).</listItem>
 
 	   <listItem>
 	      <legacyBold>Настройки переподключения</legacyBold> - Настройки механизма отслеживания подключения с торговой системой (<link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780" />).
