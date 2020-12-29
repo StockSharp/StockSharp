@@ -4,7 +4,7 @@
     <introduction>
      <para>For all <token>stocksharp</token> products, graphical configuration of 
     the connection is performed on the <link xlink:href="0e99f0d7-9d8a-4bb5-a914-6461677b267b" />:</para>
-     <mediaLink><image placement="center" xlink:href="API_GUI_Settings_FAST" /></mediaLink>
+     <mediaLink><image placement="center" xlink:href="API_GUI_Settings_FIX" /></mediaLink>
      <list class="bullet">
 <listItem><legacyBold>Dialect</legacyBold> - Dialect FIX protocol.</listItem>
 <listItem><legacyBold>Login</legacyBold> - Login.</listItem>
