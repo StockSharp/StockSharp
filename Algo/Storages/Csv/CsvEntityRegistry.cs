@@ -1030,7 +1030,12 @@ namespace StockSharp.Algo.Storages.Csv
 					message.FillGaps = reader.ReadBool();
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					message.BuildFrom = reader.ReadString().ToDataType(reader.ReadString());
+				{
+					var typeStr = reader.ReadString();
+					var argStr = reader.ReadString();
+
+					message.BuildFrom = typeStr.IsEmpty() ? null : typeStr.ToDataType(argStr);
+				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					message.Skip = reader.ReadNullableLong();
