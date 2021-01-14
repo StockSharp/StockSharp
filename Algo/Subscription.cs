@@ -4,6 +4,8 @@ namespace StockSharp.Algo
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
+	using Ecng.Common;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -170,7 +172,7 @@ namespace StockSharp.Algo
 					secIdMsg.SecurityId = security.SecurityId;
 					break;
 				case INullableSecurityIdMessage nullSecIdMsg:
-					nullSecIdMsg.SecurityId = security.SecurityId;
+					nullSecIdMsg.SecurityId = security.SecurityId.IsDefault() ? null : security.SecurityId;
 					break;
 			}
 		}
