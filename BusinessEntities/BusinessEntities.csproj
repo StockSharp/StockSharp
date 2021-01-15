@@ -8,7 +8,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-  </ItemGroup>
 </Project>

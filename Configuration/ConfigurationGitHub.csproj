@@ -8,7 +8,4 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <Reference Include="System.Configuration" />
-  </ItemGroup>
 </Project>

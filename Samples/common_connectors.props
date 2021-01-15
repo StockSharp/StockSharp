@@ -6,9 +6,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7"/>
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Net.SocketIO" Version="$(EcngVer)" />
   </ItemGroup>

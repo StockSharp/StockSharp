@@ -8,10 +8,6 @@
   <ItemGroup>
     <PackageReference Include="Ecng.Serialization.FieldFactories" Version="$(EcngVer)" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>

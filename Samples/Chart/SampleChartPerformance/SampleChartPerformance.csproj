@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples.props" />
   <PropertyGroup>
     <ProjectGuid>{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}</ProjectGuid>
