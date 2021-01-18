@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Storages
 		IDictionary<string, Exception> Init();
 
 		/// <summary>
-		/// Get native security identifiers for storage. 
+		/// Get native security identifiers for storage.
 		/// </summary>
 		/// <param name="storageName">Storage name.</param>
 		/// <returns>Security identifiers.</returns>
@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Storages
 		void Clear(string storageName);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="storageName"></param>
 		/// <param name="securityId"></param>
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Storages
 		bool RemoveBySecurityId(string storageName, SecurityId securityId, bool isPersistable = true);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="storageName"></param>
 		/// <param name="nativeId">Native (internal) trading system security id.</param>
@@ -247,18 +247,15 @@ namespace StockSharp.Algo.Storages
 
 		private void WriteHeader(CsvFileWriter writer, object nativeId)
 		{
-			if (nativeId is ITuple tuple)
+			var tupleValues = nativeId.TryTupleToValues();
+
+			if (tupleValues != null)
 			{
-				var tupleValues = new List<string>();
-
-				for (int i = 0; i < tuple.Length; i++)
-					tupleValues.Add(GetTypeName(tuple[i].GetType()));
-
 				writer.WriteRow(new[]
 				{
 					"Symbol",
 					"Board",
-				}.Concat(tupleValues));
+				}.Concat(tupleValues.Select(v => GetTypeName(v.GetType()))));
 			}
 			else
 			{
@@ -273,13 +270,15 @@ namespace StockSharp.Algo.Storages
 
 		private void WriteItem(CsvFileWriter writer, SecurityId securityId, object nativeId)
 		{
-			if (nativeId is ITuple tuple)
+			var tupleValues = nativeId.TryTupleToValues();
+
+			if (tupleValues != null)
 			{
 				writer.WriteRow(new[]
 				{
 					securityId.SecurityCode,
 					securityId.BoardCode
-				}.Concat(tuple.ToValues().Select(v => v.To<string>())));
+				}.Concat(tupleValues.Select(v => v.To<string>())));
 			}
 			else
 			{
@@ -371,7 +370,7 @@ namespace StockSharp.Algo.Storages
 						}
 						else
 							nativeId = reader.ReadString().To(types[0]);
-						
+
 						pairs.Add(Tuple.Create(securityId, nativeId));
 					}
 				}

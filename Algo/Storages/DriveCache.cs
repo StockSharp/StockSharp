@@ -174,7 +174,7 @@
 			lock (_drives.SyncRoot)
 			{
 				foreach (var drive in drives)
-					_drives.TryAdd(CreatePair(drive.Path), drive);	
+					_drives.TryAdd2(CreatePair(drive.Path), drive);
 			}
 
 			if (storage.ContainsKey(nameof(DefaultDrive)))

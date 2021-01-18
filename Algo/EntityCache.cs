@@ -135,7 +135,7 @@ namespace StockSharp.Algo
 				if (order.Time == DateTimeOffset.MinValue)
 					order.Time = message.ServerTime;
 
-				// для новых заявок используем серверное время, 
+				// для новых заявок используем серверное время,
 				// т.к. заявка получена первый раз и не менялась
 				// ServerTime для заявки - это время регистрации
 				order.LastChangeTime = _raiseNewOrder ? message.ServerTime : message.LocalTime;
@@ -338,7 +338,7 @@ namespace StockSharp.Algo
 		private readonly HashSet<long> _massCancelationTransactions = new HashSet<long>();
 
 		public IEntityFactory EntityFactory { get; }
-		
+
 		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = new CachedSynchronizedDictionary<Order, IMessageAdapter>();
@@ -452,7 +452,7 @@ namespace StockSharp.Algo
 
 		public void AddOrderFailById(OrderFail fail, OrderOperations operation, long transactionId)
 		{
-			_allOrdersByFailedId.TryAdd(Tuple.Create(transactionId, operation), fail);
+			_allOrdersByFailedId.TryAdd2(Tuple.Create(transactionId, operation), fail);
 		}
 
 		private void AddOrderByTransactionId(Order order, long transactionId, OrderOperations operation)
@@ -565,7 +565,7 @@ namespace StockSharp.Algo
 					if (registeredInfo == null)
 					{
 						_logReceiver.AddDebugLog("Сancel '{0}': {1}", cancellationOrder.TransactionId, message);
-						
+
 						foreach (var i in cancelledInfo.ApplyChanges(message, OrderOperations.Cancel, o => UpdateOrderIds(o, securityData)))
 							yield return i;
 
@@ -577,9 +577,9 @@ namespace StockSharp.Algo
 					if ((newOrderState == OrderStates.Active || newOrderState == OrderStates.Done) && cancellationOrder.State != OrderStates.Done)
 					{
 						_logReceiver.AddDebugLog("Replace-cancel '{0}': {1}", cancellationOrder.TransactionId, message);
-						
+
 						cancellationOrder.ApplyNewState(OrderStates.Done, _logReceiver);
-						
+
 						if (message.Latency != null)
 							cancellationOrder.LatencyCancellation = message.Latency.Value;
 
@@ -653,7 +653,7 @@ namespace StockSharp.Algo
 
 						o.Balance = message.Balance.Value;
 					}
-					
+
 					o.Portfolio = getPortfolio(message.PortfolioName);
 
 					//if (o.ExtensionInfo == null)
@@ -1149,7 +1149,7 @@ namespace StockSharp.Algo
 			{
 				var toRemove = _orders.SyncGet(d =>
 				{
-					var tmp = d.Where(o => o.Key.State.IsFinal()).Take(countToRemove).Select(p => p.Key).ToHashSet();
+					var tmp = d.Where(o => o.Key.State.IsFinal()).Take(countToRemove).Select(p => p.Key).ToHashSet2();
 
 					foreach (var order in tmp)
 						d.Remove(order);

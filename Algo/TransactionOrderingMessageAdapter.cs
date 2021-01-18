@@ -30,13 +30,13 @@
 
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new SynchronizedDictionary<long, SubscriptionInfo>();
 		private readonly SynchronizedSet<long> _orderStatusIds = new SynchronizedSet<long>();
-		
+
 		private readonly SynchronizedDictionary<long, long> _orders = new SynchronizedDictionary<long, long>();
 		private readonly SynchronizedDictionary<long, SecurityId> _secIds = new SynchronizedDictionary<long, SecurityId>();
 
 		private readonly SynchronizedPairSet<long, long> _orderIds = new SynchronizedPairSet<long, long>();
 		private readonly SynchronizedPairSet<string, long> _orderStringIds = new SynchronizedPairSet<string, long>(StringComparer.InvariantCultureIgnoreCase);
-		
+
 		private readonly SyncObject _nonAssociatedLock = new SyncObject();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
@@ -54,7 +54,7 @@
 		{
 			_transactionLogSubscriptions.Clear();
 			_orderStatusIds.Clear();
-			
+
 			_orders.Clear();
 			_secIds.Clear();
 
@@ -93,10 +93,10 @@
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
-					
+
 					RemoteTrailingZeros(regMsg);
 
-					_secIds.TryAdd(regMsg.TransactionId, regMsg.SecurityId);
+					_secIds.TryAdd2(regMsg.TransactionId, regMsg.SecurityId);
 					break;
 				}
 				case MessageTypes.OrderReplace:
@@ -106,7 +106,7 @@
 					RemoteTrailingZeros(replaceMsg);
 
 					if (_secIds.TryGetValue(replaceMsg.OriginalTransactionId, out var secId))
-						_secIds.TryAdd(replaceMsg.TransactionId, secId);
+						_secIds.TryAdd2(replaceMsg.TransactionId, secId);
 
 					break;
 				}
@@ -118,10 +118,10 @@
 					RemoteTrailingZeros(replaceMsg.Message2);
 
 					if (_secIds.TryGetValue(replaceMsg.Message1.OriginalTransactionId, out var secId))
-						_secIds.TryAdd(replaceMsg.Message1.TransactionId, secId);
+						_secIds.TryAdd2(replaceMsg.Message1.TransactionId, secId);
 
 					if (_secIds.TryGetValue(replaceMsg.Message2.OriginalTransactionId, out secId))
-						_secIds.TryAdd(replaceMsg.Message2.TransactionId, secId);
+						_secIds.TryAdd2(replaceMsg.Message2.TransactionId, secId);
 
 					break;
 				}
@@ -180,7 +180,7 @@
 						break;
 
 					Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>[] tuples;
-					
+
 					lock (subscription.Sync)
 						tuples = subscription.Transactions.Values.ToArray();
 
@@ -223,7 +223,7 @@
 					var transId = execMsg.TransactionId;
 
 					if (transId != 0)
-						_secIds.TryAdd(transId, execMsg.SecurityId);
+						_secIds.TryAdd2(transId, execMsg.SecurityId);
 					else
 					{
 						if (execMsg.SecurityId == default && _secIds.TryGetValue(execMsg.OriginalTransactionId, out var secId))
@@ -289,7 +289,7 @@
 
 							lock (_nonAssociatedLock)
 								_nonAssociatedOrderIds.SafeAdd(execMsg.OrderId.Value).Add(execMsg.TypedClone());
-							
+
 							return;
 						}
 						else if (!execMsg.OrderStringId.IsEmpty() && !_orderStringIds.ContainsKey(execMsg.OrderStringId) && (execMsg.OriginalTransactionId == 0 || !_secIds.ContainsKey(execMsg.OriginalTransactionId)))
@@ -380,7 +380,7 @@
 		private void ProcessSuspended<TKey>(Dictionary<TKey, List<ExecutionMessage>> nonAssociated, TKey key)
 		{
 			List<ExecutionMessage> trades;
-			
+
 			lock (_nonAssociatedLock)
 			{
 				if (nonAssociated.Count > 0)

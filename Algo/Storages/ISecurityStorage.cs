@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Storages
 					if (!_inner.Remove(security.ToSecurityId()))
 					{
 						if (toDelete == null)
-							toDelete = securities.ToHashSet();
+							toDelete = securities.ToHashSet2();
 
 						toDelete.Remove(security);
 					}
@@ -175,7 +175,7 @@ namespace StockSharp.Algo.Storages
 			if (security is null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (_inner.TryAdd(security.ToSecurityId(), security))
+			if (_inner.TryAdd2(security.ToSecurityId(), security))
 				Added?.Invoke(new[] { security });
 		}
 	}

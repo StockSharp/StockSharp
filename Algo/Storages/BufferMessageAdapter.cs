@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Storages
 
 						Buffer.ProcessInMessage(replaceMsg);
 					}
-					
+
 					break;
 				}
 				case MessageTypes.OrderPairReplace:
@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Storages
 					if (Buffer.EnabledTransactions)
 					{
 						var pairMsg = (OrderPairReplaceMessage)message;
-						
+
 						// can be looped back from offline
 						if (!_replaceTransactions.ContainsKey(pairMsg.Message1.TransactionId))
 						{
@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Storages
 						if (!_cancellationTransactions.ContainsKey(cancelMsg.TransactionId))
 							_cancellationTransactions.Add(cancelMsg.TransactionId, cancelMsg.OriginalTransactionId);
 					}
-					
+
 					break;
 				}
 				case MessageTypes.MarketData:
@@ -240,10 +240,10 @@ namespace StockSharp.Algo.Storages
 
 				if (Settings.IsMode(StorageModes.Snapshot))
 				{
-					var states = message.States.ToHashSet();
+					var states = message.States.ToHashSet2();
 
 					var ordersIds = new HashSet<long>();
-					
+
 					var storage = (ISnapshotStorage<string, ExecutionMessage>)GetSnapshotStorage(DataType.Transactions);
 
 					foreach (var snapshot in storage.GetAll(from, to))
@@ -409,7 +409,7 @@ namespace StockSharp.Algo.Storages
 					{
 						if (incremental)
 							Settings.GetStorage<QuoteChangeMessage>(pair.Key, null).Save(pair.Value);
-						
+
 						if (snapshot)
 						{
 							var snapshotStorage = GetSnapshotStorage(DataType.MarketDepth);
@@ -425,7 +425,7 @@ namespace StockSharp.Algo.Storages
 
 						if (incremental)
 							Settings.GetStorage<Level1ChangeMessage>(pair.Key, null).Save(messages);
-						
+
 						if (Settings.IsMode(StorageModes.Snapshot))
 						{
 							var snapshotStorage = GetSnapshotStorage(DataType.Level1);
@@ -446,7 +446,7 @@ namespace StockSharp.Algo.Storages
 
 						if (incremental)
 							Settings.GetStorage<PositionChangeMessage>(pair.Key, null).Save(messages);
-						
+
 						if (snapshot)
 						{
 							var snapshotStorage = GetSnapshotStorage(DataType.PositionChanges);

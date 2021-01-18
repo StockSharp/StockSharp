@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
 		public void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
 		{
-			var existingIds = securityProvider?.LookupAll().Select(s => s.Id.ToSecurityId()).ToHashSet() ?? new HashSet<SecurityId>();
+			var existingIds = securityProvider?.LookupAll().Select(s => s.Id.ToSecurityId()).ToHashSet2() ?? new HashSet<SecurityId>();
 			
 			LookupSecurities(criteria, existingIds, newSecurity, isCancelled, updateProgress);
 		}
@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 		//	private readonly RemoteStorageClient _client;
 		//	private readonly string _storageName;
-			
+
 		//	public RemoteExtendedStorage(RemoteStorageClient client, string storageName)
 		//	{
 		//		if (storageName.IsEmpty())

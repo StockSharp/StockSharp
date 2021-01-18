@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Strategies
 			Type = type ?? throw new ArgumentNullException(nameof(type));
 			_value = initialValue;
 
-			if (!_strategy.Parameters.TryAdd(id, this))
+			if (!_strategy.Parameters.TryAdd2(id, this))
 				throw new ArgumentException(LocalizedStrings.CompositionAlreadyExistParams.Put(name, string.Empty), nameof(name));
 
 			CanOptimize = type.CanOptimize();

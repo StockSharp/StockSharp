@@ -52,7 +52,7 @@ namespace StockSharp.BitStamp
 			}
 
 			var price = regMsg.OrderType == OrderTypes.Market ? (decimal?)null : regMsg.Price;
-			
+
 			var result = _httpClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.Side.ToString().ToLowerInvariant(), price, regMsg.Volume, condition?.StopPrice, regMsg.TillDate.IsToday(), regMsg.TimeInForce == TimeInForce.CancelBalance);
 
 			_orderInfo.Add(result.Id, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
@@ -91,7 +91,7 @@ namespace StockSharp.BitStamp
 		private void ProcessOrderGroupCancel(OrderGroupCancelMessage cancelMsg)
 		{
 			_httpClient.CancelAllOrders();
-		
+
 			SendOutMessage(new ExecutionMessage
 			{
 				ServerTime = CurrentTime.ConvertToUtc(),
@@ -273,7 +273,7 @@ namespace StockSharp.BitStamp
 
 				var orders = _httpClient.RequestOpenOrders();
 
-				var ids = _orderInfo.Keys.ToHashSet();
+				var ids = _orderInfo.Keys.ToHashSet2();
 
 				foreach (var order in orders)
 				{
@@ -348,7 +348,7 @@ namespace StockSharp.BitStamp
 				{
 					ProcessTrade(trade);
 				}
-			
+
 				SendSubscriptionResult(message);
 			}
 		}
@@ -433,7 +433,7 @@ namespace StockSharp.BitStamp
 				msg.TryAdd(PositionChangeTypes.CurrentPrice, currPrice, true);
 				msg.TryAdd(PositionChangeTypes.BlockedValue, blockValue, true);
 
-				SendOutMessage(msg);	
+				SendOutMessage(msg);
 			}
 
 			foreach (var pair in tuple.Item2)

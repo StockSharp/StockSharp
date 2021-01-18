@@ -201,7 +201,7 @@ namespace StockSharp.Algo.Storages.Csv
 		protected abstract TEntity Read(FastCsvReader reader);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="item"></param>
 		/// <returns></returns>
@@ -212,7 +212,7 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="item">Trade object.</param>
 		/// <returns></returns>
@@ -220,7 +220,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			lock (SyncRoot)
 			{
-				if (!_items.TryAdd(GetNormalizedKey(item), item))
+				if (!_items.TryAdd2(GetNormalizedKey(item), item))
 					return false;
 
 				AddCache(item);
@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="item">Trade object.</param>
 		protected override void OnRemoved(TEntity item)
@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="items"></param>
 		protected void OnRemovedRange(IEnumerable<TEntity> items)
@@ -261,13 +261,13 @@ namespace StockSharp.Algo.Storages.Csv
 					_items.Remove(GetNormalizedKey(item));
 					RemoveCache(item);
 				}
-				
+
 				WriteMany(_items.Values.ToArray());
 			}
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected override void OnCleared()
 		{
@@ -335,7 +335,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 							lock (SyncRoot)
 							{
-								if (_items.TryAdd(key, item))
+								if (_items.TryAdd2(key, item))
 								{
 									InnerCollection.Add(item);
 									AddCache(item);
@@ -352,7 +352,7 @@ namespace StockSharp.Algo.Storages.Csv
 								errors.Add(ex);
 
 							currErrors++;
-							
+
 							if (currErrors >= 1000)
 								break;
 						}

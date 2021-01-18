@@ -1073,12 +1073,12 @@ GOLD
 RTS
 GMKR
 GAZR
-SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+SPFB.1MFR".SplitLines().ToHashSet2(StringComparer.InvariantCultureIgnoreCase);
 
 		#endregion
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="securities"></param>
 		/// <param name="code"></param>
@@ -1125,7 +1125,7 @@ SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 			}
 
 			if (!onlyLocal)
-				securities.TryAdd(Tuple.Create(code.ToUpperInvariant(), type), secMsg);
+				securities.TryAdd2(Tuple.Create(code.ToUpperInvariant(), type), secMsg);
 		}
 
 		private class InstrumentProviderClient
@@ -1136,7 +1136,7 @@ SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 					throw new ArgumentNullException(nameof(criteria));
 
 				var existingSecurities = ServicesRegistry.TrySecurityProvider?.Lookup(criteria).Select(s => s.ToMessage()).Where(s => !s.SecurityId.IsAllSecurity()).ToArray() ?? Enumerable.Empty<SecurityMessage>();
-				var existingIds = existingSecurities.Select(s => s.SecurityId.ToStringId()).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+				var existingIds = existingSecurities.Select(s => s.SecurityId.ToStringId()).ToHashSet2(StringComparer.InvariantCultureIgnoreCase);
 
 				var securities = new List<SecurityMessage>();
 
@@ -1261,10 +1261,10 @@ SPFB.1MFR".SplitLines().ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 					var secType = message.SecurityType;
 
 					byCode.SafeAdd(Tuple.Create(message.SecurityId.SecurityCode.ToUpperInvariant(), secType)).Add(message);
-						
+
 					if (!message.ShortName.IsEmpty())
 						byShortName.SafeAdd(Tuple.Create(message.ShortName.ToUpperInvariant(), secType)).Add(message);
-						
+
 					if (!message.Name.IsEmpty())
 						byName.SafeAdd(Tuple.Create(message.Name.ToUpperInvariant(), secType)).Add(message);
 				}

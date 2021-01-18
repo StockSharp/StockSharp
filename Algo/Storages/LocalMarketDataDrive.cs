@@ -245,7 +245,7 @@ namespace StockSharp.Algo.Storages
 							//stream.Write(date);
 						}
 					});
-					
+
 					lock (_cacheSync)
 					{
 						stream.Position = 0;
@@ -386,7 +386,7 @@ namespace StockSharp.Algo.Storages
 				lock (_availableDataTypes.SyncRoot)
 				{
 					var tuple = _availableDataTypes.SafeAdd(Path, key => RefTuple.Create(new HashSet<DataType>(), false));
-				
+
 					if (!tuple.Second)
 					{
 						tuple.First.AddRange(Directory
@@ -467,7 +467,7 @@ namespace StockSharp.Algo.Storages
 
 			updateProgress(0, iterCount);
 
-			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet2(StringComparer.InvariantCultureIgnoreCase);
 
 			foreach (var securityPath in securityPaths)
 			{

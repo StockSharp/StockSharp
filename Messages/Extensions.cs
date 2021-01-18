@@ -428,7 +428,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(info));
 
 			var dict = adapter.PossibleSupportedMessages.ToDictionary(i => i.Type);
-			dict.TryAdd(info.Type, info);
+			dict.TryAdd2(info.Type, info);
 
 			adapter.PossibleSupportedMessages = dict.Values.ToArray();
 		}
@@ -624,7 +624,7 @@ namespace StockSharp.Messages
 					if (!_messageTypeMap.TryGetValue(type, out typeVal))
 						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 				}
-				
+
 				return typeVal;
 			}
 		}
@@ -1145,7 +1145,7 @@ namespace StockSharp.Messages
 		/// <param name="field">Field.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsBestBidField(this Level1Fields field) => BestBidFields.Contains(field);
-		
+
 		/// <summary>
 		/// Fields related to best ask.
 		/// </summary>
@@ -1472,7 +1472,7 @@ namespace StockSharp.Messages
 				message.SecurityType = type.Value;
 			else if (types != null)
 			{
-				var set = types.ToHashSet();
+				var set = types.ToHashSet2();
 
 				if (set.Count <= 0)
 					return;
@@ -1554,7 +1554,7 @@ namespace StockSharp.Messages
 				{
 					wrapper.InnerAdapter = found.InnerAdapter;
 					found.InnerAdapter = null;
-					return found; 
+					return found;
 				}
 				else
 					return wrapper.InnerAdapter.TryRemoveWrapper<TAdapter>();
@@ -1788,7 +1788,7 @@ namespace StockSharp.Messages
 			=> mdMsg.GetArg<TimeSpan>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="ex"></param>
@@ -1925,7 +1925,7 @@ namespace StockSharp.Messages
 
 			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
 		}
-		
+
 		/// <summary>
 		/// Get <see cref="ExecutionMessage.TradePrice"/>.
 		/// </summary>
@@ -3051,7 +3051,7 @@ namespace StockSharp.Messages
 			if (criteria is null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return transaction.IsMatch(criteria, criteria.States.ToHashSet());
+			return transaction.IsMatch(criteria, criteria.States.ToHashSet2());
 		}
 
 		/// <summary>
@@ -3380,7 +3380,7 @@ namespace StockSharp.Messages
 				return MessageTypes.TimeFrameInfo;
 			else if (type.IsCandles)
 				return type.MessageType.ToMessageType();
-			else 
+			else
 			{
 				return _messageTypes.SafeAdd(type, key => key.MessageType.ToMessageType());
 				//throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
@@ -3553,7 +3553,7 @@ namespace StockSharp.Messages
 		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, Unit priceRange, decimal? priceStep)
 		{
 			ValidatePriceRange(priceRange);
-			
+
 			var bidPrice = bid.Price;
 			var askPrice = ask.Price;
 
@@ -3834,13 +3834,13 @@ namespace StockSharp.Messages
 
 			foreach (var change in from)
 			{
-				if (!mapFrom.TryAdd(change.Price, change))
+				if (!mapFrom.TryAdd2(change.Price, change))
 					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(from));
 			}
 
 			foreach (var change in to)
 			{
-				if (!mapTo.TryAdd(change.Price, change))
+				if (!mapTo.TryAdd2(change.Price, change))
 					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(to));
 			}
 
@@ -4036,7 +4036,7 @@ namespace StockSharp.Messages
 			{
 				quoteMsg.Bids = quoteMsg.Bids.OrderByDescending(q => q.Price).ToArray();
 				quoteMsg.Asks = quoteMsg.Asks.OrderBy(q => q.Price).ToArray();
-				
+
 				quoteMsg.IsSorted = true;
 			}
 

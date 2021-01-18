@@ -141,7 +141,7 @@ namespace StockSharp.Algo
 							var queue = _queue.SafeAdd(message.Type);
 
 							// not prev queued lookup
-							if (queue.TryAdd(transId, message.TypedClone()))
+							if (queue.TryAdd2(transId, message.TypedClone()))
 							{
 								if (queue.Count > 1)
 								{
@@ -150,7 +150,7 @@ namespace StockSharp.Algo
 								}
 							}
 						}
-						
+
 						if (!this.IsResultMessageSupported(message.Type) && TimeOut > TimeSpan.Zero)
 						{
 							_lookups.Add(transId, new LookupInfo(message.TypedClone(), TimeOut));
@@ -158,7 +158,7 @@ namespace StockSharp.Algo
 						}
 					}
 				}
-			
+
 				return true;
 			}
 			finally
@@ -186,7 +186,7 @@ namespace StockSharp.Algo
 					_queue.Remove(type);
 					return null;
 				}
-				
+
 				return (Message)queue.First().Value;
 			}
 
@@ -224,7 +224,7 @@ namespace StockSharp.Algo
 				else if (message is ISubscriptionIdMessage subscrMsg)
 				{
 					ignoreIds = subscrMsg.GetSubscriptionIds();
-					
+
 					lock (_lookups.SyncRoot)
 					{
 						foreach (var id in ignoreIds)
@@ -285,7 +285,7 @@ namespace StockSharp.Algo
 				foreach (var lookup in nextLookups)
 				{
 					lookup.LoopBack(this);
-					base.OnInnerAdapterNewOutMessage(lookup);	
+					base.OnInnerAdapterNewOutMessage(lookup);
 				}
 			}
 

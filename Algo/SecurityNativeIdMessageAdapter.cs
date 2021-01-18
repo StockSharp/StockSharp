@@ -84,7 +84,7 @@
 
 					var noNative = securityId;
 					noNative.Native = null;
-					
+
 					if (!boardCode.IsEmpty())
 					{
 						if (nativeSecurityId != null)
@@ -101,7 +101,7 @@
 									{
 										//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
 										this.AddWarningLog(LocalizedStrings.Str687Params.Put(noNative, prevId.Value, nativeSecurityId));
-										
+
 										Storage.RemoveBySecurityId(storageName, prevId.Value);
 										Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
 									}
@@ -110,7 +110,7 @@
 								{
 									//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
 									this.AddWarningLog(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, noNative), nativeSecurityId, noNative));
-									
+
 									Storage.RemoveByNativeId(storageName, nativeSecurityId);
 									Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
 								}
@@ -143,7 +143,7 @@
 					{
 						foreach (var pair in prev.Changes)
 						{
-							curr.Changes.TryAdd(pair.Key, pair.Value);
+							curr.Changes.TryAdd2(pair.Key, pair.Value);
 						}
 
 						return curr;
@@ -166,7 +166,7 @@
 					{
 						foreach (var pair in prev.Changes)
 						{
-							curr.Changes.TryAdd(pair.Key, pair.Value);
+							curr.Changes.TryAdd2(pair.Key, pair.Value);
 						}
 
 						return curr;

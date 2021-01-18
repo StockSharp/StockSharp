@@ -129,7 +129,7 @@ namespace StockSharp.Algo.PnL
 						var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, pf => new PortfolioPnLManager(pf));
 						_managersByTransId.Add(regMsg.TransactionId, manager);
 					}
-					
+
 					return null;
 				}
 
@@ -165,9 +165,9 @@ namespace StockSharp.Algo.PnL
 										return null;
 
 									if (execMsg.OrderId != null)
-										_managersByOrderId.TryAdd(execMsg.OrderId.Value, manager);
+										_managersByOrderId.TryAdd2(execMsg.OrderId.Value, manager);
 									else if (!execMsg.OrderStringId.IsEmpty())
-										_managersByOrderStringId.TryAdd(execMsg.OrderStringId, manager);
+										_managersByOrderStringId.TryAdd2(execMsg.OrderStringId, manager);
 								}
 							}
 

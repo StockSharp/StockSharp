@@ -69,7 +69,7 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		public void Add(Security security)
 		{
-			if (_inner.TryAdd(security.ToSecurityId(), security))
+			if (_inner.TryAdd2(security.ToSecurityId(), security))
 				_added?.Invoke(new[] { security });
 		}
 
@@ -100,7 +100,7 @@ namespace StockSharp.Algo
 
 			foreach (var security in securities)
 			{
-				if (!_inner.TryAdd(security.ToSecurityId(), security))
+				if (!_inner.TryAdd2(security.ToSecurityId(), security))
 					added.Remove(security);
 			}
 

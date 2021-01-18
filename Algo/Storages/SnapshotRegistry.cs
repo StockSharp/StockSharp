@@ -347,12 +347,12 @@ namespace StockSharp.Algo.Storages
 
 				if (date.IsDefault())
 					throw new ArgumentException(message.ToString());
-				
+
 				GetStorageDate(date).Update(curr);
 
 				lock (DatesDict.SyncRoot)
 				{
-					if (DatesDict.TryAdd(date, date))
+					if (DatesDict.TryAdd2(date, date))
 						_flushDates = true;
 				}
 			}
@@ -459,7 +459,7 @@ namespace StockSharp.Algo.Storages
 							writer.WriteLine(LocalMarketDataDrive.GetDirName(date));
 						}
 					});
-					
+
 					lock (_cacheSync)
 					{
 						stream.Position = 0;
@@ -468,7 +468,7 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (UnauthorizedAccessException)
 				{
-					// если папка с данными с правами только на чтение
+					// РµСЃР»Рё РїР°РїРєР° СЃ РґР°РЅРЅС‹РјРё СЃ РїСЂР°РІР°РјРё С‚РѕР»СЊРєРѕ РЅР° С‡С‚РµРЅРёРµ
 				}
 			}
 
