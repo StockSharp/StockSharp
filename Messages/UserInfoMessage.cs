@@ -9,6 +9,7 @@ namespace StockSharp.Messages
 	using System.Security;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.Localization;
@@ -177,6 +178,18 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long UploadLimit { get; set; }
 
+		private string[] _features = ArrayHelper.Empty<string>();
+
+		/// <summary>
+		/// Available features.
+		/// </summary>
+		[DataMember]
+		public string[] Features
+		{
+			get => _features;
+			set => _features = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
 		/// </summary>
@@ -215,6 +228,9 @@ namespace StockSharp.Messages
 			destination.CanPublish = CanPublish;
 			destination.IsAgreementAccepted = IsAgreementAccepted;
 			destination.UploadLimit = UploadLimit;
+
+			if (Features.Length > 0)
+				destination.Features = Features.ToArray();
 
 			if (Permissions != null)
 				destination.Permissions.AddRange(Permissions.ToDictionary());
