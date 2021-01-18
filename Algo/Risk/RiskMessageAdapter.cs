@@ -109,7 +109,7 @@ namespace StockSharp.Algo.Risk
 						RaiseNewOutMessage(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this));
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(rule.Action.To<string>());
 				}
 			}
 		}

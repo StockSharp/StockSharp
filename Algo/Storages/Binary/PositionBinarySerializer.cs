@@ -314,7 +314,7 @@ namespace StockSharp.Algo.Storages.Binary
 							writer.WriteInt((int)change.Value);
 							break;
 						default:
-							throw new ArgumentOutOfRangeException();
+							throw new InvalidOperationException(change.Key.To<string>());
 					}
 				}
 
@@ -443,7 +443,7 @@ namespace StockSharp.Algo.Storages.Binary
 						posMsg.Add(type, reader.ReadInt());
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(type.To<string>());
 				}
 			}
 

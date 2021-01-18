@@ -156,7 +156,7 @@ namespace StockSharp.Algo.Import
 						break;
 					}
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new ArgumentOutOfRangeException(nameof(dataType), msgType, LocalizedStrings.Str1219);
 				}
 			}
 			else if (msgType == typeof(CandleMessage) || msgType.IsCandleMessage())

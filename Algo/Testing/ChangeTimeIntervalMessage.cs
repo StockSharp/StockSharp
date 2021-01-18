@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Testing
 	using System;
 
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Change time interval updates message.
@@ -28,7 +29,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_interval = value;
 			}

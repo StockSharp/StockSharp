@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						snapshot.TradesCount = (int)change.Value;
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(change.Key.To<string>());
 				}
 			}
 

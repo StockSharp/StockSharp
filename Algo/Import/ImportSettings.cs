@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException();
+					throw new ArgumentNullException(nameof(value));
 
 				_fileMask = value;
 				NotifyChanged();

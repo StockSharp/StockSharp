@@ -2154,7 +2154,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_unrealizedPnLInterval = value;
 			}

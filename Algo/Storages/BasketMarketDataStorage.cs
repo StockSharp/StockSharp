@@ -154,7 +154,7 @@ namespace StockSharp.Algo.Storages
 							break;
 						}
 						default:
-							throw new ArgumentOutOfRangeException();
+							throw new InvalidOperationException(type.To<string>());
 					}
 				}
 

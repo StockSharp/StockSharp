@@ -3,6 +3,8 @@ namespace StockSharp.Algo.Candles
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
+
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Messages;
 
@@ -52,7 +54,7 @@ namespace StockSharp.Algo.Candles
 						break;
 
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(Part.To<string>());
 				}
 
 				Update(candle.OpenTime, price, volume, null, oi, priceLevels);

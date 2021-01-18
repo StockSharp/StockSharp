@@ -1070,7 +1070,7 @@ namespace StockSharp.Algo
 						if (message is CandleMessage candleMsg)
 							return candleMsg.ToCandle(_security).To<TEntity>();
 
-						throw new ArgumentOutOfRangeException();
+						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1219);
 					}
 				}
 			}

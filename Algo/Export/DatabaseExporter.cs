@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Export
 	using MoreLinq;
 
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 	using StockSharp.Algo.Export.Database;
 
 	/// <summary>
@@ -69,7 +70,7 @@ namespace StockSharp.Algo.Export
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_batchSize = value;
 			}

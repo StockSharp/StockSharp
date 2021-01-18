@@ -141,7 +141,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_maxLength = value;
 			}
@@ -158,7 +158,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_maxCount = value;
 			}

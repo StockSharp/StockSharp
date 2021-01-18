@@ -12,6 +12,7 @@ namespace StockSharp.Algo.Storages.Remote
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 	using StockSharp.Algo.Storages.Remote.Messages;
 
 	/// <summary>
@@ -44,7 +45,7 @@ namespace StockSharp.Algo.Storages.Remote
 			set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_securityBatchSize = value;
 			}

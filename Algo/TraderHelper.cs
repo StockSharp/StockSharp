@@ -2672,7 +2672,7 @@ namespace StockSharp.Algo
 						case null:
 							return "OXXXXX";
 						default:
-							throw new ArgumentOutOfRangeException();
+							throw new ArgumentOutOfRangeException(nameof(security), security.OptionType, LocalizedStrings.Str1219);
 					}
 				}
 				case SecurityTypes.Index:

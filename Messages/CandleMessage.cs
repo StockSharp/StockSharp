@@ -569,7 +569,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_reversalAmount = value;
 			}
