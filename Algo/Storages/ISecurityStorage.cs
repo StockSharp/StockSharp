@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Storages
 					if (!_inner.Remove(security.ToSecurityId()))
 					{
 						if (toDelete == null)
-							toDelete = securities.ToHashSet2();
+							toDelete = securities.ToSet();
 
 						toDelete.Remove(security);
 					}

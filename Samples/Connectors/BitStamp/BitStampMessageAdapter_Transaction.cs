@@ -273,7 +273,7 @@ namespace StockSharp.BitStamp
 
 				var orders = _httpClient.RequestOpenOrders();
 
-				var ids = _orderInfo.Keys.ToHashSet2();
+				var ids = _orderInfo.Keys.ToSet();
 
 				foreach (var order in orders)
 				{

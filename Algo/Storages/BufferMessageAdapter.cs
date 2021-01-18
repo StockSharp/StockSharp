@@ -240,7 +240,7 @@ namespace StockSharp.Algo.Storages
 
 				if (Settings.IsMode(StorageModes.Snapshot))
 				{
-					var states = message.States.ToHashSet2();
+					var states = message.States.ToSet();
 
 					var ordersIds = new HashSet<long>();
 

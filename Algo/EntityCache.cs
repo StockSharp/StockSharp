@@ -1149,7 +1149,7 @@ namespace StockSharp.Algo
 			{
 				var toRemove = _orders.SyncGet(d =>
 				{
-					var tmp = d.Where(o => o.Key.State.IsFinal()).Take(countToRemove).Select(p => p.Key).ToHashSet2();
+					var tmp = d.Where(o => o.Key.State.IsFinal()).Take(countToRemove).Select(p => p.Key).ToSet();
 
 					foreach (var order in tmp)
 						d.Remove(order);

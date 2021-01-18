@@ -6,6 +6,7 @@ namespace StockSharp.Algo.Storages.Remote
 	using System.IO;
 
 	using Ecng.Common;
+	using Ecng.Collections;
 
 	using MoreLinq;
 
@@ -74,7 +75,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
 		public void LookupSecurities(SecurityLookupMessage criteria, ISecurityProvider securityProvider, Action<SecurityMessage> newSecurity, Func<bool> isCancelled, Action<int, int> updateProgress)
 		{
-			var existingIds = securityProvider?.LookupAll().Select(s => s.Id.ToSecurityId()).ToHashSet2() ?? new HashSet<SecurityId>();
+			var existingIds = securityProvider?.LookupAll().Select(s => s.Id.ToSecurityId()).ToSet() ?? new HashSet<SecurityId>();
 			
 			LookupSecurities(criteria, existingIds, newSecurity, isCancelled, updateProgress);
 		}

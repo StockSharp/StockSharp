@@ -467,7 +467,7 @@ namespace StockSharp.Algo.Storages
 
 			updateProgress(0, iterCount);
 
-			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToHashSet2(StringComparer.InvariantCultureIgnoreCase);
+			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToIgnoreCaseSet();
 
 			foreach (var securityPath in securityPaths)
 			{

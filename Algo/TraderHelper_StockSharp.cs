@@ -21,7 +21,7 @@ namespace StockSharp.Algo
 	{
 		#region Ignore codes
 
-		private static readonly HashSet<string> _ignoreCodes = @"SPFB.ALSI
+		private static readonly ISet<string> _ignoreCodes = @"SPFB.ALSI
 SPFB.AUDU
 SPFB.BR
 SPFB.BR-11.08
@@ -1073,7 +1073,7 @@ GOLD
 RTS
 GMKR
 GAZR
-SPFB.1MFR".SplitLines().ToHashSet2(StringComparer.InvariantCultureIgnoreCase);
+SPFB.1MFR".SplitLines().ToIgnoreCaseSet();
 
 		#endregion
 
@@ -1136,7 +1136,7 @@ SPFB.1MFR".SplitLines().ToHashSet2(StringComparer.InvariantCultureIgnoreCase);
 					throw new ArgumentNullException(nameof(criteria));
 
 				var existingSecurities = ServicesRegistry.TrySecurityProvider?.Lookup(criteria).Select(s => s.ToMessage()).Where(s => !s.SecurityId.IsAllSecurity()).ToArray() ?? Enumerable.Empty<SecurityMessage>();
-				var existingIds = existingSecurities.Select(s => s.SecurityId.ToStringId()).ToHashSet2(StringComparer.InvariantCultureIgnoreCase);
+				var existingIds = existingSecurities.Select(s => s.SecurityId.ToStringId()).ToIgnoreCaseSet();
 
 				var securities = new List<SecurityMessage>();
 

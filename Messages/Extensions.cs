@@ -1472,7 +1472,7 @@ namespace StockSharp.Messages
 				message.SecurityType = type.Value;
 			else if (types != null)
 			{
-				var set = types.ToHashSet2();
+				var set = types.ToSet();
 
 				if (set.Count <= 0)
 					return;
@@ -3051,7 +3051,7 @@ namespace StockSharp.Messages
 			if (criteria is null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			return transaction.IsMatch(criteria, criteria.States.ToHashSet2());
+			return transaction.IsMatch(criteria, criteria.States.ToSet());
 		}
 
 		/// <summary>
