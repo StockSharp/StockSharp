@@ -232,7 +232,7 @@ namespace StockSharp.Messages
 			if (Features.Length > 0)
 				destination.Features = Features.ToArray();
 
-			if (Permissions != null)
+			if (Permissions?.Count > 0)
 				destination.Permissions.AddRange(Permissions.ToDictionary());
 		}
 	}
