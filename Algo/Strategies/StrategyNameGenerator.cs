@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Strategies
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using SmartFormat;
@@ -51,7 +52,7 @@ namespace StockSharp.Algo.Strategies
 
 			bool ISource.TryEvaluateSelector(ISelectorInfo selectorInfo)
 			{
-				var value = _values?.TryGetValue(selectorInfo.Selector.Text);
+				var value = _values?.TryGetValue(selectorInfo.SelectorText);
 
 				if (value == null)
 					return false;
@@ -123,12 +124,12 @@ namespace StockSharp.Algo.Strategies
 
 				_pattern = value;
 
-				var format = _formatter.Parser.ParseFormat(value);
+				var format = _formatter.Parser.ParseFormat(value, ArrayHelper.Empty<string>());
 				var selectors = format
 					.Items
 					.OfType<Placeholder>()
 					.SelectMany(ph => ph.Selectors)
-					.Select(s => s.Text)
+					.Select(s => s.RawText)
 					.Distinct();
 
 				_selectors.Clear();

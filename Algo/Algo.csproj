@@ -9,6 +9,8 @@
     <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
+
+    <PackageReference Include="MathNet.Numerics" Version="$(MathNumVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
