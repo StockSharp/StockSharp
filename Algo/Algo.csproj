@@ -11,6 +11,7 @@
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
 
     <PackageReference Include="MathNet.Numerics" Version="$(MathNumVer)" />
+    <PackageReference Include="Microsoft.CSharp" Version="$(CSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />

@@ -4,6 +4,7 @@
     <DefineConstants>IGNORE_LICENSE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="$(CSharpVer)"/>
     <PackageReference Include="Ecng.Net.SocketIO" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
