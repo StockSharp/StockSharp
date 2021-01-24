@@ -20,8 +20,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
@@ -76,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 					_buffer.RemoveAt(0);
 			}
 			else
-				buff = _buffer.Skip(1).Concat(candle).ToList();
+				buff = _buffer.Skip(1).Append(candle).ToList();
 
 			if (buff.Count >= Length)
 			{

@@ -8,8 +8,6 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -233,7 +231,8 @@ namespace StockSharp.Algo
 					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
 					_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
 
-					_adapter.InnerAdapters.ForEach(InnerAdaptersOnAdded);
+					foreach (var inner in _adapter.InnerAdapters)
+						InnerAdaptersOnAdded(inner);
 				}
 
 				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;

@@ -28,8 +28,6 @@ namespace StockSharp.Messages
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
 
-	using MoreLinq;
-
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 
@@ -470,7 +468,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Concat(dataType).Distinct().ToArray();
+			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Append(dataType).Distinct().ToArray();
 		}
 
 		/// <summary>
@@ -496,7 +494,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedResultMessages = adapter.SupportedResultMessages.Concat(type).Distinct();
+			adapter.SupportedResultMessages = adapter.SupportedResultMessages.Append(type).Distinct();
 		}
 
 		/// <summary>
@@ -536,7 +534,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Concat(type).Distinct();
+			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Append(type).Distinct();
 		}
 
 		/// <summary>
