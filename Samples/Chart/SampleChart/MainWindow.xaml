@@ -3,7 +3,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:sx="http://schemas.stocksharp.com/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
 		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
 		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="1000">
 	<Grid>

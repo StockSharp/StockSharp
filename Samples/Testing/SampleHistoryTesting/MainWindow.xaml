@@ -4,8 +4,8 @@
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		Title="{x:Static loc:LocalizedStrings.XamlStr562}" Height="520" Width="834"
 		xmlns:sx="http://schemas.stocksharp.com/xaml"
-		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
-        xmlns:exc="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
+        xmlns:exc="clr-namespace:Ecng.Xaml.Converters;assembly=StockSharp.Xaml"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
 
