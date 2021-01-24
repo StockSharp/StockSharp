@@ -9,6 +9,7 @@
     <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.StringSearch" Version="$(EcngVer)" />
 
     <PackageReference Include="MathNet.Numerics" Version="$(MathNumVer)" />
     <PackageReference Include="Microsoft.CSharp" Version="$(CSharpVer)" />
