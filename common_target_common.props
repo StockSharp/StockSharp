@@ -16,6 +16,7 @@
     <FluentFtpVer>33.0.3</FluentFtpVer>
     <NitoVer>5.1.0</NitoVer>
     <CSharpVer>4.7.0</CSharpVer>
+    <SignalRVer>2.4.1</SignalRVer>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
