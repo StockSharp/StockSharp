@@ -15,9 +15,9 @@
     "en": "Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.",
     "ru": "Выберите проектный файл (.csproj) вашего продукта. Перед публикацией проект должен быть построен в Visual Studio в конфигурации Release."
   },
-  "DotNetCoreSDK31NotInstalled": {
-    "en": "You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core)",
-    "ru": "Чтобы публиковать пакеты, необходимо установить .NET Core SDK v3.1+ (https://dotnet.microsoft.com/download/dotnet-core)"
+  "DotNetSDKNotInstalled": {
+    "en": ".NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/5.0",
+    "ru": ".NET SDK v5.0+ не установлен. Его можно скачать по ссылке: https://dotnet.microsoft.com/download/dotnet/5.0"
   },
   "SelectImage": {
     "en": "Select image",
