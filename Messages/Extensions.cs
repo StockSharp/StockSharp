@@ -1197,9 +1197,9 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="categories">Message adapter categories.</param>
 		/// <returns>Language</returns>
-		public static Languages GetPreferredLanguage(this MessageAdapterCategories? categories)
+		public static string GetPreferredLanguage(this MessageAdapterCategories? categories)
 		{
-			return categories?.Contains(MessageAdapterCategories.Russia) == true ? Languages.Russian : Languages.English;
+			return categories?.Contains(MessageAdapterCategories.Russia) == true ? LangCodes.Ru : LangCodes.En;
 		}
 
 		/// <summary>
