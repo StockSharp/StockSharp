@@ -74,6 +74,13 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DiagramElementKey)]
 		DiagramElement,
+
+		/// <summary>
+		/// Other.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2381Key)]
+		Other,
 	}
 
 	/// <summary>
@@ -145,5 +152,12 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DiagramElementKey)]
 		DiagramElement = StockConnector << 1,
+
+		/// <summary>
+		/// Other.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2381Key)]
+		Other = DiagramElement << 1,
 	}
 }

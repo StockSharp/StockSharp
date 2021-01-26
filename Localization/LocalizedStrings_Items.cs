@@ -58,14 +58,14 @@ namespace StockSharp.Localization
 		public static string SelectCsprojForProduct => GetString(SelectCsprojForProductKey);
 
 		/// <summary>
-		/// You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core)
+		/// .NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/5.0
 		/// </summary>
-		public const string DotNetCoreSDK31NotInstalledKey = nameof(DotNetCoreSDK31NotInstalled);
+		public const string DotNetSDKNotInstalledKey = nameof(DotNetSDKNotInstalled);
 
 		/// <summary>
-		/// You have to install .NET Core SDK v3.1+ to publish packages (https://dotnet.microsoft.com/download/dotnet-core)
+		/// .NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/5.0
 		/// </summary>
-		public static string DotNetCoreSDK31NotInstalled => GetString(DotNetCoreSDK31NotInstalledKey);
+		public static string DotNetSDKNotInstalled => GetString(DotNetSDKNotInstalledKey);
 
 		/// <summary>
 		/// Select image
