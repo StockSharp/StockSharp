@@ -191,6 +191,30 @@
 		public Tuple<string, string>[] StubVersions { get; set; }
 
 		/// <summary>
+		/// Target.
+		/// </summary>
+		[DataMember]
+		public string Target { get; set; }
+
+		/// <summary>
+		/// Per month (with discount).
+		/// </summary>
+		[DataMember]
+		public Currency DiscountMonthlyPrice { get; set; }
+
+		/// <summary>
+		/// Annual (with discount).
+		/// </summary>
+		[DataMember]
+		public Currency DiscountAnnualPrice { get; set; }
+
+		/// <summary>
+		/// Lifetime (with discount).
+		/// </summary>
+		[DataMember]
+		public Currency DiscountLifetimePrice { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -252,6 +276,10 @@
 			destination.LatestVersion = LatestVersion;
 			destination.IsApproved = IsApproved;
 			destination.StubVersions = StubVersions?.ToArray();
+			destination.Target = Target;
+			destination.DiscountMonthlyPrice = DiscountMonthlyPrice?.Clone();
+			destination.DiscountAnnualPrice = DiscountAnnualPrice?.Clone();
+			destination.DiscountLifetimePrice = DiscountLifetimePrice?.Clone();
 		}
 
 		/// <inheritdoc />
