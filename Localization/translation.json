@@ -21450,5 +21450,9 @@
   "RegisterIntervalDesc": {
     "en": "The order registration interval above which the new order would not be registered.",
     "ru": "Интервал частоты регистрации заявок, при превышении которого новая заявка выставляться не будет."
+  },
+  "Video": {
+    "en": "Video",
+    "ru": "Видео"
   }
 }

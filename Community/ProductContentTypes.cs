@@ -81,6 +81,13 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2381Key)]
 		Other,
+
+		/// <summary>
+		/// Video.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VideoKey)]
+		Video,
 	}
 
 	/// <summary>
@@ -159,5 +166,12 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2381Key)]
 		Other = DiagramElement << 1,
+
+		/// <summary>
+		/// Video.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VideoKey)]
+		Video = Other << 1,
 	}
 }

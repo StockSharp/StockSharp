@@ -53286,5 +53286,15 @@ namespace StockSharp.Localization
 		/// The order registration interval above which the new order would not be registered.
 		/// </summary>
 		public static string RegisterIntervalDesc => GetString(RegisterIntervalDescKey);
+
+		/// <summary>
+		/// Video
+		/// </summary>
+		public const string VideoKey = nameof(Video);
+
+		/// <summary>
+		/// Video
+		/// </summary>
+		public static string Video => GetString(VideoKey);
 	}
 }
