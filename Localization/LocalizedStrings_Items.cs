@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// New connection string
+		/// </summary>
+		public const string NewConnectionStringKey = nameof(NewConnectionString);
+
+		/// <summary>
+		/// New connection string
+		/// </summary>
+		public static string NewConnectionString => GetString(NewConnectionStringKey);
+
+		/// <summary>
 		/// New version must be greater than current.
 		/// </summary>
 		public const string NewVersionMustBeGreaterKey = nameof(NewVersionMustBeGreater);
