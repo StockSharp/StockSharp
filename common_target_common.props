@@ -16,6 +16,7 @@
     <NitoVer>5.1.0</NitoVer>
     <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.1</SignalRVer>
+    <SystemDataSqlClientVer>4.8.2</SystemDataSqlClientVer>
   </PropertyGroup>
   <PropertyGroup>
     <!-- reverse defaults from "C:\Program Files\dotnet\sdk\5.0.102\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.GenerateAssemblyInfo.targets"  -->
