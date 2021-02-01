@@ -53306,5 +53306,25 @@ namespace StockSharp.Localization
 		/// Video
 		/// </summary>
 		public static string Video => GetString(VideoKey);
+
+		/// <summary>
+		/// Support
+		/// </summary>
+		public const string SupportKey = nameof(Support);
+
+		/// <summary>
+		/// Support
+		/// </summary>
+		public static string Support => GetString(SupportKey);
+
+		/// <summary>
+		/// Development
+		/// </summary>
+		public const string DevelopmentKey = nameof(Development);
+
+		/// <summary>
+		/// Development
+		/// </summary>
+		public static string Development => GetString(DevelopmentKey);
 	}
 }

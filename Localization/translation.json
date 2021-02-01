@@ -1,4 +1,4 @@
-{
+{                                                                                                              8
   "NewVersionMustBeGreater": {
     "en": "New version must be greater than current.",
     "ru": "Новая версия должна быть больше текущей."
@@ -21454,5 +21454,13 @@
   "Video": {
     "en": "Video",
     "ru": "Видео"
+  },
+  "Support": {
+    "en": "Support",
+    "ru": "ТехПоддержка"
+  },
+  "Development": {
+    "en": "Development",
+    "ru": "Разработка"
   }
 }

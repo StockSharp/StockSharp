@@ -88,6 +88,27 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VideoKey)]
 		Video,
+
+		/// <summary>
+		/// Support.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SupportKey)]
+		Support,
+
+		/// <summary>
+		/// Development.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DevelopmentKey)]
+		Development,
+
+		/// <summary>
+		/// Account.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AccountKey)]
+		Account,
 	}
 
 	/// <summary>
@@ -173,5 +194,26 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VideoKey)]
 		Video = Other << 1,
+
+		/// <summary>
+		/// Support.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SupportKey)]
+		Support = Video << 1,
+
+		/// <summary>
+		/// Development.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DevelopmentKey)]
+		Development = Support << 1,
+
+		/// <summary>
+		/// Account.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AccountKey)]
+		Account = Development << 1,
 	}
 }
