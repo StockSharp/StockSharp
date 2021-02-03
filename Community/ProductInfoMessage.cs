@@ -185,6 +185,24 @@
 		public bool IsApproved { get; set; }
 
 		/// <summary>
+		/// Can buy.
+		/// </summary>
+		[DataMember]
+		public bool CanBuy { get; set; }
+
+		/// <summary>
+		/// Is available. (already bought and can be downloaded)
+		/// </summary>
+		[DataMember]
+		public bool IsAvailable { get; set; }
+
+		/// <summary>
+		/// Is license expired.
+		/// </summary>
+		[DataMember]
+		public bool IsLicenseExpired { get; set; }
+
+		/// <summary>
 		/// Stub versions.
 		/// </summary>
 		[DataMember]
@@ -275,6 +293,9 @@
 			destination.Scope = Scope;
 			destination.LatestVersion = LatestVersion;
 			destination.IsApproved = IsApproved;
+			destination.CanBuy = CanBuy;
+			destination.IsAvailable = IsAvailable;
+			destination.IsLicenseExpired = IsLicenseExpired;
 			destination.StubVersions = StubVersions?.ToArray();
 			destination.Target = Target;
 			destination.DiscountMonthlyPrice = DiscountMonthlyPrice?.Clone();
@@ -341,6 +362,8 @@
 
 			if (!IsApproved)
 				str += $",Approved={IsApproved}";
+
+			str += $",CanBuy={CanBuy},IsAvailable={IsAvailable},IsLicenseExpired={IsLicenseExpired}";
 
 			return str;
 		}
