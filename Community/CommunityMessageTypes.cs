@@ -48,6 +48,16 @@
 		public const MessageTypes ProductPublish = (MessageTypes)(-11007);
 
 		/// <summary>
+		/// <see cref="ProductCategoryMessage"/>.
+		/// </summary>
+		public const MessageTypes ProductCategory = (MessageTypes)(-11008);
+
+		/// <summary>
+		/// <see cref="ProductCategoryLookupMessage"/>.
+		/// </summary>
+		public const MessageTypes ProductCategoryLookup = (MessageTypes)(-11009);
+
+		/// <summary>
 		/// <see cref="LicenseLookupMessage"/>.
 		/// </summary>
 		public const MessageTypes LicenseLookup = (MessageTypes)(-10000);
@@ -81,5 +91,10 @@
 		/// <see cref="LicenseInfoMessage"/>.
 		/// </summary>
 		public static DataType LicenseInfoType = DataType.Create(typeof(LicenseInfoMessage), null).Immutable();
+
+		/// <summary>
+		/// <see cref="ProductCategoryMessage"/>.
+		/// </summary>
+		public static DataType ProductCategoryType = DataType.Create(typeof(ProductCategoryMessage), null).Immutable();
 	}
 }

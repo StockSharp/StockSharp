@@ -36,7 +36,7 @@
 		public override DataType DataType => CommunityMessageTypes.ProductFeedbackType;
 
 		/// <summary>
-		/// Create a copy of <see cref="ProductFeedbackMessage"/>.
+		/// Create a copy of <see cref="ProductFeedbackLookupMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override Message Clone()

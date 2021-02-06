@@ -233,6 +233,12 @@
 		public Currency DiscountLifetimePrice { get; set; }
 
 		/// <summary>
+		/// Categories.
+		/// </summary>
+		[DataMember]
+		public long[] Categories { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -301,6 +307,7 @@
 			destination.DiscountMonthlyPrice = DiscountMonthlyPrice?.Clone();
 			destination.DiscountAnnualPrice = DiscountAnnualPrice?.Clone();
 			destination.DiscountLifetimePrice = DiscountLifetimePrice?.Clone();
+			destination.Categories = Categories?.ToArray();
 		}
 
 		/// <inheritdoc />
