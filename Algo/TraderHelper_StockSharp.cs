@@ -14,7 +14,7 @@ namespace StockSharp.Algo
 	using MoreLinq;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Storages.Remote;
+	using StockSharp.Configuration;
 	using StockSharp.Messages;
 
 	partial class TraderHelper
@@ -1140,14 +1140,14 @@ SPFB.1MFR".SplitLines().ToIgnoreCaseSet();
 
 				var securities = new List<SecurityMessage>();
 
-				byte[] Send<T>(string method, string argName, T arg)
+				static byte[] Send<T>(string method, string argName, T arg)
 				{
 					var request = new MemoryStream();
 					request.SerializeDataContract(arg);
 
 					using (var client = new WebClientEx { Timeout = TimeSpan.FromMinutes(1) })
 					{
-						var response = client.UploadData($"https://stocksharp.com/services/instrumentprovider.ashx?method={method}", request.To<byte[]>().DeflateTo());
+						var response = client.UploadData($"{Paths.GetWebSiteUrl()}/services/instrumentprovider.ashx?method={method}", request.To<byte[]>().DeflateTo());
 						return response.DeflateFrom();
 					}
 				}

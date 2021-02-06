@@ -2408,12 +2408,12 @@ namespace StockSharp.Localization
 		public static string LicenseMaxRenew => GetString(LicenseMaxRenewKey);
 
 		/// <summary>
-		/// SMS activation failed. Read more at https://stocksharp.com/profile/ .
+		/// SMS activation failed. Read more at {0}.
 		/// </summary>
 		public const string SmsActivationFailedKey = nameof(SmsActivationFailed);
 
 		/// <summary>
-		/// SMS activation failed. Read more at https://stocksharp.com/profile/ .
+		/// SMS activation failed. Read more at {0}.
 		/// </summary>
 		public static string SmsActivationFailed => GetString(SmsActivationFailedKey);
 
@@ -2458,12 +2458,12 @@ namespace StockSharp.Localization
 		public static string LicenseWrongHID => GetString(LicenseWrongHIDKey);
 
 		/// <summary>
-		/// License N{0} has expired {1}. Visit https://stocksharp.com/ to obtain a new license.
+		/// License N{0} has expired {1}. Visit {2} to obtain a new license.
 		/// </summary>
 		public const string LicenseExpiredKey = nameof(LicenseExpired);
 
 		/// <summary>
-		/// License N{0} has expired {1}. Visit https://stocksharp.com/ to obtain a new license.
+		/// License N{0} has expired {1}. Visit {2} to obtain a new license.
 		/// </summary>
 		public static string LicenseExpired => GetString(LicenseExpiredKey);
 

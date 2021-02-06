@@ -952,8 +952,8 @@
     "ru": "Лицензия N{0} обновлена максимальное количество раз."
   },
   "SmsActivationFailed": {
-    "en": "SMS activation failed. Read more at https://stocksharp.com/profile/ .",
-    "ru": "Не пройдена активация через SMS. Подробнее в https://stocksharp.com/profile/ ."
+    "en": "SMS activation failed. Read more at {0}.",
+    "ru": "Не пройдена активация через SMS. Подробнее в {0}."
   },
   "MaxLicensePerMin": {
     "en": "Maximum number of license generations per minute exceeded.",
@@ -972,8 +972,8 @@
     "ru": "Лицензия N{0} содержит неправильный идентификатор компьютера '{1}' вместо '{2}'."
   },
   "LicenseExpired": {
-    "en": "License N{0} has expired {1}. Visit https://stocksharp.com/ to obtain a new license.",
-    "ru": "Лицензия N{0} истекла {1}. Посетите сайт https://stocksharp.com/ чтобы приобрести новую."
+    "en": "License N{0} has expired {1}. Visit {2} to obtain a new license.",
+    "ru": "Лицензия N{0} истекла {1}. Посетите сайт {2} чтобы приобрести новую."
   },
   "LicenseNotSupport": {
     "en": "License N{0} does not support '{1}'.",
