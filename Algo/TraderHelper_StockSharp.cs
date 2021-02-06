@@ -1256,7 +1256,7 @@ SPFB.1MFR".SplitLines().ToIgnoreCaseSet();
 				var byShortName = new Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>>();
 				var byName = new Dictionary<Tuple<string, SecurityTypes?>, List<SecurityMessage>>();
 
-				foreach (var message in client.LookupSecurities(Extensions.LookupAllCriteriaMessage))
+				foreach (var message in client.LookupSecurities(Messages.Extensions.LookupAllCriteriaMessage))
 				{
 					var secType = message.SecurityType;
 
