@@ -155,7 +155,6 @@ namespace SampleRealTimeEmulation
 
 			_emuConnector.OrderBookReceived += OnDepth;
 
-			_emuConnector.PortfolioReceived += (sub, p) => PortfolioGrid.Positions.TryAdd(p);
 			_emuConnector.PositionReceived += (sub, p) => PortfolioGrid.Positions.TryAdd(p);
 
 			_emuConnector.NewOrder += OrderGrid.Orders.Add;

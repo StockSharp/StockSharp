@@ -56,7 +56,7 @@
 			_settingsFile = Path.Combine(_defaultDataPath, "connection.xml");
 		}
 
-		public event Func<string, Connector> CreateConnector; 
+		public event Func<string, Connector> CreateConnector;
 
 		private void MainPanel_OnLoaded(object sender, RoutedEventArgs e)
 		{
@@ -135,7 +135,6 @@
 
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
-			Connector.PortfolioReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 			Connector.PositionReceived += (sub, p) => _portfoliosWindow.PortfolioGrid.Positions.TryAdd(p);
 
 			// subscribe on error of order registration event

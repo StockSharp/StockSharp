@@ -104,7 +104,7 @@ namespace StockSharp.Algo
 					_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message);
 					return;
 				}
-				
+
 				SendInMessage(message);
 			}
 			else
@@ -754,7 +754,7 @@ namespace StockSharp.Algo
 		}
 
 		private void ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message)
-		{ 
+		{
 			var subscription = _subscriptionManager.ProcessSubscriptionFinishedMessage(message, out var items);
 
 			if (subscription == null)
@@ -832,7 +832,7 @@ namespace StockSharp.Algo
 					else
 					{
 						_notFirstTimeConnected = true;
-						
+
 						void TrySend(MessageTypes type)
 						{
 							DataType dataType;
@@ -1110,35 +1110,36 @@ namespace StockSharp.Algo
 			{
 				portfolio = GetPortfolio(message.PortfolioName, pf =>
 				{
+					if (message.LimitType != null)
+						return false;
+
 					pf.ApplyChanges(message, ExchangeInfoProvider);
 					return true;
 				}, out _);
 
 				RaiseReceived(portfolio, message, PortfolioReceived);
 			}
-			else
+
+			var security = EnsureGetSecurity(message);
+			portfolio = LookupByPortfolioName(message.PortfolioName);
+
+			var valueInLots = message.TryGetDecimal(PositionChangeTypes.CurrentValueInLots);
+			if (valueInLots != null)
 			{
-				var security = EnsureGetSecurity(message);
-				portfolio = LookupByPortfolioName(message.PortfolioName);
-
-				var valueInLots = message.TryGetDecimal(PositionChangeTypes.CurrentValueInLots);
-				if (valueInLots != null)
+				if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
 				{
-					if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
-					{
-						var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
-						message.Add(PositionChangeTypes.CurrentValue, currValue);
-					}
-
-					message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
+					var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
+					message.Add(PositionChangeTypes.CurrentValue, currValue);
 				}
 
-				var position = GetPosition(portfolio, security, message.StrategyId, message.Side, message.ClientCode, message.DepoName, message.LimitType, message.Description);
-				position.ApplyChanges(message);
-
-				RaisePositionChanged(position);
-				RaiseReceived(position, message, PositionReceived);
+				message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
 			}
+
+			var position = GetPosition(portfolio, security, message.StrategyId, message.Side, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+			position.ApplyChanges(message);
+
+			RaisePositionChanged(position);
+			RaiseReceived(position, message, PositionReceived);
 
 			TrySubscribePortfolio(portfolio, message.Adapter);
 		}
@@ -1212,7 +1213,7 @@ namespace StockSharp.Algo
 				if (hasReceivedEvt)
 					receivedEvt.Invoke(subscription, depth);
 			}
-			
+
 			if (!hasOnline || message.IsFiltered || message.State != null)
 				return;
 
@@ -1333,7 +1334,7 @@ namespace StockSharp.Algo
 							innerSecurity.LocalTime = message.LocalTime;
 							innerSecurity.LastChangeTime = message.ServerTime;
 						}
-						
+
 						RaiseSecuritiesChanged(changedSecurities.Keys.ToArray());
 					}
 				}
@@ -1360,7 +1361,7 @@ namespace StockSharp.Algo
 		private void ProcessTradeMessage(ExecutionMessage message)
 		{
 			var security = EnsureGetSecurity(message);
-			
+
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
 
 			if (RaiseReceived(tuple.Item1, message, TickTradeReceived) == false)
@@ -1634,7 +1635,7 @@ namespace StockSharp.Algo
 					ProcessOrderLogMessage(message);
 					break;
 				}
-				
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
 			}

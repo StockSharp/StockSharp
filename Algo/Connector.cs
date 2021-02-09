@@ -676,7 +676,7 @@ namespace StockSharp.Algo
 
 				var transactionId = TransactionIdGenerator.GetNextId();
 				_entityCache.AddOrderByEditionId(order, transactionId);
-					
+
 				changes.TransactionId = transactionId;
 				OnEditOrder(order, changes);
 			}
@@ -857,7 +857,7 @@ namespace StockSharp.Algo
 					if (priceStep != null && (order.Price % priceStep.Value) != 0)
 						throw new ArgumentException(LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(order.Price, order, priceStep.Value));
 				}
-					
+
 				var volumeStep = order.Security.VolumeStep;
 
 				if (volumeStep != null && (order.Volume % volumeStep.Value) != 0)
@@ -1049,7 +1049,7 @@ namespace StockSharp.Algo
 			if (message == _marketTimeMessage)
 			{
 				lock (_marketTimerSync)
-					_isMarketTimeHandled = true;	
+					_isMarketTimeHandled = true;
 			}
 
 			var currentTime = message.LocalTime;
@@ -1080,6 +1080,9 @@ namespace StockSharp.Algo
 			where TMessage : ISecurityIdMessage, ISubscriptionIdMessage
 		{
 			var secId = message.SecurityId;
+
+			if (secId.IsMoney())
+				return TraderHelper.MoneySecurity;
 
 			if (secId == default)
 			{
@@ -1302,7 +1305,7 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 			storage.SetValue(nameof(CheckSteps), CheckSteps);
 			storage.SetValue(nameof(KeepStrategiesPositions), KeepStrategiesPositions);
-			
+
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 

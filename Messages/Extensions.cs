@@ -2007,6 +2007,13 @@ namespace StockSharp.Messages
 			=> adapter.IsMessageSupported(MessageTypes.Portfolio);
 
 		/// <summary>
+		/// Check if the specified id is money id.
+		/// </summary>
+		/// <param name="secId">The message contains information about the position changes.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMoney(this SecurityId secId) => secId == SecurityId.Money;
+
+		/// <summary>
 		/// Determines the specified message contains <see cref="SecurityId.Money"/> position.
 		/// </summary>
 		/// <param name="posMsg">The message contains information about the position changes.</param>
@@ -2016,7 +2023,7 @@ namespace StockSharp.Messages
 			if (posMsg == null)
 				throw new ArgumentNullException(nameof(posMsg));
 
-			return posMsg.SecurityId == SecurityId.Money;
+			return posMsg.SecurityId.IsMoney();
 		}
 
 		/// <summary>
