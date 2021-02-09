@@ -95,7 +95,7 @@
     <PackageReference Include="StockSharp.DigitexFuturesStub" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\ConfigurationGitHub.csproj" />
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>

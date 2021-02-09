@@ -29,6 +29,6 @@
     <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
     <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
     <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
-    <ProjectReference Include="..\..\..\Configuration\ConfigurationGitHub.csproj" />
+    <ProjectReference Include="..\..\..\Configuration\Configuration.csproj" />
   </ItemGroup>
 </Project>
