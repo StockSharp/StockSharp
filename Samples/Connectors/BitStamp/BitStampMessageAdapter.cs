@@ -6,7 +6,7 @@ namespace StockSharp.BitStamp
 	using Ecng.Common;
 
 	using StockSharp.BitStamp.Native;
-#if !IGNORE_LICENSE
+#if INCLUDE_LICENSE && !IGNORE_LICENSE
 	using StockSharp.Licensing;
 #endif
 	using StockSharp.Messages;
@@ -81,7 +81,7 @@ namespace StockSharp.BitStamp
 			_pusherClient.NewTrade -= SessionOnNewTrade;
 		}
 
-#if !IGNORE_LICENSE
+#if INCLUDE_LICENSE && !IGNORE_LICENSE
 		/// <inheritdoc />
 		public override string FeatureName => nameof(BitStamp);
 #endif
@@ -144,7 +144,7 @@ namespace StockSharp.BitStamp
 							throw new InvalidOperationException(LocalizedStrings.Str3690);
 					}
 
-#if !IGNORE_LICENSE
+#if INCLUDE_LICENSE && !IGNORE_LICENSE
 					var msg = "Crypto".ValidateLicense(component: GetType());
 					if (!msg.IsEmpty())
 					{
