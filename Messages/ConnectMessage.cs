@@ -46,6 +46,12 @@ namespace StockSharp.Messages
 		public string SessionId { get; set; }
 
 		/// <summary>
+		/// Language.
+		/// </summary>
+		[DataMember]
+		public string Language { get; set; }
+
+		/// <summary>
 		/// Create a copy of <see cref="ConnectMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
@@ -54,7 +60,8 @@ namespace StockSharp.Messages
 			var clone = new ConnectMessage
 			{
 				ClientVersion = ClientVersion,
-				SessionId = SessionId
+				SessionId = SessionId,
+				Language = Language,
 			};
 
 			CopyTo(clone);
