@@ -3504,7 +3504,7 @@ namespace StockSharp.Algo
 
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				adapter.SendInMessage(new ConnectMessage());
+				adapter.SendInMessage(new ConnectMessage { Language = LocalizedStrings.ActiveLanguage });
 
 				lock (sync)
 				{
