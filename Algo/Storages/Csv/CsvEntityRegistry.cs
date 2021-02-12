@@ -823,7 +823,8 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private Security GetSecurity(string id)
 			{
-				var security = Registry.Securities.ReadById(id.ToSecurityId());
+				var secId = id.ToSecurityId();
+				var security = secId.IsMoney() ? TraderHelper.MoneySecurity : Registry.Securities.ReadById(secId);
 
 				if (security == null)
 					throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id));
