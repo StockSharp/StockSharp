@@ -97,7 +97,24 @@
 		/// Price for renew.
 		/// </summary>
 		[DataMember]
-		public Currency RenewPrice { get; set; }
+		[Obsolete("Use RenewMonthlyPrice or RenewAnnualPrice properties.")]
+		public Currency RenewPrice
+		{
+			get => RenewMonthlyPrice;
+			set => RenewMonthlyPrice = value;
+		}
+
+		/// <summary>
+		/// Price for monthly renew.
+		/// </summary>
+		[DataMember]
+		public Currency RenewMonthlyPrice { get; set; }
+
+		/// <summary>
+		/// Price for annual renew.
+		/// </summary>
+		[DataMember]
+		public Currency RenewAnnualPrice { get; set; }
 
 		/// <summary>
 		/// Download count.
@@ -241,7 +258,8 @@
 			destination.MonthlyPrice = MonthlyPrice?.Clone();
 			destination.AnnualPrice = AnnualPrice?.Clone();
 			destination.LifetimePrice = LifetimePrice?.Clone();
-			destination.RenewPrice = RenewPrice?.Clone();
+			destination.RenewMonthlyPrice = RenewMonthlyPrice?.Clone();
+			destination.RenewAnnualPrice = RenewAnnualPrice?.Clone();
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
@@ -284,16 +302,13 @@
 				str += $",Author={Author}";
 
 			if (MonthlyPrice != null)
-				str += $",Monthly={MonthlyPrice}";
+				str += $",Monthly={MonthlyPrice} ({RenewMonthlyPrice})";
 
 			if (AnnualPrice != null)
-				str += $",Annual={AnnualPrice}";
+				str += $",Annual={AnnualPrice} ({RenewAnnualPrice})";
 
 			if (LifetimePrice != null)
 				str += $",Life={LifetimePrice}";
-
-			if (RenewPrice != null)
-				str += $",Renew={RenewPrice}";
 
 			str += $",Downloads={DownloadCount}";
 
