@@ -94,17 +94,6 @@
 		public Currency LifetimePrice { get; set; }
 
 		/// <summary>
-		/// Lifetime.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public Currency Price
-		{
-			get => LifetimePrice;
-			set => LifetimePrice = value;
-		}
-
-		/// <summary>
 		/// Price for renew.
 		/// </summary>
 		[DataMember]
@@ -127,13 +116,6 @@
 		/// </summary>
 		[DataMember]
 		public string DocUrl { get; set; }
-
-		/// <summary>
-		/// Product required connectors.
-		/// </summary>
-		[DataMember]
-		[Obsolete("Use SupportedPlugins property.")]
-		public bool IsRequiredConnectors { get; set; }
 
 		/// <summary>
 		/// Supported plugins.
@@ -164,13 +146,6 @@
 		/// </summary>
 		[DataMember]
 		public ProductScopes Scope { get; set; }
-
-		/// <summary>
-		/// Type of <see cref="Price"/>.
-		/// </summary>
-		[DataMember]
-		[Obsolete("Use MonthlyPrice, AnnualPrice or LifetimePrice properties.")]
-		public ProductPriceTypes PriceType { get; set; }
 
 		/// <summary>
 		/// Latest version.
@@ -288,10 +263,6 @@
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
-#pragma warning disable CS0618 // Type or member is obsolete
-			destination.IsRequiredConnectors = IsRequiredConnectors;
-			destination.PriceType = PriceType;
-#pragma warning restore CS0618 // Type or member is obsolete
 			destination.SupportedPlugins = SupportedPlugins;
 			destination.ContentType = ContentType;
 			destination.Picture = Picture;
