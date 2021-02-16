@@ -3566,6 +3566,7 @@ namespace StockSharp.Algo
 
 			var transIdMsg = request as ITransactionIdMessage;
 			var isConnect = typeof(TResult) == typeof(ConnectMessage);
+			var resultIsFinish = typeof(TResult) == typeof(SubscriptionFinishedMessage);
 
 			adapter.DoConnect(request is null ? Enumerable.Empty<Message>() : new[] { request }, !isConnect,
 				msg =>
@@ -3575,7 +3576,12 @@ namespace StockSharp.Algo
 						if (origIdMsg.OriginalTransactionId == transIdMsg.TransactionId)
 						{
 							if (msg is TResult resMsg)
+							{
 								retVal.Add(resMsg);
+
+								if (resultIsFinish)
+									return Tuple.Create(true, (Exception)null);
+							}
 							else if (msg is SubscriptionResponseMessage responseMsg && responseMsg.Error != null)
 								return Tuple.Create(true, responseMsg.Error);
 							else if (msg is ErrorMessage errorMsg)

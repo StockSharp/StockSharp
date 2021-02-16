@@ -191,6 +191,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Is trial verified.
+		/// </summary>
+		[DataMember]
+		public bool IsTrialVerified { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="UserInfoMessage"/>.
 		/// </summary>
 		public UserInfoMessage()
@@ -234,6 +240,8 @@ namespace StockSharp.Messages
 
 			if (Permissions?.Count > 0)
 				destination.Permissions.AddRange(Permissions.ToDictionary());
+
+			destination.IsTrialVerified = IsTrialVerified;
 		}
 	}
 }

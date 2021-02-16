@@ -213,6 +213,18 @@
 		public long[] Categories { get; set; }
 
 		/// <summary>
+		/// Is trial allow.
+		/// </summary>
+		[DataMember]
+		public bool IsTrialAllow { get; set; }
+
+		/// <summary>
+		/// Is trial requested.
+		/// </summary>
+		[DataMember]
+		public bool IsTrialRequested { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public ProductInfoMessage()
@@ -276,6 +288,8 @@
 			destination.DiscountAnnualPrice = DiscountAnnualPrice?.Clone();
 			destination.DiscountLifetimePrice = DiscountLifetimePrice?.Clone();
 			destination.Categories = Categories?.ToArray();
+			destination.IsTrialAllow = IsTrialAllow;
+			destination.IsTrialRequested = IsTrialRequested;
 		}
 
 		/// <inheritdoc />
@@ -334,6 +348,12 @@
 
 			if (!IsApproved)
 				str += $",Approved={IsApproved}";
+
+			if (IsTrialAllow)
+				str += $",Trial={IsTrialAllow}";
+
+			if (IsTrialRequested)
+				str += $",Trial_Req={IsTrialRequested}";
 
 			return str;
 		}
