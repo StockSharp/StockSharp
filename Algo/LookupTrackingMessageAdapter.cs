@@ -70,7 +70,12 @@ namespace StockSharp.Algo
 		{
 		}
 
-		private TimeSpan _timeOut = TimeSpan.FromSeconds(10);
+		/// <summary>
+		/// Default lookup timeout.
+		/// </summary>
+		public static readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(10);
+
+		private TimeSpan _timeOut = DefaultTimeOut;
 
 		/// <summary>
 		/// Securities and portfolios lookup timeout.

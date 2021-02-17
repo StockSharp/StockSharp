@@ -782,6 +782,27 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
 
+		private TimeSpan _lookupTrackingTimeout = LookupTrackingMessageAdapter.DefaultTimeOut;
+
+		/// <summary>
+		/// Lookup tracking timeout (<see cref="LookupTrackingMessageAdapter.TimeOut"/>).
+		/// </summary>
+		public TimeSpan LookupTrackingTimeout
+		{
+			get => _lookupTrackingTimeout;
+
+			set
+			{
+				_lookupTrackingTimeout = value.Max(TimeSpan.Zero);
+				Wrappers.ForEach(w =>
+				{
+					var la = w.FindAdapter<LookupTrackingMessageAdapter>();
+					if (la != null)
+						la.TimeOut = _lookupTrackingTimeout;
+				});
+			}
+		}
+
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>
@@ -875,7 +896,7 @@ namespace StockSharp.Algo
 
 			if (SupportLookupTracking)
 			{
-				adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter));
+				adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter) { TimeOut = LookupTrackingTimeout });
 			}
 
 			if (IsSupportTransactionLog)
