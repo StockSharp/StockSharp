@@ -349,9 +349,9 @@ namespace StockSharp.Algo.Testing
 							{
 								var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
 								Process(trades[0], result);
-								info.Item2.AddRange(trades.Skip(1));	
+								info.Item2.AddRange(trades.Skip(1));
 							}
-						
+
 							break;
 						}
 
@@ -643,7 +643,7 @@ namespace StockSharp.Algo.Testing
 				}
 
 				//для чужих FOK заявок необходимо убрать ее из стакана после исполнения своих заявок
-				// [upd] теперь не ставим чужую заявку сразу в стакан, поэтому и удалять не нужно 
+				// [upd] теперь не ставим чужую заявку сразу в стакан, поэтому и удалять не нужно
 				//if (message.TimeInForce == TimeInForce.MatchOrCancel && !message.IsCancelled)
 				//{
 				//	UpdateQuote(new ExecutionMessage
@@ -757,7 +757,7 @@ namespace StockSharp.Algo.Testing
 
 							foreach (var quote in levelQuotes)
 								_messagePool.Free(quote);
-							
+
 							AddTotalVolume(order.Side.Invert(), -qc.Volume);
 						}
 
@@ -854,7 +854,7 @@ namespace StockSharp.Algo.Testing
 
 							result.Add(ToOrder(time, order));
 						}
-							
+
 						if (isMarket)
 						{
 							if (leftBalance > 0)
@@ -862,7 +862,7 @@ namespace StockSharp.Algo.Testing
 								this.AddInfoLog(LocalizedStrings.Str1165Params, order.TransactionId, leftBalance);
 
 								order.OrderState = OrderStates.Done;
-								result.Add(ToOrder(time, order));	
+								result.Add(ToOrder(time, order));
 							}
 						}
 
@@ -1026,7 +1026,7 @@ namespace StockSharp.Algo.Testing
 					//если пришло увеличение объема на уровне, то всегда добавляем в конец очереди, даже для диффа стаканов
 					//var clone = message.TypedClone();
 					var clone = _messagePool.Allocate();
-					
+
 					clone.TransactionId = message.TransactionId;
 					clone.OrderPrice = message.OrderPrice;
 					clone.PortfolioName = message.PortfolioName;
@@ -1200,7 +1200,7 @@ namespace StockSharp.Algo.Testing
 					var board = _parent._boardDefinitions.TryGetValue(_securityId.BoardCode);
 
 					if (board != null)
-						destTimeZone = board.TimeZone;	
+						destTimeZone = board.TimeZone;
 				}
 
 				if (destTimeZone == null)
@@ -1641,7 +1641,7 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		public bool SendInMessage(Message message)
 		{
-			if (message == null) 
+			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
 			var retVal = new List<Message>();
@@ -1796,7 +1796,7 @@ namespace StockSharp.Algo.Testing
 						foreach (var securityEmulator in emulators)
 							securityEmulator.Process(boardMsg, retVal);
 					}
-					
+
 					break;
 				}
 
@@ -1814,7 +1814,7 @@ namespace StockSharp.Algo.Testing
 
 					retVal.Add(pfMsg);
 					//GetPortfolioInfo(pfMsg.PortfolioName);
-					
+
 					break;
 				}
 
@@ -2231,6 +2231,7 @@ namespace StockSharp.Algo.Testing
 		bool? IMessageAdapter.IsPositionsEmulationRequired => null;
 		bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
 		bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
+		TimeSpan? IMessageAdapter.LookupTimeout => null;
 
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);

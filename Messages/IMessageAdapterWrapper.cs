@@ -362,6 +362,8 @@ namespace StockSharp.Messages
 
 		TimeSpan IMessageAdapter.IterationInterval => InnerAdapter.IterationInterval;
 
+		TimeSpan? IMessageAdapter.LookupTimeout => InnerAdapter.LookupTimeout;
+
 		string IMessageAdapter.FeatureName => InnerAdapter.FeatureName;
 
 		/// <inheritdoc />

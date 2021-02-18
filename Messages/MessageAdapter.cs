@@ -579,6 +579,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual TimeSpan? LookupTimeout => null;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool? IsPositionsEmulationRequired => null;
 
 		/// <inheritdoc />

@@ -261,6 +261,11 @@ namespace StockSharp.Messages
 		/// Interval between iterations.
 		/// </summary>
 		TimeSpan IterationInterval { get; }
+
+		/// <summary>
+		/// Lookup timeout.
+		/// </summary>
+		TimeSpan? LookupTimeout { get; }
 	}
 
 	/// <summary>

@@ -70,12 +70,9 @@ namespace StockSharp.Algo
 		{
 		}
 
-		/// <summary>
-		/// Default lookup timeout.
-		/// </summary>
-		public static readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(10);
+		private static readonly TimeSpan _defaultTimeOut = TimeSpan.FromSeconds(10);
 
-		private TimeSpan _timeOut = DefaultTimeOut;
+		private TimeSpan? _timeOut;
 
 		/// <summary>
 		/// Securities and portfolios lookup timeout.
@@ -83,16 +80,10 @@ namespace StockSharp.Algo
 		/// <remarks>
 		/// By default is 10 seconds.
 		/// </remarks>
-		public TimeSpan TimeOut
+		private TimeSpan TimeOut
 		{
-			get => _timeOut;
-			set
-			{
-				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.IntervalMustBePositive);
-
-				_timeOut = value;
-			}
+			get => _timeOut ?? InnerAdapter.LookupTimeout ?? _defaultTimeOut;
+			set => _timeOut = value <= TimeSpan.Zero ? null : value;
 		}
 
 		/// <inheritdoc />
@@ -303,7 +294,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new LookupTrackingMessageAdapter(InnerAdapter.TypedClone()) { TimeOut = TimeOut };
+			return new LookupTrackingMessageAdapter(InnerAdapter.TypedClone()) { _timeOut = _timeOut };
 		}
 	}
 }
