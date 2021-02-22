@@ -211,14 +211,14 @@ namespace StockSharp.Messages
 		public string ObjectId { get; set; }
 
 		[field: NonSerialized]
-		private IDictionary<string, Tuple<string, string>> _parameters = new Dictionary<string, Tuple<string, string>>();
+		private readonly IDictionary<string, (string type, string value)> _parameters = new Dictionary<string, (string type, string value)>();
 
 		/// <summary>
 		/// Parameters.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		public IDictionary<string, Tuple<string, string>> Parameters => _parameters;
+		public IDictionary<string, (string type, string value)> Parameters => _parameters;
 
 		/// <summary>
 		/// Create a copy of <see cref="CommandMessage"/>.

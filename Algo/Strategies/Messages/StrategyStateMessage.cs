@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Statistics.
 		/// </summary>
 		[DataMember]
-		public IDictionary<string, Tuple<string, string>> Statistics { get; private set; } = new Dictionary<string, Tuple<string, string>>();
+		public IDictionary<string, (string, string)> Statistics { get; private set; } = new Dictionary<string, (string, string)>();
 
 		/// <inheritdoc />
 		public override string ToString()

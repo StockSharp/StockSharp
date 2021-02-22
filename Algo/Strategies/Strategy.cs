@@ -2887,7 +2887,7 @@ namespace StockSharp.Algo.Strategies
 				StrategyId = Id,
 				Statistics =
 				{
-					{ paramName, Tuple.Create(typeof(T).FullName, value?.ToString()) }
+					{ paramName, (typeof(T).GetTypeAsString(false), value?.ToString()) }
 				}
 			});
 		}
@@ -2908,7 +2908,7 @@ namespace StockSharp.Algo.Strategies
 
 			foreach (var parameter in Parameters)
 			{
-				msg.Parameters.Add(parameter.Key, Tuple.Create(parameter.Value.Value.GetType().FullName, parameter.Value.Value?.ToString()));
+				msg.Parameters.Add(parameter.Key, (parameter.Value.Value.GetType().GetTypeAsString(false), parameter.Value.Value?.ToString()));
 			}
 
 			return msg;
@@ -2975,14 +2975,14 @@ namespace StockSharp.Algo.Strategies
 
 				case CommandTypes.RegisterOrder:
 				{
-					var secId = parameters.TryGetValue(nameof(Order.Security))?.Item2;
-					var pfName = parameters.TryGetValue(nameof(Order.Portfolio))?.Item2;
-					var side = parameters[nameof(Order.Direction)].Item2.To<Sides>();
-					var volume = parameters[nameof(Order.Volume)].Item2.To<decimal>();
-					var price = parameters.TryGetValue(nameof(Order.Price))?.Item2.To<decimal?>() ?? 0;
-					var comment = parameters.TryGetValue(nameof(Order.Comment))?.Item2;
-					var clientCode = parameters.TryGetValue(nameof(Order.ClientCode))?.Item2;
-					var tif = parameters.TryGetValue(nameof(Order.TimeInForce))?.Item2.To<TimeInForce?>();
+					var secId = parameters.TryGet(nameof(Order.Security));
+					var pfName = parameters.TryGet(nameof(Order.Portfolio));
+					var side = parameters[nameof(Order.Direction)].value.To<Sides>();
+					var volume = parameters[nameof(Order.Volume)].value.To<decimal>();
+					var price = parameters.TryGet(nameof(Order.Price)).To<decimal?>() ?? 0;
+					var comment = parameters.TryGet(nameof(Order.Comment));
+					var clientCode = parameters.TryGet(nameof(Order.ClientCode));
+					var tif = parameters.TryGet(nameof(Order.TimeInForce)).To<TimeInForce?>();
 
 					var order = new Order
 					{
@@ -3003,7 +3003,7 @@ namespace StockSharp.Algo.Strategies
 
 				case CommandTypes.CancelOrder:
 				{
-					var orderId = parameters[nameof(Order.Id)].Item2.To<long>();
+					var orderId = parameters[nameof(Order.Id)].value.To<long>();
 
 					// TODO
 #pragma warning disable 618
@@ -3015,7 +3015,7 @@ namespace StockSharp.Algo.Strategies
 
 				case CommandTypes.ClosePosition:
 				{
-					var slippage = parameters.TryGetValue(nameof(Order.Slippage))?.Item2.To<decimal?>();
+					var slippage = parameters.TryGet(nameof(Order.Slippage)).To<decimal?>();
 
 					this.ClosePosition(slippage ?? 0);
 

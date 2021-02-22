@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Strategy parameters.
 		/// </summary>
 		[DataMember]
-		public IDictionary<string, Tuple<string, string>> Parameters { get; } = new Dictionary<string, Tuple<string, string>>();
+		public IDictionary<string, (string type, string value)> Parameters { get; } = new Dictionary<string, (string type, string value)>();
 
 		/// <summary>
 		/// The creation date.
