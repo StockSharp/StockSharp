@@ -23,19 +23,13 @@
 		{
 		}
 
-		///// <summary>
-		///// Product.
-		///// </summary>
-		//[DataMember]
-		//public long ProductId { get; set; }
-
-		private (string packageId, string version, string releaseNotes)[] _packages = ArrayHelper.Empty<(string packageId, string version, string releaseNotes)>();
+		private (long, string, string, string)[] _packages = ArrayHelper.Empty<(long, string, string, string)>();
 
 		/// <summary>
 		/// Products.
 		/// </summary>
 		[DataMember]
-		public (string packageId, string version, string releaseNotes)[] Packages
+		public (long productId, string version, string releaseNotesEn, string releaseNotesRu)[] Packages
 		{
 			get => _packages;
 			set => _packages = value ?? throw new ArgumentNullException(nameof(value));
@@ -49,8 +43,7 @@
 		{
 			var clone = new ProductPublishMessage
 			{
-				//ProductId = ProductId,
-				Packages = Packages?.ToArray(),
+				Packages = Packages.ToArray(),
 			};
 			CopyTo(clone);
 			return clone;
