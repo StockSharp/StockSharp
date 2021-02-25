@@ -33,6 +33,12 @@
 		public long UserId { get; set; }
 
 		/// <summary>
+		/// Is manager.
+		/// </summary>
+		[DataMember]
+		public bool IsManager { get; set; }
+
+		/// <summary>
 		/// Command.
 		/// </summary>
 		[DataMember]
@@ -52,6 +58,7 @@
 				ProductId = ProductId,
 				UserId = UserId,
 				Command = Command,
+				IsManager = IsManager,
 			};
 			CopyTo(clone);
 			return clone;
