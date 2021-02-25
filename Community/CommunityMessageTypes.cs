@@ -73,6 +73,11 @@
 		public const MessageTypes LicenseInfo = (MessageTypes)(-10002);
 
 		/// <summary>
+		/// <see cref="LicenseFeatureMessage"/>.
+		/// </summary>
+		public const MessageTypes LicenseFeature = (MessageTypes)(-10003);
+
+		/// <summary>
 		/// <see cref="ProductInfoMessage"/>.
 		/// </summary>
 		public static DataType ProductInfoType = DataType.Create(typeof(ProductInfoMessage), null).Immutable();
@@ -91,6 +96,11 @@
 		/// <see cref="LicenseInfoMessage"/>.
 		/// </summary>
 		public static DataType LicenseInfoType = DataType.Create(typeof(LicenseInfoMessage), null).Immutable();
+		
+		/// <summary>
+		/// <see cref="LicenseFeatureMessage"/>.
+		/// </summary>
+		public static DataType LicenseFeatureType = DataType.Create(typeof(LicenseFeatureMessage), null).Immutable();
 
 		/// <summary>
 		/// <see cref="ProductCategoryMessage"/>.
