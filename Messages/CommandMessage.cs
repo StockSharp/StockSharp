@@ -166,6 +166,36 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		Product,
+
+		/// <summary>
+		/// License.
+		/// </summary>
+		[EnumMember]
+		License,
+
+		/// <summary>
+		/// License feature.
+		/// </summary>
+		[EnumMember]
+		LicenseFeature,
+
+		/// <summary>
+		/// Product category.
+		/// </summary>
+		[EnumMember]
+		ProductCategory,
+
+		/// <summary>
+		/// Product permission.
+		/// </summary>
+		[EnumMember]
+		ProductPermission,
+
+		/// <summary>
+		/// Product feedback.
+		/// </summary>
+		[EnumMember]
+		ProductFeedback,
 	}
 
 	/// <summary>

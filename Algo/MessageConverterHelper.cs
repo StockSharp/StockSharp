@@ -1983,10 +1983,6 @@ namespace StockSharp.Algo
 				return new OrderStatusMessage();
 			else if (dataType == DataType.PositionChanges)
 				return new PortfolioLookupMessage();
-			else if (dataType == StrategyDataType.Info)
-				return new StrategyLookupMessage();
-			else if (dataType == StrategyDataType.State)
-				return new StrategyLookupMessage();
 			else if (dataType.IsPortfolio)
 				return new PortfolioMessage();
 			else if (dataType == DataType.SecurityLegs)
@@ -1999,10 +1995,6 @@ namespace StockSharp.Algo
 				return new PortfolioRouteListRequestMessage();
 			else if (dataType == DataType.Command)
 				return new CommandMessage();
-			else if (dataType == CommunityMessageTypes.ProductInfoType)
-				return new ProductLookupMessage();
-			else if (dataType == CommunityMessageTypes.ProductFeedbackType)
-				return new ProductLookupMessage();
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 		}

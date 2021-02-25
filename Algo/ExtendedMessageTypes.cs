@@ -51,10 +51,10 @@
 		/// </summary>
 		public const MessageTypes ChangeTimeInterval = (MessageTypes)(-14);
 
-		/// <summary>
-		/// <see cref="StrategyLookupMessage"/>.
-		/// </summary>
-		public const MessageTypes StrategyLookup = (MessageTypes)(-15);
+		///// <summary>
+		///// <see cref="StrategyLookupMessage"/>.
+		///// </summary>
+		//public const MessageTypes StrategyLookup = (MessageTypes)(-15);
 
 		/// <summary>
 		/// <see cref="StrategyInfoMessage"/>.
