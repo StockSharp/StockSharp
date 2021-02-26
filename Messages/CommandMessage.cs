@@ -5,6 +5,7 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
@@ -239,6 +240,15 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		public string ObjectId { get; set; }
+
+		/// <summary>
+		/// <see cref="ObjectId"/>.
+		/// </summary>
+		public long? ObjectIdLong
+		{
+			get => ObjectId.To<long?>();
+			set => ObjectId = value.To<string>();
+		}
 
 		[field: NonSerialized]
 		private readonly IDictionary<string, (string type, string value)> _parameters = new Dictionary<string, (string type, string value)>();
