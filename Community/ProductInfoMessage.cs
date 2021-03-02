@@ -9,6 +9,44 @@
 	using StockSharp.Messages;
 
 	/// <summary>
+	/// Product info flags.
+	/// </summary>
+	[Flags]
+	[DataContract]
+	public enum ProductInfoFlags
+	{
+		/// <summary>
+		/// None.
+		/// </summary>
+		[EnumMember]
+		None,
+
+		/// <summary>
+		/// Is trial allow.
+		/// </summary>
+		[EnumMember]
+		IsTrialAllow = 1,
+
+		/// <summary>
+		/// Is trial requested.
+		/// </summary>
+		[EnumMember]
+		IsTrialRequested = IsTrialAllow << 1,
+
+		/// <summary>
+		/// Is approved.
+		/// </summary>
+		[EnumMember]
+		IsApproved = IsTrialRequested << 1,
+
+		/// <summary>
+		/// Is refund requested.
+		/// </summary>
+		[EnumMember]
+		IsRefundRequested = IsApproved << 1,
+	}
+
+	/// <summary>
 	/// Product info message.
 	/// </summary>
 	[DataContract]
@@ -173,8 +211,9 @@
 		/// <summary>
 		/// Is approved.
 		/// </summary>
-		[DataMember]
-		public bool IsApproved { get; set; }
+		//[DataMember]
+		[Obsolete]
+		public bool IsApproved => Flags.Contains(ProductInfoFlags.IsApproved);
 
 		/// <summary>
 		/// Stub versions.
@@ -215,14 +254,28 @@
 		/// <summary>
 		/// Is trial allow.
 		/// </summary>
-		[DataMember]
-		public bool IsTrialAllow { get; set; }
+		//[DataMember]
+		[Obsolete]
+		public bool IsTrialAllow => Flags.Contains(ProductInfoFlags.IsTrialAllow);
+
+		/// <summary>
+		/// Is trial requested.
+		/// </summary>
+		//[DataMember]
+		[Obsolete]
+		public bool IsTrialRequested => Flags.Contains(ProductInfoFlags.IsTrialRequested);
 
 		/// <summary>
 		/// Is trial requested.
 		/// </summary>
 		[DataMember]
-		public bool IsTrialRequested { get; set; }
+		public ProductInfoFlags Flags { get; set; }
+
+		/// <summary>
+		/// Purchased till.
+		/// </summary>
+		[DataMember]
+		public DateTimeOffset? PurchasedTill { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductInfoMessage"/>.
@@ -281,15 +334,14 @@
 			destination.Extra = Extra;
 			destination.Scope = Scope;
 			destination.LatestVersion = LatestVersion;
-			destination.IsApproved = IsApproved;
 			destination.StubVersions = StubVersions?.ToArray();
 			destination.Target = Target;
 			destination.DiscountMonthlyPrice = DiscountMonthlyPrice?.Clone();
 			destination.DiscountAnnualPrice = DiscountAnnualPrice?.Clone();
 			destination.DiscountLifetimePrice = DiscountLifetimePrice?.Clone();
 			destination.Categories = Categories?.ToArray();
-			destination.IsTrialAllow = IsTrialAllow;
-			destination.IsTrialRequested = IsTrialRequested;
+			destination.Flags = Flags;
+			destination.PurchasedTill = PurchasedTill;
 		}
 
 		/// <inheritdoc />
@@ -346,14 +398,11 @@
 			if (!LatestVersion.IsEmpty())
 				str += $",Ver={LatestVersion}";
 
-			if (!IsApproved)
-				str += $",Approved={IsApproved}";
+			if (Flags != default)
+				str += $",Flags={Flags}";
 
-			if (IsTrialAllow)
-				str += $",Trial={IsTrialAllow}";
-
-			if (IsTrialRequested)
-				str += $",Trial_Req={IsTrialRequested}";
+			if (PurchasedTill != default)
+				str += $",Purchased={PurchasedTill}";
 
 			return str;
 		}
