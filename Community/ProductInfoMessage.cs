@@ -40,10 +40,16 @@
 		IsApproved = IsTrialRequested << 1,
 
 		/// <summary>
+		/// Is refund allow.
+		/// </summary>
+		[EnumMember]
+		IsRefundAllow = IsApproved << 1,
+
+		/// <summary>
 		/// Is refund requested.
 		/// </summary>
 		[EnumMember]
-		IsRefundRequested = IsApproved << 1,
+		IsRefundRequested = IsRefundAllow << 1,
 	}
 
 	/// <summary>
