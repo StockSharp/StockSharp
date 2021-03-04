@@ -1,4 +1,20 @@
 {
+  "RequestTrial": {
+    "en": "Request trial access",
+    "ru": "Запросить пробный доступ"
+  },
+  "RequestedTrial": {
+    "en": "Trial access was requested",
+    "ru": "Запрошен пробный доступ"
+  },
+  "RequestRefund": {
+    "en": "Request refund",
+    "ru": "Запросить возврат средств"
+  },
+  "RequestedRefund": {
+    "en": "Refund was requested",
+    "ru": "Запрошен возврат средств"
+  },
   "ProductManagers": {
     "en": "Product managers",
     "ru": "Менеджеры продукта"

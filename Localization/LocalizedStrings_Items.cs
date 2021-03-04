@@ -18,6 +18,46 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Trial access was requested
+		/// </summary>
+		public const string RequestedTrialKey = nameof(RequestedTrial);
+
+		/// <summary>
+		/// Trial access was requested
+		/// </summary>
+		public static string RequestedTrial => GetString(RequestedTrialKey);
+
+		/// <summary>
+		/// Refund was requested
+		/// </summary>
+		public const string RequestedRefundKey = nameof(RequestedRefund);
+
+		/// <summary>
+		/// Refund was requested
+		/// </summary>
+		public static string RequestedRefund => GetString(RequestedRefundKey);
+
+		/// <summary>
+		/// Request trial access
+		/// </summary>
+		public const string RequestTrialKey = nameof(RequestTrial);
+
+		/// <summary>
+		/// Request trial access
+		/// </summary>
+		public static string RequestTrial => GetString(RequestTrialKey);
+
+		/// <summary>
+		/// Request refund
+		/// </summary>
+		public const string RequestRefundKey = nameof(RequestRefund);
+
+		/// <summary>
+		/// Request refund
+		/// </summary>
+		public static string RequestRefund => GetString(RequestRefundKey);
+
+		/// <summary>
 		/// Product managers
 		/// </summary>
 		public const string ProductManagersKey = nameof(ProductManagers);
