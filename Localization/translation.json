@@ -1,4 +1,8 @@
 {
+  "ProductManagers": {
+    "en": "Product managers",
+    "ru": "Менеджеры продукта"
+  },
   "NewVersionMustBeGreater": {
     "en": "New version must be greater than current.",
     "ru": "Новая версия должна быть больше текущей."
@@ -52,8 +56,8 @@
     "ru": "Свободный доступ"
   },
   "RestrictedProduct": {
-    "en": "Visible to all, available to selected users",
-    "ru": "Виден всем, доступен выбранным пользователям"
+    "en": "Visible to everyone, available after purchase",
+    "ru": "Виден всем, доступен после покупки"
   },
   "PrivateProduct": {
     "en": "Visible and available to selected users only",

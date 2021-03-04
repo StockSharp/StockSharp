@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Product managers
+		/// </summary>
+		public const string ProductManagersKey = nameof(ProductManagers);
+
+		/// <summary>
+		/// Product managers
+		/// </summary>
+		public static string ProductManagers => GetString(ProductManagersKey);
+
+		/// <summary>
 		/// New connection string
 		/// </summary>
 		public const string NewConnectionStringKey = nameof(NewConnectionString);
@@ -158,12 +168,12 @@ namespace StockSharp.Localization
 		public static string PublicProduct => GetString(PublicProductKey);
 
 		/// <summary>
-		/// Visible to all, available to selected users
+		/// Visible to everyone, available after purchase
 		/// </summary>
 		public const string RestrictedProductKey = nameof(RestrictedProduct);
 
 		/// <summary>
-		/// Visible to all, available to selected users
+		/// Visible to everyone, available after purchase
 		/// </summary>
 		public static string RestrictedProduct => GetString(RestrictedProductKey);
 
