@@ -3453,7 +3453,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, PortfolioLookupMessage criteria)
 			=> positions.Where(p => p.ToChangeMessage().IsMatch(criteria, false));
 
-		private static void DoConnect(this IMessageAdapter adapter, IEnumerable<Message> requests, bool waitResponse, Func<Message, Tuple<bool, Exception>> newMessage)
+		private static void DoConnect(this IMessageAdapter adapter, IEnumerable<Message> requests, bool waitResponse, Func<Message, bool> newMessage)
 		{
 			if (adapter is null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -3488,17 +3488,24 @@ namespace StockSharp.Algo
 
 			adapter.NewOutMessage += msg =>
 			{
-				if (msg is BaseConnectionMessage conMsg)
+				try
 				{
-					newMessage(msg);
-					sync.PulseSignal(conMsg.Error);
-				}
-				else
-				{
-					var tuple = newMessage(msg);
+					if (msg is BaseConnectionMessage conMsg)
+					{
+						newMessage(msg);
+						sync.PulseSignal(conMsg.Error);
+					}
+					else
+					{
+						var done = newMessage(msg);
 
-					if (tuple != null)
-						sync.PulseSignal(tuple.Item2);
+						if (done)
+							sync.PulseSignal();
+					}
+				}
+				catch (Exception e)
+				{
+					sync.PulseSignal(e);
 				}
 			};
 
@@ -3549,7 +3556,7 @@ namespace StockSharp.Algo
 		public static void Upload<TMessage>(this IMessageAdapter adapter, IEnumerable<TMessage> messages)
 			where TMessage : Message
 		{
-			adapter.DoConnect(messages,	false, msg => null);
+			adapter.DoConnect(messages,	false, _ => false);
 		}
 
 		/// <summary>
@@ -3565,36 +3572,39 @@ namespace StockSharp.Algo
 			var retVal = new List<TResult>();
 
 			var transIdMsg = request as ITransactionIdMessage;
-			var isConnect = typeof(TResult) == typeof(ConnectMessage);
-			var resultIsFinish = typeof(TResult) == typeof(SubscriptionFinishedMessage);
+			var resultIsConnect = typeof(TResult) == typeof(ConnectMessage);
+			var resultIsOrigIdMsg = typeof(IOriginalTransactionIdMessage).IsAssignableFrom(typeof(TResult));
 
-			adapter.DoConnect(request is null ? Enumerable.Empty<Message>() : new[] { request }, !isConnect,
-				msg =>
-				{
-					if (transIdMsg != null && msg is IOriginalTransactionIdMessage origIdMsg)
-					{
-						if (origIdMsg.OriginalTransactionId == transIdMsg.TransactionId)
-						{
-							if (msg is TResult resMsg)
-							{
-								retVal.Add(resMsg);
+			bool TransactionMessageHandler(ITransactionIdMessage req, IOriginalTransactionIdMessage resp)
+			{
+				if (resp.OriginalTransactionId != req.TransactionId)
+					return false;
 
-								if (resultIsFinish)
-									return Tuple.Create(true, (Exception)null);
-							}
-							else if (msg is SubscriptionResponseMessage responseMsg && responseMsg.Error != null)
-								return Tuple.Create(true, responseMsg.Error);
-							else if (msg is ErrorMessage errorMsg)
-								return Tuple.Create(true, errorMsg.Error);
-							else if (msg is SubscriptionFinishedMessage)
-								return Tuple.Create(true, (Exception)null);
-						}
-					}
-					else if (isConnect && msg is TResult resMsg)
-						retVal.Add(resMsg);
+				if (resp is TResult resMsg)
+					retVal.Add(resMsg);
 
-					return null;
-				});
+				var err = (resp as SubscriptionResponseMessage)?.Error ??
+				          (resp as ErrorMessage)?.Error;
+
+				if (err != null)
+					throw err;
+
+				return resp is SubscriptionFinishedMessage;
+			}
+
+			bool OtherMessageHandler(Message msg)
+			{
+				if (msg is TResult resMsg)
+					retVal.Add(resMsg);
+
+				if (msg is IErrorMessage errMsg && errMsg.Error != null)
+					throw errMsg.Error;
+
+				return msg is SubscriptionFinishedMessage;
+			}
+
+			adapter.DoConnect(request is null ? Enumerable.Empty<Message>() : new[] { request }, !resultIsConnect,
+				msg => transIdMsg != null && resultIsOrigIdMsg ? msg is IOriginalTransactionIdMessage origIdMsg && TransactionMessageHandler(transIdMsg, origIdMsg) : OtherMessageHandler(msg));
 
 			return retVal;
 		}
