@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Categories
+		/// </summary>
+		public const string CategoriesKey = nameof(Categories);
+
+		/// <summary>
+		/// Categories
+		/// </summary>
+		public static string Categories => GetString(CategoriesKey);
+
+		/// <summary>
+		/// Content type
+		/// </summary>
+		public const string ContentTypeKey = nameof(ContentType);
+
+		/// <summary>
+		/// Content type
+		/// </summary>
+		public static string ContentType => GetString(ContentTypeKey);
+
+		/// <summary>
 		/// Trial access was requested
 		/// </summary>
 		public const string RequestedTrialKey = nameof(RequestedTrial);

@@ -1,4 +1,12 @@
 {
+  "Categories": {
+    "en": "Categories",
+    "ru": "Категории"
+  },
+  "ContentType": {
+    "en": "Content type",
+    "ru": "Тип контента"
+  },
   "RequestTrial": {
     "en": "Request trial access",
     "ru": "Запросить пробный доступ"
