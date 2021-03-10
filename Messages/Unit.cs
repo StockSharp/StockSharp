@@ -196,20 +196,14 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
-		public static implicit operator Unit(decimal value)
-		{
-			return new Unit(value);
-		}
+		public static implicit operator Unit(decimal value) => new Unit(value);
 
 		/// <summary>
 		/// Cast <see cref="int"/> object to the type <see cref="Unit"/>.
 		/// </summary>
 		/// <param name="value"><see cref="int"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
-		public static implicit operator Unit(int value)
-		{
-			return new Unit(value);
-		}
+		public static implicit operator Unit(int value) => new Unit(value);
 
 		/// <summary>
 		/// Cast object from <see cref="Unit"/> to <see cref="decimal"/>.
@@ -265,10 +259,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="value"><see cref="double"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
-		public static implicit operator Unit(double value)
-		{
-			return (decimal)value;
-		}
+		public static implicit operator Unit(double value) => (decimal)value;
 
 		/// <summary>
 		/// Cast object from <see cref="Unit"/> to <see cref="double"/>.
@@ -437,10 +428,7 @@ namespace StockSharp.Messages
 		/// Get the hash code of the object <see cref="Unit"/>.
 		/// </summary>
 		/// <returns>A hash code.</returns>
-		public override int GetHashCode()
-		{
-			return Type.GetHashCode() ^ Value.GetHashCode();
-		}
+		public override int GetHashCode() => Type.GetHashCode() ^ Value.GetHashCode();
 
 		private bool? EqualsImpl(Unit other)
 		{
@@ -488,20 +476,14 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="other">Another value with which to compare.</param>
 		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-		protected override bool OnEquals(Unit other)
-		{
-			return EqualsImpl(other) == true;
-		}
+		protected override bool OnEquals(Unit other) => EqualsImpl(other) == true;
 
 		/// <summary>
 		/// Compare <see cref="Unit"/> on the equivalence.
 		/// </summary>
 		/// <param name="other">Another value with which to compare.</param>
 		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-		public override bool Equals(object other)
-		{
-			return base.Equals(other);
-		}
+		public override bool Equals(object other) => base.Equals(other);
 
 		/// <summary>
 		/// Compare two values in the inequality (if the value of different types, the conversion will be used).
@@ -689,10 +671,7 @@ namespace StockSharp.Messages
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>
 		/// <returns><see langword="true" />, if the first value is greater than the second, <see langword="false" />.</returns>
-		public static bool operator >(Unit u1, Unit u2)
-		{
-			return MoreThan(u1, u2) == true;
-		}
+		public static bool operator >(Unit u1, Unit u2) => MoreThan(u1, u2) == true;
 
 		/// <summary>
 		/// Check whether the first value is greater than or equal to the second.
@@ -700,10 +679,7 @@ namespace StockSharp.Messages
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>
 		/// <returns><see langword="true" />, if the first value is greater than or equal the second, otherwise, <see langword="false" />.</returns>
-		public static bool operator >=(Unit u1, Unit u2)
-		{
-			return u1 == u2 || u1 > u2;
-		}
+		public static bool operator >=(Unit u1, Unit u2) => u1 == u2 || u1 > u2;
 
 		/// <summary>
 		/// Check whether the first value is less than the second.
@@ -711,10 +687,7 @@ namespace StockSharp.Messages
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>
 		/// <returns><see langword="true" />, if the first value is less than the second, <see langword="false" />.</returns>
-		public static bool operator <(Unit u1, Unit u2)
-		{
-			return MoreThan(u2, u1) == true;
-		}
+		public static bool operator <(Unit u1, Unit u2) => MoreThan(u2, u1) == true;
 
 		/// <summary>
 		/// Check whether the first value is less than or equal to the second.
@@ -722,10 +695,7 @@ namespace StockSharp.Messages
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>
 		/// <returns><see langword="true" />, if the first value is less than or equal to the second, <see langword="false" />.</returns>
-		public static bool operator <=(Unit u1, Unit u2)
-		{
-			return u1 == u2 || MoreThan(u2, u1) == true;
-		}
+		public static bool operator <=(Unit u1, Unit u2) => u1 == u2 || MoreThan(u2, u1) == true;
 
 		/// <summary>
 		/// Get the value with the opposite sign from the value <see cref="Unit.Value"/>.
@@ -745,25 +715,10 @@ namespace StockSharp.Messages
 			};
 		}
 
-		Unit IOperable<Unit>.Add(Unit other)
-		{
-			return this + other;
-		}
-
-		Unit IOperable<Unit>.Subtract(Unit other)
-		{
-			return this - other;
-		}
-
-		Unit IOperable<Unit>.Multiply(Unit other)
-		{
-			return this * other;
-		}
-
-		Unit IOperable<Unit>.Divide(Unit other)
-		{
-			return this / other;
-		}
+		Unit IOperable<Unit>.Add(Unit other) => this + other;
+		Unit IOperable<Unit>.Subtract(Unit other) => this - other;
+		Unit IOperable<Unit>.Multiply(Unit other) => this * other;
+		Unit IOperable<Unit>.Divide(Unit other) => this / other;
 
 		/// <summary>
 		/// Load settings.
@@ -796,30 +751,21 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="value"><see cref="int"/> value.</param>
 		/// <returns>Percents.</returns>
-		public static Unit Percents(this int value)
-		{
-			return Percents((decimal)value);
-		}
+		public static Unit Percents(this int value) => Percents((decimal)value);
 
 		/// <summary>
 		/// Convert the <see cref="double"/> to percents.
 		/// </summary>
 		/// <param name="value"><see cref="double"/> value.</param>
 		/// <returns>Percents.</returns>
-		public static Unit Percents(this double value)
-		{
-			return Percents((decimal)value);
-		}
+		public static Unit Percents(this double value) => Percents((decimal)value);
 
 		/// <summary>
 		/// Convert the <see cref="decimal"/> to percents.
 		/// </summary>
 		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Percents.</returns>
-		public static Unit Percents(this decimal value)
-		{
-			return new Unit(value, UnitTypes.Percent);
-		}
+		public static Unit Percents(this decimal value) => new Unit(value, UnitTypes.Percent);
 
 		/// <summary>
 		/// Convert string to <see cref="Unit"/>.
