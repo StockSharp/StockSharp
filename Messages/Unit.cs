@@ -216,7 +216,36 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="unit">Object <see cref="Unit"/>.</param>
 		/// <returns><see cref="decimal"/> value.</returns>
-		public static explicit operator decimal(Unit unit) => (decimal?) unit ?? 0m;
+		public static explicit operator decimal(Unit unit)
+		{
+			if (unit is null)
+				throw new ArgumentNullException(nameof(unit));
+
+			switch (unit.Type)
+			{
+				case UnitTypes.Limit:
+				case UnitTypes.Absolute:
+					return unit.Value;
+				case UnitTypes.Percent:
+					throw new ArgumentException(LocalizedStrings.PercentagesConvert, nameof(unit));
+				case UnitTypes.Point:
+					var point = unit.GetTypeValue?.Invoke(unit.Type);
+
+					if (point is null)
+						throw new InvalidOperationException(LocalizedStrings.Str2925);
+
+					return unit.Value * point.Value;
+				case UnitTypes.Step:
+					var step = unit.GetTypeValue?.Invoke(unit.Type);
+
+					if (step is null)
+						throw new InvalidOperationException(LocalizedStrings.Str2925);
+
+					return unit.Value * step.Value;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.Str1219);
+			}
+		}
 
 		/// <summary>
 		/// Cast object from <see cref="Unit"/> to nullable <see cref="decimal"/>.
@@ -225,22 +254,10 @@ namespace StockSharp.Messages
 		/// <returns><see cref="decimal"/> value.</returns>
 		public static explicit operator decimal?(Unit unit)
 		{
-			switch (unit?.Type)
-			{
-				case null:
-					return null;
-				case UnitTypes.Limit:
-				case UnitTypes.Absolute:
-					return unit.Value;
-				case UnitTypes.Percent:
-					throw new ArgumentException(LocalizedStrings.PercentagesConvert, nameof(unit));
-				case UnitTypes.Point:
-					return unit.Value * unit.GetTypeValue?.Invoke(unit.Type);
-				case UnitTypes.Step:
-					return unit.Value * unit.GetTypeValue?.Invoke(unit.Type);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.Str1219);
-			}
+			if (unit is null)
+				return null;
+
+			return (decimal)unit;
 		}
 
 		/// <summary>
@@ -260,7 +277,10 @@ namespace StockSharp.Messages
 		/// <returns><see cref="double"/> value.</returns>
 		public static explicit operator double(Unit unit)
 		{
-			return ((double?)unit).Value;
+			if (unit is null)
+				throw new ArgumentNullException(nameof(unit));
+
+			return (double)(decimal)unit;
 		}
 
 		/// <summary>
@@ -270,7 +290,10 @@ namespace StockSharp.Messages
 		/// <returns><see cref="double"/> value.</returns>
 		public static explicit operator double?(Unit unit)
 		{
-			return (double?)(decimal?)unit;
+			if (unit is null)
+				return null;
+
+			return (double)unit;
 		}
 
 		private decimal SafeGetTypeValue(Func<UnitTypes, decimal?> getTypeValue)
@@ -625,10 +648,10 @@ namespace StockSharp.Messages
 		private static bool? MoreThan(Unit u1, Unit u2)
 		{
 			if (u1 is null)
-				throw new ArgumentNullException(nameof(u1));
+				return null;
 
 			if (u2 is null)
-				throw new ArgumentNullException(nameof(u2));
+				return null;
 
 			//if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
 			//	throw new ArgumentException("Limit value cannot be modified while arithmetics operations.");
