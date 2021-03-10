@@ -216,10 +216,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="unit">Object <see cref="Unit"/>.</param>
 		/// <returns><see cref="decimal"/> value.</returns>
-		public static explicit operator decimal(Unit unit)
-		{
-			return ((decimal?)unit).Value;
-		}
+		public static explicit operator decimal(Unit unit) => (decimal?) unit ?? 0m;
 
 		/// <summary>
 		/// Cast object from <see cref="Unit"/> to nullable <see cref="decimal"/>.
@@ -228,11 +225,10 @@ namespace StockSharp.Messages
 		/// <returns><see cref="decimal"/> value.</returns>
 		public static explicit operator decimal?(Unit unit)
 		{
-			if (unit is null)
-				throw new ArgumentNullException(nameof(unit));
-
-			switch (unit.Type)
+			switch (unit?.Type)
 			{
+				case null:
+					return null;
 				case UnitTypes.Limit:
 				case UnitTypes.Absolute:
 					return unit.Value;
