@@ -1,4 +1,24 @@
 {
+  "PublishSelectContentFile": {
+    "en": "Select content file you want to publish",
+    "ru": "Выберите файл контента для публикации"
+  },
+  "PublishSelectProjectSolutionFolder": {
+    "en": "Select project/solution folder you want to publish",
+    "ru": "Выберите папку с проектом или решением для публикации"
+  },
+  "PublishSelectFolder": {
+    "en": "Select folder you want to publish",
+    "ru": "Выберите папку для публикации"
+  },
+  "FoundProjectsSolutionsParams": {
+    "en": "Found {0} solutions, {1} projects",
+    "ru": "Найдено {0} решений, {1} проектов"
+  },
+  "TotalFilesParams": {
+    "en": "{2} files total",
+    "ru": "Всего {2} файлов"
+  },
   "Categories": {
     "en": "Categories",
     "ru": "Категории"

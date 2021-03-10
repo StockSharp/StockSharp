@@ -18,6 +18,56 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Select content file you want to publish
+		/// </summary>
+		public const string PublishSelectContentFileKey = nameof(PublishSelectContentFile);
+
+		/// <summary>
+		/// Select content file you want to publish
+		/// </summary>
+		public static string PublishSelectContentFile => GetString(PublishSelectContentFileKey);
+
+		/// <summary>
+		/// Select project/solution folder you want to publish
+		/// </summary>
+		public const string PublishSelectProjectSolutionFolderKey = nameof(PublishSelectProjectSolutionFolder);
+
+		/// <summary>
+		/// Select project/solution folder you want to publish
+		/// </summary>
+		public static string PublishSelectProjectSolutionFolder => GetString(PublishSelectProjectSolutionFolderKey);
+
+		/// <summary>
+		/// Select folder you want to publish
+		/// </summary>
+		public const string PublishSelectFolderKey = nameof(PublishSelectFolder);
+
+		/// <summary>
+		/// Select folder you want to publish
+		/// </summary>
+		public static string PublishSelectFolder => GetString(PublishSelectFolderKey);
+
+		/// <summary>
+		/// Found {0} solutions, {1} projects
+		/// </summary>
+		public const string FoundProjectsSolutionsParamsKey = nameof(FoundProjectsSolutionsParams);
+
+		/// <summary>
+		/// Found {0} solutions, {1} projects
+		/// </summary>
+		public static string FoundProjectsSolutionsParams => GetString(FoundProjectsSolutionsParamsKey);
+
+		/// <summary>
+		/// {2} files total
+		/// </summary>
+		public const string TotalFilesParamsKey = nameof(TotalFilesParams);
+
+		/// <summary>
+		/// {2} files total
+		/// </summary>
+		public static string TotalFilesParams => GetString(TotalFilesParamsKey);
+
+		/// <summary>
 		/// Categories
 		/// </summary>
 		public const string CategoriesKey = nameof(Categories);
