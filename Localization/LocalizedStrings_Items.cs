@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// The product was not yet approved
+		/// </summary>
+		public const string ProductIsNotApprovedKey = nameof(ProductIsNotApproved);
+
+		/// <summary>
+		/// The product was not yet approved
+		/// </summary>
+		public static string ProductIsNotApproved => GetString(ProductIsNotApprovedKey);
+
+		/// <summary>
 		/// Select content file you want to publish
 		/// </summary>
 		public const string PublishSelectContentFileKey = nameof(PublishSelectContentFile);
@@ -58,12 +68,12 @@ namespace StockSharp.Localization
 		public static string FoundProjectsSolutionsParams => GetString(FoundProjectsSolutionsParamsKey);
 
 		/// <summary>
-		/// {2} files total
+		/// {0} files total
 		/// </summary>
 		public const string TotalFilesParamsKey = nameof(TotalFilesParams);
 
 		/// <summary>
-		/// {2} files total
+		/// {0} files total
 		/// </summary>
 		public static string TotalFilesParams => GetString(TotalFilesParamsKey);
 

@@ -1,4 +1,8 @@
 {
+  "ProductIsNotApproved": {
+    "en": "The product was not yet approved",
+    "ru": "Этот продукт еще не одобрен"
+  },
   "PublishSelectContentFile": {
     "en": "Select content file you want to publish",
     "ru": "Выберите файл контента для публикации"
@@ -16,8 +20,8 @@
     "ru": "Найдено {0} решений, {1} проектов"
   },
   "TotalFilesParams": {
-    "en": "{2} files total",
-    "ru": "Всего {2} файлов"
+    "en": "{0} files total",
+    "ru": "Всего {0} файлов"
   },
   "Categories": {
     "en": "Categories",
