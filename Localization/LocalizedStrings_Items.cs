@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// How to install?
+		/// </summary>
+		public const string HowToInstallKey = nameof(HowToInstall);
+
+		/// <summary>
+		/// How to install?
+		/// </summary>
+		public static string HowToInstall => GetString(HowToInstallKey);
+
+		/// <summary>
+		/// Click to learn how to use this connector in your own projects
+		/// </summary>
+		public const string HowToUseConnectorKey = nameof(HowToUseConnector);
+
+		/// <summary>
+		/// Click to learn how to use this connector in your own projects
+		/// </summary>
+		public static string HowToUseConnector => GetString(HowToUseConnectorKey);
+
+		/// <summary>
 		/// The product was not yet approved
 		/// </summary>
 		public const string ProductIsNotApprovedKey = nameof(ProductIsNotApproved);

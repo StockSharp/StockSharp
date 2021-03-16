@@ -1,4 +1,12 @@
 {
+  "HowToInstall": {
+    "en": "How to install?",
+    "ru": "Как установить?"
+  },
+  "HowToUseConnector": {
+    "en": "Click to learn how to use this connector in your own projects",
+    "ru": "Нажмите чтобы узнать как можно использовать этот коннектор в ваших проектах"
+  },
   "ProductIsNotApproved": {
     "en": "The product was not yet approved",
     "ru": "Этот продукт еще не одобрен"
