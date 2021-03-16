@@ -141,24 +141,23 @@
 		/// Price for renew.
 		/// </summary>
 		[DataMember]
-		[Obsolete("Use RenewMonthlyPrice or RenewAnnualPrice properties.")]
-		public Currency RenewPrice
-		{
-			get => RenewMonthlyPrice;
-			set => RenewMonthlyPrice = value;
-		}
+		public Currency RenewPrice { get; set; }
 
 		/// <summary>
 		/// Price for monthly renew.
 		/// </summary>
 		[DataMember]
-		public Currency RenewMonthlyPrice { get; set; }
+		[Obsolete]
+		// ReSharper disable once ValueParameterNotUsed
+		public Currency RenewMonthlyPrice { get => RenewPrice; set { } }
 
 		/// <summary>
 		/// Price for annual renew.
 		/// </summary>
 		[DataMember]
-		public Currency RenewAnnualPrice { get; set; }
+		[Obsolete]
+		// ReSharper disable once ValueParameterNotUsed
+		public Currency RenewAnnualPrice { get => RenewPrice; set { } }
 
 		/// <summary>
 		/// Download count.
@@ -329,8 +328,7 @@
 			destination.MonthlyPrice = MonthlyPrice?.Clone();
 			destination.AnnualPrice = AnnualPrice?.Clone();
 			destination.LifetimePrice = LifetimePrice?.Clone();
-			destination.RenewMonthlyPrice = RenewMonthlyPrice?.Clone();
-			destination.RenewAnnualPrice = RenewAnnualPrice?.Clone();
+			destination.RenewPrice = RenewPrice?.Clone();
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
@@ -373,14 +371,17 @@
 			if (Author != 0)
 				str += $",Author={Author}";
 
-			if (MonthlyPrice != null)
-				str += $",Monthly={MonthlyPrice} ({RenewMonthlyPrice})";
+			if (MonthlyPrice != null || DiscountMonthlyPrice != null)
+				str += $",Monthly={MonthlyPrice} (disc={DiscountMonthlyPrice})";
 
-			if (AnnualPrice != null)
-				str += $",Annual={AnnualPrice} ({RenewAnnualPrice})";
+			if (AnnualPrice != null || DiscountAnnualPrice != null)
+				str += $",Annual={AnnualPrice} (disc={DiscountAnnualPrice})";
 
-			if (LifetimePrice != null)
-				str += $",Life={LifetimePrice}";
+			if (LifetimePrice != null || DiscountLifetimePrice != null)
+				str += $",Life={LifetimePrice} (disc={DiscountLifetimePrice})";
+
+			if (RenewPrice != null)
+				str += $",Renew={RenewPrice}";
 
 			str += $",Downloads={DownloadCount}";
 
