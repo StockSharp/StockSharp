@@ -50,6 +50,12 @@
 		/// </summary>
 		[EnumMember]
 		IsRefundRequested = IsRefundAllow << 1,
+
+		/// <summary>
+		/// Was purchased before.
+		/// </summary>
+		[EnumMember]
+		WasPurchased = IsRefundRequested << 1,
 	}
 
 	/// <summary>
@@ -147,17 +153,13 @@
 		/// Price for monthly renew.
 		/// </summary>
 		[DataMember]
-		[Obsolete]
-		// ReSharper disable once ValueParameterNotUsed
-		public Currency RenewMonthlyPrice { get => RenewPrice; set { } }
+		public Currency RenewMonthlyPrice { get; set; }
 
 		/// <summary>
 		/// Price for annual renew.
 		/// </summary>
 		[DataMember]
-		[Obsolete]
-		// ReSharper disable once ValueParameterNotUsed
-		public Currency RenewAnnualPrice { get => RenewPrice; set { } }
+		public Currency RenewAnnualPrice { get; set; }
 
 		/// <summary>
 		/// Download count.
@@ -329,6 +331,8 @@
 			destination.AnnualPrice = AnnualPrice?.Clone();
 			destination.LifetimePrice = LifetimePrice?.Clone();
 			destination.RenewPrice = RenewPrice?.Clone();
+			destination.RenewMonthlyPrice = RenewMonthlyPrice?.Clone();
+			destination.RenewAnnualPrice = RenewAnnualPrice?.Clone();
 			destination.DownloadCount = DownloadCount;
 			destination.Rating = Rating;
 			destination.DocUrl = DocUrl;
@@ -371,11 +375,11 @@
 			if (Author != 0)
 				str += $",Author={Author}";
 
-			if (MonthlyPrice != null || DiscountMonthlyPrice != null)
-				str += $",Monthly={MonthlyPrice} (disc={DiscountMonthlyPrice})";
+			if (MonthlyPrice != null || DiscountMonthlyPrice != null || RenewMonthlyPrice != null)
+				str += $",Monthly={MonthlyPrice},renew={RenewMonthlyPrice},disc={DiscountMonthlyPrice}";
 
-			if (AnnualPrice != null || DiscountAnnualPrice != null)
-				str += $",Annual={AnnualPrice} (disc={DiscountAnnualPrice})";
+			if (AnnualPrice != null || DiscountAnnualPrice != null || RenewAnnualPrice != null)
+				str += $",Annual={AnnualPrice},renew={RenewAnnualPrice},disc={DiscountAnnualPrice}";
 
 			if (LifetimePrice != null || DiscountLifetimePrice != null)
 				str += $",Life={LifetimePrice} (disc={DiscountLifetimePrice})";
