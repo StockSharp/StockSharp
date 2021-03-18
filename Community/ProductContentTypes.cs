@@ -109,6 +109,13 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AccountKey)]
 		Account,
+
+		/// <summary>
+		/// Freelance.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FreelanceKey)]
+		Freelance,
 	}
 
 	/// <summary>
@@ -215,5 +222,12 @@ namespace StockSharp.Community
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AccountKey)]
 		Account = Development << 1,
+
+		/// <summary>
+		/// Freelance.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FreelanceKey)]
+		Freelance = Account << 1,
 	}
 }

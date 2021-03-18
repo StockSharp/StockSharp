@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Freelance
+		/// </summary>
+		public const string FreelanceKey = nameof(Freelance);
+
+		/// <summary>
+		/// Freelance
+		/// </summary>
+		public static string Freelance => GetString(FreelanceKey);
+
+		/// <summary>
 		/// How to install?
 		/// </summary>
 		public const string HowToInstallKey = nameof(HowToInstall);
