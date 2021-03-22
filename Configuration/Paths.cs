@@ -158,16 +158,38 @@
 		/// <summary>
 		/// Get user url.
 		/// </summary>
-		/// <param name="userId">User id.</param>
+		/// <param name="userId">Identifier.</param>
 		/// <returns>Localized url.</returns>
 		public static string GetUserUrl(long userId) => $"{GetWebSiteUrl()}/users/{userId}/";
 
 		/// <summary>
 		/// Get strategy url.
 		/// </summary>
-		/// <param name="robotId">The strategy identifier.</param>
+		/// <param name="robotId">Identifier.</param>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetRobotLink(long robotId) => $"{GetWebSiteUrl()}/robot/{robotId}/";
+
+		/// <summary>
+		/// Get produdct url.
+		/// </summary>
+		/// <param name="productId">Identifier.</param>
+		/// <returns>Localized url.</returns>
+		public static string GetProductLink(object productId) => $"{GetWebSiteUrl()}/store/{productId}/";
+
+		/// <summary>
+		/// Get topic url.
+		/// </summary>
+		/// <param name="topicId">Identifier.</param>
+		/// <returns>Localized url.</returns>
+		public static string GetTopicLink(long topicId) => $"{GetWebSiteUrl()}/topic/{topicId}/";
+
+		/// <summary>
+		/// Get message url.
+		/// </summary>
+		/// <param name="messageId">Identifier.</param>
+		/// <returns>Localized url.</returns>
+		public static string GetMessageLink(long messageId) => $"{GetWebSiteUrl()}/posts/m/{messageId}/";
 
 		/// <summary>
 		/// Get file url.
