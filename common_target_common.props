@@ -24,7 +24,6 @@
     <ConnectorsGitLabPath>$(RepoGitLabPath)Connectors\</ConnectorsGitLabPath>
     <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
-    <BeforeTargetsInDesignTime>ResolveReferences;BeforeBuild</BeforeTargetsInDesignTime>
   </PropertyGroup>
   <PropertyGroup>
     <!-- TODO this needs to be removed when connectors fixed to NO_LICENSE constant -->
@@ -53,43 +52,4 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <StockSharpNoStubConnectors Include="AlfaDirect"/>
-    <StockSharpNoStubConnectors Include="AlorHistory"/>
-    <StockSharpNoStubConnectors Include="AlphaVantage"/>
-    <StockSharpNoStubConnectors Include="BarChart"/>
-    <StockSharpNoStubConnectors Include="Cqg.Com"/>
-    <StockSharpNoStubConnectors Include="Cqg.Continuum"/>
-    <StockSharpNoStubConnectors Include="CSV"/>
-    <StockSharpNoStubConnectors Include="DukasCopy"/>
-    <StockSharpNoStubConnectors Include="ETrade"/>
-    <StockSharpNoStubConnectors Include="Finam"/>
-    <StockSharpNoStubConnectors Include="FinViz"/>
-    <StockSharpNoStubConnectors Include="Fix"/>
-    <StockSharpNoStubConnectors Include="Fxcm"/>
-    <StockSharpNoStubConnectors Include="Google"/>
-    <StockSharpNoStubConnectors Include="IEX"/>
-    <StockSharpNoStubConnectors Include="InteractiveBrokers"/>
-    <StockSharpNoStubConnectors Include="IQFeed"/>
-    <StockSharpNoStubConnectors Include="ITCH"/>
-    <StockSharpNoStubConnectors Include="LMAX"/>
-    <StockSharpNoStubConnectors Include="Mfd"/>
-    <StockSharpNoStubConnectors Include="Micex"/>
-    <StockSharpNoStubConnectors Include="Oanda"/>
-    <StockSharpNoStubConnectors Include="Plaza"/>
-    <StockSharpNoStubConnectors Include="Quandl"/>
-    <StockSharpNoStubConnectors Include="Quik"/>
-    <StockSharpNoStubConnectors Include="Rithmic"/>
-    <StockSharpNoStubConnectors Include="Rss"/>
-    <StockSharpNoStubConnectors Include="SmartCom"/>
-    <StockSharpNoStubConnectors Include="SpbEx"/>
-    <StockSharpNoStubConnectors Include="Sterling"/>
-    <StockSharpNoStubConnectors Include="Tradier"/>
-    <StockSharpNoStubConnectors Include="Transaq"/>
-    <StockSharpNoStubConnectors Include="Twime"/>
-    <StockSharpNoStubConnectors Include="UkrExh"/>
-    <StockSharpNoStubConnectors Include="Xignite"/>
-    <StockSharpNoStubConnectors Include="Yahoo"/>
-  </ItemGroup>
 </Project>
