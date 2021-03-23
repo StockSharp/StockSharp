@@ -46,7 +46,7 @@
     <ProjectReference Include="$(ConnectorsGitLabPath)FatBTC\FatBTC.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Finam\Finam.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)FinViz\FinViz.csproj" />
-    <ProjectReference Include="$(ConnectorsGitLabPath)Fix\Fix.csproj" />
+    <ProjectReference Include="$(ConnectorsAppsPath)Fix\Fix.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Fxcm\Fxcm.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Gdax\Gdax.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Google\Google.csproj" />
