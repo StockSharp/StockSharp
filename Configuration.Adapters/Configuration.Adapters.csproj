@@ -6,12 +6,13 @@
     <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="$(ConnectorsAppsPath)Binance\Binance.csproj" />
+    <ProjectReference Include="$(ConnectorsAppsPath)Okex\Okex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlfaDirect\AlfaDirect.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlorHistory\AlorHistory.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlphaVantage\AlphaVantage.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)BarChart\BarChart.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Bibox\Bibox.csproj" />
-    <ProjectReference Include="$(ConnectorsGitLabPath)Binance\Binance.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Bitalong\Bitalong.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Bitbank\Bitbank.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Bitexbook\Bitexbook.csproj" />
@@ -69,7 +70,6 @@
     <ProjectReference Include="$(ConnectorsGitLabPath)Micex\Micex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Oanda\Oanda.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Okcoin\Okcoin.csproj" />
-    <ProjectReference Include="$(ConnectorsGitLabPath)Okex\Okex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Plaza\Plaza.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Poloniex\Poloniex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)PrizmBit\PrizmBit.csproj" />
