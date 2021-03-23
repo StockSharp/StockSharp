@@ -1,97 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common.props" />
+  <Import Project="$(ConnectorsStubPath)\stub_connectors.props" />
   <PropertyGroup>
     <ProjectGuid>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</ProjectGuid>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
     <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlorHistory\AlorHistory.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlphaVantage\AlphaVantage.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bibox\Bibox.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Binance\Binance.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitalong\Bitalong.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitbank\Bitbank.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitexbook\Bitexbook.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitfinex\Bitfinex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bithumb\Bithumb.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitMax\BitMax.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitmex\Bitmex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitStamp\BitStamp.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bittrex\Bittrex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitZ\BitZ.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Btce\Btce.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BW\BW.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cex\Cex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coinbase\Coinbase.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinBene\CoinBene.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinCap\CoinCap.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coincheck\Coincheck.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinExchange\CoinExchange.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinEx\CoinEx.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CoinHub\CoinHub.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coinigy\Coinigy.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cqg.Com\Cqg.Com.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cqg.Continuum\Cqg.Continuum.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cryptopia\Cryptopia.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CSV\CSV.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Deribit\Deribit.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Digifinex\Digifinex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\DukasCopy\DukasCopy.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ETrade\ETrade.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Exmo\Exmo.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\FatBTC\FatBTC.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Finam\Finam.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\FinViz\FinViz.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fix\Fix.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fxcm\Fxcm.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Gdax\Gdax.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Google\Google.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Gopax\Gopax.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\HitBtc\HitBtc.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Hotbit\Hotbit.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Huobi\Huobi.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Idax\Idax.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IEX\IEX.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\InteractiveBrokers\InteractiveBrokers.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IQFeed\IQFeed.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ITCH\ITCH.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kraken\Kraken.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kucoin\Kucoin.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LATOKEN\LATOKEN.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LBank\LBank.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Liqui\Liqui.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LiveCoin\LiveCoin.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LMAX\LMAX.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Mfd\Mfd.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Micex\Micex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Oanda\Oanda.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okcoin\Okcoin.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okex\Okex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Poloniex\Poloniex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\PrizmBit\PrizmBit.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quandl\Quandl.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quoinex\Quoinex.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rss\Rss.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SmartCom\SmartCom.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SpbEx\SpbEx.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Sterling\Sterling.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\TradeOgre\TradeOgre.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Tradier\Tradier.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Transaq\Transaq.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Twime\Twime.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\UkrExh\UkrExh.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Upbit\Upbit.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Xignite\Xignite.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Yahoo\Yahoo.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Yobit\Yobit.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Zaif\Zaif.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ZB\ZB.csproj" />
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\DigitexFutures\DigitexFutures.csproj" />
-  </ItemGroup>
+
+  <Target Name="AddConnProjRefs" BeforeTargets="$(BeforeTargetsInDesignTime)" DependsOnTargets="CreateStubNames">
+    <ItemGroup>
+      <ProjectReference Include="@(StockSharpNoStubConnectors->'$(ConnectorsGitLabPath)%(identity)\%(identity).csproj')"/>
+      <ProjectReference Include="@(StockSharpConnStubsRealNames->'$(ConnectorsGitLabPath)%(identity)\%(identity).csproj')"/>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="test" DependsOnTargets="AddConnProjRefs">
+    <Message Text="@(ProjectReference)" />
+  </Target>
+
 </Project>
