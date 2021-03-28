@@ -13,12 +13,14 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.ComponentModel;
 
 	using Ecng.Common;
 
@@ -149,6 +151,13 @@ namespace StockSharp.Messages
 		public NewsPriorities? Priority { get; set; }
 
 		/// <summary>
+		/// Product id.
+		/// </summary>
+		[DataMember]
+		[Browsable(false)]
+		public long ProductId { get; set; }
+
+		/// <summary>
 		/// Language.
 		/// </summary>
 		[DataMember]
@@ -203,6 +212,9 @@ namespace StockSharp.Messages
 			if (SeqNum != default)
 				str += $",SQ={SeqNum}";
 
+			if (ProductId != default)
+				str += $",product={ProductId}";
+
 			return str;
 		}
 
@@ -210,7 +222,7 @@ namespace StockSharp.Messages
 		public override void CopyTo(NewsMessage destination)
 		{
 			base.CopyTo(destination);
-			
+
 			destination.TransactionId = TransactionId;
 			destination.Id = Id;
 			destination.BoardCode = BoardCode;
@@ -225,6 +237,7 @@ namespace StockSharp.Messages
 			destination.ExpiryDate = ExpiryDate;
 			destination.Attachments = Attachments.ToArray();
 			destination.SeqNum = SeqNum;
+			destination.ProductId = ProductId;
 		}
 	}
 }
