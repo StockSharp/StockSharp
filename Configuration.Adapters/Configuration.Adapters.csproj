@@ -93,5 +93,6 @@
     <ProjectReference Include="$(ConnectorsGitLabPath)Zaif\Zaif.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)ZB\ZB.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)DigitexFutures\DigitexFutures.csproj" />
+    <ProjectReference Include="$(ConnectorsGitLabPath)QuantHouse\QuantHouse.csproj" />
   </ItemGroup>
 </Project>

@@ -91,6 +91,7 @@
     <PackageReference Include="StockSharp.ZaifStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.ZBStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.DigitexFuturesStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.QuantHouseStub" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
