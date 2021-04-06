@@ -31,6 +31,12 @@
 		public long Id { get; set; }
 
 		/// <summary>
+		/// Extra identifier.
+		/// </summary>
+		[DataMember]
+		public long ExtraId { get; set; }
+
+		/// <summary>
 		/// Text.
 		/// </summary>
 		[DataMember]
@@ -90,6 +96,7 @@
 			destination.TransactionId = TransactionId;
 			destination.ProductId = ProductId;
 			destination.Id = Id;
+			destination.ExtraId = ExtraId;
 			destination.Text = Text;
 			destination.Author = Author;
 			destination.Rating = Rating;
@@ -107,6 +114,9 @@
 
 			if (Id != 0)
 				str += $",Id={Id}";
+
+			if (ExtraId != 0)
+				str += $",ExtraId={Id}";
 
 			if (!Text.IsEmpty())
 				str += $",Text={Text}";
