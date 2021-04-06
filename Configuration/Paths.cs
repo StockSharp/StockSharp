@@ -223,6 +223,8 @@
 		/// <returns>Localized url.</returns>
 		public static string GetForgotUrl() => $"{GetWebSiteUrl()}/forgot/";
 
+		private static string _installedVersion;
+
 		/// <summary>
 		/// Installed version of the product.
 		/// </summary>
@@ -230,20 +232,23 @@
 		{
 			get
 			{
-				string version;
+				if (_installedVersion != null)
+					return _installedVersion;
 
 				static string GetAssemblyVersion() => (Assembly.GetEntryAssembly() ?? typeof(Paths).Assembly).GetName().Version.To<string>();
 
 				try
 				{
-					version = GetInstalledVersion(Directory.GetCurrentDirectory()) ?? GetAssemblyVersion();
+					_installedVersion = GetInstalledVersion(Directory.GetCurrentDirectory()) ?? GetAssemblyVersion();
 				}
 				catch
 				{
-					version = GetAssemblyVersion();
+					_installedVersion = GetAssemblyVersion();
 				}
 
-				return version;
+				_installedVersion ??= "<error>";
+
+				return _installedVersion;
 			}
 		}
 
