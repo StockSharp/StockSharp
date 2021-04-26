@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private readonly CandleBuilderProvider _candleBuilderProvider;
 		private readonly Dictionary<long, SeriesInfo> _allChilds = new Dictionary<long, SeriesInfo>();
 		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new Dictionary<long, RefPair<long, SubscriptionStates>>();
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleBuilderMessageAdapter"/>.
 		/// </summary>
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 								tuple.Second = SubscriptionStates.Active;
 								this.AddDebugLog("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
-								
+
 								RaiseNewOutMessage(mdMsg.CreateResponse());
 								return true;
 							}
@@ -175,12 +175,12 @@ namespace StockSharp.Algo.Candles.Compression
 								return true;
 							}
 						}
-						
+
 						if (mdMsg.BuildMode == MarketDataBuildModes.Build)
 						{
 							if (!TrySubscribeBuild(mdMsg))
 								RaiseNewOutMessage(transactionId.CreateNotSupported());
-							
+
 							return true;
 						}
 
@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Candles.Compression
 								}
 							}
 						}
-						
+
 						return true;
 					}
 					else
@@ -592,7 +592,7 @@ namespace StockSharp.Algo.Candles.Compression
 												}
 											}
 
-											base.OnInnerAdapterNewOutMessage(bigCandle);
+											base.OnInnerAdapterNewOutMessage(bigCandle.TypedClone());
 										}
 
 										break;
@@ -626,7 +626,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 								newSubscriptionIds.Remove(subscriptionId);
 
-								ProcessCandle(series, candleMsg);	
+								ProcessCandle(series, candleMsg);
 							}
 
 							if (newSubscriptionIds != null)
@@ -856,7 +856,7 @@ namespace StockSharp.Algo.Candles.Compression
 							_pendingLoopbacks.Add(allMsg.TransactionId, RefTuple.Create(allMsg.ParentTransactionId, SubscriptionStates.Stopped));
 
 							this.AddDebugLog("New ALL candle-map: {0}/{1} TrId={2}-{3}", key, series.Original.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
-							
+
 							return new SeriesInfo(allMsg, allMsg)
 							{
 								LastTime = allMsg.From,
@@ -873,7 +873,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (allMsg != null)
 						RaiseNewOutMessage(allMsg);
 				}
-				
+
 				var transform = series.Transform;
 
 				if (transform?.Process((Message)message) != true)
