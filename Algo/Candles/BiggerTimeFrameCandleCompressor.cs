@@ -96,6 +96,14 @@ namespace StockSharp.Algo.Candles
 			CurrentCandle = null;
 		}
 
+		private static readonly Level1Fields[] _processParts =
+		{
+			Level1Fields.OpenPrice,
+			Level1Fields.HighPrice,
+			Level1Fields.LowPrice,
+			Level1Fields.ClosePrice,
+		};
+
 		/// <summary>
 		/// To process the new data.
 		/// </summary>
@@ -103,25 +111,16 @@ namespace StockSharp.Algo.Candles
 		/// <returns>A new candles changes.</returns>
 		public IEnumerable<CandleMessage> Process(CandleMessage message)
 		{
-			var parts = new[]
+			TimeFrameCandleMessage lastCandle = null;
+
+			foreach (var candle in _processParts.SelectMany(p => ProcessCandlePart(p, message)).ToArray().Cast<TimeFrameCandleMessage>())
 			{
-				Level1Fields.OpenPrice,
-				Level1Fields.HighPrice,
-				Level1Fields.LowPrice,
-				Level1Fields.ClosePrice,
-			};
-
-			var candles = parts
-				.SelectMany(p => ProcessCandlePart(p, message))
-				.Aggregate(new List<CandleMessage>(), (current, next) =>
+				if (candle != lastCandle)
 				{
-					if (current.LastOrDefault() != next)
-						current.Add(next);
-					return current;
-				});
-
-			foreach (var candle in candles)
-				yield return candle;
+					lastCandle = candle;
+					yield return candle;
+				}
+			}
 		}
 
 		private IEnumerable<CandleMessage> ProcessCandlePart(Level1Fields part, CandleMessage message)
