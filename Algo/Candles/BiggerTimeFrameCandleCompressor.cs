@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Candles
 {
 	using System;
+	using System.Linq;
 	using System.Collections.Generic;
 
 	using Ecng.Common;
@@ -102,17 +103,25 @@ namespace StockSharp.Algo.Candles
 		/// <returns>A new candles changes.</returns>
 		public IEnumerable<CandleMessage> Process(CandleMessage message)
 		{
-			foreach (var builtCandle in ProcessCandlePart(Level1Fields.OpenPrice, message))
-				yield return (TimeFrameCandleMessage)builtCandle;
+			var parts = new[]
+			{
+				Level1Fields.OpenPrice,
+				Level1Fields.HighPrice,
+				Level1Fields.LowPrice,
+				Level1Fields.ClosePrice,
+			};
 
-			foreach (var builtCandle in ProcessCandlePart(Level1Fields.HighPrice, message))
-				yield return (TimeFrameCandleMessage)builtCandle;
+			var candles = parts
+				.SelectMany(p => ProcessCandlePart(p, message))
+				.Aggregate(new List<CandleMessage>(), (current, next) =>
+				{
+					if (current.LastOrDefault() != next)
+						current.Add(next);
+					return current;
+				});
 
-			foreach (var builtCandle in ProcessCandlePart(Level1Fields.LowPrice, message))
-				yield return (TimeFrameCandleMessage)builtCandle;
-
-			foreach (var builtCandle in ProcessCandlePart(Level1Fields.ClosePrice, message))
-				yield return (TimeFrameCandleMessage)builtCandle;
+			foreach (var candle in candles)
+				yield return candle;
 		}
 
 		private IEnumerable<CandleMessage> ProcessCandlePart(Level1Fields part, CandleMessage message)
