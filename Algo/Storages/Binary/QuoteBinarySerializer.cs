@@ -37,6 +37,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public bool IncrementalOnly { get; set; }
 
+		public bool HasSnapshot { get; set; }
+
 		public override void Write(Stream stream)
 		{
 			base.Write(stream);
@@ -71,6 +73,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteSeqNums(stream);
+
+			if (Version < MarketDataVersions.Version62)
+				return;
+
+			stream.WriteEx(HasSnapshot);
 		}
 
 		public override void Read(Stream stream)
@@ -107,6 +114,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadSeqNums(stream);
+
+			if (Version < MarketDataVersions.Version62)
+				return;
+
+			HasSnapshot = stream.Read<bool>();
 		}
 
 		public override void CopyFrom(BinaryMetaInfo src)
@@ -121,9 +133,12 @@ namespace StockSharp.Algo.Storages.Binary
 
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
+		private readonly OrderBookIncrementBuilder _builder;
+
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version61, exchangeInfoProvider)
+			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version62, exchangeInfoProvider)
 		{
+			_builder = new OrderBookIncrementBuilder(securityId);
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<QuoteChangeMessage> messages, QuoteMetaInfo metaInfo)
@@ -160,6 +175,35 @@ namespace StockSharp.Algo.Storages.Binary
 			var buildFrom = metaInfo.Version >= MarketDataVersions.Version59;
 			var seqNumAndPos = metaInfo.Version >= MarketDataVersions.Version60;
 			var largeDecimal = metaInfo.Version >= MarketDataVersions.Version61;
+			var saveSnapshot = metaInfo.Version >= MarketDataVersions.Version62;
+
+			if (metaInfo.IncrementalOnly)
+			{
+				var idx = -1;
+
+				foreach (var m in messages)
+				{
+					var fullBook = _builder.TryApply(m);
+					++idx;
+
+					if (saveSnapshot && !metaInfo.HasSnapshot && fullBook != null)
+					{
+						metaInfo.HasSnapshot = true;
+
+						fullBook.IsSorted = m.IsSorted;
+						fullBook.Currency = m.Currency;
+						fullBook.BuildFrom = m.BuildFrom;
+						fullBook.IsFiltered = m.IsFiltered;
+						fullBook.State = QuoteChangeStates.SnapshotComplete;
+						fullBook.HasPositions = m.HasPositions;
+						fullBook.SeqNum = m.SeqNum;
+
+						var arr = messages.ToArray();
+						arr[idx] = fullBook;
+						messages = arr;
+					}
+				}
+			}
 
 			foreach (var m in messages)
 			{
@@ -355,7 +399,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (!buildFrom)
 				return quoteMsg;
-				
+
 			quoteMsg.BuildFrom = reader.ReadBuildFrom();
 
 			if (!seqNumAndPos)
