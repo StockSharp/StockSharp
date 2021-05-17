@@ -1,4 +1,8 @@
 {
+  "ResumeFromLastDateInStorage": {
+    "en": "Resume download starting from last date in storage",
+    "ru": "Возобновить скачивание начиная с последней даты в хранилище"
+  },
   "Freelance": {
     "en": "Freelance",
     "ru": "Фриланс"
