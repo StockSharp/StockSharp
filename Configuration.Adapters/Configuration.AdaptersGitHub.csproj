@@ -11,6 +11,7 @@
     <PackageReference Include="StockSharp.AlphaVantage" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.BarChart" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.BiboxStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.BinanceStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.BitalongStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.BitbankStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.BitexbookStub" Version="$(StockSharpVer)" />
