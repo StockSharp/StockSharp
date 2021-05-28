@@ -68,12 +68,6 @@ namespace StockSharp.Messages
 			set => _states = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		/// <summary>
-		/// Include unknown orders.
-		/// </summary>
-		[DataMember]
-		public bool IncludeUnknownOrders { get; set; }
-
 		bool ISubscriptionMessage.FilterEnabled
 			=>
 			States.Length != 0 || SecurityId != default ||
@@ -104,7 +98,6 @@ namespace StockSharp.Messages
 			destination.Count = Count;
 			destination.IsSubscribe = IsSubscribe;
 			destination.States = States.ToArray();
-			destination.IncludeUnknownOrders = IncludeUnknownOrders;
 		}
 
 		/// <summary>
@@ -139,9 +132,6 @@ namespace StockSharp.Messages
 
 			if (States.Length > 0)
 				str += $",States={States.Select(s => s.To<string>()).JoinComma()}";
-
-			if (IncludeUnknownOrders)
-				str += $",{nameof(IncludeUnknownOrders)}";
 
 			return str;
 		}
