@@ -831,10 +831,10 @@ namespace StockSharp.Algo.Candles.Compression
 			var currentCandle = (RenkoCandleMessage)subscription.CurrentCandle;
 			var prevCandle = currentCandle?.GetValue<RenkoCandleMessage>(prevKey);
 
-			void FinishCurrentCandle()
+			bool TryFinishCurrentCandle()
 			{
 				if (currentCandle.State == CandleStates.Finished)
-					return;
+					return false;
 
 				var ei = currentCandle.ExtensionInfo;
 				if (ei?.Count == 1 && ei.First().Key == prevKey)
@@ -847,12 +847,16 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				currentCandle.State = CandleStates.Finished;
+				return true;
 			}
 
 			void GenerateNewCandle()
 			{
 				prevCandle = currentCandle;
 
+				// TODO исправляет отображение свечей с повторяющимся временем на графике
+				// но вообще это нужно фиксить в самом графике, а не тут
+				// при сохранении в csv время может быть округлено, и после восстановления эти тики потеряются
 				if (prevCandle != null && time <= prevCandle.OpenTime)
 					time = prevCandle.OpenTime + TimeSpan.FromTicks(1);
 
@@ -974,12 +978,12 @@ namespace StockSharp.Algo.Candles.Compression
 				if (price == greenClose)
 				{
 					currentCandle.OpenPrice = price - renkoStep;
-					FinishCurrentCandle();
+					TryFinishCurrentCandle();
 				}
 				else if (price == redClose)
 				{
 					currentCandle.OpenPrice = price + renkoStep;
-					FinishCurrentCandle();
+					TryFinishCurrentCandle();
 				}
 
 				return true;
@@ -995,8 +999,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 				if (currentCandle != null)
 				{
-					FinishCurrentCandle();
-					yield return currentCandle;
+					if(TryFinishCurrentCandle())
+						yield return currentCandle;
 				}
 
 				GenerateNewCandle();
