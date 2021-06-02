@@ -46,6 +46,7 @@ namespace StockSharp.Algo.Indicators
 			InnerIndicators.Add(MovingAverage = ma);
 			InnerIndicators.Add(UpBand = new BollingerBand(MovingAverage, _dev) { Name = "UpBand" });
 			InnerIndicators.Add(LowBand = new BollingerBand(MovingAverage, _dev) { Name = "LowBand" });
+			_dev.Length = ma.Length;
 			Width = 2;
 		}
 
@@ -99,11 +100,11 @@ namespace StockSharp.Algo.Indicators
 
 				UpBand.Width = value;
 				LowBand.Width = -value;
- 
+
 				Reset();
 			}
 		}
-		
+
 		/// <inheritdoc />
 		public override void Reset()
 		{
