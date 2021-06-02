@@ -13,8 +13,10 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Indicators
 {
+	using System;
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
@@ -30,7 +32,6 @@ namespace StockSharp.Algo.Indicators
 		private readonly MedianPrice _medianPrice;
 
 		private readonly SmoothedMovingAverage _sma;
-		//private readonly SimpleMovingAverage _sma;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AlligatorLine"/>.
@@ -77,16 +78,18 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			//если кол-во в буфере больше Shift, то первое значение отдали в прошлый раз, удалим его.
-			if (Buffer.Count > Shift)
-				Buffer.RemoveAt(0);
-
 			var smaResult = _sma.Process(_medianPrice.Process(input));
 			if (_sma.IsFormed & input.IsFinal)
+			{
+				//если кол-во в буфере больше Shift, то первое значение отдали в прошлый раз, удалим его.
+				if (Buffer.Count > Shift)
+					Buffer.RemoveAt(0);
+
 				Buffer.Add(smaResult.GetValue<decimal>());
+			}
 
 			return Buffer.Count > Shift
-				? new DecimalIndicatorValue(this, Buffer[0])
+				? new DecimalIndicatorValue(this, Buffer[input.IsFinal ? 0 : Math.Min(1, Buffer.Count - 1)])
 				: new DecimalIndicatorValue(this);
 		}
 
