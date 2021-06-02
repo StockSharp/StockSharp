@@ -75,19 +75,22 @@ namespace StockSharp.Algo.Indicators
 		{
 			var candle = input.GetValue<Candle>();
 
+			var cm = _currentMaximum;
+			var vbc = _valueBarCount;
+
 			try
 			{
-				if (candle.HighPrice > _currentMaximum)
+				if (candle.HighPrice > cm)
 				{
-					_currentMaximum = candle.HighPrice;
-					_valueBarCount = _currentBarCount;
+					cm = candle.HighPrice;
+					vbc = _currentBarCount;
 				}
-				else if (candle.LowPrice <= _currentMaximum - ReversalAmount)
+				else if (candle.LowPrice <= cm - ReversalAmount)
 				{
 					if (input.IsFinal)
 						IsFormed = true;
 
-					return new DecimalIndicatorValue(this, _valueBarCount);
+					return new DecimalIndicatorValue(this, vbc);
 				}
 
 				return new DecimalIndicatorValue(this, this.GetCurrentValue());
@@ -95,7 +98,11 @@ namespace StockSharp.Algo.Indicators
 			finally
 			{
 				if (input.IsFinal)
+				{
 					_currentBarCount++;
+					_currentMaximum = cm;
+					_valueBarCount = vbc;
+				}
 			}
 		}
 
