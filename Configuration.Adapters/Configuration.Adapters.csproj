@@ -8,6 +8,9 @@
   <ItemGroup>
     <ProjectReference Include="$(ConnectorsAppsPath)Binance\Binance.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Okex\Okex.csproj" />
+    <ProjectReference Include="$(ConnectorsAppsPath)Kucoin\Kucoin.csproj" />
+    <ProjectReference Include="$(ConnectorsAppsPath)Quik\Quik.csproj" />
+    <ProjectReference Include="$(ConnectorsAppsPath)Huobi\Huobi.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlfaDirect\AlfaDirect.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlorHistory\AlorHistory.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlphaVantage\AlphaVantage.csproj" />
@@ -53,14 +56,12 @@
     <ProjectReference Include="$(ConnectorsGitLabPath)Gopax\Gopax.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)HitBtc\HitBtc.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Hotbit\Hotbit.csproj" />
-    <ProjectReference Include="$(ConnectorsGitLabPath)Huobi\Huobi.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Idax\Idax.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)IEX\IEX.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)InteractiveBrokers\InteractiveBrokers.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)IQFeed\IQFeed.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)ITCH\ITCH.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Kraken\Kraken.csproj" />
-    <ProjectReference Include="$(ConnectorsGitLabPath)Kucoin\Kucoin.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)LATOKEN\LATOKEN.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)LBank\LBank.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Liqui\Liqui.csproj" />
@@ -74,7 +75,6 @@
     <ProjectReference Include="$(ConnectorsGitLabPath)Poloniex\Poloniex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)PrizmBit\PrizmBit.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Quandl\Quandl.csproj" />
-    <ProjectReference Include="$(ConnectorsGitLabPath)Quik\Quik.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Quoinex\Quoinex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Rithmic\Rithmic.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Rss\Rss.csproj" />
