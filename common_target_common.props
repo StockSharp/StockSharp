@@ -16,7 +16,7 @@
     <NitoVer>5.1.0</NitoVer>
     <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.1</SignalRVer>
-    <NuGetApiVersion>5.9.0</NuGetApiVersion>
+    <NuGetApiVersion>5.9.1</NuGetApiVersion>
     <SystemDataSqlClientVer>4.8.2</SystemDataSqlClientVer>
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoGitLabPath>$(RepoGitHubPath)..\StockSharp (GitLab)\</RepoGitLabPath>
