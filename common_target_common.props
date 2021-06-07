@@ -27,6 +27,7 @@
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
     <MsTestVer>2.2.3</MsTestVer>
     <MsTestSdkVer>16.9.4</MsTestSdkVer>
+    <NewtonJsonVer>13.0.1</NewtonJsonVer>
   </PropertyGroup>
   <PropertyGroup>
     <!-- TODO this needs to be removed when connectors fixed to NO_LICENSE constant -->
