@@ -102,7 +102,7 @@ namespace StockSharp.Algo
 			private readonly List<SubscriptionInfo> _keeped = new List<SubscriptionInfo>();
 			private readonly HashSet<long> _notFound = new HashSet<long>();
 			private readonly Dictionary<long, long> _subscriptionAllMap = new Dictionary<long, long>();
-			
+
 			private readonly Connector _connector;
 
 			public SubscriptionManager(Connector connector)
@@ -155,8 +155,7 @@ namespace StockSharp.Algo
 
 			private void Remove(long id)
 			{
-				// keed subscription instancies for tracing purpose
-				//_subscriptions.Remove(id);
+				_subscriptions.Remove(id);
 				_connector.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
 			}
 
@@ -584,7 +583,7 @@ namespace StockSharp.Algo
 
 					if (!info.UpdateLastTime(message.OpenTime))
 						continue;
-					
+
 					if (!info.UpdateCandle(message, out var candle))
 						continue;
 
