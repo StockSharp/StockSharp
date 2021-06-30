@@ -11,6 +11,7 @@
     <ProjectReference Include="$(ConnectorsAppsPath)Kucoin\Kucoin.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Quik\Quik.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Huobi\Huobi.csproj" />
+    <ProjectReference Include="$(ConnectorsAppsPath)Plaza\Plaza.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlfaDirect\AlfaDirect.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlorHistory\AlorHistory.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)AlphaVantage\AlphaVantage.csproj" />
@@ -71,7 +72,6 @@
     <ProjectReference Include="$(ConnectorsGitLabPath)Micex\Micex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Oanda\Oanda.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Okcoin\Okcoin.csproj" />
-    <ProjectReference Include="$(ConnectorsGitLabPath)Plaza\Plaza.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Poloniex\Poloniex.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)PrizmBit\PrizmBit.csproj" />
     <ProjectReference Include="$(ConnectorsGitLabPath)Quandl\Quandl.csproj" />
