@@ -451,7 +451,7 @@ namespace StockSharp.Algo
 					{
 						var sub = dt.ToSubscription();
 						_connector.AddVerboseLog($"subscribing default subscription {sub.SubscriptionMessage.Type}");
-						Subscribe(dt.ToSubscription());
+						Subscribe(sub);
 					});
 				}
 			}
