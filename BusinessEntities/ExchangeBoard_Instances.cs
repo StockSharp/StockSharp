@@ -76,7 +76,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2003, 6, 21),
 
 				// http://www.rts.ru/a6598
-				// δΰς νες
+				// Π΄Π°Ρ‚ Π½ΠµΡ‚
 
 				// http://www.rts.ru/a7751
 				new DateTime(2005, 3, 5),
@@ -104,7 +104,7 @@ namespace StockSharp.BusinessEntities
 
 				// http://www.rts.ru/s355
 				new DateTime(2011, 3, 5),
-				
+
 				// http://moex.com/a254
 				new DateTime(2012, 3, 11),
 				new DateTime(2012, 4, 28),
@@ -330,7 +330,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2014, 6, 12),
 				new DateTime(2014, 11, 4),
 				new DateTime(2014, 12, 31),
-				
+
 				// http://moex.com/a2793
 				new DateTime(2015, 1, 1),
 				new DateTime(2015, 1, 2),
@@ -3235,6 +3235,15 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
+		/// Information about board <see cref="Bitmart"/>.
+		/// </summary>
+		public static ExchangeBoard Bitmart { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bitmart.Name,
+			Exchange = Exchange.Bitmart,
+		};
+
+		/// <summary>
 		/// Information about board <see cref="Yobit"/>.
 		/// </summary>
 		public static ExchangeBoard Yobit { get; } = new ExchangeBoard
@@ -3512,7 +3521,7 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Upbit.Name,
 			Exchange = Exchange.Upbit,
 		};
-		
+
 		/// <summary>
 		/// Information about board <see cref="CoinEx"/>.
 		/// </summary>
@@ -3530,7 +3539,7 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.FatBtc.Name,
 			Exchange = Exchange.FatBtc,
 		};
-		
+
 		/// <summary>
 		/// Information about board <see cref="Latoken"/>.
 		/// </summary>
