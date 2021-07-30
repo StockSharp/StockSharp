@@ -1,4 +1,12 @@
 {
+  "DumpBooks": {
+    "en": "Dump order books",
+    "ru": "Лог книги заявок"
+  },
+  "Bitmart": {
+    "en": "Bitmart",
+    "ru": "Bitmart"
+  },
   "ResumeFromLastDateInStorage": {
     "en": "Resume download starting from last date in storage",
     "ru": "Возобновить скачивание начиная с последней даты в хранилище"

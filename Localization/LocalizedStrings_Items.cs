@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Dump order books
+		/// </summary>
+		public const string DumpBooksKey = nameof(DumpBooks);
+
+		/// <summary>
+		/// Dump order books
+		/// </summary>
+		public static string DumpBooks => GetString(DumpBooksKey);
+
+		/// <summary>
+		/// Bitmart
+		/// </summary>
+		public const string BitmartKey = nameof(Bitmart);
+
+		/// <summary>
+		/// Bitmart
+		/// </summary>
+		public static string Bitmart => GetString(BitmartKey);
+
+		/// <summary>
 		/// Resume download starting from last date in storage
 		/// </summary>
 		public const string ResumeFromLastDateInStorageKey = nameof(ResumeFromLastDateInStorage);
