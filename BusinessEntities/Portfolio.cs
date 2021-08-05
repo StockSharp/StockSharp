@@ -113,6 +113,14 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override string StrategyId { get => base.StrategyId; set => base.StrategyId = value; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override Sides? Side { get => base.Side; set => base.Side = value; }
+
 		/// <summary>
 		/// Portfolio associated with the orders received through the orders log.
 		/// </summary>
@@ -146,10 +154,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
 
 		/// <inheritdoc />
 		public override Position Clone()

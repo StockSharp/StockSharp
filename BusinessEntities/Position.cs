@@ -18,6 +18,7 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -460,13 +461,25 @@ namespace StockSharp.BusinessEntities
 		/// Strategy id.
 		/// </summary>
 		[DataMember]
-		public string StrategyId { get; set; }
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.StrategyKey,
+			Description = LocalizedStrings.Str361Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 100)]
+		public virtual string StrategyId { get; set; }
 
 		/// <summary>
 		/// Side.
 		/// </summary>
 		[DataMember]
-		public Sides? Side { get; set; }
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SideKey,
+			Description = LocalizedStrings.Str3126Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 101)]
+		public virtual Sides? Side { get; set; }
 
 		private decimal? _leverage;
 
