@@ -36,7 +36,7 @@ namespace StockSharp.BusinessEntities
 	/// Information about electronic board.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public partial class ExchangeBoard : Equatable<ExchangeBoard>, IExtendableEntity, IPersistable, INotifyPropertyChanged
 	{
 		private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
@@ -96,7 +96,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Securities expiration times.
 		/// </summary>
-		[TimeSpan]
+		//[TimeSpan]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str64Key)]
@@ -206,7 +206,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about the time zone where the exchange is located.
 		/// </summary>
-		[TimeZoneInfo]
+		//[TimeZoneInfo]
 		[XmlIgnore]
 		//[DataMember]
 		public TimeZoneInfo TimeZone

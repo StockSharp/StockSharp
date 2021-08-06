@@ -28,7 +28,7 @@ namespace StockSharp.BusinessEntities
 	/// Portfolio, describing the trading account and the size of its generated commission.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
 	public class Portfolio : Position
@@ -98,7 +98,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
 		[DescriptionLoc(LocalizedStrings.Str252Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public PortfolioStates? State
 		{

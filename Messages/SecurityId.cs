@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Security ID.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	{
@@ -159,7 +159,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[DisplayName("InteractiveBrokers")]
 		[DescriptionLoc(LocalizedStrings.Str357Key)]
-		[Nullable]
+		//[Nullable]
 		public int? InteractiveBrokers { get; set; }
 
 		/// <summary>

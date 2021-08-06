@@ -31,7 +31,7 @@ namespace StockSharp.BusinessEntities
 	/// News.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str395Key)]
 	[DescriptionLoc(LocalizedStrings.Str510Key)]
 	public class News : NotifiableObject, IExtendableEntity
@@ -140,7 +140,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.PriorityKey,
 			Description = LocalizedStrings.NewsPriorityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		[Nullable]
+		//[Nullable]
 		public NewsPriorities? Priority { get; set; }
 
 		[field: NonSerialized]

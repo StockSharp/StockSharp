@@ -31,7 +31,7 @@ namespace StockSharp.BusinessEntities
 	/// Market depth quote representing bid or ask.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
@@ -119,7 +119,7 @@ namespace StockSharp.BusinessEntities
 		/// Orders count.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public int? OrdersCount { get; set; }
 
 		/// <summary>

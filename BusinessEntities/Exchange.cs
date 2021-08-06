@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// Exchange info.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[KnownType(typeof(TimeZoneInfo))]
 	[KnownType(typeof(TimeZoneInfo.AdjustmentRule))]
 	[KnownType(typeof(TimeZoneInfo.AdjustmentRule[]))]
@@ -112,7 +112,7 @@ namespace StockSharp.BusinessEntities
 		/// ISO country code.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public CountryCodes? CountryCode
 		{
 			get => _countryCode;

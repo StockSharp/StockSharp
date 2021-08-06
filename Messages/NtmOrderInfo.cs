@@ -11,7 +11,7 @@ namespace StockSharp.Messages
     /// Negotiated Trades Mode information.
     /// </summary>
     [Serializable]
-    [System.Runtime.Serialization.DataContract]
+    [DataContract]
     [TypeConverter(typeof(ExpandableObjectConverter))]
 	public class NtmOrderInfo : Cloneable<NtmOrderInfo>, IPersistable
     {
@@ -32,7 +32,7 @@ namespace StockSharp.Messages
 		/// Execution date OTC.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public DateTimeOffset? SettleDate { get; set; }
 
 		/// <summary>

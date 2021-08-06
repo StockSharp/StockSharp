@@ -92,7 +92,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str212Key)]
 		[MainCategory]
-		[Ecng.Serialization.Nullable]
+		//[Ecng.Serialization.Nullable]
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
@@ -147,7 +147,7 @@ namespace StockSharp.Messages
 			Name = LocalizedStrings.PriorityKey,
 			Description = LocalizedStrings.NewsPriorityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		[Ecng.Serialization.Nullable]
+		//[Ecng.Serialization.Nullable]
 		public NewsPriorities? Priority { get; set; }
 
 		/// <summary>

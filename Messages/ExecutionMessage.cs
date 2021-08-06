@@ -21,14 +21,13 @@ namespace StockSharp.Messages
 	using System.Xml.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// The types of data that contain information in <see cref="ExecutionMessage"/>.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public enum ExecutionTypes
 	{
@@ -62,7 +61,7 @@ namespace StockSharp.Messages
 	/// The message contains information about the execution.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISeqNumMessage,
 		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage
@@ -129,7 +128,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.DataTypeKey)]
 		[DescriptionLoc(LocalizedStrings.Str110Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public ExecutionTypes? ExecutionType { get; set; }
 
 		/// <summary>
@@ -148,7 +147,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
 		[DescriptionLoc(LocalizedStrings.OrderIdKey, true)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public long? OrderId { get; set; }
 
 		/// <summary>
@@ -214,7 +213,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VolumeOrderKey)]
 		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? OrderVolume { get; set; }
 
 		/// <summary>
@@ -224,7 +223,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VolumeTradeKey)]
 		[DescriptionLoc(LocalizedStrings.TradeVolumeKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? TradeVolume { get; set; }
 
 		/// <summary>
@@ -234,7 +233,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
@@ -253,7 +252,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str130Key)]
 		[DescriptionLoc(LocalizedStrings.Str131Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? Balance { get; set; }
 
 		/// <summary>
@@ -270,7 +269,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[Browsable(false)]
-		[Nullable]
+		//[Nullable]
 		public long? OrderStatus { get; set; }
 
 		/// <summary>
@@ -280,7 +279,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
 		[DescriptionLoc(LocalizedStrings.Str134Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public OrderStates? OrderState { get; set; }
 
 		/// <summary>
@@ -307,7 +306,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str139Key)]
 		[DescriptionLoc(LocalizedStrings.Str140Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public bool? IsSystem { get; set; }
 
 		/// <summary>
@@ -328,7 +327,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str143Key)]
 		[DescriptionLoc(LocalizedStrings.Str144Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public TimeInForce? TimeInForce { get; set; }
 
 		/// <summary>
@@ -338,7 +337,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
 		[DescriptionLoc(LocalizedStrings.Str145Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public long? TradeId { get; set; }
 
 		/// <summary>
@@ -357,7 +356,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str147Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? TradePrice { get; set; }
 
 		/// <summary>
@@ -365,7 +364,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[Browsable(false)]
-		[Nullable]
+		//[Nullable]
 		public int? TradeStatus { get; set; }
 
 		/// <summary>
@@ -375,7 +374,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.InitiatorKey)]
 		[DescriptionLoc(LocalizedStrings.Str149Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public Sides? OriginSide { get; set; }
 
 		/// <summary>
@@ -385,7 +384,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str150Key)]
 		[DescriptionLoc(LocalizedStrings.Str151Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? OpenInterest { get; set; }
 
 		/// <inheritdoc />
@@ -411,7 +410,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str157Key)]
 		[DescriptionLoc(LocalizedStrings.Str158Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public bool? IsUpTick { get; set; }
 
 		/// <summary>
@@ -421,7 +420,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.Str160Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? Commission { get; set; }
 
 		/// <summary>
@@ -436,7 +435,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str161Key)]
 		[DescriptionLoc(LocalizedStrings.Str162Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public TimeSpan? Latency { get; set; }
 
 		/// <summary>
@@ -446,7 +445,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str163Key)]
 		[DescriptionLoc(LocalizedStrings.Str164Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? Slippage { get; set; }
 
 		/// <summary>
@@ -469,7 +468,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
@@ -479,7 +478,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PnLKey)]
 		[DescriptionLoc(LocalizedStrings.PnLKey, true)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? PnL { get; set; }
 
 		/// <summary>
@@ -489,7 +488,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str862Key)]
 		[DescriptionLoc(LocalizedStrings.Str862Key, true)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? Position { get; set; }
 
 		/// <summary>
