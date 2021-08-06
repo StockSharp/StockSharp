@@ -135,7 +135,7 @@
 				MessageBox.Show($"RegisterOrder: sec={order.Security.Id}, {order.Direction} {order.Volume}@{order.Price}");
 			};
 
-			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(YandexLoginWindow.Authorize(this)));
+			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(YandexLoginWindow.Authorize(() => this)));
 
 			HistoryPath.Folder = Paths.HistoryDataPath;
 
