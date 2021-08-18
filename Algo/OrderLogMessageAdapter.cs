@@ -68,7 +68,7 @@
 					return message;
 
 				var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == DataType.OrderLog;
-					
+
 				if (message.DataType2 == DataType.MarketDepth)
 				{
 					if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
@@ -129,12 +129,24 @@
 								info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Error, id, this);
 						}
 					}
-					else
+					else if (_subscriptionIds.TryGetValue(id, out var info) && info.State != SubscriptionStates.Online)
 					{
-						if (_subscriptionIds.TryGetValue(id, out var info))
+						lock (info.Lock)
 						{
-							lock (info.Lock)
-								info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Active, id, this);
+							QuoteChangeMessage snapshot = null;
+
+							info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Online, id, this);
+
+							if (!info.IsTicks)
+							{
+								snapshot = info.Builder.Snapshot?.TypedClone();
+							}
+
+							if (snapshot != null)
+							{
+								snapshot.SetSubscriptionIds(subscriptionId: id);
+								base.OnInnerAdapterNewOutMessage(snapshot);
+							}
 						}
 					}
 
@@ -148,34 +160,6 @@
 					{
 						lock (info.Lock)
 							info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Finished, id, this);
-					}
-
-					break;
-				}
-				case MessageTypes.SubscriptionOnline:
-				{
-					var onlineMsg = (SubscriptionOnlineMessage)message;
-					var id = onlineMsg.OriginalTransactionId;
-
-					QuoteChangeMessage snapshot = null;
-
-					if (_subscriptionIds.TryGetValue(id, out var info))
-					{
-						lock (info.Lock)
-						{
-							info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Online, id, this);
-
-							if (!info.IsTicks)
-							{
-								snapshot = info.Builder.Snapshot?.TypedClone();
-							}
-						}
-					}
-
-					if (snapshot != null)
-					{
-						snapshot.SetSubscriptionIds(subscriptionId: id);
-						base.OnInnerAdapterNewOutMessage(snapshot);
 					}
 
 					break;
