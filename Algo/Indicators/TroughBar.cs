@@ -72,20 +72,22 @@ namespace StockSharp.Algo.Indicators
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
+			var cm = _currentMinimum;
+			var vbc = _valueBarCount;
 
 			try
 			{
-				if (candle.LowPrice < _currentMinimum)
+				if (candle.LowPrice < cm)
 				{
-					_currentMinimum = candle.LowPrice;
-					_valueBarCount = _currentBarCount;
+					cm = candle.LowPrice;
+					vbc = _currentBarCount;
 				}
-				else if (candle.HighPrice >= _currentMinimum + ReversalAmount.Value)
+				else if (candle.HighPrice >= cm + ReversalAmount.Value)
 				{
 					if (input.IsFinal)
 						IsFormed = true;
 
-					return new DecimalIndicatorValue(this, _valueBarCount);
+					return new DecimalIndicatorValue(this, vbc);
 				}
 
 				return new DecimalIndicatorValue(this, this.GetCurrentValue());
@@ -93,7 +95,11 @@ namespace StockSharp.Algo.Indicators
 			finally
 			{
 				if(input.IsFinal)
+				{
 					_currentBarCount++;
+					_currentMinimum = cm;
+					_valueBarCount = vbc;
+				}
 			}
 		}
 

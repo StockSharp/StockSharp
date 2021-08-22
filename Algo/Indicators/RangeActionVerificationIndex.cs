@@ -34,8 +34,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public RangeActionVerificationIndex()
 		{
-			ShortSma = new SimpleMovingAverage();
-			LongSma = new SimpleMovingAverage();
+			ShortSma = new SimpleMovingAverage { Length = 7 };
+			LongSma = new SimpleMovingAverage { Length = 65 };
 		}
 
 		/// <summary>

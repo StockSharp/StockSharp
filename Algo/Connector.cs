@@ -51,7 +51,6 @@ namespace StockSharp.Algo
 		private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = new CachedSynchronizedSet<Portfolio>();
 		private readonly CachedSynchronizedSet<Position> _existingPositions = new CachedSynchronizedSet<Position>();
 
-		private bool _notFirstTimeConnected;
 		private bool _isDisposing;
 
 		/// <summary>
@@ -1196,8 +1195,6 @@ namespace StockSharp.Algo
 			_existingSecurities.Clear();
 			_existingPortfolios.Clear();
 			_existingPositions.Clear();
-
-			_notFirstTimeConnected = default;
 
 			_prevTime = default;
 

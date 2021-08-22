@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Localization;
@@ -27,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	{
 		private readonly SimpleMovingAverage _sma;
+		private int _lookBack;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DetrendedPriceOscillator"/>.
@@ -40,7 +42,8 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override void Reset()
 		{
-			_sma.Length = (Length - 2) * 2;
+			_sma.Length = Length;
+			_lookBack = Length / 2 + 1;
 			base.Reset();
 		}
 
@@ -61,7 +64,7 @@ namespace StockSharp.Algo.Indicators
 			if (Buffer.Count > Length)
 				Buffer.RemoveAt(0);
 
-			return new DecimalIndicatorValue(this, input.GetValue<decimal>() - Buffer[0]);
+			return new DecimalIndicatorValue(this, input.GetValue<decimal>() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)]);
 		}
 	}
 }

@@ -6,7 +6,7 @@
     <AssemblyName>StockSharp.Messages</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Serialization.FieldFactories" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Security" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />

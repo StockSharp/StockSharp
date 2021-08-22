@@ -18,9 +18,9 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
-	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
+
 	using Ecng.Common;
 	using Ecng.Serialization;
 
@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Change actions.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public enum QuoteChangeActions : byte
 	{
@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Quote conditions.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public enum QuoteConditions : byte
 	{
@@ -77,7 +77,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Market depth quote representing bid or ask.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
@@ -154,28 +154,28 @@ namespace StockSharp.Messages
 		/// Orders count.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public int? OrdersCount { get; set; }
 
 		/// <summary>
 		/// Start position, related for <see cref="Action"/>.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public int? StartPosition { get; set; }
 
 		/// <summary>
 		/// End position, related for <see cref="Action"/>.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public int? EndPosition { get; set; }
 
 		/// <summary>
 		/// Change action.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public QuoteChangeActions? Action { get; set; }
 
 		/// <summary>

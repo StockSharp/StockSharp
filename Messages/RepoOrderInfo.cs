@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 	/// REPO info.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class RepoOrderInfo : Cloneable<RepoOrderInfo>, IPersistable
 	{
@@ -47,28 +47,28 @@ namespace StockSharp.Messages
 		/// REPO expiration.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? Term { get; set; }
 
 		/// <summary>
 		/// Repo rate, in percentage.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? Rate { get; set; }
 
 		/// <summary>
 		/// Blocking code.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public bool? BlockSecurities { get; set; }
 
 		/// <summary>
 		/// The rate of fixed compensation payable in the event that the second part of the repo, the percentage.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? RefundRate { get; set; }
 
 		/// <summary>
@@ -87,42 +87,42 @@ namespace StockSharp.Messages
 		/// REPO second price part.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? SecondPrice { get; set; }
 
 		/// <summary>
 		/// Execution date OTC.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public DateTimeOffset? SettleDate { get; set; }
 
 		/// <summary>
 		/// REPO-M the begin value of the discount.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? StartDiscount { get; set; }
 
 		/// <summary>
 		/// REPO-M the lower limit value of the discount.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? LowerDiscount { get; set; }
 
 		/// <summary>
 		/// REPO-M the upper limit value of the discount.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? UpperDiscount { get; set; }
 
 		/// <summary>
 		/// REPO-M volume.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? Value { get; set; }
 
 		/// <summary>

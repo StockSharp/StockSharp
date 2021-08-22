@@ -824,46 +824,7 @@ namespace StockSharp.Algo
 			{
 				if (adapter == Adapter)
 				{
-					if (_notFirstTimeConnected)
-					{
-						if (IsRestoreSubscriptionOnNormalReconnect)
-							_subscriptionManager.ReSubscribeAll();
-					}
-					else
-					{
-						_notFirstTimeConnected = true;
-
-						void TrySend(MessageTypes type)
-						{
-							DataType dataType;
-
-							switch (type)
-							{
-								case MessageTypes.SecurityLookup:
-									dataType = DataType.Securities;
-									break;
-								case MessageTypes.PortfolioLookup:
-									dataType = DataType.PositionChanges;
-									break;
-								case MessageTypes.OrderStatus:
-									dataType = DataType.Transactions;
-									break;
-								case MessageTypes.TimeFrameLookup:
-									dataType = DataType.TimeFrames;
-									break;
-								default:
-									return;
-							}
-
-							if (Adapter.IsMessageSupported(type) && !_subscriptionManager.Subscriptions.Any(s => s.SubscriptionMessage.DataType == dataType && s.SubscriptionMessage.To == null))
-								_subscriptionManager.Subscribe(dataType.ToSubscription());
-						}
-
-						foreach (var type in _lookupMessagesOnConnect.Cache)
-						{
-							TrySend(type);
-						}
-					}
+					_subscriptionManager.HandleConnected(_lookupMessagesOnConnect.Cache.Where(mt => Adapter.IsMessageSupported(mt)).ToArray());
 
 					// raise event after re subscriptions cause handler on Connected event can send some subscriptions
 					RaiseConnected();

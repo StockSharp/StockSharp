@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Indicators
 				{
 					isMax = false;
 				}
-					
+
 				if (isMin && _wasLowUp && buffer.GetRange(0, _numCenter).Max(i => i.LowPrice) == centerLowPrice)
 				{
 					isMin = false;
@@ -188,8 +188,8 @@ namespace StockSharp.Algo.Indicators
 
 				var shift = buffer.Count - _numCenter - 1;
 
-				var upValue = isMax ? new ShiftedIndicatorValue(this, shift, new DecimalIndicatorValue(this, centerHighPrice)) : new ShiftedIndicatorValue(this);
-				var downValue = isMin ? new ShiftedIndicatorValue(this, shift, new DecimalIndicatorValue(this, centerLowPrice)) : new ShiftedIndicatorValue(this);
+				var upValue = new ShiftedIndicatorValue(this, shift, isMax ? new DecimalIndicatorValue(this, centerHighPrice) : null);
+				var downValue = new ShiftedIndicatorValue(this, shift, isMin ? new DecimalIndicatorValue(this, centerLowPrice) : null);
 
 				upValue.IsFinal = input.IsFinal;
 				downValue.IsFinal = input.IsFinal;

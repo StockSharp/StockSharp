@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Candle states.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public enum CandleStates
 	{
@@ -59,7 +59,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public abstract class CandleMessage : Message,
 		ISubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage, ISeqNumMessage
@@ -147,28 +147,28 @@ namespace StockSharp.Messages
 		/// Volume at open.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? OpenVolume { get; set; }
 
 		/// <summary>
 		/// Volume at close.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? CloseVolume { get; set; }
 
 		/// <summary>
 		/// Volume at high.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? HighVolume { get; set; }
 
 		/// <summary>
 		/// Volume at low.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? LowVolume { get; set; }
 
 		/// <summary>
@@ -351,7 +351,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the time-frame candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
 	public class TimeFrameCandleMessage : CandleMessage
@@ -403,7 +403,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the tick candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
 	public class TickCandleMessage : CandleMessage
@@ -446,7 +446,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the volume candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
 	public class VolumeCandleMessage : CandleMessage
@@ -489,7 +489,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the range candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
 	public class RangeCandleMessage : CandleMessage
@@ -541,7 +541,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Point in figure (X0) candle arg.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class PnFArg : Equatable<PnFArg>
 	{
@@ -617,7 +617,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the X0 candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
 	public class PnFCandleMessage : CandleMessage
@@ -670,7 +670,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the renko candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
 	public class RenkoCandleMessage : CandleMessage
@@ -722,7 +722,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the Heikin-Ashi candle.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.HeikinAshiKey)]
 	public class HeikinAshiCandleMessage : TimeFrameCandleMessage

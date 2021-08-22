@@ -134,7 +134,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
-		[Ecng.Serialization.Nullable]
+		//[Ecng.Serialization.Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>

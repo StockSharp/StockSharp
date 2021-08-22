@@ -28,7 +28,7 @@ namespace StockSharp.BusinessEntities
 	/// Description of the error that occurred during the registration or cancellation of the order.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public class OrderFail : IExtendableEntity
 	{
 		/// <summary>
@@ -49,7 +49,7 @@ namespace StockSharp.BusinessEntities
 		/// System information about error containing the reason for the refusal or cancel of registration.
 		/// </summary>
 		[DataMember]
-		[BinaryFormatter]
+		//[BinaryFormatter]
 		public Exception Error { get; set; }
 
 		/// <summary>

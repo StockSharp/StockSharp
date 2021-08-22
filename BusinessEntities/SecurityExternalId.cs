@@ -21,7 +21,6 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
@@ -29,7 +28,7 @@ namespace StockSharp.BusinessEntities
 	/// Security IDs in other systems.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.IdentifiersKey)]
 	[DescriptionLoc(LocalizedStrings.Str603Key)]
 	public class SecurityExternalId : NotifiableObject, ICloneable<SecurityExternalId>, IEquatable<SecurityExternalId>
@@ -152,7 +151,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[DisplayName("Interactive Brokers")]
 		[DescriptionLoc(LocalizedStrings.Str357Key)]
-		[Nullable]
+		//[Nullable]
 		public int? InteractiveBrokers
 		{
 			get => _interactiveBrokers;

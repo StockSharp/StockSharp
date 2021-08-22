@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// Order.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str504Key)]
 	[DescriptionLoc(LocalizedStrings.Str516Key)]
@@ -51,14 +51,14 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Time taken to register an order.
 		/// </summary>
-		[TimeSpan]
+		//[TimeSpan]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str538Key,
 			Description = LocalizedStrings.Str518Key,
 			GroupName = LocalizedStrings.Str161Key,
 			Order = 1000)]
-		[Nullable]
+		//[Nullable]
 		public TimeSpan? LatencyRegistration
 		{
 			get => _latencyRegistration;
@@ -77,14 +77,14 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Time taken to cancel an order.
 		/// </summary>
-		[TimeSpan]
+		//[TimeSpan]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str537Key,
 			Description = LocalizedStrings.Str520Key,
 			GroupName = LocalizedStrings.Str161Key,
 			Order = 1001)]
-		[Nullable]
+		//[Nullable]
 		public TimeSpan? LatencyCancellation
 		{
 			get => _latencyCancellation;
@@ -103,14 +103,14 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Time taken to edit an order.
 		/// </summary>
-		[TimeSpan]
+		//[TimeSpan]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.EditionKey,
 			Description = LocalizedStrings.EditionLatencyKey,
 			GroupName = LocalizedStrings.Str161Key,
 			Order = 1002)]
-		[Nullable]
+		//[Nullable]
 		public TimeSpan? LatencyEdition
 		{
 			get => _latencyEdition;
@@ -343,7 +343,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
@@ -383,7 +383,7 @@ namespace StockSharp.BusinessEntities
 		/// System order status.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public long? Status
 		{
@@ -407,7 +407,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str139Key)]
 		[DescriptionLoc(LocalizedStrings.Str140Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public bool? IsSystem
 		{
 			get => _isSystem;
@@ -483,7 +483,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public TimeInForce? TimeInForce { get; set; }
 
 		private Order _derivedOrder;
@@ -536,7 +536,7 @@ namespace StockSharp.BusinessEntities
 		/// Commission (broker, exchange etc.).
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.Str160Key)]
 		[MainCategory]
@@ -587,7 +587,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>

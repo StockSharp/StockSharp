@@ -28,19 +28,100 @@ namespace StockSharp.Algo.Indicators
 	[Description("Nick Rypock Trailing reverse.")]
 	public class NickRypockTrailingReverse : LengthIndicator<decimal>
 	{
-		private bool _isInitialized;
+		private class CalcBuffer
+		{
+			private bool _isInitialized;
 
-		private decimal _k;
-		private decimal _reverse;
-		private decimal _price;
-		private decimal _highPrice;
-		private decimal _lowPrice;
-		private int _newTrend;
+			private decimal _k;
+			private decimal _reverse;
+			private decimal _price;
+			private decimal _highPrice;
+			private decimal _lowPrice;
+			private int _newTrend;
 
-		/// <summary>
-		/// The trend direction.
-		/// </summary>
-		private int _trend;
+			/// <summary>
+			/// The trend direction.
+			/// </summary>
+			private int _trend;
+
+			public CalcBuffer Clone() => (CalcBuffer)MemberwiseClone();
+
+			public decimal Calculate(NickRypockTrailingReverse ind, IIndicatorValue input)
+			{
+				if (_isInitialized == false)
+				{
+					_k = input.GetValue<decimal>();
+					_highPrice = input.GetValue<decimal>();
+					_lowPrice = input.GetValue<decimal>();
+
+					_isInitialized = true;
+				}
+
+				_price = input.GetValue<decimal>();
+
+				_k = (_k + (_price - _k) / ind.Length) * ind._multiple;
+
+				_newTrend = 0;
+
+				if (_trend >= 0)
+				{
+					if (_price > _highPrice)
+						_highPrice = _price;
+
+					_reverse = _highPrice - _k;
+
+					if (_price <= _reverse)
+					{
+						_newTrend = -1;
+						_lowPrice = _price;
+						_reverse = _lowPrice + _k;
+					}
+					else
+					{
+						_newTrend = +1;
+					}
+				}
+
+				if (_trend <= 0)
+				{
+					if (_price < _lowPrice)
+						_lowPrice = _price;
+
+					_reverse = _lowPrice + _k;
+
+					if (_price >= _reverse)
+					{
+						_newTrend = +1;
+						_highPrice = _price;
+						_reverse = _highPrice - _k;
+					}
+					else
+					{
+						_newTrend = -1;
+					}
+				}
+
+				if (_newTrend != 0)
+					_trend = _newTrend;
+
+				return _reverse;
+			}
+
+			public void Reset()
+			{
+				_isInitialized = false;
+
+				_k = 0;
+				_reverse = 0;
+				_price = 0;
+				_highPrice = 0;
+				_lowPrice = 0;
+				_trend = 0;
+				_newTrend = 0;
+			}
+		}
+
+		private readonly CalcBuffer _buf = new();
 
 		private decimal _multiple;
 
@@ -66,28 +147,6 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		//private int _roundDigits;
-
-		///// <summary>
-		///// Округление до знака после запятой.
-		///// </summary>
-		//[DisplayName("Округление после запятой")]
-		//[Description("Округление до знака после запятой.")]
-		//[Category("Основное")]
-		//public int RoundDigits
-		//{
-		//	get { return _roundDigits; }
-		//	set
-		//	{
-		//		_roundDigits = value;
-
-		//		if (_roundDigits < 0)
-		//			_roundDigits = 0;
-
-		//		Reset();
-		//	}
-		//}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NickRypockTrailingReverse"/>.
 		/// </summary>
@@ -100,90 +159,24 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			if (_isInitialized == false)
+			var b = input.IsFinal ? _buf : _buf.Clone();
+
+			var newValue = b.Calculate(this, input);
+
+			if (input.IsFinal)
 			{
-				_k = input.GetValue<decimal>();
-				_highPrice = input.GetValue<decimal>();
-				_lowPrice = input.GetValue<decimal>();
+				if(IsFormed)
+					Buffer.RemoveAt(0);
 
-				_isInitialized = true;
+				Buffer.Add(newValue);
 			}
-
-			_price = input.GetValue<decimal>();
-
-			_k = (_k + (_price - _k) / Length) * _multiple;
-
-			_newTrend = 0;
-
-			if (_trend >= 0)
-			{
-				if (_price > _highPrice)
-					_highPrice = _price;
-
-				_reverse = _highPrice - _k;
-
-				if (_price <= _reverse)
-				{
-					_newTrend = -1;
-					_lowPrice = _price;
-					_reverse = _lowPrice + _k;
-				}
-				else
-				{
-					_newTrend = +1;
-				}
-			}
-
-			if (_trend <= 0)
-			{
-				if (_price < _lowPrice)
-					_lowPrice = _price;
-
-				_reverse = _lowPrice + _k;
-
-				if (_price >= _reverse)
-				{
-					_newTrend = +1;
-					_highPrice = _price;
-					_reverse = _highPrice - _k;
-				}
-				else
-				{
-					_newTrend = -1;
-				}
-			}
-
-			if (_newTrend != 0)
-				_trend = _newTrend;
-
-			var newValue = _reverse;
-
-			// если буффер стал достаточно большим (стал больше длины)
-			if (IsFormed)
-			{
-				// удаляем хвостовое значение
-				Buffer.RemoveAt(0);
-			}
-
-			Buffer.Add(newValue);
 
 			// значение NickRypockTrailingReverse
 			return new DecimalIndicatorValue(this, newValue);
 		}
 
 		/// <inheritdoc />
-		public override void Reset()
-		{
-			_isInitialized = false;
-
-			_k = 0;
-			_reverse = 0;
-			_price = 0;
-			_highPrice = 0;
-			_lowPrice = 0;
-			_trend = 0;
-			_newTrend = 0;
-		}
+		public override void Reset() => _buf.Reset();
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)

@@ -18,6 +18,7 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -32,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// The position by the instrument.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
 	public class Position : NotifiableObject, IExtendableEntity
@@ -53,7 +54,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str253Key)]
 		[DescriptionLoc(LocalizedStrings.Str424Key)]
 		[StatisticsCategory]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public decimal? BeginValue
 		{
@@ -77,7 +78,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str254Key)]
 		[DescriptionLoc(LocalizedStrings.Str425Key)]
 		[StatisticsCategory]
-		[Nullable]
+		//[Nullable]
 		//[Browsable(false)]
 		public decimal? CurrentValue
 		{
@@ -101,7 +102,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str255Key)]
 		[DescriptionLoc(LocalizedStrings.Str426Key)]
 		[StatisticsCategory]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public decimal? BlockedValue
 		{
@@ -246,7 +247,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str260Key)]
 		[DescriptionLoc(LocalizedStrings.Str432Key)]
 		[StatisticsCategory]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public decimal? VariationMargin
 		{
@@ -270,7 +271,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.Str433Key)]
 		[StatisticsCategory]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public decimal? Commission
 		{
@@ -294,7 +295,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str312Key)]
 		[DescriptionLoc(LocalizedStrings.SettlementPriceKey)]
 		[StatisticsCategory]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public decimal? SettlementPrice
 		{
@@ -377,7 +378,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str251Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public CurrencyTypes? Currency
 		{
 			get => _currency;
@@ -397,7 +398,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 		[DescriptionLoc(LocalizedStrings.ExpiryDateKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public DateTimeOffset? ExpirationDate
 		{
 			get => _expirationDate;
@@ -452,7 +453,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str272Key)]
 		[DescriptionLoc(LocalizedStrings.Str267Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		[DataMember]
 		public TPlusLimits? LimitType { get; set; }
 
@@ -460,13 +461,25 @@ namespace StockSharp.BusinessEntities
 		/// Strategy id.
 		/// </summary>
 		[DataMember]
-		public string StrategyId { get; set; }
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.StrategyKey,
+			Description = LocalizedStrings.Str361Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 100)]
+		public virtual string StrategyId { get; set; }
 
 		/// <summary>
 		/// Side.
 		/// </summary>
 		[DataMember]
-		public Sides? Side { get; set; }
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SideKey,
+			Description = LocalizedStrings.Str3126Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 101)]
+		public virtual Sides? Side { get; set; }
 
 		private decimal? _leverage;
 
@@ -477,7 +490,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.LeverageKey)]
 		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? Leverage
 		{
 			get => _leverage;

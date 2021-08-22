@@ -18,14 +18,12 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Serialization;
-
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// The message containing the information for the order registration.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class OrderRegisterMessage : OrderMessage
 	{
@@ -54,7 +52,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
@@ -84,7 +82,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public TimeInForce? TimeInForce { get; set; }
 
 		/// <summary>

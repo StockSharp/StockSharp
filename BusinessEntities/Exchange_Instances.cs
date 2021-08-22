@@ -776,6 +776,15 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
+		/// Information about <see cref="Bitmart"/>.
+		/// </summary>
+		public static Exchange Bitmart { get; } = new Exchange
+		{
+			Name = "BIMA",
+			FullNameLoc = LocalizedStrings.BitmartKey,
+		};
+
+		/// <summary>
 		/// Information about <see cref="Yobit"/>.
 		/// </summary>
 		public static Exchange Yobit { get; } = new Exchange

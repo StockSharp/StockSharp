@@ -16,7 +16,7 @@
     <NitoVer>5.1.0</NitoVer>
     <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.1</SignalRVer>
-    <NuGetApiVersion>5.9.0</NuGetApiVersion>
+    <NuGetApiVersion>5.9.1</NuGetApiVersion>
     <SystemDataSqlClientVer>4.8.2</SystemDataSqlClientVer>
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoGitLabPath>$(RepoGitHubPath)..\StockSharp (GitLab)\</RepoGitLabPath>
@@ -25,6 +25,10 @@
     <ConnectorsGitLabPath>$(RepoGitLabPath)Connectors\</ConnectorsGitLabPath>
     <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
+    <MsTestVer>2.2.3</MsTestVer>
+    <MsTestSdkVer>16.9.4</MsTestSdkVer>
+    <NewtonJsonVer>13.0.1</NewtonJsonVer>
+    <ReactiveXVer>5.0.0</ReactiveXVer>
   </PropertyGroup>
   <PropertyGroup>
     <!-- TODO this needs to be removed when connectors fixed to NO_LICENSE constant -->

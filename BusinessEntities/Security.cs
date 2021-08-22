@@ -35,7 +35,7 @@ namespace StockSharp.BusinessEntities
 	/// Security (shares, futures, options etc.).
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str546Key)]
 	public class Security : Cloneable<Security>, IExtendableEntity, INotifyPropertyChanged
@@ -133,7 +133,7 @@ namespace StockSharp.BusinessEntities
 		/// Security type.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TypeKey,
@@ -209,7 +209,7 @@ namespace StockSharp.BusinessEntities
 		/// Trading security currency.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
@@ -288,7 +288,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.MinPriceStepKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 9)]
-		[Nullable]
+		//[Nullable]
 		[GreaterThanZero]
 		public decimal? PriceStep
 		{
@@ -318,7 +318,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str366Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		[Nullable]
+		//[Nullable]
 		[GreaterThanZero]
 		public decimal? VolumeStep
 		{
@@ -348,7 +348,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.MinVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		[Nullable]
+		//[Nullable]
 		//[GreaterThanZero]
 		public decimal? MinVolume
 		{
@@ -378,7 +378,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.MaxVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
-		[Nullable]
+		//[Nullable]
 		//[GreaterThanZero]
 		public decimal? MaxVolume
 		{
@@ -408,7 +408,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.LotVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 12)]
-		[Nullable]
+		//[Nullable]
 		public decimal? Multiplier
 		{
 			get => _multiplier;
@@ -438,7 +438,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 13)]
 		//[ReadOnly(true)]
-		[Nullable]
+		//[Nullable]
 		public int? Decimals
 		{
 			get => _decimals;
@@ -461,7 +461,7 @@ namespace StockSharp.BusinessEntities
 		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExpiryDateKey,
@@ -487,7 +487,7 @@ namespace StockSharp.BusinessEntities
 		/// Settlement date for security (for derivatives and bonds).
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SettlementDateKey,
@@ -1067,7 +1067,7 @@ namespace StockSharp.BusinessEntities
 		/// Option type.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str551Key,
@@ -1099,7 +1099,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.OptionStrikePriceKey,
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 102)]
-		[Nullable]
+		//[Nullable]
 		public decimal? Strike
 		{
 			get => _strike;
@@ -1789,7 +1789,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 21)]
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? IssueSize
 		{
 			get => _issueSize;
@@ -1812,7 +1812,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 22)]
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public DateTimeOffset? IssueDate
 		{
 			get => _issueDate;
@@ -1835,7 +1835,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 22)]
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public bool? Shortable
 		{
 			get => _shortable;
@@ -1858,7 +1858,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 103)]
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public SecurityTypes? UnderlyingSecurityType
 		{
 			get => _underlyingSecurityType;
@@ -1881,7 +1881,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 104)]
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		public decimal? UnderlyingSecurityMinVolume
 		{
 			get => _underlyingSecurityMinVolume;

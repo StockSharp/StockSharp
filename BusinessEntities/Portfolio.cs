@@ -28,7 +28,7 @@ namespace StockSharp.BusinessEntities
 	/// Portfolio, describing the trading account and the size of its generated commission.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
 	public class Portfolio : Position
@@ -98,7 +98,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
 		[DescriptionLoc(LocalizedStrings.Str252Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		[Browsable(false)]
 		public PortfolioStates? State
 		{
@@ -112,6 +112,14 @@ namespace StockSharp.BusinessEntities
 				NotifyChanged();
 			}
 		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override string StrategyId { get => base.StrategyId; set => base.StrategyId = value; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override Sides? Side { get => base.Side; set => base.Side = value; }
 
 		/// <summary>
 		/// Portfolio associated with the orders received through the orders log.
@@ -146,10 +154,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <inheritdoc />
-		public override string ToString()
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
 
 		/// <inheritdoc />
 		public override Position Clone()

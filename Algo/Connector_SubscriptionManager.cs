@@ -102,8 +102,9 @@ namespace StockSharp.Algo
 			private readonly List<SubscriptionInfo> _keeped = new List<SubscriptionInfo>();
 			private readonly HashSet<long> _notFound = new HashSet<long>();
 			private readonly Dictionary<long, long> _subscriptionAllMap = new Dictionary<long, long>();
-			
+
 			private readonly Connector _connector;
+			private bool _wasConnected;
 
 			public SubscriptionManager(Connector connector)
 			{
@@ -127,6 +128,7 @@ namespace StockSharp.Algo
 			{
 				lock (_syncObject)
 				{
+					_wasConnected = default;
 					_subscriptions.Clear();
 					_requests.Clear();
 					_keeped.Clear();
@@ -155,8 +157,7 @@ namespace StockSharp.Algo
 
 			private void Remove(long id)
 			{
-				// keed subscription instancies for tracing purpose
-				//_subscriptions.Remove(id);
+				_subscriptions.Remove(id);
 				_connector.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
 			}
 
@@ -346,7 +347,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void Subscribe(Subscription subscription, bool keepBackMode = false)
+			private void AddSubscription(Subscription subscription)
 			{
 				if (subscription == null)
 					throw new ArgumentNullException(nameof(subscription));
@@ -354,18 +355,22 @@ namespace StockSharp.Algo
 				if (subscription.TransactionId == 0)
 					subscription.TransactionId = _connector.TransactionIdGenerator.GetNextId();
 
-				var subscrMsg = subscription.SubscriptionMessage;
-
 				lock (_syncObject)
 				{
 					var info = new SubscriptionInfo(subscription, _subscriptionAllMap.TryGetValue(subscription.TransactionId, out var parentId) ? _subscriptions.TryGetValue(parentId) : null);
 
-					if (subscrMsg is OrderStatusMessage)
+					if (subscription.SubscriptionMessage is OrderStatusMessage)
 						_connector._entityCache.AddOrderStatusTransactionId(subscription.TransactionId);
 
 					_subscriptions.Add(subscription.TransactionId, info);
 				}
+			}
 
+			public void Subscribe(Subscription subscription, bool keepBackMode = false)
+			{
+				AddSubscription(subscription);
+
+				var subscrMsg = subscription.SubscriptionMessage;
 				var clone = subscrMsg.TypedClone();
 				clone.Adapter = subscrMsg.Adapter;
 
@@ -410,7 +415,48 @@ namespace StockSharp.Algo
 				_connector.SendInMessage((Message)request);
 			}
 
-			public void ReSubscribeAll()
+			public void HandleConnected(MessageTypes[] defaultSubscriptionMessageTypes)
+			{
+				static DataType GetDataType(MessageTypes type) =>
+					type switch
+					{
+						MessageTypes.SecurityLookup     => DataType.Securities,
+						MessageTypes.PortfolioLookup    => DataType.PositionChanges,
+						MessageTypes.OrderStatus        => DataType.Transactions,
+						MessageTypes.TimeFrameLookup    => DataType.TimeFrames,
+						_                               => null
+					};
+
+				var missingSubscriptionDataTypes = defaultSubscriptionMessageTypes
+					.Select(GetDataType)
+					.Where(dt => dt != null && !Subscriptions.Any(s => s.SubscriptionMessage.DataType == dt && s.SubscriptionMessage.To == null));
+
+				if (_wasConnected)
+				{
+					if (!_connector.IsRestoreSubscriptionOnNormalReconnect)
+						return;
+
+					missingSubscriptionDataTypes.ForEach(dt =>
+					{
+						var sub = dt.ToSubscription();
+						_connector.AddVerboseLog($"adding default subscription {sub.SubscriptionMessage.Type}");
+						AddSubscription(sub);
+					});
+					ReSubscribeAll();
+				}
+				else
+				{
+					_wasConnected = true;
+					missingSubscriptionDataTypes.ForEach(dt =>
+					{
+						var sub = dt.ToSubscription();
+						_connector.AddVerboseLog($"subscribing default subscription {sub.SubscriptionMessage.Type}");
+						Subscribe(sub);
+					});
+				}
+			}
+
+			private void ReSubscribeAll()
 			{
 				_connector.AddInfoLog(nameof(ReSubscribeAll));
 
@@ -584,7 +630,7 @@ namespace StockSharp.Algo
 
 					if (!info.UpdateLastTime(message.OpenTime))
 						continue;
-					
+
 					if (!info.UpdateCandle(message, out var candle))
 						continue;
 

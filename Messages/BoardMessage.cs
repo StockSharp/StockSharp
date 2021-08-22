@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The message contains information about the electronic board.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class BoardMessage : BaseSubscriptionIdMessage<BoardMessage>
 	{
@@ -110,7 +110,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str68Key)]
 		[MainCategory]
 		[XmlIgnore]
-		[Ecng.Serialization.TimeZoneInfo]
+		//[Ecng.Serialization.TimeZoneInfo]
 		public TimeZoneInfo TimeZone
 		{
 			get => _timeZone;

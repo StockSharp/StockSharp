@@ -22,14 +22,13 @@ namespace StockSharp.Messages
 	using System.ComponentModel;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// A message containing info about the security.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class SecurityMessage : BaseSubscriptionIdMessage<SecurityMessage>, ISecurityIdMessage
 	{
@@ -66,7 +65,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? VolumeStep { get; set; }
 
 		/// <summary>
@@ -76,7 +75,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.MinVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.MinVolumeDescKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? MinVolume { get; set; }
 
 		/// <summary>
@@ -86,7 +85,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.MaxVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.MaxVolumeDescKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? MaxVolume { get; set; }
 
 		/// <summary>
@@ -96,7 +95,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str330Key)]
 		[DescriptionLoc(LocalizedStrings.LotVolumeKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? Multiplier { get; set; }
 
 		/// <summary>
@@ -106,7 +105,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
 		[DescriptionLoc(LocalizedStrings.Str548Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public int? Decimals { get; set; }
 
 		/// <summary>
@@ -116,7 +115,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
 		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? PriceStep { get; set; }
 
 		/// <summary>
@@ -126,7 +125,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TypeKey)]
 		[DescriptionLoc(LocalizedStrings.Str360Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
@@ -145,7 +144,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str371Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <summary>
@@ -155,7 +154,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.SettlementDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str373Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public DateTimeOffset? SettlementDate { get; set; }
 
 		/// <summary>
@@ -173,7 +172,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.UnderlyingMinVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.UnderlyingMinVolumeDescKey)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public decimal? UnderlyingSecurityMinVolume { get; set; }
 
 		/// <summary>
@@ -182,7 +181,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
 		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
-		[Nullable]
+		//[Nullable]
 		public decimal? Strike { get; set; }
 
 		/// <summary>
@@ -191,7 +190,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OptionsContractKey)]
 		[DescriptionLoc(LocalizedStrings.OptionContractTypeKey)]
-		[Nullable]
+		//[Nullable]
 		public OptionTypes? OptionType { get; set; }
 
 		/// <summary>
@@ -209,7 +208,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
-		[Nullable]
+		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>

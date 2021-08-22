@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// Own trade.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str502Key)]
 	[DescriptionLoc(LocalizedStrings.Str503Key)]
 	public class MyTrade : NotifiableObject, IExtendableEntity
@@ -83,7 +83,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str160Key,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 0)]
-		[Nullable]
+		//[Nullable]
 		public decimal? Commission { get; set; }
 
 		/// <summary>
@@ -95,7 +95,7 @@ namespace StockSharp.BusinessEntities
 		/// Slippage in trade price.
 		/// </summary>
 		[DataMember]
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str163Key,
@@ -116,7 +116,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.PnLKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 2)]
-		[Nullable]
+		//[Nullable]
 		public decimal? PnL
 		{
 			get => _pnL;
@@ -140,7 +140,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str862Key + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 2)]
-		[Nullable]
+		//[Nullable]
 		public decimal? Position { get; set; }
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.InitiatorTradeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
-		[Nullable]
+		//[Nullable]
 		public bool? Initiator { get; set; }
 
 		/// <summary>
