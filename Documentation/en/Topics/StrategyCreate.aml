@@ -162,7 +162,7 @@ class SmaStrategy : Strategy
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.MyTrades</codeEntityReference> collections, so you can view all the orders
 			  and trades created within the framework of the strategy.
 			</para>
-			<alert class-="note">
+			<alert class="note">
 			  <para>
 				If you want to change the registered order, you also have to call <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
 				method, and not to apply directly to the connector through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
@@ -329,11 +329,11 @@ private void StartClick(object sender, RoutedEventArgs e)
 			  <codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> 
 			  event and strategy termination begins by itself.
 			</para>
-			<note class="note">
+			<alert class="note">
 			  The <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Warning</codeEntityReference> value is aimed to alert about anything unusual.
 			  For example, to display information to the user that clearing started, or the account has not sufficient funds and there is a probability that the next
 			  order can not be registered.
-			</note>
+			</alert>
 		  </content>
 		</step>
 		<step>

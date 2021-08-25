@@ -336,7 +336,6 @@
     <None Include="Topics\HydraConnectingBitmex.aml" />
     <None Include="Topics\HydraConnectingIBTWS.aml" />
     <None Include="Topics\HydraConnectingOanda.aml" />
-    <None Include="Topics\HydraConnectingFinam.aml" />
     <None Include="Topics\InstallerSetup.aml" />
     <None Include="Topics\HydraConvectorVideo.aml" />
     <None Include="Topics\HydraExportAutoVideo.aml" />
@@ -356,7 +355,6 @@
     <None Include="Topics\HydraWorkingWithMarketData.aml" />
     <None Include="Topics\HydraCustomCandleType.aml" />
     <None Include="Topics\HydraConfigurationSecuritiesDownload.aml" />
-    <None Include="Topics\HydraDownloadingMarketData.aml" />
     <None Include="Topics\HydraSourceSelection.aml" />
     <None Include="Topics\HydraDataSource.aml" />
     <None Include="Topics\Installer_software_update.aml" />
@@ -401,7 +399,6 @@
     <None Include="Topics\FinViz.aml" />
     <None Include="Topics\GAIN Capital.aml" />
     <None Include="Topics\RTSConnectorsSettings.aml" />
-    <None Include="Topics\RTSSample.aml" />
     <None Include="Topics\LCISample.aml" />
     <None Include="Topics\UXSample.aml" />
     <None Include="Topics\RTS.aml" />
@@ -523,8 +520,6 @@
     <None Include="Topics\Quandl.aml" />
     <None Include="Topics\MfdSample.aml" />
     <None Include="Topics\Mfd.aml" />
-    <None Include="Topics\AlorHistorySample.aml" />
-    <None Include="Topics\AlorHistory.aml" />
     <None Include="Topics\FinamSample.aml" />
     <None Include="Topics\Finam.aml" />
     <None Include="Topics\DukasCopySample.aml" />
@@ -830,7 +825,6 @@
     <None Include="Topics\Bithumb.aml" />
     <None Include="Topics\Bitfinex.aml" />
     <None Include="Topics\QuantFeedSample.aml" />
-    <None Include="Topics\SpbExSample.aml" />
     <None Include="Topics\QuantFeed.aml" />
     <None Include="Topics\HydraTasksImport.aml" />
     <None Include="Topics\Designer_Security_mapping.aml" />
@@ -846,8 +840,6 @@
     <None Include="Topics\FxcmSample.aml" />
     <None Include="Topics\Fxcm.aml" />
     <None Include="Topics\SpbEx.aml" />
-    <None Include="Topics\HydraSecurityExtensionInfo.aml" />
-    <None Include="Topics\hydraAPIConnectWCF.aml" />
     <None Include="Topics\HydraExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnect.aml" />
     <None Include="Topics\hydra_index.aml" />
@@ -1007,7 +999,6 @@
     <None Include="Topics\HydraExportSecurityChange.aml" />
     <None Include="Topics\HydraExportDepth.aml" />
     <None Include="Topics\HydraSettingsSecurity.aml" />
-    <None Include="Topics\HydraSettingsSource.aml" />
     <None Include="Topics\MarketRuleExclusive.aml" />
     <None Include="Topics\MarketRuleSyncAndSuspend.aml" />
     <None Include="Topics\MarketRule.aml" />

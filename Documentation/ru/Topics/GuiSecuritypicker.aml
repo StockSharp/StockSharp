@@ -16,7 +16,7 @@
   			<para>Текстового поля, для ввода кода (или Id) инструмента. При вводе выполняется фильтрация списка по введенной подстроке.</para>
   		</listItem>
   		<listItem>
-  			<para>Специального комбинированного списка <codeEntityReference>T:StockSharp.Xaml.<codeInline></codeInline>SecurityTypeComboBox</codeEntityReference> 
+  			<para>Специального комбинированного списка <codeEntityReference>T:StockSharp.Xaml.SecurityTypeComboBox</codeEntityReference> 
   			для фильтрации инструментов по их типу.</para>
   		</listItem>
   		<listItem>

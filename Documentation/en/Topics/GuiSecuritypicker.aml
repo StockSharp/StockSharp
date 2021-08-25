@@ -18,7 +18,7 @@
   			<para>A text field, to enter the code (or Id) of the instrument. When you enter, the list is filtered by the entered substring.</para>
   		</listItem>
   		<listItem>
-  			<para>The special <codeEntityReference>T:StockSharp.Xaml.<codeInline></codeInline>SecurityTypeComboBox</codeEntityReference> 
+  			<para>The special <codeEntityReference>T:StockSharp.Xaml.SecurityTypeComboBox</codeEntityReference> 
   			combo box for filtering instruments by their type.</para>
   		</listItem>
   		<listItem>

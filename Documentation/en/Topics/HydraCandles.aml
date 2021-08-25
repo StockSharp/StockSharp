@@ -3,7 +3,7 @@
   <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para><token>hydra</token> allows you to generate candles based on downloaded trades, which can later be exported to 
-      <token>>Excel</token>, xml, sql, bin, Json or txt formats (see below).
+      <token>excel</token>, xml, sql, bin, Json or txt formats (see below).
 </para>
       <para>This allows you to subsequently use the data in any technical analysis programs (WealthLab, AmiBroker, etc.).</para>
     </introduction>

@@ -384,7 +384,6 @@
     <None Include="Topics\HydraWorkingWithMarketData.aml" />
     <None Include="Topics\HydraCustomCandleType.aml" />
     <None Include="Topics\HydraConfigurationSecuritiesDownload.aml" />
-    <None Include="Topics\HydraDownloadingMarketData.aml" />
     <None Include="Topics\HydraSourceSelection.aml" />
     <None Include="Topics\HydraDataSource.aml" />
     <None Include="Topics\Installer_software_update.aml" />
@@ -883,8 +882,6 @@
     <None Include="Topics\FxcmSample.aml" />
     <None Include="Topics\Fxcm.aml" />
     <None Include="Topics\SpbEx.aml" />
-    <None Include="Topics\HydraSecurityExtensionInfo.aml" />
-    <None Include="Topics\hydraAPIConnectWCF.aml" />
     <None Include="Topics\HydraExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnect.aml" />
     <None Include="Topics\hydra_index.aml" />
@@ -1035,7 +1032,6 @@
     <None Include="Topics\HydraExportSecurityChange.aml" />
     <None Include="Topics\HydraExportDepth.aml" />
     <None Include="Topics\HydraSettingsSecurity.aml" />
-    <None Include="Topics\HydraSettingsSource.aml" />
     <None Include="Topics\MarketRuleExclusive.aml" />
     <None Include="Topics\MarketRuleSyncAndSuspend.aml" />
     <None Include="Topics\MarketRule.aml" />

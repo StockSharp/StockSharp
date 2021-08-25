@@ -4,7 +4,7 @@
     <introduction>
 <para>Для экспорта данных в файлы форматов TSLab и MetaStock необходимо из раскрывающегося списка выбрать формат Txt:</para>
     	<mediaLink>
-    		<image placement="center" xlink:href="hydra_export_JSON" />
+    		<image placement="center" xlink:href="hydra_export" />
     	</mediaLink>
 
     	<para>
