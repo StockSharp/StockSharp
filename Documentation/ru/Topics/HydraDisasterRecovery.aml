@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20" revisionNumber="1">
-  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>При аварийном восстановлении работы <token>hydra</token> следует учитывать, что настройки хранятся в <link xlink:href="38595e78-cff6-44ed-b525-2be13e6c17e4">базе данных</link> и обычное удаление папок с историей может не привести к желаемому эффекту!</para>
-      <para>Если после "аварии" была удалена база данных и следовательно удалены инструменты, то существует возможность восстановить инструменты по скачанным файлам при помощи функции <link xlink:href="715c9caa-2fc1-4b7d-bc01-05cdf5897794">Синхронизировать данные с директориями</link>.</para>
-    </introduction>
-  </developerConceptualDocument>
-</topic>
