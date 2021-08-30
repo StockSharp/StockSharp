@@ -259,7 +259,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private XmlSerializer<TItem> GetSerializer<TItem>()
 			{
-				return (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>(false));
+				return (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem> { Indent = false });
 			}
 		}
 

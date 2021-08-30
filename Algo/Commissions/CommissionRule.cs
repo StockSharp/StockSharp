@@ -18,7 +18,6 @@ namespace StockSharp.Algo.Commissions
 	using System;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
-	using DataContract = System.Runtime.Serialization.DataContractAttribute;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -53,10 +52,7 @@ namespace StockSharp.Algo.Commissions
 			get => _value;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_value = value;
+				_value = value ?? throw new ArgumentNullException(nameof(value));
 				NotifyChanged();
 			}
 		}
