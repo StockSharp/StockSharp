@@ -537,7 +537,7 @@ namespace StockSharp.Algo
 					if (message.OrderId != null)
 						return i.Order.Id == message.OrderId;
 					else
-						return i.Order.StringId.CompareIgnoreCase(message.OrderStringId);
+						return i.Order.StringId.EqualsIgnoreCase(message.OrderStringId);
 				});
 
 				if (info == null)
@@ -558,7 +558,7 @@ namespace StockSharp.Algo
 				var editedInfo = securityData.TryGetOrder(message.OrderType, transactionId, OrderOperations.Edit);
 
 				// проверяем не отмененная ли заявка пришла
-				if (cancelledInfo != null) // && (cancelledOrder.Id == orderId || (!cancelledOrder.StringId.IsEmpty() && cancelledOrder.StringId.CompareIgnoreCase(orderStringId))))
+				if (cancelledInfo != null) // && (cancelledOrder.Id == orderId || (!cancelledOrder.StringId.IsEmpty() && cancelledOrder.StringId.EqualsIgnoreCase(orderStringId))))
 				{
 					var cancellationOrder = cancelledInfo.Order;
 

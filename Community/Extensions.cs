@@ -109,7 +109,7 @@ namespace StockSharp.Community
 
 			var name = product.Name.Remove("S#.", true);
 
-			if (name.CompareIgnoreCase("Data"))
+			if (name.EqualsIgnoreCase("Data"))
 				name = "Hydra";
 
 			return name;

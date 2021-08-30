@@ -2403,7 +2403,7 @@ namespace StockSharp.Algo.Strategies
 
 			var id = EnsureGetId();
 
-			return order.UserOrderId.CompareIgnoreCase(id) || (RestoreChildOrders && order.StrategyId.CompareIgnoreCase(id));
+			return order.UserOrderId.EqualsIgnoreCase(id) || (RestoreChildOrders && order.StrategyId.EqualsIgnoreCase(id));
 		}
 
 		private void OnConnectorOrderReceived(Subscription subscription, Order order)

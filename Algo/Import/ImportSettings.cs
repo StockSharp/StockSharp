@@ -430,7 +430,7 @@ namespace StockSharp.Algo.Import
 			foreach (var fieldSettings in storages)
 			{
 				var fieldName = fieldSettings.GetValue<string>(nameof(FieldMapping.Name));
-				var field = AllFields.FirstOrDefault(f => f.Name.CompareIgnoreCase(fieldName));
+				var field = AllFields.FirstOrDefault(f => f.Name.EqualsIgnoreCase(fieldName));
 
 				if (field == null)
 					continue;

@@ -2214,7 +2214,7 @@ namespace StockSharp.Messages
 			if (news == null)
 				throw new ArgumentNullException(nameof(news));
 
-			return news.Source.CompareIgnoreCase(NewsStockSharpSource);
+			return news.Source.EqualsIgnoreCase(NewsStockSharpSource);
 		}
 
 		/// <summary>
@@ -2515,7 +2515,7 @@ namespace StockSharp.Messages
 			//if (security == null)
 			//	throw new ArgumentNullException(nameof(security));
 
-			return securityId == default || (securityId.SecurityCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode));
+			return securityId == default || (securityId.SecurityCode.EqualsIgnoreCase(SecurityId.AssociatedBoardCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.AssociatedBoardCode));
 		}
 
 		/// <summary>
@@ -2983,16 +2983,16 @@ namespace StockSharp.Messages
 
 			if (!criteria.PortfolioName.IsEmpty())
 			{
-				if (compareName && !!portfolio.PortfolioName.CompareIgnoreCase(criteria.PortfolioName))
+				if (compareName && !!portfolio.PortfolioName.EqualsIgnoreCase(criteria.PortfolioName))
 					return false;
 				else if (!compareName && !portfolio.PortfolioName.ContainsIgnoreCase(criteria.PortfolioName))
 					return false;
 			}
 
-			if (!criteria.BoardCode.IsEmpty() && !portfolio.BoardCode.CompareIgnoreCase(criteria.BoardCode))
+			if (!criteria.BoardCode.IsEmpty() && !portfolio.BoardCode.EqualsIgnoreCase(criteria.BoardCode))
 				return false;
 
-			if (!criteria.ClientCode.IsEmpty() && !portfolio.ClientCode.CompareIgnoreCase(criteria.ClientCode))
+			if (!criteria.ClientCode.IsEmpty() && !portfolio.ClientCode.EqualsIgnoreCase(criteria.ClientCode))
 				return false;
 
 			if (criteria.Currency != null && portfolio.Currency != criteria.Currency)
@@ -3018,7 +3018,7 @@ namespace StockSharp.Messages
 
 			if (!criteria.PortfolioName.IsEmpty())
 			{
-				if (compareName && !!position.PortfolioName.CompareIgnoreCase(criteria.PortfolioName))
+				if (compareName && !!position.PortfolioName.EqualsIgnoreCase(criteria.PortfolioName))
 					return false;
 				else if (!compareName && !position.PortfolioName.ContainsIgnoreCase(criteria.PortfolioName))
 					return false;
@@ -3027,13 +3027,13 @@ namespace StockSharp.Messages
 			if (criteria.SecurityId != null && position.SecurityId != criteria.SecurityId.Value)
 				return false;
 
-			if (!criteria.BoardCode.IsEmpty() && !position.BoardCode.CompareIgnoreCase(criteria.BoardCode))
+			if (!criteria.BoardCode.IsEmpty() && !position.BoardCode.EqualsIgnoreCase(criteria.BoardCode))
 				return false;
 
-			if (!criteria.ClientCode.IsEmpty() && !position.ClientCode.CompareIgnoreCase(criteria.ClientCode))
+			if (!criteria.ClientCode.IsEmpty() && !position.ClientCode.EqualsIgnoreCase(criteria.ClientCode))
 				return false;
 
-			if (!criteria.StrategyId.IsEmpty() && !position.StrategyId.CompareIgnoreCase(criteria.StrategyId))
+			if (!criteria.StrategyId.IsEmpty() && !position.StrategyId.EqualsIgnoreCase(criteria.StrategyId))
 				return false;
 
 			if (criteria.Side != null && position.Side != criteria.Side)
@@ -3089,10 +3089,10 @@ namespace StockSharp.Messages
 			if (criteria.Volume != default && criteria.Volume != transaction.OrderVolume)
 				return false;
 
-			if (!criteria.StrategyId.IsEmpty() && !criteria.StrategyId.CompareIgnoreCase(transaction.StrategyId))
+			if (!criteria.StrategyId.IsEmpty() && !criteria.StrategyId.EqualsIgnoreCase(transaction.StrategyId))
 				return false;
 
-			if (!criteria.PortfolioName.IsEmpty() && !criteria.PortfolioName.CompareIgnoreCase(transaction.PortfolioName))
+			if (!criteria.PortfolioName.IsEmpty() && !criteria.PortfolioName.EqualsIgnoreCase(transaction.PortfolioName))
 				return false;
 
 			return true;
@@ -3123,7 +3123,7 @@ namespace StockSharp.Messages
 			if (!secId.SecurityCode.IsEmpty() && !security.SecurityId.SecurityCode.ContainsIgnoreCase(secId.SecurityCode))
 				return false;
 
-			if (!secId.BoardCode.IsEmpty() && !security.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
+			if (!secId.BoardCode.IsEmpty() && !security.SecurityId.BoardCode.EqualsIgnoreCase(secId.BoardCode))
 				return false;
 
 			// sec + board codes means exact id
@@ -3232,7 +3232,7 @@ namespace StockSharp.Messages
 			if (!criteria.BasketCode.IsEmptyOrWhiteSpace() && !security.BasketCode.ContainsIgnoreCase(criteria.BasketCode))
 				return false;
 
-			if (!criteria.BasketExpression.IsEmptyOrWhiteSpace() && !security.BasketExpression.CompareIgnoreCase(criteria.BasketExpression))
+			if (!criteria.BasketExpression.IsEmptyOrWhiteSpace() && !security.BasketExpression.EqualsIgnoreCase(criteria.BasketExpression))
 				return false;
 
 			if (criteria.FaceValue != default && security.FaceValue != criteria.FaceValue)
@@ -3241,7 +3241,7 @@ namespace StockSharp.Messages
 			if (criteria.PrimaryId != default && security.PrimaryId != criteria.PrimaryId)
 				return false;
 
-			if (!criteria.BoardCode.IsEmptyOrWhiteSpace() && !security.SecurityId.BoardCode.CompareIgnoreCase(criteria.BoardCode))
+			if (!criteria.BoardCode.IsEmptyOrWhiteSpace() && !security.SecurityId.BoardCode.EqualsIgnoreCase(criteria.BoardCode))
 				return false;
 
 			return true;

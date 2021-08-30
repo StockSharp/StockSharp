@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Storages
 
 		private Stream LoadStream(DateTime date) => Drive.LoadStream(date);
 
-		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.CompareIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.BoardCode);
+		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
 
 		public int Save(IEnumerable<TMessage> data)
 		{

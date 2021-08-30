@@ -362,7 +362,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				public Security ToSecurity(SecurityCsvList list)
 				{
-					if (Id.CompareIgnoreCase(TraderHelper.AllSecurity.Id))
+					if (Id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
 						return TraderHelper.AllSecurity;
 
 					var board = Board;
@@ -446,7 +446,7 @@ namespace StockSharp.Algo.Storages.Csv
 				if (original.IsEmpty())
 					return forced && !cached.IsEmpty();
 				else
-					return cached.IsEmpty() || (forced && !cached.CompareIgnoreCase(original));
+					return cached.IsEmpty() || (forced && !cached.EqualsIgnoreCase(original));
 			}
 
 			private static bool IsChanged<T>(T? original, T? cached, bool forced)
@@ -544,7 +544,7 @@ namespace StockSharp.Algo.Storages.Csv
 				}
 				else
 				{
-					if (liteSec.Board.IsEmpty() || (forced && !liteSec.Board.CompareIgnoreCase(security.Board?.Code)))
+					if (liteSec.Board.IsEmpty() || (forced && !liteSec.Board.EqualsIgnoreCase(security.Board?.Code)))
 						return true;
 				}
 

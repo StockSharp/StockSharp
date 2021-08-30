@@ -230,7 +230,7 @@ namespace StockSharp.Algo.Import
 
 			if (Values.Any())
 			{
-				var v = Values.FirstOrDefault(vl => vl.ValueFile.CompareIgnoreCase(value));
+				var v = Values.FirstOrDefault(vl => vl.ValueFile.EqualsIgnoreCase(value));
 
 				if (v != null)
 				{

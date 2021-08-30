@@ -482,7 +482,7 @@ namespace StockSharp.Algo.Storages
 						Directory.EnumerateDirectories(securityPath)
 							.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
 								.Concat(Directory.EnumerateFiles(d, "*.csv"))
-								.OrderBy(f => IOPath.GetExtension(f).CompareIgnoreCase(".bin") ? 0 : 1))
+								.OrderBy(f => IOPath.GetExtension(f).EqualsIgnoreCase(".bin") ? 0 : 1))
 							.FirstOrDefault();
 
 					if (firstDataFile != null)
@@ -491,7 +491,7 @@ namespace StockSharp.Algo.Storages
 
 						decimal priceStep;
 
-						if (IOPath.GetExtension(firstDataFile).CompareIgnoreCase(".bin"))
+						if (IOPath.GetExtension(firstDataFile).EqualsIgnoreCase(".bin"))
 						{
 							try
 							{

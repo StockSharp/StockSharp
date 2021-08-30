@@ -218,7 +218,7 @@ namespace StockSharp.Messages
 			if (_native != null)
 				return _native.Equals(other._native);
 
-			return _securityCode.CompareIgnoreCase(other._securityCode) && _boardCode.CompareIgnoreCase(other._boardCode);
+			return _securityCode.EqualsIgnoreCase(other._securityCode) && _boardCode.EqualsIgnoreCase(other._boardCode);
 		}
 
 		/// <summary>

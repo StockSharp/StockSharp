@@ -720,7 +720,7 @@ namespace StockSharp.Algo
 		/// <returns><see cref="SecurityId"/> value.</returns>
 		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
 		{
-			if (id.CompareIgnoreCase(TraderHelper.AllSecurity.Id))
+			if (id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
 				return default;
 
 			return GetGenerator(generator).Split(id);
@@ -1559,10 +1559,10 @@ namespace StockSharp.Algo
 
 				// http://stocksharp.com/forum/yaf_postst5143findunread_API-4-2-4-0-Nie-vystavliaiutsia-zaiavki-po-niekotorym-instrumientam-FORTS.aspx
 				// для Quik необходимо соблюдение регистра в коде инструмента при выставлении заявок
-				if (secCode.CompareIgnoreCase(security.Code))
+				if (secCode.EqualsIgnoreCase(security.Code))
 					secCode = security.Code;
 
-				//if (!boardCode.CompareIgnoreCase(ExchangeBoard.Test.Code))
+				//if (!boardCode.EqualsIgnoreCase(ExchangeBoard.Test.Code))
 				boardCode = id.BoardCode;
 			}
 			else

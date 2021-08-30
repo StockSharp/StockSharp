@@ -80,7 +80,7 @@ namespace StockSharp.Algo
 			var securities = _trie.Retrieve(filter);
 
 			if (!secId.IsEmpty())
-				securities = securities.Where(s => s.Id.CompareIgnoreCase(secId));
+				securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
 
 			return securities.Filter(criteria);
 		}

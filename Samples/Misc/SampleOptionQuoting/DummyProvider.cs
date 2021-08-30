@@ -270,7 +270,7 @@ namespace SampleOptionQuoting
 
 		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)
 		{
-			return _positions.OfType<Portfolio>().FirstOrDefault(p => p.Name.CompareIgnoreCase(name));
+			return _positions.OfType<Portfolio>().FirstOrDefault(p => p.Name.EqualsIgnoreCase(name));
 		}
 	}
 }

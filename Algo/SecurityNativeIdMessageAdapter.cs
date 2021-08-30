@@ -385,7 +385,7 @@
 					{
 						foreach (var id in _securityIds.Values)
 						{
-							if (!id.SecurityCode.CompareIgnoreCase(securityCode))
+							if (!id.SecurityCode.EqualsIgnoreCase(securityCode))
 								continue;
 
 							//if (securityId.SecurityType != null && securityId.SecurityType != id.SecurityType)
@@ -506,7 +506,7 @@
 				// find association by code and code + type
 				var pair = _suspendedOutMessages
 					.FirstOrDefault(p =>
-						p.Key.SecurityCode.CompareIgnoreCase(securityId.SecurityCode) &&
+						p.Key.SecurityCode.EqualsIgnoreCase(securityId.SecurityCode) &&
 						p.Key.BoardCode.IsEmpty() /*&&
 						(securityId.SecurityType == null || p.Key.SecurityType == securityId.SecurityType)*/);
 
@@ -538,7 +538,7 @@
 
 		private void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)
 		{
-			if (!StorageName.CompareIgnoreCase(storageName))
+			if (!StorageName.EqualsIgnoreCase(storageName))
 				return;
 
 			bool needMessage;

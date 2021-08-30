@@ -323,7 +323,7 @@ namespace StockSharp.Algo.Testing
 		{
 			if (OwnInnerAdapter)
 			{
-				if (_isEmulationOnly || portfolioName.CompareIgnoreCase(Extensions.SimulatorPortfolioName))
+				if (_isEmulationOnly || portfolioName.EqualsIgnoreCase(Extensions.SimulatorPortfolioName))
 				{
 					if (!_isEmulationOnly)
 						_emuOrderIds.Add(message.TransactionId);

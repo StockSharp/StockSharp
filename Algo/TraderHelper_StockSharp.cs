@@ -1096,7 +1096,7 @@ SPFB.1MFR".SplitLines().ToIgnoreCaseSet();
 			if (secProvider != null)
 			{
 				var found = (board.IsEmpty() ? null : new[] { secProvider.LookupById(new SecurityId { SecurityCode = code, BoardCode = board }) }.Where(f1 => f1 != null)) ??
-							secProvider.LookupByCode(code, type).Where(s => s.ToSecurityId().SecurityCode.CompareIgnoreCase(code)) ??
+							secProvider.LookupByCode(code, type).Where(s => s.ToSecurityId().SecurityCode.EqualsIgnoreCase(code)) ??
 				            secProvider.Lookup(new SecurityLookupMessage { ShortName = code, SecurityType = type }) ??
 				            secProvider.Lookup(new SecurityLookupMessage { Name = code, SecurityType = type });
 
@@ -1188,7 +1188,7 @@ SPFB.1MFR".SplitLines().ToIgnoreCaseSet();
 					{
 						var name = key.Item1;
 
-						return s.SecurityId.SecurityCode.CompareIgnoreCase(name) || s.ShortName.CompareIgnoreCase(name) || s.Name.CompareIgnoreCase(name);
+						return s.SecurityId.SecurityCode.EqualsIgnoreCase(name) || s.ShortName.EqualsIgnoreCase(name) || s.Name.EqualsIgnoreCase(name);
 					});
 
 					switch (key.Item2)

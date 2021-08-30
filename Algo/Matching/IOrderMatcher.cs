@@ -411,7 +411,7 @@
 				if (message.SecurityId != default && message.SecurityId != order.SecurityId)
 					return false;
 
-				if (checkByPf && message.PortfolioName.CompareIgnoreCase(order.PortfolioName))
+				if (checkByPf && message.PortfolioName.EqualsIgnoreCase(order.PortfolioName))
 					return false;
 
 				return true;
@@ -461,7 +461,7 @@
 			{
 				if (checkByPf)
 				{
-					if (!order.PortfolioName.CompareIgnoreCase(statusMsg.PortfolioName))
+					if (!order.PortfolioName.EqualsIgnoreCase(statusMsg.PortfolioName))
 						continue;
 				}
 				else if (statusMsg.OrderId != null)

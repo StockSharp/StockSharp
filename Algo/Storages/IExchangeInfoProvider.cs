@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Storages
 			if (code.IsEmpty())
 				throw new ArgumentNullException(nameof(code));
 
-			if (code.CompareIgnoreCase("RTS"))
+			if (code.EqualsIgnoreCase("RTS"))
 				code = "FORTS";
 
 			return _exchanges.TryGetValue(code);

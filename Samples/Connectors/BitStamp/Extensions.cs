@@ -37,7 +37,7 @@ namespace StockSharp.BitStamp
 
 		public static bool IsAssociated(this SecurityId secId)
 		{
-			return secId.BoardCode.CompareIgnoreCase(BitStampBoard);
+			return secId.BoardCode.EqualsIgnoreCase(BitStampBoard);
 		}
 
 		public static SecurityId ToStockSharp(this string currency, bool format = true)

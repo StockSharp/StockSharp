@@ -260,7 +260,7 @@ namespace StockSharp.Algo.Testing
 						{
 							if (checkByPf)
 							{
-								if (!order.PortfolioName.CompareIgnoreCase(statusMsg.PortfolioName))
+								if (!order.PortfolioName.EqualsIgnoreCase(statusMsg.PortfolioName))
 									continue;
 							}
 							else if (statusMsg.OrderId != null)

@@ -1633,7 +1633,7 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(s => s.Code.CompareIgnoreCase(code)), throwIfNotExists);
+			return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(s => s.Code.EqualsIgnoreCase(code)), throwIfNotExists);
 		}
 
 		/// <summary>
@@ -2981,7 +2981,7 @@ namespace StockSharp.Algo
 
 			isNew = false;
 
-			//if (code.CompareIgnoreCase("RTS"))
+			//if (code.EqualsIgnoreCase("RTS"))
 			//	return ExchangeBoard.Forts;
 
 			var board = exchangeInfoProvider.GetExchangeBoard(code);
@@ -3088,7 +3088,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return security == AllSecurity || security.Id.CompareIgnoreCase(AllSecurity.Id);
+			return security == AllSecurity || security.Id.EqualsIgnoreCase(AllSecurity.Id);
 		}
 
 		/// <summary>
@@ -3169,7 +3169,7 @@ namespace StockSharp.Algo
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
-			return securityId.BoardCode.CompareIgnoreCase(board.Code);
+			return securityId.BoardCode.EqualsIgnoreCase(board.Code);
 		}
 
 		/// <summary>
@@ -3739,7 +3739,7 @@ namespace StockSharp.Algo
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			return portfolio.Name.CompareIgnoreCase(uniqueId);// || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
+			return portfolio.Name.EqualsIgnoreCase(uniqueId);// || (portfolio.InternalId != null && Guid.TryParse(uniqueId, out var indernalId) && portfolio.InternalId == indernalId);
 		}
 
 		/// <summary>
@@ -3795,7 +3795,7 @@ namespace StockSharp.Algo
 			if (news == null)
 				throw new ArgumentNullException(nameof(news));
 
-			return news.Source.CompareIgnoreCase(Messages.Extensions.NewsStockSharpSource);
+			return news.Source.EqualsIgnoreCase(Messages.Extensions.NewsStockSharpSource);
 		}
 
 		/// <summary>

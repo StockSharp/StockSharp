@@ -486,7 +486,7 @@ namespace StockSharp.Algo.Commissions
 		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
-			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.CompareIgnoreCase(Board.Code))
+			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.EqualsIgnoreCase(Board.Code))
 				return GetValue(message.TradePrice);
 			
 			return null;

@@ -144,7 +144,7 @@ namespace StockSharp.Algo
 
 		private bool IsAssociated(string boardCode)
 		{
-			return /*boardCode.IsEmpty() || */boardCode.CompareIgnoreCase(SecurityId.AssociatedBoardCode);
+			return /*boardCode.IsEmpty() || */boardCode.EqualsIgnoreCase(SecurityId.AssociatedBoardCode);
 		}
 
 		private SecurityId CreateAssociatedId(SecurityId securityId)
