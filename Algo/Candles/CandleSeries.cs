@@ -131,7 +131,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// The initial date from which you need to get data.
 		/// </summary>
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str343Key,
@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// The final date by which you need to get data.
 		/// </summary>
-		[Nullable]
+		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str345Key,
