@@ -102,7 +102,7 @@ namespace StockSharp.Algo
 				Func<Range<DateTimeOffset>, Range<DateTimeOffset>, int> comparer = (r1, r2) => r1.Max.CompareTo(r2.Max);
 				_expirationRanges = new SortedDictionary<Range<DateTimeOffset>, SecurityId>(comparer.ToComparer());
 
-				InnerSecurities = ArrayHelper.Empty<SecurityId>();
+				InnerSecurities = Array.Empty<SecurityId>();
 			}
 
 			public SecurityId[] InnerSecurities { get; private set; }
@@ -138,7 +138,7 @@ namespace StockSharp.Algo
 
 					_expirationRanges.Clear();
 					_current = null;
-					InnerSecurities = ArrayHelper.Empty<SecurityId>();
+					InnerSecurities = Array.Empty<SecurityId>();
 
 					DisposeEnumerator();
 				}

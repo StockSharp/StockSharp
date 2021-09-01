@@ -945,7 +945,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMarketDataTypes = ArrayHelper.Empty<DataType>();
+			adapter.SupportedMarketDataTypes = Array.Empty<DataType>();
 		}
 
 		/// <summary>
@@ -1908,7 +1908,7 @@ namespace StockSharp.Messages
 			else if (message.SubscriptionId > 0)
 				return new[] { message.SubscriptionId };
 			else
-				return ArrayHelper.Empty<long>();
+				return Array.Empty<long>();
 		}
 
 		/// <summary>
@@ -2431,8 +2431,8 @@ namespace StockSharp.Messages
 							SecurityId = level1.SecurityId,
 							LocalTime = level1.LocalTime,
 							ServerTime = level1.ServerTime,
-							Bids = _prevBidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
-							Asks = _prevAskPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
+							Bids = _prevBidPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
+							Asks = _prevAskPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
 							BuildFrom = level1.BuildFrom ?? DataType.Level1,
 						};
 
@@ -3522,7 +3522,7 @@ namespace StockSharp.Messages
 			var bestAsk = depth.GetBestAsk();
 
 			var spreadQuotes = bestBid is null || bestAsk is null
-				? (ArrayHelper.Empty<QuoteChange>(), ArrayHelper.Empty<QuoteChange>())
+				? (Array.Empty<QuoteChange>(), Array.Empty<QuoteChange>())
 				: bestBid.Value.Sparse(bestAsk.Value, priceRange, priceStep);
 
 			return new QuoteChangeMessage
@@ -3563,7 +3563,7 @@ namespace StockSharp.Messages
 			var askPrice = ask.Price;
 
 			if (bidPrice == default || askPrice == default || bidPrice == askPrice)
-				return (ArrayHelper.Empty<QuoteChange>(), ArrayHelper.Empty<QuoteChange>());
+				return (Array.Empty<QuoteChange>(), Array.Empty<QuoteChange>());
 
 			const int maxLimit = 1000;
 
@@ -3617,7 +3617,7 @@ namespace StockSharp.Messages
 			ValidatePriceRange(priceRange);
 
 			if (quotes.Length < 2)
-				return ArrayHelper.Empty<QuoteChange>();
+				return Array.Empty<QuoteChange>();
 
 			const int maxLimit = 10000;
 

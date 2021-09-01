@@ -551,14 +551,14 @@ namespace StockSharp.Algo
 
 					if (info == null)
 					{
-						items = ArrayHelper.Empty<object>();
+						items = Array.Empty<object>();
 						return null;
 					}
 
 					if (info.Parent == null)
-						items = info.LookupItems?.CopyAndClear() ?? ArrayHelper.Empty<object>();
+						items = info.LookupItems?.CopyAndClear() ?? Array.Empty<object>();
 					else
-						items = ArrayHelper.Empty<object>();
+						items = Array.Empty<object>();
 
 					ChangeState(info, SubscriptionStates.Finished);
 					_requests.Remove(message.OriginalTransactionId);
@@ -578,14 +578,14 @@ namespace StockSharp.Algo
 
 					if (info == null)
 					{
-						items = ArrayHelper.Empty<object>();
+						items = Array.Empty<object>();
 						return null;
 					}
 
 					if (info.Parent == null)
-						items = info.LookupItems?.CopyAndClear() ?? ArrayHelper.Empty<object>();
+						items = info.LookupItems?.CopyAndClear() ?? Array.Empty<object>();
 					else
-						items = ArrayHelper.Empty<object>();
+						items = Array.Empty<object>();
 
 					ChangeState(info, SubscriptionStates.Online);
 

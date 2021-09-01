@@ -28,7 +28,7 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public static class Extensions
 	{
-		//private static readonly Type[] _customCandles = ArrayHelper.Empty<Type>();
+		//private static readonly Type[] _customCandles = Array.Empty<Type>();
 
 		//static Extensions()
 		//{

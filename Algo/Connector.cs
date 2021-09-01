@@ -1353,7 +1353,7 @@ namespace StockSharp.Algo
 
 		IEnumerable<CandleSeries> ICandleManager.Series => SubscribedCandleSeries;
 
-		IList<ICandleSource<Candle>> ICandleManager.Sources => ArrayHelper.Empty<ICandleSource<Candle>>();
+		IList<ICandleSource<Candle>> ICandleManager.Sources => Array.Empty<ICandleSource<Candle>>();
 
 		#endregion
 

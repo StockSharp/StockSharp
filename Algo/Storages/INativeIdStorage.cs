@@ -488,7 +488,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(storageName));
 
 			lock (_syncRoot)
-				return _nativeIds.TryGetValue(storageName)?.Select(p => Tuple.Create(p.Key, p.Value)).ToArray() ?? ArrayHelper.Empty<Tuple<SecurityId, object>>();
+				return _nativeIds.TryGetValue(storageName)?.Select(p => Tuple.Create(p.Key, p.Value)).ToArray() ?? Array.Empty<Tuple<SecurityId, object>>();
 		}
 
 		bool INativeIdStorage.RemoveBySecurityId(string storageName, SecurityId securityId, bool isPersistable)

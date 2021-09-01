@@ -61,7 +61,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long? Count { get; set; }
 
-		private SecurityId[] _securityIds = ArrayHelper.Empty<SecurityId>();
+		private SecurityId[] _securityIds = Array.Empty<SecurityId>();
 
 		/// <summary>
 		/// Security identifiers.

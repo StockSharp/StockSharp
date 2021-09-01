@@ -178,7 +178,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long UploadLimit { get; set; }
 
-		private string[] _features = ArrayHelper.Empty<string>();
+		private string[] _features = Array.Empty<string>();
 
 		/// <summary>
 		/// Available features.

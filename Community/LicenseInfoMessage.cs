@@ -31,7 +31,7 @@
 		[DataMember]
 		public bool IsApproved { get; set; }
 
-		private byte[] _body = ArrayHelper.Empty<byte>();
+		private byte[] _body = Array.Empty<byte>();
 
 		/// <summary>
 		/// License body.

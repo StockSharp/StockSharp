@@ -1335,14 +1335,14 @@ namespace StockSharp.Algo
 					{
 						isPended = true;
 						_pendingMessages.Add(message.Clone());
-						return ArrayHelper.Empty<IMessageAdapter>();
+						return Array.Empty<IMessageAdapter>();
 					}
 				}
 			}
 
 			if (adapters == null)
 			{
-				adapters = ArrayHelper.Empty<IMessageAdapter>();
+				adapters = Array.Empty<IMessageAdapter>();
 			}
 
 			if (adapters.Length == 0)

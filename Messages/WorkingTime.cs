@@ -122,7 +122,7 @@ namespace StockSharp.Messages
 			set
 			{
 				foreach (var day in CheckDates(value))
-					_specialDays[day] = ArrayHelper.Empty<Range<TimeSpan>>();
+					_specialDays[day] = Array.Empty<Range<TimeSpan>>();
 			}
 		}
 

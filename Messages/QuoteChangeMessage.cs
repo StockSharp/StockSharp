@@ -71,7 +71,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public SecurityId SecurityId { get; set; }
 
-		private QuoteChange[] _bids = ArrayHelper.Empty<QuoteChange>();
+		private QuoteChange[] _bids = Array.Empty<QuoteChange>();
 
 		/// <summary>
 		/// Quotes to buy.
@@ -86,7 +86,7 @@ namespace StockSharp.Messages
 			set => _bids = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private QuoteChange[] _asks = ArrayHelper.Empty<QuoteChange>();
+		private QuoteChange[] _asks = Array.Empty<QuoteChange>();
 
 		/// <summary>
 		/// Quotes to sell.

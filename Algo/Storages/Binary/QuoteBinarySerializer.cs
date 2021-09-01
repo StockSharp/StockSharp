@@ -502,7 +502,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var count = reader.ReadInt();
 
 			if (count == 0)
-				return ArrayHelper.Empty<QuoteChange>();
+				return Array.Empty<QuoteChange>();
 
 			var is56 = metaInfo.Version >= MarketDataVersions.Version56;
 			var is57 = metaInfo.Version >= MarketDataVersions.Version57;

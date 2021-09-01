@@ -21,7 +21,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		private TimeSpan[] _timeFrames = ArrayHelper.Empty<TimeSpan>();
+		private TimeSpan[] _timeFrames = Array.Empty<TimeSpan>();
 
 		/// <summary>
 		/// Possible time-frames.

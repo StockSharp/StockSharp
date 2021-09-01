@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Strategies
 
 				_pattern = value;
 
-				var format = _formatter.Parser.ParseFormat(value, ArrayHelper.Empty<string>());
+				var format = _formatter.Parser.ParseFormat(value, Array.Empty<string>());
 				var selectors = format
 					.Items
 					.OfType<Placeholder>()

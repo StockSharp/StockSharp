@@ -23,7 +23,7 @@
 		{
 		}
 
-		private (long, string, string, string)[] _packages = ArrayHelper.Empty<(long, string, string, string)>();
+		private (long, string, string, string)[] _packages = Array.Empty<(long, string, string, string)>();
 
 		/// <summary>
 		/// Products.

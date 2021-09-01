@@ -1,5 +1,6 @@
 namespace StockSharp.Algo
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -50,8 +51,8 @@ namespace StockSharp.Algo
 					ServerTime = message.ServerTime,
 					LocalTime = message.LocalTime,
 					BuildFrom = DataType.Level1,
-					Bids = bidPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(bidPrice.Value, bidVolume ?? 0) },
-					Asks = askPrice == null ? ArrayHelper.Empty<QuoteChange>() : new[] { new QuoteChange(askPrice.Value, askVolume ?? 0) },
+					Bids = bidPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(bidPrice.Value, bidVolume ?? 0) },
+					Asks = askPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(askPrice.Value, askVolume ?? 0) },
 				};
 			}
 		}

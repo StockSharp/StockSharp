@@ -137,7 +137,7 @@ namespace StockSharp.BusinessEntities
 		[Obsolete("Use Asks2 property.")]
 		public Quote[] Asks => Asks2.Select(c => c.ToQuote(Sides.Sell, Security)).ToArray();
 
-		private QuoteChange[] _bids2 = ArrayHelper.Empty<QuoteChange>();
+		private QuoteChange[] _bids2 = Array.Empty<QuoteChange>();
 
 		/// <summary>
 		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
@@ -154,7 +154,7 @@ namespace StockSharp.BusinessEntities
 			private set => _bids2 = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private QuoteChange[] _asks2 = ArrayHelper.Empty<QuoteChange>();
+		private QuoteChange[] _asks2 = Array.Empty<QuoteChange>();
 
 		/// <summary>
 		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
@@ -891,7 +891,7 @@ namespace StockSharp.BusinessEntities
 			var dir = GetDirection(price);
 
 			if (dir == null)
-				return ArrayHelper.Empty<QuoteChange>();
+				return Array.Empty<QuoteChange>();
 			else
 				return dir == Sides.Buy ? _bids2 : _asks2;
 		}

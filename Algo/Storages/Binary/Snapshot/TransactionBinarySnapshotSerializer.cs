@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				ConditionType = (message.Condition?.GetType().GetTypeName(false)).VerifySize(Sizes.S256),
 			};
 
-			var conParams = message.Condition?.Parameters.Where(p => p.Value != null).ToArray() ?? ArrayHelper.Empty<KeyValuePair<string, object>>();
+			var conParams = message.Condition?.Parameters.Where(p => p.Value != null).ToArray() ?? Array.Empty<KeyValuePair<string, object>>();
 
 			snapshot.ConditionParamsCount = conParams.Length;
 

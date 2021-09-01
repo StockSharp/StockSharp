@@ -172,7 +172,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override DataType DataType => DataType.News;
 
-		private long[] _attachments = ArrayHelper.Empty<long>();
+		private long[] _attachments = Array.Empty<long>();
 
 		/// <summary>
 		/// Attachments.

@@ -742,13 +742,13 @@ namespace StockSharp.Algo
 					if (originalMsg is OrderStatusMessage orderLookup)
 						RaiseOrderStatusFailed(orderLookup.TransactionId, error, replyMsg.LocalTime);
 					else if (originalMsg is SecurityLookupMessage secLookup)
-						RaiseLookupSecuritiesResult(secLookup, error, Securities.Filter(secLookup).ToArray(), ArrayHelper.Empty<Security>());
+						RaiseLookupSecuritiesResult(secLookup, error, Securities.Filter(secLookup).ToArray(), Array.Empty<Security>());
 					else if (originalMsg is BoardLookupMessage boardLookup)
-						RaiseLookupBoardsResult(boardLookup, error, ExchangeBoards.Filter(boardLookup).ToArray(), ArrayHelper.Empty<ExchangeBoard>());
+						RaiseLookupBoardsResult(boardLookup, error, ExchangeBoards.Filter(boardLookup).ToArray(), Array.Empty<ExchangeBoard>());
 					else if (originalMsg is PortfolioLookupMessage pfLookup)
-						RaiseLookupPortfoliosResult(pfLookup, error, Portfolios.Filter(pfLookup).ToArray(), ArrayHelper.Empty<Portfolio>());
+						RaiseLookupPortfoliosResult(pfLookup, error, Portfolios.Filter(pfLookup).ToArray(), Array.Empty<Portfolio>());
 					else if (originalMsg is TimeFrameLookupMessage tfLookup)
-						RaiseLookupTimeFramesResult(tfLookup, error, ArrayHelper.Empty<TimeSpan>(), ArrayHelper.Empty<TimeSpan>());
+						RaiseLookupTimeFramesResult(tfLookup, error, Array.Empty<TimeSpan>(), Array.Empty<TimeSpan>());
 				}
 			}
 		}

@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		[DataMember]
 		public StorageFormats Format { get; set; }
 
-		private byte[] _body = ArrayHelper.Empty<byte>();
+		private byte[] _body = Array.Empty<byte>();
 
 		/// <summary>
 		/// File body.

@@ -598,7 +598,7 @@ namespace StockSharp.Algo.Testing
 			private static QuoteChange[] BuildQuoteChanges(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
 			{
 				return quotes.Count == 0
-					? ArrayHelper.Empty<QuoteChange>()
+					? Array.Empty<QuoteChange>()
 					: quotes.Select(p => p.Value.Second).ToArray();
 			}
 
