@@ -268,7 +268,7 @@ namespace StockSharp.Logging
 		public SeparateByDateModes SeparateByDates { get; set; }
 
 		/// <summary>
-		/// <see cref="FileLogHistoryPolicies"/>.
+		/// <see cref="FileLogHistoryPolicies"/>. By default is <see cref="FileLogHistoryPolicies.None"/>.
 		/// </summary>
 		public FileLogHistoryPolicies HistoryPolicy { get; set; } = FileLogHistoryPolicies.None;
 
@@ -290,12 +290,12 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// <see cref="FileLogHistoryPolicies.Move"/>.
+		/// Uses in case of <see cref="FileLogHistoryPolicies.Move"/>. Default is <see langword="null"/>.
 		/// </summary>
 		public string HistoryMove { get; set; }
 
 		/// <summary>
-		/// <see cref="FileLogHistoryPolicies.Compression"/>.
+		/// Uses in case of <see cref="FileLogHistoryPolicies.Compression"/>. Default is <see cref="CompressionLevel.Optimal"/>.
 		/// </summary>
 		public CompressionLevel HistoryCompressionLevel { get; set; } = CompressionLevel.Optimal;
 
