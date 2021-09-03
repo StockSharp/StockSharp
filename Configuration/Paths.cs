@@ -203,7 +203,7 @@
 		/// </summary>
 		/// <param name="docUrl">Help topic.</param>
 		/// <returns>Localized url.</returns>
-		public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{LocalizedStrings.Domain}/html/{docUrl}";
+		public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{LocalizedStrings.Domain}/{docUrl}";
 
 		/// <summary>
 		/// Get open account url.
