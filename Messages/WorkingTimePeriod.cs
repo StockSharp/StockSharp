@@ -44,7 +44,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str418Key)]
 		[DescriptionLoc(LocalizedStrings.Str419Key)]
 		public DateTime Till { get; set; }
-		
+
 		private List<Range<TimeSpan>> _times = new List<Range<TimeSpan>>();
 
 		/// <summary>
@@ -96,7 +96,11 @@ namespace StockSharp.Messages
 			Till = storage.GetValue<DateTime>(nameof(Till));
 
 			if (storage.ContainsKey(nameof(SpecialDays)))
-				SpecialDays = storage.GetValue<IDictionary<DayOfWeek, Range<TimeSpan>[]>>(nameof(SpecialDays));
+			{
+				var sd = storage.GetValue<IDictionary<DayOfWeek, Range<TimeSpan>[]>>(nameof(SpecialDays));
+				if(sd != null)
+					SpecialDays = sd;
+			}
 		}
 
 		/// <summary>
