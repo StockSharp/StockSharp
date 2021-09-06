@@ -24,10 +24,8 @@
     <ReactiveXVer>5.0.0</ReactiveXVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
-    <RepoGitLabPath>$(RepoGitHubPath)..\StockSharp (GitLab)\</RepoGitLabPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
     <ConnectorsStubPath>$(RepoAppsPath)ConnectorsStub\</ConnectorsStubPath>
-    <ConnectorsGitLabPath>$(RepoGitLabPath)Connectors\</ConnectorsGitLabPath>
     <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
   </PropertyGroup>
