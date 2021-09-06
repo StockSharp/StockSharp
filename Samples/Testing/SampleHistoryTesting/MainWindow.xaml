@@ -10,7 +10,7 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
 
 	<Window.Resources>
-		<exc:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseVisibilityValue="Hidden" />
+		<exc:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseValue="Hidden" />
 	</Window.Resources>
 
 	<Grid>
