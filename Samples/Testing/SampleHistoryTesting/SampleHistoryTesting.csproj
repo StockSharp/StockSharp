@@ -18,8 +18,8 @@
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Finam\Finam.csproj" />
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Yahoo\Yahoo.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Finam\Finam.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Yahoo\Yahoo.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
