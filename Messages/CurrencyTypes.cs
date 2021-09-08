@@ -19,7 +19,6 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
-	//[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "2.0.50727.4927")]
 	/// <summary>
 	/// Currency type.
 	/// </summary>
