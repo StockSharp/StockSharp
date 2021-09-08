@@ -61,7 +61,7 @@ namespace StockSharp.Configuration
 		//		.ToArray());
 		//}
 
-		private const string _credentialsFile = "credentials.xml";
+		private static readonly string _credentialsFile = $"credentials{Paths.DefaultSettingsExt}";
 
 		/// <summary>
 		/// Try load credentials from <see cref="Paths.CompanyPath"/>.
@@ -75,10 +75,10 @@ namespace StockSharp.Configuration
 
 			var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
 
-			if (!File.Exists(file))
+			if (!File.Exists(file) && !File.Exists(file.MakeLegacy()))
 				return false;
 
-			credentials.Load(new XmlSerializer<SettingsStorage>().Deserialize(file));
+			credentials.Load(file.DeserializeWithMigration<SettingsStorage>());
 			return true;
 		}
 
@@ -113,7 +113,7 @@ namespace StockSharp.Configuration
 
 			var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
 
-			new XmlSerializer<SettingsStorage>().Serialize(clone.Save(), file);
+			clone.Save().Serialize(file);
 		}
 	}
 }

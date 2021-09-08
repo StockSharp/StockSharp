@@ -8,6 +8,7 @@
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using StockSharp.Configuration;
 	using StockSharp.Algo;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Quoting;
@@ -34,13 +35,11 @@
 
 			Directory.CreateDirectory(_dir);
 
-			var serializer = new XmlSerializer<SettingsStorage>();
-
-			foreach (var xml in Directory.GetFiles(_dir, "*.xml"))
+			foreach (var xml in Directory.GetFiles(_dir, $"*{Paths.DefaultSettingsExt}").Concat(Directory.GetFiles(_dir, $"*{Paths.LegacySettingsExt}")))
 			{
 				try
 				{
-					var strategy = serializer.Deserialize(xml).LoadEntire<Strategy>();
+					var strategy = xml.DeserializeWithMigration<SettingsStorage>().LoadEntire<Strategy>();
 					AddStrategy(strategy.Name, strategy);
 				}
 				catch (Exception ex)
@@ -131,7 +130,7 @@
 			if (strategy is null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			new XmlSerializer<SettingsStorage>().Serialize(strategy.SaveEntire(false), Path.Combine(_dir, $"{strategy.Id}.xml"));
+			strategy.SaveEntire(false).Serialize(Path.Combine(_dir, $"{strategy.Id}{Paths.DefaultSettingsExt}"));
 		}
 
 		private bool Dashboard_OnCanExecuteSettings(StrategiesDashboardItem item)

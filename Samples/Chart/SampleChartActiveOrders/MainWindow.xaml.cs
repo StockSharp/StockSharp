@@ -278,11 +278,11 @@
 
 		private void Load_Click(object sender, RoutedEventArgs e)
 		{
-			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml"))
+			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}"))
 			{
-				var settingsStorage =
-					new XmlSerializer<SettingsStorage>().Deserialize(
-						AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml");
+				var settingsStorage = (AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}")
+					.DeserializeWithMigration<SettingsStorage>();
+
 				Chart.Load(settingsStorage);
 
 				_area = Chart.Areas.First();
@@ -295,7 +295,7 @@
 		{
 			var settingsStorage = new SettingsStorage();
 			Chart.Save(settingsStorage);
-			new XmlSerializer<SettingsStorage>().Serialize(settingsStorage, AppDomain.CurrentDomain.BaseDirectory + "/SettingsStorage.xml");
+			settingsStorage.Serialize(AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}");
 		}
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)

@@ -61,7 +61,7 @@ namespace SampleStrategies
 
 			const string path = "Data";
 
-			_settingsFile = Path.Combine(path, "connection.xml");
+			_settingsFile = Path.Combine(path, $"connection{Paths.DefaultSettingsExt}");
 
 			LogManager = new LogManager();
 			LogManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
@@ -176,13 +176,13 @@ namespace SampleStrategies
 
 			try
 			{
-				if (File.Exists(_settingsFile))
+				if (File.Exists(_settingsFile) || File.Exists(_settingsFile.MakeLegacy()))
 				{
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
 					using (ctx.ToScope())
-						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+						Connector.Load(_settingsFile.DeserializeWithMigration<SettingsStorage>());
 				}
 			}
 			catch
@@ -214,7 +214,7 @@ namespace SampleStrategies
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
 			if (Connector.Configure(this))
-				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+				Connector.Save().Serialize(_settingsFile);
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)

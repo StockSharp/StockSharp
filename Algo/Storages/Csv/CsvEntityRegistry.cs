@@ -14,6 +14,7 @@ namespace StockSharp.Algo.Storages.Csv
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -227,22 +228,7 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
-			private readonly SynchronizedDictionary<Type, IXmlSerializer> _serializers = new SynchronizedDictionary<Type, IXmlSerializer>();
-
-			//private string Serialize<TItem>(TItem item)
-			//	where TItem : class
-			//{
-			//	if (item == null)
-			//		return null;
-
-			//	var serializer = GetSerializer<TItem>();
-
-			//	using (var stream = new MemoryStream())
-			//	{
-			//		serializer.Serialize(item, stream);
-			//		return Registry.Encoding.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
-			//	}
-			//}
+			private readonly SynchronizedDictionary<Type, ISerializer> _serializers = new();
 
 			private TItem Deserialize<TItem>(string value)
 				where TItem : class
@@ -253,14 +239,11 @@ namespace StockSharp.Algo.Storages.Csv
 				var serializer = GetSerializer<TItem>();
 				var bytes = Registry.Encoding.GetBytes(value.Replace("'", "\""));
 
-				using (var stream = new MemoryStream(bytes))
-					return serializer.Deserialize(stream);
+				return (TItem)serializer.DeserializeWithMigration(bytes);
 			}
 
-			private XmlSerializer<TItem> GetSerializer<TItem>()
-			{
-				return (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem> { Indent = false });
-			}
+			private ISerializer<TItem> GetSerializer<TItem>()
+				=> (ISerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new JsonSerializer<TItem> { Indent = false, FillMode = true, EnumAsString = true });
 		}
 
 		private class SecurityCsvList : CsvEntityList<SecurityId, Security>, IStorageSecurityList

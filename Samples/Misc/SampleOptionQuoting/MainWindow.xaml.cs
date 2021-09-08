@@ -33,6 +33,7 @@ namespace SampleOptionQuoting
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using StockSharp.Configuration;
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Derivatives;
@@ -46,7 +47,7 @@ namespace SampleOptionQuoting
 
 	public partial class MainWindow
 	{
-		private const string _settingsFile = "connection.xml";
+		private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
 
 		public readonly Connector Connector = new Connector();
 
@@ -325,13 +326,13 @@ namespace SampleOptionQuoting
 
 			try
 			{
-				if (File.Exists(_settingsFile))
+				if (File.Exists(_settingsFile) || File.Exists(_settingsFile.MakeLegacy()))
 				{
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
 					using (ctx.ToScope())
-						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+						Connector.Load(_settingsFile.DeserializeWithMigration<SettingsStorage>());
 				}
 			}
 			catch
@@ -351,7 +352,7 @@ namespace SampleOptionQuoting
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
 			if (Connector.Configure(this))
-				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+				Connector.Save().Serialize(_settingsFile);
 		}
 
 		private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)

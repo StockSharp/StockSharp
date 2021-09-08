@@ -49,7 +49,7 @@ namespace SampleRealTimeEmulation
 		private Security _security;
 		private CandleSeries _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
 
-		private const string _settingsFile = "connection.xml";
+		private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
 
 		private readonly Portfolio _emuPf = Portfolio.CreateSimulator();
 
@@ -97,13 +97,13 @@ namespace SampleRealTimeEmulation
 
 			try
 			{
-				if (File.Exists(_settingsFile))
+				if (File.Exists(_settingsFile) || File.Exists(_settingsFile.MakeLegacy()))
 				{
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
 					using (ctx.ToScope())
-						_realConnector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+						_realConnector.Load(_settingsFile.DeserializeWithMigration<SettingsStorage>());
 				}
 			}
 			catch
@@ -208,7 +208,7 @@ namespace SampleRealTimeEmulation
 			if (!_realConnector.Configure(this))
 				return;
 
-			new XmlSerializer<SettingsStorage>().Serialize(_realConnector.Save(), _settingsFile);
+			_realConnector.Save().Serialize(_settingsFile);
 			InitEmuConnector();
 		}
 

@@ -53,7 +53,7 @@
 
 			_defaultDataPath = _defaultDataPath.ToFullPath();
 
-			_settingsFile = Path.Combine(_defaultDataPath, "connection.xml");
+			_settingsFile = Path.Combine(_defaultDataPath, $"connection{Paths.DefaultSettingsExt}");
 		}
 
 		public event Func<string, Connector> CreateConnector;
@@ -188,13 +188,13 @@
 
 			try
 			{
-				if (File.Exists(_settingsFile))
+				if (File.Exists(_settingsFile) || File.Exists(_settingsFile.MakeLegacy()))
 				{
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();
 
 					using (ctx.ToScope())
-						Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+						Connector.Load(_settingsFile.DeserializeWithMigration<SettingsStorage>());
 				}
 			}
 			catch
@@ -242,7 +242,7 @@
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
 			if (Connector.Configure(this.GetWindow()))
-				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+				Connector.Save().Serialize(_settingsFile);
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)

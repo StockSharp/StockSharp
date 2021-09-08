@@ -14036,8 +14036,8 @@
     "ru": "Генерация параметров завершена."
   },
   "Str3584": {
-    "en": "Layout (.xml)|*.xml",
-    "ru": "Разметка (.xml)|*.xml"
+    "en": "Layout (.json)|*.json",
+    "ru": "Разметка (.json)|*.json"
   },
   "Str3585": {
     "en": "Issued for:",

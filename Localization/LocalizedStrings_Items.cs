@@ -34998,12 +34998,12 @@ namespace StockSharp.Localization
 		public static string Str3583 => GetString(Str3583Key);
 
 		/// <summary>
-		/// Layout (.xml)|*.xml
+		/// Layout (.json)|*.json
 		/// </summary>
 		public const string Str3584Key = nameof(Str3584);
 
 		/// <summary>
-		/// Layout (.xml)|*.xml
+		/// Layout (.json)|*.json
 		/// </summary>
 		public static string Str3584 => GetString(Str3584Key);
 

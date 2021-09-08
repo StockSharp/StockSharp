@@ -29,15 +29,15 @@
 			var settingsPath = ConfigManager.TryGet<string>("settingsPath");
 			AppDataPath = settingsPath.IsEmpty() ? Path.Combine(CompanyPath, AppName2) : settingsPath.ToFullPathIfNeed();
 
-			PlatformConfigurationFile = Path.Combine(AppDataPath, "platform_config.xml");
-			ProxyConfigurationFile = Path.Combine(CompanyPath, "proxy_config.xml");
+			PlatformConfigurationFile = Path.Combine(AppDataPath, $"platform_config{DefaultSettingsExt}");
+			ProxyConfigurationFile = Path.Combine(CompanyPath, $"proxy_config{DefaultSettingsExt}");
 			SecurityNativeIdDir = Path.Combine(AppDataPath, "NativeId");
 			SecurityMappingDir = Path.Combine(AppDataPath, "Symbol mapping");
 			SecurityExtendedInfo = Path.Combine(AppDataPath, "Extended info");
 			StorageDir = Path.Combine(AppDataPath, "Storage");
 			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
-			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, "installer_apps_installed.xml");
+			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
 
 			HistoryDataPath = GetHistoryDataPath(Assembly.GetExecutingAssembly().Location);
 		}
@@ -265,8 +265,8 @@
 			if (!File.Exists(InstallerInstallationsConfigPath))
 				return null;
 
-			SettingsStorage storage = null;
-			CultureInfo.InvariantCulture.DoInCulture(() => storage = new XmlSerializer<SettingsStorage>().Deserialize(InstallerInstallationsConfigPath));
+			var storage = CultureInfo.InvariantCulture.DoInCulture(() =>
+				InstallerInstallationsConfigPath.DeserializeWithMigration<SettingsStorage>());
 
 			var installations = storage?.GetValue<SettingsStorage[]>("Installations");
 			if (!(installations?.Length > 0))
@@ -389,6 +389,144 @@
 				_stop.Set();
 				_stopped.WaitOne();
 				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// Default extension for settings file.
+		/// </summary>
+		public const string DefaultSettingsExt = ".json";
+
+		/// <summary>
+		/// Legacy extension for settings file.
+		/// </summary>
+		public const string LegacySettingsExt = ".xml";
+
+		/// <summary>
+		/// Backup extension for settings file.
+		/// </summary>
+		public const string BackupExt = ".bak";
+
+		/// <summary>
+		/// Make the specified <paramref name="filePath"/> with <see cref="LegacySettingsExt"/> extension.
+		/// </summary>
+		/// <param name="filePath">File path.</param>
+		/// <returns>File path.</returns>
+		public static string MakeLegacy(this string filePath)
+			=> Path.ChangeExtension(filePath, LegacySettingsExt);
+
+		/// <summary>
+		/// Make the specified <paramref name="filePath"/> with <see cref="BackupExt"/> extension.
+		/// </summary>
+		/// <param name="filePath">File path.</param>
+		/// <returns>File path.</returns>
+		public static string MakeBackup(this string filePath)
+			=> $"{filePath}{BackupExt}";
+
+		/// <summary>
+		/// Rename the specified file with <see cref="BackupExt"/> extension.
+		/// </summary>
+		/// <param name="filePath">File path.</param>
+		public static void MoveToBackup(this string filePath)
+			=> File.Move(filePath, filePath.MakeBackup());
+
+		/// <summary>
+		/// Create serializer.
+		/// </summary>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <returns>Serializer.</returns>
+		public static ISerializer<T> CreateSerializer<T>()
+			=> new JsonSerializer<T> { FillMode = true, Indent = true, EnumAsString = true };
+
+		/// <summary>
+		/// Create serializer.
+		/// </summary>
+		/// <param name="type">Value type.</param>
+		/// <returns>Serializer.</returns>
+		public static ISerializer CreateSerializer(Type type)
+			=> CreateSerializer<int>().GetSerializer(type);
+
+		/// <summary>
+		/// Serialize value into the specified file.
+		/// </summary>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="value">Value.</param>
+		/// <param name="filePath">File path.</param>
+		public static void Serialize<T>(this T value, string filePath)
+			=> CreateSerializer<T>().Serialize(value, filePath);
+
+		/// <summary>
+		/// Serialize value into byte array.
+		/// </summary>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="value">Value.</param>
+		/// <returns>Serialized data.</returns>
+		public static byte[] Serialize<T>(this T value)
+			=> CreateSerializer<T>().Serialize(value);
+
+		/// <summary>
+		/// Deserialize value from the specified file.
+		/// </summary>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="filePath">File path.</param>
+		/// <returns>Value.</returns>
+		public static T DeserializeWithMigration<T>(this string filePath)
+		{
+			var def = Path.ChangeExtension(filePath, DefaultSettingsExt);
+			var defSer = CreateSerializer<T>();
+
+			T value;
+
+			if (File.Exists(def))
+				value = defSer.Deserialize(def);
+			else
+			{
+				var xml = filePath.MakeLegacy();
+
+#pragma warning disable CS0618 // Type or member is obsolete
+				value = new XmlSerializer<T>().Deserialize(xml);
+#pragma warning restore CS0618 // Type or member is obsolete
+				defSer.Serialize(value, def);
+				xml.MoveToBackup();
+			}
+
+			return value;
+		}
+
+		/// <summary>
+		/// Deserialize value from the serialized data.
+		/// </summary>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="data">Serialized data.</param>
+		/// <returns>Value.</returns>
+		public static T DeserializeWithMigration<T>(this byte[] data)
+			=> (T)CreateSerializer<T>().DeserializeWithMigration(data);
+
+		/// <summary>
+		/// Deserialize value from the serialized data.
+		/// </summary>
+		/// <param name="serializer">Serializer.</param>
+		/// <param name="data">Serialized data.</param>
+		/// <returns>Value.</returns>
+		public static object DeserializeWithMigration(this ISerializer serializer, byte[] data)
+		{
+			if (serializer is null)
+				throw new ArgumentNullException(nameof(serializer));
+
+#pragma warning disable CS0618 // Type or member is obsolete
+			var xmlSer = typeof(XmlSerializer<>).Make(serializer.Type).CreateInstance<ISerializer>();
+#pragma warning restore CS0618 // Type or member is obsolete
+
+			try
+			{
+				return serializer.Deserialize(data);
+			}
+			catch
+			{
+				if (xmlSer.GetType() == serializer.GetType())
+					throw;
+
+				return xmlSer.Deserialize(data);
 			}
 		}
 	}

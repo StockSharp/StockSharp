@@ -13,6 +13,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Configuration;
 
 	/// <summary>
 	/// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="ExecutionMessage"/>.
@@ -313,7 +314,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							storage.SetValue(nameof(r.Max), r.Max);
 
 						if (storage.Count > 0)
-							stringValue = new XmlSerializer<SettingsStorage>().Serialize(storage);
+							stringValue = storage.Serialize();
 
 						break;
 					}
@@ -322,12 +323,12 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						var storage = p.Save();
 
 						if (storage.Count > 0)
-							stringValue = new XmlSerializer<SettingsStorage>().Serialize(storage);
+							stringValue = storage.Serialize();
 
 						break;
 					}
 					default:
-						stringValue = typeof(XmlSerializer<>).Make(paramType).CreateInstance<ISerializer>().Serialize(conParam.Value);
+						stringValue = Paths.CreateSerializer(paramType).Serialize(conParam.Value);
 						break;
 				}
 
@@ -474,14 +475,14 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							if (typeof(IPersistable).IsAssignableFrom(paramType))
 							{
 								var persistable = paramType.CreateInstance<IPersistable>();
-								persistable.Load(new XmlSerializer<SettingsStorage>().Deserialize(strBuffer));
+								persistable.Load(strBuffer.DeserializeWithMigration<SettingsStorage>());
 								value = persistable;
 							}
 							else if (typeof(IRange).IsAssignableFrom(paramType))
 							{
 								var range = paramType.CreateInstance<IRange>();
 
-								var storage = new XmlSerializer<SettingsStorage>().Deserialize(strBuffer);
+								var storage = strBuffer.DeserializeWithMigration<SettingsStorage>();
 
 								if (storage.ContainsKey(nameof(range.Min)))
 									range.Min = storage.GetValue<object>(nameof(range.Min));
@@ -493,7 +494,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							}
 							else
 							{
-								value = typeof(XmlSerializer<>).Make(paramType).CreateInstance<ISerializer>().Deserialize(strBuffer);
+								value = Paths.CreateSerializer(paramType).DeserializeWithMigration(strBuffer);
 							}
 						}
 						else
