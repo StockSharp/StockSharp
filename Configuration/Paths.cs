@@ -13,6 +13,7 @@
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
+	using Ecng.Localization;
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -153,10 +154,15 @@
 		public static readonly string InstallerInstallationsConfigPath;
 
 		/// <summary>
+		/// Web site domain.
+		/// </summary>
+		public static string Domain => LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "ru" : "com";
+
+		/// <summary>
 		/// Get website url.
 		/// </summary>
 		/// <returns>Localized url.</returns>
-		public static string GetWebSiteUrl() => $"https://stocksharp.{LocalizedStrings.Domain}";
+		public static string GetWebSiteUrl() => $"https://stocksharp.{Domain}";
 
 		/// <summary>
 		/// Get user url.
@@ -206,7 +212,7 @@
 		/// </summary>
 		/// <param name="docUrl">Help topic.</param>
 		/// <returns>Localized url.</returns>
-		public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{LocalizedStrings.Domain}/{docUrl}";
+		public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{Domain}/{docUrl}";
 
 		/// <summary>
 		/// Get open account url.

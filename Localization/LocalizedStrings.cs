@@ -90,10 +90,5 @@ namespace StockSharp.Localization
 		{
 			return LocalizationManager.GetString(resourceId, language);
 		}
-
-		/// <summary>
-		/// Web site domain.
-		/// </summary>
-		public static string Domain => ActiveLanguage == LangCodes.Ru ? "ru" : "com";
 	}
 }
