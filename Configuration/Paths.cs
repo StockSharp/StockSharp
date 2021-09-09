@@ -447,8 +447,9 @@
 		/// Rename the specified file with <see cref="BackupExt"/> extension.
 		/// </summary>
 		/// <param name="filePath">File path.</param>
-		public static void MoveToBackup(this string filePath)
-			=> File.Move(filePath, filePath.MakeBackup());
+		/// <param name="backupFilePath">Backup file path.</param>
+		public static void MoveToBackup(this string filePath, string backupFilePath = null)
+			=> File.Move(filePath, (backupFilePath ?? filePath).MakeBackup());
 
 		/// <summary>
 		/// Create serializer.
@@ -614,16 +615,16 @@
 			if (serializer is null)
 				throw new ArgumentNullException(nameof(serializer));
 
-#pragma warning disable CS0618 // Type or member is obsolete
-			var xmlSer = typeof(XmlSerializer<>).Make(serializer.Type).CreateInstance<ISerializer>();
-#pragma warning restore CS0618 // Type or member is obsolete
-
 			try
 			{
 				return serializer.Deserialize(data);
 			}
 			catch
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
+				var xmlSer = typeof(XmlSerializer<>).Make(serializer.Type).CreateInstance<ISerializer>();
+#pragma warning restore CS0618 // Type or member is obsolete
+
 				if (xmlSer.GetType() == serializer.GetType())
 					throw;
 
