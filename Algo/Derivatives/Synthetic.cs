@@ -89,7 +89,7 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="strike">Strike.</param>
 		/// <returns>The option position.</returns>
-		public KeyValuePair<Security, Sides>[] Buy(decimal strike)
+		public (Security security, Sides side)[] Buy(decimal strike)
 		{
 			return Buy(strike, GetExpiryDate());
 		}
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="strike">Strike.</param>
 		/// <param name="expiryDate">The date of the option expiration.</param>
 		/// <returns>The option position.</returns>
-		public KeyValuePair<Security, Sides>[] Buy(decimal strike, DateTimeOffset expiryDate)
+		public (Security security, Sides side)[] Buy(decimal strike, DateTimeOffset expiryDate)
 		{
 			return Position(strike, expiryDate, Sides.Buy);
 		}
@@ -110,7 +110,7 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="strike">Strike.</param>
 		/// <returns>The option position.</returns>
-		public KeyValuePair<Security, Sides>[] Sell(decimal strike)
+		public (Security security, Sides side)[] Sell(decimal strike)
 		{
 			return Sell(strike, GetExpiryDate());
 		}
@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="strike">Strike.</param>
 		/// <param name="expiryDate">The date of the option expiration.</param>
 		/// <returns>The option position.</returns>
-		public KeyValuePair<Security, Sides>[] Sell(decimal strike, DateTimeOffset expiryDate)
+		public (Security security, Sides side)[] Sell(decimal strike, DateTimeOffset expiryDate)
 		{
 			return Position(strike, expiryDate, Sides.Sell);
 		}
@@ -133,15 +133,15 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="expiryDate">The date of the option expiration.</param>
 		/// <param name="side">The main position direction.</param>
 		/// <returns>The option position.</returns>
-		public KeyValuePair<Security, Sides>[] Position(decimal strike, DateTimeOffset expiryDate, Sides side)
+		public (Security security, Sides side)[] Position(decimal strike, DateTimeOffset expiryDate, Sides side)
 		{
 			var call = _security.GetCall(_provider, strike, expiryDate);
 			var put = _security.GetPut(_provider, strike, expiryDate);
 
-			return new[]
+			return new (Security, Sides)[]
 			{
-				new KeyValuePair<Security, Sides>(call, side),
-				new KeyValuePair<Security, Sides>(put, side.Invert())
+				new (call, side),
+				new (put, side.Invert())
 			};
 		}
 

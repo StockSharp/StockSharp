@@ -1196,12 +1196,12 @@ namespace StockSharp.Algo
 					var q = bestBid.Value;
 
 					info.SetValue(time, Level1Fields.BestBidPrice, q.Price);
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidPrice, q.Price));
+					changes.Add(new (Level1Fields.BestBidPrice, q.Price));
 
 					if (q.Volume != 0)
 					{
 						info.SetValue(time, Level1Fields.BestBidVolume, q.Volume);
-						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestBidVolume, q.Volume));
+						changes.Add(new (Level1Fields.BestBidVolume, q.Volume));
 					}
 				}
 
@@ -1210,12 +1210,12 @@ namespace StockSharp.Algo
 					var q = bestAsk.Value;
 
 					info.SetValue(time, Level1Fields.BestAskPrice, q.Price);
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskPrice, q.Price));
+					changes.Add(new (Level1Fields.BestAskPrice, q.Price));
 
 					if (q.Volume != 0)
 					{
 						info.SetValue(time, Level1Fields.BestAskVolume, q.Volume);
-						changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.BestAskVolume, q.Volume));
+						changes.Add(new (Level1Fields.BestAskVolume, q.Volume));
 					}
 				}
 
@@ -1337,8 +1337,8 @@ namespace StockSharp.Algo
 
 			var changes = new List<KeyValuePair<Level1Fields, object>>(4)
 			{
-				new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeTime, message.ServerTime),
-				new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradePrice, price)
+				new (Level1Fields.LastTradeTime, message.ServerTime),
+				new (Level1Fields.LastTradePrice, price)
 			};
 
 			info.SetValue(time, Level1Fields.LastTradeTime, message.ServerTime);
@@ -1347,37 +1347,37 @@ namespace StockSharp.Algo
 			if (message.IsSystem != null)
 			{
 				info.SetValue(time, Level1Fields.IsSystem, message.IsSystem.Value);
-				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.IsSystem, message.IsSystem.Value));
+				changes.Add(new (Level1Fields.IsSystem, message.IsSystem.Value));
 			}
 
 			if (message.TradeId != null)
 			{
 				info.SetValue(time, Level1Fields.LastTradeId, message.TradeId.Value);
-				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId.Value));
+				changes.Add(new (Level1Fields.LastTradeId, message.TradeId.Value));
 			}
 
 			if (!message.TradeStringId.IsEmpty())
 			{
 				info.SetValue(time, Level1Fields.LastTradeStringId, message.TradeStringId);
-				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeStringId, message.TradeStringId));
+				changes.Add(new (Level1Fields.LastTradeStringId, message.TradeStringId));
 			}
 
 			if (message.TradeVolume != null)
 			{
 				info.SetValue(time, Level1Fields.LastTradeVolume, message.TradeVolume.Value);
-				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
+				changes.Add(new (Level1Fields.LastTradeVolume, message.TradeVolume.Value));
 			}
 
 			if (message.OriginSide != null)
 			{
 				info.SetValue(time, Level1Fields.LastTradeOrigin, message.OriginSide.Value);
-				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeOrigin, message.OriginSide.Value));
+				changes.Add(new (Level1Fields.LastTradeOrigin, message.OriginSide.Value));
 			}
 
 			if (message.IsUpTick != null)
 			{
 				info.SetValue(time, Level1Fields.LastTradeUpDown, message.IsUpTick.Value);
-				changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeUpDown, message.IsUpTick.Value));
+				changes.Add(new (Level1Fields.LastTradeUpDown, message.IsUpTick.Value));
 			}
 
 			if (tuple.Item2)
