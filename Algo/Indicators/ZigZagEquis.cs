@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Indicators
 	public class ZigZagEquis : BaseIndicator
 	{
 		private readonly IList<decimal> _buffer = new List<decimal>();
-		private readonly List<decimal> _zigZagBuffer = new List<decimal>();
+		private readonly List<decimal> _zigZagBuffer = new();
 
 		private bool _needAdd = true;
 

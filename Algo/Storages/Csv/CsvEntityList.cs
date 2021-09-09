@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Storages.Csv
 	public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList
 		where TEntity : class
 	{
-		private readonly Dictionary<TKey, TEntity> _items = new Dictionary<TKey, TEntity>();
+		private readonly Dictionary<TKey, TEntity> _items = new();
 
 		/// <summary>
 		/// The CSV storage of trading objects.

@@ -138,7 +138,7 @@ namespace StockSharp.Configuration
 			return adapters;
 		}
 
-		private static readonly Lazy<Func<Type>[]> _standardAdapters = new Lazy<Func<Type>[]>(() => new[]
+		private static readonly Lazy<Func<Type>[]> _standardAdapters = new(() => new[]
 		{
 			(Func<Type>)(() => typeof(AlfaDirectMessageAdapter)),
 			() => typeof(BarChartMessageAdapter),

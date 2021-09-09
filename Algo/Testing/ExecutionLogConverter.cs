@@ -30,8 +30,8 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	class ExecutionLogConverter
 	{
-		private readonly Random _volumeRandom = new Random(TimeHelper.Now.Millisecond);
-		private readonly Random _priceRandom = new Random(TimeHelper.Now.Millisecond);
+		private readonly Random _volumeRandom = new(TimeHelper.Now.Millisecond);
+		private readonly Random _priceRandom = new(TimeHelper.Now.Millisecond);
 		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _bids;
 		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks;
 		private decimal _currSpreadPrice;
@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Testing
 		// указывает, есть ли реальные стаканы, чтобы своей псевдо генерацией не портить настоящую историю
 		private DateTime _lastDepthDate;
 		//private DateTime _lastTradeDate;
-		private SecurityMessage _securityDefinition = new SecurityMessage
+		private SecurityMessage _securityDefinition = new()
 		{
 			PriceStep = 1,
 			VolumeStep = 1,
@@ -230,7 +230,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private readonly RandomArray<bool> _isMatch = new RandomArray<bool>(100);
+		private readonly RandomArray<bool> _isMatch = new(100);
 
 		private void AddExecMsg(List<ExecutionMessage> diff, DateTimeOffset time, DateTimeOffset serverTime, QuoteChange quote, decimal volume, Sides side, bool isSpread)
 		{

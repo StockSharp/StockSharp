@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class CommodityChannelIndex : LengthIndicator<decimal>
 	{
-		private readonly MeanDeviation _mean = new MeanDeviation();
+		private readonly MeanDeviation _mean = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CommodityChannelIndex"/>.

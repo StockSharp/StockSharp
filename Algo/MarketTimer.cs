@@ -32,7 +32,7 @@ namespace StockSharp.Algo
 		private readonly Action _activated;
 		private bool _started;
 		private TimeSpan _interval;
-		private readonly object _syncLock = new object();
+		private readonly object _syncLock = new();
 		private TimeSpan _elapsedTime;
 
 		/// <summary>

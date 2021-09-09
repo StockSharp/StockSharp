@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
-			private readonly SynchronizedDictionary<ICandleSource<Candle>, SourceInfo> _info = new SynchronizedDictionary<ICandleSource<Candle>, SourceInfo>();
+			private readonly SynchronizedDictionary<ICandleSource<Candle>, SourceInfo> _info = new();
 			private readonly CandleManager _manager;
 
 			public CandleManagerSourceList(CandleManager manager)
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private readonly SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleSource<Candle>, Candle>> _series = new SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleSource<Candle>, Candle>>();
+		private readonly SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleSource<Candle>, Candle>> _series = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleManager"/>.

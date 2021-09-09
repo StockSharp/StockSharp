@@ -36,14 +36,14 @@ namespace StockSharp.Algo.Derivatives
 	/// </summary>
 	public static class DerivativesHelper
 	{
-		private static readonly Regex _futureNameRegex = new Regex(@"(?<code>[A-Z,a-z]+)-(?<expiryMonth>[0-9]{1,2})\.(?<expiryYear>[0-9]{1,2})", RegexOptions.Compiled);
-		private static readonly Regex _optionNameRegex = new Regex(@"(?<code>\w+-[0-9]{1,2}\.[0-9]{1,2})(?<isMargin>[M_])(?<expiryDate>[0-9]{6,6})(?<optionType>[CP])(?<region>\w)\s(?<strike>\d*\.*\d*)", RegexOptions.Compiled);
-		private static readonly Regex _optionCodeRegex = new Regex(@"(?<code>[A-Z,a-z]+)(?<strike>\d*\.*\d*)(?<optionType>[BA])(?<expiryMonth>[A-X]{1})(?<expiryYear>[0-9]{1})", RegexOptions.Compiled);
+		private static readonly Regex _futureNameRegex = new(@"(?<code>[A-Z,a-z]+)-(?<expiryMonth>[0-9]{1,2})\.(?<expiryYear>[0-9]{1,2})", RegexOptions.Compiled);
+		private static readonly Regex _optionNameRegex = new(@"(?<code>\w+-[0-9]{1,2}\.[0-9]{1,2})(?<isMargin>[M_])(?<expiryDate>[0-9]{6,6})(?<optionType>[CP])(?<region>\w)\s(?<strike>\d*\.*\d*)", RegexOptions.Compiled);
+		private static readonly Regex _optionCodeRegex = new(@"(?<code>[A-Z,a-z]+)(?<strike>\d*\.*\d*)(?<optionType>[BA])(?<expiryMonth>[A-X]{1})(?<expiryYear>[0-9]{1})", RegexOptions.Compiled);
 
-		private static readonly SynchronizedPairSet<int, char> _futureMonthCodes = new SynchronizedPairSet<int, char>();
-		private static readonly SynchronizedPairSet<int, char> _optionCallMonthCodes = new SynchronizedPairSet<int, char>();
-		private static readonly SynchronizedPairSet<int, char> _optionPutMonthCodes = new SynchronizedPairSet<int, char>();
-		private static readonly Normal _normalDistribution = new Normal();
+		private static readonly SynchronizedPairSet<int, char> _futureMonthCodes = new();
+		private static readonly SynchronizedPairSet<int, char> _optionCallMonthCodes = new();
+		private static readonly SynchronizedPairSet<int, char> _optionPutMonthCodes = new();
+		private static readonly Normal _normalDistribution = new();
 
 		static DerivativesHelper()
 		{
@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Derivatives
 			_optionPutMonthCodes.Add(12, 'X');
 		}
 
-		private static readonly SynchronizedDictionary<Security, Security> _underlyingSecurities = new SynchronizedDictionary<Security, Security>();
+		private static readonly SynchronizedDictionary<Security, Security> _underlyingSecurities = new();
 
 		/// <summary>
 		/// To get the underlying asset by the derivative.

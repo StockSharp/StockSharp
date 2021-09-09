@@ -366,7 +366,7 @@ namespace StockSharp.Algo
 			Order = 1)]
 		public bool IsOpenInterest { get; set; }
 
-		private Unit _volumeLevel = new Unit();
+		private Unit _volumeLevel = new();
 
 		/// <summary>
 		/// Volume trigger causes switch to the next contract.

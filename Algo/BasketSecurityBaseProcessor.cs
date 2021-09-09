@@ -19,7 +19,7 @@ namespace StockSharp.Algo
 	public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecurityProcessor
 		where TBasketSecurity : BasketSecurity, new()
 	{
-		private readonly CachedSynchronizedSet<SecurityId> _basketLegs = new CachedSynchronizedSet<SecurityId>();
+		private readonly CachedSynchronizedSet<SecurityId> _basketLegs = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketSecurityBaseProcessor{TBasketSecurity}"/>.
@@ -290,12 +290,12 @@ namespace StockSharp.Algo
 	public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
 		where TBasketSecurity : IndexSecurity, new()
 	{
-		private readonly SynchronizedDictionary<MessageTypes, object> _messages = new SynchronizedDictionary<MessageTypes, object>();
+		private readonly SynchronizedDictionary<MessageTypes, object> _messages = new();
 
-		private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = new Dictionary<SecurityId, ExecutionMessage>();
-		private readonly Dictionary<SecurityId, ExecutionMessage> _ol = new Dictionary<SecurityId, ExecutionMessage>();
+		private readonly Dictionary<SecurityId, ExecutionMessage> _ticks = new();
+		private readonly Dictionary<SecurityId, ExecutionMessage> _ol = new();
 
-		private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = new SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>>();
+		private readonly SortedDictionary<DateTimeOffset, Dictionary<SecurityId, CandleMessage>> _candles = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.

@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class CandleHolderMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly SynchronizedDictionary<long, CandleMessage> _infos = new SynchronizedDictionary<long, CandleMessage>();
+		private readonly SynchronizedDictionary<long, CandleMessage> _infos = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleHolderMessageAdapter"/>.

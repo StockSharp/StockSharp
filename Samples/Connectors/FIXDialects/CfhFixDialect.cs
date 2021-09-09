@@ -41,7 +41,7 @@ namespace StockSharp.Fix.Dialects
 			public const string AccountInfo = "AAB";
 		}
 
-		private readonly FastDateTimeParser _expiryDateParser = new FastDateTimeParser("yyyyMMdd");
+		private readonly FastDateTimeParser _expiryDateParser = new("yyyyMMdd");
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CfhFixDialect"/>.

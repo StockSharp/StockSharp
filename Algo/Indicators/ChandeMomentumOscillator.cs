@@ -26,8 +26,8 @@ namespace StockSharp.Algo.Indicators
 	[DescriptionLoc(LocalizedStrings.Str759Key)]
 	public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	{
-		private readonly Sum _cmoUp = new Sum();
-		private readonly Sum _cmoDn = new Sum();
+		private readonly Sum _cmoUp = new();
+		private readonly Sum _cmoDn = new();
 		private bool _isInitialized;
 		private decimal _last;
 

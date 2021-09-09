@@ -74,7 +74,7 @@ namespace StockSharp.Algo
 			};
 		}
 
-		private static readonly CachedSynchronizedPairSet<Type, Type> _candleTypes = new CachedSynchronizedPairSet<Type, Type>();
+		private static readonly CachedSynchronizedPairSet<Type, Type> _candleTypes = new();
 
 		/// <summary>
 		/// Cast candle type <see cref="Candle"/> to the message <see cref="CandleMessage"/>.
@@ -687,7 +687,7 @@ namespace StockSharp.Algo
 			return security;
 		}
 
-		private static readonly SecurityIdGenerator _defaultGenerator = new SecurityIdGenerator();
+		private static readonly SecurityIdGenerator _defaultGenerator = new();
 
 		private static SecurityIdGenerator GetGenerator(SecurityIdGenerator generator) => generator ?? _defaultGenerator;
 
@@ -1142,8 +1142,8 @@ namespace StockSharp.Algo
 			return candle;
 		}
 
-		private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = new SynchronizedDictionary<Type, Func<Candle>>();
-		private static readonly SynchronizedDictionary<Type, Func<CandleMessage>> _candleMessageCreators = new SynchronizedDictionary<Type, Func<CandleMessage>>();
+		private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = new();
+		private static readonly SynchronizedDictionary<Type, Func<CandleMessage>> _candleMessageCreators = new();
 
 		/// <summary>
 		/// Create instance of <see cref="CandleMessage"/>.
@@ -1955,7 +1955,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
 		/// <returns>Subscription.</returns>
-		public static Subscription ToSubscription(this DataType dataType) => new Subscription(dataType, (SecurityMessage)null);
+		public static Subscription ToSubscription(this DataType dataType) => new(dataType, (SecurityMessage)null);
 
 		/// <summary>
 		/// Convert <see cref="DataType"/> to <see cref="ISubscriptionMessage"/> value.

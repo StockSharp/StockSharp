@@ -17,10 +17,10 @@
 	/// </summary>
 	public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly PairSet<object, SecurityId> _securityIds = new PairSet<object, SecurityId>();
-		private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = new Dictionary<SecurityId, List<Message>>();
-		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
-		private readonly SyncObject _syncRoot = new SyncObject();
+		private readonly PairSet<object, SecurityId> _securityIds = new();
+		private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = new();
+		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new();
+		private readonly SyncObject _syncRoot = new();
 
 		/// <summary>
 		/// Security native identifier storage.

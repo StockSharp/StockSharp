@@ -55,7 +55,7 @@ namespace StockSharp.Logging
 	public class MemoryStatisticsValue<T> : IPersistable, IMemoryStatisticsValue
 	{
 		//private readonly MemoryStatistics _parent;
-		private readonly CachedSynchronizedSet<T> _objects = new CachedSynchronizedSet<T>();
+		private readonly CachedSynchronizedSet<T> _objects = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryStatisticsValue{T}"/>.

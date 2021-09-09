@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorOut(typeof(VolumeProfileIndicatorValue))]
 	public class VolumeProfileIndicator : BaseIndicator
 	{
-		private readonly Dictionary<decimal, decimal> _levels = new Dictionary<decimal, decimal>();
+		private readonly Dictionary<decimal, decimal> _levels = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolumeProfileIndicator"/>.

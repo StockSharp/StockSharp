@@ -32,10 +32,10 @@ namespace StockSharp.Algo.Indicators
 	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	{
 		// Текущее значение числителя
-		private readonly Sum _nominator = new Sum();
+		private readonly Sum _nominator = new();
 
 		// Текущее значение знаменателя
-		private readonly Sum _denominator = new Sum();
+		private readonly Sum _denominator = new();
 
 		/// <summary>
 		/// To create the indicator <see cref="VolumeWeightedMovingAverage"/>.

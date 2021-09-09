@@ -39,11 +39,11 @@ namespace SampleRealTimeEmulation
 
 	public partial class MainWindow
 	{
-		private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>();
+		private readonly SynchronizedList<Candle> _buffer = new();
 		private readonly ChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
 		private Subscription _candlesSubscription;
-		private readonly Connector _realConnector = new Connector();
+		private readonly Connector _realConnector = new();
 		private RealTimeEmulationTrader<IMessageAdapter> _emuConnector;
 		private bool _isConnected;
 		private Security _security;

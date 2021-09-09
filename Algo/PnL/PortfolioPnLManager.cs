@@ -32,9 +32,9 @@ namespace StockSharp.Algo.PnL
 	/// </summary>
 	public class PortfolioPnLManager : IPnLManager
 	{
-		private readonly Dictionary<string, PnLInfo> _tradeByStringIdInfos = new Dictionary<string, PnLInfo>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<long, PnLInfo> _tradeByIdInfos = new Dictionary<long, PnLInfo>();
-		private readonly CachedSynchronizedDictionary<SecurityId, PnLQueue> _securityPnLs = new CachedSynchronizedDictionary<SecurityId, PnLQueue>();
+		private readonly Dictionary<string, PnLInfo> _tradeByStringIdInfos = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<long, PnLInfo> _tradeByIdInfos = new();
+		private readonly CachedSynchronizedDictionary<SecurityId, PnLQueue> _securityPnLs = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioPnLManager"/>.

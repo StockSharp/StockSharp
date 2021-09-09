@@ -32,7 +32,7 @@ namespace SampleStrategies
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new();
 		private bool _initialized;
 
 		public SecuritiesWindow()

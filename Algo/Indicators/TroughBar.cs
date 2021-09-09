@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Indicators
 		{
 		}
 
-		private Unit _reversalAmount = new Unit();
+		private Unit _reversalAmount = new();
 
 		/// <summary>
 		/// Indicator changes threshold.

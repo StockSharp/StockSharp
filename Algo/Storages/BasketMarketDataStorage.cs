@@ -71,8 +71,8 @@ namespace StockSharp.Algo.Storages
 		{
 			private readonly BasketMarketDataStorage<TMessage> _storage;
 			private readonly DateTime _date;
-			private readonly SynchronizedQueue<Tuple<ActionTypes, IMarketDataStorage, long>> _actions = new SynchronizedQueue<Tuple<ActionTypes, IMarketDataStorage, long>>();
-			private readonly OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator<Message>, IMarketDataStorage, long>> _enumerators = new OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator<Message>, IMarketDataStorage, long>>();
+			private readonly SynchronizedQueue<Tuple<ActionTypes, IMarketDataStorage, long>> _actions = new();
+			private readonly OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator<Message>, IMarketDataStorage, long>> _enumerators = new();
 
 			public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date)
 			{
@@ -250,7 +250,7 @@ namespace StockSharp.Algo.Storages
 		
 		private class BasketMarketDataStorageInnerList : CachedSynchronizedList<IMarketDataStorage>, IBasketMarketDataStorageInnerList
 		{
-			private readonly PairSet<IMarketDataStorage, long> _transactionIds = new PairSet<IMarketDataStorage, long>();
+			private readonly PairSet<IMarketDataStorage, long> _transactionIds = new();
 
 			public long TryGetTransactionId(IMarketDataStorage storage) => _transactionIds.TryGetValue(storage);
 
@@ -310,8 +310,8 @@ namespace StockSharp.Algo.Storages
 				=> throw new NotSupportedException();
 		}
 
-		private readonly BasketMarketDataStorageInnerList _innerStorages = new BasketMarketDataStorageInnerList();
-		private readonly CachedSynchronizedList<BasketMarketDataStorageEnumerator> _enumerators = new CachedSynchronizedList<BasketMarketDataStorageEnumerator>();
+		private readonly BasketMarketDataStorageInnerList _innerStorages = new();
+		private readonly CachedSynchronizedList<BasketMarketDataStorageEnumerator> _enumerators = new();
 
 		/// <summary>
 		/// Embedded storages of market data.

@@ -47,11 +47,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	public class OrderLogMarketDepthBuilder : IOrderLogMarketDepthBuilder
 	{
-		private readonly Dictionary<long, decimal> _ordersByNum = new Dictionary<long, decimal>();
-		private readonly Dictionary<string, decimal> _ordersByString = new Dictionary<string, decimal>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<long, decimal> _ordersByNum = new();
+		private readonly Dictionary<string, decimal> _ordersByString = new(StringComparer.InvariantCultureIgnoreCase);
 
-		private readonly SortedList<decimal, QuoteChange> _bids = new SortedList<decimal, QuoteChange>(new BackwardComparer<decimal>());
-		private readonly SortedList<decimal, QuoteChange> _asks = new SortedList<decimal, QuoteChange>();
+		private readonly SortedList<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
+		private readonly SortedList<decimal, QuoteChange> _asks = new();
 
 		private readonly QuoteChangeMessage _depth;
 

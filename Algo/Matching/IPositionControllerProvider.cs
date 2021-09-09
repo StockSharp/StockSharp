@@ -74,7 +74,7 @@
 		/// </summary>
 		public bool CheckShortable { get; set; }
 
-		private readonly Dictionary<string, IPositionController> _portfolios = new Dictionary<string, IPositionController>();
+		private readonly Dictionary<string, IPositionController> _portfolios = new();
 
 		/// <inheritdoc />
 		public IEnumerable<IPositionController> Controllers => _portfolios.Values;

@@ -75,7 +75,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public TimeSpan ExpiryTime { get; set; }
 
-		private WorkingTime _workingTime = new WorkingTime { IsEnabled = true };
+		private WorkingTime _workingTime = new() { IsEnabled = true };
 
 		/// <summary>
 		/// Board working hours.

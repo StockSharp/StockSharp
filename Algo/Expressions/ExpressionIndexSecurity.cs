@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Expressions
 			}
 		}
 
-		private readonly CachedSynchronizedList<SecurityId> _innerSecurityIds = new CachedSynchronizedList<SecurityId>();
+		private readonly CachedSynchronizedList<SecurityId> _innerSecurityIds = new();
 
 		/// <inheritdoc />
 		public override IEnumerable<SecurityId> InnerSecurityIds => _innerSecurityIds.Cache;

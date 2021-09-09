@@ -32,8 +32,8 @@ namespace StockSharp.Algo
 			public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 		}
 
-		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByChildId = new SynchronizedDictionary<long, SubscriptionInfo>();
-		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByParentId = new SynchronizedDictionary<long, SubscriptionInfo>();
+		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByChildId = new();
+		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByParentId = new();
 
 		private readonly ISecurityProvider _securityProvider;
 		private readonly IBasketSecurityProcessorProvider _processorProvider;

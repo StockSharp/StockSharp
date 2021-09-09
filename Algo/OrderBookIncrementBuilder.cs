@@ -18,13 +18,13 @@
 		private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
 		private QuoteChangeStates _state = _none;
 
-		private readonly SortedList<decimal, QuoteChange> _bids = new SortedList<decimal, QuoteChange>(new BackwardComparer<decimal>());
-		private readonly SortedList<decimal, QuoteChange> _asks = new SortedList<decimal, QuoteChange>();
+		private readonly SortedList<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
+		private readonly SortedList<decimal, QuoteChange> _asks = new();
 
-		private readonly List<QuoteChange> _bidsByPos = new List<QuoteChange>();
-		private readonly List<QuoteChange> _asksByPos = new List<QuoteChange>();
+		private readonly List<QuoteChange> _bidsByPos = new();
+		private readonly List<QuoteChange> _asksByPos = new();
 
-		private readonly HashSet<long> _invalidSubscriptions = new HashSet<long>();
+		private readonly HashSet<long> _invalidSubscriptions = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookIncrementBuilder"/>.

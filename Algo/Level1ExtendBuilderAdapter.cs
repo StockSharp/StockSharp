@@ -30,8 +30,8 @@
 			public SubscriptionStates State { get; set; }
 		}
 
-		private readonly SyncObject _syncObject = new SyncObject();
-		private readonly Dictionary<long, Level1Info> _level1Subscriptions = new Dictionary<long, Level1Info>();
+		private readonly SyncObject _syncObject = new();
+		private readonly Dictionary<long, Level1Info> _level1Subscriptions = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1ExtendBuilderAdapter"/>.

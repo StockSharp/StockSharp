@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Storages
 		private class DataBuffer<TKey, TMarketData>
 			where TMarketData : Message
 		{
-			private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new SynchronizedDictionary<TKey, List<TMarketData>>();
+			private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new();
 
 			public void Add(TKey key, TMarketData data)
 				=> _data.SyncDo(d => d.SafeAdd(key).Add(data));
@@ -36,16 +36,16 @@ namespace StockSharp.Algo.Storages
 				=> _data.Clear();
 		}
 
-		private readonly DataBuffer<SecurityId, ExecutionMessage> _ticksBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
-		private readonly DataBuffer<SecurityId, QuoteChangeMessage> _orderBooksBuffer = new DataBuffer<SecurityId, QuoteChangeMessage>();
-		private readonly DataBuffer<SecurityId, ExecutionMessage> _orderLogBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
-		private readonly DataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new DataBuffer<SecurityId, Level1ChangeMessage>();
-		private readonly DataBuffer<SecurityId, PositionChangeMessage> _positionChangesBuffer = new DataBuffer<SecurityId, PositionChangeMessage>();
-		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
-		private readonly SynchronizedSet<BoardStateMessage> _boardStatesBuffer = new SynchronizedSet<BoardStateMessage>();
-		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
-		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
-		private readonly SynchronizedSet<long> _subscriptionsById = new SynchronizedSet<long>();
+		private readonly DataBuffer<SecurityId, ExecutionMessage> _ticksBuffer = new();
+		private readonly DataBuffer<SecurityId, QuoteChangeMessage> _orderBooksBuffer = new();
+		private readonly DataBuffer<SecurityId, ExecutionMessage> _orderLogBuffer = new();
+		private readonly DataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new();
+		private readonly DataBuffer<SecurityId, PositionChangeMessage> _positionChangesBuffer = new();
+		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new();
+		private readonly SynchronizedSet<BoardStateMessage> _boardStatesBuffer = new();
+		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new();
+		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new();
+		private readonly SynchronizedSet<long> _subscriptionsById = new();
 
 		/// <summary>
 		/// Save data only for subscriptions.

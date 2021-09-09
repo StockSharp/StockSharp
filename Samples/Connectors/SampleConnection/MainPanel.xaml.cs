@@ -22,14 +22,14 @@
 
 	public partial class MainPanel
 	{
-		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
-		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
-		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
-		private readonly TradesWindow _tradesWindow = new TradesWindow();
-		private readonly OrdersLogWindow _orderLogWindow = new OrdersLogWindow();
-		private readonly NewsWindow _newsWindow = new NewsWindow();
-		private readonly Level1Window _level1Window = new Level1Window();
+		private readonly SecuritiesWindow _securitiesWindow = new();
+		private readonly OrdersWindow _ordersWindow = new();
+		private readonly PortfoliosWindow _portfoliosWindow = new();
+		private readonly MyTradesWindow _myTradesWindow = new();
+		private readonly TradesWindow _tradesWindow = new();
+		private readonly OrdersLogWindow _orderLogWindow = new();
+		private readonly NewsWindow _newsWindow = new();
+		private readonly Level1Window _level1Window = new();
 
 		public Connector Connector { get; private set; }
 

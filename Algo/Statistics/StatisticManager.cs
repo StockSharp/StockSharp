@@ -132,7 +132,7 @@ namespace StockSharp.Algo.Statistics
 			//Parameters.Add(new MinSlippageParameter());
 		}
 
-		private readonly EquityParameterList _parameters = new EquityParameterList();
+		private readonly EquityParameterList _parameters = new();
 
 		/// <summary>
 		/// Calculated parameters.

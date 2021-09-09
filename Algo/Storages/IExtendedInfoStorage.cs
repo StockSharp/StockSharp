@@ -124,9 +124,9 @@ namespace StockSharp.Algo.Storages
 			private readonly CsvExtendedInfoStorage _storage;
 			private readonly string _fileName;
 			private Tuple<string, Type>[] _fields;
-			private readonly SyncObject _lock = new SyncObject();
+			private readonly SyncObject _lock = new();
 			//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
-			private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new Dictionary<SecurityId, Dictionary<string, object>>();
+			private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new();
 
 			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 			{
@@ -310,7 +310,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<string, CsvExtendedInfoStorageItem> _items = new CachedSynchronizedDictionary<string, CsvExtendedInfoStorageItem>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly CachedSynchronizedDictionary<string, CsvExtendedInfoStorageItem> _items = new(StringComparer.InvariantCultureIgnoreCase);
 		private readonly string _path;
 
 		/// <summary>

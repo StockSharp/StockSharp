@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Indicators
 	[Browsable(false)]
 	public class IchimokuLine : LengthIndicator<decimal>
 	{
-		private readonly List<Candle> _buffer = new List<Candle>();
+		private readonly List<Candle> _buffer = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IchimokuLine"/>.

@@ -250,7 +250,7 @@
 		{
 			private decimal _receivedVolume;
 
-			private readonly CachedSynchronizedList<MyTrade> _trades = new CachedSynchronizedList<MyTrade>();
+			private readonly CachedSynchronizedList<MyTrade> _trades = new();
 
 			public AllTradesOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
@@ -314,7 +314,7 @@
 			private decimal? _bestAskPrice;
 			private decimal _averagePrice;
 
-			private readonly List<Tuple<decimal, decimal>> _trades = new List<Tuple<decimal, decimal>>();
+			private readonly List<Tuple<decimal, decimal>> _trades = new();
 
 			public OrderTakeProfitStopLossRule(Order order, Unit offset, bool isTake, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
 				: base(order, transactionProvider)

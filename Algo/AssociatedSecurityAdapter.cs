@@ -16,7 +16,7 @@ namespace StockSharp.Algo
 	{
 		private sealed class QuoteChangeDepthBuilder
 		{
-			private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = new Dictionary<SecurityId, QuoteChangeMessage>();
+			private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = new();
 
 			private readonly string _securityCode;
 			private readonly string _boardCode;
@@ -49,7 +49,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssociatedSecurityAdapter"/>.

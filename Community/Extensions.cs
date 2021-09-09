@@ -16,50 +16,50 @@ namespace StockSharp.Community
 		/// <summary>
 		/// S#.API
 		/// </summary>
-		public static readonly ProductInfoMessage Api = new ProductInfoMessage { Id = 5, Name = "S#.API", PackageId = "StockSharp.Samples" };
+		public static readonly ProductInfoMessage Api = new() { Id = 5, Name = "S#.API", PackageId = "StockSharp.Samples" };
 
 		/// <summary>
 		/// S#.Data
 		/// </summary>
-		public static readonly ProductInfoMessage Hydra = new ProductInfoMessage { Id = 8, Name = "S#.Data", PackageId = "StockSharp.Hydra" };
+		public static readonly ProductInfoMessage Hydra = new() { Id = 8, Name = "S#.Data", PackageId = "StockSharp.Hydra" };
 
 		/// <summary>
 		/// S#.Terminal
 		/// </summary>
-		public static readonly ProductInfoMessage Terminal = new ProductInfoMessage { Id = 10, Name = "S#.Terminal", PackageId = "StockSharp.Terminal" };
+		public static readonly ProductInfoMessage Terminal = new() { Id = 10, Name = "S#.Terminal", PackageId = "StockSharp.Terminal" };
 
 		/// <summary>
 		/// S#.Designer
 		/// </summary>
-		public static readonly ProductInfoMessage Designer = new ProductInfoMessage { Id = 9, Name = "S#.Designer", PackageId = "StockSharp.Designer" };
+		public static readonly ProductInfoMessage Designer = new() { Id = 9, Name = "S#.Designer", PackageId = "StockSharp.Designer" };
 
 		/// <summary>
 		/// S#.Installer
 		/// </summary>
-		public static readonly ProductInfoMessage Installer = new ProductInfoMessage { Id = 16, Name = "S#.Installer", PackageId = "StockSharp.Installer.UI" };
+		public static readonly ProductInfoMessage Installer = new() { Id = 16, Name = "S#.Installer", PackageId = "StockSharp.Installer.UI" };
 
 		/// <summary>
 		/// S#.Edu
 		/// </summary>
-		public static readonly ProductInfoMessage Edu = new ProductInfoMessage { Id = 83, Name = "S#.Edu", PackageId = "StockSharp.Lessons" };
+		public static readonly ProductInfoMessage Edu = new() { Id = 83, Name = "S#.Edu", PackageId = "StockSharp.Lessons" };
 
 		/// <summary>
 		/// S#.Server
 		/// </summary>
-		public static readonly ProductInfoMessage Server = new ProductInfoMessage { Id = 14, Name = "S#.Server", PackageId = "StockSharp.Server" };
+		public static readonly ProductInfoMessage Server = new() { Id = 14, Name = "S#.Server", PackageId = "StockSharp.Server" };
 
 		/// <summary>
 		/// S#.LicenseTool
 		/// </summary>
-		public static readonly ProductInfoMessage LicenseTool = new ProductInfoMessage { Id = 194, Name = "S#.LicenseTool", PackageId = "StockSharp.LicenseTool" };
+		public static readonly ProductInfoMessage LicenseTool = new() { Id = 194, Name = "S#.LicenseTool", PackageId = "StockSharp.LicenseTool" };
 
 		/// <summary>
 		/// S#.Terminal (mobile).
 		/// </summary>
-		public static readonly ProductInfoMessage TerminalMobile = new ProductInfoMessage { Id = 199, Name = "S#.Terminal (mobile)", PackageId = "StockSharp.Mobile.Terminal" };
+		public static readonly ProductInfoMessage TerminalMobile = new() { Id = 199, Name = "S#.Terminal (mobile)", PackageId = "StockSharp.Mobile.Terminal" };
 
 		[Obsolete]
-		private static readonly Dictionary<Products, ProductInfoMessage> _productsMapping = new Dictionary<Products, ProductInfoMessage>
+		private static readonly Dictionary<Products, ProductInfoMessage> _productsMapping = new()
 		{
 			{ Products.Api, Api },
 			{ Products.Hydra, Hydra },

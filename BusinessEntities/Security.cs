@@ -227,7 +227,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private SecurityExternalId _externalId = new SecurityExternalId();
+		private SecurityExternalId _externalId = new();
 
 		/// <summary>
 		/// Security ID in other systems.
@@ -865,7 +865,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.BestPairKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 208)]
-		public MarketDepthPair BestPair => new MarketDepthPair(this, BestBid, BestAsk);
+		public MarketDepthPair BestPair => new(this, BestBid, BestAsk);
 
 		private SecurityStates? _state;
 

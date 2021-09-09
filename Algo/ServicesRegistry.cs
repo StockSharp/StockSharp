@@ -17,7 +17,7 @@ namespace StockSharp.Algo
 	/// </summary>
 	public static class ServicesRegistry
 	{
-		private static readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+		private static readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new();
 
 		/// <summary>
 		/// Exchanges and trading boards provider.

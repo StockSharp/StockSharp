@@ -20,16 +20,16 @@
 				=> Builder = new OrderBookIncrementBuilder(securityId);
 
 			public readonly OrderBookIncrementBuilder Builder;
-			public readonly CachedSynchronizedSet<long> SubscriptionIds = new CachedSynchronizedSet<long>();
+			public readonly CachedSynchronizedSet<long> SubscriptionIds = new();
 		}
 
-		private readonly SyncObject _syncObject = new SyncObject();
+		private readonly SyncObject _syncObject = new();
 
-		private readonly Dictionary<long, BookInfo> _byId = new Dictionary<long, BookInfo>();
-		private readonly Dictionary<SecurityId, BookInfo> _online = new Dictionary<SecurityId, BookInfo>();
-		private readonly HashSet<long> _passThrough = new HashSet<long>();
-		private readonly CachedSynchronizedSet<long> _allSecSubscriptions = new CachedSynchronizedSet<long>();
-		private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = new CachedSynchronizedSet<long>();
+		private readonly Dictionary<long, BookInfo> _byId = new();
+		private readonly Dictionary<SecurityId, BookInfo> _online = new();
+		private readonly HashSet<long> _passThrough = new();
+		private readonly CachedSynchronizedSet<long> _allSecSubscriptions = new();
+		private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookIncrementMessageAdapter"/>.

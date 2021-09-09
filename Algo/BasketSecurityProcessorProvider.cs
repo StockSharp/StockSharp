@@ -14,7 +14,7 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 	{
-		private readonly SynchronizedDictionary<string, Tuple<Type, Type>> _processors = new SynchronizedDictionary<string, Tuple<Type, Type>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<string, Tuple<Type, Type>> _processors = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketSecurityProcessorProvider"/>.

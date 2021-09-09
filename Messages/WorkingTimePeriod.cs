@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str419Key)]
 		public DateTime Till { get; set; }
 
-		private List<Range<TimeSpan>> _times = new List<Range<TimeSpan>>();
+		private List<Range<TimeSpan>> _times = new();
 
 		/// <summary>
 		/// Work schedule within day.

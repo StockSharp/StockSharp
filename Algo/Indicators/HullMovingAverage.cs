@@ -29,9 +29,9 @@ namespace StockSharp.Algo.Indicators
 	[DescriptionLoc(LocalizedStrings.Str786Key)]
 	public class HullMovingAverage : LengthIndicator<decimal>
 	{
-		private readonly WeightedMovingAverage _wmaSlow = new WeightedMovingAverage();
-		private readonly WeightedMovingAverage _wmaFast = new WeightedMovingAverage();
-		private readonly WeightedMovingAverage _wmaResult = new WeightedMovingAverage();
+		private readonly WeightedMovingAverage _wmaSlow = new();
+		private readonly WeightedMovingAverage _wmaFast = new();
+		private readonly WeightedMovingAverage _wmaResult = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HullMovingAverage"/>.

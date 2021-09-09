@@ -125,7 +125,7 @@
 		private class MessagePool<TMessage>
 			where TMessage : Message, new()
 		{
-			private readonly Queue<TMessage> _messageQueue = new Queue<TMessage>();
+			private readonly Queue<TMessage> _messageQueue = new();
 
 			public TMessage Allocate()
 			{
@@ -144,8 +144,8 @@
 
 		private class LevelQuotes : IEnumerable<ExecutionMessage>
 		{
-			private readonly List<ExecutionMessage> _quotes = new List<ExecutionMessage>();
-			private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new Dictionary<long, ExecutionMessage>();
+			private readonly List<ExecutionMessage> _quotes = new();
+			private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new();
 
 			public int Count => _quotes.Count;
 
@@ -194,13 +194,13 @@
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 		}
 
-		private readonly MessagePool<ExecutionMessage> _messagePool = new MessagePool<ExecutionMessage>();
+		private readonly MessagePool<ExecutionMessage> _messagePool = new();
 
-		private readonly Dictionary<long, ExecutionMessage> _activeOrders = new Dictionary<long, ExecutionMessage>();
-		private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = new Dictionary<ExecutionMessage, TimeSpan>();
+		private readonly Dictionary<long, ExecutionMessage> _activeOrders = new();
+		private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = new();
 
-		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _bids = new SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>>(new BackwardComparer<decimal>());
-		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks = new SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>>();
+		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _bids = new(new BackwardComparer<decimal>());
+		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks = new();
 		
 		private decimal _totalBidVolume;
 		private decimal _totalAskVolume;

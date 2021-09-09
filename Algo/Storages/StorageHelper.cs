@@ -844,7 +844,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private static readonly SynchronizedDictionary<IMarketDataStorage, IMarketDataStorage> _convertedStorages = new SynchronizedDictionary<IMarketDataStorage, IMarketDataStorage>();
+		private static readonly SynchronizedDictionary<IMarketDataStorage, IMarketDataStorage> _convertedStorages = new();
 
 		/// <summary>
 		/// Convert message storage to entity.
@@ -952,7 +952,7 @@ namespace StockSharp.Algo.Storages
 		///// </summary>
 		//public const string SecurityFirst2Dots = "##DDOT##";
 
-		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
+		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new()
 		{
 			{ "/", SecurityPairSeparator },
 			{ "*", SecurityStarSeparator },

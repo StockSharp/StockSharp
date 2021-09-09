@@ -363,7 +363,7 @@ namespace StockSharp.Algo
 
 		private sealed class MarketRuleContainer : BaseLogReceiver, IMarketRuleContainer
 		{
-			private readonly object _rulesSuspendLock = new object();
+			private readonly object _rulesSuspendLock = new();
 			private int _rulesSuspendCount;
 
 			public MarketRuleContainer()
@@ -526,7 +526,7 @@ namespace StockSharp.Algo
 
 		private abstract class BaseComplexRule<TToken, TArg> : MarketRule<TToken, TArg>, IMarketRuleContainer
 		{
-			private readonly List<IMarketRule> _innerRules = new List<IMarketRule>();
+			private readonly List<IMarketRule> _innerRules = new();
 
 			protected BaseComplexRule(IEnumerable<IMarketRule> innerRules)
 				: base(default)
@@ -665,8 +665,8 @@ namespace StockSharp.Algo
 
 		private sealed class AndRule : BaseComplexRule<object, object>
 		{
-			private readonly List<object> _args = new List<object>();
-			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new SynchronizedSet<IMarketRule>();
+			private readonly List<object> _args = new();
+			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
 
 			public AndRule(IMarketRule[] innerRules)
 				: base(innerRules)
@@ -699,8 +699,8 @@ namespace StockSharp.Algo
 
 		private sealed class AndRule<TToken, TArg> : BaseComplexRule<TToken, TArg>
 		{
-			private readonly List<TArg> _args = new List<TArg>();
-			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new SynchronizedSet<IMarketRule>();
+			private readonly List<TArg> _args = new();
+			private readonly SynchronizedSet<IMarketRule> _nonActivatedRules = new();
 
 			public AndRule(MarketRule<TToken, TArg>[] innerRules)
 				: base(innerRules)

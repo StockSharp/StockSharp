@@ -526,7 +526,7 @@ namespace StockSharp.Messages
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> new OrderLogMarketDepthBuilder(securityId);
 
-		private readonly HashSet<TimeSpan> _timeFrames = new HashSet<TimeSpan>();
+		private readonly HashSet<TimeSpan> _timeFrames = new();
 
 		/// <summary>
 		/// Get possible time-frames for the specified instrument.

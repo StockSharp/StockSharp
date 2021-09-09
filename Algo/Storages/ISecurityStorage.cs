@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Storages
 	public class InMemorySecurityStorage : ISecurityStorage
 	{
 		private readonly ISecurityProvider _underlying;
-		private readonly SynchronizedDictionary<SecurityId, Security> _inner = new SynchronizedDictionary<SecurityId, Security>();
+		private readonly SynchronizedDictionary<SecurityId, Security> _inner = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemorySecurityStorage"/>.

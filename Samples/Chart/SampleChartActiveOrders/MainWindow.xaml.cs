@@ -26,16 +26,16 @@
 
 	public partial class MainWindow
 	{
-		private readonly ObservableCollection<Order> _orders = new ObservableCollection<Order>();
+		private readonly ObservableCollection<Order> _orders = new();
 
 		private ChartArea _area;
 		private ChartCandleElement _candleElement;
 		private ChartActiveOrdersElement _activeOrdersElement;
 		private TimeFrameCandle _candle;
 
-		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
-		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
-		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
+		private readonly DispatcherTimer _chartUpdateTimer = new();
+		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new();
+		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new();
 
 		private const decimal _priceStep = 0.01m;
 		private const int _timeframe = 1;
@@ -45,14 +45,14 @@
 		private bool NeedToConfirm => ConfirmCtrl.IsChecked == true;
 		private bool UseSingleOrderObject => SameOrderCtrl.IsChecked == true;
 
-		private readonly Security _security = new Security
+		private readonly Security _security = new()
 		{
 			Id = "SBER@TQBR",
 			PriceStep = _priceStep,
 			Board = ExchangeBoard.Micex
 		};
 
-		private readonly PortfolioDataSource _portfolios = new PortfolioDataSource();
+		private readonly PortfolioDataSource _portfolios = new();
 
 		private readonly IdGenerator _idGenerator = new IncrementalIdGenerator();
 

@@ -43,7 +43,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		private readonly SynchronizedDictionary<string, object> _parameters = new SynchronizedDictionary<string, object>();
+		private readonly SynchronizedDictionary<string, object> _parameters = new();
 
 		/// <summary>
 		/// Condition parameters.

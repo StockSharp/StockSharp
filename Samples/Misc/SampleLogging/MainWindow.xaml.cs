@@ -30,7 +30,7 @@ namespace SampleLogging
 		{
 		}
 
-		private readonly LogManager _logManager = new LogManager();
+		private readonly LogManager _logManager = new();
 		private readonly TestSource _testSource;
 
 		public MainWindow()

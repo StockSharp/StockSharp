@@ -22,11 +22,11 @@ namespace StockSharp.Algo.Strategies.Testing
 	/// </summary>
 	public class BatchEmulation : BaseLogReceiver
 	{
-		private readonly List<HistoryEmulationConnector> _currentConnectors = new List<HistoryEmulationConnector>();
+		private readonly List<HistoryEmulationConnector> _currentConnectors = new();
 		private IMessageAdapter _histAdapter;
 		private bool _cancelEmulation;
 
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 
 		private readonly ISecurityProvider _securityProvider;
 		private readonly IPortfolioProvider _portfolioProvider;

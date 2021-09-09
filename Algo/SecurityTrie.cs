@@ -35,9 +35,9 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class SecurityTrie : ICollection<Security>
 	{
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 
-		private readonly Dictionary<SecurityId, Security> _allSecurities = new Dictionary<SecurityId, Security>();
+		private readonly Dictionary<SecurityId, Security> _allSecurities = new();
 		private readonly ITrie<Security> _trie = new PatriciaSuffixTrie<Security>(1);
 
 		/// <summary>

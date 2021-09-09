@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Risk
 			};
 		}
 
-		private readonly CachedSynchronizedSet<IRiskRule> _rules = new CachedSynchronizedSet<IRiskRule>();
+		private readonly CachedSynchronizedSet<IRiskRule> _rules = new();
 
 		/// <inheritdoc />
 		public SynchronizedSet<IRiskRule> Rules => _rules;

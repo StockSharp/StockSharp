@@ -23,12 +23,12 @@ namespace StockSharp.Algo.Testing
     /// </summary>
     public class HistoryMessageAdapter : MessageAdapter
 	{
-		private readonly Dictionary<SourceKey, Tuple<MarketDataGenerator, long>> _generators = new Dictionary<SourceKey, Tuple<MarketDataGenerator, long>>();
-		private readonly Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>>();
+		private readonly Dictionary<SourceKey, Tuple<MarketDataGenerator, long>> _generators = new();
+		private readonly Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new();
 
-		private readonly List<Tuple<IMarketDataStorage, long>> _actions = new List<Tuple<IMarketDataStorage, long>>();
-		private readonly SyncObject _moveNextSyncRoot = new SyncObject();
-		private readonly SyncObject _syncRoot = new SyncObject();
+		private readonly List<Tuple<IMarketDataStorage, long>> _actions = new();
+		private readonly SyncObject _moveNextSyncRoot = new();
+		private readonly SyncObject _syncRoot = new();
 
 		private readonly BasketMarketDataStorage<Message> _basketStorage;
 

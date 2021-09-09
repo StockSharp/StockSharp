@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		private static readonly MemoryStatisticsValue<Strategy> _strategyStat = new MemoryStatisticsValue<Strategy>(LocalizedStrings.Str1355);
+		private static readonly MemoryStatisticsValue<Strategy> _strategyStat = new(LocalizedStrings.Str1355);
 
 		static Strategy()
 		{
@@ -103,7 +103,7 @@ namespace StockSharp.Algo.Strategies
 
 		private sealed class ChildStrategyList : SynchronizedSet<Strategy>, IStrategyChildStrategyList
 		{
-			private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = new Dictionary<Strategy, IMarketRule>();
+			private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = new();
 			private readonly Strategy _parent;
 
 			public ChildStrategyList(Strategy parent)
@@ -247,10 +247,10 @@ namespace StockSharp.Algo.Strategies
 			public OrderStates PrevState { get; set; }
 		}
 
-		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new CachedSynchronizedDictionary<Order, OrderInfo>();
+		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new();
 
-		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new CachedSynchronizedDictionary<Subscription, bool>();
-		private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = new SynchronizedDictionary<long, Subscription>();
+		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new();
+		private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = new();
 		private Subscription _pfSubscription;
 		private Subscription _orderSubscription;
 
@@ -695,7 +695,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public event Action LatencyChanged;
 
-		private StatisticManager _statisticManager = new StatisticManager();
+		private StatisticManager _statisticManager = new();
 
 		/// <summary>
 		/// The statistics manager.
@@ -1144,7 +1144,7 @@ namespace StockSharp.Algo.Strategies
 			_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
 		}
 
-		private readonly CachedSynchronizedSet<MyTrade> _myTrades = new CachedSynchronizedSet<MyTrade>();
+		private readonly CachedSynchronizedSet<MyTrade> _myTrades = new();
 
 		/// <summary>
 		/// Trades, matched during the strategy operation.

@@ -29,17 +29,17 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// <see cref="DateTime"/> parser.
 		/// </summary>
-		public static readonly FastDateTimeParser DateParser = new FastDateTimeParser(DateFormat);
+		public static readonly FastDateTimeParser DateParser = new(DateFormat);
 
 		/// <summary>
 		/// <see cref="TimeSpan"/> parser.
 		/// </summary>
-		public static readonly FastTimeSpanParser TimeMlsParser = new FastTimeSpanParser(TimeMlsFormat);
+		public static readonly FastTimeSpanParser TimeMlsParser = new(TimeMlsFormat);
 
 		/// <summary>
 		/// <see cref="TimeSpan"/> parser.
 		/// </summary>
-		public static readonly FastTimeSpanParser TimeParser = new FastTimeSpanParser(TimeFormat);
+		public static readonly FastTimeSpanParser TimeParser = new(TimeFormat);
 
 		/// <summary>
 		/// Read <see cref="DateTimeOffset"/>.

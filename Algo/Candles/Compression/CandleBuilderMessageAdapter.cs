@@ -67,13 +67,13 @@ namespace StockSharp.Algo.Candles.Compression
 			public bool Stopped;
 		}
 
-		private readonly SyncObject _syncObject = new SyncObject();
+		private readonly SyncObject _syncObject = new();
 
-		private readonly Dictionary<long, SeriesInfo> _series = new Dictionary<long, SeriesInfo>();
-		private readonly Dictionary<long, long> _replaceId = new Dictionary<long, long>();
+		private readonly Dictionary<long, SeriesInfo> _series = new();
+		private readonly Dictionary<long, long> _replaceId = new();
 		private readonly CandleBuilderProvider _candleBuilderProvider;
-		private readonly Dictionary<long, SeriesInfo> _allChilds = new Dictionary<long, SeriesInfo>();
-		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new Dictionary<long, RefPair<long, SubscriptionStates>>();
+		private readonly Dictionary<long, SeriesInfo> _allChilds = new();
+		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleBuilderMessageAdapter"/>.

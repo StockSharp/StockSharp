@@ -30,12 +30,12 @@ namespace StockSharp.Algo.Positions
 	/// </summary>
 	public class PositionMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 		private readonly IPositionManager _positionManager;
 
-		private readonly CachedSynchronizedSet<long> _subscriptions = new CachedSynchronizedSet<long>();
-		private readonly SynchronizedDictionary<string, CachedSynchronizedSet<long>> _strategySubscriptions = new SynchronizedDictionary<string, CachedSynchronizedSet<long>>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly SynchronizedDictionary<long, string> _strategyIdMap = new SynchronizedDictionary<long, string>();
+		private readonly CachedSynchronizedSet<long> _subscriptions = new();
+		private readonly SynchronizedDictionary<string, CachedSynchronizedSet<long>> _strategySubscriptions = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<long, string> _strategyIdMap = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionMessageAdapter"/>.

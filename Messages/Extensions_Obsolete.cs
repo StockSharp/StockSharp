@@ -34,7 +34,7 @@
 		}
 
 		[Obsolete]
-		private static readonly SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>> _messageTypeMapOld = new SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>>
+		private static readonly SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>> _messageTypeMapOld = new()
 		{
 			{ MarketDataTypes.Level1, Tuple.Create(MessageTypes.Level1Change, default(object)) },
 			{ MarketDataTypes.MarketDepth, Tuple.Create(MessageTypes.QuoteChange, default(object)) },

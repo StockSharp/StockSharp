@@ -23,7 +23,7 @@ namespace SampleHistoryTesting
 		public override bool IsAllDownloadingSupported(DataType dataType)
 			=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
-		private readonly HashSet<TimeSpan> _timeFrames = new HashSet<TimeSpan>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5) });
+		private readonly HashSet<TimeSpan> _timeFrames = new(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5) });
 
 		/// <inheritdoc />
 		protected override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)

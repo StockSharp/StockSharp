@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Commissions
 		{
 		}
 
-		private readonly CachedSynchronizedSet<ICommissionRule> _rules = new CachedSynchronizedSet<ICommissionRule>();
+		private readonly CachedSynchronizedSet<ICommissionRule> _rules = new();
 
 		/// <inheritdoc />
 		public ISynchronizedCollection<ICommissionRule> Rules => _rules;

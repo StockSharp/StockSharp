@@ -338,8 +338,8 @@
 
 		private class ProcessSingleton : Disposable
 		{
-			private readonly ManualResetEvent _stop = new ManualResetEvent(false);
-			private readonly ManualResetEvent _stopped = new ManualResetEvent(false);
+			private readonly ManualResetEvent _stop = new(false);
+			private readonly ManualResetEvent _stopped = new(false);
 
 			public ProcessSingleton(string key)
 			{

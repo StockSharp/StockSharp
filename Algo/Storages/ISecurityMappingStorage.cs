@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 	{
-		private readonly SynchronizedDictionary<string, PairSet<SecurityId, SecurityId>> _mappings = new SynchronizedDictionary<string, PairSet<SecurityId, SecurityId>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<string, PairSet<SecurityId, SecurityId>> _mappings = new(StringComparer.InvariantCultureIgnoreCase);
 
 		private Action<string, SecurityIdMapping> _changed;
 

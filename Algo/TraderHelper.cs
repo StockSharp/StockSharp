@@ -2445,7 +2445,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Lookup all securities predefined criteria.
 		/// </summary>
-		public static readonly Security LookupAllCriteria = new Security();
+		public static readonly Security LookupAllCriteria = new();
 
 		/// <summary>
 		/// Determine the <paramref name="criteria"/> contains lookup all filter.
@@ -3061,12 +3061,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// "News" security instance.
 		/// </summary>
-		public static readonly Security NewsSecurity = new Security { Id = SecurityId.News.ToStringId() };
+		public static readonly Security NewsSecurity = new() { Id = SecurityId.News.ToStringId() };
 
 		/// <summary>
 		/// "Money" security instance.
 		/// </summary>
-		public static readonly Security MoneySecurity = new Security { Id = SecurityId.Money.ToStringId() };
+		public static readonly Security MoneySecurity = new() { Id = SecurityId.Money.ToStringId() };
 
 		/// <summary>
 		/// Find <see cref="AllSecurity"/> instance in the specified provider.

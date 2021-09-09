@@ -67,7 +67,7 @@ namespace StockSharp.Algo
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
 			private readonly BasketMessageAdapter _parent;
-			private readonly Dictionary<IMessageAdapter, int> _enables = new Dictionary<IMessageAdapter, int>();
+			private readonly Dictionary<IMessageAdapter, int> _enables = new();
 
 			public InnerAdapterList(BasketMessageAdapter parent)
 			{
@@ -143,8 +143,8 @@ namespace StockSharp.Algo
 
 		private class ParentChildMap
 		{
-			private readonly SyncObject _syncObject = new SyncObject();
-			private readonly Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>> _childToParentIds = new Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>>();
+			private readonly SyncObject _syncObject = new();
+			private readonly Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>> _childToParentIds = new();
 
 			public void AddMapping(long childId, ISubscriptionMessage parentMsg, IMessageAdapter adapter)
 			{
@@ -265,7 +265,7 @@ namespace StockSharp.Algo
 			private readonly IPositionManager _nonStrategyManager;
 			private readonly IPositionManager _strategyManager;
 
-			private readonly Dictionary<long, IPositionManager> _managersByTransId = new Dictionary<long, IPositionManager>();
+			private readonly Dictionary<long, IPositionManager> _managersByTransId = new();
 
 			private readonly BasketMessageAdapter _adapter;
 			private readonly Connector _connector;
@@ -451,23 +451,23 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = new CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
-		private readonly SyncObject _connectedResponseLock = new SyncObject();
-		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
-		private readonly List<Message> _pendingMessages = new List<Message>();
+		private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = new();
+		private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = new();
+		private readonly SyncObject _connectedResponseLock = new();
+		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new();
+		private readonly List<Message> _pendingMessages = new();
 
-		private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = new Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>>();
+		private readonly Dictionary<IMessageAdapter, Tuple<ConnectionStates, Exception>> _adapterStates = new();
 		private ConnectionStates _currState = ConnectionStates.Disconnected;
 
-		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter> _securityAdapters = new SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter>();
+		private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType>, IMessageAdapter> _securityAdapters = new();
 
-		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>>();
-		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>>();
-		private readonly ParentChildMap _parentChildMap = new ParentChildMap();
+		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter[], DataType>> _subscription = new();
+		private readonly SynchronizedDictionary<long, Tuple<ISubscriptionMessage, IMessageAdapter>> _requestsById = new();
+		private readonly ParentChildMap _parentChildMap = new();
 
-		private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = new SynchronizedDictionary<long, IMessageAdapter>();
+		private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -973,7 +973,7 @@ namespace StockSharp.Algo
 			return adapter;
 		}
 
-		private readonly Dictionary<IMessageAdapter, bool> _hearbeatFlags = new Dictionary<IMessageAdapter, bool>();
+		private readonly Dictionary<IMessageAdapter, bool> _hearbeatFlags = new();
 
 		private bool IsHeartbeatOn(IMessageAdapter adapter)
 		{

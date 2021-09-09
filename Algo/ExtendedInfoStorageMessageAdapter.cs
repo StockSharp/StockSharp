@@ -34,7 +34,7 @@ namespace StockSharp.Algo
 			_fields = InnerAdapter.SecurityExtendedFields.ToArray();
 		}
 
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 		private IExtendedInfoStorageItem _storage;
 
 		private IExtendedInfoStorageItem GetStorage()

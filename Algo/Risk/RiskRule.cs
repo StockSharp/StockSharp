@@ -110,7 +110,7 @@ namespace StockSharp.Algo.Risk
 			_initValue = null;
 		}
 
-		private Unit _pnL = new Unit();
+		private Unit _pnL = new();
 
 		/// <summary>
 		/// Profit-loss.
@@ -248,7 +248,7 @@ namespace StockSharp.Algo.Risk
 	[DescriptionLoc(LocalizedStrings.Str866Key)]
 	public class RiskPositionTimeRule : RiskRule
 	{
-		private readonly Dictionary<Tuple<SecurityId, string>, DateTimeOffset> _posOpenTime = new Dictionary<Tuple<SecurityId, string>, DateTimeOffset>();
+		private readonly Dictionary<Tuple<SecurityId, string>, DateTimeOffset> _posOpenTime = new();
 		private TimeSpan _time;
 
 		/// <summary>

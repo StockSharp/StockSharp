@@ -15,8 +15,8 @@
 	/// </summary>
 	public class StrategyPositionManager : BaseLogReceiver, IPositionManager
 	{
-		private readonly Dictionary<string, IPositionManager> _managersByStrategyId = new Dictionary<string, IPositionManager>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<long, Tuple<IPositionManager, string>> _managersByTransId = new Dictionary<long, Tuple<IPositionManager, string>>();
+		private readonly Dictionary<string, IPositionManager> _managersByStrategyId = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<long, Tuple<IPositionManager, string>> _managersByTransId = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyPositionManager"/>.

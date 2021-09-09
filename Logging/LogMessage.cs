@@ -74,7 +74,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public LogLevels Level { get; }
 
-		private readonly SyncObject _messageLock = new SyncObject();
+		private readonly SyncObject _messageLock = new();
 
 		private string _message;
 

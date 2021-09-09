@@ -53,10 +53,10 @@
 				}
 			}
 
-			public readonly HashSet<long> ExtraFilters = new HashSet<long>();
-			public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = new CachedSynchronizedDictionary<long, ISubscriptionMessage>();
+			public readonly HashSet<long> ExtraFilters = new();
+			public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = new();
 
-			private readonly List<long> _linked = new List<long>();
+			private readonly List<long> _linked = new();
 
 			public List<long> Linked
 			{
@@ -70,11 +70,11 @@
 			public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
 		}
 
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 
-		private readonly PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo> _subscriptionsByKey = new PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo>();
-		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new Dictionary<long, SubscriptionInfo>();
-		private readonly HashSet<long> _strategyPosSubscriptions = new HashSet<long>();
+		private readonly PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo> _subscriptionsByKey = new();
+		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new();
+		private readonly HashSet<long> _strategyPosSubscriptions = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionOnlineMessageAdapter"/>.

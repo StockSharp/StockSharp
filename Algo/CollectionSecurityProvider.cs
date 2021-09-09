@@ -14,7 +14,7 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class CollectionSecurityProvider : ISecurityProvider
 	{
-		private readonly SynchronizedDictionary<SecurityId, Security> _inner = new SynchronizedDictionary<SecurityId, Security>();
+		private readonly SynchronizedDictionary<SecurityId, Security> _inner = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.

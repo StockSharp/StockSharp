@@ -56,7 +56,7 @@ namespace StockSharp.Algo
 	public class MarketRuleList : SynchronizedSet<IMarketRule>, IMarketRuleList
 	{
 		private readonly IMarketRuleContainer _container;
-		private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = new Dictionary<object, HashSet<IMarketRule>>(); 
+		private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = new(); 
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketRuleList"/>.

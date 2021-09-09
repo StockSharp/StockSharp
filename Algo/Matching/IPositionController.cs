@@ -150,7 +150,7 @@
 		private readonly Func<SecurityId, SecurityMessage> _getSecurityDefinition;
 		private readonly Func<SecurityId, Sides, decimal> _getMarginPrice;
 		private readonly string _portfolioName;
-		private readonly Dictionary<SecurityId, PositionInfo> _positions = new Dictionary<SecurityId, PositionInfo>();
+		private readonly Dictionary<SecurityId, PositionInfo> _positions = new();
 
 		private decimal _beginMoney;
 		private decimal _currentMoney;

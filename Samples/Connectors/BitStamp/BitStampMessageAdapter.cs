@@ -16,7 +16,7 @@ namespace StockSharp.BitStamp
 	public partial class BitStampMessageAdapter : MessageAdapter
 	{
 		private long _lastMyTradeId;
-		private readonly Dictionary<long, RefPair<long, decimal>> _orderInfo = new Dictionary<long, RefPair<long, decimal>>();
+		private readonly Dictionary<long, RefPair<long, decimal>> _orderInfo = new();
 		
 		private HttpClient _httpClient;
 		private PusherClient _pusherClient;

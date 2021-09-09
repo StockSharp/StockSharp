@@ -136,13 +136,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public virtual Security CreateSecurity(string id) => new Security { Id = id };
+		public virtual Security CreateSecurity(string id) => new() { Id = id };
 
 		/// <inheritdoc />
-		public virtual Portfolio CreatePortfolio(string name) => new Portfolio { Name = name };
+		public virtual Portfolio CreatePortfolio(string name) => new() { Name = name };
 
 		/// <inheritdoc />
-		public virtual Position CreatePosition(Portfolio portfolio, Security security) => new Position
+		public virtual Position CreatePosition(Portfolio portfolio, Security security) => new()
 		{
 			Portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio)),
 			Security = security ?? throw new ArgumentNullException(nameof(security)),
@@ -150,11 +150,12 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public virtual Trade CreateTrade(Security security, long? id, string stringId)
-			=> new Trade { Security = security, Id = id ?? 0, StringId = stringId };
+			=> new()
+			{ Security = security, Id = id ?? 0, StringId = stringId };
 
 		/// <inheritdoc />
 		public virtual Order CreateOrder(Security security, OrderTypes? type, long transactionId)
-			=> new Order
+			=> new()
 			{
 				Security = security,
 				TransactionId = transactionId,
@@ -163,33 +164,34 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public virtual OrderFail CreateOrderFail(Order order, Exception error)
-			=> new OrderFail { Order = order, Error = error };
+			=> new()
+			{ Order = order, Error = error };
 
 		/// <inheritdoc />
-		public virtual MyTrade CreateMyTrade(Order order, Trade trade) => new MyTrade
+		public virtual MyTrade CreateMyTrade(Order order, Trade trade) => new()
 		{
 			Order = order,
 			Trade = trade,
 		};
 
 		/// <inheritdoc />
-		public virtual MarketDepth CreateMarketDepth(Security security) => new MarketDepth(security);
+		public virtual MarketDepth CreateMarketDepth(Security security) => new(security);
 
 		/// <inheritdoc />
-		public virtual OrderLogItem CreateOrderLogItem(Order order, Trade trade) => new OrderLogItem
+		public virtual OrderLogItem CreateOrderLogItem(Order order, Trade trade) => new()
 		{
 			Order = order,
 			Trade = trade,
 		};
 
 		/// <inheritdoc />
-		public virtual News CreateNews() => new News();
+		public virtual News CreateNews() => new();
 
 		/// <inheritdoc />
-		public Exchange CreateExchange(string code) => new Exchange { Name = code };
+		public Exchange CreateExchange(string code) => new() { Name = code };
 
 		/// <inheritdoc />
-		public ExchangeBoard CreateBoard(string code, Exchange exchange) => new ExchangeBoard { Code = code, Exchange = exchange };
+		public ExchangeBoard CreateBoard(string code, Exchange exchange) => new() { Code = code, Exchange = exchange };
 
 		long IStorage.GetCount<TEntity>() => throw new NotSupportedException();
 

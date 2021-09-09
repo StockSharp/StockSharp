@@ -49,7 +49,7 @@ namespace SampleOptionQuoting
 	{
 		private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
 
-		public readonly Connector Connector = new Connector();
+		public readonly Connector Connector = new();
 
 		private readonly ObservableCollection<Security> _assets;
 		private readonly ObservableCollection<Security> _options;
@@ -64,7 +64,7 @@ namespace SampleOptionQuoting
 		private bool _isDirty;
 		private bool _isConnected;
 
-		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new();
 
 		private Security SelectedOption => (Security)Options.SelectedItem;
 		private Security SelectedAsset => (Security)Assets.SelectedItem;
@@ -450,7 +450,7 @@ namespace SampleOptionQuoting
 			_callLastSmile?.Clear();
 		}
 
-		private readonly List<Subscription> _prevLevel1 = new List<Subscription>();
+		private readonly List<Subscription> _prevLevel1 = new();
 
 		private void Assets_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 		{

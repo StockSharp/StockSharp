@@ -48,7 +48,7 @@
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<PathPair, IMarketDataDrive> _drives = new CachedSynchronizedDictionary<PathPair, IMarketDataDrive>(new PathComparer());
+		private readonly CachedSynchronizedDictionary<PathPair, IMarketDataDrive> _drives = new(new PathComparer());
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DriveCache"/>.

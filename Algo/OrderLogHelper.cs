@@ -195,8 +195,8 @@ namespace StockSharp.Algo
 			{
 				private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
 
-				private readonly HashSet<long> _tradesByNum = new HashSet<long>();
-				private readonly HashSet<string> _tradesByString = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+				private readonly HashSet<long> _tradesByNum = new();
+				private readonly HashSet<string> _tradesByString = new(StringComparer.InvariantCultureIgnoreCase);
 
 				public OrderLogTickEnumerator(IEnumerable<ExecutionMessage> items)
 				{

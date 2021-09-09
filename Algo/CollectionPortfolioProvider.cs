@@ -14,7 +14,7 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class CollectionPortfolioProvider : IPortfolioProvider
 	{
-		private readonly CachedSynchronizedDictionary<string, Portfolio> _inner = new CachedSynchronizedDictionary<string, Portfolio>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly CachedSynchronizedDictionary<string, Portfolio> _inner = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionPortfolioProvider"/>.

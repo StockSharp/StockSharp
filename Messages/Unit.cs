@@ -196,14 +196,14 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
-		public static implicit operator Unit(decimal value) => new Unit(value);
+		public static implicit operator Unit(decimal value) => new(value);
 
 		/// <summary>
 		/// Cast <see cref="int"/> object to the type <see cref="Unit"/>.
 		/// </summary>
 		/// <param name="value"><see cref="int"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
-		public static implicit operator Unit(int value) => new Unit(value);
+		public static implicit operator Unit(int value) => new(value);
 
 		/// <summary>
 		/// Cast object from <see cref="Unit"/> to <see cref="decimal"/>.
@@ -765,7 +765,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Percents.</returns>
-		public static Unit Percents(this decimal value) => new Unit(value, UnitTypes.Percent);
+		public static Unit Percents(this decimal value) => new(value, UnitTypes.Percent);
 
 		/// <summary>
 		/// Convert string to <see cref="Unit"/>.

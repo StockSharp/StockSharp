@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
-		private readonly CachedSynchronizedDictionary<Key, Guid> _adapters = new CachedSynchronizedDictionary<Key, Guid>();
+		private readonly CachedSynchronizedDictionary<Key, Guid> _adapters = new();
 
 		/// <inheritdoc />
 		public IEnumerable<KeyValuePair<Key, Guid>> Adapters => _adapters.CachedPairs;
@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	{
-		private readonly InMemorySecurityMessageAdapterProvider _inMemory = new InMemorySecurityMessageAdapterProvider();
+		private readonly InMemorySecurityMessageAdapterProvider _inMemory = new();
 
 		private readonly string _fileName;
 

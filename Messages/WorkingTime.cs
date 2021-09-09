@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 			Order = 0)]
 		public bool IsEnabled { get; set; }
 
-		private List<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
+		private List<WorkingTimePeriod> _periods = new();
 
 		/// <summary>
 		/// Schedule validity periods.

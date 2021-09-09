@@ -118,7 +118,7 @@ namespace StockSharp.Algo.Storages.Csv
 	public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TData>
 	{
 		// ReSharper disable StaticFieldInGenericType
-		private static readonly UTF8Encoding _utf = new UTF8Encoding(false);
+		private static readonly UTF8Encoding _utf = new(false);
 		// ReSharper restore StaticFieldInGenericType
 
 		/// <summary>

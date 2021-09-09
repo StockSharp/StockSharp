@@ -62,13 +62,13 @@ namespace StockSharp.Algo
 			public BookInfo(Level1DepthBuilder builder) => Builder = builder;
 
 			public readonly Level1DepthBuilder Builder;
-			public readonly CachedSynchronizedSet<long> SubscriptionIds = new CachedSynchronizedSet<long>();
+			public readonly CachedSynchronizedSet<long> SubscriptionIds = new();
 		}
 
-		private readonly SyncObject _syncObject = new SyncObject();
+		private readonly SyncObject _syncObject = new();
 
-		private readonly Dictionary<long, BookInfo> _byId = new Dictionary<long, BookInfo>();
-		private readonly Dictionary<SecurityId, BookInfo> _online = new Dictionary<SecurityId, BookInfo>();
+		private readonly Dictionary<long, BookInfo> _byId = new();
+		private readonly Dictionary<SecurityId, BookInfo> _online = new();
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1DepthBuilderAdapter"/>.

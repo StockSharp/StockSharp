@@ -29,8 +29,8 @@ namespace StockSharp.Algo.Indicators
 	public class MoneyFlowIndex : LengthIndicator<decimal>
 	{
 		private decimal _previousPrice;
-		private readonly Sum _positiveFlow = new Sum();
-		private readonly Sum _negativeFlow = new Sum();
+		private readonly Sum _positiveFlow = new();
+		private readonly Sum _negativeFlow = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MoneyFlowIndex"/>.

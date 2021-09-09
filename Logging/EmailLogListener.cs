@@ -28,7 +28,7 @@ namespace StockSharp.Logging
 	/// </summary>
 	public class EmailLogListener : LogListener
 	{
-		private readonly BlockingQueue<Tuple<string, string>> _queue = new BlockingQueue<Tuple<string, string>>();
+		private readonly BlockingQueue<Tuple<string, string>> _queue = new();
 
 		private bool _isThreadStarted;
 

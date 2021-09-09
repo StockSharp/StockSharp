@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Storages
 	public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		private readonly INativeIdStorage _inMemory = new InMemoryNativeIdStorage();
-		private readonly SynchronizedDictionary<SecurityId, object> _buffer = new SynchronizedDictionary<SecurityId, object>();
+		private readonly SynchronizedDictionary<SecurityId, object> _buffer = new();
 
 		private readonly string _path;
 
@@ -385,8 +385,8 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class InMemoryNativeIdStorage : INativeIdStorage
 	{
-		private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new Dictionary<string, PairSet<SecurityId, object>>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly SyncObject _syncRoot = new SyncObject();
+		private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SyncObject _syncRoot = new();
 
 		private Action<string, SecurityId, object> _added;
 

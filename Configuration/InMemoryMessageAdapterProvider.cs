@@ -48,7 +48,7 @@ namespace StockSharp.Configuration
 		/// <inheritdoc />
 		public virtual IEnumerable<IMessageAdapter> PossibleAdapters { get; }
 
-		private static readonly HashSet<string> _exceptions = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+		private static readonly HashSet<string> _exceptions = new(StringComparer.InvariantCultureIgnoreCase)
 		{
 			"StockSharp.Alerts",
 			"StockSharp.Algo",

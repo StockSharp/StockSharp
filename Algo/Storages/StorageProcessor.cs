@@ -13,7 +13,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class StorageProcessor
 	{
-		private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new SynchronizedSet<long>();
+		private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = new();
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageProcessor"/>.

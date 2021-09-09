@@ -29,10 +29,10 @@ namespace StockSharp.Algo.Indicators
 	public class StochasticK : LengthIndicator<decimal>
 	{
 		// Минимальная цена за период.
-		private readonly Lowest _low = new Lowest();
+		private readonly Lowest _low = new();
 
 		// Максимальная цена за период.
-		private readonly Highest _high = new Highest();
+		private readonly Highest _high = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StochasticK"/>.

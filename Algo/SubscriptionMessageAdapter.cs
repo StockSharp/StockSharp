@@ -30,13 +30,13 @@ namespace StockSharp.Algo
 			public override string ToString() => Subscription.ToString();
 		}
 
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 
-		private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = new Dictionary<long, ISubscriptionMessage>();
-		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new Dictionary<long, SubscriptionInfo>();
-		private readonly PairSet<long, long> _replaceId = new PairSet<long, long>();
-		private readonly HashSet<long> _allSecIdChilds = new HashSet<long>();
-		private readonly List<Message> _reMapSubscriptions = new List<Message>();
+		private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = new();
+		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new();
+		private readonly PairSet<long, long> _replaceId = new();
+		private readonly HashSet<long> _allSecIdChilds = new();
+		private readonly List<Message> _reMapSubscriptions = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.

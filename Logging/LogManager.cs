@@ -35,7 +35,7 @@ namespace StockSharp.Logging
 	/// </summary>
 	public class LogManager : Disposable, IPersistable
 	{
-		private static readonly MemoryStatisticsValue<LogMessage> _logMsgStat = new MemoryStatisticsValue<LogMessage>(LocalizedStrings.MessageLog);
+		private static readonly MemoryStatisticsValue<LogMessage> _logMsgStat = new(LocalizedStrings.MessageLog);
 
 		static LogManager()
 		{
@@ -83,7 +83,7 @@ namespace StockSharp.Logging
 
 		private sealed class DisposeLogMessage : LogMessage
 		{
-			private readonly SyncObject _syncRoot = new SyncObject();
+			private readonly SyncObject _syncRoot = new();
 
 			public DisposeLogMessage()
 				: base(new ApplicationReceiver(), DateTimeOffset.MinValue, LogLevels.Off, string.Empty)
@@ -102,10 +102,10 @@ namespace StockSharp.Logging
 			}
 		}
 
-		private static readonly DisposeLogMessage _disposeMessage = new DisposeLogMessage();
+		private static readonly DisposeLogMessage _disposeMessage = new();
 
-		private readonly object _syncRoot = new object();
-		private readonly List<LogMessage> _pendingMessages = new List<LogMessage>();
+		private readonly object _syncRoot = new();
+		private readonly List<LogMessage> _pendingMessages = new();
 		private readonly Timer _flushTimer;
 		private bool _isFlusing;
 		private readonly bool _asyncMode;
@@ -237,7 +237,7 @@ namespace StockSharp.Logging
 			}
 		}
 
-		private readonly CachedSynchronizedSet<ILogListener> _listeners = new CachedSynchronizedSet<ILogListener>(true);
+		private readonly CachedSynchronizedSet<ILogListener> _listeners = new(true);
 
 		/// <summary>
 		/// Messages loggers arriving from <see cref="Sources"/>.

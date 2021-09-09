@@ -39,7 +39,7 @@ namespace StockSharp.Algo
 
 	class EntityCache : ISnapshotHolder
 	{
-		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
+		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new(LocalizedStrings.Ticks);
 
 		public class OrderChangeInfo
 		{
@@ -60,7 +60,7 @@ namespace StockSharp.Algo
 			public bool IsChanged { get; }
 			public bool IsEdit { get; }
 
-			public static readonly OrderChangeInfo NotExist = new OrderChangeInfo();
+			public static readonly OrderChangeInfo NotExist = new();
 		}
 
 		private sealed class OrderInfo
@@ -208,8 +208,8 @@ namespace StockSharp.Algo
 
 		private class SecurityData
 		{
-			public readonly CachedSynchronizedDictionary<Tuple<long, long, string>, MyTrade> MyTrades = new CachedSynchronizedDictionary<Tuple<long, long, string>, MyTrade>();
-			public readonly CachedSynchronizedDictionary<Tuple<long, bool, OrderOperations>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, bool, OrderOperations>, OrderInfo>();
+			public readonly CachedSynchronizedDictionary<Tuple<long, long, string>, MyTrade> MyTrades = new();
+			public readonly CachedSynchronizedDictionary<Tuple<long, bool, OrderOperations>, OrderInfo> Orders = new();
 
 			public OrderInfo TryGetOrder(OrderTypes? type, long transactionId, OrderOperations operation)
 			{
@@ -217,31 +217,31 @@ namespace StockSharp.Algo
 					?? (type == null ? Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, transactionId, operation)) : null);
 			}
 
-			public readonly SynchronizedDictionary<long, Trade> TradesById = new SynchronizedDictionary<long, Trade>();
-			public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new SynchronizedDictionary<string, Trade>(StringComparer.InvariantCultureIgnoreCase);
-			public readonly SynchronizedList<Trade> Trades = new SynchronizedList<Trade>();
+			public readonly SynchronizedDictionary<long, Trade> TradesById = new();
+			public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new(StringComparer.InvariantCultureIgnoreCase);
+			public readonly SynchronizedList<Trade> Trades = new();
 
-			public readonly SynchronizedDictionary<long, Order> OrdersById = new SynchronizedDictionary<long, Order>();
-			public readonly SynchronizedDictionary<string, Order> OrdersByStringId = new SynchronizedDictionary<string, Order>(StringComparer.InvariantCultureIgnoreCase);
+			public readonly SynchronizedDictionary<long, Order> OrdersById = new();
+			public readonly SynchronizedDictionary<string, Order> OrdersByStringId = new(StringComparer.InvariantCultureIgnoreCase);
 		}
 
-		private readonly SynchronizedDictionary<Security, SecurityData> _securityData = new SynchronizedDictionary<Security, SecurityData>();
+		private readonly SynchronizedDictionary<Security, SecurityData> _securityData = new();
 
 		private SecurityData GetData(Security security)
 			=> _securityData.SafeAdd(security);
 
-		private readonly CachedSynchronizedList<Trade> _trades = new CachedSynchronizedList<Trade>();
+		private readonly CachedSynchronizedList<Trade> _trades = new();
 
 		public IEnumerable<Trade> Trades
 			=> _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStringId.SyncGet(t => t.Values.ToArray()))).ToArray());
 
-		private readonly SynchronizedDictionary<Tuple<long, OrderOperations>, Order> _allOrdersByTransactionId = new SynchronizedDictionary<Tuple<long, OrderOperations>, Order>();
-		private readonly SynchronizedDictionary<Tuple<long, OrderOperations>, OrderFail> _allOrdersByFailedId = new SynchronizedDictionary<Tuple<long, OrderOperations>, OrderFail>();
-		private readonly SynchronizedDictionary<long, Order> _allOrdersById = new SynchronizedDictionary<long, Order>();
-		private readonly SynchronizedDictionary<string, Order> _allOrdersByStringId = new SynchronizedDictionary<string, Order>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<Tuple<long, OrderOperations>, Order> _allOrdersByTransactionId = new();
+		private readonly SynchronizedDictionary<Tuple<long, OrderOperations>, OrderFail> _allOrdersByFailedId = new();
+		private readonly SynchronizedDictionary<long, Order> _allOrdersById = new();
+		private readonly SynchronizedDictionary<string, Order> _allOrdersByStringId = new(StringComparer.InvariantCultureIgnoreCase);
 
-		private readonly SynchronizedDictionary<string, News> _newsById = new SynchronizedDictionary<string, News>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly SynchronizedList<News> _newsWithoutId = new SynchronizedList<News>();
+		private readonly SynchronizedDictionary<string, News> _newsById = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedList<News> _newsWithoutId = new();
 
 		private class MarketDepthInfo
 		{
@@ -272,7 +272,7 @@ namespace StockSharp.Algo
 			public QuoteChangeMessage GetCopy() => _snapshot?.TypedClone();
 		}
 
-		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
+		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new();
 
 		public IEnumerable<News> News => _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray();
 
@@ -334,30 +334,30 @@ namespace StockSharp.Algo
 			RecycleOrders();
 		}
 
-		private readonly HashSet<long> _orderStatusTransactions = new HashSet<long>();
-		private readonly HashSet<long> _massCancelationTransactions = new HashSet<long>();
+		private readonly HashSet<long> _orderStatusTransactions = new();
+		private readonly HashSet<long> _massCancelationTransactions = new();
 
 		public IEntityFactory EntityFactory { get; }
 
 		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
-		private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = new CachedSynchronizedDictionary<Order, IMessageAdapter>();
+		private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = new();
 
 		public IEnumerable<Order> Orders => _orders.CachedKeys;
 
-		private readonly CachedSynchronizedList<MyTrade> _myTrades = new CachedSynchronizedList<MyTrade>();
+		private readonly CachedSynchronizedList<MyTrade> _myTrades = new();
 
 		public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
-		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
+		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new();
 
 		public IEnumerable<OrderFail> OrderRegisterFails => _orderRegisterFails.SyncGet(c => c.ToArray());
 
-		private readonly SynchronizedList<OrderFail> _orderCancelFails = new SynchronizedList<OrderFail>();
+		private readonly SynchronizedList<OrderFail> _orderCancelFails = new();
 
 		public IEnumerable<OrderFail> OrderCancelFails => _orderCancelFails.SyncGet(c => c.ToArray());
 
-		private readonly SynchronizedList<OrderFail> _orderEditFails = new SynchronizedList<OrderFail>();
+		private readonly SynchronizedList<OrderFail> _orderEditFails = new();
 
 		public IEnumerable<OrderFail> OrderEditFails => _orderEditFails.SyncGet(c => c.ToArray());
 
@@ -1220,7 +1220,7 @@ namespace StockSharp.Algo
 
 		public class Level1Info
 		{
-			private readonly SyncObject _sync = new SyncObject();
+			private readonly SyncObject _sync = new();
 			private readonly Level1ChangeMessage _snapshot;
 
 			public Level1Info(SecurityId securityId, DateTimeOffset serverTime)
@@ -1303,12 +1303,12 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates?> _boardStates = new SynchronizedDictionary<ExchangeBoard, SessionStates?>();
+		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates?> _boardStates = new();
 
 		public SessionStates? GetSessionState(ExchangeBoard board) => _boardStates.TryGetValue(board);
 		public void SetSessionState(ExchangeBoard board, SessionStates? value) => _boardStates[board] = value;
 
-		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new SynchronizedDictionary<Security, Level1Info>();
+		private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = new();
 
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{

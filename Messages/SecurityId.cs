@@ -308,7 +308,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// "Money" security id.
 		/// </summary>
-		public static readonly SecurityId Money = new SecurityId
+		public static readonly SecurityId Money = new()
 		{
 			SecurityCode = "MONEY",
 			BoardCode = AssociatedBoardCode
@@ -317,7 +317,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// "News" security id.
 		/// </summary>
-		public static readonly SecurityId News = new SecurityId
+		public static readonly SecurityId News = new()
 		{
 			SecurityCode = "NEWS",
 			BoardCode = AssociatedBoardCode

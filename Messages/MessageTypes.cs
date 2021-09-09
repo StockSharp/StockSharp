@@ -452,6 +452,6 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="MessageTypeInfo"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override MessageTypeInfo Clone() => new MessageTypeInfo(Type, IsMarketData, DisplayName, Description);
+		public override MessageTypeInfo Clone() => new(Type, IsMarketData, DisplayName, Description);
 	}
 }

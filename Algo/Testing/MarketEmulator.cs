@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Testing
 		private class MessagePool<TMessage>
 			where TMessage : Message, new()
 		{
-			private readonly Queue<TMessage> _messageQueue = new Queue<TMessage>();
+			private readonly Queue<TMessage> _messageQueue = new();
 
 			public TMessage Allocate()
 			{
@@ -61,22 +61,22 @@ namespace StockSharp.Algo.Testing
 			private readonly MarketEmulator _parent;
 			private readonly SecurityId _securityId;
 
-			private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = new Dictionary<ExecutionMessage, TimeSpan>();
-			private readonly Dictionary<long, ExecutionMessage> _activeOrders = new Dictionary<long, ExecutionMessage>();
-			private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _bids = new SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>>(new BackwardComparer<decimal>());
-			private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks = new SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>>();
-			private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = new Dictionary<ExecutionMessage, TimeSpan>();
+			private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = new();
+			private readonly Dictionary<long, ExecutionMessage> _activeOrders = new();
+			private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _bids = new(new BackwardComparer<decimal>());
+			private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks = new();
+			private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = new();
 			private DateTimeOffset _prevTime;
 			private readonly ExecutionLogConverter _execLogConverter;
 			private int _volumeDecimals;
-			private readonly SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>> _candleInfo = new SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>>();
+			private readonly SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>> _candleInfo = new();
 			private LogLevels? _logLevel;
 			private DateTime _lastStripDate;
 
 			private decimal _totalBidVolume;
 			private decimal _totalAskVolume;
 
-			private readonly MessagePool<ExecutionMessage> _messagePool = new MessagePool<ExecutionMessage>();
+			private readonly MessagePool<ExecutionMessage> _messagePool = new();
 
 			public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
 			{
@@ -1284,7 +1284,7 @@ namespace StockSharp.Algo.Testing
 
 			private readonly MarketEmulator _parent;
 			private readonly string _name;
-			private readonly Dictionary<SecurityId, MoneyInfo> _moneys = new Dictionary<SecurityId, MoneyInfo>();
+			private readonly Dictionary<SecurityId, MoneyInfo> _moneys = new();
 
 			private decimal _beginMoney;
 			private decimal _currentMoney;
@@ -1572,17 +1572,17 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private readonly Dictionary<SecurityId, SecurityMarketEmulator> _securityEmulators = new Dictionary<SecurityId, SecurityMarketEmulator>();
-		private readonly Dictionary<string, List<SecurityMarketEmulator>> _securityEmulatorsByBoard = new Dictionary<string, List<SecurityMarketEmulator>>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<string, PortfolioEmulator> _portfolios = new Dictionary<string, PortfolioEmulator>();
-		private readonly Dictionary<string, BoardMessage> _boardDefinitions = new Dictionary<string, BoardMessage>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = new Dictionary<SecurityId, Dictionary<Level1Fields, object>>();
+		private readonly Dictionary<SecurityId, SecurityMarketEmulator> _securityEmulators = new();
+		private readonly Dictionary<string, List<SecurityMarketEmulator>> _securityEmulatorsByBoard = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, PortfolioEmulator> _portfolios = new();
+		private readonly Dictionary<string, BoardMessage> _boardDefinitions = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = new();
 		private bool? _needBuffer;
-		private readonly List<Message> _buffer = new List<Message>();
+		private readonly List<Message> _buffer = new();
 		private DateTimeOffset _bufferPrevFlush;
 		private DateTimeOffset _portfoliosPrevRecalc;
 		private readonly ICommissionManager _commissionManager = new CommissionManager();
-		private readonly Dictionary<string, SessionStates> _boardStates = new Dictionary<string, SessionStates>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, SessionStates> _boardStates = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketEmulator"/>.

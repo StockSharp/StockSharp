@@ -18,8 +18,8 @@ namespace StockSharp.Algo
 	{
 		private class FilteredMarketDepthInfo
 		{
-			private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = new Dictionary<ValueTuple<Sides, decimal>, decimal>();
-			private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _ordersInfo = new Dictionary<long, RefTriple<Sides, decimal, decimal?>>();
+			private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = new();
+			private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _ordersInfo = new();
 			
 			private QuoteChangeMessage _lastSnapshot;
 
@@ -211,19 +211,19 @@ namespace StockSharp.Algo
 
 		private class OnlineInfo
 		{
-			public readonly CachedSynchronizedSet<long> Subscribers = new CachedSynchronizedSet<long>();
+			public readonly CachedSynchronizedSet<long> Subscribers = new();
 			
-			public readonly CachedSynchronizedSet<long> BookSubscribers = new CachedSynchronizedSet<long>();
-			public readonly CachedSynchronizedSet<long> OrdersSubscribers = new CachedSynchronizedSet<long>();
+			public readonly CachedSynchronizedSet<long> BookSubscribers = new();
+			public readonly CachedSynchronizedSet<long> OrdersSubscribers = new();
 		}
 
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 
-		private readonly Dictionary<long, FilteredMarketDepthInfo> _byId = new Dictionary<long, FilteredMarketDepthInfo>();
-		private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = new Dictionary<long, FilteredMarketDepthInfo>();
-		private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = new Dictionary<long, FilteredMarketDepthInfo>();
-		private readonly Dictionary<SecurityId, OnlineInfo> _online = new Dictionary<SecurityId, OnlineInfo>();
-		private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = new Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>>();
+		private readonly Dictionary<long, FilteredMarketDepthInfo> _byId = new();
+		private readonly Dictionary<long, FilteredMarketDepthInfo> _byBookId = new();
+		private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = new();
+		private readonly Dictionary<SecurityId, OnlineInfo> _online = new();
+		private readonly Dictionary<long, Tuple<FilteredMarketDepthInfo, bool>> _unsubscribeRequests = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FilteredMarketDepthAdapter"/>.

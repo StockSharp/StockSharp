@@ -9,8 +9,8 @@
 
 	class LevelQuotes : IEnumerable<ExecutionMessage>
 	{
-		private readonly List<ExecutionMessage> _quotes = new List<ExecutionMessage>();
-		private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new Dictionary<long, ExecutionMessage>();
+		private readonly List<ExecutionMessage> _quotes = new();
+		private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new();
 
 		public int Count => _quotes.Count;
 

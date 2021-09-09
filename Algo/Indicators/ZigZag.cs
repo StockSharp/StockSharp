@@ -38,9 +38,9 @@ namespace StockSharp.Algo.Indicators
 	public class ZigZag : BaseIndicator
 	{
 		private readonly IList<Candle> _buffer = new List<Candle>();
-		private readonly List<decimal> _lowBuffer = new List<decimal>();
-		private readonly List<decimal> _highBuffer = new List<decimal>();
-		private readonly List<decimal> _zigZagBuffer = new List<decimal>();
+		private readonly List<decimal> _lowBuffer = new();
+		private readonly List<decimal> _highBuffer = new();
+		private readonly List<decimal> _zigZagBuffer = new();
 
 		private Func<Candle, decimal> _currentValue = candle => candle.ClosePrice;
 		private int _depth;
@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private Unit _deviation = new Unit(0.45m, UnitTypes.Percent);
+		private Unit _deviation = new(0.45m, UnitTypes.Percent);
 		/// <summary>
 		/// Minimum number of points between maximums (minimums) of two adjacent bars used by Zigzag indicator to form a local peak (local trough).
 		/// </summary>

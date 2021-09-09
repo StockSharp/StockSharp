@@ -57,8 +57,8 @@ namespace StockSharp.Algo.Positions
 			public override string ToString() => Value.ToString();
 		}
 
-		private readonly Dictionary<long, OrderInfo> _ordersInfo = new Dictionary<long, OrderInfo>();
-		private readonly Dictionary<Tuple<SecurityId, string>, PositionInfo> _positions = new Dictionary<Tuple<SecurityId, string>, PositionInfo>();
+		private readonly Dictionary<long, OrderInfo> _ordersInfo = new();
+		private readonly Dictionary<Tuple<SecurityId, string>, PositionInfo> _positions = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionManager"/>.

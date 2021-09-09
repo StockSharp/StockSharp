@@ -31,7 +31,7 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class FilterableSecurityProvider : Disposable, ISecurityProvider
 	{
-		private readonly SecurityTrie _trie = new SecurityTrie();
+		private readonly SecurityTrie _trie = new();
 
 		private readonly ISecurityProvider _provider;
 

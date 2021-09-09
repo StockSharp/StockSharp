@@ -502,7 +502,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		private Unit _priceRange = new Unit();
+		private Unit _priceRange = new();
 
 		/// <summary>
 		/// Range of price.
@@ -545,7 +545,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class PnFArg : Equatable<PnFArg>
 	{
-		private Unit _boxSize = new Unit();
+		private Unit _boxSize = new();
 
 		/// <summary>
 		/// Range of price above which increase the candle body.
@@ -630,7 +630,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		private PnFArg _pnFArg = new PnFArg();
+		private PnFArg _pnFArg = new();
 
 		/// <summary>
 		/// Value of arguments.
@@ -683,7 +683,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		private Unit _boxSize = new Unit();
+		private Unit _boxSize = new();
 
 		/// <summary>
 		/// Possible price change range.

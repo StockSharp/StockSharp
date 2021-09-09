@@ -422,7 +422,7 @@ namespace StockSharp.Algo.Storages.Csv
 				}
 			}
 
-			private readonly Dictionary<SecurityId, LiteSecurity> _cache = new Dictionary<SecurityId, LiteSecurity>();
+			private readonly Dictionary<SecurityId, LiteSecurity> _cache = new();
 
 			private static bool IsChanged(string original, string cached, bool forced)
 			{
@@ -1033,7 +1033,7 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		private const string _dateTimeFormat = "yyyyMMddHHmmss";
-		private static readonly FastDateTimeParser _dateTimeParser = new FastDateTimeParser(_dateTimeFormat);
+		private static readonly FastDateTimeParser _dateTimeParser = new(_dateTimeFormat);
 
 		private static DateTimeOffset? ReadNullableDateTime(FastCsvReader reader)
 		{
@@ -1045,7 +1045,7 @@ namespace StockSharp.Algo.Storages.Csv
 			return _dateTimeParser.Parse(str).UtcKind();
 		}
 
-		private readonly List<ICsvEntityList> _csvLists = new List<ICsvEntityList>();
+		private readonly List<ICsvEntityList> _csvLists = new();
 
 		/// <summary>
 		/// The path to data directory.
@@ -1066,7 +1066,7 @@ namespace StockSharp.Algo.Storages.Csv
 			set => _encoding = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private DelayAction _delayAction = new DelayAction(ex => ex.LogError());
+		private DelayAction _delayAction = new(ex => ex.LogError());
 
 		/// <inheritdoc />
 		public virtual DelayAction DelayAction

@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	public class IndicatorContainer : IIndicatorContainer
 	{
-		private readonly FixedSynchronizedList<Tuple<IIndicatorValue, IIndicatorValue>> _values = new FixedSynchronizedList<Tuple<IIndicatorValue, IIndicatorValue>>();
+		private readonly FixedSynchronizedList<Tuple<IIndicatorValue, IIndicatorValue>> _values = new();
 
 		/// <summary>
 		/// The maximal number of indicators values.

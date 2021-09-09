@@ -29,9 +29,9 @@ namespace StockSharp.Algo.Latency
 	/// </summary>
 	public class LatencyManager : ILatencyManager
 	{
-		private readonly SyncObject _syncObject = new SyncObject();
-		private readonly Dictionary<long, DateTimeOffset> _register = new Dictionary<long, DateTimeOffset>();
-		private readonly Dictionary<long, DateTimeOffset> _cancel = new Dictionary<long, DateTimeOffset>();
+		private readonly SyncObject _syncObject = new();
+		private readonly Dictionary<long, DateTimeOffset> _register = new();
+		private readonly Dictionary<long, DateTimeOffset> _cancel = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LatencyManager"/>.

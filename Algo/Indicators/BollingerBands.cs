@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Indicators
 	[DescriptionLoc(LocalizedStrings.Str777Key)]
 	public class BollingerBands : BaseComplexIndicator
 	{
-		private readonly StandardDeviation _dev = new StandardDeviation();
+		private readonly StandardDeviation _dev = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BollingerBands"/>.

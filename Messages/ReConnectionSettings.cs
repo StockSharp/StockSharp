@@ -117,7 +117,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private WorkingTime _workingTime = new WorkingTime();
+		private WorkingTime _workingTime = new();
 
 		/// <summary>
 		/// Schedule, during which it is necessary to make the connection. For example, there is no need to track connection when trading on the exchange finished.

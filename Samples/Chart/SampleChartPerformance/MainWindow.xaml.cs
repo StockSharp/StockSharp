@@ -52,9 +52,9 @@
 		private ChartArea _area;
 		private ChartCandleElement _candleElement;
 		private ChartIndicatorElement _indicatorElement;
-		private readonly CachedSynchronizedList<LightCandle> _candles = new CachedSynchronizedList<LightCandle>();
+		private readonly CachedSynchronizedList<LightCandle> _candles = new();
 		private readonly TimeSpan _tfSpan = TimeSpan.FromTicks(_timeframe);
-		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
+		private readonly DispatcherTimer _chartUpdateTimer = new();
 		private decimal _lastPrice;
 		private DateTimeOffset _lastTime;
 		private bool _dataIsLoaded;
@@ -67,7 +67,7 @@
 
 		//private volatile int _curCandleNum;
 
-		private Security _security = new Security
+		private Security _security = new()
 		{
 			Id = _securityId,
 			PriceStep = _priceStep,
@@ -386,7 +386,7 @@
 	class MyMovingAverage : IIndicator
 	{
 		private readonly int _period;
-		private readonly Queue<double> _values = new Queue<double>();
+		private readonly Queue<double> _values = new();
 		private double _sum;
 
 		public MyMovingAverage(int period)

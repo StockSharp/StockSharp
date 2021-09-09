@@ -95,13 +95,13 @@ namespace StockSharp.Algo
 
 		private class SubscriptionManager
 		{
-			private readonly SyncObject _syncObject = new SyncObject();
+			private readonly SyncObject _syncObject = new();
 
-			private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new Dictionary<long, SubscriptionInfo>();
-			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new Dictionary<long, Tuple<ISubscriptionMessage, Subscription>>();
-			private readonly List<SubscriptionInfo> _keeped = new List<SubscriptionInfo>();
-			private readonly HashSet<long> _notFound = new HashSet<long>();
-			private readonly Dictionary<long, long> _subscriptionAllMap = new Dictionary<long, long>();
+			private readonly Dictionary<long, SubscriptionInfo> _subscriptions = new();
+			private readonly Dictionary<long, Tuple<ISubscriptionMessage, Subscription>> _requests = new();
+			private readonly List<SubscriptionInfo> _keeped = new();
+			private readonly HashSet<long> _notFound = new();
+			private readonly Dictionary<long, long> _subscriptionAllMap = new();
 
 			private readonly Connector _connector;
 			private bool _wasConnected;

@@ -33,13 +33,13 @@ namespace StockSharp.Algo.Indicators
 	public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	{
 		// Текущее значение минимума
-		private readonly Lowest _min = new Lowest();
+		private readonly Lowest _min = new();
 
 		// Текущее значение максимума
-		private readonly Highest _max = new Highest();
+		private readonly Highest _max = new();
 
 		// Текущее значение суммы
-		private readonly Sum _sum = new Sum();
+		private readonly Sum _sum = new();
 
 		// Цена закрытия предыдущего бара
 		private decimal? _previousClosePrice;

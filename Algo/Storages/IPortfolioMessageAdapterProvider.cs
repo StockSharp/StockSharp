@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
-		private readonly CachedSynchronizedDictionary<string, Guid> _adapters = new CachedSynchronizedDictionary<string, Guid>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly CachedSynchronizedDictionary<string, Guid> _adapters = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <inheritdoc />
 		public IEnumerable<KeyValuePair<string, Guid>> Adapters => _adapters.CachedPairs;
@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvider
 	{
-		private readonly InMemoryPortfolioMessageAdapterProvider _inMemory = new InMemoryPortfolioMessageAdapterProvider();
+		private readonly InMemoryPortfolioMessageAdapterProvider _inMemory = new();
 
 		private readonly string _fileName;
 

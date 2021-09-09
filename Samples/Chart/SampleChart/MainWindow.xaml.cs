@@ -39,25 +39,25 @@
 	{
 		private ChartArea _areaComb;
 		private ChartCandleElement _candleElement;
-		private readonly SynchronizedList<CandleMessage> _updatedCandles = new SynchronizedList<CandleMessage>();
-		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle> _allCandles = new CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle>();
+		private readonly SynchronizedList<CandleMessage> _updatedCandles = new();
+		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle> _allCandles = new();
 		private Security _security;
 		private RandomWalkTradeGenerator _tradeGenerator;
-		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator>();
+		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new();
 		private ICandleBuilder _candleBuilder;
 		private MarketDataMessage _mdMsg;
 		private readonly ICandleBuilderValueTransform _candleTransform = new TickCandleBuilderValueTransform();
-		private readonly CandlesHolder _holder = new CandlesHolder();
-		private readonly CandleBuilderProvider _builderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		private readonly CandlesHolder _holder = new();
+		private readonly CandleBuilderProvider _builderProvider = new(new InMemoryExchangeInfoProvider());
 		private bool _historyLoaded;
 		private bool _isRealTime;
 		private DateTimeOffset _lastTime;
 		private readonly Timer _dataTimer;
 		private bool _isInTimerHandler;
-		private readonly SyncObject _timerLock = new SyncObject();
-		private readonly SynchronizedList<Action> _dataThreadActions = new SynchronizedList<Action>();
-		private readonly CollectionSecurityProvider _securityProvider = new CollectionSecurityProvider();
-		private readonly TestMarketSubscriptionProvider _testProvider = new TestMarketSubscriptionProvider();
+		private readonly SyncObject _timerLock = new();
+		private readonly SynchronizedList<Action> _dataThreadActions = new();
+		private readonly CollectionSecurityProvider _securityProvider = new();
+		private readonly TestMarketSubscriptionProvider _testProvider = new();
 
 		private static readonly TimeSpan _realtimeInterval = TimeSpan.FromMilliseconds(100);
 		private static readonly TimeSpan _drawInterval = TimeSpan.FromMilliseconds(100);
@@ -715,7 +715,7 @@
 
 		private class TestMarketSubscriptionProvider : ISubscriptionProvider
 		{
-			private readonly HashSet<Subscription> _l1Subscriptions = new HashSet<Subscription>();
+			private readonly HashSet<Subscription> _l1Subscriptions = new();
 
 			public void UpdateData(Security sec, decimal price)
 			{

@@ -37,7 +37,7 @@ namespace SampleHistoryTesting
 		private readonly ChartTradeElement _tradesElem;
 		private readonly ChartIndicatorElement _shortElem;
 		private readonly ChartIndicatorElement _longElem;
-		private readonly List<MyTrade> _myTrades = new List<MyTrade>();
+		private readonly List<MyTrade> _myTrades = new();
 		private readonly Subscription _series;
 		private bool? _isShortLessThenLong;
 

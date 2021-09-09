@@ -260,7 +260,7 @@ namespace StockSharp.BusinessEntities
 
 		[field: NonSerialized]
 		[Obsolete]
-		private readonly Lazy<SynchronizedList<string>> _messages = new Lazy<SynchronizedList<string>>(() => new SynchronizedList<string>());
+		private readonly Lazy<SynchronizedList<string>> _messages = new(() => new SynchronizedList<string>());
 
 		/// <summary>
 		/// Messages for order (created by the trading system when registered, changed or cancelled).

@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Candles
 		private readonly CandleSeries _series;
 		private readonly Func<TValue, DateTimeOffset> _processing;
 		private readonly Action _stopped;
-		private readonly SynchronizedQueue<SourceInfo> _sources = new SynchronizedQueue<SourceInfo>();
+		private readonly SynchronizedQueue<SourceInfo> _sources = new();
 		private bool _manualStopped;
 		private DateTimeOffset? _nextSourceBegin;
 

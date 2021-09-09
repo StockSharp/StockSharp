@@ -133,7 +133,7 @@ namespace StockSharp.BusinessEntities
 		/// Create virtual portfolio for simulation.
 		/// </summary>
 		/// <returns>Simulator.</returns>
-		public static Portfolio CreateSimulator() => new Portfolio
+		public static Portfolio CreateSimulator() => new()
 		{
 			Name = Extensions.SimulatorPortfolioName,
 			BeginValue = 1000000,

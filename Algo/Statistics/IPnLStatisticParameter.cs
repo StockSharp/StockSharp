@@ -178,8 +178,8 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class RecoveryFactorParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
-		private readonly MaxDrawdownParameter _maxDrawdown = new MaxDrawdownParameter();
-		private readonly NetProfitParameter _netProfit = new NetProfitParameter();
+		private readonly MaxDrawdownParameter _maxDrawdown = new();
+		private readonly NetProfitParameter _netProfit = new();
 
 		/// <inheritdoc />
 		public override void Reset()

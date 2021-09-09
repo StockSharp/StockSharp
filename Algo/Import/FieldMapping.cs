@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Import
 		private FastDateTimeParser _dateParser;
 		private FastTimeSpanParser _timeParser;
 
-		private readonly HashSet<string> _enumNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly HashSet<string> _enumNames = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FieldMapping"/>.

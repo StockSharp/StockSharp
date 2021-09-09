@@ -57,9 +57,9 @@ namespace SampleHistoryTesting
 			public Func<IdGenerator, IMessageAdapter> CustomHistoryAdapter { get; set; }
 		}
 
-		private readonly List<ProgressBar> _progressBars = new List<ProgressBar>();
-		private readonly List<CheckBox> _checkBoxes = new List<CheckBox>();
-		private readonly CachedSynchronizedList<HistoryEmulationConnector> _connectors = new CachedSynchronizedList<HistoryEmulationConnector>();
+		private readonly List<ProgressBar> _progressBars = new();
+		private readonly List<CheckBox> _checkBoxes = new();
+		private readonly CachedSynchronizedList<HistoryEmulationConnector> _connectors = new();
 		
 		private DateTime _startEmulationTime;
 		private ChartCandleElement _candlesElem;
@@ -70,7 +70,7 @@ namespace SampleHistoryTesting
 		private SimpleMovingAverage _longMa;
 		private ChartArea _area;
 
-		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new();
 
 		public MainWindow()
 		{

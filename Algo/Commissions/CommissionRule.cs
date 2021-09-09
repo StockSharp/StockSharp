@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Commissions
 		{
 		}
 
-		private Unit _value = new Unit();
+		private Unit _value = new();
 
 		/// <inheritdoc />
 		[DataMember]

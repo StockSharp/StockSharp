@@ -382,7 +382,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private Unit _priceLimitOffset = new Unit(40, UnitTypes.Percent);
+		private Unit _priceLimitOffset = new(40, UnitTypes.Percent);
 
 		/// <summary>
 		/// The price shift from the previous trade, determining boundaries of maximal and minimal prices for the next session. Used only if there is no saved information <see cref="Level1ChangeMessage"/>. By default, it equals to 40%.

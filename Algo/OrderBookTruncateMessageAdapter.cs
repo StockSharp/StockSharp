@@ -14,7 +14,7 @@
 	/// </summary>
 	public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly SynchronizedDictionary<long, int> _depths = new SynchronizedDictionary<long, int>();
+		private readonly SynchronizedDictionary<long, int> _depths = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderBookTruncateMessageAdapter"/>.

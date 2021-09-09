@@ -171,11 +171,11 @@
 			}
 		}
 
-		private readonly SyncObject _syncObject = new SyncObject();
-		private readonly Dictionary<long, DownloadInfo> _original = new Dictionary<long, DownloadInfo>();
-		private readonly Dictionary<long, DownloadInfo> _partialRequests = new Dictionary<long, DownloadInfo>();
-		private readonly Dictionary<long, bool> _liveRequests = new Dictionary<long, bool>();
-		private readonly HashSet<long> _finished = new HashSet<long>();
+		private readonly SyncObject _syncObject = new();
+		private readonly Dictionary<long, DownloadInfo> _original = new();
+		private readonly Dictionary<long, DownloadInfo> _partialRequests = new();
+		private readonly Dictionary<long, bool> _liveRequests = new();
+		private readonly HashSet<long> _finished = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartialDownloadMessageAdapter"/>.

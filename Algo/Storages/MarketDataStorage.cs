@@ -29,8 +29,8 @@ namespace StockSharp.Algo.Storages
 		private readonly Func<TMessage, SecurityId> _getSecurityId;
 		private readonly Func<TMessage, TId> _getId;
 		private readonly Func<TMessage, bool> _isValid;
-		private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new SynchronizedDictionary<DateTime, SyncObject>();
-		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new SynchronizedDictionary<DateTime, IMarketDataMetaInfo>();
+		private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new();
+		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new();
 
 		protected MarketDataStorage(SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurityId, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive, Func<TMessage, bool> isValid)
 		{

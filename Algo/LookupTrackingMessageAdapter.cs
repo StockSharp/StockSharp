@@ -57,8 +57,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = new CachedSynchronizedDictionary<long, LookupInfo>();
-		private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = new Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>>();
+		private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = new();
+		private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = new();
 		private DateTimeOffset _prevTime;
 
 		/// <summary>

@@ -93,7 +93,7 @@ namespace StockSharp.Logging
 			}
 		}
 
-		private readonly CachedSynchronizedSet<IMemoryStatisticsValue> _values = new CachedSynchronizedSet<IMemoryStatisticsValue>();
+		private readonly CachedSynchronizedSet<IMemoryStatisticsValue> _values = new();
 
 		/// <summary>
 		/// Monitored objects.

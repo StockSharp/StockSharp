@@ -47,18 +47,18 @@
 			{
 			}
 
-			public CachedSynchronizedPairSet<long, MarketDataMessage> Alls = new CachedSynchronizedPairSet<long, MarketDataMessage>();
-			public SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> NonAlls = new SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>>();
+			public CachedSynchronizedPairSet<long, MarketDataMessage> Alls = new();
+			public SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> NonAlls = new();
 			public Dictionary<SecurityId, ChildSubscription> Child { get; } = new Dictionary<SecurityId, ChildSubscription>();
 		}
 
-		private readonly SyncObject _sync = new SyncObject();
+		private readonly SyncObject _sync = new();
 
-		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new Dictionary<long, RefPair<long, SubscriptionStates>>();
-		private readonly Dictionary<long, ParentSubscription> _parents = new Dictionary<long, ParentSubscription>();
-		private readonly Dictionary<long, ParentSubscription> _unsubscribes = new Dictionary<long, ParentSubscription>();
-		private readonly Dictionary<long, Tuple<ParentSubscription, MarketDataMessage>> _requests = new Dictionary<long, Tuple<ParentSubscription, MarketDataMessage>>();
-		private readonly List<ChildSubscription> _toFlush = new List<ChildSubscription>();
+		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new();
+		private readonly Dictionary<long, ParentSubscription> _parents = new();
+		private readonly Dictionary<long, ParentSubscription> _unsubscribes = new();
+		private readonly Dictionary<long, Tuple<ParentSubscription, MarketDataMessage>> _requests = new();
+		private readonly List<ChildSubscription> _toFlush = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionSecurityAllMessageAdapter"/>.

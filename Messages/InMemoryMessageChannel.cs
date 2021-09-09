@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	public class InMemoryMessageChannel : IMessageChannel
 	{
-		private static readonly MemoryStatisticsValue<Message> _msgStat = new MemoryStatisticsValue<Message>(LocalizedStrings.Messages);
+		private static readonly MemoryStatisticsValue<Message> _msgStat = new(LocalizedStrings.Messages);
 
 		static InMemoryMessageChannel()
 		{
@@ -39,7 +39,7 @@ namespace StockSharp.Messages
 		private readonly IMessageQueue _queue;
 		private readonly Action<Exception> _errorHandler;
 
-		private readonly SyncObject _suspendLock = new SyncObject();
+		private readonly SyncObject _suspendLock = new();
 
 		private int _version;
 

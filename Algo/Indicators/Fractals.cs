@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class Fractals : BaseComplexIndicator
 	{
-		private readonly List<Candle> _buffer = new List<Candle>();
+		private readonly List<Candle> _buffer = new();
 
 		// Номер центральной свечи
 		private int _numCenter;

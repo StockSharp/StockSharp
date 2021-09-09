@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	public class CandleManagerContainer : Disposable, ICandleManagerContainer
 	{
-		private static readonly MemoryStatisticsValue<Candle> _candleStat = new MemoryStatisticsValue<Candle>(LocalizedStrings.Candles);
+		private static readonly MemoryStatisticsValue<Candle> _candleStat = new(LocalizedStrings.Candles);
 
 		static CandleManagerContainer()
 		{
@@ -45,8 +45,8 @@ namespace StockSharp.Algo.Candles
 			private readonly CandleManagerContainer _container;
 			private const int _candlesCapacity = 10000;
 
-			private readonly SynchronizedDictionary<long, SynchronizedSet<Candle>> _byTime = new SynchronizedDictionary<long, SynchronizedSet<Candle>>(_candlesCapacity);
-			private readonly SynchronizedLinkedList<Candle> _allCandles = new SynchronizedLinkedList<Candle>();
+			private readonly SynchronizedDictionary<long, SynchronizedSet<Candle>> _byTime = new(_candlesCapacity);
+			private readonly SynchronizedLinkedList<Candle> _allCandles = new();
 
 			private long _firstCandleTime;
 			private long _lastCandleTime;
@@ -136,7 +136,7 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private readonly SynchronizedDictionary<CandleSeries, SeriesInfo> _info = new SynchronizedDictionary<CandleSeries, SeriesInfo>();
+		private readonly SynchronizedDictionary<CandleSeries, SeriesInfo> _info = new();
 		private long _maxCandlesKeepTime;
 		
 		/// <summary>

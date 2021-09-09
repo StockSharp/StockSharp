@@ -17,7 +17,7 @@
 	{
 		private class SubscriptionInfo
 		{
-			public readonly SyncObject Lock = new SyncObject();
+			public readonly SyncObject Lock = new();
 
 			public SubscriptionInfo(MarketDataMessage origin)
 			{
@@ -33,7 +33,7 @@
 			public SubscriptionStates State { get; set; }
 		}
 
-		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionIds = new SynchronizedDictionary<long, SubscriptionInfo>();
+		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionIds = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogMessageAdapter"/>.

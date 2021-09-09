@@ -110,8 +110,8 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class InMemoryExchangeInfoProvider : IExchangeInfoProvider
 	{
-		private readonly CachedSynchronizedDictionary<string, ExchangeBoard> _boards = new CachedSynchronizedDictionary<string, ExchangeBoard>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly CachedSynchronizedDictionary<string, Exchange> _exchanges = new CachedSynchronizedDictionary<string, Exchange>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly CachedSynchronizedDictionary<string, ExchangeBoard> _boards = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly CachedSynchronizedDictionary<string, Exchange> _exchanges = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryExchangeInfoProvider"/>.

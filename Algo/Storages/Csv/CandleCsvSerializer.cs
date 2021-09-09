@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Storages.Csv
 		private class CandleCsvMetaInfo : MetaInfo
 			//where TCandleMessage : CandleMessage, new()
 		{
-			private readonly Dictionary<DateTime, TCandleMessage> _items = new Dictionary<DateTime, TCandleMessage>();
+			private readonly Dictionary<DateTime, TCandleMessage> _items = new();
 
 			private readonly CandleCsvSerializer<TCandleMessage> _serializer;
 			private readonly Encoding _encoding;

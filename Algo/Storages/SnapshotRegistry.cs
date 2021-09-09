@@ -42,9 +42,9 @@ namespace StockSharp.Algo.Storages
 		{
 			private class SnapshotStorageDate
 			{
-				private readonly HashSet<TKey> _dirtyKeys = new HashSet<TKey>();
-				private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = new SynchronizedDictionary<TKey, TMessage>();
-				private readonly Dictionary<TKey, byte[]> _buffers = new Dictionary<TKey, byte[]>();
+				private readonly HashSet<TKey> _dirtyKeys = new();
+				private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = new();
+				private readonly Dictionary<TKey, byte[]> _buffers = new();
 				private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 				private readonly Version _version;
 				private readonly string _fileName;
@@ -261,9 +261,9 @@ namespace StockSharp.Algo.Storages
 
 			private bool _flushDates;
 
-			private readonly SyncObject _cacheSync = new SyncObject();
+			private readonly SyncObject _cacheSync = new();
 
-			private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = new CachedSynchronizedDictionary<DateTime, SnapshotStorageDate>();
+			private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = new();
 
 			private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 
@@ -516,7 +516,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private readonly string _path;
-		private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = new CachedSynchronizedDictionary<DataType, SnapshotStorage>();
+		private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = new();
 		private Timer _timer;
 
 		/// <summary>

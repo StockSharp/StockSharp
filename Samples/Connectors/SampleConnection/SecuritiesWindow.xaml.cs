@@ -109,9 +109,9 @@ namespace SampleConnection
 			}
 		}
 
-		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>>();
-		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindowsBySubscription = new SynchronizedDictionary<Subscription, QuotesWindow>();
-		private readonly SynchronizedList<ChartWindow> _chartWindows = new SynchronizedList<ChartWindow>();
+		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new();
+		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindowsBySubscription = new();
+		private readonly SynchronizedList<ChartWindow> _chartWindows = new();
 		private bool _initialized;
 		private bool _appClosing;
 

@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages
 				=> _parent.CreateClient().LoadStream(_securityId, _dataType, _format, date);
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive> _remoteStorages = new SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive> _remoteStorages = new();
 		private readonly Func<IMessageAdapter> _createAdapter;
 
 		/// <summary>

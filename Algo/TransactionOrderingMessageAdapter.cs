@@ -28,18 +28,18 @@
 			public Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>> Transactions { get; } = new Dictionary<long, Tuple<List<ExecutionMessage>, List<ExecutionMessage>, long>>();
 		}
 
-		private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new SynchronizedDictionary<long, SubscriptionInfo>();
-		private readonly SynchronizedSet<long> _orderStatusIds = new SynchronizedSet<long>();
+		private readonly SynchronizedDictionary<long, SubscriptionInfo> _transactionLogSubscriptions = new();
+		private readonly SynchronizedSet<long> _orderStatusIds = new();
 
-		private readonly SynchronizedDictionary<long, long> _orders = new SynchronizedDictionary<long, long>();
-		private readonly SynchronizedDictionary<long, SecurityId> _secIds = new SynchronizedDictionary<long, SecurityId>();
+		private readonly SynchronizedDictionary<long, long> _orders = new();
+		private readonly SynchronizedDictionary<long, SecurityId> _secIds = new();
 
-		private readonly SynchronizedPairSet<long, long> _orderIds = new SynchronizedPairSet<long, long>();
-		private readonly SynchronizedPairSet<string, long> _orderStringIds = new SynchronizedPairSet<string, long>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedPairSet<long, long> _orderIds = new();
+		private readonly SynchronizedPairSet<string, long> _orderStringIds = new(StringComparer.InvariantCultureIgnoreCase);
 
-		private readonly SyncObject _nonAssociatedLock = new SyncObject();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new Dictionary<string, List<ExecutionMessage>>();
+		private readonly SyncObject _nonAssociatedLock = new();
+		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedOrderIds = new();
+		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedStringOrderIds = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TransactionOrderingMessageAdapter"/>.

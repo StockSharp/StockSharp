@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	public class CandlesHolder
 	{
-		private readonly CachedSynchronizedDictionary<long, CandlesSeriesHolder> _holders = new CachedSynchronizedDictionary<long, CandlesSeriesHolder>();
+		private readonly CachedSynchronizedDictionary<long, CandlesSeriesHolder> _holders = new();
 
 		/// <summary>
 		/// List of all candles series, subscribed via <see cref="CreateCandleSeries"/>.

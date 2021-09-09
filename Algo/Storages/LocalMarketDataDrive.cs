@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Storages
 			private readonly string _datesPath;
 			private readonly DataType _dataType;
 
-			private readonly SyncObject _cacheSync = new SyncObject();
+			private readonly SyncObject _cacheSync = new();
 
 			//private static readonly Version _dateVersion = new Version(1, 0);
 
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, LocalMarketDataStorageDrive> _drives = new SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, LocalMarketDataStorageDrive>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, LocalMarketDataStorageDrive> _drives = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
@@ -355,7 +355,7 @@ namespace StockSharp.Algo.Storages
 				.Where(t => !t.IsDefault());
 		}
 
-		private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>>(StringComparer.InvariantCultureIgnoreCase);
+		private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)

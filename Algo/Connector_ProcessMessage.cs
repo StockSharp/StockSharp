@@ -17,9 +17,9 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
-		private readonly SyncObject _marketTimerSync = new SyncObject();
+		private readonly SyncObject _marketTimerSync = new();
 		private Timer _marketTimer;
-		private readonly TimeMessage _marketTimeMessage = new TimeMessage();
+		private readonly TimeMessage _marketTimeMessage = new();
 		private bool _isMarketTimeHandled;
 
 		private void CreateTimer()
@@ -73,7 +73,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly ResetMessage _disposeMessage = new ResetMessage();
+		private readonly ResetMessage _disposeMessage = new();
 
 		private void AdapterOnNewOutMessage(Message message)
 		{

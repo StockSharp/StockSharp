@@ -47,9 +47,9 @@ namespace StockSharp.Algo
 		private readonly SubscriptionManager _subscriptionManager;
 
 		// backward compatibility for NewXXX events
-		private readonly CachedSynchronizedSet<Security> _existingSecurities = new CachedSynchronizedSet<Security>();
-		private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = new CachedSynchronizedSet<Portfolio>();
-		private readonly CachedSynchronizedSet<Position> _existingPositions = new CachedSynchronizedSet<Position>();
+		private readonly CachedSynchronizedSet<Security> _existingSecurities = new();
+		private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = new();
+		private readonly CachedSynchronizedSet<Position> _existingPositions = new();
 
 		private bool _isDisposing;
 
@@ -210,7 +210,7 @@ namespace StockSharp.Algo
 			set => Adapter.TransactionIdGenerator = value;
 		}
 
-		private SecurityIdGenerator _securityIdGenerator = new SecurityIdGenerator();
+		private SecurityIdGenerator _securityIdGenerator = new();
 
 		/// <summary>
 		/// The instrument identifiers generator <see cref="Security.Id"/>.
@@ -452,7 +452,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool KeepStrategiesPositions { get; set; }
 
-		private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new CachedSynchronizedSet<MessageTypes>(new[]
+		private readonly CachedSynchronizedSet<MessageTypes> _lookupMessagesOnConnect = new(new[]
 		{
 			MessageTypes.SecurityLookup,
 			MessageTypes.PortfolioLookup,

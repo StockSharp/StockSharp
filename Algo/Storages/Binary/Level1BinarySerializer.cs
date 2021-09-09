@@ -525,7 +525,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 	class Level1BinarySerializer : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>
 	{
-		private static readonly SynchronizedPairSet<Level1Fields, int> _oldMap = new SynchronizedPairSet<Level1Fields, int>
+		private static readonly SynchronizedPairSet<Level1Fields, int> _oldMap = new()
 		{
 			{ Level1Fields.OpenPrice,				1 },
 			{ Level1Fields.HighPrice,				1 << 1 },

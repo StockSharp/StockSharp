@@ -106,7 +106,7 @@ namespace StockSharp.Algo
 
 	class Holder
 	{
-		public static readonly MemoryStatisticsValue<IMarketRule> RuleStat = new MemoryStatisticsValue<IMarketRule>(LocalizedStrings.Str1088);
+		public static readonly MemoryStatisticsValue<IMarketRule> RuleStat = new(LocalizedStrings.Str1088);
 
 		static Holder()
 		{
@@ -190,7 +190,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public virtual object Token => _token;
 
-		private readonly SynchronizedSet<IMarketRule> _exclusiveRules = new SynchronizedSet<IMarketRule>();
+		private readonly SynchronizedSet<IMarketRule> _exclusiveRules = new();
 
 		/// <inheritdoc />
 		public virtual ISynchronizedCollection<IMarketRule> ExclusiveRules => _exclusiveRules;

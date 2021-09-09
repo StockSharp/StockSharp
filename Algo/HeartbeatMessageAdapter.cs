@@ -76,8 +76,8 @@ namespace StockSharp.Algo
 		private const ConnectionStates _none = (ConnectionStates)(-1);
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
-		private readonly SyncObject _timeSync = new SyncObject();
-		private readonly TimeMessage _timeMessage = new TimeMessage { OfflineMode = MessageOfflineModes.Ignore };
+		private readonly SyncObject _timeSync = new();
+		private readonly TimeMessage _timeMessage = new() { OfflineMode = MessageOfflineModes.Ignore };
 
 		private readonly ReConnectionSettings _reConnectionSettings;
 

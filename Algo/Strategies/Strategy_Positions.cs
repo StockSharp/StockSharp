@@ -88,7 +88,7 @@
 			RaiseNewStateMessage(nameof(Position), Position);
 		}
 
-		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position>();
+		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new();
 
 		private Tuple<Security, Portfolio> CreateKey(Security security, Portfolio portfolio)
 			=> Tuple.Create(security ?? throw new ArgumentNullException(nameof(security)), portfolio ?? throw new ArgumentNullException(nameof(portfolio)));
