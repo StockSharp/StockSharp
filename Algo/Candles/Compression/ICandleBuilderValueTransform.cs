@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		public override bool Process(Message message)
 		{
-			if (!(message is ExecutionMessage tick) || tick.ExecutionType != ExecutionTypes.Tick)
+			if (message is not ExecutionMessage tick || tick.ExecutionType != ExecutionTypes.Tick)
 				return base.Process(message);
 
 			Update(tick.ServerTime, tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide, tick.OpenInterest, null);
@@ -177,7 +177,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		public override bool Process(Message message)
 		{
-			if (!(message is QuoteChangeMessage md))
+			if (message is not QuoteChangeMessage md)
 				return base.Process(message);
 
 			switch (Type)
@@ -246,7 +246,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		public override bool Process(Message message)
 		{
-			if (!(message is Level1ChangeMessage l1))
+			if (message is not Level1ChangeMessage l1)
 			{
 				if (message.Type == MessageTypes.Reset)
 				{
@@ -349,7 +349,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		public override bool Process(Message message)
 		{
-			if (!(message is ExecutionMessage ol) || ol.ExecutionType != ExecutionTypes.OrderLog)
+			if (message is not ExecutionMessage ol || ol.ExecutionType != ExecutionTypes.OrderLog)
 				return base.Process(message);
 
 			switch (Type)

@@ -336,13 +336,15 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override object ConvertFrom(ITypeDescriptorContext ctx, CultureInfo culture, object value)
 		{
-			if(!(value is string securityId))
+			if (value is not string securityId)
 				return base.ConvertFrom(ctx, culture, value);
 
 			var isNullable = ctx.PropertyDescriptor?.PropertyType.IsNullable() == true;
 
 			const string delimiter = "@";
+
 			var index = securityId.LastIndexOfIgnoreCase(delimiter);
+
 			return index < 0 ?
 				isNullable ? (SecurityId?)null : default(SecurityId) :
 				new SecurityId { SecurityCode = securityId.Substring(0, index), BoardCode = securityId.Substring(index + delimiter.Length, securityId.Length - index - delimiter.Length) };

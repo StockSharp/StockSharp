@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Import
 						}
 					}
 
-					if (!(instance is SecurityMessage secMsg))
+					if (instance is not SecurityMessage secMsg)
 					{
 						switch (instance)
 						{

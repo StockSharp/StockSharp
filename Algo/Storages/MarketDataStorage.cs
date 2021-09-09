@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Storages
 
 						count += diff;
 
-						if (!(stream is MemoryStream))
+						if (stream is not MemoryStream)
 							continue;
 
 						stream.Position = 0;

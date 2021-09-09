@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Candles
 
 			public override bool Process(Message message)
 			{
-				if (!(message is CandleMessage candle))
+				if (message is not CandleMessage candle)
 					return base.Process(message);
 
 				decimal price;

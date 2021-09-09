@@ -995,7 +995,7 @@ namespace StockSharp.Algo
 
 				emulator.NewOutMessage += msg =>
 				{
-					if (!(msg is ExecutionMessage execMsg))
+					if (msg is not ExecutionMessage execMsg)
 						return;
 
 					if (execMsg.Error != null)

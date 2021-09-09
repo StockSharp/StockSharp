@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Derivatives
 		/// To get the synthetic position to buy the option.
 		/// </summary>
 		/// <returns>The synthetic position.</returns>
-		public KeyValuePair<Security, Sides>[] Buy()
+		public (Security security, Sides side)[] Buy()
 		{
 			return Position(Sides.Buy);
 		}
@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Derivatives
 		/// To get the synthetic position to sale the option.
 		/// </summary>
 		/// <returns>The synthetic position.</returns>
-		public KeyValuePair<Security, Sides>[] Sell()
+		public (Security security, Sides side)[] Sell()
 		{
 			return Position(Sides.Sell);
 		}
@@ -73,14 +73,14 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="side">The main position direction.</param>
 		/// <returns>The synthetic position.</returns>
-		public KeyValuePair<Security, Sides>[] Position(Sides side)
+		public (Security security, Sides side)[] Position(Sides side)
 		{
 			var asset = Option.GetUnderlyingAsset(_provider);
 
-			return new[]
+			return new (Security, Sides)[]
 			{
-				new KeyValuePair<Security, Sides>(asset, Option.OptionType == OptionTypes.Call ? side : side.Invert()),
-				new KeyValuePair<Security, Sides>(Option.GetOppositeOption(_provider), side)
+				new(asset, Option.OptionType == OptionTypes.Call ? side : side.Invert()),
+				new(Option.GetOppositeOption(_provider), side)
 			};
 		}
 
