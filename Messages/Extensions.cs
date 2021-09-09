@@ -310,7 +310,7 @@ namespace StockSharp.Messages
 			return new MessageTypeInfo(type, isMarketData);
 		}
 
-		private static readonly CachedSynchronizedSet<MessageTypes> _transactionalTypes = new CachedSynchronizedSet<MessageTypes>(new[]
+		private static readonly CachedSynchronizedSet<MessageTypes> _transactionalTypes = new(new[]
 		{
 			MessageTypes.OrderRegister,
 			MessageTypes.OrderCancel,
@@ -347,7 +347,7 @@ namespace StockSharp.Messages
 				adapter.RemoveSupportedMessage(type);
 		}
 
-		private static readonly CachedSynchronizedSet<MessageTypes> _marketDataTypes = new CachedSynchronizedSet<MessageTypes>(new[]
+		private static readonly CachedSynchronizedSet<MessageTypes> _marketDataTypes = new(new[]
 		{
 			MessageTypes.MarketData,
 			MessageTypes.SecurityLookup,
@@ -564,7 +564,7 @@ namespace StockSharp.Messages
 			return adapter.SupportedOutMessages.Contains(type);
 		}
 
-		private static readonly CachedSynchronizedPairSet<MessageTypes, Type> _candleDataTypes = new CachedSynchronizedPairSet<MessageTypes, Type>();
+		private static readonly CachedSynchronizedPairSet<MessageTypes, Type> _candleDataTypes = new();
 
 		/// <summary>
 		/// Determine the <paramref name="type"/> is candle data type.
@@ -573,7 +573,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
 		public static bool IsCandle(this MessageTypes type)	=> _candleDataTypes.ContainsKey(type);
 
-		private static readonly SynchronizedPairSet<MessageTypes, Type> _messageTypeMap = new SynchronizedPairSet<MessageTypes, Type>();
+		private static readonly SynchronizedPairSet<MessageTypes, Type> _messageTypeMap = new();
 
 		/// <summary>
 		/// Convert <see cref="Type"/> to <see cref="MessageTypes"/> value.
@@ -634,7 +634,7 @@ namespace StockSharp.Messages
 		/// <returns>Candles type.</returns>
 		public static Type ToCandleMessageType(this MessageTypes type) => _candleDataTypes[type];
 
-		private static readonly SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>> _dataTypeArgConverters = new SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>>
+		private static readonly SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>> _dataTypeArgConverters = new()
 		{
 			{ typeof(ExecutionMessage), Tuple.Create((Func<string, object>)(str => str.To<ExecutionTypes>()), (Func<object, string>)(arg => arg.To<string>())) }
 		};
@@ -694,7 +694,7 @@ namespace StockSharp.Messages
 			//throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 		}
 
-		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new SynchronizedPairSet<DataType, string>(EqualityComparer<DataType>.Default, StringComparer.InvariantCultureIgnoreCase)
+		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new(EqualityComparer<DataType>.Default, StringComparer.InvariantCultureIgnoreCase)
 		{
 			{ DataType.Ticks, "trades" },
 			{ DataType.OrderLog, "orderLog" },
@@ -1755,7 +1755,7 @@ namespace StockSharp.Messages
 		/// <returns>The additional argument, associated with data. For example, candle argument.</returns>
 		public static TArg GetArg<TArg>(this MarketDataMessage mdMsg)
 		{
-			if (!(mdMsg.GetArg() is TArg arg))
+			if (mdMsg.GetArg() is not TArg arg)
 				throw new InvalidOperationException(LocalizedStrings.WrongCandleArg.Put(mdMsg.DataType2.Arg));
 
 			return arg;
@@ -3282,7 +3282,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Lookup all securities predefined criteria.
 		/// </summary>
-		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = new SecurityLookupMessage();
+		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = new();
 
 		/// <summary>
 		/// Determine the <paramref name="criteria"/> contains lookup all filter.
@@ -3351,7 +3351,7 @@ namespace StockSharp.Messages
 			adapter.SupportedInMessages = supported.Distinct().ToArray();
 		}
 
-		private static readonly SynchronizedDictionary<DataType, MessageTypes> _messageTypes = new SynchronizedDictionary<DataType, MessageTypes>();
+		private static readonly SynchronizedDictionary<DataType, MessageTypes> _messageTypes = new();
 
 		/// <summary>
 		/// Convert <see cref="DataType"/> to <see cref="MessageTypes"/> value.
@@ -3408,7 +3408,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Constant value for <see cref="OrderRegisterMessage.TillDate"/> means Today(=Session).
 		/// </summary>
-		public static DateTimeOffset Today = new DateTimeOffset(2100, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		public static DateTimeOffset Today = new(2100, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
 		/// <summary>
 		/// To check the specified date is today.
