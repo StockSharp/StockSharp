@@ -282,10 +282,13 @@ namespace StockSharp.Algo.Candles
 			}
 
 			CandleType = storage.GetValue(nameof(CandleType), CandleType);
-			Arg = storage.GetValue(nameof(Arg), Arg);
+
+			if (CandleType != null)
+				Arg = CandleType.ToCandleMessageType().ToDataTypeArg(storage.GetValue<string>(nameof(Arg)));
+
 			From = storage.GetValue(nameof(From), From);
 			To = storage.GetValue(nameof(To), To);
-			WorkingTime = storage.GetValue(nameof(WorkingTime), WorkingTime);
+			WorkingTime = storage.GetValue<SettingsStorage>(nameof(WorkingTime))?.Load<WorkingTime>();
 
 			IsCalcVolumeProfile = storage.GetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 
@@ -318,14 +321,14 @@ namespace StockSharp.Algo.Candles
 			if (CandleType != null)
 				storage.SetValue(nameof(CandleType), CandleType.GetTypeName(false));
 
-			if (Arg != null)
-				storage.SetValue(nameof(Arg), Arg);
+			if (Arg != null && CandleType != null)
+				storage.SetValue(nameof(Arg), CandleType.ToCandleMessageType().DataTypeArgToString(Arg));
 
 			storage.SetValue(nameof(From), From);
 			storage.SetValue(nameof(To), To);
 
 			if (WorkingTime != null)
-				storage.SetValue(nameof(WorkingTime), WorkingTime);
+				storage.SetValue(nameof(WorkingTime), WorkingTime.Save());
 
 			storage.SetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 

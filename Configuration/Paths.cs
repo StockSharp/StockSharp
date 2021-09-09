@@ -17,6 +17,7 @@
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// System paths.
@@ -481,21 +482,19 @@
 		/// <returns>Value.</returns>
 		public static T DeserializeWithMigration<T>(this string filePath)
 		{
-			var def = Path.ChangeExtension(filePath, DefaultSettingsExt);
+			var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
 			var defSer = CreateSerializer<T>();
 
 			T value;
 
-			if (File.Exists(def))
-				value = defSer.Deserialize(def);
-			else
+			var legacyFile = filePath.MakeLegacy();
+
+			if (File.Exists(legacyFile))
 			{
 				// TODO 2021-09-09 remove 1 year later
 
-				var xml = filePath.MakeLegacy();
-
 #pragma warning disable CS0618 // Type or member is obsolete
-				value = new XmlSerializer<T>().Deserialize(xml);
+				value = new XmlSerializer<T>().Deserialize(legacyFile);
 #pragma warning restore CS0618 // Type or member is obsolete
 
 				static void TryFix(SettingsStorage storage)
@@ -541,6 +540,10 @@
 								).ToArray()
 							);
 						}
+						else if (value is IEnumerable<RefPair<Guid, string>> pairs)
+						{
+							storage.Set(pair.Key, pairs.Select(p => p.ToStorage()).ToArray());
+						}
 						else if (value is SettingsStorage s1)
 							TryFix(s1);
 						else if (value is IEnumerable<SettingsStorage> set)
@@ -559,9 +562,23 @@
 						TryFix(item);
 				}
 
-				defSer.Serialize(value, def);
-				xml.MoveToBackup();
+				try
+				{
+					defSer.Serialize(value, defFile);
+
+					// !!! deserialize again (check our new serializer)
+					value = defSer.Deserialize(defFile);
+
+					// make backup only if everything is ok
+					legacyFile.MoveToBackup();
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
+				}
 			}
+			else
+				value = defSer.Deserialize(defFile);
 
 			return value;
 		}
