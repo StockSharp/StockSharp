@@ -35,7 +35,7 @@
 
 			Directory.CreateDirectory(_dir);
 
-			foreach (var xml in Directory.GetFiles(_dir, $"*{Paths.DefaultSettingsExt}").Concat(Directory.GetFiles(_dir, $"*{Paths.LegacySettingsExt}")))
+			foreach (var xml in Paths.EnumerateDefaultAndLegacy(_dir))
 			{
 				try
 				{

@@ -418,6 +418,16 @@
 		public const string BackupExt = ".bak";
 
 		/// <summary>
+		/// Returns an files with <see cref="DefaultSettingsExt"/> and <see cref="LegacySettingsExt"/> extensions.
+		/// </summary>
+		/// <param name="path">The relative or absolute path to the directory to search.</param>
+		/// <param name="filter">The search string to match against the names of files in path.</param>
+		/// <returns>Files.</returns>
+		public static IEnumerable<string> EnumerateDefaultAndLegacy(string path, string filter = "*")
+			=>	Directory.EnumerateFiles(path, $"{filter}{DefaultSettingsExt}").Concat(
+				Directory.EnumerateFiles(path, $"{filter}{LegacySettingsExt}"));
+
+		/// <summary>
 		/// Make the specified <paramref name="filePath"/> with <see cref="LegacySettingsExt"/> extension.
 		/// </summary>
 		/// <param name="filePath">File path.</param>
@@ -564,10 +574,11 @@
 
 				try
 				{
-					defSer.Serialize(value, defFile);
+					// !!! serialize and deserialize (check our new serializer)
+					value = defSer.Deserialize(defSer.Serialize(value));
 
-					// !!! deserialize again (check our new serializer)
-					value = defSer.Deserialize(defFile);
+					// saving data in new format
+					defSer.Serialize(value, defFile);
 
 					// make backup only if everything is ok
 					legacyFile.MoveToBackup();
