@@ -26,6 +26,7 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+	using Ecng.Collections;
 
 	using StockSharp.Localization;
 
@@ -178,7 +179,15 @@ namespace StockSharp.Messages
 
 				if (storage.ContainsKey(nameof(SpecialDays)))
 				{
-					SpecialDays = storage.GetValue<IDictionary<DateTime, Range<TimeSpan>[]>>(nameof(SpecialDays));
+					SpecialDays.Clear();
+					SpecialDays.AddRange(storage
+						.GetValue<IEnumerable<SettingsStorage>>(nameof(SpecialDays))
+						.Select(s => new KeyValuePair<DateTime, Range<TimeSpan>[]>
+						(
+							s.GetValue<DateTime>("Day"),
+							s.GetValue<IEnumerable<SettingsStorage>>("Periods").Select(s1 => s1.ToRange<TimeSpan>()).ToArray()
+						))
+					);
 				}
 				else
 				{
@@ -200,9 +209,10 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue(nameof(IsEnabled), IsEnabled);
 			storage.SetValue(nameof(Periods), Periods.Select(p => p.Save()).ToArray());
-			storage.SetValue(nameof(SpecialDays), SpecialDays);
-			//storage.SetValue(nameof(SpecialWorkingDays), SpecialWorkingDays);
-			//storage.SetValue(nameof(SpecialHolidays), SpecialHolidays);
+			storage.SetValue(nameof(SpecialDays), SpecialDays.Select(p => new SettingsStorage()
+				.Set("Day", p.Key)
+				.Set("Periods", p.Value.Select(p1 => p1.ToStorage()).ToArray())
+			).ToArray());
 		}
 
 		/// <inheritdoc />

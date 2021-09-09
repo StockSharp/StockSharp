@@ -24,6 +24,7 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+	using Ecng.Collections;
 
 	using StockSharp.Localization;
 
@@ -92,15 +93,13 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Times = storage.GetValue<List<Range<TimeSpan>>>(nameof(Times));
+			Times = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Times)).Select(s => s.ToRange<TimeSpan>()).ToList();
 			Till = storage.GetValue<DateTime>(nameof(Till));
-
-			if (storage.ContainsKey(nameof(SpecialDays)))
-			{
-				var sd = storage.GetValue<IDictionary<DayOfWeek, Range<TimeSpan>[]>>(nameof(SpecialDays));
-				if(sd != null)
-					SpecialDays = sd;
-			}
+			SpecialDays = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(SpecialDays)).Select(s =>
+				new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(
+					s.GetValue<DayOfWeek>("Day"),
+					s.GetValue<IEnumerable<SettingsStorage>>("Periods").Select(s1 => s1.ToRange<TimeSpan>()).ToArray()))
+			.ToDictionary();
 		}
 
 		/// <summary>
@@ -109,9 +108,12 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(Times), Times);
+			storage.SetValue(nameof(Times), Times.Select(r => r.ToStorage()).ToArray());
 			storage.SetValue(nameof(Till), Till);
-			storage.SetValue(nameof(SpecialDays), SpecialDays);
+			storage.SetValue(nameof(SpecialDays), SpecialDays.Select(p => new SettingsStorage()
+				.Set("Day", p.Key)
+				.Set("Periods", p.Value.Select(r => r.ToStorage()).ToArray())
+			).ToArray());
 		}
 
 		/// <inheritdoc />

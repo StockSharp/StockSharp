@@ -6,13 +6,16 @@
 	using System.Reflection;
 	using System.Globalization;
 	using System.Threading;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.Security;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// System paths.
@@ -481,11 +484,75 @@
 				value = defSer.Deserialize(def);
 			else
 			{
+				// TODO 2021-09-09 remove 1 year later
+
 				var xml = filePath.MakeLegacy();
 
 #pragma warning disable CS0618 // Type or member is obsolete
 				value = new XmlSerializer<T>().Deserialize(xml);
 #pragma warning restore CS0618 // Type or member is obsolete
+
+				static void TryFix(SettingsStorage storage)
+				{
+					foreach (var pair in storage.ToArray())
+					{
+						var value = pair.Value;
+
+						if (value is List<Range<TimeSpan>> times)
+						{
+							storage.Set(pair.Key, times.Select(r => r.ToStorage()).ToArray());
+						}
+						else if (value is Dictionary<DayOfWeek, Range<TimeSpan>[]> specialDays)
+						{
+							storage.Set(pair.Key, specialDays.Select(p => new SettingsStorage()
+								.Set("Day", p.Key)
+								.Set("Periods", p.Value.Select(r => r.ToStorage()).ToArray())
+							).ToArray());
+						}
+						else if (value is Dictionary<DateTime, Range<TimeSpan>[]> specialDays2)
+						{
+							storage.Set(pair.Key, specialDays2.Select(p => new SettingsStorage()
+								.Set("Day", p.Key)
+								.Set("Periods", p.Value.Select(p1 => p1.ToStorage()).ToArray())
+							).ToArray());
+						}
+						else if (value is Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> permissions)
+						{
+							storage.Set(pair.Key, permissions
+								.Select(p =>
+									new SettingsStorage()
+										.Set("Permission", p.Key)
+										.Set("Settings", p.Value
+											.Select(p1 =>
+												new SettingsStorage()
+													.Set("Name", p1.Key.Item1)
+													.Set("Param", p1.Key.Item2)
+													.Set("Extra", p1.Key.Item3)
+													.Set("Till", p1.Key.Item4)
+													.Set("IsEnabled", p1.Value)
+											).ToArray()
+										)
+								).ToArray()
+							);
+						}
+						else if (value is SettingsStorage s1)
+							TryFix(s1);
+						else if (value is IEnumerable<SettingsStorage> set)
+						{
+							foreach (var item in set)
+								TryFix(item);
+						}
+					}
+				}
+
+				if (value is SettingsStorage s)
+					TryFix(s);
+				else if (value is IEnumerable<SettingsStorage> set)
+				{
+					foreach (var item in set)
+						TryFix(item);
+				}
+
 				defSer.Serialize(value, def);
 				xml.MoveToBackup();
 			}
