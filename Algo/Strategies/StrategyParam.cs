@@ -178,11 +178,6 @@ namespace StockSharp.Algo.Strategies
 				}
 				else
 				{
-					if (value is SettingsStorage storage && Type.IsPersistable())
-						value = storage.Load(Type);
-					else
-						value = value.To(Type);
-
 					if (_comparer.Equals(_value, value))
 						return;
 				}
@@ -223,7 +218,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			Id = storage.GetValue<string>(nameof(Id));
 			Name = storage.GetValue<string>(nameof(Name));
-			Value = storage.GetValue<object>(nameof(Value));
+			Value = storage.GetValue(Type, nameof(Value));
 			CanOptimize = storage.GetValue(nameof(CanOptimize), CanOptimize);
 			OptimizeFrom = storage.GetValue<object>(nameof(OptimizeFrom));
 			OptimizeTo = storage.GetValue<object>(nameof(OptimizeTo));
