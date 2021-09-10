@@ -723,7 +723,7 @@ namespace StockSharp.Algo.Strategies
 		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
-		public CachedSynchronizedDictionary<string, IStrategyParam> Parameters { get; } = new CachedSynchronizedDictionary<string, IStrategyParam>(StringComparer.InvariantCultureIgnoreCase);
+		public CachedSynchronizedDictionary<string, IStrategyParam> Parameters { get; } = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// <see cref="Parameters"/> change event.
@@ -744,7 +744,7 @@ namespace StockSharp.Algo.Strategies
 		/// Strategy environment parameters.
 		/// </summary>
 		[Browsable(false)]
-		public SettingsStorage Environment { get; } = new SettingsStorage();
+		public SettingsStorage Environment { get; } = new();
 
 		private readonly StrategyParam<int> _maxErrorCount;
 
@@ -2619,14 +2619,13 @@ namespace StockSharp.Algo.Strategies
 			if (parameters == null)
 				return;
 
-			//var dict = Parameters.SyncGet(c => c.ToDictionary(p => p.Name, p => p, StringComparer.InvariantCultureIgnoreCase));
+			//var dict = Parameters.SyncGet(c => c.ToDictionary(p => p.Id ?? p.Name, p => p, StringComparer.InvariantCultureIgnoreCase));
 
 			// в настройках могут быть дополнительные параметры, которые будут добавлены позже
 			foreach (var s in parameters)
 			{
-				var param = Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Name)));
-
-				param?.Load(s);
+				if (Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Id)) ?? s.GetValue<string>(nameof(IStrategyParam.Name)), out var param))
+					param.Load(s);
 			}
 
 			var pnlStorage = storage.GetValue<SettingsStorage>(nameof(PnLManager));
