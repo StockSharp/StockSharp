@@ -3509,7 +3509,7 @@ namespace StockSharp.Algo
 				}
 			};
 
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			Do.Invariant(() =>
 			{
 				adapter.SendInMessage(new ConnectMessage { Language = LocalizedStrings.ActiveLanguage });
 

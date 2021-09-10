@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages
 			{
 				try
 				{
-					return CultureInfo.InvariantCulture.DoInCulture(() =>
+					return Do.Invariant(() =>
 					{
 						using (var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read)))
 						{
@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Storages
 					//stream.WriteByte((byte)_dateVersion.Minor);
 					//stream.Write(dates.Length);
 
-					CultureInfo.InvariantCulture.DoInCulture(() =>
+					Do.Invariant(() =>
 					{
 						var writer = new StreamWriter(stream) { AutoFlush = true };
 

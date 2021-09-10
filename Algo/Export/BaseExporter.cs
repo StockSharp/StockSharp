@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Export
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
-			return CultureInfo.InvariantCulture.DoInCulture(() =>
+			return Do.Invariant(() =>
 			{
 				if (DataType == DataType.MarketDepth)
 					return Export((IEnumerable<QuoteChangeMessage>)values);

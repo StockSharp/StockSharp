@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		public override void Read(Stream stream)
 		{
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			Do.Invariant(() =>
 			{
 				var count = 0;
 
@@ -189,7 +189,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		public virtual void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			Do.Invariant(() =>
 			{
 				var writer = new CsvFileWriter(stream, Encoding);
 

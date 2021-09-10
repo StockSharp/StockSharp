@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			public override void Read(Stream stream)
 			{
-				CultureInfo.InvariantCulture.DoInCulture(() =>
+				Do.Invariant(() =>
 				{
 					var count = 0;
 					var firstTimeRead = false;
@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			var toWrite = candleMetaInfo.Process(data);
 
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			Do.Invariant(() =>
 			{
 				var writer = new CsvFileWriter(stream, Encoding);
 

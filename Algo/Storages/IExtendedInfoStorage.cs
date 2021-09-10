@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Storages
 			{
 				if (File.Exists(_fileName))
 				{
-					CultureInfo.InvariantCulture.DoInCulture(() =>
+					Do.Invariant(() =>
 					{
 						using (var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read))
 						{

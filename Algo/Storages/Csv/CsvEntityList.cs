@@ -317,7 +317,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (!File.Exists(FileName))
 				return;
 
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			Do.Invariant(() =>
 			{
 				using (var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
 				{

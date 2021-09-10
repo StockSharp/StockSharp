@@ -326,7 +326,7 @@ namespace StockSharp.Algo.Storages
 
 		private void LoadFile(string fileName)
 		{
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			Do.Invariant(() =>
 			{
 				if (!File.Exists(fileName))
 					return;

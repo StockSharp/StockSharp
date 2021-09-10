@@ -54,7 +54,7 @@ namespace StockSharp.Algo
 				if (stream == null)
 					throw new InvalidOperationException(LocalizedStrings.Str2112);
 
-				return CultureInfo.InvariantCulture.DoInCulture(() =>
+				return Do.Invariant(() =>
 				{
 					var message = new List<Level1ChangeMessage>();
 
@@ -128,7 +128,7 @@ namespace StockSharp.Algo
 				if (stream == null)
 					throw new InvalidOperationException(LocalizedStrings.Str2112);
 
-				return CultureInfo.InvariantCulture.DoInCulture(() =>
+				return Do.Invariant(() =>
 					(from rate in XDocument.Load(stream).Descendants("rate")
 					select new KeyValuePair<DateTimeOffset, decimal>(
 						rate.GetAttributeValue<string>("moment").ToDateTime("yyyy-MM-dd HH:mm:ss").ApplyMoscow(),

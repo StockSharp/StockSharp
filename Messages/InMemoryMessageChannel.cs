@@ -154,7 +154,7 @@ namespace StockSharp.Messages
 			var version = Interlocked.Increment(ref _version);
 
 			ThreadingHelper
-				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
+				.Thread(() => Do.Invariant(() =>
 				{
 					while (this.IsOpened())
 					{

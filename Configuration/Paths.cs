@@ -275,7 +275,7 @@
 			if (!File.Exists(InstallerInstallationsConfigPath))
 				return null;
 
-			var storage = CultureInfo.InvariantCulture.DoInCulture(() =>
+			var storage = Do.Invariant(() =>
 				InstallerInstallationsConfigPath.DeserializeWithMigration<SettingsStorage>());
 
 			var installations = storage?.GetValue<SettingsStorage[]>("Installations");

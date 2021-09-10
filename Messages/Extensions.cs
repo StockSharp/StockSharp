@@ -781,7 +781,7 @@ namespace StockSharp.Messages
 			if (argParserFrom is null)
 				throw new ArgumentNullException(nameof(argParserFrom));
 
-			static T Do<T>(Func<T> func) => CultureInfo.InvariantCulture.DoInCulture(func);
+			static T Do<T>(Func<T> func) => Ecng.Common.Do.Invariant(func);
 
 			Func<string, object> p1 = str => Do(() => argParserTo(str));
 			Func<object, string> p2 = arg => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
