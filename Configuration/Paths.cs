@@ -14,6 +14,8 @@
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
 
+	using NuGet.Configuration;
+
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Logging;
@@ -43,7 +45,8 @@
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
 			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
 
-			HistoryDataPath = GetHistoryDataPath(Assembly.GetExecutingAssembly().Location);
+			var settings = Settings.LoadDefaultSettings(null);
+			HistoryDataPath = GetHistoryDataPath(SettingsUtility.GetGlobalPackagesFolder(settings));
 		}
 
 		/// <summary>

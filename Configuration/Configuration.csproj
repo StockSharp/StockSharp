@@ -8,4 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVersion)" />
+  </ItemGroup>
 </Project>
