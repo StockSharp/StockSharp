@@ -25,7 +25,6 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The strategy parameter.

@@ -3,8 +3,6 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	using StockSharp.Messages;
 
 	/// <summary>

@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Derivatives
 {
 	using System;
-	using System.Collections.Generic;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;

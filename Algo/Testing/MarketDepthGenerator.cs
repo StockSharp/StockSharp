@@ -17,8 +17,6 @@ namespace StockSharp.Algo.Testing
 {
 	using System;
 	using System.Collections.Generic;
-
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.Messages;

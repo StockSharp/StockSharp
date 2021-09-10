@@ -1,8 +1,5 @@
 ﻿namespace StockSharp.Algo
 {
-	using System.Linq;
-
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.Messages;

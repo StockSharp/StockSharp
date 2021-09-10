@@ -17,10 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Runtime.Serialization;
-
-	using Ecng.Common;
 
 	/// <summary>
 	/// The price level.

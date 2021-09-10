@@ -3,8 +3,6 @@
 	using System;
 	using System.Reflection;
 
-	using Ecng.Net;
-
 	using Newtonsoft.Json;
 
 	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]

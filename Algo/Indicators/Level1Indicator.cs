@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using Ecng.Collections;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;

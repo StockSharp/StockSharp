@@ -15,12 +15,11 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Testing
 {
-    using System;
-    using System.Linq;
-	using System.Collections.Generic;
+	using System;
+	using System.Linq;
 
 	using Ecng.Common;
-    using Ecng.Serialization;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Algo.Storages;

@@ -20,8 +20,6 @@ namespace StockSharp.Messages
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	using StockSharp.Localization;
 
 	/// <summary>

@@ -2,7 +2,6 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
 	using System.IO;
 	using System.Net;
@@ -13,7 +12,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-    using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Storages;
 
 	partial class TraderHelper
 	{

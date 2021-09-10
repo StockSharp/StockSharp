@@ -16,8 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Testing
 {
 	using System;
-
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;

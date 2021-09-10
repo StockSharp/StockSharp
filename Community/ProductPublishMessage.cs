@@ -4,8 +4,6 @@
 	using System.Runtime.Serialization;
 	using System.Linq;
 
-	using Ecng.Common;
-
 	using StockSharp.Messages;
 
 	/// <summary>

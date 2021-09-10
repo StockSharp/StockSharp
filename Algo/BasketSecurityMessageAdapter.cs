@@ -1,7 +1,6 @@
 namespace StockSharp.Algo
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -9,8 +8,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-    using StockSharp.Logging;
-    using StockSharp.Messages;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The messages adapter builds market data for basket securities.

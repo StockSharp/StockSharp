@@ -3,8 +3,6 @@ namespace StockSharp.Algo.Candles.Compression
 	using System;
 	using System.Collections.Generic;
 
-	using Ecng.Collections;
-
 	using StockSharp.Messages;
 
 	/// <summary>

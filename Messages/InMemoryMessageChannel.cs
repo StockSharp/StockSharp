@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Globalization;
 	using System.Threading;
 
 	using Ecng.Common;

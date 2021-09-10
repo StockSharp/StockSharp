@@ -19,8 +19,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 
-	using Ecng.Common;
-
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;

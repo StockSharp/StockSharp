@@ -4,7 +4,6 @@ namespace StockSharp.Algo.Testing
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading;
-    using System.Globalization;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -14,14 +13,14 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-    using StockSharp.Logging;
+	using StockSharp.Logging;
 
 	using SourceKey = System.Tuple<Messages.SecurityId, Messages.DataType>;
 
-    /// <summary>
-    /// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
-    /// </summary>
-    public class HistoryMessageAdapter : MessageAdapter
+	/// <summary>
+	/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
+	/// </summary>
+	public class HistoryMessageAdapter : MessageAdapter
 	{
 		private readonly Dictionary<SourceKey, Tuple<MarketDataGenerator, long>> _generators = new();
 		private readonly Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new();

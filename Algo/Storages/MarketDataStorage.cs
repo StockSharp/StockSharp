@@ -7,7 +7,6 @@ namespace StockSharp.Algo.Storages
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;

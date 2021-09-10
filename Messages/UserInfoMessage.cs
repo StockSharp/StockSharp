@@ -8,8 +8,6 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Security;
 	using System.Xml.Serialization;
-
-	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.Localization;

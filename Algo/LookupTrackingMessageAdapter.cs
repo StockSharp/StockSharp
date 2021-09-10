@@ -6,8 +6,6 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 	using Ecng.Collections;
-
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 

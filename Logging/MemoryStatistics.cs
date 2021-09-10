@@ -22,7 +22,6 @@ namespace StockSharp.Logging
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using MoreLinq;

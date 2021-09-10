@@ -20,7 +20,7 @@ namespace SampleHistoryTestingParallel
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Media;
-    using System.Collections.Generic;
+	using System.Collections.Generic;
 
 	using Ecng.Xaml;
 	using Ecng.Common;
@@ -29,7 +29,6 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies.Testing;
-	using StockSharp.Algo.Testing;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
