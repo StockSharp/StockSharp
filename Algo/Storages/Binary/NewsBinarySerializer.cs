@@ -156,7 +156,7 @@ namespace StockSharp.Algo.Storages.Binary
 				Story = reader.ReadStringEx(),
 				Source = reader.ReadStringEx(),
 				BoardCode = reader.ReadStringEx(),
-				SecurityId = reader.Read() ? new SecurityId { SecurityCode = reader.ReadString() } : (SecurityId?)null,
+				SecurityId = reader.Read() ? new SecurityId { SecurityCode = reader.ReadString() } : null,
 				Url = reader.ReadStringEx(),
 			};
 
@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo.Version < MarketDataVersions.Version50)
 				return message;
 
-			message.ExpiryDate = reader.Read() ? reader.ReadLong().To<DateTimeOffset>() : (DateTimeOffset?)null;
+			message.ExpiryDate = reader.Read() ? reader.ReadLong().To<DateTimeOffset>() : null;
 
 			var secBoard = reader.ReadStringEx();
 			if (!secBoard.IsEmpty() && message.SecurityId != null)

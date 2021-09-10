@@ -547,7 +547,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (metaInfo.Version < MarketDataVersions.Version50)
 						execMsg.TimeInForce = (TimeInForce)reader.ReadInt();
 					else
-						execMsg.TimeInForce = reader.Read() ? (TimeInForce)reader.ReadInt() : (TimeInForce?)null;
+						execMsg.TimeInForce = reader.Read() ? (TimeInForce)reader.ReadInt() : null;
 
 					execMsg.IsSystem = metaInfo.Version < MarketDataVersions.Version49
 						? reader.Read()

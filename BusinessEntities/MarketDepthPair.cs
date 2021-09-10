@@ -70,14 +70,14 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str496Key)]
 		[DescriptionLoc(LocalizedStrings.Str497Key)]
-		public decimal? SpreadPrice => _isFull ? (Ask.Value.Price - Bid.Value.Price) : (decimal?)null;
+		public decimal? SpreadPrice => _isFull ? (Ask.Value.Price - Bid.Value.Price) : null;
 
 		/// <summary>
 		/// Spread by volume. If negative, it best ask has a greater volume than the best bid. Is <see langword="null" />, if one of the quotes is empty.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str498Key)]
 		[DescriptionLoc(LocalizedStrings.Str499Key)]
-		public decimal? SpreadVolume => _isFull ? (Ask.Value.Volume - Bid.Value.Volume).Abs() : (decimal?)null;
+		public decimal? SpreadVolume => _isFull ? (Ask.Value.Volume - Bid.Value.Volume).Abs() : null;
 
 		/// <summary>
 		/// The middle of spread. Is <see langword="null" />, if quotes are empty.

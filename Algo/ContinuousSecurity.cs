@@ -217,7 +217,7 @@ namespace StockSharp.Algo
 						throw new ArgumentException(LocalizedStrings.Str697Params.Put(security));
 
 					var index = InnerSecurities.IndexOf(security);
-					return index == InnerSecurities.Length - 1 ? (SecurityId?)null : InnerSecurities[index + 1];
+					return index == InnerSecurities.Length - 1 ? null : InnerSecurities[index + 1];
 				}
 			}
 
@@ -229,7 +229,7 @@ namespace StockSharp.Algo
 						throw new ArgumentException(LocalizedStrings.Str697Params.Put(security));
 
 					var index = InnerSecurities.IndexOf(security);
-					return index == 0 ? (SecurityId?)null : InnerSecurities[index - 1];
+					return index == 0 ? null : InnerSecurities[index - 1];
 				}
 			}
 

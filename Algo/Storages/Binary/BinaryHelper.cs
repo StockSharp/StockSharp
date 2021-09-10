@@ -513,7 +513,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public static Sides? ReadSide(this BitArrayReader reader)
 		{
-			return reader.Read() ? (reader.Read() ? Sides.Buy : Sides.Sell) : (Sides?)null;
+			return reader.Read() ? (reader.Read() ? Sides.Buy : Sides.Sell) : null;
 		}
 
 		public static void WriteStringEx(this BitArrayWriter writer, string value)
@@ -613,7 +613,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public static DateTimeOffset? ReadDto(this BitArrayReader reader)
 		{
-			return reader.Read() ? reader.ReadLong().To<DateTime>().ApplyTimeZone(new TimeSpan(reader.ReadInt(), reader.ReadInt(), 0)) : (DateTimeOffset?)null;
+			return reader.Read() ? reader.ReadLong().To<DateTime>().ApplyTimeZone(new TimeSpan(reader.ReadInt(), reader.ReadInt(), 0)) : null;
 		}
 
 		public static void WriteBuildFrom(this BitArrayWriter writer, DataType buildFrom)
@@ -702,7 +702,7 @@ namespace StockSharp.Algo.Storages.Binary
 		}
 
 		public static bool? ReadNullableBool(this BitArrayReader reader)
-			=> reader.Read() ? reader.Read() : (bool?)null;
+			=> reader.Read() ? reader.Read() : null;
 
 		public static void WriteNullableSide(this BitArrayWriter writer, Sides? value)
 		{
@@ -715,7 +715,7 @@ namespace StockSharp.Algo.Storages.Binary
 		}
 
 		public static Sides? ReadNullableSide(this BitArrayReader reader)
-			=> reader.Read() ? reader.Read() ? Sides.Buy : Sides.Sell : (Sides?)null;
+			=> reader.Read() ? reader.Read() ? Sides.Buy : Sides.Sell : null;
 
 		public static void WriteNullableDecimal(this BitArrayWriter writer, decimal? value)
 		{
@@ -728,6 +728,6 @@ namespace StockSharp.Algo.Storages.Binary
 		}
 
 		public static decimal? ReadNullableDecimal(this BitArrayReader reader)
-			=> reader.Read() ? reader.ReadDecimal() : (decimal?)null;
+			=> reader.Read() ? reader.ReadDecimal() : null;
 	}
 }

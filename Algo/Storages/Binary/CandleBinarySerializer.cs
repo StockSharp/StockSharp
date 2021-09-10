@@ -449,7 +449,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				SecurityId = SecurityId,
 				TotalVolume = reader.ReadVolume(metaInfo, largeDecimal),
-				RelativeVolume = metaInfo.Version < MarketDataVersions.Version52 || !reader.Read() ? (decimal?)null : reader.ReadVolume(metaInfo, largeDecimal),
+				RelativeVolume = metaInfo.Version < MarketDataVersions.Version52 || !reader.Read() ? null : reader.ReadVolume(metaInfo, largeDecimal),
 				Arg = Arg
 			};
 
@@ -531,10 +531,10 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 				else
 				{
-					candle.OpenVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
-					candle.HighVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
-					candle.LowVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
-					candle.CloseVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : (decimal?)null;
+					candle.OpenVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : null;
+					candle.HighVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : null;
+					candle.LowVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : null;
+					candle.CloseVolume = reader.Read() ? reader.ReadVolume(metaInfo, largeDecimal) : null;
 				}
 			}
 
@@ -550,9 +550,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (metaInfo.Version >= MarketDataVersions.Version52)
 			{
-				candle.DownTicks = reader.Read() ? reader.ReadInt() : (int?)null;
-				candle.UpTicks = reader.Read() ? reader.ReadInt() : (int?)null;
-				candle.TotalTicks = reader.Read() ? reader.ReadInt() : (int?)null;
+				candle.DownTicks = reader.Read() ? reader.ReadInt() : null;
+				candle.UpTicks = reader.Read() ? reader.ReadInt() : null;
+				candle.TotalTicks = reader.Read() ? reader.ReadInt() : null;
 			}
 
 			if (!useLevels)

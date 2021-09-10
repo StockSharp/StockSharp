@@ -140,7 +140,7 @@ namespace StockSharp.Algo.Testing
 				TradeId = IdGenerator.GetNextId(),
 				ServerTime = time,
 				LocalTime = time,
-				OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : (Sides?)null,
+				OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : null,
 				TradeVolume = Volumes.Next(),
 				ExecutionType = ExecutionTypes.Tick
 			};

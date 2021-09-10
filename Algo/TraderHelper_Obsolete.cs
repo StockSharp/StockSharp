@@ -1142,7 +1142,7 @@ namespace StockSharp.Algo
 			if (subscription == null)
 			{
 				if (provider is ILogReceiver logs)
-					logs.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id > 0 ? (object)id : Tuple.Create(dataType, security));
+					logs.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id > 0 ? id : Tuple.Create(dataType, security));
 			}
 
 			return subscription;

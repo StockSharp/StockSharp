@@ -917,8 +917,8 @@ namespace StockSharp.BusinessEntities
 				_depth = _bids2.Length > _asks2.Length ? _bids2.Length : _asks2.Length;
 			}
 
-			BestBid2 = _bids2.Length > 0 ? _bids2[0] : (QuoteChange?)null;
-			BestAsk2 = _asks2.Length > 0 ? _asks2[0] : (QuoteChange?)null;
+			BestBid2 = _bids2.Length > 0 ? _bids2[0] : null;
+			BestAsk2 = _asks2.Length > 0 ? _asks2[0] : null;
 
 			UpdateTime(lastChangeTime);
 		}

@@ -175,7 +175,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				ClientCode = message.ClientCode.VerifySize(Sizes.S100),
 				Comment = message.Comment.VerifySize(Sizes.S100),
 				SystemComment = message.SystemComment.VerifySize(Sizes.S100),
-				Currency = message.Currency == null ? (short?)null : (short)message.Currency.Value,
+				Currency = message.Currency == null ? null : (short)message.Currency.Value,
 				DepoName = message.DepoName.VerifySize(Sizes.S100),
 				Error = (message.Error?.Message).VerifySize(Sizes.S200),
 				ExpiryDate = message.ExpiryDate?.To<long>(),
@@ -389,7 +389,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					Comment = snapshot.Comment,
 					SystemComment = snapshot.SystemComment,
 
-					Currency = snapshot.Currency == null ? (CurrencyTypes?)null : (CurrencyTypes)snapshot.Currency.Value,
+					Currency = snapshot.Currency == null ? null : (CurrencyTypes)snapshot.Currency.Value,
 					DepoName = snapshot.DepoName,
 					Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error),
 
@@ -411,7 +411,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					UserOrderId = snapshot.UserOrderId,
 					StrategyId = snapshot.StrategyId,
 					OriginSide = snapshot.OriginSide?.ToEnum<Sides>(),
-					Latency = snapshot.Latency == null ? (TimeSpan?)null : TimeSpan.FromTicks(snapshot.Latency.Value),
+					Latency = snapshot.Latency == null ? null : TimeSpan.FromTicks(snapshot.Latency.Value),
 					PnL = snapshot.PnL,
 					Position = snapshot.Position,
 					Slippage = snapshot.Slippage,

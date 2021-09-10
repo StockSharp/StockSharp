@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Export
 
 			if (value is DecimalIndicatorValue || value is CandleIndicatorValue || value is ShiftedIndicatorValue)
 			{
-				values.Add(value.IsEmpty ? (decimal?)null : value.GetValue<decimal>());
+				values.Add(value.IsEmpty ? null : value.GetValue<decimal>());
 			}
 			else if (value is ComplexIndicatorValue complexValue)
 			{

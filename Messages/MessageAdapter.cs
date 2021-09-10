@@ -451,7 +451,7 @@ namespace StockSharp.Messages
 		/// <param name="error">Error info. Can be <see langword="null"/>.</param>
 		protected void SendOutDisconnectMessage(Exception error)
 		{
-			SendOutMessage(error == null ? (BaseConnectionMessage)new DisconnectMessage() : new ConnectMessage
+			SendOutMessage(error == null ? new DisconnectMessage() : new ConnectMessage
 			{
 				Error = error
 			});

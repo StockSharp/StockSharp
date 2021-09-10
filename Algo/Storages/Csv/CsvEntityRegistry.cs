@@ -737,7 +737,7 @@ namespace StockSharp.Algo.Storages.Csv
 					portfolio.Currency = reader.ReadString().To<CurrencyTypes?>();
 
 					var str = reader.ReadString();
-					portfolio.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
+					portfolio.ExpirationDate = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -844,7 +844,7 @@ namespace StockSharp.Algo.Storages.Csv
 					position.Currency = reader.ReadString().To<CurrencyTypes?>();
 
 					var str = reader.ReadString();
-					position.ExpirationDate = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
+					position.ExpirationDate = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
 				}
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
@@ -997,10 +997,10 @@ namespace StockSharp.Algo.Storages.Csv
 				};
 
 				var str = reader.ReadString();
-				message.From = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
+				message.From = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
 
 				str = reader.ReadString();
-				message.To = str.IsEmpty() ? (DateTimeOffset?)null : _dateTimeParser.Parse(str).UtcKind();
+				message.To = str.IsEmpty() ? null : _dateTimeParser.Parse(str).UtcKind();
 
 				message.Count = reader.ReadNullableLong();
 

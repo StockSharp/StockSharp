@@ -491,7 +491,7 @@
 
 				var chartGroup = chartData.Group(candle.OpenTime);
 				chartGroup.Add(_candleElement, candle);
-				chartGroup.Add(_candleElement, _drawWithColor ? _candleDrawColor : (Color?) null);
+				chartGroup.Add(_candleElement, _drawWithColor ? _candleDrawColor : null);
 
 				foreach (var pair in _indicators.CachedPairs)
 				{
@@ -524,8 +524,8 @@
 
 			if (CustomColors.IsChecked == true)
 			{
-				_candleElement.Colorer = (dto, isUpCandle, isLastCandle) => dto.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua);
-				_indicators.Keys.ForEach(el => el.Colorer = c => ((DateTimeOffset)c).Hour % 2 != 0 ? null : (Color?)Colors.Magenta);
+				_candleElement.Colorer = (dto, isUpCandle, isLastCandle) => dto.Hour % 2 != 0 ? null : (isUpCandle ? Colors.Chartreuse : Colors.Aqua);
+				_indicators.Keys.ForEach(el => el.Colorer = c => ((DateTimeOffset)c).Hour % 2 != 0 ? null : Colors.Magenta);
 			}
 			else
 			{
@@ -548,7 +548,7 @@
 
 				var dd = new ChartDrawData();
 				foreach (var c in _allCandles)
-					dd.Group(c.Value.OpenTime).Add(_candleElement, colored ? GetRandomColor() : (Color?) null);
+					dd.Group(c.Value.OpenTime).Add(_candleElement, colored ? GetRandomColor() : null);
 
 				Chart.Draw(dd);
 			});
