@@ -179,7 +179,10 @@ namespace StockSharp.Algo.Strategies
 				}
 				else
 				{
-					value = value.To(Type);
+					if (value is SettingsStorage storage && Type.IsPersistable())
+						value = storage.Load(Type);
+					else
+						value = value.To(Type);
 
 					if (_comparer.Equals(_value, value))
 						return;

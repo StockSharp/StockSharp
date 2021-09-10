@@ -472,11 +472,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							var strBuffer = new byte[param.StringValueLen];
 							ptr.CopyTo(strBuffer, true);
 
-							if (typeof(IPersistable).IsAssignableFrom(paramType))
+							if (paramType.IsPersistable())
 							{
-								var persistable = paramType.CreateInstance<IPersistable>();
-								persistable.Load(strBuffer.DeserializeWithMigration<SettingsStorage>());
-								value = persistable;
+								value = strBuffer.DeserializeWithMigration<SettingsStorage>().Load(paramType);
 							}
 							else if (typeof(IRange).IsAssignableFrom(paramType))
 							{
