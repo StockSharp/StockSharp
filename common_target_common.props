@@ -56,4 +56,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(RepoGitHubPath)IsExternalInit.cs" Link="Properties\IsExternalInit.cs" />
+  </ItemGroup>
 </Project>
