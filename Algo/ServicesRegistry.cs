@@ -119,6 +119,11 @@ namespace StockSharp.Algo
 		public static LogManager LogManager => LogManager.Instance;
 
 		/// <summary>
+		/// Log manager.
+		/// </summary>
+		public static LogManager EnsureLogManager => LogManager ?? throw new InvalidOperationException();
+
+		/// <summary>
 		/// The storage of trade objects.
 		/// </summary>
 		public static IEntityRegistry EntityRegistry => ConfigManager.GetService<IEntityRegistry>();
