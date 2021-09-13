@@ -176,8 +176,8 @@ namespace StockSharp.Algo.Testing
 
 						break;
 					case ChannelStates.Stopping:
-						throwError = _state != ChannelStates.Started && _state != ChannelStates.Suspended
-							&& _state != ChannelStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
+						throwError = _state is not ChannelStates.Started and not ChannelStates.Suspended
+							and not ChannelStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
 
 						//if (EmulationAdapter.OwnInnerAdapter)
 						{
@@ -189,7 +189,7 @@ namespace StockSharp.Algo.Testing
 
 						break;
 					case ChannelStates.Starting:
-						throwError = _state != ChannelStates.Stopped && _state != ChannelStates.Suspended;
+						throwError = _state is not ChannelStates.Stopped and not ChannelStates.Suspended;
 						break;
 					case ChannelStates.Started:
 						throwError = _state != ChannelStates.Starting;
@@ -295,7 +295,7 @@ namespace StockSharp.Algo.Testing
 			if (/*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended)
 				EmulationAdapter.InChannel.Resume();
 
-			if (State != ChannelStates.Stopped && State != ChannelStates.Stopping)
+			if (State is not ChannelStates.Stopped and not ChannelStates.Stopping)
 				SendEmulationState(ChannelStates.Stopping);
 		}
 

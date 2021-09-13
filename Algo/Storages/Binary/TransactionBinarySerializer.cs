@@ -314,7 +314,7 @@ namespace StockSharp.Algo.Storages.Binary
 					//if ((msg.TradeId == null && msg.TradeStringId.IsEmpty()) || msg.TradeId <= 0)
 					//	throw new ArgumentOutOfRangeException(nameof(messages), msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
 
-					if (msg.TradePrice == null || msg.TradePrice <= 0)
+					if (msg.TradePrice is null or <= 0)
 						throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.Str929Params.Put(msg.TradeId, msg.OrderId));
 				}
 

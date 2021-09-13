@@ -997,7 +997,7 @@ namespace StockSharp.Algo
 
 			if (adapter is IMessageAdapterWrapper wrapper)
 			{
-				return wrapper is IEmulationMessageAdapter || wrapper is HistoryMessageAdapter
+				return wrapper is IEmulationMessageAdapter or HistoryMessageAdapter
 					? wrapper
 					: GetUnderlyingAdapter(wrapper.InnerAdapter);
 			}
@@ -1331,7 +1331,7 @@ namespace StockSharp.Algo
 
 				if (adapters == null)
 				{
-					if (HasPendingAdapters() || _adapterStates.Count == 0 || _adapterStates.All(p => p.Value.Item1 == ConnectionStates.Disconnected || p.Value.Item1 == ConnectionStates.Failed))
+					if (HasPendingAdapters() || _adapterStates.Count == 0 || _adapterStates.All(p => p.Value.Item1 is ConnectionStates.Disconnected or ConnectionStates.Failed))
 					{
 						isPended = true;
 						_pendingMessages.Add(message.Clone());
@@ -1966,7 +1966,7 @@ namespace StockSharp.Algo
 				{
 					_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
 
-					if (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected)
+					if (_currState is ConnectionStates.Connecting or ConnectionStates.Connected)
 					{
 						var allFailed = _adapterStates.All(v => v.Value.Item1 == ConnectionStates.Failed);
 
@@ -1985,7 +1985,7 @@ namespace StockSharp.Algo
 				else
 					_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
 
-				var noPending = _adapterStates.All(v => v.Value.Item1 == ConnectionStates.Disconnected || v.Value.Item1 == ConnectionStates.Failed);
+				var noPending = _adapterStates.All(v => v.Value.Item1 is ConnectionStates.Disconnected or ConnectionStates.Failed);
 
 				if (noPending)
 				{

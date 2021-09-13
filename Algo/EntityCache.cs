@@ -502,7 +502,7 @@ namespace StockSharp.Algo
 			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
-			if (adapter is null || adapter is BasketMessageAdapter)
+			if (adapter is null or BasketMessageAdapter)
 				return;
 
 			_orders[order] = adapter;

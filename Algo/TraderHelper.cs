@@ -1143,7 +1143,7 @@ namespace StockSharp.Algo
 		/// <param name="state">Order state.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsFinal(this OrderStates state)
-			=> state == OrderStates.Done || state == OrderStates.Failed;
+			=> state is OrderStates.Done or OrderStates.Failed;
 
 		/// <summary>
 		/// To check whether specified instrument is used now.
@@ -3318,7 +3318,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return security.BasketCode == "WI" || security.BasketCode == "EI";
+			return security.BasketCode is "WI" or "EI";
 		}
 
 		/// <summary>
@@ -3331,7 +3331,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return security.BasketCode == "WI" || security.BasketCode == "EI";
+			return security.BasketCode is "WI" or "EI";
 		}
 
 		/// <summary>
@@ -3344,7 +3344,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return security.BasketCode == "CE" || security.BasketCode == "CV";
+			return security.BasketCode is "CE" or "CV";
 		}
 
 		/// <summary>
@@ -3357,7 +3357,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			return security.BasketCode == "CE" || security.BasketCode == "CV";
+			return security.BasketCode is "CE" or "CV";
 		}
 
 		/// <summary>
@@ -3781,7 +3781,7 @@ namespace StockSharp.Algo
 		/// <returns>Check result.</returns>
 		public static bool IsActive(this SubscriptionStates state)
 		{
-			return state == SubscriptionStates.Active || state == SubscriptionStates.Online;
+			return state is SubscriptionStates.Active or SubscriptionStates.Online;
 		}
 
 		/// <summary>

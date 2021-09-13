@@ -97,9 +97,9 @@ namespace StockSharp.Algo.Testing
 				if (_logLevel != LogLevels.Debug)
 					return;
 
-				if (message.Type != MessageTypes.Time &&
-					message.Type != MessageTypes.Level1Change &&
-					message.Type != MessageTypes.QuoteChange)
+				if (message.Type is not MessageTypes.Time
+					and	not MessageTypes.Level1Change
+					and	not MessageTypes.QuoteChange)
 					this.AddDebugLog((isInput ? " --> {0}" : " <-- {0}"), message);
 			}
 
@@ -611,7 +611,7 @@ namespace StockSharp.Algo.Testing
 				if (message.TradeId != null)
 					throw new ArgumentException(LocalizedStrings.Str1159, nameof(message));
 
-				if (message.OrderVolume == null || message.OrderVolume <= 0)
+				if (message.OrderVolume is null or <= 0)
 					throw new ArgumentOutOfRangeException(nameof(message), message.OrderVolume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
 
 				var isRegister = !message.IsCancellation;

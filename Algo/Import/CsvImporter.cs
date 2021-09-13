@@ -88,7 +88,7 @@
 					if (msg is SecurityMappingMessage)
 						continue;
 
-					if (!(msg is SecurityMessage secMsg))
+					if (msg is not SecurityMessage secMsg)
 					{
 						buffer.Add(msg);
 

@@ -472,7 +472,7 @@ namespace StockSharp.Algo
 
 			try
 			{
-				if (ConnectionState != ConnectionStates.Disconnected && ConnectionState != ConnectionStates.Failed)
+				if (ConnectionState is not ConnectionStates.Disconnected and not ConnectionStates.Failed)
 				{
 					this.AddWarningLog(LocalizedStrings.Str1095Params, ConnectionState);
 					return;

@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Export
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
-			if (value is DecimalIndicatorValue || value is CandleIndicatorValue || value is ShiftedIndicatorValue)
+			if (value is DecimalIndicatorValue or CandleIndicatorValue or ShiftedIndicatorValue)
 			{
 				values.Add(value.IsEmpty ? null : value.GetValue<decimal>());
 			}

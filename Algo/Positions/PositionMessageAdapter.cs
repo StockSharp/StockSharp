@@ -150,9 +150,9 @@ namespace StockSharp.Algo.Positions
 		{
 			PositionChangeMessage change = null;
 
-			if (message.Type != MessageTypes.Reset &&
-				message.Type != MessageTypes.Connect &&
-				message.Type != MessageTypes.Disconnect)
+			if (message.Type is not MessageTypes.Reset and
+				not MessageTypes.Connect and
+				not MessageTypes.Disconnect)
 			{
 				lock (_sync)
 					change = _positionManager.ProcessMessage(message);

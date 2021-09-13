@@ -323,7 +323,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			lock (_sync)
 			{
-				if (!(State == ChannelStates.Started || State == ChannelStates.Suspended))
+				if (!(State is ChannelStates.Started or ChannelStates.Suspended))
 					return;
 
 				State = ChannelStates.Stopping;
@@ -332,10 +332,11 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				foreach (var connector in _currentConnectors)
 				{
-					if (connector.State == ChannelStates.Started ||
-						connector.State == ChannelStates.Starting ||
-						connector.State == ChannelStates.Suspended ||
-						connector.State == ChannelStates.Suspending)
+					if (connector.State is
+						ChannelStates.Started or
+						ChannelStates.Starting or
+						ChannelStates.Suspended or
+						ChannelStates.Suspending)
 						connector.Disconnect();
 				}
 			

@@ -426,7 +426,7 @@
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			return new ChangedOrNewOrderRule(order, provider, o => o.State == OrderStates.Active || o.State == OrderStates.Done) { Name = LocalizedStrings.Str1034 }.Once();
+			return new ChangedOrNewOrderRule(order, provider, o => o.State is OrderStates.Active or OrderStates.Done) { Name = LocalizedStrings.Str1034 }.Once();
 		}
 
 		///// <summary>

@@ -275,7 +275,7 @@ namespace StockSharp.Algo
 					{
 						lock (_timeSync)
 						{
-							if (_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected)
+							if (_currState is ConnectionStates.Disconnecting or ConnectionStates.Disconnected)
 								return true;
 						}
 					}

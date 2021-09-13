@@ -1921,7 +1921,7 @@ namespace StockSharp.Messages
 			if (execMsg == null)
 				throw new ArgumentNullException(nameof(execMsg));
 
-			return execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.ExecutionType == ExecutionTypes.OrderLog;
+			return execMsg.ExecutionType is ExecutionTypes.Tick or ExecutionTypes.OrderLog;
 		}
 
 		/// <summary>
@@ -3491,7 +3491,7 @@ namespace StockSharp.Messages
 			if (depth is null)
 				throw new ArgumentNullException(nameof(depth));
 
-			if (!(depth.State == null || depth.State == QuoteChangeStates.SnapshotComplete))
+			if (!(depth.State is null or QuoteChangeStates.SnapshotComplete))
 				throw new ArgumentException(nameof(depth));
 		}
 

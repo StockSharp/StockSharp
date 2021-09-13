@@ -675,7 +675,7 @@ namespace StockSharp.Algo.Testing
 				if (checkFromTime)
 				{
 					// пропускаем только стаканы, тики и ОЛ
-					if (msg.Type == MessageTypes.QuoteChange || msg.Type == MessageTypes.Execution)
+					if (msg.Type is MessageTypes.QuoteChange or MessageTypes.Execution)
 					{
 						if (msg.LocalTime < startDate)
 							continue;

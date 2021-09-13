@@ -82,7 +82,7 @@
 					case _none:
 					case QuoteChangeStates.SnapshotStarted:
 					{
-						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
+						if (newState is not QuoteChangeStates.SnapshotBuilding and not QuoteChangeStates.SnapshotComplete)
 						{
 							WriteWarning();
 							return false;
@@ -92,7 +92,7 @@
 					}
 					case QuoteChangeStates.SnapshotBuilding:
 					{
-						if (newState != QuoteChangeStates.SnapshotBuilding && newState != QuoteChangeStates.SnapshotComplete)
+						if (newState is not QuoteChangeStates.SnapshotBuilding and not QuoteChangeStates.SnapshotComplete)
 						{
 							WriteWarning();
 							return false;
@@ -116,7 +116,7 @@
 				return true;
 			}
 
-			var resetState = newState == QuoteChangeStates.SnapshotStarted || newState == QuoteChangeStates.SnapshotComplete;
+			var resetState = newState is QuoteChangeStates.SnapshotStarted or QuoteChangeStates.SnapshotComplete;
 
 			if (currState != newState || resetState)
 			{
@@ -198,7 +198,7 @@
 				Apply(change.Asks, _asks);
 			}
 
-			if (currState == QuoteChangeStates.SnapshotStarted || currState == QuoteChangeStates.SnapshotBuilding)
+			if (currState is QuoteChangeStates.SnapshotStarted or QuoteChangeStates.SnapshotBuilding)
 				return null;
 
 			if (currState == QuoteChangeStates.SnapshotComplete)

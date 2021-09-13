@@ -240,7 +240,7 @@ namespace StockSharp.Algo.Storages.Binary
 				{
 					tradeId = message.TradeId;
 
-					if (tradeId is null || tradeId <= 0)
+					if (tradeId is null or <= 0)
 					{
 						if (!stringId)
 							throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.Str1012Params.Put(message.TransactionId));

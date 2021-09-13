@@ -106,7 +106,7 @@ namespace StockSharp.Algo
 
 				if (message.TransactionId != 0)
 				{
-					if (message.OrderState != OrderStates.Done && message.OrderState != OrderStates.Failed)
+					if (message.OrderState is not OrderStates.Done and not OrderStates.Failed)
 					{
 						if (message.OrderPrice == 0)
 							return null;
@@ -245,7 +245,7 @@ namespace StockSharp.Algo
 				if (regMsg.OrderType == OrderTypes.Market || regMsg.Price == 0)
 					return;
 
-				if (regMsg.TimeInForce == TimeInForce.MatchOrCancel || regMsg.TimeInForce == TimeInForce.CancelBalance)
+				if (regMsg.TimeInForce is TimeInForce.MatchOrCancel or TimeInForce.CancelBalance)
 					return;
 
 				lock (_sync)

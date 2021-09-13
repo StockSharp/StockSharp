@@ -413,7 +413,7 @@
 				if (_parents.Count == 0)
 					return null;
 
-				if (message is ISubscriptionIdMessage subscrMsg && message is ISecurityIdMessage secIdMsg)
+				if (message is ISubscriptionIdMessage subscrMsg and ISecurityIdMessage secIdMsg)
 				{
 					foreach (var parentId in subscrMsg.GetSubscriptionIds())
 					{

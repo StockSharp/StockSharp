@@ -575,7 +575,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		protected virtual void OnProcessMessage(Message message)
 		{
-			if (message.Type != MessageTypes.Time && message.Type != MessageTypes.QuoteChange)
+			if (message.Type is not MessageTypes.Time and not MessageTypes.QuoteChange)
 				this.AddVerboseLog("BP:{0}", message);
 
 			ProcessTimeInterval(message);
@@ -1633,7 +1633,7 @@ namespace StockSharp.Algo
 
 			RaiseError(error);
 
-			if (message.Adapter is object && !(message.Adapter is BasketMessageAdapter))
+			if (message.Adapter is object and not BasketMessageAdapter)
 				message.Adapter.AddErrorLog(error);
 			else
 				this.AddErrorLog(error);

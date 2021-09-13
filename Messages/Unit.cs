@@ -296,7 +296,7 @@ namespace StockSharp.Messages
 
 			var value = func(Type);
 
-			if (value != null && value != 0)
+			if (value is not null and not 0)
 				return value.Value;
 
 			if (getTypeValue is null)
@@ -304,7 +304,7 @@ namespace StockSharp.Messages
 
 			value = getTypeValue(Type);
 
-			if (value == null || value == 0)
+			if (value is null or 0)
 				throw new InvalidOperationException(LocalizedStrings.Str1291);
 
 			return value.Value;
@@ -583,7 +583,7 @@ namespace StockSharp.Messages
 				return null;
 			}
 
-			if (destinationType == UnitTypes.Point || destinationType == UnitTypes.Step)
+			if (destinationType is UnitTypes.Point or UnitTypes.Step)
 			{
 				if (getTypeValue is null)
 				{
@@ -598,7 +598,7 @@ namespace StockSharp.Messages
 					case UnitTypes.Point:
 						var point = getTypeValue(UnitTypes.Point);
 
-						if (point == null || point == 0)
+						if (point is null or 0)
 						{
 							if (throwException)
 								throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
@@ -611,7 +611,7 @@ namespace StockSharp.Messages
 					case UnitTypes.Step:
 						var step = getTypeValue(UnitTypes.Step);
 
-						if (step == null || step == 0)
+						if (step is null or 0)
 						{
 							if (throwException)
 								throw new InvalidOperationException(LocalizedStrings.Str2925);
