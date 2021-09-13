@@ -586,7 +586,7 @@ namespace StockSharp.Localization
 		/// Please rate the {0}.
 		/// </summary>
 		public static string PleaseRateProductParams => GetString(PleaseRateProductParamsKey);
-	
+
 		/// <summary>
 		/// Install prerelease versions.
 		/// </summary>
@@ -26368,12 +26368,12 @@ namespace StockSharp.Localization
 		public static string Str2635 => GetString(Str2635Key);
 
 		/// <summary>
-		/// Futures: trades log
+		/// Futures and options: trades log
 		/// </summary>
 		public const string Str2636Key = nameof(Str2636);
 
 		/// <summary>
-		/// Futures: trades log
+		/// Futures and options: trades log
 		/// </summary>
 		public static string Str2636 => GetString(Str2636Key);
 
@@ -26548,12 +26548,12 @@ namespace StockSharp.Localization
 		public static string Str2653 => GetString(Str2653Key);
 
 		/// <summary>
-		/// Futures: 20 quotes deep market depth
+		/// Futures and options: 20 quotes deep market depth
 		/// </summary>
 		public const string Str2654Key = nameof(Str2654);
 
 		/// <summary>
-		/// Futures: 20 quotes deep market depth
+		/// Futures and options: 20 quotes deep market depth
 		/// </summary>
 		public static string Str2654 => GetString(Str2654Key);
 
@@ -26568,12 +26568,12 @@ namespace StockSharp.Localization
 		public static string Str2655 => GetString(Str2655Key);
 
 		/// <summary>
-		/// Futures: 50 quotes deep market depth
+		/// Futures and options: 50 quotes deep market depth
 		/// </summary>
 		public const string Str2656Key = nameof(Str2656);
 
 		/// <summary>
-		/// Futures: 50 quotes deep market depth
+		/// Futures and options: 50 quotes deep market depth
 		/// </summary>
 		public static string Str2656 => GetString(Str2656Key);
 
@@ -26588,12 +26588,12 @@ namespace StockSharp.Localization
 		public static string Str2657 => GetString(Str2657Key);
 
 		/// <summary>
-		/// Futures: 5 quotes deep market depth
+		/// Futures and options: 5 quotes deep market depth
 		/// </summary>
 		public const string Str2658Key = nameof(Str2658);
 
 		/// <summary>
-		/// Futures: 5 quotes deep market depth
+		/// Futures and options: 5 quotes deep market depth
 		/// </summary>
 		public static string Str2658 => GetString(Str2658Key);
 

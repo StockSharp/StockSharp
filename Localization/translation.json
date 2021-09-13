@@ -10556,8 +10556,8 @@
     "ru": "Фьючерсы: журнал заявок"
   },
   "Str2636": {
-    "en": "Futures: trades log",
-    "ru": "Фьючерсы: журнал сделок"
+    "en": "Futures and options: trades log",
+    "ru": "Фьючерсы и опционы: журнал сделок"
   },
   "Str2637": {
     "en": "Futures: multileg trades log",
@@ -10632,24 +10632,24 @@
     "ru": "Опционы: общая информация по сессии"
   },
   "Str2654": {
-    "en": "Futures: 20 quotes deep market depth",
-    "ru": "Фьючерсы: стакан глубиной 20 котировок"
+    "en": "Futures and options: 20 quotes deep market depth",
+    "ru": "Фьючерсы и опционы: стакан глубиной 20 котировок"
   },
   "Str2655": {
     "en": "Options: 20 quotes deep market depth",
     "ru": "Опционы: стакан глубиной 20 котировок"
   },
   "Str2656": {
-    "en": "Futures: 50 quotes deep market depth",
-    "ru": "Фьючерсы: стакан глубиной 50 котировок"
+    "en": "Futures and options: 50 quotes deep market depth",
+    "ru": "Фьючерсы и опционы: стакан глубиной 50 котировок"
   },
   "Str2657": {
     "en": "Options: 50 quotes deep market depth",
     "ru": "Опционы: стакан глубиной 50 котировок"
   },
   "Str2658": {
-    "en": "Futures: 5 quotes deep market depth",
-    "ru": "Фьючерсы: стакан глубиной 5 котировок"
+    "en": "Futures and options: 5 quotes deep market depth",
+    "ru": "Фьючерсы и опционы: стакан глубиной 5 котировок"
   },
   "Str2659": {
     "en": "Options: 5 quotes deep market depth",
