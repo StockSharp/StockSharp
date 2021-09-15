@@ -101,7 +101,7 @@ namespace StockSharp.Algo
 					var bestAsk = quoteMsg.GetBestAsk();
 
 					var volume = bestBid?.Volume;
-					
+
 					if (bestAsk?.Volume != null)
 						volume = volume ?? 0 + bestAsk?.Volume;
 
@@ -403,7 +403,7 @@ namespace StockSharp.Algo
 						yield break;
 
 					var dict = _candles.SafeAdd(candleMsg.OpenTime);
-					
+
 					dict[candleMsg.SecurityId] = candleMsg.TypedClone();
 
 					if (dict.Count == BasketLegs.Length)
@@ -583,7 +583,7 @@ namespace StockSharp.Algo
 				var step = Security.PriceStep;
 
 				if (step != null)
-					value = Security.ShrinkPrice(value);
+					value = Security.RoundPrice(value);
 			}
 			else
 			{

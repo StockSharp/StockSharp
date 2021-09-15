@@ -13,25 +13,25 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Messages
 {
+	using System;
+
 	/// <summary>
-	/// Price rounding rules.
 	/// </summary>
+	[Obsolete("Use MidpointRounding or Ecng.Common.MathRoundingRules")]
 	public enum ShrinkRules
 	{
 		/// <summary>
-		/// Automatically to determine rounding to lesser or to bigger value.
 		/// </summary>
 		Auto,
 
 		/// <summary>
-		/// To round to lesser value.
 		/// </summary>
 		Less,
 
 		/// <summary>
-		/// To round to bigger value.
 		/// </summary>
 		More,
 	}

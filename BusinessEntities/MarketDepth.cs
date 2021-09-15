@@ -165,8 +165,8 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str284Key,
 			GroupName = LocalizedStrings.Str1559Key,
 			Order = 1)]
-		public QuoteChange[] Asks2 
-		{ 
+		public QuoteChange[] Asks2
+		{
 			get => _asks2;
 			private set => _asks2 = value ?? throw new ArgumentNullException(nameof(value));
 		}
@@ -213,13 +213,13 @@ namespace StockSharp.BusinessEntities
 		/// To get the total price size by bids.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TotalBidsPriceKey)]
-		public decimal TotalBidsPrice => _bids2.Length > 0 ? Security.ShrinkPrice(_bids2.Sum(b => b.Price)) : 0;
+		public decimal TotalBidsPrice => _bids2.Length > 0 ? Security.RoundPrice(_bids2.Sum(b => b.Price)) : 0;
 
 		/// <summary>
 		/// To get the total price size by offers.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TotalAsksPriceKey)]
-		public decimal TotalAsksPrice => _asks2.Length > 0 ? Security.ShrinkPrice(_asks2.Sum(a => a.Price)) : 0;
+		public decimal TotalAsksPrice => _asks2.Length > 0 ? Security.RoundPrice(_asks2.Sum(a => a.Price)) : 0;
 
 		/// <summary>
 		/// Get bids total volume.
@@ -381,7 +381,7 @@ namespace StockSharp.BusinessEntities
 
 			if (bid == null && ask == null)
 				return null;
-				
+
 			return new MarketDepthPair(Security, bid, ask);
 		}
 
@@ -508,7 +508,7 @@ namespace StockSharp.BusinessEntities
 			//}
 
 			//Truncate(bidsArr, asksArr, lastChangeTime);
-			
+
 			return Update(bidsArr, asksArr, lastChangeTime);
 		}
 
@@ -529,7 +529,7 @@ namespace StockSharp.BusinessEntities
 
 			_bids2 = bids.ToArray();
 			_asks2 = asks.ToArray();
-			
+
 			UpdateDepthAndTime(lastChangeTime, false);
 			RaiseQuotesChanged();
 
