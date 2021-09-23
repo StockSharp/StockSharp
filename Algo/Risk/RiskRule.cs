@@ -22,7 +22,18 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		protected RiskRule()
 		{
+			UpdateTitle();
 		}
+
+		/// <summary>
+		/// Get title.
+		/// </summary>
+		protected abstract string GetTitle();
+
+		/// <summary>
+		/// Update title.
+		/// </summary>
+		protected void UpdateTitle() => Title = GetTitle();
 
 		private string _title;
 
@@ -33,7 +44,7 @@ namespace StockSharp.Algo.Risk
 		public string Title
 		{
 			get => _title;
-			protected set
+			private set
 			{
 				_title = value;
 				NotifyChanged();
@@ -81,7 +92,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		private PropertyChangedEventHandler _propertyChanged;
-		
+
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
 			add => _propertyChanged += value;
@@ -124,9 +135,12 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_pnL = value ?? throw new ArgumentNullException(nameof(value));
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _pnL?.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -202,9 +216,12 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_position = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _position.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -264,11 +281,14 @@ namespace StockSharp.Algo.Risk
 			{
 				if (value < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
-				
+
 				_time = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _time.To<string>();
 
 		/// <inheritdoc />
 		public override void Reset()
@@ -377,9 +397,12 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_commission = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _commission.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -438,9 +461,12 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_slippage = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _slippage.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -498,9 +524,12 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_price = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _price.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -565,9 +594,12 @@ namespace StockSharp.Algo.Risk
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volume = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _volume.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -618,10 +650,8 @@ namespace StockSharp.Algo.Risk
 		private DateTimeOffset? _endTime;
 		private int _current;
 
-		private void UpdateTitle()
-		{
-			Title = Count + " -> " + Interval;
-		}
+		/// <inheritdoc />
+		protected override string GetTitle() => Count + " -> " + Interval;
 
 		private int _count;
 
@@ -722,7 +752,7 @@ namespace StockSharp.Algo.Risk
 
 						this.AddDebugLog("EndTime={0}", _endTime);
 					}
-					
+
 					return false;
 				}
 			}
@@ -770,9 +800,12 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_price = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _price.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -829,9 +862,12 @@ namespace StockSharp.Algo.Risk
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volume = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _volume.To<string>();
 
 		/// <inheritdoc />
 		public override bool ProcessMessage(Message message)
@@ -874,10 +910,8 @@ namespace StockSharp.Algo.Risk
 		private DateTimeOffset? _endTime;
 		private int _current;
 
-		private void UpdateTitle()
-		{
-			Title = Count + " -> " + Interval;
-		}
+		/// <inheritdoc />
+		protected override string GetTitle() => Count + " -> " + Interval;
 
 		private int _count;
 
@@ -979,7 +1013,7 @@ namespace StockSharp.Algo.Risk
 
 				this.AddDebugLog("EndTime={0}", _endTime);
 			}
-			
+
 			return false;
 		}
 

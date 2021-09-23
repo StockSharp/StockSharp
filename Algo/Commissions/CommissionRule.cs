@@ -38,6 +38,7 @@ namespace StockSharp.Algo.Commissions
 		/// </summary>
 		protected CommissionRule()
 		{
+			UpdateTitle();
 		}
 
 		private Unit _value = new();
@@ -61,6 +62,16 @@ namespace StockSharp.Algo.Commissions
 		[Browsable(false)]
 		public decimal Commission { get; private set; }
 
+		/// <summary>
+		/// Get title.
+		/// </summary>
+		protected virtual string GetTitle() => string.Empty;
+
+		/// <summary>
+		/// Update title.
+		/// </summary>
+		protected void UpdateTitle() => Title = GetTitle();
+
 		private string _title;
 
 		/// <inheritdoc />
@@ -68,7 +79,7 @@ namespace StockSharp.Algo.Commissions
 		public string Title
 		{
 			get => _title;
-			protected set
+			private set
 			{
 				_title = value;
 				NotifyChanged();
@@ -141,7 +152,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			if (message.HasOrderInfo())
 				return GetValue(message.OrderPrice);
-			
+
 			return null;
 		}
 	}
@@ -158,7 +169,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			if (message.HasTradeInfo())
 				return GetValue(message.TradePrice);
-			
+
 			return null;
 		}
 	}
@@ -175,7 +186,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			if (message.HasOrderInfo())
 				return (decimal)(message.OrderVolume * Value);
-			
+
 			return null;
 		}
 	}
@@ -192,7 +203,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			if (message.HasTradeInfo())
 				return (decimal)(message.TradeVolume * Value);
-			
+
 			return null;
 		}
 	}
@@ -219,9 +230,12 @@ namespace StockSharp.Algo.Commissions
 			set
 			{
 				_count = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _count.To<string>();
 
 		/// <inheritdoc />
 		public override void Reset()
@@ -282,9 +296,12 @@ namespace StockSharp.Algo.Commissions
 			set
 			{
 				_count = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _count.To<string>();
 
 		/// <inheritdoc />
 		public override void Reset()
@@ -335,7 +352,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			if (message.HasTradeInfo())
 				return (decimal)(message.TradePrice * message.TradeVolume * Value);
-			
+
 			return null;
 		}
 	}
@@ -363,16 +380,19 @@ namespace StockSharp.Algo.Commissions
 			{
 				_security = value;
 				_securityId = _security?.ToSecurityId();
-				Title = value?.ToString();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _security?.To<string>();
 
 		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && message.SecurityId == _securityId)
 				return GetValue(message.TradePrice);
-			
+
 			return null;
 		}
 
@@ -423,9 +443,12 @@ namespace StockSharp.Algo.Commissions
 			set
 			{
 				_securityType = value;
-				Title = value.ToString();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _securityType.ToString();
 
 		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
@@ -433,7 +456,7 @@ namespace StockSharp.Algo.Commissions
 			// TODO
 			//if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
 			//	return GetValue(message.TradePrice);
-			
+
 			return null;
 		}
 
@@ -475,16 +498,19 @@ namespace StockSharp.Algo.Commissions
 			set
 			{
 				_board = value;
-				Title = value?.Code;
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _board?.Code;
 
 		/// <inheritdoc />
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.EqualsIgnoreCase(Board.Code))
 				return GetValue(message.TradePrice);
-			
+
 			return null;
 		}
 
@@ -531,9 +557,12 @@ namespace StockSharp.Algo.Commissions
 			set
 			{
 				_turnOver = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
+
+		/// <inheritdoc />
+		protected override string GetTitle() => _turnOver.To<string>();
 
 		/// <inheritdoc />
 		public override void Reset()

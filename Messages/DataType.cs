@@ -144,12 +144,12 @@ namespace StockSharp.Messages
 		/// <see cref="RenkoCandleMessage"/> data type.
 		/// </summary>
 		public static DataType CandleRenko { get; } = Create(typeof(RenkoCandleMessage), null).Immutable();
-		
+
 		/// <summary>
 		/// <see cref="PnFCandleMessage"/> data type.
 		/// </summary>
 		public static DataType CandlePnF { get; } = Create(typeof(PnFCandleMessage), null).Immutable();
-		
+
 		/// <summary>
 		/// Adapters.
 		/// </summary>
@@ -392,7 +392,7 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(MessageType), MessageType.GetTypeName(false));
+			storage.SetValue(nameof(MessageType), MessageType?.GetTypeName(false));
 
 			if (Arg != null)
 				storage.SetValue(nameof(Arg), Arg);

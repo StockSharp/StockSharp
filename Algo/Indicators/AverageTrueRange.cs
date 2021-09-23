@@ -13,12 +13,16 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Localization;
+
+	using Ecng.Common;
+	using Ecng.Serialization;
 
 	/// <summary>
 	/// The average true range <see cref="AverageTrueRange.TrueRange"/>.
@@ -77,11 +81,27 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			// используем дополнительную переменную IsFormed, 
+			// используем дополнительную переменную IsFormed,
 			// т.к. нужна задержка в один период для корректной инициализации скользящей средней
 			_isFormed = MovingAverage.IsFormed;
 
 			return MovingAverage.Process(TrueRange.Process(input));
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			Length = storage.GetValue<int>(nameof(Length));
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue(nameof(Length), Length);
 		}
 	}
 }

@@ -123,7 +123,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		public string ExpiryTimeStr
 		{
-			// XmlSerializer does not support TimeSpan, so use this property for 
+			// XmlSerializer does not support TimeSpan, so use this property for
 			// serialization instead.
 			get => XmlConvert.ToString(ExpiryTime);
 			set => ExpiryTime = value.IsEmpty() ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
@@ -327,7 +327,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Exchange = storage.GetValue<SettingsStorage>(nameof(Exchange)).Load<Exchange>();
+			Exchange = storage.GetValue<SettingsStorage>(nameof(Exchange))?.Load<Exchange>();
 			Code = storage.GetValue<string>(nameof(Code));
 			//IsSupportMarketOrders = storage.GetValue<bool>(nameof(IsSupportMarketOrders));
 			//IsSupportAtomicReRegister = storage.GetValue<bool>(nameof(IsSupportAtomicReRegister));
@@ -342,7 +342,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(Exchange), Exchange.Save());
+			storage.SetValue(nameof(Exchange), Exchange?.Save());
 			storage.SetValue(nameof(Code), Code);
 			//storage.SetValue(nameof(IsSupportMarketOrders), IsSupportMarketOrders);
 			//storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
