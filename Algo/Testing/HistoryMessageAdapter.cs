@@ -159,7 +159,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		private DateTimeOffset _currentTime;
-		
+
 		/// <inheritdoc />
 		public override DateTimeOffset CurrentTime => _currentTime;
 
@@ -193,7 +193,7 @@ namespace StockSharp.Algo.Testing
 						.Distinct()
 						.ToArray();
 				}
-				
+
 				return _supportedMarketDataTypes;
 			}
 		}
@@ -242,14 +242,12 @@ namespace StockSharp.Algo.Testing
 			{
 				case MessageTypes.Reset:
 				{
-					_currentTime = default;
-
 					_generators.Clear();
 					_historySources.Clear();
 
-                    _currentTime = DateTimeOffset.MinValue;
+                    _currentTime = default;
 					_basketStorage.InnerStorages.Clear();
-					
+
 					LoadedMessageCount = 0;
 
 					if (!_isStarted)
@@ -282,8 +280,8 @@ namespace StockSharp.Algo.Testing
 				{
 					var lookupMsg = (SecurityLookupMessage)message;
 
-					var securities = lookupMsg.SecurityId.IsDefault() 
-							? SecurityProvider.LookupAll() 
+					var securities = lookupMsg.SecurityId.IsDefault()
+							? SecurityProvider.LookupAll()
 							: SecurityProvider.Lookup(lookupMsg);
 
 					var processedBoards = new HashSet<ExchangeBoard>();
@@ -347,7 +345,7 @@ namespace StockSharp.Algo.Testing
 				case ExtendedMessageTypes.Generator:
 				{
 					var generatorMsg = (GeneratorMessage)message;
-					
+
 					if (generatorMsg.IsSubscribe)
 					{
 						_generators.Add(Tuple.Create(generatorMsg.SecurityId, generatorMsg.DataType2), Tuple.Create(generatorMsg.Generator, generatorMsg.TransactionId));
@@ -555,9 +553,9 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Start data loading.
 		/// </summary>
-		/// <param name="startDate">Date in history for starting the paper trading.</param>
-		/// <param name="stopDate">Date in history to stop the paper trading (date is included).</param>
-		private void Start(DateTimeOffset startDate, DateTimeOffset stopDate)
+		/// <param name="startDateTime">Datetime in history for starting the paper trading.</param>
+		/// <param name="stopDateTime">Datetime in history to stop the paper trading (date is included).</param>
+		private void Start(DateTimeOffset startDateTime, DateTimeOffset stopDateTime)
 		{
 			_isStarted = true;
 
@@ -591,35 +589,39 @@ namespace StockSharp.Algo.Testing
 							}
 
 							var boards = Boards.ToArray();
-							var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime.Date : startDate;
-							var startTime = _currentTime;
+
+							var currentTime = _currentTime.IsDefault() ? startDateTime : _currentTime;
+
+							var loadDateInUtc = currentTime.UtcDateTime.Date;
+							var stopDateInUtc = stopDateTime.UtcDateTime.Date;
+
 							var checkDates = CheckTradableDates && boards.Length > 0;
 
-							while (loadDate.Date <= stopDate.Date && !_isChanged && !token.IsCancellationRequested)
+							while (loadDateInUtc <= stopDateInUtc && !_isChanged && !token.IsCancellationRequested)
 							{
-								if (!checkDates || boards.Any(b => b.IsTradeDate(loadDate, true)))
+								if (!checkDates || boards.Any(b => b.IsTradeDate(currentTime, true)))
 								{
-									this.AddInfoLog("Loading {0}", loadDate.Date);
+									this.AddInfoLog("Loading {0}", loadDateInUtc);
 
-									var messages = _basketStorage.Load(loadDate.UtcDateTime.Date);
+									var messages = _basketStorage.Load(loadDateInUtc);
 
 									// storage for the specified date contains only time messages and clearing events
 									var noData = !messages.DataTypes.Except(messageTypes).Any();
 
 									if (noData)
-										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, GetSimpleTimeLine(loadDate, MarketTimeChangedInterval));
+										EnqueueMessages(startDateTime, stopDateTime, currentTime, token, GetSimpleTimeLine(currentTime, MarketTimeChangedInterval));
 									else
-										EnqueueMessages(startDate, stopDate, loadDate, startTime, token, messages);
+										EnqueueMessages(startDateTime, stopDateTime, currentTime, token, messages);
 								}
 
-								loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
+								loadDateInUtc += TimeSpan.FromDays(1);
 							}
 
 							if (!_isChanged)
 							{
 								SendOutMessage(new EmulationStateMessage
 								{
-									LocalTime = stopDate,
+									LocalTime = stopDateTime,
 									State = ChannelStates.Stopping,
 								});
 
@@ -633,7 +635,7 @@ namespace StockSharp.Algo.Testing
 
 						SendOutMessage(new EmulationStateMessage
 						{
-							LocalTime = stopDate,
+							LocalTime = stopDateTime,
 							State = ChannelStates.Stopping,
 							Error = ex,
 						});
@@ -652,43 +654,29 @@ namespace StockSharp.Algo.Testing
 			_syncRoot.PulseSignal();
 		}
 
-		private void EnqueueMessages(DateTimeOffset startDate, DateTimeOffset stopDate, DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerable<Message> messages)
+		private void EnqueueMessages(DateTimeOffset fromTime, DateTimeOffset toTime, DateTimeOffset curTime, CancellationToken token, IEnumerable<Message> messages)
 		{
-			var checkFromTime = loadDate.Date == startDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
-			var checkToTime = loadDate.Date == stopDate.Date;
-
 			foreach (var msg in messages)
 			{
 				if (_isChanged || token.IsCancellationRequested)
 					break;
 
-				var serverTime = msg.GetServerTime();
+				var msgServerTime = msg.GetServerTime();
 
-				//if (serverTime == null)
-				//	throw new InvalidOperationException();
-
-				if (serverTime < startTime)
+				if (msgServerTime < curTime)
 					continue;
 
-				msg.LocalTime = serverTime;
+				msg.LocalTime = msgServerTime;
 
-				if (checkFromTime)
+				if (msg.LocalTime < fromTime)
 				{
-					// пропускаем только стаканы, тики и ОЛ
+					// не пропускаем только стаканы, тики и ОЛ
 					if (msg.Type is MessageTypes.QuoteChange or MessageTypes.Execution)
-					{
-						if (msg.LocalTime < startDate)
-							continue;
-
-						checkFromTime = false;
-					}
+						continue;
 				}
 
-				if (checkToTime)
-				{
-					if (msg.LocalTime > stopDate)
-						break;
-				}
+				if (msg.LocalTime > toTime)
+					break;
 
 				SendOutMessage(msg);
 			}
@@ -816,7 +804,7 @@ namespace StockSharp.Algo.Testing
 		protected override void SendOutMessage(Message message)
 		{
 			LoadedMessageCount++;
-			
+
 			var serverTime = message.TryGetServerTime();
 
 			if (serverTime != null)
