@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo
 {
 	using System;
-    
+
 	using Ecng.Collections;
 	using Ecng.Common;
 
@@ -372,6 +372,9 @@ namespace StockSharp.Algo
 		private bool ProcessRuleVoid()
 		{
 			_actionVoid(_arg);
+
+			_activatedHandler?.Invoke(null);
+
 			return _canFinish();
 		}
 
