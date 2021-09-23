@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Testing
 	public class OrderLogGenerator : MarketDataGenerator
 	{
 		private decimal _lastOrderPrice;
-		private readonly SynchronizedQueue<ExecutionMessage> _activeOrders = new(); 
+		private readonly SynchronizedQueue<ExecutionMessage> _activeOrders = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogGenerator"/>.
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Testing
 		public override void Init()
 		{
 			base.Init();
-		
+
 			_lastOrderPrice = default;
 			TradeGenerator.Init();
 		}
@@ -165,13 +165,17 @@ namespace StockSharp.Algo.Testing
 				if (_lastOrderPrice <= 0)
 					_lastOrderPrice = priceStep;
 
+				var v = Volumes.Next();
+				if(v == 0)
+					v = 1;
+
 				item = new ExecutionMessage
 				{
 					OrderId = IdGenerator.GetNextId(),
 					SecurityId = SecurityId,
 					ServerTime = time,
 					OrderState = OrderStates.Active,
-					OrderVolume = Volumes.Next(),
+					OrderVolume = v,
 					Side = RandomGen.GetEnum<Sides>(),
 					OrderPrice = _lastOrderPrice,
 					ExecutionType = ExecutionTypes.OrderLog,
