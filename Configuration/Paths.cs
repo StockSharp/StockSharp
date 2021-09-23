@@ -451,7 +451,20 @@
 		/// <param name="filePath">File path.</param>
 		/// <param name="backupFilePath">Backup file path.</param>
 		public static void MoveToBackup(this string filePath, string backupFilePath = null)
-			=> File.Move(filePath, (backupFilePath ?? filePath).MakeBackup());
+		{
+			var target = backupFilePath ?? filePath;
+			var bak = target.MakeBackup();
+			var idx = 0;
+			do
+			{
+				if(!File.Exists(bak))
+					break;
+
+				bak = (target + $".{++idx}").MakeBackup();
+			} while(true);
+
+			File.Move(filePath, bak);
+		}
 
 		/// <summary>
 		/// Create serializer.
