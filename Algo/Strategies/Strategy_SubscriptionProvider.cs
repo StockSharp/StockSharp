@@ -102,85 +102,85 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
 		}
 
 		private void OnConnectorSubscriptionStopped(Subscription subscription, Exception error)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				SubscriptionStopped?.Invoke(subscription, error);
 		}
 
 		private void OnConnectorSubscriptionStarted(Subscription subscription)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				SubscriptionStarted?.Invoke(subscription);
 		}
 
 		private void OnConnectorSubscriptionOnline(Subscription subscription)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				SubscriptionOnline?.Invoke(subscription);
 		}
 
 		private void OnConnectorSubscriptionReceived(Subscription subscription, Message message)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				SubscriptionReceived?.Invoke(subscription, message);
 		}
 
 		private void OnConnectorCandleReceived(Subscription subscription, Candle candle)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				CandleReceived?.Invoke(subscription, candle);
 		}
 
 		private void OnConnectorNewsReceived(Subscription subscription, News news)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				NewsReceived?.Invoke(subscription, news);
 		}
 
 		private void OnConnectorOrderLogItemReceived(Subscription subscription, OrderLogItem ol)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				OrderLogItemReceived?.Invoke(subscription, ol);
 		}
 
 		private void OnConnectorMarketDepthReceived(Subscription subscription, MarketDepth depth)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				MarketDepthReceived?.Invoke(subscription, depth);
 		}
 
 		private void OnConnectorBoardReceived(Subscription subscription, ExchangeBoard board)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				BoardReceived?.Invoke(subscription, board);
 		}
 
 		private void OnConnectorSecurityReceived(Subscription subscription, Security security)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				SecurityReceived?.Invoke(subscription, security);
 		}
 
 		private void OnConnectorTickTradeReceived(Subscription subscription, Trade trade)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				TickTradeReceived?.Invoke(subscription, trade);
 		}
 
 		private void OnConnectorOrderBookReceived(Subscription subscription, QuoteChangeMessage message)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				OrderBookReceived?.Invoke(subscription, message);
 		}
 
 		private void OnConnectorLevel1Received(Subscription subscription, Level1ChangeMessage message)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				Level1Received?.Invoke(subscription, message);
 		}
 	}

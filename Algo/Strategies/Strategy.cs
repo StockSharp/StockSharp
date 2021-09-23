@@ -31,7 +31,6 @@ namespace StockSharp.Algo.Strategies
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.PnL;
-	using StockSharp.Algo.Positions;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Statistics;
 	using StockSharp.Algo.Strategies.Messages;
@@ -305,7 +304,7 @@ namespace StockSharp.Algo.Strategies
 
 			RiskManager = new RiskManager { Parent = this };
 
-			_positionManager = new PositionManager(true) { Parent = this };
+			_positionManager = new ChildStrategyPositionManager { Parent = this };
 		}
 
 		private readonly StrategyParam<Guid> _id;
@@ -444,7 +443,7 @@ namespace StockSharp.Algo.Strategies
 					_connector.SubscriptionStopped += OnConnectorSubscriptionStopped;
 					_connector.SubscriptionFailed += OnConnectorSubscriptionFailed;
 
-					if (ParentStrategy == null)
+					if (IsRootStrategy)
 					{
 						_pfSubscription = new Subscription(new PortfolioLookupMessage
 						{
@@ -473,25 +472,25 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorPortfolioReceived(Subscription subscription, Portfolio portfolio)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				PortfolioReceived?.Invoke(subscription, portfolio);
 		}
 
 		private void OnConnectorOrderEditFailReceived(Subscription subscription, OrderFail fail)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				OrderEditFailReceived?.Invoke(subscription, fail);
 		}
 
 		private void OnConnectorOrderCancelFailReceived(Subscription subscription, OrderFail fail)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				OrderCancelFailReceived?.Invoke(subscription, fail);
 		}
 
 		private void OnConnectorOrderRegisterFailReceived(Subscription subscription, OrderFail fail)
 		{
-			if (_subscriptions.ContainsKey(subscription))
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				OrderRegisterFailReceived?.Invoke(subscription, fail);
 		}
 
@@ -647,35 +646,6 @@ namespace StockSharp.Algo.Strategies
 		/// <see cref="Commission"/> change event.
 		/// </summary>
 		public event Action CommissionChanged;
-
-		private IPositionManager _positionManager;
-
-		/// <summary>
-		/// The position manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="Strategy.ChildStrategies"/>.
-		/// </summary>
-		[Browsable(false)]
-		[Obsolete("Use Positions property.")]
-		public IPositionManager PositionManager
-		{
-			get => _positionManager;
-			set => _positionManager = value ?? throw new ArgumentNullException(nameof(value));
-		}
-
-		/// <summary>
-		/// The position aggregate value.
-		/// </summary>
-		[Browsable(false)]
-		public decimal Position
-		{
-			get => Security == null || Portfolio == null ? 0m : GetPositionValue(Security, Portfolio) ?? 0;
-			[Obsolete]
-			set	{ }
-		}
-
-		/// <summary>
-		/// <see cref="Position"/> change event.
-		/// </summary>
-		public event Action PositionChanged;
 
 		/// <summary>
 		/// Total latency.
@@ -1026,7 +996,8 @@ namespace StockSharp.Algo.Strategies
 					throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219);
 			}
 
-			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, Parent != null ? ParentStrategy.ChildStrategies.Count : -1, Position);
+			var ps = ParentStrategy;
+			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, ps != null ? ps.ChildStrategies.Count : -1, Position);
 		}
 
 		private Strategy ParentStrategy => Parent as Strategy;
@@ -1833,69 +1804,81 @@ namespace StockSharp.Algo.Strategies
 			if (info != null && info.IsOwn)
 				info.PrevState = order.State;
 
-			TryInvoke(() =>
+			if(IsDisposeStarted)
+				return;
+
+			if (isRegistered)
 			{
-				if (isRegistered)
+				if (order.Type == OrderTypes.Conditional)
 				{
-					if (order.Type == OrderTypes.Conditional)
-					{
-						//_stopOrders.Add(order);
-						OnOrderRegistered(order);
+					//_stopOrders.Add(order);
+					OnOrderRegistered(order);
 
-						StatisticManager.AddNewOrder(order);
-					}
-					else
-					{
-						//_orders.Add(order);
-						OnOrderRegistered(order);
-
-						//SlippageManager.Registered(order);
-
-						StatisticManager.AddNewOrder(order);
-
-						if (order.Commission != null)
-						{
-							Commission += order.Commission;
-							RaiseCommissionChanged();
-						}
-					}
-
-					if (_firstOrderTime == default)
-						_firstOrderTime = order.Time;
-
-					_lastOrderTime = order.Time;
-
-					ChangeLatency(order.LatencyRegistration);
-
-					RecycleOrders();
-
-					if (ProcessState == ProcessStates.Stopping && CancelOrdersWhenStopping)
-					{
-						lock (_ordersInfo.SyncRoot)
-						{
-							//var info = _ordersInfo.TryGetValue(order);
-
-							// заявка принадлежит дочерней стратегии
-							if (info == null || !info.IsOwn)
-								return;
-
-							// для заявки уже был послан сигнал на снятие
-							if (info.IsCanceled)
-								return;
-
-							info.IsCanceled = true;
-						}
-
-						CancelOrderHandler(order);
-					}
+					StatisticManager.AddNewOrder(order);
 				}
-				else if (isChanging)
+				else
 				{
-					StatisticManager.AddChangedOrder(order);
+					//_orders.Add(order);
+					OnOrderRegistered(order);
 
-					OnOrderChanged(order);
+					//SlippageManager.Registered(order);
+					PositionChangeMessage posChange = null;
+
+					if(!IsRootStrategy)
+						posChange = _positionManager.ProcessMessage(order.ToMessage());
+
+					StatisticManager.AddNewOrder(order);
+
+					if (order.Commission != null)
+					{
+						Commission += order.Commission;
+						RaiseCommissionChanged();
+					}
+
+					ProcessPositionChangeMessageImpl(posChange);
 				}
-			});
+
+				if (_firstOrderTime == default)
+					_firstOrderTime = order.Time;
+
+				_lastOrderTime = order.Time;
+
+				ChangeLatency(order.LatencyRegistration);
+
+				RecycleOrders();
+
+				if (ProcessState == ProcessStates.Stopping && CancelOrdersWhenStopping)
+				{
+					lock (_ordersInfo.SyncRoot)
+					{
+						//var info = _ordersInfo.TryGetValue(order);
+
+						// заявка принадлежит дочерней стратегии
+						if (info == null || !info.IsOwn)
+							return;
+
+						// для заявки уже был послан сигнал на снятие
+						if (info.IsCanceled)
+							return;
+
+						info.IsCanceled = true;
+					}
+
+					CancelOrderHandler(order);
+				}
+			}
+			else if (isChanging)
+			{
+				PositionChangeMessage posChange = null;
+				if(!IsRootStrategy)
+					posChange = _positionManager.ProcessMessage(order.ToMessage());
+
+				StatisticManager.AddChangedOrder(order);
+
+				OnOrderChanged(order);
+
+				ProcessPositionChangeMessageImpl(posChange);
+			}
 		}
 
 		/// <summary>
@@ -1925,6 +1908,9 @@ namespace StockSharp.Algo.Strategies
 			this.AddInfoLog("Order {0} attached.", order.TransactionId);
 
 			AddOrder(order, restored);
+
+			if(order.Type != OrderTypes.Conditional && !IsRootStrategy)
+				ProcessPositionChangeMessageImpl(_positionManager.ProcessMessage(order.ToMessage()));
 
 			ProcessOrder(order);
 
@@ -2053,6 +2039,8 @@ namespace StockSharp.Algo.Strategies
 			_subscriptions.Clear();
 			_subscriptionsById.Clear();
 
+			_positionManager.Reset();
+
 			OnReseted();
 
 			// события вызываем только после вызова Reseted
@@ -2089,22 +2077,32 @@ namespace StockSharp.Algo.Strategies
 
 		private void TryFinalStop()
 		{
-			if (!Rules.IsEmpty())
+			IMarketRule[] rules;
+
+			if(Rules is ISynchronizedCollection coll)
+			{
+				lock (coll.SyncRoot)
+					rules = Rules.ToArray();
+			}
+			else
+			{
+				rules = Rules.ToArray();
+			}
+
+			if (rules.Any())
 			{
 				if (WaitRulesOnStop)
 				{
 					this.AddLog(LogLevels.Info,
-						() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.ToString()).JoinCommaSpace()));
+						() => LocalizedStrings.Str1396Params.Put(rules.Length, rules.Select(r => r.ToString()).JoinCommaSpace()));
 
 					return;
 				}
-				else
-				{
-					foreach (var rule in Rules)
-						rule.Dispose();
 
-					Rules.Clear();
-				}
+				foreach (var rule in rules)
+					rule.Dispose();
+
+				Rules.Clear();
 			}
 
 			ProcessState = ProcessStates.Stopped;
@@ -2245,6 +2243,9 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorNewMessage(Message message)
 		{
+			if(IsDisposeStarted)
+				return;
+
 			DateTimeOffset? msgTime = null;
 
 			switch (message.Type)
@@ -2382,13 +2383,10 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorOwnTradeReceived(Subscription subscription, MyTrade trade)
 		{
-			if (_orderSubscription != subscription)
+			if (IsDisposeStarted || !IsOwnOrder(trade.Order) || !TryAddMyTrade(trade))
 				return;
 
-			if (IsOwnOrder(trade.Order))
-				AddMyTrade(trade);
-
-			OwnTradeReceived?.Invoke(subscription, trade);
+			TryInvoke(() => OwnTradeReceived?.Invoke(subscription, trade));
 		}
 
 		/// <summary>
@@ -2408,7 +2406,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorOrderReceived(Subscription subscription, Order order)
 		{
-			if (_orderSubscription != subscription)
+			if (_orderSubscription != subscription || IsDisposeStarted)
 				return;
 
 			if (!_ordersInfo.ContainsKey(order) && CanAttach(order))
@@ -2416,17 +2414,23 @@ namespace StockSharp.Algo.Strategies
 			else if (IsOwnOrder(order))
 				TryInvoke(() => ProcessOrder(order, true));
 
-			OrderReceived?.Invoke(subscription, order);
+			TryInvoke(() => OrderReceived?.Invoke(subscription, order));
 		}
 
 		private void OnConnectorOrderEditFailed(long transactionId, OrderFail fail)
 		{
+			if(IsDisposeStarted)
+				return;
+
 			if (IsOwnOrder(fail.Order))
 				OrderEditFailed?.Invoke(transactionId, fail);
 		}
 
 		private void OnConnectorOrderEdited(long transactionId, Order order)
 		{
+			if(IsDisposeStarted)
+				return;
+
 			if (IsOwnOrder(order))
 			{
 				OrderEdited?.Invoke(transactionId, order);
@@ -2435,39 +2439,36 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		private string _idStr;
-
-		private string EnsureGetId()
-		{
-			if (_idStr == null)
-				_idStr = Id.To<string>();
-
-			return _idStr;
-		}
-
 		private string _rootIdStr;
+		private Strategy _rootStrategy;
 
-		private string EnsureGetRootId()
-		{
-			if (_rootIdStr == null)
-			{
-				var root = this;
+		private string EnsureGetId()     => _idStr     ??= Id.To<string>();
+		private string EnsureGetRootId() => _rootIdStr ??= RootStrategy.EnsureGetId();
 
-				while (root.ParentStrategy != null)
-					root = root.ParentStrategy;
+		/// <summary>
+		/// Root strategy.
+		/// </summary>
+		protected Strategy RootStrategy => _rootStrategy ??= IsRootStrategy ? this : ParentStrategy.RootStrategy;
 
-				_rootIdStr = root.Id.To<string>();
-			}
-
-			return _rootIdStr;
-		}
+		/// <summary>
+		/// Whether this is a root strategy.
+		/// </summary>
+		protected bool IsRootStrategy => ParentStrategy == null;
 
 		private void OnConnectorOrderRegisterFailed(OrderFail fail)
 		{
+			if(IsDisposeStarted)
+				return;
+
+
 			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
 		}
 
 		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
+			if(IsDisposeStarted)
+				return;
+
 			ValuesChanged?.Invoke(security, changes, serverTime, localTime);
 		}
 
@@ -2481,10 +2482,12 @@ namespace StockSharp.Algo.Strategies
 			PnLManager.ProcessMessage(msg);
 		}
 
-		private void AddMyTrade(MyTrade trade)
+		private void AddMyTrade(MyTrade trade) => TryAddMyTrade(trade);
+
+		private bool TryAddMyTrade(MyTrade trade)
 		{
 			if (!_myTrades.TryAdd(trade))
-				return;
+				return false;
 
 			if (WaitAllTrades)
 			{
@@ -2494,8 +2497,6 @@ namespace StockSharp.Algo.Strategies
 						info.ReceivedVolume += trade.Trade.Volume;
 				}
 			}
-
-			TryInvoke(() => OnNewMyTrade(trade));
 
 			var isComChanged = false;
 			var isPnLChanged = false;
@@ -2537,19 +2538,27 @@ namespace StockSharp.Algo.Strategies
 				isSlipChanged = true;
 			}
 
+			TryInvoke(() => OnNewMyTrade(trade));
+
 			TryInvoke(() =>
 			{
 				if (isComChanged)
 					RaiseCommissionChanged();
-
+			});
+			TryInvoke(() =>
+			{
 				if (isPnLChanged)
 					RaisePnLChanged();
-
+			});
+			TryInvoke(() =>
+			{
 				if (isSlipChanged)
 					RaiseSlippageChanged();
 			});
 
 			ProcessRisk(execMsg);
+
+			return true;
 		}
 
 		private void RaiseSlippageChanged()
@@ -2717,6 +2726,9 @@ namespace StockSharp.Algo.Strategies
 
 		private void ProcessCancelOrderFail(OrderFail fail)
 		{
+			if(IsDisposeStarted)
+				return;
+
 			var order = fail.Order;
 
 			lock (_ordersInfo.SyncRoot)
@@ -2807,13 +2819,8 @@ namespace StockSharp.Algo.Strategies
 
 		private void TryInvoke(Action handler)
 		{
-			//_disposeLock.Read(() =>
-			//{
-				if (IsDisposed)
-					return;
-
+			if (!IsDisposeStarted)
 				handler();
-			//});
 		}
 
 		private bool IsOwnOrder(Order order)
@@ -3051,15 +3058,12 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			//_disposeLock.WriteAsync(() =>
-			//{
 			ChildStrategies.ForEach(s => s.Dispose());
 			ChildStrategies.Clear();
 
 			UnSubscribe(true);
 
 			Connector = null;
-			//});
 
 			base.DisposeManaged();
 

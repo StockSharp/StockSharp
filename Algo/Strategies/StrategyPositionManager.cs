@@ -37,8 +37,8 @@
 		{
 			IPositionManager CreateManager(long transId, string strategyId)
 			{
-				var manager = _managersByStrategyId.SafeAdd(strategyId, key => new PositionManager(ByOrders) { Parent = this });
-				_managersByTransId.Add(transId, Tuple.Create(manager, strategyId));
+				var manager = _managersByStrategyId.SafeAdd(strategyId, _ => new PositionManager(ByOrders) { Parent = this });
+				_managersByTransId.SafeAdd(transId, _ => Tuple.Create(manager, strategyId));
 				return manager;
 			}
 
