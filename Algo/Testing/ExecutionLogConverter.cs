@@ -410,7 +410,7 @@ namespace StockSharp.Algo.Testing
 			{
 				// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
 				CancelWorstQuote(retVal, time, tick.ServerTime, Sides.Buy, _bids);
-				CancelWorstQuote(retVal, time, tick.ServerTime, Sides.Sell, _asks);	
+				CancelWorstQuote(retVal, time, tick.ServerTime, Sides.Sell, _asks);
 			}
 
 			_prevTickPrice = tradePrice;
@@ -508,7 +508,7 @@ namespace StockSharp.Algo.Testing
 							// иначе добавляем новый уровень в стакан, чтобы не было большого расхождения цен.
 							hasQuotes = true;
 						}
-					
+
 						break;
 					}
 
@@ -603,7 +603,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
-					
+
 					if (NeedCheckVolume(regMsg, quotesVolume))
 					{
 						foreach (var executionMessage in IncreaseDepthVolume(regMsg, serverTime, quotesVolume))
@@ -632,7 +632,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.OrderReplace:
 				{
 					var replaceMsg = (OrderReplaceMessage)message;
-					
+
 					if (NeedCheckVolume(replaceMsg, quotesVolume))
 					{
 						foreach (var executionMessage in IncreaseDepthVolume(replaceMsg, serverTime, quotesVolume))
@@ -652,6 +652,7 @@ namespace StockSharp.Algo.Testing
 						TransactionId = replaceMsg.TransactionId,
 						PortfolioName = replaceMsg.PortfolioName,
 						OrderType = replaceMsg.OrderType,
+						StrategyId = replaceMsg.StrategyId,
 						// для старой заявки пользовательский идентификатор менять не надо
 						//UserOrderId = replaceMsg.UserOrderId
 					};
@@ -692,6 +693,7 @@ namespace StockSharp.Algo.Testing
 						LocalTime = cancelMsg.LocalTime,
 						ServerTime = serverTime,
 						OrderType = cancelMsg.OrderType,
+						StrategyId = cancelMsg.StrategyId,
 						// при отмене заявки пользовательский идентификатор не меняется
 						//UserOrderId = cancelMsg.UserOrderId
 					};
