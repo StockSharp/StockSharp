@@ -1,4 +1,8 @@
 {
+  "RecentOrdersRequestLimit": {
+    "en": "Number of requested recent orders for each instrument type",
+    "ru": "Количество запрашиваемых недавних заявок по каждому типу инструмента"
+  },
   "DumpBooks": {
     "en": "Dump order books",
     "ru": "Лог книги заявок"
