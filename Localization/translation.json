@@ -5684,7 +5684,7 @@
     "ru": "Заявка {0} в процессе снятия."
   },
   "Str1306Params": {
-    "en": "Order {0} in reregistering process.",
+    "en": "Order {0} in registering process.",
     "ru": "Заявка {0} в процессе регистрации."
   },
   "Str1307Params": {
