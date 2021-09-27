@@ -274,7 +274,7 @@
 			if (productInstallPath.IsEmpty())
 				throw new ArgumentException(nameof(productInstallPath));
 
-			if (!File.Exists(InstallerInstallationsConfigPath))
+			if (!File.Exists(InstallerInstallationsConfigPath) && !File.Exists(InstallerInstallationsConfigPath.MakeLegacy()))
 				return null;
 
 			var storage = Do.Invariant(() =>
