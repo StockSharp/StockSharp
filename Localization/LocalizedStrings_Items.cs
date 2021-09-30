@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Product id
+		/// </summary>
+		public const string ProductIdKey = nameof(ProductId);
+
+		/// <summary>
+		/// Product id
+		/// </summary>
+		public static string ProductId => GetString(ProductIdKey);
+
+		/// <summary>
 		/// Number of requested recent own trades
 		/// </summary>
 		public const string RecentTradesRequestLimitKey = nameof(RecentTradesRequestLimit);

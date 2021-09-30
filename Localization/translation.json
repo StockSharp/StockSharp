@@ -1,4 +1,8 @@
 {
+  "ProductId": {
+    "en": "Product id",
+    "ru": "Идентификатор продукта"
+  },
   "RecentOrdersRequestLimit": {
     "en": "Number of requested recent orders for each instrument type",
     "ru": "Количество запрашиваемых недавних заявок по каждому типу инструмента"
