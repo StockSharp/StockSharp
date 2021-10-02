@@ -1,7 +1,0 @@
-T:StockSharp.Yahoo.YahooMessageAdapter/summary;DocStr2538
-M:StockSharp.Yahoo.YahooMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Yahoo.YahooMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Yahoo.YahooMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
-M:StockSharp.Yahoo.YahooMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
-M:StockSharp.Yahoo.YahooMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Yahoo.YahooMessageAdapter.AllTimeFrames/summary;DocStr206

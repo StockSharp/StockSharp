@@ -1,5 +1,0 @@
-T:StockSharp.FinViz.FinVizMessageAdapter/summary;DocStr2538
-M:StockSharp.FinViz.FinVizMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.FinViz.FinVizMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.FinViz.FinVizMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
-M:StockSharp.FinViz.FinVizMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

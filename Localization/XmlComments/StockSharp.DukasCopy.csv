@@ -1,9 +1,0 @@
-T:StockSharp.DukasCopy.DukasCopyMessageAdapter/summary;DocStr2538
-M:StockSharp.DukasCopy.DukasCopyMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.DukasCopy.DukasCopyMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.DukasCopy.DukasCopyMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
-M:StockSharp.DukasCopy.DukasCopyMessageAdapter.GetTimeFrames(StockSharp.Messages.SecurityId,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/inheritdoc;DocStr8459
-P:StockSharp.DukasCopy.DukasCopyMessageAdapter.CandlesBuildFrom/inheritdoc;DocStr8459
-M:StockSharp.DukasCopy.DukasCopyMessageAdapter.GetHistoryStepSize(StockSharp.Messages.DataType,System.TimeSpan@)/inheritdoc;DocStr8459
-M:StockSharp.DukasCopy.DukasCopyMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.DukasCopy.DukasCopyMessageAdapter.AllTimeFrames/summary;DocStr206

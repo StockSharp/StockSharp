@@ -1,9 +1,0 @@
-T:StockSharp.Xignite.XigniteMessageAdapter/summary;DocStr2538
-M:StockSharp.Xignite.XigniteMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Xignite.XigniteMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Xignite.XigniteMessageAdapter.IsAllDownloadingSupported(StockSharp.Messages.DataType)/inheritdoc;DocStr8459
-M:StockSharp.Xignite.XigniteMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-P:StockSharp.Xignite.XigniteMessageAdapter.Token/inheritdoc;DocStr8459
-M:StockSharp.Xignite.XigniteMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
-M:StockSharp.Xignite.XigniteMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
-M:StockSharp.Xignite.XigniteMessageAdapter.ToString/inheritdoc;DocStr8459
