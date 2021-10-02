@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Web socket addresses
+		/// </summary>
+		public const string WebSocketAddressesKey = nameof(WebSocketAddresses);
+
+		/// <summary>
+		/// Web socket addresses
+		/// </summary>
+		public static string WebSocketAddresses => GetString(WebSocketAddressesKey);
+
+		/// <summary>
+		/// Futures coin section
+		/// </summary>
+		public const string FuturesCoinSectionKey = nameof(FuturesCoinSection);
+
+		/// <summary>
+		/// Futures coin section
+		/// </summary>
+		public static string FuturesCoinSection => GetString(FuturesCoinSectionKey);
+
+		/// <summary>
 		/// Product id
 		/// </summary>
 		public const string ProductIdKey = nameof(ProductId);
