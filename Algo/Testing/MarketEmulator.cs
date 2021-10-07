@@ -226,7 +226,6 @@ namespace StockSharp.Algo.Testing
 									Error = new InvalidOperationException(error),
 									ServerTime = serverTime,
 									HasOrderInfo = true,
-									StrategyId = orderMsg.StrategyId,
 								});
 
 								// registration error
@@ -241,7 +240,6 @@ namespace StockSharp.Algo.Testing
 									Error = new InvalidOperationException(error),
 									ServerTime = serverTime,
 									HasOrderInfo = true,
-									StrategyId = orderMsg.StrategyId,
 								});
 
 								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OriginalTransactionId);
@@ -468,7 +466,6 @@ namespace StockSharp.Algo.Testing
 					LocalTime = time,
 					OriginalTransactionId = original.TransactionId,
 					Error = error,
-					StrategyId = original.StrategyId
 				};
 
 				if (error != null)
@@ -1170,7 +1167,6 @@ namespace StockSharp.Algo.Testing
 					ExecutionType = ExecutionTypes.Transaction,
 					HasOrderInfo = true,
 					ServerTime = GetServerTime(time),
-					StrategyId = message.StrategyId,
 				};
 			}
 
@@ -1189,7 +1185,6 @@ namespace StockSharp.Algo.Testing
 					HasTradeInfo = true,
 					ServerTime = GetServerTime(time),
 					Side = message.Side,
-					StrategyId = message.StrategyId,
 				};
 			}
 
@@ -1324,7 +1319,6 @@ namespace StockSharp.Algo.Testing
 							PortfolioName = _name,
 							SecurityId = pair.Key,
 							OriginalTransactionId = pfMsg.TransactionId,
-							StrategyId = pfMsg.StrategyId,
 						}
 						.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
 						.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
@@ -1379,7 +1373,6 @@ namespace StockSharp.Algo.Testing
 						ServerTime = posMsg.ServerTime,
 						LocalTime = posMsg.LocalTime,
 						PortfolioName = _name,
-						StrategyId = posMsg.StrategyId,
 					}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 				);
 			}
@@ -1481,7 +1474,6 @@ namespace StockSharp.Algo.Testing
 						ServerTime = time,
 						PortfolioName = _name,
 						SecurityId = tradeMsg.SecurityId,
-						StrategyId = tradeMsg.StrategyId,
 					}
 					.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
 					.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
@@ -1708,7 +1700,6 @@ namespace StockSharp.Algo.Testing
 									LocalTime = orderMsg.LocalTime,
 									OriginalTransactionId = orderMsg.TransactionId,
 									OrderState = OrderStates.Failed,
-									StrategyId = orderMsg.StrategyId,
 									Error = new InvalidOperationException(LocalizedStrings.SessionStopped.Put(secId.BoardCode, state.Value)),
 								});
 
