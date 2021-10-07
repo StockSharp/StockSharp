@@ -18,7 +18,7 @@
     <SignalRVer>2.4.2</SignalRVer>
     <NuGetApiVersion>5.11.0</NuGetApiVersion>
     <SystemDataSqlClientVer>4.8.2</SystemDataSqlClientVer>
-    <MsTestVer>2.2.6</MsTestVer>
+    <MsTestVer>2.2.7</MsTestVer>
     <MsTestSdkVer>16.11.0</MsTestSdkVer>
     <NewtonJsonVer>13.0.1</NewtonJsonVer>
     <ReactiveXVer>5.0.0</ReactiveXVer>
