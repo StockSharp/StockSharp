@@ -21,12 +21,6 @@
     <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Finam\Finam.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Yahoo\Yahoo.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
-    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj" />
   </ItemGroup>
 </Project>
