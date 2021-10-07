@@ -132,10 +132,6 @@ namespace StockSharp.Algo.Testing
 			if (!IsTimeToGenerate(time))
 				return null;
 
-			var v = Volumes.Next();
-			if(v == 0)
-				v = 1;
-
 			var trade = new ExecutionMessage
 			{
 				SecurityId = SecurityId,
@@ -143,7 +139,7 @@ namespace StockSharp.Algo.Testing
 				ServerTime = time,
 				LocalTime = time,
 				OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : null,
-				TradeVolume = v,
+				TradeVolume = Volumes.Next(),
 				ExecutionType = ExecutionTypes.Tick
 			};
 
