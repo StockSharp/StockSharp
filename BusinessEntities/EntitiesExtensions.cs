@@ -123,7 +123,7 @@ namespace StockSharp.BusinessEntities
 			return unit.Convert(destinationType, type => GetTypeValue(security, type));
 		}
 
-		internal static decimal RoundPrice(this Security security, decimal price)
+		internal static decimal ShrinkPrice(this Security security, decimal price)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -131,7 +131,7 @@ namespace StockSharp.BusinessEntities
 			if (security.PriceStep == null)
 				throw new ArgumentException(LocalizedStrings.Str2925, nameof(security));
 
-			return price.Round(security.PriceStep ?? 1m, security.Decimals ?? 0);
+			return price.Round(security.PriceStep ?? 1m, security.Decimals ?? 0, null);
 		}
 
 		/// <summary>

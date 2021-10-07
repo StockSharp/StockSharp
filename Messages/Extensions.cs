@@ -3505,7 +3505,7 @@ namespace StockSharp.Messages
 		/// <param name="priceRange">Minimum price step.</param>
 		/// <param name="priceStep">Security price step.</param>
 		/// <returns>The sparse order book.</returns>
-		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, decimal priceRange, decimal? priceStep)
+		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, Unit priceRange, decimal? priceStep)
 		{
 			depth.CheckIsSnapshot();
 
@@ -3535,38 +3535,14 @@ namespace StockSharp.Messages
 			};
 		}
 
-		/// <summary>
-		/// </summary>
-		[Obsolete("Use method with decimal priceRange parameter")]
-		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, Unit priceRange, decimal? priceStep)
-			=> depth.Sparse(GetActualPriceRange(priceRange), priceStep);
-
-		private static void ValidatePriceRange(decimal? priceRange)
+		private static void ValidatePriceRange(Unit priceRange)
 		{
 			if (priceRange is null)
 				throw new ArgumentNullException(nameof(priceRange));
 
-			if (priceRange <= 0)
+			if (priceRange.Value <= 0)
 				throw new ArgumentOutOfRangeException(nameof(priceRange), priceRange, LocalizedStrings.Str1213);
 		}
-
-		private static decimal GetActualPriceRange(Unit priceRange)
-		{
-			var val = (decimal?)priceRange;
-			ValidatePriceRange(val);
-
-			if (priceRange.Type is not UnitTypes.Absolute and not UnitTypes.Step)
-				throw new ArgumentOutOfRangeException(LocalizedStrings.Str1844Params.Put(priceRange.Type));
-
-			// ReSharper disable once PossibleInvalidOperationException
-			return val.Value;
-		}
-
-		/// <summary>
-		/// </summary>
-		[Obsolete("Use method with decimal priceRange parameter")]
-		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, Unit priceRange, decimal? priceStep)
-			=> bid.Sparse(ask, GetActualPriceRange(priceRange), priceStep);
 
 		/// <summary>
 		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair.
@@ -3579,7 +3555,7 @@ namespace StockSharp.Messages
 		/// <param name="priceRange">Minimum price step.</param>
 		/// <param name="priceStep">Security price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
-		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, decimal priceRange, decimal? priceStep)
+		public static (QuoteChange[] bids, QuoteChange[] asks) Sparse(this QuoteChange bid, QuoteChange ask, Unit priceRange, decimal? priceStep)
 		{
 			ValidatePriceRange(priceRange);
 
@@ -3596,8 +3572,8 @@ namespace StockSharp.Messages
 
 			while (true)
 			{
-				bidPrice = (bidPrice + priceRange).RoundPrice(priceStep, null, MathRoundingRules.ToPositiveInfinity);
-				askPrice = (askPrice - priceRange).RoundPrice(priceStep, null, MathRoundingRules.ToNegativeInfinity);
+				bidPrice = ((decimal)(bidPrice + priceRange)).ShrinkPrice(priceStep, null, ShrinkRules.More);
+				askPrice = ((decimal)(askPrice - priceRange)).ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
 				if (bidPrice > askPrice)
 					break;
@@ -3633,7 +3609,7 @@ namespace StockSharp.Messages
 		/// <param name="priceRange">Minimum price step.</param>
 		/// <param name="priceStep">Security price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
-		public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, decimal priceRange, decimal? priceStep)
+		public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, Unit priceRange, decimal? priceStep)
 		{
 			if (quotes is null)
 				throw new ArgumentNullException(nameof(quotes));
@@ -3654,9 +3630,9 @@ namespace StockSharp.Messages
 
 				if (side == Sides.Buy)
 				{
-					for (var price = from.Price - priceRange; price > toPrice; price -= priceRange)
+					for (var price = (from.Price - priceRange); price > toPrice; price -= priceRange)
 					{
-						var p = price.RoundPrice(priceStep, null, MathRoundingRules.ToNegativeInfinity);
+						var p = ((decimal)price).ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
 						if (p <= toPrice)
 							break;
@@ -3669,9 +3645,9 @@ namespace StockSharp.Messages
 				}
 				else
 				{
-					for (var price = from.Price + priceRange; price < toPrice; price += priceRange)
+					for (var price = (from.Price + priceRange); price < toPrice; price += priceRange)
 					{
-						var p = price.RoundPrice(priceStep, null, MathRoundingRules.ToPositiveInfinity);
+						var p = ((decimal)price).ShrinkPrice(priceStep, null, ShrinkRules.More);
 
 						if (p >= toPrice)
 							break;
@@ -3691,42 +3667,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// To create the sparse collection of quotes from regular quotes.
-		/// </summary>
-		/// <remarks>
-		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
-		/// </remarks>
-		/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
-		/// <param name="side">Side.</param>
-		/// <param name="priceRange">Minimum price step.</param>
-		/// <param name="priceStep">Security price step.</param>
-		/// <returns>The sparse collection of quotes.</returns>
-		[Obsolete("Use method with decimal priceRange parameter")]
-		public static QuoteChange[] Sparse(this QuoteChange[] quotes, Sides side, Unit priceRange, decimal? priceStep)
-		{
-			if (quotes is null)
-				throw new ArgumentNullException(nameof(quotes));
-
-			return quotes.Sparse(side, GetActualPriceRange(priceRange), priceStep);
-		}
-
-		/// <summary>
 		/// To group the order book by the price range.
 		/// </summary>
 		/// <param name="depth">The order book to be grouped.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>The grouped order book.</returns>
-		[Obsolete("Use method with decimal priceRange parameter")]
 		public static QuoteChangeMessage Group(this QuoteChangeMessage depth, Unit priceRange)
-			=> depth.Group(GetActualPriceRange(priceRange));
-
-		/// <summary>
-		/// To group the order book by the price range.
-		/// </summary>
-		/// <param name="depth">The order book to be grouped.</param>
-		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
-		/// <returns>The grouped order book.</returns>
-		public static QuoteChangeMessage Group(this QuoteChangeMessage depth, decimal priceRange)
 		{
 			depth.CheckIsSnapshot();
 
@@ -3741,7 +3687,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// To de-group the order book, grouped using the method <see cref="Group(QuoteChangeMessage,decimal)"/>.
+		/// To de-group the order book, grouped using the method <see cref="Group(QuoteChangeMessage,Unit)"/>.
 		/// </summary>
 		/// <param name="depth">The grouped order book.</param>
 		/// <returns>The de-grouped order book.</returns>
@@ -3776,7 +3722,7 @@ namespace StockSharp.Messages
 		/// <param name="side">Side.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>Grouped quotes.</returns>
-		public static QuoteChange[] Group(this QuoteChange[] quotes, Sides side, decimal priceRange)
+		public static QuoteChange[] Group(this QuoteChange[] quotes, Sides side, Unit priceRange)
 		{
 			if (quotes is null)
 				throw new ArgumentNullException(nameof(quotes));
@@ -3796,7 +3742,7 @@ namespace StockSharp.Messages
 			var groupedQuote = new QuoteChange { Price = quotes[0].Price };
 			var innerQuotes = new List<QuoteChange> { quotes[0] };
 
-			var nextPrice = groupedQuote.Price + priceRange;
+			var nextPrice = (decimal)(groupedQuote.Price + priceRange);
 
 			for (int i = 1; i < quotes.Length; i++)
 			{
@@ -3836,7 +3782,7 @@ namespace StockSharp.Messages
 				groupedQuote = new QuoteChange { Price = currQuote.Price };
 				innerQuotes.Add(currQuote);
 
-				nextPrice = groupedQuote.Price + priceRange;
+				nextPrice = (decimal)(groupedQuote.Price + priceRange);
 			}
 
 			if (innerQuotes.Count > 0)
@@ -3846,17 +3792,6 @@ namespace StockSharp.Messages
 			}
 
 			return retVal.ToArray();
-		}
-
-		/// <summary>
-		/// </summary>
-		[Obsolete("Use method with decimal priceRange")]
-		public static QuoteChange[] Group(this QuoteChange[] quotes, Sides side, Unit priceRange)
-		{
-			if (quotes is null)
-				throw new ArgumentNullException(nameof(quotes));
-
-			return quotes.Group(side, GetActualPriceRange(priceRange));
 		}
 
 		/// <summary>
@@ -4079,25 +4014,17 @@ namespace StockSharp.Messages
 		/// <param name="price">The price to be made multiple.</param>
 		/// <param name="priceStep">Price step.</param>
 		/// <param name="decimals">Number of digits in price after coma.</param>
-		/// <param name="rounding">The price rounding rule.</param>
+		/// <param name="rule">The price rounding rule.</param>
 		/// <returns>The multiple price.</returns>
-		public static decimal RoundPrice(this decimal price, decimal? priceStep, int? decimals, MathRoundingRules rounding = MathRoundingRules.ToEven)
-			=> price.Round(priceStep ?? 0.01m, decimals, rounding).RemoveTrailingZeros();
-
-		/// <summary>
-		/// </summary>
-		[Obsolete("Use RoundPrice instead")]
 		public static decimal ShrinkPrice(this decimal price, decimal? priceStep, int? decimals, ShrinkRules rule = ShrinkRules.Auto)
 		{
-			var rounding = rule switch
-			{
-				ShrinkRules.Auto => MathRoundingRules.ToEven,
-				ShrinkRules.Less => MathRoundingRules.ToNegativeInfinity,
-				ShrinkRules.More => MathRoundingRules.ToPositiveInfinity,
-				               _ => throw new ArgumentOutOfRangeException()
-			};
+			var rounding = rule == ShrinkRules.Auto
+				? (MidpointRounding?)null
+				: (rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven);
 
-			return price.Round(priceStep ?? 0.01m, decimals, rounding).RemoveTrailingZeros();
+			var result = price.Round(priceStep ?? 0.01m, decimals, rounding);
+
+			return result.RemoveTrailingZeros();
 		}
 
 		/// <summary>

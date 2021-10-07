@@ -401,25 +401,14 @@ namespace StockSharp.Algo
 			if (offset.GetTypeValue == null)
 				offset.SetSecurity(security);
 
-			return security.RoundPrice((decimal)(side == Sides.Buy ? price + offset : price - offset));
+			return security.ShrinkPrice((decimal)(side == Sides.Buy ? price + offset : price - offset));
 		}
 
 		/// <summary>
 		/// To cut the price for the order, to make it multiple of the minimal step, also to limit number of decimal places.
 		/// </summary>
 		/// <param name="order">The order for which the price will be cut <see cref="Order.Price"/>.</param>
-		/// <param name="rounding">The price rounding rule.</param>
-		public static void RoundPrice(this Order order, MathRoundingRules rounding = MathRoundingRules.ToEven)
-		{
-			if (order is null)
-				throw new ArgumentNullException(nameof(order));
-
-			order.Price = order.Security.RoundPrice(order.Price, rounding);
-		}
-
-		/// <summary>
-		/// </summary>
-		[Obsolete("Use RoundPrice instead")]
+		/// <param name="rule">The price rounding rule.</param>
 		public static void ShrinkPrice(this Order order, ShrinkRules rule = ShrinkRules.Auto)
 		{
 			if (order is null)
@@ -433,33 +422,14 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">The instrument from which the <see cref="Security.PriceStep"/> and <see cref="Security.Decimals"/> values are taken.</param>
 		/// <param name="price">The price to be made multiple.</param>
-		/// <param name="rounding">The price rounding rule.</param>
+		/// <param name="rule">The price rounding rule.</param>
 		/// <returns>The multiple price.</returns>
-		public static decimal RoundPrice(this Security security, decimal price, MathRoundingRules rounding = MathRoundingRules.ToEven)
-		{
-			if (security is null)
-				throw new ArgumentNullException(nameof(security));
-
-			return price.RoundPrice(security.PriceStep, security.Decimals, rounding);
-		}
-
-		/// <summary>
-		/// </summary>
-		[Obsolete("Use RoundPrice instead")]
 		public static decimal ShrinkPrice(this Security security, decimal price, ShrinkRules rule = ShrinkRules.Auto)
 		{
 			if (security is null)
 				throw new ArgumentNullException(nameof(security));
 
-			var rounding = rule switch
-			{
-				ShrinkRules.Auto => MathRoundingRules.ToEven,
-				ShrinkRules.Less => MathRoundingRules.ToNegativeInfinity,
-				ShrinkRules.More => MathRoundingRules.ToPositiveInfinity,
-				               _ => throw new ArgumentOutOfRangeException()
-			};
-
-			return price.RoundPrice(security.PriceStep, security.Decimals, rounding);
+			return price.ShrinkPrice(security.PriceStep, security.Decimals, rule);
 		}
 
 		/// <summary>
@@ -674,21 +644,10 @@ namespace StockSharp.Algo
 		/// <param name="depth">The regular order book.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse order book.</returns>
-		[Obsolete("Use method with decimal priceStep parameter")]
 		public static MarketDepth Sparse(this MarketDepth depth, Unit priceStep)
-			=> depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
-
-		/// <summary>
-		/// To create from regular order book a sparse one.
-		/// </summary>
-		/// <remarks>
-		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
-		/// </remarks>
-		/// <param name="depth">The regular order book.</param>
-		/// <param name="priceStep">Minimum price step.</param>
-		/// <returns>The sparse order book.</returns>
-		public static MarketDepth Sparse(this MarketDepth depth, decimal priceStep)
-			=> depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
+		{
+			return depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
+		}
 
 		/// <summary>
 		/// To merge the initial order book and its sparse representation.
@@ -713,21 +672,13 @@ namespace StockSharp.Algo
 		/// <param name="depth">The order book to be grouped.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>The grouped order book.</returns>
-		public static MarketDepth Group(this MarketDepth depth, decimal priceRange)
-			=> depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
-
-		/// <summary>
-		/// To group the order book by the price range.
-		/// </summary>
-		/// <param name="depth">The order book to be grouped.</param>
-		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
-		/// <returns>The grouped order book.</returns>
-		[Obsolete("Use method with decimal priceRange parameter")]
 		public static MarketDepth Group(this MarketDepth depth, Unit priceRange)
-			=> depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
+		{
+			return depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
+		}
 
 		/// <summary>
-		/// To de-group the order book, grouped using the method <see cref="Group(MarketDepth,decimal)"/>.
+		/// To de-group the order book, grouped using the method <see cref="Group(MarketDepth,Unit)"/>.
 		/// </summary>
 		/// <param name="depth">The grouped order book.</param>
 		/// <returns>The de-grouped order book.</returns>

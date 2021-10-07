@@ -405,8 +405,8 @@ namespace StockSharp.Algo.Testing
 						LocalTime = execution.LocalTime,
 						ServerTime = execution.ServerTime,
 					}
-					.Add(Level1Fields.MinPrice, RoundPrice((decimal)(price - priceOffset), priceStep))
-					.Add(Level1Fields.MaxPrice, RoundPrice((decimal)(price + priceOffset), priceStep));
+					.Add(Level1Fields.MinPrice, ShrinkPrice((decimal)(price - priceOffset), priceStep))
+					.Add(Level1Fields.MaxPrice, ShrinkPrice((decimal)(price + priceOffset), priceStep));
 
 				_parent.UpdateLevel1Info(level1Msg, result, true);
 			}
@@ -449,12 +449,12 @@ namespace StockSharp.Algo.Testing
 				return _securityDefinition.VolumeStep ?? 1;
 			}
 
-			private static decimal RoundPrice(decimal price, decimal priceStep)
+			private static decimal ShrinkPrice(decimal price, decimal priceStep)
 			{
 				var decimals = priceStep.GetCachedDecimals();
 
 				return price
-					.Round(priceStep, decimals)
+					.Round(priceStep, decimals, null)
 					.RemoveTrailingZeros();
 			}
 
