@@ -452,7 +452,7 @@ namespace StockSharp.Algo.Testing
 				var decimals = priceStep.GetCachedDecimals();
 
 				return price
-					.Round(priceStep, decimals, null)
+					.Round(priceStep, decimals)
 					.RemoveTrailingZeros();
 			}
 

@@ -4019,8 +4019,8 @@ namespace StockSharp.Messages
 		public static decimal ShrinkPrice(this decimal price, decimal? priceStep, int? decimals, ShrinkRules rule = ShrinkRules.Auto)
 		{
 			var rounding = rule == ShrinkRules.Auto
-				? (MidpointRounding?)null
-				: (rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven);
+				? MidpointRounding.ToEven
+				: rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven;
 
 			var result = price.Round(priceStep ?? 0.01m, decimals, rounding);
 
@@ -4162,7 +4162,7 @@ namespace StockSharp.Messages
 			=> boards.Where(b => b.IsMatch(criteria));
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <param name="name"></param>
@@ -4172,7 +4172,7 @@ namespace StockSharp.Messages
 			=> parameters.TryGet<string>(defaultValue);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="parameters"></param>
