@@ -23,7 +23,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Gets company information.
 		/// </summary>
-		public const string Company = "StockSharp Platfrom LLC";
+		public const string Company = "StockSharp Platform LLC";
 
 		/// <summary>
 		/// Gets product information.
