@@ -21558,5 +21558,13 @@
   "Development": {
     "en": "Development",
     "ru": "Разработка"
+  },
+  "WshMeta": {
+    "en": "Wall Street Horizon meta data",
+    "ru": "Wall Street Horizon мета-информация"
+  },
+  "WshEvent": {
+    "en": "Wall Street Horizon event data",
+    "ru": "Wall Street Horizon информация"
   }
 }
