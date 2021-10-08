@@ -53566,5 +53566,25 @@ namespace StockSharp.Localization
 		/// Development
 		/// </summary>
 		public static string Development => GetString(DevelopmentKey);
+
+		/// <summary>
+		/// Wall Street Horizon meta data
+		/// </summary>
+		public const string WshMetaKey = nameof(WshMeta);
+
+		/// <summary>
+		/// Wall Street Horizon meta data
+		/// </summary>
+		public static string WshMeta => GetString(WshMetaKey);
+
+		/// <summary>
+		/// Wall Street Horizon event data
+		/// </summary>
+		public const string WshEventKey = nameof(WshEvent);
+
+		/// <summary>
+		/// Wall Street Horizon event data
+		/// </summary>
+		public static string WshEvent => GetString(WshEventKey);
 	}
 }

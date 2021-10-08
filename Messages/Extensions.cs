@@ -4189,5 +4189,357 @@ namespace StockSharp.Messages
 
 			return defaultValue;
 		}
+
+		/// <summary>
+		/// To change the direction to opposite.
+		/// </summary>
+		/// <param name="side">The initial direction.</param>
+		/// <returns>The opposite direction.</returns>
+		public static Sides Invert(this Sides side)
+			=> side == Sides.Buy ? Sides.Sell : Sides.Buy;
+
+		/// <summary>
+		/// To check, whether the order was cancelled.
+		/// </summary>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if the order is cancelled, otherwise, <see langword="false" />.</returns>
+		public static bool IsCanceled(this ExecutionMessage order)
+		{
+			if (order == null)
+				throw new ArgumentNullException(nameof(order));
+
+			return order.OrderState == OrderStates.Done && order.Balance > 0;
+		}
+
+		/// <summary>
+		/// To check, is the order matched completely.
+		/// </summary>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if the order is matched completely, otherwise, <see langword="false" />.</returns>
+		public static bool IsMatched(this ExecutionMessage order)
+		{
+			if (order == null)
+				throw new ArgumentNullException(nameof(order));
+
+			return order.OrderState == OrderStates.Done && order.Balance == 0;
+		}
+
+		/// <summary>
+		/// To check, is a part of volume is implemented in the order.
+		/// </summary>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if part of volume is implemented, otherwise, <see langword="false" />.</returns>
+		public static bool IsMatchedPartially(this ExecutionMessage order)
+		{
+			if (order == null)
+				throw new ArgumentNullException(nameof(order));
+
+			return order.Balance > 0 && order.Balance != order.OrderVolume;
+		}
+
+		/// <summary>
+		/// To check, if no contract in order is implemented.
+		/// </summary>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if no contract is implemented, otherwise, <see langword="false" />.</returns>
+		public static bool IsMatchedEmpty(this ExecutionMessage order)
+		{
+			if (order == null)
+				throw new ArgumentNullException(nameof(order));
+
+			return order.Balance > 0 && order.Balance == order.OrderVolume;
+		}
+
+		/// <summary>
+		/// Is specified security is basket.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBasket(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return !security.BasketCode.IsEmpty();
+		}
+
+		/// <summary>
+		/// Is specified security is index.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsIndex(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.BasketCode is "WI" or "EI";
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to readable string.
+		/// </summary>
+		/// <param name="dt"><see cref="DataType"/> instance.</param>
+		/// <returns>Readable string.</returns>
+		public static string ToReadableString(this DataType dt)
+		{
+			if (dt == null)
+				throw new ArgumentNullException(nameof(dt));
+
+			var tf = (TimeSpan)dt.Arg;
+
+			var str = string.Empty;
+
+			if (tf.Days > 0)
+				str += LocalizedStrings.Str2918Params.Put(tf.Days);
+
+			if (tf.Hours > 0)
+				str = (str + " " + LocalizedStrings.Str2919Params.Put(tf.Hours)).Trim();
+
+			if (tf.Minutes > 0)
+				str = (str + " " + LocalizedStrings.Str2920Params.Put(tf.Minutes)).Trim();
+
+			if (tf.Seconds > 0)
+				str = (str + " " + LocalizedStrings.Seconds.Put(tf.Seconds)).Trim();
+
+			if (str.IsEmpty())
+				str = LocalizedStrings.Ticks;
+
+			return str;
+		}
+
+		/// <summary>
+		/// To get the type for the instrument in the ISO 10962 standard.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Type in ISO 10962 standard.</returns>
+		public static string Iso10962(this SecurityMessage security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			// https://en.wikipedia.org/wiki/ISO_10962
+
+			switch (security.SecurityType)
+			{
+				case SecurityTypes.Stock:
+					return "ESXXXX";
+				case SecurityTypes.Future:
+					return "FFXXXX";
+				case SecurityTypes.Option:
+				{
+					return security.OptionType switch
+					{
+						OptionTypes.Call => "OCXXXX",
+						OptionTypes.Put => "OPXXXX",
+						null => "OXXXXX",
+						_ => throw new ArgumentOutOfRangeException(nameof(security), security.OptionType, LocalizedStrings.Str1219),
+					};
+				}
+				case SecurityTypes.Index:
+					return "MRIXXX";
+				case SecurityTypes.Currency:
+					return "MRCXXX";
+				case SecurityTypes.Bond:
+					return "DBXXXX";
+				case SecurityTypes.Warrant:
+					return "RWXXXX";
+				case SecurityTypes.Forward:
+					return "FFMXXX";
+				case SecurityTypes.Swap:
+					return "FFWXXX";
+				case SecurityTypes.Commodity:
+					return "MRTXXX";
+				case SecurityTypes.Cfd:
+					return "MMCXXX";
+				case SecurityTypes.Adr:
+					return "MMAXXX";
+				case SecurityTypes.News:
+					return "MMNXXX";
+				case SecurityTypes.Weather:
+					return "MMWXXX";
+				case SecurityTypes.Fund:
+					return "EUXXXX";
+				case SecurityTypes.CryptoCurrency:
+					return "MMBXXX";
+				case null:
+					return "XXXXXX";
+				default:
+					throw new ArgumentOutOfRangeException(nameof(security), security.SecurityType, LocalizedStrings.Str1219);
+			}
+		}
+
+		/// <summary>
+		/// To convert the type in the ISO 10962 standard into <see cref="SecurityTypes"/>.
+		/// </summary>
+		/// <param name="cfi">Type in ISO 10962 standard.</param>
+		/// <returns>Security type.</returns>
+		public static SecurityTypes? Iso10962ToSecurityType(this string cfi)
+		{
+			if (cfi.IsEmpty())
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(cfi));
+			}
+
+			if (cfi.Length != 6)
+			{
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
+			}
+
+			switch (cfi[0])
+			{
+				case 'E':
+					return SecurityTypes.Stock;
+
+				case 'D':
+					return SecurityTypes.Bond;
+
+				case 'R':
+					return SecurityTypes.Warrant;
+
+				case 'O':
+					return SecurityTypes.Option;
+
+				case 'F':
+				{
+					return cfi[2] switch
+					{
+						'W' => SecurityTypes.Swap,
+						'M' => SecurityTypes.Forward,
+						_ => SecurityTypes.Future,
+					};
+				}
+
+				case 'M':
+				{
+					switch (cfi[1])
+					{
+						case 'R':
+						{
+							switch (cfi[2])
+							{
+								case 'I':
+									return SecurityTypes.Index;
+
+								case 'C':
+									return SecurityTypes.Currency;
+
+								case 'R':
+									return SecurityTypes.Currency;
+
+								case 'T':
+									return SecurityTypes.Commodity;
+							}
+
+							break;
+						}
+
+						case 'M':
+						{
+							switch (cfi[2])
+							{
+								case 'B':
+									return SecurityTypes.CryptoCurrency;
+
+								case 'W':
+									return SecurityTypes.Weather;
+
+								case 'A':
+									return SecurityTypes.Adr;
+
+								case 'C':
+									return SecurityTypes.Cfd;
+
+								case 'N':
+									return SecurityTypes.News;
+							}
+
+							break;
+						}
+					}
+
+					break;
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// To convert the type in the ISO 10962 standard into <see cref="OptionTypes"/>.
+		/// </summary>
+		/// <param name="cfi">Type in ISO 10962 standard.</param>
+		/// <returns>Option type.</returns>
+		public static OptionTypes? Iso10962ToOptionType(this string cfi)
+		{
+			if (cfi.IsEmpty())
+				throw new ArgumentNullException(nameof(cfi));
+
+			if (cfi[0] != 'O')
+				return null;
+			//throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
+
+			if (cfi.Length < 2)
+				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1605Params.Put(cfi));
+
+			return cfi[1] switch
+			{
+				'C' => OptionTypes.Call,
+				'P' => OptionTypes.Put,
+				'X' or ' ' => null,
+				_ => throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1606Params.Put(cfi)),
+			};
+		}
+
+		private static readonly SecurityIdGenerator _defaultGenerator = new();
+
+		/// <summary>
+		/// Returns the specified generator or the default in case of <see langword="null"/>.
+		/// </summary>
+		/// <param name="generator"><see cref="SecurityIdGenerator"/></param>
+		/// <returns><see cref="SecurityIdGenerator"/></returns>
+		public static SecurityIdGenerator EnsureGetGenerator(this SecurityIdGenerator generator) => generator ?? _defaultGenerator;
+
+		/// <summary>
+		/// Convert <see cref="SecurityId"/> to <see cref="SecurityId"/> value.
+		/// </summary>
+		/// <param name="securityId"><see cref="SecurityId"/> value.</param>
+		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
+		/// <param name="nullIfEmpty">Return <see langword="null"/> if <see cref="SecurityId"/> is empty.</param>
+		/// <returns><see cref="SecurityId"/> value.</returns>
+		public static string ToStringId(this SecurityId securityId, SecurityIdGenerator generator = null, bool nullIfEmpty = false)
+		{
+			var secCode = securityId.SecurityCode;
+			var boardCode = securityId.BoardCode;
+
+			if (nullIfEmpty)
+			{
+				if (secCode.IsEmpty() || boardCode.IsEmpty())
+					return null;
+			}
+
+			return generator.EnsureGetGenerator().GenerateId(secCode, boardCode);
+		}
+
+		/// <summary>
+		/// "All securities" id.
+		/// </summary>
+		public static readonly string AllSecurityId = $"{SecurityId.AssociatedBoardCode}@{SecurityId.AssociatedBoardCode}";
+
+		/// <summary>
+		/// Convert <see cref="SecurityId"/> to <see cref="SecurityId"/> value.
+		/// </summary>
+		/// <param name="id"><see cref="SecurityId"/> value.</param>
+		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
+		/// <returns><see cref="SecurityId"/> value.</returns>
+		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
+		{
+			if (id.EqualsIgnoreCase(AllSecurityId))
+				return default;
+
+			return generator.EnsureGetGenerator().Split(id);
+		}
 	}
 }

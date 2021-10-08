@@ -9,15 +9,14 @@
 
     <xNetVer>5.2.10</xNetVer>
     <MathNumVer>4.15.0</MathNumVer>
-    <ProtobufVer>3.0.73</ProtobufVer>
-    <HtmlAgilityPackVer>1.11.36</HtmlAgilityPackVer>
-    <JwtVer>8.2.3</JwtVer>
-    <FluentFtpVer>35.0.2</FluentFtpVer>
+    <ProtobufVer>3.0.101</ProtobufVer>
+    <HtmlAgilityPackVer>1.11.37</HtmlAgilityPackVer>
+    <JwtVer>8.4.2</JwtVer>
+    <FluentFtpVer>35.0.5</FluentFtpVer>
     <NitoVer>5.1.2</NitoVer>
     <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.2</SignalRVer>
     <NuGetApiVersion>5.11.0</NuGetApiVersion>
-    <SystemDataSqlClientVer>4.8.2</SystemDataSqlClientVer>
     <MsTestVer>2.2.7</MsTestVer>
     <MsTestSdkVer>16.11.0</MsTestSdkVer>
     <NewtonJsonVer>13.0.1</NewtonJsonVer>
@@ -25,6 +24,9 @@
     <MsBclAsyncInterfacesVer>5.0.0</MsBclAsyncInterfacesVer>
     <AsyncLinqVer>5.0.0</AsyncLinqVer>
     <TaskExtensionsVer>4.5.4</TaskExtensionsVer>
+    <PubnubPCLVer>5.0.1</PubnubPCLVer>
+    <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
+    <MicrosoftDataSqliteVer>5.0.10</MicrosoftDataSqliteVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
