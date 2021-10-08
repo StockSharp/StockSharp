@@ -685,45 +685,6 @@ namespace StockSharp.Algo
 			return security;
 		}
 
-		private static readonly SecurityIdGenerator _defaultGenerator = new();
-
-		private static SecurityIdGenerator GetGenerator(SecurityIdGenerator generator) => generator ?? _defaultGenerator;
-
-		/// <summary>
-		/// Convert <see cref="SecurityId"/> to <see cref="Security.Id"/> value.
-		/// </summary>
-		/// <param name="securityId"><see cref="SecurityId"/> value.</param>
-		/// <param name="generator">The instrument identifiers generator <see cref="Security.Id"/>. Can be <see langword="null"/>.</param>
-		/// <param name="nullIfEmpty">Return <see langword="null"/> if <see cref="SecurityId"/> is empty.</param>
-		/// <returns><see cref="Security.Id"/> value.</returns>
-		public static string ToStringId(this SecurityId securityId, SecurityIdGenerator generator = null, bool nullIfEmpty = false)
-		{
-			var secCode = securityId.SecurityCode;
-			var boardCode = securityId.BoardCode;
-
-			if (nullIfEmpty)
-			{
-				if (secCode.IsEmpty() || boardCode.IsEmpty())
-					return null;
-			}
-
-			return GetGenerator(generator).GenerateId(secCode, boardCode);
-		}
-
-		/// <summary>
-		/// Convert <see cref="Security.Id"/> to <see cref="SecurityId"/> value.
-		/// </summary>
-		/// <param name="id"><see cref="Security.Id"/> value.</param>
-		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
-		/// <returns><see cref="SecurityId"/> value.</returns>
-		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
-		{
-			if (id.EqualsIgnoreCase(TraderHelper.AllSecurity.Id))
-				return default;
-
-			return GetGenerator(generator).Split(id);
-		}
-
 		/// <summary>
 		/// To convert the portfolio into message.
 		/// </summary>
@@ -1551,7 +1512,7 @@ namespace StockSharp.Algo
 			// иногда в Security.Code может быть записано неправильное, и необходимо опираться на Security.Id
 			if (!security.Id.IsEmpty())
 			{
-				var id = GetGenerator(idGenerator).Split(security.Id);
+				var id = idGenerator.EnsureGetGenerator().Split(security.Id);
 
 				secCode = id.SecurityCode;
 

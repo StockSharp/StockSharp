@@ -4492,5 +4492,54 @@ namespace StockSharp.Messages
 				_ => throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1606Params.Put(cfi)),
 			};
 		}
+
+		private static readonly SecurityIdGenerator _defaultGenerator = new();
+
+		/// <summary>
+		/// Returns the specified generator or the default in case of <see langword="null"/>.
+		/// </summary>
+		/// <param name="generator"><see cref="SecurityIdGenerator"/></param>
+		/// <returns><see cref="SecurityIdGenerator"/></returns>
+		public static SecurityIdGenerator EnsureGetGenerator(this SecurityIdGenerator generator) => generator ?? _defaultGenerator;
+
+		/// <summary>
+		/// Convert <see cref="SecurityId"/> to <see cref="SecurityId"/> value.
+		/// </summary>
+		/// <param name="securityId"><see cref="SecurityId"/> value.</param>
+		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
+		/// <param name="nullIfEmpty">Return <see langword="null"/> if <see cref="SecurityId"/> is empty.</param>
+		/// <returns><see cref="SecurityId"/> value.</returns>
+		public static string ToStringId(this SecurityId securityId, SecurityIdGenerator generator = null, bool nullIfEmpty = false)
+		{
+			var secCode = securityId.SecurityCode;
+			var boardCode = securityId.BoardCode;
+
+			if (nullIfEmpty)
+			{
+				if (secCode.IsEmpty() || boardCode.IsEmpty())
+					return null;
+			}
+
+			return generator.EnsureGetGenerator().GenerateId(secCode, boardCode);
+		}
+
+		/// <summary>
+		/// "All securities" id.
+		/// </summary>
+		public static readonly string AllSecurityId = $"{SecurityId.AssociatedBoardCode}@{SecurityId.AssociatedBoardCode}";
+
+		/// <summary>
+		/// Convert <see cref="SecurityId"/> to <see cref="SecurityId"/> value.
+		/// </summary>
+		/// <param name="id"><see cref="SecurityId"/> value.</param>
+		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
+		/// <returns><see cref="SecurityId"/> value.</returns>
+		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
+		{
+			if (id.EqualsIgnoreCase(AllSecurityId))
+				return default;
+
+			return generator.EnsureGetGenerator().Split(id);
+		}
 	}
 }
