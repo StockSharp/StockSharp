@@ -453,7 +453,6 @@ namespace SampleConnection
 			{
 				var mdMsg = new MarketDataMessage
 				{
-					SecurityId = security.ToSecurityId(),
 					IsSubscribe = true,
 					DataType2 = DataType.TimeFrame(tf),
 					From = settings.From,
@@ -462,6 +461,7 @@ namespace SampleConnection
 					Skip = settings.Skip,
 					Count = settings.Count,
 				};
+				security.ToMessage().CopyTo(mdMsg);
 				var chartWnd = new ChartWindow(mdMsg);
 
 				_chartWindows.Add(chartWnd);
