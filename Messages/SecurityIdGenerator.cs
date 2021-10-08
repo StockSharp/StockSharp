@@ -9,10 +9,22 @@ namespace StockSharp.Messages
 	/// </summary>
 	public class SecurityIdGenerator
 	{
+		private string _delimiter = "@";
+
 		/// <summary>
 		/// The delimiter between the instrument code and the class.
 		/// </summary>
-		public string Delimiter { get; set; } = "@";
+		public string Delimiter
+		{
+			get => _delimiter;
+			set
+			{
+				if (value.IsEmpty())
+					throw new ArgumentNullException(nameof(value));
+
+				_delimiter = value;
+			}
+		}
 
 		/// <summary>
 		/// Generate <see cref="SecurityId"/> security.
