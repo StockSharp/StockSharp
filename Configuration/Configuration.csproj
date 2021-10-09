@@ -9,6 +9,6 @@
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVersion)" />
+    <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVer)" />
   </ItemGroup>
 </Project>
