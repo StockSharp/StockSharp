@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Import
 			}
 			else if (msgType == typeof(ExecutionMessage))
 			{
-				switch ((ExecutionTypes)dataType.Arg)
+				switch (dataType.Arg.To<ExecutionTypes>())
 				{
 					case ExecutionTypes.Tick:
 					{
