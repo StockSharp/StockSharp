@@ -21,9 +21,6 @@
     <MsTestSdkVer>16.11.0</MsTestSdkVer>
     <NewtonJsonVer>13.0.1</NewtonJsonVer>
     <ReactiveXVer>5.0.0</ReactiveXVer>
-    <MsBclAsyncInterfacesVer>5.0.0</MsBclAsyncInterfacesVer>
-    <AsyncLinqVer>5.0.0</AsyncLinqVer>
-    <TaskExtensionsVer>4.5.4</TaskExtensionsVer>
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
     <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
     <MicrosoftDataSqliteVer>5.0.10</MicrosoftDataSqliteVer>
@@ -63,11 +60,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(RepoGitHubPath)IsExternalInit.cs" Link="Properties\IsExternalInit.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <!-- need this to avoid dependency issues when using from .net standard libs -->
-    <PackageReference Include="System.Linq.Async" Version="$(AsyncLinqVer)" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MsBclAsyncInterfacesVer)" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="$(TaskExtensionsVer)" />
   </ItemGroup>
 </Project>
