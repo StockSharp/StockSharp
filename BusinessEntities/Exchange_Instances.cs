@@ -1147,6 +1147,15 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
+		/// Information about <see cref="Bvmt"/>.
+		/// </summary>
+		public static Exchange Bvmt { get; } = new Exchange
+		{
+			Name = "BVMT",
+			FullNameLoc = LocalizedStrings.TunisBvmtKey,
+		};
+
+		/// <summary>
 		/// Information about <see cref="IQFeed"/>.
 		/// </summary>
 		public static Exchange IQFeed { get; } = new Exchange

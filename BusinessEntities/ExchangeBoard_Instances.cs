@@ -3613,6 +3613,15 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
+		/// Information about board <see cref="Bvmt"/>.
+		/// </summary>
+		public static ExchangeBoard Bvmt { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bvmt.Name,
+			Exchange = Exchange.Bvmt,
+		};
+
+		/// <summary>
 		/// Information about board <see cref="IQFeed"/>.
 		/// </summary>
 		public static ExchangeBoard IQFeed { get; } = new ExchangeBoard

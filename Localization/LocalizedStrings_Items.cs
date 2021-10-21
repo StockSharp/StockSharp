@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Tunis BVMT
+		/// </summary>
+		public const string TunisBvmtKey = nameof(TunisBvmt);
+
+		/// <summary>
+		/// Tunis BVMT
+		/// </summary>
+		public static string TunisBvmt => GetString(TunisBvmtKey);
+
+		/// <summary>
 		/// Web socket addresses
 		/// </summary>
 		public const string WebSocketAddressesKey = nameof(WebSocketAddresses);
