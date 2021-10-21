@@ -6,4 +6,5 @@
   <ItemGroup>
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
+  <Import Project="$(RepoGitHubPath)async_deps.props" />
 </Project>
