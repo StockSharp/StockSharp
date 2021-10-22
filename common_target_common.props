@@ -1,5 +1,10 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <SSProjectName>$([System.String]::Copy('StockSharp.$(MSBuildProjectName)').Replace('GitHub',''))</SSProjectName>
+
+    <RootNamespace>$(SSProjectName)</RootNamespace>
+    <AssemblyName>$(SSProjectName)</AssemblyName>
+
     <ProductVersion>9.0.30729</ProductVersion>
     <!--<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>-->
     <EcngVer>1.0.*</EcngVer>

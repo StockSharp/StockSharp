@@ -2,8 +2,6 @@
   <Import Project="..\common.props" />
   <PropertyGroup>
     <ProjectGuid>{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}</ProjectGuid>
-    <RootNamespace>StockSharp.Media</RootNamespace>
-    <AssemblyName>StockSharp.Media</AssemblyName>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>

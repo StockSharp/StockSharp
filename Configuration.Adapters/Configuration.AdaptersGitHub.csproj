@@ -3,7 +3,6 @@
   <PropertyGroup>
     <ProjectGuid>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</ProjectGuid>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
-    <AssemblyName>StockSharp.Configuration.Adapters</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="StockSharp.AlfaDirect" Version="$(StockSharpVer)" />
