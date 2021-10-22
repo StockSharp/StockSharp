@@ -13,6 +13,7 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Testing
 {
 	using System;
@@ -23,6 +24,8 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo.Positions;
+	using StockSharp.Algo.Strategies;
     using StockSharp.BusinessEntities;
     using StockSharp.Messages;
 	using StockSharp.Algo.Storages;
@@ -71,6 +74,7 @@ namespace StockSharp.Algo.Testing
 			InChannel = inChannel;
 
 			_inAdapter = new SubscriptionOnlineMessageAdapter(Emulator);
+			_inAdapter = new PositionMessageAdapter(_inAdapter, new StrategyPositionManager(Emulator.IsPositionsEmulationRequired ?? true));
 			_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
 			_inAdapter.NewOutMessage += RaiseNewOutMessage;
 
@@ -101,7 +105,7 @@ namespace StockSharp.Algo.Testing
 
 		/// <inheritdoc />
 		public override IEnumerable<MessageTypes> SupportedInMessages => InnerAdapter.SupportedInMessages.Concat(Emulator.SupportedInMessages).Distinct().ToArray();
-		
+
 		/// <inheritdoc />
 		public override IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages.Concat(Emulator.SupportedOutMessages).Distinct().ToArray();
 
