@@ -2,8 +2,6 @@
   <Import Project="..\common.props" />
   <PropertyGroup>
     <ProjectGuid>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</ProjectGuid>
-    <RootNamespace>StockSharp.BusinessEntities</RootNamespace>
-    <AssemblyName>StockSharp.BusinessEntities</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />

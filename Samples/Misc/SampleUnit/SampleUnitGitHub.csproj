@@ -3,8 +3,6 @@
   <PropertyGroup>
     <ProjectGuid>{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SampleUnit</RootNamespace>
-    <AssemblyName>SampleUnit</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>

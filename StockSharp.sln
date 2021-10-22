@@ -56,7 +56,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleConnectionGitHub", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitStamp", "Samples\Connectors\BitStamp\BitStamp.csproj", "{43ECFB7C-86B0-45B9-92C4-F14CA7204E34}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIXDialects", "Samples\Connectors\FIXDialects\FIXDialects.csproj", "{11FDEA93-3E5D-4448-85C1-5EA355454081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fix.Dialects", "Samples\Connectors\Fix.Dialects\Fix.Dialects.csproj", "{11FDEA93-3E5D-4448-85C1-5EA355454081}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media", "Media\Media.csproj", "{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}"
 EndProject

@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common.props" />
   <PropertyGroup>
-    <RootNamespace>StockSharp.Algo.Export</RootNamespace>
-    <AssemblyName>StockSharp.Algo.Export</AssemblyName>
     <ProjectGuid>{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>

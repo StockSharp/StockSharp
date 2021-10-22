@@ -2,8 +2,6 @@
   <Import Project="..\common.props" />
   <PropertyGroup>
     <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
-    <RootNamespace>StockSharp.Messages</RootNamespace>
-    <AssemblyName>StockSharp.Messages</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Security" Version="$(EcngVer)" />
