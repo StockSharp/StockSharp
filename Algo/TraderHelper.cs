@@ -644,10 +644,21 @@ namespace StockSharp.Algo
 		/// <param name="depth">The regular order book.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse order book.</returns>
+		[Obsolete("Use method with decimal priceStep parameter")]
 		public static MarketDepth Sparse(this MarketDepth depth, Unit priceStep)
-		{
-			return depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
-		}
+			=> depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
+
+		/// <summary>
+		/// To create from regular order book a sparse one.
+		/// </summary>
+		/// <remarks>
+		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
+		/// <param name="depth">The regular order book.</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <returns>The sparse order book.</returns>
+		public static MarketDepth Sparse(this MarketDepth depth, decimal priceStep)
+			=> depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
 
 		/// <summary>
 		/// To merge the initial order book and its sparse representation.
@@ -672,13 +683,21 @@ namespace StockSharp.Algo
 		/// <param name="depth">The order book to be grouped.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>The grouped order book.</returns>
-		public static MarketDepth Group(this MarketDepth depth, Unit priceRange)
-		{
-			return depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
-		}
+		public static MarketDepth Group(this MarketDepth depth, decimal priceRange)
+			=> depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
 
 		/// <summary>
-		/// To de-group the order book, grouped using the method <see cref="Group(MarketDepth,Unit)"/>.
+		/// To group the order book by the price range.
+		/// </summary>
+		/// <param name="depth">The order book to be grouped.</param>
+		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
+		/// <returns>The grouped order book.</returns>
+		[Obsolete("Use method with decimal priceRange parameter")]
+		public static MarketDepth Group(this MarketDepth depth, Unit priceRange)
+			=> depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
+
+		/// <summary>
+		/// To de-group the order book, grouped using the method <see cref="Group(MarketDepth,decimal)"/>.
 		/// </summary>
 		/// <param name="depth">The grouped order book.</param>
 		/// <returns>The de-grouped order book.</returns>

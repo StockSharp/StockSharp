@@ -165,8 +165,8 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str284Key,
 			GroupName = LocalizedStrings.Str1559Key,
 			Order = 1)]
-		public QuoteChange[] Asks2 
-		{ 
+		public QuoteChange[] Asks2
+		{
 			get => _asks2;
 			private set => _asks2 = value ?? throw new ArgumentNullException(nameof(value));
 		}
@@ -381,7 +381,7 @@ namespace StockSharp.BusinessEntities
 
 			if (bid == null && ask == null)
 				return null;
-				
+
 			return new MarketDepthPair(Security, bid, ask);
 		}
 
@@ -508,7 +508,7 @@ namespace StockSharp.BusinessEntities
 			//}
 
 			//Truncate(bidsArr, asksArr, lastChangeTime);
-			
+
 			return Update(bidsArr, asksArr, lastChangeTime);
 		}
 
@@ -529,7 +529,7 @@ namespace StockSharp.BusinessEntities
 
 			_bids2 = bids.ToArray();
 			_asks2 = asks.ToArray();
-			
+
 			UpdateDepthAndTime(lastChangeTime, false);
 			RaiseQuotesChanged();
 
