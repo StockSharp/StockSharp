@@ -14,9 +14,12 @@
 		public QuotesWindow()
 		{
 			InitializeComponent();
+
+			Loaded += (_, _) => DepthCtrl.MaxDepth = MaxDepth ?? MarketDepthControl.DefaultDepth;
 		}
 
 		public Security Security { get; set; }
+		public int? MaxDepth { get; set; }
 
 		private static Connector Connector => MainWindow.Instance.MainPanel.Connector;
 

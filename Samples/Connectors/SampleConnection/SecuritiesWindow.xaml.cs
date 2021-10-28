@@ -314,6 +314,7 @@ namespace SampleConnection
 				{
 					Title = security.Id + " " + LocalizedStrings.MarketDepth,
 					Security = security,
+					MaxDepth = settings?.MaxDepth
 				};
 
 				//window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
