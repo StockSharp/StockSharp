@@ -6,7 +6,7 @@
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Net;
+	using Ecng.Serialization;
 	
 	using Newtonsoft.Json;
 
@@ -36,6 +36,7 @@
 		/// </remarks>
 		public bool Indent { get; set; } = true;
 
+#pragma warning disable CS0612 // Type or member is obsolete
 		/// <inheritdoc />
 		protected override (int, DateTimeOffset?) Export(IEnumerable<QuoteChangeMessage> messages)
 		{
@@ -475,6 +476,7 @@
 					.WriteProperty("leverage", item.Leverage);
 			});
 		}
+#pragma warning restore CS0612 // Type or member is obsolete
 
 		private (int, DateTimeOffset?) Do<TValue>(IEnumerable<TValue> values, Action<JsonTextWriter, TValue> action)
 		{

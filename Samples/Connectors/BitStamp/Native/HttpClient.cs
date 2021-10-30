@@ -25,6 +25,7 @@ namespace StockSharp.BitStamp.Native
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Net;
+	using Ecng.Serialization;
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
@@ -289,7 +290,7 @@ namespace StockSharp.BitStamp.Native
 			return new RestRequest(method);
 		}
 
-		private static readonly JsonSerializerSettings _serializerSettings = NetworkHelper.CreateJsonSerializerSettings();
+		private static readonly JsonSerializerSettings _serializerSettings = JsonHelper.CreateJsonSerializerSettings();
 
 		private IRestRequest ApplySecret(IRestRequest request, Uri url)
 		{

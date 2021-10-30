@@ -3,7 +3,7 @@
 	using System;
 	using System.Reflection;
 
-	using Ecng.Net;
+	using Ecng.Serialization;
 
 	using Newtonsoft.Json;
 

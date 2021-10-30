@@ -19,6 +19,7 @@ namespace StockSharp.BitStamp.Native
 
 	using Ecng.Common;
 	using Ecng.Net;
+	using Ecng.Serialization;
 
 	using Newtonsoft.Json.Linq;
 
