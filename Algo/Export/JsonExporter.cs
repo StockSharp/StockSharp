@@ -6,8 +6,8 @@
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Net;
-
+	using Ecng.Serialization;
+	
 	using Newtonsoft.Json;
 
 	using StockSharp.Messages;
@@ -238,10 +238,10 @@
 
 				if (security.SecurityType != null)
 					writer.WriteProperty("type", security.SecurityType.Value);
-
+				
 				if (!security.CfiCode.IsEmpty())
 					writer.WriteProperty("cfiCode", security.CfiCode);
-
+				
 				if (security.Shortable != null)
 					writer.WriteProperty("shortable", security.Shortable.Value);
 
@@ -482,7 +482,7 @@
 		{
 			var count = 0;
 			var lastTime = default(DateTimeOffset?);
-
+			
 			using (var writer = new StreamWriter(Path))
 			{
 				var json = new JsonTextWriter(writer);
