@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Storages.Remote
 		//		if (fields == null)
 		//			throw new ArgumentNullException(nameof(fields));
 
-		//		_client.Invoke(f => f.CreateSecurityExtendedFields(_client.SessionId, _storageName, fields.Select(t => Tuple.Create(t.Item1, Converter.GetAlias(t.Item2) ?? t.Item2.GetTypeName(false))).ToArray()));
+		//		_client.Invoke(f => f.CreateSecurityExtendedFields(_client.SessionId, _storageName, fields.Select(t => Tuple.Create(t.Item1, t.Item2.TryGetCSharpAlias() ?? t.Item2.GetTypeName(false))).ToArray()));
 		//	}
 
 		//	string IRemoteExtendedStorage.StorageName => _storageName;

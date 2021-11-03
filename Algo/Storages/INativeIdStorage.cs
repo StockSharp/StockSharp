@@ -319,7 +319,7 @@ namespace StockSharp.Algo.Storages
 
 		private static string GetTypeName(Type nativeIdType)
 		{
-			return Converter.GetAlias(nativeIdType) ?? nativeIdType.GetTypeName(false);
+			return nativeIdType.TryGetCSharpAlias() ?? nativeIdType.GetTypeName(false);
 		}
 
 		private void LoadFile(string fileName)
