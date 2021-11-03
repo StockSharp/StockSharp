@@ -29,6 +29,12 @@
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
     <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
     <MicrosoftDataSqliteVer>5.0.10</MicrosoftDataSqliteVer>
+    <AsyncLinqVer>5.0.0</AsyncLinqVer>
+    <MsBclAsyncInterfacesVer>5.0.0</MsBclAsyncInterfacesVer>
+    <TaskExtensionsVer>4.5.4</TaskExtensionsVer>
+    <SysChannelsVer>5.0.0</SysChannelsVer>
+    <SysPipelinesVer>5.0.1</SysPipelinesVer>
+    <SBEVer>1.23.1.1</SBEVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
