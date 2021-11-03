@@ -4,6 +4,7 @@ namespace StockSharp.BitStamp
 	using System.ComponentModel.DataAnnotations;
 	using System.Security;
 
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 

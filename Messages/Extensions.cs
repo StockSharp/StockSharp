@@ -21,7 +21,6 @@ namespace StockSharp.Messages
 	using System.Globalization;
 	using System.Linq;
 	using System.Net;
-	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -2243,16 +2242,6 @@ namespace StockSharp.Messages
 		/// Anonymous account.
 		/// </summary>
 		public static string AnonymousPortfolioName = "Anonymous (S#)";
-
-		/// <summary>
-		/// Convert key to numeric identifier.
-		/// </summary>
-		/// <param name="key">Key.</param>
-		/// <returns>Identifier.</returns>
-		public static int? ToId(this SecureString key)
-		{
-			return key?.UnSecure().GetDeterministicHashCode();
-		}
 
 		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 		{
