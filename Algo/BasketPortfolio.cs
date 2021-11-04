@@ -24,7 +24,6 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Basket portfolio.
@@ -159,7 +158,7 @@ namespace StockSharp.Algo
 				foreach (var pair in CachedPairs)
 				{
 					var portfolio = pair.Key;
-					var weight = (Currency)pair.Value;
+					var weight = pair.Value;
 
 					beginValue += Multiple(beginValue, weight, portfolio.BeginValue);
 					currentValue += Multiple(currentValue, weight, portfolio.CurrentValue);
@@ -173,18 +172,15 @@ namespace StockSharp.Algo
 				_parent.Commission = commission.Value;
 			}
 
-			private static Currency Multiple(Currency currency, Currency weight, Currency part)
+			private static Currency Multiple(Currency currency, decimal weight, decimal? part)
 			{
-				if (currency == null)
+				if (currency is null)
 					throw new ArgumentNullException(nameof(currency));
 
-				if (part == null)
+				if (part is null)
 					throw new ArgumentNullException(nameof(part));
 
-				if (currency.Type != part.Type)
-					part = part.Convert(currency.Type);
-
-				return currency * weight * part;
+				return (currency.Value * weight * part.Value).ToCurrency(currency.Type);
 			}
 		}
 

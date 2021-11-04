@@ -2192,13 +2192,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines the specified type is crypto currency.
-		/// </summary>
-		/// <param name="type">Currency type.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsCrypto(this CurrencyTypes type) => type.GetAttributeOfType<CryptoAttribute>() != null;
-
-		/// <summary>
 		/// StockSharp news source.
 		/// </summary>
 		public const string NewsStockSharpSource = nameof(StockSharp);
