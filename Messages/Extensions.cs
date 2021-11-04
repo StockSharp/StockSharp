@@ -2197,36 +2197,6 @@ namespace StockSharp.Messages
 		public const string NewsStockSharpSource = nameof(StockSharp);
 
 		/// <summary>
-		/// Determines whether the specified news related with StockSharp.
-		/// </summary>
-		/// <param name="news">News.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsStockSharp(this NewsMessage news)
-		{
-			if (news == null)
-				throw new ArgumentNullException(nameof(news));
-
-			return news.Source.EqualsIgnoreCase(NewsStockSharpSource);
-		}
-
-		/// <summary>
-		/// Make news related with StockSharp.
-		/// </summary>
-		/// <param name="news">News.</param>
-		/// <returns>News.</returns>
-		public static NewsMessage MakeAsStockSharp(this NewsMessage news)
-		{
-			if (news == null)
-				throw new ArgumentNullException(nameof(news));
-
-			if (!news.Story.IsEmpty())
-				throw new ArgumentException(nameof(news));
-
-			news.Story = NewsStockSharpSource;
-			return news;
-		}
-
-		/// <summary>
 		/// Simulator.
 		/// </summary>
 		public static string SimulatorPortfolioName = "Simulator (S#)";
