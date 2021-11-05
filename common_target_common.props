@@ -18,23 +18,14 @@
     <HtmlAgilityPackVer>1.11.37</HtmlAgilityPackVer>
     <JwtVer>8.4.2</JwtVer>
     <FluentFtpVer>35.0.5</FluentFtpVer>
-    <NitoVer>5.1.2</NitoVer>
     <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.2</SignalRVer>
     <NuGetApiVer>5.11.0</NuGetApiVer>
     <MsTestVer>2.2.7</MsTestVer>
-    <MsTestSdkVer>16.11.0</MsTestSdkVer>
-    <NewtonJsonVer>13.0.1</NewtonJsonVer>
-    <ReactiveXVer>5.0.0</ReactiveXVer>
-    <PubnubPCLVer>5.0.1</PubnubPCLVer>
+    <MsTestSdkVer>17.0.0</MsTestSdkVer>
+    <PubnubPCLVer>5.2.0</PubnubPCLVer>
     <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
-    <MicrosoftDataSqliteVer>5.0.10</MicrosoftDataSqliteVer>
-    <AsyncLinqVer>5.0.0</AsyncLinqVer>
-    <MsBclAsyncInterfacesVer>5.0.0</MsBclAsyncInterfacesVer>
-    <TaskExtensionsVer>4.5.4</TaskExtensionsVer>
-    <SysChannelsVer>5.0.0</SysChannelsVer>
-    <SysPipelinesVer>5.0.1</SysPipelinesVer>
-    <SBEVer>1.23.1.1</SBEVer>
+    <MicrosoftDataSqliteVer>5.0.11</MicrosoftDataSqliteVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
