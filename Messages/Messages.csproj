@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Security" Version="$(EcngVer)" />
+	<PackageReference Include="Ecng.Serialization.Obsolete" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />
