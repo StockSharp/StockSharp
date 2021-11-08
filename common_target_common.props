@@ -23,7 +23,10 @@
     <NuGetApiVer>5.11.0</NuGetApiVer>
     <MsTestVer>2.2.7</MsTestVer>
     <MsTestSdkVer>17.0.0</MsTestSdkVer>
-    <PubnubPCLVer>5.2.0</PubnubPCLVer>
+    
+    <!-- do not update until task is resolved: https://stocksharp.myjetbrains.com/youtrack/issue/ISLR-10 -->
+    <PubnubPCLVer>5.0.1</PubnubPCLVer>
+    
     <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
     <MicrosoftDataSqliteVer>5.0.11</MicrosoftDataSqliteVer>
     <AsyncLinqVer>5.0.0</AsyncLinqVer>
