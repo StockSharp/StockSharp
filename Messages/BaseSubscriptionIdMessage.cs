@@ -20,12 +20,10 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		public long SubscriptionId { get; set; }
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		public long[] SubscriptionIds { get; set; }
 

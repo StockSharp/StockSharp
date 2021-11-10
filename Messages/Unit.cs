@@ -33,7 +33,7 @@ namespace StockSharp.Messages
 	/// Measure units.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public enum UnitTypes
 	{
 		/// <summary>
@@ -76,7 +76,7 @@ namespace StockSharp.Messages
 	/// Special class, allows to set the value as a percentage, absolute, points and pips values.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable
 	{
 		static Unit()
@@ -153,7 +153,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		public Func<UnitTypes, decimal?> GetTypeValue
 		{

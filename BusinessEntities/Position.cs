@@ -24,7 +24,6 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -126,7 +125,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// Required if additional information is stored in the program. For example, the amount of commission paid.
 		/// </remarks>
-		[Ignore]
+		//[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
@@ -147,7 +146,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Position price.
 		/// </summary>
-		[Ignore]
+		//[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str256Key)]
 		[DescriptionLoc(LocalizedStrings.Str428Key)]
@@ -171,7 +170,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Average price.
 		/// </summary>
-		[Ignore]
+		//[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.AveragePriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str429Key)]
@@ -195,7 +194,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Unrealized profit.
 		/// </summary>
-		[Ignore]
+		//[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str258Key)]
 		[DescriptionLoc(LocalizedStrings.Str430Key)]
@@ -219,7 +218,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Realized profit.
 		/// </summary>
-		[Ignore]
+		//[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str259Key)]
 		[DescriptionLoc(LocalizedStrings.Str431Key)]
@@ -378,7 +377,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str251Key)]
 		[MainCategory]
-		//[Nullable]
 		public CurrencyTypes? Currency
 		{
 			get => _currency;
@@ -398,7 +396,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 		[DescriptionLoc(LocalizedStrings.ExpiryDateKey)]
 		[MainCategory]
-		//[Nullable]
 		public DateTimeOffset? ExpirationDate
 		{
 			get => _expirationDate;
@@ -421,7 +418,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Portfolio, in which position is created.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 		[DescriptionLoc(LocalizedStrings.Str270Key)]
@@ -431,7 +427,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Security, for which a position was created.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str271Key)]
@@ -512,7 +507,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Commission (taker).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? CommissionTaker
@@ -530,7 +524,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Commission (maker).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? CommissionMaker
@@ -548,7 +541,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Orders (bids).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public int? BuyOrdersCount
@@ -566,7 +558,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Orders (asks).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public int? SellOrdersCount
@@ -584,7 +575,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Margin (buy).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? BuyOrdersMargin
@@ -602,7 +592,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Margin (sell).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? SellOrdersMargin
@@ -620,7 +609,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Orders (margin).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? OrdersMargin
@@ -638,7 +626,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Orders.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public int? OrdersCount
@@ -656,7 +643,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Trades.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public int? TradesCount

@@ -4,8 +4,7 @@
     <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Security" Version="$(EcngVer)" />
-	<PackageReference Include="Ecng.Serialization.Obsolete" Version="$(EcngVer)" />
+	<PackageReference Include="Ecng.Serialization" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />

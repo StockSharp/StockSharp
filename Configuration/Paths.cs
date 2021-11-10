@@ -501,6 +501,11 @@
 			=> CreateSerializer<T>().Serialize(value);
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public static ISerializer LegacySerializer { get; set; }
+
+		/// <summary>
 		/// Deserialize value from the specified file.
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
@@ -515,13 +520,11 @@
 
 			var legacyFile = filePath.MakeLegacy();
 
-			if (File.Exists(legacyFile))
+			if (File.Exists(legacyFile) && LegacySerializer != null)
 			{
 				// TODO 2021-09-09 remove 1 year later
 
-#pragma warning disable CS0618 // Type or member is obsolete
-				value = new XmlSerializer<T>().Deserialize(legacyFile);
-#pragma warning restore CS0618 // Type or member is obsolete
+				value = LegacySerializer.GetSerializer<T>().Deserialize(legacyFile);
 
 				static void TryFix(SettingsStorage storage)
 				{
@@ -636,9 +639,10 @@
 			}
 			catch
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
-				var xmlSer = typeof(XmlSerializer<>).Make(serializer.Type).CreateInstance<ISerializer>();
-#pragma warning restore CS0618 // Type or member is obsolete
+				if (LegacySerializer is null)
+					return null;
+
+				var xmlSer = LegacySerializer.GetSerializer(serializer.Type);
 
 				if (xmlSer.GetType() == serializer.GetType())
 					throw;

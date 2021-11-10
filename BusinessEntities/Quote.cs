@@ -22,7 +22,6 @@ namespace StockSharp.BusinessEntities
 	using System.Xml.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -67,7 +66,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// The instrument by which the quote is received.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public Security Security { get; set; }
@@ -103,7 +101,6 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<string, object> _extensionInfo;
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
@@ -119,7 +116,6 @@ namespace StockSharp.BusinessEntities
 		/// Orders count.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		public int? OrdersCount { get; set; }
 
 		/// <summary>

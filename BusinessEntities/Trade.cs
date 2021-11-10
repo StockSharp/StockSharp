@@ -48,7 +48,6 @@ namespace StockSharp.BusinessEntities
 		/// Trade ID.
 		/// </summary>
 		[DataMember]
-		[Identity]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str361Key,
@@ -72,7 +71,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// The instrument, on which the trade was completed.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[XmlIgnore]
 		[Browsable(false)]
 		public Security Security { get; set; }
@@ -129,7 +127,6 @@ namespace StockSharp.BusinessEntities
 		/// Order side (buy or sell), which led to the trade.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str128Key,
@@ -148,21 +145,18 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.IsSystemTradeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 6)]
-		//[Nullable]
 		public bool? IsSystem { get; set; }
 
 		/// <summary>
 		/// System trade status.
 		/// </summary>
 		[Browsable(false)]
-		//[Nullable]
 		public int? Status { get; set; }
 
 		/// <summary>
 		/// Number of open positions (open interest).
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str150Key,
@@ -175,7 +169,6 @@ namespace StockSharp.BusinessEntities
 		/// Is tick ascending or descending in price.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str157Key,
@@ -194,7 +187,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str382Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 7)]
-		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
@@ -231,7 +223,6 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<string, object> _extensionInfo;
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),

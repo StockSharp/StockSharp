@@ -86,7 +86,6 @@ namespace StockSharp.Messages
 		//	Order = 2)]
 		//[DataMember]
 		[XmlIgnore]
-		[Ignore]
 		[Browsable(false)]
 		public DateTime[] SpecialWorkingDays
 		{
@@ -115,7 +114,6 @@ namespace StockSharp.Messages
 		//	GroupName = LocalizedStrings.GeneralKey,
 		//	Order = 3)]
 		[XmlIgnore]
-		[Ignore]
 		[Browsable(false)]
 		public DateTime[] SpecialHolidays
 		{

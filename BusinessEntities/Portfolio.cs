@@ -19,8 +19,6 @@ namespace StockSharp.BusinessEntities
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	using Ecng.Serialization;
-
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -46,7 +44,6 @@ namespace StockSharp.BusinessEntities
 		/// Portfolio code name.
 		/// </summary>
 		[DataMember]
-		[Identity]
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
 		[DescriptionLoc(LocalizedStrings.Str247Key)]
 		[MainCategory]
@@ -63,26 +60,9 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		//[field: NonSerialized]
-		//private IConnector _connector;
-
-		///// <summary>
-		///// Connection to the trading system, through which this portfolio has been loaded.
-		///// </summary>
-		//[Ignore]
-		//[XmlIgnore]
-		//[Browsable(false)]
-		//[Obsolete("The property Connector was obsoleted and is always null.")]
-		//public IConnector Connector
-		//{
-		//	get { return _connector; }
-		//	set { _connector = value; }
-		//}
-
 		/// <summary>
 		/// Exchange board, for which the current portfolio is active.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str544Key)]
@@ -98,7 +78,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
 		[DescriptionLoc(LocalizedStrings.Str252Key)]
 		[MainCategory]
-		//[Nullable]
 		[Browsable(false)]
 		public PortfolioStates? State
 		{

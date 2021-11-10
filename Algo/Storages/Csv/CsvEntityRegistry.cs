@@ -24,81 +24,6 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class CsvEntityRegistry : IEntityRegistry
 	{
-		private class FakeStorage : IStorage
-		{
-			private readonly IEntityRegistry _registry;
-
-			public FakeStorage(IEntityRegistry registry)
-			{
-				_registry = registry ?? throw new ArgumentNullException(nameof(registry));
-			}
-
-			public long GetCount<TEntity>()
-			{
-				return 0;
-			}
-
-			public TEntity Add<TEntity>(TEntity entity)
-			{
-				Added?.Invoke(entity);
-				return entity;
-			}
-
-			public TEntity GetBy<TEntity>(SerializationItemCollection by)
-			{
-				return _registry.Securities.ReadById(by[0].Value).To<TEntity>();
-				//throw new NotSupportedException();
-			}
-
-			public TEntity GetById<TEntity>(object id)
-			{
-				throw new NotSupportedException();
-			}
-
-			public IEnumerable<TEntity> GetGroup<TEntity>(long startIndex, long count, Field orderBy, ListSortDirection direction)
-			{
-				throw new NotSupportedException();
-			}
-
-			public TEntity Update<TEntity>(TEntity entity)
-			{
-				Updated?.Invoke(entity);
-				return entity;
-			}
-
-			public void Remove<TEntity>(TEntity entity)
-			{
-				Removed?.Invoke(entity);
-			}
-
-			public void Clear<TEntity>()
-			{
-			}
-
-			public void ClearCache()
-			{
-			}
-
-			public IBatchContext BeginBatch()
-			{
-				return new BatchContext(this);
-			}
-
-			public void CommitBatch()
-			{
-			}
-
-			public void EndBatch()
-			{
-			}
-
-			public event Action<object> Added;
-
-			public event Action<object> Updated;
-
-			public event Action<object> Removed;
-		}
-
 		private class ExchangeCsvList : CsvEntityList<string, Exchange>
 		{
 			public ExchangeCsvList(CsvEntityRegistry registry)
@@ -1052,9 +977,6 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public string Path { get; set; }
 
-		/// <inheritdoc />
-		public IStorage Storage { get; }
-
 		private Encoding _encoding = Encoding.UTF8;
 
 		/// <summary>
@@ -1127,7 +1049,6 @@ namespace StockSharp.Algo.Storages.Csv
 		public CsvEntityRegistry(string path)
 		{
 			Path = path ?? throw new ArgumentNullException(nameof(path));
-			Storage = new FakeStorage(this);
 
 			Add(_exchanges = new ExchangeCsvList(this));
 			Add(_exchangeBoards = new ExchangeBoardCsvList(this));

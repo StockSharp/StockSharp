@@ -7,12 +7,11 @@ namespace StockSharp.Messages
 
 	using Ecng.Common;
 	using Ecng.Collections;
-	using Ecng.Serialization;
 
 	/// <summary>
 	/// Command types.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public enum CommandTypes
 	{
@@ -116,7 +115,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Command scopes.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public enum CommandScopes
 	{
@@ -203,7 +202,7 @@ namespace StockSharp.Messages
 	/// The message contains information about command to change state.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public class CommandMessage : BaseRequestMessage
 	{
 		/// <summary>
@@ -256,7 +255,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Parameters.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		public IDictionary<string, (string type, string value)> Parameters => _parameters;
 

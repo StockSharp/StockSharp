@@ -248,7 +248,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Candle arg.
 		/// </summary>
-		[Ignore]
 		public abstract object Arg { get; set; }
 
 		DataType ISubscriptionIdMessage.DataType => DataType.Create(GetType(), Arg);
@@ -273,12 +272,10 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		public long SubscriptionId { get; set; }
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		public long[] SubscriptionIds { get; set; }
 
@@ -392,7 +389,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		[Ignore]
 		public override object Arg
 		{
 			get => TimeFrame;
@@ -435,7 +431,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		[Ignore]
 		public override object Arg
 		{
 			get => MaxTradeCount;
@@ -478,7 +473,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		[Ignore]
 		public override object Arg
 		{
 			get => Volume;
@@ -527,7 +521,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		[Ignore]
 		public override object Arg
 		{
 			get => PriceRange;
@@ -656,7 +649,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		[Ignore]
 		public override object Arg
 		{
 			get => PnFArg;
@@ -708,7 +700,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		[Ignore]
 		public override object Arg
 		{
 			get => BoxSize;

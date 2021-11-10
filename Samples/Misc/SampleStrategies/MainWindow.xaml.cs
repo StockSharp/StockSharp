@@ -70,8 +70,6 @@ namespace SampleStrategies
 			var entityRegistry = new CsvEntityRegistry(path);
 
 			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
-			// ecng.serialization invoke in several places IStorage obj
-			ConfigManager.RegisterService(entityRegistry.Storage);
 
 			var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
 			ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);

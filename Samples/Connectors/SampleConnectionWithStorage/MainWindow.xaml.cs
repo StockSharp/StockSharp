@@ -36,8 +36,6 @@ namespace SampleConnection
 
 			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 			ConfigManager.RegisterService<IStorageRegistry>(storageRegistry);
-			// ecng.serialization invoke in several places IStorage obj
-			ConfigManager.RegisterService(entityRegistry.Storage);
 
 			INativeIdStorage nativeIdStorage = new CsvNativeIdStorage(Path.Combine(path, "NativeId"))
 			{

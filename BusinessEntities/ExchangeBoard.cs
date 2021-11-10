@@ -74,7 +74,6 @@ namespace StockSharp.BusinessEntities
 		/// Board code.
 		/// </summary>
 		[DataMember]
-		[Identity]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
 		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
@@ -120,7 +119,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Browsable(false)]
 		[XmlElement(DataType = "duration", ElementName = nameof(ExpiryTime))]
-		[Ignore]
 		public string ExpiryTimeStr
 		{
 			// XmlSerializer does not support TimeSpan, so use this property for
@@ -132,7 +130,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Exchange, where board is situated.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ExchangeInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str479Key)]
@@ -186,7 +183,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.WorkingTimeKey)]
 		[DescriptionLoc(LocalizedStrings.WorkingHoursKey)]
 		[MainCategory]
-		[InnerSchema]
 		public WorkingTime WorkingTime
 		{
 			get => _workingTime;
@@ -206,7 +202,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about the time zone where the exchange is located.
 		/// </summary>
-		//[TimeZoneInfo]
 		[XmlIgnore]
 		//[DataMember]
 		public TimeZoneInfo TimeZone
@@ -227,7 +222,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Browsable(false)]
 		[DataMember]
-		[Ignore]
 		public string TimeZoneStr
 		{
 			get => TimeZone.To<string>();

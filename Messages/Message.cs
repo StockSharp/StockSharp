@@ -91,7 +91,6 @@ namespace StockSharp.Messages
 		private IDictionary<string, object> _extensionInfo;
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
@@ -105,7 +104,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Is loopback message.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Obsolete("Use BackMode property.")]
 		public bool IsBack
@@ -115,19 +113,16 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		public MessageBackModes BackMode { get; set; }
 
 		/// <summary>
 		/// Offline mode handling message.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		public MessageOfflineModes OfflineMode { get; set; }
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		public IMessageAdapter Adapter { get; set; }
 

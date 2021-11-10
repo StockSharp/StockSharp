@@ -31,9 +31,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Base order condition (for example, for stop order algo orders).
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
-	[TypeSchemaFactory(SearchBy.Properties, VisibleScopes.Public)]
 	public abstract class OrderCondition : Cloneable<OrderCondition>
 	{
 		/// <summary>

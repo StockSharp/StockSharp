@@ -24,7 +24,6 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-    using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -49,7 +48,6 @@ namespace StockSharp.BusinessEntities
 		/// Order, for which a trade was filled.
 		/// </summary>
 		[DataMember]
-		[RelationSingle]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -63,7 +61,6 @@ namespace StockSharp.BusinessEntities
 		/// Trade info.
 		/// </summary>
 		[DataMember]
-		[RelationSingle]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -83,7 +80,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str160Key,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 0)]
-		//[Nullable]
 		public decimal? Commission { get; set; }
 
 		/// <summary>
@@ -95,7 +91,6 @@ namespace StockSharp.BusinessEntities
 		/// Slippage in trade price.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str163Key,
@@ -116,7 +111,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.PnLKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 2)]
-		//[Nullable]
 		public decimal? PnL
 		{
 			get => _pnL;
@@ -140,7 +134,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str862Key + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 2)]
-		//[Nullable]
 		public decimal? Position { get; set; }
 
 		/// <summary>
@@ -152,7 +145,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.InitiatorTradeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
-		//[Nullable]
 		public bool? Initiator { get; set; }
 
 		/// <summary>
@@ -165,7 +157,6 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<string, object> _extensionInfo;
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),

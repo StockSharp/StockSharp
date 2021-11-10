@@ -1169,6 +1169,16 @@ SPFB.1MFR".SplitLines().ToIgnoreCaseSet();
 			}
 		}
 
+		private static T DeserializeDataContract<T>(this Stream stream)
+		{
+			return (T)new System.Runtime.Serialization.DataContractSerializer(typeof(T)).ReadObject(stream);
+		}
+
+		private static void SerializeDataContract<T>(this Stream stream, T value)
+		{
+			new System.Runtime.Serialization.DataContractSerializer(typeof(T)).WriteObject(stream, value);
+		}
+
 		/// <summary>
 		/// Download securities info.
 		/// </summary>

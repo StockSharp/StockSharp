@@ -20,8 +20,6 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
-	using Ecng.Serialization;
-
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -42,14 +40,12 @@ namespace StockSharp.BusinessEntities
 		/// The order which was not registered or was canceled due to an error.
 		/// </summary>
 		[DataMember]
-		[RelationSingle]
 		public Order Order { get; set; }
 
 		/// <summary>
 		/// System information about error containing the reason for the refusal or cancel of registration.
 		/// </summary>
 		[DataMember]
-		//[BinaryFormatter]
 		public Exception Error { get; set; }
 
 		/// <summary>

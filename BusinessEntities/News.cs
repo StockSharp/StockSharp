@@ -22,7 +22,6 @@ namespace StockSharp.BusinessEntities
 	using System.Xml.Serialization;
 
 	using Ecng.ComponentModel;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -43,13 +42,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.IdKey)]
 		[DescriptionLoc(LocalizedStrings.NewsIdKey)]
 		[MainCategory]
-		//[Identity]
 		public string Id { get; set; }
 
 		/// <summary>
 		/// Exchange board for which the news is published.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str511Key)]
 		[DescriptionLoc(LocalizedStrings.Str512Key)]
@@ -59,7 +56,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Security, for which news have been published.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str513Key)]
@@ -140,14 +136,13 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.PriorityKey,
 			Description = LocalizedStrings.NewsPriorityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
-		//[Nullable]
 		public NewsPriorities? Priority { get; set; }
 
 		[field: NonSerialized]
 		private IDictionary<string, object> _extensionInfo;
 
 		/// <inheritdoc />
-		[Ignore]
+		//[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]

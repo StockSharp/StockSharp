@@ -26,7 +26,6 @@ namespace StockSharp.BusinessEntities
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -53,7 +52,6 @@ namespace StockSharp.BusinessEntities
 		/// Security ID.
 		/// </summary>
 		[DataMember]
-		[Identity]
 		[ReadOnly(true)]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -105,7 +103,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Exchange board where the security is traded.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -133,7 +130,6 @@ namespace StockSharp.BusinessEntities
 		/// Security type.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TypeKey,
@@ -240,7 +236,6 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 7)]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[InnerSchema(NullWhenAllEmpty = false)]
 		public SecurityExternalId ExternalId
 		{
 			get => _externalId;
@@ -318,7 +313,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str366Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		//[Nullable]
 		[GreaterThanZero]
 		public decimal? VolumeStep
 		{
@@ -348,7 +342,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.MinVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		//[Nullable]
 		//[GreaterThanZero]
 		public decimal? MinVolume
 		{
@@ -378,7 +371,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.MaxVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
-		//[Nullable]
 		//[GreaterThanZero]
 		public decimal? MaxVolume
 		{
@@ -408,7 +400,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.LotVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 12)]
-		//[Nullable]
 		public decimal? Multiplier
 		{
 			get => _multiplier;
@@ -438,7 +429,6 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 13)]
 		//[ReadOnly(true)]
-		//[Nullable]
 		public int? Decimals
 		{
 			get => _decimals;
@@ -461,7 +451,6 @@ namespace StockSharp.BusinessEntities
 		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExpiryDateKey,
@@ -487,7 +476,6 @@ namespace StockSharp.BusinessEntities
 		/// Settlement date for security (for derivatives and bonds).
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SettlementDateKey,
@@ -594,7 +582,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str427Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 20)]
-		[Ignore]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
@@ -611,7 +598,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Step price.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -643,7 +629,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about the last trade. If during the session on the instrument there were no trades, the value equals to <see langword="null" />.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
@@ -679,7 +664,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// First trade price for the session.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -708,7 +692,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Last trade price for the previous session.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -737,7 +720,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Lowest price for the session.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -766,7 +748,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Highest price for the session.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -795,7 +776,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Best bid in market depth.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -827,7 +807,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Best ask in market depth.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -880,7 +859,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str569Key,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 209)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -909,7 +887,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.PriceMinLimitKey,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 210)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -938,7 +915,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.PriceMaxLimitKey,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 211)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -967,7 +943,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.MarginBuyKey,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 212)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -996,7 +971,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.MarginSellKey,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 213)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1012,29 +986,6 @@ namespace StockSharp.BusinessEntities
 				Notify();
 			}
 		}
-
-		//[field: NonSerialized]
-		//private IConnector _connector;
-
-		///// <summary>
-		///// Connection to the trading system, through which this instrument has been downloaded.
-		///// </summary>
-		//[Ignore]
-		//[XmlIgnore]
-		//[Browsable(false)]
-		//[Obsolete("The property Connector was obsoleted and is always null.")]
-		//public IConnector Connector
-		//{
-		//	get { return _connector; }
-		//	set
-		//	{
-		//		if (_connector == value)
-		//			return;
-
-		//		_connector = value;
-		//		Notify(nameof(Trader));
-		//	}
-		//}
 
 		private string _underlyingSecurityId;
 
@@ -1099,7 +1050,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.OptionStrikePriceKey,
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 102)]
-		//[Nullable]
 		public decimal? Strike
 		{
 			get => _strike;
@@ -1147,7 +1097,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Volatility (implied).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1176,7 +1125,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Volatility (historical).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1205,7 +1153,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Theoretical price.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1240,7 +1187,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.OptionDeltaKey,
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 107)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1263,7 +1209,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option gamma.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1292,7 +1237,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option vega.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1321,7 +1265,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option theta.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1350,7 +1293,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option rho.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1385,7 +1327,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str151Key,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 220)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1408,7 +1349,6 @@ namespace StockSharp.BusinessEntities
 		/// Local time of the last instrument change.
 		/// </summary>
 		[Browsable(false)]
-		[Ignore]
 		[XmlIgnore]
 		public DateTimeOffset LocalTime
 		{
@@ -1428,7 +1368,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
-		[Ignore]
 		[XmlIgnore]
 		public DateTimeOffset LastChangeTime
 		{
@@ -1446,7 +1385,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Total volume in all buy orders.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1472,7 +1410,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of buy orders.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1498,7 +1435,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Total volume in all sell orders.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1524,7 +1460,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of sell orders.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1550,7 +1485,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of trades.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1576,7 +1510,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Maximum bid during the session.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1602,7 +1535,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Minimum ask during the session.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -1634,7 +1566,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str321Key + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 228)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1660,7 +1591,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.AveragePriceKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 229)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1686,7 +1616,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.SettlementPriceKey,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 230)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1712,7 +1641,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str600Key,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 231)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1738,7 +1666,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str601Key,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 232)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1763,7 +1690,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.TurnoverKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 232)]
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1789,7 +1715,6 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 21)]
 		[DataMember]
-		//[Nullable]
 		public decimal? IssueSize
 		{
 			get => _issueSize;
@@ -1812,7 +1737,6 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 22)]
 		[DataMember]
-		//[Nullable]
 		public DateTimeOffset? IssueDate
 		{
 			get => _issueDate;
@@ -1835,7 +1759,6 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 22)]
 		[DataMember]
-		//[Nullable]
 		public bool? Shortable
 		{
 			get => _shortable;
@@ -1858,7 +1781,6 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 103)]
 		[DataMember]
-		//[Nullable]
 		public SecurityTypes? UnderlyingSecurityType
 		{
 			get => _underlyingSecurityType;
@@ -1881,7 +1803,6 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 104)]
 		[DataMember]
-		//[Nullable]
 		public decimal? UnderlyingSecurityMinVolume
 		{
 			get => _underlyingSecurityMinVolume;
@@ -1897,7 +1818,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// BuyBack price.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? BuyBackPrice
@@ -1915,7 +1835,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// BuyBack date.
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public DateTimeOffset? BuyBackDate
@@ -1957,7 +1876,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Commission (taker).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? CommissionTaker
@@ -1975,7 +1893,6 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Commission (maker).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
 		public decimal? CommissionMaker

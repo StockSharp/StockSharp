@@ -54,7 +54,6 @@ namespace StockSharp.BusinessEntities
 		/// Exchange code name.
 		/// </summary>
 		[DataMember]
-		[Identity]
 		public string Name
 		{
 			get => _name;
@@ -112,7 +111,6 @@ namespace StockSharp.BusinessEntities
 		/// ISO country code.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		public CountryCodes? CountryCode
 		{
 			get => _countryCode;
@@ -143,13 +141,6 @@ namespace StockSharp.BusinessEntities
 				Notify();
 			}
 		}
-
-		//[OnDeserialized]
-		//private void AfterDeserialization(StreamingContext ctx)
-		//{
-		//	if (ExtensionInfo == null)
-		//		ExtensionInfo = new Dictionary<string, object>();
-		//}
 
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;

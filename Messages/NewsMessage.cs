@@ -75,7 +75,6 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.IdKey)]
 		[DescriptionLoc(LocalizedStrings.NewsIdKey)]
 		[MainCategory]
-		//[Identity]
 		public string Id { get; set; }
 
 		/// <summary>
@@ -92,7 +91,6 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str212Key)]
 		[MainCategory]
-		//[Ecng.Serialization.Nullable]
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>

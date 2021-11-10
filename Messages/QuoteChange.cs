@@ -22,7 +22,6 @@ namespace StockSharp.Messages
 	using System.Xml.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
@@ -138,7 +137,6 @@ namespace StockSharp.Messages
 		private IDictionary<string, object> _extensionInfo;
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
@@ -154,28 +152,24 @@ namespace StockSharp.Messages
 		/// Orders count.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		public int? OrdersCount { get; set; }
 
 		/// <summary>
 		/// Start position, related for <see cref="Action"/>.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		public int? StartPosition { get; set; }
 
 		/// <summary>
 		/// End position, related for <see cref="Action"/>.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		public int? EndPosition { get; set; }
 
 		/// <summary>
 		/// Change action.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		public QuoteChangeActions? Action { get; set; }
 
 		/// <summary>

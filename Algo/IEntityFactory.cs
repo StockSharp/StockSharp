@@ -16,11 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo
 {
 	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-
-	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -126,7 +121,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 	/// </summary>
-	public class EntityFactory : IEntityFactory, IStorage
+	public class EntityFactory : IEntityFactory
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EntityFactory"/>.
@@ -192,60 +187,5 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public ExchangeBoard CreateBoard(string code, Exchange exchange) => new() { Code = code, Exchange = exchange };
-
-		long IStorage.GetCount<TEntity>() => throw new NotSupportedException();
-
-		TEntity IStorage.Add<TEntity>(TEntity entity) => entity;
-
-		TEntity IStorage.GetBy<TEntity>(SerializationItemCollection by) => throw new NotSupportedException();
-
-		TEntity IStorage.GetById<TEntity>(object id)
-		{
-			if (typeof(TEntity) == typeof(Security))
-				return CreateSecurity((string)id).To<TEntity>();
-			else if (typeof(TEntity) == typeof(Portfolio))
-				return CreatePortfolio((string)id).To<TEntity>();
-			else
-				throw new NotSupportedException();
-		}
-
-		IEnumerable<TEntity> IStorage.GetGroup<TEntity>(long startIndex, long count, Field orderBy, ListSortDirection direction)
-			=> throw new NotSupportedException();
-
-		TEntity IStorage.Update<TEntity>(TEntity entity) => entity;
-
-		void IStorage.Remove<TEntity>(TEntity entity)
-		{
-		}
-
-		void IStorage.Clear<TEntity>()
-		{
-		}
-
-		void IStorage.ClearCache() => throw new NotSupportedException();
-
-		IBatchContext IStorage.BeginBatch() => throw new NotSupportedException();
-
-		void IStorage.CommitBatch() => throw new NotSupportedException();
-
-		void IStorage.EndBatch() => throw new NotSupportedException();
-
-		event Action<object> IStorage.Added
-		{
-			add => throw new NotSupportedException();
-			remove => throw new NotSupportedException();
-		}
-
-		event Action<object> IStorage.Updated
-		{
-			add => throw new NotSupportedException();
-			remove => throw new NotSupportedException();
-		}
-
-		event Action<object> IStorage.Removed
-		{
-			add => throw new NotSupportedException();
-			remove => throw new NotSupportedException();
-		}
 	}
 }

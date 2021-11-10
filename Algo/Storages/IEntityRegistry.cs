@@ -29,11 +29,6 @@ namespace StockSharp.Algo.Storages
 	public interface IEntityRegistry
 	{
 		/// <summary>
-		/// The special interface for direct access to the storage.
-		/// </summary>
-		IStorage Storage { get; }
-
-		/// <summary>
 		/// The time delayed action.
 		/// </summary>
 		DelayAction DelayAction { get; set; }

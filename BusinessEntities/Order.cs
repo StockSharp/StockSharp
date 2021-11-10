@@ -25,7 +25,6 @@ namespace StockSharp.BusinessEntities
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -58,7 +57,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str518Key,
 			GroupName = LocalizedStrings.Str161Key,
 			Order = 1000)]
-		//[Nullable]
 		public TimeSpan? LatencyRegistration
 		{
 			get => _latencyRegistration;
@@ -77,14 +75,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Time taken to cancel an order.
 		/// </summary>
-		//[TimeSpan]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str537Key,
 			Description = LocalizedStrings.Str520Key,
 			GroupName = LocalizedStrings.Str161Key,
 			Order = 1001)]
-		//[Nullable]
 		public TimeSpan? LatencyCancellation
 		{
 			get => _latencyCancellation;
@@ -103,14 +99,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Time taken to edit an order.
 		/// </summary>
-		//[TimeSpan]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.EditionKey,
 			Description = LocalizedStrings.EditionLatencyKey,
 			GroupName = LocalizedStrings.Str161Key,
 			Order = 1002)]
-		//[Nullable]
 		public TimeSpan? LatencyEdition
 		{
 			get => _latencyEdition;
@@ -213,13 +207,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
 		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
 		[MainCategory]
-		[Identity]
 		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// Security, for which an order is being placed.
 		/// </summary>
-		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str524Key)]
@@ -252,7 +244,6 @@ namespace StockSharp.BusinessEntities
 		/// Portfolio, in which the order is being traded.
 		/// </summary>
 		[DataMember]
-		[RelationSingle(IdentityType = typeof(string))]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 		[DescriptionLoc(LocalizedStrings.Str525Key)]
 		[MainCategory]
@@ -266,7 +257,6 @@ namespace StockSharp.BusinessEntities
 		/// Messages for order (created by the trading system when registered, changed or cancelled).
 		/// </summary>
 		[XmlIgnore]
-		[Ignore]
 		[DisplayNameLoc(LocalizedStrings.Str526Key)]
 		[DescriptionLoc(LocalizedStrings.Str527Key)]
 		[MainCategory]
@@ -279,7 +269,6 @@ namespace StockSharp.BusinessEntities
 		/// Time of last order change (Cancellation, Fill).
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[DisplayNameLoc(LocalizedStrings.Str528Key)]
 		[DescriptionLoc(LocalizedStrings.Str529Key)]
 		[MainCategory]
@@ -343,7 +332,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
-		//[Nullable]
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
@@ -383,7 +371,6 @@ namespace StockSharp.BusinessEntities
 		/// System order status.
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[Browsable(false)]
 		public long? Status
 		{
@@ -407,7 +394,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str139Key)]
 		[DescriptionLoc(LocalizedStrings.Str140Key)]
 		[MainCategory]
-		//[Nullable]
 		public bool? IsSystem
 		{
 			get => _isSystem;
@@ -425,7 +411,6 @@ namespace StockSharp.BusinessEntities
 		/// Placed order comment.
 		/// </summary>
 		[DataMember]
-		[Primitive]
 		[DisplayNameLoc(LocalizedStrings.Str135Key)]
 		[DescriptionLoc(LocalizedStrings.Str136Key)]
 		[MainCategory]
@@ -465,16 +450,14 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		//[DataMember]
-		//[InnerSchema(IsNullable = true)]
 		/// <summary>
 		/// Order condition (e.g., stop- and algo- orders parameters).
 		/// </summary>
-		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str154Key)]
 		[DescriptionLoc(LocalizedStrings.Str155Key)]
 		[CategoryLoc(LocalizedStrings.Str156Key)]
+		//[DataMember]
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>
@@ -483,7 +466,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
 		[MainCategory]
-		//[Nullable]
 		public TimeInForce? TimeInForce { get; set; }
 
 		private Order _derivedOrder;
@@ -492,8 +474,6 @@ namespace StockSharp.BusinessEntities
 		/// Exchange order that was created by the stop-order when the condition is activated (<see langword="null" /> if a stop condition has not been activated).
 		/// </summary>
 		//[DataMember]
-		//[InnerSchema]
-		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str532Key)]
 		[DescriptionLoc(LocalizedStrings.Str533Key)]
@@ -516,7 +496,6 @@ namespace StockSharp.BusinessEntities
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
 		/// <inheritdoc />
-		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
@@ -536,7 +515,6 @@ namespace StockSharp.BusinessEntities
 		/// Commission (broker, exchange etc.).
 		/// </summary>
 		[DataMember]
-		//[Nullable]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.Str160Key)]
 		[MainCategory]
@@ -587,7 +565,6 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
-		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
