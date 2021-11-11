@@ -78,8 +78,7 @@ namespace StockSharp.Configuration
 			if (!File.Exists(file) && !File.Exists(file.MakeLegacy()))
 				return false;
 
-			credentials.Load(file.DeserializeWithMigration<SettingsStorage>());
-			return true;
+			return credentials.LoadIfNotNull(file.DeserializeWithMigration<SettingsStorage>());
 		}
 
 		/// <summary>

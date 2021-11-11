@@ -29,6 +29,11 @@ namespace StockSharp.Algo.Storages
 	public interface IEntityRegistry
 	{
 		/// <summary>
+		/// </summary>
+		[Obsolete("This property exists only for backward compatibility.")]
+		object Storage { get; }
+
+		/// <summary>
 		/// The time delayed action.
 		/// </summary>
 		DelayAction DelayAction { get; set; }

@@ -283,7 +283,7 @@
 				var settingsStorage = (AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}")
 					.DeserializeWithMigration<SettingsStorage>();
 
-				Chart.Load(settingsStorage);
+				Chart.LoadIfNotNull(settingsStorage);
 
 				_area = Chart.Areas.First();
 				_candleElement = Chart.Elements.OfType<ChartCandleElement>().First();

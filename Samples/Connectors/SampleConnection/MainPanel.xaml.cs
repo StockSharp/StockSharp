@@ -194,7 +194,7 @@
 					ctx.Error += ex => ex.LogError();
 
 					using (ctx.ToScope())
-						Connector.Load(_settingsFile.DeserializeWithMigration<SettingsStorage>());
+						Connector.LoadIfNotNull(_settingsFile.DeserializeWithMigration<SettingsStorage>());
 				}
 			}
 			catch

@@ -103,7 +103,7 @@ namespace SampleRealTimeEmulation
 					ctx.Error += ex => ex.LogError();
 
 					using (ctx.ToScope())
-						_realConnector.Load(_settingsFile.DeserializeWithMigration<SettingsStorage>());
+						_realConnector.LoadIfNotNull(_settingsFile.DeserializeWithMigration<SettingsStorage>());
 				}
 			}
 			catch

@@ -280,6 +280,9 @@
 			var storage = Do.Invariant(() =>
 				InstallerInstallationsConfigPath.DeserializeWithMigration<SettingsStorage>());
 
+			if (storage is null)
+				return null;
+
 			var installations = storage?.GetValue<SettingsStorage[]>("Installations");
 			if (!(installations?.Length > 0))
 				return null;
@@ -608,7 +611,7 @@
 				}
 			}
 			else
-				value = defSer.Deserialize(defFile);
+				value = File.Exists(defFile) ? defSer.Deserialize(defFile) : default;
 
 			return value;
 		}
@@ -649,6 +652,17 @@
 
 				return xmlSer.Deserialize(data);
 			}
+		}
+
+		/// <summary>
+		/// </summary>
+		public static bool LoadIfNotNull(this IPersistable persistable, SettingsStorage storage)
+		{
+			if (storage is null)
+				return false;
+
+			persistable.Load(storage);
+			return true;
 		}
 	}
 }
