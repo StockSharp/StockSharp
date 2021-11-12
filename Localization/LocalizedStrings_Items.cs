@@ -18,6 +18,36 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Please explain your question in details
+		/// </summary>
+		public const string DescribeTheQuestionInDetailsKey = nameof(DescribeTheQuestionInDetails);
+
+		/// <summary>
+		/// Please explain your question in details
+		/// </summary>
+		public static string DescribeTheQuestionInDetails => GetString(DescribeTheQuestionInDetailsKey);
+
+		/// <summary>
+		/// Please explain what the prolem is and provide detailed scenario on how to reproduce the problem
+		/// </summary>
+		public const string DescribeTheBugInDetailsKey = nameof(DescribeTheBugInDetails);
+
+		/// <summary>
+		/// Please explain what the prolem is and provide detailed scenario on how to reproduce the problem
+		/// </summary>
+		public static string DescribeTheBugInDetails => GetString(DescribeTheBugInDetailsKey);
+
+		/// <summary>
+		/// {0} {0:day|days}
+		/// </summary>
+		public const string DaysParamSmartPluralKey = nameof(DaysParamSmartPlural);
+
+		/// <summary>
+		/// {0} {0:day|days}
+		/// </summary>
+		public static string DaysParamSmartPlural => GetString(DaysParamSmartPluralKey);
+
+		/// <summary>
 		/// Tunis BVMT
 		/// </summary>
 		public const string TunisBvmtKey = nameof(TunisBvmt);
@@ -43697,6 +43727,17 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static string BitStamp => GetString(BitStampKey);
 
+
+		/// <summary>
+		/// FTX
+		/// </summary>
+		public const string FTXKey = nameof(FTX);
+
+		/// <summary>
+		/// FTX
+		/// </summary>
+		public static string FTX => GetString(FTXKey);
+
 		/// <summary>
 		/// Fusion (Blackwood)
 		/// </summary>
@@ -46026,16 +46067,6 @@ namespace StockSharp.Localization
 		/// Select the duration of logs for export
 		/// </summary>
 		public static string SelectLogsDurationToExport => GetString(SelectLogsDurationToExportKey);
-
-		/// <summary>
-		/// {0} day(s)
-		/// </summary>
-		public const string DaysParamKey = nameof(DaysParam);
-
-		/// <summary>
-		/// {0} day(s)
-		/// </summary>
-		public static string DaysParam => GetString(DaysParamKey);
 
 		/// <summary>
 		/// MICEX TEAP

@@ -1,4 +1,12 @@
 {
+  "DescribeTheQuestionInDetails": {
+    "en": "Please explain your question in details",
+    "ru": "Пожалуйста, подробно опишите ваш вопрос"
+  },
+  "DescribeTheBugInDetails": {
+    "en": "Please explain what the prolem is and provide detailed scenario on how to reproduce the problem",
+    "ru": "Пожалуйста, подробно опишите в чем состоит проблема и опишите детальный сценарий воспроизведения"
+  },
   "TunisBvmt": {
     "en": "Tunis BVMT",
     "ru": "Tunis BVMT"
@@ -17631,6 +17639,10 @@
     "en": "Bitstamp",
     "ru": "Bitstamp"
   },
+  "FTX": {
+    "en": "FTX",
+    "ru": "FTX"
+  },
   "Fusion": {
     "en": "Fusion (Blackwood)",
     "ru": "Fusion (Blackwood)"
@@ -18559,9 +18571,9 @@
     "en": "Select the duration of logs for export",
     "ru": "Выберите продолжительность логов для экспорта"
   },
-  "DaysParam": {
-    "en": "{0} day(s)",
-    "ru": "{0} день(-я, -й)"
+  "DaysParamSmartPlural": {
+    "en": "{0} {0:day|days}",
+    "ru": "{0} {0:день|дня|дней}"
   },
   "MicexTeap": {
     "en": "MICEX TEAP",
