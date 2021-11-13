@@ -32,8 +32,9 @@
     <AsyncLinqVer>5.0.0</AsyncLinqVer>
     <MsBclAsyncInterfacesVer>5.0.0</MsBclAsyncInterfacesVer>
     <TaskExtensionsVer>4.5.4</TaskExtensionsVer>
-    <SysChannelsVer>5.0.0</SysChannelsVer>
-    <SysPipelinesVer>5.0.1</SysPipelinesVer>
+    <SysChannelsVer>6.0.0</SysChannelsVer>
+    <SysPipelinesVer>6.0.0</SysPipelinesVer>
+    <SysMemoryVer>4.5.4</SysMemoryVer>
     <SBEVer>1.23.1.1</SBEVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>

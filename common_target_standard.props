@@ -1,6 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="common_target_common.props" />
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <StockSharpTargets Condition="'$(StockSharpTargets)' == ''">netstandard2.0</StockSharpTargets>
+    <TargetFrameworks>$(StockSharpTargets)</TargetFrameworks>
   </PropertyGroup>
 </Project>
