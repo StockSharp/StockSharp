@@ -172,6 +172,7 @@
 		/// </summary>
 		/// <param name="userId">Identifier.</param>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetUserUrl(long userId) => $"{GetWebSiteUrl()}/users/{userId}/";
 
 		/// <summary>
@@ -187,6 +188,7 @@
 		/// </summary>
 		/// <param name="productId">Identifier.</param>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetProductLink(object productId) => $"{GetWebSiteUrl()}/store/{productId}/";
 
 		/// <summary>
@@ -194,6 +196,7 @@
 		/// </summary>
 		/// <param name="topicId">Identifier.</param>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetTopicLink(long topicId) => $"{GetWebSiteUrl()}/topic/{topicId}/";
 
 		/// <summary>
@@ -201,6 +204,7 @@
 		/// </summary>
 		/// <param name="messageId">Identifier.</param>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetMessageLink(long messageId) => $"{GetWebSiteUrl()}/posts/m/{messageId}/";
 
 		/// <summary>
@@ -208,6 +212,7 @@
 		/// </summary>
 		/// <param name="fileId">File ID.</param>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetFileLink(object fileId) => $"{GetWebSiteUrl()}/file/{fileId}/";
 
 		/// <summary>
@@ -221,18 +226,21 @@
 		/// Get open account url.
 		/// </summary>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetOpenAccountUrl() => $"{GetWebSiteUrl()}/broker/openaccount/";
 
 		/// <summary>
 		/// Get sign up url.
 		/// </summary>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetSignUpUrl() => $"{GetWebSiteUrl()}/register/";
 
 		/// <summary>
 		/// Get forgot password url.
 		/// </summary>
 		/// <returns>Localized url.</returns>
+		[Obsolete]
 		public static string GetForgotUrl() => $"{GetWebSiteUrl()}/forgot/";
 
 		private static string _installedVersion;
