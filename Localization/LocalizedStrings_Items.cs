@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Report a problem
+		/// </summary>
+		public const string ReportProblemKey = nameof(ReportProblem);
+
+		/// <summary>
+		/// Report a problem
+		/// </summary>
+		public static string ReportProblem => GetString(ReportProblemKey);
+
+		/// <summary>
 		/// Please explain your question in details
 		/// </summary>
 		public const string DescribeTheQuestionInDetailsKey = nameof(DescribeTheQuestionInDetails);

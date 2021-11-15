@@ -1,4 +1,8 @@
 {
+  "ReportProblem": {
+    "en": "Report a problem",
+    "ru": "Сообщить о проблеме"
+  },
   "DescribeTheQuestionInDetails": {
     "en": "Please explain your question in details",
     "ru": "Пожалуйста, подробно опишите ваш вопрос"
