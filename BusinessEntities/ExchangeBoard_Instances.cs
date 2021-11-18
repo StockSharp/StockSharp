@@ -3619,6 +3619,7 @@ namespace StockSharp.BusinessEntities
 		{
 			Code = Exchange.Bvmt.Name,
 			Exchange = Exchange.Bvmt,
+			TimeZone = TimeHelper.Tunisia,
 		};
 
 		/// <summary>
