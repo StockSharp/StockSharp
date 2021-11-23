@@ -782,8 +782,8 @@ namespace StockSharp.Messages
 
 			static T Do<T>(Func<T> func) => Ecng.Common.Do.Invariant(func);
 
-			Func<string, object> p1 = str => Do(() => argParserTo(str));
-			Func<object, string> p2 = arg => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
+			object p1(string str) => Do(() => argParserTo(str));
+			string p2(object arg) => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
 
 #pragma warning disable CS0612 // Type or member is obsolete
 			_messageTypeMapOld.Add(dataType, Tuple.Create(type, default(object)));
@@ -908,17 +908,13 @@ namespace StockSharp.Messages
 		/// <returns>Data type info.</returns>
 		public static DataType ToDataType(this ExecutionTypes type)
 		{
-			switch (type)
+			return type switch
 			{
-				case ExecutionTypes.Tick:
-					return DataType.Ticks;
-				case ExecutionTypes.Transaction:
-					return DataType.Transactions;
-				case ExecutionTypes.OrderLog:
-					return DataType.OrderLog;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
-			}
+				ExecutionTypes.Tick => DataType.Ticks,
+				ExecutionTypes.Transaction => DataType.Transactions,
+				ExecutionTypes.OrderLog => DataType.OrderLog,
+				_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219),
+			};
 		}
 
 		/// <summary>
@@ -1050,8 +1046,8 @@ namespace StockSharp.Messages
 			if (from == to)
 				return 1;
 
-			using (var client = new WebClient())
-				return decimal.Parse(client.DownloadString($"https://stocksharp.com/services/currencyconverter.ashx?from={from}&to={to}&date={(long)date.ToUnix()}"), CultureInfo.InvariantCulture);
+			using var client = new WebClient();
+			return decimal.Parse(client.DownloadString($"https://stocksharp.com/services/currencyconverter.ashx?from={from}&to={to}&date={(long)date.ToUnix()}"), CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>
@@ -1198,7 +1194,7 @@ namespace StockSharp.Messages
 		/// <returns>Language</returns>
 		public static string GetPreferredLanguage(this MessageAdapterCategories? categories)
 		{
-			return categories?.Contains(MessageAdapterCategories.Russia) == true ? LangCodes.Ru : LangCodes.En;
+			return categories?.HasFlag(MessageAdapterCategories.Russia) == true ? LangCodes.Ru : LangCodes.En;
 		}
 
 		/// <summary>
@@ -1966,15 +1962,12 @@ namespace StockSharp.Messages
 		/// <returns>Security ID or <see langword="null"/> if message do not provide it.</returns>
 		public static SecurityId? TryGetSecurityId(this Message message)
 		{
-			switch (message)
+			return message switch
 			{
-				case ISecurityIdMessage secIdMsg:
-					return secIdMsg.SecurityId;
-				case INullableSecurityIdMessage nullSecIdMsg:
-					return nullSecIdMsg.SecurityId;
-				default:
-					return null;
-			}
+				ISecurityIdMessage secIdMsg => secIdMsg.SecurityId,
+				INullableSecurityIdMessage nullSecIdMsg => nullSecIdMsg.SecurityId,
+				_ => null,
+			};
 		}
 
 		/// <summary>
@@ -2477,13 +2470,11 @@ namespace StockSharp.Messages
 		/// <returns>The currency name in the MICEX format.</returns>
 		public static string ToMicexCurrencyName(this CurrencyTypes type)
 		{
-			switch (type)
+			return type switch
 			{
-				case CurrencyTypes.RUB:
-					return "SUR";
-				default:
-					return type.GetName();
-			}
+				CurrencyTypes.RUB => "SUR",
+				_ => type.GetName(),
+			};
 		}
 
 		/// <summary>
@@ -2562,40 +2553,25 @@ namespace StockSharp.Messages
 		/// <returns><see cref="Type"/> value.</returns>
 		public static Type ToType(this Level1Fields field)
 		{
-			switch (field)
+			return field switch
 			{
-				case Level1Fields.AsksCount:
-				case Level1Fields.BidsCount:
-				case Level1Fields.TradesCount:
-				case Level1Fields.Decimals:
-					return typeof(int);
+				Level1Fields.AsksCount or Level1Fields.BidsCount or
+				Level1Fields.TradesCount or Level1Fields.Decimals => typeof(int),
 
-				case Level1Fields.LastTradeId:
-					return typeof(long);
+				Level1Fields.LastTradeId => typeof(long),
 
-				case Level1Fields.BestAskTime:
-				case Level1Fields.BestBidTime:
-				case Level1Fields.LastTradeTime:
-				case Level1Fields.BuyBackDate:
-				case Level1Fields.CouponDate:
-					return typeof(DateTimeOffset);
+				Level1Fields.BestAskTime or Level1Fields.BestBidTime or
+				Level1Fields.LastTradeTime or Level1Fields.BuyBackDate or
+				Level1Fields.CouponDate => typeof(DateTimeOffset),
 
-				case Level1Fields.LastTradeUpDown:
-				case Level1Fields.IsSystem:
-					return typeof(bool);
+				Level1Fields.LastTradeUpDown or Level1Fields.IsSystem => typeof(bool),
 
-				case Level1Fields.State:
-					return typeof(SecurityStates);
+				Level1Fields.State => typeof(SecurityStates),
+				Level1Fields.LastTradeOrigin => typeof(Sides),
+				Level1Fields.LastTradeStringId => typeof(string),
 
-				case Level1Fields.LastTradeOrigin:
-					return typeof(Sides);
-
-				case Level1Fields.LastTradeStringId:
-					return typeof(string);
-
-				default:
-					return field.IsObsolete() ? null : typeof(decimal);
-			}
+				_ => field.IsObsolete() ? null : typeof(decimal),
+			};
 		}
 
 		/// <summary>
@@ -2605,26 +2581,14 @@ namespace StockSharp.Messages
 		/// <returns><see cref="Type"/> value.</returns>
 		public static Type ToType(this PositionChangeTypes type)
 		{
-			switch (type)
+			return type switch
 			{
-				case PositionChangeTypes.ExpirationDate:
-					return typeof(DateTimeOffset);
-
-				case PositionChangeTypes.State:
-					return typeof(PortfolioStates);
-
-				case PositionChangeTypes.Currency:
-					return typeof(CurrencyTypes);
-
-				case PositionChangeTypes.BuyOrdersCount:
-				case PositionChangeTypes.SellOrdersCount:
-				case PositionChangeTypes.OrdersCount:
-				case PositionChangeTypes.TradesCount:
-					return typeof(int);
-
-				default:
-					return type.IsObsolete() ? null : typeof(decimal);
-			}
+				PositionChangeTypes.ExpirationDate => typeof(DateTimeOffset),
+				PositionChangeTypes.State => typeof(PortfolioStates),
+				PositionChangeTypes.Currency => typeof(CurrencyTypes),
+				PositionChangeTypes.BuyOrdersCount or PositionChangeTypes.SellOrdersCount or PositionChangeTypes.OrdersCount or PositionChangeTypes.TradesCount => typeof(int),
+				_ => type.IsObsolete() ? null : typeof(decimal),
+			};
 		}
 
 		/// <summary>
