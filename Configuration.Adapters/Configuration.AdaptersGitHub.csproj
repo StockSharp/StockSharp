@@ -8,6 +8,7 @@
     <RootNamespace>StockSharp.Configuration</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="StockSharp.FTX" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlfaDirect" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlorHistory" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlphaVantage" Version="$(StockSharpVer)" />

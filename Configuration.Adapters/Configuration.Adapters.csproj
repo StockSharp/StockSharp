@@ -8,6 +8,7 @@
     <RootNamespace>StockSharp.Configuration</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="$(ConnectorsAppsPath)FTX\FTX.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Binance\Binance.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Okex\Okex.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Kucoin\Kucoin.csproj" />
