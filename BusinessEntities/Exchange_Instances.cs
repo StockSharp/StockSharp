@@ -364,6 +364,8 @@ namespace StockSharp.BusinessEntities
 				FullNameLoc = LocalizedStrings.IcBitKey,
 				CountryCode = CountryCodes.RU,
 			};
+
+
 		}
 
 		/// <summary>
@@ -1207,6 +1209,16 @@ namespace StockSharp.BusinessEntities
 		{
 			Name = "QTFD",
 			FullNameLoc = LocalizedStrings.QuantFeed,
+		};
+
+		/// <summary>
+		/// Information about <see cref="FTX"/>. 
+		/// </summary>
+		public static Exchange FTX { get; } = new Exchange
+		{
+			Name = "FTX",
+			FullNameLoc = LocalizedStrings.FTX,
+			CountryCode = CountryCodes.BS,
 		};
 	}
 }

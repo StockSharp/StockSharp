@@ -3619,7 +3619,6 @@ namespace StockSharp.BusinessEntities
 		{
 			Code = Exchange.Bvmt.Name,
 			Exchange = Exchange.Bvmt,
-			TimeZone = TimeHelper.Tunisia,
 		};
 
 		/// <summary>
@@ -3665,6 +3664,15 @@ namespace StockSharp.BusinessEntities
 		{
 			Code = Exchange.QNDL.Name,
 			Exchange = Exchange.QNDL,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="FTX"/>.
+		/// </summary>
+		public static ExchangeBoard FTX { get; } = new ExchangeBoard
+		{
+			Code = Exchange.FTX.Name,
+			Exchange = Exchange.FTX,
 		};
 	}
 }

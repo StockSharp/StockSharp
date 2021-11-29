@@ -18,46 +18,6 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
-		/// Report a problem
-		/// </summary>
-		public const string ReportProblemKey = nameof(ReportProblem);
-
-		/// <summary>
-		/// Report a problem
-		/// </summary>
-		public static string ReportProblem => GetString(ReportProblemKey);
-
-		/// <summary>
-		/// Please explain your question in details
-		/// </summary>
-		public const string DescribeTheQuestionInDetailsKey = nameof(DescribeTheQuestionInDetails);
-
-		/// <summary>
-		/// Please explain your question in details
-		/// </summary>
-		public static string DescribeTheQuestionInDetails => GetString(DescribeTheQuestionInDetailsKey);
-
-		/// <summary>
-		/// Please explain what the prolem is and provide detailed scenario on how to reproduce the problem
-		/// </summary>
-		public const string DescribeTheBugInDetailsKey = nameof(DescribeTheBugInDetails);
-
-		/// <summary>
-		/// Please explain what the prolem is and provide detailed scenario on how to reproduce the problem
-		/// </summary>
-		public static string DescribeTheBugInDetails => GetString(DescribeTheBugInDetailsKey);
-
-		/// <summary>
-		/// {0} {0:day|days}
-		/// </summary>
-		public const string DaysParamSmartPluralKey = nameof(DaysParamSmartPlural);
-
-		/// <summary>
-		/// {0} {0:day|days}
-		/// </summary>
-		public static string DaysParamSmartPlural => GetString(DaysParamSmartPluralKey);
-
-		/// <summary>
 		/// Tunis BVMT
 		/// </summary>
 		public const string TunisBvmtKey = nameof(TunisBvmt);
@@ -46079,6 +46039,16 @@ namespace StockSharp.Localization
 		public static string SelectLogsDurationToExport => GetString(SelectLogsDurationToExportKey);
 
 		/// <summary>
+		/// {0} day(s)
+		/// </summary>
+		public const string DaysParamKey = nameof(DaysParam);
+
+		/// <summary>
+		/// {0} day(s)
+		/// </summary>
+		public static string DaysParam => GetString(DaysParamKey);
+
+		/// <summary>
 		/// MICEX TEAP
 		/// </summary>
 		public const string MicexTeapKey = nameof(MicexTeap);
@@ -53637,5 +53607,15 @@ namespace StockSharp.Localization
 		/// Wall Street Horizon event data
 		/// </summary>
 		public static string WshEvent => GetString(WshEventKey);
+
+		/// <summary>
+		/// FTX
+		/// </summary>
+		public const string FtxKey = nameof(Ftx);
+
+		/// <summary>
+		/// FTX
+		/// </summary>
+		public static string Ftx => GetString(FtxKey);
 	}
 }

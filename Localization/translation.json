@@ -1,16 +1,4 @@
 {
-  "ReportProblem": {
-    "en": "Report a problem",
-    "ru": "Сообщить о проблеме"
-  },
-  "DescribeTheQuestionInDetails": {
-    "en": "Please explain your question in details",
-    "ru": "Пожалуйста, подробно опишите ваш вопрос"
-  },
-  "DescribeTheBugInDetails": {
-    "en": "Please explain what the prolem is and provide detailed scenario on how to reproduce the problem",
-    "ru": "Пожалуйста, подробно опишите в чем состоит проблема и опишите детальный сценарий воспроизведения"
-  },
   "TunisBvmt": {
     "en": "Tunis BVMT",
     "ru": "Tunis BVMT"
@@ -18575,9 +18563,9 @@
     "en": "Select the duration of logs for export",
     "ru": "Выберите продолжительность логов для экспорта"
   },
-  "DaysParamSmartPlural": {
-    "en": "{0} {0:day|days}",
-    "ru": "{0} {0:день|дня|дней}"
+  "DaysParam": {
+    "en": "{0} day(s)",
+    "ru": "{0} день(-я, -й)"
   },
   "MicexTeap": {
     "en": "MICEX TEAP",
