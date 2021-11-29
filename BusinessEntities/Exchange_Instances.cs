@@ -1210,7 +1210,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about <see cref="FTX"/>. 
+		/// Information about <see cref="FTX"/>.
 		/// </summary>
 		public static Exchange FTX { get; } = new Exchange
 		{
