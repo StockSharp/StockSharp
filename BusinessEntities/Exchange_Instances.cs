@@ -1208,5 +1208,15 @@ namespace StockSharp.BusinessEntities
 			Name = "QTFD",
 			FullNameLoc = LocalizedStrings.QuantFeed,
 		};
+
+		/// <summary>
+		/// Information about <see cref="FTX"/>. 
+		/// </summary>
+		public static Exchange FTX { get; } = new Exchange
+		{
+			Name = "FTX",
+			FullNameLoc = LocalizedStrings.FTX,
+			CountryCode = CountryCodes.BS,
+		};
 	}
 }

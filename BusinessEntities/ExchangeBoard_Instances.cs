@@ -3666,5 +3666,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.QNDL.Name,
 			Exchange = Exchange.QNDL,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="FTX"/>.
+		/// </summary>
+		public static ExchangeBoard FTX { get; } = new ExchangeBoard
+		{
+			Code = Exchange.FTX.Name,
+			Exchange = Exchange.FTX,
+		};
 	}
 }
