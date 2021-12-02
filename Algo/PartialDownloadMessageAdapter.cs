@@ -108,7 +108,7 @@
 
 			public void TryUpdateNextFrom(DateTimeOffset last)
 			{
-				if (_nextFrom < last)
+				if (_currFrom < last)
 					_nextFrom = last;
 
 				if (_count != default)
