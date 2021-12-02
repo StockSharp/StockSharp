@@ -10,6 +10,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Localization" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="translation.json" />

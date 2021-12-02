@@ -7,7 +7,7 @@ namespace StockSharp.Algo.Expressions
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.ComponentModel.Expressions;
-	using Ecng.Serialization;
+	using Ecng.Compilation;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;

@@ -2,7 +2,7 @@ namespace StockSharp.Algo
 {
 	using System;
 
-	using Ecng.Common;
+	using Ecng.Compilation;
 	using Ecng.Configuration;
 	using Ecng.Interop;
 

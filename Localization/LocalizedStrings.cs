@@ -19,6 +19,7 @@ namespace StockSharp.Localization
 	using System.Diagnostics;
 	using System.IO;
 
+	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Configuration;
 
@@ -89,6 +90,26 @@ namespace StockSharp.Localization
 		public static string GetString(string resourceId, string language = null)
 		{
 			return LocalizationManager.GetString(resourceId, language);
+		}
+
+		/// <summary>
+		/// Get localized string in <paramref name="to"/> language.
+		/// </summary>
+		/// <param name="text">Text.</param>
+		/// <param name="from">Language of the <paramref name="text"/>.</param>
+		/// <param name="to">Destination language.</param>
+		/// <returns>Localized string.</returns>
+		public static string Translate(this string text, string from = LangCodes.En, string to = null)
+		{
+			var manager = LocalizationManager;
+
+			if (manager is null)
+				return text;
+
+			if (to.IsEmpty())
+				to = manager.ActiveLanguage;
+
+			return manager.Translate(text, from, to);
 		}
 	}
 }
