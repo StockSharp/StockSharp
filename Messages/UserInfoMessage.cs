@@ -121,7 +121,7 @@ namespace StockSharp.Messages
 		public decimal? Balance { get; set; }
 
 		/// <summary>
-		/// Balance.
+		/// Avatar.
 		/// </summary>
 		[DataMember]
 		public long? Avatar { get; set; }
