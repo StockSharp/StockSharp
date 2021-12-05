@@ -15,7 +15,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\Community\Community.csproj" />
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,6 @@ namespace StockSharp.Algo.Strategies.Messages
 	using Ecng.Common;
 	using Ecng.Collections;
 
-	using StockSharp.Community;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -51,13 +50,6 @@ namespace StockSharp.Algo.Strategies.Messages
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Strategy description.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public string Description { get; set; }
-
-		/// <summary>
 		/// Strategy parameters.
 		/// </summary>
 		[DataMember]
@@ -68,97 +60,6 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// </summary>
 		[DataMember]
 		public DateTimeOffset CreationDate { get; set; }
-
-		/// <summary>
-		/// Strategy tags.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public string Tags { get; set; }
-
-		/// <summary>
-		/// The identifier of a topic in the forum where the strategy is discussed.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public long Topic { get; set; }
-
-		/// <summary>
-		/// Type of <see cref="Price"/>.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public ProductPriceTypes PriceType { get; set; }
-
-		/// <summary>
-		/// The purchase price.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public decimal Price { get; set; }
-
-		/// <summary>
-		/// Type of <see cref="Content"/>.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public ProductContentTypes ContentType { get; set; }
-
-		/// <summary>
-		/// Content.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public long Content { get; set; }
-
-		/// <summary>
-		/// The author identifier.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public long Author { get; set; }
-
-		/// <summary>
-		/// The picture identifier.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public long? Picture { get; set; }
-
-		/// <summary>
-		/// The content revision.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public int Revision { get; set; }
-
-		/// <summary>
-		/// Only visible to author.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public bool IsPrivate { get; set; }
-
-		/// <summary>
-		/// Is colocation available for the strategy.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public bool IsColocation { get; set; }
-
-		/// <summary>
-		/// Promo price.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public decimal? PromoPrice { get; set; }
-
-		/// <summary>
-		/// Promo end date.
-		/// </summary>
-		[DataMember]
-		[Obsolete]
-		public DateTimeOffset? PromoEnd { get; set; }
 
 		/// <inheritdoc />
 		public override DataType DataType => StrategyDataType.Info;
@@ -179,23 +80,7 @@ namespace StockSharp.Algo.Strategies.Messages
 			destination.StrategyId = StrategyId;
 			destination.Name = Name;
 			destination.CreationDate = CreationDate;
-#pragma warning disable CS0612 // Type or member is obsolete
-			destination.Description = Description;
-			destination.Tags = Tags;
-			destination.Topic = Topic;
-			destination.PriceType = PriceType;
-			destination.Price = Price;
-			destination.ContentType = ContentType;
-			destination.Content = Content;
-			destination.Author = Author;
-			destination.Picture = Picture;
-			destination.Revision = Revision;
-			destination.IsPrivate = IsPrivate;
-			destination.IsColocation = IsColocation;
-			destination.PromoPrice = PromoPrice;
-			destination.PromoEnd = PromoEnd;
 			destination.Parameters.AddRange(Parameters);
-#pragma warning restore CS0612 // Type or member is obsolete
 		}
 	}
 }
