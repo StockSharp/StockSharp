@@ -60,59 +60,5 @@ namespace StockSharp.Configuration
 		//		.Concat(_customCandles)
 		//		.ToArray());
 		//}
-
-		private static readonly string _credentialsFile = $"credentials{Paths.DefaultSettingsExt}";
-
-		/// <summary>
-		/// Try load credentials from <see cref="Paths.CompanyPath"/>.
-		/// </summary>
-		/// <param name="credentials">The class that contains a login and password to access the services https://stocksharp.com .</param>
-		/// <returns><see langword="true"/> if the specified credentials was loaded successfully, otherwise, <see langword="false"/>.</returns>
-		public static bool TryLoadCredentials(this ServerCredentials credentials)
-		{
-			if (credentials == null)
-				throw new ArgumentNullException(nameof(credentials));
-
-			var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
-
-			if (!File.Exists(file) && !File.Exists(file.MakeLegacy()))
-				return false;
-
-			return credentials.LoadIfNotNull(file.DeserializeWithMigration<SettingsStorage>());
-		}
-
-		/// <summary>
-		/// Save the credentials to <see cref="Paths.CompanyPath"/>.
-		/// </summary>
-		/// <param name="credentials">The class that contains a login and password to access the services https://stocksharp.com .</param>
-		public static void SaveCredentials(this ServerCredentials credentials)
-		{
-			if (credentials == null)
-				throw new ArgumentNullException(nameof(credentials));
-
-			credentials.SaveCredentials(credentials.AutoLogon);
-		}
-
-		/// <summary>
-		/// Save the credentials to <see cref="Paths.CompanyPath"/>.
-		/// </summary>
-		/// <param name="credentials">The class that contains a login and password to access the services https://stocksharp.com .</param>
-		/// <param name="savePassword">Save password.</param>
-		public static void SaveCredentials(this ServerCredentials credentials, bool savePassword)
-		{
-			if (credentials == null)
-				throw new ArgumentNullException(nameof(credentials));
-
-			var clone = credentials;
-
-			if (!savePassword)
-				clone.Password = null;
-
-			Directory.CreateDirectory(Paths.CompanyPath);
-
-			var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
-
-			clone.Save().Serialize(file);
-		}
 	}
 }
