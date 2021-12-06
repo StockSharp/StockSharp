@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 
 			private ISerializer<TItem> GetSerializer<TItem>()
-				=> (ISerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new JsonSerializer<TItem> { Indent = false, FillMode = true, EnumAsString = true });
+				=> (ISerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new JsonSerializer<TItem> { Indent = false, EnumAsString = true });
 		}
 
 		private class SecurityCsvList : CsvEntityList<SecurityId, Security>, IStorageSecurityList

@@ -14,6 +14,8 @@
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
 
+	using Newtonsoft.Json;
+
 	using NuGet.Configuration;
 
 	using StockSharp.Localization;
@@ -483,7 +485,12 @@
 		/// <typeparam name="T">Value type.</typeparam>
 		/// <returns>Serializer.</returns>
 		public static ISerializer<T> CreateSerializer<T>()
-			=> new JsonSerializer<T> { FillMode = true, Indent = true, EnumAsString = true };
+			=> new JsonSerializer<T>
+			{
+				Indent = true,
+				EnumAsString = true,
+				NullValueHandling = NullValueHandling.Ignore,
+			};
 
 		/// <summary>
 		/// Create serializer.
