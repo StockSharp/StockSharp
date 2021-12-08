@@ -3,10 +3,12 @@
 	using System;
 	using System.IO;
 
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Configuration;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Default implementation of <see cref="ICredentialsProvider"/>.
@@ -26,8 +28,18 @@
 			}
 
 			credentials = new ServerCredentials();
-			credentials.LoadIfNotNull(file.DeserializeWithMigration<SettingsStorage>());
-			return true;
+
+			try
+			{
+				credentials.LoadIfNotNull(file.DeserializeWithMigration<SettingsStorage>());
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+				return false;
+			}
+
+			return !credentials.Password.IsEmpty() || !credentials.Token.IsEmpty();
 		}
 
 		void ICredentialsProvider.Save(ServerCredentials credentials)
