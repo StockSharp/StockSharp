@@ -15,7 +15,7 @@
 	/// </summary>
 	public class DefaultCredentialsProvider : ICredentialsProvider
 	{
-		private const string _credentialsFile = $"credentials{Paths.DefaultSettingsExt}";
+		private readonly string _credentialsFile = $"credentials{Paths.DefaultSettingsExt}";
 
 		bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
 		{
