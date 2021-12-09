@@ -178,20 +178,20 @@
 		public static string GetUserUrl(long userId) => $"{GetWebSiteUrl()}/users/{userId}/";
 
 		/// <summary>
-		/// Get strategy url.
-		/// </summary>
-		/// <param name="robotId">Identifier.</param>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetRobotLink(long robotId) => $"{GetWebSiteUrl()}/robot/{robotId}/";
-
-		/// <summary>
-		/// Get produdct url.
+		/// Get store url.
 		/// </summary>
 		/// <param name="productId">Identifier.</param>
 		/// <returns>Localized url.</returns>
 		[Obsolete]
-		public static string GetProductLink(object productId) => $"{GetWebSiteUrl()}/store/{productId}/";
+		public static string GetStoreLink(object productId) => $"{GetWebSiteUrl()}/store/{productId}/";
+
+		/// <summary>
+		/// Get products url.
+		/// </summary>
+		/// <param name="productId">Identifier.</param>
+		/// <returns>Localized url.</returns>
+		[Obsolete]
+		public static string GetProductLink(object productId) => $"{GetWebSiteUrl()}/products/{productId}/";
 
 		/// <summary>
 		/// Get topic url.
