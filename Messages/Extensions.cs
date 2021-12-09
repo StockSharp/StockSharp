@@ -1010,47 +1010,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// To convert one currency to another.
-		/// </summary>
-		/// <param name="currencyFrom">The currency to be converted.</param>
-		/// <param name="currencyTypeTo">The code of the target currency.</param>
-		/// <returns>Converted currency.</returns>
-		public static Currency Convert(this Currency currencyFrom, CurrencyTypes currencyTypeTo)
-		{
-			if (currencyFrom == null)
-				throw new ArgumentNullException(nameof(currencyFrom));
-
-			return new Currency { Type = currencyTypeTo, Value = currencyFrom.Value * currencyFrom.Type.Convert(currencyTypeTo) };
-		}
-
-		/// <summary>
-		/// To get the conversion rate for converting one currency to another.
-		/// </summary>
-		/// <param name="from">The code of currency to be converted.</param>
-		/// <param name="to">The code of the target currency.</param>
-		/// <returns>The rate.</returns>
-		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to)
-		{
-			return from.Convert(to, DateTime.Today);
-		}
-
-		/// <summary>
-		/// To get the conversion rate for the specified date.
-		/// </summary>
-		/// <param name="from">The code of currency to be converted.</param>
-		/// <param name="to">The code of the target currency.</param>
-		/// <param name="date">The rate date.</param>
-		/// <returns>The rate.</returns>
-		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to, DateTime date)
-		{
-			if (from == to)
-				return 1;
-
-			using var client = new WebClient();
-			return decimal.Parse(client.DownloadString($"https://stocksharp.com/services/currencyconverter.ashx?from={from}&to={to}&date={(long)date.ToUnix()}"), CultureInfo.InvariantCulture);
-		}
-
-		/// <summary>
 		/// Is the specified <see cref="PositionChangeTypes"/> was marked by <see cref="ObsoleteAttribute"/>.
 		/// </summary>
 		/// <param name="type"><see cref="PositionChangeTypes"/> value.</param>
