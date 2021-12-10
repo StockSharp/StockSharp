@@ -44,6 +44,13 @@
     <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
   </PropertyGroup>
+  
+  <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
+  <PropertyGroup Condition="$(_TargetAssemblyProjectName) != ''">
+    <SSProjectName>$([System.String]::Copy('StockSharp.$(_TargetAssemblyProjectName)').Replace('GitHub',''))</SSProjectName>
+    <AssemblyName>$(SSProjectName)</AssemblyName>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <!-- TODO this needs to be removed when connectors fixed to NO_LICENSE constant -->
     <DefineConstants>$(DefineConstants);INCLUDE_LICENSE</DefineConstants>
