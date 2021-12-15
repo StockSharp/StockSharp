@@ -241,7 +241,7 @@ namespace StockSharp.Algo
 
 			List<Message> nextLookups = null;
 
-			if(_prevTime.IsDefault())
+			if(_prevTime == default)
 			{
 				_prevTime = message.LocalTime;
 			}
