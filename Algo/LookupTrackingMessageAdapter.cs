@@ -241,9 +241,14 @@ namespace StockSharp.Algo
 
 			List<Message> nextLookups = null;
 
-			if (_prevTime != DateTimeOffset.MinValue)
+			if(_prevTime.IsDefault())
+			{
+				_prevTime = message.LocalTime;
+			}
+			else if (message.LocalTime > _prevTime)
 			{
 				var diff = message.LocalTime - _prevTime;
+				_prevTime = message.LocalTime;
 
 				foreach (var pair in _lookups.CachedPairs)
 				{
@@ -282,8 +287,6 @@ namespace StockSharp.Algo
 					base.OnInnerAdapterNewOutMessage(lookup);
 				}
 			}
-
-			_prevTime = message.LocalTime;
 		}
 
 		/// <summary>
