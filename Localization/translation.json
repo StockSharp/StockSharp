@@ -803,6 +803,10 @@
     "en": "Cluster base line color",
     "ru": "Цвет базовой линии кластера"
   },
+  "ClusterSeparatorLineColor": {
+    "en": "Cluster separator line color",
+    "ru": "Цвет линии разделителя кластера"
+  },
   "ClusterTextColor": {
     "en": "Cluster text color",
     "ru": "Цвет текста кластера"

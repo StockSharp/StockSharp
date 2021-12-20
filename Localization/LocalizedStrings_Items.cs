@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Cluster separator line color
+		/// </summary>
+		public const string ClusterSeparatorLineColorKey = nameof(ClusterSeparatorLineColor);
+
+		/// <summary>
+		/// Cluster separator line color
+		/// </summary>
+		public static string ClusterSeparatorLineColor => GetString(ClusterSeparatorLineColorKey);
+
+		/// <summary>
 		/// Report a problem
 		/// </summary>
 		public const string ReportProblemKey = nameof(ReportProblem);

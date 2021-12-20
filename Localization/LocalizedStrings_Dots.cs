@@ -57,6 +57,11 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
+		public static string ClusterSeparatorLineColorDot => AppendDot(ClusterLineColor);
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public static string ClusterTextColorDot => AppendDot(ClusterTextColor);
 
 		/// <summary>
