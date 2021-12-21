@@ -62,6 +62,8 @@
 		private static readonly TimeSpan _realtimeInterval = TimeSpan.FromMilliseconds(100);
 		private static readonly TimeSpan _drawInterval = TimeSpan.FromMilliseconds(100);
 
+		private CancellationTokenSource _drawCts = new();
+
 		private DateTime _lastRealtimeUpdateTime;
 		private DateTime _lastDrawTime;
 
@@ -210,6 +212,9 @@
 				return;
 			}
 
+			_drawCts.Cancel();
+			_drawCts = new();
+
 			this.GuiSync(() =>
 			{
 				Chart.ClearAreas();
@@ -284,6 +289,8 @@
 
 			_mdMsg = series.ToMarketDataMessage(true);
 
+			var token = _drawCts.Token;
+
 			Task.Factory.StartNew(() =>
 			{
 				var date = DateTime.MinValue;
@@ -292,6 +299,9 @@
 				{
 					foreach (var tick in storage.GetTickMessageStorage(series.Security.ToSecurityId(), new LocalMarketDataDrive(path), format).Load())
 					{
+						if(token.IsCancellationRequested)
+							break;
+
 						_tradeGenerator.Process(tick);
 
 						if (_candleTransform.Process(tick))
@@ -324,6 +334,9 @@
 				{
 					foreach (var candleMsg in storage.GetCandleMessageStorage(msgType, series.Security.ToSecurityId(), series.Arg, new LocalMarketDataDrive(path), format).Load())
 					{
+						if(token.IsCancellationRequested)
+							break;
+
 						if (candleMsg.State != CandleStates.Finished)
 							candleMsg.State = CandleStates.Finished;
 
@@ -359,7 +372,7 @@
 				}
 
 				_historyLoaded = true;
-			})
+			}, token)
 			.ContinueWith(t =>
 			{
 				if (t.Exception != null)
