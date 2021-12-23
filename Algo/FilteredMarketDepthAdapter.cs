@@ -20,7 +20,7 @@ namespace StockSharp.Algo
 		{
 			private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = new();
 			private readonly Dictionary<long, RefTriple<Sides, decimal, decimal?>> _ordersInfo = new();
-			
+
 			private QuoteChangeMessage _lastSnapshot;
 
 			public FilteredMarketDepthInfo(long subscribeId, Subscription bookSubscription, Subscription ordersSubscription)
@@ -94,6 +94,12 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(message));
 
 				_ordersInfo[message.TransactionId] = RefTuple.Create(message.Side, message.Price, (decimal?)message.Volume);
+
+				var valKey = (message.Side, message.Price);
+
+				_totals.TryGetValue(valKey, out var total);
+				total += message.Volume;
+				_totals[valKey] = total;
 			}
 
 			public QuoteChangeMessage Process(ExecutionMessage message)
@@ -212,7 +218,7 @@ namespace StockSharp.Algo
 		private class OnlineInfo
 		{
 			public readonly CachedSynchronizedSet<long> Subscribers = new();
-			
+
 			public readonly CachedSynchronizedSet<long> BookSubscribers = new();
 			public readonly CachedSynchronizedSet<long> OrdersSubscribers = new();
 		}
@@ -270,7 +276,7 @@ namespace StockSharp.Algo
 						_online.Clear();
 						_unsubscribeRequests.Clear();
 					}
-					
+
 					break;
 				}
 
@@ -388,7 +394,7 @@ namespace StockSharp.Algo
 							if (ordersUnsubscribe != null)
 								base.OnSendInMessage(ordersUnsubscribe);
 						}
-							
+
 						return true;
 					}
 				}
