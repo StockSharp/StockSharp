@@ -12023,6 +12023,10 @@
     "en": "Security ID incorrectly specified.",
     "ru": "Идентификатор инструмента задан неверно."
   },
+  "Str3017": {
+    "en": "Subaccount name",
+    "ru": "Имя субсчета"
+  },
   "PnLUnreal": {
     "en": "P&L (unrealized)",
     "ru": "П/У (нереализ.)"
@@ -13094,6 +13098,10 @@
   "Str3308": {
     "en": "Client ID.",
     "ru": "Идентификатор клиента."
+  },
+  "Str3309": {
+    "en": "Path to script to start the gate.",
+    "ru": "Путь к скрипту для старта шлюза."
   },
   "Str3310Params": {
     "en": "The number of requests in {0} minutes exceeded {1}. Read more about the limits at https://bitstamp.net/api/.",
@@ -14878,6 +14886,14 @@
   "Str3843": {
     "en": "Cannot cast adapter with type {0} to {1}.",
     "ru": "Невозможно привести адаптера с типом {0} к {1}."
+  },
+  "Str3844": {
+    "en": "The path to gate launch script not set.",
+    "ru": "Не задан путь к скрипту запуска шлюза для подключения к маркету."
+  },
+  "Str3845": {
+    "en": "Gate launch script file not found. Path: {0}.",
+    "ru": "Не найден файл скрипта запуска шлюза для подключения к маркету. Путь {0}"
   },
   "TaskSettings": {
     "en": "{0} task settings",

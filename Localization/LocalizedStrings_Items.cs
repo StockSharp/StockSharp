@@ -30007,6 +30007,17 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static string Str3016 => GetString(Str3016Key);
 
+
+		/// <summary>
+		/// Subaccount name.
+		/// </summary>
+		public const string Str3017Key = nameof(Str3017);
+
+		/// <summary>
+		/// Subaccount name.
+		/// </summary>
+		public static string Str3017 => GetString(Str3017Key);
+
 		/// <summary>
 		/// P&amp;L (unrealized)
 		/// </summary>
@@ -32676,6 +32687,16 @@ namespace StockSharp.Localization
 		/// Client ID.
 		/// </summary>
 		public static string Str3308 => GetString(Str3308Key);
+
+		/// <summary>
+		/// Script path name.
+		/// </summary>
+		public const string Str3309Key = nameof(Str3309);
+
+		/// <summary>
+		/// Script path name.
+		/// </summary>
+		public static string Str3309 => GetString(Str3309Key);
 
 		/// <summary>
 		/// The number of requests in {0} minutes exceeded {1}. Read more about the limits at https://bitstamp.net/api/.
@@ -37106,6 +37127,26 @@ namespace StockSharp.Localization
 		/// Error loading quotes for {0} for {1}.
 		/// </summary>
 		public static string Str3839Params => GetString(Str3839ParamsKey);
+
+		/// <summary>
+		/// The path to gate launch script not set.
+		/// </summary>
+		public const string Str3844Key = nameof(Str3844);
+
+		/// <summary>
+		/// The path to gate launch script not set.
+		/// </summary>
+		public static string Str3844 => GetString(Str3844Key);
+
+		/// <summary>
+		/// Gate launch script file not found. Path: {0}.
+		/// </summary>
+		public const string Str3845Key = nameof(Str3845);
+
+		/// <summary>
+		/// Gate launch script file not found. Path: {0}.
+		/// </summary>
+		public static string Str3845 => GetString(Str3845Key);
 
 		/// <summary>
 		/// Cannot cast adapter with type {0} to {1}.
@@ -43827,6 +43868,17 @@ namespace StockSharp.Localization
 		/// Google
 		/// </summary>
 		public static string Google => GetString(GoogleKey);
+
+		/// <summary>
+		/// Interactive Brokers
+		/// </summary>
+		public const string IBKey = nameof(IB);
+
+		/// <summary>
+		/// Interactive Brokers
+		/// </summary>
+		public static string IB => GetString(IBKey);
+
 
 		/// <summary>
 		/// MB Trading
@@ -53647,5 +53699,15 @@ namespace StockSharp.Localization
 		/// Wall Street Horizon event data
 		/// </summary>
 		public static string WshEvent => GetString(WshEventKey);
+
+		/// <summary>
+		/// FTX
+		/// </summary>
+		public const string FtxKey = nameof(Ftx);
+
+		/// <summary>
+		/// FTX
+		/// </summary>
+		public static string Ftx => GetString(FtxKey);
 	}
 }
