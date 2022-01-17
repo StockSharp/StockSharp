@@ -53699,15 +53699,5 @@ namespace StockSharp.Localization
 		/// Wall Street Horizon event data
 		/// </summary>
 		public static string WshEvent => GetString(WshEventKey);
-
-		/// <summary>
-		/// FTX
-		/// </summary>
-		public const string FtxKey = nameof(Ftx);
-
-		/// <summary>
-		/// FTX
-		/// </summary>
-		public static string Ftx => GetString(FtxKey);
 	}
 }
