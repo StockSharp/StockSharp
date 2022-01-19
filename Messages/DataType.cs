@@ -9,6 +9,7 @@ namespace StockSharp.Messages
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Data type info.
@@ -371,6 +372,25 @@ namespace StockSharp.Messages
 		/// </summary>
 		public static ISet<DataType> CandleSources { get; } = new HashSet<DataType>(new[] { Ticks, Level1, MarketDepth, OrderLog });
 
+		private static object TryParseArg(object arg)
+		{
+			if (arg is not string str)
+				str = arg.ToString();
+
+			if(TimeSpan.TryParse(str, out var ts))
+				return ts;
+
+			if(Enum.TryParse(str, true, out ExecutionTypes et))
+				return et;
+
+			if(decimal.TryParse(str, out var val))
+				return val;
+
+			LogManager.Instance?.Application.AddWarningLog("Unable to parse Arg. type='{0}', val='{1}'", arg.GetType().FullName, str);
+
+			return arg;
+		}
+
 		/// <summary>
 		/// Load settings.
 		/// </summary>
@@ -380,7 +400,29 @@ namespace StockSharp.Messages
 			MessageType = storage.GetValue<Type>(nameof(MessageType));
 
 			if (storage.ContainsKey(nameof(Arg)))
-				Arg = storage.GetValue<object>(nameof(Arg));
+			{
+				var arg = storage.GetValue<object>(nameof(Arg));
+
+				if (arg is SettingsStorage ss)
+				{
+					var type = ss.GetValue<Type>("type");
+					if (typeof(IPersistable).IsAssignableFrom(type))
+					{
+						var instance = type.CreateInstance<IPersistable>();
+						instance.Load(ss.GetValue<SettingsStorage>("value"));
+
+						Arg = instance;
+					}
+					else
+					{
+						Arg = ss.GetValue<object>("value").To(type);
+					}
+				}
+				else
+				{
+					Arg = arg == null ? null : TryParseArg(arg);
+				}
+			}
 
 			if (storage.ContainsKey(nameof(IsSecurityRequired)))
 				_isSecurityRequired = storage.GetValue<bool>(nameof(IsSecurityRequired));
@@ -395,7 +437,17 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(MessageType), MessageType?.GetTypeName(false));
 
 			if (Arg != null)
-				storage.SetValue(nameof(Arg), Arg);
+			{
+				var ss = new SettingsStorage();
+				ss.SetValue("type", Arg.GetType().GetTypeName(false));
+
+				if (Arg is IPersistable per)
+					ss.SetValue("value", per.Save());
+				else
+					ss.SetValue("value", Arg.To<string>());
+
+				storage.SetValue(nameof(Arg), ss);
+			}
 
 			if (_isSecurityRequired)
 				storage.SetValue(nameof(IsSecurityRequired), true);
