@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Help
+		/// </summary>
+		public const string Help2Key = nameof(Help2);
+
+		/// <summary>
+		/// Help
+		/// </summary>
+		public static string Help2 => GetString(Help2Key);
+
+		/// <summary>
 		/// Cluster separator line color
 		/// </summary>
 		public const string ClusterSeparatorLineColorKey = nameof(ClusterSeparatorLineColor);
@@ -42699,12 +42709,12 @@ namespace StockSharp.Localization
 		public static string HddId => GetString(HddIdKey);
 
 		/// <summary>
-		/// Select application launch mode (available features are marked)
+		/// Select application launch mode
 		/// </summary>
 		public const string SelectAppModeKey = nameof(SelectAppMode);
 
 		/// <summary>
-		/// Select application launch mode (available features are marked)
+		/// Select application launch mode
 		/// </summary>
 		public static string SelectAppMode => GetString(SelectAppModeKey);
 

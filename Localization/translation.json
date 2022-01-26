@@ -16695,6 +16695,10 @@
     "en": "Help",
     "ru": "Справка"
   },
+  "Help2": {
+    "en": "Help",
+    "ru": "Помощь"
+  },
   "AverageTime": {
     "en": "Average time",
     "ru": "Среднее время"
@@ -17224,8 +17228,8 @@
     "ru": "ID компьютера"
   },
   "SelectAppMode": {
-    "en": "Select application launch mode (available features are marked)",
-    "ru": "Выберите режим запуска (доступная функциональность выделена)"
+    "en": "Select application launch mode",
+    "ru": "Выберите режим запуска"
   },
   "InProgress": {
     "en": "In progress. Please wait...",
