@@ -3,7 +3,15 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\..\stocksharp.ico">
+      <Link>Properties\stocksharp.ico</Link>
+    </Resource>
   </ItemGroup>
 </Project>

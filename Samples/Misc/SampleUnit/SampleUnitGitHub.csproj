@@ -4,14 +4,6 @@
     <ProjectGuid>{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}</ProjectGuid>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Content Include="..\..\..\stocksharp.ico">
-      <Link>stocksharp.ico</Link>
-    </Content>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
   </ItemGroup>

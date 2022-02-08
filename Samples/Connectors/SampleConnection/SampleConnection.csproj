@@ -4,14 +4,8 @@
     <ProjectGuid>{1F698A62-C461-4A8A-9D81-FFEF09C0DC52}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ApplicationIcon>..\..\..\stocksharp.ico</ApplicationIcon>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <ItemGroup>
-    <Resource Include="..\..\..\stocksharp.ico">
-      <Link>stocksharp.ico</Link>
-    </Resource>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
