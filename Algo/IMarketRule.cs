@@ -400,7 +400,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <inheritdoc />
-		public bool IsReady => !IsDisposed && !(_container is null);
+		public bool IsReady => !IsDisposed && _container is not null;
 
 		/// <inheritdoc />
 		public bool IsActive { get; set; }
