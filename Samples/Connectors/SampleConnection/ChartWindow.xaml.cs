@@ -2,17 +2,18 @@
 {
 	using System;
 	using System.ComponentModel;
-	using System.Windows.Media;
+	using System.Drawing;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Charting;
 
 	partial class ChartWindow
 	{
 		private readonly Connector _connector;
-		private readonly ChartCandleElement _candleElem;
+		private readonly IChartCandleElement _candleElem;
 		private readonly Subscription _subscription;
 
 		public ChartWindow(MarketDataMessage mdMsg)
@@ -28,17 +29,15 @@
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
-			var area = new ChartArea();
+			var area = Chart.CreateArea();
 			Chart.Areas.Add(area);
 
-			_candleElem = new ChartCandleElement
-			{
-				AntiAliasing = false,
-				UpFillColor = Colors.White,
-				UpBorderColor = Colors.Black,
-				DownFillColor = Colors.Black,
-				DownBorderColor = Colors.Black,
-			};
+			_candleElem = Chart.CreateCandleElement();
+			_candleElem.AntiAliasing = false;
+			_candleElem.UpFillColor = Color.White;
+			_candleElem.UpBorderColor = Color.Black;
+			_candleElem.DownFillColor = Color.Black;
+			_candleElem.DownBorderColor = Color.Black;
 
 			area.Elements.Add(_candleElem);
 

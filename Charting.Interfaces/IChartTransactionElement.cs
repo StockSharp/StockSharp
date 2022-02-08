@@ -1,0 +1,42 @@
+﻿namespace StockSharp.Charting
+{
+	using System.Drawing;
+
+	/// <summary>
+	/// The interface that describes the Orders Or Trades chart element.
+	/// </summary>
+	/// <typeparam name="T">The element type.</typeparam>
+	public interface IChartTransactionElement<T> : IChartElement
+		where T : IChartTransactionElement<T>
+	{
+		/// <summary>
+		/// Color of graphics element on chart, indicating buy.
+		/// </summary>
+		Color BuyColor { get; set; }
+
+		/// <summary>
+		/// Border color of graphics element on chart, indicating buy.
+		/// </summary>
+		Color BuyStrokeColor { get; set; }
+
+		/// <summary>
+		/// Color of graphics element on chart, indicating sell.
+		/// </summary>
+		Color SellColor { get; set; }
+
+		/// <summary>
+		/// Border color of graphics element on chart, indicating sell.
+		/// </summary>
+		Color SellStrokeColor { get; set; }
+
+		/// <summary>
+		/// Use alternative icons.
+		/// </summary>
+		bool UseAltIcon { get; set; }
+
+		/// <summary>
+		/// Draw size.
+		/// </summary>
+		double DrawSize { get; set; }
+	}
+}

@@ -22,6 +22,7 @@
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Configuration;
+	using StockSharp.Charting;
 
 	public partial class MainWindow
 	{
@@ -48,9 +49,9 @@
 		private const bool _addIndicator = true;
 		//private const int _tradeEveryNCandles = 100;
 
-		private ChartArea _area;
-		private ChartCandleElement _candleElement;
-		private ChartIndicatorElement _indicatorElement;
+		private IChartArea _area;
+		private IChartCandleElement _candleElement;
+		private IChartIndicatorElement _indicatorElement;
 		private readonly CachedSynchronizedList<LightCandle> _candles = new();
 		private readonly TimeSpan _tfSpan = TimeSpan.FromTicks(_timeframe);
 		private readonly DispatcherTimer _chartUpdateTimer = new();
@@ -108,7 +109,7 @@
 		{
 			Chart.ClearAreas();
 
-			_area = new ChartArea();
+			_area = Chart.CreateArea();
 
 			var yAxis = _area.YAxises.First();
 
@@ -125,11 +126,9 @@
 
 			_indicatorElement = null;
 
-			_candleElement = new ChartCandleElement
-			{
-				FullTitle = "Candles",
-				YAxisId = yAxis.Id
-			};
+			_candleElement = Chart.CreateCandleElement();
+			_candleElement.FullTitle = "Candles";
+			_candleElement.YAxisId = yAxis.Id;
 			Chart.AddElement(_area, _candleElement, series);
 
 			if (_addIndicator)
@@ -139,14 +138,12 @@
 					Name = "MyMA"
 				};
 
-				_indicatorElement = new ChartIndicatorElement
-				{
-					DrawStyle = ChartIndicatorDrawStyles.Line,
-					AntiAliasing = true,
-					StrokeThickness = 1,
-					Color = Colors.Blue,
-					YAxisId = yAxis.Id,
-				};
+				_indicatorElement = Chart.CreateIndicatorElement();
+				_indicatorElement.DrawStyle = ChartIndicatorDrawStyles.Line;
+				_indicatorElement.AntiAliasing = true;
+				_indicatorElement.StrokeThickness = 1;
+				_indicatorElement.Color = System.Drawing.Color.Blue;
+				_indicatorElement.YAxisId = yAxis.Id;
 
 				Chart.AddElement(_area, _indicatorElement, series, _indicator);
 			}

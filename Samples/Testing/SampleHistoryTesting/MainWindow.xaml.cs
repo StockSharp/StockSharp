@@ -32,12 +32,12 @@ namespace SampleHistoryTesting
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
-	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Finam;
 	using StockSharp.Yahoo;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Charting;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
@@ -62,13 +62,6 @@ namespace SampleHistoryTesting
 		private readonly CachedSynchronizedList<HistoryEmulationConnector> _connectors = new();
 		
 		private DateTime _startEmulationTime;
-		private ChartCandleElement _candlesElem;
-		private ChartTradeElement _tradesElem;
-		private ChartIndicatorElement _shortElem;
-		private SimpleMovingAverage _shortMa;
-		private ChartIndicatorElement _longElem;
-		private SimpleMovingAverage _longMa;
-		private ChartArea _area;
 
 		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new();
 
@@ -356,7 +349,7 @@ namespace SampleHistoryTesting
 
 				var title = (string)set.Item1.Content;
 
-				InitChart(set.Item5, set.Item6, set.Item7);
+				ClearChart(set.Item5, set.Item6, set.Item7);
 
 				var progressBar = set.Item2;
 				var statistic = set.Item3;
@@ -426,29 +419,11 @@ namespace SampleHistoryTesting
 					BuildCandlesFrom2 = emulationInfo.UseOrderLog ? DataType.OrderLog : null,
 				};
 
-				_shortMa = new SimpleMovingAverage { Length = 10 };
-				_shortElem = new ChartIndicatorElement
-				{
-					Color = Colors.Coral,
-					ShowAxisMarker = false,
-					FullTitle = _shortMa.ToString()
-				};
-
-				var chart = set.Item5;
-
-				chart.AddElement(_area, _shortElem);
-
-				_longMa = new SimpleMovingAverage { Length = 80 };
-				_longElem = new ChartIndicatorElement
-				{
-					ShowAxisMarker = false,
-					FullTitle = _longMa.ToString()
-				};
-				chart.AddElement(_area, _longElem);
-
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(series, _longMa, _shortMa, chart, _candlesElem, _tradesElem, _longElem, _shortElem)
+				var strategy = new SmaStrategy(series)
 				{
+					LongSma = { Length = 80 },
+					ShortSma = { Length = 10 },
 					Volume = 1,
 					Portfolio = portfolio,
 					Security = security,
@@ -459,6 +434,10 @@ namespace SampleHistoryTesting
 					// it is excessively for time range with several months
 					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 				};
+
+				var chart = set.Item5;
+
+				strategy.SetChart(chart);
 
 				logManager.Sources.Add(strategy);
 
@@ -543,7 +522,7 @@ namespace SampleHistoryTesting
 				
 				strategy.PnLChanged += () =>
 				{
-					var data = new ChartDrawData();
+					var data = equity.CreateData();
 
 					data
 						.Group(strategy.CurrentTime)
@@ -558,7 +537,7 @@ namespace SampleHistoryTesting
 
 				strategy.PositionChanged += () =>
 				{
-					var data = new ChartDrawData();
+					var data = set.Item7.CreateData();
 
 					data
 						.Group(strategy.CurrentTime)
@@ -668,20 +647,11 @@ namespace SampleHistoryTesting
 			}
 		}
 
-		private void InitChart(IChart chart, EquityCurveChart equity, EquityCurveChart position)
+		private void ClearChart(IChart chart, EquityCurveChart equity, EquityCurveChart position)
 		{
 			chart.ClearAreas();
 			equity.Clear();
 			position.Clear();
-
-			_area = new ChartArea();
-			chart.AddArea(_area);
-
-			_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
-			chart.AddElement(_area, _candlesElem);
-
-			_tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
-			chart.AddElement(_area, _tradesElem);
 		}
 
 		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)

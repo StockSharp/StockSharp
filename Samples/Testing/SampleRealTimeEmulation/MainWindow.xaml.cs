@@ -36,11 +36,12 @@ namespace SampleRealTimeEmulation
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Charting;
 
 	public partial class MainWindow
 	{
 		private readonly SynchronizedList<Candle> _buffer = new();
-		private readonly ChartCandleElement _candlesElem;
+		private readonly IChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
 		private Subscription _candlesSubscription;
 		private readonly Connector _realConnector = new();
@@ -69,10 +70,10 @@ namespace SampleRealTimeEmulation
 
 			_logManager.Sources.Add(_realConnector);
 
-			var area = new ChartArea();
+			var area = Chart.CreateArea();
 			Chart.Areas.Add(area);
 
-			_candlesElem = new ChartCandleElement();
+			_candlesElem = Chart.CreateCandleElement();
 			area.Elements.Add(_candlesElem);
 
 			InitRealConnector();

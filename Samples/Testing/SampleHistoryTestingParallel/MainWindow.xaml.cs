@@ -29,13 +29,13 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies.Testing;
-	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
+	using StockSharp.Charting;
 
 	public partial class MainWindow
 	{
@@ -73,13 +73,13 @@ namespace SampleHistoryTestingParallel
 			logManager.Listeners.Add(fileLogListener);
 
 			// SMA periods
-			var periods = new List<Tuple<int, int, Color>>();
+			var periods = new List<(int longMa, int shortMa, Color color)>();
 
 			for (var l = 100; l >= 50; l -= 10)
 			{
 				for (var s = 10; s >= 5; s -= 1)
 				{
-					periods.Add(Tuple.Create(l, s, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
+					periods.Add((l, s, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
 				}
 			}
 
@@ -185,8 +185,11 @@ namespace SampleHistoryTestingParallel
 					var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 					// create strategy based SMA
-					var strategy = new SampleHistoryTesting.SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 }, null, null, null, null, null)
+					var strategy = new SampleHistoryTesting.SmaStrategy(series)
 					{
+						ShortSma = { Length = period.shortMa },
+						LongSma = { Length = period.longMa },
+
 						Volume = 1,
 						Security = security,
 						Portfolio = portfolio,

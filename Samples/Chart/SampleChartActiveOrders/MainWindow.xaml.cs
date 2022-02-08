@@ -23,14 +23,15 @@
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Configuration;
+	using StockSharp.Charting;
 
 	public partial class MainWindow
 	{
 		private readonly ObservableCollection<Order> _orders = new();
 
-		private ChartArea _area;
-		private ChartCandleElement _candleElement;
-		private ChartActiveOrdersElement _activeOrdersElement;
+		private IChartArea _area;
+		private IChartCandleElement _candleElement;
+		private IChartActiveOrdersElement _activeOrdersElement;
 		private TimeFrameCandle _candle;
 
 		private readonly DispatcherTimer _chartUpdateTimer = new();
@@ -90,7 +91,7 @@
 			Chart.ClearAreas();
 			Chart.OrderCreationMode = true;
 
-			_area = new ChartArea();
+			_area = Chart.CreateArea();
 
 			var yAxis = _area.YAxises.First();
 
@@ -105,16 +106,12 @@
 				_security,
 				TimeSpan.FromMinutes(_timeframe));
 
-			_candleElement = new ChartCandleElement
-			{
-				FullTitle = "Candles"
-			};
+			_candleElement = Chart.CreateCandleElement();
+			_candleElement.FullTitle = "Candles";
 			Chart.AddElement(_area, _candleElement, series);
 
-			_activeOrdersElement = new ChartActiveOrdersElement
-			{
-				FullTitle = "Active orders"
-			};
+			_activeOrdersElement = Chart.CreateActiveOrdersElement();
+			_activeOrdersElement.FullTitle = "Active orders";
 			Chart.AddElement(_area, _activeOrdersElement);
 		}
 
@@ -184,7 +181,7 @@
 			var lastCandle = _allCandles.LastOrDefault();
 			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
 
-			var data = new ChartDrawData();
+			var data = Chart.CreateData();
 
 			foreach (var candle in candlesToUpdate)
 			{
@@ -273,7 +270,7 @@
 				_orders.Remove(order);
 			}
 
-			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order));
+			Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order));
 		}
 
 		private void Load_Click(object sender, RoutedEventArgs e)
@@ -286,8 +283,8 @@
 				Chart.LoadIfNotNull(settingsStorage);
 
 				_area = Chart.Areas.First();
-				_candleElement = Chart.Elements.OfType<ChartCandleElement>().First();
-				_activeOrdersElement = Chart.Elements.OfType<ChartActiveOrdersElement>().First();
+				_candleElement = Chart.Elements.OfType<IChartCandleElement>().First();
+				_activeOrdersElement = Chart.Elements.OfType<IChartActiveOrdersElement>().First();
 			}
 		}
 
@@ -308,7 +305,7 @@
 			Chart_OnMoveOrder(SelectedOrder, SelectedOrder.Price + RandomGen.GetInt(-3, 3) * _priceStep);
 		}
 
-		private void Chart_OnRegisterOrder(ChartArea area, Order orderDraft)
+		private void Chart_OnRegisterOrder(IChartArea area, Order orderDraft)
 		{
 			if (NeedToConfirm && !Confirm("Register order?"))
 				return;
@@ -328,21 +325,21 @@
 
 			Log($"RegisterOrder: {order}");
 
-			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order));
+			Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order));
 
 			void RegAction()
 			{
 				if (NeedToFail)
 				{
 					order.State = OrderStates.Failed;
-					Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order));
+					Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order));
 
 					Log($"Order failed: {order}");
 				}
 				else
 				{
 					order.State = OrderStates.Active;
-					Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order));
+					Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order));
 
 					Log($"Order registered: {order}");
 
@@ -386,7 +383,7 @@
 		private void Chart_OnMoveOrder1(Order order, decimal newPrice)
 		{
 			// freeze order on chart
-			Chart.Draw(new ChartDrawData()
+			Chart.Draw(Chart.CreateData()
 				.Add(_activeOrdersElement, order, true, price: newPrice, state: OrderStates.Pending));
 
 			void MoveAction()
@@ -394,7 +391,7 @@
 				if (NeedToFail)
 				{
 					Log("Move failed");
-					Chart.Draw(new ChartDrawData()
+					Chart.Draw(Chart.CreateData()
 						.Add(_activeOrdersElement, null, isError: true, price: newPrice, balance: order.Balance) // draw error animation on newprice
 						.Add(_activeOrdersElement, order, isError: true, price: order.Price)); // redraw order with old price
 				}
@@ -403,7 +400,7 @@
 					order.Price = newPrice;
 					Log($"Order moved to new price: {order}");
 
-					Chart.Draw(new ChartDrawData()
+					Chart.Draw(Chart.CreateData()
 						.Add(_activeOrdersElement, order)); // redraw/unfreeze
 
 					((OrderEx)order).Refresh();
@@ -431,8 +428,8 @@
 				Portfolio = order.Portfolio,
 			};
 
-			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order, true, state: OrderStates.Pending)); // freeze old order on chart
-			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, newOrder, true)); // freeze new order on chart
+			Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order, true, state: OrderStates.Pending)); // freeze old order on chart
+			Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, newOrder, true)); // freeze new order on chart
 
 			void MoveAction()
 			{
@@ -442,8 +439,8 @@
 
 					newOrder.State = OrderStates.Failed;
 
-					Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order, isError: true)); // show error on old order
-					Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, newOrder, isError: true)); // show error on new order
+					Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order, isError: true)); // show error on old order
+					Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, newOrder, isError: true)); // show error on new order
 				}
 				else
 				{
@@ -452,7 +449,7 @@
 
 					Log($"Order moved to new: {newOrder}");
 
-					Chart.Draw(new ChartDrawData()
+					Chart.Draw(Chart.CreateData()
 							.Add(_activeOrdersElement, order)
 							.Add(_activeOrdersElement, newOrder));
 
@@ -474,7 +471,7 @@
 
 			Log($"CancelOrder: {order}");
 
-			Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order, true));
+			Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order, true));
 
 			void CancelAction()
 			{
@@ -482,7 +479,7 @@
 				{
 					Log("Cancel failed");
 
-					Chart.Draw(new ChartDrawData().Add(_activeOrdersElement, order, isError: true));
+					Chart.Draw(Chart.CreateData().Add(_activeOrdersElement, order, isError: true));
 				}
 				else
 				{

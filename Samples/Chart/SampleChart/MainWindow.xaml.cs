@@ -9,6 +9,7 @@
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Media;
+	using DrawingColor = System.Drawing.Color;
 
 	using MoreLinq;
 
@@ -31,19 +32,19 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.Visuals.Annotations;
+	using StockSharp.Charting;
     using StockSharp.Xaml;
 	using StockSharp.Configuration;
 
 	public partial class MainWindow : ICandleBuilderSubscription
 	{
-		private ChartArea _areaComb;
-		private ChartCandleElement _candleElement;
+		private IChartArea _areaComb;
+		private IChartCandleElement _candleElement;
 		private readonly SynchronizedList<CandleMessage> _updatedCandles = new();
 		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle> _allCandles = new();
 		private Security _security;
 		private RandomWalkTradeGenerator _tradeGenerator;
-		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new();
+		private readonly CachedSynchronizedDictionary<IChartIndicatorElement, IIndicator> _indicators = new();
 		private ICandleBuilder _candleBuilder;
 		private MarketDataMessage _mdMsg;
 		private readonly ICandleBuilderValueTransform _candleTransform = new TickCandleBuilderValueTransform();
@@ -70,13 +71,13 @@
 		private readonly IdGenerator _transactionIdGenerator = new IncrementalIdGenerator();
 		private long _transactionId;
 
-		private ChartAnnotation _annotation;
+		private IChartAnnotation _annotation;
 		private ChartDrawData.AnnotationData _annotationData;
 		private int _annotationId;
 
 		private DateTimeOffset _lastCandleDrawTime;
 		private bool _drawWithColor;
-		private Color _candleDrawColor;
+		private DrawingColor _candleDrawColor;
 
 		MarketDataMessage ICandleBuilderSubscription.Message => _mdMsg;
 		VolumeProfileBuilder ICandleBuilderSubscription.VolumeProfile { get; set; }
@@ -155,7 +156,7 @@
 			base.OnClosing(e);
 		}
 
-		private void Chart_OnSubscribeCandleElement(ChartCandleElement el, CandleSeries ser)
+		private void Chart_OnSubscribeCandleElement(IChartCandleElement el, CandleSeries ser)
 		{
 			CurrentCandle = null;
 			_historyLoaded = false;
@@ -168,7 +169,7 @@
 			LoadData(ser);
 		}
 
-		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
+		private void Chart_OnSubscribeIndicatorElement(IChartIndicatorElement element, CandleSeries series, IIndicator indicator)
 		{
 			_dataThreadActions.Add(() =>
 			{
@@ -183,7 +184,7 @@
 					Chart.DisableIndicatorReset = oldReset;
 				}
 
-				var chartData = new ChartDrawData();
+				var chartData = Chart.CreateData();
 
 				foreach (var candle in _allCandles.CachedValues)
 					chartData.Group(candle.OpenTime).Add(element, indicator.Process(candle));
@@ -199,7 +200,7 @@
 		{
 			_dataThreadActions.Add(() =>
 			{
-				if (element is ChartIndicatorElement indElem)
+				if (element is IChartIndicatorElement indElem)
 					_indicators.Remove(indElem);
 			});
 		}
@@ -219,7 +220,7 @@
 			{
 				Chart.ClearAreas();
 
-				_areaComb = new ChartArea();
+				_areaComb = Chart.CreateArea();
 
 				var yAxis = _areaComb.YAxises.First();
 
@@ -254,7 +255,7 @@
 											 _security,
 											 SeriesEditor.Settings.Arg) { IsCalcVolumeProfile = true };
 
-				_candleElement = new ChartCandleElement();
+				_candleElement = Chart.CreateCandleElement();
 				Chart.AddElement(_areaComb, _candleElement, series);
 			});
 		}
@@ -454,7 +455,7 @@
 			_lastTime += TimeSpan.FromMilliseconds(RandomGen.GetInt(100, 20000));
 		}
 
-		private static Color GetRandomColor() => Color.FromRgb((byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255));
+		private static DrawingColor GetRandomColor() => DrawingColor.FromArgb(255, (byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255));
 
 		private void DrawChartElements()
 		{
@@ -489,12 +490,12 @@
 			foreach (var candle in candlesToUpdate)
 				_allCandles[candle.OpenTime] = candle;
 
-			ChartDrawData chartData = null;
+			IChartDrawData chartData = null;
 
 			foreach (var candle in candlesToUpdate)
 			{
 				if (chartData == null)
-					chartData = new ChartDrawData();
+					chartData = Chart.CreateData();
 
 				if (_lastCandleDrawTime != candle.OpenTime)
 				{
@@ -537,8 +538,8 @@
 
 			if (CustomColors.IsChecked == true)
 			{
-				_candleElement.Colorer = (dto, isUpCandle, isLastCandle) => dto.Hour % 2 != 0 ? null : (isUpCandle ? Colors.Chartreuse : Colors.Aqua);
-				_indicators.Keys.ForEach(el => el.Colorer = c => ((DateTimeOffset)c).Hour % 2 != 0 ? null : Colors.Magenta);
+				_candleElement.Colorer = (dto, isUpCandle, isLastCandle) => dto.Hour % 2 != 0 ? null : (isUpCandle ? DrawingColor.Chartreuse : DrawingColor.Aqua);
+				_indicators.Keys.ForEach(el => el.Colorer = c => ((DateTimeOffset)c).Hour % 2 != 0 ? null : DrawingColor.Magenta);
 			}
 			else
 			{
@@ -547,7 +548,7 @@
 			}
 
 			// refresh prev painted elements
-			Chart.Draw(new ChartDrawData());
+			Chart.Draw(Chart.CreateData());
 		}
 
 		private void CustomColors2_Changed(object sender, RoutedEventArgs e)
@@ -559,7 +560,7 @@
 				if(_allCandles.IsEmpty())
 					return;
 
-				var dd = new ChartDrawData();
+				var dd = Chart.CreateData();
 				foreach (var c in _allCandles)
 					dd.Group(c.Value.OpenTime).Add(_candleElement, colored ? GetRandomColor() : null);
 
@@ -594,7 +595,7 @@
 
 		private void ModifyAnnotation(bool isNew)
 		{
-			Brush RandomBrush()
+			static Brush RandomBrush()
 			{
 				var b = new SolidColorBrush(Color.FromRgb((byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255)));
 				b.Freeze();
@@ -671,7 +672,7 @@
 					data.CoordinateMode = mode;
 				}
 
-				var dd = new ChartDrawData();
+				var dd = Chart.CreateData();
 				dd.Add(_annotation, data);
 
 				Chart.Draw(dd);
@@ -685,7 +686,8 @@
 
 			var values = Enumerator.GetValues<ChartAnnotationTypes>().ToArray();
 
-			_annotation = new ChartAnnotation { Type = values[RandomGen.GetInt(1, values.Length - 1)] };
+			_annotation = Chart.CreateAnnotation();
+			_annotation.Type = values[RandomGen.GetInt(1, values.Length - 1)];
 			_annotationData = null;
 
 			Chart.AddElement(_areaComb, _annotation);
@@ -703,21 +705,21 @@
 			ModifyAnnotation(false);
 		}
 
-		private void ChartOnAnnotationCreated(ChartAnnotation ann) => _annotation = ann;
+		private void ChartOnAnnotationCreated(IChartAnnotation ann) => _annotation = ann;
 
-		private void ChartOnAnnotationSelected(ChartAnnotation ann, ChartDrawData.AnnotationData data)
+		private void ChartOnAnnotationSelected(IChartAnnotation ann, ChartDrawData.AnnotationData data)
 		{
 			_annotation = ann;
 			_annotationData = data;
 		}
 
-		private void ChartOnAnnotationModified(ChartAnnotation ann, ChartDrawData.AnnotationData data)
+		private void ChartOnAnnotationModified(IChartAnnotation ann, ChartDrawData.AnnotationData data)
 		{
 			_annotation = ann;
 			_annotationData = data;
 		}
 
-		private void ChartOnAnnotationDeleted(ChartAnnotation ann)
+		private void ChartOnAnnotationDeleted(IChartAnnotation ann)
 		{
 			if (_annotation == ann)
 			{
