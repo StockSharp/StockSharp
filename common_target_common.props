@@ -35,6 +35,7 @@
     <SysChannelsVer>6.0.0</SysChannelsVer>
     <SysPipelinesVer>6.0.0</SysPipelinesVer>
     <SysMemoryVer>4.5.4</SysMemoryVer>
+    <SysDrawingVer>6.0.0</SysDrawingVer>
     <SBEVer>1.23.1.1</SBEVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
