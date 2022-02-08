@@ -1,5 +1,6 @@
 namespace StockSharp.Charting
 {
+	using System;
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
@@ -47,6 +48,12 @@ namespace StockSharp.Charting
 		/// Show FPS.
 		/// </summary>
 		bool ShowPerfStats { get; set; }
+
+		/// <summary>
+		/// Call action in chart thread.
+		/// </summary>
+		/// <param name="action">Action.</param>
+		void Invoke(Action action);
 
 		/// <summary>
 		/// Create <see cref="IChartArea"/> instance.

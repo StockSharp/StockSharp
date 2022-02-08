@@ -57,28 +57,31 @@ namespace SampleHistoryTesting
 
 			if (_chart is not null)
 			{
-				var area = _chart.CreateArea();
-				_chart.AddArea(area);
+				_chart.Invoke(() =>
+				{
+					var area = _chart.CreateArea();
+					_chart.AddArea(area);
 
-				_candlesElem = _chart.CreateCandleElement();
-				_candlesElem.ShowAxisMarker = false;
-				_chart.AddElement(area, _candlesElem);
+					_candlesElem = _chart.CreateCandleElement();
+					_candlesElem.ShowAxisMarker = false;
+					_chart.AddElement(area, _candlesElem);
 
-				_tradesElem = _chart.CreateTradeElement();
-				_tradesElem.FullTitle = LocalizedStrings.Str985;
-				_chart.AddElement(area, _tradesElem);
+					_tradesElem = _chart.CreateTradeElement();
+					_tradesElem.FullTitle = LocalizedStrings.Str985;
+					_chart.AddElement(area, _tradesElem);
 
-				_shortElem = _chart.CreateIndicatorElement();
-				_shortElem.Color = Color.Coral;
-				_shortElem.ShowAxisMarker = false;
-				_shortElem.FullTitle = ShortSma.ToString();
+					_shortElem = _chart.CreateIndicatorElement();
+					_shortElem.Color = Color.Coral;
+					_shortElem.ShowAxisMarker = false;
+					_shortElem.FullTitle = ShortSma.ToString();
 
-				_chart.AddElement(area, _shortElem);
+					_chart.AddElement(area, _shortElem);
 
-				_longElem = _chart.CreateIndicatorElement();
-				_longElem.ShowAxisMarker = false;
-				_longElem.FullTitle = LongSma.ToString();
-				_chart.AddElement(area, _longElem);
+					_longElem = _chart.CreateIndicatorElement();
+					_longElem.ShowAxisMarker = false;
+					_longElem.FullTitle = LongSma.ToString();
+					_chart.AddElement(area, _longElem);
+				});
 			}
 
 			this

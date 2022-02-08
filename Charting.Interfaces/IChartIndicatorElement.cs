@@ -7,6 +7,11 @@
 	/// </summary>
 	public interface IChartIndicatorElement : IChartElement
 	{
+		/// <summary>
+		/// The indicator renderer.
+		/// </summary>
+		IChartIndicatorPainter IndicatorPainter { get; set; }
+
 		/// <summary>Compatibility property for <see cref="IChartLineElement.Color"/>.</summary>
 		Color Color { get; set; }
 
