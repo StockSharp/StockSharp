@@ -114,8 +114,14 @@ namespace StockSharp.Algo.Storages
 
 		private readonly CandleSerializer _serializer;
 
+		private static bool IsDailyTf(object arg) => arg is TimeSpan tf && tf.Ticks % TimeSpan.TicksPerDay == 0;
+
+		private static DateTimeOffset ToUtcDailyOpenTime(DateTimeOffset dto) => new(dto.Date.UtcKind());
+
 		public CandleStorage(SecurityId securityId, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
-			: base(securityId, arg, candle => candle.OpenTime, candle => candle.SecurityId, candle => candle.OpenTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => true)
+			: base(securityId, arg,
+					IsDailyTf(arg) ? m => ToUtcDailyOpenTime(m.OpenTime) : m => m.OpenTime,
+					candle => candle.SecurityId, candle => candle.OpenTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => true)
 		{
 			_serializer = new CandleSerializer(Serializer);
 		}
