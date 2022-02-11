@@ -8,7 +8,7 @@
     <RootNamespace>StockSharp.Configuration</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.FTX" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.FTXStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlfaDirect" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlorHistory" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlphaVantage" Version="$(StockSharpVer)" />
@@ -58,7 +58,7 @@
     <PackageReference Include="StockSharp.IdaxStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.IEX" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.InteractiveBrokers" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.IQFeed" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.IQFeedStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.ITCHStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.KrakenStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.KucoinStub" Version="$(StockSharpVer)" />
@@ -78,7 +78,7 @@
     <PackageReference Include="StockSharp.Quandl" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Quik" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.QuoinexStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Rithmic" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.RithmicStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Rss" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.SmartCom" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.SpbExStub" Version="$(StockSharpVer)" />
