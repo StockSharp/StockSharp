@@ -617,15 +617,10 @@ namespace StockSharp.Algo.Storages
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<CandleMessage>)this).Serializer;
 
-			DateTimeOffset _nextCandleMinTime;
-
 			public IEnumerable<CandleMessage> Load(DateTime date)
 			{
 				if (date <= _prevDate)
-				{
 					_compressors.Values.ForEach(c => c.Reset());
-					_nextCandleMinTime = DateTimeOffset.MinValue;
-				}
 
 				_prevDate = date;
 
@@ -635,62 +630,51 @@ namespace StockSharp.Algo.Storages
 
 					if (s == _original)
 						return data;
+					else
+					{
+						var compressor = _compressors.TryGetValue((TimeSpan)s.DataType.Arg);
 
-					var compressor = _compressors.TryGetValue((TimeSpan)s.DataType.Arg);
+						if (compressor == null)
+							return Enumerable.Empty<CandleMessage>();
 
-					if (compressor == null)
-						return Enumerable.Empty<CandleMessage>();
-
-					return data.SelectMany(message => compressor.Process(message));
+						return data.Compress(compressor, false);
+					}
 				}).Select(e => e.GetEnumerator()).ToList();
 
 				if (enumerators.Count == 0)
 					yield break;
 
-				var tf = (TimeSpan)_dataType.Arg;
-				var toRemove = new List<IEnumerator<CandleMessage>>(enumerators.Count);
+				if (enumerators.Count == 1)
+				{
+					var enu = enumerators[0];
+
+					while (enu.MoveNext())
+						yield return enu.Current;
+
+					enu.Dispose();
+					yield break;
+				}
+
+				var needMove = enumerators.ToArray();
 
 				while (true)
 				{
-					foreach (var enumerator in enumerators)
+					foreach (var enumerator in needMove)
 					{
-						while (enumerator.Current == null || enumerator.Current.OpenTime < _nextCandleMinTime)
-						{
-							if (!enumerator.MoveNext())
-							{
-								toRemove.Add(enumerator);
-								break;
-							}
-						}
+						if (enumerator.MoveNext())
+							continue;
+
+						enumerator.Dispose();
+						enumerators.Remove(enumerator);
 					}
-
-					toRemove.ForEach(e =>
-					{
-						e.Dispose();
-						enumerators.Remove(e);
-					});
-
-					toRemove.Clear();
 
 					if (enumerators.Count == 0)
 						yield break;
 
-					var nextCandleCompressor = enumerators.OrderBy(e => e.Current!.OpenTime).First();
-					var candle = nextCandleCompressor.Current;
+					var candle = enumerators.Select(e => e.Current).OrderBy(c => c.OpenTime).First();
 
-					while ((candle!.OpenTime < _nextCandleMinTime || candle.State != CandleStates.Finished) && nextCandleCompressor.MoveNext())
-					{
-						/* compress until candle is finished OR no more data */
-						candle = nextCandleCompressor.Current;
-					}
+					needMove = enumerators.Where(c => c.Current.OpenTime == candle.OpenTime).ToArray();
 
-					if (candle.State != CandleStates.Finished)
-					{
-						candle = candle.TypedClone();
-						candle.State = CandleStates.Finished;
-					}
-
-					_nextCandleMinTime = candle.OpenTime + tf;
 					yield return candle;
 				}
 			}
@@ -748,7 +732,7 @@ namespace StockSharp.Algo.Storages
 				else
 				{
 					var dates = drive.GetStorageDrive(securityId, DataType.Create(candleType, arg), format).Dates;
-
+					
 					if (from != null)
 						dates = dates.Where(d => d >= from.Value);
 
@@ -1251,7 +1235,7 @@ namespace StockSharp.Algo.Storages
 										return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
 															.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
 															.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
-
+											
 									// TODO
 									//case Level1Fields.SpreadMiddle:
 									//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
@@ -1361,7 +1345,7 @@ namespace StockSharp.Algo.Storages
 			return Tuple.Create(from.Value, to.Value);
 		}
 
-		private static DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, TimeSpan daysLoad, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
+		private static DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, TimeSpan daysLoad, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null) 
 			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 		{
 			var range = GetRange(storage, subscription, daysLoad);
@@ -1565,7 +1549,7 @@ namespace StockSharp.Algo.Storages
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(messageType), type, LocalizedStrings.Str1219);
-
+			
 			return DataType.Create(type, arg);
 		}
 
