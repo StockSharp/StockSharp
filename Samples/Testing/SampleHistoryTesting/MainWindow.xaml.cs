@@ -437,6 +437,7 @@ namespace SampleHistoryTesting
 
 				var chart = set.Item5;
 
+				chart.IsInteracted = false;
 				strategy.SetChart(chart);
 
 				logManager.Sources.Add(strategy);

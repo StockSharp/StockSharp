@@ -57,7 +57,8 @@ namespace SampleHistoryTesting
 
 			if (_chart is not null)
 			{
-				_chart.Invoke(() =>
+				// creates chart's components in his own thread
+				_chart.ThreadDispatcher.Invoke(() =>
 				{
 					var area = _chart.CreateArea();
 					_chart.AddArea(area);
