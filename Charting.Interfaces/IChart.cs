@@ -3,6 +3,7 @@ namespace StockSharp.Charting
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
