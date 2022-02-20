@@ -40,7 +40,7 @@
 				throw new ArgumentNullException(nameof(chart));
 
 			chart.IndicatorTypes.Clear();
-			chart.IndicatorTypes.AddRange(IndicatorProvider.GetIndicatorTypes().Where(it => it.Indicator.IsIndicatorSupportedByChart()).ExcludeObsolete());
+			chart.IndicatorTypes.AddRange(IndicatorProvider.GetIndicatorTypes().ExcludeObsolete().Where(it => it.Indicator.IsIndicatorSupportedByChart()));
 		}
 
 		private static readonly Type[] _chartUnsupportedIndicators =
