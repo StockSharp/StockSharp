@@ -3,6 +3,8 @@
 	using System;
 	using System.Drawing;
 
+	using Ecng.Drawing;
+
 	/// <summary>
 	/// Used to transfer annotation draw data.
 	/// </summary>
@@ -52,7 +54,7 @@
 		Brush Foreground { get; set; }
 
 		/// <summary>Line thickness.</summary>
-		ChartThickness? Thickness { get; set; }
+		Thickness? Thickness { get; set; }
 
 		/// <summary>Turn on/off label show for horizontal and vertical lines.</summary>
 		bool? ShowLabel { get; set; }
@@ -61,10 +63,10 @@
 		LabelPlacement? LabelPlacement { get; set; }
 
 		/// <summary>Alignment for horizontal lines.</summary>
-		ChartHorizontalAlignment? HorizontalAlignment { get; set; }
+		HorizontalAlignment? HorizontalAlignment { get; set; }
 
 		/// <summary>Alignment for vertical lines.</summary>
-		ChartVerticalAlignment? VerticalAlignment { get; set; }
+		VerticalAlignment? VerticalAlignment { get; set; }
 
 		/// <summary>
 		/// Coordinate mode.

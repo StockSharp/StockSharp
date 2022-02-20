@@ -2,7 +2,7 @@
   <Import Project="..\common.props" />
 	
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="$(SysDrawingVer)" />
+    <PackageReference Include="Ecng.Drawing" Version="$(EcngVer)" />
   </ItemGroup>
 	
   <ItemGroup>
