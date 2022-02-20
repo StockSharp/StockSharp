@@ -18,6 +18,106 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Do you want to publish the new version of {0}?
+		/// </summary>
+		public const string ConfirmNewVersionPublishParamsKey = nameof(ConfirmNewVersionPublishParams);
+
+		/// <summary>
+		/// Do you want to publish the new version of {0}?
+		/// </summary>
+		public static string ConfirmNewVersionPublishParams => GetString(ConfirmNewVersionPublishParamsKey);
+
+		/// <summary>
+		/// Product {0} does not support S#.Designer scheme publishing. You need to select or create product with corresponding content type.
+		/// </summary>
+		public const string InvalidProductForDesignerSchemeParamsKey = nameof(InvalidProductForDesignerSchemeParams);
+
+		/// <summary>
+		/// Product {0} does not support S#.Designer scheme publishing. You need to select or create product with corresponding content type.
+		/// </summary>
+		public static string InvalidProductForDesignerSchemeParams => GetString(InvalidProductForDesignerSchemeParamsKey);
+
+		/// <summary>
+		/// The request was canceled
+		/// </summary>
+		public const string RequestWasCanceledKey = nameof(RequestWasCanceled);
+
+		/// <summary>
+		/// The request was canceled
+		/// </summary>
+		public static string RequestWasCanceled => GetString(RequestWasCanceledKey);
+
+		/// <summary>
+		/// The new version {0} of the "{1}" was published successfully!
+		/// </summary>
+		public const string NewProductVersionPublishedParamsKey = nameof(NewProductVersionPublishedParams);
+
+		/// <summary>
+		/// The new version {0} of the "{1}" was published successfully!
+		/// </summary>
+		public static string NewProductVersionPublishedParams => GetString(NewProductVersionPublishedParamsKey);
+
+		/// <summary>
+		/// Create new product
+		/// </summary>
+		public const string CreateNewProductKey = nameof(CreateNewProduct);
+
+		/// <summary>
+		/// Create new product
+		/// </summary>
+		public static string CreateNewProduct => GetString(CreateNewProductKey);
+
+		/// <summary>
+		/// Select product to publish a new version
+		/// </summary>
+		public const string SelectProductToPublishKey = nameof(SelectProductToPublish);
+
+		/// <summary>
+		/// Select product to publish a new version
+		/// </summary>
+		public static string SelectProductToPublish => GetString(SelectProductToPublishKey);
+
+		/// <summary>
+		/// Templates
+		/// </summary>
+		public const string TemplatesKey = nameof(Templates);
+
+		/// <summary>
+		/// Templates
+		/// </summary>
+		public static string Templates => GetString(TemplatesKey);
+
+		/// <summary>
+		/// Unable to complete operation at this moment. Please try again later.
+		/// </summary>
+		public const string BusyTryAgainLaterKey = nameof(BusyTryAgainLater);
+
+		/// <summary>
+		/// Unable to complete operation at this moment. Please try again later.
+		/// </summary>
+		public static string BusyTryAgainLater => GetString(BusyTryAgainLaterKey);
+
+		/// <summary>
+		/// Available strategies
+		/// </summary>
+		public const string AvailableStrategiesKey = nameof(AvailableStrategies);
+
+		/// <summary>
+		/// Available strategies
+		/// </summary>
+		public static string AvailableStrategies => GetString(AvailableStrategiesKey);
+
+		/// <summary>
+		/// An error has occurred. Please check that latest version of S#.Installer is running.
+		/// </summary>
+		public const string InstallerMustBeRunningKey = nameof(InstallerMustBeRunning);
+
+		/// <summary>
+		/// An error has occurred. Please check that latest version of S#.Installer is running.
+		/// </summary>
+		public static string InstallerMustBeRunning => GetString(InstallerMustBeRunningKey);
+
+		/// <summary>
 		/// Help
 		/// </summary>
 		public const string Help2Key = nameof(Help2);

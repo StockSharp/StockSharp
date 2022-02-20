@@ -1,4 +1,44 @@
 {
+  "ConfirmNewVersionPublishParams": {
+    "en": "Do you want to publish the new version of \"{0}\"?",
+    "ru": "Опубликовать новую версию \"{0}\"?"
+  },
+  "InvalidProductForDesignerSchemeParams": {
+    "en": "Product \"{0}\" does not support S#.Designer scheme publishing. You need to select or create product with corresponding content type.",
+    "ru": "Продукт \"{0}\" не поддерживает публикацию диаграм S#.Designer. Вам необходимо выбрать или создать продукт с соответствующим типом контента."
+  },
+  "RequestWasCanceled": {
+    "en": "The request was canceled",
+    "ru": "Запрос был отменен"
+  },
+  "NewProductVersionPublishedParams": {
+    "en": "The new version {0} of the \"{1}\" was published successfully!",
+    "ru": "Новая версия {0} продукта \"{1}\" была успешно опубликована!"
+  },
+  "CreateNewProduct": {
+    "en": "Create new product",
+    "ru": "Создать новый продукт"
+  },
+  "SelectProductToPublish": {
+    "en": "Select product to publish a new version",
+    "ru": "Выберите продукт для публикации новой версии"
+  },
+  "Templates": {
+    "en": "Templates",
+    "ru": "Шаблоны"
+  },
+  "BusyTryAgainLater": {
+    "en": "Unable to complete operation at this moment. Please try again later.",
+    "ru": "Невозможно выполнить операцию в данный момент. Попробуйте повторить позднее."
+  },
+  "AvailableStrategies": {
+    "en": "Available strategies",
+    "ru": "Доступные стратегии"
+  },
+  "InstallerMustBeRunning": {
+    "en": "An error has occurred. Please check that latest version of S#.Installer is running.",
+    "ru": "Произошла ошибка. Убедитесь, что последняя версия S#.Installer запущена."
+  },
   "ReportProblem": {
     "en": "Report a problem",
     "ru": "Сообщить о проблеме"
