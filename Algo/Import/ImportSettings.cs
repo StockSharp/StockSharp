@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DataTypeKey,
 			Description = LocalizedStrings.DataTypeKey,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 0)]
 		public DataType DataType
 		{
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str2002Key,
 			Description = LocalizedStrings.Str2843Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 1)]
 		[Editor(typeof(IFileBrowserEditor), typeof(IFileBrowserEditor))]
 		public string FileName
@@ -103,7 +103,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str2237Key,
 			Description = LocalizedStrings.Str2237Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 2)]
 		[Editor(typeof(IFolderBrowserEditor), typeof(IFolderBrowserEditor))]
 		public string Directory
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.FileMaskKey,
 			Description = LocalizedStrings.FileMaskDescriptionKey,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 3)]
 		public string FileMask
 		{
@@ -149,7 +149,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SubDirectoriesKey,
 			Description = LocalizedStrings.SubDirectoriesIncludeKey,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 4)]
 		public bool IncludeSubDirectories
 		{
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str2844Key,
 			Description = LocalizedStrings.Str2845Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 5)]
 		public string ColumnSeparator
 		{
@@ -194,7 +194,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str2846Key,
 			Description = LocalizedStrings.Str2847Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 6)]
 		public int SkipFromHeader
 		{
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeZoneKey,
 			Description = LocalizedStrings.TimeZoneKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 7)]
 		public TimeZoneInfo TimeZone
 		{
@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Import
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str175Key,
 			Description = LocalizedStrings.IntervalDataUpdatesKey,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 8)]
 		[TimeSpanEditor(Mask = TimeSpanEditorMask.Days | TimeSpanEditorMask.Hours | TimeSpanEditorMask.Minutes)]
 		public TimeSpan Interval

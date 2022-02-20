@@ -87,7 +87,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ServerTimeKey,
 			Description = LocalizedStrings.Str168Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 2)]
 		public DateTimeOffset LastChangeTime { get; set; }
 
@@ -98,7 +98,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str203Key,
 			Description = LocalizedStrings.Str204Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 3)]
 		public DateTimeOffset LocalTime { get; set; }
 
@@ -120,7 +120,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str281Key,
 			Description = LocalizedStrings.Str282Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 0)]
 		[Obsolete("Use Bids2 property.")]
 		public Quote[] Bids => Bids2.Select(c => c.ToQuote(Sides.Buy, Security)).ToArray();
@@ -132,7 +132,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str283Key,
 			Description = LocalizedStrings.Str284Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 1)]
 		[Obsolete("Use Asks2 property.")]
 		public Quote[] Asks => Asks2.Select(c => c.ToQuote(Sides.Sell, Security)).ToArray();
@@ -146,7 +146,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str281Key,
 			Description = LocalizedStrings.Str282Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 0)]
 		public QuoteChange[] Bids2
 		{
@@ -163,7 +163,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str283Key,
 			Description = LocalizedStrings.Str284Key,
-			GroupName = LocalizedStrings.Str1559Key,
+			GroupName = LocalizedStrings.CommonKey,
 			Order = 1)]
 		public QuoteChange[] Asks2
 		{

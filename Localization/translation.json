@@ -6675,7 +6675,7 @@
     "en": "Activate connection",
     "ru": "Включить подключение"
   },
-  "Str1559": {
+  "Common": {
     "en": "Common",
     "ru": "Общее"
   },
@@ -12119,19 +12119,19 @@
     "en": "Element with type '{0}' not found.",
     "ru": "Элемент с типом '{0}' не найден."
   },
-  "Str3048": {
+  "Inform": {
     "en": "Notifying",
     "ru": "Информирование"
   },
-  "Str3049": {
+  "Sources": {
     "en": "Data sources",
     "ru": "Источники данных"
   },
-  "Str3050": {
+  "Composition": {
     "en": "Composite elements",
     "ru": "Составные элементы"
   },
-  "Str3051": {
+  "Converter": {
     "en": "Converters",
     "ru": "Конвертеры"
   },

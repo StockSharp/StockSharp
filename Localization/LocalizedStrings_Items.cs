@@ -16700,12 +16700,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Common
 		/// </summary>
-		public const string Str1559Key = nameof(Str1559);
+		public const string CommonKey = nameof(Common);
 
 		/// <summary>
 		/// Common
 		/// </summary>
-		public static string Str1559 => GetString(Str1559Key);
+		public static string Common => GetString(CommonKey);
 
 		/// <summary>
 		/// Connection successfully checked.
@@ -30261,42 +30261,42 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Notifying
 		/// </summary>
-		public const string Str3048Key = nameof(Str3048);
+		public const string InformKey = nameof(Inform);
 
 		/// <summary>
 		/// Notifying
 		/// </summary>
-		public static string Str3048 => GetString(Str3048Key);
+		public static string Inform => GetString(InformKey);
 
 		/// <summary>
 		/// Data sources
 		/// </summary>
-		public const string Str3049Key = nameof(Str3049);
+		public const string SourcesKey = nameof(Sources);
 
 		/// <summary>
 		/// Data sources
 		/// </summary>
-		public static string Str3049 => GetString(Str3049Key);
+		public static string Sources => GetString(SourcesKey);
 
 		/// <summary>
 		/// Composite elements
 		/// </summary>
-		public const string Str3050Key = nameof(Str3050);
+		public const string CompositionKey = nameof(Composition);
 
 		/// <summary>
 		/// Composite elements
 		/// </summary>
-		public static string Str3050 => GetString(Str3050Key);
+		public static string Composition => GetString(CompositionKey);
 
 		/// <summary>
 		/// Converters
 		/// </summary>
-		public const string Str3051Key = nameof(Str3051);
+		public const string ConverterKey = nameof(Converter);
 
 		/// <summary>
 		/// Converters
 		/// </summary>
-		public static string Str3051 => GetString(Str3051Key);
+		public static string Converter => GetString(ConverterKey);
 
 		/// <summary>
 		/// Diagram element name.
