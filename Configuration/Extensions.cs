@@ -15,13 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Configuration
 {
-	using System;
-	using System.IO;
 	using System.Linq;
-
-	using Ecng.ComponentModel;
 	using Ecng.Configuration;
-	using Ecng.Serialization;
 
 	/// <summary>
 	/// Extension class.

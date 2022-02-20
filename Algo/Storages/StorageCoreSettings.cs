@@ -1,8 +1,6 @@
 ﻿namespace StockSharp.Algo.Storages
 {
 	using System;
-
-	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;

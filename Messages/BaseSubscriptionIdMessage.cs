@@ -4,8 +4,6 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
-	using Ecng.Serialization;
-
 	/// <summary>
 	/// A message containing subscription identifiers.
 	/// </summary>
