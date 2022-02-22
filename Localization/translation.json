@@ -1709,11 +1709,11 @@
   },
   "Id": {
     "en": "ID",
-    "ru": "Идентификатор"
+    "ru": "Номер"
   },
   "NewsId": {
     "en": "News ID.",
-    "ru": "Идентификатор новости."
+    "ru": "Номер новости."
   },
   "Board": {
     "en": "Board",
@@ -21650,5 +21650,13 @@
   "WshEvent": {
     "en": "Wall Street Horizon event data",
     "ru": "Wall Street Horizon информация"
+  },
+  "Private": {
+    "en": "Private",
+    "ru": "Личное"
+  },
+  "Manager": {
+    "en": "Manager",
+    "ru": "Менеджер"
   }
 }
