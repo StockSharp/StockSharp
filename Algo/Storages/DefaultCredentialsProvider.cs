@@ -15,44 +15,31 @@
 	/// </summary>
 	public class DefaultCredentialsProvider : ICredentialsProvider
 	{
-		private static readonly string _credentialsFile = $"credentials{Paths.DefaultSettingsExt}";
-
-		private ServerCredentials _credentials;
-
-		// ReSharper disable InconsistentlySynchronizedField
-		private bool IsValid => _credentials != null && (!_credentials.Password.IsEmpty() || !_credentials.Token.IsEmpty());
-		// ReSharper restore InconsistentlySynchronizedField
+		private readonly string _credentialsFile = $"credentials{Paths.DefaultSettingsExt}";
 
 		bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
 		{
-			lock (this)
+			var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
+
+			if (!File.Exists(file) && !File.Exists(file.MakeLegacy()))
 			{
-				if(_credentials != null)
-				{
-					credentials = _credentials.Clone();
-					return IsValid;
-				}
-
-				var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
 				credentials = null;
-
-				try
-				{
-					if (File.Exists(file) || File.Exists(file.MakeLegacy()))
-					{
-						credentials = new ServerCredentials();
-						credentials.LoadIfNotNull(file.DeserializeWithMigration<SettingsStorage>());
-
-						_credentials = credentials.Clone();
-					}
-				}
-				catch (Exception ex)
-				{
-					ex.LogError();
-				}
-
-				return IsValid;
+				return false;
 			}
+
+			credentials = new ServerCredentials();
+
+			try
+			{
+				credentials.LoadIfNotNull(file.DeserializeWithMigration<SettingsStorage>());
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+				return false;
+			}
+
+			return !credentials.Password.IsEmpty() || !credentials.Token.IsEmpty();
 		}
 
 		void ICredentialsProvider.Save(ServerCredentials credentials)
@@ -60,21 +47,16 @@
 			if (credentials is null)
 				throw new ArgumentNullException(nameof(credentials));
 
-			lock (this)
-			{
-				var clone = credentials.Clone();
+			var clone = credentials;
 
-				if (!clone.AutoLogon)
-					clone.Password = null;
+			if (!credentials.AutoLogon)
+				clone.Password = null;
 
-				Directory.CreateDirectory(Paths.CompanyPath);
+			Directory.CreateDirectory(Paths.CompanyPath);
 
-				var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
+			var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
 
-				clone.Save().Serialize(file);
-
-				_credentials = clone;
-			}
+			clone.Save().Serialize(file);
 		}
 	}
 }
