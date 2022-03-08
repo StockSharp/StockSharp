@@ -15,7 +15,11 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Configuration
 {
+	using System;
 	using System.Linq;
+	using System.Reflection;
+
+	using Ecng.Common;
 	using Ecng.Configuration;
 
 	/// <summary>
@@ -55,5 +59,17 @@ namespace StockSharp.Configuration
 		//		.Concat(_customCandles)
 		//		.ToArray());
 		//}
+
+		/// <summary>
+		/// </summary>
+		public static long GetProductId()
+		{
+			var prodIdAttr = Assembly.GetEntryAssembly().GetAttribute<ProductIdAttribute>();
+
+			if (prodIdAttr is null)
+				throw new InvalidOperationException($"{nameof(ProductIdAttribute)} is missing.");
+
+			return prodIdAttr.ProductId;
+		}
 	}
 }
