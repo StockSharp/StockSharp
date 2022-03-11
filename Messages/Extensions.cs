@@ -788,7 +788,7 @@ namespace StockSharp.Messages
 #pragma warning restore CS0612 // Type or member is obsolete
 
 			_candleDataTypes.Add(type, messageType);
-			_dataTypeArgConverters.Add(messageType, Tuple.Create(p1, p2));
+			_dataTypeArgConverters.Add(messageType, Tuple.Create((Func<string, object>)p1, (Func<object, string>)p2));
 			_fileNames.Add(DataType.Create(messageType, null), fileName);
 		}
 
