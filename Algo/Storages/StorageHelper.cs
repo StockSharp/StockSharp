@@ -707,14 +707,14 @@ namespace StockSharp.Algo.Storages
 
 			DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
 
-			class BuildableCandleInfo : IMarketDataMetaInfo
+			private class BuildableCandleInfo : IMarketDataMetaInfo
 			{
-				readonly TimeSpan _tf;
-				readonly IMarketDataMetaInfo _info;
+				private readonly TimeSpan _tf;
+				private readonly IMarketDataMetaInfo _info;
 
 				public BuildableCandleInfo(IMarketDataMetaInfo info, TimeSpan tf)
 				{
-					_info = info;
+					_info = info ?? throw new ArgumentNullException(nameof(info));
 					_tf = tf;
 				}
 
@@ -729,13 +729,13 @@ namespace StockSharp.Algo.Storages
 
 				public DateTime FirstTime
 				{
-					get => _tf.GetCandleBounds(_info.FirstTime.ToDateTimeOffset(TimeSpan.Zero)).Min.UtcDateTime;
+					get => _tf.GetCandleBounds(_info.FirstTime).Min.UtcDateTime;
 					set => throw new NotSupportedException();
 				}
 
 				public DateTime LastTime
 				{
-					get => _tf.GetCandleBounds(_info.LastTime.ToDateTimeOffset(TimeSpan.Zero)).Max.UtcDateTime;
+					get => _tf.GetCandleBounds(_info.LastTime).Max.UtcDateTime;
 					set => throw new NotSupportedException();
 				}
 
