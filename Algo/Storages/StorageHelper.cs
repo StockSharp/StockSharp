@@ -13,9 +13,11 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Storages
 {
 	using System;
+	using System.IO;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
@@ -609,7 +611,7 @@ namespace StockSharp.Algo.Storages
 					var info = storage.GetMetaInfo(date);
 
 					if (info != null)
-						return info;
+						return new BuildableCandleInfo(info, _timeFrame);
 				}
 
 				return null;
@@ -704,6 +706,42 @@ namespace StockSharp.Algo.Storages
 			DateTimeOffset IMarketDataStorageInfo<CandleMessage>.GetTime(CandleMessage data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
 
 			DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
+
+			class BuildableCandleInfo : IMarketDataMetaInfo
+			{
+				readonly TimeSpan _tf;
+				readonly IMarketDataMetaInfo _info;
+
+				public BuildableCandleInfo(IMarketDataMetaInfo info, TimeSpan tf)
+				{
+					_info = info;
+					_tf = tf;
+				}
+
+				public DateTime Date              => _info.Date;
+				public bool IsOverride            => _info.IsOverride;
+
+				public int Count             { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+				public object LastId         { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+
+				public decimal PriceStep     { get => _info.PriceStep;  set => throw new NotSupportedException(); }
+				public decimal VolumeStep    { get => _info.VolumeStep; set => throw new NotSupportedException(); }
+
+				public DateTime FirstTime
+				{
+					get => _tf.GetCandleBounds(_info.FirstTime.ToDateTimeOffset(TimeSpan.Zero)).Min.UtcDateTime;
+					set => throw new NotSupportedException();
+				}
+
+				public DateTime LastTime
+				{
+					get => _tf.GetCandleBounds(_info.LastTime.ToDateTimeOffset(TimeSpan.Zero)).Max.UtcDateTime;
+					set => throw new NotSupportedException();
+				}
+
+				public void Write(Stream stream)  => throw new NotSupportedException();
+				public void Read(Stream stream)   => throw new NotSupportedException();
+			}
 		}
 
 		/// <summary>
