@@ -357,7 +357,7 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WriteInt(timeDiff.Seconds);
 				}
 			}
-
+			
 			writer.WriteInt(timeDiff.Milliseconds);
 
 			if (isTickPrecision)
@@ -546,10 +546,14 @@ namespace StockSharp.Algo.Storages.Binary
 		}
 
 		public static TimeSpan GetTimeZone(this BinaryMetaInfo metaInfo, bool isUtc, SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			=> isUtc ? metaInfo.ServerOffset : securityId.GetTimeZone(exchangeInfoProvider) ?? metaInfo.LocalOffset;
+		{
+			if (isUtc)
+				return metaInfo.ServerOffset;
 
-		public static TimeSpan? GetTimeZone(this SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			=> securityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetExchangeBoard(securityId.BoardCode)?.TimeZone.BaseUtcOffset;
+			var board = exchangeInfoProvider.GetExchangeBoard(securityId.BoardCode);
+
+			return board == null ? metaInfo.LocalOffset : board.TimeZone.BaseUtcOffset;
+		}
 
 		public static void WriteNullableInt(this BitArrayWriter writer, int? value)
 		{

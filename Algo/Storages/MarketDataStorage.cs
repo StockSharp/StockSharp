@@ -55,9 +55,6 @@ namespace StockSharp.Algo.Storages
 		private readonly DataType _dataType;
 		DataType IMarketDataStorage.DataType => _dataType;
 
-		private IExchangeInfoProvider _exchangeInfoProvider;
-		private TimeSpan? _tzOffset;
-
 		public SecurityId SecurityId { get; }
 
 		public bool AppendOnlyNew { get; set; }
@@ -74,8 +71,6 @@ namespace StockSharp.Algo.Storages
 		private Stream LoadStream(DateTime date) => Drive.LoadStream(date);
 
 		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
-
-		private DateTime GetStorageDate(DateTimeOffset dto) => dto.UtcDateTime.Date;
 
 		public int Save(IEnumerable<TMessage> data)
 		{
@@ -96,7 +91,7 @@ namespace StockSharp.Algo.Storages
 				if (time == DateTimeOffset.MinValue)
 					throw new ArgumentException(LocalizedStrings.EmptyMessageTime.Put(d));
 
-				return GetStorageDate(time);
+				return time.UtcDateTime.Date;
 			}))
 			{
 				var date = group.Key;
@@ -271,7 +266,7 @@ namespace StockSharp.Algo.Storages
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
 
-			foreach (var group in data.GroupBy(i => GetStorageDate(_getTime(i))))
+			foreach (var group in data.GroupBy(i => _getTime(i).UtcDateTime.Date))
 			{
 				var date = group.Key;
 
