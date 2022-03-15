@@ -10,7 +10,6 @@ namespace StockSharp.Algo.Storages
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using StockSharp.Algo.Storages.Binary;
 
 	interface IMarketDataStorageInfo
 	{
@@ -76,11 +75,7 @@ namespace StockSharp.Algo.Storages
 
 		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
 
-		private DateTime GetStorageDate(DateTimeOffset dto)
-		{
-			_tzOffset ??= SecurityId.GetTimeZone(_exchangeInfoProvider ??= ServicesRegistry.EnsureGetExchangeInfoProvider()) ?? TimeSpan.Zero;
-			return dto.ToOffset(_tzOffset.Value).Date;
-		}
+		private DateTime GetStorageDate(DateTimeOffset dto) => dto.UtcDateTime.Date;
 
 		public int Save(IEnumerable<TMessage> data)
 		{
