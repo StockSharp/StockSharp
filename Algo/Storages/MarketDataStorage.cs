@@ -55,9 +55,6 @@ namespace StockSharp.Algo.Storages
 		private readonly DataType _dataType;
 		DataType IMarketDataStorage.DataType => _dataType;
 
-		private IExchangeInfoProvider _exchangeInfoProvider;
-		private TimeSpan? _tzOffset;
-
 		public SecurityId SecurityId { get; }
 
 		public bool AppendOnlyNew { get; set; }
