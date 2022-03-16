@@ -72,6 +72,8 @@ namespace StockSharp.Algo.Storages
 
 		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
 
+		private DateTime GetStorageDate(DateTimeOffset dto) => dto.UtcDateTime.Date;
+
 		public int Save(IEnumerable<TMessage> data)
 		{
 			if (data == null)
@@ -91,7 +93,7 @@ namespace StockSharp.Algo.Storages
 				if (time == DateTimeOffset.MinValue)
 					throw new ArgumentException(LocalizedStrings.EmptyMessageTime.Put(d));
 
-				return time.UtcDateTime.Date;
+				return GetStorageDate(time);
 			}))
 			{
 				var date = group.Key;
@@ -266,7 +268,7 @@ namespace StockSharp.Algo.Storages
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
 
-			foreach (var group in data.GroupBy(i => _getTime(i).UtcDateTime.Date))
+			foreach (var group in data.GroupBy(i => GetStorageDate(_getTime(i))))
 			{
 				var date = group.Key;
 
