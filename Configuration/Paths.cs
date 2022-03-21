@@ -668,5 +668,13 @@
 				return xmlSer.Deserialize(data);
 			}
 		}
+
+		/// <summary>
+		/// Get file name for the specified id.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <returns>File name.</returns>
+		public static string GetFileName(this Guid id)
+			=> $"{id.ToString().Replace('-', '_')}{DefaultSettingsExt}";
 	}
 }
