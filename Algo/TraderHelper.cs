@@ -876,9 +876,6 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			if (order.Type == OrderTypes.Conditional)
-				throw new ArgumentException(nameof(order));
-
 			return order.Volume - order.Balance;
 		}
 
