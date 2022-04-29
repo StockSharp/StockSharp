@@ -38,10 +38,10 @@
 
 				try
 				{
-					if (File.Exists(file) || File.Exists(file.MakeLegacy()))
+					if (File.Exists(file))
 					{
 						credentials = new ServerCredentials();
-						credentials.LoadIfNotNull(file.DeserializeWithMigration<SettingsStorage>());
+						credentials.LoadIfNotNull(file.Deserialize<SettingsStorage>());
 
 						_credentials = credentials.Clone();
 					}

@@ -474,13 +474,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 							if (paramType.IsPersistable())
 							{
-								value = strBuffer.DeserializeWithMigration<SettingsStorage>().Load(paramType);
+								value = strBuffer.Deserialize<SettingsStorage>().Load(paramType);
 							}
 							else if (typeof(IRange).IsAssignableFrom(paramType))
 							{
 								var range = paramType.CreateInstance<IRange>();
 
-								var storage = strBuffer.DeserializeWithMigration<SettingsStorage>();
+								var storage = strBuffer.Deserialize<SettingsStorage>();
 
 								if (storage.ContainsKey(nameof(range.Min)))
 									range.Min = storage.GetValue<object>(nameof(range.Min));
@@ -492,7 +492,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							}
 							else
 							{
-								value = Paths.CreateSerializer(paramType).DeserializeWithMigration(strBuffer);
+								value = Paths.CreateSerializer(paramType).Deserialize(strBuffer);
 							}
 						}
 						else

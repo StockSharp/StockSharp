@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var serializer = GetSerializer<TItem>();
 				var bytes = Registry.Encoding.GetBytes(value.Replace("'", "\""));
 
-				return (TItem)serializer.DeserializeWithMigration(bytes);
+				return serializer.Deserialize(bytes);
 			}
 
 			private ISerializer<TItem> GetSerializer<TItem>()

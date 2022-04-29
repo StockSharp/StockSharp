@@ -40,7 +40,7 @@
 		/// <param name="fileName">File name.</param>
 		/// <returns><see cref="SettingsStorage"/></returns>
 		public static SettingsStorage DeserializeInvariant(this string fileName)
-			=> Do.Invariant(() => fileName.DeserializeWithMigration<SettingsStorage>());
+			=> Do.Invariant(() => fileName.Deserialize<SettingsStorage>());
 
 		/// <summary>
 		/// Deserialize storage from the specified byte array.
@@ -48,6 +48,6 @@
 		/// <param name="data">Data.</param>
 		/// <returns><see cref="SettingsStorage"/></returns>
 		public static SettingsStorage DeserializeInvariant(this byte[] data)
-			=> Do.Invariant(() => data.DeserializeWithMigration<SettingsStorage>());
+			=> Do.Invariant(() => data.Deserialize<SettingsStorage>());
 	}
 }

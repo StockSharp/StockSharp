@@ -278,7 +278,7 @@
 			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}"))
 			{
 				var settingsStorage = (AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}")
-					.DeserializeWithMigration<SettingsStorage>();
+					.Deserialize<SettingsStorage>();
 
 				Chart.LoadIfNotNull(settingsStorage);
 

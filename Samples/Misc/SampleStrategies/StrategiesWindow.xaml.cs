@@ -39,7 +39,7 @@
 			{
 				try
 				{
-					var strategy = xml.DeserializeWithMigration<SettingsStorage>()?.LoadEntire<Strategy>();
+					var strategy = xml.Deserialize<SettingsStorage>()?.LoadEntire<Strategy>();
 
 					if (strategy is null)
 						continue;

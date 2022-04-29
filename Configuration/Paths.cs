@@ -19,8 +19,6 @@
 	using NuGet.Configuration;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
-	using StockSharp.Logging;
 
 	/// <summary>
 	/// System paths.
@@ -284,11 +282,11 @@
 			if (productInstallPath.IsEmpty())
 				throw new ArgumentException(nameof(productInstallPath));
 
-			if (!File.Exists(InstallerInstallationsConfigPath) && !File.Exists(InstallerInstallationsConfigPath.MakeLegacy()))
+			if (!File.Exists(InstallerInstallationsConfigPath))
 				return null;
 
 			var storage = Do.Invariant(() =>
-				InstallerInstallationsConfigPath.DeserializeWithMigration<SettingsStorage>());
+				InstallerInstallationsConfigPath.Deserialize<SettingsStorage>());
 
 			if (storage is null)
 				return null;
@@ -302,9 +300,9 @@
 				return null;
 
 			var identityStr = installation
-				.TryGet<SettingsStorage>("Version")
-			   ?.TryGet<SettingsStorage>("Metadata")
-			   ?.TryGet<string>("Identity");
+				.TryGet<SettingsStorage>("Version")?
+				.TryGet<SettingsStorage>("Metadata")?
+				.TryGet<string>("Identity");
 
 			if (identityStr.IsEmpty())
 				return null;
@@ -425,6 +423,7 @@
 		/// <summary>
 		/// Legacy extension for settings file.
 		/// </summary>
+		[Obsolete]
 		public const string LegacySettingsExt = ".xml";
 
 		/// <summary>
@@ -433,20 +432,20 @@
 		public const string BackupExt = ".bak";
 
 		/// <summary>
-		/// Returns an files with <see cref="DefaultSettingsExt"/> and <see cref="LegacySettingsExt"/> extensions.
+		/// Returns an files with <see cref="DefaultSettingsExt"/> extensions.
 		/// </summary>
 		/// <param name="path">The relative or absolute path to the directory to search.</param>
 		/// <param name="filter">The search string to match against the names of files in path.</param>
 		/// <returns>Files.</returns>
 		public static IEnumerable<string> EnumerateDefaultAndLegacy(string path, string filter = "*")
-			=>	Directory.EnumerateFiles(path, $"{filter}{DefaultSettingsExt}").Concat(
-				Directory.EnumerateFiles(path, $"{filter}{LegacySettingsExt}"));
+			=>	Directory.EnumerateFiles(path, $"{filter}{DefaultSettingsExt}");
 
 		/// <summary>
 		/// Make the specified <paramref name="filePath"/> with <see cref="LegacySettingsExt"/> extension.
 		/// </summary>
 		/// <param name="filePath">File path.</param>
 		/// <returns>File path.</returns>
+		[Obsolete]
 		public static string MakeLegacy(this string filePath)
 			=> Path.ChangeExtension(filePath, LegacySettingsExt);
 
@@ -521,7 +520,9 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		public static ISerializer LegacySerializer { get; set; }
+		[Obsolete("Use Deserialize instead.")]
+		public static T DeserializeWithMigration<T>(this string filePath)
+			=> filePath.Deserialize<T>();
 
 		/// <summary>
 		/// Deserialize value from the specified file.
@@ -529,106 +530,13 @@
 		/// <typeparam name="T">Value type.</typeparam>
 		/// <param name="filePath">File path.</param>
 		/// <returns>Value.</returns>
-		public static T DeserializeWithMigration<T>(this string filePath)
+		public static T Deserialize<T>(this string filePath)
 		{
 			var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
-			var defSer = CreateSerializer<T>();
 
-			T value;
-
-			var legacyFile = filePath.MakeLegacy();
-
-			if (File.Exists(legacyFile) && LegacySerializer != null)
-			{
-				// TODO 2021-09-09 remove 1 year later
-
-				value = LegacySerializer.GetSerializer<T>().Deserialize(legacyFile);
-
-				static void TryFix(SettingsStorage storage)
-				{
-					foreach (var pair in storage.ToArray())
-					{
-						var value = pair.Value;
-
-						if (value is List<Range<TimeSpan>> times)
-						{
-							storage.Set(pair.Key, times.Select(r => r.ToStorage()).ToArray());
-						}
-						else if (value is Dictionary<DayOfWeek, Range<TimeSpan>[]> specialDays)
-						{
-							storage.Set(pair.Key, specialDays.Select(p => new SettingsStorage()
-								.Set("Day", p.Key)
-								.Set("Periods", p.Value.Select(r => r.ToStorage()).ToArray())
-							).ToArray());
-						}
-						else if (value is Dictionary<DateTime, Range<TimeSpan>[]> specialDays2)
-						{
-							storage.Set(pair.Key, specialDays2.Select(p => new SettingsStorage()
-								.Set("Day", p.Key)
-								.Set("Periods", p.Value.Select(p1 => p1.ToStorage()).ToArray())
-							).ToArray());
-						}
-						else if (value is Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> permissions)
-						{
-							storage.Set(pair.Key, permissions
-								.Select(p =>
-									new SettingsStorage()
-										.Set("Permission", p.Key)
-										.Set("Settings", p.Value
-											.Select(p1 =>
-												new SettingsStorage()
-													.Set("Name", p1.Key.Item1)
-													.Set("Param", p1.Key.Item2)
-													.Set("Extra", p1.Key.Item3)
-													.Set("Till", p1.Key.Item4)
-													.Set("IsEnabled", p1.Value)
-											).ToArray()
-										)
-								).ToArray()
-							);
-						}
-						else if (value is IEnumerable<RefPair<Guid, string>> pairs)
-						{
-							storage.Set(pair.Key, pairs.Select(p => p.ToStorage()).ToArray());
-						}
-						else if (value is SettingsStorage s1)
-							TryFix(s1);
-						else if (value is IEnumerable<SettingsStorage> set)
-						{
-							foreach (var item in set)
-								TryFix(item);
-						}
-					}
-				}
-
-				if (value is SettingsStorage s)
-					TryFix(s);
-				else if (value is IEnumerable<SettingsStorage> set)
-				{
-					foreach (var item in set)
-						TryFix(item);
-				}
-
-				try
-				{
-					// !!! serialize and deserialize (check our new serializer)
-					value = defSer.Deserialize(defSer.Serialize(value));
-
-					// saving data in new format
-					defSer.Serialize(value, defFile);
-
-					// make backup only if everything is ok
-					legacyFile.MoveToBackup();
-				}
-				catch (Exception ex)
-				{
-					ex.LogError();
-				}
-			}
-			else
-				value = File.Exists(defFile) ? defSer.Deserialize(defFile) : default;
-
-			return value;
+			return File.Exists(defFile)
+				? File.ReadAllBytes(defFile).Deserialize<T>()
+				: default;
 		}
 
 		/// <summary>
@@ -637,37 +545,8 @@
 		/// <typeparam name="T">Value type.</typeparam>
 		/// <param name="data">Serialized data.</param>
 		/// <returns>Value.</returns>
-		public static T DeserializeWithMigration<T>(this byte[] data)
-			=> (T)CreateSerializer<T>().DeserializeWithMigration(data);
-
-		/// <summary>
-		/// Deserialize value from the serialized data.
-		/// </summary>
-		/// <param name="serializer">Serializer.</param>
-		/// <param name="data">Serialized data.</param>
-		/// <returns>Value.</returns>
-		public static object DeserializeWithMigration(this ISerializer serializer, byte[] data)
-		{
-			if (serializer is null)
-				throw new ArgumentNullException(nameof(serializer));
-
-			try
-			{
-				return serializer.Deserialize(data);
-			}
-			catch
-			{
-				if (LegacySerializer is null)
-					return null;
-
-				var xmlSer = LegacySerializer.GetSerializer(serializer.Type);
-
-				if (xmlSer.GetType() == serializer.GetType())
-					throw;
-
-				return xmlSer.Deserialize(data);
-			}
-		}
+		public static T Deserialize<T>(this byte[] data)
+			=> CreateSerializer<T>().Deserialize(data);
 
 		/// <summary>
 		/// Get file name for the specified id.
