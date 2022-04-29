@@ -35,7 +35,7 @@
 
 			Directory.CreateDirectory(_dir);
 
-			foreach (var xml in Paths.EnumerateDefaultAndLegacy(_dir))
+			foreach (var xml in _dir.EnumerateConfigs())
 			{
 				try
 				{

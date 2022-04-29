@@ -188,7 +188,7 @@
 
 			try
 			{
-				if (File.Exists(_settingsFile))
+				if (_settingsFile.IsConfigExists())
 				{
 					var ctx = new ContinueOnExceptionContext();
 					ctx.Error += ex => ex.LogError();

@@ -38,7 +38,7 @@
 
 				try
 				{
-					if (File.Exists(file))
+					if (file.IsConfigExists())
 					{
 						credentials = new ServerCredentials();
 						credentials.LoadIfNotNull(file.Deserialize<SettingsStorage>());
