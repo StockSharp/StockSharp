@@ -20,7 +20,7 @@
     <FluentFtpVer>35.0.5</FluentFtpVer>
     <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.2</SignalRVer>
-    <NuGetApiVer>5.11.0</NuGetApiVer>
+    <NuGetApiVer>6.2.0</NuGetApiVer>
     <MsTestVer>2.2.7</MsTestVer>
     <MsTestSdkVer>17.0.0</MsTestSdkVer>
     
