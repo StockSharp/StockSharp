@@ -380,33 +380,36 @@ namespace StockSharp.Algo.Strategies
 
 				if (_connector != null)
 				{
-					_connector.OrderReceived -= OnConnectorOrderReceived;
-					_connector.OwnTradeReceived -= OnConnectorOwnTradeReceived;
-					_connector.OrderRegisterFailed -= OnConnectorOrderRegisterFailed;
-					_connector.OrderCancelFailed -= ProcessCancelOrderFail;
-					_connector.OrderEdited -= OnConnectorOrderEdited;
-					_connector.OrderEditFailed -= OnConnectorOrderEditFailed;
-					_connector.NewMessage -= OnConnectorNewMessage;
-					_connector.ValuesChanged -= OnConnectorValuesChanged;
-					_connector.PositionReceived -= OnConnectorPositionReceived;
-					_connector.Level1Received -= OnConnectorLevel1Received;
-					_connector.OrderBookReceived -= OnConnectorOrderBookReceived;
-					_connector.TickTradeReceived -= OnConnectorTickTradeReceived;
-					_connector.SecurityReceived -= OnConnectorSecurityReceived;
-					_connector.BoardReceived -= OnConnectorBoardReceived;
-					_connector.MarketDepthReceived -= OnConnectorMarketDepthReceived;
-					_connector.OrderLogItemReceived -= OnConnectorOrderLogItemReceived;
-					_connector.NewsReceived -= OnConnectorNewsReceived;
-					_connector.CandleReceived -= OnConnectorCandleReceived;
-					_connector.OrderRegisterFailReceived -= OnConnectorOrderRegisterFailReceived;
-					_connector.OrderCancelFailReceived -= OnConnectorOrderCancelFailReceived;
-					_connector.OrderEditFailReceived -= OnConnectorOrderEditFailReceived;
-					_connector.PortfolioReceived -= OnConnectorPortfolioReceived;
-					_connector.SubscriptionReceived -= OnConnectorSubscriptionReceived;
-					_connector.SubscriptionOnline -= OnConnectorSubscriptionOnline;
-					_connector.SubscriptionStarted -= OnConnectorSubscriptionStarted;
-					_connector.SubscriptionStopped -= OnConnectorSubscriptionStopped;
-					_connector.SubscriptionFailed -= OnConnectorSubscriptionFailed;
+					ISubscriptionProvider isp = _connector;
+					IConnector con = _connector;
+
+					isp.OrderReceived             -= OnConnectorOrderReceived;
+					isp.OwnTradeReceived          -= OnConnectorOwnTradeReceived;
+					con.OrderRegisterFailed       -= OnConnectorOrderRegisterFailed;
+					con.OrderCancelFailed         -= ProcessCancelOrderFail;
+					con.OrderEdited               -= OnConnectorOrderEdited;
+					con.OrderEditFailed           -= OnConnectorOrderEditFailed;
+					con.NewMessage                -= OnConnectorNewMessage;
+					con.ValuesChanged             -= OnConnectorValuesChanged;
+					isp.PositionReceived          -= OnConnectorPositionReceived;
+					isp.Level1Received            -= OnConnectorLevel1Received;
+					isp.OrderBookReceived         -= OnConnectorOrderBookReceived;
+					isp.TickTradeReceived         -= OnConnectorTickTradeReceived;
+					isp.SecurityReceived          -= OnConnectorSecurityReceived;
+					isp.BoardReceived             -= OnConnectorBoardReceived;
+					isp.MarketDepthReceived       -= OnConnectorMarketDepthReceived;
+					isp.OrderLogItemReceived      -= OnConnectorOrderLogItemReceived;
+					isp.NewsReceived              -= OnConnectorNewsReceived;
+					isp.CandleReceived            -= OnConnectorCandleReceived;
+					isp.OrderRegisterFailReceived -= OnConnectorOrderRegisterFailReceived;
+					isp.OrderCancelFailReceived   -= OnConnectorOrderCancelFailReceived;
+					isp.OrderEditFailReceived     -= OnConnectorOrderEditFailReceived;
+					isp.PortfolioReceived         -= OnConnectorPortfolioReceived;
+					isp.SubscriptionReceived      -= OnConnectorSubscriptionReceived;
+					isp.SubscriptionOnline        -= OnConnectorSubscriptionOnline;
+					isp.SubscriptionStarted       -= OnConnectorSubscriptionStarted;
+					isp.SubscriptionStopped       -= OnConnectorSubscriptionStopped;
+					isp.SubscriptionFailed        -= OnConnectorSubscriptionFailed;
 
 					UnSubscribe(true);
 				}
@@ -415,33 +418,36 @@ namespace StockSharp.Algo.Strategies
 
 				if (_connector != null)
 				{
-					_connector.OrderReceived += OnConnectorOrderReceived;
-					_connector.OwnTradeReceived += OnConnectorOwnTradeReceived;
-					_connector.OrderRegisterFailed += OnConnectorOrderRegisterFailed;
-					_connector.OrderCancelFailed += ProcessCancelOrderFail;
-					_connector.OrderEdited += OnConnectorOrderEdited;
-					_connector.OrderEditFailed += OnConnectorOrderEditFailed;
-					_connector.NewMessage += OnConnectorNewMessage;
-					_connector.ValuesChanged += OnConnectorValuesChanged;
-					_connector.PositionReceived += OnConnectorPositionReceived;
-					_connector.Level1Received += OnConnectorLevel1Received;
-					_connector.OrderBookReceived += OnConnectorOrderBookReceived;
-					_connector.TickTradeReceived += OnConnectorTickTradeReceived;
-					_connector.SecurityReceived += OnConnectorSecurityReceived;
-					_connector.BoardReceived += OnConnectorBoardReceived;
-					_connector.MarketDepthReceived += OnConnectorMarketDepthReceived;
-					_connector.OrderLogItemReceived += OnConnectorOrderLogItemReceived;
-					_connector.NewsReceived += OnConnectorNewsReceived;
-					_connector.CandleReceived += OnConnectorCandleReceived;
-					_connector.OrderRegisterFailReceived += OnConnectorOrderRegisterFailReceived;
-					_connector.OrderCancelFailReceived += OnConnectorOrderCancelFailReceived;
-					_connector.OrderEditFailReceived += OnConnectorOrderEditFailReceived;
-					_connector.PortfolioReceived += OnConnectorPortfolioReceived;
-					_connector.SubscriptionReceived += OnConnectorSubscriptionReceived;
-					_connector.SubscriptionOnline += OnConnectorSubscriptionOnline;
-					_connector.SubscriptionStarted += OnConnectorSubscriptionStarted;
-					_connector.SubscriptionStopped += OnConnectorSubscriptionStopped;
-					_connector.SubscriptionFailed += OnConnectorSubscriptionFailed;
+					ISubscriptionProvider isp = _connector;
+					IConnector con = _connector;
+
+					isp.OrderReceived             += OnConnectorOrderReceived;
+					isp.OwnTradeReceived          += OnConnectorOwnTradeReceived;
+					con.OrderRegisterFailed       += OnConnectorOrderRegisterFailed;
+					con.OrderCancelFailed         += ProcessCancelOrderFail;
+					con.OrderEdited               += OnConnectorOrderEdited;
+					con.OrderEditFailed           += OnConnectorOrderEditFailed;
+					con.NewMessage                += OnConnectorNewMessage;
+					con.ValuesChanged             += OnConnectorValuesChanged;
+					isp.PositionReceived          += OnConnectorPositionReceived;
+					isp.Level1Received            += OnConnectorLevel1Received;
+					isp.OrderBookReceived         += OnConnectorOrderBookReceived;
+					isp.TickTradeReceived         += OnConnectorTickTradeReceived;
+					isp.SecurityReceived          += OnConnectorSecurityReceived;
+					isp.BoardReceived             += OnConnectorBoardReceived;
+					isp.MarketDepthReceived       += OnConnectorMarketDepthReceived;
+					isp.OrderLogItemReceived      += OnConnectorOrderLogItemReceived;
+					isp.NewsReceived              += OnConnectorNewsReceived;
+					isp.CandleReceived            += OnConnectorCandleReceived;
+					isp.OrderRegisterFailReceived += OnConnectorOrderRegisterFailReceived;
+					isp.OrderCancelFailReceived   += OnConnectorOrderCancelFailReceived;
+					isp.OrderEditFailReceived     += OnConnectorOrderEditFailReceived;
+					isp.PortfolioReceived         += OnConnectorPortfolioReceived;
+					isp.SubscriptionReceived      += OnConnectorSubscriptionReceived;
+					isp.SubscriptionOnline        += OnConnectorSubscriptionOnline;
+					isp.SubscriptionStarted       += OnConnectorSubscriptionStarted;
+					isp.SubscriptionStopped       += OnConnectorSubscriptionStopped;
+					isp.SubscriptionFailed        += OnConnectorSubscriptionFailed;
 
 					if (IsRootStrategy)
 					{
