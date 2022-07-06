@@ -7,6 +7,9 @@
     <ProjectGuid>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</ProjectGuid>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
   </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+    <ProjectReference Include="$(ConnectorsAppsPath)Bvmt\Bvmt.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(ConnectorsAppsPath)FTX\FTX.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Binance\Binance.csproj" />
