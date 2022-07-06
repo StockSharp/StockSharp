@@ -792,6 +792,8 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter[] Wrappers => _adapterWrappers.CachedValues;
 
+		private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _orderAdapters.TryAdd2(transId, GetUnderlyingAdapter(adapter));
+
 		private void ProcessReset(ResetMessage message, bool isConnect)
 		{
 			Wrappers.ForEach(a =>
@@ -1582,7 +1584,7 @@ namespace StockSharp.Algo
 			}
 
 			if (message is OrderRegisterMessage regMsg)
-				_orderAdapters.TryAdd2(regMsg.TransactionId, adapter);
+				TryAddOrderAdapter(regMsg.TransactionId, adapter);
 
 			adapter.SendInMessage(message);
 		}
@@ -1601,7 +1603,9 @@ namespace StockSharp.Algo
 					adapter = GetAdapter(pairMsg.Message1.PortfolioName, message, out _);
 			}
 
-			if (adapter is null)
+			var wrapper = _adapterWrappers.TryGetValue(adapter);
+
+			if (adapter is null || wrapper is null)
 			{
 				this.AddErrorLog(LocalizedStrings.UnknownTransactionId, originId);
 
@@ -1619,16 +1623,16 @@ namespace StockSharp.Algo
 			{
 				if (message is OrderReplaceMessage replace)
 				{
-					_orderAdapters.TryAdd2(replace.TransactionId, adapter);
+					TryAddOrderAdapter(replace.TransactionId, adapter);
 				}
 				else if (message is OrderPairReplaceMessage pairReplace)
 				{
-					_orderAdapters.TryAdd2(pairReplace.Message1.TransactionId, adapter);
-					_orderAdapters.TryAdd2(pairReplace.Message2.TransactionId, adapter);
+					TryAddOrderAdapter(pairReplace.Message1.TransactionId, adapter);
+					TryAddOrderAdapter(pairReplace.Message2.TransactionId, adapter);
 				}
 			}
 
-			adapter.SendInMessage(message);
+			wrapper.SendInMessage(message);
 		}
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
@@ -1777,7 +1781,7 @@ namespace StockSharp.Algo
 						if (execMsg.TransactionId != default)
 						{
 							if (execMsg.HasOrderInfo)
-								_orderAdapters.TryAdd2(execMsg.TransactionId, innerAdapter);
+								TryAddOrderAdapter(execMsg.TransactionId, innerAdapter);
 						}
 
 						break;
