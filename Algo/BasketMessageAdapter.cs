@@ -1590,7 +1590,7 @@ namespace StockSharp.Algo
 		}
 
 #if DEBUG
-		internal IMessageAdapterWrapper GetOrderWrapper(long transId) => (IMessageAdapterWrapper)_orderAdapters[transId];
+		internal IMessageAdapterWrapper GetOrderWrapper(long transId) => (IMessageAdapterWrapper)_adapterWrappers[_orderAdapters[transId]];
 #endif
 
 		private void ProcessOrderMessage(long transId, long originId, Message message)
