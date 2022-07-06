@@ -1587,6 +1587,10 @@ namespace StockSharp.Algo
 			adapter.SendInMessage(message);
 		}
 
+#if DEBUG
+		internal IMessageAdapterWrapper GetOrderWrapper(long transId) => (IMessageAdapterWrapper)_orderAdapters[transId];
+#endif
+
 		private void ProcessOrderMessage(long transId, long originId, Message message)
 		{
 			if (!_orderAdapters.TryGetValue(originId, out var adapter))
