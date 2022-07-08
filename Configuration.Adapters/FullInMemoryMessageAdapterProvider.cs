@@ -5,6 +5,9 @@ namespace StockSharp.Configuration
 
 	using Ecng.Common;
 
+#if NETSTANDARD2_1
+	using StockSharp.Bvmt;
+#endif
 	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
 	using StockSharp.AlphaVantage;
@@ -141,6 +144,10 @@ namespace StockSharp.Configuration
 		private static readonly Lazy<Func<Type>[]> _standardAdapters = new(() => new[]
 		{
 			(Func<Type>)(() => typeof(AlfaDirectMessageAdapter)),
+#if NETSTANDARD2_1
+			() => typeof(BvmtMarketDataAdapter),
+			() => typeof(BvmtTransactionAdapter),
+#endif
 			() => typeof(BarChartMessageAdapter),
 			() => typeof(BitStampMessageAdapter),
 			//() => typeof(BlackwoodMessageAdapter),
