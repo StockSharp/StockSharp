@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Show error dialog windows
+		/// </summary>
+		public const string ErrorsDialogsKey = nameof(ErrorsDialogs);
+
+		/// <summary>
+		/// Show error dialog windows
+		/// </summary>
+		public static string ErrorsDialogs => GetString(ErrorsDialogsKey);
+
+		/// <summary>
 		/// Do you want to publish the new version of {0}?
 		/// </summary>
 		public const string ConfirmNewVersionPublishParamsKey = nameof(ConfirmNewVersionPublishParams);
