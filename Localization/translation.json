@@ -1,4 +1,8 @@
 {
+  "ErrorsDialogs": {
+    "en": "Show error dialog windows",
+    "ru": "Показывать ошибки в диалоговых окнах"
+  },
   "ConfirmNewVersionPublishParams": {
     "en": "Do you want to publish the new version of \"{0}\"?",
     "ru": "Опубликовать новую версию \"{0}\"?"
