@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Track orders for securities
+		/// </summary>
+		public const string TrackOrdersForSecuritiesKey = nameof(TrackOrdersForSecurities);
+
+		/// <summary>
+		/// Track orders for securities
+		/// </summary>
+		public static string TrackOrdersForSecurities => GetString(TrackOrdersForSecuritiesKey);
+
+		/// <summary>
+		/// The Binance connector during connection/reconnection process will request order/trade status for the listed securities. Symbols, comma-separated. For example: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB
+		/// </summary>
+		public const string TrackOrdersForSecuritiesDescKey = nameof(TrackOrdersForSecuritiesDesc);
+
+		/// <summary>
+		/// The Binance connector during connection/reconnection process will request order/trade status for the listed securities. Symbols, comma-separated. For example: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB
+		/// </summary>
+		public static string TrackOrdersForSecuritiesDesc => GetString(TrackOrdersForSecuritiesDescKey);
+
+		/// <summary>
 		/// Show error dialog windows
 		/// </summary>
 		public const string ErrorsDialogsKey = nameof(ErrorsDialogs);

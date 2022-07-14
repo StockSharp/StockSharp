@@ -1,4 +1,12 @@
 {
+  "TrackOrdersForSecurities": {
+    "en": "Track orders for securities",
+    "ru": "Отслеживать заявки по инструментам"
+  },
+  "TrackOrdersForSecuritiesDesc": {
+    "en": "The Binance connector during connection/reconnection process will request order/trade status for the listed securities. Security ids, comma-separated. For example: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB",
+    "ru": "Коннектор Binance в процессе подключения/переподключения будет запрашивать состояние заявок/сделок по перечисленным инструментам. Id инструментов через запятую. Например: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB"
+  },
   "ErrorsDialogs": {
     "en": "Show error dialog windows",
     "ru": "Показывать ошибки в диалоговых окнах"
