@@ -13,9 +13,12 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Strategies
 {
 	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
 	using System.Collections.Generic;
 	using System.Linq;
 	using Ecng.Collections;
@@ -58,6 +61,9 @@ namespace StockSharp.Algo.Strategies
 				selectorInfo.Result = value;
 				return true;
 			}
+
+			ValueTask<bool> ISource.TryEvaluateSelectorAsync(ISelectorInfo selectorInfo, CancellationToken _)
+				=> new(((ISource)this).TryEvaluateSelector(selectorInfo));
 		}
 
 		private readonly SmartFormatter _formatter;
