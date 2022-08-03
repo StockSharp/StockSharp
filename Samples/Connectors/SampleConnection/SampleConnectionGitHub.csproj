@@ -11,11 +11,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
-    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj" />
-    <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.AdaptersGitHub.csproj" />
-    <ProjectReference Include="..\..\..\Configuration\Configuration.csproj" />
-    <ProjectReference Include="..\..\..\Localization\Localization.csproj" />
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\..\..\Messages\Messages.csproj" />
   </ItemGroup>
 </Project>
