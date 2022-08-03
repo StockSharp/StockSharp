@@ -176,8 +176,8 @@
     "ru": "Новая версия"
   },
   "SelectCsprojForProduct": {
-    "en": "Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.",
-    "ru": "Выберите проектный файл (.csproj) вашего продукта. Перед публикацией проект должен быть построен в Visual Studio в конфигурации Release."
+    "en": "Select .nupkg or .csproj for your product. In case of .csproj, before package publishing you have to build it in Visual Studio in Release configuration.",
+    "ru": "Выберите .nupkg или .csproj вашего продукта. В случае .csproj, перед публикацией проект должен быть построен в Visual Studio в конфигурации Release."
   },
   "DotNetSDKNotInstalled": {
     "en": ".NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/5.0",

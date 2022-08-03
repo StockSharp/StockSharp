@@ -498,12 +498,12 @@ namespace StockSharp.Localization
 		public static string NewVersion => GetString(NewVersionKey);
 
 		/// <summary>
-		/// Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.
+		/// Select .nupkg or .csproj for your product. In case of .csproj, before package publishing you have to build it in Visual Studio in Release configuration.
 		/// </summary>
 		public const string SelectCsprojForProductKey = nameof(SelectCsprojForProduct);
 
 		/// <summary>
-		/// Select project file (.csproj) for your product. Before package publishing you have to build it in Visual Studio in Release configuration.
+		/// Select .nupkg or .csproj for your product. In case of .csproj, before package publishing you have to build it in Visual Studio in Release configuration.
 		/// </summary>
 		public static string SelectCsprojForProduct => GetString(SelectCsprojForProductKey);
 
