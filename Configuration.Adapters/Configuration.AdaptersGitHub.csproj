@@ -97,6 +97,9 @@
     <PackageReference Include="StockSharp.DigitexFuturesStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.QuantHouseStub" Version="$(StockSharpVer)" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+    <PackageReference Include="StockSharp.BvmtStub" Version="$(StockSharpVer)" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\Messages\Messages.csproj" />
