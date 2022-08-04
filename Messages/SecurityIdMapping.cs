@@ -9,7 +9,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Security identifier mapping.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class SecurityIdMapping : IPersistable
 	{

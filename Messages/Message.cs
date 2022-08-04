@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// A message containing market data or command.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public abstract class Message : Cloneable<Message>, IExtendableEntity, IMessage
 	{

@@ -175,7 +175,7 @@ namespace StockSharp.Messages
 	/// The base implementation <see cref="IWithdrawOrderCondition"/>.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public abstract class BaseWithdrawOrderCondition : OrderCondition, IWithdrawOrderCondition
 	{
 		/// <summary>

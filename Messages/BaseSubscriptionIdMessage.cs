@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// A message containing subscription identifiers.
 	/// </summary>
 	/// <typeparam name="TMessage">Message type.</typeparam>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public abstract class BaseSubscriptionIdMessage<TMessage> : Message, ISubscriptionIdMessage
 		where TMessage : BaseSubscriptionIdMessage<TMessage>, new()

@@ -9,7 +9,7 @@ namespace StockSharp.Messages
 	/// Security mapping result message.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	public class SecurityMappingMessage : Message, ISubscriptionMessage
 	{
 		/// <summary>

@@ -14,7 +14,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Data type info.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public class DataType : Equatable<DataType>, IPersistable
 	{

@@ -34,7 +34,7 @@ namespace StockSharp.Messages
 	/// Work schedule (time, holidays etc.).
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str184Key)]
 	[DescriptionLoc(LocalizedStrings.Str408Key)]
 	public class WorkingTime : IPersistable

@@ -32,7 +32,7 @@ namespace StockSharp.Messages
 	/// Schedule validity period.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str416Key)]
 	[DescriptionLoc(LocalizedStrings.Str417Key)]
 	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable

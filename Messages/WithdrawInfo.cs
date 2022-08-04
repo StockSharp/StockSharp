@@ -38,7 +38,7 @@ namespace StockSharp.Messages
 	/// Bank details.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class BankDetails : IPersistable
 	{
@@ -212,7 +212,7 @@ namespace StockSharp.Messages
 	/// Withdraw info.
 	/// </summary>
 	[Serializable]
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class WithdrawInfo : IPersistable
 	{
