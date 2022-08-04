@@ -425,15 +425,12 @@ namespace StockSharp.Algo.Candles
 		{
 			return executions.ToCandles(mdMsg, execMsg =>
 			{
-				switch (execMsg.ExecutionType)
-				{
-					case ExecutionTypes.Tick:
-						return new TickCandleBuilderValueTransform();
-					case ExecutionTypes.OrderLog:
-						return new OrderLogCandleBuilderValueTransform();
-					default:
-						throw new ArgumentOutOfRangeException(nameof(execMsg.ExecutionType), execMsg.ExecutionType, LocalizedStrings.Str1219);
-				}
+				if (execMsg.DataType == DataType.Ticks)
+					return new TickCandleBuilderValueTransform();
+				else if (execMsg.DataType == DataType.OrderLog)
+					return new OrderLogCandleBuilderValueTransform();
+				else
+					throw new ArgumentOutOfRangeException(nameof(execMsg), execMsg.DataType, LocalizedStrings.Str1219);
 			}, candleBuilderProvider);
 		}
 
@@ -573,7 +570,7 @@ namespace StockSharp.Algo.Candles
 				TradePrice = price,
 				TradeVolume = volume,
 				Side = side,
-				ExecutionType = ExecutionTypes.Tick,
+				DataTypeEx = DataType.Ticks,
 				OpenInterest = openInterest
 			};
 		}

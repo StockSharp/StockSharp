@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Storages.Csv
 			var ol = new ExecutionMessage
 			{
 				SecurityId = SecurityId,
-				ExecutionType = ExecutionTypes.OrderLog,
+				DataTypeEx = DataType.OrderLog,
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				TransactionId = reader.ReadLong(),
 				OrderId = reader.ReadNullableLong(),

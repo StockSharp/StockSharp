@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Testing
 					{
 						Side = side,
 						TradeVolume = tradeVolume,
-						ExecutionType = ExecutionTypes.Tick,
+						DataTypeEx = DataType.Ticks,
 						SecurityId = SecurityId,
 						LocalTime = time,
 						ServerTime = serverTime,
@@ -571,7 +571,7 @@ namespace StockSharp.Algo.Testing
 				Side = side,
 				OrderPrice = price,
 				OrderVolume = volume,
-				ExecutionType = ExecutionTypes.OrderLog,
+				DataTypeEx = DataType.OrderLog,
 				IsCancellation = isCancelling,
 				SecurityId = SecurityId,
 				LocalTime = localTime,
@@ -615,7 +615,7 @@ namespace StockSharp.Algo.Testing
 						LocalTime = regMsg.LocalTime,
 						ServerTime = serverTime,
 						SecurityId = regMsg.SecurityId,
-						ExecutionType = ExecutionTypes.Transaction,
+						DataTypeEx = DataType.Transactions,
 						HasOrderInfo = true,
 						TransactionId = regMsg.TransactionId,
 						OrderPrice = regMsg.Price,
@@ -644,7 +644,7 @@ namespace StockSharp.Algo.Testing
 						LocalTime = replaceMsg.LocalTime,
 						ServerTime = serverTime,
 						SecurityId = replaceMsg.SecurityId,
-						ExecutionType = ExecutionTypes.Transaction,
+						DataTypeEx = DataType.Transactions,
 						HasOrderInfo = true,
 						IsCancellation = true,
 						OrderId = replaceMsg.OldOrderId,
@@ -662,7 +662,7 @@ namespace StockSharp.Algo.Testing
 						LocalTime = replaceMsg.LocalTime,
 						ServerTime = serverTime,
 						SecurityId = replaceMsg.SecurityId,
-						ExecutionType = ExecutionTypes.Transaction,
+						DataTypeEx = DataType.Transactions,
 						HasOrderInfo = true,
 						TransactionId = replaceMsg.TransactionId,
 						OrderPrice = replaceMsg.Price,
@@ -682,7 +682,7 @@ namespace StockSharp.Algo.Testing
 
 					yield return new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Transaction,
+						DataTypeEx = DataType.Transactions,
 						HasOrderInfo = true,
 						IsCancellation = true,
 						OrderId = cancelMsg.OrderId,

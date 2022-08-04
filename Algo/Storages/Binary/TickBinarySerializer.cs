@@ -143,8 +143,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 			foreach (var msg in messages)
 			{
-				if (msg.ExecutionType != ExecutionTypes.Tick)
-					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg));
+				if (msg.DataType != DataType.Ticks)
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.DataType, LocalizedStrings.Str1695Params.Put(msg));
 
 				var tradeId = msg.TradeId ?? 0;
 
@@ -324,7 +324,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var msg = new ExecutionMessage
 			{
 				//LocalTime = metaInfo.FirstTime,
-				ExecutionType = ExecutionTypes.Tick,
+				DataTypeEx = DataType.Ticks,
 				SecurityId = SecurityId,
 				TradeId = metaInfo.FirstId == 0 ? null : metaInfo.FirstId,
 				TradeVolume = volume,

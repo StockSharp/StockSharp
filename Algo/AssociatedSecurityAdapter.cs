@@ -119,19 +119,14 @@ namespace StockSharp.Algo
 				{
 					var executionMsg = (ExecutionMessage)message;
 
-					switch (executionMsg.ExecutionType)
+					if (executionMsg.DataType == DataType.Ticks ||
+						executionMsg.DataType == DataType.OrderLog)
 					{
-						case ExecutionTypes.Tick:
-						case ExecutionTypes.OrderLog:
+						if (!IsAssociated(executionMsg.SecurityId.BoardCode))
 						{
-							if (!IsAssociated(executionMsg.SecurityId.BoardCode))
-							{
-								var clone = executionMsg.TypedClone();
-								clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-								base.OnInnerAdapterNewOutMessage(clone);
-							}
-
-							break;
+							var clone = executionMsg.TypedClone();
+							clone.SecurityId = CreateAssociatedId(clone.SecurityId);
+							base.OnInnerAdapterNewOutMessage(clone);
 						}
 					}
 

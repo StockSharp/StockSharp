@@ -2611,7 +2611,7 @@ namespace StockSharp.Algo
 			if (volume != null)
 				return volume.Value;
 
-			var errorMsg = message.ExecutionType == ExecutionTypes.Tick || message.HasTradeInfo()
+			var errorMsg = message.DataType == DataType.Ticks || message.HasTradeInfo()
 				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
 				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
 

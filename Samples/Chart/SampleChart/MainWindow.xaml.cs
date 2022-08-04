@@ -351,7 +351,7 @@
 
 						_tradeGenerator.Process(new ExecutionMessage
 						{
-							ExecutionType = ExecutionTypes.Tick,
+							DataTypeEx = DataType.Ticks,
 							SecurityId = series.Security.ToSecurityId(),
 							ServerTime = _lastTime,
 							TradePrice = candleMsg.ClosePrice,

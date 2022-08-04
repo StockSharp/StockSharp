@@ -302,12 +302,12 @@ namespace StockSharp.Algo
 			if (item == null)
 				throw new ArgumentNullException(nameof(item));
 
-			if (item.ExecutionType != ExecutionTypes.OrderLog)
+			if (item.DataType != DataType.OrderLog)
 				throw new ArgumentException(nameof(item));
 
 			return new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Tick,
+				DataTypeEx = DataType.Ticks,
 				SecurityId = item.SecurityId,
 				TradeId = item.TradeId,
 				TradeStringId = item.TradeStringId,

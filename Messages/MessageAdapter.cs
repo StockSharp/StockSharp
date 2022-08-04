@@ -430,7 +430,7 @@ namespace StockSharp.Messages
 				case PositionChangeMessage posMsg when posMsg.ServerTime.IsDefault():
 					posMsg.ServerTime = CurrentTime;
 					break;
-				case ExecutionMessage execMsg when execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.ServerTime.IsDefault():
+				case ExecutionMessage execMsg when execMsg.DataType == DataType.Transactions && execMsg.ServerTime.IsDefault():
 					execMsg.ServerTime = CurrentTime;
 					break;
 			}

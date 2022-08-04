@@ -129,7 +129,12 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str110Key)]
 		[MainCategory]
 		//[Nullable]
-		public ExecutionTypes? ExecutionType { get; set; }
+		[Obsolete("Use DataTypeEx property.")]
+		public ExecutionTypes? ExecutionType
+		{
+			get => DataTypeEx.ToExecutionType();
+			set => DataTypeEx = value?.ToDataType();
+		}
 
 		/// <summary>
 		/// Is the action an order cancellation.
@@ -404,7 +409,7 @@ namespace StockSharp.Messages
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>
-		/// Is tick uptrend or downtrend in price. Uses only <see cref="ExecutionType"/> for <see cref="ExecutionTypes.Tick"/>.
+		/// Is tick uptrend or downtrend in price. Uses only <see cref="DataType"/> for <see cref="DataType.Ticks"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str157Key)]
@@ -414,7 +419,7 @@ namespace StockSharp.Messages
 		public bool? IsUpTick { get; set; }
 
 		/// <summary>
-		/// Commission (broker, exchange etc.). Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
+		/// Commission (broker, exchange etc.). Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
@@ -439,7 +444,7 @@ namespace StockSharp.Messages
 		public TimeSpan? Latency { get; set; }
 
 		/// <summary>
-		/// Slippage in trade price. Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
+		/// Slippage in trade price. Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str163Key)]
@@ -449,7 +454,7 @@ namespace StockSharp.Messages
 		public decimal? Slippage { get; set; }
 
 		/// <summary>
-		/// User order id. Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
+		/// User order id. Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str165Key)]
@@ -586,12 +591,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType => ExecutionType.Value.ToDataType();
+		public override DataType DataType => DataTypeEx;
+
+		/// <inheritdoc />
+		public DataType DataTypeEx { get; set; }
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({ExecutionType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{OrderStringId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},Type={OrderType},State={OrderState},Cond={Condition}";
+			var str = base.ToString() + $",T(S)={ServerTime:yyyy/MM/dd HH:mm:ss.fff},({DataType}),Sec={SecurityId},O/T={HasOrderInfo}/{HasTradeInfo},Ord={OrderId}/{OrderStringId}/{TransactionId}/{OriginalTransactionId},Fail={Error},Price={OrderPrice},OrdVol={OrderVolume},TrVol={TradeVolume},Bal={Balance},TId={TradeId},Pf={PortfolioName},TPrice={TradePrice},UId={UserOrderId},Type={OrderType},State={OrderState},Cond={Condition}";
 
 			if (!StrategyId.IsEmpty())
 				str += $",Strategy={StrategyId}";
@@ -640,7 +648,7 @@ namespace StockSharp.Messages
 			destination.OrderId = OrderId;
 			destination.OrderStringId = OrderStringId;
 			destination.OrderBoardId = OrderBoardId;
-			destination.ExecutionType = ExecutionType;
+			destination.DataTypeEx = DataTypeEx;
 			destination.IsCancellation = IsCancellation;
 			//destination.Action = Action;
 			destination.OrderState = OrderState;

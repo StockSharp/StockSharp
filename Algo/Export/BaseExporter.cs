@@ -121,21 +121,21 @@ namespace StockSharp.Algo.Export
 		protected abstract (int, DateTimeOffset?) Export(IEnumerable<Level1ChangeMessage> messages);
 
 		/// <summary>
-		/// To export <see cref="ExecutionTypes.Tick"/>.
+		/// To export <see cref="DataType.Ticks"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
 		/// <returns>Count and last time.</returns>
 		protected abstract (int, DateTimeOffset?) ExportTicks(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
-		/// To export <see cref="ExecutionTypes.OrderLog"/>.
+		/// To export <see cref="DataType.OrderLog"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
 		/// <returns>Count and last time.</returns>
 		protected abstract (int, DateTimeOffset?) ExportOrderLog(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
-		/// To export <see cref="ExecutionTypes.Transaction"/>.
+		/// To export <see cref="DataType.Transactions"/>.
 		/// </summary>
 		/// <param name="messages">Messages.</param>
 		/// <returns>Count and last time.</returns>

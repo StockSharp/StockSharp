@@ -242,7 +242,7 @@ namespace StockSharp.Messages
 			return new ExecutionMessage
 			{
 				OriginalTransactionId = transactionId,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				ServerTime = serverTime,
 			};
@@ -902,8 +902,8 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Convert <see cref="ExecutionTypes"/> to <see cref="DataType"/> value.
 		/// </summary>
-		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
-		/// <returns>Data type info.</returns>
+		/// <param name="type"><see cref="ExecutionTypes"/>.</param>
+		/// <returns><see cref="DataType"/>.</returns>
 		public static DataType ToDataType(this ExecutionTypes type)
 		{
 			return type switch
@@ -913,6 +913,23 @@ namespace StockSharp.Messages
 				ExecutionTypes.OrderLog => DataType.OrderLog,
 				_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219),
 			};
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to <see cref="ExecutionTypes"/> value.
+		/// </summary>
+		/// <param name="type"><see cref="DataType"/>.</param>
+		/// <returns><see cref="ExecutionTypes"/>.</returns>
+		public static ExecutionTypes ToExecutionType(this DataType type)
+		{
+			if (type == DataType.Ticks)
+				return ExecutionTypes.Tick;
+			else if (type == DataType.Transactions)
+				return ExecutionTypes.Transaction;
+			else if (type == DataType.OrderLog)
+				return ExecutionTypes.OrderLog;
+			else
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 		}
 
 		/// <summary>
@@ -964,7 +981,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.ExecutionType == ExecutionTypes.Transaction && message.HasOrderInfo;
+			return message.DataType == DataType.Transactions && message.HasOrderInfo;
 		}
 
 		/// <summary>
@@ -977,7 +994,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.ExecutionType == ExecutionTypes.Transaction && message.HasTradeInfo;
+			return message.DataType == DataType.Transactions && message.HasTradeInfo;
 		}
 
 		/// <summary>
@@ -1872,8 +1889,8 @@ namespace StockSharp.Messages
 		{
 			if (execMsg == null)
 				throw new ArgumentNullException(nameof(execMsg));
-
-			return execMsg.ExecutionType is ExecutionTypes.Tick or ExecutionTypes.OrderLog;
+			
+			return execMsg.DataType == DataType.Ticks || execMsg.DataType == DataType.OrderLog;
 		}
 
 		/// <summary>
@@ -2250,7 +2267,7 @@ namespace StockSharp.Messages
 
 			return new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Tick,
+				DataTypeEx = DataType.Ticks,
 				SecurityId = level1.SecurityId,
 				TradeId = (long?)level1.TryGet(Level1Fields.LastTradeId),
 				TradePrice = level1.TryGetDecimal(Level1Fields.LastTradePrice),
@@ -4040,7 +4057,7 @@ namespace StockSharp.Messages
 			return new ExecutionMessage
 			{
 				ServerTime = DateTimeOffset.Now,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				SecurityId = regMsg.SecurityId,
 				TransactionId = regMsg.TransactionId,
 				OriginalTransactionId = regMsg.TransactionId,

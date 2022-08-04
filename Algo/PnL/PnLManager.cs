@@ -42,12 +42,12 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
-		/// Use <see cref="ExecutionTypes.Tick"/> for <see cref="UnrealizedPnL"/> calculation.
+		/// Use <see cref="DataType.Ticks"/> for <see cref="UnrealizedPnL"/> calculation.
 		/// </summary>
 		public bool UseTick { get; set; } = true;
 
 		/// <summary>
-		/// Use <see cref="ExecutionTypes.OrderLog"/> for <see cref="UnrealizedPnL"/> calculation.
+		/// Use <see cref="DataType.OrderLog"/> for <see cref="UnrealizedPnL"/> calculation.
 		/// </summary>
 		public bool UseOrderLog { get; set; }
 

@@ -293,8 +293,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 			foreach (var msg in messages)
 			{
-				if (msg.ExecutionType != ExecutionTypes.Transaction)
-					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg));
+				if (msg.DataType != DataType.Transactions)
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.DataType, LocalizedStrings.Str1695Params.Put(msg));
 
 				// нулевой номер заявки возможен при сохранении в момент регистрации
 				if (msg.OrderId < 0)
@@ -587,7 +587,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var msg = new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				SecurityId = SecurityId,
 
 				ServerTime = serverTime,

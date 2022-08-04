@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Commissions
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			if (message is ExecutionMessage execMsg && execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.Commission == null)
+			if (message is ExecutionMessage execMsg && execMsg.DataType == DataType.Transactions && execMsg.Commission == null)
 				execMsg.Commission = CommissionManager.Process(execMsg);
 
 			base.OnInnerAdapterNewOutMessage(message);

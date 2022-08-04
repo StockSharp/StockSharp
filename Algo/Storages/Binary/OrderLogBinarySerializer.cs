@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
 		public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.OrderLog, 200, MarketDataVersions.Version58, exchangeInfoProvider)
+			: base(securityId, DataType.OrderLog, 200, MarketDataVersions.Version58, exchangeInfoProvider)
 		{
 		}
 
@@ -221,8 +221,8 @@ namespace StockSharp.Algo.Storages.Binary
 						throw new ArgumentOutOfRangeException(nameof(messages), message.TransactionId, LocalizedStrings.Str925);
 				}
 
-				if (message.ExecutionType != ExecutionTypes.OrderLog)
-					throw new ArgumentOutOfRangeException(nameof(messages), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
+				if (message.DataType != DataType.OrderLog)
+					throw new ArgumentOutOfRangeException(nameof(messages), message.DataType, LocalizedStrings.Str1695Params.Put(message));
 
 				// sell market orders has zero price (if security do not have min allowed price)
 				// execution ticks (like option execution) may be a zero cost
@@ -501,7 +501,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var execMsg = new ExecutionMessage
 			{
 				//LocalTime = metaInfo.FirstTime,
-				ExecutionType = ExecutionTypes.OrderLog,
+				DataTypeEx = DataType.OrderLog,
 				SecurityId = SecurityId,
 				OrderId = metaInfo.FirstOrderId,
 				OrderVolume = volume,

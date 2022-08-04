@@ -1611,7 +1611,7 @@ namespace StockSharp.Algo
 
 				SendOutMessage(new ExecutionMessage
 				{
-					ExecutionType = ExecutionTypes.Transaction,
+					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
 					OriginalTransactionId = transId,
 					Error = new InvalidOperationException(LocalizedStrings.UnknownTransactionId.Put(originId)),
@@ -1773,7 +1773,7 @@ namespace StockSharp.Algo
 					{
 						var execMsg = (ExecutionMessage)message;
 
-						if (execMsg.ExecutionType != ExecutionTypes.Transaction)
+						if (execMsg.DataType != DataType.Transactions)
 							break;
 
 						ApplyParentLookupId(execMsg);

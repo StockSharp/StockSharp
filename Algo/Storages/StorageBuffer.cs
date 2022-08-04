@@ -284,7 +284,7 @@ namespace StockSharp.Algo.Storages
 				//	_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
 				//	{
 				//		ServerTime = DateTimeOffset.Now,
-				//		ExecutionType = ExecutionTypes.Transaction,
+				//		DataTypeEx = DataType.Transactions,
 				//		SecurityId = cancelMsg.SecurityId,
 				//		HasOrderInfo = true,
 				//		TransactionId = cancelMsg.TransactionId,
@@ -352,22 +352,16 @@ namespace StockSharp.Algo.Storages
 
 					DataBuffer<SecurityId, ExecutionMessage> buffer;
 
-					var execType = execMsg.ExecutionType;
+					var dataType = execMsg.DataType;
 
-					switch (execType)
-					{
-						case ExecutionTypes.Tick:
-							buffer = _ticksBuffer;
-							break;
-						case ExecutionTypes.Transaction:
-							buffer = _transactionsBuffer;
-							break;
-						case ExecutionTypes.OrderLog:
-							buffer = _orderLogBuffer;
-							break;
-						default:
-							throw new ArgumentOutOfRangeException(nameof(message), execType, LocalizedStrings.Str1695Params.Put(message));
-					}
+					if (dataType == DataType.Ticks)
+						buffer = _ticksBuffer;
+					else if (dataType == DataType.Transactions)
+						buffer = _transactionsBuffer;
+					else if (dataType == DataType.OrderLog)
+						buffer = _orderLogBuffer;
+					else
+						throw new ArgumentOutOfRangeException(nameof(message), dataType, LocalizedStrings.Str1695Params.Put(message));
 
 					TryStore(buffer, execMsg);
 					break;

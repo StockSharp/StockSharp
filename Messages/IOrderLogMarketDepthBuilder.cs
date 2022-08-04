@@ -96,7 +96,7 @@ namespace StockSharp.Messages
 			if (item == null)
 				throw new ArgumentNullException(nameof(item));
 
-			if (item.ExecutionType != ExecutionTypes.OrderLog)
+			if (item.DataType != DataType.OrderLog)
 				throw new ArgumentException(nameof(item));
 
 			if (item.OrderPrice == 0)

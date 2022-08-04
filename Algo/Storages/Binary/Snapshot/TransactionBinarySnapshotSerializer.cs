@@ -152,8 +152,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (message.ExecutionType != ExecutionTypes.Transaction)
-				throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
+			if (message.DataType != DataType.Transactions)
+				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.Str1695Params.Put(message));
 
 			if (message.TransactionId == 0)
 				throw new InvalidOperationException("TransId == 0");
@@ -375,7 +375,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
 					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 
-					ExecutionType = ExecutionTypes.Transaction,
+					DataTypeEx = DataType.Transactions,
 
 					//OriginalTransactionId = snapshot.OriginalTransactionId,
 					TransactionId = snapshot.TransactionId,

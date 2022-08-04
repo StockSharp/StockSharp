@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Storages.Csv
 			var execMsg = new ExecutionMessage
 			{
 				SecurityId = SecurityId,
-				ExecutionType = ExecutionTypes.Tick,
+				DataTypeEx = DataType.Ticks,
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				TradeId = reader.ReadNullableLong(),
 				TradePrice = reader.ReadNullableDecimal(),

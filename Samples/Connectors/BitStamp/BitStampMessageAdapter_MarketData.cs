@@ -19,7 +19,7 @@ namespace StockSharp.BitStamp
 		{
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Tick,
+				DataTypeEx = DataType.Ticks,
 				SecurityId = pair.ToStockSharp(),
 				TradeId = trade.Id,
 				TradePrice = (decimal)trade.Price,
@@ -44,7 +44,7 @@ namespace StockSharp.BitStamp
 		{
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.OrderLog,
+				DataTypeEx = DataType.OrderLog,
 				SecurityId = pair.ToStockSharp(),
 				ServerTime = order.Time,
 				OrderVolume = (decimal)order.Amount,
@@ -104,7 +104,7 @@ namespace StockSharp.BitStamp
 						{
 							SendOutMessage(new ExecutionMessage
 							{
-								ExecutionType = ExecutionTypes.Tick,
+								DataTypeEx = DataType.Ticks,
 								SecurityId = mdMsg.SecurityId,
 								TradeId = trade.Id,
 								TradePrice = (decimal)trade.Price,

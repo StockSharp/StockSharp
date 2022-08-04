@@ -138,7 +138,7 @@ namespace StockSharp.Algo.PnL
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType != ExecutionTypes.Tick)
+					if (execMsg.DataType != DataType.Ticks)
 						break;
 
 					var queue = _securityPnLs.TryGetValue(execMsg.SecurityId);

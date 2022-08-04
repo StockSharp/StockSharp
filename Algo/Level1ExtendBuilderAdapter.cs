@@ -260,7 +260,7 @@
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType != ExecutionTypes.Tick)
+					if (execMsg.DataType != DataType.Ticks)
 						break;
 
 					message = TryConvert(execMsg, DataType.Ticks, Extensions.ToLevel1);

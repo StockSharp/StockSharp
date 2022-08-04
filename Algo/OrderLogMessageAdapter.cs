@@ -171,7 +171,7 @@
 
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType == ExecutionTypes.OrderLog && execMsg.IsSystem != false)
+					if (execMsg.DataType == DataType.OrderLog && execMsg.IsSystem != false)
 						message = ProcessBuilders(execMsg);
 
 					break;

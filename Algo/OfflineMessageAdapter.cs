@@ -66,7 +66,7 @@
 
 					RaiseNewOutMessage(new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Transaction,
+						DataTypeEx = DataType.Transactions,
 						HasOrderInfo = true,
 						OriginalTransactionId = replaceMsg.OriginalTransactionId,
 						ServerTime = DateTimeOffset.Now,
@@ -151,7 +151,7 @@
 
 								RaiseNewOutMessage(new ExecutionMessage
 								{
-									ExecutionType = ExecutionTypes.Transaction,
+									DataTypeEx = DataType.Transactions,
 									HasOrderInfo = true,
 									OriginalTransactionId = cancelMsg.TransactionId,
 									ServerTime = DateTimeOffset.Now,

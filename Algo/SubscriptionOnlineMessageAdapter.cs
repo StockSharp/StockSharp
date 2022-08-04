@@ -248,7 +248,7 @@
 							if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
 							{
 								if (message is ExecutionMessage execMsg &&
-									execMsg.ExecutionType == ExecutionTypes.Transaction &&
+									execMsg.DataType == DataType.Transactions &&
 									execMsg.TransactionId != 0 &&
 									info.Subscription.DataType == DataType.Transactions)
 								{

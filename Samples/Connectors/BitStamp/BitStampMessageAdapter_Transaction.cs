@@ -36,7 +36,7 @@ namespace StockSharp.BitStamp
 
 					SendOutMessage(new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Transaction,
+						DataTypeEx = DataType.Transactions,
 						OrderId = withdrawId,
 						ServerTime = CurrentTime.ConvertToUtc(),
 						OriginalTransactionId = regMsg.TransactionId,
@@ -59,7 +59,7 @@ namespace StockSharp.BitStamp
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				OrderId = result.Id,
 				ServerTime = result.Time,
 				OriginalTransactionId = regMsg.TransactionId,
@@ -78,7 +78,7 @@ namespace StockSharp.BitStamp
 			//SendOutMessage(new ExecutionMessage
 			//{
 			//	ServerTime = CurrentTime.ConvertToUtc(),
-			//	ExecutionType = ExecutionTypes.Transaction,
+			//	DataTypeEx = DataType.Transactions,
 			//	OriginalTransactionId = cancelMsg.TransactionId,
 			//	OrderState = OrderStates.Done,
 			//	HasOrderInfo = true,
@@ -95,7 +95,7 @@ namespace StockSharp.BitStamp
 			SendOutMessage(new ExecutionMessage
 			{
 				ServerTime = CurrentTime.ConvertToUtc(),
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				HasOrderInfo = true,
 			});
@@ -108,7 +108,7 @@ namespace StockSharp.BitStamp
 		{
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				OrderId = order.Id,
 				TransactionId = transId,
 				OriginalTransactionId = origTransId,
@@ -230,7 +230,7 @@ namespace StockSharp.BitStamp
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				OrderId = transaction.OrderId,
 				TradeId = transaction.Id,
 				TradePrice = price,
@@ -250,7 +250,7 @@ namespace StockSharp.BitStamp
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				OrderId = transaction.OrderId,
 				Balance = info.Second,
 				OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done,
@@ -312,7 +312,7 @@ namespace StockSharp.BitStamp
 
 					SendOutMessage(new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Transaction,
+						DataTypeEx = DataType.Transactions,
 						HasOrderInfo = true,
 						OrderId = id,
 						OriginalTransactionId = info.First,

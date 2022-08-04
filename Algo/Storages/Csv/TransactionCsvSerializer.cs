@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Storages.Csv
 			var msg = new ExecutionMessage
 			{
 				SecurityId = SecurityId,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				ServerTime = reader.ReadTime(metaInfo.Date),
 				TransactionId = reader.ReadLong(),
 				OriginalTransactionId = reader.ReadLong(),

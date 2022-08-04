@@ -525,7 +525,7 @@
 		//	//{
 		//	//	UpdateQuote(new ExecutionMessage
 		//	//	{
-		//	//		ExecutionType = ExecutionTypes.Transaction,
+		//	//		DataTypeEx = DataType.Transactions,
 		//	//		Side = message.Side,
 		//	//		OrderPrice = message.OrderPrice,
 		//	//		OrderVolume = message.OrderVolume,
@@ -922,7 +922,7 @@
 				TradeId = _tradeIdGenerator.GetNextId(),
 				TradePrice = price,
 				TradeVolume = volume,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				HasTradeInfo = true,
 				ServerTime = time,
 				Side = order.Side,
@@ -984,7 +984,7 @@
 				Balance = message.Balance,
 				OrderState = message.OrderState,
 				PortfolioName = message.PortfolioName,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				ServerTime = time,
 			};

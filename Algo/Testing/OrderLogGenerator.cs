@@ -119,14 +119,10 @@ namespace StockSharp.Algo.Testing
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					switch (execMsg.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-							_lastOrderPrice = execMsg.GetTradePrice();
-							break;
-						default:
-							return null;
-					}
+					if (execMsg.DataType == DataType.Ticks)
+						_lastOrderPrice = execMsg.GetTradePrice();
+					else
+						return null;
 
 					time = execMsg.ServerTime;
 					break;
@@ -178,7 +174,7 @@ namespace StockSharp.Algo.Testing
 					OrderVolume = v * (SecurityDefinition.VolumeStep ?? 1m),
 					Side = RandomGen.GetEnum<Sides>(),
 					OrderPrice = _lastOrderPrice,
-					ExecutionType = ExecutionTypes.OrderLog,
+					DataTypeEx = DataType.OrderLog,
 				};
 
 				_activeOrders.Enqueue(item.TypedClone());

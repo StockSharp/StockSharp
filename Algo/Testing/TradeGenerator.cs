@@ -110,7 +110,7 @@ namespace StockSharp.Algo.Testing
 
 					if (price != null)
 						_lastTradePrice = price.Value;
-					else if (execMsg.ExecutionType != ExecutionTypes.OrderLog)
+					else if (execMsg.DataType != DataType.OrderLog)
 						return null;
 
 					time = execMsg.ServerTime;
@@ -144,7 +144,7 @@ namespace StockSharp.Algo.Testing
 				LocalTime = time,
 				OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : null,
 				TradeVolume = v * (SecurityDefinition?.VolumeStep ?? 1m),
-				ExecutionType = ExecutionTypes.Tick
+				DataTypeEx = DataType.Ticks
 			};
 
 			var priceStep = SecurityDefinition.PriceStep ?? 0.01m;

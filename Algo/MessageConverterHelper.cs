@@ -178,7 +178,7 @@ namespace StockSharp.Algo
 				OrderPrice = order.Price,
 				SecurityId = order.Security.ToSecurityId(),
 				PortfolioName = order.Portfolio.Name,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				HasTradeInfo = true,
 				ServerTime = tick.Time,
@@ -213,7 +213,7 @@ namespace StockSharp.Algo
 				OriginalTransactionId = order.TransactionId,
 				SecurityId = order.Security.ToSecurityId(),
 				PortfolioName = order.Portfolio.Name,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				OrderPrice = order.Price,
 				OrderType = order.Type,
@@ -265,7 +265,7 @@ namespace StockSharp.Algo
 				SecurityId = order.Security?.ToSecurityId() ?? default,
 				PortfolioName = order.Portfolio?.Name,
 				Error = fail.Error,
-				ExecutionType = ExecutionTypes.Transaction,
+				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				OrderState = OrderStates.Failed,
 				ServerTime = fail.ServerTime,
@@ -286,7 +286,7 @@ namespace StockSharp.Algo
 
 			return new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Tick,
+				DataTypeEx = DataType.Ticks,
 				LocalTime = trade.LocalTime,
 				ServerTime = trade.Time,
 				SecurityId = trade.Security.ToSecurityId(),
@@ -340,7 +340,7 @@ namespace StockSharp.Algo
 				TimeInForce = order.TimeInForce,
 				ExpiryDate = order.ExpiryDate,
 				PortfolioName = order.Portfolio?.Name,
-				ExecutionType = ExecutionTypes.OrderLog,
+				DataTypeEx = DataType.OrderLog,
 				TradeId = trade?.Id.DefaultAsNull(),
 				TradeStringId = trade?.StringId,
 				TradePrice = trade?.Price,
@@ -999,20 +999,14 @@ namespace StockSharp.Algo
 					{
 						var execMsg = message.To<ExecutionMessage>();
 
-						switch (execMsg.ExecutionType)
-						{
-							case ExecutionTypes.Tick:
-								return execMsg.ToTrade(_security).To<TEntity>();
-
-							case ExecutionTypes.OrderLog:
-								return execMsg.ToOrderLog(_security).To<TEntity>();
-
-							case ExecutionTypes.Transaction:
-								return execMsg.ToOrder(_security).To<TEntity>();
-
-							default:
-								throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1122Params.Put(execMsg.ExecutionType));
-						}
+						if (execMsg.DataType == DataType.Ticks)
+							return execMsg.ToTrade(_security).To<TEntity>();
+						else if (execMsg.DataType == DataType.OrderLog)
+							return execMsg.ToOrderLog(_security).To<TEntity>();
+						else if (execMsg.DataType == DataType.Transactions)
+							return execMsg.ToOrder(_security).To<TEntity>();
+						else
+							throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1122Params.Put(execMsg.DataType));
 					}
 
 					case MessageTypes.QuoteChange:

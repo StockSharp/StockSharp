@@ -494,7 +494,7 @@ namespace StockSharp.Algo.Storages
 					SecurityId = message.SecurityId,
 					ServerTime = message.ServerTime,
 					TransactionId = message.TransactionId,
-					ExecutionType = message.ExecutionType,
+					DataTypeEx = message.DataTypeEx,
 					TradeId = message.TradeId,
 					TradeVolume = message.TradeVolume,
 					TradePrice = message.TradePrice,

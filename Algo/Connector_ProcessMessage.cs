@@ -1574,32 +1574,19 @@ namespace StockSharp.Algo
 			}
 
 			if (!processed)
-				throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
+				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.Str1695Params.Put(message));
 		}
 
 		private void ProcessExecutionMessage(ExecutionMessage message)
 		{
-			switch (message.ExecutionType)
-			{
-				case ExecutionTypes.Transaction:
-				{
-					ProcessTransactionMessage(message);
-					break;
-				}
-				case ExecutionTypes.Tick:
-				{
-					ProcessTradeMessage(message);
-					break;
-				}
-				case ExecutionTypes.OrderLog:
-				{
-					ProcessOrderLogMessage(message);
-					break;
-				}
-
-				default:
-					throw new ArgumentOutOfRangeException(nameof(message), message.ExecutionType, LocalizedStrings.Str1695Params.Put(message));
-			}
+			if (message.DataType == DataType.Transactions)
+				ProcessTransactionMessage(message);
+			else if (message.DataType == DataType.Ticks)
+				ProcessTradeMessage(message);
+			else if (message.DataType == DataType.OrderLog)
+				ProcessOrderLogMessage(message);
+			else
+				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.Str1695Params.Put(message));
 		}
 
 		private void ProcessCandleMessage(CandleMessage message)
