@@ -4124,7 +4124,7 @@ namespace StockSharp.Messages
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
 		public static string TryGet(this IDictionary<string, (string type, string value)> parameters, string name, string defaultValue = default)
-			=> parameters.TryGet<string>(defaultValue);
+			=> parameters.TryGet<string>(name, defaultValue);
 
 		/// <summary>
 		///
