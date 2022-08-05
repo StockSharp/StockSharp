@@ -281,54 +281,49 @@ namespace StockSharp.Algo.Testing
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					switch (execMsg.ExecutionType)
+					if (execMsg.DataType == DataType.Ticks)
 					{
-						case ExecutionTypes.Tick:
+						var tradePrice = execMsg.TradePrice;
+
+						if (null == _prevTradePrice)
 						{
-							var tradePrice = execMsg.TradePrice;
-
-							if (null == _prevTradePrice)
-							{
-								_prevTradePrice = tradePrice;
-								_bestAskPrice = tradePrice;
-								_bestBidPrice = tradePrice;
-							}
-
-							switch (execMsg.OriginSide)
-							{
-								case null:
-								{
-									if (tradePrice > _prevTradePrice)
-									{
-										_bestAskPrice = tradePrice;
-										//BestBid = PrevTrade;
-										_prevTradePrice = tradePrice;
-									}
-									else if (tradePrice < _prevTradePrice)
-									{
-										_bestBidPrice = tradePrice;
-										//BestAsk = PrevTrade;
-										_prevTradePrice = tradePrice;
-									}
-
-									break;
-								}
-								case Sides.Buy:
-									_bestAskPrice = tradePrice;
-									break;
-								default:
-									_bestBidPrice = tradePrice;
-									break;
-							}
-
-							_lastTradePrice = tradePrice;
-							_newTrades = true;
-
-							break;
+							_prevTradePrice = tradePrice;
+							_bestAskPrice = tradePrice;
+							_bestBidPrice = tradePrice;
 						}
-						default:
-							return null;
+
+						switch (execMsg.OriginSide)
+						{
+							case null:
+							{
+								if (tradePrice > _prevTradePrice)
+								{
+									_bestAskPrice = tradePrice;
+									//BestBid = PrevTrade;
+									_prevTradePrice = tradePrice;
+								}
+								else if (tradePrice < _prevTradePrice)
+								{
+									_bestBidPrice = tradePrice;
+									//BestAsk = PrevTrade;
+									_prevTradePrice = tradePrice;
+								}
+
+								break;
+							}
+							case Sides.Buy:
+								_bestAskPrice = tradePrice;
+								break;
+							default:
+								_bestBidPrice = tradePrice;
+								break;
+						}
+
+						_lastTradePrice = tradePrice;
+						_newTrades = true;
 					}
+					else
+						return null;
 
 					time = execMsg.ServerTime;
 

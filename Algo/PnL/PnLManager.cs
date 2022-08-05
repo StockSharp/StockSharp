@@ -137,76 +137,66 @@ namespace StockSharp.Algo.PnL
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					switch (execMsg.ExecutionType)
+					if (execMsg.DataType == DataType.Transactions)
 					{
-						case ExecutionTypes.Transaction:
+						var transId = execMsg.TransactionId == 0
+							? execMsg.OriginalTransactionId
+							: execMsg.TransactionId;
+
+						PortfolioPnLManager manager = null;
+
+						if (execMsg.HasOrderInfo())
 						{
-							var transId = execMsg.TransactionId == 0
-								? execMsg.OriginalTransactionId
-								: execMsg.TransactionId;
-
-							PortfolioPnLManager manager = null;
-
-							if (execMsg.HasOrderInfo())
+							lock (_managersByPf.SyncRoot)
 							{
-								lock (_managersByPf.SyncRoot)
+								if (!_managersByTransId.TryGetValue(transId, out manager))
 								{
-									if (!_managersByTransId.TryGetValue(transId, out manager))
-									{
-										if (!execMsg.PortfolioName.IsEmpty())
-											manager = _managersByPf.SafeAdd(execMsg.PortfolioName, key => new PortfolioPnLManager(key));
-										else if (execMsg.OrderId != null)
-											manager = _managersByOrderId.TryGetValue(execMsg.OrderId.Value);
-										else if (!execMsg.OrderStringId.IsEmpty())
-											manager = _managersByOrderStringId.TryGetValue(execMsg.OrderStringId);
-									}
-
-									if (manager == null)
-										return null;
-
-									if (execMsg.OrderId != null)
-										_managersByOrderId.TryAdd2(execMsg.OrderId.Value, manager);
+									if (!execMsg.PortfolioName.IsEmpty())
+										manager = _managersByPf.SafeAdd(execMsg.PortfolioName, key => new PortfolioPnLManager(key));
+									else if (execMsg.OrderId != null)
+										manager = _managersByOrderId.TryGetValue(execMsg.OrderId.Value);
 									else if (!execMsg.OrderStringId.IsEmpty())
-										_managersByOrderStringId.TryAdd2(execMsg.OrderStringId, manager);
+										manager = _managersByOrderStringId.TryGetValue(execMsg.OrderStringId);
 								}
-							}
 
-							if (execMsg.HasTradeInfo())
+								if (manager == null)
+									return null;
+
+								if (execMsg.OrderId != null)
+									_managersByOrderId.TryAdd2(execMsg.OrderId.Value, manager);
+								else if (!execMsg.OrderStringId.IsEmpty())
+									_managersByOrderStringId.TryAdd2(execMsg.OrderStringId, manager);
+							}
+						}
+
+						if (execMsg.HasTradeInfo())
+						{
+							lock (_managersByPf.SyncRoot)
 							{
-								lock (_managersByPf.SyncRoot)
-								{
-									if (manager == null && !_managersByTransId.TryGetValue(transId, out manager))
-										return null;
+								if (manager == null && !_managersByTransId.TryGetValue(transId, out manager))
+									return null;
 
-									if (!manager.ProcessMyTrade(execMsg, out var info))
-										return null;
+								if (!manager.ProcessMyTrade(execMsg, out var info))
+									return null;
 
-									_realizedPnL += info.PnL;
-									changedPortfolios?.Add(manager);
-									return info;
-								}
+								_realizedPnL += info.PnL;
+								changedPortfolios?.Add(manager);
+								return info;
 							}
-
-							break;
 						}
-
-						case ExecutionTypes.Tick:
-						{
-							if (!UseTick)
-								return null;
-
-							break;
-						}
-						case ExecutionTypes.OrderLog:
-						{
-							if (!UseOrderLog)
-								return null;
-
-							break;
-						}
-						default:
+					}
+					else if (execMsg.DataType == DataType.Ticks)
+					{
+						if (!UseTick)
 							return null;
 					}
+					else if (execMsg.DataType == DataType.OrderLog)
+					{
+						if (!UseOrderLog)
+							return null;
+					}
+					else
+						return null;
 
 					break;
 				}

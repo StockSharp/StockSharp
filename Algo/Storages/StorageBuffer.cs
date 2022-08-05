@@ -88,21 +88,21 @@ namespace StockSharp.Algo.Storages
 		public bool IgnoreGeneratedTransactional { get; set; } = true;
 
 		/// <summary>
-		/// Get accumulated <see cref="ExecutionTypes.Tick"/>.
+		/// Get accumulated <see cref="DataType.Ticks"/>.
 		/// </summary>
 		/// <returns>Ticks.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTicks()
 			=> _ticksBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated <see cref="ExecutionTypes.OrderLog"/>.
+		/// Get accumulated <see cref="DataType.OrderLog"/>.
 		/// </summary>
 		/// <returns>Order log.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetOrderLog()
 			=> _orderLogBuffer.Get();
 
 		/// <summary>
-		/// Get accumulated <see cref="ExecutionTypes.Transaction"/>.
+		/// Get accumulated <see cref="DataType.Transactions"/>.
 		/// </summary>
 		/// <returns>Transactions.</returns>
 		public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTransactions()

@@ -122,52 +122,43 @@ namespace StockSharp.Algo.Testing
 
 						UpdatePriceLimits(execMsg, result);
 
-						switch (execMsg.ExecutionType)
+						if (execMsg.DataType == DataType.Ticks)
 						{
-							case ExecutionTypes.Tick:
-							{
-								foreach (var m in _execLogConverter.ToExecutionLog(execMsg))
-									Process(m, result);
+							foreach (var m in _execLogConverter.ToExecutionLog(execMsg))
+								Process(m, result);
 
-								result.Add(execMsg);
+							result.Add(execMsg);
 
-								result.Add(CreateQuoteMessage(
-									execMsg.SecurityId,
-									execMsg.LocalTime,
-									execMsg.ServerTime));
-
-								break;
-							}
-							case ExecutionTypes.Transaction:
-							{
-								if (!execMsg.HasOrderInfo())
-									throw new InvalidOperationException();
-
-								if (_parent.Settings.Latency > TimeSpan.Zero)
-								{
-									this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancellation ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
-									_pendingExecutions.Add(execMsg.TypedClone(), _parent.Settings.Latency);
-								}
-								else
-									AcceptExecution(execMsg.LocalTime, execMsg, result);
-
-								break;
-							}
-							case ExecutionTypes.OrderLog:
-							{
-								if (execMsg.TradeId == null)
-									UpdateQuotes(execMsg, result);
-
-								// добавляем в результат ОЛ только из хранилища или из генератора
-								// (не из ExecutionLogConverter)
-								//if (execMsg.TransactionId > 0)
-								//	result.Add(execMsg);
-
-								break;
-							}
-							default:
-								throw new ArgumentOutOfRangeException();
+							result.Add(CreateQuoteMessage(
+								execMsg.SecurityId,
+								execMsg.LocalTime,
+								execMsg.ServerTime));
 						}
+						else if (execMsg.DataType == DataType.Transactions)
+						{
+							if (!execMsg.HasOrderInfo())
+								throw new InvalidOperationException();
+
+							if (_parent.Settings.Latency > TimeSpan.Zero)
+							{
+								this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancellation ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
+								_pendingExecutions.Add(execMsg.TypedClone(), _parent.Settings.Latency);
+							}
+							else
+								AcceptExecution(execMsg.LocalTime, execMsg, result);
+						}
+						else if (execMsg.DataType == DataType.OrderLog)
+						{
+							if (execMsg.TradeId == null)
+								UpdateQuotes(execMsg, result);
+
+							// добавляем в результат ОЛ только из хранилища или из генератора
+							// (не из ExecutionLogConverter)
+							//if (execMsg.TransactionId > 0)
+							//	result.Add(execMsg);
+						}
+						else
+							throw new ArgumentOutOfRangeException();
 
 						break;
 					}
@@ -219,7 +210,7 @@ namespace StockSharp.Algo.Testing
 									LocalTime = orderMsg.LocalTime,
 									OriginalTransactionId = orderMsg.TransactionId,
 									OrderId = execMsg.OrderId,
-									ExecutionType = ExecutionTypes.Transaction,
+									DataTypeEx = DataType.Transactions,
 									SecurityId = orderMsg.SecurityId,
 									IsCancellation = true,
 									OrderState = OrderStates.Failed,
@@ -234,7 +225,7 @@ namespace StockSharp.Algo.Testing
 								{
 									LocalTime = orderMsg.LocalTime,
 									OriginalTransactionId = orderMsg.TransactionId,
-									ExecutionType = ExecutionTypes.Transaction,
+									DataTypeEx = DataType.Transactions,
 									SecurityId = orderMsg.SecurityId,
 									IsCancellation = false,
 									OrderState = OrderStates.Failed,
@@ -290,7 +281,7 @@ namespace StockSharp.Algo.Testing
 
 						foreach (var m in _execLogConverter.ToExecutionLog(quoteMsg))
 						{
-							if (m.ExecutionType == ExecutionTypes.Tick)
+							if (m.DataType == DataType.Ticks)
 							{
 								m.ServerTime = quoteMsg.ServerTime;
 								result.Add(m);
@@ -376,22 +367,17 @@ namespace StockSharp.Algo.Testing
 
 				decimal price;
 
-				switch (execution.ExecutionType)
+				if (execution.DataType == DataType.Ticks)
+					price = execution.GetTradePrice();
+				else if (execution.DataType == DataType.OrderLog)
 				{
-					case ExecutionTypes.Tick:
-						price = execution.GetTradePrice();
-						break;
-
-					case ExecutionTypes.OrderLog:
-						if (execution.TradePrice == null)
-							return;
-
-						price = execution.TradePrice.Value;
-						break;
-
-					default:
+					if (execution.TradePrice == null)
 						return;
+
+					price = execution.TradePrice.Value;
 				}
+				else
+					return;
 
 				_lastStripDate = execution.LocalTime.Date;
 
@@ -463,7 +449,7 @@ namespace StockSharp.Algo.Testing
 				var replyMsg = new ExecutionMessage
 				{
 					HasOrderInfo = true,
-					ExecutionType = ExecutionTypes.Transaction,
+					DataTypeEx = DataType.Transactions,
 					ServerTime = time,
 					LocalTime = time,
 					OriginalTransactionId = original.TransactionId,
@@ -651,7 +637,7 @@ namespace StockSharp.Algo.Testing
 				//{
 				//	UpdateQuote(new ExecutionMessage
 				//	{
-				//		ExecutionType = ExecutionTypes.Transaction,
+				//		DataTypeEx = DataType.Transactions,
 				//		Side = message.Side,
 				//		OrderPrice = message.OrderPrice,
 				//		OrderVolume = message.OrderVolume,
@@ -932,7 +918,7 @@ namespace StockSharp.Algo.Testing
 						TradeId = tradeMsg.TradeId,
 						TradePrice = tradeMsg.TradePrice,
 						TradeVolume = tradeMsg.TradeVolume,
-						ExecutionType = ExecutionTypes.Tick,
+						DataTypeEx = DataType.Ticks,
 						ServerTime = GetServerTime(time),
 					});
 				}
@@ -1167,7 +1153,7 @@ namespace StockSharp.Algo.Testing
 					Balance = message.Balance,
 					OrderState = message.OrderState,
 					PortfolioName = message.PortfolioName,
-					ExecutionType = ExecutionTypes.Transaction,
+					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
 					ServerTime = GetServerTime(time),
 					StrategyId = message.StrategyId,
@@ -1185,7 +1171,7 @@ namespace StockSharp.Algo.Testing
 					TradeId = _parent.TradeIdGenerator.GetNextId(),
 					TradePrice = price,
 					TradeVolume = volume,
-					ExecutionType = ExecutionTypes.Transaction,
+					DataTypeEx = DataType.Transactions,
 					HasTradeInfo = true,
 					ServerTime = GetServerTime(time),
 					Side = message.Side,
@@ -1702,7 +1688,7 @@ namespace StockSharp.Algo.Testing
 							{
 								retVal.Add(new ExecutionMessage
 								{
-									ExecutionType = ExecutionTypes.Transaction,
+									DataTypeEx = DataType.Transactions,
 									HasOrderInfo = true,
 									ServerTime = orderMsg.LocalTime,
 									LocalTime = orderMsg.LocalTime,

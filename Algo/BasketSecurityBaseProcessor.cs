@@ -118,19 +118,15 @@ namespace StockSharp.Algo
 					if (!ContainsLeg(execMsg.SecurityId))
 						yield break;
 
-					switch (execMsg.ExecutionType)
+					if (execMsg.DataType == DataType.Ticks)
 					{
-						case ExecutionTypes.Tick:
-							if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.TradePrice, execMsg.TradeVolume, execMsg.OpenInterest))
-								yield break;
-
-							break;
-
-						case ExecutionTypes.OrderLog:
-							if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.OrderPrice, execMsg.OrderVolume, execMsg.OpenInterest))
-								yield break;
-
-							break;
+						if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.TradePrice, execMsg.TradeVolume, execMsg.OpenInterest))
+							yield break;
+					}
+					else if (execMsg.DataType == DataType.OrderLog)
+					{
+						if (!CanProcess(execMsg.SecurityId, execMsg.ServerTime, execMsg.OrderPrice, execMsg.OrderVolume, execMsg.OpenInterest))
+							yield break;
 					}
 
 					break;
@@ -332,65 +328,57 @@ namespace StockSharp.Algo
 					if (!ContainsLeg(execMsg.SecurityId))
 						yield break;
 
-					switch (execMsg.ExecutionType)
+					if (execMsg.DataType == DataType.OrderLog)
 					{
-						case ExecutionTypes.OrderLog:
+						foreach (var msg in ProcessMessage(_ol, execMsg.SecurityId, execMsg, execMsgs =>
 						{
-							foreach (var msg in ProcessMessage(_ol, execMsg.SecurityId, execMsg, execMsgs =>
+							var prices = new decimal[execMsgs.Length];
+							var volumes = new decimal[execMsgs.Length];
+
+							for (var i = 0; i < execMsgs.Length; i++)
 							{
-								var prices = new decimal[execMsgs.Length];
-								var volumes = new decimal[execMsgs.Length];
+								var msg = execMsgs[i];
 
-								for (var i = 0; i < execMsgs.Length; i++)
-								{
-									var msg = execMsgs[i];
+								prices[i] = msg.OrderPrice;
+								volumes[i] = msg.OrderVolume ?? 0;
+							}
 
-									prices[i] = msg.OrderPrice;
-									volumes[i] = msg.OrderVolume ?? 0;
-								}
-
-								return new ExecutionMessage
-								{
-									SecurityId = SecurityId,
-									ServerTime = execMsg.ServerTime,
-									ExecutionType = execMsg.ExecutionType,
-									OrderPrice = Calculate(prices, true),
-									OrderVolume = Calculate(volumes, false),
-								};
-							}))
-								yield return msg;
-
-							break;
-						}
-
-						case ExecutionTypes.Tick:
+							return new ExecutionMessage
+							{
+								SecurityId = SecurityId,
+								ServerTime = execMsg.ServerTime,
+								DataTypeEx = execMsg.DataTypeEx,
+								OrderPrice = Calculate(prices, true),
+								OrderVolume = Calculate(volumes, false),
+							};
+						}))
+							yield return msg;
+					}
+					else if (execMsg.DataType == DataType.Ticks)
+					{
+						foreach (var msg in ProcessMessage(_ticks, execMsg.SecurityId, execMsg, execMsgs =>
 						{
-							foreach (var msg in ProcessMessage(_ticks, execMsg.SecurityId, execMsg, execMsgs =>
+							var prices = new decimal[execMsgs.Length];
+							var volumes = new decimal[execMsgs.Length];
+
+							for (var i = 0; i < execMsgs.Length; i++)
 							{
-								var prices = new decimal[execMsgs.Length];
-								var volumes = new decimal[execMsgs.Length];
+								var msg = execMsgs[i];
 
-								for (var i = 0; i < execMsgs.Length; i++)
-								{
-									var msg = execMsgs[i];
+								prices[i] = msg.TradePrice ?? 0;
+								volumes[i] = msg.TradeVolume ?? 0;
+							}
 
-									prices[i] = msg.TradePrice ?? 0;
-									volumes[i] = msg.TradeVolume ?? 0;
-								}
-
-								return new ExecutionMessage
-								{
-									SecurityId = SecurityId,
-									ServerTime = execMsg.ServerTime,
-									ExecutionType = execMsg.ExecutionType,
-									TradePrice = Calculate(prices, true),
-									TradeVolume = Calculate(volumes, false),
-								};
-							}))
-								yield return msg;
-
-							break;
-						}
+							return new ExecutionMessage
+							{
+								SecurityId = SecurityId,
+								ServerTime = execMsg.ServerTime,
+								DataTypeEx = execMsg.DataTypeEx,
+								TradePrice = Calculate(prices, true),
+								TradeVolume = Calculate(volumes, false),
+							};
+						}))
+							yield return msg;
 					}
 
 					break;

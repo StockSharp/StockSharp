@@ -434,7 +434,7 @@ namespace StockSharp.Messages
 		public string CommissionCurrency { get; set; }
 
 		/// <summary>
-		/// Network latency. Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
+		/// Network latency. Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str161Key)]

@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Import
 						switch (instance)
 						{
 							case ExecutionMessage execMsg:
-								execMsg.ExecutionType = (ExecutionTypes)DataType.Arg;
+								execMsg.DataTypeEx = DataType;
 								break;
 							case CandleMessage candleMsg:
 								candleMsg.State = CandleStates.Finished;
