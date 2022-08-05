@@ -784,11 +784,11 @@ namespace StockSharp.Messages
 			string p2(object arg) => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
 
 #pragma warning disable CS0612 // Type or member is obsolete
-			_messageTypeMapOld.Add(dataType, Tuple.Create(type, default(object)));
+			_messageTypeMapOld.Add(dataType, (type, default));
 #pragma warning restore CS0612 // Type or member is obsolete
 
 			_candleDataTypes.Add(type, messageType);
-			_dataTypeArgConverters.Add(messageType, Tuple.Create((Func<string, object>)p1, (Func<object, string>)p2));
+			_dataTypeArgConverters.Add(messageType, Tuple.Create(p1, p2));
 			_fileNames.Add(DataType.Create(messageType, null), fileName);
 		}
 

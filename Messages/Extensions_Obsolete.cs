@@ -34,14 +34,14 @@
 		}
 
 		[Obsolete]
-		private static readonly SynchronizedPairSet<MarketDataTypes, Tuple<MessageTypes, object>> _messageTypeMapOld = new()
+		private static readonly SynchronizedPairSet<MarketDataTypes, (MessageTypes, object)> _messageTypeMapOld = new()
 		{
-			{ MarketDataTypes.Level1, Tuple.Create(MessageTypes.Level1Change, default(object)) },
-			{ MarketDataTypes.MarketDepth, Tuple.Create(MessageTypes.QuoteChange, default(object)) },
-			{ MarketDataTypes.Trades, Tuple.Create(MessageTypes.Execution, (object)ExecutionTypes.Tick) },
-			{ MarketDataTypes.OrderLog, Tuple.Create(MessageTypes.Execution, (object)ExecutionTypes.OrderLog) },
-			{ MarketDataTypes.News, Tuple.Create(MessageTypes.News, default(object)) },
-			{ MarketDataTypes.Board, Tuple.Create(MessageTypes.Board, default(object)) },
+			{ MarketDataTypes.Level1, (MessageTypes.Level1Change, default) },
+			{ MarketDataTypes.MarketDepth, (MessageTypes.QuoteChange, default) },
+			{ MarketDataTypes.Trades, (MessageTypes.Execution, ExecutionTypes.Tick) },
+			{ MarketDataTypes.OrderLog, (MessageTypes.Execution, ExecutionTypes.OrderLog) },
+			{ MarketDataTypes.News, (MessageTypes.News, default) },
+			{ MarketDataTypes.Board, (MessageTypes.Board, default) },
 		};
 
 		/// <summary>
@@ -53,7 +53,7 @@
 		[Obsolete]
 		public static MarketDataTypes ToMarketDataType(this MessageTypes type, object arg)
 		{
-			if (_messageTypeMapOld.TryGetKey(Tuple.Create(type, arg), out var dataType))
+			if (_messageTypeMapOld.TryGetKey((type, arg), out var dataType))
 				return dataType;
 
 			throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
