@@ -170,52 +170,77 @@
 		public static string GetWebSiteUrl() => $"https://stocksharp.{Domain}";
 
 		/// <summary>
-		/// Get user url.
 		/// </summary>
-		/// <param name="userId">Identifier.</param>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetUserUrl(long userId) => $"{GetWebSiteUrl()}/users/{userId}/";
+		public static class Pages
+		{
+			/// <summary>
+			/// </summary>
+			public const long Eula = 274;
+			/// <summary>
+			/// </summary>
+			public const long Pricing = 157;
+			/// <summary>
+			/// </summary>
+			public const long NugetManual = 241;
+			/// <summary>
+			/// </summary>
+			public const long Message = 278;
+			/// <summary>
+			/// </summary>
+			public const long Topic = 275;
+			/// <summary>
+			/// </summary>
+			public const long File = 276;
+			/// <summary>
+			/// </summary>
+			public const long Users = 246;
+			/// <summary>
+			/// </summary>
+			public const long Register = 252;
+			/// <summary>
+			/// </summary>
+			public const long Forgot = 253;
+			/// <summary>
+			/// </summary>
+			public const long Faq = 239;
+			/// <summary>
+			/// </summary>
+			public const long Store = 164;
+		}
 
 		/// <summary>
-		/// Get store url.
+		/// Get page url.
 		/// </summary>
-		/// <param name="productId">Identifier.</param>
+		/// <param name="id">Page id.</param>
+		/// <param name="urlPart">Url part (topic id, file name etc.).</param>
 		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetStoreLink(object productId) => $"{GetWebSiteUrl()}/store/{productId}/";
+		public static string GetPageUrl(long id, object urlPart = default)
+		{
+			var url = GetWebSiteUrl() + "/";
 
-		/// <summary>
-		/// Get products url.
-		/// </summary>
-		/// <param name="productId">Identifier.</param>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetProductLink(object productId) => $"{GetWebSiteUrl()}/products/{productId}/";
+			url += id switch
+			{
+				Pages.Eula => "products/eula",
+				Pages.Pricing => "products/pricing",
+				Pages.NugetManual => "products/nuget_manual",
+				Pages.Message => "posts/m",
+				Pages.Topic => "topic",
+				Pages.File => "file",
+				Pages.Users => "users",
+				Pages.Register => "register",
+				Pages.Forgot => "forgot",
+				Pages.Faq => "store/faq",
+				Pages.Store => "store",
+				_ => throw new ArgumentOutOfRangeException(nameof(id), id, LocalizedStrings.Str1219),
+			};
 
-		/// <summary>
-		/// Get topic url.
-		/// </summary>
-		/// <param name="topicId">Identifier.</param>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetTopicLink(long topicId) => $"{GetWebSiteUrl()}/topic/{topicId}/";
+			url += "/";
 
-		/// <summary>
-		/// Get message url.
-		/// </summary>
-		/// <param name="messageId">Identifier.</param>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetMessageLink(long messageId) => $"{GetWebSiteUrl()}/posts/m/{messageId}/";
+			if (urlPart is not null)
+				url += $"{urlPart}/";
 
-		/// <summary>
-		/// Get file url.
-		/// </summary>
-		/// <param name="fileId">File ID.</param>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetFileLink(object fileId) => $"{GetWebSiteUrl()}/file/{fileId}/";
+			return url;
+		}
 
 		/// <summary>
 		/// To create localized url.
@@ -223,27 +248,6 @@
 		/// <param name="docUrl">Help topic.</param>
 		/// <returns>Localized url.</returns>
 		public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{Domain}/{docUrl}";
-
-		/// <summary>
-		/// Get open account url.
-		/// </summary>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetOpenAccountUrl() => $"{GetWebSiteUrl()}/broker/openaccount/";
-
-		/// <summary>
-		/// Get sign up url.
-		/// </summary>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetSignUpUrl() => $"{GetWebSiteUrl()}/register/";
-
-		/// <summary>
-		/// Get forgot password url.
-		/// </summary>
-		/// <returns>Localized url.</returns>
-		[Obsolete]
-		public static string GetForgotUrl() => $"{GetWebSiteUrl()}/forgot/";
 
 		private static string _installedVersion;
 
