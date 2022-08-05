@@ -291,8 +291,8 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			//if (tick.ExecutionType != ExecutionTypes.Tick)
-			//	throw new ArgumentOutOfRangeException(nameof(tick), tick.ExecutionType, LocalizedStrings.Str1655);
+			//if (tick.DataType != DataType.Ticks)
+			//	throw new ArgumentOutOfRangeException(nameof(tick), tick.DataType, LocalizedStrings.Str1655);
 
 			//_lastTradeDate = message.LocalTime.Date;
 

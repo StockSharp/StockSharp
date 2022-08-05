@@ -447,7 +447,7 @@ namespace StockSharp.Algo.Testing
 
 		//	var tradeMessage = (ExecutionMessage)message;
 
-		//	return tradeMessage.ExecutionType == ExecutionTypes.Tick;
+		//	return tradeMessage.DataType == DataType.Ticks;
 		//}
 		
 		/// <summary>
