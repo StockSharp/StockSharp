@@ -54,9 +54,14 @@ namespace StockSharp.Localization
 			}
 			catch (Exception ex)
 			{
-				Trace.WriteLine(ex);
+				Trace.WriteLine(Error = ex);
 			}
 		}
+
+		/// <summary>
+		/// Initialization error.
+		/// </summary>
+		public static Exception Error { get; }
 
 		/// <summary>
 		/// Localization manager.
