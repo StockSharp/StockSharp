@@ -473,7 +473,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, MarketDataMessage mdMsg, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
 		{
-			return depths.ToCandles(mdMsg, quoteMsg => new QuoteCandleBuilderValueTransform(), candleBuilderProvider);
+			return depths.ToCandles(mdMsg, quoteMsg => new QuoteCandleBuilderValueTransform { Type = type }, candleBuilderProvider);
 		}
 
 		/// <summary>
