@@ -9,20 +9,6 @@
 	partial class Extensions
 	{
 		/// <summary>
-		/// Convert <see cref="MarketDataMessage"/> to <see cref="DataType"/> value.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		/// <returns>Data type info.</returns>
-		[Obsolete("Use MarketDataMessage.DataType2 property.")]
-		public static DataType ToDataType(this MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			return message.DataType.ToDataType(message.Arg);
-		}
-
-		/// <summary>
 		/// Cast message type <see cref="CandleMessage"/> to the <see cref="MarketDataTypes"/>.
 		/// </summary>
 		/// <param name="messageType">The type of the message <see cref="CandleMessage"/>.</param>
@@ -119,14 +105,6 @@
 		}
 
 		/// <summary>
-		/// Determine the <paramref name="type"/> is candle data type.
-		/// </summary>
-		/// <param name="type">The data type.</param>
-		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
-		[Obsolete]
-		public static bool IsCandleDataType(this MarketDataTypes type) => _candleDataTypes.ContainsKey(type.ToMessageType(out _));
-
-		/// <summary>
 		/// Convert <see cref="MessageTypes"/> to <see cref="DataType"/> value.
 		/// </summary>
 		/// <param name="type">Message type.</param>
@@ -176,26 +154,6 @@
 					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 				}
 			}
-		}
-
-		/// <summary>
-		/// Determines the specified type is lookup.
-		/// </summary>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns>Check result.</returns>
-		[Obsolete]
-		public static bool IsLookup(this DataType dataType)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			return
-				dataType == DataType.Transactions ||
-				dataType == DataType.Securities ||
-				dataType == DataType.PositionChanges ||
-				dataType == DataType.TimeFrames ||
-				dataType == DataType.Users ||
-				dataType == DataType.Transactions;
 		}
 	}
 }
