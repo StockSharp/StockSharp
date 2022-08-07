@@ -15,15 +15,13 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Storages
 {
-	using Ecng.Collections;
-
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface for access to the position storage.
 	/// </summary>
-	public interface IStoragePositionList : ICollectionEx<Position>, IStorageEntityList<Position>
+	public interface IStoragePositionList : IStorageEntityList<Position>
 	{
 		/// <summary>
 		/// To get the position by portfolio and instrument.

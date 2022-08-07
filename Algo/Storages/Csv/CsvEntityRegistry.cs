@@ -180,8 +180,8 @@ namespace StockSharp.Algo.Storages.Csv
 			public SecurityCsvList(CsvEntityRegistry registry)
 				: base(registry, "security.csv")
 			{
-				((ICollectionEx<Security>)this).AddedRange += s => _added?.Invoke(s);
-				((ICollectionEx<Security>)this).RemovedRange += s => _removed?.Invoke(s);
+				AddedRange += s => _added?.Invoke(s);
+				RemovedRange += s => _removed?.Invoke(s);
 			}
 
 			#region IStorageSecurityList
