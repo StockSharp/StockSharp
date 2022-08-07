@@ -322,6 +322,11 @@ namespace StockSharp.Messages
 			SecurityCode = "NEWS",
 			BoardCode = AssociatedBoardCode
 		};
+
+		/// <summary>
+		/// Determines the id is <see cref="Money"/> or <see cref="News"/>.
+		/// </summary>
+		public bool IsSpecial => this == Money || this == News;
 	}
 
 	/// <summary>
