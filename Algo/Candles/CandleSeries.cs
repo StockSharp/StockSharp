@@ -89,6 +89,10 @@ namespace StockSharp.Algo.Candles
 			set
 			{
 				NotifyChanging();
+
+				if (_candleType != value)
+					_arg = null; // reset incompatible arg
+
 				_candleType = value;
 				NotifyChanged();
 			}
