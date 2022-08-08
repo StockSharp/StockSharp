@@ -8,6 +8,7 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Security;
 	using System.Xml.Serialization;
+
 	using Ecng.Collections;
 
 	using StockSharp.Localization;
@@ -153,7 +154,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Permission set.
 		/// </summary>
-		public IDictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>>();
+		public IDictionary<UserPermissions, IDictionary<(string name, string param, string extra, DateTime? till), bool>> Permissions { get; } = new Dictionary<UserPermissions, IDictionary<(string, string, string, DateTime?), bool>>();
 
 		/// <summary>
 		/// Can publish NuGet packages.
