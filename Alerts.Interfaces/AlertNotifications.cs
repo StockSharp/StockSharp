@@ -40,6 +40,7 @@
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SmsKey)]
+		[Obsolete]
 		Sms,
 
 		/// <summary>
@@ -47,6 +48,7 @@
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EmailKey)]
+		[Obsolete]
 		Email,
 
 		/// <summary>
@@ -55,5 +57,12 @@
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LogFileKey)]
 		Log,
+
+		/// <summary>
+		/// Telegram.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TelegramKey)]
+		Telegram,
 	}
 }

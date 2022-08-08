@@ -1,4 +1,8 @@
 {
+  "Telegram": {
+    "en": "Telegram",
+    "ru": "Телеграм"
+  },
   "TrackOrdersForSecurities": {
     "en": "Track orders for securities",
     "ru": "Отслеживать заявки по инструментам"

@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Telegram
+		/// </summary>
+		public const string TelegramKey = nameof(Telegram);
+
+		/// <summary>
+		/// Telegram
+		/// </summary>
+		public static string Telegram => GetString(TelegramKey);
+
+		/// <summary>
 		/// Track orders for securities
 		/// </summary>
 		public const string TrackOrdersForSecuritiesKey = nameof(TrackOrdersForSecurities);
