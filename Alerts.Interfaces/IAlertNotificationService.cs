@@ -1,6 +1,8 @@
 namespace StockSharp.Alerts
 {
 	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	using StockSharp.Logging;
 
@@ -16,6 +18,8 @@ namespace StockSharp.Alerts
 		/// <param name="caption">Signal header.</param>
 		/// <param name="message">Alert text.</param>
 		/// <param name="time">Creation time.</param>
-		void Notify(AlertNotifications type, string caption, string message, DateTimeOffset time);
+		/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+		/// <returns><see cref="ValueTask"/>.</returns>
+		ValueTask NotifyAsync(AlertNotifications type, string caption, string message, DateTimeOffset time, CancellationToken cancellationToken);
 	}
 }
