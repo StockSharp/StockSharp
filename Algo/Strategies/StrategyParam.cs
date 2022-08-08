@@ -220,9 +220,9 @@ namespace StockSharp.Algo.Strategies
 			Name = storage.GetValue<string>(nameof(Name));
 			Value = storage.GetValue(Type, nameof(Value));
 			CanOptimize = storage.GetValue(nameof(CanOptimize), CanOptimize);
-			OptimizeFrom = storage.GetValue<object>(nameof(OptimizeFrom));
-			OptimizeTo = storage.GetValue<object>(nameof(OptimizeTo));
-			OptimizeStep = storage.GetValue<object>(nameof(OptimizeStep));
+			OptimizeFrom = storage.GetValue<SettingsStorage>(nameof(OptimizeFrom))?.FromStorage();
+			OptimizeTo = storage.GetValue<SettingsStorage>(nameof(OptimizeTo))?.FromStorage();
+			OptimizeStep = storage.GetValue<SettingsStorage>(nameof(OptimizeStep))?.FromStorage();
 		}
 
 		/// <summary>
@@ -235,9 +235,9 @@ namespace StockSharp.Algo.Strategies
 			storage.SetValue(nameof(Name), Name);
 			storage.SetValue(nameof(Value), Value);
 			storage.SetValue(nameof(CanOptimize), CanOptimize);
-			storage.SetValue(nameof(OptimizeFrom), OptimizeFrom);
-			storage.SetValue(nameof(OptimizeTo), OptimizeTo);
-			storage.SetValue(nameof(OptimizeStep), OptimizeStep);
+			storage.SetValue(nameof(OptimizeFrom), OptimizeFrom.ToStorage());
+			storage.SetValue(nameof(OptimizeTo), OptimizeTo.ToStorage());
+			storage.SetValue(nameof(OptimizeStep), OptimizeStep.ToStorage());
 		}
 
 		/// <inheritdoc />

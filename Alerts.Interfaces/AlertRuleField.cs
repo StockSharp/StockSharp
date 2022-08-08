@@ -31,10 +31,7 @@ namespace StockSharp.Alerts
 		/// <param name="extraField">Extra info for <see cref="Property"/>.</param>
 		public AlertRuleField(PropertyInfo property, object extraField = null)
 		{
-			if (property == null)
-				throw new ArgumentNullException(nameof(property));
-
-			Property = property;
+			Property = property ?? throw new ArgumentNullException(nameof(property));
 			ExtraField = extraField;
 
 			UpdateState();
@@ -90,7 +87,15 @@ namespace StockSharp.Alerts
 					Property = parts[0].To<Type>().GetMember<PropertyInfo>(parts[1]);
 			}
 
-			ExtraField = storage.GetValue<object>(nameof(ExtraField));
+			try
+			{
+				ExtraField = storage.GetValue<SettingsStorage>(nameof(ExtraField))?.FromStorage();
+			}
+			catch (Exception)
+			{
+				// 2022-08-08 remove 1 year later
+				ExtraField = storage.GetValue<string>(nameof(ExtraField)).To(Property.PropertyType.GetGenericArguments()[0]);
+			}
 
 			UpdateState();
 		}
@@ -102,7 +107,7 @@ namespace StockSharp.Alerts
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue(_propKey, Property.ToStorage(false));
-			storage.SetValue(nameof(ExtraField), ExtraField);
+			storage.SetValue(nameof(ExtraField), ExtraField?.ToStorage());
 		}
 
 		private void UpdateState()

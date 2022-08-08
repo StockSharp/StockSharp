@@ -20,13 +20,13 @@ namespace StockSharp.Algo.Import
 		void IPersistable.Load(SettingsStorage storage)
 		{
 			ValueFile = storage.GetValue<string>(nameof(ValueFile));
-			ValueStockSharp = storage.GetValue<object>(nameof(ValueStockSharp));
+			ValueStockSharp = storage.GetValue<SettingsStorage>(nameof(ValueStockSharp))?.FromStorage();
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(ValueFile), ValueFile);
-			storage.SetValue(nameof(ValueStockSharp), ValueStockSharp);
+			storage.SetValue(nameof(ValueStockSharp), ValueStockSharp?.ToStorage());
 		}
 	}
 }

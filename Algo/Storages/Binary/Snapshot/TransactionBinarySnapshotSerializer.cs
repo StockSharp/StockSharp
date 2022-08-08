@@ -308,10 +308,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						var storage = new SettingsStorage();
 
 						if (r.HasMinValue)
-							storage.SetValue(nameof(r.Min), r.Min);
+							storage.SetValue(nameof(r.Min), r.Min.ToStorage());
 
 						if (r.HasMaxValue)
-							storage.SetValue(nameof(r.Max), r.Max);
+							storage.SetValue(nameof(r.Max), r.Max.ToStorage());
 
 						if (storage.Count > 0)
 							stringValue = storage.Serialize();
@@ -483,10 +483,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 								var storage = strBuffer.Deserialize<SettingsStorage>();
 
 								if (storage.ContainsKey(nameof(range.Min)))
-									range.Min = storage.GetValue<object>(nameof(range.Min));
+									range.Min = storage.GetValue<SettingsStorage>(nameof(range.Min)).FromStorage();
 
 								if (storage.ContainsKey(nameof(range.Max)))
-									range.Max = storage.GetValue<object>(nameof(range.Max));
+									range.Max = storage.GetValue<SettingsStorage>(nameof(range.Max)).FromStorage();
 
 								value = range;
 							}
