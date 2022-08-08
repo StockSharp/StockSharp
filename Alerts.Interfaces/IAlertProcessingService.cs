@@ -21,11 +21,12 @@ namespace StockSharp.Alerts
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Defines an alert processing service.
 	/// </summary>
-	public interface IAlertProcessingService : IPersistable
+	public interface IAlertProcessingService : IPersistable, ILogSource
 	{
 		/// <summary>
 		/// All schemas.

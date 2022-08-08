@@ -2,10 +2,12 @@ namespace StockSharp.Alerts
 {
 	using System;
 
+	using StockSharp.Logging;
+
 	/// <summary>
 	/// Defines an alert notification service.
 	/// </summary>
-	public interface IAlertNotificationService : IDisposable
+	public interface IAlertNotificationService : ILogSource
 	{
 		/// <summary>
 		/// Add alert at the output.
