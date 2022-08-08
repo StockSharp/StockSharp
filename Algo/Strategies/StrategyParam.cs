@@ -235,9 +235,9 @@ namespace StockSharp.Algo.Strategies
 			storage.SetValue(nameof(Name), Name);
 			storage.SetValue(nameof(Value), Value);
 			storage.SetValue(nameof(CanOptimize), CanOptimize);
-			storage.SetValue(nameof(OptimizeFrom), OptimizeFrom.ToStorage());
-			storage.SetValue(nameof(OptimizeTo), OptimizeTo.ToStorage());
-			storage.SetValue(nameof(OptimizeStep), OptimizeStep.ToStorage());
+			storage.SetValue(nameof(OptimizeFrom), OptimizeFrom?.ToStorage());
+			storage.SetValue(nameof(OptimizeTo), OptimizeTo?.ToStorage());
+			storage.SetValue(nameof(OptimizeStep), OptimizeStep?.ToStorage());
 		}
 
 		/// <inheritdoc />
