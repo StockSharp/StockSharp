@@ -65,6 +65,7 @@ namespace StockSharp.Configuration
 			"StockSharp.Xaml.Charting",
 			"StockSharp.Xaml.Diagram",
 			"StockSharp.Studio.Community",
+			"StockSharp.Studio.WebApi",
 			"StockSharp.Studio.Core",
 			"StockSharp.Studio.Controls",
 			"StockSharp.QuikLua",
