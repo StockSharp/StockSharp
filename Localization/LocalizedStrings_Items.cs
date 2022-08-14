@@ -53869,5 +53869,145 @@ namespace StockSharp.Localization
 		/// Manager
 		/// </summary>
 		public static string Manager => GetString(ManagerKey);
+
+		/// <summary>
+		/// Provider
+		/// </summary>
+		public const string ProviderKey = nameof(Provider);
+
+		/// <summary>
+		/// Provider
+		/// </summary>
+		public static string Provider => GetString(ProviderKey);
+
+		/// <summary>
+		/// Integrated security
+		/// </summary>
+		public const string IntegratedSecurityKey = nameof(IntegratedSecurity);
+
+		/// <summary>
+		/// Integrated security
+		/// </summary>
+		public static string IntegratedSecurity => GetString(IntegratedSecurityKey);
+
+		/// <summary>
+		/// DDE settings
+		/// </summary>
+		public const string DDESettingsKey = nameof(DDESettings);
+
+		/// <summary>
+		/// DDE settings
+		/// </summary>
+		public static string DDESettings => GetString(DDESettingsKey);
+
+		/// <summary>
+		/// Flush (one time)
+		/// </summary>
+		public const string FlushOneTimeKey = nameof(FlushOneTime);
+
+		/// <summary>
+		/// Flush (one time)
+		/// </summary>
+		public static string FlushOneTime => GetString(FlushOneTimeKey);
+
+		/// <summary>
+		/// Invalid folder path.
+		/// </summary>
+		public const string InvalidFolderPathKey = nameof(InvalidFolderPath);
+
+		/// <summary>
+		/// Invalid folder path.
+		/// </summary>
+		public static string InvalidFolderPath => GetString(InvalidFolderPathKey);
+
+		/// <summary>
+		/// Invalid file path.
+		/// </summary>
+		public const string InvalidFilePathKey = nameof(InvalidFilePath);
+
+		/// <summary>
+		/// Invalid file path.
+		/// </summary>
+		public static string InvalidFilePath => GetString(InvalidFilePathKey);
+
+		/// <summary>
+		/// Database connection string settings.
+		/// </summary>
+		public const string StringDescriptionKey = nameof(StringDescription);
+
+		/// <summary>
+		/// Database connection string settings.
+		/// </summary>
+		public static string StringDescription => GetString(StringDescriptionKey);
+
+		/// <summary>
+		/// Login. Not used in anonymous mode.
+		/// </summary>
+		public const string LoginDescriptionKey = nameof(LoginDescription);
+
+		/// <summary>
+		/// Login. Not used in anonymous mode.
+		/// </summary>
+		public static string LoginDescription => GetString(LoginDescriptionKey);
+
+		/// <summary>
+		/// Password. Not used in anonymous mode.
+		/// </summary>
+		public const string PasswordDescriptionKey = nameof(PasswordDescription);
+
+		/// <summary>
+		/// Password. Not used in anonymous mode.
+		/// </summary>
+		public static string PasswordDescription => GetString(PasswordDescriptionKey);
+
+		/// <summary>
+		/// Network address or path to file.
+		/// </summary>
+		public const string ServerDescriptionKey = nameof(ServerDescription);
+
+		/// <summary>
+		/// Network address or path to file.
+		/// </summary>
+		public static string ServerDescription => GetString(ServerDescriptionKey);
+
+		/// <summary>
+		/// Name of database. Not used in SQLite.
+		/// </summary>
+		public const string DatabaseDescriptionKey = nameof(DatabaseDescription);
+
+		/// <summary>
+		/// Name of database. Not used in SQLite.
+		/// </summary>
+		public static string DatabaseDescription => GetString(DatabaseDescriptionKey);
+
+		/// <summary>
+		/// Use integrated security (like Windows accounts).
+		/// </summary>
+		public const string SecurityDescriptionKey = nameof(SecurityDescription);
+
+		/// <summary>
+		/// Use integrated security (like Windows accounts).
+		/// </summary>
+		public static string SecurityDescription => GetString(SecurityDescriptionKey);
+
+		/// <summary>
+		/// Final connection string.
+		/// </summary>
+		public const string ConnectionStringDescriptionKey = nameof(ConnectionStringDescription);
+
+		/// <summary>
+		/// Final connection string.
+		/// </summary>
+		public static string ConnectionStringDescription => GetString(ConnectionStringDescriptionKey);
+
+		/// <summary>
+		/// Provider settings.
+		/// </summary>
+		public const string ProviderSettingsKey = nameof(ProviderSettings);
+
+		/// <summary>
+		/// Provider settings.
+		/// </summary>
+		public static string ProviderSettings => GetString(ProviderSettingsKey);
 	}
 }
