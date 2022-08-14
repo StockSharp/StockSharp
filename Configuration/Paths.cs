@@ -170,6 +170,12 @@
 		public static string GetWebSiteUrl() => $"https://stocksharp.{Domain}";
 
 		/// <summary>
+		/// Get logo url.
+		/// </summary>
+		/// <returns>Logo url.</returns>
+		public static string GetLogoUrl() => $"{Paths.GetWebSiteUrl()}/images/logo.png";
+
+		/// <summary>
 		/// </summary>
 		public static class Pages
 		{
