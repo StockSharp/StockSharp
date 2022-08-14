@@ -37,6 +37,9 @@
     <SysMemoryVer>4.5.4</SysMemoryVer>
     <SBEVer>1.23.1.1</SBEVer>
 
+    <MicrosoftCodeAnalysisCSharpVer>4.2.0</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>
+
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
     <RepoWebPath>$(RepoGitHubPath)..\Web\</RepoWebPath>

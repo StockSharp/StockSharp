@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29102.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algo", "Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
 EndProject
@@ -54,13 +54,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitStamp", "Samples\Connect
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fix.Dialects", "Samples\Connectors\Fix.Dialects\Fix.Dialects.csproj", "{11FDEA93-3E5D-4448-85C1-5EA355454081}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media", "Media\Media.csproj", "{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Media", "Media\Media.csproj", "{A1A5C8E7-0BA6-4D8C-8FB2-93424A94E5D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configuration\Configuration.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration", "Configuration\Configuration.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.Interfaces", "Alerts.Interfaces\Alerts.Interfaces.csproj", "{43DFFE65-4AB7-4C21-8F2E-F05F86B70BC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charting.Interfaces", "Charting.Interfaces\Charting.Interfaces.csproj", "{44953EAC-4E10-4680-BAF3-B4C67F638331}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Generator", "Localization.Generator\Localization.Generator.csproj", "{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -168,6 +170,10 @@ Global
 		{44953EAC-4E10-4680-BAF3-B4C67F638331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44953EAC-4E10-4680-BAF3-B4C67F638331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44953EAC-4E10-4680-BAF3-B4C67F638331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
