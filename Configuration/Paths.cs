@@ -173,7 +173,7 @@
 		/// Get logo url.
 		/// </summary>
 		/// <returns>Logo url.</returns>
-		public static string GetLogoUrl() => $"{Paths.GetWebSiteUrl()}/images/logo.png";
+		public static string GetLogoUrl() => $"{GetWebSiteUrl()}/images/logo.png";
 
 		/// <summary>
 		/// </summary>
