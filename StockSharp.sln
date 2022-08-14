@@ -64,6 +64,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charting.Interfaces", "Char
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Generator", "Localization.Generator\Localization.Generator.csproj", "{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algo.Export", "Algo.Export\Algo.Export.csproj", "{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -174,6 +176,10 @@ Global
 		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCD1242A-B4BF-4D17-AB8D-DAEB891704C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
