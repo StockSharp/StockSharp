@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_standard.props" />
   <PropertyGroup>
+    <IsPackable>false</IsPackable>
     <IsRoslynComponent>true</IsRoslynComponent>
   </PropertyGroup>
 
