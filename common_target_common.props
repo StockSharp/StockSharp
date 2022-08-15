@@ -1,4 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="common_versions.props" />
+
   <PropertyGroup>
     <SSProjectName>$([System.String]::Copy('StockSharp.$(MSBuildProjectName)').Replace('GitHub',''))</SSProjectName>
 
@@ -11,34 +13,6 @@
     <LangVersion>default</LangVersion>
     <SampleHistoryDataVersion>1.*</SampleHistoryDataVersion>
     <StockSharpVer>5.*</StockSharpVer>
-
-    <xNetVer>5.2.10</xNetVer>
-    <MathNumVer>4.15.0</MathNumVer>
-    <ProtobufVer>3.0.101</ProtobufVer>
-    <HtmlAgilityPackVer>1.11.37</HtmlAgilityPackVer>
-    <JwtVer>8.4.2</JwtVer>
-    <FluentFtpVer>35.0.5</FluentFtpVer>
-    <CSharpVer>4.7.0</CSharpVer>
-    <SignalRVer>2.4.2</SignalRVer>
-    <NuGetApiVer>6.2.0</NuGetApiVer>
-    <MsTestVer>2.2.7</MsTestVer>
-    <MsTestSdkVer>17.0.0</MsTestSdkVer>
-    
-    <!-- do not update until task is resolved: https://stocksharp.myjetbrains.com/youtrack/issue/ISLR-10 -->
-    <PubnubPCLVer>5.0.1</PubnubPCLVer>
-    
-    <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
-    <MicrosoftDataSqliteVer>5.0.11</MicrosoftDataSqliteVer>
-    <AsyncLinqVer>5.0.0</AsyncLinqVer>
-    <MsBclAsyncInterfacesVer>5.0.0</MsBclAsyncInterfacesVer>
-    <TaskExtensionsVer>4.5.4</TaskExtensionsVer>
-    <SysChannelsVer>6.0.0</SysChannelsVer>
-    <SysPipelinesVer>6.0.0</SysPipelinesVer>
-    <SysMemoryVer>4.5.4</SysMemoryVer>
-    <SBEVer>1.23.1.1</SBEVer>
-
-    <MicrosoftCodeAnalysisCSharpVer>4.2.0</MicrosoftCodeAnalysisCSharpVer>
-    <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
