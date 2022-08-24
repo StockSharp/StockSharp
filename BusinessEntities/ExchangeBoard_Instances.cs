@@ -3620,6 +3620,21 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Bvmt.Name,
 			Exchange = Exchange.Bvmt,
 			TimeZone = TimeHelper.Tunisia,
+			WorkingTime = new WorkingTime
+			{
+				IsEnabled = true,
+				Periods = new List<WorkingTimePeriod>
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new List<Range<TimeSpan>>
+						{
+							new("09:00:00".To<TimeSpan>(), "14:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
 		};
 
 		/// <summary>
