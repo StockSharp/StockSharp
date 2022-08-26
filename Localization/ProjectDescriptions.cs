@@ -33,7 +33,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Gets copyright information.
 		/// </summary>
-		public const string Copyright = "Copyright @ StockSharp 2022";
+		public const string Copyright = "Copyright @ StockSharp 2010-2022";
 
 		/// <summary>
 		/// Gets trademark information.
