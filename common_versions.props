@@ -10,6 +10,7 @@
     <SignalRVer>2.4.2</SignalRVer>
     <MsTestVer>2.2.7</MsTestVer>
     <MsTestSdkVer>17.0.0</MsTestSdkVer>
+    <MsExtensionsVer>6.0.*</MsExtensionsVer>
 
     <!--
     версия nuget должна совпадать с версией нугет либ которые использует мсбилд на сервере стокшарп
@@ -22,12 +23,10 @@
     
     <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
     <MicrosoftDataSqliteVer>5.0.11</MicrosoftDataSqliteVer>
-    <AsyncLinqVer>5.0.0</AsyncLinqVer>
-    <MsBclAsyncInterfacesVer>5.0.0</MsBclAsyncInterfacesVer>
-    <TaskExtensionsVer>4.5.4</TaskExtensionsVer>
-    <SysChannelsVer>6.0.0</SysChannelsVer>
-    <SysPipelinesVer>6.0.0</SysPipelinesVer>
-    <SysMemoryVer>4.5.4</SysMemoryVer>
+    <AsyncLinqVer>6.0.1</AsyncLinqVer>
+    <MsBclAsyncInterfacesVer>6.0.0</MsBclAsyncInterfacesVer>
+    <SysPipelinesVer>6.0.3</SysPipelinesVer>
+    <SysMemoryVer>4.5.5</SysMemoryVer>
     <SBEVer>1.23.1.1</SBEVer>
 
     <MicrosoftCodeAnalysisCSharpVer>4.2.0</MicrosoftCodeAnalysisCSharpVer>
