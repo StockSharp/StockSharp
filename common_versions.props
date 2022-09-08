@@ -1,15 +1,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <xNetVer>5.2.10</xNetVer>
-    <MathNumVer>4.15.0</MathNumVer>
-    <ProtobufVer>3.0.101</ProtobufVer>
-    <HtmlAgilityPackVer>1.11.37</HtmlAgilityPackVer>
-    <JwtVer>8.4.2</JwtVer>
-    <FluentFtpVer>35.0.5</FluentFtpVer>
+    <MathNumVer>5.0.0</MathNumVer>
+    <ProtobufNetVer>3.1.17</ProtobufNetVer>
+    <HtmlAgilityPackVer>1.11.45</HtmlAgilityPackVer>
+    <JwtVer>9.0.3</JwtVer>
+    <FluentFtpVer>40.0.0</FluentFtpVer>
     <CSharpVer>4.7.0</CSharpVer>
-    <SignalRVer>2.4.2</SignalRVer>
-    <MsTestVer>2.2.7</MsTestVer>
-    <MsTestSdkVer>17.0.0</MsTestSdkVer>
+    <SignalRVer>2.4.3</SignalRVer>
+    <MsTestVer>2.2.10</MsTestVer>
+    <MsTestSdkVer>17.3.1</MsTestSdkVer>
     <MsExtensionsVer>6.0.*</MsExtensionsVer>
 
     <!--
@@ -21,15 +21,17 @@
     <!-- do not update until task is resolved: https://stocksharp.myjetbrains.com/youtrack/issue/ISLR-10 -->
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
     
-    <MicrosoftDataSqlClientVer>3.0.1</MicrosoftDataSqlClientVer>
-    <MicrosoftDataSqliteVer>5.0.11</MicrosoftDataSqliteVer>
+    <MicrosoftDataSqlClientVer>5.0.0</MicrosoftDataSqlClientVer>
+    <MicrosoftDataSqliteVer>6.0.8</MicrosoftDataSqliteVer>
     <AsyncLinqVer>6.0.1</AsyncLinqVer>
     <MsBclAsyncInterfacesVer>6.0.0</MsBclAsyncInterfacesVer>
     <SysPipelinesVer>6.0.3</SysPipelinesVer>
     <SysMemoryVer>4.5.5</SysMemoryVer>
+    <SystemTextEncodingsWebVer>6.0.0</SystemTextEncodingsWebVer>
+    <SystemTextJsonVer>6.*</SystemTextJsonVer>
     <SBEVer>1.23.1.1</SBEVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.2.0</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisCSharpVer>4.3.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
