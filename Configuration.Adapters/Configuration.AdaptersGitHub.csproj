@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <StockSharpTargets>netstandard2.0;netstandard2.1</StockSharpTargets>
+    <StockSharpTargets>netstandard2.0;net6.0</StockSharpTargets>
   </PropertyGroup>
   <Import Project="..\common.props" />
   <PropertyGroup>
@@ -58,7 +58,6 @@
     <PackageReference Include="StockSharp.IdaxStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.IEX" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.InteractiveBrokers" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.IQFeedStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.ITCHStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.KrakenStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.KucoinStub" Version="$(StockSharpVer)" />
@@ -71,7 +70,6 @@
     <PackageReference Include="StockSharp.MicexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Oanda" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.OkcoinStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.OkexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.PlazaStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.PoloniexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.PrizmBitStub" Version="$(StockSharpVer)" />
@@ -97,8 +95,10 @@
     <PackageReference Include="StockSharp.DigitexFuturesStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.QuantHouseStub" Version="$(StockSharpVer)" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <PackageReference Include="StockSharp.BvmtStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.IQFeedStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.OkexStub" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Configuration\Configuration.csproj" />

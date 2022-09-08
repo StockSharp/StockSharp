@@ -5,8 +5,10 @@ namespace StockSharp.Configuration
 
 	using Ecng.Common;
 
-#if NETSTANDARD2_1
+#if NET5_0_OR_GREATER
 	using StockSharp.Bvmt;
+	using StockSharp.IQFeed;
+	using StockSharp.Okex;
 #endif
 	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
@@ -59,7 +61,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Idax;
 	using StockSharp.IEX;
 	using StockSharp.InteractiveBrokers;
-	using StockSharp.IQFeed;
 	using StockSharp.ITCH;
 	using StockSharp.Kraken;
 	using StockSharp.Kucoin;
@@ -74,7 +75,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Micex;
 	using StockSharp.Oanda;
 	using StockSharp.Okcoin;
-	using StockSharp.Okex;
 	//using StockSharp.OpenECry;
 	using StockSharp.Plaza;
 	using StockSharp.Poloniex;
@@ -144,9 +144,11 @@ namespace StockSharp.Configuration
 		private static readonly Lazy<Func<Type>[]> _standardAdapters = new(() => new[]
 		{
 			(Func<Type>)(() => typeof(AlfaDirectMessageAdapter)),
-#if NETSTANDARD2_1
+#if NET5_0_OR_GREATER
 			() => typeof(BvmtMarketDataAdapter),
 			() => typeof(BvmtTransactionAdapter),
+			() => typeof(IQFeedMessageAdapter),
+			() => typeof(OkexMessageAdapter),
 #endif
 			() => typeof(BarChartMessageAdapter),
 			() => typeof(BitStampMessageAdapter),
@@ -158,7 +160,6 @@ namespace StockSharp.Configuration
 			() => typeof(FixMessageAdapter),
 			() => typeof(FastMessageAdapter),
 			() => typeof(InteractiveBrokersMessageAdapter),
-			() => typeof(IQFeedMessageAdapter),
 			() => typeof(ItchMessageAdapter),
 			() => typeof(LmaxMessageAdapter),
 			() => typeof(MicexMessageAdapter),
@@ -200,7 +201,6 @@ namespace StockSharp.Configuration
 			() => typeof(KucoinMessageAdapter),
 			() => typeof(LiquiMessageAdapter),
 			() => typeof(LiveCoinMessageAdapter),
-			() => typeof(OkexMessageAdapter),
 			() => typeof(YobitMessageAdapter),
 			() => typeof(AlphaVantageMessageAdapter),
 			() => typeof(IEXMessageAdapter),
