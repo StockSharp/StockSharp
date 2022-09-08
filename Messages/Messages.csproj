@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <StockSharpTargets>netstandard2.0;net6.0</StockSharpTargets>
+  </PropertyGroup>
   <Import Project="..\common.props" />
   <PropertyGroup>
     <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
@@ -9,4 +12,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Compile Remove="AsyncMessageProcessor.cs" />
+    <Compile Remove="IAsyncMessageAdapter.cs" />
+  </ItemGroup>
+
 </Project>
