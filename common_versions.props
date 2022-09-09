@@ -10,7 +10,7 @@
     <SignalRVer>2.4.3</SignalRVer>
     <MsTestVer>2.2.10</MsTestVer>
     <MsTestSdkVer>17.3.1</MsTestSdkVer>
-    <MsExtensionsVer>6.0.*</MsExtensionsVer>
+    <MsExtensionsVer>6.*</MsExtensionsVer>
 
     <!--
     версия nuget должна совпадать с версией нугет либ которые использует мсбилд на сервере стокшарп
