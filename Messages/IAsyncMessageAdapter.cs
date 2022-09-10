@@ -89,7 +89,7 @@ public interface IAsyncMessageAdapter : ILogReceiver
 
 	/// <summary>
 	/// </summary>
-	ValueTask ProcessMessageAsync(Message msg, CancellationToken token) { /* do nothing by default */ return default; }
+	ValueTask ProcessMessageAsync(Message msg, CancellationToken token) => default; // do nothing by default
 
 	/// <summary>
 	/// </summary>
