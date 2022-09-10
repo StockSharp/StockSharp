@@ -2970,13 +2970,13 @@ namespace StockSharp.Algo.Strategies
 					continue;
 				}
 
-				if (parameter.Value.Item2 == null)
+				if (parameter.Value.value == null)
 					param.Value = null;
 				else
 				{
-					param.Value = parameter.Value.Item1 == typeof(Unit).FullName
-						? parameter.Value.Item2.ToUnit()
-						: parameter.Value.Item2.To(parameter.Value.Item1.To<Type>());
+					param.Value = parameter.Value.type == typeof(Unit).FullName
+						? parameter.Value.value.ToUnit()
+						: parameter.Value.value.To(parameter.Value.type.To<Type>());
 				}
 			}
 		}
