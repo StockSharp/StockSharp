@@ -20,6 +20,11 @@
     <ConnectorsStubPath>$(RepoAppsPath)ConnectorsStub\</ConnectorsStubPath>
     <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
+
+    <Product>StockSharp</Product>
+    <Company>StockSharp Platform LLC</Company>
+    <AssemblyVersion>5.0.0</AssemblyVersion>
+    <FileVersion>5.0.0</FileVersion>
   </PropertyGroup>
   
   <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
@@ -57,6 +62,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(RepoGitHubPath)IsExternalInit.cs" Link="Properties\IsExternalInit.cs" />
-    <Compile Include="$(RepoGitHubPath)StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyCopyrightAttribute">
+      <_Parameter1>Copyright @ StockSharp 2010 - $([System.DateTime]::Now.ToString(yyyy))</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyTrademarkAttribute">
+      <_Parameter1>StockSharp</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Condition=" !$(DefineConstants.Contains('CLS_DISABLE')) " Include="System.CLSCompliantAttribute">
+      <_Parameter1>true</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Resources.NeutralResourcesLanguageAttribute">
+      <_Parameter1>en-US</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.InteropServices.ComVisibleAttribute">
+      <_Parameter1>false</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>
