@@ -2,13 +2,10 @@
   <PropertyGroup>
     <StockSharpTargets>netstandard2.0;net6.0</StockSharpTargets>
   </PropertyGroup>
-  <Import Project="..\common.props" />
+  <Import Project="..\common_target_standard.props" />
   <PropertyGroup>
     <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
   </PropertyGroup>
-  <ItemGroup>
-	<PackageReference Include="Ecng.Serialization" Version="$(EcngVer)" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logging\Logging.csproj" />
   </ItemGroup>

@@ -57,5 +57,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(RepoGitHubPath)IsExternalInit.cs" Link="Properties\IsExternalInit.cs" />
+    <Compile Include="$(RepoGitHubPath)StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
   </ItemGroup>
 </Project>

@@ -1,18 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <StockSharpTargets>netstandard2.0;net6.0</StockSharpTargets>
-  </PropertyGroup>
-  <Import Project="..\common.props" />
+  <Import Project="..\common_target_net.props" />
   <PropertyGroup>
     <ProjectGuid>{7D6C7AD7-2735-4BC0-8E37-B21584E43264}</ProjectGuid>
     <RootNamespace>StockSharp.Configuration</RootNamespace>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup>
     <ProjectReference Include="$(ConnectorsAppsPath)Bvmt\Bvmt.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Okex\Okex.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)IQFeed\IQFeed.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="$(ConnectorsAppsPath)FTX\FTX.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Binance\Binance.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Kucoin\Kucoin.csproj" />

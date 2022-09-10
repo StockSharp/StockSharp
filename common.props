@@ -1,9 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="common_target_standard.props" />
-  <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\StockSharpAssemblyInfo.cs" Link="Properties\StockSharpAssemblyInfo.cs" />
-  </ItemGroup>
-</Project>

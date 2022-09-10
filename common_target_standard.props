@@ -3,5 +3,7 @@
   <PropertyGroup>
     <StockSharpTargets Condition="'$(StockSharpTargets)' == ''">netstandard2.0</StockSharpTargets>
     <TargetFrameworks>$(StockSharpTargets)</TargetFrameworks>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 </Project>

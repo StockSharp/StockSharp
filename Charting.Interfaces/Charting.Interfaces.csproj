@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common.props" />
+  <Import Project="..\common_target_standard.props" />
 	
   <ItemGroup>
     <PackageReference Include="Ecng.Drawing" Version="$(EcngVer)" />
