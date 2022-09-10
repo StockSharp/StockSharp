@@ -7,8 +7,6 @@ namespace StockSharp.BitStamp
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.BitStamp.Native.Model;
 	using StockSharp.Localization;
 	using StockSharp.Messages;

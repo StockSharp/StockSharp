@@ -4,9 +4,9 @@
 	using System.Text;
 	using System.IO;
 	using System.Text.Json;
+	using System.Collections.Generic;
 
 	using Microsoft.CodeAnalysis;
-	using System.Collections.Generic;
 
 	[Generator]
 	public class LocalizedStringsGenerator : ISourceGenerator
