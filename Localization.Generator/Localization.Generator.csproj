@@ -1,15 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_standard.props" />
+  <Import Project="..\common_target_source_generator.props" />
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <IsRoslynComponent>true</IsRoslynComponent>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 	
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpVer)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisAnalyzersVer)" PrivateAssets="all" />
-	  
     <PackageReference Include="System.Text.Json" Version="$(SystemTextJsonVer)" GeneratePathProperty="true" PrivateAssets="all" />
     <PackageReference Include="System.Text.Encodings.Web" Version="$(SystemTextEncodingsWebVer)" GeneratePathProperty="true" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MsBclAsyncInterfacesVer)" GeneratePathProperty="true" PrivateAssets="all" />
