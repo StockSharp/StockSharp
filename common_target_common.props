@@ -9,10 +9,7 @@
 
     <ProductVersion>9.0.30729</ProductVersion>
     <!--<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>-->
-    <EcngVer>1.0.*</EcngVer>
     <LangVersion>default</LangVersion>
-    <SampleHistoryDataVersion>1.*</SampleHistoryDataVersion>
-    <StockSharpVer>5.*</StockSharpVer>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
@@ -21,10 +18,13 @@
     <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
 
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <Product>StockSharp</Product>
     <Company>StockSharp Platform LLC</Company>
-    <AssemblyVersion>5.0.0</AssemblyVersion>
-    <FileVersion>5.0.0</FileVersion>
+    <Version>5.0.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version)</FileVersion>
+    <Copyright>Copyright @ $(Company) 2010 - $([System.DateTime]::Now.ToString(yyyy))</Copyright>
   </PropertyGroup>
   
   <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
@@ -39,20 +39,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <!-- reverse defaults from "C:\Program Files\dotnet\sdk\5.0.102\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.GenerateAssemblyInfo.targets"  -->
-    <GenerateAssemblyCompanyAttribute Condition="'$(GenerateAssemblyCompanyAttribute)' == ''">false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyConfigurationAttribute Condition="'$(GenerateAssemblyConfigurationAttribute)' == ''">false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCopyrightAttribute Condition="'$(GenerateAssemblyCopyrightAttribute)' == ''">false</GenerateAssemblyCopyrightAttribute>
-    <GenerateAssemblyDescriptionAttribute Condition="'$(GenerateAssemblyDescriptionAttribute)' == ''">false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyFileVersionAttribute Condition="'$(GenerateAssemblyFileVersionAttribute)' == ''">false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute Condition="'$(GenerateAssemblyInformationalVersionAttribute)' == ''">false</GenerateAssemblyInformationalVersionAttribute>
-    <GenerateAssemblyProductAttribute Condition="'$(GenerateAssemblyProductAttribute)' == ''">false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyTitleAttribute Condition="'$(GenerateAssemblyTitleAttribute)' == ''">false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyVersionAttribute Condition="'$(GenerateAssemblyVersionAttribute)' == ''">false</GenerateAssemblyVersionAttribute>
-    <GenerateRepositoryUrlAttribute Condition="'$(GenerateRepositoryUrlAttribute)' == '' and !('$(TargetFrameworkIdentifier)' == '.NETFramework' and $([MSBuild]::VersionLessThan($(TargetFrameworkVersion), 4.5)))">false</GenerateRepositoryUrlAttribute>
-    <GenerateNeutralResourcesLanguageAttribute Condition="'$(GenerateNeutralResourcesLanguageAttribute)' == ''">false</GenerateNeutralResourcesLanguageAttribute>
-    <GenerateAssemblyMetadataAttributes Condition="'$(GenerateAssemblyMetadataAttributes)' == ''">false</GenerateAssemblyMetadataAttributes>
-    <IncludeSourceRevisionInInformationalVersion Condition="'$(IncludeSourceRevisionInInformationalVersion)' == ''">false</IncludeSourceRevisionInInformationalVersion>
-    <GenerateInternalsVisibleToAttributes Condition="'$(GenerateInternalsVisibleToAttributes)' == ''">false</GenerateInternalsVisibleToAttributes>
+    <GenerateAssemblyDescriptionAttribute Condition="'$(GenerateAssemblyDescriptionAttribute)' == ''">false</GenerateAssemblyDescriptionAttribute>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -65,9 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AssemblyAttribute Include="System.Reflection.AssemblyCopyrightAttribute">
-      <_Parameter1>Copyright @ StockSharp 2010 - $([System.DateTime]::Now.ToString(yyyy))</_Parameter1>
-    </AssemblyAttribute>
     <AssemblyAttribute Include="System.Reflection.AssemblyTrademarkAttribute">
       <_Parameter1>StockSharp</_Parameter1>
     </AssemblyAttribute>
