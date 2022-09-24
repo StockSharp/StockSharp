@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_source_generator.props" />
-  <PropertyGroup>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
 	
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="$(SystemTextJsonVer)" GeneratePathProperty="true" PrivateAssets="all" />
