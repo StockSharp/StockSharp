@@ -35,7 +35,7 @@
     <SystemTextJsonVer>6.*</SystemTextJsonVer>
     <SBEVer>1.23.1.1</SBEVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.3.0-3.final</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisCSharpVer>4.3.1</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>
 
     <!-- 8sep22: temporary net5 support for installer. TODO remove in a couple of months -->
