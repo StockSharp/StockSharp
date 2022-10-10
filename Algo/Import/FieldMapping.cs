@@ -16,6 +16,7 @@ namespace StockSharp.Algo.Import
 	{
 		private FastDateTimeParser _dateParser;
 		private FastTimeSpanParser _timeParser;
+		private Func<string, object> _dateConverter;
 
 		private readonly HashSet<string> _enumNames = new(StringComparer.InvariantCultureIgnoreCase);
 
@@ -33,7 +34,7 @@ namespace StockSharp.Algo.Import
 
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
-				
+
 			if (displayName.IsEmpty())
 				throw new ArgumentNullException(nameof(displayName));
 
@@ -66,7 +67,7 @@ namespace StockSharp.Algo.Import
 		/// Is field extended.
 		/// </summary>
 		public bool IsExtended { get; set; }
-		
+
 		/// <summary>
 		/// Display name.
 		/// </summary>
@@ -110,7 +111,7 @@ namespace StockSharp.Algo.Import
 				}
 				else
 					Order = null;
-				
+
 				NotifyChanged(nameof(IsEnabled));
 				NotifyChanged(nameof(Order));
 			}
@@ -238,7 +239,7 @@ namespace StockSharp.Algo.Import
 					return;
 				}
 			}
-			
+
 			if (_enumNames.Contains(value))
 			{
 				ApplyValue(instance, value.To(Type));
@@ -255,6 +256,54 @@ namespace StockSharp.Algo.Import
 		public void ApplyDefaultValue(object instance)
 		{
 			ApplyValue(instance, DefaultValue);
+		}
+
+		private void EnsureDateConverter()
+		{
+			if(_dateConverter != null)
+				return;
+
+			object fastParserConverter(string str)
+			{
+				if (Type == typeof(DateTimeOffset))
+				{
+					var dto = _dateParser.ParseDto(str);
+
+					if (dto.Offset.IsDefault())
+					{
+						var tz = Scope<TimeZoneInfo>.Current?.Value;
+
+						if (tz != null)
+							dto = dto.UtcDateTime.ApplyTimeZone(tz);
+					}
+
+					return dto;
+				}
+
+				return _dateParser.Parse(str);
+			}
+
+			Func<DateTimeOffset, object> toObj = Type == typeof(DateTimeOffset) ? dto => dto : dto => dto.DateTime;
+
+			switch (Format.ToLowerInvariant())
+			{
+				case "timestamp":
+					_dateConverter = str => toObj(DateTimeOffset.FromUnixTimeSeconds(long.Parse(str)));
+					break;
+				case "timestamp_milli":
+					_dateConverter = str => toObj(DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(str)));
+					break;
+				case "timestamp_micro":
+					_dateConverter = str => toObj(new DateTimeOffset(long.Parse(str).MicrosecondsToTicks(), TimeSpan.Zero));
+					break;
+				case "timestamp_nano":
+					_dateConverter = str => toObj(new DateTimeOffset(long.Parse(str).NanosecondsToTicks(), TimeSpan.Zero));
+					break;
+				default:
+					_dateParser = new FastDateTimeParser(Format);
+					_dateConverter = fastParserConverter;
+					break;
+			}
 		}
 
 		private void ApplyValue(object instance, object value)
@@ -280,27 +329,8 @@ namespace StockSharp.Algo.Import
 			{
 				if (value is string str)
 				{
-					if (_dateParser == null)
-						_dateParser = new FastDateTimeParser(Format);
-
-					if (Type == typeof(DateTimeOffset))
-					{
-						var dto = _dateParser.ParseDto(str);
-
-						if (dto.Offset.IsDefault())
-						{
-							var tz = Scope<TimeZoneInfo>.Current?.Value;
-
-							if (tz != null)
-								dto = dto.UtcDateTime.ApplyTimeZone(tz);
-						}
-
-						value = dto;
-					}
-					else
-					{
-						value = _dateParser.Parse(str);
-					}
+					EnsureDateConverter();
+					value = _dateConverter(str);
 				}
 			}
 			else if (Type == typeof(TimeSpan))
@@ -345,6 +375,7 @@ namespace StockSharp.Algo.Import
 		{
 			_dateParser = null;
 			_timeParser = null;
+			_dateConverter = null;
 		}
 
 		/// <summary>
