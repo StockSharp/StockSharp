@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Export
 				{
 					worker
 						.SetCell(0, rowIndex, LocalizedStrings.Time)
-						.SetCell(1, rowIndex, message.ServerTime);
+						.SetCell(1, rowIndex, message.ServerTime.ToString());
 
 					var columnIndex = 0;
 
@@ -398,7 +398,7 @@ namespace StockSharp.Algo.Export
 						worker.SetCell(col++, row, indVal);
 
 					lastTime = value.Time;
-				
+
 					if (!Check(++row))
 						break;
 				}
