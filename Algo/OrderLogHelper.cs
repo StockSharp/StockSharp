@@ -164,7 +164,7 @@ namespace StockSharp.Algo
 			{
 				if (!snapshotSent)
 				{
-					yield return builder.Snapshot.TypedClone();
+					yield return builder.Snapshot;
 					snapshotSent = true;
 				}
 
@@ -175,12 +175,16 @@ namespace StockSharp.Algo
 				if (prevTime != null && (depth.ServerTime - prevTime.Value) < interval)
 					continue;
 
-				depth = depth.TypedClone();
-
 				if (maxDepth < int.MaxValue)
 				{
+					depth = builder.Snapshot; // cannot trim incremental book
+
 					depth.Bids = depth.Bids.Take(maxDepth).ToArray();
 					depth.Asks = depth.Asks.Take(maxDepth).ToArray();
+				}
+				else if (!interval.IsDefault())
+				{
+					depth = builder.Snapshot; // cannot return incrementals if interval is set
 				}
 
 				yield return depth;
@@ -243,7 +247,7 @@ namespace StockSharp.Algo
 				void IEnumerator.Reset()
 				{
 					_itemsEnumerator.Reset();
-					
+
 					_tradesByNum.Clear();
 					_tradesByString.Clear();
 

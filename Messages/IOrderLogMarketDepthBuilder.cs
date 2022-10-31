@@ -84,12 +84,20 @@ namespace StockSharp.Messages
 
 			foreach (var ask in depth.Asks)
 				_asks.Add(ask.Price, ask);
-
-			_depth.Bids = _bids.Values.ToArray();
-			_depth.Asks = _asks.Values.ToArray();
 		}
 
-		QuoteChangeMessage IOrderLogMarketDepthBuilder.Snapshot => _depth.TypedClone();
+		QuoteChangeMessage IOrderLogMarketDepthBuilder.Snapshot
+		{
+			get
+			{
+				var depth = _depth.TypedClone();
+
+				depth.Bids = _bids.Values.ToArray();
+				depth.Asks = _asks.Values.ToArray();
+
+				return depth;
+			}
+		}
 
 		QuoteChangeMessage IOrderLogMarketDepthBuilder.Update(ExecutionMessage item)
 		{
@@ -133,7 +141,7 @@ namespace StockSharp.Messages
 						quotes[item.OrderPrice] = quote;
 						return quote;
 					}
-				
+
 					if (item.OrderId != null)
 						changedQuote = ProcessRegister(item.OrderId.Value, _ordersByNum);
 					else if (!item.OrderStringId.IsEmpty())
@@ -151,15 +159,16 @@ namespace StockSharp.Messages
 						if (orders.TryGetValue(id, out var prevVolume))
 						{
 							orders[id] = prevVolume - volume.Value;
-								
+
 							if (quotes.TryGetValue(item.OrderPrice, out var quote))
 							{
 								quote.Volume -= volume.Value;
 
 								if (quote.Volume <= 0)
 									quotes.Remove(item.OrderPrice);
+								else
+									quotes[item.OrderPrice] = quote;
 
-								quotes[item.OrderPrice] = quote;
 								return quote;
 							}
 						}
@@ -185,8 +194,9 @@ namespace StockSharp.Messages
 
 							if (quote.Volume <= 0)
 								quotes.Remove(item.OrderPrice);
+							else
+								quotes[item.OrderPrice] = quote;
 
-							quotes[item.OrderPrice] = quote;
 							return quote;
 						}
 					}
