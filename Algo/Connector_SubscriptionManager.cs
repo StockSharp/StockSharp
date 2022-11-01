@@ -366,7 +366,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public void Subscribe(Subscription subscription, bool keepBackMode = false)
+			public void Subscribe(Subscription subscription, bool isAllExtension = false)
 			{
 				AddSubscription(subscription);
 
@@ -374,10 +374,10 @@ namespace StockSharp.Algo
 				var clone = subscrMsg.TypedClone();
 				clone.Adapter = subscrMsg.Adapter;
 
-				if (keepBackMode)
+				if (isAllExtension)
 					clone.BackMode = subscrMsg.BackMode;
 
-				SendRequest(clone, subscription, !keepBackMode);
+				SendRequest(clone, subscription, isAllExtension);
 			}
 
 			public void UnSubscribe(Subscription subscription)
@@ -401,15 +401,17 @@ namespace StockSharp.Algo
 				if (unsubscribe.IsSubscribe)
 					return;
 
-				SendRequest(unsubscribe, subscription, true);
+				SendRequest(unsubscribe, subscription, false);
 			}
 
-			private void SendRequest(ISubscriptionMessage request, Subscription subscription, bool needLog)
+			private void SendRequest(ISubscriptionMessage request, Subscription subscription, bool isAllExtension)
 			{
 				lock (_syncObject)
 					_requests.Add(request.TransactionId, Tuple.Create(request, subscription));
 
-				if (needLog)
+				if(isAllExtension)
+					_connector.AddVerboseLog("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
+				else
 					_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
 
 				_connector.SendInMessage((Message)request);
@@ -490,7 +492,7 @@ namespace StockSharp.Algo
 
 				foreach (var pair in requests)
 				{
-					SendRequest(pair.Key, pair.Value.Subscription, true);
+					SendRequest(pair.Key, pair.Value.Subscription, false);
 				}
 			}
 
