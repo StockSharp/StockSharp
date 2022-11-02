@@ -193,6 +193,22 @@ namespace StockSharp.Messages
 		public decimal TotalVolume { get; set; }
 
 		/// <summary>
+		/// Buy volume.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.XamlStr493Key)]
+		[MainCategory]
+		public decimal? BuyVolume { get; set; }
+
+		/// <summary>
+		/// Sell volume.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.XamlStr579Key)]
+		[MainCategory]
+		public decimal? SellVolume { get; set; }
+
+		/// <summary>
 		/// Open interest.
 		/// </summary>
 		[DataMember]
@@ -314,6 +330,8 @@ namespace StockSharp.Messages
 			copy.OpenInterest = OpenInterest;
 			copy.SecurityId = SecurityId;
 			copy.TotalVolume = TotalVolume;
+			copy.BuyVolume = BuyVolume;
+			copy.SellVolume = SellVolume;
 			copy.RelativeVolume = RelativeVolume;
 			copy.DownTicks = DownTicks;
 			copy.UpTicks = UpTicks;

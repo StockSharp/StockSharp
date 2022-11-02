@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Storages.Binary
 		where TCandleMessage : CandleMessage, new()
 	{
 		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, arg, 74, MarketDataVersions.Version61, exchangeInfoProvider)
+			: base(securityId, arg, 74, MarketDataVersions.Version62, exchangeInfoProvider)
 		{
 		}
 
@@ -147,6 +147,19 @@ namespace StockSharp.Algo.Storages.Binary
 
 					if (candle.RelativeVolume != null)
 						writer.WriteVolume(candle.RelativeVolume.Value, metaInfo, largeDecimal);
+				}
+
+				if (metaInfo.Version >= MarketDataVersions.Version62)
+				{
+					writer.Write(candle.BuyVolume != null);
+
+					if (candle.BuyVolume != null)
+						writer.WriteVolume(candle.BuyVolume.Value, metaInfo, largeDecimal);
+
+					writer.Write(candle.SellVolume != null);
+
+					if (candle.SellVolume != null)
+						writer.WriteVolume(candle.SellVolume.Value, metaInfo, largeDecimal);
 				}
 
 				if (metaInfo.Version < MarketDataVersions.Version56)
@@ -257,9 +270,9 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					var time = writer.WriteTime(candle.CloseTime, metaInfo.LastTime, LocalizedStrings.Str1001, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, false, ref lastOffset);
-					
+
 					if (metaInfo.Version >= MarketDataVersions.Version41)
-						metaInfo.LastTime = time;	
+						metaInfo.LastTime = time;
 				}
 
 				if (metaInfo.Version >= MarketDataVersions.Version46)
@@ -449,6 +462,8 @@ namespace StockSharp.Algo.Storages.Binary
 				SecurityId = SecurityId,
 				TotalVolume = reader.ReadVolume(metaInfo, largeDecimal),
 				RelativeVolume = metaInfo.Version < MarketDataVersions.Version52 || !reader.Read() ? null : reader.ReadVolume(metaInfo, largeDecimal),
+				BuyVolume  = metaInfo.Version < MarketDataVersions.Version62 || !reader.Read() ? null : reader.ReadVolume(metaInfo, largeDecimal),
+				SellVolume = metaInfo.Version < MarketDataVersions.Version62 || !reader.Read() ? null : reader.ReadVolume(metaInfo, largeDecimal),
 				Arg = Arg
 			};
 
@@ -607,7 +622,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (!buildFrom)
 				return candle;
-			
+
 			candle.BuildFrom = reader.ReadBuildFrom();
 
 			if (!seqNum)

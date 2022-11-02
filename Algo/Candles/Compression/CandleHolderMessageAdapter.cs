@@ -107,6 +107,8 @@ namespace StockSharp.Algo.Candles.Compression
 			TryUpdateValue(message, info, c => c.CloseVolume, (c, v) => c.CloseVolume = v);
 			TryUpdateValue(message, info, c => c.RelativeVolume, (c, v) => c.RelativeVolume = v);
 			TryUpdateValue(message, info, c => c.TotalVolume, (c, v) => c.TotalVolume = v);
+			TryUpdateValue(message, info, c => c.BuyVolume, (c, v) => c.BuyVolume = v);
+			TryUpdateValue(message, info, c => c.SellVolume, (c, v) => c.SellVolume = v);
 
 			TryUpdateValue(message, info, c => c.UpTicks, (c, v) => c.UpTicks = v);
 			TryUpdateValue(message, info, c => c.DownTicks, (c, v) => c.DownTicks = v);

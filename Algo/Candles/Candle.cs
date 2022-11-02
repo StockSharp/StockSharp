@@ -163,6 +163,20 @@ namespace StockSharp.Algo.Candles
 		public decimal? RelativeVolume { get; set; }
 
 		/// <summary>
+		/// Buy volume.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.XamlStr493Key)]
+		public decimal? BuyVolume { get; set; }
+
+		/// <summary>
+		/// Sell volume.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.XamlStr579Key)]
+		public decimal? SellVolume { get; set; }
+
+		/// <summary>
 		/// Candle arg.
 		/// </summary>
 		public abstract object Arg { get; set; }
@@ -292,6 +306,8 @@ namespace StockSharp.Algo.Candles
 			destination.TotalPrice = TotalPrice;
 			destination.TotalTicks = TotalTicks;
 			destination.TotalVolume = TotalVolume;
+			destination.BuyVolume = BuyVolume;
+			destination.SellVolume = SellVolume;
 			//destination.VolumeProfileInfo = VolumeProfileInfo;
 			destination.PriceLevels = PriceLevels?./*Select(l => l.Clone()).*/ToArray();
 			destination.SeqNum = SeqNum;

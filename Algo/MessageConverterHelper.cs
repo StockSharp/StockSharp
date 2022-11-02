@@ -136,6 +136,8 @@ namespace StockSharp.Algo
 			message.LowPrice = candle.LowPrice;
 			message.ClosePrice = candle.ClosePrice;
 			message.TotalVolume = candle.TotalVolume;
+			message.BuyVolume = candle.BuyVolume;
+			message.SellVolume = candle.SellVolume;
 			message.OpenInterest = candle.OpenInterest;
 			message.OpenVolume = candle.OpenVolume;
 			message.HighVolume = candle.HighVolume;
@@ -648,7 +650,7 @@ namespace StockSharp.Algo
 					secId.SecurityCode = criteria.Code;
 
 				message.SecurityId = criteria.ExternalId.ToSecurityId(secId);
-				
+
 				criteria.FillMessage(message);
 
 				message.BoardCode = criteria.Board?.Code;
@@ -978,7 +980,7 @@ namespace StockSharp.Algo
 				_security = security;
 				_exchangeInfoProvider = exchangeInfoProvider;
 			}
-			
+
 			public IEnumerator<TEntity> GetEnumerator()
 			{
 				return _messages.Select(Convert).GetEnumerator();
@@ -1214,6 +1216,9 @@ namespace StockSharp.Algo
 			candle.TotalVolume = message.TotalVolume;
 			candle.RelativeVolume = message.RelativeVolume;
 
+			candle.BuyVolume = message.BuyVolume;
+			candle.SellVolume = message.SellVolume;
+
 			candle.OpenInterest = message.OpenInterest;
 
 			candle.TotalTicks = message.TotalTicks;
@@ -1424,7 +1429,7 @@ namespace StockSharp.Algo
 			order.Time = message.ServerTime;
 			order.LastChangeTime = message.ServerTime;
 			order.LocalTime = message.LocalTime;
-			
+
 			order.Status = message.OrderStatus;
 			order.TimeInForce = message.TimeInForce;
 			order.IsSystem = message.IsSystem;
@@ -1543,7 +1548,7 @@ namespace StockSharp.Algo
 
 			if (copyExtended)
 				return security.ExternalId.ToSecurityId(secCode, boardCode);
-			
+
 			return new SecurityId
 			{
 				SecurityCode = secCode,
@@ -1840,7 +1845,7 @@ namespace StockSharp.Algo
 				if (throwIfInvalidType)
 					throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(message.DataType2), nameof(message));
 			}
-			
+
 			series.From = message.From;
 			series.To = message.To;
 			series.Count = message.Count;
