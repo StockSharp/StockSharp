@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Candles.Compression
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
@@ -77,6 +76,29 @@ namespace StockSharp.Algo.Candles.Compression
 				return true;
 
 			return board.IsTradeTime(time, out _, out _);
+		}
+
+		/// <summary>
+		/// Add volume to <see cref="CandleMessage.TotalVolume"/>, <see cref="CandleMessage.BuyVolume"/>, <see cref="CandleMessage.SellVolume"/>, <see cref="CandleMessage.RelativeVolume"/>.
+		/// </summary>
+		protected static void AddVolume(TCandleMessage candle, decimal? volume, Sides? volSide)
+		{
+			if (volume == null)
+				return;
+
+			candle.TotalVolume += volume.Value;
+
+			switch (volSide)
+			{
+				case Sides.Buy:
+					candle.BuyVolume       = (candle.BuyVolume ?? 0)      + volume.Value;
+					candle.RelativeVolume  = (candle.RelativeVolume ?? 0) + volume.Value;
+					break;
+				case Sides.Sell:
+					candle.SellVolume      = (candle.SellVolume ?? 0)     + volume.Value;
+					candle.RelativeVolume  = (candle.RelativeVolume ?? 0) - volume.Value;
+					break;
+			}
 		}
 
 		/// <summary>
@@ -191,21 +213,7 @@ namespace StockSharp.Algo.Candles.Compression
 			candle.LowVolume = volume;
 			candle.HighVolume = volume;
 
-			if (volume != null)
-			{
-				candle.TotalVolume = volume.Value;
-
-				switch (transform.Side)
-				{
-					case Sides.Buy:
-						candle.BuyVolume = candle.RelativeVolume = volume.Value;
-						break;
-					case Sides.Sell:
-						candle.SellVolume = volume.Value;
-						candle.RelativeVolume = -volume.Value;
-						break;
-				}
-			}
+			AddVolume(candle, volume, transform.Side);
 
 			candle.OpenInterest = transform.OpenInterest;
 			candle.PriceLevels = transform.PriceLevels;
@@ -256,19 +264,8 @@ namespace StockSharp.Algo.Candles.Compression
 				candle.TotalPrice += price * v;
 
 				candle.CloseVolume = v;
-				candle.TotalVolume += v;
 
-				switch (transform.Side)
-				{
-					case Sides.Buy:
-						candle.RelativeVolume = (candle.RelativeVolume ?? 0) + v;
-						candle.BuyVolume = (candle.BuyVolume ?? 0) + v;
-						break;
-					case Sides.Sell:
-						candle.RelativeVolume = (candle.RelativeVolume ?? 0) - v;
-						candle.SellVolume = (candle.SellVolume ?? 0) + v;
-						break;
-				}
+				AddVolume(candle, v, transform.Side);
 			}
 
 			candle.CloseTime = time;
@@ -770,20 +767,9 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				var v = volume.Value;
 
-				currentPnFCandle.TotalVolume += v;
 				currentPnFCandle.TotalPrice += v * price;
 
-				switch (side)
-				{
-					case Sides.Buy:
-						currentPnFCandle.RelativeVolume = (currentPnFCandle.RelativeVolume ?? 0) + v;
-						currentPnFCandle.BuyVolume      = (currentPnFCandle.BuyVolume ?? 0)      + v;
-						break;
-					case Sides.Sell:
-						currentPnFCandle.RelativeVolume = (currentPnFCandle.RelativeVolume ?? 0) - v;
-						currentPnFCandle.SellVolume     = (currentPnFCandle.SellVolume ?? 0)     + v;
-						break;
-				}
+				AddVolume(currentPnFCandle, v, side);
 			}
 
 			currentPnFCandle.CloseVolume = volume;
@@ -988,20 +974,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 				if (volume != null)
 				{
-					currentCandle.TotalVolume += volume.Value;
 					currentCandle.TotalPrice += volume.Value * price;
 
-					switch (side)
-					{
-						case Sides.Buy:
-							currentCandle.RelativeVolume = (currentCandle.RelativeVolume ?? 0) + volume;
-							currentCandle.BuyVolume      = (currentCandle.BuyVolume ?? 0)      + volume;
-							break;
-						case Sides.Sell:
-							currentCandle.RelativeVolume = (currentCandle.RelativeVolume ?? 0) - volume;
-							currentCandle.SellVolume     = (currentCandle.SellVolume ?? 0)     + volume;
-							break;
-					}
+					AddVolume(currentCandle, volume.Value, side);
 				}
 
 				if (subscription.Message.IsCalcVolumeProfile && currentCandle.PriceLevels == null)
