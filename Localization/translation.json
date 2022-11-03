@@ -21674,5 +21674,13 @@
   "Manager": {
     "en": "Manager",
     "ru": "Менеджер"
+  },
+  "Done": {
+    "en": "Done",
+    "ru": "Исполнено"
+  },
+  "Approved": {
+    "en": "Approved",
+    "ru": "Утверждено"
   }
 }
