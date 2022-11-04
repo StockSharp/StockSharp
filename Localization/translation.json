@@ -21682,5 +21682,13 @@
   "Approved": {
     "en": "Approved",
     "ru": "Утверждено"
+  },
+  "PreventWork": {
+    "en": "Prevent work",
+    "ru": "Запретить работу"
+  },
+  "PreventUpgrade": {
+    "en": "Prevent upgrade",
+    "ru": "Запретить обновление"
   }
 }
