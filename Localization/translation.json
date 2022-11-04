@@ -1,4 +1,16 @@
 {
+  "RefreshLicense": {
+    "en": "Refresh license",
+    "ru": "Обновить лицензию"
+  },
+  "RefreshingLicense": {
+    "en": "Requesting license info from StockSharp server",
+    "ru": "Получение текущей лицензии с сервера StockSharp"
+  },
+  "RefreshLicenseComplete": {
+    "en": "License was updated successfully",
+    "ru": "Лицензия успешно обновлена"
+  },
   "Telegram": {
     "en": "Telegram",
     "ru": "Телеграм"
@@ -14144,8 +14156,8 @@
     "ru": "Разметка (.json)|*.json"
   },
   "Str3585": {
-    "en": "Issued for:",
-    "ru": "Выдана на:"
+    "en": "Issued for",
+    "ru": "Выдана на"
   },
   "Str3586": {
     "en": "Remaining:",
@@ -15272,8 +15284,8 @@
     "ru": "Дебаг лог"
   },
   "XamlStr120": {
-    "en": "Valid until:",
-    "ru": "Действительно до:"
+    "en": "Valid until",
+    "ru": "Действительно до"
   },
   "XamlStr123": {
     "en": "Day",
