@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Charting
 {
 	using System;
-	using System.Drawing;
 
 	using Ecng.Drawing;
 

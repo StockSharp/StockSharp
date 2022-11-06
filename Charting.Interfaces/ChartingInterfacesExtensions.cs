@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+
 	using Ecng.Common;
 
 	using StockSharp.Algo.Candles;
