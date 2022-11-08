@@ -2515,15 +2515,6 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board <see cref="STSH"/>.
-		/// </summary>
-		public static ExchangeBoard STSH { get; } = new()
-		{
-			Code = Exchange.STSH.Name,
-			Exchange = Exchange.STSH,
-		};
-
-		/// <summary>
 		/// Information about board <see cref="STRLG"/>.
 		/// </summary>
 		public static ExchangeBoard STRLG { get; } = new()

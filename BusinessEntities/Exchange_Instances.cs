@@ -1073,15 +1073,6 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about <see cref="STSH"/>.
-		/// </summary>
-		public static Exchange STSH { get; } = new()
-		{
-			Name = "STSH",
-			FullNameLoc = LocalizedStrings.StockSharpKey,
-		};
-
-		/// <summary>
 		/// Information about <see cref="STRLG"/>.
 		/// </summary>
 		public static Exchange STRLG { get; } = new()

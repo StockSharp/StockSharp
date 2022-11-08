@@ -1116,11 +1116,6 @@ public static class BoardCodes
 	public const string IBKR = "IBKR";
 
 	/// <summary>
-	/// <see cref="STSH"/>.
-	/// </summary>
-	public const string STSH = "STSH";
-
-	/// <summary>
 	/// <see cref="STRLG"/>.
 	/// </summary>
 	public const string STRLG = "STRLG";
