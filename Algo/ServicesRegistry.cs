@@ -186,8 +186,13 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Excel provider.
 		/// </summary>
-		public static IExcelWorkerProvider ExcelProvider => ConfigManager.TryGetService<IExcelWorkerProvider>();
+		public static IExcelWorkerProvider ExcelProvider => ConfigManager.GetService<IExcelWorkerProvider>();
 
+		/// <summary>
+		/// Excel provider.
+		/// </summary>
+		public static IExcelWorkerProvider TryExcelProvider => ConfigManager.TryGetService<IExcelWorkerProvider>();
+		
 		/// <summary>
 		/// Snapshot storage registry.
 		/// </summary>
