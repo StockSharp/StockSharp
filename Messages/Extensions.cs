@@ -4612,6 +4612,172 @@ namespace StockSharp.Messages
 			else
 				throw new ArgumentOutOfRangeException(nameof(item), status, LocalizedStrings.Str939);
 		}
+
+		private static readonly WorkingTime _time = new() { IsEnabled = true };
+
+		/// <summary>
+		/// To get candle time frames relatively to the exchange working pattern.
+		/// </summary>
+		/// <param name="timeFrame">The time frame for which you need to get time range.</param>
+		/// <param name="currentTime">The current time within the range of time frames.</param>
+		/// <returns>The candle time frames.</returns>
+		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime)
+			=> GetCandleBounds(timeFrame, currentTime, TimeZoneInfo.Utc, _time);
+
+		private static readonly long _weekTf = TimeSpan.FromDays(7).Ticks;
+
+		/// <summary>
+		/// To get candle time frames relatively to the exchange working pattern.
+		/// </summary>
+		/// <param name="timeFrame">The time frame for which you need to get time range.</param>
+		/// <param name="currentTime">The current time within the range of time frames.</param>
+		/// <param name="timeZone">Information about the time zone where the exchange is located.</param>
+		/// <param name="time">The information about the exchange working pattern.</param>
+		/// <returns>The candle time frames.</returns>
+		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, TimeZoneInfo timeZone, WorkingTime time)
+		{
+			if (timeZone == null)
+				throw new ArgumentNullException(nameof(timeZone));
+
+			if (time == null)
+				throw new ArgumentNullException(nameof(time));
+
+			var exchangeTime = currentTime.ToLocalTime(timeZone);
+			Range<DateTime> bounds;
+
+			if (timeFrame.Ticks == _weekTf)
+			{
+				var monday = exchangeTime.StartOfWeek(DayOfWeek.Monday);
+
+				var endDay = exchangeTime.Date;
+
+				while (endDay.DayOfWeek != DayOfWeek.Sunday)
+				{
+					var nextDay = endDay.AddDays(1);
+
+					if (nextDay.Month != endDay.Month)
+						break;
+
+					endDay = nextDay;
+				}
+
+				bounds = new Range<DateTime>(monday, endDay.EndOfDay());
+			}
+			else if (timeFrame.Ticks == TimeHelper.TicksPerMonth)
+			{
+				var month = new DateTime(exchangeTime.Year, exchangeTime.Month, 1);
+				bounds = new Range<DateTime>(month, (month + TimeSpan.FromDays(month.DaysInMonth())).EndOfDay());
+			}
+			else
+			{
+				var period = time.GetPeriod(exchangeTime);
+
+				// http://stocksharp.com/forum/yaf_postsm13887_RealtimeEmulationTrader---niepravil-nyie-sviechi.aspx#post13887
+				// отсчет свечек идет от начала сессии и игнорируются клиринги
+				var startTime = period != null && period.Times.Count > 0 ? period.Times[0].Min : TimeSpan.Zero;
+
+				var length = (exchangeTime.TimeOfDay - startTime).To<long>();
+				var beginTime = exchangeTime.Date + (startTime + length.Floor(timeFrame.Ticks).To<TimeSpan>());
+
+				//последняя свеча должна заканчиваться в конец торговой сессии
+				var tempEndTime = beginTime.TimeOfDay + timeFrame;
+				TimeSpan stopTime;
+
+				if (period != null && period.Times.Count > 0)
+				{
+					var last = period.Times.LastOrDefault(t => tempEndTime > t.Min);
+					stopTime = last == null ? TimeSpan.MaxValue : last.Max;
+				}
+				else
+					stopTime = TimeSpan.MaxValue;
+
+				var endTime = beginTime + timeFrame.Min(stopTime - beginTime.TimeOfDay);
+
+				// если currentTime попало на клиринг
+				if (endTime < beginTime)
+					endTime = beginTime.Date + tempEndTime;
+
+				var days = timeFrame.Days > 1 ? timeFrame.Days - 1 : 0;
+
+				var min = beginTime.Truncate(TimeSpan.TicksPerMillisecond);
+				var max = endTime.Truncate(TimeSpan.TicksPerMillisecond).AddDays(days);
+
+				bounds = new Range<DateTime>(min, max);
+			}
+
+			var offset = currentTime.Offset;
+			var diff = currentTime.DateTime - exchangeTime;
+
+			return new Range<DateTimeOffset>(
+				(bounds.Min + diff).ApplyTimeZone(offset),
+				(bounds.Max + diff).ApplyTimeZone(offset));
+		}
+
+		private static readonly WorkingTime _allRange = new();
+
+		/// <summary>
+		/// To get the number of time frames within the specified time range.
+		/// </summary>
+		/// <param name="range">The specified time range for which you need to get the number of time frames.</param>
+		/// <param name="timeFrame">The time frame size.</param>
+		/// <param name="workingTime"><see cref="WorkingTime"/>.</param>
+		/// <param name="timeZone">Information about the time zone where the exchange is located.</param>
+		/// <returns>The received number of time frames.</returns>
+		public static long GetTimeFrameCount(this Range<DateTimeOffset> range, TimeSpan timeFrame, WorkingTime workingTime = default, TimeZoneInfo timeZone = default)
+		{
+			if (range is null)
+				throw new ArgumentNullException(nameof(range));
+
+			workingTime ??= _allRange;
+			timeZone ??= TimeZoneInfo.Utc;
+
+			var to = range.Max.ToLocalTime(timeZone);
+			var from = range.Min.ToLocalTime(timeZone);
+
+			var days = (int)(to.Date - from.Date).TotalDays;
+
+			var period = workingTime.GetPeriod(from);
+
+			if (period == null || period.Times.IsEmpty())
+			{
+				return (to - from).Ticks / timeFrame.Ticks;
+			}
+
+			if (days == 0)
+			{
+				return workingTime.GetTimeFrameCount(from, new Range<TimeSpan>(from.TimeOfDay, to.TimeOfDay), timeFrame);
+			}
+
+			var totalCount = workingTime.GetTimeFrameCount(from, new Range<TimeSpan>(from.TimeOfDay, TimeHelper.LessOneDay), timeFrame);
+			totalCount += workingTime.GetTimeFrameCount(to, new Range<TimeSpan>(TimeSpan.Zero, to.TimeOfDay), timeFrame);
+
+			if (days <= 1)
+				return totalCount;
+
+			var fullDayLength = period.Times.Sum(r => r.Length.Ticks);
+			totalCount += TimeSpan.FromTicks((days - 1) * fullDayLength).Ticks / timeFrame.Ticks;
+
+			return totalCount;
+		}
+
+		private static long GetTimeFrameCount(this WorkingTime workingTime, DateTime date, Range<TimeSpan> fromToRange, TimeSpan timeFrame)
+		{
+			if (workingTime is null)
+				throw new ArgumentNullException(nameof(workingTime));
+
+			if (fromToRange is null)
+				throw new ArgumentNullException(nameof(fromToRange));
+
+			var period = workingTime.GetPeriod(date);
+
+			if (period == null)
+				return 0;
+
+			return period.Times
+						.Select(fromToRange.Intersect)
+						.Where(intersection => intersection != null)
+						.Sum(intersection => intersection.Length.Ticks / timeFrame.Ticks);
+		}
 	}
 
 	/// <summary>

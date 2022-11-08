@@ -523,7 +523,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var timeFrame = subscription.Message.GetTimeFrame();
 
 			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
-			var bounds = timeFrame.GetCandleBounds(transform.Time, board, board.WorkingTime);
+			var bounds = timeFrame.GetCandleBounds(transform.Time, board);
 
 			if (transform.Time < bounds.Min)
 				return null;
@@ -1044,7 +1044,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var timeFrame = subscription.Message.GetTimeFrame();
 
 			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
-			var bounds = timeFrame.GetCandleBounds(transform.Time, board, board.WorkingTime);
+			var bounds = timeFrame.GetCandleBounds(transform.Time, board);
 
 			if (transform.Time < bounds.Min)
 				return null;
