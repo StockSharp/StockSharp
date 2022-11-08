@@ -118,8 +118,8 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public InMemoryExchangeInfoProvider()
 		{
-			ExchangeBoard.EnumerateExchanges().ForEach(b => _exchanges[b.Name] = b);
-			ExchangeBoard.EnumerateExchangeBoards().ForEach(b => _boards[b.Code] = b);
+			EntitiesExtensions.EnumerateExchanges().ForEach(b => _exchanges[b.Name] = b);
+			EntitiesExtensions.EnumerateExchangeBoards().ForEach(b => _boards[b.Code] = b);
 		}
 
 		/// <inheritdoc />

@@ -16,14 +16,18 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
 
 	using Ecng.Common;
+	using Ecng.Reflection;
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Extension class for <see cref="Unit"/>.
+	/// Extension class for <see cref="BusinessEntities"/>.
 	/// </summary>
 	public static class EntitiesExtensions
 	{
@@ -302,5 +306,25 @@ namespace StockSharp.BusinessEntities
 		{
 			return provider.LookupById(id.ToSecurityId());
 		}
+
+		private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
+
+		/// <summary>
+		/// To get a list of exchanges.
+		/// </summary>
+		/// <returns>Exchanges.</returns>
+		public static IEnumerable<Exchange> EnumerateExchanges()
+			=> typeof(Exchange)
+				.GetMembers<PropertyInfo>(_publicStatic, typeof(Exchange))
+				.Select(prop => (Exchange)prop.GetValue(null, null));
+
+		/// <summary>
+		/// To get a list of boards.
+		/// </summary>
+		/// <returns>Boards.</returns>
+		public static IEnumerable<ExchangeBoard> EnumerateExchangeBoards()
+			=> typeof(ExchangeBoard)
+				.GetMembers<PropertyInfo>(_publicStatic, typeof(ExchangeBoard))
+				.Select(prop => (ExchangeBoard)prop.GetValue(null, null));
 	}
 }

@@ -18,8 +18,6 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Linq;
-	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Xml;
 	using System.Xml.Serialization;
@@ -27,7 +25,6 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Reflection;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -39,28 +36,6 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	public partial class ExchangeBoard : Equatable<ExchangeBoard>, IExtendableEntity, IPersistable, INotifyPropertyChanged
 	{
-		private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
-
-		/// <summary>
-		/// To get a list of exchanges.
-		/// </summary>
-		/// <returns>Exchanges.</returns>
-		public static IEnumerable<Exchange> EnumerateExchanges()
-		{
-			return typeof(Exchange).GetMembers<PropertyInfo>(_publicStatic, typeof(Exchange))
-				.Select(prop => (Exchange)prop.GetValue(null, null));
-		}
-
-		/// <summary>
-		/// To get a list of boards.
-		/// </summary>
-		/// <returns>Boards.</returns>
-		public static IEnumerable<ExchangeBoard> EnumerateExchangeBoards()
-		{
-			return typeof(ExchangeBoard).GetMembers<PropertyInfo>(_publicStatic, typeof(ExchangeBoard))
-				.Select(prop => (ExchangeBoard)prop.GetValue(null, null));
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExchangeBoard"/>.
 		/// </summary>
