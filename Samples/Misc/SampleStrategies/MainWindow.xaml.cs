@@ -73,6 +73,7 @@ namespace SampleStrategies
 
 			var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
 			ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
+			ConfigManager.RegisterService<IBoardMessageProvider>(exchangeInfoProvider);
 
 			var storageRegistry = new StorageRegistry(exchangeInfoProvider)
 			{

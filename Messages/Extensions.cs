@@ -4778,31 +4778,22 @@ namespace StockSharp.Messages
 						.Where(intersection => intersection != null)
 						.Sum(intersection => intersection.Length.Ticks / timeFrame.Ticks);
 		}
-	}
-
-	/// <summary>
-	/// Reasons for orders cancelling in the orders log.
-	/// </summary>
-	public enum OrderLogCancelReasons
-	{
-		/// <summary>
-		/// The order re-registration.
-		/// </summary>
-		ReRegistered,
 
 		/// <summary>
-		/// Cancel order.
+		/// To get the instrument by the instrument code.
 		/// </summary>
-		Canceled,
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="code">Security code.</param>
+		/// <param name="type">Security type.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+		public static IEnumerable<SecurityMessage> LookupByCode(this ISecurityMessageProvider provider, string code, SecurityTypes? type = null)
+		{
+			if (provider is null)
+				throw new ArgumentNullException(nameof(provider));
 
-		/// <summary>
-		/// Group canceling of orders.
-		/// </summary>
-		GroupCanceled,
-
-		/// <summary>
-		/// The sign of deletion of order residual due to cross-trade.
-		/// </summary>
-		CrossTrade,
+			return code.IsEmpty() && type == null
+				? provider.LookupMessages(LookupAllCriteriaMessage)
+				: provider.LookupMessages(new() { SecurityId = new() { SecurityCode = code }, SecurityType = type });
+		}
 	}
 }

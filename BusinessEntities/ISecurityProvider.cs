@@ -23,7 +23,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The interface for access to provider of information about instruments.
 	/// </summary>
-	public interface ISecurityProvider
+	public interface ISecurityProvider : ISecurityMessageProvider
 	{
 		/// <summary>
 		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.

@@ -2914,6 +2914,12 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => SecurityProvider.Lookup(criteria);
 
+		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
+			=> SecurityProvider.LookupMessageById(id);
+
+		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
+			=> SecurityProvider.LookupMessages(criteria);
+
 		/// <summary>
 		/// New <see cref="StrategyStateMessage"/> occurred event.
 		/// </summary>

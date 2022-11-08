@@ -217,6 +217,12 @@ namespace StockSharp.Algo.Storages.Csv
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 
+			SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
+				=> GetById(id)?.ToMessage();
+
+			IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
+				=> ((ISecurityProvider)this).Lookup(criteria).Select(s => s.ToMessage());
+
 			void ISecurityStorage.Delete(Security security)
 			{
 				Remove(security);

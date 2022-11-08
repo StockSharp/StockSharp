@@ -2,6 +2,7 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
 
@@ -61,6 +62,12 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria) => _inner.SyncGet(d => d.Values.Filter(criteria));
+
+		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
+			=> LookupById(id)?.ToMessage();
+
+		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
+			=> Lookup(criteria).Select(s => s.ToMessage());
 
 		/// <summary>
 		/// Add security.

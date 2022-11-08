@@ -275,6 +275,12 @@ namespace StockSharp.Algo
 
 		IEnumerable<Security> ISecurityProvider.Lookup(SecurityLookupMessage criteria) => SecurityStorage.Lookup(criteria);
 
+		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
+			=> SecurityStorage.LookupMessageById(id);
+
+		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
+			=> SecurityStorage.LookupMessages(criteria);
+
 		/// <inheritdoc />
 		public SessionStates? GetSessionState(ExchangeBoard board) => _entityCache.GetSessionState(board);
 

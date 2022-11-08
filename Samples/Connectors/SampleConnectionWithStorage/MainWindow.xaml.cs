@@ -6,6 +6,7 @@ namespace SampleConnection
 	using Ecng.Common;
 	using Ecng.Configuration;
 
+	using StockSharp.Messages;
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Storages.Csv;
@@ -28,6 +29,7 @@ namespace SampleConnection
 
 			var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry, false);
 			ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
+			ConfigManager.RegisterService<IBoardMessageProvider>(exchangeInfoProvider);
 
 			var storageRegistry = new StorageRegistry(exchangeInfoProvider)
 			{

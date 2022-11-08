@@ -159,15 +159,17 @@ namespace StockSharp.Algo.Storages
 
 		/// <inheritdoc />
 		public IEnumerable<Security> Lookup(SecurityLookupMessage criteria)
-		{
-			return _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).Concat(_underlying.Lookup(criteria)).Distinct();
-		}
+			=> _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).Concat(_underlying.Lookup(criteria)).Distinct();
 
 		/// <inheritdoc />
 		public Security LookupById(SecurityId id)
-		{
-			return _inner.TryGetValue(id) ?? _underlying.LookupById(id);
-		}
+			=> _inner.TryGetValue(id) ?? _underlying.LookupById(id);
+
+		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
+			=> LookupById(id)?.ToMessage();
+
+		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
+			=> Lookup(criteria).Select(s => s.ToMessage());
 
 		/// <inheritdoc />
 		public void Save(Security security, bool forced)

@@ -25,11 +25,12 @@ namespace StockSharp.Algo.Storages
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Interface describing exchanges and trading boards provider.
 	/// </summary>
-	public interface IExchangeInfoProvider
+	public interface IExchangeInfoProvider : IBoardMessageProvider
 	{
 		/// <summary>
 		/// All exchanges.
@@ -223,6 +224,9 @@ namespace StockSharp.Algo.Storages
 			_boards.Remove(board.Code);
 			BoardRemoved?.Invoke(board);
 		}
+
+		IEnumerable<BoardMessage> IBoardMessageProvider.Lookup(BoardLookupMessage criteria)
+			=> Boards.Filter(criteria).Select(b => b.ToMessage());
 	}
 
 	/// <summary>

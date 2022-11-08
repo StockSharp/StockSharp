@@ -85,6 +85,12 @@ namespace StockSharp.Algo
 			return securities.Filter(criteria);
 		}
 
+		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)
+			=> LookupById(id)?.ToMessage();
+
+		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
+			=> Lookup(criteria).Select(s => s.ToMessage());
+
 		private void AddSecurities(IEnumerable<Security> securities)
 		{
 			securities.ForEach(_trie.Add);
