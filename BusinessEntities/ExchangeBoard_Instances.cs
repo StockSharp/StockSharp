@@ -16,2242 +16,343 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
 	partial class ExchangeBoard
 	{
-		static ExchangeBoard()
+		private static readonly DateTime[] _russianSpecialWorkingDays = new DateTime[]
 		{
-			// NOTE
+			// http://www.rts.ru/a742
+			new(2001, 3, 11),
+			new(2001, 4, 28),
+			new(2001, 6, 9),
+			new(2001, 12, 29),
 
-			Associated = new ExchangeBoard
+			// http://www.rts.ru/a3414
+			new(2002, 4, 27),
+			new(2002, 5, 18),
+			new(2002, 11, 10),
+
+			// http://www.rts.ru/a5194
+			new(2003, 1, 4),
+			new(2003, 1, 5),
+			new(2003, 6, 21),
+
+			// http://www.rts.ru/a6598
+			// дат нет
+
+			// http://www.rts.ru/a7751
+			new(2005, 3, 5),
+			new(2005, 5, 14),
+
+			// http://www.rts.ru/a743
+			new(2006, 2, 26),
+			new(2006, 5, 6),
+
+			// http://www.rts.ru/a13059
+			new(2007, 4, 28),
+			new(2007, 6, 9),
+
+			// http://www.rts.ru/a15065
+			new(2008, 5, 4),
+			new(2008, 6, 7),
+			new(2008, 11, 1),
+
+			// http://www.rts.ru/a17902
+			new(2009, 1, 11),
+
+			// http://www.rts.ru/a19524
+			new(2010, 2, 27),
+			new(2010, 11, 13),
+
+			// http://www.rts.ru/s355
+			new(2011, 3, 5),
+
+			// http://moex.com/a254
+			new(2012, 3, 11),
+			new(2012, 4, 28),
+			new(2012, 5, 5),
+			new(2012, 5, 12),
+			new(2012, 6, 9),
+			new(2012, 12, 29),
+
+			// http://moex.com/a3367
+			new(2016, 02, 20)
+		};
+		private static readonly DateTime[] _russianSpecialHolidays = new DateTime[]
+		{
+			// http://www.rts.ru/a742
+			new(2001, 1, 1),
+			new(2001, 1, 2),
+			new(2001, 1, 8),
+			new(2001, 3, 8),
+			new(2001, 3, 9),
+			new(2001, 4, 30),
+			new(2001, 5, 1),
+			new(2001, 5, 2),
+			new(2001, 5, 9),
+			new(2001, 6, 11),
+			new(2001, 6, 12),
+			new(2001, 11, 7),
+			new(2001, 12, 12),
+			new(2001, 12, 31),
+
+			// http://www.rts.ru/a3414
+			new(2002, 1, 1),
+			new(2002, 1, 2),
+			new(2002, 1, 7),
+			new(2002, 2, 25),
+			new(2002, 3, 8),
+			new(2002, 3, 9),
+			new(2002, 5, 1),
+			new(2002, 5, 2),
+			new(2002, 5, 3),
+			new(2002, 5, 9),
+			new(2002, 5, 10),
+			new(2002, 6, 12),
+			new(2002, 11, 7),
+			new(2002, 11, 8),
+			new(2002, 12, 12),
+			new(2002, 12, 13),
+
+			// http://www.rts.ru/a5194
+			new(2003, 1, 1),
+			new(2003, 1, 2),
+			new(2003, 1, 3),
+			new(2003, 1, 6),
+			new(2003, 1, 7),
+			new(2003, 2, 24),
+			new(2003, 3, 10),
+			new(2003, 5, 1),
+			new(2003, 5, 2),
+			new(2003, 5, 9),
+			new(2003, 6, 12),
+			new(2003, 6, 13),
+			new(2003, 11, 7),
+			new(2003, 12, 12),
+
+			// http://www.rts.ru/a6598
+			new(2004, 1, 1),
+			new(2004, 1, 2),
+			new(2004, 1, 7),
+			new(2004, 2, 23),
+			new(2004, 3, 8),
+			new(2004, 5, 3),
+			new(2004, 5, 4),
+			new(2004, 5, 10),
+			new(2004, 6, 14),
+			new(2004, 11, 8),
+			new(2004, 12, 13),
+
+			// http://www.rts.ru/a7751
+			new(2005, 1, 3),
+			new(2005, 1, 4),
+			new(2005, 1, 5),
+			new(2005, 1, 6),
+			new(2005, 1, 7),
+			new(2005, 1, 10),
+			new(2005, 2, 23),
+			new(2005, 3, 7),
+			new(2005, 3, 8),
+			new(2005, 5, 2),
+			new(2005, 5, 9),
+			new(2005, 5, 10),
+			new(2005, 6, 13),
+			new(2005, 11, 4),
+
+			// http://www.rts.ru/a743
+			new(2006, 1, 2),
+			new(2006, 1, 3),
+			new(2006, 1, 4),
+			new(2006, 1, 5),
+			new(2006, 1, 6),
+			new(2006, 1, 9),
+			new(2006, 2, 23),
+			new(2006, 2, 24),
+			new(2006, 3, 8),
+			new(2006, 5, 1),
+			new(2006, 5, 8),
+			new(2006, 5, 9),
+			new(2006, 6, 12),
+			new(2006, 11, 6),
+
+			// http://www.rts.ru/a13059
+			new(2007, 1, 1),
+			new(2007, 1, 2),
+			new(2007, 1, 3),
+			new(2007, 1, 4),
+			new(2007, 1, 5),
+			new(2007, 1, 8),
+			new(2007, 2, 23),
+			new(2007, 3, 8),
+			new(2007, 4, 30),
+			new(2007, 5, 1),
+			new(2007, 5, 9),
+			new(2007, 6, 11),
+			new(2007, 6, 12),
+			new(2007, 11, 5),
+			new(2007, 12, 31),
+
+			// http://www.rts.ru/a15065
+			new(2008, 1, 1),
+			new(2008, 1, 2),
+			new(2008, 1, 3),
+			new(2008, 1, 4),
+			new(2008, 1, 7),
+			new(2008, 1, 8),
+			new(2008, 2, 25),
+			new(2008, 3, 10),
+			new(2008, 5, 1),
+			new(2008, 5, 2),
+			new(2008, 6, 12),
+			new(2008, 6, 13),
+			new(2008, 11, 3),
+			new(2008, 11, 4),
+
+			// http://www.rts.ru/a17902
+			new(2009, 1, 1),
+			new(2009, 1, 2),
+			new(2009, 1, 5),
+			new(2009, 1, 6),
+			new(2009, 1, 7),
+			new(2009, 1, 8),
+			new(2009, 1, 9),
+			new(2009, 2, 23),
+			new(2009, 3, 9),
+			new(2009, 5, 1),
+			new(2009, 5, 11),
+			new(2009, 6, 12),
+			new(2009, 11, 4),
+
+			// http://www.rts.ru/a19524
+			new(2010, 1, 1),
+			new(2010, 1, 4),
+			new(2010, 1, 5),
+			new(2010, 1, 6),
+			new(2010, 1, 7),
+			new(2010, 1, 8),
+			new(2010, 2, 22),
+			new(2010, 2, 23),
+			new(2010, 3, 8),
+			new(2010, 5, 3),
+			new(2010, 5, 10),
+			new(2010, 6, 14),
+			new(2010, 11, 4),
+			new(2010, 11, 5),
+
+			// http://www.rts.ru/s355
+			new(2011, 1, 3),
+			new(2011, 1, 4),
+			new(2011, 1, 5),
+			new(2011, 1, 6),
+			new(2011, 1, 7),
+			new(2011, 1, 10),
+			new(2011, 2, 23),
+			new(2011, 3, 7),
+			new(2011, 3, 8),
+			new(2011, 5, 2),
+			new(2011, 5, 9),
+			new(2011, 6, 13),
+			new(2011, 11, 4),
+
+			// http://moex.com/a254
+			new(2012, 1, 2),
+			new(2012, 2, 23),
+			new(2012, 3, 8),
+			new(2012, 3, 9),
+			new(2012, 4, 30),
+			new(2012, 5, 1),
+			new(2012, 5, 9),
+			new(2012, 6, 11),
+			new(2012, 6, 12),
+			new(2012, 11, 5),
+			new(2012, 12, 31),
+
+			// http://moex.com/a1343
+			new(2013, 1, 1),
+			new(2013, 1, 2),
+			new(2013, 1, 3),
+			new(2013, 1, 4),
+			new(2013, 1, 7),
+			new(2013, 3, 8),
+			new(2013, 5, 1),
+			new(2013, 5, 9),
+			new(2013, 6, 12),
+			new(2013, 11, 4),
+			new(2013, 12, 31),
+
+			// http://moex.com/a2973
+			new(2014, 1, 1),
+			new(2014, 1, 2),
+			new(2014, 1, 3),
+			new(2014, 1, 7),
+			new(2014, 3, 10),
+			new(2014, 5, 1),
+			new(2014, 5, 9),
+			new(2014, 6, 12),
+			new(2014, 11, 4),
+			new(2014, 12, 31),
+
+			// http://moex.com/a2793
+			new(2015, 1, 1),
+			new(2015, 1, 2),
+			new(2015, 1, 7),
+			new(2015, 2, 23),
+			new(2015, 3, 9),
+			new(2015, 5, 1),
+			new(2015, 5, 4),
+			new(2015, 5, 11),
+			new(2015, 6, 12),
+			new(2015, 11, 4),
+			new(2015, 12, 31),
+
+			// http://moex.com/a3367
+			new(2016, 1, 1),
+			new(2016, 1, 7),
+			new(2016, 1, 8),
+			new(2016, 2, 23),
+			new(2016, 3, 8),
+			new(2016, 5, 2),
+			new(2016, 5, 3),
+			new(2016, 5, 9),
+			new(2016, 6, 13),
+			new(2016, 11, 4),
+		};
+
+		private static readonly WorkingTime _micexWorkingTime = new()
+		{
+			IsEnabled = true,
+			Periods = new()
 			{
-				Code = SecurityId.AssociatedBoardCode,
-				Exchange = Exchange.Test,
-			};
-
-			Test = new ExchangeBoard
-			{
-				Code = "TEST",
-				Exchange = Exchange.Test,
-			};
-
-			Finam = new ExchangeBoard
-			{
-				Code = "FINAM",
-				Exchange = Exchange.Test,
-			};
-
-			Mfd = new ExchangeBoard
-			{
-				Code = "MFD",
-				Exchange = Exchange.Test,
-			};
-
-			// http://stocksharp.com/forum/yaf_postst667_Rabochiie-dni-dlia-birzh--2011-ghod.aspx
-			// http://stocksharp.com/forum/yaf_postst1689_Exchange-WorkingTime-2012.aspx
-			var russianSpecialWorkingDays = new[]
-			{
-				// http://www.rts.ru/a742
-				new DateTime(2001, 3, 11),
-				new DateTime(2001, 4, 28),
-				new DateTime(2001, 6, 9),
-				new DateTime(2001, 12, 29),
-
-				// http://www.rts.ru/a3414
-				new DateTime(2002, 4, 27),
-				new DateTime(2002, 5, 18),
-				new DateTime(2002, 11, 10),
-
-				// http://www.rts.ru/a5194
-				new DateTime(2003, 1, 4),
-				new DateTime(2003, 1, 5),
-				new DateTime(2003, 6, 21),
-
-				// http://www.rts.ru/a6598
-				// дат нет
-
-				// http://www.rts.ru/a7751
-				new DateTime(2005, 3, 5),
-				new DateTime(2005, 5, 14),
-
-				// http://www.rts.ru/a743
-				new DateTime(2006, 2, 26),
-				new DateTime(2006, 5, 6),
-
-				// http://www.rts.ru/a13059
-				new DateTime(2007, 4, 28),
-				new DateTime(2007, 6, 9),
-
-				// http://www.rts.ru/a15065
-				new DateTime(2008, 5, 4),
-				new DateTime(2008, 6, 7),
-				new DateTime(2008, 11, 1),
-
-				// http://www.rts.ru/a17902
-				new DateTime(2009, 1, 11),
-
-				// http://www.rts.ru/a19524
-				new DateTime(2010, 2, 27),
-				new DateTime(2010, 11, 13),
-
-				// http://www.rts.ru/s355
-				new DateTime(2011, 3, 5),
-
-				// http://moex.com/a254
-				new DateTime(2012, 3, 11),
-				new DateTime(2012, 4, 28),
-				new DateTime(2012, 5, 5),
-				new DateTime(2012, 5, 12),
-				new DateTime(2012, 6, 9),
-				new DateTime(2012, 12, 29),
-
-				// http://moex.com/a3367
-				new DateTime(2016, 02, 20)
-			};
-
-			var russianSpecialHolidays = new[]
-			{
-				// http://www.rts.ru/a742
-				new DateTime(2001, 1, 1),
-				new DateTime(2001, 1, 2),
-				new DateTime(2001, 1, 8),
-				new DateTime(2001, 3, 8),
-				new DateTime(2001, 3, 9),
-				new DateTime(2001, 4, 30),
-				new DateTime(2001, 5, 1),
-				new DateTime(2001, 5, 2),
-				new DateTime(2001, 5, 9),
-				new DateTime(2001, 6, 11),
-				new DateTime(2001, 6, 12),
-				new DateTime(2001, 11, 7),
-				new DateTime(2001, 12, 12),
-				new DateTime(2001, 12, 31),
-
-				// http://www.rts.ru/a3414
-				new DateTime(2002, 1, 1),
-				new DateTime(2002, 1, 2),
-				new DateTime(2002, 1, 7),
-				new DateTime(2002, 2, 25),
-				new DateTime(2002, 3, 8),
-				new DateTime(2002, 3, 9),
-				new DateTime(2002, 5, 1),
-				new DateTime(2002, 5, 2),
-				new DateTime(2002, 5, 3),
-				new DateTime(2002, 5, 9),
-				new DateTime(2002, 5, 10),
-				new DateTime(2002, 6, 12),
-				new DateTime(2002, 11, 7),
-				new DateTime(2002, 11, 8),
-				new DateTime(2002, 12, 12),
-				new DateTime(2002, 12, 13),
-
-				// http://www.rts.ru/a5194
-				new DateTime(2003, 1, 1),
-				new DateTime(2003, 1, 2),
-				new DateTime(2003, 1, 3),
-				new DateTime(2003, 1, 6),
-				new DateTime(2003, 1, 7),
-				new DateTime(2003, 2, 24),
-				new DateTime(2003, 3, 10),
-				new DateTime(2003, 5, 1),
-				new DateTime(2003, 5, 2),
-				new DateTime(2003, 5, 9),
-				new DateTime(2003, 6, 12),
-				new DateTime(2003, 6, 13),
-				new DateTime(2003, 11, 7),
-				new DateTime(2003, 12, 12),
-
-				// http://www.rts.ru/a6598
-				new DateTime(2004, 1, 1),
-				new DateTime(2004, 1, 2),
-				new DateTime(2004, 1, 7),
-				new DateTime(2004, 2, 23),
-				new DateTime(2004, 3, 8),
-				new DateTime(2004, 5, 3),
-				new DateTime(2004, 5, 4),
-				new DateTime(2004, 5, 10),
-				new DateTime(2004, 6, 14),
-				new DateTime(2004, 11, 8),
-				new DateTime(2004, 12, 13),
-
-				// http://www.rts.ru/a7751
-				new DateTime(2005, 1, 3),
-				new DateTime(2005, 1, 4),
-				new DateTime(2005, 1, 5),
-				new DateTime(2005, 1, 6),
-				new DateTime(2005, 1, 7),
-				new DateTime(2005, 1, 10),
-				new DateTime(2005, 2, 23),
-				new DateTime(2005, 3, 7),
-				new DateTime(2005, 3, 8),
-				new DateTime(2005, 5, 2),
-				new DateTime(2005, 5, 9),
-				new DateTime(2005, 5, 10),
-				new DateTime(2005, 6, 13),
-				new DateTime(2005, 11, 4),
-
-				// http://www.rts.ru/a743
-				new DateTime(2006, 1, 2),
-				new DateTime(2006, 1, 3),
-				new DateTime(2006, 1, 4),
-				new DateTime(2006, 1, 5),
-				new DateTime(2006, 1, 6),
-				new DateTime(2006, 1, 9),
-				new DateTime(2006, 2, 23),
-				new DateTime(2006, 2, 24),
-				new DateTime(2006, 3, 8),
-				new DateTime(2006, 5, 1),
-				new DateTime(2006, 5, 8),
-				new DateTime(2006, 5, 9),
-				new DateTime(2006, 6, 12),
-				new DateTime(2006, 11, 6),
-
-				// http://www.rts.ru/a13059
-				new DateTime(2007, 1, 1),
-				new DateTime(2007, 1, 2),
-				new DateTime(2007, 1, 3),
-				new DateTime(2007, 1, 4),
-				new DateTime(2007, 1, 5),
-				new DateTime(2007, 1, 8),
-				new DateTime(2007, 2, 23),
-				new DateTime(2007, 3, 8),
-				new DateTime(2007, 4, 30),
-				new DateTime(2007, 5, 1),
-				new DateTime(2007, 5, 9),
-				new DateTime(2007, 6, 11),
-				new DateTime(2007, 6, 12),
-				new DateTime(2007, 11, 5),
-				new DateTime(2007, 12, 31),
-
-				// http://www.rts.ru/a15065
-				new DateTime(2008, 1, 1),
-				new DateTime(2008, 1, 2),
-				new DateTime(2008, 1, 3),
-				new DateTime(2008, 1, 4),
-				new DateTime(2008, 1, 7),
-				new DateTime(2008, 1, 8),
-				new DateTime(2008, 2, 25),
-				new DateTime(2008, 3, 10),
-				new DateTime(2008, 5, 1),
-				new DateTime(2008, 5, 2),
-				new DateTime(2008, 6, 12),
-				new DateTime(2008, 6, 13),
-				new DateTime(2008, 11, 3),
-				new DateTime(2008, 11, 4),
-
-				// http://www.rts.ru/a17902
-				new DateTime(2009, 1, 1),
-				new DateTime(2009, 1, 2),
-				new DateTime(2009, 1, 5),
-				new DateTime(2009, 1, 6),
-				new DateTime(2009, 1, 7),
-				new DateTime(2009, 1, 8),
-				new DateTime(2009, 1, 9),
-				new DateTime(2009, 2, 23),
-				new DateTime(2009, 3, 9),
-				new DateTime(2009, 5, 1),
-				new DateTime(2009, 5, 11),
-				new DateTime(2009, 6, 12),
-				new DateTime(2009, 11, 4),
-
-				// http://www.rts.ru/a19524
-				new DateTime(2010, 1, 1),
-				new DateTime(2010, 1, 4),
-				new DateTime(2010, 1, 5),
-				new DateTime(2010, 1, 6),
-				new DateTime(2010, 1, 7),
-				new DateTime(2010, 1, 8),
-				new DateTime(2010, 2, 22),
-				new DateTime(2010, 2, 23),
-				new DateTime(2010, 3, 8),
-				new DateTime(2010, 5, 3),
-				new DateTime(2010, 5, 10),
-				new DateTime(2010, 6, 14),
-				new DateTime(2010, 11, 4),
-				new DateTime(2010, 11, 5),
-
-				// http://www.rts.ru/s355
-				new DateTime(2011, 1, 3),
-				new DateTime(2011, 1, 4),
-				new DateTime(2011, 1, 5),
-				new DateTime(2011, 1, 6),
-				new DateTime(2011, 1, 7),
-				new DateTime(2011, 1, 10),
-				new DateTime(2011, 2, 23),
-				new DateTime(2011, 3, 7),
-				new DateTime(2011, 3, 8),
-				new DateTime(2011, 5, 2),
-				new DateTime(2011, 5, 9),
-				new DateTime(2011, 6, 13),
-				new DateTime(2011, 11, 4),
-
-				// http://moex.com/a254
-				new DateTime(2012, 1, 2),
-				new DateTime(2012, 2, 23),
-				new DateTime(2012, 3, 8),
-				new DateTime(2012, 3, 9),
-				new DateTime(2012, 4, 30),
-				new DateTime(2012, 5, 1),
-				new DateTime(2012, 5, 9),
-				new DateTime(2012, 6, 11),
-				new DateTime(2012, 6, 12),
-				new DateTime(2012, 11, 5),
-				new DateTime(2012, 12, 31),
-
-				// http://moex.com/a1343
-				new DateTime(2013, 1, 1),
-				new DateTime(2013, 1, 2),
-				new DateTime(2013, 1, 3),
-				new DateTime(2013, 1, 4),
-				new DateTime(2013, 1, 7),
-				new DateTime(2013, 3, 8),
-				new DateTime(2013, 5, 1),
-				new DateTime(2013, 5, 9),
-				new DateTime(2013, 6, 12),
-				new DateTime(2013, 11, 4),
-				new DateTime(2013, 12, 31),
-
-				// http://moex.com/a2973
-				new DateTime(2014, 1, 1),
-				new DateTime(2014, 1, 2),
-				new DateTime(2014, 1, 3),
-				new DateTime(2014, 1, 7),
-				new DateTime(2014, 3, 10),
-				new DateTime(2014, 5, 1),
-				new DateTime(2014, 5, 9),
-				new DateTime(2014, 6, 12),
-				new DateTime(2014, 11, 4),
-				new DateTime(2014, 12, 31),
-
-				// http://moex.com/a2793
-				new DateTime(2015, 1, 1),
-				new DateTime(2015, 1, 2),
-				new DateTime(2015, 1, 7),
-				new DateTime(2015, 2, 23),
-				new DateTime(2015, 3, 9),
-				new DateTime(2015, 5, 1),
-				new DateTime(2015, 5, 4),
-				new DateTime(2015, 5, 11),
-				new DateTime(2015, 6, 12),
-				new DateTime(2015, 11, 4),
-				new DateTime(2015, 12, 31),
-
-				// http://moex.com/a3367
-				new DateTime(2016, 1, 1),
-				new DateTime(2016, 1, 7),
-				new DateTime(2016, 1, 8),
-				new DateTime(2016, 2, 23),
-				new DateTime(2016, 3, 8),
-				new DateTime(2016, 5, 2),
-				new DateTime(2016, 5, 3),
-				new DateTime(2016, 5, 9),
-				new DateTime(2016, 6, 13),
-				new DateTime(2016, 11, 4),
-			};
-
-			//var moscowTime = TimeZoneInfo.FromSerializedString("Russian Standard Time;180;(UTC+03:00) Moscow, St. Petersburg, Volgograd (RTZ 2);Russia TZ 2 Standard Time;Russia TZ 2 Daylight Time;[01:01:0001;12:31:2010;60;[0;02:00:00;3;5;0;];[0;03:00:00;10;5;0;];][01:01:2011;12:31:2011;60;[0;02:00:00;3;5;0;];[0;00:00:00;1;1;6;];][01:01:2014;12:31:2014;60;[0;00:00:00;1;1;3;];[0;02:00:00;10;5;0;];];");
-			var moscowTime = TimeHelper.Moscow;
-
-			//russianSpecialHolidays =
-			//	russianSpecialHolidays
-			//		.Concat(GetDefaultRussianHolidays(new DateTime(2001, 01, 01), new DateTime(2010, 01, 01)))
-			//		.ToArray();
-
-			Forts = new ExchangeBoard
-			{
-				Code = "FORTS",
-				WorkingTime = new WorkingTime
+				new()
 				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
+					Till = DateTime.MaxValue,
+					Times = new()
 					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "14:00:00".To<TimeSpan>()),
-								new Range<TimeSpan>("14:03:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>()),
-								new Range<TimeSpan>("19:00:00".To<TimeSpan>(), "23:50:00".To<TimeSpan>())
-							},
-						}
+						new("10:00:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>())
 					},
-					SpecialWorkingDays = russianSpecialWorkingDays,
-					SpecialHolidays = russianSpecialHolidays,
-				},
-				ExpiryTime = new TimeSpan(18, 45, 00),
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			var micexWorkingTime = new WorkingTime
-			{
-				IsEnabled = true,
-				Periods = new List<WorkingTimePeriod>
-				{
-					new WorkingTimePeriod
-					{
-						Till = DateTime.MaxValue,
-						Times = new List<Range<TimeSpan>>
-						{
-							new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>())
-						},
-					}
-				},
-				SpecialWorkingDays = russianSpecialWorkingDays,
-				SpecialHolidays = russianSpecialHolidays,
-			};
-
-			Micex = new ExchangeBoard
-			{
-				Code = "MICEX",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexAuct = new ExchangeBoard
-			{
-				Code = "AUCT",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexAubb = new ExchangeBoard
-			{
-				Code = "AUBB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexCasf = new ExchangeBoard
-			{
-				Code = "CASF",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqbr = new ExchangeBoard
-			{
-				Code = "EQBR",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqbs = new ExchangeBoard
-			{
-				Code = "EQBS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqdp = new ExchangeBoard
-			{
-				Code = "EQDP",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqeu = new ExchangeBoard
-			{
-				Code = "EQEU",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqus = new ExchangeBoard
-			{
-				Code = "EQUS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqnb = new ExchangeBoard
-			{
-				Code = "EQNB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqne = new ExchangeBoard
-			{
-				Code = "EQNE",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqnl = new ExchangeBoard
-			{
-				Code = "EQNL",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqno = new ExchangeBoard
-			{
-				Code = "EQNO",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqob = new ExchangeBoard
-			{
-				Code = "EQOB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqos = new ExchangeBoard
-			{
-				Code = "EQOS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqov = new ExchangeBoard
-			{
-				Code = "EQOV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqlv = new ExchangeBoard
-			{
-				Code = "EQLV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqdb = new ExchangeBoard
-			{
-				Code = "EQDB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqde = new ExchangeBoard
-			{
-				Code = "EQDE",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqli = new ExchangeBoard
-			{
-				Code = "EQLI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqqi = new ExchangeBoard
-			{
-				Code = "EQQI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexSmal = new ExchangeBoard
-			{
-				Code = "SMAL",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexSpob = new ExchangeBoard
-			{
-				Code = "SPOB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqbr = new ExchangeBoard
-			{
-				Code = "TQBR",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqde = new ExchangeBoard
-			{
-				Code = "TQDE",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqbs = new ExchangeBoard
-			{
-				Code = "TQBS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqeu = new ExchangeBoard
-			{
-				Code = "TQEU",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqus = new ExchangeBoard
-			{
-				Code = "TQUS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqnb = new ExchangeBoard
-			{
-				Code = "TQNB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqne = new ExchangeBoard
-			{
-				Code = "TQNE",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqnl = new ExchangeBoard
-			{
-				Code = "TQNL",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqno = new ExchangeBoard
-			{
-				Code = "TQNO",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqob = new ExchangeBoard
-			{
-				Code = "TQOB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqos = new ExchangeBoard
-			{
-				Code = "TQOS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqov = new ExchangeBoard
-			{
-				Code = "TQOV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqlv = new ExchangeBoard
-			{
-				Code = "TQLV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqli = new ExchangeBoard
-			{
-				Code = "TQLI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTqqi = new ExchangeBoard
-			{
-				Code = "TQQI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexEqrp = new ExchangeBoard
-			{
-				Code = "EQRP",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsrp = new ExchangeBoard
-			{
-				Code = "PSRP",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRfnd = new ExchangeBoard
-			{
-				Code = "RFND",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTadm = new ExchangeBoard
-			{
-				Code = "TADM",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexNadm = new ExchangeBoard
-			{
-				Code = "NADM",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			//MicexTran = new ExchangeBoard
-			//{
-			//	Code = "TRAN",
-			//	WorkingTime = micexWorkingTime.Clone(),
-			//	//IsSupportMarketOrders = true,
-			//	Exchange = Exchange.Moex,
-			//	TimeZone = moscowTime,
-			//};
-
-			MicexPsau = new ExchangeBoard
-			{
-				Code = "PSAU",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPaus = new ExchangeBoard
-			{
-				Code = "PAUS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsbb = new ExchangeBoard
-			{
-				Code = "PSBB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPseq = new ExchangeBoard
-			{
-				Code = "PSEQ",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPses = new ExchangeBoard
-			{
-				Code = "PSES",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPseu = new ExchangeBoard
-			{
-				Code = "PSEU",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsdb = new ExchangeBoard
-			{
-				Code = "PSDB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsde = new ExchangeBoard
-			{
-				Code = "PSDE",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsus = new ExchangeBoard
-			{
-				Code = "PSUS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsnb = new ExchangeBoard
-			{
-				Code = "PSNB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsne = new ExchangeBoard
-			{
-				Code = "PSNE",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsnl = new ExchangeBoard
-			{
-				Code = "PSNL",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsno = new ExchangeBoard
-			{
-				Code = "PSNO",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsob = new ExchangeBoard
-			{
-				Code = "PSOB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsos = new ExchangeBoard
-			{
-				Code = "PSOS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsov = new ExchangeBoard
-			{
-				Code = "PSOV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPslv = new ExchangeBoard
-			{
-				Code = "PSLV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsli = new ExchangeBoard
-			{
-				Code = "PSLI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPsqi = new ExchangeBoard
-			{
-				Code = "PSQI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpeu = new ExchangeBoard
-			{
-				Code = "RPEU",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpma = new ExchangeBoard
-			{
-				Code = "RPMA",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpmo = new ExchangeBoard
-			{
-				Code = "RPMO",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpua = new ExchangeBoard
-			{
-				Code = "RPUA",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpuo = new ExchangeBoard
-			{
-				Code = "RPUO",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpuq = new ExchangeBoard
-			{
-				Code = "RPUQ",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexFbcb = new ExchangeBoard
-			{
-				Code = "FBCB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexFbfx = new ExchangeBoard
-			{
-				Code = "FBFX",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexIrk2 = new ExchangeBoard
-			{
-				Code = "IRK2",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpqi = new ExchangeBoard
-			{
-				Code = "RPQI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPteq = new ExchangeBoard
-			{
-				Code = "PTEQ",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtes = new ExchangeBoard
-			{
-				Code = "PTES",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPteu = new ExchangeBoard
-			{
-				Code = "PTEU",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtus = new ExchangeBoard
-			{
-				Code = "PTUS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtnb = new ExchangeBoard
-			{
-				Code = "PTNB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtne = new ExchangeBoard
-			{
-				Code = "PTNE",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtnl = new ExchangeBoard
-			{
-				Code = "PTNL",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtno = new ExchangeBoard
-			{
-				Code = "PTNO",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtob = new ExchangeBoard
-			{
-				Code = "PTOB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtos = new ExchangeBoard
-			{
-				Code = "PTOS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtov = new ExchangeBoard
-			{
-				Code = "PTOV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtlv = new ExchangeBoard
-			{
-				Code = "PTLV",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtli = new ExchangeBoard
-			{
-				Code = "PTLI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexPtqi = new ExchangeBoard
-			{
-				Code = "PTQI",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexScvc = new ExchangeBoard
-			{
-				Code = "SCVC",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpng = new ExchangeBoard
-			{
-				Code = "RPNG",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexRpfg = new ExchangeBoard
-			{
-				Code = "RPFG",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexCbcr = new ExchangeBoard
-			{
-				Code = "CBCR",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexCred = new ExchangeBoard
-			{
-				Code = "CRED",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexDepz = new ExchangeBoard
-			{
-				Code = "DEPZ",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-			};
-
-			MicexDpvb = new ExchangeBoard
-			{
-				Code = "DPVB",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexDpfk = new ExchangeBoard
-			{
-				Code = "DPFK",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexDpfo = new ExchangeBoard
-			{
-				Code = "DPFO",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexDppf = new ExchangeBoard
-			{
-				Code = "DPPF",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexCets = new ExchangeBoard
-			{
-				Code = "CETS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexAets = new ExchangeBoard
-			{
-				Code = "AETS",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexCngd = new ExchangeBoard
-			{
-				Code = "CNGD",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexTran = new ExchangeBoard
-			{
-				Code = "TRAN",
-				WorkingTime = micexWorkingTime.Clone(),
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			MicexJunior = new ExchangeBoard
-			{
-				Code = "QJSIM",
-				//IsSupportMarketOrders = true,
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Moex,
-				TimeZone = moscowTime,
-			};
-
-			Spb = new ExchangeBoard
-			{
-				Code = "SPB",
-				//IsSupportMarketOrders = false,
-				//IsSupportAtomicReRegister = false,
-				Exchange = Exchange.Spb,
-				TimeZone = moscowTime,
-			};
-
-			Ux = new ExchangeBoard
-			{
-				Code = "UX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("10:30:00".To<TimeSpan>(), "13:00:00".To<TimeSpan>()),
-								new Range<TimeSpan>("13:03:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				ExpiryTime = new TimeSpan(18, 45, 00),
-				//IsSupportAtomicReRegister = true,
-				Exchange = Exchange.Ux,
-				TimeZone = TimeHelper.Fle,
-			};
-
-			UxStock = new ExchangeBoard
-			{
-				Code = "GTS",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("10:30:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Ux,
-				TimeZone = TimeHelper.Fle,
-			};
-
-			Amex = new ExchangeBoard
-			{
-				Code = "AMEX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				//IsSupportMarketOrders = true,
-				TimeZone = TimeHelper.Est,
-				Exchange = Exchange.Amex
-			};
-
-			Cme = new ExchangeBoard
-			{
-				Code = "CME",
-				TimeZone = TimeHelper.Cst,
-				Exchange = Exchange.Cme,
-			};
-
-			CmeMini = new ExchangeBoard
-			{
-				Code = "CMEMINI",
-				TimeZone = TimeHelper.Cst,
-				Exchange = Exchange.Cme,
-			};
-
-			Cbot = new ExchangeBoard
-			{
-				Code = "CBOT",
-				TimeZone = TimeHelper.Cst,
-				Exchange = Exchange.Cbot,
-			};
-
-			Cce = new ExchangeBoard
-			{
-				Code = "CCE",
-				TimeZone = TimeHelper.Cst,
-				Exchange = Exchange.Cce,
-			};
-
-			Nyse = new ExchangeBoard
-			{
-				Code = "NYSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				//IsSupportMarketOrders = true,
-				TimeZone = TimeHelper.Est,
-				Exchange = Exchange.Nyse
-			};
-
-			Nymex = new ExchangeBoard
-			{
-				Code = "NYMEX",
-				TimeZone = TimeHelper.Est,
-				Exchange = Exchange.Nymex,
-			};
-
-			Nasdaq = new ExchangeBoard
-			{
-				Code = "NASDAQ",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				//IsSupportMarketOrders = true,
-				Exchange = Exchange.Nasdaq,
-				TimeZone = TimeHelper.Est,
-			};
-
-			Nqlx = new ExchangeBoard
-			{
-				Code = "NQLX",
-				Exchange = Exchange.Nqlx,
-				TimeZone = TimeHelper.Est,
-			};
-
-			Tsx = new ExchangeBoard
-			{
-				Code = "TSX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Tsx,
-				TimeZone = TimeHelper.Est,
-			};
-
-			Lse = new ExchangeBoard
-			{
-				Code = "LSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("08:00:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Lse,
-				TimeZone = TimeHelper.Gmt,
-			};
-
-			Lme = new ExchangeBoard
-			{
-				Code = "LME",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "18:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Lme,
-				TimeZone = TimeHelper.Gmt,
-			};
-
-			Tse = new ExchangeBoard
-			{
-				Code = "TSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
-								new Range<TimeSpan>("12:30:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Tse,
-				TimeZone = TimeHelper.Tokyo,
-			};
-
-			Hkex = new ExchangeBoard
-			{
-				Code = "HKEX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:20:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
-								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Hkex,
-				TimeZone = TimeHelper.China,
-			};
-
-			Hkfe = new ExchangeBoard
-			{
-				Code = "HKFE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:15:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
-								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Hkfe,
-				TimeZone = TimeHelper.China,
-			};
-
-			Sse = new ExchangeBoard
-			{
-				Code = "SSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
-								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Sse,
-				TimeZone = TimeHelper.China,
-			};
-
-			Szse = new ExchangeBoard
-			{
-				Code = "SZSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
-								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Szse,
-				TimeZone = TimeHelper.China,
-			};
-
-			Tsec = new ExchangeBoard
-			{
-				Code = "TSEC",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "13:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Tsec,
-				TimeZone = TimeHelper.China,
-			};
-
-			var singaporeTime = "Singapore Standard Time".To<TimeZoneInfo>();
-
-			Sgx = new ExchangeBoard
-			{
-				Code = "SGX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Sgx,
-				TimeZone = singaporeTime,
-			};
-
-			Pse = new ExchangeBoard
-			{
-				Code = "PSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
-								new Range<TimeSpan>("13:30:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Pse,
-				TimeZone = singaporeTime,
-			};
-
-			Klse = new ExchangeBoard
-			{
-				Code = "KLSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
-								new Range<TimeSpan>("14:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Klse,
-				TimeZone = singaporeTime,
-			};
-
-			var bangkokTime = "SE Asia Standard Time".To<TimeZoneInfo>();
-
-			Idx = new ExchangeBoard
-			{
-				Code = "IDX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Idx,
-				TimeZone = bangkokTime,
-			};
-
-			Set = new ExchangeBoard
-			{
-				Code = "SET",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
-								new Range<TimeSpan>("14:30:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Set,
-				TimeZone = bangkokTime,
-			};
-
-			var indiaTime = "India Standard Time".To<TimeZoneInfo>();
-
-			Bse = new ExchangeBoard
-			{
-				Code = "BSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Bse,
-				TimeZone = indiaTime,
-			};
-
-			Nse = new ExchangeBoard
-			{
-				Code = "NSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Nse,
-				TimeZone = indiaTime,
-			};
-
-			Cse = new ExchangeBoard
-			{
-				Code = "CSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "14:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Cse,
-				TimeZone = "Sri Lanka Standard Time".To<TimeZoneInfo>(),
-			};
-
-			Krx = new ExchangeBoard
-			{
-				Code = "KRX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Krx,
-				TimeZone = TimeHelper.Korea,
-			};
-
-			Asx = new ExchangeBoard
-			{
-				Code = "ASX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:50:00".To<TimeSpan>(), "16:12:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Asx,
-				TimeZone = "AUS Eastern Standard Time".To<TimeZoneInfo>(),
-			};
-
-			Nzx = new ExchangeBoard
-			{
-				Code = "NZX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Nzx,
-				TimeZone = "New Zealand Standard Time".To<TimeZoneInfo>(),
-			};
-
-			Tase = new ExchangeBoard
-			{
-				Code = "TASE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "16:25:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Tase,
-				TimeZone = "Israel Standard Time".To<TimeZoneInfo>(),
-			};
-
-			Fwb = new ExchangeBoard
-			{
-				Code = "FWB",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("08:00:00".To<TimeSpan>(), "22:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Fwb,
-				TimeZone = "W. Europe Standard Time".To<TimeZoneInfo>(),
-			};
-
-			Mse = new ExchangeBoard
-			{
-				Code = "MSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Mse,
-				TimeZone = "Romance Standard Time".To<TimeZoneInfo>(),
-			};
-
-			Swx = new ExchangeBoard
-			{
-				Code = "SWX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Swx,
-				TimeZone = GetTimeZone("Central European Standard Time", TimeSpan.FromHours(1)),
-			};
-
-			Jse = new ExchangeBoard
-			{
-				Code = "JSE",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Jse,
-				TimeZone = GetTimeZone("South Africa Standard Time", TimeSpan.FromHours(2)),
-			};
-
-			Lmax = new ExchangeBoard
-			{
-				Code = "LMAX",
-				WorkingTime = new WorkingTime
-				{
-					IsEnabled = true,
-					Periods = new List<WorkingTimePeriod>
-					{
-						new WorkingTimePeriod
-						{
-							Till = DateTime.MaxValue,
-							Times = new List<Range<TimeSpan>>
-							{
-								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
-							},
-						}
-					},
-				},
-				Exchange = Exchange.Lmax,
-			};
-
-			DukasCopy = new ExchangeBoard
-			{
-				Code = "DUKAS",
-				Exchange = Exchange.DukasCopy,
-			};
-
-			GainCapital = new ExchangeBoard
-			{
-				Code = "GAIN",
-				Exchange = Exchange.GainCapital,
-			};
-
-			MBTrading = new ExchangeBoard
-			{
-				Code = "MBT",
-				Exchange = Exchange.MBTrading,
-			};
-
-			TrueFX = new ExchangeBoard
-			{
-				Code = "TRUEFX",
-				Exchange = Exchange.TrueFX,
-			};
-
-			Integral = new ExchangeBoard
-			{
-				Code = "INTGRL",
-				Exchange = Exchange.Integral,
-			};
-
-			Cfh = new ExchangeBoard
-			{
-				Code = "CFH",
-				Exchange = Exchange.Cfh,
-			};
-
-			Ond = new ExchangeBoard
-			{
-				Code = "OND",
-				Exchange = Exchange.Ond,
-			};
-
-			Smart = new ExchangeBoard
-			{
-				Code = "SMART",
-				Exchange = Exchange.Nasdaq,
-			};
-
-			Btce = new ExchangeBoard
-			{
-				Code = Exchange.Btce.Name,
-				Exchange = Exchange.Btce,
-			};
-
-			BitStamp = new ExchangeBoard
-			{
-				Code = Exchange.BitStamp.Name,
-				Exchange = Exchange.BitStamp,
-			};
-
-			BtcChina = new ExchangeBoard
-			{
-				Code = Exchange.BtcChina.Name,
-				Exchange = Exchange.BtcChina,
-			};
-
-			Icbit = new ExchangeBoard
-			{
-				Code = Exchange.Icbit.Name,
-				Exchange = Exchange.Icbit,
-			};
-		}
+				}
+			},
+			SpecialWorkingDays = _russianSpecialWorkingDays,
+			SpecialHolidays = _russianSpecialHolidays,
+		};
+
+		private static ExchangeBoard CreateMoex(string code) => new()
+		{
+			Code = code,
+			WorkingTime = _micexWorkingTime.Clone(),
+			Exchange = Exchange.Moex,
+			TimeZone = TimeHelper.Moscow,
+		};
+
+		private static readonly TimeZoneInfo _singaporeTime = "Singapore Standard Time".To<TimeZoneInfo>();
+		private static readonly TimeZoneInfo _bangkokTime = "SE Asia Standard Time".To<TimeZoneInfo>();
+		private static readonly TimeZoneInfo _indiaTime = "India Standard Time".To<TimeZoneInfo>();
 
 		private static TimeZoneInfo GetTimeZone(string id, TimeSpan offset)
 		{
@@ -2268,787 +369,1545 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Associated"/>.
 		/// </summary>
-		public static ExchangeBoard Associated { get; }
+		public static ExchangeBoard Associated { get; } = new()
+		{
+			Code = SecurityId.AssociatedBoardCode,
+			Exchange = Exchange.Test,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Test"/>.
 		/// </summary>
-		public static ExchangeBoard Test { get; }
+		public static ExchangeBoard Test { get; } = new()
+		{
+			Code = "TEST",
+			Exchange = Exchange.Test,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Forts"/>.
 		/// </summary>
-		public static ExchangeBoard Forts { get; }
+		public static ExchangeBoard Forts { get; } = new()
+		{
+			Code = "FORTS",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("10:00:00".To<TimeSpan>(), "14:00:00".To<TimeSpan>()),
+							new("14:03:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>()),
+							new("19:00:00".To<TimeSpan>(), "23:50:00".To<TimeSpan>())
+						},
+					}
+				},
+				SpecialWorkingDays = _russianSpecialWorkingDays,
+				SpecialHolidays = _russianSpecialHolidays,
+			},
+			ExpiryTime = new TimeSpan(18, 45, 00),
+			//IsSupportAtomicReRegister = true,
+			Exchange = Exchange.Moex,
+			TimeZone = TimeHelper.Moscow,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Micex"/>.
 		/// </summary>
-		public static ExchangeBoard Micex { get; }
+		public static ExchangeBoard Micex { get; } = CreateMoex("MICEX");
 
 		/// <summary>
 		/// Information about board <see cref="MicexAuct"/>.
 		/// </summary>
-		public static ExchangeBoard MicexAuct { get; }
+		public static ExchangeBoard MicexAuct { get; } = CreateMoex("AUCT");
 
 		/// <summary>
 		/// Information about board <see cref="MicexAubb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexAubb { get; }
+		public static ExchangeBoard MicexAubb { get; } = CreateMoex("AUBB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexCasf"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCasf { get; }
+		public static ExchangeBoard MicexCasf { get; } = CreateMoex("CASF");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqbr"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqbr { get; }
+		public static ExchangeBoard MicexEqbr { get; } = CreateMoex("EQBR");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqbs"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqbs { get; }
+		public static ExchangeBoard MicexEqbs { get; } = CreateMoex("EQBS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqdp"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqdp { get; }
+		public static ExchangeBoard MicexEqdp { get; } = CreateMoex("EQDP");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqeu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqeu { get; }
+		public static ExchangeBoard MicexEqeu { get; } = CreateMoex("EQEU");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqus { get; }
+		public static ExchangeBoard MicexEqus { get; } = CreateMoex("EQUS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqnb { get; }
+		public static ExchangeBoard MicexEqnb { get; } = CreateMoex("EQNB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqne { get; }
+		public static ExchangeBoard MicexEqne { get; } = CreateMoex("EQNE");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqnl { get; }
+		public static ExchangeBoard MicexEqnl { get; } = CreateMoex("EQNL");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqno { get; }
+		public static ExchangeBoard MicexEqno { get; } = CreateMoex("EQNO");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqob { get; }
+		public static ExchangeBoard MicexEqob { get; } = CreateMoex("EQOB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqos { get; }
+		public static ExchangeBoard MicexEqos { get; } = CreateMoex("EQOS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqov { get; }
+		public static ExchangeBoard MicexEqov { get; } = CreateMoex("EQOV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqlv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqlv { get; }
+		public static ExchangeBoard MicexEqlv { get; } = CreateMoex("EQLV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqdb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqdb { get; }
+		public static ExchangeBoard MicexEqdb { get; } = CreateMoex("EQDB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqde"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqde { get; }
+		public static ExchangeBoard MicexEqde { get; } = CreateMoex("EQDE");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqli { get; }
+		public static ExchangeBoard MicexEqli { get; } = CreateMoex("EQLI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqqi { get; }
+		public static ExchangeBoard MicexEqqi { get; } = CreateMoex("EQQI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexSmal"/>.
 		/// </summary>
-		public static ExchangeBoard MicexSmal { get; }
+		public static ExchangeBoard MicexSmal { get; } = CreateMoex("SMAL");
 
 		/// <summary>
 		/// Information about board <see cref="MicexSpob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexSpob { get; }
+		public static ExchangeBoard MicexSpob { get; } = CreateMoex("SPOB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqbr"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqbr { get; }
+		public static ExchangeBoard MicexTqbr { get; } = CreateMoex("TQBR");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqde"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqde { get; }
+		public static ExchangeBoard MicexTqde { get; } = CreateMoex("TQDE");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqbs"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqbs { get; }
+		public static ExchangeBoard MicexTqbs { get; } = CreateMoex("TQBS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqeu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqeu { get; }
+		public static ExchangeBoard MicexTqeu { get; } = CreateMoex("TQEU");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqus { get; }
+		public static ExchangeBoard MicexTqus { get; } = CreateMoex("TQUS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqnb { get; }
+		public static ExchangeBoard MicexTqnb { get; } = CreateMoex("TQNB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqne { get; }
+		public static ExchangeBoard MicexTqne { get; } = CreateMoex("TQNE");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqnl { get; }
+		public static ExchangeBoard MicexTqnl { get; } = CreateMoex("TQNL");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqno { get; }
+		public static ExchangeBoard MicexTqno { get; } = CreateMoex("TQNO");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqob { get; }
+		public static ExchangeBoard MicexTqob { get; } = CreateMoex("TQOB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqos { get; }
+		public static ExchangeBoard MicexTqos { get; } = CreateMoex("TQOS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqov { get; }
+		public static ExchangeBoard MicexTqov { get; } = CreateMoex("TQOV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqlv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqlv { get; }
+		public static ExchangeBoard MicexTqlv { get; } = CreateMoex("TQLV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqli { get; }
+		public static ExchangeBoard MicexTqli { get; } = CreateMoex("TQLI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqqi { get; }
+		public static ExchangeBoard MicexTqqi { get; } = CreateMoex("TQQI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqrp"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqrp { get; }
+		public static ExchangeBoard MicexEqrp { get; } = CreateMoex("EQRP");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsrp"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsrp { get; }
+		public static ExchangeBoard MicexPsrp { get; } = CreateMoex("PSRP");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRfnd"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRfnd { get; }
+		public static ExchangeBoard MicexRfnd { get; } = CreateMoex("RFND");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTadm"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTadm { get; }
+		public static ExchangeBoard MicexTadm { get; } = CreateMoex("TADM");
 
 		/// <summary>
 		/// Information about board <see cref="MicexNadm"/>.
 		/// </summary>
-		public static ExchangeBoard MicexNadm { get; }
+		public static ExchangeBoard MicexNadm { get; } = CreateMoex("NADM");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsau"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsau { get; }
+		public static ExchangeBoard MicexPsau { get; } = CreateMoex("PSAU");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPaus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPaus { get; }
+		public static ExchangeBoard MicexPaus { get; } = CreateMoex("PAUS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsbb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsbb { get; }
+		public static ExchangeBoard MicexPsbb { get; } = CreateMoex("PSBB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPseq"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPseq { get; }
+		public static ExchangeBoard MicexPseq { get; } = CreateMoex("PSEQ");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPses"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPses { get; }
+		public static ExchangeBoard MicexPses { get; } = CreateMoex("PSES");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPseu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPseu { get; }
+		public static ExchangeBoard MicexPseu { get; } = CreateMoex("PSEU");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsdb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsdb { get; }
+		public static ExchangeBoard MicexPsdb { get; } = CreateMoex("PSDB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsde"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsde { get; }
+		public static ExchangeBoard MicexPsde { get; } = CreateMoex("PSDE");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsus { get; }
+		public static ExchangeBoard MicexPsus { get; } = CreateMoex("PSUS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsnb { get; }
+		public static ExchangeBoard MicexPsnb { get; } = CreateMoex("PSNB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsne { get; }
+		public static ExchangeBoard MicexPsne { get; } = CreateMoex("PSNE");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsnl { get; }
+		public static ExchangeBoard MicexPsnl { get; } = CreateMoex("PSNL");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsno { get; }
+		public static ExchangeBoard MicexPsno { get; } = CreateMoex("PSNO");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsob { get; }
+		public static ExchangeBoard MicexPsob { get; } = CreateMoex("PSOB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsos { get; }
+		public static ExchangeBoard MicexPsos { get; } = CreateMoex("PSOS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsov { get; }
+		public static ExchangeBoard MicexPsov { get; } = CreateMoex("PSOV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPslv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPslv { get; }
+		public static ExchangeBoard MicexPslv { get; } = CreateMoex("PSLV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsli { get; }
+		public static ExchangeBoard MicexPsli { get; } = CreateMoex("PSLI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsqi { get; }
+		public static ExchangeBoard MicexPsqi { get; } = CreateMoex("PSQI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpeu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpeu { get; }
+		public static ExchangeBoard MicexRpeu { get; } = CreateMoex("RPEU");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpma"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpma { get; }
+		public static ExchangeBoard MicexRpma { get; } = CreateMoex("RPMA");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpmo"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpmo { get; }
+		public static ExchangeBoard MicexRpmo { get; } = CreateMoex("RPMO");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpua"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpua { get; }
+		public static ExchangeBoard MicexRpua { get; } = CreateMoex("RPUA");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpuo"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpuo { get; }
+		public static ExchangeBoard MicexRpuo { get; } = CreateMoex("RPUO");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpuq"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpuq { get; }
+		public static ExchangeBoard MicexRpuq { get; } = CreateMoex("RPUQ");
 
 		/// <summary>
 		/// Information about board <see cref="MicexFbcb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexFbcb { get; }
+		public static ExchangeBoard MicexFbcb { get; } = CreateMoex("FBCB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexFbfx"/>.
 		/// </summary>
-		public static ExchangeBoard MicexFbfx { get; }
+		public static ExchangeBoard MicexFbfx { get; } = CreateMoex("FBFX");
 
 		/// <summary>
 		/// Information about board <see cref="MicexIrk2"/>.
 		/// </summary>
-		public static ExchangeBoard MicexIrk2 { get; }
+		public static ExchangeBoard MicexIrk2 { get; } = CreateMoex("IRK2");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpqi { get; }
+		public static ExchangeBoard MicexRpqi { get; } = CreateMoex("RPQI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPteq"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPteq { get; }
+		public static ExchangeBoard MicexPteq { get; } = CreateMoex("PTEQ");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtes"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtes { get; }
+		public static ExchangeBoard MicexPtes { get; } = CreateMoex("PTES");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPteu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPteu { get; }
+		public static ExchangeBoard MicexPteu { get; } = CreateMoex("PTEU");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtus { get; }
+		public static ExchangeBoard MicexPtus { get; } = CreateMoex("PTUS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtnb { get; }
+		public static ExchangeBoard MicexPtnb { get; } = CreateMoex("PTNB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtne { get; }
+		public static ExchangeBoard MicexPtne { get; } = CreateMoex("PTNE");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtnl { get; }
+		public static ExchangeBoard MicexPtnl { get; } = CreateMoex("PTNL");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtno { get; }
+		public static ExchangeBoard MicexPtno { get; } = CreateMoex("PTNO");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtob { get; }
+		public static ExchangeBoard MicexPtob { get; } = CreateMoex("PTOB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtos { get; }
+		public static ExchangeBoard MicexPtos { get; } = CreateMoex("PTOS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtov { get; }
+		public static ExchangeBoard MicexPtov { get; } = CreateMoex("PTOV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtlv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtlv { get; }
+		public static ExchangeBoard MicexPtlv { get; } = CreateMoex("PTLV");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtli { get; }
+		public static ExchangeBoard MicexPtli { get; } = CreateMoex("PTLI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtqi { get; }
+		public static ExchangeBoard MicexPtqi { get; } = CreateMoex("PTQI");
 
 		/// <summary>
 		/// Information about board <see cref="MicexScvc"/>.
 		/// </summary>
-		public static ExchangeBoard MicexScvc { get; }
+		public static ExchangeBoard MicexScvc { get; } = CreateMoex("SCVC");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpng"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpng { get; }
+		public static ExchangeBoard MicexRpng { get; } = CreateMoex("RPNG");
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpfg"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpfg { get; }
+		public static ExchangeBoard MicexRpfg { get; } = CreateMoex("RPFG");
 
 		/// <summary>
 		/// Information about board <see cref="MicexCbcr"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCbcr { get; }
+		public static ExchangeBoard MicexCbcr { get; } = CreateMoex("CBCR");
 
 		/// <summary>
 		/// Information about board <see cref="MicexCred"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCred { get; }
+		public static ExchangeBoard MicexCred { get; } = CreateMoex("CRED");
 
 		/// <summary>
 		/// Information about board <see cref="MicexDepz"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDepz { get; }
+		public static ExchangeBoard MicexDepz { get; } = CreateMoex("DEPZ");
 
 		/// <summary>
 		/// Information about board <see cref="MicexDpvb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDpvb { get; }
+		public static ExchangeBoard MicexDpvb { get; } = CreateMoex("DPVB");
 
 		/// <summary>
 		/// Information about board <see cref="MicexDpfk"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDpfk { get; }
+		public static ExchangeBoard MicexDpfk { get; } = CreateMoex("DPFK");
 
 		/// <summary>
 		/// Information about board <see cref="MicexDpfo"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDpfo { get; }
+		public static ExchangeBoard MicexDpfo { get; } = CreateMoex("DPFO");
 
 		/// <summary>
 		/// Information about board <see cref="MicexDppf"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDppf { get; }
+		public static ExchangeBoard MicexDppf { get; } = CreateMoex("DPPF");
 
 		/// <summary>
 		/// Information about board <see cref="MicexCets"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCets { get; }
+		public static ExchangeBoard MicexCets { get; } = CreateMoex("CETS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexAets"/>.
 		/// </summary>
-		public static ExchangeBoard MicexAets { get; }
+		public static ExchangeBoard MicexAets { get; } = CreateMoex("AETS");
 
 		/// <summary>
 		/// Information about board <see cref="MicexCngd"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCngd { get; }
+		public static ExchangeBoard MicexCngd { get; } = CreateMoex("CNGD");
 
 		/// <summary>
 		/// Information about board <see cref="MicexTran"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTran { get; }
+		public static ExchangeBoard MicexTran { get; } = CreateMoex("TRAN");
 
 		/// <summary>
 		/// Information about board <see cref="MicexJunior"/>.
 		/// </summary>
-		public static ExchangeBoard MicexJunior { get; }
+		public static ExchangeBoard MicexJunior { get; } = CreateMoex("QJSIM");
 
 		/// <summary>
 		/// Information about board <see cref="Spb"/>.
 		/// </summary>
-		public static ExchangeBoard Spb { get; }
+		public static ExchangeBoard Spb { get; } = new()
+		{
+			Code = "SPB",
+			Exchange = Exchange.Spb,
+			TimeZone = TimeHelper.Moscow,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Ux"/>.
 		/// </summary>
-		public static ExchangeBoard Ux { get; }
+		public static ExchangeBoard Ux { get; } = new()
+		{
+			Code = "UX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("10:30:00".To<TimeSpan>(), "13:00:00".To<TimeSpan>()),
+							new("13:03:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			ExpiryTime = new TimeSpan(18, 45, 00),
+			//IsSupportAtomicReRegister = true,
+			Exchange = Exchange.Ux,
+			TimeZone = TimeHelper.Fle,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="UxStock"/>.
 		/// </summary>
-		public static ExchangeBoard UxStock { get; }
+		public static ExchangeBoard UxStock { get; } = new()
+		{
+			Code = "GTS",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("10:30:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Ux,
+			TimeZone = TimeHelper.Fle,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Cme"/>.
 		/// </summary>
-		public static ExchangeBoard Cme { get; }
+		public static ExchangeBoard Cme { get; } = new()
+		{
+			Code = "CME",
+			TimeZone = TimeHelper.Cst,
+			Exchange = Exchange.Cme,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Cme"/>.
 		/// </summary>
-		public static ExchangeBoard CmeMini { get; }
+		public static ExchangeBoard CmeMini { get; } = new()
+		{
+			Code = "CMEMINI",
+			TimeZone = TimeHelper.Cst,
+			Exchange = Exchange.Cme,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Cce"/>.
 		/// </summary>
-		public static ExchangeBoard Cce { get; }
+		public static ExchangeBoard Cce { get; } = new()
+		{
+			Code = "CCE",
+			TimeZone = TimeHelper.Cst,
+			Exchange = Exchange.Cce,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Cbot"/>.
 		/// </summary>
-		public static ExchangeBoard Cbot { get; }
+		public static ExchangeBoard Cbot { get; } = new()
+		{
+			Code = "CBOT",
+			TimeZone = TimeHelper.Cst,
+			Exchange = Exchange.Cbot,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Nymex"/>.
 		/// </summary>
-		public static ExchangeBoard Nymex { get; }
+		public static ExchangeBoard Nymex { get; } = new()
+		{
+			Code = "NYMEX",
+			TimeZone = TimeHelper.Est,
+			Exchange = Exchange.Nymex,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Amex"/>.
 		/// </summary>
-		public static ExchangeBoard Amex { get; }
+		public static ExchangeBoard Amex { get; } = new()
+		{
+			Code = "AMEX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			//IsSupportMarketOrders = true,
+			TimeZone = TimeHelper.Est,
+			Exchange = Exchange.Amex
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Nyse"/>.
 		/// </summary>
-		public static ExchangeBoard Nyse { get; }
+		public static ExchangeBoard Nyse { get; } = new()
+		{
+			Code = "NYSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			//IsSupportMarketOrders = true,
+			TimeZone = TimeHelper.Est,
+			Exchange = Exchange.Nyse
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Nasdaq"/>.
 		/// </summary>
-		public static ExchangeBoard Nasdaq { get; }
+		public static ExchangeBoard Nasdaq { get; } = new()
+		{
+			Code = "NASDAQ",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			//IsSupportMarketOrders = true,
+			Exchange = Exchange.Nasdaq,
+			TimeZone = TimeHelper.Est,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Nqlx"/>.
 		/// </summary>
-		public static ExchangeBoard Nqlx { get; }
+		public static ExchangeBoard Nqlx { get; } = new()
+		{
+			Code = "NQLX",
+			Exchange = Exchange.Nqlx,
+			TimeZone = TimeHelper.Est,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Lse"/>.
 		/// </summary>
-		public static ExchangeBoard Lse { get; }
+		public static ExchangeBoard Lse { get; } = new()
+		{
+			Code = "LSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("08:00:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Lse,
+			TimeZone = TimeHelper.Gmt,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Lme"/>.
 		/// </summary>
-		public static ExchangeBoard Lme { get; }
+		public static ExchangeBoard Lme { get; } = new()
+		{
+			Code = "LME",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:00:00".To<TimeSpan>(), "18:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Lme,
+			TimeZone = TimeHelper.Gmt,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Tse"/>.
 		/// </summary>
-		public static ExchangeBoard Tse { get; }
+		public static ExchangeBoard Tse { get; } = new()
+		{
+			Code = "TSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:00:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
+							new("12:30:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Tse,
+			TimeZone = TimeHelper.Tokyo,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Hkex"/>.
 		/// </summary>
-		public static ExchangeBoard Hkex { get; }
+		public static ExchangeBoard Hkex { get; } = new()
+		{
+			Code = "HKEX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:20:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
+							new("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Hkex,
+			TimeZone = TimeHelper.China,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Hkfe"/>.
 		/// </summary>
-		public static ExchangeBoard Hkfe { get; }
+		public static ExchangeBoard Hkfe { get; } = new()
+		{
+			Code = "HKFE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:15:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
+							new("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Hkfe,
+			TimeZone = TimeHelper.China,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Sse"/>.
 		/// </summary>
-		public static ExchangeBoard Sse { get; }
+		public static ExchangeBoard Sse { get; } = new()
+		{
+			Code = "SSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
+							new("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Sse,
+			TimeZone = TimeHelper.China,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Szse"/>.
 		/// </summary>
-		public static ExchangeBoard Szse { get; }
+		public static ExchangeBoard Szse { get; } = new()
+		{
+			Code = "SZSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
+							new("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Szse,
+			TimeZone = TimeHelper.China,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Tsx"/>.
 		/// </summary>
-		public static ExchangeBoard Tsx { get; }
+		public static ExchangeBoard Tsx { get; } = new()
+		{
+			Code = "TSX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Tsx,
+			TimeZone = TimeHelper.Est,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Fwb"/>.
 		/// </summary>
-		public static ExchangeBoard Fwb { get; }
+		public static ExchangeBoard Fwb { get; } = new()
+		{
+			Code = "FWB",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("08:00:00".To<TimeSpan>(), "22:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Fwb,
+			TimeZone = "W. Europe Standard Time".To<TimeZoneInfo>(),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Asx"/>.
 		/// </summary>
-		public static ExchangeBoard Asx { get; }
+		public static ExchangeBoard Asx { get; } = new()
+		{
+			Code = "ASX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:50:00".To<TimeSpan>(), "16:12:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Asx,
+			TimeZone = "AUS Eastern Standard Time".To<TimeZoneInfo>(),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Nzx"/>.
 		/// </summary>
-		public static ExchangeBoard Nzx { get; }
+		public static ExchangeBoard Nzx { get; } = new()
+		{
+			Code = "NZX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("10:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Nzx,
+			TimeZone = "New Zealand Standard Time".To<TimeZoneInfo>(),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Bse"/>.
 		/// </summary>
-		public static ExchangeBoard Bse { get; }
+		public static ExchangeBoard Bse { get; } = new()
+		{
+			Code = "BSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Bse,
+			TimeZone = _indiaTime,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Nse"/>.
 		/// </summary>
-		public static ExchangeBoard Nse { get; }
+		public static ExchangeBoard Nse { get; } = new()
+		{
+			Code = "NSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Nse,
+			TimeZone = _indiaTime,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Swx"/>.
 		/// </summary>
-		public static ExchangeBoard Swx { get; }
+		public static ExchangeBoard Swx { get; } = new()
+		{
+			Code = "SWX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Swx,
+			TimeZone = GetTimeZone("Central European Standard Time", TimeSpan.FromHours(1)),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Krx"/>.
 		/// </summary>
-		public static ExchangeBoard Krx { get; }
+		public static ExchangeBoard Krx { get; } = new()
+		{
+			Code = "KRX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Krx,
+			TimeZone = TimeHelper.Korea,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Mse"/>.
 		/// </summary>
-		public static ExchangeBoard Mse { get; }
+		public static ExchangeBoard Mse { get; } = new()
+		{
+			Code = "MSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Mse,
+			TimeZone = "Romance Standard Time".To<TimeZoneInfo>(),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Jse"/>.
 		/// </summary>
-		public static ExchangeBoard Jse { get; }
+		public static ExchangeBoard Jse { get; } = new()
+		{
+			Code = "JSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Jse,
+			TimeZone = GetTimeZone("South Africa Standard Time", TimeSpan.FromHours(2)),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Sgx"/>.
 		/// </summary>
-		public static ExchangeBoard Sgx { get; }
+		public static ExchangeBoard Sgx { get; } = new()
+		{
+			Code = "SGX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Sgx,
+			TimeZone = _singaporeTime,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Tsec"/>.
 		/// </summary>
-		public static ExchangeBoard Tsec { get; }
+		public static ExchangeBoard Tsec { get; } = new()
+		{
+			Code = "TSEC",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:00:00".To<TimeSpan>(), "13:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Tsec,
+			TimeZone = TimeHelper.China,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Pse"/>.
 		/// </summary>
-		public static ExchangeBoard Pse { get; }
+		public static ExchangeBoard Pse { get; } = new()
+		{
+			Code = "PSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
+							new("13:30:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Pse,
+			TimeZone = _singaporeTime,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Klse"/>.
 		/// </summary>
-		public static ExchangeBoard Klse { get; }
+		public static ExchangeBoard Klse { get; } = new()
+		{
+			Code = "KLSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
+							new("14:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Klse,
+			TimeZone = _singaporeTime,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Idx"/>.
 		/// </summary>
-		public static ExchangeBoard Idx { get; }
+		public static ExchangeBoard Idx { get; } = new()
+		{
+			Code = "IDX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Idx,
+			TimeZone = _bangkokTime,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Set"/>.
 		/// </summary>
-		public static ExchangeBoard Set { get; }
+		public static ExchangeBoard Set { get; } = new()
+		{
+			Code = "SET",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("10:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
+							new("14:30:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Set,
+			TimeZone = _bangkokTime,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Cse"/>.
 		/// </summary>
-		public static ExchangeBoard Cse { get; }
+		public static ExchangeBoard Cse { get; } = new()
+		{
+			Code = "CSE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:30:00".To<TimeSpan>(), "14:30:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Cse,
+			TimeZone = "Sri Lanka Standard Time".To<TimeZoneInfo>(),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Tase"/>.
 		/// </summary>
-		public static ExchangeBoard Tase { get; }
+		public static ExchangeBoard Tase { get; } = new()
+		{
+			Code = "TASE",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("09:00:00".To<TimeSpan>(), "16:25:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Tase,
+			TimeZone = "Israel Standard Time".To<TimeZoneInfo>(),
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Lmax"/>.
 		/// </summary>
-		public static ExchangeBoard Lmax { get; }
+		public static ExchangeBoard Lmax { get; } = new()
+		{
+			Code = "LMAX",
+			WorkingTime = new()
+			{
+				IsEnabled = true,
+				Periods = new()
+				{
+					new()
+					{
+						Till = DateTime.MaxValue,
+						Times = new()
+						{
+							new("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
+						},
+					}
+				},
+			},
+			Exchange = Exchange.Lmax,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="DukasCopy"/>.
 		/// </summary>
-		public static ExchangeBoard DukasCopy { get; }
+		public static ExchangeBoard DukasCopy { get; } = new()
+		{
+			Code = "DUKAS",
+			Exchange = Exchange.DukasCopy,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="GainCapital"/>.
 		/// </summary>
-		public static ExchangeBoard GainCapital { get; }
+		public static ExchangeBoard GainCapital { get; } = new()
+		{
+			Code = "GAIN",
+			Exchange = Exchange.GainCapital,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="MBTrading"/>.
 		/// </summary>
-		public static ExchangeBoard MBTrading { get; }
+		public static ExchangeBoard MBTrading { get; } = new()
+		{
+			Code = "MBT",
+			Exchange = Exchange.MBTrading,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="TrueFX"/>.
 		/// </summary>
-		public static ExchangeBoard TrueFX { get; }
+		public static ExchangeBoard TrueFX { get; } = new()
+		{
+			Code = "TRUEFX",
+			Exchange = Exchange.TrueFX,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Integral"/>.
 		/// </summary>
-		public static ExchangeBoard Integral { get; }
+		public static ExchangeBoard Integral { get; } = new()
+		{
+			Code = "INTGRL",
+			Exchange = Exchange.Integral,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Cfh"/>.
 		/// </summary>
-		public static ExchangeBoard Cfh { get; }
+		public static ExchangeBoard Cfh { get; } = new()
+		{
+			Code = "CFH",
+			Exchange = Exchange.Cfh,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Ond"/>.
 		/// </summary>
-		public static ExchangeBoard Ond { get; }
+		public static ExchangeBoard Ond { get; } = new()
+		{
+			Code = "OND",
+			Exchange = Exchange.Ond,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Nasdaq"/>.
 		/// </summary>
-		public static ExchangeBoard Smart { get; }
+		public static ExchangeBoard Smart { get; } = new()
+		{
+			Code = "SMART",
+			Exchange = Exchange.Nasdaq,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Btce"/>.
 		/// </summary>
-		public static ExchangeBoard Btce { get; }
+		public static ExchangeBoard Btce { get; } = new()
+		{
+			Code = Exchange.Btce.Name,
+			Exchange = Exchange.Btce,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="BitStamp"/>.
 		/// </summary>
-		public static ExchangeBoard BitStamp { get; }
+		public static ExchangeBoard BitStamp { get; } = new()
+		{
+			Code = Exchange.BitStamp.Name,
+			Exchange = Exchange.BitStamp,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="BtcChina"/>.
 		/// </summary>
-		public static ExchangeBoard BtcChina { get; }
+		public static ExchangeBoard BtcChina { get; } = new()
+		{
+			Code = Exchange.BtcChina.Name,
+			Exchange = Exchange.BtcChina,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Icbit"/>.
 		/// </summary>
-		public static ExchangeBoard Icbit { get; }
+		public static ExchangeBoard Icbit { get; } = new()
+		{
+			Code = Exchange.Icbit.Name,
+			Exchange = Exchange.Icbit,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Finam"/>.
 		/// </summary>
-		public static ExchangeBoard Finam { get; }
+		public static ExchangeBoard Finam { get; } = new()
+		{
+			Code = "FINAM",
+			Exchange = Exchange.Test,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Mfd"/>.
 		/// </summary>
-		public static ExchangeBoard Mfd { get; }
+		public static ExchangeBoard Mfd { get; } = new()
+		{
+			Code = "MFD",
+			Exchange = Exchange.Test,
+		};
 
 		/// <summary>
 		/// Information about board <see cref="Arca"/>.
 		/// </summary>
-		public static ExchangeBoard Arca { get; } = new ExchangeBoard
+		public static ExchangeBoard Arca { get; } = new()
 		{
 			Code = "ARCA",
 			Exchange = Exchange.Nyse,
@@ -3057,7 +1916,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bats"/>.
 		/// </summary>
-		public static ExchangeBoard Bats { get; } = new ExchangeBoard
+		public static ExchangeBoard Bats { get; } = new()
 		{
 			Code = "BATS",
 			Exchange = Exchange.Cbot,
@@ -3066,7 +1925,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Currenex"/>.
 		/// </summary>
-		public static ExchangeBoard Currenex { get; } = new ExchangeBoard
+		public static ExchangeBoard Currenex { get; } = new()
 		{
 			Code = Exchange.Currenex.Name,
 			Exchange = Exchange.Currenex,
@@ -3075,7 +1934,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Fxcm"/>.
 		/// </summary>
-		public static ExchangeBoard Fxcm { get; } = new ExchangeBoard
+		public static ExchangeBoard Fxcm { get; } = new()
 		{
 			Code = Exchange.Fxcm.Name,
 			Exchange = Exchange.Fxcm,
@@ -3084,7 +1943,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Poloniex"/>.
 		/// </summary>
-		public static ExchangeBoard Poloniex { get; } = new ExchangeBoard
+		public static ExchangeBoard Poloniex { get; } = new()
 		{
 			Code = Exchange.Poloniex.Name,
 			Exchange = Exchange.Poloniex,
@@ -3093,7 +1952,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Kraken"/>.
 		/// </summary>
-		public static ExchangeBoard Kraken { get; } = new ExchangeBoard
+		public static ExchangeBoard Kraken { get; } = new()
 		{
 			Code = Exchange.Kraken.Name,
 			Exchange = Exchange.Kraken,
@@ -3102,7 +1961,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bittrex"/>.
 		/// </summary>
-		public static ExchangeBoard Bittrex { get; } = new ExchangeBoard
+		public static ExchangeBoard Bittrex { get; } = new()
 		{
 			Code = Exchange.Bittrex.Name,
 			Exchange = Exchange.Bittrex,
@@ -3111,7 +1970,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bitfinex"/>.
 		/// </summary>
-		public static ExchangeBoard Bitfinex { get; } = new ExchangeBoard
+		public static ExchangeBoard Bitfinex { get; } = new()
 		{
 			Code = Exchange.Bitfinex.Name,
 			Exchange = Exchange.Bitfinex,
@@ -3120,7 +1979,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Coinbase"/>.
 		/// </summary>
-		public static ExchangeBoard Coinbase { get; } = new ExchangeBoard
+		public static ExchangeBoard Coinbase { get; } = new()
 		{
 			Code = Exchange.Coinbase.Name,
 			Exchange = Exchange.Coinbase,
@@ -3129,7 +1988,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Gdax"/>.
 		/// </summary>
-		public static ExchangeBoard Gdax { get; } = new ExchangeBoard
+		public static ExchangeBoard Gdax { get; } = new()
 		{
 			Code = Exchange.Gdax.Name,
 			Exchange = Exchange.Gdax,
@@ -3138,7 +1997,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bithumb"/>.
 		/// </summary>
-		public static ExchangeBoard Bithumb { get; } = new ExchangeBoard
+		public static ExchangeBoard Bithumb { get; } = new()
 		{
 			Code = Exchange.Bithumb.Name,
 			Exchange = Exchange.Bithumb,
@@ -3147,7 +2006,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="HitBtc"/>.
 		/// </summary>
-		public static ExchangeBoard HitBtc { get; } = new ExchangeBoard
+		public static ExchangeBoard HitBtc { get; } = new()
 		{
 			Code = Exchange.HitBtc.Name,
 			Exchange = Exchange.HitBtc,
@@ -3156,7 +2015,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="OkCoin"/>.
 		/// </summary>
-		public static ExchangeBoard OkCoin { get; } = new ExchangeBoard
+		public static ExchangeBoard OkCoin { get; } = new()
 		{
 			Code = Exchange.OkCoin.Name,
 			Exchange = Exchange.OkCoin,
@@ -3165,7 +2024,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Coincheck"/>.
 		/// </summary>
-		public static ExchangeBoard Coincheck { get; } = new ExchangeBoard
+		public static ExchangeBoard Coincheck { get; } = new()
 		{
 			Code = Exchange.Coincheck.Name,
 			Exchange = Exchange.Coincheck,
@@ -3174,7 +2033,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Binance"/>.
 		/// </summary>
-		public static ExchangeBoard Binance { get; } = new ExchangeBoard
+		public static ExchangeBoard Binance { get; } = new()
 		{
 			Code = Exchange.Binance.Name,
 			Exchange = Exchange.Binance,
@@ -3183,7 +2042,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="BinanceCoin"/>.
 		/// </summary>
-		public static ExchangeBoard BinanceCoin { get; } = new ExchangeBoard
+		public static ExchangeBoard BinanceCoin { get; } = new()
 		{
 			Code = Exchange.Binance.Name + "CN",
 			Exchange = Exchange.Binance,
@@ -3192,7 +2051,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bitexbook"/>.
 		/// </summary>
-		public static ExchangeBoard Bitexbook { get; } = new ExchangeBoard
+		public static ExchangeBoard Bitexbook { get; } = new()
 		{
 			Code = Exchange.Bitexbook.Name,
 			Exchange = Exchange.Bitexbook,
@@ -3201,7 +2060,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bitmex"/>.
 		/// </summary>
-		public static ExchangeBoard Bitmex { get; } = new ExchangeBoard
+		public static ExchangeBoard Bitmex { get; } = new()
 		{
 			Code = Exchange.Bitmex.Name,
 			Exchange = Exchange.Bitmex,
@@ -3210,7 +2069,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Cex"/>.
 		/// </summary>
-		public static ExchangeBoard Cex { get; } = new ExchangeBoard
+		public static ExchangeBoard Cex { get; } = new()
 		{
 			Code = Exchange.Cex.Name,
 			Exchange = Exchange.Cex,
@@ -3219,7 +2078,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Cryptopia"/>.
 		/// </summary>
-		public static ExchangeBoard Cryptopia { get; } = new ExchangeBoard
+		public static ExchangeBoard Cryptopia { get; } = new()
 		{
 			Code = Exchange.Cryptopia.Name,
 			Exchange = Exchange.Cryptopia,
@@ -3228,7 +2087,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Okex"/>.
 		/// </summary>
-		public static ExchangeBoard Okex { get; } = new ExchangeBoard
+		public static ExchangeBoard Okex { get; } = new()
 		{
 			Code = Exchange.Okex.Name,
 			Exchange = Exchange.Okex,
@@ -3237,7 +2096,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bitmart"/>.
 		/// </summary>
-		public static ExchangeBoard Bitmart { get; } = new ExchangeBoard
+		public static ExchangeBoard Bitmart { get; } = new()
 		{
 			Code = Exchange.Bitmart.Name,
 			Exchange = Exchange.Bitmart,
@@ -3246,7 +2105,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Yobit"/>.
 		/// </summary>
-		public static ExchangeBoard Yobit { get; } = new ExchangeBoard
+		public static ExchangeBoard Yobit { get; } = new()
 		{
 			Code = Exchange.Yobit.Name,
 			Exchange = Exchange.Yobit,
@@ -3255,7 +2114,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="CoinExchange"/>.
 		/// </summary>
-		public static ExchangeBoard CoinExchange { get; } = new ExchangeBoard
+		public static ExchangeBoard CoinExchange { get; } = new()
 		{
 			Code = Exchange.CoinExchange.Name,
 			Exchange = Exchange.CoinExchange,
@@ -3264,7 +2123,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="LiveCoin"/>.
 		/// </summary>
-		public static ExchangeBoard LiveCoin { get; } = new ExchangeBoard
+		public static ExchangeBoard LiveCoin { get; } = new()
 		{
 			Code = Exchange.LiveCoin.Name,
 			Exchange = Exchange.LiveCoin,
@@ -3273,7 +2132,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Exmo"/>.
 		/// </summary>
-		public static ExchangeBoard Exmo { get; } = new ExchangeBoard
+		public static ExchangeBoard Exmo { get; } = new()
 		{
 			Code = Exchange.Exmo.Name,
 			Exchange = Exchange.Exmo,
@@ -3282,7 +2141,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Deribit"/>.
 		/// </summary>
-		public static ExchangeBoard Deribit { get; } = new ExchangeBoard
+		public static ExchangeBoard Deribit { get; } = new()
 		{
 			Code = Exchange.Deribit.Name,
 			Exchange = Exchange.Deribit,
@@ -3291,7 +2150,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Kucoin"/>.
 		/// </summary>
-		public static ExchangeBoard Kucoin { get; } = new ExchangeBoard
+		public static ExchangeBoard Kucoin { get; } = new()
 		{
 			Code = Exchange.Kucoin.Name,
 			Exchange = Exchange.Kucoin,
@@ -3300,7 +2159,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Liqui"/>.
 		/// </summary>
-		public static ExchangeBoard Liqui { get; } = new ExchangeBoard
+		public static ExchangeBoard Liqui { get; } = new()
 		{
 			Code = Exchange.Liqui.Name,
 			Exchange = Exchange.Liqui,
@@ -3309,7 +2168,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Huobi"/>.
 		/// </summary>
-		public static ExchangeBoard Huobi { get; } = new ExchangeBoard
+		public static ExchangeBoard Huobi { get; } = new()
 		{
 			Code = Exchange.Huobi.Name,
 			Exchange = Exchange.Huobi,
@@ -3318,7 +2177,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Globex"/>.
 		/// </summary>
-		public static ExchangeBoard Globex { get; } = new ExchangeBoard
+		public static ExchangeBoard Globex { get; } = new()
 		{
 			Code = "Globex",
 			Exchange = Exchange.Cme,
@@ -3327,7 +2186,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="IEX"/>.
 		/// </summary>
-		public static ExchangeBoard IEX { get; } = new ExchangeBoard
+		public static ExchangeBoard IEX { get; } = new()
 		{
 			Code = Exchange.IEX.Name,
 			Exchange = Exchange.IEX,
@@ -3336,7 +2195,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="AlphaVantage"/>.
 		/// </summary>
-		public static ExchangeBoard AlphaVantage { get; } = new ExchangeBoard
+		public static ExchangeBoard AlphaVantage { get; } = new()
 		{
 			Code = Exchange.AlphaVantage.Name,
 			Exchange = Exchange.AlphaVantage,
@@ -3345,7 +2204,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bitbank"/>.
 		/// </summary>
-		public static ExchangeBoard Bitbank { get; } = new ExchangeBoard
+		public static ExchangeBoard Bitbank { get; } = new()
 		{
 			Code = Exchange.Bitbank.Name,
 			Exchange = Exchange.Bitbank,
@@ -3354,7 +2213,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Zaif"/>.
 		/// </summary>
-		public static ExchangeBoard Zaif { get; } = new ExchangeBoard
+		public static ExchangeBoard Zaif { get; } = new()
 		{
 			Code = Exchange.Zaif.Name,
 			Exchange = Exchange.Zaif,
@@ -3363,7 +2222,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Quoinex"/>.
 		/// </summary>
-		public static ExchangeBoard Quoinex { get; } = new ExchangeBoard
+		public static ExchangeBoard Quoinex { get; } = new()
 		{
 			Code = Exchange.Quoinex.Name,
 			Exchange = Exchange.Quoinex,
@@ -3372,7 +2231,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Wiki"/>.
 		/// </summary>
-		public static ExchangeBoard Wiki { get; } = new ExchangeBoard
+		public static ExchangeBoard Wiki { get; } = new()
 		{
 			Code = Exchange.Wiki.Name,
 			Exchange = Exchange.Wiki,
@@ -3381,7 +2240,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Idax"/>.
 		/// </summary>
-		public static ExchangeBoard Idax { get; } = new ExchangeBoard
+		public static ExchangeBoard Idax { get; } = new()
 		{
 			Code = Exchange.Idax.Name,
 			Exchange = Exchange.Idax,
@@ -3390,7 +2249,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Digifinex"/>.
 		/// </summary>
-		public static ExchangeBoard Digifinex { get; } = new ExchangeBoard
+		public static ExchangeBoard Digifinex { get; } = new()
 		{
 			Code = Exchange.Digifinex.Name,
 			Exchange = Exchange.Digifinex,
@@ -3399,7 +2258,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="TradeOgre"/>.
 		/// </summary>
-		public static ExchangeBoard TradeOgre { get; } = new ExchangeBoard
+		public static ExchangeBoard TradeOgre { get; } = new()
 		{
 			Code = Exchange.TradeOgre.Name,
 			Exchange = Exchange.TradeOgre,
@@ -3408,7 +2267,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="CoinCap"/>.
 		/// </summary>
-		public static ExchangeBoard CoinCap { get; } = new ExchangeBoard
+		public static ExchangeBoard CoinCap { get; } = new()
 		{
 			Code = Exchange.CoinCap.Name,
 			Exchange = Exchange.CoinCap,
@@ -3417,7 +2276,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Coinigy"/>.
 		/// </summary>
-		public static ExchangeBoard Coinigy { get; } = new ExchangeBoard
+		public static ExchangeBoard Coinigy { get; } = new()
 		{
 			Code = Exchange.Coinigy.Name,
 			Exchange = Exchange.Coinigy,
@@ -3426,7 +2285,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="LBank"/>.
 		/// </summary>
-		public static ExchangeBoard LBank { get; } = new ExchangeBoard
+		public static ExchangeBoard LBank { get; } = new()
 		{
 			Code = Exchange.LBank.Name,
 			Exchange = Exchange.LBank,
@@ -3435,7 +2294,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="BitMax"/>.
 		/// </summary>
-		public static ExchangeBoard BitMax { get; } = new ExchangeBoard
+		public static ExchangeBoard BitMax { get; } = new()
 		{
 			Code = Exchange.BitMax.Name,
 			Exchange = Exchange.BitMax,
@@ -3444,7 +2303,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="BW"/>.
 		/// </summary>
-		public static ExchangeBoard BW { get; } = new ExchangeBoard
+		public static ExchangeBoard BW { get; } = new()
 		{
 			Code = Exchange.BW.Name,
 			Exchange = Exchange.BW,
@@ -3453,7 +2312,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bibox"/>.
 		/// </summary>
-		public static ExchangeBoard Bibox { get; } = new ExchangeBoard
+		public static ExchangeBoard Bibox { get; } = new()
 		{
 			Code = Exchange.Bibox.Name,
 			Exchange = Exchange.Bibox,
@@ -3462,7 +2321,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="CoinBene"/>.
 		/// </summary>
-		public static ExchangeBoard CoinBene { get; } = new ExchangeBoard
+		public static ExchangeBoard CoinBene { get; } = new()
 		{
 			Code = Exchange.CoinBene.Name,
 			Exchange = Exchange.CoinBene,
@@ -3471,7 +2330,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="BitZ"/>.
 		/// </summary>
-		public static ExchangeBoard BitZ { get; } = new ExchangeBoard
+		public static ExchangeBoard BitZ { get; } = new()
 		{
 			Code = Exchange.BitZ.Name,
 			Exchange = Exchange.BitZ,
@@ -3480,7 +2339,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="ZB"/>.
 		/// </summary>
-		public static ExchangeBoard ZB { get; } = new ExchangeBoard
+		public static ExchangeBoard ZB { get; } = new()
 		{
 			Code = Exchange.ZB.Name,
 			Exchange = Exchange.ZB,
@@ -3489,7 +2348,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Tradier"/>.
 		/// </summary>
-		public static ExchangeBoard Tradier { get; } = new ExchangeBoard
+		public static ExchangeBoard Tradier { get; } = new()
 		{
 			Code = Exchange.Tradier.Name,
 			Exchange = Exchange.Tradier,
@@ -3498,7 +2357,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="SwSq"/>.
 		/// </summary>
-		public static ExchangeBoard SwSq { get; } = new ExchangeBoard
+		public static ExchangeBoard SwSq { get; } = new()
 		{
 			Code = Exchange.SwSq.Name,
 			Exchange = Exchange.SwSq,
@@ -3507,7 +2366,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="StockSharp"/>.
 		/// </summary>
-		public static ExchangeBoard StockSharp { get; } = new ExchangeBoard
+		public static ExchangeBoard StockSharp { get; } = new()
 		{
 			Code = Exchange.StockSharp.Name,
 			Exchange = Exchange.StockSharp,
@@ -3516,7 +2375,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Upbit"/>.
 		/// </summary>
-		public static ExchangeBoard Upbit { get; } = new ExchangeBoard
+		public static ExchangeBoard Upbit { get; } = new()
 		{
 			Code = Exchange.Upbit.Name,
 			Exchange = Exchange.Upbit,
@@ -3525,7 +2384,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="CoinEx"/>.
 		/// </summary>
-		public static ExchangeBoard CoinEx { get; } = new ExchangeBoard
+		public static ExchangeBoard CoinEx { get; } = new()
 		{
 			Code = Exchange.CoinEx.Name,
 			Exchange = Exchange.CoinEx,
@@ -3534,7 +2393,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="FatBtc"/>.
 		/// </summary>
-		public static ExchangeBoard FatBtc { get; } = new ExchangeBoard
+		public static ExchangeBoard FatBtc { get; } = new()
 		{
 			Code = Exchange.FatBtc.Name,
 			Exchange = Exchange.FatBtc,
@@ -3543,7 +2402,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Latoken"/>.
 		/// </summary>
-		public static ExchangeBoard Latoken { get; } = new ExchangeBoard
+		public static ExchangeBoard Latoken { get; } = new()
 		{
 			Code = Exchange.Latoken.Name,
 			Exchange = Exchange.Latoken,
@@ -3552,7 +2411,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Gopax"/>.
 		/// </summary>
-		public static ExchangeBoard Gopax { get; } = new ExchangeBoard
+		public static ExchangeBoard Gopax { get; } = new()
 		{
 			Code = Exchange.Gopax.Name,
 			Exchange = Exchange.Gopax,
@@ -3561,7 +2420,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="CoinHub"/>.
 		/// </summary>
-		public static ExchangeBoard CoinHub { get; } = new ExchangeBoard
+		public static ExchangeBoard CoinHub { get; } = new()
 		{
 			Code = Exchange.CoinHub.Name,
 			Exchange = Exchange.CoinHub,
@@ -3570,7 +2429,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Hotbit"/>.
 		/// </summary>
-		public static ExchangeBoard Hotbit { get; } = new ExchangeBoard
+		public static ExchangeBoard Hotbit { get; } = new()
 		{
 			Code = Exchange.Hotbit.Name,
 			Exchange = Exchange.Hotbit,
@@ -3579,7 +2438,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bitalong"/>.
 		/// </summary>
-		public static ExchangeBoard Bitalong { get; } = new ExchangeBoard
+		public static ExchangeBoard Bitalong { get; } = new()
 		{
 			Code = Exchange.Bitalong.Name,
 			Exchange = Exchange.Bitalong,
@@ -3588,7 +2447,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="PrizmBit"/>.
 		/// </summary>
-		public static ExchangeBoard PrizmBit { get; } = new ExchangeBoard
+		public static ExchangeBoard PrizmBit { get; } = new()
 		{
 			Code = Exchange.PrizmBit.Name,
 			Exchange = Exchange.PrizmBit,
@@ -3597,7 +2456,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="DigitexFutures"/>.
 		/// </summary>
-		public static ExchangeBoard DigitexFutures { get; } = new ExchangeBoard
+		public static ExchangeBoard DigitexFutures { get; } = new()
 		{
 			Code = Exchange.DigitexFutures.Name,
 			Exchange = Exchange.DigitexFutures,
@@ -3606,7 +2465,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bovespa"/>.
 		/// </summary>
-		public static ExchangeBoard Bovespa { get; } = new ExchangeBoard
+		public static ExchangeBoard Bovespa { get; } = new()
 		{
 			Code = Exchange.Bovespa.Name,
 			Exchange = Exchange.Bovespa,
@@ -3615,20 +2474,20 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Bvmt"/>.
 		/// </summary>
-		public static ExchangeBoard Bvmt { get; } = new ExchangeBoard
+		public static ExchangeBoard Bvmt { get; } = new()
 		{
 			Code = Exchange.Bvmt.Name,
 			Exchange = Exchange.Bvmt,
 			TimeZone = TimeHelper.Tunisia,
-			WorkingTime = new WorkingTime
+			WorkingTime = new()
 			{
 				IsEnabled = true,
-				Periods = new List<WorkingTimePeriod>
+				Periods = new()
 				{
 					new()
 					{
 						Till = DateTime.MaxValue,
-						Times = new List<Range<TimeSpan>>
+						Times = new()
 						{
 							new("09:00:00".To<TimeSpan>(), "14:00:00".To<TimeSpan>())
 						},
@@ -3640,7 +2499,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="IQFeed"/>.
 		/// </summary>
-		public static ExchangeBoard IQFeed { get; } = new ExchangeBoard
+		public static ExchangeBoard IQFeed { get; } = new()
 		{
 			Code = Exchange.IQFeed.Name,
 			Exchange = Exchange.IQFeed,
@@ -3649,7 +2508,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="IBKR"/>.
 		/// </summary>
-		public static ExchangeBoard IBKR { get; } = new ExchangeBoard
+		public static ExchangeBoard IBKR { get; } = new()
 		{
 			Code = Exchange.IBKR.Name,
 			Exchange = Exchange.IBKR,
@@ -3658,7 +2517,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="STSH"/>.
 		/// </summary>
-		public static ExchangeBoard STSH { get; } = new ExchangeBoard
+		public static ExchangeBoard STSH { get; } = new()
 		{
 			Code = Exchange.STSH.Name,
 			Exchange = Exchange.STSH,
@@ -3667,7 +2526,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="STRLG"/>.
 		/// </summary>
-		public static ExchangeBoard STRLG { get; } = new ExchangeBoard
+		public static ExchangeBoard STRLG { get; } = new()
 		{
 			Code = Exchange.STRLG.Name,
 			Exchange = Exchange.STRLG,
@@ -3676,7 +2535,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="QNDL"/>.
 		/// </summary>
-		public static ExchangeBoard QNDL { get; } = new ExchangeBoard
+		public static ExchangeBoard QNDL { get; } = new()
 		{
 			Code = Exchange.QNDL.Name,
 			Exchange = Exchange.QNDL,
@@ -3685,7 +2544,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="FTX"/>.
 		/// </summary>
-		public static ExchangeBoard FTX { get; } = new ExchangeBoard
+		public static ExchangeBoard FTX { get; } = new()
 		{
 			Code = Exchange.FTX.Name,
 			Exchange = Exchange.FTX,
