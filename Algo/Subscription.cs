@@ -1,90 +1,16 @@
 namespace StockSharp.Algo
 {
-	using System;
-	using System.ComponentModel.DataAnnotations;
-	using System.Runtime.Serialization;
-
-	using Ecng.Common;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	using DataType = StockSharp.Messages.DataType;
 
 	/// <summary>
-	/// Subscription states.
-	/// </summary>
-	[DataContract]
-	[Serializable]
-	public enum SubscriptionStates
-	{
-		/// <summary>
-		/// Stopped.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3178Key)]
-		Stopped,
-
-		/// <summary>
-		/// Active.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2229Key)]
-		Active,
-
-		/// <summary>
-		/// Error.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str152Key)]
-		Error,
-
-		/// <summary>
-		/// Finished.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FinishedKey)]
-		Finished,
-
-		/// <summary>
-		/// Online.
-		/// </summary>
-		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OnlineKey)]
-		Online,
-	}
-
-	/// <summary>
 	/// Subscription.
 	/// </summary>
-	public class Subscription
+	public class Subscription : SubscriptionBase
 	{
-		/// <summary>
-		/// Security ID.
-		/// </summary>
-		public SecurityId? SecurityId => (SubscriptionMessage as ISecurityIdMessage)?.SecurityId;
-
-		/// <summary>
-		/// Data type info.
-		/// </summary>
-		public DataType DataType => SubscriptionMessage.DataType;
-
-		/// <summary>
-		/// Subscription message.
-		/// </summary>
-		public ISubscriptionMessage SubscriptionMessage { get; }
-
-		/// <summary>
-		/// Request identifier.
-		/// </summary>
-		public long TransactionId
-		{
-			get => SubscriptionMessage.TransactionId;
-			set => SubscriptionMessage.TransactionId = value;
-		}
-
 		/// <summary>
 		/// Candles series.
 		/// </summary>
@@ -94,11 +20,6 @@ namespace StockSharp.Algo
 		/// Portfolio, describing the trading account and the size of its generated commission.
 		/// </summary>
 		public Portfolio Portfolio { get; }
-
-		/// <summary>
-		/// State.
-		/// </summary>
-		public SubscriptionStates State { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Subscription"/>.
@@ -156,28 +77,8 @@ namespace StockSharp.Algo
 		/// <param name="subscriptionMessage">Subscription message.</param>
 		/// <param name="security">Security.</param>
 		public Subscription(ISubscriptionMessage subscriptionMessage, SecurityMessage security = null)
+			: base(subscriptionMessage, security)
 		{
-			SubscriptionMessage = subscriptionMessage ?? throw new ArgumentNullException(nameof(subscriptionMessage));
-			SubscriptionMessage.IsSubscribe = true;
-
-			if (security == null)
-				return;
-
-			switch (subscriptionMessage)
-			{
-				case MarketDataMessage mdMsg:
-					security.CopyTo(mdMsg, false);
-					break;
-				case ISecurityIdMessage secIdMsg:
-					secIdMsg.SecurityId = security.SecurityId;
-					break;
-				case INullableSecurityIdMessage nullSecIdMsg:
-					nullSecIdMsg.SecurityId = security.SecurityId.IsDefault() ? null : security.SecurityId;
-					break;
-			}
 		}
-
-		/// <inheritdoc />
-		public override string ToString() => SubscriptionMessage.ToString();
 	}
 }

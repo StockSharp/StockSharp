@@ -1643,56 +1643,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Change subscription state.
-		/// </summary>
-		/// <param name="currState">Current state.</param>
-		/// <param name="newState">New state.</param>
-		/// <param name="subscriptionId">Subscription id.</param>
-		/// <param name="receiver">Logs.</param>
-		/// <param name="isInfoLevel">Use <see cref="LogLevels.Info"/> for log message.</param>
-		/// <returns>New state.</returns>
-		public static SubscriptionStates ChangeSubscriptionState(this SubscriptionStates currState, SubscriptionStates newState, long subscriptionId, ILogReceiver receiver, bool isInfoLevel = true)
-		{
-			bool isOk;
-
-			if (currState == newState)
-				isOk = false;
-			else
-			{
-				switch (currState)
-				{
-					case SubscriptionStates.Stopped:
-					case SubscriptionStates.Active:
-						isOk = true;
-						break;
-					case SubscriptionStates.Error:
-					case SubscriptionStates.Finished:
-						isOk = false;
-						break;
-					case SubscriptionStates.Online:
-						isOk = newState != SubscriptionStates.Active;
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(currState), currState, LocalizedStrings.Str1219);
-				}
-			}
-
-			const string text = "Subscription {0} {1}->{2}.";
-
-			if (isOk)
-			{
-				if (isInfoLevel)
-					receiver.AddInfoLog(text, subscriptionId, currState, newState);
-				else
-					receiver.AddDebugLog(text, subscriptionId, currState, newState);
-			}
-			else
-				receiver.AddWarningLog(text, subscriptionId, currState, newState);
-
-			return newState;
-		}
-
-		/// <summary>
 		/// Apply changes to the portfolio object.
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
@@ -3369,16 +3319,6 @@ namespace StockSharp.Algo
 			init(adapter);
 			connector.Adapter.InnerAdapters.Add(adapter);
 			return connector;
-		}
-
-		/// <summary>
-		/// Determines the specified state equals <see cref="SubscriptionStates.Active"/> or <see cref="SubscriptionStates.Online"/>.
-		/// </summary>
-		/// <param name="state">State.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsActive(this SubscriptionStates state)
-		{
-			return state is SubscriptionStates.Active or SubscriptionStates.Online;
 		}
 
 		/// <summary>
