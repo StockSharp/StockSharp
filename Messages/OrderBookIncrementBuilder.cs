@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo
+﻿namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,7 +8,6 @@
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Order book builder, used incremental <see cref="QuoteChangeMessage"/>.
