@@ -202,15 +202,5 @@ namespace StockSharp.Algo
 		/// The risks control manager.
 		/// </summary>
 		public static IRiskManager RiskManager => ConfigManager.GetService<IRiskManager>();
-
-		/// <summary>
-		/// <see cref="ICredentialsProvider"/>.
-		/// </summary>
-		public static ICredentialsProvider TryCredentialsProvider => ConfigManager.TryGetService<ICredentialsProvider>();
-
-		/// <summary>
-		/// <see cref="ICredentialsProvider"/>.
-		/// </summary>
-		public static ICredentialsProvider CredentialsProvider => ConfigManager.GetService<ICredentialsProvider>();
 	}
 }

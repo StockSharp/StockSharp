@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+﻿namespace StockSharp.Configuration
 {
 	using System;
 	using System.IO;
@@ -7,7 +7,6 @@
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Configuration;
 	using StockSharp.Logging;
 
 	/// <summary>

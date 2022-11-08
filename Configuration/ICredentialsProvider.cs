@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+﻿namespace StockSharp.Configuration
 {
 	using Ecng.ComponentModel;
 
