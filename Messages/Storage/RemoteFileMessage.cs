@@ -1,11 +1,9 @@
-namespace StockSharp.Algo.Storages.Remote.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Remove file message (upload or download).
@@ -16,7 +14,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Initializes a new instance of the <see cref="RemoteFileMessage"/>.
 		/// </summary>
 		public RemoteFileMessage()
-			: base(ExtendedMessageTypes.RemoteFile)
+			: base(MessageTypes.RemoteFile)
 		{
 		}
 
@@ -50,7 +48,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Storage format.
 		/// </summary>
 		[DataMember]
-		public StorageFormats Format { get; set; }
+		public int Format { get; set; }
 
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.

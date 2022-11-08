@@ -33,7 +33,6 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Statistics;
-	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;

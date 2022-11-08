@@ -1,11 +1,9 @@
-﻿namespace StockSharp.Algo.Storages.Remote.Messages
+﻿namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Available data info message.
@@ -16,7 +14,7 @@
 		/// Initializes a new instance of the <see cref="AvailableDataInfoMessage"/>.
 		/// </summary>
 		public AvailableDataInfoMessage()
-			: base(ExtendedMessageTypes.AvailableDataInfo)
+			: base(MessageTypes.AvailableDataInfo)
 		{
 		}
 
@@ -40,7 +38,7 @@
 		/// Storage format.
 		/// </summary>
 		[DataMember]
-		public StorageFormats Format { get; set; }
+		public int Format { get; set; }
 
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Create(typeof(AvailableDataInfoMessage), null);

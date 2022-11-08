@@ -1,11 +1,9 @@
-namespace StockSharp.Algo.Storages.Remote.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Remote file command.
@@ -16,7 +14,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Initializes a new instance of the <see cref="RemoteFileCommandMessage"/>.
 		/// </summary>
 		public RemoteFileCommandMessage()
-			: base(ExtendedMessageTypes.RemoteFileCommand)
+			: base(MessageTypes.RemoteFileCommand)
 		{
 			Scope = CommandScopes.File;
 		}
@@ -47,7 +45,7 @@ namespace StockSharp.Algo.Storages.Remote.Messages
 		/// Storage format.
 		/// </summary>
 		[DataMember]
-		public StorageFormats Format { get; set; }
+		public int Format { get; set; }
 
 		private byte[] _body = Array.Empty<byte>();
 

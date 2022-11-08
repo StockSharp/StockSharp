@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -7,8 +7,6 @@ namespace StockSharp.Algo.Strategies.Messages
 
 	using Ecng.Common;
 	using Ecng.Collections;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The message contains information about strategy.
@@ -21,7 +19,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Initializes a new instance of the <see cref="StrategyInfoMessage"/>.
 		/// </summary>
 		public StrategyInfoMessage()
-			: base(ExtendedMessageTypes.StrategyInfo)
+			: base(MessageTypes.StrategyInfo)
 		{
 		}
 
@@ -62,7 +60,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		public DateTimeOffset CreationDate { get; set; }
 
 		/// <inheritdoc />
-		public override DataType DataType => StrategyDataType.Info;
+		public override DataType DataType => DataType.Info;
 
 		/// <inheritdoc />
 		public override string ToString()

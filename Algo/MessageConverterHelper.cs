@@ -1914,47 +1914,5 @@ namespace StockSharp.Algo
 		/// <param name="dataType">Data type info.</param>
 		/// <returns>Subscription.</returns>
 		public static Subscription ToSubscription(this DataType dataType) => new(dataType, (SecurityMessage)null);
-
-		/// <summary>
-		/// Convert <see cref="DataType"/> to <see cref="ISubscriptionMessage"/> value.
-		/// </summary>
-		/// <param name="dataType">Data type info.</param>
-		/// <returns>Subscription message.</returns>
-		public static ISubscriptionMessage ToSubscriptionMessage(this DataType dataType)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			if (dataType == DataType.Securities)
-				return new SecurityLookupMessage();
-			else if (dataType == DataType.Board)
-				return new BoardLookupMessage();
-			else if (dataType == DataType.BoardState)
-				return new BoardLookupMessage();
-			else if (dataType == DataType.Users)
-				return new UserLookupMessage();
-			else if (dataType == DataType.TimeFrames)
-				return new TimeFrameLookupMessage();
-			else if (dataType.IsMarketData)
-				return new MarketDataMessage { DataType2 = dataType };
-			else if (dataType == DataType.Transactions)
-				return new OrderStatusMessage();
-			else if (dataType == DataType.PositionChanges)
-				return new PortfolioLookupMessage();
-			else if (dataType.IsPortfolio)
-				return new PortfolioMessage();
-			else if (dataType == DataType.SecurityLegs)
-				return new SecurityLegsRequestMessage();
-			else if (dataType == DataType.SecurityMapping)
-				return new SecurityMappingRequestMessage();
-			else if (dataType == DataType.SecurityRoute)
-				return new SecurityRouteListRequestMessage();
-			else if (dataType == DataType.PortfolioRoute)
-				return new PortfolioRouteListRequestMessage();
-			else if (dataType == DataType.Command)
-				return new CommandMessage();
-			else
-				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
-		}
 	}
 }

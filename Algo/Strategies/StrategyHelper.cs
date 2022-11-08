@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Strategies
 
 	using Ecng.Common;
 
-	using StockSharp.Algo.Strategies.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;

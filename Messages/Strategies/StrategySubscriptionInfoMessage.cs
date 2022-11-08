@@ -1,9 +1,7 @@
-namespace StockSharp.Algo.Strategies.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The strategy subscription.
@@ -64,7 +62,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Initializes a new instance of the <see cref="StrategySubscriptionInfoMessage"/>.
 		/// </summary>
 		public StrategySubscriptionInfoMessage()
-			: base(ExtendedMessageTypes.StrategySubscriptionInfo)
+			: base(MessageTypes.StrategySubscriptionInfo)
 		{
 		}
 

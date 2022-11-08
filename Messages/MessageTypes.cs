@@ -383,6 +383,61 @@ namespace StockSharp.Messages
 		/// <see cref="ProcessSuspendedMessage"/>.
 		/// </summary>
 		ProcessSuspended,
+
+		/// <summary>
+		/// <see cref="EmulationStateMessage"/>.
+		/// </summary>
+		EmulationState,
+
+		/// <summary>
+		/// <see cref="ChangeTimeIntervalMessage"/>.
+		/// </summary>
+		ChangeTimeInterval,
+
+		/// <summary>
+		/// <see cref="StrategyInfoMessage"/>.
+		/// </summary>
+		StrategyInfo,
+
+		/// <summary>
+		/// <see cref="StrategyTypeMessage"/>.
+		/// </summary>
+		StrategyType,
+
+		/// <summary>
+		/// <see cref="StrategyStateMessage"/>.
+		/// </summary>
+		StrategyState,
+
+		/// <summary>
+		/// <see cref="RemoteFileMessage"/>.
+		/// </summary>
+		RemoteFile,
+
+		/// <summary>
+		/// <see cref="RemoteFileCommandMessage"/>.
+		/// </summary>
+		RemoteFileCommand,
+
+		/// <summary>
+		/// <see cref="StrategySubscriptionInfoMessage"/>.
+		/// </summary>
+		StrategySubscriptionInfo,
+
+		/// <summary>
+		/// <see cref="StrategyBacktestResultMessage"/>.
+		/// </summary>
+		StrategyBacktestResult,
+
+		/// <summary>
+		/// <see cref="AvailableDataRequestMessage"/>.
+		/// </summary>
+		AvailableDataRequest,
+
+		/// <summary>
+		/// <see cref="AvailableDataInfoMessage"/>.
+		/// </summary>
+		AvailableDataInfo,
 	}
 
 	/// <summary>

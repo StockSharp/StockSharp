@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -7,8 +7,6 @@ namespace StockSharp.Algo.Strategies.Messages
 
 	using Ecng.Collections;
 	using Ecng.Common;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The message contains information about strategy state or command to change state.
@@ -21,12 +19,12 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Initializes a new instance of the <see cref="StrategyStateMessage"/>.
 		/// </summary>
 		public StrategyStateMessage()
-			: base(ExtendedMessageTypes.StrategyState)
+			: base(MessageTypes.StrategyState)
 		{
 		}
 
 		/// <inheritdoc />
-		public override DataType DataType => StrategyDataType.State;
+		public override DataType DataType => DataType.State;
 
 		/// <summary>
 		/// Strategy ID.

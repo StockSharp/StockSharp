@@ -351,7 +351,7 @@ namespace StockSharp.Algo.Testing
 			{
 				switch (message.Type)
 				{
-					case ExtendedMessageTypes.EmulationState:
+					case MessageTypes.EmulationState:
 						ProcessEmulationStateMessage((EmulationStateMessage)message);
 						break;
 

@@ -279,7 +279,7 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case ExtendedMessageTypes.EmulationState:
+				case MessageTypes.EmulationState:
 					SendToEmulator(message);
 					break;
 

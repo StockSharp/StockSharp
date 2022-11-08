@@ -74,7 +74,7 @@ namespace StockSharp.Algo
 								SecurityId = new SecurityId
 								{
 									SecurityCode = securityName,
-									BoardCode = BusinessEntities.ExchangeBoard.Forts.Code,
+									BoardCode = BoardCodes.Forts,
 								},
 							}
 							.TryAdd(Level1Fields.SettlementPrice, GetPart(row[1]))

@@ -126,10 +126,10 @@ namespace StockSharp.Algo.Testing
 			StopDate = DateTimeOffset.MaxValue;
 
 			this.AddMarketDataSupport();
-			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState, null);
+			this.AddSupportedMessage(MessageTypes.EmulationState, null);
 			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource, true);
 			this.AddSupportedMessage(ExtendedMessageTypes.Generator, true);
-			this.AddSupportedMessage(ExtendedMessageTypes.ChangeTimeInterval, null);
+			this.AddSupportedMessage(MessageTypes.ChangeTimeInterval, null);
 		}
 
 		/// <summary>
@@ -317,7 +317,7 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case ExtendedMessageTypes.EmulationState:
+				case MessageTypes.EmulationState:
 				{
 					var stateMsg = (EmulationStateMessage)message;
 
@@ -361,7 +361,7 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case ExtendedMessageTypes.ChangeTimeInterval:
+				case MessageTypes.ChangeTimeInterval:
 				{
 					var intervalMsg = (ChangeTimeIntervalMessage)message;
 					MarketTimeChangedInterval = intervalMsg.Interval;

@@ -1,10 +1,8 @@
-namespace StockSharp.Algo.Strategies.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Linq;
 	using System.Runtime.Serialization;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The message contains information about strategy type.
@@ -17,7 +15,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Initializes a new instance of the <see cref="StrategyTypeMessage"/>.
 		/// </summary>
 		public StrategyTypeMessage()
-			: base(ExtendedMessageTypes.StrategyType)
+			: base(MessageTypes.StrategyType)
 		{
 		}
 

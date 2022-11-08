@@ -14,7 +14,6 @@ namespace StockSharp.Algo.Storages.Remote
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using StockSharp.Algo.Storages.Remote.Messages;
 
 	/// <summary>
 	/// The client for access to the history server.
@@ -290,7 +289,7 @@ namespace StockSharp.Algo.Storages.Remote
 			//if (securityId.IsDefault())
 			//	throw new ArgumentNullException(nameof(securityId));
 
-			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = format })
+			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = (int)format })
 				.Select(t => t.FileDataType).Distinct().ToArray();
 		}
 
@@ -315,7 +314,7 @@ namespace StockSharp.Algo.Storages.Remote
 			{
 				SecurityId = securityId,
 				RequestDataType = dataType,
-				Format = format,
+				Format = (int)format,
 			}).Select(i => i.Date.UtcDateTime).ToArray();
 		}
 
@@ -337,7 +336,7 @@ namespace StockSharp.Algo.Storages.Remote
 				FileDataType = dataType,
 				StartDate = date,
 				EndDate = date,
-				Format = format,
+				Format = (int)format,
 				Body = stream.To<byte[]>(),
 			});
 		}
@@ -360,7 +359,7 @@ namespace StockSharp.Algo.Storages.Remote
 				FileDataType = dataType,
 				StartDate = date,
 				EndDate = date,
-				Format = format,
+				Format = (int)format,
 			}).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
 		}
 
@@ -379,7 +378,7 @@ namespace StockSharp.Algo.Storages.Remote
 				Scope = CommandScopes.File,
 				SecurityId = securityId,
 				FileDataType = dataType,
-				Format = format,
+				Format = (int)format,
 				StartDate = date,
 				EndDate = date,
 			});

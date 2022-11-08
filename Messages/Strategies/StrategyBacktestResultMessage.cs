@@ -1,9 +1,7 @@
-namespace StockSharp.Algo.Strategies.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
-
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Backtesting session.
@@ -16,7 +14,7 @@ namespace StockSharp.Algo.Strategies.Messages
 		/// Initializes a new instance of the <see cref="StrategyBacktestResultMessage"/>.
 		/// </summary>
 		public StrategyBacktestResultMessage()
-			: base(ExtendedMessageTypes.StrategyBacktestResult)
+			: base(MessageTypes.StrategyBacktestResult)
 		{
 		}
 

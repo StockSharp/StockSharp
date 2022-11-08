@@ -1,8 +1,7 @@
-namespace StockSharp.Algo.Testing
+namespace StockSharp.Messages
 {
 	using System;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -14,7 +13,7 @@ namespace StockSharp.Algo.Testing
 		/// Initializes a new instance of the <see cref="ChangeTimeIntervalMessage"/>.
 		/// </summary>
 		public ChangeTimeIntervalMessage()
-			: base(ExtendedMessageTypes.ChangeTimeInterval)
+			: base(MessageTypes.ChangeTimeInterval)
 		{
 		}
 
