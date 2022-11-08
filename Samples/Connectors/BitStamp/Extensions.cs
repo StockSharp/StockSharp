@@ -33,11 +33,9 @@ namespace StockSharp.BitStamp
 			return securityId.SecurityCode?.Remove("/").ToLowerInvariant();
 		}
 
-		public static readonly string BitStampBoard = "BSTMP";
-
 		public static bool IsAssociated(this SecurityId secId)
 		{
-			return secId.BoardCode.EqualsIgnoreCase(BitStampBoard);
+			return secId.BoardCode.EqualsIgnoreCase(BoardCodes.BitStamp);
 		}
 
 		public static SecurityId ToStockSharp(this string currency, bool format = true)
@@ -53,7 +51,7 @@ namespace StockSharp.BitStamp
 			return new SecurityId
 			{
 				SecurityCode = currency,
-				BoardCode = BitStampBoard,
+				BoardCode = BoardCodes.BitStamp,
 			};
 		}
 

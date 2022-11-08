@@ -407,7 +407,7 @@ namespace StockSharp.BitStamp
 			SendOutMessage(new PortfolioMessage
 			{
 				PortfolioName = pfName,
-				BoardCode = Extensions.BitStampBoard,
+				BoardCode = BoardCodes.BitStamp,
 				OriginalTransactionId = transactionId,
 			});
 

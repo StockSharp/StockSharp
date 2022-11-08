@@ -380,7 +380,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Test { get; } = new()
 		{
-			Code = "TEST",
+			Code = BoardCodes.Test,
 			Exchange = Exchange.Test,
 		};
 
@@ -389,7 +389,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Forts { get; } = new()
 		{
-			Code = "FORTS",
+			Code = BoardCodes.Forts,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -418,514 +418,514 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about board <see cref="Micex"/>.
 		/// </summary>
-		public static ExchangeBoard Micex { get; } = CreateMoex("MICEX");
+		public static ExchangeBoard Micex { get; } = CreateMoex(BoardCodes.Micex);
 
 		/// <summary>
 		/// Information about board <see cref="MicexAuct"/>.
 		/// </summary>
-		public static ExchangeBoard MicexAuct { get; } = CreateMoex("AUCT");
+		public static ExchangeBoard MicexAuct { get; } = CreateMoex(BoardCodes.MicexAuct);
 
 		/// <summary>
 		/// Information about board <see cref="MicexAubb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexAubb { get; } = CreateMoex("AUBB");
+		public static ExchangeBoard MicexAubb { get; } = CreateMoex(BoardCodes.MicexAubb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexCasf"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCasf { get; } = CreateMoex("CASF");
+		public static ExchangeBoard MicexCasf { get; } = CreateMoex(BoardCodes.MicexCasf);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqbr"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqbr { get; } = CreateMoex("EQBR");
+		public static ExchangeBoard MicexEqbr { get; } = CreateMoex(BoardCodes.MicexEqbr);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqbs"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqbs { get; } = CreateMoex("EQBS");
+		public static ExchangeBoard MicexEqbs { get; } = CreateMoex(BoardCodes.MicexEqbs);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqdp"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqdp { get; } = CreateMoex("EQDP");
+		public static ExchangeBoard MicexEqdp { get; } = CreateMoex(BoardCodes.MicexEqdp);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqeu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqeu { get; } = CreateMoex("EQEU");
+		public static ExchangeBoard MicexEqeu { get; } = CreateMoex(BoardCodes.MicexEqeu);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqus { get; } = CreateMoex("EQUS");
+		public static ExchangeBoard MicexEqus { get; } = CreateMoex(BoardCodes.MicexEqus);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqnb { get; } = CreateMoex("EQNB");
+		public static ExchangeBoard MicexEqnb { get; } = CreateMoex(BoardCodes.MicexEqnb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqne { get; } = CreateMoex("EQNE");
+		public static ExchangeBoard MicexEqne { get; } = CreateMoex(BoardCodes.MicexEqne);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqnl { get; } = CreateMoex("EQNL");
+		public static ExchangeBoard MicexEqnl { get; } = CreateMoex(BoardCodes.MicexEqnl);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqno { get; } = CreateMoex("EQNO");
+		public static ExchangeBoard MicexEqno { get; } = CreateMoex(BoardCodes.MicexEqno);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqob { get; } = CreateMoex("EQOB");
+		public static ExchangeBoard MicexEqob { get; } = CreateMoex(BoardCodes.MicexEqob);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqos { get; } = CreateMoex("EQOS");
+		public static ExchangeBoard MicexEqos { get; } = CreateMoex(BoardCodes.MicexEqos);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqov { get; } = CreateMoex("EQOV");
+		public static ExchangeBoard MicexEqov { get; } = CreateMoex(BoardCodes.MicexEqov);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqlv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqlv { get; } = CreateMoex("EQLV");
+		public static ExchangeBoard MicexEqlv { get; } = CreateMoex(BoardCodes.MicexEqlv);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqdb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqdb { get; } = CreateMoex("EQDB");
+		public static ExchangeBoard MicexEqdb { get; } = CreateMoex(BoardCodes.MicexEqdb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqde"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqde { get; } = CreateMoex("EQDE");
+		public static ExchangeBoard MicexEqde { get; } = CreateMoex(BoardCodes.MicexEqde);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqli { get; } = CreateMoex("EQLI");
+		public static ExchangeBoard MicexEqli { get; } = CreateMoex(BoardCodes.MicexEqli);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqqi { get; } = CreateMoex("EQQI");
+		public static ExchangeBoard MicexEqqi { get; } = CreateMoex(BoardCodes.MicexEqqi);
 
 		/// <summary>
 		/// Information about board <see cref="MicexSmal"/>.
 		/// </summary>
-		public static ExchangeBoard MicexSmal { get; } = CreateMoex("SMAL");
+		public static ExchangeBoard MicexSmal { get; } = CreateMoex(BoardCodes.MicexSmal);
 
 		/// <summary>
 		/// Information about board <see cref="MicexSpob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexSpob { get; } = CreateMoex("SPOB");
+		public static ExchangeBoard MicexSpob { get; } = CreateMoex(BoardCodes.MicexSpob);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqbr"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqbr { get; } = CreateMoex("TQBR");
+		public static ExchangeBoard MicexTqbr { get; } = CreateMoex(BoardCodes.MicexTqbr);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqde"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqde { get; } = CreateMoex("TQDE");
+		public static ExchangeBoard MicexTqde { get; } = CreateMoex(BoardCodes.MicexTqde);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqbs"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqbs { get; } = CreateMoex("TQBS");
+		public static ExchangeBoard MicexTqbs { get; } = CreateMoex(BoardCodes.MicexTqbs);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqeu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqeu { get; } = CreateMoex("TQEU");
+		public static ExchangeBoard MicexTqeu { get; } = CreateMoex(BoardCodes.MicexTqeu);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqus { get; } = CreateMoex("TQUS");
+		public static ExchangeBoard MicexTqus { get; } = CreateMoex(BoardCodes.MicexTqus);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqnb { get; } = CreateMoex("TQNB");
+		public static ExchangeBoard MicexTqnb { get; } = CreateMoex(BoardCodes.MicexTqnb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqne { get; } = CreateMoex("TQNE");
+		public static ExchangeBoard MicexTqne { get; } = CreateMoex(BoardCodes.MicexTqne);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqnl { get; } = CreateMoex("TQNL");
+		public static ExchangeBoard MicexTqnl { get; } = CreateMoex(BoardCodes.MicexTqnl);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqno { get; } = CreateMoex("TQNO");
+		public static ExchangeBoard MicexTqno { get; } = CreateMoex(BoardCodes.MicexTqno);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqob { get; } = CreateMoex("TQOB");
+		public static ExchangeBoard MicexTqob { get; } = CreateMoex(BoardCodes.MicexTqob);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqos { get; } = CreateMoex("TQOS");
+		public static ExchangeBoard MicexTqos { get; } = CreateMoex(BoardCodes.MicexTqos);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqov { get; } = CreateMoex("TQOV");
+		public static ExchangeBoard MicexTqov { get; } = CreateMoex(BoardCodes.MicexTqov);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqlv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqlv { get; } = CreateMoex("TQLV");
+		public static ExchangeBoard MicexTqlv { get; } = CreateMoex(BoardCodes.MicexTqlv);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqli { get; } = CreateMoex("TQLI");
+		public static ExchangeBoard MicexTqli { get; } = CreateMoex(BoardCodes.MicexTqli);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTqqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTqqi { get; } = CreateMoex("TQQI");
+		public static ExchangeBoard MicexTqqi { get; } = CreateMoex(BoardCodes.MicexTqqi);
 
 		/// <summary>
 		/// Information about board <see cref="MicexEqrp"/>.
 		/// </summary>
-		public static ExchangeBoard MicexEqrp { get; } = CreateMoex("EQRP");
+		public static ExchangeBoard MicexEqrp { get; } = CreateMoex(BoardCodes.MicexEqrp);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsrp"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsrp { get; } = CreateMoex("PSRP");
+		public static ExchangeBoard MicexPsrp { get; } = CreateMoex(BoardCodes.MicexPsrp);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRfnd"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRfnd { get; } = CreateMoex("RFND");
+		public static ExchangeBoard MicexRfnd { get; } = CreateMoex(BoardCodes.MicexRfnd);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTadm"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTadm { get; } = CreateMoex("TADM");
+		public static ExchangeBoard MicexTadm { get; } = CreateMoex(BoardCodes.MicexTadm);
 
 		/// <summary>
 		/// Information about board <see cref="MicexNadm"/>.
 		/// </summary>
-		public static ExchangeBoard MicexNadm { get; } = CreateMoex("NADM");
+		public static ExchangeBoard MicexNadm { get; } = CreateMoex(BoardCodes.MicexNadm);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsau"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsau { get; } = CreateMoex("PSAU");
+		public static ExchangeBoard MicexPsau { get; } = CreateMoex(BoardCodes.MicexPsau);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPaus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPaus { get; } = CreateMoex("PAUS");
+		public static ExchangeBoard MicexPaus { get; } = CreateMoex(BoardCodes.MicexPaus);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsbb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsbb { get; } = CreateMoex("PSBB");
+		public static ExchangeBoard MicexPsbb { get; } = CreateMoex(BoardCodes.MicexPsbb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPseq"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPseq { get; } = CreateMoex("PSEQ");
+		public static ExchangeBoard MicexPseq { get; } = CreateMoex(BoardCodes.MicexPseq);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPses"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPses { get; } = CreateMoex("PSES");
+		public static ExchangeBoard MicexPses { get; } = CreateMoex(BoardCodes.MicexPses);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPseu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPseu { get; } = CreateMoex("PSEU");
+		public static ExchangeBoard MicexPseu { get; } = CreateMoex(BoardCodes.MicexPseu);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsdb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsdb { get; } = CreateMoex("PSDB");
+		public static ExchangeBoard MicexPsdb { get; } = CreateMoex(BoardCodes.MicexPsdb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsde"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsde { get; } = CreateMoex("PSDE");
+		public static ExchangeBoard MicexPsde { get; } = CreateMoex(BoardCodes.MicexPsde);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsus { get; } = CreateMoex("PSUS");
+		public static ExchangeBoard MicexPsus { get; } = CreateMoex(BoardCodes.MicexPsus);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsnb { get; } = CreateMoex("PSNB");
+		public static ExchangeBoard MicexPsnb { get; } = CreateMoex(BoardCodes.MicexPsnb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsne { get; } = CreateMoex("PSNE");
+		public static ExchangeBoard MicexPsne { get; } = CreateMoex(BoardCodes.MicexPsne);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsnl { get; } = CreateMoex("PSNL");
+		public static ExchangeBoard MicexPsnl { get; } = CreateMoex(BoardCodes.MicexPsnl);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsno { get; } = CreateMoex("PSNO");
+		public static ExchangeBoard MicexPsno { get; } = CreateMoex(BoardCodes.MicexPsno);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsob { get; } = CreateMoex("PSOB");
+		public static ExchangeBoard MicexPsob { get; } = CreateMoex(BoardCodes.MicexPsob);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsos { get; } = CreateMoex("PSOS");
+		public static ExchangeBoard MicexPsos { get; } = CreateMoex(BoardCodes.MicexPsos);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsov { get; } = CreateMoex("PSOV");
+		public static ExchangeBoard MicexPsov { get; } = CreateMoex(BoardCodes.MicexPsov);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPslv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPslv { get; } = CreateMoex("PSLV");
+		public static ExchangeBoard MicexPslv { get; } = CreateMoex(BoardCodes.MicexPslv);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsli { get; } = CreateMoex("PSLI");
+		public static ExchangeBoard MicexPsli { get; } = CreateMoex(BoardCodes.MicexPsli);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPsqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPsqi { get; } = CreateMoex("PSQI");
+		public static ExchangeBoard MicexPsqi { get; } = CreateMoex(BoardCodes.MicexPsqi);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpeu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpeu { get; } = CreateMoex("RPEU");
+		public static ExchangeBoard MicexRpeu { get; } = CreateMoex(BoardCodes.MicexRpeu);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpma"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpma { get; } = CreateMoex("RPMA");
+		public static ExchangeBoard MicexRpma { get; } = CreateMoex(BoardCodes.MicexRpma);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpmo"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpmo { get; } = CreateMoex("RPMO");
+		public static ExchangeBoard MicexRpmo { get; } = CreateMoex(BoardCodes.MicexRpmo);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpua"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpua { get; } = CreateMoex("RPUA");
+		public static ExchangeBoard MicexRpua { get; } = CreateMoex(BoardCodes.MicexRpua);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpuo"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpuo { get; } = CreateMoex("RPUO");
+		public static ExchangeBoard MicexRpuo { get; } = CreateMoex(BoardCodes.MicexRpuo);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpuq"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpuq { get; } = CreateMoex("RPUQ");
+		public static ExchangeBoard MicexRpuq { get; } = CreateMoex(BoardCodes.MicexRpuq);
 
 		/// <summary>
 		/// Information about board <see cref="MicexFbcb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexFbcb { get; } = CreateMoex("FBCB");
+		public static ExchangeBoard MicexFbcb { get; } = CreateMoex(BoardCodes.MicexFbcb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexFbfx"/>.
 		/// </summary>
-		public static ExchangeBoard MicexFbfx { get; } = CreateMoex("FBFX");
+		public static ExchangeBoard MicexFbfx { get; } = CreateMoex(BoardCodes.MicexFbfx);
 
 		/// <summary>
 		/// Information about board <see cref="MicexIrk2"/>.
 		/// </summary>
-		public static ExchangeBoard MicexIrk2 { get; } = CreateMoex("IRK2");
+		public static ExchangeBoard MicexIrk2 { get; } = CreateMoex(BoardCodes.MicexIrk2);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpqi { get; } = CreateMoex("RPQI");
+		public static ExchangeBoard MicexRpqi { get; } = CreateMoex(BoardCodes.MicexRpqi);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPteq"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPteq { get; } = CreateMoex("PTEQ");
+		public static ExchangeBoard MicexPteq { get; } = CreateMoex(BoardCodes.MicexPteq);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtes"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtes { get; } = CreateMoex("PTES");
+		public static ExchangeBoard MicexPtes { get; } = CreateMoex(BoardCodes.MicexPtes);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPteu"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPteu { get; } = CreateMoex("PTEU");
+		public static ExchangeBoard MicexPteu { get; } = CreateMoex(BoardCodes.MicexPteu);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtus"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtus { get; } = CreateMoex("PTUS");
+		public static ExchangeBoard MicexPtus { get; } = CreateMoex(BoardCodes.MicexPtus);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtnb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtnb { get; } = CreateMoex("PTNB");
+		public static ExchangeBoard MicexPtnb { get; } = CreateMoex(BoardCodes.MicexPtnb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtne"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtne { get; } = CreateMoex("PTNE");
+		public static ExchangeBoard MicexPtne { get; } = CreateMoex(BoardCodes.MicexPtne);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtnl"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtnl { get; } = CreateMoex("PTNL");
+		public static ExchangeBoard MicexPtnl { get; } = CreateMoex(BoardCodes.MicexPtnl);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtno"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtno { get; } = CreateMoex("PTNO");
+		public static ExchangeBoard MicexPtno { get; } = CreateMoex(BoardCodes.MicexPtno);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtob"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtob { get; } = CreateMoex("PTOB");
+		public static ExchangeBoard MicexPtob { get; } = CreateMoex(BoardCodes.MicexPtob);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtos"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtos { get; } = CreateMoex("PTOS");
+		public static ExchangeBoard MicexPtos { get; } = CreateMoex(BoardCodes.MicexPtos);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtov"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtov { get; } = CreateMoex("PTOV");
+		public static ExchangeBoard MicexPtov { get; } = CreateMoex(BoardCodes.MicexPtov);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtlv"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtlv { get; } = CreateMoex("PTLV");
+		public static ExchangeBoard MicexPtlv { get; } = CreateMoex(BoardCodes.MicexPtlv);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtli"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtli { get; } = CreateMoex("PTLI");
+		public static ExchangeBoard MicexPtli { get; } = CreateMoex(BoardCodes.MicexPtli);
 
 		/// <summary>
 		/// Information about board <see cref="MicexPtqi"/>.
 		/// </summary>
-		public static ExchangeBoard MicexPtqi { get; } = CreateMoex("PTQI");
+		public static ExchangeBoard MicexPtqi { get; } = CreateMoex(BoardCodes.MicexPtqi);
 
 		/// <summary>
 		/// Information about board <see cref="MicexScvc"/>.
 		/// </summary>
-		public static ExchangeBoard MicexScvc { get; } = CreateMoex("SCVC");
+		public static ExchangeBoard MicexScvc { get; } = CreateMoex(BoardCodes.MicexScvc);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpng"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpng { get; } = CreateMoex("RPNG");
+		public static ExchangeBoard MicexRpng { get; } = CreateMoex(BoardCodes.MicexRpng);
 
 		/// <summary>
 		/// Information about board <see cref="MicexRpfg"/>.
 		/// </summary>
-		public static ExchangeBoard MicexRpfg { get; } = CreateMoex("RPFG");
+		public static ExchangeBoard MicexRpfg { get; } = CreateMoex(BoardCodes.MicexRpfg);
 
 		/// <summary>
 		/// Information about board <see cref="MicexCbcr"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCbcr { get; } = CreateMoex("CBCR");
+		public static ExchangeBoard MicexCbcr { get; } = CreateMoex(BoardCodes.MicexCbcr);
 
 		/// <summary>
 		/// Information about board <see cref="MicexCred"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCred { get; } = CreateMoex("CRED");
+		public static ExchangeBoard MicexCred { get; } = CreateMoex(BoardCodes.MicexCred);
 
 		/// <summary>
 		/// Information about board <see cref="MicexDepz"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDepz { get; } = CreateMoex("DEPZ");
+		public static ExchangeBoard MicexDepz { get; } = CreateMoex(BoardCodes.MicexDepz);
 
 		/// <summary>
 		/// Information about board <see cref="MicexDpvb"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDpvb { get; } = CreateMoex("DPVB");
+		public static ExchangeBoard MicexDpvb { get; } = CreateMoex(BoardCodes.MicexDpvb);
 
 		/// <summary>
 		/// Information about board <see cref="MicexDpfk"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDpfk { get; } = CreateMoex("DPFK");
+		public static ExchangeBoard MicexDpfk { get; } = CreateMoex(BoardCodes.MicexDpfk);
 
 		/// <summary>
 		/// Information about board <see cref="MicexDpfo"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDpfo { get; } = CreateMoex("DPFO");
+		public static ExchangeBoard MicexDpfo { get; } = CreateMoex(BoardCodes.MicexDpfo);
 
 		/// <summary>
 		/// Information about board <see cref="MicexDppf"/>.
 		/// </summary>
-		public static ExchangeBoard MicexDppf { get; } = CreateMoex("DPPF");
+		public static ExchangeBoard MicexDppf { get; } = CreateMoex(BoardCodes.MicexDppf);
 
 		/// <summary>
 		/// Information about board <see cref="MicexCets"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCets { get; } = CreateMoex("CETS");
+		public static ExchangeBoard MicexCets { get; } = CreateMoex(BoardCodes.MicexCets);
 
 		/// <summary>
 		/// Information about board <see cref="MicexAets"/>.
 		/// </summary>
-		public static ExchangeBoard MicexAets { get; } = CreateMoex("AETS");
+		public static ExchangeBoard MicexAets { get; } = CreateMoex(BoardCodes.MicexAets);
 
 		/// <summary>
 		/// Information about board <see cref="MicexCngd"/>.
 		/// </summary>
-		public static ExchangeBoard MicexCngd { get; } = CreateMoex("CNGD");
+		public static ExchangeBoard MicexCngd { get; } = CreateMoex(BoardCodes.MicexCngd);
 
 		/// <summary>
 		/// Information about board <see cref="MicexTran"/>.
 		/// </summary>
-		public static ExchangeBoard MicexTran { get; } = CreateMoex("TRAN");
+		public static ExchangeBoard MicexTran { get; } = CreateMoex(BoardCodes.MicexTran);
 
 		/// <summary>
 		/// Information about board <see cref="MicexJunior"/>.
 		/// </summary>
-		public static ExchangeBoard MicexJunior { get; } = CreateMoex("QJSIM");
+		public static ExchangeBoard MicexJunior { get; } = CreateMoex(BoardCodes.MicexJunior);
 
 		/// <summary>
 		/// Information about board <see cref="Spb"/>.
 		/// </summary>
 		public static ExchangeBoard Spb { get; } = new()
 		{
-			Code = "SPB",
+			Code = BoardCodes.Spb,
 			Exchange = Exchange.Spb,
 			TimeZone = TimeHelper.Moscow,
 		};
@@ -935,7 +935,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Ux { get; } = new()
 		{
-			Code = "UX",
+			Code = BoardCodes.Ux,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -963,7 +963,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard UxStock { get; } = new()
 		{
-			Code = "GTS",
+			Code = BoardCodes.UxStock,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -988,7 +988,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Cme { get; } = new()
 		{
-			Code = "CME",
+			Code = BoardCodes.Cme,
 			TimeZone = TimeHelper.Cst,
 			Exchange = Exchange.Cme,
 		};
@@ -998,7 +998,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard CmeMini { get; } = new()
 		{
-			Code = "CMEMINI",
+			Code = BoardCodes.CmeMini,
 			TimeZone = TimeHelper.Cst,
 			Exchange = Exchange.Cme,
 		};
@@ -1008,7 +1008,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Cce { get; } = new()
 		{
-			Code = "CCE",
+			Code = BoardCodes.Cce,
 			TimeZone = TimeHelper.Cst,
 			Exchange = Exchange.Cce,
 		};
@@ -1018,7 +1018,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Cbot { get; } = new()
 		{
-			Code = "CBOT",
+			Code = BoardCodes.Cbot,
 			TimeZone = TimeHelper.Cst,
 			Exchange = Exchange.Cbot,
 		};
@@ -1028,7 +1028,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Nymex { get; } = new()
 		{
-			Code = "NYMEX",
+			Code = BoardCodes.Nymex,
 			TimeZone = TimeHelper.Est,
 			Exchange = Exchange.Nymex,
 		};
@@ -1038,7 +1038,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Amex { get; } = new()
 		{
-			Code = "AMEX",
+			Code = BoardCodes.Amex,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1064,7 +1064,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Nyse { get; } = new()
 		{
-			Code = "NYSE",
+			Code = BoardCodes.Nyse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1090,7 +1090,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Nasdaq { get; } = new()
 		{
-			Code = "NASDAQ",
+			Code = BoardCodes.Nasdaq,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1116,7 +1116,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Nqlx { get; } = new()
 		{
-			Code = "NQLX",
+			Code = BoardCodes.Nqlx,
 			Exchange = Exchange.Nqlx,
 			TimeZone = TimeHelper.Est,
 		};
@@ -1126,7 +1126,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Lse { get; } = new()
 		{
-			Code = "LSE",
+			Code = BoardCodes.Lse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1151,7 +1151,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Lme { get; } = new()
 		{
-			Code = "LME",
+			Code = BoardCodes.Lme,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1176,7 +1176,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Tse { get; } = new()
 		{
-			Code = "TSE",
+			Code = BoardCodes.Tse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1202,7 +1202,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Hkex { get; } = new()
 		{
-			Code = "HKEX",
+			Code = BoardCodes.Hkex,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1228,7 +1228,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Hkfe { get; } = new()
 		{
-			Code = "HKFE",
+			Code = BoardCodes.Hkfe,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1254,7 +1254,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Sse { get; } = new()
 		{
-			Code = "SSE",
+			Code = BoardCodes.Sse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1280,7 +1280,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Szse { get; } = new()
 		{
-			Code = "SZSE",
+			Code = BoardCodes.Szse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1306,7 +1306,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Tsx { get; } = new()
 		{
-			Code = "TSX",
+			Code = BoardCodes.Tsx,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1331,7 +1331,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Fwb { get; } = new()
 		{
-			Code = "FWB",
+			Code = BoardCodes.Fwb,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1356,7 +1356,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Asx { get; } = new()
 		{
-			Code = "ASX",
+			Code = BoardCodes.Asx,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1381,7 +1381,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Nzx { get; } = new()
 		{
-			Code = "NZX",
+			Code = BoardCodes.Nzx,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1406,7 +1406,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Bse { get; } = new()
 		{
-			Code = "BSE",
+			Code = BoardCodes.Bse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1431,7 +1431,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Nse { get; } = new()
 		{
-			Code = "NSE",
+			Code = BoardCodes.Nse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1456,7 +1456,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Swx { get; } = new()
 		{
-			Code = "SWX",
+			Code = BoardCodes.Swx,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1481,7 +1481,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Krx { get; } = new()
 		{
-			Code = "KRX",
+			Code = BoardCodes.Krx,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1506,7 +1506,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Mse { get; } = new()
 		{
-			Code = "MSE",
+			Code = BoardCodes.Mse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1531,7 +1531,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Jse { get; } = new()
 		{
-			Code = "JSE",
+			Code = BoardCodes.Jse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1556,7 +1556,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Sgx { get; } = new()
 		{
-			Code = "SGX",
+			Code = BoardCodes.Sgx,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1581,7 +1581,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Tsec { get; } = new()
 		{
-			Code = "TSEC",
+			Code = BoardCodes.Tsec,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1606,7 +1606,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Pse { get; } = new()
 		{
-			Code = "PSE",
+			Code = BoardCodes.Pse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1632,7 +1632,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Klse { get; } = new()
 		{
-			Code = "KLSE",
+			Code = BoardCodes.Klse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1658,7 +1658,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Idx { get; } = new()
 		{
-			Code = "IDX",
+			Code = BoardCodes.Idx,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1683,7 +1683,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Set { get; } = new()
 		{
-			Code = "SET",
+			Code = BoardCodes.Set,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1709,7 +1709,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Cse { get; } = new()
 		{
-			Code = "CSE",
+			Code = BoardCodes.Cse,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1734,7 +1734,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Tase { get; } = new()
 		{
-			Code = "TASE",
+			Code = BoardCodes.Tase,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1759,7 +1759,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Lmax { get; } = new()
 		{
-			Code = "LMAX",
+			Code = BoardCodes.Lmax,
 			WorkingTime = new()
 			{
 				IsEnabled = true,
@@ -1783,7 +1783,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard DukasCopy { get; } = new()
 		{
-			Code = "DUKAS",
+			Code = BoardCodes.DukasCopy,
 			Exchange = Exchange.DukasCopy,
 		};
 
@@ -1792,7 +1792,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard GainCapital { get; } = new()
 		{
-			Code = "GAIN",
+			Code = BoardCodes.GainCapital,
 			Exchange = Exchange.GainCapital,
 		};
 
@@ -1801,7 +1801,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard MBTrading { get; } = new()
 		{
-			Code = "MBT",
+			Code = BoardCodes.MBTrading,
 			Exchange = Exchange.MBTrading,
 		};
 
@@ -1810,7 +1810,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard TrueFX { get; } = new()
 		{
-			Code = "TRUEFX",
+			Code = BoardCodes.TrueFX,
 			Exchange = Exchange.TrueFX,
 		};
 
@@ -1819,7 +1819,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Integral { get; } = new()
 		{
-			Code = "INTGRL",
+			Code = BoardCodes.Integral,
 			Exchange = Exchange.Integral,
 		};
 
@@ -1828,7 +1828,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Cfh { get; } = new()
 		{
-			Code = "CFH",
+			Code = BoardCodes.Cfh,
 			Exchange = Exchange.Cfh,
 		};
 
@@ -1837,7 +1837,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Ond { get; } = new()
 		{
-			Code = "OND",
+			Code = BoardCodes.Ond,
 			Exchange = Exchange.Ond,
 		};
 
@@ -1846,7 +1846,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Smart { get; } = new()
 		{
-			Code = "SMART",
+			Code = BoardCodes.Smart,
 			Exchange = Exchange.Nasdaq,
 		};
 
@@ -1891,7 +1891,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Finam { get; } = new()
 		{
-			Code = "FINAM",
+			Code = BoardCodes.Finam,
 			Exchange = Exchange.Test,
 		};
 
@@ -1900,7 +1900,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Mfd { get; } = new()
 		{
-			Code = "MFD",
+			Code = BoardCodes.Mfd,
 			Exchange = Exchange.Test,
 		};
 
@@ -1909,7 +1909,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Arca { get; } = new()
 		{
-			Code = "ARCA",
+			Code = BoardCodes.Arca,
 			Exchange = Exchange.Nyse,
 		};
 
@@ -1918,7 +1918,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Bats { get; } = new()
 		{
-			Code = "BATS",
+			Code = BoardCodes.Bats,
 			Exchange = Exchange.Cbot,
 		};
 
@@ -2044,7 +2044,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard BinanceCoin { get; } = new()
 		{
-			Code = Exchange.Binance.Name + "CN",
+			Code = BoardCodes.BinanceCoin,
 			Exchange = Exchange.Binance,
 		};
 
@@ -2179,7 +2179,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Globex { get; } = new()
 		{
-			Code = "Globex",
+			Code = BoardCodes.Globex,
 			Exchange = Exchange.Cme,
 		};
 
