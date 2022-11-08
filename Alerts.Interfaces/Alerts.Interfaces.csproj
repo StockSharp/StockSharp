@@ -2,6 +2,6 @@
   <Import Project="..\common_target_standard.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
   </ItemGroup>
 </Project>

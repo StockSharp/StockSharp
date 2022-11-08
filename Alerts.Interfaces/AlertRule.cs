@@ -17,9 +17,9 @@ namespace StockSharp.Alerts
 {
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Configuration;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -62,13 +62,13 @@ namespace StockSharp.Alerts
 			var value = storage.GetValue<string>(nameof(Value));
 
 			if (storage.GetValue<bool>(nameof(Portfolio)))
-				Value = ServicesRegistry.PortfolioProvider.LookupByPortfolioName(value);
+				Value = ConfigManager.GetService<IPortfolioProvider>().LookupByPortfolioName(value);
 			else
 			{
 				var valueType = Field.ValueType;
 
 				Value = (valueType == typeof(SecurityId) || valueType == typeof(SecurityId?))
-					? ServicesRegistry.SecurityProvider.LookupById(value)
+					? ConfigManager.GetService<ISecurityProvider>().LookupByStringId(value)
 					: value.To(valueType);
 			}
 		}

@@ -278,5 +278,29 @@ namespace StockSharp.BusinessEntities
 			provider.ReRegisterOrder(oldOrder, newOrder);
 			return newOrder;
 		}
+
+		/// <summary>
+		/// Get portfolio identifier.
+		/// </summary>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Portfolio identifier.</returns>
+		public static string GetUniqueId(this Portfolio portfolio)
+		{
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return /*portfolio.InternalId?.To<string>() ?? */portfolio.Name;
+		}
+
+		/// <summary>
+		/// To get the instrument by the identifier.
+		/// </summary>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="id">Security ID.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+		public static Security LookupByStringId(this ISecurityProvider provider, string id)
+		{
+			return provider.LookupById(id.ToSecurityId());
+		}
 	}
 }

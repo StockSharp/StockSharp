@@ -2336,9 +2336,7 @@ namespace StockSharp.Algo
 		/// <param name="id">Security ID.</param>
 		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
 		public static Security LookupById(this ISecurityProvider provider, string id)
-		{
-			return provider.LookupById(id.ToSecurityId());
-		}
+			=> provider.LookupByStringId(id);
 
 		/// <summary>
 		/// Lookup securities by criteria <paramref name="criteria" />.
@@ -3399,19 +3397,6 @@ namespace StockSharp.Algo
 			};
 
 			return adapter.Download<TimeFrameCandleMessage>(mdMsg);
-		}
-
-		/// <summary>
-		/// Get portfolio identifier.
-		/// </summary>
-		/// <param name="portfolio">Portfolio.</param>
-		/// <returns>Portfolio identifier.</returns>
-		public static string GetUniqueId(this Portfolio portfolio)
-		{
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			return /*portfolio.InternalId?.To<string>() ?? */portfolio.Name;
 		}
 
 		/// <summary>
