@@ -29,32 +29,6 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.Storages;
 
 	/// <summary>
-	/// Reasons for orders cancelling in the orders log.
-	/// </summary>
-	public enum OrderLogCancelReasons
-	{
-		/// <summary>
-		/// The order re-registration.
-		/// </summary>
-		ReRegistered,
-
-		/// <summary>
-		/// Cancel order.
-		/// </summary>
-		Canceled,
-
-		/// <summary>
-		/// Group canceling of orders.
-		/// </summary>
-		GroupCanceled,
-
-		/// <summary>
-		/// The sign of deletion of order residual due to cross-trade.
-		/// </summary>
-		CrossTrade,
-	}
-
-	/// <summary>
 	/// Building order book by the orders log.
 	/// </summary>
 	public static class OrderLogHelper
@@ -87,33 +61,6 @@ namespace StockSharp.Algo
 		public static bool IsMatched(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogMatched();
-		}
-
-		/// <summary>
-		/// To get the reason for cancelling order in orders log.
-		/// </summary>
-		/// <param name="item">Order log item.</param>
-		/// <returns>The reason for order cancelling in order log.</returns>
-		public static OrderLogCancelReasons GetOrderLogCancelReason(this ExecutionMessage item)
-		{
-			if (!item.IsOrderLogCanceled())
-				throw new ArgumentException(LocalizedStrings.Str937, nameof(item));
-
-			if (item.OrderStatus == null)
-				throw new ArgumentException(LocalizedStrings.Str938, nameof(item));
-
-			var status = item.OrderStatus.Value;
-
-			if (status.HasBits(0x100000))
-				return OrderLogCancelReasons.ReRegistered;
-			else if (status.HasBits(0x200000))
-				return OrderLogCancelReasons.Canceled;
-			else if (status.HasBits(0x400000))
-				return OrderLogCancelReasons.GroupCanceled;
-			else if (status.HasBits(0x800000))
-				return OrderLogCancelReasons.CrossTrade;
-			else
-				throw new ArgumentOutOfRangeException(nameof(item), status, LocalizedStrings.Str939);
 		}
 
 		/// <summary>

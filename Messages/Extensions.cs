@@ -4496,5 +4496,147 @@ namespace StockSharp.Messages
 
 			return generator.EnsureGetGenerator().Split(id);
 		}
+
+		/// <summary>
+		/// Is specified security id associated with the board.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="boardCode">Board code.</param>
+		/// <returns><see langword="true" />, if associated, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAssociated(this SecurityId securityId, string boardCode)
+		{
+			if (boardCode.IsEmpty())
+				throw new ArgumentNullException(nameof(boardCode));
+
+			return securityId.BoardCode.EqualsIgnoreCase(boardCode);
+		}
+
+		/// <summary>
+		/// To get the number of operations, or discard the exception, if no information available.
+		/// </summary>
+		/// <param name="message">Operations.</param>
+		/// <returns>Quantity.</returns>
+		public static decimal SafeGetVolume(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var volume = message.OrderVolume ?? message.TradeVolume;
+
+			if (volume != null)
+				return volume.Value;
+
+			var errorMsg = message.DataType == DataType.Ticks || message.HasTradeInfo()
+				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
+				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
+
+			throw new ArgumentOutOfRangeException(nameof(message), null, errorMsg);
+		}
+
+		/// <summary>
+		/// To get order identifier, or discard exception, if no information available.
+		/// </summary>
+		/// <param name="message">Operations.</param>
+		/// <returns>Order ID.</returns>
+		public static long SafeGetOrderId(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var orderId = message.OrderId;
+
+			if (orderId != null)
+				return orderId.Value;
+
+			throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str925);
+		}
+
+		/// <summary>
+		/// Is the specified state is final (<see cref="OrderStates.Done"/> or <see cref="OrderStates.Failed"/>).
+		/// </summary>
+		/// <param name="state">Order state.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsFinal(this OrderStates state)
+			=> state is OrderStates.Done or OrderStates.Failed;
+
+		/// <summary>
+		/// Extract <see cref="TimeInForce"/> from bits flag.
+		/// </summary>
+		/// <param name="status">Bits flag.</param>
+		/// <returns><see cref="TimeInForce"/>.</returns>
+		public static TimeInForce? GetPlazaTimeInForce(this long status)
+		{
+			if (status.HasBits(0x1))
+				return TimeInForce.PutInQueue;
+			else if (status.HasBits(0x2))
+				return TimeInForce.CancelBalance;
+			else if (status.HasBits(0x80000))
+				return TimeInForce.MatchOrCancel;
+
+			return null;
+		}
+
+		/// <summary>
+		/// Extract system attribute from the bits flag.
+		/// </summary>
+		/// <param name="status">Bits flag.</param>
+		/// <returns><see langword="true"/> if an order is system, otherwise, <see langword="false"/>.</returns>
+		public static bool IsPlazaSystem(this long status)
+		{
+			return !status.HasBits(0x4);
+		}
+
+		/// <summary>
+		/// To get the reason for cancelling order in orders log.
+		/// </summary>
+		/// <param name="item">Order log item.</param>
+		/// <returns>The reason for order cancelling in order log.</returns>
+		public static OrderLogCancelReasons GetOrderLogCancelReason(this ExecutionMessage item)
+		{
+			if (!item.IsOrderLogCanceled())
+				throw new ArgumentException(LocalizedStrings.Str937, nameof(item));
+
+			if (item.OrderStatus == null)
+				throw new ArgumentException(LocalizedStrings.Str938, nameof(item));
+
+			var status = item.OrderStatus.Value;
+
+			if (status.HasBits(0x100000))
+				return OrderLogCancelReasons.ReRegistered;
+			else if (status.HasBits(0x200000))
+				return OrderLogCancelReasons.Canceled;
+			else if (status.HasBits(0x400000))
+				return OrderLogCancelReasons.GroupCanceled;
+			else if (status.HasBits(0x800000))
+				return OrderLogCancelReasons.CrossTrade;
+			else
+				throw new ArgumentOutOfRangeException(nameof(item), status, LocalizedStrings.Str939);
+		}
+	}
+
+	/// <summary>
+	/// Reasons for orders cancelling in the orders log.
+	/// </summary>
+	public enum OrderLogCancelReasons
+	{
+		/// <summary>
+		/// The order re-registration.
+		/// </summary>
+		ReRegistered,
+
+		/// <summary>
+		/// Cancel order.
+		/// </summary>
+		Canceled,
+
+		/// <summary>
+		/// Group canceling of orders.
+		/// </summary>
+		GroupCanceled,
+
+		/// <summary>
+		/// The sign of deletion of order residual due to cross-trade.
+		/// </summary>
+		CrossTrade,
 	}
 }

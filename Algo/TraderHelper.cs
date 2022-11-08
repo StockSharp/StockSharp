@@ -1092,14 +1092,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Is the specified state is final (<see cref="OrderStates.Done"/> or <see cref="OrderStates.Failed"/>).
-		/// </summary>
-		/// <param name="state">Order state.</param>
-		/// <returns>Check result.</returns>
-		public static bool IsFinal(this OrderStates state)
-			=> state is OrderStates.Done or OrderStates.Failed;
-
-		/// <summary>
 		/// To check whether specified instrument is used now.
 		/// </summary>
 		/// <param name="basketSecurity">Instruments basket.</param>
@@ -2595,73 +2587,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the number of operations, or discard the exception, if no information available.
-		/// </summary>
-		/// <param name="message">Operations.</param>
-		/// <returns>Quantity.</returns>
-		public static decimal SafeGetVolume(this ExecutionMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			var volume = message.OrderVolume ?? message.TradeVolume;
-
-			if (volume != null)
-				return volume.Value;
-
-			var errorMsg = message.DataType == DataType.Ticks || message.HasTradeInfo()
-				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
-				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
-
-			throw new ArgumentOutOfRangeException(nameof(message), null, errorMsg);
-		}
-
-		/// <summary>
-		/// To get order identifier, or discard exception, if no information available.
-		/// </summary>
-		/// <param name="message">Operations.</param>
-		/// <returns>Order ID.</returns>
-		public static long SafeGetOrderId(this ExecutionMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			var orderId = message.OrderId;
-
-			if (orderId != null)
-				return orderId.Value;
-
-			throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str925);
-		}
-
-		/// <summary>
-		/// Extract <see cref="TimeInForce"/> from bits flag.
-		/// </summary>
-		/// <param name="status">Bits flag.</param>
-		/// <returns><see cref="TimeInForce"/>.</returns>
-		public static TimeInForce? GetPlazaTimeInForce(this long status)
-		{
-			if (status.HasBits(0x1))
-				return TimeInForce.PutInQueue;
-			else if (status.HasBits(0x2))
-				return TimeInForce.CancelBalance;
-			else if (status.HasBits(0x80000))
-				return TimeInForce.MatchOrCancel;
-
-			return null;
-		}
-
-		/// <summary>
-		/// Extract system attribute from the bits flag.
-		/// </summary>
-		/// <param name="status">Bits flag.</param>
-		/// <returns><see langword="true"/> if an order is system, otherwise, <see langword="false"/>.</returns>
-		public static bool IsPlazaSystem(this long status)
-		{
-			return !status.HasBits(0x4);
-		}
-
-		/// <summary>
 		/// To get a board by its code. If board with the passed name does not exist, then it will be created.
 		/// </summary>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
@@ -2879,7 +2804,7 @@ namespace StockSharp.Algo
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
-			return securityId.BoardCode.EqualsIgnoreCase(board.Code);
+			return securityId.IsAssociated(board.Code);
 		}
 
 		/// <summary>
