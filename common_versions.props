@@ -15,6 +15,7 @@
     <MsTestVer>2.2.10</MsTestVer>
     <MsTestSdkVer>17.3.1</MsTestSdkVer>
     <MsExtensionsVer>6.*</MsExtensionsVer>
+    <RestSharpXmlVer>108.0.2</RestSharpXmlVer>
 
     <!--
     версия nuget должна совпадать с версией нугет либ которые использует мсбилд на сервере стокшарп

@@ -69,24 +69,24 @@ namespace StockSharp.BitStamp.Native
 
 		public IEnumerable<Symbol> GetPairsInfo()
 		{
-			return MakeRequest<IEnumerable<Symbol>>(CreateUrl("trading-pairs-info"), CreateRequest(Method.GET));
+			return MakeRequest<IEnumerable<Symbol>>(CreateUrl("trading-pairs-info"), CreateRequest(Method.Get));
 		}
 
 		public IEnumerable<Transaction> RequestTransactions(string ticker, string interval = null)
 		{
 			var url = CreateUrl($"transactions/{ticker}");
-			var request = CreateRequest(Method.GET);
+			var request = CreateRequest(Method.Get);
 
 			if (interval != null)
 				request.AddParameter("time", interval);
 
-			return MakeRequest<IEnumerable<Transaction>>(url, request, true);
+			return MakeRequest<IEnumerable<Transaction>>(url, request);
 		}
 
 		public Tuple<Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>, Dictionary<string, decimal>> GetBalances(string ticker = null)
 		{
 			var url = CreateUrl(ticker.IsEmpty() ? "balance" : $"balance/{ticker}");
-			dynamic response = MakeRequest<object>(url, ApplySecret(CreateRequest(Method.POST), url));
+			dynamic response = MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Post), url));
 
 			var balances = new Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>(StringComparer.InvariantCultureIgnoreCase);
 			var fees = new Dictionary<string, decimal>(StringComparer.InvariantCultureIgnoreCase);
@@ -128,7 +128,7 @@ namespace StockSharp.BitStamp.Native
 
 		public UserTransaction[] RequestUserTransactions(string ticker, int? offset, int? limit)
 		{
-			var request = CreateRequest(Method.POST);
+			var request = CreateRequest(Method.Post);
 
 			if (offset != null)
 				request.AddParameter("offset", offset.Value);
@@ -143,14 +143,14 @@ namespace StockSharp.BitStamp.Native
 		public IEnumerable<UserOrder> RequestOpenOrders(string ticker = "all")
 		{
 			var url = CreateUrl($"open_orders/{ticker}");
-			return MakeRequest<IEnumerable<UserOrder>>(url, ApplySecret(CreateRequest(Method.POST), url));
+			return MakeRequest<IEnumerable<UserOrder>>(url, ApplySecret(CreateRequest(Method.Post), url));
 		}
 
 		public UserOrder RegisterOrder(string pair, string side, decimal? price, decimal volume, decimal? stopPrice, bool daily, bool ioc)
 		{
 			var market = price == null ? "market/" : string.Empty;
 
-			var request = CreateRequest(Method.POST);
+			var request = CreateRequest(Method.Post);
 
 			request.AddParameter("amount", volume);
 
@@ -173,14 +173,14 @@ namespace StockSharp.BitStamp.Native
 		public UserOrder CancelOrder(long orderId)
 		{
 			var url = CreateUrl("cancel_order");
-			return MakeRequest<UserOrder>(url, ApplySecret(CreateRequest(Method.POST).AddParameter("id", orderId), url));
+			return MakeRequest<UserOrder>(url, ApplySecret(CreateRequest(Method.Post).AddParameter("id", orderId), url));
 		}
 
 		public void CancelAllOrders()
 		{
 			var url = CreateUrl("cancel_all_orders", string.Empty);
-			var result = MakeRequest<bool>(url, ApplySecret(CreateRequest(Method.POST), url));
-			
+			var result = MakeRequest<bool>(url, ApplySecret(CreateRequest(Method.Post), url));
+
 			if (!result)
 				throw new InvalidOperationException();
 		}
@@ -190,7 +190,7 @@ namespace StockSharp.BitStamp.Native
 			if (info == null)
 				throw new ArgumentNullException(nameof(info));
 
-			var request = CreateRequest(Method.POST);
+			var request = CreateRequest(Method.Post);
 
 			switch (info.Type)
 			{
@@ -285,14 +285,14 @@ namespace StockSharp.BitStamp.Native
 			return $"https://{_baseAddr}/api/{version}{methodName}/".To<Uri>();
 		}
 
-		private static IRestRequest CreateRequest(Method method)
+		private static RestRequest CreateRequest(Method method)
 		{
-			return new RestRequest(method);
+			return new RestRequest((string)null, method);
 		}
 
 		private static readonly JsonSerializerSettings _serializerSettings = JsonHelper.CreateJsonSerializerSettings();
 
-		private IRestRequest ApplySecret(IRestRequest request, Uri url)
+		private RestRequest ApplySecret(RestRequest request, Uri url)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -305,7 +305,7 @@ namespace StockSharp.BitStamp.Native
 				var version = "v2";
 				var nonce = Guid.NewGuid().ToString();
 				var timeStamp = ((long)TimeHelper.UnixNowMls).To<string>();
-				
+
 				var payload = request
                   .Parameters
                   .Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
@@ -344,7 +344,7 @@ namespace StockSharp.BitStamp.Native
 				                .ComputeHash((nonce + _clientId + _key.UnSecure()).UTF8())
 				                .Digest()
 				                .ToUpperInvariant();
-		
+
 				request
 					.AddParameter("key", _key.UnSecure())
 					.AddParameter("nonce", nonce)
@@ -354,13 +354,9 @@ namespace StockSharp.BitStamp.Native
 			return request;
 		}
 
-		private T MakeRequest<T>(Uri url, IRestRequest request, bool cookies = false)
+		private T MakeRequest<T>(Uri url, RestRequest request)
 		{
-			dynamic obj = request.Invoke(url, this, this.AddVerboseLog, client =>
-			{
-				if (cookies)
-					client.CookieContainer = new CookieContainer();
-			});
+			dynamic obj = request.Invoke(url, this, this.AddVerboseLog);
 
 			if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
 				throw new InvalidOperationException((string)obj.reason.ToString());
