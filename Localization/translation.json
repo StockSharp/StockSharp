@@ -21702,5 +21702,17 @@
   "PreventUpgrade": {
     "en": "Prevent upgrade",
     "ru": "Запретить обновление"
+  },
+  "Article": {
+    "en": "Article",
+    "ru": "Статья"
+  },
+  "Page": {
+    "en": "Page",
+    "ru": "Статья"
+  },
+  "Forum": {
+    "en": "Forum",
+    "ru": "Форум"
   }
 }
