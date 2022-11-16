@@ -68,6 +68,8 @@ public class AsyncMessageProcessor : BaseLogReceiver
 	public AsyncMessageProcessor(IAsyncMessageAdapter adapter)
 	{
 		Parent = adapter;
+		// ReSharper disable once VirtualMemberCallInConstructor
+		Name = $"async({adapter.Name})";
 		Task.Run(ProcessMessagesAsync);
 	}
 

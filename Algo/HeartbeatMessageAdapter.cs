@@ -90,7 +90,7 @@ namespace StockSharp.Algo
 		private bool _canSendTime;
 		private bool _isFirstTimeConnect = true;
 		private bool _suppressDisconnectError;
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/>.
 		/// </summary>
@@ -149,6 +149,8 @@ namespace StockSharp.Algo
 							else
 								_prevState = _currState = ConnectionStates.Failed;
 						}
+
+						this.AddLog(LogLevels.Warning, () => $"RCM: got error, new state={_currState}\n{connectMsg.Error}");
 					}
 
 					if (isRestored)
@@ -307,7 +309,7 @@ namespace StockSharp.Algo
 				{
 					lock (_timeSync)
 						_canSendTime = true;
-				}	
+				}
 			}
 		}
 
@@ -318,7 +320,7 @@ namespace StockSharp.Algo
 
 			var period = ReConnectionSettings.Interval;
 			var needHeartbeat = HeartbeatInterval != TimeSpan.Zero;
-			
+
 			var time = TimeHelper.Now;
 			var lastHeartBeatTime = TimeHelper.Now;
 
@@ -485,7 +487,7 @@ namespace StockSharp.Algo
 			{
 				case _reConnecting:
 					return LocalizedStrings.Reconnecting;
-				
+
 				case _none:
 					return LocalizedStrings.Str1658;
 
