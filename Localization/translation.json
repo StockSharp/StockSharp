@@ -21714,5 +21714,9 @@
   "Forum": {
     "en": "Forum",
     "ru": "Форум"
+  },
+  "LicenseWrongAppId": {
+    "en": "License N{0} contains a wrong app ID '{1}' instead of '{2}'.",
+    "ru": "Лицензия N{0} содержит неправильный идентификатор программы '{1}' вместо '{2}'."
   }
 }

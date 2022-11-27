@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Configuration
 {
-	using System;
 	using System.Linq;
 	using System.Reflection;
 
@@ -27,49 +26,17 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public static class Extensions
 	{
-		//private static readonly Type[] _customCandles = Array.Empty<Type>();
-
-		//static Extensions()
-		//{
-		//	var section = RootSection;
-
-		//	if (section == null)
-		//		return;
-
-		//	_customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
-		//	_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
-		//}
-
 		/// <summary>
 		/// Instance of the root section <see cref="StockSharpSection"/>.
 		/// </summary>
 		public static StockSharpSection RootSection => ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
 
-		//private static Type[] _candles;
-
-		///// <summary>
-		///// Get all candles.
-		///// </summary>
-		///// <returns>All candles.</returns>
-		//public static IEnumerable<Type> GetCandles()
-		//{
-		//	return _candles ?? (_candles = typeof(Candle).Assembly
-		//		.GetTypes()
-		//		.Where(t => !t.IsAbstract && t.IsCandle())
-		//		.Concat(_customCandles)
-		//		.ToArray());
-		//}
-
 		/// <summary>
 		/// </summary>
-		public static long GetProductId()
-		{
-			var prodIdAttr = Assembly.GetEntryAssembly().GetAttribute<ProductIdAttribute>();
-
-			if (prodIdAttr is null)
-				throw new InvalidOperationException($"{nameof(ProductIdAttribute)} is missing.");
-
-			return prodIdAttr.ProductId;
-		}
+		public static long? TryGetProductId()
+			=> Assembly
+				.GetEntryAssembly()?
+				.GetAttribute<ProductIdAttribute>()?
+				.ProductId;
 	}
 }
