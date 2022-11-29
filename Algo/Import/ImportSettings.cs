@@ -370,9 +370,13 @@ namespace StockSharp.Algo.Import
 		/// <returns>File list.</returns>
 		public IEnumerable<string> GetFiles()
 		{
-			return !FileName.IsEmpty()
-				? new[] { FileName }
-				: System.IO.Directory.GetFiles(Directory, FileMask, IncludeSubDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+			if (!FileName.IsEmpty())
+				return new[] { FileName };
+
+			if (!Directory.IsEmpty())
+				return System.IO.Directory.GetFiles(Directory, FileMask, IncludeSubDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+
+			throw new InvalidOperationException("No any directory or file was set for import.");
 		}
 
 		/// <summary>
