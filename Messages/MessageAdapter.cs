@@ -24,7 +24,6 @@ namespace StockSharp.Messages
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Logging;
@@ -255,7 +254,7 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual Uri Icon => GetType().GetIconUrl();
+		public virtual Uri Icon => GetType().TryGetIconUrl();
 
 		/// <inheritdoc />
 		[Browsable(false)]

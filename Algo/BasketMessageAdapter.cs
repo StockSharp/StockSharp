@@ -634,7 +634,7 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.HeartbeatBeforConnect => false;
 
-		Uri IMessageAdapter.Icon => GetType().GetIconUrl();
+		Uri IMessageAdapter.Icon => GetType().TryGetIconUrl();
 
 		bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => GetSortedAdapters().All(a => a.IsAutoReplyOnTransactonalUnsubscription);
 

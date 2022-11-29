@@ -4795,5 +4795,33 @@ namespace StockSharp.Messages
 				? provider.LookupMessages(LookupAllCriteriaMessage)
 				: provider.LookupMessages(new() { SecurityId = new() { SecurityCode = code }, SecurityType = type });
 		}
+
+		/// <summary>
+		/// get icon uri
+		/// </summary>
+		public static Uri MakeVectorIconUri(this string key) => new($"pack://application:,,,/StockSharp.Xaml;component/IconsSvg/{key}.svg");
+
+		/// <summary>
+		/// Try get <see cref="VectorIconAttribute.Icon"/> path.
+		/// </summary>
+		/// <param name="type">Component type with applied <see cref="VectorIconAttribute"/>.</param>
+		/// <returns>Icon url.</returns>
+		public static Uri TryGetVectorIcon(this Type type)
+		{
+			var attr = type.GetAttribute<VectorIconAttribute>();
+
+			if (attr is null)
+				return null;
+
+			return MakeVectorIconUri(attr.Icon);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns>Icon url.</returns>
+		public static Uri TryGetIconUrl(this Type type)
+			=> type.GetIconUrl() ?? type.TryGetVectorIcon();
 	}
 }
