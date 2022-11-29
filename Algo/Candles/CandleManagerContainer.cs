@@ -23,8 +23,6 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using MoreLinq;
-
 	using StockSharp.Logging;
 	using StockSharp.Localization;
 

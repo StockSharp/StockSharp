@@ -21,8 +21,7 @@ namespace StockSharp.Algo.Export
 
 	using Ecng.Common;
 	using Ecng.Data;
-
-	using MoreLinq;
+	using Ecng.Collections;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;

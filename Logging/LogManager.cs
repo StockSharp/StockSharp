@@ -26,8 +26,6 @@ namespace StockSharp.Logging
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Localization;
 
 	/// <summary>

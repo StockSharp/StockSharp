@@ -23,8 +23,6 @@ namespace StockSharp.Algo.PnL
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Messages;
 
 	/// <summary>

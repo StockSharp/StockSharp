@@ -10,8 +10,6 @@ namespace StockSharp.Algo.Storages.Csv
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;

@@ -20,8 +20,7 @@ namespace StockSharp.Algo
 	using System.Linq;
 
 	using Ecng.Common;
-
-	using MoreLinq;
+	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;

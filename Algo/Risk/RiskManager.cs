@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Risk
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 

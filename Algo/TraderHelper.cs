@@ -23,8 +23,6 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.ComponentModel.Expressions;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;

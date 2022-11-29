@@ -8,8 +8,6 @@ namespace StockSharp.Algo.Storages.Remote
 	using Ecng.Common;
 	using Ecng.Collections;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;

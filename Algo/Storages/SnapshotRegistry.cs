@@ -13,8 +13,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Interop;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Storages.Binary.Snapshot;
 	using StockSharp.Localization;
 	using StockSharp.Logging;

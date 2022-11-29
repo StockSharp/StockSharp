@@ -27,8 +27,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;

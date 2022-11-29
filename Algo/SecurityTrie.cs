@@ -25,8 +25,6 @@ namespace StockSharp.Algo
 
 	using Gma.DataStructures.StringSearch;
 
-	using MoreLinq;
-
 	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 

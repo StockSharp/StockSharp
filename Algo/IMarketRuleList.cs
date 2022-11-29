@@ -122,7 +122,7 @@ namespace StockSharp.Algo
 		/// <returns>The sign of possible action.</returns>
 		protected override bool OnClearing()
 		{
-			foreach (var item in ToArray())
+			foreach (var item in this.ToArray())
 				Remove(item);
 
 			return base.OnClearing();

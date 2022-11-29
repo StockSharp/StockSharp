@@ -21,8 +21,6 @@ namespace StockSharp.Algo.Commissions
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Messages;
 
 	/// <summary>

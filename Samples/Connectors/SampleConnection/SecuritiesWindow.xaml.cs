@@ -11,8 +11,6 @@ namespace SampleConnection
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using MoreLinq;
-
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;

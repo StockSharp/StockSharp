@@ -20,8 +20,7 @@ namespace StockSharp.Logging
 
 	using Ecng.Common;
 	using Ecng.Serialization;
-
-	using MoreLinq;
+	using Ecng.Collections;
 
 	using StockSharp.Localization;
 

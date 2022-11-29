@@ -11,8 +11,6 @@
 	using System.Windows.Media;
 	using DrawingColor = System.Drawing.Color;
 
-	using MoreLinq;
-
 	using Ecng.Backup;
 	using Ecng.Backup.Yandex;
 	using Ecng.Collections;

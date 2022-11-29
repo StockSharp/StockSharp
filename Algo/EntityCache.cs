@@ -22,8 +22,6 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 	using Ecng.Collections;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;

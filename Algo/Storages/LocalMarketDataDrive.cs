@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Storages
 	using System.Linq;
 	using IOPath = System.IO.Path;
 
-	using MoreLinq;
-
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;

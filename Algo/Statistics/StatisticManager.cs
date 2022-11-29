@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Statistics
 	using Ecng.Common;
 	using Ecng.Collections;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.PnL;
 	using StockSharp.BusinessEntities;
 
@@ -86,7 +84,7 @@ namespace StockSharp.Algo.Statistics
 
 			protected override bool OnClearing()
 			{
-				foreach (var item in ToArray())
+				foreach (var item in this.ToArray())
 					Remove(item);
 
 				return true;

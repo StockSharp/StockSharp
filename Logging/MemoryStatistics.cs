@@ -24,8 +24,6 @@ namespace StockSharp.Logging
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	/// <summary>
 	/// The class for tracking objects taking in memory.
 	/// </summary>

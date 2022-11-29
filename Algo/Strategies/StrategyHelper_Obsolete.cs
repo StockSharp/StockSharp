@@ -8,8 +8,6 @@
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;

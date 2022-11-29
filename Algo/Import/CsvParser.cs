@@ -7,8 +7,6 @@ namespace StockSharp.Algo.Import
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
 	using StockSharp.Logging;

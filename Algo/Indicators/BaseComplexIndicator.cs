@@ -21,8 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Serialization;
-
-	using MoreLinq;
+	using Ecng.Collections;
 
 	/// <summary>
 	/// Embedded indicators processing modes.

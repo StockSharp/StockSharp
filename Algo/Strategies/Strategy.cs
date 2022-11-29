@@ -27,8 +27,6 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
@@ -171,7 +169,7 @@ namespace StockSharp.Algo.Strategies
 
 			protected override bool OnClearing()
 			{
-				foreach (var item in ToArray())
+				foreach (var item in this.ToArray())
 					Remove(item);
 
 				return true;

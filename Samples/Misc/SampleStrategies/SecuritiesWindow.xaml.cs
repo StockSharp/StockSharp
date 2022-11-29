@@ -22,8 +22,6 @@ namespace SampleStrategies
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;

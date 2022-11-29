@@ -9,7 +9,6 @@
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using MoreLinq;
 	using StockSharp.Localization;
 
 	using PathPair = System.Tuple<string, System.Net.EndPoint>;
