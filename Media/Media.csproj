@@ -5,9 +5,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Localization\Localization.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="logos\*.png" />
     <Resource Include="logos\*.svg" />
     <None Remove="logos\*.png" />
