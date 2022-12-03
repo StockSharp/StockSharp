@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using StockSharp.Logging;
 
 namespace StockSharp.Messages;
@@ -10,32 +11,31 @@ namespace StockSharp.Messages;
 /// </summary>
 public interface IAsyncMessageAdapter : ILogReceiver
 {
-	private static readonly TimeSpan DefaultDisconnectTimeout = TimeSpan.FromSeconds(5);
-	private static readonly TimeSpan DefaultTransactionTimeout = TimeSpan.FromSeconds(10);
+	private static readonly TimeSpan _defaultDisconnectTimeout = TimeSpan.FromSeconds(5);
+	private static readonly TimeSpan _defaultTransactionTimeout = TimeSpan.FromSeconds(10);
 
 	/// <summary>
 	/// </summary>
-	TimeSpan DisconnectTimeout => DefaultDisconnectTimeout;
+	TimeSpan DisconnectTimeout => _defaultDisconnectTimeout;
 
 	/// <summary>
 	/// </summary>
-	TimeSpan TransactionTimeout => DefaultTransactionTimeout;
+	TimeSpan TransactionTimeout => _defaultTransactionTimeout;
 
 	/// <summary>
 	/// </summary>
-	ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
+	ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token);
+
+	/// <summary>
+	/// </summary>
+	ValueTask DisconnectAsync(DisconnectMessage msg, CancellationToken token)
 		=> ProcessMessageAsync(msg, token);
-
-	/// <summary>
-	/// </summary>
-	ValueTask DisconnectAsync(DisconnectMessage msg)
-		=> ProcessMessageAsync(msg, CancellationToken.None);
 
 	/// <summary>
 	/// Reset adapter. Must NOT throw.
 	/// </summary>
-	ValueTask ResetAsync(ResetMessage msg)
-		=> ProcessMessageAsync(msg, CancellationToken.None);
+	ValueTask ResetAsync(ResetMessage msg, CancellationToken token)
+		=> ProcessMessageAsync(msg, token);
 
 	/// <summary>
 	/// </summary>
@@ -84,8 +84,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 
 	/// <summary>
 	/// </summary>
-	Task RunSubscriptionAsync(MarketDataMessage msg, CancellationToken token)
-		=> ProcessMessageAsync(msg, token).AsTask();
+	ValueTask RunSubscriptionAsync(MarketDataMessage msg, CancellationToken token)
+		=> ProcessMessageAsync(msg, token);
 
 	/// <summary>
 	/// </summary>

@@ -2,9 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Ecng.Collections;
 using Ecng.Common;
+
 using Nito.AsyncEx;
+
 using StockSharp.Localization;
 using StockSharp.Logging;
 
@@ -210,7 +213,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 			if (md.IsSubscribe)
 			{
 				var childToken = CreateChildTokenByTransId(md.TransactionId, token);
-				TryAddChildTask($"sub{md.TransactionId}", _adapter.RunSubscriptionAsync(md, childToken));
+				TryAddChildTask($"sub{md.TransactionId}", _adapter.RunSubscriptionAsync(md, childToken).AsTask());
 			}
 			else
 			{
@@ -308,7 +311,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		if(!await WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()))
 			throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
 
-		await _adapter.DisconnectAsync(msg);
+		await _adapter.DisconnectAsync(msg, default);
 
 		_isDisconnecting = _isConnectionStarted = false;
 	}
@@ -320,7 +323,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		// token is already canceled in EnqueueMessage
 		await AsyncHelper.CatchHandle(() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()));
 
-		await _adapter.ResetAsync(msg); // reset must not throw.
+		await _adapter.ResetAsync(msg, default); // reset must not throw.
 
 		_isDisconnecting = _isConnectionStarted = false;
 	}
