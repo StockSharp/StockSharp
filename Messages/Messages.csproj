@@ -13,6 +13,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <Compile Remove="AsyncMessageProcessor.cs" />
     <Compile Remove="IAsyncMessageAdapter.cs" />
+    <Compile Remove="AsyncMessageAdapter.cs" />
   </ItemGroup>
 
 </Project>
