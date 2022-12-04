@@ -108,6 +108,10 @@ namespace StockSharp.Algo
 			if (text.IsEmpty())
 				return;
 
+			// no not trie large strings
+			if (text.Length > 500)
+				return;
+
 			_trie.Add(text.ToLowerInvariant(), security);
 		}
 
