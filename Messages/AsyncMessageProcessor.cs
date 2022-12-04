@@ -63,14 +63,15 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 	private bool _isConnectionStarted, _isDisconnecting;
 
-	private IAsyncMessageAdapter _adapter => (IAsyncMessageAdapter)Parent;
+	private readonly IAsyncMessageAdapter _adapter;
 
 	/// <summary>
 	/// Initialize <see cref="AsyncMessageProcessor"/>.
 	/// </summary>
+	/// <param name="adapter"><see cref="IAsyncMessageAdapter"/>.</param>
 	public AsyncMessageProcessor(IAsyncMessageAdapter adapter)
 	{
-		Parent = adapter;
+		Parent = _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 		// ReSharper disable once VirtualMemberCallInConstructor
 		Name = $"async({adapter.Name})";
 		Task.Run(ProcessMessagesAsync);
@@ -94,7 +95,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 			if (msg is ResetMessage)
 				CancelAndReplaceGlobalCts();
 
-			_messages.Add(new MessageQueueItem(msg, _globalCts));
+			_messages.Add(new(msg, _globalCts));
 		}
 
 		_processMessageEvt.Set();
