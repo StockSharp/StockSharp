@@ -153,7 +153,7 @@ namespace StockSharp.Logging
 						+ refExc
 							.LoaderExceptions
 							.Select(e => e.ToString())
-							.Join(Environment.NewLine);
+							.JoinNL();
 				}
 
 				if (format != null)

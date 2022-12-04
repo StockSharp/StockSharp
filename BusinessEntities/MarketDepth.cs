@@ -962,7 +962,7 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return this.Select(q => q.ToString()).Join(Environment.NewLine);
+			return this.Select(q => q.ToString()).JoinNL();
 		}
 	}
 }
