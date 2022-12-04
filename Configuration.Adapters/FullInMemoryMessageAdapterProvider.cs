@@ -9,6 +9,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Bvmt;
 	using StockSharp.IQFeed;
 	using StockSharp.Okex;
+	using StockSharp.BinanceHistory;
 #endif
 	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
@@ -149,6 +150,7 @@ namespace StockSharp.Configuration
 			() => typeof(BvmtTransactionAdapter),
 			() => typeof(IQFeedMessageAdapter),
 			() => typeof(OkexMessageAdapter),
+			() => typeof(BinanceHistoryMessageAdapter),
 #endif
 			() => typeof(BarChartMessageAdapter),
 			() => typeof(BitStampMessageAdapter),

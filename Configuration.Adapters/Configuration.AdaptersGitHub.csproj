@@ -94,6 +94,7 @@
     <PackageReference Include="StockSharp.BvmtStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.IQFeedStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.OkexStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.BinanceHistoryStub" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
