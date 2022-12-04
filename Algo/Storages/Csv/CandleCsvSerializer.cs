@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Storages.Csv
 					var count = 0;
 					var firstTimeRead = false;
 
-					var reader = new FastCsvReader(stream, _encoding);
+					var reader = new FastCsvReader(stream, _encoding, StringHelper.RN);
 
 					while (reader.NextLine())
 					{

@@ -77,6 +77,23 @@ namespace StockSharp.Algo.Import
 			}
 		}
 
+		private string _lineSeparator = StringHelper.RN;
+
+		/// <summary>
+		/// Line separator.
+		/// </summary>
+		public string LineSeparator
+		{
+			get => _lineSeparator;
+			set
+			{
+				if (value.IsEmpty())
+					throw new ArgumentNullException(nameof(value));
+
+				_lineSeparator = value;
+			}
+		}
+
 		private int _skipFromHeader;
 
 		/// <summary>
@@ -116,7 +133,7 @@ namespace StockSharp.Algo.Import
 			var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
 			using (TimeZone.ToScope())
-			using (var reader = new CsvFileReader(fileName) { Delimiter = columnSeparator[0] })
+			using (var reader = new CsvFileReader(fileName, LineSeparator) { Delimiter = columnSeparator[0] })
 			{
 				var skipLines = SkipFromHeader;
 				var lineIndex = 0;

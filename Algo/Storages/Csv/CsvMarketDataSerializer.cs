@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var firstTimeRead = false;
 				string lastLine = null;
 
-				var reader = new FastCsvReader(stream, _encoding);
+				var reader = new FastCsvReader(stream, _encoding, StringHelper.RN);
 
 				while (reader.NextLine())
 				{
@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if (lastLine != null)
 				{
-					reader = new FastCsvReader(lastLine);
+					reader = new FastCsvReader(lastLine, StringHelper.RN);
 
 					if (!reader.NextLine())
 						throw new InvalidOperationException();
@@ -257,7 +257,7 @@ namespace StockSharp.Algo.Storages.Csv
 			//	new CsvReader(copy, _encoding, SecurityId, metaInfo.Date.Date, _executionType, _candleArg, _members))
 			//	.ToEx(metaInfo.Count);
 
-			return new SimpleEnumerable<TData>(() => new CsvEnumerator(this, new FastCsvReader(copy, Encoding), metaInfo));
+			return new SimpleEnumerable<TData>(() => new CsvEnumerator(this, new FastCsvReader(copy, Encoding, StringHelper.RN), metaInfo));
 		}
 
 		/// <summary>

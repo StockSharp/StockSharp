@@ -335,7 +335,7 @@ namespace StockSharp.Algo.Storages
 
 				using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 				{
-					var reader = new FastCsvReader(stream, Encoding.UTF8);
+					var reader = new FastCsvReader(stream, Encoding.UTF8, StringHelper.RN);
 
 					reader.NextLine();
 					reader.Skip(2);

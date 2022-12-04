@@ -185,6 +185,30 @@ namespace StockSharp.Algo.Import
 			}
 		}
 
+		private string _lineSeparator = StringHelper.RN;
+
+		/// <summary>
+		/// Line separator.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LineKey,
+			Description = LocalizedStrings.LineSeparatorKey,
+			GroupName = LocalizedStrings.CommonKey,
+			Order = 6)]
+		public string LineSeparator
+		{
+			get => _lineSeparator;
+			set
+			{
+				if (value.IsEmpty())
+					throw new ArgumentNullException(nameof(value));
+
+				_lineSeparator = value;
+				NotifyChanged();
+			}
+		}
+
 		private int _skipFromHeader;
 
 		/// <summary>
@@ -398,6 +422,7 @@ namespace StockSharp.Algo.Import
 			FileMask = storage.GetValue(nameof(FileMask), FileMask);
 			IncludeSubDirectories = storage.GetValue(nameof(IncludeSubDirectories), IncludeSubDirectories);
 			ColumnSeparator = storage.GetValue(nameof(ColumnSeparator), ColumnSeparator);
+			LineSeparator = storage.GetValue(nameof(LineSeparator), LineSeparator);
 			SkipFromHeader = storage.GetValue(nameof(SkipFromHeader), SkipFromHeader);
 			TimeZone = storage.GetValue(nameof(TimeZone), TimeZone);
 			UpdateDuplicateSecurities = storage.GetValue(nameof(UpdateDuplicateSecurities), UpdateDuplicateSecurities);
@@ -420,6 +445,7 @@ namespace StockSharp.Algo.Import
 			storage.SetValue(nameof(FileMask), FileMask);
 			storage.SetValue(nameof(IncludeSubDirectories), IncludeSubDirectories);
 			storage.SetValue(nameof(ColumnSeparator), ColumnSeparator);
+			storage.SetValue(nameof(LineSeparator), LineSeparator);
 			storage.SetValue(nameof(SkipFromHeader), SkipFromHeader);
 			storage.SetValue(nameof(TimeZone), TimeZone);
 			storage.SetValue(nameof(UpdateDuplicateSecurities), UpdateDuplicateSecurities);
@@ -483,6 +509,7 @@ namespace StockSharp.Algo.Import
 				throw new ArgumentNullException(nameof(parser));
 
 			parser.ColumnSeparator = ColumnSeparator;
+			parser.LineSeparator = LineSeparator;
 			parser.SkipFromHeader = SkipFromHeader;
 			parser.TimeZone = TimeZone;
 			parser.ExtendedInfoStorageItem = ExtendedStorage;

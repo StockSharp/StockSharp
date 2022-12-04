@@ -320,7 +320,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				using (var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
 				{
-					var reader = new FastCsvReader(stream, Registry.Encoding);
+					var reader = new FastCsvReader(stream, Registry.Encoding, StringHelper.RN);
 
 					var hasDuplicates = false;
 					var currErrors = 0;
