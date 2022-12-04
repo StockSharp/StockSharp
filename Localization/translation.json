@@ -21722,5 +21722,9 @@
   "LineSeparator": {
     "en": "Line separator.",
     "ru": "Разделитель строк."
+  },
+  "BinanceHistory": {
+    "en": "Binance-History",
+    "ru": "Binance-История"
   }
 }
