@@ -631,7 +631,7 @@ namespace StockSharp.Algo
 
 							var book = info.Process(execMsg);
 
-							if (book is object)
+							if (book is not null)
 								filtered.Add(book);
 						}
 					}

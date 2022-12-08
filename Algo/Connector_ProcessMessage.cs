@@ -1620,7 +1620,7 @@ namespace StockSharp.Algo
 
 			RaiseError(error);
 
-			if (message.Adapter is object and not BasketMessageAdapter)
+			if (message.Adapter is not null and not BasketMessageAdapter)
 				message.Adapter.AddErrorLog(error);
 			else
 				this.AddErrorLog(error);
