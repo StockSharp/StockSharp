@@ -23,48 +23,6 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// States <see cref="IMessageChannel"/>.
-	/// </summary>
-	public enum ChannelStates
-	{
-		/// <summary>
-		/// Stopped.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1128Key)]
-		Stopped,
-
-		/// <summary>
-		/// Stopping.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1114Key)]
-		Stopping,
-
-		/// <summary>
-		/// Starting.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1129Key)]
-		Starting,
-
-		/// <summary>
-		/// Working.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1130Key)]
-		Started,
-
-		/// <summary>
-		/// In the process of suspension.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1131Key)]
-		Suspending, 
-
-		/// <summary>
-		/// Suspended.
-		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1132Key)]
-		Suspended,
-	}
-
-	/// <summary>
 	/// Message channel base interface.
 	/// </summary>
 	public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>
