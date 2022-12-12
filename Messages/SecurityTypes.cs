@@ -201,6 +201,13 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VolatilityKey)]
-		Volatility
+		Volatility,
+
+		/// <summary>
+		/// REPO.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RepoKey)]
+		Repo,
 	}
 }
