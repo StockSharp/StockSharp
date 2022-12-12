@@ -2119,7 +2119,7 @@ namespace StockSharp.Messages
 				if (supportedCandles == null)
 					return TimeSpan.Zero;
 
-				if (dataType.MessageType == typeof(TimeFrameCandleMessage))
+				if (dataType.IsTFCandles)
 				{
 					var tf = (TimeSpan)dataType.Arg;
 
@@ -2688,7 +2688,7 @@ namespace StockSharp.Messages
 		/// <param name="dataTypes">Data types.</param>
 		/// <returns>Possible time-frames.</returns>
 		public static IEnumerable<TimeSpan> FilterTimeFrames(this IEnumerable<DataType> dataTypes)
-			=> dataTypes.Where(t => t.MessageType == typeof(TimeFrameCandleMessage) && t.Arg != null).Select(t => (TimeSpan)t.Arg);
+			=> dataTypes.Where(t => t.IsTFCandles && t.Arg != null).Select(t => (TimeSpan)t.Arg);
 
 		/// <summary>
 		/// To determine whether the order book is in the right state.

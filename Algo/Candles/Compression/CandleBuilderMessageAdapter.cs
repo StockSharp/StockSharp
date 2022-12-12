@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Candles.Compression
 							return true;
 						}
 
-						if (mdMsg.DataType2.MessageType == typeof(TimeFrameCandleMessage))
+						if (mdMsg.DataType2.IsTFCandles)
 						{
 							var originalTf = mdMsg.GetTimeFrame();
 							var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
@@ -689,7 +689,7 @@ namespace StockSharp.Algo.Candles.Compression
 					var isLoadOnly = series.Original.BuildMode == MarketDataBuildModes.Load;
 
 					// upgrade to smaller tf only in case failed subscription
-					if (response != null && original.DataType2.MessageType == typeof(TimeFrameCandleMessage) && original.AllowBuildFromSmallerTimeFrame)
+					if (response != null && original.DataType2.IsTFCandles && original.AllowBuildFromSmallerTimeFrame)
 					{
 						if (isLoadOnly)
 						{

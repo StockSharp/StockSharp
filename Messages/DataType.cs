@@ -336,9 +336,14 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Determines whether the specified message type is derived from <see cref="CandleMessage"/>.
+		/// Determines whether the <see cref="MessageType"/> is derived from <see cref="CandleMessage"/>.
 		/// </summary>
 		public bool IsCandles => MessageType?.IsCandleMessage() == true;
+
+		/// <summary>
+		/// Determines whether the <see cref="MessageType"/> is <see cref="TimeFrameCandleMessage"/>.
+		/// </summary>
+		public bool IsTFCandles => MessageType == typeof(TimeFrameCandleMessage);
 
 		/// <summary>
 		/// Determines whether the specified message type is derived from <see cref="PortfolioMessage"/>.

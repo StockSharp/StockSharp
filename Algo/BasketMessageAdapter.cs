@@ -1364,7 +1364,7 @@ namespace StockSharp.Algo
 				if (skipSupportedMessages)
 					return true;
 
-				if (mdMsg.DataType2.MessageType != typeof(TimeFrameCandleMessage))
+				if (!mdMsg.DataType2.IsTFCandles)
 				{
 					var isCandles = mdMsg.DataType2.IsCandles;
 

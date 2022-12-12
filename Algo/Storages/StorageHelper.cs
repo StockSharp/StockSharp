@@ -570,7 +570,7 @@ namespace StockSharp.Algo.Storages
 			{
 				return _original.Drive.Drive
 					.GetAvailableDataTypes(_original.SecurityId, ((IMarketDataStorage<CandleMessage>)this).Serializer.Format)
-					.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
+					.Where(t => t.IsTFCandles)
 					.Select(t => (TimeSpan)t.Arg)
 					.FilterSmallerTimeFrames(_timeFrame)
 					.OrderByDescending();
@@ -1233,7 +1233,7 @@ namespace StockSharp.Algo.Storages
 			}
 			else if (subscription.DataType2.IsCandles)
 			{
-				if (subscription.DataType2.MessageType == typeof(TimeFrameCandleMessage))
+				if (subscription.DataType2.IsTFCandles)
 				{
 					var tf = subscription.GetTimeFrame();
 

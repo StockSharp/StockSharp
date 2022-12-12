@@ -373,8 +373,8 @@ namespace StockSharp.Algo.Storages
 					       if (!d.IsCandles)
 						       return 0;
 
-					       return d.MessageType == typeof(TimeFrameCandleMessage)
-						       ? ((TimeSpan)d.Arg).Ticks : long.MaxValue;
+					       return d.IsTFCandles
+							   ? ((TimeSpan)d.Arg).Ticks : long.MaxValue;
 				       });
 			}
 
