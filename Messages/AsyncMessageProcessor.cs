@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 	private readonly SynchronizedList<MessageQueueItem> _messages = new();
 
-	private readonly SynchronizedList<(string name, Task task)> _childTasks = new();
+	private readonly SynchronizedDictionary<Task, Func<string>> _childTasks = new();
 	private readonly SynchronizedDictionary<long, CancellationTokenSource> _childTokens = new();
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
@@ -103,20 +104,31 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		return true;
 	}
 
+	/// <summary></summary>
+	public void TryAddChildTask(string name, Task task) => TryAddChildTask(() => name, task);
+
+	/// <summary></summary>
+	public void TryAddChildTask(string name, ValueTask task) => TryAddChildTask(() => name, task);
+
 	/// <summary>
 	/// </summary>
-	public void TryAddChildTask(string name, Task task)
+	public void TryAddChildTask(Func<string> getName, Task task)
 	{
 		if(!task.IsCompleted)
-			_childTasks.Add((name, task));
+		{
+			// ReSharper disable InconsistentlySynchronizedField
+			_childTasks.Add(task, getName ?? throw new ArgumentNullException(nameof(getName)));
+			task.ContinueWith(_ => _childTasks.Remove(task));
+			// ReSharper restore InconsistentlySynchronizedField
+		}
 	}
 
 	/// <summary>
 	/// </summary>
-	public void TryAddChildTask(string name, ValueTask task)
+	public void TryAddChildTask(Func<string> getName, ValueTask task)
 	{
 		if(!task.IsCompleted)
-			_childTasks.Add((name, task.AsTask()));
+			TryAddChildTask(getName, task.AsTask());
 	}
 
 	private MessageQueueItem SelectNextMessage()
@@ -165,6 +177,9 @@ public class AsyncMessageProcessor : BaseLogReceiver
 				}
 
 				msg.Task = vt.AsTask();
+				if(!msg.IsControl)
+					TryAddChildTask(() => $"task({msg.Message})", msg.Task);
+
 				msg.Task.ContinueWith(t =>
 				{
 					if(!t.IsCompletedSuccessfully)
@@ -209,19 +224,25 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 		var token = _globalCts.Token;
 
-		ValueTask processMarketDataMessage(MarketDataMessage md)
+		async ValueTask processMarketDataMessage(MarketDataMessage md)
 		{
 			if (md.IsSubscribe)
 			{
 				var childToken = CreateChildTokenByTransId(md.TransactionId, token);
-				TryAddChildTask($"sub{md.TransactionId}", _adapter.RunSubscriptionAsync(md, childToken).AsTask());
+				try
+				{
+					await _adapter.RunSubscriptionAsync(md, childToken);
+				}
+				catch (OperationCanceledException)
+				{
+					if(!childToken.IsCancellationRequested)
+						throw;
+				}
 			}
 			else
 			{
 				TryCancelChildTokenByTransId(md.OriginalTransactionId);
 			}
-
-			return default;
 		}
 
 		BeginProcessMessage(msg, () =>
@@ -346,16 +367,23 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 	private async Task<bool> WhenChildrenComplete(CancellationToken token)
 	{
-		var tasks = _childTasks.ToArray();
+		KeyValuePair<Task, Func<string>>[] tasks;
+
+		lock(_childTasks.SyncRoot)
+		{
+			tasks = _childTasks.ToArray();
+			_childTasks.Clear();
+		}
+
 		var allComplete = true;
 
-		await Task.WhenAll(tasks.Select(t => t.task.WithCancellation(token))).CatchHandle(finalizer: () =>
+		await Task.WhenAll(tasks.Select(t => t.Key.WithCancellation(token))).CatchHandle(finalizer: () =>
 		{
-			var incomplete = tasks.Where(t => !t.task.IsCompleted).Select(t => t.name).ToArray();
+			var incomplete = tasks.Where(t => !t.Key.IsCompleted).Select(t => t.Value()).ToArray();
 			if(incomplete.Any())
 			{
 				allComplete = false;
-				this.AddErrorLog("following tasks were not completed: " + incomplete.Join(", "));
+				this.AddErrorLog("following tasks were not completed:\n" + incomplete.JoinN());
 			}
 		});
 
