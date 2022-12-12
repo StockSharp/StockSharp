@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -116,10 +115,8 @@ public class AsyncMessageProcessor : BaseLogReceiver
 	{
 		if(!task.IsCompleted)
 		{
-			// ReSharper disable InconsistentlySynchronizedField
 			_childTasks.Add(task, getName ?? throw new ArgumentNullException(nameof(getName)));
 			task.ContinueWith(_ => _childTasks.Remove(task));
-			// ReSharper restore InconsistentlySynchronizedField
 		}
 	}
 
@@ -367,13 +364,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 	private async Task<bool> WhenChildrenComplete(CancellationToken token)
 	{
-		KeyValuePair<Task, Func<string>>[] tasks;
-
-		lock(_childTasks.SyncRoot)
-		{
-			tasks = _childTasks.ToArray();
-			_childTasks.Clear();
-		}
+		var tasks = _childTasks.CopyAndClear();
 
 		var allComplete = true;
 
