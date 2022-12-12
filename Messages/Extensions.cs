@@ -2471,6 +2471,7 @@ namespace StockSharp.Messages
 				case "PLT":
 				case "GLD":
 				case "SLV":
+				case "PCT": // проценты https://www.moex.com/n12293
 					return null;
 				default:
 				{
