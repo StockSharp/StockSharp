@@ -96,5 +96,6 @@
     <ProjectReference Include="$(ConnectorsAppsPath)DigitexFutures\DigitexFutures.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)QuantHouse\QuantHouse.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)BinanceHistory\BinanceHistory.csproj" />
+    <ProjectReference Include="$(ConnectorsAppsPath)MoexISS\MoexISS.csproj" />
   </ItemGroup>
 </Project>

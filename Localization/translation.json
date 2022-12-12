@@ -21726,5 +21726,9 @@
   "BinanceHistory": {
     "en": "Binance-History",
     "ru": "Binance-История"
+  },
+  "MoexISS": {
+    "en": "Moex ISS",
+    "ru": "Moex ISS"
   }
 }
