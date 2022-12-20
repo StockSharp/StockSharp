@@ -3302,21 +3302,39 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <typeparam name="TAdapter">Adapter type.</typeparam>
 		/// <param name="connector">The class to create connections to trading systems.</param>
-		/// <param name="init">Initialize <typeparamref name="TAdapter"/>.</param>
+		/// <param name="init">Initialize adapter.</param>
 		/// <returns>The class to create connections to trading systems.</returns>
-		public static Connector AddAdapter<TAdapter>(this Connector connector, Action<TAdapter> init)
+		public static TAdapter AddAdapter<TAdapter>(this Connector connector, Action<TAdapter> init)
 			where TAdapter : IMessageAdapter
 		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			if (init == null)
+			if (init is null)
 				throw new ArgumentNullException(nameof(init));
 
-			var adapter = (TAdapter)typeof(TAdapter).CreateAdapter(connector.TransactionIdGenerator);
+			return (TAdapter)connector.AddAdapter(typeof(TAdapter), a => init((TAdapter)a));
+		}
+
+		/// <summary>
+		/// Create <see cref="IMessageAdapter"/>.
+		/// </summary>
+		/// <param name="connector">The class to create connections to trading systems.</param>
+		/// <param name="adapterType">Adapter type.</param>
+		/// <param name="init">Initialize adapter.</param>
+		/// <returns>The class to create connections to trading systems.</returns>
+		public static IMessageAdapter AddAdapter(this Connector connector, Type adapterType, Action<IMessageAdapter> init)
+		{
+			if (connector is null)
+				throw new ArgumentNullException(nameof(connector));
+
+			if (adapterType is null)
+				throw new ArgumentNullException(nameof(adapterType));
+
+			if (init is null)
+				throw new ArgumentNullException(nameof(init));
+
+			var adapter = adapterType.CreateAdapter(connector.TransactionIdGenerator);
 			init(adapter);
 			connector.Adapter.InnerAdapters.Add(adapter);
-			return connector;
+			return adapter;
 		}
 
 		/// <summary>
