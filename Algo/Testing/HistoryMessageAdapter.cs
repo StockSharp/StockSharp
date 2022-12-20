@@ -15,15 +15,13 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 
-	using SourceKey = System.Tuple<Messages.SecurityId, Messages.DataType>;
-
 	/// <summary>
 	/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 	/// </summary>
 	public class HistoryMessageAdapter : MessageAdapter
 	{
-		private readonly Dictionary<SourceKey, Tuple<MarketDataGenerator, long>> _generators = new();
-		private readonly Dictionary<SourceKey, Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new();
+		private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = new();
+		private readonly Dictionary<(SecurityId secId, DataType dataType), Func<DateTimeOffset, IEnumerable<Message>>> _historySources = new();
 
 		private readonly List<Tuple<IMarketDataStorage, long>> _actions = new();
 		private readonly SyncObject _moveNextSyncRoot = new();
@@ -101,11 +99,6 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// List of all exchange boards, for which instruments are loaded.
-		/// </summary>
-		public IEnumerable<ExchangeBoard> Boards { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryMessageAdapter"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
@@ -114,11 +107,6 @@ namespace StockSharp.Algo.Testing
 			: base(transactionIdGenerator)
 		{
 			SecurityProvider = securityProvider;
-
-			Boards = SecurityProvider
-				.LookupAll()
-				.Select(s => s.Board)
-				.Distinct();
 
 			_basketStorage = new BasketMarketDataStorage<Message>();
 
@@ -213,16 +201,16 @@ namespace StockSharp.Algo.Testing
 				return Enumerable.Empty<object>();
 
 			var args = _historySources
-	             .Where(t => t.Key.Item2.MessageType == candleType && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
-	             .Select(s => s.Key.Item2.Arg)
+	             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId.IsDefault()))
+	             .Select(s => s.Key.dataType.Arg)
 	             .ToArray();
 
 			if (args.Length > 0)
 				return args;
 
 			args = _generators
-	             .Where(t => t.Key.Item2.MessageType == candleType && (t.Key.Item1 == securityId || t.Key.Item1.IsDefault()))
-	             .Select(s => s.Key.Item2.Arg)
+	             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId.IsDefault()))
+	             .Select(s => s.Key.dataType.Arg)
 	             .ToArray();
 
 			if (args.Length > 0)
@@ -307,7 +295,7 @@ namespace StockSharp.Algo.Testing
 				{
 					var sourceMsg = (HistorySourceMessage)message;
 
-					var key = Tuple.Create(sourceMsg.SecurityId, sourceMsg.DataType2);
+					var key = (sourceMsg.SecurityId, sourceMsg.DataType2);
 
 					if (sourceMsg.IsSubscribe)
 						_historySources[key] = sourceMsg.GetMessages;
@@ -348,14 +336,14 @@ namespace StockSharp.Algo.Testing
 
 					if (generatorMsg.IsSubscribe)
 					{
-						_generators.Add(Tuple.Create(generatorMsg.SecurityId, generatorMsg.DataType2), Tuple.Create(generatorMsg.Generator, generatorMsg.TransactionId));
+						_generators.Add((generatorMsg.SecurityId, generatorMsg.DataType2), (generatorMsg.Generator, generatorMsg.TransactionId));
 					}
 					else
 					{
-						var pair = _generators.FirstOrDefault(p => p.Value.Item2 == generatorMsg.OriginalTransactionId);
+						var key = _generators.FirstOrDefault(p => p.Value.transId == generatorMsg.OriginalTransactionId).Key;
 
-						if (pair.Key != default)
-							_generators.Remove(pair.Key);
+						if (key != default)
+							_generators.Remove(key);
 					}
 
 					break;
@@ -423,12 +411,12 @@ namespace StockSharp.Algo.Testing
 			Func<DateTimeOffset, IEnumerable<Message>> GetHistorySource()
 			{
 				Func<DateTimeOffset, IEnumerable<Message>> GetHistorySource2(SecurityId s)
-					=> _historySources.TryGetValue(Tuple.Create(s, dataType));
+					=> _historySources.TryGetValue((s, dataType));
 
 				return GetHistorySource2(securityId) ?? GetHistorySource2(default);
 			}
 
-			bool HasGenerator(DataType dt) => _generators.ContainsKey(Tuple.Create(securityId, dt));
+			bool HasGenerator(DataType dt) => _generators.ContainsKey((securityId, dt));
 
 			Exception error = null;
 
@@ -550,6 +538,13 @@ namespace StockSharp.Algo.Testing
 				SendSubscriptionOnline(transId);
 		}
 
+		private ExchangeBoard[] GetBoard()
+			=>	SecurityProvider
+			.LookupAll()
+			.Select(s => s.Board)
+			.Distinct()
+			.ToArray();
+
 		/// <summary>
 		/// Start data loading.
 		/// </summary>
@@ -568,6 +563,8 @@ namespace StockSharp.Algo.Testing
 					{
 						var messageTypes = new[] { MessageTypes.Time/*, ExtendedMessageTypes.Clearing*/ };
 						var token = _cancellationToken.Token;
+
+						ExchangeBoard[] boards = null;
 
 						while (!IsDisposed && !token.IsCancellationRequested)
 						{
@@ -588,7 +585,7 @@ namespace StockSharp.Algo.Testing
 									_basketStorage.InnerStorages.Remove(subscriptionId);
 							}
 
-							var boards = Boards.ToArray();
+							boards ??= GetBoard();
 
 							var currentTime = _currentTime.IsDefault() ? startDateTime : _currentTime;
 
@@ -609,7 +606,7 @@ namespace StockSharp.Algo.Testing
 									var noData = !messages.DataTypes.Except(messageTypes).Any();
 
 									if (noData)
-										EnqueueMessages(startDateTime, stopDateTime, currentTime, token, GetSimpleTimeLine(currentTime, MarketTimeChangedInterval));
+										EnqueueMessages(startDateTime, stopDateTime, currentTime, token, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval));
 									else
 										EnqueueMessages(startDateTime, stopDateTime, currentTime, token, messages);
 								}
@@ -682,17 +679,20 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private IEnumerable<Tuple<ExchangeBoard, Range<TimeSpan>>> GetOrderedRanges(DateTimeOffset date)
+		private IEnumerable<(ExchangeBoard, Range<TimeSpan>)> GetOrderedRanges(ExchangeBoard[] boards, DateTimeOffset date)
 		{
-			var orderedRanges = Boards
+			if (boards is null)
+				throw new ArgumentNullException(nameof(boards));
+
+			var orderedRanges = boards
 				.Where(b => b.IsTradeDate(date, true))
 				.SelectMany(board =>
 				{
 					var period = board.WorkingTime.GetPeriod(date.ToLocalTime(board.TimeZone));
 
 					return period == null || period.Times.Count == 0
-						       ? new[] { Tuple.Create(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay)) }
-						       : period.Times.Select(t => Tuple.Create(board, ToUtc(board, t)));
+						       ? new[] { (board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay)) }
+						       : period.Times.Select(t => (board, ToUtc(board, t)));
 				})
 				.OrderBy(i => i.Item2.Min)
 				.ToList();
@@ -709,7 +709,7 @@ namespace StockSharp.Algo.Testing
 				}
 				else if (orderedRanges[i].Item2.Intersect(orderedRanges[i + 1].Item2) != null)
 				{
-					orderedRanges[i] = Tuple.Create(orderedRanges[i].Item1, new Range<TimeSpan>(orderedRanges[i].Item2.Min, orderedRanges[i + 1].Item2.Max));
+					orderedRanges[i] = (orderedRanges[i].board, new Range<TimeSpan>(orderedRanges[i].Item2.Min, orderedRanges[i + 1].Item2.Max));
 					orderedRanges.RemoveAt(i + 1);
 				}
 				else
@@ -730,9 +730,9 @@ namespace StockSharp.Algo.Testing
 			return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
 		}
 
-		private IEnumerable<TimeMessage> GetTimeLine(DateTimeOffset date, TimeSpan interval)
+		private IEnumerable<TimeMessage> GetTimeLine(ExchangeBoard[] boards, DateTimeOffset date, TimeSpan interval)
 		{
-			var ranges = GetOrderedRanges(date);
+			var ranges = GetOrderedRanges(boards, date);
 			var lastTime = TimeSpan.Zero;
 
 			foreach (var range in ranges)
@@ -755,9 +755,9 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private IEnumerable<TimeMessage> GetSimpleTimeLine(DateTimeOffset date, TimeSpan interval)
+		private IEnumerable<TimeMessage> GetSimpleTimeLine(ExchangeBoard[] boards, DateTimeOffset date, TimeSpan interval)
 		{
-			var ranges = GetOrderedRanges(date);
+			var ranges = GetOrderedRanges(boards, date);
 			var lastTime = TimeSpan.Zero;
 
 			foreach (var range in ranges)
