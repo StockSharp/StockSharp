@@ -708,5 +708,18 @@ namespace StockSharp.Algo.Strategies
 				OriginalTransactionId = transactionId,
 			};
 		}
+
+		/// <summary>
+		/// Determines the specified type is derived from <see cref="Strategy"/> and not abstract.
+		/// </summary>
+		/// <param name="type"><see cref="Type"/>.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsStrategy(this Type type)
+		{
+			if (type is null)
+				throw new ArgumentNullException(nameof(type));
+
+			return !type.IsAbstract && type.IsSubclassOf(typeof(Strategy));
+		}
 	}
 }
