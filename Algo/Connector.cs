@@ -313,7 +313,7 @@ namespace StockSharp.Algo
 		public IEnumerable<News> News => _entityCache.News;
 
 		/// <inheritdoc />
-		public IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;
+		public virtual IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;
 
 		/// <inheritdoc />
 		public IEnumerable<Position> Positions => _existingPositions.Cache;

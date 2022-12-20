@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Testing
 {
 	using System;
 	using System.Linq;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -25,6 +26,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.BusinessEntities;
 
 	/// <summary>
 	/// The base connection of emulation.
@@ -53,6 +55,9 @@ namespace StockSharp.Algo.Testing
 			// sync transaction ids with underlying adapter
 			TransactionIdGenerator = emulationAdapter.TransactionIdGenerator;
 		}
+
+		/// <inheritdoc />
+		public override IEnumerable<Portfolio> Portfolios => base.Portfolios.Concat(EmulationAdapter.Emulator.PortfolioProvider.Portfolios).Distinct();
 
 		private DateTimeOffset _currentTime;
 

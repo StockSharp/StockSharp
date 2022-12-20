@@ -367,14 +367,10 @@ namespace SampleHistoryTesting
 				.TryAdd(Level1Fields.MarginBuy, 10000m)
 				.TryAdd(Level1Fields.MarginSell, 10000m);
 
-				// test portfolio
-				var portfolio = Portfolio.CreateSimulator();
-
 				var secProvider = (ISecurityProvider)new CollectionSecurityProvider(new[] { security });
 
 				// create backtesting connector
-				var connector = new HistoryEmulationConnector(
-					secProvider, new[] { portfolio })
+				var connector = new HistoryEmulationConnector(secProvider)
 				{
 					EmulationAdapter =
 					{
@@ -425,7 +421,7 @@ namespace SampleHistoryTesting
 					LongSma = { Length = 80 },
 					ShortSma = { Length = 10 },
 					Volume = 1,
-					Portfolio = portfolio,
+					Portfolio = connector.Portfolios.First(),
 					Security = security,
 					Connector = connector,
 					LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info,

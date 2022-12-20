@@ -36,6 +36,15 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		public HistoryEmulationConnector(ISecurityProvider securityProvider)
+			: this(securityProvider, new[] { Portfolio.CreateSimulator() })
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
+		/// </summary>
 		/// <param name="securities">Instruments, which will be sent through the <see cref="IConnector.NewSecurities"/> event.</param>
 		/// <param name="portfolios">Portfolios, which will be sent through the <see cref="IConnector.NewPortfolios"/> event.</param>
 		public HistoryEmulationConnector(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios)
