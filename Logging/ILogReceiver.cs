@@ -17,6 +17,8 @@ namespace StockSharp.Logging
 {
 	using System;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// Logs recipient interface.
 	/// </summary>
@@ -131,6 +133,23 @@ namespace StockSharp.Logging
 
 		void IDisposable.Dispose()
 		{
+		}
+	}
+
+	/// <summary>
+	/// <see cref="BaseLogReceiver"/>.
+	/// </summary>
+	public class LogReceiver : BaseLogReceiver
+	{
+		/// <summary>
+		/// Create instance.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		public LogReceiver(string name = null)
+		{
+			if (!name.IsEmptyOrWhiteSpace())
+				// ReSharper disable once VirtualMemberCallInConstructor
+				Name = name;
 		}
 	}
 }
