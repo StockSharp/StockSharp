@@ -63,10 +63,12 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static Exception Error { get; }
 
+		private static LocalizationManager _localizationManager;
+
 		/// <summary>
 		/// Localization manager.
 		/// </summary>
-		public static LocalizationManager LocalizationManager => ConfigManager.TryGetService<LocalizationManager>();
+		public static LocalizationManager LocalizationManager => _localizationManager ??= ConfigManager.TryGetService<LocalizationManager>();
 
 		/// <summary>
 		/// Error handler to track missed translations or resource keys.
