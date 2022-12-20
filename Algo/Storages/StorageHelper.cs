@@ -1622,5 +1622,21 @@ namespace StockSharp.Algo.Storages
 
 			return provider.SetAdapter(key, adapter.Id);
 		}
+
+		/// <summary>
+		/// Determines the specified path is network.
+		/// </summary>
+		/// <param name="path">Path.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsNetworkPath(this string path)
+		{
+			if (path.IsEmpty())
+				throw new ArgumentNullException(nameof(path));
+
+			if (path.Length < 3)
+				throw new ArgumentOutOfRangeException(nameof(path), path, LocalizedStrings.Str3014);
+
+			return !(path[0] >= 'A' && path[1] <= 'z' && path[1] == ':' && path[2] == '\\');
+		}
 	}
 }
