@@ -4824,5 +4824,33 @@ namespace StockSharp.Messages
 		/// <returns>Icon url.</returns>
 		public static Uri TryGetIconUrl(this Type type)
 			=> type.GetIconUrl() ?? type.TryGetVectorIcon();
+
+		/// <summary>
+		/// Get typed <see cref="CommandMessage.ObjectId"/>.
+		/// </summary>
+		/// <typeparam name="T">Type of <see cref="CommandMessage.ObjectId"/>.</typeparam>
+		/// <param name="message"><see cref="CommandMessage"/>.</param>
+		/// <returns>Typed <see cref="CommandMessage.ObjectId"/>.</returns>
+		public static T GetId<T>(this CommandMessage message)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.ObjectId.To<T>();
+		}
+
+		/// <summary>
+		/// Set typed <see cref="CommandMessage.ObjectId"/>.
+		/// </summary>
+		/// <typeparam name="T">Type of <see cref="CommandMessage.ObjectId"/>.</typeparam>
+		/// <param name="message"><see cref="CommandMessage"/>.</param>
+		/// <param name="id">Typed <see cref="CommandMessage.ObjectId"/>.</param>
+		public static void SetId<T>(this CommandMessage message, T id)
+		{
+			if (message is null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.ObjectId = id.To<string>();
+		}
 	}
 }

@@ -240,15 +240,6 @@ namespace StockSharp.Messages
 		[DataMember]
 		public string ObjectId { get; set; }
 
-		/// <summary>
-		/// <see cref="ObjectId"/>.
-		/// </summary>
-		public long? ObjectIdLong
-		{
-			get => ObjectId.To<long?>();
-			set => ObjectId = value.To<string>();
-		}
-
 		[field: NonSerialized]
 		private readonly IDictionary<string, (string type, string value)> _parameters = new Dictionary<string, (string type, string value)>();
 
