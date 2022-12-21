@@ -17,7 +17,7 @@ public static class StrategyAsyncExtensions
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask ConnectAsync(this Strategy strategy, CancellationToken cancellationToken)
+	public static async ValueTask StartAsync(this Strategy strategy, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -55,7 +55,7 @@ public static class StrategyAsyncExtensions
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask DisconnectAsync(this Strategy strategy, CancellationToken cancellationToken)
+	public static async ValueTask StopAsync(this Strategy strategy, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
