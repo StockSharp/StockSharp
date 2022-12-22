@@ -20084,8 +20084,8 @@
     "ru": "Использовать только основные часы торговли, для которых будут запрошены данные."
   },
   "AllowTrading": {
-    "en": "The strategy is in the warm-up mode, the trading is disabled. The trading mode can be turned on with the 'Trading' button.",
-    "ru": "Стратегия находится в режиме прогрева, выставление заявок отключено. Режим торговли можно включить кнопкой 'Торговля'."
+    "en": "The strategy is in the warm-up mode, the trading is disabled. The trading mode will be turned on when all underlying indicators is fully formed.",
+    "ru": "Стратегия находится в режиме прогрева, выставление заявок отключено. Режим торговли будет включен, когда все индикаторы стратегии будут полностью сформированы."
   },
   "Default": {
     "en": "Default",

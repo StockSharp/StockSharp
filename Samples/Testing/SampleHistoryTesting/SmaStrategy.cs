@@ -53,6 +53,10 @@ namespace SampleHistoryTesting
 
 		protected override void OnStarted()
 		{
+			// !!! DO NOT FORGET add it in case use AllowTrading property (see code below)
+			Indicators.Add(LongSma);
+			Indicators.Add(ShortSma);
+
 			_chart = this.GetChart();
 
 			if (_chart is not null)
@@ -117,7 +121,8 @@ namespace SampleHistoryTesting
 			var longValue = LongSma.Process(candle);
 			var shortValue = ShortSma.Process(candle);
 
-			if (LongSma.IsFormed && ShortSma.IsFormed)
+			// all indicators added in OnStarted now is fully formed and we can use it
+			if (AllowTrading)
 			{
 				// calc new values for short and long
 				var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();

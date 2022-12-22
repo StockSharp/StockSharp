@@ -144,14 +144,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public override bool AllowTrading
-		{
-			get => base.AllowTrading;
-			set => base.AllowTrading = value;
-		}
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public override bool UnsubscribeOnStop
 		{
 			get => base.UnsubscribeOnStop;

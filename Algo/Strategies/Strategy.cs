@@ -35,11 +35,12 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Algo.Indicators;
 
 	/// <summary>
 	/// <see cref="Order.Comment"/> auto-fill modes.
 	/// </summary>
-	[System.Runtime.Serialization.DataContract]
+	[DataContract]
 	[Serializable]
 	public enum StrategyCommentModes
 	{
@@ -243,6 +244,92 @@ namespace StockSharp.Algo.Strategies
 			public OrderStates PrevState { get; set; }
 		}
 
+		private class IndicatorList : SynchronizedSet<IIndicator>
+		{
+			private readonly Strategy _strategy;
+			private readonly CachedSynchronizedSet<IIndicator> _nonFormedIndicators = new();
+
+			public IndicatorList(Strategy strategy)
+			{
+				_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+			}
+
+			private bool _allFormed = true;
+
+			public bool AllFormed
+			{
+				get => _allFormed;
+				private set
+				{
+					if (_allFormed == value)
+						return;
+
+					_allFormed = value;
+					_strategy.Notify(nameof(AllowTrading));
+				}
+			}
+
+			private void RefreshAllFormed()
+			{
+				AllFormed = _nonFormedIndicators.Cache.All(i => i.IsFormed);
+			}
+
+			private void OnChanged(IIndicatorValue input, IIndicatorValue result)
+			{
+				var indicator = result.Indicator;
+
+				if (indicator is null)
+					throw new InvalidOperationException("Indicator is not present.");
+
+				if (!indicator.IsFormed)
+					return;
+
+				UnTrackIndicator(indicator);
+			}
+
+			private void UnTrackIndicator(IIndicator indicator)
+			{
+				if (indicator is null)
+					throw new ArgumentNullException(nameof(indicator));
+
+				indicator.Changed -= OnChanged;
+				_nonFormedIndicators.Remove(indicator);
+				RefreshAllFormed();
+			}
+
+			protected override void OnAdded(IIndicator item)
+			{
+				base.OnAdded(item);
+
+				if (AllFormed)
+					AllFormed = item.IsFormed;
+
+				if (!item.IsFormed)
+				{
+					item.Changed += OnChanged;
+					_nonFormedIndicators.Add(item);
+				}
+			}
+
+			protected override void OnRemoved(IIndicator item)
+			{
+				base.OnRemoved(item);
+
+				UnTrackIndicator(item);
+			}
+
+			protected override bool OnClearing()
+			{
+				foreach (var item in this)
+					item.Changed -= OnChanged;
+
+				_nonFormedIndicators.Clear();
+				RefreshAllFormed();
+
+				return base.OnClearing();
+			}
+		}
+
 		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new();
 
 		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new();
@@ -285,7 +372,6 @@ namespace StockSharp.Algo.Strategies
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
-			_allowTrading = this.Param(nameof(AllowTrading), true);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
@@ -302,6 +388,8 @@ namespace StockSharp.Algo.Strategies
 			RiskManager = new RiskManager { Parent = this };
 
 			_positionManager = new ChildStrategyPositionManager { Parent = this };
+
+			_indicators = new(this);
 		}
 
 		private readonly StrategyParam<Guid> _id;
@@ -1079,22 +1167,21 @@ namespace StockSharp.Algo.Strategies
 			set => _restoreChildOrders.Value = value;
 		}
 
-		private readonly StrategyParam<bool> _allowTrading;
-
 		/// <summary>
 		/// Allow trading.
 		/// </summary>
+		/// <remarks>
+		/// Default implementation used <see cref="Indicators"/> collection to check all <see cref="IIndicator.IsFormed"/> are <see langword="true"/>.
+		/// It means the strategy is online and can send orders.
+		/// </remarks>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str3599Key,
 			Description = LocalizedStrings.AllowTradingKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		public virtual bool AllowTrading
-		{
-			get => _allowTrading.Value;
-			set => _allowTrading.Value = value;
-		}
+		[Browsable(false)]
+		public virtual bool AllowTrading => _indicators.AllFormed;
 
 		private readonly StrategyParam<bool> _unsubscribeOnStop;
 
@@ -1471,6 +1558,13 @@ namespace StockSharp.Algo.Strategies
 		protected virtual void OnStopped()
 		{
 		}
+
+		private readonly IndicatorList _indicators;
+
+		/// <summary>
+		/// All indicators used in strategy. Uses in default implementation of <see cref="AllowTrading"/>.
+		/// </summary>
+		public IList<IIndicator> Indicators => _indicators;
 
 		private bool CheckRegisterLimits()
 		{
@@ -2080,6 +2174,8 @@ namespace StockSharp.Algo.Strategies
 			RaiseLatencyChanged();
 			RaisePositionChanged();
 			RaiseSlippageChanged();
+
+			_indicators.Clear();
 		}
 
 		/// <summary>

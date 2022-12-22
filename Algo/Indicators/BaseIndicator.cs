@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Indicators
 		protected abstract IIndicatorValue OnProcess(IIndicatorValue input);
 
 		/// <summary>
-		/// To call the event <see cref="BaseIndicator.Changed"/>.
+		/// To call the event <see cref="Changed"/>.
 		/// </summary>
 		/// <param name="input">The input value of the indicator.</param>
 		/// <param name="result">The resulting value of the indicator.</param>
