@@ -174,6 +174,11 @@ namespace StockSharp.Algo
 		public static DriveCache DriveCache => ConfigManager.GetService<DriveCache>();
 
 		/// <summary>
+		/// <see cref="IMarketDataDrive"/> cache.
+		/// </summary>
+		public static DriveCache TryDriveCache => ConfigManager.TryGetService<DriveCache>();
+
+		/// <summary>
 		/// Compiler service.
 		/// </summary>
 		[Obsolete]
