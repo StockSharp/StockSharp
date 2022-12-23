@@ -14360,7 +14360,7 @@
     "ru": "Распределение объема по ценовым уровням"
   },
   "Str3640": {
-    "en": ".NET build (.dll)|*.dll",
+    "en": ".NET assemblies (.dll)|*.dll",
     "ru": ".NET сборки (.dll)|*.dll"
   },
   "Str3641Params": {
