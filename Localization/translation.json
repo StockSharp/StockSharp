@@ -21730,5 +21730,9 @@
   "MoexISS": {
     "en": "Moex ISS",
     "ru": "Moex ISS"
+  },
+  "OpenFolder": {
+    "en": "Open folder",
+    "ru": "Открыть директорию"
   }
 }
