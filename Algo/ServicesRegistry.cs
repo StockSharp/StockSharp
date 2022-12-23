@@ -176,12 +176,24 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Compiler service.
 		/// </summary>
+		[Obsolete]
 		public static ICompilerService CompilerService => ConfigManager.GetService<ICompilerService>();
 
 		/// <summary>
 		/// Compiler service.
 		/// </summary>
+		[Obsolete]
 		public static ICompilerService TryCompilerService => ConfigManager.TryGetService<ICompilerService>();
+
+		/// <summary>
+		/// <see cref="ICompiler"/>.
+		/// </summary>
+		public static ICompiler Compiler => ConfigManager.GetService<ICompiler>();
+
+		/// <summary>
+		/// <see cref="ICompiler"/>.
+		/// </summary>
+		public static ICompiler TryCompiler => ConfigManager.TryGetService<ICompiler>();
 
 		/// <summary>
 		/// Excel provider.

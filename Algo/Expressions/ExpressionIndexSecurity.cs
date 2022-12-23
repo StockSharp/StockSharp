@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Expressions
 
 	using Ecng.Common;
 	using Ecng.Collections;
-	using Ecng.ComponentModel.Expressions;
+	using Ecng.Compilation.Expressions;
 	using Ecng.Compilation;
 
 	using StockSharp.BusinessEntities;
@@ -46,11 +46,13 @@ namespace StockSharp.Algo.Expressions
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
-				var service = ServicesRegistry.TryCompilerService;
-
-				if (service != null)
+				if (ServicesRegistry.TryCompiler is not null
+#pragma warning disable CS0612 // Type or member is obsolete
+					|| ServicesRegistry.TryCompilerService is not null
+#pragma warning restore CS0612 // Type or member is obsolete
+				)
 				{
-					Formula = service.Compile(value, true);
+					Formula = value.Compile();
 
 					_innerSecurityIds.Clear();
 
@@ -65,7 +67,7 @@ namespace StockSharp.Algo.Expressions
 						new InvalidOperationException(Formula.Error).LogError();
 				}
 				else
-					new InvalidOperationException($"Service {nameof(ICompilerService)} is not initialized.").LogError();
+					new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.").LogError();
 			}
 		}
 

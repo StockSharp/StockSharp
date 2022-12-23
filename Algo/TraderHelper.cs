@@ -21,7 +21,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 	using Ecng.Collections;
-	using Ecng.ComponentModel.Expressions;
+	using Ecng.Compilation.Expressions;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -3294,7 +3294,16 @@ namespace StockSharp.Algo
 		/// <returns>Compiled mathematical formula.</returns>
 		public static ExpressionFormula Compile(this string expression, bool useIds = true)
 		{
-			return ServicesRegistry.CompilerService.Compile(expression, useIds);
+			var compiler = ServicesRegistry.TryCompiler;
+
+			if (compiler is null)
+			{
+#pragma warning disable CS0612 // Type or member is obsolete
+				compiler = ServicesRegistry.CompilerService.GetCompiler();
+#pragma warning restore CS0612 // Type or member is obsolete
+			}
+
+			return compiler.Compile(new(), expression, useIds);
 		}
 
 		/// <summary>
