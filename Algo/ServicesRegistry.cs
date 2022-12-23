@@ -188,12 +188,20 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// <see cref="ICompiler"/>.
 		/// </summary>
-		public static ICompiler Compiler => ConfigManager.GetService<ICompiler>();
+		public static ICompiler Compiler => ConfigManager.GetService<ICompiler>()
+#pragma warning disable CS0612 // Type or member is obsolete
+			?? CompilerService?.GetCompiler()
+#pragma warning restore CS0612 // Type or member is obsolete
+		;
 
 		/// <summary>
 		/// <see cref="ICompiler"/>.
 		/// </summary>
-		public static ICompiler TryCompiler => ConfigManager.TryGetService<ICompiler>();
+		public static ICompiler TryCompiler => ConfigManager.TryGetService<ICompiler>()
+#pragma warning disable CS0612 // Type or member is obsolete
+			?? TryCompilerService?.GetCompiler()
+#pragma warning restore CS0612 // Type or member is obsolete
+		;
 
 		/// <summary>
 		/// Excel provider.

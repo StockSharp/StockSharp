@@ -46,11 +46,7 @@ namespace StockSharp.Algo.Expressions
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
-				if (ServicesRegistry.TryCompiler is not null
-#pragma warning disable CS0612 // Type or member is obsolete
-					|| ServicesRegistry.TryCompilerService is not null
-#pragma warning restore CS0612 // Type or member is obsolete
-				)
+				if (ServicesRegistry.TryCompiler is not null)
 				{
 					Formula = value.Compile();
 
