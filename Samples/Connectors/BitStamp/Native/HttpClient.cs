@@ -311,7 +311,7 @@ namespace StockSharp.BitStamp.Native
                   .Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
                   .OrderBy(p => p.Name)
                   .Select(p => $"{p.Name}={p.Value}")
-                  .Join("&");
+                  .JoinAnd();
 
 				var str = apiKey +
 				          request.Method +
