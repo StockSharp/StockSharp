@@ -30,14 +30,20 @@ public class XmlReportGenerator : BaseReportGenerator
 		void WriteEndElement()
 			=> writer.WriteEndElement();
 
-		void WriteElementString(string name, object value)
-			=> writer.WriteElementString(name, value is TimeSpan ts ? ts.Format() : value.To<string>());
+		void WriteAttributeString(string name, object value)
+			=> writer.WriteAttributeString(name, value is TimeSpan ts ? ts.Format() : value.To<string>());
 
 		WriteStartElement("strategy");
 
-		WriteElementString("name", strategy.Name);
-		WriteElementString("security", strategy.Security?.Id);
-		WriteElementString("portfolio", strategy.Portfolio?.Name);
+		WriteAttributeString("name", strategy.Name);
+		WriteAttributeString("security", strategy.Security?.Id);
+		WriteAttributeString("portfolio", strategy.Portfolio?.Name);
+		WriteAttributeString("totalWorkingTime", strategy.TotalWorkingTime);
+		WriteAttributeString("commission", strategy.Commission);
+		WriteAttributeString("position", strategy.Position);
+		WriteAttributeString("PnL", strategy.PnL);
+		WriteAttributeString("slippage", strategy.Slippage);
+		WriteAttributeString("latency", strategy.Latency);
 
 		WriteStartElement("parameters");
 
@@ -47,20 +53,13 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			WriteStartElement("parameter");
 
-			WriteElementString("name", p.Name);
-			WriteElementString("value", p.Value);
+			WriteAttributeString("name", p.Name);
+			WriteAttributeString("value", p.Value);
 
 			WriteEndElement();
 		}
 
 		WriteEndElement();
-
-		WriteElementString("totalWorkingTime", strategy.TotalWorkingTime);
-		WriteElementString("commission", strategy.Commission);
-		WriteElementString("position", strategy.Position);
-		WriteElementString("PnL", strategy.PnL);
-		WriteElementString("slippage", strategy.Slippage);
-		WriteElementString("latency", strategy.Latency);
 
 		WriteStartElement("statisticParameters");
 
@@ -70,8 +69,8 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			WriteStartElement("parameter");
 
-			WriteElementString("name", p.Name);
-			WriteElementString("value", p.Value);
+			WriteAttributeString("name", p.Name);
+			WriteAttributeString("value", p.Value);
 
 			WriteEndElement();
 		}
@@ -86,15 +85,16 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			WriteStartElement("order");
 
-			WriteElementString("id", o.Id);
-			WriteElementString("transactionId", o.TransactionId);
-			WriteElementString("direction", o.Direction);
-			WriteElementString("time", o.Time);
-			WriteElementString("price", o.Price);
-			WriteElementString("state", o.State);
-			WriteElementString("balance", o.Balance);
-			WriteElementString("volume", o.Volume);
-			WriteElementString("type", o.Type);
+			WriteAttributeString("id", o.Id);
+			WriteAttributeString("transactionId", o.TransactionId);
+			WriteAttributeString("direction", o.Direction);
+			WriteAttributeString("time", o.Time);
+			WriteAttributeString("price", o.Price);
+			WriteAttributeString("state", o.State);
+			WriteAttributeString("balance", o.Balance);
+			WriteAttributeString("volume", o.Volume);
+			WriteAttributeString("type", o.Type);
+			WriteAttributeString("comment", o.Comment);
 
 			WriteEndElement();
 		}
@@ -109,14 +109,14 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			WriteStartElement("trade");
 
-			WriteElementString("id", t.Trade.Id);
-			WriteElementString("transactionId", t.Order.TransactionId);
-			WriteElementString("time", t.Trade.Time);
-			WriteElementString("price", t.Trade.Price);
-			WriteElementString("volume", t.Trade.Volume);
-			WriteElementString("order", t.Order.Id);
-			WriteElementString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
-			WriteElementString("slippage", t.Slippage);
+			WriteAttributeString("id", t.Trade.Id);
+			WriteAttributeString("transactionId", t.Order.TransactionId);
+			WriteAttributeString("time", t.Trade.Time);
+			WriteAttributeString("price", t.Trade.Price);
+			WriteAttributeString("volume", t.Trade.Volume);
+			WriteAttributeString("order", t.Order.Id);
+			WriteAttributeString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
+			WriteAttributeString("slippage", t.Slippage);
 
 			WriteEndElement();
 		}
