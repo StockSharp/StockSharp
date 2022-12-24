@@ -8,6 +8,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Strategies.Reporting;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -232,5 +233,10 @@ namespace StockSharp.Algo
 		/// The risks control manager.
 		/// </summary>
 		public static IRiskManager RiskManager => ConfigManager.GetService<IRiskManager>();
+
+		/// <summary>
+		/// <see cref="IReportGeneratorProvider"/>.
+		/// </summary>
+		public static IReportGeneratorProvider ReportGeneratorProvider => ConfigManager.GetService<IReportGeneratorProvider>();
 	}
 }
