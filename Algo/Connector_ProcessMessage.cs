@@ -73,6 +73,9 @@ namespace StockSharp.Algo
 			}
 		}
 
+		/// <inheritdoc />
+		public bool CanConnect => Adapter.InnerAdapters.SortedAdapters.Any();
+
 		private readonly ResetMessage _disposeMessage = new();
 
 		private void AdapterOnNewOutMessage(Message message)

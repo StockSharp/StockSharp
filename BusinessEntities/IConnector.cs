@@ -272,6 +272,11 @@ namespace StockSharp.BusinessEntities
 		IEnumerable<News> News { get; }
 
 		/// <summary>
+		/// Determines this connector is ready for establish connection.
+		/// </summary>
+		bool CanConnect { get; }
+
+		/// <summary>
 		/// Connection state.
 		/// </summary>
 		ConnectionStates ConnectionState { get; }
