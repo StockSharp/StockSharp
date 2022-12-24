@@ -8,6 +8,8 @@ using System.Xml;
 
 using Ecng.Common;
 
+using StockSharp.Messages;
+
 /// <summary>
 /// The report generator for the strategy in the xml format.
 /// </summary>
@@ -51,6 +53,9 @@ public class XmlReportGenerator : BaseReportGenerator
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
+			if (p.Value is WorkingTime)
+				continue;
+
 			WriteStartElement("parameter");
 
 			WriteAttributeString("name", p.Name);
@@ -61,7 +66,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		WriteEndElement();
 
-		WriteStartElement("statisticParameters");
+		WriteStartElement("statistics");
 
 		foreach (var p in strategy.StatisticManager.Parameters)
 		{

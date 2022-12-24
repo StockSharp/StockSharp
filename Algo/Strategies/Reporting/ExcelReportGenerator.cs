@@ -15,6 +15,7 @@ using Ecng.ComponentModel;
 using StockSharp.Algo.PnL;
 using StockSharp.BusinessEntities;
 using StockSharp.Localization;
+using StockSharp.Messages;
 
 /// <summary>
 /// The report generator for the strategy in the Excel format.
@@ -141,6 +142,9 @@ public class ExcelReportGenerator : BaseReportGenerator
 			cancellationToken.ThrowIfCancellationRequested();
 
 			var value = strategyParam.Value;
+
+			if (value is WorkingTime)
+				continue;
 
 			if (value is TimeSpan ts)
 				value = ts.Format();

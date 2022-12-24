@@ -11,6 +11,8 @@ using Ecng.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+using StockSharp.Messages;
+
 /// <summary>
 /// The report generator for the strategy in the json format.
 /// </summary>
@@ -45,7 +47,7 @@ public class JsonReportGenerator : BaseReportGenerator
 		void WriteElementString(string name, object value)
 		{
 			WritePropertyName(name);
-			writer.WriteValue(value);
+			writer.WriteValue(value?.To<string>());
 		}
 
 		WriteStartElement();
@@ -54,22 +56,15 @@ public class JsonReportGenerator : BaseReportGenerator
 		WriteElementString("security", strategy.Security?.Id);
 		WriteElementString("portfolio", strategy.Portfolio?.Name);
 
-		WritePropertyName("parameters");
-		WriteStartArray();
-
 		foreach (var p in strategy.Parameters.CachedValues)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			WriteStartElement();
+			if (p.Value is WorkingTime)
+				continue;
 
-			WriteElementString("name", p.Name);
-			WriteElementString("value", p.Value);
-
-			WriteEndElement();
+			WriteElementString(p.Name, p.Value);
 		}
-
-		WriteEndArray();
 
 		WriteElementString("totalWorkingTime", strategy.TotalWorkingTime);
 		WriteElementString("commission", strategy.Commission);
@@ -78,22 +73,17 @@ public class JsonReportGenerator : BaseReportGenerator
 		WriteElementString("slippage", strategy.Slippage);
 		WriteElementString("latency", strategy.Latency);
 
-		WritePropertyName("statisticParameters");
-		WriteStartArray();
+		WritePropertyName("statistics");
+		WriteStartElement();
 
 		foreach (var p in strategy.StatisticManager.Parameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			WriteStartElement();
-
-			WriteElementString("name", p.Name);
-			WriteElementString("value", p.Value);
-
-			WriteEndElement();
+			WriteElementString(p.Name, p.Value);
 		}
 
-		WriteEndArray();
+		WriteEndElement();
 
 		WritePropertyName("orders");
 		WriteStartArray();
