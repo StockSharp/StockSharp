@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo;
+﻿namespace StockSharp.BusinessEntities;
 
 using System;
 using System.Threading;
@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using Ecng.Common;
 
-using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 
 /// <summary>
