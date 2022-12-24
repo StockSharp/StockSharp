@@ -2166,12 +2166,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Simulator.
 		/// </summary>
-		public static string SimulatorPortfolioName = "Simulator (S#)";
+		public static string SimulatorPortfolioName = "Simulator_SS";
 
 		/// <summary>
 		/// Anonymous account.
 		/// </summary>
-		public static string AnonymousPortfolioName = "Anonymous (S#)";
+		public static string AnonymousPortfolioName = "Anonymous_SS";
 
 		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 		{
