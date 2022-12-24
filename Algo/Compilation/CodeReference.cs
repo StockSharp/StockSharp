@@ -81,5 +81,8 @@ namespace StockSharp.Algo.Compilation
 		{
 			storage.SetValue(nameof(Location), Location);
 		}
+
+		/// <inheritdoc />
+		public override string ToString() => FullLocation;
 	}
 }
