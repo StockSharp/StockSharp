@@ -1140,7 +1140,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The time for storing <see cref="Orders"/> and <see cref="StopOrders"/> orders in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
 		/// </summary>
-		[Browsable(false)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrdersKey,
+			Description = LocalizedStrings.OrdersKeepTimeKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 9)]
 		public TimeSpan OrdersKeepTime
 		{
 			get => _ordersKeepTime.Value;
@@ -1342,7 +1347,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Wait <see cref="Rules"/> to finish before strategy become into <see cref="ProcessStates.Stopped"/> state.
 		/// </summary>
-		//[Browsable(false)]
+		[Browsable(false)]
 		public virtual bool WaitRulesOnStop
 		{
 			get => _waitRulesOnStop.Value;
@@ -1564,6 +1569,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// All indicators used in strategy. Uses in default implementation of <see cref="AllowTrading"/>.
 		/// </summary>
+		[Browsable(false)]
 		public IList<IIndicator> Indicators => _indicators;
 
 		private bool CheckRegisterLimits()
