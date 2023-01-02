@@ -19964,8 +19964,8 @@
     "ru": "Диапазон страйка"
   },
   "AccessToken": {
-    "en": "Access token.",
-    "ru": "Access token."
+    "en": "Access token",
+    "ru": "Токен доступа"
   },
   "SmallerTimeFrame": {
     "en": "Smaller time-frame",
