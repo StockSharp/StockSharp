@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="StockSharp.FTXStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.AlfaDirect" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.AlfaDirectStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlorHistory" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.AlphaVantage" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.BarChart" Version="$(StockSharpVer)" />
@@ -32,20 +32,20 @@
     <PackageReference Include="StockSharp.CoinExStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.CoinHubStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.CoinigyStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Cqg.Com" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Cqg.Continuum" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Cqg.ComStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Cqg.ContinuumStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.CryptopiaStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.CSV" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.DeribitStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.DigifinexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.DukasCopy" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.ETrade" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.ETradeStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.ExmoStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.FatBTCStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Finam" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.FinViz" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Fxcm" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.FxcmStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.GdaxStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Google" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.GopaxStub" Version="$(StockSharpVer)" />
@@ -54,7 +54,7 @@
     <PackageReference Include="StockSharp.HuobiStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.IdaxStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.IEX" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.InteractiveBrokers" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.InteractiveBrokersStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.ITCHStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.KrakenStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.KucoinStub" Version="$(StockSharpVer)" />
@@ -62,10 +62,10 @@
     <PackageReference Include="StockSharp.LBankStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.LiquiStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.LiveCoinStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.LMAX" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.LMAXStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Mfd" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.MicexStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Oanda" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.OandaStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.OkcoinStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.PlazaStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.PoloniexStub" Version="$(StockSharpVer)" />
@@ -75,12 +75,12 @@
     <PackageReference Include="StockSharp.QuoinexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.RithmicStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Rss" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.SmartCom" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.SmartComStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.SpbExStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Sterling" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.SterlingStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.TradeOgreStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Tradier" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Transaq" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.TradierStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.TransaqStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.TwimeStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.UkrExh" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.UpbitStub" Version="$(StockSharpVer)" />
