@@ -8,7 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
 </Project>

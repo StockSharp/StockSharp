@@ -7,7 +7,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.Adapters.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>

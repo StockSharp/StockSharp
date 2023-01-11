@@ -24,6 +24,8 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
+	using StockSharp.Algo.Strategies.Protective;
+	using StockSharp.Algo.Strategies.Quoting;
 
 	/// <summary>
 	/// Extension class for <see cref="Strategy"/>.
@@ -720,6 +722,143 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(type));
 
 			return !type.IsAbstract && type.IsSubclassOf(typeof(Strategy));
+		}
+
+		/// <summary>
+		/// To open the position via quoting.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="finishPosition">The position value that should be reached. A negative value means the short position.</param>
+		public static void OpenPositionByQuoting(this Strategy strategy, decimal finishPosition)
+		{
+			if (strategy == null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			var position = strategy.Position;
+
+			if (finishPosition == position)
+				return;
+
+			var delta = (finishPosition - position).Abs();
+
+			var quoting = new MarketQuotingStrategy(finishPosition < position ? Sides.Sell : Sides.Buy, delta);
+			strategy.ChildStrategies.Add(quoting);
+		}
+
+		/// <summary>
+		/// To close the open position via quoting.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		public static void ClosePositionByQuoting(this Strategy strategy)
+		{
+			if (strategy == null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			var position = strategy.Position;
+
+			if (position == 0)
+				return;
+
+			var quoting = new MarketQuotingStrategy(position > 0 ? Sides.Sell : Sides.Buy, position.Abs());
+			strategy.ChildStrategies.Add(quoting);
+		}
+
+		///// <summary>
+		///// To create the action protecting the order by strategies <see cref="TakeProfitStrategy"/> and <see cref="StopLossStrategy"/>.
+		///// </summary>
+		///// <param name="rule">The rule associated with the order.</param>
+		///// <param name="takePriceDelta">The delta from the price of the protected order, by which the protective take profit order is to be registered.</param>
+		///// <param name="stopPriceDelta">The delta from the price of the protected order, by which the protective stop loss order is to be registered.</param>
+		///// <returns>Rule.</returns>
+		//public static MarketRule<Order, Order> Protect(this MarketRule<Order, Order> rule, Unit takePriceDelta, Unit stopPriceDelta)
+		//{
+		//	if (rule == null)
+		//		throw new ArgumentNullException(nameof(rule));
+
+		//	return rule.Do(order =>
+		//		order
+		//			.WhenNewTrades()
+		//			.Protect(takePriceDelta, stopPriceDelta)
+		//			.Apply(GetRuleStrategy(rule)));
+		//}
+
+		/// <summary>
+		/// To create the action protecting orders by strategies <see cref="TakeProfitStrategy"/> and <see cref="StopLossStrategy"/>.
+		/// </summary>
+		/// <param name="rule">The rule for new orders.</param>
+		/// <param name="takePriceDelta">The delta from the price of the protected order, by which the protective take profit order is to be registered.</param>
+		/// <param name="stopPriceDelta">The delta from the price of the protected order, by which the protective stop loss order is to be registered.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, MyTrade> Protect(this MarketRule<Order, MyTrade> rule, Unit takePriceDelta, Unit stopPriceDelta)
+		{
+			return rule.Protect(
+				takePriceDelta == null
+					? null
+					: t => new TakeProfitStrategy(t, takePriceDelta),
+				stopPriceDelta == null
+					? null
+					: t => new StopLossStrategy(t, stopPriceDelta));
+		}
+
+		/// <summary>
+		/// To create the action protecting orders by strategies <see cref="TakeProfitStrategy"/> and <see cref="StopLossStrategy"/>.
+		/// </summary>
+		/// <param name="rule">The rule for new orders.</param>
+		/// <param name="takeProfit">The function that creates the strategy <see cref="TakeProfitStrategy"/> by the order.</param>
+		/// <param name="stopLoss">The function that creates the strategy <see cref="StopLossStrategy"/> by the order.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, MyTrade> Protect(this MarketRule<Order, MyTrade> rule, Func<MyTrade, TakeProfitStrategy> takeProfit, Func<MyTrade, StopLossStrategy> stopLoss)
+		{
+			if (rule == null)
+				throw new ArgumentNullException(nameof(rule));
+
+			if (takeProfit == null && stopLoss == null)
+				throw new ArgumentException(LocalizedStrings.Str1248);
+
+			Strategy CreateProtection(MyTrade trade)
+			{
+				if (takeProfit != null && stopLoss != null)
+					return new TakeProfitStopLossStrategy(takeProfit(trade), stopLoss(trade));
+
+				if (takeProfit != null)
+					return takeProfit(trade);
+				else
+					return stopLoss(trade);
+			}
+
+			rule.Do(trade => GetRuleStrategy(rule).ChildStrategies.Add(CreateProtection(trade)));
+
+			return rule;
+		}
+
+		private sealed class ActivatedStrategyRule : MarketRule<ProtectiveStrategy, ProtectiveStrategy>
+		{
+			private readonly ProtectiveStrategy _strategy;
+
+			public ActivatedStrategyRule(ProtectiveStrategy strategy)
+				: base(strategy)
+			{
+				Name = LocalizedStrings.Str1082;
+
+				_strategy = strategy;
+				_strategy.Activated += Activate;
+			}
+
+			protected override void DisposeManaged()
+			{
+				_strategy.Activated -= Activate;
+				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// To create the rule for the event <see cref="ProtectiveStrategy.Activated"/>.
+		/// </summary>
+		/// <param name="strategy">The strategy, by which the event will be monitored.</param>
+		/// <returns>Rule.</returns>
+		public static IMarketRule WhenActivated(this ProtectiveStrategy strategy)
+		{
+			return new ActivatedStrategyRule(strategy);
 		}
 	}
 }

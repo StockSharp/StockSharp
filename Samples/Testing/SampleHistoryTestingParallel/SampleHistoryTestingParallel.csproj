@@ -13,7 +13,6 @@
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
 </Project>

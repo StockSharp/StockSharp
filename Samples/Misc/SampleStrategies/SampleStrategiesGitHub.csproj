@@ -8,7 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="StockSharp.Xaml" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.Algo.Strategies" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Configuration.Adapters\Configuration.AdaptersGitHub.csproj" />
