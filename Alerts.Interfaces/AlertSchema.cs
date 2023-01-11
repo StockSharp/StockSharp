@@ -72,6 +72,11 @@ namespace StockSharp.Alerts
 		public AlertNotifications? AlertType { get; set; }
 
 		/// <summary>
+		/// External ID.
+		/// </summary>
+		public long? ExternalId { get; set; }
+
+		/// <summary>
 		/// Signal header.
 		/// </summary>
 		public string Caption { get; set; }
@@ -91,6 +96,7 @@ namespace StockSharp.Alerts
 			Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.Load<AlertRule>()).Where(r => r.Value != null));
 
 			AlertType = storage.GetValue<string>(nameof(AlertType)).To<AlertNotifications?>();
+			ExternalId = storage.GetValue<long?>(nameof(ExternalId));
 			Caption = storage.GetValue<string>(nameof(Caption));
 			Message = storage.GetValue<string>(nameof(Message));
 			IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
@@ -106,6 +112,7 @@ namespace StockSharp.Alerts
 		{
 			storage.SetValue(nameof(Rules), Rules.Select(r => r.Save()).ToArray());
 			storage.SetValue(nameof(AlertType), AlertType.To<string>());
+			storage.SetValue(nameof(ExternalId), ExternalId);
 			storage.SetValue(nameof(Caption), Caption);
 			storage.SetValue(nameof(Message), Message);
 			storage.SetValue(nameof(IsEnabled), IsEnabled);

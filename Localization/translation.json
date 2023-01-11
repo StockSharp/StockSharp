@@ -21738,5 +21738,9 @@
   "OrdersKeepTime": {
     "en": "The time for storing orders in memory. By default it equals to 2 days. If value is set in 0, orders will not be deleted.",
     "ru": "Время хранения заявок в памяти. По-умолчанию равно 2 дням. Если значение равно 0, то заявки не будут удаляться."
+  },
+  "ExternalIdIsNotSet": {
+    "en": "External ID is not set.",
+    "ru": "Внешний идентификатор не установлен."
   }
 }
