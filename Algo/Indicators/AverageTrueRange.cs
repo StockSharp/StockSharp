@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The average true range <see cref="AverageTrueRange.TrueRange"/>.
+	/// The average true range <see cref="Indicators.TrueRange"/>.
 	/// </summary>
 	[DisplayName("ATR")]
 	[DescriptionLoc(LocalizedStrings.Str758Key)]
@@ -47,6 +47,9 @@ namespace StockSharp.Algo.Indicators
 			MovingAverage = movingAverage ?? throw new ArgumentNullException(nameof(movingAverage));
 			TrueRange = trueRange ?? throw new ArgumentNullException(nameof(trueRange));
 		}
+
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
 
 		/// <summary>
 		/// Moving Average.

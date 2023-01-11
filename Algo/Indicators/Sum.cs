@@ -36,6 +36,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Volume;
+
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

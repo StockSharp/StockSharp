@@ -38,6 +38,9 @@ namespace StockSharp.Algo.Indicators
 			LongSma = new SimpleMovingAverage { Length = 65 };
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// Short moving average.
 		/// </summary>

@@ -37,6 +37,9 @@ namespace StockSharp.Algo.Indicators
 			Mode = ComplexIndicatorModes.Sequence;
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
 		/// <summary>
 		/// %K.
 		/// </summary>

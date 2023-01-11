@@ -40,6 +40,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_sma.Length = Length;

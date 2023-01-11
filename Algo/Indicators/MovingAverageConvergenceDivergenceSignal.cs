@@ -47,6 +47,9 @@ namespace StockSharp.Algo.Indicators
 			Mode = ComplexIndicatorModes.Sequence;
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// Convergence/divergence of moving averages.
 		/// </summary>

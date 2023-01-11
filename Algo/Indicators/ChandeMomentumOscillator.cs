@@ -40,6 +40,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			_cmoDn.Length = _cmoUp.Length = Length;

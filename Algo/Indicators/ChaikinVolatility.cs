@@ -42,6 +42,9 @@ namespace StockSharp.Algo.Indicators
 			Roc = new RateOfChange();
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
 		/// <summary>
 		/// Moving Average.
 		/// </summary>

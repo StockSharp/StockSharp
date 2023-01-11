@@ -55,6 +55,9 @@ namespace StockSharp.Algo.Indicators
 			Mode = ComplexIndicatorModes.Sequence;
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
 		/// <summary>
 		/// Welles Wilder Directional Movement Index.
 		/// </summary>

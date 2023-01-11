@@ -33,10 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class WilliamsR : LengthIndicator<decimal>
 	{
-		// Текущее значение минимума
 		private readonly Lowest _low;
-
-		// Текущее значение максимума
 		private readonly Highest _high;
 
 		/// <summary>
@@ -47,6 +44,9 @@ namespace StockSharp.Algo.Indicators
 			_low = new Lowest();
 			_high = new Highest();
 		}
+
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
 
 		/// <inheritdoc />
 		public override bool IsFormed => _low.IsFormed;
@@ -63,7 +63,6 @@ namespace StockSharp.Algo.Indicators
 		{
 			var candle = input.GetValue<Candle>();
 
-			// Находим минимум и максимум для заданного периода
 			var lowValue = _low.Process(input.SetValue(this, candle.LowPrice)).GetValue<decimal>();
 			var highValue = _high.Process(input.SetValue(this, candle.HighPrice)).GetValue<decimal>();
 

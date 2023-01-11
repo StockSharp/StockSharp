@@ -43,6 +43,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
+		/// <inheritdoc />
 		public override bool IsFormed => _high.IsFormed;
 
 		/// <inheritdoc />

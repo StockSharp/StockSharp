@@ -66,6 +66,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
+		/// <inheritdoc />
 		public override bool IsFormed => _period7BpSum.IsFormed && _period14BpSum.IsFormed &&
 		                                 _period28BpSum.IsFormed && _period7TrSum.IsFormed &&
 		                                 _period14TrSum.IsFormed && _period28TrSum.IsFormed;

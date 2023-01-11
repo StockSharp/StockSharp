@@ -38,6 +38,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
+		/// <inheritdoc />
 		public override bool IsFormed => _sma.IsFormed;
 
 		/// <inheritdoc />

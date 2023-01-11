@@ -52,6 +52,9 @@ namespace StockSharp.Algo.Indicators
 			MedianPrice = new MedianPrice();
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// Long moving average.
 		/// </summary>

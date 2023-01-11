@@ -93,6 +93,10 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual IndicatorMeasures Measure { get; } = IndicatorMeasures.Absolute;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual bool IsFormed { get; protected set; }
 
 		/// <inheritdoc />

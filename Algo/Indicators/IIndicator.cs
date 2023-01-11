@@ -21,6 +21,32 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	/// <summary>
+	/// Indicator measures.
+	/// </summary>
+	public enum IndicatorMeasures
+	{
+		/// <summary>
+		/// Absolute.
+		/// </summary>
+		Absolute,
+
+		/// <summary>
+		/// 0 till 100.
+		/// </summary>
+		Persent,
+
+		/// <summary>
+		/// -1 till +1.
+		/// </summary>
+		MunisOnePlusOne,
+
+		/// <summary>
+		/// Volume.
+		/// </summary>
+		Volume,
+	}
+
+	/// <summary>
 	/// The interface describing indicator.
 	/// </summary>
 	public interface IIndicator : IPersistable, ICloneable<IIndicator>
@@ -76,5 +102,10 @@ namespace StockSharp.Algo.Indicators
 		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		void Reset();
+
+		/// <summary>
+		/// <see cref="IndicatorMeasures"/>.
+		/// </summary>
+		IndicatorMeasures Measure { get; }
 	}
 }

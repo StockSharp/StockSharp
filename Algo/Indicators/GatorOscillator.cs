@@ -58,6 +58,9 @@ namespace StockSharp.Algo.Indicators
 			Histogram2 = histogram2;
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// Top histogram.
 		/// </summary>

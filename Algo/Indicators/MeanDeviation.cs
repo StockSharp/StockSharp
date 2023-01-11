@@ -37,6 +37,9 @@ namespace StockSharp.Algo.Indicators
 			Length = 5;
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// Moving Average.
 		/// </summary>

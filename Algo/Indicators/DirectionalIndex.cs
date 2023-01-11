@@ -61,6 +61,9 @@ namespace StockSharp.Algo.Indicators
 			InnerIndicators.Add(Minus = new DiMinus());
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
 		/// <summary>
 		/// Period length.
 		/// </summary>

@@ -48,6 +48,9 @@ namespace StockSharp.Algo.Indicators
 			LongMa = longMa ?? throw new ArgumentNullException(nameof(longMa));
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// Long moving average.
 		/// </summary>

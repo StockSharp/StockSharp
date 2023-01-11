@@ -51,6 +51,9 @@ namespace StockSharp.Algo.Indicators
 			Sma = sma ?? throw new ArgumentNullException(nameof(sma));
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// The moving average.
 		/// </summary>

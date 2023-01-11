@@ -50,6 +50,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+
+		/// <inheritdoc />
 		public override void Reset()
 		{
 			base.Reset();

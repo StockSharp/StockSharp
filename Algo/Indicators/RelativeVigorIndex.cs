@@ -48,6 +48,9 @@ namespace StockSharp.Algo.Indicators
 			Mode = ComplexIndicatorModes.Sequence;
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// Average indicator part.
 		/// </summary>

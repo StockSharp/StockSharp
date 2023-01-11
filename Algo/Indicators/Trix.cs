@@ -45,6 +45,9 @@ namespace StockSharp.Algo.Indicators
 			_roc = new RateOfChange { Length = 1 };
 		}
 
+		/// <inheritdoc />
+		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+
 		/// <summary>
 		/// The length of period <see cref="RateOfChange"/>.
 		/// </summary>
