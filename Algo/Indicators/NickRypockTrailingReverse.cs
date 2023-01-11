@@ -18,14 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// NickRypockTrailingReverse (Nick Rypock Trailing reverse).
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorNickRypockTrailingReverse.html
+	/// </remarks>
 	[DisplayName("NRTR")]
 	[Description("Nick Rypock Trailing reverse.")]
+	[Doc("topics/IndicatorNickRypockTrailingReverse.html")]
 	public class NickRypockTrailingReverse : LengthIndicator<decimal>
 	{
 		private class CalcBuffer

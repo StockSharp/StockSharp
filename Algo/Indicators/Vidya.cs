@@ -19,16 +19,19 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 	using System;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// The dynamic average of variable index  (Variable Index Dynamic Average).
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/Vidya.ashx http://www.mql5.com/en/code/75.
+	/// https://doc.stocksharp.com/topics/IndicatorVidya.html
 	/// </remarks>
 	[DisplayName("Vidya")]
 	[DescriptionLoc(LocalizedStrings.Str755Key)]
+	[Doc("topics/IndicatorVidya.html")]
 	public class Vidya : LengthIndicator<decimal>
 	{
 		private decimal _multiplier = 1;

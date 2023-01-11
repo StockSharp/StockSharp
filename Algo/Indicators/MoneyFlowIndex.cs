@@ -17,15 +17,21 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Money Flow Index.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorMoneyFlowIndex.html
+	/// </remarks>
 	[DisplayName("MFI")]
 	[DescriptionLoc(LocalizedStrings.MoneyFlowIndexKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorMoneyFlowIndex.html")]
 	public class MoneyFlowIndex : LengthIndicator<decimal>
 	{
 		private decimal _previousPrice;

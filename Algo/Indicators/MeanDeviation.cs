@@ -19,13 +19,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Average deviation.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorMeanDeviation.html
+	/// </remarks>
 	[DisplayName("MeanDeviation")]
 	[DescriptionLoc(LocalizedStrings.Str744Key)]
+	[Doc("topics/IndicatorMeanDeviation.html")]
 	public class MeanDeviation : LengthIndicator<decimal>
 	{
 		/// <summary>

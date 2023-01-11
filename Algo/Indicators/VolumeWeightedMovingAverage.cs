@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
@@ -24,11 +26,12 @@ namespace StockSharp.Algo.Indicators
 	/// Volume weighted moving average.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/VMA.ashx http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:vwap_intraday.
+	/// https://doc.stocksharp.com/topics/IndicatorVolumeWeightedMovingAverage.html
 	/// </remarks>
 	[DisplayName("VMA")]
 	[DescriptionLoc(LocalizedStrings.Str823Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorVolumeWeightedMovingAverage.html")]
 	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	{
 		// Текущее значение числителя

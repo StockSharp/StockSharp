@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Rate of change.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorRateOfChange.html
+	/// </remarks>
 	[DisplayName("ROC")]
 	[DescriptionLoc(LocalizedStrings.Str732Key)]
+	[Doc("topics/IndicatorRateOfChange.html")]
 	public class RateOfChange : Momentum
 	{
 		/// <summary>

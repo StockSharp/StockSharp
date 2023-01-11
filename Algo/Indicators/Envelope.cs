@@ -20,14 +20,19 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Common;
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Envelope.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorEnvelope.html
+	/// </remarks>
 	[DisplayName("Envelope")]
 	[Description("Envelope.")]
+	[Doc("topics/IndicatorEnvelope.html")]
 	public class Envelope : BaseComplexIndicator
 	{
 		/// <summary>

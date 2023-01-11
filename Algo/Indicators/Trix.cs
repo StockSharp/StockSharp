@@ -17,16 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Triple Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/TRIX.ashx http://www.incrediblecharts.com/indicators/trix_indicator.php.
+	/// https://doc.stocksharp.com/topics/IndicatorTrix.html
 	/// </remarks>
 	[DisplayName("Trix")]
 	[DescriptionLoc(LocalizedStrings.Str752Key)]
+	[Doc("topics/IndicatorTrix.html")]
 	public class Trix : LengthIndicator<IIndicatorValue>
 	{
 		private readonly ExponentialMovingAverage _ema1;

@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -27,10 +28,14 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// Volume profile.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorVolumeProfileIndicator.html
+	/// </remarks>
 	[DisplayName("VolumeProfile")]
 	[DescriptionLoc(LocalizedStrings.VolumeProfileKey, true)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(VolumeProfileIndicatorValue))]
+	[Doc("topics/IndicatorVolumeProfileIndicator.html")]
 	public class VolumeProfileIndicator : BaseIndicator
 	{
 		private readonly Dictionary<decimal, decimal> _levels = new();

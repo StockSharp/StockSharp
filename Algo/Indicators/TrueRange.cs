@@ -19,15 +19,21 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// True range.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorTrueRange.html
+	/// </remarks>
 	[DisplayName("TR")]
 	[DescriptionLoc(LocalizedStrings.Str775Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorTrueRange.html")]
 	public class TrueRange : BaseIndicator
 	{
 		private Candle _prevCandle;

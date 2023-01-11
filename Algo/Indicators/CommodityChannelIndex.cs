@@ -17,15 +17,21 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Commodity Channel Index.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorCommodityChannelIndex.html
+	/// </remarks>
 	[DisplayName("CCI")]
 	[DescriptionLoc(LocalizedStrings.Str760Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorCommodityChannelIndex.html")]
 	public class CommodityChannelIndex : LengthIndicator<decimal>
 	{
 		private readonly MeanDeviation _mean = new();

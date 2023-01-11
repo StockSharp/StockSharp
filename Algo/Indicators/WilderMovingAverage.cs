@@ -18,14 +18,21 @@ namespace StockSharp.Algo.Indicators
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
+
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Welles Wilder Moving Average.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorWilderMovingAverage.html
+	/// </remarks>
 	[DisplayName("WilderMA")]
 	[DescriptionLoc(LocalizedStrings.Str825Key)]
+	[Doc("topics/IndicatorWilderMovingAverage.html")]
 	public class WilderMovingAverage : LengthIndicator<decimal>
 	{
 		/// <summary>

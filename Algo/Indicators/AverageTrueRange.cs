@@ -18,13 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// The average true range <see cref="Indicators.TrueRange"/>.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorAverageTrueRange.html
+	/// </remarks>
 	[DisplayName("ATR")]
 	[DescriptionLoc(LocalizedStrings.Str758Key)]
+	[Doc("topics/IndicatorAverageTrueRange.html")]
 	public class AverageTrueRange : LengthIndicator<IIndicatorValue>
 	{
 		private bool _isFormed;

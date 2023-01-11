@@ -19,14 +19,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Convergence/divergence of moving averages.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergence.html
+	/// </remarks>
 	[DisplayName("MACD")]
 	[DescriptionLoc(LocalizedStrings.Str797Key)]
+	[Doc("topics/IndicatorMovingAverageConvergenceDivergence.html")]
 	public class MovingAverageConvergenceDivergence : BaseIndicator
 	{
 		/// <summary>

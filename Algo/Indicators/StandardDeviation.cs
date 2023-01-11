@@ -21,14 +21,19 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Standard deviation.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorStandardDeviation.html
+	/// </remarks>
 	[DisplayName("StdDev")]
 	[DescriptionLoc(LocalizedStrings.Str820Key)]
+	[Doc("topics/IndicatorStandardDeviation.html")]
 	public class StandardDeviation : LengthIndicator<decimal>
 	{
 		private readonly SimpleMovingAverage _sma;

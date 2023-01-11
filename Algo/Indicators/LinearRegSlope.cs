@@ -20,14 +20,19 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Linear regression gradient.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorLinearRegSlope.html
+	/// </remarks>
 	[DisplayName("LinearRegSlope")]
 	[DescriptionLoc(LocalizedStrings.Str742Key)]
+	[Doc("topics/IndicatorLinearRegSlope.html")]
 	public class LinearRegSlope : LengthIndicator<decimal>
 	{
 		/// <summary>

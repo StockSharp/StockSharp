@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Convergence/divergence of moving averages with signal line.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergenceSignal.html
+	/// </remarks>
 	[DisplayName("MACD Signal")]
 	[DescriptionLoc(LocalizedStrings.Str803Key)]
+	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceSignal.html")]
 	public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 	{
 		/// <summary>

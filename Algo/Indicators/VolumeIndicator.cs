@@ -17,16 +17,22 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Candle volume.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorVolumeIndicator.html
+	/// </remarks>
 	[DisplayName("Volume")]
 	[DescriptionLoc(LocalizedStrings.Str756Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorVolumeIndicator.html")]
 	public class VolumeIndicator : BaseIndicator
 	{
 		/// <summary>

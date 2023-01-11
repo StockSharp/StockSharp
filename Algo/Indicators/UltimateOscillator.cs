@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
@@ -24,11 +26,12 @@ namespace StockSharp.Algo.Indicators
 	/// Last oscillator.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/UltimateOsc.ashx http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:ultimate_oscillator.
+	/// https://doc.stocksharp.com/topics/IndicatorUltimateOscillator.html
 	/// </remarks>
 	[DisplayName("UltimateOsc")]
 	[DescriptionLoc(LocalizedStrings.Str776Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorUltimateOscillator.html")]
 	public class UltimateOscillator : BaseIndicator
 	{
 		private const decimal _stoProcentov = 100m;

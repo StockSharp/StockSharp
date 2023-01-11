@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Peak.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorPeak.html
+	/// </remarks>
 	[DisplayName("Peak")]
 	[DescriptionLoc(LocalizedStrings.Str816Key)]
+	[Doc("topics/IndicatorPeak.html")]
 	public sealed class Peak : ZigZagEquis
 	{
 		/// <summary>

@@ -19,14 +19,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Welles Wilder Average Directional Index.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorAverageDirectionalIndex.html
+	/// </remarks>
 	[DisplayName("ADX")]
 	[DescriptionLoc(LocalizedStrings.Str757Key)]
+	[Doc("topics/IndicatorAverageDirectionalIndex.html")]
 	public class AverageDirectionalIndex : BaseComplexIndicator
 	{
 		/// <summary>

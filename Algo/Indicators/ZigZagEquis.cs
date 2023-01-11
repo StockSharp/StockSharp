@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -28,12 +29,13 @@ namespace StockSharp.Algo.Indicators
 	/// Zig Zag (Metastock).
 	/// </summary>
 	/// <remarks>
-	/// Zig Zag indicator filters fluctuations of prices or indicator values, which are not beyond specific value, presented in % or in absolute numbers. It is done for preliminary analysis of chart, emphasizing only sufficiently big price changes (indicator values).
+	/// https://doc.stocksharp.com/topics/IndicatorZigZagEquis.html
 	/// </remarks>
 	[DisplayName("ZigZag Metastock")]
 	[DescriptionLoc(LocalizedStrings.Str826Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(ShiftedIndicatorValue))]
+	[Doc("topics/IndicatorZigZagEquis.html")]
 	public class ZigZagEquis : BaseIndicator
 	{
 		private readonly IList<decimal> _buffer = new List<decimal>();

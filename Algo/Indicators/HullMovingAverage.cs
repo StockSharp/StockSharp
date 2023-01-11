@@ -19,14 +19,19 @@ namespace StockSharp.Algo.Indicators
 	using System;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Hull Moving Average.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorHullMovingAverage.html
+	/// </remarks>
 	[DisplayName("HMA")]
 	[DescriptionLoc(LocalizedStrings.Str786Key)]
+	[Doc("topics/IndicatorHullMovingAverage.html")]
 	public class HullMovingAverage : LengthIndicator<decimal>
 	{
 		private readonly WeightedMovingAverage _wmaSlow = new();

@@ -21,14 +21,19 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Standard error in linear regression.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorStandardError.html
+	/// </remarks>
 	[DisplayName("StdErr")]
 	[DescriptionLoc(LocalizedStrings.Str750Key)]
+	[Doc("topics/IndicatorStandardError.html")]
 	public class StandardError : LengthIndicator<decimal>
 	{
 		// Коэффициент при независимой переменной, угол наклона прямой.

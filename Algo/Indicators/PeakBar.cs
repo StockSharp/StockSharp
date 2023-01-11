@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -28,11 +29,12 @@ namespace StockSharp.Algo.Indicators
 	/// PeakBar.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/PeakBar.ashx.
+	/// https://doc.stocksharp.com/topics/IndicatorPeakBar.html
 	/// </remarks>
 	[DisplayName("PeakBar")]
 	[DescriptionLoc(LocalizedStrings.Str817Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorPeakBar.html")]
 	public class PeakBar : BaseIndicator
 	{
 		private decimal _currentMaximum = decimal.MinValue;

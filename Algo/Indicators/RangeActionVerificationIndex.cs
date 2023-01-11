@@ -19,14 +19,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Range Action Verification Index.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorRangeActionVerificationIndex.html
+	/// </remarks>
 	[DisplayName("RAVI")]
 	[Description("Range Action Verification Index.")]
+	[Doc("topics/IndicatorRangeActionVerificationIndex.html")]
 	public class RangeActionVerificationIndex : BaseIndicator
 	{
 		/// <summary>

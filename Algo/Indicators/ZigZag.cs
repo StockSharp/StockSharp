@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -30,11 +31,12 @@ namespace StockSharp.Algo.Indicators
 	/// ZigZag.
 	/// </summary>
 	/// <remarks>
-	/// ZigZag traces and combines extreme points of the chart, distanced for not less than specified percentage by the price scale.
+	/// https://doc.stocksharp.com/topics/IndicatorZigZag.html
 	/// </remarks>
 	[DisplayName("ZigZag")]
 	[DescriptionLoc(LocalizedStrings.Str826Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorZigZag.html")]
 	public class ZigZag : BaseIndicator
 	{
 		private readonly IList<Candle> _buffer = new List<Candle>();

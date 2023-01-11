@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Relative Vigor Index.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorRelativeVigorIndex.html
+	/// </remarks>
 	[DisplayName("RVI")]
 	[DescriptionLoc(LocalizedStrings.Str771Key)]
+	[Doc("topics/IndicatorRelativeVigorIndex.html")]
 	public class RelativeVigorIndex : BaseComplexIndicator
 	{
 		/// <summary>

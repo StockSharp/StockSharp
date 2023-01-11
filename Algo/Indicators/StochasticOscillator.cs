@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// The stochastic oscillator.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorStochasticOscillator.html
+	/// </remarks>
 	[DisplayName("Stochastic Oscillator")]
 	[Description("Stochastic Oscillator")]
+	[Doc("topics/IndicatorStochasticOscillator.html")]
 	public class StochasticOscillator : BaseComplexIndicator
 	{
 		/// <summary>

@@ -20,14 +20,19 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Weighted moving average.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorWeightedMovingAverage.html
+	/// </remarks>
 	[DisplayName("WMA")]
 	[DescriptionLoc(LocalizedStrings.Str824Key)]
+	[Doc("topics/IndicatorWeightedMovingAverage.html")]
 	public class WeightedMovingAverage : LengthIndicator<decimal>
 	{
 		private decimal _denominator = 1;

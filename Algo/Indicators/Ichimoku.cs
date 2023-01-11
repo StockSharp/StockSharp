@@ -18,16 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Ichimoku.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/oscillators/ichimoku.
+	/// https://doc.stocksharp.com/topics/IndicatorIchimoku.html
 	/// </remarks>
 	[DisplayNameLoc(LocalizedStrings.Str763Key)]
 	[DescriptionLoc(LocalizedStrings.Str763Key, true)]
+	[Doc("topics/IndicatorIchimoku.html")]
 	public class Ichimoku : BaseComplexIndicator
 	{
 		/// <summary>

@@ -17,16 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Alligator.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/alligator.
+	/// https://doc.stocksharp.com/topics/IndicatorAlligator.html
 	/// </remarks>
 	[DisplayNameLoc(LocalizedStrings.Str837Key)]
 	[DescriptionLoc(LocalizedStrings.Str837Key, true)]
+	[Doc("topics/IndicatorAlligator.html")]
 	public class Alligator : BaseComplexIndicator
 	{
 		/// <summary>

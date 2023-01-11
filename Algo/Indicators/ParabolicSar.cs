@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -29,11 +30,12 @@ namespace StockSharp.Algo.Indicators
 	/// Trend indicator implementation - Parabolic SAR.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/trends/parabolic_sar.
+	/// https://doc.stocksharp.com/topics/IndicatorParabolicSar.html
 	/// </remarks>
 	[DisplayName("Parabolic SAR")]
 	[DescriptionLoc(LocalizedStrings.Str809Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorParabolicSar.html")]
 	public class ParabolicSar : BaseIndicator
 	{
 		private class CalcBuffer

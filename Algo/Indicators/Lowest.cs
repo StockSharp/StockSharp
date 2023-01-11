@@ -19,14 +19,20 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Minimum value for a period.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorLowest.html
+	/// </remarks>
 	[DisplayName("Lowest")]
 	[DescriptionLoc(LocalizedStrings.Str743Key)]
+	[Doc("topics/IndicatorLowest.html")]
 	public class Lowest : LengthIndicator<decimal>
 	{
 		/// <summary>

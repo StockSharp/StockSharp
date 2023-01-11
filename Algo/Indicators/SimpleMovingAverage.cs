@@ -18,13 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Simple moving average.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorSimpleMovingAverage.html
+	/// </remarks>
 	[DisplayName("SMA")]
 	[DescriptionLoc(LocalizedStrings.Str818Key)]
+	[Doc("topics/IndicatorSimpleMovingAverage.html")]
 	public class SimpleMovingAverage : LengthIndicator<decimal>
 	{
 		/// <summary>

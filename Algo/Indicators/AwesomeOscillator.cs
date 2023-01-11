@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
@@ -26,10 +27,11 @@ namespace StockSharp.Algo.Indicators
 	/// Awesome Oscillator.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/awesome.
+	/// https://doc.stocksharp.com/topics/IndicatorAwesomeOscillator.html
 	/// </remarks>
 	[DisplayName("AO")]
 	[DescriptionLoc(LocalizedStrings.Str836Key)]
+	[Doc("topics/IndicatorAwesomeOscillator.html")]
 	public class AwesomeOscillator : BaseIndicator
 	{
 		/// <summary>

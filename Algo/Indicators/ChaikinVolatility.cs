@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -26,11 +27,12 @@ namespace StockSharp.Algo.Indicators
 	/// Chaikin volatility.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/Volatility.ashx http://www.incrediblecharts.com/indicators/chaikin_volatility.php.
+	/// https://doc.stocksharp.com/topics/IndicatorChaikinVolatility.html
 	/// </remarks>
 	[DisplayName("Chaikin's Volatility")]
 	[DescriptionLoc(LocalizedStrings.Str730Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorChaikinVolatility.html")]
 	public class ChaikinVolatility : BaseIndicator
 	{
 		/// <summary>

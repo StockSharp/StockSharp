@@ -17,14 +17,17 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	/// <summary>
 	/// Double Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// ((2 * EMA) – EMA of EMA).
+	/// https://doc.stocksharp.com/topics/IndicatorDoubleExponentialMovingAverage.html
 	/// </remarks>
 	[DisplayName("DEMA")]
 	[Description("Double Exponential Moving Average")]
+	[Doc("topics/IndicatorDoubleExponentialMovingAverage.html")]
 	public class DoubleExponentialMovingAverage : LengthIndicator<decimal>
 	{
 		private readonly ExponentialMovingAverage _ema1;

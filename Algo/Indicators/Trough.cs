@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Trough.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorTrough.html
+	/// </remarks>
 	[DisplayName("Trough")]
 	[DescriptionLoc(LocalizedStrings.Str821Key)]
+	[Doc("topics/IndicatorTrough.html")]
 	public sealed class Trough : ZigZagEquis
 	{
 		/// <summary>

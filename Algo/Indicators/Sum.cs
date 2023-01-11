@@ -18,13 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Sum of N last values.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorSum.html
+	/// </remarks>
 	[DisplayName("Sum")]
 	[DescriptionLoc(LocalizedStrings.Str751Key)]
+	[Doc("topics/IndicatorSum.html")]
 	public class Sum : LengthIndicator<decimal>
 	{
 		/// <summary>

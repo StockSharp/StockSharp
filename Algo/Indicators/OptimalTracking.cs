@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 
@@ -28,11 +29,12 @@ namespace StockSharp.Algo.Indicators
 	/// Optimal Tracking.
 	/// </summary>
 	/// <remarks>
-	/// Based on a Kalman Filter (Dr. R. E. Kalman, 1960) and Kalatas Tracking Index (Paul. R. Kalata, 1984).
+	/// https://doc.stocksharp.com/topics/IndicatorOptimalTrackingFilter.html
 	/// </remarks>
 	[DisplayName("OptimalTracking")]
 	[Description("Optimal Tracking Filter published by John Ehlers")]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorOptimalTrackingFilter.html")]
 	public sealed class OptimalTracking : LengthIndicator<decimal>
 	{
 		private static readonly decimal _smoothConstant1 = (decimal)Math.Exp(-0.25);

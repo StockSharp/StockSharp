@@ -17,15 +17,21 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Median price.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorMedianPrice.html
+	/// </remarks>
 	[DisplayName("MedianPrice")]
 	[DescriptionLoc(LocalizedStrings.Str745Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorMedianPrice.html")]
 	public class MedianPrice : BaseIndicator
 	{
 		/// <summary>

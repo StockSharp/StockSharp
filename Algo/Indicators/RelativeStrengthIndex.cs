@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Relative Strength Index.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorRelativeStrengthIndex.html
+	/// </remarks>
 	[DisplayName("RSI")]
 	[DescriptionLoc(LocalizedStrings.Str770Key)]
+	[Doc("topics/IndicatorRelativeStrengthIndex.html")]
 	public class RelativeStrengthIndex : LengthIndicator<decimal>
 	{
 		private readonly SmoothedMovingAverage _gain;

@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
@@ -24,11 +26,12 @@ namespace StockSharp.Algo.Indicators
 	/// Market Facilitation Index.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/market_facilitation_index.
+	/// https://doc.stocksharp.com/topics/IndicatorMarketFacilitationIndex.html
 	/// </remarks>
 	[DisplayName("MFI")]
 	[DescriptionLoc(LocalizedStrings.Str853Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorMarketFacilitationIndex.html")]
 	public class MarketFacilitationIndex : BaseIndicator
 	{
 		/// <summary>

@@ -17,16 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Momentum.
 	/// </summary>
 	/// <remarks>
-	/// Momentum Simple = C - C-n Where C- closing price of previous period. Where C-n - closing price N periods ago.
+	/// https://doc.stocksharp.com/topics/IndicatorMomentum.html
 	/// </remarks>
 	[DisplayName("Momentum")]
 	[DescriptionLoc(LocalizedStrings.Str769Key)]
+	[Doc("topics/IndicatorMomentum.html")]
 	public class Momentum : LengthIndicator<decimal>
 	{
 		/// <summary>

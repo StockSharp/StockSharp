@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Convergence/divergence of moving averages. Histogram.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergenceHistogram.html
+	/// </remarks>
 	[DisplayName("MACD Histogram")]
 	[DescriptionLoc(LocalizedStrings.Str802Key)]
+	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceHistogram.html")]
 	public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConvergenceDivergenceSignal
 	{
 		/// <summary>

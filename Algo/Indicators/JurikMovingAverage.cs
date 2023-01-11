@@ -19,14 +19,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Jurik Moving Average.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorJurikMovingAverage.html
+	/// </remarks>
 	[DisplayName("JMA")]
 	[DescriptionLoc(LocalizedStrings.Str789Key)]
+	[Doc("topics/IndicatorJurikMovingAverage.html")]
 	public class JurikMovingAverage : LengthIndicator<decimal>
 	{
 		private class CalcBuffer

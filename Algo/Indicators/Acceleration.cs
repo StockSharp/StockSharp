@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -26,10 +27,11 @@ namespace StockSharp.Algo.Indicators
 	/// Acceleration / Deceleration Indicator.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/acceleration_deceleration.
+	/// https://doc.stocksharp.com/topics/IndicatorAcceleration.html
 	/// </remarks>
 	[DisplayName("A/D")]
 	[DescriptionLoc(LocalizedStrings.Str835Key)]
+	[Doc("topics/IndicatorAcceleration.html")]
 	public class Acceleration : BaseIndicator
 	{
 		/// <summary>

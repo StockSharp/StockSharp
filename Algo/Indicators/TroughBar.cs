@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -28,11 +29,12 @@ namespace StockSharp.Algo.Indicators
 	/// TroughBar.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/TroughBar.ashx.
+	/// https://doc.stocksharp.com/topics/IndicatorTroughBar.html
 	/// </remarks>
 	[DisplayName("TroughBar")]
 	[DescriptionLoc(LocalizedStrings.Str822Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorTroughBar.html")]
 	public class TroughBar : BaseIndicator
 	{
 		private decimal _currentMinimum = decimal.MaxValue;

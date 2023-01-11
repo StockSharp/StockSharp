@@ -17,20 +17,21 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Triple Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// http://tradingsim.com/blog/triple-exponential-moving-average/ (3 * EMA) – (3 * EMA of EMA) + EMA of EMA of EMA).
+	/// https://doc.stocksharp.com/topics/IndicatorTripleExponentialMovingAverage.html
 	/// </remarks>
 	[DisplayName("TEMA")]
 	[DescriptionLoc(LocalizedStrings.Str752Key)]
+	[Doc("topics/IndicatorTripleExponentialMovingAverage.html")]
 	public class TripleExponentialMovingAverage : LengthIndicator<decimal>
 	{
-		// http://www2.wealth-lab.com/WL5Wiki/GetFile.aspx?File=%2fTEMA.cs&Provider=ScrewTurn.Wiki.FilesStorageProvider
-
 		private readonly ExponentialMovingAverage _ema1;
 		private readonly ExponentialMovingAverage _ema2;
 		private readonly ExponentialMovingAverage _ema3;

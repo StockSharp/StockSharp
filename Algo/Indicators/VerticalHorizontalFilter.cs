@@ -18,6 +18,8 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
@@ -25,11 +27,12 @@ namespace StockSharp.Algo.Indicators
 	/// The vertical-horizontal filter.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/VHF.ashx http://www.stator-afm.com/vertical-horizontal-filter.html http://www.incrediblecharts.com/indicators/vertical_horizontal_filter.php.
+	/// https://doc.stocksharp.com/topics/IndicatorVerticalHorizontalFilter.html
 	/// </remarks>
 	[DisplayName("VHF")]
 	[DescriptionLoc(LocalizedStrings.Str754Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorVerticalHorizontalFilter.html")]
 	public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	{
 		// Текущее значение минимума

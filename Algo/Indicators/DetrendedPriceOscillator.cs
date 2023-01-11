@@ -18,13 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Price oscillator without trend.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorDetrendedPriceOscillator.html
+	/// </remarks>
 	[DisplayName("DPO")]
 	[DescriptionLoc(LocalizedStrings.Str761Key)]
+	[Doc("topics/IndicatorDetrendedPriceOscillator.html")]
 	public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	{
 		private readonly SimpleMovingAverage _sma;

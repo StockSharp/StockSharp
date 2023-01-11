@@ -22,14 +22,19 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Collections;
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Kaufman adaptive moving average.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorKaufmannAdaptiveMovingAverage.html
+	/// </remarks>
 	[DisplayName("KAMA")]
 	[DescriptionLoc(LocalizedStrings.Str792Key)]
+	[Doc("topics/IndicatorKaufmannAdaptiveMovingAverage.html")]
 	public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 	{
 		private decimal _prevFinalValue;

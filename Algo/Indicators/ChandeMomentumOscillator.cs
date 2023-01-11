@@ -17,13 +17,19 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Chande Momentum Oscillator.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorChandeMomentumOscillator.html
+	/// </remarks>
 	[DisplayName("CMO")]
 	[DescriptionLoc(LocalizedStrings.Str759Key)]
+	[Doc("topics/IndicatorChandeMomentumOscillator.html")]
 	public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	{
 		private readonly Sum _cmoUp = new();

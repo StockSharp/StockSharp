@@ -18,13 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Bollinger Bands.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorBollingerBands.html
+	/// </remarks>
 	[DisplayName("Bollinger")]
 	[DescriptionLoc(LocalizedStrings.Str777Key)]
+	[Doc("topics/IndicatorBollingerBands.html")]
 	public class BollingerBands : BaseComplexIndicator
 	{
 		private readonly StandardDeviation _dev = new();

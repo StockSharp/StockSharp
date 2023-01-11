@@ -19,14 +19,20 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 	using System;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Maximum value for a period.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorHighest.html
+	/// </remarks>
 	[DisplayName("Highest")]
 	[DescriptionLoc(LocalizedStrings.Str733Key)]
+	[Doc("topics/IndicatorHighest.html")]
 	public class Highest : LengthIndicator<decimal>
 	{
 		/// <summary>

@@ -15,15 +15,18 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
 	/// QStick.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/QStick.ashx.
+	/// https://doc.stocksharp.com/topics/IndicatorQStick.html
 	/// </remarks>
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorQStick.html")]
 	public class QStick : LengthIndicator<IIndicatorValue>
 	{
 		private readonly SimpleMovingAverage _sma;

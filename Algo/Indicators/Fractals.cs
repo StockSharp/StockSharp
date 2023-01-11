@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
@@ -29,11 +30,12 @@ namespace StockSharp.Algo.Indicators
 	/// Fractals.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/fractal.
+	/// https://doc.stocksharp.com/topics/IndicatorFractals.html
 	/// </remarks>
 	[DisplayName("Fractals")]
 	[DescriptionLoc(LocalizedStrings.Str844Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorFractals.html")]
 	public class Fractals : BaseComplexIndicator
 	{
 		private readonly List<Candle> _buffer = new();

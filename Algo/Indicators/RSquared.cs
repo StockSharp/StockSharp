@@ -20,14 +20,19 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Linear regression R-squared.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorRSquared.html
+	/// </remarks>
 	[DisplayName("RSquared")]
 	[DescriptionLoc(LocalizedStrings.Str746Key)]
+	[Doc("topics/IndicatorRSquared.html")]
 	public class RSquared : LengthIndicator<decimal>
 	{
 		// Коэффициент при независимой переменной, угол наклона прямой.

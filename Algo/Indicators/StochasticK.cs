@@ -17,15 +17,21 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Stochastic %K.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorStochasticK.html
+	/// </remarks>
 	[DisplayName("Stochastic %K")]
 	[DescriptionLoc(LocalizedStrings.Str774Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[Doc("topics/IndicatorStochasticK.html")]
 	public class StochasticK : LengthIndicator<decimal>
 	{
 		// Минимальная цена за период.

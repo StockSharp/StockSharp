@@ -18,13 +18,19 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Exponential Moving Average.
 	/// </summary>
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorExponentialMovingAverage.html
+	/// </remarks>
 	[DisplayName("EMA")]
 	[DescriptionLoc(LocalizedStrings.Str785Key)]
+	[Doc("topics/IndicatorExponentialMovingAverage.html")]
 	public class ExponentialMovingAverage : LengthIndicator<decimal>
 	{
 		private decimal _prevFinalValue;
