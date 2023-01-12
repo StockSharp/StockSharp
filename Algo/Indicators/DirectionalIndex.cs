@@ -20,14 +20,19 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Common;
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Welles Wilder Directional Movement Index.
 	/// </summary>
-	[DisplayName("DX")]
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorDirectionalIndex.html
+	/// </remarks>
+	[DisplayName("DMI")]
 	[DescriptionLoc(LocalizedStrings.Str762Key)]
+	[Doc("topics/IndicatorDirectionalIndex.html")]
 	public class DirectionalIndex : BaseComplexIndicator
 	{
 		private sealed class DxValue : ComplexIndicatorValue

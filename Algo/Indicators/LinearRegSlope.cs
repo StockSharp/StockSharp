@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorLinearRegSlope.html
 	/// </remarks>
-	[DisplayName("LinearRegSlope")]
+	[DisplayName("LRS")]
 	[DescriptionLoc(LocalizedStrings.Str742Key)]
 	[Doc("topics/IndicatorLinearRegSlope.html")]
 	public class LinearRegSlope : LengthIndicator<decimal>

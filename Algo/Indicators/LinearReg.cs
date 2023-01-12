@@ -20,14 +20,19 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Linear regression - Value returns the last point prediction.
 	/// </summary>
-	[DisplayName("LinearReg")]
+	/// <remarks>
+	/// https://doc.stocksharp.com/topics/IndicatorLinearReg.html
+	/// </remarks>
+	[DisplayName("LRC")]
 	[DescriptionLoc(LocalizedStrings.Str734Key)]
+	[Doc("topics/IndicatorLinearReg.html")]
 	public class LinearReg : LengthIndicator<decimal>
 	{
 		// Коэффициент при независимой переменной, угол наклона прямой.
