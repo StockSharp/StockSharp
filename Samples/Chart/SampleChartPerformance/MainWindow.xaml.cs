@@ -435,6 +435,8 @@
 		Type IIndicator.InputType { get; } = typeof(DecimalIndicatorValue);
 		Type IIndicator.ResultType { get; } = typeof(DecimalIndicatorValue);
 
+		IndicatorMeasures IIndicator.Measure => IndicatorMeasures.Price;
+
 		event Action<IIndicatorValue, IIndicatorValue> IIndicator.Changed
 		{
 			add { }

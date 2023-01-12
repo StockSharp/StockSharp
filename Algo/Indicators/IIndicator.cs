@@ -26,9 +26,9 @@ namespace StockSharp.Algo.Indicators
 	public enum IndicatorMeasures
 	{
 		/// <summary>
-		/// Absolute.
+		/// Price.
 		/// </summary>
-		Absolute,
+		Price,
 
 		/// <summary>
 		/// 0 till 100.

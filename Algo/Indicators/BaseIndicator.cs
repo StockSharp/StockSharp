@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual IndicatorMeasures Measure { get; } = IndicatorMeasures.Absolute;
+		public virtual IndicatorMeasures Measure { get; } = IndicatorMeasures.Price;
 
 		/// <inheritdoc />
 		[Browsable(false)]
