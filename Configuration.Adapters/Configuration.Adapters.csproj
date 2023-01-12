@@ -105,5 +105,7 @@
     <ProjectReference Include="$(ConnectorsDir)QuantHouse$(ConnectorPostfix)\QuantHouse$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)BinanceHistory\BinanceHistory.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)MoexISS\MoexISS.csproj" />
+    <ProjectReference Include="$(ConnectorsDir)Alor$(ConnectorPostfix)\Alor$(ConnectorPostfix).csproj" />
+    <ProjectReference Include="$(ConnectorsDir)Tinkoff$(ConnectorPostfix)\Tinkoff$(ConnectorPostfix).csproj" />
   </ItemGroup>
 </Project>

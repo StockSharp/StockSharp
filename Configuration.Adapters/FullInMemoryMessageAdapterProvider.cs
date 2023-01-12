@@ -11,6 +11,8 @@ namespace StockSharp.Configuration
 	using StockSharp.Okex;
 	using StockSharp.BinanceHistory;
 	using StockSharp.MoexISS;
+	using StockSharp.Alor;
+	using StockSharp.Tinkoff;
 #endif
 	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
@@ -153,6 +155,8 @@ namespace StockSharp.Configuration
 			() => typeof(OkexMessageAdapter),
 			() => typeof(BinanceHistoryMessageAdapter),
 			() => typeof(MoexISSMessageAdapter),
+			() => typeof(AlorMessageAdapter),
+			() => typeof(TinkoffMessageAdapter),
 #endif
 			() => typeof(BarChartMessageAdapter),
 			() => typeof(BitStampMessageAdapter),

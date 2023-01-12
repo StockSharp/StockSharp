@@ -21742,5 +21742,17 @@
   "ExternalIdIsNotSet": {
     "en": "External ID is not set.",
     "ru": "Внешний идентификатор не установлен."
+  },
+  "View": {
+    "en": "View",
+    "ru": "Вид"
+  },
+  "Tinkoff": {
+    "en": "Tinkoff",
+    "ru": "Тинькофф"
+  },
+  "Alor": {
+    "en": "Alor",
+    "ru": "Алор"
   }
 }

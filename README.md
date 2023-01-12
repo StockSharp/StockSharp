@@ -117,17 +117,19 @@ public class SimpleStrategy : Strategy
 ## Russian Stock, Futures and Options
 |Logo | Name |  Documentation Ru| 
 |:---:|:----:|:---------------:|
+|<img src="./Media/logos/Quik_logo.png" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Quik.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Tinkoff_logo.svg" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Tinkoff.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Mfd_logo.png" height="30" /> |Mfd | <a href="https://doc.stocksharp.ru/topics/Mfd.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/micex_logo.png" height="30" /> |Micex (TEAP) | <a href="https://doc.stocksharp.ru/topics/Micex.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/plaza_logo.png" height="30" /> |Plaza II | <a href="https://doc.stocksharp.ru/topics/Plaza.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Quik_logo.png" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Quik.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Quik_logo.png" height="30" /> |Quik FIX |  <a href="https://doc.stocksharp.ru/topics/QuikFix.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/SmartCom_logo.png" height="30" /> |SmartCOM |  <a href="https://doc.stocksharp.ru/topics/Smart.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/spbex_logo.png" height="30" /> |SPB Exchange |  <a href="https://doc.stocksharp.ru/topics/SpbEx.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Transaq_logo.png" height="30" /> |Transaq |  <a href="https://doc.stocksharp.ru/topics/Transaq.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/micex_logo.png" height="30" /> |Twime |  <a href="https://doc.stocksharp.ru/topics/TWIME.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/UkrExh_logo.png" height="30" /> |UX (сайт) | <a href="https://doc.stocksharp.ru/topics/UX.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/AlorHistory_logo.png" height="30" /> |Алор Трейд | <a href="https://doc.stocksharp.ru/topics/AlorHistory.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Alor_logo.svg" height="30" /> |Алор История | <a href="https://doc.stocksharp.ru/topics/AlorHistory.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Alor_logo.svg" height="30" /> |Алор Брокер | <a href="https://doc.stocksharp.ru/topics/Alor.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/AlfaDirect_logo.png" height="30" /> |Альфа-Директ | <a href="https://doc.stocksharp.ru/topics/Alfa.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/MoexLchi_logo.png" height="30" /> |ЛЧИ | <a href="https://doc.stocksharp.ru/topics/LCI.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/RtsHistory_logo.png" height="30" /> |РТС | <a href="https://doc.stocksharp.ru/topics/RTS.html" target="_blank">Ru</a> |

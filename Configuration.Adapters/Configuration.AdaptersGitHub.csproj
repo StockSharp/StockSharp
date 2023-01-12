@@ -96,6 +96,8 @@
     <PackageReference Include="StockSharp.OkexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.BinanceHistory" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.MoexISS" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.AlorStub" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.TinkoffStub" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
