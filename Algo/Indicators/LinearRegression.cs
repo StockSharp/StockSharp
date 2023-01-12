@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="LinearRegression"/>.
 		/// </summary>
 		public LinearRegression()
-			: this(new LinearReg(), new RSquared(), new LinearRegSlope(), new StandardError())
+			: this(new(), new(), new(), new())
 		{
 			Length = 11;
 		}
@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="rSquared">Regression R-squared.</param>
 		/// <param name="regSlope">Coefficient with independent variable, slope of a straight line.</param>
 		/// <param name="standardError">Standard error.</param>
-		public LinearRegression(LinearReg linearReg, RSquared rSquared, LinearRegSlope regSlope, StandardError standardError)
+		public LinearRegression(LinearReg linearReg, LinearRegRSquared rSquared, LinearRegSlope regSlope, StandardError standardError)
 			: base(linearReg, rSquared, regSlope, standardError)
 		{
 			LinearReg = linearReg;
@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("RSquared")]
 		[DescriptionLoc(LocalizedStrings.Str739Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RSquared RSquared { get; }
+		public LinearRegRSquared RSquared { get; }
 
 		/// <summary>
 		/// Standard error.

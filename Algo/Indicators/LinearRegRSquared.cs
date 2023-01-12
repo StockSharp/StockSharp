@@ -28,20 +28,20 @@ namespace StockSharp.Algo.Indicators
 	/// Linear regression R-squared.
 	/// </summary>
 	/// <remarks>
-	/// https://doc.stocksharp.com/topics/IndicatorRSquared.html
+	/// https://doc.stocksharp.com/topics/IndicatorLinearRegRSquared.html
 	/// </remarks>
-	[DisplayName("RSquared")]
+	[DisplayName("LRR2")]
 	[DescriptionLoc(LocalizedStrings.Str746Key)]
-	[Doc("topics/IndicatorRSquared.html")]
-	public class RSquared : LengthIndicator<decimal>
+	[Doc("topics/IndicatorLinearRegRSquared.html")]
+	public class LinearRegRSquared : LengthIndicator<decimal>
 	{
 		// Коэффициент при независимой переменной, угол наклона прямой.
 		private decimal _slope;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RSquared"/>.
+		/// Initializes a new instance of the <see cref="LinearRegRSquared"/>.
 		/// </summary>
-		public RSquared()
+		public LinearRegRSquared()
 		{
 			Length = 10;
 		}
