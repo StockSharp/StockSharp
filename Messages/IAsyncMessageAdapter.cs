@@ -38,7 +38,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="disconnectMsg"><see cref="DisconnectMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken);
+	ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(disconnectMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="ResetMessage"/>.
@@ -49,7 +50,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="resetMsg"><see cref="ResetMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken);
+	ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(resetMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="SecurityLookupMessage"/>.
@@ -57,7 +59,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="lookupMsg"><see cref="SecurityLookupMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken);
+	ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(lookupMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="PortfolioLookupMessage"/>.
@@ -65,7 +68,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="lookupMsg"><see cref="PortfolioLookupMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken);
+	ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(lookupMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="BoardLookupMessage"/>.
@@ -73,7 +77,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="lookupMsg"><see cref="BoardLookupMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken);
+	ValueTask BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(lookupMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="OrderStatusMessage"/>.
@@ -81,7 +86,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="statusMsg"><see cref="OrderStatusMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken);
+	ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(statusMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="OrderRegisterMessage"/>.
@@ -89,7 +95,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="regMsg"><see cref="OrderRegisterMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken);
+	ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(regMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="OrderReplaceMessage"/>.
@@ -97,7 +104,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="replaceMsg"><see cref="OrderReplaceMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken);
+	ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(replaceMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="OrderPairReplaceMessage"/>.
@@ -105,7 +113,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="replaceMsg"><see cref="OrderPairReplaceMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask ReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken);
+	ValueTask ReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(replaceMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="OrderCancelMessage"/>.
@@ -113,7 +122,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="cancelMsg"><see cref="OrderCancelMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken);
+	ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(cancelMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="OrderGroupCancelMessage"/>.
@@ -121,7 +131,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="cancelMsg"><see cref="OrderGroupCancelMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken);
+	ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(cancelMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="MarketDataMessage"/>.
@@ -129,7 +140,8 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="mdMsg"><see cref="MarketDataMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken);
+	ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(mdMsg, cancellationToken);
 
 	/// <summary>
 	/// Process <see cref="Message"/>.
@@ -137,7 +149,7 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="msg"><see cref="Message"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask ProcessMessageAsync(Message msg, CancellationToken cancellationToken);
+	ValueTask ProcessMessageAsync(Message msg, CancellationToken cancellationToken) => default; // do nothing by default
 
 	/// <summary>
 	/// Handle error associated with the specified message.
