@@ -100,7 +100,8 @@ namespace StockSharp.Messages
 			SettlementDate != null || IssueDate != null || IssueSize != null ||
 			!UnderlyingSecurityCode.IsEmpty() || UnderlyingSecurityMinVolume != null ||
 			UnderlyingSecurityType != null || !Class.IsEmpty() || Currency != null ||
-			!BinaryOptionType.IsEmpty() || Shortable != null || FaceValue != null || !BoardCode.IsEmpty();
+			!BinaryOptionType.IsEmpty() || Shortable != null || FaceValue != null ||
+			SettlementType != null || OptionStyle != null || !BoardCode.IsEmpty();
 
 		/// <summary>
 		/// Create a copy of <see cref="SecurityLookupMessage"/>.

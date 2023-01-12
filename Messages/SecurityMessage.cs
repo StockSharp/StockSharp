@@ -282,6 +282,18 @@ namespace StockSharp.Messages
 		[DataMember]
 		public SecurityId PrimaryId { get; set; }
 
+		/// <summary>
+		/// <see cref="SettlementTypes"/>.
+		/// </summary>
+		[DataMember]
+		public SettlementTypes? SettlementType { get; set; }
+
+		/// <summary>
+		/// <see cref="OptionStyles"/>.
+		/// </summary>
+		[DataMember]
+		public OptionStyles? OptionStyle { get; set; }
+
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Securities;
 
@@ -360,6 +372,8 @@ namespace StockSharp.Messages
 			destination.BasketCode = BasketCode;
 			destination.BasketExpression = BasketExpression;
 			destination.FaceValue = FaceValue;
+			destination.SettlementType = SettlementType;
+			destination.OptionStyle = OptionStyle;
 			destination.PrimaryId = PrimaryId;
 		}
 
@@ -430,6 +444,12 @@ namespace StockSharp.Messages
 
 			if (FaceValue != null)
 				str += $",FaceValue={FaceValue}";
+
+			if (SettlementType != null)
+				str += $",SettlementType={SettlementType}";
+
+			if (OptionStyle != null)
+				str += $",OptionStyle={OptionStyle}";
 
 			if (PrimaryId != default)
 				str += $",Primary={PrimaryId}";

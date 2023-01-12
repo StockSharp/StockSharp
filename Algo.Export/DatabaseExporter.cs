@@ -353,6 +353,8 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.BasketCode).HasLength(2)
 				.Property(m => m.BasketExpression)
 				.Property(m => m.FaceValue)
+				.Property(m => m.OptionStyle)
+				.Property(m => m.SettlementType)
 				.Property(m => m.SecurityId.Bloomberg).HasLength(16)
 				.Property(m => m.SecurityId.Cusip).HasLength(16)
 				.Property(m => m.SecurityId.IQFeed).HasLength(16)

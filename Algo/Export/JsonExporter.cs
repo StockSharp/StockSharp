@@ -284,6 +284,12 @@
 				if (security.FaceValue != null)
 					writer.WriteProperty("faceValue", security.FaceValue.Value);
 
+				if (security.SettlementType != null)
+					writer.WriteProperty("settlementType", security.SettlementType.Value);
+
+				if (security.OptionStyle != null)
+					writer.WriteProperty("optionStyle", security.OptionStyle.Value);
+
 				if (!security.PrimaryId.SecurityCode.IsEmpty())
 					writer.WriteProperty("primaryCode", security.PrimaryId.SecurityCode);
 

@@ -3129,6 +3129,12 @@ namespace StockSharp.Messages
 			if (criteria.FaceValue != default && security.FaceValue != criteria.FaceValue)
 				return false;
 
+			if (criteria.SettlementType != default && security.SettlementType != criteria.SettlementType)
+				return false;
+
+			if (criteria.OptionStyle != default && security.OptionStyle != criteria.OptionStyle)
+				return false;
+
 			if (criteria.PrimaryId != default && security.PrimaryId != criteria.PrimaryId)
 				return false;
 
@@ -3216,6 +3222,8 @@ namespace StockSharp.Messages
 				criteria.BasketCode.IsEmpty() &&
 				criteria.BasketExpression.IsEmpty() &&
 				criteria.FaceValue == null &&
+				criteria.SettlementType == null &&
+				criteria.OptionStyle == null &&
 				criteria.PrimaryId == default &&
 				(criteria.SecurityTypes == null || criteria.SecurityTypes.Length == 0) &&
 				criteria.Count == null &&

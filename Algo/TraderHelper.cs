@@ -2260,6 +2260,18 @@ namespace StockSharp.Algo
 					security.FaceValue = message.FaceValue;
 			}
 
+			if (message.OptionStyle != null)
+			{
+				if (isOverride || security.OptionStyle == null)
+					security.OptionStyle = message.OptionStyle;
+			}
+
+			if (message.SettlementType != null)
+			{
+				if (isOverride || security.SettlementType == null)
+					security.SettlementType = message.SettlementType;
+			}
+
 			if (message.PrimaryId != default)
 			{
 				if (isOverride || security.PrimaryId == default)

@@ -486,6 +486,12 @@ namespace StockSharp.Algo.Export
 				if (security.FaceValue != null)
 					writer.WriteAttribute("faceValue", security.FaceValue.Value);
 
+				if (security.SettlementType != null)
+					writer.WriteAttribute("settlementType", security.SettlementType.Value);
+
+				if (security.OptionStyle != null)
+					writer.WriteAttribute("optionStyle", security.OptionStyle.Value);
+
 				if (!security.PrimaryId.SecurityCode.IsEmpty())
 					writer.WriteAttribute("primaryCode", security.PrimaryId.SecurityCode);
 

@@ -21754,5 +21754,37 @@
   "Alor": {
     "en": "Alor",
     "ru": "Алор"
+  },
+  "European": {
+    "en": "European",
+    "ru": "Европейский"
+  },
+  "American": {
+    "en": "American",
+    "ru": "Американский"
+  },
+  "Exotic": {
+    "en": "Exotic",
+    "ru": "Экзотика"
+  },
+  "Delivery": {
+    "en": "Delivery",
+    "ru": "Поставка"
+  },
+  "Cash": {
+    "en": "Cash",
+    "ru": "Деньги"
+  },
+  "OptionStyle": {
+    "en": "Option style",
+    "ru": "Стиль опциона"
+  },
+  "OptionStyleDesc": {
+    "en": "Option style.",
+    "ru": "Стиль опциона."
+  },
+  "SettlementTypeDesc": {
+    "en": "Settlement type when the instrument was expired.",
+    "ru": "Тип расчета по инструменту после окончания торгов."
   }
 }

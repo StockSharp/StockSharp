@@ -275,6 +275,8 @@ namespace StockSharp.Algo.Storages.Csv
 				public string BasketCode { get; set; }
 				public string BasketExpression { get; set; }
 				public string PrimaryId { get; set; }
+				public OptionStyles? OptionStyle { get; set; }
+				public SettlementTypes? SettlementType { get; set; }
 
 				public Security ToSecurity(SecurityCsvList list)
 				{
@@ -317,7 +319,9 @@ namespace StockSharp.Algo.Storages.Csv
 						Shortable = Shortable,
 						BasketCode = BasketCode,
 						BasketExpression = BasketExpression,
-						PrimaryId = PrimaryId
+						PrimaryId = PrimaryId,
+						OptionStyle = OptionStyle,
+						SettlementType = SettlementType,
 					};
 				}
 
@@ -352,6 +356,8 @@ namespace StockSharp.Algo.Storages.Csv
 					BasketCode = security.BasketCode;
 					BasketExpression = security.BasketExpression;
 					PrimaryId = security.PrimaryId;
+					OptionStyle = security.OptionStyle;
+					SettlementType = security.SettlementType;
 				}
 			}
 
@@ -476,6 +482,12 @@ namespace StockSharp.Algo.Storages.Csv
 				if (IsChanged(security.PrimaryId, liteSec.PrimaryId, forced))
 					return true;
 
+				if (IsChanged(security.SettlementType, liteSec.SettlementType, forced))
+					return true;
+
+				if (IsChanged(security.OptionStyle, liteSec.OptionStyle, forced))
+					return true;
+
 				return false;
 			}
 
@@ -570,6 +582,12 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					liteSec.PrimaryId = reader.ReadString();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					liteSec.SettlementType = reader.ReadNullableEnum<SettlementTypes>();
+					liteSec.OptionStyle = reader.ReadNullableEnum<OptionStyles>();
+				}
+
 				return liteSec.ToSecurity(this);
 			}
 
@@ -614,6 +632,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.UnderlyingSecurityMinVolume.To<string>(),
 					data.MaxVolume.To<string>(),
 					data.PrimaryId,
+					data.SettlementType.To<string>(),
+					data.OptionStyle.To<string>(),
 				});
 			}
 

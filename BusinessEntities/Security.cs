@@ -545,6 +545,56 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private SettlementTypes? _settlementType;
+
+		/// <summary>
+		/// <see cref="SettlementTypes"/>.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.XamlStr527Key,
+			Description = LocalizedStrings.SettlementTypeDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 18)]
+		public SettlementTypes? SettlementType
+		{
+			get => _settlementType;
+			set
+			{
+				if (_settlementType == value)
+					return;
+
+				_settlementType = value;
+				Notify();
+			}
+		}
+
+		private OptionStyles? _optionStyle;
+
+		/// <summary>
+		/// <see cref="OptionStyles"/>.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OptionStyleKey,
+			Description = LocalizedStrings.OptionStyleDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 19)]
+		public OptionStyles? OptionStyle
+		{
+			get => _optionStyle;
+			set
+			{
+				if (_optionStyle == value)
+					return;
+
+				_optionStyle = value;
+				Notify();
+			}
+		}
+
 		private string _primaryId;
 
 		/// <summary>
@@ -556,7 +606,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.PrimaryIdKey,
 			Description = LocalizedStrings.PrimaryIdDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 18)]
+			Order = 20)]
 		public string PrimaryId
 		{
 			get => _primaryId;
@@ -581,7 +631,7 @@ namespace StockSharp.BusinessEntities
 			Name = LocalizedStrings.ExtendedInfoKey,
 			Description = LocalizedStrings.Str427Key,
 			GroupName = LocalizedStrings.GeneralKey,
-			Order = 20)]
+			Order = 21)]
 		public IDictionary<string, object> ExtensionInfo
 		{
 			get => _extensionInfo;
@@ -1990,6 +2040,8 @@ namespace StockSharp.BusinessEntities
 			destination.CommissionTaker = CommissionTaker;
 			destination.CommissionMaker = CommissionMaker;
 			destination.FaceValue = FaceValue;
+			destination.SettlementType = SettlementType;
+			destination.OptionStyle = OptionStyle;
 			destination.PrimaryId = PrimaryId;
 
 			//if (destination.ExtensionInfo == null)
