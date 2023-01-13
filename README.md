@@ -92,17 +92,19 @@ public class SimpleStrategy : Strategy
 	}
 }
 ```
-## American Stock, Futures and Options
+## Stock, Futures and Options
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
+|<img src="./Media/logos/InteractiveBrokers_logo.png" height="30" /> |Interactive Brokers | <a href="//doc.stocksharp.com/topics/IB.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IB.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/FIX_logo.png" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="//doc.stocksharp.com/topics/FIX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FIX.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/FIX_logo.png" height="30" /> |FAST protocol | <a href="//doc.stocksharp.com/topics/Fast.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fast.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="//doc.stocksharp.com/topics/Bvmt.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bvmt.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/AlphaVantage_logo.png" height="30" /> |AlphaVantage | <a href="//doc.stocksharp.com/topics/AlphaVantage.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/AlphaVantage.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/BarChart_logo.png" height="30" /> |Bachart | <a href="//doc.stocksharp.com/topics/BarChart.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BarChart.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Blackwood_logo.png" height="30" /> |Blackwood (Fusion) | <a href="//doc.stocksharp.com/topics/Blackwood.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Blackwood.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/CQG_logo.png" height="30" /> |CQG | <a href="//doc.stocksharp.com/topics/CQG.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CQG.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/ETrade_logo.png" height="30" /> |E*TRADE | <a href="//doc.stocksharp.com/topics/ETrade.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/ETrade.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Google_logo.png" height="30" /> |Google | <a href="//doc.stocksharp.com/topics/Google.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Google.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/iex_logo.png" height="30" /> |IEX | <a href="//doc.stocksharp.com/topics/IEX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IEX.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/InteractiveBrokers_logo.png" height="30" /> |Interactive Brokers | <a href="//doc.stocksharp.com/topics/IB.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IB.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/IQFeed_logo.png" height="30" /> |IQFeed | <a href="//doc.stocksharp.com/topics/IQFeed.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IQFeed.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Itch_logo.png" height="30" /> |ITCH | <a href="//doc.stocksharp.com/topics/ITCH.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/ITCH.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/OpenECry_logo.png" height="30" /> |OpenECry | <a href="//doc.stocksharp.com/topics/OEC.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/OEC.html" target="_blank">Ru</a> |
@@ -113,8 +115,9 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/Tradier_logo.png" height="30" /> |Tradier | <a href="//doc.stocksharp.com/topics/Tradier.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Tradier.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Xignite_logo.png" height="30" /> |Xignite | <a href="//doc.stocksharp.com/topics/Xignite.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Xignite.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Yahoo_logo.png" height="30" /> |Yahoo | <a href="//doc.stocksharp.com/topics/Yahoo.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Yahoo.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Blackwood_logo.png" height="30" /> |Blackwood (Fusion) | <a href="//doc.stocksharp.com/topics/Blackwood.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Blackwood.html" target="_blank">Ru</a> |
 
-## Russian Stock, Futures and Options
+## Russian market
 |Logo | Name |  Documentation Ru| 
 |:---:|:----:|:---------------:|
 |<img src="./Media/logos/Quik_logo.png" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Quik.html" target="_blank">Ru</a> |
@@ -147,7 +150,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/Oanda_logo.png" height="30" /> |Oanda | <a href="//doc.stocksharp.com/topics/Oanda.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Oanda.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/TrueFX_logo.png" height="30" /> |TrueFX | <a href="//doc.stocksharp.com/topics/TrueFX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/TrueFX.html" target="_blank">Ru</a> |
 
-## Cryptocurrencies
+## Crypto exchanges
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
 |<img src="./Media/logos/Bibox_logo.png" height="30" /> |Bibox | <a href="//doc.stocksharp.com/topics/Bibox.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bibox.html" target="_blank">Ru</a> |
