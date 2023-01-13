@@ -16,12 +16,14 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-
+	using Ecng.ComponentModel;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -172,6 +174,17 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str346Key)]
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }
+
+		/// <summary>
+		/// Market data fields, which will be received with subscribed to <see cref="DataType.Level1"/> messages.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2522Key,
+			Description = LocalizedStrings.Str2523Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 3)]
+		public IEnumerable<Level1Fields> Fields { get; set; }
 
 		DataType ISubscriptionMessage.DataType => DataType2;
 
@@ -376,6 +389,7 @@ namespace StockSharp.Messages
 			destination.DepthBuilder = DepthBuilder;
 			destination.FillGaps = FillGaps;
 			destination.DoNotBuildOrderBookInrement = DoNotBuildOrderBookInrement;
+			destination.Fields = Fields?.ToArray();
 		}
 
 		/// <inheritdoc />
@@ -430,6 +444,9 @@ namespace StockSharp.Messages
 
 			if (DoNotBuildOrderBookInrement)
 				str += $",NotBuildInc={DoNotBuildOrderBookInrement}";
+
+			if (Fields is not null)
+				str += $",Fields={Fields.Select(f => f.GetDisplayName()).JoinCommaSpace()}";
 
 			return str;
 		}

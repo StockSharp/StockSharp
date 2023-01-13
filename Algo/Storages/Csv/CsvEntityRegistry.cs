@@ -922,6 +922,7 @@ namespace StockSharp.Algo.Storages.Csv
 					buildFromTuples?.arg,
 					data.Skip.To<string>(),
 					data.DoNotBuildOrderBookInrement.To<string>(),
+					data.Fields.Select(f => ((int)f).To<string>()).JoinComma(),
 				});
 			}
 
@@ -980,6 +981,14 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					message.DoNotBuildOrderBookInrement = reader.ReadBool();
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					str = reader.ReadString();
+
+					if (!str.IsEmpty())
+						message.Fields = str.SplitByComma().Select(s => (Level1Fields)s.To<int>()).ToArray();
+				}
 
 				return message;
 			}
