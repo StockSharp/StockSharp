@@ -5,7 +5,7 @@
 
 ## Introduction ##
 
-**StockSharp** (shortly **S#**) – are **free** programs for trading at any markets of the world (American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
+**StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
 **Available connections**: FIX/FAST, ITCH (LSE, NASDAQ), Blackwood/Fusion, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, OpenECry, Rithmic, RSS, Sterling, BTCE, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange, QuantFEED and many other.
 
@@ -92,6 +92,61 @@ public class SimpleStrategy : Strategy
 	}
 }
 ```
+
+## Crypto exchanges
+|Logo | Name | Documentation Eng| Documentation Ru| 
+|:---:|:----:|:----------------:|:---------------:|
+|<img src="./Media/logos/Bibox_logo.png" height="30" /> |Bibox | <a href="//doc.stocksharp.com/topics/Bibox.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bibox.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Binance_logo.svg" height="30" /> |Binance | <a href="//doc.stocksharp.com/topics/Binance.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Binance.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/bitalong_logo.png" height="30" /> |Bitalong | <a href="https://doc.stocksharp.com/topics/Bitalong.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitalong.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Bitbank_logo.png" height="30" /> |Bitbank | <a href="//doc.stocksharp.com/topics/Bitbank.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitbank.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Bitexbook_logo.png" height="30" /> |Bitexbook | <a href="//doc.stocksharp.com/topics/Bitexbook.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitexbook.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Bitfinex_logo.png" height="30" /> |Bitfinex | <a href="//doc.stocksharp.com/topics/Bitfinex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitfinex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Bithumb_logo.png" height="30" /> |Bithumb | <a href="//doc.stocksharp.com/topics/Bithumb.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bithumb.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/BitMax_logo.png" height="30" /> |BitMax | <a href="//doc.stocksharp.com/topics/BitMax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BitMax.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Bitmex_logo.png" height="30" /> |BitMEX | <a href="//doc.stocksharp.com/topics/Bitmex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitmex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/BitStamp_logo.svg" height="30" /> |BitStamp | <a href="//doc.stocksharp.com/topics/BitStamp.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BitStamp.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Bittrex_logo.png" height="30" /> |Bittrex | <a href="//doc.stocksharp.com/topics/Bittrex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bittrex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/BitZ_logo.png" height="30" /> |BitZ | <a href="//doc.stocksharp.com/topics/BitZ.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BitZ.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/BW_logo.png" height="30" /> |BW | <a href="//doc.stocksharp.com/topics/BW.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BW.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Cex_logo.png" height="30" /> |CEX.IO | <a href="//doc.stocksharp.com/topics/Cex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Cex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Coinbase_logo.png" height="30" /> |Coinbase | <a href="//doc.stocksharp.com/topics/Coinbase.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Coinbase.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/CoinBene_logo.png" height="30" /> |CoinBene | <a href="//doc.stocksharp.com/topics/CoinBene.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinBene.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/CoinCap_logo.png" height="30" /> |CoinCap | <a href="//doc.stocksharp.com/topics/CoinCap.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinCap.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Coincheck_logo.png" height="30" /> |Coincheck | <a href="//doc.stocksharp.com/topics/Coincheck.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Coincheck.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/CoinEx_logo.png" height="30" /> |CoinEx | <a href="//doc.stocksharp.com/topics/CoinEx.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinEx.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/CoinExchange_logo.png" height="30" /> |CoinExchange | <a href="//doc.stocksharp.com/topics/CoinExchange.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinExchange.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Coinigy_logo.png" height="30" /> |Coinigy  | <a href="//doc.stocksharp.com/topics/Coinigy.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Coinigy.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/CoinHub_logo.png" height="30" /> |CoinHub | <a href="//doc.stocksharp.com/topics/CoinHub.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinHub.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Cryptopia_logo.png" height="30" /> |Cryptopia | <a href="//doc.stocksharp.com/topics/Cryptopia.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Cryptopia.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Deribit_logo.png" height="30" /> |Deribit | <a href="//doc.stocksharp.com/topics/Deribit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Deribit.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Digifinex_logo.png" height="30" /> |DigiFinex | <a href="//doc.stocksharp.com/topics/Digifinex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Digifinex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/digitexfutures_logo.png" height="30" /> |DigitexFutures | <a href="https://doc.stocksharp.com/topics/DigitexFutures.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/DigitexFutures.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Exmo_logo.png" height="30" /> |EXMO | <a href="//doc.stocksharp.com/topics/Exmo.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Exmo.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/FatBtc_logo.png" height="30" /> |FatBTC | <a href="//doc.stocksharp.com/topics/FatBTC.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FatBTC.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Gdax_logo.png" height="30" /> |GDAX | <a href="//doc.stocksharp.com/topics/GDAX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/GDAX.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Gopax_logo.png" height="30" /> |GOPAX | <a href="//doc.stocksharp.com/topics/Gopax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Gopax.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/HitBtc_logo.png" height="30" /> |HitBTC | <a href="//doc.stocksharp.com/topics/HitBTC.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/HitBTC.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Hotbit_logo.png" height="30" /> |Hotbit | <a href="//doc.stocksharp.com/topics/Hotbit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Hotbit.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Huobi_logo.png" height="30" /> |Huobi | <a href="//doc.stocksharp.com/topics/Huobi.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Huobi.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Idax_logo.png" height="30" /> |IDAX | <a href="//doc.stocksharp.com/topics/Idax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Idax.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Kraken_logo.png" height="30" /> |Kraken | <a href="//doc.stocksharp.com/topics/Kraken.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Kraken.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Kucoin_logo.png" height="30" /> |KuCoin | <a href="//doc.stocksharp.com/topics/Kucoin.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Kucoin.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Latoken_logo.png" height="30" /> |LATOKEN | <a href="//doc.stocksharp.com/topics/Latoken.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Latoken.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/LBank_logo.png" height="30" /> |LBank | <a href="//doc.stocksharp.com/topics/LBank.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/LBank.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Liqui_logo.png" height="30" /> |Liqui | <a href="//doc.stocksharp.com/topics/Liqui.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Liqui.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/LiveCoin_logo.png" height="30" /> |Livecoin | <a href="//doc.stocksharp.com/topics/LiveCoin.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/LiveCoin.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Okcoin_logo.png" height="30" /> |OKCoin | <a href="//doc.stocksharp.com/topics/OKCoin.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/OKCoin.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Okex_logo.png" height="30" /> |OKEx | <a href="//doc.stocksharp.com/topics/Okex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Okex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/poloniex_logo.png" height="30" /> |Poloniex | <a href="//doc.stocksharp.com/topics/Poloniex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Poloniex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/prizmbit_logo.png" height="30" /> |PrizmBit | <a href="https://doc.stocksharp.com/topics/PrizmBit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/PrizmBit.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Quoinex_logo.png" height="30" /> |QuoineX | <a href="//doc.stocksharp.com/topics/Quoinex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Quoinex.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/TradeOgre_logo.png" height="30" /> |TradeOgre | <a href="//doc.stocksharp.com/topics/TradeOrge.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/TradeOrge.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Upbit_logo.png" height="30" /> |Upbit | <a href="//doc.stocksharp.com/topics/Upbit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Upbit.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Yobit_logo.png" height="30" /> |YoBit | <a href="//doc.stocksharp.com/topics/Yobit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Yobit.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Zaif_logo.png" height="30" /> |Zaif | <a href="//doc.stocksharp.com/topics/Zaif.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Zaif.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/ZB_logo.png" height="30" /> |ZB | <a href="//doc.stocksharp.com/topics/ZB.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/ZB.html" target="_blank">Ru</a> |
+
 ## Stock, Futures and Options
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
@@ -149,69 +204,6 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/MBTrading_logo.png" height="30" /> |MB Trading | <a href="//doc.stocksharp.com/topics/MB%20Trading.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/MB%20Trading.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Oanda_logo.png" height="30" /> |Oanda | <a href="//doc.stocksharp.com/topics/Oanda.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Oanda.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/TrueFX_logo.png" height="30" /> |TrueFX | <a href="//doc.stocksharp.com/topics/TrueFX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/TrueFX.html" target="_blank">Ru</a> |
-
-## Crypto exchanges
-|Logo | Name | Documentation Eng| Documentation Ru| 
-|:---:|:----:|:----------------:|:---------------:|
-|<img src="./Media/logos/Bibox_logo.png" height="30" /> |Bibox | <a href="//doc.stocksharp.com/topics/Bibox.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bibox.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Binance_logo.svg" height="30" /> |Binance | <a href="//doc.stocksharp.com/topics/Binance.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Binance.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/bitalong_logo.png" height="30" /> |Bitalong | <a href="https://doc.stocksharp.com/topics/Bitalong.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitalong.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Bitbank_logo.png" height="30" /> |Bitbank | <a href="//doc.stocksharp.com/topics/Bitbank.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitbank.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Bitexbook_logo.png" height="30" /> |Bitexbook | <a href="//doc.stocksharp.com/topics/Bitexbook.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitexbook.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Bitfinex_logo.png" height="30" /> |Bitfinex | <a href="//doc.stocksharp.com/topics/Bitfinex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitfinex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Bithumb_logo.png" height="30" /> |Bithumb | <a href="//doc.stocksharp.com/topics/Bithumb.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bithumb.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/BitMax_logo.png" height="30" /> |BitMax | <a href="//doc.stocksharp.com/topics/BitMax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BitMax.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Bitmex_logo.png" height="30" /> |BitMEX | <a href="//doc.stocksharp.com/topics/Bitmex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bitmex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/BitStamp_logo.svg" height="30" /> |BitStamp | <a href="//doc.stocksharp.com/topics/BitStamp.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BitStamp.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Bittrex_logo.png" height="30" /> |Bittrex | <a href="//doc.stocksharp.com/topics/Bittrex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bittrex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/BitZ_logo.png" height="30" /> |BitZ | <a href="//doc.stocksharp.com/topics/BitZ.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BitZ.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/BW_logo.png" height="30" /> |BW | <a href="//doc.stocksharp.com/topics/BW.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BW.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Cex_logo.png" height="30" /> |CEX.IO | <a href="//doc.stocksharp.com/topics/Cex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Cex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Coinbase_logo.png" height="30" /> |Coinbase | <a href="//doc.stocksharp.com/topics/Coinbase.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Coinbase.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/CoinBene_logo.png" height="30" /> |CoinBene | <a href="//doc.stocksharp.com/topics/CoinBene.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinBene.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/CoinCap_logo.png" height="30" /> |CoinCap | <a href="//doc.stocksharp.com/topics/CoinCap.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinCap.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Coincheck_logo.png" height="30" /> |Coincheck | <a href="//doc.stocksharp.com/topics/Coincheck.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Coincheck.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/CoinEx_logo.png" height="30" /> |CoinEx | <a href="//doc.stocksharp.com/topics/CoinEx.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinEx.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/CoinExchange_logo.png" height="30" /> |CoinExchange | <a href="//doc.stocksharp.com/topics/CoinExchange.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinExchange.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Coinigy_logo.png" height="30" /> |Coinigy  | <a href="//doc.stocksharp.com/topics/Coinigy.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Coinigy.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/CoinHub_logo.png" height="30" /> |CoinHub | <a href="//doc.stocksharp.com/topics/CoinHub.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CoinHub.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Cryptopia_logo.png" height="30" /> |Cryptopia | <a href="//doc.stocksharp.com/topics/Cryptopia.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Cryptopia.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Deribit_logo.png" height="30" /> |Deribit | <a href="//doc.stocksharp.com/topics/Deribit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Deribit.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Digifinex_logo.png" height="30" /> |DigiFinex | <a href="//doc.stocksharp.com/topics/Digifinex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Digifinex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/digitexfutures_logo.png" height="30" /> |DigitexFutures | <a href="https://doc.stocksharp.com/topics/DigitexFutures.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/DigitexFutures.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Exmo_logo.png" height="30" /> |EXMO | <a href="//doc.stocksharp.com/topics/Exmo.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Exmo.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/FatBtc_logo.png" height="30" /> |FatBTC | <a href="//doc.stocksharp.com/topics/FatBTC.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FatBTC.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Gdax_logo.png" height="30" /> |GDAX | <a href="//doc.stocksharp.com/topics/GDAX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/GDAX.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Gopax_logo.png" height="30" /> |GOPAX | <a href="//doc.stocksharp.com/topics/Gopax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Gopax.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/HitBtc_logo.png" height="30" /> |HitBTC | <a href="//doc.stocksharp.com/topics/HitBTC.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/HitBTC.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Hotbit_logo.png" height="30" /> |Hotbit | <a href="//doc.stocksharp.com/topics/Hotbit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Hotbit.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Huobi_logo.png" height="30" /> |Huobi | <a href="//doc.stocksharp.com/topics/Huobi.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Huobi.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Idax_logo.png" height="30" /> |IDAX | <a href="//doc.stocksharp.com/topics/Idax.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Idax.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Kraken_logo.png" height="30" /> |Kraken | <a href="//doc.stocksharp.com/topics/Kraken.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Kraken.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Kucoin_logo.png" height="30" /> |KuCoin | <a href="//doc.stocksharp.com/topics/Kucoin.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Kucoin.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Latoken_logo.png" height="30" /> |LATOKEN | <a href="//doc.stocksharp.com/topics/Latoken.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Latoken.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/LBank_logo.png" height="30" /> |LBank | <a href="//doc.stocksharp.com/topics/LBank.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/LBank.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Liqui_logo.png" height="30" /> |Liqui | <a href="//doc.stocksharp.com/topics/Liqui.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Liqui.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/LiveCoin_logo.png" height="30" /> |Livecoin | <a href="//doc.stocksharp.com/topics/LiveCoin.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/LiveCoin.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Okcoin_logo.png" height="30" /> |OKCoin | <a href="//doc.stocksharp.com/topics/OKCoin.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/OKCoin.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Okex_logo.png" height="30" /> |OKEx | <a href="//doc.stocksharp.com/topics/Okex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Okex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/poloniex_logo.png" height="30" /> |Poloniex | <a href="//doc.stocksharp.com/topics/Poloniex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Poloniex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/prizmbit_logo.png" height="30" /> |PrizmBit | <a href="https://doc.stocksharp.com/topics/PrizmBit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/PrizmBit.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Quoinex_logo.png" height="30" /> |QuoineX | <a href="//doc.stocksharp.com/topics/Quoinex.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Quoinex.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/TradeOgre_logo.png" height="30" /> |TradeOgre | <a href="//doc.stocksharp.com/topics/TradeOrge.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/TradeOrge.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Upbit_logo.png" height="30" /> |Upbit | <a href="//doc.stocksharp.com/topics/Upbit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Upbit.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Yobit_logo.png" height="30" /> |YoBit | <a href="//doc.stocksharp.com/topics/Yobit.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Yobit.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Zaif_logo.png" height="30" /> |Zaif | <a href="//doc.stocksharp.com/topics/Zaif.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Zaif.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/ZB_logo.png" height="30" /> |ZB | <a href="//doc.stocksharp.com/topics/ZB.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/ZB.html" target="_blank">Ru</a> |
-
-## Development stage
-
-Current stage of all components - [RELEASE_STAGES.md](../master/_ReleaseNotes/RELEASE_STAGES.md).
-Release notes - [RELEASE_NOTES.md](../master/_ReleaseNotes/CHANGE_LOG_API.md).
-
-## License
-
-StockSharp code is licensed under the [Apache License 2.0](../master/LICENSE).
 
   [1]: https://stocksharp.com
   [2]: https://doc.stocksharp.com
