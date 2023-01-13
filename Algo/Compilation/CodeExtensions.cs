@@ -48,7 +48,6 @@ namespace StockSharp.Algo.Compilation
 			"Ecng.Serialization",
 
 			"StockSharp.Algo",
-			"StockSharp.Algo.Strategies",
 			"StockSharp.Messages",
 			"StockSharp.BusinessEntities",
 			"StockSharp.Logging",

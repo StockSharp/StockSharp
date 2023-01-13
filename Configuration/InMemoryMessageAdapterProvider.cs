@@ -48,28 +48,39 @@ namespace StockSharp.Configuration
 		/// <inheritdoc />
 		public virtual IEnumerable<IMessageAdapter> PossibleAdapters { get; }
 
-		private static readonly HashSet<string> _exceptions = new(StringComparer.InvariantCultureIgnoreCase)
+		private static readonly HashSet<string> _nonAdapters = new(StringComparer.InvariantCultureIgnoreCase)
 		{
 			"StockSharp.Alerts",
+			"StockSharp.Alerts.Interfaces",
 			"StockSharp.Algo",
-			"StockSharp.Algo.History",
-			"StockSharp.Algo.Strategies",
+			"StockSharp.Algo.Export",
 			"StockSharp.BusinessEntities",
+			"StockSharp.Charting.Interfaces",
 			"StockSharp.Configuration",
+			"StockSharp.Configuration.Adapters",
+			"StockSharp.Diagram.Core",
+			"StockSharp.Fix.Core",
 			"StockSharp.Licensing",
 			"StockSharp.Localization",
 			"StockSharp.Logging",
+			"StockSharp.Media",
 			"StockSharp.Messages",
 			"StockSharp.Xaml",
 			"StockSharp.Xaml.CodeEditor",
 			"StockSharp.Xaml.Charting",
 			"StockSharp.Xaml.Diagram",
-			"StockSharp.Studio.Community",
-			"StockSharp.Studio.WebApi",
-			"StockSharp.Studio.Core",
 			"StockSharp.Studio.Controls",
+			"StockSharp.Studio.Core",
+			"StockSharp.Studio.Nuget",
+			"StockSharp.Studio.WebApi",
+			"StockSharp.Studio.WebApi.UI",
 			"StockSharp.QuikLua",
 			"StockSharp.QuikLua32",
+			"StockSharp.MT4",
+			"StockSharp.MT5",
+			"StockSharp.Server.Core",
+			"StockSharp.Server.Fix",
+			"StockSharp.Server.Utils",
 		};
 		
 		/// <summary>
@@ -85,7 +96,14 @@ namespace StockSharp.Configuration
 				var assemblies = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll").Where(p =>
 				{
 					var name = Path.GetFileNameWithoutExtension(p);
-					return !_exceptions.Contains(name) && name.StartsWithIgnoreCase("StockSharp.");
+
+					if (!name.StartsWithIgnoreCase("StockSharp."))
+						return false;
+
+					if (_nonAdapters.Contains(name))
+						return false;
+
+					return true;
 				});
 
 				foreach (var assembly in assemblies)
