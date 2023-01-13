@@ -151,8 +151,8 @@ public class SimpleStrategy : Strategy
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
 |<img src="./Media/logos/InteractiveBrokers_logo.png" height="30" /> |Interactive Brokers | <a href="//doc.stocksharp.com/topics/IB.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IB.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/FIX_logo.png" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="//doc.stocksharp.com/topics/FIX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FIX.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/FIX_logo.png" height="30" /> |FAST protocol | <a href="//doc.stocksharp.com/topics/Fast.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fast.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Fin_logo.png" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="//doc.stocksharp.com/topics/FIX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FIX.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Fix_logo.png" height="30" /> |FAST protocol | <a href="//doc.stocksharp.com/topics/Fast.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fast.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="//doc.stocksharp.com/topics/Bvmt.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bvmt.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/AlphaVantage_logo.png" height="30" /> |AlphaVantage | <a href="//doc.stocksharp.com/topics/AlphaVantage.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/AlphaVantage.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/BarChart_logo.png" height="30" /> |Bachart | <a href="//doc.stocksharp.com/topics/BarChart.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BarChart.html" target="_blank">Ru</a> |
@@ -176,7 +176,7 @@ public class SimpleStrategy : Strategy
 |Logo | Name |  Documentation Ru| 
 |:---:|:----:|:---------------:|
 |<img src="./Media/logos/Quik_logo.png" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Quik.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Tinkoff_logo.svg" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Tinkoff.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Tinkoff_logo.svg" height="30" /> |Tinkoff |  <a href="https://doc.stocksharp.ru/topics/Tinkoff.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Mfd_logo.png" height="30" /> |Mfd | <a href="https://doc.stocksharp.ru/topics/Mfd.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/micex_logo.png" height="30" /> |Micex (TEAP) | <a href="https://doc.stocksharp.ru/topics/Micex.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/plaza_logo.png" height="30" /> |Plaza II | <a href="https://doc.stocksharp.ru/topics/Plaza.html" target="_blank">Ru</a> |
