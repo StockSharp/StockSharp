@@ -38,56 +38,56 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 		=> msg.HandleErrorResponse(err, this, SendOutMessage);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnConnectAsync(ConnectMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(connectMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnDisconnectAsync(DisconnectMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnDisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(disconnectMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnResetAsync(ResetMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(resetMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnSecurityLookupAsync(SecurityLookupMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnSecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(lookupMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnPortfolioLookupAsync(PortfolioLookupMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnPortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(lookupMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnBoardLookupAsync(BoardLookupMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnBoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(lookupMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnOrderStatusAsync(OrderStatusMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnOrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(statusMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnRegisterOrderAsync(OrderRegisterMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnRegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(regMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnReplaceOrderAsync(OrderReplaceMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(replaceMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnReplaceOrderPairAsync(OrderPairReplaceMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(replaceMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnCancelOrderAsync(OrderCancelMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnCancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(cancelMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnCancelOrderGroupAsync(OrderGroupCancelMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnCancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(cancelMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnRunSubscriptionAsync(MarketDataMessage msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
+	protected virtual ValueTask OnRunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(mdMsg, cancellationToken);
 
 	/// <inheritdoc />
 	protected virtual ValueTask OnProcessMessageAsync(Message msg, CancellationToken cancellationToken)
