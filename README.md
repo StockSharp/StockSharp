@@ -175,7 +175,7 @@ public class SimpleStrategy : Strategy
 ## Russian market
 |Logo | Name |  Documentation Ru| 
 |:---:|:----:|:---------------:|
-|<img src="./Media/logos/Quik_logo.png" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Quik.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/quik_logo.svg" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Quik.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Tinkoff_logo.svg" height="30" /> |Tinkoff |  <a href="https://doc.stocksharp.ru/topics/Tinkoff.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Mfd_logo.png" height="30" /> |Mfd | <a href="https://doc.stocksharp.ru/topics/Mfd.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/moex_logo.svg" height="30" /> |Micex (TEAP) | <a href="https://doc.stocksharp.ru/topics/Micex.html" target="_blank">Ru</a> |
