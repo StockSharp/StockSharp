@@ -197,7 +197,7 @@ public class SimpleStrategy : Strategy
 |:---:|:----:|:----------------:|:---------------:|
 |<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |DukasCopy | <a href="//doc.stocksharp.com/topics/DukasCopy.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/DukasCopy.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/FinViz_logo.png" height="30" /> |FinViz | <a href="//doc.stocksharp.com/topics/FinViz.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FinViz.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/fxcm_logo.png" height="30" /> |FXCM | <a href="//doc.stocksharp.com/topics/Fxcm.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fxcm.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/fxcm_logo.svg" height="30" /> |FXCM | <a href="//doc.stocksharp.com/topics/Fxcm.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fxcm.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/GainCapital_logo.png" height="30" /> |GAIN Capital | <a href="//doc.stocksharp.com/topics/GAIN%20Capital.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/GAIN%20Capital.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Lmax_logo.png" height="30" /> |LMAX | <a href="//doc.stocksharp.com/topics/LMAX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/LMAX.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/MBTrading_logo.png" height="30" /> |MB Trading | <a href="//doc.stocksharp.com/topics/MB%20Trading.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/MB%20Trading.html" target="_blank">Ru</a> |
