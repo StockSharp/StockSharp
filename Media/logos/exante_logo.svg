@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="400" height="450" viewBox="-200.14 -230.14 400 450" xml:space="preserve">
+<g transform="matrix(0.28 0 0 0.28 -16.72 -15.06)"  >
+<g style="" vector-effect="non-scaling-stroke"   >
+		<g transform="matrix(1 0 0 1 -160 -370)"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,127,56); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-3840, -3167)" d="M 4000 3537 L 4000 2797 L 3680 3352 z" stroke-linecap="round" />
+</g>
+		<g transform="matrix(1 0 0 1 0 0)"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,127,56); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-4000, -3537)" d="M 4000 3999.5 L 4000 4230.8 L 3466.6 3922.4 L 4000 3999.5 L 4000 3537 L 3360.1 3907 L 3360 3907 L 3680 3352 L 3520 3259.5 L 3400 3745.1 L 3400 3190.1 L 3520 3259.5 L 4000 2797 L 3360 3167 L 3360 3907 L 4000 4277 L 4640 3907 z" stroke-linecap="round" />
+</g>
+		<g transform="matrix(1 0 0 1 320 -185)"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,127,56); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-4320, -3352)" d="M 4600 3190.1 L 4600 3837.6 L 4320 3352 L 4000 3537 L 4640 3907 L 4640 3167 L 4000 2797 L 4320 3352 z" stroke-linecap="round" />
+</g>
+</g>
+</g>
+</svg>
