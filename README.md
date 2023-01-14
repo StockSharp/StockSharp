@@ -201,7 +201,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/GainCapital_logo.png" height="30" /> |GAIN Capital | <a href="//doc.stocksharp.com/topics/GAIN%20Capital.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/GAIN%20Capital.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Lmax_logo.png" height="30" /> |LMAX | <a href="//doc.stocksharp.com/topics/LMAX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/LMAX.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/MBTrading_logo.png" height="30" /> |MB Trading | <a href="//doc.stocksharp.com/topics/MB%20Trading.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/MB%20Trading.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/oanda_logo.svg" height="30" /> |Oanda | <a href="//doc.stocksharp.com/topics/Oanda.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Oanda.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/Oanda_logo.svg" height="30" /> |Oanda | <a href="//doc.stocksharp.com/topics/Oanda.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Oanda.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/TrueFX_logo.png" height="30" /> |TrueFX | <a href="//doc.stocksharp.com/topics/TrueFX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/TrueFX.html" target="_blank">Ru</a> |
 
   [1]: https://stocksharp.com
