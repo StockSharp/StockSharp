@@ -156,7 +156,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="//doc.stocksharp.com/topics/Bvmt.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Bvmt.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/alphavantage_logo.svg" height="30" /> |AlphaVantage | <a href="//doc.stocksharp.com/topics/AlphaVantage.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/AlphaVantage.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/barchart_logo.svg" height="30" /> |Bachart | <a href="//doc.stocksharp.com/topics/BarChart.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/BarChart.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/CQG_logo.png" height="30" /> |CQG | <a href="//doc.stocksharp.com/topics/CQG.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CQG.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/cqg_logo.svg" height="30" /> |CQG | <a href="//doc.stocksharp.com/topics/CQG.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/CQG.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/etrade_logo.svg" height="30" /> |E*TRADE | <a href="//doc.stocksharp.com/topics/ETrade.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/ETrade.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/google_logo.svg" height="30" /> |Google | <a href="//doc.stocksharp.com/topics/Google.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Google.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/iex_logo.svg" height="30" /> |IEX | <a href="//doc.stocksharp.com/topics/IEX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IEX.html" target="_blank">Ru</a> |
@@ -177,7 +177,7 @@ public class SimpleStrategy : Strategy
 |:---:|:----:|:---------------:|
 |<img src="./Media/logos/quik_logo.svg" height="30" /> |Quik |  <a href="https://doc.stocksharp.ru/topics/Quik.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Tinkoff_logo.svg" height="30" /> |Tinkoff |  <a href="https://doc.stocksharp.ru/topics/Tinkoff.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/Mfd_logo.png" height="30" /> |Mfd | <a href="https://doc.stocksharp.ru/topics/Mfd.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/mfd_logo.svg" height="30" /> |Mfd | <a href="https://doc.stocksharp.ru/topics/Mfd.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/moex_logo.svg" height="30" /> |Micex (TEAP) | <a href="https://doc.stocksharp.ru/topics/Micex.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/moex_logo.svg" height="30" /> |Plaza II | <a href="https://doc.stocksharp.ru/topics/Plaza.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/quik_logo.svg" height="30" /> |Quik FIX |  <a href="https://doc.stocksharp.ru/topics/QuikFix.html" target="_blank">Ru</a> |
