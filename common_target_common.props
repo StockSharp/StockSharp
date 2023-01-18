@@ -34,10 +34,6 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <!-- TODO this needs to be removed when connectors fixed to NO_LICENSE constant -->
-    <DefineConstants>$(DefineConstants);INCLUDE_LICENSE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup>
     <!-- reverse defaults from "C:\Program Files\dotnet\sdk\5.0.102\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.GenerateAssemblyInfo.targets"  -->
     <GenerateAssemblyTitleAttribute Condition="'$(GenerateAssemblyTitleAttribute)' == ''">false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute Condition="'$(GenerateAssemblyDescriptionAttribute)' == ''">false</GenerateAssemblyDescriptionAttribute>
