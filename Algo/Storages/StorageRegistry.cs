@@ -185,7 +185,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetStorage(security.ToSecurityId(), dataType, arg, drive, format);
+			return GetStorage(security?.ToSecurityId() ?? default, dataType, arg, drive, format);
 		}
 
 		/// <inheritdoc />
