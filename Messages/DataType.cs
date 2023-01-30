@@ -375,7 +375,9 @@ namespace StockSharp.Messages
 			this == FilteredMarketDepth ||
 			this == Level1				||
 			this == Ticks				||
-			this == OrderLog;
+			this == OrderLog			||
+			this == PositionChanges		||
+			this == Transactions;
 
 		/// <summary>
 		/// Is the data type can be used as candles compression source.
