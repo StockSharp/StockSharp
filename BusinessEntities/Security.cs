@@ -290,11 +290,11 @@ namespace StockSharp.BusinessEntities
 			get => _priceStep;
 			set
 			{
+				if(!(value > 0))
+					value = null;
+
 				if (_priceStep == value)
 					return;
-
-				//if (value < 0)
-				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_priceStep = value;
 				Notify();
@@ -1776,7 +1776,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		private DateTimeOffset? _issueDate;
-		
+
 		/// <summary>
 		/// Date of issue.
 		/// </summary>
@@ -1798,7 +1798,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		private bool? _shortable;
-		
+
 		/// <summary>
 		/// Can have short positions.
 		/// </summary>
@@ -1881,7 +1881,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		private DateTimeOffset? _buyBackDate;
-		
+
 		/// <summary>
 		/// BuyBack date.
 		/// </summary>
