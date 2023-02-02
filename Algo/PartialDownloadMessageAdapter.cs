@@ -85,6 +85,8 @@
 
 			private bool IsStepMax => _step == TimeSpan.MaxValue;
 
+			public bool CanFinish => LastIteration || IsStepMax;
+
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
 				if (step <= TimeSpan.Zero)
@@ -479,7 +481,7 @@
 							if (finishMsg.NextFrom != null)
 								info.TryUpdateNextFrom(finishMsg.NextFrom.Value);
 
-							if (info.LastIteration)
+							if (info.CanFinish)
 							{
 								_original.Remove(origin.TransactionId);
 								_partialRequests.RemoveWhere(p => p.Value == info);
