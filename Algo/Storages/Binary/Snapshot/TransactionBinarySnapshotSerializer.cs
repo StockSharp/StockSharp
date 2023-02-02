@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public string Error;
 
 			public short? Currency;
-			
+
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string DepoName;
 
@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 			public byte? IsMarketMaker;
 			public byte Side;
-			
+
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string OrderBoardId;
 
@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public byte? OrderState;
 			public long? OrderStatus;
 			public BlittableDecimal? Balance;
-			
+
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string UserOrderId;
 
@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public BlittableDecimal? Slippage;
 			public BlittableDecimal? Commission;
 			public int? TradeStatus;
-			
+
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = Sizes.S100)]
 			public string TradeStringId;
 
@@ -474,13 +474,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 							if (paramType.IsPersistable())
 							{
-								value = strBuffer.Deserialize<SettingsStorage>().Load(paramType);
+								value = strBuffer.Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
 							}
 							else if (typeof(IRange).IsAssignableFrom(paramType))
 							{
 								var range = paramType.CreateInstance<IRange>();
 
-								var storage = strBuffer.Deserialize<SettingsStorage>();
+								var storage = strBuffer.Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
 
 								if (storage.ContainsKey(nameof(range.Min)))
 									range.Min = storage.GetValue<SettingsStorage>(nameof(range.Min)).FromStorage();
@@ -497,7 +497,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						}
 						else
 							value = null;
-					
+
 						value = value.To(paramType);
 						execMsg.Condition.Parameters.Add(param.Name, value);
 					}
@@ -506,7 +506,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						ex.LogError();
 					}
 				}
-				
+
 				return execMsg;
 			}
 		}

@@ -534,14 +534,14 @@
 			=> CreateSerializer<T>().Serialize(value);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[Obsolete("Use Deserialize instead.")]
 		public static T DeserializeWithMigration<T>(this string filePath)
 			=> filePath.Deserialize<T>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[Obsolete]
 		public static ISerializer LegacySerializer { get; set; }
@@ -553,6 +553,25 @@
 		/// <param name="filePath">File path.</param>
 		/// <returns>Value.</returns>
 		public static T Deserialize<T>(this string filePath)
+		{
+			try
+			{
+				return filePath.DeserializeOrThrow<T>();
+			}
+			catch (Exception e)
+			{
+				new Exception($"Error deserializing '{filePath}'", e).LogError();
+				return default;
+			}
+		}
+
+		/// <summary>
+		/// Deserialize value from the specified file.
+		/// </summary>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="filePath">File path.</param>
+		/// <returns>Value.</returns>
+		public static T DeserializeOrThrow<T>(this string filePath)
 		{
 			var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
 			var defSer = CreateSerializer<T>();
@@ -634,24 +653,22 @@
 						TryFix(item);
 				}
 
-				try
-				{
-					// !!! serialize and deserialize (check our new serializer)
-					value = defSer.Deserialize(defSer.Serialize(value));
+				// !!! serialize and deserialize (check our new serializer)
+				value = defSer.Deserialize(defSer.Serialize(value));
 
-					// saving data in new format
-					defSer.Serialize(value, defFile);
+				// saving data in new format
+				defSer.Serialize(value, defFile);
 
-					// make backup only if everything is ok
-					legacyFile.MoveToBackup();
-				}
-				catch (Exception ex)
-				{
-					ex.LogError();
-				}
+				// make backup only if everything is ok
+				legacyFile.MoveToBackup();
 			}
 			else
-				value = File.Exists(defFile) ? defSer.Deserialize(defFile) : default;
+			{
+				if(!File.Exists(defFile))
+					throw new FileNotFoundException($"file not found: '{defFile}'");
+
+				value = defSer.Deserialize(defFile);
+			}
 
 			return value;
 		}
@@ -670,20 +687,35 @@
 			{
 				return serializer.Deserialize(data);
 			}
-			catch
+			catch(Exception e)
 			{
 #pragma warning disable CS0612 // Type or member is obsolete
 				if (LegacySerializer is null)
+				{
+					e.LogError();
 					return default;
+				}
 
 				var xmlSer = LegacySerializer.GetSerializer(serializer.Type);
 
 				if (xmlSer.GetType() == serializer.GetType())
-					throw;
+				{
+					e.LogError();
+					return default;
+				}
 
-				return (T)xmlSer.Deserialize(data);
+				try
+				{
+					return (T)xmlSer.Deserialize(data);
+				}
+				catch (Exception e2)
+				{
+					e2.LogError();
+				}
 #pragma warning restore CS0612 // Type or member is obsolete
 			}
+
+			return default;
 		}
 
 		/// <summary>
