@@ -11,7 +11,6 @@
 	using Ecng.Security;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
-	using Ecng.ComponentModel;
 	using Ecng.Localization;
 
 	using Newtonsoft.Json;
@@ -19,7 +18,6 @@
 	using NuGet.Configuration;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -433,37 +431,18 @@
 		public const string DefaultSettingsExt = ".json";
 
 		/// <summary>
-		/// Legacy extension for settings file.
-		/// </summary>
-		[Obsolete]
-		public const string LegacySettingsExt = ".xml";
-
-		/// <summary>
 		/// Backup extension for settings file.
 		/// </summary>
 		public const string BackupExt = ".bak";
 
 		/// <summary>
-		/// Returns an files with <see cref="DefaultSettingsExt"/> and <see cref="LegacySettingsExt"/> extensions.
+		/// Returns an files with <see cref="DefaultSettingsExt"/> extension.
 		/// </summary>
 		/// <param name="path">The relative or absolute path to the directory to search.</param>
 		/// <param name="filter">The search string to match against the names of files in path.</param>
 		/// <returns>Files.</returns>
 		public static IEnumerable<string> EnumerateConfigs(this string path, string filter = "*")
-			=> Directory.EnumerateFiles(path, $"{filter}{DefaultSettingsExt}").Concat(
-#pragma warning disable CS0612 // Type or member is obsolete
-				Directory.EnumerateFiles(path, $"{filter}{LegacySettingsExt}")
-#pragma warning restore CS0612 // Type or member is obsolete
-		);
-
-		/// <summary>
-		/// Make the specified <paramref name="filePath"/> with <see cref="LegacySettingsExt"/> extension.
-		/// </summary>
-		/// <param name="filePath">File path.</param>
-		/// <returns>File path.</returns>
-		[Obsolete]
-		public static string MakeLegacy(this string filePath)
-			=> Path.ChangeExtension(filePath, LegacySettingsExt);
+			=> Directory.EnumerateFiles(path, $"{filter}{DefaultSettingsExt}");
 
 		/// <summary>
 		/// Make the specified <paramref name="filePath"/> with <see cref="BackupExt"/> extension.
@@ -541,12 +520,6 @@
 			=> filePath.Deserialize<T>();
 
 		/// <summary>
-		///
-		/// </summary>
-		[Obsolete]
-		public static ISerializer LegacySerializer { get; set; }
-
-		/// <summary>
 		/// Deserialize value from the specified file.
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
@@ -576,101 +549,10 @@
 			var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
 			var defSer = CreateSerializer<T>();
 
-			T value;
+			if(!File.Exists(defFile))
+				throw new FileNotFoundException($"file not found: '{defFile}'");
 
-#pragma warning disable CS0612 // Type or member is obsolete
-			var legacyFile = filePath.MakeLegacy();
-
-			if (File.Exists(legacyFile) && LegacySerializer is not null)
-			{
-				// TODO 2021-09-09 remove 1 year later
-
-				value = LegacySerializer.GetSerializer<T>().Deserialize(legacyFile);
-#pragma warning restore CS0612 // Type or member is obsolete
-
-				static void TryFix(SettingsStorage storage)
-				{
-					foreach (var pair in storage.ToArray())
-					{
-						var value = pair.Value;
-
-						if (value is List<Range<TimeSpan>> times)
-						{
-							storage.Set(pair.Key, times.Select(r => r.ToStorage()).ToArray());
-						}
-						else if (value is Dictionary<DayOfWeek, Range<TimeSpan>[]> specialDays)
-						{
-							storage.Set(pair.Key, specialDays.Select(p => new SettingsStorage()
-								.Set("Day", p.Key)
-								.Set("Periods", p.Value.Select(r => r.ToStorage()).ToArray())
-							).ToArray());
-						}
-						else if (value is Dictionary<DateTime, Range<TimeSpan>[]> specialDays2)
-						{
-							storage.Set(pair.Key, specialDays2.Select(p => new SettingsStorage()
-								.Set("Day", p.Key)
-								.Set("Periods", p.Value.Select(p1 => p1.ToStorage()).ToArray())
-							).ToArray());
-						}
-						else if (value is Dictionary<UserPermissions, IDictionary<Tuple<string, string, object, DateTime?>, bool>> permissions)
-						{
-							storage.Set(pair.Key, permissions
-								.Select(p =>
-									new SettingsStorage()
-										.Set("Permission", p.Key)
-										.Set("Settings", p.Value
-											.Select(p1 =>
-												new SettingsStorage()
-													.Set("Name", p1.Key.Item1)
-													.Set("Param", p1.Key.Item2)
-													.Set("Extra", p1.Key.Item3)
-													.Set("Till", p1.Key.Item4)
-													.Set("IsEnabled", p1.Value)
-											).ToArray()
-										)
-								).ToArray()
-							);
-						}
-						else if (value is IEnumerable<RefPair<Guid, string>> pairs)
-						{
-							storage.Set(pair.Key, pairs.Select(p => p.ToStorage()).ToArray());
-						}
-						else if (value is SettingsStorage s1)
-							TryFix(s1);
-						else if (value is IEnumerable<SettingsStorage> set)
-						{
-							foreach (var item in set)
-								TryFix(item);
-						}
-					}
-				}
-
-				if (value is SettingsStorage s)
-					TryFix(s);
-				else if (value is IEnumerable<SettingsStorage> set)
-				{
-					foreach (var item in set)
-						TryFix(item);
-				}
-
-				// !!! serialize and deserialize (check our new serializer)
-				value = defSer.Deserialize(defSer.Serialize(value));
-
-				// saving data in new format
-				defSer.Serialize(value, defFile);
-
-				// make backup only if everything is ok
-				legacyFile.MoveToBackup();
-			}
-			else
-			{
-				if(!File.Exists(defFile))
-					throw new FileNotFoundException($"file not found: '{defFile}'");
-
-				value = defSer.Deserialize(defFile);
-			}
-
-			return value;
+			return defSer.Deserialize(defFile);
 		}
 
 		/// <summary>
@@ -689,30 +571,7 @@
 			}
 			catch(Exception e)
 			{
-#pragma warning disable CS0612 // Type or member is obsolete
-				if (LegacySerializer is null)
-				{
-					e.LogError();
-					return default;
-				}
-
-				var xmlSer = LegacySerializer.GetSerializer(serializer.Type);
-
-				if (xmlSer.GetType() == serializer.GetType())
-				{
-					e.LogError();
-					return default;
-				}
-
-				try
-				{
-					return (T)xmlSer.Deserialize(data);
-				}
-				catch (Exception e2)
-				{
-					e2.LogError();
-				}
-#pragma warning restore CS0612 // Type or member is obsolete
+				e.LogError();
 			}
 
 			return default;
@@ -732,10 +591,6 @@
 		/// <param name="configFile">Config file.</param>
 		/// <returns>Check result.</returns>
 		public static bool IsConfigExists(this string configFile)
-			=> File.Exists(configFile) ||
-#pragma warning disable CS0612 // Type or member is obsolete
-			File.Exists(configFile.MakeLegacy())
-#pragma warning restore CS0612 // Type or member is obsolete
-		;
+			=> File.Exists(configFile);
 	}
 }
