@@ -85,7 +85,7 @@
 
 			private bool IsStepMax => _step == TimeSpan.MaxValue;
 
-			public bool CanFinish => LastIteration || IsStepMax;
+			public bool CanFinish => LastIteration || (IsStepMax && Origin.To is not null);
 
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
