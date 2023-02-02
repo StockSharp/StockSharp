@@ -137,4 +137,11 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 
 	void IAsyncMessageAdapter.HandleMessageException(Message msg, Exception err)
 		=> OnHandleMessageException(msg, err);
+
+	/// <inheritdoc />
+	public override TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
+	{
+		iterationInterval = TimeSpan.Zero;
+		return TimeSpan.MaxValue;
+	}
 }
