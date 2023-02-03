@@ -224,6 +224,16 @@ namespace StockSharp.Algo
 										subscrMsg.SetSubscriptionIds(ids.Select(id => _replaceId.TryGetValue2(id) ?? id).ToArray());
 								}
 							}
+
+							if (subscrMsg is ISecurityIdMessage secIdMsg &&
+								secIdMsg.SecurityId == default &&
+								subscrMsg.OriginalTransactionId != default &&
+								_subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info) &&
+								info.Subscription is ISecurityIdMessage subscriptionMsg &&
+								!subscriptionMsg.SecurityId.IsAllSecurity())
+							{
+								secIdMsg.SecurityId = subscriptionMsg.SecurityId;
+							}
 						}
 					}
 
