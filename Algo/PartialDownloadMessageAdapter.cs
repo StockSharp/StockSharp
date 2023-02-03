@@ -154,7 +154,7 @@
 
 					mdMsg.Skip = null;
 
-					if (Origin.To == null && _nextFrom >= _to)
+					if (Origin.To == null && (_nextFrom >= _to || IsStepMax))
 					{
 						// on-line
 						mdMsg.From = null;
