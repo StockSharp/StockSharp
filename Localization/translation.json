@@ -1,4 +1,12 @@
 {
+  "BasicSettings": {
+    "en": "Basic settings",
+    "ru": "Базовые настройки"
+  },
+  "AdvancedSettings": {
+    "en": "Advanced settings",
+    "ru": "Продвинутые настройки"
+  },
   "RefreshLicense": {
     "en": "Refresh license",
     "ru": "Обновить лицензию"

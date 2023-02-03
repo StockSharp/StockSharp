@@ -9,7 +9,7 @@
 
     <ProductVersion>9.0.30729</ProductVersion>
     <!--<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>-->
-    <LangVersion>default</LangVersion>
+    <LangVersion>11.0</LangVersion>
 
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>

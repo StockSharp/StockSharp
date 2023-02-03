@@ -108,6 +108,8 @@ namespace StockSharp.Messages
 		//[Nullable]
 		public int? Decimals { get; set; }
 
+		private decimal? _priceStep;
+
 		/// <summary>
 		/// Minimum price step.
 		/// </summary>
@@ -116,7 +118,11 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
 		[MainCategory]
 		//[Nullable]
-		public decimal? PriceStep { get; set; }
+		public decimal? PriceStep
+		{
+			get => _priceStep;
+			set => _priceStep = value > 0 ? value : null;
+		}
 
 		/// <summary>
 		/// Security type.
