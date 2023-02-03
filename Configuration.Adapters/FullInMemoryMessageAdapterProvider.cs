@@ -5,7 +5,6 @@ namespace StockSharp.Configuration
 
 	using Ecng.Common;
 
-#if NET5_0_OR_GREATER
 	using StockSharp.Bvmt;
 	using StockSharp.IQFeed;
 	using StockSharp.Okex;
@@ -13,7 +12,6 @@ namespace StockSharp.Configuration
 	using StockSharp.MoexISS;
 	using StockSharp.Alor;
 	using StockSharp.Tinkoff;
-#endif
 	using StockSharp.AlorHistory;
 	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
@@ -79,7 +77,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Poloniex;
 	using StockSharp.PrizmBit;
 	using StockSharp.Quandl;
-	//using StockSharp.QuantHouse;
+	using StockSharp.QuantHouse;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Quoinex;
 	using StockSharp.Rithmic;
@@ -120,12 +118,7 @@ namespace StockSharp.Configuration
 			{
 				try
 				{
-					var type = func();
-
-					//if (type == typeof(QuikDdeAdapter) || type == typeof(QuikTrans2QuikAdapter))
-					//	adapters.Remove(type);
-					//else
-					adapters.Add(type);
+					adapters.Add(func());
 				}
 				catch (Exception e)
 				{
@@ -229,6 +222,7 @@ namespace StockSharp.Configuration
 			() => typeof(BitalongMessageAdapter),
 			() => typeof(PrizmBitMessageAdapter),
 			() => typeof(DigitexFuturesMessageAdapter),
+			() => typeof(QuantFeedMessageAdapter),
 		});
 
 		/// <inheritdoc />
