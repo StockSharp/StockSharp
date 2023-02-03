@@ -14,7 +14,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Alor;
 	using StockSharp.Tinkoff;
 #endif
-	using StockSharp.AlfaDirect;
 	using StockSharp.AlorHistory;
 	using StockSharp.AlphaVantage;
 	using StockSharp.BarChart;
@@ -30,7 +29,6 @@ namespace StockSharp.Configuration
 	using StockSharp.BitStamp;
 	using StockSharp.Bittrex;
 	using StockSharp.BitZ;
-	//using StockSharp.Blackwood;
 	using StockSharp.Btce;
 	using StockSharp.BW;
 	using StockSharp.Cex;
@@ -53,11 +51,9 @@ namespace StockSharp.Configuration
 	using StockSharp.Exmo;
 	using StockSharp.FatBTC;
 	using StockSharp.Finam;
-	using StockSharp.FinViz;
 	using StockSharp.Fix;
 	using StockSharp.Fxcm;
 	using StockSharp.Gdax;
-	using StockSharp.Google;
 	using StockSharp.Gopax;
 	using StockSharp.HitBtc;
 	using StockSharp.Hotbit;
@@ -79,27 +75,22 @@ namespace StockSharp.Configuration
 	using StockSharp.Micex;
 	using StockSharp.Oanda;
 	using StockSharp.Okcoin;
-	//using StockSharp.OpenECry;
 	using StockSharp.Plaza;
 	using StockSharp.Poloniex;
 	using StockSharp.PrizmBit;
 	using StockSharp.Quandl;
 	//using StockSharp.QuantHouse;
-	//using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Quoinex;
 	using StockSharp.Rithmic;
 	using StockSharp.Rss;
 	using StockSharp.SmartCom;
 	using StockSharp.SpbEx;
-	using StockSharp.Sterling;
 	using StockSharp.TradeOgre;
 	using StockSharp.Tradier;
 	using StockSharp.Transaq;
 	using StockSharp.Twime;
-	using StockSharp.UkrExh;
 	using StockSharp.Upbit;
-	using StockSharp.Xignite;
 	using StockSharp.Yahoo;
 	using StockSharp.Yobit;
 	using StockSharp.Zaif;
@@ -147,7 +138,6 @@ namespace StockSharp.Configuration
 
 		private static readonly Lazy<Func<Type>[]> _standardAdapters = new(() => new[]
 		{
-			(Func<Type>)(() => typeof(AlfaDirectMessageAdapter)),
 #if NET5_0_OR_GREATER
 			() => typeof(BvmtMarketDataAdapter),
 			() => typeof(BvmtTransactionAdapter),
@@ -160,7 +150,6 @@ namespace StockSharp.Configuration
 #endif
 			() => typeof(BarChartMessageAdapter),
 			() => typeof(BitStampMessageAdapter),
-			//() => typeof(BlackwoodMessageAdapter),
 			() => typeof(BtceMessageAdapter),
 			() => typeof(CqgComMessageAdapter),
 			() => typeof(CqgContinuumMessageAdapter),
@@ -172,21 +161,16 @@ namespace StockSharp.Configuration
 			() => typeof(LmaxMessageAdapter),
 			() => typeof(MicexMessageAdapter),
 			() => typeof(OandaMessageAdapter),
-			//() => typeof(OpenECryMessageAdapter),
 			() => typeof(PlazaMessageAdapter),
 			() => typeof(LuaFixTransactionMessageAdapter),
 			() => typeof(LuaFixMarketDataMessageAdapter),
-			//() => typeof(QuikTrans2QuikAdapter),
-			//() => typeof(QuikDdeAdapter),
 			() => typeof(RithmicMessageAdapter),
 			() => typeof(RssMessageAdapter),
 			() => typeof(SmartComMessageAdapter),
-			() => typeof(SterlingMessageAdapter),
 			() => typeof(TransaqMessageAdapter),
 			() => typeof(TwimeMessageAdapter),
 			() => typeof(SpbExMessageAdapter),
 			() => typeof(FxcmMessageAdapter),
-			//() => typeof(QuantFeedMessageAdapter),
 			() => typeof(BitfinexMessageAdapter),
 			() => typeof(BithumbMessageAdapter),
 			() => typeof(BittrexMessageAdapter),
@@ -233,11 +217,7 @@ namespace StockSharp.Configuration
 			() => typeof(AlorHistoryMessageAdapter),
 			() => typeof(MfdMessageAdapter),
 			() => typeof(QuandlMessageAdapter),
-			() => typeof(XigniteMessageAdapter),
 			() => typeof(YahooMessageAdapter),
-			() => typeof(GoogleMessageAdapter),
-			() => typeof(FinVizMessageAdapter),
-			() => typeof(UkrExhMessageAdapter),
 			() => typeof(CSVMessageAdapter),
 			() => typeof(UpbitMessageAdapter),
 			() => typeof(CoinExMessageAdapter),

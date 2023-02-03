@@ -22,7 +22,6 @@
     <ProjectReference Include="$(ConnectorsAppsPath)Quik\Quik.csproj" />
     <ProjectReference Include="$(ConnectorsDir)Huobi$(ConnectorPostfix)\Huobi$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Plaza$(ConnectorPostfix)\Plaza$(ConnectorPostfix).csproj" />
-    <ProjectReference Include="$(ConnectorsDir)AlfaDirect$(ConnectorPostfix)\AlfaDirect$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)AlorHistory\AlorHistory.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)AlphaVantage\AlphaVantage.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)BarChart\BarChart.csproj" />
@@ -59,11 +58,9 @@
     <ProjectReference Include="$(ConnectorsDir)Exmo$(ConnectorPostfix)\Exmo$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)FatBTC$(ConnectorPostfix)\FatBTC$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Finam\Finam.csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)FinViz\FinViz.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Fix\Fix.csproj" />
     <ProjectReference Include="$(ConnectorsDir)Fxcm$(ConnectorPostfix)\Fxcm$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Gdax$(ConnectorPostfix)\Gdax$(ConnectorPostfix).csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)Google\Google.csproj" />
     <ProjectReference Include="$(ConnectorsDir)Gopax$(ConnectorPostfix)\Gopax$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)HitBtc$(ConnectorPostfix)\HitBtc$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Hotbit$(ConnectorPostfix)\Hotbit$(ConnectorPostfix).csproj" />
@@ -89,14 +86,11 @@
     <ProjectReference Include="$(ConnectorsAppsPath)Rss\Rss.csproj" />
     <ProjectReference Include="$(ConnectorsDir)SmartCom$(ConnectorPostfix)\SmartCom$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)SpbEx$(ConnectorPostfix)\SpbEx$(ConnectorPostfix).csproj" />
-    <ProjectReference Include="$(ConnectorsDir)Sterling$(ConnectorPostfix)\Sterling$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)TradeOgre$(ConnectorPostfix)\TradeOgre$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Tradier$(ConnectorPostfix)\Tradier$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Transaq$(ConnectorPostfix)\Transaq$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Twime$(ConnectorPostfix)\Twime$(ConnectorPostfix).csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)UkrExh\UkrExh.csproj" />
     <ProjectReference Include="$(ConnectorsDir)Upbit$(ConnectorPostfix)\Upbit$(ConnectorPostfix).csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)Xignite\Xignite.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Yahoo\Yahoo.csproj" />
     <ProjectReference Include="$(ConnectorsDir)Yobit$(ConnectorPostfix)\Yobit$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Zaif$(ConnectorPostfix)\Zaif$(ConnectorPostfix).csproj" />
