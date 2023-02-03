@@ -395,9 +395,9 @@ namespace StockSharp.Messages
 			//// do not process empty change msgs
 			//if (!message.IsBack)
 			//{
-			//	if (message is Level1ChangeMessage l1Msg && l1Msg.Changes.Count == 0)
+			//	if (message is Level1ChangeMessage l1Msg && !l1Msg.HasChanges())
 			//		return;
-			//	else if (message is BasePositionChangeMessage posMsg && posMsg.Changes.Count == 0)
+			//	else if (message is BasePositionChangeMessage posMsg && !posMsg.HasChanges())
 			//		return;
 			//}
 

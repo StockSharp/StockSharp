@@ -8,6 +8,17 @@
 	static partial class Extensions
 	{
 		/// <summary>
+		/// Determines the message contains any changes.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <returns>Check result.</returns>
+		public static bool HasChanges<TMessage, TChange>(this BaseChangeMessage<TMessage, TChange> message)
+			where TMessage : BaseChangeMessage<TMessage, TChange>, new()
+			=> message.CheckOnNull(nameof(message)).Changes.Count > 0;
+
+		/// <summary>
 		/// Try get change from message.
 		/// </summary>
 		/// <typeparam name="TMessage">Change message type.</typeparam>

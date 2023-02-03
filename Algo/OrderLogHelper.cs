@@ -323,7 +323,7 @@ namespace StockSharp.Algo
 						.TryAdd(Level1Fields.LastTradeOrigin, tick.OriginSide)
 						;
 
-						if (l1Msg.Changes.Count == 0)
+						if (!l1Msg.HasChanges())
 							continue;
 
 						Current = l1Msg;

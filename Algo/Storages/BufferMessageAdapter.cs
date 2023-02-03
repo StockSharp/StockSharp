@@ -421,7 +421,7 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in Buffer.GetLevel1())
 					{
-						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
+						var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
 
 						if (incremental)
 							Settings.GetStorage<Level1ChangeMessage>(pair.Key, null).Save(messages);
@@ -442,7 +442,7 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in Buffer.GetPositionChanges())
 					{
-						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
+						var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
 
 						if (incremental)
 							Settings.GetStorage<PositionChangeMessage>(pair.Key, null).Save(messages);

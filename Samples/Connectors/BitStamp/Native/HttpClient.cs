@@ -307,11 +307,10 @@ namespace StockSharp.BitStamp.Native
 				var timeStamp = ((long)TimeHelper.UnixNowMls).To<string>();
 
 				var payload = request
-                  .Parameters
-                  .Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
-                  .OrderBy(p => p.Name)
-                  .Select(p => $"{p.Name}={p.Value}")
-                  .JoinAnd();
+		 			.Parameters
+					.Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
+					.OrderBy(p => p.Name)
+					.ToQueryString(false);
 
 				var str = apiKey +
 				          request.Method +

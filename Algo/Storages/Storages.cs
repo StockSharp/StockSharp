@@ -165,7 +165,7 @@ namespace StockSharp.Algo.Storages
 	class Level1Storage : MarketDataStorage<Level1ChangeMessage, DateTimeOffset>
 	{
 		public Level1Storage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)
-			: base(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.Changes.Count > 0)
+			: base(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.HasChanges())
 		{
 		}
 	}
@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Storages
 	class PositionChangeStorage : MarketDataStorage<PositionChangeMessage, DateTimeOffset>
 	{
 		public PositionChangeStorage(SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<PositionChangeMessage> serializer)
-			: base(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.Changes.Count > 0)
+			: base(securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive, m => m.HasChanges())
 		{
 		}
 	}
