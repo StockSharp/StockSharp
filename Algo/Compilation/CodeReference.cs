@@ -37,6 +37,9 @@ namespace StockSharp.Algo.Compilation
 			{
 				var location = Location;
 
+				if (location.IsEmpty())
+					return string.Empty;
+
 				if (File.Exists(location))
 					return location;
 
