@@ -380,9 +380,17 @@ namespace StockSharp.Messages
 			this == FilteredMarketDepth ||
 			this == Level1				||
 			this == Ticks				||
-			this == OrderLog			||
-			this == PositionChanges		||
-			this == Transactions;
+			this == OrderLog;
+
+		/// <summary>
+		/// Is the data type never associated with security.
+		/// </summary>
+		public bool IsNonSecurity =>
+			this == Securities	||
+			this == News		||
+			this == Board		||
+			this == BoardState	||
+			this == TimeFrames;
 
 		/// <summary>
 		/// Is the data type can be used as candles compression source.
