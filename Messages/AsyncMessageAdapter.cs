@@ -30,6 +30,9 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	public virtual TimeSpan DisconnectTimeout { get; } = TimeSpan.FromSeconds(5);
 
 	/// <inheritdoc />
+	public virtual int MaxParallelMessages => IAsyncMessageAdapter.DefaultMaxParallelMessages;
+
+	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 		=> _asyncMessageProcessor.EnqueueMessage(message);
 

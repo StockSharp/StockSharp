@@ -134,15 +134,17 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		{
 			var isControlProcessing = false;
 			var isTransactionProcessing = false;
+			var numProcessing = 0;
 
 			foreach (var msg in _messages.Where(m => m.IsProcessing))
 			{
 				isControlProcessing |= msg.IsControl;
 				isTransactionProcessing |= msg.IsTransaction;
+				++numProcessing;
 			}
 
 			// cant process anything in parallel while connect/disconnect/reset is processing
-			if(isControlProcessing)
+			if(isControlProcessing || numProcessing >= _adapter.MaxParallelMessages)
 				return null;
 
 			// if transaction is processing currently, we can process other non-exclusive messages in parallel (marketdata request for example)

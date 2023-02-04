@@ -15,6 +15,11 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	private static readonly TimeSpan _defaultTransactionTimeout = TimeSpan.FromSeconds(10);
 
 	/// <summary>
+	/// Default max number of parallel messages processing.
+	/// </summary>
+	protected const int DefaultMaxParallelMessages = int.MaxValue;
+
+	/// <summary>
 	/// Disconnect timeout.
 	/// </summary>
 	TimeSpan DisconnectTimeout => _defaultDisconnectTimeout;
@@ -23,6 +28,11 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// Transaction timeout.
 	/// </summary>
 	TimeSpan TransactionTimeout => _defaultTransactionTimeout;
+
+	/// <summary>
+	/// Max number of parallel messages processing.
+	/// </summary>
+	int MaxParallelMessages => DefaultMaxParallelMessages;
 
 	/// <summary>
 	/// Process <see cref="ConnectMessage"/>.
