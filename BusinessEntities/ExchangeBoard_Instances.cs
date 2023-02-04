@@ -2540,5 +2540,14 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.FTX.Name,
 			Exchange = Exchange.FTX,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="YHF"/>.
+		/// </summary>
+		public static ExchangeBoard YHF { get; } = new()
+		{
+			Code = Exchange.YHF.Name,
+			Exchange = Exchange.YHF,
+		};
 	}
 }

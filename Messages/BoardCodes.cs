@@ -1139,4 +1139,9 @@ public static class BoardCodes
 	/// <see cref="QTFD"/>.
 	/// </summary>
 	public const string QTFD = "QTFD";
+
+	/// <summary>
+	/// <see cref="YHF"/>.
+	/// </summary>
+	public const string YHF = "YHF";
 }

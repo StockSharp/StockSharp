@@ -1108,5 +1108,14 @@ namespace StockSharp.BusinessEntities
 			FullNameLoc = LocalizedStrings.FTX,
 			CountryCode = CountryCodes.BS,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="YHF"/>.
+		/// </summary>
+		public static Exchange YHF { get; } = new()
+		{
+			Name = "YHF",
+			FullNameLoc = LocalizedStrings.Yahoo,
+		};
 	}
 }
