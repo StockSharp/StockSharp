@@ -354,13 +354,18 @@ namespace StockSharp.Messages
 		/// Determines whether the specified message type is market-data.
 		/// </summary>
 		public bool IsMarketData =>
-			IsSecurityRequired		||
-			this == News			||
-			this == Board			||
-			this == BoardState		||
-			this == SecurityLegs	||
-			this == SecurityRoute	||
-			this == SecurityMapping	||
+			IsCandles					||
+			this == MarketDepth			||
+			this == FilteredMarketDepth	||
+			this == Level1				||
+			this == Ticks				||
+			this == OrderLog			||
+			this == News				||
+			this == Board				||
+			this == BoardState			||
+			this == SecurityLegs		||
+			this == SecurityRoute		||
+			this == SecurityMapping		||
 			this == TimeFrames;
 
 		private bool _isSecurityRequired;
