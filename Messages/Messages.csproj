@@ -14,6 +14,7 @@
     <Compile Remove="AsyncMessageProcessor.cs" />
     <Compile Remove="IAsyncMessageAdapter.cs" />
     <Compile Remove="AsyncMessageAdapter.cs" />
+    <Compile Remove="HistoricalAsyncMessageAdapter.cs" />
   </ItemGroup>
 
 </Project>
