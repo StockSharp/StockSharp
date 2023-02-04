@@ -76,7 +76,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Plaza;
 	using StockSharp.Poloniex;
 	using StockSharp.PrizmBit;
-	using StockSharp.Quandl;
 	using StockSharp.QuantHouse;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Quoinex;
@@ -209,7 +208,6 @@ namespace StockSharp.Configuration
 			() => typeof(FinamMessageAdapter),
 			() => typeof(AlorHistoryMessageAdapter),
 			() => typeof(MfdMessageAdapter),
-			() => typeof(QuandlMessageAdapter),
 			() => typeof(YahooMessageAdapter),
 			() => typeof(CSVMessageAdapter),
 			() => typeof(UpbitMessageAdapter),

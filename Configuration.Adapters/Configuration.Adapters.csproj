@@ -80,7 +80,6 @@
     <ProjectReference Include="$(ConnectorsDir)Okcoin$(ConnectorPostfix)\Okcoin$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Poloniex$(ConnectorPostfix)\Poloniex$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)PrizmBit$(ConnectorPostfix)\PrizmBit$(ConnectorPostfix).csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)Quandl\Quandl.csproj" />
     <ProjectReference Include="$(ConnectorsDir)Quoinex$(ConnectorPostfix)\Quoinex$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsDir)Rithmic$(ConnectorPostfix)\Rithmic$(ConnectorPostfix).csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Rss\Rss.csproj" />
