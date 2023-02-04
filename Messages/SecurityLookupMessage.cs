@@ -74,12 +74,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Electronic board code.
-		/// </summary>
-		[DataMember]
-		public string BoardCode { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		public SecurityLookupMessage()
@@ -101,7 +95,7 @@ namespace StockSharp.Messages
 			!UnderlyingSecurityCode.IsEmpty() || UnderlyingSecurityMinVolume != null ||
 			UnderlyingSecurityType != null || !Class.IsEmpty() || Currency != null ||
 			!BinaryOptionType.IsEmpty() || Shortable != null || FaceValue != null ||
-			SettlementType != null || OptionStyle != null || !BoardCode.IsEmpty();
+			SettlementType != null || OptionStyle != null;
 
 		/// <summary>
 		/// Create a copy of <see cref="SecurityLookupMessage"/>.
@@ -129,7 +123,6 @@ namespace StockSharp.Messages
 			destination.Skip = Skip;
 			destination.Count = Count;
 			destination.SecurityIds = SecurityIds.ToArray();
-			destination.BoardCode = BoardCode;
 
 			base.CopyTo(destination);
 		}
@@ -150,9 +143,6 @@ namespace StockSharp.Messages
 
 			if (SecurityIds.Length > 0)
 				str += $",Ids={SecurityIds.Select(id => id.ToString()).JoinComma()}";
-
-			if (!BoardCode.IsEmpty())
-				str += $",Board={BoardCode}";
 
 			return str;
 		}

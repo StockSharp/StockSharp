@@ -643,19 +643,13 @@ namespace StockSharp.Algo
 
 			if (criteria.Id.IsEmpty())
 			{
-				var secId = message.SecurityId;
-
-				// if set both sec + board codes it means exact sec id
-				if (criteria.Code.IsEmpty())
-					secId.BoardCode = criteria.Board?.Code;
-				else
-					secId.SecurityCode = criteria.Code;
-
-				message.SecurityId = criteria.ExternalId.ToSecurityId(secId);
+				message.SecurityId = criteria.ExternalId.ToSecurityId(new()
+				{
+					SecurityCode = criteria.Code,
+					BoardCode = criteria.Board?.Code,
+				});
 
 				criteria.FillMessage(message);
-
-				message.BoardCode = criteria.Board?.Code;
 			}
 			else
 			{
