@@ -4857,5 +4857,125 @@ namespace StockSharp.Messages
 
 			message.ObjectId = id.To<string>();
 		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
+		{
+			return board.IsTradeTime(time, out _, out _);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time, out bool? isWorkingDay, out WorkingTimePeriod period)
+		{
+			if (board is null)
+				throw new ArgumentNullException(nameof(board));
+
+			var exchangeTime = time.ToLocalTime(board.TimeZone);
+			var workingTime = board.WorkingTime;
+
+			return workingTime.IsTradeTime(exchangeTime, out isWorkingDay, out period);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="workingTime">Board working hours.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this WorkingTime workingTime, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
+		{
+			if (workingTime is null)
+				throw new ArgumentNullException(nameof(workingTime));
+
+			period = null;
+			isWorkingDay = null;
+
+			if (!workingTime.IsEnabled)
+				return true;
+
+			isWorkingDay = workingTime.IsTradeDate(time);
+
+			if (isWorkingDay == false)
+				return false;
+
+			period = workingTime.GetPeriod(time);
+
+			var tod = time.TimeOfDay;
+			return period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
+		}
+
+		/// <summary>
+		/// To check, whether date is traded.
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="date">The passed date to be checked.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
+		public static bool IsTradeDate(this BoardMessage board, DateTimeOffset date, bool checkHolidays = false)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			var exchangeTime = date.ToLocalTime(board.TimeZone);
+			var workingTime = board.WorkingTime;
+
+			return workingTime.IsTradeDate(exchangeTime, checkHolidays);
+		}
+
+		/// <summary>
+		/// To check, whether date is traded.
+		/// </summary>
+		/// <param name="workingTime">Board working hours.</param>
+		/// <param name="date">The passed date to be checked.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
+		public static bool IsTradeDate(this WorkingTime workingTime, DateTime date, bool checkHolidays = false)
+		{
+			var period = workingTime.GetPeriod(date);
+
+			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
+				return true;
+
+			bool isWorkingDay;
+
+			if (checkHolidays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday))
+				isWorkingDay = workingTime.SpecialWorkingDays.Contains(date.Date);
+			else
+				isWorkingDay = !workingTime.SpecialHolidays.Contains(date.Date);
+
+			return isWorkingDay;
+		}
+
+		/// <summary>
+		/// Get last trade date.
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="date">The date from which to start checking.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns>Last trade date.</returns>
+		public static DateTimeOffset LastTradeDay(this BoardMessage board, DateTimeOffset date, bool checkHolidays = true)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			while (!board.IsTradeDate(date, checkHolidays))
+				date = date.AddDays(-1);
+
+			return date;
+		}
 	}
 }

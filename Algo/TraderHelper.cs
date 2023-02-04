@@ -24,7 +24,6 @@ namespace StockSharp.Algo
 	using Ecng.Compilation.Expressions;
 
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -73,8 +72,6 @@ namespace StockSharp.Algo
 			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Active] = false;
 			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Done] = false;
 			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Failed] = true;
-
-			UsdRateMinAvailableTime = new DateTime(2009, 11, 2);
 		}
 
 		/// <summary>
@@ -121,21 +118,14 @@ namespace StockSharp.Algo
 
 			diffs = diffs.OrderBy(m =>
 			{
-				switch (m.OrderState)
+				return m.OrderState switch
 				{
-					case null:
-					case OrderStates.None:
-						return 0;
-					case OrderStates.Pending:
-						return 1;
-					case OrderStates.Active:
-						return 2;
-					case OrderStates.Done:
-					case OrderStates.Failed:
-						return 3;
-					default:
-						throw new ArgumentOutOfRangeException(m.OrderState.ToString());
-				}
+					null or OrderStates.None => 0,
+					OrderStates.Pending => 1,
+					OrderStates.Active => 2,
+					OrderStates.Done or OrderStates.Failed => 3,
+					_ => throw new ArgumentOutOfRangeException(m.OrderState.ToString()),
+				};
 			});
 
 			ExecutionMessage snapshot = null;
@@ -224,10 +214,8 @@ namespace StockSharp.Algo
 		/// <param name="security">The instrument used for the current price calculation.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="direction">Order side.</param>
-		/// <param name="priceType">The type of market price.</param>
-		/// <param name="orders">Orders to be ignored.</param>
 		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
-		public static Unit GetCurrentPrice(this Security security, IMarketDataProvider provider, Sides? direction = null, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
+		public static Unit GetCurrentPrice(this Security security, IMarketDataProvider provider, Sides? direction = null)
 		{
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
@@ -240,11 +228,8 @@ namespace StockSharp.Algo
 					direction == Sides.Buy ? Level1Fields.BestAskPrice : Level1Fields.BestBidPrice);
 			}
 
-			if (currentPrice == null)
-				currentPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.LastTradePrice);
-
-			if (currentPrice == null)
-				currentPrice = 0;
+			currentPrice ??= (decimal?)provider.GetSecurityValue(security, Level1Fields.LastTradePrice);
+			currentPrice ??= 0;
 
 			return new Unit((decimal)currentPrice).SetSecurity(security);
 		}
@@ -486,66 +471,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
-		/// </summary>
-		/// <param name="board">Board info.</param>
-		/// <param name="time">The passed time to be checked.</param>
-		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
-		{
-			return board.IsTradeTime(time, out _, out _);
-		}
-
-		/// <summary>
-		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
-		/// </summary>
-		/// <param name="board">Board info.</param>
-		/// <param name="time">The passed time to be checked.</param>
-		/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
-		/// <param name="period">Current working time period.</param>
-		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time, out bool? isWorkingDay, out WorkingTimePeriod period)
-		{
-			if (board is null)
-				throw new ArgumentNullException(nameof(board));
-
-			var exchangeTime = time.ToLocalTime(board.TimeZone);
-			var workingTime = board.WorkingTime;
-
-			return workingTime.IsTradeTime(exchangeTime, out isWorkingDay, out period);
-		}
-
-		/// <summary>
-		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
-		/// </summary>
-		/// <param name="workingTime">Board working hours.</param>
-		/// <param name="time">The passed time to be checked.</param>
-		/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
-		/// <param name="period">Current working time period.</param>
-		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-		public static bool IsTradeTime(this WorkingTime workingTime, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
-		{
-			if (workingTime is null)
-				throw new ArgumentNullException(nameof(workingTime));
-
-			period = null;
-			isWorkingDay = null;
-
-			if (!workingTime.IsEnabled)
-				return true;
-
-			isWorkingDay = workingTime.IsTradeDate(time);
-
-			if (isWorkingDay == false)
-				return false;
-
-			period = workingTime.GetPeriod(time);
-
-			var tod = time.TimeOfDay;
-			return period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
-		}
-
-		/// <summary>
 		/// To check, whether date is traded.
 		/// </summary>
 		/// <param name="board">Board info.</param>
@@ -555,66 +480,6 @@ namespace StockSharp.Algo
 		public static bool IsTradeDate(this ExchangeBoard board, DateTimeOffset date, bool checkHolidays = false)
 		{
 			return board.ToMessage().IsTradeDate(date, checkHolidays);
-		}
-
-		/// <summary>
-		/// To check, whether date is traded.
-		/// </summary>
-		/// <param name="board">Board info.</param>
-		/// <param name="date">The passed date to be checked.</param>
-		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
-		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
-		public static bool IsTradeDate(this BoardMessage board, DateTimeOffset date, bool checkHolidays = false)
-		{
-			if (board == null)
-				throw new ArgumentNullException(nameof(board));
-
-			var exchangeTime = date.ToLocalTime(board.TimeZone);
-			var workingTime = board.WorkingTime;
-
-			return workingTime.IsTradeDate(exchangeTime, checkHolidays);
-		}
-
-		/// <summary>
-		/// To check, whether date is traded.
-		/// </summary>
-		/// <param name="workingTime">Board working hours.</param>
-		/// <param name="date">The passed date to be checked.</param>
-		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
-		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
-		public static bool IsTradeDate(this WorkingTime workingTime, DateTime date, bool checkHolidays = false)
-		{
-			var period = workingTime.GetPeriod(date);
-
-			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
-				return true;
-
-			bool isWorkingDay;
-
-			if (checkHolidays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday))
-				isWorkingDay = workingTime.SpecialWorkingDays.Contains(date.Date);
-			else
-				isWorkingDay = !workingTime.SpecialHolidays.Contains(date.Date);
-
-			return isWorkingDay;
-		}
-
-		/// <summary>
-		/// Get last trade date.
-		/// </summary>
-		/// <param name="board">Board info.</param>
-		/// <param name="date">The date from which to start checking.</param>
-		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
-		/// <returns>Last trade date.</returns>
-		public static DateTimeOffset LastTradeDay(this BoardMessage board, DateTimeOffset date, bool checkHolidays = true)
-		{
-			if (board == null)
-				throw new ArgumentNullException(nameof(board));
-
-			while (!board.IsTradeDate(date, checkHolidays))
-				date = date.AddDays(-1);
-
-			return date;
 		}
 
 		/// <summary>
@@ -705,126 +570,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To delete in order book levels, which shall disappear in case of trades occurrence <paramref name="trades" />.
-		/// </summary>
-		/// <param name="depth">The order book to be cleared.</param>
-		/// <param name="trades">Trades.</param>
-		public static void EmulateTrades(this MarketDepth depth, IEnumerable<ExecutionMessage> trades)
-		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			if (trades == null)
-				throw new ArgumentNullException(nameof(trades));
-
-			var changedVolume = new Dictionary<decimal, decimal>();
-
-			var maxTradePrice = decimal.MinValue;
-			var minTradePrice = decimal.MaxValue;
-
-			foreach (var trade in trades)
-			{
-				var price = trade.GetTradePrice();
-
-				minTradePrice = minTradePrice.Min(price);
-				maxTradePrice = maxTradePrice.Max(price);
-
-				var q = depth.GetQuote(price);
-
-				if (q is null)
-					continue;
-
-				var quote = q.Value;
-
-				if (!changedVolume.TryGetValue(price, out var vol))
-					vol = quote.Volume;
-
-				vol -= trade.SafeGetVolume();
-				changedVolume[quote.Price] = vol;
-			}
-
-			var bids = new QuoteChange[depth.Bids2.Length];
-
-			void B1()
-			{
-				var i = 0;
-				var count = 0;
-
-				for (; i < depth.Bids2.Length; i++)
-				{
-					var quote = depth.Bids2[i];
-					var price = quote.Price;
-
-					if (price > minTradePrice)
-						continue;
-
-					if (price == minTradePrice)
-					{
-						if (changedVolume.TryGetValue(price, out var vol))
-						{
-							if (vol <= 0)
-								continue;
-
-							//quote = quote.Clone();
-							quote.Volume = vol;
-						}
-					}
-
-					bids[count++] = quote;
-					i++;
-
-					break;
-				}
-
-				Array.Copy(depth.Bids2, i, bids, count, depth.Bids2.Length - i);
-				Array.Resize(ref bids, count + (depth.Bids2.Length - i));
-			}
-
-			B1();
-
-			var asks = new QuoteChange[depth.Asks2.Length];
-
-			void A1()
-			{
-				var i = 0;
-				var count = 0;
-
-				for (; i < depth.Asks2.Length; i++)
-				{
-					var quote = depth.Asks2[i];
-					var price = quote.Price;
-
-					if (price < maxTradePrice)
-						continue;
-
-					if (price == maxTradePrice)
-					{
-						if (changedVolume.TryGetValue(price, out var vol))
-						{
-							if (vol <= 0)
-								continue;
-
-							//quote = quote.Clone();
-							quote.Volume = vol;
-						}
-					}
-
-					asks[count++] = quote;
-					i++;
-
-					break;
-				}
-
-				Array.Copy(depth.Asks2, i, asks, count, depth.Asks2.Length - i);
-				Array.Resize(ref asks, count + (depth.Asks2.Length - i));
-			}
-
-			A1();
-
-			depth.Update(bids, asks, depth.LastChangeTime);
-		}
-
-		/// <summary>
 		/// To check, whether the order was cancelled.
 		/// </summary>
 		/// <param name="order">The order to be checked.</param>
@@ -875,154 +620,6 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(order));
 
 			return order.Volume - order.Balance;
-		}
-
-		/// <summary>
-		/// To get the weighted mean price of matching by own trades.
-		/// </summary>
-		/// <param name="trades">Trades, for which the weighted mean price of matching shall be got.</param>
-		/// <returns>The weighted mean price. If no trades, 0 is returned.</returns>
-		public static decimal GetAveragePrice(this IEnumerable<MyTrade> trades)
-		{
-			if (trades == null)
-				throw new ArgumentNullException(nameof(trades));
-
-			var numerator = 0m;
-			var denominator = 0m;
-			var currentAvgPrice = 0m;
-
-			foreach (var myTrade in trades)
-			{
-				var order = myTrade.Order;
-				var trade = myTrade.Trade;
-
-				var direction = (order.Direction == Sides.Buy) ? 1m : -1m;
-
-				//Если открываемся или переворачиваемся
-				if (direction != denominator.Sign() && trade.Volume > denominator.Abs())
-				{
-					var newVolume = trade.Volume - denominator.Abs();
-					numerator = direction * trade.Price * newVolume;
-					denominator = direction * newVolume;
-				}
-				else
-				{
-					//Если добавляемся в сторону уже открытой позиции
-					if (direction == denominator.Sign())
-						numerator += direction * trade.Price * trade.Volume;
-					else
-						numerator += direction * currentAvgPrice * trade.Volume;
-
-					denominator += direction * trade.Volume;
-				}
-
-				currentAvgPrice = (denominator != 0) ? numerator / denominator : 0m;
-			}
-
-			return currentAvgPrice;
-		}
-
-		/// <summary>
-		/// To get probable trades for order book for the given order.
-		/// </summary>
-		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
-		/// <param name="order">The order, for which probable trades shall be calculated.</param>
-		/// <returns>Probable trades.</returns>
-		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Order order)
-		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			if (order == null)
-				throw new ArgumentNullException(nameof(order));
-
-			if (depth.Security != order.Security)
-				throw new ArgumentException(nameof(order));
-
-			order = order.ReRegisterClone();
-			depth = depth.Clone();
-
-			order.LastChangeTime = depth.LastChangeTime = DateTimeOffset.Now;
-			order.LocalTime = depth.LocalTime = DateTime.Now;
-
-			var testPf = Portfolio.CreateSimulator();
-			order.Portfolio = testPf;
-
-			var trades = new List<MyTrade>();
-
-			using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf }), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()))
-			{
-				var errors = new List<Exception>();
-
-				emulator.NewOutMessage += msg =>
-				{
-					if (msg is not ExecutionMessage execMsg)
-						return;
-
-					if (execMsg.Error != null)
-						errors.Add(execMsg.Error);
-
-					if (execMsg.HasTradeInfo())
-					{
-						trades.Add(new MyTrade
-						{
-							Order = order,
-							Trade = execMsg.ToTrade(new Trade { Security = order.Security })
-						});
-					}
-				};
-
-				var depthMsg = depth.ToMessage();
-				var regMsg = order.CreateRegisterMessage();
-				var pfMsg = testPf.ToChangeMessage();
-
-				pfMsg.ServerTime = depthMsg.ServerTime = order.LastChangeTime;
-				pfMsg.LocalTime = regMsg.LocalTime = depthMsg.LocalTime = order.LocalTime;
-
-				emulator.SendInMessage(pfMsg);
-				emulator.SendInMessage(depthMsg);
-				emulator.SendInMessage(regMsg);
-
-				if (errors.Count > 0)
-					throw new AggregateException(errors);
-			}
-
-			return trades;
-		}
-
-		/// <summary>
-		/// To get probable trades by the order book for the market price and given volume.
-		/// </summary>
-		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
-		/// <param name="orderDirection">Order side.</param>
-		/// <param name="volume">The volume, supposed to be implemented.</param>
-		/// <returns>Probable trades.</returns>
-		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume)
-		{
-			return depth.GetTheoreticalTrades(orderDirection, volume, 0);
-		}
-
-		/// <summary>
-		/// To get probable trades by order book for given price and volume.
-		/// </summary>
-		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
-		/// <param name="orderDirection">Order side.</param>
-		/// <param name="volume">The volume, supposed to be implemented.</param>
-		/// <param name="price">The price, based on which the order is supposed to be forwarded. If it equals 0, option of market order will be considered.</param>
-		/// <returns>Probable trades.</returns>
-		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume, decimal price)
-		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			return depth.GetTheoreticalTrades(new Order
-			{
-				Direction = orderDirection,
-				Type = price == 0 ? OrderTypes.Market : OrderTypes.Limit,
-				Security = depth.Security,
-				Price = price,
-				Volume = volume
-			});
 		}
 
 		/// <summary>
@@ -1334,8 +931,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			var stocksharpId = criteria.SecurityId.SecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
-				                   ? string.Empty
-				                   : connector.SecurityIdGenerator.GenerateId(criteria.SecurityId.SecurityCode, criteria.SecurityId.BoardCode);
+				? string.Empty
+				: connector.SecurityIdGenerator.GenerateId(criteria.SecurityId.SecurityCode, criteria.SecurityId.BoardCode);
 
 			var secCriteria = new Security { Id = stocksharpId };
 			secCriteria.ApplyChanges(criteria, exchangeInfoProvider);
@@ -3360,7 +2957,7 @@ namespace StockSharp.Algo
 			if (news == null)
 				throw new ArgumentNullException(nameof(news));
 
-			return news.Source.EqualsIgnoreCase(Messages.Extensions.NewsStockSharpSource);
+			return news.Source.EqualsIgnoreCase(Extensions.NewsStockSharpSource);
 		}
 
 		/// <summary>

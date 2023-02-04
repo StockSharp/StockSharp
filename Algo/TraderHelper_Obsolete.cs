@@ -3,6 +3,12 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Net;
+	using System.IO;
+	using System.Xml.Linq;
+
+	using Ecng.Common;
+	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Positions;
@@ -10,6 +16,8 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Testing;
 
 	partial class TraderHelper
 	{
@@ -1146,6 +1154,397 @@ namespace StockSharp.Algo
 			}
 
 			return subscription;
+		}
+
+		/// <summary>
+		/// It returns yesterday's data at the end of day (EOD, End-Of-Day) by the selected instrument.
+		/// </summary>
+		/// <param name="securityName">Security name.</param>
+		/// <returns>Yesterday's market-data.</returns>
+		/// <remarks>
+		/// Date is determined by the system time.
+		/// </remarks>
+		[Obsolete]
+		public static Level1ChangeMessage GetFortsYesterdayEndOfDay(this string securityName)
+		{
+			var time = TimeHelper.Now;
+			time -= TimeSpan.FromDays(1);
+			return GetFortsEndOfDay(securityName, time, time).FirstOrDefault();
+		}
+
+		/// <summary>
+		/// It returns a list of the data at the end of day (EOD, End-Of-Day) by the selected instrument for the specified period.
+		/// </summary>
+		/// <param name="securityName">Security name.</param>
+		/// <param name="fromDate">Begin period.</param>
+		/// <param name="toDate">End period.</param>
+		/// <returns>Historical market-data.</returns>
+		[Obsolete]
+		public static IEnumerable<Level1ChangeMessage> GetFortsEndOfDay(this string securityName, DateTime fromDate, DateTime toDate)
+		{
+			if (fromDate > toDate)
+				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
+
+			static decimal GetPart(string item)
+				=> !decimal.TryParse(item, out var pardesData) ? 0 : pardesData;
+
+			using var client = new WebClient();
+
+			var csvUrl = "https://moex.com/en/derivatives/contractresults-exp.aspx?day1={0:yyyyMMdd}&day2={1:yyyyMMdd}&code={2}"
+				.Put(fromDate.Date, toDate.Date, securityName);
+
+			var stream = client.OpenRead(csvUrl);
+
+			if (stream == null)
+				throw new InvalidOperationException(LocalizedStrings.Str2112);
+
+			return Do.Invariant(() =>
+			{
+				var message = new List<Level1ChangeMessage>();
+
+				using (var reader = new StreamReader(stream, StringHelper.WindowsCyrillic))
+				{
+					reader.ReadLine();
+
+					string newLine;
+					while ((newLine = reader.ReadLine()) != null)
+					{
+						var row = newLine.Split(',');
+
+						var time = row[0].ToDateTime("dd.MM.yyyy");
+
+						message.Add(new Level1ChangeMessage
+						{
+							ServerTime = time.EndOfDay().ApplyMoscow(),
+							SecurityId = new SecurityId
+							{
+								SecurityCode = securityName,
+								BoardCode = BoardCodes.Forts,
+							},
+						}
+						.TryAdd(Level1Fields.SettlementPrice, GetPart(row[1]))
+						.TryAdd(Level1Fields.AveragePrice, GetPart(row[2]))
+						.TryAdd(Level1Fields.OpenPrice, GetPart(row[3]))
+						.TryAdd(Level1Fields.HighPrice, GetPart(row[4]))
+						.TryAdd(Level1Fields.LowPrice, GetPart(row[5]))
+						.TryAdd(Level1Fields.ClosePrice, GetPart(row[6]))
+						.TryAdd(Level1Fields.Change, GetPart(row[7]))
+						.TryAdd(Level1Fields.LastTradeVolume, GetPart(row[8]))
+						.TryAdd(Level1Fields.Volume, GetPart(row[11]))
+						.TryAdd(Level1Fields.OpenInterest, GetPart(row[13])));
+					}
+				}
+
+				return message;
+			});
+		}
+
+		/// <summary>
+		/// The earliest date for which there is an indicative rate of US dollar to the Russian ruble. It is 2 November 2009.
+		/// </summary>
+		[Obsolete]
+		public static DateTime UsdRateMinAvailableTime { get; } = new(2009, 11, 2);
+
+		/// <summary>
+		/// To get an indicative exchange rate of a currency pair.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="fromDate">Begin period.</param>
+		/// <param name="toDate">End period.</param>
+		/// <returns>The indicative rate of US dollar to the Russian ruble.</returns>
+		[Obsolete]
+		public static IDictionary<DateTimeOffset, decimal> GetFortsRate(this SecurityId securityId, DateTime fromDate, DateTime toDate)
+		{
+			if (fromDate > toDate)
+				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
+
+			using var client = new WebClient();
+
+			var url = $"https://moex.com/export/derivatives/currency-rate.aspx?language=en&currency={securityId.SecurityCode.Replace("/", "__")}&moment_start={fromDate:yyyy-MM-dd}&moment_end={toDate:yyyy-MM-dd}";
+
+			var stream = client.OpenRead(url);
+
+			if (stream == null)
+				throw new InvalidOperationException(LocalizedStrings.Str2112);
+
+			return Do.Invariant(() =>
+				(from rate in XDocument.Load(stream).Descendants("rate")
+				 select new KeyValuePair<DateTimeOffset, decimal>(
+					 rate.GetAttributeValue<string>("moment").ToDateTime("yyyy-MM-dd HH:mm:ss").ApplyMoscow(),
+					 rate.GetAttributeValue<decimal>("value"))).OrderBy(p => p.Key).ToDictionary());
+		}
+
+		/// <summary>
+		/// To delete in order book levels, which shall disappear in case of trades occurrence <paramref name="trades" />.
+		/// </summary>
+		/// <param name="depth">The order book to be cleared.</param>
+		/// <param name="trades">Trades.</param>
+		[Obsolete]
+		public static void EmulateTrades(this MarketDepth depth, IEnumerable<ExecutionMessage> trades)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			if (trades == null)
+				throw new ArgumentNullException(nameof(trades));
+
+			var changedVolume = new Dictionary<decimal, decimal>();
+
+			var maxTradePrice = decimal.MinValue;
+			var minTradePrice = decimal.MaxValue;
+
+			foreach (var trade in trades)
+			{
+				var price = trade.GetTradePrice();
+
+				minTradePrice = minTradePrice.Min(price);
+				maxTradePrice = maxTradePrice.Max(price);
+
+				var q = depth.GetQuote(price);
+
+				if (q is null)
+					continue;
+
+				var quote = q.Value;
+
+				if (!changedVolume.TryGetValue(price, out var vol))
+					vol = quote.Volume;
+
+				vol -= trade.SafeGetVolume();
+				changedVolume[quote.Price] = vol;
+			}
+
+			var bids = new QuoteChange[depth.Bids2.Length];
+
+			void B1()
+			{
+				var i = 0;
+				var count = 0;
+
+				for (; i < depth.Bids2.Length; i++)
+				{
+					var quote = depth.Bids2[i];
+					var price = quote.Price;
+
+					if (price > minTradePrice)
+						continue;
+
+					if (price == minTradePrice)
+					{
+						if (changedVolume.TryGetValue(price, out var vol))
+						{
+							if (vol <= 0)
+								continue;
+
+							//quote = quote.Clone();
+							quote.Volume = vol;
+						}
+					}
+
+					bids[count++] = quote;
+					i++;
+
+					break;
+				}
+
+				Array.Copy(depth.Bids2, i, bids, count, depth.Bids2.Length - i);
+				Array.Resize(ref bids, count + (depth.Bids2.Length - i));
+			}
+
+			B1();
+
+			var asks = new QuoteChange[depth.Asks2.Length];
+
+			void A1()
+			{
+				var i = 0;
+				var count = 0;
+
+				for (; i < depth.Asks2.Length; i++)
+				{
+					var quote = depth.Asks2[i];
+					var price = quote.Price;
+
+					if (price < maxTradePrice)
+						continue;
+
+					if (price == maxTradePrice)
+					{
+						if (changedVolume.TryGetValue(price, out var vol))
+						{
+							if (vol <= 0)
+								continue;
+
+							//quote = quote.Clone();
+							quote.Volume = vol;
+						}
+					}
+
+					asks[count++] = quote;
+					i++;
+
+					break;
+				}
+
+				Array.Copy(depth.Asks2, i, asks, count, depth.Asks2.Length - i);
+				Array.Resize(ref asks, count + (depth.Asks2.Length - i));
+			}
+
+			A1();
+
+			depth.Update(bids, asks, depth.LastChangeTime);
+		}
+
+		/// <summary>
+		/// To get the weighted mean price of matching by own trades.
+		/// </summary>
+		/// <param name="trades">Trades, for which the weighted mean price of matching shall be got.</param>
+		/// <returns>The weighted mean price. If no trades, 0 is returned.</returns>
+		[Obsolete]
+		public static decimal GetAveragePrice(this IEnumerable<MyTrade> trades)
+		{
+			if (trades == null)
+				throw new ArgumentNullException(nameof(trades));
+
+			var numerator = 0m;
+			var denominator = 0m;
+			var currentAvgPrice = 0m;
+
+			foreach (var myTrade in trades)
+			{
+				var order = myTrade.Order;
+				var trade = myTrade.Trade;
+
+				var direction = (order.Direction == Sides.Buy) ? 1m : -1m;
+
+				//≈сли открываемс€ или переворачиваемс€
+				if (direction != denominator.Sign() && trade.Volume > denominator.Abs())
+				{
+					var newVolume = trade.Volume - denominator.Abs();
+					numerator = direction * trade.Price * newVolume;
+					denominator = direction * newVolume;
+				}
+				else
+				{
+					//≈сли добавл€емс€ в сторону уже открытой позиции
+					if (direction == denominator.Sign())
+						numerator += direction * trade.Price * trade.Volume;
+					else
+						numerator += direction * currentAvgPrice * trade.Volume;
+
+					denominator += direction * trade.Volume;
+				}
+
+				currentAvgPrice = (denominator != 0) ? numerator / denominator : 0m;
+			}
+
+			return currentAvgPrice;
+		}
+
+		/// <summary>
+		/// To get probable trades for order book for the given order.
+		/// </summary>
+		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
+		/// <param name="order">The order, for which probable trades shall be calculated.</param>
+		/// <returns>Probable trades.</returns>
+		[Obsolete]
+		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Order order)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			if (order == null)
+				throw new ArgumentNullException(nameof(order));
+
+			if (depth.Security != order.Security)
+				throw new ArgumentException(nameof(order));
+
+			order = order.ReRegisterClone();
+			depth = depth.Clone();
+
+			order.LastChangeTime = depth.LastChangeTime = DateTimeOffset.Now;
+			order.LocalTime = depth.LocalTime = DateTime.Now;
+
+			var testPf = Portfolio.CreateSimulator();
+			order.Portfolio = testPf;
+
+			var trades = new List<MyTrade>();
+
+			using (IMarketEmulator emulator = new MarketEmulator(new CollectionSecurityProvider(new[] { order.Security }), new CollectionPortfolioProvider(new[] { testPf }), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()))
+			{
+				var errors = new List<Exception>();
+
+				emulator.NewOutMessage += msg =>
+				{
+					if (msg is not ExecutionMessage execMsg)
+						return;
+
+					if (execMsg.Error != null)
+						errors.Add(execMsg.Error);
+
+					if (execMsg.HasTradeInfo())
+					{
+						trades.Add(new MyTrade
+						{
+							Order = order,
+							Trade = execMsg.ToTrade(new Trade { Security = order.Security })
+						});
+					}
+				};
+
+				var depthMsg = depth.ToMessage();
+				var regMsg = order.CreateRegisterMessage();
+				var pfMsg = testPf.ToChangeMessage();
+
+				pfMsg.ServerTime = depthMsg.ServerTime = order.LastChangeTime;
+				pfMsg.LocalTime = regMsg.LocalTime = depthMsg.LocalTime = order.LocalTime;
+
+				emulator.SendInMessage(pfMsg);
+				emulator.SendInMessage(depthMsg);
+				emulator.SendInMessage(regMsg);
+
+				if (errors.Count > 0)
+					throw new AggregateException(errors);
+			}
+
+			return trades;
+		}
+
+		/// <summary>
+		/// To get probable trades by the order book for the market price and given volume.
+		/// </summary>
+		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
+		/// <param name="orderDirection">Order side.</param>
+		/// <param name="volume">The volume, supposed to be implemented.</param>
+		/// <returns>Probable trades.</returns>
+		[Obsolete]
+		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume)
+		{
+			return depth.GetTheoreticalTrades(orderDirection, volume, 0);
+		}
+
+		/// <summary>
+		/// To get probable trades by order book for given price and volume.
+		/// </summary>
+		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
+		/// <param name="orderDirection">Order side.</param>
+		/// <param name="volume">The volume, supposed to be implemented.</param>
+		/// <param name="price">The price, based on which the order is supposed to be forwarded. If it equals 0, option of market order will be considered.</param>
+		/// <returns>Probable trades.</returns>
+		[Obsolete]
+		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume, decimal price)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			return depth.GetTheoreticalTrades(new Order
+			{
+				Direction = orderDirection,
+				Type = price == 0 ? OrderTypes.Market : OrderTypes.Limit,
+				Security = depth.Security,
+				Price = price,
+				Volume = volume
+			});
 		}
 	}
 }
