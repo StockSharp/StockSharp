@@ -3081,10 +3081,10 @@ namespace StockSharp.Messages
 			if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !security.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
 				return false;
 
-			if (criteria.ExpiryDate != null && security.ExpiryDate != criteria.ExpiryDate)
+			if (criteria.ExpiryDate != null && security.ExpiryDate?.Date != criteria.ExpiryDate?.Date)
 				return false;
 
-			if (criteria.SettlementDate != null && security.SettlementDate != criteria.SettlementDate)
+			if (criteria.SettlementDate != null && security.SettlementDate?.Date != criteria.SettlementDate?.Date)
 				return false;
 
 			if (!criteria.UnderlyingSecurityCode.IsEmpty() && !security.UnderlyingSecurityCode.ContainsIgnoreCase(criteria.UnderlyingSecurityCode))
@@ -3111,7 +3111,7 @@ namespace StockSharp.Messages
 			if (criteria.IssueSize != null && security.IssueSize != criteria.IssueSize)
 				return false;
 
-			if (criteria.IssueDate != null && security.IssueDate != criteria.IssueDate)
+			if (criteria.IssueDate != null && security.IssueDate?.Date != criteria.IssueDate?.Date)
 				return false;
 
 			if (criteria.UnderlyingSecurityType != null && security.UnderlyingSecurityType != criteria.UnderlyingSecurityType)
