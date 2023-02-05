@@ -2807,14 +2807,16 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <param name="beginDate">Start date.</param>
 		/// <param name="endDate">End date.</param>
 		/// <returns>Tick data.</returns>
-		public static IEnumerable<ExecutionMessage> GetTicks(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate)
+		public static IEnumerable<ExecutionMessage> GetTicks(this IMessageAdapter adapter, SecurityId securityId, SecurityTypes? secType, DateTime beginDate, DateTime endDate)
 		{
 			var mdMsg = new MarketDataMessage
 			{
 				SecurityId = securityId,
+				SecurityType = secType,
 				IsSubscribe = true,
 				DataType2 = DataType.Ticks,
 				From = beginDate,
