@@ -3153,7 +3153,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(securities));
 
 			if (criteria.IsLookupAll())
-				return securities.ToArray();
+				return securities.TryLimitByCount(criteria).ToArray();
 
 			var secTypes = criteria.GetSecurityTypes();
 
@@ -3223,7 +3223,8 @@ namespace StockSharp.Messages
 				criteria.OptionStyle == null &&
 				criteria.PrimaryId == default &&
 				(criteria.SecurityTypes == null || criteria.SecurityTypes.Length == 0) &&
-				criteria.Count == null &&
+				// count is NOT filter by fields
+				//criteria.Count == null &&
 				criteria.SecurityIds.Length == 0;
 		}
 
@@ -4976,6 +4977,27 @@ namespace StockSharp.Messages
 				date = date.AddDays(-1);
 
 			return date;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="set"></param>
+		/// <param name="msg"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> TryLimitByCount<T>(this IEnumerable<T> set, SecurityLookupMessage msg)
+		{
+			if (set is null)
+				throw new ArgumentNullException(nameof(set));
+
+			if (msg is null)
+				throw new ArgumentNullException(nameof(msg));
+
+			if (msg.Count is not null)
+				set = set.Take((int)msg.Count.Value);
+
+			return set;
 		}
 	}
 }

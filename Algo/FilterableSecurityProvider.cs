@@ -81,7 +81,7 @@ namespace StockSharp.Algo
 			if (!secId.IsEmpty())
 				securities = securities.Where(s => s.Id.EqualsIgnoreCase(secId));
 
-			return securities.Filter(criteria);
+			return securities.Filter(criteria).TryLimitByCount(criteria);
 		}
 
 		SecurityMessage ISecurityMessageProvider.LookupMessageById(SecurityId id)

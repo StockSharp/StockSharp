@@ -979,10 +979,10 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(securities));
 
 			if (criteria.IsLookupAll())
-				return securities.ToArray();
+				return securities.TryLimitByCount(criteria).ToArray();
 
 			var dict = securities.ToDictionary(s => s.ToMessage(), s => s);
-			return dict.Keys.Filter(criteria).Select(m => dict[m]).ToArray();
+			return dict.Keys.Filter(criteria).TryLimitByCount(criteria).Select(m => dict[m]).ToArray();
 		}
 
 		/// <summary>

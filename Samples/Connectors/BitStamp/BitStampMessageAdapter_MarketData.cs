@@ -138,6 +138,7 @@ namespace StockSharp.BitStamp
 		private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 		{
 			var secTypes = lookupMsg.GetSecurityTypes();
+			var left = lookupMsg.Count ?? long.MaxValue;
 
 			foreach (var info in _httpClient.GetPairsInfo())
 			{
@@ -156,6 +157,9 @@ namespace StockSharp.BitStamp
 					continue;
 
 				SendOutMessage(secMsg);
+
+				if (--left <= 0)
+					break;
 			}
 
 			SendSubscriptionResult(lookupMsg);
