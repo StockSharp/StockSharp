@@ -2862,17 +2862,19 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <param name="timeFrame">Time-frame.</param>
 		/// <param name="from">Begin period.</param>
 		/// <param name="to">End period.</param>
 		/// <param name="count">Candles count.</param>
 		/// <param name="buildField">Extra info for the <see cref="MarketDataMessage.BuildFrom"/>.</param>
 		/// <returns>Downloaded candles.</returns>
-		public static IEnumerable<TimeFrameCandleMessage> GetCandles(this IMessageAdapter adapter, SecurityId securityId, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null)
+		public static IEnumerable<TimeFrameCandleMessage> GetCandles(this IMessageAdapter adapter, SecurityId securityId, SecurityTypes? secType, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null)
 		{
 			var mdMsg = new MarketDataMessage
 			{
 				SecurityId = securityId,
+				SecurityType = secType,
 				IsSubscribe = true,
 				DataType2 = DataType.TimeFrame(timeFrame),
 				From = from,
