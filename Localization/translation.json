@@ -1,4 +1,8 @@
 {
+  "MaximumInstrumentsCount": {
+    "en": "Maximum instruments count to download.",
+    "ru": "Максимальное количество инструментов для скачивания."
+  },
   "BasicSettings": {
     "en": "Basic settings",
     "ru": "Базовые настройки"
