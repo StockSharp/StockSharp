@@ -538,11 +538,12 @@ namespace StockSharp.Algo.Testing
 				SendSubscriptionOnline(transId);
 		}
 
-		private ExchangeBoard[] GetBoard()
-			=>	SecurityProvider
+		private BoardMessage[] GetBoard()
+			=> SecurityProvider
 			.LookupAll()
 			.Select(s => s.Board)
 			.Distinct()
+			.Select(b => b.ToMessage())
 			.ToArray();
 
 		/// <summary>
@@ -564,7 +565,7 @@ namespace StockSharp.Algo.Testing
 						var messageTypes = new[] { MessageTypes.Time/*, ExtendedMessageTypes.Clearing*/ };
 						var token = _cancellationToken.Token;
 
-						ExchangeBoard[] boards = null;
+						BoardMessage[] boards = null;
 
 						while (!IsDisposed && !token.IsCancellationRequested)
 						{
@@ -679,7 +680,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private IEnumerable<(ExchangeBoard, Range<TimeSpan>)> GetOrderedRanges(ExchangeBoard[] boards, DateTimeOffset date)
+		private IEnumerable<(BoardMessage, Range<TimeSpan>)> GetOrderedRanges(BoardMessage[] boards, DateTimeOffset date)
 		{
 			if (boards is null)
 				throw new ArgumentNullException(nameof(boards));
@@ -697,7 +698,7 @@ namespace StockSharp.Algo.Testing
 				.OrderBy(i => i.Item2.Min)
 				.ToList();
 
-			for (var i = 0; i < orderedRanges.Count - 1;)
+			for (var i = 0; i < orderedRanges.Count - 1; )
 			{
 				if (orderedRanges[i].Item2.Contains(orderedRanges[i + 1].Item2))
 				{
@@ -719,7 +720,7 @@ namespace StockSharp.Algo.Testing
 			return orderedRanges;
 		}
 
-		private static Range<TimeSpan> ToUtc(ExchangeBoard board, Range<TimeSpan> range)
+		private static Range<TimeSpan> ToUtc(BoardMessage board, Range<TimeSpan> range)
 		{
 			var min = DateTime.MinValue + range.Min;
 			var max = DateTime.MinValue + range.Max;
@@ -730,7 +731,7 @@ namespace StockSharp.Algo.Testing
 			return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
 		}
 
-		private IEnumerable<TimeMessage> GetTimeLine(ExchangeBoard[] boards, DateTimeOffset date, TimeSpan interval)
+		private IEnumerable<TimeMessage> GetTimeLine(BoardMessage[] boards, DateTimeOffset date, TimeSpan interval)
 		{
 			var ranges = GetOrderedRanges(boards, date);
 			var lastTime = TimeSpan.Zero;
@@ -755,7 +756,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private IEnumerable<TimeMessage> GetSimpleTimeLine(ExchangeBoard[] boards, DateTimeOffset date, TimeSpan interval)
+		private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTimeOffset date, TimeSpan interval)
 		{
 			var ranges = GetOrderedRanges(boards, date);
 			var lastTime = TimeSpan.Zero;

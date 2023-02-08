@@ -1025,28 +1025,7 @@ namespace StockSharp.Algo
 		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
 		/// <returns>The end T +/- N date.</returns>
 		public static DateTimeOffset AddOrSubtractTradingDays(this ExchangeBoard board, DateTimeOffset date, int n, bool checkHolidays = true)
-		{
-			if (board == null)
-				throw new ArgumentNullException(nameof(board));
-
-			while (n != 0)
-			{
-				//if need to Add
-				if (n > 0)
-				{
-					date = date.AddDays(1);
-					if (board.IsTradeDate(date, checkHolidays)) n--;
-				}
-				//if need to Subtract
-				if (n < 0)
-				{
-					date = date.AddDays(-1);
-					if (board.IsTradeDate(date, checkHolidays)) n++;
-				}
-			}
-
-			return date;
-		}
+			=> board.ToMessage().AddOrSubtractTradingDays(date, n, checkHolidays);
 
 		/// <summary>
 		/// To get the expiration date for <see cref="ExchangeBoard.Forts"/>.
@@ -1058,6 +1037,8 @@ namespace StockSharp.Algo
 		{
 			if (from > to)
 				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
+
+			var board = ExchangeBoard.Forts.ToMessage();
 
 			for (var year = from.Year; year <= to.Year; year++)
 			{
@@ -1073,9 +1054,9 @@ namespace StockSharp.Algo
 						case 9:
 						case 12:
 						{
-							var dt = new DateTime(year, month, 15).ApplyTimeZone(ExchangeBoard.Forts.TimeZone);
+							var dt = new DateTime(year, month, 15).ApplyTimeZone(board.TimeZone);
 
-							while (!ExchangeBoard.Forts.IsTradeDate(dt))
+							while (!board.IsTradeDate(dt))
 							{
 								dt = dt.AddDays(1);
 							}
