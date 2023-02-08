@@ -1755,6 +1755,40 @@ namespace StockSharp.Messages
 			=> mdMsg.GetArg<TimeSpan>();
 
 		/// <summary>
+		/// Determines the specified time-frame is intraday.
+		/// </summary>
+		/// <param name="tf">Time-frame.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsIntraday(this TimeSpan tf)
+		{
+			if (tf <= TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(tf));
+
+			return tf < TimeSpan.FromDays(1);
+		}
+
+		/// <summary>
+		/// Split to pair.
+		/// </summary>
+		/// <param name="symbol">Symbol.</param>
+		/// <returns>Pair.</returns>
+		public static (string pairFrom, string pairTo) SplitToPair(this string symbol)
+		{
+			if (symbol.IsEmpty())
+				throw new ArgumentNullException(nameof(symbol));
+
+			var parts = symbol.Split('/');
+
+			if (parts.Length != 2)
+				parts = symbol.Split('-');
+
+			if (parts.Length != 2)
+				throw new ArgumentException($"Symbol {symbol} cannot split.", nameof(symbol));
+
+			return (parts[0], parts[1]);
+		}
+
+		/// <summary>
 		///
 		/// </summary>
 		/// <param name="message"></param>
