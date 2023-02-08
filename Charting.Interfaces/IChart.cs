@@ -50,11 +50,6 @@ namespace StockSharp.Charting
 		bool ShowPerfStats { get; set; }
 
 		/// <summary>
-		/// <see cref="IDispatcher"/>.
-		/// </summary>
-		IDispatcher ThreadDispatcher { get; }
-
-		/// <summary>
 		/// Create <see cref="IChartArea"/> instance.
 		/// </summary>
 		/// <returns><see cref="IChartArea"/> instance.</returns>

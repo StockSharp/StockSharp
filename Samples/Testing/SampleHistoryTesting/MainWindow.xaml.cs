@@ -416,8 +416,10 @@ namespace SampleHistoryTesting
 				};
 
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(series)
+				var strategy = new SmaStrategy
 				{
+					Subscription = new(series),
+					
 					LongSma = { Length = 80 },
 					ShortSma = { Length = 10 },
 					Volume = 1,
@@ -428,10 +430,33 @@ namespace SampleHistoryTesting
 
 					// by default interval is 1 min,
 					// it is excessively for time range with several months
-					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
+					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
 				};
 
 				var chart = set.Item5;
+
+				var area = chart.CreateArea();
+				chart.AddArea(area);
+
+				var candlesElem = strategy.ChartCandlesElem = chart.CreateCandleElement();
+				candlesElem.ShowAxisMarker = false;
+				chart.AddElement(area, candlesElem);
+
+				var tradesElem = strategy.ChartTradesElem = chart.CreateTradeElement();
+				tradesElem.FullTitle = LocalizedStrings.Str985;
+				chart.AddElement(area, tradesElem);
+
+				var shortElem = strategy.ChartShortElem = chart.CreateIndicatorElement();
+				shortElem.Color = System.Drawing.Color.Coral;
+				shortElem.ShowAxisMarker = false;
+				shortElem.FullTitle = strategy.ShortSma.ToString();
+
+				chart.AddElement(area, shortElem);
+
+				var longElem = strategy.ChartLongElem = chart.CreateIndicatorElement();
+				longElem.ShowAxisMarker = false;
+				longElem.FullTitle = strategy.LongSma.ToString();
+				chart.AddElement(area, longElem);
 
 				chart.IsInteracted = false;
 				strategy.SetChart(chart);

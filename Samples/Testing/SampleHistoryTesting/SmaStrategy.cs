@@ -17,7 +17,6 @@ namespace SampleHistoryTesting
 {
 	using System.Linq;
 	using System.Collections.Generic;
-	using System.Drawing;
 
 	using Ecng.Common;
 
@@ -34,19 +33,16 @@ namespace SampleHistoryTesting
 	class SmaStrategy : Strategy
 	{
 		private IChart _chart;
-		private IChartCandleElement _candlesElem;
-		private IChartTradeElement _tradesElem;
-		private IChartIndicatorElement _shortElem;
-		private IChartIndicatorElement _longElem;
 
 		private readonly List<MyTrade> _myTrades = new();
-		private readonly Subscription _series;
 		private bool? _isShortLessThenLong;
 
-		public SmaStrategy(CandleSeries series)
-		{
-			_series = new Subscription(series);
-		}
+		public Subscription Subscription { get; set; }
+
+		public IChartCandleElement ChartCandlesElem { get; set; }
+		public IChartTradeElement ChartTradesElem { get; set; }
+		public IChartIndicatorElement ChartLongElem { get; set; }
+		public IChartIndicatorElement ChartShortElem { get; set; }
 
 		public SimpleMovingAverage LongSma { get; } = new();
 		public SimpleMovingAverage ShortSma { get; } = new();
@@ -59,38 +55,8 @@ namespace SampleHistoryTesting
 
 			_chart = this.GetChart();
 
-			if (_chart is not null)
-			{
-				// creates chart's components in his own thread
-				_chart.ThreadDispatcher.Invoke(() =>
-				{
-					var area = _chart.CreateArea();
-					_chart.AddArea(area);
-
-					_candlesElem = _chart.CreateCandleElement();
-					_candlesElem.ShowAxisMarker = false;
-					_chart.AddElement(area, _candlesElem);
-
-					_tradesElem = _chart.CreateTradeElement();
-					_tradesElem.FullTitle = LocalizedStrings.Str985;
-					_chart.AddElement(area, _tradesElem);
-
-					_shortElem = _chart.CreateIndicatorElement();
-					_shortElem.Color = Color.Coral;
-					_shortElem.ShowAxisMarker = false;
-					_shortElem.FullTitle = ShortSma.ToString();
-
-					_chart.AddElement(area, _shortElem);
-
-					_longElem = _chart.CreateIndicatorElement();
-					_longElem.ShowAxisMarker = false;
-					_longElem.FullTitle = LongSma.ToString();
-					_chart.AddElement(area, _longElem);
-				});
-			}
-
 			this
-				.WhenCandlesFinished(_series.CandleSeries)
+				.WhenCandlesFinished(Subscription.CandleSeries)
 				.Do(ProcessCandle)
 				.Apply(this);
 
@@ -101,7 +67,7 @@ namespace SampleHistoryTesting
 
 			_isShortLessThenLong = null;
 
-			Subscribe(_series);
+			Subscribe(Subscription);
 
 			base.OnStarted();
 		}
@@ -163,10 +129,10 @@ namespace SampleHistoryTesting
 
 			data
 				.Group(candle.OpenTime)
-					.Add(_candlesElem, candle)
-					.Add(_shortElem, shortValue)
-					.Add(_longElem, longValue)
-					.Add(_tradesElem, trade);
+					.Add(ChartCandlesElem, candle)
+					.Add(ChartShortElem, shortValue)
+					.Add(ChartLongElem, longValue)
+					.Add(ChartTradesElem, trade);
 
 			_chart.Draw(data);
 		}

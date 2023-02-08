@@ -182,11 +182,11 @@ namespace SampleHistoryTestingParallel
 			var strategies = periods
 				.Select(period =>
 				{
-					var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-
 					// create strategy based SMA
-					var strategy = new SampleHistoryTesting.SmaStrategy(series)
+					var strategy = new SampleHistoryTesting.SmaStrategy
 					{
+						Subscription = new(new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)),
+
 						ShortSma = { Length = period.shortMa },
 						LongSma = { Length = period.longMa },
 
