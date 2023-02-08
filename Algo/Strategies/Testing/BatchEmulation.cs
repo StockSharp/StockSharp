@@ -275,21 +275,24 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Suspend()
 		{
-			lock (_sync)
+			ThreadingHelper.Thread(() =>
 			{
-				if (State != ChannelStates.Started)
-					return;
-
-				State = ChannelStates.Suspending;
-
-				foreach (var connector in _currentConnectors)
+				lock (_sync)
 				{
-					if (connector.State == ChannelStates.Started)
-						connector.Suspend();
-				}
+					if (State != ChannelStates.Started)
+						return;
 
-				State = ChannelStates.Suspended;
-			}
+					State = ChannelStates.Suspending;
+
+					foreach (var connector in _currentConnectors)
+					{
+						if (connector.State == ChannelStates.Started)
+							connector.Suspend();
+					}
+
+					State = ChannelStates.Suspended;
+				}
+			}).Launch();
 		}
 
 		/// <summary>
@@ -297,21 +300,24 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Resume()
 		{
-			lock (_sync)
+			ThreadingHelper.Thread(() =>
 			{
-				if (State != ChannelStates.Suspended)
-					return;
-
-				State = ChannelStates.Starting;
-
-				foreach (var connector in _currentConnectors)
+				lock (_sync)
 				{
-					if (connector.State == ChannelStates.Suspended)
-						connector.Start();
-				}
+					if (State != ChannelStates.Suspended)
+						return;
 
-				State = ChannelStates.Started;
-			}
+					State = ChannelStates.Starting;
+
+					foreach (var connector in _currentConnectors)
+					{
+						if (connector.State == ChannelStates.Suspended)
+							connector.Start();
+					}
+
+					State = ChannelStates.Started;
+				}
+			}).Launch();
 		}
 
 		/// <summary>
@@ -319,28 +325,31 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Stop()
 		{
-			lock (_sync)
+			ThreadingHelper.Thread(() =>
 			{
-				if (!(State is ChannelStates.Started or ChannelStates.Suspended))
-					return;
-
-				State = ChannelStates.Stopping;
-
-				_cancelEmulation = true;
-
-				foreach (var connector in _currentConnectors)
+				lock (_sync)
 				{
-					if (connector.State is
-						ChannelStates.Started or
-						ChannelStates.Starting or
-						ChannelStates.Suspended or
-						ChannelStates.Suspending)
-						connector.Disconnect();
-				}
+					if (!(State is ChannelStates.Started or ChannelStates.Suspended))
+						return;
+
+					State = ChannelStates.Stopping;
+
+					_cancelEmulation = true;
+
+					foreach (var connector in _currentConnectors)
+					{
+						if (connector.State is
+							ChannelStates.Started or
+							ChannelStates.Starting or
+							ChannelStates.Suspended or
+							ChannelStates.Suspending)
+							connector.Disconnect();
+					}
 			
-				_histAdapter.SendInMessage(new EmulationStateMessage { State = ChannelStates.Stopping });
-				_histAdapter.SendInMessage(new DisconnectMessage());
-			}
+					_histAdapter.SendInMessage(new EmulationStateMessage { State = ChannelStates.Stopping });
+					_histAdapter.SendInMessage(new DisconnectMessage());
+				}
+			}).Launch();
 		}
 	}
 }
