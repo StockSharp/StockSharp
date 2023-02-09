@@ -1754,7 +1754,8 @@ namespace StockSharp.Algo.Strategies
 
 		private void ProcessRisk(Order order)
 		{
-			ProcessRisk(order.CreateRegisterMessage());
+			if (RiskManager.Rules.Count > 0)
+				ProcessRisk(order.CreateRegisterMessage());
 		}
 
 		private void ProcessChildOrderRegistering(Order order)
