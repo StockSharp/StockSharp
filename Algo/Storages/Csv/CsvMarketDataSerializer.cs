@@ -136,6 +136,9 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="encoding">Encoding.</param>
 		protected CsvMarketDataSerializer(SecurityId securityId, Encoding encoding = null)
 		{
+			// force hash code caching
+			securityId.GetHashCode();
+
 			SecurityId = securityId;
 			Encoding = encoding ?? _utf;
 		}

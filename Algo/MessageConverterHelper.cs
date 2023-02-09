@@ -1542,14 +1542,23 @@ namespace StockSharp.Algo
 				boardCode = security.Board?.Code;
 			}
 
-			if (copyExtended)
-				return security.ExternalId.ToSecurityId(secCode, boardCode);
+			SecurityId secId;
 
-			return new SecurityId
+			if (copyExtended)
+				secId = security.ExternalId.ToSecurityId(secCode, boardCode);
+			else
 			{
-				SecurityCode = secCode,
-				BoardCode = boardCode,
-			};
+				secId = new()
+				{
+					SecurityCode = secCode,
+					BoardCode = boardCode,
+				};
+			}
+
+			// force hash code caching
+			secId.GetHashCode();
+
+			return secId;
 		}
 
 		/// <summary>

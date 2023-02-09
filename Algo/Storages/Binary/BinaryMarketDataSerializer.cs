@@ -431,6 +431,9 @@ namespace StockSharp.Algo.Storages.Binary
 			if (securityId == null)
 				throw new ArgumentNullException(nameof(securityId));
 
+			// force hash code caching
+			securityId.GetHashCode();
+
 			Arg = arg;
 			SecurityId = securityId;
 			DataSize = dataSize;

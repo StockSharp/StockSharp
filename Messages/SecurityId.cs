@@ -33,6 +33,12 @@ namespace StockSharp.Messages
 	[Serializable]
 	public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	{
+		static SecurityId()
+		{
+			Money.EnsureGetHashCode();
+			News.EnsureGetHashCode();
+		}
+
 		private string _securityCode;
 
 		/// <summary>
@@ -185,6 +191,9 @@ namespace StockSharp.Messages
 		{
 			if (_hashCode == 0)
 			{
+				if (_nativeAsInt == default && _native == default && _securityCode == default && _boardCode == default)
+					return 0;
+
 				_hashCode = (_nativeAsInt != 0 ? _nativeAsInt.GetHashCode() : _native?.GetHashCode())
 				            ?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
 			}
