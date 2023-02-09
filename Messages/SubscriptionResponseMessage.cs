@@ -12,7 +12,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Not supported error.
 		/// </summary>
-		public static NotSupportedException NotSupported = new();
+		public static readonly NotSupportedException NotSupported = new();
 		
 		/// <inheritdoc />
 		[DataMember]

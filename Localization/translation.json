@@ -1,4 +1,8 @@
 {
+  "WrongSecurityBoard": {
+    "en": "Subscription cannot be processes for the {0} security cause it is not contain board code {1}. Security must be like {2}.",
+    "ru": "Подписка не может быть выполнена для {0} так как поддерживается код площадки должен быть {1}. Инструмент должен быть вида {2}."
+  },
   "MaximumInstrumentsCount": {
     "en": "Maximum instruments count to download.",
     "ru": "Максимальное количество инструментов для скачивания."

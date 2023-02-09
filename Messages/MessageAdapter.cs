@@ -494,6 +494,21 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Check the <paramref name="expectedBoard"/> can supported. If not supported the method <see cref="SendSubscriptionNotSupported"/> will be called.
+		/// </summary>
+		/// <param name="mdMsg"><see cref="MarketDataMessage"/>.</param>
+		/// <param name="expectedBoard">Supported board code.</param>
+		/// <returns>Check result.</returns>
+		protected bool CheckBoardNotSupported(MarketDataMessage mdMsg, string expectedBoard)
+		{
+			if (mdMsg.SecurityId.IsAssociated(expectedBoard))
+				return true;
+
+			SendOutMessage(mdMsg.TransactionId.CreateSubscriptionResponse(new NotSupportedException(LocalizedStrings.WrongSecurityBoard.Put(mdMsg.SecurityId, expectedBoard, $"{mdMsg.SecurityId.SecurityCode}@{expectedBoard}"))));
+			return false;
+		}
+
+		/// <summary>
 		/// Initialize a new message <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
 		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
