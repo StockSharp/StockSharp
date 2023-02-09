@@ -51,7 +51,13 @@ namespace StockSharp.Messages
 		public string SecurityCode
 		{
 			get => _securityCode;
-			set => _securityCode = value;
+			set
+			{
+				if (_hashCode != 0)
+					throw new InvalidOperationException("Cannot be modified.");
+
+				_securityCode = value;
+			}
 		}
 
 		private string _boardCode;
@@ -66,7 +72,13 @@ namespace StockSharp.Messages
 		public string BoardCode
 		{
 			get => _boardCode;
-			set => _boardCode = value;
+			set
+			{
+				if (_hashCode != 0)
+					throw new InvalidOperationException("Cannot be modified.");
+
+				_boardCode = value;
+			}
 		}
 
 		private object _native;
@@ -79,6 +91,9 @@ namespace StockSharp.Messages
 			get => _nativeAsInt != 0 ? _nativeAsInt : _native;
 			set
 			{
+				if (_hashCode != 0)
+					throw new InvalidOperationException("Cannot be modified.");
+
 				_native = value;
 
 				_nativeAsInt = 0;
@@ -96,7 +111,13 @@ namespace StockSharp.Messages
 		public long NativeAsInt
 		{
 			get => _nativeAsInt;
-			set => _nativeAsInt = value;
+			set
+			{
+				if (_hashCode != 0)
+					throw new InvalidOperationException("Cannot be modified.");
+
+				_nativeAsInt = value;
+			}
 		}
 
 		private SecurityTypes? _securityType;
