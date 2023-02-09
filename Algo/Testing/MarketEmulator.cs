@@ -76,6 +76,8 @@ namespace StockSharp.Algo.Testing
 			private decimal _totalBidVolume;
 			private decimal _totalAskVolume;
 
+			private long? _depthSubscription;
+
 			private readonly MessagePool<ExecutionMessage> _messagePool = new();
 
 			public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
@@ -129,10 +131,13 @@ namespace StockSharp.Algo.Testing
 
 							result.Add(execMsg);
 
-							result.Add(CreateQuoteMessage(
-								execMsg.SecurityId,
-								execMsg.LocalTime,
-								execMsg.ServerTime));
+							if (_depthSubscription is not null)
+							{
+								result.Add(CreateQuoteMessage(
+									execMsg.SecurityId,
+									execMsg.LocalTime,
+									execMsg.ServerTime));
+							}
 						}
 						else if (execMsg.DataType == DataType.Transactions)
 						{
@@ -290,14 +295,17 @@ namespace StockSharp.Algo.Testing
 								Process(m, result);
 						}
 
-						// возращаем не входящий стакан, а тот, что сейчас хранится внутри эмулятора.
-						// таким образом мы можем видеть в стакане свои цены и объемы
+						if (_depthSubscription is not null)
+						{
+							// возращаем не входящий стакан, а тот, что сейчас хранится внутри эмулятора.
+							// таким образом мы можем видеть в стакане свои цены и объемы
 
-						result.Add(CreateQuoteMessage(
-							quoteMsg.SecurityId,
-							quoteMsg.LocalTime,
-							quoteMsg.ServerTime));
-
+							result.Add(CreateQuoteMessage(
+								quoteMsg.SecurityId,
+								quoteMsg.LocalTime,
+								quoteMsg.ServerTime));
+						}
+							
 						break;
 					}
 
@@ -324,6 +332,24 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Board:
 					{
 						//_execLogConverter.UpdateBoardDefinition((BoardMessage)message);
+						break;
+					}
+
+					case MessageTypes.MarketData:
+					{
+						var mdMsg = (MarketDataMessage)message;
+
+						if (mdMsg.IsSubscribe)
+						{
+							if (mdMsg.DataType2 == DataType.MarketDepth)
+								_depthSubscription = mdMsg.TransactionId;
+						}
+						else
+						{
+							if (_depthSubscription == mdMsg.OriginalTransactionId)
+								_depthSubscription = null;
+						}
+
 						break;
 					}
 
@@ -489,11 +515,14 @@ namespace StockSharp.Algo.Testing
 						// изменяем текущие котировки, добавляя туда наши цену и объем
 						UpdateQuote(order, false);
 
-						// отправляем измененный стакан
-						result.Add(CreateQuoteMessage(
-							order.SecurityId,
-							time,
-							GetServerTime(time)));
+						if (_depthSubscription is not null)
+						{
+							// отправляем измененный стакан
+							result.Add(CreateQuoteMessage(
+								order.SecurityId,
+								time,
+								GetServerTime(time)));
+						}
 
 						var replyMsg = CreateReply(order, time, null);
 
@@ -559,11 +588,14 @@ namespace StockSharp.Algo.Testing
 								.ProcessOrder(execution, execution.Balance.Value, result);
 						}
 
-						// отправляем измененный стакан
-						result.Add(CreateQuoteMessage(
-							execution.SecurityId,
-							time,
-							GetServerTime(time)));
+						if (_depthSubscription is not null)
+						{
+							// отправляем измененный стакан
+							result.Add(CreateQuoteMessage(
+								execution.SecurityId,
+								time,
+								GetServerTime(time)));
+						}
 					}
 					else
 					{
@@ -981,11 +1013,14 @@ namespace StockSharp.Algo.Testing
 						// изменяем текущие котировки, удаляя оттуда наши цену и объем
 						UpdateQuote(orderMsg, false);
 
-						// отправляем измененный стакан
-						result.Add(CreateQuoteMessage(
-							orderMsg.SecurityId,
-							message.LocalTime,
-							GetServerTime(message.LocalTime)));
+						if (_depthSubscription is not null)
+						{
+							// отправляем измененный стакан
+							result.Add(CreateQuoteMessage(
+								orderMsg.SecurityId,
+								message.LocalTime,
+								GetServerTime(message.LocalTime)));
+						}
 					}
 					else
 						_expirableOrders[orderMsg] = left;
@@ -1963,6 +1998,9 @@ namespace StockSharp.Algo.Testing
 
 		private SecurityMarketEmulator GetEmulator(SecurityId securityId)
 		{
+			// force hash code caching
+			securityId.GetHashCode();
+
 			return _securityEmulators.SafeAdd(securityId, key =>
 			{
 				var emulator = new SecurityMarketEmulator(this, securityId) { Parent = this };

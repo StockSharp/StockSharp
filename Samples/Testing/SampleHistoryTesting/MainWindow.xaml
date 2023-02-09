@@ -14,11 +14,11 @@
 	</Window.Resources>
 
 	<Grid>
-		<Grid.ColumnDefinitions>
+		<!--<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="5"/>
 			<ColumnDefinition Width="250"/>
-		</Grid.ColumnDefinitions>
+		</Grid.ColumnDefinitions>-->
 
 		<Grid>
 			<Grid.ColumnDefinitions>
@@ -108,7 +108,7 @@
                     </StackPanel>
 					
 					<CheckBox x:Name="GenDepthsCheckBox" Content="{x:Static loc:LocalizedStrings.XamlStr97}" Grid.Row="13" Grid.Column="0" Click="CheckBoxClick" />
-					<CheckBox x:Name="ShowDepth" Content="{x:Static loc:LocalizedStrings.XamlStr85}" Grid.Row="14" Grid.Column="0" IsChecked="True" />
+					<!--<CheckBox x:Name="ShowDepth" Content="{x:Static loc:LocalizedStrings.XamlStr85}" Grid.Row="14" Grid.Column="0" IsChecked="True" />-->
 					
 					<TextBox x:Name="MaxDepth" Grid.Row="15" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr291}">1</TextBox>
 					<TextBox x:Name="MaxVolume" Grid.Row="16" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr293}">1</TextBox>
@@ -286,8 +286,8 @@
 			</Grid>
 		</Grid>
 
-		<GridSplitter Grid.Column="1" ResizeDirection="Columns" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+		<!--<GridSplitter Grid.Column="1" ResizeDirection="Columns" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
 
-		<sx:MarketDepthControl Grid.Column="2" x:Name="MarketDepth" />
+		<sx:MarketDepthControl Grid.Column="2" x:Name="MarketDepth" />-->
 	</Grid>
 </Window>

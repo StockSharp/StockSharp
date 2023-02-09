@@ -611,16 +611,16 @@ namespace SampleHistoryTesting
 					}
 				};
 
-				if (ShowDepth.IsChecked == true)
-				{
-					MarketDepth.UpdateFormat(security);
+				//if (ShowDepth.IsChecked == true)
+				//{
+				//	MarketDepth.UpdateFormat(security);
 
-					connector.NewMessage += message =>
-					{
-						if (message is QuoteChangeMessage quoteMsg)
-							MarketDepth.UpdateDepth(quoteMsg);
-					};
-				}
+				//	connector.NewMessage += message =>
+				//	{
+				//		if (message is QuoteChangeMessage quoteMsg)
+				//			MarketDepth.UpdateDepth(quoteMsg);
+				//	};
+				//}
 
 				_connectors.Add(connector);
 
