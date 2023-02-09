@@ -1322,8 +1322,16 @@ namespace StockSharp.Algo
 			RaiseNewOrderLogItem(logItem);
 		}
 
+		/// <summary>
+		/// Disable convert <see cref="ExecutionMessage"/> to <see cref="Trade"/>.
+		/// </summary>
+		public bool DisableTicks { get; set; }
+
 		private void ProcessTradeMessage(ExecutionMessage message)
 		{
+			if (DisableTicks)
+				return;
+
 			var security = EnsureGetSecurity(message);
 
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
