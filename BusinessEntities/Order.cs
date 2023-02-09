@@ -36,7 +36,7 @@ namespace StockSharp.BusinessEntities
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str504Key)]
 	[DescriptionLoc(LocalizedStrings.Str516Key)]
-	public class Order : NotifiableObject, IExtendableEntity
+	public class Order : NotifiableObject, IExtendableEntity, IOrderMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Order"/>.

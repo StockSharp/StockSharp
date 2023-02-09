@@ -64,8 +64,12 @@ namespace StockSharp.Messages
 	[DataContract]
 	public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISeqNumMessage,
-		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage
+		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage, IOrderMessage
 	{
+		OrderStates IOrderMessage.State => OrderState.Value;
+		decimal IOrderMessage.Balance => Balance.Value;
+		decimal IOrderMessage.Volume => OrderVolume.Value;
+
 		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]

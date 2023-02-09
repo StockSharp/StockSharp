@@ -570,59 +570,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To check, whether the order was cancelled.
-		/// </summary>
-		/// <param name="order">The order to be checked.</param>
-		/// <returns><see langword="true" />, if the order is cancelled, otherwise, <see langword="false" />.</returns>
-		public static bool IsCanceled(this Order order)
-		{
-			return order.ToMessage().IsCanceled();
-		}
-
-		/// <summary>
-		/// To check, is the order matched completely.
-		/// </summary>
-		/// <param name="order">The order to be checked.</param>
-		/// <returns><see langword="true" />, if the order is matched completely, otherwise, <see langword="false" />.</returns>
-		public static bool IsMatched(this Order order)
-		{
-			return order.ToMessage().IsMatched();
-		}
-
-		/// <summary>
-		/// To check, is a part of volume is implemented in the order.
-		/// </summary>
-		/// <param name="order">The order to be checked.</param>
-		/// <returns><see langword="true" />, if part of volume is implemented, otherwise, <see langword="false" />.</returns>
-		public static bool IsMatchedPartially(this Order order)
-		{
-			return order.ToMessage().IsMatchedPartially();
-		}
-
-		/// <summary>
-		/// To check, if no contract in order is implemented.
-		/// </summary>
-		/// <param name="order">The order to be checked.</param>
-		/// <returns><see langword="true" />, if no contract is implemented, otherwise, <see langword="false" />.</returns>
-		public static bool IsMatchedEmpty(this Order order)
-		{
-			return order.ToMessage().IsMatchedEmpty();
-		}
-
-		/// <summary>
-		/// To calculate the implemented part of volume for order.
-		/// </summary>
-		/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
-		/// <returns>The implemented part of volume.</returns>
-		public static decimal GetMatchedVolume(this Order order)
-		{
-			if (order == null)
-				throw new ArgumentNullException(nameof(order));
-
-			return order.Volume - order.Balance;
-		}
-
-		/// <summary>
 		/// To get the order direction for the position.
 		/// </summary>
 		/// <param name="position">The position value.</param>

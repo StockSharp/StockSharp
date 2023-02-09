@@ -4199,12 +4199,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="order">The order to be checked.</param>
 		/// <returns><see langword="true" />, if the order is cancelled, otherwise, <see langword="false" />.</returns>
-		public static bool IsCanceled(this ExecutionMessage order)
+		public static bool IsCanceled(this IOrderMessage order)
 		{
-			if (order == null)
+			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
-			return order.OrderState == OrderStates.Done && order.Balance > 0;
+			return order.State == OrderStates.Done && order.Balance > 0;
 		}
 
 		/// <summary>
@@ -4212,12 +4212,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="order">The order to be checked.</param>
 		/// <returns><see langword="true" />, if the order is matched completely, otherwise, <see langword="false" />.</returns>
-		public static bool IsMatched(this ExecutionMessage order)
+		public static bool IsMatched(this IOrderMessage order)
 		{
-			if (order == null)
+			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
-			return order.OrderState == OrderStates.Done && order.Balance == 0;
+			return order.State == OrderStates.Done && order.Balance == 0;
 		}
 
 		/// <summary>
@@ -4225,12 +4225,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="order">The order to be checked.</param>
 		/// <returns><see langword="true" />, if part of volume is implemented, otherwise, <see langword="false" />.</returns>
-		public static bool IsMatchedPartially(this ExecutionMessage order)
+		public static bool IsMatchedPartially(this IOrderMessage order)
 		{
-			if (order == null)
+			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
-			return order.Balance > 0 && order.Balance != order.OrderVolume;
+			return order.Balance > 0 && order.Balance != order.Volume;
 		}
 
 		/// <summary>
@@ -4238,12 +4238,25 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="order">The order to be checked.</param>
 		/// <returns><see langword="true" />, if no contract is implemented, otherwise, <see langword="false" />.</returns>
-		public static bool IsMatchedEmpty(this ExecutionMessage order)
+		public static bool IsMatchedEmpty(this IOrderMessage order)
 		{
-			if (order == null)
+			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
-			return order.Balance > 0 && order.Balance == order.OrderVolume;
+			return order.Balance > 0 && order.Balance == order.Volume;
+		}
+
+		/// <summary>
+		/// To calculate the implemented part of volume for order.
+		/// </summary>
+		/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
+		/// <returns>The implemented part of volume.</returns>
+		public static decimal GetMatchedVolume(this IOrderMessage order)
+		{
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
+
+			return order.Volume - order.Balance;
 		}
 
 		/// <summary>

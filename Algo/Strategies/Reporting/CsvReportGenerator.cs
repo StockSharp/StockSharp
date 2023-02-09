@@ -12,6 +12,7 @@ using Ecng.ComponentModel;
 
 using StockSharp.Algo.Strategies;
 using StockSharp.Localization;
+using StockSharp.Messages;
 
 /// <summary>
 /// The generator of report on equity in the csv format.
