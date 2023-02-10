@@ -136,6 +136,15 @@ namespace StockSharp.Algo.Testing
 		public bool CheckTradableDates { get; set; } = true;
 
 		/// <summary>
+		/// <see cref="MarketDataStorageCache"/>.
+		/// </summary>
+		public MarketDataStorageCache Cache
+		{
+			get => _basketStorage.Cache;
+			set => _basketStorage.Cache = value;
+		}
+
+		/// <summary>
 		/// Order book builders.
 		/// </summary>
 		public IDictionary<SecurityId, IOrderLogMarketDepthBuilder> OrderLogMarketDepthBuilders { get; } = new Dictionary<SecurityId, IOrderLogMarketDepthBuilder>();

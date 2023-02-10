@@ -131,7 +131,9 @@ namespace SampleHistoryTestingParallel
 					// count of parallel testing strategies
 					// if not set, then CPU count * 2
 					//BatchSize = 3,
-				}
+				},
+
+				Cache = new(),
 			};
 
 			// handle historical time for update ProgressBar

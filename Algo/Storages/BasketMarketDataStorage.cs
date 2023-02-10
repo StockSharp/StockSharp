@@ -106,6 +106,9 @@ namespace StockSharp.Algo.Storages
 					{
 						case ActionTypes.Add:
 						{
+							if (_storage.Cache is not null)
+								storage = new CacheableMarketDataStorage(storage, _storage.Cache);
+
 							var loaded = storage.Load(_date);
 
 							if (!_storage.PassThroughOrderBookInrement && loaded is IEnumerable<QuoteChangeMessage> quotes)
@@ -346,6 +349,11 @@ namespace StockSharp.Algo.Storages
 		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		public bool PassThroughOrderBookInrement { get; set; }
+
+		/// <summary>
+		/// <see cref="MarketDataStorageCache"/>.
+		/// </summary>
+		public MarketDataStorageCache Cache { get; set; }
 
 		private void InnerStoragesOnAdded(IMarketDataStorage storage)
 			=> AddAction(ActionTypes.Add, storage, _innerStorages.TryGetTransactionId(storage));
