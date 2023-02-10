@@ -1576,19 +1576,19 @@ namespace StockSharp.Algo.Storages
 				arg = (ExecutionTypes)arg1;
 			else if (type.IsCandleMessage())
 			{
-				var candleArg = type.CreateInstance<CandleMessage>().Arg;
+				var argType = type.CreateInstance<CandleMessage>().ArgType;
 
-				if (candleArg is TimeSpan)
+				if (argType.Is<TimeSpan>())
 					arg = arg1.To<TimeSpan>();
-				else if (candleArg is Unit)
+				else if (argType.Is<Unit>())
 					arg = new Unit(arg2, (UnitTypes)arg1);
-				else if (candleArg is int)
+				else if (argType.Is<int>())
 					arg = (int)arg1;
-				else if (candleArg is long)
+				else if (argType.Is<long>())
 					arg = arg1;
-				else if (candleArg is decimal)
+				else if (argType.Is<decimal>())
 					arg = arg2;
-				else if (candleArg is PnFArg)
+				else if (argType.Is<PnFArg>())
 				{
 					arg = new PnFArg
 					{
@@ -1597,7 +1597,7 @@ namespace StockSharp.Algo.Storages
 					};
 				}
 				else
-					throw new ArgumentOutOfRangeException(nameof(messageType), candleArg, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(messageType), argType, LocalizedStrings.Str1219);
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(messageType), type, LocalizedStrings.Str1219);

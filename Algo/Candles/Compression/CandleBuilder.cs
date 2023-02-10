@@ -530,9 +530,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var openTime = bounds.Min;
 
-			var candle = FirstInitCandle(subscription, new TimeFrameCandleMessage
+			var candle = FirstInitCandle(subscription, new()
 			{
-				TimeFrame = timeFrame,
+				TypedArg = timeFrame,
 				OpenTime = openTime,
 				HighTime = openTime,
 				LowTime = openTime,
@@ -545,7 +545,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, TimeFrameCandleMessage candle, ICandleBuilderValueTransform transform)
 		{
-			return transform.Time < candle.OpenTime || (candle.OpenTime + candle.TimeFrame) <= transform.Time;
+			return transform.Time < candle.OpenTime || (candle.OpenTime + candle.TypedArg) <= transform.Time;
 		}
 	}
 
@@ -568,9 +568,9 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var time = transform.Time;
 
-			return FirstInitCandle(subscription, new TickCandleMessage
+			return FirstInitCandle(subscription, new()
 			{
-				MaxTradeCount = subscription.Message.GetArg<int>(),
+				TypedArg = subscription.Message.GetArg<int>(),
 				OpenTime = time,
 				CloseTime = time,
 				HighTime = time,
@@ -581,7 +581,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, TickCandleMessage candle, ICandleBuilderValueTransform transform)
 		{
-			return candle.TotalTicks != null && candle.TotalTicks.Value >= candle.MaxTradeCount;
+			return candle.TotalTicks != null && candle.TotalTicks.Value >= candle.TypedArg;
 		}
 	}
 
@@ -604,9 +604,9 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var time = transform.Time;
 
-			return FirstInitCandle(subscription, new VolumeCandleMessage
+			return FirstInitCandle(subscription, new()
 			{
-				Volume = subscription.Message.GetArg<decimal>(),
+				TypedArg = subscription.Message.GetArg<decimal>(),
 				OpenTime = time,
 				CloseTime = time,
 				HighTime = time,
@@ -617,7 +617,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, VolumeCandleMessage candle, ICandleBuilderValueTransform transform)
 		{
-			return candle.TotalVolume >= candle.Volume;
+			return candle.TotalVolume >= candle.TypedArg;
 		}
 	}
 
@@ -642,7 +642,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			return FirstInitCandle(subscription, new RangeCandleMessage
 			{
-				PriceRange = subscription.Message.GetArg<Unit>(),
+				TypedArg = subscription.Message.GetArg<Unit>(),
 				OpenTime = time,
 				CloseTime = time,
 				HighTime = time,
@@ -653,7 +653,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, RangeCandleMessage candle, ICandleBuilderValueTransform transform)
 		{
-			return (decimal)(candle.LowPrice + candle.PriceRange) <= candle.HighPrice;
+			return (decimal)(candle.LowPrice + candle.TypedArg) <= candle.HighPrice;
 		}
 	}
 
@@ -785,7 +785,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var candle = new PnFCandleMessage
 			{
 				SecurityId = subscription.Message.SecurityId,
-				PnFArg = pnfArg,
+				TypedArg = pnfArg,
 				BuildFrom = buildFrom,
 
 				OpenPrice = openPrice,
@@ -806,7 +806,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
 				var levels = new List<CandlePriceLevel>();
-				subscription.VolumeProfile = new VolumeProfileBuilder(levels);
+				subscription.VolumeProfile = new(levels);
 				candle.PriceLevels = levels;
 			}
 
@@ -877,10 +877,10 @@ namespace StockSharp.Algo.Candles.Compression
 				if (prevCandle != null && time <= prevCandle.OpenTime)
 					time = prevCandle.OpenTime + TimeSpan.FromTicks(1);
 
-				currentCandle = new RenkoCandleMessage
+				currentCandle = new()
 				{
 					SecurityId = subscription.Message.SecurityId,
-					BoxSize = boxSize,
+					TypedArg = boxSize,
 					BuildFrom = buildFrom,
 					OpenPrice = _decimalEpsilon,
 					HighPrice = _decimalEpsilon,
@@ -1051,9 +1051,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var openTime = bounds.Min;
 
-			var candle = FirstInitCandle(subscription, new HeikinAshiCandleMessage
+			var candle = FirstInitCandle(subscription, new()
 			{
-				TimeFrame = timeFrame,
+				TypedArg = timeFrame,
 				OpenTime = openTime,
 				HighTime = openTime,
 				LowTime = openTime,
@@ -1070,7 +1070,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <inheritdoc />
 		protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, HeikinAshiCandleMessage candle, ICandleBuilderValueTransform transform)
 		{
-			return transform.Time < candle.OpenTime || (candle.OpenTime + candle.TimeFrame) <= transform.Time;
+			return transform.Time < candle.OpenTime || (candle.OpenTime + candle.TypedArg) <= transform.Time;
 		}
 
 		/// <inheritdoc />

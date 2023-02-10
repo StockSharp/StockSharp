@@ -265,7 +265,13 @@ namespace StockSharp.Messages
 		/// </summary>
 		public abstract object Arg { get; set; }
 
-		DataType ISubscriptionIdMessage.DataType => DataType.Create(GetType(), Arg);
+		/// <summary>
+		/// <see cref="Arg"/> type.
+		/// </summary>
+		public abstract Type ArgType { get; }
+
+		/// <inheritdoc />
+		public DataType DataType => DataType.Create(GetType(), Arg);
 
 		/// <summary>
 		/// Initialize <see cref="CandleMessage"/>.
@@ -363,12 +369,47 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// Typed <see cref="CandleMessage"/>.
+	/// </summary>
+	/// <typeparam name="TArg"><see cref="Arg"/> type.</typeparam>
+	[DataContract]
+	[Serializable]
+	public abstract class TypedCandleMessage<TArg> : CandleMessage
+	{
+		/// <summary>
+		/// Initialize <see cref="CandleMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		/// <param name="arg"><see cref="TypedArg"/>.</param>
+		protected TypedCandleMessage(MessageTypes type, TArg arg)
+			: base(type)
+		{
+			Arg = arg;
+		}
+
+		/// <inheritdoc />
+		public override Type ArgType => typeof(TArg);
+
+		/// <summary>
+		/// Candle arg.
+		/// </summary>
+		public TArg TypedArg { get; set; }
+
+		/// <inheritdoc />
+		public override object Arg
+		{
+			get => TypedArg;
+			set => TypedArg = (TArg)value;
+		}
+	}
+
+	/// <summary>
 	/// The message contains information about the time-frame candle.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
-	public class TimeFrameCandleMessage : CandleMessage
+	public class TimeFrameCandleMessage : TypedCandleMessage<TimeSpan>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeFrameCandleMessage"/>.
@@ -383,15 +424,9 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		protected TimeFrameCandleMessage(MessageTypes type)
-			: base(type)
+			: base(type, default)
 		{
 		}
-
-		/// <summary>
-		/// Time-frame.
-		/// </summary>
-		[DataMember]
-		public TimeSpan TimeFrame { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="TimeFrameCandleMessage"/>.
@@ -401,15 +436,8 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new TimeFrameCandleMessage
 			{
-				TimeFrame = TimeFrame
+				TypedArg = TypedArg
 			});
-		}
-
-		/// <inheritdoc />
-		public override object Arg
-		{
-			get => TimeFrame;
-			set => TimeFrame = (TimeSpan)value;
 		}
 	}
 
@@ -419,21 +447,15 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
-	public class TickCandleMessage : CandleMessage
+	public class TickCandleMessage : TypedCandleMessage<int>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TickCandleMessage"/>.
 		/// </summary>
 		public TickCandleMessage()
-			: base(MessageTypes.CandleTick)
+			: base(MessageTypes.CandleTick, default)
 		{
 		}
-
-		/// <summary>
-		/// Maximum tick count.
-		/// </summary>
-		[DataMember]
-		public int MaxTradeCount { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="TickCandleMessage"/>.
@@ -443,15 +465,8 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new TickCandleMessage
 			{
-				MaxTradeCount = MaxTradeCount
+				TypedArg = TypedArg
 			});
-		}
-
-		/// <inheritdoc />
-		public override object Arg
-		{
-			get => MaxTradeCount;
-			set => MaxTradeCount = (int)value;
 		}
 	}
 
@@ -461,21 +476,15 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
-	public class VolumeCandleMessage : CandleMessage
+	public class VolumeCandleMessage : TypedCandleMessage<decimal>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolumeCandleMessage"/>.
 		/// </summary>
 		public VolumeCandleMessage()
-			: base(MessageTypes.CandleVolume)
+			: base(MessageTypes.CandleVolume, default)
 		{
 		}
-
-		/// <summary>
-		/// Maximum volume.
-		/// </summary>
-		[DataMember]
-		public decimal Volume { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="VolumeCandleMessage"/>.
@@ -485,15 +494,8 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new VolumeCandleMessage
 			{
-				Volume = Volume
+				TypedArg = TypedArg
 			});
-		}
-
-		/// <inheritdoc />
-		public override object Arg
-		{
-			get => Volume;
-			set => Volume = (decimal)value;
 		}
 	}
 
@@ -503,26 +505,14 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
-	public class RangeCandleMessage : CandleMessage
+	public class RangeCandleMessage : TypedCandleMessage<Unit>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RangeCandleMessage"/>.
 		/// </summary>
 		public RangeCandleMessage()
-			: base(MessageTypes.CandleRange)
+			: base(MessageTypes.CandleRange, new())
 		{
-		}
-
-		private Unit _priceRange = new();
-
-		/// <summary>
-		/// Range of price.
-		/// </summary>
-		[DataMember]
-		public Unit PriceRange
-		{
-			get => _priceRange;
-			set => _priceRange = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -533,19 +523,12 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new RangeCandleMessage
 			{
-				PriceRange = PriceRange.Clone()
+				TypedArg = TypedArg.Clone()
 			});
 		}
 
 		/// <inheritdoc />
-		public override object Arg
-		{
-			get => PriceRange;
-			set => PriceRange = (Unit)value;
-		}
-
-		/// <inheritdoc />
-		public override object CloneArg() => PriceRange.Clone();
+		public override object CloneArg() => TypedArg.Clone();
 	}
 
 	/// <summary>
@@ -630,26 +613,14 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
-	public class PnFCandleMessage : CandleMessage
+	public class PnFCandleMessage : TypedCandleMessage<PnFArg>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PnFCandleMessage"/>.
 		/// </summary>
 		public PnFCandleMessage()
-			: base(MessageTypes.CandlePnF)
+			: base(MessageTypes.CandlePnF, new())
 		{
-		}
-
-		private PnFArg _pnFArg = new();
-
-		/// <summary>
-		/// Value of arguments.
-		/// </summary>
-		[DataMember]
-		public PnFArg PnFArg
-		{
-			get => _pnFArg;
-			set => _pnFArg = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -660,20 +631,12 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new PnFCandleMessage
 			{
-				PnFArg = PnFArg.Clone(),
-				//PnFType = PnFType
+				TypedArg = TypedArg.Clone(),
 			});
 		}
 
 		/// <inheritdoc />
-		public override object Arg
-		{
-			get => PnFArg;
-			set => PnFArg = (PnFArg)value;
-		}
-
-		/// <inheritdoc />
-		public override object CloneArg() => PnFArg.Clone();
+		public override object CloneArg() => TypedArg.Clone();
 	}
 
 	/// <summary>
@@ -682,26 +645,14 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
-	public class RenkoCandleMessage : CandleMessage
+	public class RenkoCandleMessage : TypedCandleMessage<Unit>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RenkoCandleMessage"/>.
 		/// </summary>
 		public RenkoCandleMessage()
-			: base(MessageTypes.CandleRenko)
+			: base(MessageTypes.CandleRenko, new())
 		{
-		}
-
-		private Unit _boxSize = new();
-
-		/// <summary>
-		/// Possible price change range.
-		/// </summary>
-		[DataMember]
-		public Unit BoxSize
-		{
-			get => _boxSize;
-			set => _boxSize = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -712,19 +663,12 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new RenkoCandleMessage
 			{
-				BoxSize = BoxSize.Clone()
+				TypedArg = TypedArg.Clone()
 			});
 		}
 
 		/// <inheritdoc />
-		public override object Arg
-		{
-			get => BoxSize;
-			set => BoxSize = (Unit)value;
-		}
-
-		/// <inheritdoc />
-		public override object CloneArg() => BoxSize.Clone();
+		public override object CloneArg() => TypedArg.Clone();
 	}
 
 	/// <summary>
@@ -751,7 +695,7 @@ namespace StockSharp.Messages
 		{
 			return CopyTo(new HeikinAshiCandleMessage
 			{
-				TimeFrame = TimeFrame
+				TypedArg = TypedArg
 			});
 		}
 	}
