@@ -563,7 +563,7 @@ namespace StockSharp.Algo.Storages
 					IsSubscribe = true,
 				}, provider.Get(typeof(TimeFrameCandleMessage))));
 
-				_dataType = DataType.Create(typeof(TimeFrameCandleMessage), _original.DataType.Arg);
+				_dataType = DataType.Create<TimeFrameCandleMessage>(_original.DataType.Arg);
 			}
 
 			private IEnumerable<TimeSpan> GetSmallerTimeFrames()

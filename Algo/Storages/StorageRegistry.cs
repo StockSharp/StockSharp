@@ -331,7 +331,7 @@ namespace StockSharp.Algo.Storages
 			if (securityId == default)
 				throw new ArgumentNullException(nameof(securityId));
 
-			return _executionStorages.SafeAdd(Tuple.Create(securityId, type, (drive ?? DefaultDrive).GetStorageDrive(securityId, DataType.Create(typeof(ExecutionMessage), type), format)), key =>
+			return _executionStorages.SafeAdd(Tuple.Create(securityId, type, (drive ?? DefaultDrive).GetStorageDrive(securityId, DataType.Create<ExecutionMessage>(type), format)), key =>
 			{
 				var secId = key.Item1;
 				var mdDrive = key.Item3;

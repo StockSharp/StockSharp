@@ -21,6 +21,16 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataType"/>.
 		/// </summary>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
+		/// <param name="isSecurityRequired">Is the data type required security info.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType Create<TMessage>(object arg, bool isSecurityRequired = default)
+			=> Create(typeof(TMessage), arg, isSecurityRequired);
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataType"/>.
+		/// </summary>
 		/// <param name="messageType">Message type.</param>
 		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 		/// <returns>Data type info.</returns>
@@ -59,144 +69,144 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Level1.
 		/// </summary>
-		public static DataType Level1 { get; } = Create(typeof(Level1ChangeMessage), null).Immutable();
+		public static DataType Level1 { get; } = Create<Level1ChangeMessage>(null).Immutable();
 
 		/// <summary>
 		/// Market depth.
 		/// </summary>
-		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).Immutable();
+		public static DataType MarketDepth { get; } = Create<QuoteChangeMessage>(null).Immutable();
 
 		/// <summary>
 		/// Filtered market depth.
 		/// </summary>
-		public static DataType FilteredMarketDepth { get; } = Create(typeof(QuoteChangeMessage), ExecutionTypes.Transaction).Immutable();
+		public static DataType FilteredMarketDepth { get; } = Create<QuoteChangeMessage>(ExecutionTypes.Transaction).Immutable();
 
 		/// <summary>
 		/// Position changes.
 		/// </summary>
-		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).Immutable();
+		public static DataType PositionChanges { get; } = Create<PositionChangeMessage>(null).Immutable();
 
 		/// <summary>
 		/// News.
 		/// </summary>
-		public static DataType News { get; } = Create(typeof(NewsMessage), null).Immutable();
+		public static DataType News { get; } = Create<NewsMessage>(null).Immutable();
 
 		/// <summary>
 		/// Securities.
 		/// </summary>
-		public static DataType Securities { get; } = Create(typeof(SecurityMessage), null).Immutable();
+		public static DataType Securities { get; } = Create<SecurityMessage>(null).Immutable();
 
 		/// <summary>
 		/// Ticks.
 		/// </summary>
-		public static DataType Ticks { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Tick).Immutable();
+		public static DataType Ticks { get; } = Create<ExecutionMessage>(ExecutionTypes.Tick).Immutable();
 
 		/// <summary>
 		/// Order log.
 		/// </summary>
-		public static DataType OrderLog { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog).Immutable();
+		public static DataType OrderLog { get; } = Create<ExecutionMessage>(ExecutionTypes.OrderLog).Immutable();
 
 		/// <summary>
 		/// Transactions.
 		/// </summary>
-		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).Immutable();
+		public static DataType Transactions { get; } = Create<ExecutionMessage>(ExecutionTypes.Transaction).Immutable();
 
 		/// <summary>
 		/// Board info.
 		/// </summary>
-		public static DataType Board { get; } = Create(typeof(BoardMessage), null).Immutable();
+		public static DataType Board { get; } = Create<BoardMessage>(null).Immutable();
 
 		/// <summary>
 		/// Board state.
 		/// </summary>
-		public static DataType BoardState { get; } = Create(typeof(BoardStateMessage), null).Immutable();
+		public static DataType BoardState { get; } = Create<BoardStateMessage>(null).Immutable();
 
 		/// <summary>
 		/// User info.
 		/// </summary>
-		public static DataType Users { get; } = Create(typeof(UserInfoMessage), null).Immutable();
+		public static DataType Users { get; } = Create<UserInfoMessage>(null).Immutable();
 
 		/// <summary>
 		/// The candle time frames.
 		/// </summary>
-		public static DataType TimeFrames { get; } = Create(typeof(TimeFrameInfoMessage), null).Immutable();
+		public static DataType TimeFrames { get; } = Create<TimeFrameInfoMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="TimeFrameCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleTimeFrame { get; } = Create(typeof(TimeFrameCandleMessage), null).Immutable();
+		public static DataType CandleTimeFrame { get; } = Create<TimeFrameCandleMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="VolumeCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleVolume { get; } = Create(typeof(VolumeCandleMessage), null).Immutable();
+		public static DataType CandleVolume { get; } = Create<VolumeCandleMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="TickCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleTick { get; } = Create(typeof(TickCandleMessage), null).Immutable();
+		public static DataType CandleTick { get; } = Create<TickCandleMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="RangeCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleRange { get; } = Create(typeof(RangeCandleMessage), null).Immutable();
+		public static DataType CandleRange { get; } = Create<RangeCandleMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="RenkoCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleRenko { get; } = Create(typeof(RenkoCandleMessage), null).Immutable();
+		public static DataType CandleRenko { get; } = Create<RenkoCandleMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="PnFCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandlePnF { get; } = Create(typeof(PnFCandleMessage), null).Immutable();
+		public static DataType CandlePnF { get; } = Create<PnFCandleMessage>(null).Immutable();
 
 		/// <summary>
 		/// Adapters.
 		/// </summary>
-		public static DataType Adapters { get; } = Create(typeof(AdapterResponseMessage), null).Immutable();
+		public static DataType Adapters { get; } = Create<AdapterResponseMessage>(null).Immutable();
 
 		/// <summary>
 		/// Portfolio route.
 		/// </summary>
-		public static DataType PortfolioRoute { get; } = Create(typeof(PortfolioRouteMessage), null).Immutable();
+		public static DataType PortfolioRoute { get; } = Create<PortfolioRouteMessage>(null).Immutable();
 
 		/// <summary>
 		/// Security route.
 		/// </summary>
-		public static DataType SecurityRoute { get; } = Create(typeof(SecurityRouteMessage), null).Immutable();
+		public static DataType SecurityRoute { get; } = Create<SecurityRouteMessage>(null).Immutable();
 
 		/// <summary>
 		/// Security legs.
 		/// </summary>
-		public static DataType SecurityLegs { get; } = Create(typeof(SecurityLegsInfoMessage), null).Immutable();
+		public static DataType SecurityLegs { get; } = Create<SecurityLegsInfoMessage>(null).Immutable();
 
 		/// <summary>
 		/// Security mapping.
 		/// </summary>
-		public static DataType SecurityMapping { get; } = Create(typeof(SecurityMappingInfoMessage), null).Immutable();
+		public static DataType SecurityMapping { get; } = Create<SecurityMappingInfoMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="CommandMessage"/>.
 		/// </summary>
-		public static DataType Command { get; } = Create(typeof(CommandMessage), null);
+		public static DataType Command { get; } = Create<CommandMessage>(null);
 
 		/// <summary>
 		/// <see cref="StrategyInfoMessage"/>.
 		/// </summary>
-		public static DataType Info { get; } = Create(typeof(StrategyInfoMessage), null).Immutable();
+		public static DataType Info { get; } = Create<StrategyInfoMessage>(null).Immutable();
 
 		/// <summary>
 		/// <see cref="StrategyStateMessage"/>.
 		/// </summary>
-		public static DataType State { get; } = Create(typeof(StrategyStateMessage), null).Immutable();
+		public static DataType State { get; } = Create<StrategyStateMessage>(null).Immutable();
 
 		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <param name="tf">Candle arg.</param>
 		/// <returns>Data type info.</returns>
-		public static DataType TimeFrame(TimeSpan tf) => Create(typeof(TimeFrameCandleMessage), tf).Immutable();
+		public static DataType TimeFrame(TimeSpan tf) => Create<TimeFrameCandleMessage>(tf).Immutable();
 
 		/// <summary>
 		/// Create data type info for <see cref="PortfolioMessage"/>.
@@ -208,7 +218,7 @@ namespace StockSharp.Messages
 			if (portfolioName.IsEmpty())
 				throw new ArgumentNullException(nameof(portfolioName));
 
-			return Create(typeof(PortfolioMessage), portfolioName).Immutable();
+			return Create<PortfolioMessage>(portfolioName).Immutable();
 		}
 
 		private Type _messageType;

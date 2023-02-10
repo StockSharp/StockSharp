@@ -71,7 +71,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public DataType DataType { get; } = DataType.Create(typeof(SecurityMappingMessage), null).Immutable();
+		public DataType DataType { get; } = DataType.Create<SecurityMappingMessage>(null).Immutable();
 
 		/// <inheritdoc />
 		[DataMember]
