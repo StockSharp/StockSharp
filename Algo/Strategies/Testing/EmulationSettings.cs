@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_startTime = value;
-				NotifyPropertyChanged(nameof(StartTime));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_stopTime = value;
-				NotifyPropertyChanged(nameof(StopTime));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Strategies.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_marketTimeChangedInterval = value;
-				NotifyPropertyChanged(nameof(MarketTimeChangedInterval));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Strategies.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_unrealizedPnLInterval = value;
-				NotifyPropertyChanged(nameof(UnrealizedPnLInterval));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_tradeDataMode = value;
-				NotifyPropertyChanged(nameof(TradeDataMode));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -154,7 +154,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_depthDataMode = value;
-				NotifyPropertyChanged(nameof(DepthDataMode));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_orderLogDataMode = value;
-				NotifyPropertyChanged(nameof(OrderLogDataMode));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -196,7 +196,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_batchSize = value;
-				NotifyPropertyChanged(nameof(BatchSize));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -217,7 +217,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_checkTradableDates = value;
-				NotifyPropertyChanged(nameof(CheckTradableDates));
+				NotifyPropertyChanged();
 			}
 		}
 
@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				_logLevel = value;
-				NotifyPropertyChanged(nameof(LogLevel));
+				NotifyPropertyChanged();
 			}
 		}
 
