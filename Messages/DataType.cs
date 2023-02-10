@@ -25,7 +25,7 @@ namespace StockSharp.Messages
 		/// <param name="arg">The additional argument, associated with data. For example, candle argument.</param>
 		/// <param name="isSecurityRequired">Is the data type required security info.</param>
 		/// <returns>Data type info.</returns>
-		public static DataType Create<TMessage>(object arg, bool isSecurityRequired = default)
+		public static DataType Create<TMessage>(object arg = default, bool isSecurityRequired = default)
 			=> Create(typeof(TMessage), arg, isSecurityRequired);
 
 		/// <summary>
@@ -67,14 +67,22 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// </summary>
+		protected void CheckImmutable()
+		{
+			if (_immutable)
+				throw new InvalidOperationException();
+		}
+
+		/// <summary>
 		/// Level1.
 		/// </summary>
-		public static DataType Level1 { get; } = Create<Level1ChangeMessage>(null).Immutable();
+		public static DataType Level1 { get; } = Create<Level1ChangeMessage>().Immutable();
 
 		/// <summary>
 		/// Market depth.
 		/// </summary>
-		public static DataType MarketDepth { get; } = Create<QuoteChangeMessage>(null).Immutable();
+		public static DataType MarketDepth { get; } = Create<QuoteChangeMessage>().Immutable();
 
 		/// <summary>
 		/// Filtered market depth.
@@ -84,17 +92,17 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Position changes.
 		/// </summary>
-		public static DataType PositionChanges { get; } = Create<PositionChangeMessage>(null).Immutable();
+		public static DataType PositionChanges { get; } = Create<PositionChangeMessage>().Immutable();
 
 		/// <summary>
 		/// News.
 		/// </summary>
-		public static DataType News { get; } = Create<NewsMessage>(null).Immutable();
+		public static DataType News { get; } = Create<NewsMessage>().Immutable();
 
 		/// <summary>
 		/// Securities.
 		/// </summary>
-		public static DataType Securities { get; } = Create<SecurityMessage>(null).Immutable();
+		public static DataType Securities { get; } = Create<SecurityMessage>().Immutable();
 
 		/// <summary>
 		/// Ticks.
@@ -114,92 +122,92 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Board info.
 		/// </summary>
-		public static DataType Board { get; } = Create<BoardMessage>(null).Immutable();
+		public static DataType Board { get; } = Create<BoardMessage>().Immutable();
 
 		/// <summary>
 		/// Board state.
 		/// </summary>
-		public static DataType BoardState { get; } = Create<BoardStateMessage>(null).Immutable();
+		public static DataType BoardState { get; } = Create<BoardStateMessage>().Immutable();
 
 		/// <summary>
 		/// User info.
 		/// </summary>
-		public static DataType Users { get; } = Create<UserInfoMessage>(null).Immutable();
+		public static DataType Users { get; } = Create<UserInfoMessage>().Immutable();
 
 		/// <summary>
 		/// The candle time frames.
 		/// </summary>
-		public static DataType TimeFrames { get; } = Create<TimeFrameInfoMessage>(null).Immutable();
+		public static DataType TimeFrames { get; } = Create<TimeFrameInfoMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="TimeFrameCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleTimeFrame { get; } = Create<TimeFrameCandleMessage>(null).Immutable();
+		public static DataType CandleTimeFrame { get; } = Create<TimeFrameCandleMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="VolumeCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleVolume { get; } = Create<VolumeCandleMessage>(null).Immutable();
+		public static DataType CandleVolume { get; } = Create<VolumeCandleMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="TickCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleTick { get; } = Create<TickCandleMessage>(null).Immutable();
+		public static DataType CandleTick { get; } = Create<TickCandleMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="RangeCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleRange { get; } = Create<RangeCandleMessage>(null).Immutable();
+		public static DataType CandleRange { get; } = Create<RangeCandleMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="RenkoCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandleRenko { get; } = Create<RenkoCandleMessage>(null).Immutable();
+		public static DataType CandleRenko { get; } = Create<RenkoCandleMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="PnFCandleMessage"/> data type.
 		/// </summary>
-		public static DataType CandlePnF { get; } = Create<PnFCandleMessage>(null).Immutable();
+		public static DataType CandlePnF { get; } = Create<PnFCandleMessage>().Immutable();
 
 		/// <summary>
 		/// Adapters.
 		/// </summary>
-		public static DataType Adapters { get; } = Create<AdapterResponseMessage>(null).Immutable();
+		public static DataType Adapters { get; } = Create<AdapterResponseMessage>().Immutable();
 
 		/// <summary>
 		/// Portfolio route.
 		/// </summary>
-		public static DataType PortfolioRoute { get; } = Create<PortfolioRouteMessage>(null).Immutable();
+		public static DataType PortfolioRoute { get; } = Create<PortfolioRouteMessage>().Immutable();
 
 		/// <summary>
 		/// Security route.
 		/// </summary>
-		public static DataType SecurityRoute { get; } = Create<SecurityRouteMessage>(null).Immutable();
+		public static DataType SecurityRoute { get; } = Create<SecurityRouteMessage>().Immutable();
 
 		/// <summary>
 		/// Security legs.
 		/// </summary>
-		public static DataType SecurityLegs { get; } = Create<SecurityLegsInfoMessage>(null).Immutable();
+		public static DataType SecurityLegs { get; } = Create<SecurityLegsInfoMessage>().Immutable();
 
 		/// <summary>
 		/// Security mapping.
 		/// </summary>
-		public static DataType SecurityMapping { get; } = Create<SecurityMappingInfoMessage>(null).Immutable();
+		public static DataType SecurityMapping { get; } = Create<SecurityMappingInfoMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="CommandMessage"/>.
 		/// </summary>
-		public static DataType Command { get; } = Create<CommandMessage>(null);
+		public static DataType Command { get; } = Create<CommandMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="StrategyInfoMessage"/>.
 		/// </summary>
-		public static DataType Info { get; } = Create<StrategyInfoMessage>(null).Immutable();
+		public static DataType Info { get; } = Create<StrategyInfoMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="StrategyStateMessage"/>.
 		/// </summary>
-		public static DataType State { get; } = Create<StrategyStateMessage>(null).Immutable();
+		public static DataType State { get; } = Create<StrategyStateMessage>().Immutable();
 
 		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
@@ -232,8 +240,7 @@ namespace StockSharp.Messages
 			get => _messageType;
 			set
 			{
-				if (_immutable)
-					throw new InvalidOperationException();
+				CheckImmutable();
 
 				_messageType = value;
 				ReInitHashCode();
@@ -251,8 +258,7 @@ namespace StockSharp.Messages
 			get => _arg;
 			set
 			{
-				if (_immutable)
-					throw new InvalidOperationException();
+				CheckImmutable();
 
 				_arg = value;
 				ReInitHashCode();

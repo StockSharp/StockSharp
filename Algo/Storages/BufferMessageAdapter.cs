@@ -437,7 +437,7 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in Buffer.GetCandles())
 					{
-						Settings.GetStorage(pair.Key.Item1, pair.Key.Item2, pair.Key.Item3).Save(pair.Value);
+						Settings.GetStorage(pair.Key.secId, pair.Key.dataType.MessageType, pair.Key.dataType.Arg).Save(pair.Value);
 					}
 
 					foreach (var pair in Buffer.GetPositionChanges())

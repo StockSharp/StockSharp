@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<SecurityId, PositionChangeMessage> _positionChangesBuffer = new();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new();
 		private readonly SynchronizedSet<BoardStateMessage> _boardStatesBuffer = new();
-		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new();
+		private readonly DataBuffer<(SecurityId, DataType), CandleMessage> _candleBuffer = new();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new();
 		private readonly SynchronizedSet<long> _subscriptionsById = new();
 
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Storages
 		/// Get accumulated <see cref="CandleMessage"/>.
 		/// </summary>
 		/// <returns>Candles.</returns>
-		public IDictionary<Tuple<SecurityId, Type, object>, IEnumerable<CandleMessage>> GetCandles()
+		public IDictionary<(SecurityId secId, DataType dataType), IEnumerable<CandleMessage>> GetCandles()
 			=> _candleBuffer.Get();
 
 		/// <summary>
@@ -395,7 +395,7 @@ namespace StockSharp.Algo.Storages
 					if (message is CandleMessage candleMsg && candleMsg.State == CandleStates.Finished)
 					{
 						if (CanStore(candleMsg))
-							_candleBuffer.Add(Tuple.Create(candleMsg.SecurityId, candleMsg.GetType(), candleMsg.Arg), candleMsg.TypedClone());
+							_candleBuffer.Add((candleMsg.SecurityId, candleMsg.DataType), candleMsg.TypedClone());
 					}
 
 					break;

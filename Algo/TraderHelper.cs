@@ -2895,7 +2895,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Indicator value.
 		/// </summary>
-		public static DataType IndicatorValue { get; } = DataType.Create<Indicators.IIndicatorValue>(null);//.Immutable();
+		public static DataType IndicatorValue { get; } = DataType.Create<Indicators.IIndicatorValue>();//.Immutable();
 
 		/// <summary>
 		/// To determine whether the order book is in the right state.
