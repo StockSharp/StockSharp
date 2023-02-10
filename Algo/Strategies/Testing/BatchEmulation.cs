@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private readonly List<HistoryEmulationConnector> _currentConnectors = new();
 		private IMessageAdapter _histAdapter;
 		private bool _cancelEmulation;
+		private int _nextTotalProgress;
 
 		private readonly SyncObject _sync = new();
 
@@ -108,7 +109,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// The event of total progress change.
 		/// </summary>
-		public event Action<IEnumerable<Strategy>, int> TotalProgressChanged;
+		public event Action<int> TotalProgressChanged;
 
 		/// <summary>
 		/// The event of single progress change.
@@ -134,7 +135,8 @@ namespace StockSharp.Algo.Strategies.Testing
 				throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.Str1219);
 
 			_cancelEmulation = false;
-			
+			_nextTotalProgress = 0;
+
 			State = ChannelStates.Starting;
 
 			var totalBatches = (int)((decimal)iterationCount / EmulationSettings.BatchSize).Ceiling();
@@ -244,7 +246,13 @@ namespace StockSharp.Algo.Strategies.Testing
 
 					nextProgress++;
 
-					TotalProgressChanged?.Invoke(batch, (int)(currentBatch * batchWeight + ((avgStep * batchWeight) / 100)));
+					var currTotalProgress = (int)(currentBatch * batchWeight + ((avgStep * batchWeight) / 100));
+
+					if (_nextTotalProgress >= currTotalProgress)
+						return;
+
+					TotalProgressChanged?.Invoke(currTotalProgress);
+					_nextTotalProgress = currTotalProgress + 1;
 				};
 
 				connector.MarketTimeChanged += diff => MarketTimeChanged?.Invoke(connector, diff);

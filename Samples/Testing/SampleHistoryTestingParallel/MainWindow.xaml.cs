@@ -75,9 +75,9 @@ namespace SampleHistoryTestingParallel
 			// SMA periods
 			var periods = new List<(int longMa, int shortMa, Color color)>();
 
-			for (var l = 100; l >= 50; l -= 10)
+			for (var l = 100; l >= 50; l -= 1)
 			{
-				for (var s = 10; s >= 5; s -= 1)
+				for (var s = 40; s >= 5; s -= 1)
 				{
 					periods.Add((l, s, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
 				}
@@ -102,7 +102,7 @@ namespace SampleHistoryTestingParallel
 			};
 
 			var startTime = new DateTime(2020, 4, 1);
-			var stopTime = new DateTime(2020, 4, 20);
+			var stopTime = new DateTime(2020, 4, 30);
 
 			var level1Info = new Level1ChangeMessage
 			{
@@ -135,7 +135,7 @@ namespace SampleHistoryTestingParallel
 			};
 
 			// handle historical time for update ProgressBar
-			_batchEmulation.TotalProgressChanged += (currBatch, total) => this.GuiAsync(() => TestingProcess.Value = total);
+			_batchEmulation.TotalProgressChanged += total => this.GuiAsync(() => TestingProcess.Value = total);
 
 			_batchEmulation.StateChanged += (oldState, newState) =>
 			{
