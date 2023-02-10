@@ -201,7 +201,7 @@ namespace StockSharp.Algo
 
 				default:
 				{
-					if (message is ISubscriptionIdMessage subscrMsg)
+					if (message is ISubscriptionIdMessage subscrMsg && _subscriptionsByChildId.Count > 0)
 					{
 						foreach (var id in subscrMsg.GetSubscriptionIds())
 						{
