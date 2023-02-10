@@ -108,15 +108,6 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public DateTimeOffset ServerTime { get; set; }
 
-		/// <summary>
-		/// Flag sorted by price quotes (<see cref="Bids"/> by descending, <see cref="Asks"/> by ascending).
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str285Key)]
-		[DescriptionLoc(LocalizedStrings.Str285Key, true)]
-		[MainCategory]
-		public bool IsSorted { get; set; } = true;
-
 		/// <inheritdoc />
 		[DataMember]
 		public DataType BuildFrom { get; set; }
@@ -173,7 +164,6 @@ namespace StockSharp.Messages
 			destination.Bids = Bids.ToArray();
 			destination.Asks = Asks.ToArray();
 			destination.ServerTime = ServerTime;
-			destination.IsSorted = IsSorted;
 			destination.Currency = Currency;
 			destination.BuildFrom = BuildFrom;
 			destination.IsFiltered = IsFiltered;

@@ -117,7 +117,7 @@ namespace StockSharp.Messages
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (message.IsSorted ? (IEnumerable<QuoteChange>)message.Bids : message.Bids.OrderByDescending(q => q.Price)).FirstOr();
+			return message.Bids.FirstOr();
 		}
 
 		/// <summary>
@@ -130,7 +130,7 @@ namespace StockSharp.Messages
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (message.IsSorted ? (IEnumerable<QuoteChange>)message.Asks : message.Asks.OrderBy(q => q.Price)).FirstOr();
+			return message.Asks.FirstOr();
 		}
 
 		/// <summary>
@@ -2738,8 +2738,8 @@ namespace StockSharp.Messages
 			if (book is null)
 				throw new ArgumentNullException(nameof(book));
 
-			var bids = book.IsSorted ? book.Bids : book.Bids.OrderByDescending(b => b.Price).ToArray();
-			var asks = book.IsSorted ? book.Asks : book.Asks.OrderBy(b => b.Price).ToArray();
+			var bids = book.Bids;
+			var asks = book.Asks;
 
 			var bestBid = bids.FirstOr();
 			var bestAsk = asks.FirstOr();
@@ -3440,12 +3440,6 @@ namespace StockSharp.Messages
 		{
 			depth.CheckIsSnapshot();
 
-			if (!depth.IsSorted)
-			{
-				depth.Bids = depth.Bids.OrderByDescending(q => q.Price).ToArray();
-				depth.Asks = depth.Asks.OrderBy(q => q.Price).ToArray();
-			}
-
 			var bids = depth.Bids.Sparse(Sides.Buy, priceRange, priceStep);
 			var asks = depth.Asks.Sparse(Sides.Sell, priceRange, priceStep);
 
@@ -3887,13 +3881,7 @@ namespace StockSharp.Messages
 			if (delta == null)
 				throw new ArgumentNullException(nameof(delta));
 
-			if (!from.IsSorted)
-				throw new ArgumentException(nameof(from));
-
-			if (!delta.IsSorted)
-				throw new ArgumentException(nameof(delta));
-
-			return new QuoteChangeMessage
+			return new()
 			{
 				LocalTime = delta.LocalTime,
 				SecurityId = from.SecurityId,
@@ -4021,27 +4009,6 @@ namespace StockSharp.Messages
 			var result = price.Round(priceStep ?? 0.01m, decimals, rounding);
 
 			return result.RemoveTrailingZeros();
-		}
-
-		/// <summary>
-		/// Sort order book.
-		/// </summary>
-		/// <param name="quoteMsg">Order book.</param>
-		/// <returns>Order book.</returns>
-		public static QuoteChangeMessage TrySort(this QuoteChangeMessage quoteMsg)
-		{
-			if (quoteMsg is null)
-				throw new ArgumentNullException(nameof(quoteMsg));
-
-			if (!quoteMsg.IsSorted)
-			{
-				quoteMsg.Bids = quoteMsg.Bids.OrderByDescending(q => q.Price).ToArray();
-				quoteMsg.Asks = quoteMsg.Asks.OrderBy(q => q.Price).ToArray();
-
-				quoteMsg.IsSorted = true;
-			}
-
-			return quoteMsg;
 		}
 
 		/// <summary>

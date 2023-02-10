@@ -207,9 +207,6 @@ namespace StockSharp.Algo.Storages
 								}
 							}
 						}
-
-						if (!quoteMsg.IsSorted)
-							data[i] = quoteMsg.TypedClone().TrySort().To<TMessage>();
 					}
 				}
 			}

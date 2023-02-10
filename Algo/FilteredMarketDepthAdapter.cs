@@ -62,7 +62,6 @@ namespace StockSharp.Algo
 					SecurityId = _lastSnapshot.SecurityId,
 					ServerTime = _lastSnapshot.ServerTime,
 					LocalTime = _lastSnapshot.LocalTime,
-					IsSorted = _lastSnapshot.IsSorted,
 					BuildFrom = _lastSnapshot.BuildFrom,
 					Currency = _lastSnapshot.Currency,
 					IsFiltered = true,

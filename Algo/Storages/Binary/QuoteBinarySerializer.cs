@@ -189,7 +189,6 @@ namespace StockSharp.Algo.Storages.Binary
 					{
 						metaInfo.HasSnapshot = true;
 
-						fullBook.IsSorted = m.IsSorted;
 						fullBook.Currency = m.Currency;
 						fullBook.BuildFrom = m.BuildFrom;
 						fullBook.IsFiltered = m.IsFiltered;

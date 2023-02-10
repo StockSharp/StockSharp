@@ -73,9 +73,6 @@ namespace StockSharp.Messages
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			if (!depth.IsSorted)
-				throw new ArgumentException(LocalizedStrings.Str942, nameof(depth));
-
 			_depth = depth;
 			_depth.State = QuoteChangeStates.SnapshotComplete;
 
