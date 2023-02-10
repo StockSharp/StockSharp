@@ -844,7 +844,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get possible args for the specified candle type and instrument.
 		/// </summary>
-		/// <typeparam name="TArg">Type of <see cref="CandleMessage.Arg"/>.</typeparam>
+		/// <typeparam name="TArg">Type of <see cref="DataType.Arg"/>.</typeparam>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="candleType">The type of the message <see cref="CandleMessage"/>.</param>
 		/// <param name="securityId">Security ID.</param>
@@ -1715,6 +1715,26 @@ namespace StockSharp.Messages
 
 			return mdMsg.DataType2.Arg;
 		}
+
+		/// <summary>
+		/// Get time-frame.
+		/// </summary>
+		/// <param name="dataType"><see cref="DataType"/>.</param>
+		/// <returns>Time-frame.</returns>
+		public static TimeSpan GetTimeFrame(this DataType dataType)
+		{
+			if (dataType is null)
+				throw new ArgumentNullException(nameof(dataType));
+
+			return (TimeSpan)dataType.Arg;
+		}
+
+		/// <summary>
+		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
+		/// </summary>
+		/// <param name="tf">Candle arg.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType TimeFrame(this TimeSpan tf) => DataType.TimeFrame(tf).Immutable();
 
 		/// <summary>
 		/// Get typed argument.

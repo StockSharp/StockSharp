@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Import
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
-
+	using StockSharp.Messages;
 	using DataType = StockSharp.Messages.DataType;
 
 	/// <summary>
@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Import
 		/// </summary>
 		public ImportSettings()
 		{
-			DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
+			DataType = TimeSpan.FromMinutes(1).TimeFrame();
 			Directory = string.Empty;
 			IncludeSubDirectories = false;
 			FileMask = "*.csv";

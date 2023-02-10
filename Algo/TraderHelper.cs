@@ -2806,7 +2806,7 @@ namespace StockSharp.Algo
 				SecurityId = securityId,
 				SecurityType = secType,
 				IsSubscribe = true,
-				DataType2 = DataType.TimeFrame(timeFrame),
+				DataType2 = timeFrame.TimeFrame(),
 				From = from,
 				To = to,
 				Count = count,

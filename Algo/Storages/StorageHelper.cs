@@ -559,7 +559,7 @@ namespace StockSharp.Algo.Storages
 				_compressors = GetSmallerTimeFrames().ToDictionary(tf => tf, tf => new BiggerTimeFrameCandleCompressor(new MarketDataMessage
 				{
 					SecurityId = securityId,
-					DataType2 = DataType.TimeFrame(timeFrame),
+					DataType2 = timeFrame.TimeFrame(),
 					IsSubscribe = true,
 				}, provider.Get(typeof(TimeFrameCandleMessage))));
 
