@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Strategies.Testing
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -261,9 +262,7 @@ namespace StockSharp.Algo.Strategies.Testing
 				{
 					if (connector.State == ChannelStates.Stopped)
 					{
-						left--;
-
-						if (left == 0)
+						if (Interlocked.Decrement(ref left) == 0)
 							TryStartNextBatch(batches, currentBatch, totalBatches, batchWeight);
 					}
 				};
