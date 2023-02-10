@@ -37,7 +37,7 @@
     <SBEVer>1.23.1.1</SBEVer>
     <SysCommandLineVer>2.0.0-beta4.22272.1</SysCommandLineVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.3.1</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisCSharpVer>4.4.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
