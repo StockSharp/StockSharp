@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Testing
 			private DateTimeOffset _prevTime;
 			private readonly ExecutionLogConverter _execLogConverter;
 			private int _volumeDecimals;
-			private readonly SortedDictionary<DateTimeOffset, Tuple<List<CandleMessage>, List<ExecutionMessage>>> _candleInfo = new();
+			private readonly SortedDictionary<DateTimeOffset, (List<CandleMessage> candles, List<ExecutionMessage> ticks)> _candleInfo = new();
 			private LogLevels? _logLevel;
 			private DateTime _lastStripDate;
 
@@ -100,8 +100,8 @@ namespace StockSharp.Algo.Testing
 					return;
 
 				if (message.Type is not MessageTypes.Time
-					and	not MessageTypes.Level1Change
-					and	not MessageTypes.QuoteChange)
+					and not MessageTypes.Level1Change
+					and not MessageTypes.QuoteChange)
 					this.AddDebugLog((isInput ? " --> {0}" : " <-- {0}"), message);
 			}
 
@@ -305,7 +305,7 @@ namespace StockSharp.Algo.Testing
 								quoteMsg.LocalTime,
 								quoteMsg.ServerTime));
 						}
-							
+
 						break;
 					}
 
@@ -360,15 +360,15 @@ namespace StockSharp.Algo.Testing
 							// в трейдах используется время открытия свечи, при разных MarketTimeChangedInterval и TimeFrame свечек
 							// возможны ситуации, когда придет TimeMsg 11:03:00, а время закрытия будет 11:03:30
 							// т.о. время уйдет вперед данных, которые построены по свечкам.
-							var info = _candleInfo.SafeAdd(candleMsg.OpenTime, key => Tuple.Create(new List<CandleMessage>(), new List<ExecutionMessage>()));
+							var info = _candleInfo.SafeAdd(candleMsg.OpenTime, key => (new(), new()));
 
-							info.Item1.Add(candleMsg.TypedClone());
+							info.candles.Add(candleMsg.TypedClone());
 
 							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
 							{
 								var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
 								Process(trades[0], result);
-								info.Item2.AddRange(trades.Skip(1));
+								info.ticks.AddRange(trades.Skip(1));
 							}
 
 							break;
@@ -974,13 +974,13 @@ namespace StockSharp.Algo.Testing
 					{
 						_candleInfo.Remove(pair.Key);
 
-						foreach (var trade in pair.Value.Item2)
+						foreach (var trade in pair.Value.ticks)
 							result.Add(trade);
 
 						// change current time before the candle will be processed
 						result.Add(new TimeMessage { LocalTime = message.LocalTime });
 
-						foreach (var candle in pair.Value.Item1)
+						foreach (var candle in pair.Value.candles)
 						{
 							candle.LocalTime = message.LocalTime;
 							result.Add(candle);
@@ -1579,11 +1579,11 @@ namespace StockSharp.Algo.Testing
 					if (_currentMoney < needBlock)
 					{
 						return LocalizedStrings.Str1169Params
-						                       .Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
+							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
 					}
 				}
 				else if (_parent.Settings.CheckShortable && execMsg.Side == Sides.Sell &&
-				         _parent._securityEmulators.TryGetValue(execMsg.SecurityId, out var secEmu) &&
+						 _parent._securityEmulators.TryGetValue(execMsg.SecurityId, out var secEmu) &&
 						 secEmu.SecurityDefinition?.Shortable == false)
 				{
 					var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);
@@ -1593,7 +1593,7 @@ namespace StockSharp.Algo.Testing
 					if (potentialPosition < 0)
 					{
 						return LocalizedStrings.CannotShortPosition
-						                       .Put(execMsg.PortfolioName, execMsg.TransactionId, money.PositionCurrentValue, execMsg.OrderVolume);
+							.Put(execMsg.PortfolioName, execMsg.TransactionId, money.PositionCurrentValue, execMsg.OrderVolume);
 					}
 				}
 
