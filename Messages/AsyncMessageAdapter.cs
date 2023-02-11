@@ -90,7 +90,65 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 
 	/// <inheritdoc />
 	protected virtual ValueTask OnRunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(mdMsg, cancellationToken);
+	{
+		if (!mdMsg.IsSubscribe)
+			return OnStopSubscriptionAsync(mdMsg, cancellationToken);
+
+		var dataType = mdMsg.DataType2;
+
+		if (dataType == DataType.News)
+			return OnNewsSubscriptionAsync(mdMsg, cancellationToken);
+		else if (dataType == DataType.Level1)
+			return OnLevel1SubscriptionAsync(mdMsg, cancellationToken);
+		else if (dataType == DataType.Ticks)
+			return OnTicksSubscriptionAsync(mdMsg, cancellationToken);
+		else if (dataType == DataType.MarketDepth)
+			return OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken);
+		else if (dataType == DataType.OrderLog)
+			return OnOrderLogSubscriptionAsync(mdMsg, cancellationToken);
+		else if (dataType.IsTFCandles)
+			return OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken);
+		else
+			throw SubscriptionResponseMessage.NotSupported;
+	}
+
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnStopSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+		return default;
+	}
+
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnNewsSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
+
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
 
 	/// <inheritdoc />
 	protected virtual ValueTask OnProcessMessageAsync(Message msg, CancellationToken cancellationToken)
