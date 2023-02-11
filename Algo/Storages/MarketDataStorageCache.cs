@@ -35,7 +35,7 @@ public class MarketDataStorageCache
 		var key = (dataType, date);
 
 		if (!_cache.TryGetValue(key, out var messages))
-			_cache[key] = messages = init(date).ToArray();
+			_cache[key] = messages = loadIfNeed(date).ToArray();
 
 		return messages;
 	}
