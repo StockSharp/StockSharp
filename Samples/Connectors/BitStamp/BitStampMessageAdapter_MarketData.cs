@@ -57,12 +57,6 @@ namespace StockSharp.BitStamp
 
 		private void ProcessMarketData(MarketDataMessage mdMsg)
 		{
-			if (!mdMsg.SecurityId.IsAssociated())
-			{
-				SendSubscriptionNotSupported(mdMsg.TransactionId);
-				return;
-			}
-
 			var currency = mdMsg.SecurityId.ToCurrency();
 
 			if (mdMsg.DataType2 == DataType.OrderLog)

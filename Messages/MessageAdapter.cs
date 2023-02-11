@@ -332,6 +332,22 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		public virtual string AssociatedBoard => string.Empty;
+
+		/// <summary>
+		/// Validate the specified security id is supported by the adapter and subscription can be done.
+		/// </summary>
+		/// <param name="secId"><see cref="SecurityId"/>.</param>
+		/// <returns>Check result.</returns>
+		protected virtual bool ValidateSecurityId(SecurityId secId)
+		{
+			if (secId == SecurityId.News)
+				return SupportedMarketDataTypes.Contains(DataType.News);
+
+			return secId.IsAssociated(AssociatedBoard);
+		}
+
+		/// <inheritdoc />
 		public bool SendInMessage(Message message)
 		{
 			if (message.Type == MessageTypes.Connect)
@@ -351,6 +367,19 @@ namespace StockSharp.Messages
 
 			try
 			{
+				if (message.Type == MessageTypes.MarketData && !AssociatedBoard.IsEmpty())
+				{
+					var mdMsg = (MarketDataMessage)message;
+					var secId = mdMsg.SecurityId;
+
+					if (!ValidateSecurityId(secId))
+					{
+						var boardCode = AssociatedBoard;
+						SendOutMessage(mdMsg.TransactionId.CreateSubscriptionResponse(new NotSupportedException(LocalizedStrings.WrongSecurityBoard.Put(secId, boardCode, $"{secId.SecurityCode}@{boardCode}"))));
+						return false;
+					}
+				}
+
 				var result = OnSendInMessage(message);
 
 				if (IsAutoReplyOnTransactonalUnsubscription)
@@ -491,21 +520,6 @@ namespace StockSharp.Messages
 		protected void SendSubscriptionNotSupported(long originalTransactionId)
 		{
 			SendOutMessage(originalTransactionId.CreateNotSupported());
-		}
-
-		/// <summary>
-		/// Check the <paramref name="expectedBoard"/> can supported. If not supported the method <see cref="SendSubscriptionNotSupported"/> will be called.
-		/// </summary>
-		/// <param name="mdMsg"><see cref="MarketDataMessage"/>.</param>
-		/// <param name="expectedBoard">Supported board code.</param>
-		/// <returns>Check result.</returns>
-		protected bool CheckBoardNotSupported(MarketDataMessage mdMsg, string expectedBoard)
-		{
-			if (mdMsg.SecurityId.IsAssociated(expectedBoard))
-				return true;
-
-			SendOutMessage(mdMsg.TransactionId.CreateSubscriptionResponse(new NotSupportedException(LocalizedStrings.WrongSecurityBoard.Put(mdMsg.SecurityId, expectedBoard, $"{mdMsg.SecurityId.SecurityCode}@{expectedBoard}"))));
-			return false;
 		}
 
 		/// <summary>

@@ -375,6 +375,8 @@ namespace StockSharp.Messages
 			set => InnerAdapter.GenerateOrderBookFromLevel1 = value;
 		}
 
+		string IMessageAdapter.AssociatedBoard => InnerAdapter.AssociatedBoard;
+
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 			=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
 

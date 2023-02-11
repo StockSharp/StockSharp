@@ -202,6 +202,11 @@ namespace StockSharp.Messages
 		bool GenerateOrderBookFromLevel1 { get; set; }
 
 		/// <summary>
+		/// The adapter can process subscription only with instruments associated with the specified board.
+		/// </summary>
+		string AssociatedBoard { get; }
+
+		/// <summary>
 		/// Create market depth builder.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>

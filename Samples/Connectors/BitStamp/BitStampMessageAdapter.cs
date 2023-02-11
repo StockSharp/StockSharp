@@ -51,6 +51,9 @@ namespace StockSharp.BitStamp
 			=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 		/// <inheritdoc />
+		public override string AssociatedBoard => BoardCodes.BitStamp;
+
+		/// <inheritdoc />
 		public override TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
 		{
 			var step = base.GetHistoryStepSize(dataType, out iterationInterval);

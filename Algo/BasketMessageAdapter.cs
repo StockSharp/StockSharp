@@ -777,6 +777,8 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.GenerateOrderBookFromLevel1 { get; set; }
 
+		string IMessageAdapter.AssociatedBoard => string.Empty;
+
 		/// <summary>
 		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>
