@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Testing
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -56,6 +57,58 @@ namespace StockSharp.Algo.Testing
 			public void Free(TMessage message) => _messageQueue.Enqueue(message);
 		}
 
+		private class LevelQuotes : IEnumerable<ExecutionMessage>
+		{
+			private readonly List<ExecutionMessage> _quotes = new();
+			private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new();
+
+			public int Count => _quotes.Count;
+
+			public ExecutionMessage this[int i]
+			{
+				get => _quotes[i];
+				set
+				{
+					var prev = _quotes[i];
+
+					if (prev.TransactionId != 0)
+						_quotesByTrId.Remove(prev.TransactionId);
+
+					_quotes[i] = value;
+
+					if (value.TransactionId != 0)
+						_quotesByTrId[value.TransactionId] = value;
+				}
+			}
+
+			public bool TryGetByTransactionId(long transactionId, out ExecutionMessage msg) => _quotesByTrId.TryGetValue(transactionId, out msg);
+
+			public void Add(ExecutionMessage quote)
+			{
+				if (quote.TransactionId != 0)
+					_quotesByTrId[quote.TransactionId] = quote;
+
+				_quotes.Add(quote);
+			}
+
+			public void RemoveAt(int index, ExecutionMessage quote = null)
+			{
+				if (quote == null)
+					quote = _quotes[index];
+
+				_quotes.RemoveAt(index);
+
+				if (quote.TransactionId != 0)
+					_quotesByTrId.Remove(quote.TransactionId);
+			}
+
+			public void Remove(ExecutionMessage quote) => RemoveAt(_quotes.IndexOf(quote), quote);
+
+			public IEnumerator<ExecutionMessage> GetEnumerator() => _quotes.GetEnumerator();
+
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+		}
+
 		private sealed class SecurityMarketEmulator : BaseLogReceiver//, IMarketEmulator
 		{
 			private readonly MarketEmulator _parent;
@@ -67,7 +120,10 @@ namespace StockSharp.Algo.Testing
 			private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks = new();
 			private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = new();
 			private DateTimeOffset _prevTime;
-			private readonly ExecutionLogConverter _execLogConverter;
+			private readonly MarketEmulatorSettings _settings;
+			private readonly Random _volumeRandom = new(TimeHelper.Now.Millisecond);
+			private readonly Random _priceRandom = new(TimeHelper.Now.Millisecond);
+			private readonly RandomArray<bool> _isMatch = new(100);
 			private int _volumeDecimals;
 			private readonly SortedDictionary<DateTimeOffset, (List<CandleMessage> candles, List<ExecutionMessage> ticks)> _candleInfo = new();
 			private LogLevels? _logLevel;
@@ -79,17 +135,31 @@ namespace StockSharp.Algo.Testing
 			private long? _depthSubscription;
 			private long? _ticksSubscription;
 
+			private bool _priceStepUpdated;
+			private bool _volumeStepUpdated;
+
+			private decimal _prevTickPrice;
+			private decimal _currSpreadPrice;
+
+			private decimal? _prevBidPrice;
+			private decimal? _prevBidVolume;
+			private decimal? _prevAskPrice;
+			private decimal? _prevAskVolume;
+
+			// указывает, есть ли реальные стаканы, чтобы своей псевдо генерацией не портить настоящую историю
+			private DateTime _lastDepthDate;
+			//private DateTime _lastTradeDate;
+
 			private readonly MessagePool<ExecutionMessage> _messagePool = new();
 
 			public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
 			{
 				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 				_securityId = securityId;
-				_execLogConverter = new ExecutionLogConverter(securityId, _bids, _asks, _parent.Settings, GetServerTime);
+				_settings = parent.Settings;
 			}
 
 			private SecurityMessage _securityDefinition;
-
 			public SecurityMessage SecurityDefinition => _securityDefinition;
 
 			private void LogMessage(Message message, bool isInput)
@@ -126,29 +196,17 @@ namespace StockSharp.Algo.Testing
 
 						if (execMsg.DataType == DataType.Ticks)
 						{
-							foreach (var m in _execLogConverter.ToExecutionLog(execMsg))
-								Process(m, result);
-
-							if (_ticksSubscription is not null)
-								result.Add(execMsg);
-
-							if (_depthSubscription is not null)
-							{
-								result.Add(CreateQuoteMessage(
-									execMsg.SecurityId,
-									execMsg.LocalTime,
-									execMsg.ServerTime));
-							}
+							ProcessTick(execMsg, result);
 						}
 						else if (execMsg.DataType == DataType.Transactions)
 						{
 							if (!execMsg.HasOrderInfo())
 								throw new InvalidOperationException();
 
-							if (_parent.Settings.Latency > TimeSpan.Zero)
+							if (_settings.Latency > TimeSpan.Zero)
 							{
 								this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancellation ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
-								_pendingExecutions.Add(execMsg.TypedClone(), _parent.Settings.Latency);
+								_pendingExecutions.Add(execMsg.TypedClone(), _settings.Latency);
 							}
 							else
 								AcceptExecution(execMsg.LocalTime, execMsg, result);
@@ -173,7 +231,7 @@ namespace StockSharp.Algo.Testing
 					{
 						var orderMsg = (OrderRegisterMessage)message;
 
-						foreach (var m in _execLogConverter.ToExecutionLog(orderMsg, GetTotalVolume(orderMsg.Side.Invert())))
+						foreach (var m in ToExecutionLog(orderMsg, GetTotalVolume(orderMsg.Side.Invert())))
 							Process(m, result);
 
 						break;
@@ -183,7 +241,7 @@ namespace StockSharp.Algo.Testing
 					{
 						var orderMsg = (OrderCancelMessage)message;
 
-						foreach (var m in _execLogConverter.ToExecutionLog(orderMsg, 0))
+						foreach (var m in ToExecutionLog(orderMsg, 0))
 							Process(m, result);
 
 						break;
@@ -196,7 +254,7 @@ namespace StockSharp.Algo.Testing
 						var orderMsg = (OrderReplaceMessage)message;
 						var oldOrder = _activeOrders.TryGetValue(orderMsg.OriginalTransactionId);
 
-						foreach (var execMsg in _execLogConverter.ToExecutionLog(orderMsg, GetTotalVolume(orderMsg.Side.Invert())))
+						foreach (var execMsg in ToExecutionLog(orderMsg, GetTotalVolume(orderMsg.Side.Invert())))
 						{
 							if (oldOrder != null)
 							{
@@ -282,51 +340,18 @@ namespace StockSharp.Algo.Testing
 					}
 
 					case MessageTypes.QuoteChange:
-					{
-						var quoteMsg = (QuoteChangeMessage)message;
-
-						foreach (var m in _execLogConverter.ToExecutionLog(quoteMsg))
-						{
-							if (m.DataType == DataType.Ticks)
-							{
-								m.ServerTime = quoteMsg.ServerTime;
-								result.Add(m);
-							}
-							else
-								Process(m, result);
-						}
-
-						if (_depthSubscription is not null)
-						{
-							// возращаем не входящий стакан, а тот, что сейчас хранится внутри эмулятора.
-							// таким образом мы можем видеть в стакане свои цены и объемы
-
-							result.Add(CreateQuoteMessage(
-								quoteMsg.SecurityId,
-								quoteMsg.LocalTime,
-								quoteMsg.ServerTime));
-						}
-
+						ProcessQuoteChange((QuoteChangeMessage)message, result);
 						break;
-					}
 
 					case MessageTypes.Level1Change:
-					{
-						var level1Msg = (Level1ChangeMessage)message;
-
-						UpdateSecurityDefinition(level1Msg);
-
-						foreach (var m in _execLogConverter.ToExecutionLog(level1Msg))
-							Process(m, result);
-
+						ProcessLevel1((Level1ChangeMessage)message, result);
 						break;
-					}
 
 					case MessageTypes.Security:
 					{
 						_securityDefinition = (SecurityMessage)message.Clone();
 						_volumeDecimals = GetVolumeStep().GetCachedDecimals();
-						_execLogConverter.UpdateSecurityDefinition(_securityDefinition);
+						UpdateSecurityDefinition(_securityDefinition);
 						break;
 					}
 
@@ -391,6 +416,683 @@ namespace StockSharp.Algo.Testing
 					LogMessage(item, false);
 			}
 
+			private ExecutionMessage CreateMessage(DateTimeOffset localTime, DateTimeOffset serverTime, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
+			{
+				if (price <= 0)
+					throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str1144);
+
+				//if (volume <= 0)
+				//	throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str3344);
+
+				if (volume == 0)
+					volume = _volumeRandom.Next(10, 100);
+
+				return new()
+				{
+					Side = side,
+					OrderPrice = price,
+					OrderVolume = volume,
+					DataTypeEx = DataType.OrderLog,
+					IsCancellation = isCancelling,
+					SecurityId = _securityId,
+					LocalTime = localTime,
+					ServerTime = serverTime,
+					TimeInForce = tif,
+				};
+			}
+
+			private IEnumerable<ExecutionMessage> ToExecutionLog(OrderMessage message, decimal quotesVolume)
+			{
+				var serverTime = GetServerTime(message.LocalTime);
+				var priceStep = GetPriceStep();
+
+				bool NeedCheckVolume(OrderRegisterMessage message)
+				{
+					if (!_settings.IncreaseDepthVolume)
+						return false;
+
+					var orderSide = message.Side;
+					var price = message.Price;
+
+					var quotes = orderSide == Sides.Buy ? _asks : _bids;
+
+					var quote = quotes.FirstOrDefault();
+
+					if (quote.Value == null)
+						return false;
+
+					var bestPrice = quote.Key;
+
+					return (orderSide == Sides.Buy ? price >= bestPrice : price <= bestPrice)
+						&& quotesVolume <= message.Volume;
+				}
+
+				IEnumerable<ExecutionMessage> IncreaseDepthVolume(OrderRegisterMessage message)
+				{
+					var leftVolume = (message.Volume - quotesVolume) + 1;
+					var orderSide = message.Side;
+
+					var quotes = orderSide == Sides.Buy ? _asks : _bids;
+					var quote = quotes.LastOrDefault();
+
+					if (quote.Value == null)
+						yield break;
+
+					var side = orderSide.Invert();
+
+					var lastVolume = quote.Value.Second.Volume;
+					var lastPrice = quote.Value.Second.Price;
+
+					while (leftVolume > 0 && lastPrice != 0)
+					{
+						lastVolume *= 2;
+						lastPrice += priceStep * (side == Sides.Buy ? -1 : 1);
+
+						leftVolume -= lastVolume;
+
+						yield return CreateMessage(message.LocalTime, serverTime, side, lastPrice, lastVolume);
+					}
+				}
+
+				switch (message.Type)
+				{
+					case MessageTypes.OrderRegister:
+					{
+						var regMsg = (OrderRegisterMessage)message;
+
+						if (NeedCheckVolume(regMsg))
+						{
+							foreach (var executionMessage in IncreaseDepthVolume(regMsg))
+								yield return executionMessage;
+						}
+
+						yield return new ExecutionMessage
+						{
+							LocalTime = regMsg.LocalTime,
+							ServerTime = serverTime,
+							SecurityId = regMsg.SecurityId,
+							DataTypeEx = DataType.Transactions,
+							HasOrderInfo = true,
+							TransactionId = regMsg.TransactionId,
+							OrderPrice = regMsg.Price,
+							OrderVolume = regMsg.Volume,
+							Side = regMsg.Side,
+							PortfolioName = regMsg.PortfolioName,
+							OrderType = regMsg.OrderType,
+							UserOrderId = regMsg.UserOrderId,
+							StrategyId = regMsg.StrategyId,
+						};
+
+						yield break;
+					}
+					case MessageTypes.OrderReplace:
+					{
+						var replaceMsg = (OrderReplaceMessage)message;
+
+						if (NeedCheckVolume(replaceMsg))
+						{
+							foreach (var executionMessage in IncreaseDepthVolume(replaceMsg))
+								yield return executionMessage;
+						}
+
+						yield return new ExecutionMessage
+						{
+							LocalTime = replaceMsg.LocalTime,
+							ServerTime = serverTime,
+							SecurityId = replaceMsg.SecurityId,
+							DataTypeEx = DataType.Transactions,
+							HasOrderInfo = true,
+							IsCancellation = true,
+							OrderId = replaceMsg.OldOrderId,
+							OriginalTransactionId = replaceMsg.OriginalTransactionId,
+							TransactionId = replaceMsg.TransactionId,
+							PortfolioName = replaceMsg.PortfolioName,
+							OrderType = replaceMsg.OrderType,
+							StrategyId = replaceMsg.StrategyId,
+							// для старой заявки пользовательский идентификатор менять не надо
+							//UserOrderId = replaceMsg.UserOrderId
+						};
+
+						yield return new ExecutionMessage
+						{
+							LocalTime = replaceMsg.LocalTime,
+							ServerTime = serverTime,
+							SecurityId = replaceMsg.SecurityId,
+							DataTypeEx = DataType.Transactions,
+							HasOrderInfo = true,
+							TransactionId = replaceMsg.TransactionId,
+							OrderPrice = replaceMsg.Price,
+							OrderVolume = replaceMsg.Volume,
+							Side = replaceMsg.Side,
+							PortfolioName = replaceMsg.PortfolioName,
+							OrderType = replaceMsg.OrderType,
+							UserOrderId = replaceMsg.UserOrderId,
+							StrategyId = replaceMsg.StrategyId,
+						};
+
+						yield break;
+					}
+					case MessageTypes.OrderCancel:
+					{
+						var cancelMsg = (OrderCancelMessage)message;
+
+						yield return new ExecutionMessage
+						{
+							DataTypeEx = DataType.Transactions,
+							HasOrderInfo = true,
+							IsCancellation = true,
+							OrderId = cancelMsg.OrderId,
+							TransactionId = cancelMsg.TransactionId,
+							OriginalTransactionId = cancelMsg.OriginalTransactionId,
+							PortfolioName = cancelMsg.PortfolioName,
+							SecurityId = cancelMsg.SecurityId,
+							LocalTime = cancelMsg.LocalTime,
+							ServerTime = serverTime,
+							OrderType = cancelMsg.OrderType,
+							StrategyId = cancelMsg.StrategyId,
+							// при отмене заявки пользовательский идентификатор не меняется
+							//UserOrderId = cancelMsg.UserOrderId
+						};
+
+						yield break;
+					}
+
+					case MessageTypes.OrderPairReplace:
+					case MessageTypes.OrderGroupCancel:
+						throw new NotSupportedException();
+
+					default:
+						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1219);
+				}
+			}
+
+			private void ProcessLevel1(Level1ChangeMessage message, ICollection<Message> result)
+			{
+				UpdateSecurityDefinition(message);
+
+				if (message.IsContainsTick())
+				{
+					ProcessTick(message.ToTick(), result);
+				}
+				else if (message.IsContainsQuotes() && !HasDepth(message.LocalTime))
+				{
+					var prevBidPrice = _prevBidPrice;
+					var prevBidVolume = _prevBidVolume;
+					var prevAskPrice = _prevAskPrice;
+					var prevAskVolume = _prevAskVolume;
+
+					_prevBidPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _prevBidPrice;
+					_prevBidVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _prevBidVolume;
+					_prevAskPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _prevAskPrice;
+					_prevAskVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _prevAskVolume;
+
+					if (_prevBidPrice == 0)
+						_prevBidPrice = null;
+
+					if (_prevAskPrice == 0)
+						_prevAskPrice = null;
+
+					if (prevBidPrice == _prevBidPrice && prevBidVolume == _prevBidVolume && prevAskPrice == _prevAskPrice && prevAskVolume == _prevAskVolume)
+						return;
+
+					ProcessQuoteChange(new QuoteChangeMessage
+					{
+						SecurityId = message.SecurityId,
+						LocalTime = message.LocalTime,
+						ServerTime = message.ServerTime,
+						Bids = _prevBidPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
+						Asks = _prevAskPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
+					}, result);
+				}
+			}
+
+			private void ProcessQuoteChange(QuoteChangeMessage message, ICollection<Message> result)
+			{
+				if (!_priceStepUpdated || !_volumeStepUpdated)
+				{
+					var quote = message.GetBestBid() ?? message.GetBestAsk();
+
+					if (quote != null)
+						UpdateSteps(quote.Value.Price, quote.Value.Volume);
+				}
+
+				_lastDepthDate = message.LocalTime.Date;
+
+				var localTime = message.LocalTime;
+				var serverTime = message.ServerTime;
+
+				var diff = new List<ExecutionMessage>();
+
+				void GetDiff(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
+				{
+					void AddExecMsg(QuoteChange quote, decimal volume, Sides side, bool isSpread)
+					{
+						if (volume > 0)
+							diff.Add(CreateMessage(localTime, serverTime, side, quote.Price, volume));
+						else
+						{
+							volume = volume.Abs();
+
+							// matching only top orders (spread)
+							if (isSpread && volume > 1 && _isMatch.Next())
+							{
+								var tradeVolume = (int)volume / 2;
+
+								diff.Add(new ExecutionMessage
+								{
+									Side = side,
+									TradeVolume = tradeVolume,
+									DataTypeEx = DataType.Ticks,
+									SecurityId = _securityId,
+									LocalTime = localTime,
+									ServerTime = serverTime,
+									TradePrice = quote.Price,
+								});
+
+								// that tick will not affect on order book
+								//volume -= tradeVolume;
+							}
+
+							diff.Add(CreateMessage(localTime, serverTime, side, quote.Price, volume, true));
+						}
+					}
+
+					newBestPrice = 0;
+
+					var canProcessFrom = true;
+					var canProcessTo = true;
+
+					QuoteChange? currFrom = null;
+					QuoteChange? currTo = null;
+
+					var mult = side == Sides.Buy ? -1 : 1;
+					bool? isSpread = null;
+
+					using (var fromEnum = from.GetEnumerator())
+					using (var toEnum = to.GetEnumerator())
+					{
+						while (true)
+						{
+							if (canProcessFrom && currFrom == null)
+							{
+								if (!fromEnum.MoveNext())
+									canProcessFrom = false;
+								else
+								{
+									currFrom = fromEnum.Current.Value.Second;
+									isSpread = isSpread == null;
+								}
+							}
+
+							if (canProcessTo && currTo == null)
+							{
+								if (!toEnum.MoveNext())
+									canProcessTo = false;
+								else
+								{
+									currTo = toEnum.Current;
+
+									if (newBestPrice == 0)
+										newBestPrice = currTo.Value.Price;
+								}
+							}
+
+							if (currFrom == null)
+							{
+								if (currTo == null)
+									break;
+								else
+								{
+									var v = currTo.Value;
+
+									AddExecMsg(v, v.Volume, side, false);
+									currTo = null;
+								}
+							}
+							else
+							{
+								if (currTo == null)
+								{
+									var v = currFrom.Value;
+									AddExecMsg(v, -v.Volume, side, isSpread.Value);
+									currFrom = null;
+								}
+								else
+								{
+									var f = currFrom.Value;
+									var t = currTo.Value;
+
+									if (f.Price == t.Price)
+									{
+										if (f.Volume != t.Volume)
+										{
+											AddExecMsg(t, t.Volume - f.Volume, side, isSpread.Value);
+										}
+
+										currFrom = currTo = null;
+									}
+									else if (f.Price * mult > t.Price * mult)
+									{
+										AddExecMsg(t, t.Volume, side, isSpread.Value);
+										currTo = null;
+									}
+									else
+									{
+										AddExecMsg(f, -f.Volume, side, isSpread.Value);
+										currFrom = null;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				GetDiff(_bids, message.Bids.ToArray(), Sides.Buy, out var bestBidPrice);
+				GetDiff(_asks, message.Asks.ToArray(), Sides.Sell, out var bestAskPrice);
+
+				var spreadPrice = bestAskPrice == 0
+					? bestBidPrice
+					: (bestBidPrice == 0
+						? bestAskPrice
+						: (bestAskPrice - bestBidPrice) / 2 + bestBidPrice);
+
+				//при обновлении стакана необходимо учитывать направление сдвига, чтобы не было ложного исполнения при наложении бидов и асков.
+				//т.е. если цена сдвинулась вниз, то обновление стакана необходимо начинать с минимального бида.
+				var diffs = (spreadPrice < _currSpreadPrice)
+						? diff.OrderBy(m => m.OrderPrice)
+						: diff.OrderByDescending(m => m.OrderPrice);
+
+				foreach (var m in diffs)
+				{
+					if (m.DataType == DataType.Ticks)
+					{
+						m.ServerTime = message.ServerTime;
+						result.Add(m);
+					}
+					else
+						Process(m, result);
+				}
+
+				_currSpreadPrice = spreadPrice;
+
+				if (_depthSubscription is not null)
+				{
+					// возращаем не входящий стакан, а тот, что сейчас хранится внутри эмулятора.
+					// таким образом мы можем видеть в стакане свои цены и объемы
+
+					result.Add(CreateQuoteMessage(
+						message.SecurityId,
+						localTime,
+						serverTime));
+				}
+			}
+
+			private void ProcessTick(ExecutionMessage tick, ICollection<Message> result)
+			{
+				var tradePrice = tick.GetTradePrice();
+				var tickVolume = tick.TradeVolume;
+
+				UpdateSteps(tradePrice, tickVolume);
+
+				var bestBid = _bids.FirstOrDefault();
+				var bestAsk = _asks.FirstOrDefault();
+
+				var volume = tickVolume ?? 1;
+				var localTime = tick.LocalTime;
+				var serverTime = tick.ServerTime;
+
+				var hasDepth = HasDepth(localTime);
+
+				var diff = new List<ExecutionMessage>();
+
+				void TryCreateOppositeOrder(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes, Sides originSide)
+				{
+					var priceStep = GetPriceStep();
+					var oppositePrice = (tradePrice + _settings.SpreadSize * priceStep * (originSide == Sides.Buy ? 1 : -1)).Max(priceStep);
+
+					var bestQuote = quotes.FirstOrDefault();
+
+					if (bestQuote.Value == null || ((originSide == Sides.Buy && oppositePrice < bestQuote.Key) || (originSide == Sides.Sell && oppositePrice > bestQuote.Key)))
+						diff.Add(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume));
+				}
+
+				Sides GetOrderSide()
+				{
+					return tick.OriginSide == null
+						? tick.TradePrice > _prevTickPrice ? Sides.Sell : Sides.Buy
+						: tick.OriginSide.Value.Invert();
+				}
+
+				void ProcessMarketOrder(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes, Sides orderSide)
+				{
+					// вычисляем объем заявки по рынку, который смог бы пробить текущие котировки.
+
+					// bigOrder - это наша большая рыночная заявка, которая способствовала появлению tradeMessage
+					var bigOrder = CreateMessage(localTime, serverTime, orderSide, tradePrice, 0, tif: TimeInForce.MatchOrCancel);
+					var sign = orderSide == Sides.Buy ? -1 : 1;
+					var hasQuotes = false;
+
+					foreach (var pair in quotes)
+					{
+						var quote = pair.Value.Second;
+
+						if (quote.Price * sign > tradePrice * sign)
+						{
+							bigOrder.OrderVolume += quote.Volume;
+						}
+						else
+						{
+							if (quote.Price == tradePrice)
+							{
+								bigOrder.OrderVolume += volume;
+
+								//var diff = tradeMessage.Volume - quote.Volume;
+
+								//// если объем котиовки был меньше объема сделки
+								//if (diff > 0)
+								//	retVal.Add(CreateMessage(tradeMessage.LocalTime, quote.Side, quote.Price, diff));
+							}
+							else
+							{
+								if ((tradePrice - quote.Price).Abs() == _securityDefinition.PriceStep)
+								{
+									// если на один шаг цены выше/ниже есть котировка, то не выполняем никаких действий
+									// иначе добавляем новый уровень в стакан, чтобы не было большого расхождения цен.
+									hasQuotes = true;
+								}
+
+								break;
+							}
+
+							//// если котировки с ценой сделки вообще не было в стакане
+							//else if (quote.Price * sign < tradeMessage.TradePrice * sign)
+							//{
+							//	retVal.Add(CreateMessage(tradeMessage.LocalTime, quote.Side, tradeMessage.Price, tradeMessage.Volume));
+							//}
+						}
+					}
+
+					diff.Add(bigOrder);
+
+					// если собрали все котировки, то оставляем заявку в стакане по цене сделки
+					if (!hasQuotes)
+						diff.Add(CreateMessage(localTime, serverTime, orderSide.Invert(), tradePrice, volume));
+				}
+
+				if (bestBid.Value != null && tradePrice <= bestBid.Key)
+				{
+					// тик попал в биды, значит была крупная заявка по рынку на продажу,
+					// которая возможна исполнила наши заявки
+
+					ProcessMarketOrder(_bids, Sides.Sell);
+
+					if (!hasDepth)
+					{
+						// подтягиваем противоположные котировки и снимаем лишние заявки
+						TryCreateOppositeOrder(_asks, Sides.Buy);
+					}
+				}
+				else if (bestAsk.Value != null && tradePrice >= bestAsk.Key)
+				{
+					// тик попал в аски, значит была крупная заявка по рынку на покупку,
+					// которая возможна исполнила наши заявки
+
+					ProcessMarketOrder(_asks, Sides.Buy);
+
+					if (!hasDepth)
+					{
+						// подтягиваем противоположные котировки и снимаем лишние заявки
+						TryCreateOppositeOrder(_bids, Sides.Sell);
+					}
+				}
+				else if (bestBid.Value != null && bestAsk.Value != null && bestBid.Key < tradePrice && tradePrice < bestAsk.Key)
+				{
+					// тик попал в спред, значит в спреде до сделки была заявка.
+					// создаем две лимитки с разных сторон, но одинаковой ценой.
+					// если в эмуляторе есть наша заявка на этом уровне, то она исполниться.
+					// если нет, то эмулятор взаимно исполнит эти заявки друг об друга
+
+					var originSide = GetOrderSide();
+
+					diff.Add(CreateMessage(localTime, serverTime, originSide, tradePrice, volume + (_securityDefinition.VolumeStep ?? 1 * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
+
+					var spreadStep = _settings.SpreadSize * GetPriceStep();
+
+					// try to fill depth gaps
+
+					var newBestPrice = tradePrice + spreadStep;
+
+					var depth = _settings.MaxDepth;
+					while (--depth > 0)
+					{
+						if (bestAsk.Key > newBestPrice)
+						{
+							diff.Add(CreateMessage(localTime, serverTime, Sides.Sell, newBestPrice, 0));
+							newBestPrice += spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
+						}
+						else
+							break;
+					}
+
+					newBestPrice = tradePrice - spreadStep;
+
+					depth = _settings.MaxDepth;
+					while (--depth > 0)
+					{
+						if (newBestPrice > bestBid.Key)
+						{
+							diff.Add(CreateMessage(localTime, serverTime, Sides.Buy, newBestPrice, 0));
+							newBestPrice -= spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
+						}
+						else
+							break;
+					}
+
+					diff.Add(CreateMessage(localTime, serverTime, originSide.Invert(), tradePrice, volume, tif: TimeInForce.MatchOrCancel));
+				}
+				else
+				{
+					// если у нас стакан был полу пустой, то тик формирует некий ценовой уровень в стакана,
+					// так как прошедщая заявка должна была обо что-то удариться. допускаем, что после
+					// прохождения сделки на этом ценовом уровне остался объем равный тиковой сделки
+
+					var hasOpposite = true;
+
+					Sides originSide;
+
+					// определяем направление псевдо-ранее существовавшей заявки, из которой получился тик
+					if (bestBid.Value != null)
+						originSide = Sides.Sell;
+					else if (bestAsk.Value != null)
+						originSide = Sides.Buy;
+					else
+					{
+						originSide = GetOrderSide();
+						hasOpposite = false;
+					}
+
+					diff.Add(CreateMessage(localTime, serverTime, originSide, tradePrice, volume));
+
+					// если стакан был полностью пустой, то формируем сразу уровень с противоположной стороны
+					if (!hasOpposite)
+					{
+						var oppositePrice = tradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
+
+						if (oppositePrice > 0)
+							diff.Add(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume));
+					}
+				}
+
+				if (!hasDepth)
+				{
+					void CancelWorstQuote(Sides side, SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
+					{
+						if (quotes.Count <= _settings.MaxDepth)
+							return;
+
+						var worst = quotes.Last();
+						var volume = worst.Value.First.Where(e => e.PortfolioName == null).Sum(e => e.OrderVolume.Value);
+
+						if (volume == 0)
+							return;
+
+						diff.Add(CreateMessage(localTime, serverTime, side, worst.Key, volume, true));
+					}
+
+					// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
+					CancelWorstQuote(Sides.Buy, _bids);
+					CancelWorstQuote(Sides.Sell, _asks);
+				}
+
+				_prevTickPrice = tradePrice;
+
+				foreach (var m in diff)
+					Process(m, result);
+
+				if (_ticksSubscription is not null)
+					result.Add(tick);
+
+				if (_depthSubscription is not null)
+				{
+					result.Add(CreateQuoteMessage(
+						tick.SecurityId,
+						localTime,
+						serverTime));
+				}
+			}
+
+			private decimal GetPriceStep() => _securityDefinition.PriceStep ?? 0.01m;
+			private bool HasDepth(DateTimeOffset time) => _lastDepthDate == time.Date;
+
+			private void UpdateSteps(decimal price, decimal? volume)
+			{
+				if (!_priceStepUpdated)
+				{
+					_securityDefinition.PriceStep = price.GetDecimalInfo().EffectiveScale.GetPriceStep();
+					_priceStepUpdated = true;
+				}
+
+				if (!_volumeStepUpdated)
+				{
+					if (volume != null)
+					{
+						_securityDefinition.VolumeStep = volume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
+						_volumeStepUpdated = true;
+					}
+				}
+			}
+
+			private void UpdateSecurityDefinition(SecurityMessage securityDefinition)
+			{
+				_securityDefinition = securityDefinition ?? throw new ArgumentNullException(nameof(securityDefinition));
+
+				if (_securityDefinition.PriceStep != null)
+					_priceStepUpdated = true;
+
+				if (_securityDefinition.VolumeStep != null)
+					_volumeStepUpdated = true;
+			}
+
 			private void UpdatePriceLimits(ExecutionMessage execution, ICollection<Message> result)
 			{
 				if (_lastStripDate == execution.LocalTime.Date)
@@ -412,7 +1114,7 @@ namespace StockSharp.Algo.Testing
 
 				_lastStripDate = execution.LocalTime.Date;
 
-				var priceOffset = _parent.Settings.PriceLimitOffset;
+				var priceOffset = _settings.PriceLimitOffset;
 				var priceStep = _securityDefinition?.PriceStep ?? 0.01m;
 
 				var level1Msg =
@@ -458,7 +1160,7 @@ namespace StockSharp.Algo.Testing
 					}
 				}
 
-				_execLogConverter.UpdateSecurityDefinition(_securityDefinition);
+				UpdateSecurityDefinition(_securityDefinition);
 			}
 
 			private decimal GetVolumeStep()
@@ -496,9 +1198,9 @@ namespace StockSharp.Algo.Testing
 
 			private void AcceptExecution(DateTimeOffset time, ExecutionMessage execution, ICollection<Message> result)
 			{
-				if (_parent.Settings.Failing > 0)
+				if (_settings.Failing > 0)
 				{
-					if (RandomGen.GetDouble() < (_parent.Settings.Failing / 100.0))
+					if (RandomGen.GetDouble() < (_settings.Failing / 100.0))
 					{
 						this.AddErrorLog(LocalizedStrings.Str1151Params, execution.IsCancellation ? LocalizedStrings.Str1152 : LocalizedStrings.Str1153, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
 
@@ -733,7 +1435,7 @@ namespace StockSharp.Algo.Testing
 						if (sign * price > sign * orderPrice)
 							break;
 
-						if (price == orderPrice && !_parent.Settings.MatchOnTouch)
+						if (price == orderPrice && !_settings.MatchOnTouch)
 							break;
 					}
 
@@ -1116,13 +1818,7 @@ namespace StockSharp.Algo.Testing
 					}
 					else
 					{
-						var quote = level.TryGetByTransactionId(message.TransactionId);
-
-						//TODO при перерегистрации номер транзакции может совпадать для двух заявок
-						//if (quote == null)
-						//	throw new InvalidOperationException("Котировка для отмены с номером транзакции {0} не найдена.".Put(message.TransactionId));
-
-						if (quote != null)
+						if (level.TryGetByTransactionId(message.TransactionId, out var quote))
 						{
 							var balance = quote.GetBalance();
 
@@ -1216,10 +1912,10 @@ namespace StockSharp.Algo.Testing
 
 			private DateTimeOffset GetServerTime(DateTimeOffset time)
 			{
-				if (!_parent.Settings.ConvertTime)
+				if (!_settings.ConvertTime)
 					return time;
 
-				var destTimeZone = _parent.Settings.TimeZone;
+				var destTimeZone = _settings.TimeZone;
 
 				if (destTimeZone == null)
 				{
@@ -1567,7 +2263,9 @@ namespace StockSharp.Algo.Testing
 
 			public string CheckRegistration(ExecutionMessage execMsg)
 			{
-				if (_parent.Settings.CheckMoney)
+				var settings = _parent.Settings;
+
+				if (settings.CheckMoney)
 				{
 					// если задан баланс, то проверям по нему (для частично исполненных заявок)
 					var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
@@ -1582,7 +2280,7 @@ namespace StockSharp.Algo.Testing
 							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
 					}
 				}
-				else if (_parent.Settings.CheckShortable && execMsg.Side == Sides.Sell &&
+				else if (settings.CheckShortable && execMsg.Side == Sides.Sell &&
 						 _parent._securityEmulators.TryGetValue(execMsg.SecurityId, out var secEmu) &&
 						 secEmu.SecurityDefinition?.Shortable == false)
 				{
