@@ -82,13 +82,6 @@ namespace StockSharp.Algo
 			/// <param name="security">Security.</param>
 			/// <returns>The previous instrument. If the <paramref name="security" /> is the first instrument then <see langword="null" /> will be returned.</returns>
 			SecurityId? GetPrevSecurity(SecurityId security);
-			
-			/// <summary>
-			/// To get the range of operation of the internal instrument.
-			/// </summary>
-			/// <param name="security">The internal instrument.</param>
-			/// <returns>The range of operation.</returns>
-			Range<DateTimeOffset> GetActivityRange(SecurityId security);
 		}
 
 		private sealed class ExpirationJumpsDictionary : SynchronizedPairSet<SecurityId, DateTimeOffset>, IExpirationJumpList
@@ -200,10 +193,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private void DisposeEnumerator()
-			{
-				_enumerator?.Dispose();
-			}
+			private void DisposeEnumerator() => _enumerator?.Dispose();
 
 			SecurityId IExpirationJumpList.FirstSecurity => GetSecurity(DateTimeOffset.MinValue);
 
@@ -230,19 +220,6 @@ namespace StockSharp.Algo
 
 					var index = InnerSecurities.IndexOf(security);
 					return index == 0 ? null : InnerSecurities[index - 1];
-				}
-			}
-
-			Range<DateTimeOffset> IExpirationJumpList.GetActivityRange(SecurityId security)
-			{
-				if (security == null)
-					throw new ArgumentNullException(nameof(security));
-
-				lock (SyncRoot)
-				{
-					return (from expirationRange in _expirationRanges
-							where expirationRange.Value == security
-							select expirationRange.Key).First();
 				}
 			}
 		}

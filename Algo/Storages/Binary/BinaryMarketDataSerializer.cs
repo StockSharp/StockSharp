@@ -428,9 +428,6 @@ namespace StockSharp.Algo.Storages.Binary
 
 		protected BinaryMarketDataSerializer(SecurityId securityId, object arg, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
 		{
-			if (securityId == null)
-				throw new ArgumentNullException(nameof(securityId));
-
 			// force hash code caching
 			securityId.GetHashCode();
 
