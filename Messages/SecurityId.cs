@@ -53,10 +53,9 @@ namespace StockSharp.Messages
 			get => _securityCode;
 			set
 			{
-				if (_hashCode != 0)
-					throw new InvalidOperationException("Cannot be modified.");
-
+				CheckImmutable();
 				_securityCode = value;
+				_hashCode = default;
 			}
 		}
 
@@ -74,10 +73,9 @@ namespace StockSharp.Messages
 			get => _boardCode;
 			set
 			{
-				if (_hashCode != 0)
-					throw new InvalidOperationException("Cannot be modified.");
-
+				CheckImmutable();
 				_boardCode = value;
+				_hashCode = default;
 			}
 		}
 
@@ -91,8 +89,7 @@ namespace StockSharp.Messages
 			get => _nativeAsInt != 0 ? _nativeAsInt : _native;
 			set
 			{
-				if (_hashCode != 0)
-					throw new InvalidOperationException("Cannot be modified.");
+				CheckImmutable();
 
 				_native = value;
 
@@ -100,6 +97,8 @@ namespace StockSharp.Messages
 
 				if (value is long l)
 					_nativeAsInt = l;
+
+				_hashCode = default;
 			}
 		}
 
@@ -113,10 +112,10 @@ namespace StockSharp.Messages
 			get => _nativeAsInt;
 			set
 			{
-				if (_hashCode != 0)
-					throw new InvalidOperationException("Cannot be modified.");
+				CheckImmutable();
 
 				_nativeAsInt = value;
+				_hashCode = default;
 			}
 		}
 
@@ -338,25 +337,43 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// "Money" security id.
 		/// </summary>
-		public static readonly SecurityId Money = new()
+		public static readonly SecurityId Money = new SecurityId
 		{
 			SecurityCode = "MONEY",
 			BoardCode = AssociatedBoardCode
-		};
+		}.Immutable();
 
 		/// <summary>
 		/// "News" security id.
 		/// </summary>
-		public static readonly SecurityId News = new()
+		public static readonly SecurityId News = new SecurityId
 		{
 			SecurityCode = "NEWS",
 			BoardCode = AssociatedBoardCode
-		};
+		}.Immutable();
 
 		/// <summary>
 		/// Determines the id is <see cref="Money"/> or <see cref="News"/>.
 		/// </summary>
 		public bool IsSpecial => this == Money || this == News;
+
+		private bool _immutable;
+
+		/// <summary>
+		/// Make immutable.
+		/// </summary>
+		/// <returns><see cref="SecurityId"/>.</returns>
+		public SecurityId Immutable()
+		{
+			_immutable = true;
+			return this;
+		}
+
+		private void CheckImmutable()
+		{
+			if (_immutable)
+				throw new InvalidOperationException(LocalizedStrings.CannotBeModified);
+		}
 	}
 
 	/// <summary>
