@@ -94,8 +94,7 @@ namespace StockSharp.Algo.Testing
 
 			private void LogMessage(Message message, bool isInput)
 			{
-				if (_logLevel == null)
-					_logLevel = this.GetLogLevel();
+				_logLevel ??= this.GetLogLevel();
 
 				if (_logLevel != LogLevels.Debug)
 					return;
@@ -165,7 +164,7 @@ namespace StockSharp.Algo.Testing
 							//	result.Add(execMsg);
 						}
 						else
-							throw new ArgumentOutOfRangeException();
+							throw new ArgumentOutOfRangeException(nameof(message), execMsg.DataType, LocalizedStrings.Str1219);
 
 						break;
 					}
@@ -366,21 +365,21 @@ namespace StockSharp.Algo.Testing
 							// в трейдах используется время открытия свечи, при разных MarketTimeChangedInterval и TimeFrame свечек
 							// возможны ситуации, когда придет TimeMsg 11:03:00, а время закрытия будет 11:03:30
 							// т.о. время уйдет вперед данных, которые построены по свечкам.
-							var info = _candleInfo.SafeAdd(candleMsg.OpenTime, key => (new(), new()));
+							var (candles, ticks) = _candleInfo.SafeAdd(candleMsg.OpenTime, key => (new(), new()));
 
-							info.candles.Add(candleMsg.TypedClone());
+							candles.Add(candleMsg.TypedClone());
 
 							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
 							{
 								var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
 								Process(trades[0], result);
-								info.ticks.AddRange(trades.Skip(1));
+								ticks.AddRange(trades.Skip(1));
 							}
 
 							break;
 						}
 
-						throw new ArgumentOutOfRangeException();
+						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1219);
 					}
 				}
 
@@ -695,16 +694,12 @@ namespace StockSharp.Algo.Testing
 
 			private SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> GetQuotes(Sides side)
 			{
-				switch (side)
+				return side switch
 				{
-					case Sides.Buy:
-						return _bids;
-					case Sides.Sell:
-						return _asks;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.Str1219);
-				}
-				//return _quotes.SafeAdd(side, key => new SortedDictionary<decimal, List<ExecutionMessage>>(side == Sides.Buy ? new BackwardComparer<decimal>() : null));
+					Sides.Buy => _bids,
+					Sides.Sell => _asks,
+					_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.Str1219),
+				};
 			}
 
 			private void MatchOrder(DateTimeOffset time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
@@ -775,8 +770,7 @@ namespace StockSharp.Algo.Testing
 						}
 						else
 						{
-							if (toRemove == null)
-								toRemove = new List<decimal>();
+							toRemove ??= new List<decimal>();
 
 							toRemove.Add(price);
 
@@ -827,8 +821,7 @@ namespace StockSharp.Algo.Testing
 
 								if (levelQuotes.Count == 0)
 								{
-									if (toRemove == null)
-										toRemove = new List<decimal>();
+									toRemove ??= new List<decimal>();
 
 									toRemove.Add(price);
 								}
@@ -2030,8 +2023,7 @@ namespace StockSharp.Algo.Testing
 
 		private IEnumerable<Message> BufferResult(IEnumerable<Message> result, DateTimeOffset time)
 		{
-			if (_needBuffer == null)
-				_needBuffer = Settings.BufferTime > TimeSpan.Zero;
+			_needBuffer ??= Settings.BufferTime > TimeSpan.Zero;
 
 			if (_needBuffer == false)
 				return result;
@@ -2139,8 +2131,7 @@ namespace StockSharp.Algo.Testing
 				var minPrice = (decimal?)state.TryGetValue(Level1Fields.MinPrice);
 				var maxPrice = (decimal?)state.TryGetValue(Level1Fields.MaxPrice);
 
-				if (priceStep == null)
-					priceStep = (decimal?)state.TryGetValue(Level1Fields.PriceStep);
+				priceStep ??= (decimal?)state.TryGetValue(Level1Fields.PriceStep);
 
 				if (minPrice != null && minPrice > 0 && execMsg.OrderPrice < minPrice)
 					return LocalizedStrings.Str1172Params.Put(execMsg.OrderPrice, execMsg.TransactionId, minPrice);
@@ -2152,8 +2143,7 @@ namespace StockSharp.Algo.Testing
 			if (priceStep != null && priceStep > 0 && execMsg.OrderPrice % priceStep != 0)
 				return LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(execMsg.OrderPrice, execMsg.TransactionId, priceStep);
 
-			if (volumeStep == null)
-				volumeStep = (decimal?)state?.TryGetValue(Level1Fields.VolumeStep);
+			volumeStep ??= (decimal?)state?.TryGetValue(Level1Fields.VolumeStep);
 
 			if (volumeStep != null && volumeStep > 0 && execMsg.OrderVolume % volumeStep != 0)
 				return LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(execMsg.OrderVolume, execMsg.TransactionId, volumeStep);

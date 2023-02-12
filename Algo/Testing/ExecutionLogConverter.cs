@@ -145,9 +145,6 @@ namespace StockSharp.Algo.Testing
 			QuoteChange? currFrom = null;
 			QuoteChange? currTo = null;
 
-			// TODO
-			//List<ExecutionMessage> currOrders = null;
-
 			var mult = side == Sides.Buy ? -1 : 1;
 			bool? isSpread = null;
 
@@ -706,7 +703,7 @@ namespace StockSharp.Algo.Testing
 					throw new NotSupportedException();
 
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1219);
 			}
 		}
 
