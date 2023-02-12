@@ -77,6 +77,7 @@ namespace StockSharp.Algo.Testing
 			private decimal _totalAskVolume;
 
 			private long? _depthSubscription;
+			private long? _ticksSubscription;
 
 			private readonly MessagePool<ExecutionMessage> _messagePool = new();
 
@@ -129,7 +130,8 @@ namespace StockSharp.Algo.Testing
 							foreach (var m in _execLogConverter.ToExecutionLog(execMsg))
 								Process(m, result);
 
-							result.Add(execMsg);
+							if (_ticksSubscription is not null)
+								result.Add(execMsg);
 
 							if (_depthSubscription is not null)
 							{
@@ -343,11 +345,15 @@ namespace StockSharp.Algo.Testing
 						{
 							if (mdMsg.DataType2 == DataType.MarketDepth)
 								_depthSubscription = mdMsg.TransactionId;
+							else if (mdMsg.DataType2 == DataType.Ticks)
+								_ticksSubscription = mdMsg.TransactionId;
 						}
 						else
 						{
 							if (_depthSubscription == mdMsg.OriginalTransactionId)
 								_depthSubscription = null;
+							else if (_ticksSubscription == mdMsg.OriginalTransactionId)
+								_ticksSubscription = null;
 						}
 
 						break;
@@ -635,9 +641,7 @@ namespace StockSharp.Algo.Testing
 				if (message.OrderVolume is null or <= 0)
 					throw new ArgumentOutOfRangeException(nameof(message), message.OrderVolume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
 
-				var isRegister = !message.IsCancellation;
-
-				if (!isRegister)
+				if (message.IsCancellation)
 				{
 					UpdateQuote(message, false);
 					return;
@@ -974,8 +978,11 @@ namespace StockSharp.Algo.Testing
 					{
 						_candleInfo.Remove(pair.Key);
 
-						foreach (var trade in pair.Value.ticks)
-							result.Add(trade);
+						if (_ticksSubscription is not null)
+						{
+							foreach (var trade in pair.Value.ticks)
+								result.Add(trade);
+						}
 
 						// change current time before the candle will be processed
 						result.Add(new TimeMessage { LocalTime = message.LocalTime });
