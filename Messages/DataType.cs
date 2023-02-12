@@ -66,12 +66,10 @@ namespace StockSharp.Messages
 			return this;
 		}
 
-		/// <summary>
-		/// </summary>
-		protected void CheckImmutable()
+		private void CheckImmutable()
 		{
 			if (_immutable)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException(LocalizedStrings.CannotBeModified);
 		}
 
 		/// <summary>
