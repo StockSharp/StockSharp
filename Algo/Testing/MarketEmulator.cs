@@ -93,8 +93,7 @@ namespace StockSharp.Algo.Testing
 
 			public void RemoveAt(int index, ExecutionMessage quote = null)
 			{
-				if (quote == null)
-					quote = _quotes[index];
+				quote ??= _quotes[index];
 
 				_quotes.RemoveAt(index);
 
@@ -708,79 +707,78 @@ namespace StockSharp.Algo.Testing
 					var mult = side == Sides.Buy ? -1 : 1;
 					bool? isSpread = null;
 
-					using (var fromEnum = from.GetEnumerator())
-					using (var toEnum = to.GetEnumerator())
+					using var fromEnum = from.GetEnumerator();
+					using var toEnum = to.GetEnumerator();
+
+					while (true)
 					{
-						while (true)
+						if (canProcessFrom && currFrom == null)
 						{
-							if (canProcessFrom && currFrom == null)
+							if (!fromEnum.MoveNext())
+								canProcessFrom = false;
+							else
 							{
-								if (!fromEnum.MoveNext())
-									canProcessFrom = false;
-								else
-								{
-									currFrom = fromEnum.Current.Value.Second;
-									isSpread = isSpread == null;
-								}
+								currFrom = fromEnum.Current.Value.Second;
+								isSpread = isSpread == null;
 							}
+						}
 
-							if (canProcessTo && currTo == null)
+						if (canProcessTo && currTo == null)
+						{
+							if (!toEnum.MoveNext())
+								canProcessTo = false;
+							else
 							{
-								if (!toEnum.MoveNext())
-									canProcessTo = false;
-								else
-								{
-									currTo = toEnum.Current;
+								currTo = toEnum.Current;
 
-									if (newBestPrice == 0)
-										newBestPrice = currTo.Value.Price;
-								}
+								if (newBestPrice == 0)
+									newBestPrice = currTo.Value.Price;
 							}
+						}
 
-							if (currFrom == null)
+						if (currFrom == null)
+						{
+							if (currTo == null)
+								break;
+							else
 							{
-								if (currTo == null)
-									break;
-								else
-								{
-									var v = currTo.Value;
+								var v = currTo.Value;
 
-									AddExecMsg(v, v.Volume, side, false);
-									currTo = null;
-								}
+								AddExecMsg(v, v.Volume, side, false);
+								currTo = null;
+							}
+						}
+						else
+						{
+							if (currTo == null)
+							{
+								var v = currFrom.Value;
+								AddExecMsg(v, -v.Volume, side, isSpread.Value);
+								currFrom = null;
 							}
 							else
 							{
-								if (currTo == null)
+								var f = currFrom.Value;
+								var t = currTo.Value;
+
+								if (f.Price == t.Price)
 								{
-									var v = currFrom.Value;
-									AddExecMsg(v, -v.Volume, side, isSpread.Value);
-									currFrom = null;
+									if (f.Volume != t.Volume)
+									{
+										AddExecMsg(t, t.Volume - f.Volume, side, isSpread.Value);
+									}
+
+									currFrom = currTo = null;
+								}
+								else if (f.Price * mult > t.Price * mult)
+								{
+									AddExecMsg(t, t.Volume, side, isSpread.Value);
+									currTo = null;
 								}
 								else
 								{
-									var f = currFrom.Value;
-									var t = currTo.Value;
-
-									if (f.Price == t.Price)
-									{
-										if (f.Volume != t.Volume)
-										{
-											AddExecMsg(t, t.Volume - f.Volume, side, isSpread.Value);
-										}
-
-										currFrom = currTo = null;
-									}
-									else if (f.Price * mult > t.Price * mult)
-									{
-										AddExecMsg(t, t.Volume, side, isSpread.Value);
-										currTo = null;
-									}
-									else
-									{
-										AddExecMsg(f, -f.Volume, side, isSpread.Value);
-										currFrom = null;
-									}
+									AddExecMsg(f, -f.Volume, side, isSpread.Value);
+									currFrom = null;
 								}
 							}
 						}
