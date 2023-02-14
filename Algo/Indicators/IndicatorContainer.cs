@@ -1,93 +1,32 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo.Indicators;
 
-Project: StockSharp.Algo.Indicators.Algo
-File: IndicatorContainer.cs
-Created: 2015, 11, 11, 2:32 PM
+using System.Collections.Generic;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Indicators
+using Ecng.Collections;
+
+/// <summary>
+/// The container, storing indicators data.
+/// </summary>
+public class IndicatorContainer : IIndicatorContainer
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	private readonly CircularBuffer<(IIndicatorValue, IIndicatorValue)> _values = new(100);
 
-	using Ecng.Collections;
+	/// <inheritdoc />
+	public int Count => _values.Count;
 
-	using StockSharp.Localization;
+	/// <inheritdoc />
+	public virtual void AddValue(IIndicatorValue input, IIndicatorValue result)
+		=> _values.PushFront((input, result));
 
-	/// <summary>
-	/// The container, storing indicators data.
-	/// </summary>
-	public class IndicatorContainer : IIndicatorContainer
-	{
-		private readonly FixedSynchronizedList<Tuple<IIndicatorValue, IIndicatorValue>> _values = new();
+	/// <inheritdoc />
+	public virtual IEnumerable<(IIndicatorValue, IIndicatorValue)> GetValues()
+		=> _values.ToArray();
 
-		/// <summary>
-		/// The maximal number of indicators values.
-		/// </summary>
-		public int MaxValueCount
-		{
-			get => _values.BufferSize;
-			set => _values.BufferSize = value;
-		}
+	/// <inheritdoc />
+	public virtual (IIndicatorValue, IIndicatorValue) GetValue(int index)
+		=> _values[index];
 
-		/// <summary>
-		/// The current number of saved values.
-		/// </summary>
-		public int Count => _values.Count;
-
-		/// <summary>
-		/// Add new values.
-		/// </summary>
-		/// <param name="input">The input value of the indicator.</param>
-		/// <param name="result">The resulting value of the indicator.</param>
-		public virtual void AddValue(IIndicatorValue input, IIndicatorValue result)
-		{
-			_values.Add(Tuple.Create(input, result));
-		}
-
-		/// <summary>
-		/// To get all values of the identifier.
-		/// </summary>
-		/// <returns>All values of the identifier. The empty set, if there are no values.</returns>
-		public virtual IEnumerable<Tuple<IIndicatorValue, IIndicatorValue>> GetValues()
-		{
-			return _values.SyncGet(c => c.Reverse().ToArray());
-		}
-
-		/// <summary>
-		/// To get the indicator value by the index.
-		/// </summary>
-		/// <param name="index">The sequential number of value from the end.</param>
-		/// <returns>Input and resulting values of the indicator.</returns>
-		public virtual Tuple<IIndicatorValue, IIndicatorValue> GetValue(int index)
-		{
-			if (index < 0)
-				throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str912);
-
-			lock (_values.SyncRoot)
-			{
-				if (index >= _values.Count)
-					throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str913);
-
-				return _values[_values.Count - 1 - index];
-			}
-		}
-
-		/// <summary>
-		/// To delete all values of the indicator.
-		/// </summary>
-		public virtual void ClearValues()
-		{
-			_values.Clear();
-		}
-	}
+	/// <inheritdoc />
+	public virtual void ClearValues()
+		=> _values.Clear();
 }

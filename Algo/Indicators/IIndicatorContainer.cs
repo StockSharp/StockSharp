@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
 	using System.Collections.Generic;
 
 	/// <summary>
@@ -39,14 +38,14 @@ namespace StockSharp.Algo.Indicators
 		/// To get all values of the identifier.
 		/// </summary>
 		/// <returns>All values of the identifier. The empty set, if there are no values.</returns>
-		IEnumerable<Tuple<IIndicatorValue, IIndicatorValue>> GetValues();
+		IEnumerable<(IIndicatorValue input, IIndicatorValue output)> GetValues();
 
 		/// <summary>
 		/// To get the indicator value by the index.
 		/// </summary>
 		/// <param name="index">The sequential number of value from the end.</param>
 		/// <returns>Input and resulting values of the indicator.</returns>
-		Tuple<IIndicatorValue, IIndicatorValue> GetValue(int index);
+		(IIndicatorValue input, IIndicatorValue output) GetValue(int index);
 
 		/// <summary>
 		/// To delete all values of the indicator.
