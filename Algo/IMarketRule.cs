@@ -104,16 +104,6 @@ namespace StockSharp.Algo
 		bool CanFinish();
 	}
 
-	class Holder
-	{
-		public static readonly MemoryStatisticsValue<IMarketRule> RuleStat = new(LocalizedStrings.Str1088);
-
-		static Holder()
-		{
-			MemoryStatistics.Instance.Values.Add(RuleStat);
-		}
-	}
-
 	/// <summary>
 	/// The rule, activating action at market condition occurrence.
 	/// </summary>
@@ -140,8 +130,6 @@ namespace StockSharp.Algo
 			Name = GetType().Name;
 
 			Until(CanFinish);
-
-			Holder.RuleStat.Add(this);
 		}
 
 		/// <summary>
@@ -390,8 +378,6 @@ namespace StockSharp.Algo
 			_container = null;
 
 			base.DisposeManaged();
-
-			Holder.RuleStat.Remove(this);
 		}
 
 		bool IMarketRule.CanFinish()

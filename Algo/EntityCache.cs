@@ -37,8 +37,6 @@ namespace StockSharp.Algo
 
 	class EntityCache : ISnapshotHolder
 	{
-		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new(LocalizedStrings.Ticks);
-
 		public class OrderChangeInfo
 		{
 			private OrderChangeInfo() { }
@@ -315,7 +313,6 @@ namespace StockSharp.Algo
 			if (TradesKeepCount == 0)
 				return;
 
-			_tradeStat.Add(trade);
 			_trades.Add(trade);
 
 			RecycleTrades();
@@ -388,7 +385,6 @@ namespace StockSharp.Algo
 			_myTrades.Clear();
 
 			_trades.Clear();
-			_tradeStat.Clear(true);
 
 			_orderStatusTransactions.Clear();
 			_massCancelationTransactions.Clear();
@@ -1069,7 +1065,6 @@ namespace StockSharp.Algo
 			if (TradesKeepCount == 0)
 			{
 				_trades.Clear();
-				_tradeStat.Clear(true);
 				_securityData.SyncDo(d => d.Values.ForEach(v =>
 				{
 					v.Trades.Clear();
@@ -1100,8 +1095,6 @@ namespace StockSharp.Algo
 
 				foreach (var trade in toRemove)
 				{
-					_tradeStat.Remove(trade);
-
 					var data = GetData(trade.Security);
 
 					if (trade.Id != 0)

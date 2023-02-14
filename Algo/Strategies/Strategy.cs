@@ -91,13 +91,6 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		private static readonly MemoryStatisticsValue<Strategy> _strategyStat = new(LocalizedStrings.Str1355);
-
-		static Strategy()
-		{
-			MemoryStatistics.Instance.Values.Add(_strategyStat);
-		}
-
 		private sealed class ChildStrategyList : SynchronizedSet<Strategy>, IStrategyChildStrategyList
 		{
 			private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = new();
@@ -382,8 +375,6 @@ namespace StockSharp.Algo.Strategies
 			_maxRegisterCount.CanOptimize = false;
 
 			InitMaxOrdersKeepTime();
-
-			_strategyStat.Add(this);
 
 			RiskManager = new RiskManager { Parent = this };
 
@@ -3205,8 +3196,6 @@ namespace StockSharp.Algo.Strategies
 			Connector = null;
 
 			base.DisposeManaged();
-
-			_strategyStat.Remove(this);
 		}
 	}
 }

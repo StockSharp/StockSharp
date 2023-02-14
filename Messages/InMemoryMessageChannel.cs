@@ -20,21 +20,11 @@ namespace StockSharp.Messages
 
 	using Ecng.Common;
 
-	using StockSharp.Localization;
-	using StockSharp.Logging;
-
 	/// <summary>
 	/// Message channel, based on the queue and operate within a single process.
 	/// </summary>
 	public class InMemoryMessageChannel : IMessageChannel
 	{
-		private static readonly MemoryStatisticsValue<Message> _msgStat = new(LocalizedStrings.Messages);
-
-		static InMemoryMessageChannel()
-		{
-			MemoryStatistics.Instance.Values.Add(_msgStat);
-		}
-
 		private readonly IMessageQueue _queue;
 		private readonly Action<Exception> _errorHandler;
 
@@ -173,7 +163,6 @@ namespace StockSharp.Messages
 							if (_version != version)
 								break;
 
-							_msgStat.Remove(message);
 							NewOutMessage?.Invoke(message);
 						}
 						catch (Exception ex)
@@ -233,7 +222,6 @@ namespace StockSharp.Messages
 					return false;
 			}
 
-			_msgStat.Add(message);
 			_queue.Enqueue(message);
 
 			if (_queue.Count > SuspendMaxCount)

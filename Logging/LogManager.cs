@@ -33,13 +33,6 @@ namespace StockSharp.Logging
 	/// </summary>
 	public class LogManager : Disposable, IPersistable
 	{
-		private static readonly MemoryStatisticsValue<LogMessage> _logMsgStat = new(LocalizedStrings.MessageLog);
-
-		static LogManager()
-		{
-			MemoryStatistics.Instance.Values.Add(_logMsgStat);
-		}
-
 		private sealed class ApplicationReceiver : BaseLogReceiver
 		{
 			public ApplicationReceiver()
@@ -167,8 +160,6 @@ namespace StockSharp.Logging
 				_isFlusing = true;
 			}
 
-			_logMsgStat.Remove(temp);
-
 			try
 			{
 				var messages = new List<LogMessage>();
@@ -269,8 +260,6 @@ namespace StockSharp.Logging
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
-
-			_logMsgStat.Add(message);
 
 			lock (_syncRoot)
 			{

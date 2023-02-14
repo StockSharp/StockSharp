@@ -31,13 +31,6 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	public class CandleManagerContainer : Disposable, ICandleManagerContainer
 	{
-		private static readonly MemoryStatisticsValue<Candle> _candleStat = new(LocalizedStrings.Candles);
-
-		static CandleManagerContainer()
-		{
-			MemoryStatistics.Instance.Values.Add(_candleStat);
-		}
-
 		private sealed class SeriesInfo
 		{
 			private readonly CandleManagerContainer _container;
@@ -62,11 +55,7 @@ namespace StockSharp.Algo.Candles
 
 				_byTime.Clear();
 
-				lock (_allCandles.SyncRoot)
-				{
-					_candleStat.Remove(_allCandles);
-					_allCandles.Clear();
-				}
+				_allCandles.Clear();
 			}
 
 			public bool AddCandle(Candle candle)
@@ -80,7 +69,6 @@ namespace StockSharp.Algo.Candles
 					return false;
 
 				_allCandles.AddLast(candle);
-				_candleStat.Add(candle);
 
 				_lastCandleTime = ticks;
 
@@ -108,7 +96,6 @@ namespace StockSharp.Algo.Candles
 						if (list.First.Value.OpenTime.To<long>() >= _firstCandleTime)
 							break;
 
-						_candleStat.Remove(list.First.Value);
 						list.RemoveFirst();
 					}
 				});
