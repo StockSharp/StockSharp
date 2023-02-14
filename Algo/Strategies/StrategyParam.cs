@@ -75,55 +75,52 @@ namespace StockSharp.Algo.Strategies
 	/// <summary>
 	/// Wrapper for typified access to the strategy parameter.
 	/// </summary>
-	public class StrategyParam : IStrategyParam
+	/// <typeparam name="T">The type of the parameter value.</typeparam>
+	public class StrategyParam<T> : IStrategyParam
 	{
-		private readonly IEqualityComparer _comparer;
+		private readonly IEqualityComparer<T> _comparer;
 		private readonly Strategy _strategy;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="name">Parameter name.</param>
-		/// <param name="type">The type of the parameter value.</param>
-		public StrategyParam(Strategy strategy, string name, Type type)
-			: this(strategy, name, name, type)
+		public StrategyParam(Strategy strategy, string name)
+			: this(strategy, name, name)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="id">Parameter identifier.</param>
 		/// <param name="name">Parameter name.</param>
-		/// <param name="type">The type of the parameter value.</param>
-		public StrategyParam(Strategy strategy, string id, string name, Type type)
-			: this(strategy, id, name, type, default)
+		public StrategyParam(Strategy strategy, string id, string name)
+			: this(strategy, id, name, default)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="name">Parameter name.</param>
-		/// <param name="type">The type of the parameter value.</param>
 		/// <param name="initialValue">The initial value.</param>
-		public StrategyParam(Strategy strategy, string name, Type type, object initialValue)
-			: this(strategy, name, name, type, initialValue)
+		public StrategyParam(Strategy strategy, string name, T initialValue)
+			: this(strategy, name, name, initialValue)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="id">Parameter identifier.</param>
 		/// <param name="name">Parameter name.</param>
-		/// <param name="type">The type of the parameter value.</param>
 		/// <param name="initialValue">The initial value.</param>
-		public StrategyParam(Strategy strategy, string id, string name, Type type, object initialValue)
+		public StrategyParam(Strategy strategy, string id, string name, T initialValue)
 		{
 			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
@@ -134,16 +131,15 @@ namespace StockSharp.Algo.Strategies
 			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			Id = id;
 			Name = name;
-			Type = type ?? throw new ArgumentNullException(nameof(type));
 			_value = initialValue;
 
 			if (!_strategy.Parameters.TryAdd2(id, this))
 				throw new ArgumentException(LocalizedStrings.CompositionAlreadyExistParams.Put(name, string.Empty), nameof(name));
 
-			CanOptimize = type.CanOptimize();
-			AllowNull = Type.IsNullable();
+			CanOptimize = typeof(T).CanOptimize();
+			AllowNull = typeof(T).IsNullable();
 
-			_comparer = (IEqualityComparer)typeof(EqualityComparer<>).Make(type).GetProperty(nameof(EqualityComparer<int>.Default)).GetValue(null);
+			_comparer = EqualityComparer<T>.Default;
 		}
 
 		/// <inheritdoc />
@@ -157,13 +153,10 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public bool AllowNull { get; set; }
 
-		/// <inheritdoc />
-		public Type Type { get; }
-
-		private object _value;
+		private T _value;
 
 		/// <inheritdoc />
-		public object Value
+		public T Value
 		{
 			get => _value;
 			set
@@ -193,6 +186,14 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
+		Type IStrategyParam.Type => typeof(T);
+
+		object IStrategyParam.Value
+		{
+			get => Value;
+			set => Value = (T)value;
+		}
+
 		/// <inheritdoc />
 		public bool CanOptimize { get; set; }
 
@@ -218,7 +219,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			Id = storage.GetValue<string>(nameof(Id));
 			Name = storage.GetValue<string>(nameof(Name));
-			Value = storage.GetValue(Type, nameof(Value));
+			Value = storage.GetValue<T>(nameof(Value));
 			CanOptimize = storage.GetValue(nameof(CanOptimize), CanOptimize);
 			OptimizeFrom = storage.GetValue<SettingsStorage>(nameof(OptimizeFrom))?.FromStorage();
 			OptimizeTo = storage.GetValue<SettingsStorage>(nameof(OptimizeTo))?.FromStorage();
@@ -242,65 +243,5 @@ namespace StockSharp.Algo.Strategies
 
 		/// <inheritdoc />
 		public override string ToString() => Name;
-	}
-
-	/// <summary>
-	/// Wrapper for typified access to the strategy parameter.
-	/// </summary>
-	/// <typeparam name="T">The type of the parameter value.</typeparam>
-	public class StrategyParam<T> : StrategyParam
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="name">Parameter name.</param>
-		public StrategyParam(Strategy strategy, string name)
-			: base(strategy, name, name, typeof(T))
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="id">Parameter identifier.</param>
-		/// <param name="name">Parameter name.</param>
-		public StrategyParam(Strategy strategy, string id, string name)
-			: base(strategy, id, name, typeof(T), default)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="name">Parameter name.</param>
-		/// <param name="initialValue">The initial value.</param>
-		public StrategyParam(Strategy strategy, string name, T initialValue)
-			: base(strategy, name, name, typeof(T), initialValue)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StrategyParam"/>.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="id">Parameter identifier.</param>
-		/// <param name="name">Parameter name.</param>
-		/// <param name="initialValue">The initial value.</param>
-		public StrategyParam(Strategy strategy, string id, string name, T initialValue)
-			: base(strategy, id, name, typeof(T), initialValue)
-		{
-		}
-
-		/// <summary>
-		/// The parameter value.
-		/// </summary>
-		public new T Value
-		{
-			get => (T)base.Value;
-			set => base.Value = value;
-		}
 	}
 }
