@@ -4962,7 +4962,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
 		public static bool IsTradeDate(this BoardMessage board, DateTimeOffset date, bool checkHolidays = false)
 		{
-			if (board == null)
+			if (board is null)
 				throw new ArgumentNullException(nameof(board));
 
 			var exchangeTime = date.ToLocalTime(board.TimeZone);

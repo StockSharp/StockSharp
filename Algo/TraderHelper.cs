@@ -471,18 +471,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To check, whether date is traded.
-		/// </summary>
-		/// <param name="board">Board info.</param>
-		/// <param name="date">The passed date to be checked.</param>
-		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
-		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
-		public static bool IsTradeDate(this ExchangeBoard board, DateTimeOffset date, bool checkHolidays = false)
-		{
-			return board.ToMessage().IsTradeDate(date, checkHolidays);
-		}
-
-		/// <summary>
 		/// To create from regular order book a sparse on, with minimal price step of <see cref="Security.PriceStep"/>.
 		/// </summary>
 		/// <remarks>

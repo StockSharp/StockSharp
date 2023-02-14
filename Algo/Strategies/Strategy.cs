@@ -338,6 +338,7 @@ namespace StockSharp.Algo.Strategies
 		private bool _isPrevDateTradable;
 		private bool _stopping;
 		private DateTimeOffset _lastRegisterTime;
+		private BoardMessage _boardMsg;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Strategy"/>.
@@ -2153,6 +2154,7 @@ namespace StockSharp.Algo.Strategies
 			ErrorState = LogLevels.Info;
 			ErrorCount = 0;
 
+			_boardMsg = null;
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
 			_idStr = null;
 
@@ -2473,27 +2475,23 @@ namespace StockSharp.Algo.Strategies
 
 			_lastPnlRefreshTime = msgTime.Value;
 
-			ExchangeBoard board = null;
+			if (_boardMsg is null)
+				_boardMsg = Security?.Board?.ToMessage() ?? Portfolio?.Board?.ToMessage();
 
-			if (Security != null && Security.Board != null)
-				board = Security.Board;
-			else if (Portfolio != null && Portfolio.Board != null)
-				board = Portfolio.Board;
-
-			if (board != null)
+			if (_boardMsg is not null)
 			{
 				var date = _lastPnlRefreshTime.Date;
 
 				if (date != _prevTradeDate)
 				{
 					_prevTradeDate = date;
-					_isPrevDateTradable = board.IsTradeDate(_prevTradeDate);
+					_isPrevDateTradable = _boardMsg.IsTradeDate(_prevTradeDate);
 				}
 
 				if (!_isPrevDateTradable)
 					return;
 
-				var period = board.WorkingTime.GetPeriod(date);
+				var period = _boardMsg.WorkingTime.GetPeriod(date);
 
 				var tod = _lastPnlRefreshTime.TimeOfDay;
 
