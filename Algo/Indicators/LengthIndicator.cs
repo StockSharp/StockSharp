@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
@@ -24,10 +25,26 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
+	/// The interface for indicators with one resulting value and based on the period.
+	/// </summary>
+	public interface ILengthIndicator
+	{
+		/// <summary>
+		/// Period length. By default equal to 1.
+		/// </summary>
+		int Length { get; }
+
+		/// <summary>
+		/// The buffer for data storage.
+		/// </summary>
+		IList Buffer { get; }
+	}
+
+	/// <summary>
 	/// The base class for indicators with one resulting value and based on the period.
 	/// </summary>
 	/// <typeparam name="TResult">Result values type.</typeparam>
-	public abstract class LengthIndicator<TResult> : BaseIndicator
+	public abstract class LengthIndicator<TResult> : BaseIndicator, ILengthIndicator
 	{
 		/// <summary>
 		/// 
@@ -71,9 +88,7 @@ namespace StockSharp.Algo.Indicators
 
 		private int _length = 1;
 
-		/// <summary>
-		/// Period length. By default equal to 1.
-		/// </summary>
+		/// <inheritdoc />
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -99,6 +114,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Browsable(false)]
 		protected LengthIndicatorBuffer Buffer { get; }
+
+		IList ILengthIndicator.Buffer => Buffer;
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
