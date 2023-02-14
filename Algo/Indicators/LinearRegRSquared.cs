@@ -66,13 +66,7 @@ namespace StockSharp.Algo.Indicators
 				Buffer.AddEx(newValue);
 			}
 
-			var buff = Buffer;
-			if (!input.IsFinal)
-			{
-				buff = new(this);
-				buff.AddRange(Buffer.Skip(1));
-				buff.Add(newValue);
-			}
+			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 
 			// если значений хватает, считаем регрессию
 			if (IsFormed)
@@ -87,8 +81,8 @@ namespace StockSharp.Algo.Indicators
 				for (var i = 0; i < Length; i++)
 				{
 					sumX += i;
-					sumY += buff.ElementAt(i);
-					sumXy += i * buff.ElementAt(i);
+					sumY += buff[i];
+					sumXy += i * buff[i];
 					sumX2 += i * i;
 				}
 
@@ -101,13 +95,13 @@ namespace StockSharp.Algo.Indicators
 				var b = (sumY - _slope * sumX) / Length;
 
 				//сумма квадратов отклонений от среднего и сумма квадратов ошибок
-				var av = buff.Average();// срднее значение
+				var av = buff.Average();// среднее значение
 				var sumYAv2 = 0m; //сумма квадратов отклонений от среднего
 				var sumErr2 = 0m; //сумма квадратов ошибок
 
 				for (var i = 0; i < Length; i++)
 				{
-					var y = buff.ElementAt(i);// значение
+					var y = buff[i];// значение
 					var yEst = _slope * i + b;// оценка по регрессии
 					sumYAv2 += (y - av) * (y - av);
 					sumErr2 += (y - yEst) * (y - yEst);

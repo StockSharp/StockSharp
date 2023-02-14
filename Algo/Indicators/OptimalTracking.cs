@@ -24,6 +24,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
+	using System.Linq;
 
 	/// <summary>
 	/// Optimal Tracking.
@@ -121,17 +122,10 @@ namespace StockSharp.Algo.Indicators
 			var average = (candle.HighPrice + candle.LowPrice) / 2;
 			var halfRange = (candle.HighPrice - candle.LowPrice) / 2;
 
-			var buff = Buffer;
-			if (!input.IsFinal)
-			{
-				buff = new(this);
-				buff.AddRange(Buffer);
-			}
+			if (input.IsFinal)
+				Buffer.AddEx(average);
 
-			buff.Add(average);
-
-			if (buff.Count > Length)
-				buff.RemoveAt(0);
+			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(Buffer.Count >= Length ? 1 : 0).Append(average).ToArray();
 
 			var b = input.IsFinal ? _buf : _buf.Clone();
 

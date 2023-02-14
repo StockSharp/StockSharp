@@ -15,16 +15,15 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 	using System;
 
-	using Ecng.Collections;
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Kaufman adaptive moving average.
@@ -96,18 +95,10 @@ namespace StockSharp.Algo.Indicators
 				return new DecimalIndicatorValue(this, _prevFinalValue = newValue);
 			}
 
-			var buff = Buffer;
-
 			if (input.IsFinal)
-			{
-				buff.RemoveAt(0);
-			}
-			else
-			{
-				buff = new(this);
-				buff.AddRange(Buffer.Skip(1));
-				buff.Add(newValue);
-			}
+				Buffer.RemoveAt(0);
+
+			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 
 			var direction = newValue - buff[0];
 

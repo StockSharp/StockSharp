@@ -15,11 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Linq;
-
-	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
@@ -49,19 +46,11 @@ namespace StockSharp.Algo.Indicators
 			var newValue = input.GetValue<decimal>();
 
 			if (input.IsFinal)
-			{
 				Buffer.AddEx(newValue);
-			}
 
-			var buff = Buffer;
-			if (!input.IsFinal)
-			{
-				buff = new(this);
-				buff.AddRange(Buffer.Skip(1));
-				buff.Add(newValue);
-			}
+			var buffCount = input.IsFinal ? Buffer.Count : ((Buffer.Count - 1).Max(0) + 1);
 
-			return new DecimalIndicatorValue(this, (this.GetCurrentValue() * (buff.Count - 1) + newValue) / buff.Count);
+			return new DecimalIndicatorValue(this, (this.GetCurrentValue() * (buffCount - 1) + newValue) / buffCount);
 		}
 	}
 }

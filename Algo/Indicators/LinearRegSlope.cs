@@ -56,13 +56,7 @@ namespace StockSharp.Algo.Indicators
 				Buffer.AddEx(newValue);
 			}
 
-			var buff = Buffer;
-			if (!input.IsFinal)
-			{
-				buff = new(this);
-				buff.AddRange(Buffer.Skip(1));
-				buff.Add(newValue);
-			}
+			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 
 			//x - независимая переменная, номер значения в буфере
 			//y - зависимая переменная - значения из буфера
@@ -74,8 +68,8 @@ namespace StockSharp.Algo.Indicators
 			for (var i = 0; i < buff.Count; i++)
 			{
 				sumX += i;
-				sumY += buff.ElementAt(i);
-				sumXy += i * buff.ElementAt(i);
+				sumY += buff[i];
+				sumXy += i * buff[i];
 				sumX2 += i * i;
 			}
 

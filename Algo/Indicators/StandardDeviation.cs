@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 
@@ -69,13 +70,7 @@ namespace StockSharp.Algo.Indicators
 				Buffer.AddEx(newValue);
 			}
 
-			var buff = Buffer;
-			if (!input.IsFinal)
-			{
-				buff = new(this);
-				buff.AddRange(Buffer.Skip(1));
-				buff.Add(newValue);
-			}
+			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 
 			//считаем значение отклонения в последней точке
 			var std = buff.Select(t1 => t1 - smaValue).Select(t => t * t).Sum();

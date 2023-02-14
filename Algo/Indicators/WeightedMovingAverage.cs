@@ -66,13 +66,7 @@ namespace StockSharp.Algo.Indicators
 				Buffer.AddEx(newValue);
 			}
 
-			var buff = Buffer;
-			if (!input.IsFinal)
-			{
-				buff = new(this);
-				buff.AddRange(Buffer.Skip(1));
-				buff.Add(newValue);
-			}
+			var buff = input.IsFinal ? Buffer : Buffer.Skip(1).Append(newValue);
 
 			var w = 1;
 			return new DecimalIndicatorValue(this, buff.Sum(v => w++ * v) / _denominator);
