@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Indicators
 			}
 			else
 			{
-				buff = new List<decimal>();
+				buff = new(this);
 				buff.AddRange(Buffer.Skip(1));
 				buff.Add(newValue);
 			}

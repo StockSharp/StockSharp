@@ -53,16 +53,13 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				Buffer.Add(newValue);
-
-				if (Buffer.Count > Length)
-					Buffer.RemoveAt(0);
+				Buffer.AddEx(newValue);
 			}
 
 			var buff = Buffer;
 			if (!input.IsFinal)
 			{
-				buff = new List<decimal>();
+				buff = new(this);
 				buff.AddRange(Buffer.Skip(1));
 				buff.Add(newValue);
 			}

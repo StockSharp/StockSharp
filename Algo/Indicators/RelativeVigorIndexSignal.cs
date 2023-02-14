@@ -38,10 +38,7 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				Buffer.Add(newValue);
-
-				if (Buffer.Count > Length)
-					Buffer.RemoveAt(0);
+				Buffer.AddEx(newValue);
 			}
 
 			if (IsFormed)

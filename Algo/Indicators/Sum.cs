@@ -50,12 +50,7 @@ namespace StockSharp.Algo.Indicators
 			var newValue = input.GetValue<decimal>();
 
 			if (input.IsFinal)
-			{
-				Buffer.Add(newValue);
-
-				if (Buffer.Count > Length)
-					Buffer.RemoveAt(0);
-			}
+				Buffer.AddEx(newValue);
 
 			if (input.IsFinal)
 			{

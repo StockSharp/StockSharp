@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Indicators
 			var buff = Buffer;
 			if (!input.IsFinal)
 			{
-				buff = new List<decimal>();
+				buff = new(this);
 				buff.AddRange(Buffer);
 			}
 

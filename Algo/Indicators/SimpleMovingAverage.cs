@@ -48,14 +48,9 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				Buffer.Add(newValue);
-
-				if (Buffer.Count > Length)
-					Buffer.RemoveAt(0);
-			}
-
-			if (input.IsFinal)
+				Buffer.AddEx(newValue);
 				return new DecimalIndicatorValue(this, Buffer.Sum() / Length);
+			}
 
 			return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
 		}

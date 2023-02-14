@@ -30,11 +30,36 @@ namespace StockSharp.Algo.Indicators
 	public abstract class LengthIndicator<TResult> : BaseIndicator
 	{
 		/// <summary>
+		/// 
+		/// </summary>
+		protected class LengthIndicatorBuffer : List<TResult>
+		{
+			private readonly LengthIndicator<TResult> _parent;
+
+			internal LengthIndicatorBuffer(LengthIndicator<TResult> parent)
+			{
+				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
+			}
+
+			/// <summary>
+			/// Add with <see cref="Length"/> auto adjust.
+			/// </summary>
+			/// <param name="result">Value.</param>
+			public void AddEx(TResult result)
+			{
+				Add(result);
+
+				if (Count > _parent.Length)
+					RemoveAt(0);
+			}
+		}
+
+		/// <summary>
 		/// Initialize <see cref="LengthIndicator{T}"/>.
 		/// </summary>
 		protected LengthIndicator()
 		{
-			Buffer = new List<TResult>();
+			Buffer = new(this);
 		}
 
 		/// <inheritdoc />
@@ -73,7 +98,7 @@ namespace StockSharp.Algo.Indicators
 		/// The buffer for data storage.
 		/// </summary>
 		[Browsable(false)]
-		protected IList<TResult> Buffer { get; }
+		protected LengthIndicatorBuffer Buffer { get; }
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
