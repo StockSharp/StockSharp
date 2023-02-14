@@ -135,7 +135,7 @@ namespace StockSharp.Algo.Storages.Binary
 		private readonly OrderBookIncrementBuilder _builder;
 
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 16 + 20 * 25, MarketDataVersions.Version62, exchangeInfoProvider)
+			: base(securityId, DataType.MarketDepth, 16 + 20 * 25, MarketDataVersions.Version62, exchangeInfoProvider)
 		{
 			_builder = new OrderBookIncrementBuilder(securityId);
 		}

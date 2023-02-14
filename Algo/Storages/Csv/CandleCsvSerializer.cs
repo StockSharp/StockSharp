@@ -116,6 +116,8 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
+		private readonly DataType _dataType;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleCsvSerializer{TCandleMessage}"/>.
 		/// </summary>
@@ -125,13 +127,8 @@ namespace StockSharp.Algo.Storages.Csv
 		public CandleCsvSerializer(SecurityId securityId, object arg, Encoding encoding = null)
 			: base(securityId, encoding)
 		{
-			Arg = arg ?? throw new ArgumentNullException(nameof(arg));
+			_dataType = DataType.Create(typeof(TCandleMessage), arg ?? throw new ArgumentNullException(nameof(arg)));
 		}
-
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
-		public object Arg { get; set; }
 
 		/// <inheritdoc />
 		public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
@@ -191,7 +188,7 @@ namespace StockSharp.Algo.Storages.Csv
 			var message = new TCandleMessage
 			{
 				SecurityId = SecurityId,
-				Arg = Arg,
+				DataType = _dataType,
 				OpenTime = reader.ReadTime(metaInfo.Date),
 				OpenPrice = reader.ReadDecimal(),
 				HighPrice = reader.ReadDecimal(),

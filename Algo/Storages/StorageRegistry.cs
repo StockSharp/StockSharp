@@ -307,19 +307,14 @@ namespace StockSharp.Algo.Storages
 
 			return _candleStorages.SafeAdd(Tuple.Create(securityId, (drive ?? DefaultDrive).GetStorageDrive(securityId, DataType.Create(candleMessageType, arg), format)), key =>
 			{
-				IMarketDataSerializer serializer;
+				var dataType = DataType.Create(candleMessageType, arg).Immutable();
 
-				switch (format)
+				var serializer = format switch
 				{
-					case StorageFormats.Binary:
-						serializer = typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, arg, ExchangeInfoProvider);
-						break;
-					case StorageFormats.Csv:
-						serializer = typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, arg, null);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-				}
+					StorageFormats.Binary => typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, dataType, ExchangeInfoProvider),
+					StorageFormats.Csv => typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, dataType, null),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+				};
 
 				return typeof(CandleStorage<>).Make(candleMessageType).CreateInstance<IMarketDataStorage<CandleMessage>>(key.Item1, arg, key.Item2, serializer);
 			});

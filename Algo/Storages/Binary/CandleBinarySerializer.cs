@@ -97,8 +97,8 @@ namespace StockSharp.Algo.Storages.Binary
 	class CandleBinarySerializer<TCandleMessage> : BinaryMarketDataSerializer<TCandleMessage, CandleMetaInfo>
 		where TCandleMessage : CandleMessage, new()
 	{
-		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, arg, 74, MarketDataVersions.Version62, exchangeInfoProvider)
+		public CandleBinarySerializer(SecurityId securityId, DataType dataType, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, dataType, 74, MarketDataVersions.Version62, exchangeInfoProvider)
 		{
 		}
 
@@ -464,7 +464,7 @@ namespace StockSharp.Algo.Storages.Binary
 				RelativeVolume = metaInfo.Version < MarketDataVersions.Version52 || !reader.Read() ? null : reader.ReadVolume(metaInfo, largeDecimal),
 				BuyVolume  = metaInfo.Version < MarketDataVersions.Version62 || !reader.Read() ? null : reader.ReadVolume(metaInfo, largeDecimal),
 				SellVolume = metaInfo.Version < MarketDataVersions.Version62 || !reader.Read() ? null : reader.ReadVolume(metaInfo, largeDecimal),
-				Arg = Arg
+				DataType = DataType
 			};
 
 			if (metaInfo.Version < MarketDataVersions.Version56)

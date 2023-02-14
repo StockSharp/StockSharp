@@ -257,7 +257,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Transaction, 200, MarketDataVersions.Version69, exchangeInfoProvider)
+			: base(securityId, DataType.Transactions, 200, MarketDataVersions.Version69, exchangeInfoProvider)
 		{
 		}
 

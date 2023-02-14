@@ -178,7 +178,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class PositionBinarySerializer : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>
 	{
 		public PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, null, 20, MarketDataVersions.Version36, exchangeInfoProvider)
+			: base(securityId, DataType.PositionChanges, 20, MarketDataVersions.Version36, exchangeInfoProvider)
 		{
 		}
 

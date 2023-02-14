@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class NewsBinarySerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
 	{
 		public NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
-			: base(default, null, 200, MarketDataVersions.Version51, exchangeInfoProvider)
+			: base(default, DataType.News, 200, MarketDataVersions.Version51, exchangeInfoProvider)
 		{
 		}
 

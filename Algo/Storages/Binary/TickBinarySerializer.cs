@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
 		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, ExecutionTypes.Tick, 50, MarketDataVersions.Version61, exchangeInfoProvider)
+			: base(securityId, DataType.Ticks, 50, MarketDataVersions.Version61, exchangeInfoProvider)
 		{
 		}
 

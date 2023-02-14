@@ -426,12 +426,12 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		protected BinaryMarketDataSerializer(SecurityId securityId, object arg, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
+		protected BinaryMarketDataSerializer(SecurityId securityId, DataType dataType, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			// force hash code caching
 			securityId.GetHashCode();
 
-			Arg = arg;
+			DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 			SecurityId = securityId;
 			DataSize = dataSize;
 
@@ -439,7 +439,7 @@ namespace StockSharp.Algo.Storages.Binary
 			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		}
 
-		protected object Arg { get; }
+		protected DataType DataType { get; }
 		protected SecurityId SecurityId { get; }
 		protected int DataSize { get; }
 		protected Version Version { get; set; }
@@ -471,7 +471,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo.Version <= Version)
 				return;
 
-			var name = $"{SecurityId}/{typeof(TData)}/{Arg}";
+			var name = $"{SecurityId}/{DataType}";
 			Debug.WriteLine($"Storage ({operation}) !! DISABLED !!: {name}");
 
 			throw new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(name, metaInfo.Version, Version));
