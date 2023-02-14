@@ -42,6 +42,7 @@ namespace StockSharp.Algo.Indicators
 		public ExponentialMovingAverage()
 		{
 			Length = 32;
+			Buffer.Operator = new DecimalOperator();
 		}
 
 		/// <inheritdoc />
@@ -64,15 +65,15 @@ namespace StockSharp.Algo.Indicators
 				// или "недоделанную" sma c пропущенным первым значением из буфера + промежуточное значение
 				if (input.IsFinal)
 				{
-					Buffer.Add(newValue);
+					Buffer.AddEx(newValue);
 
-					_prevFinalValue = Buffer.Sum() / Length;
+					_prevFinalValue = Buffer.Sum / Length;
 
 					return new DecimalIndicatorValue(this, _prevFinalValue);
 				}
 				else
 				{
-					return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
+					return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length);
 				}
 			}
 			else

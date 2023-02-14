@@ -16,11 +16,9 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;

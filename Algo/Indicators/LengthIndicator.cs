@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -59,6 +60,19 @@ namespace StockSharp.Algo.Indicators
 			}
 
 			/// <summary>
+			/// Calc <see cref="Sum"/>.
+			/// </summary>
+			public IOperator<TResult> Operator { get; set; }
+
+			/// <summary>
+			/// </summary>
+			public TResult Sum { get; private set; }
+
+			/// <summary>
+			/// </summary>
+			public TResult SumNoFirst => Count == 0 ? default : Operator.Subtract(Sum, this[0]);
+
+			/// <summary>
 			/// Add with <see cref="Length"/> auto adjust.
 			/// </summary>
 			/// <param name="result">Value.</param>
@@ -66,8 +80,16 @@ namespace StockSharp.Algo.Indicators
 			{
 				Add(result);
 
+				if (Operator is not null)
+					Sum = Operator.Add(Sum, result);
+
 				if (Count > _parent.Length)
+				{
+					if (Operator is not null)
+						Sum = Operator.Subtract(Sum, base[0]);
+					
 					RemoveAt(0);
+				}
 			}
 		}
 

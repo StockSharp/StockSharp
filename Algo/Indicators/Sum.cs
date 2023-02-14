@@ -39,6 +39,7 @@ namespace StockSharp.Algo.Indicators
 		public Sum()
 		{
 			Length = 15;
+			Buffer.Operator = new DecimalOperator();
 		}
 
 		/// <inheritdoc />
@@ -54,11 +55,11 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				return new DecimalIndicatorValue(this, Buffer.Sum());
+				return new DecimalIndicatorValue(this, Buffer.Sum);
 			}
 			else
 			{
-				return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue));
+				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue));
 			}
 		}
 	}

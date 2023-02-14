@@ -46,6 +46,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			_cmo = new ChandeMomentumOscillator();
 			Length = 15;
+			Buffer.Operator = new DecimalOperator();
 		}
 
 		/// <inheritdoc />
@@ -73,11 +74,11 @@ namespace StockSharp.Algo.Indicators
 			if (!IsFormed)
 			{
 				if (!input.IsFinal)
-					return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
+					return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length);
 
-				Buffer.Add(newValue);
+				Buffer.AddEx(newValue);
 
-				_prevFinalValue = Buffer.Sum() / Length;
+				_prevFinalValue = Buffer.Sum / Length;
 
 				return new DecimalIndicatorValue(this, _prevFinalValue);
 			}

@@ -41,6 +41,7 @@ namespace StockSharp.Algo.Indicators
 		public SmoothedMovingAverage()
 		{
 			Length = 32;
+			Buffer.Operator = new DecimalOperator();
 		}
 
 		/// <inheritdoc />
@@ -59,14 +60,14 @@ namespace StockSharp.Algo.Indicators
 			{
 				if (input.IsFinal)
 				{
-					Buffer.Add(newValue);
+					Buffer.AddEx(newValue);
 
-					_prevFinalValue = Buffer.Sum() / Length;
+					_prevFinalValue = Buffer.Sum / Length;
 
 					return new DecimalIndicatorValue(this, _prevFinalValue);
 				}
 
-				return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
+				return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length);
 			}
 
 			var curValue = (_prevFinalValue * (Length - 1) + newValue) / Length;

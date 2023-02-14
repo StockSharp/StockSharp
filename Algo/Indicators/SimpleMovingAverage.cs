@@ -39,6 +39,7 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage()
 		{
 			Length = 32;
+			Buffer.Operator = new DecimalOperator();
 		}
 
 		/// <inheritdoc />
@@ -49,10 +50,10 @@ namespace StockSharp.Algo.Indicators
 			if (input.IsFinal)
 			{
 				Buffer.AddEx(newValue);
-				return new DecimalIndicatorValue(this, Buffer.Sum() / Length);
+				return new DecimalIndicatorValue(this, Buffer.Sum / Length);
 			}
 
-			return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
+			return new DecimalIndicatorValue(this, (Buffer.SumNoFirst + newValue) / Length);
 		}
 	}
 }
