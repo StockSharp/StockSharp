@@ -132,7 +132,8 @@ namespace SampleHistoryTesting
 					.Add(ChartCandlesElem, candle)
 					.Add(ChartShortElem, shortValue)
 					.Add(ChartLongElem, longValue)
-					.Add(ChartTradesElem, trade);
+					.Add(ChartTradesElem, trade)
+					;
 
 			_chart.Draw(data);
 		}

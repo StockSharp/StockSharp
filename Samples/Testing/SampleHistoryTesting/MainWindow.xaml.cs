@@ -148,6 +148,7 @@ namespace SampleHistoryTesting
 				Id = SecId.Text, // sec id has the same name as folder with historical data
 				Code = secCode,
 				Board = board,
+				PriceStep = 0.01m,
 			};
 
 			// create backtesting modes
@@ -360,12 +361,13 @@ namespace SampleHistoryTesting
 					SecurityId = secId,
 					ServerTime = startTime,
 				}
-				.TryAdd(Level1Fields.PriceStep, 0.01m)
+				.TryAdd(Level1Fields.PriceStep, security.PriceStep)
 				.TryAdd(Level1Fields.StepPrice, 0.01m)
 				.TryAdd(Level1Fields.MinPrice, 0.01m)
 				.TryAdd(Level1Fields.MaxPrice, 1000000m)
 				.TryAdd(Level1Fields.MarginBuy, 10000m)
-				.TryAdd(Level1Fields.MarginSell, 10000m);
+				.TryAdd(Level1Fields.MarginSell, 10000m)
+				;
 
 				var secProvider = (ISecurityProvider)new CollectionSecurityProvider(new[] { security });
 

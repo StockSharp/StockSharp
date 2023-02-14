@@ -453,7 +453,7 @@ namespace SampleConnection
 				var mdMsg = new MarketDataMessage
 				{
 					IsSubscribe = true,
-					DataType2 = DataType.TimeFrame(tf),
+					DataType2 = tf.TimeFrame(),
 					From = settings.From,
 					To = settings.To,
 					BuildMode = settings.BuildMode,
