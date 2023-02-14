@@ -442,7 +442,7 @@ namespace StockSharp.Algo
 		private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
 		{
 			indexCandle.SecurityId = SecurityId;
-			indexCandle.Arg = candleMsg.CloneArg();
+			indexCandle.DataType = candleMsg.DataType;
 			indexCandle.OpenTime = candleMsg.OpenTime;
 			indexCandle.CloseTime = candleMsg.CloseTime;
 

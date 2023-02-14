@@ -270,8 +270,29 @@ namespace StockSharp.Messages
 		/// </summary>
 		public abstract Type ArgType { get; }
 
+		private DataType _dataType;
+
 		/// <inheritdoc />
-		public DataType DataType => DataType.Create(GetType(), Arg);
+		public DataType DataType
+		{
+			get
+			{
+				if (_dataType is null)
+				{
+					var arg = Arg;
+
+					if (arg is not null)
+						_dataType = DataType.Create(GetType(), arg);
+				}
+
+				return _dataType;
+			}
+			set
+			{
+				_dataType = value;
+				Arg = _dataType?.Arg;
+			}
+		}
 
 		/// <summary>
 		/// Initialize <see cref="CandleMessage"/>.
@@ -281,12 +302,6 @@ namespace StockSharp.Messages
 			: base(type)
 		{
 		}
-
-		/// <summary>
-		/// Clone <see cref="Arg"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public virtual object CloneArg() => Arg;
 
 		/// <inheritdoc />
 		[DataMember]
@@ -320,6 +335,7 @@ namespace StockSharp.Messages
 			copy.OriginalTransactionId = OriginalTransactionId;
 			copy.SubscriptionId = SubscriptionId;
 			copy.SubscriptionIds = SubscriptionIds;//?.ToArray();
+			copy.DataType = DataType;
 
 			copy.OpenPrice = OpenPrice;
 			copy.OpenTime = OpenTime;
@@ -434,10 +450,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new TimeFrameCandleMessage
-			{
-				TypedArg = TypedArg
-			});
+			return CopyTo(new TimeFrameCandleMessage());
 		}
 	}
 
@@ -463,10 +476,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new TickCandleMessage
-			{
-				TypedArg = TypedArg
-			});
+			return CopyTo(new TickCandleMessage());
 		}
 	}
 
@@ -492,10 +502,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new VolumeCandleMessage
-			{
-				TypedArg = TypedArg
-			});
+			return CopyTo(new VolumeCandleMessage());
 		}
 	}
 
@@ -526,9 +533,6 @@ namespace StockSharp.Messages
 				TypedArg = TypedArg.Clone()
 			});
 		}
-
-		/// <inheritdoc />
-		public override object CloneArg() => TypedArg.Clone();
 	}
 
 	/// <summary>
@@ -634,9 +638,6 @@ namespace StockSharp.Messages
 				TypedArg = TypedArg.Clone(),
 			});
 		}
-
-		/// <inheritdoc />
-		public override object CloneArg() => TypedArg.Clone();
 	}
 
 	/// <summary>
@@ -666,9 +667,6 @@ namespace StockSharp.Messages
 				TypedArg = TypedArg.Clone()
 			});
 		}
-
-		/// <inheritdoc />
-		public override object CloneArg() => TypedArg.Clone();
 	}
 
 	/// <summary>
@@ -693,10 +691,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			return CopyTo(new HeikinAshiCandleMessage
-			{
-				TypedArg = TypedArg
-			});
+			return CopyTo(new HeikinAshiCandleMessage());
 		}
 	}
 }
