@@ -258,6 +258,9 @@ namespace StockSharp.Messages
 			{
 				CheckImmutable();
 
+				if (value is DataType)
+					throw new ArgumentException(value.To<string>(), nameof(value));
+
 				_arg = value;
 				ReInitHashCode();
 			}

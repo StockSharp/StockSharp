@@ -122,12 +122,12 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Initializes a new instance of the <see cref="CandleCsvSerializer{TCandleMessage}"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="arg">Candle arg.</param>
+		/// <param name="dataType"><see cref="DataType"/>.</param>
 		/// <param name="encoding">Encoding.</param>
-		public CandleCsvSerializer(SecurityId securityId, object arg, Encoding encoding = null)
+		public CandleCsvSerializer(SecurityId securityId, DataType dataType, Encoding encoding = null)
 			: base(securityId, encoding)
 		{
-			_dataType = DataType.Create(typeof(TCandleMessage), arg ?? throw new ArgumentNullException(nameof(arg)));
+			_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
 		}
 
 		/// <inheritdoc />
