@@ -83,14 +83,14 @@ namespace StockSharp.Algo.Indicators
 				var min = buff.Min(t => t.LowPrice);
 
 				if (Kijun.IsFormed && input.IsFinal)
-				    Buffer.Add((max + min) / 2);
+				    Buffer.PushBack((max + min) / 2);
 
 				if (Buffer.Count >= Kijun.Length)
 					result = Buffer[0];
 
 				if (Buffer.Count > Kijun.Length)
 				{
-					Buffer.RemoveAt(0);
+					Buffer.PopFront();
 				}
 			}
 

@@ -60,10 +60,10 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				Buffer.Add(newValue);
+				Buffer.PushBack(newValue);
 
 				if (Buffer.Count > Length)
-					Buffer.RemoveAt(0);
+					Buffer.PopFront();
 			}
 
 			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();

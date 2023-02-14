@@ -171,9 +171,9 @@ namespace StockSharp.Algo.Indicators
 			if (input.IsFinal)
 			{
 				if(IsFormed)
-					Buffer.RemoveAt(0);
+					Buffer.PopFront();
 
-				Buffer.Add(newValue);
+				Buffer.PushBack(newValue);
 			}
 
 			// значение NickRypockTrailingReverse

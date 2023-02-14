@@ -65,13 +65,13 @@ namespace StockSharp.Algo.Indicators
 			var smaValue = _sma.Process(input);
 
 			if (_sma.IsFormed && input.IsFinal)
-				Buffer.Add(smaValue.GetValue<decimal>());
+				Buffer.PushBack(smaValue.GetValue<decimal>());
 
 			if (!IsFormed)
 				return new DecimalIndicatorValue(this);
 
 			if (Buffer.Count > Length)
-				Buffer.RemoveAt(0);
+				Buffer.PopFront();
 
 			return new DecimalIndicatorValue(this, input.GetValue<decimal>() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)]);
 		}

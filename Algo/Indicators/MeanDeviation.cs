@@ -68,12 +68,12 @@ namespace StockSharp.Algo.Indicators
 			var val = input.GetValue<decimal>();
 
 			if (input.IsFinal)
-				Buffer.Add(val);
+				Buffer.PushBack(val);
 
 			var smaValue = Sma.Process(input).GetValue<decimal>();
 
 			if (Buffer.Count > Length)
-				Buffer.RemoveAt(0);
+				Buffer.PopFront();
 
 			// считаем значение отклонения
 			var md = input.IsFinal

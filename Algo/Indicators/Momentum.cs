@@ -53,10 +53,10 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				Buffer.Add(newValue);
+				Buffer.PushBack(newValue);
 				
 				if ((Buffer.Count - 1) > Length)
-					Buffer.RemoveAt(0);
+					Buffer.PopFront();
 			}
 
 			if (Buffer.Count == 0)

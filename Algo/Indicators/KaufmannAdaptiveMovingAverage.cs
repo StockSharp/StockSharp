@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 			var lastValue = this.GetCurrentValue();
 
 			if (input.IsFinal)
-				Buffer.Add(newValue);
+				Buffer.PushBack(newValue);
 
 			if (!IsFormed)
 				return new DecimalIndicatorValue(this, lastValue);
@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Indicators
 			}
 
 			if (input.IsFinal)
-				Buffer.RemoveAt(0);
+				Buffer.PopFront();
 
 			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 

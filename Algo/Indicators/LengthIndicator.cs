@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Indicators
 			/// <param name="result">Value.</param>
 			public void AddEx(TResult result)
 			{
-				Add(result);
+				PushBack(result);
 
 				if (Operator is not null)
 					Sum = Operator.Add(Sum, result);
@@ -88,9 +88,12 @@ namespace StockSharp.Algo.Indicators
 					if (Operator is not null)
 						Sum = Operator.Subtract(Sum, base[0]);
 					
-					RemoveAt(0);
+					PopFront();
 				}
 			}
+
+			internal void PopFront() => RemoveAt(0);
+			internal void PushBack(TResult value) => Add(value);
 		}
 
 		/// <summary>

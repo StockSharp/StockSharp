@@ -39,10 +39,10 @@ namespace StockSharp.Algo.Indicators
 			var price = input.GetValue<Candle>().ClosePrice;
 
 			if (Buffer.Count > Length)
-				Buffer.RemoveAt(0);
+				Buffer.PopFront();
 
 			if (input.IsFinal)
-				Buffer.Add(price);
+				Buffer.PushBack(price);
 
 			return new DecimalIndicatorValue(this, price);
 		}

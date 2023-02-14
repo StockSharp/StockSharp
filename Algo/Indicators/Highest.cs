@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 
 			// добавляем новое начало
 			if (input.IsFinal)
-				Buffer.Add(newValue);
+				Buffer.PushBack(newValue);
 
 			if (newValue > lastValue)
 			{
@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Indicators
 
 				// удаляем хвостовое значение
 				if (input.IsFinal)
-					Buffer.RemoveAt(0);
+					Buffer.PopFront();
 
 				// удаляется экстремум, для поиска нового значения необходим проход по всему буфферу
 				if (first == lastValue && lastValue != newValue)

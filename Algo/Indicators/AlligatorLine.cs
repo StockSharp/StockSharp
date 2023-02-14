@@ -83,9 +83,9 @@ namespace StockSharp.Algo.Indicators
 			{
 				//если кол-во в буфере больше Shift, то первое значение отдали в прошлый раз, удалим его.
 				if (Buffer.Count > Shift)
-					Buffer.RemoveAt(0);
+					Buffer.PopFront();
 
-				Buffer.Add(smaResult.GetValue<decimal>());
+				Buffer.PushBack(smaResult.GetValue<decimal>());
 			}
 
 			return Buffer.Count > Shift

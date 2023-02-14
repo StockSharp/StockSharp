@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Indicators
 
 				if (Buffer.Count > Kijun.Length && input.IsFinal)
 				{
-					Buffer.RemoveAt(0);
+					Buffer.PopFront();
 				}
 			}
 
