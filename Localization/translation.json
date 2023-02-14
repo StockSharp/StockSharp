@@ -1,4 +1,12 @@
 {
+  "CrossingUpCheckDetails": {
+    "en": "true - crossing up - input1 value becomes greater than input2, false - crossing down - input2 value becomes greater than input2",
+    "ru": "вкл - пересечение вверх - значение входа1 становится больше чем вход2, выкл - пересечение вниз - значение входа2 становится больше чем вход1"
+  },
+  "Crossing": {
+    "en": "Crossing",
+    "ru": "Пересечение"
+  },
   "CannotBeModified": {
     "en": "Cannot be modified.",
     "ru": "Невозможно изменить."
