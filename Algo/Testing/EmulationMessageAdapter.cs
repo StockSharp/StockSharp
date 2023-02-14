@@ -313,12 +313,17 @@ namespace StockSharp.Algo.Testing
 
 		private void TrySendToEmulator(ISubscriptionIdMessage message)
 		{
-			foreach (var id in message.GetSubscriptionIds())
+			if (_isEmulationOnly)
+				SendToEmulator((Message)message);
+			else
 			{
-				if (_subscriptionIds.Contains(id))
+				foreach (var id in message.GetSubscriptionIds())
 				{
-					SendToEmulator((Message)message);
-					break;
+					if (_subscriptionIds.Contains(id))
+					{
+						SendToEmulator((Message)message);
+						break;
+					}
 				}
 			}
 		}
