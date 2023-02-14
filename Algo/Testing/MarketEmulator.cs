@@ -13,6 +13,9 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
+//#define EMU_DBG
+
 namespace StockSharp.Algo.Testing
 {
 	using System;
@@ -32,21 +35,73 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Storages;
 
+	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Common.RefPair<LevelQuotes, StockSharp.Messages.QuoteChange>>;
+
+	class LevelQuotes : IEnumerable<ExecutionMessage>
+	{
+		private readonly List<ExecutionMessage> _quotes = new(5);
+		private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new();
+
+		public int Count => _quotes.Count;
+
+		public ExecutionMessage this[int i]
+		{
+			get => _quotes[i];
+			set
+			{
+				var prev = _quotes[i];
+
+				if (prev.TransactionId != 0)
+					_quotesByTrId.Remove(prev.TransactionId);
+
+				_quotes[i] = value;
+
+				if (value.TransactionId != 0)
+					_quotesByTrId[value.TransactionId] = value;
+			}
+		}
+
+		public bool TryGetByTransactionId(long transactionId, out ExecutionMessage msg) => _quotesByTrId.TryGetValue(transactionId, out msg);
+
+		public void Add(ExecutionMessage quote)
+		{
+			if (quote.TransactionId != 0)
+				_quotesByTrId[quote.TransactionId] = quote;
+
+			_quotes.Add(quote);
+		}
+
+		public void RemoveAt(int index, ExecutionMessage quote = null)
+		{
+			quote ??= _quotes[index];
+
+			_quotes.RemoveAt(index);
+
+			if (quote.TransactionId != 0)
+				_quotesByTrId.Remove(quote.TransactionId);
+		}
+
+		public void Remove(ExecutionMessage quote) => RemoveAt(_quotes.IndexOf(quote), quote);
+
+		public IEnumerator<ExecutionMessage> GetEnumerator() => _quotes.GetEnumerator();
+
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+	}
+
 	/// <summary>
 	/// Emulator.
 	/// </summary>
 	public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
-		private class MessagePool<TMessage>
-			where TMessage : Message, new()
+		private class MessagePool
 		{
-			private readonly Queue<TMessage> _messageQueue = new();
+			private readonly Queue<ExecutionMessage> _messageQueue = new();
 
-			public TMessage Allocate()
+			public ExecutionMessage Allocate()
 			{
 				if (_messageQueue.Count == 0)
 				{
-					var message = new TMessage();
+					var message = new ExecutionMessage { DataTypeEx = DataType.Transactions };
 					//queue.Enqueue(message);
 					return message;
 				}
@@ -54,58 +109,7 @@ namespace StockSharp.Algo.Testing
 					return _messageQueue.Dequeue();
 			}
 
-			public void Free(TMessage message) => _messageQueue.Enqueue(message);
-		}
-
-		private class LevelQuotes : IEnumerable<ExecutionMessage>
-		{
-			private readonly List<ExecutionMessage> _quotes = new();
-			private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new();
-
-			public int Count => _quotes.Count;
-
-			public ExecutionMessage this[int i]
-			{
-				get => _quotes[i];
-				set
-				{
-					var prev = _quotes[i];
-
-					if (prev.TransactionId != 0)
-						_quotesByTrId.Remove(prev.TransactionId);
-
-					_quotes[i] = value;
-
-					if (value.TransactionId != 0)
-						_quotesByTrId[value.TransactionId] = value;
-				}
-			}
-
-			public bool TryGetByTransactionId(long transactionId, out ExecutionMessage msg) => _quotesByTrId.TryGetValue(transactionId, out msg);
-
-			public void Add(ExecutionMessage quote)
-			{
-				if (quote.TransactionId != 0)
-					_quotesByTrId[quote.TransactionId] = quote;
-
-				_quotes.Add(quote);
-			}
-
-			public void RemoveAt(int index, ExecutionMessage quote = null)
-			{
-				quote ??= _quotes[index];
-
-				_quotes.RemoveAt(index);
-
-				if (quote.TransactionId != 0)
-					_quotesByTrId.Remove(quote.TransactionId);
-			}
-
-			public void Remove(ExecutionMessage quote) => RemoveAt(_quotes.IndexOf(quote), quote);
-
-			public IEnumerator<ExecutionMessage> GetEnumerator() => _quotes.GetEnumerator();
-
-			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+			public void Free(ExecutionMessage message) => _messageQueue.Enqueue(message);
 		}
 
 		private sealed class SecurityMarketEmulator : BaseLogReceiver//, IMarketEmulator
@@ -115,8 +119,8 @@ namespace StockSharp.Algo.Testing
 
 			private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = new();
 			private readonly Dictionary<long, ExecutionMessage> _activeOrders = new();
-			private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _bids = new(new BackwardComparer<decimal>());
-			private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks = new();
+			private readonly QuotesDict _bids = new(new BackwardComparer<decimal>());
+			private readonly QuotesDict _asks = new();
 			private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = new();
 			private DateTimeOffset _prevTime;
 			private readonly MarketEmulatorSettings _settings;
@@ -149,7 +153,7 @@ namespace StockSharp.Algo.Testing
 			private DateTime _lastDepthDate;
 			//private DateTime _lastTradeDate;
 
-			private readonly MessagePool<ExecutionMessage> _messagePool = new();
+			private readonly MessagePool _messagePool = new();
 
 			public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
 			{
@@ -420,11 +424,8 @@ namespace StockSharp.Algo.Testing
 				if (price <= 0)
 					throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str1144);
 
-				//if (volume <= 0)
-				//	throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str3344);
-
-				if (volume == 0)
-					volume = _volumeRandom.Next(10, 100);
+				if (volume <= 0)
+					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str3344);
 
 				return new()
 				{
@@ -453,7 +454,7 @@ namespace StockSharp.Algo.Testing
 					var orderSide = message.Side;
 					var price = message.Price;
 
-					var quotes = orderSide == Sides.Buy ? _asks : _bids;
+					var quotes = GetQuotes(orderSide.Invert());
 
 					var quote = quotes.FirstOrDefault();
 
@@ -471,7 +472,7 @@ namespace StockSharp.Algo.Testing
 					var leftVolume = (message.Volume - quotesVolume) + 1;
 					var orderSide = message.Side;
 
-					var quotes = orderSide == Sides.Buy ? _asks : _bids;
+					var quotes = GetQuotes(orderSide.Invert());
 					var quote = quotes.LastOrDefault();
 
 					if (quote.Value == null)
@@ -662,7 +663,7 @@ namespace StockSharp.Algo.Testing
 
 				var diff = new List<ExecutionMessage>();
 
-				void GetDiff(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
+				void GetDiff(QuotesDict from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
 				{
 					void AddExecMsg(QuoteChange quote, decimal volume, Sides side, bool isSpread)
 					{
@@ -841,17 +842,24 @@ namespace StockSharp.Algo.Testing
 
 				var hasDepth = HasDepth(localTime);
 
-				var diff = new List<ExecutionMessage>();
-
-				void TryCreateOppositeOrder(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes, Sides originSide)
+				void TryCreateOppositeOrder(Sides originSide)
 				{
+					var quotesSide = originSide.Invert();
+					var quotes = GetQuotes(quotesSide);
+
 					var priceStep = GetPriceStep();
 					var oppositePrice = (tradePrice + _settings.SpreadSize * priceStep * (originSide == Sides.Buy ? 1 : -1)).Max(priceStep);
 
 					var bestQuote = quotes.FirstOrDefault();
 
 					if (bestQuote.Value == null || ((originSide == Sides.Buy && oppositePrice < bestQuote.Key) || (originSide == Sides.Sell && oppositePrice > bestQuote.Key)))
-						diff.Add(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume));
+					{
+						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, oppositePrice, volume), true);
+
+#if EMU_DBG
+						Verify(quotesSide);
+#endif
+					}
 				}
 
 				Sides GetOrderSide()
@@ -861,14 +869,19 @@ namespace StockSharp.Algo.Testing
 						: tick.OriginSide.Value.Invert();
 				}
 
-				void ProcessMarketOrder(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes, Sides orderSide)
+				void ProcessMarketOrder(Sides orderSide)
 				{
-					// вычисляем объем заявки по рынку, который смог бы пробить текущие котировки.
+					var quotesSide = orderSide.Invert();
+					var quotes = GetQuotes(quotesSide);
 
-					// bigOrder - это наша большая рыночная заявка, которая способствовала появлению tradeMessage
-					var bigOrder = CreateMessage(localTime, serverTime, orderSide, tradePrice, 0, tif: TimeInForce.MatchOrCancel);
+#if EMU_DBG
+					Verify(quotesSide);
+#endif
+
 					var sign = orderSide == Sides.Buy ? -1 : 1;
 					var hasQuotes = false;
+
+					List<RefPair<LevelQuotes, QuoteChange>> toRemove = null;
 
 					foreach (var pair in quotes)
 					{
@@ -876,19 +889,15 @@ namespace StockSharp.Algo.Testing
 
 						if (quote.Price * sign > tradePrice * sign)
 						{
-							bigOrder.OrderVolume += quote.Volume;
+							toRemove ??= new();
+							toRemove.Add(pair.Value);
 						}
 						else
 						{
 							if (quote.Price == tradePrice)
 							{
-								bigOrder.OrderVolume += volume;
-
-								//var diff = tradeMessage.Volume - quote.Volume;
-
-								//// если объем котиовки был меньше объема сделки
-								//if (diff > 0)
-								//	retVal.Add(CreateMessage(tradeMessage.LocalTime, quote.Side, quote.Price, diff));
+								toRemove ??= new();
+								toRemove.Add(pair.Value);
 							}
 							else
 							{
@@ -901,59 +910,94 @@ namespace StockSharp.Algo.Testing
 
 								break;
 							}
-
-							//// если котировки с ценой сделки вообще не было в стакане
-							//else if (quote.Price * sign < tradeMessage.TradePrice * sign)
-							//{
-							//	retVal.Add(CreateMessage(tradeMessage.LocalTime, quote.Side, tradeMessage.Price, tradeMessage.Volume));
-							//}
 						}
 					}
 
-					diff.Add(bigOrder);
+					if (toRemove is not null)
+					{
+						var totalVolumeDiff = 0m;
+
+						foreach (var pair in toRemove)
+						{
+							quotes.Remove(pair.Second.Price);
+
+							totalVolumeDiff += pair.Second.Volume;
+
+							foreach (var quote in pair.First)
+							{
+								if (quote.PortfolioName is not null)
+								{
+									var orderMsg = _activeOrders.GetAndRemove(quote.TransactionId);
+
+									if (quote.ExpiryDate is not null)
+										_expirableOrders.Remove(quote);
+
+									orderMsg.OriginalTransactionId = quote.TransactionId;
+									orderMsg.OrderState = OrderStates.Done;
+									result.Add(ToOrder(localTime, orderMsg));
+
+									ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
+								}
+
+								_messagePool.Free(quote);
+							}
+						}
+
+						AddTotalVolume(quotesSide, -totalVolumeDiff);
+
+#if EMU_DBG
+						Verify(quotesSide);
+#endif
+					}
 
 					// если собрали все котировки, то оставляем заявку в стакане по цене сделки
 					if (!hasQuotes)
-						diff.Add(CreateMessage(localTime, serverTime, orderSide.Invert(), tradePrice, volume));
+					{
+						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, tradePrice, volume), true);
+
+#if EMU_DBG
+						Verify(quotesSide);
+#endif
+					}
 				}
 
-				if (bestBid.Value != null && tradePrice <= bestBid.Key)
+				if (bestBid.Value is not null && tradePrice <= bestBid.Key)
 				{
 					// тик попал в биды, значит была крупная заявка по рынку на продажу,
 					// которая возможна исполнила наши заявки
 
-					ProcessMarketOrder(_bids, Sides.Sell);
+					ProcessMarketOrder(Sides.Sell);
 
 					if (!hasDepth)
 					{
 						// подтягиваем противоположные котировки и снимаем лишние заявки
-						TryCreateOppositeOrder(_asks, Sides.Buy);
+						TryCreateOppositeOrder(Sides.Buy);
 					}
 				}
-				else if (bestAsk.Value != null && tradePrice >= bestAsk.Key)
+				else if (bestAsk.Value is not null && tradePrice >= bestAsk.Key)
 				{
 					// тик попал в аски, значит была крупная заявка по рынку на покупку,
 					// которая возможна исполнила наши заявки
 
-					ProcessMarketOrder(_asks, Sides.Buy);
+					ProcessMarketOrder(Sides.Buy);
 
 					if (!hasDepth)
 					{
 						// подтягиваем противоположные котировки и снимаем лишние заявки
-						TryCreateOppositeOrder(_bids, Sides.Sell);
+						TryCreateOppositeOrder(Sides.Sell);
 					}
 				}
-				else if (bestBid.Value != null && bestAsk.Value != null && bestBid.Key < tradePrice && tradePrice < bestAsk.Key)
+				else if (bestBid.Value is not null && bestAsk.Value is not null && bestBid.Key < tradePrice && tradePrice < bestAsk.Key)
 				{
 					// тик попал в спред, значит в спреде до сделки была заявка.
 					// создаем две лимитки с разных сторон, но одинаковой ценой.
 					// если в эмуляторе есть наша заявка на этом уровне, то она исполниться.
 					// если нет, то эмулятор взаимно исполнит эти заявки друг об друга
 
+					// [upd] 2023/2/13 - не понятно как наша заявка может оказаться на этом уровне
+					// если тик попал в середину спреда (и значит на уровне нет ни наших, ни сгенерированных заявок)
+
 					var originSide = GetOrderSide();
-
-					diff.Add(CreateMessage(localTime, serverTime, originSide, tradePrice, volume + (_securityDefinition.VolumeStep ?? 1 * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
-
 					var spreadStep = _settings.SpreadSize * GetPriceStep();
 
 					// try to fill depth gaps
@@ -965,7 +1009,7 @@ namespace StockSharp.Algo.Testing
 					{
 						if (bestAsk.Key > newBestPrice)
 						{
-							diff.Add(CreateMessage(localTime, serverTime, Sides.Sell, newBestPrice, 0));
+							UpdateQuote(CreateMessage(localTime, serverTime, Sides.Sell, newBestPrice, _volumeRandom.Next(10, 100)), true);
 							newBestPrice += spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 						}
 						else
@@ -979,14 +1023,12 @@ namespace StockSharp.Algo.Testing
 					{
 						if (newBestPrice > bestBid.Key)
 						{
-							diff.Add(CreateMessage(localTime, serverTime, Sides.Buy, newBestPrice, 0));
+							UpdateQuote(CreateMessage(localTime, serverTime, Sides.Buy, newBestPrice, _volumeRandom.Next(10, 100)), true);
 							newBestPrice -= spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 						}
 						else
 							break;
 					}
-
-					diff.Add(CreateMessage(localTime, serverTime, originSide.Invert(), tradePrice, volume, tif: TimeInForce.MatchOrCancel));
 				}
 				else
 				{
@@ -1009,7 +1051,7 @@ namespace StockSharp.Algo.Testing
 						hasOpposite = false;
 					}
 
-					diff.Add(CreateMessage(localTime, serverTime, originSide, tradePrice, volume));
+					UpdateQuote(CreateMessage(localTime, serverTime, originSide, tradePrice, volume), true);
 
 					// если стакан был полностью пустой, то формируем сразу уровень с противоположной стороны
 					if (!hasOpposite)
@@ -1017,14 +1059,16 @@ namespace StockSharp.Algo.Testing
 						var oppositePrice = tradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
 
 						if (oppositePrice > 0)
-							diff.Add(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume));
+							UpdateQuote(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume), true);
 					}
 				}
 
 				if (!hasDepth)
 				{
-					void CancelWorstQuote(Sides side, SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
+					void CancelWorstQuote(Sides side)
 					{
+						var quotes = GetQuotes(side);
+
 						if (quotes.Count <= _settings.MaxDepth)
 							return;
 
@@ -1034,18 +1078,15 @@ namespace StockSharp.Algo.Testing
 						if (volume == 0)
 							return;
 
-						diff.Add(CreateMessage(localTime, serverTime, side, worst.Key, volume, true));
+						UpdateQuote(CreateMessage(localTime, serverTime, side, worst.Key, volume, true), false);
 					}
 
 					// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
-					CancelWorstQuote(Sides.Buy, _bids);
-					CancelWorstQuote(Sides.Sell, _asks);
+					CancelWorstQuote(Sides.Buy);
+					CancelWorstQuote(Sides.Sell);
 				}
 
 				_prevTickPrice = tradePrice;
-
-				foreach (var m in diff)
-					Process(m, result);
 
 				if (_ticksSubscription is not null)
 					result.Add(tick);
@@ -1274,7 +1315,17 @@ namespace StockSharp.Algo.Testing
 							.GetPortfolioInfo(execution.PortfolioName)
 							.ProcessOrder(execution, null, result);
 
+#if EMU_DBG
+						Verify(Sides.Buy);
+						Verify(Sides.Sell);
+#endif
+
 						MatchOrder(execution.LocalTime, execution, result, true);
+
+#if EMU_DBG
+						Verify(Sides.Buy);
+						Verify(Sides.Sell);
+#endif
 
 						if (execution.OrderState == OrderStates.Active)
 						{
@@ -1321,7 +1372,7 @@ namespace StockSharp.Algo.Testing
 				};
 			}
 
-			private static QuoteChange[] BuildQuoteChanges(SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
+			private static QuoteChange[] BuildQuoteChanges(QuotesDict quotes)
 			{
 				return quotes.Count == 0
 					? Array.Empty<QuoteChange>()
@@ -1392,7 +1443,7 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			private SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> GetQuotes(Sides side)
+			private QuotesDict GetQuotes(Sides side)
 			{
 				return side switch
 				{
@@ -1409,7 +1460,8 @@ namespace StockSharp.Algo.Testing
 
 				var executions = result == null ? null : new Dictionary<decimal, decimal>();
 
-				var quotes = GetQuotes(order.Side.Invert());
+				var quotesSide = order.Side.Invert();
+				var quotes = GetQuotes(quotesSide);
 
 				List<decimal> toRemove = null;
 
@@ -1466,6 +1518,10 @@ namespace StockSharp.Algo.Testing
 
 								levelQuotes.RemoveAt(i, quote);
 								_messagePool.Free(quote);
+
+#if EMU_DBG
+								Verify(quotesSide);
+#endif
 							}
 						}
 						else
@@ -1477,7 +1533,7 @@ namespace StockSharp.Algo.Testing
 							foreach (var quote in levelQuotes)
 								_messagePool.Free(quote);
 
-							AddTotalVolume(order.Side.Invert(), -qc.Volume);
+							AddTotalVolume(quotesSide, -qc.Volume);
 						}
 
 						leftBalance -= qc.Volume;
@@ -1527,9 +1583,15 @@ namespace StockSharp.Algo.Testing
 								}
 							}
 
-							AddTotalVolume(order.Side.Invert(), -volume);
+							AddTotalVolume(quotesSide, -volume);
 							qc.Volume -= volume;
 							leftBalance -= volume;
+
+							pair.Value.Second = qc;
+
+#if EMU_DBG
+							Verify(quotesSide);
+#endif
 
 							if (leftBalance == 0)
 								break;
@@ -1544,6 +1606,10 @@ namespace StockSharp.Algo.Testing
 				{
 					foreach (var value in toRemove)
 						quotes.Remove(value);
+
+#if EMU_DBG
+					Verify(quotesSide);
+#endif
 				}
 
 				// если это не пользовательская заявка
@@ -1631,25 +1697,7 @@ namespace StockSharp.Algo.Testing
 
 				foreach (var execution in executions)
 				{
-					var tradeMsg = ToMyTrade(time, order, execution.Key, execution.Value);
-					result.Add(tradeMsg);
-
-					this.AddInfoLog(LocalizedStrings.Str1168Params, tradeMsg.TradeId, tradeMsg.OriginalTransactionId, execution.Key, execution.Value);
-
-					var info = _parent.GetPortfolioInfo(order.PortfolioName);
-
-					info.ProcessMyTrade(order.Side, tradeMsg, result);
-
-					result.Add(new ExecutionMessage
-					{
-						LocalTime = time,
-						SecurityId = tradeMsg.SecurityId,
-						TradeId = tradeMsg.TradeId,
-						TradePrice = tradeMsg.TradePrice,
-						TradeVolume = tradeMsg.TradeVolume,
-						DataTypeEx = DataType.Ticks,
-						ServerTime = GetServerTime(time),
-					});
+					ProcessOwnTrade(time, order, execution.Key, execution.Value, result);
 				}
 			}
 
@@ -1665,11 +1713,14 @@ namespace StockSharp.Algo.Testing
 				if (_candleInfo.Count == 0)
 					return;
 
-				foreach (var pair in _candleInfo.ToArray())
+				List<DateTimeOffset> toRemove = null;
+
+				foreach (var pair in _candleInfo)
 				{
 					if (pair.Key < message.LocalTime)
 					{
-						_candleInfo.Remove(pair.Key);
+						toRemove ??= new();
+						toRemove.Add(pair.Key);
 
 						if (_ticksSubscription is not null)
 						{
@@ -1685,6 +1736,14 @@ namespace StockSharp.Algo.Testing
 							candle.LocalTime = message.LocalTime;
 							result.Add(candle);
 						}
+					}
+				}
+
+				if (toRemove is not null)
+				{
+					foreach (var key in toRemove)
+					{
+						_candleInfo.Remove(key);
 					}
 				}
 			}
@@ -1848,6 +1907,19 @@ namespace StockSharp.Algo.Testing
 				return side == Sides.Buy ? _totalBidVolume : _totalAskVolume;
 			}
 
+#if EMU_DBG
+			private void Verify(Sides side)
+			{
+				var totalVolume = side == Sides.Buy ? _totalBidVolume : _totalAskVolume;
+
+				if (totalVolume < 0)
+					throw new InvalidOperationException();
+
+				if (GetQuotes(side).Values.Sum(p => p.Second.Volume) != totalVolume)
+					throw new InvalidOperationException();
+			}
+#endif
+
 			private void ProcessPendingExecutions(Message message, ICollection<Message> result)
 			{
 				if (_pendingExecutions.Count == 0)
@@ -1889,23 +1961,43 @@ namespace StockSharp.Algo.Testing
 				};
 			}
 
-			private ExecutionMessage ToMyTrade(DateTimeOffset time, ExecutionMessage message, decimal price, decimal volume)
+			private void ProcessOwnTrade(DateTimeOffset time, ExecutionMessage order, decimal price, decimal volume, ICollection<Message> result)
 			{
-				return new ExecutionMessage
+				if (volume <= 0)
+					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str1219);
+
+				var tradeMsg = new ExecutionMessage
 				{
 					LocalTime = time,
-					SecurityId = message.SecurityId,
-					OrderId = message.OrderId,
-					OriginalTransactionId = message.TransactionId,
+					SecurityId = order.SecurityId,
+					OrderId = order.OrderId,
+					OriginalTransactionId = order.TransactionId,
 					TradeId = _parent.TradeIdGenerator.GetNextId(),
 					TradePrice = price,
 					TradeVolume = volume,
 					DataTypeEx = DataType.Transactions,
 					HasTradeInfo = true,
 					ServerTime = GetServerTime(time),
-					Side = message.Side,
-					StrategyId = message.StrategyId,
+					Side = order.Side,
+					StrategyId = order.StrategyId,
 				};
+				result.Add(tradeMsg);
+
+				this.AddInfoLog(LocalizedStrings.Str1168Params, tradeMsg.TradeId, tradeMsg.OriginalTransactionId, price, volume);
+				var info = _parent.GetPortfolioInfo(order.PortfolioName);
+
+				info.ProcessMyTrade(order.Side, tradeMsg, result);
+
+				result.Add(new ExecutionMessage
+				{
+					LocalTime = time,
+					SecurityId = tradeMsg.SecurityId,
+					TradeId = tradeMsg.TradeId,
+					TradePrice = tradeMsg.TradePrice,
+					TradeVolume = tradeMsg.TradeVolume,
+					DataTypeEx = DataType.Ticks,
+					ServerTime = GetServerTime(time),
+				});
 			}
 
 			private DateTimeOffset GetServerTime(DateTimeOffset time)
