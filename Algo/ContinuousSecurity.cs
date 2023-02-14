@@ -153,7 +153,7 @@ namespace StockSharp.Algo
 
 				DisposeEnumerator();
 
-				_enumerator = ((IEnumerable<KeyValuePair<Range<DateTimeOffset>, SecurityId>>)new CircularBuffer<KeyValuePair<Range<DateTimeOffset>, SecurityId>>(_expirationRanges)).GetEnumerator();
+				_enumerator = new CircularBuffer<KeyValuePair<Range<DateTimeOffset>, SecurityId>>(_expirationRanges.Count, _expirationRanges.ToArray()).GetEnumerator();
 
 				MoveNext();
 			}
