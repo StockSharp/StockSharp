@@ -210,6 +210,9 @@
 			/// <summary>
 			/// </summary>
 			public const long Store = 164;
+			/// <summary>
+			/// </summary>
+			public const long Login = 251;
 		}
 
 		/// <summary>
@@ -235,6 +238,7 @@
 				Pages.Forgot => "forgot",
 				Pages.Faq => "store/faq",
 				Pages.Store => "store",
+				Pages.Login => "login",
 				_ => throw new ArgumentOutOfRangeException(nameof(id), id, LocalizedStrings.Str1219),
 			};
 
