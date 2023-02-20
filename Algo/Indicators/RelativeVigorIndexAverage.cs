@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Indicators
 			base.Reset();
 
 			_buffer.Clear();
-			Buffer.Clear();
+			Buffer.Reset();
 		}
 
 		/// <inheritdoc />

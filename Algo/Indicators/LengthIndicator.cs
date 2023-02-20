@@ -94,6 +94,12 @@ namespace StockSharp.Algo.Indicators
 
 			internal void PopFront() => RemoveAt(0);
 			internal void PushBack(TResult value) => Add(value);
+
+			internal void Reset()
+			{
+				Clear();
+				Sum = default;
+			}
 		}
 
 		/// <summary>
@@ -107,7 +113,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override void Reset()
 		{
-			Buffer.Clear();
+			Buffer.Reset();
 			base.Reset();
 		}
 
