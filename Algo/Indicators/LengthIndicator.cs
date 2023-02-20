@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public int Length
+		public virtual int Length
 		{
 			get => _length;
 			set

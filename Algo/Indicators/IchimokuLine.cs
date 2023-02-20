@@ -19,6 +19,8 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.Collections;
+
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
@@ -28,13 +30,14 @@ namespace StockSharp.Algo.Indicators
 	[Browsable(false)]
 	public class IchimokuLine : LengthIndicator<decimal>
 	{
-		private readonly List<Candle> _buffer = new();
+		private readonly CircularBuffer<Candle> _buffer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IchimokuLine"/>.
 		/// </summary>
 		public IchimokuLine()
 		{
+			_buffer = new(Length);
 		}
 
 		/// <summary>
@@ -43,7 +46,9 @@ namespace StockSharp.Algo.Indicators
 		public override void Reset()
 		{
 			base.Reset();
+
 			_buffer.Clear();
+			_buffer.Capacity = Length;
 		}
 
 		/// <inheritdoc />
@@ -53,16 +58,11 @@ namespace StockSharp.Algo.Indicators
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
-			var buff = _buffer;
+
+			IList<Candle> buff = _buffer;
 
 			if (input.IsFinal)
-			{
-				_buffer.Add(candle);
-
-				// если буффер стал достаточно большим (стал больше длины)
-				if (_buffer.Count > Length)
-					_buffer.RemoveAt(0);
-			}
+				_buffer.PushBack(candle);
 			else
 				buff = _buffer.Skip(1).Append(candle).ToList();
 

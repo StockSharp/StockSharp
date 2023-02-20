@@ -38,9 +38,6 @@ namespace StockSharp.Algo.Indicators
 		{
 			var price = input.GetValue<Candle>().ClosePrice;
 
-			if (Buffer.Count > Length)
-				Buffer.PopFront();
-
 			if (input.IsFinal)
 				Buffer.PushBack(price);
 

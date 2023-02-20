@@ -20,6 +20,8 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.Collections;
+
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
@@ -28,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	{
-		private readonly List<Candle> _buffer = new();
+		private readonly CircularBuffer<Candle> _buffer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IchimokuLine"/>.
@@ -37,20 +39,21 @@ namespace StockSharp.Algo.Indicators
 		public IchimokuSenkouBLine(IchimokuLine kijun)
 		{
 			Kijun = kijun ?? throw new ArgumentNullException(nameof(kijun));
+			_buffer = new(Length);
 		}
 
 		/// <inheritdoc />
 		public override void Reset()
 		{
 			base.Reset();
+
 			_buffer.Clear();
+			_buffer.Capacity = Length;
 		}
 
 		/// <inheritdoc />
 		public override bool IsFormed => _buffer.Count >= Length && Buffer.Count >= Kijun.Length;
 
-		//_buffer.Count >= Length &&
-		
 		/// <summary>
 		/// Kijun line.
 		/// </summary>
@@ -63,15 +66,11 @@ namespace StockSharp.Algo.Indicators
 			var candle = input.GetValue<Candle>();
 			
 			decimal? result = null;
-			var buff = _buffer;
+			IList<Candle> buff = _buffer;
 
 			if (input.IsFinal)
 			{
-				_buffer.Add(candle);
-
-				// если буффер стал достаточно большим (стал больше длины)
-				if (_buffer.Count > Length)
-					_buffer.RemoveAt(0);
+				_buffer.PushBack(candle);
 			}
 			else
 				buff = _buffer.Skip(1).Append(candle).ToList();
@@ -82,16 +81,11 @@ namespace StockSharp.Algo.Indicators
 				var max = buff.Max(t => t.HighPrice);
 				var min = buff.Min(t => t.LowPrice);
 
-				if (Kijun.IsFormed && input.IsFinal)
-				    Buffer.PushBack((max + min) / 2);
-
-				if (Buffer.Count >= Kijun.Length)
+				if (Buffer.Count >= (Kijun.Length - 1))
 					result = Buffer[0];
 
-				if (Buffer.Count > Kijun.Length)
-				{
-					Buffer.PopFront();
-				}
+				if (Kijun.IsFormed && input.IsFinal)
+				   Buffer.PushBack((max + min) / 2);
 			}
 
 			return result == null ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, result.Value);
