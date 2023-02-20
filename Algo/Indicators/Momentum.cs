@@ -47,6 +47,13 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsFormed => Buffer.Count > Length;
 
 		/// <inheritdoc />
+		public override void Reset()
+		{
+			base.Reset();
+			Buffer.Capacity = Length + 1;
+		}
+
+		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();
@@ -54,9 +61,6 @@ namespace StockSharp.Algo.Indicators
 			if (input.IsFinal)
 			{
 				Buffer.PushBack(newValue);
-				
-				if ((Buffer.Count - 1) > Length)
-					Buffer.PopFront();
 			}
 
 			if (Buffer.Count == 0)

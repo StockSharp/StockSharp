@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
+	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
@@ -34,11 +35,6 @@ namespace StockSharp.Algo.Indicators
 		/// Period length. By default equal to 1.
 		/// </summary>
 		int Length { get; }
-
-		/// <summary>
-		/// The buffer for data storage.
-		/// </summary>
-		IList Buffer { get; }
 	}
 
 	/// <summary>
@@ -50,13 +46,15 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Buffer.
 		/// </summary>
-		protected class LengthIndicatorBuffer : List<TResult>
+		protected class LengthIndicatorBuffer : CircularBuffer<TResult>
 		{
 			private readonly LengthIndicator<TResult> _parent;
 
 			internal LengthIndicatorBuffer(LengthIndicator<TResult> parent)
+				: base(parent.Length)
 			{
 				_parent = parent ?? throw new ArgumentNullException(nameof(parent));
+				Reset();
 			}
 
 			/// <summary>
@@ -80,27 +78,19 @@ namespace StockSharp.Algo.Indicators
 			/// <param name="result">Value.</param>
 			public void AddEx(TResult result)
 			{
-				PushBack(result);
-
 				var op = Operator;
 
 				if (op is not null)
-					Sum = op.Add(Sum, result);
-
-				if (Count > _parent.Length)
 				{
-					if (op is not null)
-						Sum = op.Subtract(Sum, base[0]);
-
-					PopFront();
+					if (Count == _parent.Length)
+						Sum = op.Subtract(Sum, this[0]);
 				}
+
+				PushBack(result);
+
+				if (op is not null)
+					Sum = op.Add(Sum, result);
 			}
-
-			internal void PushFront(TResult value) => Insert(0, value);
-			internal void PushBack(TResult value) => Add(value);
-
-			internal void PopFront() => RemoveAt(0);
-			internal void PopBack() => RemoveAt(Count - 1);
 
 			/// <summary>
 			/// Reset.
@@ -108,6 +98,7 @@ namespace StockSharp.Algo.Indicators
 			public void Reset()
 			{
 				Clear();
+				Capacity = _parent.Length;
 				Sum = default;
 			}
 		}
@@ -155,8 +146,6 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Browsable(false)]
 		protected LengthIndicatorBuffer Buffer { get; }
-
-		IList ILengthIndicator.Buffer => Buffer;
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)

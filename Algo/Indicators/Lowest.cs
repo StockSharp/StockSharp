@@ -47,12 +47,7 @@ namespace StockSharp.Algo.Indicators
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.IsSupport(typeof(Candle)) ? input.GetValue<Candle>().LowPrice : input.GetValue<decimal>();
-
 			var lastValue = Buffer.Count == 0 ? newValue : this.GetCurrentValue();
-
-			// добавляем новое начало
-			if (input.IsFinal)
-				Buffer.PushBack(newValue);
 
 			if (newValue < lastValue)
 			{
@@ -60,19 +55,15 @@ namespace StockSharp.Algo.Indicators
 				lastValue = newValue;
 			}
 
-			if (Buffer.Count > Length) // IsFormed не использовать, т.к. сначала добавляется и >= не подходит
+			// добавляем новое начало
+			if (input.IsFinal)
 			{
-				var first = Buffer[0];
+				var recalc = Buffer.Count == Length && Buffer[0] == lastValue && lastValue != newValue;
+				Buffer.PushBack(newValue);
 
-				// удаляем хвостовое значение
-				if (input.IsFinal)
-					Buffer.PopFront();
-
-				if (first == lastValue && lastValue != newValue) // удаляется экстремум, для поиска нового значения необходим проход по всему буфферу
-				{
-					// ищем новый экстремум
+				// ищем новый экстремум
+				if (recalc)
 					lastValue = Buffer.Aggregate(newValue, (current, t) => Math.Min(t, current));
-				}
 			}
 
 			return new DecimalIndicatorValue(this, lastValue);

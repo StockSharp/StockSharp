@@ -44,22 +44,16 @@ namespace StockSharp.Algo.Indicators
 		{
 			var value = input.GetValue<Tuple<decimal, decimal>>();
 
-			Buffer.PushBack(value);
-
 			Tuple<decimal, decimal> first = null;
 
 			if (input.IsFinal)
 			{
-				if (Buffer.Count > Length)
-					Buffer.PopFront();
+				Buffer.PushBack(value);
 			}
 			else
 			{
-				if (Buffer.Count > Length)
-				{
-					first = Buffer[0];
-					Buffer.PopFront();
-				}
+				first = Buffer.Count == Length ? Buffer[0] : default;
+				Buffer.PushBack(value);
 			}
 
 			decimal avgSource = 0;

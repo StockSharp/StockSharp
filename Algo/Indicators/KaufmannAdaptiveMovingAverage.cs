@@ -74,6 +74,8 @@ namespace StockSharp.Algo.Indicators
 			_isInitialized = false;
 
 			base.Reset();
+
+			Buffer.Capacity = Length + 1;
 		}
 
 		/// <inheritdoc />
@@ -94,9 +96,6 @@ namespace StockSharp.Algo.Indicators
 				// Начальное значение - последнее входное значение.
 				return new DecimalIndicatorValue(this, _prevFinalValue = newValue);
 			}
-
-			if (input.IsFinal)
-				Buffer.PopFront();
 
 			var buff = input.IsFinal ? Buffer : (IList<decimal>)Buffer.Skip(1).Append(newValue).ToArray();
 

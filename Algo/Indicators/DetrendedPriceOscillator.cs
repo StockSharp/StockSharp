@@ -57,9 +57,6 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => Buffer.Count >= Length;
-
-		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var smaValue = _sma.Process(input);
@@ -69,9 +66,6 @@ namespace StockSharp.Algo.Indicators
 
 			if (!IsFormed)
 				return new DecimalIndicatorValue(this);
-
-			if (Buffer.Count > Length)
-				Buffer.PopFront();
 
 			return new DecimalIndicatorValue(this, input.GetValue<decimal>() - Buffer[Math.Max(0, Buffer.Count - 1 - _lookBack)]);
 		}

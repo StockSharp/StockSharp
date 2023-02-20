@@ -15,8 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.Collections.Generic;
 	using System.ComponentModel;
+
+	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
 
@@ -27,13 +28,14 @@ namespace StockSharp.Algo.Indicators
 	[Browsable(false)]
 	public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 	{
-		private readonly List<Candle> _buffer = new();
+		private readonly CircularBuffer<Candle> _buffer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RelativeVigorIndexAverage"/>.
 		/// </summary>
 		public RelativeVigorIndexAverage()
 		{
+			_buffer = new(Length);
 			Length = 4;
 		}
 
@@ -43,6 +45,8 @@ namespace StockSharp.Algo.Indicators
 			base.Reset();
 
 			_buffer.Clear();
+			_buffer.Capacity = Length;
+
 			Buffer.Reset();
 		}
 
@@ -53,38 +57,40 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				_buffer.Add(newValue);
-
-				if (_buffer.Count > Length)
-					_buffer.RemoveAt(0);
+				_buffer.PushBack(newValue);
 			}
 
 			if (IsFormed)
 			{
 				decimal valueUp, valueDn;
 
+				var value0 = _buffer[0];
+				var value1 = _buffer[1];
+				var value2 = _buffer[2];
+				var value3 = _buffer[3];
+
 				if (input.IsFinal)
 				{
-					valueUp = ((_buffer[0].ClosePrice - _buffer[0].OpenPrice) +
-					           2*(_buffer[1].ClosePrice - _buffer[1].OpenPrice) +
-					           2*(_buffer[2].ClosePrice - _buffer[2].OpenPrice) +
-					           (_buffer[3].ClosePrice - _buffer[3].OpenPrice))/6m;
+					valueUp = ((value0.ClosePrice - value0.OpenPrice) +
+					           2 * (value1.ClosePrice - value1.OpenPrice) +
+					           2 * (value2.ClosePrice - value2.OpenPrice) +
+					           (value3.ClosePrice - value3.OpenPrice)) / 6m;
 
-					valueDn = ((_buffer[0].HighPrice - _buffer[0].LowPrice) +
-					           2*(_buffer[1].HighPrice - _buffer[1].LowPrice) +
-					           2*(_buffer[2].HighPrice - _buffer[2].LowPrice) +
-					           (_buffer[3].HighPrice - _buffer[3].LowPrice))/6m;
+					valueDn = ((value0.HighPrice - value0.LowPrice) +
+					           2 * (value1.HighPrice - value1.LowPrice) +
+					           2 * (value2.HighPrice - value2.LowPrice) +
+					           (value3.HighPrice - value3.LowPrice)) / 6m;
 				}
 				else
 				{
-					valueUp = ((_buffer[1].ClosePrice - _buffer[1].OpenPrice) +
-					           2*(_buffer[2].ClosePrice - _buffer[2].OpenPrice) +
-					           2*(_buffer[3].ClosePrice - _buffer[3].OpenPrice) +
+					valueUp = ((value1.ClosePrice - value1.OpenPrice) +
+					           2 * (value2.ClosePrice - value2.OpenPrice) +
+					           2 * (value3.ClosePrice - value3.OpenPrice) +
 							   (newValue.ClosePrice - newValue.OpenPrice)) / 6m;
 
-					valueDn = ((_buffer[1].HighPrice - _buffer[1].LowPrice) +
-					           2*(_buffer[2].HighPrice - _buffer[2].LowPrice) +
-					           2*(_buffer[3].HighPrice - _buffer[3].LowPrice) +
+					valueDn = ((value1.HighPrice - value1.LowPrice) +
+					           2 * (value2.HighPrice - value2.LowPrice) +
+					           2 * (value3.HighPrice - value3.LowPrice) +
 							   (newValue.HighPrice - newValue.LowPrice)) / 6m;
 				}
 

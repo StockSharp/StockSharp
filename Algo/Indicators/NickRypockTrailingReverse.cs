@@ -170,9 +170,6 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				if(IsFormed)
-					Buffer.PopFront();
-
 				Buffer.PushBack(newValue);
 			}
 
@@ -181,7 +178,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override void Reset() => _buf.Reset();
+		public override void Reset()
+		{
+			base.Reset();
+			_buf.Reset();
+		}
 
 		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
