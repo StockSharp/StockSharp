@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Indicators
 			if (Tenkan.IsFormed && Kijun.IsFormed)
 			{
 				if (input.IsFinal)
-					Buffer.Add((Tenkan.GetCurrentValue() + Kijun.GetCurrentValue()) / 2);
+					Buffer.PushBack((Tenkan.GetCurrentValue() + Kijun.GetCurrentValue()) / 2);
 
 				if (IsFormed)
 					result = Buffer[0];

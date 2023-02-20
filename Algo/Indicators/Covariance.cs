@@ -86,9 +86,9 @@ namespace StockSharp.Algo.Indicators
 			if (!input.IsFinal)
 			{
 				if (first != null)
-					Buffer.Insert(0, first);
+					Buffer.PushFront(first);
 
-				Buffer.RemoveAt(len - 1);
+				Buffer.PopBack();
 			}
 
 			return new DecimalIndicatorValue(this, covariance / len);

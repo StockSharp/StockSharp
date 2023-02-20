@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Indicators
 	public abstract class LengthIndicator<TResult> : BaseIndicator, ILengthIndicator
 	{
 		/// <summary>
-		/// 
+		/// Buffer.
 		/// </summary>
 		protected class LengthIndicatorBuffer : List<TResult>
 		{
@@ -65,10 +65,12 @@ namespace StockSharp.Algo.Indicators
 			public IOperator<TResult> Operator { get; set; }
 
 			/// <summary>
+			/// Sum of all elements in buffer.
 			/// </summary>
 			public TResult Sum { get; private set; }
 
 			/// <summary>
+			/// Sum of all elements in buffer without the first element.
 			/// </summary>
 			public TResult SumNoFirst => Count == 0 ? default : Operator.Subtract(Sum, this[0]);
 
@@ -80,22 +82,30 @@ namespace StockSharp.Algo.Indicators
 			{
 				PushBack(result);
 
-				if (Operator is not null)
-					Sum = Operator.Add(Sum, result);
+				var op = Operator;
+
+				if (op is not null)
+					Sum = op.Add(Sum, result);
 
 				if (Count > _parent.Length)
 				{
-					if (Operator is not null)
-						Sum = Operator.Subtract(Sum, base[0]);
-					
+					if (op is not null)
+						Sum = op.Subtract(Sum, base[0]);
+
 					PopFront();
 				}
 			}
 
-			internal void PopFront() => RemoveAt(0);
+			internal void PushFront(TResult value) => Insert(0, value);
 			internal void PushBack(TResult value) => Add(value);
 
-			internal void Reset()
+			internal void PopFront() => RemoveAt(0);
+			internal void PopBack() => RemoveAt(Count - 1);
+
+			/// <summary>
+			/// Reset.
+			/// </summary>
+			public void Reset()
 			{
 				Clear();
 				Sum = default;
