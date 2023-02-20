@@ -16,8 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
-	using System.Linq;
-	using System;
+	using System.Collections.Generic;
 
 	using Ecng.ComponentModel;
 
@@ -41,6 +40,7 @@ namespace StockSharp.Algo.Indicators
 		public Highest()
 		{
 			Length = 5;
+			Buffer.MaxComparer = Comparer<decimal>.Default;
 		}
 
 		/// <inheritdoc />
@@ -50,21 +50,12 @@ namespace StockSharp.Algo.Indicators
 			var lastValue = Buffer.Count == 0 ? newValue : this.GetCurrentValue();
 
 			if (newValue > lastValue)
-			{
-				// Новое значение и есть экстремум 
 				lastValue = newValue;
-			}
 
-			// добавляем новое начало
 			if (input.IsFinal)
 			{
-				var recalc = Buffer.Count == Length && Buffer[0] == lastValue && lastValue != newValue;
-
-				Buffer.PushBack(newValue);
-
-				// ищем новый экстремум
-				if (recalc)
-					lastValue = Buffer.Aggregate(newValue, (current, t) => Math.Max(t, current));
+				Buffer.AddEx(newValue);
+				lastValue = Buffer.Max.Value;
 			}
 
 			return new DecimalIndicatorValue(this, lastValue);

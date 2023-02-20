@@ -16,11 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
@@ -63,6 +64,26 @@ namespace StockSharp.Algo.Indicators
 			public IOperator<TResult> Operator { get; set; }
 
 			/// <summary>
+			/// Calc <see cref="Max"/>.
+			/// </summary>
+			public IComparer<TResult> MaxComparer { get; set; }
+
+			/// <summary>
+			/// Calc <see cref="Min"/>.
+			/// </summary>
+			public IComparer<TResult> MinComparer { get; set; }
+
+			/// <summary>
+			/// Max value.
+			/// </summary>
+			public NullableEx<TResult> Max { get; private set; } = new();
+
+			/// <summary>
+			/// Min value.
+			/// </summary>
+			public NullableEx<TResult> Min { get; private set; } = new();
+
+			/// <summary>
 			/// Sum of all elements in buffer.
 			/// </summary>
 			public TResult Sum { get; private set; }
@@ -80,16 +101,35 @@ namespace StockSharp.Algo.Indicators
 			{
 				var op = Operator;
 
-				if (op is not null)
+				var recalcMax = false;
+				var recalcMin = false;
+
+				if (Count == _parent.Length)
 				{
-					if (Count == _parent.Length)
+					if (op is not null)
 						Sum = op.Subtract(Sum, this[0]);
+
+					if (MaxComparer?.Compare(Max.Value, this[0]) == 0)
+						recalcMax = true;
+
+					if (MinComparer?.Compare(Min.Value, this[0]) == 0)
+						recalcMin = true;
 				}
 
 				PushBack(result);
 
 				if (op is not null)
 					Sum = op.Add(Sum, result);
+
+				if (recalcMax)
+					Max.Value = this.Max(MaxComparer);
+				else if (!Max.HasValue || MaxComparer?.Compare(Max.Value, result) < 0)
+					Max.Value = result;
+
+				if (recalcMin)
+					Min.Value = this.Min(MinComparer);
+				else if (!Min.HasValue || MinComparer?.Compare(Min.Value, result) > 0)
+					Min.Value = result;
 			}
 
 			/// <summary>
@@ -100,6 +140,8 @@ namespace StockSharp.Algo.Indicators
 				Clear();
 				Capacity = _parent.Length;
 				Sum = default;
+				Max = new();
+				Min = new();
 			}
 		}
 
