@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Indicators
 
 			if (Tenkan.IsFormed && Kijun.IsFormed)
 			{
-				if (Buffer.Count >= (Length - 1))
+				if (IsFormed || (input.IsFinal && Buffer.Count == (Length - 1)))
 					result = Buffer[0];
 
 				if (input.IsFinal)

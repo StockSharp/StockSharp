@@ -69,9 +69,7 @@ namespace StockSharp.Algo.Indicators
 			IList<Candle> buff = _buffer;
 
 			if (input.IsFinal)
-			{
 				_buffer.PushBack(candle);
-			}
 			else
 				buff = _buffer.Skip(1).Append(candle).ToList();
 
@@ -81,11 +79,14 @@ namespace StockSharp.Algo.Indicators
 				var max = buff.Max(t => t.HighPrice);
 				var min = buff.Min(t => t.LowPrice);
 
-				if (Buffer.Count >= (Kijun.Length - 1))
-					result = Buffer[0];
-
 				if (Kijun.IsFormed && input.IsFinal)
 				   Buffer.PushBack((max + min) / 2);
+
+				if (Buffer.Count >= Kijun.Length)
+					result = Buffer[0];
+
+				if (Buffer.Count > Kijun.Length)
+					Buffer.PopFront();
 			}
 
 			return result == null ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, result.Value);
