@@ -3359,7 +3359,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Constant value for <see cref="OrderRegisterMessage.TillDate"/> means Today(=Session).
 		/// </summary>
-		public static DateTimeOffset Today = new(2100, 1, 1, 0, 0, 0, TimeSpan.Zero);
+		public static readonly DateTimeOffset Today = new(2100, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
 		/// <summary>
 		/// To check the specified date is today.
