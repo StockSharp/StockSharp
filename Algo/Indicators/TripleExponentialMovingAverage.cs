@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => _ema1.IsFormed && _ema2.IsFormed && _ema3.IsFormed;
+		protected override bool CalcIsFormed() => _ema1.IsFormed && _ema2.IsFormed && _ema3.IsFormed;
 
 		/// <inheritdoc />
 		public override void Reset()

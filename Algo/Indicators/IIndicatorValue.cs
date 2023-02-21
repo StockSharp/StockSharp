@@ -183,7 +183,7 @@ namespace StockSharp.Algo.Indicators
 		public override T GetValue<T>()
 		{
 			ThrowIfEmpty();
-			return Value.To<T>();
+			return Value is T t ? t : throw new InvalidCastException($"Cannot convert {typeof(TValue).Name} to {typeof(T).Name}."); ;
 		}
 
 		/// <inheritdoc />
@@ -303,7 +303,11 @@ namespace StockSharp.Algo.Indicators
 		public override T GetValue<T>()
 		{
 			var candle = base.GetValue<Candle>();
-			return typeof(T) == typeof(decimal) ? _getPart(candle).To<T>() : candle.To<T>();
+
+			if (typeof(T) == typeof(decimal))
+				return _getPart(candle) is T t ? t : throw new InvalidCastException($"Cannot convert decimal to {typeof(T).Name}.");
+			else
+				return candle is T t ? t : throw new InvalidCastException($"Cannot convert candle to {typeof(T).Name}.");
 		}
 
 		/// <inheritdoc />

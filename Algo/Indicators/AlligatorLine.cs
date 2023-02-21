@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => Buffer.Count > Shift;
+		protected override bool CalcIsFormed() => Buffer.Count > Shift;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

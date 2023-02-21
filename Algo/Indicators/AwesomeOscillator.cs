@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Indicators
 		public MedianPrice MedianPrice { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => LongMa.IsFormed;
+		protected override bool CalcIsFormed() => LongMa.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

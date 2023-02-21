@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Indicators
 		public int SlowSCPeriod { get; set; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => Buffer.Count > Length;
+		protected override bool CalcIsFormed() => Buffer.Count > Length;
 
 		/// <inheritdoc />
 		public override void Reset()

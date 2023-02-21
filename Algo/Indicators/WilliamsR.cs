@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Indicators
 		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
 
 		/// <inheritdoc />
-		public override bool IsFormed => _low.IsFormed;
+		protected override bool CalcIsFormed() => _low.IsFormed;
 
 		/// <inheritdoc />
 		public override void Reset()

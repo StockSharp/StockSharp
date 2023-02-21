@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage LongSma { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => LongSma.IsFormed;
+		protected override bool CalcIsFormed() => LongSma.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

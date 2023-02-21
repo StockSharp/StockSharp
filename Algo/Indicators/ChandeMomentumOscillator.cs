@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => _cmoUp.IsFormed;
+		protected override bool CalcIsFormed() => _cmoUp.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

@@ -33,8 +33,6 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorAverageTrueRange.html")]
 	public class AverageTrueRange : LengthIndicator<IIndicatorValue>
 	{
-		private bool _isFormed;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AverageTrueRange"/>.
 		/// </summary>
@@ -70,14 +68,9 @@ namespace StockSharp.Algo.Indicators
 		public TrueRange TrueRange { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => _isFormed;
-
-		/// <inheritdoc />
 		public override void Reset()
 		{
 			base.Reset();
-
-			_isFormed = false;
 
 			MovingAverage.Length = Length;
 			TrueRange.Reset();
@@ -88,7 +81,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			// используем дополнительную переменную IsFormed, 
 			// т.к. нужна задержка в один период для корректной инициализации скользящей средней
-			_isFormed = MovingAverage.IsFormed;
+			if (MovingAverage.IsFormed)
+				IsFormed = true;
 
 			return MovingAverage.Process(TrueRange.Process(input));
 		}

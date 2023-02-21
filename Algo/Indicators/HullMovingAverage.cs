@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => _wmaResult.IsFormed;
+		protected override bool CalcIsFormed() => _wmaResult.IsFormed;
 
 		/// <inheritdoc />
 		public override void Reset()

@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
 
 		/// <inheritdoc />
-		public override bool IsFormed => _sum.IsFormed && _max.IsFormed && _min.IsFormed;
+		protected override bool CalcIsFormed() => _sum.IsFormed && _max.IsFormed && _min.IsFormed;
 
 		/// <inheritdoc />
 		public override void Reset()

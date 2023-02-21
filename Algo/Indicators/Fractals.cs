@@ -97,7 +97,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => _buffer.Count >= Length && base.IsFormed;
+		protected override bool CalcIsFormed() => _buffer.Count >= Length && base.CalcIsFormed();
 
 		/// <summary>
 		/// Fractal up.

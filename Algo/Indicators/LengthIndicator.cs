@@ -189,7 +189,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => Buffer.Count >= Length;
+		protected override bool CalcIsFormed() => Buffer.Count >= Length;
 
 		/// <summary>
 		/// The buffer for data storage.

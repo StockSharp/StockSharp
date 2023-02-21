@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Indicators
 		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
 
 		/// <inheritdoc />
-		public override bool IsFormed => _sma.IsFormed;
+		protected override bool CalcIsFormed() => _sma.IsFormed;
 
 		/// <inheritdoc />
 		public override void Reset()

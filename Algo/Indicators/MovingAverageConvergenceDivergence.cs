@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Indicators
 		public ExponentialMovingAverage ShortMa { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => LongMa.IsFormed;
+		protected override bool CalcIsFormed() => LongMa.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public virtual void Reset()
 		{
-			IsFormed = false;
+			_isFormed = false;
 			Container.ClearValues();
 			Reseted?.Invoke();
 		}
@@ -95,9 +95,27 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public virtual IndicatorMeasures Measure { get; } = IndicatorMeasures.Price;
 
+		private bool _isFormed;
+
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsFormed { get; protected set; }
+		public bool IsFormed
+		{
+			get
+			{
+				if (_isFormed)
+					return _isFormed;
+
+				return _isFormed = CalcIsFormed();
+			}
+			protected set => _isFormed = value;
+		}
+
+		/// <summary>
+		/// Calc <see cref="IsFormed"/>.
+		/// </summary>
+		/// <returns><see cref="IsFormed"/></returns>
+		protected virtual bool CalcIsFormed() => false;
 
 		/// <inheritdoc />
 		[Browsable(false)]

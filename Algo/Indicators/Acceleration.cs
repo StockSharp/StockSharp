@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Indicators
 		public AwesomeOscillator Ao { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => Sma.IsFormed;
+		protected override bool CalcIsFormed() => Sma.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

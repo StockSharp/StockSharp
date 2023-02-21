@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => MovingAverage.IsFormed;
+		protected override bool CalcIsFormed() => MovingAverage.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

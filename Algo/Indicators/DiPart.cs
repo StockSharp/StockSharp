@@ -26,7 +26,6 @@ namespace StockSharp.Algo.Indicators
 		private readonly AverageTrueRange _averageTrueRange;
 		private readonly LengthIndicator<decimal> _movingAverage;
 		private Candle _lastCandle;
-		private bool _isFormed;
 
 		/// <summary>
 		/// Initialize <see cref="DiPart"/>.
@@ -48,11 +47,7 @@ namespace StockSharp.Algo.Indicators
 			_movingAverage.Length = Length;
 
 			_lastCandle = null;
-			_isFormed = false;
 		}
-
-		/// <inheritdoc />
-		public override bool IsFormed => _isFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
@@ -62,7 +57,8 @@ namespace StockSharp.Algo.Indicators
 			var candle = input.GetValue<Candle>();
 
 			// 1 period delay
-			_isFormed = _averageTrueRange.IsFormed && _movingAverage.IsFormed;
+			if (_averageTrueRange.IsFormed && _movingAverage.IsFormed)
+				IsFormed = true;
 
 			_averageTrueRange.Process(input);
 

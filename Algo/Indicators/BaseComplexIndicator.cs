@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Indicators
 		IEnumerable<IIndicator> IComplexIndicator.InnerIndicators => InnerIndicators;
 
 		/// <inheritdoc />
-		public override bool IsFormed => InnerIndicators.All(i => i.IsFormed);
+		protected override bool CalcIsFormed() => InnerIndicators.All(i => i.IsFormed);
 
 		/// <inheritdoc />
 		public override Type ResultType { get; } = typeof(ComplexIndicatorValue);

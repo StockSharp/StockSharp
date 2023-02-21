@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Indicators
 		public RateOfChange Roc { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => Roc.IsFormed;
+		protected override bool CalcIsFormed() => Roc.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

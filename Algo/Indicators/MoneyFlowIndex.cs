@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => _positiveFlow.IsFormed && _negativeFlow.IsFormed;
+		protected override bool CalcIsFormed() => _positiveFlow.IsFormed && _negativeFlow.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

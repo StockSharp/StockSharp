@@ -82,6 +82,6 @@ namespace StockSharp.Algo.Indicators
 		public AlligatorLine Lips { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => Jaw.IsFormed;
+		protected override bool CalcIsFormed() => Jaw.IsFormed;
 	}
 }

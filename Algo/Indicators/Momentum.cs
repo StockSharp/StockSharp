@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Indicators
 		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
 
 		/// <inheritdoc />
-		public override bool IsFormed => Buffer.Count > Length;
+		protected override bool CalcIsFormed() => Buffer.Count > Length;
 
 		/// <inheritdoc />
 		public override void Reset()

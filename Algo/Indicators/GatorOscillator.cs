@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 		public GatorHistogram Histogram2 { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => _alligator.IsFormed;
+		protected override bool CalcIsFormed() => _alligator.IsFormed;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

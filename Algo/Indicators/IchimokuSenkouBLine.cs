@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override bool IsFormed => _buffer.Count >= Length && Buffer.Count >= Kijun.Length;
+		protected override bool CalcIsFormed() => _buffer.Count >= Length && Buffer.Count >= Kijun.Length;
 
 		/// <summary>
 		/// Kijun line.

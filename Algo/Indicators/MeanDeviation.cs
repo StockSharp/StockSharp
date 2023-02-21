@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage Sma { get; }
 
 		/// <inheritdoc />
-		public override bool IsFormed => Sma.IsFormed;
+		protected override bool CalcIsFormed() => Sma.IsFormed;
 
 		/// <inheritdoc />
 		public override void Reset()
