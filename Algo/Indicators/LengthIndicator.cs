@@ -100,6 +100,8 @@ namespace StockSharp.Algo.Indicators
 			public void AddEx(TResult result)
 			{
 				var op = Operator;
+				var maxComparer = MaxComparer;
+				var minComparer = MinComparer;
 
 				var recalcMax = false;
 				var recalcMin = false;
@@ -109,10 +111,10 @@ namespace StockSharp.Algo.Indicators
 					if (op is not null)
 						Sum = op.Subtract(Sum, this[0]);
 
-					if (MaxComparer?.Compare(Max.Value, this[0]) == 0)
+					if (maxComparer?.Compare(Max.Value, this[0]) == 0)
 						recalcMax = true;
 
-					if (MinComparer?.Compare(Min.Value, this[0]) == 0)
+					if (minComparer?.Compare(Min.Value, this[0]) == 0)
 						recalcMin = true;
 				}
 
@@ -121,15 +123,21 @@ namespace StockSharp.Algo.Indicators
 				if (op is not null)
 					Sum = op.Add(Sum, result);
 
-				if (recalcMax)
-					Max.Value = this.Max(MaxComparer);
-				else if (!Max.HasValue || MaxComparer?.Compare(Max.Value, result) < 0)
-					Max.Value = result;
+				if (maxComparer is not null)
+				{
+					if (recalcMax)
+						Max.Value = this.Max(maxComparer);
+					else if (!Max.HasValue || maxComparer?.Compare(Max.Value, result) < 0)
+						Max.Value = result;
+				}
 
-				if (recalcMin)
-					Min.Value = this.Min(MinComparer);
-				else if (!Min.HasValue || MinComparer?.Compare(Min.Value, result) > 0)
-					Min.Value = result;
+				if (minComparer is not null)
+				{
+					if (recalcMin)
+						Min.Value = this.Min(minComparer);
+					else if (!Min.HasValue || minComparer?.Compare(Min.Value, result) > 0)
+						Min.Value = result;
+				}
 			}
 
 			/// <summary>
