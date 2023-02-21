@@ -1062,7 +1062,7 @@ namespace StockSharp.Messages
 			if (source == null)
 				throw new ArgumentNullException(nameof(source));
 
-			if (message.LocalTime != default)
+			if (message.LocalTime == default)
 				message.LocalTime = source.CurrentTime;
 		}
 
