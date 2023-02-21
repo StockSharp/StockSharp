@@ -69,8 +69,8 @@ namespace StockSharp.Algo.Storages
 		{
 			private readonly BasketMarketDataStorage<TMessage> _storage;
 			private readonly DateTime _date;
-			private readonly SynchronizedQueue<Tuple<ActionTypes, IMarketDataStorage, long>> _actions = new();
-			private readonly OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator<Message>, IMarketDataStorage, long>> _enumerators = new();
+			private readonly SynchronizedQueue<(ActionTypes action, IMarketDataStorage storage, long transId)> _actions = new();
+			private readonly Ecng.Collections.PriorityQueue<DateTimeOffset, (IEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new();
 
 			public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date)
 			{
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Storages
 					if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
 						continue;
 
-					_actions.Add(Tuple.Create(ActionTypes.Add, s, storage._innerStorages.TryGetTransactionId(s)));
+					_actions.Add((ActionTypes.Add, s, storage._innerStorages.TryGetTransactionId(s)));
 				}
 
 				_storage._enumerators.Add(this);
@@ -94,13 +94,13 @@ namespace StockSharp.Algo.Storages
 			{
 				while (true)
 				{
-					var action = _actions.TryDequeue();
+					var action = _actions.TryDequeue2();
 
-					if (action == null)
+					if (action is null)
 						break;
 
-					var type = action.Item1;
-					var storage = action.Item2;
+					var type = action.Value.action;
+					var storage = action.Value.storage;
 
 					switch (type)
 					{
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Storages
 
 							// данных в хранилище нет больше последней даты
 							if (hasValues)
-								_enumerators.Enqueue(GetServerTime(enu), Tuple.Create(enu, storage, action.Item3));
+								_enumerators.Enqueue(GetServerTime(enu), (enu, storage, action.Value.transId));
 							else
 								enu.DoDispose();
 
@@ -146,7 +146,7 @@ namespace StockSharp.Algo.Storages
 						}
 						case ActionTypes.Remove:
 						{
-							_enumerators.RemoveWhere(p => p.Value.Item2 == storage);
+							_enumerators.RemoveWhere(p => p.Item2.storage == storage);
 							break;
 						}
 						case ActionTypes.Clear:
@@ -162,14 +162,14 @@ namespace StockSharp.Algo.Storages
 				if (_enumerators.Count == 0)
 					return false;
 
-				var pair = _enumerators.Dequeue();
+				var (priority, element) = _enumerators.Dequeue();
 
-				var enumerator = pair.Value.Item1;
+				var enumerator = element.enu;
 
-				Current = TrySetTransactionId(enumerator.Current, pair.Value.Item3);
+				Current = TrySetTransactionId(enumerator.Current, element.transId);
 
 				if (enumerator.MoveNext())
-					_enumerators.Enqueue(GetServerTime(enumerator), pair.Value);
+					_enumerators.Enqueue(GetServerTime(enumerator), element);
 				else
 					enumerator.DoDispose();
 
@@ -197,13 +197,13 @@ namespace StockSharp.Algo.Storages
 			void IEnumerator.Reset()
 			{
 				foreach (var enumerator in _enumerators)
-					enumerator.Value.Item1.Reset();
+					enumerator.Item2.enu.Reset();
 			}
 
 			void IDisposable.Dispose()
 			{
 				foreach (var enumerator in _enumerators)
-					enumerator.Value.Item1.DoDispose();
+					enumerator.Item2.enu.DoDispose();
 
 				_enumerators.Clear();
 
@@ -214,7 +214,7 @@ namespace StockSharp.Algo.Storages
 
 			public void AddAction(ActionTypes type, IMarketDataStorage storage, long transactionId)
 			{
-				_actions.Add(Tuple.Create(type, storage, transactionId));
+				_actions.Add((type, storage, transactionId));
 			}
 		}
 

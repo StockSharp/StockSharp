@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interfaces described message queue.
 	/// </summary>
-	public interface IMessageQueue : IBlockingQueue<KeyValuePair<long, Message>>
+	public interface IMessageQueue : IBlockingQueue<(long sort, Message elem)>
 	{
 		/// <summary>
 		/// Enqueue the specified message.
@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Message queue.
 	/// </summary>
-	public abstract class BaseMessageQueue : BaseOrderedBlockingQueue<long, Message>, IMessageQueue
+	public abstract class BaseMessageQueue : BaseOrderedBlockingQueue<long, Message, Ecng.Collections.PriorityQueue<long, Message>>, IMessageQueue
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseMessageQueue"/>.
@@ -37,6 +37,12 @@ namespace StockSharp.Messages
 		protected BaseMessageQueue()
 		{
 		}
+
+		/// <summary>
+		/// Enqueue message.
+		/// </summary>
+		/// <param name="message"><see cref="Message"/>.</param>
+		public abstract void Enqueue(Message message);
 	}
 
 	/// <summary>
