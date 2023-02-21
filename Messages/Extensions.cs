@@ -280,17 +280,28 @@ namespace StockSharp.Messages
 		/// <returns>Server time.</returns>
 		public static DateTimeOffset GetServerTime(this Message message)
 		{
-			return message.TryGetServerTime().Value;
+			if (message.TryGetServerTime(out var serverTime))
+				return serverTime;
+
+			throw new InvalidOperationException();
 		}
 
 		/// <summary>
-		/// Get message server time.
+		/// Try get message server time.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		/// <returns>Server time. If the value is <see langword="null" />, the message does not contain the server time.</returns>
-		public static DateTimeOffset? TryGetServerTime(this Message message)
+		/// <param name="serverTime">Server time. If the value is <see langword="default" />, the message does not contain the server time.</param>
+		/// <returns>Operation result.</returns>
+		public static bool TryGetServerTime(this Message message, out DateTimeOffset serverTime)
 		{
-			return (message as IServerTimeMessage)?.ServerTime;
+			if (message is IServerTimeMessage timeMsg)
+			{
+				serverTime = timeMsg.ServerTime;
+				return true;
+			}
+
+			serverTime = default;
+			return false;
 		}
 
 		/// <summary>
@@ -1051,7 +1062,7 @@ namespace StockSharp.Messages
 			if (source == null)
 				throw new ArgumentNullException(nameof(source));
 
-			if (message.LocalTime.IsDefault())
+			if (message.LocalTime != default)
 				message.LocalTime = source.CurrentTime;
 		}
 

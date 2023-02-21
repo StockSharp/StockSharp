@@ -420,6 +420,6 @@ namespace StockSharp.Algo.Storages
 		public IBasketMarketDataStorageEnumerable<TMessage> Load(DateTime date) => new BasketEnumerable(this, date);
 
 		DateTimeOffset IMarketDataStorageInfo<TMessage>.GetTime(TMessage data) => data.GetServerTime();
-		DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((Message)data).GetServerTime();
+		DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((IMarketDataStorageInfo<TMessage>)this).GetTime((TMessage)data);
 	}
 }

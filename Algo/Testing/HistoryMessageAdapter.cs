@@ -616,9 +616,9 @@ namespace StockSharp.Algo.Testing
 									var noData = !messages.DataTypes.Except(messageTypes).Any();
 
 									if (noData)
-										EnqueueMessages(startDateTime, stopDateTime, currentTime, token, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval));
+										EnqueueMessages(startDateTime, stopDateTime, currentTime, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval), token);
 									else
-										EnqueueMessages(startDateTime, stopDateTime, currentTime, token, messages);
+										EnqueueMessages(startDateTime, stopDateTime, currentTime, messages, token);
 								}
 
 								loadDateInUtc += TimeSpan.FromDays(1);
@@ -661,7 +661,7 @@ namespace StockSharp.Algo.Testing
 			_syncRoot.PulseSignal();
 		}
 
-		private void EnqueueMessages(DateTimeOffset fromTime, DateTimeOffset toTime, DateTimeOffset curTime, CancellationToken token, IEnumerable<Message> messages)
+		private void EnqueueMessages(DateTimeOffset fromTime, DateTimeOffset toTime, DateTimeOffset curTime, IEnumerable<Message> messages, CancellationToken token)
 		{
 			foreach (var msg in messages)
 			{
@@ -689,7 +689,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private IEnumerable<(BoardMessage, Range<TimeSpan>)> GetOrderedRanges(BoardMessage[] boards, DateTimeOffset date)
+		private static IEnumerable<(BoardMessage, Range<TimeSpan>)> GetOrderedRanges(BoardMessage[] boards, DateTimeOffset date)
 		{
 			if (boards is null)
 				throw new ArgumentNullException(nameof(boards));
@@ -815,10 +815,8 @@ namespace StockSharp.Algo.Testing
 		{
 			LoadedMessageCount++;
 
-			var serverTime = message.TryGetServerTime();
-
-			if (serverTime != null)
-				_currentTime = serverTime.Value;
+			if (message.TryGetServerTime(out var serverTime))
+				_currentTime = serverTime;
 
 			base.SendOutMessage(message);
 		}

@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private class SnapshotStorage<TKey, TMessage> : SnapshotStorage, ISnapshotStorage<TKey, TMessage>
-			where TMessage : Message, ISecurityIdMessage
+			where TMessage : Message, ISecurityIdMessage, IServerTimeMessage
 		{
 			private class SnapshotStorageDate
 			{
@@ -193,7 +193,7 @@ namespace StockSharp.Algo.Storages
 							if (from == null && to == null)
 								return true;
 
-							var time = m.GetServerTime();
+							var time = m.ServerTime;
 
 							if (from != null && from > time)
 								return false;
@@ -340,7 +340,7 @@ namespace StockSharp.Algo.Storages
 
 				var curr = (TMessage)message;
 
-				var date = curr.GetServerTime().UtcDateTime.Date;
+				var date = curr.ServerTime.UtcDateTime.Date;
 
 				if (date.IsDefault())
 					throw new ArgumentException(message.ToString());
