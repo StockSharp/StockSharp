@@ -228,7 +228,7 @@
 			url += id switch
 			{
 				Pages.Eula => "products/eula",
-				Pages.Pricing => "products/pricing",
+				Pages.Pricing => "pricing",
 				Pages.NugetManual => "products/nuget_manual",
 				Pages.Message => "posts/m",
 				Pages.Topic => "topic",

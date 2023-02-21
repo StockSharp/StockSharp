@@ -19588,8 +19588,8 @@
     "ru": "Нижняя линия"
   },
   "ConnectorIsStub": {
-    "en": "Connector is stub only. Please visit https://stocksharp.com/products/pricing/ to get more info.",
-    "ru": "Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://stocksharp.ru/products/pricing/ с информацией."
+    "en": "Connector is stub only. Please visit https://stocksharp.com/pricing/ to get more info.",
+    "ru": "Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://stocksharp.ru/pricing/ с информацией."
   },
   "Bitfinex": {
     "en": "Bitfinex",
