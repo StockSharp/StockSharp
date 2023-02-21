@@ -81,7 +81,7 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			this.AddInfoLog(LocalizedStrings.Str3634Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security));
+			this.AddInfoLog(LocalizedStrings.Str3634Params, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security);
 
 			// process new candle
 			var longValue = LongSma.Process(candle);

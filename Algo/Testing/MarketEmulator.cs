@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Storages;
 
-	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Common.RefPair<LevelQuotes, StockSharp.Messages.QuoteChange>>;
+	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Common.RefPair<LevelQuotes, Messages.QuoteChange>>;
 
 	class LevelQuotes : IEnumerable<ExecutionMessage>
 	{
