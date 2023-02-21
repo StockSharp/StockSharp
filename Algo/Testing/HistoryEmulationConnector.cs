@@ -138,13 +138,11 @@ namespace StockSharp.Algo.Testing
 			Disconnected += OnDisconnected;
 
 			DisableTicks = true;
+			SupportFilteredMarketDepth = false;
 		}
 
 		/// <inheritdoc />
 		public override IRiskManager RiskManager => null;
-
-		/// <inheritdoc />
-		public override bool SupportBasketSecurities => true;
 
 		/// <inheritdoc />
 		public override bool SupportSnapshots => false;
