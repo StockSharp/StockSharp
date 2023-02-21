@@ -133,7 +133,7 @@ namespace SampleHistoryTestingParallel
 					//BatchSize = 3,
 				},
 
-				Cache = new(),
+				AdapterCache = new(),
 			};
 
 			// handle historical time for update ProgressBar

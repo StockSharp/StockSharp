@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Ecng.Collections;
-using Ecng.Common;
 
 using StockSharp.Messages;
 
@@ -14,29 +13,60 @@ using StockSharp.Messages;
 /// </summary>
 public class MarketDataStorageCache
 {
-	private readonly SyncObject _lock = new();
-	private readonly SynchronizedDictionary<(DataType, DateTime), Message[]> _cache = new();
+	private readonly SynchronizedDictionary<(SecurityId, DataType, DateTime), (DateTime lastAccess, Message[] data)> _cache = new();
+
+	private int _limit = 1000;
+
+	/// <summary>
+	/// Max count.
+	/// </summary>
+	public int Limit
+	{
+		get => _limit;
+		set
+		{
+			if (value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(value));
+
+			_limit = value;
+		}
+	}
 
 	/// <summary>
 	/// Get data.
 	/// </summary>
+	/// <param name="securityId"><see cref="SecurityId"/>.</param>
 	/// <param name="dataType"><see cref="DataType"/>.</param>
 	/// <param name="date">Date to load.</param>
 	/// <param name="loadIfNeed">Handler to load data from real storage.</param>
 	/// <returns>Data.</returns>
-	public IEnumerable<Message> GetMessages(DataType dataType, DateTime date, Func<DateTime, IEnumerable<Message>> loadIfNeed)
+	public Message[] GetMessages(SecurityId securityId, DataType dataType, DateTime date, Func<DateTime, IEnumerable<Message>> loadIfNeed)
 	{
-		if (dataType is null)
-			throw new ArgumentNullException(nameof(dataType));
+		//if (dataType is null)
+		//	throw new ArgumentNullException(nameof(dataType));
 
 		if (loadIfNeed is null)
 			throw new ArgumentNullException(nameof(loadIfNeed));
 
-		var key = (dataType, date);
+		var now = DateTime.UtcNow;
 
-		if (!_cache.TryGetValue(key, out var messages))
-			_cache[key] = messages = loadIfNeed(date).ToArray();
+		var key = (securityId, dataType, date);
 
-		return messages;
+		if (!_cache.TryGetValue(key, out var t))
+		{
+			t = (now, loadIfNeed(date).ToArray());
+
+			if (_cache.Count > Limit)
+			{
+				lock (_cache.SyncRoot)
+					_cache.RemoveRange(_cache.OrderBy(p => p.Value.lastAccess).Take(500).ToArray());
+			}
+		}
+		else
+			t.lastAccess = now;
+
+		_cache[key] = t;
+
+		return t.data;
 	}
 }

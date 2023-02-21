@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using StockSharp.Messages;
 
 /// <summary>
-/// Cacheable <see cref="IMarketDataStorage{T}"/>.
+/// Cacheable <see cref="IMarketDataStorage"/>.
 /// </summary>
 public class CacheableMarketDataStorage : IMarketDataStorage
 {
@@ -32,7 +32,7 @@ public class CacheableMarketDataStorage : IMarketDataStorage
 	bool IMarketDataStorage.AppendOnlyNew { get => _underlying.AppendOnlyNew; set => _underlying.AppendOnlyNew = value; }
 
 	IEnumerable<Message> IMarketDataStorage.Load(DateTime date)
-		=> _cache.GetMessages(_underlying.DataType, date, _underlying.Load);
+		=> _cache.GetMessages(_underlying.SecurityId, _underlying.DataType, date, _underlying.Load);
 
 	int IMarketDataStorage.Save(IEnumerable<Message> data) => _underlying.Save(data);
 	void IMarketDataStorage.Delete(IEnumerable<Message> data) => _underlying.Delete(data);

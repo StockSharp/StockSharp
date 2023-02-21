@@ -79,9 +79,14 @@ namespace StockSharp.Algo.Strategies.Testing
 		public EmulationSettings EmulationSettings { get; }
 
 		/// <summary>
-		/// <see cref="MarketDataStorageCache"/>.
+		/// <see cref="HistoryMessageAdapter.AdapterCache"/>.
 		/// </summary>
-		public MarketDataStorageCache Cache { get; set; }
+		public MarketDataStorageCache AdapterCache { get; set; }
+
+		/// <summary>
+		/// <see cref="HistoryMessageAdapter.StorageCache"/>.
+		/// </summary>
+		public MarketDataStorageCache StorageCache { get; set; }
 
 		/// <summary>
 		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="BatchEmulation.Stop"/>method.
@@ -209,7 +214,8 @@ namespace StockSharp.Algo.Strategies.Testing
 				StartDate = EmulationSettings.StartTime,
 				StopDate = EmulationSettings.StopTime,
 				Parent = this,
-				Cache = Cache,
+				AdapterCache = AdapterCache,
+				StorageCache = StorageCache,
 			});
 
 			var progress = new SynchronizedDictionary<HistoryEmulationConnector, int>();

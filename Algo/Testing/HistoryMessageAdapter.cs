@@ -136,13 +136,18 @@ namespace StockSharp.Algo.Testing
 		public bool CheckTradableDates { get; set; } = true;
 
 		/// <summary>
-		/// <see cref="MarketDataStorageCache"/>.
+		/// <see cref="BasketMarketDataStorage{T}.Cache"/>.
 		/// </summary>
-		public MarketDataStorageCache Cache
+		public MarketDataStorageCache StorageCache
 		{
 			get => _basketStorage.Cache;
 			set => _basketStorage.Cache = value;
 		}
+
+		/// <summary>
+		/// <see cref="MarketDataStorageCache"/>.
+		/// </summary>
+		public MarketDataStorageCache AdapterCache { get; set; }
 
 		/// <summary>
 		/// Order book builders.
@@ -610,10 +615,23 @@ namespace StockSharp.Algo.Testing
 								{
 									this.AddInfoLog("Loading {0}", loadDateInUtc);
 
-									var messages = _basketStorage.Load(loadDateInUtc);
+									IEnumerable<Message> messages;
+									bool noData;
 
-									// storage for the specified date contains only time messages and clearing events
-									var noData = !messages.DataTypes.Except(messageTypes).Any();
+									if (AdapterCache is not null)
+									{
+										messages = AdapterCache.GetMessages(default, default, loadDateInUtc, _basketStorage.Load);
+										noData = messages.IsEmpty();
+									}
+									else
+									{
+										var enu = _basketStorage.Load(loadDateInUtc);
+
+										// storage for the specified date contains only time messages and clearing events
+										noData = !enu.DataTypes.Except(messageTypes).Any();
+
+										messages = enu;
+									}
 
 									if (noData)
 										EnqueueMessages(startDateTime, stopDateTime, currentTime, GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval), token);
@@ -740,6 +758,7 @@ namespace StockSharp.Algo.Testing
 			return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
 		}
 
+		/*
 		private IEnumerable<TimeMessage> GetTimeLine(BoardMessage[] boards, DateTimeOffset date, TimeSpan interval)
 		{
 			var ranges = GetOrderedRanges(boards, date);
@@ -764,6 +783,7 @@ namespace StockSharp.Algo.Testing
 				yield return m;
 			}
 		}
+		*/
 
 		private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTimeOffset date, TimeSpan interval)
 		{

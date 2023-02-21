@@ -402,7 +402,7 @@ namespace SampleHistoryTesting
 							}
 						},
 
-						Cache = _cache,
+						AdapterCache = _cache,
 					},
 
 					// set market time freq as time frame
