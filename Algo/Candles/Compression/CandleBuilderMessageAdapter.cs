@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Testing;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -74,6 +75,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private readonly CandleBuilderProvider _candleBuilderProvider;
 		private readonly Dictionary<long, SeriesInfo> _allChilds = new();
 		private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = new();
+		private readonly bool _isHistory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleBuilderMessageAdapter"/>.
@@ -84,6 +86,7 @@ namespace StockSharp.Algo.Candles.Compression
 			: base(innerAdapter)
 		{
 			_candleBuilderProvider = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
+			_isHistory = innerAdapter.FindAdapter<HistoryMessageAdapter>() is not null;
 		}
 
 		/// <summary>
@@ -552,8 +555,7 @@ namespace StockSharp.Algo.Candles.Compression
 								if (series == null)
 									continue;
 
-								if (newSubscriptionIds == null)
-									newSubscriptionIds = new HashSet<long>(subscriptionIds);
+								newSubscriptionIds ??= new HashSet<long>(subscriptionIds);
 
 								newSubscriptionIds.Remove(subscriptionId);
 
@@ -621,8 +623,7 @@ namespace StockSharp.Algo.Candles.Compression
 								if (series == null)
 									continue;
 
-								if (newSubscriptionIds == null)
-									newSubscriptionIds = new HashSet<long>(subscriptionIds);
+								newSubscriptionIds ??= new HashSet<long>(subscriptionIds);
 
 								newSubscriptionIds.Remove(subscriptionId);
 
@@ -802,7 +803,7 @@ namespace StockSharp.Algo.Candles.Compression
 				info.NonFinishedCandle = null;
 			}
 
-			candleMsg = candleMsg.TypedClone();
+			candleMsg = _isHistory ? candleMsg : candleMsg.TypedClone();
 
 			if (candleMsg.Type == MessageTypes.CandleTimeFrame && !SendFinishedCandlesImmediatelly)
 			{

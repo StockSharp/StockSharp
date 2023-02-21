@@ -395,7 +395,7 @@ namespace StockSharp.Algo.Testing
 							// т.о. время уйдет вперед данных, которые построены по свечкам.
 							var (candles, ticks) = _candleInfo.SafeAdd(candleMsg.OpenTime, key => (new(), new()));
 
-							candles.Add(candleMsg.TypedClone());
+							candles.Add(candleMsg);
 
 							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
 							{

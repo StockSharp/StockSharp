@@ -686,7 +686,7 @@ namespace StockSharp.Algo.Testing
 				if (_isChanged || token.IsCancellationRequested)
 					break;
 
-				var msgServerTime = msg.GetServerTime();
+				var msgServerTime = ((IServerTimeMessage)msg).ServerTime;
 
 				if (msgServerTime < curTime)
 					continue;
