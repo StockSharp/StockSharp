@@ -8,9 +8,5 @@
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public class MessageAdapterStubAttribute : Attribute
 	{
-		/// <summary>
-		/// Package id.
-		/// </summary>
-		public string PackageId { get; set; }
 	}
 }

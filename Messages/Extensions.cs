@@ -5076,5 +5076,13 @@ namespace StockSharp.Messages
 
 			return set;
 		}
+
+		/// <summary>
+		/// Determines the specified adapter type is stub.
+		/// </summary>
+		/// <param name="adapterType"><see cref="IMessageAdapter"/> type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsStub(this Type adapterType)
+			=> adapterType.GetAttribute<MessageAdapterStubAttribute>() is not null;
 	}
 }
