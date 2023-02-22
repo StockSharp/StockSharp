@@ -1,4 +1,28 @@
 {
+  "ContinueSubscriptionParams": {
+    "en": "Continue free subscription with connector {0}?",
+    "ru": "Выполнить бесплатную подписку с коннектором {0}?"
+  },
+  "SelectYourConnector": {
+    "en": "Select one connector for this subscription",
+    "ru": "Выберите один коннектор для этой подписки"
+  },
+  "ChooseLater": {
+    "en": "Postpone the choice",
+    "ru": "Выбрать потом"
+  },
+  "ChooseYourTariff": {
+    "en": "Choose your StockSharp subscription",
+    "ru": "Выберите вашу подписку StockSharp"
+  },
+  "AllowUnsortedData": {
+    "en": "Allow unsorted data.",
+    "ru": "Разрешить несортированные данные."
+  },
+  "AllowUnsortedDataDetails": {
+    "en": "Allows to draw unsorted data on chart. May negatively affect performance.",
+    "ru": "Разрешить отрисовку неотсортированных данных на графике. Может негативно повлиять на производительность."
+  },
   "Shortcut": {
     "en": "Shortcut",
     "ru": "Ярлык"
@@ -19588,8 +19612,8 @@
     "ru": "Нижняя линия"
   },
   "ConnectorIsStub": {
-    "en": "Connector is stub only. Please visit https://stocksharp.com/pricing/ to get more info.",
-    "ru": "Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://stocksharp.ru/pricing/ с информацией."
+    "en": "Connector is stub only. Please visit https://stocksharp.com/products/pricing/ to get more info.",
+    "ru": "Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://stocksharp.ru/products/pricing/ с информацией."
   },
   "Bitfinex": {
     "en": "Bitfinex",
