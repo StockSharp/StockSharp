@@ -2,6 +2,8 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 
+	using Ecng.Common;
+
 	/// <summary>
 	/// Attribute, applied to indicator, to provide information about type of values <see cref="IIndicatorValue"/>.
 	/// </summary>
@@ -27,7 +29,7 @@ namespace StockSharp.Algo.Indicators
 			if (type == null)
 				throw new ArgumentNullException(nameof(type));
 
-			if (!typeof(IIndicatorValue).IsAssignableFrom(type))
+			if (!type.Is<IIndicatorValue>())
 				throw new ArgumentException(nameof(type));
 
 			Type = type;

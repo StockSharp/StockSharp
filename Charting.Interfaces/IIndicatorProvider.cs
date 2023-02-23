@@ -49,7 +49,7 @@
 					.GetTypes()
 					.Where(t => t.Namespace == ns &&
 								!t.IsAbstract &&
-								typeof(IIndicator).IsAssignableFrom(t) &&
+								t.Is<IIndicator>() &&
 								t.GetConstructor(Type.EmptyTypes) != null &&
 								t.IsBrowsable())
 					.Select(t => new IndicatorType(t, null))

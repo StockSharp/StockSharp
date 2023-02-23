@@ -453,7 +453,8 @@ namespace StockSharp.Messages
 				if (arg is SettingsStorage ss)
 				{
 					var type = ss.GetValue<Type>("type");
-					if (typeof(IPersistable).IsAssignableFrom(type))
+
+					if (type.Is<IPersistable>())
 					{
 						var instance = type.CreateInstance<IPersistable>();
 						instance.Load(ss.GetValue<SettingsStorage>("value"));

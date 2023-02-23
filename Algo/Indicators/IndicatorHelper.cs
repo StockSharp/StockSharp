@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Indicators
 				//throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str914Params.Put(indicator.Name));
 			}
 
-			var value = container.GetValue(index).Item2;
+			var value = container.GetValue(index).output;
 
 			if (value.IsEmpty)
 			{
@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Indicators
 				return default;
 			}
 
-			return typeof(IIndicatorValue).IsAssignableFrom(typeof(T)) ? value.To<T>() : value.GetValue<T>();
+			return typeof(T).Is<IIndicatorValue>() ? value.To<T>() : value.GetValue<T>();
 		}
 
 		/// <summary>
@@ -197,7 +197,7 @@ namespace StockSharp.Algo.Indicators
 			if (indicatorType == null)
 				throw new ArgumentNullException(nameof(indicatorType));
 
-			if (!typeof(IIndicator).IsAssignableFrom(indicatorType))
+			if (!indicatorType.Is<IIndicator>())
 				throw new ArgumentException(nameof(indicatorType));
 
 			return (isInput

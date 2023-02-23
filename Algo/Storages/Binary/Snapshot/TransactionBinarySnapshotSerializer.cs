@@ -476,7 +476,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							{
 								value = strBuffer.Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
 							}
-							else if (typeof(IRange).IsAssignableFrom(paramType))
+							else if (paramType.Is<IRange>())
 							{
 								var range = paramType.CreateInstance<IRange>();
 

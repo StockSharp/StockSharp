@@ -2658,7 +2658,7 @@ namespace StockSharp.Algo
 
 			var transIdMsg = request as ITransactionIdMessage;
 			var resultIsConnect = typeof(TResult) == typeof(ConnectMessage);
-			var resultIsOrigIdMsg = typeof(IOriginalTransactionIdMessage).IsAssignableFrom(typeof(TResult));
+			var resultIsOrigIdMsg = typeof(TResult).Is<IOriginalTransactionIdMessage>();
 
 			bool TransactionMessageHandler(ITransactionIdMessage req, IOriginalTransactionIdMessage resp)
 			{

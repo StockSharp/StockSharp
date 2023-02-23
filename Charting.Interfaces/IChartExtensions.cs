@@ -56,7 +56,7 @@
 		public static bool IsIndicatorSupportedByChart(this Type itype)
 		{
 			return
-				typeof(IIndicator).IsAssignableFrom(itype) &&
+				itype.Is<IIndicator>() &&
 				!_chartUnsupportedIndicators.Any(t => t.IsAssignableFrom(itype));
 		}
 	}
