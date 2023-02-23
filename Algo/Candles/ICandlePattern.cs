@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo.Candles;
 
+using System.ComponentModel.DataAnnotations;
+
 using Ecng.Common;
 using Ecng.Serialization;
 
@@ -24,17 +26,38 @@ public interface ICandlePattern : IPersistable
 /// </summary>
 public abstract class BaseCandlePattern : ICandlePattern
 {
+	/// <summary>
+	/// Small error value.
+	/// </summary>
+	[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.EpsilonKey,
+			Description = LocalizedStrings.EpsilonDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
+	public decimal Epsilon { get; set; }
+
+	/// <summary>
+	/// Determines the <paramref name="value"/> is less by absolute than <see cref="Epsilon"/>.
+	/// </summary>
+	/// <param name="value">Value.</param>
+	/// <returns>Check result.</returns>
+	protected bool IsEpsilon(decimal value)
+		=> value.Abs() <= Epsilon;
+
 	/// <inheritdoc />
 	public abstract bool Recognize(ICandleMessage candle);
 
 	/// <inheritdoc />
 	public virtual void Load(SettingsStorage storage)
 	{
+		Epsilon = storage.GetValue<decimal>(nameof(Epsilon));
 	}
 
 	/// <inheritdoc />
 	public virtual void Save(SettingsStorage storage)
 	{
+		storage.Set(nameof(Epsilon), Epsilon);
 	}
 }
 
@@ -46,7 +69,12 @@ public class CandleFlatPattern : BaseCandlePattern
 {
 	/// <inheritdoc />
 	public override bool Recognize(ICandleMessage candle)
-		=> candle.OpenPrice == candle.ClosePrice;
+	{
+		if (Epsilon == 0)
+			return candle.OpenPrice == candle.ClosePrice;
+
+		return IsEpsilon(candle.OpenPrice - candle.ClosePrice);
+	}
 }
 
 /// <summary>
@@ -79,7 +107,12 @@ public class CandleMarubozuPattern : BaseCandlePattern
 {
 	/// <inheritdoc />
 	public override bool Recognize(ICandleMessage candle)
-		=> candle.GetLength() == candle.GetBody();
+	{
+		if (Epsilon == 0)
+			return candle.GetLength() == candle.GetBody();
+
+		return IsEpsilon(candle.GetLength() - candle.GetBody());
+	}
 }
 
 /// <summary>
@@ -90,7 +123,15 @@ public class CandleSpinningTopPattern : CandleMarubozuPattern
 {
 	/// <inheritdoc />
 	public override bool Recognize(ICandleMessage candle)
-		=> !base.Recognize(candle) && (candle.GetBottomShadow() == candle.GetTopShadow());
+	{
+		if (base.Recognize(candle))
+			return false;
+
+		if (Epsilon == 0)
+			return candle.GetBottomShadow() == candle.GetTopShadow();
+
+		return IsEpsilon(candle.GetBottomShadow() - candle.GetTopShadow());
+	}
 }
 
 /// <summary>
@@ -101,7 +142,15 @@ public class CandleHammerPattern : CandleMarubozuPattern
 {
 	/// <inheritdoc />
 	public override bool Recognize(ICandleMessage candle)
-		=> !base.Recognize(candle) && (candle.GetBottomShadow() == 0 || candle.GetTopShadow() == 0);
+	{
+		if (base.Recognize(candle))
+			return false;
+
+		if (Epsilon == 0)
+			return candle.GetBottomShadow() == 0 || candle.GetTopShadow() == 0;
+
+		return IsEpsilon(candle.GetBottomShadow()) || IsEpsilon(candle.GetTopShadow());
+	}
 }
 
 /// <summary>
@@ -112,7 +161,15 @@ public class CandleDragonflyPattern : CandleFlatPattern
 {
 	/// <inheritdoc />
 	public override bool Recognize(ICandleMessage candle)
-		=> base.Recognize(candle) && candle.GetTopShadow() == 0;
+	{
+		if (!base.Recognize(candle))
+			return false;
+
+		if (Epsilon == 0)
+			return candle.GetTopShadow() == 0;
+
+		return IsEpsilon(candle.GetTopShadow());
+	}
 }
 
 /// <summary>
@@ -123,7 +180,15 @@ public class CandleGravestonePattern : CandleFlatPattern
 {
 	/// <inheritdoc />
 	public override bool Recognize(ICandleMessage candle)
-		=> base.Recognize(candle) && candle.GetBottomShadow() == 0;
+	{
+		if (!base.Recognize(candle))
+			return false;
+
+		if (Epsilon == 0)
+			return candle.GetBottomShadow() == 0;
+
+		return IsEpsilon(candle.GetBottomShadow());
+	}
 }
 
 /// <summary>
