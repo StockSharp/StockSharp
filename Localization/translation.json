@@ -1,4 +1,52 @@
 {
+  "FlatCandle": {
+    "en": "Flat",
+    "ru": "Плоская"
+  },
+  "WhiteCandle": {
+    "en": "White",
+    "ru": "Белая"
+  },
+  "BlackCandle": {
+    "en": "Black",
+    "ru": "Черная"
+  },
+  "Marubozu": {
+    "en": "Marubozu",
+    "ru": "Marubozu"
+  },
+  "SpinningTop": {
+    "en": "Spinning top",
+    "ru": "Волчок"
+  },
+  "Hammer": {
+    "en": "Hammer",
+    "ru": "Молот"
+  },
+  "Dragonfly": {
+    "en": "Dragonfly",
+    "ru": "Стрекоза"
+  },
+  "Gravestone": {
+    "en": "Gravestone",
+    "ru": "Надгробье"
+  },
+  "BullishCandle": {
+    "en": "Bullish",
+    "ru": "Бычья"
+  },
+  "BearishCandle": {
+    "en": "Bearish",
+    "ru": "Медвежья"
+  },
+  "Pattern": {
+    "en": "Pattern",
+    "ru": "Паттерн"
+  },
+  "PatternDesc": {
+    "en": "Candle pattern (hammer, dragonfly, shadowless, etc.).",
+    "ru": "Паттерн свечи (молот, стрекоза, бестеневая и т.д.)."
+  },
   "ContinueSubscriptionParams": {
     "en": "Continue free subscription with connector {0}?",
     "ru": "Выполнить бесплатную подписку с коннектором {0}?"
@@ -19612,8 +19660,8 @@
     "ru": "Нижняя линия"
   },
   "ConnectorIsStub": {
-    "en": "Connector is stub only. Please visit https://stocksharp.com/products/pricing/ to get more info.",
-    "ru": "Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://stocksharp.ru/products/pricing/ с информацией."
+    "en": "Connector is stub only. Please visit https://stocksharp.com/pricing/ to get more info.",
+    "ru": "Коннектор является заглушкой. Пожалуйста, ознакомьтесь на сайте https://stocksharp.ru/pricing/ с информацией."
   },
   "Bitfinex": {
     "en": "Bitfinex",

@@ -169,26 +169,6 @@ namespace StockSharp.Algo.Candles
 			manager.ThrowIfNull().Start(series, series.From, series.To);
 		}
 
-		///// <summary>
-		///// To stop candles getting.
-		///// </summary>
-		///// <param name="series">Candles series.</param>
-		//public static void Stop(this CandleSeries series)
-		//{
-		//	var manager = series.ThrowIfNull().CandleManager;
-
-		//	// серию ранее не запускали, значит и останавливать не нужно
-		//	if (manager == null)
-		//		return;
-
-		//	manager.Stop(series);
-		//}
-
-		//private static ICandleManagerContainer GetContainer(this CandleSeries series)
-		//{
-		//	return series.ThrowIfNull().CandleManager.Container;
-		//}
-
 		/// <summary>
 		/// To get the number of candles.
 		/// </summary>
@@ -323,39 +303,37 @@ namespace StockSharp.Algo.Candles
 
 			CandleMessage lastActiveCandle = null;
 
-			using (var builder = candleBuilderProvider.CreateBuilder(mdMsg))
+			using var builder = candleBuilderProvider.CreateBuilder(mdMsg);
+
+			var subscription = new CandleBuilderSubscription(mdMsg);
+			var isFinishedOnly = mdMsg.IsFinishedOnly;
+
+			ICandleBuilderValueTransform transform = null;
+
+			foreach (var message in messages)
 			{
-				var subscription = new CandleBuilderSubscription(mdMsg);
-				var isFinishedOnly = mdMsg.IsFinishedOnly;
+				transform ??= createTransform(message);
 
-				ICandleBuilderValueTransform transform = null;
+				if (!transform.Process(message))
+					continue;
 
-				foreach (var message in messages)
+				foreach (var candle in builder.Process(subscription, transform))
 				{
-					if (transform == null)
-						transform = createTransform(message);
-
-					if (!transform.Process(message))
-						continue;
-
-					foreach (var candle in builder.Process(subscription, transform))
+					if (candle.State == CandleStates.Finished)
 					{
-						if (candle.State == CandleStates.Finished)
-						{
-							lastActiveCandle = null;
-							yield return candle;
-						}
-						else
-						{
-							if (!isFinishedOnly)
-								lastActiveCandle = candle;
-						}
+						lastActiveCandle = null;
+						yield return candle;
+					}
+					else
+					{
+						if (!isFinishedOnly)
+							lastActiveCandle = candle;
 					}
 				}
-
-				if (lastActiveCandle != null)
-					yield return lastActiveCandle;
 			}
+
+			if (lastActiveCandle != null)
+				yield return lastActiveCandle;
 		}
 
 		/// <summary>
@@ -408,8 +386,7 @@ namespace StockSharp.Algo.Candles
 			if (mdMsg is null)
 				throw new ArgumentNullException(nameof(mdMsg));
 
-			if (candleBuilderProvider is null)
-				candleBuilderProvider = ConfigManager.TryGetService<CandleBuilderProvider>() ?? new CandleBuilderProvider(ServicesRegistry.EnsureGetExchangeInfoProvider());
+			candleBuilderProvider ??= ConfigManager.TryGetService<CandleBuilderProvider>() ?? new CandleBuilderProvider(ServicesRegistry.EnsureGetExchangeInfoProvider());
 
 			return candleBuilderProvider.Get(mdMsg.DataType2.MessageType);
 		}
@@ -696,7 +673,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get a length.</param>
 		/// <returns>The candle length.</returns>
-		public static decimal GetLength(this Candle candle)
+		public static decimal GetLength(this ICandleMessage candle)
 		{
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
@@ -709,7 +686,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get the body.</param>
 		/// <returns>The candle body.</returns>
-		public static decimal GetBody(this Candle candle)
+		public static decimal GetBody(this ICandleMessage candle)
 		{
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
@@ -722,7 +699,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get the upper shadow length.</param>
 		/// <returns>The candle upper shadow length. If 0, there is no shadow.</returns>
-		public static decimal GetTopShadow(this Candle candle)
+		public static decimal GetTopShadow(this ICandleMessage candle)
 		{
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
@@ -735,7 +712,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get the lower shadow length.</param>
 		/// <returns>The candle lower shadow length. If 0, there is no shadow.</returns>
-		public static decimal GetBottomShadow(this Candle candle)
+		public static decimal GetBottomShadow(this ICandleMessage candle)
 		{
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
@@ -747,34 +724,38 @@ namespace StockSharp.Algo.Candles
 		// http://en.wikipedia.org/wiki/Candlestick_chart
 		//
 
+		private static readonly ICandlePattern _whitePattern = new CandleWhitePattern();
+		private static readonly ICandlePattern _blackPattern = new CandleBlackPattern();
+
 		/// <summary>
 		/// Whether the candle is white or black.
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get a color.</param>
 		/// <returns><see langword="true" /> if the candle is white, <see langword="false" /> if the candle is black and <see langword="null" /> if the candle is plane.</returns>
-		public static bool? IsWhiteOrBlack(this Candle candle)
+		public static bool? IsWhiteOrBlack(this ICandleMessage candle)
 		{
 			if (candle == null)
 				throw new ArgumentNullException(nameof(candle));
 
-			if (candle.OpenPrice == candle.ClosePrice)
+			if (_whitePattern.Recognize(candle))
+				return true;
+			else if (_blackPattern.Recognize(candle))
+				return false;
+			else
 				return null;
-
-			return candle.OpenPrice < candle.ClosePrice;
 		}
+
+		private static readonly ICandlePattern _marubozuPattern = new CandleMarubozuPattern();
 
 		/// <summary>
 		/// Whether the candle is shadowless.
 		/// </summary>
 		/// <param name="candle">The candle for which you need to identify the shadows presence.</param>
 		/// <returns><see langword="true" /> if the candle has no shadows, <see langword="false" /> if it has shadows.</returns>
-		public static bool IsMarubozu(this Candle candle)
-		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
+		public static bool IsMarubozu(this ICandleMessage candle)
+			=> _marubozuPattern.Recognize(candle);
 
-			return candle.GetLength() == candle.GetBody();
-		}
+		private static readonly ICandlePattern _spinningTopPattern = new CandleSpinningTopPattern();
 
 		/// <summary>
 		/// Whether the candle is neutral to trades.
@@ -784,68 +765,53 @@ namespace StockSharp.Algo.Candles
 		/// <remarks>
 		/// The neutrality is defined as a situation when during the candle neither buyers nor sellers have not created a trend.
 		/// </remarks>
-		public static bool IsSpinningTop(this Candle candle)
-		{
-			return !candle.IsMarubozu() && (candle.GetBottomShadow() == candle.GetTopShadow());
-		}
+		public static bool IsSpinningTop(this ICandleMessage candle)
+			=> _spinningTopPattern.Recognize(candle);
+
+		private static readonly ICandlePattern _hammerPattern = new CandleHammerPattern();
 
 		/// <summary>
 		/// Whether the candle is hammer.
 		/// </summary>
 		/// <param name="candle">The candle which should match the pattern.</param>
 		/// <returns><see langword="true" /> if it is matched, <see langword="false" /> if not.</returns>
-		public static bool IsHammer(this Candle candle)
-		{
-			return !candle.IsMarubozu() && (candle.GetBottomShadow() == 0 || candle.GetTopShadow() == 0);
-		}
+		public static bool IsHammer(this ICandleMessage candle)
+			=> _hammerPattern.Recognize(candle);
+
+		private static readonly ICandlePattern _dragonflyPattern = new CandleDragonflyPattern();
+		private static readonly ICandlePattern _gravestonePattern = new CandleGravestonePattern();
 
 		/// <summary>
 		/// Whether the candle is dragonfly or tombstone.
 		/// </summary>
 		/// <param name="candle">The candle which should match the pattern.</param>
 		/// <returns><see langword="true" /> if the dragonfly, <see langword="false" /> if the tombstone, <see langword="null" /> - neither one nor the other.</returns>
-		public static bool? IsDragonflyOrGravestone(this Candle candle)
+		public static bool? IsDragonflyOrGravestone(this ICandleMessage candle)
 		{
-			if (candle.IsWhiteOrBlack() == null)
-			{
-				if (candle.GetTopShadow() == 0)
-					return true;
-				else if (candle.GetBottomShadow() == 0)
-					return false;
-			}
-
-			return null;
+			if (_dragonflyPattern.Recognize(candle))
+				return true;
+			else if (_gravestonePattern.Recognize(candle))
+				return false;
+			else
+				return null;
 		}
+
+		private static readonly ICandlePattern _bullishPattern = new CandleBullishPattern();
+		private static readonly ICandlePattern _bearishPattern = new CandleBearishPattern();
 
 		/// <summary>
 		/// Whether the candle is bullish or bearish.
 		/// </summary>
 		/// <param name="candle">The candle which should be checked for the trend.</param>
 		/// <returns><see langword="true" /> if bullish, <see langword="false" />, if bearish, <see langword="null" /> - neither one nor the other.</returns>
-		public static bool? IsBullishOrBearish(this Candle candle)
+		public static bool? IsBullishOrBearish(this ICandleMessage candle)
 		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
-
-			switch (candle.IsWhiteOrBlack())
-			{
-				case true:
-				{
-					if (candle.GetBottomShadow() >= candle.GetBody())
-						return true;
-
-					break;
-				}
-				case false:
-				{
-					if (candle.GetTopShadow() >= candle.GetBody())
-						return false;
-
-					break;
-				}
-			}
-
-			return null;
+			if (_bullishPattern.Recognize(candle))
+				return true;
+			else if (_bearishPattern.Recognize(candle))
+				return false;
+			else
+				return null;
 		}
 
 		/// <summary>
@@ -861,27 +827,6 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentNullException(nameof(board));
 
 			return range.GetTimeFrameCount(timeFrame, board.WorkingTime, board.TimeZone);
-		}
-
-		//internal static CandleSeries CheckSeries(this Candle candle)
-		//{
-		//	if (candle == null)
-		//		throw new ArgumentNullException(nameof(candle));
-
-		//	var series = candle.Series;
-
-		//	if (series == null)
-		//		throw new ArgumentException(nameof(candle));
-
-		//	return series;
-		//}
-
-		internal static bool CheckTime(this CandleSeries series, DateTimeOffset time)
-		{
-			if (series == null)
-				throw new ArgumentNullException(nameof(series));
-
-			return time >= series.From && time < series.To && (!series.IsRegularTradingHours || series.Security.Board.IsTradeTime(time));
 		}
 
 		/// <summary>
@@ -907,58 +852,6 @@ namespace StockSharp.Algo.Candles
 			area.Calculate();
 			return area;
 		}
-
-		///// <summary>
-		///// To start timer of getting from sent <paramref name="connector" /> of real time candles.
-		///// </summary>
-		///// <typeparam name="TConnector">The type of the connection implementing <see cref="IExternalCandleSource"/>.</typeparam>
-		///// <param name="connector">The connection implementing <see cref="IExternalCandleSource"/>.</param>
-		///// <param name="registeredSeries">All registered candles series.</param>
-		///// <param name="offset">The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage.</param>
-		///// <param name="requestNewCandles">The handler getting new candles.</param>
-		///// <param name="interval">The interval between data updates.</param>
-		///// <returns>Created timer.</returns>
-		//public static Timer StartRealTime<TConnector>(this TConnector connector, CachedSynchronizedSet<CandleSeries> registeredSeries, TimeSpan offset, Action<CandleSeries, Range<DateTimeOffset>> requestNewCandles, TimeSpan interval)
-		//	where TConnector : class, IConnector//, IExternalCandleSource
-		//{
-		//	if (connector == null)
-		//		throw new ArgumentNullException(nameof(connector));
-
-		//	if (registeredSeries == null)
-		//		throw new ArgumentNullException(nameof(registeredSeries));
-
-		//	if (requestNewCandles == null)
-		//		throw new ArgumentNullException(nameof(requestNewCandles));
-
-		//	return ThreadingHelper.Timer(() =>
-		//	{
-		//		try
-		//		{
-		//			if (connector.ConnectionState != ConnectionStates.Connected)
-		//				return;
-
-		//			lock (registeredSeries.SyncRoot)
-		//			{
-		//				foreach (var series in registeredSeries.Cache)
-		//				{
-		//					var tf = (TimeSpan)series.Arg;
-		//					var time = connector.CurrentTime;
-		//					var bounds = tf.GetCandleBounds(time, series.Security.Board);
-
-		//					var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
-		//					var finishTime = bounds.Max;
-
-		//					requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));
-		//				}
-		//			}
-		//		}
-		//		catch (Exception ex)
-		//		{
-		//			ex.LogError();
-		//		}
-		//	})
-		//	.Interval(interval);
-		//}
 
 		/// <summary>
 		/// Compress candles to bigger time-frame candles.

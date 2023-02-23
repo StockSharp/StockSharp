@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Candles
 	[KnownType(typeof(TimeFrameCandle))]
 	[KnownType(typeof(PnFCandle))]
 	[KnownType(typeof(RenkoCandle))]
-	public abstract class Candle : Cloneable<Candle>
+	public abstract class Candle : Cloneable<Candle>, ICandleMessage
 	{
 		/// <summary>
 		/// Security.
