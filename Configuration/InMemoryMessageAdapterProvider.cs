@@ -116,8 +116,7 @@ namespace StockSharp.Configuration
 						var asm = Assembly.Load(AssemblyName.GetAssemblyName(assembly));
 
 						adapters.AddRange(asm
-							.GetTypes()
-							.Where(t => t.Is<IMessageAdapter>() && t.IsPublic && !t.IsAbstract && !t.IsObsolete() && t.IsBrowsable() && !t.Name.EndsWith("Dialect"))
+							.FindImplementations<IMessageAdapter>(extraFilter: t => !t.Name.EndsWith("Dialect"))
 							.ToArray());
 					}
 					catch (Exception e)

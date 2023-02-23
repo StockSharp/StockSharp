@@ -10,6 +10,7 @@
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Configuration;
 	using StockSharp.Logging;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Provider <see cref="IndicatorType"/>.
@@ -36,7 +37,7 @@
 		/// </summary>
 		public DummyIndicatorProvider()
 		{
-			_customIndicators = Extensions.RootSection?.CustomIndicators.SafeAdd<IndicatorElement, IndicatorType>(elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>())) ?? Array.Empty<IndicatorType>();
+			_customIndicators = Configuration.Extensions.RootSection?.CustomIndicators.SafeAdd<IndicatorElement, IndicatorType>(elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>())) ?? Array.Empty<IndicatorType>();
 		}
 
 		IEnumerable<IndicatorType> IIndicatorProvider.GetIndicatorTypes()
@@ -45,13 +46,9 @@
 			{
 				var ns = typeof(IIndicator).Namespace;
 
-				_indicatorTypes = typeof(IIndicator).Assembly
-					.GetTypes()
-					.Where(t => t.Namespace == ns &&
-								!t.IsAbstract &&
-								t.Is<IIndicator>() &&
-								t.GetConstructor(Type.EmptyTypes) != null &&
-								t.IsBrowsable())
+				_indicatorTypes = typeof(IIndicator)
+					.Assembly
+					.FindImplementations<IIndicator>(true, extraFilter: t => t.Namespace == ns && t.GetConstructor(Type.EmptyTypes) != null)
 					.Select(t => new IndicatorType(t, null))
 					.Concat(_customIndicators)
 					.OrderBy(t => t.Name)
