@@ -288,9 +288,12 @@ namespace StockSharp.Algo.Import
 			switch (Format.ToLowerInvariant())
 			{
 				case "timestamp":
+				case "unix":
 					_dateConverter = str => toObj(DateTimeOffset.FromUnixTimeSeconds(long.Parse(str)));
 					break;
 				case "timestamp_milli":
+				case "unixmls":
+				case "unix_mls":
 					_dateConverter = str => toObj(DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(str)));
 					break;
 				case "timestamp_micro":
