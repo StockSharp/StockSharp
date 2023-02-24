@@ -5103,8 +5103,7 @@ namespace StockSharp.Messages
 
 			return assembly
 				.GetTypes()
-				.Where(t => t.Is<T>() && (showNonPublic || t.IsPublic) && !t.IsAbstract && !t.IsInterface && (showObsolete || !t.IsObsolete()) && t.IsBrowsable() && extraFilter(t))
-				.ToArray();
+				.Where(t => t.Is<T>() && (showNonPublic || t.IsPublic) && !t.IsAbstract && !t.IsInterface && (showObsolete || !t.IsObsolete()) && t.IsBrowsable() && extraFilter(t));
 		}
 	}
 }
