@@ -20,10 +20,14 @@ namespace StockSharp.Algo.Candles
 
 	using Ecng.ComponentModel;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The interface of the container that stores candles data.
 	/// </summary>
-	public interface ICandleManagerContainer : IDisposable
+	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
+	public interface ICandleManagerContainer<TCandle> : IDisposable
+		where TCandle : ICandleMessage
 	{
 		/// <summary>
 		/// Candles storage time in memory. The default is 2 days.
@@ -47,7 +51,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="candle">Candle.</param>
 		/// <returns><see langword="true" /> if the candle is not added previously, otherwise, <see langword="false" />.</returns>
-		bool AddCandle(CandleSeries series, Candle candle);
+		bool AddCandle(CandleSeries series, TCandle candle);
 
 		/// <summary>
 		/// To get all associated with the series candles for the <paramref name="time" /> period.
@@ -55,14 +59,14 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="time">The candle period.</param>
 		/// <returns>Candles.</returns>
-		IEnumerable<Candle> GetCandles(CandleSeries series, DateTimeOffset time);
+		IEnumerable<TCandle> GetCandles(CandleSeries series, DateTimeOffset time);
 
 		/// <summary>
 		/// To get all associated with the series candles.
 		/// </summary>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
-		IEnumerable<Candle> GetCandles(CandleSeries series);
+		IEnumerable<TCandle> GetCandles(CandleSeries series);
 
 		/// <summary>
 		/// To get a candle by the index.
@@ -70,15 +74,15 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="candleIndex">The candle's position number from the end.</param>
 		/// <returns>The found candle. If the candle does not exist, then <see langword="null" /> will be returned.</returns>
-		Candle GetCandle(CandleSeries series, int candleIndex);
+		TCandle GetCandle(CandleSeries series, int candleIndex);
 
 		/// <summary>
 		/// To get candles by the series and date range.
 		/// </summary>
 		/// <param name="series">Candles series.</param>
-		/// <param name="timeRange">The date range which should include candles. The <see cref="Candle.OpenTime"/> value is taken into consideration.</param>
+		/// <param name="timeRange">The date range which should include candles. The <see cref="ICandleMessage.OpenTime"/> value is taken into consideration.</param>
 		/// <returns>Found candles.</returns>
-		IEnumerable<Candle> GetCandles(CandleSeries series, Range<DateTimeOffset> timeRange);
+		IEnumerable<TCandle> GetCandles(CandleSeries series, Range<DateTimeOffset> timeRange);
 
 		/// <summary>
 		/// To get candles by the series and the total number.
@@ -86,7 +90,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="candleCount">The number of candles that should be returned.</param>
 		/// <returns>Found candles.</returns>
-		IEnumerable<Candle> GetCandles(CandleSeries series, int candleCount);
+		IEnumerable<TCandle> GetCandles(CandleSeries series, int candleCount);
 
 		/// <summary>
 		/// To get the number of candles.

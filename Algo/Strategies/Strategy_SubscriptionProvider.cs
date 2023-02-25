@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Subscription, News> NewsReceived;
 
 		/// <inheritdoc />
-		public event Action<Subscription, Candle> CandleReceived;
+		public event Action<Subscription, ICandleMessage> CandleReceived;
 
 		/// <inheritdoc />
 		public event Action<Subscription, MyTrade> OwnTradeReceived;
@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Strategies
 				SubscriptionReceived?.Invoke(subscription, message);
 		}
 
-		private void OnConnectorCandleReceived(Subscription subscription, Candle candle)
+		private void OnConnectorCandleReceived(Subscription subscription, ICandleMessage candle)
 		{
 			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				CandleReceived?.Invoke(subscription, candle);

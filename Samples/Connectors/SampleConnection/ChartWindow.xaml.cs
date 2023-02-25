@@ -47,7 +47,7 @@
 
 		public bool SeriesInactive { get; set; }
 
-		private void OnCandleReceived(Subscription subscription, Candle candle)
+		private void OnCandleReceived(Subscription subscription, ICandleMessage candle)
 		{
 			if (subscription != _subscription)
 				return;

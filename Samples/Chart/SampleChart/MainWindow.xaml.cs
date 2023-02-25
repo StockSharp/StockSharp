@@ -768,7 +768,7 @@
 
 			event Action<Subscription, News> ISubscriptionProvider.NewsReceived { add { } remove { } }
 
-			event Action<Subscription, Candle> ISubscriptionProvider.CandleReceived { add { } remove { } }
+			event Action<Subscription, ICandleMessage> ISubscriptionProvider.CandleReceived { add { } remove { } }
 
 			event Action<Subscription, MyTrade> ISubscriptionProvider.OwnTradeReceived { add { } remove { } }
 

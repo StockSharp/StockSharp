@@ -65,7 +65,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Candle received.
 		/// </summary>
-		event Action<Subscription, Candle> CandleReceived;
+		event Action<Subscription, ICandleMessage> CandleReceived;
 
 		/// <summary>
 		/// Own trade received.

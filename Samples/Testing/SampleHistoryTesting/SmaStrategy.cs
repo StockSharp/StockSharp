@@ -21,7 +21,6 @@ namespace SampleHistoryTesting
 	using Ecng.Common;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Logging;
@@ -62,7 +61,7 @@ namespace SampleHistoryTesting
 
 			this
 				.WhenNewMyTrade()
-				.Do(trade => _myTrades.Add(trade))
+				.Do(_myTrades.Add)
 				.Apply(this);
 
 			_isShortLessThenLong = null;
@@ -72,7 +71,7 @@ namespace SampleHistoryTesting
 			base.OnStarted();
 		}
 
-		private void ProcessCandle(Candle candle)
+		private void ProcessCandle(ICandleMessage candle)
 		{
 			// strategy are stopping
 			if (ProcessState == ProcessStates.Stopping)
@@ -81,7 +80,7 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			this.AddInfoLog(LocalizedStrings.Str3634Params, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security);
+			this.AddInfoLog(LocalizedStrings.Str3634Params, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
 
 			// process new candle
 			var longValue = LongSma.Process(candle);

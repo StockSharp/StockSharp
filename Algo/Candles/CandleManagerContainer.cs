@@ -25,24 +25,27 @@ namespace StockSharp.Algo.Candles
 
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The standard container that stores candles data.
 	/// </summary>
-	public class CandleManagerContainer : Disposable, ICandleManagerContainer
+	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
+	public class CandleManagerContainer<TCandle> : Disposable, ICandleManagerContainer<TCandle>
+		where TCandle : ICandleMessage
 	{
 		private sealed class SeriesInfo
 		{
-			private readonly CandleManagerContainer _container;
+			private readonly CandleManagerContainer<TCandle> _container;
 			private const int _candlesCapacity = 10000;
 
-			private readonly SynchronizedDictionary<long, SynchronizedSet<Candle>> _byTime = new(_candlesCapacity);
-			private readonly SynchronizedLinkedList<Candle> _allCandles = new();
+			private readonly SynchronizedDictionary<long, SynchronizedSet<TCandle>> _byTime = new(_candlesCapacity);
+			private readonly SynchronizedLinkedList<TCandle> _allCandles = new();
 
 			private long _firstCandleTime;
 			private long _lastCandleTime;
 
-			public SeriesInfo(CandleManagerContainer container)
+			public SeriesInfo(CandleManagerContainer<TCandle> container)
 			{
 				_container = container ?? throw new ArgumentNullException(nameof(container));
 			}
@@ -58,7 +61,7 @@ namespace StockSharp.Algo.Candles
 				_allCandles.Clear();
 			}
 
-			public bool AddCandle(Candle candle)
+			public bool AddCandle(TCandle candle)
 			{
 				if (candle == null)
 					throw new ArgumentNullException(nameof(candle));
@@ -103,19 +106,19 @@ namespace StockSharp.Algo.Candles
 				_byTime.SyncGet(d => d.RemoveWhere(p => p.Key < _firstCandleTime));
 			}
 
-			public IEnumerable<Candle> GetCandles(DateTimeOffset time)
+			public IEnumerable<TCandle> GetCandles(DateTimeOffset time)
 			{
 				var candles = _byTime.TryGetValue(time.To<long>());
 
-				return candles != null ? candles.SyncGet(c => c.ToArray()) : Enumerable.Empty<Candle>();
+				return candles != null ? candles.SyncGet(c => c.ToArray()) : Enumerable.Empty<TCandle>();
 			}
 
-			public IEnumerable<Candle> GetCandles()
+			public IEnumerable<TCandle> GetCandles()
 			{
 				return _allCandles.SyncGet(c => c.ToArray());
 			}
 
-			public Candle GetCandle(int candleIndex)
+			public TCandle GetCandle(int candleIndex)
 			{
 				return _allCandles.SyncGet(c => c.ElementAtFromEndOrDefault(candleIndex));
 			}
@@ -123,9 +126,9 @@ namespace StockSharp.Algo.Candles
 
 		private readonly SynchronizedDictionary<CandleSeries, SeriesInfo> _info = new();
 		private long _maxCandlesKeepTime;
-		
+
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CandleManagerContainer"/>.
+		/// Initializes a new instance of the <see cref="CandleManagerContainer{TCandle}"/>.
 		/// </summary>
 		public CandleManagerContainer()
 		{
@@ -151,7 +154,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <inheritdoc />
-		public bool AddCandle(CandleSeries series, Candle candle)
+		public bool AddCandle(CandleSeries series, TCandle candle)
 		{
 			var info = GetInfo(series);
 
@@ -162,31 +165,35 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Candle> GetCandles(CandleSeries series, DateTimeOffset time)
+		public IEnumerable<TCandle> GetCandles(CandleSeries series, DateTimeOffset time)
 		{
 			var info = GetInfo(series);
-			return info != null ? info.GetCandles(time) : Enumerable.Empty<Candle>();
+			return info != null ? info.GetCandles(time) : Enumerable.Empty<TCandle>();
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Candle> GetCandles(CandleSeries series)
+		public IEnumerable<TCandle> GetCandles(CandleSeries series)
 		{
 			var info = GetInfo(series);
-			return info != null ? info.GetCandles() : Enumerable.Empty<Candle>();
+			return info != null ? info.GetCandles() : Enumerable.Empty<TCandle>();
 		}
 
 		/// <inheritdoc />
-		public Candle GetCandle(CandleSeries series, int candleIndex)
+		public TCandle GetCandle(CandleSeries series, int candleIndex)
 		{
 			if (candleIndex < 0)
 				throw new ArgumentOutOfRangeException(nameof(candleIndex), candleIndex, LocalizedStrings.Str1219);
 
 			var info = GetInfo(series);
-			return info?.GetCandle(candleIndex);
+
+			if (info is null)
+				return default;
+
+			return info.GetCandle(candleIndex);
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Candle> GetCandles(CandleSeries series, Range<DateTimeOffset> timeRange)
+		public IEnumerable<TCandle> GetCandles(CandleSeries series, Range<DateTimeOffset> timeRange)
 		{
 			return GetCandles(series)
 						.Where(c => timeRange.Contains(c.OpenTime))
@@ -194,15 +201,15 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<Candle> GetCandles(CandleSeries series, int candleCount)
+		public IEnumerable<TCandle> GetCandles(CandleSeries series, int candleCount)
 		{
 			if (candleCount <= 0)
 				throw new ArgumentOutOfRangeException(nameof(candleCount), candleCount, LocalizedStrings.Str1219);
 
 			return GetCandles(series)
-							.OrderByDescending(c => c.OpenTime)
-							.Take(candleCount)
-							.OrderBy(c => c.OpenTime);
+				.OrderByDescending(c => c.OpenTime)
+				.Take(candleCount)
+				.OrderBy(c => c.OpenTime);
 		}
 
 		/// <inheritdoc />

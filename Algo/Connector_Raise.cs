@@ -307,7 +307,7 @@ namespace StockSharp.Algo
 		public event Action<Subscription, News> NewsReceived;
 
 		/// <inheritdoc />
-		public event Action<Subscription, Candle> CandleReceived;
+		public event Action<Subscription, ICandleMessage> CandleReceived;
 
 		/// <inheritdoc />
 		public event Action<Subscription, MyTrade> OwnTradeReceived;

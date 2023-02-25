@@ -9,7 +9,7 @@ namespace StockSharp.Algo.Strategies
 
 	partial class Strategy
 	{
-		private ICandleManager CandleManager => (ICandleManager)SafeGetConnector();
+		private ICandleManager<Candle> CandleManager => (ICandleManager<Candle>)SafeGetConnector();
 
 		/// <inheritdoc />
 		int ICandleSource<Candle>.SpeedPriority => CandleManager.SpeedPriority;
@@ -42,12 +42,12 @@ namespace StockSharp.Algo.Strategies
 		public virtual void Stop(CandleSeries series) => CandleManager.Stop(series);
 
 		/// <inheritdoc />
-		ICandleManagerContainer ICandleManager.Container => CandleManager.Container;
+		ICandleManagerContainer<Candle> ICandleManager<Candle>.Container => CandleManager.Container;
 
 		/// <inheritdoc />
-		IEnumerable<CandleSeries> ICandleManager.Series => CandleManager.Series;
+		IEnumerable<CandleSeries> ICandleManager<Candle>.Series => CandleManager.Series;
 
 		/// <inheritdoc />
-		IList<ICandleSource<Candle>> ICandleManager.Sources => CandleManager.Sources;
+		IList<ICandleSource<Candle>> ICandleManager<Candle>.Sources => CandleManager.Sources;
 	}
 }

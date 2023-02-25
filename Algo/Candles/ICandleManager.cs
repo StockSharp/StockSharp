@@ -17,15 +17,19 @@ namespace StockSharp.Algo.Candles
 {
 	using System.Collections.Generic;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The candles manager interface.
 	/// </summary>
-	public interface ICandleManager : ICandleSource<Candle>
+	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
+	public interface ICandleManager<TCandle> : ICandleSource<TCandle>
+		where TCandle : ICandleMessage
 	{
 		/// <summary>
 		/// The data container.
 		/// </summary>
-		ICandleManagerContainer Container { get; }
+		ICandleManagerContainer<TCandle> Container { get; }
 
 		/// <summary>
 		/// All currently active candles series started via <see cref="ICandleSource{T}.Start"/>.
@@ -35,6 +39,6 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Candles sources.
 		/// </summary>
-		IList<ICandleSource<Candle>> Sources { get; }
+		IList<ICandleSource<TCandle>> Sources { get; }
 	}
 }

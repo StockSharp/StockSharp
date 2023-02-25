@@ -17,7 +17,6 @@ namespace SampleRealTimeEmulation
 {
 	using System;
 	using System.ComponentModel;
-	using System.IO;
 	using System.Windows;
 
 	using Ecng.Collections;
@@ -35,12 +34,11 @@ namespace SampleRealTimeEmulation
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
-	using StockSharp.Xaml.Charting;
 	using StockSharp.Charting;
 
 	public partial class MainWindow
 	{
-		private readonly SynchronizedList<Candle> _buffer = new();
+		private readonly SynchronizedList<ICandleMessage> _buffer = new();
 		private readonly IChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
 		private Subscription _candlesSubscription;

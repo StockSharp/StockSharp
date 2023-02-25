@@ -332,7 +332,8 @@
 			return new TickTradeReceivedRule(subscription, provider);
 		}
 
-		private class CandleReceivedRule : SubscriptionRule<Candle>
+		private class CandleReceivedRule<TCandle> : SubscriptionRule<TCandle>
+			where TCandle : ICandleMessage
 		{
 			public CandleReceivedRule(Subscription subscription, ISubscriptionProvider provider)
 				: base(subscription, provider)
@@ -341,10 +342,10 @@
 				Provider.CandleReceived += ProviderOnCandleReceived;
 			}
 
-			private void ProviderOnCandleReceived(Subscription subscription, Candle candle)
+			private void ProviderOnCandleReceived(Subscription subscription, ICandleMessage candle)
 			{
 				if (Subscription == subscription)
-					Activate(candle);
+					Activate((TCandle)candle);
 			}
 
 			protected override void DisposeManaged()
@@ -361,8 +362,19 @@
 		/// <param name="provider">Subscription provider.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Subscription, Candle> WhenCandleReceived(this Subscription subscription, ISubscriptionProvider provider)
+			=> WhenCandleReceived<Candle>(subscription, provider);
+
+		/// <summary>
+		/// To create a rule for the event of <see cref="ISubscriptionProvider.CandleReceived"/>.
+		/// </summary>
+		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
+		/// <param name="subscription">Subscription.</param>
+		/// <param name="provider">Subscription provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Subscription, TCandle> WhenCandleReceived<TCandle>(this Subscription subscription, ISubscriptionProvider provider)
+			where TCandle : ICandleMessage
 		{
-			return new CandleReceivedRule(subscription, provider);
+			return new CandleReceivedRule<TCandle>(subscription, provider);
 		}
 
 		private class NewsReceivedRule : SubscriptionRule<News>
@@ -466,7 +478,7 @@
 
 		private class OrderFailReceivedRule : SubscriptionRule<OrderFail>
 		{
-			private bool _isRegister;
+			private readonly bool _isRegister;
 
 			public OrderFailReceivedRule(Subscription subscription, ISubscriptionProvider provider, bool isRegister)
 				: base(subscription, provider)
