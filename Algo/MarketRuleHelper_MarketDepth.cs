@@ -38,19 +38,10 @@
 
 				Name = LocalizedStrings.Str1056 + " " + depth.Security;
 
-				if (provider == null)
-				{
-#pragma warning disable 612
-					Depth.QuotesChanged += OnQuotesChanged;
-#pragma warning restore 612
-				}
-				else
-				{
-					_provider = provider;
+				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
 #pragma warning disable CS0618 // Type or member is obsolete
-					_provider.MarketDepthChanged += ProviderOnMarketDepthChanged;
+				_provider.MarketDepthChanged += ProviderOnMarketDepthChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
-				}
 			}
 
 			private void ProviderOnMarketDepthChanged(MarketDepth depth)
@@ -67,18 +58,9 @@
 
 			protected override void DisposeManaged()
 			{
-				if (_provider == null)
-				{
-#pragma warning disable 612
-					Depth.QuotesChanged -= OnQuotesChanged;
-#pragma warning restore 612
-				}
-				else
-				{
 #pragma warning disable CS0618 // Type or member is obsolete
-					_provider.MarketDepthChanged -= ProviderOnMarketDepthChanged;
+				_provider.MarketDepthChanged -= ProviderOnMarketDepthChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
-				}
 
 				base.DisposeManaged();
 			}
@@ -90,7 +72,7 @@
 		/// <param name="depth">The order book to be traced for change event.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenChanged(this MarketDepth depth, IMarketDataProvider provider = null)
+		public static MarketRule<MarketDepth, MarketDepth> WhenChanged(this MarketDepth depth, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider);
 		}
@@ -102,7 +84,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
+		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			var pair = depth.BestPair;
 			var firstPrice = pair?.SpreadPrice ?? 0;
@@ -119,7 +101,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
+		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			var pair = depth.BestPair;
 			var firstPrice = pair?.SpreadPrice ?? 0;
@@ -136,7 +118,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, false))
 			{
@@ -151,7 +133,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, true))
 			{
@@ -166,7 +148,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, false))
 			{
@@ -181,7 +163,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider = null)
+		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, true))
 			{

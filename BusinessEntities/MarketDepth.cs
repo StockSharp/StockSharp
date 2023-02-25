@@ -18,7 +18,6 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
@@ -42,29 +41,6 @@ namespace StockSharp.BusinessEntities
 		public MarketDepth(Security security)
 		{
 			Security = security ?? throw new ArgumentNullException(nameof(security));
-		}
-
-		private int _maxDepth = 100;
-
-		/// <summary>
-		/// The maximum depth of order book.
-		/// </summary>
-		/// <remarks>
-		/// The default value is 100. If the exceeded the maximum depth the event <see cref="MarketDepth.QuoteOutOfDepth"/> will triggered.
-		/// </remarks>
-		[DisplayNameLoc(LocalizedStrings.Str1660Key)]
-		[Browsable(false)]
-		[Obsolete]
-		public int MaxDepth
-		{
-			get => _maxDepth;
-			set
-			{
-				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str480);
-
-				_maxDepth = value;
-			}
 		}
 
 		/// <summary>
@@ -113,30 +89,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public Messages.DataType BuildFrom { get; set; }
 
-		/// <summary>
-		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str281Key,
-			Description = LocalizedStrings.Str282Key,
-			GroupName = LocalizedStrings.CommonKey,
-			Order = 0)]
-		[Obsolete("Use Bids2 property.")]
-		public Quote[] Bids => Bids2.Select(c => c.ToQuote(Sides.Buy, Security)).ToArray();
-
-		/// <summary>
-		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str283Key,
-			Description = LocalizedStrings.Str284Key,
-			GroupName = LocalizedStrings.CommonKey,
-			Order = 1)]
-		[Obsolete("Use Asks2 property.")]
-		public Quote[] Asks => Asks2.Select(c => c.ToQuote(Sides.Sell, Security)).ToArray();
-
 		private QuoteChange[] _bids2 = Array.Empty<QuoteChange>();
 
 		/// <summary>
@@ -176,20 +128,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		public CurrencyTypes? Currency { get; set; }
-
-		/// <summary>
-		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
-		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str291Key)]
-		[Obsolete("Use BestBid2 property.")]
-		public Quote BestBid => BestBid2?.ToQuote(Sides.Buy, Security);
-
-		/// <summary>
-		/// The best ask. If the order book does not contain asks, will be returned <see langword="null" />.
-		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str292Key)]
-		[Obsolete("Use BestAsk2 property.")]
-		public Quote BestAsk => BestAsk2?.ToQuote(Sides.Sell, Security);
 
 		/// <summary>
 		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
@@ -251,46 +189,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.TotalQuotesCountKey)]
 		public int Count => _bids2.Length + _asks2.Length;
 
-		private int _depth;
-
 		/// <summary>
 		/// Depth of book.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
-		public int Depth
-		{
-			get => _depth;
-			private set
-			{
-				if (_depth == value)
-					return;
-
-				_depth = value;
-#pragma warning disable 612
-				DepthChanged?.Invoke();
-#pragma warning restore 612
-			}
-		}
-
-		/// <summary>
-		/// Event on exceeding the maximum allowable depth of quotes.
-		/// </summary>
-		[Obsolete]
-#pragma warning disable 67
-		public event Action<Quote> QuoteOutOfDepth;
-#pragma warning restore 67
-
-		/// <summary>
-		/// Depth <see cref="Depth"/> changed.
-		/// </summary>
-		[Obsolete]
-		public event Action DepthChanged;
-
-		/// <summary>
-		/// Quotes changed.
-		/// </summary>
-		[Obsolete]
-		public event Action QuotesChanged;
+		public int Depth { get; private set; }
 
 		/// <summary>
 		/// To reduce the order book to the required depth.
@@ -309,7 +212,6 @@ namespace StockSharp.BusinessEntities
 			Asks2 = Decrease(_asks2, newDepth);
 
 			UpdateDepthAndTime();
-			RaiseQuotesChanged();
 		}
 
 		private static QuoteChange[] Decrease(QuoteChange[] quotes, int newDepth)
@@ -444,75 +346,6 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Update the order book by new quotes.
-		/// </summary>
-		/// <param name="quotes">The new quotes.</param>
-		/// <param name="lastChangeTime">Last change time.</param>
-		/// <returns>Market depth.</returns>
-		/// <remarks>
-		/// The old quotes will be removed from the book.
-		/// </remarks>
-		[Obsolete]
-		public MarketDepth Update(IEnumerable<Quote> quotes, DateTimeOffset lastChangeTime = default)
-		{
-			if (quotes == null)
-				throw new ArgumentNullException(nameof(quotes));
-
-			var bids = Enumerable.Empty<Quote>();
-			var asks = Enumerable.Empty<Quote>();
-
-			foreach (var group in quotes.GroupBy(q => q.OrderDirection))
-			{
-				if (group.Key == Sides.Buy)
-					bids = group;
-				else
-					asks = group;
-			}
-
-			return Update(bids, asks, false, lastChangeTime);
-		}
-
-		/// <summary>
-		/// Update the order book by new bids and asks.
-		/// </summary>
-		/// <param name="bids">The new bids.</param>
-		/// <param name="asks">The new asks.</param>
-		/// <param name="isSorted">Are quotes sorted. This parameter is used for optimization in order to prevent re-sorting.</param>
-		/// <param name="lastChangeTime">Last change time.</param>
-		/// <returns>Market depth.</returns>
-		/// <remarks>
-		/// The old quotes will be removed from the book.
-		/// </remarks>
-		[Obsolete]
-		public MarketDepth Update(IEnumerable<Quote> bids, IEnumerable<Quote> asks, bool isSorted = false, DateTimeOffset lastChangeTime = default)
-		{
-			if (bids == null)
-				throw new ArgumentNullException(nameof(bids));
-
-			if (asks == null)
-				throw new ArgumentNullException(nameof(asks));
-
-			if (!isSorted)
-			{
-				bids = bids.OrderBy(q => 0 - q.Price);
-				asks = asks.OrderBy(q => q.Price);
-			}
-
-			var bidsArr = bids.Select(EntitiesExtensions.ToQuoteChange).ToArray();
-			var asksArr = asks.Select(EntitiesExtensions.ToQuoteChange).ToArray();
-
-			//if (AutoVerify)
-			//{
-			//	if (!Verify(bidsArr, asksArr))
-			//		throw new ArgumentException(LocalizedStrings.Str485);
-			//}
-
-			//Truncate(bidsArr, asksArr, lastChangeTime);
-
-			return Update(bidsArr, asksArr, lastChangeTime);
-		}
-
-		/// <summary>
 		/// To update the order book. The version without checks and blockings.
 		/// </summary>
 		/// <param name="bids">Sorted bids.</param>
@@ -530,8 +363,7 @@ namespace StockSharp.BusinessEntities
 			_bids2 = bids.ToArray();
 			_asks2 = asks.ToArray();
 
-			UpdateDepthAndTime(lastChangeTime, false);
-			RaiseQuotesChanged();
+			UpdateDepthAndTime(lastChangeTime);
 
 			return this;
 		}
@@ -671,8 +503,6 @@ namespace StockSharp.BusinessEntities
 				//	throw new InvalidOperationException(LocalizedStrings.Str486Params.Put(MaxDepth, quotes.Length));
 			//}
 
-			RaiseQuotesChanged();
-
 			//if (outOfDepthQuote != null)
 			//	QuoteOutOfDepth?.Invoke(outOfDepthQuote);
 		}
@@ -706,20 +536,6 @@ namespace StockSharp.BusinessEntities
 		public IEnumerable<MarketDepthPair> ToPairs()
 		{
 			return GetTopPairs(Depth);
-		}
-
-		/// <summary>
-		/// Remove the quote.
-		/// </summary>
-		/// <param name="quote">The quote to remove.</param>
-		/// <param name="lastChangeTime">Order book change time.</param>
-		[Obsolete]
-		public void Remove(Quote quote, DateTimeOffset lastChangeTime = default)
-		{
-			if (quote == null)
-				throw new ArgumentNullException(nameof(quote));
-
-			Remove(quote.OrderDirection, quote.Price, quote.Volume, lastChangeTime);
 		}
 
 		/// <summary>
@@ -811,8 +627,6 @@ namespace StockSharp.BusinessEntities
 				quote.Volume = leftVolume;
 				UpdateTime(lastChangeTime);
 			}
-
-			RaiseQuotesChanged();
 		}
 
 		private static QuoteChange[] RemoveAt(QuoteChange[] quotes, int index)
@@ -906,16 +720,9 @@ namespace StockSharp.BusinessEntities
 				return null;
 		}
 
-		private void UpdateDepthAndTime(DateTimeOffset lastChangeTime = default, bool depthChangedEventNeeded = true)
+		private void UpdateDepthAndTime(DateTimeOffset lastChangeTime = default)
 		{
-			if (depthChangedEventNeeded)
-			{
-				Depth = _bids2.Length > _asks2.Length ? _bids2.Length : _asks2.Length;
-			}
-			else
-			{
-				_depth = _bids2.Length > _asks2.Length ? _bids2.Length : _asks2.Length;
-			}
+			Depth = _bids2.Length > _asks2.Length ? _bids2.Length : _asks2.Length;
 
 			BestBid2 = _bids2.Length > 0 ? _bids2[0] : null;
 			BestAsk2 = _asks2.Length > 0 ? _asks2[0] : null;
@@ -929,13 +736,6 @@ namespace StockSharp.BusinessEntities
 			{
 				LastChangeTime = lastChangeTime;
 			}
-		}
-
-		private void RaiseQuotesChanged()
-		{
-#pragma warning disable 612
-			QuotesChanged?.Invoke();
-#pragma warning restore 612
 		}
 
 		/// <summary>

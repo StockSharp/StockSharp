@@ -351,12 +351,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// The converter, taking from the order book the best bid price <see cref="MarketDepth.BestBid"/>.
+		/// The converter, taking from the order book the best bid price <see cref="MarketDepth.BestBid2"/>.
 		/// </summary>
 		public static readonly Func<MarketDepth, decimal?> ByBestBid = d => d.BestBid2?.Price;
 
 		/// <summary>
-		/// The converter, taking from the order book the best offer price <see cref="MarketDepth.BestAsk"/>.
+		/// The converter, taking from the order book the best offer price <see cref="MarketDepth.BestAsk2"/>.
 		/// </summary>
 		public static readonly Func<MarketDepth, decimal?> ByBestAsk = d => d.BestAsk2?.Price;
 
