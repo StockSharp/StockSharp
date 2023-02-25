@@ -39,14 +39,13 @@
 		private IChartArea _areaComb;
 		private IChartCandleElement _candleElement;
 		private readonly SynchronizedList<CandleMessage> _updatedCandles = new();
-		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle> _allCandles = new();
+		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleMessage> _allCandles = new();
 		private Security _security;
 		private RandomWalkTradeGenerator _tradeGenerator;
 		private readonly CachedSynchronizedDictionary<IChartIndicatorElement, IIndicator> _indicators = new();
 		private ICandleBuilder _candleBuilder;
 		private MarketDataMessage _mdMsg;
 		private readonly ICandleBuilderValueTransform _candleTransform = new TickCandleBuilderValueTransform();
-		private readonly CandlesHolder _holder = new();
 		private readonly CandleBuilderProvider _builderProvider = new(new InMemoryExchangeInfoProvider());
 		private bool _historyLoaded;
 		private bool _isRealTime;
@@ -268,8 +267,6 @@
 			var msgType = series.CandleType.ToCandleMessageType();
 
 			_transactionId = _transactionIdGenerator.GetNextId();
-			_holder.Clear();
-			_holder.CreateCandleSeries(_transactionId, series);
 
 			_candleTransform.Process(new ResetMessage());
 			_candleBuilder = _builderProvider.Get(msgType);
@@ -463,21 +460,14 @@
 				return;
 
 			var lastTime = DateTimeOffset.MinValue;
-			var candlesToUpdate = new List<Candle>();
+			var candlesToUpdate = new List<CandleMessage>();
 
-			foreach (var message in messages.Reverse())
+			foreach (var candle in messages.Reverse())
 			{
-				if (lastTime == message.OpenTime)
+				if (lastTime == candle.OpenTime)
 					continue;
 
-				lastTime = message.OpenTime;
-
-				var info = _holder.UpdateCandles(_transactionId, message);
-
-				if (info == null)
-					continue;
-
-				var candle = info.Item2;
+				lastTime = candle.OpenTime;
 
 				if (candlesToUpdate.Count == 0 || candlesToUpdate.Last() != candle)
 					candlesToUpdate.Add(candle);

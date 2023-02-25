@@ -47,4 +47,9 @@ public interface ICandleMessage
 	/// Price levels.
 	/// </summary>
 	IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
+
+	/// <summary>
+	/// Candle arg.
+	/// </summary>
+	object Arg { get; set; }
 }

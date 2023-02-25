@@ -3,7 +3,6 @@
 	using System;
 	using System.Drawing;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -32,7 +31,7 @@
 			/// <param name="element">The chart element representing a candle.</param>
 			/// <param name="candle">The candle data.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, Candle candle);
+			IChartDrawDataItem Add(IChartCandleElement element, ICandleMessage candle);
 
 			/// <summary>
 			/// Put the candle data.
@@ -44,7 +43,7 @@
 			/// <param name="lowPrice">Lowest price.</param>
 			/// <param name="closePrice">Closing price.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, Candle candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice);
+			IChartDrawDataItem Add(IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice);
 
 			/// <summary>
 			/// Put the candle data.
@@ -56,9 +55,8 @@
 			/// <param name="lowPrice">Lowest price.</param>
 			/// <param name="closePrice">Closing price.</param>
 			/// <param name="priceLevels">Price levels.</param>
-			/// <param name="priceStep">Minimum price step.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, Candle candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels, decimal? priceStep);
+			IChartDrawDataItem Add(IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels);
 
 			/// <summary>
 			/// Put the candle data.
@@ -70,9 +68,8 @@
 			/// <param name="lowPrice">Lowest price.</param>
 			/// <param name="closePrice">Closing price.</param>
 			/// <param name="priceLevels">Price levels.</param>
-			/// <param name="priceStep">Minimum price step.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, object candleArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels, decimal? priceStep);
+			IChartDrawDataItem Add(IChartCandleElement element, object candleArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels);
 
 			/// <summary>
 			/// Put the indicator data.

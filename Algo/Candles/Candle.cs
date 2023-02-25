@@ -41,6 +41,13 @@ namespace StockSharp.Algo.Candles
 	public abstract class Candle : Cloneable<Candle>, ICandleMessage
 	{
 		/// <summary>
+		/// Initializes a new instance of the <see cref="Candle"/>.
+		/// </summary>
+		protected Candle()
+		{
+		}
+
+		/// <summary>
 		/// Security.
 		/// </summary>
 		[DataMember]

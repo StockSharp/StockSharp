@@ -5,7 +5,7 @@
 
 	using Ecng.Common;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Localization;
 
@@ -20,7 +20,7 @@
 		/// <param name="chart">Chart.</param>
 		/// <param name="element">The chart element representing a candle.</param>
 		/// <param name="candle">Candle.</param>
-		public static void Draw(this IChart chart, IChartCandleElement element, Candle candle)
+		public static void Draw(this IChart chart, IChartCandleElement element, ICandleMessage candle)
 		{
 			if (element == null)
 				throw new ArgumentNullException(nameof(element));
