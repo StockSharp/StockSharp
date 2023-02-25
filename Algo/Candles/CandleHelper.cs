@@ -766,6 +766,7 @@ namespace StockSharp.Algo.Candles
 			=> _spinningTopPattern.Recognize(candle);
 
 		private static readonly ICandlePattern _hammerPattern = new CandleHammerPattern();
+		private static readonly ICandlePattern _invHammerPattern = new CandleInvertedHammerPattern();
 
 		/// <summary>
 		/// Whether the candle is hammer.
@@ -773,7 +774,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="candle">The candle which should match the pattern.</param>
 		/// <returns><see langword="true" /> if it is matched, <see langword="false" /> if not.</returns>
 		public static bool IsHammer(this ICandleMessage candle)
-			=> _hammerPattern.Recognize(candle);
+			=> _hammerPattern.Recognize(candle) || _invHammerPattern.Recognize(candle);
 
 		private static readonly ICandlePattern _dragonflyPattern = new CandleDragonflyPattern();
 		private static readonly ICandlePattern _gravestonePattern = new CandleGravestonePattern();

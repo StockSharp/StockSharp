@@ -1,4 +1,12 @@
 {
+  "PatternBuilder": {
+    "en": "Pattern builder",
+    "ru": "Построитель паттерна"
+  },
+  "Epsilon": {
+    "en": "Epsilon",
+    "ru": "Epsilon"
+  },
   "Epsilon": {
     "en": "Epsilon",
     "ru": "Epsilon"
@@ -30,6 +38,10 @@
   "Hammer": {
     "en": "Hammer",
     "ru": "Молот"
+  },
+  "InvertedHammer": {
+    "en": "Inverted Hammer",
+    "ru": "Перевернутый Молот"
   },
   "Dragonfly": {
     "en": "Dragonfly",
@@ -18740,8 +18752,8 @@
     "ru": "Аналитика '{0}'. Результат"
   },
   "IndexSample": {
-    "en": "Sample: LOG(AAPL@NASDAQ) / LOG(MSFT@NADAQ)",
-    "ru": "Пример: LOG(SBER@TQBR) / LOG(LKOH@TQBR)"
+    "en": "Sample: log(AAPL@NASDAQ) / log(MSFT@NADAQ)",
+    "ru": "Пример: log(SBER@TQBR) / log(LKOH@TQBR)"
   },
   "AvailableFunctions": {
     "en": "Available functions",

@@ -1,9 +1,13 @@
 ﻿namespace StockSharp.Algo.Candles;
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 using Ecng.Common;
+using Ecng.ComponentModel;
 using Ecng.Serialization;
+using Ecng.Collections;
 
 using StockSharp.Localization;
 using StockSharp.Messages;
@@ -13,6 +17,11 @@ using StockSharp.Messages;
 /// </summary>
 public interface ICandlePattern : IPersistable
 {
+	/// <summary>
+	/// Reset.
+	/// </summary>
+	void Reset();
+
 	/// <summary>
 	/// Try recognize pattern.
 	/// </summary>
@@ -26,6 +35,13 @@ public interface ICandlePattern : IPersistable
 /// </summary>
 public abstract class BaseCandlePattern : ICandlePattern
 {
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BaseCandlePattern"/>.
+	/// </summary>
+	protected BaseCandlePattern()
+	{
+	}
+
 	/// <summary>
 	/// Small error value.
 	/// </summary>
@@ -46,6 +62,9 @@ public abstract class BaseCandlePattern : ICandlePattern
 		=> value.Abs() <= Epsilon;
 
 	/// <inheritdoc />
+	public virtual void Reset() { }
+
+	/// <inheritdoc />
 	public abstract bool Recognize(ICandleMessage candle);
 
 	/// <inheritdoc />
@@ -59,6 +78,70 @@ public abstract class BaseCandlePattern : ICandlePattern
 	{
 		storage.Set(nameof(Epsilon), Epsilon);
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => GetType().GetDisplayName();
+}
+
+/// <summary>
+/// Base complex implementation of <see cref="ICandlePattern"/>.
+/// </summary>
+public class ComplexCandlePattern : BaseCandlePattern
+{
+	private int _last;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ComplexCandlePattern"/>.
+	/// </summary>
+	public ComplexCandlePattern()
+	{
+	}
+
+	/// <summary>
+	/// Inner patterns.
+	/// </summary>
+	public IList<ICandlePattern> Inner { get; } = new List<ICandlePattern>();
+
+	/// <inheritdoc />
+	public override void Reset() => _last = 0;
+
+	/// <inheritdoc />
+	public override bool Recognize(ICandleMessage candle)
+	{
+		var res = Inner[_last].Recognize(candle);
+
+		if (res)
+		{
+			if (++_last < Inner.Count)
+				return false;
+
+			_last = 0;
+			return true;
+		}
+
+		_last = 0;
+		return false;
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.Set(nameof(Inner), Inner.Select(i => i.SaveEntire(false)).ToArray());
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		Inner.Clear();
+		Inner.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Inner)).Select(i => i.LoadEntire<ICandlePattern>()));
+	}
+
+	/// <inheritdoc />
+	public override string ToString() => Inner.Select(i => i.GetType().GetDisplayName()).JoinCommaSpace();
 }
 
 /// <summary>
@@ -147,9 +230,28 @@ public class CandleHammerPattern : CandleMarubozuPattern
 			return false;
 
 		if (Epsilon == 0)
-			return candle.GetBottomShadow() == 0 || candle.GetTopShadow() == 0;
+			return candle.GetTopShadow() == 0;
 
-		return IsEpsilon(candle.GetBottomShadow()) || IsEpsilon(candle.GetTopShadow());
+		return IsEpsilon(candle.GetTopShadow());
+	}
+}
+
+/// <summary>
+/// Inverted Hammer candle pattern.
+/// </summary>
+[DisplayNameLoc(LocalizedStrings.InvertedHammerKey)]
+public class CandleInvertedHammerPattern : CandleMarubozuPattern
+{
+	/// <inheritdoc />
+	public override bool Recognize(ICandleMessage candle)
+	{
+		if (base.Recognize(candle))
+			return false;
+
+		if (Epsilon == 0)
+			return candle.GetBottomShadow() == 0;
+
+		return IsEpsilon(candle.GetBottomShadow());
 	}
 }
 
