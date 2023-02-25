@@ -265,24 +265,70 @@ namespace StockSharp.Algo.Candles
 	}
 
 	/// <summary>
+	/// Base candle class (contains main parameters).
+	/// </summary>
+	/// <typeparam name="TArg"></typeparam>
+	public abstract class Candle<TArg> : Candle
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Candle"/>.
+		/// </summary>
+		protected Candle()
+		{
+		}
+
+		private TArg _typedArg;
+
+		/// <summary>
+		/// Arg.
+		/// </summary>
+		public TArg TypedArg
+		{
+			get => _typedArg;
+			set
+			{
+				Validate(value);
+				_typedArg = value;
+			}
+		}
+
+		/// <summary>
+		/// Validate value.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		protected virtual void Validate(TArg value) { }
+
+		/// <inheritdoc />
+		public override object Arg
+		{
+			get => TypedArg;
+			set => TypedArg = (TArg)value;
+		}
+	}
+
+	/// <summary>
 	/// Time-frame candle.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
-	public class TimeFrameCandle : Candle
+	public class TimeFrameCandle : Candle<TimeSpan>, ITimeFrameCandleMessage
 	{
 		/// <summary>
 		/// Time-frame.
 		/// </summary>
 		[DataMember]
-		public TimeSpan TimeFrame { get; set; }
+		public TimeSpan TimeFrame
+		{
+			get => TypedArg;
+			set => TypedArg = value;
+		}
 
 		/// <inheritdoc />
-		public override object Arg
+		protected override void Validate(TimeSpan value)
 		{
-			get => TimeFrame;
-			set => TimeFrame = (TimeSpan)value;
+			if (value <= TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(value));
 		}
 
 		/// <summary>
@@ -301,31 +347,23 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
-	public class TickCandle : Candle
+	public class TickCandle : Candle<int>, ITickCandleMessage
 	{
-		private int _maxTradeCount;
-
 		/// <summary>
 		/// Maximum tick count.
 		/// </summary>
 		[DataMember]
 		public int MaxTradeCount
 		{
-			get => _maxTradeCount;
-			set
-			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_maxTradeCount = value;
-			}
+			get => TypedArg;
+			set => TypedArg = value;
 		}
 
 		/// <inheritdoc />
-		public override object Arg
+		protected override void Validate(int value)
 		{
-			get => MaxTradeCount;
-			set => MaxTradeCount = (int)value;
+			if (value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(value));
 		}
 
 		/// <summary>
@@ -344,31 +382,23 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
-	public class VolumeCandle : Candle
+	public class VolumeCandle : Candle<decimal>, IVolumeCandleMessage
 	{
-		private decimal _volume;
-
 		/// <summary>
 		/// Maximum volume.
 		/// </summary>
 		[DataMember]
 		public decimal Volume
 		{
-			get => _volume;
-			set
-			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_volume = value;
-			}
+			get => TypedArg;
+			set => TypedArg = value;
 		}
 
 		/// <inheritdoc />
-		public override object Arg
+		protected override void Validate(decimal value)
 		{
-			get => Volume;
-			set => Volume = (decimal)value;
+			if (value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(value));
 		}
 
 		/// <summary>
@@ -387,25 +417,23 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
-	public class RangeCandle : Candle
+	public class RangeCandle : Candle<Unit>, IRangeCandleMessage
 	{
-		private Unit _priceRange;
-
 		/// <summary>
 		/// Range of price.
 		/// </summary>
 		[DataMember]
 		public Unit PriceRange
 		{
-			get => _priceRange;
-			set => _priceRange = value ?? throw new ArgumentNullException(nameof(value));
+			get => TypedArg;
+			set => TypedArg = value;
 		}
 
 		/// <inheritdoc />
-		public override object Arg
+		protected override void Validate(Unit value)
 		{
-			get => PriceRange;
-			set => PriceRange = (Unit)value;
+			if (value is null)
+				throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -424,31 +452,23 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
-	public class PnFCandle : Candle
+	public class PnFCandle : Candle<PnFArg>, IPnFCandleMessage
 	{
-		private PnFArg _pnFArg;
-
 		/// <summary>
 		/// Value of arguments.
 		/// </summary>
 		[DataMember]
 		public PnFArg PnFArg
 		{
-			get => _pnFArg;
-			set => _pnFArg = value ?? throw new ArgumentNullException(nameof(value));
+			get => TypedArg;
+			set => TypedArg = value;
 		}
 
-		///// <summary>
-		///// Type of symbols.
-		///// </summary>
-		//[DataMember]
-		//public PnFTypes Type { get; set; }
-
 		/// <inheritdoc />
-		public override object Arg
+		protected override void Validate(PnFArg value)
 		{
-			get => PnFArg;
-			set => PnFArg = (PnFArg)value;
+			if (value is null)
+				throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -467,25 +487,23 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
-	public class RenkoCandle : Candle
+	public class RenkoCandle : Candle<Unit>, IRenkoCandleMessage
 	{
-		private Unit _boxSize;
-
 		/// <summary>
 		/// Possible price change range.
 		/// </summary>
 		[DataMember]
 		public Unit BoxSize
 		{
-			get => _boxSize;
-			set => _boxSize = value ?? throw new ArgumentNullException(nameof(value));
+			get => TypedArg;
+			set => TypedArg = value;
 		}
 
 		/// <inheritdoc />
-		public override object Arg
+		protected override void Validate(Unit value)
 		{
-			get => BoxSize;
-			set => BoxSize = (Unit)value;
+			if (value is null)
+				throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -504,7 +522,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.HeikinAshiKey)]
-	public class HeikinAshiCandle : TimeFrameCandle
+	public class HeikinAshiCandle : TimeFrameCandle, IHeikinAshiCandleMessage
 	{
 		/// <summary>
 		/// Create a copy of <see cref="HeikinAshiCandle"/>.

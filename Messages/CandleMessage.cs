@@ -378,7 +378,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
-	public class TimeFrameCandleMessage : TypedCandleMessage<TimeSpan>
+	public class TimeFrameCandleMessage : TypedCandleMessage<TimeSpan>, ITimeFrameCandleMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeFrameCandleMessage"/>.
@@ -413,7 +413,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
-	public class TickCandleMessage : TypedCandleMessage<int>
+	public class TickCandleMessage : TypedCandleMessage<int>, ITickCandleMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TickCandleMessage"/>.
@@ -439,7 +439,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
-	public class VolumeCandleMessage : TypedCandleMessage<decimal>
+	public class VolumeCandleMessage : TypedCandleMessage<decimal>, IVolumeCandleMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolumeCandleMessage"/>.
@@ -465,7 +465,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
-	public class RangeCandleMessage : TypedCandleMessage<Unit>
+	public class RangeCandleMessage : TypedCandleMessage<Unit>, IRangeCandleMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RangeCandleMessage"/>.
@@ -570,7 +570,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
-	public class PnFCandleMessage : TypedCandleMessage<PnFArg>
+	public class PnFCandleMessage : TypedCandleMessage<PnFArg>, IPnFCandleMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PnFCandleMessage"/>.
@@ -599,7 +599,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
-	public class RenkoCandleMessage : TypedCandleMessage<Unit>
+	public class RenkoCandleMessage : TypedCandleMessage<Unit>, IRenkoCandleMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RenkoCandleMessage"/>.
@@ -628,7 +628,7 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.HeikinAshiKey)]
-	public class HeikinAshiCandleMessage : TimeFrameCandleMessage
+	public class HeikinAshiCandleMessage : TimeFrameCandleMessage, IHeikinAshiCandleMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HeikinAshiCandleMessage"/>.

@@ -144,3 +144,64 @@ public interface ICandleMessage
 	/// </summary>
 	DataType BuildFrom { get; set; }
 }
+
+/// <summary>
+/// The interfaces describes candle.
+/// </summary>
+/// <typeparam name="TArg">Type of <see cref="TypedArg"/>.</typeparam>
+public interface ICandleMessage<TArg> : ICandleMessage
+{
+	/// <summary>
+	/// Arg.
+	/// </summary>
+	TArg TypedArg { get; set; }
+}
+
+/// <summary>
+/// Time-frame candle.
+/// </summary>
+public interface ITimeFrameCandleMessage : ICandleMessage<TimeSpan>
+{
+}
+
+/// <summary>
+/// Tick candle.
+/// </summary>
+public interface ITickCandleMessage : ICandleMessage<int>
+{
+}
+
+/// <summary>
+/// Volume candle.
+/// </summary>
+public interface IVolumeCandleMessage : ICandleMessage<decimal>
+{
+}
+
+/// <summary>
+/// Range candle.
+/// </summary>
+public interface IRangeCandleMessage : ICandleMessage<Unit>
+{
+}
+
+/// <summary>
+/// X0 candle.
+/// </summary>
+public interface IPnFCandleMessage : ICandleMessage<PnFArg>
+{
+}
+
+/// <summary>
+/// Renko candle.
+/// </summary>
+public interface IRenkoCandleMessage : ICandleMessage<Unit>
+{
+}
+
+/// <summary>
+/// Heikin-Ashi candle.
+/// </summary>
+public interface IHeikinAshiCandleMessage : ITimeFrameCandleMessage
+{
+}

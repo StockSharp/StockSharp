@@ -357,7 +357,7 @@
 			return new TimeFrameCandle
 			{
 				Security = security,
-				TimeFrame = ts,
+				TypedArg = ts,
 				OpenTime = TimeFrom,
 				CloseTime = TimeTo,
 				OpenPrice = Open,

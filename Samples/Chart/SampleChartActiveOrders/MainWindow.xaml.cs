@@ -209,7 +209,7 @@
 				var bounds = tf.GetCandleBounds(time, _security.Board);
 				_candle = new TimeFrameCandle
 				{
-					TimeFrame = tf,
+					TypedArg = tf,
 					OpenTime = bounds.Min,
 					CloseTime = bounds.Max,
 					Security = security,
