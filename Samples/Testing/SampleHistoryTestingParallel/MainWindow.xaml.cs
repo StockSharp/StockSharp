@@ -65,7 +65,6 @@ namespace SampleHistoryTestingParallel
 			}
 
 			TestingProcess.Value = 0;
-			Curve.Clear();
 			Stat.Clear();
 
 			var logManager = new LogManager();
@@ -199,26 +198,12 @@ namespace SampleHistoryTestingParallel
 
 						// by default interval is 1 min,
 						// it is excessively for time range with several months
-						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
+						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
+
+						Name = $"L={period.longMa} S={period.shortMa}",
 					};
 
-					this.GuiSync(() =>
-					{
-						var curveElem = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3, ChartIndicatorDrawStyles.Line);
-					
-						strategy.PnLChanged += () =>
-						{
-							var data = new ChartDrawData();
-
-							data
-								.Group(strategy.CurrentTime)
-									.Add(curveElem, strategy.PnL);
-
-							Curve.Draw(data);
-						};
-
-						Stat.AddStrategies(new[] { strategy });
-					});
+					this.GuiSync(() => Stat.AddStrategy(strategy));
 
 					return strategy;
 				});

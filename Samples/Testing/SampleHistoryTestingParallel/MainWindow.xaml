@@ -29,13 +29,6 @@
 		</StackPanel>
 		<ProgressBar x:Name="TestingProcess" Grid.Column="1" Grid.Row="2" Maximum="100" />
 
-        <TabControl Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" >
-            <TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
-                <charting:EquityCurveChart x:Name="Curve" />
-            </TabItem>
-            <TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
-                <charting:StrategiesStatisticsPanel x:Name="Stat" ShowProgress="False"/>
-            </TabItem>
-        </TabControl>
+		<charting:StrategiesStatisticsPanel x:Name="Stat" ShowProgress="False" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0"/>
 	</Grid>
 </Window>
