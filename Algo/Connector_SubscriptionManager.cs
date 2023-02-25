@@ -596,7 +596,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public IEnumerable<Tuple<Subscription, Candle>> UpdateCandles(CandleMessage message)
+			public IEnumerable<(Subscription subscription, Candle candle)> UpdateCandles(CandleMessage message)
 			{
 				foreach (var subscriptionId in message.GetSubscriptionIds())
 				{
@@ -634,7 +634,7 @@ namespace StockSharp.Algo
 					if (!info.UpdateCandle(message, out var candle))
 						continue;
 
-					yield return Tuple.Create(info.Subscription, candle);
+					yield return (info.Subscription, candle);
 				}
 			}
 

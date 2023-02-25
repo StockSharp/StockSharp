@@ -1602,11 +1602,8 @@ namespace StockSharp.Algo
 
 		private void ProcessCandleMessage(CandleMessage message)
 		{
-			foreach (var tuple in _subscriptionManager.UpdateCandles(message))
+			foreach (var (subscription, candle) in _subscriptionManager.UpdateCandles(message))
 			{
-				var subscription = tuple.Item1;
-				var candle = tuple.Item2;
-
 				if (subscription.CandleSeries != null)
 					RaiseCandleSeriesProcessing(subscription.CandleSeries, candle);
 
