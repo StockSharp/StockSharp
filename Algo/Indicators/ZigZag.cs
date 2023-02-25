@@ -23,7 +23,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -39,12 +38,12 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorZigZag.html")]
 	public class ZigZag : BaseIndicator
 	{
-		private readonly IList<Candle> _buffer = new List<Candle>();
+		private readonly IList<ICandleMessage> _buffer = new List<ICandleMessage>();
 		private readonly List<decimal> _lowBuffer = new();
 		private readonly List<decimal> _highBuffer = new();
 		private readonly List<decimal> _zigZagBuffer = new();
 
-		private Func<Candle, decimal> _currentValue = candle => candle.ClosePrice;
+		private Func<ICandleMessage, decimal> _currentValue = candle => candle.ClosePrice;
 		private int _depth;
 		private int _backStep;
 		private bool _needAdd = true;
@@ -119,12 +118,12 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private Func<Candle, decimal> _highValue = candle => candle.HighPrice;
+		private Func<ICandleMessage, decimal> _highValue = candle => candle.HighPrice;
 		/// <summary>
 		/// The converter, returning from the candle a price for search of maximum.
 		/// </summary>
 		[Browsable(false)]
-		public Func<Candle, decimal> HighValueFunc
+		public Func<ICandleMessage, decimal> HighValueFunc
 		{
 			get => _highValue;
 			set
@@ -134,12 +133,12 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private Func<Candle, decimal> _lowValue = candle => candle.LowPrice;
+		private Func<ICandleMessage, decimal> _lowValue = candle => candle.LowPrice;
 		/// <summary>
 		/// The converter, returning from the candle a price for search of minimum.
 		/// </summary>
 		[Browsable(false)]
-		public Func<Candle, decimal> LowValueFunc
+		public Func<ICandleMessage, decimal> LowValueFunc
 		{
 			get => _lowValue;
 			set
@@ -153,7 +152,7 @@ namespace StockSharp.Algo.Indicators
 		/// The converter, returning from the candle a price for the current value.
 		/// </summary>
 		[Browsable(false)]
-		public Func<Candle, decimal> CurrentValueFunc
+		public Func<ICandleMessage, decimal> CurrentValueFunc
 		{
 			get => _currentValue;
 			set
@@ -191,7 +190,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<Candle>();
+			var candle = input.GetValue<ICandleMessage>();
 
 			if (_needAdd)
 			{

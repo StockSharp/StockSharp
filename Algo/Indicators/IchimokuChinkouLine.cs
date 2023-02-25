@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Chinkou line.
@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var price = input.GetValue<Candle>().ClosePrice;
+			var price = input.GetValue<ICandleMessage>().ClosePrice;
 
 			if (input.IsFinal)
 				Buffer.PushBack(price);

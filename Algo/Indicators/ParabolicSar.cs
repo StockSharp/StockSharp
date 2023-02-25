@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -53,13 +53,13 @@ namespace StockSharp.Algo.Indicators
 			private decimal _prevSar;
 			private decimal _todaySar;
 
-			private IList<Candle> Candles => _ind._candles;
+			private IList<ICandleMessage> Candles => _ind._candles;
 
 			public CalcBuffer(ParabolicSar parent) => _ind = parent;
 
 			public CalcBuffer Clone() => (CalcBuffer) MemberwiseClone();
 
-			public decimal Calculate(Candle candle)
+			public decimal Calculate(ICandleMessage candle)
 			{
 				if (Candles.Count == 0)
 					Candles.Add(candle);
@@ -227,7 +227,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		private readonly CalcBuffer _buf;
-		private readonly List<Candle> _candles = new();
+		private readonly List<ICandleMessage> _candles = new();
 		private decimal _acceleration;
 		private decimal _accelerationStep;
 		private decimal _accelerationMax;
@@ -298,7 +298,7 @@ namespace StockSharp.Algo.Indicators
 				IsFormed = true;
 
 			var b = input.IsFinal ? _buf : _buf.Clone();
-			var val = b.Calculate(input.GetValue<Candle>());
+			var val = b.Calculate(input.GetValue<ICandleMessage>());
 
 			return val == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, val);
 		}

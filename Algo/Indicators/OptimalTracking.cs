@@ -19,12 +19,11 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 	using System.Collections.Generic;
+	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
-	using System.Linq;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Optimal Tracking.
@@ -118,7 +117,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<Candle>();
+			var candle = input.GetValue<ICandleMessage>();
 			var average = (candle.HighPrice + candle.LowPrice) / 2;
 			var halfRange = (candle.HighPrice - candle.LowPrice) / 2;
 

@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorTrueRange.html")]
 	public class TrueRange : BaseIndicator
 	{
-		private Candle _prevCandle;
+		private ICandleMessage _prevCandle;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TrueRange"/>.
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="prevCandle">The previous candle.</param>
 		/// <returns>Price components.</returns>
-		protected virtual decimal[] GetPriceMovements(Candle currentCandle, Candle prevCandle)
+		protected virtual decimal[] GetPriceMovements(ICandleMessage currentCandle, ICandleMessage prevCandle)
 		{
 			return new[]
 			{
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<Candle>();
+			var candle = input.GetValue<ICandleMessage>();
 
 			if (_prevCandle != null)
 			{

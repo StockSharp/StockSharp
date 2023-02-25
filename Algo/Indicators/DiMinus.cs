@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// DIMinus is a component of the Directional Movement System developed by Welles Wilder.
@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		protected override decimal GetValue(Candle current, Candle prev)
+		protected override decimal GetValue(ICandleMessage current, ICandleMessage prev)
 		{
 			if (current.LowPrice < prev.LowPrice && current.HighPrice - prev.HighPrice < prev.LowPrice - current.LowPrice)
 				return prev.LowPrice - current.LowPrice;

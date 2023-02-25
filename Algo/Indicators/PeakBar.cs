@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -63,10 +62,7 @@ namespace StockSharp.Algo.Indicators
 			get => _reversalAmount;
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_reversalAmount = value;
+				_reversalAmount = value ?? throw new ArgumentNullException(nameof(value));
 
 				Reset();
 			}
@@ -75,7 +71,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<Candle>();
+			var candle = input.GetValue<ICandleMessage>();
 
 			var cm = _currentMaximum;
 			var vbc = _valueBarCount;

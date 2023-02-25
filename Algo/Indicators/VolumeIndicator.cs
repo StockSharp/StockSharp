@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Indicators
 			if (input.IsFinal)
 				IsFormed = true;
 
-			return new CandleIndicatorValue(this, input.GetValue<Candle>(), c => c.TotalVolume);
+			return new CandleIndicatorValue(this, input.GetValue<ICandleMessage>(), c => c.TotalVolume);
 		}
 	}
 }

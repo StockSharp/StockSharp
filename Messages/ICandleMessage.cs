@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Messages;
 
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// The interfaces describes candle.
@@ -36,4 +37,14 @@ public interface ICandleMessage
 	/// Open time.
 	/// </summary>
 	DateTimeOffset OpenTime { get; set; }
+
+	/// <summary>
+	/// State.
+	/// </summary>
+	CandleStates State { get; set; }
+
+	/// <summary>
+	/// Price levels.
+	/// </summary>
+	IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 }

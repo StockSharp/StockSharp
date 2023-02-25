@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Common;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -239,18 +238,18 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// The indicator value, operating with data type <see cref="Candle"/>.
+	/// The indicator value, operating with data type <see cref="ICandleMessage"/>.
 	/// </summary>
-	public class CandleIndicatorValue : SingleIndicatorValue<Candle>
+	public class CandleIndicatorValue : SingleIndicatorValue<ICandleMessage>
 	{
-		private readonly Func<Candle, decimal> _getPart;
+		private readonly Func<ICandleMessage, decimal> _getPart;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="value">Value.</param>
-		public CandleIndicatorValue(IIndicator indicator, Candle value)
+		public CandleIndicatorValue(IIndicator indicator, ICandleMessage value)
 			: this(indicator, value, ByClose)
 		{
 		}
@@ -261,7 +260,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="value">Value.</param>
 		/// <param name="getPart">The candle converter, through which its parameter can be got. By default, the <see cref="CandleIndicatorValue.ByClose"/> is used.</param>
-		public CandleIndicatorValue(IIndicator indicator, Candle value, Func<Candle, decimal> getPart)
+		public CandleIndicatorValue(IIndicator indicator, ICandleMessage value, Func<ICandleMessage, decimal> getPart)
 			: base(indicator, value)
 		{
 			if (value == null)
@@ -282,19 +281,19 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// The converter, taking from candle closing price <see cref="Candle.ClosePrice"/>.
+		/// The converter, taking from candle closing price <see cref="ICandleMessage.ClosePrice"/>.
 		/// </summary>
-		public static readonly Func<Candle, decimal> ByClose = c => c.ClosePrice;
+		public static readonly Func<ICandleMessage, decimal> ByClose = c => c.ClosePrice;
 
 		/// <summary>
-		/// The converter, taking from candle opening price <see cref="Candle.OpenPrice"/>.
+		/// The converter, taking from candle opening price <see cref="ICandleMessage.OpenPrice"/>.
 		/// </summary>
-		public static readonly Func<Candle, decimal> ByOpen = c => c.OpenPrice;
+		public static readonly Func<ICandleMessage, decimal> ByOpen = c => c.OpenPrice;
 
 		/// <summary>
-		/// The converter, taking from candle middle of the body (<see cref="Candle.OpenPrice"/> + <see cref="Candle.ClosePrice"/>) / 2.
+		/// The converter, taking from candle middle of the body (<see cref="ICandleMessage.OpenPrice"/> + <see cref="ICandleMessage.ClosePrice"/>) / 2.
 		/// </summary>
-		public static readonly Func<Candle, decimal> ByMiddle = c => (c.ClosePrice + c.OpenPrice) / 2;
+		public static readonly Func<ICandleMessage, decimal> ByMiddle = c => (c.ClosePrice + c.OpenPrice) / 2;
 
 		/// <inheritdoc />
 		public override bool IsSupport(Type valueType) => valueType == typeof(decimal) || base.IsSupport(valueType);
@@ -302,7 +301,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override T GetValue<T>()
 		{
-			var candle = base.GetValue<Candle>();
+			var candle = base.GetValue<ICandleMessage>();
 
 			if (typeof(T) == typeof(decimal))
 				return _getPart(candle) is T t ? t : throw new InvalidCastException($"Cannot convert decimal to {typeof(T).Name}.");
@@ -313,7 +312,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
-			return value is Candle candle
+			return value is ICandleMessage candle
 					? new CandleIndicatorValue(indicator, candle) { InputValue = this }
 					: value.IsNull() ? new CandleIndicatorValue(indicator) : base.SetValue(indicator, value);
 		}

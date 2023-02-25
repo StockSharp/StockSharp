@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Extension class for indicators.
@@ -126,12 +126,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// To renew the indicator with candle closing price <see cref="Candle.ClosePrice"/>.
+		/// To renew the indicator with candle closing price <see cref="ICandleMessage.ClosePrice"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="candle">Candle.</param>
 		/// <returns>The new value of the indicator.</returns>
-		public static IIndicatorValue Process(this IIndicator indicator, Candle candle)
+		public static IIndicatorValue Process(this IIndicator indicator, ICandleMessage candle)
 		{
 			return indicator.Process(new CandleIndicatorValue(indicator, candle));
 		}

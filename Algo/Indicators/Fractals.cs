@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorFractals.html")]
 	public class Fractals : BaseComplexIndicator
 	{
-		private readonly List<Candle> _buffer = new();
+		private readonly List<ICandleMessage> _buffer = new();
 
 		// Номер центральной свечи
 		private int _numCenter;
@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<Candle>();
+			var candle = input.GetValue<ICandleMessage>();
 			var buffer = input.IsFinal ? _buffer : _buffer.ToList();
 
 			buffer.Add(candle);

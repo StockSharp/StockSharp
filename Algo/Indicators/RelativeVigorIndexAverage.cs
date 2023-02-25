@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Collections;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The weight-average part of indicator <see cref="RelativeVigorIndex"/>.
@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Indicators
 	[Browsable(false)]
 	public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 	{
-		private readonly CircularBuffer<Candle> _buffer;
+		private readonly CircularBuffer<ICandleMessage> _buffer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RelativeVigorIndexAverage"/>.
@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var newValue = input.GetValue<Candle>();
+			var newValue = input.GetValue<ICandleMessage>();
 
 			if (input.IsFinal)
 			{

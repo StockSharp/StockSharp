@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -77,13 +77,13 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private Func<Candle, decimal> _byPrice = candle => candle.ClosePrice;
+		private Func<ICandleMessage, decimal> _byPrice = candle => candle.ClosePrice;
 
 		/// <summary>
 		/// The converter, returning from the candle a price for calculations.
 		/// </summary>
 		[Browsable(false)]
-		public Func<Candle, decimal> ByPrice
+		public Func<ICandleMessage, decimal> ByPrice
 		{
 			get => _byPrice;
 			set
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var value = _byPrice(input.GetValue<Candle>());
+			var value = _byPrice(input.GetValue<ICandleMessage>());
 			if (_needAdd)
 			{
 				_buffer.Add(value);

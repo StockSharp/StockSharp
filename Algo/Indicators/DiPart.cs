@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The part of the indicator <see cref="DirectionalIndex"/>.
@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Indicators
 	{
 		private readonly AverageTrueRange _averageTrueRange;
 		private readonly LengthIndicator<decimal> _movingAverage;
-		private Candle _lastCandle;
+		private ICandleMessage _lastCandle;
 
 		/// <summary>
 		/// Initialize <see cref="DiPart"/>.
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			decimal? result = null;
 
-			var candle = input.GetValue<Candle>();
+			var candle = input.GetValue<ICandleMessage>();
 
 			// 1 period delay
 			if (_averageTrueRange.IsFormed && _movingAverage.IsFormed)
@@ -84,6 +84,6 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="current">The current candle.</param>
 		/// <param name="prev">The previous candle.</param>
 		/// <returns>Value.</returns>
-		protected abstract decimal GetValue(Candle current, Candle prev);
+		protected abstract decimal GetValue(ICandleMessage current, ICandleMessage prev);
 	}
 }

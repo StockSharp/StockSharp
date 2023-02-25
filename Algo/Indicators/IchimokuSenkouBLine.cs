@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Collections;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Senkou (B) line.
@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	{
-		private readonly CircularBuffer<Candle> _buffer;
+		private readonly CircularBuffer<ICandleMessage> _buffer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IchimokuLine"/>.
@@ -63,10 +63,10 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var candle = input.GetValue<Candle>();
+			var candle = input.GetValue<ICandleMessage>();
 			
 			decimal? result = null;
-			IList<Candle> buff = _buffer;
+			IList<ICandleMessage> buff = _buffer;
 
 			if (input.IsFinal)
 				_buffer.PushBack(candle);
