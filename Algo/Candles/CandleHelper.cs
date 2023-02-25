@@ -303,7 +303,7 @@ namespace StockSharp.Algo.Candles
 
 			CandleMessage lastActiveCandle = null;
 
-			using var builder = candleBuilderProvider.CreateBuilder(mdMsg);
+			using var builder = candleBuilderProvider.CreateBuilder(mdMsg.DataType2.MessageType);
 
 			var subscription = new CandleBuilderSubscription(mdMsg);
 			var isFinishedOnly = mdMsg.IsFinishedOnly;
@@ -381,14 +381,14 @@ namespace StockSharp.Algo.Candles
 			return trades.ToCandles(series.ToMarketDataMessage(true), candleBuilderProvider);
 		}
 
-		private static ICandleBuilder CreateBuilder(this CandleBuilderProvider candleBuilderProvider, MarketDataMessage mdMsg)
+		private static ICandleBuilder CreateBuilder(this CandleBuilderProvider candleBuilderProvider, Type messageType)
 		{
-			if (mdMsg is null)
-				throw new ArgumentNullException(nameof(mdMsg));
+			if (messageType is null)
+				throw new ArgumentNullException(nameof(messageType));
 
 			candleBuilderProvider ??= ConfigManager.TryGetService<CandleBuilderProvider>() ?? new CandleBuilderProvider(ServicesRegistry.EnsureGetExchangeInfoProvider());
 
-			return candleBuilderProvider.Get(mdMsg.DataType2.MessageType);
+			return candleBuilderProvider.Get(messageType);
 		}
 
 		/// <summary>
@@ -901,5 +901,21 @@ namespace StockSharp.Algo.Candles
 		{
 			return timeFrames.Where(t => t < original && (original.Ticks % t.Ticks) == 0);
 		}
+
+		/// <summary>
+		/// <see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		/// <param name="candle"><see cref="ICandleMessage"/></param>
+		/// <returns><see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
+		public static CandlePriceLevel? MinPriceLevel(this ICandleMessage candle)
+			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderBy(l => l.TotalVolume).FirstOr();
+
+		/// <summary>
+		/// <see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		/// <param name="candle"><see cref="ICandleMessage"/></param>
+		/// <returns><see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
+		public static CandlePriceLevel? MaxPriceLevel(this ICandleMessage candle)
+			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOr();
 	}
 }

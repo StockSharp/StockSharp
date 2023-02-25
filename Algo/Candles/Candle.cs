@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Candles
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -47,6 +46,10 @@ namespace StockSharp.Algo.Candles
 		{
 		}
 
+		private SecurityId? _securityId;
+
+		SecurityId ICandleMessage.SecurityId => _securityId ??= Security.ToSecurityId();
+
 		/// <summary>
 		/// Security.
 		/// </summary>
@@ -55,158 +58,116 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.SecurityKey, true)]
 		public Security Security { get; set; }
 
-		/// <summary>
-		/// Open time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleOpenTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleOpenTimeKey, true)]
 		public DateTimeOffset OpenTime { get; set; }
 
-		/// <summary>
-		/// Close time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleCloseTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleCloseTimeKey, true)]
 		public DateTimeOffset CloseTime { get; set; }
 
-		/// <summary>
-		/// High time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleHighTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleHighTimeKey, true)]
 		public DateTimeOffset HighTime { get; set; }
 
-		/// <summary>
-		/// Low time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleLowTimeKey)]
 		[DescriptionLoc(LocalizedStrings.CandleLowTimeKey, true)]
 		public DateTimeOffset LowTime { get; set; }
 
-		/// <summary>
-		/// Opening price.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str79Key)]
 		[DescriptionLoc(LocalizedStrings.Str80Key)]
 		public decimal OpenPrice { get; set; }
 
-		/// <summary>
-		/// Closing price.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ClosingPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str86Key)]
 		public decimal ClosePrice { get; set; }
 
-		/// <summary>
-		/// Highest price.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.HighestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str82Key)]
 		public decimal HighPrice { get; set; }
 
-		/// <summary>
-		/// Lowest price.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.LowestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str84Key)]
 		public decimal LowPrice { get; set; }
 
-		/// <summary>
-		/// Total price size.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
 		public decimal TotalPrice { get; set; }
 
-		/// <summary>
-		/// Volume at open.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OpenVolumeKey)]
 		public decimal? OpenVolume { get; set; }
 
-		/// <summary>
-		/// Volume at close.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CloseVolumeKey)]
 		public decimal? CloseVolume { get; set; }
 
-		/// <summary>
-		/// Volume at high.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.HighVolumeKey)]
 		public decimal? HighVolume { get; set; }
 
-		/// <summary>
-		/// Volume at low.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.LowVolumeKey)]
 		public decimal? LowVolume { get; set; }
 
-		/// <summary>
-		/// Total volume.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.TotalCandleVolumeKey)]
 		public decimal TotalVolume { get; set; }
 
-		/// <summary>
-		/// Relative volume.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.RelativeVolumeKey)]
 		public decimal? RelativeVolume { get; set; }
 
-		/// <summary>
-		/// Buy volume.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.XamlStr493Key)]
 		public decimal? BuyVolume { get; set; }
 
-		/// <summary>
-		/// Sell volume.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.XamlStr579Key)]
 		public decimal? SellVolume { get; set; }
 
-		/// <summary>
-		/// Candle arg.
-		/// </summary>
+		/// <inheritdoc />
 		public abstract object Arg { get; set; }
 
-		/// <summary>
-		/// Number of ticks.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TicksKey)]
 		[DescriptionLoc(LocalizedStrings.TickCountKey)]
 		public int? TotalTicks { get; set; }
 
-		/// <summary>
-		/// Number of up trending ticks.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
 		[DescriptionLoc(LocalizedStrings.TickUpCountKey)]
 		public int? UpTicks { get; set; }
 
-		/// <summary>
-		/// Number of down trending ticks.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickDownKey)]
 		[DescriptionLoc(LocalizedStrings.TickDownCountKey)]
@@ -214,9 +175,7 @@ namespace StockSharp.Algo.Candles
 
 		private CandleStates _state;
 
-		/// <summary>
-		/// State.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
 		[DescriptionLoc(LocalizedStrings.CandleStateKey, true)]
@@ -230,41 +189,22 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		/// <summary>
-		/// Price levels.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceLevelsKey)]
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
-		/// <summary>
-		/// <see cref="PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.
-		/// </summary>
-		public CandlePriceLevel? MinPriceLevel => PriceLevels?.OrderBy(l => l.TotalVolume).FirstOr();
-
-		/// <summary>
-		/// <see cref="PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.
-		/// </summary>
-		public CandlePriceLevel? MaxPriceLevel => PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOr();
-
-		/// <summary>
-		/// Open interest.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OIKey)]
 		[DescriptionLoc(LocalizedStrings.OpenInterestKey)]
 		public decimal? OpenInterest { get; set; }
 
-		/// <summary>
-		/// Sequence number.
-		/// </summary>
-		/// <remarks>Zero means no information.</remarks>
+		/// <inheritdoc />
 		[DataMember]
 		public long SeqNum { get; set; }
 
-		/// <summary>
-		/// Determines the message is generated from the specified <see cref="DataType"/>.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public DataType BuildFrom { get; set; }
 
