@@ -581,22 +581,6 @@ namespace StockSharp.Algo.Storages
 			return fileName;
 		}
 
-		/// <summary>
-		/// To get the file name by the type of data.
-		/// </summary>
-		/// <param name="dataType">Data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="format">Storage format. If set an extension will be added to the file name.</param>
-		/// <returns>The file name.</returns>
-		[Obsolete]
-		public static string GetFileName(Type dataType, object arg, StorageFormats? format = null)
-		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			return GetFileName(DataType.Create(dataType, arg), format);
-		}
-
 		private const string _dateFormat = "yyyy_MM_dd";
 
 		/// <summary>

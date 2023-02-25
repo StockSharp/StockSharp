@@ -70,18 +70,6 @@ namespace StockSharp.BusinessEntities
 		private string GetLocName(string language) => FullNameLoc.IsEmpty() ? null : LocalizedStrings.GetString(FullNameLoc, language);
 
 		/// <summary>
-		/// Russian exchange name.
-		/// </summary>
-		[Obsolete]
-		public string RusName => GetLocName(LangCodes.Ru);
-
-		/// <summary>
-		/// English exchange name.
-		/// </summary>
-		[Obsolete]
-		public string EngName => GetLocName(LangCodes.En);
-
-		/// <summary>
 		/// Full name.
 		/// </summary>
 		public string FullName => GetLocName(null);
