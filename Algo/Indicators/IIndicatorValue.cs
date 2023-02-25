@@ -296,7 +296,7 @@ namespace StockSharp.Algo.Indicators
 		public static readonly Func<ICandleMessage, decimal> ByMiddle = c => (c.ClosePrice + c.OpenPrice) / 2;
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType) => valueType == typeof(decimal) || base.IsSupport(valueType);
+		public override bool IsSupport(Type valueType) => valueType == typeof(decimal) || valueType.Is<ICandleMessage>();
 
 		/// <inheritdoc />
 		public override T GetValue<T>()
