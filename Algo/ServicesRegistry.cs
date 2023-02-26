@@ -6,6 +6,7 @@ namespace StockSharp.Algo
 	using Ecng.Configuration;
 	using Ecng.Interop;
 
+	using StockSharp.Algo.Candles.Patterns;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies.Reporting;
@@ -238,5 +239,15 @@ namespace StockSharp.Algo
 		/// <see cref="IReportGeneratorProvider"/>.
 		/// </summary>
 		public static IReportGeneratorProvider ReportGeneratorProvider => ConfigManager.GetService<IReportGeneratorProvider>();
+
+		/// <summary>
+		/// <see cref="ICandlePatternStorage"/>
+		/// </summary>
+		public static ICandlePatternStorage CandlePatternStorage => ConfigManager.TryGetService<ICandlePatternStorage>();
+
+		/// <summary>
+		/// <see cref="ICandlePatternStorage"/>
+		/// </summary>
+		public static ICandlePatternStorage TryCandlePatternStorage => ConfigManager.TryGetService<ICandlePatternStorage>();
 	}
 }

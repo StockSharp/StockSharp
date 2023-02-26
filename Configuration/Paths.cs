@@ -147,6 +147,11 @@
 		public static readonly string SnapshotsDir;
 
 		/// <summary>
+		/// The path to the file with candle patterns.
+		/// </summary>
+		public static readonly string CandlePatternsFile;
+
+		/// <summary>
 		/// The path to the installer directory.
 		/// </summary>
 		public static readonly string InstallerDir;

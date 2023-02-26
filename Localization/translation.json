@@ -3,18 +3,6 @@
     "en": "Pattern builder",
     "ru": "Построитель паттерна"
   },
-  "Epsilon": {
-    "en": "Epsilon",
-    "ru": "Epsilon"
-  },
-  "Epsilon": {
-    "en": "Epsilon",
-    "ru": "Epsilon"
-  },
-  "EpsilonDesc": {
-    "en": "Small error value.",
-    "ru": "Небольшое значение погрешности."
-  },
   "FlatCandle": {
     "en": "Flat",
     "ru": "Плоская"
