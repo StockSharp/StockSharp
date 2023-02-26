@@ -361,8 +361,8 @@
 		/// <param name="subscription">Subscription.</param>
 		/// <param name="provider">Subscription provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Candle> WhenCandleReceived(this Subscription subscription, ISubscriptionProvider provider)
-			=> WhenCandleReceived<Candle>(subscription, provider);
+		public static MarketRule<Subscription, ICandleMessage> WhenCandleReceived(this Subscription subscription, ISubscriptionProvider provider)
+			=> WhenCandleReceived<ICandleMessage>(subscription, provider);
 
 		/// <summary>
 		/// To create a rule for the event of <see cref="ISubscriptionProvider.CandleReceived"/>.
