@@ -44,7 +44,11 @@ namespace StockSharp.Algo.Expressions
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException(nameof(value));
+				{
+					Formula = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
+					return;
+					//throw new ArgumentNullException(nameof(value));
+				}
 
 				if (ServicesRegistry.TryCompiler is not null)
 				{
