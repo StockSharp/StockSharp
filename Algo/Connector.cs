@@ -1334,8 +1334,8 @@ namespace StockSharp.Algo
 
 		event Action<CandleSeries, ICandleMessage> ICandleSource<ICandleMessage>.Processing
 		{
-			add => CandleSeriesProcessing += value;
-			remove => CandleSeriesProcessing -= value;
+			add => CandleProcessing += value;
+			remove => CandleProcessing -= value;
 		}
 
 		event Action<CandleSeries> ICandleSource<ICandleMessage>.Stopped
