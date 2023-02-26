@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Expressions
 		/// <summary>
 		/// Compiled mathematical formula.
 		/// </summary>
-		public ExpressionFormula Formula { get; private set; } = ExpressionHelper.CreateError(LocalizedStrings.ExpressionNotSet);
+		public ExpressionFormula<decimal> Formula { get; private set; } = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
 
 		/// <summary>
 		/// The mathematical formula of index.
@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Expressions
 			get => Formula.Expression;
 			set
 			{
-				if (value == null)
+				if (value.IsEmpty())
 					throw new ArgumentNullException(nameof(value));
 
 				if (ServicesRegistry.TryCompiler is not null)
@@ -54,9 +54,9 @@ namespace StockSharp.Algo.Expressions
 
 					if (Formula.Error.IsEmpty())
 					{
-						foreach (var id in Formula.Identifiers)
+						foreach (var v in Formula.Variables)
 						{
-							_innerSecurityIds.Add(id.ToSecurityId());
+							_innerSecurityIds.Add(v.ToSecurityId());
 						}
 					}
 					else

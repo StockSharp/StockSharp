@@ -2822,10 +2822,18 @@ namespace StockSharp.Algo
 		/// Compile mathematical formula.
 		/// </summary>
 		/// <param name="expression">Text expression.</param>
-		/// <param name="useIds">Use ids as variables.</param>
 		/// <returns>Compiled mathematical formula.</returns>
-		public static ExpressionFormula Compile(this string expression, bool useIds = true)
-			=> ServicesRegistry.Compiler.Compile(new(), expression, useIds);
+		public static ExpressionFormula<decimal> Compile(this string expression)
+			=> Compile<decimal>(expression);
+
+		/// <summary>
+		/// Compile mathematical formula.
+		/// </summary>
+		/// <typeparam name="TResult">Result type.</typeparam>
+		/// <param name="expression">Text expression.</param>
+		/// <returns>Compiled mathematical formula.</returns>
+		public static ExpressionFormula<TResult> Compile<TResult>(this string expression)
+			=> ServicesRegistry.Compiler.Compile<TResult>(new(), expression);
 
 		/// <summary>
 		/// Create <see cref="IMessageAdapter"/>.
