@@ -18,7 +18,7 @@ namespace StockSharp.Algo
 		private class SubscriptionInfo
 		{
 			private DateTimeOffset? _last;
-			private Candle _currentCandle;
+			private ICandleMessage _currentCandle;
 
 			public SubscriptionInfo(Subscription subscription, SubscriptionInfo parent)
 			{
@@ -34,7 +34,7 @@ namespace StockSharp.Algo
 					type == DataType.Board ||
 					type == DataType.TimeFrames)
 				{
-					LookupItems = new List<object>();
+					LookupItems = new();
 				}
 			}
 
@@ -67,7 +67,7 @@ namespace StockSharp.Algo
 				return false;
 			}
 
-			public bool UpdateCandle(CandleMessage message, out Candle candle)
+			public bool UpdateCandle(CandleMessage message, out ICandleMessage candle)
 			{
 				if (message == null)
 					throw new ArgumentNullException(nameof(message));
@@ -79,10 +79,11 @@ namespace StockSharp.Algo
 					if (_currentCandle.State == CandleStates.Finished)
 						return false;
 
-					_currentCandle.Update(message);
+					if (_currentCandle is Candle entity)
+						entity.Update(message);
 				}
 				else
-					_currentCandle = message.ToCandle(Security);
+					_currentCandle = Subscription.DisableEntity ? message : message.ToCandle(Security);
 
 				candle = _currentCandle;
 				return true;
@@ -596,7 +597,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public IEnumerable<(Subscription subscription, Candle candle)> UpdateCandles(CandleMessage message)
+			public IEnumerable<(Subscription subscription, ICandleMessage candle)> UpdateCandles(CandleMessage message)
 			{
 				foreach (var subscriptionId in message.GetSubscriptionIds())
 				{

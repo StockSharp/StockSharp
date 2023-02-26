@@ -6,30 +6,31 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 
 	partial class Strategy
 	{
-		private ICandleManager<Candle> CandleManager => (ICandleManager<Candle>)SafeGetConnector();
+		private ICandleManager<ICandleMessage> CandleManager => (ICandleManager<ICandleMessage>)SafeGetConnector();
 
 		/// <inheritdoc />
-		int ICandleSource<Candle>.SpeedPriority => CandleManager.SpeedPriority;
+		int ICandleSource<ICandleMessage>.SpeedPriority => CandleManager.SpeedPriority;
 
 		/// <inheritdoc />
-		event Action<CandleSeries, Candle> ICandleSource<Candle>.Processing
+		event Action<CandleSeries, ICandleMessage> ICandleSource<ICandleMessage>.Processing
 		{
 			add => CandleManager.Processing += value;
 			remove => CandleManager.Processing -= value;
 		}
 
 		/// <inheritdoc />
-		event Action<CandleSeries> ICandleSource<Candle>.Stopped
+		event Action<CandleSeries> ICandleSource<ICandleMessage>.Stopped
 		{
 			add => CandleManager.Stopped += value;
 			remove => CandleManager.Stopped -= value;
 		}
 
 		/// <inheritdoc />
-		IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
+		IEnumerable<Range<DateTimeOffset>> ICandleSource<ICandleMessage>.GetSupportedRanges(CandleSeries series)
 			=> CandleManager.GetSupportedRanges(series);
 
 		/// <inheritdoc />
@@ -42,12 +43,12 @@ namespace StockSharp.Algo.Strategies
 		public virtual void Stop(CandleSeries series) => CandleManager.Stop(series);
 
 		/// <inheritdoc />
-		ICandleManagerContainer<Candle> ICandleManager<Candle>.Container => CandleManager.Container;
+		ICandleManagerContainer<ICandleMessage> ICandleManager<ICandleMessage>.Container => CandleManager.Container;
 
 		/// <inheritdoc />
-		IEnumerable<CandleSeries> ICandleManager<Candle>.Series => CandleManager.Series;
+		IEnumerable<CandleSeries> ICandleManager<ICandleMessage>.Series => CandleManager.Series;
 
 		/// <inheritdoc />
-		IList<ICandleSource<Candle>> ICandleManager<Candle>.Sources => CandleManager.Sources;
+		IList<ICandleSource<ICandleMessage>> ICandleManager<ICandleMessage>.Sources => CandleManager.Sources;
 	}
 }

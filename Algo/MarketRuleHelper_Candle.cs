@@ -219,16 +219,6 @@
 		/// <summary>
 		/// To create a rule for the event of candle closing price excess above a specific level.
 		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="candle">The candle to be traced for the event of candle closing price excess above a specific level.</param>
-		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Candle, Candle> WhenClosePriceMore(this ICandleManager<Candle> candleManager, Candle candle, Unit price)
-			=> WhenClosePriceMore<Candle>(candleManager, candle, price);
-
-		/// <summary>
-		/// To create a rule for the event of candle closing price excess above a specific level.
-		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="candle">The candle to be traced for the event of candle closing price excess above a specific level.</param>
@@ -242,16 +232,6 @@
 				Name = LocalizedStrings.Str1067Params.Put(candle, price)
 			};
 		}
-
-		/// <summary>
-		/// To create a rule for the event of candle closing price reduction below a specific level.
-		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="candle">The candle to be traced for the event of candle closing price reduction below a specific level.</param>
-		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Candle, Candle> WhenClosePriceLess(this ICandleManager<Candle> candleManager, Candle candle, Unit price)
-			=> WhenClosePriceLess<Candle>(candleManager, candle, price);
 
 		/// <summary>
 		/// To create a rule for the event of candle closing price reduction below a specific level.
@@ -303,16 +283,6 @@
 		/// <summary>
 		/// To create a rule for the event of candle total volume excess above a specific level.
 		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="candle">The candle to be traced for the event of candle total volume excess above a specific level.</param>
-		/// <param name="volume">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Candle, Candle> WhenTotalVolumeMore(this ICandleManager<Candle> candleManager, Candle candle, Unit volume)
-			=> WhenTotalVolumeMore<Candle>(candleManager, candle, volume);
-
-		/// <summary>
-		/// To create a rule for the event of candle total volume excess above a specific level.
-		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="candle">The candle to be traced for the event of candle total volume excess above a specific level.</param>
@@ -331,16 +301,6 @@
 				Name = candle + LocalizedStrings.Str1069Params.Put(volume)
 			};
 		}
-
-		/// <summary>
-		/// To create a rule for the event of candle total volume excess above a specific level.
-		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="series">Candles series, from which a candle will be taken.</param>
-		/// <param name="volume">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<CandleSeries, Candle> WhenCurrentCandleTotalVolumeMore(this ICandleManager<Candle> candleManager, CandleSeries series, Unit volume)
-			=> WhenCurrentCandleTotalVolumeMore<Candle>(candleManager, series, volume);
 
 		/// <summary>
 		/// To create a rule for the event of candle total volume excess above a specific level.
@@ -377,15 +337,6 @@
 		/// <summary>
 		/// To create a rule for the event of new candles occurrence.
 		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="series">Candles series to be traced for new candles.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<CandleSeries, Candle> WhenCandlesStarted(this ICandleManager<Candle> candleManager, CandleSeries series)
-			=> WhenCandlesStarted<Candle>(candleManager, series);
-
-		/// <summary>
-		/// To create a rule for the event of new candles occurrence.
-		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series to be traced for new candles.</param>
@@ -395,15 +346,6 @@
 		{
 			return new CandleStartedRule<TCandle>(candleManager, series) { Name = LocalizedStrings.Str1072 + " " + series };
 		}
-
-		/// <summary>
-		/// To create a rule for candle change event.
-		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="series">Candles series to be traced for changed candles.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<CandleSeries, Candle> WhenCandlesChanged(this ICandleManager<Candle> candleManager, CandleSeries series)
-			=> WhenCandlesChanged<Candle>(candleManager, series);
 
 		/// <summary>
 		/// To create a rule for candle change event.
@@ -421,15 +363,6 @@
 		/// <summary>
 		/// To create a rule for candles end event.
 		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="series">Candles series to be traced for end of candle.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<CandleSeries, Candle> WhenCandlesFinished(this ICandleManager<Candle> candleManager, CandleSeries series)
-			=> WhenCandlesFinished<Candle>(candleManager, series);
-
-		/// <summary>
-		/// To create a rule for candles end event.
-		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series to be traced for end of candle.</param>
@@ -439,15 +372,6 @@
 		{
 			return new CandleStateSeriesRule<TCandle>(candleManager, series, CandleStates.Finished) { Name = LocalizedStrings.Str1073 + " " + series };
 		}
-
-		/// <summary>
-		/// To create a rule for the event of candles occurrence, change and end.
-		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="series">Candles series to be traced for candles.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<CandleSeries, Candle> WhenCandles(this ICandleManager<Candle> candleManager, CandleSeries series)
-			=> WhenCandles<Candle>(candleManager, series);
 
 		/// <summary>
 		/// To create a rule for the event of candles occurrence, change and end.
@@ -468,15 +392,6 @@
 		/// <summary>
 		/// To create a rule for candle change event.
 		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="candle">The candle to be traced for change.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Candle, Candle> WhenChanged(this ICandleManager<Candle> candleManager, Candle candle)
-			=> WhenChanged<Candle>(candleManager, candle);
-
-		/// <summary>
-		/// To create a rule for candle change event.
-		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="candle">The candle to be traced for change.</param>
@@ -490,15 +405,6 @@
 		/// <summary>
 		/// To create a rule for candle end event.
 		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="candle">The candle to be traced for end.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Candle, Candle> WhenFinished(this ICandleManager<Candle> candleManager, Candle candle)
-			=> WhenFinished<Candle>(candleManager, candle);
-
-		/// <summary>
-		/// To create a rule for candle end event.
-		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="candle">The candle to be traced for end.</param>
@@ -508,17 +414,6 @@
 		{
 			return new FinishedCandleRule<TCandle>(candleManager, candle).Once();
 		}
-
-		/// <summary>
-		/// To create a rule for the event of candle partial end.
-		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="candle">The candle to be traced for partial end.</param>
-		/// <param name="connector">Connection to the trading system.</param>
-		/// <param name="percent">The percentage of candle completion.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Candle, Candle> WhenPartiallyFinished(this ICandleManager<Candle> candleManager, Candle candle, IConnector connector, decimal percent)
-			=> WhenPartiallyFinished<Candle>(candleManager, candle, connector, percent);
 
 		/// <summary>
 		/// To create a rule for the event of candle partial end.
@@ -539,17 +434,6 @@
 			rule.Name = LocalizedStrings.Str1075Params.Put(percent);
 			return rule;
 		}
-
-		/// <summary>
-		/// To create a rule for the event of candle partial end.
-		/// </summary>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="series">The candle series to be traced for candle partial end.</param>
-		/// <param name="connector">Connection to the trading system.</param>
-		/// <param name="percent">The percentage of candle completion.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<CandleSeries, Candle> WhenPartiallyFinishedCandles(this ICandleManager<Candle> candleManager, CandleSeries series, IConnector connector, decimal percent)
-			=> WhenPartiallyFinishedCandles<Candle>(candleManager, series, connector, percent);
 
 		/// <summary>
 		/// To create a rule for the event of candle partial end.
@@ -684,6 +568,28 @@
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(candle), candle.GetType(), LocalizedStrings.WrongCandleType);
+		}
+
+		/// <summary>
+		/// Backward compatibility.
+		/// </summary>
+		public static MarketRule<TToken, ICandleMessage> Do<TToken>(this MarketRule<TToken, ICandleMessage> rule, Action<Candle> action)
+		{
+			if (action is null)
+				throw new ArgumentNullException(nameof(action));
+
+			return rule.Do((ICandleMessage msg) => action((Candle)msg));
+		}
+
+		/// <summary>
+		/// Backward compatibility.
+		/// </summary>
+		public static MarketRule<TToken, ICandleMessage> Do<TToken, TResult>(this MarketRule<TToken, ICandleMessage> rule, Func<Candle, TResult> action)
+		{
+			if (action is null)
+				throw new ArgumentNullException(nameof(action));
+
+			return rule.Do((ICandleMessage msg) => action((Candle)msg));
 		}
 	}
 }

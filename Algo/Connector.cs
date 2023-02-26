@@ -41,7 +41,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager<Candle>, IMarketDataProvider, ISubscriptionProvider
+	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager<ICandleMessage>, IMarketDataProvider, ISubscriptionProvider
 	{
 		private readonly EntityCache _entityCache;
 		private readonly SubscriptionManager _subscriptionManager;
@@ -1330,36 +1330,36 @@ namespace StockSharp.Algo
 
 		#region ICandleManager implementation
 
-		int ICandleSource<Candle>.SpeedPriority => 0;
+		int ICandleSource<ICandleMessage>.SpeedPriority => 0;
 
-		event Action<CandleSeries, Candle> ICandleSource<Candle>.Processing
+		event Action<CandleSeries, ICandleMessage> ICandleSource<ICandleMessage>.Processing
 		{
 			add => CandleSeriesProcessing += value;
 			remove => CandleSeriesProcessing -= value;
 		}
 
-		event Action<CandleSeries> ICandleSource<Candle>.Stopped
+		event Action<CandleSeries> ICandleSource<ICandleMessage>.Stopped
 		{
 			add => CandleSeriesStopped += value;
 			remove => CandleSeriesStopped -= value;
 		}
 
-		IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
+		IEnumerable<Range<DateTimeOffset>> ICandleSource<ICandleMessage>.GetSupportedRanges(CandleSeries series)
 			=> Enumerable.Empty<Range<DateTimeOffset>>();
 
-		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+		void ICandleSource<ICandleMessage>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 			=> this.SubscribeCandles(series, from, to);
 
-		void ICandleSource<Candle>.Stop(CandleSeries series)
+		void ICandleSource<ICandleMessage>.Stop(CandleSeries series)
 #pragma warning disable CS0618 // Type or member is obsolete
 			=> this.UnSubscribeCandles(series);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-		ICandleManagerContainer<Candle> ICandleManager<Candle>.Container { get; } = new CandleManagerContainer<Candle>();
+		ICandleManagerContainer<ICandleMessage> ICandleManager<ICandleMessage>.Container { get; } = new CandleManagerContainer<ICandleMessage>();
 
-		IEnumerable<CandleSeries> ICandleManager<Candle>.Series => SubscribedCandleSeries;
+		IEnumerable<CandleSeries> ICandleManager<ICandleMessage>.Series => SubscribedCandleSeries;
 
-		IList<ICandleSource<Candle>> ICandleManager<Candle>.Sources => Array.Empty<ICandleSource<Candle>>();
+		IList<ICandleSource<ICandleMessage>> ICandleManager<ICandleMessage>.Sources => Array.Empty<ICandleSource<ICandleMessage>>();
 
 		#endregion
 

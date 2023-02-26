@@ -422,7 +422,7 @@ namespace SampleHistoryTesting
 				// create strategy based on 80 5-min и 10 5-min
 				var strategy = new SmaStrategy
 				{
-					Subscription = new(series),
+					Subscription = new(series) { DisableEntity = true },
 					
 					LongSma = { Length = 80 },
 					ShortSma = { Length = 10 },

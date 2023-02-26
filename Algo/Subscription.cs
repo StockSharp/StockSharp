@@ -22,6 +22,11 @@ namespace StockSharp.Algo
 		public Portfolio Portfolio { get; }
 
 		/// <summary>
+		/// Disable convert messages to entities.
+		/// </summary>
+		public bool DisableEntity { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Subscription"/>.
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>

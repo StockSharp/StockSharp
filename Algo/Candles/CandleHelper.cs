@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Configuration;
 
 	using StockSharp.Algo.Candles.Compression;
+	using StockSharp.Algo.Candles.Patterns;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -256,13 +257,15 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get a temporary candle on the specific date.
 		/// </summary>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="time">The candle date.</param>
 		/// <returns>The found candle (<see langword="null" />, if the candle by the specified criteria does not exist).</returns>
-		public static TimeFrameCandle GetTimeFrameCandle(this ICandleManager<Candle> candleManager, CandleSeries series, DateTimeOffset time)
+		public static TCandle GetCandle<TCandle>(this ICandleManager<TCandle> candleManager, CandleSeries series, DateTimeOffset time)
+			where TCandle : ICandleMessage
 		{
-			return (TimeFrameCandle)candleManager.GetCandles(series, time).FirstOrDefault(c => c.OpenTime == time);
+			return candleManager.GetCandles(series, time).FirstOrDefault(c => c.OpenTime == time);
 		}
 
 		/// <summary>

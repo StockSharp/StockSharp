@@ -366,7 +366,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// A new value for processing occurrence event.
 		/// </summary>
-		public event Action<CandleSeries, Candle> CandleSeriesProcessing;
+		public event Action<CandleSeries, ICandleMessage> CandleSeriesProcessing;
 
 		/// <summary>
 		/// The series processing end event.
@@ -913,7 +913,7 @@ namespace StockSharp.Algo
 #pragma warning restore 618
 		}
 
-		private void RaiseCandleSeriesProcessing(CandleSeries series, Candle candle)
+		private void RaiseCandleSeriesProcessing(CandleSeries series, ICandleMessage candle)
 		{
 			CandleSeriesProcessing?.Invoke(series, candle);
 		}

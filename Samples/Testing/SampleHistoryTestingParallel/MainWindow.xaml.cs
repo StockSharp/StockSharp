@@ -186,7 +186,7 @@ namespace SampleHistoryTestingParallel
 					// create strategy based SMA
 					var strategy = new SampleHistoryTesting.SmaStrategy
 					{
-						Subscription = new(new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)),
+						Subscription = new(new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)) { DisableEntity = true },
 
 						ShortSma = { Length = period.shortMa },
 						LongSma = { Length = period.longMa },
