@@ -42,6 +42,7 @@
 			SecurityExtendedInfo = Path.Combine(AppDataPath, "Extended info");
 			StorageDir = Path.Combine(AppDataPath, "Storage");
 			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
+			CandlePatternsFile = Path.Combine(AppDataPath, $"candle_patterns{DefaultSettingsExt}");
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
 			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
 
