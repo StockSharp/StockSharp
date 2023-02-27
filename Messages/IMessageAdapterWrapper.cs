@@ -195,7 +195,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual event Action<Message> NewOutMessage;
+		public event Action<Message> NewOutMessage;
 
 		/// <summary>
 		/// Load settings.
