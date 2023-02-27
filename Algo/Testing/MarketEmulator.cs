@@ -1100,7 +1100,7 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			private decimal GetPriceStep() => _securityDefinition.PriceStep ?? 0.01m;
+			private decimal GetPriceStep() => _securityDefinition?.PriceStep ?? 0.01m;
 			private bool HasDepth(DateTimeOffset time) => _lastDepthDate == time.Date;
 
 			private void UpdateSteps(decimal price, decimal? volume)
