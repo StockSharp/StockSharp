@@ -25,4 +25,14 @@ public interface ICandlePattern : IPersistable
 	/// <param name="candle"><see cref="ICandleMessage"/>.</param>
 	/// <returns>Check result.</returns>
 	bool Recognize(ICandleMessage candle);
+
+	/// <summary>
+	/// Candles in pattern.
+	/// </summary>
+	int CandlesCount { get; }
+
+	/// <summary>
+	/// Validate settings.
+	/// </summary>
+	void Validate();
 }

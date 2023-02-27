@@ -121,6 +121,11 @@ public class CsvCandlePatternStorage : ICandlePatternStorage
 
 	private void Save()
 	{
-		DelayAction.DefaultGroup.Add(() => Paths.Serialize<SettingsStorage[]>(_cache.Cache.Select(i => i.SaveEntire(false)).ToArray(), _fileName));
+		void _() => Paths.Serialize(_cache.Cache.Select(i => i.SaveEntire(false)).ToArray(), _fileName);
+
+		if (DelayAction is null)
+			_();
+		else
+			DelayAction.DefaultGroup.Add(_);
 	}
 }

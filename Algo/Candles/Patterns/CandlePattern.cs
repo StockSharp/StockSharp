@@ -12,18 +12,16 @@ using Ecng.Serialization;
 
 using StockSharp.Localization;
 using StockSharp.Messages;
-using StockSharp.Logging;
 
 /// <summary>
 /// Formula based implementation of <see cref="ICandlePattern"/>.
 /// </summary>
 public class CandlePattern : ICandlePattern
 {
-	private readonly CachedSynchronizedList<string> _variables = new();
+	private string[] _variables;
+	private ExpressionFormula<bool> _formula;
 	private bool _hasPrevVar;
 	private ICandleMessage _prev;
-
-	private string _name = nameof(CandlePattern);
 
 	/// <inheritdoc />
 	[Display(
@@ -32,11 +30,7 @@ public class CandlePattern : ICandlePattern
 		Description = LocalizedStrings.NameKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 0)]
-	public string Name
-	{
-		get => _name;
-		set => _name = value.ThrowIfEmpty(nameof(value));
-	}
+	public string Name { get; set; }
 
 	/// <summary>
 	/// Formula.
@@ -47,56 +41,46 @@ public class CandlePattern : ICandlePattern
 		Description = LocalizedStrings.Str3115Key,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 1)]
-	public string Expression
+	public string Expression { get; set; }
+
+	int ICandlePattern.CandlesCount => 1;
+
+	void ICandlePattern.Validate()
 	{
-		get => Formula.Expression;
-		set
-		{
-			if (value.IsEmpty())
-			{
-				Formula = ExpressionFormula<bool>.CreateError(LocalizedStrings.ExpressionNotSet);
-				return;
-				//throw new ArgumentNullException(nameof(value));
-			}
+		if (Expression.IsEmpty())
+			throw new InvalidOperationException("Expression is not set.");
 
-			if (ServicesRegistry.TryCompiler is not null)
-			{
-				Formula = value.Compile<bool>();
+		if (ServicesRegistry.TryCompiler is null)
+			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
 
-				_variables.Clear();
+		_formula = Expression.Compile<bool>();
 
-				if (Formula.Error.IsEmpty())
-				{
-					_variables.AddRange(Formula.Variables);
+		if (!_formula.Error.IsEmpty())
+			throw new InvalidOperationException(_formula.Error);
 
-					_hasPrevVar = _variables.Cache.Any(v => v.StartsWithIgnoreCase("p"));
-				}
-				else
-					new InvalidOperationException(Formula.Error).LogError();
-			}
-			else
-				new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.").LogError();
-		}
+		_variables = _formula.Variables.ToArray();
+		_hasPrevVar = _variables.Any(v => v.StartsWithIgnoreCase("p"));
 	}
-
-	/// <summary>
-	/// Compiled mathematical formula.
-	/// </summary>
-	public ExpressionFormula<bool> Formula { get; private set; } = ExpressionFormula<bool>.CreateError(LocalizedStrings.ExpressionNotSet);
 
 	void ICandlePattern.Reset()
 	{
 		_prev = default;
+		_formula = default;
+		_variables = default;
+		_hasPrevVar = default;
 	}
 
 	bool ICandlePattern.Recognize(ICandleMessage candle)
 	{
+		if (_formula is null)
+			((ICandlePattern)this).Validate();
+
 		try
 		{
 			if (_hasPrevVar && _prev is null)
 				return false;
 
-			return Formula.Calculate(_variables.Cache.Select(id =>
+			return _formula.Calculate(_variables.Select(id =>
 				(id?.ToUpperInvariant()) switch
 				{
 					"O" => candle.OpenPrice,

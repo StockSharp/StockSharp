@@ -18,6 +18,9 @@
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 	using Ecng.Xaml.Yandex;
+	using Ecng.Compilation;
+	using Ecng.Compilation.Roslyn;
+	using Ecng.Serialization;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -33,6 +36,7 @@
 	using StockSharp.Charting;
     using StockSharp.Xaml;
 	using StockSharp.Configuration;
+	using StockSharp.Algo.Candles.Patterns;
 
 	public partial class MainWindow : ICandleBuilderSubscription
 	{
@@ -65,9 +69,6 @@
 		private DateTime _lastRealtimeUpdateTime;
 		private DateTime _lastDrawTime;
 
-		private readonly IdGenerator _transactionIdGenerator = new IncrementalIdGenerator();
-		private long _transactionId;
-
 		private IChartAnnotation _annotation;
 		private ChartDrawData.AnnotationData _annotationData;
 		private int _annotationId;
@@ -82,6 +83,17 @@
 
 		public MainWindow()
 		{
+			try
+			{
+				ICandlePatternStorage patternStorage = new CsvCandlePatternStorage("candle_patterns.json");
+				patternStorage.Init();
+
+				ConfigManager.RegisterService(patternStorage);
+			}
+			catch
+			{
+			}
+
 			InitializeComponent();
 
 			Title = Title.Put(LocalizedStrings.Str3200);
@@ -100,6 +112,7 @@
 
 			ConfigManager.RegisterService<ISubscriptionProvider>(_testProvider);
 			ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
+			ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
 
 			ThemeExtensions.ApplyDefaultTheme();
 		}
@@ -129,6 +142,7 @@
 			Chart.AnnotationModified += ChartOnAnnotationModified;
 			Chart.AnnotationDeleted += ChartOnAnnotationDeleted;
 			Chart.AnnotationSelected += ChartOnAnnotationSelected;
+			Chart.CandlePatternChanged += ChartOnCandlePatternChanged;
 
 			Chart.RegisterOrder += (area, order) =>
 			{
@@ -145,6 +159,44 @@
 				return;
 
 			RefreshCharts();
+		}
+
+		private void ChartOnCandlePatternChanged(ICandlePattern pattern)
+		{
+			var white = CandlePatternRegistry.White;
+			var black = CandlePatternRegistry.Black;
+
+			pattern = pattern?.Clone();
+
+			_dataThreadActions.Add(() =>
+			{
+				if (_allCandles.IsEmpty())
+					return;
+
+				var dd = Chart.CreateData();
+
+				var candles = _allCandles.CachedValues;
+
+				for (int i = 0; i < candles.Length; i++)
+				{
+					var candle = candles[i];
+
+					if (pattern?.Recognize(candle) == true)
+					{
+						for (int j = pattern.CandlesCount - 1; j >= 0; j--)
+						{
+							var inner = candles[i - j];
+							dd.Group(inner.OpenTime).Add(_candleElement, white.Recognize(inner) ? DrawingColor.White : DrawingColor.Black);
+						}
+					}
+					else
+					{
+						dd.Group(candle.OpenTime).Add(_candleElement, (DrawingColor?)null);
+					}
+				}
+
+				Chart.Draw(dd);
+			});
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -265,8 +317,6 @@
 		private void LoadData(CandleSeries series)
 		{
 			var msgType = series.CandleType.ToCandleMessageType();
-
-			_transactionId = _transactionIdGenerator.GetNextId();
 
 			_candleTransform.Process(new ResetMessage());
 			_candleBuilder = _builderProvider.Get(msgType);
@@ -405,8 +455,7 @@
 			{
 				if (_dataThreadActions.Count > 0)
 				{
-					Action[] actions = null;
-					_dataThreadActions.SyncDo(l => actions = l.CopyAndClear());
+					var actions = _dataThreadActions.SyncGet(l => l.CopyAndClear());
 					actions.ForEach(a => a());
 				}
 

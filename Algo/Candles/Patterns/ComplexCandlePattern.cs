@@ -25,8 +25,6 @@ public class ComplexCandlePattern : ICandlePattern
 	{
 	}
 
-	private string _name = nameof(ComplexCandlePattern);
-
 	/// <inheritdoc />
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -34,16 +32,20 @@ public class ComplexCandlePattern : ICandlePattern
 		Description = LocalizedStrings.NameKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 0)]
-	public string Name
-	{
-		get => _name;
-		set => _name = value.ThrowIfEmpty(nameof(value));
-	}
+	public string Name { get; set; }
 
 	/// <summary>
 	/// Inner patterns.
 	/// </summary>
 	public IList<ICandlePattern> Inner { get; } = new List<ICandlePattern>();
+
+	int ICandlePattern.CandlesCount => Inner.Count;
+
+	void ICandlePattern.Validate()
+	{
+		foreach (var i in Inner)
+			i.Validate();
+	}
 
 	void ICandlePattern.Reset()
 	{
