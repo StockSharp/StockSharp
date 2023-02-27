@@ -20,6 +20,10 @@ using StockSharp.Logging;
 public class CandlePattern : ICandlePattern
 {
 	private readonly CachedSynchronizedList<string> _variables = new();
+	private bool _hasPrevVar;
+	private ICandleMessage _prev;
+
+	private string _name = nameof(CandlePattern);
 
 	/// <inheritdoc />
 	[Display(
@@ -28,7 +32,11 @@ public class CandlePattern : ICandlePattern
 		Description = LocalizedStrings.NameKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 0)]
-	public string Name { get; set; }
+	public string Name
+	{
+		get => _name;
+		set => _name = value.ThrowIfEmpty(nameof(value));
+	}
 
 	/// <summary>
 	/// Formula.
@@ -60,6 +68,8 @@ public class CandlePattern : ICandlePattern
 				if (Formula.Error.IsEmpty())
 				{
 					_variables.AddRange(Formula.Variables);
+
+					_hasPrevVar = _variables.Cache.Any(v => v.StartsWithIgnoreCase("p"));
 				}
 				else
 					new InvalidOperationException(Formula.Error).LogError();
@@ -74,27 +84,50 @@ public class CandlePattern : ICandlePattern
 	/// </summary>
 	public ExpressionFormula<bool> Formula { get; private set; } = ExpressionFormula<bool>.CreateError(LocalizedStrings.ExpressionNotSet);
 
-	void ICandlePattern.Reset() { }
+	void ICandlePattern.Reset()
+	{
+		_prev = default;
+	}
 
 	bool ICandlePattern.Recognize(ICandleMessage candle)
 	{
-		Formula.Calculate(_variables.Cache.Select(id =>
-			(id?.ToUpperInvariant()) switch
-			{
-				"O" => candle.OpenPrice,
-				"H" => candle.HighPrice,
-				"L" => candle.LowPrice,
-				"C" => candle.ClosePrice,
-				"V" => candle.TotalVolume,
-				"OI" => candle.OpenInterest ?? default,
-				"B" => candle.GetBody(),
-				"LEN" => candle.GetLength(),
-				"TS" => candle.GetTopShadow(),
-				"BS" => candle.GetBottomShadow(),
-				_ => throw new ArgumentOutOfRangeException(id),
-			}).ToArray());
+		try
+		{
+			if (_hasPrevVar && _prev is null)
+				return false;
 
-		return false;
+			return Formula.Calculate(_variables.Cache.Select(id =>
+				(id?.ToUpperInvariant()) switch
+				{
+					"O" => candle.OpenPrice,
+					"H" => candle.HighPrice,
+					"L" => candle.LowPrice,
+					"C" => candle.ClosePrice,
+					"V" => candle.TotalVolume,
+					"OI" => candle.OpenInterest ?? default,
+					"B" => candle.GetBody(),
+					"LEN" => candle.GetLength(),
+					"TS" => candle.GetTopShadow(),
+					"BS" => candle.GetBottomShadow(),
+
+					"PO" => _prev.OpenPrice,
+					"PH" => _prev.HighPrice,
+					"PL" => _prev.LowPrice,
+					"PC" => _prev.ClosePrice,
+					"PV" => _prev.TotalVolume,
+					"POI" => _prev.OpenInterest ?? default,
+					"PB" => _prev.GetBody(),
+					"PLEN" => _prev.GetLength(),
+					"PTS" => _prev.GetTopShadow(),
+					"PBS" => _prev.GetBottomShadow(),
+
+					_ => throw new ArgumentOutOfRangeException(id),
+				}).ToArray());
+		}
+		finally
+		{
+			_prev = candle;
+		}
 	}
 
 	void IPersistable.Load(SettingsStorage storage)
@@ -112,5 +145,5 @@ public class CandlePattern : ICandlePattern
 	}
 
 	/// <inheritdoc />
-	public override string ToString() => $"{Name} ({Expression})";
+	public override string ToString() => Name;
 }

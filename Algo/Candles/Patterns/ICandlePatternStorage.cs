@@ -17,15 +17,24 @@ using StockSharp.Configuration;
 public interface ICandlePatternStorage
 {
 	/// <summary>
+	/// <see cref="ICandlePattern"/> created event.
+	/// </summary>
+	event Action<ICandlePattern> PatternCreated;
+
+	/// <summary>
+	/// <see cref="ICandlePattern"/> deleted event.
+	/// </summary>
+	event Action<ICandlePattern> PatternDeleted;
+
+	/// <summary>
 	/// Initialize the storage.
 	/// </summary>
 	void Init();
 
 	/// <summary>
-	/// Get patterns from the storage.
+	/// Patterns.
 	/// </summary>
-	/// <returns>Patterns.</returns>
-	IEnumerable<ICandlePattern> Load();
+	IEnumerable<ICandlePattern> Patterns { get; }
 
 	/// <summary>
 	/// Remove pattern from the storage.
@@ -64,6 +73,12 @@ public class CsvCandlePatternStorage : ICandlePatternStorage
 
 	private DelayAction _delayAction;
 
+	/// <inheritdoc/>
+	public event Action<ICandlePattern> PatternCreated;
+
+	/// <inheritdoc/>
+	public event Action<ICandlePattern> PatternDeleted;
+
 	/// <summary>
 	/// The time delayed action.
 	/// </summary>
@@ -81,8 +96,7 @@ public class CsvCandlePatternStorage : ICandlePatternStorage
 		Do.Invariant(() => _cache.AddRange(Paths.Deserialize<SettingsStorage[]>(_fileName).Select(s => s.LoadEntire<ICandlePattern>())));
 	}
 
-	IEnumerable<ICandlePattern> ICandlePatternStorage.Load()
-		=> _cache.Cache;
+	IEnumerable<ICandlePattern> ICandlePatternStorage.Patterns => _cache.Cache;
 
 	bool ICandlePatternStorage.Remove(ICandlePattern pattern)
 	{
@@ -90,14 +104,19 @@ public class CsvCandlePatternStorage : ICandlePatternStorage
 			return false;
 
 		Save();
+
+		PatternDeleted?.Invoke(pattern);
 		return true;
 	}
 
 	void ICandlePatternStorage.Save(ICandlePattern pattern)
 	{
-		_cache.Add(pattern);
+		var isNew = _cache.TryAdd(pattern);
 
 		Save();
+
+		if (isNew)
+			PatternCreated?.Invoke(pattern);
 	}
 
 	private void Save()

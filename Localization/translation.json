@@ -1,4 +1,24 @@
 {
+  "Previous": {
+    "en": "Previous",
+    "ru": "Предыдущее"
+  },
+  "TopShadow": {
+    "en": "Top shadow",
+    "ru": "Тень (верх)"
+  },
+  "BottomShadow": {
+    "en": "Bottom shadow",
+    "ru": "Тень (низ)"
+  },
+  "CandleBody": {
+    "en": "Candle body",
+    "ru": "Тело свечи"
+  },
+  "CandleLength": {
+    "en": "Candle length",
+    "ru": "Длина свечи"
+  },
   "PatternBuilder": {
     "en": "Pattern builder",
     "ru": "Построитель паттерна"

@@ -6,6 +6,7 @@ using System.Linq;
 
 using Ecng.Serialization;
 using Ecng.Collections;
+using Ecng.Common;
 
 using StockSharp.Localization;
 using StockSharp.Messages;
@@ -24,6 +25,8 @@ public class ComplexCandlePattern : ICandlePattern
 	{
 	}
 
+	private string _name = nameof(ComplexCandlePattern);
+
 	/// <inheritdoc />
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -31,14 +34,24 @@ public class ComplexCandlePattern : ICandlePattern
 		Description = LocalizedStrings.NameKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 0)]
-	public string Name { get; set; }
+	public string Name
+	{
+		get => _name;
+		set => _name = value.ThrowIfEmpty(nameof(value));
+	}
 
 	/// <summary>
 	/// Inner patterns.
 	/// </summary>
 	public IList<ICandlePattern> Inner { get; } = new List<ICandlePattern>();
 
-	void ICandlePattern.Reset() => _last = 0;
+	void ICandlePattern.Reset()
+	{
+		_last = 0;
+
+		foreach (var i in Inner)
+			i.Reset();
+	}
 
 	bool ICandlePattern.Recognize(ICandleMessage candle)
 	{
@@ -68,8 +81,11 @@ public class ComplexCandlePattern : ICandlePattern
 	void IPersistable.Load(SettingsStorage storage)
 	{
 		Name = storage.GetValue<string>(nameof(Name));
-		
+
 		Inner.Clear();
 		Inner.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Inner)).Select(i => i.LoadEntire<ICandlePattern>()));
 	}
+
+	/// <inheritdoc />
+	public override string ToString() => Name;
 }
