@@ -20,6 +20,7 @@ public class CandlePattern : ICandlePattern
 {
 	private string[] _variables;
 	private ExpressionFormula<bool> _formula;
+	private bool _invalid;
 	private bool _hasPrevVar;
 	private ICandleMessage _prev;
 
@@ -68,12 +69,26 @@ public class CandlePattern : ICandlePattern
 		_formula = default;
 		_variables = default;
 		_hasPrevVar = default;
+		_invalid = default;
 	}
 
 	bool ICandlePattern.Recognize(ICandleMessage candle)
 	{
+		if (_invalid)
+			return false;
+
 		if (_formula is null)
-			((ICandlePattern)this).Validate();
+		{
+			try
+			{
+				((ICandlePattern)this).Validate();
+			}
+			catch
+			{
+				_invalid = true;
+				throw;
+			}
+		}
 
 		try
 		{

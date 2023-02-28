@@ -6,7 +6,6 @@ using System.Linq;
 
 using Ecng.Serialization;
 using Ecng.Collections;
-using Ecng.Common;
 
 using StockSharp.Localization;
 using StockSharp.Messages;
@@ -16,7 +15,7 @@ using StockSharp.Messages;
 /// </summary>
 public class ComplexCandlePattern : ICandlePattern
 {
-	private int _last;
+	private int _curr;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ComplexCandlePattern"/>.
@@ -49,7 +48,7 @@ public class ComplexCandlePattern : ICandlePattern
 
 	void ICandlePattern.Reset()
 	{
-		_last = 0;
+		_curr = 0;
 
 		foreach (var i in Inner)
 			i.Reset();
@@ -57,18 +56,25 @@ public class ComplexCandlePattern : ICandlePattern
 
 	bool ICandlePattern.Recognize(ICandleMessage candle)
 	{
-		var res = Inner[_last].Recognize(candle);
+		var isFinished = candle.State == CandleStates.Finished;
 
-		if (res)
+		if (Inner[_curr].Recognize(candle))
 		{
-			if (++_last < Inner.Count)
-				return false;
+			if (isFinished)
+			{
+				if (++_curr < Inner.Count)
+					return false;
 
-			_last = 0;
-			return true;
+				_curr = 0;
+				return true;
+			}
+
+			return (_curr + 1) == Inner.Count;
 		}
 
-		_last = 0;
+		if (isFinished)
+			_curr = 0;
+
 		return false;
 	}
 
