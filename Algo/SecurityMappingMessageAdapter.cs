@@ -135,7 +135,8 @@ namespace StockSharp.Algo
 
 		private void ProcessMessage(SecurityId adapterId, Message message)
 		{
-			adapterId.SetNativeId(null);
+			if (!adapterId.IsSpecial)
+				adapterId.SetNativeId(null);
 
 			if (!adapterId.IsDefault())
 			{

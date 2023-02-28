@@ -340,7 +340,8 @@ namespace StockSharp.Messages
 		public static readonly SecurityId Money = new SecurityId
 		{
 			SecurityCode = "MONEY",
-			BoardCode = AssociatedBoardCode
+			BoardCode = AssociatedBoardCode,
+			IsSpecial = true,
 		}.Immutable();
 
 		/// <summary>
@@ -349,13 +350,14 @@ namespace StockSharp.Messages
 		public static readonly SecurityId News = new SecurityId
 		{
 			SecurityCode = "NEWS",
-			BoardCode = AssociatedBoardCode
+			BoardCode = AssociatedBoardCode,
+			IsSpecial = true,
 		}.Immutable();
 
 		/// <summary>
 		/// Determines the id is <see cref="Money"/> or <see cref="News"/>.
 		/// </summary>
-		public bool IsSpecial => this == Money || this == News;
+		public bool IsSpecial { get; private set; }
 
 		private bool _immutable;
 
@@ -402,5 +404,4 @@ namespace StockSharp.Messages
 				new SecurityId { SecurityCode = securityId.Substring(0, index), BoardCode = securityId.Substring(index + delimiter.Length, securityId.Length - index - delimiter.Length) };
 		}
 	}
-
 }
