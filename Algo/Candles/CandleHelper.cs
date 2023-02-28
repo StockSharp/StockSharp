@@ -912,6 +912,6 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Check result.</returns>
 		public static bool IsSame<TCandle>(this TCandle candle1, TCandle candle2)
 			where TCandle : ICandleMessage
-			=> candle1 is not null && candle2 is not null && candle1.OpenTime == candle2.OpenTime;
+			=> candle1 is not null && candle2 is not null && ((candle1 is Candle entity && ReferenceEquals(candle1, candle2)) || candle1.OpenTime == candle2.OpenTime);
 	}
 }
