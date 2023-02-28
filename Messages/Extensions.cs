@@ -1423,19 +1423,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Initialize <see cref="SecurityId.Native"/>.
-		/// </summary>
-		/// <param name="message">A message containing info about the security.</param>
-		/// <param name="nativeId">Native (internal) trading system security id.</param>
-		public static void SetNativeId(this SecurityMessage message, object nativeId)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			message.SecurityId = message.SecurityId.SetNativeId(nativeId);
-		}
-
-		/// <summary>
 		/// Initialize <see cref="SecurityLookupMessage.SecurityTypes"/>.
 		/// </summary>
 		/// <param name="message">Message security lookup for specified criteria.</param>

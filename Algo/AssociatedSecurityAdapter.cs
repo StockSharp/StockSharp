@@ -137,14 +137,14 @@ namespace StockSharp.Algo
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private bool IsAssociated(string boardCode)
+		private static bool IsAssociated(string boardCode)
 		{
 			return /*boardCode.IsEmpty() || */boardCode.EqualsIgnoreCase(SecurityId.AssociatedBoardCode);
 		}
 
-		private SecurityId CreateAssociatedId(SecurityId securityId)
+		private static SecurityId CreateAssociatedId(SecurityId securityId)
 		{
-			return new SecurityId
+			return new()
 			{
 				SecurityCode = securityId.SecurityCode,
 				BoardCode = SecurityId.AssociatedBoardCode,
