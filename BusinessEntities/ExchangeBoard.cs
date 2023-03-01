@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 	using System.Xml;
@@ -34,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public partial class ExchangeBoard : Equatable<ExchangeBoard>, IExtendableEntity, IPersistable, INotifyPropertyChanged
+	public partial class ExchangeBoard : Equatable<ExchangeBoard>, IPersistable, INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExchangeBoard"/>.
@@ -202,31 +201,6 @@ namespace StockSharp.BusinessEntities
 			get => TimeZone.To<string>();
 			set => TimeZone = value.To<TimeZoneInfo>();
 		}
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo = new Dictionary<string, object>();
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		[Browsable(false)]
-		[DataMember]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set
-			{
-				_extensionInfo = value/* ?? throw new ArgumentNullException(nameof(value))*/;
-				Notify();
-			}
-		}
-
-		//[OnDeserialized]
-		//private void AfterDeserialization(StreamingContext ctx)
-		//{
-		//	if (ExtensionInfo == null)
-		//		ExtensionInfo = new Dictionary<string, object>();
-		//}
 
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;

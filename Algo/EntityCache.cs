@@ -193,8 +193,6 @@ namespace StockSharp.Algo
 				if (message.Leverage != default)
 					order.Leverage = message.Leverage;
 
-				message.CopyExtensionInfo(order);
-
 				retVal = new OrderChangeInfo(order, _raiseNewOrder, true, operation == OrderOperations.Edit);
 				_raiseNewOrder = false;
 				process(order);
@@ -650,9 +648,6 @@ namespace StockSharp.Algo
 
 					o.Portfolio = getPortfolio(message.PortfolioName);
 
-					//if (o.ExtensionInfo == null)
-					//	o.ExtensionInfo = new Dictionary<string, object>();
-
 					AddOrder(o);
 					_allOrdersByTransactionId.Add(Tuple.Create(transactionId, OrderOperations.Register), o);
 
@@ -787,8 +782,6 @@ namespace StockSharp.Algo
 				if (!message.CommissionCurrency.IsEmpty())
 					o.CommissionCurrency = message.CommissionCurrency;
 
-				message.CopyExtensionInfo(o);
-
 				var error = message.Error ?? new InvalidOperationException(operation == OrderOperations.Cancel ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
 
 				var fail = EntityFactory.CreateOrderFail(o, error);
@@ -859,9 +852,6 @@ namespace StockSharp.Algo
 
 				var t = EntityFactory.CreateMyTrade(order, trade);
 
-				//if (t.ExtensionInfo == null)
-				//	t.ExtensionInfo = new Dictionary<string, object>();
-
 				if (message.Commission != null)
 					t.Commission = message.Commission;
 
@@ -882,8 +872,6 @@ namespace StockSharp.Algo
 
 				if (message.Yield != null)
 					t.Yield = message.Yield;
-
-				message.CopyExtensionInfo(t);
 
 				_myTrades.Add(t);
 
@@ -906,7 +894,6 @@ namespace StockSharp.Algo
 				var t = message.ToTrade(EntityFactory.CreateTrade(security, id, stringId));
 				t.LocalTime = message.LocalTime;
 				t.Time = message.ServerTime;
-				message.CopyExtensionInfo(t);
 				return t;
 			});
 
@@ -972,8 +959,6 @@ namespace StockSharp.Algo
 
 			if (message.ExpiryDate != null)
 				news.ExpiryDate = message.ExpiryDate;
-
-			message.CopyExtensionInfo(news);
 
 			return Tuple.Create(news, isNew);
 		}

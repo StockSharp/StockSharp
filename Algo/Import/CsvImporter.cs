@@ -116,7 +116,7 @@
 
 						_securityStorage.Save(security, UpdateDuplicateSecurities);
 
-						ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
+						//ExtendedInfoStorageItem?.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
 						SecurityUpdated?.Invoke(security, isNew);
 					}

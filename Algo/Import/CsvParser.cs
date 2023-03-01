@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Import
 		public IEnumerable<FieldMapping> Fields { get; }
 
 		/// <summary>
-		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+		/// Extended info storage.
 		/// </summary>
 		public IExtendedInfoStorageItem ExtendedInfoStorageItem { get; set; }
 
@@ -325,8 +325,8 @@ namespace StockSharp.Algo.Import
 				? new TimeQuoteChange()
 				: DataType.MessageType.CreateInstance<object>();
 
-			if (isSecurities && ExtendedInfoStorageItem != null)
-				((SecurityMessage)instance).ExtensionInfo = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+			//if (isSecurities && ExtendedInfoStorageItem != null)
+			//	((SecurityMessage)instance).ExtensionInfo = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
 			return instance;
 		}

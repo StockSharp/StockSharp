@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
@@ -36,7 +35,7 @@ namespace StockSharp.BusinessEntities
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str504Key)]
 	[DescriptionLoc(LocalizedStrings.Str516Key)]
-	public class Order : NotifiableObject, IExtendableEntity, IOrderMessage
+	public class Order : NotifiableObject, IOrderMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Order"/>.
@@ -248,20 +247,6 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str525Key)]
 		[MainCategory]
 		public Portfolio Portfolio { get; set; }
-
-		[field: NonSerialized]
-		[Obsolete]
-		private readonly Lazy<SynchronizedList<string>> _messages = new(() => new SynchronizedList<string>());
-
-		/// <summary>
-		/// Messages for order (created by the trading system when registered, changed or cancelled).
-		/// </summary>
-		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str526Key)]
-		[DescriptionLoc(LocalizedStrings.Str527Key)]
-		[MainCategory]
-		[Obsolete]
-		public ISynchronizedCollection<string> Messages => _messages.Value;
 
 		private DateTimeOffset _lastChangeTime;
 
@@ -488,25 +473,6 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_derivedOrder = value;
-				NotifyChanged();
-			}
-		}
-
-		[field: NonSerialized]
-		private SynchronizedDictionary<string, object> _extensionInfo;
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str427Key)]
-		[MainCategory]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set
-			{
-				_extensionInfo = value.Sync();
 				NotifyChanged();
 			}
 		}

@@ -303,8 +303,8 @@ namespace StockSharp.Algo.Import
 
 				_extendedStorage = value;
 
-				if (_extendedStorage != null)
-					AllFields = AllFields.Concat(FieldMappingRegistry.CreateExtendedFields(_extendedStorage)).ToArray();
+				//if (_extendedStorage != null)
+				//	AllFields = AllFields.Concat(FieldMappingRegistry.CreateExtendedFields(_extendedStorage)).ToArray();
 
 				NotifyChanged();
 			}

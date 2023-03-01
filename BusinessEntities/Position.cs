@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
@@ -35,7 +34,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public class Position : NotifiableObject, IExtendableEntity
+	public class Position : NotifiableObject
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Position"/>.
@@ -112,31 +111,6 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_blockedValue = value;
-				NotifyChanged();
-			}
-		}
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo;
-
-		/// <summary>
-		/// Extended information.
-		/// </summary>
-		/// <remarks>
-		/// Required if additional information is stored in the program. For example, the amount of commission paid.
-		/// </remarks>
-		//[Ignore]
-		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str427Key)]
-		[MainCategory]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set
-			{
-				_extensionInfo = value;
 				NotifyChanged();
 			}
 		}

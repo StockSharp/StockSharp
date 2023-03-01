@@ -16,18 +16,14 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Runtime.CompilerServices;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Localization;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Exchange info.
@@ -39,7 +35,7 @@ namespace StockSharp.BusinessEntities
 	[KnownType(typeof(TimeZoneInfo.AdjustmentRule[]))]
 	[KnownType(typeof(TimeZoneInfo.TransitionTime))]
 	[KnownType(typeof(DayOfWeek))]
-	public partial class Exchange : Equatable<Exchange>, IExtendableEntity, IPersistable, INotifyPropertyChanged
+	public partial class Exchange : Equatable<Exchange>, IPersistable, INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Exchange"/>.
@@ -108,24 +104,6 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_countryCode = value;
-				Notify();
-			}
-		}
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo/* = new Dictionary<string, object>()*/;
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		[Browsable(false)]
-		[DataMember]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set
-			{
-				_extensionInfo = value/* ?? throw new ArgumentNullException(nameof(value))*/;
 				Notify();
 			}
 		}

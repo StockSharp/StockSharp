@@ -71,7 +71,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class Message : Cloneable<Message>, IExtendableEntity, IMessage
+	public abstract class Message : Cloneable<Message>, IMessage
 	{
 		/// <inheritdoc />
 		[DisplayNameLoc(LocalizedStrings.Str203Key)]
@@ -85,20 +85,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public MessageTypes Type => _type;
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo;
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str427Key)]
-		[MainCategory]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set => _extensionInfo = value;
-		}
 
 		/// <summary>
 		/// Is loopback message.
@@ -174,7 +160,6 @@ namespace StockSharp.Messages
 #if MSG_TRACE
 			destination.StackTrace = StackTrace;
 #endif
-			this.CopyExtensionInfo(destination);
 		}
 	}
 }

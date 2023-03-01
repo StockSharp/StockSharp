@@ -16,10 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.ComponentModel;
 
@@ -33,7 +31,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str395Key)]
 	[DescriptionLoc(LocalizedStrings.Str510Key)]
-	public class News : NotifiableObject, IExtendableEntity
+	public class News : NotifiableObject
 	{
 		/// <summary>
 		/// News ID.
@@ -137,22 +135,6 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.NewsPriorityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public NewsPriorities? Priority { get; set; }
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo;
-
-		/// <inheritdoc />
-		//[Ignore]
-		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str427Key)]
-		[MainCategory]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set => _extensionInfo = value;
-		}
 
 		/// <summary>
 		/// Language.

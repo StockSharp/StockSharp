@@ -141,12 +141,12 @@ namespace StockSharp.Algo
 		public static INativeIdStorage NativeIdStorage => ConfigManager.GetService<INativeIdStorage>();
 		
 		/// <summary>
-		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+		/// Extended info storage.
 		/// </summary>
 		public static IExtendedInfoStorage ExtendedInfoStorage => ConfigManager.GetService<IExtendedInfoStorage>();
 
 		/// <summary>
-		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+		/// Extended info storage.
 		/// </summary>
 		public static IExtendedInfoStorage TryExtendedInfoStorage => ConfigManager.TryGetService<IExtendedInfoStorage>();
 

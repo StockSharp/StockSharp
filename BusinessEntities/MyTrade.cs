@@ -16,16 +16,13 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -35,7 +32,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str502Key)]
 	[DescriptionLoc(LocalizedStrings.Str503Key)]
-	public class MyTrade : NotifiableObject, IExtendableEntity
+	public class MyTrade : NotifiableObject
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MyTrade"/>.
@@ -152,24 +149,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		public decimal? Yield { get; set; }
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo;
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ExtendedInfoKey,
-			Description = LocalizedStrings.Str427Key,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 100)]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set => _extensionInfo = value;
-		}
 
 		/// <inheritdoc />
 		public override string ToString()

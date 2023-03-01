@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+	/// Extended info storage.
 	/// </summary>
 	public interface IExtendedInfoStorageItem
 	{
@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Storages
 	}
 
 	/// <summary>
-	/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+	/// Extended info storage.
 	/// </summary>
 	public interface IExtendedInfoStorage
 	{
@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Storages
 	}
 
 	/// <summary>
-	/// Extended info <see cref="Message.ExtensionInfo"/> storage, used csv files.
+	/// Extended info storage, used csv files.
 	/// </summary>
 	public class CsvExtendedInfoStorage : IExtendedInfoStorage
 	{

@@ -44,9 +44,6 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					Name = reader.ReadString(),
 					CountryCode = reader.ReadNullableEnum<CountryCodes>(),
-					//EngName = reader.ReadString(),
-					//RusName = reader.ReadString(),
-					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
 
 				var engName = reader.ReadString();
@@ -71,7 +68,6 @@ namespace StockSharp.Algo.Storages.Csv
 					data.CountryCode.To<string>(),
 					string.Empty/*data.EngName*/,
 					string.Empty/*data.RusName*/,
-					//Serialize(data.ExtensionInfo),
 					data.FullNameLoc,
 				});
 			}

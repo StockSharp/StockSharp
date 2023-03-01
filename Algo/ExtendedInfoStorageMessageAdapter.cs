@@ -10,7 +10,7 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The message adapter, that save <see cref="Message.ExtensionInfo"/> into <see cref="IExtendedInfoStorage"/>.
+	/// The message adapter, that save extension info into <see cref="IExtendedInfoStorage"/>.
 	/// </summary>
 	public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 	{
@@ -22,7 +22,7 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="MessageAdapterWrapper"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		/// <param name="extendedInfoStorage">Extended info <see cref="Message.ExtensionInfo"/> storage.</param>
+		/// <param name="extendedInfoStorage">Extended info storage.</param>
 		public ExtendedInfoStorageMessageAdapter(IMessageAdapter innerAdapter, IExtendedInfoStorage extendedInfoStorage)
 			: base(innerAdapter)
 		{
@@ -56,8 +56,8 @@ namespace StockSharp.Algo
 		{
 			var secMsg = message as SecurityMessage;
 
-			if (secMsg?.ExtensionInfo != null)
-				GetStorage().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
+			//if (secMsg?.ExtensionInfo != null)
+			//	GetStorage().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

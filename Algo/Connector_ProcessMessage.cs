@@ -1013,9 +1013,6 @@ namespace StockSharp.Algo
 				if (p == null)
 					throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name));
 
-				//if (p.ExtensionInfo == null)
-				//	p.ExtensionInfo = new Dictionary<string, object>();
-
 				return p;
 			}, out isNew);
 

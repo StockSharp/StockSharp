@@ -16,14 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -35,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str506Key)]
 	[DescriptionLoc(LocalizedStrings.TickTradeKey)]
-	public class Trade : Cloneable<Trade>, IExtendableEntity
+	public class Trade : Cloneable<Trade>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Trade"/>.
@@ -218,24 +216,6 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		public long? OrderSellId { get; set; }
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo;
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ExtendedInfoKey,
-			Description = LocalizedStrings.Str427Key,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 8)]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set => _extensionInfo = value;
-		}
 
 		/// <summary>
 		/// Create a copy of <see cref="Trade"/>.

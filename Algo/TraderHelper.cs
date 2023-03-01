@@ -1215,10 +1215,6 @@ namespace StockSharp.Algo
 						case PositionChangeTypes.AveragePrice:
 							position.AveragePrice = (decimal)change.Value;
 							break;
-						//case PositionChangeTypes.ExtensionInfo:
-						//	var pair = change.Value.To<KeyValuePair<string, object>>();
-						//	position.ExtensionInfo[pair.Key] = pair.Value;
-						//	break;
 						case PositionChangeTypes.RealizedPnL:
 							position.RealizedPnL = (decimal)change.Value;
 							break;
@@ -1231,9 +1227,6 @@ namespace StockSharp.Algo
 						case PositionChangeTypes.VariationMargin:
 							position.VariationMargin = (decimal)change.Value;
 							break;
-						//case PositionChangeTypes.DepoName:
-						//	position.ExtensionInfo[nameof(PositionChangeTypes.DepoName)] = change.Value;
-						//	break;
 						case PositionChangeTypes.Currency:
 							position.Currency = (CurrencyTypes)change.Value;
 							break;
@@ -1291,7 +1284,6 @@ namespace StockSharp.Algo
 
 			position.LocalTime = message.LocalTime;
 			position.LastChangeTime = message.ServerTime;
-			message.CopyExtensionInfo(position);
 		}
 
 		/// <summary>
@@ -1790,8 +1782,6 @@ namespace StockSharp.Algo
 				if (isOverride || security.PrimaryId == default)
 					security.PrimaryId = message.PrimaryId.ToStringId();
 			}
-
-			message.CopyExtensionInfo(security);
 		}
 
 		/// <summary>

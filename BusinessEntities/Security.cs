@@ -37,7 +37,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str546Key)]
-	public class Security : Cloneable<Security>, IExtendableEntity, INotifyPropertyChanged
+	public class Security : Cloneable<Security>, INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Security"/>.
@@ -616,28 +616,6 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_primaryId = value;
-				Notify();
-			}
-		}
-
-		[field: NonSerialized]
-		private SynchronizedDictionary<string, object> _extensionInfo;
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		//[DataMember]
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ExtendedInfoKey,
-			Description = LocalizedStrings.Str427Key,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 21)]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set
-			{
-				_extensionInfo = value.Sync();
 				Notify();
 			}
 		}
@@ -2043,9 +2021,6 @@ namespace StockSharp.BusinessEntities
 			destination.SettlementType = SettlementType;
 			destination.OptionStyle = OptionStyle;
 			destination.PrimaryId = PrimaryId;
-
-			//if (destination.ExtensionInfo == null)
-			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();
 
 			//if (LastTrade != null)
 			//{

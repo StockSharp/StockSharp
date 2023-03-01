@@ -57,8 +57,6 @@
 			{
 				destination.OriginalTransactionId = OriginalTransactionId;
 
-				this.CopyExtensionInfo(destination);
-
 				return destination;
 			}
 		}

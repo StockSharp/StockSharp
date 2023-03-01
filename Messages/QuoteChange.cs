@@ -80,7 +80,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
-	public struct QuoteChange : IExtendableEntity
+	public struct QuoteChange
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteChange"/>.
@@ -101,7 +101,6 @@ namespace StockSharp.Messages
 			Action = null;
 
 			BoardCode = null;
-			_extensionInfo = null;
 
 			_innerQuotes = null;
 		}
@@ -132,21 +131,6 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string BoardCode { get; set; }
-
-		[field: NonSerialized]
-		private IDictionary<string, object> _extensionInfo;
-
-		/// <inheritdoc />
-		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str427Key)]
-		[MainCategory]
-		[Obsolete]
-		public IDictionary<string, object> ExtensionInfo
-		{
-			get => _extensionInfo;
-			set => _extensionInfo = value;
-		}
 
 		/// <summary>
 		/// Orders count.

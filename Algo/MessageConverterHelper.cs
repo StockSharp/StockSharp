@@ -1713,8 +1713,6 @@ namespace StockSharp.Algo
 			//if (message.State != null)
 			//	portfolio.State = message.State;
 
-			message.CopyExtensionInfo(portfolio);
-
 			return portfolio;
 		}
 
@@ -1786,7 +1784,6 @@ namespace StockSharp.Algo
 				AllowBuildFromSmallerTimeFrame = series.AllowBuildFromSmallerTimeFrame,
 				IsRegularTradingHours = series.IsRegularTradingHours,
 				IsFinishedOnly = series.IsFinishedOnly,
-				//ExtensionInfo = extensionInfo
 			};
 
 			if (series.CandleType == null)

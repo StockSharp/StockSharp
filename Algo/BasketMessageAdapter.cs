@@ -544,7 +544,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+		/// Extended info storage.
 		/// </summary>
 		public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
 

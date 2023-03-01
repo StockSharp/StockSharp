@@ -308,19 +308,6 @@ namespace StockSharp.Algo.Import
 			return fields;
 		}
 
-		/// <summary>
-		/// Generate extended fields for the specified storage.
-		/// </summary>
-		/// <param name="storage">Extended info <see cref="Message.ExtensionInfo"/> storage.</param>
-		/// <returns>Extended fields.</returns>
-		public static FieldMapping[] CreateExtendedFields(IExtendedInfoStorageItem storage)
-		{
-			return storage
-				.Fields
-				.Select(t => (FieldMapping)new FieldMapping<SecurityMessage, object>($"{nameof(IExtendableEntity.ExtensionInfo)}[{t.Item1}]", t.Item1, string.Empty, (s, v) => s.ExtensionInfo[t.Item1] = v) { IsExtended = true })
-				.ToArray();
-		}
-
 		private static void SetSecCode(dynamic message, string code)
 		{
 			SecurityId securityId = message.SecurityId;

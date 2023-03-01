@@ -250,31 +250,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Copy extended info.
-		/// </summary>
-		/// <param name="from">The object of which is copied to extended information.</param>
-		/// <param name="to">The object, which is copied to extended information.</param>
-		public static void CopyExtensionInfo(this IExtendableEntity from, IExtendableEntity to)
-		{
-			if (from == null)
-				throw new ArgumentNullException(nameof(from));
-
-			if (to == null)
-				throw new ArgumentNullException(nameof(to));
-
-			if (from.ExtensionInfo == null)
-				return;
-
-			if (to.ExtensionInfo == null)
-				to.ExtensionInfo = new Dictionary<string, object>();
-
-			foreach (var pair in from.ExtensionInfo)
-			{
-				to.ExtensionInfo[pair.Key] = pair.Value;
-			}
-		}
-
-		/// <summary>
 		/// Get message server time.
 		/// </summary>
 		/// <param name="message">Message.</param>
