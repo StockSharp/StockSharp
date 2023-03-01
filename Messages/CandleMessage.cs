@@ -216,7 +216,7 @@ namespace StockSharp.Messages
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
 		/// <inheritdoc />
-		public abstract object Arg { get; set; }
+		public object Arg => DataType?.Arg;
 
 		/// <summary>
 		/// <see cref="Arg"/> type.
@@ -234,17 +234,13 @@ namespace StockSharp.Messages
 				{
 					var arg = Arg;
 
-					if (arg is not null)
+					if (!arg.IsDefault())
 						_dataType = DataType.Create(GetType(), arg);
 				}
 
 				return _dataType;
 			}
-			set
-			{
-				_dataType = value;
-				Arg = _dataType?.Arg;
-			}
+			set => _dataType = value;
 		}
 
 		/// <summary>
@@ -340,7 +336,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Typed <see cref="CandleMessage"/>.
 	/// </summary>
-	/// <typeparam name="TArg"><see cref="Arg"/> type.</typeparam>
+	/// <typeparam name="TArg"><see cref="TypedArg"/> type.</typeparam>
 	[DataContract]
 	[Serializable]
 	public abstract class TypedCandleMessage<TArg> : CandleMessage
@@ -353,7 +349,7 @@ namespace StockSharp.Messages
 		protected TypedCandleMessage(MessageTypes type, TArg arg)
 			: base(type)
 		{
-			Arg = arg;
+			TypedArg = arg;
 		}
 
 		/// <inheritdoc />
@@ -363,13 +359,6 @@ namespace StockSharp.Messages
 		/// Candle arg.
 		/// </summary>
 		public TArg TypedArg { get; set; }
-
-		/// <inheritdoc />
-		public override object Arg
-		{
-			get => TypedArg;
-			set => TypedArg = (TArg)value;
-		}
 	}
 
 	/// <summary>

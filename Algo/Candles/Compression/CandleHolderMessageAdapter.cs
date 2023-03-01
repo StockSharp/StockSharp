@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Candles.Compression
 					{
 						var info = _infos.SafeAdd(mdMsg.TransactionId, k => mdMsg.DataType2.MessageType.CreateInstance<CandleMessage>());
 						info.SecurityId = mdMsg.SecurityId;
-						info.Arg = mdMsg.GetArg();
+						info.DataType = mdMsg.DataType2;
 					}
 
 					break;
@@ -85,10 +85,10 @@ namespace StockSharp.Algo.Candles.Compression
 			else
 				message.SecurityId = info.SecurityId;
 
-			if (info.Arg == null)
-				info.Arg = message.Arg;
+			if (info.DataType is null)
+				info.DataType = message.DataType;
 			else
-				message.Arg = info.Arg;
+				message.DataType = info.DataType;
 
 			TryUpdateValue(message, info, c => c.OpenPrice, (c, v) => c.OpenPrice = v);
 			TryUpdateValue(message, info, c => c.HighPrice, (c, v) => c.HighPrice = v);

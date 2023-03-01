@@ -144,7 +144,7 @@ namespace StockSharp.Algo
 			message.LowVolume = candle.LowVolume;
 			message.CloseVolume = candle.CloseVolume;
 			message.RelativeVolume = candle.RelativeVolume;
-			message.Arg = candle.Arg;
+			message.DataType = DataType.Create(messageType, candle.Arg);
 			message.PriceLevels = candle.PriceLevels?/*.Select(l => l.Clone())*/.ToArray();
 			message.State = candle.State;
 			message.SeqNum = candle.SeqNum;

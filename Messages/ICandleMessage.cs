@@ -66,7 +66,7 @@ public interface ICandleMessage
 	/// <summary>
 	/// Candle arg.
 	/// </summary>
-	object Arg { get; set; }
+	object Arg { get; }
 
 	/// <summary>
 	/// Total price size.
