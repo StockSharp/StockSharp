@@ -868,7 +868,7 @@ namespace StockSharp.Algo
 		private static TRule Modify<TRule>(this TRule rule, Action<TRule> action)
 			where TRule : IMarketRule
 		{
-			if (rule.IsNull())
+			if (rule is null)
 				throw new ArgumentNullException(nameof(rule));
 
 			action(rule);

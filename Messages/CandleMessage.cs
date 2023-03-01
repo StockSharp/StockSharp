@@ -234,7 +234,7 @@ namespace StockSharp.Messages
 				{
 					var arg = Arg;
 
-					if (!arg.IsDefault())
+					if (!arg.IsNull(true))
 						_dataType = DataType.Create(GetType(), arg);
 				}
 
