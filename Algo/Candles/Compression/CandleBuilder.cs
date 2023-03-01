@@ -841,21 +841,18 @@ namespace StockSharp.Algo.Candles.Compression
 			var side = transform.Side;
 			var oi = transform.OpenInterest;
 			var buildFrom = transform.BuildFrom;
-			const string prevKey = "PreviousCandle";
 
 			var boxSize = subscription.Message.GetArg<Unit>();
 			var renkoStep = (decimal)(1 * boxSize);
 			var currentCandle = (RenkoCandleMessage)subscription.CurrentCandle;
-			var prevCandle = currentCandle?.GetValue<RenkoCandleMessage>(prevKey);
+			var prevCandle = subscription.PrevCandle;
 
 			bool TryFinishCurrentCandle()
 			{
 				if (currentCandle.State == CandleStates.Finished)
 					return false;
 
-				var ei = currentCandle.ExtensionInfo;
-				if (ei?.Count == 1 && ei.First().Key == prevKey)
-					currentCandle.ExtensionInfo = null;
+				subscription.PrevCandle = null;
 
 				if (currentCandle.TotalTicks == 0)
 				{
@@ -896,7 +893,7 @@ namespace StockSharp.Algo.Candles.Compression
 				};
 
 				if(prevCandle != null)
-					currentCandle.AddValue(prevKey, prevCandle);
+					subscription.PrevCandle = prevCandle;
 			}
 
 			bool Uninitialized(decimal p) => p == _decimalEpsilon;

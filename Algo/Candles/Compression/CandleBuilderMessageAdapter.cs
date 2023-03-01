@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Candles.Compression
 			public long? Count { get; set; }
 
 			public CandleMessage CurrentCandle { get; set; }
-
+			public CandleMessage PrevCandle { get; set; }
 			public CandleMessage NonFinishedCandle { get; set; }
 
 			public VolumeProfileBuilder VolumeProfile { get; set; }

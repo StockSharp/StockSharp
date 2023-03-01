@@ -88,12 +88,16 @@ namespace StockSharp.Algo.Candles
 		/// <inheritdoc />
 		public CandleMessage CurrentCandle { get; set; }
 
+		/// <inheritdoc />
+		public CandleMessage PrevCandle { get; set; }
+
 		/// <summary>
 		/// Reset state.
 		/// </summary>
 		public void Reset()
 		{
 			CurrentCandle = null;
+			PrevCandle = null;
 		}
 
 		private static readonly Level1Fields[] _processParts =
