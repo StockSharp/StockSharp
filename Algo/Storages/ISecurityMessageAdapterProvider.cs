@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Storages
 			if (key == null)
 				throw new ArgumentNullException(nameof(key));
 
-			if (adapterId.IsDefault())
+			if (adapterId == default)
 				throw new ArgumentNullException(nameof(adapterId));
 
 			lock (_adapters.SyncRoot)

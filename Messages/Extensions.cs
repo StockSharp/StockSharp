@@ -3244,7 +3244,7 @@ namespace StockSharp.Messages
 				return true;
 
 			return
-				criteria.SecurityId.IsDefault() &&
+				criteria.SecurityId == default &&
 				criteria.Name.IsEmpty() &&
 				criteria.ShortName.IsEmpty() &&
 				criteria.VolumeStep == null &&

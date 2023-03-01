@@ -342,7 +342,7 @@ namespace StockSharp.Algo.Storages
 
 				var date = curr.ServerTime.UtcDateTime.Date;
 
-				if (date.IsDefault())
+				if (date == default)
 					throw new ArgumentException(message.ToString());
 
 				GetStorageDate(date).Update(curr);

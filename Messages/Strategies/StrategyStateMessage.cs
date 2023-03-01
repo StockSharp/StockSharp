@@ -53,7 +53,7 @@ namespace StockSharp.Messages
 		{
 			var str = base.ToString() + $",TrId={TransactionId},Orig={OriginalTransactionId},Stat={Statistics.Select(p => $"{p.Key}={p.Value}").JoinComma()}";
 
-			if (!StrategyId.IsDefault())
+			if (StrategyId != default)
 				str += $",Id={StrategyId}";
 
 			if (!StrategyTypeId.IsEmpty())

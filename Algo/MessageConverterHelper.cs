@@ -675,7 +675,7 @@ namespace StockSharp.Algo
 
 			var security = new Security
 			{
-				Id = message.SecurityId.IsDefault() ? null : message.SecurityId.ToStringId(nullIfEmpty: message is SecurityLookupMessage)
+				Id = message.SecurityId == default ? null : message.SecurityId.ToStringId(nullIfEmpty: message is SecurityLookupMessage)
 			};
 
 			security.ApplyChanges(message, exchangeInfoProvider);
@@ -894,7 +894,7 @@ namespace StockSharp.Algo
 			//board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
 			//board.IsSupportMarketOrders = message.IsSupportMarketOrders;
 
-			if (!message.ExpiryTime.IsDefault())
+			if (message.ExpiryTime != default)
 				board.ExpiryTime = message.ExpiryTime;
 
 			if (message.TimeZone != null)
@@ -1594,7 +1594,7 @@ namespace StockSharp.Algo
 				   !securityId.Isin.IsEmpty() ||
 				   !securityId.Ric.IsEmpty() ||
 				   !securityId.Sedol.IsEmpty() ||
-				   !securityId.InteractiveBrokers.IsDefault() ||
+				   securityId.InteractiveBrokers != default ||
 				   !securityId.Plaza.IsEmpty();
 		}
 

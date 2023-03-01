@@ -196,14 +196,14 @@
 								else if (candle.CloseTime > candle.OpenTime)
 								{
 									// date component can be missed for open time
-									if (candle.OpenTime.Date.IsDefault())
+									if (candle.OpenTime.Date == default)
 									{
 										candle.OpenTime = candle.CloseTime;
 
 										if (timeFrame != null)
 											candle.OpenTime -= timeFrame.Value;
 									}
-									else if (candle.OpenTime.TimeOfDay.IsDefault())
+									else if (candle.OpenTime.TimeOfDay == default)
 									{
 										candle.OpenTime = candle.CloseTime;
 

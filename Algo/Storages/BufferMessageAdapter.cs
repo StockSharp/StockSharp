@@ -272,7 +272,7 @@ namespace StockSharp.Algo.Storages
 				}
 				else if (Settings.IsMode(StorageModes.Incremental))
 				{
-					if (!message.SecurityId.IsDefault())
+					if (message.SecurityId != default)
 					{
 						// TODO restore last actual state from incremental messages
 

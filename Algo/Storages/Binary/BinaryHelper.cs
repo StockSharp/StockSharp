@@ -593,7 +593,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public static bool HasLocalTime(this Message msg, DateTimeOffset serverTime)
 		{
-			return !msg.LocalTime.IsDefault() && msg.LocalTime != serverTime/* && (msg.LocalTime - serverTime).TotalHours.Abs() < 1*/;
+			return msg.LocalTime != default && msg.LocalTime != serverTime/* && (msg.LocalTime - serverTime).TotalHours.Abs() < 1*/;
 		}
 
 		public static void WriteDto(this BitArrayWriter writer, DateTimeOffset? dto)

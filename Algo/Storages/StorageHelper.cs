@@ -777,7 +777,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var arg = dataType.Arg;
 
-				if (securityId.IsDefault())
+				if (securityId == default)
 					args.Add(arg);
 				else if (from == null && to == null)
 					args.Add(arg);

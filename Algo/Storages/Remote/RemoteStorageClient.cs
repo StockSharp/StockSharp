@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 		//	ISecurityRemoteExtendedStorage IRemoteExtendedStorage.GetSecurityStorage(SecurityId securityId)
 		//	{
-		//		if (securityId.IsDefault())
+		//		if (securityId == default)
 		//			throw new ArgumentNullException(nameof(securityId));
 
 		//		return _securityStorages.SafeAdd(securityId, key => new SecurityRemoteExtendedStorage(this, key));
@@ -284,7 +284,7 @@ namespace StockSharp.Algo.Storages.Remote
 		/// <returns>Data types.</returns>
 		public IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
-			//if (securityId.IsDefault())
+			//if (securityId == default)
 			//	throw new ArgumentNullException(nameof(securityId));
 
 			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = (int)format })

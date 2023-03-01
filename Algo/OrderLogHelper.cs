@@ -129,7 +129,7 @@ namespace StockSharp.Algo
 					depth.Bids = depth.Bids.Take(maxDepth).ToArray();
 					depth.Asks = depth.Asks.Take(maxDepth).ToArray();
 				}
-				else if (!interval.IsDefault())
+				else if (interval != default)
 				{
 					depth = builder.Snapshot; // cannot return incrementals if interval is set
 				}

@@ -1534,7 +1534,7 @@ namespace StockSharp.Algo
 
 			if (lastTradeChanged)
 			{
-				if (lastTrade.Time.IsDefault())
+				if (lastTrade.Time == default)
 					lastTrade.Time = serverTime;
 
 				lastTrade.LocalTime = localTime;

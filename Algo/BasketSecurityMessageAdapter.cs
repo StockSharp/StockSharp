@@ -68,7 +68,7 @@ namespace StockSharp.Algo
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.SecurityId.IsDefault())
+					if (mdMsg.SecurityId == default)
 						break;
 
 					var security = _securityProvider.LookupById(mdMsg.SecurityId);

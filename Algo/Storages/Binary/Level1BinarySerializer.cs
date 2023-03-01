@@ -915,7 +915,7 @@ namespace StockSharp.Algo.Storages.Binary
 						{
 							var timeValue = (DateTimeOffset)value;
 
-							if (metaInfo.FirstFieldTime.IsDefault())
+							if (metaInfo.FirstFieldTime == default)
 							{
 								if (!isTickPrecision)
 									timeValue = timeValue.StorageBinaryOldTruncate();
@@ -1118,7 +1118,7 @@ namespace StockSharp.Algo.Storages.Binary
 							var info = metaInfo.BuyBackInfo;
 							var timeValue = (DateTimeOffset)value;
 							
-							if (info.FirstDateTime.IsDefault())
+							if (info.FirstDateTime == default)
 							{
 								if (!isTickPrecision)
 									timeValue = timeValue.StorageBinaryOldTruncate();
@@ -1163,7 +1163,7 @@ namespace StockSharp.Algo.Storages.Binary
 							var info = metaInfo.CouponInfo;
 							var timeValue = (DateTimeOffset)value;
 
-							if (info.FirstDateTime.IsDefault())
+							if (info.FirstDateTime == default)
 							{
 								if (!isTickPrecision)
 									timeValue = timeValue.StorageBinaryOldTruncate();

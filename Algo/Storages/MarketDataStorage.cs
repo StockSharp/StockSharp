@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var securityId = _getSecurityId(d);
 
-				if (!securityId.IsDefault() && !SecurityIdEqual(securityId))
+				if (securityId != default && !SecurityIdEqual(securityId))
 					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TMessage).Name, securityId, SecurityId));
 
 				var time = _getTime(d);

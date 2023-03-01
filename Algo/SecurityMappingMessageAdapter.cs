@@ -40,7 +40,7 @@ namespace StockSharp.Algo
 
 					var adapterId = secMsg.SecurityId.SetNativeId(null);
 
-					if (adapterId.IsDefault())
+					if (adapterId == default)
 						throw new InvalidOperationException(secMsg.ToString());
 
 					var stockSharpId = Storage.TryGetStockSharpId(StorageName, adapterId);
@@ -138,7 +138,7 @@ namespace StockSharp.Algo
 			if (!adapterId.IsSpecial)
 				adapterId.SetNativeId(null);
 
-			if (!adapterId.IsDefault())
+			if (adapterId != default)
 			{
 				var stockSharpId = Storage.TryGetStockSharpId(StorageName, adapterId);
 

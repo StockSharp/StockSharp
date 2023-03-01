@@ -269,7 +269,7 @@ namespace StockSharp.Algo.Import
 				{
 					var dto = _dateParser.ParseDto(str);
 
-					if (dto.Offset.IsDefault())
+					if (dto.Offset == default)
 					{
 						var tz = Scope<TimeZoneInfo>.Current?.Value;
 

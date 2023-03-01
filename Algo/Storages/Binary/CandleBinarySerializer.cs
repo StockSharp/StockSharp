@@ -199,7 +199,7 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WritePriceEx(candle.HighPrice, metaInfo, SecurityId, useLong, largeDecimal);
 				}
 
-				if (!candle.CloseTime.IsDefault() && candle.OpenTime > candle.CloseTime)
+				if (candle.CloseTime != default && candle.OpenTime > candle.CloseTime)
 					throw new ArgumentException(LocalizedStrings.MoreThanCloseTime.Put(candle.OpenTime, candle.CloseTime));
 
 				var lastOffset = metaInfo.LastServerOffset;
@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (metaInfo.Version >= MarketDataVersions.Version46)
 				{
-					var isAll = !candle.HighTime.IsDefault() && !candle.LowTime.IsDefault();
+					var isAll = candle.HighTime != default && candle.LowTime != default;
 
 					DateTimeOffset first;
 					DateTimeOffset second;
@@ -225,30 +225,30 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					else
 					{
-						writer.Write(!candle.HighTime.IsDefault());
-						writer.Write(!candle.LowTime.IsDefault());
+						writer.Write(candle.HighTime != default);
+						writer.Write(candle.LowTime != default);
 
-						first = candle.HighTime.IsDefault() ? candle.LowTime : candle.HighTime;
+						first = candle.HighTime == default ? candle.LowTime : candle.HighTime;
 						second = default;
 					}
 
-					if (!first.IsDefault())
+					if (first != default)
 					{
 						if (first.Offset != lastOffset && !allowDiffOffsets)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(first, lastOffset));
 
-						if (!candle.CloseTime.IsDefault() && first > candle.CloseTime)
+						if (candle.CloseTime != default && first > candle.CloseTime)
 							throw new ArgumentException(LocalizedStrings.MoreThanCloseTime.Put(first, candle.CloseTime));
 
 						metaInfo.LastTime = writer.WriteTime(first, metaInfo.LastTime, LocalizedStrings.Str999, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
 					}
 
-					if (!second.IsDefault())
+					if (second != default)
 					{
 						if (second.Offset != lastOffset && !allowDiffOffsets)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(second, lastOffset));
 
-						if (!candle.CloseTime.IsDefault() && second > candle.CloseTime)
+						if (candle.CloseTime != default && second > candle.CloseTime)
 							throw new ArgumentException(LocalizedStrings.MoreThanCloseTime.Put(second, candle.CloseTime));
 
 						metaInfo.LastTime = writer.WriteTime(second, metaInfo.LastTime, LocalizedStrings.Str1000, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, bigRange);
@@ -257,9 +257,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (metaInfo.Version >= MarketDataVersions.Version47)
 				{
-					writer.Write(!candle.CloseTime.IsDefault());
+					writer.Write(candle.CloseTime != default);
 
-					if (!candle.CloseTime.IsDefault())
+					if (candle.CloseTime != default)
 					{
 						if (candle.CloseTime.Offset != lastOffset && !allowDiffOffsets)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(candle.CloseTime, lastOffset));

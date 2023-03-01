@@ -703,7 +703,7 @@ namespace StockSharp.BusinessEntities
 			    if (value == null)
 			        return;
 
-				if (!value.Time.IsDefault())
+				if (value.Time != default)
 					LastChangeTime = value.Time;
 			}
 		}

@@ -716,7 +716,7 @@ namespace StockSharp.Algo.Risk
 				{
 					var time = message.LocalTime;
 
-					if (time.IsDefault())
+					if (time == default)
 					{
 						this.AddWarningLog("Time is null. Msg={0}", message);
 						return false;
@@ -977,7 +977,7 @@ namespace StockSharp.Algo.Risk
 
 			var time = message.LocalTime;
 
-			if (time.IsDefault())
+			if (time == default)
 			{
 				this.AddWarningLog("Time is null. Msg={0}", message);
 				return false;

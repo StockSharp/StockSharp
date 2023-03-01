@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public bool SetAdapter(string key, Guid adapterId)
 		{
-			if (adapterId.IsDefault())
+			if (adapterId == default)
 				throw new ArgumentNullException(nameof(adapterId));
 
 			lock (_adapters.SyncRoot)

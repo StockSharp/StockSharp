@@ -60,7 +60,7 @@ public class SubscriptionBase
 				secIdMsg.SecurityId = security.SecurityId;
 				break;
 			case INullableSecurityIdMessage nullSecIdMsg:
-				nullSecIdMsg.SecurityId = security.SecurityId.IsDefault() ? null : security.SecurityId;
+				nullSecIdMsg.SecurityId = security.SecurityId == default ? null : security.SecurityId;
 				break;
 		}
 	}

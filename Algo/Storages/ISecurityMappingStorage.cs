@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Storages
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
-			if (mapping.IsDefault())
+			if (mapping == default)
 				throw new ArgumentNullException(nameof(mapping));
 
 			var added = false;
@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Storages
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
-			if (stockSharpId.IsDefault())
+			if (stockSharpId == default)
 				throw new ArgumentNullException(nameof(storageName));
 
 			all = null;
@@ -306,7 +306,7 @@ namespace StockSharp.Algo.Storages
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
-			if (mapping.IsDefault())
+			if (mapping == default)
 				throw new ArgumentNullException(nameof(mapping));
 
 			var added = ((InMemorySecurityMappingStorage)_inMemory).Save(storageName, mapping, out var all);

@@ -349,7 +349,7 @@ namespace StockSharp.Algo.Storages
 				.Select(IOPath.GetFileName)
 				.Select(StorageHelper.FolderNameToSecurityId)
 				.Select(n => idGenerator.Split(n, true))
-				.Where(t => !t.IsDefault());
+				.Where(t => t != default);
 		}
 
 		private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
@@ -378,7 +378,7 @@ namespace StockSharp.Algo.Storages
 				       });
 			}
 
-			if (securityId.IsDefault())
+			if (securityId == default)
 			{
 				lock (_availableDataTypes.SyncRoot)
 				{

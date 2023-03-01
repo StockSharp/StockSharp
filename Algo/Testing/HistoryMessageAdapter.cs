@@ -215,7 +215,7 @@ namespace StockSharp.Algo.Testing
 				return Enumerable.Empty<object>();
 
 			var args = _historySources
-	             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId.IsDefault()))
+	             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId == default))
 	             .Select(s => s.Key.dataType.Arg)
 	             .ToArray();
 
@@ -223,7 +223,7 @@ namespace StockSharp.Algo.Testing
 				return args;
 
 			args = _generators
-	             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId.IsDefault()))
+	             .Where(t => t.Key.dataType.MessageType == candleType && (t.Key.secId == securityId || t.Key.secId == default))
 	             .Select(s => s.Key.dataType.Arg)
 	             .ToArray();
 
@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Testing
 				{
 					var lookupMsg = (SecurityLookupMessage)message;
 
-					var securities = lookupMsg.SecurityId.IsDefault()
+					var securities = lookupMsg.SecurityId == default
 							? SecurityProvider.LookupAll()
 							: SecurityProvider.Lookup(lookupMsg);
 
@@ -328,7 +328,7 @@ namespace StockSharp.Algo.Testing
 						case ChannelStates.Starting:
 						{
 							if (!_isStarted)
-								Start(stateMsg.StartDate.IsDefault() ? StartDate : stateMsg.StartDate, stateMsg.StopDate.IsDefault() ? StopDate : stateMsg.StopDate);
+								Start(stateMsg.StartDate == default ? StartDate : stateMsg.StartDate, stateMsg.StopDate == default ? StopDate : stateMsg.StopDate);
 
 							break;
 						}
@@ -602,7 +602,7 @@ namespace StockSharp.Algo.Testing
 
 							boards ??= GetBoard();
 
-							var currentTime = _currentTime.IsDefault() ? startDateTime : _currentTime;
+							var currentTime = _currentTime == default ? startDateTime : _currentTime;
 
 							var loadDateInUtc = currentTime.UtcDateTime.Date;
 							var stopDateInUtc = stopDateTime.UtcDateTime.Date;

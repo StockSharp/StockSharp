@@ -183,7 +183,7 @@ namespace StockSharp.Algo
 						if (kv.Key.Contains(marketTime))
 							return kv.Value;
 
-						if (security.IsDefault())
+						if (security == default)
 							security = _current.Value.Value;
 
 						MoveNext();

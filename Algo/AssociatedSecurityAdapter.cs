@@ -99,7 +99,7 @@ namespace StockSharp.Algo
 					if (quoteMsg.State != null)
 						break;
 
-					if (quoteMsg.SecurityId.IsDefault())
+					if (quoteMsg.SecurityId == default)
 						break;
 
 					//if (IsAssociated(quoteMsg.SecurityId.BoardCode))

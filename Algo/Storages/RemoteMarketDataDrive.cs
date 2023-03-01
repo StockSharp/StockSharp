@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages
 
 			public RemoteStorageDrive(RemoteMarketDataDrive parent, SecurityId securityId, DataType dataType, StorageFormats format)
 			{
-				if (securityId.IsDefault())
+				if (securityId == default)
 					throw new ArgumentNullException(nameof(securityId));
 
 				if (dataType == null)
@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Storages
 			{
 				get
 				{
-					if (_prevDatesSync.IsDefault() || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
+					if (_prevDatesSync == default || (DateTime.Now - _prevDatesSync).TotalSeconds > 3)
 					{
 						_dates = _parent.CreateClient().GetDates(_securityId, _dataType, _format);
 

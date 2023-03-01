@@ -170,13 +170,13 @@ namespace StockSharp.Algo.Import
 				{
 					i.OpenTime = v + i.OpenTime.TimeOfDay;
 
-					if (!i.CloseTime.IsDefault())
+					if (i.CloseTime != default)
 						i.CloseTime = v + i.CloseTime.TimeOfDay;
 				}) { IsRequired = true });
 				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(GetTimeOfDayField(nameof(CandleMessage.OpenTime)), LocalizedStrings.Str2860, LocalizedStrings.CandleOpenTime, (i, v) => i.OpenTime += v));
 				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(nameof(CandleMessage.CloseTime), LocalizedStrings.Str2861, LocalizedStrings.CandleCloseTime, (i, v) =>
 				{
-					if (i.CloseTime.IsDefault())
+					if (i.CloseTime == default)
 						i.CloseTime = i.OpenTime - i.OpenTime.TimeOfDay + v;
 					else
 						i.CloseTime += v;
