@@ -196,7 +196,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
 				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Type).HasLength(32)
-				.Property(m => m.Arg).HasLength(100)
+				.Property(m => m.DataType.Arg).HasLength(100)
 				.Property(m => m.OpenTime)
 				.Property(m => m.CloseTime)
 				.Property(m => m.HighTime)

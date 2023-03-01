@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Storages
 		/// To get the market-data storage.
 		/// </summary>
 		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
 		/// <param name="serializer">The serializer.</param>
 		/// <returns>Market-data storage.</returns>
 		IMarketDataStorage GetStorage(Type dataType, object arg, IMarketDataSerializer serializer);

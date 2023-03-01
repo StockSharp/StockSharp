@@ -463,7 +463,7 @@
 			public TimeFrameCandleChangedRule(TCandle candle, IConnector connector, decimal percent)
 				: base(candle)
 			{
-				_timer = CreateAndActivateTimeFrameTimer(candle.SecurityId, (TimeSpan)candle.Arg, connector, () => Activate(candle), percent, false);
+				_timer = CreateAndActivateTimeFrameTimer(candle.SecurityId, (TimeSpan)candle.DataType.Arg, connector, () => Activate(candle), percent, false);
 			}
 
 			protected override void DisposeManaged()
@@ -554,7 +554,7 @@
 
 			if (candle is ITickCandleMessage tickCandle)
 			{
-				var count = realPercent * (int)candle.Arg;
+				var count = realPercent * (int)candle.DataType.Arg;
 				return tickCandle.TotalTicks != null && tickCandle.TotalTicks.Value >= count;
 			}
 			else if (candle is IRangeCandleMessage rangeCandle)

@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>Market-data storage.</returns>

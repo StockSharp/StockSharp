@@ -216,10 +216,10 @@ namespace StockSharp.Messages
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
 		/// <inheritdoc />
-		public object Arg => DataType?.Arg;
+		public abstract object Arg { get; }
 
 		/// <summary>
-		/// <see cref="Arg"/> type.
+		/// <see cref="DataType.Arg"/> type.
 		/// </summary>
 		public abstract Type ArgType { get; }
 
@@ -318,7 +318,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = $"{Type},Sec={SecurityId},A={Arg},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume},S={State},TransId={OriginalTransactionId}";
+			var str = $"{Type},Sec={SecurityId},A={DataType.Arg},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume},S={State},TransId={OriginalTransactionId}";
 
 			if (SeqNum != default)
 				str += $",SQ={SeqNum}";
@@ -351,6 +351,9 @@ namespace StockSharp.Messages
 		{
 			TypedArg = arg;
 		}
+
+		/// <inheritdoc />
+		public override object Arg => TypedArg;
 
 		/// <inheritdoc />
 		public override Type ArgType => typeof(TArg);

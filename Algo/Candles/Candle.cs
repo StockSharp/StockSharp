@@ -155,6 +155,25 @@ namespace StockSharp.Algo.Candles
 		/// <inheritdoc />
 		public abstract object Arg { get; set; }
 
+		private DataType _dataType;
+
+		/// <inheritdoc />
+		public DataType DataType
+		{
+			get
+			{
+				if (_dataType is null)
+				{
+					var arg = Arg;
+
+					if (!arg.IsNull(true))
+						_dataType = DataType.Create(GetType().ToCandleMessageType(), arg);
+				}
+
+				return _dataType;
+			}
+		}
+
 		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TicksKey)]

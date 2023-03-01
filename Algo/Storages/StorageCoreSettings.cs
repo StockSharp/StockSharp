@@ -76,7 +76,7 @@
 		/// </summary>
 		/// <typeparam name="TMessage">Message type.</typeparam>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="arg">The parameter associated with the <typeparamref name="TMessage" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="arg">The parameter associated with the <typeparamref name="TMessage" /> type. For example, candle arg.</param>
 		/// <returns>Market-data storage.</returns>
 		public IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
 			where TMessage : Message
@@ -89,7 +89,7 @@
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="messageType"></param>
-		/// <param name="arg">The parameter associated with the <paramref name="messageType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="messageType" /> type. For example, candle arg.</param>
 		/// <returns>Market-data storage.</returns>
 		public IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{

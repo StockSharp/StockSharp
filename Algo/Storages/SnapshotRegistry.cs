@@ -580,7 +580,7 @@ namespace StockSharp.Algo.Storages
 		/// To get the snapshot storage.
 		/// </summary>
 		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
 		/// <returns>The snapshot storage.</returns>
 		public ISnapshotStorage GetSnapshotStorage(Type dataType, object arg)
 		{

@@ -64,9 +64,9 @@ public interface ICandleMessage
 	IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
 	/// <summary>
-	/// Candle arg.
+	/// <see cref="DataType"/>.
 	/// </summary>
-	object Arg { get; }
+	DataType DataType { get; }
 
 	/// <summary>
 	/// Total price size.

@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Storages
 		/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="arg">The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle arg.</param>
 		/// <param name="getData">Handler for retrieving in-memory data.</param>
 		/// <param name="dataType">Data type.</param>
 		public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTimeOffset, IEnumerable<Message>> getData, Type dataType = null)
@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Storages
 		/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="arg">The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, candle arg.</param>
 		/// <param name="getData">Handler for retrieving in-memory data.</param>
 		/// <param name="dataType">Data type.</param>
 		public InMemoryMarketDataStorage(SecurityId securityId, object arg, Func<DateTimeOffset, IEnumerable<T>> getData, Type dataType = null)

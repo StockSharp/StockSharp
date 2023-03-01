@@ -1174,7 +1174,7 @@ namespace StockSharp.Algo
 			var candle = creator();
 
 			candle.Security = security;
-			candle.Arg = message.Arg;
+			candle.Arg = message.DataType.Arg;
 
 			return candle.Update(message);
 		}

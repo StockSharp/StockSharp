@@ -542,7 +542,7 @@ namespace StockSharp.Algo.Storages
 		/// Get data type and parameter for the specified file name.
 		/// </summary>
 		/// <param name="fileName">The file name.</param>
-		/// <returns>Data type and parameter associated with the type. For example, <see cref="CandleMessage.Arg"/>.</returns>
+		/// <returns>Data type and parameter associated with the type. For example, candle arg.</returns>
 		public static DataType GetDataType(string fileName)
 		{
 			try
