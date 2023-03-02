@@ -93,23 +93,32 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
-		private class MessagePool
+		private abstract class Pool<T>
 		{
-			private readonly Queue<ExecutionMessage> _messageQueue = new();
+			private readonly Queue<T> _pool = new();
 
-			public ExecutionMessage Allocate()
+			public T Allocate()
 			{
-				if (_messageQueue.Count == 0)
-				{
-					var message = new ExecutionMessage { DataTypeEx = DataType.Transactions };
-					//queue.Enqueue(message);
-					return message;
-				}
+				if (_pool.Count == 0)
+					return Create();
 				else
-					return _messageQueue.Dequeue();
+					return _pool.Dequeue();
 			}
 
-			public void Free(ExecutionMessage message) => _messageQueue.Enqueue(message);
+			protected abstract T Create();
+
+			public void Free(T message) => _pool.Enqueue(message);
+		}
+
+		private class ExecMsgPool : Pool<ExecutionMessage>
+		{
+			protected override ExecutionMessage Create() => new() { DataTypeEx = DataType.Transactions };
+		}
+
+		private class TickPool : Pool<(Sides? side, decimal price, decimal vol)[]>
+		{
+			protected override (Sides?, decimal, decimal)[] Create()
+				=> new (Sides?, decimal, decimal)[4];
 		}
 
 		private sealed class SecurityMarketEmulator : BaseLogReceiver//, IMarketEmulator
@@ -128,7 +137,7 @@ namespace StockSharp.Algo.Testing
 			private readonly Random _priceRandom = new(TimeHelper.Now.Millisecond);
 			private readonly RandomArray<bool> _isMatch = new(100);
 			private int _volumeDecimals;
-			private readonly SortedDictionary<DateTimeOffset, (List<CandleMessage> candles, List<ExecutionMessage> ticks)> _candleInfo = new();
+			private readonly SortedDictionary<DateTimeOffset, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol)[] ticks)>> _candleInfo = new();
 			private LogLevels? _logLevel;
 			private DateTime _lastStripDate;
 
@@ -153,7 +162,8 @@ namespace StockSharp.Algo.Testing
 			private DateTime _lastDepthDate;
 			//private DateTime _lastTradeDate;
 
-			private readonly MessagePool _messagePool = new();
+			private readonly ExecMsgPool _messagePool = new();
+			private readonly TickPool _tickPool = new();
 
 			public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
 			{
@@ -393,15 +403,15 @@ namespace StockSharp.Algo.Testing
 							// в трейдах используется время открытия свечи, при разных MarketTimeChangedInterval и TimeFrame свечек
 							// возможны ситуации, когда придет TimeMsg 11:03:00, а время закрытия будет 11:03:30
 							// т.о. время уйдет вперед данных, которые построены по свечкам.
-							var (candles, ticks) = _candleInfo.SafeAdd(candleMsg.OpenTime, key => (new(), new()));
+							var candles = _candleInfo.SafeAdd(candleMsg.OpenTime, key => new());
 
-							candles.Add(candleMsg);
+							var ticks = _tickPool.Allocate();
+							candles.Add((candleMsg, ticks));
 
 							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
 							{
-								var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
-								Process(trades[0], result);
-								ticks.AddRange(trades.Skip(1));
+								candleMsg.ConvertToTrades(GetVolumeStep(), _volumeDecimals, ticks);
+								ProcessTick(candleMsg.SecurityId, candleMsg.LocalTime, candleMsg.OpenTime, ticks[0], result);
 							}
 
 							break;
@@ -828,17 +838,19 @@ namespace StockSharp.Algo.Testing
 
 			private void ProcessTick(ExecutionMessage tick, ICollection<Message> result)
 			{
-				var tradePrice = tick.GetTradePrice();
-				var tickVolume = tick.TradeVolume;
+				ProcessTick(tick.SecurityId, tick.LocalTime, tick.ServerTime, (tick.OriginSide, tick.GetTradePrice(), tick.TradeVolume ?? 1), result);
+			}
 
-				UpdateSteps(tradePrice, tickVolume);
+			private void ProcessTick(SecurityId secId, DateTimeOffset localTime, DateTimeOffset serverTime, (Sides? side, decimal price, decimal volume) tick, ICollection<Message> result)
+			{
+				var tradePrice = tick.price;
+				var tradeVolume = tick.volume;
+				var side = tick.side;
+
+				UpdateSteps(tradePrice, tradeVolume);
 
 				var bestBid = _bids.FirstOrDefault();
 				var bestAsk = _asks.FirstOrDefault();
-
-				var volume = tickVolume ?? 1;
-				var localTime = tick.LocalTime;
-				var serverTime = tick.ServerTime;
 
 				var hasDepth = HasDepth(localTime);
 
@@ -854,7 +866,7 @@ namespace StockSharp.Algo.Testing
 
 					if (bestQuote.Value == null || ((originSide == Sides.Buy && oppositePrice < bestQuote.Key) || (originSide == Sides.Sell && oppositePrice > bestQuote.Key)))
 					{
-						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, oppositePrice, volume), true);
+						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, oppositePrice, tradeVolume), true);
 
 #if EMU_DBG
 						Verify(quotesSide);
@@ -864,9 +876,9 @@ namespace StockSharp.Algo.Testing
 
 				Sides GetOrderSide()
 				{
-					return tick.OriginSide == null
-						? tick.TradePrice > _prevTickPrice ? Sides.Sell : Sides.Buy
-						: tick.OriginSide.Value.Invert();
+					return side is null
+						? tradePrice > _prevTickPrice ? Sides.Sell : Sides.Buy
+						: side.Value.Invert();
 				}
 
 				void ProcessMarketOrder(Sides orderSide)
@@ -953,7 +965,7 @@ namespace StockSharp.Algo.Testing
 					// если собрали все котировки, то оставляем заявку в стакане по цене сделки
 					if (!hasQuotes)
 					{
-						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, tradePrice, volume), true);
+						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, tradePrice, tradeVolume), true);
 
 #if EMU_DBG
 						Verify(quotesSide);
@@ -1051,7 +1063,7 @@ namespace StockSharp.Algo.Testing
 						hasOpposite = false;
 					}
 
-					UpdateQuote(CreateMessage(localTime, serverTime, originSide, tradePrice, volume), true);
+					UpdateQuote(CreateMessage(localTime, serverTime, originSide, tradePrice, tradeVolume), true);
 
 					// если стакан был полностью пустой, то формируем сразу уровень с противоположной стороны
 					if (!hasOpposite)
@@ -1059,7 +1071,7 @@ namespace StockSharp.Algo.Testing
 						var oppositePrice = tradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
 
 						if (oppositePrice > 0)
-							UpdateQuote(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume), true);
+							UpdateQuote(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, tradeVolume), true);
 					}
 				}
 
@@ -1089,12 +1101,14 @@ namespace StockSharp.Algo.Testing
 				_prevTickPrice = tradePrice;
 
 				if (_ticksSubscription is not null)
-					result.Add(tick);
+				{
+					result.Add(tick.ToTickMessage(secId, localTime, serverTime));
+				}
 
 				if (_depthSubscription is not null)
 				{
 					result.Add(CreateQuoteMessage(
-						tick.SecurityId,
+						secId,
 						localTime,
 						serverTime));
 				}
@@ -1724,17 +1738,29 @@ namespace StockSharp.Algo.Testing
 
 						if (_ticksSubscription is not null)
 						{
-							foreach (var trade in pair.Value.ticks)
-								result.Add(trade);
+							foreach (var (candle, ticks) in pair.Value)
+							{
+								for (var i = 1; i < ticks.Length; i++)
+								{
+									var trade = ticks[i];
+
+									if (trade == default)
+										break;
+
+									result.Add(trade.ToTickMessage(candle.SecurityId, candle.LocalTime, candle.OpenTime));
+								}
+							}
 						}
 
 						// change current time before the candle will be processed
 						result.Add(new TimeMessage { LocalTime = message.LocalTime });
 
-						foreach (var candle in pair.Value.candles)
+						foreach (var (candle, ticks) in pair.Value)
 						{
 							candle.LocalTime = message.LocalTime;
 							result.Add(candle);
+
+							_tickPool.Free(ticks);
 						}
 					}
 				}

@@ -90,7 +90,7 @@ namespace SampleHistoryTesting
 			if (AllowTrading)
 			{
 				// calc new values for short and long
-				var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
+				var isShortLessThenLong = shortValue.GetValue<decimal>() < longValue.GetValue<decimal>();
 
 				if (_isShortLessThenLong == null)
 				{
