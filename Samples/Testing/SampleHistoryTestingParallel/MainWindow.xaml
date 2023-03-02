@@ -27,7 +27,10 @@
 			<Button x:Name="PauseBtn" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
 			<Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
 		</StackPanel>
-		<ProgressBar x:Name="TestingProcess" Grid.Column="1" Grid.Row="2" Maximum="100" />
+		<Grid Grid.Column="1" Grid.Row="2">  
+		   <ProgressBar x:Name="TestingProcess" Maximum="100" />
+		   <TextBlock x:Name="TestingProcessText" HorizontalAlignment="Center" VerticalAlignment="Center" />
+		</Grid>
 
 		<charting:StrategiesStatisticsPanel x:Name="Stat" ShowProgress="False" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0"/>
 	</Grid>

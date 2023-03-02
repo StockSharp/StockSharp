@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private IMessageAdapter _histAdapter;
 		private bool _cancelEmulation;
 		private int _nextTotalProgress;
+		private DateTime _startedAt;
 
 		private readonly SyncObject _sync = new();
 
@@ -120,7 +121,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// The event of total progress change.
 		/// </summary>
-		public event Action<int> TotalProgressChanged;
+		public event Action<int, TimeSpan, TimeSpan> TotalProgressChanged;
 
 		/// <summary>
 		/// The event of single progress change.
@@ -147,6 +148,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			_cancelEmulation = false;
 			_nextTotalProgress = 0;
+			_startedAt = DateTime.UtcNow;
 
 			State = ChannelStates.Starting;
 
@@ -264,7 +266,10 @@ namespace StockSharp.Algo.Strategies.Testing
 					if (_nextTotalProgress >= currTotalProgress)
 						return;
 
-					TotalProgressChanged?.Invoke(currTotalProgress);
+					var now = DateTime.UtcNow;
+					var duration = now - _startedAt;
+
+					TotalProgressChanged?.Invoke(currTotalProgress, duration, TimeSpan.FromTicks((duration.Ticks * 100) / currTotalProgress));
 					_nextTotalProgress = currTotalProgress + 1;
 				};
 

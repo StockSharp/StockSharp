@@ -136,7 +136,11 @@ namespace SampleHistoryTestingParallel
 			};
 
 			// handle historical time for update ProgressBar
-			_batchEmulation.TotalProgressChanged += total => this.GuiAsync(() => TestingProcess.Value = total);
+			_batchEmulation.TotalProgressChanged += (progress, duration, remaining) => this.GuiAsync(() =>
+			{
+				TestingProcess.Value = progress;
+				TestingProcessText.Text = $"{progress}% | {(int)duration.TotalSeconds} sec left | {(int)remaining.TotalSeconds} sec rem";
+			});
 
 			_batchEmulation.StateChanged += (oldState, newState) =>
 			{
