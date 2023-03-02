@@ -9284,8 +9284,8 @@
     "ru": "Серверный режим"
   },
   "Str2213": {
-    "en": "Change S#.Data to server mode.",
-    "ru": "Перевести S#.Data в серверный режим."
+    "en": "Turn on S#.Data into server mode to allow other application get downloaded market data?",
+    "ru": "Перевести S#.Data в серверный режим чтобы позволить другим программам получать скаченные маркет-данные."
   },
   "Str2214": {
     "en": "Number of securities",
