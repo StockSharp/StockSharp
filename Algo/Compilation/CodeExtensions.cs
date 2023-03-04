@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Compilation
 {
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.Loader;
 	using System.Threading;
 
 	using Ecng.Compilation;
@@ -15,13 +16,14 @@ namespace StockSharp.Algo.Compilation
 		/// To compile the code.
 		/// </summary>
 		/// <param name="compiler">Compiler.</param>
+		/// <param name="context"><see cref="AssemblyLoadContext"/></param>
 		/// <param name="code">Code.</param>
 		/// <param name="name">The reference name.</param>
 		/// <param name="references">References.</param>
 		/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 		/// <returns>The result of the compilation.</returns>
-		public static CompilationResult CompileCode(this ICompiler compiler, string code, string name, IEnumerable<CodeReference> references, CancellationToken cancellationToken = default)
-			=> compiler.Compile(new(), name, code, references.Where(r => r.IsValid).Select(r => r.FullLocation).ToArray(), cancellationToken);
+		public static CompilationResult CompileCode(this ICompiler compiler, AssemblyLoadContext context, string code, string name, IEnumerable<CodeReference> references, CancellationToken cancellationToken = default)
+			=> compiler.Compile(new(context), name, code, references.Where(r => r.IsValid).Select(r => r.FullLocation).ToArray(), cancellationToken);
 
 		private static readonly IEnumerable<string> _defaultReferences = new[]
 		{
