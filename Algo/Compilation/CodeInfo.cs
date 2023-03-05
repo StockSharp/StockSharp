@@ -6,7 +6,6 @@ using System.Runtime.Loader;
 using System.Collections.Generic;
 
 using Ecng.Common;
-using Ecng.ComponentModel;
 using Ecng.Serialization;
 using Ecng.Compilation;
 using Ecng.Collections;
@@ -18,12 +17,17 @@ using StockSharp.Algo;
 /// <summary>
 /// Code info.
 /// </summary>
-public class CodeInfo : NotifiableObject, IPersistable
+public class CodeInfo : IPersistable
 {
 	/// <summary>
 	/// Identifier.
 	/// </summary>
 	public Guid Id { get; set; } = Guid.NewGuid();
+
+	/// <summary>
+	/// <see cref="Name"/> changed event.
+	/// </summary>
+	public event Action<CodeInfo> NameChanged;
 
 	private string _name;
 
@@ -39,7 +43,7 @@ public class CodeInfo : NotifiableObject, IPersistable
 				return;
 
 			_name = value;
-			NotifyChanged();
+			NameChanged?.Invoke(this);
 		}
 	}
 
