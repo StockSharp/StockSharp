@@ -1,17 +1,48 @@
-﻿namespace StockSharp.Algo.Compilation;
+namespace StockSharp.Algo.Compilation;
 
+using System;
 using System.Linq;
+using System.Runtime.Loader;
 using System.Collections.Generic;
 
 using Ecng.Common;
+using Ecng.ComponentModel;
 using Ecng.Serialization;
+using Ecng.Compilation;
 using Ecng.Collections;
+
+using StockSharp.Logging;
+using StockSharp.Localization;
+using StockSharp.Algo;
 
 /// <summary>
 /// Code info.
 /// </summary>
-public class CodeInfo : IPersistable
+public class CodeInfo : NotifiableObject, IPersistable
 {
+	/// <summary>
+	/// Identifier.
+	/// </summary>
+	public Guid Id { get; set; } = Guid.NewGuid();
+
+	private string _name;
+
+	/// <summary>
+	/// Name.
+	/// </summary>
+	public string Name
+	{
+		get => _name;
+		set
+		{
+			if (_name == value)
+				return;
+
+			_name = value;
+			NotifyChanged();
+		}
+	}
+
 	/// <summary>
 	/// Code.
 	/// </summary>
@@ -24,9 +55,67 @@ public class CodeInfo : IPersistable
 	/// </summary>
 	public INotifyList<CodeReference> References => _references;
 
+	/// <summary>
+	/// Strategy type.
+	/// </summary>
+	public Type StrategyType { get; private set; }
+
+	/// <summary>
+	/// Compiled event.
+	/// </summary>
+	public event Action Compiled;
+
+	private AssemblyLoadContext _context;
+
+	/// <summary>
+	/// Compile code.
+	/// </summary>
+	/// <returns><see cref="CompilationResult"/></returns>
+	public CompilationResult Compile()
+	{
+		var prev = _context;
+
+		_context = new(default, true);
+		var result = ServicesRegistry.Compiler.CompileCode(_context, Text, string.Empty, References);
+
+		if (result.HasErrors())
+			return result;
+
+		var type = result.Assembly.GetTypes().FirstOrDefault(CodeExtensions.IsTypeCompatible);
+
+		StrategyType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
+
+		try
+		{
+			Compiled?.Invoke();
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
+
+		try
+		{
+			prev?.Unload();
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
+
+		return result;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public string Key => $"_{Id:N}";
+
 	void IPersistable.Load(SettingsStorage storage)
 	{
-		Text = storage.GetValue(nameof(Text), Text);
+		Id = storage.GetValue(nameof(Id), Id);
+		Name = storage.GetValue(nameof(Name), Name);
+		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"));
 
 		_references.Clear();
 		_references.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(References)).Select(s => s.Load<CodeReference>()).ToArray());
@@ -34,6 +123,8 @@ public class CodeInfo : IPersistable
 
 	void IPersistable.Save(SettingsStorage storage)
 	{
+		storage.SetValue(nameof(Id), Id);
+		storage.SetValue(nameof(Name), Name);
 		storage.SetValue(nameof(Text), Text);
 		storage.SetValue(nameof(References), _references.Cache.Select(r => r.Save()).ToArray());
 	}

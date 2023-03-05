@@ -1,11 +1,16 @@
 namespace StockSharp.Algo.Compilation
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Loader;
 	using System.Threading;
 
+	using Ecng.Common;
 	using Ecng.Compilation;
+
+	using StockSharp.Algo.Indicators;
+	using StockSharp.Algo.Strategies;
 
 	/// <summary>
 	/// Extension class.
@@ -66,5 +71,18 @@ namespace StockSharp.Algo.Compilation
 			=>	_defaultReferences
 				.Select(r => new CodeReference { Location = $"{r}.dll" })
 				.ToArray();
+
+		/// <summary>
+		/// Is type compatible.
+		/// </summary>
+		/// <param name="type">Type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsTypeCompatible(Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException(nameof(type));
+
+			return !type.IsAbstract && type.IsPublic && (type.IsSubclassOf(typeof(Strategy)) || type.Is<IIndicator>());
+		}
 	}
 }
