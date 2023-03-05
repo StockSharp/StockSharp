@@ -1,4 +1,12 @@
 {
+  "Explorer": {
+    "en": "Explorer",
+    "ru": "Обозреватель"
+  },
+  "Rename": {
+    "en": "Rename",
+    "ru": "Переименовать"
+  },
   "Present": {
     "en": "Present",
     "ru": "Настоящее"
