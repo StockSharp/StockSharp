@@ -3,8 +3,7 @@
 	/// <summary>
 	/// The chart element representing trades.
 	/// </summary>
-	public interface IChartTradeElement : IChartTransactionElement<IChartTradeElement>
+	public interface IChartTradeElement : IChartTransactionElement
 	{
-
 	}
 }

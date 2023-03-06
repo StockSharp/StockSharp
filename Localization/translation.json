@@ -1,4 +1,8 @@
 {
+  "ErrorBorderColor": {
+    "en": "Error border color",
+    "ru": "Цвет границы ошибки"
+  },
   "Explorer": {
     "en": "Explorer",
     "ru": "Обозреватель"

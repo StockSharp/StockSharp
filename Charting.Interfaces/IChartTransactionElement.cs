@@ -5,9 +5,7 @@
 	/// <summary>
 	/// The interface that describes the Orders Or Trades chart element.
 	/// </summary>
-	/// <typeparam name="T">The element type.</typeparam>
-	public interface IChartTransactionElement<T> : IChartElement
-		where T : IChartTransactionElement<T>
+	public interface IChartTransactionElement : IChartElement
 	{
 		/// <summary>
 		/// Color of graphics element on chart, indicating buy.

@@ -5,12 +5,17 @@
 	/// <summary>
 	/// The chart element representing orders.
 	/// </summary>
-	public interface IChartOrderElement : IChartTransactionElement<IChartOrderElement>
+	public interface IChartOrderElement : IChartTransactionElement
 	{
 		/// <summary>
 		/// Fill color of transaction errors.
 		/// </summary>
 		Color ErrorColor { get; set; }
+
+		/// <summary>
+		/// Stroke color of transaction errors.
+		/// </summary>
+		Color ErrorStrokeColor { get; set; }
 
 		/// <summary>
 		/// Orders display filter.
