@@ -1,6 +1,7 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Compilation;
 	using Ecng.Configuration;
@@ -249,5 +250,15 @@ namespace StockSharp.Algo
 		/// <see cref="ICandlePatternStorage"/>
 		/// </summary>
 		public static ICandlePatternStorage TryCandlePatternStorage => ConfigManager.TryGetService<ICandlePatternStorage>();
+
+		/// <summary>
+		/// <see cref="ICandlePatternStorage"/>
+		/// </summary>
+		public static IList<ICandlePattern> TryCandlePatterns => ConfigManager.TryGetService<IList<ICandlePattern>>();
+
+		/// <summary>
+		/// <see cref="ICandlePatternStorage"/>
+		/// </summary>
+		public static IList<ICandlePattern> CandlePatterns => ConfigManager.GetService<IList<ICandlePattern>>();
 	}
 }

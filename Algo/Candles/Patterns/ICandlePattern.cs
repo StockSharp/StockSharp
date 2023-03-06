@@ -12,7 +12,7 @@ public interface ICandlePattern : IPersistable
 	/// <summary>
 	/// Name.
 	/// </summary>
-	string Name { get; set; }
+	string Name { get; }
 
 	/// <summary>
 	/// Reset.

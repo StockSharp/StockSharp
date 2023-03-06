@@ -24,15 +24,6 @@ public class CandlePattern : ICandlePattern
 	private bool _hasPrevVar;
 	private ICandleMessage _prev;
 
-	/// <inheritdoc />
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.NameKey,
-		Description = LocalizedStrings.NameKey,
-		GroupName = LocalizedStrings.GeneralKey,
-		Order = 0)]
-	public string Name { get; set; }
-
 	/// <summary>
 	/// Formula.
 	/// </summary>
@@ -129,20 +120,18 @@ public class CandlePattern : ICandlePattern
 		}
 	}
 
+	string ICandlePattern.Name => Expression;
+
 	void IPersistable.Load(SettingsStorage storage)
 	{
-		Name = storage.GetValue<string>(nameof(Name));
 		Expression = storage.GetValue<string>(nameof(Expression));
 	}
 
 	void IPersistable.Save(SettingsStorage storage)
 	{
-		storage
-			.Set(nameof(Name), Name)
-			.Set(nameof(Expression), Expression)
-		;
+		storage.Set(nameof(Expression), Expression);
 	}
 
 	/// <inheritdoc />
-	public override string ToString() => Name;
+	public override string ToString() => Expression;
 }

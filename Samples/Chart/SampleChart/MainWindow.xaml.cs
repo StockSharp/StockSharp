@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Threading;
@@ -86,10 +87,7 @@
 		{
 			try
 			{
-				ICandlePatternStorage patternStorage = new CsvCandlePatternStorage("candle_patterns.json");
-				patternStorage.Init();
-
-				ConfigManager.RegisterService(patternStorage);
+				ConfigManager.RegisterService<IList<ICandlePattern>>(new ObservableCollection<ICandlePattern>(CandlePatternRegistry.All.Select(p => p.Clone())));
 			}
 			catch
 			{

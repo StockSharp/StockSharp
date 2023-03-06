@@ -37,6 +37,13 @@ public interface ICandlePatternStorage
 	IEnumerable<ICandlePattern> Patterns { get; }
 
 	/// <summary>
+	/// Find pattern by name.
+	/// </summary>
+	/// <param name="name">Name.</param>
+	/// <returns><see cref="ICandlePattern"/> or <see langword="null"/>.</returns>
+	ICandlePattern TryFind(string name);
+
+	/// <summary>
 	/// Remove pattern from the storage.
 	/// </summary>
 	/// <param name="pattern">Pattern.</param>
@@ -128,4 +135,7 @@ public class CsvCandlePatternStorage : ICandlePatternStorage
 		else
 			DelayAction.DefaultGroup.Add(_);
 	}
+
+	ICandlePattern ICandlePatternStorage.TryFind(string name)
+		=> _cache.Cache.FirstOrDefault(p => p.Name == name);
 }

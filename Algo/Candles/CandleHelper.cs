@@ -766,7 +766,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="candle">The candle for which you need to identify the shadows presence.</param>
 		/// <returns><see langword="true" /> if the candle has no shadows, <see langword="false" /> if it has shadows.</returns>
 		public static bool IsMarubozu(this ICandleMessage candle)
-			=> CandlePatternRegistry.Marubozu.Recognize(candle);
+			=> CandlePatternRegistry.WhiteMarubozu.Recognize(candle);
 
 		/// <summary>
 		/// Whether the candle is neutral to trades.

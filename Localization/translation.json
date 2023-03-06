@@ -35,6 +35,86 @@
     "en": "Pattern builder",
     "ru": "Построитель паттерна"
   },
+  "MorningStar": {
+    "en": "Morning Star",
+    "ru": "Утренняя Звезда"
+  },
+  "EveningStar": {
+    "en": "Evening Star",
+    "ru": "Вечерняя Звезда"
+  },
+  "ThreeWhiteSoldiers": {
+    "en": "3 White Soldiers",
+    "ru": "3 Белых Солдата"
+  },
+  "ThreeBlackCrows": {
+    "en": "3 Black Crows",
+    "ru": "3 Черных Ворона"
+  },
+  "BullishEngulfing": {
+    "en": "Bullish Engulfing",
+    "ru": "Бычье Поглощение"
+  },
+  "BearishEngulfing": {
+    "en": "Bearish Engulfing",
+    "ru": "Медвежье Поглощение"
+  },
+  "BullishHarami": {
+    "en": "Bullish Harami",
+    "ru": "Бычий Харами"
+  },
+  "BearishHarami": {
+    "en": "Bearish Harami",
+    "ru": "Медвежий Харами"
+  },
+  "HangingMan": {
+    "en": "Hanging Man",
+    "ru": "Повешенный"
+  },
+  "ShootingStar": {
+    "en": "Shooting Star",
+    "ru": "Падающая звезда"
+  },
+  "TweezerTop": {
+    "en": "Tweezer Top",
+    "ru": "Пинцет Верх"
+  },
+  "TweezerBottom": {
+    "en": "Tweezer Bottom",
+    "ru": "Пинцет Низ"
+  },
+  "OnNeck": {
+    "en": "On-Neck",
+    "ru": "На шее"
+  },
+  "ThreeInsideUp": {
+    "en": "3 Inside Up",
+    "ru": "3 Внутри Вверх"
+  },
+  "ThreeInsideDown": {
+    "en": "3 Inside Down",
+    "ru": "3 Внутри Вниз"
+  },
+  "ThreeOutsideUp": {
+    "en": "3 Outside Up",
+    "ru": "3 Снаружи Вверх"
+  },
+  "ThreeOutsideDown": {
+    "en": "3 Outside Down",
+    "ru": "3 Снаружи Вниз"
+  },
+  "FallingThreeMethods": {
+    "en": "Falling 3 Methods",
+    "ru": "3 Падающих"
+  },
+  "RisingThreeMethods": {
+    "en": "Rising 3 Methods",
+    "ru": "3 Всходящих"
+  },
+  "Piercing": {
+    "en": "Piercing",
+    "ru": "Просвет"
+  },
   "FlatCandle": {
     "en": "Flat",
     "ru": "Плоская"
@@ -47,9 +127,13 @@
     "en": "Black",
     "ru": "Черная"
   },
-  "Marubozu": {
-    "en": "Marubozu",
-    "ru": "Marubozu"
+  "WhiteMarubozu": {
+    "en": "White Marubozu",
+    "ru": "Белая Марубозу"
+  },
+  "BlackMarubozu": {
+    "en": "Black Marubozu",
+    "ru": "Черная Марубозу"
   },
   "SpinningTop": {
     "en": "Spinning top",
