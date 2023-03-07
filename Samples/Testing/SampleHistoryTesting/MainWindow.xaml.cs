@@ -73,8 +73,8 @@ namespace SampleHistoryTesting
 
 			SecId.Text = "SBER@TQBR";
 
-			From.EditValue = new DateTime(2020, 4, 1);
-			To.EditValue = new DateTime(2020, 4, 30);
+			From.EditValue = Paths.HistoryBeginDate;
+			To.EditValue = Paths.HistoryEndDate;
 
 			TimeFrame.SelectedIndex = 0;
 

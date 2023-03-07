@@ -100,8 +100,8 @@ namespace SampleHistoryTestingParallel
 				Board = ExchangeBoard.Micex,
 			};
 
-			var startTime = new DateTime(2020, 4, 1);
-			var stopTime = new DateTime(2020, 4, 30);
+			var startTime = Paths.HistoryBeginDate;
+			var stopTime = Paths.HistoryEndDate;
 
 			var level1Info = new Level1ChangeMessage
 			{

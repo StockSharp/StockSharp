@@ -344,6 +344,16 @@
 		/// </summary>
 		public static readonly string HistoryDataPath;
 
+		/// <summary>
+		/// Begin date of <see cref="HistoryDataPath"/>.
+		/// </summary>
+		public static readonly DateTime HistoryBeginDate = new(2020, 4, 1);
+
+		/// <summary>
+		/// End date of <see cref="HistoryDataPath"/>.
+		/// </summary>
+		public static readonly DateTime HistoryEndDate = new(2020, 4, 30);
+
 		private static ProcessSingleton _isRunningMutex;
 
 		/// <summary>
