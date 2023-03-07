@@ -1245,7 +1245,7 @@
   },
   "Off": {
     "en": "Off",
-    "ru": "Выключено"
+    "ru": "Выкл"
   },
   "Str17": {
     "en": "Method should be implemented in the inherited class.",

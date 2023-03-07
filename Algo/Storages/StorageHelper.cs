@@ -266,7 +266,8 @@ namespace StockSharp.Algo.Storages
 		/// <param name="storage">Market-data storage.</param>
 		/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="GetFromDate"/>.</param>
 		/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="GetToDate"/>, inclusive.</param>
-		public static void Delete(this IMarketDataStorage storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		/// <returns><see langword="true"/> if data was deleted, <see langword="false"/> data not exist for the specified period.</returns>
+		public static bool Delete(this IMarketDataStorage storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
@@ -274,7 +275,7 @@ namespace StockSharp.Algo.Storages
 			var range = GetRange(storage, from, to);
 
 			if (range == null)
-				return;
+				return false;
 
 			var info = (IMarketDataStorageInfo)storage;
 
@@ -332,6 +333,8 @@ namespace StockSharp.Algo.Storages
 					storage.Delete(data);
 				}
 			}
+
+			return true;
 		}
 
 		/// <summary>
