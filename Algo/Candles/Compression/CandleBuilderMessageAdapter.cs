@@ -580,6 +580,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 											bigCandle.SetSubscriptionIds(subscriptionId: series.Id);
 											bigCandle.Adapter = candleMsg.Adapter;
+											bigCandle.LocalTime = candleMsg.LocalTime;
 
 											if (isFinished)
 											{
@@ -594,7 +595,7 @@ namespace StockSharp.Algo.Candles.Compression
 												}
 											}
 
-											base.OnInnerAdapterNewOutMessage(bigCandle.TypedClone());
+											base.OnInnerAdapterNewOutMessage(_isHistory ? bigCandle : bigCandle.TypedClone());
 										}
 
 										break;
