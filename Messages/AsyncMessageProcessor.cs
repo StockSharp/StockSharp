@@ -266,6 +266,8 @@ public class AsyncMessageProcessor : BaseLogReceiver
 				PortfolioLookupMessage m   => _adapter.PortfolioLookupAsync(m, token),
 				BoardLookupMessage m       => _adapter.BoardLookupAsync(m, token),
 
+				TimeMessage m              => _adapter.TimeMessageAsync(m, token),
+
 				OrderStatusMessage m       => _adapter.OrderStatusAsync(m, token),
 
 				OrderReplaceMessage m      => _adapter.ReplaceOrderAsync(m, token),

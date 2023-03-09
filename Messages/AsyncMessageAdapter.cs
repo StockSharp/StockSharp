@@ -89,6 +89,10 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 		=> OnProcessMessageAsync(cancelMsg, cancellationToken);
 
 	/// <inheritdoc />
+	protected virtual ValueTask OnTimeMessageAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+		=> OnProcessMessageAsync(timeMsg, cancellationToken);
+
+	/// <inheritdoc />
 	protected virtual ValueTask OnRunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		if (!mdMsg.IsSubscribe)
@@ -189,6 +193,9 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 
 	ValueTask IAsyncMessageAdapter.CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 		=> OnCancelOrderGroupAsync(cancelMsg, cancellationToken);
+
+	ValueTask IAsyncMessageAdapter.TimeMessageAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+		=> OnTimeMessageAsync(timeMsg, cancellationToken);
 
 	ValueTask IAsyncMessageAdapter.RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 		=> OnRunSubscriptionAsync(mdMsg, cancellationToken);

@@ -145,6 +145,15 @@ public interface IAsyncMessageAdapter : ILogReceiver
 		=> ProcessMessageAsync(cancelMsg, cancellationToken);
 
 	/// <summary>
+	/// Process <see cref="TimeMessage"/>.
+	/// </summary>
+	/// <param name="timeMsg"><see cref="TimeMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	ValueTask TimeMessageAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(timeMsg, cancellationToken);
+
+	/// <summary>
 	/// Process <see cref="MarketDataMessage"/>.
 	/// </summary>
 	/// <param name="mdMsg"><see cref="MarketDataMessage"/>.</param>
