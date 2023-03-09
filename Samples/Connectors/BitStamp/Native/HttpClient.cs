@@ -1,26 +1,12 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.BitStamp.Native.BitStamp
-File: HttpClient.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
 namespace StockSharp.BitStamp.Native
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Net;
 	using System.Security;
 	using System.Security.Cryptography;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -67,12 +53,12 @@ namespace StockSharp.BitStamp.Native
 		// to get readable name after obfuscation
 		public override string Name => nameof(BitStamp) + "_" + nameof(HttpClient);
 
-		public IEnumerable<Symbol> GetPairsInfo()
+		public ValueTask<IEnumerable<Symbol>> GetPairsInfo(CancellationToken cancellationToken)
 		{
-			return MakeRequest<IEnumerable<Symbol>>(CreateUrl("trading-pairs-info"), CreateRequest(Method.Get));
+			return MakeRequest<IEnumerable<Symbol>>(CreateUrl("trading-pairs-info"), CreateRequest(Method.Get), cancellationToken);
 		}
 
-		public IEnumerable<Transaction> RequestTransactions(string ticker, string interval = null)
+		public ValueTask<IEnumerable<Transaction>> RequestTransactions(string ticker, string interval, CancellationToken cancellationToken)
 		{
 			var url = CreateUrl($"transactions/{ticker}");
 			var request = CreateRequest(Method.Get);
@@ -80,13 +66,13 @@ namespace StockSharp.BitStamp.Native
 			if (interval != null)
 				request.AddParameter("time", interval);
 
-			return MakeRequest<IEnumerable<Transaction>>(url, request);
+			return MakeRequest<IEnumerable<Transaction>>(url, request, cancellationToken);
 		}
 
-		public Tuple<Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>, Dictionary<string, decimal>> GetBalances(string ticker = null)
+		public async ValueTask<(Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>, Dictionary<string, decimal>)> GetBalances(string ticker, CancellationToken cancellationToken)
 		{
 			var url = CreateUrl(ticker.IsEmpty() ? "balance" : $"balance/{ticker}");
-			dynamic response = MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Post), url));
+			dynamic response = await MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
 
 			var balances = new Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>(StringComparer.InvariantCultureIgnoreCase);
 			var fees = new Dictionary<string, decimal>(StringComparer.InvariantCultureIgnoreCase);
@@ -123,10 +109,10 @@ namespace StockSharp.BitStamp.Native
 				}
 			}
 
-			return Tuple.Create(balances, fees);
+			return (balances, fees);
 		}
 
-		public UserTransaction[] RequestUserTransactions(string ticker, int? offset, int? limit)
+		public ValueTask<UserTransaction[]> RequestUserTransactions(string ticker, int? offset, int? limit, CancellationToken cancellationToken)
 		{
 			var request = CreateRequest(Method.Post);
 
@@ -137,16 +123,16 @@ namespace StockSharp.BitStamp.Native
 				request.AddParameter("limit", limit.Value);
 
 			var url = CreateUrl(ticker.IsEmpty() ? "user_transactions" : $"user_transactions/{ticker}");
-			return MakeRequest<UserTransaction[]>(url, ApplySecret(request, url));
+			return MakeRequest<UserTransaction[]>(url, ApplySecret(request, url), cancellationToken);
 		}
 
-		public IEnumerable<UserOrder> RequestOpenOrders(string ticker = "all")
+		public ValueTask<IEnumerable<UserOrder>> RequestOpenOrders(string ticker, CancellationToken cancellationToken)
 		{
 			var url = CreateUrl($"open_orders/{ticker}");
-			return MakeRequest<IEnumerable<UserOrder>>(url, ApplySecret(CreateRequest(Method.Post), url));
+			return MakeRequest<IEnumerable<UserOrder>>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
 		}
 
-		public UserOrder RegisterOrder(string pair, string side, decimal? price, decimal volume, decimal? stopPrice, bool daily, bool ioc)
+		public ValueTask<UserOrder> RegisterOrder(string pair, string side, decimal? price, decimal volume, decimal? stopPrice, bool daily, bool ioc, CancellationToken cancellationToken)
 		{
 			var market = price == null ? "market/" : string.Empty;
 
@@ -167,25 +153,25 @@ namespace StockSharp.BitStamp.Native
 				request.AddParameter("ioc_order", true);
 
 			var url = CreateUrl($"{side}/{market}{pair}");
-			return MakeRequest<UserOrder>(url, ApplySecret(request, url));
+			return MakeRequest<UserOrder>(url, ApplySecret(request, url), cancellationToken);
 		}
 
-		public UserOrder CancelOrder(long orderId)
+		public ValueTask<UserOrder> CancelOrder(long orderId, CancellationToken cancellationToken)
 		{
 			var url = CreateUrl("cancel_order");
-			return MakeRequest<UserOrder>(url, ApplySecret(CreateRequest(Method.Post).AddParameter("id", orderId), url));
+			return MakeRequest<UserOrder>(url, ApplySecret(CreateRequest(Method.Post).AddParameter("id", orderId), url), cancellationToken);
 		}
 
-		public void CancelAllOrders()
+		public async ValueTask CancelAllOrders(CancellationToken cancellationToken)
 		{
 			var url = CreateUrl("cancel_all_orders", string.Empty);
-			var result = MakeRequest<bool>(url, ApplySecret(CreateRequest(Method.Post), url));
+			var result = await MakeRequest<bool>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
 
 			if (!result)
 				throw new InvalidOperationException();
 		}
 
-		public long Withdraw(string currency, decimal volume, WithdrawInfo info)
+		public async ValueTask<long> Withdraw(string currency, decimal volume, WithdrawInfo info, CancellationToken cancellationToken)
 		{
 			if (info == null)
 				throw new ArgumentNullException(nameof(info));
@@ -219,7 +205,7 @@ namespace StockSharp.BitStamp.Native
 						.AddParameter("comment", info.Comment);
 
 					var url = CreateUrl("withdrawal/open");
-					dynamic response = MakeRequest<object>(url, ApplySecret(request, url));
+					dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
 
 					if (response.id == null)
 						throw new InvalidOperationException();
@@ -265,7 +251,7 @@ namespace StockSharp.BitStamp.Native
 					}
 
 					var url = CreateUrl(methodName, version);
-					dynamic response = MakeRequest<object>(url, ApplySecret(request, url));
+					dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
 
 					if (response.id == null)
 						throw new InvalidOperationException();
@@ -353,9 +339,9 @@ namespace StockSharp.BitStamp.Native
 			return request;
 		}
 
-		private T MakeRequest<T>(Uri url, RestRequest request)
+		private async ValueTask<T> MakeRequest<T>(Uri url, RestRequest request, CancellationToken cancellationToken)
 		{
-			dynamic obj = request.Invoke(url, this, this.AddVerboseLog);
+			dynamic obj = await request.InvokeAsync(url, this, this.AddVerboseLog, cancellationToken);
 
 			if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
 				throw new InvalidOperationException((string)obj.reason.ToString());

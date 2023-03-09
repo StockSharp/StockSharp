@@ -1,21 +1,8 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: StockSharp.BitStamp.Native.BitStamp
-File: PusherClient.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
 namespace StockSharp.BitStamp.Native
 {
 	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	using Ecng.Common;
 	using Ecng.Net;
@@ -83,13 +70,13 @@ namespace StockSharp.BitStamp.Native
 			base.DisposeManaged();
 		}
 
-		public void Connect()
+		public ValueTask Connect(CancellationToken cancellationToken)
 		{
 			_nextPing = null;
 			_activityTimeout = 0;
 
 			this.AddInfoLog(LocalizedStrings.Connecting);
-			_client.Connect("wss://ws.bitstamp.net", true);
+			return _client.ConnectAsync("wss://ws.bitstamp.net", true, cancellationToken: cancellationToken);
 		}
 
 		public void Disconnect()
@@ -120,7 +107,7 @@ namespace StockSharp.BitStamp.Native
 					break;
 
 				case "ping":
-					SendPingPong("pong");
+					SendPingPong("pong", default);
 					break;
 
 				case "pong":
@@ -197,37 +184,25 @@ namespace StockSharp.BitStamp.Native
 			public const string UnSubscribe = "unsubscribe";
 		}
 
-		public void SubscribeTrades(string currency)
-		{
-			Process(Commands.Subscribe, ChannelNames.Trades + currency);
-		}
+		public ValueTask SubscribeTrades(string currency, CancellationToken cancellationToken)
+			=> Process(Commands.Subscribe, ChannelNames.Trades + currency, cancellationToken);
 
-		public void UnSubscribeTrades(string currency)
-		{
-			Process(Commands.UnSubscribe, ChannelNames.Trades + currency);
-		}
+		public ValueTask UnSubscribeTrades(string currency, CancellationToken cancellationToken)
+			=> Process(Commands.UnSubscribe, ChannelNames.Trades + currency, cancellationToken);
 
-		public void SubscribeOrderBook(string currency)
-		{
-			Process(Commands.Subscribe, ChannelNames.OrderBook + currency);
-		}
+		public ValueTask SubscribeOrderBook(string currency, CancellationToken cancellationToken)
+			=> Process(Commands.Subscribe, ChannelNames.OrderBook + currency, cancellationToken);
 
-		public void UnSubscribeOrderBook(string currency)
-		{
-			Process(Commands.UnSubscribe, ChannelNames.OrderBook + currency);
-		}
+		public ValueTask UnSubscribeOrderBook(string currency, CancellationToken cancellationToken)
+			=> Process(Commands.UnSubscribe, ChannelNames.OrderBook + currency, cancellationToken);
 
-		public void SubscribeOrderLog(string currency)
-		{
-			Process(Commands.Subscribe, ChannelNames.OrderLog + currency);
-		}
+		public ValueTask SubscribeOrderLog(string currency, CancellationToken cancellationToken)
+			=> Process(Commands.Subscribe, ChannelNames.OrderLog + currency, cancellationToken);
 
-		public void UnSubscribeOrderLog(string currency)
-		{
-			Process(Commands.UnSubscribe, ChannelNames.OrderLog + currency);
-		}
+		public ValueTask UnSubscribeOrderLog(string currency, CancellationToken cancellationToken)
+			=> Process(Commands.UnSubscribe, ChannelNames.OrderLog + currency, cancellationToken);
 
-		private void Process(string action, string channel)
+		private ValueTask Process(string action, string channel, CancellationToken cancellationToken)
 		{
 			if (action.IsEmpty())
 				throw new ArgumentNullException(nameof(action));
@@ -235,27 +210,32 @@ namespace StockSharp.BitStamp.Native
 			if (channel.IsEmpty())
 				throw new ArgumentNullException(nameof(channel));
 
-			_client.Send(new
+			return _client.SendAsync(new
 			{
 				@event = $"bts:{action}",
 				data = new { channel }
-			});
+			}, cancellationToken);
 		}
 
-		public void ProcessPing()
+		public ValueTask ProcessPing(CancellationToken cancellationToken)
 		{
 			if (_nextPing == null || DateTime.UtcNow < _nextPing.Value)
-				return;
+				return default;
 
-			SendPingPong("ping");
+			return SendPingPong("ping", cancellationToken);
 		}
 
-		private void SendPingPong(string action)
+		private ValueTask SendPingPong(string action, CancellationToken cancellationToken)
 		{
-			_client.Send(new { @event = $"{action}" });
-
-			if (_activityTimeout > 0)
-				_nextPing = DateTime.UtcNow.AddSeconds(_activityTimeout);
+			try
+			{
+				return _client.SendAsync(new { @event = $"{action}" }, cancellationToken);
+			}
+			finally
+			{
+				if (_activityTimeout > 0)
+					_nextPing = DateTime.UtcNow.AddSeconds(_activityTimeout);
+			}
 		}
 	}
 }

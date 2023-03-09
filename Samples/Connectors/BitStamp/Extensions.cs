@@ -1,58 +1,42 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.BitStamp;
 
-Project: StockSharp.BitStamp.BitStamp
-File: Extensions.cs
-Created: 2015, 11, 11, 2:32 PM
+using System;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.BitStamp
+using Ecng.Common;
+
+using StockSharp.Messages;
+
+static class Extensions
 {
-	using System;
-
-	using Ecng.Common;
-
-	using StockSharp.Messages;
-
-	static class Extensions
+	public static Sides ToSide(this int type)
 	{
-		public static Sides ToSide(this int type)
+		return type == 0 ? Sides.Buy : Sides.Sell;
+	}
+
+	public static string ToCurrency(this SecurityId securityId)
+	{
+		return securityId.SecurityCode?.Remove("/").ToLowerInvariant();
+	}
+
+	public static SecurityId ToStockSharp(this string currency, bool format = true)
+	{
+		if (format)
 		{
-			return type == 0 ? Sides.Buy : Sides.Sell;
+			if (currency.Length > 3 && !currency.Contains("/"))
+				currency = currency.Insert(3, "/");
+
+			currency = currency.ToUpperInvariant();
 		}
 
-		public static string ToCurrency(this SecurityId securityId)
+		return new SecurityId
 		{
-			return securityId.SecurityCode?.Remove("/").ToLowerInvariant();
-		}
+			SecurityCode = currency,
+			BoardCode = BoardCodes.BitStamp,
+		};
+	}
 
-		public static SecurityId ToStockSharp(this string currency, bool format = true)
-		{
-			if (format)
-			{
-				if (currency.Length > 3 && !currency.Contains("/"))
-					currency = currency.Insert(3, "/");
-
-				currency = currency.ToUpperInvariant();
-			}
-
-			return new SecurityId
-			{
-				SecurityCode = currency,
-				BoardCode = BoardCodes.BitStamp,
-			};
-		}
-
-		public static DateTimeOffset ToDto(this string value, string format = "yyyy-MM-dd HH:mm:ss")
-		{
-			return value.ToDateTime(format).ApplyUtc();
-		}
+	public static DateTimeOffset ToDto(this string value, string format = "yyyy-MM-dd HH:mm:ss")
+	{
+		return value.ToDateTime(format).ApplyUtc();
 	}
 }
