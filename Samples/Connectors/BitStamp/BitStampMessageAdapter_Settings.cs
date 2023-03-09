@@ -47,17 +47,6 @@ public partial class BitStampMessageAdapter : IKeySecretAdapter
 			Order = 1)]
 	public SecureString Secret { get; set; }
 
-	/// <summary>
-	/// Client ID.
-	/// </summary>
-	[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ClientKey,
-			Description = LocalizedStrings.Str3308Key,
-			GroupName = LocalizedStrings.Str174Key,
-			Order = 2)]
-	public string ClientId { get; set; }
-
 	private TimeSpan _balanceCheckInterval;
 
 	/// <summary>
@@ -81,11 +70,6 @@ public partial class BitStampMessageAdapter : IKeySecretAdapter
 		}
 	}
 
-	/// <summary>
-	/// V2 authentication method.
-	/// </summary>
-	public bool AuthV2 { get; set; }
-
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
@@ -93,9 +77,7 @@ public partial class BitStampMessageAdapter : IKeySecretAdapter
 
 		storage.SetValue(nameof(Key), Key);
 		storage.SetValue(nameof(Secret), Secret);
-		storage.SetValue(nameof(ClientId), ClientId);
 		storage.SetValue(nameof(BalanceCheckInterval), BalanceCheckInterval);
-		storage.SetValue(nameof(AuthV2), AuthV2);
 	}
 
 	/// <inheritdoc />
@@ -105,9 +87,7 @@ public partial class BitStampMessageAdapter : IKeySecretAdapter
 
 		Key = storage.GetValue<SecureString>(nameof(Key));
 		Secret = storage.GetValue<SecureString>(nameof(Secret));
-		ClientId = storage.GetValue<string>(nameof(ClientId));
 		BalanceCheckInterval = storage.GetValue<TimeSpan>(nameof(BalanceCheckInterval));
-		AuthV2 = storage.GetValue(nameof(AuthV2), AuthV2);
 	}
 
 	/// <inheritdoc />

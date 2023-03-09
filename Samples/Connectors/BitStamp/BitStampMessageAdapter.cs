@@ -96,9 +96,6 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	{
 		if (this.IsTransactional())
 		{
-			if (!AuthV2 && ClientId.IsEmpty())
-				throw new InvalidOperationException(LocalizedStrings.Str3835);
-
 			if (Key.IsEmpty())
 				throw new InvalidOperationException(LocalizedStrings.Str3689);
 
@@ -123,7 +120,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		if (_pusherClient != null)
 			throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-		_httpClient = new HttpClient(ClientId, Key, Secret, AuthV2) { Parent = this };
+		_httpClient = new HttpClient(Key, Secret) { Parent = this };
 
 		_pusherClient = new PusherClient { Parent = this };
 		SubscribePusherClient();

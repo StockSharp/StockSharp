@@ -25,20 +25,16 @@ namespace StockSharp.BitStamp.Native
 
 	class HttpClient : BaseLogReceiver
 	{
-		private readonly string _clientId;
 		private readonly SecureString _key;
-		private readonly bool _authV2;
 		private readonly HashAlgorithm _hasher;
 
 		private const string _baseAddr = "www.bitstamp.net";
 
 		private readonly IdGenerator _nonceGen;
 
-		public HttpClient(string clientId, SecureString key, SecureString secret, bool authV2)
+		public HttpClient(SecureString key, SecureString secret)
 		{
-			_clientId = clientId;
 			_key = key;
-			_authV2 = authV2;
 			_hasher = secret.IsEmpty() ? null : new HMACSHA256(secret.UnSecure().ASCII());
 
 			_nonceGen = new UTCMlsIncrementalIdGenerator();
@@ -218,39 +214,10 @@ namespace StockSharp.BitStamp.Native
 						.AddParameter("amount", volume)
 						.AddParameter("address", info.CryptoAddress);
 
-					string methodName;
-					string version;
+					if (!info.Comment.IsEmpty())
+						request.AddParameter("destination_tag", info.Comment);
 
-					switch (currency.To<CurrencyTypes>())
-					{
-						case CurrencyTypes.BTC:
-						{
-							methodName = "bitcoin_withdrawal";
-							version = string.Empty;
-
-							request
-								.AddParameter("instant", info.Express ? 1 : 0);
-
-							break;
-						}
-						case CurrencyTypes.LTC:
-						case CurrencyTypes.ETH:
-						case CurrencyTypes.BCH:
-						case CurrencyTypes.XRP:
-						{
-							methodName = $"{currency}_withdrawal".ToLowerInvariant();
-							version = "v2/";
-
-							if (!info.Comment.IsEmpty())
-								request.AddParameter("destination_tag", info.Comment);
-
-							break;
-						}
-						default:
-							throw new NotSupportedException(LocalizedStrings.Str1212Params.Put(currency));
-					}
-
-					var url = CreateUrl(methodName, version);
+					var url = CreateUrl($"{currency}_withdrawal".ToLowerInvariant());
 					dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
 
 					if (response.id == null)
@@ -285,56 +252,39 @@ namespace StockSharp.BitStamp.Native
 
 			var urlStr = url.ToString();
 
-			if (_authV2 && urlStr.ContainsIgnoreCase("/v2/"))
-			{
-				var apiKey = "BITSTAMP " + _key.UnSecure();
-				var version = "v2";
-				var nonce = Guid.NewGuid().ToString();
-				var timeStamp = ((long)TimeHelper.UnixNowMls).To<string>();
+			var apiKey = "BITSTAMP " + _key.UnSecure();
+			var version = "v2";
+			var nonce = Guid.NewGuid().ToString();
+			var timeStamp = ((long)TimeHelper.UnixNowMls).To<string>();
 
-				var payload = request
-		 			.Parameters
-					.Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
-					.OrderBy(p => p.Name)
-					.ToQueryString(false);
+			var payload = request
+		 		.Parameters
+				.Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
+				.OrderBy(p => p.Name)
+				.ToQueryString(false);
 
-				var str = apiKey +
-				          request.Method +
-				          url.Host +
-				          url.PathAndQuery.Remove(url.Query, true) +
-				          url.Query +
-				          "application/json" +
-				          nonce +
-				          timeStamp +
-				          version +
-				          payload;
+			var str = apiKey +
+				        request.Method +
+				        url.Host +
+				        url.PathAndQuery.Remove(url.Query, true) +
+				        url.Query +
+				        "application/json" +
+				        nonce +
+				        timeStamp +
+				        version +
+				        payload;
 
-				var signature = _hasher
-				                .ComputeHash(str.UTF8())
-				                .Digest()
-				                .ToUpperInvariant();
+			var signature = _hasher
+				            .ComputeHash(str.UTF8())
+				            .Digest()
+				            .ToUpperInvariant();
 
-				request
-					.AddHeader("X-Auth", apiKey)
-					.AddHeader("X-Auth-Signature", signature)
-					.AddHeader("X-Auth-Nonce", nonce)
-					.AddHeader("X-Auth-Timestamp", timeStamp)
-					.AddHeader("X-Auth-Version", version);
-			}
-			else
-			{
-				var nonce = _nonceGen.GetNextId();
-
-				var signature = _hasher
-				                .ComputeHash((nonce + _clientId + _key.UnSecure()).UTF8())
-				                .Digest()
-				                .ToUpperInvariant();
-
-				request
-					.AddParameter("key", _key.UnSecure())
-					.AddParameter("nonce", nonce)
-					.AddParameter("signature", signature);
-			}
+			request
+				.AddHeader("X-Auth", apiKey)
+				.AddHeader("X-Auth-Signature", signature)
+				.AddHeader("X-Auth-Nonce", nonce)
+				.AddHeader("X-Auth-Timestamp", timeStamp)
+				.AddHeader("X-Auth-Version", version);
 
 			return request;
 		}

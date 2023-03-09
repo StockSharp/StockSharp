@@ -15,7 +15,7 @@ using StockSharp.Messages;
 
 partial class BitStampMessageAdapter
 {
-	private string PortfolioName => nameof(BitStamp) + "_" + (AuthV2 ? Key.ToId().To<string>() : ClientId);
+	private string PortfolioName => nameof(BitStamp) + "_" + Key.ToId();
 
 	/// <inheritdoc />
 	protected override async ValueTask OnRegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
