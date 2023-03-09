@@ -192,9 +192,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<CandleMessage>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Type).HasLength(32)
 				.Property(m => m.DataType.Arg).HasLength(100)
 				.Property(m => m.OpenTime)
@@ -222,9 +222,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<IndicatorValue>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Time)
 				//.Property(m => m.OpenPrice).HasScale(priceScale)
 				//.Property(m => m.HighPrice).HasScale(priceScale)
@@ -325,9 +325,9 @@ namespace StockSharp.Algo.Export
 		{
 			builder
 				.Entity<SecurityMessage>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Name).HasLength(256)
 				.Property(m => m.ShortName).HasLength(64)
 				.Property(m => m.PriceStep)
@@ -372,12 +372,12 @@ namespace StockSharp.Algo.Export
 		{
 			builder
 				.Entity<NewsMessage>()
+				.IsColumnRequired()
 				.Property(m => m.Id).HasLength(32)
 				.Property(m => m.ServerTime)
 				.Property(m => m.LocalTime)
 				.Property(m => m.SecurityId.Value.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.Value.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Headline).HasLength(256)
 				.Property(m => m.Story)
 				.Property(m => m.Source).HasLength(256)
@@ -460,9 +460,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<TimeQuoteChange>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.ServerTime)
 				.Property(m => m.LocalTime)
 				.Property(m => m.Quote.Price).HasScale(priceScale)
@@ -483,9 +483,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<ExecutionMessage>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.ServerTime)
 				.Property(m => m.LocalTime)
 
