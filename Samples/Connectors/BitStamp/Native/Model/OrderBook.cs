@@ -15,7 +15,6 @@ namespace StockSharp.BitStamp.Native.Model
 		public decimal Size { get; set; }
 	}
 
-	[Obfuscation(Feature = "renaming", ApplyToMembers = true)]
 	class OrderBook
 	{
 		[JsonProperty("bids")]
