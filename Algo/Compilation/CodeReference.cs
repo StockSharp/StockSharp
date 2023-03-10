@@ -40,19 +40,11 @@ namespace StockSharp.Algo.Compilation
 				if (location.IsEmpty())
 					return string.Empty;
 
-				if (File.Exists(location))
-					return location;
-
 				var fileName = Path.GetFileName(Location);
 
 				if (location.EqualsIgnoreCase(fileName))
 				{
-					var tmp = Path.Combine(Directory.GetCurrentDirectory(), fileName);
-
-					if (File.Exists(tmp))
-						return tmp;
-
-					tmp = Path.Combine(ICompilerExtensions.RuntimePath, fileName);
+					var tmp = Path.Combine(ICompilerExtensions.RuntimePath, fileName);
 
 					if (File.Exists(tmp))
 						return tmp;
