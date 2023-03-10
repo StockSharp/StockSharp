@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Export
 
 				if (!dbSchema.Tables.Any(t => t.TableName == tableName))
 				{
-					var builder = db.MappingSchema.GetFluentMappingBuilder();
+					var builder = new FluentMappingBuilder(db.MappingSchema);
 					createTable(builder);
 					table = db.CreateTable<TValue>();
 				}
@@ -212,6 +212,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.UpTicks)
 				.Property(m => m.DownTicks)
 				.Property(m => m.SeqNum)
+				.Build()
 			;
 		}
 
@@ -236,6 +237,7 @@ namespace StockSharp.Algo.Export
 				//.Property(m => m.UpTicks)
 				//.Property(m => m.DownTicks)
 				//.Property(m => m.SeqNum)
+				.Build()
 			;
 
 			//for (var i = 0; i < _maxInnerValue; i++)
@@ -365,6 +367,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.SecurityId.Sedol).HasLength(16)
 				.Property(m => m.PrimaryId.SecurityCode).HasColumnName(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.SecurityCode)).HasLength(64)
 				.Property(m => m.PrimaryId.BoardCode).HasColumnName(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.BoardCode)).HasLength(32)
+				.Build()
 			;
 		}
 
@@ -386,6 +389,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.Language).HasLength(8)
 				.Property(m => m.ExpiryDate)
 				.Property(m => m.SeqNum)
+				.Build()
 			;
 		}
 
@@ -473,6 +477,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.Quote.StartPosition)
 				.Property(m => m.Quote.EndPosition)
 				.Property(m => m.Quote.Action)
+				.Build()
 			;
 		}
 
@@ -550,6 +555,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.Leverage)
 
 				.Property(m => m.SeqNum)
+				.Build()
 			;
 		}
 	}
