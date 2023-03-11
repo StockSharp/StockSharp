@@ -9,9 +9,7 @@
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.StringSearch" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Compilation" Version="$(EcngVer)" />
-
-    <PackageReference Include="MathNet.Numerics" Version="$(MathNumVer)" />
-    <PackageReference Include="Microsoft.CSharp" Version="$(CSharpVer)" />
+    <PackageReference Include="Ecng.MathLight" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
