@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Analytics
+namespace StockSharp.Algo.Analytics
 {
 	using System;
 
