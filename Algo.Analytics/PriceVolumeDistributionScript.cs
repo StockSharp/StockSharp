@@ -16,9 +16,9 @@ namespace StockSharp.Algo.Analytics
 	/// <summary>
 	/// The analytic script, calculating distribution of the volume by price levels.
 	/// </summary>
-	public class PriceVolumeDistributionScript : BaseLogReceiver, IAnalyticsScript
+	public class PriceVolumeDistributionScript : IAnalyticsScript
 	{
-		Task IAnalyticsScript.Run(IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
 			// script can process only 1 instrument
 			var security = securities.First();
@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Analytics
 
 			if (dates.Length == 0)
 			{
-				this.AddWarningLog("no data");
+				logs.AddWarningLog("no data");
 				return Task.CompletedTask;
 			}
 

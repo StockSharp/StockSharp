@@ -17,9 +17,9 @@ namespace StockSharp.Algo.Analytics
 	/// <summary>
 	/// The analytic script, calculating distribution of the biggest volume by hours.
 	/// </summary>
-	public class DailyHighestVolumeScript : BaseLogReceiver, IAnalyticsScript
+	public class DailyHighestVolumeScript : IAnalyticsScript
 	{
-		Task IAnalyticsScript.Run(IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
 			// script can process only 1 instrument
 			var security = securities.First();
@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Analytics
 
 			if (dates.Length == 0)
 			{
-				this.AddWarningLog("no data");
+				logs.AddWarningLog("no data");
 				return Task.CompletedTask;
 			}
 
@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Analytics
 			// draw on chart
 			var chart = panel.CreateHistogramChart();
 
-			foreach (var row in rows)
+			foreach (var row in rows.OrderBy(p => p.Key))
 			{
 				chart.Append(DateTime.Today + row.Key, row.Value, default);
 			}
