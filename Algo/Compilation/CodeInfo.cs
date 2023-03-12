@@ -60,9 +60,9 @@ public class CodeInfo : IPersistable
 	public INotifyList<CodeReference> References => _references;
 
 	/// <summary>
-	/// Strategy type.
+	/// Object type.
 	/// </summary>
-	public Type StrategyType { get; private set; }
+	public Type ObjectType { get; private set; }
 
 	/// <summary>
 	/// Compiled event.
@@ -74,9 +74,13 @@ public class CodeInfo : IPersistable
 	/// <summary>
 	/// Compile code.
 	/// </summary>
+	/// <param name="isTypeCompatible">Is type compatible.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public CompilationResult Compile()
+	public CompilationResult Compile(Func<Type, bool> isTypeCompatible)
 	{
+		if (isTypeCompatible is null)
+			throw new ArgumentNullException(nameof(isTypeCompatible));
+
 		var prev = _context;
 
 		_context = new(default, true);
@@ -85,9 +89,9 @@ public class CodeInfo : IPersistable
 		if (result.HasErrors())
 			return result;
 
-		var type = result.Assembly.GetTypes().FirstOrDefault(CodeExtensions.IsTypeCompatible);
+		var type = result.Assembly.GetTypes().FirstOrDefault(isTypeCompatible);
 
-		StrategyType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
+		ObjectType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
 
 		try
 		{
