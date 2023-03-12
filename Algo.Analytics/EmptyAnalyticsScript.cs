@@ -14,7 +14,7 @@
 	/// <summary>
 	/// The empty analytic strategy.
 	/// </summary>
-	public class EmptyAnalyticsStrategy : BaseLogReceiver, IAnalyticsScript
+	public class EmptyAnalyticsScript : BaseLogReceiver, IAnalyticsScript
 	{
 		Task IAnalyticsScript.Run(IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{

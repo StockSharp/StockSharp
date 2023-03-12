@@ -2,21 +2,22 @@ namespace StockSharp.Algo.Analytics
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
+	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// The analytic strategy, calculating distribution of the volume by price levels.
+	/// The analytic script, calculating distribution of the biggest volume by hours.
 	/// </summary>
-	public class PriceVolumeDistributionAnalyticsScript : BaseLogReceiver, IAnalyticsScript
+	public class DailyHighestVolumeScript : BaseLogReceiver, IAnalyticsScript
 	{
 		Task IAnalyticsScript.Run(IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
@@ -35,7 +36,7 @@ namespace StockSharp.Algo.Analytics
 				return Task.CompletedTask;
 			}
 
-			var rows = new Dictionary<decimal, decimal>();
+			var rows = new Dictionary<TimeSpan, decimal>();
 
 			foreach (var loadDate in dates)
 			{
@@ -45,36 +46,35 @@ namespace StockSharp.Algo.Analytics
 				// load candles
 				var candles = candleStorage.Load(loadDate);
 
-				// grouping candles by candle's middle price
-				var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
+				// grouping candles by open time
+				var groupedCandles = candles.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)));
 
 				foreach (var group in groupedCandles.OrderBy(g => g.Key))
 				{
 					// check if stopped
 					cancellationToken.ThrowIfCancellationRequested();
 
-					var price = group.Key;
+					var time = group.Key;
 
 					// calc total volume for the specified time frame
 					var sumVol = group.Sum(c => c.TotalVolume);
 
-					if (!rows.TryGetValue(price, out var volume))
+					if (!rows.TryGetValue(time, out var volume))
 						volume = sumVol;
 					else
 						volume += sumVol;
 
-					rows[price] = volume;
+					rows[time] = volume;
 				}
 			}
 
-			// put our calculations into grid
-			var grid = panel.CreateGrid("Price", "Volume");
-
-			// sorting by volume column (descending)
-			grid.SetSort("Volume", false);
+			// draw on chart
+			var chart = panel.CreateHistogramChart();
 
 			foreach (var row in rows)
-				grid.SetRow(row.Key, row.Value);
+			{
+				chart.Append(DateTime.Today + row.Key, row.Value, default);
+			}
 
 			return Task.CompletedTask;
 		}
