@@ -16,7 +16,7 @@ namespace StockSharp.Algo.Analytics
 	/// <summary>
 	/// The analytic script, calculating distribution of the volume by price levels.
 	/// </summary>
-	public class PriceVolumeDistributionScript : IAnalyticsScript
+	public class PriceVolumeScript : IAnalyticsScript
 	{
 		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
@@ -35,46 +35,13 @@ namespace StockSharp.Algo.Analytics
 				return Task.CompletedTask;
 			}
 
-			var rows = new Dictionary<decimal, decimal>();
+			// grouping candles by middle price
+			var rows = candleStorage.Load(from, to)
+				.GroupBy(c => c.LowPrice + c.GetLength() / 2)
+				.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));
 
-			foreach (var loadDate in dates)
-			{
-				// check if stopped
-				cancellationToken.ThrowIfCancellationRequested();
-
-				// load candles
-				var candles = candleStorage.Load(loadDate);
-
-				// grouping candles by candle's middle price
-				var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
-
-				foreach (var group in groupedCandles.OrderBy(g => g.Key))
-				{
-					// check if stopped
-					cancellationToken.ThrowIfCancellationRequested();
-
-					var price = group.Key;
-
-					// calc total volume for the specified time frame
-					var sumVol = group.Sum(c => c.TotalVolume);
-
-					if (!rows.TryGetValue(price, out var volume))
-						volume = sumVol;
-					else
-						volume += sumVol;
-
-					rows[price] = volume;
-				}
-			}
-
-			// put our calculations into grid
-			var grid = panel.CreateGrid("Price", "Volume");
-
-			// sorting by volume column (descending)
-			grid.SetSort("Volume", false);
-
-			foreach (var row in rows)
-				grid.SetRow(row.Key, row.Value);
+			// draw on chart
+			panel.CreateHistogramChart(rows.Keys, rows.Values);
 
 			return Task.CompletedTask;
 		}

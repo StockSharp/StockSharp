@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Analytics
 	/// <summary>
 	/// The analytic script, calculating distribution of the biggest volume by hours.
 	/// </summary>
-	public class DailyHighestVolumeScript : IAnalyticsScript
+	public class TimeVolumeScript : IAnalyticsScript
 	{
 		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, IEnumerable<Security> securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
@@ -36,45 +36,19 @@ namespace StockSharp.Algo.Analytics
 				return Task.CompletedTask;
 			}
 
-			var rows = new Dictionary<TimeSpan, decimal>();
+			// grouping candles by opening time (time part only) with 1 hour truncating
+			var rows = candleStorage.Load(from, to)
+				.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)))
+				.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));
 
-			foreach (var loadDate in dates)
-			{
-				// check if stopped
-				cancellationToken.ThrowIfCancellationRequested();
+			// put our calculations into grid
+			var grid = panel.CreateGrid("Price", "Volume");
 
-				// load candles
-				var candles = candleStorage.Load(loadDate);
+			foreach (var row in rows)
+				grid.SetRow(row.Key, row.Value);
 
-				// grouping candles by open time
-				var groupedCandles = candles.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)));
-
-				foreach (var group in groupedCandles.OrderBy(g => g.Key))
-				{
-					// check if stopped
-					cancellationToken.ThrowIfCancellationRequested();
-
-					var time = group.Key;
-
-					// calc total volume for the specified time frame
-					var sumVol = group.Sum(c => c.TotalVolume);
-
-					if (!rows.TryGetValue(time, out var volume))
-						volume = sumVol;
-					else
-						volume += sumVol;
-
-					rows[time] = volume;
-				}
-			}
-
-			// draw on chart
-			var chart = panel.CreateHistogramChart();
-
-			foreach (var row in rows.OrderBy(p => p.Key))
-			{
-				chart.Append(DateTime.Today + row.Key, row.Value, default);
-			}
+			// sorting by volume column (descending)
+			grid.SetSort("Volume", false);
 
 			return Task.CompletedTask;
 		}
