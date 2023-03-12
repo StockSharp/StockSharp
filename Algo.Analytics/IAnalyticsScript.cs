@@ -1,14 +1,5 @@
 ﻿namespace StockSharp.Algo.Analytics;
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Logging;
-
 /// <summary>
 /// Interface describes analytics script.
 /// </summary>

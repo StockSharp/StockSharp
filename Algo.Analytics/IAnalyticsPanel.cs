@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Analytics;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// The interface for work with result panel.
 /// </summary>

@@ -1,19 +1,5 @@
 namespace StockSharp.Algo.Analytics
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using System.Linq;
-
-	using Ecng.Common;
-	using Ecng.Collections;
-
-	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Storages;
-	using StockSharp.Logging;
-	using StockSharp.BusinessEntities;
-
 	/// <summary>
 	/// The analytic script, calculating distribution of the biggest volume by hours.
 	/// </summary>

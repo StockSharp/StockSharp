@@ -1,18 +1,5 @@
 namespace StockSharp.Algo.Analytics
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading;
-	using System.Threading.Tasks;
-
-	using Ecng.Collections;
-
-	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
-	using StockSharp.Logging;
-
 	/// <summary>
 	/// The analytic script, calculating distribution of the volume by price levels.
 	/// </summary>
