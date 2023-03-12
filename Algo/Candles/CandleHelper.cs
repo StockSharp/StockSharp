@@ -687,6 +687,19 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
+		/// To get the candle middle price.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <returns>The candle length.</returns>
+		public static decimal GetMiddlePrice(this ICandleMessage candle)
+		{
+			if (candle is null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.LowPrice + candle.GetLength() / 2;
+		}
+
+		/// <summary>
 		/// To get the candle length.
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get a length.</param>
