@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Compilation
 			"System.ComponentModel.Primitives",
 			"System.ComponentModel.TypeConverter",
 			"System.ComponentModel.Annotations",
+			"System.Collections",
 
 			"Ecng.Common",
 			"Ecng.Collections",
