@@ -1,4 +1,8 @@
 {
+  "BiggestCandle": {
+    "en": "Biggest candle",
+    "ru": "Наибольшая свеча"
+  },
   "Normalize": {
     "en": "Normalize",
     "ru": "Нормализация"

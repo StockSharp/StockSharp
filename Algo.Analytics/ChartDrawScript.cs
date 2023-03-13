@@ -8,8 +8,7 @@
 		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, Security[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
 			var lineChart = panel.CreateChart<DateTimeOffset, decimal>();
-			var volChart = panel.CreateChart<DateTimeOffset, decimal>();
-			var bubbleChart = panel.CreateChart<DateTimeOffset, decimal, decimal>();
+			var histogramChart = panel.CreateChart<DateTimeOffset, decimal>();
 
 			foreach (var security in securities)
 			{
@@ -26,9 +25,9 @@
 					volsSeries[candle.OpenTime] = candle.TotalVolume;
 				}
 
-				// draw series on chart
+				// draw series on chart as line and histogram
 				lineChart.Append(security.Id + " (close)", candlesSeries.Keys, candlesSeries.Values, ChartIndicatorDrawStyles.DashedLine, Color.Red);
-				volChart.Append(security.Id + " (vol)", volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram, Color.LightGreen);
+				histogramChart.Append(security.Id + " (vol)", volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram, Color.LightGreen);
 			}
 
 			return Task.CompletedTask;
