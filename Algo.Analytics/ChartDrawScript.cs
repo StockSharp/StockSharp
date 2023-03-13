@@ -27,8 +27,8 @@
 				}
 
 				// draw series on chart
-				lineChart.Append(candlesSeries.Keys, candlesSeries.Values, ChartIndicatorDrawStyles.DashedLine, Color.Red);
-				volChart.Append(volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram, Color.LightGreen);
+				lineChart.Append(security.Id + " (close)", candlesSeries.Keys, candlesSeries.Values, ChartIndicatorDrawStyles.DashedLine, Color.Red);
+				volChart.Append(security.Id + " (vol)", volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram, Color.LightGreen);
 			}
 
 			return Task.CompletedTask;

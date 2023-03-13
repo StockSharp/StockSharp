@@ -27,7 +27,7 @@
 				}
 
 				// draw series on chart
-				chart.Append(series.Keys, series.Values);
+				chart.Append(security.Id, series.Keys, series.Values);
 			}
 
 			return Task.CompletedTask;

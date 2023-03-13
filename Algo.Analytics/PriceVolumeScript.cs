@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Analytics
 
 			// draw on chart
 			panel.CreateChart<decimal, decimal>()
-				.Append(rows.Keys, rows.Values, ChartIndicatorDrawStyles.Histogram);
+				.Append(security.Id, rows.Keys, rows.Values, ChartIndicatorDrawStyles.Histogram);
 
 			return Task.CompletedTask;
 		}

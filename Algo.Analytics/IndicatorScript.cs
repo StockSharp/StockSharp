@@ -30,8 +30,8 @@
 				}
 
 				// draw series on chart
-				candleChart.Append(candlesSeries.Keys, candlesSeries.Values);
-				indicatorChart.Append(indicatorSeries.Keys, indicatorSeries.Values);
+				candleChart.Append(security.Id + " (close)", candlesSeries.Keys, candlesSeries.Values);
+				indicatorChart.Append(security.Id + " (ROC)", indicatorSeries.Keys, indicatorSeries.Values);
 			}
 
 			return Task.CompletedTask;
