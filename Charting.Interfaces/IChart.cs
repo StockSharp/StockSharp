@@ -29,11 +29,6 @@ namespace StockSharp.Charting
 		bool IsAutoRange { get; set; }
 
 		/// <summary>
-		/// Type of X axis for this chart.
-		/// </summary>
-		ChartAxisType XAxisType { get; set; }
-
-		/// <summary>
 		/// The list of available indicators types.
 		/// </summary>
 		IList<IndicatorType> IndicatorTypes { get; }
