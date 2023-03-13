@@ -1,4 +1,12 @@
 {
+  "Normalize": {
+    "en": "Normalize",
+    "ru": "Нормализация"
+  },
+  "PearsonCorrelation": {
+    "en": "Pearson Correlation",
+    "ru": "Корреляция Пирсона"
+  },
   "ErrorBorderColor": {
     "en": "Error border color",
     "ru": "Цвет границы ошибки"

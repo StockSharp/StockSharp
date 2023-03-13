@@ -51,7 +51,7 @@
 			var matrix = Correlation.PearsonMatrix(closes);
 
 			// displaing result into heatmap
-			panel.CreateHeatmap(ids, ids, matrix.ToArray());
+			panel.DrawHeatmap(ids, ids, matrix.ToArray());
 
 			return Task.CompletedTask;
 		}

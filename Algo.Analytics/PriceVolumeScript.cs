@@ -28,7 +28,8 @@ namespace StockSharp.Algo.Analytics
 				.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));
 
 			// draw on chart
-			panel.CreateHistogramChart(rows.Keys, rows.Values);
+			panel.CreateChart<decimal, decimal>()
+				.Append(rows.Keys, rows.Values, ChartIndicatorDrawStyles.Histogram);
 
 			return Task.CompletedTask;
 		}

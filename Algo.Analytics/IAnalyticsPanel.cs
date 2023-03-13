@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Analytics;
 
+using Ecng.Reflection;
+
 /// <summary>
 /// The interface for work with result panel.
 /// </summary>
@@ -13,33 +15,27 @@ public interface IAnalyticsPanel
 	IAnalyticsGrid CreateGrid(params string[] columns);
 
 	/// <summary>
-	/// Create bubble chart to show analytics result.
+	/// Create chart with 2 dimension to show analytics result.
 	/// </summary>
-	/// <typeparam name="X">Type of <paramref name="xValues"/> values.</typeparam>
-	/// <typeparam name="Y">Type of <paramref name="yValues"/> values.</typeparam>
-	/// <typeparam name="Z">Type of <paramref name="zValues"/> values.</typeparam>
-	/// <param name="xValues">X values.</param>
-	/// <param name="yValues">Y values.</param>
-	/// <param name="zValues">Z values.</param>
-	/// <returns><see cref="IAnalyticsChart"/></returns>
-	IAnalyticsChart CreateBubbleChart<X, Y, Z>(IEnumerable<X> xValues, IEnumerable<Y> yValues, IEnumerable<Z> zValues);
+	/// <typeparam name="X">Type of X values.</typeparam>
+	/// <typeparam name="Y">Type of Y values.</typeparam>
+	/// <returns><see cref="IAnalyticsChart{X,Y,VoidType}"/></returns>
+	IAnalyticsChart<X, Y, VoidType> CreateChart<X, Y>();
 
 	/// <summary>
-	/// Create histogram chart to show analytics result.
+	/// Create chart with 3 dimension to show analytics result.
 	/// </summary>
-	/// <typeparam name="X">Type of <paramref name="xValues"/> values.</typeparam>
-	/// <typeparam name="Y">Type of <paramref name="yValues"/> values.</typeparam>
-	/// <param name="xValues">X values.</param>
-	/// <param name="yValues">Y values.</param>
-	/// <returns><see cref="IAnalyticsChart"/></returns>
-	IAnalyticsChart CreateHistogramChart<X, Y>(IEnumerable<X> xValues, IEnumerable<Y> yValues);
+	/// <typeparam name="X">Type of X values.</typeparam>
+	/// <typeparam name="Y">Type of Y values.</typeparam>
+	/// <typeparam name="Z">Type of Z values.</typeparam>
+	/// <returns><see cref="IAnalyticsChart{X,Y,Z}"/></returns>
+	IAnalyticsChart<X, Y, Z> CreateChart<X, Y, Z>();
 
 	/// <summary>
-	/// Create heatmap to show analytics result.
+	/// Draw heatmap to show analytics result.
 	/// </summary>
 	/// <param name="xTitles">X titles.</param>
 	/// <param name="yTitles">Y titles.</param>
 	/// <param name="data">Data.</param>
-	/// <returns><see cref="IAnalyticsChart"/></returns>
-	IAnalyticsChart CreateHeatmap(string[] xTitles, string[] yTitles, double[,] data);
+	void DrawHeatmap(string[] xTitles, string[] yTitles, double[,] data);
 }
