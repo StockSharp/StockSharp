@@ -90,31 +90,6 @@
 		}
 
 		/// <summary>
-		/// To return the area by the specified index. If the number of areas is smaller then the missing areas will be created automatically.
-		/// </summary>
-		/// <param name="chart">Chart.</param>
-		/// <param name="index">The area index.</param>
-		/// <returns>Area.</returns>
-		public static IChartArea GetArea(this IChart chart, int index)
-		{
-			if (chart == null)
-				throw new ArgumentNullException(nameof(chart));
-
-			if (index < 0)
-				throw new ArgumentOutOfRangeException(nameof(index));
-
-			while (chart.Areas.Count < index + 1)
-			{
-				var area = chart.CreateArea();
-				area.Title = LocalizedStrings.Panel + " " + index;
-				area.XAxisType = chart.XAxisType;
-				chart.Areas.Add(area);
-			}
-
-			return chart.Areas[index];
-		}
-
-		/// <summary>
 		/// To get the chart associated with the passed strategy.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
