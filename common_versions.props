@@ -12,8 +12,8 @@
     <FluentFtpVer>40.0.0</FluentFtpVer>
     <CSharpVer>4.7.0</CSharpVer>
     <SignalRVer>2.4.3</SignalRVer>
-    <MsTestVer>2.2.10</MsTestVer>
-    <MsTestSdkVer>17.3.1</MsTestSdkVer>
+    <MsTestVer>3.*</MsTestVer>
+    <MsTestSdkVer>17.*</MsTestSdkVer>
     <MsExtensionsVer>6.*</MsExtensionsVer>
     <RestSharpXmlVer>108.0.2</RestSharpXmlVer>
 

@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Export
 
 				if (!dbSchema.Tables.Any(t => t.TableName == tableName))
 				{
-					var builder = db.MappingSchema.GetFluentMappingBuilder();
+					var builder = new FluentMappingBuilder(db.MappingSchema);
 					createTable(builder);
 					table = db.CreateTable<TValue>();
 				}
@@ -192,9 +192,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<CandleMessage>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Type).HasLength(32)
 				.Property(m => m.DataType.Arg).HasLength(100)
 				.Property(m => m.OpenTime)
@@ -212,6 +212,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.UpTicks)
 				.Property(m => m.DownTicks)
 				.Property(m => m.SeqNum)
+				.Build()
 			;
 		}
 
@@ -222,9 +223,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<IndicatorValue>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Time)
 				//.Property(m => m.OpenPrice).HasScale(priceScale)
 				//.Property(m => m.HighPrice).HasScale(priceScale)
@@ -236,6 +237,7 @@ namespace StockSharp.Algo.Export
 				//.Property(m => m.UpTicks)
 				//.Property(m => m.DownTicks)
 				//.Property(m => m.SeqNum)
+				.Build()
 			;
 
 			//for (var i = 0; i < _maxInnerValue; i++)
@@ -325,9 +327,9 @@ namespace StockSharp.Algo.Export
 		{
 			builder
 				.Entity<SecurityMessage>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Name).HasLength(256)
 				.Property(m => m.ShortName).HasLength(64)
 				.Property(m => m.PriceStep)
@@ -365,6 +367,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.SecurityId.Sedol).HasLength(16)
 				.Property(m => m.PrimaryId.SecurityCode).HasColumnName(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.SecurityCode)).HasLength(64)
 				.Property(m => m.PrimaryId.BoardCode).HasColumnName(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.BoardCode)).HasLength(32)
+				.Build()
 			;
 		}
 
@@ -372,12 +375,12 @@ namespace StockSharp.Algo.Export
 		{
 			builder
 				.Entity<NewsMessage>()
+				.IsColumnRequired()
 				.Property(m => m.Id).HasLength(32)
 				.Property(m => m.ServerTime)
 				.Property(m => m.LocalTime)
 				.Property(m => m.SecurityId.Value.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.Value.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.Headline).HasLength(256)
 				.Property(m => m.Story)
 				.Property(m => m.Source).HasLength(256)
@@ -386,6 +389,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.Language).HasLength(8)
 				.Property(m => m.ExpiryDate)
 				.Property(m => m.SeqNum)
+				.Build()
 			;
 		}
 
@@ -460,9 +464,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<TimeQuoteChange>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.ServerTime)
 				.Property(m => m.LocalTime)
 				.Property(m => m.Quote.Price).HasScale(priceScale)
@@ -473,6 +477,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.Quote.StartPosition)
 				.Property(m => m.Quote.EndPosition)
 				.Property(m => m.Quote.Action)
+				.Build()
 			;
 		}
 
@@ -483,9 +488,9 @@ namespace StockSharp.Algo.Export
 
 			builder
 				.Entity<ExecutionMessage>()
+				.IsColumnRequired()
 				.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 				.Property(m => m.SecurityId.BoardCode).HasLength(256)
-				.Property(m => m.SecurityId).IsNotColumn()
 				.Property(m => m.ServerTime)
 				.Property(m => m.LocalTime)
 
@@ -550,6 +555,7 @@ namespace StockSharp.Algo.Export
 				.Property(m => m.Leverage)
 
 				.Property(m => m.SeqNum)
+				.Build()
 			;
 		}
 	}

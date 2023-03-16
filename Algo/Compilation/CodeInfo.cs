@@ -60,34 +60,49 @@ public class CodeInfo : IPersistable
 	public INotifyList<CodeReference> References => _references;
 
 	/// <summary>
-	/// Strategy type.
+	/// Object type.
 	/// </summary>
-	public Type StrategyType { get; private set; }
+	public Type ObjectType { get; private set; }
 
 	/// <summary>
-	/// Compiled event.
+	/// Extra source codes.
 	/// </summary>
-	public event Action Compiled;
+    public string[] ExtraSources { get; set; }
+
+    /// <summary>
+    /// Compiled event.
+    /// </summary>
+    public event Action Compiled;
 
 	private AssemblyLoadContext _context;
 
 	/// <summary>
 	/// Compile code.
 	/// </summary>
+	/// <param name="isTypeCompatible">Is type compatible.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
-	public CompilationResult Compile()
+	public CompilationResult Compile(Func<Type, bool> isTypeCompatible)
 	{
+		if (isTypeCompatible is null)
+			throw new ArgumentNullException(nameof(isTypeCompatible));
+
 		var prev = _context;
 
 		_context = new(default, true);
-		var result = ServicesRegistry.Compiler.CompileCode(_context, Text, string.Empty, References);
+
+		var source = new[] { Text };
+
+		if (ExtraSources is not null)
+			source = source.Concat(ExtraSources);
+
+		var result = ServicesRegistry.Compiler.CompileCode(_context, source, string.Empty, References);
 
 		if (result.HasErrors())
 			return result;
 
-		var type = result.Assembly.GetTypes().FirstOrDefault(CodeExtensions.IsTypeCompatible);
+		var type = result.Assembly.GetTypes().FirstOrDefault(isTypeCompatible);
 
-		StrategyType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
+		ObjectType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
 
 		try
 		{
@@ -120,6 +135,7 @@ public class CodeInfo : IPersistable
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
 		Text = storage.GetValue(nameof(Text), storage.GetValue<string>("SourceCode"));
+		ExtraSources = storage.GetValue(nameof(ExtraSources), ExtraSources);
 
 		_references.Clear();
 		_references.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(References)).Select(s => s.Load<CodeReference>()).ToArray());
@@ -129,6 +145,7 @@ public class CodeInfo : IPersistable
 	{
 		storage.SetValue(nameof(Id), Id);
 		storage.SetValue(nameof(Name), Name);
+		storage.SetValue(nameof(ExtraSources), ExtraSources);
 		storage.SetValue(nameof(Text), Text);
 		storage.SetValue(nameof(References), _references.Cache.Select(r => r.Save()).ToArray());
 	}

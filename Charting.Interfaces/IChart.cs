@@ -3,7 +3,6 @@ namespace StockSharp.Charting
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
-	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
@@ -28,11 +27,6 @@ namespace StockSharp.Charting
 		/// To use automatic range for the X-axis. The default is off.
 		/// </summary>
 		bool IsAutoRange { get; set; }
-
-		/// <summary>
-		/// Type of X axis for this chart.
-		/// </summary>
-		ChartAxisType XAxisType { get; set; }
 
 		/// <summary>
 		/// The list of available indicators types.

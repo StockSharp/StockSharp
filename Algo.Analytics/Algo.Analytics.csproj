@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_net.props" />
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="$(MathNumVer)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\Charting.Interfaces\Charting.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

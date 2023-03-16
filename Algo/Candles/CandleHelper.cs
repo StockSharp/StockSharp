@@ -687,6 +687,19 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
+		/// To get the candle middle price.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <returns>The candle length.</returns>
+		public static decimal GetMiddlePrice(this ICandleMessage candle)
+		{
+			if (candle is null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.LowPrice + candle.GetLength() / 2;
+		}
+
+		/// <summary>
 		/// To get the candle length.
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get a length.</param>
@@ -736,85 +749,6 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentNullException(nameof(candle));
 
 			return candle.OpenPrice.Min(candle.ClosePrice) - candle.LowPrice;
-		}
-
-		//
-		// http://en.wikipedia.org/wiki/Candlestick_chart
-		//
-
-		/// <summary>
-		/// Whether the candle is white or black.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to get a color.</param>
-		/// <returns><see langword="true" /> if the candle is white, <see langword="false" /> if the candle is black and <see langword="null" /> if the candle is plane.</returns>
-		public static bool? IsWhiteOrBlack(this ICandleMessage candle)
-		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
-
-			if (CandlePatternRegistry.White.Recognize(candle))
-				return true;
-			else if (CandlePatternRegistry.Black.Recognize(candle))
-				return false;
-			else
-				return null;
-		}
-
-		/// <summary>
-		/// Whether the candle is shadowless.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to identify the shadows presence.</param>
-		/// <returns><see langword="true" /> if the candle has no shadows, <see langword="false" /> if it has shadows.</returns>
-		public static bool IsMarubozu(this ICandleMessage candle)
-			=> CandlePatternRegistry.WhiteMarubozu.Recognize(candle);
-
-		/// <summary>
-		/// Whether the candle is neutral to trades.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to calculate whether it is neutral.</param>
-		/// <returns><see langword="true" /> if the candle is neutral, <see langword="false" /> if it is not neutral.</returns>
-		/// <remarks>
-		/// The neutrality is defined as a situation when during the candle neither buyers nor sellers have not created a trend.
-		/// </remarks>
-		public static bool IsSpinningTop(this ICandleMessage candle)
-			=> CandlePatternRegistry.SpinningTop.Recognize(candle);
-
-		/// <summary>
-		/// Whether the candle is hammer.
-		/// </summary>
-		/// <param name="candle">The candle which should match the pattern.</param>
-		/// <returns><see langword="true" /> if it is matched, <see langword="false" /> if not.</returns>
-		public static bool IsHammer(this ICandleMessage candle)
-			=> CandlePatternRegistry.Hammer.Recognize(candle) || CandlePatternRegistry.InvertedHammer.Recognize(candle);
-
-		/// <summary>
-		/// Whether the candle is dragonfly or tombstone.
-		/// </summary>
-		/// <param name="candle">The candle which should match the pattern.</param>
-		/// <returns><see langword="true" /> if the dragonfly, <see langword="false" /> if the tombstone, <see langword="null" /> - neither one nor the other.</returns>
-		public static bool? IsDragonflyOrGravestone(this ICandleMessage candle)
-		{
-			if (CandlePatternRegistry.Dragonfly.Recognize(candle))
-				return true;
-			else if (CandlePatternRegistry.Gravestone.Recognize(candle))
-				return false;
-			else
-				return null;
-		}
-
-		/// <summary>
-		/// Whether the candle is bullish or bearish.
-		/// </summary>
-		/// <param name="candle">The candle which should be checked for the trend.</param>
-		/// <returns><see langword="true" /> if bullish, <see langword="false" />, if bearish, <see langword="null" /> - neither one nor the other.</returns>
-		public static bool? IsBullishOrBearish(this ICandleMessage candle)
-		{
-			if (CandlePatternRegistry.Bullish.Recognize(candle))
-				return true;
-			else if (CandlePatternRegistry.Bearish.Recognize(candle))
-				return false;
-			else
-				return null;
 		}
 
 		/// <summary>

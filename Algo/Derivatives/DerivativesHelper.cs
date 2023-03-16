@@ -23,8 +23,7 @@ namespace StockSharp.Algo.Derivatives
 
 	using Ecng.Collections;
 	using Ecng.Common;
-
-	using MathNet.Numerics.Distributions;
+	using Ecng.MathLight;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -43,7 +42,6 @@ namespace StockSharp.Algo.Derivatives
 		private static readonly SynchronizedPairSet<int, char> _futureMonthCodes = new();
 		private static readonly SynchronizedPairSet<int, char> _optionCallMonthCodes = new();
 		private static readonly SynchronizedPairSet<int, char> _optionPutMonthCodes = new();
-		private static readonly Normal _normalDistribution = new();
 
 		static DerivativesHelper()
 		{
@@ -909,9 +907,7 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		private static double NormalDistr(double x)
-		{
-			return _normalDistribution.CumulativeDistribution(x);
-		}
+			=> Normal.CumulativeDistribution(x);
 
 		internal static void CheckOption(this Security option)
 		{
