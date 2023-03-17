@@ -1,4 +1,64 @@
 {
+  "NCandlesParams": {
+    "en": "{0} candles",
+    "ru": "{0} свечей"
+  },
+  "NCandlesDelayLength": {
+    "en": "Delay length",
+    "ru": "Длительность задержки"
+  },
+  "NCandlesDelayLengthDetails": {
+    "en": "Number of candles to delay signal for.",
+    "ru": "Количество свечей на которое будет задержан сигнал."
+  },
+  "PosCondition": {
+    "en": "Position condition",
+    "ru": "Условие по позиции"
+  },
+  "PosConditionNone": {
+    "en": "No additional condition",
+    "ru": "Без дополнительных условий"
+  },
+  "PosConditionIncreaseOnly": {
+    "en": "Increase only",
+    "ru": "Только увеличение"
+  },
+  "PosConditionIncreaseOnlyDetails": {
+    "en": "Increase position only. Send order only if it is of the same direction as the current position or if the current position is zero.",
+    "ru": "Только увеличение позиции. Посылать заявку только того же направления что и текущая позиция или если текущая позиция нулевая."
+  },
+  "PosConditionReduceOnly": {
+    "en": "Reduce only",
+    "ru": "Только сокращение"
+  },
+  "PosConditionReduceOnlyDetails": {
+    "en": "Reduce position only. Send order only if it is of the opposite direction of the current non-zero position. Order size is limited by current position.",
+    "ru": "Только сокращение позиции. Посылать заявку только на сокращение текущей позиции. Размер заявки ограничен текущей позицией."
+  },
+  "PosConditionOpen": {
+    "en": "Open position",
+    "ru": "Открытие позиции"
+  },
+  "PosConditionOpenDetails": {
+    "en": "Open position. Send order only if the current position is zero.",
+    "ru": "Открытие позиции. Посылать заявку только если текущая позиция нулевая."
+  },
+  "PosConditionClose": {
+    "en": "Close position",
+    "ru": "Закрытие позиции"
+  },
+  "PosConditionCloseDetails": {
+    "en": "Close position. Order volume and direction is calculated automatically based on current position.",
+    "ru": "Закрытие позиции. Объем и направление заявки расчитывается автоматически на основе текущей позиции."
+  },
+  "PosConditionInvert": {
+    "en": "Invert position",
+    "ru": "Переворот позиции"
+  },
+  "PosConditionInvertDetails": {
+    "en": "Invert position. Order volume and direction is calculated automatically based on current position.",
+    "ru": "Переворот позиции. Объем и направление заявки расчитывается автоматически на основе текущей позиции."
+  },
   "BiggestCandle": {
     "en": "Biggest candle",
     "ru": "Наибольшая свеча"
