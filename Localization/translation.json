@@ -1,4 +1,8 @@
 {
+  "OAuthStart": {
+    "en": "By clicking the Start button below, you will be redirected to the service website to provide access rights.",
+    "ru": "Нажимая ниже кнопку Старт вы будете переадресованы на сайт сервиса для предоставления прав доступа."
+  },
   "NCandlesParams": {
     "en": "{0} candles",
     "ru": "{0} свечей"
