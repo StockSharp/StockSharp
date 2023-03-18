@@ -1,4 +1,8 @@
 {
+  "Mega": {
+    "en": "Mega",
+    "ru": "Mega"
+  },
   "Amazon": {
     "en": "Amazon",
     "ru": "Амазон"
@@ -435,9 +439,9 @@
     "en": "Bitmart",
     "ru": "Bitmart"
   },
-  "ResumeFromLastDateInStorage": {
-    "en": "Resume download starting from last date in storage",
-    "ru": "Возобновить скачивание начиная с последней даты в хранилище"
+  "ResumeFromLastDate": {
+    "en": "Resume operation starting from last date",
+    "ru": "Возобновить операцию начиная с последней даты"
   },
   "Freelance": {
     "en": "Freelance",
