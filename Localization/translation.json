@@ -1,4 +1,16 @@
 {
+  "AmazonS3": {
+    "en": "Amazon S3",
+    "ru": "Амазон S3"
+  },
+  "AmazonGlacier": {
+    "en": "Amazon Glacier",
+    "ru": "Амазон Glacier"
+  },
+  "Amazon": {
+    "en": "Amazon",
+    "ru": "Амазон"
+  },
   "Mega": {
     "en": "Mega",
     "ru": "Mega"
