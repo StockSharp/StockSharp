@@ -13,7 +13,6 @@
 	using DrawingColor = System.Drawing.Color;
 
 	using Ecng.Backup;
-	using Ecng.Backup.Yandex;
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
