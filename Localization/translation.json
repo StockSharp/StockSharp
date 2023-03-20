@@ -1,4 +1,24 @@
 {
+  "ForumNotifications": {
+    "en": "Forum notifications",
+    "ru": "Уведомления о сообщениях на форуме"
+  },
+  "Promotion": {
+    "en": "Promotion",
+    "ru": "Предложения"
+  },
+  "PromotionNewsletters": {
+    "en": "Newsletters about special promotion",
+    "ru": "Рассылки о специальных предложениях"
+  },
+  "Releases": {
+    "en": "Releases",
+    "ru": "Новые версии"
+  },
+  "ReleasesNewsletters": {
+    "en": "Releases newsletters",
+    "ru": "Рассылки о новых версиях"
+  },
   "AmazonS3": {
     "en": "Amazon S3",
     "ru": "Амазон S3"
@@ -22046,6 +22066,14 @@
   "Article": {
     "en": "Article",
     "ru": "Статья"
+  },
+  "Articles": {
+    "en": "Articles",
+    "ru": "Статьи"
+  },
+  "ArticlesNewsletters": {
+    "en": "Newsletters with articles about algorithmic trading and trading robots",
+    "ru": "Рассылки со статьями об алгоритмической торговле и торговых роботах"
   },
   "Page": {
     "en": "Page",
