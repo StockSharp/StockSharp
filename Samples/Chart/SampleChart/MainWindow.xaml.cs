@@ -13,12 +13,10 @@
 	using DrawingColor = System.Drawing.Color;
 
 	using Ecng.Backup;
-	using Ecng.Backup.Yandex;
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Xaml;
-	using Ecng.Xaml.Yandex;
 	using Ecng.Compilation;
 	using Ecng.Compilation.Roslyn;
 	using Ecng.Serialization;
@@ -147,8 +145,6 @@
 			{
 				MessageBox.Show($"RegisterOrder: sec={order.Security.Id}, {order.Direction} {order.Volume}@{order.Price}");
 			};
-
-			ConfigManager.RegisterService<IBackupService>(new YandexDiskService(new YandexLoginWindowOAuthProvider()));
 
 			HistoryPath.Folder = Paths.HistoryDataPath;
 

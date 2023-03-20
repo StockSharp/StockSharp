@@ -1,4 +1,60 @@
 {
+  "ForumNotifications": {
+    "en": "Forum notifications",
+    "ru": "Уведомления о сообщениях на форуме"
+  },
+  "Promotion": {
+    "en": "Promotion",
+    "ru": "Предложения"
+  },
+  "PromotionNewsletters": {
+    "en": "Newsletters about special promotion",
+    "ru": "Рассылки о специальных предложениях"
+  },
+  "Releases": {
+    "en": "Releases",
+    "ru": "Новые версии"
+  },
+  "ReleasesNewsletters": {
+    "en": "Releases newsletters",
+    "ru": "Рассылки о новых версиях"
+  },
+  "AmazonS3": {
+    "en": "Amazon S3",
+    "ru": "Амазон S3"
+  },
+  "AmazonGlacier": {
+    "en": "Amazon Glacier",
+    "ru": "Амазон Glacier"
+  },
+  "Amazon": {
+    "en": "Amazon",
+    "ru": "Амазон"
+  },
+  "Mega": {
+    "en": "Mega",
+    "ru": "Mega"
+  },
+  "Amazon": {
+    "en": "Amazon",
+    "ru": "Амазон"
+  },
+  "Yandex": {
+    "en": "Yandex",
+    "ru": "Яндекс"
+  },
+  "Folder": {
+    "en": "Folder",
+    "ru": "Папка"
+  },
+  "FolderCloud": {
+    "en": "A folder in the cloud storage used as a root for uploading data.",
+    "ru": "Папка в облачном хранилище, используемая в качестве корня для загрузки данных."
+  },
+  "OAuthStart": {
+    "en": "By clicking the Start button below, you will be redirected to the service website to provide access rights.",
+    "ru": "Нажимая ниже кнопку Старт вы будете переадресованы на сайт сервиса для предоставления прав доступа."
+  },
   "NCandlesParams": {
     "en": "{0} candles",
     "ru": "{0} свечей"
@@ -415,9 +471,9 @@
     "en": "Bitmart",
     "ru": "Bitmart"
   },
-  "ResumeFromLastDateInStorage": {
-    "en": "Resume download starting from last date in storage",
-    "ru": "Возобновить скачивание начиная с последней даты в хранилище"
+  "ResumeFromLastDate": {
+    "en": "Resume operation starting from last date",
+    "ru": "Возобновить операцию начиная с последней даты"
   },
   "Freelance": {
     "en": "Freelance",
@@ -8728,8 +8784,8 @@
     "ru": "Автопубликация"
   },
   "Str1999": {
-    "en": "Activate automatic chart publication on Yandex.Disk.",
-    "ru": "Включить автоматическую публикацию графика на Яндекс.Диск."
+    "en": "Activate automatic chart publication into cloud.",
+    "ru": "Включить автоматическую публикацию графика в облако."
   },
   "Str2000": {
     "en": "Chart publishing period.",
@@ -8744,8 +8800,8 @@
     "ru": "Имя файла"
   },
   "Str2003": {
-    "en": "File name, where an image on Yandex.Disk will be saved.",
-    "ru": "Имя файла, куда будет сохраняться изображение на Яндекс.Диск-е."
+    "en": "File name, where an image on cloud will be saved.",
+    "ru": "Имя файла, куда будет сохраняться изображение в облаке."
   },
   "Str2004": {
     "en": "Chart does not contain any candle series.",
@@ -22010,6 +22066,14 @@
   "Article": {
     "en": "Article",
     "ru": "Статья"
+  },
+  "Articles": {
+    "en": "Articles",
+    "ru": "Статьи"
+  },
+  "ArticlesNewsletters": {
+    "en": "Newsletters with articles about algorithmic trading and trading robots",
+    "ru": "Рассылки со статьями об алгоритмической торговле и торговых роботах"
   },
   "Page": {
     "en": "Page",
