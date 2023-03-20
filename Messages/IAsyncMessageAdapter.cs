@@ -30,7 +30,7 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	TimeSpan TransactionTimeout => _defaultTransactionTimeout;
 
 	/// <summary>
-	/// Max number of parallel messages processing.
+	/// Max number of parallel (non-control) messages processing.
 	/// </summary>
 	int MaxParallelMessages => DefaultMaxParallelMessages;
 

@@ -144,14 +144,18 @@ public class AsyncMessageProcessor : BaseLogReceiver
 			}
 
 			// cant process anything in parallel while connect/disconnect/reset is processing
-			if(isControlProcessing || numProcessing >= _adapter.MaxParallelMessages)
+			if(isControlProcessing)
 				return null;
 
 			// if transaction is processing currently, we can process other non-exclusive messages in parallel (marketdata request for example)
 			if(isTransactionProcessing)
-				return _messages.FirstOrDefault(m => !m.IsStartedProcessing && !(m.IsControl || m.IsTransaction));
+				return numProcessing >= _adapter.MaxParallelMessages
+					? null // can't process more messages because of the limit.
+					: _messages.FirstOrDefault(m => !m.IsStartedProcessing && !(m.IsControl || m.IsTransaction));
 
-			return _messages.FirstOrDefault(m => !m.IsStartedProcessing);
+			return numProcessing >= _adapter.MaxParallelMessages
+				? _messages.FirstOrDefault(m => !m.IsStartedProcessing && m.IsControl) // if the limit is exceeded we can only process control messages
+				: _messages.FirstOrDefault(m => !m.IsStartedProcessing);
 		}
 	}
 
