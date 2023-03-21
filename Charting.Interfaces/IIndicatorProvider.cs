@@ -6,11 +6,11 @@
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Reflection;
 
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Configuration;
 	using StockSharp.Logging;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Provider <see cref="IndicatorType"/>.

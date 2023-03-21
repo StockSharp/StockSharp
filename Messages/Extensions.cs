@@ -19,12 +19,12 @@ namespace StockSharp.Messages
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Reflection;
 
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
+	using Ecng.Reflection;
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -5046,26 +5046,5 @@ namespace StockSharp.Messages
 		/// <returns>Check result.</returns>
 		public static bool IsStub(this Type adapterType)
 			=> adapterType.GetAttribute<MessageAdapterStubAttribute>() is not null;
-
-		/// <summary>
-		/// Find all <typeparamref name="T"/> implementation in the specified assembly.
-		/// </summary>
-		/// <typeparam name="T">Filter interface type.</typeparam>
-		/// <param name="assembly">Assembly in where types scan required.</param>
-		/// <param name="showObsolete">Show types marked as obsolete.</param>
-		/// <param name="showNonPublic">Show non public types.</param>
-		/// <param name="extraFilter">Extra filter.</param>
-		/// <returns>Found types.</returns>
-		public static IEnumerable<Type> FindImplementations<T>(this Assembly assembly, bool showObsolete = default, bool showNonPublic = default, Func<Type, bool> extraFilter = default)
-		{
-			if (assembly is null)
-				throw new ArgumentNullException(nameof(assembly));
-
-			extraFilter ??= t => true;
-
-			return assembly
-				.GetTypes()
-				.Where(t => t.Is<T>() && (showNonPublic || t.IsPublic) && !t.IsAbstract && !t.IsInterface && (showObsolete || !t.IsObsolete()) && t.IsBrowsable() && extraFilter(t));
-		}
 	}
 }
