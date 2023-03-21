@@ -81,12 +81,10 @@ namespace StockSharp.Algo
 		/// <returns>The type of the message <see cref="CandleMessage"/>.</returns>
 		public static Type ToCandleMessageType(this Type candleType)
 		{
-			if (candleType == null)
+			if (candleType is null)
 				throw new ArgumentNullException(nameof(candleType));
 
-			var messageType = _candleTypes.TryGetValue(candleType);
-
-			if (messageType == null)
+			if (!_candleTypes.TryGetValue(candleType, out var messageType))
 				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
 			return messageType;
@@ -99,12 +97,10 @@ namespace StockSharp.Algo
 		/// <returns>The type of the candle <see cref="Candle"/>.</returns>
 		public static Type ToCandleType(this Type messageType)
 		{
-			if (messageType == null)
+			if (messageType is null)
 				throw new ArgumentNullException(nameof(messageType));
 
-			var candleType = _candleTypes.TryGetKey(messageType);
-
-			if (candleType == null)
+			if (!_candleTypes.TryGetKey(messageType, out var candleType))
 				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 
 			return candleType;
