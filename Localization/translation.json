@@ -1,4 +1,8 @@
 {
+  "OfflineWarning": {
+    "en": "Offline mode. Unable to continue the operation.",
+    "ru": "Оффлайн режим. Невозможно продолжить операцию."
+  },
   "ForumNotifications": {
     "en": "Forum notifications",
     "ru": "Уведомления о сообщениях на форуме"
