@@ -472,7 +472,7 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (Exception excp)
 				{
-					excp.LogError();
+					this.AddErrorLog(excp);
 				}
 				finally
 				{

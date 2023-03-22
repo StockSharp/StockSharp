@@ -2160,7 +2160,7 @@ namespace StockSharp.Algo
 					}
 					catch (Exception e)
 					{
-						e.LogError();
+						this.AddErrorLog(e);
 					}
 				}
 
