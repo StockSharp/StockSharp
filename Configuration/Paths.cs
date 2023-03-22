@@ -186,6 +186,18 @@
 		public static string GetLogoUrl() => $"{GetWebSiteUrl()}/images/logo.png";
 
 		/// <summary>
+		/// Chat in Telegram.
+		/// </summary>
+		public static string Chat
+		{
+			get
+			{
+				var channelId = LocalizedStrings.ActiveLanguage == LangCodes.Ru ? 1 : 361;
+				return $"https://t.me/stocksharpchat/{channelId}";
+			}
+		}
+
+		/// <summary>
 		/// </summary>
 		public static class Pages
 		{
