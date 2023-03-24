@@ -1,27 +1,32 @@
-﻿namespace StockSharp.Algo.Candles.Patterns;
-
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using Ecng.Serialization;
-using Ecng.Collections;
 
 using StockSharp.Localization;
 using StockSharp.Messages;
+
+namespace StockSharp.Algo.Candles.Patterns;
 
 /// <summary>
 /// Base complex implementation of <see cref="ICandlePattern"/>.
 /// </summary>
 public class ComplexCandlePattern : ICandlePattern
 {
-	private int _curr;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ComplexCandlePattern"/>.
+	/// </summary>
+	public ComplexCandlePattern() { }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ComplexCandlePattern"/>.
 	/// </summary>
-	public ComplexCandlePattern()
+	public ComplexCandlePattern(IEnumerable<ICandlePattern> inner)
 	{
+		_inner.AddRange(inner);
+		UpdateCount();
 	}
 
 	/// <inheritdoc />
@@ -33,49 +38,35 @@ public class ComplexCandlePattern : ICandlePattern
 		Order = 0)]
 	public string Name { get; set; }
 
+	private readonly List<ICandlePattern> _inner = new();
+
 	/// <summary>
 	/// Inner patterns.
 	/// </summary>
-	public IList<ICandlePattern> Inner { get; } = new List<ICandlePattern>();
+	public IEnumerable<ICandlePattern> Inner => _inner;
 
-	int ICandlePattern.CandlesCount => Inner.Count;
+	/// <inheritdoc />
+	public int CandlesCount { get; private set; }
 
-	void ICandlePattern.Validate()
+	private void UpdateCount() => CandlesCount = Inner.Sum(c => c.CandlesCount);
+
+	bool ICandlePattern.Recognize(ReadOnlySpan<ICandleMessage> candles)
 	{
-		foreach (var i in Inner)
-			i.Validate();
-	}
+		if(candles.Length != CandlesCount)
+			throw new ArgumentException($"unexpected candles count. expected {CandlesCount}, got {candles.Length}");
 
-	void ICandlePattern.Reset()
-	{
-		_curr = 0;
-
-		foreach (var i in Inner)
-			i.Reset();
-	}
-
-	bool ICandlePattern.Recognize(ICandleMessage candle)
-	{
-		var isFinished = candle.State == CandleStates.Finished;
-
-		if (Inner[_curr].Recognize(candle))
+		var start = 0;
+		foreach (var inner in _inner)
 		{
-			if (isFinished)
-			{
-				if (++_curr < Inner.Count)
-					return false;
+			var subCandles = candles.Slice(start, inner.CandlesCount);
 
-				_curr = 0;
-				return true;
-			}
+			if(!inner.Recognize(subCandles))
+				return false;
 
-			return (_curr + 1) == Inner.Count;
+			start += inner.CandlesCount;
 		}
 
-		if (isFinished)
-			_curr = 0;
-
-		return false;
+		return true;
 	}
 
 	void IPersistable.Save(SettingsStorage storage)
@@ -90,8 +81,12 @@ public class ComplexCandlePattern : ICandlePattern
 	{
 		Name = storage.GetValue<string>(nameof(Name));
 
-		Inner.Clear();
-		Inner.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Inner)).Select(i => i.LoadEntire<ICandlePattern>()));
+		_inner.Clear();
+		_inner.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Inner)).Select(i => i.LoadEntire<ICandlePattern>()));
+		UpdateCount();
+
+		if(!(_inner?.Count > 0))
+			throw new ArgumentException("no inner patterns");
 	}
 
 	/// <inheritdoc />

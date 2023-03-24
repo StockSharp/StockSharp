@@ -1,8 +1,10 @@
-﻿namespace StockSharp.Algo.Candles.Patterns;
+﻿using System;
 
 using Ecng.Serialization;
 
 using StockSharp.Messages;
+
+namespace StockSharp.Algo.Candles.Patterns;
 
 /// <summary>
 /// The interfaces describes candle pattern.
@@ -15,24 +17,14 @@ public interface ICandlePattern : IPersistable
 	string Name { get; }
 
 	/// <summary>
-	/// Reset.
-	/// </summary>
-	void Reset();
-
-	/// <summary>
 	/// Try recognize pattern.
 	/// </summary>
-	/// <param name="candle"><see cref="ICandleMessage"/>.</param>
+	/// <param name="candles"><see cref="ICandleMessage"/>. Number of candles must be equal to <see cref="CandlesCount"/>.</param>
 	/// <returns>Check result.</returns>
-	bool Recognize(ICandleMessage candle);
+	bool Recognize(ReadOnlySpan<ICandleMessage> candles);
 
 	/// <summary>
 	/// Candles in pattern.
 	/// </summary>
 	int CandlesCount { get; }
-
-	/// <summary>
-	/// Validate settings.
-	/// </summary>
-	void Validate();
 }

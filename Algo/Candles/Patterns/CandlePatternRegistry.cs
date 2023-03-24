@@ -3,8 +3,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Ecng.Collections;
-
 using StockSharp.Localization;
 
 /// <summary>
@@ -12,17 +10,9 @@ using StockSharp.Localization;
 /// </summary>
 public static class CandlePatternRegistry
 {
-	private static ComplexCandlePattern Create(params string[] expressions)
-	{
-		//if (expressions.Length == 1)
-		//	return new CandlePattern { Expression = expressions[0] };
+	private static ExpressionCandlePattern Create(params string[] expressions) => new(expressions.Select(e => new CandleExpressionCondition(e)));
 
-		var comples = new ComplexCandlePattern();
-		comples.Inner.AddRange(expressions.Select(e => new CandlePattern { Expression = e }));
-		return comples;
-	}
-
-	private static ComplexCandlePattern Name(this ComplexCandlePattern pattern, string name)
+	private static ExpressionCandlePattern Name(this ExpressionCandlePattern pattern, string name)
 	{
 		pattern.Name = name;
 		return pattern;
