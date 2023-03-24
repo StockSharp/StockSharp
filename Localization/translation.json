@@ -1,4 +1,12 @@
 {
+  "RemoteControl": {
+    "en": "Remote control.",
+    "ru": "Удаленное управление."
+  },
+  "NotificationChannel": {
+    "en": "Notification channel.",
+    "ru": "Канал с уведомлениями."
+  },
   "OfflineWarning": {
     "en": "Offline mode. Unable to continue the operation.",
     "ru": "Оффлайн режим. Невозможно продолжить операцию."
