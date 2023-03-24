@@ -12,7 +12,6 @@
 	using System.Windows.Media;
 	using DrawingColor = System.Drawing.Color;
 
-	using Ecng.Backup;
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
@@ -60,7 +59,7 @@
 		private readonly CollectionSecurityProvider _securityProvider = new();
 		private readonly TestMarketSubscriptionProvider _testProvider = new();
 
-		private static readonly TimeSpan _realtimeInterval = TimeSpan.FromMilliseconds(100);
+		private static readonly TimeSpan _realtimeInterval = TimeSpan.FromMilliseconds(50);
 		private static readonly TimeSpan _drawInterval = TimeSpan.FromMilliseconds(100);
 
 		private CancellationTokenSource _drawCts = new();
@@ -83,6 +82,7 @@
 
 		public MainWindow()
 		{
+			ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
 			try
 			{
 				ConfigManager.RegisterService<IList<ICandlePattern>>(new ObservableCollection<ICandlePattern>(CandlePatternRegistry.All.Select(p => p.Clone())));
@@ -109,7 +109,6 @@
 
 			ConfigManager.RegisterService<ISubscriptionProvider>(_testProvider);
 			ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
-			ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
 
 			ThemeExtensions.ApplyDefaultTheme();
 		}
@@ -139,7 +138,6 @@
 			Chart.AnnotationModified += ChartOnAnnotationModified;
 			Chart.AnnotationDeleted += ChartOnAnnotationDeleted;
 			Chart.AnnotationSelected += ChartOnAnnotationSelected;
-			Chart.CandlePatternChanged += ChartOnCandlePatternChanged;
 
 			Chart.RegisterOrder += (area, order) =>
 			{
@@ -154,44 +152,6 @@
 				return;
 
 			RefreshCharts();
-		}
-
-		private void ChartOnCandlePatternChanged(ICandlePattern pattern)
-		{
-			var white = CandlePatternRegistry.White;
-			var black = CandlePatternRegistry.Black;
-
-			pattern = pattern?.Clone();
-
-			_dataThreadActions.Add(() =>
-			{
-				if (_allCandles.IsEmpty())
-					return;
-
-				var dd = Chart.CreateData();
-
-				var candles = _allCandles.CachedValues;
-
-				for (int i = 0; i < candles.Length; i++)
-				{
-					var candle = candles[i];
-
-					if (pattern?.Recognize(candle) == true)
-					{
-						for (int j = pattern.CandlesCount - 1; j >= 0; j--)
-						{
-							var inner = candles[i - j];
-							dd.Group(inner.OpenTime).Add(_candleElement, white.Recognize(inner) ? DrawingColor.White : DrawingColor.Black);
-						}
-					}
-					else
-					{
-						dd.Group(candle.OpenTime).Add(_candleElement, (DrawingColor?)null);
-					}
-				}
-
-				Chart.Draw(dd);
-			});
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -325,7 +285,7 @@
 			var format = Format.SelectedFormat;
 
 			var maxDays = (isBuild || series.CandleType != typeof(TimeFrameCandle))
-				? 2
+				? 15
 				: 30 * (int)((TimeSpan)series.Arg).TotalMinutes;
 
 			_mdMsg = series.ToMarketDataMessage(true);
@@ -491,7 +451,7 @@
 				}
 			}
 
-			_lastTime += TimeSpan.FromMilliseconds(RandomGen.GetInt(100, 20000));
+			_lastTime += TimeSpan.FromMilliseconds(RandomGen.GetInt(100, 10000));
 		}
 
 		private static DrawingColor GetRandomColor() => DrawingColor.FromArgb(255, (byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255), (byte)RandomGen.GetInt(0, 255));
