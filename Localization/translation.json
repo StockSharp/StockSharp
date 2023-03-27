@@ -7,6 +7,10 @@
     "en": "Notification channel.",
     "ru": "Канал с уведомлениями."
   },
+  "PatternParameterIndexDescription": {
+    "en": "Parameter indexes using closing price as example:\\nC: current candle\\nC1: first candle after current\\nC2: second candle after current\\npC: previous candle\\npC1: first candle before previous candle\\nAll indexes must be in range of the current pattern.",
+    "ru": "Индексы параметров на примере цены закрытия:\\nC: текущая свеча\\nC1: первая свеча после текущей\\nC2: вторая свеча после текущей\\npC: предыдущая свеча\\npC1: первая свеча перед предыдущей свечой\\nВсе индексы должны быть в диапазоне текущего шаблона."
+  },
   "OfflineWarning": {
     "en": "Offline mode. Unable to continue the operation.",
     "ru": "Оффлайн режим. Невозможно продолжить операцию."
