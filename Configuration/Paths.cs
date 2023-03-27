@@ -198,6 +198,11 @@
 		}
 
 		/// <summary>
+		/// Bot in Telegram.
+		/// </summary>
+		public static string Bot => $"https://t.me/stocksharpbot";
+
+		/// <summary>
 		/// </summary>
 		public static class Pages
 		{

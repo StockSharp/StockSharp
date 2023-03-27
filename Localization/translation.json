@@ -1,4 +1,8 @@
 {
+  "TelegramActivation": {
+    "en": "Now you will be redirected to our Telegram bot to activate your profile.",
+    "ru": "Сейчас вы будете перенаправлены в наш Телеграм бот для активации профиля."
+  },
   "RemoteControl": {
     "en": "Remote control.",
     "ru": "Удаленное управление."
