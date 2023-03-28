@@ -42,12 +42,12 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// The address, on whose behalf the message will be sent.
 		/// </summary>
-		public string From { get; set; }
+		public virtual string From { get; set; }
 
 		/// <summary>
 		/// The address to which the message will be sent to.
 		/// </summary>
-		public string To { get; set; }
+		public virtual string To { get; set; }
 
 		/// <summary>
 		/// To create the email client.
