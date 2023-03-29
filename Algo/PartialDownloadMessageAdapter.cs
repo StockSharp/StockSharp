@@ -71,6 +71,8 @@
 			public bool ReplyReceived { get; set; }
 			public long? UnsubscribingId { get; set; }
 
+			public bool IsDownloadingInProgress { get; set; }
+
 			private readonly PartialDownloadMessageAdapter _adapter;
 			private readonly TimeSpan _iterationInterval;
 			private readonly TimeSpan _step;
@@ -83,7 +85,7 @@
 
 			private bool IsStepMax => _step == TimeSpan.MaxValue;
 
-			public bool CanFinish => LastIteration || (IsStepMax && Origin.To is not null);
+			public bool CanFinish => LastIteration || (IsStepMax && Origin.To is not null) || UnsubscribingId != null;
 
 			public DownloadInfo(PartialDownloadMessageAdapter adapter, MarketDataMessage origin, TimeSpan step, TimeSpan iterationInterval)
 			{
@@ -194,7 +196,6 @@
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-				case MessageTypes.Disconnect:
 				{
 					lock (_syncObject)
 					{
@@ -298,6 +299,7 @@
 							{
 								_original.Add(info.Origin.TransactionId, info);
 								_partialRequests.Add(info.CurrTransId, info);
+								info.IsDownloadingInProgress = true;
 							}
 
 							this.AddInfoLog("Downloading {0}/{1}: {2}-{3}", mdMsg.SecurityId, mdMsg.DataType2, mdMsg.From, mdMsg.To);
@@ -317,6 +319,9 @@
 
 							info.UnsubscribingId = transId;
 							message = null;
+
+							if(!info.IsDownloadingInProgress)
+								outMsg = new SubscriptionResponseMessage { OriginalTransactionId = info.UnsubscribingId.Value };
 						}
 					}
 
@@ -351,7 +356,10 @@
 							_partialRequests.RemoveWhere(p => p.Value == info);
 						}
 						else
+						{
 							_partialRequests.Add(info.CurrTransId, info);
+							info.IsDownloadingInProgress = true;
+						}
 
 						message = mdMsg;
 					}
@@ -363,7 +371,7 @@
 			}
 
 			var result = true;
-			
+
 			if (message != null)
 				result = base.OnSendInMessage(message);
 
@@ -376,10 +384,19 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			Message extra = null;
-
 			switch (message.Type)
 			{
+				case MessageTypes.Disconnect:
+				case MessageTypes.Reset:
+				{
+					lock (_syncObject)
+					{
+						_partialRequests.Clear();
+						_original.Clear();
+						_liveRequests.Clear();
+					}
+					break;
+				}
 				case MessageTypes.SubscriptionResponse:
 				{
 					var responseMsg = (SubscriptionResponseMessage)message;
@@ -429,12 +446,12 @@
 								break;
 							}
 						}
-						
+
 						if (info.ReplyReceived)
 							return;
 
 						info.ReplyReceived = true;
-						
+
 						message = responseMsg = responseMsg.TypedClone();
 						responseMsg.OriginalTransactionId = requestId;
 					}
@@ -473,6 +490,7 @@
 						if (_partialRequests.TryGetAndRemove(id, out var info))
 						{
 							_finished.Add(id);
+							info.IsDownloadingInProgress = false;
 
 							var origin = info.Origin;
 
@@ -484,7 +502,10 @@
 								_original.Remove(origin.TransactionId);
 								_partialRequests.RemoveWhere(p => p.Value == info);
 
-								finishMsg.OriginalTransactionId = origin.TransactionId;
+								if (info.UnsubscribingId != null)
+									message = new SubscriptionResponseMessage { OriginalTransactionId = info.UnsubscribingId.Value };
+								else
+									finishMsg.OriginalTransactionId = origin.TransactionId;
 							}
 							else
 							{
@@ -539,9 +560,6 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
-
-			if (extra != null)
-				base.OnInnerAdapterNewOutMessage(extra);
 		}
 
 		private void TryUpdateSubscriptionResult<TMessage>(TMessage message)
