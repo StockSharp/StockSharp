@@ -130,6 +130,8 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 	private MessageQueueItem SelectNextMessage()
 	{
+		static bool canProcessOverLimit(Message msg) => (msg as ISubscriptionMessage)?.IsSubscribe == false;
+
 		lock (_messages.SyncRoot)
 		{
 			var isControlProcessing = false;
@@ -150,11 +152,11 @@ public class AsyncMessageProcessor : BaseLogReceiver
 			// if transaction is processing currently, we can process other non-exclusive messages in parallel (marketdata request for example)
 			if(isTransactionProcessing)
 				return numProcessing >= _adapter.MaxParallelMessages
-					? null // can't process more messages because of the limit.
+					? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message)) // can't process more messages because of the limit.
 					: _messages.FirstOrDefault(m => !m.IsStartedProcessing && !(m.IsControl || m.IsTransaction));
 
 			return numProcessing >= _adapter.MaxParallelMessages
-				? _messages.FirstOrDefault(m => !m.IsStartedProcessing && m.IsControl) // if the limit is exceeded we can only process control messages
+				? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message) || (!m.IsStartedProcessing && m.IsControl)) // if the limit is exceeded we can only process control messages
 				: _messages.FirstOrDefault(m => !m.IsStartedProcessing);
 		}
 	}
@@ -176,6 +178,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 				if (vt.IsCompleted)
 				{
 					msg.Task = Task.CompletedTask;
+					this.AddVerboseLog("endprocess: {0}", msg.Message.Type);
 					return vt;
 				}
 
@@ -186,7 +189,15 @@ public class AsyncMessageProcessor : BaseLogReceiver
 				msg.Task.ContinueWith(t =>
 				{
 					if(!t.IsCompletedSuccessfully)
-						_adapter.HandleMessageException(msg.Message, t.IsFaulted ? t.Exception : new OperationCanceledException("canceled"));
+					{
+						Exception ex = t.IsFaulted ? t.Exception : new OperationCanceledException("canceled");
+						_adapter.HandleMessageException(msg.Message, ex);
+						this.AddVerboseLog("endprocess: {0} ({1})", msg.Message.Type, ex?.GetType().Name);
+					}
+					else
+					{
+						this.AddVerboseLog("endprocess: {0} (OK)", msg.Message.Type);
+					}
 
 					_processMessageEvt.Set(); // check next message
 				});
@@ -227,27 +238,6 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 		var token = _globalCts.Token;
 
-		async ValueTask processMarketDataMessage(MarketDataMessage md)
-		{
-			if (md.IsSubscribe)
-			{
-				var childToken = CreateChildTokenByTransId(md.TransactionId, token);
-				try
-				{
-					await _adapter.RunSubscriptionAsync(md, childToken);
-				}
-				catch (OperationCanceledException)
-				{
-					if(!childToken.IsCancellationRequested)
-						throw;
-				}
-			}
-			else
-			{
-				TryCancelChildTokenByTransId(md.OriginalTransactionId);
-			}
-		}
-
 		BeginProcessMessage(msg, () =>
 		{
 			this.AddVerboseLog("beginprocess: {0}", msg.Message.Type);
@@ -280,7 +270,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 				OrderCancelMessage m       => _adapter.CancelOrderAsync(m, token),
 				OrderGroupCancelMessage m  => _adapter.CancelOrderGroupAsync(m, token),
 
-				MarketDataMessage m        => processMarketDataMessage(m),
+				MarketDataMessage m        => _adapter.ProcessMarketDataAsync(m, token),
 
 				_                          => _adapter.ProcessMessageAsync(msg.Message, token)
 			};
@@ -361,14 +351,33 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		_globalCts = new();
 	}
 
-	private CancellationToken CreateChildTokenByTransId(long transactionId, CancellationToken parentToken)
+	/// <summary>
+	/// Create child cancellation token for transaction id.
+	/// </summary>
+	public CancellationToken CreateChildTokenByTransId(long transactionId, CancellationToken parentToken)
 	{
 		var (cts, childToken) = parentToken.CreateChildToken();
 		_childTokens.Add(transactionId, cts);
 		return childToken;
 	}
 
-	private void TryCancelChildTokenByTransId(long transactionId) => _childTokens.TryGetAndRemove(transactionId)?.Cancel();
+	/// <summary>
+	/// Remove child token.
+	/// </summary>
+	public void RemoveChildToken(long transactionId) => _childTokens.Remove(transactionId);
+
+	/// <summary>
+	/// Cancel child token.
+	/// </summary>
+	public bool TryCancelChildTokenByTransId(long transactionId)
+	{
+		var cts = _childTokens.TryGetAndRemove(transactionId);
+		if(cts == null)
+			return false;
+
+		cts.Cancel();
+		return true;
+	}
 
 	private async Task<bool> WhenChildrenComplete(CancellationToken token)
 	{

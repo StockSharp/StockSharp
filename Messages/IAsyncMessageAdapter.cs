@@ -159,7 +159,7 @@ public interface IAsyncMessageAdapter : ILogReceiver
 	/// <param name="mdMsg"><see cref="MarketDataMessage"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	ValueTask ProcessMarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 		=> ProcessMessageAsync(mdMsg, cancellationToken);
 
 	/// <summary>

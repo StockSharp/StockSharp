@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Ecng.Collections;
 using Ecng.Common;
+using StockSharp.Logging;
 
 namespace StockSharp.Messages;
 
@@ -93,36 +94,17 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 		=> OnProcessMessageAsync(timeMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask OnRunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-	{
-		if (!mdMsg.IsSubscribe)
-			return OnStopSubscriptionAsync(mdMsg, cancellationToken);
-
-		var dataType = mdMsg.DataType2;
-
-		if (dataType == DataType.News)
-			return OnNewsSubscriptionAsync(mdMsg, cancellationToken);
-		else if (dataType == DataType.Level1)
-			return OnLevel1SubscriptionAsync(mdMsg, cancellationToken);
-		else if (dataType == DataType.Ticks)
-			return OnTicksSubscriptionAsync(mdMsg, cancellationToken);
-		else if (dataType == DataType.MarketDepth)
-			return OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken);
-		else if (dataType == DataType.OrderLog)
-			return OnOrderLogSubscriptionAsync(mdMsg, cancellationToken);
-		else if (dataType.IsTFCandles)
-			return OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken);
-		else
-			throw SubscriptionResponseMessage.NotSupported;
-	}
-
-	/// <summary>
-	/// </summary>
-	protected virtual ValueTask OnStopSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-	{
-		SendSubscriptionReply(mdMsg.TransactionId);
-		return default;
-	}
+	protected virtual ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken) =>
+		mdMsg.DataType switch
+		{
+			MarketDataTypes.News             => OnNewsSubscriptionAsync(mdMsg, cancellationToken),
+			MarketDataTypes.Level1           => OnLevel1SubscriptionAsync(mdMsg, cancellationToken),
+			MarketDataTypes.Trades           => OnTicksSubscriptionAsync(mdMsg, cancellationToken),
+			MarketDataTypes.MarketDepth      => OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken),
+			MarketDataTypes.OrderLog         => OnOrderLogSubscriptionAsync(mdMsg, cancellationToken),
+			MarketDataTypes.CandleTimeFrame  => OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken),
+			_                                => throw SubscriptionResponseMessage.NotSupported
+		};
 
 	/// <summary>
 	/// </summary>
@@ -153,6 +135,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	/// </summary>
 	protected virtual ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 		=> throw SubscriptionResponseMessage.NotSupported;
+
 
 	/// <inheritdoc />
 	protected virtual ValueTask OnProcessMessageAsync(Message msg, CancellationToken cancellationToken)
@@ -197,11 +180,67 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	ValueTask IAsyncMessageAdapter.TimeMessageAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
 		=> OnTimeMessageAsync(timeMsg, cancellationToken);
 
-	ValueTask IAsyncMessageAdapter.RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-		=> OnRunSubscriptionAsync(mdMsg, cancellationToken);
-
 	ValueTask IAsyncMessageAdapter.ProcessMessageAsync(Message msg, CancellationToken cancellationToken)
 		=> OnProcessMessageAsync(msg, cancellationToken);
+
+	private readonly SynchronizedDictionary<long, Task> _marketDataTasks = new();
+
+	ValueTask IAsyncMessageAdapter.ProcessMarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		if (!mdMsg.IsSubscribe)
+		{
+			var subTask = _marketDataTasks.TryGetValue(mdMsg.OriginalTransactionId);
+			_asyncMessageProcessor.TryCancelChildTokenByTransId(mdMsg.OriginalTransactionId);
+
+			if (subTask == null)
+			{
+				this.AddVerboseLog($"subscription not found: {mdMsg.OriginalTransactionId}");
+				SendSubscriptionReply(mdMsg.TransactionId);
+				return default;
+			}
+
+			return new(subTask.ContinueWith(_ => SendSubscriptionReply(mdMsg.TransactionId), TaskContinuationOptions.ExecuteSynchronously));
+		}
+
+		lock (_marketDataTasks.SyncRoot)
+		{
+			var task = runSub();
+
+			if(!task.IsCompleted)
+				_marketDataTasks[mdMsg.TransactionId] = task.AsTask();
+
+			return task;
+		}
+
+		void trySendFinished(bool checkSupported)
+		{
+			if(mdMsg.IsHistoryOnly() && (!this.IsOutMessageSupported(MessageTypes.SubscriptionFinished) || !checkSupported))
+				SendSubscriptionFinished(mdMsg.TransactionId);
+		}
+
+		async ValueTask runSub()
+		{
+			var childToken = _asyncMessageProcessor.CreateChildTokenByTransId(mdMsg.TransactionId, cancellationToken);
+
+			try
+			{
+				await RunSubscriptionAsync(mdMsg, childToken);
+				trySendFinished(true);
+			}
+			catch (OperationCanceledException)
+			{
+				if (!childToken.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
+					throw;
+
+				trySendFinished(false);
+			}
+			finally
+			{
+				_asyncMessageProcessor.RemoveChildToken(mdMsg.TransactionId);
+				_marketDataTasks.Remove(mdMsg.TransactionId);
+			}
+		}
+	}
 
 	void IAsyncMessageAdapter.HandleMessageException(Message msg, Exception err)
 		=> OnHandleMessageException(msg, err);
