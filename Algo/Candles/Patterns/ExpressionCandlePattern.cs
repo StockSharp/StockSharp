@@ -99,19 +99,14 @@ public class CandleExpressionCondition : IPersistable
 		{
 			var m = _varNamePattern.Match(varName);
 			if(!m.Success)
-				throw new InvalidOperationException($"unknown variable '{varName}'");
+				throw new InvalidOperationException($"invalid variable '{varName}'");
 
 			var name = m.Groups[1].Value;
 			var idx = m.Groups[2].Value.IsEmptyOrWhiteSpace() ? 0 : m.Groups[2].Value.To<int>();
 
 			if(name.StartsWithIgnoreCase("p"))
 			{
-				idx = -idx;
-				if(idx == 0)
-					idx = -1;
-				else
-					--idx;
-
+				idx = -idx - 1;
 				name = name.Substring(1);
 			}
 
@@ -120,7 +115,7 @@ public class CandleExpressionCondition : IPersistable
 
 			var idxVar = Variables.IndexOf(v => v.VarName.EqualsIgnoreCase(name));
 			if(idxVar < 0)
-				throw new InvalidOperationException($"invalid var name '{varName}'");
+				throw new InvalidOperationException($"unknown variable '{varName}'");
 
 			var curVarName = varName;
 			_varGetters[varName] = (candles, i) =>
