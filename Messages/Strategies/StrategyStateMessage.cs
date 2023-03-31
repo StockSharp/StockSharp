@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		/// Statistics.
 		/// </summary>
 		[DataMember]
-		public IDictionary<string, (string, string)> Statistics { get; private set; } = new Dictionary<string, (string, string)>();
+		public IDictionary<string, string> Statistics { get; private set; } = new Dictionary<string, string>();
 
 		/// <inheritdoc />
 		public override string ToString()

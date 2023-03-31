@@ -3022,7 +3022,7 @@ namespace StockSharp.Algo.Strategies
 				StrategyId = Id,
 				Statistics =
 				{
-					{ paramName, (typeof(T).GetTypeAsString(false), value?.ToString()) }
+					{ paramName, value?.ToString() }
 				}
 			});
 		}
@@ -3043,7 +3043,7 @@ namespace StockSharp.Algo.Strategies
 
 			foreach (var parameter in Parameters)
 			{
-				msg.Parameters.Add(parameter.Key, (parameter.Value.Value.GetType().GetTypeAsString(false), parameter.Value.Value?.ToString()));
+				msg.Parameters.Add(parameter.Key, parameter.Value.Value?.ToString());
 			}
 
 			return msg;
@@ -3066,13 +3066,13 @@ namespace StockSharp.Algo.Strategies
 					continue;
 				}
 
-				if (parameter.Value.value == null)
+				if (parameter.Value.IsEmpty())
 					param.Value = null;
 				else
 				{
-					param.Value = parameter.Value.type == typeof(Unit).FullName
-						? parameter.Value.value.ToUnit()
-						: parameter.Value.value.To(parameter.Value.type.To<Type>());
+					param.Value = param.Type == typeof(Unit)
+						? parameter.Value.ToUnit()
+						: parameter.Value.To(param.Type);
 				}
 			}
 		}
@@ -3112,8 +3112,8 @@ namespace StockSharp.Algo.Strategies
 				{
 					var secId = parameters.TryGet(nameof(Order.Security));
 					var pfName = parameters.TryGet(nameof(Order.Portfolio));
-					var side = parameters[nameof(Order.Direction)].value.To<Sides>();
-					var volume = parameters[nameof(Order.Volume)].value.To<decimal>();
+					var side = parameters[nameof(Order.Direction)].To<Sides>();
+					var volume = parameters[nameof(Order.Volume)].To<decimal>();
 					var price = parameters.TryGet(nameof(Order.Price)).To<decimal?>() ?? 0;
 					var comment = parameters.TryGet(nameof(Order.Comment));
 					var clientCode = parameters.TryGet(nameof(Order.ClientCode));
@@ -3138,7 +3138,7 @@ namespace StockSharp.Algo.Strategies
 
 				case CommandTypes.CancelOrder:
 				{
-					var orderId = parameters[nameof(Order.Id)].value.To<long>();
+					var orderId = parameters[nameof(Order.Id)].To<long>();
 
 					// TODO
 #pragma warning disable 618

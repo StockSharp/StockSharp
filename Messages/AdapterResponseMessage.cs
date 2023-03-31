@@ -33,7 +33,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[XmlIgnore]
-		public IDictionary<string, (string type, string value)> Parameters { get; private set; } = new Dictionary<string, (string type, string value)>();
+		public IDictionary<string, string> Parameters { get; private set; } = new Dictionary<string, string>();
 
 		/// <inheritdoc />
 		public override DataType DataType => DataType.Adapters;

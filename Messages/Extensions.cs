@@ -4124,24 +4124,13 @@ namespace StockSharp.Messages
 		/// <param name="name"></param>
 		/// <param name="defaultValue"></param>
 		/// <returns></returns>
-		public static string TryGet(this IDictionary<string, (string type, string value)> parameters, string name, string defaultValue = default)
-			=> parameters.TryGet<string>(name, defaultValue);
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="parameters"></param>
-		/// <param name="name"></param>
-		/// <param name="defaultValue"></param>
-		/// <returns></returns>
-		public static T TryGet<T>(this IDictionary<string, (string type, string value)> parameters, string name, T defaultValue = default)
+		public static string TryGet(this IDictionary<string, string> parameters, string name, string defaultValue = default)
 		{
 			if (parameters is null)
 				throw new ArgumentNullException(nameof(parameters));
 
-			if (parameters.TryGetValue(name, out var tuple))
-				return tuple.value.To<T>();
+			if (parameters.TryGetValue(name, out var value))
+				return value;
 
 			return defaultValue;
 		}
