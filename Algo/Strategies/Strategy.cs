@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Strategies
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
+	using System.Runtime.CompilerServices;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -618,9 +619,9 @@ namespace StockSharp.Algo.Strategies
 						strategy.Portfolio = value;
 				}
 
-				RaiseParametersChanged(nameof(Portfolio));
+				RaiseParametersChanged();
 
-				this.Notify(nameof(Portfolio));
+				this.Notify();
 			}
 		}
 
@@ -651,7 +652,7 @@ namespace StockSharp.Algo.Strategies
 						strategy.Security = value;
 				}
 
-				RaiseParametersChanged(nameof(Security));
+				RaiseParametersChanged();
 
 				this.Notify(nameof(Position));
 
@@ -787,7 +788,7 @@ namespace StockSharp.Algo.Strategies
 		/// To call events <see cref="ParametersChanged"/> and <see cref="PropertyChanged"/>.
 		/// </summary>
 		/// <param name="name">Parameter name.</param>
-		protected internal void RaiseParametersChanged(string name)
+		protected internal void RaiseParametersChanged([CallerMemberName]string name = default)
 		{
 			ParametersChanged?.Invoke();
 			this.Notify(name);
@@ -835,7 +836,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 
 				_errorCount = value;
-				this.Notify(nameof(ErrorCount));
+				this.Notify();
 			}
 		}
 
@@ -1257,7 +1258,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 
 				_errorState = value;
-				this.Notify(nameof(ErrorState));
+				this.Notify();
 			}
 		}
 
@@ -1288,7 +1289,7 @@ namespace StockSharp.Algo.Strategies
 			private set
 			{
 				_startedTime = value;
-				this.Notify(nameof(StartedTime));
+				this.Notify();
 			}
 		}
 
