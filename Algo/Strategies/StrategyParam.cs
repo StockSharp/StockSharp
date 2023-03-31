@@ -137,7 +137,7 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentException(LocalizedStrings.CompositionAlreadyExistParams.Put(name, string.Empty), nameof(name));
 
 			CanOptimize = typeof(T).CanOptimize();
-			AllowNull = typeof(T).IsNullable();
+			AllowNull = typeof(T).IsNullable() || typeof(T).IsClass || typeof(T).IsInterface;
 
 			_comparer = EqualityComparer<T>.Default;
 		}
