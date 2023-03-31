@@ -94,17 +94,19 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 		=> OnProcessMessageAsync(timeMsg, cancellationToken);
 
 	/// <inheritdoc />
-	protected virtual ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken) =>
-		mdMsg.DataType switch
-		{
-			MarketDataTypes.News             => OnNewsSubscriptionAsync(mdMsg, cancellationToken),
-			MarketDataTypes.Level1           => OnLevel1SubscriptionAsync(mdMsg, cancellationToken),
-			MarketDataTypes.Trades           => OnTicksSubscriptionAsync(mdMsg, cancellationToken),
-			MarketDataTypes.MarketDepth      => OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken),
-			MarketDataTypes.OrderLog         => OnOrderLogSubscriptionAsync(mdMsg, cancellationToken),
-			MarketDataTypes.CandleTimeFrame  => OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken),
-			_                                => throw SubscriptionResponseMessage.NotSupported
-		};
+	protected virtual ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		var dataType = mdMsg.DataType2;
+
+		return
+			  dataType == DataType.News         ? OnNewsSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.Level1       ? OnLevel1SubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.Ticks        ? OnTicksSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.MarketDepth  ? OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.OrderLog     ? OnOrderLogSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType.IsTFCandles              ? OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken)
+			: throw SubscriptionResponseMessage.NotSupported;
+	}
 
 	/// <summary>
 	/// </summary>
