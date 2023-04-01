@@ -82,10 +82,12 @@
 
 		public MainWindow()
 		{
+			MessageBoxBuilder.DefaultHandler = new DevExpMessageBoxHandler();
+
 			ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
 			try
 			{
-				ConfigManager.RegisterService<IList<ICandlePattern>>(new ObservableCollection<ICandlePattern>(CandlePatternRegistry.All.Select(p => p.Clone())));
+				ConfigManager.RegisterService<ICandlePatternProvider>(new InMemoryCandlePatternProvider(CandlePatternRegistry.All));
 			}
 			catch
 			{

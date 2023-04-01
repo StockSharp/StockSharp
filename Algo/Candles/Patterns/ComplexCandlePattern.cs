@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-
 using Ecng.Serialization;
 
-using StockSharp.Localization;
 using StockSharp.Messages;
 
 namespace StockSharp.Algo.Candles.Patterns;
@@ -23,20 +20,16 @@ public class ComplexCandlePattern : ICandlePattern
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ComplexCandlePattern"/>.
 	/// </summary>
-	public ComplexCandlePattern(IEnumerable<ICandlePattern> inner)
+	public ComplexCandlePattern(string name, IEnumerable<ICandlePattern> inner)
 	{
+		Name = name;
+
 		_inner.AddRange(inner);
 		UpdateCount();
 	}
 
 	/// <inheritdoc />
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.NameKey,
-		Description = LocalizedStrings.NameKey,
-		GroupName = LocalizedStrings.GeneralKey,
-		Order = 0)]
-	public string Name { get; set; }
+	public string Name { get; private set; }
 
 	private readonly List<ICandlePattern> _inner = new();
 
@@ -69,6 +62,12 @@ public class ComplexCandlePattern : ICandlePattern
 		return true;
 	}
 
+	private void EnsureEmpty()
+	{
+		if(Name != null || _inner.Count > 0)
+			throw new InvalidOperationException($"cannot change initialized pattern (name='{Name}', {_inner.Count} inner patterns)");
+	}
+
 	void IPersistable.Save(SettingsStorage storage)
 	{
 		storage
@@ -79,6 +78,8 @@ public class ComplexCandlePattern : ICandlePattern
 
 	void IPersistable.Load(SettingsStorage storage)
 	{
+		EnsureEmpty();
+
 		Name = storage.GetValue<string>(nameof(Name));
 
 		_inner.Clear();

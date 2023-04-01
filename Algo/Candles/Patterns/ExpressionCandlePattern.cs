@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Ecng.Collections;
@@ -159,9 +158,17 @@ public class CandleExpressionCondition : IPersistable
 		new("TS",  LocalizedStrings.TopShadow,      msg => msg.GetTopShadow()),
 	};
 
+	private void EnsureEmpty()
+	{
+		if(!Expression.IsEmptyOrWhiteSpace())
+			throw new InvalidOperationException($"cannot change initialized candle expression (expr='{Expression}')");
+	}
+
 	/// <inheritdoc />
 	public void Load(SettingsStorage storage)
 	{
+		EnsureEmpty();
+
 		Expression = storage.GetValue<string>(nameof(Expression));
 		Init();
 	}
@@ -183,20 +190,27 @@ public class ExpressionCandlePattern : ICandlePattern
 	/// <inheritdoc />
 	public int CandlesCount => Conditions.Length;
 
-	/// <summary>
-	/// Create instance.
-	/// </summary>
-	public ExpressionCandlePattern() : this(Enumerable.Empty<CandleExpressionCondition>()) { }
+	/// <inheritdoc />
+	public string Name { get; private set; }
+
+	internal bool IsRegistry { get; init; }
 
 	/// <summary>
 	/// Create instance.
 	/// </summary>
-	public ExpressionCandlePattern(IEnumerable<CandleExpressionCondition> formulas)
+	public ExpressionCandlePattern() : this(null, Enumerable.Empty<CandleExpressionCondition>()) { }
+
+	/// <summary>
+	/// Create instance.
+	/// </summary>
+	public ExpressionCandlePattern(string name, IEnumerable<CandleExpressionCondition> formulas)
 	{
 		Conditions = formulas?.ToArray() ?? throw new ArgumentNullException(nameof(formulas));
 
 		if(Conditions.IsEmpty())
 			return; // for Load to work
+
+		Name = name;
 
 		var invalidRangeIds = new List<int>();
 
@@ -232,20 +246,20 @@ public class ExpressionCandlePattern : ICandlePattern
 		return true;
 	}
 
-	/// <summary>
-	/// Pattern name.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.NameKey,
-		Description = LocalizedStrings.NameKey,
-		GroupName = LocalizedStrings.GeneralKey,
-		Order = 0)]
-	public string Name { get; set; }
+	private void EnsureEmpty()
+	{
+		if(Name != null || Conditions.Length > 0)
+			throw new InvalidOperationException($"cannot change initialized pattern (name='{Name}', {Conditions.Length} conditions)");
+	}
 
 	void IPersistable.Load(SettingsStorage storage)
 	{
+		EnsureEmpty();
+
 		Name = storage.GetValue<string>(nameof(Name));
+
+		if(Name.IsEmptyOrWhiteSpace())
+			throw new InvalidOperationException("invalid pattern name");
 
 		Conditions = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
 		{

@@ -32,7 +32,7 @@ namespace StockSharp.Algo
 		/// Exchanges and trading boards provider.
 		/// </summary>
 		public static IExchangeInfoProvider ExchangeInfoProvider => ConfigManager.GetService<IExchangeInfoProvider>();
-		
+
 		/// <summary>
 		/// Exchanges and trading boards provider.
 		/// </summary>
@@ -42,22 +42,22 @@ namespace StockSharp.Algo
 		/// Securities meta info storage.
 		/// </summary>
 		public static ISecurityStorage SecurityStorage => ConfigManager.GetService<ISecurityStorage>();
-		
+
 		/// <summary>
 		/// Security identifier mappings storage.
 		/// </summary>
 		public static ISecurityMappingStorage MappingStorage => ConfigManager.GetService<ISecurityMappingStorage>();
-		
+
 		/// <summary>
 		/// Position storage.
 		/// </summary>
 		public static IPositionStorage PositionStorage => ConfigManager.GetService<IPositionStorage>();
-		
+
 		/// <summary>
 		/// The provider of information about portfolios.
 		/// </summary>
 		public static IPortfolioProvider PortfolioProvider => ConfigManager.GetService<IPortfolioProvider>();
-		
+
 		/// <summary>
 		/// The provider of information about portfolios.
 		/// </summary>
@@ -67,7 +67,7 @@ namespace StockSharp.Algo
 		/// The position provider.
 		/// </summary>
 		public static IPositionProvider PositionProvider => ConfigManager.GetService<IPositionProvider>();
-		
+
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
@@ -102,12 +102,12 @@ namespace StockSharp.Algo
 		/// The storage of market data.
 		/// </summary>
 		public static IStorageRegistry StorageRegistry => ConfigManager.GetService<IStorageRegistry>();
-		
+
 		/// <summary>
 		/// Connector.
 		/// </summary>
 		public static Connector Connector => ConfigManager.GetService<Connector>();
-		
+
 		/// <summary>
 		/// Connector.
 		/// </summary>
@@ -115,7 +115,7 @@ namespace StockSharp.Algo
 		// ReSharper disable InconsistentNaming
 		public static IConnector IConnector => ConfigManager.GetService<IConnector>();
 		// ReSharper restore InconsistentNaming
-		
+
 		/// <summary>
 		/// Log manager.
 		/// </summary>
@@ -130,7 +130,7 @@ namespace StockSharp.Algo
 		/// The storage of trade objects.
 		/// </summary>
 		public static IEntityRegistry EntityRegistry => ConfigManager.GetService<IEntityRegistry>();
-		
+
 		/// <summary>
 		/// Security native identifier storage.
 		/// </summary>
@@ -140,7 +140,7 @@ namespace StockSharp.Algo
 		/// Security native identifier storage.
 		/// </summary>
 		public static INativeIdStorage NativeIdStorage => ConfigManager.GetService<INativeIdStorage>();
-		
+
 		/// <summary>
 		/// Extended info storage.
 		/// </summary>
@@ -220,12 +220,12 @@ namespace StockSharp.Algo
 		/// Excel provider.
 		/// </summary>
 		public static IExcelWorkerProvider TryExcelProvider => ConfigManager.TryGetService<IExcelWorkerProvider>();
-		
+
 		/// <summary>
 		/// Snapshot storage registry.
 		/// </summary>
 		public static SnapshotRegistry SnapshotRegistry => ConfigManager.GetService<SnapshotRegistry>();
-		
+
 		/// <summary>
 		/// News provider.
 		/// </summary>
@@ -242,23 +242,13 @@ namespace StockSharp.Algo
 		public static IReportGeneratorProvider ReportGeneratorProvider => ConfigManager.GetService<IReportGeneratorProvider>();
 
 		/// <summary>
-		/// <see cref="ICandlePatternStorage"/>
+		/// <see cref="ICandlePatternProvider"/>
 		/// </summary>
-		public static ICandlePatternStorage CandlePatternStorage => ConfigManager.TryGetService<ICandlePatternStorage>();
+		public static ICandlePatternProvider CandlePatternProvider => ConfigManager.TryGetService<ICandlePatternProvider>();
 
 		/// <summary>
-		/// <see cref="ICandlePatternStorage"/>
+		/// <see cref="ICandlePatternProvider"/>
 		/// </summary>
-		public static ICandlePatternStorage TryCandlePatternStorage => ConfigManager.TryGetService<ICandlePatternStorage>();
-
-		/// <summary>
-		/// <see cref="ICandlePatternStorage"/>
-		/// </summary>
-		public static IList<ICandlePattern> TryCandlePatterns => ConfigManager.TryGetService<IList<ICandlePattern>>();
-
-		/// <summary>
-		/// <see cref="ICandlePatternStorage"/>
-		/// </summary>
-		public static IList<ICandlePattern> CandlePatterns => ConfigManager.GetService<IList<ICandlePattern>>();
+		public static ICandlePatternProvider TryCandlePatternProvider => ConfigManager.TryGetService<ICandlePatternProvider>();
 	}
 }
