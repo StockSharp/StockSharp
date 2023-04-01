@@ -198,16 +198,6 @@ namespace StockSharp.Messages
 		public static DataType Command { get; } = Create<CommandMessage>().Immutable();
 
 		/// <summary>
-		/// <see cref="StrategyInfoMessage"/>.
-		/// </summary>
-		public static DataType Info { get; } = Create<StrategyInfoMessage>().Immutable();
-
-		/// <summary>
-		/// <see cref="StrategyStateMessage"/>.
-		/// </summary>
-		public static DataType State { get; } = Create<StrategyStateMessage>().Immutable();
-
-		/// <summary>
 		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <param name="tf">Candle arg.</param>

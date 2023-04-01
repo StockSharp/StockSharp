@@ -395,18 +395,21 @@ namespace StockSharp.Messages
 		ChangeTimeInterval,
 
 		/// <summary>
-		/// <see cref="StrategyInfoMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		StrategyInfo,
 
 		/// <summary>
-		/// <see cref="StrategyTypeMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		StrategyType,
 
 		/// <summary>
-		/// <see cref="StrategyStateMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		StrategyState,
 
 		/// <summary>
@@ -420,13 +423,15 @@ namespace StockSharp.Messages
 		RemoteFileCommand,
 
 		/// <summary>
-		/// <see cref="StrategySubscriptionInfoMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		StrategySubscriptionInfo,
 
 		/// <summary>
-		/// <see cref="StrategyBacktestResultMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		StrategyBacktestResult,
 
 		/// <summary>

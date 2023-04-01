@@ -693,25 +693,6 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Convert <see cref="Type"/> to <see cref="StrategyTypeMessage"/>.
-		/// </summary>
-		/// <param name="strategyType">Strategy type.</param>
-		/// <param name="transactionId">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
-		/// <returns>The message contains information about strategy type.</returns>
-		public static StrategyTypeMessage ToTypeMessage(this Type strategyType, long transactionId = 0)
-		{
-			if (strategyType == null)
-				throw new ArgumentNullException(nameof(strategyType));
-
-			return new StrategyTypeMessage
-			{
-				StrategyTypeId = strategyType.GetTypeName(false),
-				StrategyName = strategyType.Name,
-				OriginalTransactionId = transactionId,
-			};
-		}
-
-		/// <summary>
 		/// Determines the specified type is derived from <see cref="Strategy"/> and not abstract.
 		/// </summary>
 		/// <param name="type"><see cref="Type"/>.</param>

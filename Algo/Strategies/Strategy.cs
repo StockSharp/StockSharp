@@ -1056,8 +1056,6 @@ namespace StockSharp.Algo.Strategies
 
 					TryFinalStop();
 				}
-
-				RaiseNewStateMessage(nameof(ProcessState), ProcessState);
 			}
 		}
 
@@ -2688,16 +2686,12 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.Notify(nameof(Slippage));
 			SlippageChanged?.Invoke();
-
-			RaiseNewStateMessage(nameof(Slippage), Slippage);
 		}
 
 		private void RaiseCommissionChanged()
 		{
 			this.Notify(nameof(Commission));
 			CommissionChanged?.Invoke();
-
-			RaiseNewStateMessage(nameof(Commission), Commission);
 		}
 
 		private void RaisePnLChanged()
@@ -2709,16 +2703,12 @@ namespace StockSharp.Algo.Strategies
 				PnLReceived?.Invoke(_pfSubscription);
 
 			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
-
-			RaiseNewStateMessage(nameof(PnL), PnL);
 		}
 
 		private void RaiseLatencyChanged()
 		{
 			this.Notify(nameof(Latency));
 			LatencyChanged?.Invoke();
-
-			RaiseNewStateMessage(nameof(Latency), Latency);
 		}
 
 		private void ChangeLatency(TimeSpan? diff)
@@ -3009,73 +2999,6 @@ namespace StockSharp.Algo.Strategies
 
 		IEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessages(SecurityLookupMessage criteria)
 			=> SecurityProvider.LookupMessages(criteria);
-
-		/// <summary>
-		/// New <see cref="StrategyStateMessage"/> occurred event.
-		/// </summary>
-		public event Action<StrategyStateMessage> NewStateMessage;
-
-		private void RaiseNewStateMessage<T>(string paramName, T value)
-		{
-			NewStateMessage?.Invoke(new StrategyStateMessage
-			{
-				StrategyId = Id,
-				Statistics =
-				{
-					{ paramName, value?.ToString() }
-				}
-			});
-		}
-
-		/// <summary>
-		/// Convert to <see cref="StrategyInfoMessage"/>.
-		/// </summary>
-		/// <param name="transactionId">ID of the original message <see cref="ITransactionIdMessage.TransactionId"/> for which this message is a response.</param>
-		/// <returns>The message contains information about strategy.</returns>
-		public virtual StrategyInfoMessage ToInfoMessage(long transactionId = 0)
-		{
-			var msg = new StrategyInfoMessage
-			{
-				StrategyId = Id,
-				Name = Name,
-				OriginalTransactionId = transactionId,
-			};
-
-			foreach (var parameter in Parameters)
-			{
-				msg.Parameters.Add(parameter.Key, parameter.Value.Value?.ToString());
-			}
-
-			return msg;
-		}
-
-		/// <summary>
-		/// Apply changes.
-		/// </summary>
-		/// <param name="message">The message contains information about strategy.</param>
-		public virtual void ApplyChanges(StrategyInfoMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			foreach (var parameter in message.Parameters)
-			{
-				if (!Parameters.TryGetValue(parameter.Key, out var param))
-				{
-					this.AddWarningLog("Unknown parameter '{0}'.", parameter.Key);
-					continue;
-				}
-
-				if (parameter.Value.IsEmpty())
-					param.Value = null;
-				else
-				{
-					param.Value = param.Type == typeof(Unit)
-						? parameter.Value.ToUnit()
-						: parameter.Value.To(param.Type);
-				}
-			}
-		}
 
 		/// <summary>
 		/// Apply incoming command.

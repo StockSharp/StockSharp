@@ -91,8 +91,6 @@
 
 			StatisticManager.AddPosition(CurrentTime, Position);
 			StatisticManager.AddPnL(CurrentTime, PnL);
-
-			RaiseNewStateMessage(nameof(Position), Position);
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new();
