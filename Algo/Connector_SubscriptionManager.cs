@@ -79,8 +79,10 @@ namespace StockSharp.Algo
 					if (_currentCandle.State == CandleStates.Finished)
 						return false;
 
-					if (_currentCandle is Candle entity)
+					if (_currentCandle is Candle entity) // Subscription.DisableEntity is false
 						entity.Update(message);
+					else
+						_currentCandle = message; // Subscription.DisableEntity is true
 				}
 				else
 					_currentCandle = Subscription.DisableEntity ? message : message.ToCandle(Security);

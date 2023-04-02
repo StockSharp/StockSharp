@@ -362,6 +362,23 @@ namespace StockSharp.Messages
 		/// Candle arg.
 		/// </summary>
 		public TArg TypedArg { get; set; }
+
+		/// <summary>
+		/// Copy to candle.
+		/// </summary>
+		protected TypedCandleMessage<TArg> CopyTo(TypedCandleMessage<TArg> copy)
+		{
+			base.CopyTo(copy);
+
+			if(typeof(TArg).IsValueType)
+				copy.TypedArg = TypedArg;
+			else if(TypedArg is ICloneable cloneable)
+				copy.TypedArg = (TArg)cloneable.Clone();
+			else
+				throw new InvalidOperationException($"unable to copy {nameof(TypedArg)}");
+
+			return copy;
+		}
 	}
 
 	/// <summary>
@@ -393,10 +410,7 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new TimeFrameCandleMessage());
-		}
+		public override Message Clone() => CopyTo(new TimeFrameCandleMessage());
 	}
 
 	/// <summary>
@@ -419,10 +433,7 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="TickCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new TickCandleMessage());
-		}
+		public override Message Clone() => CopyTo(new TickCandleMessage());
 	}
 
 	/// <summary>
@@ -445,10 +456,7 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="VolumeCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new VolumeCandleMessage());
-		}
+		public override Message Clone() => CopyTo(new VolumeCandleMessage());
 	}
 
 	/// <summary>
@@ -471,13 +479,7 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="RangeCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new RangeCandleMessage
-			{
-				TypedArg = TypedArg.Clone()
-			});
-		}
+		public override Message Clone() => CopyTo(new RangeCandleMessage());
 	}
 
 	/// <summary>
@@ -576,13 +578,7 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="PnFCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new PnFCandleMessage
-			{
-				TypedArg = TypedArg.Clone(),
-			});
-		}
+		public override Message Clone() => CopyTo(new PnFCandleMessage());
 	}
 
 	/// <summary>
@@ -605,13 +601,7 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="RenkoCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new RenkoCandleMessage
-			{
-				TypedArg = TypedArg.Clone()
-			});
-		}
+		public override Message Clone() => CopyTo(new RenkoCandleMessage());
 	}
 
 	/// <summary>
@@ -634,9 +624,6 @@ namespace StockSharp.Messages
 		/// Create a copy of <see cref="HeikinAshiCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
-		public override Message Clone()
-		{
-			return CopyTo(new HeikinAshiCandleMessage());
-		}
+		public override Message Clone() => CopyTo(new HeikinAshiCandleMessage());
 	}
 }
