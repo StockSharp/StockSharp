@@ -259,7 +259,7 @@ namespace StockSharp.Algo.Strategies
 						return;
 
 					_allFormed = value;
-					_strategy.Notify(nameof(AllowTrading));
+					_strategy.Notify(nameof(IsFormed));
 				}
 			}
 
@@ -367,6 +367,7 @@ namespace StockSharp.Algo.Strategies
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
+			_allowTrading = this.Param(nameof(AllowTrading), true);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
@@ -1163,21 +1164,31 @@ namespace StockSharp.Algo.Strategies
 			set => _restoreChildOrders.Value = value;
 		}
 
+		private readonly StrategyParam<bool> _allowTrading;
+
 		/// <summary>
 		/// Allow trading.
 		/// </summary>
-		/// <remarks>
-		/// Default implementation used <see cref="Indicators"/> collection to check all <see cref="IIndicator.IsFormed"/> are <see langword="true"/>.
-		/// It means the strategy is online and can send orders.
-		/// </remarks>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str3599Key,
 			Description = LocalizedStrings.AllowTradingKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
+		public bool AllowTrading
+		{
+			get => _allowTrading.Value;
+			set => _allowTrading.Value = value;
+		}
+
+		/// <summary>
+		/// Strategy fully formed.
+		/// </summary>
+		/// <remarks>
+		/// Default implementation used <see cref="Indicators"/> collection to check all <see cref="IIndicator.IsFormed"/> are <see langword="true"/>.
+		/// </remarks>
 		[Browsable(false)]
-		public virtual bool AllowTrading => _indicators.AllFormed;
+		public virtual bool IsFormed => _indicators.AllFormed;
 
 		private readonly StrategyParam<bool> _unsubscribeOnStop;
 
@@ -1558,7 +1569,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly IndicatorList _indicators;
 
 		/// <summary>
-		/// All indicators used in strategy. Uses in default implementation of <see cref="AllowTrading"/>.
+		/// All indicators used in strategy. Uses in default implementation of <see cref="IsFormed"/>.
 		/// </summary>
 		[Browsable(false)]
 		public IList<IIndicator> Indicators => _indicators;
@@ -1624,6 +1635,12 @@ namespace StockSharp.Algo.Strategies
 			if (ProcessState != ProcessStates.Started)
 			{
 				noTradeReason = LocalizedStrings.Str1383Params.Put(ProcessState);
+				return false;
+			}
+
+			if (!IsFormed)
+			{
+				noTradeReason = LocalizedStrings.NonFormed;
 				return false;
 			}
 

@@ -841,5 +841,13 @@ namespace StockSharp.Algo.Strategies
 		{
 			return new ActivatedStrategyRule(strategy);
 		}
+
+		/// <summary>
+		/// <see cref="Strategy.IsFormed"/> and <see cref="Strategy.AllowTrading"/>.
+		/// </summary>
+		/// <param name="strategy"><see cref="Strategy"/></param>
+		/// <returns>Check result.</returns>
+		public static bool IsFormedAndAllowTrading(this Strategy strategy)
+			=> strategy.CheckOnNull(nameof(strategy)).IsFormed && strategy.AllowTrading;
 	}
 }
