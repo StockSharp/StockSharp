@@ -20464,8 +20464,8 @@
     "ru": "Использовать только основные часы торговли, для которых будут запрошены данные."
   },
   "AllowTrading": {
-    "en": "The strategy is in the warm-up mode, the trading is disabled. The trading mode will be turned on when all underlying indicators is fully formed.",
-    "ru": "Стратегия находится в режиме прогрева, выставление заявок отключено. Режим торговли будет включен, когда все индикаторы стратегии будут полностью сформированы."
+    "en": "The strategy has allowed trading or disallowed (can only monitoring live market data without possibilities to send orders).",
+    "ru": "Стратегии разрешена торговля или запрещено (может только отслеживать живые маркет данные без возможности совершать сделки)."
   },
   "Default": {
     "en": "Default",
