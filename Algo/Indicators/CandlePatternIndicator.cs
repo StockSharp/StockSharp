@@ -78,7 +78,7 @@ public class CandlePatternIndicator : BaseIndicator
 	public override void Load(SettingsStorage storage)
 	{
 		base.Load(storage);
-		Pattern = storage.GetValue<SettingsStorage>(nameof(Pattern)).LoadEntire<ICandlePattern>();
+		Pattern = storage.GetValue<SettingsStorage>(nameof(Pattern))?.LoadEntire<ICandlePattern>();
 	}
 
 	/// <inheritdoc />

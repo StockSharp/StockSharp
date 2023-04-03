@@ -258,9 +258,6 @@ public class ExpressionCandlePattern : ICandlePattern
 
 		Name = storage.GetValue<string>(nameof(Name));
 
-		if(Name.IsEmptyOrWhiteSpace())
-			throw new InvalidOperationException("invalid pattern name");
-
 		Conditions = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
 		{
 			var cond = new CandleExpressionCondition(null);

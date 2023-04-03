@@ -85,9 +85,6 @@ public class ComplexCandlePattern : ICandlePattern
 		_inner.Clear();
 		_inner.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Inner)).Select(i => i.LoadEntire<ICandlePattern>()));
 		UpdateCount();
-
-		if(!(_inner?.Count > 0))
-			throw new ArgumentException("no inner patterns");
 	}
 
 	/// <inheritdoc />
