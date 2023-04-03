@@ -88,8 +88,9 @@
 			try
 			{
 				ConfigManager.RegisterService<ICandlePatternProvider>(new InMemoryCandlePatternProvider(CandlePatternRegistry.All));
+				LoggingHelper.DoWithLog(ServicesRegistry.CandlePatternProvider.Init);
 			}
-			catch
+			catch (Exception e)
 			{
 			}
 
