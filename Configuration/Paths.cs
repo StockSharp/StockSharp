@@ -43,7 +43,7 @@
 			StorageDir = Path.Combine(AppDataPath, "Storage");
 			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
 			CandlePatternsFile = Path.Combine(AppDataPath, $"candle_patterns{DefaultSettingsExt}");
-			LogsDir = Path.Combine(CompanyPath, "Logs");
+			LogsDir = Path.Combine(AppDataPath, "Logs");
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
 			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
 
