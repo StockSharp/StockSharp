@@ -22,6 +22,8 @@
 		private bool IsValid => _credentials != null && (!_credentials.Password.IsEmpty() || !_credentials.Token.IsEmpty());
 		// ReSharper restore InconsistentlySynchronizedField
 
+		private static string FileName => Path.Combine(Paths.CompanyPath, _credentialsFile);
+
 		bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
 		{
 			lock (this)
@@ -32,7 +34,7 @@
 					return IsValid;
 				}
 
-				var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
+				var file = FileName;
 				credentials = null;
 
 				try
@@ -68,11 +70,20 @@
 
 				Directory.CreateDirectory(Paths.CompanyPath);
 
-				var file = Path.Combine(Paths.CompanyPath, _credentialsFile);
-
-				clone.Save().Serialize(file);
+				clone.Save().Serialize(FileName);
 
 				_credentials = clone;
+			}
+		}
+
+		void ICredentialsProvider.Delete()
+		{
+			var fileName = FileName;
+
+			lock (this)
+			{
+				if (File.Exists(fileName))
+					File.Delete(fileName);
 			}
 		}
 	}

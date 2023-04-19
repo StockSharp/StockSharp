@@ -19,5 +19,10 @@
 		/// </summary>
 		/// <param name="credentials"><see cref="ServerCredentials"/>.</param>
 		void Save(ServerCredentials credentials);
+
+		/// <summary>
+		/// Delete credentials.
+		/// </summary>
+		void Delete();
 	}
 }
