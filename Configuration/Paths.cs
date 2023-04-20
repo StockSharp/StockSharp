@@ -316,6 +316,11 @@
 		}
 
 		/// <summary>
+		/// Reset installed version cache so it would be re-generated next time when it's requested.
+		/// </summary>
+		public static void ResetInstalledVersionCache() => _installedVersion = null;
+
+		/// <summary>
 		/// Get currently installed version of the product.
 		/// </summary>
 		/// <param name="productInstallPath">File system path to product installation.</param>
@@ -329,7 +334,10 @@
 				return null;
 
 			var storage = Do.Invariant(() =>
-				InstallerInstallationsConfigPath.Deserialize<SettingsStorage>());
+			{
+				lock(InstallerInstallationsConfigPath)
+					return InstallerInstallationsConfigPath.Deserialize<SettingsStorage>();
+			});
 
 			if (storage is null)
 				return null;
