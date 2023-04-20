@@ -5,7 +5,7 @@
   },
   "LogoutQuestion": {
     "en": "Do you want to logout?",
-    "ru": "Вы хотите выйти из разлогиниться?"
+    "ru": "Вы хотите разлогиниться?"
   },
   "TelegramActivation": {
     "en": "Now you will be redirected to our Telegram bot to activate your profile.",
