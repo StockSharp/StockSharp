@@ -27,13 +27,6 @@
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
     
     <MicrosoftDataSqlClientVer>5.0.0</MicrosoftDataSqlClientVer>
-    <MicrosoftDataSqliteVer>6.0.8</MicrosoftDataSqliteVer>
-    <AsyncLinqVer>6.0.1</AsyncLinqVer>
-    <MsBclAsyncInterfacesVer>6.0.0</MsBclAsyncInterfacesVer>
-    <SysPipelinesVer>6.0.3</SysPipelinesVer>
-    <SysMemoryVer>4.5.5</SysMemoryVer>
-    <SystemTextEncodingsWebVer>6.0.0</SystemTextEncodingsWebVer>
-    <SystemTextJsonVer>6.*</SystemTextJsonVer>
     <SBEVer>1.23.1.1</SBEVer>
     <SysCommandLineVer>2.0.0-beta4.22272.1</SysCommandLineVer>
 

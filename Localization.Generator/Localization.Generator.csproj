@@ -2,9 +2,9 @@
   <Import Project="..\common_target_source_generator.props" />
 	
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="$(SystemTextJsonVer)" GeneratePathProperty="true" PrivateAssets="all" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="$(SystemTextEncodingsWebVer)" GeneratePathProperty="true" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MsBclAsyncInterfacesVer)" GeneratePathProperty="true" PrivateAssets="all" />
+    <PackageReference Include="System.Text.Json" Version="$(MsExtensionsVer)" GeneratePathProperty="true" PrivateAssets="all" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="$(MsExtensionsVer)" GeneratePathProperty="true" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MsExtensionsVer)" GeneratePathProperty="true" PrivateAssets="all" />
   </ItemGroup>
 	
   <PropertyGroup>
