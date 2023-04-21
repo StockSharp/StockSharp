@@ -51,13 +51,11 @@
     <ProjectReference Include="$(ConnectorsAppsPath)FatBTC\FatBTC.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Finam\Finam.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Fix\Fix.csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)Fxcm\Fxcm.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Gdax\Gdax.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Gopax\Gopax.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)HitBtc\HitBtc.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Hotbit\Hotbit.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Idax\Idax.csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)IEX\IEX.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)InteractiveBrokers\InteractiveBrokers.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)ITCH\ITCH.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Kraken\Kraken.csproj" />

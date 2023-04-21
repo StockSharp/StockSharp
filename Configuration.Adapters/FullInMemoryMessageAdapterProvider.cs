@@ -50,14 +50,12 @@ namespace StockSharp.Configuration
 	using StockSharp.FatBTC;
 	using StockSharp.Finam;
 	using StockSharp.Fix;
-	using StockSharp.Fxcm;
 	using StockSharp.Gdax;
 	using StockSharp.Gopax;
 	using StockSharp.HitBtc;
 	using StockSharp.Hotbit;
 	using StockSharp.Huobi;
 	using StockSharp.Idax;
-	using StockSharp.IEX;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.ITCH;
 	using StockSharp.Kraken;
@@ -162,7 +160,6 @@ namespace StockSharp.Configuration
 			() => typeof(TransaqMessageAdapter),
 			() => typeof(TwimeMessageAdapter),
 			() => typeof(SpbExMessageAdapter),
-			() => typeof(FxcmMessageAdapter),
 			() => typeof(BitfinexMessageAdapter),
 			() => typeof(BithumbMessageAdapter),
 			() => typeof(BittrexMessageAdapter),
@@ -187,7 +184,6 @@ namespace StockSharp.Configuration
 			() => typeof(LiveCoinMessageAdapter),
 			() => typeof(YobitMessageAdapter),
 			() => typeof(AlphaVantageMessageAdapter),
-			() => typeof(IEXMessageAdapter),
 			() => typeof(QuoinexMessageAdapter),
 			() => typeof(BitbankMessageAdapter),
 			() => typeof(ZaifMessageAdapter),

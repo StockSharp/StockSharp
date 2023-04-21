@@ -45,7 +45,6 @@
     <PackageReference Include="StockSharp.Finam" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.FinViz" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.FxcmStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.GdaxStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Google" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.GopaxStub" Version="$(StockSharpVer)" />
@@ -53,7 +52,6 @@
     <PackageReference Include="StockSharp.HotbitStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.HuobiStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.IdaxStub" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.IEX" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.InteractiveBrokersStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.ITCHStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.KrakenStub" Version="$(StockSharpVer)" />
