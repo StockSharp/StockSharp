@@ -49,7 +49,7 @@
 			{
 				if (Security is BasketSecurity basket)
 				{
-					if (basket.Contains(ServicesRegistry.SecurityProvider, security) && _condition(security))
+					if (basket.Contains(ServicesRegistry.TrySecurityProvider, security) && _condition(security))
 						Activate(security);
 				}
 				else
@@ -85,7 +85,7 @@
 
 				var basket = sec as BasketSecurity;
 
-				var has = basket?.Contains(ServicesRegistry.SecurityProvider, trade.Security) ?? trade.Security == sec;
+				var has = basket?.Contains(ServicesRegistry.TrySecurityProvider, trade.Security) ?? trade.Security == sec;
 
 				if (has)
 					Activate(trade);
@@ -117,7 +117,7 @@
 
 				var basket = sec as BasketSecurity;
 
-				var has = basket?.Contains(ServicesRegistry.SecurityProvider, item.Order.Security) ?? item.Order.Security == sec;
+				var has = basket?.Contains(ServicesRegistry.TrySecurityProvider, item.Order.Security) ?? item.Order.Security == sec;
 
 				if (has)
 					Activate(item);
@@ -159,7 +159,7 @@
 			{
 				if (Security is BasketSecurity basket)
 				{
-					return basket.Contains(ServicesRegistry.SecurityProvider, security) && _condition(security);
+					return basket.Contains(ServicesRegistry.TrySecurityProvider, security) && _condition(security);
 				}
 				else
 				{
@@ -176,7 +176,7 @@
 			private bool CheckTrades(Security security, Trade trade)
 			{
 				return security is BasketSecurity basket
-					? basket.Contains(ServicesRegistry.SecurityProvider, trade.Security) && _condition(trade.Security)
+					? basket.Contains(ServicesRegistry.TrySecurityProvider, trade.Security) && _condition(trade.Security)
 					: trade.Security == security && _condition(trade.Security);
 			}
 
@@ -251,7 +251,7 @@
 			{
 				var basket = security as BasketSecurity;
 
-				return basket?.Contains(ServicesRegistry.SecurityProvider, depth.Security) ?? depth.Security == security;
+				return basket?.Contains(ServicesRegistry.TrySecurityProvider, depth.Security) ?? depth.Security == security;
 			}
 
 			protected override void DisposeManaged()
