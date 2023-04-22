@@ -30,6 +30,7 @@
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
     
     <MicrosoftDataSqlClientVer>5.0.0</MicrosoftDataSqlClientVer>
+    <AsyncLinqVer>6.0.1</AsyncLinqVer>
     <SBEVer>1.23.1.1</SBEVer>
     <SysCommandLineVer>2.0.0-beta4.22272.1</SysCommandLineVer>
 
