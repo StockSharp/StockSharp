@@ -19,13 +19,26 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 	{
+		private readonly Type _transportAdapter;
+
 		/// <summary>
 		/// Initialize <see cref="InMemoryMessageAdapterProvider"/>.
 		/// </summary>
 		/// <param name="currentAdapters">All currently available adapters.</param>
 		public InMemoryMessageAdapterProvider(IEnumerable<IMessageAdapter> currentAdapters)
+			: this(currentAdapters, ConfigManager.TryGet<Type>("transportAdapter"))
+		{
+		}
+
+		/// <summary>
+		/// Initialize <see cref="InMemoryMessageAdapterProvider"/>.
+		/// </summary>
+		/// <param name="currentAdapters">All currently available adapters.</param>
+		/// <param name="transportAdapter"><see cref="CreateTransportAdapter"/></param>
+		public InMemoryMessageAdapterProvider(IEnumerable<IMessageAdapter> currentAdapters, Type transportAdapter)
 		{
 			CurrentAdapters = currentAdapters ?? throw new ArgumentNullException(nameof(currentAdapters));
+			_transportAdapter = transportAdapter;
 
 			var idGenerator = new IncrementalIdGenerator();
 			PossibleAdapters = GetAdapters().Select(t =>
@@ -137,12 +150,10 @@ namespace StockSharp.Configuration
 		/// <inheritdoc />
 		public virtual IMessageAdapter CreateTransportAdapter(IdGenerator transactionIdGenerator)
 		{
-			var type = ConfigManager.TryGet<Type>("transportAdapter");
-
-			if (type is null)
+			if (_transportAdapter is null)
 				throw new NotSupportedException();
 
-			return type.CreateInstance<IMessageAdapter>(transactionIdGenerator);
+			return _transportAdapter.CreateInstance<IMessageAdapter>(transactionIdGenerator);
 		}
 	}
 }
