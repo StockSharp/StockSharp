@@ -1,4 +1,12 @@
 {
+  "OnlineOnly": {
+    "en": "Online only",
+    "ru": "Только онлайн"
+  },
+  "OnlineOnlyDescription": {
+    "en": "Allow transactions only when in online state",
+    "ru": "Разрешать транзакции только в состоянии онлайн"
+  },
   "Logout": {
     "en": "Logout",
     "ru": "Разлогиниться"

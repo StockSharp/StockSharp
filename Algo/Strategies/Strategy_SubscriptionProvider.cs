@@ -92,6 +92,8 @@ namespace StockSharp.Algo.Strategies
 			_subscriptionsById.Add(subscription.TransactionId, subscription);
 
 			SubscriptionProvider.Subscribe(subscription);
+
+			CheckRefreshOnlineState();
 		}
 
 		/// <inheritdoc />
@@ -102,26 +104,38 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
 		{
-			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-				SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
+			if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+				return;
+
+			SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
+			CheckRefreshOnlineState();
 		}
 
 		private void OnConnectorSubscriptionStopped(Subscription subscription, Exception error)
 		{
-			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-				SubscriptionStopped?.Invoke(subscription, error);
+			if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+				return;
+
+			SubscriptionStopped?.Invoke(subscription, error);
+			CheckRefreshOnlineState();
 		}
 
 		private void OnConnectorSubscriptionStarted(Subscription subscription)
 		{
-			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-				SubscriptionStarted?.Invoke(subscription);
+			if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+				return;
+
+			SubscriptionStarted?.Invoke(subscription);
+			CheckRefreshOnlineState();
 		}
 
 		private void OnConnectorSubscriptionOnline(Subscription subscription)
 		{
-			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-				SubscriptionOnline?.Invoke(subscription);
+			if (IsDisposeStarted || !_subscriptions.ContainsKey(subscription))
+				return;
+
+			SubscriptionOnline?.Invoke(subscription);
+			CheckRefreshOnlineState();
 		}
 
 		private void OnConnectorSubscriptionReceived(Subscription subscription, Message message)
