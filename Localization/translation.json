@@ -1,4 +1,8 @@
 {
+  "OnlineAuthorization": {
+    "en": "You have been redirected to the StockSharp.Com website where you need to log in. After a successful login, you will be automatically logged into the application.",
+    "ru": "Вы были переадресованы на сайт StockSharp.Ru где вам необходимо залогиниться. После успешного логина вы автоматически войдете в приложение."
+  },
   "OnlineOnly": {
     "en": "Online only",
     "ru": "Только онлайн"
