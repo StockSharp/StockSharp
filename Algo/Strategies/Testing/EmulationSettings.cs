@@ -200,7 +200,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private bool _checkTradableDates = true;
+		private bool _checkTradableDates;
 
 		/// <summary>
 		/// Check loading dates are they tradable.
