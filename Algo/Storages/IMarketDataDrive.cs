@@ -84,13 +84,6 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer);
 
 		/// <summary>
-		/// To get the storage for the instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>The storage for the instrument.</returns>
-		ISecurityMarketDataDrive GetSecurityDrive(Security security);
-
-		/// <summary>
 		/// Get all available instruments.
 		/// </summary>
 		IEnumerable<SecurityId> AvailableSecurities { get; }
@@ -147,12 +140,6 @@ namespace StockSharp.Algo.Storages
 		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
 		{
 			throw new NotImplementedException();
-		}
-
-		/// <inheritdoc />
-		public ISecurityMarketDataDrive GetSecurityDrive(Security security)
-		{
-			return new SecurityMarketDataDrive(this, security);
 		}
 
 		/// <inheritdoc />
