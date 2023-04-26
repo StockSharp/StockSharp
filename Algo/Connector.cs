@@ -467,7 +467,8 @@ namespace StockSharp.Algo
 		});
 
 		/// <summary>
-		/// Send lookup messages on connect. By default is <see langword="true"/>.
+		/// Send lookup messages on connect.
+		/// By default is <see cref="MessageTypes.SecurityLookup"/>, <see cref="MessageTypes.PortfolioLookup"/>, <see cref="MessageTypes.OrderStatus"/>, <see cref="MessageTypes.TimeFrameLookup"/>.
 		/// </summary>
 		public ISet<MessageTypes> LookupMessagesOnConnect => _lookupMessagesOnConnect;
 

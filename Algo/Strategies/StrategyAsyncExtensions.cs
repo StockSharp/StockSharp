@@ -25,6 +25,8 @@ public static class StrategyAsyncExtensions
 		if (strategy.ProcessState != ProcessStates.Stopped)
 			throw new ArgumentException($"State is {strategy.ProcessState}.", nameof(strategy));
 
+		await Task.Yield();
+
 		var tcs = AsyncHelper.CreateTaskCompletionSource<ProcessStates>();
 
 		using var _ = cancellationToken.Register(tcs.SetCanceled);
