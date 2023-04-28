@@ -29,6 +29,9 @@ namespace StockSharp.Algo.Indicators
 		private readonly AlligatorLine _line2;
 		private readonly bool _isNegative;
 
+		/// <inheritdoc />
+		public override int? NumValuesToInitialize => MaxNumValuesToInitialize(_line1, _line2);
+
 		internal GatorHistogram(AlligatorLine line1, AlligatorLine line2, bool isNegative)
 		{
 			_line1 = line1 ?? throw new ArgumentNullException(nameof(line1));

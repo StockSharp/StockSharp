@@ -69,6 +69,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override int? NumValuesToInitialize => MaxNumValuesToInitialize(_period7BpSum, _period14BpSum, _period28BpSum, _period7TrSum, _period14TrSum, _period28TrSum);
+
+		/// <inheritdoc />
 		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
 
 		/// <inheritdoc />
