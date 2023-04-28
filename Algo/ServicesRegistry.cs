@@ -104,6 +104,11 @@ namespace StockSharp.Algo
 		public static IStorageRegistry StorageRegistry => ConfigManager.GetService<IStorageRegistry>();
 
 		/// <summary>
+		/// The storage of market data.
+		/// </summary>
+		public static IStorageRegistry TryStorageRegistry => ConfigManager.TryGetService<IStorageRegistry>();
+
+		/// <summary>
 		/// Connector.
 		/// </summary>
 		public static Connector Connector => ConfigManager.GetService<Connector>();
