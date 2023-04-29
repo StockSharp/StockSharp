@@ -218,8 +218,8 @@ namespace StockSharp.Algo.Storages.Remote
 				Scope = CommandScopes.File,
 				SecurityId = securityId,
 				FileDataType = dataType,
-				StartDate = date,
-				EndDate = date,
+				From = date,
+				To = date.AddDays(1),
 				Format = (int)format,
 				Body = stream.To<byte[]>(),
 			});
@@ -241,8 +241,8 @@ namespace StockSharp.Algo.Storages.Remote
 				Scope = CommandScopes.File,
 				SecurityId = securityId,
 				FileDataType = dataType,
-				StartDate = date,
-				EndDate = date,
+				From = date,
+				To = date.AddDays(1),
 				Format = (int)format,
 			}).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
 		}
@@ -263,8 +263,8 @@ namespace StockSharp.Algo.Storages.Remote
 				SecurityId = securityId,
 				FileDataType = dataType,
 				Format = (int)format,
-				StartDate = date,
-				EndDate = date,
+				From = date,
+				To = date.AddDays(1),
 			});
 		}
 

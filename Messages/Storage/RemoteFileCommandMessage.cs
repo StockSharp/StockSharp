@@ -29,17 +29,13 @@ namespace StockSharp.Messages
 		[DataMember]
 		public DataType FileDataType { get; set; }
 
-		/// <summary>
-		/// Start date.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
-		public DateTimeOffset StartDate { get; set; }
+		public override DateTimeOffset? From { get; set; }
 
-		/// <summary>
-		/// End date.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
-		public DateTimeOffset EndDate { get; set; }
+		public override DateTimeOffset? To { get; set; }
 
 		/// <summary>
 		/// Storage format.
@@ -69,8 +65,6 @@ namespace StockSharp.Messages
 			{
 				SecurityId = SecurityId,
 				FileDataType = FileDataType?.TypedClone(),
-				StartDate = StartDate,
-				EndDate = EndDate,
 				Format = Format,
 				Body = Body,
 			};
@@ -82,7 +76,7 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Start={StartDate},End={EndDate},Fmt={Format},BodyLen={Body.Length}";
+			return base.ToString() + $",SecId={SecurityId},DT={FileDataType},Fmt={Format},BodyLen={Body.Length}";
 		}
 	}
 }
