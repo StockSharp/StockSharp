@@ -3303,8 +3303,6 @@ namespace StockSharp.Messages
 				return MessageTypes.Security;
 			else if (type == DataType.SecurityLegs)
 				return MessageTypes.SecurityLegsInfo;
-			else if (type == DataType.SecurityRoute)
-				return MessageTypes.SecurityRoute;
 			else if (type == DataType.TimeFrames)
 				return MessageTypes.TimeFrameInfo;
 			else if (type.IsCandles)
