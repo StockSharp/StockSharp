@@ -32,6 +32,11 @@ namespace StockSharp.Algo.Storages.Remote
 		/// </summary>
 		public IMessageAdapter Adapter { get; }
 
+		/// <summary>
+		/// Cache.
+		/// </summary>
+        public RemoteStorageCache Cache { get; set; }
+
 		private int _securityBatchSize = 1000;
 
 		/// <summary>
@@ -56,9 +61,10 @@ namespace StockSharp.Algo.Storages.Remote
 		{
 			get
 			{
-				return Do<SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true })
-					.Select(s => s.SecurityId)
-					.ToArray();
+				return Do<SecurityMessage>(
+					new SecurityLookupMessage { OnlySecurityId = true },
+					() => (typeof(SecurityLookupMessage), true)
+				).Select(s => s.SecurityId).ToArray();
 			}
 		}
 
@@ -122,7 +128,9 @@ namespace StockSharp.Algo.Storages.Remote
 
 				var batch = b.ToArray();
 
-				foreach (var security in Do<SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch.ToArray() }))
+				foreach (var security in Do<SecurityMessage>(
+					new SecurityLookupMessage { SecurityIds = batch },
+					() => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma())))
 					newSecurity(security);
 
 				count += batch.Length;
@@ -173,8 +181,11 @@ namespace StockSharp.Algo.Storages.Remote
 			//if (securityId == default)
 			//	throw new ArgumentNullException(nameof(securityId));
 
-			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = (int)format })
-				.Select(t => t.FileDataType).Distinct().ToArray();
+			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
+			{
+				SecurityId = securityId,
+				Format = (int)format,
+			}, () => (typeof(AvailableDataRequestMessage), securityId, format)).Select(t => t.FileDataType).Distinct().ToArray();
 		}
 
 		/// <summary>
@@ -199,7 +210,7 @@ namespace StockSharp.Algo.Storages.Remote
 				SecurityId = securityId,
 				RequestDataType = dataType,
 				Format = (int)format,
-			}).Select(i => i.Date.UtcDateTime).ToArray();
+			}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format)).Select(i => i.Date.UtcDateTime).ToArray();
 		}
 
 		/// <summary>
@@ -273,10 +284,21 @@ namespace StockSharp.Algo.Storages.Remote
 			Adapter.TypedClone().Upload(messages);
 		}
 
-		private IEnumerable<TResult> Do<TResult>(Message message)
+		private IEnumerable<TResult> Do<TResult>(Message message, Func<object> getKey = default)
 			where TResult : Message, IOriginalTransactionIdMessage
 		{
-			return Adapter.TypedClone().Download<TResult>(message);
+			var needCache = getKey is not null && Cache is not null;
+			object key = default;
+
+			if (needCache && Cache.TryGet(key = getKey(), out var messages))
+				return messages.Cast<TResult>();
+
+			var result = Adapter.TypedClone().Download<TResult>(message);
+
+			if (needCache)
+				Cache.Set(key, result.Cast<Message>().ToArray());
+
+			return result;
 		}
 	}
 }

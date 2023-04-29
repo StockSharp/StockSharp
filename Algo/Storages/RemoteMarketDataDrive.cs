@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages
 				=> _parent.CreateClient().LoadStream(_securityId, _dataType, _format, date);
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, RemoteStorageDrive> _remoteStorages = new();
+		private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = new();
 		private readonly Func<IMessageAdapter> _createAdapter;
 
 		/// <summary>
@@ -179,6 +179,11 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		/// <summary>
+		/// Cache.
+		/// </summary>
+		public RemoteStorageCache Cache { get; set; }
+
 		private RemoteStorageClient CreateClient()
 		{
 			var adapter = _createAdapter();
@@ -192,7 +197,7 @@ namespace StockSharp.Algo.Storages
 			((ISenderTargetAdapter)adapter).SenderCompId = login;
 			((ISenderTargetAdapter)adapter).TargetCompId = TargetCompId;
 
-			return new RemoteStorageClient(adapter);
+			return new(adapter) { Cache = Cache };
 		}
 
 		/// <inheritdoc />
@@ -209,8 +214,8 @@ namespace StockSharp.Algo.Storages
 			if (dataType is null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			return _remoteStorages.SafeAdd(Tuple.Create(securityId, dataType, format),
-				key => new RemoteStorageDrive(this, securityId, dataType, format));
+			return _remoteStorages.SafeAdd((securityId, dataType, format),
+				key => new(this, securityId, dataType, format));
 		}
 
 		/// <inheritdoc />
