@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Storages
 
 		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
 
-		private DateTime GetStorageDate(DateTimeOffset dto) => dto.UtcDateTime.Date;
+		private static DateTime GetStorageDate(DateTimeOffset dto) => dto.UtcDateTime.Date;
 
 		public int Save(IEnumerable<TMessage> data)
 		{
