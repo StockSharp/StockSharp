@@ -1204,10 +1204,11 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// If true, the strategy can only be online if all of its children are online as well.
 		/// </summary>
+		[Browsable(false)]
 		public bool IsOnlineStateIncludesChildren
 		{
 			get => _isOnlineStateIncludesChildren;
-			private set
+			set
 			{
 				if(_isOnlineStateIncludesChildren == value)
 					return;
@@ -3151,50 +3152,52 @@ namespace StockSharp.Algo.Strategies
 				CheckRefreshOnlineState();
 		}
 
+		private readonly object _onlineStateLock = new();
+
 		private void CheckRefreshOnlineState()
 		{
-			int numSubs, numSubsOnline;
-			int numChildren, numChildrenOnline;
-
+			int numSubs, numSubsOnline, numChildren, numChildrenOnline;
 			numSubs = numSubsOnline = numChildren = numChildrenOnline = 0;
 
-			var online = ProcessState == ProcessStates.Started;
-
-			_subscriptions.SyncDo(d =>
+			lock (_onlineStateLock)
 			{
-				foreach (var sub in d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()))
+				var online = ProcessState == ProcessStates.Started;
+
+				_subscriptions.SyncDo(d =>
 				{
-					++numSubs;
-					if(sub.State == SubscriptionStates.Online)
-						++numSubsOnline;
-				}
-
-			});
-
-			online &= numSubs == numSubsOnline;
-
-			if (IsOnlineStateIncludesChildren)
-			{
-				_childStrategies.SyncDo(s =>
-				{
-					foreach (var child in s)
+					foreach (var sub in d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()))
 					{
-						++numChildren;
-						if(child.IsOnline)
-							++numChildrenOnline;
+						++numSubs;
+						if(sub.State == SubscriptionStates.Online)
+							++numSubsOnline;
 					}
-
 				});
 
-				online &= numChildren == numChildrenOnline;
+				online &= numSubs == numSubsOnline;
+
+				if (IsOnlineStateIncludesChildren)
+				{
+					_childStrategies.SyncDo(s =>
+					{
+						foreach (var child in s)
+						{
+							++numChildren;
+							if(child.IsOnline)
+								++numChildrenOnline;
+						}
+					});
+
+					online &= numChildren == numChildrenOnline;
+				}
+
+				if(online == IsOnline)
+					return;
+
+				this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, subs: {3}/{4}, children({5}): {6}/{7}", IsOnline, online, ProcessState, numSubsOnline, numSubs, IsOnlineStateIncludesChildren, numChildrenOnline, numChildren);
+
+				IsOnline = online;
 			}
 
-			if(online == IsOnline)
-				return;
-
-			this.AddInfoLog($"IsOnline: {IsOnline} ==> {online}. state={ProcessState}, subs: {numSubsOnline}/{numSubs}" + (IsOnlineStateIncludesChildren ? $", children: {numChildrenOnline}/{numChildren}" : null));
-
-			IsOnline = online;
 			IsOnlineChanged?.Invoke(this);
 		}
 

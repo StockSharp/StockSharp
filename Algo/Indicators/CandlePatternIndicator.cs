@@ -36,8 +36,12 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 [IndicatorIn(typeof(CandleIndicatorValue))]
 public class CandlePatternIndicator : BaseIndicator
 {
+	private ICandlePatternProvider _candlePatternProvider;
 	private ICandlePattern _pattern;
 	private readonly List<ICandleMessage> _buffer = new();
+
+	/// <inheritdoc />
+	public override int? NumValuesToInitialize => 0;
 
 	/// <summary>
 	/// Candle pattern.
@@ -55,6 +59,28 @@ public class CandlePatternIndicator : BaseIndicator
 		}
 	}
 
+	private void EnsureProvider()
+	{
+		if(_candlePatternProvider != null)
+			return;
+
+		_candlePatternProvider = ServicesRegistry.TryCandlePatternProvider;
+		if (_candlePatternProvider == null)
+			return;
+
+		_candlePatternProvider.PatternReplaced += (oldPattern, newPattern) =>
+		{
+			if(oldPattern == Pattern)
+				Pattern = newPattern;
+		};
+
+		_candlePatternProvider.PatternDeleted += (pattern) =>
+		{
+			if(pattern == Pattern)
+				Pattern = null;
+		};
+	}
+
 	/// <summary>
 	/// Number of candles in the pattern.
 	/// </summary>
@@ -63,7 +89,11 @@ public class CandlePatternIndicator : BaseIndicator
 
 	/// <summary>
 	/// </summary>
-	public CandlePatternIndicator() => Reset();
+	public CandlePatternIndicator()
+	{
+		EnsureProvider();
+		Reset();
+	}
 
 	/// <inheritdoc />
 	public sealed override void Reset()

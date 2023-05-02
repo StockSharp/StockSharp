@@ -45,6 +45,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override int? NumValuesToInitialize => MaxNumValuesToInitialize(Ema, Roc);
+
+		/// <inheritdoc />
 		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
 
 		/// <summary>

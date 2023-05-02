@@ -34,6 +34,9 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorMedianPrice.html")]
 	public class MedianPrice : BaseIndicator
 	{
+		/// <inheritdoc />
+		public override int? NumValuesToInitialize => 1;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MedianPrice"/>.
 		/// </summary>

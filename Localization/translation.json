@@ -3,6 +3,10 @@
     "en": "You have been redirected to the StockSharp.Com website where you need to log in. After a successful login, you will be automatically logged into the application.",
     "ru": "Вы были переадресованы на сайт StockSharp.Ru где вам необходимо залогиниться. После успешного логина вы автоматически войдете в приложение."
   },
+  "DoubleClickToEdit": {
+    "en": "Double click on formula to edit. Enter to finish editing.",
+    "ru": "Двойной клик на формуле для редактирования. Enter для завершения редактирования."
+  },
   "OnlineOnly": {
     "en": "Online only",
     "ru": "Только онлайн"
