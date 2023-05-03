@@ -42,6 +42,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class MaxProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="MaxProfitParameter"/>.
+		/// </summary>
+		public MaxProfitParameter()
+			: base(StatisticParameterTypes.MaxProfit)
+		{
+		}
+
 		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
@@ -57,6 +65,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class MaxDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="MaxDrawdownParameter"/>.
+		/// </summary>
+		public MaxDrawdownParameter()
+			: base(StatisticParameterTypes.MaxDrawdown)
+		{
+		}
+
 		private decimal _maxEquity = decimal.MinValue;
 
 		/// <inheritdoc />
@@ -96,6 +112,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class MaxRelativeDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="MaxRelativeDrawdownParameter"/>.
+		/// </summary>
+		public MaxRelativeDrawdownParameter()
+			: base(StatisticParameterTypes.MaxRelativeDrawdown)
+		{
+		}
+
 		private decimal _maxEquity = decimal.MinValue;
 
 		/// <inheritdoc />
@@ -137,6 +161,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class ReturnParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="ReturnParameter"/>.
+		/// </summary>
+		public ReturnParameter()
+			: base(StatisticParameterTypes.Return)
+		{
+		}
+
 		private decimal _minEquity = decimal.MaxValue;
 
 		/// <inheritdoc />
@@ -178,6 +210,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class RecoveryFactorParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="RecoveryFactorParameter"/>.
+		/// </summary>
+		public RecoveryFactorParameter()
+			: base(StatisticParameterTypes.RecoveryFactor)
+		{
+		}
+
 		private readonly MaxDrawdownParameter _maxDrawdown = new();
 		private readonly NetProfitParameter _netProfit = new();
 
@@ -225,6 +265,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class NetProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="NetProfitParameter"/>.
+		/// </summary>
+		public NetProfitParameter()
+			: base(StatisticParameterTypes.NetProfit)
+		{
+		}
+
 		private decimal? _firstPnL;
 
 		/// <inheritdoc />

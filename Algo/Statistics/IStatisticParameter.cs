@@ -32,6 +32,11 @@ namespace StockSharp.Algo.Statistics
 		string Name { get; set; }
 
 		/// <summary>
+		/// Type.
+		/// </summary>
+		StatisticParameterTypes Type { get; }
+
+		/// <summary>
 		/// The current value of the parameter.
 		/// </summary>
 		object Value { get; }
@@ -52,7 +57,7 @@ namespace StockSharp.Algo.Statistics
 		string Category { get; }
 
 		/// <summary>
-		/// <see cref="IStatisticParameter.Value"/> change event.
+		/// <see cref="Value"/> change event.
 		/// </summary>
 		event Action ValueChanged;
 
@@ -84,14 +89,17 @@ namespace StockSharp.Algo.Statistics
 		/// <summary>
 		/// Initialize <see cref="BaseStatisticParameter{T}"/>.
 		/// </summary>
-		protected BaseStatisticParameter()
+		/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+		protected BaseStatisticParameter(StatisticParameterTypes type)
 		{
-			var type = GetType();
-			_name = type.Name.Remove("Parameter");
+			Type = type;
 
-			DisplayName = type.GetDisplayName(GetReadableName(_name));
-			Description = type.GetDescription(DisplayName);
-			Category = type.GetCategory();
+			var type2 = GetType();
+			_name = type2.Name.Remove("Parameter");
+
+			DisplayName = type2.GetDisplayName(GetReadableName(_name));
+			Description = type2.GetDescription(DisplayName);
+			Category = type2.GetCategory();
 		}
 
 		private string _name;
@@ -109,6 +117,9 @@ namespace StockSharp.Algo.Statistics
 				this.Notify(nameof(Name));
 			}
 		}
+
+		/// <inheritdoc />
+		public StatisticParameterTypes Type { get; }
 
 		/// <inheritdoc />
 		public string DisplayName { get; }

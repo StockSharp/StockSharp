@@ -117,7 +117,7 @@ namespace StockSharp.Algo.Statistics
 			Parameters.Add(new LossingTradesParameter());
 			Parameters.Add(new AverageLossTradeParameter());
 			Parameters.Add(new RoundtripCountParameter());
-			Parameters.Add(new AverageTradeParameter());
+			Parameters.Add(new AverageTradeProfitParameter());
 			Parameters.Add(new TradeCountParameter());
 			Parameters.Add(new MaxLongPositionParameter());
 			Parameters.Add(new MaxShortPositionParameter());

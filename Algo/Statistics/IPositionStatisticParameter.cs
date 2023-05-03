@@ -43,6 +43,14 @@ namespace StockSharp.Algo.Statistics
 	public class MaxLongPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
 		/// <summary>
+		/// Initialize <see cref="MaxLongPositionParameter"/>.
+		/// </summary>
+		public MaxLongPositionParameter()
+			: base(StatisticParameterTypes.MaxLongPosition)
+		{
+		}
+
+		/// <summary>
 		/// To add the new position value to the parameter.
 		/// </summary>
 		/// <param name="marketTime">The exchange time.</param>
@@ -62,6 +70,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str972Key)]
 	public class MaxShortPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="MaxShortPositionParameter"/>.
+		/// </summary>
+		public MaxShortPositionParameter()
+			: base(StatisticParameterTypes.MaxShortPosition)
+		{
+		}
+
 		/// <summary>
 		/// To add the new position value to the parameter.
 		/// </summary>
