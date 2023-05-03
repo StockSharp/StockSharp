@@ -76,7 +76,10 @@ namespace StockSharp.Algo.Indicators
 		IEnumerable<IIndicator> IComplexIndicator.InnerIndicators => InnerIndicators;
 
 		/// <inheritdoc />
-		public override int? NumValuesToInitialize => MaxNumValuesToInitialize(InnerIndicators);
+		public override int? NumValuesToInitialize =>
+			Mode == ComplexIndicatorModes.Parallel
+				? MaxNumValuesToInitialize(InnerIndicators)
+				: InnerIndicators.Select(i => i.NumValuesToInitialize).Aggregate<int?, int?>(0, (cur, next) => cur + next);
 
 		/// <inheritdoc />
 		protected override bool CalcIsFormed() => InnerIndicators.All(i => i.IsFormed);
