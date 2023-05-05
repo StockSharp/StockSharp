@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Ecng.Common;
 using Ecng.Serialization;
 
 using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Messages;
 using StockSharp.Localization;
+using StockSharp.Logging;
 
 namespace StockSharp.Algo.Indicators;
 
@@ -104,18 +106,35 @@ public class CandlePatternIndicator : BaseIndicator
 		IsFormed = true;
 	}
 
+	const string PatternKey = nameof(PatternKey);
+
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
 		base.Load(storage);
-		Pattern = storage.GetValue<SettingsStorage>(nameof(Pattern))?.LoadEntire<ICandlePattern>();
+
+		EnsureProvider();
+		var patternName = storage.GetValue<string>(PatternKey);
+
+		if(patternName.IsEmptyOrWhiteSpace())
+			return;
+
+		if(_candlePatternProvider == null)
+			throw new InvalidOperationException($"unable to load pattern '{patternName}'. candle pattern provider is not initialized.");
+
+		Pattern = _candlePatternProvider.TryFind(patternName);
+
+		if(Pattern == null)
+			LogManager.Instance?.Application.AddErrorLog($"pattern '{patternName}' not found");
 	}
 
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
 		base.Save(storage);
-		storage.SetValue(nameof(Pattern), Pattern?.SaveEntire(false));
+
+		if(Pattern != null)
+			storage.SetValue(PatternKey, Pattern.Name);
 	}
 
 	/// <inheritdoc />
