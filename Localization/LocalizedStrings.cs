@@ -85,7 +85,11 @@ namespace StockSharp.Localization
 		public static string ActiveLanguage
 		{
 			get => LocalizationManager.ActiveLanguage;
-			set => LocalizationManager.ActiveLanguage = value;
+			set
+			{
+				LocalizationManager.ActiveLanguage = value;
+				ResetCache();
+			}
 		}
 
 		/// <summary>
