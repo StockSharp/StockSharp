@@ -1142,8 +1142,8 @@ namespace StockSharp.Algo
 				if (s.Code.IsEmpty())
 					s.Code = code;
 
-				if (s.Name.IsEmpty())
-					s.Name = code;
+				//if (s.Name.IsEmpty())
+				//	s.Name = code;
 
 				//if (s.Class.IsEmpty())
 				//	s.Class = board.Code;
