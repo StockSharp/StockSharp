@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Ecng.Collections;
 using Ecng.Common;
+
 using StockSharp.Logging;
 
 namespace StockSharp.Messages;
@@ -25,12 +28,15 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
+	[Browsable(false)]
 	public virtual TimeSpan TransactionTimeout { get; } = TimeSpan.FromSeconds(10);
 
 	/// <inheritdoc />
+	[Browsable(false)]
 	public virtual TimeSpan DisconnectTimeout { get; } = TimeSpan.FromSeconds(5);
 
 	/// <inheritdoc />
+	[Browsable(false)]
 	public virtual int MaxParallelMessages => IAsyncMessageAdapter.DefaultMaxParallelMessages;
 
 	/// <inheritdoc />
