@@ -150,6 +150,7 @@ public class SimpleStrategy : Strategy
 ## Stock, Futures and Options
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
+|<img src="./Media/logos/polygonio_logo.svg" height="30" /> |Polygon.io | <a href="//doc.stocksharp.com/topics/PolygonIO.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/PolygonIO.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="//doc.stocksharp.com/topics/IB.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IB.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="//doc.stocksharp.com/topics/FIX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FIX.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="//doc.stocksharp.com/topics/Fast.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fast.html" target="_blank">Ru</a> |

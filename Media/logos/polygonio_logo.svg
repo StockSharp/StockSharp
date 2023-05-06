@@ -1,0 +1,8 @@
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <g id="favicon-color" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+  <rect fill="#5F5CFF" x="0" y="0" width="512" height="512">
+  </rect>
+  <path d="M255.333227,64 L367.331378,175.899445 L347.299853,201.253218 L254.780963,448 L199.661467,275.745932 L144,174.546261 L255.333227,64 Z M319.636,234.131 L262.496621,303.661778 L262.496,386.524 L319.636,234.131 Z M259.451,88.416 L214.049,273.596 L248.138,380.125 L248.138369,298.514026 L348.05,176.937 L259.451,88.416 Z M242.589,96.892 L161.799812,177.111675 L204.076,253.977 L242.589,96.892 Z" id="polyLogo" fill="#FFFFFF" fill-rule="nonzero">
+  </path>
+ </g>
+</svg>
