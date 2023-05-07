@@ -1197,6 +1197,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// True means that strategy is started and all of its subscriptions are in online state and all child strategies are online.
 		/// </summary>
+		[Browsable(false)]
 		public bool IsOnline { get; private set; }
 
 		private bool _isOnlineStateIncludesChildren;
