@@ -595,7 +595,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(provider));
 
 			if (provider is ILogReceiver logs)
-				logs.AddInfoLog(nameof(SubscribeCandles));
+				logs.AddDebugLog(nameof(SubscribeCandles));
 
 			var subscription = new Subscription(series);
 

@@ -413,7 +413,7 @@ namespace StockSharp.Algo
 				if(isAllExtension)
 					_connector.AddVerboseLog("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
 				else
-					_connector.AddInfoLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
+					_connector.AddDebugLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
 
 				_connector.SendInMessage((Message)request);
 			}
