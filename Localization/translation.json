@@ -1,4 +1,12 @@
 {
+  "Parallel": {
+    "en": "Parallel",
+    "ru": "Parallel"
+  },
+  "ParallelDesc": {
+    "en": "Max number of parallel messages processing.",
+    "ru": "Максимальное количество параллельных сообщений для обработки."
+  },
   "PolygonIO": {
     "en": "Polygon.io",
     "ru": "Polygon.io"
