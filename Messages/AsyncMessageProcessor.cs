@@ -221,7 +221,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		AsyncHelper.CatchHandle(
 			wrapper,
 			handleError:    e => _adapter.HandleMessageException(msg.Message, e),
-			handleCancel:   e => _adapter.HandleMessageException(msg.Message, e),
+			handleCancel:   e => _adapter.AddDebugLog("{0} cancelled", msg.Message),
 			rethrowCancel:  false,
 			rethrowErr:     false
 		);
