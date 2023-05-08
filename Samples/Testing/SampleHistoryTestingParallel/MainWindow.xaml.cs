@@ -32,10 +32,8 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
-	using StockSharp.Charting;
 
 	public partial class MainWindow
 	{
@@ -144,8 +142,6 @@ namespace SampleHistoryTestingParallel
 
 			_batchEmulation.StateChanged += (oldState, newState) =>
 			{
-				var isFinished = _batchEmulation.IsFinished;
-
 				if (_batchEmulation.State == ChannelStates.Stopped)
 					_batchEmulation = null;
 
@@ -161,7 +157,7 @@ namespace SampleHistoryTestingParallel
 						case ChannelStates.Stopped:
 							SetIsEnabled(true, false, false);
 
-							if (isFinished)
+							if (!_batchEmulation.IsCancelled)
 							{
 								TestingProcess.Value = TestingProcess.Maximum;
 								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));

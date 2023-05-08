@@ -90,9 +90,9 @@ namespace StockSharp.Algo.Strategies.Testing
 		public MarketDataStorageCache StorageCache { get; set; }
 
 		/// <summary>
-		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="BatchEmulation.Stop"/>method.
+		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="Stop"/> method.
 		/// </summary>
-		public bool IsFinished { get; private set; }
+		public bool IsCancelled { get; private set; }
 
 		private ChannelStates _state = ChannelStates.Stopped;
 		
@@ -172,7 +172,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				if (_cancelEmulation || !batches.MoveNext())
 				{
-					IsFinished = !_cancelEmulation;
+					IsCancelled = _cancelEmulation;
 
 					State = ChannelStates.Stopping;
 					State = ChannelStates.Stopped;
