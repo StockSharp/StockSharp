@@ -45,8 +45,9 @@ public interface ICandlePatternProvider
 	/// Find pattern by name.
 	/// </summary>
 	/// <param name="name">Name.</param>
-	/// <returns><see cref="ICandlePattern"/> or <see langword="null"/>.</returns>
-	ICandlePattern TryFind(string name);
+	/// <param name="pattern"><see cref="ICandlePattern"/> or <see langword="null"/>.</param>
+	/// <returns><see langword="true"/> if pattern was loaded otherwise <see langword="false"/>.</returns>
+	bool TryFind(string name, out ICandlePattern pattern);
 
 	/// <summary>
 	/// Remove pattern from the storage.
@@ -119,8 +120,8 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 			PatternReplaced?.Invoke(oldPattern, pattern);
 	}
 
-	ICandlePattern ICandlePatternProvider.TryFind(string name)
-		=> _cache.TryGetValue(name);
+	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)
+		=> _cache.TryGetValue(name, out pattern);
 }
 
 /// <summary>
@@ -174,15 +175,32 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 	{
 		_inMemory.Init();
 
+		var errors = new List<Exception>();
+
 		if (File.Exists(_fileName))
-			Do.Invariant(() => _fileName.Deserialize<SettingsStorage[]>().Select(s => s.LoadEntire<ICandlePattern>()).ForEach(p =>
+		{
+			Do.Invariant(() => _fileName.Deserialize<SettingsStorage[]>().Select(s =>
 			{
-				var toReplace = _inMemory.TryFind(p.Name);
-				if(toReplace != null)
+				try
+				{
+					return s.LoadEntire<ICandlePattern>();
+				}
+				catch (Exception ex)
+				{
+					errors.Add(ex);
+					return null;
+				}
+			}).Where(p => p is not null).ForEach(p =>
+			{
+				if (_inMemory.TryFind(p.Name, out var toReplace))
 					_inMemory.Remove(toReplace);
 
 				_inMemory.Save(p);
 			}));
+		}
+
+		if (errors.Count > 0)
+			throw errors.SingleOrAggr();
 	}
 
 	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns => _inMemory.Patterns;
@@ -220,5 +238,6 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 			DelayAction.DefaultGroup.Add(dosave);
 	}
 
-	ICandlePattern ICandlePatternProvider.TryFind(string name) => _inMemory.TryFind(name);
+	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)
+		=> _inMemory.TryFind(name, out pattern);
 }

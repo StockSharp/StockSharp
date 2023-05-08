@@ -106,15 +106,13 @@ public class CandlePatternIndicator : BaseIndicator
 		IsFormed = true;
 	}
 
-	const string PatternKey = nameof(PatternKey);
-
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
 		base.Load(storage);
 
 		EnsureProvider();
-		var patternName = storage.GetValue<string>(PatternKey);
+		var patternName = storage.GetValue<string>(nameof(Pattern));
 
 		if(patternName.IsEmptyOrWhiteSpace())
 			return;
@@ -122,10 +120,10 @@ public class CandlePatternIndicator : BaseIndicator
 		if(_candlePatternProvider == null)
 			throw new InvalidOperationException($"unable to load pattern '{patternName}'. candle pattern provider is not initialized.");
 
-		Pattern = _candlePatternProvider.TryFind(patternName);
-
-		if(Pattern == null)
+		if(!_candlePatternProvider.TryFind(patternName, out var pattern))
 			LogManager.Instance?.Application.AddErrorLog($"pattern '{patternName}' not found");
+
+		Pattern = pattern;
 	}
 
 	/// <inheritdoc />
@@ -134,7 +132,7 @@ public class CandlePatternIndicator : BaseIndicator
 		base.Save(storage);
 
 		if(Pattern != null)
-			storage.SetValue(PatternKey, Pattern.Name);
+			storage.SetValue(nameof(Pattern), Pattern.Name);
 	}
 
 	/// <inheritdoc />
