@@ -156,6 +156,12 @@ namespace StockSharp.Algo.Strategies.Testing
 			_nextTotalProgress = 0;
 			_startedAt = DateTime.UtcNow;
 
+			if (EmulationSettings.MaxIterations > 0 && iterationCount > EmulationSettings.MaxIterations)
+			{
+				iterationCount = EmulationSettings.MaxIterations;
+				strategies = strategies.Take(iterationCount);
+			}
+
 			State = ChannelStates.Starting;
 
 			var totalBatches = (int)((decimal)iterationCount / EmulationSettings.BatchSize).Ceiling();

@@ -185,14 +185,35 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1418Key,
 			Description = LocalizedStrings.Str1419Key,
-			GroupName = LocalizedStrings.Str1174Key,
-			Order = 105)]
+			GroupName = LocalizedStrings.Str3177Key,
+			Order = 200)]
 		public int BatchSize
 		{
 			get => _batchSize;
 			set
 			{
 				_batchSize = value;
+				NotifyPropertyChanged();
+			}
+		}
+
+		private int _maxIterations;
+
+		/// <summary>
+		/// Maximum possible iterations count.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IterationsKey,
+			Description = LocalizedStrings.MaxIterationsKey,
+			GroupName = LocalizedStrings.Str3177Key,
+			Order = 201)]
+		public int MaxIterations
+		{
+			get => _maxIterations;
+			set
+			{
+				_maxIterations = value;
 				NotifyPropertyChanged();
 			}
 		}
@@ -257,6 +278,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			storage.SetValue(nameof(LogLevel), LogLevel.To<string>());
 			storage.SetValue(nameof(TradeDataMode), TradeDataMode.To<string>());
 			storage.SetValue(nameof(BatchSize), BatchSize);
+			storage.SetValue(nameof(MaxIterations), MaxIterations);
 			storage.SetValue(nameof(CheckTradableDates), CheckTradableDates);
 		}
 
@@ -277,6 +299,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
 			TradeDataMode = storage.GetValue(nameof(TradeDataMode), TradeDataMode);
 			BatchSize = storage.GetValue(nameof(BatchSize), BatchSize);
+			MaxIterations = storage.GetValue(nameof(MaxIterations), MaxIterations);
 			CheckTradableDates = storage.GetValue(nameof(CheckTradableDates), CheckTradableDates);
 		}
 	}

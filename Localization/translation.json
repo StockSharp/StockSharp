@@ -1,4 +1,8 @@
 {
+  "MaxIterations": {
+    "en": "Maximum possible iterations count.",
+    "ru": "Максимально возможно кол-во итераций."
+  },
   "Parallel": {
     "en": "Parallel",
     "ru": "Parallel"
