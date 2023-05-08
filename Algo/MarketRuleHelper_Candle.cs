@@ -303,38 +303,6 @@
 		}
 
 		/// <summary>
-		/// To create a rule for the event of candle total volume excess above a specific level.
-		/// </summary>
-		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
-		/// <param name="candleManager">The candles manager.</param>
-		/// <param name="series">Candles series, from which a candle will be taken.</param>
-		/// <param name="volume">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<CandleSeries, TCandle> WhenCurrentCandleTotalVolumeMore<TCandle>(this ICandleManager<TCandle> candleManager, CandleSeries series, Unit volume)
-			where TCandle : ICandleMessage
-		{
-			if (series == null)
-				throw new ArgumentNullException(nameof(series));
-
-			var finishVolume = volume;
-
-			if (volume.Type != UnitTypes.Limit)
-			{
-				var curCandle = candleManager.GetCurrentCandle<TCandle>(series);
-
-				if (curCandle == null)
-					throw new ArgumentException(LocalizedStrings.Str1070, nameof(series));
-
-				finishVolume = curCandle.TotalVolume + volume;	
-			}
-
-			return new CurrentCandleSeriesRule<TCandle>(candleManager, series, candle => candle.TotalVolume > finishVolume)
-			{
-				Name = series + LocalizedStrings.Str1071Params.Put(volume)
-			};
-		}
-
-		/// <summary>
 		/// To create a rule for the event of new candles occurrence.
 		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
@@ -427,12 +395,10 @@
 		public static MarketRule<TCandle, TCandle> WhenPartiallyFinished<TCandle>(this ICandleManager<TCandle> candleManager, TCandle candle, IConnector connector, decimal percent)
 			where TCandle : ICandleMessage
 		{
-			var rule = candle is ITimeFrameCandleMessage
-				? (MarketRule<TCandle, TCandle>)new TimeFrameCandleChangedRule<TCandle>(candle, connector, percent)
-			    : new ChangedCandleRule<TCandle>(candleManager, candle, c => c.IsCandlePartiallyFinished(percent));
-
-			rule.Name = LocalizedStrings.Str1075Params.Put(percent);
-			return rule;
+			return new ChangedCandleRule<TCandle>(candleManager, candle, c => c.IsCandlePartiallyFinished(percent))
+			{
+				Name = LocalizedStrings.Str1075Params.Put(percent)
+			};
 		}
 
 		/// <summary>
@@ -447,98 +413,10 @@
 		public static MarketRule<CandleSeries, TCandle> WhenPartiallyFinishedCandles<TCandle>(this ICandleManager<TCandle> candleManager, CandleSeries series, IConnector connector, decimal percent)
 			where TCandle : ICandleMessage
 		{
-			var rule = series.CandleType.Is<ITimeFrameCandleMessage>()
-				? (MarketRule<CandleSeries, TCandle>)new TimeFrameCandlesChangedSeriesRule<TCandle>(candleManager, series, connector, percent)
-				: new CandleChangedSeriesRule<TCandle>(candleManager, series, candle => candle.IsCandlePartiallyFinished(percent));
-
-			rule.Name = LocalizedStrings.Str1076Params.Put(percent);
-			return rule;
-		}
-
-		private sealed class TimeFrameCandleChangedRule<TCandle> : MarketRule<TCandle, TCandle>
-			where TCandle : ICandleMessage
-		{
-			private readonly MarketTimer _timer;
-
-			public TimeFrameCandleChangedRule(TCandle candle, IConnector connector, decimal percent)
-				: base(candle)
+			return new CandleChangedSeriesRule<TCandle>(candleManager, series, candle => candle.IsCandlePartiallyFinished(percent))
 			{
-				_timer = CreateAndActivateTimeFrameTimer(candle.SecurityId, (TimeSpan)candle.DataType.Arg, connector, () => Activate(candle), percent, false);
-			}
-
-			protected override void DisposeManaged()
-			{
-				_timer.Dispose();
-				base.DisposeManaged();
-			}
-		}
-
-		private sealed class TimeFrameCandlesChangedSeriesRule<TCandle> : BaseCandleSeriesRule<TCandle>
-			where TCandle : ICandleMessage
-		{
-			private readonly MarketTimer _timer;
-
-			public TimeFrameCandlesChangedSeriesRule(ICandleManager<TCandle> candleManager, CandleSeries series, IConnector connector, decimal percent)
-				: base(series)
-			{
-				if (candleManager == null)
-					throw new ArgumentNullException(nameof(candleManager));
-
-				_timer = CreateAndActivateTimeFrameTimer(series.Security.ToSecurityId(), (TimeSpan)series.Arg, connector, () => Activate(candleManager.GetCurrentCandle<TCandle>(Series)), percent, true);
-			}
-
-			protected override void DisposeManaged()
-			{
-				_timer.Dispose();
-				base.DisposeManaged();
-			}
-		}
-
-		private static MarketTimer CreateAndActivateTimeFrameTimer(SecurityId securityId, TimeSpan timeFrame, IConnector connector, Action callback, decimal percent, bool periodical)
-		{
-			if (securityId == default)
-				throw new ArgumentNullException(nameof(securityId));
-
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			if (callback == null)
-				throw new ArgumentNullException(nameof(callback));
-
-			if (percent <= 0)
-				throw new ArgumentOutOfRangeException(nameof(percent), LocalizedStrings.Str1077);
-
-			MarketTimer timer = null;
-
-			timer = new MarketTimer(connector, () =>
-			{
-				if (periodical)
-					timer.Interval(timeFrame);
-				else
-					timer.Stop();
-
-				callback();
-			});
-
-			var time = connector.CurrentTime;
-
-			// TODO
-			var candleBounds = timeFrame.GetCandleBounds(time, TimeZoneInfo.Utc, new());
-
-			percent /= 100;
-
-			var startTime = candleBounds.Min + TimeSpan.FromMilliseconds(timeFrame.TotalMilliseconds * (double)percent);
-
-			var diff = startTime - time;
-
-			if (diff == TimeSpan.Zero)
-				timer.Interval(timeFrame);
-			else if (diff > TimeSpan.Zero)
-				timer.Interval(diff);
-			else
-				timer.Interval(timeFrame + diff);
-
-			return timer.Start();
+				Name = LocalizedStrings.Str1076Params.Put(percent)
+			};
 		}
 
 		private static bool IsCandlePartiallyFinished<TCandle>(this TCandle candle, decimal percent)
@@ -567,7 +445,10 @@
 				return candle.TotalVolume >= volume;
 			}
 			else
-				throw new ArgumentOutOfRangeException(nameof(candle), candle.GetType(), LocalizedStrings.WrongCandleType);
+			{
+				return candle.State == CandleStates.Finished;
+				//throw new ArgumentOutOfRangeException(nameof(candle), candle.GetType(), LocalizedStrings.WrongCandleType);
+			}
 		}
 
 		/// <summary>

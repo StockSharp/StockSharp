@@ -43,7 +43,7 @@ namespace StockSharp.Algo
 		public IEnumerable<Portfolio> RegisteredPortfolios => _subscriptionManager.SubscribedPortfolios;
 
 		/// <summary>
-		/// List of all candles series, subscribed via <see cref="ICandleSource{Candle}.Start"/>.
+		/// List of all candles series, subscribed via <see cref="Subscribe"/>.
 		/// </summary>
 		public IEnumerable<CandleSeries> SubscribedCandleSeries => _subscriptionManager.SubscribedCandleSeries;
 
