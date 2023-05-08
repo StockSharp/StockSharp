@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Statistics
 				get
 				{
 					lock (SyncRoot)
-						return _pnlParams ?? (_pnlParams = this.OfType<IPnLStatisticParameter>().ToArray());
+						return _pnlParams ??= this.OfType<IPnLStatisticParameter>().ToArray();
 				}
 			}
 
@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Statistics
 				get
 				{
 					lock (SyncRoot)
-						return _tradeParams ?? (_tradeParams = this.OfType<ITradeStatisticParameter>().ToArray());
+						return _tradeParams ??= this.OfType<ITradeStatisticParameter>().ToArray();
 				}
 			}
 
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Statistics
 				get
 				{
 					lock (SyncRoot)
-						return _positionParams ?? (_positionParams = this.OfType<IPositionStatisticParameter>().ToArray());
+						return _positionParams ??= this.OfType<IPositionStatisticParameter>().ToArray();
 				}
 			}
 
@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Statistics
 				get
 				{
 					lock (SyncRoot)
-						return _orderParams ?? (_orderParams = this.OfType<IOrderStatisticParameter>().ToArray());
+						return _orderParams ??= this.OfType<IOrderStatisticParameter>().ToArray();
 				}
 			}
 
@@ -106,36 +106,39 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public StatisticManager()
 		{
-			Parameters.Add(new MaxProfitParameter());
-			Parameters.Add(new MaxDrawdownParameter());
-			Parameters.Add(new MaxRelativeDrawdownParameter());
-			Parameters.Add(new ReturnParameter());
-			Parameters.Add(new RecoveryFactorParameter());
-			Parameters.Add(new NetProfitParameter());
-			Parameters.Add(new WinningTradesParameter());
-			Parameters.Add(new AverageWinTradeParameter());
-			Parameters.Add(new LossingTradesParameter());
-			Parameters.Add(new AverageLossTradeParameter());
-			Parameters.Add(new RoundtripCountParameter());
-			Parameters.Add(new AverageTradeProfitParameter());
-			Parameters.Add(new TradeCountParameter());
-			Parameters.Add(new MaxLongPositionParameter());
-			Parameters.Add(new MaxShortPositionParameter());
-			Parameters.Add(new MaxLatencyRegistrationParameter());
-			Parameters.Add(new MinLatencyRegistrationParameter());
-			Parameters.Add(new MaxLatencyCancellationParameter());
-			Parameters.Add(new MinLatencyCancellationParameter());
-			Parameters.Add(new OrderCountParameter());
-			//Parameters.Add(new MaxSlippageParameter());
-			//Parameters.Add(new MinSlippageParameter());
+			_parameters = new()
+			{
+				new MaxProfitParameter(),
+				new MaxDrawdownParameter(),
+				new MaxRelativeDrawdownParameter(),
+				new ReturnParameter(),
+				new RecoveryFactorParameter(),
+				new NetProfitParameter(),
+				new WinningTradesParameter(),
+				new AverageWinTradeParameter(),
+				new LossingTradesParameter(),
+				new AverageLossTradeParameter(),
+				new RoundtripCountParameter(),
+				new AverageTradeProfitParameter(),
+				new TradeCountParameter(),
+				new MaxLongPositionParameter(),
+				new MaxShortPositionParameter(),
+				new MaxLatencyRegistrationParameter(),
+				new MinLatencyRegistrationParameter(),
+				new MaxLatencyCancellationParameter(),
+				new MinLatencyCancellationParameter(),
+				new OrderCountParameter()
+				//new MaxSlippageParameter(),
+				//new MinSlippageParameter()
+			};
 		}
 
-		private readonly EquityParameterList _parameters = new();
+		private readonly EquityParameterList _parameters;
 
 		/// <summary>
 		/// Calculated parameters.
 		/// </summary>
-		public ISynchronizedCollection<IStatisticParameter> Parameters => _parameters;
+		public IStatisticParameter[] Parameters => _parameters.Cache;
 
 		/// <summary>
 		/// To add the new profit-loss value.
