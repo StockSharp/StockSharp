@@ -40,7 +40,18 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
 		public BatchEmulation(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
-			: this(new CollectionSecurityProvider(securities), new CollectionPortfolioProvider(portfolios), new InMemoryExchangeInfoProvider(), storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
+			: this(new CollectionSecurityProvider(securities), new CollectionPortfolioProvider(portfolios), storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BatchEmulation"/>.
+		/// </summary>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		/// <param name="storageRegistry">Market data storage.</param>
+		public BatchEmulation(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry)
+			: this(securityProvider, portfolioProvider, storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
 		{
 		}
 
@@ -127,11 +138,6 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// The event of single progress change.
 		/// </summary>
 		public event Action<Strategy, int> SingleProgressChanged;
-
-		/// <summary>
-		/// Server time changed <see cref="ILogSource.CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
-		/// </summary>
-		public event Action<Connector, TimeSpan> MarketTimeChanged;
 
 		/// <summary>
 		/// Start emulation.
@@ -273,12 +279,13 @@ namespace StockSharp.Algo.Strategies.Testing
 					_nextTotalProgress = currTotalProgress + 1;
 				};
 
-				connector.MarketTimeChanged += diff => MarketTimeChanged?.Invoke(connector, diff);
-
 				connector.StateChanged += () =>
 				{
 					if (connector.State == ChannelStates.Stopped)
 					{
+						if (progress[connector] != 100)
+							SingleProgressChanged?.Invoke(strategy, 100);
+
 						if (Interlocked.Decrement(ref left) == 0)
 							TryStartNextBatch(batches, currentBatch, totalBatches, batchWeight);
 					}
@@ -374,6 +381,13 @@ namespace StockSharp.Algo.Strategies.Testing
 					_histAdapter.SendInMessage(new DisconnectMessage());
 				}
 			}).Launch();
+		}
+
+		/// <inheritdoc />
+		protected override void DisposeManaged()
+		{
+			base.DisposeManaged();
+			Stop();
 		}
 	}
 }
