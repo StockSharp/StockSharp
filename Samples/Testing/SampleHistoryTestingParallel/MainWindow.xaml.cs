@@ -96,22 +96,11 @@ namespace SampleHistoryTestingParallel
 				Code = "SBER",
 				Name = "SBER",
 				Board = ExchangeBoard.Micex,
+				PriceStep = 0.01m,
 			};
 
 			var startTime = Paths.HistoryBeginDate;
 			var stopTime = Paths.HistoryEndDate;
-
-			var level1Info = new Level1ChangeMessage
-			{
-				SecurityId = security.ToSecurityId(),
-				ServerTime = startTime,
-			}
-			.TryAdd(Level1Fields.PriceStep, 0.01m)
-			.TryAdd(Level1Fields.StepPrice, 0.01m)
-			.TryAdd(Level1Fields.MinPrice, 0.01m)
-			.TryAdd(Level1Fields.MaxPrice, 1000000m)
-			.TryAdd(Level1Fields.MarginBuy, 10000m)
-			.TryAdd(Level1Fields.MarginSell, 10000m);
 
 			// test portfolio
 			var portfolio = Portfolio.CreateSimulator();
@@ -142,7 +131,7 @@ namespace SampleHistoryTestingParallel
 
 			_batchEmulation.StateChanged += (oldState, newState) =>
 			{
-				if (_batchEmulation.State == ChannelStates.Stopped)
+				if (newState == ChannelStates.Stopped)
 					_batchEmulation = null;
 
 				this.GuiAsync(() =>
