@@ -175,6 +175,10 @@ public class AsyncMessageProcessor : BaseLogReceiver
 					var tcs = AsyncHelper.CreateTaskCompletionSource(false);
 					tcs.SetCanceled();
 					msg.Task = tcs.Task;
+
+					if(msg.IsTransaction)
+						_adapter.HandleMessageException(msg.Message, new OperationCanceledException("canceled"));
+
 					return default;
 				}
 
@@ -226,7 +230,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		AsyncHelper.CatchHandle(
 			wrapper,
 			handleError:    e => _adapter.HandleMessageException(msg.Message, e),
-			handleCancel:   e => _adapter.AddDebugLog("{0} cancelled", msg.Message),
+			handleCancel:   e => _adapter.HandleMessageException(msg.Message, e),
 			rethrowCancel:  false,
 			rethrowErr:     false
 		);
