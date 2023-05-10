@@ -10,6 +10,7 @@ using Ecng.Common;
 using Ecng.Serialization;
 
 using StockSharp.Configuration;
+using StockSharp.Logging;
 
 /// <summary>
 /// Provider <see cref="ICandlePattern"/>.
@@ -149,9 +150,9 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 		_inMemory.PatternCreated  += p        => PatternCreated?.Invoke(p);
 		_inMemory.PatternReplaced += (op, np) => PatternReplaced?.Invoke(op, np);
 		_inMemory.PatternDeleted  += p        => PatternDeleted?.Invoke(p);
-	}
 
-	private DelayAction _delayAction;
+		_delayAction = new(ex => ex.LogError());
+	}
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternCreated;
@@ -161,6 +162,8 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternDeleted;
+
+	private DelayAction _delayAction;
 
 	/// <summary>
 	/// The time delayed action.

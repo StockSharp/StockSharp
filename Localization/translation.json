@@ -1,4 +1,8 @@
 {
+  "Only": {
+    "en": "{0} only",
+    "ru": "Только {0}"
+  },
   "MaxIterations": {
     "en": "Maximum possible iterations count.",
     "ru": "Максимально возможно кол-во итераций."
