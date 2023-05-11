@@ -492,7 +492,7 @@
 
 			if (sendInMsg != null)
 			{
-				this.AddInfoLog("In: {0}", sendInMsg);
+				this.AddDebugLog("In: {0}", sendInMsg);
 				retVal = base.OnSendInMessage((Message)sendInMsg);
 			}
 
