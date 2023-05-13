@@ -50,6 +50,7 @@ namespace StockSharp.Configuration
 	using StockSharp.FatBTC;
 	using StockSharp.Finam;
 	using StockSharp.Fix;
+	using StockSharp.Fix.MT;
 	using StockSharp.Gdax;
 	using StockSharp.Gopax;
 	using StockSharp.HitBtc;
@@ -217,6 +218,10 @@ namespace StockSharp.Configuration
 			() => typeof(PrizmBitMessageAdapter),
 			() => typeof(DigitexFuturesMessageAdapter),
 			() => typeof(QuantFeedMessageAdapter),
+			() => typeof(MT5TransactionMessageAdapter),
+			() => typeof(MT5MarketDataMessageAdapter),
+			() => typeof(MT4TransactionMessageAdapter),
+			() => typeof(MT4MarketDataMessageAdapter),
 		});
 
 		/// <inheritdoc />
