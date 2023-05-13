@@ -1,4 +1,12 @@
 {
+  "NotSelectedMT": {
+    "en": "You have not selected any of the directories. Install the connector in directory and configure it as instructed in the documentation https://doc.stocksharp.com/topics/MT.html",
+    "ru": "Вы не выбрали ни одну из директорий. Установите коннектор в директорию, и настройте как указано в инструкции https://doc.stocksharp.ru/topics/MT.html"
+  },
+  "SeveralDirectoriesMT": {
+    "en": "Several directories with the MT terminal were found. Choose the appropriate one.",
+    "ru": "Найдено несколько директорий с терминалом MT. Выберите подходящую."
+  },
   "Only": {
     "en": "{0} only",
     "ru": "Только {0}"
