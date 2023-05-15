@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override int? NumValuesToInitialize => 2;
+		public override int NumValuesToInitialize => 2;
 
 		private decimal _deviation = 0.45m * 0.01m;
 

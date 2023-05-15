@@ -37,9 +37,6 @@ namespace StockSharp.Algo.Indicators
 		public Level1Fields Field { get; set; }
 
 		/// <inheritdoc />
-		public override int? NumValuesToInitialize => 1;
-
-		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var message = input.GetValue<Level1ChangeMessage>();

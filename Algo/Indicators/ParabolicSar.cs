@@ -232,9 +232,6 @@ namespace StockSharp.Algo.Indicators
 		private decimal _accelerationStep;
 		private decimal _accelerationMax;
 
-		/// <inheritdoc />
-		public override int? NumValuesToInitialize => 1;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ParabolicSar"/>.
 		/// </summary>

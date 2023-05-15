@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override int? NumValuesToInitialize => MaxNumValuesToInitialize(LongMa, ShortMa, MedianPrice);
+		public override int NumValuesToInitialize => Math.Max(LongMa.NumValuesToInitialize, Math.Max(ShortMa.NumValuesToInitialize, MedianPrice.NumValuesToInitialize));
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.

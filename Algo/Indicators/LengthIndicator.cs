@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override int? NumValuesToInitialize => Length;
+		public override int NumValuesToInitialize => Length;
 
 		private int _length = 1;
 

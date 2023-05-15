@@ -42,9 +42,6 @@ public class CandlePatternIndicator : BaseIndicator
 	private ICandlePattern _pattern;
 	private readonly List<ICandleMessage> _buffer = new();
 
-	/// <inheritdoc />
-	public override int? NumValuesToInitialize => 0;
-
 	/// <summary>
 	/// Candle pattern.
 	/// </summary>

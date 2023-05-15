@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override int? NumValuesToInitialize => MaxNumValuesToInitialize(Ao, Sma);
+		public override int NumValuesToInitialize => Math.Max(Ao.NumValuesToInitialize, Sma.NumValuesToInitialize);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Acceleration"/>.

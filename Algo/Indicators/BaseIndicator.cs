@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual int? NumValuesToInitialize => null;
+		public virtual int NumValuesToInitialize => 1;
 
 		/// <inheritdoc />
 		public virtual void Reset()
@@ -196,16 +196,6 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public override string ToString() => Name;
-
-		/// <summary>
-		/// Returns max <see cref="NumValuesToInitialize"/> or null if any value is null.
-		/// </summary>
-		public static int? MaxNumValuesToInitialize(params IIndicator[] indicators) => GetMaxOrNull(indicators.Select(i => i.NumValuesToInitialize));
-
-		/// <summary>
-		/// Returns max <see cref="NumValuesToInitialize"/> or null if any value is null.
-		/// </summary>
-		public static int? MaxNumValuesToInitialize(IEnumerable<IIndicator> indicators) => GetMaxOrNull(indicators.Select(i => i.NumValuesToInitialize));
 
 		/// <summary>
 		/// Returns max <see cref="NumValuesToInitialize"/> or null if any value is null.

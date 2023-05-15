@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override int? NumValuesToInitialize => 2;
+		public override int NumValuesToInitialize => 2;
 
 		/// <summary>
 		/// Minimum number of bars between local maximums, minimums.
