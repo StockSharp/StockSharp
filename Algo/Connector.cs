@@ -1328,36 +1328,27 @@ namespace StockSharp.Algo
 
 		#region ICandleManager implementation
 
-		int ICandleSource<ICandleMessage>.SpeedPriority => 0;
-
-		event Action<CandleSeries, ICandleMessage> ICandleSource<ICandleMessage>.Processing
+		event Action<CandleSeries, ICandleMessage> ICandleManager<ICandleMessage>.Processing
 		{
 			add => CandleProcessing += value;
 			remove => CandleProcessing -= value;
 		}
 
-		event Action<CandleSeries> ICandleSource<ICandleMessage>.Stopped
+		event Action<CandleSeries> ICandleManager<ICandleMessage>.Stopped
 		{
 			add => CandleSeriesStopped += value;
 			remove => CandleSeriesStopped -= value;
 		}
 
-		IEnumerable<Range<DateTimeOffset>> ICandleSource<ICandleMessage>.GetSupportedRanges(CandleSeries series)
-			=> Enumerable.Empty<Range<DateTimeOffset>>();
-
-		void ICandleSource<ICandleMessage>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+		void ICandleManager<ICandleMessage>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 			=> this.SubscribeCandles(series, from, to);
 
-		void ICandleSource<ICandleMessage>.Stop(CandleSeries series)
+		void ICandleManager<ICandleMessage>.Stop(CandleSeries series)
 #pragma warning disable CS0618 // Type or member is obsolete
 			=> this.UnSubscribeCandles(series);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-		ICandleManagerContainer<ICandleMessage> ICandleManager<ICandleMessage>.Container { get; } = new CandleManagerContainer<ICandleMessage>();
-
 		IEnumerable<CandleSeries> ICandleManager<ICandleMessage>.Series => SubscribedCandleSeries;
-
-		IList<ICandleSource<ICandleMessage>> ICandleManager<ICandleMessage>.Sources => Array.Empty<ICandleSource<ICandleMessage>>();
 
 		#endregion
 

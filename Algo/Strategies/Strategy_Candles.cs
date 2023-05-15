@@ -13,25 +13,18 @@ namespace StockSharp.Algo.Strategies
 		private ICandleManager<ICandleMessage> CandleManager => (ICandleManager<ICandleMessage>)SafeGetConnector();
 
 		/// <inheritdoc />
-		int ICandleSource<ICandleMessage>.SpeedPriority => CandleManager.SpeedPriority;
-
-		/// <inheritdoc />
-		event Action<CandleSeries, ICandleMessage> ICandleSource<ICandleMessage>.Processing
+		event Action<CandleSeries, ICandleMessage> ICandleManager<ICandleMessage>.Processing
 		{
 			add => CandleManager.Processing += value;
 			remove => CandleManager.Processing -= value;
 		}
 
 		/// <inheritdoc />
-		event Action<CandleSeries> ICandleSource<ICandleMessage>.Stopped
+		event Action<CandleSeries> ICandleManager<ICandleMessage>.Stopped
 		{
 			add => CandleManager.Stopped += value;
 			remove => CandleManager.Stopped -= value;
 		}
-
-		/// <inheritdoc />
-		IEnumerable<Range<DateTimeOffset>> ICandleSource<ICandleMessage>.GetSupportedRanges(CandleSeries series)
-			=> CandleManager.GetSupportedRanges(series);
 
 		/// <inheritdoc />
 		[Obsolete("Use Subscribe method.")]
@@ -43,12 +36,6 @@ namespace StockSharp.Algo.Strategies
 		public virtual void Stop(CandleSeries series) => CandleManager.Stop(series);
 
 		/// <inheritdoc />
-		ICandleManagerContainer<ICandleMessage> ICandleManager<ICandleMessage>.Container => CandleManager.Container;
-
-		/// <inheritdoc />
 		IEnumerable<CandleSeries> ICandleManager<ICandleMessage>.Series => CandleManager.Series;
-
-		/// <inheritdoc />
-		IList<ICandleSource<ICandleMessage>> ICandleManager<ICandleMessage>.Sources => CandleManager.Sources;
 	}
 }

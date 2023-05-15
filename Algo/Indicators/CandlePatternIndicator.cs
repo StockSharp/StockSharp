@@ -23,15 +23,21 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	public DateTimeOffset[] CandleOpenTimes { get; init; }
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="CandlePatternIndicatorValue"/>.
 	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="value">Signal value.</param>
 	public CandlePatternIndicatorValue(IIndicator indicator, bool value) : base(indicator, value) { }
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="CandlePatternIndicatorValue"/>.
 	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
 	public CandlePatternIndicatorValue(IIndicator indicator) : base(indicator) { }
 }
 
 /// <summary>
+/// Indicator, based on <see cref="ICandlePattern"/>.
 /// </summary>
 [DisplayName("Pattern")]
 [DescriptionLoc(LocalizedStrings.PatternKey)]
@@ -87,6 +93,7 @@ public class CandlePatternIndicator : BaseIndicator
 	public int PatternLength => Pattern?.CandlesCount ?? 0;
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="CandlePatternIndicator"/>.
 	/// </summary>
 	public CandlePatternIndicator()
 	{
@@ -97,7 +104,7 @@ public class CandlePatternIndicator : BaseIndicator
 	/// <inheritdoc />
 	public sealed override void Reset()
 	{
-		Name = LocalizedStrings.Pattern + " " + Pattern?.Name;
+		Name = (Pattern?.Name).IsEmpty(LocalizedStrings.Pattern);
 		_buffer.Clear();
 		base.Reset();
 		IsFormed = true;

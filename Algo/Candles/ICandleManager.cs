@@ -1,44 +1,43 @@
-#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
+namespace StockSharp.Algo.Candles;
 
-Project: StockSharp.Algo.Candles.Algo
-File: ICandleManager.cs
-Created: 2015, 11, 11, 2:32 PM
+using System;
+using System.Collections.Generic;
 
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace StockSharp.Algo.Candles
+using StockSharp.Messages;
+
+/// <summary>
+/// The candles manager interface.
+/// </summary>
+/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
+public interface ICandleManager<TCandle> : IDisposable
+	where TCandle : ICandleMessage
 {
-	using System.Collections.Generic;
-
-	using StockSharp.Messages;
+	/// <summary>
+	/// A new value for processing occurrence event.
+	/// </summary>
+	event Action<CandleSeries, TCandle> Processing;
 
 	/// <summary>
-	/// The candles manager interface.
+	/// The series processing end event.
 	/// </summary>
-	/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
-	public interface ICandleManager<TCandle> : ICandleSource<TCandle>
-		where TCandle : ICandleMessage
-	{
-		/// <summary>
-		/// The data container.
-		/// </summary>
-		ICandleManagerContainer<TCandle> Container { get; }
+	event Action<CandleSeries> Stopped;
 
-		/// <summary>
-		/// All currently active candles series started via <see cref="ICandleSource{T}.Start"/>.
-		/// </summary>
-		IEnumerable<CandleSeries> Series { get; }
+	/// <summary>
+	/// All currently active candles series started via <see cref="Start"/>.
+	/// </summary>
+	IEnumerable<CandleSeries> Series { get; }
 
-		/// <summary>
-		/// Candles sources.
-		/// </summary>
-		IList<ICandleSource<TCandle>> Sources { get; }
-	}
+	/// <summary>
+	/// To send data request.
+	/// </summary>
+	/// <param name="series">The candles series for which data receiving should be started.</param>
+	/// <param name="from">The initial date from which you need to get data.</param>
+	/// <param name="to">The final date by which you need to get data.</param>
+	void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to);
+
+	/// <summary>
+	/// To stop data receiving starting through <see cref="Start"/>.
+	/// </summary>
+	/// <param name="series">Candles series.</param>
+	void Stop(CandleSeries series);
 }

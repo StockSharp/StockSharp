@@ -33,6 +33,7 @@
     <AsyncLinqVer>6.0.1</AsyncLinqVer>
     <SBEVer>1.23.1.1</SBEVer>
     <SysCommandLineVer>2.0.0-beta4.22272.1</SysCommandLineVer>
+    <AWSSDKVer>3.*</AWSSDKVer>
 
     <MicrosoftCodeAnalysisCSharpVer>4.4.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>

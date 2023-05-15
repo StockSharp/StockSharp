@@ -115,7 +115,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 
 		var rowIndex = 11;
 
-		foreach (var parameter in strategy.StatisticManager.Parameters.SyncGet(c => c.ToArray()))
+		foreach (var parameter in strategy.StatisticManager.Parameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
