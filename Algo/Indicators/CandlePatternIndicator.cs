@@ -100,7 +100,7 @@ public class CandlePatternIndicator : BaseIndicator
 	/// <inheritdoc />
 	public sealed override void Reset()
 	{
-		Name = Pattern?.Name;
+		Name = (Pattern?.Name).IsEmpty(LocalizedStrings.Pattern);
 		_buffer.Clear();
 		base.Reset();
 		IsFormed = true;
