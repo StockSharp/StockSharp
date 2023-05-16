@@ -76,6 +76,7 @@ namespace StockSharp.Algo.Indicators
 		IEnumerable<IIndicator> IComplexIndicator.InnerIndicators => InnerIndicators;
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public override int NumValuesToInitialize =>
 			Mode == ComplexIndicatorModes.Parallel
 				? InnerIndicators.Select(i => i.NumValuesToInitialize).Max()
