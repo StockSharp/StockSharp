@@ -34,7 +34,12 @@ public static class StrategyAsyncExtensions
 		void OnProcessStateChanged(Strategy s)
 		{
 			if (s == strategy && s.ProcessState == ProcessStates.Stopped)
-				tcs.SetResult(s.ProcessState);
+			{
+				if (s.LastError is null)
+					tcs.SetResult(s.ProcessState);
+				else
+					tcs.SetException(s.LastError);
+			}
 		}
 
 		strategy.ProcessStateChanged += OnProcessStateChanged;

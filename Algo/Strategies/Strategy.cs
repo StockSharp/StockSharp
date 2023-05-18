@@ -1561,6 +1561,11 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Strategy, Exception> Error;
 
 		/// <summary>
+		/// The last error that caused the strategy to stop.
+		/// </summary>
+		public Exception LastError { get; private set; }
+
+		/// <summary>
 		/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		protected virtual void OnStarted()
@@ -2212,6 +2217,7 @@ namespace StockSharp.Algo.Strategies
 			ProcessState = ProcessStates.Stopped;
 			ErrorState = LogLevels.Info;
 			ErrorCount = 0;
+			LastError = null;
 
 			_boardMsg = null;
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
@@ -2972,7 +2978,10 @@ namespace StockSharp.Algo.Strategies
 			this.AddErrorLog(error.ToString());
 
 			if (ErrorCount >= MaxErrorCount)
+			{
+				LastError = error;
 				Stop();
+			}
 		}
 
 		object ICloneable.Clone() => Clone();
