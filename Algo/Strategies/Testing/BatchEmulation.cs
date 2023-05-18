@@ -136,14 +136,14 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// The event of single progress change.
 		/// </summary>
-		public event Action<Strategy, int> SingleProgressChanged;
+		public event Action<Strategy, IStrategyParam[], int> SingleProgressChanged;
 
 		/// <summary>
 		/// Start emulation.
 		/// </summary>
-		/// <param name="strategies">The strategies.</param>
+		/// <param name="strategies">The strategies and parameters used for optimization.</param>
 		/// <param name="iterationCount">Iteration count.</param>
-		public void Start(IEnumerable<Strategy> strategies, int iterationCount)
+		public void Start(IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies, int iterationCount)
 		{
 			if (strategies is null)
 				throw new ArgumentNullException(nameof(strategies));
@@ -194,7 +194,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		}
 
 		private void TryStartNextBatch(
-			IEnumerator<IEnumerable<Strategy>> batches,
+			IEnumerator<IEnumerable<(Strategy strategy, IStrategyParam[] parameters)>> batches,
 			int currentBatch, int totalBatches, double batchWeight,
 			IDictionary<int, MarketDataStorageCache> adapterCaches,
 			IDictionary<int, MarketDataStorageCache> storageCaches)
@@ -230,7 +230,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				_currentConnectors.Clear();
 
-				foreach (var strategy in batch)
+				foreach (var (strategy, parameters) in batch)
 				{
 					var idx = _currentConnectors.Count;
 
@@ -261,7 +261,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 					connector.ProgressChanged += step =>
 					{
-						SingleProgressChanged?.Invoke(strategy, step);
+						SingleProgressChanged?.Invoke(strategy, parameters, step);
 
 						var avgStep = 0;
 
@@ -293,7 +293,7 @@ namespace StockSharp.Algo.Strategies.Testing
 						if (connector.State == ChannelStates.Stopped)
 						{
 							if (progress[connector] != 100)
-								SingleProgressChanged?.Invoke(strategy, 100);
+								SingleProgressChanged?.Invoke(strategy, parameters, 100);
 
 							if (Interlocked.Decrement(ref left) == 0)
 								TryStartNextBatch(batches, currentBatch, totalBatches, batchWeight, adapterCaches, storageCaches);

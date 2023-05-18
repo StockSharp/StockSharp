@@ -28,6 +28,7 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -194,7 +195,10 @@ namespace SampleHistoryTestingParallel
 
 					this.GuiSync(() => Stat.AddStrategy(strategy));
 
-					return strategy;
+					var shortSmaParam = new StrategyParam<int>(strategy, nameof(strategy.ShortSma));
+					var longSmaParam = new StrategyParam<int>(strategy, nameof(strategy.LongSma));
+
+					return ((Strategy)strategy, new IStrategyParam[] { shortSmaParam, longSmaParam });
 				});
 
 			// start emulation
