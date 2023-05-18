@@ -57,6 +57,9 @@ namespace StockSharp.Algo.Indicators
 			Depth = 12;
 		}
 
+		/// <inheritdoc />
+		public override int NumValuesToInitialize => 2;
+
 		/// <summary>
 		/// Minimum number of bars between local maximums, minimums.
 		/// </summary>
@@ -294,7 +297,7 @@ namespace StockSharp.Algo.Indicators
 					_highBuffer[shift] = 0m;
 			}
 
-			// final cutting 
+			// final cutting
 			lastHigh = -1;
 			lastLow = -1;
 			var lastHighPos = -1;

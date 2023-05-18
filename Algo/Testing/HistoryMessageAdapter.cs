@@ -112,12 +112,12 @@ namespace StockSharp.Algo.Testing
 
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
+			GenerateOrderBookFromLevel1 = false;
 
 			this.AddMarketDataSupport();
 			this.AddSupportedMessage(MessageTypes.EmulationState, null);
 			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource, true);
 			this.AddSupportedMessage(ExtendedMessageTypes.Generator, true);
-			this.AddSupportedMessage(MessageTypes.ChangeTimeInterval, null);
 		}
 
 		/// <summary>
@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Check loading dates are they tradable.
 		/// </summary>
-		public bool CheckTradableDates { get; set; } = true;
+		public bool CheckTradableDates { get; set; }
 
 		/// <summary>
 		/// <see cref="BasketMarketDataStorage{T}.Cache"/>.
@@ -360,13 +360,6 @@ namespace StockSharp.Algo.Testing
 							_generators.Remove(key);
 					}
 
-					break;
-				}
-
-				case MessageTypes.ChangeTimeInterval:
-				{
-					var intervalMsg = (ChangeTimeIntervalMessage)message;
-					MarketTimeChangedInterval = intervalMsg.Interval;
 					break;
 				}
 
@@ -600,7 +593,7 @@ namespace StockSharp.Algo.Testing
 									_basketStorage.InnerStorages.Remove(subscriptionId);
 							}
 
-							boards ??= GetBoard();
+							boards ??= CheckTradableDates ? GetBoard() : Array.Empty<BoardMessage>();
 
 							var currentTime = _currentTime == default ? startDateTime : _currentTime;
 

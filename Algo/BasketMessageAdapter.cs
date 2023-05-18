@@ -1468,7 +1468,7 @@ namespace StockSharp.Algo
 		{
 			// if the message was looped back via IsBack=true
 			_requestsById.TryAdd2(subscrMsg.TransactionId, Tuple.Create(subscrMsg, GetUnderlyingAdapter(adapter)));
-			this.AddInfoLog("Send to {0}: {1}", adapter, subscrMsg);
+			this.AddDebugLog("Send to {0}: {1}", adapter, subscrMsg);
 			adapter.SendInMessage((Message)subscrMsg);
 		}
 

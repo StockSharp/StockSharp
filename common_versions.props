@@ -1,5 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <LangVersion>11.0</LangVersion>
+
     <EcngVer>1.0.*</EcngVer>
     <SampleHistoryDataVersion>1.*</SampleHistoryDataVersion>
     <StockSharpVer>5.*</StockSharpVer>
@@ -27,15 +30,10 @@
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
     
     <MicrosoftDataSqlClientVer>5.0.0</MicrosoftDataSqlClientVer>
-    <MicrosoftDataSqliteVer>6.0.8</MicrosoftDataSqliteVer>
     <AsyncLinqVer>6.0.1</AsyncLinqVer>
-    <MsBclAsyncInterfacesVer>6.0.0</MsBclAsyncInterfacesVer>
-    <SysPipelinesVer>6.0.3</SysPipelinesVer>
-    <SysMemoryVer>4.5.5</SysMemoryVer>
-    <SystemTextEncodingsWebVer>6.0.0</SystemTextEncodingsWebVer>
-    <SystemTextJsonVer>6.*</SystemTextJsonVer>
     <SBEVer>1.23.1.1</SBEVer>
     <SysCommandLineVer>2.0.0-beta4.22272.1</SysCommandLineVer>
+    <AWSSDKVer>3.*</AWSSDKVer>
 
     <MicrosoftCodeAnalysisCSharpVer>4.4.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>

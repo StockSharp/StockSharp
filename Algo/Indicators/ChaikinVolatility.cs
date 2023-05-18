@@ -13,8 +13,10 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Indicators
 {
+	using System;
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
@@ -43,6 +45,9 @@ namespace StockSharp.Algo.Indicators
 			Ema = new ExponentialMovingAverage();
 			Roc = new RateOfChange();
 		}
+
+		/// <inheritdoc />
+		public override int NumValuesToInitialize => Math.Max(Ema.NumValuesToInitialize, Roc.NumValuesToInitialize);
 
 		/// <inheritdoc />
 		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;

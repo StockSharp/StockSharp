@@ -58,7 +58,7 @@
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return base.ToString() + $",TrId={TransactionId},SecId={SecurityId},Fmt={Format}";
+			return base.ToString() + $",TrId={TransactionId},SecId={SecurityId},DT={RequestDataType},Fmt={Format}";
 		}
 	}
 }

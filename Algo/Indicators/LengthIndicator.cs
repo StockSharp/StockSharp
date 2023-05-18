@@ -168,6 +168,9 @@ namespace StockSharp.Algo.Indicators
 			base.Reset();
 		}
 
+		/// <inheritdoc />
+		public override int NumValuesToInitialize => Length;
+
 		private int _length = 1;
 
 		/// <inheritdoc />

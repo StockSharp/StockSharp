@@ -149,6 +149,8 @@ namespace StockSharp.Algo.Testing
 
 			private bool _priceStepUpdated;
 			private bool _volumeStepUpdated;
+			private bool _priceStepExplicit;
+			private bool _volumeStepExplicit;
 
 			private decimal _prevTickPrice;
 			private decimal _currSpreadPrice;
@@ -1140,10 +1142,16 @@ namespace StockSharp.Algo.Testing
 				_securityDefinition = securityDefinition ?? throw new ArgumentNullException(nameof(securityDefinition));
 
 				if (_securityDefinition.PriceStep != null)
+				{
 					_priceStepUpdated = true;
+					_priceStepExplicit = true;
+				}
 
 				if (_securityDefinition.VolumeStep != null)
+				{
 					_volumeStepUpdated = true;
+					_priceStepExplicit = true;
+				}
 			}
 
 			private void UpdatePriceLimits(ExecutionMessage execution, ICollection<Message> result)
@@ -1168,7 +1176,7 @@ namespace StockSharp.Algo.Testing
 				_lastStripDate = execution.LocalTime.Date;
 
 				var priceOffset = _settings.PriceLimitOffset;
-				var priceStep = _securityDefinition?.PriceStep ?? 0.01m;
+				var priceStep = GetPriceStep();
 
 				var level1Msg =
 					new Level1ChangeMessage
@@ -1196,10 +1204,14 @@ namespace StockSharp.Algo.Testing
 							_securityDefinition.PriceStep = (decimal)change.Value;
 							// при изменении шага надо пересчитать планки
 							_lastStripDate = DateTime.MinValue;
+							_priceStepUpdated = true;
+							_priceStepExplicit = true;
 							break;
 						case Level1Fields.VolumeStep:
 							_securityDefinition.VolumeStep = (decimal)change.Value;
 							_volumeDecimals = GetVolumeStep().GetCachedDecimals();
+							_volumeStepUpdated = true;
+							_volumeStepExplicit = true;
 							break;
 						case Level1Fields.MinVolume:
 							_securityDefinition.MinVolume = (decimal)change.Value;
@@ -1306,7 +1318,7 @@ namespace StockSharp.Algo.Testing
 				}
 				else
 				{
-					var message = _parent.CheckRegistration(execution, _securityDefinition/*, result*/);
+					var message = _parent.CheckRegistration(execution, _securityDefinition, _priceStepExplicit, _volumeStepExplicit/*, result*/);
 
 					var replyMsg = CreateReply(execution, time, message == null ? null : new InvalidOperationException(message));
 					result.Add(replyMsg);
@@ -2908,7 +2920,7 @@ namespace StockSharp.Algo.Testing
 				info.ProcessMarginChange(level1Msg.LocalTime, level1Msg.SecurityId, retVal);
 		}
 
-		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition/*, ICollection<Message> result*/)
+		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition, bool priceStepExplicit, bool volumeStepExplicit/*, ICollection<Message> result*/)
 		{
 			if (Settings.CheckTradingState)
 			{
@@ -2954,12 +2966,12 @@ namespace StockSharp.Algo.Testing
 					return LocalizedStrings.Str1173Params.Put(execMsg.OrderPrice, execMsg.TransactionId, maxPrice);
 			}
 
-			if (priceStep != null && priceStep > 0 && execMsg.OrderPrice % priceStep != 0)
+			if (priceStepExplicit && priceStep != null && priceStep > 0 && execMsg.OrderPrice % priceStep != 0)
 				return LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(execMsg.OrderPrice, execMsg.TransactionId, priceStep);
 
 			volumeStep ??= (decimal?)state?.TryGetValue(Level1Fields.VolumeStep);
 
-			if (volumeStep != null && volumeStep > 0 && execMsg.OrderVolume % volumeStep != 0)
+			if (volumeStepExplicit && volumeStep != null && volumeStep > 0 && execMsg.OrderVolume % volumeStep != 0)
 				return LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(execMsg.OrderVolume, execMsg.TransactionId, volumeStep);
 
 			if (minVolume != null && execMsg.OrderVolume < minVolume)

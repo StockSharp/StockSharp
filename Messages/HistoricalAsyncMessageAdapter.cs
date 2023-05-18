@@ -18,6 +18,7 @@ public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
 	protected HistoricalAsyncMessageAdapter(IdGenerator transactionIdGenerator)
 		: base(transactionIdGenerator)
 	{
+		MaxParallelMessages = 1;
 	}
 
 	/// <inheritdoc />

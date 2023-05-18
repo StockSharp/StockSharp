@@ -276,13 +276,15 @@ namespace StockSharp.Messages
 		TimeFrameInfo,
 
 		/// <summary>
-		/// <see cref="SecurityMappingRequestMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		SecurityMappingRequest,
 
 		/// <summary>
-		/// <see cref="SecurityMappingInfoMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		SecurityMappingInfo,
 
 		/// <summary>
@@ -296,8 +298,9 @@ namespace StockSharp.Messages
 		SecurityLegsInfo,
 
 		/// <summary>
-		/// <see cref="AdapterListRequestMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		AdapterListRequest,
 
 		/// <summary>
@@ -312,8 +315,9 @@ namespace StockSharp.Messages
 		Command,
 
 		/// <summary>
-		/// <see cref="AdapterResponseMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		AdapterResponse,
 
 		/// <summary>
@@ -328,13 +332,15 @@ namespace StockSharp.Messages
 		SubscriptionListFinished,
 
 		/// <summary>
-		/// <see cref="SecurityRouteListRequestMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		SecurityRouteListRequest,
 
 		/// <summary>
-		/// <see cref="SecurityRouteMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		SecurityRoute,
 
 		/// <summary>
@@ -344,13 +350,15 @@ namespace StockSharp.Messages
 		SecurityRouteListFinished,
 
 		/// <summary>
-		/// <see cref="PortfolioRouteListRequestMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		PortfolioRouteListRequest,
 
 		/// <summary>
-		/// <see cref="PortfolioRouteMessage"/>.
+		///
 		/// </summary>
+		[Obsolete]
 		PortfolioRoute,
 
 		/// <summary>
@@ -390,8 +398,9 @@ namespace StockSharp.Messages
 		EmulationState,
 
 		/// <summary>
-		/// <see cref="ChangeTimeIntervalMessage"/>.
+		/// 
 		/// </summary>
+		[Obsolete]
 		ChangeTimeInterval,
 
 		/// <summary>

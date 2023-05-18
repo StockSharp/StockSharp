@@ -13,10 +13,13 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.Linq;
 	using System.ComponentModel;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -62,6 +65,10 @@ namespace StockSharp.Algo.Indicators
 				_name = value;
 			}
 		}
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual int NumValuesToInitialize => 1;
 
 		/// <inheritdoc />
 		public virtual void Reset()
@@ -189,5 +196,23 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public override string ToString() => Name;
+
+		/// <summary>
+		/// Returns max <see cref="NumValuesToInitialize"/> or null if any value is null.
+		/// </summary>
+		public static T? GetMaxOrNull<T>(IEnumerable<T?> values) where T: struct, IComparable<T>
+		{
+			T max = default;
+			foreach (var v in values)
+			{
+				if(v == null)
+					return null;
+
+				if(v.Value.CompareTo(max) > 0)
+					max = v.Value;
+			}
+
+			return max;
+		}
 	}
 }

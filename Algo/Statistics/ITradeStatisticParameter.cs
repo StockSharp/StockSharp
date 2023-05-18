@@ -42,8 +42,16 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class WinningTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
-		/// <inheritdoc />
-		public void Add(PnLInfo info)
+		/// <summary>
+		/// Initialize <see cref="WinningTradesParameter"/>.
+		/// </summary>
+		public WinningTradesParameter()
+			: base(StatisticParameterTypes.WinningTrades)
+        {
+        }
+
+        /// <inheritdoc />
+        public void Add(PnLInfo info)
 		{
 			if (info == null)
 				throw new ArgumentNullException(nameof(info));
@@ -63,6 +71,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class LossingTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="LossingTradesParameter"/>.
+		/// </summary>
+		public LossingTradesParameter()
+			: base(StatisticParameterTypes.LossingTrades)
+		{
+		}
+
 		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
@@ -82,6 +98,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class TradeCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="TradeCountParameter"/>.
+		/// </summary>
+		public TradeCountParameter()
+			: base(StatisticParameterTypes.TradeCount)
+		{
+		}
+
 		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
@@ -97,6 +121,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class RoundtripCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="RoundtripCountParameter"/>.
+		/// </summary>
+		public RoundtripCountParameter()
+			: base(StatisticParameterTypes.RoundtripCount)
+		{
+		}
+
 		/// <inheritdoc />
 		public void Add(PnLInfo info)
 		{
@@ -111,8 +143,16 @@ namespace StockSharp.Algo.Statistics
 	[DisplayNameLoc(LocalizedStrings.Str992Key)]
 	[DescriptionLoc(LocalizedStrings.Str993Key)]
 	[CategoryLoc(LocalizedStrings.Str985Key)]
-	public class AverageTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
+	public class AverageTradeProfitParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="AverageTradeProfitParameter"/>.
+		/// </summary>
+		public AverageTradeProfitParameter()
+			: base(StatisticParameterTypes.AverageTradeProfit)
+		{
+		}
+
 		private decimal _sum;
 		private int _count;
 
@@ -166,6 +206,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class AverageWinTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="AverageWinTradeParameter"/>.
+		/// </summary>
+		public AverageWinTradeParameter()
+			: base(StatisticParameterTypes.AverageWinTrades)
+		{
+		}
+
 		private decimal _sum;
 		private int _count;
 
@@ -222,6 +270,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.Str985Key)]
 	public class AverageLossTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
+		/// <summary>
+		/// Initialize <see cref="AverageLossTradeParameter"/>.
+		/// </summary>
+		public AverageLossTradeParameter()
+			: base(StatisticParameterTypes.AverageLossTrades)
+		{
+		}
+
 		private decimal _sum;
 		private int _count;
 

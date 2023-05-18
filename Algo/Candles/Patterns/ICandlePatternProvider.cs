@@ -10,6 +10,7 @@ using Ecng.Common;
 using Ecng.Serialization;
 
 using StockSharp.Configuration;
+using StockSharp.Logging;
 
 /// <summary>
 /// Provider <see cref="ICandlePattern"/>.
@@ -20,6 +21,11 @@ public interface ICandlePatternProvider
 	/// <see cref="ICandlePattern"/> created event.
 	/// </summary>
 	event Action<ICandlePattern> PatternCreated;
+
+	/// <summary>
+	/// <see cref="ICandlePattern"/> replaced event.
+	/// </summary>
+	event Action<ICandlePattern, ICandlePattern> PatternReplaced;
 
 	/// <summary>
 	/// <see cref="ICandlePattern"/> deleted event.
@@ -40,8 +46,9 @@ public interface ICandlePatternProvider
 	/// Find pattern by name.
 	/// </summary>
 	/// <param name="name">Name.</param>
-	/// <returns><see cref="ICandlePattern"/> or <see langword="null"/>.</returns>
-	ICandlePattern TryFind(string name);
+	/// <param name="pattern"><see cref="ICandlePattern"/> or <see langword="null"/>.</param>
+	/// <returns><see langword="true"/> if pattern was loaded otherwise <see langword="false"/>.</returns>
+	bool TryFind(string name, out ICandlePattern pattern);
 
 	/// <summary>
 	/// Remove pattern from the storage.
@@ -76,6 +83,9 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 	public event Action<ICandlePattern> PatternCreated;
 
 	/// <inheritdoc/>
+	public event Action<ICandlePattern, ICandlePattern> PatternReplaced;
+
+	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternDeleted;
 
 	void ICandlePatternProvider.Init()
@@ -97,14 +107,22 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 
 	void ICandlePatternProvider.Save(ICandlePattern pattern)
 	{
-		if(!_cache.TryAdd2(pattern.Name, pattern))
-			throw new InvalidOperationException($"pattern '{pattern.Name}' already exists");
+		ICandlePattern oldPattern = null;
 
-		PatternCreated?.Invoke(pattern);
+		_cache.SyncDo(_ =>
+		{
+			oldPattern = _cache.TryGetValue(pattern.Name);
+			_cache[pattern.Name] = pattern;
+		});
+
+		if(oldPattern == null)
+			PatternCreated?.Invoke(pattern);
+		else
+			PatternReplaced?.Invoke(oldPattern, pattern);
 	}
 
-	ICandlePattern ICandlePatternProvider.TryFind(string name)
-		=> _cache.TryGetValue(name);
+	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)
+		=> _cache.TryGetValue(name, out pattern);
 }
 
 /// <summary>
@@ -128,15 +146,24 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 
 		_inMemory = new InMemoryCandlePatternProvider(patterns);
 		_fileName = fileName;
-	}
 
-	private DelayAction _delayAction;
+		_inMemory.PatternCreated  += p        => PatternCreated?.Invoke(p);
+		_inMemory.PatternReplaced += (op, np) => PatternReplaced?.Invoke(op, np);
+		_inMemory.PatternDeleted  += p        => PatternDeleted?.Invoke(p);
+
+		_delayAction = new(ex => ex.LogError());
+	}
 
 	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternCreated;
 
 	/// <inheritdoc/>
+	public event Action<ICandlePattern, ICandlePattern> PatternReplaced;
+
+	/// <inheritdoc/>
 	public event Action<ICandlePattern> PatternDeleted;
+
+	private DelayAction _delayAction;
 
 	/// <summary>
 	/// The time delayed action.
@@ -151,15 +178,32 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 	{
 		_inMemory.Init();
 
+		var errors = new List<Exception>();
+
 		if (File.Exists(_fileName))
-			Do.Invariant(() => _fileName.Deserialize<SettingsStorage[]>().Select(s => s.LoadEntire<ICandlePattern>()).ForEach(p =>
+		{
+			Do.Invariant(() => _fileName.Deserialize<SettingsStorage[]>().Select(s =>
 			{
-				var toReplace = _inMemory.TryFind(p.Name);
-				if(toReplace != null)
+				try
+				{
+					return s.LoadEntire<ICandlePattern>();
+				}
+				catch (Exception ex)
+				{
+					errors.Add(ex);
+					return null;
+				}
+			}).Where(p => p is not null).ForEach(p =>
+			{
+				if (_inMemory.TryFind(p.Name, out var toReplace))
 					_inMemory.Remove(toReplace);
 
 				_inMemory.Save(p);
 			}));
+		}
+
+		if (errors.Count > 0)
+			throw errors.SingleOrAggr();
 	}
 
 	IEnumerable<ICandlePattern> ICandlePatternProvider.Patterns => _inMemory.Patterns;
@@ -170,17 +214,13 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 			return false;
 
 		Save();
-
-		PatternDeleted?.Invoke(pattern);
 		return true;
 	}
 
 	void ICandlePatternProvider.Save(ICandlePattern pattern)
 	{
 		_inMemory.Save(pattern);
-
 		Save();
-		PatternCreated?.Invoke(pattern);
 	}
 
 	private void Save()
@@ -201,5 +241,6 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 			DelayAction.DefaultGroup.Add(dosave);
 	}
 
-	ICandlePattern ICandlePatternProvider.TryFind(string name) => _inMemory.TryFind(name);
+	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)
+		=> _inMemory.TryFind(name, out pattern);
 }

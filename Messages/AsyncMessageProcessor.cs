@@ -130,7 +130,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 
 	private MessageQueueItem SelectNextMessage()
 	{
-		static bool canProcessOverLimit(Message msg) => (msg as ISubscriptionMessage)?.IsSubscribe == false;
+		static bool canProcessOverLimit(Message msg) => msg is ISubscriptionMessage { IsSubscribe: false };
 
 		lock (_messages.SyncRoot)
 		{
@@ -170,8 +170,17 @@ public class AsyncMessageProcessor : BaseLogReceiver
 		{
 			try
 			{
-				if(msg.IsCanceled)
-					throw new OperationCanceledException("canceled");
+				if (msg.IsCanceled)
+				{
+					var tcs = AsyncHelper.CreateTaskCompletionSource(false);
+					tcs.SetCanceled();
+					msg.Task = tcs.Task;
+
+					if(msg.IsTransaction)
+						_adapter.HandleMessageException(msg.Message, new OperationCanceledException("canceled"));
+
+					return default;
+				}
 
 				var vt = process();
 

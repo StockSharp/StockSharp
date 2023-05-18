@@ -429,8 +429,8 @@ namespace StockSharp.Algo.Storages
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			if (securityProvider == null)
-				throw new ArgumentNullException(nameof(securityProvider));
+			//if (securityProvider == null)
+			//	throw new ArgumentNullException(nameof(securityProvider));
 
 			if (newSecurity == null)
 				throw new ArgumentNullException(nameof(newSecurity));
@@ -464,7 +464,7 @@ namespace StockSharp.Algo.Storages
 
 			updateProgress(0, iterCount);
 
-			var existingIds = securityProvider.LookupAll().Select(s => s.Id).ToIgnoreCaseSet();
+			var existingIds = securityProvider?.LookupAll().Select(s => s.Id).ToIgnoreCaseSet() ?? new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
 			foreach (var securityPath in securityPaths)
 			{

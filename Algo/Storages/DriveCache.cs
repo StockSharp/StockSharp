@@ -9,8 +9,6 @@
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Localization;
-
 	using PathPair = System.Tuple<string, System.Net.EndPoint>;
 
 	/// <summary>
@@ -50,11 +48,8 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DriveCache"/>.
 		/// </summary>
-		/// <param name="defaultDrive">The storage used by default.</param>
-		public DriveCache(IMarketDataDrive defaultDrive)
+		public DriveCache()
 		{
-			DefaultDrive = defaultDrive ?? throw new ArgumentNullException(nameof(defaultDrive));
-			_drives.Add(CreatePair(DefaultDrive.Path), DefaultDrive);
 		}
 
 		/// <summary>
@@ -65,7 +60,7 @@
 		/// <summary>
 		/// The storage used by default.
 		/// </summary>
-		public IMarketDataDrive DefaultDrive { get; private set; }
+		public IMarketDataDrive DefaultDrive => Drives.OfType<LocalMarketDataDrive>().FirstOrDefault();
 
 		/// <summary>
 		/// New storage created event.
@@ -107,7 +102,7 @@
 		/// <returns>Market data storage.</returns>
 		public IMarketDataDrive GetDrive(string path)
 		{
-			if (path.IsEmpty() || Guid.TryParse(path, out _)/* TODO remove few versions later 2019-08-06 */)
+			if (path.IsEmpty())
 				return DefaultDrive;
 
 			var pair = CreatePair(path);
@@ -136,8 +131,8 @@
 			if (drive == null)
 				throw new ArgumentNullException(nameof(drive));
 
-			if (drive == DefaultDrive)
-				throw new ArgumentException(nameof(drive));
+			if (drive is LocalMarketDataDrive && _drives.CachedValues.OfType<LocalMarketDataDrive>().Count() <= 1)
+				throw new InvalidOperationException($"Cannot remove drive {drive.Path}.");
 
 			if (_drives.Remove(CreatePair(drive.Path)))
 				DriveDeleted?.Invoke(drive);
@@ -167,14 +162,6 @@
 				foreach (var drive in drives)
 					_drives.TryAdd2(CreatePair(drive.Path), drive);
 			}
-
-			if (storage.ContainsKey(nameof(DefaultDrive)))
-			{
-				var pair = CreatePair(storage.GetValue<string>(nameof(DefaultDrive)));
-
-				if (_drives.TryGetValue(pair, out var drive))
-					DefaultDrive = drive;
-			}
 		}
 
 		/// <summary>
@@ -184,9 +171,6 @@
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Drives), Drives.Select(s => s.SaveEntire(false)).ToArray());
-
-			if (DefaultDrive != null)
-				storage.SetValue(nameof(DefaultDrive), DefaultDrive.Path);
 		}
 
 		/// <summary>

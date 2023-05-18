@@ -1,9 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Ecng.Collections;
 using Ecng.Common;
+using Ecng.Serialization;
+
 using StockSharp.Logging;
+using StockSharp.Localization;
 
 namespace StockSharp.Messages;
 
@@ -25,13 +31,21 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
+	[Browsable(false)]
 	public virtual TimeSpan TransactionTimeout { get; } = TimeSpan.FromSeconds(10);
 
 	/// <inheritdoc />
+	[Browsable(false)]
 	public virtual TimeSpan DisconnectTimeout { get; } = TimeSpan.FromSeconds(5);
 
 	/// <inheritdoc />
-	public virtual int MaxParallelMessages => IAsyncMessageAdapter.DefaultMaxParallelMessages;
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ParallelKey,
+		Description = LocalizedStrings.ParallelDescKey,
+		GroupName = LocalizedStrings.Str186Key,
+		Order = 310)]
+	public int MaxParallelMessages { get; set; } = IAsyncMessageAdapter.DefaultMaxParallelMessages;
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -252,5 +266,21 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	{
 		iterationInterval = TimeSpan.Zero;
 		return TimeSpan.MaxValue;
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.Set(nameof(MaxParallelMessages), MaxParallelMessages);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		MaxParallelMessages = storage.GetValue(nameof(MaxParallelMessages), MaxParallelMessages);
 	}
 }

@@ -67,6 +67,12 @@ namespace StockSharp.Algo.Indicators
 		bool IsFormed { get; }
 
 		/// <summary>
+		/// Number of values that need to be processed in order for the indicator to initialize (be "formed").
+		/// Null if undefined.
+		/// </summary>
+		int NumValuesToInitialize { get; }
+
+		/// <summary>
 		/// The container storing indicator data.
 		/// </summary>
 		IIndicatorContainer Container { get; }

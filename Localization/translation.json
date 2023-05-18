@@ -1,4 +1,60 @@
 {
+  "UseCloud": {
+    "en": "Use cloud",
+    "ru": "Облако"
+  },
+  "NotSelectedMT": {
+    "en": "You have not selected any of the directories. Install the connector in directory and configure it as instructed in the documentation https://doc.stocksharp.com/topics/MT.html",
+    "ru": "Вы не выбрали ни одну из директорий. Установите коннектор в директорию, и настройте как указано в инструкции https://doc.stocksharp.ru/topics/MT.html"
+  },
+  "SeveralDirectoriesMT": {
+    "en": "Several directories with the MT terminal were found. Choose the appropriate one.",
+    "ru": "Найдено несколько директорий с терминалом MT. Выберите подходящую."
+  },
+  "Only": {
+    "en": "{0} only",
+    "ru": "Только {0}"
+  },
+  "MaxIterations": {
+    "en": "Maximum possible iterations count.",
+    "ru": "Максимально возможно кол-во итераций."
+  },
+  "Parallel": {
+    "en": "Parallel",
+    "ru": "Parallel"
+  },
+  "ParallelDesc": {
+    "en": "Max number of parallel messages processing.",
+    "ru": "Максимальное количество параллельных сообщений для обработки."
+  },
+  "PolygonIO": {
+    "en": "Polygon.io",
+    "ru": "Polygon.io"
+  },
+  "OnlineAuthorization": {
+    "en": "You have been redirected to the StockSharp.Com website where you need to log in. After a successful login, you will be automatically logged into the application.",
+    "ru": "Вы были переадресованы на сайт StockSharp.Ru где вам необходимо залогиниться. После успешного логина вы автоматически войдете в приложение."
+  },
+  "DoubleClickToEdit": {
+    "en": "Double click on formula to edit. Enter to finish editing.",
+    "ru": "Двойной клик на формуле для редактирования. Enter для завершения редактирования."
+  },
+  "OnlineOnly": {
+    "en": "Online only",
+    "ru": "Только онлайн"
+  },
+  "OnlineOnlyDescription": {
+    "en": "Allow transactions only when in online state",
+    "ru": "Разрешать транзакции только в состоянии онлайн"
+  },
+  "Logout": {
+    "en": "Logout",
+    "ru": "Разлогиниться"
+  },
+  "LogoutQuestion": {
+    "en": "Do you want to logout?",
+    "ru": "Вы хотите разлогиниться?"
+  },
   "TelegramActivation": {
     "en": "Now you will be redirected to our Telegram bot to activate your profile.",
     "ru": "Сейчас вы будете перенаправлены в наш Телеграм бот для активации профиля."

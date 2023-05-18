@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Ecng.Common;
 using Ecng.Serialization;
 
 using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Messages;
 using StockSharp.Localization;
+using StockSharp.Logging;
 
 namespace StockSharp.Algo.Indicators;
 
@@ -21,21 +23,28 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	public DateTimeOffset[] CandleOpenTimes { get; init; }
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="CandlePatternIndicatorValue"/>.
 	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
+	/// <param name="value">Signal value.</param>
 	public CandlePatternIndicatorValue(IIndicator indicator, bool value) : base(indicator, value) { }
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="CandlePatternIndicatorValue"/>.
 	/// </summary>
+	/// <param name="indicator"><see cref="IIndicator"/></param>
 	public CandlePatternIndicatorValue(IIndicator indicator) : base(indicator) { }
 }
 
 /// <summary>
+/// Indicator, based on <see cref="ICandlePattern"/>.
 /// </summary>
 [DisplayName("Pattern")]
 [DescriptionLoc(LocalizedStrings.PatternKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 public class CandlePatternIndicator : BaseIndicator
 {
+	private ICandlePatternProvider _candlePatternProvider;
 	private ICandlePattern _pattern;
 	private readonly List<ICandleMessage> _buffer = new();
 
@@ -55,6 +64,28 @@ public class CandlePatternIndicator : BaseIndicator
 		}
 	}
 
+	private void EnsureProvider()
+	{
+		if(_candlePatternProvider != null)
+			return;
+
+		_candlePatternProvider = ServicesRegistry.TryCandlePatternProvider;
+		if (_candlePatternProvider == null)
+			return;
+
+		_candlePatternProvider.PatternReplaced += (oldPattern, newPattern) =>
+		{
+			if(oldPattern == Pattern)
+				Pattern = newPattern;
+		};
+
+		_candlePatternProvider.PatternDeleted += (pattern) =>
+		{
+			if(pattern == Pattern)
+				Pattern = null;
+		};
+	}
+
 	/// <summary>
 	/// Number of candles in the pattern.
 	/// </summary>
@@ -62,13 +93,18 @@ public class CandlePatternIndicator : BaseIndicator
 	public int PatternLength => Pattern?.CandlesCount ?? 0;
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="CandlePatternIndicator"/>.
 	/// </summary>
-	public CandlePatternIndicator() => Reset();
+	public CandlePatternIndicator()
+	{
+		EnsureProvider();
+		Reset();
+	}
 
 	/// <inheritdoc />
 	public sealed override void Reset()
 	{
-		Name = LocalizedStrings.Pattern + " " + Pattern?.Name;
+		Name = (Pattern?.Name).IsEmpty(LocalizedStrings.Pattern);
 		_buffer.Clear();
 		base.Reset();
 		IsFormed = true;
@@ -78,14 +114,29 @@ public class CandlePatternIndicator : BaseIndicator
 	public override void Load(SettingsStorage storage)
 	{
 		base.Load(storage);
-		Pattern = storage.GetValue<SettingsStorage>(nameof(Pattern))?.LoadEntire<ICandlePattern>();
+
+		EnsureProvider();
+		var patternName = storage.GetValue<string>(nameof(Pattern));
+
+		if(patternName.IsEmptyOrWhiteSpace())
+			return;
+
+		if(_candlePatternProvider == null)
+			throw new InvalidOperationException($"unable to load pattern '{patternName}'. candle pattern provider is not initialized.");
+
+		if(!_candlePatternProvider.TryFind(patternName, out var pattern))
+			LogManager.Instance?.Application.AddErrorLog($"pattern '{patternName}' not found");
+
+		Pattern = pattern;
 	}
 
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
 		base.Save(storage);
-		storage.SetValue(nameof(Pattern), Pattern?.SaveEntire(false));
+
+		if(Pattern != null)
+			storage.SetValue(nameof(Pattern), Pattern.Name);
 	}
 
 	/// <inheritdoc />

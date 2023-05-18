@@ -130,6 +130,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderReRegistering += _parent.OnOrderReRegistering;
 				item.ProcessStateChanged += OnChildProcessStateChanged;
 				item.Error += _parent.OnError;
+				item.IsOnlineChanged += _parent.OnChildStrategyIsOnlineChanged;
 
 				item.Orders.ForEach(_parent.ProcessOrder);
 
@@ -142,6 +143,8 @@ namespace StockSharp.Algo.Strategies
 					OnChildProcessStateChanged(item);
 				else
 					item.ProcessState = _parent.ProcessState;
+
+				_parent.CheckRefreshOnlineState();
 			}
 
 			private void OnChildProcessStateChanged(Strategy child)
@@ -160,6 +163,8 @@ namespace StockSharp.Algo.Strategies
 
 					_childStrategyRules.Add(child, rule);
 				}
+
+				_parent.CheckRefreshOnlineState();
 			}
 
 			protected override bool OnClearing()
@@ -185,6 +190,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderReRegistering -= _parent.OnOrderReRegistering;
 				item.ProcessStateChanged -= OnChildProcessStateChanged;
 				item.Error -= _parent.OnError;
+				item.IsOnlineChanged -= _parent.OnChildStrategyIsOnlineChanged;
 
 				var rule = _childStrategyRules.TryGetValue(item);
 
@@ -198,6 +204,12 @@ namespace StockSharp.Algo.Strategies
 				}
 
 				return base.OnRemoving(item);
+			}
+
+			protected override void OnRemoved(Strategy item)
+			{
+				base.OnRemoved(item);
+				_parent.CheckRefreshOnlineState();
 			}
 
 			public void TryRemoveStoppedRule(IMarketRule rule)
@@ -1033,6 +1045,7 @@ namespace StockSharp.Algo.Strategies
 
 				try
 				{
+					CheckRefreshOnlineState();
 					RaiseProcessStateChanged(this);
 					this.Notify(nameof(ProcessState));
 				}
@@ -1179,6 +1192,31 @@ namespace StockSharp.Algo.Strategies
 		{
 			get => _allowTrading.Value;
 			set => _allowTrading.Value = value;
+		}
+
+		/// <summary>
+		/// True means that strategy is started and all of its subscriptions are in online state and all child strategies are online.
+		/// </summary>
+		[Browsable(false)]
+		public bool IsOnline { get; private set; }
+
+		private bool _isOnlineStateIncludesChildren;
+
+		/// <summary>
+		/// If true, the strategy can only be online if all of its children are online as well.
+		/// </summary>
+		[Browsable(false)]
+		public bool IsOnlineStateIncludesChildren
+		{
+			get => _isOnlineStateIncludesChildren;
+			set
+			{
+				if(_isOnlineStateIncludesChildren == value)
+					return;
+
+				_isOnlineStateIncludesChildren = value;
+				this.Notify();
+			}
 		}
 
 		/// <summary>
@@ -1511,6 +1549,11 @@ namespace StockSharp.Algo.Strategies
 		/// The event of strategy connection change.
 		/// </summary>
 		public event Action ConnectorChanged;
+
+		/// <summary>
+		/// The event of strategy online state change.
+		/// </summary>
+		public event Action<Strategy> IsOnlineChanged;
 
 		/// <summary>
 		/// The event of error occurrence in the strategy.
@@ -2181,6 +2224,8 @@ namespace StockSharp.Algo.Strategies
 
 			_positionManager.Reset();
 
+			IsOnline = false;
+
 			OnReseted();
 
 			// события вызываем только после вызова Reseted
@@ -2776,6 +2821,8 @@ namespace StockSharp.Algo.Strategies
 
 			if (riskStorage != null)
 				RiskManager.Load(riskStorage);
+
+			IsOnlineStateIncludesChildren = storage.GetValue<bool>(nameof(IsOnlineStateIncludesChildren));
 		}
 
 		/// <inheritdoc />
@@ -2785,6 +2832,7 @@ namespace StockSharp.Algo.Strategies
 
 			storage.SetValue(nameof(PnLManager), PnLManager.Save());
 			storage.SetValue(nameof(RiskManager), RiskManager.Save());
+			storage.SetValue(nameof(IsOnlineStateIncludesChildren), IsOnlineStateIncludesChildren);
 			//storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
 			//storage.SetValue(nameof(PositionManager), PositionManager.Save());
 		}
@@ -3099,6 +3147,61 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
+		private void OnChildStrategyIsOnlineChanged(Strategy _)
+		{
+			if(IsOnlineStateIncludesChildren)
+				CheckRefreshOnlineState();
+		}
+
+		private readonly object _onlineStateLock = new();
+
+		private void CheckRefreshOnlineState()
+		{
+			int numSubs, numSubsOnline, numChildren, numChildrenOnline;
+			numSubs = numSubsOnline = numChildren = numChildrenOnline = 0;
+
+			lock (_onlineStateLock)
+			{
+				var online = ProcessState == ProcessStates.Started;
+
+				_subscriptions.SyncDo(d =>
+				{
+					foreach (var sub in d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()))
+					{
+						++numSubs;
+						if(sub.State == SubscriptionStates.Online)
+							++numSubsOnline;
+					}
+				});
+
+				online &= numSubs == numSubsOnline;
+
+				if (IsOnlineStateIncludesChildren)
+				{
+					_childStrategies.SyncDo(s =>
+					{
+						foreach (var child in s)
+						{
+							++numChildren;
+							if(child.IsOnline)
+								++numChildrenOnline;
+						}
+					});
+
+					online &= numChildren == numChildrenOnline;
+				}
+
+				if(online == IsOnline)
+					return;
+
+				this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, subs: {3}/{4}, children({5}): {6}/{7}", IsOnline, online, ProcessState, numSubsOnline, numSubs, IsOnlineStateIncludesChildren, numChildrenOnline, numChildren);
+
+				IsOnline = online;
+			}
+
+			IsOnlineChanged?.Invoke(this);
+		}
+
 		//private bool IsChildOrder(Order order)
 		//{
 		//	var info = _ordersInfo.TryGetValue(order);
@@ -3107,6 +3210,8 @@ namespace StockSharp.Algo.Strategies
 
 		private void UnSubscribe(bool globalAndLocal)
 		{
+			var changed = false;
+
 			foreach (var pair in _subscriptions.CachedPairs)
 			{
 				if (globalAndLocal || !pair.Value)
@@ -3118,8 +3223,12 @@ namespace StockSharp.Algo.Strategies
 
 					_subscriptions.Remove(subscription);
 					_subscriptionsById.Remove(subscription.TransactionId);
+					changed = true;
 				}
 			}
+
+			if(changed)
+				CheckRefreshOnlineState();
 		}
 
 		/// <summary>

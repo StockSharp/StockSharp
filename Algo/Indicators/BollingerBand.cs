@@ -38,6 +38,9 @@ namespace StockSharp.Algo.Indicators
 			_dev = dev ?? throw new ArgumentNullException(nameof(dev));
 		}
 
+		/// <inheritdoc />
+		public override int NumValuesToInitialize => Math.Max(_ma.NumValuesToInitialize, _dev.NumValuesToInitialize);
+
 		/// <summary>
 		/// Channel width.
 		/// </summary>

@@ -85,12 +85,13 @@
 			MessageBoxBuilder.DefaultHandler = new DevExpMessageBoxHandler();
 
 			ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
+
 			try
 			{
 				ConfigManager.RegisterService<ICandlePatternProvider>(new InMemoryCandlePatternProvider(CandlePatternRegistry.All));
 				LoggingHelper.DoWithLog(ServicesRegistry.CandlePatternProvider.Init);
 			}
-			catch (Exception e)
+			catch
 			{
 			}
 

@@ -13,8 +13,10 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Indicators
 {
+	using System.Linq;
 	using System.ComponentModel;
 
 	using Ecng.ComponentModel;
@@ -67,6 +69,9 @@ namespace StockSharp.Algo.Indicators
 			_period14TrSum = new Sum { Length = _period14 };
 			_period28TrSum = new Sum { Length = _period28 };
 		}
+
+		/// <inheritdoc />
+		public override int NumValuesToInitialize => new[] { _period7BpSum, _period14BpSum, _period28BpSum, _period7TrSum, _period14TrSum, _period28TrSum }.Select(i => i.NumValuesToInitialize).Sum();
 
 		/// <inheritdoc />
 		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;

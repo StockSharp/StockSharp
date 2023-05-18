@@ -413,7 +413,7 @@ namespace StockSharp.Algo.Import
 
 			var extendedStorage = storage.GetValue<string>(nameof(ExtendedStorage));
 			if (!extendedStorage.IsEmpty())
-				ExtendedStorage = ServicesRegistry.ExtendedInfoStorage.Get(extendedStorage);
+				ExtendedStorage = ServicesRegistry.TryExtendedInfoStorage?.Get(extendedStorage);
 
 			SelectedFields = LoadSelectedFields(storage.GetValue<SettingsStorage[]>("Fields") ?? storage.GetValue<SettingsStorage[]>(nameof(SelectedFields)));
 

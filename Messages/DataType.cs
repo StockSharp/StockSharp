@@ -168,29 +168,9 @@ namespace StockSharp.Messages
 		public static DataType CandlePnF { get; } = Create<PnFCandleMessage>().Immutable();
 
 		/// <summary>
-		/// Adapters.
-		/// </summary>
-		public static DataType Adapters { get; } = Create<AdapterResponseMessage>().Immutable();
-
-		/// <summary>
-		/// Portfolio route.
-		/// </summary>
-		public static DataType PortfolioRoute { get; } = Create<PortfolioRouteMessage>().Immutable();
-
-		/// <summary>
-		/// Security route.
-		/// </summary>
-		public static DataType SecurityRoute { get; } = Create<SecurityRouteMessage>().Immutable();
-
-		/// <summary>
 		/// Security legs.
 		/// </summary>
 		public static DataType SecurityLegs { get; } = Create<SecurityLegsInfoMessage>().Immutable();
-
-		/// <summary>
-		/// Security mapping.
-		/// </summary>
-		public static DataType SecurityMapping { get; } = Create<SecurityMappingInfoMessage>().Immutable();
 
 		/// <summary>
 		/// <see cref="CommandMessage"/>.
@@ -371,8 +351,6 @@ namespace StockSharp.Messages
 			this == Board				||
 			this == BoardState			||
 			this == SecurityLegs		||
-			this == SecurityRoute		||
-			this == SecurityMapping		||
 			this == TimeFrames;
 
 		private bool _isSecurityRequired;

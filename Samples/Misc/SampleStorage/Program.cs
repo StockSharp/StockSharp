@@ -20,8 +20,8 @@ namespace SampleStorage
 
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -38,7 +38,9 @@ namespace SampleStorage
 				Decimals = 1,
 			};
 
-			var trades = new List<Trade>();
+			var securityId = security.ToSecurityId();
+
+			var trades = new List<ExecutionMessage>();
 
 			// generation 1000 random ticks
 			//
@@ -50,25 +52,28 @@ namespace SampleStorage
 
 			for (var i = 0; i < count; i++)
 			{
-				var t = new Trade
+				var t = new ExecutionMessage
 				{
-					Time = begin + TimeSpan.FromMinutes(i),
-					Id = i + 1,
-					Security = security,
-					Volume = RandomGen.GetInt(1, 10),
-					Price = RandomGen.GetInt(1, 100) * security.PriceStep ?? 1m + 99
+					DataTypeEx = DataType.Ticks,
+					ServerTime = begin + TimeSpan.FromMinutes(i),
+					TradeId = i + 1,
+					SecurityId = securityId,
+					TradeVolume = RandomGen.GetInt(1, 10),
+					TradePrice = RandomGen.GetInt(1, 100) * security.PriceStep ?? 1m + 99
 				};
 
 				trades.Add(t);
 			}
 
+			var storageRegistry = new StorageRegistry()
+			{
+				DefaultDrive = new LocalMarketDataDrive(),
+			};
+
 			using (var drive = new LocalMarketDataDrive())
 			{
-				// get AAPL storage
-				var aaplStorage = drive.GetSecurityDrive(security);
-
-				// get tick storage
-				var tradeStorage = aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId)).ToEntityStorage<ExecutionMessage, Trade>(security);
+				// get AAPL tick storage
+				var tradeStorage = storageRegistry.GetTickMessageStorage(securityId);
 
 				// saving ticks
 				tradeStorage.Save(trades);
@@ -80,7 +85,7 @@ namespace SampleStorage
 
 					foreach (var trade in loadedTrades)
 					{
-						Console.WriteLine(LocalizedStrings.Str2968Params, trade.Id, trade);
+						Console.WriteLine(LocalizedStrings.Str2968Params, trade.TradeId, trade);
 					}	
 				}
 

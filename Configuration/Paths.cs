@@ -242,6 +242,9 @@
 			/// <summary>
 			/// </summary>
 			public const long Login = 251;
+			/// <summary>
+			/// </summary>
+			public const long Profile = 243;
 		}
 
 		/// <summary>
@@ -268,6 +271,7 @@
 				Pages.Faq => "store/faq",
 				Pages.Store => "store",
 				Pages.Login => "login",
+				Pages.Profile => "profile",
 				_ => throw new ArgumentOutOfRangeException(nameof(id), id, LocalizedStrings.Str1219),
 			};
 
@@ -316,6 +320,11 @@
 		}
 
 		/// <summary>
+		/// Reset installed version cache so it would be re-generated next time when it's requested.
+		/// </summary>
+		public static void ResetInstalledVersionCache() => _installedVersion = null;
+
+		/// <summary>
 		/// Get currently installed version of the product.
 		/// </summary>
 		/// <param name="productInstallPath">File system path to product installation.</param>
@@ -329,7 +338,10 @@
 				return null;
 
 			var storage = Do.Invariant(() =>
-				InstallerInstallationsConfigPath.Deserialize<SettingsStorage>());
+			{
+				lock(InstallerInstallationsConfigPath)
+					return InstallerInstallationsConfigPath.Deserialize<SettingsStorage>();
+			});
 
 			if (storage is null)
 				return null;

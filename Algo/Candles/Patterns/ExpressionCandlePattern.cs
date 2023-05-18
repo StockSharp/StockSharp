@@ -23,19 +23,26 @@ public class CandleExpressionCondition : IPersistable
 	public readonly struct Variable
 	{
 		/// <summary>
+		/// Name.
 		/// </summary>
 		public string VarName { get; }
 
 		/// <summary>
+		/// Description.
 		/// </summary>
 		public string Description { get; }
 
 		/// <summary>
+		/// Func to get the candle message part (open, high, low or close).
 		/// </summary>
 		public Func<ICandleMessage, decimal> PartGetter { get; }
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="Variable"/>.
 		/// </summary>
+		/// <param name="varName"><see cref="VarName"/></param>
+		/// <param name="description"><see cref="Description"/></param>
+		/// <param name="getter"><see cref="PartGetter"/></param>
 		public Variable(string varName, string description, Func<ICandleMessage, decimal> getter)
 		{
 			VarName = varName;
@@ -52,10 +59,12 @@ public class CandleExpressionCondition : IPersistable
 	private ExpressionFormula<bool> _formula;
 
 	/// <summary>
+	/// Formula is not present.
 	/// </summary>
 	public bool IsEmpty => _formula == null;
 
 	/// <summary>
+	/// Expression.
 	/// </summary>
 	public string Expression { get; private set; }
 
@@ -65,13 +74,14 @@ public class CandleExpressionCondition : IPersistable
 	/// <summary>
 	/// Create instance.
 	/// </summary>
+	/// <param name="expression"><see cref="Expression"/></param>
 	public CandleExpressionCondition(string expression)
 	{
 		Expression = expression;
 		Init();
 	}
 
-	static readonly Regex _varNamePattern = new(@"^([a-zA-Z]+)(\d*)$", RegexOptions.Compiled);
+	private static readonly Regex _varNamePattern = new(@"^([a-zA-Z]+)(\d*)$", RegexOptions.Compiled);
 
 	private void Init()
 	{
@@ -184,6 +194,7 @@ public class CandleExpressionCondition : IPersistable
 public class ExpressionCandlePattern : ICandlePattern
 {
 	/// <summary>
+	/// Pattern formulas.
 	/// </summary>
 	public CandleExpressionCondition[] Conditions { get; private set; }
 
@@ -203,9 +214,11 @@ public class ExpressionCandlePattern : ICandlePattern
 	/// <summary>
 	/// Create instance.
 	/// </summary>
-	public ExpressionCandlePattern(string name, IEnumerable<CandleExpressionCondition> formulas)
+	/// <param name="name"><see cref="Name"/></param>
+	/// <param name="conditions"><see cref="Conditions"/></param>
+	public ExpressionCandlePattern(string name, IEnumerable<CandleExpressionCondition> conditions)
 	{
-		Conditions = formulas?.ToArray() ?? throw new ArgumentNullException(nameof(formulas));
+		Conditions = conditions?.ToArray() ?? throw new ArgumentNullException(nameof(conditions));
 
 		if(Conditions.IsEmpty())
 			return; // for Load to work

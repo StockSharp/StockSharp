@@ -400,7 +400,7 @@ namespace StockSharp.Algo
 			if (sendInMsg != null)
 			{
 				if (isInfoLevel)
-					this.AddInfoLog("In: {0}", sendInMsg);
+					this.AddDebugLog("In: {0}", sendInMsg);
 				else
 					this.AddDebugLog("In: {0}", sendInMsg);
 
@@ -411,7 +411,7 @@ namespace StockSharp.Algo
 			{
 				foreach (var sendOutMsg in sendOutMsgs)
 				{
-					this.AddInfoLog("Out: {0}", sendOutMsg);
+					this.AddDebugLog("Out: {0}", sendOutMsg);
 					RaiseNewOutMessage(sendOutMsg);	
 				}
 			}

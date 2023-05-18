@@ -630,6 +630,9 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if specified instrument is used now, otherwise <see langword="false" />.</returns>
 		public static bool Contains(this BasketSecurity basketSecurity, ISecurityProvider securityProvider, Security security)
 		{
+			if (securityProvider is null)
+				return false;
+
 			return basketSecurity.GetInnerSecurities(securityProvider).Any(innerSecurity =>
 			{
 				if (innerSecurity is BasketSecurity basket)

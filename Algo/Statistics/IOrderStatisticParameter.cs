@@ -63,7 +63,9 @@ namespace StockSharp.Algo.Statistics
 		/// <summary>
 		/// Initialize <see cref="BaseOrderStatisticParameter{T}"/>.
 		/// </summary>
-		protected BaseOrderStatisticParameter()
+		/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+		protected BaseOrderStatisticParameter(StatisticParameterTypes type)
+			: base(type)
 		{
 		}
 
@@ -96,6 +98,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class MaxLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
+		/// <summary>
+		/// Initialize <see cref="MaxLatencyRegistrationParameter"/>.
+		/// </summary>
+		public MaxLatencyRegistrationParameter()
+			: base(StatisticParameterTypes.MaxLatencyRegistration)
+		{
+		}
+
 		/// <inheritdoc />
 		public override void New(Order order)
 		{
@@ -112,6 +122,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class MaxLatencyCancellationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
+		/// <summary>
+		/// Initialize <see cref="MaxLatencyCancellationParameter"/>.
+		/// </summary>
+		public MaxLatencyCancellationParameter()
+			: base(StatisticParameterTypes.MaxLatencyCancellation)
+		{
+		}
+
 		/// <inheritdoc />
 		public override void Changed(Order order)
 		{
@@ -128,6 +146,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class MinLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
+		/// <summary>
+		/// Initialize <see cref="MinLatencyRegistrationParameter"/>.
+		/// </summary>
+		public MinLatencyRegistrationParameter()
+			: base(StatisticParameterTypes.MinLatencyRegistration)
+		{
+		}
+
 		private bool _initialized;
 
 		/// <inheritdoc />
@@ -175,6 +201,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class MinLatencyCancellationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
+		/// <summary>
+		/// Initialize <see cref="MinLatencyCancellationParameter"/>.
+		/// </summary>
+		public MinLatencyCancellationParameter()
+			: base(StatisticParameterTypes.MinLatencyCancellation)
+		{
+		}
+
 		private bool _initialized;
 
 		/// <inheritdoc />
@@ -222,6 +256,14 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.OrdersKey)]
 	public class OrderCountParameter : BaseOrderStatisticParameter<int>
 	{
+		/// <summary>
+		/// Initialize <see cref="OrderCountParameter"/>.
+		/// </summary>
+		public OrderCountParameter()
+			: base(StatisticParameterTypes.OrderCount)
+		{
+		}
+
 		/// <inheritdoc />
 		public override void New(Order order)
 		{

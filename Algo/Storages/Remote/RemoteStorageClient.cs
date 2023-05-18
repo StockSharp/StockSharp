@@ -32,6 +32,11 @@ namespace StockSharp.Algo.Storages.Remote
 		/// </summary>
 		public IMessageAdapter Adapter { get; }
 
+		/// <summary>
+		/// Cache.
+		/// </summary>
+        public RemoteStorageCache Cache { get; set; }
+
 		private int _securityBatchSize = 1000;
 
 		/// <summary>
@@ -56,9 +61,10 @@ namespace StockSharp.Algo.Storages.Remote
 		{
 			get
 			{
-				return Do<SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true })
-					.Select(s => s.SecurityId)
-					.ToArray();
+				return Do<SecurityMessage>(
+					new SecurityLookupMessage { OnlySecurityId = true },
+					() => (typeof(SecurityLookupMessage), true)
+				).Select(s => s.SecurityId).ToArray();
 			}
 		}
 
@@ -122,7 +128,9 @@ namespace StockSharp.Algo.Storages.Remote
 
 				var batch = b.ToArray();
 
-				foreach (var security in Do<SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch.ToArray() }))
+				foreach (var security in Do<SecurityMessage>(
+					new SecurityLookupMessage { SecurityIds = batch },
+					() => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma())))
 					newSecurity(security);
 
 				count += batch.Length;
@@ -162,120 +170,6 @@ namespace StockSharp.Algo.Storages.Remote
 			Do(securities.ToArray());
 		}
 
-		//private class RemoteExtendedStorage : IRemoteExtendedStorage
-		//{
-		//	private class SecurityRemoteExtendedStorage : ISecurityRemoteExtendedStorage
-		//	{
-		//		private readonly RemoteExtendedStorage _parent;
-		//		private readonly SecurityId _securityId;
-		//		private readonly string _securityIdStr;
-
-		//		public SecurityRemoteExtendedStorage(RemoteExtendedStorage parent, SecurityId securityId)
-		//		{
-		//			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
-
-		//			_securityId = securityId;
-		//			_securityIdStr = securityId.ToStringId();
-		//		}
-
-		//		void ISecurityRemoteExtendedStorage.AddSecurityExtendedInfo(object[] fieldValues)
-		//		{
-		//			_parent._client.Invoke(f => f.AddSecurityExtendedInfo(_parent._client.SessionId, _parent._storageName, _securityIdStr, fieldValues.Select(v => v.To<string>()).ToArray()));
-		//		}
-
-		//		void ISecurityRemoteExtendedStorage.DeleteSecurityExtendedInfo()
-		//		{
-		//			_parent._client.Invoke(f => f.DeleteSecurityExtendedInfo(_parent._client.SessionId, _parent._storageName, _securityIdStr));
-		//		}
-
-		//		SecurityId ISecurityRemoteExtendedStorage.SecurityId => _securityId;
-		//	}
-
-		//	private readonly RemoteStorageClient _client;
-		//	private readonly string _storageName;
-
-		//	public RemoteExtendedStorage(RemoteStorageClient client, string storageName)
-		//	{
-		//		if (storageName.IsEmpty())
-		//			throw new ArgumentNullException(nameof(storageName));
-
-		//		_client = client ?? throw new ArgumentNullException(nameof(client));
-		//		_storageName = storageName;
-		//	}
-
-		//	private Tuple<string, Type>[] _securityExtendedFields;
-
-		//	public Tuple<string, Type>[] Fields
-		//	{
-		//		get
-		//		{
-		//			return _securityExtendedFields ?? (_securityExtendedFields = _client
-		//				   .Invoke(f => f.GetSecurityExtendedFields(_client.SessionId, _storageName))
-		//				   .Select(t => Tuple.Create(t.Item1, t.Item2.To<Type>()))
-		//				   .ToArray());
-		//		}
-		//	}
-
-		//	void IRemoteExtendedStorage.CreateSecurityExtendedFields(Tuple<string, Type>[] fields)
-		//	{
-		//		if (fields == null)
-		//			throw new ArgumentNullException(nameof(fields));
-
-		//		_client.Invoke(f => f.CreateSecurityExtendedFields(_client.SessionId, _storageName, fields.Select(t => Tuple.Create(t.Item1, t.Item2.TryGetCSharpAlias() ?? t.Item2.GetTypeName(false))).ToArray()));
-		//	}
-
-		//	string IRemoteExtendedStorage.StorageName => _storageName;
-
-		//	IEnumerable<SecurityId> IRemoteExtendedStorage.Securities
-		//	{
-		//		get { return _client.Invoke(f => f.GetExtendedInfoSecurities(_client.SessionId, _storageName)).Select(id => id.ToSecurityId()); }
-		//	}
-
-		//	private readonly SynchronizedDictionary<SecurityId, ISecurityRemoteExtendedStorage> _securityStorages = new SynchronizedDictionary<SecurityId, ISecurityRemoteExtendedStorage>();
-
-		//	ISecurityRemoteExtendedStorage IRemoteExtendedStorage.GetSecurityStorage(SecurityId securityId)
-		//	{
-		//		if (securityId == default)
-		//			throw new ArgumentNullException(nameof(securityId));
-
-		//		return _securityStorages.SafeAdd(securityId, key => new SecurityRemoteExtendedStorage(this, key));
-		//	}
-
-		//	Tuple<SecurityId, object[]>[] IRemoteExtendedStorage.GetAllExtendedInfo()
-		//	{
-		//		var fields = Fields;
-
-		//		if (fields == null)
-		//			return null;
-
-		//		return _client
-		//			.Invoke(f => f.GetAllExtendedInfo(_client.SessionId, _storageName))
-		//				.Select(t => Tuple.Create(t.Item1.ToSecurityId(), t.Item2.Select((v, i) => v.To(fields[i].Item2)).ToArray()))
-		//			.ToArray();
-		//	}
-		//}
-
-		///// <summary>
-		///// Get security extended storage names.
-		///// </summary>
-		///// <returns>Storage names.</returns>
-		//public string[] GetSecurityExtendedStorages()
-		//{
-		//	return Invoke(f => f.GetSecurityExtendedStorages(SessionId));
-		//}
-
-		//private readonly SynchronizedDictionary<string, RemoteExtendedStorage> _extendedStorages = new SynchronizedDictionary<string, RemoteExtendedStorage>(StringComparer.InvariantCultureIgnoreCase);
-
-		///// <summary>
-		///// Get extended info storage.
-		///// </summary>
-		///// <param name="storageName">Storage name.</param>
-		///// <returns>Extended info storage.</returns>
-		//public IRemoteExtendedStorage GetExtendedStorage(string storageName)
-		//{
-		//	return _extendedStorages.SafeAdd(storageName, key => new RemoteExtendedStorage(this, storageName));
-		//}
-
 		/// <summary>
 		/// Get all available data types.
 		/// </summary>
@@ -287,8 +181,11 @@ namespace StockSharp.Algo.Storages.Remote
 			//if (securityId == default)
 			//	throw new ArgumentNullException(nameof(securityId));
 
-			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage { SecurityId = securityId, Format = (int)format })
-				.Select(t => t.FileDataType).Distinct().ToArray();
+			return Do<AvailableDataInfoMessage>(new AvailableDataRequestMessage
+			{
+				SecurityId = securityId,
+				Format = (int)format,
+			}, () => (typeof(AvailableDataRequestMessage), securityId, format)).Select(t => t.FileDataType).Distinct().ToArray();
 		}
 
 		/// <summary>
@@ -313,7 +210,7 @@ namespace StockSharp.Algo.Storages.Remote
 				SecurityId = securityId,
 				RequestDataType = dataType,
 				Format = (int)format,
-			}).Select(i => i.Date.UtcDateTime).ToArray();
+			}, () => (typeof(AvailableDataRequestMessage), securityId, dataType, format)).Select(i => i.Date.UtcDateTime).ToArray();
 		}
 
 		/// <summary>
@@ -332,8 +229,8 @@ namespace StockSharp.Algo.Storages.Remote
 				Scope = CommandScopes.File,
 				SecurityId = securityId,
 				FileDataType = dataType,
-				StartDate = date,
-				EndDate = date,
+				From = date,
+				To = date.AddDays(1),
 				Format = (int)format,
 				Body = stream.To<byte[]>(),
 			});
@@ -355,8 +252,8 @@ namespace StockSharp.Algo.Storages.Remote
 				Scope = CommandScopes.File,
 				SecurityId = securityId,
 				FileDataType = dataType,
-				StartDate = date,
-				EndDate = date,
+				From = date,
+				To = date.AddDays(1),
 				Format = (int)format,
 			}).FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
 		}
@@ -377,8 +274,8 @@ namespace StockSharp.Algo.Storages.Remote
 				SecurityId = securityId,
 				FileDataType = dataType,
 				Format = (int)format,
-				StartDate = date,
-				EndDate = date,
+				From = date,
+				To = date.AddDays(1),
 			});
 		}
 
@@ -387,10 +284,21 @@ namespace StockSharp.Algo.Storages.Remote
 			Adapter.TypedClone().Upload(messages);
 		}
 
-		private IEnumerable<TResult> Do<TResult>(Message message)
+		private IEnumerable<TResult> Do<TResult>(Message message, Func<object> getKey = default)
 			where TResult : Message, IOriginalTransactionIdMessage
 		{
-			return Adapter.TypedClone().Download<TResult>(message);
+			var needCache = getKey is not null && Cache is not null;
+			object key = default;
+
+			if (needCache && Cache.TryGet(key = getKey(), out var messages))
+				return messages.Cast<TResult>();
+
+			var result = Adapter.TypedClone().Download<TResult>(message);
+
+			if (needCache)
+				Cache.Set(key, result.Cast<Message>().ToArray());
+
+			return result;
 		}
 	}
 }

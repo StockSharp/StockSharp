@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -33,7 +33,6 @@ internal class LocalizedStringsGenerator : IIncrementalGenerator
             string source = GetTypeWithMembers(members);
 
             ctx.AddSource($"LocalizedStrings_Items.cs", source);
-            //System.Diagnostics.Debugger.Launch();
         });
 
     }

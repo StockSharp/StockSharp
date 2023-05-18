@@ -44,6 +44,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		public override int NumValuesToInitialize => Math.Max(LongSma.NumValuesToInitialize, ShortSma.NumValuesToInitialize);
+
+		/// <inheritdoc />
 		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
 
 		/// <summary>

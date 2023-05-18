@@ -100,12 +100,6 @@ public static class SubscriptionExtensions
 			return new PortfolioMessage();
 		else if (dataType == DataType.SecurityLegs)
 			return new SecurityLegsRequestMessage();
-		else if (dataType == DataType.SecurityMapping)
-			return new SecurityMappingRequestMessage();
-		else if (dataType == DataType.SecurityRoute)
-			return new SecurityRouteListRequestMessage();
-		else if (dataType == DataType.PortfolioRoute)
-			return new PortfolioRouteListRequestMessage();
 		else if (dataType == DataType.Command)
 			return new CommandMessage();
 		else

@@ -12,12 +12,12 @@ using Ecng.Common;
 public static class StrategyAsyncExtensions
 {
 	/// <summary>
-	/// Async version <see cref="Strategy.Start()"/>.
+	/// Execute strategy.
 	/// </summary>
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask StartAsync(this Strategy strategy, CancellationToken cancellationToken)
+	public static async ValueTask ExecAsync(this Strategy strategy, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -25,43 +25,7 @@ public static class StrategyAsyncExtensions
 		if (strategy.ProcessState != ProcessStates.Stopped)
 			throw new ArgumentException($"State is {strategy.ProcessState}.", nameof(strategy));
 
-		var tcs = AsyncHelper.CreateTaskCompletionSource<ProcessStates>();
-
-		using var _ = cancellationToken.Register(tcs.SetCanceled);
-
-		void OnProcessStateChanged(Strategy s)
-		{
-			if (s == strategy && s.ProcessState == ProcessStates.Started)
-				tcs.SetResult(s.ProcessState);
-		}
-
-		strategy.ProcessStateChanged += OnProcessStateChanged;
-
-		try
-		{
-			strategy.Start();
-
-			await tcs.Task;
-		}
-		finally
-		{
-			strategy.ProcessStateChanged -= OnProcessStateChanged;
-		}
-	}
-
-	/// <summary>
-	/// Async version <see cref="Strategy.Stop()"/>.
-	/// </summary>
-	/// <param name="strategy"><see cref="Strategy"/>.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
-	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask StopAsync(this Strategy strategy, CancellationToken cancellationToken)
-	{
-		if (strategy is null)
-			throw new ArgumentNullException(nameof(strategy));
-
-		if (strategy.ProcessState != ProcessStates.Started)
-			throw new ArgumentException($"State is {strategy.ProcessState}.", nameof(strategy));
+		await Task.Yield();
 
 		var tcs = AsyncHelper.CreateTaskCompletionSource<ProcessStates>();
 
@@ -77,7 +41,7 @@ public static class StrategyAsyncExtensions
 
 		try
 		{
-			strategy.Stop();
+			strategy.Start();
 
 			await tcs.Task;
 		}

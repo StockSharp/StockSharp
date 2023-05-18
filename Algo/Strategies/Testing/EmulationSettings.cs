@@ -65,12 +65,10 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		#region Emulation
-
-		private TimeSpan _marketTimeChangedInterval;
+		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromMinutes(1);
 
 		/// <summary>
-		/// Time change interval.
+		/// Time change interval. <see cref="TimeSpan.Zero"/> interval disabled.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -83,7 +81,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			get => _marketTimeChangedInterval;
 			set
 			{
-				if (value <= TimeSpan.Zero)
+				if (value < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_marketTimeChangedInterval = value;
@@ -91,10 +89,10 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private TimeSpan? _unrealizedPnLInterval;
+		private TimeSpan _unrealizedPnLInterval = TimeSpan.FromMinutes(1);
 
 		/// <summary>
-		/// Unrealized profit recalculation interval.
+		/// Unrealized profit recalculation interval. <see cref="TimeSpan.Zero"/> interval disabled.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -102,13 +100,12 @@ namespace StockSharp.Algo.Strategies.Testing
 			Description = LocalizedStrings.Str1411Key,
 			GroupName = LocalizedStrings.Str1174Key,
 			Order = 101)]
-		[DefaultValue(typeof(TimeSpan), "00:01:00")]
-		public TimeSpan? UnrealizedPnLInterval
+		public TimeSpan UnrealizedPnLInterval
 		{
 			get => _unrealizedPnLInterval;
 			set
 			{
-				if (value <= TimeSpan.Zero)
+				if (value < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_unrealizedPnLInterval = value;
@@ -188,8 +185,8 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1418Key,
 			Description = LocalizedStrings.Str1419Key,
-			GroupName = LocalizedStrings.Str1174Key,
-			Order = 105)]
+			GroupName = LocalizedStrings.Str3177Key,
+			Order = 200)]
 		public int BatchSize
 		{
 			get => _batchSize;
@@ -200,7 +197,28 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private bool _checkTradableDates = true;
+		private int _maxIterations;
+
+		/// <summary>
+		/// Maximum possible iterations count.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IterationsKey,
+			Description = LocalizedStrings.MaxIterationsKey,
+			GroupName = LocalizedStrings.Str3177Key,
+			Order = 201)]
+		public int MaxIterations
+		{
+			get => _maxIterations;
+			set
+			{
+				_maxIterations = value;
+				NotifyPropertyChanged();
+			}
+		}
+
+		private bool _checkTradableDates;
 
 		/// <summary>
 		/// Check loading dates are they tradable.
@@ -221,11 +239,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		#endregion
-
-		#region Debug
-
-		private LogLevels _logLevel;
+		private LogLevels _logLevel = LogLevels.Info;
 
 		/// <summary>
 		/// Logging level.
@@ -247,17 +261,6 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		#endregion
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="EmulationSettings"/>.
-		/// </summary>
-		public EmulationSettings()
-		{
-			MarketTimeChangedInterval = TimeSpan.FromMinutes(1);
-			LogLevel = LogLevels.Info;
-		}
-
 		/// <summary>
 		/// To save the state of paper trading parameters.
 		/// </summary>
@@ -275,6 +278,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			storage.SetValue(nameof(LogLevel), LogLevel.To<string>());
 			storage.SetValue(nameof(TradeDataMode), TradeDataMode.To<string>());
 			storage.SetValue(nameof(BatchSize), BatchSize);
+			storage.SetValue(nameof(MaxIterations), MaxIterations);
 			storage.SetValue(nameof(CheckTradableDates), CheckTradableDates);
 		}
 
@@ -295,6 +299,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
 			TradeDataMode = storage.GetValue(nameof(TradeDataMode), TradeDataMode);
 			BatchSize = storage.GetValue(nameof(BatchSize), BatchSize);
+			MaxIterations = storage.GetValue(nameof(MaxIterations), MaxIterations);
 			CheckTradableDates = storage.GetValue(nameof(CheckTradableDates), CheckTradableDates);
 		}
 	}

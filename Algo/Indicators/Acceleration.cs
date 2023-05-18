@@ -13,6 +13,7 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Indicators
 {
 	using System;
@@ -41,6 +42,9 @@ namespace StockSharp.Algo.Indicators
 			: this(new AwesomeOscillator(), new SimpleMovingAverage { Length = 5 })
 		{
 		}
+
+		/// <inheritdoc />
+		public override int NumValuesToInitialize => Math.Max(Ao.NumValuesToInitialize, Sma.NumValuesToInitialize);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Acceleration"/>.

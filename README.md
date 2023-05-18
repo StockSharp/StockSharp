@@ -150,6 +150,7 @@ public class SimpleStrategy : Strategy
 ## Stock, Futures and Options
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
+|<img src="./Media/logos/polygonio_logo.svg" height="30" /> |Polygon.io | <a href="//doc.stocksharp.com/topics/PolygonIO.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/PolygonIO.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="//doc.stocksharp.com/topics/IB.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/IB.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="//doc.stocksharp.com/topics/FIX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FIX.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="//doc.stocksharp.com/topics/Fast.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fast.html" target="_blank">Ru</a> |
@@ -171,6 +172,7 @@ public class SimpleStrategy : Strategy
 |<img src="./Media/logos/Xignite_logo.png" height="30" /> |Xignite | <a href="//doc.stocksharp.com/topics/Xignite.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Xignite.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/yahoo_logo.svg" height="30" /> |Yahoo | <a href="//doc.stocksharp.com/topics/Yahoo.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Yahoo.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/Blackwood_logo.png" height="30" /> |Blackwood (Fusion) | <a href="//doc.stocksharp.com/topics/Blackwood.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Blackwood.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/FinViz_logo.png" height="30" /> |FinViz | <a href="//doc.stocksharp.com/topics/FinViz.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FinViz.html" target="_blank">Ru</a> |
 
 ## Russian market
 |Logo | Name |  Documentation Ru| 
@@ -195,8 +197,9 @@ public class SimpleStrategy : Strategy
 ## Forex
 |Logo | Name | Documentation Eng| Documentation Ru| 
 |:---:|:----:|:----------------:|:---------------:|
+|<img src="./Media/logos/mt4_logo.svg" height="30" /> |MT4 | <a href="//doc.stocksharp.com/topics/MT.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/MT.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/mt5_logo.svg" height="30" /> |MT5 | <a href="//doc.stocksharp.com/topics/MT.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/MT.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |DukasCopy | <a href="//doc.stocksharp.com/topics/DukasCopy.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/DukasCopy.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/FinViz_logo.png" height="30" /> |FinViz | <a href="//doc.stocksharp.com/topics/FinViz.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/FinViz.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/fxcm_logo.svg" height="30" /> |FXCM | <a href="//doc.stocksharp.com/topics/Fxcm.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/Fxcm.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/gaincapital_logo.svg" height="30" /> |GAIN Capital | <a href="//doc.stocksharp.com/topics/GAIN%20Capital.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/GAIN%20Capital.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/lmax_logo.svg" height="30" /> |LMAX | <a href="//doc.stocksharp.com/topics/LMAX.html" target="_blank">Eng</a> | <a href="https://doc.stocksharp.ru/topics/LMAX.html" target="_blank">Ru</a> |
