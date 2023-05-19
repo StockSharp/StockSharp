@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Storages.Remote
 
 			var count = 0;
 
-			foreach (var b in newSecurityIds.Batch(SecurityBatchSize))
+			foreach (var b in newSecurityIds.Chunk(SecurityBatchSize))
 			{
 				if (isCancelled())
 					break;

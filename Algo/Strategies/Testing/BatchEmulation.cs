@@ -188,7 +188,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			var batchWeight = 100.0 / totalBatches;
 
 			TryStartNextBatch(
-				strategies.Batch(batchSize).GetEnumerator(), 
+				strategies.Chunk(batchSize).GetEnumerator(), 
 				-1, totalBatches, batchWeight,
 				adapterCaches, storageCaches);
 		}
