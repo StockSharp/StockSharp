@@ -1,4 +1,12 @@
 {
+  "BruteForce": {
+    "en": "Brute Force",
+    "ru": "Перебор"
+  },
+  "Genetic": {
+    "en": "Genetic",
+    "ru": "Генетика"
+  },
   "UseCloud": {
     "en": "Use cloud",
     "ru": "Облако"
