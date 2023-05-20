@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromMinutes(1);
 
 		/// <summary>
-		/// Time change interval. <see cref="TimeSpan.Zero"/> interval disabled.
+		/// Time change interval. <see cref="TimeSpan.Zero"/> means interval disabled.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private TimeSpan _unrealizedPnLInterval = TimeSpan.FromMinutes(1);
 
 		/// <summary>
-		/// Unrealized profit recalculation interval. <see cref="TimeSpan.Zero"/> interval disabled.
+		/// Unrealized profit recalculation interval. <see cref="TimeSpan.Zero"/> means interval disabled.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -192,6 +192,9 @@ namespace StockSharp.Algo.Strategies.Testing
 			get => _batchSize;
 			set
 			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_batchSize = value;
 				NotifyPropertyChanged();
 			}
@@ -200,7 +203,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private int _maxIterations;
 
 		/// <summary>
-		/// Maximum possible iterations count.
+		/// Maximum possible iterations count. Zero means the option is ignored.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -213,6 +216,9 @@ namespace StockSharp.Algo.Strategies.Testing
 			get => _maxIterations;
 			set
 			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_maxIterations = value;
 				NotifyPropertyChanged();
 			}
