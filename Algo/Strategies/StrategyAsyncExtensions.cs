@@ -28,17 +28,21 @@ public static class StrategyAsyncExtensions
 		await Task.Yield();
 
 		var tcs = AsyncHelper.CreateTaskCompletionSource<ProcessStates>();
+		var wasCancelled = false;
 
-		using var _ = cancellationToken.Register(tcs.SetCanceled);
+		using var _ = cancellationToken.Register(() =>
+		{
+			wasCancelled = tcs.TrySetCanceled();
+		});
 
 		void OnProcessStateChanged(Strategy s)
 		{
 			if (s == strategy && s.ProcessState == ProcessStates.Stopped)
 			{
 				if (s.LastError is null)
-					tcs.SetResult(s.ProcessState);
+					tcs.TrySetResult(s.ProcessState);
 				else
-					tcs.SetException(s.LastError);
+					tcs.TrySetException(s.LastError);
 			}
 		}
 
@@ -52,6 +56,13 @@ public static class StrategyAsyncExtensions
 		}
 		finally
 		{
+			if (wasCancelled)
+			{
+				strategy.Stop();
+
+				// TODO SS-274 correct stopping awaiting
+			}
+
 			strategy.ProcessStateChanged -= OnProcessStateChanged;
 		}
 	}
