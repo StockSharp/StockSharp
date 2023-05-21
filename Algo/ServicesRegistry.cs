@@ -1,12 +1,12 @@
 namespace StockSharp.Algo
 {
 	using System;
-	using System.Collections.Generic;
 
 	using Ecng.Compilation;
 	using Ecng.Configuration;
 	using Ecng.Interop;
 
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Candles.Patterns;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
@@ -255,5 +255,10 @@ namespace StockSharp.Algo
 		/// <see cref="ICandlePatternProvider"/>
 		/// </summary>
 		public static ICandlePatternProvider TryCandlePatternProvider => ConfigManager.TryGetService<ICandlePatternProvider>();
+
+		/// <summary>
+		/// <see cref="CandleBuilderProvider"/>
+		/// </summary>
+		public static CandleBuilderProvider CandleBuilderProvider => ConfigManager.GetService<CandleBuilderProvider>();
 	}
 }
