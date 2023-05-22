@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Ecng.Collections;
+using Ecng.Common;
 
 using StockSharp.Messages;
 
 /// <summary>
 /// <see cref="IMarketDataStorage"/> cache.
 /// </summary>
-public class MarketDataStorageCache
+public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 {
 	private readonly SynchronizedDictionary<(SecurityId, DataType, DateTime), (DateTime lastAccess, Message[] data)> _cache = new();
 
@@ -31,6 +32,9 @@ public class MarketDataStorageCache
 			_limit = value;
 		}
 	}
+
+	/// <inheritdoc/>
+	public override MarketDataStorageCache Clone() => new() { Limit = Limit };
 
 	/// <summary>
 	/// Get data.

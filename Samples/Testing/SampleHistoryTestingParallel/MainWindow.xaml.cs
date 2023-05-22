@@ -132,9 +132,6 @@ namespace SampleHistoryTestingParallel
 
 			_optimizer.StateChanged += (oldState, newState) =>
 			{
-				if (newState == ChannelStates.Stopped)
-					_optimizer = null;
-
 				this.GuiAsync(() =>
 				{
 					switch (newState)
@@ -154,6 +151,8 @@ namespace SampleHistoryTestingParallel
 							}
 							else
 								MessageBox.Show(this, LocalizedStrings.cancelled);
+
+							_optimizer = null;
 
 							break;
 						case ChannelStates.Started:

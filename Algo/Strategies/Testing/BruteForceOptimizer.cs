@@ -3,9 +3,7 @@ namespace StockSharp.Algo.Strategies.Testing
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 
@@ -21,9 +19,10 @@ namespace StockSharp.Algo.Strategies.Testing
 	/// </summary>
 	public class BruteForceOptimizer : BaseLogReceiver
 	{
-		private readonly List<HistoryEmulationConnector> _currentConnectors = new();
+		private readonly HashSet<HistoryEmulationConnector> _startedConnectors = new();
 		private bool _cancelEmulation;
-		private int _nextTotalProgress;
+		private int _leftIters;
+		private int _lastTotalProgress;
 		private DateTime _startedAt;
 
 		private readonly SyncObject _sync = new();
@@ -152,60 +151,45 @@ namespace StockSharp.Algo.Strategies.Testing
 				throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.Str1219);
 
 			_cancelEmulation = false;
-			_nextTotalProgress = 0;
 			_startedAt = DateTime.UtcNow;
+			_lastTotalProgress = 0;
 
-			if (EmulationSettings.MaxIterations > 0 && iterationCount > EmulationSettings.MaxIterations)
+			var maxIters = EmulationSettings.MaxIterations;
+			if (maxIters > 0 && iterationCount > maxIters)
 			{
-				iterationCount = EmulationSettings.MaxIterations;
+				iterationCount = maxIters;
 				strategies = strategies.Take(iterationCount);
 			}
 
 			State = ChannelStates.Starting;
 
-			var totalBatches = (int)((decimal)iterationCount / EmulationSettings.BatchSize).Ceiling();
-
-			if (totalBatches == 0)
-				throw new ArgumentOutOfRangeException(nameof(iterationCount), "totalBatches == 0");
-
 			var batchSize = EmulationSettings.BatchSize;
 
-			var adapterCaches = AdapterCache is null ? null : new Dictionary<int, MarketDataStorageCache>();
-			var storageCaches = StorageCache is null ? null : new Dictionary<int, MarketDataStorageCache>();
+			_leftIters = iterationCount;
 
-			if (adapterCaches is not null)
+			var enumerator = strategies.GetEnumerator();
+
+			State = ChannelStates.Started;
+
+			for (var i = 0; i < batchSize; i++)
 			{
-				for (int i = 0; i < batchSize; i++)
-					adapterCaches.Add(i, new());
+				TryNextRun(enumerator, AdapterCache?.Clone(), StorageCache?.Clone(), iterationCount);
 			}
-
-			if (storageCaches is not null)
-			{
-				for (int i = 0; i < batchSize; i++)
-					storageCaches.Add(i, new());
-			}
-
-			var batchWeight = 100.0 / totalBatches;
-
-			TryStartNextBatch(
-				strategies.Chunk(batchSize).GetEnumerator(), 
-				-1, totalBatches, batchWeight,
-				adapterCaches, storageCaches);
 		}
 
-		private void TryStartNextBatch(
-			IEnumerator<IEnumerable<(Strategy strategy, IStrategyParam[] parameters)>> batches,
-			int currentBatch, int totalBatches, double batchWeight,
-			IDictionary<int, MarketDataStorageCache> adapterCaches,
-			IDictionary<int, MarketDataStorageCache> storageCaches)
+		private void TryNextRun(IEnumerator<(Strategy, IStrategyParam[])> enumerator, MarketDataStorageCache adapterCache, MarketDataStorageCache storageCache, int iterCount)
 		{
-			if (batches is null)
-				throw new ArgumentNullException(nameof(batches));
+			Strategy strategy;
+			IStrategyParam[] parameters;
+			HistoryEmulationConnector connector;
 
 			lock (_sync)
 			{
-				if (_cancelEmulation || !batches.MoveNext())
+				if (_cancelEmulation || !enumerator.MoveNext())
 				{
+					if (State == ChannelStates.Stopped)
+						return;
+
 					IsCancelled = _cancelEmulation;
 
 					State = ChannelStates.Stopping;
@@ -214,101 +198,83 @@ namespace StockSharp.Algo.Strategies.Testing
 					return;
 				}
 
-				var batch = batches.Current.ToArray();
-				currentBatch++;
+				var t = enumerator.Current;
+				strategy = t.Item1;
+				parameters = t.Item2;
 
-				if (currentBatch == 0)
+				connector = new(_securityProvider, _portfolioProvider, _exchangeInfoProvider)
 				{
-					State = ChannelStates.Starting;
-					State = ChannelStates.Started;
-				}
+					Parent = this,
 
-				var progress = new SynchronizedDictionary<HistoryEmulationConnector, int>();
-				var left = batch.Length;
-
-				var nextProgress = 1;
-
-				_currentConnectors.Clear();
-
-				foreach (var (strategy, parameters) in batch)
-				{
-					var idx = _currentConnectors.Count;
-
-					var connector = new HistoryEmulationConnector(_securityProvider, _portfolioProvider, _exchangeInfoProvider)
+					HistoryMessageAdapter =
 					{
-						Parent = this,
+						StorageRegistry = StorageSettings.StorageRegistry,
+						Drive = StorageSettings.Drive,
+						StorageFormat = StorageSettings.Format,
 
-						HistoryMessageAdapter =
-						{
-							StorageRegistry = StorageSettings.StorageRegistry,
-							Drive = StorageSettings.Drive,
-							StorageFormat = StorageSettings.Format,
-							StartDate = EmulationSettings.StartTime,
-							StopDate = EmulationSettings.StopTime,
+						StartDate = EmulationSettings.StartTime,
+						StopDate = EmulationSettings.StopTime,
 
-							AdapterCache = adapterCaches?.TryGetValue(idx),
-							StorageCache = storageCaches?.TryGetValue(idx),
-						},
-					};
-					connector.EmulationAdapter.Settings.Load(EmulationSettings.Save());
+						AdapterCache = adapterCache,
+						StorageCache = storageCache,
+					},
+				};
 
-					strategy.Connector = connector;
-
-					strategy.Reset();
-					strategy.Start();
-
-					progress.Add(connector, 0);
-
-					connector.ProgressChanged += step =>
-					{
-						SingleProgressChanged?.Invoke(strategy, parameters, step);
-
-						var avgStep = 0;
-
-						lock (progress.SyncRoot)
-						{
-							progress[connector] = step;
-							avgStep = (int)progress.Values.Average();
-						}
-
-						if (avgStep < nextProgress)
-							return;
-
-						nextProgress++;
-
-						var currTotalProgress = (int)(currentBatch * batchWeight + ((avgStep * batchWeight) / 100));
-
-						if (_nextTotalProgress >= currTotalProgress)
-							return;
-
-						var now = DateTime.UtcNow;
-						var duration = now - _startedAt;
-
-						TotalProgressChanged?.Invoke(currTotalProgress, duration, TimeSpan.FromTicks((duration.Ticks * 100) / currTotalProgress));
-						_nextTotalProgress = currTotalProgress + 1;
-					};
-
-					connector.StateChanged += () =>
-					{
-						if (connector.State == ChannelStates.Stopped)
-						{
-							if (progress[connector] != 100)
-								SingleProgressChanged?.Invoke(strategy, parameters, 100);
-
-							if (Interlocked.Decrement(ref left) == 0)
-								TryStartNextBatch(batches, currentBatch, totalBatches, batchWeight, adapterCaches, storageCaches);
-						}
-					};
-
-					_currentConnectors.Add(connector);
-				}
-
-				foreach (var connector in _currentConnectors)
-				{
-					connector.Connect();
-					connector.Start();
-				}
+				_startedConnectors.Add(connector);
 			}
+			
+			connector.EmulationAdapter.Settings.Load(EmulationSettings.Save());
+
+			strategy.Connector = connector;
+
+			strategy.Reset();
+			strategy.Start();
+
+			var lastStep = 0;
+
+			connector.ProgressChanged += step => SingleProgressChanged?.Invoke(strategy, parameters, lastStep = step);
+
+			connector.StateChanged += () =>
+			{
+				if (connector.State == ChannelStates.Stopped)
+				{
+					if (lastStep < 100)
+						SingleProgressChanged?.Invoke(strategy, parameters, 100);
+
+					int totalProgress;
+					var now = DateTime.UtcNow;
+					var duration = now - _startedAt;
+					var remaining = TimeSpan.Zero;
+					var updateProgress = true;
+
+					lock (_sync)
+					{
+						_startedConnectors.Remove(connector);
+
+						_leftIters--;
+
+						var doneIters = iterCount - _leftIters;
+
+						totalProgress = (int)((doneIters * 100.0) / iterCount);
+
+						if (_lastTotalProgress >= totalProgress)
+							updateProgress = false;
+						else
+						{
+							_lastTotalProgress = totalProgress;
+							remaining = _leftIters * (duration / doneIters);
+						}
+					}
+
+					if (updateProgress)
+						TotalProgressChanged?.Invoke(totalProgress, duration, remaining);
+
+					TryNextRun(enumerator, adapterCache, storageCache, iterCount);
+				}
+			};
+
+			connector.Connect();
+			connector.Start();
 		}
 
 		/// <summary>
@@ -316,24 +282,21 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Suspend()
 		{
-			ThreadingHelper.Thread(() =>
+			lock (_sync)
 			{
-				lock (_sync)
+				if (State != ChannelStates.Started)
+					return;
+
+				State = ChannelStates.Suspending;
+
+				foreach (var connector in _startedConnectors)
 				{
-					if (State != ChannelStates.Started)
-						return;
-
-					State = ChannelStates.Suspending;
-
-					foreach (var connector in _currentConnectors)
-					{
-						if (connector.State == ChannelStates.Started)
-							connector.Suspend();
-					}
-
-					State = ChannelStates.Suspended;
+					if (connector.State == ChannelStates.Started)
+						connector.Suspend();
 				}
-			}).Launch();
+
+				State = ChannelStates.Suspended;
+			}
 		}
 
 		/// <summary>
@@ -341,24 +304,21 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Resume()
 		{
-			ThreadingHelper.Thread(() =>
+			lock (_sync)
 			{
-				lock (_sync)
+				if (State != ChannelStates.Suspended)
+					return;
+
+				State = ChannelStates.Starting;
+
+				foreach (var connector in _startedConnectors)
 				{
-					if (State != ChannelStates.Suspended)
-						return;
-
-					State = ChannelStates.Starting;
-
-					foreach (var connector in _currentConnectors)
-					{
-						if (connector.State == ChannelStates.Suspended)
-							connector.Start();
-					}
-
-					State = ChannelStates.Started;
+					if (connector.State == ChannelStates.Suspended)
+						connector.Start();
 				}
-			}).Launch();
+
+				State = ChannelStates.Started;
+			}
 		}
 
 		/// <summary>
@@ -366,35 +326,32 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public void Stop()
 		{
-			ThreadingHelper.Thread(() =>
+			lock (_sync)
 			{
-				lock (_sync)
+				if (!(State is ChannelStates.Started or ChannelStates.Suspended))
+					return;
+
+				State = ChannelStates.Stopping;
+
+				_cancelEmulation = true;
+
+				foreach (var connector in _startedConnectors)
 				{
-					if (!(State is ChannelStates.Started or ChannelStates.Suspended))
-						return;
-
-					State = ChannelStates.Stopping;
-
-					_cancelEmulation = true;
-
-					foreach (var connector in _currentConnectors)
-					{
-						if (connector.State is
-							ChannelStates.Started or
-							ChannelStates.Starting or
-							ChannelStates.Suspended or
-							ChannelStates.Suspending)
-							connector.Disconnect();
-					}
+					if (connector.State is
+						ChannelStates.Started or
+						ChannelStates.Starting or
+						ChannelStates.Suspended or
+						ChannelStates.Suspending)
+						connector.Disconnect();
 				}
-			}).Launch();
+			}
 		}
 
 		/// <inheritdoc />
 		protected override void DisposeManaged()
 		{
-			base.DisposeManaged();
 			Stop();
+			base.DisposeManaged();
 		}
 	}
 }
