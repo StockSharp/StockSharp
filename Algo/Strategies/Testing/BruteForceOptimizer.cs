@@ -17,9 +17,9 @@ namespace StockSharp.Algo.Strategies.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The batch emulator of strategies.
+	/// The brute force optimizer of strategies.
 	/// </summary>
-	public class BatchEmulation : BaseLogReceiver
+	public class BruteForceOptimizer : BaseLogReceiver
 	{
 		private readonly List<HistoryEmulationConnector> _currentConnectors = new();
 		private bool _cancelEmulation;
@@ -33,29 +33,29 @@ namespace StockSharp.Algo.Strategies.Testing
 		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BatchEmulation"/>.
+		/// Initializes a new instance of the <see cref="BruteForceOptimizer"/>.
 		/// </summary>
 		/// <param name="securities">Instruments, the operation will be performed with.</param>
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
-		public BatchEmulation(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
+		public BruteForceOptimizer(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
 			: this(new CollectionSecurityProvider(securities), new CollectionPortfolioProvider(portfolios), storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BatchEmulation"/>.
+		/// Initializes a new instance of the <see cref="BruteForceOptimizer"/>.
 		/// </summary>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
-		public BatchEmulation(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry)
+		public BruteForceOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry)
 			: this(securityProvider, portfolioProvider, storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BatchEmulation"/>.
+		/// Initializes a new instance of the <see cref="BruteForceOptimizer"/>.
 		/// </summary>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <param name="storageRegistry">Market data storage.</param>
 		/// <param name="storageFormat">The format of market data. <see cref="StorageFormats.Binary"/> is used by default.</param>
 		/// <param name="drive">The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.</param>
-		public BatchEmulation(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry, StorageFormats storageFormat = StorageFormats.Binary, IMarketDataDrive drive = null)
+		public BruteForceOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry, StorageFormats storageFormat = StorageFormats.Binary, IMarketDataDrive drive = null)
 		{
 			_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 			_portfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
