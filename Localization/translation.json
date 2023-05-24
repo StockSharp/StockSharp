@@ -1,4 +1,8 @@
 {
+  "To": {
+    "en": "To",
+    "ru": "До"
+  },
   "SupportRemoteDrives": {
     "en": "Support remote drives.",
     "ru": "Поддерживать удаленные хранилища."
