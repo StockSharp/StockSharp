@@ -1,4 +1,8 @@
 {
+  "SupportRemoteDrives": {
+    "en": "Support remote drives.",
+    "ru": "Поддерживать удаленные хранилища."
+  },
   "BruteForce": {
     "en": "Brute Force",
     "ru": "Перебор"
