@@ -7,31 +7,41 @@
         Title="{x:Static loc:LocalizedStrings.XamlStr563}" Height="430" Width="525">
     
 	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="10" />
+			<RowDefinition Height="5" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="10" />
+			<RowDefinition Height="5" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
-        <ex:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
-
-		<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
-			<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" />
-			<Button x:Name="PauseBtn" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
-			<Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
-		</StackPanel>
-		<Grid Grid.Column="1" Grid.Row="2">  
-		   <ProgressBar x:Name="TestingProcess" Maximum="100" />
-		   <TextBlock x:Name="TestingProcessText" HorizontalAlignment="Center" VerticalAlignment="Center" />
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			
+			<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
+		    <ex:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
+		</Grid>
+		
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Button x:Name="StartBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" />
+			<Button x:Name="PauseBtn" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
+			<Button x:Name="StopBtn" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+			
+			<Grid Grid.Column="3" Grid.Row="2">  
+			   <ProgressBar x:Name="TestingProcess" Maximum="100" />
+			   <TextBlock x:Name="TestingProcessText" HorizontalAlignment="Center" VerticalAlignment="Center" />
+			</Grid>
 		</Grid>
 
-		<charting:StrategiesStatisticsPanel x:Name="Stat" ShowProgress="False" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0"/>
+		<charting:StrategiesStatisticsPanel x:Name="Stat" ShowProgress="False" Grid.Row="4" />
 	</Grid>
 </Window>
