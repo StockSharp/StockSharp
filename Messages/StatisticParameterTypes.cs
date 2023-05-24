@@ -1,107 +1,107 @@
-﻿namespace StockSharp.Algo.Statistics;
+﻿namespace StockSharp.Messages;
 
 /// <summary>
-/// <see cref="IStatisticParameter"/> types.
+/// Statistic types.
 /// </summary>
 public enum StatisticParameterTypes
 {
 	/// <summary>
-	/// <see cref="WinningTradesParameter"/>
+	/// Number of trades won (whose profit is greater than 0).
 	/// </summary>
 	WinningTrades,
 
 	/// <summary>
-	/// <see cref="TradeCountParameter"/>
+	/// Total number of trades.
 	/// </summary>
 	TradeCount,
 
 	/// <summary>
-	/// <see cref="RoundtripCountParameter"/>
+	/// Total number of closing trades.
 	/// </summary>
 	RoundtripCount,
 
 	/// <summary>
-	/// <see cref="AverageTradeProfitParameter"/>
+	/// Average trade profit.
 	/// </summary>
 	AverageTradeProfit,
 
 	/// <summary>
-	/// <see cref="AverageWinTradeParameter"/>
+	/// Average winning trade.
 	/// </summary>
 	AverageWinTrades,
 
 	/// <summary>
-	/// <see cref="AverageLossTradeParameter"/>
+	/// Average losing trade.
 	/// </summary>
 	AverageLossTrades,
 
 	/// <summary>
-	/// <see cref="LossingTradesParameter"/>
+	/// Number of trades lost with zero profit (whose profit is less than or equal to 0).
 	/// </summary>
 	LossingTrades,
 
 	/// <summary>
-	/// <see cref="MaxLongPositionParameter"/>
+	/// Maximum long position size.
 	/// </summary>
 	MaxLongPosition,
 
 	/// <summary>
-	/// <see cref="MaxShortPositionParameter"/>
+	/// Maximum short position size.
 	/// </summary>
 	MaxShortPosition,
 
 	/// <summary>
-	/// <see cref="MaxProfitParameter"/>
+	/// The maximal profit value for the entire period.
 	/// </summary>
 	MaxProfit,
 
 	/// <summary>
-	/// <see cref="MaxDrawdownParameter"/>
+	/// Maximum absolute drawdown during the whole period.
 	/// </summary>
 	MaxDrawdown,
 
 	/// <summary>
-	/// <see cref="MaxRelativeDrawdownParameter"/>
+	/// Maximum relative equity drawdown during the whole period.
 	/// </summary>
 	MaxRelativeDrawdown,
 
 	/// <summary>
-	/// <see cref="ReturnParameter"/>
+	/// Relative income for the whole time period.
 	/// </summary>
 	Return,
 
 	/// <summary>
-	/// <see cref="RecoveryFactorParameter"/>
+	/// Recovery factor (net profit / maximum drawdown).
 	/// </summary>
 	RecoveryFactor,
 
 	/// <summary>
-	/// <see cref="NetProfitParameter"/>
+	/// Net profit for whole time period.
 	/// </summary>
 	NetProfit,
 
 	/// <summary>
-	/// <see cref="MaxLatencyRegistrationParameter"/>
+	/// The maximal value of the order registration delay.
 	/// </summary>
 	MaxLatencyRegistration,
 
 	/// <summary>
-	/// <see cref="MaxLatencyCancellationParameter"/>
+	/// The maximal value of the order cancelling delay.
 	/// </summary>
 	MaxLatencyCancellation,
 
 	/// <summary>
-	/// <see cref="MinLatencyRegistrationParameter"/>
+	/// The minimal value of order registration delay.
 	/// </summary>
 	MinLatencyRegistration,
 
 	/// <summary>
-	/// <see cref="MinLatencyCancellationParameter"/>
+	/// The minimal value of order cancelling delay.
 	/// </summary>
 	MinLatencyCancellation,
 
 	/// <summary>
-	/// <see cref="OrderCountParameter"/>
+	/// Total number of orders.
 	/// </summary>
 	OrderCount,
 }

@@ -28,6 +28,7 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -39,7 +40,7 @@ namespace SampleHistoryTestingParallel
 	{
 		private DateTime _startEmulationTime;
 
-		private BatchEmulation _batchEmulation;
+		private BruteForceOptimizer _optimizer;
 
 		public MainWindow()
 		{
@@ -50,9 +51,9 @@ namespace SampleHistoryTestingParallel
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
-			if (_batchEmulation != null)
+			if (_optimizer != null)
 			{
-				_batchEmulation.Resume();
+				_optimizer.Resume();
 				return;
 			}
 
@@ -106,7 +107,7 @@ namespace SampleHistoryTestingParallel
 			var portfolio = Portfolio.CreateSimulator();
 
 			// create backtesting connector
-			_batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
+			_optimizer = new(new[] { security }, new[] { portfolio }, storageRegistry)
 			{
 				EmulationSettings =
 				{
@@ -123,17 +124,14 @@ namespace SampleHistoryTestingParallel
 			};
 
 			// handle historical time for update ProgressBar
-			_batchEmulation.TotalProgressChanged += (progress, duration, remaining) => this.GuiAsync(() =>
+			_optimizer.TotalProgressChanged += (progress, duration, remaining) => this.GuiAsync(() =>
 			{
 				TestingProcess.Value = progress;
 				TestingProcessText.Text = $"{progress}% | {(int)duration.TotalSeconds} sec left | {(int)remaining.TotalSeconds} sec rem";
 			});
 
-			_batchEmulation.StateChanged += (oldState, newState) =>
+			_optimizer.StateChanged += (oldState, newState) =>
 			{
-				if (newState == ChannelStates.Stopped)
-					_batchEmulation = null;
-
 				this.GuiAsync(() =>
 				{
 					switch (newState)
@@ -146,13 +144,15 @@ namespace SampleHistoryTestingParallel
 						case ChannelStates.Stopped:
 							SetIsEnabled(true, false, false);
 
-							if (!_batchEmulation.IsCancelled)
+							if (!_optimizer.IsCancelled)
 							{
 								TestingProcess.Value = TestingProcess.Maximum;
 								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
 							}
 							else
 								MessageBox.Show(this, LocalizedStrings.cancelled);
+
+							_optimizer = null;
 
 							break;
 						case ChannelStates.Started:
@@ -194,11 +194,14 @@ namespace SampleHistoryTestingParallel
 
 					this.GuiSync(() => Stat.AddStrategy(strategy));
 
-					return strategy;
+					var shortSmaParam = new StrategyParam<int>(strategy, nameof(strategy.ShortSma));
+					var longSmaParam = new StrategyParam<int>(strategy, nameof(strategy.LongSma));
+
+					return ((Strategy)strategy, new IStrategyParam[] { shortSmaParam, longSmaParam });
 				});
 
 			// start emulation
-			_batchEmulation.Start(strategies, periods.Count);
+			_optimizer.Start(strategies, periods.Count);
 		}
 
 		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)
@@ -213,12 +216,12 @@ namespace SampleHistoryTestingParallel
 
 		private void StopBtnClick(object sender, RoutedEventArgs e)
 		{
-			_batchEmulation.Stop();
+			_optimizer.Stop();
 		}
 
 		private void PauseBtnClick(object sender, RoutedEventArgs e)
 		{
-			_batchEmulation.Suspend();
+			_optimizer.Suspend();
 		}
 	}
 }

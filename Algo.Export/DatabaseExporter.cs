@@ -149,7 +149,7 @@ public class DatabaseExporter : BaseExporter
 			? db.GetTable<TValue>()
 			: db.CreateTable<TValue>();
 
-		foreach (var batch in values.Batch(BatchSize).Select(b => b.ToArray()))
+		foreach (var batch in values.Chunk(BatchSize).Select(b => b.ToArray()))
 		{
 			if (!CanProcess(batch.Length))
 				break;

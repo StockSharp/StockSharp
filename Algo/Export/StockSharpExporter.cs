@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Export
 			var count = 0;
 			var lastTime = default(DateTimeOffset?);
 
-			foreach (var batch in messages.Batch(BatchSize))
+			foreach (var batch in messages.Chunk(BatchSize))
 			{
 				foreach (var group in batch.GroupBy(m => m.TryGetSecurityId()))
 				{

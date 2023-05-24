@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Statistics
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface, describing statistic parameter, calculated based on orders.

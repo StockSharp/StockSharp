@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Statistics
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface, describing statistic parameter, calculated based on the profit-loss value (maximal contraction, Sharp coefficient etc.).

@@ -428,7 +428,7 @@
 		{
 		}
 
-		int? IIndicator.NumValuesToInitialize => _period;
+		int IIndicator.NumValuesToInitialize => _period;
 
 		Guid IIndicator.Id { get; } = default;
 		public string Name { get; set; }

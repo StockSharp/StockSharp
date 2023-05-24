@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Statistics
 	using Ecng.Common;
 
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface, describing statistic parameter, calculated based on position.

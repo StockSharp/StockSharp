@@ -21,6 +21,8 @@ namespace StockSharp.Algo.Statistics
 	using Ecng.Serialization;
 	using Ecng.Common;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The interface, describing statistic parameter.
 	/// </summary>
