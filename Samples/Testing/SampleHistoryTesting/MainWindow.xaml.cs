@@ -28,7 +28,6 @@ namespace SampleHistoryTesting
 	using Ecng.Collections;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -413,19 +412,11 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(connector);
 
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
-				{
-					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? MarketDataBuildModes.Build : MarketDataBuildModes.Load,
-					BuildCandlesFrom2 = emulationInfo.UseOrderLog ? DataType.OrderLog : null,
-				};
-
 				// create strategy based on 80 5-min и 10 5-min
 				var strategy = new SmaStrategy
 				{
-					Subscription = new(series) { DisableEntity = true },
-					
-					LongSma = { Length = 80 },
-					ShortSma = { Length = 10 },
+					LongSma = 80,
+					ShortSma = 10,
 					Volume = 1,
 					Portfolio = connector.Portfolios.First(),
 					Security = security,

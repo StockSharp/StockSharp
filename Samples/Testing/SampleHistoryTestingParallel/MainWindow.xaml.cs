@@ -70,12 +70,15 @@ namespace SampleHistoryTestingParallel
 			var fileLogListener = new FileLogListener("sample.log");
 			logManager.Listeners.Add(fileLogListener);
 
+			(int min, int max) longRange = new(50, 100);
+			(int min, int max) shortRange = new(5, 40);
+
 			// SMA periods
 			var periods = new List<(int longMa, int shortMa, Color color)>();
 
-			for (var l = 100; l >= 50; l -= 1)
+			for (var l = longRange.max; l >= longRange.min; l -= 1)
 			{
-				for (var s = 40; s >= 5; s -= 1)
+				for (var s = shortRange.max; s >= shortRange.min; s -= 1)
 				{
 					periods.Add((l, s, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
 				}
@@ -175,10 +178,8 @@ namespace SampleHistoryTestingParallel
 					// create strategy based SMA
 					var strategy = new SampleHistoryTesting.SmaStrategy
 					{
-						Subscription = new(new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)) { DisableEntity = true },
-
-						ShortSma = { Length = period.shortMa },
-						LongSma = { Length = period.longMa },
+						ShortSma = period.shortMa,
+						LongSma = period.longMa,
 
 						Volume = 1,
 						Security = security,

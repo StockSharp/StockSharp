@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleHistoryTesting
 {
+	using System;
 	using System.Linq;
 	using System.Collections.Generic;
 
@@ -35,27 +36,55 @@ namespace SampleHistoryTesting
 
 		private readonly List<MyTrade> _myTrades = new();
 		private bool? _isShortLessThenLong;
-
-		public Subscription Subscription { get; set; }
+		private SimpleMovingAverage _shortSma;
+		private SimpleMovingAverage _longSma;
 
 		public IChartCandleElement ChartCandlesElem { get; set; }
 		public IChartTradeElement ChartTradesElem { get; set; }
 		public IChartIndicatorElement ChartLongElem { get; set; }
 		public IChartIndicatorElement ChartShortElem { get; set; }
 
-		public SimpleMovingAverage LongSma { get; } = new();
-		public SimpleMovingAverage ShortSma { get; } = new();
+		public SmaStrategy()
+        {
+			_longSmaParam = this.Param(nameof(LongSma), 80);
+			_shortSmaParam = this.Param(nameof(ShortSma), 30);
+		}
+
+		private readonly StrategyParam<int> _longSmaParam;
+
+		public int LongSma
+		{
+			get => _longSmaParam.Value;
+			set => _longSmaParam.Value = value;
+		}
+
+		private readonly StrategyParam<int> _shortSmaParam;
+
+		public int ShortSma
+		{
+			get => _shortSmaParam.Value;
+			set => _shortSmaParam.Value = value;
+		}
 
 		protected override void OnStarted()
 		{
-			// !!! DO NOT FORGET add it in case use AllowTrading property (see code below)
-			Indicators.Add(LongSma);
-			Indicators.Add(ShortSma);
+			// !!! DO NOT FORGET add it in case use IsFormed property (see code below)
+			Indicators.Add(_longSma = new SimpleMovingAverage { Length = LongSma });
+			Indicators.Add(_shortSma = new SimpleMovingAverage { Length = ShortSma });
 
 			_chart = this.GetChart();
 
-			this
-				.WhenCandlesFinished(Subscription.CandleSeries)
+			var subscription = new Subscription(DataType.TimeFrame(TimeSpan.FromMinutes(5)), Security)
+			{
+				DisableEntity = true,
+				MarketData =
+				{
+					IsFinishedOnly = true,
+				}
+			};
+
+			subscription
+				.WhenCandleReceived(this)
 				.Do(ProcessCandle)
 				.Apply(this);
 
@@ -66,7 +95,7 @@ namespace SampleHistoryTesting
 
 			_isShortLessThenLong = null;
 
-			Subscribe(Subscription);
+			Subscribe(subscription);
 
 			base.OnStarted();
 		}
@@ -83,11 +112,12 @@ namespace SampleHistoryTesting
 			this.AddInfoLog(LocalizedStrings.Str3634Params, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
 
 			// process new candle
-			var longValue = LongSma.Process(candle);
-			var shortValue = ShortSma.Process(candle);
+			var longValue = _longSma.Process(candle);
+			var shortValue = _shortSma.Process(candle);
 
 			// all indicators added in OnStarted now is fully formed and we can use it
-			if (AllowTrading)
+			// or user turned off allow trading
+			if (this.IsFormedAndAllowTrading())
 			{
 				// calc new values for short and long
 				var isShortLessThenLong = shortValue.GetValue<decimal>() < longValue.GetValue<decimal>();
