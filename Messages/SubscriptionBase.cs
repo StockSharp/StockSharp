@@ -2,8 +2,6 @@
 
 using System;
 
-using Ecng.Common;
-
 /// <summary>
 /// Subscription.
 /// </summary>
@@ -23,6 +21,26 @@ public class SubscriptionBase
 	/// Subscription message.
 	/// </summary>
 	public ISubscriptionMessage SubscriptionMessage { get; }
+
+	/// <summary>
+	/// <see cref="MarketDataMessage"/>
+	/// </summary>
+	public MarketDataMessage MarketData => (MarketDataMessage)SubscriptionMessage;
+
+	/// <summary>
+	/// <see cref="SecurityLookupMessage"/>
+	/// </summary>
+	public SecurityLookupMessage SecurityLookup => (SecurityLookupMessage)SubscriptionMessage;
+
+	/// <summary>
+	/// <see cref="PortfolioLookupMessage"/>
+	/// </summary>
+	public PortfolioLookupMessage PortfolioLookup => (PortfolioLookupMessage)SubscriptionMessage;
+
+	/// <summary>
+	/// <see cref="OrderStatusMessage"/>
+	/// </summary>
+	public OrderStatusMessage OrderStatus => (OrderStatusMessage)SubscriptionMessage;
 
 	/// <summary>
 	/// Request identifier.
