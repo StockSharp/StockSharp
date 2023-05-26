@@ -25,8 +25,6 @@ namespace SampleHistoryTestingParallel
 	using Ecng.Xaml;
 	using Ecng.Common;
 
-	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Testing;
@@ -35,12 +33,13 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
+	using StockSharp.Algo;
 
 	public partial class MainWindow
 	{
 		private DateTime _startEmulationTime;
 
-		private BruteForceOptimizer _optimizer;
+		private BaseOptimizer _optimizer;
 
 		public MainWindow()
 		{
@@ -109,21 +108,32 @@ namespace SampleHistoryTestingParallel
 			// test portfolio
 			var portfolio = Portfolio.CreateSimulator();
 
-			// create backtesting connector
-			_optimizer = new(new[] { security }, new[] { portfolio }, storageRegistry)
+			var secProvider = new CollectionSecurityProvider(new[] { security });
+			var pfProvider = new CollectionPortfolioProvider(new[] { portfolio });
+
+			if (BruteForce.IsChecked == true)
+				_optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+			else
+				_optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry);
+
+			_optimizer.EmulationSettings.MarketTimeChangedInterval = timeFrame;
+			_optimizer.EmulationSettings.StartTime = startTime;
+			_optimizer.EmulationSettings.StopTime = stopTime;
+
+			// count of parallel testing strategies
+			// if not set, then CPU count * 2
+			//_optimizer.EmulationSettings.BatchSize = 3;
+
+			// settings caching mode non security optimized param
+			_optimizer.AdapterCache = new();
+
+			// handle single iteration progress
+			_optimizer.SingleProgressChanged += (s, a, p) =>
 			{
-				EmulationSettings =
-				{
-					MarketTimeChangedInterval = timeFrame,
-					StartTime = startTime,
-					StopTime = stopTime,
+				if (p != 100)
+					return;
 
-					// count of parallel testing strategies
-					// if not set, then CPU count * 2
-					//BatchSize = 3,
-				},
-
-				AdapterCache = new(),
+				this.GuiAsync(() => Stat.AddStrategy(s));
 			};
 
 			// handle historical time for update ProgressBar
@@ -172,37 +182,59 @@ namespace SampleHistoryTestingParallel
 
 			_startEmulationTime = DateTime.Now;
 
-			var strategies = periods
-				.Select(period =>
-				{
-					// create strategy based SMA
-					var strategy = new SampleHistoryTesting.SmaStrategy
+			if (_optimizer is BruteForceOptimizer btOptimizer)
+			{
+				var strategies = periods
+					.Select(period =>
 					{
-						ShortSma = period.shortMa,
-						LongSma = period.longMa,
+						// create strategy based SMA
+						var strategy = new SampleHistoryTesting.SmaStrategy
+						{
+							ShortSma = period.shortMa,
+							LongSma = period.longMa,
 
-						Volume = 1,
-						Security = security,
-						Portfolio = portfolio,
-						//Connector = connector,
+							Volume = 1,
+							Security = security,
+							Portfolio = portfolio,
+							//Connector = connector,
 
-						// by default interval is 1 min,
-						// it is excessively for time range with several months
-						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
+							// by default interval is 1 min,
+							// it is excessively for time range with several months
+							UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
 
-						Name = $"L={period.longMa} S={period.shortMa}",
-					};
+							Name = $"L={period.longMa} S={period.shortMa}",
+						};
 
-					this.GuiSync(() => Stat.AddStrategy(strategy));
+						return ((Strategy)strategy, new IStrategyParam[]
+						{
+							strategy.Parameters.GetByName(nameof(strategy.ShortSma)),
+							strategy.Parameters.GetByName(nameof(strategy.LongSma)),
+						});
+					});
 
-					var shortSmaParam = new StrategyParam<int>(strategy, nameof(strategy.ShortSma));
-					var longSmaParam = new StrategyParam<int>(strategy, nameof(strategy.LongSma));
+				// start emulation
+				btOptimizer.Start(strategies, periods.Count);
+			}
+			else
+			{
+				var strategy = new SampleHistoryTesting.SmaStrategy
+				{
+					Volume = 1,
+					Security = security,
+					Portfolio = portfolio,
+					//Connector = connector,
 
-					return ((Strategy)strategy, new IStrategyParam[] { shortSmaParam, longSmaParam });
-				});
+					// by default interval is 1 min,
+					// it is excessively for time range with several months
+					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
+				};
 
-			// start emulation
-			_optimizer.Start(strategies, periods.Count);
+				((GeneticOptimizer)_optimizer).Start(strategy, new (IStrategyParam, object, object, int)[]
+				{
+					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, 0),
+					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, 0),
+				}, 20, s => s.PnL);
+			}
 		}
 
 		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)

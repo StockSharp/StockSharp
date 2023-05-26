@@ -12,6 +12,8 @@
 			<RowDefinition Height="5" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
@@ -28,6 +30,17 @@
 		<Grid Grid.Row="2">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			
+			<RadioButton x:Name="BruteForce" GroupName="OptimizerType" IsChecked="True" Content="{x:Static loc:LocalizedStrings.BruteForce}" />
+			<RadioButton x:Name="Genetic" GroupName="OptimizerType" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Genetic}" />
+		</Grid>
+		
+		<Grid Grid.Row="4">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="*" />
@@ -42,6 +55,6 @@
 			</Grid>
 		</Grid>
 
-		<charting:StrategiesStatisticsPanel x:Name="Stat" ShowProgress="False" Grid.Row="4" />
+		<charting:StrategiesStatisticsPanel x:Name="Stat" ShowProgress="False" Grid.Row="6" />
 	</Grid>
 </Window>
