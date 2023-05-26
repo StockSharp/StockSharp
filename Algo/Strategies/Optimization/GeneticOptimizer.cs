@@ -227,7 +227,7 @@ public class GeneticOptimizer : BaseOptimizer
 		//_ga.GenerationRan += OnGenerationRan;
 		_ga.TerminationReached += OnTerminationReached;
 
-		OnStart(iterCount);
+		OnStart(iterCount * EmulationSettings.BatchSize);
 
 		Task.Run(async () =>
 		{
@@ -252,10 +252,6 @@ public class GeneticOptimizer : BaseOptimizer
 	//private void OnGenerationRan(object sender, EventArgs e)
 	//{
 	//}
-
-	/// <inheritdoc />
-	protected override int GetDoneIteration()
-		=> _ga.GenerationsNumber;
 
 	/// <inheritdoc />
 	public override void Suspend()

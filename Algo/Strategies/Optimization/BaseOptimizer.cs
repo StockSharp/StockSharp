@@ -45,6 +45,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private int _lastTotalProgress;
 	private DateTime _startedAt;
 	private int _iterCount;
+	private int _doneIters;
 
 	private MarketDataStorageCache _adapterCache;
 	private MarketDataStorageCache _storageCache;
@@ -207,6 +208,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		_startedAt = DateTime.UtcNow;
 		_lastTotalProgress = 0;
 		_iterCount = iterationCount;
+		_doneIters = 0;
 
 		State = ChannelStates.Starting;
 		State = ChannelStates.Started;
@@ -383,7 +385,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			{
 				_startedConnectors.Remove(connector);
 
-				progress = (int)((GetDoneIteration() * 100.0) / _iterCount);
+				_doneIters++;
+
+				progress = (int)((_doneIters * 100.0) / _iterCount);
 
 				if (_lastTotalProgress >= progress)
 					progress = null;
@@ -408,10 +412,4 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		connector.Connect();
 		connector.Start();
 	}
-
-	/// <summary>
-	/// Get done iterations count.
-	/// </summary>
-	/// <returns>Done iterations count.</returns>
-	protected abstract int GetDoneIteration();
 }
