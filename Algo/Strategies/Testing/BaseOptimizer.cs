@@ -10,7 +10,6 @@ using Ecng.Serialization;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
-using StockSharp.Localization;
 using StockSharp.Logging;
 using StockSharp.Messages;
 
@@ -42,9 +41,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 	private readonly HashSet<HistoryEmulationConnector> _startedConnectors = new();
 	private bool _cancelEmulation;
-	private int _leftIters;
 	private int _lastTotalProgress;
 	private DateTime _startedAt;
+	private int _iterCount;
 
 	private MarketDataStorageCache _adapterCache;
 	private MarketDataStorageCache _storageCache;
@@ -200,24 +199,15 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <summary>
 	/// Start optimization.
 	/// </summary>
-	/// <param name="iterationCount">Iteration count.</param>
-	protected void OnStart(ref int iterationCount)
+	/// <param name="iterationCount">Iterations count.</param>
+	protected void OnStart(int iterationCount)
 	{
-		if (iterationCount <= 0)
-			throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.Str1219);
-
 		_cancelEmulation = false;
 		_startedAt = DateTime.UtcNow;
 		_lastTotalProgress = 0;
-
-		var maxIters = EmulationSettings.MaxIterations;
-		if (maxIters > 0 && iterationCount > maxIters)
-			iterationCount = maxIters;
+		_iterCount = iterationCount;
 
 		State = ChannelStates.Starting;
-
-		_leftIters = iterationCount;
-
 		State = ChannelStates.Started;
 	}
 
@@ -304,11 +294,10 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
 	/// <param name="adapterCache"><see cref="HistoryMessageAdapter.AdapterCache"/></param>
 	/// <param name="storageCache"><see cref="HistoryMessageAdapter.StorageCache"/></param>
-	/// <param name="iterCount">Iteration count.</param>
 	/// <param name="iterationFinished">Callback to notify the iteration was finished.</param>
 	protected internal void TryNextRun(Func<(Strategy, IStrategyParam[])?> tryGetNext,
 		MarketDataStorageCache adapterCache, MarketDataStorageCache storageCache,
-		int iterCount, Action iterationFinished)
+		Action iterationFinished)
 	{
 		if (tryGetNext is null)
 			throw new ArgumentNullException(nameof(tryGetNext));
@@ -387,38 +376,41 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (lastStep < 100)
 				SingleProgressChanged?.Invoke(strategy, parameters, 100);
 
-			int totalProgress;
-			var now = DateTime.UtcNow;
-			var duration = now - _startedAt;
-			var remaining = TimeSpan.Zero;
-			var updateProgress = true;
+			int? progress;
 
 			lock (_sync)
 			{
 				_startedConnectors.Remove(connector);
 
-				_leftIters--;
+				progress = (int)((GetDoneIteration() * 100.0) / _iterCount);
 
-				var doneIters = iterCount - _leftIters;
-
-				totalProgress = (int)((doneIters * 100.0) / iterCount);
-
-				if (_lastTotalProgress >= totalProgress)
-					updateProgress = false;
+				if (_lastTotalProgress >= progress)
+					progress = null;
 				else
-				{
-					_lastTotalProgress = totalProgress;
-					remaining = _leftIters * (duration / doneIters);
-				}
+					_lastTotalProgress = progress.Value;
 			}
 
-			if (updateProgress)
-				TotalProgressChanged?.Invoke(totalProgress, duration, remaining);
+			if (progress is not null)
+			{
+				var evt = TotalProgressChanged;
 
+				if (evt is not null)
+				{
+					var duration = DateTime.UtcNow - _startedAt;
+					evt(progress.Value, duration, (100.0 / progress.Value) * duration - duration);
+				}
+			}
+			
 			iterationFinished();
 		};
 
 		connector.Connect();
 		connector.Start();
 	}
+
+	/// <summary>
+	/// Get done iterations count.
+	/// </summary>
+	/// <returns>Done iterations count.</returns>
+	protected abstract int GetDoneIteration();
 }

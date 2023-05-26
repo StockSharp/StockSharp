@@ -24,6 +24,7 @@ namespace SampleHistoryTestingParallel
 
 	using Ecng.Xaml;
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
@@ -46,6 +47,7 @@ namespace SampleHistoryTestingParallel
 			InitializeComponent();
 
 			HistoryPath.Folder = Paths.HistoryDataPath;
+			GeneticSettings.SelectedObject = new GeneticSettings();
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
@@ -56,6 +58,8 @@ namespace SampleHistoryTestingParallel
 				return;
 			}
 
+			OptimizeTypeGrid.IsEnabled = false;
+
 			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
 				MessageBox.Show(this, LocalizedStrings.Str3014);
@@ -63,6 +67,7 @@ namespace SampleHistoryTestingParallel
 			}
 
 			TestingProcess.Value = 0;
+			TestingProcessText.Text = string.Empty;
 			Stat.Clear();
 
 			var logManager = new LogManager();
@@ -152,10 +157,10 @@ namespace SampleHistoryTestingParallel
 						case ChannelStates.Stopping:
 						case ChannelStates.Starting:
 						case ChannelStates.Suspending:
-							SetIsEnabled(false, false, false);
+							SetIsEnabled(false, false, false, false);
 							break;
 						case ChannelStates.Stopped:
-							SetIsEnabled(true, false, false);
+							SetIsEnabled(true, false, false, true);
 
 							if (!_optimizer.IsCancelled)
 							{
@@ -169,10 +174,10 @@ namespace SampleHistoryTestingParallel
 
 							break;
 						case ChannelStates.Started:
-							SetIsEnabled(false, true, true);
+							SetIsEnabled(false, true, true, false);
 							break;
 						case ChannelStates.Suspended:
-							SetIsEnabled(true, false, true);
+							SetIsEnabled(true, false, true, false);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(newState.ToString());
@@ -229,21 +234,25 @@ namespace SampleHistoryTestingParallel
 					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
 				};
 
-				((GeneticOptimizer)_optimizer).Start(strategy, new (IStrategyParam, object, object, int)[]
+				var go = (GeneticOptimizer)_optimizer;
+				go.EmulationSettings.MaxIterations = 20;
+				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
+				go.Start(strategy, new (IStrategyParam, object, object, int)[]
 				{
 					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, 0),
 					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, 0),
-				}, 20, s => s.PnL);
+				}, s => s.PnL);
 			}
 		}
 
-		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)
+		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop, bool canType)
 		{
 			this.GuiAsync(() =>
 			{
 				StopBtn.IsEnabled = canStop;
 				StartBtn.IsEnabled = canStart;
 				PauseBtn.IsEnabled = canSuspend;
+				OptimizeTypeGrid.IsEnabled = canType;
 			});
 		}
 

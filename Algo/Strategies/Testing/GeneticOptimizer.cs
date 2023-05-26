@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Ecng.Collections;
 using Ecng.Common;
 
 using GeneticSharp;
@@ -23,14 +25,12 @@ public class GeneticOptimizer : BaseOptimizer
 		private readonly GeneticOptimizer _optimizer;
 		private readonly Strategy _strategy;
 		private readonly Func<Strategy, decimal> _calcFitness;
-		private readonly int _iterCount;
 
-		public StrategyFitness(GeneticOptimizer optimizer, Strategy strategy, Func<Strategy, decimal> calcFitness, int iterCount)
+		public StrategyFitness(GeneticOptimizer optimizer, Strategy strategy, Func<Strategy, decimal> calcFitness)
 		{
 			_optimizer = optimizer ?? throw new ArgumentNullException(nameof(optimizer));
 			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			_calcFitness = calcFitness ?? throw new ArgumentNullException(nameof(calcFitness));
-			_iterCount = iterCount;
 		}
 
 		double IFitness.Evaluate(IChromosome chromosome)
@@ -38,33 +38,45 @@ public class GeneticOptimizer : BaseOptimizer
 			var spc = (StrategyParametersChromosome)chromosome;
 			var strategy = _strategy.Clone();
 
-			foreach (var gene in spc.GetGenes())
+			var genes = spc.GetGenes();
+			var parameters = new IStrategyParam[genes.Length];
+
+			for (var i = 0; i < genes.Length; i++)
 			{
+				var gene = genes[i];
 				var (param, value) = ((IStrategyParam, object))gene.Value;
 				_strategy.Parameters[param.Id].Value = value;
+				parameters[i] = param;
 			}
 
 			using var wait = new ManualResetEvent(false);
+			_optimizer._events.Add(wait);
 
-			var adapterCache = _optimizer.AllocateAdapterCache();
-			var storageCache = _optimizer.AllocateStorageCache();
+			try
+			{
+				var adapterCache = _optimizer.AllocateAdapterCache();
+				var storageCache = _optimizer.AllocateStorageCache();
 
-			_optimizer.TryNextRun(
-				() => (strategy, null),
-				adapterCache,
-				storageCache,
-				_iterCount,
-				() =>
-				{
-					_optimizer.FreeAdapterCache(adapterCache);
-					_optimizer.FreeStorageCache(storageCache);
+				_optimizer.TryNextRun(
+					() => (strategy, parameters),
+					adapterCache,
+					storageCache,
+					() =>
+					{
+						_optimizer.FreeAdapterCache(adapterCache);
+						_optimizer.FreeStorageCache(storageCache);
 
-					wait.Set();
-				});
+						wait.Set();
+					});
 
-			wait.WaitOne();
+				wait.WaitOne();
 
-			return (double)_calcFitness(strategy);
+				return (double)_calcFitness(strategy);
+			}
+			finally
+			{
+				_optimizer._events.Remove(wait);
+			}
 		}
 	}
 
@@ -124,6 +136,7 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 	}
 
+	private readonly SynchronizedSet<ManualResetEvent> _events = new();
 	private GeneticAlgorithm _ga;
 
 	/// <summary>
@@ -161,7 +174,6 @@ public class GeneticOptimizer : BaseOptimizer
 	/// </summary>
 	/// <param name="strategy">Strategy.</param>
 	/// <param name="parameters">Parameters used to generate chromosomes.</param>
-	/// <param name="iterationCount"></param>
 	/// <param name="calcFitness">Calc fitness value function.</param>
 	/// <param name="selection"><see cref="ISelection"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Selection"/> will be used.</param>
 	/// <param name="crossover"><see cref="ICrossover"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Crossover"/> will be used.</param>
@@ -170,7 +182,6 @@ public class GeneticOptimizer : BaseOptimizer
 	public void Start(
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, int precision)> parameters,
-		int iterationCount,
 		Func<Strategy, decimal> calcFitness,
 		ISelection selection = default,
 		ICrossover crossover = default,
@@ -186,15 +197,15 @@ public class GeneticOptimizer : BaseOptimizer
 		if (_ga is not null)
 			throw new InvalidOperationException("Not stopped.");
 
-		OnStart(ref iterationCount);
-
-		var population = new Population(Settings.PopulationSize, Settings.PopulationSizeMaximum, new StrategyParametersChromosome(parameters.ToArray()));
+		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(parameters.ToArray()));
 
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
 
-		_ga = new(population, new StrategyFitness(this, strategy, calcFitness, iterationCount), selection, crossover, mutation)
+		var iterCount = EmulationSettings.MaxIterations.Max(1);
+
+		_ga = new(population, new StrategyFitness(this, strategy, calcFitness), selection, crossover, mutation)
 		{
 			TaskExecutor = new ParallelTaskExecutor
 			{
@@ -204,17 +215,19 @@ public class GeneticOptimizer : BaseOptimizer
 
 			Termination = new OrTermination(
 				new FitnessStagnationTermination(Settings.StagnationGenerations),
-				new GenerationNumberTermination(iterationCount)
+				new GenerationNumberTermination(iterCount)
 			),
 
-			MutationProbability = Settings.MutationProbability,
-			CrossoverProbability = Settings.CrossoverProbability,
+			MutationProbability = (float)Settings.MutationProbability,
+			CrossoverProbability = (float)Settings.CrossoverProbability,
 
 			Reinsertion = Settings.Reinsertion.CreateInstance<IReinsertion>(),
 		};
 
-		_ga.GenerationRan += OnGenerationRan;
+		//_ga.GenerationRan += OnGenerationRan;
 		_ga.TerminationReached += OnTerminationReached;
+
+		OnStart(iterCount);
 
 		Task.Run(async () =>
 		{
@@ -223,39 +236,65 @@ public class GeneticOptimizer : BaseOptimizer
 		});
 	}
 
-	private void OnTerminationReached(object sender, EventArgs e)
+	private void RaiseStop()
 	{
-		// TODO
-
-		if (State != ChannelStates.Stopping)
-			State = ChannelStates.Stopping;
-
 		State = ChannelStates.Stopped;
 	}
 
-	private void OnGenerationRan(object sender, EventArgs e)
+	private void OnTerminationReached(object sender, EventArgs e)
 	{
+		if (State != ChannelStates.Stopping)
+			State = ChannelStates.Stopping;
 
+		RaiseStop();
 	}
+
+	//private void OnGenerationRan(object sender, EventArgs e)
+	//{
+	//}
+
+	/// <inheritdoc />
+	protected override int GetDoneIteration()
+		=> _ga.GenerationsNumber;
 
 	/// <inheritdoc />
 	public override void Suspend()
 	{
-		_ga.Stop();
 		base.Suspend();
+	
+		_ga.Stop();
 	}
 
 	/// <inheritdoc />
 	public override void Resume()
 	{
-		_ga.Resume();
 		base.Resume();
+
+		Task.Run(async () =>
+		{
+			await Task.Yield();
+			_ga.Resume();
+		});
 	}
 
 	/// <inheritdoc />
 	public override void Stop()
 	{
-		_ga.Stop();
 		base.Stop();
+
+		_ga.Stop();
+		_events.CopyAndClear().ForEach(e =>
+		{
+			try
+			{
+				e.Set();
+			}
+			catch
+			{
+				// handle can be already disposed
+			}
+		});
+
+		RaiseStop();
 	}
 }

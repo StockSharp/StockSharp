@@ -1,4 +1,76 @@
 {
+  "Population": {
+    "en": "Population",
+    "ru": "Популяция"
+  },
+  "PopulationDesc": {
+    "en": "The initial size of population.",
+    "ru": "Начальный размер популяции."
+  },
+  "PopulationMax": {
+    "en": "Population (max)",
+    "ru": "Популяция (макс)"
+  },
+  "PopulationMaxDesc": {
+    "en": "The maximum population.",
+    "ru": "Максимальный размер популяции."
+  },
+  "Stagnation": {
+    "en": "Stagnation",
+    "ru": "Стагнация"
+  },
+  "StagnationDesc": {
+    "en": "The genetic algorithm will be terminate when the best chromosome's fitness has no change in the last generations specified.",
+    "ru": "Генетический алгоритм завершится, когда приспособленность наилучшей хромосомы не изменится в последних указанных поколениях."
+  },
+  "MutationProbability": {
+    "en": "Mutation probability",
+    "ru": "Вероятность мутации"
+  },
+  "MutationProbabilityDesc": {
+    "en": "Mutation probability.",
+    "ru": "Вероятность мутации."
+  },
+  "CrossoverProbability": {
+    "en": "Crossover probability",
+    "ru": "Вероятность скрещивания"
+  },
+  "CrossoverProbabilityDesc": {
+    "en": "Crossover probability.",
+    "ru": "Вероятность скрещивания."
+  },
+  "Reinsertion": {
+    "en": "Reinsertion",
+    "ru": "Повторение"
+  },
+  "ReinsertionDesc": {
+    "en": "Reinsertion algorithm.",
+    "ru": "Алгоритм повторения."
+  },
+  "Mutation": {
+    "en": "Mutation",
+    "ru": "Мутация"
+  },
+  "MutationDesc": {
+    "en": "Mutation algorithm.",
+    "ru": "Алгоритм мутации."
+  },
+  "Crossover": {
+    "en": "Crossover",
+    "ru": "Скрещивание"
+  },
+  "CrossoverDesc": {
+    "en": "Crossover algorithm.",
+    "ru": "Алгоритм скрещивания."
+  },
+  "Selection": {
+    "en": "Selection",
+    "ru": "Отбор"
+  },
+  "SelectionDesc": {
+    "en": "Selection algorithm.",
+    "ru": "Алгоритм отбора."
+  },
   "SupportRemoteDrives": {
     "en": "Support remote drives.",
     "ru": "Поддерживать удаленные хранилища."

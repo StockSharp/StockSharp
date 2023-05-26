@@ -8,12 +8,15 @@ using Ecng.Common;
 
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
+using StockSharp.Localization;
 
 /// <summary>
 /// The brute force optimizer of strategies.
 /// </summary>
 public class BruteForceOptimizer : BaseOptimizer
 {
+	private int _doneIters;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BruteForceOptimizer"/>.
 	/// </summary>
@@ -60,11 +63,19 @@ public class BruteForceOptimizer : BaseOptimizer
 		if (strategies is null)
 			throw new ArgumentNullException(nameof(strategies));
 
-		var was = iterationCount;
-		OnStart(ref iterationCount);
+		if (iterationCount <= 0)
+			throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.Str1219);
 
-		if (was > iterationCount)
+		var maxIters = EmulationSettings.MaxIterations;
+		if (maxIters > 0 && iterationCount > maxIters)
+		{
+			iterationCount = maxIters;
 			strategies = strategies.Take(iterationCount);
+		}
+
+		OnStart(iterationCount);
+
+		_doneIters = 0;
 
 		var batchSize = EmulationSettings.BatchSize;
 
@@ -86,11 +97,14 @@ public class BruteForceOptimizer : BaseOptimizer
 						enumerator.Dispose();
 						return default;
 					},
-					adapterCache, storageCache, iterationCount,
+					adapterCache, storageCache,
 					() => _());
 			}
 
 			_();
 		}
 	}
+
+	/// <inheritdoc/>
+	protected override int GetDoneIteration() => ++_doneIters;
 }
