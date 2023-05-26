@@ -790,7 +790,7 @@ namespace StockSharp.Algo.Strategies
 		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
-		public CachedSynchronizedDictionary<string, IStrategyParam> Parameters { get; } = new(StringComparer.InvariantCultureIgnoreCase);
+		public StrategyParameterDictionary Parameters { get; } = new();
 
 		/// <summary>
 		/// <see cref="Parameters"/> change event.
