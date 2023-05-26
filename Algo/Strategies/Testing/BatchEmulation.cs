@@ -10,7 +10,7 @@ using StockSharp.BusinessEntities;
 /// <summary>
 /// </summary>
 [Obsolete("Use BruteForceOptimizer.")]
-public class BatchEmulation : BruteForceOptimizer
+public class BatchEmulation : Optimization.BruteForceOptimizer
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BatchEmulation"/>.

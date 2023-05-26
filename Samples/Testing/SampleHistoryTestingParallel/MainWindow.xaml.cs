@@ -28,7 +28,7 @@ namespace SampleHistoryTestingParallel
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
-	using StockSharp.Algo.Strategies.Testing;
+	using StockSharp.Algo.Strategies.Optimization;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;

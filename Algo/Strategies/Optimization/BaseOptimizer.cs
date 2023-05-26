@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Testing;
+﻿namespace StockSharp.Algo.Strategies.Optimization;
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using Ecng.Common;
 using Ecng.Serialization;
 
 using StockSharp.Algo.Storages;
+using StockSharp.Algo.Strategies.Testing;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
 using StockSharp.Logging;

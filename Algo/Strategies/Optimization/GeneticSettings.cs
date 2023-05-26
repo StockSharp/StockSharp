@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Testing;
+﻿namespace StockSharp.Algo.Strategies.Optimization;
 
 using System;
 using System.ComponentModel.DataAnnotations;
