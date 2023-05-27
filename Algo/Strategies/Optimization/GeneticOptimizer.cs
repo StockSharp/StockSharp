@@ -98,12 +98,6 @@ public class GeneticOptimizer : BaseOptimizer
 		public override IChromosome CreateNew()
 			=> new StrategyParametersChromosome(_parameters);
 
-		private static decimal GetDecimal(decimal min, decimal max, int precision)
-		{
-			var value = RandomGen.GetDouble() * ((double)max - (double)min) + (double)min;
-			return (decimal)value.Round(precision);
-		}
-
 		public override Gene GenerateGene(int geneIndex)
 		{
 			var (p, f, t, precision) = _parameters[geneIndex];
@@ -119,11 +113,11 @@ public class GeneticOptimizer : BaseOptimizer
 				var fu = (Unit)f;
 				var tu = (Unit)f;
 
-				v = new Unit(GetDecimal(fu.Value, tu.Value, precision), fu.Type);
+				v = new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, precision), fu.Type);
 			}
 			else if (p.Type == typeof(decimal))
 			{
-				v = GetDecimal(f.To<decimal>(), t.To<decimal>(), precision).To(p.Type);
+				v = RandomGen.GetDecimal(f.To<decimal>(), t.To<decimal>(), precision).To(p.Type);
 			}
 			else if (p.Type.IsPrimitive())
 			{

@@ -4,11 +4,9 @@
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
-	using System.Threading;
 	using System.Collections.Generic;
 
 	using Ecng.Common;
-	using Ecng.Security;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Localization;
@@ -382,103 +380,6 @@
 		/// End date of <see cref="HistoryDataPath"/>.
 		/// </summary>
 		public static readonly DateTime HistoryEndDate = new(2020, 4, 30);
-
-		private static ProcessSingleton _isRunningMutex;
-
-		/// <summary>
-		/// Check if an instance of the application already started.
-		/// </summary>
-		/// <returns>Check result.</returns>
-		public static bool StartIsRunning() => StartIsRunning(AppDataPath);
-
-		/// <summary>
-		/// Check if an instance of the application already started.
-		/// </summary>
-		/// <returns>Check result.</returns>
-		public static bool StartIsRunning(string appKey)
-		{
-			if (_isRunningMutex != null)
-				throw new InvalidOperationException("mutex was already initialized");
-
-			try
-			{
-				_isRunningMutex = new ProcessSingleton(appKey);
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-
-			return true;
-		}
-
-		/// <summary>
-		/// Release all resources allocated by <see cref="StartIsRunning()"/>.
-		/// </summary>
-		public static void StopIsRunning()
-		{
-			_isRunningMutex?.Dispose();
-			_isRunningMutex = null;
-		}
-
-		private class ProcessSingleton : Disposable
-		{
-			private readonly ManualResetEvent _stop = new(false);
-			private readonly ManualResetEvent _stopped = new(false);
-
-			public ProcessSingleton(string key)
-			{
-				Exception error = null;
-				var started = new ManualResetEvent(false);
-
-				// mutex должен освобождаться из того же потока, в котором захвачен. некоторые приложения вызывают StopIsRunning из другого потока нежели StartIsRunning
-				// выделяя отдельный поток, обеспечивается гарантия корректной работы в любом случае
-				ThreadingHelper.Thread(() =>
-				{
-					Mutex mutex;
-
-					try
-					{
-						var mutexName = "stocksharp_app_" + key.UTF8().Md5();
-						if (!ThreadingHelper.TryGetUniqueMutex(mutexName, out mutex))
-							throw new InvalidOperationException($"can't acquire the mutex {mutexName}, (key={key})");
-					}
-					catch (Exception e)
-					{
-						error = e;
-						_stopped.Set();
-						return;
-					}
-					finally
-					{
-						started.Set();
-					}
-
-					try
-					{
-						_stop.WaitOne();
-						mutex.ReleaseMutex();
-					}
-					finally
-					{
-						_stopped.Set();
-					}
-				})
-				.Name("process_singleton")
-				.Launch();
-
-				started.WaitOne();
-				if (error != null)
-					throw error;
-			}
-
-			protected override void DisposeManaged()
-			{
-				_stop.Set();
-				_stopped.WaitOne();
-				base.DisposeManaged();
-			}
-		}
 
 		/// <summary>
 		/// Default extension for settings file.
