@@ -211,50 +211,25 @@ namespace StockSharp.Algo.Statistics
 	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class RecoveryFactorParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
+		private readonly MaxDrawdownParameter _maxDrawdown;
+		private readonly NetProfitParameter _netProfit;
+
 		/// <summary>
 		/// Initialize <see cref="RecoveryFactorParameter"/>.
 		/// </summary>
-		public RecoveryFactorParameter()
+		/// <param name="maxDrawdown"><see cref="MaxDrawdownParameter"/></param>
+		/// <param name="netProfit"><see cref="NetProfitParameter"/></param>
+		public RecoveryFactorParameter(MaxDrawdownParameter maxDrawdown, NetProfitParameter netProfit)
 			: base(StatisticParameterTypes.RecoveryFactor)
 		{
-		}
-
-		private readonly MaxDrawdownParameter _maxDrawdown = new();
-		private readonly NetProfitParameter _netProfit = new();
-
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			_maxDrawdown.Reset();
-			_netProfit.Reset();
-			base.Reset();
+			_maxDrawdown = maxDrawdown ?? throw new ArgumentNullException(nameof(maxDrawdown));
+			_netProfit = netProfit ?? throw new ArgumentNullException(nameof(netProfit));
 		}
 
 		/// <inheritdoc />
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
-			_maxDrawdown.Add(marketTime, pnl);
-			_netProfit.Add(marketTime, pnl);
-
 			Value = _maxDrawdown.Value != 0 ? _netProfit.Value / _maxDrawdown.Value : 0;
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			storage.SetValue("MaxDrawdown", _maxDrawdown.Save());
-			storage.SetValue("NetProfit", _netProfit.Save());
-
-			base.Save(storage);
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			_maxDrawdown.Load(storage.GetValue<SettingsStorage>("MaxDrawdown"));
-			_netProfit.Load(storage.GetValue<SettingsStorage>("NetProfit"));
-
-			base.Load(storage);
 		}
 	}
 

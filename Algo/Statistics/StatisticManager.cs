@@ -109,14 +109,17 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public StatisticManager()
 		{
+			var maxDd = new MaxDrawdownParameter();
+			var netPf = new NetProfitParameter();
+
 			_parameters = new()
 			{
 				new MaxProfitParameter(),
-				new MaxDrawdownParameter(),
+				maxDd,
 				new MaxRelativeDrawdownParameter(),
 				new ReturnParameter(),
-				new RecoveryFactorParameter(),
-				new NetProfitParameter(),
+				netPf,
+				new RecoveryFactorParameter(maxDd, netPf),
 				new WinningTradesParameter(),
 				new AverageWinTradeParameter(),
 				new LossingTradesParameter(),

@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Statistics
 		object IStatisticParameter.Value => Value;
 
 		/// <inheritdoc />
-		public virtual event Action ValueChanged;
+		public event Action ValueChanged;
 
 		/// <inheritdoc />
 		public virtual void Reset()
