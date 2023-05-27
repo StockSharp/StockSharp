@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Statistics
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -269,6 +270,54 @@ namespace StockSharp.Algo.Statistics
 		public override void New(Order order)
 		{
 			Value++;
+		}
+	}
+
+	/// <summary>
+	/// Total number of error orders.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ErrorsKey,
+		Description = LocalizedStrings.ErrorOrdersOnlyKey,
+		GroupName = LocalizedStrings.OrdersKey)]
+	public class OrderErrorCountParameter : BaseOrderStatisticParameter<int>
+	{
+		/// <summary>
+		/// Initialize <see cref="OrderErrorCountParameter"/>.
+		/// </summary>
+		public OrderErrorCountParameter()
+			: base(StatisticParameterTypes.OrderErrorCount)
+		{
+		}
+
+		/// <inheritdoc />
+		public override void RegisterFailed(OrderFail fail) => Value++;
+	}
+
+	/// <summary>
+	/// Total number of insufficient fund error orders.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.IFEKey,
+		Description = LocalizedStrings.InsufficientFundErrorKey,
+		GroupName = LocalizedStrings.OrdersKey)]
+	public class OrderInsufficientFundErrorCountParameter : BaseOrderStatisticParameter<int>
+	{
+		/// <summary>
+		/// Initialize <see cref="OrderInsufficientFundErrorCountParameter"/>.
+		/// </summary>
+		public OrderInsufficientFundErrorCountParameter()
+			: base(StatisticParameterTypes.OrderInsufficientFundErrorCount)
+		{
+		}
+
+		/// <inheritdoc />
+		public override void RegisterFailed(OrderFail fail)
+		{
+			if (fail.Error is InsufficientFundException)
+				Value++;
 		}
 	}
 }

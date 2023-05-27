@@ -133,7 +133,9 @@ namespace StockSharp.Algo.Statistics
 				new MinLatencyRegistrationParameter(),
 				new MaxLatencyCancellationParameter(),
 				new MinLatencyCancellationParameter(),
-				new OrderCountParameter()
+				new OrderCountParameter(),
+				new OrderErrorCountParameter(),
+				new OrderInsufficientFundErrorCountParameter(),
 				//new MaxSlippageParameter(),
 				//new MinSlippageParameter()
 			};

@@ -1,4 +1,12 @@
 {
+  "IFE": {
+    "en": "IFE",
+    "ru": "IFE"
+  },
+  "InsufficientFundError": {
+    "en": "Total number of insufficient fund error orders.",
+    "ru": "Количество заявок с ошибками регистрации недостаточности средств."
+  },
   "Population": {
     "en": "Population",
     "ru": "Популяция"

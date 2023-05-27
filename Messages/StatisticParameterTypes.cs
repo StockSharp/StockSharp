@@ -104,4 +104,14 @@ public enum StatisticParameterTypes
 	/// Total number of orders.
 	/// </summary>
 	OrderCount,
+
+	/// <summary>
+	/// Total number of error orders.
+	/// </summary>
+	OrderErrorCount,
+
+	/// <summary>
+	/// Total number of insufficient fund error orders.
+	/// </summary>
+	OrderInsufficientFundErrorCount,
 }

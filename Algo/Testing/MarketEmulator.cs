@@ -1318,12 +1318,12 @@ namespace StockSharp.Algo.Testing
 				}
 				else
 				{
-					var message = _parent.CheckRegistration(execution, _securityDefinition, _priceStepExplicit, _volumeStepExplicit/*, result*/);
+					var error = _parent.CheckRegistration(execution, _securityDefinition, _priceStepExplicit, _volumeStepExplicit/*, result*/);
 
-					var replyMsg = CreateReply(execution, time, message == null ? null : new InvalidOperationException(message));
+					var replyMsg = CreateReply(execution, time, error);
 					result.Add(replyMsg);
 
-					if (message == null)
+					if (error is null)
 					{
 						this.AddInfoLog(LocalizedStrings.Str1157Params, execution.TransactionId);
 
@@ -1381,7 +1381,7 @@ namespace StockSharp.Algo.Testing
 					}
 					else
 					{
-						this.AddInfoLog(LocalizedStrings.Str1158Params, execution.TransactionId, message);
+						this.AddInfoLog(LocalizedStrings.Str1158Params, execution.TransactionId, error.Message);
 					}
 				}
 			}
@@ -2389,7 +2389,7 @@ namespace StockSharp.Algo.Testing
 				.Add(PositionChangeTypes.Commission, commission));
 			}
 
-			public string CheckRegistration(ExecutionMessage execMsg)
+			public InvalidOperationException CheckRegistration(ExecutionMessage execMsg)
 			{
 				var settings = _parent.Settings;
 
@@ -2404,8 +2404,8 @@ namespace StockSharp.Algo.Testing
 
 					if (_currentMoney < needBlock)
 					{
-						return LocalizedStrings.Str1169Params
-							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
+						return new InsufficientFundException(LocalizedStrings.Str1169Params
+							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice));
 					}
 				}
 				else if (settings.CheckShortable && execMsg.Side == Sides.Sell &&
@@ -2418,8 +2418,8 @@ namespace StockSharp.Algo.Testing
 
 					if (potentialPosition < 0)
 					{
-						return LocalizedStrings.CannotShortPosition
-							.Put(execMsg.PortfolioName, execMsg.TransactionId, money.PositionCurrentValue, execMsg.OrderVolume);
+						return new(LocalizedStrings.CannotShortPosition
+							.Put(execMsg.PortfolioName, execMsg.TransactionId, money.PositionCurrentValue, execMsg.OrderVolume));
 					}
 				}
 
@@ -2920,7 +2920,7 @@ namespace StockSharp.Algo.Testing
 				info.ProcessMarginChange(level1Msg.LocalTime, level1Msg.SecurityId, retVal);
 		}
 
-		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition, bool priceStepExplicit, bool volumeStepExplicit/*, ICollection<Message> result*/)
+		private InvalidOperationException CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition, bool priceStepExplicit, bool volumeStepExplicit/*, ICollection<Message> result*/)
 		{
 			if (Settings.CheckTradingState)
 			{
@@ -2930,10 +2930,10 @@ namespace StockSharp.Algo.Testing
 				{
 					//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
 					//if (!Settings.IsSupportAtomicReRegister)
-					//	return LocalizedStrings.Str1170Params.Put(board.Code);
+					//	return new(LocalizedStrings.Str1170Params.Put(board.Code));
 
 					if (!board.IsTradeTime(execMsg.ServerTime))
-						return LocalizedStrings.Str1171;
+						return new(LocalizedStrings.Str1171);
 				}
 			}
 
@@ -2942,10 +2942,10 @@ namespace StockSharp.Algo.Testing
 			var secState = (SecurityStates?)state?.TryGetValue(Level1Fields.State);
 
 			if (secState == SecurityStates.Stoped)
-				return LocalizedStrings.SecurityStopped.Put(execMsg.SecurityId);
+				return new(LocalizedStrings.SecurityStopped.Put(execMsg.SecurityId));
 
 			if (securityDefinition?.BasketCode.IsEmpty() == false)
-				return LocalizedStrings.SecurityNonTradable.Put(execMsg.SecurityId);
+				return new(LocalizedStrings.SecurityNonTradable.Put(execMsg.SecurityId));
 
 			var priceStep = securityDefinition?.PriceStep;
 			var volumeStep = securityDefinition?.VolumeStep;
@@ -2960,25 +2960,25 @@ namespace StockSharp.Algo.Testing
 				priceStep ??= (decimal?)state.TryGetValue(Level1Fields.PriceStep);
 
 				if (minPrice != null && minPrice > 0 && execMsg.OrderPrice < minPrice)
-					return LocalizedStrings.Str1172Params.Put(execMsg.OrderPrice, execMsg.TransactionId, minPrice);
+					return new(LocalizedStrings.Str1172Params.Put(execMsg.OrderPrice, execMsg.TransactionId, minPrice));
 
 				if (maxPrice != null && maxPrice > 0 && execMsg.OrderPrice > maxPrice)
-					return LocalizedStrings.Str1173Params.Put(execMsg.OrderPrice, execMsg.TransactionId, maxPrice);
+					return new(LocalizedStrings.Str1173Params.Put(execMsg.OrderPrice, execMsg.TransactionId, maxPrice));
 			}
 
 			if (priceStepExplicit && priceStep != null && priceStep > 0 && execMsg.OrderPrice % priceStep != 0)
-				return LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(execMsg.OrderPrice, execMsg.TransactionId, priceStep);
+				return new(LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(execMsg.OrderPrice, execMsg.TransactionId, priceStep));
 
 			volumeStep ??= (decimal?)state?.TryGetValue(Level1Fields.VolumeStep);
 
 			if (volumeStepExplicit && volumeStep != null && volumeStep > 0 && execMsg.OrderVolume % volumeStep != 0)
-				return LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(execMsg.OrderVolume, execMsg.TransactionId, volumeStep);
+				return new(LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(execMsg.OrderVolume, execMsg.TransactionId, volumeStep));
 
 			if (minVolume != null && execMsg.OrderVolume < minVolume)
-				return LocalizedStrings.OrderVolumeLessMin.Put(execMsg.OrderVolume, execMsg.TransactionId, minVolume);
+				return new(LocalizedStrings.OrderVolumeLessMin.Put(execMsg.OrderVolume, execMsg.TransactionId, minVolume));
 
 			if (maxVolume != null && execMsg.OrderVolume > maxVolume)
-				return LocalizedStrings.OrderVolumeMoreMax.Put(execMsg.OrderVolume, execMsg.TransactionId, maxVolume);
+				return new(LocalizedStrings.OrderVolumeMoreMax.Put(execMsg.OrderVolume, execMsg.TransactionId, maxVolume));
 
 			return GetPortfolioInfo(execMsg.PortfolioName).CheckRegistration(execMsg/*, result*/);
 		}
