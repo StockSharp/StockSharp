@@ -16,19 +16,20 @@ namespace StockSharp.Algo.Storages.Binary
 		public PositionMetaInfo(DateTime date)
 			: base(date)
 		{
-			BeginValue = new RefPair<decimal, decimal>();
-			CurrentValue = new RefPair<decimal, decimal>();
-			BlockedValue = new RefPair<decimal, decimal>();
-			CurrentPrice = new RefPair<decimal, decimal>();
-			AveragePrice = new RefPair<decimal, decimal>();
-			UnrealizedPnL = new RefPair<decimal, decimal>();
-			RealizedPnL = new RefPair<decimal, decimal>();
-			VariationMargin = new RefPair<decimal, decimal>();
-			Leverage = new RefPair<decimal, decimal>();
-			Commission = new RefPair<decimal, decimal>();
-			CurrentValueInLots = new RefPair<decimal, decimal>();
-			SettlementPrice = new RefPair<decimal, decimal>();
-			
+			BeginValue = new();
+			CurrentValue = new();
+			BlockedValue = new();
+			CurrentPrice = new();
+			AveragePrice = new();
+			UnrealizedPnL = new();
+			RealizedPnL = new();
+			VariationMargin = new();
+			Leverage = new();
+			Commission = new();
+			CurrentValueInLots = new();
+			SettlementPrice = new();
+			LiquidationPrice = new();
+
 			Portfolios = new List<string>();
 			ClientCodes = new List<string>();
 			DepoNames = new List<string>();
@@ -46,6 +47,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public RefPair<decimal, decimal> Commission { get; private set; }
 		public RefPair<decimal, decimal> CurrentValueInLots { get; private set; }
 		public RefPair<decimal, decimal> SettlementPrice { get; private set; }
+		public RefPair<decimal, decimal> LiquidationPrice { get; private set; }
 
 		public IList<string> Portfolios { get; }
 		public IList<string> ClientCodes { get; }
@@ -89,6 +91,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			Write(stream, SettlementPrice);
+
+			if (Version < MarketDataVersions.Version40)
+				return;
+
+			Write(stream, LiquidationPrice);
 		}
 
 		public override void Read(Stream stream)
@@ -126,6 +133,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			SettlementPrice = ReadInfo(stream);
+
+			if (Version < MarketDataVersions.Version40)
+				return;
+
+			LiquidationPrice = ReadInfo(stream);
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -167,6 +179,7 @@ namespace StockSharp.Algo.Storages.Binary
 			DepoNames.AddRange(posInfo.DepoNames);
 
 			SettlementPrice = Clone(posInfo.SettlementPrice);
+			LiquidationPrice = Clone(posInfo.LiquidationPrice);
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -178,7 +191,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class PositionBinarySerializer : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>
 	{
 		public PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, DataType.PositionChanges, 20, MarketDataVersions.Version36, exchangeInfoProvider)
+			: base(securityId, DataType.PositionChanges, 20, MarketDataVersions.Version40, exchangeInfoProvider)
 		{
 		}
 
@@ -312,6 +325,9 @@ namespace StockSharp.Algo.Storages.Binary
 						case PositionChangeTypes.TradesCount:
 							writer.WriteInt((int)change.Value);
 							break;
+						case PositionChangeTypes.LiquidationPrice:
+							SerializeChange(writer, metaInfo.LiquidationPrice, (decimal)change.Value);
+							break;
 						default:
 							throw new InvalidOperationException(change.Key.To<string>());
 					}
@@ -440,6 +456,9 @@ namespace StockSharp.Algo.Storages.Binary
 					case PositionChangeTypes.OrdersCount:
 					case PositionChangeTypes.TradesCount:
 						posMsg.Add(type, reader.ReadInt());
+						break;
+					case PositionChangeTypes.LiquidationPrice:
+						posMsg.Add(type, DeserializeChange(reader, metaInfo.LiquidationPrice));
 						break;
 					default:
 						throw new InvalidOperationException(type.To<string>());

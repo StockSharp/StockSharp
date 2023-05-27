@@ -1,4 +1,8 @@
 {
+  "LiquidationPrice": {
+    "en": "Liquidation price",
+    "ru": "Цена ликвидации"
+  },
   "IFE": {
     "en": "IFE",
     "ru": "IFE"

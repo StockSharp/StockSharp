@@ -214,6 +214,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str985Key)]
 		TradesCount,
+
+		/// <summary>
+		/// Liquidation price.
+		/// </summary>
+		[EnumMember]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LiquidationPriceKey)]
+		LiquidationPrice,
 	}
 
 	/// <summary>

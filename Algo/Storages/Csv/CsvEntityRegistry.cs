@@ -825,6 +825,9 @@ namespace StockSharp.Algo.Storages.Csv
 				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 					position.Side = reader.ReadNullableEnum<Sides>();
 
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					position.LiquidationPrice = reader.ReadNullableDecimal();
+
 				return position;
 			}
 
@@ -864,6 +867,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.TradesCount.To<string>(),
 					data.StrategyId,
 					data.Side.To<string>(),
+					data.LiquidationPrice.To<string>(),
 				});
 			}
 

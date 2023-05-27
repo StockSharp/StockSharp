@@ -71,6 +71,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public int? Side;
 
 			public SnapshotDataType? BuildFrom;
+
+			public BlittableDecimal? LiquidationPrice;
 		}
 
 		Version ISnapshotSerializer<Key, PositionChangeMessage>.Version { get; } = SnapshotVersions.V24;
@@ -177,6 +179,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case PositionChangeTypes.TradesCount:
 						snapshot.TradesCount = (int)change.Value;
 						break;
+					case PositionChangeTypes.LiquidationPrice:
+						snapshot.LiquidationPrice = (BlittableDecimal)(decimal)change.Value;
+						break;
 					default:
 						throw new InvalidOperationException(change.Key.To<string>());
 				}
@@ -238,6 +243,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				.TryAdd(PositionChangeTypes.OrdersCount, snapshot.OrdersCount, true)
 				.TryAdd(PositionChangeTypes.TradesCount, snapshot.TradesCount, true)
 				.TryAdd(PositionChangeTypes.State, snapshot.State?.ToEnum<PortfolioStates>())
+				.TryAdd(PositionChangeTypes.LiquidationPrice, snapshot.LiquidationPrice, true)
 				;
 
 				if (snapshot.Currency != null)

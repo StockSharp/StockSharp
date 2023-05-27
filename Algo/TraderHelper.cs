@@ -1273,6 +1273,9 @@ namespace StockSharp.Algo
 						case PositionChangeTypes.TradesCount:
 							position.TradesCount = (int)change.Value;
 							break;
+						case PositionChangeTypes.LiquidationPrice:
+							position.LiquidationPrice = (decimal)change.Value;
+							break;
 
 						// skip unknown fields
 						//default:

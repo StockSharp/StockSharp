@@ -629,6 +629,29 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _liquidationPrice;
+
+		/// <summary>
+		/// Liquidation price.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.LiquidationPriceKey)]
+		[DescriptionLoc(LocalizedStrings.LiquidationPriceKey)]
+		[StatisticsCategory]
+		[Browsable(false)]
+		public decimal? LiquidationPrice
+		{
+			get => _liquidationPrice;
+			set
+			{
+				if (_liquidationPrice == value)
+					return;
+
+				_liquidationPrice = value;
+				NotifyChanged();
+			}
+		}
+
 		/// <summary>
 		/// Create a copy of <see cref="Position"/>.
 		/// </summary>
@@ -683,6 +706,8 @@ namespace StockSharp.BusinessEntities
 			destination.SellOrdersMargin = SellOrdersMargin;
 			destination.OrdersCount = OrdersCount;
 			destination.TradesCount = TradesCount;
+
+			destination.LiquidationPrice = LiquidationPrice;
 		}
 
 		/// <inheritdoc />
