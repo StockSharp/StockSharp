@@ -145,7 +145,9 @@ namespace SampleHistoryTestingParallel
 			_optimizer.TotalProgressChanged += (progress, duration, remaining) => this.GuiAsync(() =>
 			{
 				TestingProcess.Value = progress;
-				TestingProcessText.Text = $"{progress}% | {(int)duration.TotalSeconds} sec left | {(int)remaining.TotalSeconds} sec rem";
+
+				var remainingSeconds = remaining == TimeSpan.MaxValue ? "unk" : ((int)remaining.TotalSeconds).To<string>();
+				TestingProcessText.Text = $"{progress}% | {(int)duration.TotalSeconds} sec left | {remainingSeconds} sec rem";
 			});
 
 			_optimizer.StateChanged += (oldState, newState) =>

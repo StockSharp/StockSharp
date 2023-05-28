@@ -204,9 +204,12 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <param name="iterationCount">Iterations count.</param>
 	protected void OnStart(int iterationCount)
 	{
+		if (iterationCount <= 0)
+			throw new ArgumentOutOfRangeException(nameof(iterationCount));
+
 		_cancelEmulation = false;
 		_startedAt = DateTime.UtcNow;
-		_lastTotalProgress = 0;
+		_lastTotalProgress = -1;
 		_iterCount = iterationCount;
 		_doneIters = 0;
 
@@ -391,7 +394,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 				progress = (int)((_doneIters * 100.0) / _iterCount);
 
-				if (_lastTotalProgress >= progress)
+				if (_lastTotalProgress > progress)
 					progress = null;
 				else
 					_lastTotalProgress = progress.Value;
@@ -404,7 +407,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				if (evt is not null)
 				{
 					var duration = DateTime.UtcNow - _startedAt;
-					evt(progress.Value, duration, (100.0 / progress.Value) * duration - duration);
+					evt(progress.Value, duration, _iterCount == int.MaxValue ? TimeSpan.MaxValue : (_iterCount * 1.0 / _doneIters - 1) * duration);
 				}
 			}
 			

@@ -275,7 +275,7 @@ public class GeneticOptimizer : BaseOptimizer
 		//_ga.GenerationRan += OnGenerationRan;
 		_ga.TerminationReached += OnTerminationReached;
 
-		OnStart(Settings.GenerationsMax * EmulationSettings.BatchSize);
+		OnStart(Settings.GenerationsMax == 0 ? int.MaxValue : Settings.GenerationsMax * EmulationSettings.BatchSize);
 
 		Task.Run(async () =>
 		{
