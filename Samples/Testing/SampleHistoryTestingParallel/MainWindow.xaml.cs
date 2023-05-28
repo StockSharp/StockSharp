@@ -187,6 +187,9 @@ namespace SampleHistoryTestingParallel
 
 			_startEmulationTime = DateTime.Now;
 
+			// set max possible iteration to 100
+			_optimizer.EmulationSettings.MaxIterations = 100;
+
 			if (_optimizer is BruteForceOptimizer btOptimizer)
 			{
 				var strategies = periods

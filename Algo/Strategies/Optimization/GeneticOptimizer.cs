@@ -35,6 +35,17 @@ public class GeneticOptimizer : BaseOptimizer
 
 		double IFitness.Evaluate(IChromosome chromosome)
 		{
+			if (_optimizer._leftIterations is not null)
+			{
+				lock (_optimizer._leftIterLock)
+				{
+					_optimizer._leftIterations = _optimizer._leftIterations.Value - 1;
+
+					if (_optimizer._leftIterations < 0)
+						return double.MinValue;
+				}
+			}
+
 			var spc = (StrategyParametersChromosome)chromosome;
 			var strategy = _strategy.Clone();
 
@@ -130,8 +141,27 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 	}
 
+	private class MaxIterationsTermination : TerminationBase
+	{
+		private readonly GeneticOptimizer _optimizer;
+
+		public MaxIterationsTermination(GeneticOptimizer optimizer)
+        {
+			_optimizer = optimizer ?? throw new ArgumentNullException(nameof(optimizer));
+		}
+
+		protected override bool PerformHasReached(IGeneticAlgorithm geneticAlgorithm)
+		{
+			lock (_optimizer._leftIterLock)
+				return _optimizer._leftIterations <= 0;
+		}
+	}
+
 	private readonly SynchronizedSet<ManualResetEvent> _events = new();
 	private GeneticAlgorithm _ga;
+
+	private readonly SyncObject _leftIterLock = new();
+	private int? _leftIterations;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GeneticOptimizer"/>.
@@ -207,6 +237,8 @@ public class GeneticOptimizer : BaseOptimizer
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
 
+		_leftIterations = null;
+
 		var terminations = new List<ITermination>();
 
 		if (Settings.GenerationsStagnation > 0)
@@ -214,6 +246,12 @@ public class GeneticOptimizer : BaseOptimizer
 
 		if (Settings.GenerationsMax > 0)
 			terminations.Add(new FitnessStagnationTermination(Settings.GenerationsMax));
+
+		if (EmulationSettings.MaxIterations > 0)
+		{
+			_leftIterations = EmulationSettings.MaxIterations;
+			terminations.Add(new MaxIterationsTermination(this));
+		}
 
 		if (terminations.Count == 0)
 			throw new InvalidOperationException("No termination set.");
