@@ -207,7 +207,16 @@ public class GeneticOptimizer : BaseOptimizer
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
 
-		var iterCount = EmulationSettings.MaxIterations.Max(1);
+		var terminations = new List<ITermination>();
+
+		if (Settings.GenerationsStagnation > 0)
+			terminations.Add(new FitnessStagnationTermination(Settings.GenerationsStagnation));
+
+		if (Settings.GenerationsMax > 0)
+			terminations.Add(new FitnessStagnationTermination(Settings.GenerationsMax));
+
+		if (terminations.Count == 0)
+			throw new InvalidOperationException("No termination set.");
 
 		_ga = new(population, new StrategyFitness(this, strategy, calcFitness), selection, crossover, mutation)
 		{
@@ -217,10 +226,7 @@ public class GeneticOptimizer : BaseOptimizer
 				MaxThreads = EmulationSettings.BatchSize,
 			},
 
-			Termination = new OrTermination(
-				new FitnessStagnationTermination(Settings.StagnationGenerations),
-				new GenerationNumberTermination(iterCount)
-			),
+			Termination = new OrTermination(terminations.ToArray()),
 
 			MutationProbability = (float)Settings.MutationProbability,
 			CrossoverProbability = (float)Settings.CrossoverProbability,
@@ -231,7 +237,7 @@ public class GeneticOptimizer : BaseOptimizer
 		//_ga.GenerationRan += OnGenerationRan;
 		_ga.TerminationReached += OnTerminationReached;
 
-		OnStart(iterCount * EmulationSettings.BatchSize);
+		OnStart(Settings.GenerationsMax * EmulationSettings.BatchSize);
 
 		Task.Run(async () =>
 		{

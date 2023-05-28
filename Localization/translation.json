@@ -1,4 +1,12 @@
 {
+  "Generations": {
+    "en": "Generations",
+    "ru": "Поколения"
+  },
+  "GenerationsMax": {
+    "en": "Maximum number of generations.",
+    "ru": "Максимальное количество поколений."
+  },
   "Fitness": {
     "en": "Fitness",
     "ru": "Фитнес"

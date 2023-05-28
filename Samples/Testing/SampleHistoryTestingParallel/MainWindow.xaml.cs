@@ -235,7 +235,6 @@ namespace SampleHistoryTestingParallel
 				};
 
 				var go = (GeneticOptimizer)_optimizer;
-				go.EmulationSettings.MaxIterations = 20;
 				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
 				go.Start(strategy, new (IStrategyParam, object, object, int)[]
 				{

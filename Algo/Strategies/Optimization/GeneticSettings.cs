@@ -65,6 +65,8 @@ public class GeneticSettings : IPersistable
 		set => _fitness = value.ThrowIfEmpty(nameof(value));
 	}
 
+	private int _population = 8;
+
 	/// <summary>
 	/// The initial size of population.
 	/// </summary>
@@ -74,7 +76,13 @@ public class GeneticSettings : IPersistable
 		Description = LocalizedStrings.PopulationDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 1)]
-	public int Population { get; set; } = 8;
+	public int Population
+	{
+		get => _population;
+		set => _population = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+	}
+
+	private int _populationMax = 16;
 
 	/// <summary>
 	/// The maximum population.
@@ -85,7 +93,30 @@ public class GeneticSettings : IPersistable
 		Description = LocalizedStrings.PopulationMaxDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 2)]
-	public int PopulationMax { get; set; } = 16;
+	public int PopulationMax
+	{
+		get => _populationMax;
+		set => _populationMax = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+	}
+
+	private int _generationsMax = 20;
+
+	/// <summary>
+	/// Maximum number of generations.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.GenerationsKey,
+		Description = LocalizedStrings.GenerationsMaxKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 3)]
+	public int GenerationsMax
+	{
+		get => _generationsMax;
+		set => _generationsMax = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+	}
+
+	private int _generationsStagnation = 5;
 
 	/// <summary>
 	/// The genetic algorithm will be terminate when the best chromosome's fitness has no change in the last generations specified.
@@ -96,7 +127,13 @@ public class GeneticSettings : IPersistable
 		Description = LocalizedStrings.StagnationDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 3)]
-	public int StagnationGenerations { get; set; } = 10;
+	public int GenerationsStagnation
+	{
+		get => _generationsStagnation;
+		set => _generationsStagnation = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+	}
+
+	private decimal _mutationProbability = (decimal)GeneticAlgorithm.DefaultMutationProbability;
 
 	/// <summary>
 	/// <see cref="GeneticAlgorithm.MutationProbability"/>
@@ -107,7 +144,13 @@ public class GeneticSettings : IPersistable
 		Description = LocalizedStrings.MutationProbabilityDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 4)]
-	public decimal MutationProbability { get; set; } = (decimal)GeneticAlgorithm.DefaultMutationProbability;
+	public decimal MutationProbability
+	{
+		get => _mutationProbability;
+		set => _mutationProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+	}
+
+	private decimal _crossoverProbability = (decimal)GeneticAlgorithm.DefaultCrossoverProbability;
 
 	/// <summary>
 	/// <see cref="GeneticAlgorithm.CrossoverProbability"/>
@@ -118,7 +161,11 @@ public class GeneticSettings : IPersistable
 		Description = LocalizedStrings.CrossoverProbabilityDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 5)]
-	public decimal CrossoverProbability { get; set; } = (decimal)GeneticAlgorithm.DefaultCrossoverProbability;
+	public decimal CrossoverProbability
+	{
+		get => _crossoverProbability;
+		set => _crossoverProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+	}
 
 	private Type _reinsertion = typeof(ElitistReinsertion);
 
@@ -197,7 +244,8 @@ public class GeneticSettings : IPersistable
 		Fitness = storage.GetValue(nameof(Fitness), Fitness);
 		Population = storage.GetValue(nameof(Population), Population);
 		PopulationMax = storage.GetValue(nameof(PopulationMax), PopulationMax);
-		StagnationGenerations = storage.GetValue(nameof(StagnationGenerations), StagnationGenerations);
+		GenerationsMax = storage.GetValue(nameof(GenerationsMax), GenerationsMax);
+		GenerationsStagnation = storage.GetValue(nameof(GenerationsStagnation), GenerationsStagnation);
 		MutationProbability = storage.GetValue(nameof(MutationProbability), MutationProbability);
 		CrossoverProbability = storage.GetValue(nameof(CrossoverProbability), CrossoverProbability);
 		Reinsertion = storage.GetValue(nameof(Reinsertion), Reinsertion);
@@ -212,7 +260,8 @@ public class GeneticSettings : IPersistable
 			.Set(nameof(Fitness), Fitness)
 			.Set(nameof(Population), Population)
 			.Set(nameof(PopulationMax), PopulationMax)
-			.Set(nameof(StagnationGenerations), StagnationGenerations)
+			.Set(nameof(GenerationsMax), GenerationsMax)
+			.Set(nameof(GenerationsStagnation), GenerationsStagnation)
 			.Set(nameof(MutationProbability), MutationProbability)
 			.Set(nameof(CrossoverProbability), CrossoverProbability)
 			.Set(nameof(Reinsertion), Reinsertion)
