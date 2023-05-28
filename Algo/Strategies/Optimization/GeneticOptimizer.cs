@@ -163,12 +163,21 @@ public class GeneticOptimizer : BaseOptimizer
 	/// </summary>
 	public GeneticSettings Settings { get; } = new();
 
+	private static Func<Strategy, decimal> ToFitness(string formula)
+	{
+		if (formula.IsEmpty())
+			throw new ArgumentNullException(nameof(formula));
+
+		// TODO
+		return s => s.PnL;
+	}
+
 	/// <summary>
 	/// Start optimization.
 	/// </summary>
 	/// <param name="strategy">Strategy.</param>
 	/// <param name="parameters">Parameters used to generate chromosomes.</param>
-	/// <param name="calcFitness">Calc fitness value function.</param>
+	/// <param name="calcFitness">Calc fitness value function. If <see langword="null"/> the value from <see cref="GeneticSettings.Fitness"/> will be used.</param>
 	/// <param name="selection"><see cref="ISelection"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Selection"/> will be used.</param>
 	/// <param name="crossover"><see cref="ICrossover"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Crossover"/> will be used.</param>
 	/// <param name="mutation"><see cref="IMutation"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Mutation"/> will be used.</param>
@@ -176,7 +185,7 @@ public class GeneticOptimizer : BaseOptimizer
 	public void Start(
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, int precision)> parameters,
-		Func<Strategy, decimal> calcFitness,
+		Func<Strategy, decimal> calcFitness = default,
 		ISelection selection = default,
 		ICrossover crossover = default,
 		IMutation mutation = default
@@ -193,6 +202,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(parameters.ToArray()));
 
+		calcFitness ??= ToFitness(Settings.Fitness);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();

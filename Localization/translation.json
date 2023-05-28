@@ -1,4 +1,12 @@
 {
+  "Fitness": {
+    "en": "Fitness",
+    "ru": "Фитнес"
+  },
+  "FitnessFormula": {
+    "en": "Fitness function formula. For example, 'PnL'.",
+    "ru": "Формула фитнес-функции. Например, 'PnL'."
+  },
   "LiquidationPrice": {
     "en": "Liquidation price",
     "ru": "Цена ликвидации"

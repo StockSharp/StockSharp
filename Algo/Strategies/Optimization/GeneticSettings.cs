@@ -3,6 +3,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
+using Ecng.Common;
 using Ecng.ComponentModel;
 using Ecng.Serialization;
 
@@ -47,6 +48,23 @@ public class GeneticSettings : IPersistable
 		}
 	}
 
+	private string _fitness = nameof(Strategy.PnL);
+
+	/// <summary>
+	/// Fitness function formula. For example, 'PnL'.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FitnessKey,
+		Description = LocalizedStrings.FitnessFormulaKey,
+		GroupName = LocalizedStrings.GeneralKey,
+		Order = 1)]
+	public string Fitness
+	{
+		get => _fitness;
+		set => _fitness = value.ThrowIfEmpty(nameof(value));
+	}
+
 	/// <summary>
 	/// The initial size of population.
 	/// </summary>
@@ -55,7 +73,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.PopulationKey,
 		Description = LocalizedStrings.PopulationDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 0)]
+		Order = 1)]
 	public int Population { get; set; } = 8;
 
 	/// <summary>
@@ -66,7 +84,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.PopulationMaxKey,
 		Description = LocalizedStrings.PopulationMaxDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 1)]
+		Order = 2)]
 	public int PopulationMax { get; set; } = 16;
 
 	/// <summary>
@@ -77,7 +95,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.StagnationKey,
 		Description = LocalizedStrings.StagnationDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 2)]
+		Order = 3)]
 	public int StagnationGenerations { get; set; } = 10;
 
 	/// <summary>
@@ -88,7 +106,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.MutationProbabilityKey,
 		Description = LocalizedStrings.MutationProbabilityDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 3)]
+		Order = 4)]
 	public decimal MutationProbability { get; set; } = (decimal)GeneticAlgorithm.DefaultMutationProbability;
 
 	/// <summary>
@@ -99,7 +117,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.CrossoverProbabilityKey,
 		Description = LocalizedStrings.CrossoverProbabilityDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 4)]
+		Order = 5)]
 	public decimal CrossoverProbability { get; set; } = (decimal)GeneticAlgorithm.DefaultCrossoverProbability;
 
 	private Type _reinsertion = typeof(ElitistReinsertion);
@@ -113,7 +131,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.ReinsertionKey,
 		Description = LocalizedStrings.ReinsertionDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 5)]
+		Order = 6)]
 	public Type Reinsertion
 	{
 		get => _reinsertion;
@@ -131,7 +149,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.MutationKey,
 		Description = LocalizedStrings.MutationDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 6)]
+		Order = 7)]
 	public Type Mutation
 	{
 		get => _mutation;
@@ -149,7 +167,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.CrossoverKey,
 		Description = LocalizedStrings.CrossoverDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 7)]
+		Order = 8)]
 	public Type Crossover
 	{
 		get => _crossover;
@@ -167,7 +185,7 @@ public class GeneticSettings : IPersistable
 		Name = LocalizedStrings.SelectionKey,
 		Description = LocalizedStrings.SelectionDescKey,
 		GroupName = LocalizedStrings.GeneralKey,
-		Order = 8)]
+		Order = 9)]
 	public Type Selection
 	{
 		get => _selection;
@@ -176,6 +194,7 @@ public class GeneticSettings : IPersistable
 
 	void IPersistable.Load(SettingsStorage storage)
 	{
+		Fitness = storage.GetValue(nameof(Fitness), Fitness);
 		Population = storage.GetValue(nameof(Population), Population);
 		PopulationMax = storage.GetValue(nameof(PopulationMax), PopulationMax);
 		StagnationGenerations = storage.GetValue(nameof(StagnationGenerations), StagnationGenerations);
@@ -190,6 +209,7 @@ public class GeneticSettings : IPersistable
 	void IPersistable.Save(SettingsStorage storage)
 	{
 		storage
+			.Set(nameof(Fitness), Fitness)
 			.Set(nameof(Population), Population)
 			.Set(nameof(PopulationMax), PopulationMax)
 			.Set(nameof(StagnationGenerations), StagnationGenerations)
