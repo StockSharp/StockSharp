@@ -176,6 +176,27 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
+		private bool _checkTradableDates;
+
+		/// <summary>
+		/// Check loading dates are they tradable.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CheckDatesKey,
+			Description = LocalizedStrings.CheckDatesDescKey,
+			GroupName = LocalizedStrings.Str1174Key,
+			Order = 106)]
+		public bool CheckTradableDates
+		{
+			get => _checkTradableDates;
+			set
+			{
+				_checkTradableDates = value;
+				NotifyPropertyChanged();
+			}
+		}
+
 		private int _batchSize = Environment.ProcessorCount * 2;
 
 		/// <summary>
@@ -224,27 +245,6 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private bool _checkTradableDates;
-
-		/// <summary>
-		/// Check loading dates are they tradable.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.CheckDatesKey,
-			Description = LocalizedStrings.CheckDatesDescKey,
-			GroupName = LocalizedStrings.Str1174Key,
-			Order = 106)]
-		public bool CheckTradableDates
-		{
-			get => _checkTradableDates;
-			set
-			{
-				_checkTradableDates = value;
-				NotifyPropertyChanged();
-			}
-		}
-
 		private LogLevels _logLevel = LogLevels.Info;
 
 		/// <summary>
@@ -256,7 +256,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Name = LocalizedStrings.Str9Key,
 			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str12Key,
-			Order = 200)]
+			Order = 300)]
 		public LogLevels LogLevel
 		{
 			get => _logLevel;
@@ -275,17 +275,19 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			base.Save(storage);
 
-			storage.SetValue(nameof(StartTime), StartTime);
-			storage.SetValue(nameof(StopTime), StopTime);
-			storage.SetValue(nameof(OrderLogDataMode), OrderLogDataMode.To<string>());
-			storage.SetValue(nameof(DepthDataMode), DepthDataMode.To<string>());
-			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
-			storage.SetValue(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval);
-			storage.SetValue(nameof(LogLevel), LogLevel.To<string>());
-			storage.SetValue(nameof(TradeDataMode), TradeDataMode.To<string>());
-			storage.SetValue(nameof(BatchSize), BatchSize);
-			storage.SetValue(nameof(MaxIterations), MaxIterations);
-			storage.SetValue(nameof(CheckTradableDates), CheckTradableDates);
+			storage
+				.Set(nameof(StartTime), StartTime)
+				.Set(nameof(StopTime), StopTime)
+				.Set(nameof(OrderLogDataMode), OrderLogDataMode.To<string>())
+				.Set(nameof(DepthDataMode), DepthDataMode.To<string>())
+				.Set(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval)
+				.Set(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval)
+				.Set(nameof(TradeDataMode), TradeDataMode.To<string>())
+				.Set(nameof(CheckTradableDates), CheckTradableDates)
+				.Set(nameof(BatchSize), BatchSize)
+				.Set(nameof(MaxIterations), MaxIterations)
+				.Set(nameof(LogLevel), LogLevel.To<string>())
+			;
 		}
 
 		/// <summary>
@@ -302,11 +304,11 @@ namespace StockSharp.Algo.Strategies.Testing
 			DepthDataMode = storage.GetValue(nameof(DepthDataMode), DepthDataMode);
 			MarketTimeChangedInterval = storage.GetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			UnrealizedPnLInterval = storage.GetValue(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval);
-			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
 			TradeDataMode = storage.GetValue(nameof(TradeDataMode), TradeDataMode);
+			CheckTradableDates = storage.GetValue(nameof(CheckTradableDates), CheckTradableDates);
 			BatchSize = storage.GetValue(nameof(BatchSize), BatchSize);
 			MaxIterations = storage.GetValue(nameof(MaxIterations), MaxIterations);
-			CheckTradableDates = storage.GetValue(nameof(CheckTradableDates), CheckTradableDates);
+			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
 		}
 	}
 }
