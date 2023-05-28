@@ -17,11 +17,11 @@ public class GeneticSettings : IPersistable
 {
 	private class ReinsertionItemsSource : ItemsSourceBase<Type>
 	{
-        public ReinsertionItemsSource()
+		public ReinsertionItemsSource()
 			: base(ReinsertionService.GetReinsertionTypes())
-        {
-        }
-    }
+		{
+		}
+	}
 
 	private class MutationItemsSource : ItemsSourceBase<Type>
 	{
