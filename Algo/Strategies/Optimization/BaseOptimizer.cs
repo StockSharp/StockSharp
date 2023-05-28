@@ -339,6 +339,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			strategy = t.Value.Item1;
 			parameters = t.Value.Item2;
 
+			strategy.Parent ??= this;
+
 			connector = new(SecurityProvider, PortfolioProvider, ExchangeInfoProvider)
 			{
 				Parent = this,
