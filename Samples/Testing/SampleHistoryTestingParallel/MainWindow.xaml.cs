@@ -241,10 +241,10 @@ namespace SampleHistoryTestingParallel
 
 				var go = (GeneticOptimizer)_optimizer;
 				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
-				go.Start(strategy, new (IStrategyParam, object, object, int)[]
+				go.Start(strategy, new (IStrategyParam, object, object, int, object)[]
 				{
-					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, 0),
-					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, 0),
+					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, 0, null),
+					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, 0, null),
 				}, s => s.PnL);
 			}
 		}

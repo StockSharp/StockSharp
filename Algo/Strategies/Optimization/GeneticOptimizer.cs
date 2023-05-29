@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Algo.Strategies.Optimization;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -93,9 +94,9 @@ public class GeneticOptimizer : BaseOptimizer
 
 	private class StrategyParametersChromosome : ChromosomeBase
 	{
-		private readonly (IStrategyParam param, object from, object to, int precision)[] _parameters;
+		private readonly (IStrategyParam param, object from, object to, int precision, object value)[] _parameters;
 
-		public StrategyParametersChromosome((IStrategyParam param, object from, object to, int precision)[] parameters)
+		public StrategyParametersChromosome((IStrategyParam, object, object, int, object)[] parameters)
 			: base(parameters.CheckOnNull(nameof(parameters)).Length)
 		{
 			_parameters = parameters;
@@ -111,33 +112,46 @@ public class GeneticOptimizer : BaseOptimizer
 
 		public override Gene GenerateGene(int geneIndex)
 		{
-			var (p, f, t, precision) = _parameters[geneIndex];
+			var (p, f, t, precision, v) = _parameters[geneIndex];
 
-			object v;
+			if (f is null && t is null && v is null)
+				throw new InvalidOperationException($"No values for {p.Name}.");
+
+			object val;
 
 			if (p.Type == typeof(Security))
 			{
-				v = RandomGen.GetElement((IEnumerable<Security>)f);
+				val = RandomGen.GetElement((IEnumerable<Security>)v);
 			}
 			else if (p.Type == typeof(Unit))
 			{
-				var fu = (Unit)f;
-				var tu = (Unit)f;
-
-				v = new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, precision), fu.Type);
+				if (f is not null && t is not null)
+					val = new Unit(RandomGen.GetDecimal(((Unit)f).Value, ((Unit)f).Value, precision), ((Unit)f).Type);
+				else
+					val = RandomGen.GetElement((IEnumerable<Unit>)v);
 			}
 			else if (p.Type == typeof(decimal))
 			{
-				v = RandomGen.GetDecimal(f.To<decimal>(), t.To<decimal>(), precision).To(p.Type);
+				if (f is not null && t is not null)
+					val = RandomGen.GetDecimal(f.To<decimal>(), t.To<decimal>(), precision);
+				else
+					val = RandomGen.GetElement(((IEnumerable)v).Cast<object>());
+
+				val = val.To(p.Type);
 			}
 			else if (p.Type.IsPrimitive())
 			{
-				v = RandomGen.GetLong(f.To<long>(), t.To<long>()).To(p.Type);
+				if (f is not null && t is not null)
+					val = RandomGen.GetLong(f.To<long>(), t.To<long>());
+				else
+					val = RandomGen.GetElement(((IEnumerable)v).Cast<object>());
+
+				val = val.To(p.Type);
 			}
 			else
 				throw new NotSupportedException($"Type {p.Type} not supported.");
 
-			return new((p, v));
+			return new((p, val));
 		}
 	}
 
@@ -214,7 +228,7 @@ public class GeneticOptimizer : BaseOptimizer
 	[CLSCompliant(false)]
 	public void Start(
 		Strategy strategy,
-		IEnumerable<(IStrategyParam param, object from, object to, int precision)> parameters,
+		IEnumerable<(IStrategyParam param, object from, object to, int precision, object value)> parameters,
 		Func<Strategy, decimal> calcFitness = default,
 		ISelection selection = default,
 		ICrossover crossover = default,
@@ -242,7 +256,7 @@ public class GeneticOptimizer : BaseOptimizer
 			terminations.Add(new FitnessStagnationTermination(Settings.GenerationsStagnation));
 
 		if (Settings.GenerationsMax > 0)
-			terminations.Add(new FitnessStagnationTermination(Settings.GenerationsMax));
+			terminations.Add(new GenerationNumberTermination(Settings.GenerationsMax));
 
 		if (EmulationSettings.MaxIterations > 0)
 		{
@@ -253,6 +267,10 @@ public class GeneticOptimizer : BaseOptimizer
 		if (terminations.Count == 0)
 			throw new InvalidOperationException("No termination set.");
 
+		var termination = terminations.Count == 1
+			? terminations[0]
+			: new OrTermination(terminations.ToArray());
+
 		_ga = new(population, new StrategyFitness(this, strategy, calcFitness), selection, crossover, mutation)
 		{
 			TaskExecutor = new ParallelTaskExecutor
@@ -261,7 +279,7 @@ public class GeneticOptimizer : BaseOptimizer
 				MaxThreads = EmulationSettings.BatchSize,
 			},
 
-			Termination = new OrTermination(terminations.ToArray()),
+			Termination = termination,
 
 			MutationProbability = (float)Settings.MutationProbability,
 			CrossoverProbability = (float)Settings.CrossoverProbability,
@@ -281,17 +299,9 @@ public class GeneticOptimizer : BaseOptimizer
 		});
 	}
 
-	private void RaiseStop()
-	{
-		State = ChannelStates.Stopped;
-	}
-
 	private void OnTerminationReached(object sender, EventArgs e)
 	{
-		if (State != ChannelStates.Stopping)
-			State = ChannelStates.Stopping;
-
-		RaiseStop();
+		RaiseStopped();
 	}
 
 	//private void OnGenerationRan(object sender, EventArgs e)
@@ -336,6 +346,6 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 		});
 
-		RaiseStop();
+		RaiseStopped();
 	}
 }

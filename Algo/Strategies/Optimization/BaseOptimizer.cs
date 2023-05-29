@@ -172,7 +172,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	public ChannelStates State
 	{
 		get => _state;
-		protected set
+		private set
 		{
 			if (_state == value)
 				return;
@@ -295,6 +295,26 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	}
 
 	/// <summary>
+	/// Set <see cref="State"/> to <see cref="ChannelStates.Stopped"/>.
+	/// </summary>
+	protected void RaiseStopped()
+	{
+		if (State != ChannelStates.Stopping)
+			State = ChannelStates.Stopping;
+
+		var needProgress = false;
+
+		lock (_sync)
+			needProgress = !_cancelEmulation && _lastTotalProgress < 100;
+
+		if (needProgress)
+			TotalProgressChanged?.Invoke(100, DateTime.UtcNow - _startedAt, default);
+
+		IsCancelled = _cancelEmulation;
+		State = ChannelStates.Stopped;
+	}
+
+	/// <summary>
 	/// Try start next iteration.
 	/// </summary>
 	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
@@ -331,10 +351,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					State = ChannelStates.Stopping;
 
 				if (_startedConnectors.Count == 0)
-				{
-					IsCancelled = _cancelEmulation;
-					State = ChannelStates.Stopped;
-				}
+					RaiseStopped();
 
 				return;
 			}
