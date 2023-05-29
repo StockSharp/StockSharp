@@ -224,9 +224,6 @@ public class GeneticOptimizer : BaseOptimizer
 		if (parameters is null)
 			throw new ArgumentNullException(nameof(parameters));
 
-		if (calcFitness is null)
-			throw new ArgumentNullException(nameof(calcFitness));
-
 		if (_ga is not null)
 			throw new InvalidOperationException("Not stopped.");
 
