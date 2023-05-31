@@ -19,6 +19,22 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 	{
+        static InMemoryMessageAdapterProvider()
+        {
+			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+        }
+
+		private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+		{
+			var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+			
+			if (!File.Exists(assemblyPath))
+				return null;
+
+			return Assembly.LoadFrom(assemblyPath);
+		}
+
 		private readonly Type _transportAdapter;
 
 		/// <summary>
