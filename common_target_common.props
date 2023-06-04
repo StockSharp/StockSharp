@@ -37,7 +37,7 @@
     <GenerateAssemblyDescriptionAttribute Condition="'$(GenerateAssemblyDescriptionAttribute)' == ''">false</GenerateAssemblyDescriptionAttribute>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
