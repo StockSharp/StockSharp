@@ -1,4 +1,24 @@
 {
+  "StringLenMustBeAtLeastParams": {
+    "en": "The string must be at least {0} symbols",
+    "ru": "Строка должна быть как минимум {0} символов"
+  },
+  "SearchCloudSecurity": {
+    "en": "Search for security in the cloud",
+    "ru": "Поиск инструментов в облаке"
+  },
+  "AvailableDates": {
+    "en": "Available dates",
+    "ru": "Доступные даты"
+  },
+  "InQueue": {
+    "en": "enqueued",
+    "ru": "в очереди"
+  },
+  "CloudTasks": {
+    "en": "Cloud tasks",
+    "ru": "Облачные задачи"
+  },
   "To": {
     "en": "To",
     "ru": "До"
@@ -12232,8 +12252,8 @@
     "ru": "Настройки задачи соответствуют настройкам по умолчанию. Задача будет выключена."
   },
   "Str2906": {
-    "en": "Initializing.",
-    "ru": "Инициализируется."
+    "en": "Initializing",
+    "ru": "Инициализируется"
   },
   "Str2907": {
     "en": "Task has no selected securities.",
@@ -22037,11 +22057,11 @@
   },
   "Received": {
     "en": "Received",
-    "ru": "Received"
+    "ru": "Получено"
   },
   "Sent": {
     "en": "Sent",
-    "ru": "Sent"
+    "ru": "Отправлено"
   },
   "Crypto": {
     "en": "Crypto",
