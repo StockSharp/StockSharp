@@ -1,4 +1,12 @@
 {
+  "AvailableFrom": {
+    "en": "available from",
+    "ru": "доступно от"
+  },
+  "AvailableTo": {
+    "en": "available to",
+    "ru": "доступно до"
+  },
   "StringLenMustBeAtLeastParams": {
     "en": "The string must be at least {0} symbols",
     "ru": "Строка должна быть как минимум {0} символов"
@@ -6,10 +14,6 @@
   "SearchCloudSecurity": {
     "en": "Search for security in the cloud",
     "ru": "Поиск инструментов в облаке"
-  },
-  "AvailableDates": {
-    "en": "Available dates",
-    "ru": "Доступные даты"
   },
   "InQueue": {
     "en": "enqueued",
