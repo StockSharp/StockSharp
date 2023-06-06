@@ -1916,7 +1916,7 @@ namespace StockSharp.Messages
 		{
 			if (execMsg == null)
 				throw new ArgumentNullException(nameof(execMsg));
-			
+
 			return execMsg.DataType == DataType.Ticks || execMsg.DataType == DataType.OrderLog;
 		}
 
@@ -2498,7 +2498,7 @@ namespace StockSharp.Messages
 				case "PLT":
 				case "GLD":
 				case "SLV":
-				case "PCT": // проценты https://www.moex.com/n12293
+				case "PCT": // РїСЂРѕС†РµРЅС‚С‹ https://www.moex.com/n12293
 					return null;
 				default:
 				{
@@ -4674,13 +4674,13 @@ namespace StockSharp.Messages
 				var period = time.GetPeriod(exchangeTime);
 
 				// http://stocksharp.com/forum/yaf_postsm13887_RealtimeEmulationTrader---niepravil-nyie-sviechi.aspx#post13887
-				// отсчет свечек идет от начала сессии и игнорируются клиринги
+				// РѕС‚СЃС‡РµС‚ СЃРІРµС‡РµРє РёРґРµС‚ РѕС‚ РЅР°С‡Р°Р»Р° СЃРµСЃСЃРёРё Рё РёРіРЅРѕСЂРёСЂСѓСЋС‚СЃСЏ РєР»РёСЂРёРЅРіРё
 				var startTime = period != null && period.Times.Count > 0 ? period.Times[0].Min : TimeSpan.Zero;
 
 				var length = (exchangeTime.TimeOfDay - startTime).To<long>();
 				var beginTime = exchangeTime.Date + (startTime + length.Floor(timeFrame.Ticks).To<TimeSpan>());
 
-				//последняя свеча должна заканчиваться в конец торговой сессии
+				//РїРѕСЃР»РµРґРЅСЏСЏ СЃРІРµС‡Р° РґРѕР»Р¶РЅР° Р·Р°РєР°РЅС‡РёРІР°С‚СЊСЃСЏ РІ РєРѕРЅРµС† С‚РѕСЂРіРѕРІРѕР№ СЃРµСЃСЃРёРё
 				var tempEndTime = beginTime.TimeOfDay + timeFrame;
 				TimeSpan stopTime;
 
@@ -4694,7 +4694,7 @@ namespace StockSharp.Messages
 
 				var endTime = beginTime + timeFrame.Min(stopTime - beginTime.TimeOfDay);
 
-				// если currentTime попало на клиринг
+				// РµСЃР»Рё currentTime РїРѕРїР°Р»Рѕ РЅР° РєР»РёСЂРёРЅРі
 				if (endTime < beginTime)
 					endTime = beginTime.Date + tempEndTime;
 
@@ -4818,7 +4818,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns>Icon url.</returns>
@@ -5006,7 +5006,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="set"></param>
