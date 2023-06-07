@@ -15,7 +15,8 @@
 		/// </summary>
 		/// <param name="settings"><see cref="SettingsStorage"/></param>
 		/// <param name="fileName">File name.</param>
-		public static void SerializeInvariant(this SettingsStorage settings, string fileName)
+		/// <param name="bom">Add UTF8 BOM preamble.</param>
+		public static void SerializeInvariant(this SettingsStorage settings, string fileName, bool bom = true)
 		{
 			if (settings is null)
 				throw new ArgumentNullException(nameof(settings));
@@ -23,16 +24,17 @@
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
 
-			Do.Invariant(() => settings.Serialize(fileName));
+			Do.Invariant(() => settings.Serialize(fileName, bom));
 		}
 
 		/// <summary>
 		/// Serialize the specified storage into byte array.
 		/// </summary>
 		/// <param name="settings"><see cref="SettingsStorage"/></param>
+		/// <param name="bom">Add UTF8 BOM preamble.</param>
 		/// <returns></returns>
-		public static byte[] SerializeInvariant(this SettingsStorage settings)
-			=> Do.Invariant(() => settings.Serialize());
+		public static byte[] SerializeInvariant(this SettingsStorage settings, bool bom = true)
+			=> Do.Invariant(() => settings.Serialize(bom));
 
 		/// <summary>
 		/// Deserialize storage from the specified file.

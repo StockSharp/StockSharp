@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Configuration
 {
 	using System;
+	using System.Text;
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
@@ -433,11 +434,13 @@
 		/// Create serializer.
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="bom">Serializer adds UTF8 BOM preamble.</param>
 		/// <returns>Serializer.</returns>
-		public static ISerializer<T> CreateSerializer<T>()
+		public static ISerializer<T> CreateSerializer<T>(bool bom = true)
 			=> new JsonSerializer<T>
 			{
 				Indent = true,
+				Encoding = bom ? Encoding.UTF8 : JsonHelper.UTF8NoBom,
 				EnumAsString = true,
 				NullValueHandling = NullValueHandling.Ignore,
 			};
@@ -456,17 +459,19 @@
 		/// <typeparam name="T">Value type.</typeparam>
 		/// <param name="value">Value.</param>
 		/// <param name="filePath">File path.</param>
-		public static void Serialize<T>(this T value, string filePath)
-			=> CreateSerializer<T>().Serialize(value, filePath);
+		/// <param name="bom">Add UTF8 BOM preamble.</param>
+		public static void Serialize<T>(this T value, string filePath, bool bom = true)
+			=> CreateSerializer<T>(bom).Serialize(value, filePath);
 
 		/// <summary>
 		/// Serialize value into byte array.
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
 		/// <param name="value">Value.</param>
+		/// <param name="bom">Add UTF8 BOM preamble.</param>
 		/// <returns>Serialized data.</returns>
-		public static byte[] Serialize<T>(this T value)
-			=> CreateSerializer<T>().Serialize(value);
+		public static byte[] Serialize<T>(this T value, bool bom = true)
+			=> CreateSerializer<T>(bom).Serialize(value);
 
 		/// <summary>
 		///
