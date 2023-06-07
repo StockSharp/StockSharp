@@ -1,4 +1,8 @@
 {
+  "TaskIsComplete": {
+    "en": "Task is complete",
+    "ru": "Задача завершена"
+  },
   "AvailableFrom": {
     "en": "available from",
     "ru": "доступно от"
