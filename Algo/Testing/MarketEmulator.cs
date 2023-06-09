@@ -146,6 +146,8 @@ namespace StockSharp.Algo.Testing
 
 			private long? _depthSubscription;
 			private long? _ticksSubscription;
+			private long? _l1Subscription;
+			private long? _olSubscription;
 
 			private bool _priceStepUpdated;
 			private bool _volumeStepUpdated;
@@ -235,6 +237,9 @@ namespace StockSharp.Algo.Testing
 							// (не из ExecutionLogConverter)
 							//if (execMsg.TransactionId > 0)
 							//	result.Add(execMsg);
+
+							if (_olSubscription is not null)
+								result.Add(execMsg);
 						}
 						else
 							throw new ArgumentOutOfRangeException(nameof(message), execMsg.DataType, LocalizedStrings.Str1219);
@@ -386,6 +391,10 @@ namespace StockSharp.Algo.Testing
 								_depthSubscription = mdMsg.TransactionId;
 							else if (mdMsg.DataType2 == DataType.Ticks)
 								_ticksSubscription = mdMsg.TransactionId;
+							else if (mdMsg.DataType2 == DataType.Level1)
+								_l1Subscription = mdMsg.TransactionId;
+							else if (mdMsg.DataType2 == DataType.OrderLog)
+								_olSubscription = mdMsg.TransactionId;
 						}
 						else
 						{
@@ -393,6 +402,10 @@ namespace StockSharp.Algo.Testing
 								_depthSubscription = null;
 							else if (_ticksSubscription == mdMsg.OriginalTransactionId)
 								_ticksSubscription = null;
+							else if (_l1Subscription == mdMsg.OriginalTransactionId)
+								_l1Subscription = null;
+							else if (_olSubscription == mdMsg.OriginalTransactionId)
+								_olSubscription = null;
 						}
 
 						break;
@@ -656,6 +669,9 @@ namespace StockSharp.Algo.Testing
 						Asks = _prevAskPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
 					}, result);
 				}
+
+				if (_l1Subscription is not null)
+					result.Add(message);
 			}
 
 			private void ProcessQuoteChange(QuoteChangeMessage message, ICollection<Message> result)
