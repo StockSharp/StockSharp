@@ -202,19 +202,12 @@ namespace StockSharp.Algo.Storages
 
 			return _depthStorages.SafeAdd(Tuple.Create(securityId, (drive ?? DefaultDrive).GetStorageDrive(securityId, DataType.MarketDepth, format)), key =>
 			{
-				IMarketDataSerializer<QuoteChangeMessage> serializer;
-
-				switch (format)
+				IMarketDataSerializer<QuoteChangeMessage> serializer = format switch
 				{
-					case StorageFormats.Binary:
-						serializer = new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider);
-						break;
-					case StorageFormats.Csv:
-						serializer = new MarketDepthCsvSerializer(key.Item1);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-				}
+					StorageFormats.Binary => new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider),
+					StorageFormats.Csv => new MarketDepthCsvSerializer(key.Item1),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+				};
 
 				return new MarketDepthStorage(securityId, key.Item2, serializer);
 			});
@@ -243,19 +236,12 @@ namespace StockSharp.Algo.Storages
 				//if (security.Board == ExchangeBoard.Associated)
 				//	return new AllSecurityMarketDataStorage<Level1ChangeMessage>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), (s, d) => GetLevel1MessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
 
-				IMarketDataSerializer<Level1ChangeMessage> serializer;
-
-				switch (format)
+				IMarketDataSerializer<Level1ChangeMessage> serializer = format switch
 				{
-					case StorageFormats.Binary:
-						serializer = new Level1BinarySerializer(key.Item1, ExchangeInfoProvider);
-						break;
-					case StorageFormats.Csv:
-						serializer = new Level1CsvSerializer(key.Item1);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-				}
+					StorageFormats.Binary => new Level1BinarySerializer(key.Item1, ExchangeInfoProvider),
+					StorageFormats.Csv => new Level1CsvSerializer(key.Item1),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+				};
 
 				return new Level1Storage(securityId, key.Item2, serializer);
 			});
@@ -272,19 +258,12 @@ namespace StockSharp.Algo.Storages
 				//if (security.Board == ExchangeBoard.Associated)
 				//	return new AllSecurityMarketDataStorage<Level1ChangeMessage>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), (s, d) => GetLevel1MessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
 
-				IMarketDataSerializer<PositionChangeMessage> serializer;
-
-				switch (format)
+				IMarketDataSerializer<PositionChangeMessage> serializer = format switch
 				{
-					case StorageFormats.Binary:
-						serializer = new PositionBinarySerializer(key.Item1, ExchangeInfoProvider);
-						break;
-					case StorageFormats.Csv:
-						serializer = new PositionCsvSerializer(key.Item1);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-				}
+					StorageFormats.Binary => new PositionBinarySerializer(key.Item1, ExchangeInfoProvider),
+					StorageFormats.Csv => new PositionCsvSerializer(key.Item1),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+				};
 
 				return new PositionChangeStorage(securityId, key.Item2, serializer);
 			});
@@ -335,55 +314,34 @@ namespace StockSharp.Algo.Storages
 				{
 					case ExecutionTypes.Tick:
 					{
-						IMarketDataSerializer<ExecutionMessage> serializer;
-
-						switch (format)
+						IMarketDataSerializer<ExecutionMessage> serializer = format switch
 						{
-							case StorageFormats.Binary:
-								serializer = new TickBinarySerializer(key.Item1, ExchangeInfoProvider);
-								break;
-							case StorageFormats.Csv:
-								serializer = new TickCsvSerializer(key.Item1);
-								break;
-							default:
-								throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-						}
+							StorageFormats.Binary => new TickBinarySerializer(key.Item1, ExchangeInfoProvider),
+							StorageFormats.Csv => new TickCsvSerializer(key.Item1),
+							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+						};
 
 						return new TradeStorage(securityId, mdDrive, serializer);
 					}
 					case ExecutionTypes.Transaction:
 					{
-						IMarketDataSerializer<ExecutionMessage> serializer;
-
-						switch (format)
+						IMarketDataSerializer<ExecutionMessage> serializer = format switch
 						{
-							case StorageFormats.Binary:
-								serializer = new TransactionBinarySerializer(secId, ExchangeInfoProvider);
-								break;
-							case StorageFormats.Csv:
-								serializer = new TransactionCsvSerializer(secId);
-								break;
-							default:
-								throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-						}
+							StorageFormats.Binary => new TransactionBinarySerializer(secId, ExchangeInfoProvider),
+							StorageFormats.Csv => new TransactionCsvSerializer(secId),
+							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+						};
 
 						return new TransactionStorage(securityId, mdDrive, serializer);
 					}
 					case ExecutionTypes.OrderLog:
 					{
-						IMarketDataSerializer<ExecutionMessage> serializer;
-
-						switch (format)
+						IMarketDataSerializer<ExecutionMessage> serializer = format switch
 						{
-							case StorageFormats.Binary:
-								serializer = new OrderLogBinarySerializer(secId, ExchangeInfoProvider);
-								break;
-							case StorageFormats.Csv:
-								serializer = new OrderLogCsvSerializer(secId);
-								break;
-							default:
-								throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-						}
+							StorageFormats.Binary => new OrderLogBinarySerializer(secId, ExchangeInfoProvider),
+							StorageFormats.Csv => new OrderLogCsvSerializer(secId),
+							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+						};
 
 						return new OrderLogStorage(securityId, mdDrive, serializer);
 					}
@@ -432,19 +390,12 @@ namespace StockSharp.Algo.Storages
 
 			return _newsStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(securityId, DataType.News, format), key =>
 			{
-				IMarketDataSerializer<NewsMessage> serializer;
-
-				switch (format)
+				IMarketDataSerializer<NewsMessage> serializer = format switch
 				{
-					case StorageFormats.Binary:
-						serializer = new NewsBinarySerializer(ExchangeInfoProvider);
-						break;
-					case StorageFormats.Csv:
-						serializer = new NewsCsvSerializer();
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-				}
+					StorageFormats.Binary => new NewsBinarySerializer(ExchangeInfoProvider),
+					StorageFormats.Csv => new NewsCsvSerializer(),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+				};
 
 				return new NewsStorage(securityId, serializer, key);
 			});
@@ -455,19 +406,12 @@ namespace StockSharp.Algo.Storages
 		{
 			return _boardStateStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(default, DataType.BoardState, format), key =>
 			{
-				IMarketDataSerializer<BoardStateMessage> serializer;
-
-				switch (format)
+				IMarketDataSerializer<BoardStateMessage> serializer = format switch
 				{
-					case StorageFormats.Binary:
-						serializer = new BoardStateBinarySerializer(ExchangeInfoProvider);
-						break;
-					case StorageFormats.Csv:
-						serializer = new BoardStateCsvSerializer();
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
-				}
+					StorageFormats.Binary => new BoardStateBinarySerializer(ExchangeInfoProvider),
+					StorageFormats.Csv => new BoardStateCsvSerializer(),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+				};
 
 				return new BoardStateStorage(default, serializer, key);
 			});
