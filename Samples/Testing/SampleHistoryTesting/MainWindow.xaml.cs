@@ -40,6 +40,7 @@ namespace SampleHistoryTesting
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
+	using StockSharp.Algo.Candles;
 
 	public partial class MainWindow
 	{
@@ -48,7 +49,7 @@ namespace SampleHistoryTesting
 		{
 			public bool UseTicks { get; set; }
 			public bool UseMarketDepth { get; set; }
-			public TimeSpan? UseCandleTimeFrame { get; set; }
+			public DataType UseCandle { get; set; }
 			public Color CurveColor { get; set; }
 			public string StrategyName { get; set; }
 			public bool UseOrderLog { get; set; }
@@ -75,7 +76,11 @@ namespace SampleHistoryTesting
 			From.EditValue = Paths.HistoryBeginDate;
 			To.EditValue = Paths.HistoryEndDate;
 
-			TimeFrame.SelectedIndex = 0;
+			CandleSettings.Settings = new()
+			{
+				CandleType = typeof(TimeFrameCandle),
+				Arg = TimeSpan.FromMinutes(1),
+			};
 
 			_progressBars.AddRange(new[]
 			{
@@ -135,8 +140,6 @@ namespace SampleHistoryTesting
 			//	MessageBox.Show(this, LocalizedStrings.Str3016);
 			//	return;
 			//}
-
-			var timeFrame = TimeSpan.FromMinutes(TimeFrame.SelectedIndex == 0 ? 1 : 5);
 
 			var secCode = id.SecurityCode;
 			var board = _exchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
@@ -206,7 +209,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandleTimeFrame = timeFrame,
+						UseCandle = CandleSettings.Settings.ToDataType(),
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.Candles
 					},
@@ -222,7 +225,7 @@ namespace SampleHistoryTesting
 					new EmulationInfo
 					{
 						UseMarketDepth = true,
-						UseCandleTimeFrame = timeFrame,
+						UseCandle = CandleSettings.Settings.ToDataType(),
 						CurveColor = Colors.Cyan,
 						StrategyName = LocalizedStrings.XamlStr635
 					},
@@ -267,7 +270,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandleTimeFrame = timeFrame,
+						UseCandle = CandleSettings.Settings.ToDataType(),
 						CustomHistoryAdapter = g => new FinamMessageAdapter(g),
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.FinamCandles
@@ -283,7 +286,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandleTimeFrame = timeFrame,
+						UseCandle = CandleSettings.Settings.ToDataType(),
 						CustomHistoryAdapter = g => new YahooMessageAdapter(g),
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.YahooCandles
@@ -299,7 +302,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandleTimeFrame = timeFrame,
+						UseCandle = CandleSettings.Settings.ToDataType(),
 						CustomHistoryAdapter = g => new OwnMessageAdapter(g),
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.Custom
@@ -405,7 +408,7 @@ namespace SampleHistoryTesting
 					},
 
 					// set market time freq as time frame
-					MarketTimeChangedInterval = timeFrame,
+					//MarketTimeChangedInterval = timeFrame,
 				};
 
 				((ILogSource)connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
@@ -427,6 +430,24 @@ namespace SampleHistoryTesting
 					// it is excessively for time range with several months
 					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
 				};
+
+				if (emulationInfo.UseCandle is not null)
+				{
+					strategy.CandleType = emulationInfo.UseCandle;
+
+					if (strategy.CandleType != DataType.TimeFrame(TimeSpan.FromMinutes(1)))
+					{
+						strategy.BuildFrom = DataType.TimeFrame(TimeSpan.FromMinutes(1));
+					}
+				}
+				else if (emulationInfo.UseTicks)
+					strategy.BuildFrom = DataType.Ticks;
+				else if (emulationInfo.UseLevel1)
+					strategy.BuildFrom = DataType.Level1;
+				else if (emulationInfo.UseOrderLog)
+					strategy.BuildFrom = DataType.OrderLog;
+				else if (emulationInfo.UseMarketDepth)
+					strategy.BuildFrom = DataType.MarketDepth;
 
 				var chart = set.Item5;
 
@@ -486,7 +507,7 @@ namespace SampleHistoryTesting
 								// if order book will be generated
 								generateDepths ||
 								// or backtesting will be on candles
-								emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
+								emulationInfo.UseCandle is not null
 							)
 						{
 							// if no have order book historical data, but strategy is required,
