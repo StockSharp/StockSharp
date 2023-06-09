@@ -2768,6 +2768,15 @@ namespace StockSharp.Algo.Testing
 				}
 
 				case MessageTypes.MarketData:
+				{
+					var secId = ((MarketDataMessage)message).SecurityId;
+
+					if (!secId.IsAllSecurity())
+						GetEmulator(secId).Process(message, retVal);
+
+					break;
+				}
+
 				case MessageTypes.SecurityLookup:
 				case MessageTypes.BoardLookup:
 				case MessageTypes.TimeFrameLookup:
