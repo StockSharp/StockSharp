@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Candles.Compression
 							}
 						}
 
-						if (mdMsg.BuildMode == MarketDataBuildModes.Build)
+						if (mdMsg.BuildMode == MarketDataBuildModes.Build && mdMsg.BuildFrom?.IsTFCandles != true)
 						{
 							if (!TrySubscribeBuild(mdMsg))
 								RaiseNewOutMessage(transactionId.CreateNotSupported());
