@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		/// <param name="inChannel">Incoming messages channel.</param>
-		/// <param name="isEmulationOnly">Send <see cref="TimeMessage"/> to emulator.</param>
+		/// <param name="isEmulationOnly">All messages do not contains real trading.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
 		/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>

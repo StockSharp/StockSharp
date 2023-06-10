@@ -1,4 +1,16 @@
 {
+  "Renko": {
+    "en": "Renko",
+    "ru": "Ренко"
+  },
+  "Range": {
+    "en": "Range",
+    "ru": "Рейндж"
+  },
+  "PnF": {
+    "en": "X0",
+    "ru": "X0"
+  },
   "CloudSecurities": {
     "en": "Cloud securities",
     "ru": "Инструменты в облаке"
@@ -1878,6 +1890,10 @@
   "OpenInterest": {
     "en": "Open interest.",
     "ru": "Открытый интерес."
+  },
+  "Tick": {
+    "en": "Tick",
+    "ru": "Тик"
   },
   "Ticks": {
     "en": "Ticks",

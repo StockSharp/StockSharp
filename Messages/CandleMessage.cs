@@ -386,7 +386,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TFKey,
+		Description = LocalizedStrings.TimeFrameCandleKey
+	)]
 	public class TimeFrameCandleMessage : TypedCandleMessage<TimeSpan>, ITimeFrameCandleMessage
 	{
 		/// <summary>
@@ -418,7 +422,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TickKey,
+		Description = LocalizedStrings.TickCandleKey
+	)]
 	public class TickCandleMessage : TypedCandleMessage<int>, ITickCandleMessage
 	{
 		/// <summary>
@@ -441,7 +449,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.VolumeKey,
+		Description = LocalizedStrings.VolumeCandleKey
+	)]
 	public class VolumeCandleMessage : TypedCandleMessage<decimal>, IVolumeCandleMessage
 	{
 		/// <summary>
@@ -464,7 +476,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.RangeKey,
+		Description = LocalizedStrings.RangeCandleKey
+	)]
 	public class RangeCandleMessage : TypedCandleMessage<Unit>, IRangeCandleMessage
 	{
 		/// <summary>
@@ -563,7 +579,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PnFKey,
+		Description = LocalizedStrings.PnFCandleKey
+	)]
 	public class PnFCandleMessage : TypedCandleMessage<PnFArg>, IPnFCandleMessage
 	{
 		/// <summary>
@@ -586,7 +606,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.RenkoKey,
+		Description = LocalizedStrings.RenkoCandleKey
+	)]
 	public class RenkoCandleMessage : TypedCandleMessage<Unit>, IRenkoCandleMessage
 	{
 		/// <summary>
@@ -609,7 +633,11 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.HeikinAshiKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.HeikinAshiKey,
+		Description = LocalizedStrings.HeikinAshiKey
+	)]
 	public class HeikinAshiCandleMessage : TimeFrameCandleMessage, IHeikinAshiCandleMessage
 	{
 		/// <summary>
