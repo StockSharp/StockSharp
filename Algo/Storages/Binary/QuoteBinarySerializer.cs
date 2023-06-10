@@ -140,6 +140,11 @@ namespace StockSharp.Algo.Storages.Binary
 			_builder = new OrderBookIncrementBuilder(securityId);
 		}
 
+		/// <summary>
+		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
+		/// </summary>
+		public bool PassThroughOrderBookInrement { get; set; }
+
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<QuoteChangeMessage> messages, QuoteMetaInfo metaInfo)
 		{
 			if (metaInfo.IsEmpty())
@@ -356,7 +361,13 @@ namespace StockSharp.Algo.Storages.Binary
 					diff.Asks = diff.Asks.OrderBy(q => q.Price).ToArray();
 				}
 
-				quoteMsg = isFull ? diff : prevDepth.AddDelta(diff);
+				if (PassThroughOrderBookInrement)
+				{
+					quoteMsg = diff;
+					quoteMsg.State = isFull ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment;
+				}
+				else
+					quoteMsg = isFull ? diff : prevDepth.AddDelta(diff);
 
 				//if (depth.BestBid != null && depth.BestAsk != null && depth.BestBid.Price >= depth.BestAsk.Price)
 				//	throw new InvalidOperationException("Лучший бид {0} больше или равен лучшему офферу {1}.".Put(depth.BestBid.Price, depth.BestAsk.Price));
