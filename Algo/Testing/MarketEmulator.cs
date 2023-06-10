@@ -859,6 +859,23 @@ namespace StockSharp.Algo.Testing
 				ProcessTick(tick.SecurityId, tick.LocalTime, tick.ServerTime, (tick.OriginSide, tick.GetTradePrice(), tick.TradeVolume ?? 1), result);
 			}
 
+			private void AddActiveOrder(ExecutionMessage orderMsg, DateTimeOffset time)
+			{
+				_activeOrders.Add(orderMsg.TransactionId, orderMsg);
+
+				if (orderMsg.ExpiryDate != null)
+					_expirableOrders.Add(orderMsg, orderMsg.ExpiryDate.Value.EndOfDay() - time);
+			}
+
+			private bool TryRemoveActiveOrder(long transId, out ExecutionMessage orderMsg)
+			{
+				if (!_activeOrders.TryGetAndRemove(transId, out orderMsg))
+					return false;
+
+				_expirableOrders.Remove(orderMsg);
+				return true;
+			}
+
 			private void ProcessTick(SecurityId secId, DateTimeOffset localTime, DateTimeOffset serverTime, (Sides? side, decimal price, decimal volume) tick, ICollection<Message> result)
 			{
 				var tradePrice = tick.price;
@@ -957,16 +974,14 @@ namespace StockSharp.Algo.Testing
 							{
 								if (quote.PortfolioName is not null)
 								{
-									var orderMsg = _activeOrders.GetAndRemove(quote.TransactionId);
+									if (TryRemoveActiveOrder(quote.TransactionId, out var orderMsg))
+									{
+										orderMsg.OriginalTransactionId = quote.TransactionId;
+										orderMsg.OrderState = OrderStates.Done;
+										result.Add(ToOrder(localTime, orderMsg));
 
-									if (quote.ExpiryDate is not null)
-										_expirableOrders.Remove(quote);
-
-									orderMsg.OriginalTransactionId = quote.TransactionId;
-									orderMsg.OrderState = OrderStates.Done;
-									result.Add(ToOrder(localTime, orderMsg));
-
-									ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
+										ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
+									}
 								}
 
 								_messagePool.Free(quote);
@@ -1296,10 +1311,8 @@ namespace StockSharp.Algo.Testing
 
 				if (execution.IsCancellation)
 				{
-					if (_activeOrders.TryGetAndRemove(execution.OriginalTransactionId, out var order))
+					if (TryRemoveActiveOrder(execution.OriginalTransactionId, out var order))
 					{
-						_expirableOrders.Remove(order);
-
 						// изменяем текущие котировки, добавляя туда наши цену и объем
 						UpdateQuote(order, false);
 
@@ -1371,10 +1384,7 @@ namespace StockSharp.Algo.Testing
 
 						if (execution.OrderState == OrderStates.Active)
 						{
-							_activeOrders.Add(execution.TransactionId, execution);
-
-							if (execution.ExpiryDate != null)
-								_expirableOrders.Add(execution, execution.ExpiryDate.Value.EndOfDay() - time);
+							AddActiveOrder(execution, time);
 
 							// изменяем текущие котировки, добавляя туда наши цену и объем
 							UpdateQuote(execution, true);
@@ -1451,8 +1461,7 @@ namespace StockSharp.Algo.Testing
 						if (order.OrderState != OrderStates.Done)
 							continue;
 
-						_activeOrders.Remove(order.TransactionId);
-						_expirableOrders.Remove(order);
+						TryRemoveActiveOrder(order.TransactionId, out _);
 
 						// изменяем текущие котировки, удаляя оттуда наши цену и объем
 						UpdateQuote(order, false);
@@ -1817,8 +1826,7 @@ namespace StockSharp.Algo.Testing
 
 					if (left <= TimeSpan.Zero)
 					{
-						_expirableOrders.Remove(orderMsg);
-						_activeOrders.Remove(orderMsg.TransactionId);
+						TryRemoveActiveOrder(orderMsg.TransactionId, out _);
 
 						orderMsg.OrderState = OrderStates.Done;
 						result.Add(ToOrder(message.LocalTime, orderMsg));
