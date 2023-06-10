@@ -1114,6 +1114,11 @@ namespace StockSharp.Algo
 		public static IEnumerable<Type> AllCandleTypes => _candleTypes.CachedKeys;
 
 		/// <summary>
+		/// All registered candle message types.
+		/// </summary>
+		public static IEnumerable<Type> AllCandleMessageTypes => _candleTypes.CachedValues;
+
+		/// <summary>
 		/// Register new candle type.
 		/// </summary>
 		/// <typeparam name="TCandle">Candle type.</typeparam>
