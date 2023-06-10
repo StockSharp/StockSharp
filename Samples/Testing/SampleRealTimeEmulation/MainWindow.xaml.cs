@@ -46,7 +46,7 @@ namespace SampleRealTimeEmulation
 		private RealTimeEmulationTrader<IMessageAdapter> _emuConnector;
 		private bool _isConnected;
 		private Security _security;
-		private CandleSeries _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
+		private DataType _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
 
 		private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
 
@@ -56,12 +56,8 @@ namespace SampleRealTimeEmulation
 		{
 			InitializeComponent();
 
-			CandleSettingsEditor.Settings = new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = TimeSpan.FromMinutes(5),
-			};
-            CandleSettingsEditor.SettingsChanged += CandleSettingsChanged;
+			CandleSettingsEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(5));
+			CandleSettingsEditor.DataTypeChanged += CandleSettingsChanged;
 
 			_logManager = new LogManager();
 			_logManager.Listeners.Add(new GuiLogListener(Log));
@@ -187,10 +183,10 @@ namespace SampleRealTimeEmulation
 
 		private void CandleSettingsChanged()
 		{
-			if (_tempCandleSeries == CandleSettingsEditor.Settings || _candlesSubscription == null)
+			if (_tempCandleSeries == CandleSettingsEditor.DataType || _candlesSubscription == null)
 				return;
 
-			_tempCandleSeries = CandleSettingsEditor.Settings.Clone();
+			_tempCandleSeries = CandleSettingsEditor.DataType.Clone();
 			SecurityPicker_OnSecuritySelected(SecurityPicker.SelectedSecurity);
 		}
 
@@ -267,7 +263,7 @@ namespace SampleRealTimeEmulation
 			_emuConnector.SubscribeTrades(security);
 			_emuConnector.SubscribeLevel1(security);
 
-			_candlesSubscription = _emuConnector.SubscribeCandles(new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg), from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
+			_candlesSubscription = _emuConnector.SubscribeCandles(CandleSettingsEditor.DataType.ToCandleSeries(security), from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
 		}
 
 		private void NewOrder_OnClick(object sender, RoutedEventArgs e)

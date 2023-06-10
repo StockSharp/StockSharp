@@ -105,11 +105,7 @@
 				.Timer(OnDataTimer)
 				.Interval(TimeSpan.FromMilliseconds(1));
 
-			SeriesEditor.Settings = new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = TimeSpan.FromMinutes(1)
-			};
+			SeriesEditor.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
 
 			ConfigManager.RegisterService<ISubscriptionProvider>(_testProvider);
 			ConfigManager.RegisterService<ISecurityProvider>(_securityProvider);
@@ -258,10 +254,8 @@
 				_tradeGenerator.Init();
 				_tradeGenerator.Process(_security.ToMessage());
 
-				var series = new CandleSeries(
-											 SeriesEditor.Settings.CandleType,
-											 _security,
-											 SeriesEditor.Settings.Arg) { IsCalcVolumeProfile = true };
+				var series = SeriesEditor.DataType.ToCandleSeries(_security);
+				series.IsCalcVolumeProfile = true;
 
 				_candleElement = Chart.CreateCandleElement();
 				Chart.AddElement(_areaComb, _candleElement, series);

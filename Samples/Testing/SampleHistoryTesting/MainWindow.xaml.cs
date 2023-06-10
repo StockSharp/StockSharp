@@ -76,11 +76,7 @@ namespace SampleHistoryTesting
 			From.EditValue = Paths.HistoryBeginDate;
 			To.EditValue = Paths.HistoryEndDate;
 
-			CandleSettings.Settings = new()
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = TimeSpan.FromMinutes(1),
-			};
+			CandleSettings.DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1));
 
 			_progressBars.AddRange(new[]
 			{
@@ -209,7 +205,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandle = CandleSettings.Settings.ToDataType(),
+						UseCandle = CandleSettings.DataType,
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.Candles
 					},
@@ -225,7 +221,7 @@ namespace SampleHistoryTesting
 					new EmulationInfo
 					{
 						UseMarketDepth = true,
-						UseCandle = CandleSettings.Settings.ToDataType(),
+						UseCandle = CandleSettings.DataType,
 						CurveColor = Colors.Cyan,
 						StrategyName = LocalizedStrings.XamlStr635
 					},
@@ -270,7 +266,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandle = CandleSettings.Settings.ToDataType(),
+						UseCandle = CandleSettings.DataType,
 						CustomHistoryAdapter = g => new FinamMessageAdapter(g),
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.FinamCandles
@@ -286,7 +282,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandle = CandleSettings.Settings.ToDataType(),
+						UseCandle = CandleSettings.DataType,
 						CustomHistoryAdapter = g => new YahooMessageAdapter(g),
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.YahooCandles
@@ -302,7 +298,7 @@ namespace SampleHistoryTesting
 					// candles
 					new EmulationInfo
 					{
-						UseCandle = CandleSettings.Settings.ToDataType(),
+						UseCandle = CandleSettings.DataType,
 						CustomHistoryAdapter = g => new OwnMessageAdapter(g),
 						CurveColor = Colors.DarkBlue,
 						StrategyName = LocalizedStrings.Custom
