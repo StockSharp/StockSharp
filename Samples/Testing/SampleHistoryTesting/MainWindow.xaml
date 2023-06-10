@@ -113,10 +113,7 @@
 					<TextBox x:Name="MaxDepth" Grid.Row="15" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr291}">1</TextBox>
 					<TextBox x:Name="MaxVolume" Grid.Row="16" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr293}">1</TextBox>
 
-					<ComboBox x:Name="TimeFrame" Grid.Row="17" Grid.Column="0">
-						<ComboBoxItem>1min</ComboBoxItem>
-						<ComboBoxItem>5min</ComboBoxItem>
-					</ComboBox>
+					<charting:CandleSettingsEditor x:Name="CandleSettings" Grid.Row="17" Grid.Column="0" />
 				</Grid>
 			</Grid>
 

@@ -48,6 +48,10 @@ namespace SampleHistoryTesting
         {
 			_longSmaParam = this.Param(nameof(LongSma), 80);
 			_shortSmaParam = this.Param(nameof(ShortSma), 30);
+			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)));
+			_buildFromParam = this.Param<DataType>(nameof(BuildFrom));
+
+			_candleTypeParam.AllowNull = false;
 		}
 
 		private readonly StrategyParam<int> _longSmaParam;
@@ -66,6 +70,22 @@ namespace SampleHistoryTesting
 			set => _shortSmaParam.Value = value;
 		}
 
+		private readonly StrategyParam<DataType> _candleTypeParam;
+
+		public DataType CandleType
+		{
+			get => _candleTypeParam.Value;
+			set => _candleTypeParam.Value = value;
+		}
+
+		private readonly StrategyParam<DataType> _buildFromParam;
+
+		public DataType BuildFrom
+		{
+			get => _buildFromParam.Value;
+			set => _buildFromParam.Value = value;
+		}
+
 		protected override void OnStarted()
 		{
 			// !!! DO NOT FORGET add it in case use IsFormed property (see code below)
@@ -74,12 +94,14 @@ namespace SampleHistoryTesting
 
 			_chart = this.GetChart();
 
-			var subscription = new Subscription(DataType.TimeFrame(TimeSpan.FromMinutes(5)), Security)
+			var subscription = new Subscription(CandleType, Security)
 			{
 				DisableEntity = true,
 				MarketData =
 				{
 					IsFinishedOnly = true,
+					BuildFrom = BuildFrom,
+					BuildMode = BuildFrom is null ? MarketDataBuildModes.Load : MarketDataBuildModes.Build
 				}
 			};
 

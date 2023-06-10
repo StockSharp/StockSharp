@@ -1620,7 +1620,7 @@ namespace StockSharp.Algo.Strategies
 		/// All indicators used in strategy. Uses in default implementation of <see cref="IsFormed"/>.
 		/// </summary>
 		[Browsable(false)]
-		public IList<IIndicator> Indicators => _indicators;
+		public INotifyList<IIndicator> Indicators => _indicators;
 
 		private bool CheckRegisterLimits()
 		{
