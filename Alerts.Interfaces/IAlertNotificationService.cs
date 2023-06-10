@@ -23,4 +23,20 @@ namespace StockSharp.Alerts
 		/// <returns><see cref="ValueTask"/>.</returns>
 		ValueTask NotifyAsync(AlertNotifications type, long? externalId, string caption, string message, DateTimeOffset time, CancellationToken cancellationToken);
 	}
+
+	/// <summary>
+	/// Desktop popup notification service.
+	/// </summary>
+	public interface IDesktopPopupService : ILogSource
+	{
+		/// <summary>
+		/// Show desktop popup.
+		/// </summary>
+		/// <param name="caption">Signal header.</param>
+		/// <param name="message">Alert text.</param>
+		/// <param name="iconKey">Icon to show with notification.</param>
+		/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+		/// <returns><see cref="ValueTask"/>Task result is true if user has clicked the notification.</returns>
+		ValueTask<bool> NotifyAsync(string caption, string message, string iconKey, CancellationToken cancellationToken);
+	}
 }

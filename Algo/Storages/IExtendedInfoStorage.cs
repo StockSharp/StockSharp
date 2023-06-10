@@ -46,13 +46,13 @@ namespace StockSharp.Algo.Storages
 		void Add(SecurityId securityId, IDictionary<string, object> extensionInfo);
 
 		/// <summary>
-		/// Load extended info. 
+		/// Load extended info.
 		/// </summary>
 		/// <returns>Extended information.</returns>
 		IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> Load();
 
 		/// <summary>
-		/// Load extended info. 
+		/// Load extended info.
 		/// </summary>
 		/// <param name="securityId">Security identifier.</param>
 		/// <returns>Extended information.</returns>
@@ -63,6 +63,11 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="securityId">Security identifier.</param>
 		void Delete(SecurityId securityId);
+
+		/// <summary>
+		/// Fields data need to be reloaded.
+		/// </summary>
+		event Action Reset;
 	}
 
 	/// <summary>
@@ -126,6 +131,8 @@ namespace StockSharp.Algo.Storages
 			private readonly SyncObject _lock = new();
 			//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 			private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new();
+
+			public event Action Reset;
 
 			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 			{

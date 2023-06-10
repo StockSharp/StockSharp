@@ -1,4 +1,20 @@
 {
+  "CloudSecurities": {
+    "en": "Cloud securities",
+    "ru": "Инструменты в облаке"
+  },
+  "InvalidDataRangeParams": {
+    "en": "Selected market data range is invalid. For {0} security the available data range is {1} — {2}",
+    "ru": "Выбранный диапазон маркет данных некорректен. Для инструмента {0} доступны маркет данные в диапазоне {1} — {2}"
+  },
+  "CopyError": {
+    "en": "Copy error",
+    "ru": "Скопировать ошибку"
+  },
+  "TaskIsComplete": {
+    "en": "Task is complete",
+    "ru": "Задача завершена"
+  },
   "AvailableFrom": {
     "en": "available from",
     "ru": "доступно от"
@@ -8,8 +24,8 @@
     "ru": "доступно до"
   },
   "StringLenMustBeAtLeastParams": {
-    "en": "The string must be at least {0} symbols",
-    "ru": "Строка должна быть как минимум {0} символов"
+    "en": "Enter at least {0} symbols to search",
+    "ru": "Введите как минимум {0} символов для поиска"
   },
   "SearchCloudSecurity": {
     "en": "Search for security in the cloud",
