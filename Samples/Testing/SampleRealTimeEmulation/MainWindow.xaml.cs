@@ -26,7 +26,6 @@ namespace SampleRealTimeEmulation
 	using Ecng.Configuration;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
@@ -78,6 +77,8 @@ namespace SampleRealTimeEmulation
 
 		private void InitRealConnector()
 		{
+			_realConnector.Adapter.SupportOrderBookIncrement = false;
+
 			_realConnector.NewOrder += OrderGrid.Orders.Add;
 			_realConnector.NewMyTrade += TradeGrid.Trades.Add;
 			_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
