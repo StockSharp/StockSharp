@@ -322,10 +322,27 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private bool _supportBasketSecurities;
+
 		/// <summary>
 		/// Use <see cref="BasketSecurityMessageAdapter"/>.
 		/// </summary>
-		public bool SupportBasketSecurities { get; set; }
+		public bool SupportBasketSecurities
+		{
+			get => _supportBasketSecurities;
+			set
+			{
+				if (_supportBasketSecurities == value)
+					return;
+
+				if (value)
+					EnableAdapter(a => new BasketSecurityMessageAdapter(a, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true }, typeof(BufferMessageAdapter));
+				else
+					DisableAdapter<BasketSecurityMessageAdapter>();
+
+				_supportBasketSecurities = value;
+			}
+		}
 
 		private bool _supportFilteredMarketDepth;
 
