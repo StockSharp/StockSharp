@@ -1530,6 +1530,8 @@ namespace StockSharp.Algo.Testing
 
 						if (execution.OrderState == OrderStates.Active)
 						{
+							replyMsg.OrderState = OrderStates.Active;
+
 							AddActiveOrder(execution, time);
 
 							// изменяем текущие котировки, добавляя туда наши цену и объем
