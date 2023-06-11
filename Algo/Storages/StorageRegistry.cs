@@ -153,36 +153,6 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public IEntityMarketDataStorage<Trade, ExecutionMessage> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
-		{
-			return GetTickMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<ExecutionMessage, Trade>(security, ExchangeInfoProvider);
-		}
-
-		/// <inheritdoc />
-		public IEntityMarketDataStorage<MarketDepth, QuoteChangeMessage> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
-		{
-			return GetQuoteMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<QuoteChangeMessage, MarketDepth>(security, ExchangeInfoProvider);
-		}
-
-		/// <inheritdoc />
-		public IEntityMarketDataStorage<OrderLogItem, ExecutionMessage> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
-		{
-			return GetOrderLogMessageStorage(security.ToSecurityId(), drive, format).ToEntityStorage<ExecutionMessage, OrderLogItem>(security, ExchangeInfoProvider);
-		}
-
-		/// <inheritdoc />
-		public IEntityMarketDataStorage<Candle, CandleMessage> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
-		{
-			return GetCandleMessageStorage(candleType.ToCandleMessageType(), security.ToSecurityId(), arg, drive, format).ToEntityStorage<CandleMessage, Candle>(security, ExchangeInfoProvider);
-		}
-
-		/// <inheritdoc />
-		public IEntityMarketDataStorage<News, NewsMessage> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
-		{
-			return GetNewsMessageStorage(drive, format).ToEntityStorage<NewsMessage, News>(null, ExchangeInfoProvider);
-		}
-
-		/// <inheritdoc />
 		public IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetStorage(security?.ToSecurityId() ?? default, dataType, arg, drive, format);
