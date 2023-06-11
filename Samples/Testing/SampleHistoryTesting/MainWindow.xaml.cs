@@ -55,12 +55,12 @@ namespace SampleHistoryTesting
 			public bool UseOrderLog { get; set; }
 			public bool UseLevel1 { get; set; }
 			public Func<IdGenerator, IMessageAdapter> CustomHistoryAdapter { get; set; }
+			public MarketDataStorageCache Cache { get; set; } = new();
 		}
 
 		private readonly List<ProgressBar> _progressBars = new();
 		private readonly List<CheckBox> _checkBoxes = new();
 		private readonly CachedSynchronizedList<HistoryEmulationConnector> _connectors = new();
-		private readonly MarketDataStorageCache _cache = new();
 		private DateTime _startEmulationTime;
 
 		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new();
@@ -400,7 +400,7 @@ namespace SampleHistoryTesting
 							}
 						},
 
-						AdapterCache = _cache,
+						AdapterCache = emulationInfo.Cache,
 					},
 
 					// set market time freq as time frame
