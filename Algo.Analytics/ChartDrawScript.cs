@@ -5,7 +5,7 @@
 	/// </summary>
 	public class ChartDrawScript : IAnalyticsScript
 	{
-		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, Security[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
 			var lineChart = panel.CreateChart<DateTimeOffset, decimal>();
 			var histogramChart = panel.CreateChart<DateTimeOffset, decimal>();
@@ -16,7 +16,7 @@
 				var volsSeries = new Dictionary<DateTimeOffset, decimal>();
 
 				// get candle storage
-				var candleStorage = storage.GetCandleStorage(typeof(TimeFrameCandle), security, timeFrame, format: format);
+				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 
 				foreach (var candle in candleStorage.Load(from, to))
 				{
@@ -26,8 +26,8 @@
 				}
 
 				// draw series on chart as line and histogram
-				lineChart.Append(security.Id + " (close)", candlesSeries.Keys, candlesSeries.Values, ChartIndicatorDrawStyles.DashedLine, Color.Red);
-				histogramChart.Append(security.Id + " (vol)", volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram, Color.LightGreen);
+				lineChart.Append($"{security} (close)", candlesSeries.Keys, candlesSeries.Values, ChartIndicatorDrawStyles.DashedLine, Color.Red);
+				histogramChart.Append($"{security} (vol)", volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram, Color.LightGreen);
 			}
 
 			return Task.CompletedTask;

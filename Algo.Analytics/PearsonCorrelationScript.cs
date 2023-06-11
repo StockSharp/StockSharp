@@ -7,11 +7,9 @@
 	/// </summary>
 	public class PearsonCorrelationScript : IAnalyticsScript
 	{
-		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, Security[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
-			var ids = securities.Select(s => s.Id).ToArray();
-
-			if (ids.Length == 0)
+			if (securities.Length == 0)
 			{
 				logs.AddWarningLog("No instruments.");
 				return Task.CompletedTask;
@@ -22,14 +20,14 @@
 			foreach (var security in securities)
 			{
 				// get candle storage
-				var candleStorage = storage.GetCandleStorage(typeof(TimeFrameCandle), security, timeFrame, format: format);
+				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 
 				// get closing prices
 				var prices = candleStorage.Load(from, to).Select(c => (double)c.ClosePrice).ToArray();
 
 				if (prices.Length == 0)
 				{
-					logs.AddWarningLog("No data for {0}", security.Id);
+					logs.AddWarningLog("No data for {0}", security);
 					return Task.CompletedTask;
 				}
 
@@ -51,6 +49,7 @@
 			var matrix = Correlation.PearsonMatrix(closes);
 
 			// displaing result into heatmap
+			var ids = securities.Select(s => s.ToStringId()).ToArray();
 			panel.DrawHeatmap(ids, ids, matrix.ToArray());
 
 			return Task.CompletedTask;

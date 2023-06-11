@@ -5,7 +5,7 @@
 	/// </summary>
 	public class NormalizePriceScript : IAnalyticsScript
 	{
-		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, Security[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
 			var chart = panel.CreateChart<DateTimeOffset, decimal>();
 
@@ -14,7 +14,7 @@
 				var series = new Dictionary<DateTimeOffset, decimal>();
 
 				// get candle storage
-				var candleStorage = storage.GetCandleStorage(typeof(TimeFrameCandle), security, timeFrame, format: format);
+				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 
 				decimal? firstClose = null;
 
@@ -27,7 +27,7 @@
 				}
 
 				// draw series on chart
-				chart.Append(security.Id, series.Keys, series.Values);
+				chart.Append(security.ToStringId(), series.Keys, series.Values);
 			}
 
 			return Task.CompletedTask;

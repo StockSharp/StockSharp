@@ -5,7 +5,7 @@
 	/// </summary>
 	public class IndicatorScript : IAnalyticsScript
 	{
-		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, Security[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
 			// creating 2 panes for candles and indicator series
 			var candleChart = panel.CreateChart<DateTimeOffset, decimal>();
@@ -20,7 +20,7 @@
 				var roc = new RateOfChange();
 
 				// get candle storage
-				var candleStorage = storage.GetCandleStorage(typeof(TimeFrameCandle), security, timeFrame, format: format);
+				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 
 				foreach (var candle in candleStorage.Load(from, to))
 				{
@@ -30,8 +30,8 @@
 				}
 
 				// draw series on chart
-				candleChart.Append(security.Id + " (close)", candlesSeries.Keys, candlesSeries.Values);
-				indicatorChart.Append(security.Id + " (ROC)", indicatorSeries.Keys, indicatorSeries.Values);
+				candleChart.Append($"{security} (close)", candlesSeries.Keys, candlesSeries.Values);
+				indicatorChart.Append($"{security} (ROC)", indicatorSeries.Keys, indicatorSeries.Values);
 			}
 
 			return Task.CompletedTask;

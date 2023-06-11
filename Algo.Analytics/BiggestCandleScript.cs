@@ -5,7 +5,7 @@
 	/// </summary>
 	public class BiggestCandleScript : IAnalyticsScript
 	{
-		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, Security[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
+		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
 			var priceChart = panel.CreateChart<DateTimeOffset, decimal, decimal>();
 			var volChart = panel.CreateChart<DateTimeOffset, decimal, decimal>();
@@ -16,7 +16,7 @@
 			foreach (var security in securities)
 			{
 				// get candle storage
-				var candleStorage = storage.GetCandleStorage(typeof(TimeFrameCandle), security, timeFrame, format: format);
+				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 
 				var allCandles = candleStorage.Load(from, to).ToArray();
 
