@@ -74,10 +74,7 @@ namespace StockSharp.Algo.Storages
 
 				bool IEnumerator.MoveNext()
 				{
-					if (_current == null)
-					{
-						_current = _storage.Load(_currDate).GetEnumerator();
-					}
+					_current ??= _storage.Load(_currDate).GetEnumerator();
 
 					while (true)
 					{
@@ -554,7 +551,7 @@ namespace StockSharp.Algo.Storages
 				if (registry == null)
 					throw new ArgumentNullException(nameof(registry));
 
-				_getStorage = tf => registry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, tf, drive, format);
+				_getStorage = tf => registry.GetTimeFrameCandleMessageStorage(securityId, tf, drive, format);
 				_original = _getStorage(timeFrame);
 
 				_timeFrame = timeFrame;
@@ -1387,17 +1384,10 @@ namespace StockSharp.Algo.Storages
 			if (last == null)
 				return null;
 
-			var to = subscription.To;
+			var to = subscription.To ?? last.Value;
+			var from = subscription.From ?? to - daysLoad;
 
-			if (to == null)
-				to = last.Value;
-
-			var from = subscription.From;
-
-			if (from == null)
-				from = to.Value - daysLoad;
-
-			return Tuple.Create(from.Value, to.Value);
+			return Tuple.Create(from, to);
 		}
 
 		private static DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, TimeSpan daysLoad, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
@@ -1641,5 +1631,17 @@ namespace StockSharp.Algo.Storages
 
 			return !(path[0] >= 'A' && path[1] <= 'z' && path[1] == ':' && path[2] == '\\');
 		}
+
+		/// <summary>
+		/// To get the candles storage for the specified instrument.
+		/// </summary>
+		/// <param name="registry"><see cref="IMessageStorageRegistry"/>.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <param name="drive">The storage.</param>
+		/// <param name="format">The format type.</param>
+		/// <returns>The candles storage.</returns>
+		public static IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(this IMessageStorageRegistry registry, SecurityId securityId, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+			=> registry.CheckOnNull(nameof(registry)).GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, arg, drive, format);
 	}
 }
