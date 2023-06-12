@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The news storage.</returns>
-		IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get board state storage.
@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The news storage.</returns>
-		IMarketDataStorage<BoardStateMessage> GetBoardStateMessageStorage(IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<BoardStateMessage> GetBoardStateMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the storage of tick trades for the specified instrument.
@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The storage of tick trades.</returns>
-		IMarketDataStorage<ExecutionMessage> GetTickMessageStorage(SecurityId securityId, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<ExecutionMessage> GetTickMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the storage of order books for the specified instrument.
@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="format">The format type.</param>
 		/// <param name="passThroughOrderBookInrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
 		/// <returns>The order books storage.</returns>
-		IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(SecurityId securityId, IMarketDataDrive drive, StorageFormats format, bool passThroughOrderBookInrement = false);
+		IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary, bool passThroughOrderBookInrement = false);
 
 		/// <summary>
 		/// To get the storage of orders log for the specified instrument.
@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The storage of orders log.</returns>
-		IMarketDataStorage<ExecutionMessage> GetOrderLogMessageStorage(SecurityId securityId, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<ExecutionMessage> GetOrderLogMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the storage of level1 data.
@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The storage of level1 data.</returns>
-		IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(SecurityId securityId, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the storage of position changes data.
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The storage of position changes data.</returns>
-		IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(SecurityId securityId, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the candles storage for the specified instrument.
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The candles storage.</returns>
-		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, SecurityId securityId, object arg, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, SecurityId securityId, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the <see cref="ExecutionMessage"/> storage for the specified instrument.
@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The <see cref="ExecutionMessage"/> storage.</returns>
-		IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(SecurityId securityId, ExecutionTypes type, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(SecurityId securityId, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the transactions storage for the specified instrument.
@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>The transactions storage.</returns>
-		IMarketDataStorage<ExecutionMessage> GetTransactionStorage(SecurityId securityId, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage<ExecutionMessage> GetTransactionStorage(SecurityId securityId, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the market-data storage.
@@ -110,7 +110,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="drive">The storage.</param>
 		/// <param name="format">The format type.</param>
 		/// <returns>Market-data storage.</returns>
-		IMarketDataStorage GetStorage(SecurityId securityId, Type dataType, object arg, IMarketDataDrive drive, StorageFormats format);
+		IMarketDataStorage GetStorage(SecurityId securityId, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To register tick trades storage.

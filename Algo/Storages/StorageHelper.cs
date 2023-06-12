@@ -1433,5 +1433,29 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The candles storage.</returns>
 		public static IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(this IMessageStorageRegistry registry, SecurityId securityId, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 			=> registry.CheckOnNull(nameof(registry)).GetCandleMessageStorage(typeof(TimeFrameCandleMessage), securityId, arg, drive, format);
+
+		/// <summary>
+		/// To get the candles storage for the specified instrument.
+		/// </summary>
+		/// <param name="registry"><see cref="IMessageStorageRegistry"/>.</param>
+		/// <param name="subscription"><see cref="Subscription"/>.</param>
+		/// <param name="drive">The storage.</param>
+		/// <param name="format">The format type.</param>
+		/// <returns>The candles storage.</returns>
+		public static IMarketDataStorage<CandleMessage> GetCandleMessageStorage(this IMessageStorageRegistry registry, Subscription subscription, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			if (registry is null)
+				throw new ArgumentNullException(nameof(registry));
+
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (subscription.SecurityId is null)
+				throw new ArgumentException(nameof(subscription));
+
+			var dt = subscription.DataType;
+
+			return registry.GetCandleMessageStorage(dt.MessageType, subscription.SecurityId.Value, dt.Arg, drive, format);
+		}
 	}
 }
