@@ -41,7 +41,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager<ICandleMessage>, IMarketDataProvider, ISubscriptionProvider
+	public partial class Connector : BaseLogReceiver, IConnector, IMarketDataProvider, ISubscriptionProvider
 	{
 		private readonly EntityCache _entityCache;
 		private readonly SubscriptionManager _subscriptionManager;
@@ -1325,32 +1325,6 @@ namespace StockSharp.Algo
 
 			base.Save(storage);
 		}
-
-		#region ICandleManager implementation
-
-		event Action<CandleSeries, ICandleMessage> ICandleManager<ICandleMessage>.Processing
-		{
-			add => CandleProcessing += value;
-			remove => CandleProcessing -= value;
-		}
-
-		event Action<CandleSeries> ICandleManager<ICandleMessage>.Stopped
-		{
-			add => CandleSeriesStopped += value;
-			remove => CandleSeriesStopped -= value;
-		}
-
-		void ICandleManager<ICandleMessage>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
-			=> this.SubscribeCandles(series, from, to);
-
-		void ICandleManager<ICandleMessage>.Stop(CandleSeries series)
-#pragma warning disable CS0618 // Type or member is obsolete
-			=> this.UnSubscribeCandles(series);
-#pragma warning restore CS0618 // Type or member is obsolete
-
-		IEnumerable<CandleSeries> ICandleManager<ICandleMessage>.Series => SubscribedCandleSeries;
-
-		#endregion
 
 		#region IMessageChannel implementation
 

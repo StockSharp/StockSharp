@@ -164,26 +164,33 @@ namespace StockSharp.Algo.Candles
 		/// To start candles getting.
 		/// </summary>
 		/// <typeparam name="TCandle"><see cref="ICandleMessage"/></typeparam>
-		/// <param name="manager">The candles manager.</param>
+		/// <param name="subscriptionProvider">The subscription provider.</param>
 		/// <param name="series">Candles series.</param>
-		public static void Start<TCandle>(this ICandleManager<TCandle> manager, CandleSeries series)
+		public static void Start<TCandle>(this ISubscriptionProvider subscriptionProvider, CandleSeries series)
 			where TCandle : ICandleMessage
 		{
-			manager.CheckOnNull(nameof(manager)).Start(series, series.From, series.To);
+			subscriptionProvider.CheckOnNull(nameof(subscriptionProvider)).Subscribe(new(series)
+			{
+				MarketData =
+				{
+					From = series.From,
+					To = series.To,
+				}
+			});
 		}
 
 		/// <summary>
 		/// To get a candles series by the specified parameters.
 		/// </summary>
 		/// <typeparam name="TCandle">Candles type.</typeparam>
-		/// <param name="candleManager">The candles manager.</param>
+		/// <param name="subscriptionProvider">The subscription provider.</param>
 		/// <param name="security">The instrument by which trades should be filtered for the candles creation.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <returns>The candles series. <see langword="null" /> if this series is not registered.</returns>
-		public static CandleSeries GetSeries<TCandle>(this ICandleManager<TCandle> candleManager, Security security, object arg)
+		public static CandleSeries GetSeries<TCandle>(this ISubscriptionProvider subscriptionProvider, Security security, object arg)
 			where TCandle : ICandleMessage
 		{
-			return candleManager.CheckOnNull(nameof(candleManager)).Series.FirstOrDefault(s => s.CandleType == typeof(TCandle) && s.Security == security && s.Arg.Equals(arg));
+			return subscriptionProvider.CheckOnNull(nameof(subscriptionProvider)).Subscriptions.Select(s => s.CandleSeries).Where(s => s is not null).FirstOrDefault(s => s.CandleType == typeof(TCandle) && s.Security == security && s.Arg.Equals(arg));
 		}
 
 		private static IEnumerable<CandleMessage> ToCandles<TSourceMessage>(this IEnumerable<TSourceMessage> messages, MarketDataMessage mdMsg, Func<TSourceMessage, ICandleBuilderValueTransform> createTransform, CandleBuilderProvider candleBuilderProvider = null)
@@ -552,14 +559,14 @@ namespace StockSharp.Algo.Candles
 		/// Whether the grouping of candles by the specified attribute is registered.
 		/// </summary>
 		/// <typeparam name="TCandle">Candles type.</typeparam>
-		/// <param name="manager">The candles manager.</param>
+		/// <param name="subscriptionProvider">The subscription provider.</param>
 		/// <param name="security">The instrument for which the grouping is registered.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <returns><see langword="true" /> if registered. Otherwise, <see langword="false" />.</returns>
-		public static bool IsCandlesRegistered<TCandle>(this ICandleManager<TCandle> manager, Security security, object arg)
+		public static bool IsCandlesRegistered<TCandle>(this ISubscriptionProvider subscriptionProvider, Security security, object arg)
 			where TCandle : ICandleMessage
 		{
-			return manager.GetSeries<TCandle>(security, arg) != null;
+			return subscriptionProvider.GetSeries<TCandle>(security, arg) is not null;
 		}
 
 		/// <summary>
@@ -755,6 +762,6 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Check result.</returns>
 		public static bool IsSame<TCandle>(this TCandle candle1, TCandle candle2)
 			where TCandle : ICandleMessage
-			=> candle1 is not null && candle2 is not null && ((candle1 is Candle entity && ReferenceEquals(candle1, candle2)) || candle1.OpenTime == candle2.OpenTime);
+			=> candle1 is not null && candle2 is not null && ((candle1 is Candle && ReferenceEquals(candle1, candle2)) || candle1.OpenTime == candle2.OpenTime);
 	}
 }
