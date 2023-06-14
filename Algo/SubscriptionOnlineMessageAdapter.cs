@@ -274,7 +274,7 @@
 
 								foreach (var filterId in info.ExtraFilters)
 								{
-									if (!subscrMsg.IsMatch(info.Subscribers[filterId]))
+									if (!subscrMsg.IsMatch(message.Type, info.Subscribers[filterId]))
 										set.Remove(filterId);
 								}
 

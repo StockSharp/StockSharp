@@ -5,7 +5,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interface describing an message with <see cref="Error"/> property.
 	/// </summary>
-	public interface IErrorMessage : IMessage
+	public interface IErrorMessage
 	{
 		/// <summary>
 		/// Error info.

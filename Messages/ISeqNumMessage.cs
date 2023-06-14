@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The interface describing an message with <see cref="SeqNum"/> property.
 	/// </summary>
-	public interface ISeqNumMessage : IMessage
+	public interface ISeqNumMessage
 	{
 		/// <summary>
 		/// Sequence number.

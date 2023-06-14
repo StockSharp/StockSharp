@@ -2788,43 +2788,44 @@ namespace StockSharp.Messages
 		/// Determines the specified message is matched lookup criteria.
 		/// </summary>
 		/// <param name="message">Message.</param>
+		/// <param name="type"><see cref="IMessage.Type"/></param>
 		/// <param name="criteria">The message which fields will be used as a filter.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsMatch(this ISubscriptionIdMessage message, ISubscriptionMessage criteria)
+		public static bool IsMatch(this ISubscriptionIdMessage message, MessageTypes type, ISubscriptionMessage criteria)
 		{
-			switch (message.Type)
+			switch (type)
 			{
 				case MessageTypes.Security:
 				{
 					if (criteria is SecurityLookupMessage lookupMsg)
-						return ((SecurityMessage)message).IsMatch(lookupMsg);
+						return message.To<SecurityMessage>().IsMatch(lookupMsg);
 
 					return true;
 				}
 				case MessageTypes.Board:
 				{
 					if (criteria is BoardLookupMessage lookupMsg)
-						return ((BoardMessage)message).IsMatch(lookupMsg);
+						return message.To<BoardMessage>().IsMatch(lookupMsg);
 
 					return true;
 				}
 				case MessageTypes.Portfolio:
 				{
 					if (criteria is PortfolioLookupMessage lookupMsg)
-						return ((PortfolioMessage)message).IsMatch(lookupMsg, true);
+						return message.To<PortfolioMessage>().IsMatch(lookupMsg, true);
 
 					return true;
 				}
 				case MessageTypes.PositionChange:
 				{
 					if (criteria is PortfolioLookupMessage lookupMsg)
-						return ((PositionChangeMessage)message).IsMatch(lookupMsg, true);
+						return message.To<PositionChangeMessage>().IsMatch(lookupMsg, true);
 
 					return true;
 				}
 				case MessageTypes.Execution:
 				{
-					var execMsg = (ExecutionMessage)message;
+					var execMsg = message.To<ExecutionMessage>();
 
 					if (execMsg.IsMarketData())
 					{
@@ -3413,8 +3414,10 @@ namespace StockSharp.Messages
 			if (depth is null)
 				throw new ArgumentNullException(nameof(depth));
 
-			if (!(depth.State is null or QuoteChangeStates.SnapshotComplete))
-				throw new ArgumentException(nameof(depth));
+			if (depth.State is null or QuoteChangeStates.SnapshotComplete)
+				return;
+
+			throw new ArgumentException($"State={depth.State}", nameof(depth));
 		}
 
 		/// <summary>
@@ -3664,14 +3667,7 @@ namespace StockSharp.Messages
 		public static QuoteChangeMessage UnGroup(this QuoteChangeMessage depth)
 		{
 			static QuoteChange[] GetInner(QuoteChange quote)
-			{
-				var inner = quote.InnerQuotes;
-
-				if (inner == null)
-					throw new ArgumentException(quote.ToString(), nameof(quote));
-
-				return inner;
-			}
+				=> quote.InnerQuotes ?? throw new ArgumentException(quote.ToString(), nameof(quote));
 
 			depth.CheckIsSnapshot();
 
@@ -3956,7 +3952,6 @@ namespace StockSharp.Messages
 
 			return result.ToArray();
 		}
-
 
 		/// <summary>
 		/// To merge the initial order book and its sparse representation.

@@ -13,11 +13,9 @@ namespace StockSharp.Algo.Export
 	/// <summary>
 	/// Indicator value with time.
 	/// </summary>
-	public class IndicatorValue : IServerTimeMessage
+	public class IndicatorValue : IServerTimeMessage, ISecurityIdMessage
 	{
-		/// <summary>
-		/// Security.
-		/// </summary>
+		/// <inheritdoc />
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
@@ -75,9 +73,7 @@ namespace StockSharp.Algo.Export
 		public decimal? Value4 => ValueAt(3);
 
 		private decimal? ValueAt(int index)
-		{
-			return ValuesAsDecimal?.ElementAtOrDefault(index);
-		}
+			=> ValuesAsDecimal?.ElementAtOrDefault(index);
 
 		/// <summary>
 		/// Converted to <see cref="decimal"/> type values.
@@ -117,16 +113,5 @@ namespace StockSharp.Algo.Export
 			get => Time;
 			set => Time = value;
 		}
-
-		DateTimeOffset IMessage.LocalTime
-		{
-			get => Time;
-			set => Time = value;
-		}
-		
-		MessageTypes IMessage.Type => throw new NotSupportedException();
-		IMessageAdapter IMessage.Adapter { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
-		MessageBackModes IMessage.BackMode { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
-		object ICloneable.Clone() => throw new NotSupportedException();
 	}
 }

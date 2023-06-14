@@ -5,7 +5,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interface describing an message with <see cref="IsSubscribe"/> property.
 	/// </summary>
-	public interface ISubscriptionMessage : ITransactionIdMessage, IOriginalTransactionIdMessage
+	public interface ISubscriptionMessage : ITransactionIdMessage, IOriginalTransactionIdMessage, IMessage
 	{
 		/// <summary>
 		/// Message contains fields with non default values.

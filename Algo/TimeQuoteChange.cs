@@ -22,7 +22,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The quote with the time mark. It used for CSV files.
 	/// </summary>
-	public class TimeQuoteChange : IServerTimeMessage
+	public class TimeQuoteChange : IServerTimeMessage, ISecurityIdMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeQuoteChange"/>.
@@ -59,24 +59,15 @@ namespace StockSharp.Algo
 		/// </summary>
 		public Sides Side { get; set; }
 
-		/// <summary>
-		/// Security ID.
-		/// </summary>
+		/// <inheritdoc />
 		public SecurityId SecurityId { get; set; }
 
-		/// <summary>
-		/// The server time mark.
-		/// </summary>
+		/// <inheritdoc />
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
 		/// The local time mark.
 		/// </summary>
 		public DateTimeOffset LocalTime { get; set; }
-
-		MessageTypes IMessage.Type => throw new NotSupportedException();
-		IMessageAdapter IMessage.Adapter { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
-		MessageBackModes IMessage.BackMode { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
-		object ICloneable.Clone() => throw new NotSupportedException();
 	}
 }

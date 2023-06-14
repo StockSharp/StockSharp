@@ -3,7 +3,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// The interface describing an message with <see cref="PortfolioName"/> property.
 	/// </summary>
-	public interface IPortfolioNameMessage : IMessage
+	public interface IPortfolioNameMessage
 	{
 		/// <summary>
 		/// Portfolio code name.
