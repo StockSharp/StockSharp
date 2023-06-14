@@ -1267,34 +1267,6 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Try build books by <see cref="OrderBookIncrementBuilder"/> in case of <paramref name="books"/> is incremental changes.
-		/// </summary>
-		/// <param name="books">Order books.</param>
-		/// <param name="logs">Logs.</param>
-		/// <returns>Order books.</returns>
-		public static IEnumerable<QuoteChangeMessage> BuildIfNeed(this IEnumerable<QuoteChangeMessage> books, ILogReceiver logs = null)
-		{
-			if (books is null)
-				throw new ArgumentNullException(nameof(books));
-
-			var builders = new Dictionary<SecurityId, OrderBookIncrementBuilder>();
-
-			foreach (var book in books)
-			{
-				if (book.State != null)
-				{
-					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = logs ?? GlobalLogReceiver.Instance });
-					var change = builder.TryApply(book);
-
-					if (change != null)
-						yield return change;
-				}
-				else
-					yield return book;
-			}
-		}
-
-		/// <summary>
 		/// To get the snapshot storage.
 		/// </summary>
 		/// <param name="registry">Snapshot storage registry.</param>
