@@ -132,7 +132,9 @@ namespace StockSharp.Algo.Storages
 			//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 			private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new();
 
+			#pragma warning disable CS0067
 			public event Action Reset;
+			#pragma warning restore CS0067
 
 			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 			{

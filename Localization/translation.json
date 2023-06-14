@@ -1,4 +1,16 @@
 {
+  "LastReportTime": {
+    "en": "Last report time",
+    "ru": "Время последнего отчета"
+  },
+  "SearchForCloudSecurities": {
+    "en": "You need to perform search to see available securities in the cloud",
+    "ru": "Вам необходимо выполнить поиск чтобы увидеть доступные инструменты в облаке"
+  },
+  "SearchMaxResultsParams": {
+    "en": "Search can return up to {0} results",
+    "ru": "Поиск может вернуть до {0} результатов"
+  },
   "Renko": {
     "en": "Renko",
     "ru": "Ренко"
