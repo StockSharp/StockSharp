@@ -1,4 +1,8 @@
 {
+  "Cloud": {
+    "en": "Cloud",
+    "ru": "Облако"
+  },
   "LastReportTime": {
     "en": "Last report time",
     "ru": "Время последнего отчета"
