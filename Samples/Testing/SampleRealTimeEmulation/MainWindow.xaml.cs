@@ -45,6 +45,7 @@ namespace SampleRealTimeEmulation
 		private RealTimeEmulationTrader<IMessageAdapter> _emuConnector;
 		private bool _isConnected;
 		private Security _security;
+		private SecurityId _securityId;
 		private DataType _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
 
 		private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
@@ -223,9 +224,9 @@ namespace SampleRealTimeEmulation
 			}
 		}
 
-		private void OnDepth(Subscription subscription, QuoteChangeMessage depth)
+		private void OnDepth(Subscription subscription, IOrderBookMessage depth)
 		{
-			if (depth.SecurityId != _security.ToSecurityId())
+			if (depth.SecurityId != _securityId)
 				return;
 
 			DepthControl.UpdateDepth(depth, _security);
@@ -257,6 +258,7 @@ namespace SampleRealTimeEmulation
 				_emuConnector.UnSubscribe(_candlesSubscription); // give back series memory
 
 			_security = security;
+			_securityId = security.ToSecurityId();
 
 			Chart.Reset(new[] { _candlesElem });
 

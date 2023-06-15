@@ -286,10 +286,13 @@ namespace StockSharp.Algo
 		public event Action<Subscription, Level1ChangeMessage> Level1Received;
 
 		/// <inheritdoc />
-		public event Action<Subscription, QuoteChangeMessage> OrderBookReceived;
+		public event Action<Subscription, IOrderBookMessage> OrderBookReceived;
 
 		/// <inheritdoc />
-		public event Action<Subscription, Trade> TickTradeReceived;
+		public event Action<Subscription, ITickTradeMessage> TickTradeReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, IOrderLogMessage> OrderLogReceived;
 
 		/// <inheritdoc />
 		public event Action<Subscription, Security> SecurityReceived;
@@ -298,9 +301,11 @@ namespace StockSharp.Algo
 		public event Action<Subscription, ExchangeBoard> BoardReceived;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<Subscription, MarketDepth> MarketDepthReceived;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderLogReceived event.")]
 		public event Action<Subscription, OrderLogItem> OrderLogItemReceived;
 
 		/// <inheritdoc />
