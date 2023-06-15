@@ -30,7 +30,7 @@ namespace SampleStrategies
 
 	public partial class SecuritiesWindow
 	{
-		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new();
+		private readonly SynchronizedDictionary<SecurityId, QuotesWindow> _quotesWindows = new();
 		private bool _initialized;
 
 		public SecuritiesWindow()
@@ -53,7 +53,7 @@ namespace SampleStrategies
 			if (connector != null)
 			{
 				if (_initialized)
-					connector.MarketDepthReceived -= TraderOnMarketDepthReceived;
+					connector.OrderBookReceived -= TraderOnMarketDepthReceived;
 			}
 
 			base.OnClosed(e);
@@ -83,7 +83,7 @@ namespace SampleStrategies
 
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var window = _quotesWindows.SafeAdd(security, s =>
+				var window = _quotesWindows.SafeAdd(security.ToSecurityId(), s =>
 				{
 					// subscribe on order book flow
 					connector.SubscribeMarketDepth(security);
@@ -107,7 +107,7 @@ namespace SampleStrategies
 
 				if (!_initialized)
 				{
-					connector.MarketDepthReceived += TraderOnMarketDepthReceived;
+					connector.OrderBookReceived += TraderOnMarketDepthReceived;
 					_initialized = true;
 				}
 			}
@@ -133,9 +133,9 @@ namespace SampleStrategies
 			}
 		}
 
-		private void TraderOnMarketDepthReceived(Subscription subscription, MarketDepth depth)
+		private void TraderOnMarketDepthReceived(Subscription subscription, IOrderBookMessage depth)
 		{
-			var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.SecurityId);
 
 			if (wnd != null)
 				wnd.DepthCtrl.UpdateDepth(depth);
@@ -160,7 +160,7 @@ namespace SampleStrategies
 
 		public void ProcessOrder(Order order)
 		{
-			_quotesWindows.TryGetValue(order.Security)?.DepthCtrl.ProcessOrder(order, order.Price, order.Balance, order.State);
+			_quotesWindows.TryGetValue(order.Security.ToSecurityId())?.DepthCtrl.ProcessOrder(order, order.Price, order.Balance, order.State);
 		}
 	}
 }

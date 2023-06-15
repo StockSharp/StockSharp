@@ -301,7 +301,7 @@ namespace SampleOptionQuoting
 			// subscribing on tick prices and updating asset price
 			Connector.TickTradeReceived += (sub, trade) =>
 			{
-				if (_model.UnderlyingAsset == trade.SecurityId || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+				if (_model.UnderlyingAssetId == trade.SecurityId/* TODO || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId*/)
 					_isDirty = true;
 			};
 
@@ -574,7 +574,7 @@ namespace SampleOptionQuoting
 			if (!_quotesWindows.TryGetValue(depth.SecurityId, out var wnd))
 				return;
 
-			wnd.Update(depth.ImpliedVolatility(Connector, Connector, _model.ExchangeInfoProvider, depth.LastChangeTime));
+			wnd.Update(depth.ImpliedVolatility(Connector, Connector, _model.ExchangeInfoProvider, depth.ServerTime));
 		}
 	}
 }
