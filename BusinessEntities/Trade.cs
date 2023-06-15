@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str506Key)]
 	[DescriptionLoc(LocalizedStrings.TickTradeKey)]
-	public class Trade : Cloneable<Trade>
+	public class Trade : Cloneable<Trade>, ITickTradeMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Trade"/>.
@@ -42,9 +42,7 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
-		/// <summary>
-		/// Trade ID.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -54,9 +52,7 @@ namespace StockSharp.BusinessEntities
 			Order = 0)]
 		public long Id { get; set; }
 
-		/// <summary>
-		/// Trade ID (as string, if electronic board does not use numeric order ID representation).
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -66,6 +62,13 @@ namespace StockSharp.BusinessEntities
 			Order = 1)]
 		public string StringId { get; set; }
 
+		/// <inheritdoc />
+		SecurityId ISecurityIdMessage.SecurityId
+		{
+			get => Security?.Id.ToSecurityId() ?? default;
+			set => throw new NotSupportedException();
+		}
+
 		/// <summary>
 		/// The instrument, on which the trade was completed.
 		/// </summary>
@@ -73,9 +76,7 @@ namespace StockSharp.BusinessEntities
 		[Browsable(false)]
 		public Security Security { get; set; }
 
-		/// <summary>
-		/// Trade time.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -83,11 +84,17 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str605Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
-		public DateTimeOffset Time { get; set; }
+		public DateTimeOffset ServerTime { get; set; }
 
-		/// <summary>
-		/// Trade received local time.
-		/// </summary>
+		/// <inheritdoc />
+		[Browsable(false)]
+		public DateTimeOffset Time
+		{
+			get => ServerTime;
+			set => ServerTime = value;
+		}
+
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -97,9 +104,7 @@ namespace StockSharp.BusinessEntities
 			Order = 9)]
 		public DateTimeOffset LocalTime { get; set; }
 
-		/// <summary>
-		/// Number of contracts in the trade.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -109,9 +114,7 @@ namespace StockSharp.BusinessEntities
 			Order = 4)]
 		public decimal Volume { get; set; }
 
-		/// <summary>
-		/// Trade price.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -121,9 +124,7 @@ namespace StockSharp.BusinessEntities
 			Order = 3)]
 		public decimal Price { get; set; }
 
-		/// <summary>
-		/// Order side (buy or sell), which led to the trade.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -131,11 +132,17 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str608Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 5)]
-		public Sides? OrderDirection { get; set; }
+		public Sides? OriginSide { get; set; }
 
-		/// <summary>
-		/// Is a system trade.
-		/// </summary>
+		/// <inheritdoc />
+		[Browsable(false)]
+		public Sides? OrderDirection
+		{
+			get => OriginSide;
+			set => OriginSide = value;
+		}
+
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -145,15 +152,11 @@ namespace StockSharp.BusinessEntities
 			Order = 6)]
 		public bool? IsSystem { get; set; }
 
-		/// <summary>
-		/// System trade status.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public int? Status { get; set; }
 
-		/// <summary>
-		/// Number of open positions (open interest).
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -163,9 +166,7 @@ namespace StockSharp.BusinessEntities
 			Order = 10)]
 		public decimal? OpenInterest { get; set; }
 
-		/// <summary>
-		/// Is tick ascending or descending in price.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -175,9 +176,7 @@ namespace StockSharp.BusinessEntities
 			Order = 11)]
 		public bool? IsUpTick { get; set; }
 
-		/// <summary>
-		/// Trading security currency.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -187,33 +186,22 @@ namespace StockSharp.BusinessEntities
 			Order = 7)]
 		public CurrencyTypes? Currency { get; set; }
 
-		/// <summary>
-		/// Sequence number.
-		/// </summary>
-		/// <remarks>Zero means no information.</remarks>
+		/// <inheritdoc />
 		[DataMember]
 		public long SeqNum { get; set; }
 
-		/// <summary>
-		/// Determines the message is generated from the specified <see cref="Messages.DataType"/>.
-		/// </summary>
+		/// <inheritdoc />
 		public Messages.DataType BuildFrom { get; set; }
 
-		/// <summary>
-		/// Yield.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public decimal? Yield { get; set; }
 
-		/// <summary>
-		/// Order id (buy).
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long? OrderBuyId { get; set; }
 
-		/// <summary>
-		/// Order id (sell).
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public long? OrderSellId { get; set; }
 
@@ -229,9 +217,9 @@ namespace StockSharp.BusinessEntities
 				StringId = StringId,
 				Volume = Volume,
 				Price = Price,
-				Time = Time,
+				ServerTime = ServerTime,
 				LocalTime = LocalTime,
-				OrderDirection = OrderDirection,
+				OriginSide = OriginSide,
 				Security = Security,
 				IsSystem = IsSystem,
 				Status = Status,
@@ -259,7 +247,7 @@ namespace StockSharp.BusinessEntities
 		public override string ToString()
 		{
 			var idStr = Id == 0 ? StringId : Id.To<string>();
-			return $"{Time} {idStr} {Price} {Volume}";
+			return $"{ServerTime} {idStr} {Price} {Volume}";
 		}
 	}
 }

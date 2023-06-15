@@ -25,8 +25,8 @@ namespace StockSharp.Algo.Strategies.Quoting
 		private bool _isRegistering;
 		//private Order _manualReRegisterOrder;
 		private bool _isReRegistedFailed;
-		private QuoteChangeMessage _filteredBook;
-		private Trade _lastTrade;
+		private IOrderBookMessage _filteredBook;
+		private ITickTradeMessage _lastTrade;
 
 		private IEnumerable<IMarketRule> _notificationRules;
 

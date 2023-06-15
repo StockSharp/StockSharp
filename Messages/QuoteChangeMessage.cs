@@ -61,8 +61,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMessage>,
-		IServerTimeMessage, ISecurityIdMessage, IGeneratedMessage, ISeqNumMessage
+	public sealed class QuoteChangeMessage : BaseSubscriptionIdMessage<QuoteChangeMessage>, IOrderBookMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
@@ -73,9 +72,7 @@ namespace StockSharp.Messages
 
 		private QuoteChange[] _bids = Array.Empty<QuoteChange>();
 
-		/// <summary>
-		/// Quotes to buy.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str281Key)]
 		[DescriptionLoc(LocalizedStrings.Str282Key)]
@@ -88,9 +85,7 @@ namespace StockSharp.Messages
 
 		private QuoteChange[] _asks = Array.Empty<QuoteChange>();
 
-		/// <summary>
-		/// Quotes to sell.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str283Key)]
 		[DescriptionLoc(LocalizedStrings.Str284Key)]
@@ -118,9 +113,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public bool IsFiltered { get; set; }
 
-		/// <summary>
-		/// Trading security currency.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
@@ -128,9 +121,7 @@ namespace StockSharp.Messages
 		//[Ecng.Serialization.Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
-		/// <summary>
-		/// Order book state.
-		/// </summary>
+		/// <inheritdoc />
 		[DataMember]
 		public QuoteChangeStates? State { get; set; }
 

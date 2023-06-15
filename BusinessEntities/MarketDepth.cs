@@ -32,7 +32,7 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>
+	public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOrderBookMessage
 	{
 		/// <summary>
 		/// Create order book.
@@ -42,6 +42,10 @@ namespace StockSharp.BusinessEntities
 		{
 			Security = security ?? throw new ArgumentNullException(nameof(security));
 		}
+
+		QuoteChangeStates? IOrderBookMessage.State { get => null; set => throw new NotSupportedException(); }
+
+		SecurityId ISecurityIdMessage.SecurityId { get => Security?.Id.ToSecurityId() ?? default; set => throw new NotSupportedException(); }
 
 		/// <summary>
 		/// Security.
@@ -56,20 +60,27 @@ namespace StockSharp.BusinessEntities
 		/// </remarks>
 		public bool UseAggregatedQuotes { get; set; }
 
-		/// <summary>
-		/// Last change time.
-		/// </summary>
+		/// <inheritdoc/>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ServerTimeKey,
 			Description = LocalizedStrings.Str168Key,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 2)]
-		public DateTimeOffset LastChangeTime { get; set; }
+		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// The order book local time stamp.
+		/// Last change time.
 		/// </summary>
+		[Browsable(false)]
+		[Obsolete("Use ServerTime property.")]
+		public DateTimeOffset LastChangeTime
+		{
+			get => ServerTime;
+			set => ServerTime = value;
+		}
+
+		/// <inheritdoc/>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str203Key,
@@ -78,49 +89,52 @@ namespace StockSharp.BusinessEntities
 			Order = 3)]
 		public DateTimeOffset LocalTime { get; set; }
 
-		/// <summary>
-		/// Sequence number.
-		/// </summary>
-		/// <remarks>Zero means no information.</remarks>
+		/// <inheritdoc/>
 		public long SeqNum { get; set; }
 
-		/// <summary>
-		/// Determines the message is generated from the specified <see cref="Messages.DataType"/>.
-		/// </summary>
+		/// <inheritdoc/>
 		public Messages.DataType BuildFrom { get; set; }
-
-		private QuoteChange[] _bids2 = Array.Empty<QuoteChange>();
 
 		/// <summary>
 		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
 		/// </summary>
+		[Obsolete("Use Bids property.")]
+		public QuoteChange[] Bids2 => Bids;
+
+		/// <summary>
+		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
+		/// </summary>
+		[Obsolete("Use Asks property.")]
+		public QuoteChange[] Asks2 => Asks;
+
+		private QuoteChange[] _bids = Array.Empty<QuoteChange>();
+
+		/// <inheritdoc/>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str281Key,
 			Description = LocalizedStrings.Str282Key,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 0)]
-		public QuoteChange[] Bids2
+		public QuoteChange[] Bids
 		{
-			get => _bids2;
-			private set => _bids2 = value ?? throw new ArgumentNullException(nameof(value));
+			get => _bids;
+			set => _bids = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-		private QuoteChange[] _asks2 = Array.Empty<QuoteChange>();
+		private QuoteChange[] _asks = Array.Empty<QuoteChange>();
 
-		/// <summary>
-		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
-		/// </summary>
+		/// <inheritdoc/>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str283Key,
 			Description = LocalizedStrings.Str284Key,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 1)]
-		public QuoteChange[] Asks2
+		public QuoteChange[] Asks
 		{
-			get => _asks2;
-			private set => _asks2 = value ?? throw new ArgumentNullException(nameof(value));
+			get => _asks;
+			set => _asks = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
 		/// <summary>
@@ -151,25 +165,25 @@ namespace StockSharp.BusinessEntities
 		/// To get the total price size by bids.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TotalBidsPriceKey)]
-		public decimal TotalBidsPrice => _bids2.Length > 0 ? Security.ShrinkPrice(_bids2.Sum(b => b.Price)) : 0;
+		public decimal TotalBidsPrice => _bids.Length > 0 ? Security.ShrinkPrice(_bids.Sum(b => b.Price)) : 0;
 
 		/// <summary>
 		/// To get the total price size by offers.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TotalAsksPriceKey)]
-		public decimal TotalAsksPrice => _asks2.Length > 0 ? Security.ShrinkPrice(_asks2.Sum(a => a.Price)) : 0;
+		public decimal TotalAsksPrice => _asks.Length > 0 ? Security.ShrinkPrice(_asks.Sum(a => a.Price)) : 0;
 
 		/// <summary>
 		/// Get bids total volume.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TotalBidsVolumeKey)]
-		public decimal TotalBidsVolume => _bids2.Sum(b => b.Volume);
+		public decimal TotalBidsVolume => _bids.Sum(b => b.Volume);
 
 		/// <summary>
 		/// Get asks total volume.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TotalAsksVolumeKey)]
-		public decimal TotalAsksVolume => _asks2.Sum(a => a.Volume);
+		public decimal TotalAsksVolume => _asks.Sum(a => a.Volume);
 
 		/// <summary>
 		/// Get total volume.
@@ -187,7 +201,7 @@ namespace StockSharp.BusinessEntities
 		/// Total quotes count (bids + asks).
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TotalQuotesCountKey)]
-		public int Count => _bids2.Length + _asks2.Length;
+		public int Count => _bids.Length + _asks.Length;
 
 		/// <summary>
 		/// Depth of book.
@@ -208,8 +222,8 @@ namespace StockSharp.BusinessEntities
 			else if (newDepth > currentDepth)
 				throw new ArgumentOutOfRangeException(nameof(newDepth), newDepth, LocalizedStrings.Str482Params.Put(currentDepth));
 
-			Bids2 = Decrease(_bids2, newDepth);
-			Asks2 = Decrease(_asks2, newDepth);
+			Bids = Decrease(_bids, newDepth);
+			Asks = Decrease(_asks, newDepth);
 
 			UpdateDepthAndTime();
 		}
@@ -255,7 +269,7 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Quotes.</returns>
 		public QuoteChange[] GetQuotes(Sides orderDirection)
 		{
-			return orderDirection == Sides.Buy ? Bids2 : Asks2;
+			return orderDirection == Sides.Buy ? Bids : Asks;
 		}
 
 		/// <summary>
@@ -275,16 +289,12 @@ namespace StockSharp.BusinessEntities
 		/// <returns>The pair of quotes. If the index is larger than book order depth <see cref="MarketDepth.Depth"/>, then the <see langword="null" /> is returned.</returns>
 		public MarketDepthPair GetPair(int depthIndex)
 		{
-			if (depthIndex < 0)
-				throw new ArgumentOutOfRangeException(nameof(depthIndex), depthIndex, LocalizedStrings.Str483);
+			var (bid, ask) = Extensions.GetPair(this, depthIndex);
 
-			var bid = GetQuote(Sides.Buy, depthIndex);
-			var ask = GetQuote(Sides.Sell, depthIndex);
-
-			if (bid == null && ask == null)
+			if (bid is null && ask is null)
 				return null;
 
-			return new MarketDepthPair(Security, bid, ask);
+			return new MarketDepthPair(bid, ask);
 		}
 
 		/// <summary>
@@ -293,24 +303,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="depth">Book depth. The counting is from the best quotes.</param>
 		/// <returns>Spread.</returns>
 		public IEnumerable<MarketDepthPair> GetTopPairs(int depth)
-		{
-			if (depth < 0)
-				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
-
-			var retVal = new List<MarketDepthPair>();
-
-			for (var i = 0; i < depth; i++)
-			{
-				var single = GetPair(i);
-
-				if (single != null)
-					retVal.Add(single);
-				else
-					break;
-			}
-
-			return retVal;
-		}
+			=> Extensions.GetTopPairs(this, depth).Select(t => new MarketDepthPair(t.bid, t.ask));
 
 		/// <summary>
 		/// To get quotes for a given book depth.
@@ -318,32 +311,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="depth">Book depth. Quotes are in order of price increasing from bids to offers.</param>
 		/// <returns>Spread.</returns>
 		public IEnumerable<QuoteChange> GetTopQuotes(int depth)
-		{
-			if (depth < 0)
-				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
-
-			var retVal = new List<QuoteChange>();
-
-			for (var i = depth - 1; i >= 0; i--)
-			{
-				var single = GetQuote(Sides.Buy, i);
-
-				if (single != null)
-					retVal.Add(single.Value);
-			}
-
-			for (var i = 0; i < depth; i++)
-			{
-				var single = GetQuote(Sides.Sell, i);
-
-				if (single != null)
-					retVal.Add(single.Value);
-				else
-					break;
-			}
-
-			return retVal;
-		}
+			=> Extensions.GetTopQuotes(this, depth);
 
 		/// <summary>
 		/// To update the order book. The version without checks and blockings.
@@ -360,8 +328,8 @@ namespace StockSharp.BusinessEntities
 			if (asks is null)
 				throw new ArgumentNullException(nameof(asks));
 
-			_bids2 = bids.ToArray();
-			_asks2 = asks.ToArray();
+			_bids = bids.ToArray();
+			_asks = asks.ToArray();
 
 			UpdateDepthAndTime(lastChangeTime);
 
@@ -492,9 +460,9 @@ namespace StockSharp.BusinessEntities
 					//}
 
 					if (side == Sides.Buy)
-						Bids2 = quotes;
+						Bids = quotes;
 					else
-						Asks2 = quotes;
+						Asks = quotes;
 				}
 
 				UpdateDepthAndTime();
@@ -515,17 +483,14 @@ namespace StockSharp.BusinessEntities
 		/// <returns>The enumerator object.</returns>
 		public IEnumerator<QuoteChange> GetEnumerator()
 		{
-			return Bids2.Reverse().Concat(Asks2).Cast<QuoteChange>().GetEnumerator();
+			return Bids.Reverse().Concat(Asks).Cast<QuoteChange>().GetEnumerator();
 		}
 
 		/// <summary>
 		/// To get the enumerator object.
 		/// </summary>
 		/// <returns>The enumerator object.</returns>
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 		#endregion
 
@@ -546,12 +511,9 @@ namespace StockSharp.BusinessEntities
 		/// <param name="lastChangeTime">Order book change time.</param>
 		public void Remove(decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
-			var dir = GetDirection(price);
+			var dir = GetDirection(price) ?? throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str487);
 
-			if (dir == null)
-				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str487);
-
-			Remove((Sides)dir, price, volume, lastChangeTime);
+			Remove(dir, price, volume, lastChangeTime);
 		}
 
 		/// <summary>
@@ -616,9 +578,9 @@ namespace StockSharp.BusinessEntities
 				quotes = RemoveAt(quotes, index);
 
 				if (direction == Sides.Buy)
-					Bids2 = quotes;
+					Bids = quotes;
 				else
-					Asks2 = quotes;
+					Asks = quotes;
 
 				UpdateDepthAndTime(lastChangeTime);
 			}
@@ -697,7 +659,7 @@ namespace StockSharp.BusinessEntities
 
 		private QuoteChange[] GetQuotesInternal(Sides direction)
 		{
-			return direction == Sides.Buy ? _bids2 : _asks2;
+			return direction == Sides.Buy ? _bids : _asks;
 		}
 
 		private QuoteChange[] GetQuotes(decimal price)
@@ -707,7 +669,7 @@ namespace StockSharp.BusinessEntities
 			if (dir == null)
 				return Array.Empty<QuoteChange>();
 			else
-				return dir == Sides.Buy ? _bids2 : _asks2;
+				return dir == Sides.Buy ? _bids : _asks;
 		}
 
 		private Sides? GetDirection(decimal price)
@@ -722,10 +684,10 @@ namespace StockSharp.BusinessEntities
 
 		private void UpdateDepthAndTime(DateTimeOffset lastChangeTime = default)
 		{
-			Depth = _bids2.Length > _asks2.Length ? _bids2.Length : _asks2.Length;
+			Depth = _bids.Length > _asks.Length ? _bids.Length : _asks.Length;
 
-			BestBid2 = _bids2.Length > 0 ? _bids2[0] : null;
-			BestAsk2 = _asks2.Length > 0 ? _asks2[0] : null;
+			BestBid2 = _bids.Length > 0 ? _bids[0] : null;
+			BestAsk2 = _asks.Length > 0 ? _asks[0] : null;
 
 			UpdateTime(lastChangeTime);
 		}
@@ -734,7 +696,7 @@ namespace StockSharp.BusinessEntities
 		{
 			if (lastChangeTime != default)
 			{
-				LastChangeTime = lastChangeTime;
+				ServerTime = lastChangeTime;
 			}
 		}
 
@@ -744,16 +706,16 @@ namespace StockSharp.BusinessEntities
 		/// <returns>Copy.</returns>
 		public override MarketDepth Clone()
 		{
-			return new MarketDepth(Security)
+			return new(Security)
 			{
 				//MaxDepth = MaxDepth,
 				//UseAggregatedQuotes = UseAggregatedQuotes,
 				//AutoVerify = AutoVerify,
 				Currency = Currency,
 				LocalTime = LocalTime,
-				LastChangeTime = LastChangeTime,
-				_bids2 = _bids2.ToArray(),
-				_asks2 = _asks2.ToArray(),
+				ServerTime = ServerTime,
+				_bids = _bids.ToArray(),
+				_asks = _asks.ToArray(),
 				SeqNum = SeqNum,
 				BuildFrom = BuildFrom,
 			};

@@ -64,7 +64,8 @@ namespace StockSharp.Messages
 	[DataContract]
 	public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISeqNumMessage,
-		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage, IOrderMessage
+		IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage,
+		IOrderMessage, ITickTradeMessage, IOrderLogMessage, ISystemMessage
 	{
 		OrderStates IOrderMessage.State => OrderState.Value;
 		decimal IOrderMessage.Balance => Balance.Value;
@@ -599,6 +600,18 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		public DataType DataTypeEx { get; set; }
+
+		long ITickTradeMessage.Id => TradeId.Value;
+		string ITickTradeMessage.StringId => TradeStringId;
+		decimal ITickTradeMessage.Price => TradePrice.Value;
+		decimal ITickTradeMessage.Volume => TradeVolume.Value;
+		int? ITickTradeMessage.Status => TradeStatus;
+
+		IOrderMessage IOrderLogMessage.Order => this;
+		ITickTradeMessage IOrderLogMessage.Trade => HasTradeInfo ? this : null;
+
+		OrderTypes? IOrderMessage.Type => OrderType;
+		decimal IOrderMessage.Price => OrderPrice;
 
 		/// <inheritdoc />
 		public override string ToString()

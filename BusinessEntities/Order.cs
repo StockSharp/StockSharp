@@ -44,6 +44,14 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
+		SecurityId ISecurityIdMessage.SecurityId
+		{
+			get => Security?.Id.ToSecurityId() ?? default;
+			set => throw new NotSupportedException();
+		}
+
+		Messages.DataType IGeneratedMessage.BuildFrom { get; set; }
+
 		private TimeSpan? _latencyRegistration;
 
 		/// <summary>
@@ -183,9 +191,11 @@ namespace StockSharp.BusinessEntities
 		/// Order placing time on exchange.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str522Key)]
-		[DescriptionLoc(LocalizedStrings.Str523Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str522Key,
+			Description = LocalizedStrings.Str523Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset Time
 		{
 			get => _time;
@@ -248,26 +258,35 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public Portfolio Portfolio { get; set; }
 
-		private DateTimeOffset _lastChangeTime;
+		private DateTimeOffset _serverTime;
+
+		/// <inheritdoc/>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str528Key,
+			Description = LocalizedStrings.Str529Key,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public DateTimeOffset ServerTime
+		{
+			get => _serverTime;
+			set
+			{
+				if (_serverTime == value)
+					return;
+
+				_serverTime = value;
+				NotifyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Time of last order change (Cancellation, Fill).
 		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str528Key)]
-		[DescriptionLoc(LocalizedStrings.Str529Key)]
-		[MainCategory]
 		public DateTimeOffset LastChangeTime
 		{
-			get => _lastChangeTime;
-			set
-			{
-				if (_lastChangeTime == value)
-					return;
-
-				_lastChangeTime = value;
-				NotifyChanged();
-			}
+			get => ServerTime;
+			set => ServerTime = value;
 		}
 
 		private DateTimeOffset _localTime;
@@ -319,14 +338,24 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal? VisibleVolume { get; set; }
 
+		/// <inheritdoc/>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str128Key,
+			Description = LocalizedStrings.Str129Key,
+			GroupName = LocalizedStrings.GeneralKey)]
+		public Sides Side { get; set; }
+
 		/// <summary>
 		/// Order side (buy or sell).
 		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str128Key)]
-		[DescriptionLoc(LocalizedStrings.Str129Key)]
-		[MainCategory]
-		public Sides Direction { get; set; }
+		[Browsable(false)]
+		public Sides Direction
+		{
+			get => Side;
+			set => Side = value;
+		}
 
 		private decimal _balance;
 
@@ -615,7 +644,7 @@ namespace StockSharp.BusinessEntities
 		public override string ToString()
 		{
 			var str = LocalizedStrings.Str534Params
-				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance, Type);
+				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Side == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance, Type);
 
 			if (!UserOrderId.IsEmpty())
 				str += $" UID={UserOrderId}";

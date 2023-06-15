@@ -643,12 +643,12 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="riskFree">The risk free interest rate.</param>
 		/// <param name="dividend">The dividend amount on shares.</param>
 		/// <returns>The order book volatility.</returns>
-		public static MarketDepth ImpliedVolatility(this MarketDepth depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
+		public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, IExchangeInfoProvider exchangeInfoProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
 		{
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
-			return depth.ImpliedVolatility(new BlackScholes(depth.Security, securityProvider, dataProvider, exchangeInfoProvider) { RiskFree = riskFree, Dividend = dividend }, currentTime);
+			return depth.ImpliedVolatility(new BlackScholes(securityProvider.LookupById(depth.SecurityId), securityProvider, dataProvider, exchangeInfoProvider) { RiskFree = riskFree, Dividend = dividend }, currentTime);
 		}
 
 		/// <summary>
@@ -658,7 +658,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="model">The model for calculating Greeks values by the Black-Scholes formula.</param>
 		/// <param name="currentTime">The current time.</param>
 		/// <returns>The order book volatility.</returns>
-		public static MarketDepth ImpliedVolatility(this MarketDepth depth, BlackScholes model, DateTimeOffset currentTime)
+		public static QuoteChangeMessage ImpliedVolatility(this IOrderBookMessage depth, IBlackScholes model, DateTimeOffset currentTime)
 		{
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
@@ -672,7 +672,13 @@ namespace StockSharp.Algo.Derivatives
 				return quote;
 			}
 
-			return new MarketDepth(depth.Security).Update(depth.Bids2.Select(Convert).ToArray(), depth.Asks2.Select(Convert).ToArray(), depth.LastChangeTime);
+			return new()
+			{
+				ServerTime = depth.ServerTime,
+				SecurityId = depth.SecurityId,
+				Bids = depth.Bids.Select(Convert).ToArray(),
+				Asks = depth.Asks.Select(Convert).ToArray(),
+			};
 		}
 
 		/// <summary>

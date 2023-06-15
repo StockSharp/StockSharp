@@ -126,7 +126,7 @@
 
 			Connector.SecurityReceived += (s, sec) => _securitiesWindow.SecurityPicker.Securities.Add(sec);
 			Connector.TickTradeReceived += (s, t) => _tradesWindow.TradeGrid.Trades.Add(t);
-			Connector.OrderLogItemReceived += (s, ol) => _orderLogWindow.OrderLogGrid.LogItems.Add(ol);
+			Connector.OrderLogReceived += (s, ol) => _orderLogWindow.OrderLogGrid.LogItems.Add(ol);
 			Connector.Level1Received += (s, l) => _level1Window.Level1Grid.Messages.Add(l);
 
 			Connector.NewOrder += Connector_OnNewOrder;

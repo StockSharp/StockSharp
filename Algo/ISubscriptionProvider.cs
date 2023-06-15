@@ -3,7 +3,6 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -30,12 +29,17 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Order book received.
 		/// </summary>
-		event Action<Subscription, QuoteChangeMessage> OrderBookReceived;
+		event Action<Subscription, IOrderBookMessage> OrderBookReceived;
 
 		/// <summary>
 		/// Tick trade received.
 		/// </summary>
-		event Action<Subscription, Trade> TickTradeReceived;
+		event Action<Subscription, ITickTradeMessage> TickTradeReceived;
+
+		/// <summary>
+		/// Tick trade received.
+		/// </summary>
+		event Action<Subscription, IOrderLogMessage> OrderLogReceived;
 
 		/// <summary>
 		/// Security received.

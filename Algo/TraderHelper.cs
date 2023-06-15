@@ -245,7 +245,7 @@ namespace StockSharp.Algo
 		/// <remarks>
 		/// For correct operation of the method the order book export shall be launched.
 		/// </remarks>
-		public static Unit GetCurrentPrice(this MarketDepth depth, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
+		public static Unit GetCurrentPrice(this IOrderBookMessage depth, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
 		{
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
@@ -256,12 +256,12 @@ namespace StockSharp.Algo
 
 				foreach (var order in orders)
 				{
-					if (!dict.SafeAdd(Tuple.Create(order.Direction, order.Price)).Add(order))
+					if (!dict.SafeAdd(Tuple.Create(order.Side, order.Price)).Add(order))
 						throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
 				}
 
-				var bids = depth.Bids2.ToList();
-				var asks = depth.Asks2.ToList();
+				var bids = depth.Bids.ToList();
+				var asks = depth.Asks.ToList();
 
 				for (var i = 0; i < bids.Count; i++)
 				{
@@ -307,11 +307,17 @@ namespace StockSharp.Algo
 					}
 				}
 
-				depth = new MarketDepth(depth.Security).Update(bids.ToArray(), asks.ToArray(), depth.LastChangeTime);
+				depth = new QuoteChangeMessage
+				{
+					SecurityId = depth.SecurityId,
+					ServerTime = depth.ServerTime,
+					Bids = bids.ToArray(),
+					Asks = asks.ToArray(),
+				};
 			}
 
-			var pair = depth.BestPair;
-			return pair?.GetCurrentPrice(side, priceType);
+			var (bid, ask) = depth.GetBestPair();
+			return new MarketDepthPair(bid, ask).GetCurrentPrice(side, priceType);
 		}
 
 		/// <summary>
@@ -359,7 +365,7 @@ namespace StockSharp.Algo
 
 			return currentPrice == null
 				? null
-				: new Unit(currentPrice.Value).SetSecurity(bestPair.Security);
+				: new Unit(currentPrice.Value);
 		}
 
 		/// <summary>
@@ -468,93 +474,6 @@ namespace StockSharp.Algo
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time, out bool? isWorkingDay, out WorkingTimePeriod period)
 		{
 			return board.ToMessage().IsTradeTime(time, out isWorkingDay, out period);
-		}
-
-		/// <summary>
-		/// To create from regular order book a sparse on, with minimal price step of <see cref="Security.PriceStep"/>.
-		/// </summary>
-		/// <remarks>
-		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
-		/// </remarks>
-		/// <param name="depth">The regular order book.</param>
-		/// <returns>The sparse order book.</returns>
-		public static MarketDepth Sparse(this MarketDepth depth)
-		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			return depth.Sparse(depth.Security.PriceStep ?? 1m);
-		}
-
-		/// <summary>
-		/// To create from regular order book a sparse one.
-		/// </summary>
-		/// <remarks>
-		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
-		/// </remarks>
-		/// <param name="depth">The regular order book.</param>
-		/// <param name="priceStep">Minimum price step.</param>
-		/// <returns>The sparse order book.</returns>
-		[Obsolete("Use method with decimal priceStep parameter")]
-		public static MarketDepth Sparse(this MarketDepth depth, Unit priceStep)
-			=> depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
-
-		/// <summary>
-		/// To create from regular order book a sparse one.
-		/// </summary>
-		/// <remarks>
-		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
-		/// </remarks>
-		/// <param name="depth">The regular order book.</param>
-		/// <param name="priceStep">Minimum price step.</param>
-		/// <returns>The sparse order book.</returns>
-		public static MarketDepth Sparse(this MarketDepth depth, decimal priceStep)
-			=> depth.ToMessage().Sparse(priceStep, depth.Security.PriceStep).ToMarketDepth(depth.Security);
-
-		/// <summary>
-		/// To merge the initial order book and its sparse representation.
-		/// </summary>
-		/// <param name="original">The initial order book.</param>
-		/// <param name="rare">The sparse order book.</param>
-		/// <returns>The merged order book.</returns>
-		public static MarketDepth Join(this MarketDepth original, MarketDepth rare)
-		{
-			if (original is null)
-				throw new ArgumentNullException(nameof(original));
-
-			if (rare is null)
-				throw new ArgumentNullException(nameof(rare));
-
-			return original.ToMessage().Join(rare.ToMessage()).ToMarketDepth(original.Security);
-		}
-
-		/// <summary>
-		/// To group the order book by the price range.
-		/// </summary>
-		/// <param name="depth">The order book to be grouped.</param>
-		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
-		/// <returns>The grouped order book.</returns>
-		public static MarketDepth Group(this MarketDepth depth, decimal priceRange)
-			=> depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
-
-		/// <summary>
-		/// To group the order book by the price range.
-		/// </summary>
-		/// <param name="depth">The order book to be grouped.</param>
-		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
-		/// <returns>The grouped order book.</returns>
-		[Obsolete("Use method with decimal priceRange parameter")]
-		public static MarketDepth Group(this MarketDepth depth, Unit priceRange)
-			=> depth.ToMessage().Group(priceRange).ToMarketDepth(depth.Security);
-
-		/// <summary>
-		/// To de-group the order book, grouped using the method <see cref="Group(MarketDepth,decimal)"/>.
-		/// </summary>
-		/// <param name="depth">The grouped order book.</param>
-		/// <returns>The de-grouped order book.</returns>
-		public static MarketDepth UnGroup(this MarketDepth depth)
-		{
-			return depth.ToMessage().UnGroup().ToMarketDepth(depth.Security);
 		}
 
 		/// <summary>
@@ -749,21 +668,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To filter trades for the given time period.
-		/// </summary>
-		/// <param name="trades">All trades, in which the required shall be searched for.</param>
-		/// <param name="from">The start date for trades searching.</param>
-		/// <param name="to">The end date for trades searching.</param>
-		/// <returns>Filtered trades.</returns>
-		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, DateTimeOffset from, DateTimeOffset to)
-		{
-			if (trades == null)
-				throw new ArgumentNullException(nameof(trades));
-
-			return trades.Where(trade => trade.Time >= from && trade.Time < to);
-		}
-
-		/// <summary>
 		/// To filter positions for the given instrument.
 		/// </summary>
 		/// <param name="positions">All positions, in which the required shall be searched for.</param>
@@ -921,37 +825,6 @@ namespace StockSharp.Algo
 
 			var dict = securities.ToDictionary(s => s.ToMessage(), s => s);
 			return dict.Keys.Filter(criteria).TryLimitByCount(criteria).Select(m => dict[m]).ToArray();
-		}
-
-		/// <summary>
-		/// To determine, is the order book empty.
-		/// </summary>
-		/// <param name="depth">Market depth.</param>
-		/// <returns><see langword="true" />, if order book is empty, otherwise, <see langword="false" />.</returns>
-		public static bool IsFullEmpty(this MarketDepth depth)
-		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			return depth.Bids2.Length ==0 && depth.Asks2.Length == 0;
-		}
-
-		/// <summary>
-		/// To determine, is the order book half-empty.
-		/// </summary>
-		/// <param name="depth">Market depth.</param>
-		/// <returns><see langword="true" />, if the order book is half-empty, otherwise, <see langword="false" />.</returns>
-		public static bool IsHalfEmpty(this MarketDepth depth)
-		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			var pair = depth.BestPair;
-
-			if (pair.Bid == null)
-				return pair.Ask != null;
-			else
-				return pair.Ask == null;
 		}
 
 		/// <summary>
@@ -1444,7 +1317,7 @@ namespace StockSharp.Algo
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeTime:
-							lastTrade.Time = (DateTimeOffset)value;
+							lastTrade.ServerTime = (DateTimeOffset)value;
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeUpDown:
@@ -1452,7 +1325,7 @@ namespace StockSharp.Algo
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeOrigin:
-							lastTrade.OrderDirection = (Sides)value;
+							lastTrade.OriginSide = (Sides)value;
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.IsSystem:
@@ -1532,8 +1405,8 @@ namespace StockSharp.Algo
 
 			if (lastTradeChanged)
 			{
-				if (lastTrade.Time == default)
-					lastTrade.Time = serverTime;
+				if (lastTrade.ServerTime == default)
+					lastTrade.ServerTime = serverTime;
 
 				lastTrade.LocalTime = localTime;
 
@@ -2292,22 +2165,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Truncate the specified order book by max depth value.
-		/// </summary>
-		/// <param name="depth">Order book.</param>
-		/// <param name="maxDepth">The maximum depth of order book.</param>
-		/// <returns>Truncated order book.</returns>
-		public static MarketDepth Truncate(this MarketDepth depth, int maxDepth)
-		{
-			if (depth == null)
-				throw new ArgumentNullException(nameof(depth));
-
-			var result = depth.Clone();
-			result.Update(result.Bids2.Take(maxDepth).ToArray(), result.Asks2.Take(maxDepth).ToArray(), depth.LastChangeTime);
-			return result;
-		}
-
-		/// <summary>
 		/// Get adapter by portfolio.
 		/// </summary>
 		/// <param name="portfolioProvider">The portfolio based message adapter's provider.</param>
@@ -2888,17 +2745,6 @@ namespace StockSharp.Algo
 		/// Indicator value.
 		/// </summary>
 		public static DataType IndicatorValue { get; } = DataType.Create<Indicators.IIndicatorValue>();//.Immutable();
-
-		/// <summary>
-		/// To determine whether the order book is in the right state.
-		/// </summary>
-		/// <param name="depth">Order book.</param>
-		/// <returns><see langword="true" />, if the order book contains correct data, otherwise <see langword="false" />.</returns>
-		/// <remarks>
-		/// It is used in cases when the trading system by mistake sends the wrong quotes.
-		/// </remarks>
-		public static bool Verify(this MarketDepth depth)
-			=> depth.ToMessage().Verify();
 
 		/// <summary>
 		/// Generate <see cref="SecurityId"/> security.

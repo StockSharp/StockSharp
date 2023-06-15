@@ -319,18 +319,18 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// The indicator value, operating with data type <see cref="MarketDepth"/>.
+	/// The indicator value, operating with data type <see cref="IOrderBookMessage"/>.
 	/// </summary>
-	public class MarketDepthIndicatorValue : SingleIndicatorValue<MarketDepth>
+	public class MarketDepthIndicatorValue : SingleIndicatorValue<IOrderBookMessage>
 	{
-		private readonly Func<MarketDepth, decimal?> _getPart;
+		private readonly Func<IOrderBookMessage, decimal?> _getPart;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDepthIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="depth">Market depth.</param>
-		public MarketDepthIndicatorValue(IIndicator indicator, MarketDepth depth)
+		public MarketDepthIndicatorValue(IIndicator indicator, IOrderBookMessage depth)
 			: this(indicator, depth, ByMiddle)
 		{
 		}
@@ -340,8 +340,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="depth">Market depth.</param>
-		/// <param name="getPart">The order book converter, through which its parameter can be got. By default, the <see cref="MarketDepthIndicatorValue.ByMiddle"/> is used.</param>
-		public MarketDepthIndicatorValue(IIndicator indicator, MarketDepth depth, Func<MarketDepth, decimal?> getPart)
+		/// <param name="getPart">The order book converter, through which its parameter can be got. By default, the <see cref="ByMiddle"/> is used.</param>
+		public MarketDepthIndicatorValue(IIndicator indicator, IOrderBookMessage depth, Func<IOrderBookMessage, decimal?> getPart)
 			: base(indicator, depth)
 		{
 			if (depth == null)
@@ -351,19 +351,23 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// The converter, taking from the order book the best bid price <see cref="MarketDepth.BestBid2"/>.
+		/// The converter, taking from the order book the best bid price.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByBestBid = d => d.BestBid2?.Price;
+		public static readonly Func<IOrderBookMessage, decimal?> ByBestBid = d => d.GetBestBid()?.Price;
 
 		/// <summary>
-		/// The converter, taking from the order book the best offer price <see cref="MarketDepth.BestAsk2"/>.
+		/// The converter, taking from the order book the best offer price.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByBestAsk = d => d.BestAsk2?.Price;
+		public static readonly Func<IOrderBookMessage, decimal?> ByBestAsk = d => d.GetBestAsk()?.Price;
 
 		/// <summary>
 		/// The converter, taking from the order book the middle of the spread <see cref="MarketDepthPair.MiddlePrice"/>.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByMiddle = d => d.BestPair?.MiddlePrice;
+		public static readonly Func<IOrderBookMessage, decimal?> ByMiddle = d =>
+		{
+			var (bid, ask) = d.GetBestPair();
+			return (bid?.Price).GetSpreadMiddle(ask?.Price);
+		};
 
 		/// <inheritdoc />
 		public override bool IsSupport(Type valueType)
@@ -374,14 +378,14 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override T GetValue<T>()
 		{
-			var depth = base.GetValue<MarketDepth>();
+			var depth = base.GetValue<IOrderBookMessage>();
 			return typeof(T) == typeof(decimal) ? (_getPart(depth) ?? 0).To<T>() : depth.To<T>();
 		}
 
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
-			return new MarketDepthIndicatorValue(indicator, base.GetValue<MarketDepth>(), _getPart)
+			return new MarketDepthIndicatorValue(indicator, base.GetValue<IOrderBookMessage>(), _getPart)
 			{
 				IsFinal = IsFinal,
 				InputValue = this

@@ -17,10 +17,13 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Subscription, Level1ChangeMessage> Level1Received;
 
 		/// <inheritdoc />
-		public event Action<Subscription, QuoteChangeMessage> OrderBookReceived;
+		public event Action<Subscription, IOrderBookMessage> OrderBookReceived;
 
 		/// <inheritdoc />
-		public event Action<Subscription, Trade> TickTradeReceived;
+		public event Action<Subscription, ITickTradeMessage> TickTradeReceived;
+
+		/// <inheritdoc />
+		public event Action<Subscription, IOrderLogMessage> OrderLogReceived;
 
 		/// <inheritdoc />
 		public event Action<Subscription, Security> SecurityReceived;
@@ -180,16 +183,22 @@ namespace StockSharp.Algo.Strategies
 				SecurityReceived?.Invoke(subscription, security);
 		}
 
-		private void OnConnectorTickTradeReceived(Subscription subscription, Trade trade)
+		private void OnConnectorTickTradeReceived(Subscription subscription, ITickTradeMessage trade)
 		{
 			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				TickTradeReceived?.Invoke(subscription, trade);
 		}
 
-		private void OnConnectorOrderBookReceived(Subscription subscription, QuoteChangeMessage message)
+		private void OnConnectorOrderBookReceived(Subscription subscription, IOrderBookMessage message)
 		{
 			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
 				OrderBookReceived?.Invoke(subscription, message);
+		}
+
+		private void OnConnectorOrderLogReceived(Subscription subscription, IOrderLogMessage message)
+		{
+			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+				OrderLogReceived?.Invoke(subscription, message);
 		}
 
 		private void OnConnectorLevel1Received(Subscription subscription, Level1ChangeMessage message)

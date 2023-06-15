@@ -64,7 +64,7 @@ namespace SampleOptionQuoting
 		private bool _isDirty;
 		private bool _isConnected;
 
-		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new();
+		private readonly SynchronizedDictionary<SecurityId, QuotesWindow> _quotesWindows = new();
 
 		private Security SelectedOption => (Security)Options.SelectedItem;
 		private Security SelectedAsset => (Security)Assets.SelectedItem;
@@ -301,7 +301,7 @@ namespace SampleOptionQuoting
 			// subscribing on tick prices and updating asset price
 			Connector.TickTradeReceived += (sub, trade) =>
 			{
-				if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+				if (_model.UnderlyingAsset == trade.SecurityId || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
 					_isDirty = true;
 			};
 
@@ -322,7 +322,7 @@ namespace SampleOptionQuoting
 					RefreshChart();
 			});
 
-			Connector.MarketDepthReceived += TryUpdateDepth;
+			Connector.OrderBookReceived += TryUpdateDepth;
 
 			try
 			{
@@ -530,7 +530,7 @@ namespace SampleOptionQuoting
 
 			// create DOM window
 			var wnd = new QuotesWindow { Title = option.Name };
-			_quotesWindows.Add(option, wnd);
+			_quotesWindows.Add(option.Id.ToSecurityId(), wnd);
 
 			//TryUpdateDepth(Connector.GetMarketDepth(option));
 
@@ -569,9 +569,9 @@ namespace SampleOptionQuoting
 			wnd.Show();
 		}
 
-		private void TryUpdateDepth(Subscription subscription, MarketDepth depth)
+		private void TryUpdateDepth(Subscription subscription, IOrderBookMessage depth)
 		{
-			if (!_quotesWindows.TryGetValue(depth.Security, out var wnd))
+			if (!_quotesWindows.TryGetValue(depth.SecurityId, out var wnd))
 				return;
 
 			wnd.Update(depth.ImpliedVolatility(Connector, Connector, _model.ExchangeInfoProvider, depth.LastChangeTime));

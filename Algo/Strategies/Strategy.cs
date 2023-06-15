@@ -486,6 +486,7 @@ namespace StockSharp.Algo.Strategies
 					isp.Level1Received            -= OnConnectorLevel1Received;
 					isp.OrderBookReceived         -= OnConnectorOrderBookReceived;
 					isp.TickTradeReceived         -= OnConnectorTickTradeReceived;
+					isp.OrderLogReceived          -= OnConnectorOrderLogReceived;
 					isp.SecurityReceived          -= OnConnectorSecurityReceived;
 					isp.BoardReceived             -= OnConnectorBoardReceived;
 					isp.MarketDepthReceived       -= OnConnectorMarketDepthReceived;
@@ -524,6 +525,7 @@ namespace StockSharp.Algo.Strategies
 					isp.Level1Received            += OnConnectorLevel1Received;
 					isp.OrderBookReceived         += OnConnectorOrderBookReceived;
 					isp.TickTradeReceived         += OnConnectorTickTradeReceived;
+					isp.OrderLogReceived          += OnConnectorOrderLogReceived;
 					isp.SecurityReceived          += OnConnectorSecurityReceived;
 					isp.BoardReceived             += OnConnectorBoardReceived;
 					isp.MarketDepthReceived       += OnConnectorMarketDepthReceived;

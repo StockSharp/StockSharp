@@ -28,7 +28,7 @@ namespace StockSharp.BusinessEntities
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
 	[DescriptionLoc(LocalizedStrings.Str535Key)]
-	public class OrderLogItem : MyTrade
+	public class OrderLogItem : MyTrade, IOrderLogMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderLogItem"/>.
@@ -36,6 +36,9 @@ namespace StockSharp.BusinessEntities
 		public OrderLogItem()
 		{
 		}
+
+		IOrderMessage IOrderLogMessage.Order => Order;
+		ITickTradeMessage IOrderLogMessage.Trade => Trade;
 
 		/// <inheritdoc />
 		public override string ToString()

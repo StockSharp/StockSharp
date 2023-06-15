@@ -314,7 +314,7 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="currentTime">The current time.</param>
 		/// <returns>The order book volatility.</returns>
-		public virtual MarketDepth ImpliedVolatility(DateTimeOffset currentTime)
+		public virtual IOrderBookMessage ImpliedVolatility(DateTimeOffset currentTime)
 		{
 #pragma warning disable CS0618 // Type or member is obsolete
 			return DataProvider.GetMarketDepth(Option).ImpliedVolatility(this, currentTime);

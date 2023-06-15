@@ -1,6 +1,6 @@
 ﻿namespace SampleOptionQuoting
 {
-	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	public partial class QuotesWindow
 	{
@@ -9,7 +9,7 @@
 			InitializeComponent();
 		}
 
-		public void Update(MarketDepth depth)
+		public void Update(IOrderBookMessage depth)
 		{
 			DepthCtrl.UpdateDepth(depth);
 		}

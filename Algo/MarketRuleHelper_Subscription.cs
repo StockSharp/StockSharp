@@ -167,7 +167,7 @@
 			return new SubscriptionFailedRule(subscription, provider);
 		}
 
-		private class OrderBookReceivedRule : SubscriptionRule<QuoteChangeMessage>
+		private class OrderBookReceivedRule : SubscriptionRule<IOrderBookMessage>
 		{
 			public OrderBookReceivedRule(Subscription subscription, ISubscriptionProvider provider)
 				: base(subscription, provider)
@@ -176,7 +176,7 @@
 				Provider.OrderBookReceived += ProviderOnOrderBookReceived;
 			}
 
-			private void ProviderOnOrderBookReceived(Subscription subscription, QuoteChangeMessage message)
+			private void ProviderOnOrderBookReceived(Subscription subscription, IOrderBookMessage message)
 			{
 				if (Subscription == subscription)
 					Activate(message);
@@ -195,7 +195,7 @@
 		/// <param name="subscription">Subscription.</param>
 		/// <param name="provider">Subscription provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, QuoteChangeMessage> WhenOrderBookReceived(this Subscription subscription, ISubscriptionProvider provider)
+		public static MarketRule<Subscription, IOrderBookMessage> WhenOrderBookReceived(this Subscription subscription, ISubscriptionProvider provider)
 		{
 			return new OrderBookReceivedRule(subscription, provider);
 		}
@@ -266,16 +266,16 @@
 			return new Level1ReceivedRule(subscription, provider);
 		}
 
-		private class OrderLogReceivedRule : SubscriptionRule<OrderLogItem>
+		private class OrderLogReceivedRule : SubscriptionRule<IOrderLogMessage>
 		{
 			public OrderLogReceivedRule(Subscription subscription, ISubscriptionProvider provider)
 				: base(subscription, provider)
 			{
 				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderLogItemReceived)}";
-				Provider.OrderLogItemReceived += ProviderOnOrderLogItemReceived;
+				Provider.OrderLogReceived += ProviderOnOrderLogReceived;
 			}
 
-			private void ProviderOnOrderLogItemReceived(Subscription subscription, OrderLogItem item)
+			private void ProviderOnOrderLogReceived(Subscription subscription, IOrderLogMessage item)
 			{
 				if (Subscription == subscription)
 					Activate(item);
@@ -283,7 +283,7 @@
 
 			protected override void DisposeManaged()
 			{
-				Provider.OrderLogItemReceived -= ProviderOnOrderLogItemReceived;
+				Provider.OrderLogReceived -= ProviderOnOrderLogReceived;
 				base.DisposeManaged();
 			}
 		}
@@ -294,12 +294,12 @@
 		/// <param name="subscription">Subscription.</param>
 		/// <param name="provider">Subscription provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, OrderLogItem> WhenOrderLogReceived(this Subscription subscription, ISubscriptionProvider provider)
+		public static MarketRule<Subscription, IOrderLogMessage> WhenOrderLogReceived(this Subscription subscription, ISubscriptionProvider provider)
 		{
 			return new OrderLogReceivedRule(subscription, provider);
 		}
 
-		private class TickTradeReceivedRule : SubscriptionRule<Trade>
+		private class TickTradeReceivedRule : SubscriptionRule<ITickTradeMessage>
 		{
 			public TickTradeReceivedRule(Subscription subscription, ISubscriptionProvider provider)
 				: base(subscription, provider)
@@ -308,7 +308,7 @@
 				Provider.TickTradeReceived += ProviderOnTickTradeReceived;
 			}
 
-			private void ProviderOnTickTradeReceived(Subscription subscription, Trade trade)
+			private void ProviderOnTickTradeReceived(Subscription subscription, ITickTradeMessage trade)
 			{
 				if (Subscription == subscription)
 					Activate(trade);
@@ -327,7 +327,7 @@
 		/// <param name="subscription">Subscription.</param>
 		/// <param name="provider">Subscription provider.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, Trade> WhenTickTradeReceived(this Subscription subscription, ISubscriptionProvider provider)
+		public static MarketRule<Subscription, ITickTradeMessage> WhenTickTradeReceived(this Subscription subscription, ISubscriptionProvider provider)
 		{
 			return new TickTradeReceivedRule(subscription, provider);
 		}

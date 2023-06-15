@@ -197,7 +197,7 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <inheritdoc />
-		public override MarketDepth ImpliedVolatility(DateTimeOffset currentTime)
+		public override IOrderBookMessage ImpliedVolatility(DateTimeOffset currentTime)
 		{
 			throw new NotSupportedException();
 			//return UnderlyingAsset.GetMarketDepth().ImpliedVolatility(this);

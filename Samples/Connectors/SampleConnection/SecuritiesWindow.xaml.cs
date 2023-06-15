@@ -107,7 +107,7 @@ namespace SampleConnection
 			}
 		}
 
-		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new();
+		private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new();
 		private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindowsBySubscription = new();
 		private readonly SynchronizedList<ChartWindow> _chartWindows = new();
 		private bool _initialized;
@@ -163,7 +163,7 @@ namespace SampleConnection
 			if (connector != null)
 			{
 				if (_initialized)
-					connector.MarketDepthReceived -= TraderOnMarketDepthReceived;
+					connector.OrderBookReceived -= TraderOnMarketDepthReceived;
 			}
 
 			base.OnClosed(e);
@@ -175,7 +175,7 @@ namespace SampleConnection
 			{
 				foreach (var pair in _quotesWindows)
 				{
-					if (pair.Key != order.Security)
+					if (pair.Key != order.Security.ToSecurityId())
 						continue;
 
 					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrder(order));
@@ -189,7 +189,7 @@ namespace SampleConnection
 			{
 				foreach (var pair in _quotesWindows)
 				{
-					if (pair.Key != fail.Order.Security)
+					if (pair.Key != fail.Order.Security.ToSecurityId())
 						continue;
 
 					pair.Value.Cache.ForEach(wnd => wnd.ProcessOrderFail(fail));
@@ -243,7 +243,7 @@ namespace SampleConnection
 			SubscribeDepths(null);
 		}
 
-		private void TraderOnMarketDepthReceived(Subscription subscription, MarketDepth depth)
+		private void TraderOnMarketDepthReceived(Subscription subscription, IOrderBookMessage depth)
 		{
 			if (subscription.DataType == DataType.FilteredMarketDepth)
 			{
@@ -252,7 +252,7 @@ namespace SampleConnection
 			}
 			else
 			{
-				if (_quotesWindows.TryGetValue(depth.Security, out var list))
+				if (_quotesWindows.TryGetValue(depth.SecurityId, out var list))
 					list.Cache.ForEach(wnd => wnd.DepthCtrl.UpdateDepth(depth));
 			}
 		}
@@ -263,7 +263,7 @@ namespace SampleConnection
 
 			if (!_initialized)
 			{
-				connector.MarketDepthReceived += TraderOnMarketDepthReceived;
+				connector.OrderBookReceived += TraderOnMarketDepthReceived;
 				_initialized = true;
 			}
 
@@ -301,7 +301,7 @@ namespace SampleConnection
 
 			if (!_initialized)
 			{
-				connector.MarketDepthReceived += TraderOnMarketDepthReceived;
+				connector.OrderBookReceived += TraderOnMarketDepthReceived;
 				_initialized = true;
 			}
 
@@ -321,7 +321,7 @@ namespace SampleConnection
 				// subscribe on order book flow
 				var subscription = connector.SubscribeMarketDepth(security, settings?.From, settings?.To, buildMode: settings?.BuildMode ?? MarketDataBuildModes.LoadAndBuild, maxDepth: settings?.MaxDepth, buildFrom: settings?.BuildFrom);
 
-				_quotesWindows.SafeAdd(security).Add(window);
+				_quotesWindows.SafeAdd(security.ToSecurityId()).Add(window);
 
 				window.Closed += (s, e) =>
 				{

@@ -113,7 +113,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message">Market depth.</param>
 		/// <returns>Best bid, or <see langword="null" />, if no bids are empty.</returns>
-		public static QuoteChange? GetBestBid(this QuoteChangeMessage message)
+		public static QuoteChange? GetBestBid(this IOrderBookMessage message)
 		{
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
@@ -126,7 +126,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message">Market depth.</param>
 		/// <returns>Best ask, or <see langword="null" />, if no asks are empty.</returns>
-		public static QuoteChange? GetBestAsk(this QuoteChangeMessage message)
+		public static QuoteChange? GetBestAsk(this IOrderBookMessage message)
 		{
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
@@ -139,7 +139,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="message">Market depth.</param>
 		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
-		public static decimal? GetSpreadMiddle(this QuoteChangeMessage message)
+		public static decimal? GetSpreadMiddle(this IOrderBookMessage message)
 		{
 			var bestBid = message.GetBestBid();
 			var bestAsk = message.GetBestAsk();
@@ -2594,11 +2594,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert <see cref="QuoteChangeMessage"/> to <see cref="Level1ChangeMessage"/> value.
+		/// Convert <see cref="IOrderBookMessage"/> to <see cref="Level1ChangeMessage"/> value.
 		/// </summary>
-		/// <param name="message"><see cref="QuoteChangeMessage"/> instance.</param>
+		/// <param name="message"><see cref="IOrderBookMessage"/> instance.</param>
 		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
-		public static Level1ChangeMessage ToLevel1(this QuoteChangeMessage message)
+		public static Level1ChangeMessage ToLevel1(this IOrderBookMessage message)
 		{
 			var b = message.GetBestBid();
 			var a = message.GetBestAsk();
@@ -2726,7 +2726,7 @@ namespace StockSharp.Messages
 		/// <remarks>
 		/// It is used in cases when the trading system by mistake sends the wrong quotes.
 		/// </remarks>
-		public static bool Verify(this QuoteChangeMessage book)
+		public static bool Verify(this IOrderBookMessage book)
 		{
 			if (book is null)
 				throw new ArgumentNullException(nameof(book));
@@ -3409,7 +3409,29 @@ namespace StockSharp.Messages
 			return dataTypes;
 		}
 
-		private static void CheckIsSnapshot(this QuoteChangeMessage depth)
+		/// <summary>
+		/// Truncate the specified order book by max depth value.
+		/// </summary>
+		/// <param name="depth">Order book.</param>
+		/// <param name="maxDepth">The maximum depth of order book.</param>
+		/// <returns>Truncated order book.</returns>
+		public static QuoteChangeMessage Truncate(this IOrderBookMessage depth, int maxDepth)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			depth.CheckIsSnapshot();
+
+			return new()
+			{
+				ServerTime = depth.ServerTime,
+				SecurityId = depth.SecurityId,
+				Bids = depth.Bids.Take(maxDepth).ToArray(),
+				Asks = depth.Asks.Take(maxDepth).ToArray(),
+			};
+		}
+
+		private static void CheckIsSnapshot(this IOrderBookMessage depth)
 		{
 			if (depth is null)
 				throw new ArgumentNullException(nameof(depth));
@@ -3430,7 +3452,7 @@ namespace StockSharp.Messages
 		/// <param name="priceRange">Minimum price step.</param>
 		/// <param name="priceStep">Security price step.</param>
 		/// <returns>The sparse order book.</returns>
-		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, decimal priceRange, decimal? priceStep)
+		public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, decimal priceRange, decimal? priceStep)
 		{
 			depth.CheckIsSnapshot();
 
@@ -3444,7 +3466,7 @@ namespace StockSharp.Messages
 				? (Array.Empty<QuoteChange>(), Array.Empty<QuoteChange>())
 				: bestBid.Value.Sparse(bestAsk.Value, priceRange, priceStep);
 
-			return new QuoteChangeMessage
+			return new()
 			{
 				SecurityId = depth.SecurityId,
 				ServerTime = depth.ServerTime,
@@ -3457,7 +3479,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// </summary>
 		[Obsolete("Use method with decimal priceRange parameter")]
-		public static QuoteChangeMessage Sparse(this QuoteChangeMessage depth, Unit priceRange, decimal? priceStep)
+		public static QuoteChangeMessage Sparse(this IOrderBookMessage depth, Unit priceRange, decimal? priceStep)
 			=> depth.Sparse(GetActualPriceRange(priceRange), priceStep);
 
 		private static void ValidatePriceRange(decimal? priceRange)
@@ -3636,7 +3658,7 @@ namespace StockSharp.Messages
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>The grouped order book.</returns>
 		[Obsolete("Use method with decimal priceRange parameter")]
-		public static QuoteChangeMessage Group(this QuoteChangeMessage depth, Unit priceRange)
+		public static QuoteChangeMessage Group(this IOrderBookMessage depth, Unit priceRange)
 			=> depth.Group(GetActualPriceRange(priceRange));
 
 		/// <summary>
@@ -3645,11 +3667,11 @@ namespace StockSharp.Messages
 		/// <param name="depth">The order book to be grouped.</param>
 		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
 		/// <returns>The grouped order book.</returns>
-		public static QuoteChangeMessage Group(this QuoteChangeMessage depth, decimal priceRange)
+		public static QuoteChangeMessage Group(this IOrderBookMessage depth, decimal priceRange)
 		{
 			depth.CheckIsSnapshot();
 
-			return new QuoteChangeMessage
+			return new()
 			{
 				SecurityId = depth.SecurityId,
 				ServerTime = depth.ServerTime,
@@ -3660,18 +3682,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// To de-group the order book, grouped using the method <see cref="Group(QuoteChangeMessage,decimal)"/>.
+		/// To de-group the order book, grouped using the method <see cref="Group(IOrderBookMessage, decimal)"/>.
 		/// </summary>
 		/// <param name="depth">The grouped order book.</param>
 		/// <returns>The de-grouped order book.</returns>
-		public static QuoteChangeMessage UnGroup(this QuoteChangeMessage depth)
+		public static QuoteChangeMessage UnGroup(this IOrderBookMessage depth)
 		{
 			static QuoteChange[] GetInner(QuoteChange quote)
 				=> quote.InnerQuotes ?? throw new ArgumentException(quote.ToString(), nameof(quote));
 
 			depth.CheckIsSnapshot();
 
-			return new QuoteChangeMessage
+			return new()
 			{
 				SecurityId = depth.SecurityId,
 				ServerTime = depth.ServerTime,
@@ -3777,7 +3799,7 @@ namespace StockSharp.Messages
 		/// <param name="from">First order book.</param>
 		/// <param name="to">Second order book.</param>
 		/// <returns>The order book, storing only increments.</returns>
-		public static QuoteChangeMessage GetDelta(this QuoteChangeMessage from, QuoteChangeMessage to)
+		public static QuoteChangeMessage GetDelta(this IOrderBookMessage from, IOrderBookMessage to)
 		{
 			if (from == null)
 				throw new ArgumentNullException(nameof(from));
@@ -3785,7 +3807,7 @@ namespace StockSharp.Messages
 			if (to == null)
 				throw new ArgumentNullException(nameof(to));
 
-			return new QuoteChangeMessage
+			return new()
 			{
 				LocalTime = to.LocalTime,
 				SecurityId = to.SecurityId,
@@ -3860,7 +3882,7 @@ namespace StockSharp.Messages
 		/// <param name="from">First order book.</param>
 		/// <param name="delta">Change.</param>
 		/// <returns>The changed order book.</returns>
-		public static QuoteChangeMessage AddDelta(this QuoteChangeMessage from, QuoteChangeMessage delta)
+		public static QuoteChangeMessage AddDelta(this IOrderBookMessage from, IOrderBookMessage delta)
 		{
 			if (from == null)
 				throw new ArgumentNullException(nameof(from));
@@ -3959,7 +3981,7 @@ namespace StockSharp.Messages
 		/// <param name="original">The initial order book.</param>
 		/// <param name="rare">The sparse order book.</param>
 		/// <returns>The merged order book.</returns>
-		public static QuoteChangeMessage Join(this QuoteChangeMessage original, QuoteChangeMessage rare)
+		public static QuoteChangeMessage Join(this IOrderBookMessage original, IOrderBookMessage rare)
 		{
 			if (original is null)
 				throw new ArgumentNullException(nameof(original));
@@ -3967,7 +3989,7 @@ namespace StockSharp.Messages
 			if (rare is null)
 				throw new ArgumentNullException(nameof(rare));
 
-			return new QuoteChangeMessage
+			return new()
 			{
 				ServerTime = original.ServerTime,
 				SecurityId = original.SecurityId,
@@ -3976,6 +3998,109 @@ namespace StockSharp.Messages
 				Bids = original.Bids.Concat(rare.Bids).OrderByDescending(q => q.Price).ToArray(),
 				Asks = original.Asks.Concat(rare.Asks).OrderBy(q => q.Price).ToArray(),
 			};
+		}
+
+		/// <summary>
+		/// Get best pair.
+		/// </summary>
+		/// <param name="book"><see cref="IOrderBookMessage"/></param>
+		/// <returns>Best pair.</returns>
+		public static (QuoteChange? bid, QuoteChange? ask) GetBestPair(this IOrderBookMessage book)
+			=> book.GetPair(0);
+
+		private static QuoteChange? GetQuote(this IOrderBookMessage book, Sides side, int idx)
+		{
+			var quotes = side == Sides.Buy ? book.Bids : book.Asks;
+			return quotes.Length > idx ? quotes[idx] : null;
+		}
+
+		/// <summary>
+		/// To get a pair of quotes (bid + offer) by the depth index.
+		/// </summary>
+		/// <param name="book"><see cref="IOrderBookMessage"/></param>
+		/// <param name="depthIndex">Depth index. Zero index means the best pair of quotes.</param>
+		/// <returns>The pair of quotes. If the index is larger than book order depth, then the <see langword="null" /> is returned.</returns>
+		public static (QuoteChange? bid, QuoteChange? ask) GetPair(this IOrderBookMessage book, int depthIndex)
+		{
+			if (book is null)
+				throw new ArgumentNullException(nameof(book));
+
+			if (depthIndex < 0)
+				throw new ArgumentOutOfRangeException(nameof(depthIndex), depthIndex, LocalizedStrings.Str483);
+
+			var bid = book.GetQuote(Sides.Buy, depthIndex);
+			var ask = book.GetQuote(Sides.Sell, depthIndex);
+
+			if (bid is null && ask is null)
+				return default;
+
+			return new(bid, ask);
+		}
+
+		/// <summary>
+		/// To get a pair of quotes for a given book depth.
+		/// </summary>
+		/// <param name="book"><see cref="IOrderBookMessage"/></param>
+		/// <param name="depth">Book depth. The counting is from the best quotes.</param>
+		/// <returns>Spread.</returns>
+		public static IEnumerable<(QuoteChange? bid, QuoteChange? ask)> GetTopPairs(this IOrderBookMessage book, int depth)
+		{
+			if (book is null)
+				throw new ArgumentNullException(nameof(book));
+
+			if (depth < 0)
+				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
+
+			var retVal = new List<(QuoteChange?, QuoteChange?)>();
+
+			for (var i = 0; i < depth; i++)
+			{
+				var (bid, ask) = book.GetPair(i);
+
+				if (bid is null && ask is null)
+					break;
+
+				retVal.Add(new(bid, ask));
+			}
+
+			return retVal;
+		}
+
+		/// <summary>
+		/// To get quotes for a given book depth.
+		/// </summary>
+		/// <param name="book"><see cref="IOrderBookMessage"/></param>
+		/// <param name="depth">Book depth. Quotes are in order of price increasing from bids to offers.</param>
+		/// <returns>Spread.</returns>
+		public static IEnumerable<QuoteChange> GetTopQuotes(this IOrderBookMessage book, int depth)
+		{
+			if (book is null)
+				throw new ArgumentNullException(nameof(book));
+
+			if (depth < 0)
+				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
+
+			var retVal = new List<QuoteChange>();
+
+			for (var i = depth - 1; i >= 0; i--)
+			{
+				var single = book.GetQuote(Sides.Buy, i);
+
+				if (single is not null)
+					retVal.Add(single.Value);
+			}
+
+			for (var i = 0; i < depth; i++)
+			{
+				var single = book.GetQuote(Sides.Sell, i);
+
+				if (single is not null)
+					retVal.Add(single.Value);
+				else
+					break;
+			}
+
+			return retVal;
 		}
 
 		/// <summary>
@@ -5330,6 +5455,37 @@ namespace StockSharp.Messages
 
 				prevTime = depth.ServerTime;
 			}
+		}
+
+		/// <summary>
+		/// To determine, is the order book empty.
+		/// </summary>
+		/// <param name="depth">Market depth.</param>
+		/// <returns><see langword="true" />, if order book is empty, otherwise, <see langword="false" />.</returns>
+		public static bool IsFullEmpty(this IOrderBookMessage depth)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			return depth.Bids.Length == 0 && depth.Asks.Length == 0;
+		}
+
+		/// <summary>
+		/// To determine, is the order book half-empty.
+		/// </summary>
+		/// <param name="depth">Market depth.</param>
+		/// <returns><see langword="true" />, if the order book is half-empty, otherwise, <see langword="false" />.</returns>
+		public static bool IsHalfEmpty(this IOrderBookMessage depth)
+		{
+			if (depth == null)
+				throw new ArgumentNullException(nameof(depth));
+
+			var (bid, ask) = depth.GetBestPair();
+
+			if (bid is null)
+				return ask is not null;
+			else
+				return ask is null;
 		}
 	}
 }
