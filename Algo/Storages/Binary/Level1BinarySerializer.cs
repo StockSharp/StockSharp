@@ -823,7 +823,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 							SerializePrice(writer, metaInfo, trade.Price, useLong, nonAdjustPrice);
 							writer.WriteVolume(trade.Volume, metaInfo, largeDecimal);
-							writer.WriteSide(trade.OrderDirection);
+							writer.WriteSide(trade.OriginSide);
 
 							break;
 						}

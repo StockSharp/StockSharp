@@ -433,7 +433,7 @@ namespace StockSharp.Algo
 
 			var position = trade.Trade.Volume;
 
-			if (trade.Order.Direction == Sides.Sell)
+			if (trade.Order.Side == Sides.Sell)
 				position *= -1;
 
 			return position;
@@ -515,11 +515,11 @@ namespace StockSharp.Algo
 		/// <param name="orders">The group of orders, from which the required orders shall be found and cancelled.</param>
 		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
 		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
-		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+		/// <param name="side">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
+		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? side = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
@@ -531,7 +531,7 @@ namespace StockSharp.Algo
 				.Where(order => !order.State.IsFinal())
 				.Where(order => isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder.Value)
 				.Where(order => portfolio == null || (order.Portfolio == portfolio))
-				.Where(order => direction == null || order.Direction == direction.Value)
+				.Where(order => side == null || order.Side == side.Value)
 				.Where(order => board == null || order.Security.Board == board)
 				.Where(order => security == null || order.Security == security)
 				.Where(order => securityType == null || order.Security.Type == securityType.Value)
@@ -576,14 +576,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(securityProvider));
 
 			return security.InnerSecurityIds.Select(id =>
-			{
-				var innerSec = securityProvider.LookupById(id);
-
-				if (innerSec == null)
-					throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id));
-
-				return innerSec;
-			}).ToArray();
+				securityProvider.LookupById(id) ?? throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id))
+			).ToArray();
 		}
 
 		/// <summary>
@@ -639,14 +633,14 @@ namespace StockSharp.Algo
 		/// To filter orders for the given direction.
 		/// </summary>
 		/// <param name="orders">All orders, in which the required shall be searched for.</param>
-		/// <param name="direction">Order side.</param>
+		/// <param name="side">Order side.</param>
 		/// <returns>Filtered orders.</returns>
-		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Sides direction)
+		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Sides side)
 		{
 			if (orders == null)
 				throw new ArgumentNullException(nameof(orders));
 
-			return orders.Where(p => p.Direction == direction);
+			return orders.Where(p => p.Side == side);
 		}
 
 		/// <summary>

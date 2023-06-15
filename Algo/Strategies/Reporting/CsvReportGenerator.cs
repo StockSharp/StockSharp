@@ -81,7 +81,7 @@ public class CsvReportGenerator : BaseReportGenerator
 
 		foreach (var order in strategy.Orders)
 		{
-			WriteValues(order.Id, order.TransactionId, order.Direction.GetDisplayName(), order.Time, order.Price,
+			WriteValues(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
 				order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : string.Empty), order.Balance,
 					order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
 		}
@@ -92,8 +92,8 @@ public class CsvReportGenerator : BaseReportGenerator
 
 		foreach (var trade in strategy.MyTrades)
 		{
-			WriteValues(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.Time.Format(), trade.Trade.Price, trade.Trade.Volume,
-				trade.Order.Direction.GetDisplayName(), trade.Order.Id, strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL, trade.Slippage);
+			WriteValues(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.ServerTime.Format(), trade.Trade.Price, trade.Trade.Volume,
+				trade.Order.Side.GetDisplayName(), trade.Order.Id, strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL, trade.Slippage);
 		}
 
 		return default;

@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		/// </summary>
 		/// <param name="order">Quoting order.</param>
 		protected QuotingStrategy(Order order)
-			: this(order.Direction, order.TransactionId == 0 ? order.Volume : order.Balance)
+			: this(order.Side, order.TransactionId == 0 ? order.Volume : order.Balance)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
@@ -580,7 +580,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 			}
 			else
 			{
-				this.AddInfoLog(LocalizedStrings.Str1312Params, _order.TransactionId, _order.Direction, _order.Price, _order.Volume);
+				this.AddInfoLog(LocalizedStrings.Str1312Params, _order.TransactionId, _order.Side, _order.Price, _order.Volume);
 
 				if (IsSupportAtomicReRegister && IsOrderReplaceable(_order) == true)
 				{
@@ -655,7 +655,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 						.WhenCanceled(this)
 						.Do((r, o) =>
 						{
-							this.AddInfoLog(LocalizedStrings.Str1316Params, o.TransactionId, o.LastChangeTime);
+							this.AddInfoLog(LocalizedStrings.Str1316Params, o.TransactionId, o.ServerTime);
 
 							Rules.RemoveRulesByToken(o, r);
 

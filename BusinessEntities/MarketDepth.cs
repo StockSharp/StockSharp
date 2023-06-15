@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
+	using System.ComponentModel;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;

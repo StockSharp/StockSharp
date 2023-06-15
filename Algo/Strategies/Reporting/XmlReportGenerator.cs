@@ -92,7 +92,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			WriteAttributeString("id", o.Id);
 			WriteAttributeString("transactionId", o.TransactionId);
-			WriteAttributeString("direction", o.Direction);
+			WriteAttributeString("direction", o.Side);
 			WriteAttributeString("time", o.Time);
 			WriteAttributeString("price", o.Price);
 			WriteAttributeString("state", o.State);
@@ -116,7 +116,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			WriteAttributeString("id", t.Trade.Id);
 			WriteAttributeString("transactionId", t.Order.TransactionId);
-			WriteAttributeString("time", t.Trade.Time);
+			WriteAttributeString("time", t.Trade.ServerTime);
 			WriteAttributeString("price", t.Trade.Price);
 			WriteAttributeString("volume", t.Trade.Volume);
 			WriteAttributeString("order", t.Order.Id);

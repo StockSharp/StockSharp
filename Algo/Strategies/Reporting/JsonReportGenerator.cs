@@ -96,7 +96,7 @@ public class JsonReportGenerator : BaseReportGenerator
 
 			WriteElementString("id", o.Id);
 			WriteElementString("transactionId", o.TransactionId);
-			WriteElementString("direction", o.Direction);
+			WriteElementString("direction", o.Side);
 			WriteElementString("time", o.Time);
 			WriteElementString("price", o.Price);
 			WriteElementString("state", o.State);
@@ -120,7 +120,7 @@ public class JsonReportGenerator : BaseReportGenerator
 
 			WriteElementString("id", t.Trade.Id);
 			WriteElementString("transactionId", t.Order.TransactionId);
-			WriteElementString("time", t.Trade.Time);
+			WriteElementString("time", t.Trade.ServerTime);
 			WriteElementString("price", t.Trade.Price);
 			WriteElementString("volume", t.Trade.Volume);
 			WriteElementString("order", t.Order.Id);

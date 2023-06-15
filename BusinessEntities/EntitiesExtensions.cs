@@ -213,7 +213,7 @@ namespace StockSharp.BusinessEntities
 			return new Order
 			{
 				Portfolio = oldOrder.Portfolio,
-				Direction = oldOrder.Direction,
+				Side = oldOrder.Side,
 				TimeInForce = oldOrder.TimeInForce,
 				Security = oldOrder.Security,
 				Type = oldOrder.Type,

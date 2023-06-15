@@ -598,14 +598,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <returns>Connector.</returns>
 		public IConnector SafeGetConnector()
-		{
-			var connector = Connector;
-
-			if (connector == null)
-				throw new InvalidOperationException(LocalizedStrings.Str1360);
-
-			return connector;
-		}
+			=> Connector ?? throw new InvalidOperationException(LocalizedStrings.Str1360);
 
 		private Portfolio _portfolio;
 
@@ -1732,7 +1725,7 @@ namespace StockSharp.Algo.Strategies
 				return;
 
 			this.AddInfoLog(LocalizedStrings.Str1382Params,
-				order.Type, order.Direction, order.Price, order.Volume, order.Comment, order.GetHashCode());
+				order.Type, order.Side, order.Price, order.Volume, order.Comment, order.GetHashCode());
 
 			if (order.Security == null)
 				order.Security = Security;
@@ -2694,7 +2687,7 @@ namespace StockSharp.Algo.Strategies
 			var isSlipChanged = false;
 
 			this.AddInfoLog(LocalizedStrings.Str1398Params,
-				trade.Order.Direction,
+				trade.Order.Side,
 				(trade.Trade.Id == 0 ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
 				trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
 
@@ -3111,7 +3104,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					var secId = parameters.TryGet(nameof(Order.Security));
 					var pfName = parameters.TryGet(nameof(Order.Portfolio));
-					var side = parameters[nameof(Order.Direction)].To<Sides>();
+					var side = parameters[nameof(Order.Side)].To<Sides>();
 					var volume = parameters[nameof(Order.Volume)].To<decimal>();
 					var price = parameters.TryGet(nameof(Order.Price)).To<decimal?>() ?? 0;
 					var comment = parameters.TryGet(nameof(Order.Comment));
@@ -3122,7 +3115,7 @@ namespace StockSharp.Algo.Strategies
 					{
 						Security = secId.IsEmpty() ? Security : this.LookupById(secId),
 						Portfolio = pfName.IsEmpty() ? Portfolio : Connector.LookupByPortfolioName(pfName),
-						Direction = side,
+						Side = side,
 						Volume = volume,
 						Price = price,
 						Comment = comment,

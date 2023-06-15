@@ -88,6 +88,7 @@ namespace StockSharp.BusinessEntities
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		[Obsolete("Use ServerTime property.")]
 		public DateTimeOffset Time
 		{
 			get => ServerTime;
@@ -136,6 +137,7 @@ namespace StockSharp.BusinessEntities
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		[Obsolete("Use OriginSide property.")]
 		public Sides? OrderDirection
 		{
 			get => OriginSide;

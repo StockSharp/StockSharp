@@ -397,14 +397,14 @@
 
 				if (_isTake)
 				{
-					if (Order.Direction == Sides.Buy)
+					if (Order.Side == Sides.Buy)
 						isActivate = _bestAskPrice != null && _bestAskPrice.Value >= (_averagePrice + _offset);
 					else
 						isActivate = _bestBidPrice != null && _bestBidPrice.Value <= (_averagePrice - _offset);
 				}
 				else
 				{
-					if (Order.Direction == Sides.Buy)
+					if (Order.Side == Sides.Buy)
 						isActivate = _bestAskPrice != null && _bestAskPrice.Value <= (_averagePrice - _offset);
 					else
 						isActivate = _bestBidPrice != null && _bestBidPrice.Value >= (_averagePrice + _offset);

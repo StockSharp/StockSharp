@@ -63,9 +63,9 @@ namespace StockSharp.Algo
 			{
 				LocalTime = depth.LocalTime,
 				SecurityId = securityId,
-				Bids = depth.Bids2.ToArray(),
-				Asks = depth.Asks2.ToArray(),
-				ServerTime = depth.LastChangeTime,
+				Bids = depth.Bids.ToArray(),
+				Asks = depth.Asks.ToArray(),
+				ServerTime = depth.ServerTime,
 				Currency = depth.Currency,
 				SeqNum = depth.SeqNum,
 				BuildFrom = depth.BuildFrom,
@@ -172,15 +172,15 @@ namespace StockSharp.Algo
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
 				OrderType = order.Type,
-				Side = order.Direction,
+				Side = order.Side,
 				OrderPrice = order.Price,
 				SecurityId = order.Security.ToSecurityId(),
 				PortfolioName = order.Portfolio.Name,
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				HasTradeInfo = true,
-				ServerTime = tick.Time,
-				OriginSide = tick.OrderDirection,
+				ServerTime = tick.ServerTime,
+				OriginSide = tick.OriginSide,
 				Currency = tick.Currency,
 				Position = trade.Position,
 				PnL = trade.PnL,
@@ -217,11 +217,11 @@ namespace StockSharp.Algo
 				OrderType = order.Type,
 				OrderVolume = order.Volume,
 				Balance = order.Balance,
-				Side = order.Direction,
+				Side = order.Side,
 				OrderState = order.State,
 				OrderStatus = order.Status,
 				TimeInForce = order.TimeInForce,
-				ServerTime = order.LastChangeTime,
+				ServerTime = order.ServerTime,
 				LocalTime = order.LocalTime,
 				ExpiryDate = order.ExpiryDate,
 				UserOrderId = order.UserOrderId,
@@ -286,7 +286,7 @@ namespace StockSharp.Algo
 			{
 				DataTypeEx = DataType.Ticks,
 				LocalTime = trade.LocalTime,
-				ServerTime = trade.Time,
+				ServerTime = trade.ServerTime,
 				SecurityId = trade.Security.ToSecurityId(),
 				TradeId = trade.Id.DefaultAsNull(),
 				TradeStringId = trade.StringId,
@@ -295,7 +295,7 @@ namespace StockSharp.Algo
 				IsSystem = trade.IsSystem,
 				TradeStatus = trade.Status,
 				OpenInterest = trade.OpenInterest,
-				OriginSide = trade.OrderDirection,
+				OriginSide = trade.OriginSide,
 				IsUpTick = trade.IsUpTick,
 				Currency = trade.Currency,
 				SeqNum = trade.SeqNum,
@@ -331,7 +331,7 @@ namespace StockSharp.Algo
 				OrderPrice = order.Price,
 				OrderVolume = order.Volume,
 				Balance = order.Balance,
-				Side = order.Direction,
+				Side = order.Side,
 				IsSystem = order.IsSystem,
 				OrderState = order.State,
 				OrderStatus = order.Status,
@@ -350,7 +350,7 @@ namespace StockSharp.Algo
 				IsUpTick = trade?.IsUpTick,
 				Yield = trade?.Yield,
 				OpenInterest = trade?.OpenInterest,
-				OriginSide = trade?.OrderDirection,
+				OriginSide = trade?.OriginSide,
 			};
 		}
 
@@ -369,7 +369,7 @@ namespace StockSharp.Algo
 			{
 				TransactionId = order.TransactionId,
 				PortfolioName = order.Portfolio.Name,
-				Side = order.Direction,
+				Side = order.Side,
 				Price = order.Price,
 				Volume = order.Volume,
 				VisibleVolume = order.VisibleVolume,
@@ -425,7 +425,7 @@ namespace StockSharp.Algo
 				OrderStringId = order.StringId,
 				Balance = order.Balance,
 				Volume = order.Volume,
-				Side = order.Direction,
+				Side = order.Side,
 				IsMargin = order.IsMargin,
 			};
 
@@ -453,7 +453,7 @@ namespace StockSharp.Algo
 			{
 				TransactionId = newOrder.TransactionId,
 				PortfolioName = newOrder.Portfolio.Name,
-				Side = newOrder.Direction,
+				Side = newOrder.Side,
 				Price = newOrder.Price,
 				Volume = newOrder.Volume,
 				VisibleVolume = newOrder.VisibleVolume,
@@ -1261,10 +1261,10 @@ namespace StockSharp.Algo
 			trade.Volume = message.TradeVolume ?? 0;
 			trade.Status = message.TradeStatus;
 			trade.IsSystem = message.IsSystem;
-			trade.Time = message.ServerTime;
+			trade.ServerTime = message.ServerTime;
 			trade.LocalTime = message.LocalTime;
 			trade.OpenInterest = message.OpenInterest;
-			trade.OrderDirection = message.OriginSide;
+			trade.OriginSide = message.OriginSide;
 			trade.IsUpTick = message.IsUpTick;
 			trade.Currency = message.Currency;
 			trade.SeqNum = message.SeqNum;
@@ -1305,7 +1305,7 @@ namespace StockSharp.Algo
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
-			order.Direction = message.Side;
+			order.Side = message.Side;
 			order.Price = message.OrderPrice;
 			order.Volume = message.OrderVolume ?? 0;
 			order.Balance = message.Balance ?? 0;
@@ -1314,7 +1314,7 @@ namespace StockSharp.Algo
 			order.Status = message.OrderStatus;
 			order.IsSystem = message.IsSystem;
 			order.Time = message.ServerTime;
-			order.LastChangeTime = message.ServerTime;
+			order.ServerTime = message.ServerTime;
 			order.LocalTime = message.LocalTime;
 			order.TimeInForce = message.TimeInForce;
 			order.ExpiryDate = message.ExpiryDate;
@@ -1422,9 +1422,9 @@ namespace StockSharp.Algo
 			order.Price = message.OrderPrice;
 			order.Volume = message.OrderVolume ?? 0;
 			order.Balance = message.Balance ?? 0;
-			order.Direction = message.Side;
+			order.Side = message.Side;
 			order.Time = message.ServerTime;
-			order.LastChangeTime = message.ServerTime;
+			order.ServerTime = message.ServerTime;
 			order.LocalTime = message.LocalTime;
 
 			order.Status = message.OrderStatus;
@@ -1442,13 +1442,13 @@ namespace StockSharp.Algo
 				trade.Id = message.TradeId ?? default;
 				trade.StringId = message.TradeStringId;
 				trade.Price = message.TradePrice ?? default;
-				trade.Time = message.ServerTime;
+				trade.ServerTime = message.ServerTime;
 				trade.Volume = message.OrderVolume ?? default;
 				trade.IsSystem = message.IsSystem;
 				trade.Status = message.TradeStatus;
 				trade.OrderBuyId = message.OrderBuyId;
 				trade.OrderSellId = message.OrderSellId;
-				trade.OrderDirection = message.OriginSide;
+				trade.OriginSide = message.OriginSide;
 				trade.OpenInterest = message.OpenInterest;
 				trade.IsUpTick = message.IsUpTick;
 				trade.Yield = message.Yield;

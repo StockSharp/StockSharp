@@ -1392,7 +1392,7 @@ namespace StockSharp.Algo
 
 			A1();
 
-			depth.Update(bids, asks, depth.LastChangeTime);
+			depth.Update(bids, asks, depth.ServerTime);
 		}
 
 		/// <summary>
@@ -1415,7 +1415,7 @@ namespace StockSharp.Algo
 				var order = myTrade.Order;
 				var trade = myTrade.Trade;
 
-				var direction = (order.Direction == Sides.Buy) ? 1m : -1m;
+				var direction = (order.Side == Sides.Buy) ? 1m : -1m;
 
 				//≈сли открываемс€ или переворачиваемс€
 				if (direction != denominator.Sign() && trade.Volume > denominator.Abs())
@@ -1462,7 +1462,7 @@ namespace StockSharp.Algo
 			order = order.ReRegisterClone();
 			depth = depth.Clone();
 
-			order.LastChangeTime = depth.LastChangeTime = DateTimeOffset.Now;
+			order.ServerTime = depth.ServerTime = DateTimeOffset.Now;
 			order.LocalTime = depth.LocalTime = DateTime.Now;
 
 			var testPf = Portfolio.CreateSimulator();
@@ -1496,7 +1496,7 @@ namespace StockSharp.Algo
 				var regMsg = order.CreateRegisterMessage();
 				var pfMsg = testPf.ToChangeMessage();
 
-				pfMsg.ServerTime = depthMsg.ServerTime = order.LastChangeTime;
+				pfMsg.ServerTime = depthMsg.ServerTime = order.ServerTime;
 				pfMsg.LocalTime = regMsg.LocalTime = depthMsg.LocalTime = order.LocalTime;
 
 				emulator.SendInMessage(pfMsg);
@@ -1527,19 +1527,19 @@ namespace StockSharp.Algo
 		/// To get probable trades by order book for given price and volume.
 		/// </summary>
 		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
-		/// <param name="orderDirection">Order side.</param>
+		/// <param name="side">Order side.</param>
 		/// <param name="volume">The volume, supposed to be implemented.</param>
 		/// <param name="price">The price, based on which the order is supposed to be forwarded. If it equals 0, option of market order will be considered.</param>
 		/// <returns>Probable trades.</returns>
 		[Obsolete]
-		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume, decimal price)
+		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides side, decimal volume, decimal price)
 		{
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
 
 			return depth.GetTheoreticalTrades(new Order
 			{
-				Direction = orderDirection,
+				Side = side,
 				Type = price == 0 ? OrderTypes.Market : OrderTypes.Limit,
 				Security = depth.Security,
 				Price = price,

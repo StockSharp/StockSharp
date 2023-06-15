@@ -197,7 +197,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 				.Or(order.WhenCanceled(this))
 				.Do((rule, o) =>
 				{
-					parentStrategy.AddInfoLog(LocalizedStrings.Str1272Params, o.TransactionId, o.IsMatched() ? LocalizedStrings.Str1328 : LocalizedStrings.Str1329, o.LastChangeTime);
+					parentStrategy.AddInfoLog(LocalizedStrings.Str1272Params, o.TransactionId, o.IsMatched() ? LocalizedStrings.Str1328 : LocalizedStrings.Str1329, o.ServerTime);
 
 					Rules.RemoveRulesByToken(o, rule);
 
@@ -241,7 +241,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			foreach (var order in orders)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1277Params, order.Security, order.Direction, order.Volume, order.Price);
+				this.AddInfoLog(LocalizedStrings.Str1277Params, order.Security, order.Side, order.Volume, order.Price);
 
 				var strategy = _strategies.TryGetValue(order.Security);
 

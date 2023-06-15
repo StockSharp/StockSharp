@@ -94,14 +94,14 @@ namespace StockSharp.Algo.Strategies
 		/// To create the initialized order object.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
-		/// <param name="direction">Order side.</param>
+		/// <param name="side">Order side.</param>
 		/// <param name="price">The price. If <see langword="null" /> value is passed, the order is registered at market price.</param>
 		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
 		/// <returns>The initialized order object.</returns>
 		/// <remarks>
 		/// The order is not registered, only the object is created.
 		/// </remarks>
-		public static Order CreateOrder(this Strategy strategy, Sides direction, decimal? price, decimal? volume = null)
+		public static Order CreateOrder(this Strategy strategy, Sides side, decimal? price, decimal? volume = null)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				Portfolio = strategy.Portfolio,
 				Security = strategy.Security,
-				Direction = direction,
+				Side = side,
 				Volume = volume ?? strategy.Volume,
 			};
 
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Strategies
 
 				if (order.Type != OrderTypes.Market)
 				{
-					order.Price += (order.Direction == Sides.Buy ? slippage : -slippage);
+					order.Price += (order.Side == Sides.Buy ? slippage : -slippage);
 				}
 
 				strategy.RegisterOrder(order);

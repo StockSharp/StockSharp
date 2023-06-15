@@ -41,7 +41,7 @@
 			{
 				Order = new Order
 				{
-					Direction = side,
+					Side = side,
 					Price = price,
 					Security = Security,
 					Portfolio = connector.Portfolios.FirstOrDefault(),

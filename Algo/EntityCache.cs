@@ -134,7 +134,7 @@ namespace StockSharp.Algo
 				// для новых заявок используем серверное время,
 				// т.к. заявка получена первый раз и не менялась
 				// ServerTime для заявки - это время регистрации
-				order.LastChangeTime = _raiseNewOrder ? message.ServerTime : message.LocalTime;
+				order.ServerTime = _raiseNewOrder ? message.ServerTime : message.LocalTime;
 				order.LocalTime = message.LocalTime;
 
 				if (message.OrderPrice != 0)
@@ -617,10 +617,10 @@ namespace StockSharp.Algo
 						throw new InvalidOperationException(LocalizedStrings.Str720Params.Put(transactionId));
 
 					o.Time = message.ServerTime;
-					o.LastChangeTime = message.ServerTime;
+					o.ServerTime = message.ServerTime;
 					o.Price = message.OrderPrice;
 					o.Volume = message.OrderVolume ?? 0;
-					o.Direction = message.Side;
+					o.Side = message.Side;
 					o.Comment = message.Comment;
 					o.ExpiryDate = message.ExpiryDate;
 					o.Condition = message.Condition;
@@ -754,7 +754,7 @@ namespace StockSharp.Algo
 				{
 					regOrder.State = OrderStates.Failed;
 
-					regOrder.LastChangeTime = message.ServerTime;
+					regOrder.ServerTime = message.ServerTime;
 					regOrder.LocalTime = message.LocalTime;
 				}
 
@@ -766,7 +766,7 @@ namespace StockSharp.Algo
 				var o = t.Item1;
 				var operation = t.Item2;
 
-				o.LastChangeTime = message.ServerTime;
+				o.ServerTime = message.ServerTime;
 				o.LocalTime = message.LocalTime;
 
 				if (message.OrderStatus != null)
@@ -893,7 +893,7 @@ namespace StockSharp.Algo
 			{
 				var t = message.ToTrade(EntityFactory.CreateTrade(security, id, stringId));
 				t.LocalTime = message.LocalTime;
-				t.Time = message.ServerTime;
+				t.ServerTime = message.ServerTime;
 				return t;
 			});
 
@@ -1346,7 +1346,7 @@ namespace StockSharp.Algo
 			else if (dataType == DataType.Transactions)
 			{
 				lock (_orders.SyncRoot)
-					return _orders.Keys.Select(o => o.ToMessage()).Where(m => m.IsMatch(subscription)).ToArray();
+					return _orders.Keys.Select(o => o.ToMessage()).Where(m => m.IsMatch(m.Type, subscription)).ToArray();
 			}
 			else if (dataType == DataType.PositionChanges)
 			{

@@ -283,6 +283,8 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Time of last order change (Cancellation, Fill).
 		/// </summary>
+		[Obsolete("Use LastChangeTime property.")]
+		[Browsable(false)]
 		public DateTimeOffset LastChangeTime
 		{
 			get => ServerTime;
@@ -351,6 +353,7 @@ namespace StockSharp.BusinessEntities
 		/// Order side (buy or sell).
 		/// </summary>
 		[Browsable(false)]
+		[Obsolete("Use Direction property.")]
 		public Sides Direction
 		{
 			get => Side;

@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Strategies.Protective
 		/// <param name="trade">Protected position.</param>
 		/// <param name="protectiveLevel">The protective level. If the <see cref="Unit.Type"/> type is equal to <see cref="UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from the protected trade <paramref name="trade" /> is specified.</param>
 		public TakeProfitStrategy(MyTrade trade, Unit protectiveLevel)
-			: this(trade.Order.Direction, trade.Trade.Price, trade.Trade.Volume, protectiveLevel)
+			: this(trade.Order.Side, trade.Trade.Price, trade.Trade.Volume, protectiveLevel)
 		{
 		}
 
