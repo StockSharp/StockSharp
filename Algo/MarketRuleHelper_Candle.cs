@@ -7,22 +7,31 @@
 	using Ecng.Common;
 
 	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	partial class MarketRuleHelper
 	{
-		private abstract class BaseCandleSeriesRule<TArg> : MarketRule<Subscription, TArg>
+		private abstract class BaseCandleSeriesRule<TCandle> : MarketRule<Subscription, TCandle>
+			where TCandle : ICandleMessage
 		{
 			protected BaseCandleSeriesRule(Subscription subscription)
 				: base(subscription)
 			{
-				Subscription = subscription;
+				Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 			}
 
 			protected Subscription Subscription { get; }
-			protected CandleSeries CandleSeries { get; }
+
+			protected void Activate(ICandleMessage candle)
+			{
+				if (candle is TCandle typedCandle)
+					base.Activate(typedCandle);
+				else
+				{
+					base.Activate(((CandleMessage)candle).ToCandle(Subscription.CandleSeries.Security).To<TCandle>());
+				}
+			}
 		}
 
 		private abstract class CandleSeriesRule<TCandle> : BaseCandleSeriesRule<TCandle>
@@ -39,13 +48,17 @@
 
 			private void OnProcessing(Subscription subscription, ICandleMessage candle)
 			{
-				if (Subscription != subscription && CandleSeries != subscription.CandleSeries)
+				if (Subscription != subscription
+
+					// for backward compatibility (old code used CandleSeries rules)
+					&& Subscription.CandleSeries != subscription.CandleSeries
+				)
 					return;
 
-				OnProcessCandle(candle.To<TCandle>());
+				OnProcessCandle(candle);
 			}
 
-			protected abstract void OnProcessCandle(TCandle candle);
+			protected abstract void OnProcessCandle(ICandleMessage candle);
 
 			protected override void DisposeManaged()
 			{
@@ -75,7 +88,7 @@
 					_states = states;
 			}
 
-			protected override void OnProcessCandle(TCandle candle)
+			protected override void OnProcessCandle(ICandleMessage candle)
 			{
 				if ((_states == null && candle.State == _state) || (_states != null && _states.Contains(candle.State)))
 					Activate(candle);
@@ -92,7 +105,7 @@
 			{
 			}
 
-			protected override void OnProcessCandle(TCandle candle)
+			protected override void OnProcessCandle(ICandleMessage candle)
 			{
 				if (_currCandle?.IsSame(candle) == true)
 					return;
@@ -119,7 +132,7 @@
 				Name = LocalizedStrings.Str1064 + " " + subscription;
 			}
 
-			protected override void OnProcessCandle(TCandle candle)
+			protected override void OnProcessCandle(ICandleMessage candle)
 			{
 				if (candle.State == CandleStates.Active && _condition(candle))
 					Activate(candle);
@@ -137,7 +150,7 @@
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 			}
 
-			protected override void OnProcessCandle(TCandle candle)
+			protected override void OnProcessCandle(ICandleMessage candle)
 			{
 				if (candle.State == CandleStates.Active && _condition(candle))
 					Activate(candle);
@@ -163,10 +176,10 @@
 				if (!Candle.IsSame(candle))
 					return;
 
-				OnProcessCandle(candle.To<TCandle>());
+				OnProcessCandle(candle);
 			}
 
-			protected abstract void OnProcessCandle(TCandle candle);
+			protected abstract void OnProcessCandle(ICandleMessage candle);
 
 			protected override void DisposeManaged()
 			{
@@ -194,7 +207,7 @@
 				Name = LocalizedStrings.Str1065 + " " + candle;
 			}
 
-			protected override void OnProcessCandle(TCandle candle)
+			protected override void OnProcessCandle(ICandleMessage candle)
 			{
 				if (candle.State == CandleStates.Active && Candle.IsSame(candle) && _condition(Candle))
 					Activate(Candle);
@@ -210,7 +223,7 @@
 				Name = LocalizedStrings.Str1066 + " " + candle;
 			}
 
-			protected override void OnProcessCandle(TCandle candle)
+			protected override void OnProcessCandle(ICandleMessage candle)
 			{
 				if (candle.State == CandleStates.Finished && candle.IsSame(Candle))
 					Activate(Candle);
