@@ -62,10 +62,12 @@ namespace StockSharp.BusinessEntities
 			Order = 1)]
 		public string StringId { get; set; }
 
+		private SecurityId? _securityId;
+
 		/// <inheritdoc />
 		SecurityId ISecurityIdMessage.SecurityId
 		{
-			get => Security?.Id.ToSecurityId() ?? default;
+			get => _securityId ??= Security?.Id.ToSecurityId() ?? default;
 			set => throw new NotSupportedException();
 		}
 

@@ -558,27 +558,26 @@ namespace StockSharp.Algo
 		/// </summary>
 		public StorageMetaInfoMessageAdapter StorageAdapter { get; private set; }
 
-		/// <inheritdoc />
-		public bool SendInMessage(Message message)
+		private bool SendMessage(IMessageChannel channel, Message message)
 		{
+			if (channel is null)
+				return false;
+
 			message.TryInitLocalTime(this);
 
-			if (!InMessageChannel.IsOpened())
-				InMessageChannel.Open();
+			if (!channel.IsOpened())
+				channel.Open();
 
-			return InMessageChannel.SendInMessage(message);
+			return channel.SendInMessage(message);
 		}
+
+		/// <inheritdoc />
+		public bool SendInMessage(Message message)
+			=> SendMessage(InMessageChannel, message);
 
 		/// <inheritdoc />
 		public void SendOutMessage(Message message)
-		{
-			message.TryInitLocalTime(this);
-
-			if (!OutMessageChannel.IsOpened())
-				OutMessageChannel.Open();
-
-			OutMessageChannel.SendInMessage(message);
-		}
+			=> SendMessage(OutMessageChannel, message);
 
 		/// <summary>
 		/// Send error message.
@@ -1321,14 +1320,16 @@ namespace StockSharp.Algo
 
 		private void ProcessOrderLogMessage(ExecutionMessage message)
 		{
+			if (RaiseReceived(message, message, OrderLogReceived) == false)
+				return;
+
 			var security = EnsureGetSecurity(message);
 
 			var trade = (message.TradeId != null || !message.TradeStringId.IsEmpty())
 				? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId ?? string.Empty)
 				: null;
 
-			var logItem = message.ToOrderLog(EntityFactory.CreateOrderLogItem(new Order { Security = security }, trade));
-			//logItem.LocalTime = message.LocalTime;
+			var logItem = message.ToOrderLog(EntityFactory.CreateOrderLogItem(new() { Security = security }, trade));
 
 			if (RaiseReceived(logItem, message, OrderLogItemReceived) == false)
 				return;
@@ -1414,7 +1415,7 @@ namespace StockSharp.Algo
 				return;
 
 			security.LastTrade = tuple.Item1;
-			security.LastChangeTime = tuple.Item1.Time;
+			security.LastChangeTime = tuple.Item1.ServerTime;
 
 			RaiseSecurityChanged(security);
 		}

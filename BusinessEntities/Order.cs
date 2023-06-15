@@ -44,9 +44,11 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
+		private SecurityId? _securityId;
+
 		SecurityId ISecurityIdMessage.SecurityId
 		{
-			get => Security?.Id.ToSecurityId() ?? default;
+			get => _securityId ??= Security?.Id.ToSecurityId() ?? default;
 			set => throw new NotSupportedException();
 		}
 

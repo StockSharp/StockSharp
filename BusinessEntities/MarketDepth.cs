@@ -46,7 +46,13 @@ namespace StockSharp.BusinessEntities
 
 		QuoteChangeStates? IOrderBookMessage.State { get => null; set => throw new NotSupportedException(); }
 
-		SecurityId ISecurityIdMessage.SecurityId { get => Security?.Id.ToSecurityId() ?? default; set => throw new NotSupportedException(); }
+		private SecurityId? _securityId;
+
+		SecurityId ISecurityIdMessage.SecurityId
+		{
+			get => _securityId ??= Security?.Id.ToSecurityId() ?? default;
+			set => throw new NotSupportedException();
+		}
 
 		/// <summary>
 		/// Security.
