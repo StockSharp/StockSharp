@@ -6,13 +6,10 @@ using System.Collections.Generic;
 /// <summary>
 /// The interfaces describes candle.
 /// </summary>
-public interface ICandleMessage
+public interface ICandleMessage :
+	ISecurityIdMessage, ISeqNumMessage, IGeneratedMessage,
+	ILocalTimeMessage, IServerTimeMessage
 {
-	/// <summary>
-	/// Security ID.
-	/// </summary>
-	SecurityId SecurityId { get; }
-
 	/// <summary>
 	/// Opening price.
 	/// </summary>
@@ -132,17 +129,6 @@ public interface ICandleMessage
 	/// Open interest.
 	/// </summary>
 	decimal? OpenInterest { get; set; }
-
-	/// <summary>
-	/// Sequence number.
-	/// </summary>
-	/// <remarks>Zero means no information.</remarks>
-	long SeqNum { get; set; }
-
-	/// <summary>
-	/// Determines the message is generated from the specified <see cref="DataType"/>.
-	/// </summary>
-	DataType BuildFrom { get; set; }
 }
 
 /// <summary>

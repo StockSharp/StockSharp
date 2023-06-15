@@ -5487,5 +5487,87 @@ namespace StockSharp.Messages
 			else
 				return ask is null;
 		}
+
+		/// <summary>
+		/// To get the candle middle price.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <returns>The candle length.</returns>
+		public static decimal GetMiddlePrice(this ICandleMessage candle)
+		{
+			if (candle is null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.LowPrice + candle.GetLength() / 2;
+		}
+
+		/// <summary>
+		/// To get the candle length.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <returns>The candle length.</returns>
+		public static decimal GetLength(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.HighPrice - candle.LowPrice;
+		}
+
+		/// <summary>
+		/// To get the candle body.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get the body.</param>
+		/// <returns>The candle body.</returns>
+		public static decimal GetBody(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return (candle.OpenPrice - candle.ClosePrice).Abs();
+		}
+
+		/// <summary>
+		/// To get the candle upper shadow length.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get the upper shadow length.</param>
+		/// <returns>The candle upper shadow length. If 0, there is no shadow.</returns>
+		public static decimal GetTopShadow(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.HighPrice - candle.OpenPrice.Max(candle.ClosePrice);
+		}
+
+		/// <summary>
+		/// To get the candle lower shadow length.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get the lower shadow length.</param>
+		/// <returns>The candle lower shadow length. If 0, there is no shadow.</returns>
+		public static decimal GetBottomShadow(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.OpenPrice.Min(candle.ClosePrice) - candle.LowPrice;
+		}
+
+		/// <summary>
+		/// <see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		/// <param name="candle"><see cref="ICandleMessage"/></param>
+		/// <returns><see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
+		public static CandlePriceLevel? MinPriceLevel(this ICandleMessage candle)
+			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderBy(l => l.TotalVolume).FirstOr();
+
+		/// <summary>
+		/// <see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		/// <param name="candle"><see cref="ICandleMessage"/></param>
+		/// <returns><see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
+		public static CandlePriceLevel? MaxPriceLevel(this ICandleMessage candle)
+			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOr();
+
 	}
 }

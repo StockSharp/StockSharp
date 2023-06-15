@@ -26,7 +26,6 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Configuration;
 
 	using StockSharp.Algo.Candles.Compression;
-	using StockSharp.Algo.Candles.Patterns;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -375,9 +374,10 @@ namespace StockSharp.Algo.Candles
 		/// <param name="candles">Candles.</param>
 		/// <param name="volumeStep">Volume step.</param>
 		/// <returns>Tick trades.</returns>
-		public static IEnumerable<ExecutionMessage> ToTrades(this IEnumerable<CandleMessage> candles, decimal volumeStep)
+		public static IEnumerable<ExecutionMessage> ToTrades<TCandle>(this IEnumerable<TCandle> candles, decimal volumeStep)
+			where TCandle : ICandleMessage
 		{
-			return new TradeEnumerable(candles, volumeStep);
+			return new TradeEnumerable<TCandle>(candles, volumeStep);
 		}
 
 		/// <summary>
@@ -387,7 +387,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="volumeStep">Volume step.</param>
 		/// <param name="decimals">The number of decimal places for the volume.</param>
 		/// <param name="ticks">Array to tick trades.</param>
-		public static void ConvertToTrades(this CandleMessage candleMsg, decimal volumeStep, int decimals, (Sides? side, decimal price, decimal volume)[] ticks)
+		public static void ConvertToTrades(this ICandleMessage candleMsg, decimal volumeStep, int decimals, (Sides? side, decimal price, decimal volume)[] ticks)
 		{
 			if (candleMsg is null)
 				throw new ArgumentNullException(nameof(candleMsg));
@@ -459,24 +459,25 @@ namespace StockSharp.Algo.Candles
 			};
 		}
 
-		private sealed class TradeEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
+		private class TradeEnumerable<TCandle> : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
+			where TCandle : ICandleMessage
 		{
 			private sealed class TradeEnumerator : IEnumerator<ExecutionMessage>
 			{
 				private readonly decimal _volumeStep;
-				private readonly IEnumerator<CandleMessage> _valuesEnumerator;
+				private readonly IEnumerator<TCandle> _valuesEnumerator;
 				private IEnumerator<ExecutionMessage> _currCandleEnumerator;
 				private readonly int _decimals;
 				private readonly (Sides? side, decimal price, decimal volume)[] _ticks = new (Sides?, decimal, decimal)[4];
 
-				public TradeEnumerator(IEnumerable<CandleMessage> candles, decimal volumeStep)
+				public TradeEnumerator(IEnumerable<TCandle> candles, decimal volumeStep)
 				{
 					_volumeStep = volumeStep;
 					_decimals = volumeStep.GetCachedDecimals();
 					_valuesEnumerator = candles.GetEnumerator();
 				}
 
-				private IEnumerable<ExecutionMessage> ToTicks(CandleMessage candleMsg)
+				private IEnumerable<ExecutionMessage> ToTicks(TCandle candleMsg)
 				{
 					candleMsg.ConvertToTrades(_volumeStep, _decimals, _ticks);
 
@@ -541,7 +542,7 @@ namespace StockSharp.Algo.Candles
 				object IEnumerator.Current => Current;
 			}
 
-			public TradeEnumerable(IEnumerable<CandleMessage> candles, decimal volumeStep)
+			public TradeEnumerable(IEnumerable<TCandle> candles, decimal volumeStep)
 				: base(() => new TradeEnumerator(candles, volumeStep))
 			{
 				if (candles == null)
@@ -585,71 +586,6 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// To get the candle middle price.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to get a length.</param>
-		/// <returns>The candle length.</returns>
-		public static decimal GetMiddlePrice(this ICandleMessage candle)
-		{
-			if (candle is null)
-				throw new ArgumentNullException(nameof(candle));
-
-			return candle.LowPrice + candle.GetLength() / 2;
-		}
-
-		/// <summary>
-		/// To get the candle length.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to get a length.</param>
-		/// <returns>The candle length.</returns>
-		public static decimal GetLength(this ICandleMessage candle)
-		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
-
-			return candle.HighPrice - candle.LowPrice;
-		}
-
-		/// <summary>
-		/// To get the candle body.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to get the body.</param>
-		/// <returns>The candle body.</returns>
-		public static decimal GetBody(this ICandleMessage candle)
-		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
-
-			return (candle.OpenPrice - candle.ClosePrice).Abs();
-		}
-
-		/// <summary>
-		/// To get the candle upper shadow length.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to get the upper shadow length.</param>
-		/// <returns>The candle upper shadow length. If 0, there is no shadow.</returns>
-		public static decimal GetTopShadow(this ICandleMessage candle)
-		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
-
-			return candle.HighPrice - candle.OpenPrice.Max(candle.ClosePrice);
-		}
-
-		/// <summary>
-		/// To get the candle lower shadow length.
-		/// </summary>
-		/// <param name="candle">The candle for which you need to get the lower shadow length.</param>
-		/// <returns>The candle lower shadow length. If 0, there is no shadow.</returns>
-		public static decimal GetBottomShadow(this ICandleMessage candle)
-		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
-
-			return candle.OpenPrice.Min(candle.ClosePrice) - candle.LowPrice;
-		}
-
-		/// <summary>
 		/// To get the number of time frames within the specified time range.
 		/// </summary>
 		/// <param name="range">The specified time range for which you need to get the number of time frames.</param>
@@ -669,7 +605,8 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candles">Candles.</param>
 		/// <returns>The area.</returns>
-		public static VolumeProfileBuilder GetValueArea(this IEnumerable<Candle> candles)
+		public static VolumeProfileBuilder GetValueArea<TCandle>(this IEnumerable<TCandle> candles)
+			where TCandle : ICandleMessage
 		{
 			var area = new VolumeProfileBuilder(new List<CandlePriceLevel>());
 
@@ -736,22 +673,6 @@ namespace StockSharp.Algo.Candles
 		{
 			return timeFrames.Where(t => t < original && (original.Ticks % t.Ticks) == 0);
 		}
-
-		/// <summary>
-		/// <see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.
-		/// </summary>
-		/// <param name="candle"><see cref="ICandleMessage"/></param>
-		/// <returns><see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
-		public static CandlePriceLevel? MinPriceLevel(this ICandleMessage candle)
-			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderBy(l => l.TotalVolume).FirstOr();
-
-		/// <summary>
-		/// <see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.
-		/// </summary>
-		/// <param name="candle"><see cref="ICandleMessage"/></param>
-		/// <returns><see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
-		public static CandlePriceLevel? MaxPriceLevel(this ICandleMessage candle)
-			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOr();
 
 		/// <summary>
 		/// Determines the specified candles are same.

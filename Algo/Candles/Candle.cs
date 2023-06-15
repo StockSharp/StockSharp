@@ -48,7 +48,19 @@ namespace StockSharp.Algo.Candles
 
 		private SecurityId? _securityId;
 
-		SecurityId ICandleMessage.SecurityId => _securityId ??= Security.ToSecurityId();
+		SecurityId ISecurityIdMessage.SecurityId
+		{
+			get => _securityId ??= Security?.Id.ToSecurityId() ?? default;
+			set => throw new NotSupportedException();
+		}
+
+		DateTimeOffset IServerTimeMessage.ServerTime
+		{
+			get => OpenTime;
+			set => OpenTime = value;
+		}
+
+		DateTimeOffset ILocalTimeMessage.LocalTime => OpenTime;
 
 		/// <summary>
 		/// Security.

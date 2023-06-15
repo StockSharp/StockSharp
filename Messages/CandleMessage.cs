@@ -60,9 +60,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public abstract class CandleMessage : Message,
-		ISubscriptionIdMessage, IServerTimeMessage, ISecurityIdMessage,
-		IGeneratedMessage, ISeqNumMessage, ICandleMessage
+	public abstract class CandleMessage : Message, ISubscriptionIdMessage, ICandleMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
