@@ -681,8 +681,8 @@ namespace StockSharp.BusinessEntities
 			    if (value == null)
 			        return;
 
-				if (value.Time != default)
-					LastChangeTime = value.Time;
+				if (value.ServerTime != default)
+					LastChangeTime = value.ServerTime;
 			}
 		}
 
@@ -872,7 +872,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.BestPairKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 208)]
-		public MarketDepthPair BestPair => new(this, BestBid, BestAsk);
+		public MarketDepthPair BestPair => new(BestBid, BestAsk);
 
 		private SecurityStates? _state;
 

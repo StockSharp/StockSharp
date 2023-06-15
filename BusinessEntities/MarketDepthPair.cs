@@ -34,22 +34,15 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDepthPair"/>.
 		/// </summary>
-		/// <param name="security">Security.</param>
 		/// <param name="bid">Bid.</param>
 		/// <param name="ask">Ask.</param>
-		public MarketDepthPair(Security security, QuoteChange? bid, QuoteChange? ask)
+		public MarketDepthPair(QuoteChange? bid, QuoteChange? ask)
 		{
-			Security = security ?? throw new ArgumentNullException(nameof(security));
 			Bid = bid;
 			Ask = ask;
 
 			_isFull = bid != null && ask != null;
 		}
-
-		/// <summary>
-		/// Security.
-		/// </summary>
-		public Security Security { get; }
 
 		/// <summary>
 		/// Bid.
