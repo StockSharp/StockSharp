@@ -861,6 +861,9 @@ namespace StockSharp.Algo.Testing
 					else if (_booksWithState == false)
 						return;
 
+					if (message.HasPositions)
+						throw new NotSupportedException("Order books with positions not supported.");
+
 					var canApply = false;
 
 					switch (message.State)
