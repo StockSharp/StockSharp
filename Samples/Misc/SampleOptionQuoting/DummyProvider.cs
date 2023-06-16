@@ -77,18 +77,21 @@ namespace SampleOptionQuoting
 			remove => throw new NotSupportedException();
 		}
 
+		[Obsolete]
 		event Action<MarketDepth> IMarketDataProvider.NewMarketDepth
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();
 		}
 
+		[Obsolete]
 		event Action<MarketDepth> IMarketDataProvider.MarketDepthChanged
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();
 		}
 
+		[Obsolete]
 		event Action<OrderLogItem> IMarketDataProvider.NewOrderLogItem
 		{
 			add => throw new NotSupportedException();

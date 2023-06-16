@@ -228,35 +228,6 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<string, News> _newsById = new(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedList<News> _newsWithoutId = new();
 
-		private class MarketDepthInfo
-		{
-			private QuoteChangeMessage _snapshot;
-			private bool _hasChanges;
-
-			public void TryFlushChanges(MarketDepth depth)
-			{
-				if (depth is null)
-					throw new ArgumentNullException(nameof(depth));
-
-				if (_hasChanges == false)
-					return;
-
-				_hasChanges = false;
-				_snapshot.ToMarketDepth(depth);
-			}
-
-			public void UpdateSnapshot(QuoteChangeMessage snapshot)
-			{
-				if (snapshot is null)
-					throw new ArgumentNullException(nameof(snapshot));
-
-				_snapshot = snapshot;
-				_hasChanges = true;
-			}
-
-			public QuoteChangeMessage GetCopy() => _snapshot?.TypedClone();
-		}
-
 		public IEnumerable<News> News => _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray();
 
 		private int _ordersKeepCount = 1000;
@@ -799,7 +770,9 @@ namespace StockSharp.Algo
 			{
 				isNew = true;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 				var trade = message.ToTrade(security);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 				if (message.SeqNum != default)
 					trade.SeqNum = message.SeqNum;

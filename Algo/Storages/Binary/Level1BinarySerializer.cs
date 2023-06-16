@@ -819,7 +819,7 @@ namespace StockSharp.Algo.Storages.Binary
 #pragma warning disable CS0612 // Type or member is obsolete
 						case Level1Fields.LastTrade:
 						{
-							var trade = (Trade)value;
+							var trade = (ITickTradeMessage)value;
 
 							SerializePrice(writer, metaInfo, trade.Price, useLong, nonAdjustPrice);
 							writer.WriteVolume(trade.Volume, metaInfo, largeDecimal);

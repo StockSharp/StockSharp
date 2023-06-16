@@ -305,6 +305,7 @@
 			}
 		}
 
+		[Obsolete]
 		private class OrderTakeProfitStopLossRule : OrderRule<Order>
 		{
 			private readonly Unit _offset;
@@ -336,17 +337,13 @@
 
 			protected override void Subscribe()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				_marketDataProvider.MarketDepthChanged += OnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				_marketDataProvider.MarketDepthChanged -= OnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 				Provider.NewMyTrade -= OnNewMyTrade;
 			}
 
@@ -581,6 +578,7 @@
 		/// <param name="profitOffset">Profit offset.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderChanged method.")]
 		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, IConnector connector)
 		{
 			return WhenProfitMore(order, profitOffset, connector, connector);
@@ -594,6 +592,7 @@
 		/// <param name="transactionProvider">The transactional provider.</param>
 		/// <param name="marketDataProvider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderChanged method.")]
 		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
 		{
 			return new OrderTakeProfitStopLossRule(order, profitOffset, true, transactionProvider, marketDataProvider);
@@ -606,6 +605,7 @@
 		/// <param name="profitOffset">Loss offset.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderChanged method.")]
 		public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, IConnector connector)
 		{
 			return WhenLossMore(order, profitOffset, connector, connector);
@@ -619,6 +619,7 @@
 		/// <param name="transactionProvider">The transactional provider.</param>
 		/// <param name="marketDataProvider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderChanged method.")]
 		public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, ITransactionProvider transactionProvider, IMarketDataProvider marketDataProvider)
 		{
 			return new OrderTakeProfitStopLossRule(order, profitOffset, false, transactionProvider, marketDataProvider);

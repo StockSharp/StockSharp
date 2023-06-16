@@ -28,6 +28,7 @@ namespace StockSharp.BusinessEntities
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
 	[DescriptionLoc(LocalizedStrings.Str535Key)]
+	[Obsolete("Use IOrderLogMessage.")]
 	public class OrderLogItem : MyTrade, IOrderLogMessage
 	{
 		/// <summary>

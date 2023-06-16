@@ -10,6 +10,7 @@
 
 	partial class MarketRuleHelper
 	{
+		[Obsolete]
 		private abstract class MarketDepthRule : MarketRule<MarketDepth, MarketDepth>
 		{
 			protected MarketDepthRule(MarketDepth depth)
@@ -175,6 +176,7 @@
 			};
 		}
 
+		[Obsolete]
 		private static Func<MarketDepth, bool> CreateDepthCondition(Unit price, Func<QuoteChange?> currentQuote, bool isLess)
 		{
 			if (price == null)

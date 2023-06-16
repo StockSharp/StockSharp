@@ -33,6 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
+	[Obsolete("Use IOrderBookMessage.")]
 	public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<QuoteChange>, IOrderBookMessage
 	{
 		/// <summary>

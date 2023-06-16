@@ -11,12 +11,11 @@ using StockSharp.BusinessEntities;
 using StockSharp.Localization;
 using StockSharp.Messages;
 
-#pragma warning disable CS0618 // Type or member is obsolete
-
 /// <summary>
 /// </summary>
 public static class IStorageRegistryObsoleteExtensions
 {
+	[Obsolete]
 	private class ConvertableStorage<TMessage, TEntity> : IEntityMarketDataStorage<TEntity, TMessage>, IMarketDataStorageInfo<TMessage>
 		where TMessage : Message
 	{
@@ -222,6 +221,7 @@ public static class IStorageRegistryObsoleteExtensions
 
 	private static readonly SynchronizedDictionary<IMarketDataStorage, IMarketDataStorage> _convertedStorages = new();
 
+	[Obsolete]
 	private static IEntityMarketDataStorage<TEntity, TMessage> ToEntityStorage<TMessage, TEntity>(this IMarketDataStorage<TMessage> storage, Security security, IExchangeInfoProvider exchangeInfoProvider = null)
 		where TMessage : Message
 	{

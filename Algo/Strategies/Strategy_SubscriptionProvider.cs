@@ -188,8 +188,10 @@ namespace StockSharp.Algo.Strategies
 
 				if (legacy is not null && subscription.SecurityId is not null)
 				{
+#pragma warning disable CS0618 // Type or member is obsolete
 					if (message is not MarketDepth md)
 						md = ((QuoteChangeMessage)message).ToMarketDepth(LookupById(subscription.SecurityId.Value));
+#pragma warning restore CS0618 // Type or member is obsolete
 
 					legacy(subscription, md);
 				}
@@ -206,8 +208,10 @@ namespace StockSharp.Algo.Strategies
 
 				if (legacy is not null && subscription.SecurityId is not null)
 				{
+#pragma warning disable CS0618 // Type or member is obsolete
 					if (message is not OrderLogItem ol)
 						ol = ((ExecutionMessage)message).ToOrderLog(LookupById(subscription.SecurityId.Value));
+#pragma warning restore CS0618 // Type or member is obsolete
 
 					legacy(subscription, ol);
 				}

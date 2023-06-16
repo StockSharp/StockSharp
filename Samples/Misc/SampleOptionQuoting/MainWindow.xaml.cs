@@ -148,10 +148,11 @@ namespace SampleOptionQuoting
 				PriceStep = 10,
 			};
 
-			asset.LastTick = new Trade
+			asset.LastTick = new ExecutionMessage
 			{
-				Security = asset,
-				Price = 130000,
+				DataTypeEx = DataType.Ticks,
+				SecurityId = asset.ToSecurityId(),
+				TradePrice = 130000,
 			};
 
 			var expiryDate = new DateTime(2014, 09, 15);
@@ -252,7 +253,7 @@ namespace SampleOptionQuoting
 				ExpiryDate = expiryDate,
 				Board = ExchangeBoard.Forts,
 				UnderlyingSecurityId = asset.Id,
-				LastTick = lastTrade == null ? null : new Trade { Price = lastTrade.Value },
+				LastTick = lastTrade == null ? null : new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = lastTrade.Value },
 				Volume = RandomGen.GetInt(10000),
 				Type = SecurityTypes.Option
 			};

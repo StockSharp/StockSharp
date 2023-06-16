@@ -241,6 +241,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="arg">Candle arg.</param>
 		/// <param name="onlyFormed">Send only formed candles.</param>
 		/// <returns>Candles.</returns>
+		[Obsolete("Use ITickTradeMessage.")]
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<Trade> trades, object arg, bool onlyFormed = true)
 			where TCandle : Candle
 		{
@@ -258,6 +259,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
+		[Obsolete("Use ITickTradeMessage.")]
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series)
 		{
 			return trades
@@ -316,6 +318,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="type">Type of candle depth based data.</param>
 		/// <param name="candleBuilderProvider">Candle builders provider.</param>
 		/// <returns>Candles.</returns>
+		[Obsolete("Use IOrderBookMessage.")]
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
 		{
 			return depths

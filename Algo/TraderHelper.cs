@@ -649,6 +649,7 @@ namespace StockSharp.Algo
 		/// <param name="trades">All trades, in which the required shall be searched for.</param>
 		/// <param name="security">The instrument, for which the trades shall be filtered.</param>
 		/// <returns>Filtered trades.</returns>
+		[Obsolete("Use ITickTradeMessage.")]
 		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, Security security)
 		{
 			if (trades == null)
@@ -1181,14 +1182,18 @@ namespace StockSharp.Algo
 			var bestBid = security.BestBid ?? new QuoteChange();
 			var bestAsk = security.BestAsk ?? new QuoteChange();
 
-			var lastTrade = new Trade { Security = security };
+			var lastTrade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				SecurityId = security.ToSecurityId(),
+			};
 
 			var lastTick = security.LastTick;
 
 			if (lastTick is not null)
 			{
-				lastTrade.Price = lastTick.Price;
-				lastTrade.Volume = lastTick.Volume;
+				lastTrade.TradePrice = lastTick.Price;
+				lastTrade.TradeVolume = lastTick.Volume;
 			}
 
 			foreach (var pair in changes)
@@ -1297,19 +1302,19 @@ namespace StockSharp.Algo
 							security.State = (SecurityStates)value;
 							break;
 						case Level1Fields.LastTradePrice:
-							lastTrade.Price = (decimal)value;
+							lastTrade.TradePrice = (decimal)value;
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeVolume:
-							lastTrade.Volume = (decimal)value;
+							lastTrade.TradeVolume = (decimal)value;
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeId:
-							lastTrade.Id = (long)value;
+							lastTrade.TradeId = (long)value;
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeStringId:
-							lastTrade.StringId = (string)value;
+							lastTrade.TradeStringId = (string)value;
 							lastTradeChanged = true;
 							break;
 						case Level1Fields.LastTradeTime:

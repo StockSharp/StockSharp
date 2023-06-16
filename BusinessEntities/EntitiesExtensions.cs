@@ -303,6 +303,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="message">Message.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>Tick trade.</returns>
+		[Obsolete("Use ITickTradeMessage.")]
 		public static Trade ToTrade(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
@@ -317,6 +318,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="message">Message.</param>
 		/// <param name="trade">Tick trade.</param>
 		/// <returns>Tick trade.</returns>
+		[Obsolete("Use ITickTradeMessage.")]
 		public static Trade ToTrade(this ExecutionMessage message, Trade trade)
 		{
 			if (message == null)

@@ -17,6 +17,8 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
+#pragma warning disable CS0618 // Type or member is obsolete
+
 		private readonly SyncObject _marketTimerSync = new();
 		private Timer _marketTimer;
 		private readonly TimeMessage _marketTimeMessage = new();

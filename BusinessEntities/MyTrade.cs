@@ -65,7 +65,9 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str507Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
+#pragma warning disable CS0618 // Type or member is obsolete
 		public Trade Trade { get; set; }
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		/// <summary>
 		/// Commission.

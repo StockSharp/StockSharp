@@ -771,8 +771,10 @@
 
 			event Action<Subscription, ExchangeBoard> ISubscriptionProvider.BoardReceived { add { } remove { } }
 
+			[Obsolete]
 			event Action<Subscription, MarketDepth> ISubscriptionProvider.MarketDepthReceived { add { } remove { } }
 
+			[Obsolete]
 			event Action<Subscription, OrderLogItem> ISubscriptionProvider.OrderLogItemReceived { add { } remove { } }
 
 			event Action<Subscription, News> ISubscriptionProvider.NewsReceived { add { } remove { } }

@@ -287,7 +287,9 @@ namespace StockSharp.Algo.Strategies.Protective
 			foreach(var r in base.GetNotificationRules())
 				yield return r;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 			yield return Security.WhenNewTrade(this);
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		/// <inheritdoc />

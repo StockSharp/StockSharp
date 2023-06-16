@@ -25,7 +25,8 @@
 			protected IMarketDataProvider Provider { get; }
 		}
 
-		private sealed class SecurityChangedRule : SecurityRule<Security>
+		[Obsolete]
+		private class SecurityChangedRule : SecurityRule<Security>
 		{
 			private readonly Func<Security, bool> _condition;
 
@@ -40,9 +41,8 @@
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
 				Name = LocalizedStrings.Str1046 + " " + security;
-#pragma warning disable CS0618 // Type or member is obsolete
+
 				Provider.SecurityChanged += OnSecurityChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -61,22 +61,19 @@
 
 			protected override void DisposeManaged()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged -= OnSecurityChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class SecurityNewTradeRule : SecurityRule<Trade>
+		[Obsolete]
+		private class SecurityNewTradeRule : SecurityRule<Trade>
 		{
 			public SecurityNewTradeRule(Security security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1047 + " " + security;
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade += OnNewTrade;
-#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnNewTrade(Trade trade)
@@ -93,22 +90,19 @@
 
 			protected override void DisposeManaged()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade -= OnNewTrade;
-#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class SecurityNewOrderLogItemRule : SecurityRule<OrderLogItem>
+		[Obsolete]
+		private class SecurityNewOrderLogItemRule : SecurityRule<OrderLogItem>
 		{
 			public SecurityNewOrderLogItemRule(Security security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1048 + " " + security;
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewOrderLogItem += OnNewOrderLogItem;
-#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnNewOrderLogItem(OrderLogItem item)
@@ -125,14 +119,13 @@
 
 			protected override void DisposeManaged()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewOrderLogItem -= OnNewOrderLogItem;
-#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class SecurityLastTradeRule : SecurityRule<Security>
+		[Obsolete]
+		private class SecurityLastTradeRule : SecurityRule<Security>
 		{
 			private readonly Func<Security, bool> _condition;
 
@@ -143,10 +136,8 @@
 
 				Name = LocalizedStrings.Str1049 + " " + security;
 
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.SecurityChanged += OnSecurityChanged;
 				Provider.NewTrade += OnNewTrade;
-#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnSecurityChanged(Security security)
@@ -182,25 +173,21 @@
 
 			protected override void DisposeManaged()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.NewTrade -= OnNewTrade;
 				Provider.SecurityChanged -= OnSecurityChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class SecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
+		[Obsolete]
+		private class SecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
 			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
-
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged += OnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -213,23 +200,19 @@
 
 			protected override void DisposeManaged()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged -= OnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
-
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class BasketSecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
+		[Obsolete]
+		private class BasketSecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
 			public BasketSecurityMarketDepthChangedRule(BasketSecurity security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged += OnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void OnMarketDepthChanged(MarketDepth depth)
@@ -247,9 +230,7 @@
 
 			protected override void DisposeManaged()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				Provider.MarketDepthChanged -= OnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 				base.DisposeManaged();
 			}
 		}
@@ -260,6 +241,7 @@
 		/// <param name="security">The instrument to be traced for changes.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenLevel1Received method.")]
 		public static MarketRule<Security, Security> WhenChanged(this Security security, IMarketDataProvider provider)
 		{
 			return new SecurityChangedRule(security, provider);
@@ -271,6 +253,7 @@
 		/// <param name="security">The instrument to be traced for new trade occurrence event.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenTickTradeReceived method.")]
 		public static MarketRule<Security, Trade> WhenNewTrade(this Security security, IMarketDataProvider provider)
 		{
 			return new SecurityNewTradeRule(security, provider);
@@ -282,6 +265,7 @@
 		/// <param name="security">The instrument to be traced for the event of new notes occurrence in the orders log.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderLogReceived method.")]
 		public static MarketRule<Security, OrderLogItem> WhenNewOrderLogItem(this Security security, IMarketDataProvider provider)
 		{
 			return new SecurityNewOrderLogItemRule(security, provider);
@@ -293,6 +277,7 @@
 		/// <param name="security">The instrument to be traced for the event of order book change by instrument.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this Security security, IMarketDataProvider provider)
 		{
 			return new SecurityMarketDepthChangedRule(security, provider);
@@ -304,6 +289,7 @@
 		/// <param name="security">Instruments basket to be traced for the event of order books change by internal instruments.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this BasketSecurity security, IMarketDataProvider provider)
 		{
 			return new BasketSecurityMarketDepthChangedRule(security, provider);
@@ -316,6 +302,7 @@
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenTickTradeReceived method.")]
 		public static MarketRule<Security, Security> WhenBestBidPriceMore(this Security security, IMarketDataProvider provider, Unit price)
 		{
 			return CreateSecurityCondition(security, provider, Level1Fields.BestBidPrice, price, false);
@@ -328,6 +315,7 @@
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenTickTradeReceived method.")]
 		public static MarketRule<Security, Security> WhenBestBidPriceLess(this Security security, IMarketDataProvider provider, Unit price)
 		{
 			return CreateSecurityCondition(security, provider, Level1Fields.BestBidPrice, price, true);
@@ -340,6 +328,7 @@
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenTickTradeReceived method.")]
 		public static MarketRule<Security, Security> WhenBestAskPriceMore(this Security security, IMarketDataProvider provider, Unit price)
 		{
 			return CreateSecurityCondition(security, provider, Level1Fields.BestAskPrice, price, false);
@@ -352,6 +341,7 @@
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenTickTradeReceived method.")]
 		public static MarketRule<Security, Security> WhenBestAskPriceLess(this Security security, IMarketDataProvider provider, Unit price)
 		{
 			return CreateSecurityCondition(security, provider, Level1Fields.BestAskPrice, price, true);
@@ -364,6 +354,7 @@
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenTickTradeReceived method.")]
 		public static MarketRule<Security, Security> WhenLastTradePriceMore(this Security security, IMarketDataProvider provider, Unit price)
 		{
 			return CreateLastTradeCondition(security, provider, price, false);
@@ -376,11 +367,13 @@
 		/// <param name="provider">The market data provider.</param>
 		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenTickTradeReceived method.")]
 		public static MarketRule<Security, Security> WhenLastTradePriceLess(this Security security, IMarketDataProvider provider, Unit price)
 		{
 			return CreateLastTradeCondition(security, provider, price, true);
 		}
 
+		[Obsolete]
 		private static SecurityChangedRule CreateSecurityCondition(Security security, IMarketDataProvider provider, Level1Fields field, Unit offset, bool isLess)
 		{
 			if (security == null)
@@ -420,6 +413,7 @@
 			}
 		}
 
+		[Obsolete]
 		private static SecurityLastTradeRule CreateLastTradeCondition(Security security, IMarketDataProvider provider, Unit offset, bool isLess)
 		{
 			if (security == null)

@@ -52,6 +52,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth"><see cref="MarketDepth"/>.</param>
 		/// <returns><see cref="QuoteChangeMessage"/>.</returns>
+		[Obsolete("Use IOrderBookMessage.")]
 		public static QuoteChangeMessage ToMessage(this MarketDepth depth)
 		{
 			if (depth == null)
@@ -273,6 +274,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="trade">Tick trade.</param>
 		/// <returns>Message.</returns>
+		[Obsolete("Use ITickTradeMessage.")]
 		public static ExecutionMessage ToMessage(this Trade trade)
 		{
 			if (trade == null)
@@ -307,6 +309,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="item">Order log item.</param>
 		/// <returns>Message.</returns>
+		[Obsolete("Use OrderLogMessage.")]
 		public static ExecutionMessage ToMessage(this OrderLogItem item)
 		{
 			if (item == null)
@@ -895,6 +898,7 @@ namespace StockSharp.Algo
 			return board;
 		}
 
+		[Obsolete]
 		private class ToMessagesEnumerable<TEntity, TMessage> : IEnumerable<TMessage>
 		{
 			private readonly IEnumerable<TEntity> _entities;
@@ -943,11 +947,13 @@ namespace StockSharp.Algo
 		/// <typeparam name="TMessage">Message type.</typeparam>
 		/// <param name="entities">Trading objects.</param>
 		/// <returns>Messages.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static IEnumerable<TMessage> ToMessages<TEntity, TMessage>(this IEnumerable<TEntity> entities)
 		{
 			return new ToMessagesEnumerable<TEntity, TMessage>(entities);
 		}
 
+		[Obsolete]
 		private class ToEntitiesEnumerable<TMessage, TEntity> : IEnumerable<TEntity>
 			where TMessage : Message
 		{
@@ -1028,6 +1034,7 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Trading objects.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static IEnumerable<TEntity> ToEntities<TMessage, TEntity>(this IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider = null)
 			where TMessage : Message
 		{
@@ -1044,6 +1051,7 @@ namespace StockSharp.Algo
 		/// <param name="messages">Messages.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>Trading objects.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<CandleMessage> messages, Security security)
 		{
 			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, null);
@@ -1299,6 +1307,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>Market depth.</returns>
+		[Obsolete("Use IOrderBookMessage.")]
 		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, Security security)
 		{
 			return message.ToMarketDepth(new MarketDepth(security));
@@ -1310,6 +1319,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="marketDepth">Market depth.</param>
 		/// <returns>Market depth.</returns>
+		[Obsolete("Use IOrderBookMessage.")]
 		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, MarketDepth marketDepth)
 		{
 			if (message == null)
@@ -1337,6 +1347,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>Order log item.</returns>
+		[Obsolete("Use IOrderLogMessage.")]
 		public static OrderLogItem ToOrderLog(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
@@ -1355,6 +1366,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="item">Order log item.</param>
 		/// <returns>Order log item.</returns>
+		[Obsolete("Use IOrderLogMessage.")]
 		public static OrderLogItem ToOrderLog(this ExecutionMessage message, OrderLogItem item)
 		{
 			if (message == null)
@@ -1595,6 +1607,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>Market depth.</returns>
+		[Obsolete("Use IOrderBookMessage.")]
 		public static MarketDepth ToMarketDepth(this Level1ChangeMessage message, Security security)
 		{
 			return new MarketDepth(security) { LocalTime = message.LocalTime }.Update(
@@ -1674,6 +1687,7 @@ namespace StockSharp.Algo
 		/// <param name="dataType">The type of business object.</param>
 		/// <param name="arg">The data parameter.</param>
 		/// <returns>Message type.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static Type ToMessageType(this Type dataType, ref object arg)
 		{
 			if (dataType == typeof(Trade))
