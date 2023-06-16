@@ -1636,7 +1636,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Special set mean any depth for <see cref="IMessageAdapter.SupportedOrderBookDepths"/> option.
 		/// </summary>
-		public static IEnumerable<int> AnyDepths = Array.AsReadOnly(new[] { -1 });
+		public readonly static IEnumerable<int> AnyDepths = Array.AsReadOnly(new[] { -1 });
 
 		/// <summary>
 		/// Get the nearest supported depth for the specified.
@@ -1930,12 +1930,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var price = message.TradePrice;
-
-			if (price == null)
-				throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str1021Params.Put(message.TradeId));
-
-			return price.Value;
+			return message.TradePrice ?? throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str1021Params.Put(message.TradeId));
 		}
 
 		/// <summary>
@@ -2193,12 +2188,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Simulator.
 		/// </summary>
-		public static string SimulatorPortfolioName = "Simulator_SS";
+		public const string SimulatorPortfolioName = "Simulator_SS";
 
 		/// <summary>
 		/// Anonymous account.
 		/// </summary>
-		public static string AnonymousPortfolioName = "Anonymous_SS";
+		public const string AnonymousPortfolioName = "Anonymous_SS";
 
 		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 		{

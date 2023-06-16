@@ -45,7 +45,7 @@ namespace StockSharp.Algo
 			protected IConnector Connector { get; }
 		}
 
-		private sealed class IntervalTimeRule : ConnectorRule<IConnector>
+		private class IntervalTimeRule : ConnectorRule<IConnector>
 		{
 			private readonly MarketTimer _timer;
 
@@ -77,7 +77,7 @@ namespace StockSharp.Algo
 			protected ITransactionProvider Provider { get; }
 		}
 
-		private sealed class NewMyTradeTraderRule : TransactionProviderRule<MyTrade>
+		private class NewMyTradeTraderRule : TransactionProviderRule<MyTrade>
 		{
 			public NewMyTradeTraderRule(ITransactionProvider provider)
 				: base(provider)
@@ -98,7 +98,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class NewOrderTraderRule : TransactionProviderRule<Order>
+		private class NewOrderTraderRule : TransactionProviderRule<Order>
 		{
 			public NewOrderTraderRule(ITransactionProvider provider)
 				: base(provider)
@@ -188,14 +188,12 @@ namespace StockSharp.Algo
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="interval">Interval.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, IConnector> WhenIntervalElapsed(this IConnector connector, TimeSpan interval/*, bool firstTimeRun = false*/)
+		public static MarketRule<IConnector, IConnector> WhenIntervalElapsed(this IConnector connector, TimeSpan interval)
 		{
-			/*/// <param name="firstTimeRun">Сработает ли правило в момент создания (нулевое время). False по умолчанию.</param>*/
-
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
-			return new IntervalTimeRule(connector, interval/*, firstTimeRun*/);
+			return new IntervalTimeRule(connector, interval);
 		}
 
 		/// <summary>

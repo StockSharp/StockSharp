@@ -249,10 +249,7 @@ namespace StockSharp.Algo
 			if (fail == null)
 				throw new ArgumentNullException(nameof(fail));
 
-			var order = fail.Order;
-
-			if (order == null)
-				throw new InvalidOperationException();
+			var order = fail.Order ?? throw new InvalidOperationException();
 
 			return new ExecutionMessage
 			{

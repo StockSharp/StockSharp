@@ -940,8 +940,7 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null)
 		{
-			if (transactionId == null)
-				transactionId = TransactionIdGenerator.GetNextId();
+			transactionId ??= TransactionIdGenerator.GetNextId();
 
 			_entityCache.TryAddMassCancelationId(transactionId.Value);
 			OnCancelOrders(transactionId.Value, isStopOrder, portfolio, direction, board, security, securityType);
@@ -1063,12 +1062,7 @@ namespace StockSharp.Algo
 				secId = subscrSecId.Value;
 			}
 
-			var security = TryGetSecurity(secId);
-
-			if (security == null)
-				throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str704Params.Put(secId));
-
-			return security;
+			return TryGetSecurity(secId) ?? throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str704Params.Put(secId));
 		}
 
 		/// <summary>

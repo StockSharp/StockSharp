@@ -1193,10 +1193,7 @@ namespace StockSharp.Algo
 			var csvUrl = "https://moex.com/en/derivatives/contractresults-exp.aspx?day1={0:yyyyMMdd}&day2={1:yyyyMMdd}&code={2}"
 				.Put(fromDate.Date, toDate.Date, securityName);
 
-			var stream = client.OpenRead(csvUrl);
-
-			if (stream == null)
-				throw new InvalidOperationException(LocalizedStrings.Str2112);
+			using var stream = client.OpenRead(csvUrl) ?? throw new InvalidOperationException(LocalizedStrings.Str2112);
 
 			return Do.Invariant(() =>
 			{
@@ -1262,10 +1259,7 @@ namespace StockSharp.Algo
 
 			var url = $"https://moex.com/export/derivatives/currency-rate.aspx?language=en&currency={securityId.SecurityCode.Replace("/", "__")}&moment_start={fromDate:yyyy-MM-dd}&moment_end={toDate:yyyy-MM-dd}";
 
-			var stream = client.OpenRead(url);
-
-			if (stream == null)
-				throw new InvalidOperationException(LocalizedStrings.Str2112);
+			using var stream = client.OpenRead(url) ?? throw new InvalidOperationException(LocalizedStrings.Str2112);
 
 			return Do.Invariant(() =>
 				(from rate in XDocument.Load(stream).Descendants("rate")

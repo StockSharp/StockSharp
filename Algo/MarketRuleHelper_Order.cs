@@ -62,7 +62,7 @@
 			}
 		}
 
-		private sealed class RegisterFailedOrderRule : OrderRule<OrderFail>
+		private class RegisterFailedOrderRule : OrderRule<OrderFail>
 		{
 			public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
@@ -88,7 +88,7 @@
 			}
 		}
 
-		private sealed class CancelFailedOrderRule : OrderRule<OrderFail>
+		private class CancelFailedOrderRule : OrderRule<OrderFail>
 		{
 			public CancelFailedOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
@@ -114,7 +114,7 @@
 			}
 		}
 
-		private sealed class ChangedOrNewOrderRule : OrderRule<Order>
+		private class ChangedOrNewOrderRule : OrderRule<Order>
 		{
 			private readonly Func<Order, bool> _condition;
 			private bool _activated;
@@ -156,7 +156,7 @@
 			}
 		}
 
-		private sealed class EditedOrderRule : OrderRule<Order>
+		private class EditedOrderRule : OrderRule<Order>
 		{
 			public EditedOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
@@ -182,7 +182,7 @@
 			}
 		}
 
-		private sealed class EditFailedOrderRule : OrderRule<OrderFail>
+		private class EditFailedOrderRule : OrderRule<OrderFail>
 		{
 			public EditFailedOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
@@ -246,7 +246,7 @@
 			}
 		}
 
-		private sealed class AllTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
+		private class AllTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
 		{
 			private decimal _receivedVolume;
 
@@ -305,7 +305,7 @@
 			}
 		}
 
-		class OrderTakeProfitStopLossRule : OrderRule<Order>
+		private class OrderTakeProfitStopLossRule : OrderRule<Order>
 		{
 			private readonly Unit _offset;
 			private readonly bool _isTake;
