@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Subscription, Position> PositionReceived;
 
 		/// <inheritdoc />
-		public event Action<Subscription, Message> SubscriptionReceived;
+		public event Action<Subscription, object> SubscriptionReceived;
 
 		/// <inheritdoc />
 		public event Action<Subscription> SubscriptionOnline;
@@ -142,10 +142,10 @@ namespace StockSharp.Algo.Strategies
 			CheckRefreshOnlineState();
 		}
 
-		private void OnConnectorSubscriptionReceived(Subscription subscription, Message message)
+		private void OnConnectorSubscriptionReceived(Subscription subscription, object arg)
 		{
 			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-				SubscriptionReceived?.Invoke(subscription, message);
+				SubscriptionReceived?.Invoke(subscription, arg);
 		}
 
 		private void OnConnectorCandleReceived(Subscription subscription, ICandleMessage candle)

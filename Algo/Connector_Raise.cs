@@ -948,20 +948,20 @@ namespace StockSharp.Algo
 				anyCanOnline = anyCanOnline == true || (subscription.State == SubscriptionStates.Active && subscription.SubscriptionMessage.To is null);
 
 				evt?.Invoke(subscription, entity);
+				RaiseSubscriptionReceived(subscription, entity);
 			}
 
 			return anyOnline;
 		}
 
-		private void RaiseSubscriptionReceived(Subscription subscription, Message message)
+		private void RaiseSubscriptionReceived(Subscription subscription, object arg)
 		{
-			SubscriptionReceived?.Invoke(subscription, message);
+			SubscriptionReceived?.Invoke(subscription, arg);
 		}
 
 		private void RaiseLevel1Received(Subscription subscription, Level1ChangeMessage message)
 		{
 			Level1Received?.Invoke(subscription, message);
-			RaiseSubscriptionReceived(subscription, message);
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Message received.
 		/// </summary>
-		event Action<Subscription, Message> SubscriptionReceived;
+		event Action<Subscription, object> SubscriptionReceived;
 
 		/// <summary>
 		/// Level1 received.
