@@ -337,7 +337,10 @@
 							if (execMsg.HasOrderInfo)
 							{
 								var order = execMsg.TypedClone();
-								order.HasTradeInfo = false;
+								order.TradeStringId = null;
+								order.TradeId = null;
+								order.TradePrice = null;
+								order.TradeVolume = null;
 								tuple.Item1.Add(order);
 							}
 

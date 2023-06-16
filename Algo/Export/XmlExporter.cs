@@ -158,7 +158,6 @@ namespace StockSharp.Algo.Export
 					.WriteAttribute("tradeVolume", item.TradeVolume)
 					.WriteAttribute("tradeStatus", item.TradeStatus)
 					.WriteAttribute("isOrder", item.HasOrderInfo)
-					.WriteAttribute("isTrade", item.HasTradeInfo)
 					.WriteAttribute("commission", item.Commission)
 					.WriteAttribute("commissionCurrency", item.CommissionCurrency)
 					.WriteAttribute("pnl", item.PnL)

@@ -178,7 +178,6 @@ namespace StockSharp.Algo
 				PortfolioName = order.Portfolio.Name,
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
-				HasTradeInfo = true,
 				ServerTime = tick.ServerTime,
 				OriginSide = tick.OriginSide,
 				Currency = tick.Currency,

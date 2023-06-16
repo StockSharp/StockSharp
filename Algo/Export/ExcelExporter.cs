@@ -191,8 +191,7 @@ namespace StockSharp.Algo.Export
 						.SetCell(9, row, message.OrderState)
 						.SetCell(10, row, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
 						.SetCell(11, row, message.TradePrice)
-						.SetCell(12, row, message.HasOrderInfo)
-						.SetCell(13, row, message.HasTradeInfo);
+						.SetCell(12, row, message.HasOrderInfo);
 
 					lastTime = message.ServerTime;
 

@@ -381,60 +381,62 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					TransactionId = snapshot.TransactionId,
 
 					HasOrderInfo = snapshot.HasOrderInfo,
-					HasTradeInfo = snapshot.HasTradeInfo,
+					//HasTradeInfo = snapshot.HasTradeInfo,
 
-					BrokerCode = snapshot.BrokerCode,
-					ClientCode = snapshot.ClientCode,
-
-					Comment = snapshot.Comment,
-					SystemComment = snapshot.SystemComment,
-
-					Currency = snapshot.Currency == null ? null : (CurrencyTypes)snapshot.Currency.Value,
-					DepoName = snapshot.DepoName,
-					Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error),
-
-					ExpiryDate = snapshot.ExpiryDate?.To<DateTimeOffset>(),
-					IsMarketMaker = snapshot.IsMarketMaker?.ToBool(),
-					IsMargin = snapshot.IsMargin?.ToBool(),
-					IsManual = snapshot.IsManual?.ToBool(),
-					Side = (Sides)snapshot.Side,
-					OrderId = snapshot.OrderId,
-					OrderStringId = snapshot.OrderStringId,
-					OrderBoardId = snapshot.OrderBoardId,
-					OrderPrice = snapshot.OrderPrice,
-					OrderVolume = snapshot.OrderVolume,
-					VisibleVolume = snapshot.VisibleVolume,
-					OrderType = snapshot.OrderType?.ToEnum<OrderTypes>(),
-					OrderState = snapshot.OrderState?.ToEnum<OrderStates>(),
-					OrderStatus = snapshot.OrderStatus,
-					Balance = snapshot.Balance,
-					UserOrderId = snapshot.UserOrderId,
-					StrategyId = snapshot.StrategyId,
-					OriginSide = snapshot.OriginSide?.ToEnum<Sides>(),
-					Latency = snapshot.Latency == null ? null : TimeSpan.FromTicks(snapshot.Latency.Value),
-					PnL = snapshot.PnL,
-					Position = snapshot.Position,
-					Slippage = snapshot.Slippage,
-					Commission = snapshot.Commission,
-					TradePrice = snapshot.TradePrice,
-					TradeVolume = snapshot.TradeVolume,
-					TradeStatus = snapshot.TradeStatus,
-					TradeId = snapshot.TradeId,
-					TradeStringId = snapshot.TradeStringId,
-					OpenInterest = snapshot.OpenInterest,
-					IsSystem = snapshot.IsSystem?.ToBool(),
-					TimeInForce = snapshot.OrderTif?.ToEnum<TimeInForce>(),
-
-					AveragePrice = snapshot.AveragePrice,
-					Yield = snapshot.Yield,
-					MinVolume = snapshot.MinVolume,
-					PositionEffect = snapshot.PositionEffect?.ToEnum<OrderPositionEffects>(),
-					PostOnly = snapshot.PostOnly?.ToBool(),
-					Initiator = snapshot.Initiator?.ToBool(),
-					SeqNum = snapshot.SeqNum,
-					BuildFrom = snapshot.BuildFrom,
-					Leverage = snapshot.Leverage,
+					
 				};
+
+				execMsg.BrokerCode = snapshot.BrokerCode;
+				execMsg.ClientCode = snapshot.ClientCode;
+
+				execMsg.Comment = snapshot.Comment;
+				execMsg.SystemComment = snapshot.SystemComment;
+
+				execMsg.Currency = snapshot.Currency == null ? null : (CurrencyTypes)snapshot.Currency.Value;
+				execMsg.DepoName = snapshot.DepoName;
+				execMsg.Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error);
+
+				execMsg.ExpiryDate = snapshot.ExpiryDate?.To<DateTimeOffset>();
+				execMsg.IsMarketMaker = snapshot.IsMarketMaker?.ToBool();
+				execMsg.IsMargin = snapshot.IsMargin?.ToBool();
+				execMsg.IsManual = snapshot.IsManual?.ToBool();
+				execMsg.Side = (Sides)snapshot.Side;
+				execMsg.OrderId = snapshot.OrderId;
+				execMsg.OrderStringId = snapshot.OrderStringId;
+				execMsg.OrderBoardId = snapshot.OrderBoardId;
+				execMsg.OrderPrice = snapshot.OrderPrice;
+				execMsg.OrderVolume = snapshot.OrderVolume;
+				execMsg.VisibleVolume = snapshot.VisibleVolume;
+				execMsg.OrderType = snapshot.OrderType?.ToEnum<OrderTypes>();
+				execMsg.OrderState = snapshot.OrderState?.ToEnum<OrderStates>();
+				execMsg.OrderStatus = snapshot.OrderStatus;
+				execMsg.Balance = snapshot.Balance;
+				execMsg.UserOrderId = snapshot.UserOrderId;
+				execMsg.StrategyId = snapshot.StrategyId;
+				execMsg.OriginSide = snapshot.OriginSide?.ToEnum<Sides>();
+				execMsg.Latency = snapshot.Latency == null ? null : TimeSpan.FromTicks(snapshot.Latency.Value);
+				execMsg.PnL = snapshot.PnL;
+				execMsg.Position = snapshot.Position;
+				execMsg.Slippage = snapshot.Slippage;
+				execMsg.Commission = snapshot.Commission;
+				execMsg.TradePrice = snapshot.TradePrice;
+				execMsg.TradeVolume = snapshot.TradeVolume;
+				execMsg.TradeStatus = snapshot.TradeStatus;
+				execMsg.TradeId = snapshot.TradeId;
+				execMsg.TradeStringId = snapshot.TradeStringId;
+				execMsg.OpenInterest = snapshot.OpenInterest;
+				execMsg.IsSystem = snapshot.IsSystem?.ToBool();
+				execMsg.TimeInForce = snapshot.OrderTif?.ToEnum<TimeInForce>();
+
+				execMsg.AveragePrice = snapshot.AveragePrice;
+				execMsg.Yield = snapshot.Yield;
+				execMsg.MinVolume = snapshot.MinVolume;
+				execMsg.PositionEffect = snapshot.PositionEffect?.ToEnum<OrderPositionEffects>();
+				execMsg.PostOnly = snapshot.PostOnly?.ToBool();
+				execMsg.Initiator = snapshot.Initiator?.ToBool();
+				execMsg.SeqNum = snapshot.SeqNum;
+				execMsg.BuildFrom = snapshot.BuildFrom;
+				execMsg.Leverage = snapshot.Leverage;
 
 				//var paramSize = (version > SnapshotVersions.V20 ? typeof(TransactionConditionParamV21) : typeof(TransactionConditionParamV20)).SizeOf();
 
@@ -651,8 +653,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			if (changes.HasOrderInfo)
 				message.HasOrderInfo = true;
 
-			if (changes.HasTradeInfo)
-				message.HasTradeInfo = true;
+			//if (changes.HasTradeInfo)
+			//	message.HasTradeInfo = true;
 
 			if (changes.AveragePrice != default)
 				message.AveragePrice = changes.AveragePrice;

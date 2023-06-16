@@ -2186,7 +2186,6 @@ namespace StockSharp.Algo.Testing
 					TradePrice = price,
 					TradeVolume = volume,
 					DataTypeEx = DataType.Transactions,
-					HasTradeInfo = true,
 					ServerTime = GetServerTime(time),
 					Side = order.Side,
 					StrategyId = order.StrategyId,

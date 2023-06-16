@@ -454,7 +454,6 @@
 					.WriteProperty("tradeVolume", item.TradeVolume)
 					.WriteProperty("tradeStatus", item.TradeStatus)
 					.WriteProperty("isOrder", item.HasOrderInfo)
-					.WriteProperty("isTrade", item.HasTradeInfo)
 					.WriteProperty("commission", item.Commission)
 					.WriteProperty("commissionCurrency", item.CommissionCurrency)
 					.WriteProperty("pnl", item.PnL)

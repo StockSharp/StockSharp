@@ -513,7 +513,7 @@ namespace StockSharp.Algo.Storages.Binary
 			metaInfo.FirstOriginalTransactionId += reader.ReadLong();
 
 			var hasOrderInfo = reader.Read();
-			var hasTradeInfo = reader.Read();
+			/*var hasTradeInfo = */reader.Read();
 
 			long? orderId = null;
 			long? tradeId = null;
@@ -623,7 +623,6 @@ namespace StockSharp.Algo.Storages.Binary
 				TradeStatus = tradeStatus,
 
 				HasOrderInfo = hasOrderInfo,
-				HasTradeInfo = hasTradeInfo,
 
 				OrderPrice = orderPrice ?? 0,
 				TradePrice = tradePrice,

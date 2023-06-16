@@ -74,8 +74,6 @@ namespace StockSharp.Algo.Storages.Csv
 				data.Currency.To<int?>().ToString(),
 				data.Comment,
 				data.SystemComment,
-				/*data.DerivedOrderId.ToString()*/string.Empty,
-				/*data.DerivedOrderStringId*/string.Empty,
 				data.IsUpTick.To<int?>().ToString(),
 				/*data.IsCancellation.ToString()*/string.Empty,
 				data.OpenInterest.ToString(),
@@ -141,14 +139,13 @@ namespace StockSharp.Algo.Storages.Csv
 				DepoName = reader.ReadString(),
 				IsSystem = reader.ReadNullableBool(),
 				HasOrderInfo = reader.ReadBool(),
-				HasTradeInfo = reader.ReadBool(),
-				Commission = reader.ReadNullableDecimal(),
-				Currency = reader.ReadNullableEnum<CurrencyTypes>(),
-				Comment = reader.ReadString(),
-				SystemComment = reader.ReadString(),
-				//DerivedOrderId = reader.ReadNullableLong(),
-				//DerivedOrderStringId = reader.ReadString(),
 			};
+
+			/*msg.HasTradeInfo = */reader.ReadBool();
+			msg.Commission = reader.ReadNullableDecimal();
+			msg.Currency = reader.ReadNullableEnum<CurrencyTypes>();
+			msg.Comment = reader.ReadString();
+			msg.SystemComment = reader.ReadString();
 
 			reader.ReadNullableLong();
 			reader.ReadString();

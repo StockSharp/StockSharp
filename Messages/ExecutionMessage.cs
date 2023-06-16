@@ -205,7 +205,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Is the message contains trade info.
 		/// </summary>
-		public bool HasTradeInfo { get; set; }
+		public bool HasTradeInfo => TradePrice is not null || TradeId is not null || TradeVolume is not null || !TradeStringId.IsEmpty();
 
 		/// <summary>
 		/// Order price.
@@ -700,7 +700,6 @@ namespace StockSharp.Messages
 			destination.PnL = PnL;
 			destination.Position = Position;
 
-			destination.HasTradeInfo = HasTradeInfo;
 			destination.HasOrderInfo = HasOrderInfo;
 
 			destination.IsMarketMaker = IsMarketMaker;

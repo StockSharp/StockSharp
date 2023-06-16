@@ -408,7 +408,6 @@ public class DatabaseExporter : BaseExporter
 			.Property(m => m.IsUpTick)
 
 			.Property(m => m.HasOrderInfo)
-			.Property(m => m.HasTradeInfo)
 
 			.Property(m => m.IsSystem)
 			.Property(m => m.IsCancellation)

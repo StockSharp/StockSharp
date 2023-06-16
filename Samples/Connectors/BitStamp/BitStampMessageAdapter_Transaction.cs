@@ -241,7 +241,6 @@ partial class BitStampMessageAdapter
 			SecurityId = pair.ToStockSharp(),
 			ServerTime = transaction.Time.ToDto(),
 			PortfolioName = PortfolioName,
-			HasTradeInfo = true,
 			Commission = (decimal)transaction.Fee,
 			OriginalTransactionId = info.First,
 		});

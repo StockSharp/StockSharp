@@ -490,7 +490,6 @@ namespace StockSharp.Algo.Storages
 			{
 				sepTrade = new ExecutionMessage
 				{
-					HasTradeInfo = true,
 					SecurityId = message.SecurityId,
 					ServerTime = message.ServerTime,
 					TransactionId = message.TransactionId,
@@ -505,7 +504,6 @@ namespace StockSharp.Algo.Storages
 					IsSystem = message.IsSystem,
 				};
 
-				message.HasTradeInfo = false;
 				message.TradeId = null;
 				message.TradeVolume = null;
 				message.TradePrice = null;
