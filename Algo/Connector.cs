@@ -81,7 +81,7 @@ namespace StockSharp.Algo
 			SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 			PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
-			_entityCache = new EntityCache(this, TryGetSecurity, new EntityFactory(), exchangeInfoProvider, PositionStorage);
+			_entityCache = new EntityCache(this, TryGetSecurity, exchangeInfoProvider, PositionStorage);
 
 			_subscriptionManager = new SubscriptionManager(this);
 
@@ -179,11 +179,6 @@ namespace StockSharp.Algo
 		/// </summary>
 		[Obsolete("Use exact IMessageAdapter to set reconnecting settings.")]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
-
-		/// <summary>
-		/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
-		/// </summary>
-		public IEntityFactory EntityFactory => _entityCache.EntityFactory;
 
 		/// <summary>
 		/// Number of tick trades for storage. The default is 100000. If the value is set to <see cref="int.MaxValue"/>, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
@@ -556,16 +551,17 @@ namespace StockSharp.Algo
 
 			var position = PositionStorage.GetOrCreatePosition(portfolio, security, strategyId, side, clientCode, depoName, limitType, (pf, sec, sid, sd, clCode, ddep, limit) =>
 			{
-				var p = EntityFactory.CreatePosition(portfolio, security);
-
-				p.DepoName = depoName;
-				p.LimitType = limitType;
-				p.Description = description;
-				p.ClientCode = clientCode;
-				p.StrategyId = strategyId;
-				p.Side = side;
-
-				return p;
+				return new Position
+				{
+					Portfolio = portfolio,
+					Security = security,
+					DepoName = depoName,
+					LimitType = limitType,
+					Description = description,
+					ClientCode = clientCode,
+					StrategyId = strategyId,
+					Side = side
+				};
 			}, out _);
 
 			if (_existingPositions.TryAdd(position))
@@ -795,8 +791,12 @@ namespace StockSharp.Algo
 
 		private void SendOrderFailed(Order order, OrderOperations operation, Exception error, long originalTransactionId)
 		{
-			var fail = EntityFactory.CreateOrderFail(order, error);
-			fail.ServerTime = CurrentTime;
+			var fail = new OrderFail
+			{
+				Order = order,
+				Error = error,
+				ServerTime = CurrentTime
+			};
 
 			_entityCache.AddOrderFailById(fail, operation, originalTransactionId);
 
@@ -1088,10 +1088,7 @@ namespace StockSharp.Algo
 
 			var security = SecurityStorage.GetOrCreate(id, key =>
 			{
-				var s = EntityFactory.CreateSecurity(key);
-
-				if (s == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1102Params.Put(key));
+				var s = new Security { Id = key };
 
 				var idInfo = SecurityIdGenerator.Split(key);
 

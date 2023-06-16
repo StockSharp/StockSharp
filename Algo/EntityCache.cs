@@ -291,39 +291,31 @@ namespace StockSharp.Algo
 		private readonly HashSet<long> _orderStatusTransactions = new();
 		private readonly HashSet<long> _massCancelationTransactions = new();
 
-		public IEntityFactory EntityFactory { get; }
-
 		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = new();
-
 		public IEnumerable<Order> Orders => _orders.CachedKeys;
 
 		private readonly CachedSynchronizedList<MyTrade> _myTrades = new();
-
 		public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
 		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new();
-
 		public IEnumerable<OrderFail> OrderRegisterFails => _orderRegisterFails.SyncGet(c => c.ToArray());
 
 		private readonly SynchronizedList<OrderFail> _orderCancelFails = new();
-
 		public IEnumerable<OrderFail> OrderCancelFails => _orderCancelFails.SyncGet(c => c.ToArray());
 
 		private readonly SynchronizedList<OrderFail> _orderEditFails = new();
-
 		public IEnumerable<OrderFail> OrderEditFails => _orderEditFails.SyncGet(c => c.ToArray());
 
 		private readonly ILogReceiver _logReceiver;
 		private readonly Func<SecurityId?, Security> _tryGetSecurity;
 		private readonly IPositionProvider _positionProvider;
 
-		public EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IEntityFactory entityFactory, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
+		public EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider)
 		{
 			_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 			_tryGetSecurity = tryGetSecurity ?? throw new ArgumentNullException(nameof(tryGetSecurity));
-			EntityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
 			ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 			_positionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 		}
@@ -568,32 +560,33 @@ namespace StockSharp.Algo
 
 				if (registeredInfo == null)
 				{
-					var o = EntityFactory.CreateOrder(security, message.OrderType, transactionId);
-
-					if (o == null)
-						throw new InvalidOperationException(LocalizedStrings.Str720Params.Put(transactionId));
-
-					o.Time = message.ServerTime;
-					o.ServerTime = message.ServerTime;
-					o.Price = message.OrderPrice;
-					o.Volume = message.OrderVolume ?? 0;
-					o.Side = message.Side;
-					o.Comment = message.Comment;
-					o.ExpiryDate = message.ExpiryDate;
-					o.Condition = message.Condition;
-					o.UserOrderId = message.UserOrderId;
-					o.StrategyId = message.StrategyId;
-					o.ClientCode = message.ClientCode;
-					o.BrokerCode = message.BrokerCode;
-					o.IsMarketMaker = message.IsMarketMaker;
-					o.IsMargin = message.IsMargin;
-					o.Slippage = message.Slippage;
-					o.IsManual = message.IsManual;
-					o.MinVolume = message.MinVolume;
-					o.PositionEffect = message.PositionEffect;
-					o.PostOnly = message.PostOnly;
-					o.SeqNum = message.SeqNum;
-					o.Leverage = message.Leverage;
+					var o = new Order
+					{
+						Security = security,
+						Type = message.OrderType,
+						TransactionId = transactionId,
+						Time = message.ServerTime,
+						ServerTime = message.ServerTime,
+						Price = message.OrderPrice,
+						Volume = message.OrderVolume ?? 0,
+						Side = message.Side,
+						Comment = message.Comment,
+						ExpiryDate = message.ExpiryDate,
+						Condition = message.Condition,
+						UserOrderId = message.UserOrderId,
+						StrategyId = message.StrategyId,
+						ClientCode = message.ClientCode,
+						BrokerCode = message.BrokerCode,
+						IsMarketMaker = message.IsMarketMaker,
+						IsMargin = message.IsMargin,
+						Slippage = message.Slippage,
+						IsManual = message.IsManual,
+						MinVolume = message.MinVolume,
+						PositionEffect = message.PositionEffect,
+						PostOnly = message.PostOnly,
+						SeqNum = message.SeqNum,
+						Leverage = message.Leverage
+					};
 
 					if (message.Balance != null)
 					{
@@ -617,7 +610,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public IEnumerable<Tuple<OrderFail, OrderOperations>> ProcessOrderFailMessage(Order order, Security security, ExecutionMessage message)
+		public IEnumerable<(OrderFail, OrderOperations)> ProcessOrderFailMessage(Order order, Security security, ExecutionMessage message)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -686,7 +679,7 @@ namespace StockSharp.Algo
 
 			if (orders.Count == 0)
 			{
-				var fails = new List<Tuple<OrderFail, OrderOperations>>();
+				var fails = new List<(OrderFail, OrderOperations)>();
 
 				Order TryAddFail(OrderOperations operation)
 				{
@@ -694,7 +687,7 @@ namespace StockSharp.Algo
 					{
 						if (_allOrdersByFailedId.TryGetAndRemove(Tuple.Create(message.OriginalTransactionId, operation), out var fail))
 						{
-							fails.Add(Tuple.Create(fail, operation));
+							fails.Add((fail, operation));
 							return fail.Order;
 						}
 					}
@@ -741,11 +734,15 @@ namespace StockSharp.Algo
 
 				var error = message.Error ?? new InvalidOperationException(operation == OrderOperations.Cancel ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
 
-				var fail = EntityFactory.CreateOrderFail(o, error);
-				fail.ServerTime = message.ServerTime;
-				fail.LocalTime = message.LocalTime;
-				fail.SeqNum = message.SeqNum;
-				return Tuple.Create(fail, operation);
+				var fail = new OrderFail
+				{
+					Order = o,
+					Error = error,
+					ServerTime = message.ServerTime,
+					LocalTime = message.LocalTime,
+					SeqNum = message.SeqNum
+				};
+				return (fail, operation);
 			});
 		}
 
@@ -802,12 +799,12 @@ namespace StockSharp.Algo
 			{
 				isNew = true;
 
-				var trade = message.ToTrade(EntityFactory.CreateTrade(security, key.Item2, key.Item3));
+				var trade = message.ToTrade(security);
 
 				if (message.SeqNum != default)
 					trade.SeqNum = message.SeqNum;
 
-				var t = EntityFactory.CreateMyTrade(order, trade);
+				var t = new MyTrade { Order = order, Trade = trade };
 
 				if (message.Commission != null)
 					t.Commission = message.Commission;
@@ -852,16 +849,17 @@ namespace StockSharp.Algo
 				news = _newsById.SafeAdd(message.Id, key =>
 				{
 					isNew = true;
-					var n = EntityFactory.CreateNews();
-					n.Id = key;
-					return n;
+					return new News
+					{
+						Id = key
+					};
 				});
 			}
 			else
 			{
 				isNew = true;
 
-				news = EntityFactory.CreateNews();
+				news = new();
 				_newsWithoutId.Add(news);
 			}
 

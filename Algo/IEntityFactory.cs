@@ -23,6 +23,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The interface of the business-essences factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 	/// </summary>
+	[Obsolete]
 	public interface IEntityFactory
 	{
 		/// <summary>
@@ -116,76 +117,5 @@ namespace StockSharp.Algo
 		/// <param name="exchange"><see cref="ExchangeBoard.Exchange"/> value.</param>
 		/// <returns>Exchange.</returns>
 		ExchangeBoard CreateBoard(string code, Exchange exchange);
-	}
-
-	/// <summary>
-	/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
-	/// </summary>
-	public class EntityFactory : IEntityFactory
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="EntityFactory"/>.
-		/// </summary>
-		public EntityFactory()
-		{
-		}
-
-		/// <inheritdoc />
-		public virtual Security CreateSecurity(string id) => new() { Id = id };
-
-		/// <inheritdoc />
-		public virtual Portfolio CreatePortfolio(string name) => new() { Name = name };
-
-		/// <inheritdoc />
-		public virtual Position CreatePosition(Portfolio portfolio, Security security) => new()
-		{
-			Portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio)),
-			Security = security ?? throw new ArgumentNullException(nameof(security)),
-		};
-
-		/// <inheritdoc />
-		public virtual Trade CreateTrade(Security security, long? id, string stringId)
-			=> new()
-			{ Security = security, Id = id ?? 0, StringId = stringId };
-
-		/// <inheritdoc />
-		public virtual Order CreateOrder(Security security, OrderTypes? type, long transactionId)
-			=> new()
-			{
-				Security = security,
-				TransactionId = transactionId,
-				Type = type,
-			};
-
-		/// <inheritdoc />
-		public virtual OrderFail CreateOrderFail(Order order, Exception error)
-			=> new()
-			{ Order = order, Error = error };
-
-		/// <inheritdoc />
-		public virtual MyTrade CreateMyTrade(Order order, Trade trade) => new()
-		{
-			Order = order,
-			Trade = trade,
-		};
-
-		/// <inheritdoc />
-		public virtual MarketDepth CreateMarketDepth(Security security) => new(security);
-
-		/// <inheritdoc />
-		public virtual OrderLogItem CreateOrderLogItem(Order order, Trade trade) => new()
-		{
-			Order = order,
-			Trade = trade,
-		};
-
-		/// <inheritdoc />
-		public virtual News CreateNews() => new();
-
-		/// <inheritdoc />
-		public Exchange CreateExchange(string code) => new() { Name = code };
-
-		/// <inheritdoc />
-		public ExchangeBoard CreateBoard(string code, Exchange exchange) => new() { Code = code, Exchange = exchange };
 	}
 }

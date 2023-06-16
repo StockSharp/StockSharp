@@ -916,8 +916,11 @@ namespace StockSharp.Algo
 		{
 			var board = ExchangeInfoProvider.GetOrCreateBoard(message.Code, out var isNew, code =>
 			{
-				var exchange = message.ToExchange(EntityFactory.CreateExchange(message.ExchangeCode));
-				var b = EntityFactory.CreateBoard(code, exchange);
+				var b = new ExchangeBoard
+				{
+					Code = code,
+					Exchange = message.ToExchange(),
+				};
 				return b.ApplyChanges(message);
 			});
 
@@ -1025,8 +1028,8 @@ namespace StockSharp.Algo
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
-			var portfolio = PositionStorage.GetOrCreatePortfolio(name, key =>
-				EntityFactory.CreatePortfolio(key) ?? throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name)),
+			var portfolio = PositionStorage.GetOrCreatePortfolio(name,
+				key => new Portfolio { Name = key } ?? throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name)),
 				out isNew);
 
 			var isChanged = false;
@@ -1144,7 +1147,7 @@ namespace StockSharp.Algo
 			if (MarketDepthReceived is not null)
 			{
 				security = EnsureGetSecurity(message);
-				md = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security));
+				md = message.ToMarketDepth(security);
 
 				if (RaiseReceived(md, message, MarketDepthReceived) == false)
 					return;
@@ -1156,7 +1159,7 @@ namespace StockSharp.Algo
 			if (NewMarketDepth is not null || NewMarketDepths is not null || MarketDepthChanged is not null || MarketDepthsChanged is not null)
 			{
 				security ??= EnsureGetSecurity(message);
-				md ??= message.ToMarketDepth(EntityFactory.CreateMarketDepth(security));
+				md ??= message.ToMarketDepth(security);
 
 				NewMarketDepth?.Invoke(md);
 				NewMarketDepths?.Invoke(new[] { md });
@@ -1303,11 +1306,7 @@ namespace StockSharp.Algo
 			{
 				var security = EnsureGetSecurity(message);
 
-				var trade = (message.TradeId != null || !message.TradeStringId.IsEmpty())
-					? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId ?? string.Empty)
-					: null;
-
-				return message.ToOrderLog(EntityFactory.CreateOrderLogItem(new() { Security = security }, trade));
+				return message.ToOrderLog(security);
 			}
 
 			if (OrderLogItemReceived is not null)
@@ -1333,7 +1332,7 @@ namespace StockSharp.Algo
 			{
 				security = EnsureGetSecurity(message);
 
-				var trade = message.ToTrade(EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId));
+				var trade = message.ToTrade(security);
 				trade.LocalTime = message.LocalTime;
 				trade.ServerTime = message.ServerTime;
 
@@ -1451,9 +1450,8 @@ namespace StockSharp.Algo
 					return;
 				}
 
-				foreach (var tuple in _entityCache.ProcessOrderFailMessage(o, security, message))
+				foreach (var (fail, operation) in _entityCache.ProcessOrderFailMessage(o, security, message))
 				{
-					var fail = tuple.Item1;
 					var order = fail.Order;
 
 					_entityCache.TrySetAdapter(order, message.Adapter);
@@ -1461,7 +1459,6 @@ namespace StockSharp.Algo
 					//TryProcessFilteredMarketDepth(fail.Order.Security, message);
 
 					//var isRegisterFail = (fail.Order.Id == null && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
-					var operation = tuple.Item2;
 
 					_entityCache.AddFail(operation, fail);
 
