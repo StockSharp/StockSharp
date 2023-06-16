@@ -488,6 +488,37 @@
 			return new OrderFailReceivedRule(subscription, provider, isRegister);
 		}
 
+		private class OrderEditFailReceivedRule : SubscriptionRule<OrderFail>
+		{
+			public OrderEditFailReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+				: base(subscription, provider)
+			{
+				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(OrderFail)}Received";
+				Provider.OrderEditFailReceived += ProviderOnOrderFailReceived;
+			}
+
+			private void ProviderOnOrderFailReceived(Subscription subscription, OrderFail fail)
+			{
+				if (Subscription == subscription)
+					Activate(fail);
+			}
+
+			protected override void DisposeManaged()
+			{
+				Provider.OrderEditFailReceived -= ProviderOnOrderFailReceived;
+				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// To create a rule for the event of <see cref="ISubscriptionProvider.OrderEditFailReceived"/> or <see cref="ISubscriptionProvider.OrderCancelFailReceived"/>.
+		/// </summary>
+		/// <param name="subscription">Subscription.</param>
+		/// <param name="provider">Subscription provider.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Subscription, OrderFail> WhenOrderEditFailReceived(this Subscription subscription, ISubscriptionProvider provider)
+			=> new OrderEditFailReceivedRule(subscription, provider);
+
 		private class PositionReceivedRule : SubscriptionRule<Position>
 		{
 			public PositionReceivedRule(Subscription subscription, ISubscriptionProvider provider)
