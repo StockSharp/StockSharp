@@ -446,7 +446,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				writer.WriteNullableBool(message.IsUpTick);
 				writer.WriteNullableDecimal(message.Yield);
-				writer.WriteNullableInt(message.TradeStatus);
+				writer.WriteNullableInt((int?)message.TradeStatus);
 				writer.WriteNullableDecimal(message.OpenInterest);
 				writer.WriteNullableInt((int?)message.OriginSide);
 			}

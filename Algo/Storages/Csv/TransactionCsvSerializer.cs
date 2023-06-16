@@ -156,7 +156,7 @@ namespace StockSharp.Algo.Storages.Csv
 			msg.PnL = reader.ReadNullableDecimal();
 			msg.Position = reader.ReadNullableDecimal();
 			msg.Slippage = reader.ReadNullableDecimal();
-			msg.TradeStatus = reader.ReadNullableInt();
+			msg.TradeStatus = reader.ReadNullableLong();
 			msg.OrderStatus = reader.ReadNullableLong();
 			msg.Latency = reader.ReadNullableLong().To<TimeSpan?>();
 

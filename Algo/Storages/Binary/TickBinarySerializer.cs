@@ -233,9 +233,9 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.IsSystem == false)
 				{
 					if (metaInfo.Version >= MarketDataVersions.Version51)
-						writer.WriteNullableInt(msg.TradeStatus);
+						writer.WriteNullableInt((int?)msg.TradeStatus);
 					else
-						writer.WriteInt(msg.TradeStatus ?? 0);
+						writer.WriteInt((int?)msg.TradeStatus ?? 0);
 				}
 
 				var oi = msg.OpenInterest;

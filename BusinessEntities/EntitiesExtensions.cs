@@ -322,7 +322,7 @@ namespace StockSharp.BusinessEntities
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			trade.Id = message.TradeId ?? 0;
+			trade.Id = message.TradeId;
 			trade.StringId = message.TradeStringId;
 			trade.Price = message.TradePrice ?? 0;
 			trade.Volume = message.TradeVolume ?? 0;

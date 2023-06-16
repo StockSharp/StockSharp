@@ -6,7 +6,12 @@
 public interface ISystemMessage
 {
 	/// <summary>
-	/// Is a system order.
+	/// Is a system.
 	/// </summary>
 	bool? IsSystem { get; }
+
+	/// <summary>
+	/// System status.
+	/// </summary>
+	long? Status { get; }
 }

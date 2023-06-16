@@ -393,7 +393,7 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.WriteNullableInt((int?)msg.OrderType);
 				writer.WriteNullableInt((int?)msg.OrderState);
 				writer.WriteNullableLong(msg.OrderStatus);
-				writer.WriteNullableInt(msg.TradeStatus);
+				writer.WriteNullableInt((int?)msg.TradeStatus);
 				writer.WriteNullableInt((int?)msg.TimeInForce);
 
 				writer.Write(msg.IsSystem != null);

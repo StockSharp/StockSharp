@@ -284,7 +284,7 @@ namespace StockSharp.Algo
 				LocalTime = trade.LocalTime,
 				ServerTime = trade.ServerTime,
 				SecurityId = trade.Security.ToSecurityId(),
-				TradeId = trade.Id.DefaultAsNull(),
+				TradeId = trade.Id,
 				TradeStringId = trade.StringId,
 				TradePrice = trade.Price,
 				TradeVolume = trade.Volume,
@@ -335,7 +335,7 @@ namespace StockSharp.Algo
 				ExpiryDate = order.ExpiryDate,
 				PortfolioName = order.Portfolio?.Name,
 				DataTypeEx = DataType.OrderLog,
-				TradeId = trade?.Id.DefaultAsNull(),
+				TradeId = trade?.Id,
 				TradeStringId = trade?.StringId,
 				TradePrice = trade?.Price,
 				Currency = order.Currency,
@@ -1390,7 +1390,7 @@ namespace StockSharp.Algo
 			{
 				var trade = item.Trade;
 
-				trade.Id = message.TradeId ?? default;
+				trade.Id = message.TradeId;
 				trade.StringId = message.TradeStringId;
 				trade.Price = message.TradePrice ?? default;
 				trade.ServerTime = message.ServerTime;

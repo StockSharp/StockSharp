@@ -50,7 +50,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str145Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
-		public long Id { get; set; }
+		public long? Id { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
@@ -158,7 +158,7 @@ namespace StockSharp.BusinessEntities
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public int? Status { get; set; }
+		public long? Status { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
@@ -244,13 +244,13 @@ namespace StockSharp.BusinessEntities
 		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
-			return (Security?.GetHashCode() ?? 0) ^ Id.GetHashCode();
+			return (Security?.GetHashCode() ?? 0) ^ (Id ?? default).GetHashCode();
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var idStr = Id == 0 ? StringId : Id.To<string>();
+			var idStr = Id is null ? StringId : Id.To<string>();
 			return $"{ServerTime} {idStr} {Price} {Volume}";
 		}
 	}

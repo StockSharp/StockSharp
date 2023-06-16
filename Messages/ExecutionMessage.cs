@@ -319,12 +319,7 @@ namespace StockSharp.Messages
 		//[Nullable]
 		public bool? IsSystem { get; set; }
 
-		/// <summary>
-		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
-		/// </summary>
-		/// <remarks>
-		/// If the value is equal <see langword="null" />, order will be GTC (good til cancel). Or uses exact date.
-		/// </remarks>
+		/// <inheritdoc/>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
 		[DescriptionLoc(LocalizedStrings.Str142Key)]
@@ -375,7 +370,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Browsable(false)]
 		//[Nullable]
-		public int? TradeStatus { get; set; }
+		public long? TradeStatus { get; set; }
 
 		/// <summary>
 		/// Deal initiator (seller or buyer).
@@ -601,11 +596,11 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public DataType DataTypeEx { get; set; }
 
-		long ITickTradeMessage.Id => TradeId.Value;
-		string ITickTradeMessage.StringId => TradeStringId;
-		decimal ITickTradeMessage.Price => TradePrice.Value;
-		decimal ITickTradeMessage.Volume => TradeVolume.Value;
-		int? ITickTradeMessage.Status => TradeStatus;
+		long? IComplexIdMessage.Id => TradeId;
+		string IComplexIdMessage.StringId => TradeStringId;
+		decimal ITickTradeMessage.Price => TradePrice ?? default;
+		decimal ITickTradeMessage.Volume => TradeVolume ?? default;
+		long? ISystemMessage.Status => OrderStatus ?? TradeStatus;
 
 		IOrderMessage IOrderLogMessage.Order => this;
 		ITickTradeMessage IOrderLogMessage.Trade => HasTradeInfo ? this : null;

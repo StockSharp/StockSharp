@@ -5,18 +5,8 @@
 /// </summary>
 public interface ITickTradeMessage :
 	ISecurityIdMessage, ISeqNumMessage, ICurrencyMessage, ISystemMessage,
-	IServerTimeMessage, IGeneratedMessage, ILocalTimeMessage
+	IServerTimeMessage, IGeneratedMessage, ILocalTimeMessage, IComplexIdMessage
 {
-	/// <summary>
-	/// Trade ID.
-	/// </summary>
-	long Id { get; }
-
-	/// <summary>
-	/// Trade ID (as string, if electronic board does not use numeric order ID representation).
-	/// </summary>
-	string StringId { get; }
-
 	/// <summary>
 	/// Trade price.
 	/// </summary>
@@ -41,11 +31,6 @@ public interface ITickTradeMessage :
 	/// Is tick ascending or descending in price.
 	/// </summary>
 	bool? IsUpTick { get; }
-
-	/// <summary>
-	/// System trade status.
-	/// </summary>
-	int? Status { get; }
 
 	/// <summary>
 	/// Yield.

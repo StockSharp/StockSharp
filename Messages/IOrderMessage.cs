@@ -1,10 +1,12 @@
 ﻿namespace StockSharp.Messages;
 
+using System;
+
 /// <summary>
 /// Interface describes an order's state message.
 /// </summary>
 public interface IOrderMessage :
-	ISecurityIdMessage, ILocalTimeMessage, IServerTimeMessage,
+	ISecurityIdMessage, ILocalTimeMessage, IServerTimeMessage, IComplexIdMessage,
 	IGeneratedMessage, ISeqNumMessage, ICurrencyMessage, ISystemMessage
 {
 	/// <summary>
@@ -21,6 +23,14 @@ public interface IOrderMessage :
 	/// <see cref="TimeInForce"/>
 	/// </summary>
 	TimeInForce? TimeInForce { get; }
+
+	/// <summary>
+	/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
+	/// </summary>
+	/// <remarks>
+	/// If the value is equal <see langword="null" />, order will be GTC (good til cancel). Or uses exact date.
+	/// </remarks>
+	DateTimeOffset? ExpiryDate { get; set; }
 
 	/// <summary>
 	/// <see cref="Type"/>

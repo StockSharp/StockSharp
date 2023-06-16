@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				ol.IsUpTick = reader.ReadNullableBool();
 				ol.Yield = reader.ReadNullableDecimal();
-				ol.TradeStatus = reader.ReadNullableInt();
+				ol.TradeStatus = reader.ReadNullableLong();
 				ol.OpenInterest = reader.ReadNullableDecimal();
 				ol.OriginSide = reader.ReadNullableEnum<Sides>();
 			}

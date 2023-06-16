@@ -203,7 +203,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				Commission = (BlittableDecimal?)message.Commission,
 				TradePrice = (BlittableDecimal?)message.TradePrice,
 				TradeVolume = (BlittableDecimal?)message.TradeVolume,
-				TradeStatus = message.TradeStatus,
+				TradeStatus = (int?)message.TradeStatus,
 				TradeId = message.TradeId,
 				TradeStringId = message.TradeStringId.VerifySize(Sizes.S100),
 				OpenInterest = (BlittableDecimal?)message.OpenInterest,

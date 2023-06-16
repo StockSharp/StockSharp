@@ -2652,7 +2652,7 @@ namespace StockSharp.Algo.Strategies
 
 			this.AddInfoLog(LocalizedStrings.Str1398Params,
 				trade.Order.Side,
-				(trade.Trade.Id == 0 ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
+				(trade.Trade.Id is null ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
 				trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
 
 			if (trade.Commission != null)
