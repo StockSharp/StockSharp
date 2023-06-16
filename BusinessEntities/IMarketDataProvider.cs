@@ -126,46 +126,55 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
+		[Obsolete("Use SubscriptionStarted event.")]
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <summary>
 		/// Error subscription market-data.
 		/// </summary>
+		[Obsolete("Use SubscriptionFailed event.")]
 		event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <summary>
 		/// Error subscription market-data.
 		/// </summary>
+		[Obsolete("Use SubscriptionFailed event.")]
 		event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataSubscriptionFailed2;
 
 		/// <summary>
 		/// Successful unsubscription market-data.
 		/// </summary>
+		[Obsolete("Use SubscriptionStopped event.")]
 		event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
 
 		/// <summary>
 		/// Error unsubscription market-data.
 		/// </summary>
+		[Obsolete("Use SubscriptionFailed event.")]
 		event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
 
 		/// <summary>
 		/// Error unsubscription market-data.
 		/// </summary>
+		[Obsolete("Use SubscriptionFailed event.")]
 		event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <summary>
 		/// Subscription market-data finished.
 		/// </summary>
+		[Obsolete("Use SubscriptionStopped event.")]
 		event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished;
 
 		/// <summary>
 		/// Market-data subscription unexpected cancelled.
 		/// </summary>
+		[Obsolete("Use SubscriptionFailed event.")]
 		event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
 
 		/// <summary>
 		/// Subscription is online.
 		/// </summary>
+		[Obsolete("Use SubscriptionOnline event.")]		
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
 	}
 }

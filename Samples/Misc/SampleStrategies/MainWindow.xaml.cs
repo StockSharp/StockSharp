@@ -137,9 +137,9 @@ namespace SampleStrategies
 			};
 
 			// subscribe on error of market data subscription event
-			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
+			Connector.SubscriptionFailed += (sub, error, isSubscribe) =>
 			{
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(sub.DataType, sub.SecurityId)));
 			};
 
 			Connector.SecurityReceived += (sub, s) => _securitiesWindow.SecurityPicker.Securities.Add(s);

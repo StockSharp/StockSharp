@@ -174,12 +174,12 @@ namespace SampleRealTimeEmulation
 			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// subscribe on error of market data subscription event
-			_emuConnector.MarketDataSubscriptionFailed += (security, msg, error) =>
+			_emuConnector.SubscriptionFailed += (sub, error, isSubscribe) =>
 			{
 				if (error == null)
 					return;
 
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType2, security)));
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(sub.DataType, sub.SecurityId)));
 			};
 		}
 

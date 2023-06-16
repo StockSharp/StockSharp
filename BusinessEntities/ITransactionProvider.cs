@@ -75,11 +75,13 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Failed order status request event.
 		/// </summary>
+		[Obsolete("Use SubscriptionFailed event.")]
 		event Action<long, Exception> OrderStatusFailed;
 
 		/// <summary>
 		/// Failed order status request event.
 		/// </summary>
+		[Obsolete("Use SubscriptionFailed event.")]
 		event Action<long, Exception, DateTimeOffset> OrderStatusFailed2;
 
 		/// <summary>
@@ -158,12 +160,14 @@ namespace StockSharp.BusinessEntities
 		/// Subscribe on the portfolio changes.
 		/// </summary>
 		/// <param name="portfolio">Portfolio for subscription.</param>
+		[Obsolete("Use Subscribe method.")]
 		void RegisterPortfolio(Portfolio portfolio);
 
 		/// <summary>
 		/// Unsubscribe from the portfolio changes.
 		/// </summary>
 		/// <param name="portfolio">Portfolio for unsubscription.</param>
+		[Obsolete("Use UnSubscribe method.")]
 		void UnRegisterPortfolio(Portfolio portfolio);
 
 		/// <summary>

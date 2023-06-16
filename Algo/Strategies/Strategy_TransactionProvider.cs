@@ -95,11 +95,13 @@ namespace StockSharp.Algo.Strategies
 			SafeGetConnector().CancelOrders(isStopOrder, portfolio, direction, board, security, securityType, transactionId);
 		}
 
+		[Obsolete("Use Subscribe method.")]
 		void ITransactionProvider.RegisterPortfolio(Portfolio portfolio)
 		{
 			SafeGetConnector().RegisterPortfolio(portfolio);
 		}
 
+		[Obsolete("Use UnSubscribe method.")]
 		void ITransactionProvider.UnRegisterPortfolio(Portfolio portfolio)
 		{
 			SafeGetConnector().UnRegisterPortfolio(portfolio);

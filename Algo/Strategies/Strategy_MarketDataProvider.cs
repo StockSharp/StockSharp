@@ -128,6 +128,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionStarted event.")]
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded
 		{
 			add => MarketDataProvider.MarketDataSubscriptionSucceeded += value;
@@ -135,6 +136,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed
 		{
 			add => MarketDataProvider.MarketDataSubscriptionFailed += value;
@@ -142,6 +144,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataSubscriptionFailed2
 		{
 			add => MarketDataProvider.MarketDataSubscriptionFailed2 += value;
@@ -149,6 +152,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionStopped event.")]
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded
 		{
 			add => MarketDataProvider.MarketDataUnSubscriptionSucceeded += value;
@@ -156,6 +160,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed
 		{
 			add => MarketDataProvider.MarketDataUnSubscriptionFailed += value;
@@ -163,6 +168,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataUnSubscriptionFailed2
 		{
 			add => MarketDataProvider.MarketDataUnSubscriptionFailed2 += value;
@@ -170,6 +176,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionStopped event.")]
 		public event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished
 		{
 			add => MarketDataProvider.MarketDataSubscriptionFinished += value;
@@ -177,6 +184,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled
 		{
 			add => MarketDataProvider.MarketDataUnexpectedCancelled += value;
@@ -184,6 +192,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionOnline event.")]
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline
 		{
 			add => MarketDataProvider.MarketDataSubscriptionOnline += value;

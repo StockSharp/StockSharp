@@ -17,7 +17,7 @@ namespace StockSharp.Algo
 		public event Action<MyTrade> NewMyTrade;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use NewMyTrade event.")]
 		public event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <inheritdoc />
@@ -116,10 +116,11 @@ namespace StockSharp.Algo
 		public event Action<long, Exception, DateTimeOffset> MassOrderCancelFailed2;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<long, Exception> OrderStatusFailed;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<IEnumerable<Security>> NewSecurities;
 
 		/// <inheritdoc />
@@ -127,7 +128,7 @@ namespace StockSharp.Algo
 		public event Action<Security> SecurityChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use SecurityReceived event.")]
 		public event Action<IEnumerable<Security>> SecuritiesChanged;
 
 		/// <inheritdoc />
@@ -135,7 +136,7 @@ namespace StockSharp.Algo
 		public event Action<Portfolio> NewPortfolio;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use PortfolioReceived event.")]
 		public event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <inheritdoc />
@@ -143,7 +144,7 @@ namespace StockSharp.Algo
 		public event Action<Portfolio> PortfolioChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use PortfolioReceived event.")]
 		public event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
 		/// <inheritdoc />
@@ -151,7 +152,7 @@ namespace StockSharp.Algo
 		public event Action<Position> NewPosition;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use PositionReceived event.")]
 		public event Action<IEnumerable<Position>> NewPositions;
 
 		/// <inheritdoc />
@@ -159,7 +160,7 @@ namespace StockSharp.Algo
 		public event Action<Position> PositionChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use PositionReceived event.")]
 		public event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <inheritdoc />
@@ -246,30 +247,39 @@ namespace StockSharp.Algo
 		public event Action<TimeFrameLookupMessage, IEnumerable<TimeSpan>, IEnumerable<TimeSpan>, Exception> LookupTimeFramesResult2;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionStarted event.")]
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataSubscriptionFailed2;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionStopped event.")]
 		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, SubscriptionResponseMessage> MarketDataUnSubscriptionFailed2;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionStopped event.")]
 		public event Action<Security, SubscriptionFinishedMessage> MarketDataSubscriptionFinished;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionFailed event.")]
 		public event Action<Security, MarketDataMessage, Exception> MarketDataUnexpectedCancelled;
 
 		/// <inheritdoc />
+		[Obsolete("Use SubscriptionOnline event.")]
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
 
 		/// <inheritdoc />
@@ -876,9 +886,7 @@ namespace StockSharp.Algo
 
 		private void RaiseConnectionRestored(IMessageAdapter adapter)
 		{
-#pragma warning disable 618
 			Restored?.Invoke();
-#pragma warning restore 618
 
 			if (adapter != null)
 				ConnectionRestored?.Invoke(adapter);
@@ -886,9 +894,7 @@ namespace StockSharp.Algo
 
 		private void RaiseTimeOut()
 		{
-#pragma warning disable 618
 			TimeOut?.Invoke();
-#pragma warning restore 618
 		}
 
 		private void RaiseCandleSeriesProcessing(CandleSeries series, ICandleMessage candle)
