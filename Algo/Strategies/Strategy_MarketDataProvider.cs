@@ -14,11 +14,6 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
-		public MarketDepth GetMarketDepth(Security security)
-			=> MarketDataProvider.GetMarketDepth(security);
-
-		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)
 			=> MarketDataProvider.GetSecurityValue(security, field);
 
@@ -202,10 +197,5 @@ namespace StockSharp.Algo.Strategies
 			add => MarketDataProvider.MarketDataSubscriptionOnline += value;
 			remove => MarketDataProvider.MarketDataSubscriptionOnline -= value;
 		}
-
-		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
-		public MarketDepth GetFilteredMarketDepth(Security security)
-			=> MarketDataProvider.GetFilteredMarketDepth(security);
 	}
 }

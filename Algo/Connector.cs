@@ -188,11 +188,8 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Number of tick trades for storage. The default is 100000. If the value is set to <see cref="int.MaxValue"/>, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
 		/// </summary>
-		public int TradesKeepCount
-		{
-			get => _entityCache.TradesKeepCount;
-			set => _entityCache.TradesKeepCount = value;
-		}
+		[Obsolete("Do nothing.")]
+		public int TradesKeepCount { get; set; }
 
 		/// <summary>
 		/// The number of orders for storage. The default is 1000. If the value is set to <see cref="int.MaxValue"/>, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored.
@@ -302,7 +299,7 @@ namespace StockSharp.Algo
 
 		/// <inheritdoc />
 		[Obsolete("Use NewTrade event to collect data.")]
-		public IEnumerable<Trade> Trades => _entityCache.Trades;
+		public IEnumerable<Trade> Trades => Enumerable.Empty<Trade>();
 
 		/// <inheritdoc />
 		[Obsolete("Use NewMyTrade event to collect data.")]
@@ -385,7 +382,7 @@ namespace StockSharp.Algo
 		public bool CreateTradesFromOrdersLog { get; set; }
 
 		/// <summary>
-		/// To update <see cref="Security.LastTrade"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
+		/// To update <see cref="Security.LastTick"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
 		/// </summary>
 		public bool UpdateSecurityLastQuotes { get; set; } = true;
 
@@ -576,41 +573,6 @@ namespace StockSharp.Algo
 
 			return position;
 		}
-
-		private MarketDepth GetMarketDepth(Security security, QuoteChangeMessage message)
-		{
-			var depth = _entityCache.GetMarketDepth(security, message, out var isNew);
-
-			if (isNew)
-			{
-				if (message.IsFiltered)
-					RaiseFilteredMarketDepthChanged(depth);
-				else
-					RaiseNewMarketDepth(depth);
-			}
-
-			return depth;
-		}
-
-		[Obsolete]
-		private MarketDepth GetMarketDepth(Security security, bool isFiltered)
-		{
-			return GetMarketDepth(security, new QuoteChangeMessage
-			{
-				IsFiltered = isFiltered,
-				SecurityId = security.ToSecurityId(),
-				ServerTime = CurrentTime,
-				LocalTime = CurrentTime,
-			});
-		}
-
-		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
-		public MarketDepth GetMarketDepth(Security security) => GetMarketDepth(security, false);
-
-		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
-		public MarketDepth GetFilteredMarketDepth(Security security) => GetMarketDepth(security, true);
 
 		/// <summary>
 		/// Check <see cref="Order.Price"/> and <see cref="Order.Volume"/> are they multiply to step.
@@ -1251,7 +1213,6 @@ namespace StockSharp.Algo
 			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
-			TradesKeepCount = storage.GetValue(nameof(TradesKeepCount), TradesKeepCount);
 			OrdersKeepCount = storage.GetValue(nameof(OrdersKeepCount), OrdersKeepCount);
 			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
@@ -1297,7 +1258,6 @@ namespace StockSharp.Algo
 			if (storage is null)
 				throw new ArgumentNullException(nameof(storage));
 
-			storage.SetValue(nameof(TradesKeepCount), TradesKeepCount);
 			storage.SetValue(nameof(OrdersKeepCount), OrdersKeepCount);
 			storage.SetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 			storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);

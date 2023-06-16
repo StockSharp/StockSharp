@@ -24,47 +24,22 @@ namespace SampleOptionQuoting
 			remove { }
 		}
 
-		MarketDepth IMarketDataProvider.GetMarketDepth(Security security)
-		{
-			return null;
-		}
-
 		object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field)
 		{
-			switch (field)
+			return field switch
 			{
-				case Level1Fields.OpenInterest:
-					return security.OpenInterest;
-
-				case Level1Fields.ImpliedVolatility:
-					return security.ImpliedVolatility;
-
-				case Level1Fields.HistoricalVolatility:
-					return security.HistoricalVolatility;
-
-				case Level1Fields.Volume:
-					return security.Volume;
-
-				case Level1Fields.LastTradePrice:
-					return security.LastTrade?.Price;
-
-				case Level1Fields.LastTradeVolume:
-					return security.LastTrade?.Volume;
-
-				case Level1Fields.BestBidPrice:
-					return security.BestBid?.Price;
-
-				case Level1Fields.BestBidVolume:
-					return security.BestBid?.Volume;
-
-				case Level1Fields.BestAskPrice:
-					return security.BestAsk?.Price;
-
-				case Level1Fields.BestAskVolume:
-					return security.BestAsk?.Volume;
-			}
-
-			return null;
+				Level1Fields.OpenInterest => security.OpenInterest,
+				Level1Fields.ImpliedVolatility => security.ImpliedVolatility,
+				Level1Fields.HistoricalVolatility => security.HistoricalVolatility,
+				Level1Fields.Volume => security.Volume,
+				Level1Fields.LastTradePrice => security.LastTick?.Price,
+				Level1Fields.LastTradeVolume => security.LastTick?.Volume,
+				Level1Fields.BestBidPrice => security.BestBid?.Price,
+				Level1Fields.BestBidVolume => security.BestBid?.Volume,
+				Level1Fields.BestAskPrice => security.BestAsk?.Price,
+				Level1Fields.BestAskVolume => security.BestAsk?.Volume,
+				_ => null,
+			};
 		}
 
 		IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security)
@@ -226,11 +201,6 @@ namespace SampleOptionQuoting
 		{
 			add => throw new NotSupportedException();
 			remove => throw new NotSupportedException();
-		}
-
-		MarketDepth IMarketDataProvider.GetFilteredMarketDepth(Security security)
-		{
-			throw new NotSupportedException();
 		}
 
 		private readonly IEnumerable<Position> _positions;

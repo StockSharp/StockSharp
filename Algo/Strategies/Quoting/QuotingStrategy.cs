@@ -261,7 +261,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		}
 
 		/// <summary>
-		/// To get the order book filtered with <see cref="IMarketDataProvider.GetFilteredMarketDepth"/>.
+		/// To get the order book filtered <see cref="DataType.FilteredMarketDepth"/>.
 		/// </summary>
 		/// <param name="side">The order book side (bids or offers).</param>
 		/// <returns>The filtered order book.</returns>

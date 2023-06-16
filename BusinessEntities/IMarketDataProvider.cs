@@ -31,14 +31,6 @@ namespace StockSharp.BusinessEntities
 		event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <summary>
-		/// To get the quotes order book.
-		/// </summary>
-		/// <param name="security">The instrument by which an order book should be got.</param>
-		/// <returns>Order book.</returns>
-		[Obsolete("Use MarketDepthReceived event.")]
-		MarketDepth GetMarketDepth(Security security);
-
-		/// <summary>
 		/// To get the value of market data for the instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
@@ -181,13 +173,5 @@ namespace StockSharp.BusinessEntities
 		/// Subscription is online.
 		/// </summary>
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionOnline;
-
-		/// <summary>
-		/// Get filtered order book.
-		/// </summary>
-		/// <param name="security">The instrument by which an order book should be got.</param>
-		/// <returns>Filtered order book.</returns>
-		[Obsolete("Use MarketDepthReceived event.")]
-		MarketDepth GetFilteredMarketDepth(Security security);
 	}
 }

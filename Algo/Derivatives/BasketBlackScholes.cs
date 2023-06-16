@@ -196,13 +196,6 @@ namespace StockSharp.Algo.Derivatives
 			return ProcessOptions(bs => bs.ImpliedVolatility(currentTime, premium), false);
 		}
 
-		/// <inheritdoc />
-		public override IOrderBookMessage ImpliedVolatility(DateTimeOffset currentTime)
-		{
-			throw new NotSupportedException();
-			//return UnderlyingAsset.GetMarketDepth().ImpliedVolatility(this);
-		}
-
 		private decimal? ProcessOptions(Func<BlackScholes, decimal?> func, bool usePos = true)
 		{
 			return _innerModels.Cache.Sum(m =>

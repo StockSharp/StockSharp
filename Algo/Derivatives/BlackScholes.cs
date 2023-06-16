@@ -308,18 +308,6 @@ namespace StockSharp.Algo.Derivatives
 		{
 			return DerivativesHelper.D1(assetPrice, GetStrike(), RiskFree, Dividend, deviation, timeToExp);
 		}
-		
-		/// <summary>
-		/// To create the order book of volatility.
-		/// </summary>
-		/// <param name="currentTime">The current time.</param>
-		/// <returns>The order book volatility.</returns>
-		public virtual IOrderBookMessage ImpliedVolatility(DateTimeOffset currentTime)
-		{
-#pragma warning disable CS0618 // Type or member is obsolete
-			return DataProvider.GetMarketDepth(Option).ImpliedVolatility(this, currentTime);
-#pragma warning restore CS0618 // Type or member is obsolete
-		}
 
 		internal decimal GetStrike()
 		{
