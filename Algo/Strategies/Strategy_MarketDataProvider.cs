@@ -62,14 +62,6 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
-		public event Action<MarketDepth> FilteredMarketDepthChanged
-		{
-			add => MarketDataProvider.FilteredMarketDepthChanged += value;
-			remove => MarketDataProvider.FilteredMarketDepthChanged -= value;
-		}
-
-		/// <inheritdoc />
 		[Obsolete("Use OrderLogItemReceived event.")]
 		public event Action<OrderLogItem> NewOrderLogItem
 		{

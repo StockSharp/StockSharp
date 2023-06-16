@@ -211,10 +211,6 @@ namespace StockSharp.Algo
 					?? (type == null ? Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, transactionId, operation)) : null);
 			}
 
-			public readonly SynchronizedDictionary<long, Trade> TradesById = new();
-			public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new(StringComparer.InvariantCultureIgnoreCase);
-			public readonly SynchronizedList<Trade> Trades = new();
-
 			public readonly SynchronizedDictionary<long, Order> OrdersById = new();
 			public readonly SynchronizedDictionary<string, Order> OrdersByStringId = new(StringComparer.InvariantCultureIgnoreCase);
 		}
@@ -223,11 +219,6 @@ namespace StockSharp.Algo
 
 		private SecurityData GetData(Security security)
 			=> _securityData.SafeAdd(security);
-
-		private readonly CachedSynchronizedList<Trade> _trades = new();
-
-		public IEnumerable<Trade> Trades
-			=> _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStringId.SyncGet(t => t.Values.ToArray()))).ToArray());
 
 		private readonly SynchronizedDictionary<Tuple<long, OrderOperations>, Order> _allOrdersByTransactionId = new();
 		private readonly SynchronizedDictionary<Tuple<long, OrderOperations>, OrderFail> _allOrdersByFailedId = new();
@@ -266,27 +257,7 @@ namespace StockSharp.Algo
 			public QuoteChangeMessage GetCopy() => _snapshot?.TypedClone();
 		}
 
-		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new();
-
 		public IEnumerable<News> News => _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray();
-
-		private int _tradesKeepCount = 100000;
-
-		public int TradesKeepCount
-		{
-			get => _tradesKeepCount;
-			set
-			{
-				if (_tradesKeepCount == value)
-					return;
-
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.NegativeTickCountStorage);
-
-				_tradesKeepCount = value;
-				RecycleTrades();
-			}
-		}
 
 		private int _ordersKeepCount = 1000;
 
@@ -304,16 +275,6 @@ namespace StockSharp.Algo
 				_ordersKeepCount = value;
 				RecycleOrders();
 			}
-		}
-
-		private void AddTrade(Trade trade)
-		{
-			if (TradesKeepCount == 0)
-				return;
-
-			_trades.Add(trade);
-
-			RecycleTrades();
 		}
 
 		private void AddOrder(Order order)
@@ -382,16 +343,12 @@ namespace StockSharp.Algo
 
 			_myTrades.Clear();
 
-			_trades.Clear();
-
 			_orderStatusTransactions.Clear();
 			_massCancelationTransactions.Clear();
 
 			_orderCancelFails.Clear();
 			_orderRegisterFails.Clear();
 			_orderEditFails.Clear();
-
-			_marketDepths.Clear();
 
 			_securityValues.Clear();
 			_boardStates.Clear();
@@ -881,25 +838,6 @@ namespace StockSharp.Algo
 			return Tuple.Create(myTrade, isNew);
 		}
 
-		public Tuple<Trade, bool> ProcessTradeMessage(Security security, ExecutionMessage message)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			var trade = GetTrade(security, message.TradeId, message.TradeStringId ?? string.Empty, (id, stringId) =>
-			{
-				var t = message.ToTrade(EntityFactory.CreateTrade(security, id, stringId));
-				t.LocalTime = message.LocalTime;
-				t.ServerTime = message.ServerTime;
-				return t;
-			});
-
-			return trade;
-		}
-
 		public Tuple<News, bool> ProcessNewsMessage(Security security, NewsMessage message)
 		{
 			if (message == null)
@@ -971,62 +909,6 @@ namespace StockSharp.Algo
 			return Tuple.Create(transactionId, type == OrderTypes.Conditional, operation);
 		}
 
-		public Tuple<Trade, bool> GetTrade(Security security, long? id, string strId, Func<long?, string, Trade> createTrade)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (createTrade == null)
-				throw new ArgumentNullException(nameof(createTrade));
-
-			var isNew = false;
-
-			Trade trade;
-
-			if (TradesKeepCount > 0)
-			{
-				var securityData = GetData(security);
-
-				if (id != null)
-				{
-					trade = securityData.TradesById.SafeAdd(id.Value, k =>
-					{
-						isNew = true;
-
-						var t = createTrade(id.Value, strId);
-						AddTrade(t);
-						return t;
-					});
-				}
-				else if (!strId.IsEmpty())
-				{
-					trade = securityData.TradesByStringId.SafeAdd(strId, k =>
-					{
-						isNew = true;
-
-						var t = createTrade(null, strId);
-						AddTrade(t);
-						return t;
-					});
-				}
-				else
-				{
-					isNew = true;
-
-					trade = createTrade(null, null);
-					AddTrade(trade);
-					securityData.Trades.Add(trade);
-				}
-			}
-			else
-			{
-				isNew = true;
-				trade = createTrade(id, strId);
-			}
-
-			return Tuple.Create(trade, isNew);
-		}
-
 		public void AddFail(OrderOperations operation, OrderFail fail)
 		{
 			switch (operation)
@@ -1042,53 +924,6 @@ namespace StockSharp.Algo
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(operation.ToString());
-			}
-		}
-
-		private void RecycleTrades()
-		{
-			if (TradesKeepCount == 0)
-			{
-				_trades.Clear();
-				_securityData.SyncDo(d => d.Values.ForEach(v =>
-				{
-					v.Trades.Clear();
-					v.TradesById.Clear();
-					v.TradesByStringId.Clear();
-				}));
-
-				return;
-			}
-			else if (TradesKeepCount == int.MaxValue)
-				return;
-
-			var totalCount = _trades.Count;
-
-			if (totalCount < (1.5 * TradesKeepCount))
-				return;
-
-			var countToRemove = totalCount - TradesKeepCount;
-
-			lock (_securityData.SyncRoot)
-			{
-				var toRemove = _trades.SyncGet(d =>
-				{
-					var tmp = d.Take(countToRemove).ToArray();
-					d.RemoveRange(0, countToRemove);
-					return tmp;
-				});
-
-				foreach (var trade in toRemove)
-				{
-					var data = GetData(trade.Security);
-
-					if (trade.Id != 0)
-						data.TradesById.Remove(trade.Id);
-					else if (!trade.StringId.IsEmpty())
-						data.TradesByStringId.Remove(trade.StringId);
-					else
-						data.Trades.Remove(trade);
-				}
 			}
 		}
 
@@ -1145,52 +980,6 @@ namespace StockSharp.Algo
 					pair.Value.OrdersById.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
 					pair.Value.OrdersByStringId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
 				}
-			}
-		}
-
-		public MarketDepth GetMarketDepth(Security security, QuoteChangeMessage message, out bool isNew)
-		{
-			if (security is null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (message is null)
-				throw new ArgumentNullException(nameof(message));
-
-			isNew = false;
-
-			var key = Tuple.Create(security, message.IsFiltered);
-
-			lock (_marketDepths.SyncRoot)
-			{
-				if (!_marketDepths.TryGetValue(key, out var info))
-				{
-					isNew = true;
-
-					info = new MarketDepthInfo();
-					info.UpdateSnapshot(message.TypedClone());
-
-					// стакан из лога заявок бесконечен
-					//if (CreateDepthFromOrdersLog)
-					//	info.First.MaxDepth = int.MaxValue;
-
-					_marketDepths.Add(key, info);
-				}
-
-				var depth = EntityFactory.CreateMarketDepth(security);
-				info.TryFlushChanges(depth);
-				return depth;
-			}
-		}
-
-		public bool HasMarketDepth(Security security, QuoteChangeMessage message)
-			=> _marketDepths.ContainsKey(Tuple.Create(security, message.IsFiltered));
-
-		public void UpdateMarketDepth(Security security, QuoteChangeMessage message)
-		{
-			lock (_marketDepths.SyncRoot)
-			{
-				var info = _marketDepths.SafeAdd(Tuple.Create(security, message.IsFiltered), key => new MarketDepthInfo());
-				info.UpdateSnapshot(message);
 			}
 		}
 
@@ -1326,22 +1115,6 @@ namespace StockSharp.Algo
 
 				if (_securityValues.TryGetValue(security, out var info))
 					return new[] { info.GetCopy() };
-			}
-			else if (dataType == DataType.MarketDepth)
-			{
-				if (security == null)
-					return Enumerable.Empty<Message>();
-
-				lock (_marketDepths.SyncRoot)
-				{
-					if (_marketDepths.TryGetValue(Tuple.Create(security, false), out var info))
-					{
-						var copy = info.GetCopy();
-
-						if (copy != null)
-							return new[] { copy };
-					}
-				}
 			}
 			else if (dataType == DataType.Transactions)
 			{

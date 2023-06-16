@@ -25,7 +25,7 @@ namespace StockSharp.Algo
 		public event Action<Trade> NewTrade;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use TickTradeReceived event.")]
 		public event Action<IEnumerable<Trade>> NewTrades;
 
 		/// <inheritdoc />
@@ -163,31 +163,27 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<MarketDepth> NewMarketDepth;
 
 		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<MarketDepth> MarketDepthChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use MarketDepthReceived event.")]
-		public event Action<MarketDepth> FilteredMarketDepthChanged;
-
-		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<IEnumerable<MarketDepth>> NewMarketDepths;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
 
 		/// <inheritdoc />
-		[Obsolete("Use OrderLogItemReceived event.")]
+		[Obsolete("Use OrderLogReceived event.")]
 		public event Action<OrderLogItem> NewOrderLogItem;
 
 		/// <inheritdoc />
-		[Obsolete("Use single item event overload.")]
+		[Obsolete("Use OrderLogReceived event.")]
 		public event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
 
 		/// <inheritdoc />
@@ -348,7 +344,7 @@ namespace StockSharp.Algo
 		public event Action<Subscription, Exception, bool> SubscriptionFailed;
 
 		/// <inheritdoc />
-		public event Action<Subscription, Message> SubscriptionReceived;
+		public event Action<Subscription, object> SubscriptionReceived;
 
 		/// <summary>
 		/// Connection restored.
@@ -398,12 +394,6 @@ namespace StockSharp.Algo
 
 			NewMyTrade?.Invoke(trade);
 			NewMyTrades?.Invoke(new[] { trade });
-		}
-
-		private void RaiseNewTrade(Trade trade)
-		{
-			NewTrade?.Invoke(trade);
-			NewTrades?.Invoke(new[] { trade });
 		}
 
 		private void RaiseNewOrder(Order order)
@@ -518,23 +508,6 @@ namespace StockSharp.Algo
 			PositionsChanged?.Invoke(new[] { position });
 		}
 
-		private void RaiseNewMarketDepth(MarketDepth marketDepth)
-		{
-			NewMarketDepth?.Invoke(marketDepth);
-			NewMarketDepths?.Invoke(new[] { marketDepth });
-		}
-
-		private void RaiseMarketDepthChanged(MarketDepth marketDepth)
-		{
-			MarketDepthChanged?.Invoke(marketDepth);
-			MarketDepthsChanged?.Invoke(new[] { marketDepth });
-		}
-
-		private void RaiseFilteredMarketDepthChanged(MarketDepth marketDepth)
-		{
-			FilteredMarketDepthChanged?.Invoke(marketDepth);
-		}
-
 		/// <summary>
 		/// To call the event <see cref="NewNews"/>.
 		/// </summary>
@@ -551,12 +524,6 @@ namespace StockSharp.Algo
 		private void RaiseNewsChanged(News news)
 		{
 			NewsChanged?.Invoke(news);
-		}
-
-		private void RaiseNewOrderLogItem(OrderLogItem item)
-		{
-			NewOrderLogItem?.Invoke(item);
-			NewOrderLogItems?.Invoke(new[] { item });
 		}
 
 		/// <summary>
@@ -962,12 +929,12 @@ namespace StockSharp.Algo
 			return RaiseReceived(entity, _subscriptionManager.GetSubscriptions(message), evt, out anyCanOnline);
 		}
 
-		private static void RaiseReceived<TEntity>(TEntity entity, IEnumerable<Subscription> subscriptions, Action<Subscription, TEntity> evt)
+		private void RaiseReceived<TEntity>(TEntity entity, IEnumerable<Subscription> subscriptions, Action<Subscription, TEntity> evt)
 		{
 			RaiseReceived(entity, subscriptions, evt, out _);
 		}
 
-		private static bool? RaiseReceived<TEntity>(TEntity entity, IEnumerable<Subscription> subscriptions, Action<Subscription, TEntity> evt, out bool? anyCanOnline)
+		private bool? RaiseReceived<TEntity>(TEntity entity, IEnumerable<Subscription> subscriptions, Action<Subscription, TEntity> evt, out bool? anyCanOnline)
 		{
 			if (subscriptions is null)
 				throw new ArgumentNullException(nameof(subscriptions));

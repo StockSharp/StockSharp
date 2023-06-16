@@ -489,8 +489,6 @@ namespace StockSharp.Algo.Strategies
 					isp.OrderLogReceived          -= OnConnectorOrderLogReceived;
 					isp.SecurityReceived          -= OnConnectorSecurityReceived;
 					isp.BoardReceived             -= OnConnectorBoardReceived;
-					isp.MarketDepthReceived       -= OnConnectorMarketDepthReceived;
-					isp.OrderLogItemReceived      -= OnConnectorOrderLogItemReceived;
 					isp.NewsReceived              -= OnConnectorNewsReceived;
 					isp.CandleReceived            -= OnConnectorCandleReceived;
 					isp.OrderRegisterFailReceived -= OnConnectorOrderRegisterFailReceived;
@@ -528,8 +526,6 @@ namespace StockSharp.Algo.Strategies
 					isp.OrderLogReceived          += OnConnectorOrderLogReceived;
 					isp.SecurityReceived          += OnConnectorSecurityReceived;
 					isp.BoardReceived             += OnConnectorBoardReceived;
-					isp.MarketDepthReceived       += OnConnectorMarketDepthReceived;
-					isp.OrderLogItemReceived      += OnConnectorOrderLogItemReceived;
 					isp.NewsReceived              += OnConnectorNewsReceived;
 					isp.CandleReceived            += OnConnectorCandleReceived;
 					isp.OrderRegisterFailReceived += OnConnectorOrderRegisterFailReceived;

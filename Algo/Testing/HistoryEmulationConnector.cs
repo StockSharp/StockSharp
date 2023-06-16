@@ -148,7 +148,6 @@ namespace StockSharp.Algo.Testing
 			MarketTimeChanged += OnMarketTimeChanged;
 			Disconnected += OnDisconnected;
 
-			DisableTicks = true;
 			SupportFilteredMarketDepth = false;
 		}
 

@@ -4,7 +4,6 @@
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Algo.Candles;
 
 	partial class MarketRuleHelper
 	{
@@ -200,39 +199,6 @@
 			return new OrderBookReceivedRule(subscription, provider);
 		}
 
-		private class MarketDepthReceivedRule : SubscriptionRule<MarketDepth>
-		{
-			public MarketDepthReceivedRule(Subscription subscription, ISubscriptionProvider provider)
-				: base(subscription, provider)
-			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.MarketDepthReceived)}";
-				Provider.MarketDepthReceived += ProviderOnMarketDepthReceived;
-			}
-
-			private void ProviderOnMarketDepthReceived(Subscription subscription, MarketDepth depth)
-			{
-				if (Subscription == subscription)
-					Activate(depth);
-			}
-
-			protected override void DisposeManaged()
-			{
-				Provider.MarketDepthReceived -= ProviderOnMarketDepthReceived;
-				base.DisposeManaged();
-			}
-		}
-
-		/// <summary>
-		/// To create a rule for the event of <see cref="ISubscriptionProvider.MarketDepthReceived"/>.
-		/// </summary>
-		/// <param name="subscription">Subscription.</param>
-		/// <param name="provider">Subscription provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Subscription, MarketDepth> WhenMarketDepthReceived(this Subscription subscription, ISubscriptionProvider provider)
-		{
-			return new MarketDepthReceivedRule(subscription, provider);
-		}
-
 		private class Level1ReceivedRule : SubscriptionRule<Level1ChangeMessage>
 		{
 			public Level1ReceivedRule(Subscription subscription, ISubscriptionProvider provider)
@@ -271,7 +237,7 @@
 			public OrderLogReceivedRule(Subscription subscription, ISubscriptionProvider provider)
 				: base(subscription, provider)
 			{
-				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderLogItemReceived)}";
+				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.OrderLogReceived)}";
 				Provider.OrderLogReceived += ProviderOnOrderLogReceived;
 			}
 

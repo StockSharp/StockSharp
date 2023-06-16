@@ -76,15 +76,9 @@ namespace StockSharp.BusinessEntities
 		event Action<MarketDepth> MarketDepthChanged;
 
 		/// <summary>
-		/// Order book changed.
-		/// </summary>
-		[Obsolete("Use MarketDepthReceived event.")]
-		event Action<MarketDepth> FilteredMarketDepthChanged;
-
-		/// <summary>
 		/// Order log received.
 		/// </summary>
-		[Obsolete("Use OrderLogItemReceived event.")]
+		[Obsolete("Use OrderLogReceived event.")]
 		event Action<OrderLogItem> NewOrderLogItem;
 
 		/// <summary>

@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Strategies
 	using System;
 	using System.Collections.Generic;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -32,9 +31,11 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Subscription, ExchangeBoard> BoardReceived;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderBookReceived event.")]
 		public event Action<Subscription, MarketDepth> MarketDepthReceived;
 
 		/// <inheritdoc />
+		[Obsolete("Use OrderLogReceived event.")]
 		public event Action<Subscription, OrderLogItem> OrderLogItemReceived;
 
 		/// <inheritdoc />
@@ -159,18 +160,6 @@ namespace StockSharp.Algo.Strategies
 				NewsReceived?.Invoke(subscription, news);
 		}
 
-		private void OnConnectorOrderLogItemReceived(Subscription subscription, OrderLogItem ol)
-		{
-			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-				OrderLogItemReceived?.Invoke(subscription, ol);
-		}
-
-		private void OnConnectorMarketDepthReceived(Subscription subscription, MarketDepth depth)
-		{
-			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
-				MarketDepthReceived?.Invoke(subscription, depth);
-		}
-
 		private void OnConnectorBoardReceived(Subscription subscription, ExchangeBoard board)
 		{
 			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
@@ -192,13 +181,37 @@ namespace StockSharp.Algo.Strategies
 		private void OnConnectorOrderBookReceived(Subscription subscription, IOrderBookMessage message)
 		{
 			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+			{
 				OrderBookReceived?.Invoke(subscription, message);
+
+				var legacy = MarketDepthReceived;
+
+				if (legacy is not null && subscription.SecurityId is not null)
+				{
+					if (message is not MarketDepth md)
+						md = ((QuoteChangeMessage)message).ToMarketDepth(LookupById(subscription.SecurityId.Value));
+
+					legacy(subscription, md);
+				}
+			}
 		}
 
 		private void OnConnectorOrderLogReceived(Subscription subscription, IOrderLogMessage message)
 		{
 			if (!IsDisposeStarted && _subscriptions.ContainsKey(subscription))
+			{
 				OrderLogReceived?.Invoke(subscription, message);
+
+				var legacy = OrderLogItemReceived;
+
+				if (legacy is not null && subscription.SecurityId is not null)
+				{
+					if (message is not OrderLogItem ol)
+						ol = ((ExecutionMessage)message).ToOrderLog(LookupById(subscription.SecurityId.Value));
+
+					legacy(subscription, ol);
+				}
+			}
 		}
 
 		private void OnConnectorLevel1Received(Subscription subscription, Level1ChangeMessage message)

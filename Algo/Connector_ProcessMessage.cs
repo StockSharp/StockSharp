@@ -964,47 +964,50 @@ namespace StockSharp.Algo
 				RaiseSecurityChanged(security);
 			}
 
-			var time = message.ServerTime;
-			var info = _entityCache.GetSecurityValues(security, time);
-
-			var changes = message.Changes;
-			var cloned = false;
-
-			foreach (var change in message.Changes)
+			if (ValuesChanged is not null)
 			{
-				var field = change.Key;
+				var time = message.ServerTime;
+				var info = _entityCache.GetSecurityValues(security, time);
 
-				if (!info.CanLastTrade && field.IsLastTradeField())
+				var changes = message.Changes;
+				var cloned = false;
+
+				foreach (var change in message.Changes)
 				{
-					if (!cloned)
+					var field = change.Key;
+
+					if (!info.CanLastTrade && field.IsLastTradeField())
 					{
-						changes = changes.ToDictionary();
-						cloned = true;
+						if (!cloned)
+						{
+							changes = changes.ToDictionary();
+							cloned = true;
+						}
+
+						changes.Remove(field);
+
+						continue;
 					}
 
-					changes.Remove(field);
-
-					continue;
-				}
-
-				if (!info.CanBestQuotes && (field.IsBestBidField() || field.IsBestAskField()))
-				{
-					if (!cloned)
+					if (!info.CanBestQuotes && (field.IsBestBidField() || field.IsBestAskField()))
 					{
-						changes = changes.ToDictionary();
-						cloned = true;
+						if (!cloned)
+						{
+							changes = changes.ToDictionary();
+							cloned = true;
+						}
+
+						changes.Remove(field);
+
+						continue;
 					}
 
-					changes.Remove(field);
-
-					continue;
+					info.SetValue(time, field, change.Value);
 				}
 
-				info.SetValue(time, field, change.Value);
+				if (changes.Count > 0)
+					RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
 			}
-
-			if (changes.Count > 0)
-				RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
 		}
 
 		/// <inheritdoc />
@@ -1023,14 +1026,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(name));
 
 			var portfolio = PositionStorage.GetOrCreatePortfolio(name, key =>
-			{
-				var p = EntityFactory.CreatePortfolio(key);
-
-				if (p == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name));
-
-				return p;
-			}, out isNew);
+				EntityFactory.CreatePortfolio(key) ?? throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name)),
+				out isNew);
 
 			var isChanged = false;
 			if (changePortfolio != null)
@@ -1138,69 +1135,44 @@ namespace StockSharp.Algo
 
 		private void ProcessQuotesMessage(QuoteChangeMessage message)
 		{
-			var security = EnsureGetSecurity(message);
+			if (RaiseReceived(message, message, OrderBookReceived) == false)
+				return;
 
-			var hasOnline = false;
+			Security security = null;
+			MarketDepth md = null;
 
-			var receivedEvt = MarketDepthReceived;
-			var hasReceivedEvt = receivedEvt != null;
-
-			foreach (var subscription in _subscriptionManager.GetSubscriptions(message))
+			if (MarketDepthReceived is not null)
 			{
-				MarketDepth depth = null;
+				security = EnsureGetSecurity(message);
+				md = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security));
 
-				if (!hasOnline)
-				{
-					if (subscription.State == SubscriptionStates.Online)
-					{
-						hasOnline = true;
-
-						_entityCache.UpdateMarketDepth(security, message);
-
-						if (MarketDepthChanged != null || MarketDepthsChanged != null || hasReceivedEvt || FilteredMarketDepthChanged != null)
-						{
-							depth = GetMarketDepth(security, message);
-
-							message.ToMarketDepth(depth);
-
-							if (message.IsFiltered)
-								RaiseFilteredMarketDepthChanged(depth);
-							else
-								RaiseMarketDepthChanged(depth);
-						}
-					}
-					else
-					{
-						if (subscription.State == SubscriptionStates.Active && subscription.SubscriptionMessage.To is null && !_entityCache.HasMarketDepth(security, message))
-							_entityCache.UpdateMarketDepth(security, message);
-
-						if (hasReceivedEvt)
-							depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security));
-					}
-				}
-				else
-				{
-					if (hasReceivedEvt)
-						depth = message.ToMarketDepth(EntityFactory.CreateMarketDepth(security));
-				}
-
-				OrderBookReceived?.Invoke(subscription, message);
-				RaiseSubscriptionReceived(subscription, message);
-
-				if (hasReceivedEvt)
-					receivedEvt.Invoke(subscription, depth);
+				if (RaiseReceived(md, message, MarketDepthReceived) == false)
+					return;
 			}
 
-			if (!hasOnline || message.IsFiltered || message.State != null)
+			if (message.IsFiltered || message.State != null)
 				return;
+
+			if (NewMarketDepth is not null || NewMarketDepths is not null || MarketDepthChanged is not null || MarketDepthsChanged is not null)
+			{
+				security ??= EnsureGetSecurity(message);
+				md ??= message.ToMarketDepth(EntityFactory.CreateMarketDepth(security));
+
+				NewMarketDepth?.Invoke(md);
+				NewMarketDepths?.Invoke(new[] { md });
+				MarketDepthChanged?.Invoke(md);
+				MarketDepthsChanged?.Invoke(new[] { md });
+			}
 
 			var bestBid = message.GetBestBid();
 			var bestAsk = message.GetBestAsk();
 			var fromLevel1 = message.BuildFrom == DataType.Level1;
 			var time = message.ServerTime;
 
-			if (!fromLevel1 && !Adapter.Level1Extend && (bestBid != null || bestAsk != null))
+			if (ValuesChanged is not null && !fromLevel1 && !Adapter.Level1Extend && (bestBid != null || bestAsk != null))
 			{
+				security ??= EnsureGetSecurity(message);
+
 				var info = _entityCache.GetSecurityValues(security, time);
 
 				info.ClearBestQuotes(time);
@@ -1240,6 +1212,8 @@ namespace StockSharp.Algo
 
 			if (UpdateSecurityLastQuotes)
 			{
+				security ??= EnsureGetSecurity(message);
+
 				var updated = false;
 
 				if (!fromLevel1 || bestBid != null)
@@ -1323,101 +1297,115 @@ namespace StockSharp.Algo
 			if (RaiseReceived(message, message, OrderLogReceived) == false)
 				return;
 
-			var security = EnsureGetSecurity(message);
+			OrderLogItem entity = null;
 
-			var trade = (message.TradeId != null || !message.TradeStringId.IsEmpty())
-				? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId ?? string.Empty)
-				: null;
+			OrderLogItem CreateEntity()
+			{
+				var security = EnsureGetSecurity(message);
 
-			var logItem = message.ToOrderLog(EntityFactory.CreateOrderLogItem(new() { Security = security }, trade));
+				var trade = (message.TradeId != null || !message.TradeStringId.IsEmpty())
+					? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId ?? string.Empty)
+					: null;
 
-			if (RaiseReceived(logItem, message, OrderLogItemReceived) == false)
-				return;
+				return message.ToOrderLog(EntityFactory.CreateOrderLogItem(new() { Security = security }, trade));
+			}
 
-			RaiseNewOrderLogItem(logItem);
+			if (OrderLogItemReceived is not null)
+				RaiseReceived(entity = CreateEntity(), message, OrderLogItemReceived);
+
+			if (NewOrderLogItem is not null || NewOrderLogItems is not null)
+			{
+				entity ??= CreateEntity();
+
+				NewOrderLogItem?.Invoke(entity);
+				NewOrderLogItems?.Invoke(new[] { entity });
+			}
 		}
-
-		/// <summary>
-		/// Disable convert <see cref="ExecutionMessage"/> to <see cref="Trade"/>.
-		/// </summary>
-		public bool DisableTicks { get; set; }
 
 		private void ProcessTradeMessage(ExecutionMessage message)
 		{
-			if (DisableTicks)
+			if (RaiseReceived(message, message, TickTradeReceived) == false)
 				return;
 
-			var security = EnsureGetSecurity(message);
+			Security security = null;
 
-			var tuple = _entityCache.ProcessTradeMessage(security, message);
-
-			if (RaiseReceived(tuple.Item1, message, TickTradeReceived) == false)
-				return;
-
-			var time = message.ServerTime;
-			var info = _entityCache.GetSecurityValues(security, time);
-
-			info.ClearLastTrade(time);
-
-			var price = message.TradePrice ?? 0;
-
-			var changes = new List<KeyValuePair<Level1Fields, object>>(4)
+			if (NewTrade is not null || NewTrades is not null)
 			{
-				new (Level1Fields.LastTradeTime, message.ServerTime),
-				new (Level1Fields.LastTradePrice, price)
-			};
+				security = EnsureGetSecurity(message);
 
-			info.SetValue(time, Level1Fields.LastTradeTime, message.ServerTime);
-			info.SetValue(time, Level1Fields.LastTradePrice, price);
+				var trade = message.ToTrade(EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId));
+				trade.LocalTime = message.LocalTime;
+				trade.ServerTime = message.ServerTime;
 
-			if (message.IsSystem != null)
-			{
-				info.SetValue(time, Level1Fields.IsSystem, message.IsSystem.Value);
-				changes.Add(new (Level1Fields.IsSystem, message.IsSystem.Value));
+				NewTrade?.Invoke(trade);
+				NewTrades?.Invoke(new[] { trade });
 			}
 
-			if (message.TradeId != null)
+			if (ValuesChanged is not null)
 			{
-				info.SetValue(time, Level1Fields.LastTradeId, message.TradeId.Value);
-				changes.Add(new (Level1Fields.LastTradeId, message.TradeId.Value));
+				security ??= EnsureGetSecurity(message);
+
+				var time = message.ServerTime;
+				var info = _entityCache.GetSecurityValues(security, time);
+
+				info.ClearLastTrade(time);
+
+				var price = message.TradePrice ?? 0;
+
+				var changes = new List<KeyValuePair<Level1Fields, object>>(4)
+				{
+					new (Level1Fields.LastTradeTime, message.ServerTime),
+					new (Level1Fields.LastTradePrice, price)
+				};
+
+				info.SetValue(time, Level1Fields.LastTradeTime, message.ServerTime);
+				info.SetValue(time, Level1Fields.LastTradePrice, price);
+
+				if (message.IsSystem != null)
+				{
+					info.SetValue(time, Level1Fields.IsSystem, message.IsSystem.Value);
+					changes.Add(new(Level1Fields.IsSystem, message.IsSystem.Value));
+				}
+
+				if (message.TradeId != null)
+				{
+					info.SetValue(time, Level1Fields.LastTradeId, message.TradeId.Value);
+					changes.Add(new(Level1Fields.LastTradeId, message.TradeId.Value));
+				}
+
+				if (!message.TradeStringId.IsEmpty())
+				{
+					info.SetValue(time, Level1Fields.LastTradeStringId, message.TradeStringId);
+					changes.Add(new(Level1Fields.LastTradeStringId, message.TradeStringId));
+				}
+
+				if (message.TradeVolume != null)
+				{
+					info.SetValue(time, Level1Fields.LastTradeVolume, message.TradeVolume.Value);
+					changes.Add(new(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
+				}
+
+				if (message.OriginSide != null)
+				{
+					info.SetValue(time, Level1Fields.LastTradeOrigin, message.OriginSide.Value);
+					changes.Add(new(Level1Fields.LastTradeOrigin, message.OriginSide.Value));
+				}
+
+				if (message.IsUpTick != null)
+				{
+					info.SetValue(time, Level1Fields.LastTradeUpDown, message.IsUpTick.Value);
+					changes.Add(new(Level1Fields.LastTradeUpDown, message.IsUpTick.Value));
+				}
+
+				RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 			}
 
-			if (!message.TradeStringId.IsEmpty())
+			if (UpdateSecurityLastQuotes)
 			{
-				info.SetValue(time, Level1Fields.LastTradeStringId, message.TradeStringId);
-				changes.Add(new (Level1Fields.LastTradeStringId, message.TradeStringId));
+				security.LastTick = message;
+
+				RaiseSecurityChanged(security);
 			}
-
-			if (message.TradeVolume != null)
-			{
-				info.SetValue(time, Level1Fields.LastTradeVolume, message.TradeVolume.Value);
-				changes.Add(new (Level1Fields.LastTradeVolume, message.TradeVolume.Value));
-			}
-
-			if (message.OriginSide != null)
-			{
-				info.SetValue(time, Level1Fields.LastTradeOrigin, message.OriginSide.Value);
-				changes.Add(new (Level1Fields.LastTradeOrigin, message.OriginSide.Value));
-			}
-
-			if (message.IsUpTick != null)
-			{
-				info.SetValue(time, Level1Fields.LastTradeUpDown, message.IsUpTick.Value);
-				changes.Add(new (Level1Fields.LastTradeUpDown, message.IsUpTick.Value));
-			}
-
-			if (tuple.Item2)
-				RaiseNewTrade(tuple.Item1);
-
-			RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
-
-			if (!UpdateSecurityLastQuotes)
-				return;
-
-			security.LastTrade = tuple.Item1;
-			security.LastChangeTime = tuple.Item1.ServerTime;
-
-			RaiseSecurityChanged(security);
 		}
 
 		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId/*, bool isStatusRequest*/)

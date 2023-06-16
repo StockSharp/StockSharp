@@ -21,7 +21,8 @@
 			protected MarketDepth Depth { get; }
 		}
 
-		private sealed class MarketDepthChangedRule : MarketDepthRule
+		[Obsolete]
+		private class MarketDepthChangedRule : MarketDepthRule
 		{
 			private readonly Func<MarketDepth, bool> _condition;
 			private readonly IMarketDataProvider _provider;
@@ -39,9 +40,7 @@
 				Name = LocalizedStrings.Str1056 + " " + depth.Security;
 
 				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-#pragma warning disable CS0618 // Type or member is obsolete
 				_provider.MarketDepthChanged += ProviderOnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			private void ProviderOnMarketDepthChanged(MarketDepth depth)
@@ -58,9 +57,7 @@
 
 			protected override void DisposeManaged()
 			{
-#pragma warning disable CS0618 // Type or member is obsolete
 				_provider.MarketDepthChanged -= ProviderOnMarketDepthChanged;
-#pragma warning restore CS0618 // Type or member is obsolete
 
 				base.DisposeManaged();
 			}
@@ -72,6 +69,7 @@
 		/// <param name="depth">The order book to be traced for change event.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenChanged(this MarketDepth depth, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider);
@@ -84,6 +82,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			var pair = depth.BestPair;
@@ -101,6 +100,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			var pair = depth.BestPair;
@@ -118,6 +118,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, false))
@@ -133,6 +134,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, true))
@@ -148,6 +150,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, false))
@@ -163,6 +166,7 @@
 		/// <param name="price">The shift value.</param>
 		/// <param name="provider">The market data provider.</param>
 		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price, IMarketDataProvider provider)
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, true))
@@ -209,6 +213,41 @@
 					return quote != null && quote.Value.Price > finishPrice;
 				};
 			}
+		}
+
+		[Obsolete]
+		private class MarketDepthReceivedRule : SubscriptionRule<MarketDepth>
+		{
+			public MarketDepthReceivedRule(Subscription subscription, ISubscriptionProvider provider)
+				: base(subscription, provider)
+			{
+				Name = $"{subscription.TransactionId}/{subscription.DataType} {nameof(ISubscriptionProvider.MarketDepthReceived)}";
+				Provider.MarketDepthReceived += ProviderOnMarketDepthReceived;
+			}
+
+			private void ProviderOnMarketDepthReceived(Subscription subscription, MarketDepth depth)
+			{
+				if (Subscription == subscription)
+					Activate(depth);
+			}
+
+			protected override void DisposeManaged()
+			{
+				Provider.MarketDepthReceived -= ProviderOnMarketDepthReceived;
+				base.DisposeManaged();
+			}
+		}
+
+		/// <summary>
+		/// To create a rule for the event of <see cref="ISubscriptionProvider.MarketDepthReceived"/>.
+		/// </summary>
+		/// <param name="subscription">Subscription.</param>
+		/// <param name="provider">Subscription provider.</param>
+		/// <returns>Rule.</returns>
+		[Obsolete("Use WhenOrderBookReceived method.")]
+		public static MarketRule<Subscription, MarketDepth> WhenMarketDepthReceived(this Subscription subscription, ISubscriptionProvider provider)
+		{
+			return new MarketDepthReceivedRule(subscription, provider);
 		}
 	}
 }

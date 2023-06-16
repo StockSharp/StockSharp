@@ -85,7 +85,7 @@ namespace StockSharp.Algo
 						_currentCandle = message; // Subscription.DisableEntity is true
 				}
 				else
-					_currentCandle = Subscription.DisableEntity ? message : message.ToCandle(Security);
+					_currentCandle = message;
 
 				candle = _currentCandle;
 				return true;

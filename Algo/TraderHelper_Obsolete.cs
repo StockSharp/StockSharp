@@ -1091,7 +1091,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="IMarketDataProvider.FilteredMarketDepthChanged"/>.
+		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="ISubscriptionProvider.OrderBookReceived"/>.
 		/// </summary>
 		/// <param name="provider">Subscription provider.</param>
 		/// <param name="security">The instrument by which quotes getting should be started.</param>

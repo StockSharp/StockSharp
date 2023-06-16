@@ -96,7 +96,6 @@ namespace SampleHistoryTesting
 
 			var subscription = new Subscription(CandleType, Security)
 			{
-				DisableEntity = true,
 				MarketData =
 				{
 					IsFinishedOnly = true,

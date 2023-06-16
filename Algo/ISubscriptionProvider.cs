@@ -54,11 +54,13 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Order book received.
 		/// </summary>
+		[Obsolete("Use OrderBookReceived event.")]
 		event Action<Subscription, MarketDepth> MarketDepthReceived;
 
 		/// <summary>
 		/// Order log received.
 		/// </summary>
+		[Obsolete("Use OrderLogReceived event.")]
 		event Action<Subscription, OrderLogItem> OrderLogItemReceived;
 
 		/// <summary>

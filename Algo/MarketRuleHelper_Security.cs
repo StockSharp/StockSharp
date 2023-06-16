@@ -193,19 +193,13 @@
 
 		private sealed class SecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
-			private readonly bool _isFiltered;
-
-			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider, bool isFiltered)
+			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
-				_isFiltered = isFiltered;
-				Name = LocalizedStrings.Str1050 + (_isFiltered ? " (filtered)" : string.Empty) + " " + security;
+				Name = LocalizedStrings.Str1050 + " " + security;
 
 #pragma warning disable CS0618 // Type or member is obsolete
-				if (_isFiltered)
-					Provider.FilteredMarketDepthChanged += OnMarketDepthChanged;
-				else
-					Provider.MarketDepthChanged += OnMarketDepthChanged;
+				Provider.MarketDepthChanged += OnMarketDepthChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
 			}
 
@@ -220,10 +214,7 @@
 			protected override void DisposeManaged()
 			{
 #pragma warning disable CS0618 // Type or member is obsolete
-				if (_isFiltered)
-					Provider.FilteredMarketDepthChanged -= OnMarketDepthChanged;
-				else
-					Provider.MarketDepthChanged -= OnMarketDepthChanged;
+				Provider.MarketDepthChanged -= OnMarketDepthChanged;
 #pragma warning restore CS0618 // Type or member is obsolete
 
 				base.DisposeManaged();
@@ -304,18 +295,7 @@
 		/// <returns>Rule.</returns>
 		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this Security security, IMarketDataProvider provider)
 		{
-			return new SecurityMarketDepthChangedRule(security, provider, false);
-		}
-
-		/// <summary>
-		/// To create a rule for the event of order book change by instrument.
-		/// </summary>
-		/// <param name="security">The instrument to be traced for the event of order book change by instrument.</param>
-		/// <param name="provider">The market data provider.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Security, MarketDepth> WhenFilteredMarketDepthChanged(this Security security, IMarketDataProvider provider)
-		{
-			return new SecurityMarketDepthChangedRule(security, provider, true);
+			return new SecurityMarketDepthChangedRule(security, provider);
 		}
 
 		/// <summary>
