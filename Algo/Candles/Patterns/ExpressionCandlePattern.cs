@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+
 using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
 using Ecng.Serialization;
+
 using StockSharp.Localization;
 using StockSharp.Messages;
 

@@ -351,24 +351,6 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// To create ticks from candles.
-		/// </summary>
-		/// <param name="candles">Candles.</param>
-		/// <returns>Trades.</returns>
-		public static IEnumerable<Trade> ToTrades(this IEnumerable<Candle> candles)
-		{
-			var candle = candles.FirstOrDefault();
-
-			if (candle == null)
-				return Enumerable.Empty<Trade>();
-
-			return candles
-				.ToMessages<Candle, CandleMessage>()
-				.ToTrades(candle.Security.VolumeStep ?? 1m)
-				.ToEntities<ExecutionMessage, Trade>(candle.Security);
-		}
-
-		/// <summary>
 		/// To create tick trades from candles.
 		/// </summary>
 		/// <param name="candles">Candles.</param>
@@ -378,6 +360,305 @@ namespace StockSharp.Algo.Candles
 			where TCandle : ICandleMessage
 		{
 			return new TradeEnumerable<TCandle>(candles, volumeStep);
+		}
+
+		/// <summary>
+		/// To get candle time frames relatively to the exchange working hours.
+		/// </summary>
+		/// <param name="timeFrame">The time frame for which you need to get time range.</param>
+		/// <param name="currentTime">The current time within the range of time frames.</param>
+		/// <param name="board">The information about the board from which <see cref="ExchangeBoard.WorkingTime"/> working hours will be taken.</param>
+		/// <returns>The candle time frames.</returns>
+		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			return timeFrame.GetCandleBounds(currentTime, board.TimeZone, board.WorkingTime);
+		}
+
+		/// <summary>
+		/// To get the number of time frames within the specified time range.
+		/// </summary>
+		/// <param name="range">The specified time range for which you need to get the number of time frames.</param>
+		/// <param name="timeFrame">The time frame size.</param>
+		/// <param name="board"><see cref="ExchangeBoard"/>.</param>
+		/// <returns>The received number of time frames.</returns>
+		public static long GetTimeFrameCount(this Range<DateTimeOffset> range, TimeSpan timeFrame, ExchangeBoard board)
+		{
+			if (board is null)
+				throw new ArgumentNullException(nameof(board));
+
+			return range.GetTimeFrameCount(timeFrame, board.WorkingTime, board.TimeZone);
+		}
+
+		/// <summary>
+		/// The total volume of bids in the <see cref="VolumeProfileBuilder"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of bids.</returns>
+		public static decimal TotalBuyVolume(this VolumeProfileBuilder volumeProfile)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			return volumeProfile.PriceLevels.Select(p => p.BuyVolume).Sum();
+		}
+
+		/// <summary>
+		/// The total volume of asks in the <see cref="VolumeProfileBuilder"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of asks.</returns>
+		public static decimal TotalSellVolume(this VolumeProfileBuilder volumeProfile)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			return volumeProfile.PriceLevels.Select(p => p.SellVolume).Sum();
+		}
+
+		/// <summary>
+		/// The total number of bids in the <see cref="VolumeProfileBuilder"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total number of bids.</returns>
+		public static decimal TotalBuyCount(this VolumeProfileBuilder volumeProfile)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			return volumeProfile.PriceLevels.Select(p => p.BuyCount).Sum();
+		}
+
+		/// <summary>
+		/// The total number of asks in the <see cref="VolumeProfileBuilder"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total number of asks.</returns>
+		public static decimal TotalSellCount(this VolumeProfileBuilder volumeProfile)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			return volumeProfile.PriceLevels.Select(p => p.SellCount).Sum();
+		}
+
+		/// <summary>
+		/// POC (Point Of Control) returns <see cref="CandlePriceLevel"/> which had the maximum volume.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The <see cref="CandlePriceLevel"/> which had the maximum volume.</returns>
+		public static CandlePriceLevel PoC(this VolumeProfileBuilder volumeProfile)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			var max = volumeProfile.PriceLevels.Select(p => p.BuyVolume + p.SellVolume).Max();
+			return volumeProfile.PriceLevels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == max);
+		}
+
+		/// <summary>
+		/// The total volume of bids which was above <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of bids.</returns>
+		public static decimal BuyVolAbovePoC(this VolumeProfileBuilder volumeProfile)
+		{
+			var poc = volumeProfile.PoC();
+			return volumeProfile.PriceLevels.Where(p => p.Price > poc.Price).Select(p => p.BuyVolume).Sum();
+		}
+
+		/// <summary>
+		/// The total volume of bids which was below <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of bids.</returns>
+		public static decimal BuyVolBelowPoC(this VolumeProfileBuilder volumeProfile)
+		{
+			var poc = volumeProfile.PoC();
+			return volumeProfile.PriceLevels.Where(p => p.Price < poc.Price).Select(p => p.BuyVolume).Sum();
+		}
+
+		/// <summary>
+		/// The total volume of asks which was above <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of asks.</returns>
+		public static decimal SellVolAbovePoC(this VolumeProfileBuilder volumeProfile)
+		{
+			var poc = volumeProfile.PoC();
+			return volumeProfile.PriceLevels.Where(p => p.Price > poc.Price).Select(p => p.SellVolume).Sum();
+		}
+
+		/// <summary>
+		/// The total volume of asks which was below <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of asks.</returns>
+		public static decimal SellVolBelowPoC(this VolumeProfileBuilder volumeProfile)
+		{
+			var poc = volumeProfile.PoC();
+			return volumeProfile.PriceLevels.Where(p => p.Price < poc.Price).Select(p => p.SellVolume).Sum();
+		}
+
+		/// <summary>
+		/// The total volume which was above <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Total volume.</returns>
+		public static decimal VolumeAbovePoC(this VolumeProfileBuilder volumeProfile)
+		{
+			return volumeProfile.BuyVolAbovePoC() + volumeProfile.SellVolAbovePoC();
+		}
+
+		/// <summary>
+		/// The total volume which was below <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Total volume.</returns>
+		public static decimal VolumeBelowPoC(this VolumeProfileBuilder volumeProfile)
+		{
+			return volumeProfile.BuyVolBelowPoC() + volumeProfile.SellVolBelowPoC();
+		}
+
+		/// <summary>
+		/// The difference between <see cref="TotalBuyVolume"/> and <see cref="TotalSellVolume"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Delta.</returns>
+		public static decimal Delta(this VolumeProfileBuilder volumeProfile)
+		{
+			return volumeProfile.TotalBuyVolume() - volumeProfile.TotalSellVolume();
+		}
+
+		/// <summary>
+		/// It returns the price level at which the maximum <see cref="Delta"/> is passed.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns><see cref="CandlePriceLevel"/>.</returns>
+		public static CandlePriceLevel PriceLevelOfMaxDelta(this VolumeProfileBuilder volumeProfile)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			var delta = volumeProfile.PriceLevels.Select(p => p.BuyVolume - p.SellVolume).Max();
+			return volumeProfile.PriceLevels.FirstOrDefault(p => p.BuyVolume - p.SellVolume == delta);
+		}
+
+		/// <summary>
+		/// It returns the price level at which the minimum <see cref="Delta"/> is passed.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The price level.</returns>
+		public static CandlePriceLevel PriceLevelOfMinDelta(this VolumeProfileBuilder volumeProfile)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			var delta = volumeProfile.PriceLevels.Select(p => p.BuyVolume - p.SellVolume).Min();
+			return volumeProfile.PriceLevels.FirstOrDefault(p => p.BuyVolume - p.SellVolume == delta);
+		}
+
+		/// <summary>
+		/// The total Delta which was above <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Delta.</returns>
+		public static decimal DeltaAbovePoC(this VolumeProfileBuilder volumeProfile)
+		{
+			return volumeProfile.BuyVolAbovePoC() - volumeProfile.SellVolAbovePoC();
+		}
+
+		/// <summary>
+		/// The total Delta which was below <see cref="PoC"/>.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Delta.</returns>
+		public static decimal DeltaBelowPoC(this VolumeProfileBuilder volumeProfile)
+		{
+			return volumeProfile.BuyVolBelowPoC() - volumeProfile.SellVolBelowPoC();
+		}
+
+		/// <summary>
+		/// To update the profile with new value.
+		/// </summary>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <param name="transform">The data source transformation.</param>
+		public static void Update(this VolumeProfileBuilder volumeProfile, ICandleBuilderValueTransform transform)
+		{
+			if (volumeProfile == null)
+				throw new ArgumentNullException(nameof(volumeProfile));
+
+			if (transform == null)
+				throw new ArgumentNullException(nameof(transform));
+
+			volumeProfile.Update(transform.Price, transform.Volume, transform.Side);
+		}
+
+		/// <summary>
+		/// To get the candle middle price.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <returns>The candle length.</returns>
+		public static decimal GetMiddlePrice(this ICandleMessage candle)
+		{
+			if (candle is null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.LowPrice + candle.GetLength() / 2;
+		}
+
+		/// <summary>
+		/// To get the candle length.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <returns>The candle length.</returns>
+		public static decimal GetLength(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.HighPrice - candle.LowPrice;
+		}
+
+		/// <summary>
+		/// To get the candle body.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get the body.</param>
+		/// <returns>The candle body.</returns>
+		public static decimal GetBody(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return (candle.OpenPrice - candle.ClosePrice).Abs();
+		}
+
+		/// <summary>
+		/// To get the candle upper shadow length.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get the upper shadow length.</param>
+		/// <returns>The candle upper shadow length. If 0, there is no shadow.</returns>
+		public static decimal GetTopShadow(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.HighPrice - candle.OpenPrice.Max(candle.ClosePrice);
+		}
+
+		/// <summary>
+		/// To get the candle lower shadow length.
+		/// </summary>
+		/// <param name="candle">The candle for which you need to get the lower shadow length.</param>
+		/// <returns>The candle lower shadow length. If 0, there is no shadow.</returns>
+		public static decimal GetBottomShadow(this ICandleMessage candle)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			return candle.OpenPrice.Min(candle.ClosePrice) - candle.LowPrice;
 		}
 
 		/// <summary>
@@ -406,7 +687,7 @@ namespace StockSharp.Algo.Candles
 				candleMsg.OpenPrice == candleMsg.LowPrice ||
 				candleMsg.TotalVolume == 1)
 			{
-				// –≤—Å–µ —Ü–µ–Ω—ã –≤ —Å–≤–µ—á–µ —Ä–∞–≤–Ω—ã –∏–ª–∏ –æ–±—ä–µ–º —Ä–∞–≤–µ–Ω 1 - —Å—á–∏—Ç–∞–µ–º –µ–µ –∑–∞ –æ–¥–∏–Ω —Ç–∏–∫
+				// ‚ÒÂ ˆÂÌ˚ ‚ Ò‚Â˜Â ‡‚Ì˚ ËÎË Ó·˙ÂÏ ‡‚ÂÌ 1 - Ò˜ËÚ‡ÂÏ ÂÂ Á‡ Ó‰ËÌ ÚËÍ
 				ticks[0] = (Sides.Buy, candleMsg.OpenPrice, candleMsg.TotalVolume);
 
 				ticks[1] = ticks[2] = ticks[3] = default;
@@ -520,7 +801,7 @@ namespace StockSharp.Algo.Candles
 
 						return true;
 					}
-					
+
 					Current = null;
 					return false;
 				}
@@ -571,13 +852,29 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
+		/// <see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		/// <param name="candle"><see cref="ICandleMessage"/></param>
+		/// <returns><see cref="ICandleMessage.PriceLevels"/> with minimum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
+		public static CandlePriceLevel? MinPriceLevel(this ICandleMessage candle)
+			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderBy(l => l.TotalVolume).FirstOr();
+
+		/// <summary>
+		/// <see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.
+		/// </summary>
+		/// <param name="candle"><see cref="ICandleMessage"/></param>
+		/// <returns><see cref="ICandleMessage.PriceLevels"/> with maximum <see cref="CandlePriceLevel.TotalVolume"/>.</returns>
+		public static CandlePriceLevel? MaxPriceLevel(this ICandleMessage candle)
+			=> candle.CheckOnNull(nameof(candle)).PriceLevels?.OrderByDescending(l => l.TotalVolume).FirstOr();
+
+		/// <summary>
 		/// To get candle time frames relatively to the exchange working hours.
 		/// </summary>
 		/// <param name="timeFrame">The time frame for which you need to get time range.</param>
 		/// <param name="currentTime">The current time within the range of time frames.</param>
-		/// <param name="board">The information about the board from which <see cref="ExchangeBoard.WorkingTime"/> working hours will be taken.</param>
+		/// <param name="board">The information about the board from which <see cref="BoardMessage.WorkingTime"/> working hours will be taken.</param>
 		/// <returns>The candle time frames.</returns>
-		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board)
+		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, BoardMessage board)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
@@ -590,9 +887,9 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="range">The specified time range for which you need to get the number of time frames.</param>
 		/// <param name="timeFrame">The time frame size.</param>
-		/// <param name="board"><see cref="ExchangeBoard"/>.</param>
+		/// <param name="board"><see cref="BoardMessage"/>.</param>
 		/// <returns>The received number of time frames.</returns>
-		public static long GetTimeFrameCount(this Range<DateTimeOffset> range, TimeSpan timeFrame, ExchangeBoard board)
+		public static long GetTimeFrameCount(this Range<DateTimeOffset> range, TimeSpan timeFrame, BoardMessage board)
 		{
 			if (board is null)
 				throw new ArgumentNullException(nameof(board));
@@ -641,7 +938,7 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentNullException(nameof(compressor));
 
 			CandleMessage lastActiveCandle = null;
-			
+
 			foreach (var message in source)
 			{
 				foreach (var candleMessage in compressor.Process(message))

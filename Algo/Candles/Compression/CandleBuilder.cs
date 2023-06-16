@@ -65,6 +65,21 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
+		/// <summary>
+		/// Get time zone info.
+		/// </summary>
+		/// <param name="subscription"><see cref="ICandleBuilderSubscription"/></param>
+		/// <returns>Info.</returns>
+		protected (TimeZoneInfo zone, WorkingTime time) GetTimeZone(ICandleBuilderSubscription subscription)
+		{
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
+
+			return (board.TimeZone, board.WorkingTime);
+		}
+
 		private bool IsTimeValid(MarketDataMessage message, DateTimeOffset time)
 		{
 			if (!message.IsRegularTradingHours)
@@ -522,8 +537,8 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var timeFrame = subscription.Message.GetTimeFrame();
 
-			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
-			var bounds = timeFrame.GetCandleBounds(transform.Time, board);
+			var (zone, time) = GetTimeZone(subscription);
+			var bounds = timeFrame.GetCandleBounds(transform.Time, zone, time);
 
 			if (transform.Time < bounds.Min)
 				return null;
@@ -1040,8 +1055,8 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var timeFrame = subscription.Message.GetTimeFrame();
 
-			var board = subscription.Message.IsRegularTradingHours ? ExchangeInfoProvider.GetOrCreateBoard(subscription.Message.SecurityId.BoardCode) : ExchangeBoard.Associated;
-			var bounds = timeFrame.GetCandleBounds(transform.Time, board);
+			var (zone, time) = GetTimeZone(subscription);
+			var bounds = timeFrame.GetCandleBounds(transform.Time, zone, time);
 
 			if (transform.Time < bounds.Min)
 				return null;
