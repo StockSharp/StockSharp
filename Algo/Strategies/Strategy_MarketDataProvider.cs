@@ -11,7 +11,11 @@ namespace StockSharp.Algo.Strategies
 		private IMarketDataProvider MarketDataProvider => SafeGetConnector();
 
 		/// <inheritdoc />
-		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
+		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged
+		{
+			add => MarketDataProvider.ValuesChanged += value;
+			remove => MarketDataProvider.ValuesChanged -= value;
+		}
 
 		/// <inheritdoc />
 		public object GetSecurityValue(Security security, Level1Fields field)

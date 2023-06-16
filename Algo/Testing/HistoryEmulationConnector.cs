@@ -149,6 +149,8 @@ namespace StockSharp.Algo.Testing
 			Disconnected += OnDisconnected;
 
 			SupportFilteredMarketDepth = false;
+			UpdateSecurityLastQuotes = false;
+			UpdateSecurityByLevel1 = false;
 		}
 
 		/// <inheritdoc />

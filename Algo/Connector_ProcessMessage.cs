@@ -953,22 +953,28 @@ namespace StockSharp.Algo
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
 		{
-			var security = EnsureGetSecurity(message);
+			Security security = null;
 
 			if (RaiseReceived(message, message, RaiseLevel1Received, out var anyCanOnline) == false)
 			{
+				security = EnsureGetSecurity(message);
+				
 				if (anyCanOnline != true || _entityCache.HasLevel1Info(security))
 					return;
 			}
 
 			if (UpdateSecurityByLevel1)
 			{
+				security ??= EnsureGetSecurity(message);
+
 				security.ApplyChanges(message);
 				RaiseSecurityChanged(security);
 			}
 
 			if (ValuesChanged is not null)
 			{
+				security ??= EnsureGetSecurity(message);
+
 				var time = message.ServerTime;
 				var info = _entityCache.GetSecurityValues(security, time);
 
@@ -1401,6 +1407,8 @@ namespace StockSharp.Algo
 
 			if (UpdateSecurityLastQuotes)
 			{
+				security ??= EnsureGetSecurity(message);
+
 				security.LastTick = message;
 
 				RaiseSecurityChanged(security);

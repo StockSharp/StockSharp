@@ -475,7 +475,6 @@ namespace StockSharp.Algo.Strategies
 					con.OrderEdited               -= OnConnectorOrderEdited;
 					con.OrderEditFailed           -= OnConnectorOrderEditFailed;
 					con.NewMessage                -= OnConnectorNewMessage;
-					con.ValuesChanged             -= OnConnectorValuesChanged;
 					isp.PositionReceived          -= OnConnectorPositionReceived;
 					isp.Level1Received            -= OnConnectorLevel1Received;
 					isp.OrderBookReceived         -= OnConnectorOrderBookReceived;
@@ -512,7 +511,6 @@ namespace StockSharp.Algo.Strategies
 					con.OrderEdited               += OnConnectorOrderEdited;
 					con.OrderEditFailed           += OnConnectorOrderEditFailed;
 					con.NewMessage                += OnConnectorNewMessage;
-					con.ValuesChanged             += OnConnectorValuesChanged;
 					isp.PositionReceived          += OnConnectorPositionReceived;
 					isp.Level1Received            += OnConnectorLevel1Received;
 					isp.OrderBookReceived         += OnConnectorOrderBookReceived;
@@ -2620,14 +2618,6 @@ namespace StockSharp.Algo.Strategies
 				return;
 
 			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
-		}
-
-		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
-		{
-			if(IsDisposeStarted)
-				return;
-
-			ValuesChanged?.Invoke(security, changes, serverTime, localTime);
 		}
 
 		private void UpdatePnLManager(Security security)
