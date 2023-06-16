@@ -67,6 +67,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version67 = new(6, 7);
 		public static readonly Version Version68 = new(6, 8);
 		public static readonly Version Version69 = new(6, 9);
+		public static readonly Version Version70 = new(7, 0);
 	}
 
 	abstract class BinaryMetaInfo : MetaInfo
