@@ -114,11 +114,8 @@ namespace StockSharp.Algo.Strategies
 				item.Parent = _parent;
 				item.Connector = _parent.Connector;
 
-				if (item.Portfolio == null)
-					item.Portfolio = _parent.Portfolio;
-
-				if (item.Security == null)
-					item.Security = _parent.Security;
+				item.Portfolio ??= _parent.Portfolio;
+				item.Security ??= _parent.Security;
 
 				item.OrderRegistering += _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered += _parent.ProcessOrder;
@@ -282,10 +279,7 @@ namespace StockSharp.Algo.Strategies
 
 			private void OnChanged(IIndicatorValue input, IIndicatorValue result)
 			{
-				var indicator = result.Indicator;
-
-				if (indicator is null)
-					throw new InvalidOperationException("Indicator is not present.");
+				var indicator = result.Indicator ?? throw new InvalidOperationException("Indicator is not present.");
 
 				if (!indicator.IsFormed)
 					return;
@@ -619,8 +613,7 @@ namespace StockSharp.Algo.Strategies
 
 				foreach (var strategy in ChildStrategies)
 				{
-					if (strategy.Portfolio == null)
-						strategy.Portfolio = value;
+					strategy.Portfolio ??= value;
 				}
 
 				RaiseParametersChanged();
@@ -652,8 +645,7 @@ namespace StockSharp.Algo.Strategies
 
 				foreach (var strategy in ChildStrategies)
 				{
-					if (strategy.Security == null)
-						strategy.Security = value;
+					strategy.Security ??= value;
 				}
 
 				RaiseParametersChanged();
@@ -1066,22 +1058,13 @@ namespace StockSharp.Algo.Strategies
 
 		private void LogProcessState(ProcessStates state)
 		{
-			string stateStr;
-
-			switch (state)
+			var stateStr = state switch
 			{
-				case ProcessStates.Stopped:
-					stateStr = LocalizedStrings.Str1371;
-					break;
-				case ProcessStates.Stopping:
-					stateStr = LocalizedStrings.Str1372;
-					break;
-				case ProcessStates.Started:
-					stateStr = LocalizedStrings.Str1373;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219);
-			}
+				ProcessStates.Stopped => LocalizedStrings.Str1371,
+				ProcessStates.Stopping => LocalizedStrings.Str1372,
+				ProcessStates.Started => LocalizedStrings.Str1373,
+				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219),
+			};
 
 			var ps = ParentStrategy;
 			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, ps != null ? ps.ChildStrategies.Count : -1, Position);
@@ -1723,11 +1706,8 @@ namespace StockSharp.Algo.Strategies
 			this.AddInfoLog(LocalizedStrings.Str1382Params,
 				order.Type, order.Side, order.Price, order.Volume, order.Comment, order.GetHashCode());
 
-			if (order.Security == null)
-				order.Security = Security;
-
-			if (order.Portfolio == null)
-				order.Portfolio = Portfolio;
+			order.Security ??= Security;
+			order.Portfolio ??= Portfolio;
 
 			if (order.Comment.IsEmpty())
 			{
@@ -2533,8 +2513,7 @@ namespace StockSharp.Algo.Strategies
 
 			_lastPnlRefreshTime = msgTime.Value;
 
-			if (_boardMsg is null)
-				_boardMsg = Security?.Board?.ToMessage() ?? Portfolio?.Board?.ToMessage();
+			_boardMsg ??= Security?.Board?.ToMessage() ?? Portfolio?.Board?.ToMessage();
 
 			if (_boardMsg is not null)
 			{
@@ -2640,7 +2619,6 @@ namespace StockSharp.Algo.Strategies
 			if(IsDisposeStarted)
 				return;
 
-
 			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
 		}
 
@@ -2689,8 +2667,7 @@ namespace StockSharp.Algo.Strategies
 
 			if (trade.Commission != null)
 			{
-				if (Commission == null)
-					Commission = 0;
+				Commission ??= 0;
 
 				Commission += trade.Commission.Value;
 				isComChanged = true;
@@ -2711,8 +2688,7 @@ namespace StockSharp.Algo.Strategies
 
 			if (trade.Slippage != null)
 			{
-				if (Slippage == null)
-					Slippage = 0;
+				Slippage ??= 0;
 
 				Slippage += trade.Slippage.Value;
 				isSlipChanged = true;
@@ -3128,10 +3104,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					var orderId = parameters[nameof(Order.Id)].To<long>();
 
-					// TODO
-#pragma warning disable 618
 					CancelOrder(Orders.First(o => o.Id == orderId));
-#pragma warning restore 618
 
 					break;
 				}
