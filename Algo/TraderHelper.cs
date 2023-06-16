@@ -1183,10 +1183,12 @@ namespace StockSharp.Algo
 
 			var lastTrade = new Trade { Security = security };
 
-			if (security.LastTrade != null)
+			var lastTick = security.LastTick;
+
+			if (lastTick is not null)
 			{
-				lastTrade.Price = security.LastTrade.Price;
-				lastTrade.Volume = security.LastTrade.Volume;
+				lastTrade.Price = lastTick.Price;
+				lastTrade.Volume = lastTick.Volume;
 			}
 
 			foreach (var pair in changes)
@@ -1404,7 +1406,7 @@ namespace StockSharp.Algo
 
 				lastTrade.LocalTime = localTime;
 
-				security.LastTrade = lastTrade;
+				security.LastTick = lastTrade;
 			}
 
 			security.LocalTime = localTime;

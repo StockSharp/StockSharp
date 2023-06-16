@@ -393,7 +393,7 @@ namespace StockSharp.BusinessEntities
 		void UnRegisterTrades(Security security);
 
 		/// <summary>
-		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
+		/// To start getting new information (for example, <see cref="Security.LastTick"/> or <see cref="Security.BestBid"/>) by the instrument.
 		/// </summary>
 		/// <param name="security">The instrument by which new information getting should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>

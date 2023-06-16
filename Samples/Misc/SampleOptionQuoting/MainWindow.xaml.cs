@@ -148,7 +148,7 @@ namespace SampleOptionQuoting
 				PriceStep = 10,
 			};
 
-			asset.LastTrade = new Trade
+			asset.LastTick = new Trade
 			{
 				Security = asset,
 				Price = 130000,
@@ -252,7 +252,7 @@ namespace SampleOptionQuoting
 				ExpiryDate = expiryDate,
 				Board = ExchangeBoard.Forts,
 				UnderlyingSecurityId = asset.Id,
-				LastTrade = lastTrade == null ? null : new Trade { Price = lastTrade.Value },
+				LastTick = lastTrade == null ? null : new Trade { Price = lastTrade.Value },
 				Volume = RandomGen.GetInt(10000),
 				Type = SecurityTypes.Option
 			};
@@ -399,7 +399,7 @@ namespace SampleOptionQuoting
 		private void RefreshChart()
 		{
 			var asset = SelectedAsset;
-			var trade = asset.LastTrade;
+			var trade = asset.LastTick;
 
 			if (trade != null)
 				PosChart.Refresh(trade.Price);

@@ -1232,51 +1232,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To convert the message into tick trade.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>Tick trade.</returns>
-		public static Trade ToTrade(this ExecutionMessage message, Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return message.ToTrade(new Trade { Security = security });
-		}
-
-		/// <summary>
-		/// To convert the message into tick trade.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <param name="trade">Tick trade.</param>
-		/// <returns>Tick trade.</returns>
-		public static Trade ToTrade(this ExecutionMessage message, Trade trade)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			trade.Id = message.TradeId ?? 0;
-			trade.Price = message.TradePrice ?? 0;
-			trade.Volume = message.TradeVolume ?? 0;
-			trade.Status = message.TradeStatus;
-			trade.IsSystem = message.IsSystem;
-			trade.ServerTime = message.ServerTime;
-			trade.LocalTime = message.LocalTime;
-			trade.OpenInterest = message.OpenInterest;
-			trade.OriginSide = message.OriginSide;
-			trade.IsUpTick = message.IsUpTick;
-			trade.Currency = message.Currency;
-			trade.SeqNum = message.SeqNum;
-			trade.BuildFrom = message.BuildFrom;
-			trade.Yield = message.Yield;
-			trade.OrderBuyId = message.OrderBuyId;
-			trade.OrderSellId = message.OrderSellId;
-
-			return trade;
-		}
-
-		/// <summary>
 		/// To convert the message into order.
 		/// </summary>
 		/// <param name="message">Message.</param>

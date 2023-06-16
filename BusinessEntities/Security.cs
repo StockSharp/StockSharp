@@ -651,9 +651,8 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private Trade _lastTrade;
+		private ITickTradeMessage _lastTick;
 
-		//[DataMember]
 		/// <summary>
 		/// Information about the last trade. If during the session on the instrument there were no trades, the value equals to <see langword="null" />.
 		/// </summary>
@@ -666,25 +665,43 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 201)]
 		[Browsable(false)]
-		//[Obsolete("Use the IConnector.GetSecurityValue.")]
-		public Trade LastTrade
+		public ITickTradeMessage LastTick
 		{
-			get => _lastTrade;
+			get => _lastTick;
 			set
 			{
-				if (_lastTrade == value)
+				if (_lastTick == value)
 					return;
 
-				_lastTrade = value;
+				_lastTick = value;
 				Notify();
 
-			    if (value == null)
-			        return;
+#pragma warning disable CS0618 // Type or member is obsolete
+				Notify(nameof(LastTrade));
+#pragma warning restore CS0618 // Type or member is obsolete
+
+				if (value == null)
+					return;
 
 				if (value.ServerTime != default)
 					LastChangeTime = value.ServerTime;
 			}
 		}
+
+		/// <summary>
+		/// Information about the last trade. If during the session on the instrument there were no trades, the value equals to <see langword="null" />.
+		/// </summary>
+		[XmlIgnore]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str289Key,
+			Description = LocalizedStrings.Str557Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 201)]
+		[Browsable(false)]
+		[Obsolete("Use LastTick property.")]
+		public Trade LastTrade => LastTick is ExecutionMessage execMsg ? execMsg.ToTrade(this) : (Trade)LastTick;
 
 		private decimal? _openPrice;
 

@@ -946,7 +946,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
+		/// To start getting new information (for example, <see cref="Security.LastTick"/> or <see cref="Security.BestBid"/>) by the instrument.
 		/// </summary>
 		/// <param name="provider">Subscription provider.</param>
 		/// <param name="security">The instrument by which new information getting should be started.</param>
