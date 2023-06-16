@@ -141,7 +141,7 @@
 
 			Chart.RegisterOrder += (area, order) =>
 			{
-				MessageBox.Show($"RegisterOrder: sec={order.Security.Id}, {order.Direction} {order.Volume}@{order.Price}");
+				MessageBox.Show($"RegisterOrder: sec={order.Security.Id}, {order.Side} {order.Volume}@{order.Price}");
 			};
 
 			HistoryPath.Folder = Paths.HistoryDataPath;
@@ -170,7 +170,7 @@
 
 			Chart.Reset(new[] {el});
 
-			LoadData(ser);
+			LoadData((SecurityId)Securities.SelectedItem, ser.ToDataType());
 		}
 
 		private void Chart_OnSubscribeIndicatorElement(IChartIndicatorElement element, CandleSeries series, IIndicator indicator)
@@ -267,9 +267,9 @@
 			RefreshCharts();
 		}
 
-		private void LoadData(CandleSeries series)
+		private void LoadData(SecurityId secId, DataType dt)
 		{
-			var msgType = series.CandleType.ToCandleMessageType();
+			var msgType = dt.MessageType;
 
 			_candleTransform.Process(new ResetMessage());
 			_candleBuilder = _builderProvider.Get(msgType);
@@ -282,11 +282,16 @@
 			var isBuild = BuildFromTicks.IsChecked == true;
 			var format = Format.SelectedFormat;
 
-			var maxDays = (isBuild || series.CandleType != typeof(TimeFrameCandle))
+			var maxDays = (isBuild || !dt.IsTFCandles)
 				? 15
-				: 30 * (int)((TimeSpan)series.Arg).TotalMinutes;
+				: 30 * (int)dt.GetTimeFrame().TotalMinutes;
 
-			_mdMsg = series.ToMarketDataMessage(true);
+			_mdMsg = new MarketDataMessage
+			{
+				IsSubscribe = true,
+				DataType2 = dt,
+				SecurityId = secId,
+			};
 
 			var token = _drawCts.Token;
 
@@ -296,7 +301,7 @@
 
 				if (isBuild)
 				{
-					foreach (var tick in storage.GetTickMessageStorage(series.Security.ToSecurityId(), new LocalMarketDataDrive(path), format).Load())
+					foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).Load())
 					{
 						if(token.IsCancellationRequested)
 							break;
@@ -331,7 +336,7 @@
 				}
 				else
 				{
-					foreach (var candleMsg in storage.GetCandleMessageStorage(msgType, series.Security.ToSecurityId(), series.Arg, new LocalMarketDataDrive(path), format).Load())
+					foreach (var candleMsg in storage.GetCandleMessageStorage(msgType, secId, dt.Arg, new LocalMarketDataDrive(path), format).Load())
 					{
 						if(token.IsCancellationRequested)
 							break;
@@ -345,12 +350,12 @@
 						_lastTime = candleMsg.OpenTime;
 
 						if (candleMsg is TimeFrameCandleMessage)
-							_lastTime += (TimeSpan)series.Arg;
+							_lastTime += dt.GetTimeFrame();
 
 						_tradeGenerator.Process(new ExecutionMessage
 						{
 							DataTypeEx = DataType.Ticks,
-							SecurityId = series.Security.ToSecurityId(),
+							SecurityId = secId,
 							ServerTime = _lastTime,
 							TradePrice = candleMsg.ClosePrice,
 						});
@@ -754,11 +759,13 @@
 
 			IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => _l1Subscriptions;
 
-			event Action<Subscription, Message> ISubscriptionProvider.SubscriptionReceived { add { } remove { } }
+			event Action<Subscription, object> ISubscriptionProvider.SubscriptionReceived { add { } remove { } }
 
-			event Action<Subscription, QuoteChangeMessage> ISubscriptionProvider.OrderBookReceived { add { } remove { } }
+			event Action<Subscription, IOrderBookMessage> ISubscriptionProvider.OrderBookReceived { add { } remove { } }
 
-			event Action<Subscription, Trade> ISubscriptionProvider.TickTradeReceived { add { } remove { } }
+			event Action<Subscription, ITickTradeMessage> ISubscriptionProvider.TickTradeReceived { add { } remove { } }
+
+			event Action<Subscription, IOrderLogMessage> ISubscriptionProvider.OrderLogReceived { add { } remove { } }
 
 			event Action<Subscription, Security> ISubscriptionProvider.SecurityReceived { add { } remove { } }
 
