@@ -59,6 +59,7 @@ namespace SampleOptionQuoting
 			};
 		}
 
+		[Obsolete]
 		event Action<Trade> IMarketDataProvider.NewTrade
 		{
 			add => throw new NotSupportedException();
