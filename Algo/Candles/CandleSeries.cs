@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Candles
 			Description = LocalizedStrings.SecurityKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
-		public virtual Security Security
+		public Security Security
 		{
 			get => _security;
 			set
@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Candles
 		/// The candle type.
 		/// </summary>
 		[Browsable(false)]
-		public virtual Type CandleType
+		public Type CandleType
 		{
 			get => _candleType;
 			set
@@ -106,7 +106,7 @@ namespace StockSharp.Algo.Candles
 		/// The candle formation parameter. For example, for <see cref="TimeFrameCandle"/> this value is <see cref="TimeFrameCandle.TimeFrame"/>.
 		/// </summary>
 		[Browsable(false)]
-		public virtual object Arg
+		public object Arg
 		{
 			get => _arg;
 			set
