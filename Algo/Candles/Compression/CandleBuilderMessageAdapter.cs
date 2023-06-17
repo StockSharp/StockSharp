@@ -595,7 +595,7 @@ namespace StockSharp.Algo.Candles.Compression
 												}
 											}
 
-											base.OnInnerAdapterNewOutMessage(_isHistory ? bigCandle : bigCandle.TypedClone());
+											base.OnInnerAdapterNewOutMessage(/*_isHistory ? bigCandle : */bigCandle.TypedClone());
 										}
 
 										break;
