@@ -1355,8 +1355,8 @@ namespace StockSharp.Algo
 
 			return message.ToOrderLog(new OrderLogItem
 			{
-				Order = new Order { Security = security },
-				Trade = message.TradeId != null ? new Trade { Security = security } : null
+				Order = new() { Security = security },
+				Trade = message.HasTradeInfo ? new() { Security = security } : null
 			});
 		}
 
@@ -1396,9 +1396,9 @@ namespace StockSharp.Algo
 			order.Currency = message.Currency;
 			order.SeqNum = message.SeqNum;
 
-			order.ApplyNewState(message.OrderState ?? (message.TradeId != null ? OrderStates.Done : OrderStates.Active));
+			order.ApplyNewState(message.OrderState ?? (message.HasTradeInfo ? OrderStates.Done : OrderStates.Active));
 
-			if (message.TradeId != null)
+			if (message.HasTradeInfo)
 			{
 				var trade = item.Trade;
 
