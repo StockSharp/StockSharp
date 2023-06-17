@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The value of <see cref="TickCandle.MaxTradeCount"/>.</param>
 		/// <returns>Candles series.</returns>
-		public static CandleSeries Tick(this Security security, decimal arg)
+		public static CandleSeries Tick(this Security security, int arg)
 		{
 			return new CandleSeries(typeof(TickCandleMessage).ToCandleType(), security, arg);
 		}
