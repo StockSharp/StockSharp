@@ -1185,7 +1185,6 @@ namespace StockSharp.Algo
 			var lastTrade = new ExecutionMessage
 			{
 				DataTypeEx = DataType.Ticks,
-				SecurityId = security.ToSecurityId(),
 			};
 
 			var lastTick = security.LastTick;
