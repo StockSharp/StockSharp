@@ -41,7 +41,7 @@
 		}
 
 		private static readonly string _historyPath = Paths.HistoryDataPath;
-		private const string _securityId = "SBER@TQBR";
+		private static readonly SecurityId _securityId = "SBER@TQBR".ToSecurityId();
 		private const int _timeframe = 1; //minutes
 		private const decimal _priceStep = 0.01m;
 		private const int _candlesPacketSize = 10;
@@ -57,7 +57,7 @@
 		private decimal _lastPrice;
 		private DateTimeOffset _lastTime;
 		private bool _dataIsLoaded;
-		private TimeFrameCandle _lastCandle;
+		private TimeFrameCandleMessage _lastCandle;
 
 		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
@@ -66,9 +66,9 @@
 
 		//private volatile int _curCandleNum;
 
-		private Security _security = new()
+		private readonly Security _security = new()
 		{
-			Id = _securityId,
+			Id = _securityId.ToStringId(),
 			PriceStep = _priceStep,
 			Board = ExchangeBoard.Forts
 		};
@@ -118,10 +118,7 @@
 
 			Chart.AddArea(_area);
 
-			var series = new CandleSeries(
-				typeof(TimeFrameCandle),
-				_security,
-				TimeSpan.FromMinutes(_timeframe));
+			var series = _security.TimeFrame(TimeSpan.FromMinutes(_timeframe));
 
 			_indicatorElement = null;
 
@@ -153,14 +150,6 @@
 			_lastPrice = 0m;
 
 			_candles.Clear();
-			var id = _securityId.ToSecurityId();
-
-			_security = new Security
-			{
-				Id = _securityId,
-				PriceStep = _priceStep,
-				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode) ?? ExchangeBoard.Associated
-			};
 
 			Chart.Reset(new IChartElement[] { _candleElement });
 
@@ -180,7 +169,7 @@
 				{
 					var date = DateTime.MinValue;
 
-					foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).Load())
+					foreach (var tick in storage.GetTickMessageStorage(_securityId, new LocalMarketDataDrive(path)).Load())
 					{
 						if (date != tick.ServerTime.Date)
 						{
@@ -202,7 +191,7 @@
 					{
 						var data = new ChartDrawData();
 
-						var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(_tfSpan, _security));
+						var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(_tfSpan, _securityId));
 
 						foreach (var candle in candles)
 						{
@@ -258,7 +247,7 @@
 				TradeVolume = RandomGen.GetInt(50) + 1
 			});
 
-			TimeFrameCandle candle;
+			TimeFrameCandleMessage candle;
 			var lastLightCandle = _candles[_candles.Count - 1];
 
 			if (_candles.Count != numCandles && _lastCandle != null)
@@ -269,7 +258,7 @@
 
 			if (_candles.Count != numCandles || _lastCandle == null)
 			{
-				_lastCandle = candle = lastLightCandle.ToCandle(_tfSpan, _security);
+				_lastCandle = candle = lastLightCandle.ToCandle(_tfSpan, _securityId);
 			}
 			else
 			{
@@ -280,7 +269,7 @@
 			DrawCandle(candle);
 		}
 
-		private void DrawCandle(TimeFrameCandle candle)
+		private void DrawCandle(TimeFrameCandleMessage candle)
 		{
 			var data = new ChartDrawData();
 			var group = data.Group(candle.OpenTime);
@@ -352,11 +341,11 @@
 		public decimal Close { get; set; }
 		public decimal Volume { get; set; }
 
-		public TimeFrameCandle ToCandle(TimeSpan ts, Security security)
+		public TimeFrameCandleMessage ToCandle(TimeSpan ts, SecurityId securityId)
 		{
-			return new TimeFrameCandle
+			return new()
 			{
-				Security = security,
+				SecurityId = securityId,
 				TypedArg = ts,
 				OpenTime = TimeFrom,
 				CloseTime = TimeTo,
@@ -368,7 +357,7 @@
 			};
 		}
 
-		public void UpdateCandle(TimeFrameCandle candle)
+		public void UpdateCandle(TimeFrameCandleMessage candle)
 		{
 			candle.OpenPrice = Open;
 			candle.HighPrice = High;

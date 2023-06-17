@@ -29,7 +29,9 @@
 					base.Activate(typedCandle);
 				else
 				{
+#pragma warning disable CS0618 // Type or member is obsolete
 					base.Activate(((CandleMessage)candle).ToCandle(Subscription.CandleSeries.Security).To<TCandle>());
+#pragma warning restore CS0618 // Type or member is obsolete
 				}
 			}
 		}
@@ -506,6 +508,7 @@
 		/// <summary>
 		/// Backward compatibility.
 		/// </summary>
+		[Obsolete("Use ICandleMessage.")]
 		public static MarketRule<TToken, ICandleMessage> Do<TToken>(this MarketRule<TToken, ICandleMessage> rule, Action<Candle> action)
 		{
 			if (action is null)
@@ -517,6 +520,7 @@
 		/// <summary>
 		/// Backward compatibility.
 		/// </summary>
+		[Obsolete("Use ICandleMessage.")]
 		public static MarketRule<TToken, ICandleMessage> Do<TToken, TResult>(this MarketRule<TToken, ICandleMessage> rule, Func<Candle, TResult> action)
 		{
 			if (action is null)

@@ -409,6 +409,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Time frame.
+		/// </summary>
+		public TimeSpan TimeFrame => TypedArg;
+
+		/// <summary>
 		/// Create a copy of <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>

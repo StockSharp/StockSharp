@@ -901,8 +901,10 @@ namespace StockSharp.Algo
 		{
 			CandleProcessing?.Invoke(series, candle);
 
+#pragma warning disable CS0618 // Type or member is obsolete
 			if (candle is Candle entity)
 				CandleSeriesProcessing?.Invoke(series, entity);
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		private void RaiseCandleSeriesStopped(CandleSeries series)

@@ -79,9 +79,11 @@ namespace StockSharp.Algo
 					if (_currentCandle.State == CandleStates.Finished)
 						return false;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 					if (_currentCandle is Candle entity) // Subscription.DisableEntity is false
 						entity.Update(message);
 					else
+#pragma warning restore CS0618 // Type or member is obsolete
 						_currentCandle = message; // Subscription.DisableEntity is true
 				}
 				else

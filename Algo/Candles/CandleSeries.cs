@@ -47,8 +47,10 @@ namespace StockSharp.Algo.Candles
 		/// <param name="arg">The candle formation parameter. For example, for <see cref="TimeFrameCandle"/> this value is <see cref="TimeFrameCandle.TimeFrame"/>.</param>
 		public CandleSeries(Type candleType, Security security, object arg)
 		{
+#pragma warning disable CS0618 // Type or member is obsolete
 			if (!candleType.IsCandle())
 				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 			_security = security ?? throw new ArgumentNullException(nameof(security));
 			_candleType = candleType ?? throw new ArgumentNullException(nameof(candleType));

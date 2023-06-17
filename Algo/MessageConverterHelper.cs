@@ -38,6 +38,7 @@ namespace StockSharp.Algo
 	{
 		static MessageConverterHelper()
 		{
+#pragma warning disable CS0618 // Type or member is obsolete
 			RegisterCandle(() => new TimeFrameCandle(), () => new TimeFrameCandleMessage());
 			RegisterCandle(() => new TickCandle(), () => new TickCandleMessage());
 			RegisterCandle(() => new VolumeCandle(), () => new VolumeCandleMessage());
@@ -45,6 +46,7 @@ namespace StockSharp.Algo
 			RegisterCandle(() => new PnFCandle(), () => new PnFCandleMessage());
 			RegisterCandle(() => new RenkoCandle(), () => new RenkoCandleMessage());
 			RegisterCandle(() => new HeikinAshiCandle(), () => new HeikinAshiCandleMessage());
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		/// <summary>
@@ -112,6 +114,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="candle">Candle.</param>
 		/// <returns>Message.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static CandleMessage ToMessage(this Candle candle)
 		{
 			if (candle == null)
@@ -618,8 +621,7 @@ namespace StockSharp.Algo
 			var criteria = new Security();
 			criteria.ApplyChanges(message, exchangeInfoProvider);
 
-			if (criteria.Type == null)
-				criteria.Type = message.GetSecurityTypes().FirstOr();
+			criteria.Type ??= message.GetSecurityTypes().FirstOr();
 
 			return criteria;
 		}
@@ -1064,6 +1066,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="series">Series.</param>
 		/// <returns>Candle.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static TCandle ToCandle<TCandle>(this CandleMessage message, CandleSeries series)
 			where TCandle : Candle, new()
 		{
@@ -1076,6 +1079,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="series">Series.</param>
 		/// <returns>Candle.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static Candle ToCandle(this CandleMessage message, CandleSeries series)
 		{
 			if (message == null)
@@ -1093,7 +1097,9 @@ namespace StockSharp.Algo
 			return candle;
 		}
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		private static readonly SynchronizedDictionary<Type, Func<Candle>> _candleCreators = new();
+#pragma warning restore CS0618 // Type or member is obsolete
 		private static readonly SynchronizedDictionary<Type, Func<CandleMessage>> _candleMessageCreators = new();
 
 		/// <summary>
@@ -1129,6 +1135,7 @@ namespace StockSharp.Algo
 		/// <typeparam name="TMessage">The type of candle message.</typeparam>
 		/// <param name="candleCreator"><see cref="Candle"/> instance creator.</param>
 		/// <param name="candleMessageCreator"><see cref="CandleMessage"/> instance creator.</param>
+		[Obsolete("Conversion reduce performance.")]
 		public static void RegisterCandle<TCandle, TMessage>(Func<TCandle> candleCreator, Func<TMessage> candleMessageCreator)
 			where TCandle : Candle
 			where TMessage : CandleMessage
@@ -1143,6 +1150,7 @@ namespace StockSharp.Algo
 		/// <param name="messageType">The type of candle message.</param>
 		/// <param name="candleCreator"><see cref="Candle"/> instance creator.</param>
 		/// <param name="candleMessageCreator"><see cref="CandleMessage"/> instance creator.</param>
+		[Obsolete("Conversion reduce performance.")]
 		public static void RegisterCandle(Type candleType, Type messageType, Func<Candle> candleCreator, Func<CandleMessage> candleMessageCreator)
 		{
 			if (messageType == null)
@@ -1165,6 +1173,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>Candle.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static Candle ToCandle(this CandleMessage message, Security security)
 		{
 			if (message == null)
@@ -1190,6 +1199,7 @@ namespace StockSharp.Algo
 		/// <param name="candle">Candle.</param>
 		/// <param name="message">Message.</param>
 		/// <returns>Candle.</returns>
+		[Obsolete("Conversion reduce performance.")]
 		public static Candle Update(this Candle candle, CandleMessage message)
 		{
 			if (candle == null)

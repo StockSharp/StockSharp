@@ -37,6 +37,7 @@ namespace StockSharp.Algo.Candles
 	[KnownType(typeof(TimeFrameCandle))]
 	[KnownType(typeof(PnFCandle))]
 	[KnownType(typeof(RenkoCandle))]
+	[Obsolete("Use ICandleMessage.")]
 	public abstract class Candle : Cloneable<Candle>, ICandleMessage
 	{
 		/// <summary>
@@ -299,6 +300,7 @@ namespace StockSharp.Algo.Candles
 	/// Base candle class (contains main parameters).
 	/// </summary>
 	/// <typeparam name="TArg"></typeparam>
+	[Obsolete("Use ICandleMessage.")]
 	public abstract class Candle<TArg> : Candle
 	{
 		/// <summary>
@@ -343,6 +345,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
+	[Obsolete("Use TimeFrameCandleMessage.")]
 	public class TimeFrameCandle : Candle<TimeSpan>, ITimeFrameCandleMessage
 	{
 		/// <summary>
@@ -378,6 +381,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
+	[Obsolete("Use TickCandleMessage.")]
 	public class TickCandle : Candle<int>, ITickCandleMessage
 	{
 		/// <summary>
@@ -413,6 +417,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
+	[Obsolete("Use VolumeCandleMessage.")]
 	public class VolumeCandle : Candle<decimal>, IVolumeCandleMessage
 	{
 		/// <summary>
@@ -448,6 +453,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
+	[Obsolete("Use RangeCandleMessage.")]
 	public class RangeCandle : Candle<Unit>, IRangeCandleMessage
 	{
 		/// <summary>
@@ -483,6 +489,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
+	[Obsolete("Use PnFCandleMessage.")]
 	public class PnFCandle : Candle<PnFArg>, IPnFCandleMessage
 	{
 		/// <summary>
@@ -518,6 +525,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
+	[Obsolete("Use RenkoCandleMessage.")]
 	public class RenkoCandle : Candle<Unit>, IRenkoCandleMessage
 	{
 		/// <summary>
@@ -553,6 +561,7 @@ namespace StockSharp.Algo.Candles
 	[DataContract]
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.HeikinAshiKey)]
+	[Obsolete("Use HeikinAshiCandleMessage.")]
 	public class HeikinAshiCandle : TimeFrameCandle, IHeikinAshiCandleMessage
 	{
 		/// <summary>

@@ -85,6 +85,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
 		/// <returns><see langword="true"/> if the specified type is derived from <see cref="Candle"/>, otherwise, <see langword="false"/>.</returns>
+		[Obsolete("Use ICandleMessage.")]
 		public static bool IsCandle(this Type candleType)
 		{
 			if (candleType == null)
@@ -101,7 +102,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles series.</returns>
 		public static CandleSeries TimeFrame(this Security security, TimeSpan arg)
 		{
-			return new CandleSeries(typeof(TimeFrameCandle), security, arg);
+			return new CandleSeries(typeof(TimeFrameCandleMessage).ToCandleType(), security, arg);
 		}
 
 		/// <summary>
@@ -112,7 +113,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles series.</returns>
 		public static CandleSeries Range(this Security security, Unit arg)
 		{
-			return new CandleSeries(typeof(RangeCandle), security, arg);
+			return new CandleSeries(typeof(RangeCandleMessage).ToCandleType(), security, arg);
 		}
 
 		/// <summary>
@@ -123,7 +124,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles series.</returns>
 		public static CandleSeries Volume(this Security security, decimal arg)
 		{
-			return new CandleSeries(typeof(VolumeCandle), security, arg);
+			return new CandleSeries(typeof(VolumeCandleMessage).ToCandleType(), security, arg);
 		}
 
 		/// <summary>
@@ -134,7 +135,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles series.</returns>
 		public static CandleSeries Tick(this Security security, decimal arg)
 		{
-			return new CandleSeries(typeof(TickCandle), security, arg);
+			return new CandleSeries(typeof(TickCandleMessage).ToCandleType(), security, arg);
 		}
 
 		/// <summary>
@@ -145,7 +146,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles series.</returns>
 		public static CandleSeries PnF(this Security security, PnFArg arg)
 		{
-			return new CandleSeries(typeof(PnFCandle), security, arg);
+			return new CandleSeries(typeof(PnFCandleMessage).ToCandleType(), security, arg);
 		}
 
 		/// <summary>
@@ -156,8 +157,18 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles series.</returns>
 		public static CandleSeries Renko(this Security security, Unit arg)
 		{
-			return new CandleSeries(typeof(RenkoCandle), security, arg);
+			return new CandleSeries(typeof(RenkoCandleMessage).ToCandleType(), security, arg);
 		}
+
+		/// <summary>
+		/// Determines the specified candle series if time frame based.
+		/// </summary>
+		/// <param name="series"><see cref="CandleSeries"/></param>
+		/// <returns>Check result.</returns>
+		public static bool IsTimeFrame(this CandleSeries series)
+#pragma warning disable CS0618 // Type or member is obsolete
+			=> series.CheckOnNull(nameof(series)).CandleType == typeof(TimeFrameCandle);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		/// <summary>
 		/// To start candles getting.
@@ -983,6 +994,8 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Check result.</returns>
 		public static bool IsSame<TCandle>(this TCandle candle1, TCandle candle2)
 			where TCandle : ICandleMessage
+#pragma warning disable CS0618 // Type or member is obsolete
 			=> candle1 is not null && candle2 is not null && ((candle1 is Candle && ReferenceEquals(candle1, candle2)) || candle1.OpenTime == candle2.OpenTime);
+#pragma warning restore CS0618 // Type or member is obsolete
 	}
 }

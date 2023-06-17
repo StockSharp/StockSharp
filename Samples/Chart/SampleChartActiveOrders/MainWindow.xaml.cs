@@ -32,11 +32,11 @@
 		private IChartArea _area;
 		private IChartCandleElement _candleElement;
 		private IChartActiveOrdersElement _activeOrdersElement;
-		private TimeFrameCandle _candle;
+		private TimeFrameCandleMessage _candle;
 
 		private readonly DispatcherTimer _chartUpdateTimer = new();
-		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new();
-		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new();
+		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandleMessage> _updatedCandles = new();
+		private readonly CachedSynchronizedList<TimeFrameCandleMessage> _allCandles = new();
 
 		private const decimal _priceStep = 0.01m;
 		private const int _timeframe = 1;
@@ -101,10 +101,7 @@
 
 			Chart.AddArea(_area);
 
-			var series = new CandleSeries(
-				typeof(TimeFrameCandle),
-				_security,
-				TimeSpan.FromMinutes(_timeframe));
+			var series = _security.TimeFrame(TimeSpan.FromMinutes(_timeframe));
 
 			_candleElement = Chart.CreateCandleElement();
 			_candleElement.FullTitle = "Candles";
@@ -136,7 +133,7 @@
 
 				foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).Load())
 				{
-					AppendTick(_security, tick);
+					AppendTick(tick);
 
 					if (date == tick.ServerTime.Date)
 						continue;
@@ -170,7 +167,7 @@
 
 		private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)
 		{
-			TimeFrameCandle[] candlesToUpdate;
+			TimeFrameCandleMessage[] candlesToUpdate;
 
 			lock (_updatedCandles.SyncRoot)
 			{
@@ -191,7 +188,7 @@
 			Chart.Draw(data);
 		}
 
-		private void AppendTick(Security security, ExecutionMessage tick)
+		private void AppendTick(ExecutionMessage tick)
 		{
 			var time = tick.ServerTime;
 			var price = tick.TradePrice.Value;
@@ -207,12 +204,12 @@
 
 				var tf = TimeSpan.FromMinutes(_timeframe);
 				var bounds = tf.GetCandleBounds(time, _security.Board);
-				_candle = new TimeFrameCandle
+				_candle = new TimeFrameCandleMessage
 				{
 					TypedArg = tf,
 					OpenTime = bounds.Min,
 					CloseTime = bounds.Max,
-					Security = security,
+					SecurityId = tick.SecurityId,
 				};
 
 				_candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;
