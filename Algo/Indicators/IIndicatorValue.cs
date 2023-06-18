@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		bool IsFormed { get; }
+		bool IsFormed { get; set; }
 
 		/// <summary>
 		/// The input value.
@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Indicators
 		public abstract bool IsFinal { get; set; }
 
 		/// <inheritdoc />
-		public bool IsFormed { get; }
+		public bool IsFormed { get; set; }
 
 		/// <inheritdoc />
 		public abstract IIndicatorValue InputValue { get; set; }
