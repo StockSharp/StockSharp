@@ -63,7 +63,7 @@ public interface ICandleMessage :
 	/// <summary>
 	/// <see cref="DataType"/>.
 	/// </summary>
-	DataType DataType { get; }
+	DataType DataType { get; set; }
 
 	/// <summary>
 	/// Total price size.

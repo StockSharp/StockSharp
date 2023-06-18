@@ -185,6 +185,7 @@ namespace StockSharp.Algo.Candles
 
 				return _dataType;
 			}
+			set => throw new NotSupportedException();
 		}
 
 		/// <inheritdoc />
