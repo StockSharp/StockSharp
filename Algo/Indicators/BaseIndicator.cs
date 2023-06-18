@@ -156,7 +156,7 @@ namespace StockSharp.Algo.Indicators
 				Container.AddValue(input, result);
 			}
 
-			if (IsFormed && !result.IsEmpty)
+			if (!result.IsEmpty)
 				RaiseChangedEvent(input, result);
 
 			return result;
