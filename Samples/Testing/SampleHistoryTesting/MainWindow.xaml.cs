@@ -54,7 +54,8 @@ namespace SampleHistoryTesting
 			public string StrategyName { get; set; }
 			public bool UseOrderLog { get; set; }
 			public bool UseLevel1 { get; set; }
-			public Func<IdGenerator, IMessageAdapter> CustomHistoryAdapter { get; set; }
+            public Level1Fields? BuildField { get; set; }
+            public Func<IdGenerator, IMessageAdapter> CustomHistoryAdapter { get; set; }
 			public MarketDataStorageCache Cache { get; set; } = new();
 		}
 
@@ -86,7 +87,8 @@ namespace SampleHistoryTesting
 				CandlesProgress,
 				CandlesAndDepthsProgress,
 				OrderLogProgress,
-				Level1Progress,
+				LastTradeProgress,
+				SpreadProgress,
 				FinamCandlesProgress,
 				YahooCandlesProgress,
 				RandomProgress,
@@ -100,7 +102,8 @@ namespace SampleHistoryTesting
 				CandlesCheckBox,
 				CandlesAndDepthsCheckBox,
 				OrderLogCheckBox,
-				Level1CheckBox,
+				LastTradeCheckBox,
+				SpreadCheckBox,
 				FinamCandlesCheckBox,
 				YahooCandlesCheckBox,
 				RandomCheckBox,
@@ -245,19 +248,36 @@ namespace SampleHistoryTesting
 					OrderLogPosition),
 
 				Tuple.Create(
-					Level1CheckBox,
-					Level1Progress,
-					Level1ParameterGrid,
+					LastTradeCheckBox,
+					LastTradeProgress,
+					LastTradeParameterGrid,
 					// order log
 					new EmulationInfo
 					{
 						UseLevel1 = true,
 						CurveColor = Colors.Aquamarine,
-						StrategyName = LocalizedStrings.Level1
+						StrategyName = LocalizedStrings.Level1,
+						BuildField = Level1Fields.LastTradePrice,
 					},
-					Level1Chart,
-					Level1Equity,
-					Level1Position),
+					LastTradeChart,
+					LastTradeEquity,
+					LastTradePosition),
+
+				Tuple.Create(
+					SpreadCheckBox,
+					SpreadProgress,
+					SpreadParameterGrid,
+					// order log
+					new EmulationInfo
+					{
+						UseLevel1 = true,
+						CurveColor = Colors.Aquamarine,
+						StrategyName = LocalizedStrings.Level1,
+						BuildField = Level1Fields.SpreadMiddle,
+					},
+					SpreadChart,
+					SpreadEquity,
+					SpreadPosition),
 
 				Tuple.Create(
 					FinamCandlesCheckBox,
@@ -439,7 +459,10 @@ namespace SampleHistoryTesting
 				else if (emulationInfo.UseTicks)
 					strategy.BuildFrom = DataType.Ticks;
 				else if (emulationInfo.UseLevel1)
+				{
 					strategy.BuildFrom = DataType.Level1;
+					strategy.BuildField = emulationInfo.BuildField;
+				}
 				else if (emulationInfo.UseOrderLog)
 					strategy.BuildFrom = DataType.OrderLog;
 				else if (emulationInfo.UseMarketDepth)

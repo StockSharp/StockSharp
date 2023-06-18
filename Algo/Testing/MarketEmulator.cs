@@ -157,10 +157,10 @@ namespace StockSharp.Algo.Testing
 			private decimal _prevTickPrice;
 			private decimal _currSpreadPrice;
 
-			private decimal? _prevBidPrice;
-			private decimal? _prevBidVolume;
-			private decimal? _prevAskPrice;
-			private decimal? _prevAskVolume;
+			private decimal? _l1BidPrice;
+			private decimal? _l1AskPrice;
+			private decimal? _l1BidVol;
+			private decimal? _l1AskVol;
 
 			// указывает, есть ли реальные стаканы, чтобы своей псевдо генерацией не портить настоящую историю
 			private DateTime _lastDepthDate;
@@ -638,39 +638,193 @@ namespace StockSharp.Algo.Testing
 			{
 				UpdateSecurityDefinition(message);
 
+				var localTime = message.LocalTime;
+
 				if (message.IsContainsTick())
 				{
 					ProcessTick(message.ToTick(), result);
 				}
-				else if (message.IsContainsQuotes() && !HasDepth(message.LocalTime))
+				else if (message.IsContainsQuotes() && !HasDepth(localTime))
 				{
-					var prevBidPrice = _prevBidPrice;
-					var prevBidVolume = _prevBidVolume;
-					var prevAskPrice = _prevAskPrice;
-					var prevAskVolume = _prevAskVolume;
+					var prevBidPrice = _l1BidPrice;
+					var prevAskPrice = _l1AskPrice;
+					var prevBidVol = _l1BidVol;
+					var prevAskVol = _l1AskVol;
 
-					_prevBidPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _prevBidPrice;
-					_prevBidVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _prevBidVolume;
-					_prevAskPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _prevAskPrice;
-					_prevAskVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _prevAskVolume;
+					_l1BidPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _l1BidPrice;
+					_l1AskPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _l1AskPrice;
+					_l1BidVol = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _l1BidVol;
+					_l1AskVol = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _l1AskVol;
 
-					if (_prevBidPrice == 0)
-						_prevBidPrice = null;
+					if (_l1BidPrice == 0)
+						_l1BidPrice = null;
 
-					if (_prevAskPrice == 0)
-						_prevAskPrice = null;
+					if (_l1AskPrice == 0)
+						_l1AskPrice = null;
 
-					if (prevBidPrice == _prevBidPrice && prevBidVolume == _prevBidVolume && prevAskPrice == _prevAskPrice && prevAskVolume == _prevAskVolume)
+					if (_l1BidPrice is null && _l1AskPrice is null)
 						return;
 
-					ProcessQuoteChange(new QuoteChangeMessage
+					if (_l1BidVol == 0)
+						_l1BidVol = null;
+
+					if (_l1AskVol == 0)
+						_l1AskVol = null;
+
+					if (prevBidPrice == _l1BidPrice && prevAskPrice == _l1AskPrice && prevBidVol == _l1BidVol && prevAskVol == _l1AskVol)
+						return;
+
+					void AddQuote(QuotesDict quotes, decimal price, decimal? volume)
+						=> quotes.Add(price, new(new(), new() { Price = price, Volume = volume ?? 1 }));
+
+					var serverTime = message.ServerTime;
+
+					if (_activeOrders.Count == 0)
 					{
-						SecurityId = message.SecurityId,
-						LocalTime = message.LocalTime,
-						ServerTime = message.ServerTime,
-						Bids = _prevBidPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0) },
-						Asks = _prevAskPrice == null ? Array.Empty<QuoteChange>() : new[] { new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0) },
-					}, result);
+						if (_l1BidPrice is not null)
+						{
+							_bids.Clear();
+							AddQuote(_bids, _l1BidPrice.Value, _l1BidVol);
+						}
+
+						if (_l1AskPrice is not null)
+						{
+							_asks.Clear();
+							AddQuote(_asks, _l1AskPrice.Value, _l1AskVol);
+						}
+					}
+					else
+					{
+						var bestBid = _bids.FirstOrDefault();
+						var bestAsk = _asks.FirstOrDefault();
+
+						void ProcessMarketOrder(QuotesDict quotes, Sides orderSide, decimal price, decimal volume)
+						{
+							var quotesSide = orderSide.Invert();
+
+#if EMU_DBG
+							Verify(quotesSide);
+#endif
+
+							var sign = orderSide == Sides.Buy ? -1 : 1;
+							var hasQuotes = false;
+
+							List<RefPair<LevelQuotes, QuoteChange>> toRemove = null;
+
+							foreach (var pair in quotes)
+							{
+								var quote = pair.Value.Second;
+
+								if (quote.Price * sign > price * sign)
+								{
+									toRemove ??= new();
+									toRemove.Add(pair.Value);
+								}
+								else
+								{
+									if (quote.Price == price)
+									{
+										toRemove ??= new();
+										toRemove.Add(pair.Value);
+									}
+									else
+									{
+										if ((price - quote.Price).Abs() == _securityDefinition.PriceStep)
+										{
+											// если на один шаг цены выше/ниже есть котировка, то не выполняем никаких действий
+											// иначе добавляем новый уровень в стакан, чтобы не было большого расхождения цен.
+											hasQuotes = true;
+										}
+
+										break;
+									}
+								}
+							}
+
+							if (toRemove is not null)
+							{
+								var totalVolumeDiff = 0m;
+
+								foreach (var pair in toRemove)
+								{
+									quotes.Remove(pair.Second.Price);
+
+									totalVolumeDiff += pair.Second.Volume;
+
+									foreach (var quote in pair.First)
+									{
+										if (quote.PortfolioName is not null)
+										{
+											if (TryRemoveActiveOrder(quote.TransactionId, out var orderMsg))
+											{
+												orderMsg.OriginalTransactionId = quote.TransactionId;
+												orderMsg.OrderState = OrderStates.Done;
+												result.Add(ToOrder(localTime, orderMsg));
+
+												ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
+											}
+										}
+
+										_messagePool.Free(quote);
+									}
+								}
+
+								AddTotalVolume(quotesSide, -totalVolumeDiff);
+
+#if EMU_DBG
+								Verify(quotesSide);
+#endif
+							}
+
+							// если собрали все котировки, то оставляем заявку в стакане по цене котировки
+							if (!hasQuotes)
+							{
+								UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, price, volume), true);
+
+#if EMU_DBG
+								Verify(quotesSide);
+#endif
+							}
+						}
+
+						if (bestBid.Value is null)
+						{
+							if (_l1BidPrice is not null)
+								AddQuote(_bids, _l1BidPrice.Value, _l1BidVol);
+						}
+						else
+						{
+							if (_l1AskPrice <= bestBid.Key)
+								ProcessMarketOrder(_bids, Sides.Sell, _l1AskPrice.Value, _l1AskVol ?? 1);
+						}
+
+						if (bestAsk.Value is null)
+						{
+							if (_l1AskPrice is not null)
+								AddQuote(_asks, _l1AskPrice.Value, _l1AskVol);
+						}
+						else
+						{
+							if (_l1BidPrice >= bestAsk.Key)
+								ProcessMarketOrder(_asks, Sides.Buy, _l1BidPrice.Value, _l1BidVol ?? 1);
+						}
+
+						if (_l1BidPrice is not null && !_bids.ContainsKey(_l1BidPrice.Value))
+							AddQuote(_bids, _l1BidPrice.Value, _l1BidVol);
+
+						if (_l1AskPrice is not null && !_asks.ContainsKey(_l1AskPrice.Value))
+							AddQuote(_asks, _l1AskPrice.Value, _l1AskVol);
+
+						CancelWorst(localTime, serverTime);
+					}
+
+					if (_depthSubscription is not null)
+					{
+						result.Add(CreateQuoteMessage(
+							message.SecurityId,
+							localTime,
+							serverTime));
+					}
 				}
 
 				if (_l1Subscription is not null)
@@ -1259,25 +1413,7 @@ namespace StockSharp.Algo.Testing
 
 				if (!hasDepth)
 				{
-					void CancelWorstQuote(Sides side)
-					{
-						var quotes = GetQuotes(side);
-
-						if (quotes.Count <= _settings.MaxDepth)
-							return;
-
-						var worst = quotes.Last();
-						var volume = worst.Value.First.Where(e => e.PortfolioName == null).Sum(e => e.OrderVolume.Value);
-
-						if (volume == 0)
-							return;
-
-						UpdateQuote(CreateMessage(localTime, serverTime, side, worst.Key, volume, true), false);
-					}
-
-					// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
-					CancelWorstQuote(Sides.Buy);
-					CancelWorstQuote(Sides.Sell);
+					CancelWorst(localTime, serverTime);
 				}
 
 				_prevTickPrice = tradePrice;
@@ -1294,6 +1430,29 @@ namespace StockSharp.Algo.Testing
 						localTime,
 						serverTime));
 				}
+			}
+
+			private void CancelWorst(DateTimeOffset localTime, DateTimeOffset serverTime)
+			{
+				void CancelWorstQuote(Sides side)
+				{
+					var quotes = GetQuotes(side);
+
+					if (quotes.Count <= _settings.MaxDepth)
+						return;
+
+					var worst = quotes.Last();
+					var volume = worst.Value.First.Where(e => e.PortfolioName == null).Sum(e => e.OrderVolume.Value);
+
+					if (volume == 0)
+						return;
+
+					UpdateQuote(CreateMessage(localTime, serverTime, side, worst.Key, volume, true), false);
+				}
+
+				// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
+				CancelWorstQuote(Sides.Buy);
+				CancelWorstQuote(Sides.Sell);
 			}
 
 			private decimal GetPriceStep() => _securityDefinition?.PriceStep ?? 0.01m;

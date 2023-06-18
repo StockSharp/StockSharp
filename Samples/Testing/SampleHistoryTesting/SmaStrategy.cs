@@ -50,6 +50,7 @@ namespace SampleHistoryTesting
 			_shortSmaParam = this.Param(nameof(ShortSma), 30);
 			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(5)));
 			_buildFromParam = this.Param<DataType>(nameof(BuildFrom));
+			_buildFieldParam = this.Param<Level1Fields?>(nameof(BuildField));
 
 			_candleTypeParam.AllowNull = false;
 		}
@@ -86,6 +87,14 @@ namespace SampleHistoryTesting
 			set => _buildFromParam.Value = value;
 		}
 
+		private readonly StrategyParam<Level1Fields?> _buildFieldParam;
+
+		public Level1Fields? BuildField
+		{
+			get => _buildFieldParam.Value;
+			set => _buildFieldParam.Value = value;
+		}
+
 		protected override void OnStarted()
 		{
 			// !!! DO NOT FORGET add it in case use IsFormed property (see code below)
@@ -100,7 +109,8 @@ namespace SampleHistoryTesting
 				{
 					IsFinishedOnly = true,
 					BuildFrom = BuildFrom,
-					BuildMode = BuildFrom is null ? MarketDataBuildModes.Load : MarketDataBuildModes.Build
+					BuildMode = BuildFrom is null ? MarketDataBuildModes.Load : MarketDataBuildModes.Build,
+					BuildField = BuildField,
 				}
 			};
 
