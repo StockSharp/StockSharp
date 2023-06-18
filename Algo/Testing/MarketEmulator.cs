@@ -683,13 +683,27 @@ namespace StockSharp.Algo.Testing
 					{
 						if (_l1BidPrice is not null)
 						{
+							foreach (var p in _bids.Values)
+							{
+								foreach (var quote in p.First)
+									_messagePool.Free(quote);
+							}
+
 							_bids.Clear();
+
 							AddQuote(_bids, _l1BidPrice.Value, _l1BidVol);
 						}
 
 						if (_l1AskPrice is not null)
 						{
+							foreach (var p in _asks.Values)
+							{
+								foreach (var quote in p.First)
+									_messagePool.Free(quote);
+							}
+
 							_asks.Clear();
+
 							AddQuote(_asks, _l1AskPrice.Value, _l1AskVol);
 						}
 					}
@@ -853,160 +867,201 @@ namespace StockSharp.Algo.Testing
 
 					_lastDepthDate = message.LocalTime.Date;
 
-					var diff = new List<ExecutionMessage>();
-
-					decimal GetDiff(QuotesDict from, QuoteChange[] to, Sides side)
+					if (_activeOrders.Count == 0)
 					{
-						void AddExecMsg(QuoteChange quote, decimal volume, Sides side, bool isSpread)
+						foreach (var p in _bids.Values)
 						{
-							if (volume > 0)
-								diff.Add(CreateMessage(localTime, serverTime, side, quote.Price, volume));
-							else
-							{
-								volume = volume.Abs();
-
-								// matching only top orders (spread)
-								if (isSpread && volume > 1 && _isMatch.Next())
-								{
-									var tradeVolume = (int)volume / 2;
-
-									diff.Add(new ExecutionMessage
-									{
-										Side = side,
-										TradeVolume = tradeVolume,
-										DataTypeEx = DataType.Ticks,
-										SecurityId = _securityId,
-										LocalTime = localTime,
-										ServerTime = serverTime,
-										TradePrice = quote.Price,
-									});
-
-									// that tick will not affect on order book
-									//volume -= tradeVolume;
-								}
-
-								diff.Add(CreateMessage(localTime, serverTime, side, quote.Price, volume, true));
-							}
+							foreach (var quote in p.First)
+								_messagePool.Free(quote);
 						}
 
-						var newBestPrice = 0m;
-
-						var canProcessFrom = true;
-						var canProcessTo = true;
-
-						QuoteChange? currFrom = null;
-						QuoteChange? currTo = null;
-
-						var mult = side == Sides.Buy ? -1 : 1;
-						bool? isSpread = null;
-
-						using var fromEnum = from.GetEnumerator();
-						using var toEnum = ((IEnumerable<QuoteChange>)to).GetEnumerator();
-
-						while (true)
+						foreach (var p in _asks.Values)
 						{
-							if (canProcessFrom && currFrom == null)
+							foreach (var quote in p.First)
+								_messagePool.Free(quote);
+						}
+
+						_bids.Clear();
+						_asks.Clear();
+
+						decimal? bestBidPrice = null;
+						decimal? bestAskPrice = null;
+
+						foreach (var bid in message.Bids)
+						{
+							bestBidPrice ??= bid.Price;
+							_bids.Add(bid.Price, new(new(), new() { Price = bid.Price, Volume = bid.Volume }));
+						}
+
+						foreach (var ask in message.Asks)
+						{
+							bestAskPrice ??= ask.Price;
+							_asks.Add(ask.Price, new(new(), new() { Price = ask.Price, Volume = ask.Volume }));
+						}
+
+						_currSpreadPrice = bestAskPrice is null
+							? bestBidPrice ?? 0
+							: (bestBidPrice is null
+								? bestAskPrice.Value
+								: (bestAskPrice.Value - bestBidPrice.Value) / 2 + bestBidPrice.Value);
+					}
+					else
+					{
+						var diff = new List<ExecutionMessage>();
+
+						decimal GetDiff(QuotesDict from, QuoteChange[] to, Sides side)
+						{
+							void AddExecMsg(QuoteChange quote, decimal volume, Sides side, bool isSpread)
 							{
-								if (!fromEnum.MoveNext())
-									canProcessFrom = false;
+								if (volume > 0)
+									diff.Add(CreateMessage(localTime, serverTime, side, quote.Price, volume));
 								else
 								{
-									currFrom = fromEnum.Current.Value.Second;
-									isSpread = isSpread == null;
-								}
-							}
+									volume = volume.Abs();
 
-							if (canProcessTo && currTo == null)
-							{
-								if (!toEnum.MoveNext())
-									canProcessTo = false;
-								else
-								{
-									currTo = toEnum.Current;
-
-									if (newBestPrice == 0)
-										newBestPrice = currTo.Value.Price;
-								}
-							}
-
-							if (currFrom == null)
-							{
-								if (currTo == null)
-									break;
-								else
-								{
-									var v = currTo.Value;
-
-									AddExecMsg(v, v.Volume, side, false);
-									currTo = null;
-								}
-							}
-							else
-							{
-								if (currTo == null)
-								{
-									var v = currFrom.Value;
-									AddExecMsg(v, -v.Volume, side, isSpread.Value);
-									currFrom = null;
-								}
-								else
-								{
-									var f = currFrom.Value;
-									var t = currTo.Value;
-
-									if (f.Price == t.Price)
+									// matching only top orders (spread)
+									if (isSpread && volume > 1 && _isMatch.Next())
 									{
-										if (f.Volume != t.Volume)
+										var tradeVolume = (int)volume / 2;
+
+										diff.Add(new ExecutionMessage
 										{
-											AddExecMsg(t, t.Volume - f.Volume, side, isSpread.Value);
-										}
+											Side = side,
+											TradeVolume = tradeVolume,
+											DataTypeEx = DataType.Ticks,
+											SecurityId = _securityId,
+											LocalTime = localTime,
+											ServerTime = serverTime,
+											TradePrice = quote.Price,
+										});
 
-										currFrom = currTo = null;
+										// that tick will not affect on order book
+										//volume -= tradeVolume;
 									}
-									else if (f.Price * mult > t.Price * mult)
+
+									diff.Add(CreateMessage(localTime, serverTime, side, quote.Price, volume, true));
+								}
+							}
+
+							var newBestPrice = 0m;
+
+							var canProcessFrom = true;
+							var canProcessTo = true;
+
+							QuoteChange? currFrom = null;
+							QuoteChange? currTo = null;
+
+							var mult = side == Sides.Buy ? -1 : 1;
+							bool? isSpread = null;
+
+							using var fromEnum = from.GetEnumerator();
+							using var toEnum = ((IEnumerable<QuoteChange>)to).GetEnumerator();
+
+							while (true)
+							{
+								if (canProcessFrom && currFrom == null)
+								{
+									if (!fromEnum.MoveNext())
+										canProcessFrom = false;
+									else
 									{
-										AddExecMsg(t, t.Volume, side, isSpread.Value);
+										currFrom = fromEnum.Current.Value.Second;
+										isSpread = isSpread == null;
+									}
+								}
+
+								if (canProcessTo && currTo == null)
+								{
+									if (!toEnum.MoveNext())
+										canProcessTo = false;
+									else
+									{
+										currTo = toEnum.Current;
+
+										if (newBestPrice == 0)
+											newBestPrice = currTo.Value.Price;
+									}
+								}
+
+								if (currFrom == null)
+								{
+									if (currTo == null)
+										break;
+									else
+									{
+										var v = currTo.Value;
+
+										AddExecMsg(v, v.Volume, side, false);
 										currTo = null;
+									}
+								}
+								else
+								{
+									if (currTo == null)
+									{
+										var v = currFrom.Value;
+										AddExecMsg(v, -v.Volume, side, isSpread.Value);
+										currFrom = null;
 									}
 									else
 									{
-										AddExecMsg(f, -f.Volume, side, isSpread.Value);
-										currFrom = null;
+										var f = currFrom.Value;
+										var t = currTo.Value;
+
+										if (f.Price == t.Price)
+										{
+											if (f.Volume != t.Volume)
+											{
+												AddExecMsg(t, t.Volume - f.Volume, side, isSpread.Value);
+											}
+
+											currFrom = currTo = null;
+										}
+										else if (f.Price * mult > t.Price * mult)
+										{
+											AddExecMsg(t, t.Volume, side, isSpread.Value);
+											currTo = null;
+										}
+										else
+										{
+											AddExecMsg(f, -f.Volume, side, isSpread.Value);
+											currFrom = null;
+										}
 									}
 								}
 							}
+
+							return newBestPrice;
 						}
 
-						return newBestPrice;
-					}
+						var bestBidPrice = GetDiff(_bids, message.Bids, Sides.Buy);
+						var bestAskPrice = GetDiff(_asks, message.Asks, Sides.Sell);
 
-					var bestBidPrice = GetDiff(_bids, message.Bids, Sides.Buy);
-					var bestAskPrice = GetDiff(_asks, message.Asks, Sides.Sell);
+						var spreadPrice = bestAskPrice == 0
+							? bestBidPrice
+							: (bestBidPrice == 0
+								? bestAskPrice
+								: (bestAskPrice - bestBidPrice) / 2 + bestBidPrice);
 
-					var spreadPrice = bestAskPrice == 0
-						? bestBidPrice
-						: (bestBidPrice == 0
-							? bestAskPrice
-							: (bestAskPrice - bestBidPrice) / 2 + bestBidPrice);
+						//при обновлении стакана необходимо учитывать направление сдвига, чтобы не было ложного исполнения при наложении бидов и асков.
+						//т.е. если цена сдвинулась вниз, то обновление стакана необходимо начинать с минимального бида.
+						var diffs = (spreadPrice < _currSpreadPrice)
+								? diff.OrderBy(m => m.OrderPrice)
+								: diff.OrderByDescending(m => m.OrderPrice);
 
-					//при обновлении стакана необходимо учитывать направление сдвига, чтобы не было ложного исполнения при наложении бидов и асков.
-					//т.е. если цена сдвинулась вниз, то обновление стакана необходимо начинать с минимального бида.
-					var diffs = (spreadPrice < _currSpreadPrice)
-							? diff.OrderBy(m => m.OrderPrice)
-							: diff.OrderByDescending(m => m.OrderPrice);
-
-					foreach (var m in diffs)
-					{
-						if (m.DataType == DataType.Ticks)
+						foreach (var m in diffs)
 						{
-							m.ServerTime = message.ServerTime;
-							result.Add(m);
+							if (m.DataType == DataType.Ticks)
+							{
+								m.ServerTime = message.ServerTime;
+								result.Add(m);
+							}
+							else
+								Process(m, result);
 						}
-						else
-							Process(m, result);
-					}
 
-					_currSpreadPrice = spreadPrice;
+						_currSpreadPrice = spreadPrice;
+					}
 				}
 				else
 				{
@@ -1030,6 +1085,10 @@ namespace StockSharp.Algo.Testing
 
 							canApply = message.State == QuoteChangeStates.SnapshotComplete;
 							message = _bookBuilder.TryApply(message);
+
+							if (canApply)
+								_bookBuilder = null;
+
 							break;
 						}
 						case QuoteChangeStates.Increment:
@@ -1044,8 +1103,6 @@ namespace StockSharp.Algo.Testing
 
 					if (canApply)
 					{
-						_bookBuilder = null;
-
 						var isIncremental = message.State == QuoteChangeStates.Increment;
 
 						void Apply(QuotesDict quotes, QuoteChange[] newState)
