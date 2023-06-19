@@ -1,4 +1,24 @@
 {
+  "SignInStockSharp": {
+    "en": "Sign in to StockSharp.Com",
+    "ru": "Вход на StockSharp.Ru"
+  },
+  "LoginAndPassword": {
+    "en": "Login and password",
+    "ru": "Логин и пароль"
+  },
+  "OAuth": {
+    "en": "OAuth",
+    "ru": "OAuth"
+  },
+  "YourLanguage": {
+    "en": "Your language is English.",
+    "ru": "Ваш язык Русский."
+  },
+  "ChangeLanguage": {
+    "en": "Change current language",
+    "ru": "Изменить язык"
+  },
   "Cloud": {
     "en": "Cloud",
     "ru": "Облако"
@@ -8577,7 +8597,7 @@
   },
   "Str1876": {
     "en": "Connection timeout.",
-    "ru": "Время установления связи  вышло."
+    "ru": "Время установления связи вышло."
   },
   "NetworkError": {
     "en": "Network error.",
