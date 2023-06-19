@@ -26,12 +26,12 @@
 	{
 		static Paths()
 		{
-			var companyPath = ConfigManager.TryGet<string>("companyPath");
+			var companyPath = PathsHolder.CompanyPath ?? ConfigManager.TryGet<string>("companyPath");
 			CompanyPath = companyPath.IsEmpty() ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSharp") : companyPath.ToFullPathIfNeed();
 
 			AppName = ConfigManager.TryGet("appName", TypeHelper.ApplicationName);
 
-			var settingsPath = ConfigManager.TryGet<string>("settingsPath");
+			var settingsPath = PathsHolder.AppDataPath ?? ConfigManager.TryGet<string>("settingsPath");
 			AppDataPath = settingsPath.IsEmpty() ? Path.Combine(CompanyPath, AppName2) : settingsPath.ToFullPathIfNeed();
 
 			PlatformConfigurationFile = Path.Combine(AppDataPath, $"platform_config{DefaultSettingsExt}");
