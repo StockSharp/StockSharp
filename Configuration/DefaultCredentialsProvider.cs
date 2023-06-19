@@ -14,15 +14,11 @@
 	/// </summary>
 	public class DefaultCredentialsProvider : ICredentialsProvider
 	{
-		private static readonly string _credentialsFile = $"credentials{Paths.DefaultSettingsExt}";
-
 		private ServerCredentials _credentials;
 
 		// ReSharper disable InconsistentlySynchronizedField
 		private bool IsValid => _credentials != null && (!_credentials.Password.IsEmpty() || !_credentials.Token.IsEmpty());
 		// ReSharper restore InconsistentlySynchronizedField
-
-		private static string FileName => Path.Combine(Paths.CompanyPath, _credentialsFile);
 
 		bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
 		{
@@ -34,7 +30,7 @@
 					return IsValid;
 				}
 
-				var file = FileName;
+				var file = Paths.CredentialsFile;
 				credentials = null;
 
 				try
@@ -70,7 +66,7 @@
 
 				Directory.CreateDirectory(Paths.CompanyPath);
 
-				clone.Save().Serialize(FileName);
+				clone.Save().Serialize(Paths.CredentialsFile);
 
 				_credentials = clone;
 			}
@@ -78,7 +74,7 @@
 
 		void ICredentialsProvider.Delete()
 		{
-			var fileName = FileName;
+			var fileName = Paths.CredentialsFile;
 
 			lock (this)
 			{

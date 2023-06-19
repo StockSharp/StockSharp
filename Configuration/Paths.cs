@@ -29,6 +29,8 @@
 			var companyPath = PathsHolder.CompanyPath ?? ConfigManager.TryGet<string>("companyPath");
 			CompanyPath = companyPath.IsEmpty() ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSharp") : companyPath.ToFullPathIfNeed();
 
+			CredentialsFile = Path.Combine(CompanyPath, $"credentials{DefaultSettingsExt}");
+
 			AppName = ConfigManager.TryGet("appName", TypeHelper.ApplicationName);
 
 			var settingsPath = PathsHolder.AppDataPath ?? ConfigManager.TryGet<string>("settingsPath");
@@ -106,6 +108,11 @@
 		/// The path to directory with all applications.
 		/// </summary>
 		public static readonly string CompanyPath;
+
+		/// <summary>
+		/// The path to the file with credentials.
+		/// </summary>
+		public static readonly string CredentialsFile;
 
 		/// <summary>
 		/// The path to the settings directory.
