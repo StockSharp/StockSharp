@@ -19,6 +19,7 @@ namespace StockSharp.Messages
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -5481,6 +5482,43 @@ namespace StockSharp.Messages
 				return ask is not null;
 			else
 				return ask is null;
+		}
+
+		private static readonly SynchronizedDictionary<Type, bool> _basicSettingsSupportDict = new();
+
+		/// <summary>
+		/// Determines the specified adapter supports basic settings.
+		/// </summary>
+		/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+		/// <returns>Check result.</returns>
+		public static bool IsBasicSupported(this IMessageAdapter adapter)
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			var type = adapter.GetType();
+			if (_basicSettingsSupportDict.TryGetValue(type, out var supported))
+				return supported;
+
+			_basicSettingsSupportDict[type] = supported =
+				adapter is IKeySecretAdapter or ILoginPasswordAdapter or ITokenAdapter or IDemoAdapter or ISenderTargetAdapter || adapter.GetType().GetGenericType(typeof(IAddressAdapter<>)) is not null || adapter.GetBasicProperties().Any();
+
+			return supported;
+		}
+
+		/// <summary>
+		/// Find properties marked by <see cref="BasicSettingAttribute"/>.
+		/// </summary>
+		/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+		/// <returns>Properties marked by <see cref="BasicSettingAttribute"/>.</returns>
+		public static IEnumerable<PropertyInfo> GetBasicProperties(this IMessageAdapter adapter)
+		{
+			if (adapter is null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.GetType()
+				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(pi => pi.GetAttribute<BasicSettingAttribute>() is not null);
 		}
 	}
 }
