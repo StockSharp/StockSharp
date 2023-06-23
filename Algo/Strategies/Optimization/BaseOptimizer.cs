@@ -384,11 +384,6 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		connector.EmulationAdapter.Settings.Load(EmulationSettings.Save());
 
-		strategy.Connector = connector;
-
-		strategy.Reset();
-		strategy.Start();
-
 		var lastStep = 0;
 
 		connector.ProgressChanged += step => SingleProgressChanged?.Invoke(strategy, parameters, lastStep = step);
@@ -430,6 +425,10 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			
 			iterationFinished();
 		};
+
+		strategy.Connector = connector;
+		strategy.Reset();
+		strategy.Start();
 
 		connector.Connect();
 		connector.Start();

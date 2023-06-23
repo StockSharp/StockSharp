@@ -95,8 +95,6 @@ namespace SampleHistoryTestingParallel
 				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 			};
 
-			var timeFrame = TimeSpan.FromMinutes(1);
-
 			// create test security
 			var security = new Security
 			{
@@ -121,7 +119,7 @@ namespace SampleHistoryTestingParallel
 			else
 				_optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry);
 
-			_optimizer.EmulationSettings.MarketTimeChangedInterval = timeFrame;
+			_optimizer.EmulationSettings.MarketTimeChangedInterval = TimeSpan.FromMinutes(1);
 			_optimizer.EmulationSettings.StartTime = startTime;
 			_optimizer.EmulationSettings.StopTime = stopTime;
 

@@ -559,12 +559,6 @@ namespace SampleHistoryTesting
 					{
 						connector.SubscribeLevel1(security);
 					}
-
-					// start strategy before emulation started
-					strategy.Start();
-
-					// start historical data loading when connection established successfully and all data subscribed
-					connector.Start();
 				};
 
 				// fill parameters panel
@@ -657,6 +651,9 @@ namespace SampleHistoryTesting
 				//	};
 				//}
 
+				// start strategy before emulation started
+				strategy.Start();
+
 				_connectors.Add(connector);
 
 				progressBar.Value = 0;
@@ -669,6 +666,9 @@ namespace SampleHistoryTesting
 			{
 				// raise NewSecurities and NewPortfolio for full fill strategy properties
 				connector.Connect();
+
+				// start historical data loading when connection established successfully and all data subscribed
+				connector.Start();
 
 				// 1 cent commission for trade
 				connector.SendInMessage(new CommissionRuleMessage
