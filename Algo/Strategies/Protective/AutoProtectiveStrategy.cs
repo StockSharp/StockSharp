@@ -248,9 +248,9 @@ namespace StockSharp.Algo.Strategies.Protective
 		}
 
 		/// <inheritdoc />
-		protected override void OnStarted()
+		protected override void OnStarted(DateTimeOffset time)
 		{
-			base.OnStarted();
+			base.OnStarted(time);
 
 			if (MyTradesStrategy != null)
 				ApplyRule();

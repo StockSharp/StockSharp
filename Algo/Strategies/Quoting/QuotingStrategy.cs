@@ -287,9 +287,9 @@ namespace StockSharp.Algo.Strategies.Quoting
 		}
 
 		/// <inheritdoc />
-		protected override void OnStarted()
+		protected override void OnStarted(DateTimeOffset time)
 		{
-			base.OnStarted();
+			base.OnStarted(time);
 
 			//CurrentBestPrice = default;
 			_editingChanges = default;
@@ -362,7 +362,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 			});
 
 			if (!IsRulesSuspended)
-				ProcessQuoting(CurrentTime);
+				ProcessQuoting(time);
 		}
 
 		/// <summary>

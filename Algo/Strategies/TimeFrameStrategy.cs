@@ -71,9 +71,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		protected override void OnStarted()
+		protected override void OnStarted(DateTimeOffset time)
 		{
-			base.OnStarted();
+			base.OnStarted(time);
 
 			SafeGetConnector()
 				.WhenIntervalElapsed(Interval/*, true*/)

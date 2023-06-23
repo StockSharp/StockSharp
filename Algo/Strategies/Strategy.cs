@@ -1006,7 +1006,7 @@ namespace StockSharp.Algo.Strategies
 						{
 							StartedTime = CurrentTime;
 							LogProcessState(value);
-							OnStarted();
+							OnStarted(StartedTime);
 							break;
 						}
 						case ProcessStates.Stopping:
@@ -1546,7 +1546,16 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
+		[Obsolete("Use overload with time param.")]
 		protected virtual void OnStarted()
+		{
+			OnStarted(CurrentTime);
+		}
+
+		/// <summary>
+		/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
+		/// </summary>
+		protected virtual void OnStarted(DateTimeOffset time)
 		{
 			if (Security == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1380);
@@ -1614,12 +1623,11 @@ namespace StockSharp.Algo.Strategies
 			return true;
 		}
 
-		private bool CheckIntervalLimit()
+		private bool CheckIntervalLimit(DateTimeOffset now)
 		{
 			if (RegisterInterval == default)
 				return true;
 
-			var now = CurrentTime;
 			var diff = (_lastRegisterTime + RegisterInterval) - now;
 
 			if (diff >= TimeSpan.Zero)
@@ -1640,7 +1648,7 @@ namespace StockSharp.Algo.Strategies
 
 		private bool CanTrade()
 		{
-			if(CanTrade(out var reason))
+			if(CanTrade(CurrentTime, out var reason))
 			{
 				_lastCantTradeReason = null;
 				return true;
@@ -1656,7 +1664,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Check if can trade.
 		/// </summary>
-		protected virtual bool CanTrade(out string noTradeReason)
+		protected virtual bool CanTrade(DateTimeOffset time, out string noTradeReason)
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
@@ -1688,7 +1696,7 @@ namespace StockSharp.Algo.Strategies
 				return false;
 			}
 
-			if (!CheckIntervalLimit())
+			if (!CheckIntervalLimit(time))
 			{
 				noTradeReason = "order interval not yet expired";
 				return false;
@@ -2209,12 +2217,14 @@ namespace StockSharp.Algo.Strategies
 
 			OnReseted();
 
+			var time = CurrentTime;
+
 			// события вызываем только после вызова Reseted
 			// чтобы сбросить состояние у подписчиков стратегии.
-			RaisePnLChanged(CurrentTime);
+			RaisePnLChanged(time);
 			RaiseCommissionChanged();
 			RaiseLatencyChanged();
-			RaisePositionChanged();
+			RaisePositionChanged(time);
 			RaiseSlippageChanged();
 
 			_indicators.Clear();

@@ -69,12 +69,12 @@ namespace StockSharp.Algo.Strategies
 		public Strategy FirstFinishStrategy { get; private set; }
 
 		/// <inheritdoc />
-		protected override void OnStarted()
+		protected override void OnStarted(DateTimeOffset time)
 		{
 			if (FinishMode != BasketStrategyFinishModes.None && ChildStrategies.Count == 0)
 				throw new InvalidOperationException(LocalizedStrings.Str1224);
 
-			base.OnStarted();
+			base.OnStarted(time);
 		}
 
 		private void OnChildStrategiesAdded(Strategy strategy)

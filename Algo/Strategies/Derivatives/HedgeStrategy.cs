@@ -102,9 +102,9 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		}
 
 		/// <inheritdoc />
-		protected override void OnStarted()
+		protected override void OnStarted(DateTimeOffset time)
 		{
-			base.OnStarted();
+			base.OnStarted(time);
 
 			//_reHedgeOrders = 0;
 			_awaitingOrders.Clear();
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 			if (!IsRulesSuspended)
 			{
 				lock (_syncRoot)
-					ReHedge(CurrentTime);
+					ReHedge(time);
 			}
 		}
 

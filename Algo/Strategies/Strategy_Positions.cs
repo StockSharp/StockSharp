@@ -50,7 +50,7 @@
 			else
 				_positionChanged?.Invoke(position);
 
-			RaisePositionChanged();
+			RaisePositionChanged(position.LocalTime);
 
 			foreach (var id in message.GetSubscriptionIds())
 			{
@@ -77,20 +77,20 @@
 			else
 				_positionChanged?.Invoke(position);
 
-			RaisePositionChanged();
+			RaisePositionChanged(position.LocalTime);
 
 			PositionReceived?.Invoke(subscription, position);
 		}
 
-		private void RaisePositionChanged()
+		private void RaisePositionChanged(DateTimeOffset time)
 		{
 			this.AddInfoLog(LocalizedStrings.Str1399Params, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value.CurrentValue).JoinCommaSpace());
 
 			this.Notify(nameof(Position));
 			PositionChanged?.Invoke();
 
-			StatisticManager.AddPosition(CurrentTime, Position);
-			StatisticManager.AddPnL(CurrentTime, PnL);
+			StatisticManager.AddPosition(time, Position);
+			StatisticManager.AddPnL(time, PnL);
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new();

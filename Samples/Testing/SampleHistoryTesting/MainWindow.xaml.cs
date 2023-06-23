@@ -571,28 +571,28 @@ namespace SampleHistoryTesting
 				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
 				var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
 				
-				strategy.PnLChanged += () =>
+				strategy.PnLReceived2 += (s, t, r, u, c) =>
 				{
 					var data = equity.CreateData();
 
 					data
-						.Group(strategy.CurrentTime)
-							.Add(pnlCurve, strategy.PnL - (strategy.Commission ?? 0))
-							.Add(unrealizedPnLCurve, strategy.PnLManager.UnrealizedPnL ?? 0)
-							.Add(commissionCurve, strategy.Commission ?? 0);
+						.Group(t)
+							.Add(pnlCurve, r - (c ?? 0))
+							.Add(unrealizedPnLCurve, u ?? 0)
+							.Add(commissionCurve, c ?? 0);
 
 					equity.Draw(data);
 				};
 
 				var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor, ChartIndicatorDrawStyles.Line);
 
-				strategy.PositionChanged += () =>
+				strategy.PositionReceived += (s, p) =>
 				{
 					var data = set.Item7.CreateData();
 
 					data
-						.Group(strategy.CurrentTime)
-							.Add(posItems, strategy.Position);
+						.Group(p.LocalTime)
+							.Add(posItems, p.CurrentValue);
 
 					set.Item7.Draw(data);
 				};

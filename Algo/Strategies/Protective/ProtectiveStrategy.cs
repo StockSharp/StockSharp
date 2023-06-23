@@ -290,14 +290,14 @@ namespace StockSharp.Algo.Strategies.Protective
 		}
 
 		/// <inheritdoc />
-		protected override void OnStarted()
+		protected override void OnStarted(DateTimeOffset time)
 		{
 			this.AddInfoLog(LocalizedStrings.Str1283Params,
 				ProtectiveSide, ProtectivePrice, ProtectiveVolume, ProtectiveLevel, IsTrailing, UseMarketOrders, UseQuoting, PriceOffset);
 
 			this.SubscribeTrades(Security);
 
-			base.OnStarted();
+			base.OnStarted(time);
 		}
 
 		/// <inheritdoc />
