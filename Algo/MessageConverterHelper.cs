@@ -183,6 +183,7 @@ namespace StockSharp.Algo
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				ServerTime = tick.ServerTime,
+				LocalTime = tick.LocalTime,
 				OriginSide = tick.OriginSide,
 				Currency = tick.Currency,
 				Position = trade.Position,
