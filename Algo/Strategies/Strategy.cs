@@ -705,7 +705,13 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// <see cref="PnL"/> change event.
 		/// </summary>
+		[Obsolete("Use PnLReceived2 event.")]
 		public event Action<Subscription> PnLReceived;
+
+		/// <summary>
+		/// <see cref="PnL"/> change event.
+		/// </summary>
+		public event Action<Subscription, DateTimeOffset, decimal, decimal?, decimal?> PnLReceived2;
 
 		/// <summary>
 		/// Total commission.
@@ -2205,7 +2211,7 @@ namespace StockSharp.Algo.Strategies
 
 			// события вызываем только после вызова Reseted
 			// чтобы сбросить состояние у подписчиков стратегии.
-			RaisePnLChanged();
+			RaisePnLChanged(CurrentTime);
 			RaiseCommissionChanged();
 			RaiseLatencyChanged();
 			RaisePositionChanged();
@@ -2535,7 +2541,7 @@ namespace StockSharp.Algo.Strategies
 			}
 
 			if (Positions.Any())
-				RaisePnLChanged();
+				RaisePnLChanged(msgTime.Value);
 		}
 
 		private void OnConnectorOwnTradeReceived(Subscription subscription, MyTrade trade)
@@ -2647,7 +2653,6 @@ namespace StockSharp.Algo.Strategies
 			}
 
 			var isComChanged = false;
-			var isPnLChanged = false;
 			var isSlipChanged = false;
 
 			this.AddInfoLog(LocalizedStrings.Str1398Params,
@@ -2666,12 +2671,13 @@ namespace StockSharp.Algo.Strategies
 			UpdatePnLManager(trade.Trade.Security);
 
 			var execMsg = trade.ToMessage();
+			DateTimeOffset? pnLChangeTime = null;
 
 			var tradeInfo = PnLManager.ProcessMessage(execMsg);
 			if (tradeInfo != null)
 			{
 				if (tradeInfo.PnL != 0)
-					isPnLChanged = true;
+					pnLChangeTime = execMsg.LocalTime;
 
 				StatisticManager.AddMyTrade(tradeInfo);
 			}
@@ -2693,8 +2699,8 @@ namespace StockSharp.Algo.Strategies
 			});
 			TryInvoke(() =>
 			{
-				if (isPnLChanged)
-					RaisePnLChanged();
+				if (pnLChangeTime is not null)
+					RaisePnLChanged(pnLChangeTime.Value);
 			});
 			TryInvoke(() =>
 			{
@@ -2719,13 +2725,23 @@ namespace StockSharp.Algo.Strategies
 			CommissionChanged?.Invoke();
 		}
 
-		private void RaisePnLChanged()
+		private void RaisePnLChanged(DateTimeOffset time)
 		{
 			this.Notify(nameof(PnL));
 			PnLChanged?.Invoke();
 
 			if (_pfSubscription != null)
+			{
 				PnLReceived?.Invoke(_pfSubscription);
+
+				var evt = PnLReceived2;
+
+				if (evt is not null)
+				{
+					var manager = PnLManager;
+					evt(_pfSubscription, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
+				}
+			}
 
 			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
 		}
