@@ -34,8 +34,14 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
-	public class Position : NotifiableObject
+	public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 	{
+		DateTimeOffset IServerTimeMessage.ServerTime
+		{
+			get => LastChangeTime;
+			set => LastChangeTime = value;
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Position"/>.
 		/// </summary>

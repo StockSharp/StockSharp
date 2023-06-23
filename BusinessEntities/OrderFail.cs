@@ -18,12 +18,14 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Runtime.Serialization;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// Description of the error that occurred during the registration or cancellation of the order.
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class OrderFail
+	public class OrderFail : IErrorMessage, ILocalTimeMessage, IServerTimeMessage, ISeqNumMessage
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderFail"/>.
