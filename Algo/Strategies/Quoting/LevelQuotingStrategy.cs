@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		}
 
 		/// <inheritdoc />
-		protected override decimal? NeedQuoting(decimal? currentPrice, decimal? currentVolume, decimal newVolume)
+		protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
 		{
 			var quotes = GetFilteredQuotes(QuotingDirection);
 

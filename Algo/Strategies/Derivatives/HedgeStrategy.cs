@@ -149,21 +149,22 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			this.SuspendRules(() =>
 				GetNotificationRules().Or()
-					.Do(ReHedge)
+					.Do(() => ReHedge(CurrentTime))
 					.Apply(this));
 
 			if (!IsRulesSuspended)
 			{
 				lock (_syncRoot)
-					ReHedge();
+					ReHedge(CurrentTime);
 			}
 		}
 
 		/// <summary>
 		/// To get a list of orders rehedging the option position.
 		/// </summary>
+		/// <param name="currentTime">Current time.</param>
 		/// <returns>Rehedging orders.</returns>
-		protected abstract IEnumerable<Order> GetReHedgeOrders();
+		protected abstract IEnumerable<Order> GetReHedgeOrders(DateTimeOffset currentTime);
 
 		/// <summary>
 		/// To add the rehedging strategy.
@@ -221,7 +222,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 					parentStrategy.AddErrorLog(LocalizedStrings.Str1276Params, fail.Order.TransactionId, fail.Error);
 
 					TryResumeMonitoring(order);
-					ReHedge();
+					ReHedge(fail.ServerTime);
 				})
 				.Once()
 				.Apply(parentStrategy);
@@ -270,7 +271,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 			return !_awaitingOrders.IsEmpty();
 		}
 
-		private void ReHedge()
+		private void ReHedge(DateTimeOffset currentTime)
 		{
 			if (IsSuspended())
 			{
@@ -281,7 +282,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 			//_isSuspended = false;
 			_awaitingOrders.Clear();
 
-			var orders = GetReHedgeOrders();
+			var orders = GetReHedgeOrders(currentTime);
 
 			_awaitingOrders.AddRange(orders);
 

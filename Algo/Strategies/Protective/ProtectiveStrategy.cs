@@ -78,10 +78,10 @@ namespace StockSharp.Algo.Strategies.Protective
 			get => _protectiveLevel.Value;
 			set
 			{
-				_protectiveLevel.Value = value;
-
 				if (ProcessState == ProcessStates.Started)
-					ProcessQuoting();
+					throw new InvalidOperationException("In process.");
+
+				_protectiveLevel.Value = value;
 			}
 		}
 
@@ -106,105 +106,102 @@ namespace StockSharp.Algo.Strategies.Protective
 		/// The absolute value of the price when the one is reached the protective strategy is activated.
 		/// </summary>
 		/// <remarks>If the price is equal to <see langword="null" /> then the activation is not required.</remarks>
-		public virtual decimal? ActivationPrice
+		public virtual decimal? GetActivationPrice(DateTimeOffset currentTime)
 		{
-			get
+			//var isBuy = ProtectiveSide == Sides.Buy;
+
+			if (_prevBestPrice == null)
+				_prevBestPrice = ProtectivePrice;
+
+			var ltp = LastTradePrice;
+			var bestPrice = UseLastTradePrice && ltp != null ? ltp : BestPrice;
+
+			if (bestPrice == null)
 			{
-				//var isBuy = ProtectiveSide == Sides.Buy;
+				this.AddDebugLog("Best price is null.");
+				return null;
+			}
 
-				if (_prevBestPrice == null)
-					_prevBestPrice = ProtectivePrice;
+			if (IsTimeOut(currentTime) && (_isUpTrend ? bestPrice > ProtectivePrice : bestPrice < ProtectivePrice))
+			{
+				this.AddDebugLog("Timeout.");
+				return ClosePositionPrice;
+			}
 
-				var ltp = LastTradePrice;
-				var bestPrice = UseLastTradePrice && ltp != null ? ltp : BestPrice;
+			this.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, bestPrice);
 
-				if (bestPrice == null)
+			if (IsTrailing)
+			{
+				if (_isUpTrend)
 				{
-					this.AddDebugLog("Best price is null.");
-					return null;
-				}
-
-				if (IsTimeOut && (_isUpTrend ? bestPrice > ProtectivePrice : bestPrice < ProtectivePrice))
-				{
-					this.AddDebugLog("Timeout.");
-					return ClosePositionPrice;
-				}
-
-				this.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, bestPrice);
-
-				if (IsTrailing)
-				{
-					if (_isUpTrend)
+					if (_prevBestPrice < bestPrice)
 					{
-						if (_prevBestPrice < bestPrice)
-						{
-							_prevBestPrice = bestPrice;
-						}
-						else if (_prevBestPrice > bestPrice)
-						{
-							_isTrailingActivated = true;
-						}
+						_prevBestPrice = bestPrice;
 					}
-					else
+					else if (_prevBestPrice > bestPrice)
 					{
-						if (_prevBestPrice > bestPrice)
-						{
-							_prevBestPrice = bestPrice;
-						}
-						else if (_prevBestPrice < bestPrice)
-						{
-							_isTrailingActivated = true;
-						}
+						_isTrailingActivated = true;
 					}
-
-					if (!_isTrailingActivated)
-						return null;
-
-					var activationPrice = _isUpTrend
-						? _prevBestPrice.Value - ProtectiveLevel
-						: _prevBestPrice.Value + ProtectiveLevel;
-
-					this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, ProtectiveLevel);
-
-					if (_isUpTrend)
-					{
-						if (bestPrice <= activationPrice)
-							return ClosePositionPrice;
-					}
-					else
-					{
-						if (bestPrice >= activationPrice)
-							return ClosePositionPrice;
-					}
-
-					return null;
 				}
 				else
 				{
-					var activationPrice = (ProtectiveLevel.Type == UnitTypes.Limit)
-						? ProtectiveLevel
-						: (_isUpTrend ? _prevBestPrice + ProtectiveLevel : _prevBestPrice - ProtectiveLevel);
-
-					this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, ProtectiveLevel);
-
-					// protectiveLevel may has extra big value.
-					// In that case activationPrice may less that zero.
-					if (activationPrice <= 0)
-						activationPrice = Security.MinPrice ?? 1m;
-
-					if (_isUpTrend)
+					if (_prevBestPrice > bestPrice)
 					{
-						if (bestPrice >= activationPrice)
-							return ClosePositionPrice;
+						_prevBestPrice = bestPrice;
 					}
-					else
+					else if (_prevBestPrice < bestPrice)
 					{
-						if (bestPrice <= activationPrice)
-							return ClosePositionPrice;
+						_isTrailingActivated = true;
 					}
-
-					return null;
 				}
+
+				if (!_isTrailingActivated)
+					return null;
+
+				var activationPrice = _isUpTrend
+					? _prevBestPrice.Value - ProtectiveLevel
+					: _prevBestPrice.Value + ProtectiveLevel;
+
+				this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, ProtectiveLevel);
+
+				if (_isUpTrend)
+				{
+					if (bestPrice <= activationPrice)
+						return ClosePositionPrice;
+				}
+				else
+				{
+					if (bestPrice >= activationPrice)
+						return ClosePositionPrice;
+				}
+
+				return null;
+			}
+			else
+			{
+				var activationPrice = (ProtectiveLevel.Type == UnitTypes.Limit)
+					? ProtectiveLevel
+					: (_isUpTrend ? _prevBestPrice + ProtectiveLevel : _prevBestPrice - ProtectiveLevel);
+
+				this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, ProtectiveLevel);
+
+				// protectiveLevel may has extra big value.
+				// In that case activationPrice may less that zero.
+				if (activationPrice <= 0)
+					activationPrice = Security.MinPrice ?? 1m;
+
+				if (_isUpTrend)
+				{
+					if (bestPrice >= activationPrice)
+						return ClosePositionPrice;
+				}
+				else
+				{
+					if (bestPrice <= activationPrice)
+						return ClosePositionPrice;
+				}
+
+				return null;
 			}
 		}
 
@@ -337,9 +334,9 @@ namespace StockSharp.Algo.Strategies.Protective
 		}
 
 		/// <inheritdoc />
-		protected override void ProcessTimeOut()
+		protected override void ProcessTimeOut(DateTimeOffset currentTime)
 		{
-			ProcessQuoting();
+			ProcessQuoting(currentTime);
 		}
 
 		/// <inheritdoc />
@@ -352,7 +349,7 @@ namespace StockSharp.Algo.Strategies.Protective
 		}
 
 		/// <inheritdoc />
-		protected override decimal? NeedQuoting(decimal? currentPrice, decimal? currentVolume, decimal newVolume)
+		protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
 		{
 			if (IsActivated)
 			{
@@ -364,7 +361,7 @@ namespace StockSharp.Algo.Strategies.Protective
 				return null;
 			}
 
-			var price = ActivationPrice;
+			var price = GetActivationPrice(currentTime);
 
 			if (price == null)
 				return null;
@@ -396,12 +393,12 @@ namespace StockSharp.Algo.Strategies.Protective
 		}
 
 		/// <inheritdoc />
-		protected override void ProcessQuoting()
+		protected override void ProcessQuoting(DateTimeOffset currentTime)
 		{
 			if (UseQuoting && _quotingStarted)
 				return;
 
-			base.ProcessQuoting();
+			base.ProcessQuoting(currentTime);
 		}
 
 		/// <summary>

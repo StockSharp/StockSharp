@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Strategies.Derivatives
 {
+	using System;
+
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Derivatives;
@@ -52,16 +54,14 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		}
 
 		/// <inheritdoc />
-		protected override decimal? NeedQuoting(decimal? currentPrice, decimal? currentVolume, decimal newVolume)
+		protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
 		{
-			var marketTime = CurrentTime;
-
-			var minPrice = _bs.Premium(marketTime, IVRange.Min / 100);
+			var minPrice = _bs.Premium(currentTime, IVRange.Min / 100);
 
 			if (minPrice == null)
 				return null;
 
-			var maxPrice = _bs.Premium(marketTime, IVRange.Max / 100);
+			var maxPrice = _bs.Premium(currentTime, IVRange.Max / 100);
 
 			if (maxPrice == null)
 				return null;

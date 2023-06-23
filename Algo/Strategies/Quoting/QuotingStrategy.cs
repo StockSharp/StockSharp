@@ -8,7 +8,6 @@ namespace StockSharp.Algo.Strategies.Quoting
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Algo.Strategies.Protective;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -118,15 +117,15 @@ namespace StockSharp.Algo.Strategies.Quoting
 			get => _quotingVolume.Value;
 			set
 			{
+				if (ProcessState == ProcessStates.Started)
+					throw new InvalidOperationException("In process.");
+
 				if (value == QuotingVolume)
 					return;
 
 				this.AddInfoLog(LocalizedStrings.Str1289Params, QuotingVolume, value);
 
 				CheckQuotingVolume(value);
-
-				if (ProcessState == ProcessStates.Started)
-					ProcessQuoting();
 
 				_quotingVolume.Value = value;
 			}
@@ -178,7 +177,9 @@ namespace StockSharp.Algo.Strategies.Quoting
 		/// <summary>
 		/// Is the <see cref="TimeOut"/> occurred.
 		/// </summary>
-		protected bool IsTimeOut => (TimeOut != TimeSpan.Zero && (CurrentTime - StartedTime) >= TimeOut);
+		/// <param name="currentTime">Current time.</param>
+		/// <returns>Check result.</returns>
+		protected bool IsTimeOut(DateTimeOffset currentTime) => (TimeOut != TimeSpan.Zero && (currentTime - StartedTime) >= TimeOut);
 
 		/// <summary>
 		/// Whether the quoting can be stopped.
@@ -195,11 +196,12 @@ namespace StockSharp.Algo.Strategies.Quoting
 		/// <summary>
 		/// Should the order be quoted.
 		/// </summary>
+		/// <param name="currentTime">Current time.</param>
 		/// <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
 		/// <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
 		/// <param name="newVolume">New volume.</param>
 		/// <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
-		protected virtual decimal? NeedQuoting(decimal? currentPrice, decimal? currentVolume/*, Range<decimal> acceptablePriceRange*/, decimal newVolume)
+		protected virtual decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume/*, Range<decimal> acceptablePriceRange*/, decimal newVolume)
 		{
 			//if (acceptablePriceRange == null)
 			//	throw new ArgumentNullException(nameof(acceptablePriceRange));
@@ -331,7 +333,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 				{
 					_notificationRules
 						.Or()
-						.Do(ProcessQuoting)
+						.Do(() => ProcessQuoting(CurrentTime))
 						.Apply(this);
 				}
 
@@ -353,20 +355,20 @@ namespace StockSharp.Algo.Strategies.Quoting
 				{
 					SafeGetConnector()
 						.WhenIntervalElapsed(TimeOut)
-						.Do(ProcessTimeOut)
+						.Do(() => ProcessTimeOut(CurrentTime))
 						.Once()
 						.Apply(this);
 				}
 			});
 
 			if (!IsRulesSuspended)
-				ProcessQuoting();
+				ProcessQuoting(CurrentTime);
 		}
 
 		/// <summary>
 		/// The <see cref="TimeOut"/> occurrence event handler.
 		/// </summary>
-		protected virtual void ProcessTimeOut()
+		protected virtual void ProcessTimeOut(DateTimeOffset currentTime)
 		{
 			Stop();
 		}
@@ -413,7 +415,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 			else
 				this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);
 
-			ProcessQuoting();
+			ProcessQuoting(o.ServerTime);
 		}
 
 		private void AddOrderRules(Order order)
@@ -449,7 +451,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 						this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);
 
 					if (canProcess)
-						ProcessQuoting();
+						ProcessQuoting(fail.ServerTime);
 				})
 				.Once()
 				.Apply(this);
@@ -487,7 +489,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 							_isReRegistedFailed = default;
 							_editingChanges = default;
 
-							ProcessQuoting();
+							ProcessQuoting(o.ServerTime);
 						}
 						else
 							this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);
@@ -502,7 +504,8 @@ namespace StockSharp.Algo.Strategies.Quoting
 		/// <summary>
 		/// To initiate the quoting.
 		/// </summary>
-		protected virtual void ProcessQuoting()
+		/// <param name="currentTime">Current time.</param>
+		protected virtual void ProcessQuoting(DateTimeOffset currentTime)
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
@@ -553,7 +556,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 
 			var newVolume = GetNewVolume();
 
-			var newPrice = NeedQuoting(_order?.Price, _order?.Balance, newVolume);
+			var newPrice = NeedQuoting(currentTime, _order?.Price, _order?.Balance, newVolume);
 
 			if (newPrice == null)
 				return;
@@ -598,12 +601,12 @@ namespace StockSharp.Algo.Strategies.Quoting
 
 						var editRule = _order
 							.WhenEdited(this)
-							.Do(() =>
+							.Do(o =>
 							{
-								this.AddDebugLog("Order {0} edited.", _order.TransactionId);
+								this.AddDebugLog("Order {0} edited.", o.TransactionId);
 
 								_editingChanges = null;
-								ProcessQuoting();
+								ProcessQuoting(o.ServerTime);
 							})
 							.Once()
 							.Apply(this);
@@ -626,7 +629,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 								_editingChanges = null;
 
 								if (canProcess)
-									ProcessQuoting();
+									ProcessQuoting(fail.ServerTime);
 							})
 							.Once()
 							.Apply(this);
@@ -664,7 +667,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 								//_manualReRegisterOrder = _order;
 								_order = null;
 								_isCanceling = false;
-								ProcessQuoting();
+								ProcessQuoting(o.ServerTime);
 							}
 							else
 								this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);

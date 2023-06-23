@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Strategies.Derivatives
 {
+	using System;
+
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Strategies.Quoting;
@@ -34,7 +36,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		}
 
 		/// <inheritdoc />
-		protected override decimal? NeedQuoting(decimal? currentPrice, decimal? currentVolume, decimal newVolume)
+		protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
 		{
 			var tp = this.GetSecurityValue<decimal?>(Level1Fields.TheorPrice);
 

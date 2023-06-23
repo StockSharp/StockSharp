@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		}
 
 		/// <inheritdoc />
-		protected override decimal? NeedQuoting(decimal? currentOrderPrice, decimal? currentOrderVolume, decimal newVolume)
+		protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentOrderPrice, decimal? currentOrderVolume, decimal newVolume)
 		{
 			var preferrableQuotingPrice = BestPrice;
 

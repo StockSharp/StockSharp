@@ -11,6 +11,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using System;
 
 	/// <summary>
 	/// The options delta hedging strategy.
@@ -45,9 +46,9 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		}
 
 		/// <inheritdoc />
-		protected override IEnumerable<Order> GetReHedgeOrders()
+		protected override IEnumerable<Order> GetReHedgeOrders(DateTimeOffset currentTime)
 		{
-			var futurePosition = BlackScholes.Delta(CurrentTime);
+			var futurePosition = BlackScholes.Delta(currentTime);
 
 			if (futurePosition == null)
 				return Enumerable.Empty<Order>();
