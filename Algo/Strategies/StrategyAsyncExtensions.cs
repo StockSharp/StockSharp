@@ -15,9 +15,10 @@ public static class StrategyAsyncExtensions
 	/// Execute strategy.
 	/// </summary>
 	/// <param name="strategy"><see cref="Strategy"/>.</param>
+	/// <param name="extra">Extra action.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask ExecAsync(this Strategy strategy, CancellationToken cancellationToken)
+	public static async ValueTask ExecAsync(this Strategy strategy, Action extra, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -51,6 +52,8 @@ public static class StrategyAsyncExtensions
 		try
 		{
 			strategy.Start();
+
+			extra?.Invoke();
 
 			await tcs.Task;
 		}
