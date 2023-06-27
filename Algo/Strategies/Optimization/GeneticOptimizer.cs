@@ -1,6 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Optimization;
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +7,15 @@ using System.Threading.Tasks;
 
 using Ecng.Collections;
 using Ecng.Common;
-
+using Ecng.Compilation;
+using Ecng.Compilation.Expressions;
 using GeneticSharp;
 
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
+
+namespace StockSharp.Algo.Strategies.Optimization;
 
 /// <summary>
 /// The genetic optimizer of strategies.
@@ -212,8 +213,31 @@ public class GeneticOptimizer : BaseOptimizer
 		if (formula.IsEmpty())
 			throw new ArgumentNullException(nameof(formula));
 
-		// TODO
-		return s => s.PnL;
+		if (ServicesRegistry.TryCompiler is null)
+			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
+
+		var expression = ServicesRegistry.Compiler.Compile<decimal>(new(), formula);
+
+		if (!expression.Error.IsEmpty())
+			throw new InvalidOperationException(expression.Error);
+
+		var vars = expression.Variables.ToArray();
+		var varGetters = new Func<Strategy, decimal>[vars.Length];
+
+		for (var i = 0; i < vars.Length; ++i)
+		{
+			var par = GeneticSettings.FormulaVarsItemsSource.ParamFromVarName(vars[i]);
+			varGetters[i] = s => s.StatisticManager.Parameters.FirstOrDefault(p => p.Type == par.Type)?.Value as decimal? ?? throw new ArgumentException($"unable to use '{par.Name}' statistics parameter for fitness calculation");
+		}
+
+		return stra =>
+		{
+			var varValues = new decimal[vars.Length];
+			for(var i = 0; i < varValues.Length; ++i)
+				varValues[i] = varGetters[i](stra);
+
+			return expression.Calculate(varValues);
+		};
 	}
 
 	/// <summary>
@@ -312,7 +336,7 @@ public class GeneticOptimizer : BaseOptimizer
 	public override void Suspend()
 	{
 		base.Suspend();
-	
+
 		_ga.Stop();
 	}
 

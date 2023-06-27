@@ -1,8 +1,8 @@
-﻿namespace StockSharp.Algo.Strategies.Optimization;
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.Linq;
+using Ecng.Collections;
 using Ecng.Common;
 using Ecng.ComponentModel;
 using Ecng.Serialization;
@@ -10,6 +10,10 @@ using Ecng.Serialization;
 using GeneticSharp;
 
 using StockSharp.Localization;
+using StockSharp.Algo.Statistics;
+using StockSharp.Messages;
+
+namespace StockSharp.Algo.Strategies.Optimization;
 
 /// <summary>
 /// Genetic settings.
@@ -48,6 +52,48 @@ public class GeneticSettings : IPersistable
 		}
 	}
 
+	/// <summary>
+	/// </summary>
+	public sealed class FormulaVarsItemsSource : ItemsSourceBase<IStatisticParameter>
+	{
+		static readonly IStatisticParameter[] _allParams = StatisticManager.GetAllParameters();
+		static readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _paramByType;
+
+		static FormulaVarsItemsSource() => _paramByType = _allParams.ToDictionary(v => v.Type);
+
+		/// <summary>
+		/// </summary>
+		public FormulaVarsItemsSource() : base(_allParams) { }
+
+		/// <summary>
+		/// </summary>
+		public static string VarNameFromParam(IStatisticParameter p)
+		{
+			return p.Type switch
+			{
+				StatisticParameterTypes.NetProfit => "PnL",
+				_ => p.Type.ToString(),
+			};
+		}
+
+		/// <summary>
+		/// </summary>
+		public static IStatisticParameter ParamFromVarName(string varName)
+		{
+			return varName.ToLowerInvariant() switch
+			{
+				"pnl" => _paramByType[StatisticParameterTypes.NetProfit],
+				_ => _paramByType.TryGetValue(varName.To<StatisticParameterTypes>()) ?? throw new ArgumentOutOfRangeException($"unknown variable '{varName}'"),
+			};
+		}
+
+		/// <inheritdoc />
+		protected override string GetName(IStatisticParameter value) => VarNameFromParam(value);
+
+		/// <inheritdoc />
+		protected override string GetDescription(IStatisticParameter value) => value.Description;
+	}
+
 	private string _fitness = nameof(Strategy.PnL);
 
 	/// <summary>
@@ -59,6 +105,7 @@ public class GeneticSettings : IPersistable
 		Description = LocalizedStrings.FitnessFormulaKey,
 		GroupName = LocalizedStrings.GeneralKey,
 		Order = 1)]
+	[FormulaEditor(typeof(FormulaVarsItemsSource))]
 	public string Fitness
 	{
 		get => _fitness;

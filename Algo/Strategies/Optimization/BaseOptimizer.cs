@@ -422,7 +422,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					evt(progress.Value, duration, _iterCount == int.MaxValue ? TimeSpan.MaxValue : (_iterCount * 1.0 / _doneIters - 1) * duration);
 				}
 			}
-			
+
 			iterationFinished();
 		};
 

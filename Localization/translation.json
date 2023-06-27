@@ -1,4 +1,12 @@
 {
+  "AvailableVariables": {
+    "en": "Available variables",
+    "ru": "Доступные переменные"
+  },
+  "FormulaEditor": {
+    "en": "Formula editor",
+    "ru": "Редактор формул"
+  },
   "SignInStockSharp": {
     "en": "Sign in to StockSharp.Com",
     "ru": "Вход на StockSharp.Ru"

@@ -13,6 +13,7 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Algo.Statistics
 {
 	using System;
@@ -215,5 +216,10 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public virtual void Reset()
 			=> _parameters.SyncDo(c => c.ForEach(p => p.Reset()));
+
+		/// <summary>
+		/// Return all available parameters.
+		/// </summary>
+		public static IStatisticParameter[] GetAllParameters() => new StatisticManager().Parameters;
 	}
 }

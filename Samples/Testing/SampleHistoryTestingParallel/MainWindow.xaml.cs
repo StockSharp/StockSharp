@@ -13,6 +13,7 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace SampleHistoryTestingParallel
 {
 	using System;
@@ -25,6 +26,9 @@ namespace SampleHistoryTestingParallel
 	using Ecng.Xaml;
 	using Ecng.Common;
 	using Ecng.Serialization;
+	using Ecng.Compilation;
+	using Ecng.Configuration;
+	using Ecng.Compilation.Roslyn;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
@@ -46,6 +50,7 @@ namespace SampleHistoryTestingParallel
 		{
 			InitializeComponent();
 
+			ConfigManager.RegisterService<ICompiler>(new RoslynCompiler());
 			HistoryPath.Folder = Paths.HistoryDataPath;
 			GeneticSettings.SelectedObject = new GeneticSettings();
 		}
@@ -243,7 +248,7 @@ namespace SampleHistoryTestingParallel
 				{
 					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, 0, null),
 					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, 0, null),
-				}, s => s.PnL);
+				});
 			}
 		}
 
