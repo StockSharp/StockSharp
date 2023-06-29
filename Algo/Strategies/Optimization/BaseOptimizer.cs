@@ -44,8 +44,6 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private bool _cancelEmulation;
 	private int _lastTotalProgress;
 	private DateTime _startedAt;
-	private int _iterCount;
-	private int _doneIters;
 
 	private MarketDataStorageCache _adapterCache;
 	private MarketDataStorageCache _storageCache;
@@ -201,17 +199,11 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <summary>
 	/// Start optimization.
 	/// </summary>
-	/// <param name="iterationCount">Iterations count.</param>
-	protected void OnStart(int iterationCount)
+	protected void OnStart()
 	{
-		if (iterationCount <= 0)
-			throw new ArgumentOutOfRangeException(nameof(iterationCount));
-
 		_cancelEmulation = false;
 		_startedAt = DateTime.UtcNow;
 		_lastTotalProgress = -1;
-		_iterCount = iterationCount;
-		_doneIters = 0;
 
 		State = ChannelStates.Starting;
 		State = ChannelStates.Started;
@@ -402,9 +394,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			{
 				_startedConnectors.Remove(connector);
 
-				_doneIters++;
-
-				progress = (int)((_doneIters * 100.0) / _iterCount);
+				progress = GetProgress();
 
 				if (_lastTotalProgress > progress)
 					progress = null;
@@ -419,7 +409,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				if (evt is not null)
 				{
 					var duration = DateTime.UtcNow - _startedAt;
-					evt(progress.Value, duration, _iterCount == int.MaxValue ? TimeSpan.MaxValue : (_iterCount * 1.0 / _doneIters - 1) * duration);
+
+					evt(progress.Value.Abs(), duration, progress == -1 ? TimeSpan.MaxValue : duration * 100.0 / progress.Value - duration);
 				}
 			}
 
@@ -433,4 +424,10 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		connector.Connect();
 		connector.Start();
 	}
+
+	/// <summary>
+	/// Get progress value.
+	/// </summary>
+	/// <returns>Operation result.</returns>
+	protected abstract int GetProgress();
 }

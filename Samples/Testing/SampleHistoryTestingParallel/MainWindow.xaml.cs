@@ -128,9 +128,12 @@ namespace SampleHistoryTestingParallel
 			_optimizer.EmulationSettings.StartTime = startTime;
 			_optimizer.EmulationSettings.StopTime = stopTime;
 
+			// set max possible iteration to 100
+			_optimizer.EmulationSettings.MaxIterations = 100;
+
 			// count of parallel testing strategies
 			// if not set, then CPU count * 2
-			//_optimizer.EmulationSettings.BatchSize = 3;
+			//_optimizer.EmulationSettings.BatchSize = 1;
 
 			// settings caching mode non security optimized param
 			_optimizer.AdapterCache = new();
@@ -191,9 +194,6 @@ namespace SampleHistoryTestingParallel
 			};
 
 			_startEmulationTime = DateTime.Now;
-
-			// set max possible iteration to 100
-			_optimizer.EmulationSettings.MaxIterations = 100;
 
 			if (_optimizer is BruteForceOptimizer btOptimizer)
 			{

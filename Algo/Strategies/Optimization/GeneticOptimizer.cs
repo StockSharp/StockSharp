@@ -320,13 +320,22 @@ public class GeneticOptimizer : BaseOptimizer
 		//_ga.GenerationRan += OnGenerationRan;
 		_ga.TerminationReached += OnTerminationReached;
 
-		OnStart(Settings.GenerationsMax == 0 ? int.MaxValue : Settings.GenerationsMax * EmulationSettings.BatchSize);
+		OnStart();
 
 		Task.Run(async () =>
 		{
 			await Task.Yield();
 			_ga.Start();
 		});
+	}
+
+	/// <inheritdoc />
+	protected override int GetProgress()
+	{
+		var max = Settings.GenerationsMax;
+		var ga = _ga;
+
+		return max > 0 && ga is not null ? (int)(ga.GenerationsNumber * 100.0 / max) : -1;
 	}
 
 	private void OnTerminationReached(object sender, EventArgs e)
