@@ -10,6 +10,8 @@
     <Compile Include="..\SampleHistoryTesting\SmaStrategy.cs" Link="SmaStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
+
     <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(SampleHistoryDataVersion)" />
   </ItemGroup>
