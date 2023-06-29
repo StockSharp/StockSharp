@@ -9,6 +9,7 @@ using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
+
 using GeneticSharp;
 
 using StockSharp.Algo.Storages;
@@ -265,12 +266,17 @@ public class GeneticOptimizer : BaseOptimizer
 		if (_ga is not null)
 			throw new InvalidOperationException("Not stopped.");
 
-		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(parameters.ToArray()));
+		var paramArr = parameters.ToArray();
+
+		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
 		calcFitness ??= ToFitness(Settings.Fitness);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
+
+		if (mutation is SequenceMutationBase && paramArr.Length < 3)
+			throw new InvalidOperationException($"Optimization parameters for '{mutation.GetType()}' mutation must be at least 3.");
 
 		_leftIterations = null;
 
