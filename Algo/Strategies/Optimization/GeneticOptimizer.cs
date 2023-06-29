@@ -328,7 +328,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		OnStart();
 
-		Task.Run(() => _ga.Start());
+		Task.Run(_ga.Start);
 	}
 
 	/// <inheritdoc />
