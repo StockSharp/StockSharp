@@ -199,6 +199,11 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	public event Action<Strategy, IStrategyParam[], int> SingleProgressChanged;
 
 	/// <summary>
+	/// Strategy initialized event.
+	/// </summary>
+	public event Action<Strategy, IStrategyParam[]> StrategyInitialized;
+
+	/// <summary>
 	/// Start optimization.
 	/// </summary>
 	/// <param name="iterationCount">Iterations count.</param>
@@ -428,6 +433,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		strategy.Connector = connector;
 		strategy.Reset();
+
+		StrategyInitialized?.Invoke(strategy, parameters);
+
 		strategy.Start();
 
 		connector.Connect();
