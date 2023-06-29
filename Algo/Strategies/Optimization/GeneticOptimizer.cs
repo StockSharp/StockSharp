@@ -357,7 +357,7 @@ public class GeneticOptimizer : BaseOptimizer
 	{
 		base.Stop();
 
-		_ga.Stop();
+		_ga?.Stop();
 		_events.CopyAndClear().ForEach(e =>
 		{
 			try
