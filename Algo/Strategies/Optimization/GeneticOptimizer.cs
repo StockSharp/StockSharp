@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Compilation;
-using Ecng.Compilation.Expressions;
 
 using GeneticSharp;
 
@@ -223,7 +222,7 @@ public class GeneticOptimizer : BaseOptimizer
 		if (ServicesRegistry.TryCompiler is null)
 			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
 
-		var expression = ServicesRegistry.Compiler.Compile<decimal>(new(), formula);
+		var expression = formula.Compile<decimal>();
 
 		if (!expression.Error.IsEmpty())
 			throw new InvalidOperationException(expression.Error);
