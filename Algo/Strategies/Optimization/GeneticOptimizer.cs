@@ -50,7 +50,13 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 
 			var spc = (StrategyParametersChromosome)chromosome;
-			var strategy = _strategy.Clone();
+			Strategy strategy;
+
+			using(new Scope<CloneHelper.CloneWithoutUI>())
+				strategy = _strategy.Clone();
+
+			strategy.Security = _strategy.Security;
+			strategy.Portfolio = Portfolio.CreateSimulator();
 
 			var genes = spc.GetGenes();
 			var parameters = new IStrategyParam[genes.Length];
@@ -59,7 +65,7 @@ public class GeneticOptimizer : BaseOptimizer
 			{
 				var gene = genes[i];
 				var (param, value) = ((IStrategyParam, object))gene.Value;
-				_strategy.Parameters[param.Id].Value = value;
+				strategy.Parameters[param.Id].Value = value;
 				parameters[i] = param;
 			}
 
@@ -322,11 +328,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		OnStart();
 
-		Task.Run(async () =>
-		{
-			await Task.Yield();
-			_ga.Start();
-		});
+		Task.Run(() => _ga.Start());
 	}
 
 	/// <inheritdoc />
