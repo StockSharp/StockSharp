@@ -66,8 +66,9 @@ public class GeneticOptimizer : BaseOptimizer
 			{
 				var gene = genes[i];
 				var (param, value) = ((IStrategyParam, object))gene.Value;
-				strategy.Parameters[param.Id].Value = value;
-				parameters[i] = param;
+				var realParam = strategy.Parameters[param.Id];
+				realParam.Value = value;
+				parameters[i] = realParam;
 			}
 
 			using var wait = new ManualResetEvent(false);
