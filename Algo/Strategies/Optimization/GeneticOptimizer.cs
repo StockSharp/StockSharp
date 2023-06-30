@@ -233,7 +233,7 @@ public class GeneticOptimizer : BaseOptimizer
 		for (var i = 0; i < vars.Length; ++i)
 		{
 			var par = GeneticSettings.FormulaVarsItemsSource.ParamFromVarName(vars[i]);
-			varGetters[i] = s => s.StatisticManager.Parameters.FirstOrDefault(p => p.Type == par.Type)?.Value as decimal? ?? throw new ArgumentException($"unable to use '{par.Name}' statistics parameter for fitness calculation");
+			varGetters[i] = s => s.StatisticManager.Parameters.FirstOrDefault(p => p.Type == par.Type)?.Value.To<decimal?>() ?? throw new ArgumentException($"unable to use '{par.Name}' statistics parameter for fitness calculation");
 		}
 
 		return stra =>

@@ -1,4 +1,12 @@
 {
+  "FitnessFormulaExample": {
+    "en": "Fitness function example: PnL / max(abs(MaxPnL - PnL), 1)",
+    "ru": "Пример фитнесс функции: PnL / max(abs(MaxPnL - PnL), 1)"
+  },
+  "DoubleClickOnVarToInsert": {
+    "en": "Double click on variable to insert.",
+    "ru": "Двойной клик на переменной для вставки."
+  },
   "AvailableVariables": {
     "en": "Available variables",
     "ru": "Доступные переменные"
