@@ -239,10 +239,18 @@ public class GeneticOptimizer : BaseOptimizer
 		return stra =>
 		{
 			var varValues = new decimal[vars.Length];
+
 			for(var i = 0; i < varValues.Length; ++i)
 				varValues[i] = varGetters[i](stra);
 
-			return expression.Calculate(varValues);
+			try
+			{
+				return expression.Calculate(varValues);
+			}
+			catch (ArithmeticException)
+			{
+				return decimal.MinValue;
+			}
 		};
 	}
 
