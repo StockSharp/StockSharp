@@ -242,6 +242,6 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public override string ToString() => Name;
+		public override string ToString() => $"{Name}={Value}";
 	}
 }

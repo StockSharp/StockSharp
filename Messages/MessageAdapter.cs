@@ -332,6 +332,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual string AssociatedBoard => string.Empty;
 
 		/// <summary>

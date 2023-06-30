@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Compilation;
-using Ecng.Compilation.Expressions;
+
 using GeneticSharp;
 
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
+using StockSharp.Logging;
 
 namespace StockSharp.Algo.Strategies.Optimization;
 
@@ -49,6 +50,7 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 
 			var spc = (StrategyParametersChromosome)chromosome;
+
 			Strategy strategy;
 
 			using(new Scope<CloneHelper.CloneWithoutUI>())
@@ -64,8 +66,9 @@ public class GeneticOptimizer : BaseOptimizer
 			{
 				var gene = genes[i];
 				var (param, value) = ((IStrategyParam, object))gene.Value;
-				strategy.Parameters[param.Id].Value = value;
-				parameters[i] = param;
+				var realParam = strategy.Parameters[param.Id];
+				realParam.Value = value;
+				parameters[i] = realParam;
 			}
 
 			using var wait = new ManualResetEvent(false);
@@ -214,7 +217,7 @@ public class GeneticOptimizer : BaseOptimizer
 	/// </summary>
 	public GeneticSettings Settings { get; } = new();
 
-	private static Func<Strategy, decimal> ToFitness(string formula)
+	private Func<Strategy, decimal> ToFitness(string formula)
 	{
 		if (formula.IsEmpty())
 			throw new ArgumentNullException(nameof(formula));
@@ -222,7 +225,7 @@ public class GeneticOptimizer : BaseOptimizer
 		if (ServicesRegistry.TryCompiler is null)
 			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
 
-		var expression = ServicesRegistry.Compiler.Compile<decimal>(new(), formula);
+		var expression = formula.Compile<decimal>();
 
 		if (!expression.Error.IsEmpty())
 			throw new InvalidOperationException(expression.Error);
@@ -239,10 +242,19 @@ public class GeneticOptimizer : BaseOptimizer
 		return stra =>
 		{
 			var varValues = new decimal[vars.Length];
+
 			for(var i = 0; i < varValues.Length; ++i)
 				varValues[i] = varGetters[i](stra);
 
-			return expression.Calculate(varValues);
+			try
+			{
+				return expression.Calculate(varValues);
+			}
+			catch (ArithmeticException ex)
+			{
+				this.AddErrorLog(ex);
+				return decimal.MinValue;
+			}
 		};
 	}
 
@@ -271,12 +283,17 @@ public class GeneticOptimizer : BaseOptimizer
 		if (_ga is not null)
 			throw new InvalidOperationException("Not stopped.");
 
-		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(parameters.ToArray()));
+		var paramArr = parameters.ToArray();
+
+		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
 		calcFitness ??= ToFitness(Settings.Fitness);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
+
+		if (mutation is SequenceMutationBase && paramArr.Length < 3)
+			throw new InvalidOperationException($"Optimization parameters for '{mutation.GetType()}' mutation must be at least 3.");
 
 		_leftIterations = null;
 
@@ -320,9 +337,18 @@ public class GeneticOptimizer : BaseOptimizer
 		//_ga.GenerationRan += OnGenerationRan;
 		_ga.TerminationReached += OnTerminationReached;
 
-		OnStart(Settings.GenerationsMax == 0 ? int.MaxValue : Settings.GenerationsMax * EmulationSettings.BatchSize);
+		OnStart();
 
-		Task.Run(() => _ga.Start());
+		Task.Run(_ga.Start);
+	}
+
+	/// <inheritdoc />
+	protected override int GetProgress()
+	{
+		var max = Settings.GenerationsMax;
+		var ga = _ga;
+
+		return max > 0 && ga is not null ? (int)(ga.GenerationsNumber * 100.0 / max) : -1;
 	}
 
 	private void OnTerminationReached(object sender, EventArgs e)

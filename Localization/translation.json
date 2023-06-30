@@ -7,6 +7,14 @@
     "en": "Double click on variable to insert.",
     "ru": "Двойной клик на переменной для вставки."
   },
+  "YearMonth": {
+    "en": "YearMonth",
+    "ru": "ГодМесяц"
+  },
+  "YearMonthFormat": {
+    "en": "YearMonth format.",
+    "ru": "ГодМесяц формат."
+  },
   "AvailableVariables": {
     "en": "Available variables",
     "ru": "Доступные переменные"

@@ -15,6 +15,9 @@ using StockSharp.Localization;
 /// </summary>
 public class BruteForceOptimizer : BaseOptimizer
 {
+	private int _itersCount;
+	private int _itersDone;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BruteForceOptimizer"/>.
 	/// </summary>
@@ -71,7 +74,10 @@ public class BruteForceOptimizer : BaseOptimizer
 			strategies = strategies.Take(iterationCount);
 		}
 
-		OnStart(iterationCount);
+		_itersCount = iterationCount;
+		_itersDone = 0;
+
+		OnStart();
 
 		var batchSize = EmulationSettings.BatchSize;
 
@@ -100,4 +106,8 @@ public class BruteForceOptimizer : BaseOptimizer
 			_();
 		}
 	}
+
+	/// <inheritdoc />
+	protected override int GetProgress()
+		=> _itersCount == int.MaxValue ? -1 : (int)(++_itersDone * 100.0 / _itersCount);
 }

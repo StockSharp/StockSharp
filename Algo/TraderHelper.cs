@@ -2679,6 +2679,11 @@ namespace StockSharp.Algo
 		public static ExpressionFormula<decimal> Compile(this string expression)
 			=> Compile<decimal>(expression);
 
+		private static class CacheHolder<TResult>
+		{
+			public static readonly SynchronizedDictionary<string, ExpressionFormula<TResult>> Cache = new();
+		}
+
 		/// <summary>
 		/// Compile mathematical formula.
 		/// </summary>
@@ -2686,7 +2691,7 @@ namespace StockSharp.Algo
 		/// <param name="expression">Text expression.</param>
 		/// <returns>Compiled mathematical formula.</returns>
 		public static ExpressionFormula<TResult> Compile<TResult>(this string expression)
-			=> ServicesRegistry.Compiler.Compile<TResult>(new(), expression);
+			=> CacheHolder<TResult>.Cache.SafeAdd(expression, key => ServicesRegistry.Compiler.Compile<TResult>(new(), key));
 
 		/// <summary>
 		/// Create <see cref="IMessageAdapter"/>.
