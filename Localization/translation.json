@@ -1,4 +1,12 @@
 {
+  "YearMonth": {
+    "en": "YearMonth",
+    "ru": "ГодМесяц"
+  },
+  "YearMonthFormat": {
+    "en": "YearMonth format.",
+    "ru": "ГодМесяц формат."
+  },
   "AvailableVariables": {
     "en": "Available variables",
     "ru": "Доступные переменные"
