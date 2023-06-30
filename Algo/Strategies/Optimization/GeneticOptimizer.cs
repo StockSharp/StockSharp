@@ -14,6 +14,7 @@ using GeneticSharp;
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
+using StockSharp.Logging;
 
 namespace StockSharp.Algo.Strategies.Optimization;
 
@@ -49,6 +50,7 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 
 			var spc = (StrategyParametersChromosome)chromosome;
+
 			Strategy strategy;
 
 			using(new Scope<CloneHelper.CloneWithoutUI>())
@@ -214,7 +216,7 @@ public class GeneticOptimizer : BaseOptimizer
 	/// </summary>
 	public GeneticSettings Settings { get; } = new();
 
-	private static Func<Strategy, decimal> ToFitness(string formula)
+	private Func<Strategy, decimal> ToFitness(string formula)
 	{
 		if (formula.IsEmpty())
 			throw new ArgumentNullException(nameof(formula));
@@ -247,8 +249,9 @@ public class GeneticOptimizer : BaseOptimizer
 			{
 				return expression.Calculate(varValues);
 			}
-			catch (ArithmeticException)
+			catch (ArithmeticException ex)
 			{
+				this.AddErrorLog(ex);
 				return decimal.MinValue;
 			}
 		};
