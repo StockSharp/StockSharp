@@ -68,10 +68,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		PortfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
 		ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
-		EmulationSettings = new()
-		{
-			LogLevel = LogLevels.Error,
-		};
+		EmulationSettings = new();
 
 		StorageSettings = new()
 		{
