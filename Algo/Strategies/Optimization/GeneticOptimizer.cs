@@ -72,6 +72,7 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 
 			using var wait = new ManualResetEvent(false);
+			
 			_optimizer._events.Add(wait);
 
 			try
@@ -88,7 +89,16 @@ public class GeneticOptimizer : BaseOptimizer
 						_optimizer.FreeAdapterCache(adapterCache);
 						_optimizer.FreeStorageCache(storageCache);
 
-						wait.Set();
+						if (!_optimizer._events.Contains(wait))
+							return;
+
+						try
+						{
+							wait.Set();
+						}
+						catch (ObjectDisposedException)
+						{
+						}
 					});
 
 				wait.WaitOne();
