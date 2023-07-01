@@ -56,10 +56,43 @@ public class GeneticSettings : IPersistable
 	/// </summary>
 	public sealed class FormulaVarsItemsSource : ItemsSourceBase<IStatisticParameter>
 	{
-		static readonly IStatisticParameter[] _allParams = StatisticManager.GetAllParameters();
+		static readonly IStatisticParameter[] _allParams;
 		static readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _paramByType;
+		static readonly PairSet<string, StatisticParameterTypes> _acronymsDict;
 
-		static FormulaVarsItemsSource() => _paramByType = _allParams.ToDictionary(v => v.Type);
+		static readonly List<(StatisticParameterTypes type, string acronym)> _acronyms = new()
+		{
+			(StatisticParameterTypes.NetProfit,                         "PnL"),
+			(StatisticParameterTypes.WinningTrades,                     "WinTrades"),
+			(StatisticParameterTypes.LossingTrades,                     "LosTrades"),
+			(StatisticParameterTypes.TradeCount,                        "TCount"),
+			(StatisticParameterTypes.RoundtripCount,                    "RTrip"),
+			(StatisticParameterTypes.AverageTradeProfit,                "AvgTPnL"),
+			(StatisticParameterTypes.AverageWinTrades,                  "AvgWTrades"),
+			(StatisticParameterTypes.AverageLossTrades,                 "AvgLTrades"),
+			(StatisticParameterTypes.MaxLongPosition,                   "MaxLong"),
+			(StatisticParameterTypes.MaxShortPosition,                  "MaxShort"),
+			(StatisticParameterTypes.MaxProfit,                         "MaxPnL"),
+			(StatisticParameterTypes.MaxDrawdown,                       "MaxDD"),
+			(StatisticParameterTypes.MaxRelativeDrawdown,               "MaxRelDD"),
+			(StatisticParameterTypes.Return,                            "Ret"),
+			(StatisticParameterTypes.RecoveryFactor,                    "Recovery"),
+			(StatisticParameterTypes.MaxLatencyRegistration,            "MaxLatReg"),
+			(StatisticParameterTypes.MaxLatencyCancellation,            "MaxLatCan"),
+			(StatisticParameterTypes.MinLatencyRegistration,            "MinLatReg"),
+			(StatisticParameterTypes.MinLatencyCancellation,            "MinLatCan"),
+			(StatisticParameterTypes.OrderCount,                        "OrdCount"),
+			(StatisticParameterTypes.OrderErrorCount,                   "OrdErrCount"),
+			(StatisticParameterTypes.OrderInsufficientFundErrorCount,   "OrdFundErrCount"),
+		};
+
+		static FormulaVarsItemsSource()
+		{
+			_acronymsDict = new PairSet<string, StatisticParameterTypes>(StringComparer.InvariantCultureIgnoreCase);
+			_acronyms.ForEach(a => _acronymsDict.Add(a.acronym, a.type));
+			_allParams = StatisticManager.GetAllParameters().OrderBy(VarNameFromParam).ToArray();
+			_paramByType = _allParams.ToDictionary(v => v.Type);
+		}
 
 		/// <summary>
 		/// </summary>
@@ -68,24 +101,12 @@ public class GeneticSettings : IPersistable
 		/// <summary>
 		/// </summary>
 		public static string VarNameFromParam(IStatisticParameter p)
-		{
-			return p.Type switch
-			{
-				StatisticParameterTypes.NetProfit => "PnL",
-				_ => p.Type.ToString(),
-			};
-		}
+			=> _acronymsDict.TryGetKey(p.Type, out var acronym) ? acronym : p.Type.ToString();
 
 		/// <summary>
 		/// </summary>
 		public static IStatisticParameter ParamFromVarName(string varName)
-		{
-			return varName.ToLowerInvariant() switch
-			{
-				"pnl" => _paramByType[StatisticParameterTypes.NetProfit],
-				_ => _paramByType.TryGetValue(varName.To<StatisticParameterTypes>()) ?? throw new ArgumentOutOfRangeException($"unknown variable '{varName}'"),
-			};
-		}
+			=> _acronymsDict.TryGetValue(varName, out var type) ? _paramByType[type] : throw new ArgumentOutOfRangeException($"unknown variable '{varName}'");
 
 		/// <inheritdoc />
 		protected override string GetName(IStatisticParameter value) => VarNameFromParam(value);
