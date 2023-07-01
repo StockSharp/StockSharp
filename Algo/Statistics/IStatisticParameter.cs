@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Statistics
 		/// <summary>
 		/// Parameter name.
 		/// </summary>
-		string Name { get; set; }
+		string Name { get; }
 
 		/// <summary>
 		/// Type.
@@ -97,28 +97,15 @@ namespace StockSharp.Algo.Statistics
 			Type = type;
 
 			var type2 = GetType();
-			_name = type2.Name.Remove("Parameter");
+			Name = type2.Name.Remove("Parameter");
 
-			DisplayName = type2.GetDisplayName(GetReadableName(_name));
+			DisplayName = type2.GetDisplayName(GetReadableName(Name));
 			Description = type2.GetDescription(DisplayName);
 			Category = type2.GetCategory();
 		}
 
-		private string _name;
-
 		/// <inheritdoc />
-		public string Name
-		{
-			get => _name;
-			set
-			{
-				if (_name == value)
-					return;
-
-				_name = value;
-				this.Notify(nameof(Name));
-			}
-		}
+		public string Name { get; }
 
 		/// <inheritdoc />
 		public StatisticParameterTypes Type { get; }
