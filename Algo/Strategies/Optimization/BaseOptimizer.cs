@@ -415,7 +415,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				{
 					var duration = DateTime.UtcNow - _startedAt;
 
-					evt(progress.Value.Abs(), duration, progress == -1 ? TimeSpan.MaxValue : duration * 100.0 / progress.Value - duration);
+					evt(progress.Value.Abs(), duration, progress < 1 ? TimeSpan.MaxValue : duration * 100.0 / progress.Value - duration);
 				}
 			}
 
