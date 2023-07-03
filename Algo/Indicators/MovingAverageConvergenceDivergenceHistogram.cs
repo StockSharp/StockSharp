@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)

@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 		/// <summary>
 		/// Period length.

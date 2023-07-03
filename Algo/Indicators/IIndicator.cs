@@ -33,12 +33,12 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// 0 till 100.
 		/// </summary>
-		Persent,
+		Percent,
 
 		/// <summary>
 		/// -1 till +1.
 		/// </summary>
-		MunisOnePlusOne,
+		MinusOnePlusOne,
 
 		/// <summary>
 		/// Volume.

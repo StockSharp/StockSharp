@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Indicators
 		public override int NumValuesToInitialize => Math.Max(LongMa.NumValuesToInitialize, ShortMa.NumValuesToInitialize);
 
 		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 		/// <summary>
 		/// Long moving average.

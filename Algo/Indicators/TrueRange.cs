@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Indicators
 		public override int NumValuesToInitialize => 2;
 
 		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.MunisOnePlusOne;
+		public override IndicatorMeasures Measure => IndicatorMeasures.MinusOnePlusOne;
 
 		/// <inheritdoc />
 		public override void Reset()

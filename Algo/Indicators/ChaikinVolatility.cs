@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Indicators
 		public override int NumValuesToInitialize => Math.Max(Ema.NumValuesToInitialize, Roc.NumValuesToInitialize);
 
 		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 		/// <summary>
 		/// Moving Average.

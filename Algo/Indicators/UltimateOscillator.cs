@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		public override int NumValuesToInitialize => new[] { _period7BpSum, _period14BpSum, _period28BpSum, _period7TrSum, _period14TrSum, _period28TrSum }.Select(i => i.NumValuesToInitialize).Sum();
 
 		/// <inheritdoc />
-		public override IndicatorMeasures Measure => IndicatorMeasures.Persent;
+		public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
 
 		/// <inheritdoc />
 		protected override bool CalcIsFormed()
