@@ -29,5 +29,10 @@
 
 		/// <summary>Compatibility property for <see cref="IChartLineElement.ShowAxisMarker"/>.</summary>
 		bool ShowAxisMarker { get; set; }
+
+		/// <summary>
+		/// Auto assign Y axis when the element is being added to chart.
+		/// </summary>
+		bool AutoAssignYAxis { get; set; }
 	}
 }

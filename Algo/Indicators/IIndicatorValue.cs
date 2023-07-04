@@ -176,7 +176,7 @@ namespace StockSharp.Algo.Indicators
 		public override IIndicatorValue InputValue { get; set; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType) => valueType == typeof(TValue);
+		public override bool IsSupport(Type valueType) => valueType.IsAssignableFrom(typeof(TValue));
 
 		/// <inheritdoc />
 		public override T GetValue<T>()
