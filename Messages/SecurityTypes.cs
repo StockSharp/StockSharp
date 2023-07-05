@@ -109,7 +109,7 @@ namespace StockSharp.Messages
 		/// News.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str395Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewsKey)]
 		News,
 
 		/// <summary>
@@ -186,7 +186,7 @@ namespace StockSharp.Messages
 		/// Indicator.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1981Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IndicatorKey)]
 		Indicator,
 		
 		/// <summary>

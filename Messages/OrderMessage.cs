@@ -96,7 +96,7 @@ namespace StockSharp.Messages
 		/// Placed order comment.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str135Key)]
+		[DisplayNameLoc(LocalizedStrings.CommentKey)]
 		[DescriptionLoc(LocalizedStrings.Str136Key)]
 		[MainCategory]
 		public string Comment { get; set; }

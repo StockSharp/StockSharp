@@ -31,7 +31,7 @@ public enum SubscriptionStates
 	/// Error.
 	/// </summary>
 	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str152Key)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ErrorKey)]
 	Error,
 
 	/// <summary>

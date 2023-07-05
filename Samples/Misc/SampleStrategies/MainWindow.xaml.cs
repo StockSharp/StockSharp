@@ -57,7 +57,7 @@ namespace SampleStrategies
 			InitializeComponent();
 			Instance = this;
 
-			Title = Title.Put(LocalizedStrings.Str1355);
+			Title = Title.Put(LocalizedStrings.Strategies);
 
 			const string path = "Data";
 

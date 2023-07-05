@@ -382,7 +382,7 @@ namespace StockSharp.Algo.Export
 
 				worker
 					.SetCell(0, row, LocalizedStrings.Time)
-					.SetCell(1, row, LocalizedStrings.Str3099);
+					.SetCell(1, row, LocalizedStrings.Value);
 
 				row++;
 
@@ -473,10 +473,10 @@ namespace StockSharp.Algo.Export
 					.SetCell(1, row, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
 					.SetCell(2, row, LocalizedStrings.Security).SetStyle(2, typeof(string))
 					.SetCell(3, row, LocalizedStrings.Board).SetStyle(3, typeof(string))
-					.SetCell(4, row, LocalizedStrings.Str215).SetStyle(4, typeof(string))
-					.SetCell(5, row, LocalizedStrings.Str217).SetStyle(5, typeof(string))
+					.SetCell(4, row, LocalizedStrings.Header).SetStyle(4, typeof(string))
+					.SetCell(5, row, LocalizedStrings.Text).SetStyle(5, typeof(string))
 					.SetCell(6, row, LocalizedStrings.Str213).SetStyle(6, typeof(string))
-					.SetCell(7, row, LocalizedStrings.Str221).SetStyle(6, typeof(string));
+					.SetCell(7, row, LocalizedStrings.Link).SetStyle(6, typeof(string));
 
 				row++;
 

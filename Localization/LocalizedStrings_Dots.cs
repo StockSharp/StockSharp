@@ -257,7 +257,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str3131Dot => AppendDot(Str3131);
+		public static string Str3131Dot => AppendDot(Converter);
 
 		/// <summary>
 		/// 
@@ -332,7 +332,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str345Dot => AppendDot(Str345);
+		public static string Str345Dot => AppendDot(Until);
 
 		/// <summary>
 		/// 
@@ -382,7 +382,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str135Dot => AppendDot(Str135);
+		public static string Str135Dot => AppendDot(Comment);
 
 		/// <summary>
 		/// 
@@ -442,7 +442,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str436Dot => AppendDot(Str436);
+		public static string Str436Dot => AppendDot(Statistics);
 
 		/// <summary>
 		/// 
@@ -627,7 +627,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str437Dot => AppendDot(Str437);
+		public static string Str437Dot => AppendDot(Derivatives);
 
 		/// <summary>
 		/// 

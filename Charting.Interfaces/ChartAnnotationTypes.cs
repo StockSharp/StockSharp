@@ -31,7 +31,7 @@
 		/// <summary>
 		/// Text.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str217Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TextKey)]
 		TextAnnotation,
 
 		/// <summary>

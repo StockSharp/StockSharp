@@ -631,7 +631,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str290Key,
 			Description = LocalizedStrings.Str555Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 200)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -662,7 +662,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str289Key,
 			Description = LocalizedStrings.Str557Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 201)]
 		[Browsable(false)]
 		public ITickTradeMessage LastTick
@@ -697,7 +697,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str289Key,
 			Description = LocalizedStrings.Str557Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 201)]
 		[Browsable(false)]
 		[Obsolete("Use LastTick property.")]
@@ -714,7 +714,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str558Key,
 			Description = LocalizedStrings.Str559Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 202)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -742,7 +742,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str560Key,
 			Description = LocalizedStrings.Str561Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 203)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -770,7 +770,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str288Key,
 			Description = LocalizedStrings.Str562Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 204)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -798,7 +798,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str563Key,
 			Description = LocalizedStrings.Str564Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 205)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -826,7 +826,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str565Key,
 			Description = LocalizedStrings.Str566Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 206)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -857,7 +857,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BestAskKey,
 			Description = LocalizedStrings.BestAskDescKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 207)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -887,7 +887,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BestPairKey,
 			Description = LocalizedStrings.BestPairKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 208)]
 		public MarketDepthPair BestPair => new(BestBid, BestAsk);
 
@@ -902,7 +902,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StateKey,
 			Description = LocalizedStrings.Str569Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 209)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -930,7 +930,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceMinKey,
 			Description = LocalizedStrings.PriceMinLimitKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 210)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -958,7 +958,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceMaxKey,
 			Description = LocalizedStrings.PriceMaxLimitKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 211)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -986,7 +986,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str304Key,
 			Description = LocalizedStrings.MarginBuyKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 212)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1014,7 +1014,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str305Key,
 			Description = LocalizedStrings.MarginSellKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 213)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1042,7 +1042,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UnderlyingAssetKey,
 			Description = LocalizedStrings.Str550Key,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 100)]
 		public string UnderlyingSecurityId
 		{
@@ -1068,7 +1068,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str551Key,
 			Description = LocalizedStrings.OptionContractTypeKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 101)]
 		public OptionTypes? OptionType
 		{
@@ -1093,7 +1093,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StrikeKey,
 			Description = LocalizedStrings.OptionStrikePriceKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 102)]
 		public decimal? Strike
 		{
@@ -1121,7 +1121,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str552Key,
 			Description = LocalizedStrings.TypeBinaryOptionKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 103)]
 		public string BinaryOptionType
 		{
@@ -1147,7 +1147,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IVKey,
 			Description = LocalizedStrings.Str293Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 104)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1175,7 +1175,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.HVKey,
 			Description = LocalizedStrings.Str299Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 105)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1203,7 +1203,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str294Key,
 			Description = LocalizedStrings.TheoreticalPriceKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 106)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1230,7 +1230,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DeltaKey,
 			Description = LocalizedStrings.OptionDeltaKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 107)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1259,7 +1259,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.GammaKey,
 			Description = LocalizedStrings.OptionGammaKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 108)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1287,7 +1287,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VegaKey,
 			Description = LocalizedStrings.OptionVegaKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 109)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1315,7 +1315,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ThetaKey,
 			Description = LocalizedStrings.OptionThetaKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 110)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1343,7 +1343,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.RhoKey,
 			Description = LocalizedStrings.OptionRhoKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 111)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1370,7 +1370,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str150Key,
 			Description = LocalizedStrings.Str151Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 220)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1435,7 +1435,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str295Key,
 			Description = LocalizedStrings.BidsVolumeKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 221)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1460,7 +1460,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BidsKey,
 			Description = LocalizedStrings.BidsCountKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 222)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1485,7 +1485,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str297Key,
 			Description = LocalizedStrings.AsksVolumeKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 223)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1510,7 +1510,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AsksKey,
 			Description = LocalizedStrings.AsksCountKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 224)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1535,7 +1535,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TradesOfKey,
 			Description = LocalizedStrings.Str232Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 225)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1560,7 +1560,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str319Key,
 			Description = LocalizedStrings.Str594Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 226)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1585,7 +1585,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str320Key,
 			Description = LocalizedStrings.Str595Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 227)]
 		[Browsable(false)]
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
@@ -1609,7 +1609,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str321Key,
 			Description = LocalizedStrings.Str321Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 228)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1634,7 +1634,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AveragePriceKey,
 			Description = LocalizedStrings.AveragePriceKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 229)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1659,7 +1659,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str312Key,
 			Description = LocalizedStrings.SettlementPriceKey,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 230)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1684,7 +1684,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AveragePriceKey,
 			Description = LocalizedStrings.Str600Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 231)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1709,7 +1709,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
 			Description = LocalizedStrings.Str601Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 232)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1733,7 +1733,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TurnoverKey,
 			Description = LocalizedStrings.TurnoverKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 232)]
 		[XmlIgnore]
 		[Browsable(false)]
@@ -1823,7 +1823,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AssetTypeKey,
 			Description = LocalizedStrings.UnderlyingSecurityTypeKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 103)]
 		[DataMember]
 		public SecurityTypes? UnderlyingSecurityType
@@ -1845,7 +1845,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UnderlyingMinVolumeKey,
 			Description = LocalizedStrings.UnderlyingMinVolumeDescKey,
-			GroupName = LocalizedStrings.Str437Key,
+			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 104)]
 		[DataMember]
 		public decimal? UnderlyingSecurityMinVolume

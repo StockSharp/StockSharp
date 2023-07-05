@@ -167,7 +167,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str150Key,
 			Description = LocalizedStrings.Str151Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 10)]
 		public decimal? OpenInterest { get; set; }
 
@@ -177,7 +177,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str157Key,
 			Description = LocalizedStrings.Str158Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 11)]
 		public bool? IsUpTick { get; set; }
 

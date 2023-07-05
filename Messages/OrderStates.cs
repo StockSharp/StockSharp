@@ -56,7 +56,7 @@ namespace StockSharp.Messages
 		/// The order is not accepted by the trading system.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str152Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ErrorKey)]
 		Failed,
 
 		/// <summary>

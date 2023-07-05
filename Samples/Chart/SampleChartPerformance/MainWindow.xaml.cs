@@ -79,7 +79,7 @@
 		{
 			InitializeComponent();
 
-			Title = Title.Put(LocalizedStrings.Str3200);
+			Title = Title.Put(LocalizedStrings.Chart);
 
 			_loadingContext = new LoadingContext();
 			BusyIndicator.SplashScreenDataContext = _loadingContext;

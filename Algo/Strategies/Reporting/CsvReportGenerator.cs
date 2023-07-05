@@ -70,7 +70,7 @@ public class CsvReportGenerator : BaseReportGenerator
 		WriteValues(parameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value).ToArray());
 
 		var statParameters = strategy.StatisticManager.Parameters;
-		WriteValues(LocalizedStrings.Str436);
+		WriteValues(LocalizedStrings.Statistics);
 		WriteValues(statParameters.Select(p => (object)p.Name).ToArray());
 		WriteValues(statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value).ToArray());
 

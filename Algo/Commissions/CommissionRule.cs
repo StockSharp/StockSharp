@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Order commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str504Key)]
+	[DisplayNameLoc(LocalizedStrings.OrderKey)]
 	[DescriptionLoc(LocalizedStrings.Str660Key)]
 	public class CommissionPerOrderRule : CommissionRule
 	{

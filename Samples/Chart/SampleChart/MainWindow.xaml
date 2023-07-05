@@ -25,7 +25,7 @@
 
 					<sx:StorageFormatComboBox x:Name="Format" Margin="10,0,0,0"/>
 
-					<Button x:Name="Draw" Content="{x:Static loc:LocalizedStrings.Str3200}" Margin="10,0,10,0" IsEnabled="False" Click="Draw_Click"/>
+					<Button x:Name="Draw" Content="{x:Static loc:LocalizedStrings.Chart}" Margin="10,0,10,0" IsEnabled="False" Click="Draw_Click"/>
 				</StackPanel>
 			</GroupBox>
 

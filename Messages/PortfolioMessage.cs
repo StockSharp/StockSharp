@@ -34,7 +34,7 @@ namespace StockSharp.Messages
 		/// Active.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str248Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ActiveKey)]
 		Active,
 		
 		/// <summary>
@@ -109,14 +109,14 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str343Key)]
+		[DisplayNameLoc(LocalizedStrings.FromKey)]
 		[DescriptionLoc(LocalizedStrings.Str344Key)]
 		[MainCategory]
 		public DateTimeOffset? From { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str345Key)]
+		[DisplayNameLoc(LocalizedStrings.UntilKey)]
 		[DescriptionLoc(LocalizedStrings.Str346Key)]
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }

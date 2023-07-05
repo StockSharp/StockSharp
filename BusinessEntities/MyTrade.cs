@@ -48,7 +48,7 @@ namespace StockSharp.BusinessEntities
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str504Key,
+			Name = LocalizedStrings.OrderKey,
 			Description = LocalizedStrings.Str505Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
@@ -77,7 +77,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str159Key,
 			Description = LocalizedStrings.Str160Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 0)]
 		public decimal? Commission { get; set; }
 
@@ -94,7 +94,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str163Key,
 			Description = LocalizedStrings.Str164Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 1)]
 		public decimal? Slippage { get; set; }
 
@@ -108,7 +108,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PnLKey,
 			Description = LocalizedStrings.PnLKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 2)]
 		public decimal? PnL
 		{
@@ -131,7 +131,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str862Key,
 			Description = LocalizedStrings.Str862Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 2)]
 		public decimal? Position { get; set; }
 

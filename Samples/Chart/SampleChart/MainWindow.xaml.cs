@@ -97,7 +97,7 @@
 
 			InitializeComponent();
 
-			Title = Title.Put(LocalizedStrings.Str3200);
+			Title = Title.Put(LocalizedStrings.Chart);
 
 			Loaded += OnLoaded;
 

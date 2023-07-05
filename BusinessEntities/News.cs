@@ -29,7 +29,7 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.Str395Key)]
+	[DisplayNameLoc(LocalizedStrings.NewsKey)]
 	[DescriptionLoc(LocalizedStrings.Str510Key)]
 	public class News : NotifiableObject
 	{
@@ -73,8 +73,8 @@ namespace StockSharp.BusinessEntities
 		/// Header.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str215Key)]
-		[DescriptionLoc(LocalizedStrings.Str215Key, true)]
+		[DisplayNameLoc(LocalizedStrings.HeaderKey)]
+		[DescriptionLoc(LocalizedStrings.HeaderKey, true)]
 		[MainCategory]
 		public string Headline { get; set; }
 
@@ -84,7 +84,7 @@ namespace StockSharp.BusinessEntities
 		/// News text.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str217Key)]
+		[DisplayNameLoc(LocalizedStrings.TextKey)]
 		[DescriptionLoc(LocalizedStrings.Str218Key)]
 		[MainCategory]
 		public string Story
@@ -119,7 +119,7 @@ namespace StockSharp.BusinessEntities
 		/// News link in the internet.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str221Key)]
+		[DisplayNameLoc(LocalizedStrings.LinkKey)]
 		[DescriptionLoc(LocalizedStrings.Str222Key)]
 		[MainCategory]
 		//[Url]

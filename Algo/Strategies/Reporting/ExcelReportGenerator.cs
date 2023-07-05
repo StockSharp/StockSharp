@@ -172,7 +172,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 			.SetCell(columnShift + 6, 1, LocalizedStrings.Str128)
 			.SetCell(columnShift + 7, 1, LocalizedStrings.Str1190).SetStyle(columnShift + 7, typeof(long))
 			.SetCell(columnShift + 8, 1, LocalizedStrings.Str163).SetStyle(columnShift + 8, typeof(decimal))
-			.SetCell(columnShift + 9, 1, LocalizedStrings.Str135)
+			.SetCell(columnShift + 9, 1, LocalizedStrings.Comment)
 			.SetCell(columnShift + 10, 1, LocalizedStrings.Str1342).SetStyle(columnShift + 11, typeof(decimal))
 			.SetCell(columnShift + 11, 1, LocalizedStrings.Str1343).SetStyle(columnShift + 12, typeof(decimal))
 			.SetCell(columnShift + 12, 1, LocalizedStrings.Str1344).SetStyle(columnShift + 13, typeof(decimal))
@@ -245,7 +245,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 				.SetCell(columnShift + 11, 1, LocalizedStrings.Type)
 				.SetCell(columnShift + 12, 1, LocalizedStrings.Str1326)
 				.SetCell(columnShift + 13, 1, LocalizedStrings.Str1327)
-				.SetCell(columnShift + 14, 1, LocalizedStrings.Str135);
+				.SetCell(columnShift + 14, 1, LocalizedStrings.Comment);
 
 			//worker
 			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str1329), null, Colors.Green)

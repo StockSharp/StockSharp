@@ -330,7 +330,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str135Key,
+			Name = LocalizedStrings.CommentKey,
 			Description = LocalizedStrings.BankCommentKey,
 			GroupName = LocalizedStrings.WithdrawKey,
 			Order = 9)]

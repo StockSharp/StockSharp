@@ -31,20 +31,20 @@ namespace StockSharp.BusinessEntities
 
 	class StatisticsCategoryAttribute : CategoryAttribute
 	{
-		public const string NameKey = LocalizedStrings.Str436Key;
+		public const string NameKey = LocalizedStrings.StatisticsKey;
 
 		public StatisticsCategoryAttribute()
-			: base(LocalizedStrings.Str436)
+			: base(LocalizedStrings.Statistics)
 		{
 		}
 	}
 
 	//class DerivativesCategoryAttribute : CategoryAttribute
 	//{
-	//	public const string NameKey = LocalizedStrings.Str437Key;
+	//	public const string NameKey = LocalizedStrings.DerivativesKey;
 
 	//	public DerivativesCategoryAttribute()
-	//		: base(LocalizedStrings.Str437)
+	//		: base(LocalizedStrings.Derivatives)
 	//	{
 	//	}
 	//}

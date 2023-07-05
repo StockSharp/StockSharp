@@ -206,7 +206,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1418Key,
 			Description = LocalizedStrings.Str1419Key,
-			GroupName = LocalizedStrings.Str3177Key,
+			GroupName = LocalizedStrings.OptimizationKey,
 			Order = 200)]
 		public int BatchSize
 		{
@@ -230,7 +230,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IterationsKey,
 			Description = LocalizedStrings.MaxIterationsKey,
-			GroupName = LocalizedStrings.Str3177Key,
+			GroupName = LocalizedStrings.OptimizationKey,
 			Order = 201)]
 		public int MaxIterations
 		{

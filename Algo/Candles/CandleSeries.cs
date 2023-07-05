@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str343Key,
+			Name = LocalizedStrings.FromKey,
 			Description = LocalizedStrings.Str344Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str345Key,
+			Name = LocalizedStrings.UntilKey,
 			Description = LocalizedStrings.Str346Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]

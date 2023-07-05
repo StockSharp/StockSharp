@@ -259,7 +259,7 @@ namespace StockSharp.Messages
 		/// Order contracts balance.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str130Key)]
+		[DisplayNameLoc(LocalizedStrings.BalanceKey)]
 		[DescriptionLoc(LocalizedStrings.Str131Key)]
 		[MainCategory]
 		//[Nullable]
@@ -296,7 +296,7 @@ namespace StockSharp.Messages
 		/// Placed order comment.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str135Key)]
+		[DisplayNameLoc(LocalizedStrings.CommentKey)]
 		[DescriptionLoc(LocalizedStrings.Str136Key)]
 		[MainCategory]
 		public string Comment { get; set; }
@@ -393,7 +393,7 @@ namespace StockSharp.Messages
 		public decimal? OpenInterest { get; set; }
 
 		/// <inheritdoc />
-		[DisplayNameLoc(LocalizedStrings.Str152Key)]
+		[DisplayNameLoc(LocalizedStrings.ErrorKey)]
 		[DescriptionLoc(LocalizedStrings.Str153Key, true)]
 		[MainCategory]
 		[XmlIgnore]

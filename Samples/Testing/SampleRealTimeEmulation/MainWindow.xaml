@@ -76,7 +76,7 @@
 					</Button>
 
 					<Button x:Name="NewOrder" Grid.Column="6" Width="100" Click="NewOrder_OnClick">
-						<TextBlock Text="{x:Static loc:LocalizedStrings.Str504}" />
+						<TextBlock Text="{x:Static loc:LocalizedStrings.Order}" />
 					</Button>
 				</Grid>
 

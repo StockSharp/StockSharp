@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str970Key)]
 	[DescriptionLoc(LocalizedStrings.Str971Key)]
-	[CategoryLoc(LocalizedStrings.Str972Key)]
+	[CategoryLoc(LocalizedStrings.PositionsKey)]
 	public class MaxLongPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
 		/// <summary>
@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str973Key)]
 	[DescriptionLoc(LocalizedStrings.Str974Key)]
-	[CategoryLoc(LocalizedStrings.Str972Key)]
+	[CategoryLoc(LocalizedStrings.PositionsKey)]
 	public class MaxShortPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
 		/// <summary>

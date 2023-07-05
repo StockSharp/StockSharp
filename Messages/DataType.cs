@@ -306,7 +306,7 @@ namespace StockSharp.Messages
 			else if (this == Transactions)
 				return LocalizedStrings.Transactions;
 			else if (this == PositionChanges)
-				return LocalizedStrings.Str972;
+				return LocalizedStrings.Positions;
 			else if (this == News)
 				return LocalizedStrings.News;
 			else if (this == Securities)

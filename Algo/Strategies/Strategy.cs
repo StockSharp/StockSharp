@@ -661,7 +661,7 @@ namespace StockSharp.Algo.Strategies
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str163Key,
 			Description = LocalizedStrings.Str1363Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 99)]
 		[ReadOnly(true)]
 		[Browsable(false)]
@@ -691,7 +691,7 @@ namespace StockSharp.Algo.Strategies
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PnLKey,
 			Description = LocalizedStrings.Str1364Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 100)]
 		[ReadOnly(true)]
 		[Browsable(false)]
@@ -720,7 +720,7 @@ namespace StockSharp.Algo.Strategies
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str159Key,
 			Description = LocalizedStrings.Str1365Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 101)]
 		[ReadOnly(true)]
 		[Browsable(false)]
@@ -738,7 +738,7 @@ namespace StockSharp.Algo.Strategies
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str161Key,
 			Description = LocalizedStrings.Str1366Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 102)]
 		[ReadOnly(true)]
 		[Browsable(false)]
@@ -1304,7 +1304,7 @@ namespace StockSharp.Algo.Strategies
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1378Key,
 			Description = LocalizedStrings.Str1379Key,
-			GroupName = LocalizedStrings.Str436Key,
+			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 105)]
 		[ReadOnly(true)]
 		[Browsable(false)]
@@ -1397,7 +1397,7 @@ namespace StockSharp.Algo.Strategies
 		/// </remarks>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str135Key,
+			Name = LocalizedStrings.CommentKey,
 			Description = LocalizedStrings.Str136Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]

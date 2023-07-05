@@ -32,14 +32,14 @@ namespace StockSharp.Messages
 		/// Call.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str223Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CallKey)]
 		Call,
 
 		/// <summary>
 		/// Put.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str224Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PutKey)]
 		Put,
 	}
 }

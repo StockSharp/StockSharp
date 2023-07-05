@@ -163,14 +163,14 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str343Key)]
+		[DisplayNameLoc(LocalizedStrings.FromKey)]
 		[DescriptionLoc(LocalizedStrings.Str344Key)]
 		[MainCategory]
 		public DateTimeOffset? From { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str345Key)]
+		[DisplayNameLoc(LocalizedStrings.UntilKey)]
 		[DescriptionLoc(LocalizedStrings.Str346Key)]
 		[MainCategory]
 		public DateTimeOffset? To { get; set; }

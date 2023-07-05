@@ -106,8 +106,8 @@ namespace StockSharp.Messages
 		/// Header.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str215Key)]
-		[DescriptionLoc(LocalizedStrings.Str215Key, true)]
+		[DisplayNameLoc(LocalizedStrings.HeaderKey)]
+		[DescriptionLoc(LocalizedStrings.HeaderKey, true)]
 		[MainCategory]
 		public string Headline { get; set; }
 
@@ -115,7 +115,7 @@ namespace StockSharp.Messages
 		/// News text.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str217Key)]
+		[DisplayNameLoc(LocalizedStrings.TextKey)]
 		[DescriptionLoc(LocalizedStrings.Str218Key)]
 		[MainCategory]
 		public string Story { get; set; }
@@ -131,7 +131,7 @@ namespace StockSharp.Messages
 		/// News link in the internet.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str221Key)]
+		[DisplayNameLoc(LocalizedStrings.LinkKey)]
 		[DescriptionLoc(LocalizedStrings.Str222Key)]
 		[MainCategory]
 		public string Url { get; set; }

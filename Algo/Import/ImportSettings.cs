@@ -486,7 +486,7 @@ namespace StockSharp.Algo.Import
 			else if (DataType == DataType.MarketDepth)
 				return LocalizedStrings.MarketDepths;
 			else if (DataType == DataType.PositionChanges)
-				return LocalizedStrings.Str972;
+				return LocalizedStrings.Positions;
 			else if (DataType.IsCandles)
 				return LocalizedStrings.Candles;
 			else if (DataType == DataType.OrderLog)

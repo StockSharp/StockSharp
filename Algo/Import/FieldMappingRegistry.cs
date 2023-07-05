@@ -294,10 +294,10 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<NewsMessage, string>(GetBoardCodeField(nameof(NewsMessage.SecurityId)), LocalizedStrings.Board, boardCodeDescr, (i, v) => i.BoardCode = v));
 				fields.Add(new FieldMapping<NewsMessage, DateTimeOffset>(GetDateField(nameof(NewsMessage.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 				fields.Add(new FieldMapping<NewsMessage, TimeSpan>(GetTimeOfDayField(nameof(NewsMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
-				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Headline), LocalizedStrings.Str215, LocalizedStrings.Str215, (i, v) => i.Headline = v));
-				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Story), LocalizedStrings.Str217, LocalizedStrings.Str218, (i, v) => i.Story = v));
+				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Headline), LocalizedStrings.Header, LocalizedStrings.Header, (i, v) => i.Headline = v));
+				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Story), LocalizedStrings.Text, LocalizedStrings.Str218, (i, v) => i.Story = v));
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Source), LocalizedStrings.Str213, LocalizedStrings.Str214, (i, v) => i.Source = v));
-				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Url), LocalizedStrings.Str221, LocalizedStrings.Str222, (i, v) => i.Url = v));
+				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Url), LocalizedStrings.Link, LocalizedStrings.Str222, (i, v) => i.Url = v));
 				fields.Add(new FieldMapping<NewsMessage, NewsPriorities>(nameof(NewsMessage.Priority), LocalizedStrings.Priority, LocalizedStrings.NewsPriority, (i, v) => i.Priority = v));
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Language), LocalizedStrings.Str3429, LocalizedStrings.Str3429, (i, v) => i.Language = v));
 			}

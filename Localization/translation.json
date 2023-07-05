@@ -1,4 +1,8 @@
 {
+  "Content": {
+    "en": "Content",
+    "ru": "Контент"
+  },
   "FitnessFormulaExample": {
     "en": "Fitness function example: PnL / max(abs(MaxPnL - PnL), 1)",
     "ru": "Пример фитнесс функции: PnL / max(abs(MaxPnL - PnL), 1)"
@@ -338,10 +342,6 @@
   "Mega": {
     "en": "Mega",
     "ru": "Mega"
-  },
-  "Amazon": {
-    "en": "Amazon",
-    "ru": "Амазон"
   },
   "Yandex": {
     "en": "Yandex",
@@ -2103,7 +2103,7 @@
     "en": "Order side (buy or sell).",
     "ru": "Направление заявки (покупка или продажа)."
   },
-  "Str130": {
+  "Balance": {
     "en": "Balance",
     "ru": "Остаток"
   },
@@ -2123,7 +2123,7 @@
     "en": "Order state (Active, Not active, Error).",
     "ru": "Состояние заявки (Активна, Не активна, Ошибка)."
   },
-  "Str135": {
+  "Comment": {
     "en": "Comment",
     "ru": "Комментарий"
   },
@@ -2187,7 +2187,7 @@
     "en": "Number of open positions (open interest).",
     "ru": "Количество открытых позиций (открытый интерес)."
   },
-  "Str152": {
+  "Error": {
     "en": "Error",
     "ru": "Ошибка"
   },
@@ -2431,11 +2431,11 @@
     "en": "News source.",
     "ru": "Источник новости."
   },
-  "Str215": {
+  "Header": {
     "en": "Header",
     "ru": "Заголовок"
   },
-  "Str217": {
+  "Text": {
     "en": "Text",
     "ru": "Текст"
   },
@@ -2451,7 +2451,7 @@
     "en": "Time of news arrival.",
     "ru": "Время появления новости."
   },
-  "Str221": {
+  "Link": {
     "en": "Link",
     "ru": "Ссылка"
   },
@@ -2459,15 +2459,15 @@
     "en": "News link in the internet.",
     "ru": "Ссылка на новость в интернете."
   },
-  "Str223": {
+  "Call": {
     "en": "Call",
     "ru": "Кол"
   },
-  "Str224": {
+  "Put": {
     "en": "Put",
     "ru": "Пут"
   },
-  "Str225": {
+  "Parameters": {
     "en": "Parameters",
     "ru": "Параметры"
   },
@@ -2551,7 +2551,7 @@
     "en": "Portfolio code name.",
     "ru": "Кодовое название портфеля."
   },
-  "Str248": {
+  "Active": {
     "en": "Active",
     "ru": "Активен"
   },
@@ -2915,7 +2915,7 @@
     "en": "System",
     "ru": "Системная"
   },
-  "Str343": {
+  "From": {
     "en": "From",
     "ru": "От"
   },
@@ -2923,7 +2923,7 @@
     "en": "Start date, from which data needs to be retrieved.",
     "ru": "Дата начала, с которой необходимо получать данные."
   },
-  "Str345": {
+  "Until": {
     "en": "Until",
     "ru": "До"
   },
@@ -3119,10 +3119,6 @@
     "en": "Product",
     "ru": "Продукт"
   },
-  "Str395": {
-    "en": "News",
-    "ru": "Новость"
-  },
   "Weather": {
     "en": "Weather",
     "ru": "Погода"
@@ -3291,11 +3287,11 @@
     "en": "Time of last position change.",
     "ru": "Время последнего изменения позиции."
   },
-  "Str436": {
+  "Statistics": {
     "en": "Statistics",
     "ru": "Статистика"
   },
-  "Str437": {
+  "Derivatives": {
     "en": "Derivatives",
     "ru": "Деривативы"
   },
@@ -3399,7 +3395,7 @@
     "en": "Information about own trade.",
     "ru": "Информация о собственной сделке."
   },
-  "Str504": {
+  "Order": {
     "en": "Order",
     "ru": "Заявка"
   },
@@ -5183,7 +5179,7 @@
     "en": "Maximum long position size.",
     "ru": "Максимальный размер длинной позиции."
   },
-  "Str972": {
+  "Positions": {
     "en": "Positions",
     "ru": "Позиции"
   },
@@ -6623,7 +6619,7 @@
     "en": "OTC",
     "ru": "Внебиржевая"
   },
-  "Str1355": {
+  "Strategies": {
     "en": "Strategies",
     "ru": "Стратегии"
   },
@@ -9023,7 +9019,7 @@
     "en": "Indicator settings",
     "ru": "Настройки индикатора"
   },
-  "Str1981": {
+  "Indicator": {
     "en": "Indicator",
     "ru": "Индикатор"
   },
@@ -10415,7 +10411,7 @@
     "en": "Clearing",
     "ru": "Клиринг"
   },
-  "Str2381": {
+  "Other": {
     "en": "Other",
     "ru": "Другое"
   },
@@ -12867,7 +12863,7 @@
     "en": "Composite elements",
     "ru": "Составные элементы"
   },
-  "Converter": {
+  "Converters": {
     "en": "Converters",
     "ru": "Конвертеры"
   },
@@ -13047,7 +13043,7 @@
     "en": "Collection or dictionary element.",
     "ru": "Элемент коллекции или словаря."
   },
-  "Str3099": {
+  "Value": {
     "en": "Value",
     "ru": "Значение"
   },
@@ -13079,11 +13075,11 @@
     "en": "Logical condition element.",
     "ru": "Элемент логического условия."
   },
-  "Str3109": {
+  "AND": {
     "en": "AND",
     "ru": "И"
   },
-  "Str3110": {
+  "OR": {
     "en": "OR",
     "ru": "ИЛИ"
   },
@@ -13103,7 +13099,7 @@
     "en": "Logical function with one argument element",
     "ru": "Элемент логической функции с одним аргументом"
   },
-  "Str3115": {
+  "Formula": {
     "en": "Formula",
     "ru": "Формула"
   },
@@ -13167,7 +13163,7 @@
     "en": "Trades per order element.",
     "ru": "Элемент сделок по заявке."
   },
-  "Str3131": {
+  "Converter": {
     "en": "Converter",
     "ru": "Конвертер"
   },
@@ -13175,7 +13171,7 @@
     "en": "Composite value of a complex object receiving element.",
     "ru": "Элемент получения составного значения сложного объекта."
   },
-  "Str3133": {
+  "Property": {
     "en": "Property",
     "ru": "Свойство"
   },
@@ -13343,11 +13339,11 @@
     "en": "Error initializing strategy diagram: {0}",
     "ru": "Ошибка инициализации схемы стратегии: {0}"
   },
-  "Str3176": {
+  "Live": {
     "en": "Live",
     "ru": "Торговля"
   },
-  "Str3177": {
+  "Optimization": {
     "en": "Optimization",
     "ru": "Оптимизация"
   },
@@ -13359,7 +13355,7 @@
     "en": "Running",
     "ru": "Выполняется"
   },
-  "Str3180": {
+  "SourceCode": {
     "en": "Source code",
     "ru": "Исходный код"
   },
@@ -13367,7 +13363,7 @@
     "en": "Designer",
     "ru": "Дизайнер"
   },
-  "Str3182": {
+  "Assembly": {
     "en": "Assembly",
     "ru": "Сборка"
   },
@@ -13439,7 +13435,7 @@
     "en": "Show panel for placing market orders.",
     "ru": "Показывать панель для выставления рыночных заявок."
   },
-  "Str3200": {
+  "Chart": {
     "en": "Chart",
     "ru": "График"
   },
@@ -13447,7 +13443,7 @@
     "en": "Chart to display a series of candles.",
     "ru": "График для отображения серий свечей."
   },
-  "Str3205": {
+  "Chat": {
     "en": "Chat",
     "ru": "Чат"
   },
@@ -13575,7 +13571,7 @@
     "en": "Panel for viewing Level2 data.",
     "ru": "Панель для просмотра данных по Level2."
   },
-  "Str3237": {
+  "Logs": {
     "en": "Logs",
     "ru": "Логи"
   },
@@ -14723,7 +14719,7 @@
     "en": "Valid until condition",
     "ru": "Условие действительности до"
   },
-  "Str3559": {
+  "No": {
     "en": "No",
     "ru": "Нет"
   },
@@ -15919,11 +15915,11 @@
     "en": "Graphical monitoring",
     "ru": "Графический мониторинг"
   },
-  "XamlStr108": {
+  "Yes": {
     "en": "Yes",
     "ru": "Да"
   },
-  "XamlStr109": {
+  "Data": {
     "en": "Data",
     "ru": "Данные"
   },
@@ -17535,13 +17531,13 @@
     "en": "Test (window)",
     "ru": "Тест (показать)"
   },
-  "XamlStr750": {
+  "Backtest": {
     "en": "Backtest",
-    "ru": "Тестировать"
+    "ru": "Бэктест"
   },
   "XamlStr751": {
     "en": "Backtest configuration",
-    "ru": "Тестировать конфигурацию"
+    "ru": "Конфиг бэктеста"
   },
   "XamlStr752": {
     "en": "Optimized backtest",

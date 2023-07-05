@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TakeProfitKey,
 			Description = LocalizedStrings.TakeProfitKey,
-			GroupName = LocalizedStrings.Str225Key,
+			GroupName = LocalizedStrings.ParametersKey,
 			Order = 0)]
 		public bool IsTakeProfit
 		{
@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StopPriceKey,
 			Description = LocalizedStrings.Str1693Key,
-			GroupName = LocalizedStrings.Str225Key,
+			GroupName = LocalizedStrings.ParametersKey,
 			Order = 1)]
 		public decimal? StopPrice
 		{

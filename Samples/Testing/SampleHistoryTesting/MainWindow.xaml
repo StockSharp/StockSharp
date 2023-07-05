@@ -130,7 +130,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="TicksEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="TicksParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -146,7 +146,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="TicksAndDepthsEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="TicksAndDepthsParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -162,7 +162,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="DepthsEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="DepthsParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -178,7 +178,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="CandlesEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -194,7 +194,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="CandlesAndDepthsEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="CandlesAndDepthsParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -210,7 +210,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="OrderLogEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="OrderLogParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -226,7 +226,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="LastTradeEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="LastTradeParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -242,7 +242,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="SpreadEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="SpreadParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -258,7 +258,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="FinamCandlesEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="FinamCandlesParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -274,7 +274,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="YahooCandlesEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="YahooCandlesParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
@@ -290,7 +290,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="RandomEquity" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="RandomParameterGrid" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">

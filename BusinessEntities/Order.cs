@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.Str504Key)]
+	[DisplayNameLoc(LocalizedStrings.OrderKey)]
 	[DescriptionLoc(LocalizedStrings.Str516Key)]
 	public class Order : NotifiableObject, IOrderMessage
 	{
@@ -368,7 +368,7 @@ namespace StockSharp.BusinessEntities
 		/// Order contracts balance.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str130Key)]
+		[DisplayNameLoc(LocalizedStrings.BalanceKey)]
 		[DescriptionLoc(LocalizedStrings.Str131Key)]
 		[MainCategory]
 		public decimal Balance
@@ -430,7 +430,7 @@ namespace StockSharp.BusinessEntities
 		/// Placed order comment.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str135Key)]
+		[DisplayNameLoc(LocalizedStrings.CommentKey)]
 		[DescriptionLoc(LocalizedStrings.Str136Key)]
 		[MainCategory]
 		public string Comment { get; set; }
