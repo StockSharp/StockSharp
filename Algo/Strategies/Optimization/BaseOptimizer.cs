@@ -347,8 +347,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				if (State != ChannelStates.Stopping)
 					State = ChannelStates.Stopping;
 
-				if (_startedConnectors.Count == 0)
-					RaiseStopped();
+				Stop();
+				RaiseStopped();
 
 				return;
 			}

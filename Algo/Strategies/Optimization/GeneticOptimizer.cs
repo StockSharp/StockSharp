@@ -72,7 +72,7 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 
 			using var wait = new ManualResetEvent(false);
-			
+
 			_optimizer._events.Add(wait);
 
 			try
@@ -146,7 +146,10 @@ public class GeneticOptimizer : BaseOptimizer
 			else if (p.Type == typeof(Unit))
 			{
 				if (f is not null && t is not null)
-					val = new Unit(RandomGen.GetDecimal(((Unit)f).Value, ((Unit)f).Value, precision), ((Unit)f).Type);
+				{
+					var u = f.To<Unit>();
+					val = new Unit(RandomGen.GetDecimal(u.Value, u.Value, precision), u.Type);
+				}
 				else
 					val = RandomGen.GetElement((IEnumerable<Unit>)v);
 			}
