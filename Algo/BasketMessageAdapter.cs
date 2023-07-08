@@ -758,6 +758,11 @@ namespace StockSharp.Algo
 		public bool IsSupportTransactionLog { get; set; } = true;
 
 		/// <summary>
+		/// Use <see cref="PositionMessageAdapter"/>.
+		/// </summary>
+		public bool IsSupportPositionEmulation { get; set; } = true;
+
+		/// <summary>
 		/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 		/// </summary>
 		public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
@@ -887,7 +892,10 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
 			}
 
-			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new EmulationPositionManager(adapter.IsPositionsEmulationRequired, this)));
+			if (IsSupportPositionEmulation)
+			{
+				adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new EmulationPositionManager(adapter.IsPositionsEmulationRequired, this)));
+			}
 
 			if (adapter.IsSupportSubscriptions)
 			{
@@ -2228,6 +2236,7 @@ namespace StockSharp.Algo
 				ConnectDisconnectEventOnFirstAdapter = ConnectDisconnectEventOnFirstAdapter,
 				UseChannels = UseChannels,
 				IsSupportTransactionLog = IsSupportTransactionLog,
+				IsSupportPositionEmulation = IsSupportPositionEmulation,
 			};
 
 			clone.Load(this.Save());

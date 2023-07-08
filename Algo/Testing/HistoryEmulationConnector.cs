@@ -125,10 +125,15 @@ namespace StockSharp.Algo.Testing
 			Adapter.CommissionManager = null;
 			Adapter.PnLManager = null;
 			Adapter.SlippageManager = null;
-
 			Adapter.SupportSecurityAll = false;
-
+			Adapter.IsSupportPositionEmulation = false;
 			Adapter.SendFinishedCandlesImmediatelly = true;
+			//Adapter.SupportCandlesCompression = false;
+			Adapter.SupportBuildingFromOrderLog = false;
+			Adapter.SupportPartialDownload = false;
+			Adapter.SupportLookupTracking = false;
+			Adapter.SupportOrderBookTruncate = false;
+			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 
 			InMessageChannel = new PassThroughMessageChannel();
 			OutMessageChannel = new PassThroughMessageChannel();
@@ -137,13 +142,6 @@ namespace StockSharp.Algo.Testing
 			//ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 			//MaxMessageCount = 1000;
-
-			//Adapter.SupportCandlesCompression = false;
-			Adapter.SupportBuildingFromOrderLog = false;
-			Adapter.SupportPartialDownload = false;
-			Adapter.SupportLookupTracking = false;
-			Adapter.SupportOrderBookTruncate = false;
-			Adapter.ConnectDisconnectEventOnFirstAdapter = false;
 
 			MarketTimeChanged += OnMarketTimeChanged;
 			Disconnected += OnDisconnected;
