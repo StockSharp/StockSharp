@@ -771,12 +771,14 @@ namespace StockSharp.Algo.Testing
 										{
 											if (TryRemoveActiveOrder(quote.TransactionId, out var orderMsg))
 											{
+												var tradeVol = orderMsg.Balance.Value;
+
 												orderMsg.OriginalTransactionId = quote.TransactionId;
 												orderMsg.OrderState = OrderStates.Done;
 												orderMsg.Balance = 0;
 												result.Add(ToOrder(localTime, orderMsg));
 
-												ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
+												ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
 											}
 										}
 
@@ -1333,12 +1335,14 @@ namespace StockSharp.Algo.Testing
 								{
 									if (TryRemoveActiveOrder(quote.TransactionId, out var orderMsg))
 									{
+										var tradeVol = orderMsg.Balance.Value;
+
 										orderMsg.OriginalTransactionId = quote.TransactionId;
 										orderMsg.OrderState = OrderStates.Done;
 										orderMsg.Balance = 0;
 										result.Add(ToOrder(localTime, orderMsg));
 
-										ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
+										ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
 									}
 								}
 
