@@ -773,6 +773,7 @@ namespace StockSharp.Algo.Testing
 											{
 												orderMsg.OriginalTransactionId = quote.TransactionId;
 												orderMsg.OrderState = OrderStates.Done;
+												orderMsg.Balance = 0;
 												result.Add(ToOrder(localTime, orderMsg));
 
 												ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
@@ -1334,6 +1335,7 @@ namespace StockSharp.Algo.Testing
 									{
 										orderMsg.OriginalTransactionId = quote.TransactionId;
 										orderMsg.OrderState = OrderStates.Done;
+										orderMsg.Balance = 0;
 										result.Add(ToOrder(localTime, orderMsg));
 
 										ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, orderMsg.Balance.Value, result);
