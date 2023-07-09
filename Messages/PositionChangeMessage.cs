@@ -212,7 +212,7 @@ namespace StockSharp.Messages
 		/// Trades.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str985Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TradesKey)]
 		TradesCount,
 
 		/// <summary>

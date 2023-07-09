@@ -718,7 +718,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str159Key,
+			Name = LocalizedStrings.CommissionKey,
 			Description = LocalizedStrings.Str1365Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 101)]

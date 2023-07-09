@@ -478,7 +478,7 @@ namespace SampleHistoryTesting
 				chart.AddElement(area, candlesElem);
 
 				var tradesElem = strategy.ChartTradesElem = chart.CreateTradeElement();
-				tradesElem.FullTitle = LocalizedStrings.Str985;
+				tradesElem.FullTitle = LocalizedStrings.Trades;
 				chart.AddElement(area, tradesElem);
 
 				var shortElem = strategy.ChartShortElem = chart.CreateIndicatorElement();
@@ -569,7 +569,7 @@ namespace SampleHistoryTesting
 
 				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, ChartIndicatorDrawStyles.Area);
 				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
-				var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
+				var commissionCurve = equity.CreateCurve(LocalizedStrings.Commission + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
 				
 				strategy.PnLReceived2 += (s, t, r, u, c) =>
 				{

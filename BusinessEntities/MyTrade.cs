@@ -75,7 +75,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str159Key,
+			Name = LocalizedStrings.CommissionKey,
 			Description = LocalizedStrings.Str160Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 0)]

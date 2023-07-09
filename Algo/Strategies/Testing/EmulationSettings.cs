@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str175Key,
 			Description = LocalizedStrings.Str1409Key,
-			GroupName = LocalizedStrings.Str1174Key,
+			GroupName = LocalizedStrings.BacktestKey,
 			Order = 100)]
 		public TimeSpan MarketTimeChangedInterval
 		{
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1410Key,
 			Description = LocalizedStrings.Str1411Key,
-			GroupName = LocalizedStrings.Str1174Key,
+			GroupName = LocalizedStrings.BacktestKey,
 			Order = 101)]
 		public TimeSpan UnrealizedPnLInterval
 		{
@@ -120,9 +120,9 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str985Key,
+			Name = LocalizedStrings.TradesKey,
 			Description = LocalizedStrings.Str1413Key,
-			GroupName = LocalizedStrings.Str1174Key,
+			GroupName = LocalizedStrings.BacktestKey,
 			Order = 102)]
 		public EmulationMarketDataModes TradeDataMode
 		{
@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MarketDepthsKey,
 			Description = LocalizedStrings.Str1415Key,
-			GroupName = LocalizedStrings.Str1174Key,
+			GroupName = LocalizedStrings.BacktestKey,
 			Order = 103)]
 		public EmulationMarketDataModes DepthDataMode
 		{
@@ -164,7 +164,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OrderLogKey,
 			Description = LocalizedStrings.Str1417Key,
-			GroupName = LocalizedStrings.Str1174Key,
+			GroupName = LocalizedStrings.BacktestKey,
 			Order = 104)]
 		public EmulationMarketDataModes OrderLogDataMode
 		{
@@ -185,7 +185,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CheckDatesKey,
 			Description = LocalizedStrings.CheckDatesDescKey,
-			GroupName = LocalizedStrings.Str1174Key,
+			GroupName = LocalizedStrings.BacktestKey,
 			Order = 106)]
 		public bool CheckTradableDates
 		{

@@ -452,7 +452,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str985Dot => AppendDot(Str985);
+		public static string TradesDot => AppendDot(Trades);
 
 		/// <summary>
 		/// 

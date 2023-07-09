@@ -2215,7 +2215,7 @@
     "en": "Is tick ascending or descending in price.",
     "ru": "Является ли тик восходящим или нисходящим в цене."
   },
-  "Str159": {
+  "Commission": {
     "en": "Commission",
     "ru": "Комиссия"
   },
@@ -5227,7 +5227,7 @@
     "en": "Number of trades won (whose profit is greater than 0).",
     "ru": "Количество выигранных сделок (прибыль которых больше 0)."
   },
-  "Str985": {
+  "Trades": {
     "en": "Trades",
     "ru": "Сделки"
   },
@@ -5607,7 +5607,7 @@
     "en": "Rule '{0}'. {1}",
     "ru": "Правило '{0}'. {1}"
   },
-  "Str1088": {
+  "Rules": {
     "en": "Rules",
     "ru": "Правила"
   },
@@ -5946,10 +5946,6 @@
   "Str1173Params": {
     "en": "Price {0} of order {1} is greater than allowed maximum {2}.",
     "ru": "Цена {0} заявки {1} больше максимально допустимой {2}."
-  },
-  "Str1174": {
-    "en": "Backtesting",
-    "ru": "Эмуляция"
   },
   "Str1175": {
     "en": "Backtesting (extra)",
@@ -7255,7 +7251,7 @@
     "en": "Move higher",
     "ru": "Переместить выше"
   },
-  "Str1519": {
+  "Save": {
     "en": "Save",
     "ru": "Сохранить"
   },
@@ -12595,7 +12591,7 @@
     "en": "Password is not specified.",
     "ru": "Не указан пароль."
   },
-  "Str2976Params": {
+  "ReregistrationOfOrder": {
     "en": "Reregistration of order №{0}",
     "ru": "Перерегистрация заявки №{0}"
   },
@@ -17363,7 +17359,7 @@
     "en": "Create composite element",
     "ru": "Создать составной элемент"
   },
-  "XamlStr681": {
+  "CreateStrategy": {
     "en": "Create strategy",
     "ru": "Создать стратегию"
   },

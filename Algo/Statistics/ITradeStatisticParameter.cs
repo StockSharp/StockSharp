@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str983Key)]
 	[DescriptionLoc(LocalizedStrings.Str984Key)]
-	[CategoryLoc(LocalizedStrings.Str985Key)]
+	[CategoryLoc(LocalizedStrings.TradesKey)]
 	public class WinningTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str986Key)]
 	[DescriptionLoc(LocalizedStrings.Str987Key)]
-	[CategoryLoc(LocalizedStrings.Str985Key)]
+	[CategoryLoc(LocalizedStrings.TradesKey)]
 	public class LossingTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str988Key)]
 	[DescriptionLoc(LocalizedStrings.Str989Key)]
-	[CategoryLoc(LocalizedStrings.Str985Key)]
+	[CategoryLoc(LocalizedStrings.TradesKey)]
 	public class TradeCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str990Key)]
 	[DescriptionLoc(LocalizedStrings.Str991Key)]
-	[CategoryLoc(LocalizedStrings.Str985Key)]
+	[CategoryLoc(LocalizedStrings.TradesKey)]
 	public class RoundtripCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str992Key)]
 	[DescriptionLoc(LocalizedStrings.Str993Key)]
-	[CategoryLoc(LocalizedStrings.Str985Key)]
+	[CategoryLoc(LocalizedStrings.TradesKey)]
 	public class AverageTradeProfitParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -204,7 +204,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str994Key)]
 	[DescriptionLoc(LocalizedStrings.Str995Key)]
-	[CategoryLoc(LocalizedStrings.Str985Key)]
+	[CategoryLoc(LocalizedStrings.TradesKey)]
 	public class AverageWinTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -268,7 +268,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str996Key)]
 	[DescriptionLoc(LocalizedStrings.Str997Key)]
-	[CategoryLoc(LocalizedStrings.Str985Key)]
+	[CategoryLoc(LocalizedStrings.TradesKey)]
 	public class AverageLossTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
 		/// <summary>

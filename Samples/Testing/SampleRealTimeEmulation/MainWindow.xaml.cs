@@ -314,7 +314,7 @@ namespace SampleRealTimeEmulation
 
 			var window = new OrderWindow
 			{
-				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
+				Title = LocalizedStrings.ReregistrationOfOrder.Put(order.TransactionId),
 				SecurityProvider = _emuConnector,
 				MarketDataProvider = _emuConnector,
 				Portfolios = pfDataSource,

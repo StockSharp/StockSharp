@@ -422,7 +422,7 @@ namespace StockSharp.Messages
 		/// Commission (broker, exchange etc.). Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str159Key)]
+		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
 		[DescriptionLoc(LocalizedStrings.Str160Key)]
 		[MainCategory]
 		//[Nullable]

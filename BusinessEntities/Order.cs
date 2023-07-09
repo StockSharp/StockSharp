@@ -515,7 +515,7 @@ namespace StockSharp.BusinessEntities
 		/// Commission (broker, exchange etc.).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str159Key)]
+		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
 		[DescriptionLoc(LocalizedStrings.Str160Key)]
 		[MainCategory]
 		public decimal? Commission { get; set; }

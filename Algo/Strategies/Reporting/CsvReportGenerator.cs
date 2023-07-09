@@ -59,7 +59,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			writer.WriteLine();
 		}
 
-		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Str862, LocalizedStrings.PnL, LocalizedStrings.Str159, LocalizedStrings.Str163, LocalizedStrings.Str161);
+		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Str862, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Str163, LocalizedStrings.Str161);
 		WriteValues(
 			strategy.Name, strategy.Security != null ? strategy.Security.Id : string.Empty, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty,
 			strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
@@ -86,7 +86,7 @@ public class CsvReportGenerator : BaseReportGenerator
 					order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
 		}
 
-		WriteValues(LocalizedStrings.Str985);
+		WriteValues(LocalizedStrings.Trades);
 		WriteValues(LocalizedStrings.Str1192, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
 			LocalizedStrings.Str128, LocalizedStrings.Str1190, LocalizedStrings.Str1330, LocalizedStrings.Str163);
 

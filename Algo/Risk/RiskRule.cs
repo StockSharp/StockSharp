@@ -379,7 +379,7 @@ namespace StockSharp.Algo.Risk
 	/// <summary>
 	/// Risk-rule, tracking commission size.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str159Key)]
+	[DisplayNameLoc(LocalizedStrings.CommissionKey)]
 	[DescriptionLoc(LocalizedStrings.Str868Key)]
 	public class RiskCommissionRule : RiskRule
 	{
@@ -388,7 +388,7 @@ namespace StockSharp.Algo.Risk
 		/// <summary>
 		/// Commission size.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str159Key)]
+		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
 		[DescriptionLoc(LocalizedStrings.Str869Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Commission

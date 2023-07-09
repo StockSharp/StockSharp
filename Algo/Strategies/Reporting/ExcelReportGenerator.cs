@@ -104,7 +104,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 			.SetCell(0, 6, LocalizedStrings.PnL + ":")
 			.SetCell(1, 6, strategy.PnL)
 
-			.SetCell(0, 7, LocalizedStrings.Str159 + ":")
+			.SetCell(0, 7, LocalizedStrings.Commission + ":")
 			.SetCell(1, 7, strategy.Commission)
 
 			.SetCell(0, 8, LocalizedStrings.Str163 + ":")
@@ -161,7 +161,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 		var columnShift = 3;
 
 		worker
-			.SetCell(columnShift + 0, 0, LocalizedStrings.Str985)
+			.SetCell(columnShift + 0, 0, LocalizedStrings.Trades)
 
 			.SetCell(columnShift + 0, 1, LocalizedStrings.Str1192).SetStyle(columnShift + 0, typeof(long))
 			.SetCell(columnShift + 1, 1, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))

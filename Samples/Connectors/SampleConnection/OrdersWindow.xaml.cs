@@ -26,7 +26,7 @@
 		{
 			var window = new OrderWindow
 			{
-				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
+				Title = LocalizedStrings.ReregistrationOfOrder.Put(order.TransactionId),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
 				SecurityEnabled = false,
 				PortfolioEnabled = false,

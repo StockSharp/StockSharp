@@ -247,7 +247,7 @@ namespace StockSharp.BusinessEntities
 		/// Total commission.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str159Key)]
+		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
 		[DescriptionLoc(LocalizedStrings.Str433Key)]
 		[StatisticsCategory]
 		//[Nullable]

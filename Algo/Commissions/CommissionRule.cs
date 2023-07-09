@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Commissions
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str159Key)]
+		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
 		[DescriptionLoc(LocalizedStrings.CommissionValueKey)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public Unit Value
