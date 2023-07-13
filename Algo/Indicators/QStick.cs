@@ -57,7 +57,8 @@ namespace StockSharp.Algo.Indicators
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<ICandleMessage>();
-			return _sma.Process(input.SetValue(this, candle.OpenPrice - candle.ClosePrice));
+			var val = _sma.Process(input.SetValue(this, candle.OpenPrice - candle.ClosePrice));
+			return val.SetValue(this, val.GetValue<decimal>());
 		}
 	}
 }

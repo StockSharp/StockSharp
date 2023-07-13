@@ -79,12 +79,13 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			// используем дополнительную переменную IsFormed, 
+			// используем дополнительную переменную IsFormed,
 			// т.к. нужна задержка в один период для корректной инициализации скользящей средней
 			if (MovingAverage.IsFormed)
 				IsFormed = true;
 
-			return MovingAverage.Process(TrueRange.Process(input));
+			var val = MovingAverage.Process(TrueRange.Process(input));
+			return val.SetValue(this, val.GetValue<decimal>());
 		}
 	}
 }

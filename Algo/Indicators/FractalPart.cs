@@ -39,7 +39,8 @@ namespace StockSharp.Algo.Indicators
 			if (input.IsFinal)
 				IsFormed = true;
 
-			return input.To<ShiftedIndicatorValue>();
+			var val = input.To<ShiftedIndicatorValue>();
+			return val.SetValue(this, val);
 		}
 	}
 }

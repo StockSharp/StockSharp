@@ -55,6 +55,6 @@ namespace StockSharp.Algo.Indicators
 		public override T GetValue<T>() => base.GetValue<IIndicatorValue>().GetValue<T>();
 
 		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => new ShiftedIndicatorValue(indicator, Shift, Value);
 	}
 }
