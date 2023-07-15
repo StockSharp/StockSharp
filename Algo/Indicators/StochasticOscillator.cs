@@ -37,8 +37,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public StochasticOscillator()
 		{
-			InnerIndicators.Add(K = new StochasticK());
-			InnerIndicators.Add(D = new SimpleMovingAverage { Length = 3 });
+			InnerIndicators.Add(K = new());
+			InnerIndicators.Add(D = new() { Length = 3 });
 
 			Mode = ComplexIndicatorModes.Sequence;
 		}
@@ -63,5 +63,8 @@ namespace StockSharp.Algo.Indicators
 		[Description("%D")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage D { get; }
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + $" %K={K.Length} %D={D.Length}";
 	}
 }

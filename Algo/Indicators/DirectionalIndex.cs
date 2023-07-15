@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorDirectionalIndex.html")]
 	public class DirectionalIndex : BaseComplexIndicator
 	{
-		private sealed class DxValue : ComplexIndicatorValue
+		private class DxValue : ComplexIndicatorValue
 		{
 			private decimal _value;
 
@@ -62,8 +62,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public DirectionalIndex()
 		{
-			InnerIndicators.Add(Plus = new DiPlus());
-			InnerIndicators.Add(Minus = new DiMinus());
+			InnerIndicators.Add(Plus = new());
+			InnerIndicators.Add(Minus = new());
 		}
 
 		/// <inheritdoc />
@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str737Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public virtual int Length
+		public int Length
 		{
 			get => Plus.Length;
 			set
@@ -141,5 +141,8 @@ namespace StockSharp.Algo.Indicators
 			base.Save(storage);
 			storage.SetValue(nameof(Length), Length);
 		}
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + " " + Length;
 	}
 }

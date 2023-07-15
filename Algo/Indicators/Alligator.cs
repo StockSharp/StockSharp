@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="Alligator"/>.
 		/// </summary>
 		public Alligator()
-			: this(new AlligatorLine { Length = 13, Shift = 8 }, new AlligatorLine { Length = 8, Shift = 5 }, new AlligatorLine { Length = 5, Shift = 3 })
+			: this(new() { Length = 13, Shift = 8 }, new() { Length = 8, Shift = 5 }, new() { Length = 5, Shift = 3 })
 		{
 		}
 
@@ -83,5 +83,8 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		protected override bool CalcIsFormed() => Jaw.IsFormed;
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + $" J={Jaw.Length} T={Teeth.Length} L={Lips.Length}";
 	}
 }

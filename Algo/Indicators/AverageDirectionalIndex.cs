@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str737Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public virtual int Length
+		public int Length
 		{
 			get => MovingAverage.Length;
 			set
@@ -104,5 +104,8 @@ namespace StockSharp.Algo.Indicators
 			base.Save(storage);
 			storage.SetValue(nameof(Length), Length);
 		}
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + " " + Length;
 	}
 }

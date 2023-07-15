@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str778Key)]
 		[DescriptionLoc(LocalizedStrings.Str779Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public virtual int Length
+		public int Length
 		{
 			get => Middle.Length;
 			set
@@ -142,5 +142,8 @@ namespace StockSharp.Algo.Indicators
 			base.Save(storage);
 			storage.SetValue(nameof(Shift), Shift);
 		}
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + " " + Length;
 	}
 }

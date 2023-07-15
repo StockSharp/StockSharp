@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignal"/>.
 		/// </summary>
 		public MovingAverageConvergenceDivergenceSignal()
-			: this(new MovingAverageConvergenceDivergence(), new ExponentialMovingAverage { Length = 9 })
+			: this(new(), new() { Length = 9 })
 		{
 		}
 
@@ -73,5 +73,8 @@ namespace StockSharp.Algo.Indicators
 		[DescriptionLoc(LocalizedStrings.Str805Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public ExponentialMovingAverage SignalMa { get; }
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + $" L={Macd.LongMa.Length} S={Macd.ShortMa.Length} Sig={SignalMa.Length}";
 	}
 }

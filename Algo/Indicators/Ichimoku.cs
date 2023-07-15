@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="Ichimoku"/>.
 		/// </summary>
 		public Ichimoku()
-			: this(new IchimokuLine { Length = 9 }, new IchimokuLine { Length = 26 })
+			: this(new() { Length = 9 }, new() { Length = 26 })
 		{
 		}
 
@@ -105,5 +105,8 @@ namespace StockSharp.Algo.Indicators
 		[DescriptionLoc(LocalizedStrings.Str768Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuChinkouLine Chinkou { get; }
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + $" T={Tenkan.Length} K={Kijun.Length} A={SenkouA.Length} B={SenkouB.Length} C={Chinkou.Length}";
 	}
 }

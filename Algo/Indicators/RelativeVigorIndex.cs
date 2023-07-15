@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="RelativeVigorIndex"/>.
 		/// </summary>
 		public RelativeVigorIndex()
-			: this(new RelativeVigorIndexAverage(), new RelativeVigorIndexSignal())
+			: this(new(), new())
 		{
 		}
 
@@ -74,5 +74,8 @@ namespace StockSharp.Algo.Indicators
 		[DescriptionLoc(LocalizedStrings.Str773Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public RelativeVigorIndexSignal Signal { get; }
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + $" A={Average.Length} S={Signal.Length}";
 	}
 }

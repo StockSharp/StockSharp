@@ -121,5 +121,8 @@ namespace StockSharp.Algo.Indicators
 			base.Save(storage);
 			storage.SetValue(nameof(Length), Length);
 		}
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + " " + Length;
 	}
 }

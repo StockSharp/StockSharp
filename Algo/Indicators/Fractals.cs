@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="Fractals"/>.
 		/// </summary>
 		public Fractals()
-			: this(5, new FractalPart { Name = "Up" }, new FractalPart { Name = "Down" })
+			: this(5, new() { Name = "Up" }, new() { Name = "Down" })
 		{
 		}
 
@@ -219,5 +219,8 @@ namespace StockSharp.Algo.Indicators
 			base.Save(storage);
 			storage.SetValue(nameof(Length), Length);
 		}
+
+		/// <inheritdoc />
+		public override string ToString() => base.ToString() + " " + Length;
 	}
 }
