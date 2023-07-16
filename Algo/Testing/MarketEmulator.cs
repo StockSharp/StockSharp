@@ -148,6 +148,9 @@ namespace StockSharp.Algo.Testing
 			private long? _ticksSubscription;
 			private long? _l1Subscription;
 			private long? _olSubscription;
+			private long? _candlesSubscription;
+
+			private bool _candlesNonFinished;
 
 			private bool _priceStepUpdated;
 			private bool _volumeStepUpdated;
@@ -398,6 +401,11 @@ namespace StockSharp.Algo.Testing
 								_l1Subscription = mdMsg.TransactionId;
 							else if (mdMsg.DataType2 == DataType.OrderLog)
 								_olSubscription = mdMsg.TransactionId;
+							else if (mdMsg.DataType2.IsCandles)
+							{
+								_candlesSubscription = mdMsg.TransactionId;
+								_candlesNonFinished = !mdMsg.IsFinishedOnly;
+							}
 						}
 						else
 						{
@@ -409,6 +417,11 @@ namespace StockSharp.Algo.Testing
 								_l1Subscription = null;
 							else if (_olSubscription == mdMsg.OriginalTransactionId)
 								_olSubscription = null;
+							else if (_candlesSubscription == mdMsg.OriginalTransactionId)
+							{
+								_candlesSubscription = null;
+								_candlesNonFinished = false;
+							}
 						}
 
 						break;
@@ -2163,6 +2176,37 @@ namespace StockSharp.Algo.Testing
 
 								result.Add(trade.ToTickMessage(candle.SecurityId, candle.LocalTime));
 							}
+						}
+					}
+
+					if (_candlesNonFinished)
+					{
+						foreach (var (candle, ticks) in pair.Value)
+						{
+							var openState = candle.TypedClone();
+							openState.State = CandleStates.Active;
+							openState.HighPrice = openState.LowPrice = openState.ClosePrice = openState.OpenPrice;
+
+							if (candle.OpenTime != default)
+								openState.LocalTime = candle.OpenTime;
+
+							result.Add(openState);
+
+							var highState = openState.TypedClone();
+							highState.HighPrice = candle.HighPrice;
+
+							if (candle.HighTime != default)
+								highState.LocalTime = candle.HighTime;
+
+							result.Add(highState);
+
+							var lowState = openState.TypedClone();
+							lowState.HighPrice = candle.HighPrice;
+
+							if (candle.LowTime != default)
+								lowState.LocalTime = candle.LowTime;
+
+							result.Add(lowState);
 						}
 					}
 
