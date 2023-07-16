@@ -115,10 +115,10 @@ namespace StockSharp.Algo.Testing
 			protected override ExecutionMessage Create() => new() { DataTypeEx = DataType.Transactions };
 		}
 
-		private class TickPool : Pool<(Sides? side, decimal price, decimal vol)[]>
+		private class TickPool : Pool<(Sides? side, decimal price, decimal vol, DateTimeOffset time)[]>
 		{
-			protected override (Sides?, decimal, decimal)[] Create()
-				=> new (Sides?, decimal, decimal)[4];
+			protected override (Sides?, decimal, decimal, DateTimeOffset)[] Create()
+				=> new (Sides?, decimal, decimal, DateTimeOffset)[4];
 		}
 
 		private sealed class SecurityMarketEmulator : BaseLogReceiver//, IMarketEmulator
@@ -137,7 +137,7 @@ namespace StockSharp.Algo.Testing
 			private readonly Random _priceRandom = new(TimeHelper.Now.Millisecond);
 			private readonly RandomArray<bool> _isMatch = new(100);
 			private int _volumeDecimals;
-			private readonly SortedDictionary<DateTimeOffset, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol)[] ticks)>> _candleInfo = new();
+			private readonly SortedDictionary<DateTimeOffset, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks)>> _candleInfo = new();
 			private LogLevels? _logLevel;
 			private DateTime _lastStripDate;
 
@@ -423,14 +423,17 @@ namespace StockSharp.Algo.Testing
 							// т.о. время уйдет вперед данных, которые построены по свечкам.
 							var candles = _candleInfo.SafeAdd(candleMsg.OpenTime, key => new());
 
-							var ticks = _tickPool.Allocate();
-							candles.Add((candleMsg, ticks));
+							(Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks = null;
 
 							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
 							{
+								ticks = _tickPool.Allocate();
 								candleMsg.ConvertToTrades(GetVolumeStep(), _volumeDecimals, ticks);
-								ProcessTick(candleMsg.SecurityId, candleMsg.LocalTime, candleMsg.OpenTime, ticks[0], result);
+
+								ProcessTick(candleMsg.SecurityId, candleMsg.LocalTime, ticks[0], result);
 							}
+
+							candles.Add((candleMsg, ticks));
 
 							break;
 						}
@@ -1215,7 +1218,7 @@ namespace StockSharp.Algo.Testing
 
 			private void ProcessTick(ExecutionMessage tick, ICollection<Message> result)
 			{
-				ProcessTick(tick.SecurityId, tick.LocalTime, tick.ServerTime, (tick.OriginSide, tick.GetTradePrice(), tick.TradeVolume ?? 1), result);
+				ProcessTick(tick.SecurityId, tick.LocalTime, (tick.OriginSide, tick.GetTradePrice(), tick.TradeVolume ?? 1, tick.ServerTime), result);
 			}
 
 			private void AddActiveOrder(ExecutionMessage orderMsg, DateTimeOffset time)
@@ -1235,11 +1238,12 @@ namespace StockSharp.Algo.Testing
 				return true;
 			}
 
-			private void ProcessTick(SecurityId secId, DateTimeOffset localTime, DateTimeOffset serverTime, (Sides? side, decimal price, decimal volume) tick, ICollection<Message> result)
+			private void ProcessTick(SecurityId secId, DateTimeOffset localTime, (Sides? side, decimal price, decimal volume, DateTimeOffset time) tick, ICollection<Message> result)
 			{
 				var tradePrice = tick.price;
 				var tradeVolume = tick.volume;
 				var side = tick.side;
+				var serverTime = tick.time;
 
 				UpdateSteps(tradePrice, tradeVolume);
 
@@ -1479,7 +1483,7 @@ namespace StockSharp.Algo.Testing
 
 				if (_ticksSubscription is not null)
 				{
-					result.Add(tick.ToTickMessage(secId, localTime, serverTime));
+					result.Add(tick.ToTickMessage(secId, localTime));
 				}
 
 				if (_depthSubscription is not null)
@@ -2125,10 +2129,10 @@ namespace StockSharp.Algo.Testing
 			{
 				ProcessExpirableOrders(message, result);
 				ProcessPendingExecutions(message, result);
-				ProcessCandleTrades(message, result);
+				ProcessCandles(message, result);
 			}
 
-			private void ProcessCandleTrades(Message message, ICollection<Message> result)
+			private void ProcessCandles(Message message, ICollection<Message> result)
 			{
 				if (_candleInfo.Count == 0)
 					return;
@@ -2137,37 +2141,41 @@ namespace StockSharp.Algo.Testing
 
 				foreach (var pair in _candleInfo)
 				{
-					if (pair.Key < message.LocalTime)
+					if (pair.Key >= message.LocalTime)
+						break;
+
+					toRemove ??= new();
+					toRemove.Add(pair.Key);
+
+					if (_ticksSubscription is not null)
 					{
-						toRemove ??= new();
-						toRemove.Add(pair.Key);
-
-						if (_ticksSubscription is not null)
-						{
-							foreach (var (candle, ticks) in pair.Value)
-							{
-								for (var i = 1; i < ticks.Length; i++)
-								{
-									var trade = ticks[i];
-
-									if (trade == default)
-										break;
-
-									result.Add(trade.ToTickMessage(candle.SecurityId, candle.LocalTime, candle.OpenTime));
-								}
-							}
-						}
-
-						// change current time before the candle will be processed
-						result.Add(new TimeMessage { LocalTime = message.LocalTime });
-
 						foreach (var (candle, ticks) in pair.Value)
 						{
-							candle.LocalTime = message.LocalTime;
-							result.Add(candle);
+							if (ticks is null)
+								continue;
 
-							_tickPool.Free(ticks);
+							for (var i = 1; i < ticks.Length; i++)
+							{
+								var trade = ticks[i];
+
+								if (trade == default)
+									break;
+
+								result.Add(trade.ToTickMessage(candle.SecurityId, candle.LocalTime));
+							}
 						}
+					}
+
+					// change current time before the candle will be processed
+					result.Add(new TimeMessage { LocalTime = message.LocalTime });
+
+					foreach (var (candle, ticks) in pair.Value)
+					{
+						candle.LocalTime = message.LocalTime;
+						result.Add(candle);
+
+						if (ticks is not null)
+							_tickPool.Free(ticks);
 					}
 				}
 

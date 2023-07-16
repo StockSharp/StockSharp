@@ -682,7 +682,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="volumeStep">Volume step.</param>
 		/// <param name="decimals">The number of decimal places for the volume.</param>
 		/// <param name="ticks">Array to tick trades.</param>
-		public static void ConvertToTrades(this ICandleMessage candleMsg, decimal volumeStep, int decimals, (Sides? side, decimal price, decimal volume)[] ticks)
+		public static void ConvertToTrades(this ICandleMessage candleMsg, decimal volumeStep, int decimals, (Sides? side, decimal price, decimal volume, DateTimeOffset time)[] ticks)
 		{
 			if (candleMsg is null)
 				throw new ArgumentNullException(nameof(candleMsg));
@@ -695,6 +695,7 @@ namespace StockSharp.Algo.Candles
 
 			var vol = (candleMsg.TotalVolume / 4).Round(volumeStep, decimals, MidpointRounding.AwayFromZero);
 			var isUptrend = candleMsg.ClosePrice >= candleMsg.OpenPrice;
+			var time = candleMsg.OpenTime;
 
 			if (candleMsg.OpenPrice == candleMsg.ClosePrice &&
 				candleMsg.LowPrice == candleMsg.HighPrice &&
@@ -702,31 +703,31 @@ namespace StockSharp.Algo.Candles
 				candleMsg.TotalVolume == 1)
 			{
 				// все цены в свече равны или объем равен 1 - считаем ее за один тик
-				ticks[0] = (Sides.Buy, candleMsg.OpenPrice, candleMsg.TotalVolume);
+				ticks[0] = (Sides.Buy, candleMsg.OpenPrice, candleMsg.TotalVolume, time);
 
 				ticks[1] = ticks[2] = ticks[3] = default;
 			}
 			else if (candleMsg.TotalVolume == 2)
 			{
-				ticks[0] = (Sides.Buy, candleMsg.HighPrice, 1);
-				ticks[1] = (Sides.Sell, candleMsg.LowPrice, 1);
+				ticks[0] = (Sides.Buy, candleMsg.HighPrice, 1, candleMsg.HighTime == default ? time : candleMsg.HighTime);
+				ticks[1] = (Sides.Sell, candleMsg.LowPrice, 1, candleMsg.LowTime == default ? time : candleMsg.LowTime);
 
 				ticks[2] = ticks[3] = default;
 			}
 			else if (candleMsg.TotalVolume == 3)
 			{
-				ticks[0] = (isUptrend ? Sides.Buy : Sides.Sell, candleMsg.OpenPrice, 1);
-				ticks[1] = (Sides.Buy, candleMsg.HighPrice, 1);
-				ticks[2] = (Sides.Sell, candleMsg.LowPrice, 1);
+				ticks[0] = (isUptrend ? Sides.Buy : Sides.Sell, candleMsg.OpenPrice, 1, time);
+				ticks[1] = (Sides.Buy, candleMsg.HighPrice, 1, candleMsg.HighTime == default ? time : candleMsg.HighTime);
+				ticks[2] = (Sides.Sell, candleMsg.LowPrice, 1, candleMsg.LowTime == default ? time : candleMsg.LowTime);
 
 				ticks[3] = default;
 			}
 			else
 			{
-				ticks[0] = (isUptrend ? Sides.Buy : Sides.Sell, candleMsg.OpenPrice, vol);
-				ticks[1] = (Sides.Buy, candleMsg.HighPrice, vol);
-				ticks[2] = (Sides.Sell, candleMsg.LowPrice, vol);
-				ticks[3] = (isUptrend ? Sides.Buy : Sides.Sell, candleMsg.ClosePrice, candleMsg.TotalVolume - 3 * vol);
+				ticks[0] = (isUptrend ? Sides.Buy : Sides.Sell, candleMsg.OpenPrice, vol, time);
+				ticks[1] = (Sides.Buy, candleMsg.HighPrice, vol, candleMsg.HighTime == default ? time : candleMsg.HighTime);
+				ticks[2] = (Sides.Sell, candleMsg.LowPrice, vol, candleMsg.LowTime == default ? time : candleMsg.LowTime);
+				ticks[3] = (isUptrend ? Sides.Buy : Sides.Sell, candleMsg.ClosePrice, candleMsg.TotalVolume - 3 * vol, candleMsg.CloseTime == default ? time : candleMsg.CloseTime);
 			}
 		}
 
@@ -736,15 +737,14 @@ namespace StockSharp.Algo.Candles
 		/// <param name="tick">Tick info.</param>
 		/// <param name="securityId"><see cref="ExecutionMessage.SecurityId"/></param>
 		/// <param name="localTime"><see cref="Message.LocalTime"/></param>
-		/// <param name="serverTime"><see cref="ExecutionMessage.ServerTime"/></param>
 		/// <returns><see cref="ExecutionMessage"/></returns>
-		public static ExecutionMessage ToTickMessage(this (Sides? side, decimal price, decimal volume) tick, SecurityId securityId, DateTimeOffset localTime, DateTimeOffset serverTime)
+		public static ExecutionMessage ToTickMessage(this (Sides? side, decimal price, decimal volume, DateTimeOffset time) tick, SecurityId securityId, DateTimeOffset localTime)
 		{
 			return new()
 			{
 				LocalTime = localTime,
 				SecurityId = securityId,
-				ServerTime = serverTime,
+				ServerTime = tick.time,
 				//TradeId = _tradeIdGenerator.Next,
 				TradePrice = tick.price,
 				TradeVolume = tick.volume,
@@ -763,7 +763,7 @@ namespace StockSharp.Algo.Candles
 				private readonly IEnumerator<TCandle> _valuesEnumerator;
 				private IEnumerator<ExecutionMessage> _currCandleEnumerator;
 				private readonly int _decimals;
-				private readonly (Sides? side, decimal price, decimal volume)[] _ticks = new (Sides?, decimal, decimal)[4];
+				private readonly (Sides? side, decimal price, decimal volume, DateTimeOffset time)[] _ticks = new (Sides?, decimal, decimal, DateTimeOffset)[4];
 
 				public TradeEnumerator(IEnumerable<TCandle> candles, decimal volumeStep)
 				{
@@ -781,7 +781,7 @@ namespace StockSharp.Algo.Candles
 						if (t == default)
 							yield break;
 
-						yield return t.ToTickMessage(candleMsg.SecurityId, candleMsg.LocalTime, candleMsg.OpenTime);
+						yield return t.ToTickMessage(candleMsg.SecurityId, candleMsg.LocalTime);
 					}
 				}
 
