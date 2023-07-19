@@ -61,6 +61,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str838Key)]
 		[DescriptionLoc(LocalizedStrings.Str838Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public AlligatorLine Jaw { get; }
 
 		/// <summary>
@@ -70,6 +71,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str839Key)]
 		[DescriptionLoc(LocalizedStrings.Str839Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public AlligatorLine Teeth { get; }
 
 		/// <summary>
@@ -79,6 +81,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str840Key)]
 		[DescriptionLoc(LocalizedStrings.Str840Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public AlligatorLine Lips { get; }
 
 		/// <inheritdoc />

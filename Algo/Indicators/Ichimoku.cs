@@ -68,6 +68,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Tenkan")]
 		[DescriptionLoc(LocalizedStrings.Str764Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public IchimokuLine Tenkan { get; }
 
 		/// <summary>
@@ -77,6 +78,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Kijun")]
 		[DescriptionLoc(LocalizedStrings.Str765Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public IchimokuLine Kijun { get; }
 
 		/// <summary>
@@ -86,6 +88,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("SenkouA")]
 		[DescriptionLoc(LocalizedStrings.Str766Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public IchimokuSenkouALine SenkouA { get; }
 
 		/// <summary>
@@ -95,6 +98,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("SenkouB")]
 		[DescriptionLoc(LocalizedStrings.Str767Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public IchimokuSenkouBLine SenkouB { get; }
 
 		/// <summary>
@@ -104,6 +108,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Chinkou")]
 		[DescriptionLoc(LocalizedStrings.Str768Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Browsable(true)]
 		public IchimokuChinkouLine Chinkou { get; }
 
 		/// <inheritdoc />
