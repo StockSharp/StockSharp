@@ -125,6 +125,8 @@ namespace StockSharp.Algo.Statistics
 				new AverageWinTradeParameter(),
 				new LossingTradesParameter(),
 				new AverageLossTradeParameter(),
+				new PerMonthTradeParameter(),
+				new PerDayTradeParameter(),
 				new RoundtripCountParameter(),
 				new AverageTradeProfitParameter(),
 				new TradeCountParameter(),

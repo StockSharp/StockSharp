@@ -114,4 +114,14 @@ public enum StatisticParameterTypes
 	/// Total number of insufficient fund error orders.
 	/// </summary>
 	OrderInsufficientFundErrorCount,
+
+	/// <summary>
+	/// Average trades count per one month.
+	/// </summary>
+	PerMonthTrades,
+
+	/// <summary>
+	/// Average trades count per one day.
+	/// </summary>
+	PerDayTrades,
 }

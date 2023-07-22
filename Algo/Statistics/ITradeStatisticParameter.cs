@@ -16,7 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Statistics
 {
 	using System;
-
+	using System.ComponentModel.DataAnnotations;
+	
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.PnL;
@@ -325,5 +326,139 @@ namespace StockSharp.Algo.Statistics
 
 			base.Load(storage);
 		}
+	}
+
+	/// <summary>
+	/// Average trades count per one base.
+	/// </summary>
+	public abstract class PerBaseTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
+	{
+		private DateTime _currStart;
+		private int _currCount;
+
+		private int _periodsCount;
+
+		/// <summary>
+		/// Initialize <see cref="PerMonthTradeParameter"/>.
+		/// </summary>
+		/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+		protected PerBaseTradeParameter(StatisticParameterTypes type)
+			: base(type)
+		{
+		}
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_currStart = default;
+			_currCount = default;
+			_periodsCount = default;
+
+			base.Reset();
+		}
+
+		/// <summary>
+		/// Align the specified date for exact period start.
+		/// </summary>
+		/// <param name="date">Trade date.</param>
+		/// <returns>Aligned value.</returns>
+		protected abstract DateTime Align(DateTime date);
+
+		/// <inheritdoc />
+		public void Add(PnLInfo info)
+		{
+			if (info is null)
+				throw new ArgumentNullException(nameof(info));
+
+			var date = Align(info.Trade.ServerTime.UtcDateTime);
+
+			if (_currStart == default)
+			{
+				_currStart = date;
+
+				_periodsCount = 1;
+				_currCount = 1;
+
+				Value = _currCount;
+			}
+			else if (_currStart == date)
+			{
+				Value = ((Value * _periodsCount - _currCount) + ++_currCount) / _periodsCount;
+			}
+			else
+			{
+				_currStart = date;
+
+				_currCount = 1;
+
+				Value = (Value * _periodsCount + _currCount) / ++_periodsCount;
+			}
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			storage
+				.Set("CurrStart", _currStart)
+				.Set("PeriodsCount", _periodsCount)
+				.Set("CurrCount", _currCount)
+			;
+
+			base.Save(storage);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			_currStart = storage.GetValue<DateTime>("CurrStart");
+			_periodsCount = storage.GetValue<int>("PeriodsCount");
+			_currCount = storage.GetValue<int>("CurrCount");
+
+			base.Load(storage);
+		}
+	}
+
+	/// <summary>
+	/// Average trades count per one month.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PerMonthTradesKey,
+		Description = LocalizedStrings.PerMonthTradesDescKey,
+		GroupName = LocalizedStrings.TradesKey)]	
+	public class PerMonthTradeParameter : PerBaseTradeParameter
+	{
+		/// <summary>
+		/// Initialize <see cref="PerMonthTradeParameter"/>.
+		/// </summary>
+		public PerMonthTradeParameter()
+			: base(StatisticParameterTypes.PerMonthTrades)
+        {
+        }
+
+		/// <inheritdoc/>
+		protected override DateTime Align(DateTime date) => new(date.Year, date.Month, 1);
+	}
+
+	/// <summary>
+	/// Average trades count per one day.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PerDayTradesKey,
+		Description = LocalizedStrings.PerDayTradesDescKey,
+		GroupName = LocalizedStrings.TradesKey)]
+	public class PerDayTradeParameter : PerBaseTradeParameter
+	{
+		/// <summary>
+		/// Initialize <see cref="PerDayTradeParameter"/>.
+		/// </summary>
+		public PerDayTradeParameter()
+			: base(StatisticParameterTypes.PerDayTrades)
+		{
+		}
+
+		/// <inheritdoc/>
+		protected override DateTime Align(DateTime date) => date.Date;
 	}
 }

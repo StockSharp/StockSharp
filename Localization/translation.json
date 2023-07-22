@@ -1,4 +1,20 @@
 {
+  "PerMonthTrades": {
+    "en": "Average per month",
+    "ru": "Средне в месяц"
+  },
+  "PerMonthTradesDesc": {
+    "en": "Average per month trades count.",
+    "ru": "Средне в месяц количество сделок."
+  },
+  "PerDayTrades": {
+    "en": "Average per day",
+    "ru": "Средне в день"
+  },
+  "PerDayTradesDesc": {
+    "en": "Average per day trades count.",
+    "ru": "Средне в день количество сделок."
+  },
   "Content": {
     "en": "Content",
     "ru": "Контент"
