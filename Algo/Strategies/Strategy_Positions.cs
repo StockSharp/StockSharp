@@ -90,7 +90,7 @@
 			PositionChanged?.Invoke();
 
 			StatisticManager.AddPosition(time, Position);
-			StatisticManager.AddPnL(time, PnL);
+			StatisticManager.AddPnL(time, PnL, Commission);
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new();

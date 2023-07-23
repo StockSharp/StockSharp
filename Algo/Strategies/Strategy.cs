@@ -2753,7 +2753,7 @@ namespace StockSharp.Algo.Strategies
 				}
 			}
 
-			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
+			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL, Commission);
 		}
 
 		private void RaiseLatencyChanged()

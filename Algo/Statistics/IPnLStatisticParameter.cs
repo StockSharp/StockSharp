@@ -33,7 +33,8 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		/// <param name="marketTime">The exchange time.</param>
 		/// <param name="pnl">The profit-loss value.</param>
-		void Add(DateTimeOffset marketTime, decimal pnl);
+		/// <param name="commission">Commission.</param>
+		void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission);
 	}
 
 	/// <summary>
@@ -57,7 +58,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			Value = Math.Max(Value, pnl);
 		}
@@ -96,7 +97,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			if (_prevValue < _underlying.Value)
 			{
@@ -150,7 +151,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
 			Value = Math.Max(Value, _maxEquity - pnl);
@@ -204,7 +205,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			if (_prevValue < _underlying.Value)
 			{
@@ -258,7 +259,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
 
@@ -311,7 +312,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			_minEquity = Math.Min(_minEquity, pnl);
 
@@ -362,7 +363,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			Value = _maxDrawdown.Value != 0 ? _netProfit.Value / _maxDrawdown.Value : 0;
 		}
@@ -388,36 +389,38 @@ namespace StockSharp.Algo.Statistics
 		{
 		}
 
-		private decimal? _firstPnL;
-
 		/// <inheritdoc />
-		public override void Reset()
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
-			_firstPnL = null;
-			base.Reset();
+			Value = pnl;
+		}
+	}
+
+	/// <summary>
+	/// Total commission.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CommissionKey,
+		Description = LocalizedStrings.Str1365Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 8
+	)]
+	public class CommissionParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
+	{
+		/// <summary>
+		/// Initialize <see cref="CommissionParameter"/>.
+		/// </summary>
+		public CommissionParameter()
+			: base(StatisticParameterTypes.Commission)
+		{
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl)
+		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
-			if (_firstPnL == null)
-				_firstPnL = pnl;
-
-			Value = pnl - _firstPnL.Value;
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			storage.SetValue("FirstPnL", _firstPnL);
-			base.Save(storage);
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			_firstPnL = storage.GetValue<decimal?>("FirstPnL");
-			base.Load(storage);
+			if (commission is not null)
+				Value = commission.Value;
 		}
 	}
 }

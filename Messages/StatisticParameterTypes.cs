@@ -134,4 +134,9 @@ public enum StatisticParameterTypes
 	/// Date of maximum profit value for the entire period.
 	/// </summary>
 	MaxProfitDate,
+
+	/// <summary>
+	/// Total commission.
+	/// </summary>
+	Commission,
 }

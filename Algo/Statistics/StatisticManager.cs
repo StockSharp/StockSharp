@@ -124,6 +124,8 @@ namespace StockSharp.Algo.Statistics
 				new ReturnParameter(),
 				netPf,
 				new RecoveryFactorParameter(maxDd, netPf),
+				new CommissionParameter(),
+
 				new WinningTradesParameter(),
 				new AverageWinTradeParameter(),
 				new LossingTradesParameter(),
@@ -133,8 +135,10 @@ namespace StockSharp.Algo.Statistics
 				new RoundtripCountParameter(),
 				new AverageTradeProfitParameter(),
 				new TradeCountParameter(),
+
 				new MaxLongPositionParameter(),
 				new MaxShortPositionParameter(),
+
 				new MaxLatencyRegistrationParameter(),
 				new MinLatencyRegistrationParameter(),
 				new MaxLatencyCancellationParameter(),
@@ -170,8 +174,9 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		/// <param name="time">The change time <paramref name="pnl" />.</param>
 		/// <param name="pnl">New profit-loss value.</param>
-		public virtual void AddPnL(DateTimeOffset time, decimal pnl)
-			=> _parameters.PnLParams.ForEach(p => p.Add(time, pnl));
+		/// <param name="commission">Commission.</param>
+		public virtual void AddPnL(DateTimeOffset time, decimal pnl, decimal? commission)
+			=> _parameters.PnLParams.ForEach(p => p.Add(time, pnl, commission));
 
 		/// <summary>
 		/// To add the new position value.
