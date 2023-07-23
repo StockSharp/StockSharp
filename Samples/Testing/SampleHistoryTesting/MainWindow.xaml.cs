@@ -388,9 +388,11 @@ namespace SampleHistoryTesting
 				;
 
 				var secProvider = (ISecurityProvider)new CollectionSecurityProvider(new[] { security });
+				var pf = Portfolio.CreateSimulator();
+				pf.CurrentValue = 1000;
 
 				// create backtesting connector
-				var connector = new HistoryEmulationConnector(secProvider)
+				var connector = new HistoryEmulationConnector(secProvider, new[] { pf })
 				{
 					EmulationAdapter =
 					{

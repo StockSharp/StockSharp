@@ -139,4 +139,14 @@ public enum StatisticParameterTypes
 	/// Total commission.
 	/// </summary>
 	Commission,
+
+	/// <summary>
+	/// Maximum absolute drawdown during the whole period in percent.
+	/// </summary>
+	MaxDrawdownPercent,
+
+	/// <summary>
+	/// Net profit for whole time period in percent.
+	/// </summary>
+	NetProfitPercent,
 }

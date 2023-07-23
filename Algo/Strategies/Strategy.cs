@@ -1583,6 +1583,9 @@ namespace StockSharp.Algo.Strategies
 			OrderRegisterErrorCount = default;
 			CurrentRegisterCount = default;
 			_lastRegisterTime = default;
+
+			if (Portfolio?.CurrentValue is not null)
+				StatisticManager.Init(Portfolio.CurrentValue.Value);
 		}
 
 		/// <summary>

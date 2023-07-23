@@ -29,12 +29,108 @@ namespace StockSharp.Algo.Statistics
 	public interface IPnLStatisticParameter
 	{
 		/// <summary>
+		/// Init by initial value.
+		/// </summary>
+		/// <param name="beginValue">Initial value.</param>
+		void Init(decimal beginValue);
+
+		/// <summary>
 		/// To add new data to the parameter.
 		/// </summary>
 		/// <param name="marketTime">The exchange time.</param>
 		/// <param name="pnl">The profit-loss value.</param>
 		/// <param name="commission">Commission.</param>
 		void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission);
+	}
+
+	/// <summary>
+	/// The base profit-loss statistics parameter.
+	/// </summary>
+	/// <typeparam name="TValue">The type of the parameter value.</typeparam>
+	public abstract class BasePnLStatisticParameter<TValue> : BaseStatisticParameter<TValue>, IPnLStatisticParameter
+		where TValue : IComparable<TValue>
+	{
+		/// <summary>
+		/// Initialize <see cref="BasePnLStatisticParameter{TValue}"/>.
+		/// </summary>
+		/// <param name="type"><see cref="IStatisticParameter.Type"/></param>
+		protected BasePnLStatisticParameter(StatisticParameterTypes type)
+			: base(type)
+        {
+        }
+
+		/// <inheritdoc />
+		public virtual void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+			=> throw new NotSupportedException();
+
+		/// <inheritdoc />
+		public virtual void Init(decimal beginValue)
+		{
+		}
+	}
+
+	/// <summary>
+	/// Net profit for whole time period.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str968Key,
+		Description = LocalizedStrings.Str969Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 0
+	)]
+	public class NetProfitParameter : BasePnLStatisticParameter<decimal>
+	{
+		/// <summary>
+		/// Initialize <see cref="NetProfitParameter"/>.
+		/// </summary>
+		public NetProfitParameter()
+			: base(StatisticParameterTypes.NetProfit)
+		{
+		}
+
+		/// <inheritdoc />
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		{
+			Value = pnl;
+		}
+	}
+
+	/// <summary>
+	/// Net profit for whole time period in percent.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.NetProfitPercentKey,
+		Description = LocalizedStrings.NetProfitPercentDescKey,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 1
+	)]
+	public class NetProfitPercentParameter : BasePnLStatisticParameter<decimal>
+	{
+		private decimal _beginValue;
+
+		/// <summary>
+		/// Initialize <see cref="NetProfitPercentParameter"/>.
+		/// </summary>
+		public NetProfitPercentParameter()
+			: base(StatisticParameterTypes.NetProfitPercent)
+		{
+		}
+
+		/// <inheritdoc />
+		public override void Init(decimal beginValue)
+		{
+			base.Init(beginValue);
+
+			_beginValue = beginValue;
+		}
+
+		/// <inheritdoc />
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		{
+			Value = pnl * 100m / _beginValue;
+		}
 	}
 
 	/// <summary>
@@ -45,9 +141,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str958Key,
 		Description = LocalizedStrings.Str959Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 1
+		Order = 2
 	)]
-	public class MaxProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
+	public class MaxProfitParameter : BasePnLStatisticParameter<decimal>
 	{
 		/// <summary>
 		/// Initialize <see cref="MaxProfitParameter"/>.
@@ -58,7 +154,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			Value = Math.Max(Value, pnl);
 		}
@@ -72,9 +168,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.MaxProfitDateKey,
 		Description = LocalizedStrings.MaxProfitDateDescKey,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 2
+		Order = 3
 	)]
-	public class MaxProfitDateParameter : BaseStatisticParameter<DateTimeOffset>, IPnLStatisticParameter
+	public class MaxProfitDateParameter : BasePnLStatisticParameter<DateTimeOffset>
 	{
 		private readonly MaxProfitParameter _underlying;
 		private decimal _prevValue;
@@ -97,7 +193,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			if (_prevValue < _underlying.Value)
 			{
@@ -129,9 +225,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str960Key,
 		Description = LocalizedStrings.Str961Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 3
+		Order = 4
 	)]
-	public class MaxDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
+	public class MaxDrawdownParameter : BasePnLStatisticParameter<decimal>
 	{
 		/// <summary>
 		/// Initialize <see cref="MaxDrawdownParameter"/>.
@@ -151,7 +247,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
 			Value = Math.Max(Value, _maxEquity - pnl);
@@ -173,6 +269,49 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
+	/// Maximum absolute drawdown during the whole period in percent.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MaxDrawdownPercentKey,
+		Description = LocalizedStrings.MaxDrawdownPercentKey,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 5
+	)]
+	public class MaxDrawdownPercentParameter : BasePnLStatisticParameter<decimal>
+	{
+		private readonly MaxDrawdownParameter _underlying;
+		private decimal _beginValue;
+
+		/// <summary>
+		/// Initialize <see cref="MaxDrawdownPercentParameter"/>.
+		/// </summary>
+		/// <param name="underlying"><see cref="MaxDrawdownParameter"/></param>
+		public MaxDrawdownPercentParameter(MaxDrawdownParameter underlying)
+			: base(StatisticParameterTypes.MaxDrawdownPercent)
+		{
+			_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
+		}
+
+		/// <inheritdoc />
+		public override void Init(decimal beginValue)
+		{
+			base.Init(beginValue);
+
+			_beginValue = beginValue;
+		}
+
+		/// <inheritdoc />
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		{
+			if (pnl == 0)
+				return;
+
+			Value = _underlying.Value * 100m / _beginValue;
+		}
+	}
+
+	/// <summary>
 	/// Date of maximum absolute drawdown during the whole period.
 	/// </summary>
 	[Display(
@@ -180,9 +319,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.MaxDrawdownDateKey,
 		Description = LocalizedStrings.MaxDrawdownDateDescKey,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 4
+		Order = 6
 	)]
-	public class MaxDrawdownDateParameter : BaseStatisticParameter<DateTimeOffset>, IPnLStatisticParameter
+	public class MaxDrawdownDateParameter : BasePnLStatisticParameter<DateTimeOffset>
 	{
 		private readonly MaxDrawdownParameter _underlying;
 		private decimal _prevValue;
@@ -205,7 +344,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			if (_prevValue < _underlying.Value)
 			{
@@ -237,9 +376,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str962Key,
 		Description = LocalizedStrings.Str963Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 5
+		Order = 7
 	)]
-	public class MaxRelativeDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
+	public class MaxRelativeDrawdownParameter : BasePnLStatisticParameter<decimal>
 	{
 		/// <summary>
 		/// Initialize <see cref="MaxRelativeDrawdownParameter"/>.
@@ -259,7 +398,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
 
@@ -290,9 +429,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str964Key,
 		Description = LocalizedStrings.Str965Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 6
+		Order = 8
 	)]
-	public class ReturnParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
+	public class ReturnParameter : BasePnLStatisticParameter<decimal>
 	{
 		/// <summary>
 		/// Initialize <see cref="ReturnParameter"/>.
@@ -312,7 +451,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			_minEquity = Math.Min(_minEquity, pnl);
 
@@ -343,9 +482,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str966Key,
 		Description = LocalizedStrings.Str967Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 7
+		Order = 9
 	)]
-	public class RecoveryFactorParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
+	public class RecoveryFactorParameter : BasePnLStatisticParameter<decimal>
 	{
 		private readonly MaxDrawdownParameter _maxDrawdown;
 		private readonly NetProfitParameter _netProfit;
@@ -363,36 +502,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			Value = _maxDrawdown.Value != 0 ? _netProfit.Value / _maxDrawdown.Value : 0;
-		}
-	}
-
-	/// <summary>
-	/// Net profit for whole time period.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str968Key,
-		Description = LocalizedStrings.Str969Key,
-		GroupName = LocalizedStrings.PnLKey,
-		Order = 0
-	)]
-	public class NetProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
-	{
-		/// <summary>
-		/// Initialize <see cref="NetProfitParameter"/>.
-		/// </summary>
-		public NetProfitParameter()
-			: base(StatisticParameterTypes.NetProfit)
-		{
-		}
-
-		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
-		{
-			Value = pnl;
 		}
 	}
 
@@ -404,9 +516,9 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.CommissionKey,
 		Description = LocalizedStrings.Str1365Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 8
+		Order = 10
 	)]
-	public class CommissionParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
+	public class CommissionParameter : BasePnLStatisticParameter<decimal>
 	{
 		/// <summary>
 		/// Initialize <see cref="CommissionParameter"/>.
@@ -417,7 +529,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
+		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
 			if (commission is not null)
 				Value = commission.Value;

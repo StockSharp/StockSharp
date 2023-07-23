@@ -1,4 +1,20 @@
 {
+  "NetProfitPercent": {
+    "en": "% Net profit",
+    "ru": "$ Чистая прибыль"
+  },
+  "NetProfitPercentDesc": {
+    "en": "Net profit for whole time period in percent.",
+    "ru": "Чистая прибыль за весь период в процентах."
+  },
+  "MaxDrawdownPercent": {
+    "en": "% Max drawdown",
+    "ru": "$ Макс просадка"
+  },
+  "MaxDrawdownPercentDesc": {
+    "en": "Maximum absolute drawdown during the whole period in percent.",
+    "ru": "Максимальная просадка за весь период в процентах."
+  },
   "MaxDrawdownDate": {
     "en": "Max drawdown date",
     "ru": "Дата макс просадки"
@@ -5196,7 +5212,7 @@
     "ru": "Коэффициент восстановления (чистая прибыль / максимальная просадка)."
   },
   "Str968": {
-    "en": "Numeric profit",
+    "en": "Net profit",
     "ru": "Чистая прибыль"
   },
   "Str969": {

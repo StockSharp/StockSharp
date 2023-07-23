@@ -121,8 +121,10 @@ namespace StockSharp.Algo.Statistics
 				maxDd,
 				new MaxDrawdownDateParameter(maxDd),
 				new MaxRelativeDrawdownParameter(),
+				new MaxDrawdownPercentParameter(maxDd),
 				new ReturnParameter(),
 				netPf,
+				new NetProfitPercentParameter(),
 				new RecoveryFactorParameter(maxDd, netPf),
 				new CommissionParameter(),
 
@@ -168,6 +170,13 @@ namespace StockSharp.Algo.Statistics
 		/// <returns><see cref="IStatisticParameter"/></returns>
 		public IStatisticParameter GetByType(StatisticParameterTypes type)
 			=> _dict[type];
+
+		/// <summary>
+		/// Init by initial value.
+		/// </summary>
+		/// <param name="beginValue">Initial value.</param>
+		public virtual void Init(decimal beginValue)
+			=> _parameters.PnLParams.ForEach(p => p.Init(beginValue));
 
 		/// <summary>
 		/// To add the new profit-loss value.
