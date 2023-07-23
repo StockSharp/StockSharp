@@ -110,13 +110,16 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public StatisticManager()
 		{
+			var maxPf = new MaxProfitParameter();
 			var maxDd = new MaxDrawdownParameter();
 			var netPf = new NetProfitParameter();
 
 			_parameters = new()
 			{
-				new MaxProfitParameter(),
+				maxPf,
+				new MaxProfitDateParameter(maxPf),
 				maxDd,
+				new MaxDrawdownDateParameter(maxDd),
 				new MaxRelativeDrawdownParameter(),
 				new ReturnParameter(),
 				netPf,

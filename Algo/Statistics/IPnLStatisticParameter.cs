@@ -64,6 +64,63 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
+	/// Date of maximum profit value for the entire period.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MaxProfitDateKey,
+		Description = LocalizedStrings.MaxProfitDateDescKey,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 2
+	)]
+	public class MaxProfitDateParameter : BaseStatisticParameter<DateTimeOffset>, IPnLStatisticParameter
+	{
+		private readonly MaxProfitParameter _underlying;
+		private decimal _prevValue;
+
+		/// <summary>
+		/// Initialize <see cref="MaxProfitDateParameter"/>.
+		/// </summary>
+		/// <param name="underlying"><see cref="MaxProfitParameter"/></param>
+		public MaxProfitDateParameter(MaxProfitParameter underlying)
+			: base(StatisticParameterTypes.MaxProfitDate)
+		{
+			_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
+		}
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_prevValue = default;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
+		public void Add(DateTimeOffset marketTime, decimal pnl)
+		{
+			if (_prevValue < _underlying.Value)
+			{
+				_prevValue = _underlying.Value;
+				Value = marketTime;
+			}
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			storage.SetValue("PrevValue", _prevValue);
+			base.Save(storage);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			_prevValue = storage.GetValue<decimal>("PrevValue");
+			base.Load(storage);
+		}
+	}
+
+	/// <summary>
 	/// Maximum absolute drawdown during the whole period.
 	/// </summary>
 	[Display(
@@ -71,7 +128,7 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str960Key,
 		Description = LocalizedStrings.Str961Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 2
+		Order = 3
 	)]
 	public class MaxDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
@@ -115,6 +172,63 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
+	/// Date of maximum absolute drawdown during the whole period.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MaxDrawdownDateKey,
+		Description = LocalizedStrings.MaxDrawdownDateDescKey,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 4
+	)]
+	public class MaxDrawdownDateParameter : BaseStatisticParameter<DateTimeOffset>, IPnLStatisticParameter
+	{
+		private readonly MaxDrawdownParameter _underlying;
+		private decimal _prevValue;
+
+		/// <summary>
+		/// Initialize <see cref="MaxDrawdownDateParameter"/>.
+		/// </summary>
+		/// <param name="underlying"><see cref="MaxDrawdownParameter"/></param>
+		public MaxDrawdownDateParameter(MaxDrawdownParameter underlying)
+			: base(StatisticParameterTypes.MaxDrawdownDate)
+        {
+			_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
+		}
+
+		/// <inheritdoc />
+		public override void Reset()
+		{
+			_prevValue = default;
+			base.Reset();
+		}
+
+		/// <inheritdoc />
+		public void Add(DateTimeOffset marketTime, decimal pnl)
+		{
+			if (_prevValue < _underlying.Value)
+			{
+				_prevValue = _underlying.Value;
+				Value = marketTime;
+			}
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			storage.SetValue("PrevValue", _prevValue);
+			base.Save(storage);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			_prevValue = storage.GetValue<decimal>("PrevValue");
+			base.Load(storage);
+		}
+	}
+
+	/// <summary>
 	/// Maximum relative equity drawdown during the whole period.
 	/// </summary>
 	[Display(
@@ -122,7 +236,7 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str962Key,
 		Description = LocalizedStrings.Str963Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 3
+		Order = 5
 	)]
 	public class MaxRelativeDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
@@ -175,7 +289,7 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str964Key,
 		Description = LocalizedStrings.Str965Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 4
+		Order = 6
 	)]
 	public class ReturnParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
@@ -228,7 +342,7 @@ namespace StockSharp.Algo.Statistics
 		Name = LocalizedStrings.Str966Key,
 		Description = LocalizedStrings.Str967Key,
 		GroupName = LocalizedStrings.PnLKey,
-		Order = 5
+		Order = 7
 	)]
 	public class RecoveryFactorParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{

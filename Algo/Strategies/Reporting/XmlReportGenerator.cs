@@ -33,7 +33,7 @@ public class XmlReportGenerator : BaseReportGenerator
 			=> writer.WriteEndElement();
 
 		void WriteAttributeString(string name, object value)
-			=> writer.WriteAttributeString(name, value is TimeSpan ts ? ts.Format() : value.To<string>());
+			=> writer.WriteAttributeString(name, value is TimeSpan ts ? ts.Format() : (value is DateTimeOffset dto ? dto.Format() : value.To<string>()));
 
 		WriteStartElement("strategy");
 

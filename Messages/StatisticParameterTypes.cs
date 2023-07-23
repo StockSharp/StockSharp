@@ -124,4 +124,14 @@ public enum StatisticParameterTypes
 	/// Average trades count per one day.
 	/// </summary>
 	PerDayTrades,
+
+	/// <summary>
+	/// Date of maximum absolute drawdown during the whole period.
+	/// </summary>
+	MaxDrawdownDate,
+
+	/// <summary>
+	/// Date of maximum profit value for the entire period.
+	/// </summary>
+	MaxProfitDate,
 }

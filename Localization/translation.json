@@ -1,4 +1,20 @@
 {
+  "MaxDrawdownDate": {
+    "en": "Max drawdown date",
+    "ru": "Дата макс просадки"
+  },
+  "MaxDrawdownDateDesc": {
+    "en": "Date of maximum absolute drawdown during the whole period.",
+    "ru": "Дата максимальной просадки за весь период."
+  },
+  "MaxProfitDate": {
+    "en": "Max profit date",
+    "ru": "Дата макс прибыли"
+  },
+  "MaxProfitDateDesc": {
+    "en": "Date of maximum profit value for the entire period.",
+    "ru": "Дата максимальной прибыли за весь период."
+  },
   "PerMonthTrades": {
     "en": "Average per month",
     "ru": "Средне в месяц"

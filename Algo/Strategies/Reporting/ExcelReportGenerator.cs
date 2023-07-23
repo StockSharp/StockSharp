@@ -123,6 +123,8 @@ public class ExcelReportGenerator : BaseReportGenerator
 
 			if (value is TimeSpan ts)
 				value = ts.Format();
+			else if (value is DateTimeOffset dto)
+				value = dto.Format();
 			else if (value is decimal dec)
 				value = dec.Round(Decimals);
 

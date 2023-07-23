@@ -72,7 +72,7 @@ public class CsvReportGenerator : BaseReportGenerator
 		var statParameters = strategy.StatisticManager.Parameters;
 		WriteValues(LocalizedStrings.Statistics);
 		WriteValues(statParameters.Select(p => (object)p.Name).ToArray());
-		WriteValues(statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value).ToArray());
+		WriteValues(statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : (p.Value is DateTimeOffset dto ? dto.Format() : p.Value)).ToArray());
 
 		WriteValues(LocalizedStrings.Orders);
 		WriteValues(LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Time, LocalizedStrings.Price,
