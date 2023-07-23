@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Statistics
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 
@@ -38,9 +39,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Maximum long position size.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str970Key)]
-	[DescriptionLoc(LocalizedStrings.Str971Key)]
-	[CategoryLoc(LocalizedStrings.PositionsKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str970Key,
+		Description = LocalizedStrings.Str971Key,
+		GroupName = LocalizedStrings.PositionsKey,
+		Order = 200
+	)]
 	public class MaxLongPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
 		/// <summary>
@@ -58,17 +63,21 @@ namespace StockSharp.Algo.Statistics
 		/// <param name="position">The new position value.</param>
 		public void Add(DateTimeOffset marketTime, decimal position)
 		{
-			if (position > 0)
-				Value = position.Max(Value);
+			if (position > 0 && position > Value)
+				Value = position;
 		}
 	}
 
 	/// <summary>
 	/// Maximum short position size.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str973Key)]
-	[DescriptionLoc(LocalizedStrings.Str974Key)]
-	[CategoryLoc(LocalizedStrings.PositionsKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str973Key,
+		Description = LocalizedStrings.Str974Key,
+		GroupName = LocalizedStrings.PositionsKey,
+		Order = 201
+	)]
 	public class MaxShortPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
 		/// <summary>
@@ -86,8 +95,8 @@ namespace StockSharp.Algo.Statistics
 		/// <param name="position">The new position value.</param>
 		public void Add(DateTimeOffset marketTime, decimal position)
 		{
-			if (position < 0)
-				Value = position.Abs().Max(Value);
+			if (position < 0 && position.Abs() > Value)
+				Value = position;
 		}
 	}
 }

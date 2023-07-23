@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Statistics
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 
@@ -38,9 +39,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The maximal profit value for the entire period.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str958Key)]
-	[DescriptionLoc(LocalizedStrings.Str959Key)]
-	[CategoryLoc(LocalizedStrings.PnLKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str958Key,
+		Description = LocalizedStrings.Str959Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 1
+	)]
 	public class MaxProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		/// <summary>
@@ -61,9 +66,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Maximum absolute drawdown during the whole period.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str960Key)]
-	[DescriptionLoc(LocalizedStrings.Str961Key)]
-	[CategoryLoc(LocalizedStrings.PnLKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str960Key,
+		Description = LocalizedStrings.Str961Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 2
+	)]
 	public class MaxDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		/// <summary>
@@ -108,9 +117,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Maximum relative equity drawdown during the whole period.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str962Key)]
-	[DescriptionLoc(LocalizedStrings.Str963Key)]
-	[CategoryLoc(LocalizedStrings.PnLKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str962Key,
+		Description = LocalizedStrings.Str963Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 3
+	)]
 	public class MaxRelativeDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		/// <summary>
@@ -157,9 +170,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Relative income for the whole time period.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str964Key)]
-	[DescriptionLoc(LocalizedStrings.Str965Key)]
-	[CategoryLoc(LocalizedStrings.PnLKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str964Key,
+		Description = LocalizedStrings.Str965Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 4
+	)]
 	public class ReturnParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		/// <summary>
@@ -206,9 +223,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Recovery factor (net profit / maximum drawdown).
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str966Key)]
-	[DescriptionLoc(LocalizedStrings.Str967Key)]
-	[CategoryLoc(LocalizedStrings.PnLKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str966Key,
+		Description = LocalizedStrings.Str967Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 5
+	)]
 	public class RecoveryFactorParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private readonly MaxDrawdownParameter _maxDrawdown;
@@ -236,9 +257,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Net profit for whole time period.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str968Key)]
-	[DescriptionLoc(LocalizedStrings.Str969Key)]
-	[CategoryLoc(LocalizedStrings.PnLKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str968Key,
+		Description = LocalizedStrings.Str969Key,
+		GroupName = LocalizedStrings.PnLKey,
+		Order = 0
+	)]
 	public class NetProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		/// <summary>

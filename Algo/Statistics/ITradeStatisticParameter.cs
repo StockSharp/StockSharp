@@ -39,9 +39,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Number of trades won (whose profit is greater than 0).
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str983Key)]
-	[DescriptionLoc(LocalizedStrings.Str984Key)]
-	[CategoryLoc(LocalizedStrings.TradesKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str983Key,
+		Description = LocalizedStrings.Str984Key,
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 100
+	)]
 	public class WinningTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -68,9 +72,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Number of trades lost with zero profit (whose profit is less than or equal to 0).
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str986Key)]
-	[DescriptionLoc(LocalizedStrings.Str987Key)]
-	[CategoryLoc(LocalizedStrings.TradesKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str986Key,
+		Description = LocalizedStrings.Str987Key,
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 101
+	)]
 	public class LossingTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -95,9 +103,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Total number of trades.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str988Key)]
-	[DescriptionLoc(LocalizedStrings.Str989Key)]
-	[CategoryLoc(LocalizedStrings.TradesKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str988Key,
+		Description = LocalizedStrings.Str989Key,
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 102
+	)]
 	public class TradeCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -118,9 +130,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Total number of closing trades.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str990Key)]
-	[DescriptionLoc(LocalizedStrings.Str991Key)]
-	[CategoryLoc(LocalizedStrings.TradesKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str990Key,
+		Description = LocalizedStrings.Str991Key,
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 103
+	)]
 	public class RoundtripCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -142,9 +158,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Average trade profit.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str992Key)]
-	[DescriptionLoc(LocalizedStrings.Str993Key)]
-	[CategoryLoc(LocalizedStrings.TradesKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str992Key,
+		Description = LocalizedStrings.Str993Key,
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 104
+	)]
 	public class AverageTradeProfitParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -203,9 +223,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Average winning trade.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str994Key)]
-	[DescriptionLoc(LocalizedStrings.Str995Key)]
-	[CategoryLoc(LocalizedStrings.TradesKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str994Key,
+		Description = LocalizedStrings.Str995Key,
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 105
+	)]
 	public class AverageWinTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -267,9 +291,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// Average losing trade.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str996Key)]
-	[DescriptionLoc(LocalizedStrings.Str997Key)]
-	[CategoryLoc(LocalizedStrings.TradesKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str996Key,
+		Description = LocalizedStrings.Str997Key,
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 106
+	)]
 	public class AverageLossTradeParameter : BaseStatisticParameter<decimal>, ITradeStatisticParameter
 	{
 		/// <summary>
@@ -425,7 +453,8 @@ namespace StockSharp.Algo.Statistics
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PerMonthTradesKey,
 		Description = LocalizedStrings.PerMonthTradesDescKey,
-		GroupName = LocalizedStrings.TradesKey)]	
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 107)]	
 	public class PerMonthTradeParameter : PerBaseTradeParameter
 	{
 		/// <summary>
@@ -447,7 +476,8 @@ namespace StockSharp.Algo.Statistics
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PerDayTradesKey,
 		Description = LocalizedStrings.PerDayTradesDescKey,
-		GroupName = LocalizedStrings.TradesKey)]
+		GroupName = LocalizedStrings.TradesKey,
+		Order = 108)]
 	public class PerDayTradeParameter : PerBaseTradeParameter
 	{
 		/// <summary>

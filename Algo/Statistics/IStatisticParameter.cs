@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Statistics
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
@@ -57,6 +58,11 @@ namespace StockSharp.Algo.Statistics
 		/// Category.
 		/// </summary>
 		string Category { get; }
+
+		/// <summary>
+		/// Order.
+		/// </summary>
+		int Order { get; }
 
 		/// <summary>
 		/// <see cref="Value"/> change event.
@@ -102,6 +108,7 @@ namespace StockSharp.Algo.Statistics
 			DisplayName = type2.GetDisplayName(GetReadableName(Name));
 			Description = type2.GetDescription(DisplayName);
 			Category = type2.GetCategory();
+			Order = type2.GetAttribute<DisplayAttribute>()?.Order ?? default;
 		}
 
 		/// <inheritdoc />
@@ -118,6 +125,9 @@ namespace StockSharp.Algo.Statistics
 
 		/// <inheritdoc />
 		public string Category { get; }
+
+		/// <inheritdoc />
+		public int Order { get; }
 
 		private TValue _value;
 

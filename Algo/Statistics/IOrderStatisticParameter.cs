@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Statistics
 	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -95,9 +94,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The maximal value of the order registration delay.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str947Key)]
-	[DescriptionLoc(LocalizedStrings.Str948Key)]
-	[CategoryLoc(LocalizedStrings.OrdersKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str947Key,
+		Description = LocalizedStrings.Str948Key,
+		GroupName = LocalizedStrings.OrdersKey,
+		Order = 300
+	)]
 	public class MaxLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
 		/// <summary>
@@ -119,9 +122,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The maximal value of the order cancelling delay.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str950Key)]
-	[DescriptionLoc(LocalizedStrings.Str951Key)]
-	[CategoryLoc(LocalizedStrings.OrdersKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str950Key,
+		Description = LocalizedStrings.Str951Key,
+		GroupName = LocalizedStrings.OrdersKey,
+		Order = 301
+	)]
 	public class MaxLatencyCancellationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
 		/// <summary>
@@ -143,9 +150,13 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The minimal value of order registration delay.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str952Key)]
-	[DescriptionLoc(LocalizedStrings.Str953Key)]
-	[CategoryLoc(LocalizedStrings.OrdersKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str952Key,
+		Description = LocalizedStrings.Str953Key,
+		GroupName = LocalizedStrings.OrdersKey,
+		Order = 302
+	)]
 	public class MinLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
 		/// <summary>
@@ -156,51 +167,29 @@ namespace StockSharp.Algo.Statistics
 		{
 		}
 
-		private bool _initialized;
-
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			_initialized = false;
-			base.Reset();
-		}
-
 		/// <inheritdoc />
 		public override void New(Order order)
 		{
 			if (order.LatencyRegistration == null)
 				return;
 
-			if (!_initialized)
-			{
+			if (Value == default)
 				Value = order.LatencyRegistration.Value;
-				_initialized = true;
-			}
 			else
 				Value = Value.Min(order.LatencyRegistration.Value);
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			_initialized = storage.GetValue<bool>("Initialized");
-			base.Load(storage);
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			storage.SetValue("Initialized", _initialized);
-			base.Save(storage);
 		}
 	}
 
 	/// <summary>
 	/// The minimal value of order cancelling delay.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str954Key)]
-	[DescriptionLoc(LocalizedStrings.Str955Key)]
-	[CategoryLoc(LocalizedStrings.OrdersKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str954Key,
+		Description = LocalizedStrings.Str955Key,
+		GroupName = LocalizedStrings.OrdersKey,
+		Order = 303
+	)]
 	public class MinLatencyCancellationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
 		/// <summary>
@@ -211,51 +200,29 @@ namespace StockSharp.Algo.Statistics
 		{
 		}
 
-		private bool _initialized;
-
-		/// <inheritdoc />
-		public override void Reset()
-		{
-			_initialized = false;
-			base.Reset();
-		}
-
 		/// <inheritdoc />
 		public override void Changed(Order order)
 		{
 			if (order.LatencyCancellation == null)
 				return;
 
-			if (!_initialized)
-			{
+			if (Value == default)
 				Value = order.LatencyCancellation.Value;
-				_initialized = true;
-			}
 			else
 				Value = Value.Min(order.LatencyCancellation.Value);
-		}
-
-		/// <inheritdoc />
-		public override void Load(SettingsStorage storage)
-		{
-			_initialized = storage.GetValue<bool>("Initialized");
-			base.Load(storage);
-		}
-
-		/// <inheritdoc />
-		public override void Save(SettingsStorage storage)
-		{
-			storage.SetValue("Initialized", _initialized);
-			base.Save(storage);
 		}
 	}
 
 	/// <summary>
 	/// Total number of orders.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str956Key)]
-	[DescriptionLoc(LocalizedStrings.Str957Key)]
-	[CategoryLoc(LocalizedStrings.OrdersKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str956Key,
+		Description = LocalizedStrings.Str957Key,
+		GroupName = LocalizedStrings.OrdersKey,
+		Order = 304
+	)]
 	public class OrderCountParameter : BaseOrderStatisticParameter<int>
 	{
 		/// <summary>
@@ -267,10 +234,7 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <inheritdoc />
-		public override void New(Order order)
-		{
-			Value++;
-		}
+		public override void New(Order order) => Value++;
 	}
 
 	/// <summary>
@@ -280,7 +244,9 @@ namespace StockSharp.Algo.Statistics
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ErrorsKey,
 		Description = LocalizedStrings.ErrorOrdersOnlyKey,
-		GroupName = LocalizedStrings.OrdersKey)]
+		GroupName = LocalizedStrings.OrdersKey,
+		Order = 305
+	)]
 	public class OrderErrorCountParameter : BaseOrderStatisticParameter<int>
 	{
 		/// <summary>
@@ -302,7 +268,9 @@ namespace StockSharp.Algo.Statistics
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.IFEKey,
 		Description = LocalizedStrings.InsufficientFundErrorKey,
-		GroupName = LocalizedStrings.OrdersKey)]
+		GroupName = LocalizedStrings.OrdersKey,
+		Order = 306
+	)]
 	public class OrderInsufficientFundErrorCountParameter : BaseOrderStatisticParameter<int>
 	{
 		/// <summary>
