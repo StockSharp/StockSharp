@@ -38,7 +38,9 @@ namespace SampleRealTimeEmulation
 	public partial class MainWindow
 	{
 		private readonly SynchronizedList<ICandleMessage> _buffer = new();
+		private readonly SynchronizedList<Order> _bufferOrders = new();
 		private readonly IChartCandleElement _candlesElem;
+		private readonly IChartActiveOrdersElement _ordersElem;
 		private readonly LogManager _logManager;
 		private Subscription _candlesSubscription;
 		private readonly Connector _realConnector = new();
@@ -70,16 +72,20 @@ namespace SampleRealTimeEmulation
 			_candlesElem = Chart.CreateCandleElement();
 			area.Elements.Add(_candlesElem);
 
+			_ordersElem = Chart.CreateActiveOrdersElement();
+			area.Elements.Add(_ordersElem);
+
 			InitRealConnector();
 			InitEmuConnector();
+
+			Chart.OrderCreationMode = true;
+			Chart.OrderSettings.Portfolio = _emuPf;
 
 			GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(ProcessCandles);
 		}
 
 		private void InitRealConnector()
 		{
-			_realConnector.Adapter.SupportOrderBookIncrement = false;
-
 			_realConnector.NewOrder += OrderGrid.Orders.Add;
 			_realConnector.NewMyTrade += TradeGrid.Trades.Add;
 			_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
@@ -156,6 +162,7 @@ namespace SampleRealTimeEmulation
 
 			_emuConnector.NewOrder += OrderGrid.Orders.Add;
 			_emuConnector.NewMyTrade += TradeGrid.Trades.Add;
+			_emuConnector.OrderReceived += (s, o) => _bufferOrders.Add(o);
 
 			// subscribe on error of order registration event
 			_emuConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
@@ -247,6 +254,9 @@ namespace SampleRealTimeEmulation
 		{
 			foreach (var candle in _buffer.SyncGet(c => c.CopyAndClear()))
 				Chart.Draw(_candlesElem, candle);
+
+			foreach (var order in _bufferOrders.SyncGet(c => c.CopyAndClear()))
+				Chart.Draw(Chart.CreateData().Add(_ordersElem, order));
 		}
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
@@ -260,7 +270,9 @@ namespace SampleRealTimeEmulation
 			_security = security;
 			_securityId = security.ToSecurityId();
 
-			Chart.Reset(new[] { _candlesElem });
+			Chart.Reset(new[] { (IChartElement)_candlesElem, _ordersElem });
+
+			Chart.OrderSettings.Security = security;
 
 			_emuConnector.SubscribeMarketDepth(security);
 			_emuConnector.SubscribeTrades(security);
@@ -342,6 +354,21 @@ namespace SampleRealTimeEmulation
 				return;
 
 			_emuConnector.LookupSecurities(wnd.CriteriaMessage);
+		}
+
+		private void Chart_RegisterOrder(IChartArea area, Order order)
+		{
+			_emuConnector.RegisterOrder(order);
+		}
+
+		private void Chart_CancelOrder(Order order)
+		{
+			_emuConnector.CancelOrder(order);
+		}
+
+		private void Chart_MoveOrder(Order order, decimal newPrice)
+		{
+			_emuConnector.ReRegisterOrder(order, newPrice, order.Balance);
 		}
 	}
 }

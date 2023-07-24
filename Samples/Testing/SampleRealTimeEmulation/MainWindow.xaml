@@ -39,7 +39,7 @@
 				</Grid>
 				<!--End chart control grid-->
 
-				<charting:ChartPanel x:Name="Chart" Grid.Row="1" />
+				<charting:ChartPanel x:Name="Chart" Grid.Row="1" RegisterOrder="Chart_RegisterOrder" CancelOrder="Chart_CancelOrder" MoveOrder="Chart_MoveOrder" />
 			</Grid>
 			<!--End chart and chart control grid-->
 
