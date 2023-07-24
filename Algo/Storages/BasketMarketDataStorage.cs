@@ -111,10 +111,11 @@ namespace StockSharp.Algo.Storages
 
 							var loaded = storage.Load(_date);
 
-							if (!_storage.PassThroughOrderBookInrement && loaded is IEnumerable<QuoteChangeMessage> quotes)
-							{
-								loaded = quotes.BuildIfNeed();
-							}
+							// built books slower for emulation, so this case is not real one
+							//if (!_storage.PassThroughOrderBookInrement && loaded is IEnumerable<QuoteChangeMessage> quotes)
+							//{
+							//	loaded = quotes.BuildIfNeed();
+							//}
 
 							var enu = loaded.GetEnumerator();
 							var lastTime = Current?.GetServerTime() ?? DateTimeOffset.MinValue;
@@ -344,11 +345,6 @@ namespace StockSharp.Algo.Storages
 
 			base.DisposeManaged();
 		}
-
-		/// <summary>
-		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		public bool PassThroughOrderBookInrement { get; set; }
 
 		/// <summary>
 		/// <see cref="MarketDataStorageCache"/>.

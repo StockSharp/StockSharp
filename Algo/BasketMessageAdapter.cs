@@ -718,11 +718,6 @@ namespace StockSharp.Algo
 		public bool SupportBuildingFromOrderLog { get; set; } = true;
 
 		/// <summary>
-		/// Use <see cref="OrderBookIncrementMessageAdapter"/>.
-		/// </summary>
-        public bool SupportOrderBookIncrement { get; set; } = true;
-
-		/// <summary>
 		/// Use <see cref="OrderBookTruncateMessageAdapter"/>.
 		/// </summary>
 		public bool SupportOrderBookTruncate { get; set; } = true;
@@ -955,7 +950,7 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
 			}
 
-			if ((SupportBuildingFromOrderLog || adapter.IsSupportOrderBookIncrements) && SupportOrderBookIncrement)
+			if (SupportBuildingFromOrderLog || adapter.IsSupportOrderBookIncrements)
 			{
 				adapter = ApplyOwnInner(new OrderBookIncrementMessageAdapter(adapter));
 			}
@@ -2228,7 +2223,6 @@ namespace StockSharp.Algo
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
-				SupportOrderBookIncrement = SupportOrderBookIncrement,
 				SupportOrderBookTruncate = SupportOrderBookTruncate,
 				SupportOffline = SupportOffline,
 				IgnoreExtraAdapters = IgnoreExtraAdapters,

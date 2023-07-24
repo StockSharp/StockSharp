@@ -185,6 +185,10 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.BoardLookup:
 				case MessageTypes.MarketData:
 				{
+					// MarketEmulator works faster with order book increments
+					if (message is MarketDataMessage mdMsg && mdMsg.IsSubscribe)
+						mdMsg.DoNotBuildOrderBookInrement = true;
+
 					_subscriptionIds.Add(((ISubscriptionMessage)message).TransactionId);
 
 					// sends to emu for init subscription ids

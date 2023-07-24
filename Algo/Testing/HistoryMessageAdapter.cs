@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Testing
 		private readonly SyncObject _moveNextSyncRoot = new();
 		private readonly SyncObject _syncRoot = new();
 
-		private readonly BasketMarketDataStorage<Message> _basketStorage;
+		private readonly BasketMarketDataStorage<Message> _basketStorage = new();
 
 		private CancellationTokenSource _cancellationToken;
 
@@ -108,8 +108,6 @@ namespace StockSharp.Algo.Testing
 		{
 			SecurityProvider = securityProvider;
 
-			_basketStorage = new() { PassThroughOrderBookInrement = true };
-
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
 			GenerateOrderBookFromLevel1 = false;
@@ -148,15 +146,6 @@ namespace StockSharp.Algo.Testing
 		/// <see cref="MarketDataStorageCache"/>.
 		/// </summary>
 		public MarketDataStorageCache AdapterCache { get; set; }
-
-		/// <summary>
-		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		public bool PassThroughOrderBookInrement
-		{
-			get => _basketStorage.PassThroughOrderBookInrement;
-			set => _basketStorage.PassThroughOrderBookInrement = value;
-		}
 
 		/// <summary>
 		/// Order book builders.
@@ -479,7 +468,7 @@ namespace StockSharp.Algo.Testing
 						var historySource = GetHistorySource();
 
 						AddStorage(historySource == null
-							? StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, PassThroughOrderBookInrement)
+							? StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, message.DoNotBuildOrderBookInrement)
 							: new InMemoryMarketDataStorage<QuoteChangeMessage>(securityId, null, historySource),
 							transId);
 					}
