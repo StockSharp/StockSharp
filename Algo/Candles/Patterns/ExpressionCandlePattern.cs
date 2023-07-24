@@ -213,6 +213,20 @@ public class ExpressionCandlePattern : ICandlePattern
 	public ExpressionCandlePattern() : this(null, Enumerable.Empty<CandleExpressionCondition>()) { }
 
 	/// <summary>
+	/// Condition error.
+	/// </summary>
+	public class ConditionError : Exception
+	{
+		/// <summary>
+		/// </summary>
+		public int[] Indexes { get; }
+
+		/// <summary>
+		/// </summary>
+		public ConditionError(string message, IEnumerable<int> indexes) : base(message) => Indexes = indexes.ToArray();
+	}
+
+	/// <summary>
 	/// Create instance.
 	/// </summary>
 	/// <param name="name"><see cref="Name"/></param>
@@ -232,11 +246,11 @@ public class ExpressionCandlePattern : ICandlePattern
 		{
 			var cond = Conditions[i];
 			if(i + cond.MinIndex < 0 || i + cond.MaxIndex >= Conditions.Length)
-				invalidRangeIds.Add(i + 1);
+				invalidRangeIds.Add(i);
 		}
 
 		if(invalidRangeIds.Count > 0)
-			throw new InvalidOperationException($"patterns ({invalidRangeIds.Select(i => i.ToString()).JoinComma()}) use invalid var indexes which go outside of the pattern range");
+			throw new ConditionError($"patterns ({invalidRangeIds.Select(i => (i+1).ToString()).JoinComma()}) use invalid var indexes which go outside of the pattern range", invalidRangeIds);
 
 		if(Conditions.All(cf => cf.IsEmpty))
 			throw new InvalidOperationException("all candle formulas are empty");
