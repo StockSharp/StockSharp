@@ -73,11 +73,11 @@ namespace StockSharp.BusinessEntities
 		public decimal? SpreadVolume => _isFull ? (Ask.Value.Volume - Bid.Value.Volume).Abs() : null;
 
 		/// <summary>
-		/// The middle of spread. Is <see langword="null" />, if quotes are empty.
+		/// Get middle price.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.SpreadKey)]
-		[DescriptionLoc(LocalizedStrings.SpreadMiddleKey, true)]
-		public decimal? MiddlePrice => (Bid?.Price).GetSpreadMiddle(Ask?.Price);
+		/// <param name="priceStep"><see cref="Security.PriceStep"/></param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public decimal? GetMiddlePrice(decimal? priceStep) => (Bid?.Price).GetSpreadMiddle(Ask?.Price, priceStep);
 
 		/// <summary>
 		/// Quotes pair has <see cref="Bid"/> and <see cref="Ask"/>.

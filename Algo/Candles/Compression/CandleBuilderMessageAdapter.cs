@@ -424,10 +424,10 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private static ICandleBuilderValueTransform CreateTransform(MarketDataMessage current)
 		{
-			return CreateTransform(current.DataType2, current.BuildField);
+			return CreateTransform(current.DataType2, current.BuildField, current.PriceStep);
 		}
 
-		private static ICandleBuilderValueTransform CreateTransform(DataType dataType, Level1Fields? field)
+		private static ICandleBuilderValueTransform CreateTransform(DataType dataType, Level1Fields? field, decimal? priceStep)
 		{
 			if (dataType == DataType.Ticks)
 			{
@@ -435,7 +435,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 			else if (dataType == DataType.MarketDepth)
 			{
-				var t = new QuoteCandleBuilderValueTransform();
+				var t = new QuoteCandleBuilderValueTransform(priceStep);
 
 				if (field != null)
 					t.Type = field.Value;
@@ -444,7 +444,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 			else if (dataType == DataType.Level1)
 			{
-				var t = new Level1CandleBuilderValueTransform();
+				var t = new Level1CandleBuilderValueTransform(priceStep);
 
 				if (field != null)
 					t.Type = field.Value;

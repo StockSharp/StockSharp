@@ -918,7 +918,7 @@ namespace StockSharp.Algo.Testing
 							_asks.Add(ask.Price, new(new(), new() { Price = ask.Price, Volume = ask.Volume }));
 						}
 
-						_currSpreadPrice = bestBidPrice.GetSpreadMiddle(bestAskPrice) ?? 0;
+						_currSpreadPrice = bestBidPrice.GetSpreadMiddle(bestAskPrice, null) ?? 0;
 					}
 					else
 					{

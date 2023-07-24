@@ -361,7 +361,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, MarketDataMessage mdMsg, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
 		{
-			return depths.ToCandles(mdMsg, quoteMsg => new QuoteCandleBuilderValueTransform { Type = type }, candleBuilderProvider);
+			return depths.ToCandles(mdMsg, quoteMsg => new QuoteCandleBuilderValueTransform(mdMsg.PriceStep) { Type = type }, candleBuilderProvider);
 		}
 
 		/// <summary>
@@ -614,13 +614,19 @@ namespace StockSharp.Algo.Candles
 		/// To get the candle middle price.
 		/// </summary>
 		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <returns>The candle length.</returns>
-		public static decimal GetMiddlePrice(this ICandleMessage candle)
+		public static decimal GetMiddlePrice(this ICandleMessage candle, decimal? priceStep)
 		{
 			if (candle is null)
 				throw new ArgumentNullException(nameof(candle));
 
-			return candle.LowPrice + candle.GetLength() / 2;
+			var price = candle.LowPrice + candle.GetLength() / 2;
+
+			if (priceStep is not null)
+				price = price.ShrinkPrice(priceStep, priceStep.Value.GetCachedDecimals());
+
+			return price;
 		}
 
 		/// <summary>

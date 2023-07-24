@@ -139,21 +139,23 @@ namespace StockSharp.Messages
 		/// Get middle of spread.
 		/// </summary>
 		/// <param name="message">Market depth.</param>
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
-		public static decimal? GetSpreadMiddle(this IOrderBookMessage message)
+		public static decimal? GetSpreadMiddle(this IOrderBookMessage message, decimal? priceStep)
 		{
 			var bestBid = message.GetBestBid();
 			var bestAsk = message.GetBestAsk();
 
-			return (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price);
+			return (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, priceStep);
 		}
 
 		/// <summary>
 		/// Get middle of spread.
 		/// </summary>
 		/// <param name="message">Market depth.</param>
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
-		public static decimal? GetSpreadMiddle(this Level1ChangeMessage message)
+		public static decimal? GetSpreadMiddle(this Level1ChangeMessage message, decimal? priceStep)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -165,7 +167,7 @@ namespace StockSharp.Messages
 				var bestBid = message.TryGetDecimal(Level1Fields.BestBidPrice);
 				var bestAsk = message.TryGetDecimal(Level1Fields.BestAskPrice);
 
-				spreadMiddle = bestBid.GetSpreadMiddle(bestAsk);
+				spreadMiddle = bestBid.GetSpreadMiddle(bestAsk, priceStep);
 			}
 
 			return spreadMiddle;
@@ -176,14 +178,15 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="bestBidPrice">Best bid price.</param>
 		/// <param name="bestAskPrice">Best ask price.</param>
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
-		public static decimal? GetSpreadMiddle(this decimal? bestBidPrice, decimal? bestAskPrice)
+		public static decimal? GetSpreadMiddle(this decimal? bestBidPrice, decimal? bestAskPrice, decimal? priceStep)
 		{
 			if (bestBidPrice == null && bestAskPrice == null)
 				return null;
 
 			if (bestBidPrice != null && bestAskPrice != null)
-				return bestBidPrice.Value.GetSpreadMiddle(bestAskPrice.Value);
+				return bestBidPrice.Value.GetSpreadMiddle(bestAskPrice.Value, priceStep);
 
 			return bestAskPrice ?? bestBidPrice.Value;
 		}
@@ -193,10 +196,16 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="bestBidPrice">Best bid price.</param>
 		/// <param name="bestAskPrice">Best ask price.</param>
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
-		public static decimal GetSpreadMiddle(this decimal bestBidPrice, decimal bestAskPrice)
+		public static decimal GetSpreadMiddle(this decimal bestBidPrice, decimal bestAskPrice, decimal? priceStep)
 		{
-			return (bestAskPrice + bestBidPrice) / 2;
+			var price = (bestAskPrice + bestBidPrice) / 2;
+
+			if (priceStep is not null)
+				price = ShrinkPrice(price, priceStep, priceStep.Value.GetCachedDecimals());
+
+			return price;
 		}
 
 		/// <summary>

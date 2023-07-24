@@ -361,12 +361,12 @@ namespace StockSharp.Algo.Indicators
 		public static readonly Func<IOrderBookMessage, decimal?> ByBestAsk = d => d.GetBestAsk()?.Price;
 
 		/// <summary>
-		/// The converter, taking from the order book the middle of the spread <see cref="MarketDepthPair.MiddlePrice"/>.
+		/// The converter, taking from the order book the middle of the spread <see cref="MarketDepthPair.GetMiddlePrice"/>.
 		/// </summary>
 		public static readonly Func<IOrderBookMessage, decimal?> ByMiddle = d =>
 		{
 			var (bid, ask) = d.GetBestPair();
-			return (bid?.Price).GetSpreadMiddle(ask?.Price);
+			return (bid?.Price).GetSpreadMiddle(ask?.Price, null);
 		};
 
 		/// <inheritdoc />

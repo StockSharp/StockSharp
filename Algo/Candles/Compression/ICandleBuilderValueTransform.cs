@@ -159,12 +159,16 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class QuoteCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 	{
+		private readonly decimal? _priceStep;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteCandleBuilderValueTransform"/>.
 		/// </summary>
-		public QuoteCandleBuilderValueTransform()
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
+		public QuoteCandleBuilderValueTransform(decimal? priceStep)
 			: base(DataType.MarketDepth)
 		{
+			_priceStep = priceStep;
 		}
 
 		/// <summary>
@@ -205,7 +209,7 @@ namespace StockSharp.Algo.Candles.Compression
 				//case Level1Fields.SpreadMiddle:
 				default:
 				{
-					var price = md.GetSpreadMiddle();
+					var price = md.GetSpreadMiddle(_priceStep);
 
 					if (price == null)
 						return false;
@@ -225,15 +229,18 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class Level1CandleBuilderValueTransform : BaseCandleBuilderValueTransform
 	{
+		private readonly decimal? _priceStep;
 		private decimal? _prevBestBid;
 		private decimal? _prevBestAsk;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CandleBuilderValueTransform"/>.
 		/// </summary>
-		public Level1CandleBuilderValueTransform()
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
+		public Level1CandleBuilderValueTransform(decimal? priceStep)
 			: base(DataType.Level1)
 		{
+			_priceStep = priceStep;
 		}
 
 		/// <summary>
@@ -313,7 +320,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (_prevBestBid == null || _prevBestAsk == null)
 							return false;
 
-						spreadMiddle = _prevBestBid.Value.GetSpreadMiddle(_prevBestAsk.Value);
+						spreadMiddle = _prevBestBid.Value.GetSpreadMiddle(_prevBestAsk.Value, _priceStep);
 					}
 
 					Update(time, spreadMiddle.Value, null, null, null, null);

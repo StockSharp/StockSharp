@@ -32,8 +32,8 @@
 			}
 
 			// draw series on chart
-			priceChart.Append("prices", bigPriceCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice()), bigPriceCandles.Select(c => c.GetLength()), ChartIndicatorDrawStyles.Bubble);
-			priceChart.Append("prices", bigVolCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice()), bigVolCandles.Select(c => c.TotalVolume), ChartIndicatorDrawStyles.Bubble);
+			priceChart.Append("prices", bigPriceCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice(null)), bigPriceCandles.Select(c => c.GetLength()), ChartIndicatorDrawStyles.Bubble);
+			priceChart.Append("prices", bigVolCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice(null)), bigVolCandles.Select(c => c.TotalVolume), ChartIndicatorDrawStyles.Bubble);
 
 			return Task.CompletedTask;
 		}

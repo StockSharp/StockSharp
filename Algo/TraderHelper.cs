@@ -239,13 +239,14 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="depth">The order book for the current price calculation.</param>
 		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepth.BestAsk2"/> value is used, otherwise <see cref="MarketDepth.BestBid2"/>.</param>
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <param name="priceType">The type of current price.</param>
 		/// <param name="orders">Orders to be ignored.</param>
 		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
 		/// <remarks>
 		/// For correct operation of the method the order book export shall be launched.
 		/// </remarks>
-		public static Unit GetCurrentPrice(this IOrderBookMessage depth, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
+		public static Unit GetCurrentPrice(this IOrderBookMessage depth, Sides side, decimal? priceStep, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
 		{
 			if (depth == null)
 				throw new ArgumentNullException(nameof(depth));
@@ -317,7 +318,7 @@ namespace StockSharp.Algo
 			}
 
 			var (bid, ask) = depth.GetBestPair();
-			return new MarketDepthPair(bid, ask).GetCurrentPrice(side, priceType);
+			return new MarketDepthPair(bid, ask).GetCurrentPrice(side, priceStep, priceType);
 		}
 
 		/// <summary>
@@ -325,12 +326,13 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="bestPair">The best pair of quotes, used for the current price calculation.</param>
 		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepthPair.Ask"/> value is used, otherwise <see cref="MarketDepthPair.Bid"/>.</param>
+		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
 		/// <param name="priceType">The type of current price.</param>
 		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
 		/// <remarks>
 		/// For correct operation of the method the order book export shall be launched.
 		/// </remarks>
-		public static Unit GetCurrentPrice(this MarketDepthPair bestPair, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following)
+		public static Unit GetCurrentPrice(this MarketDepthPair bestPair, Sides side, decimal? priceStep, MarketPriceTypes priceType = MarketPriceTypes.Following)
 		{
 			if (bestPair == null)
 				throw new ArgumentNullException(nameof(bestPair));
@@ -354,7 +356,7 @@ namespace StockSharp.Algo
 				case MarketPriceTypes.Middle:
 				{
 					if (bestPair.IsFull)
-						currentPrice = bestPair.MiddlePrice;
+						currentPrice = bestPair.GetMiddlePrice(priceStep);
 					else
 						currentPrice = null;
 					break;

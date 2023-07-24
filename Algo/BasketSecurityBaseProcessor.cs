@@ -105,7 +105,7 @@ namespace StockSharp.Algo
 					if (bestAsk?.Volume != null)
 						volume = volume ?? 0 + bestAsk?.Volume;
 
-					if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price), volume, null))
+					if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, Security.PriceStep), volume, null))
 						yield break;
 
 					break;
@@ -505,10 +505,7 @@ namespace StockSharp.Algo
 
 			if (indexCandle.HighPrice < indexCandle.LowPrice)
 			{
-				var high = indexCandle.HighPrice;
-
-				indexCandle.HighPrice = indexCandle.LowPrice;
-				indexCandle.LowPrice = high;
+				(indexCandle.LowPrice, indexCandle.HighPrice) = (indexCandle.HighPrice, indexCandle.LowPrice);
 			}
 
 			if (indexCandle.OpenPrice > indexCandle.HighPrice)
