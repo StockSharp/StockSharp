@@ -683,15 +683,19 @@ namespace StockSharp.Algo.Testing
 
 					if (_l1BidVol == 0)
 						_l1BidVol = null;
+					else
+						_l1BidVol ??= 1;
 
 					if (_l1AskVol == 0)
 						_l1AskVol = null;
+					else
+						_l1AskVol ??= 1;
 
 					if (prevBidPrice == _l1BidPrice && prevAskPrice == _l1AskPrice && prevBidVol == _l1BidVol && prevAskVol == _l1AskVol)
 						return;
 
-					void AddQuote(QuotesDict quotes, decimal price, decimal? volume)
-						=> quotes.Add(price, new(new(), new() { Price = price, Volume = volume ?? 1 }));
+					void AddQuote(QuotesDict quotes, decimal price, decimal volume)
+						=> quotes.Add(price, new(new(), new() { Price = price, Volume = volume }));
 
 					var serverTime = message.ServerTime;
 
@@ -707,7 +711,7 @@ namespace StockSharp.Algo.Testing
 
 							_bids.Clear();
 
-							AddQuote(_bids, _l1BidPrice.Value, _l1BidVol);
+							AddQuote(_bids, _l1BidPrice.Value, _totalBidVolume = _l1BidVol.Value);
 						}
 
 						if (_l1AskPrice is not null)
@@ -720,8 +724,12 @@ namespace StockSharp.Algo.Testing
 
 							_asks.Clear();
 
-							AddQuote(_asks, _l1AskPrice.Value, _l1AskVol);
+							AddQuote(_asks, _l1AskPrice.Value, _totalAskVolume = _l1AskVol.Value);
 						}
+
+#if EMU_DBG
+						Verify();
+#endif
 					}
 					else
 					{
@@ -733,7 +741,7 @@ namespace StockSharp.Algo.Testing
 							var quotesSide = orderSide.Invert();
 
 #if EMU_DBG
-							Verify(quotesSide);
+							Verify();
 #endif
 
 							var sign = orderSide == Sides.Buy ? -1 : 1;
@@ -805,7 +813,7 @@ namespace StockSharp.Algo.Testing
 								AddTotalVolume(quotesSide, -totalVolumeDiff);
 
 #if EMU_DBG
-								Verify(quotesSide);
+								Verify();
 #endif
 							}
 
@@ -815,7 +823,7 @@ namespace StockSharp.Algo.Testing
 								UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, price, volume), true);
 
 #if EMU_DBG
-								Verify(quotesSide);
+								Verify();
 #endif
 							}
 						}
@@ -823,7 +831,7 @@ namespace StockSharp.Algo.Testing
 						if (bestBid.Value is null)
 						{
 							if (_l1BidPrice is not null)
-								AddQuote(_bids, _l1BidPrice.Value, _l1BidVol);
+								AddQuote(_bids, _l1BidPrice.Value, _l1BidVol.Value);
 						}
 						else
 						{
@@ -834,7 +842,7 @@ namespace StockSharp.Algo.Testing
 						if (bestAsk.Value is null)
 						{
 							if (_l1AskPrice is not null)
-								AddQuote(_asks, _l1AskPrice.Value, _l1AskVol);
+								AddQuote(_asks, _l1AskPrice.Value, _l1AskVol.Value);
 						}
 						else
 						{
@@ -843,12 +851,16 @@ namespace StockSharp.Algo.Testing
 						}
 
 						if (_l1BidPrice is not null && !_bids.ContainsKey(_l1BidPrice.Value))
-							AddQuote(_bids, _l1BidPrice.Value, _l1BidVol);
+							AddQuote(_bids, _l1BidPrice.Value, _l1BidVol.Value);
 
 						if (_l1AskPrice is not null && !_asks.ContainsKey(_l1AskPrice.Value))
-							AddQuote(_asks, _l1AskPrice.Value, _l1AskVol);
+							AddQuote(_asks, _l1AskPrice.Value, _l1AskVol.Value);
 
 						CancelWorst(localTime, serverTime);
+
+#if EMU_DBG
+						Verify();
+#endif
 					}
 
 					if (_depthSubscription is not null)
@@ -903,6 +915,9 @@ namespace StockSharp.Algo.Testing
 						_bids.Clear();
 						_asks.Clear();
 
+						_totalBidVolume = 0;
+						_totalAskVolume = 0;
+
 						decimal? bestBidPrice = null;
 						decimal? bestAskPrice = null;
 
@@ -910,15 +925,23 @@ namespace StockSharp.Algo.Testing
 						{
 							bestBidPrice ??= bid.Price;
 							_bids.Add(bid.Price, new(new(), new() { Price = bid.Price, Volume = bid.Volume }));
+
+							_totalBidVolume += bid.Volume;
 						}
 
 						foreach (var ask in message.Asks)
 						{
 							bestAskPrice ??= ask.Price;
 							_asks.Add(ask.Price, new(new(), new() { Price = ask.Price, Volume = ask.Volume }));
+
+							_totalAskVolume += ask.Volume;
 						}
 
 						_currSpreadPrice = bestBidPrice.GetSpreadMiddle(bestAskPrice, null) ?? 0;
+
+#if EMU_DBG
+						Verify();
+#endif
 					}
 					else
 					{
@@ -1088,6 +1111,8 @@ namespace StockSharp.Algo.Testing
 					if (message.HasPositions)
 						throw new NotSupportedException("Order books with positions not supported.");
 
+					_lastDepthDate = message.LocalTime.Date;
+
 					var canApply = false;
 
 					switch (message.State)
@@ -1120,7 +1145,7 @@ namespace StockSharp.Algo.Testing
 					{
 						var isIncremental = message.State == QuoteChangeStates.Increment;
 
-						void Apply(QuotesDict quotes, QuoteChange[] newState)
+						void Apply(Sides side, QuotesDict quotes, QuoteChange[] newState)
 						{
 							var toRemove = isIncremental ? null : quotes.Keys.ToHashSet();
 
@@ -1144,6 +1169,8 @@ namespace StockSharp.Algo.Testing
 
 									ProcessOwnTrade(localTime, orderMsg, price, balance, result);
 								}
+
+								AddTotalVolume(side, -p.Second.Volume);
 							}
 
 							foreach (var newQuote in newState)
@@ -1164,6 +1191,8 @@ namespace StockSharp.Algo.Testing
 									var quote = p.Second;
 
 									var diff = quote.Volume - volume;
+
+									AddTotalVolume(side, -diff);
 
 									// old volume is more than new
 									if (diff > 0)
@@ -1202,6 +1231,8 @@ namespace StockSharp.Algo.Testing
 								else
 								{
 									quotes.Add(price, RefTuple.Create(new LevelQuotes(), newQuote));
+
+									AddTotalVolume(side, volume);
 								}
 							}
 
@@ -1212,8 +1243,12 @@ namespace StockSharp.Algo.Testing
 							}
 						}
 
-						Apply(_bids, message.Bids);
-						Apply(_asks, message.Asks);
+						Apply(Sides.Buy, _bids, message.Bids);
+						Apply(Sides.Sell, _asks, message.Asks);
+
+#if EMU_DBG
+						Verify();
+#endif
 					}
 				}
 
@@ -1280,7 +1315,7 @@ namespace StockSharp.Algo.Testing
 						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, oppositePrice, tradeVolume), true);
 
 #if EMU_DBG
-						Verify(quotesSide);
+						Verify();
 #endif
 					}
 				}
@@ -1298,7 +1333,7 @@ namespace StockSharp.Algo.Testing
 					var quotes = GetQuotes(quotesSide);
 
 #if EMU_DBG
-					Verify(quotesSide);
+					Verify();
 #endif
 
 					var sign = orderSide == Sides.Buy ? -1 : 1;
@@ -1370,7 +1405,7 @@ namespace StockSharp.Algo.Testing
 						AddTotalVolume(quotesSide, -totalVolumeDiff);
 
 #if EMU_DBG
-						Verify(quotesSide);
+						Verify();
 #endif
 					}
 
@@ -1380,7 +1415,7 @@ namespace StockSharp.Algo.Testing
 						UpdateQuote(CreateMessage(localTime, serverTime, quotesSide, tradePrice, tradeVolume), true);
 
 #if EMU_DBG
-						Verify(quotesSide);
+						Verify();
 #endif
 					}
 				}
@@ -1755,15 +1790,13 @@ namespace StockSharp.Algo.Testing
 							.ProcessOrder(execution, null, result);
 
 #if EMU_DBG
-						Verify(Sides.Buy);
-						Verify(Sides.Sell);
+						Verify();
 #endif
 
 						MatchOrder(execution.LocalTime, execution, result, true);
 
 #if EMU_DBG
-						Verify(Sides.Buy);
-						Verify(Sides.Sell);
+						Verify();
 #endif
 
 						if (execution.OrderState == OrderStates.Active)
@@ -1800,6 +1833,10 @@ namespace StockSharp.Algo.Testing
 
 			private QuoteChangeMessage CreateQuoteMessage(SecurityId securityId, DateTimeOffset timeStamp, DateTimeOffset time)
 			{
+#if EMU_DBG
+				Verify();
+#endif
+
 				return new QuoteChangeMessage
 				{
 					SecurityId = securityId,
@@ -1957,7 +1994,7 @@ namespace StockSharp.Algo.Testing
 								_messagePool.Free(quote);
 
 #if EMU_DBG
-								Verify(quotesSide);
+								Verify();
 #endif
 							}
 						}
@@ -2027,7 +2064,7 @@ namespace StockSharp.Algo.Testing
 							pair.Value.Second = qc;
 
 #if EMU_DBG
-							Verify(quotesSide);
+							Verify();
 #endif
 
 							if (leftBalance == 0)
@@ -2045,7 +2082,7 @@ namespace StockSharp.Algo.Testing
 						quotes.Remove(value);
 
 #if EMU_DBG
-					Verify(quotesSide);
+					Verify();
 #endif
 				}
 
@@ -2391,15 +2428,25 @@ namespace StockSharp.Algo.Testing
 			}
 
 #if EMU_DBG
-			private void Verify(Sides side)
+			private void Verify()
 			{
-				var totalVolume = side == Sides.Buy ? _totalBidVolume : _totalAskVolume;
+				if (_bids.Count == 0 || _asks.Count == 0)
+					return;
 
-				if (totalVolume < 0)
+				if (_bids.First().Key >= _asks.First().Key)
 					throw new InvalidOperationException();
 
-				if (GetQuotes(side).Values.Sum(p => p.Second.Volume) != totalVolume)
-					throw new InvalidOperationException();
+				static void Verify(QuotesDict quotes, decimal totalVolume)
+				{
+					if (totalVolume < 0)
+						throw new InvalidOperationException();
+
+					if (quotes.Values.Sum(p => p.Second.Volume) != totalVolume)
+						throw new InvalidOperationException();
+				}
+
+				Verify(_bids, _totalBidVolume);
+				Verify(_asks, _totalAskVolume);
 			}
 #endif
 
