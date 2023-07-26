@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public override void New(Order order)
 		{
-			if (order.LatencyRegistration != null)
+			if (order.LatencyRegistration is not null)
 				Value = Value.Max(order.LatencyRegistration.Value);
 		}
 	}
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public override void Changed(Order order)
 		{
-			if (order.LatencyCancellation != null)
+			if (order.LatencyCancellation is not null)
 				Value = Value.Max(order.LatencyCancellation.Value);
 		}
 	}
@@ -170,12 +170,7 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public override void New(Order order)
 		{
-			if (order.LatencyRegistration == null)
-				return;
-
-			if (Value == default)
-				Value = order.LatencyRegistration.Value;
-			else
+			if (order.LatencyRegistration is not null)
 				Value = Value.Min(order.LatencyRegistration.Value);
 		}
 	}
@@ -203,12 +198,7 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public override void Changed(Order order)
 		{
-			if (order.LatencyCancellation == null)
-				return;
-
-			if (Value == default)
-				Value = order.LatencyCancellation.Value;
-			else
+			if (order.LatencyCancellation is not null)
 				Value = Value.Min(order.LatencyCancellation.Value);
 		}
 	}
