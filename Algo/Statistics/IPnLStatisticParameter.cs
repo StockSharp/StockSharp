@@ -129,6 +129,9 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
+			if (_beginValue == 0)
+				return;
+
 			Value = pnl * 100m / _beginValue;
 		}
 	}
@@ -304,7 +307,7 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
-			if (pnl == 0)
+			if (pnl == 0 || _beginValue == 0)
 				return;
 
 			Value = _underlying.Value * 100m / _beginValue;
@@ -504,7 +507,8 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public override void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 		{
-			Value = _maxDrawdown.Value != 0 ? _netProfit.Value / _maxDrawdown.Value : 0;
+			if (_maxDrawdown.Value != 0)
+				Value = _netProfit.Value / _maxDrawdown.Value;
 		}
 	}
 
