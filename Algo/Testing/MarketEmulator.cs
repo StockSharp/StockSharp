@@ -2923,9 +2923,6 @@ namespace StockSharp.Algo.Testing
 		private readonly Dictionary<string, PortfolioEmulator> _portfolios = new();
 		private readonly Dictionary<string, BoardMessage> _boardDefinitions = new(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = new();
-		private bool? _needBuffer;
-		private readonly List<Message> _buffer = new();
-		private DateTimeOffset _bufferPrevFlush;
 		private DateTimeOffset _portfoliosPrevRecalc;
 		private readonly ICommissionManager _commissionManager = new CommissionManager();
 		private readonly Dictionary<string, SessionStates> _boardStates = new(StringComparer.InvariantCultureIgnoreCase);
@@ -3076,10 +3073,6 @@ namespace StockSharp.Algo.Testing
 
 					_secStates.Clear();
 
-					_buffer.Clear();
-					_needBuffer = null;
-
-					_bufferPrevFlush = default;
 					_portfoliosPrevRecalc = default;
 
 					ProcessedMessageCount = 0;
@@ -3302,7 +3295,7 @@ namespace StockSharp.Algo.Testing
 
 			var allowStore = Settings.AllowStoreGenerateMessages;
 
-			foreach (var msg in BufferResult(retVal, message.LocalTime))
+			foreach (var msg in retVal)
 			{
 				if (!allowStore)
 					msg.OfflineMode = MessageOfflineModes.Ignore;
@@ -3345,26 +3338,6 @@ namespace StockSharp.Algo.Testing
 
 				return emulator;
 			});
-		}
-
-		private IEnumerable<Message> BufferResult(IEnumerable<Message> result, DateTimeOffset time)
-		{
-			_needBuffer ??= Settings.BufferTime > TimeSpan.Zero;
-
-			if (_needBuffer == false)
-				return result;
-
-			_buffer.AddRange(result);
-
-			if ((time - _bufferPrevFlush) > Settings.BufferTime)
-			{
-				_bufferPrevFlush = time;
-				return _buffer.CopyAndClear();
-			}
-			else
-			{
-				return Enumerable.Empty<Message>();
-			}
 		}
 
 		private PortfolioEmulator GetPortfolioInfo(string portfolioName)

@@ -61,30 +61,6 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private TimeSpan _depthExpirationTime = TimeSpan.FromDays(1);
-
-		/// <summary>
-		/// The maximal time, during which the order book is in the emulator, if no renewal during this time, the order book is deleted, This feature may be used to remove old order books if the are holes in data. By default is equal to 1 day.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1178Key,
-			Description = LocalizedStrings.Str1179Key,
-			GroupName = LocalizedStrings.Str1175Key,
-			Order = 201)]
-		public TimeSpan DepthExpirationTime
-		{
-			get => _depthExpirationTime;
-			set
-			{
-				if (_depthExpirationTime == value)
-					return;
-
-				_depthExpirationTime = value;
-				NotifyChanged();
-			}
-		}
-
 		private double _failing;
 
 		/// <summary>
@@ -136,51 +112,6 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private bool _isSupportAtomicReRegister = true;
-
-		/// <summary>
-		/// Gets a value indicating whether the re-registration orders as a single transaction. By default is enabled.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ReregisteringKey,
-			Description = LocalizedStrings.Str60Key,
-			GroupName = LocalizedStrings.Str1175Key,
-			Order = 204)]
-		public bool IsSupportAtomicReRegister
-		{
-			get => _isSupportAtomicReRegister;
-			set
-			{
-				_isSupportAtomicReRegister = value;
-				NotifyChanged();
-			}
-		}
-
-		private TimeSpan _bufferTime;
-
-		/// <summary>
-		/// Responses shall be sent in intervals by whole package. The network delay and buffered operation of exchange are emulated. The default is 0 ms.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1186Key,
-			Description = LocalizedStrings.Str1187Key,
-			GroupName = LocalizedStrings.Str1175Key,
-			Order = 205)]
-		public TimeSpan BufferTime
-		{
-			get => _bufferTime;
-			set
-			{
-				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
-
-				_bufferTime = value;
-				NotifyChanged();
-			}
-		}
-
 		private long _initialOrderId;
 
 		/// <summary>
@@ -219,27 +150,6 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_initialTradeId = value;
-				NotifyChanged();
-			}
-		}
-
-		private long _initialTransactionId;
-
-		/// <summary>
-		/// The number, starting at which the emulator will generate numbers for order trades <see cref="Order.TransactionId"/>.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TransactionKey,
-			Description = LocalizedStrings.Str1194Key,
-			GroupName = LocalizedStrings.Str1175Key,
-			Order = 208)]
-		public long InitialTransactionId
-		{
-			get => _initialTransactionId;
-			set
-			{
-				_initialTransactionId = value;
 				NotifyChanged();
 			}
 		}
@@ -288,30 +198,6 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_maxDepth = value;
-				NotifyChanged();
-			}
-		}
-
-		private int _volumeMultiplier = 2;
-
-		/// <summary>
-		/// The number of volume increments, at which the order exceeds the tick trade. It used at testing on tick trades. By default equals to 2.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1199Key,
-			Description = LocalizedStrings.Str1200Key,
-			GroupName = LocalizedStrings.Str1175Key,
-			Order = 211)]
-		public int VolumeMultiplier
-		{
-			get => _volumeMultiplier;
-			set
-			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
-
-				_volumeMultiplier = value;
 				NotifyChanged();
 			}
 		}
@@ -494,19 +380,13 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(DepthExpirationTime), DepthExpirationTime);
 			storage.SetValue(nameof(MatchOnTouch), MatchOnTouch);
 			storage.SetValue(nameof(Failing), Failing);
 			storage.SetValue(nameof(Latency), Latency);
-			storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
-			storage.SetValue(nameof(BufferTime), BufferTime);
-			//storage.SetValue(nameof(UseCandlesTimeFrame), UseCandlesTimeFrame);
 			storage.SetValue(nameof(InitialOrderId), InitialOrderId);
 			storage.SetValue(nameof(InitialTradeId), InitialTradeId);
-			storage.SetValue(nameof(InitialTransactionId), InitialTransactionId);
 			storage.SetValue(nameof(SpreadSize), SpreadSize);
 			storage.SetValue(nameof(MaxDepth), MaxDepth);
-			storage.SetValue(nameof(VolumeMultiplier), VolumeMultiplier);
 			storage.SetValue(nameof(PortfolioRecalcInterval), PortfolioRecalcInterval);
 			storage.SetValue(nameof(ConvertTime), ConvertTime);
 			storage.SetValue(nameof(PriceLimitOffset), PriceLimitOffset);
@@ -526,19 +406,13 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			DepthExpirationTime = storage.GetValue(nameof(DepthExpirationTime), DepthExpirationTime);
 			MatchOnTouch = storage.GetValue(nameof(MatchOnTouch), MatchOnTouch);
 			Failing = storage.GetValue(nameof(Failing), Failing);
 			Latency = storage.GetValue(nameof(Latency), Latency);
-			IsSupportAtomicReRegister = storage.GetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
-			BufferTime = storage.GetValue(nameof(BufferTime), BufferTime);
-			//UseCandlesTimeFrame = storage.GetValue(nameof(UseCandlesTimeFrame), UseCandlesTimeFrame);
 			InitialOrderId = storage.GetValue(nameof(InitialOrderId), InitialOrderId);
 			InitialTradeId = storage.GetValue(nameof(InitialTradeId), InitialTradeId);
-			InitialTransactionId = storage.GetValue(nameof(InitialTransactionId), InitialTransactionId);
 			SpreadSize = storage.GetValue(nameof(SpreadSize), SpreadSize);
 			MaxDepth = storage.GetValue(nameof(MaxDepth), MaxDepth);
-			VolumeMultiplier = storage.GetValue(nameof(VolumeMultiplier), VolumeMultiplier);
 			PortfolioRecalcInterval = storage.GetValue(nameof(PortfolioRecalcInterval), PortfolioRecalcInterval);
 			ConvertTime = storage.GetValue(nameof(ConvertTime), ConvertTime);
 			PriceLimitOffset = storage.GetValue(nameof(PriceLimitOffset), PriceLimitOffset);
