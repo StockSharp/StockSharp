@@ -35,55 +35,55 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Storages;
 
-	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Common.RefPair<LevelQuotes, Messages.QuoteChange>>;
+	using QuotesDict = System.Collections.Generic.SortedDictionary<decimal, Ecng.Common.RefPair<LevelOrders, Messages.QuoteChange>>;
 
-	class LevelQuotes : IEnumerable<ExecutionMessage>
+	class LevelOrders : IEnumerable<ExecutionMessage>
 	{
-		private readonly List<ExecutionMessage> _quotes = new(5);
-		private readonly Dictionary<long, ExecutionMessage> _quotesByTrId = new();
+		private readonly Dictionary<long, ExecutionMessage> _ordersByTrId = new();
 
-		public int Count => _quotes.Count;
+		public int Count => _ordersByTrId.Count;
+		public decimal TotalBalance { get; set; }
 
-		public ExecutionMessage this[int i]
+		private static void Validate(ExecutionMessage order)
 		{
-			get => _quotes[i];
-			set
-			{
-				var prev = _quotes[i];
+			if (order is null)
+				throw new ArgumentNullException(nameof(order));
 
-				if (prev.TransactionId != 0)
-					_quotesByTrId.Remove(prev.TransactionId);
+			if (order.TransactionId == default)
+				throw new ArgumentException("TransactionId == default");
 
-				_quotes[i] = value;
-
-				if (value.TransactionId != 0)
-					_quotesByTrId[value.TransactionId] = value;
-			}
+			if (order.Balance == default)
+				throw new ArgumentException("Balance == default");
 		}
 
-		public bool TryGetByTransactionId(long transactionId, out ExecutionMessage msg) => _quotesByTrId.TryGetValue(transactionId, out msg);
-
-		public void Add(ExecutionMessage quote)
+		public bool TryGetAndRemoveByTransactionId(long transactionId, out ExecutionMessage order)
 		{
-			if (quote.TransactionId != 0)
-				_quotesByTrId[quote.TransactionId] = quote;
+			if (!_ordersByTrId.TryGetAndRemove(transactionId, out order))
+				return false;
 
-			_quotes.Add(quote);
+			TotalBalance -= order.Balance.Value;
+			return true;
 		}
 
-		public void RemoveAt(int index, ExecutionMessage quote = null)
+		public void Add(ExecutionMessage order)
 		{
-			quote ??= _quotes[index];
+			Validate(order);
 
-			_quotes.RemoveAt(index);
+			_ordersByTrId[order.TransactionId] = order;
 
-			if (quote.TransactionId != 0)
-				_quotesByTrId.Remove(quote.TransactionId);
+			TotalBalance += order.Balance.Value;
 		}
 
-		public void Remove(ExecutionMessage quote) => RemoveAt(_quotes.IndexOf(quote), quote);
+		public void Remove(ExecutionMessage order)
+		{
+			Validate(order);
 
-		public IEnumerator<ExecutionMessage> GetEnumerator() => _quotes.GetEnumerator();
+			_ordersByTrId.Remove(order.TransactionId);
+
+			TotalBalance -= order.Balance.Value;
+		}
+
+		public IEnumerator<ExecutionMessage> GetEnumerator() => _ordersByTrId.Values.GetEnumerator();
 
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
@@ -747,7 +747,7 @@ namespace StockSharp.Algo.Testing
 							var sign = orderSide == Sides.Buy ? -1 : 1;
 							var hasQuotes = false;
 
-							List<RefPair<LevelQuotes, QuoteChange>> toRemove = null;
+							List<RefPair<LevelOrders, QuoteChange>> toRemove = null;
 
 							foreach (var pair in quotes)
 							{
@@ -800,9 +800,9 @@ namespace StockSharp.Algo.Testing
 												orderMsg.OriginalTransactionId = quote.TransactionId;
 												orderMsg.OrderState = OrderStates.Done;
 												orderMsg.Balance = 0;
-												result.Add(ToOrder(localTime, orderMsg));
+												ProcessOrder(localTime, orderMsg, result);
 
-												ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
+												ProcessTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
 											}
 										}
 
@@ -1165,9 +1165,9 @@ namespace StockSharp.Algo.Testing
 
 									orderMsg.Balance = 0;
 									orderMsg.OrderState = OrderStates.Done;
-									result.Add(ToOrder(localTime, orderMsg));
+									ProcessOrder(localTime, orderMsg, result);
 
-									ProcessOwnTrade(localTime, orderMsg, price, balance, result);
+									ProcessTrade(localTime, orderMsg, price, balance, result);
 								}
 
 								AddTotalVolume(side, -p.Second.Volume);
@@ -1214,9 +1214,9 @@ namespace StockSharp.Algo.Testing
 												orderMsg.Balance -= diff;
 											}
 
-											result.Add(ToOrder(localTime, orderMsg));
+											ProcessOrder(localTime, orderMsg, result);
 
-											ProcessOwnTrade(localTime, orderMsg, price, balance, result);
+											ProcessTrade(localTime, orderMsg, price, balance, result);
 
 											diff -= balance;
 
@@ -1230,7 +1230,7 @@ namespace StockSharp.Algo.Testing
 								}
 								else
 								{
-									quotes.Add(price, RefTuple.Create(new LevelQuotes(), newQuote));
+									quotes.Add(price, RefTuple.Create(new LevelOrders(), newQuote));
 
 									AddTotalVolume(side, volume);
 								}
@@ -1339,7 +1339,7 @@ namespace StockSharp.Algo.Testing
 					var sign = orderSide == Sides.Buy ? -1 : 1;
 					var hasQuotes = false;
 
-					List<RefPair<LevelQuotes, QuoteChange>> toRemove = null;
+					List<RefPair<LevelOrders, QuoteChange>> toRemove = null;
 
 					foreach (var pair in quotes)
 					{
@@ -1392,9 +1392,9 @@ namespace StockSharp.Algo.Testing
 										orderMsg.OriginalTransactionId = quote.TransactionId;
 										orderMsg.OrderState = OrderStates.Done;
 										orderMsg.Balance = 0;
-										result.Add(ToOrder(localTime, orderMsg));
+										ProcessOrder(localTime, orderMsg, result);
 
-										ProcessOwnTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
+										ProcessTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
 									}
 								}
 
@@ -1929,13 +1929,17 @@ namespace StockSharp.Algo.Testing
 
 			private void MatchOrder(DateTimeOffset time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
 			{
+#if EMU_DBG
+				Verify();
+#endif
+
 				//string matchError = null;
 				var isCrossTrade = false;
 
-				var executions = result == null ? null : new Dictionary<decimal, decimal>();
-
 				var quotesSide = order.Side.Invert();
 				var quotes = GetQuotes(quotesSide);
+
+				var executions = result is null ? null : new List<(decimal price, decimal volume)>();
 
 				List<decimal> toRemove = null;
 
@@ -1947,7 +1951,7 @@ namespace StockSharp.Algo.Testing
 				foreach (var pair in quotes)
 				{
 					var price = pair.Key;
-					var levelQuotes = pair.Value.First;
+					var levelOrders = pair.Value.First;
 					var qc = pair.Value.Second;
 
 					// для старых заявок, когда стакан пробивает уровень заявки,
@@ -1963,121 +1967,125 @@ namespace StockSharp.Algo.Testing
 							break;
 					}
 
+					if (result != null && levelOrders.Count > 0)
+					{
+						var crossOrders = levelOrders.Where(o => o.PortfolioName == order.PortfolioName).ToArray();
+
+						// матчинг идет о заявки с таким же портфелем
+						if (crossOrders.Length > 0)
+						{
+							var matchError = LocalizedStrings.Str1161Params.Put(crossOrders.Select(o => o.TransactionId.To<string>()).JoinCommaSpace(), order.TransactionId);
+							this.AddErrorLog(matchError);
+
+							isCrossTrade = true;
+							break;
+						}
+					}
+
+					var levelOrdersExecVol = 0m;
+
 					// объем заявки больше или равен всему уровню в стакане, то сразу удаляем его целиком
 					if (leftBalance >= qc.Volume)
 					{
-						if (executions != null)
+						if (levelOrders.Count > 0)
 						{
-							for (var i = 0; i < levelQuotes.Count; i++)
+							foreach (var o in levelOrders)
 							{
-								var quote = levelQuotes[i];
+								var balance = o.Balance.Value;
 
-								// если это пользовательская заявка и матчинг идет о заявку с таким же портфелем
-								if (quote.PortfolioName == order.PortfolioName)
-								{
-									var matchError = LocalizedStrings.Str1161Params.Put(quote.TransactionId, order.TransactionId);
-									this.AddErrorLog(matchError);
+								o.Balance = 0;
+								o.OrderState = OrderStates.Done;
+								ProcessOrder(time, o, result);
 
-									isCrossTrade = true;
-									break;
-								}
+								ProcessTrade(time, o, price, balance, result);
 
-								var volume = quote.GetBalance().Min(leftBalance);
+								_messagePool.Free(o);
 
-								if (volume <= 0)
-									throw new InvalidOperationException(LocalizedStrings.Str1162);
+								executions?.Add((price, balance));
 
-								executions[execPrice] = executions.TryGetValue(execPrice) + volume;
-								this.AddInfoLog(LocalizedStrings.Str1163Params, order.TransactionId, volume, execPrice);
+								leftBalance -= balance;
 
-								levelQuotes.RemoveAt(i, quote);
-								_messagePool.Free(quote);
-
-#if EMU_DBG
-								Verify();
-#endif
+								levelOrdersExecVol += balance;
 							}
 						}
-						else
-						{
-							toRemove ??= new List<decimal>();
 
-							toRemove.Add(price);
+						toRemove ??= new();
+						toRemove.Add(price);
 
-							foreach (var quote in levelQuotes)
-								_messagePool.Free(quote);
+						AddTotalVolume(quotesSide, -qc.Volume);
 
-							AddTotalVolume(quotesSide, -qc.Volume);
-						}
-
-						leftBalance -= qc.Volume;
+						leftBalance -= (qc.Volume - levelOrdersExecVol);
 					}
 					else
 					{
-						for (var i = 0; i < levelQuotes.Count; i++)
+						qc.Volume -= leftBalance;
+						pair.Value.Second = qc;
+
+						AddTotalVolume(quotesSide, -leftBalance);
+
+						if (levelOrders.Count > 0)
 						{
-							var quote = levelQuotes[i];
-
-							// если это пользовательская заявка и матчинг идет о заявку с таким же портфелем
-							if (executions != null && quote.PortfolioName == order.PortfolioName)
+							foreach (var o in levelOrders.ToArray())
 							{
-								var matchError = LocalizedStrings.Str1161Params.Put(quote.TransactionId, order.TransactionId);
-								this.AddErrorLog(matchError);
+								var balance = o.Balance.Value;
 
-								isCrossTrade = true;
-								break;
-							}
-
-							var volume = quote.GetBalance().Min(leftBalance);
-
-							if (volume <= 0)
-								throw new InvalidOperationException(LocalizedStrings.Str1162);
-
-							// если это пользовательская заявка
-							if (executions != null)
-							{
-								executions[execPrice] = executions.TryGetValue(execPrice) + volume;
-								this.AddInfoLog(LocalizedStrings.Str1163Params, order.TransactionId, volume, execPrice);
-							}
-
-							quote.Balance -= volume;
-
-							if (quote.Balance == 0)
-							{
-								levelQuotes.RemoveAt(i, quote);
-								i--;
-
-								_messagePool.Free(quote);
-
-								if (levelQuotes.Count == 0)
+								if (leftBalance >= balance)
 								{
-									toRemove ??= new List<decimal>();
+									o.Balance = 0;
+									o.OrderState = OrderStates.Done;
+									ProcessOrder(time, o, result);
 
-									toRemove.Add(price);
+									ProcessTrade(time, o, price, balance, result);
+
+									levelOrders.Remove(o);
+									_messagePool.Free(o);
+
+									executions?.Add((price, balance));
+
+									leftBalance -= balance;
+
+									levelOrdersExecVol += balance;
 								}
+								else
+								{
+									o.Balance = balance - leftBalance;
+									ProcessOrder(time, o, result);
+
+									ProcessTrade(time, o, price, balance, result);
+
+									levelOrders.TotalBalance -= leftBalance;
+
+									executions?.Add((price, leftBalance));
+
+									levelOrdersExecVol += leftBalance;
+									leftBalance = 0;
+								}
+
+								if (leftBalance == 0)
+									break;
 							}
-
-							AddTotalVolume(quotesSide, -volume);
-							qc.Volume -= volume;
-							leftBalance -= volume;
-
-							pair.Value.Second = qc;
-
-#if EMU_DBG
-							Verify();
-#endif
-
-							if (leftBalance == 0)
-								break;
 						}
+
+						leftBalance = 0;
 					}
 
-					if (leftBalance == 0 || isCrossTrade)
+					if (qc.Volume > levelOrdersExecVol)
+						executions?.Add((price, (qc.Volume - levelOrdersExecVol)));
+
+#if EMU_DBG
+					Verify();
+#endif
+
+					if (leftBalance == 0)
 						break;
 				}
 
 				if (toRemove != null)
 				{
+#if EMU_DBG
+					Verify();
+#endif
+
 					foreach (var value in toRemove)
 						quotes.Remove(value);
 
@@ -2092,8 +2100,6 @@ namespace StockSharp.Algo.Testing
 					order.Balance = leftBalance;
 					return;
 				}
-
-				leftBalance = order.GetBalance() - executions.Values.Sum();
 
 				switch (order.TimeInForce)
 				{
@@ -2110,7 +2116,7 @@ namespace StockSharp.Algo.Testing
 								this.AddInfoLog(LocalizedStrings.Str1164Params, order.TransactionId);
 							}
 
-							result.Add(ToOrder(time, order));
+							ProcessOrder(time, order, result);
 						}
 
 						if (isMarket)
@@ -2120,7 +2126,7 @@ namespace StockSharp.Algo.Testing
 								this.AddInfoLog(LocalizedStrings.Str1165Params, order.TransactionId, leftBalance);
 
 								order.OrderState = OrderStates.Done;
-								result.Add(ToOrder(time, order));
+								ProcessOrder(time, order, result);
 							}
 						}
 
@@ -2135,7 +2141,7 @@ namespace StockSharp.Algo.Testing
 						this.AddInfoLog(LocalizedStrings.Str1166Params, order.TransactionId);
 
 						order.OrderState = OrderStates.Done;
-						result.Add(ToOrder(time, order));
+						ProcessOrder(time, order, result);
 
 						// заявка не исполнилась полностью, поэтому она вся отменяется, не влияя на стакан
 						if (leftBalance > 0)
@@ -2150,7 +2156,7 @@ namespace StockSharp.Algo.Testing
 
 						order.Balance = leftBalance;
 						order.OrderState = OrderStates.Done;
-						result.Add(ToOrder(time, order));
+						ProcessOrder(time, order, result);
 						break;
 					}
 				}
@@ -2169,9 +2175,9 @@ namespace StockSharp.Algo.Testing
 					result.Add(reply);
 				}
 
-				foreach (var execution in executions)
+				foreach (var (price, volume) in executions)
 				{
-					ProcessOwnTrade(time, order, execution.Key, execution.Value, result);
+					ProcessTrade(time, order, price, volume, result);
 				}
 			}
 
@@ -2287,7 +2293,7 @@ namespace StockSharp.Algo.Testing
 						TryRemoveActiveOrder(orderMsg.TransactionId, out _);
 
 						orderMsg.OrderState = OrderStates.Done;
-						result.Add(ToOrder(message.LocalTime, orderMsg));
+						ProcessOrder(message.LocalTime, orderMsg, result);
 
 						// изменяем текущие котировки, удаляя оттуда наши цену и объем
 						UpdateQuote(orderMsg, false);
@@ -2308,110 +2314,101 @@ namespace StockSharp.Algo.Testing
 
 			private void UpdateQuote(ExecutionMessage message, bool register, bool byVolume = true)
 			{
+#if EMU_DBG
+				Verify();
+#endif
+
 				var quotes = GetQuotes(message.Side);
 
-				var pair = quotes.TryGetValue(message.OrderPrice);
-
-				if (pair == null)
+				if (!quotes.TryGetValue(message.OrderPrice, out var pair))
 				{
 					if (!register)
 						return;
 
-					quotes[message.OrderPrice] = pair = RefTuple.Create(new LevelQuotes(), new QuoteChange(message.OrderPrice, 0));
+					quotes[message.OrderPrice] = pair = RefTuple.Create(new LevelOrders(), new QuoteChange(message.OrderPrice, 0));
 				}
 
 				var level = pair.First;
+				var quote = pair.Second;
 
 				var volume = byVolume ? message.SafeGetVolume() : message.GetBalance();
 
 				if (register)
 				{
-					//если пришло увеличение объема на уровне, то всегда добавляем в конец очереди, даже для диффа стаканов
-					//var clone = message.TypedClone();
-					var clone = _messagePool.Allocate();
-
-					clone.TransactionId = message.TransactionId;
-					clone.OrderPrice = message.OrderPrice;
-					clone.PortfolioName = message.PortfolioName;
-					clone.Balance = byVolume ? message.OrderVolume : message.Balance;
-					clone.OrderVolume = message.OrderVolume;
-
 					AddTotalVolume(message.Side, volume);
 
-					var q = pair.Second;
-					q.Volume += volume;
-					pair.Second = q;
-					level.Add(clone);
+					quote.Volume += volume;
+					pair.Second = quote;
+
+					// сохраняем только реальные заявки
+					if (message.TransactionId != default)
+					{
+						//если пришло увеличение объема на уровне, то всегда добавляем в конец очереди, даже для диффа стаканов
+						//var clone = message.TypedClone();
+						var clone = _messagePool.Allocate();
+
+						clone.TransactionId = message.TransactionId;
+						clone.OrderPrice = message.OrderPrice;
+						clone.PortfolioName = message.PortfolioName;
+						clone.Balance = volume;
+						clone.OrderVolume = message.OrderVolume;
+
+						level.Add(clone);
+					}
 				}
 				else
 				{
 					if (message.TransactionId == 0)
 					{
-						var leftBalance = volume;
-
-						// пришел дифф по стакану - начиная с конца убираем снятый объем
-						for (var i = level.Count - 1; i >= 0 && leftBalance > 0; i--)
+						if (level.Count == 0)
 						{
-							var quote = level[i];
-
-							if (quote.TransactionId != message.TransactionId)
-								continue;
-
-							var balance = quote.GetBalance();
-							leftBalance -= balance;
-
-							if (leftBalance < 0)
+							if (volume >= quote.Volume)
 							{
-								leftBalance = -leftBalance;
-
-								//var clone = message.TypedClone();
-								var clone = _messagePool.Allocate();
-
-								clone.TransactionId = message.TransactionId;
-								clone.OrderPrice = message.OrderPrice;
-								clone.PortfolioName = message.PortfolioName;
-								clone.Balance = leftBalance;
-								clone.OrderVolume = message.OrderVolume;
-
-								var diff = leftBalance - balance;
-								AddTotalVolume(message.Side, diff);
-
-								var q1 = pair.Second;
-								q1.Volume += diff;
-								pair.Second = q1;
-
-								level[i] = clone;
-								break;
+								quotes.Remove(message.OrderPrice);
+								AddTotalVolume(message.Side, -quote.Volume);
 							}
+							else
+							{
+								quote.Volume -= volume;
+								pair.Second = quote;
+								AddTotalVolume(message.Side, -volume);
+							}
+						}
+						else
+						{
+							var diff = volume - level.TotalBalance;
 
-							AddTotalVolume(message.Side, -balance);
+							if (diff > 0)
+							{
+								quote.Volume -= diff;
+								pair.Second = quote;
 
-							var q = pair.Second;
-							q.Volume -= balance;
-							pair.Second = q;
-							level.RemoveAt(i, quote);
-							_messagePool.Free(quote);
+								AddTotalVolume(message.Side, -diff);
+							}
 						}
 					}
 					else
 					{
-						if (level.TryGetByTransactionId(message.TransactionId, out var quote))
+						if (level.TryGetAndRemoveByTransactionId(message.TransactionId, out var order))
 						{
-							var balance = quote.GetBalance();
+							var balance = order.GetBalance();
 
 							AddTotalVolume(message.Side, -balance);
 
-							var q = pair.Second;
-							q.Volume -= balance;
-							pair.Second = q;
-							level.Remove(quote);
-							_messagePool.Free(quote);
-						}
-					}
+							quote.Volume -= balance;
+							pair.Second = quote;
 
-					if (level.Count == 0)
-						quotes.Remove(message.OrderPrice);
+							_messagePool.Free(order);
+
+							if (level.Count == 0)
+								quotes.Remove(message.OrderPrice);
+						}
+					}					
 				}
+
+#if EMU_DBG
+				Verify();
+#endif
 			}
 
 			private void AddTotalVolume(Sides side, decimal diff)
@@ -2430,12 +2427,6 @@ namespace StockSharp.Algo.Testing
 #if EMU_DBG
 			private void Verify()
 			{
-				if (_bids.Count == 0 || _asks.Count == 0)
-					return;
-
-				if (_bids.First().Key >= _asks.First().Key)
-					throw new InvalidOperationException();
-
 				static void Verify(QuotesDict quotes, decimal totalVolume)
 				{
 					if (totalVolume < 0)
@@ -2443,10 +2434,19 @@ namespace StockSharp.Algo.Testing
 
 					if (quotes.Values.Sum(p => p.Second.Volume) != totalVolume)
 						throw new InvalidOperationException();
+
+					if (quotes.Values.Any(p => p.First.Sum(o => o.Balance.Value) != p.First.TotalBalance))
+						throw new InvalidOperationException();
 				}
 
 				Verify(_bids, _totalBidVolume);
 				Verify(_asks, _totalAskVolume);
+
+				if (_bids.Count == 0 || _asks.Count == 0)
+					return;
+
+				if (_bids.First().Key >= _asks.First().Key)
+					throw new InvalidOperationException();
 			}
 #endif
 
@@ -2473,9 +2473,9 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			private ExecutionMessage ToOrder(DateTimeOffset time, ExecutionMessage message)
+			private void ProcessOrder(DateTimeOffset time, ExecutionMessage message, ICollection<Message> result)
 			{
-				return new ExecutionMessage
+				result.Add(new ExecutionMessage
 				{
 					LocalTime = time,
 					SecurityId = message.SecurityId,
@@ -2488,10 +2488,10 @@ namespace StockSharp.Algo.Testing
 					HasOrderInfo = true,
 					ServerTime = GetServerTime(time),
 					StrategyId = message.StrategyId,
-				};
+				});
 			}
 
-			private void ProcessOwnTrade(DateTimeOffset time, ExecutionMessage order, decimal price, decimal volume, ICollection<Message> result)
+			private void ProcessTrade(DateTimeOffset time, ExecutionMessage order, decimal price, decimal volume, ICollection<Message> result)
 			{
 				if (volume <= 0)
 					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str1219);
@@ -2515,18 +2515,21 @@ namespace StockSharp.Algo.Testing
 				this.AddInfoLog(LocalizedStrings.Str1168Params, tradeMsg.TradeId, tradeMsg.OriginalTransactionId, price, volume);
 				var info = _parent.GetPortfolioInfo(order.PortfolioName);
 
-				info.ProcessMyTrade(order.Side, tradeMsg, result);
+				info.ProcessTrade(order.Side, tradeMsg, result);
 
-				result.Add(new ExecutionMessage
+				if (_ticksSubscription is not null)
 				{
-					LocalTime = time,
-					SecurityId = tradeMsg.SecurityId,
-					TradeId = tradeMsg.TradeId,
-					TradePrice = tradeMsg.TradePrice,
-					TradeVolume = tradeMsg.TradeVolume,
-					DataTypeEx = DataType.Ticks,
-					ServerTime = GetServerTime(time),
-				});
+					result.Add(new ExecutionMessage
+					{
+						LocalTime = time,
+						SecurityId = tradeMsg.SecurityId,
+						TradeId = tradeMsg.TradeId,
+						TradePrice = tradeMsg.TradePrice,
+						TradeVolume = tradeMsg.TradeVolume,
+						DataTypeEx = DataType.Ticks,
+						ServerTime = GetServerTime(time),
+					});
+				}
 			}
 
 			private DateTimeOffset GetServerTime(DateTimeOffset time)
@@ -2770,7 +2773,7 @@ namespace StockSharp.Algo.Testing
 				return commission;
 			}
 
-			public void ProcessMyTrade(Sides side, ExecutionMessage tradeMsg, ICollection<Message> result)
+			public void ProcessTrade(Sides side, ExecutionMessage tradeMsg, ICollection<Message> result)
 			{
 				var time = tradeMsg.ServerTime;
 
