@@ -795,14 +795,9 @@ namespace StockSharp.Algo.Testing
 										{
 											if (TryRemoveActiveOrder(quote.TransactionId, out var orderMsg))
 											{
-												var tradeVol = orderMsg.Balance.Value;
-
 												orderMsg.OriginalTransactionId = quote.TransactionId;
-												orderMsg.OrderState = OrderStates.Done;
-												orderMsg.Balance = 0;
-												ProcessOrder(localTime, orderMsg, result);
-
-												ProcessTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
+												
+												ExecuteOrder(localTime, orderMsg, pair.Second.Price, result);
 											}
 										}
 
@@ -1161,13 +1156,7 @@ namespace StockSharp.Algo.Testing
 									if (!TryRemoveActiveOrder(quote.TransactionId, out var orderMsg))
 										continue;
 
-									var balance = orderMsg.Balance.Value;
-
-									orderMsg.Balance = 0;
-									orderMsg.OrderState = OrderStates.Done;
-									ProcessOrder(localTime, orderMsg, result);
-
-									ProcessTrade(localTime, orderMsg, price, balance, result);
+									ExecuteOrder(localTime, orderMsg, price, result);
 								}
 
 								AddTotalVolume(side, -p.Second.Volume);
@@ -1265,13 +1254,7 @@ namespace StockSharp.Algo.Testing
 								{
 									foreach (var order in levelOrders)
 									{
-										var balance = order.Balance.Value;
-
-										order.Balance = 0;
-										order.OrderState = OrderStates.Done;
-
-										ProcessOrder(localTime, order, result);
-										ProcessTrade(localTime, order, bestAsk.Key, balance, result);
+										ExecuteOrder(localTime, order, bestAsk.Key, result);
 
 										_messagePool.Free(order);
 									}
@@ -1289,13 +1272,7 @@ namespace StockSharp.Algo.Testing
 								{
 									foreach (var order in levelOrders)
 									{
-										var balance = order.Balance.Value;
-
-										order.Balance = 0;
-										order.OrderState = OrderStates.Done;
-
-										ProcessOrder(localTime, order, result);
-										ProcessTrade(localTime, order, bestBid.Key, balance, result);
+										ExecuteOrder(localTime, order, bestBid.Key, result);
 
 										_messagePool.Free(order);
 									}
@@ -1446,14 +1423,8 @@ namespace StockSharp.Algo.Testing
 								{
 									if (TryRemoveActiveOrder(quote.TransactionId, out var orderMsg))
 									{
-										var tradeVol = orderMsg.Balance.Value;
-
 										orderMsg.OriginalTransactionId = quote.TransactionId;
-										orderMsg.OrderState = OrderStates.Done;
-										orderMsg.Balance = 0;
-										ProcessOrder(localTime, orderMsg, result);
-
-										ProcessTrade(localTime, orderMsg, pair.Second.Price, tradeVol, result);
+										ExecuteOrder(localTime, orderMsg, pair.Second.Price, result);
 									}
 								}
 
@@ -2050,21 +2021,14 @@ namespace StockSharp.Algo.Testing
 						{
 							foreach (var o in levelOrders)
 							{
-								var balance = o.Balance.Value;
-
-								o.Balance = 0;
-								o.OrderState = OrderStates.Done;
-								ProcessOrder(time, o, result);
-
-								ProcessTrade(time, o, price, balance, result);
+								var tradeVol = ExecuteOrder(time, o, price, result);
 
 								_messagePool.Free(o);
 
-								executions?.Add((price, balance));
+								executions?.Add((price, tradeVol));
 
-								leftBalance -= balance;
-
-								levelOrdersExecVol += balance;
+								leftBalance -= tradeVol;
+								levelOrdersExecVol += tradeVol;
 							}
 						}
 
@@ -2073,10 +2037,19 @@ namespace StockSharp.Algo.Testing
 
 						AddTotalVolume(quotesSide, -qc.Volume);
 
-						leftBalance -= (qc.Volume - levelOrdersExecVol);
+						var diff = qc.Volume - levelOrdersExecVol;
+
+						if (diff > 0)
+							executions?.Add((price, diff));
+						else if (diff < 0)
+							throw new InvalidOperationException("diff < 0");
+
+						leftBalance -= qc.Volume;
 					}
 					else
 					{
+						var requiredVol = leftBalance;
+
 						qc.Volume -= leftBalance;
 						pair.Value.Second = qc;
 
@@ -2090,27 +2063,22 @@ namespace StockSharp.Algo.Testing
 
 								if (leftBalance >= balance)
 								{
-									o.Balance = 0;
-									o.OrderState = OrderStates.Done;
-									ProcessOrder(time, o, result);
-
-									ProcessTrade(time, o, price, balance, result);
+									var tradeVol = ExecuteOrder(time, o, price, result);
 
 									levelOrders.Remove(o);
 									_messagePool.Free(o);
 
-									executions?.Add((price, balance));
+									executions?.Add((price, tradeVol));
 
-									leftBalance -= balance;
-
-									levelOrdersExecVol += balance;
+									leftBalance -= tradeVol;
+									levelOrdersExecVol += tradeVol;
 								}
 								else
 								{
 									o.Balance = balance - leftBalance;
-									ProcessOrder(time, o, result);
 
-									ProcessTrade(time, o, price, balance, result);
+									ProcessOrder(time, o, result);
+									ProcessTrade(time, o, price, leftBalance, result);
 
 									levelOrders.TotalBalance -= leftBalance;
 
@@ -2125,11 +2093,15 @@ namespace StockSharp.Algo.Testing
 							}
 						}
 
+						var diff = requiredVol - levelOrdersExecVol;
+
+						if (diff > 0)
+							executions?.Add((price, diff));
+						else if (diff < 0)
+							throw new InvalidOperationException("diff < 0");
+
 						leftBalance = 0;
 					}
-
-					if (qc.Volume > levelOrdersExecVol)
-						executions?.Add((price, (qc.Volume - levelOrdersExecVol)));
 
 #if EMU_DBG
 					Verify();
@@ -2530,6 +2502,19 @@ namespace StockSharp.Algo.Testing
 					else
 						_pendingExecutions[orderMsg] = left;
 				}
+			}
+
+			private decimal ExecuteOrder(DateTimeOffset time, ExecutionMessage order, decimal price, ICollection<Message> result)
+			{
+				var balance = order.Balance.Value;
+
+				order.Balance = 0;
+				order.OrderState = OrderStates.Done;
+
+				ProcessOrder(time, order, result);
+				ProcessTrade(time, order, price, balance, result);
+
+				return balance;
 			}
 
 			private void ProcessOrder(DateTimeOffset time, ExecutionMessage message, ICollection<Message> result)
