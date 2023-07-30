@@ -17,11 +17,6 @@
 		IChartArea ChartArea { get; }
 
 		/// <summary>
-		/// Whether this axis can be removed from chart area.
-		/// </summary>
-		bool IsDefault { get; }
-
-		/// <summary>
 		/// Unique ID.
 		/// </summary>
 		string Id { get; set; }

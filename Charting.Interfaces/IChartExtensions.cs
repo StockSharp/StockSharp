@@ -59,5 +59,21 @@
 				itype.Is<IIndicator>() &&
 				!_chartUnsupportedIndicators.Any(t => t.IsAssignableFrom(itype));
 		}
+
+		/// <summary>
+		/// The primary title for the X-axis.
+		/// </summary>
+		public const string DefaultXAxisId = "X";
+
+		/// <summary>
+		/// The primary title for the Y-axis.
+		/// </summary>
+		public const string DefaultYAxisId = "Y";
+
+		/// <summary>
+		/// Whether this axis can be removed from chart area.
+		/// </summary>
+		public static bool IsDefault(this IChartAxis axis)
+			=> axis.Id == DefaultXAxisId || axis.Id == DefaultYAxisId;
 	}
 }
