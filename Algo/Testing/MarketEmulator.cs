@@ -1246,6 +1246,65 @@ namespace StockSharp.Algo.Testing
 						Apply(Sides.Buy, _bids, message.Bids);
 						Apply(Sides.Sell, _asks, message.Asks);
 
+						while (_bids.Count > 0 && _asks.Count > 0)
+						{
+							var bestBid = _bids.First();
+							var bestAsk = _asks.First();
+
+							if (bestBid.Key < bestAsk.Key)
+								break;
+
+							// сдвиг идет бидами (убираем аски)
+							if (message.Bids.Length > 0 && message.Bids[0].Volume > 0)
+							{
+								_asks.Remove(bestAsk.Key);
+
+								var levelOrders = bestAsk.Value.First;
+
+								if (levelOrders.Count > 0)
+								{
+									foreach (var order in levelOrders)
+									{
+										var balance = order.Balance.Value;
+
+										order.Balance = 0;
+										order.OrderState = OrderStates.Done;
+
+										ProcessOrder(localTime, order, result);
+										ProcessTrade(localTime, order, bestAsk.Key, balance, result);
+
+										_messagePool.Free(order);
+									}
+								}
+
+								AddTotalVolume(Sides.Sell, -bestAsk.Value.Second.Volume);
+							}
+							else
+							{
+								_bids.Remove(bestBid.Key);
+
+								var levelOrders = bestBid.Value.First;
+
+								if (levelOrders.Count > 0)
+								{
+									foreach (var order in levelOrders)
+									{
+										var balance = order.Balance.Value;
+
+										order.Balance = 0;
+										order.OrderState = OrderStates.Done;
+
+										ProcessOrder(localTime, order, result);
+										ProcessTrade(localTime, order, bestBid.Key, balance, result);
+
+										_messagePool.Free(order);
+									}
+								}
+
+								AddTotalVolume(Sides.Buy, -bestBid.Value.Second.Volume);
+							}
+						}
+
 #if EMU_DBG
 						Verify();
 #endif
@@ -2499,7 +2558,7 @@ namespace StockSharp.Algo.Testing
 				var tradeMsg = new ExecutionMessage
 				{
 					LocalTime = time,
-					SecurityId = order.SecurityId,
+					SecurityId = _securityId,
 					OrderId = order.OrderId,
 					OriginalTransactionId = order.TransactionId,
 					TradeId = _parent.TradeIdGenerator.GetNextId(),
@@ -2522,7 +2581,7 @@ namespace StockSharp.Algo.Testing
 					result.Add(new ExecutionMessage
 					{
 						LocalTime = time,
-						SecurityId = tradeMsg.SecurityId,
+						SecurityId = _securityId,
 						TradeId = tradeMsg.TradeId,
 						TradePrice = tradeMsg.TradePrice,
 						TradeVolume = tradeMsg.TradeVolume,
