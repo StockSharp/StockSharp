@@ -16,6 +16,7 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition MinWidth="400" Width="*" />
 				<ColumnDefinition MinWidth="250" MaxWidth="260" />
+				<ColumnDefinition MinWidth="250" MaxWidth="260" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition MinWidth="300" Width="Auto" />
 			</Grid.ColumnDefinitions>
@@ -44,12 +45,13 @@
 			<!--End chart and chart control grid-->
 
 			<sx:MarketDepthControl x:Name="DepthControl" Grid.Column="1" MaxDepth="10" />
+			<sx:MarketDepthControl x:Name="RealDepthControl" Grid.Column="2" MaxDepth="10" />
 
-			<GridSplitter Grid.Row="0" Grid.Column="2" Width="3"
+			<GridSplitter Grid.Row="0" Grid.Column="3" Width="3"
 			              Background="LightSteelBlue"
 			              VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
-			<Grid Grid.Column="3">
+			<Grid Grid.Column="4">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="5" />

@@ -93,6 +93,8 @@ namespace SampleRealTimeEmulation
 			_realConnector.MassOrderCancelFailed += (transId, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
+			_realConnector.OrderBookReceived += OnRealDepth;
+
 			//_realConnector.Error += error =>
 			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
@@ -239,6 +241,14 @@ namespace SampleRealTimeEmulation
 			DepthControl.UpdateDepth(depth, _security);
 		}
 
+		private void OnRealDepth(Subscription subscription, IOrderBookMessage depth)
+		{
+			if (depth.SecurityId != _securityId)
+				return;
+
+			RealDepthControl.UpdateDepth(depth, _security);
+		}
+
 		private void ChangeConnectStatus(bool isConnected)
 		{
 			// set flag (connection is established or not)
@@ -277,6 +287,8 @@ namespace SampleRealTimeEmulation
 			_emuConnector.SubscribeMarketDepth(security);
 			_emuConnector.SubscribeTrades(security);
 			_emuConnector.SubscribeLevel1(security);
+
+			_realConnector.SubscribeMarketDepth(security);
 
 			_candlesSubscription = _emuConnector.SubscribeCandles(CandleSettingsEditor.DataType.ToCandleSeries(security), from: DateTimeOffset.UtcNow - TimeSpan.FromDays(10));
 		}
