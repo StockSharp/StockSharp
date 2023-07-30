@@ -1971,7 +1971,7 @@ namespace StockSharp.Algo.Testing
 
 				var executions = result is null ? null : new List<(decimal price, decimal volume)>();
 
-				List<decimal> toRemove = null;
+				List<QuoteChange> toRemove = null;
 
 				var leftBalance = order.GetBalance();
 				var sign = order.Side == Sides.Buy ? 1 : -1;
@@ -1994,20 +1994,27 @@ namespace StockSharp.Algo.Testing
 							break;
 
 						if (price == orderPrice && !_settings.MatchOnTouch)
+						{
+							if (levelOrders.Count > 0)
+								throw new NotSupportedException("MatchOnTouch doesn't support cross trades.");
+
+							toRemove ??= new();
+							toRemove.Add(qc);
+
 							break;
+						}
 					}
 
 					if (result != null && levelOrders.Count > 0)
 					{
 						var crossOrders = levelOrders.Where(o => o.PortfolioName == order.PortfolioName).ToArray();
 
-						// матчинг идет о заявки с таким же портфелем
 						if (crossOrders.Length > 0)
 						{
+							// матчинг идет о заявки с таким же портфелем
 							var matchError = LocalizedStrings.Str1161Params.Put(crossOrders.Select(o => o.TransactionId.To<string>()).JoinCommaSpace(), order.TransactionId);
 							this.AddErrorLog(matchError);
 
-							isCrossTrade = true;
 							break;
 						}
 					}
@@ -2033,9 +2040,7 @@ namespace StockSharp.Algo.Testing
 						}
 
 						toRemove ??= new();
-						toRemove.Add(price);
-
-						AddTotalVolume(quotesSide, -qc.Volume);
+						toRemove.Add(qc);
 
 						var diff = qc.Volume - levelOrdersExecVol;
 
@@ -2117,8 +2122,12 @@ namespace StockSharp.Algo.Testing
 					Verify();
 #endif
 
-					foreach (var value in toRemove)
-						quotes.Remove(value);
+					foreach (var qc in toRemove)
+					{
+						quotes.Remove(qc.Price);
+
+						AddTotalVolume(quotesSide, -qc.Volume);
+					}
 
 #if EMU_DBG
 					Verify();
