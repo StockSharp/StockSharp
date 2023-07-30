@@ -907,9 +907,9 @@
     "en": "Select .nupkg or .csproj for your product. In case of .csproj, before package publishing you have to build it in Visual Studio in Release configuration.",
     "ru": "Выберите .nupkg или .csproj вашего продукта. В случае .csproj, перед публикацией проект должен быть построен в Visual Studio в конфигурации Release."
   },
-  "DotNetSDKNotInstalled": {
-    "en": ".NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/5.0",
-    "ru": ".NET SDK v5.0+ не установлен. Его можно скачать по ссылке: https://dotnet.microsoft.com/download/dotnet/5.0"
+  "DotNetRuntimeNotInstalled": {
+    "en": ".NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/6.0",
+    "ru": ".NET SDK v5.0+ не установлен. Его можно скачать по ссылке: https://dotnet.microsoft.com/download/dotnet/6.0"
   },
   "SelectImage": {
     "en": "Select image",
