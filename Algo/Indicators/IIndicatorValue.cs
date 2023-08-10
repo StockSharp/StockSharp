@@ -202,6 +202,14 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public override string ToString() => IsEmpty ? "Empty" : Value.ToString();
+
+		/// <summary>
+		/// Cast object from <see cref="SingleIndicatorValue{TValue}"/> to <typeparamref name="TValue"/>.
+		/// </summary>
+		/// <param name="value">Object <see cref="SingleIndicatorValue{TValue}"/>.</param>
+		/// <returns><typeparamref name="TValue"/> value.</returns>
+		public static explicit operator TValue(SingleIndicatorValue<TValue> value)
+			=> value.Value;
 	}
 
 	/// <summary>
@@ -235,6 +243,14 @@ namespace StockSharp.Algo.Indicators
 				? new DecimalIndicatorValue(indicator, value.To<decimal>()) { IsFinal = IsFinal, InputValue = this }
 				: base.SetValue(indicator, value);
 		}
+
+		/// <summary>
+		/// Cast object from <see cref="DecimalIndicatorValue"/> to <see cref="decimal"/>.
+		/// </summary>
+		/// <param name="value">Object <see cref="DecimalIndicatorValue"/>.</param>
+		/// <returns><see cref="decimal"/> value.</returns>
+		public static explicit operator decimal(DecimalIndicatorValue value)
+			=> value.Value;
 	}
 
 	/// <summary>

@@ -34,6 +34,14 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	/// </summary>
 	/// <param name="indicator"><see cref="IIndicator"/></param>
 	public CandlePatternIndicatorValue(IIndicator indicator) : base(indicator) { }
+
+	/// <summary>
+	/// Cast object from <see cref="CandlePatternIndicatorValue"/> to <see cref="bool"/>.
+	/// </summary>
+	/// <param name="value">Object <see cref="CandlePatternIndicatorValue"/>.</param>
+	/// <returns><see cref="bool"/> value.</returns>
+	public static explicit operator bool(CandlePatternIndicatorValue value)
+		=> value.Value;
 }
 
 /// <summary>
