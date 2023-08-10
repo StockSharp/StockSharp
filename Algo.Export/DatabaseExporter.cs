@@ -136,7 +136,13 @@ public class DatabaseExporter : BaseExporter
 
 		schema.SetConverter<object, DataParameter>(obj => new()
 		{
-			Value = obj is TimeSpan ts ? ts.Ticks : (obj is Unit u ? u.ToString() : obj)
+			Value = obj switch
+			{
+				TimeSpan tf => tf.Ticks,
+				Unit u => u.ToString(),
+				PnFArg pnf => pnf.ToString(),
+				_ => obj,
+			}
 		});
 
 		var builder = new FluentMappingBuilder(schema);
