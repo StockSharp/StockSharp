@@ -1,4 +1,12 @@
 {
+  "NCandles": {
+    "en": "Delay signal",
+    "ru": "Задержка сигнала"
+  },
+  "NCandlesDesc": {
+    "en": "The diagram element to delay signal for specified number of candles.",
+    "ru": "Элемент диаграммы, задерживающий исполнение на указанное кол-во свечей."
+  },
   "NetProfitPercent": {
     "en": "% Net profit",
     "ru": "$ Чистая прибыль"
