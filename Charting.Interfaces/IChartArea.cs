@@ -8,11 +8,6 @@
 	public interface IChartArea : IChartPart<IChartArea>
 	{
 		/// <summary>
-		/// To use automatic range for the X-axis. The default is off.
-		/// </summary>
-		bool IsAutoRange { get; set; }
-
-		/// <summary>
 		/// Area elements (<see cref="IChartIndicatorElement"/>, <see cref="IChartCandleElement"/>, etc.).
 		/// </summary>
 		INotifyList<IChartElement> Elements { get; }

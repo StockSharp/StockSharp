@@ -9,6 +9,10 @@
 	using Ecng.Configuration;
 
 	using StockSharp.Algo.Indicators;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
+	using StockSharp.Messages;
+	using static StockSharp.Charting.IChartDrawData;
 
 	/// <summary>
 	/// <see cref="IChart"/> extensions.
@@ -75,5 +79,164 @@
 		/// </summary>
 		public static bool IsDefault(this IChartAxis axis)
 			=> axis.Id == DefaultXAxisId || axis.Id == DefaultYAxisId;
+
+		/// <summary>
+		/// Put the chart data.
+		/// </summary>
+		/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
+		/// <param name="element">The chart element.</param>
+		/// <param name="value">The chart value.</param>
+		/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
+		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartElement element, object value)
+		{
+			switch (element)
+			{
+				case null:
+					throw new ArgumentNullException(nameof(element));
+				case IChartCandleElement candleElem:
+					return item.Add(candleElem, (ICandleMessage)value);
+				case IChartIndicatorElement indElem:
+					return item.Add(indElem, (IIndicatorValue)value);
+				case IChartOrderElement orderElem:
+				{
+					var order = (Order)value;
+					return item.Add(orderElem, order, order.State != OrderStates.Failed ? null : LocalizedStrings.Failed);
+				}
+				case IChartTradeElement tradeElem:
+					return item.Add(tradeElem, (MyTrade)value);
+				//case ChartActiveOrdersElement activeEleme:
+				//	return Add(activeEleme, (ChartActiveOrderInfo)value);
+				case IChartLineElement lineElem:
+					return value switch
+					{
+						null => throw new ArgumentNullException(nameof(value)),
+						double d => item.Add(lineElem, d),
+						decimal d => item.Add(lineElem, (double)d),
+						Tuple<double, double> t => item.Add(lineElem, t.Item1, t.Item2),
+						_ => throw new ArgumentException(LocalizedStrings.Str888Params.Put(value.GetType().Name)),
+					};
+				case IChartBandElement belem:
+					return value switch
+					{
+						null => throw new ArgumentNullException(nameof(value)),
+						double d => item.Add(belem, d, 0),
+						decimal d => item.Add(belem, d),
+						Tuple<double, double> t => item.Add(belem, t.Item1, t.Item2),
+						_ => throw new ArgumentException(LocalizedStrings.Str888Params.Put(value.GetType().Name)),
+					};
+				default:
+					throw new ArgumentException(LocalizedStrings.Str2062Params.Put(element));
+			}
+		}
+
+		/// <summary>
+		/// Put the candle data.
+		/// </summary>
+		/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
+		/// <param name="element">The chart element representing a candle.</param>
+		/// <param name="candle">The candle data.</param>
+		/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
+		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle)
+		{
+			if (candle == null)
+			{
+				//throw new ArgumentNullException(nameof(candle));
+				return item;
+			}
+
+			return item.Add(element, candle, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.PriceLevels?./*Select(l => Tuple.Create(l.Price, l.TotalVolume)).*/ToArray());
+		}
+
+		/// <summary>
+		/// Put the candle data.
+		/// </summary>
+		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+		/// <param name="element">The chart element representing a candle.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="openPrice">Opening price.</param>
+		/// <param name="highPrice">Highest price.</param>
+		/// <param name="lowPrice">Lowest price.</param>
+		/// <param name="closePrice">Closing price.</param>
+		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice)
+		{
+			return item.Add(element, candle, openPrice, highPrice, lowPrice, closePrice, null);
+		}
+
+		/// <summary>
+		/// Put the candle data.
+		/// </summary>
+		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+		/// <param name="element">The chart element representing a candle.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="openPrice">Opening price.</param>
+		/// <param name="highPrice">Highest price.</param>
+		/// <param name="lowPrice">Lowest price.</param>
+		/// <param name="closePrice">Closing price.</param>
+		/// <param name="priceLevels">Price levels.</param>
+		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels)
+		{
+			if (candle == null)
+			{
+				//throw new ArgumentNullException(nameof(candle));
+				return item;
+			}
+
+			return item.Add(element, candle.DataType, openPrice, highPrice, lowPrice, closePrice, priceLevels);
+		}
+
+		/// <summary>
+		/// Put the order data.
+		/// </summary>
+		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+		/// <param name="element">The chart element representing orders.</param>
+		/// <param name="order">The order value.</param>
+		/// <param name="errorMessage">Error registering/cancelling order.</param>
+		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
+		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartOrderElement element, Order order, string errorMessage = null)
+		{
+			if (order == null)
+				return item;
+			//	throw new ArgumentNullException(nameof(order));
+
+			if (errorMessage.IsEmpty() && order.State == OrderStates.Failed)
+				errorMessage = LocalizedStrings.Failed;
+
+			return item.Add(element, order.TransactionId, null, order.Side, order.Price, order.Volume, errorMessage);
+		}
+
+		/// <summary>
+		/// Put the order data.
+		/// </summary>
+		/// <param name="item"><see cref="IChartDrawDataItem"/> instance.</param>
+		/// <param name="element">The chart element representing trades.</param>
+		/// <param name="trade">The trade value.</param>
+		/// <returns><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</returns>
+		public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartTradeElement element, MyTrade trade)
+		{
+			if (trade == null)
+				return item;
+			//	throw new ArgumentNullException(nameof(trade));
+
+			var tick = trade.Trade;
+			return item.Add(element, tick.Id ?? default, tick.StringId, trade.Order.Side, tick.Price, tick.Volume);
+		}
+
+		/// <summary>
+		/// To use automatic range for the X-axis.
+		/// </summary>
+		/// <param name="area"><see cref="IChartArea"/></param>
+		/// <returns>To use automatic range for the X-axis.</returns>
+		public static bool GetAutoRange(this IChartArea area)
+			=> area.XAxises.All(a => a.AutoRange);
+
+		/// <summary>
+		/// To use automatic range for the X-axis.
+		/// </summary>
+		/// <param name="area"><see cref="IChartArea"/></param>
+		/// <param name="value">To use automatic range for the X-axis.</param>
+		public static void SetAutoRange(this IChartArea area, bool value)
+			=> area.XAxises.ForEach(a => a.AutoRange = value);
 	}
 }

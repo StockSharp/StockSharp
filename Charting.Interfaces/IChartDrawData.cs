@@ -29,39 +29,6 @@
 			/// Put the candle data.
 			/// </summary>
 			/// <param name="element">The chart element representing a candle.</param>
-			/// <param name="candle">The candle data.</param>
-			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, ICandleMessage candle);
-
-			/// <summary>
-			/// Put the candle data.
-			/// </summary>
-			/// <param name="element">The chart element representing a candle.</param>
-			/// <param name="candle">Candle.</param>
-			/// <param name="openPrice">Opening price.</param>
-			/// <param name="highPrice">Highest price.</param>
-			/// <param name="lowPrice">Lowest price.</param>
-			/// <param name="closePrice">Closing price.</param>
-			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice);
-
-			/// <summary>
-			/// Put the candle data.
-			/// </summary>
-			/// <param name="element">The chart element representing a candle.</param>
-			/// <param name="candle">Candle.</param>
-			/// <param name="openPrice">Opening price.</param>
-			/// <param name="highPrice">Highest price.</param>
-			/// <param name="lowPrice">Lowest price.</param>
-			/// <param name="closePrice">Closing price.</param>
-			/// <param name="priceLevels">Price levels.</param>
-			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels);
-
-			/// <summary>
-			/// Put the candle data.
-			/// </summary>
-			/// <param name="element">The chart element representing a candle.</param>
 			/// <param name="dataType"><see cref="DataType"/>.</param>
 			/// <param name="openPrice">Opening price.</param>
 			/// <param name="highPrice">Highest price.</param>
@@ -80,15 +47,6 @@
 			IChartDrawDataItem Add(IChartIndicatorElement element, IIndicatorValue value);
 
 			/// <summary>
-			/// Put the order data.
-			/// </summary>
-			/// <param name="element">The chart element representing orders.</param>
-			/// <param name="order">The order value.</param>
-			/// <param name="errorMessage">Error registering/cancelling order.</param>
-			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartOrderElement element, Order order, string errorMessage = null);
-
-			/// <summary>
 			/// Put the trade data.
 			/// </summary>
 			/// <param name="element">The chart element representing orders.</param>
@@ -100,14 +58,6 @@
 			/// <param name="errorMessage">Error registering/cancelling order.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
 			IChartDrawDataItem Add(IChartOrderElement element, long orderId, string orderStringId, Sides side, decimal price, decimal volume, string errorMessage = null);
-
-			/// <summary>
-			/// Put the order data.
-			/// </summary>
-			/// <param name="element">The chart element representing trades.</param>
-			/// <param name="trade">The trade value.</param>
-			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartTradeElement element, MyTrade trade);
 
 			/// <summary>
 			/// Put the trade data.
@@ -146,14 +96,6 @@
 			/// <param name="value2">The value2.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
 			IChartDrawDataItem Add(IChartBandElement element, double value1, double value2);
-
-			/// <summary>
-			/// Put the chart data.
-			/// </summary>
-			/// <param name="element">The chart element.</param>
-			/// <param name="value">The chart value.</param>
-			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartElement element, object value);
 		}
 
 		/// <summary>
