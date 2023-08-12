@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
