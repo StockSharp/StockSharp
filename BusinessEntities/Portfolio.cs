@@ -17,6 +17,7 @@ namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Messages;
@@ -27,8 +28,10 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-	[DescriptionLoc(LocalizedStrings.Str541Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PortfolioKey,
+		Description = LocalizedStrings.Str541Key)]
 	public class Portfolio : Position
 	{
 		/// <summary>
@@ -44,9 +47,11 @@ namespace StockSharp.BusinessEntities
 		/// Portfolio code name.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str247Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str247Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Name
 		{
 			get => _name;
@@ -64,9 +69,11 @@ namespace StockSharp.BusinessEntities
 		/// Exchange board, for which the current portfolio is active.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.Str544Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.Str544Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public ExchangeBoard Board { get; set; }
 
 		private PortfolioStates? _state;
@@ -75,9 +82,11 @@ namespace StockSharp.BusinessEntities
 		/// Portfolio state.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.Str252Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.StateKey,
+			Description = LocalizedStrings.Str252Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(false)]
 		public PortfolioStates? State
 		{

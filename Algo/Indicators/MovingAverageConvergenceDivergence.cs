@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -29,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergence.html
 	/// </remarks>
-	[DisplayName("MACD")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MACDKey)]
 	[DescriptionLoc(LocalizedStrings.Str797Key)]
 	[Doc("topics/IndicatorMovingAverageConvergenceDivergence.html")]
 	public class MovingAverageConvergenceDivergence : BaseIndicator
@@ -63,18 +64,22 @@ namespace StockSharp.Algo.Indicators
 		/// Long moving average.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str798Key)]
-		[DescriptionLoc(LocalizedStrings.Str799Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str798Key,
+			Description = LocalizedStrings.Str799Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public ExponentialMovingAverage LongMa { get; }
 
 		/// <summary>
 		/// Short moving average.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str800Key)]
-		[DescriptionLoc(LocalizedStrings.Str801Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str800Key,
+			Description = LocalizedStrings.Str801Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public ExponentialMovingAverage ShortMa { get; }
 
 		/// <inheritdoc />

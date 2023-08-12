@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -133,9 +134,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Multiplication factor.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str806Key)]
-		[DescriptionLoc(LocalizedStrings.Str807Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str806Key,
+			Description = LocalizedStrings.Str807Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Multiple
 		{
 			get => _multiple * 1000;

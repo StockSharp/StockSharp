@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -74,9 +74,11 @@ namespace StockSharp.Messages
 	public abstract class Message : Cloneable<Message>, IMessage
 	{
 		/// <inheritdoc />
-		[DisplayNameLoc(LocalizedStrings.Str203Key)]
-		[DescriptionLoc(LocalizedStrings.Str204Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str203Key,
+			Description = LocalizedStrings.Str204Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[DataMember]
 		public DateTimeOffset LocalTime { get; set; }
 

@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
@@ -32,16 +33,20 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.FromKey)]
-		[DescriptionLoc(LocalizedStrings.Str344Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.FromKey,
+			Description = LocalizedStrings.Str344Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? From { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.UntilKey)]
-		[DescriptionLoc(LocalizedStrings.Str346Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UntilKey,
+			Description = LocalizedStrings.Str346Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? To { get; set; }
 
 		/// <inheritdoc />

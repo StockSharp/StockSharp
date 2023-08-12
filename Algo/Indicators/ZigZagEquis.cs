@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -61,9 +62,11 @@ namespace StockSharp.Algo.Indicators
 		/// <remarks>
 		/// It is specified in the range from 0 to 1.
 		/// </remarks>
-		[DisplayNameLoc(LocalizedStrings.Str833Key)]
-		[DescriptionLoc(LocalizedStrings.Str834Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str833Key,
+			Description = LocalizedStrings.Str834Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Deviation
 		{
 			get => _deviation;

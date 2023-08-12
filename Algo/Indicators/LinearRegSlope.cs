@@ -16,10 +16,9 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
@@ -30,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorLinearRegSlope.html
 	/// </remarks>
-	[DisplayName("LRS")]
-	[DescriptionLoc(LocalizedStrings.Str742Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.LRSKey,
+		Description = LocalizedStrings.Str742Key)]
 	[Doc("topics/IndicatorLinearRegSlope.html")]
 	public class LinearRegSlope : LengthIndicator<decimal>
 	{

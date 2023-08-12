@@ -19,13 +19,13 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 	using Ecng.Collections;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Latency;
@@ -394,8 +394,11 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str200Key)]
-		[DescriptionLoc(LocalizedStrings.Str201Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str200Key,
+			Description = LocalizedStrings.Str201Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Obsolete("Use SupportLevel1DepthBuilder property.")]
 		public bool CreateDepthFromLevel1
 		{
@@ -406,8 +409,11 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Create a combined security for securities from different boards.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str197Key)]
-		[DescriptionLoc(LocalizedStrings.Str198Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str197Key,
+			Description = LocalizedStrings.Str198Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Obsolete("Use SupportAssociatedSecurity property.")]
 		public bool CreateAssociatedSecurity
 		{
@@ -425,9 +431,11 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The <see cref="TimeMessage"/> message generating Interval. The default is 10 milliseconds.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
-		[DescriptionLoc(LocalizedStrings.Str195Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TimeIntervalKey,
+			Description = LocalizedStrings.Str195Key,
+			GroupName = LocalizedStrings.Str186Key)]
 		public virtual TimeSpan MarketTimeChangedInterval
 		{
 			get => _marketTimeChangedInterval;

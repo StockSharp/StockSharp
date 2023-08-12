@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Collections.Generic;
 
 	using Ecng.ComponentModel;
@@ -29,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorHighest.html
 	/// </remarks>
-	[DisplayName("Highest")]
-	[DescriptionLoc(LocalizedStrings.Str733Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.HighestKey,
+		Description = LocalizedStrings.Str733Key)]
 	[Doc("topics/IndicatorHighest.html")]
 	public class Highest : LengthIndicator<decimal>
 	{

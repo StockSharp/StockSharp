@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -34,18 +35,22 @@ namespace StockSharp.Messages
 		/// Exchange code, which owns the board. Maybe be the same <see cref="Code"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ExchangeInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str56Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExchangeInfoKey,
+			Description = LocalizedStrings.Str56Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string ExchangeCode { get; set; }
 
 		/// <summary>
 		/// Board code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CodeKey,
+			Description = LocalizedStrings.BoardCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Code { get; set; }
 
 		///// <summary>
@@ -70,9 +75,11 @@ namespace StockSharp.Messages
 		/// Securities expiration times.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
-		[DescriptionLoc(LocalizedStrings.Str64Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExpiryDateKey,
+			Description = LocalizedStrings.Str64Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public TimeSpan ExpiryTime { get; set; }
 
 		private WorkingTime _workingTime = new() { IsEnabled = true };
@@ -81,9 +88,11 @@ namespace StockSharp.Messages
 		/// Board working hours.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.WorkingTimeKey)]
-		[DescriptionLoc(LocalizedStrings.WorkingHoursKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.WorkingTimeKey,
+			Description = LocalizedStrings.WorkingHoursKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public WorkingTime WorkingTime
 		{
 			get => _workingTime;
@@ -106,9 +115,11 @@ namespace StockSharp.Messages
 		/// Information about the time zone where the exchange is located.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TimeZoneKey)]
-		[DescriptionLoc(LocalizedStrings.Str68Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TimeZoneKey,
+			Description = LocalizedStrings.Str68Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[XmlIgnore]
 		//[Ecng.Serialization.TimeZoneInfo]
 		public TimeZoneInfo TimeZone

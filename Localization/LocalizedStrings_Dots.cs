@@ -638,5 +638,25 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string Str254Dot => AppendDot(Str254);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string BoardCodeDot => AppendDot(BoardCode);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string HeaderDot => AppendDot(Header);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string OrderIdStringDot => AppendDot(OrderIdString);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string MarketMakerOrderDot => AppendDot(MarketMakerOrder);
 	}
 }

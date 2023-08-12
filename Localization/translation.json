@@ -1,4 +1,72 @@
 {
+  "Lowest": {
+    "en": "Lowest",
+    "ru": "Наименьшее"
+  },
+  "Highest": {
+    "en": "Highest",
+    "ru": "Наибольшее"
+  },
+  "LRS": {
+    "en": "LRS",
+    "ru": "LRS"
+  },
+  "Envelope": {
+    "en": "Envelope",
+    "ru": "Конверт"
+  },
+  "Sedol": {
+    "en": "SEDOL",
+    "ru": "SEDOL"
+  },
+  "Cusip": {
+    "en": "CUSIP",
+    "ru": "CUSIP"
+  },
+  "Isin": {
+    "en": "ISIN",
+    "ru": "ISIN"
+  },
+  "Bloomberg": {
+    "en": "Bloomberg",
+    "ru": "Bloomberg"
+  },
+  "Ric": {
+    "en": "RIC",
+    "ru": "RIC"
+  },
+  "QuikLua": {
+    "en": "QUIK Lua",
+    "ru": "QUIK Lua"
+  },
+  "QuikLuaMarketData": {
+    "en": "QUIK LUA. Market data",
+    "ru": "QUIK LUA. Маркет данные"
+  },
+  "QuikLuaTransactions": {
+    "en": "QUIK LUA. Transactions",
+    "ru": "QUIK LUA. Транзакции"
+  },
+  "MT4Transactions": {
+    "en": "MT4 Transactions",
+    "ru": "MT4 Транзакции"
+  },
+  "MT5Transactions": {
+    "en": "MT5 Transactions",
+    "ru": "MT5 Транзакции"
+  },
+  "MT4MarketData": {
+    "en": "MT4 Market data",
+    "ru": "MT4 Маркет данные"
+  },
+  "MT5MarketData": {
+    "en": "MT5 Market data",
+    "ru": "MT5 Маркет данные"
+  },
+  "MACD": {
+    "en": "MACD",
+    "ru": "MACD"
+  },
   "NCandles": {
     "en": "Delay signal",
     "ru": "Задержка сигнала"
@@ -4316,16 +4384,16 @@
     "ru": "Период индикатора."
   },
   "Str738": {
-    "en": "Linear regression.",
-    "ru": "Линейная регрессия."
+    "en": "Linear regression",
+    "ru": "Линейная регрессия"
   },
   "Str739": {
-    "en": "Regression R-squared.",
-    "ru": "R-квадрат регрессии."
+    "en": "R-squared",
+    "ru": "R-квадрат"
   },
   "Str740": {
-    "en": "Standard error.",
-    "ru": "Стандартная ошибка."
+    "en": "Standard error",
+    "ru": "Стандартная ошибка"
   },
   "Str741": {
     "en": "Coefficient with independent variable, slope of a straight line.",
@@ -4440,8 +4508,8 @@
     "ru": "Линия Chinkou"
   },
   "Str769": {
-    "en": "Momentum.",
-    "ru": "Моментум."
+    "en": "Momentum",
+    "ru": "Моментум"
   },
   "MoneyFlowIndex": {
     "en": "Money Flow Index.",
@@ -4628,12 +4696,12 @@
     "ru": "Максимальный фактор ускорения."
   },
   "Str816": {
-    "en": "Peak.",
-    "ru": "Пик."
+    "en": "Peak",
+    "ru": "Пик"
   },
   "Str817": {
-    "en": "PeakBar.",
-    "ru": "ПикБар."
+    "en": "PeakBar",
+    "ru": "ПикБар"
   },
   "Str818": {
     "en": "Simple moving average.",
@@ -4740,8 +4808,8 @@
     "ru": "Медианная цена"
   },
   "Str844": {
-    "en": "Fractals.",
-    "ru": "Фракталы."
+    "en": "Fractals",
+    "ru": "Фракталы"
   },
   "Str845": {
     "en": "Indicator length must be an odd number.",
@@ -9232,28 +9300,28 @@
     "ru": "Цвет Jaw линии."
   },
   "Str2023": {
-    "en": "DI+ color",
-    "ru": "Цвет DI+"
+    "en": "DI+",
+    "ru": "DI+"
   },
   "Str2024": {
-    "en": "DI+ line color.",
-    "ru": "Цвет DI+ линии."
+    "en": "DI+ line.",
+    "ru": "DI+ линия."
   },
   "Str2025": {
-    "en": "DI- color",
-    "ru": "Цвет DI-"
+    "en": "DI-",
+    "ru": "DI-"
   },
   "Str2026": {
-    "en": "DI- line color.",
-    "ru": "Цвет DI- линии."
+    "en": "DI- line.",
+    "ru": "DI- линия."
   },
   "Str2027": {
-    "en": "ADX color",
-    "ru": "Цвет ADX"
+    "en": "ADX",
+    "ru": "ADX"
   },
   "Str2028": {
-    "en": "ADX line color.",
-    "ru": "Цвет ADX линии."
+    "en": "ADX line.",
+    "ru": "ADX линия."
   },
   "Str2029": {
     "en": "UpBand color",

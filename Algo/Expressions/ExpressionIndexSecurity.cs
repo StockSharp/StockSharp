@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Expressions
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -17,8 +18,10 @@ namespace StockSharp.Algo.Expressions
 	/// <summary>
 	/// The index, built of combination of several instruments through mathematical formula <see cref="Expression"/>.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.IndexKey)]
-	[DescriptionLoc(LocalizedStrings.Str728Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.IndexKey,
+		Description = LocalizedStrings.Str728Key)]
 	[BasketCode("EI")]
 	public class ExpressionIndexSecurity : IndexSecurity
 	{

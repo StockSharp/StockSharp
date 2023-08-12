@@ -17,8 +17,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.Linq;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Collections.Generic;
 
 	using Ecng.Common;
@@ -51,9 +51,11 @@ namespace StockSharp.Algo.Indicators
 		private string _name;
 
 		/// <inheritdoc />
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str908Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str908Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public virtual string Name
 		{
 			get => _name;

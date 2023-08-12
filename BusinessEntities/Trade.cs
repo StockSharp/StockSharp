@@ -31,8 +31,10 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.Str506Key)]
-	[DescriptionLoc(LocalizedStrings.TickTradeKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str506Key,
+		Description = LocalizedStrings.TickTradeKey)]
 	[Obsolete("Use ITickTradeMessage.")]
 	public class Trade : Cloneable<Trade>, ITickTradeMessage
 	{

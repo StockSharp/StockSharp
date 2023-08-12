@@ -18,6 +18,7 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -37,6 +38,7 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Algo.Strategies;
+	using DataType = Messages.DataType;
 
 	/// <summary>
 	/// The interface describing the list of adapters to trading systems with which the aggregator operates.
@@ -59,7 +61,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Adapter-aggregator that allows simultaneously to operate multiple adapters connected to different trading systems.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.BasketKey)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BasketKey)]
 	public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList

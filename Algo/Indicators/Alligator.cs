@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorAlligator.html
 	/// </remarks>
-	[DisplayNameLoc(LocalizedStrings.Str837Key)]
-	[DescriptionLoc(LocalizedStrings.Str837Key, true)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str837Key,
+		Description = LocalizedStrings.Str837Key)]
 	[Doc("topics/IndicatorAlligator.html")]
 	public class Alligator : BaseComplexIndicator
 	{
@@ -58,9 +61,11 @@ namespace StockSharp.Algo.Indicators
 		/// Jaw.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str838Key)]
-		[DescriptionLoc(LocalizedStrings.Str838Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str838Key,
+			Description = LocalizedStrings.Str838Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public AlligatorLine Jaw { get; }
 
@@ -68,9 +73,11 @@ namespace StockSharp.Algo.Indicators
 		/// Teeth.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str839Key)]
-		[DescriptionLoc(LocalizedStrings.Str839Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str839Key,
+			Description = LocalizedStrings.Str839Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public AlligatorLine Teeth { get; }
 
@@ -78,9 +85,11 @@ namespace StockSharp.Algo.Indicators
 		/// Lips.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str840Key)]
-		[DescriptionLoc(LocalizedStrings.Str840Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str840Key,
+			Description = LocalizedStrings.Str840Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public AlligatorLine Lips { get; }
 

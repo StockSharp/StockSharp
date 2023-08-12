@@ -17,10 +17,9 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
@@ -31,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorStandardError.html
 	/// </remarks>
-	[DisplayName("StdErr")]
-	[DescriptionLoc(LocalizedStrings.Str750Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str740Key,
+		Description = LocalizedStrings.Str750Key)]
 	[Doc("topics/IndicatorStandardError.html")]
 	public class StandardError : LengthIndicator<decimal>
 	{

@@ -34,9 +34,11 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str361Key)]
-		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str361Key,
+			Description = LocalizedStrings.SecurityIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[TypeConverter(typeof(StringToSecurityIdTypeConverter))]
 		public SecurityId SecurityId { get; set; }
 
@@ -44,27 +46,33 @@ namespace StockSharp.Messages
 		/// Security name.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str362Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str362Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Name { get; set; }
 
 		/// <summary>
 		/// Short security name.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str363Key)]
-		[DescriptionLoc(LocalizedStrings.Str364Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str363Key,
+			Description = LocalizedStrings.Str364Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string ShortName { get; set; }
 
 		/// <summary>
 		/// Minimum volume step.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
-		[DescriptionLoc(LocalizedStrings.Str366Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeStepKey,
+			Description = LocalizedStrings.Str366Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? VolumeStep { get; set; }
 
@@ -72,9 +80,11 @@ namespace StockSharp.Messages
 		/// Minimum volume allowed in order.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MinVolumeKey)]
-		[DescriptionLoc(LocalizedStrings.MinVolumeDescKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MinVolumeKey,
+			Description = LocalizedStrings.MinVolumeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? MinVolume { get; set; }
 
@@ -82,9 +92,11 @@ namespace StockSharp.Messages
 		/// Maximum volume allowed in order.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MaxVolumeKey)]
-		[DescriptionLoc(LocalizedStrings.MaxVolumeDescKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MaxVolumeKey,
+			Description = LocalizedStrings.MaxVolumeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? MaxVolume { get; set; }
 
@@ -92,9 +104,11 @@ namespace StockSharp.Messages
 		/// Lot multiplier.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str330Key)]
-		[DescriptionLoc(LocalizedStrings.LotVolumeKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str330Key,
+			Description = LocalizedStrings.LotVolumeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Multiplier { get; set; }
 
@@ -102,9 +116,11 @@ namespace StockSharp.Messages
 		/// Number of digits in price after coma.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
-		[DescriptionLoc(LocalizedStrings.Str548Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DecimalsKey,
+			Description = LocalizedStrings.Str548Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public int? Decimals { get; set; }
 
@@ -114,9 +130,11 @@ namespace StockSharp.Messages
 		/// Minimum price step.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
-		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceStepKey,
+			Description = LocalizedStrings.MinPriceStepKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? PriceStep
 		{
@@ -128,9 +146,11 @@ namespace StockSharp.Messages
 		/// Security type.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TypeKey)]
-		[DescriptionLoc(LocalizedStrings.Str360Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TypeKey,
+			Description = LocalizedStrings.Str360Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public SecurityTypes? SecurityType { get; set; }
 
@@ -138,18 +158,22 @@ namespace StockSharp.Messages
 		/// Type in ISO 10962 standard.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CfiCodeKey)]
-		[DescriptionLoc(LocalizedStrings.CfiCodeDescKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CfiCodeKey,
+			Description = LocalizedStrings.CfiCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string CfiCode { get; set; }
 
 		/// <summary>
 		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
-		[DescriptionLoc(LocalizedStrings.Str371Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExpiryDateKey,
+			Description = LocalizedStrings.Str371Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public DateTimeOffset? ExpiryDate { get; set; }
 
@@ -157,9 +181,11 @@ namespace StockSharp.Messages
 		/// Settlement date for security (for derivatives and bonds).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SettlementDateKey)]
-		[DescriptionLoc(LocalizedStrings.Str373Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SettlementDateKey,
+			Description = LocalizedStrings.Str373Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public DateTimeOffset? SettlementDate { get; set; }
 
@@ -167,17 +193,22 @@ namespace StockSharp.Messages
 		/// Underlying asset code, on which the current security is based.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.UnderlyingAssetKey)]
-		[DescriptionLoc(LocalizedStrings.UnderlyingAssetCodeKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UnderlyingAssetKey,
+			Description = LocalizedStrings.UnderlyingAssetCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string UnderlyingSecurityCode { get; set; }
 
 		/// <summary>
 		/// Minimum volume allowed in order for underlying security.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.UnderlyingMinVolumeKey)]
-		[DescriptionLoc(LocalizedStrings.UnderlyingMinVolumeDescKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UnderlyingMinVolumeKey,
+			Description = LocalizedStrings.UnderlyingMinVolumeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? UnderlyingSecurityMinVolume { get; set; }
 
@@ -185,8 +216,11 @@ namespace StockSharp.Messages
 		/// Option strike price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
-		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.StrikeKey,
+			Description = LocalizedStrings.OptionStrikePriceKey,
+			GroupName = LocalizedStrings.OptionsKey)]
 		//[Nullable]
 		public decimal? Strike { get; set; }
 
@@ -194,8 +228,11 @@ namespace StockSharp.Messages
 		/// Option type.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OptionsContractKey)]
-		[DescriptionLoc(LocalizedStrings.OptionContractTypeKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OptionsContractKey,
+			Description = LocalizedStrings.OptionContractTypeKey,
+			GroupName = LocalizedStrings.OptionsKey)]
 		//[Nullable]
 		public OptionTypes? OptionType { get; set; }
 
@@ -203,17 +240,22 @@ namespace StockSharp.Messages
 		/// Type of binary option.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BinaryOptionKey)]
-		[DescriptionLoc(LocalizedStrings.TypeBinaryOptionKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BinaryOptionKey,
+			Description = LocalizedStrings.TypeBinaryOptionKey,
+			GroupName = LocalizedStrings.OptionsKey)]
 		public string BinaryOptionType { get; set; }
 
 		/// <summary>
 		/// Trading security currency.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str382Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.Str382Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
@@ -221,9 +263,11 @@ namespace StockSharp.Messages
 		/// Security class.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ClassKey)]
-		[DescriptionLoc(LocalizedStrings.SecurityClassKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClassKey,
+			Description = LocalizedStrings.SecurityClassKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Class { get; set; }
 
 		/// <summary>
@@ -242,14 +286,12 @@ namespace StockSharp.Messages
 		/// Underlying security type.
 		/// </summary>
 		[DataMember]
-		[MainCategory]
 		public SecurityTypes? UnderlyingSecurityType { get; set; }
 
 		/// <summary>
 		/// Can have short positions.
 		/// </summary>
 		[DataMember]
-		[MainCategory]
 		public bool? Shortable { get; set; }
 
 		/// <summary>

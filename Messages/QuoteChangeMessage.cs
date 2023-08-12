@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Linq;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -65,18 +66,22 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
-		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityIdKey,
+			Description = LocalizedStrings.SecurityIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityId SecurityId { get; set; }
 
 		private QuoteChange[] _bids = Array.Empty<QuoteChange>();
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str281Key)]
-		[DescriptionLoc(LocalizedStrings.Str282Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str281Key,
+			Description = LocalizedStrings.Str282Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public QuoteChange[] Bids
 		{
 			get => _bids;
@@ -87,9 +92,11 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str283Key)]
-		[DescriptionLoc(LocalizedStrings.Str284Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str283Key,
+			Description = LocalizedStrings.Str284Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public QuoteChange[] Asks
 		{
 			get => _asks;
@@ -98,9 +105,11 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
-		[DescriptionLoc(LocalizedStrings.Str168Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ServerTimeKey,
+			Description = LocalizedStrings.Str168Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <inheritdoc />
@@ -115,9 +124,11 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str382Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.Str382Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Ecng.Serialization.Nullable]
 		public CurrencyTypes? Currency { get; set; }
 

@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Globalization;
 
@@ -45,9 +46,11 @@ namespace StockSharp.Messages
 		/// Security code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str349Key)]
-		[DescriptionLoc(LocalizedStrings.Str349Key, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str349Key,
+			Description = LocalizedStrings.Str349Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string SecurityCode
 		{
 			get => _securityCode;
@@ -65,9 +68,11 @@ namespace StockSharp.Messages
 		/// Electronic board code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.BoardCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string BoardCode
 		{
 			get => _boardCode;
@@ -135,65 +140,81 @@ namespace StockSharp.Messages
 		/// ID in SEDOL format (Stock Exchange Daily Official List).
 		/// </summary>
 		[DataMember]
-		[DisplayName("SEDOL")]
-		[DescriptionLoc(LocalizedStrings.Str351Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SedolKey,
+			Description = LocalizedStrings.Str351Key)]
 		public string Sedol { get; set; }
 
 		/// <summary>
 		/// ID in CUSIP format (Committee on Uniform Securities Identification Procedures).
 		/// </summary>
 		[DataMember]
-		[DisplayName("CUSIP")]
-		[DescriptionLoc(LocalizedStrings.Str352Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CusipKey,
+			Description = LocalizedStrings.Str352Key)]
 		public string Cusip { get; set; }
 
 		/// <summary>
 		/// ID in ISIN format (International Securities Identification Number).
 		/// </summary>
 		[DataMember]
-		[DisplayName("ISIN")]
-		[DescriptionLoc(LocalizedStrings.Str353Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IsinKey,
+			Description = LocalizedStrings.Str353Key)]
 		public string Isin { get; set; }
 
 		/// <summary>
 		/// ID in RIC format (Reuters Instrument Code).
 		/// </summary>
 		[DataMember]
-		[DisplayName("RIC")]
-		[DescriptionLoc(LocalizedStrings.Str354Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.RicKey,
+			Description = LocalizedStrings.Str354Key)]
 		public string Ric { get; set; }
 
 		/// <summary>
 		/// ID in Bloomberg format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("Bloomberg")]
-		[DescriptionLoc(LocalizedStrings.Str355Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BloombergKey,
+			Description = LocalizedStrings.Str355Key)]
 		public string Bloomberg { get; set; }
 
 		/// <summary>
 		/// ID in IQFeed format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("IQFeed")]
-		[DescriptionLoc(LocalizedStrings.Str356Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IQFeedKey,
+			Description = LocalizedStrings.Str356Key)]
 		public string IQFeed { get; set; }
 
 		/// <summary>
 		/// ID in Interactive Brokers format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("InteractiveBrokers")]
-		[DescriptionLoc(LocalizedStrings.Str357Key)]
 		//[Nullable]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.InteractiveBrokersKey,
+			Description = LocalizedStrings.Str357Key)]
 		public int? InteractiveBrokers { get; set; }
 
 		/// <summary>
 		/// ID in Plaza format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("Plaza")]
-		[DescriptionLoc(LocalizedStrings.Str358Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PlazaKey,
+			Description = LocalizedStrings.Str358Key)]
 		public string Plaza { get; set; }
 
 		private int _hashCode;

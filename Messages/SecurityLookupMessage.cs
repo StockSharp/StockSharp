@@ -16,8 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-    using System.Linq;
-
+	using System.ComponentModel.DataAnnotations;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -33,18 +33,22 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TransactionKey,
+			Description = LocalizedStrings.TransactionIdKey,
+			GroupName = LocalizedStrings.OptionsKey)]
 		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// Securities types.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TypeKey)]
-		[DescriptionLoc(LocalizedStrings.Str360Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TypeKey,
+			Description = LocalizedStrings.Str360Key,
+			GroupName = LocalizedStrings.OptionsKey)]
 		public SecurityTypes[] SecurityTypes { get; set; }
 
 		/// <summary>

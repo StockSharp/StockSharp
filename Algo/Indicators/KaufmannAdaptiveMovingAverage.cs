@@ -15,15 +15,16 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
-	using System.Linq;
 	using System;
+	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
-	using System.Collections.Generic;
 
 	/// <summary>
 	/// Kaufman adaptive moving average.
@@ -51,17 +52,21 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// 'Rapid' EMA period. The default value is 2.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str793Key)]
-		[DescriptionLoc(LocalizedStrings.Str794Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str793Key,
+			Description = LocalizedStrings.Str794Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int FastSCPeriod { get; set; }
 
 		/// <summary>
 		/// 'Slow' EMA period. The default value is 30.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str795Key)]
-		[DescriptionLoc(LocalizedStrings.Str796Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str795Key,
+			Description = LocalizedStrings.Str796Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int SlowSCPeriod { get; set; }
 
 		/// <inheritdoc />

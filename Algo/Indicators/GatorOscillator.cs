@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -68,18 +69,22 @@ namespace StockSharp.Algo.Indicators
 		/// Top histogram.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str3564Key)]
-		[DescriptionLoc(LocalizedStrings.Str851Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str3564Key,
+			Description = LocalizedStrings.Str851Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public GatorHistogram Histogram1 { get; }
 
 		/// <summary>
 		/// Lower histogram.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str3565Key)]
-		[DescriptionLoc(LocalizedStrings.Str852Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str3565Key,
+			Description = LocalizedStrings.Str852Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public GatorHistogram Histogram2 { get; }
 
 		/// <inheritdoc />

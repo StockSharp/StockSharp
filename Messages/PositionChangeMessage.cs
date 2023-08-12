@@ -235,41 +235,51 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str247Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str247Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string PortfolioName { get; set; }
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
-		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClientCodeKey,
+			Description = LocalizedStrings.ClientCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string ClientCode { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
-		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityIdKey,
+			Description = LocalizedStrings.SecurityIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
 		/// The depositary where the physical security.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str264Key)]
-		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str264Key,
+			Description = LocalizedStrings.DepoNameKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string DepoName { get; set; }
 
 		/// <summary>
 		/// Limit type for Т+ market.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str266Key)]
-		[DescriptionLoc(LocalizedStrings.Str267Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str266Key,
+			Description = LocalizedStrings.Str267Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public TPlusLimits? LimitType { get; set; }
 
@@ -277,18 +287,22 @@ namespace StockSharp.Messages
 		/// Text position description.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.DescriptionKey)]
-		[DescriptionLoc(LocalizedStrings.Str269Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DescriptionKey,
+			Description = LocalizedStrings.Str269Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Description { get; set; }
 
 		/// <summary>
 		/// Electronic board code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.BoardCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string BoardCode { get; set; }
 
 		/// <inheritdoc />

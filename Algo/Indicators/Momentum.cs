@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMomentum.html
 	/// </remarks>
-	[DisplayName("Momentum")]
-	[DescriptionLoc(LocalizedStrings.Str769Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str769Key,
+		Description = LocalizedStrings.Str769Key)]
 	[Doc("topics/IndicatorMomentum.html")]
 	public class Momentum : LengthIndicator<decimal>
 	{

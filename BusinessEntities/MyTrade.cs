@@ -30,8 +30,10 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.Str502Key)]
-	[DescriptionLoc(LocalizedStrings.Str503Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str502Key,
+		Description = LocalizedStrings.Str503Key)]
 	public class MyTrade : NotifiableObject
 	{
 		/// <summary>

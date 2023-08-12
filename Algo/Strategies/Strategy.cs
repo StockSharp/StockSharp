@@ -406,10 +406,11 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<LogLevels> _logLevel;
 
 		/// <inheritdoc />
-		[CategoryLoc(LocalizedStrings.LoggingKey)]
-		//[PropertyOrder(8)]
-		[DisplayNameLoc(LocalizedStrings.Str9Key)]
-		[DescriptionLoc(LocalizedStrings.Str1358Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str9Key,
+			Description = LocalizedStrings.Str1358Key,
+			GroupName = LocalizedStrings.LoggingKey)]
 		public override LogLevels LogLevel
 		{
 			get => _logLevel.Value;

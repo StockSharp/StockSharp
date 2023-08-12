@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -64,27 +65,33 @@ namespace StockSharp.Algo.Indicators
 		/// Long moving average.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str798Key)]
-		[DescriptionLoc(LocalizedStrings.Str799Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str798Key,
+			Description = LocalizedStrings.Str799Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage LongMa { get; }
 
 		/// <summary>
 		/// Short moving average.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str800Key)]
-		[DescriptionLoc(LocalizedStrings.Str799Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str800Key,
+			Description = LocalizedStrings.Str799Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage ShortMa { get; }
 
 		/// <summary>
 		/// Median price.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str843Key)]
-		[DescriptionLoc(LocalizedStrings.Str745Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str843Key,
+			Description = LocalizedStrings.Str745Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public MedianPrice MedianPrice { get; }
 
 		/// <inheritdoc />

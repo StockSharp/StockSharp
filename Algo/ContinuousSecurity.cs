@@ -31,8 +31,10 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Continuous security (generally, a futures contract), containing expirable securities.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.ContinuousSecurityKey)]
-	[DescriptionLoc(LocalizedStrings.Str696Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ContinuousSecurityKey,
+		Description = LocalizedStrings.Str696Key)]
 	public abstract class ContinuousSecurity : BasketSecurity
 	{
 	}
@@ -40,8 +42,10 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Rollover by expiration date continuous security.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.ContinuousSecurityKey)]
-	[DescriptionLoc(LocalizedStrings.Str696Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ContinuousSecurityKey,
+		Description = LocalizedStrings.Str696Key)]
 	[BasketCode("CE")]
 	public class ExpirationContinuousSecurity : ContinuousSecurity
 	{
@@ -314,8 +318,10 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Rollover by volume continuous security.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.ContinuousSecurityKey)]
-	[DescriptionLoc(LocalizedStrings.Str696Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ContinuousSecurityKey,
+		Description = LocalizedStrings.Str696Key)]
 	[BasketCode("CV")]
 	public class VolumeContinuousSecurity : ContinuousSecurity
 	{

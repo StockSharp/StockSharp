@@ -287,7 +287,11 @@ namespace StockSharp.Messages
 		public virtual bool GenerateOrderBookFromLevel1 { get; set; } = true;
 
 		/// <inheritdoc />
-		[CategoryLoc(LocalizedStrings.Str174Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str172Key,
+			Description = LocalizedStrings.Str978Key,
+			GroupName = LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
 		private IdGenerator _transactionIdGenerator;

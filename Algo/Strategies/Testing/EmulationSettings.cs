@@ -29,8 +29,10 @@ namespace StockSharp.Algo.Strategies.Testing
 	/// <summary>
 	/// Emulation settings.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.SettingsKey)]
-	[DescriptionLoc(LocalizedStrings.Str1408Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SettingsKey,
+		Description = LocalizedStrings.Str1408Key)]
 	public class EmulationSettings : MarketEmulatorSettings
 	{
 		private DateTime _startTime = DateTime.Today.AddYears(-1);

@@ -35,8 +35,10 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-	[DescriptionLoc(LocalizedStrings.Str546Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SecurityKey,
+		Description = LocalizedStrings.Str546Key)]
 	public class Security : Cloneable<Security>, INotifyPropertyChanged
 	{
 		/// <summary>

@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -649,9 +650,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Phase.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str790Key)]
-		[DescriptionLoc(LocalizedStrings.Str791Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str790Key,
+			Description = LocalizedStrings.Str791Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Phase
 		{
 			get => _phase;

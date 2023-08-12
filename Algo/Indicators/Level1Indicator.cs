@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System.ComponentModel.DataAnnotations;
+
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -23,17 +25,21 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The indicator, built on the market data basis.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-	[DescriptionLoc(LocalizedStrings.Str747Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SecurityKey,
+		Description = LocalizedStrings.Str747Key)]
 	[IndicatorIn(typeof(SingleIndicatorValue<Level1ChangeMessage>))]
 	public class Level1Indicator : BaseIndicator
 	{
 		/// <summary>
 		/// Level one market-data field, which is used as an indicator value.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str748Key)]
-		[DescriptionLoc(LocalizedStrings.Str749Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str748Key,
+			Description = LocalizedStrings.Str749Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Level1Fields Field { get; set; }
 
 		/// <inheritdoc />

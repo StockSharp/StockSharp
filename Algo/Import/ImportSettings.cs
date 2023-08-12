@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Import
 	/// <summary>
 	/// Settings of import.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str2842Key)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2842Key)]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class ImportSettings : NotifiableObject, IPersistable
 	{

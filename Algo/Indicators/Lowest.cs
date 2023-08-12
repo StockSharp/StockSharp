@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -29,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorLowest.html
 	/// </remarks>
-	[DisplayName("Lowest")]
-	[DescriptionLoc(LocalizedStrings.Str743Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.LowestKey,
+		Description = LocalizedStrings.Str743Key)]
 	[Doc("topics/IndicatorLowest.html")]
 	public class Lowest : LengthIndicator<decimal>
 	{

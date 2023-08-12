@@ -148,73 +148,73 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Trading security currency.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CurrencyKey)]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
 		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str291Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str291Key)]
 		public QuoteChange? BestBid2 { get; private set; }
 
 		/// <summary>
 		/// The best ask. If the order book does not contain asks, will be returned <see langword="null" />.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str292Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str292Key)]
 		public QuoteChange? BestAsk2 { get; private set; }
 
 		/// <summary>
 		/// The best pair. If the order book is empty, will be returned <see langword="null" />.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.BestPairKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BestPairKey)]
 		public MarketDepthPair BestPair => GetPair(0);
 
 		/// <summary>
 		/// To get the total price size by bids.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TotalBidsPriceKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalBidsPriceKey)]
 		public decimal TotalBidsPrice => _bids.Length > 0 ? Security.ShrinkPrice(_bids.Sum(b => b.Price)) : 0;
 
 		/// <summary>
 		/// To get the total price size by offers.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TotalAsksPriceKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalAsksPriceKey)]
 		public decimal TotalAsksPrice => _asks.Length > 0 ? Security.ShrinkPrice(_asks.Sum(a => a.Price)) : 0;
 
 		/// <summary>
 		/// Get bids total volume.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TotalBidsVolumeKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalBidsVolumeKey)]
 		public decimal TotalBidsVolume => _bids.Sum(b => b.Volume);
 
 		/// <summary>
 		/// Get asks total volume.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TotalAsksVolumeKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalAsksVolumeKey)]
 		public decimal TotalAsksVolume => _asks.Sum(a => a.Volume);
 
 		/// <summary>
 		/// Get total volume.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TotalVolumeKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalVolumeKey)]
 		public decimal TotalVolume => TotalBidsVolume + TotalAsksVolume;
 
 		/// <summary>
 		/// To get the total price size.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalPriceKey)]
 		public decimal TotalPrice => TotalBidsPrice + TotalAsksPrice;
 
 		/// <summary>
 		/// Total quotes count (bids + asks).
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TotalQuotesCountKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalQuotesCountKey)]
 		public int Count => _bids.Length + _asks.Length;
 
 		/// <summary>
 		/// Depth of book.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1197Key)]
 		public int Depth { get; private set; }
 
 		/// <summary>

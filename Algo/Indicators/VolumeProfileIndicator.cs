@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
@@ -31,8 +31,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorVolumeProfileIndicator.html
 	/// </remarks>
-	[DisplayName("VolumeProfile")]
-	[DescriptionLoc(LocalizedStrings.VolumeProfileKey, true)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.VolumeProfileKey,
+		Description = LocalizedStrings.VolumeProfileKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(VolumeProfileIndicatorValue))]
 	[Doc("topics/IndicatorVolumeProfileIndicator.html")]

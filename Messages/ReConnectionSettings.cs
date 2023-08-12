@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 
@@ -25,8 +26,10 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str172Key)]
-	[DescriptionLoc(LocalizedStrings.Str978Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str172Key,
+		Description = LocalizedStrings.Str978Key)]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class ReConnectionSettings : IPersistable
 	{
@@ -42,9 +45,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The interval at which attempts will establish a connection. The default value is 10 seconds.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str174Key)]
-		[DisplayNameLoc(LocalizedStrings.Str175Key)]
-		[DescriptionLoc(LocalizedStrings.Str176Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str175Key,
+			Description = LocalizedStrings.Str176Key,
+			GroupName = LocalizedStrings.Str174Key)]
 		public TimeSpan Interval
 		{
 			get => _interval;
@@ -62,9 +67,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The number of attempts to establish the initial connection, if it has not been established (timeout, network failure, etc.). The default value is 0. To establish infinite number uses -1.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str174Key)]
-		[DisplayNameLoc(LocalizedStrings.Str178Key)]
-		[DescriptionLoc(LocalizedStrings.Str179Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str178Key,
+			Description = LocalizedStrings.Str179Key,
+			GroupName = LocalizedStrings.Str174Key)]
 		public int AttemptCount
 		{
 			get => _attemptCount;
@@ -82,9 +89,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The number of attempts to reconnect if the connection was lost during the operation. The default value is 100. To establish infinite number uses -1.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str174Key)]
-		[DisplayNameLoc(LocalizedStrings.Str180Key)]
-		[DescriptionLoc(LocalizedStrings.Str181Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str180Key,
+			Description = LocalizedStrings.Str181Key,
+			GroupName = LocalizedStrings.Str174Key)]
 		public int ReAttemptCount
 		{
 			get => _reAttemptCount;
@@ -102,9 +111,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Timeout successful connection / disconnection. If the value is <see cref="TimeSpan.Zero"/>, the monitoring is performed. The default value is 30 seconds.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str174Key)]
-		[DisplayNameLoc(LocalizedStrings.Str182Key)]
-		[DescriptionLoc(LocalizedStrings.Str183Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str182Key,
+			Description = LocalizedStrings.Str183Key,
+			GroupName = LocalizedStrings.Str174Key)]
 		public TimeSpan TimeOutInterval
 		{
 			get => _timeOutInterval;
@@ -122,9 +133,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Schedule, during which it is necessary to make the connection. For example, there is no need to track connection when trading on the exchange finished.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str174Key)]
-		[DisplayNameLoc(LocalizedStrings.Str184Key)]
-		[DescriptionLoc(LocalizedStrings.Str185Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str184Key,
+			Description = LocalizedStrings.Str185Key,
+			GroupName = LocalizedStrings.Str174Key)]
 		public WorkingTime WorkingTime
 		{
 			get => _workingTime;

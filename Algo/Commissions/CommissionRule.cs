@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Commissions
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -45,9 +46,11 @@ namespace StockSharp.Algo.Commissions
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
-		[DescriptionLoc(LocalizedStrings.CommissionValueKey)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CommissionKey,
+			Description = LocalizedStrings.CommissionValueKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Unit Value
 		{
 			get => _value;
@@ -143,8 +146,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Order commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.OrderKey)]
-	[DescriptionLoc(LocalizedStrings.Str660Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.OrderKey,
+		Description = LocalizedStrings.Str660Key,
+		GroupName = LocalizedStrings.OrdersKey)]
 	public class CommissionPerOrderRule : CommissionRule
 	{
 		/// <inheritdoc />
@@ -160,8 +166,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Trade commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str506Key)]
-	[DescriptionLoc(LocalizedStrings.Str661Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str506Key,
+		Description = LocalizedStrings.Str661Key,
+		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradeRule : CommissionRule
 	{
 		/// <inheritdoc />
@@ -177,8 +186,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Order volume commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str662Key)]
-	[DescriptionLoc(LocalizedStrings.Str663Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str662Key,
+		Description = LocalizedStrings.Str663Key,
+		GroupName = LocalizedStrings.OrdersKey)]
 	public class CommissionPerOrderVolumeRule : CommissionRule
 	{
 		/// <inheritdoc />
@@ -194,8 +206,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Trade volume commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str664Key)]
-	[DescriptionLoc(LocalizedStrings.Str665Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str664Key,
+		Description = LocalizedStrings.Str665Key,
+		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradeVolumeRule : CommissionRule
 	{
 		/// <inheritdoc />
@@ -211,8 +226,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Number of orders commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str666Key)]
-	[DescriptionLoc(LocalizedStrings.Str667Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str666Key,
+		Description = LocalizedStrings.Str667Key,
+		GroupName = LocalizedStrings.OrdersKey)]
 	public class CommissionPerOrderCountRule : CommissionRule
 	{
 		private int _currentCount;
@@ -221,9 +239,11 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Order count.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str668Key)]
-		[DescriptionLoc(LocalizedStrings.Str957Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str668Key,
+			Description = LocalizedStrings.Str957Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Count
 		{
 			get => _count;
@@ -277,8 +297,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Number of trades commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str670Key)]
-	[DescriptionLoc(LocalizedStrings.Str671Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str670Key,
+		Description = LocalizedStrings.Str671Key,
+		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradeCountRule : CommissionRule
 	{
 		private int _currentCount;
@@ -287,9 +310,11 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Number of trades.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TradesOfKey)]
-		[DescriptionLoc(LocalizedStrings.Str232Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TradesOfKey,
+			Description = LocalizedStrings.Str232Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Count
 		{
 			get => _count;
@@ -343,8 +368,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Trade price commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str672Key)]
-	[DescriptionLoc(LocalizedStrings.Str673Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str672Key,
+		Description = LocalizedStrings.Str673Key,
+		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradePriceRule : CommissionRule
 	{
 		/// <inheritdoc />
@@ -360,8 +388,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Security commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-	[DescriptionLoc(LocalizedStrings.Str674Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SecurityKey,
+		Description = LocalizedStrings.Str674Key,
+		GroupName = LocalizedStrings.SecuritiesKey)]
 	public class CommissionSecurityIdRule : CommissionRule
 	{
 		private SecurityId? _securityId;
@@ -370,9 +401,11 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Security ID.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
-		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityIdKey,
+			Description = LocalizedStrings.SecurityIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Security Security
 		{
 			get => _security;
@@ -417,8 +450,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Security type commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str675Key)]
-	[DescriptionLoc(LocalizedStrings.Str676Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str675Key,
+		Description = LocalizedStrings.Str676Key,
+		GroupName = LocalizedStrings.SecuritiesKey)]
 	public class CommissionSecurityTypeRule : CommissionRule
 	{
 		/// <summary>
@@ -434,9 +470,11 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Security type.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TypeKey)]
-		[DescriptionLoc(LocalizedStrings.Str360Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TypeKey,
+			Description = LocalizedStrings.Str360Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityTypes SecurityType
 		{
 			get => _securityType;
@@ -480,8 +518,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Board commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.BoardKey)]
-	[DescriptionLoc(LocalizedStrings.BoardCommissionKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.BoardKey,
+		Description = LocalizedStrings.BoardCommissionKey,
+		GroupName = LocalizedStrings.BoardKey)]
 	public class CommissionBoardCodeRule : CommissionRule
 	{
 		private ExchangeBoard _board;
@@ -489,9 +530,11 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Board code.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.BoardCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public ExchangeBoard Board
 		{
 			get => _board;
@@ -538,8 +581,11 @@ namespace StockSharp.Algo.Commissions
 	/// <summary>
 	/// Turnover commission.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.TurnoverKey)]
-	[DescriptionLoc(LocalizedStrings.TurnoverCommissionKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TurnoverKey,
+		Description = LocalizedStrings.TurnoverCommissionKey,
+		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionTurnOverRule : CommissionRule
 	{
 		private decimal _currentTurnOver;
@@ -548,9 +594,11 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// Turnover.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TurnoverKey)]
-		[DescriptionLoc(LocalizedStrings.TurnoverKey, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TurnoverKey,
+			Description = LocalizedStrings.TurnoverKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal TurnOver
 		{
 			get => _turnOver;

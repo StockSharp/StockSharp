@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -29,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorAverageDirectionalIndex.html
 	/// </remarks>
-	[DisplayName("ADX")]
-	[DescriptionLoc(LocalizedStrings.Str757Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str2027Key,
+		Description = LocalizedStrings.Str757Key)]
 	[Doc("topics/IndicatorAverageDirectionalIndex.html")]
 	public class AverageDirectionalIndex : BaseComplexIndicator
 	{
@@ -78,9 +81,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str736Key)]
-		[DescriptionLoc(LocalizedStrings.Str737Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str736Key,
+			Description = LocalizedStrings.Str737Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => MovingAverage.Length;

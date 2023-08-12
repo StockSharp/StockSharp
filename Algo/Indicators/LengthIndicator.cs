@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -174,9 +175,11 @@ namespace StockSharp.Algo.Indicators
 		private int _length = 1;
 
 		/// <inheritdoc />
-		[DisplayNameLoc(LocalizedStrings.Str736Key)]
-		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str736Key,
+			Description = LocalizedStrings.Str778Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public virtual int Length
 		{
 			get => _length;

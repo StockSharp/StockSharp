@@ -17,6 +17,7 @@ namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml;
 	using System.Xml.Serialization;
@@ -48,9 +49,12 @@ namespace StockSharp.BusinessEntities
 		/// Board code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CodeKey,
+			Description = LocalizedStrings.BoardCodeKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey
+		)]
 		public string Code
 		{
 			get => _code;
@@ -71,9 +75,12 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		//[TimeSpan]
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
-		[DescriptionLoc(LocalizedStrings.Str64Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExpiryDateKey,
+			Description = LocalizedStrings.Str64Key,
+			GroupName = LocalizedStrings.GeneralKey
+		)]
 		[XmlIgnore]
 		public TimeSpan ExpiryTime
 		{
@@ -105,9 +112,12 @@ namespace StockSharp.BusinessEntities
 		/// Exchange, where board is situated.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ExchangeInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str479Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExchangeInfoKey,
+			Description = LocalizedStrings.Str479Key,
+			GroupName = LocalizedStrings.GeneralKey
+		)]
 		public Exchange Exchange { get; set; }
 
 		//private bool _isSupportAtomicReRegister;
@@ -154,9 +164,12 @@ namespace StockSharp.BusinessEntities
 		/// Board working hours.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.WorkingTimeKey)]
-		[DescriptionLoc(LocalizedStrings.WorkingHoursKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.WorkingTimeKey,
+			Description = LocalizedStrings.WorkingHoursKey,
+			GroupName = LocalizedStrings.GeneralKey
+		)]
 		public WorkingTime WorkingTime
 		{
 			get => _workingTime;

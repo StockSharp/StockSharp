@@ -24,6 +24,7 @@ namespace StockSharp.Messages
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -163,16 +164,20 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.FromKey)]
-		[DescriptionLoc(LocalizedStrings.Str344Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.FromKey,
+			Description = LocalizedStrings.Str344Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? From { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.UntilKey)]
-		[DescriptionLoc(LocalizedStrings.Str346Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UntilKey,
+			Description = LocalizedStrings.Str346Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? To { get; set; }
 
 		/// <summary>
@@ -220,9 +225,11 @@ namespace StockSharp.Messages
 		/// Additional argument for market data request.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str347Key)]
-		[DescriptionLoc(LocalizedStrings.Str348Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str347Key,
+			Description = LocalizedStrings.Str348Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Obsolete("Use DataType2 property.")]
 		public object Arg
 		{

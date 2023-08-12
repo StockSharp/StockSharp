@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -60,18 +61,22 @@ namespace StockSharp.Algo.Indicators
 		/// Convergence/divergence of moving averages.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("MACD")]
-		[DescriptionLoc(LocalizedStrings.Str797Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MACDKey,
+			Description = LocalizedStrings.Str797Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public MovingAverageConvergenceDivergence Macd { get; }
 
 		/// <summary>
 		/// Signaling Moving Average.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str804Key)]
-		[DescriptionLoc(LocalizedStrings.Str805Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str804Key,
+			Description = LocalizedStrings.Str805Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public ExponentialMovingAverage SignalMa { get; }
 
 		/// <inheritdoc />

@@ -55,36 +55,44 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str247Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str247Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string PortfolioName { get; set; }
 
 		/// <summary>
 		/// Portfolio currency.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str251Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.Str251Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
 		/// Electronic board code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.BoardCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string BoardCode { get; set; }
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
-		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClientCodeKey,
+			Description = LocalizedStrings.ClientCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string ClientCode { get; set; }
 
 		///// <summary>
@@ -98,9 +106,11 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TransactionKey,
+			Description = LocalizedStrings.TransactionIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public long TransactionId { get; set; }
 
 		/// <inheritdoc />
@@ -109,16 +119,20 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.FromKey)]
-		[DescriptionLoc(LocalizedStrings.Str344Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.FromKey,
+			Description = LocalizedStrings.Str344Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? From { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.UntilKey)]
-		[DescriptionLoc(LocalizedStrings.Str346Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UntilKey,
+			Description = LocalizedStrings.Str346Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? To { get; set; }
 
 		/// <inheritdoc />

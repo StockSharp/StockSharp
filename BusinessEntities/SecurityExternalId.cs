@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -29,8 +29,10 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.IdentifiersKey)]
-	[DescriptionLoc(LocalizedStrings.Str603Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.IdentifiersKey,
+		Description = LocalizedStrings.Str603Key)]
 	public class SecurityExternalId : NotifiableObject, ICloneable<SecurityExternalId>, IEquatable<SecurityExternalId>
 	{
 		private string _sedol;
@@ -53,8 +55,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in SEDOL format (Stock Exchange Daily Official List).
 		/// </summary>
 		[DataMember]
-		[DisplayName("SEDOL")]
-		[DescriptionLoc(LocalizedStrings.Str351Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SedolKey,
+			Description = LocalizedStrings.Str351Key)]
 		public string Sedol
 		{
 			get => _sedol;
@@ -69,8 +73,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in CUSIP format (Committee on Uniform Securities Identification Procedures).
 		/// </summary>
 		[DataMember]
-		[DisplayName("CUSIP")]
-		[DescriptionLoc(LocalizedStrings.Str352Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CusipKey,
+			Description = LocalizedStrings.Str352Key)]
 		public string Cusip
 		{
 			get => _cusip;
@@ -85,8 +91,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in ISIN format (International Securities Identification Number).
 		/// </summary>
 		[DataMember]
-		[DisplayName("ISIN")]
-		[DescriptionLoc(LocalizedStrings.Str353Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IsinKey,
+			Description = LocalizedStrings.Str353Key)]
 		public string Isin
 		{
 			get => _isin;
@@ -101,8 +109,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in RIC format (Reuters Instrument Code).
 		/// </summary>
 		[DataMember]
-		[DisplayName("RIC")]
-		[DescriptionLoc(LocalizedStrings.Str354Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.RicKey,
+			Description = LocalizedStrings.Str354Key)]
 		public string Ric
 		{
 			get => _ric;
@@ -117,8 +127,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in Bloomberg format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("Bloomberg")]
-		[DescriptionLoc(LocalizedStrings.Str355Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BloombergKey,
+			Description = LocalizedStrings.Str355Key)]
 		public string Bloomberg
 		{
 			get => _bloomberg;
@@ -133,8 +145,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in IQFeed format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("IQFeed")]
-		[DescriptionLoc(LocalizedStrings.Str356Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IQFeedKey,
+			Description = LocalizedStrings.Str356Key)]
 		public string IQFeed
 		{
 			get => _iqFeed;
@@ -149,8 +163,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in Interactive Brokers format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("Interactive Brokers")]
-		[DescriptionLoc(LocalizedStrings.Str357Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.InteractiveBrokersKey,
+			Description = LocalizedStrings.Str357Key)]
 		//[Nullable]
 		public int? InteractiveBrokers
 		{
@@ -166,8 +182,10 @@ namespace StockSharp.BusinessEntities
 		/// ID in Plaza format.
 		/// </summary>
 		[DataMember]
-		[DisplayName("Plaza")]
-		[DescriptionLoc(LocalizedStrings.Str358Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PlazaKey,
+			Description = LocalizedStrings.Str358Key)]
 		public string Plaza
 		{
 			get => _plaza;

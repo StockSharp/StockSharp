@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -61,9 +62,11 @@ namespace StockSharp.Algo.Indicators
 		/// Average indicator part.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.AverageKey)]
-		[DescriptionLoc(LocalizedStrings.Str772Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AverageKey,
+			Description = LocalizedStrings.Str772Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public RelativeVigorIndexAverage Average { get; }
 
@@ -71,9 +74,11 @@ namespace StockSharp.Algo.Indicators
 		/// Signaling part of indicator.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.SignalKey)]
-		[DescriptionLoc(LocalizedStrings.Str773Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SignalKey,
+			Description = LocalizedStrings.Str773Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public RelativeVigorIndexSignal Signal { get; }
 

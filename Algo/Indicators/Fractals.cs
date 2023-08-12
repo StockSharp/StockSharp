@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Serialization;
@@ -32,8 +33,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorFractals.html
 	/// </remarks>
-	[DisplayName("Fractals")]
-	[DescriptionLoc(LocalizedStrings.Str844Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str844Key,
+		Description = LocalizedStrings.Str844Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorFractals.html")]
 	public class Fractals : BaseComplexIndicator
@@ -82,9 +85,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str736Key)]
-		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str736Key,
+			Description = LocalizedStrings.Str778Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => _length;
@@ -103,18 +108,22 @@ namespace StockSharp.Algo.Indicators
 		/// Fractal up.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str846Key)]
-		[DescriptionLoc(LocalizedStrings.Str846Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str846Key,
+			Description = LocalizedStrings.Str846Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public FractalPart Up { get; }
 
 		/// <summary>
 		/// Fractal down.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayNameLoc(LocalizedStrings.Str848Key)]
-		[DescriptionLoc(LocalizedStrings.Str848Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str848Key,
+			Description = LocalizedStrings.Str848Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public FractalPart Down { get; }
 
 		/// <inheritdoc />

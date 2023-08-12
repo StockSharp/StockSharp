@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
+
 using Ecng.Common;
 using Ecng.Serialization;
 
@@ -47,8 +49,10 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 /// <summary>
 /// Indicator, based on <see cref="ICandlePattern"/>.
 /// </summary>
-[DisplayName("Pattern")]
-[DescriptionLoc(LocalizedStrings.PatternKey)]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.PatternKey,
+	Description = LocalizedStrings.PatternKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
 public class CandlePatternIndicator : BaseIndicator
 {
@@ -59,9 +63,11 @@ public class CandlePatternIndicator : BaseIndicator
 	/// <summary>
 	/// Candle pattern.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.PatternKey)]
-	[DescriptionLoc(LocalizedStrings.PatternKey)]
-	[CategoryLoc(LocalizedStrings.GeneralKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PatternKey,
+		Description = LocalizedStrings.PatternKey,
+		GroupName = LocalizedStrings.GeneralKey)]
 	public ICandlePattern Pattern
 	{
 		get => _pattern;

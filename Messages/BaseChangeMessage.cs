@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -38,9 +39,11 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
-		[DescriptionLoc(LocalizedStrings.Str168Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ServerTimeKey,
+			Description = LocalizedStrings.Str168Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <inheritdoc />

@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorPeak.html
 	/// </remarks>
-	[DisplayName("Peak")]
-	[DescriptionLoc(LocalizedStrings.Str816Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str816Key,
+		Description = LocalizedStrings.Str816Key)]
 	[Doc("topics/IndicatorPeak.html")]
 	public sealed class Peak : ZigZagEquis
 	{

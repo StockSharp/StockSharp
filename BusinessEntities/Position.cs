@@ -32,8 +32,10 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.Str862Key)]
-	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str862Key,
+		Description = LocalizedStrings.PositionDescKey)]
 	public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 	{
 		DateTimeOffset IServerTimeMessage.ServerTime
@@ -55,9 +57,11 @@ namespace StockSharp.BusinessEntities
 		/// Position size at the beginning of the trading session.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str253Key)]
-		[DescriptionLoc(LocalizedStrings.Str424Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str253Key,
+			Description = LocalizedStrings.Str424Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
 		public decimal? BeginValue
@@ -79,9 +83,11 @@ namespace StockSharp.BusinessEntities
 		/// Current position size.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str254Key)]
-		[DescriptionLoc(LocalizedStrings.Str425Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str254Key,
+			Description = LocalizedStrings.Str425Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		//[Browsable(false)]
 		public decimal? CurrentValue
@@ -103,9 +109,11 @@ namespace StockSharp.BusinessEntities
 		/// Position size, registered for active orders.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str255Key)]
-		[DescriptionLoc(LocalizedStrings.Str426Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str255Key,
+			Description = LocalizedStrings.Str426Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
 		public decimal? BlockedValue
@@ -128,9 +136,11 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		//[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str256Key)]
-		[DescriptionLoc(LocalizedStrings.Str428Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str256Key,
+			Description = LocalizedStrings.Str428Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? CurrentPrice
 		{
@@ -152,9 +162,11 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		//[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.AveragePriceKey)]
-		[DescriptionLoc(LocalizedStrings.Str429Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AveragePriceKey,
+			Description = LocalizedStrings.Str429Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? AveragePrice
 		{
@@ -176,9 +188,11 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		//[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str258Key)]
-		[DescriptionLoc(LocalizedStrings.Str430Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str258Key,
+			Description = LocalizedStrings.Str430Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? UnrealizedPnL
 		{
@@ -200,9 +214,11 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		//[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str259Key)]
-		[DescriptionLoc(LocalizedStrings.Str431Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str259Key,
+			Description = LocalizedStrings.Str431Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? RealizedPnL
 		{
@@ -223,9 +239,11 @@ namespace StockSharp.BusinessEntities
 		/// Variation margin.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str260Key)]
-		[DescriptionLoc(LocalizedStrings.Str432Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str260Key,
+			Description = LocalizedStrings.Str432Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
 		public decimal? VariationMargin
@@ -247,9 +265,11 @@ namespace StockSharp.BusinessEntities
 		/// Total commission.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
-		[DescriptionLoc(LocalizedStrings.Str433Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CommissionKey,
+			Description = LocalizedStrings.Str433Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
 		public decimal? Commission
@@ -271,9 +291,11 @@ namespace StockSharp.BusinessEntities
 		/// Settlement price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str312Key)]
-		[DescriptionLoc(LocalizedStrings.SettlementPriceKey)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str312Key,
+			Description = LocalizedStrings.SettlementPriceKey,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
 		public decimal? SettlementPrice
@@ -295,9 +317,11 @@ namespace StockSharp.BusinessEntities
 		/// Time of last position change.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str434Key)]
-		[DescriptionLoc(LocalizedStrings.Str435Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str434Key,
+			Description = LocalizedStrings.Str435Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public DateTimeOffset LastChangeTime
 		{
@@ -315,9 +339,11 @@ namespace StockSharp.BusinessEntities
 		/// Local time of the last position change.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str530Key)]
-		[DescriptionLoc(LocalizedStrings.Str530Key, true)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str530Key,
+			Description = LocalizedStrings.Str530Key,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public DateTimeOffset LocalTime
 		{
@@ -335,9 +361,11 @@ namespace StockSharp.BusinessEntities
 		/// Text position description.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.DescriptionKey)]
-		[DescriptionLoc(LocalizedStrings.Str269Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DescriptionKey,
+			Description = LocalizedStrings.Str269Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Description
 		{
 			get => _description;
@@ -354,9 +382,11 @@ namespace StockSharp.BusinessEntities
 		/// Portfolio currency.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str251Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.Str251Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public CurrencyTypes? Currency
 		{
 			get => _currency;
@@ -373,9 +403,11 @@ namespace StockSharp.BusinessEntities
 		/// Expiration date.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
-		[DescriptionLoc(LocalizedStrings.ExpiryDateKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExpiryDateKey,
+			Description = LocalizedStrings.ExpiryDateKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? ExpirationDate
 		{
 			get => _expirationDate;
@@ -390,44 +422,54 @@ namespace StockSharp.BusinessEntities
 		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
-		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClientCodeKey,
+			Description = LocalizedStrings.ClientCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string ClientCode { get; set; }
 
 		/// <summary>
 		/// Portfolio, in which position is created.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-		[DescriptionLoc(LocalizedStrings.Str270Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PortfolioKey,
+			Description = LocalizedStrings.Str270Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Portfolio Portfolio { get; set; }
 
 		/// <summary>
 		/// Security, for which a position was created.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-		[DescriptionLoc(LocalizedStrings.Str271Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityKey,
+			Description = LocalizedStrings.Str271Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Security Security { get; set; }
 
 		/// <summary>
 		/// The depositary where the physical security.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.DepoKey)]
-		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DepoKey,
+			Description = LocalizedStrings.DepoNameKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[DataMember]
 		public string DepoName { get; set; }
 
 		/// <summary>
 		/// Limit type for Т+ market.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str272Key)]
-		[DescriptionLoc(LocalizedStrings.Str267Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str272Key,
+			Description = LocalizedStrings.Str267Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		[DataMember]
 		public TPlusLimits? LimitType { get; set; }
@@ -462,9 +504,11 @@ namespace StockSharp.BusinessEntities
 		/// Margin leverage.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.LeverageKey)]
-		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LeverageKey,
+			Description = LocalizedStrings.Str261Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Leverage
 		{
@@ -641,9 +685,11 @@ namespace StockSharp.BusinessEntities
 		/// Liquidation price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.LiquidationPriceKey)]
-		[DescriptionLoc(LocalizedStrings.LiquidationPriceKey)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LiquidationPriceKey,
+			Description = LocalizedStrings.LiquidationPriceKey,
+			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? LiquidationPrice
 		{

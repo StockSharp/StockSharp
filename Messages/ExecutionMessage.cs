@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -73,66 +74,81 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
-		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityIdKey,
+			Description = LocalizedStrings.SecurityIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityId SecurityId { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-		[DescriptionLoc(LocalizedStrings.PortfolioNameKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PortfolioKey,
+			Description = LocalizedStrings.PortfolioNameKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string PortfolioName { get; set; }
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
-		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClientCodeKey,
+			Description = LocalizedStrings.ClientCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string ClientCode { get; set; }
 
 		/// <summary>
 		/// Broker firm code.
 		/// </summary>
 		[DataMember]
-		[MainCategory]
-		[CategoryLoc(LocalizedStrings.Str2593Key)]
-		[DisplayNameLoc(LocalizedStrings.BrokerKey)]
-		[DescriptionLoc(LocalizedStrings.Str2619Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BrokerKey,
+			Description = LocalizedStrings.Str2619Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string BrokerCode { get; set; }
 
 		/// <summary>
 		/// The depositary where the physical security.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.DepoKey)]
-		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DepoKey,
+			Description = LocalizedStrings.DepoNameKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string DepoName { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
-		[DescriptionLoc(LocalizedStrings.ServerTimeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ServerTimeKey,
+			Description = LocalizedStrings.ServerTimeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TransactionKey,
+			Description = LocalizedStrings.TransactionIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// Data type, information about which is contained in the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.DataTypeKey)]
-		[DescriptionLoc(LocalizedStrings.Str110Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DataTypeKey,
+			Description = LocalizedStrings.Str110Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		[Obsolete("Use DataTypeEx property.")]
 		public ExecutionTypes? ExecutionType
@@ -145,18 +161,22 @@ namespace StockSharp.Messages
 		/// Is the action an order cancellation.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CancelKey)]
-		[DescriptionLoc(LocalizedStrings.IsActionOrderCancellationKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CancelKey,
+			Description = LocalizedStrings.IsActionOrderCancellationKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool IsCancellation { get; set; }
 
 		/// <summary>
 		/// Order ID.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
-		[DescriptionLoc(LocalizedStrings.OrderIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrderIdKey,
+			Description = LocalizedStrings.OrderIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public long? OrderId { get; set; }
 
@@ -164,18 +184,22 @@ namespace StockSharp.Messages
 		/// Order ID (as string, if electronic board does not use numeric order ID representation).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OrderIdStringKey)]
-		[DescriptionLoc(LocalizedStrings.OrderIdStringDescKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrderIdStringKey,
+			Description = LocalizedStrings.OrderIdStringDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string OrderStringId { get; set; }
 
 		/// <summary>
 		/// Board order id. Uses in case of <see cref="ExecutionMessage.OrderId"/> and <see cref="ExecutionMessage.OrderStringId"/> is a brokerage system ids.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str117Key)]
-		[DescriptionLoc(LocalizedStrings.Str118Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str117Key,
+			Description = LocalizedStrings.Str118Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string OrderBoardId { get; set; }
 
 		///// <summary>
@@ -211,18 +235,22 @@ namespace StockSharp.Messages
 		/// Order price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PriceKey)]
-		[DescriptionLoc(LocalizedStrings.OrderPriceKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceKey,
+			Description = LocalizedStrings.OrderPriceKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal OrderPrice { get; set; }
 
 		/// <summary>
 		/// Number of contracts in the order.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeOrderKey)]
-		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeOrderKey,
+			Description = LocalizedStrings.OrderVolumeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? OrderVolume { get; set; }
 
@@ -230,9 +258,11 @@ namespace StockSharp.Messages
 		/// Number of contracts in the trade.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeTradeKey)]
-		[DescriptionLoc(LocalizedStrings.TradeVolumeKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeTradeKey,
+			Description = LocalizedStrings.TradeVolumeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? TradeVolume { get; set; }
 
@@ -240,9 +270,11 @@ namespace StockSharp.Messages
 		/// Visible quantity of contracts in order.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
-		[DescriptionLoc(LocalizedStrings.Str127Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VisibleVolumeKey,
+			Description = LocalizedStrings.Str127Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? VisibleVolume { get; set; }
 
@@ -250,18 +282,22 @@ namespace StockSharp.Messages
 		/// Order side (buy or sell).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str128Key)]
-		[DescriptionLoc(LocalizedStrings.Str129Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str128Key,
+			Description = LocalizedStrings.Str129Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides Side { get; set; }
 
 		/// <summary>
 		/// Order contracts balance.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BalanceKey)]
-		[DescriptionLoc(LocalizedStrings.Str131Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BalanceKey,
+			Description = LocalizedStrings.Str131Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Balance { get; set; }
 
@@ -269,9 +305,11 @@ namespace StockSharp.Messages
 		/// Order type.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str132Key)]
-		[DescriptionLoc(LocalizedStrings.Str133Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str132Key,
+			Description = LocalizedStrings.Str133Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public OrderTypes? OrderType { get; set; }
 
 		/// <summary>
@@ -286,9 +324,11 @@ namespace StockSharp.Messages
 		/// Order state.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.Str134Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.StateKey,
+			Description = LocalizedStrings.Str134Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public OrderStates? OrderState { get; set; }
 
@@ -296,42 +336,52 @@ namespace StockSharp.Messages
 		/// Placed order comment.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CommentKey)]
-		[DescriptionLoc(LocalizedStrings.Str136Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CommentKey,
+			Description = LocalizedStrings.Str136Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Comment { get; set; }
 
 		/// <summary>
 		/// Message for order (created by the trading system when registered, changed or cancelled).
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str137Key)]
-		[DescriptionLoc(LocalizedStrings.Str138Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str137Key,
+			Description = LocalizedStrings.Str138Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string SystemComment { get; set; }
 
 		/// <summary>
 		/// Is a system trade.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str139Key)]
-		[DescriptionLoc(LocalizedStrings.Str140Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str139Key,
+			Description = LocalizedStrings.Str140Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public bool? IsSystem { get; set; }
 
 		/// <inheritdoc/>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str141Key)]
-		[DescriptionLoc(LocalizedStrings.Str142Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str141Key,
+			Description = LocalizedStrings.Str142Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <summary>
 		/// Limit order execution condition.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str143Key)]
-		[DescriptionLoc(LocalizedStrings.Str144Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str143Key,
+			Description = LocalizedStrings.Str144Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public TimeInForce? TimeInForce { get; set; }
 
@@ -339,9 +389,11 @@ namespace StockSharp.Messages
 		/// Trade ID.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
-		[DescriptionLoc(LocalizedStrings.Str145Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrderIdKey,
+			Description = LocalizedStrings.Str145Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public long? TradeId { get; set; }
 
@@ -349,18 +401,22 @@ namespace StockSharp.Messages
 		/// Trade ID (as string, if electronic board does not use numeric order ID representation).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OrderIdStringKey)]
-		[DescriptionLoc(LocalizedStrings.Str146Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrderIdStringKey,
+			Description = LocalizedStrings.Str146Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string TradeStringId { get; set; }
 
 		/// <summary>
 		/// Trade price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PriceKey)]
-		[DescriptionLoc(LocalizedStrings.Str147Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceKey,
+			Description = LocalizedStrings.Str147Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? TradePrice { get; set; }
 
@@ -376,9 +432,11 @@ namespace StockSharp.Messages
 		/// Deal initiator (seller or buyer).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.InitiatorKey)]
-		[DescriptionLoc(LocalizedStrings.Str149Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.InitiatorKey,
+			Description = LocalizedStrings.Str149Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public Sides? OriginSide { get; set; }
 
@@ -386,25 +444,31 @@ namespace StockSharp.Messages
 		/// Number of open positions (open interest).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str150Key)]
-		[DescriptionLoc(LocalizedStrings.Str151Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str150Key,
+			Description = LocalizedStrings.Str151Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? OpenInterest { get; set; }
 
 		/// <inheritdoc />
-		[DisplayNameLoc(LocalizedStrings.ErrorKey)]
-		[DescriptionLoc(LocalizedStrings.Str153Key, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ErrorKey,
+			Description = LocalizedStrings.Str153Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[XmlIgnore]
 		public Exception Error { get; set; }
 
 		/// <summary>
 		/// Order condition (e.g., stop- and algo- orders parameters).
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str154Key)]
-		[DescriptionLoc(LocalizedStrings.Str155Key)]
-		[CategoryLoc(LocalizedStrings.Str156Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str154Key,
+			Description = LocalizedStrings.Str155Key,
+			GroupName = LocalizedStrings.Str156Key)]
 		[XmlIgnore]
 		public OrderCondition Condition { get; set; }
 
@@ -412,9 +476,11 @@ namespace StockSharp.Messages
 		/// Is tick uptrend or downtrend in price. Uses only <see cref="DataType"/> for <see cref="DataType.Ticks"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str157Key)]
-		[DescriptionLoc(LocalizedStrings.Str158Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str157Key,
+			Description = LocalizedStrings.Str158Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public bool? IsUpTick { get; set; }
 
@@ -422,9 +488,11 @@ namespace StockSharp.Messages
 		/// Commission (broker, exchange etc.). Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CommissionKey)]
-		[DescriptionLoc(LocalizedStrings.Str160Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CommissionKey,
+			Description = LocalizedStrings.Str160Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Commission { get; set; }
 
@@ -437,9 +505,11 @@ namespace StockSharp.Messages
 		/// Network latency. Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str161Key)]
-		[DescriptionLoc(LocalizedStrings.Str162Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str161Key,
+			Description = LocalizedStrings.Str162Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public TimeSpan? Latency { get; set; }
 
@@ -447,9 +517,11 @@ namespace StockSharp.Messages
 		/// Slippage in trade price. Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str163Key)]
-		[DescriptionLoc(LocalizedStrings.Str164Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str163Key,
+			Description = LocalizedStrings.Str164Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Slippage { get; set; }
 
@@ -457,9 +529,11 @@ namespace StockSharp.Messages
 		/// User order id. Uses when <see cref="DataType"/> set to <see cref="DataType.Transactions"/>.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str165Key)]
-		[DescriptionLoc(LocalizedStrings.Str166Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str165Key,
+			Description = LocalizedStrings.Str166Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string UserOrderId { get; set; }
 
 		/// <inheritdoc />
@@ -470,9 +544,11 @@ namespace StockSharp.Messages
 		/// Trading security currency.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str382Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.Str382Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
@@ -480,9 +556,11 @@ namespace StockSharp.Messages
 		/// The profit, realized by trade.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PnLKey)]
-		[DescriptionLoc(LocalizedStrings.PnLKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PnLKey,
+			Description = LocalizedStrings.PnLKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? PnL { get; set; }
 
@@ -490,9 +568,11 @@ namespace StockSharp.Messages
 		/// The position, generated by order or trade.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str862Key)]
-		[DescriptionLoc(LocalizedStrings.Str862Key, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str862Key,
+			Description = LocalizedStrings.Str862Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Position { get; set; }
 
@@ -500,24 +580,33 @@ namespace StockSharp.Messages
 		/// Is the order of market-maker.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarketMakerKey)]
-		[DescriptionLoc(LocalizedStrings.MarketMakerOrderKey, true)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MarketMakerKey,
+			Description = LocalizedStrings.MarketMakerOrderKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsMarketMaker { get; set; }
 
 		/// <summary>
 		/// Is margin enabled.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarginKey)]
-		[DescriptionLoc(LocalizedStrings.IsMarginKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MarginKey,
+			Description = LocalizedStrings.IsMarginKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsMargin { get; set; }
 
 		/// <summary>
 		/// Is order manual.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ManualKey)]
-		[DescriptionLoc(LocalizedStrings.IsOrderManualKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ManualKey,
+			Description = LocalizedStrings.IsOrderManualKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsManual { get; set; }
 
 		/// <summary>

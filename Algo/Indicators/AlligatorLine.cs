@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 
@@ -48,9 +49,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Shift to the future.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str841Key)]
-		[DescriptionLoc(LocalizedStrings.Str842Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str841Key,
+			Description = LocalizedStrings.Str842Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Shift
 		{
 			get => _shift;

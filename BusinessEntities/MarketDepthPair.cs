@@ -21,6 +21,7 @@ namespace StockSharp.BusinessEntities
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using System.ComponentModel.DataAnnotations;
 
 	/// <summary>
 	/// Quotes pair.
@@ -47,29 +48,41 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Bid.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.BidKey)]
-		[DescriptionLoc(LocalizedStrings.Str494Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BidKey,
+			Description = LocalizedStrings.Str494Key,
+			GroupName = LocalizedStrings.CommonKey)]
 		public QuoteChange? Bid { get; }
 
 		/// <summary>
 		/// Ask.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.AskKey)]
-		[DescriptionLoc(LocalizedStrings.Str495Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AskKey,
+			Description = LocalizedStrings.Str495Key,
+			GroupName = LocalizedStrings.CommonKey)]
 		public QuoteChange? Ask { get; }
 
 		/// <summary>
 		/// Spread by price. Is <see langword="null" />, if one of the quotes is empty.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str496Key)]
-		[DescriptionLoc(LocalizedStrings.Str497Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str496Key,
+			Description = LocalizedStrings.Str497Key,
+			GroupName = LocalizedStrings.CommonKey)]
 		public decimal? SpreadPrice => _isFull ? (Ask.Value.Price - Bid.Value.Price) : null;
 
 		/// <summary>
 		/// Spread by volume. If negative, it best ask has a greater volume than the best bid. Is <see langword="null" />, if one of the quotes is empty.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str498Key)]
-		[DescriptionLoc(LocalizedStrings.Str499Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str498Key,
+			Description = LocalizedStrings.Str499Key,
+			GroupName = LocalizedStrings.CommonKey)]
 		public decimal? SpreadVolume => _isFull ? (Ask.Value.Volume - Bid.Value.Volume).Abs() : null;
 
 		/// <summary>

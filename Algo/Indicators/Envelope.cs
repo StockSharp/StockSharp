@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -30,8 +31,7 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorEnvelope.html
 	/// </remarks>
-	[DisplayName("Envelope")]
-	[Description("Envelope.")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EnvelopeKey)]
 	[Doc("topics/IndicatorEnvelope.html")]
 	public class Envelope : BaseComplexIndicator
 	{
@@ -78,9 +78,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length. By default equal to 1.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str778Key)]
-		[DescriptionLoc(LocalizedStrings.Str779Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str778Key,
+			Description = LocalizedStrings.Str779Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => Middle.Length;
@@ -96,9 +98,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The shift width. Specified as percentage from 0 to 1. The default equals to 0.01.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str783Key)]
-		[DescriptionLoc(LocalizedStrings.Str784Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str783Key,
+			Description = LocalizedStrings.Str784Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Shift
 		{
 			get => _shift;

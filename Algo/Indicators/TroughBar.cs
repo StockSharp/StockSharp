@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -52,9 +53,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Indicator changes threshold.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str783Key)]
-		[DescriptionLoc(LocalizedStrings.Str784Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str783Key,
+			Description = LocalizedStrings.Str784Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Unit ReversalAmount
 		{
 			get => _reversalAmount;

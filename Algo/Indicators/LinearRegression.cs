@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 
@@ -24,8 +25,10 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The full class of linear regression, calculates LinearReg, LinearRegSlope, RSquared and StandardError at the same time.
 	/// </summary>
-	[DisplayName("LinearRegression")]
-	[DescriptionLoc(LocalizedStrings.Str735Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str738Key,
+		Description = LocalizedStrings.Str735Key)]
 	[Browsable(false)]
 	public class LinearRegression : BaseComplexIndicator
 	{
@@ -59,9 +62,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str736Key)]
-		[DescriptionLoc(LocalizedStrings.Str737Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str736Key,
+			Description = LocalizedStrings.Str737Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => LinearReg.Length;
@@ -76,36 +81,44 @@ namespace StockSharp.Algo.Indicators
 		/// Linear regression.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("LinearReg")]
-		[DescriptionLoc(LocalizedStrings.Str738Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str738Key,
+			Description = LocalizedStrings.Str738Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public LinearReg LinearReg { get; }
 
 		/// <summary>
 		/// Regression R-squared.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("RSquared")]
-		[DescriptionLoc(LocalizedStrings.Str739Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str739Key,
+			Description = LocalizedStrings.Str739Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public LinearRegRSquared RSquared { get; }
 
 		/// <summary>
 		/// Standard error.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("StdErr")]
-		[DescriptionLoc(LocalizedStrings.Str740Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str740Key,
+			Description = LocalizedStrings.Str750Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public StandardError StandardError { get; }
 
 		/// <summary>
 		/// Coefficient with independent variable, slope of a straight line.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("LinearRegSlope")]
-		[DescriptionLoc(LocalizedStrings.Str741Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LRSKey,
+			Description = LocalizedStrings.Str742Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public LinearRegSlope LinearRegSlope { get; }
 
 		/// <inheritdoc />

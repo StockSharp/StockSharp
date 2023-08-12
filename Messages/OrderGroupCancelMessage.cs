@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -31,18 +32,22 @@ namespace StockSharp.Messages
 		/// <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str226Key)]
-		[DescriptionLoc(LocalizedStrings.Str227Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str226Key,
+			Description = LocalizedStrings.Str227Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsStop { get; set; }
 
 		/// <summary>
 		/// Order side. If the value is <see langword="null" />, the direction does not use.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str128Key)]
-		[DescriptionLoc(LocalizedStrings.Str228Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str128Key,
+			Description = LocalizedStrings.Str228Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides? Side { get; set; }
 
 		/// <summary>

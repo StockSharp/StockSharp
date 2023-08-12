@@ -35,8 +35,10 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.Str184Key)]
-	[DescriptionLoc(LocalizedStrings.Str408Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str184Key,
+		Description = LocalizedStrings.Str408Key)]
 	public class WorkingTime : IPersistable
 	{
 		/// <summary>

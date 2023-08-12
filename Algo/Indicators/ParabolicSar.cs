@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Serialization;
@@ -246,9 +247,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Acceleration factor.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str810Key)]
-		[DescriptionLoc(LocalizedStrings.Str811Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str810Key,
+			Description = LocalizedStrings.Str811Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Acceleration
 		{
 			get => _acceleration;
@@ -262,9 +265,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Acceleration factor step.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str812Key)]
-		[DescriptionLoc(LocalizedStrings.Str813Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str812Key,
+			Description = LocalizedStrings.Str813Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal AccelerationStep
 		{
 			get => _accelerationStep;
@@ -278,9 +283,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Maximum acceleration factor.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.MaxKey)]
-		[DescriptionLoc(LocalizedStrings.Str815Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MaxKey,
+			Description = LocalizedStrings.Str815Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal AccelerationMax
 		{
 			get => _accelerationMax;

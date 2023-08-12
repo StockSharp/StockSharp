@@ -15,8 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
 	using System;
+	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -52,9 +53,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str787Key)]
-		[DescriptionLoc(LocalizedStrings.Str788Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str787Key,
+			Description = LocalizedStrings.Str788Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int SqrtPeriod
 		{
 			get => _sqrtPeriod;

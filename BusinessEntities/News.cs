@@ -29,53 +29,65 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.NewsKey)]
-	[DescriptionLoc(LocalizedStrings.Str510Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.NewsKey,
+		Description = LocalizedStrings.Str510Key)]
 	public class News : NotifiableObject
 	{
 		/// <summary>
 		/// News ID.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.IdKey)]
-		[DescriptionLoc(LocalizedStrings.NewsIdKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IdKey,
+			Description = LocalizedStrings.NewsIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Id { get; set; }
 
 		/// <summary>
 		/// Exchange board for which the news is published.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str511Key)]
-		[DescriptionLoc(LocalizedStrings.Str512Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str511Key,
+			Description = LocalizedStrings.Str512Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public ExchangeBoard Board { get; set; }
 
 		/// <summary>
 		/// Security, for which news have been published.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-		[DescriptionLoc(LocalizedStrings.Str513Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityKey,
+			Description = LocalizedStrings.Str513Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Security Security { get; set; }
 
 		/// <summary>
 		/// News source.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str213Key)]
-		[DescriptionLoc(LocalizedStrings.Str214Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str213Key,
+			Description = LocalizedStrings.Str214Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Source { get; set; }
 
 		/// <summary>
 		/// Header.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.HeaderKey)]
-		[DescriptionLoc(LocalizedStrings.HeaderKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.HeaderKey,
+			Description = LocalizedStrings.HeaderKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Headline { get; set; }
 
 		private string _story;
@@ -84,9 +96,11 @@ namespace StockSharp.BusinessEntities
 		/// News text.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TextKey)]
-		[DescriptionLoc(LocalizedStrings.Str218Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TextKey,
+			Description = LocalizedStrings.Str218Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Story
 		{
 			get => _story;
@@ -101,27 +115,33 @@ namespace StockSharp.BusinessEntities
 		/// Time of news arrival.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TimeKey)]
-		[DescriptionLoc(LocalizedStrings.Str220Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TimeKey,
+			Description = LocalizedStrings.Str220Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
 		/// News received local time.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str514Key)]
-		[DescriptionLoc(LocalizedStrings.Str515Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str514Key,
+			Description = LocalizedStrings.Str515Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset LocalTime { get; set; }
 
 		/// <summary>
 		/// News link in the internet.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.LinkKey)]
-		[DescriptionLoc(LocalizedStrings.Str222Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LinkKey,
+			Description = LocalizedStrings.Str222Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Url]
 		public string Url { get; set; }
 

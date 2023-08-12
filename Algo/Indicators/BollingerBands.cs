@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -77,9 +78,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length. By default equal to 1.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str778Key)]
-		[DescriptionLoc(LocalizedStrings.Str779Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str778Key,
+			Description = LocalizedStrings.Str779Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => MovingAverage.Length;
@@ -93,9 +96,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Bollinger Bands channel width. Default value equal to 2.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str780Key)]
-		[DescriptionLoc(LocalizedStrings.Str781Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str780Key,
+			Description = LocalizedStrings.Str781Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Width
 		{
 			get => UpBand.Width;

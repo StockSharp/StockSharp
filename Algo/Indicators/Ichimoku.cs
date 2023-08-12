@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorIchimoku.html
 	/// </remarks>
-	[DisplayNameLoc(LocalizedStrings.Str763Key)]
-	[DescriptionLoc(LocalizedStrings.Str763Key, true)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str763Key,
+		Description = LocalizedStrings.Str763Key)]
 	[Doc("topics/IndicatorIchimoku.html")]
 	public class Ichimoku : BaseComplexIndicator
 	{

@@ -874,16 +874,20 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.Level1Key)]
-	[DescriptionLoc(LocalizedStrings.Level1MarketDataKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Level1Key,
+		Description = LocalizedStrings.Level1MarketDataKey)]
 	public class Level1ChangeMessage : BaseChangeMessage<Level1ChangeMessage, Level1Fields>,
 		ISecurityIdMessage, ISeqNumMessage
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityKey,
+			Description = LocalizedStrings.SecurityIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityId SecurityId { get; set; }
 
 		/// <inheritdoc />

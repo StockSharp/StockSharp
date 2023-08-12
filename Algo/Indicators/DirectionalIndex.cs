@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -72,9 +73,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str736Key)]
-		[DescriptionLoc(LocalizedStrings.Str737Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str736Key,
+			Description = LocalizedStrings.Str737Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => Plus.Length;
@@ -89,18 +92,22 @@ namespace StockSharp.Algo.Indicators
 		/// DI+.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("DI+")]
-		[Description("DI+.")]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2023Key,
+			Description = LocalizedStrings.Str2024Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DiPlus Plus { get; }
 
 		/// <summary>
 		/// DI-.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("DI-")]
-		[Description("DI-.")]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2025Key,
+			Description = LocalizedStrings.Str2026Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DiMinus Minus { get; }
 
 		/// <inheritdoc />

@@ -2,7 +2,6 @@ namespace StockSharp.Alerts
 {
 	using System;
 	using System.Collections;
-	using System.ComponentModel;
 	using System.Reflection;
 
 	using Ecng.Common;
@@ -114,7 +113,7 @@ namespace StockSharp.Alerts
 		{
 			if (ExtraField == null)
 			{
-				DisplayName = Property.GetAttribute<DisplayNameAttribute>()?.DisplayName ?? Property.Name;
+				DisplayName = Property.GetDisplayName(Property.Name);
 				ValueType = Property.PropertyType;
 			}
 			else

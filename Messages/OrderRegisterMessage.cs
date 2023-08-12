@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -31,27 +32,33 @@ namespace StockSharp.Messages
 		/// Order price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PriceKey)]
-		[DescriptionLoc(LocalizedStrings.OrderPriceKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceKey,
+			Description = LocalizedStrings.OrderPriceKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Price { get; set; }
 
 		/// <summary>
 		/// Number of contracts in the order.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
-		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeKey,
+			Description = LocalizedStrings.OrderVolumeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Volume { get; set; }
 
 		/// <summary>
 		/// Visible quantity of contracts in order.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
-		[DescriptionLoc(LocalizedStrings.Str127Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VisibleVolumeKey,
+			Description = LocalizedStrings.Str127Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? VisibleVolume { get; set; }
 
@@ -59,9 +66,11 @@ namespace StockSharp.Messages
 		/// Order side (buy or sell).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str128Key)]
-		[DescriptionLoc(LocalizedStrings.Str129Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str128Key,
+			Description = LocalizedStrings.Str129Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides Side { get; set; }
 
 		/// <summary>
@@ -71,17 +80,21 @@ namespace StockSharp.Messages
 		/// If the value is equal <see langword="null" />, order will be GTC (good til cancel). Or uses exact date.
 		/// </remarks>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str141Key)]
-		[DescriptionLoc(LocalizedStrings.Str142Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str141Key,
+			Description = LocalizedStrings.Str142Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? TillDate { get; set; }
 
 		/// <summary>
 		/// Limit order time in force.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
-		[DescriptionLoc(LocalizedStrings.Str232Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TimeInForceKey,
+			Description = LocalizedStrings.Str232Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public TimeInForce? TimeInForce { get; set; }
 
@@ -89,25 +102,33 @@ namespace StockSharp.Messages
 		/// Is the order of market-maker.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarketMakerKey)]
-		[DescriptionLoc(LocalizedStrings.MarketMakerOrderKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MarketMakerKey,
+			Description = LocalizedStrings.MarketMakerOrderKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsMarketMaker { get; set; }
 
 		/// <summary>
 		/// Slippage in trade price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str163Key)]
-		[DescriptionLoc(LocalizedStrings.Str164Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str163Key,
+			Description = LocalizedStrings.Str164Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? Slippage { get; set; }
 
 		/// <summary>
 		/// Is order manual.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ManualKey)]
-		[DescriptionLoc(LocalizedStrings.IsOrderManualKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ManualKey,
+			Description = LocalizedStrings.IsOrderManualKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsManual { get; set; }
 
 		/// <summary>

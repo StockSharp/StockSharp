@@ -16,10 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.Common;
 
@@ -78,8 +76,10 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.Str273Key)]
-	[DescriptionLoc(LocalizedStrings.Str274Key)]
+	//[Display(
+	//	ResourceType = typeof(LocalizedStrings),
+	//	Name = LocalizedStrings.Str273Key,
+	//	Description = LocalizedStrings.Str274Key)]
 	public struct QuoteChange
 	{
 		/// <summary>
@@ -109,27 +109,33 @@ namespace StockSharp.Messages
 		/// Quote price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PriceKey)]
-		[DescriptionLoc(LocalizedStrings.Str275Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceKey,
+			Description = LocalizedStrings.Str275Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Price { get; set; }
 
 		/// <summary>
 		/// Quote volume.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
-		[DescriptionLoc(LocalizedStrings.Str276Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeKey,
+			Description = LocalizedStrings.Str276Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Volume { get; set; }
 
 		/// <summary>
 		/// Electronic board code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.BoardCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string BoardCode { get; set; }
 
 		/// <summary>

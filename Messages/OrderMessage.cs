@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -33,34 +34,42 @@ namespace StockSharp.Messages
 	{
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TransactionKey,
+			Description = LocalizedStrings.TransactionIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public long TransactionId { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-		[DescriptionLoc(LocalizedStrings.Str229Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PortfolioKey,
+			Description = LocalizedStrings.Str229Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string PortfolioName { get; set; }
 
 		/// <summary>
 		/// Order type.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str132Key)]
-		[DescriptionLoc(LocalizedStrings.Str133Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str132Key,
+			Description = LocalizedStrings.Str133Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public OrderTypes? OrderType { get; set; }
 
 		/// <summary>
 		/// User's order ID.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str165Key)]
-		[DescriptionLoc(LocalizedStrings.Str166Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str165Key,
+			Description = LocalizedStrings.Str166Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string UserOrderId { get; set; }
 
 		/// <inheritdoc />
@@ -70,25 +79,31 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Broker firm code.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str2593Key)]
-		[DisplayNameLoc(LocalizedStrings.BrokerKey)]
-		[DescriptionLoc(LocalizedStrings.Str2619Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BrokerKey,
+			Description = LocalizedStrings.Str2619Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string BrokerCode { get; set; }
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str2593Key)]
-		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
-		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClientCodeKey,
+			Description = LocalizedStrings.ClientCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string ClientCode { get; set; }
 
 		/// <summary>
 		/// Order condition (e.g., stop- and algo- orders parameters).
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str154Key)]
-		[DescriptionLoc(LocalizedStrings.Str155Key)]
-		[CategoryLoc(LocalizedStrings.Str156Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str154Key,
+			Description = LocalizedStrings.Str155Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[XmlIgnore]
 		public OrderCondition Condition { get; set; }
 
@@ -96,18 +111,22 @@ namespace StockSharp.Messages
 		/// Placed order comment.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CommentKey)]
-		[DescriptionLoc(LocalizedStrings.Str136Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CommentKey,
+			Description = LocalizedStrings.Str136Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Comment { get; set; }
 
 		/// <summary>
 		/// Is margin enabled.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarginKey)]
-		[DescriptionLoc(LocalizedStrings.IsMarginKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MarginKey,
+			Description = LocalizedStrings.IsMarginKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsMargin { get; set; }
 
 		/// <summary>

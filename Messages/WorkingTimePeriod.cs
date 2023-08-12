@@ -20,6 +20,7 @@ namespace StockSharp.Messages
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -33,17 +34,21 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.Str416Key)]
-	[DescriptionLoc(LocalizedStrings.Str417Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str416Key,
+		Description = LocalizedStrings.Str417Key)]
 	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	{
 		/// <summary>
 		/// Schedule expiration date.
 		/// </summary>
 		[DataMember]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[DisplayNameLoc(LocalizedStrings.Str418Key)]
-		[DescriptionLoc(LocalizedStrings.Str419Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str418Key,
+			Description = LocalizedStrings.Str419Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTime Till { get; set; }
 
 		private List<Range<TimeSpan>> _times = new();
@@ -52,9 +57,11 @@ namespace StockSharp.Messages
 		/// Work schedule within day.
 		/// </summary>
 		[DataMember]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[DisplayNameLoc(LocalizedStrings.Str416Key)]
-		[DescriptionLoc(LocalizedStrings.Str420Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str416Key,
+			Description = LocalizedStrings.Str420Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public List<Range<TimeSpan>> Times
 		{
 			get => _times;

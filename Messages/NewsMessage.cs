@@ -60,7 +60,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.NewsKey)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NewsKey)]
 	public class NewsMessage : BaseSubscriptionIdMessage<NewsMessage>,
 		IServerTimeMessage, INullableSecurityIdMessage, ITransactionIdMessage, ISeqNumMessage
 	{
@@ -72,68 +72,84 @@ namespace StockSharp.Messages
 		/// News ID.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.IdKey)]
-		[DescriptionLoc(LocalizedStrings.NewsIdKey)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IdKey,
+			Description = LocalizedStrings.NewsIdKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Id { get; set; }
 
 		/// <summary>
 		/// Electronic board code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.BoardCodeKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string BoardCode { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-		[DescriptionLoc(LocalizedStrings.Str212Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityKey,
+			Description = LocalizedStrings.Str212Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
 		/// News source.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str213Key)]
-		[DescriptionLoc(LocalizedStrings.Str214Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str213Key,
+			Description = LocalizedStrings.Str214Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Source { get; set; }
 
 		/// <summary>
 		/// Header.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.HeaderKey)]
-		[DescriptionLoc(LocalizedStrings.HeaderKey, true)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.HeaderKey,
+			Description = LocalizedStrings.HeaderKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Headline { get; set; }
 
 		/// <summary>
 		/// News text.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TextKey)]
-		[DescriptionLoc(LocalizedStrings.Str218Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TextKey,
+			Description = LocalizedStrings.Str218Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Story { get; set; }
 
 		/// <inheritdoc />
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TimeKey)]
-		[DescriptionLoc(LocalizedStrings.Str220Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TimeKey,
+			Description = LocalizedStrings.Str220Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
 		/// News link in the internet.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.LinkKey)]
-		[DescriptionLoc(LocalizedStrings.Str222Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.LinkKey,
+			Description = LocalizedStrings.Str222Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public string Url { get; set; }
 
 		/// <summary>
