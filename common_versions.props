@@ -24,7 +24,7 @@
     версия nuget должна совпадать с версией нугет либ которые использует мсбилд на сервере стокшарп
     иначе в процессе паблишинга будут ошибки вида Msbuild failed when processing the file "...project.csproj ... Could not load file or assembly 'NuGet.Common' "
     -->
-    <NuGetApiVer>6.4.0</NuGetApiVer>
+    <NuGetApiVer>6.7.0</NuGetApiVer>
     
     <!-- do not update until task is resolved: https://stocksharp.myjetbrains.com/youtrack/issue/ISLR-10 -->
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
@@ -37,7 +37,7 @@
     <AWSSDKVer>3.*</AWSSDKVer>
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.4.0</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisCSharpVer>4.6.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
