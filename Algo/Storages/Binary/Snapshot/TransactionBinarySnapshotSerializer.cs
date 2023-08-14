@@ -328,7 +328,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						break;
 					}
 					default:
-						stringValue = Paths.CreateSerializer(paramType).Serialize(conParam.Value);
+						//stringValue = Paths.CreateSerializer(paramType).Serialize(conParam.Value);
 						break;
 				}
 
@@ -494,7 +494,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 							}
 							else
 							{
-								value = Paths.CreateSerializer(paramType).Deserialize(strBuffer);
+								value = null;
+								//value = Paths.CreateSerializer(paramType).Deserialize(strBuffer);
 							}
 						}
 						else

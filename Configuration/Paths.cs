@@ -453,14 +453,6 @@
 			};
 
 		/// <summary>
-		/// Create serializer.
-		/// </summary>
-		/// <param name="type">Value type.</param>
-		/// <returns>Serializer.</returns>
-		public static ISerializer CreateSerializer(Type type)
-			=> CreateSerializer<int>().GetSerializer(type);
-
-		/// <summary>
 		/// Serialize value into the specified file.
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
