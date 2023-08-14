@@ -202,25 +202,6 @@ namespace StockSharp.Messages
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string OrderBoardId { get; set; }
 
-		///// <summary>
-		///// Derived order ID (e.g., conditional order generated a real exchange order).
-		///// </summary>
-		//[DataMember]
-		//[DisplayNameLoc(LocalizedStrings.DerivedKey)]
-		//[DescriptionLoc(LocalizedStrings.DerivedOrderIdKey)]
-		//[MainCategory]
-		//[Nullable]
-		//public long? DerivedOrderId { get; set; }
-
-		///// <summary>
-		///// Derived order ID (e.g., conditional order generated a real exchange order).
-		///// </summary>
-		//[DataMember]
-		//[DisplayNameLoc(LocalizedStrings.DerivedStringKey)]
-		//[DescriptionLoc(LocalizedStrings.DerivedStringDescKey)]
-		//[MainCategory]
-		//public string DerivedOrderStringId { get; set; }
-
 		/// <summary>
 		/// Is the message contains order info.
 		/// </summary>
@@ -751,7 +732,6 @@ namespace StockSharp.Messages
 			destination.OrderBoardId = OrderBoardId;
 			destination.DataTypeEx = DataTypeEx;
 			destination.IsCancellation = IsCancellation;
-			//destination.Action = Action;
 			destination.OrderState = OrderState;
 			destination.OrderStatus = OrderStatus;
 			destination.OrderType = OrderType;
@@ -769,7 +749,6 @@ namespace StockSharp.Messages
 			destination.TransactionId = TransactionId;
 			destination.OrderVolume = OrderVolume;
 			destination.TradeVolume = TradeVolume;
-			//destination.IsFinished = IsFinished;
 			destination.VisibleVolume = VisibleVolume;
 			destination.IsUpTick = IsUpTick;
 			destination.Commission = Commission;
@@ -777,9 +756,6 @@ namespace StockSharp.Messages
 			destination.Slippage = Slippage;
 			destination.UserOrderId = UserOrderId;
 			destination.StrategyId = StrategyId;
-
-			//destination.DerivedOrderId = DerivedOrderId;
-			//destination.DerivedOrderStringId = DerivedOrderStringId;
 
 			destination.PnL = PnL;
 			destination.Position = Position;

@@ -252,7 +252,6 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Logging level.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str12Key)]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str9Key,

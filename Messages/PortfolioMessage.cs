@@ -95,15 +95,6 @@ namespace StockSharp.Messages
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string ClientCode { get; set; }
 
-		///// <summary>
-		///// Portfolio state.
-		///// </summary>
-		//[DataMember]
-		//[DisplayNameLoc(LocalizedStrings.StateKey)]
-		//[DescriptionLoc(LocalizedStrings.Str252Key)]
-		//[MainCategory]
-		//public PortfolioStates? State { get; set; }
-
 		/// <inheritdoc />
 		[DataMember]
 		[Display(

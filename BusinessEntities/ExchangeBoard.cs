@@ -120,44 +120,6 @@ namespace StockSharp.BusinessEntities
 		)]
 		public Exchange Exchange { get; set; }
 
-		//private bool _isSupportAtomicReRegister;
-
-		///// <summary>
-		///// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
-		///// </summary>
-		//[DataMember]
-		//[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
-		//[DescriptionLoc(LocalizedStrings.Str60Key)]
-		//[MainCategory]
-		//public bool IsSupportAtomicReRegister
-		//{
-		//	get { return _isSupportAtomicReRegister; }
-		//	set
-		//	{
-		//		_isSupportAtomicReRegister = value;
-		//		Notify();
-		//	}
-		//}
-
-		//private bool _isSupportMarketOrders;
-
-		///// <summary>
-		///// Are market type orders <see cref="OrderTypes.Market"/> supported.
-		///// </summary>
-		//[DataMember]
-		//[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
-		//[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
-		//[MainCategory]
-		//public bool IsSupportMarketOrders
-		//{
-		//	get { return _isSupportMarketOrders; }
-		//	set
-		//	{
-		//		_isSupportMarketOrders = value;
-		//		Notify();
-		//	}
-		//}
-
 		private WorkingTime _workingTime = new() { IsEnabled = true };
 
 		/// <summary>
@@ -269,8 +231,6 @@ namespace StockSharp.BusinessEntities
 			{
 				Exchange = Exchange,
 				Code = Code,
-				//IsSupportAtomicReRegister = IsSupportAtomicReRegister,
-				//IsSupportMarketOrders = IsSupportMarketOrders,
 				ExpiryTime = ExpiryTime,
 				WorkingTime = WorkingTime.Clone(),
 				TimeZone = TimeZone,
@@ -285,8 +245,6 @@ namespace StockSharp.BusinessEntities
 		{
 			Exchange = storage.GetValue<SettingsStorage>(nameof(Exchange))?.Load<Exchange>();
 			Code = storage.GetValue<string>(nameof(Code));
-			//IsSupportMarketOrders = storage.GetValue<bool>(nameof(IsSupportMarketOrders));
-			//IsSupportAtomicReRegister = storage.GetValue<bool>(nameof(IsSupportAtomicReRegister));
 			ExpiryTime = storage.GetValue<TimeSpan>(nameof(ExpiryTime));
 			WorkingTime = storage.GetValue<SettingsStorage>(nameof(WorkingTime)).Load<WorkingTime>();
 			TimeZone = storage.GetValue(nameof(TimeZone), TimeZone);

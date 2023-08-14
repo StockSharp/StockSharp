@@ -53,24 +53,6 @@ namespace StockSharp.Messages
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Code { get; set; }
 
-		///// <summary>
-		///// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
-		///// </summary>
-		//[DataMember]
-		//[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
-		//[DescriptionLoc(LocalizedStrings.Str60Key)]
-		//[MainCategory]
-		//public bool IsSupportAtomicReRegister { get; set; }
-
-		///// <summary>
-		///// Are market type orders <see cref="OrderTypes.Market"/> supported.
-		///// </summary>
-		//[DataMember]
-		//[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
-		//[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
-		//[MainCategory]
-		//public bool IsSupportMarketOrders { get; set; }
-
 		/// <summary>
 		/// Securities expiration times.
 		/// </summary>
@@ -156,8 +138,6 @@ namespace StockSharp.Messages
 			destination.Code = Code;
 			destination.ExchangeCode = ExchangeCode;
 			destination.ExpiryTime = ExpiryTime;
-			//destination.IsSupportAtomicReRegister = IsSupportAtomicReRegister;
-			//destination.IsSupportMarketOrders = IsSupportMarketOrders;
 			destination.WorkingTime = WorkingTime.Clone();
 			destination.TimeZone = TimeZone;
 		}
