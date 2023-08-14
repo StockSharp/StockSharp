@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorStochasticK.html
 	/// </remarks>
-	[DisplayName("Stochastic %K")]
-	[DescriptionLoc(LocalizedStrings.Str774Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.StochasticKKey,
+		Description = LocalizedStrings.Str774Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorStochasticK.html")]
 	public class StochasticK : LengthIndicator<decimal>

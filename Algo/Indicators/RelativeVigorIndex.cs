@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorRelativeVigorIndex.html
 	/// </remarks>
-	[DisplayName("RVI")]
-	[DescriptionLoc(LocalizedStrings.Str771Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.RVIKey,
+		Description = LocalizedStrings.Str771Key)]
 	[Doc("topics/IndicatorRelativeVigorIndex.html")]
 	public class RelativeVigorIndex : BaseComplexIndicator
 	{

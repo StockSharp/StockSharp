@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorTrix.html
 	/// </remarks>
-	[DisplayName("Trix")]
-	[DescriptionLoc(LocalizedStrings.Str752Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TrixKey,
+		Description = LocalizedStrings.Str752Key)]
 	[Doc("topics/IndicatorTrix.html")]
 	public class Trix : LengthIndicator<IIndicatorValue>
 	{
@@ -54,9 +56,11 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The length of period <see cref="RateOfChange"/>.
 		/// </summary>
-		[DisplayName("ROC")]
-		[DescriptionLoc(LocalizedStrings.Str753Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ROCKey,
+			Description = LocalizedStrings.Str753Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public int RocLength
 		{
 			get => _roc.Length;

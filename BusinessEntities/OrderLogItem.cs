@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 
@@ -27,7 +28,10 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	[DescriptionLoc(LocalizedStrings.Str535Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.OrderLogOfKey,
+		Description = LocalizedStrings.Str535Key)]
 	[Obsolete("Use IOrderLogMessage.")]
 	public class OrderLogItem : MyTrade, IOrderLogMessage
 	{

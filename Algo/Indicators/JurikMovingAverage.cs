@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
@@ -30,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorJurikMovingAverage.html
 	/// </remarks>
-	[DisplayName("JMA")]
-	[DescriptionLoc(LocalizedStrings.Str789Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.JMAKey,
+		Description = LocalizedStrings.Str789Key)]
 	[Doc("topics/IndicatorJurikMovingAverage.html")]
 	public class JurikMovingAverage : LengthIndicator<decimal>
 	{

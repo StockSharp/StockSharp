@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergenceSignal.html
 	/// </remarks>
-	[DisplayName("MACD Signal")]
-	[DescriptionLoc(LocalizedStrings.Str803Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MACDSignalKey,
+		Description = LocalizedStrings.Str803Key)]
 	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceSignal.html")]
 	public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 	{

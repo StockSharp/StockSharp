@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using StockSharp.Localization;
 
@@ -26,8 +26,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://en.wikipedia.org/wiki/Covariance.
 	/// </remarks>
-	[DisplayName("COV")]
-	[DescriptionLoc(LocalizedStrings.CovarianceKey, true)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.COVKey,
+		Description = LocalizedStrings.CovarianceKey)]
 	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
 	public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 	{

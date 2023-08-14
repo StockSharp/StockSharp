@@ -15,11 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
@@ -30,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorWeightedMovingAverage.html
 	/// </remarks>
-	[DisplayName("WMA")]
-	[DescriptionLoc(LocalizedStrings.Str824Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.WMAKey,
+		Description = LocalizedStrings.Str824Key)]
 	[Doc("topics/IndicatorWeightedMovingAverage.html")]
 	public class WeightedMovingAverage : LengthIndicator<decimal>
 	{

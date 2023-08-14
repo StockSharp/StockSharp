@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -32,8 +31,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorKaufmannAdaptiveMovingAverage.html
 	/// </remarks>
-	[DisplayName("KAMA")]
-	[DescriptionLoc(LocalizedStrings.Str792Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.KAMAKey,
+		Description = LocalizedStrings.Str792Key)]
 	[Doc("topics/IndicatorKaufmannAdaptiveMovingAverage.html")]
 	public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 	{

@@ -30,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorAwesomeOscillator.html
 	/// </remarks>
-	[DisplayName("AO")]
-	[DescriptionLoc(LocalizedStrings.Str836Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.AOKey,
+		Description = LocalizedStrings.Str836Key)]
 	[Doc("topics/IndicatorAwesomeOscillator.html")]
 	public class AwesomeOscillator : BaseIndicator
 	{

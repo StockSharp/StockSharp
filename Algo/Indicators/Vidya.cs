@@ -15,9 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
-	using System.Linq;
 	using System;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -29,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorVidya.html
 	/// </remarks>
-	[DisplayName("Vidya")]
-	[DescriptionLoc(LocalizedStrings.Str755Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.VidyaKey,
+		Description = LocalizedStrings.Str755Key)]
 	[Doc("topics/IndicatorVidya.html")]
 	public class Vidya : LengthIndicator<decimal>
 	{

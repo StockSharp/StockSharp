@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorAverageTrueRange.html
 	/// </remarks>
-	[DisplayName("ATR")]
-	[DescriptionLoc(LocalizedStrings.Str758Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ATRKey,
+		Description = LocalizedStrings.Str758Key)]
 	[Doc("topics/IndicatorAverageTrueRange.html")]
 	public class AverageTrueRange : LengthIndicator<IIndicatorValue>
 	{

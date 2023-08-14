@@ -31,8 +31,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorDirectionalIndex.html
 	/// </remarks>
-	[DisplayName("DMI")]
-	[DescriptionLoc(LocalizedStrings.Str762Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.DMIKey,
+		Description = LocalizedStrings.Str762Key)]
 	[Doc("topics/IndicatorDirectionalIndex.html")]
 	public class DirectionalIndex : BaseComplexIndicator
 	{

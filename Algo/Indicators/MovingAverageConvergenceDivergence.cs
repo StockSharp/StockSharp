@@ -30,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergence.html
 	/// </remarks>
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MACDKey)]
-	[DescriptionLoc(LocalizedStrings.Str797Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MACDKey,
+		Description = LocalizedStrings.Str797Key)]
 	[Doc("topics/IndicatorMovingAverageConvergenceDivergence.html")]
 	public class MovingAverageConvergenceDivergence : BaseIndicator
 	{

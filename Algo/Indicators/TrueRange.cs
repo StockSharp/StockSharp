@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.ComponentModel;
@@ -30,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorTrueRange.html
 	/// </remarks>
-	[DisplayName("TR")]
-	[DescriptionLoc(LocalizedStrings.Str775Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TRKey,
+		Description = LocalizedStrings.Str775Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorTrueRange.html")]
 	public class TrueRange : BaseIndicator

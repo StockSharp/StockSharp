@@ -14,7 +14,7 @@ using StockSharp.Messages;
 /// </summary>
 [Serializable]
 [DataContract]
-[DisplayNameLoc(LocalizedStrings.Str2264Key, LocalizedStrings.BitStampKey)]
+[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BitStampKey)]
 public class BitStampOrderCondition : BaseWithdrawOrderCondition, IStopLossOrderCondition
 {
 	/// <summary>

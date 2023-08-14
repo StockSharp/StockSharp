@@ -17,7 +17,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.Linq;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -30,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorUltimateOscillator.html
 	/// </remarks>
-	[DisplayName("UltimateOsc")]
-	[DescriptionLoc(LocalizedStrings.Str776Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.UltimateOscKey,
+		Description = LocalizedStrings.Str776Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorUltimateOscillator.html")]
 	public class UltimateOscillator : BaseIndicator

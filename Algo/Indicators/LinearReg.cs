@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.ComponentModel;
@@ -29,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorLinearReg.html
 	/// </remarks>
-	[DisplayName("LRC")]
-	[DescriptionLoc(LocalizedStrings.Str734Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.LRCKey,
+		Description = LocalizedStrings.Str734Key)]
 	[Doc("topics/IndicatorLinearReg.html")]
 	public class LinearReg : LengthIndicator<decimal>
 	{

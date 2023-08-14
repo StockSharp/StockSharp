@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
@@ -30,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorHullMovingAverage.html
 	/// </remarks>
-	[DisplayName("HMA")]
-	[DescriptionLoc(LocalizedStrings.Str786Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.HMAKey,
+		Description = LocalizedStrings.Str786Key)]
 	[Doc("topics/IndicatorHullMovingAverage.html")]
 	public class HullMovingAverage : LengthIndicator<decimal>
 	{

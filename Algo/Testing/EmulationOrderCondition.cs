@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	[DisplayNameLoc(LocalizedStrings.Str2264Key, "Emulator")]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = "Emulator")]
 	public class EmulationOrderCondition : OrderCondition, IStopLossOrderCondition, ITakeProfitOrderCondition
 	{
 		/// <summary>

@@ -31,8 +31,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorTroughBar.html
 	/// </remarks>
-	[DisplayName("TroughBar")]
-	[DescriptionLoc(LocalizedStrings.Str822Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TroughBarKey,
+		Description = LocalizedStrings.Str822Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorTroughBar.html")]
 	public class TroughBar : BaseIndicator

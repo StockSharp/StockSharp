@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorTripleExponentialMovingAverage.html
 	/// </remarks>
-	[DisplayName("TEMA")]
-	[DescriptionLoc(LocalizedStrings.Str752Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TEMAKey,
+		Description = LocalizedStrings.Str752Key)]
 	[Doc("topics/IndicatorTripleExponentialMovingAverage.html")]
 	public class TripleExponentialMovingAverage : LengthIndicator<decimal>
 	{

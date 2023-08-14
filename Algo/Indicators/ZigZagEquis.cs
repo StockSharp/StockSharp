@@ -32,8 +32,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorZigZagEquis.html
 	/// </remarks>
-	[DisplayName("ZigZag Metastock")]
-	[DescriptionLoc(LocalizedStrings.Str826Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ZigZagMetaStockKey,
+		Description = LocalizedStrings.Str826Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(ShiftedIndicatorValue))]
 	[Doc("topics/IndicatorZigZagEquis.html")]

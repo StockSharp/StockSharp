@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMedianPrice.html
 	/// </remarks>
-	[DisplayName("MedianPrice")]
-	[DescriptionLoc(LocalizedStrings.Str745Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MedPrKey,
+		Description = LocalizedStrings.Str745Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorMedianPrice.html")]
 	public class MedianPrice : BaseIndicator

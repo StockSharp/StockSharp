@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
@@ -30,8 +31,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorAcceleration.html
 	/// </remarks>
-	[DisplayName("A/D")]
-	[DescriptionLoc(LocalizedStrings.Str835Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ADKey,
+		Description = LocalizedStrings.Str835Key)]
 	[Doc("topics/IndicatorAcceleration.html")]
 	public class Acceleration : BaseIndicator
 	{
@@ -64,18 +67,22 @@ namespace StockSharp.Algo.Indicators
 		/// The moving average.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("MA")]
-		[DescriptionLoc(LocalizedStrings.Str731Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MAKey,
+			Description = LocalizedStrings.Str731Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage Sma { get; }
 
 		/// <summary>
 		/// Awesome Oscillator.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("AO")]
-		[DescriptionLoc(LocalizedStrings.Str836Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AOKey,
+			Description = LocalizedStrings.Str836Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public AwesomeOscillator Ao { get; }
 
 		/// <inheritdoc />

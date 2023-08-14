@@ -17,7 +17,6 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
@@ -33,8 +32,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorParabolicSar.html
 	/// </remarks>
-	[DisplayName("Parabolic SAR")]
-	[DescriptionLoc(LocalizedStrings.Str809Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ParabolicSARKey,
+		Description = LocalizedStrings.Str809Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorParabolicSar.html")]
 	public class ParabolicSar : BaseIndicator

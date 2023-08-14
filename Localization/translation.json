@@ -1,4 +1,244 @@
 {
+  "Tenkan": {
+    "en": "Tenkan",
+    "ru": "Tenkan"
+  },
+  "Kijun": {
+    "en": "Kijun",
+    "ru": "Kijun"
+  },
+  "SenkouA": {
+    "en": "Senkou A",
+    "ru": "Senkou A"
+  },
+  "SenkouB": {
+    "en": "Senkou B",
+    "ru": "Senkou B"
+  },
+  "Chinkou": {
+    "en": "Chinkou",
+    "ru": "Chinkou"
+  },
+  "WilderMA": {
+    "en": "Wilder MA",
+    "ru": "Wilder MA"
+  },
+  "StochasticK": {
+    "en": "Stochastic %K",
+    "ru": "Стохастик %K"
+  },
+  "StdDev": {
+    "en": "Std Dev",
+    "ru": "Стд Откл"
+  },
+  "ZigZag": {
+    "en": "Zig Zag",
+    "ru": "Зиг Заг"
+  },
+  "ZigZagMetaStock": {
+    "en": "Zig Zag MetaStock",
+    "ru": "Зиг Заг MetaStock"
+  },
+  "LRC": {
+    "en": "LRC",
+    "ru": "LRC"
+  },
+  "MFI": {
+    "en": "MFI",
+    "ru": "MFI"
+  },
+  "MedPr": {
+    "en": "MedPr",
+    "ru": "СредЦен"
+  },
+  "MeanDev": {
+    "en": "MeanDev",
+    "ru": "СредОтк"
+  },
+  "K": {
+    "en": "%K",
+    "ru": "%K"
+  },
+  "D": {
+    "en": "%D",
+    "ru": "%D"
+  },
+  "MACDHistogram": {
+    "en": "MACD Histogram",
+    "ru": "MACD Гистограмма"
+  },
+  "MACDSignal": {
+    "en": "MACD Signal",
+    "ru": "MACD Сигнал"
+  },
+  "ParabolicSAR": {
+    "en": "Parabolic SAR",
+    "ru": "Параболик SAR"
+  },
+  "Trix": {
+    "en": "TRIX",
+    "ru": "TRIX"
+  },
+  "Sum": {
+    "en": "Sum",
+    "ru": "Сумма"
+  },
+  "SMMA": {
+    "en": "SMMA",
+    "ru": "SMMA"
+  },
+  "SMA": {
+    "en": "SMA",
+    "ru": "SMA"
+  },
+  "ROC": {
+    "en": "ROC",
+    "ru": "ROC"
+  },
+  "RVI": {
+    "en": "RVI",
+    "ru": "RVI"
+  },
+  "RSI": {
+    "en": "RSI",
+    "ru": "RSI"
+  },
+  "CCI": {
+    "en": "CCI",
+    "ru": "CCI"
+  },
+  "Bollinger": {
+    "en": "Bollinger",
+    "ru": "Боллинджер"
+  },
+  "Trough": {
+    "en": "Trough",
+    "ru": "Впадина"
+  },
+  "TroughBar": {
+    "en": "TroughBar",
+    "ru": "ВпадинаБар"
+  },
+  "TEMA": {
+    "en": "TEMA",
+    "ru": "TEMA"
+  },
+  "TR": {
+    "en": "TR",
+    "ru": "TR"
+  },
+  "UltimateOsc": {
+    "en": "UltimateOsc",
+    "ru": "UltimateOsc"
+  },
+  "WR": {
+    "en": "%R",
+    "ru": "%R"
+  },
+  "MFI": {
+    "en": "MFI",
+    "ru": "MFI"
+  },
+  "ChaikinVolatility": {
+    "en": "Chaikin's Volatility",
+    "ru": "Волатильность Чайкина"
+  },
+  "Gator": {
+    "en": "Gator",
+    "ru": "Гатор"
+  },
+  "KAMA": {
+    "en": "KAMA",
+    "ru": "KAMA"
+  },
+  "Vidya": {
+    "en": "VIDIA",
+    "ru": "VIDIA"
+  },
+  "VHF": {
+    "en": "VHF",
+    "ru": "VHF"
+  },
+  "VMA": {
+    "en": "VMA",
+    "ru": "VMA"
+  },
+  "WMA": {
+    "en": "WMA",
+    "ru": "WMA"
+  },
+  "JMA": {
+    "en": "JMA",
+    "ru": "JMA"
+  },
+  "HMA": {
+    "en": "HMA",
+    "ru": "HMA"
+  },
+  "EMA": {
+    "en": "EMA",
+    "ru": "EMA"
+  },
+  "DMI": {
+    "en": "DMI",
+    "ru": "DMI"
+  },
+  "DPO": {
+    "en": "DPO",
+    "ru": "DPO"
+  },
+  "COV": {
+    "en": "COV",
+    "ru": "COV"
+  },
+  "COR": {
+    "en": "COR",
+    "ru": "COR"
+  },
+  "CMO": {
+    "en": "CMO",
+    "ru": "CMO"
+  },
+  "ATR": {
+    "en": "ATR",
+    "ru": "ATR"
+  },
+  "ROC": {
+    "en": "ROC",
+    "ru": "ROC"
+  },
+  "AO": {
+    "en": "AO",
+    "ru": "AO"
+  },
+  "MA": {
+    "en": "MA",
+    "ru": "MA"
+  },
+  "AD": {
+    "en": "A/D",
+    "ru": "A/D"
+  },
+  "Contract": {
+    "en": "Contract",
+    "ru": "Контракт"
+  },
+  "CryptoConnector": {
+    "en": "Crypto exchange connector",
+    "ru": "Коннектор к крипто бирже"
+  },
+  "StockConnector": {
+    "en": "Stock broker connector",
+    "ru": "Коннектор к фондовому брокеру"
+  },
+  "MarketDataConnector": {
+    "en": "Market data connector",
+    "ru": "Коннектор к маркет данным"
+  },
+  "ForexConnector": {
+    "en": "Forex connector",
+    "ru": "Коннектор к Форекс"
+  },
   "Lowest": {
     "en": "Lowest",
     "ru": "Наименьшее"

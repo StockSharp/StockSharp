@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorDetrendedPriceOscillator.html
 	/// </remarks>
-	[DisplayName("DPO")]
-	[DescriptionLoc(LocalizedStrings.Str761Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.DPOKey,
+		Description = LocalizedStrings.Str761Key)]
 	[Doc("topics/IndicatorDetrendedPriceOscillator.html")]
 	public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	{

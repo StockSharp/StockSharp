@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorCommodityChannelIndex.html
 	/// </remarks>
-	[DisplayName("CCI")]
-	[DescriptionLoc(LocalizedStrings.Str760Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CCIKey,
+		Description = LocalizedStrings.Str760Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorCommodityChannelIndex.html")]
 	public class CommodityChannelIndex : LengthIndicator<decimal>

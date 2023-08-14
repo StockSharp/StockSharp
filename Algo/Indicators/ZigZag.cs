@@ -33,8 +33,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorZigZag.html
 	/// </remarks>
-	[DisplayName("ZigZag")]
-	[DescriptionLoc(LocalizedStrings.Str826Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ZigZagKey,
+		Description = LocalizedStrings.Str826Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorZigZag.html")]
 	public class ZigZag : BaseIndicator

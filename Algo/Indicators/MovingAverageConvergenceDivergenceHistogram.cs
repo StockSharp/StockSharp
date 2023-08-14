@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMovingAverageConvergenceDivergenceHistogram.html
 	/// </remarks>
-	[DisplayName("MACD Histogram")]
-	[DescriptionLoc(LocalizedStrings.Str802Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MACDHistogramKey,
+		Description = LocalizedStrings.Str802Key)]
 	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceHistogram.html")]
 	public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConvergenceDivergenceSignal
 	{

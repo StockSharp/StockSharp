@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorSmoothedMovingAverage.html
 	/// </remarks>
-	[DisplayName("SMMA")]
-	[DescriptionLoc(LocalizedStrings.Str819Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SMMAKey,
+		Description = LocalizedStrings.Str819Key)]
 	[Doc("topics/IndicatorSmoothedMovingAverage.html")]
 	public class SmoothedMovingAverage : LengthIndicator<decimal>
 	{

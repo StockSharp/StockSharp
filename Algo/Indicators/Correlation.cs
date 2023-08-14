@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using StockSharp.Localization;
 
@@ -26,8 +26,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://en.wikipedia.org/wiki/Correlation_and_dependence.
 	/// </remarks>
-	[DisplayName("COR")]
-	[DescriptionLoc(LocalizedStrings.CorrelationKey, true)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CORKey,
+		Description = LocalizedStrings.CorrelationKey)]
 	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
 	public class Correlation : Covariance
 	{

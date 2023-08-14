@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using System.ComponentModel.DataAnnotations;
 
 	/// <summary>
 	/// The vertical-horizontal filter.
@@ -29,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorVerticalHorizontalFilter.html
 	/// </remarks>
-	[DisplayName("VHF")]
-	[DescriptionLoc(LocalizedStrings.Str754Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.VHFKey,
+		Description = LocalizedStrings.Str754Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorVerticalHorizontalFilter.html")]
 	public class VerticalHorizontalFilter : LengthIndicator<decimal>

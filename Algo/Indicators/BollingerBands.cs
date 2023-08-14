@@ -29,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorBollingerBands.html
 	/// </remarks>
-	[DisplayName("Bollinger")]
-	[DescriptionLoc(LocalizedStrings.Str777Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.BollingerKey,
+		Description = LocalizedStrings.Str777Key)]
 	[Doc("topics/IndicatorBollingerBands.html")]
 	public class BollingerBands : BaseComplexIndicator
 	{

@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
@@ -31,8 +32,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorChaikinVolatility.html
 	/// </remarks>
-	[DisplayName("Chaikin's Volatility")]
-	[DescriptionLoc(LocalizedStrings.Str730Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ChaikinVolatilityKey,
+		Description = LocalizedStrings.Str730Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorChaikinVolatility.html")]
 	public class ChaikinVolatility : BaseIndicator
@@ -56,18 +59,22 @@ namespace StockSharp.Algo.Indicators
 		/// Moving Average.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("MA")]
-		[DescriptionLoc(LocalizedStrings.Str731Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MAKey,
+			Description = LocalizedStrings.Str731Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public ExponentialMovingAverage Ema { get; }
 
 		/// <summary>
 		/// Rate of change.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("ROC")]
-		[DescriptionLoc(LocalizedStrings.Str732Key)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ROCKey,
+			Description = LocalizedStrings.Str732Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public RateOfChange Roc { get; }
 
 		/// <inheritdoc />

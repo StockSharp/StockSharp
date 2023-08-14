@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMarketFacilitationIndex.html
 	/// </remarks>
-	[DisplayName("MFI")]
-	[DescriptionLoc(LocalizedStrings.Str853Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MFIKey,
+		Description = LocalizedStrings.Str853Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorMarketFacilitationIndex.html")]
 	public class MarketFacilitationIndex : BaseIndicator

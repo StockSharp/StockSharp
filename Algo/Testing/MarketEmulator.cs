@@ -14,7 +14,7 @@ Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
 
-//#define EMU_DBG
+#define EMU_DBG
 
 namespace StockSharp.Algo.Testing
 {
@@ -1243,7 +1243,7 @@ namespace StockSharp.Algo.Testing
 							if (bestBid.Key < bestAsk.Key)
 								break;
 
-							// сдвиг идет бидами (убираем аски)
+							// сдвиг идет бидами (убираем аск)
 							if (message.Bids.Length > 0 && message.Bids[0].Volume > 0)
 							{
 								_asks.Remove(bestAsk.Key);
@@ -1262,7 +1262,9 @@ namespace StockSharp.Algo.Testing
 
 								AddTotalVolume(Sides.Sell, -bestAsk.Value.Second.Volume);
 							}
-							else
+
+							// сдвиг идет асками (убираем бид)
+							if (message.Asks.Length > 0 && message.Asks[0].Volume > 0)
 							{
 								_bids.Remove(bestBid.Key);
 

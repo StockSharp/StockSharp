@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -50,18 +51,22 @@ namespace StockSharp.Algo.Indicators
 		/// %K.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("%K")]
-		[Description("%K")]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.KKey,
+			Description = LocalizedStrings.KKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public StochasticK K { get; }
 
 		/// <summary>
 		/// %D.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("%D")]
-		[Description("%D")]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DKey,
+			Description = LocalizedStrings.DKey,
+			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage D { get; }
 
 		/// <inheritdoc />

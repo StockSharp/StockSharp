@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorChandeMomentumOscillator.html
 	/// </remarks>
-	[DisplayName("CMO")]
-	[DescriptionLoc(LocalizedStrings.Str759Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.CMOKey,
+		Description = LocalizedStrings.Str759Key)]
 	[Doc("topics/IndicatorChandeMomentumOscillator.html")]
 	public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	{

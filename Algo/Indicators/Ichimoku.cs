@@ -68,9 +68,11 @@ namespace StockSharp.Algo.Indicators
 		/// Tenkan line.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("Tenkan")]
-		[DescriptionLoc(LocalizedStrings.Str764Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TenkanKey,
+			Description = LocalizedStrings.Str764Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuLine Tenkan { get; }
 
@@ -78,9 +80,11 @@ namespace StockSharp.Algo.Indicators
 		/// Kijun line.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("Kijun")]
-		[DescriptionLoc(LocalizedStrings.Str765Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.KijunKey,
+			Description = LocalizedStrings.Str765Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuLine Kijun { get; }
 
@@ -88,9 +92,11 @@ namespace StockSharp.Algo.Indicators
 		/// Senkou (A) line.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("SenkouA")]
-		[DescriptionLoc(LocalizedStrings.Str766Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SenkouAKey,
+			Description = LocalizedStrings.Str766Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuSenkouALine SenkouA { get; }
 
@@ -98,9 +104,11 @@ namespace StockSharp.Algo.Indicators
 		/// Senkou (B) line.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("SenkouB")]
-		[DescriptionLoc(LocalizedStrings.Str767Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SenkouBKey,
+			Description = LocalizedStrings.Str767Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuSenkouBLine SenkouB { get; }
 
@@ -108,9 +116,11 @@ namespace StockSharp.Algo.Indicators
 		/// Chinkou line.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		[DisplayName("Chinkou")]
-		[DescriptionLoc(LocalizedStrings.Str768Key, true)]
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ChinkouKey,
+			Description = LocalizedStrings.Str768Key,
+			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuChinkouLine Chinkou { get; }
 

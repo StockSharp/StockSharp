@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -28,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorVolumeWeightedMovingAverage.html
 	/// </remarks>
-	[DisplayName("VMA")]
-	[DescriptionLoc(LocalizedStrings.Str823Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.VMAKey,
+		Description = LocalizedStrings.Str823Key)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorVolumeWeightedMovingAverage.html")]
 	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>

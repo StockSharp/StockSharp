@@ -29,8 +29,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorGatorOscillator.html
 	/// </remarks>
-	[DisplayName("Gator")]
-	[DescriptionLoc(LocalizedStrings.Str850Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.GatorKey,
+		Description = LocalizedStrings.Str850Key)]
 	[Doc("topics/IndicatorGatorOscillator.html")]
 	public class GatorOscillator : BaseComplexIndicator
 	{

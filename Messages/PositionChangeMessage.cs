@@ -228,8 +228,10 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayNameLoc(LocalizedStrings.Str862Key)]
-	[DescriptionLoc(LocalizedStrings.PositionDescKey)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str862Key,
+		Description = LocalizedStrings.PositionDescKey)]
 	public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
 		PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage, IStrategyIdMessage
 	{

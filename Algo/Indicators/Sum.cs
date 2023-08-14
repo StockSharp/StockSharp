@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorSum.html
 	/// </remarks>
-	[DisplayName("Sum")]
-	[DescriptionLoc(LocalizedStrings.Str751Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SumKey,
+		Description = LocalizedStrings.Str751Key)]
 	[Doc("topics/IndicatorSum.html")]
 	public class Sum : LengthIndicator<decimal>
 	{

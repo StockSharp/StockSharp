@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorRateOfChange.html
 	/// </remarks>
-	[DisplayName("ROC")]
-	[DescriptionLoc(LocalizedStrings.Str732Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.ROCKey,
+		Description = LocalizedStrings.Str732Key)]
 	[Doc("topics/IndicatorRateOfChange.html")]
 	public class RateOfChange : Momentum
 	{

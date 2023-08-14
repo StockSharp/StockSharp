@@ -16,9 +16,11 @@ using StockSharp.Messages;
 /// </summary>
 [MediaIcon("BitStamp_logo.svg")]
 [Doc("topics/BitStamp.html")]
-[DisplayNameLoc(LocalizedStrings.BitStampKey)]
-[CategoryLoc(LocalizedStrings.CryptocurrencyKey)]
-[DescriptionLoc(LocalizedStrings.Str1770Key, LocalizedStrings.BitStampKey)]
+[Display(
+	ResourceType = typeof(LocalizedStrings),
+	Name = LocalizedStrings.BitStampKey,
+	Description = LocalizedStrings.CryptoConnectorKey,
+	GroupName = LocalizedStrings.CryptocurrencyKey)]
 [MessageAdapterCategory(MessageAdapterCategories.Crypto | MessageAdapterCategories.RealTime |
 	MessageAdapterCategories.Free | MessageAdapterCategories.Ticks | MessageAdapterCategories.MarketDepth |
 	MessageAdapterCategories.Level1 | MessageAdapterCategories.Transactions | MessageAdapterCategories.OrderLog)]

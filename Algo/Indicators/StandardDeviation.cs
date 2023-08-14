@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.ComponentModel;
@@ -30,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorStandardDeviation.html
 	/// </remarks>
-	[DisplayName("StdDev")]
-	[DescriptionLoc(LocalizedStrings.Str820Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.StdDevKey,
+		Description = LocalizedStrings.Str820Key)]
 	[Doc("topics/IndicatorStandardDeviation.html")]
 	public class StandardDeviation : LengthIndicator<decimal>
 	{

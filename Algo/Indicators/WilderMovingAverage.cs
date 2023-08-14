@@ -15,7 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
+
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
@@ -27,8 +28,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorWilderMovingAverage.html
 	/// </remarks>
-	[DisplayName("WilderMA")]
-	[DescriptionLoc(LocalizedStrings.Str825Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.WilderMAKey,
+		Description = LocalizedStrings.Str825Key)]
 	[Doc("topics/IndicatorWilderMovingAverage.html")]
 	public class WilderMovingAverage : LengthIndicator<decimal>
 	{

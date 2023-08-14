@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 
@@ -27,8 +27,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorTrough.html
 	/// </remarks>
-	[DisplayName("Trough")]
-	[DescriptionLoc(LocalizedStrings.Str821Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TroughKey,
+		Description = LocalizedStrings.Str821Key)]
 	[Doc("topics/IndicatorTrough.html")]
 	public sealed class Trough : ZigZagEquis
 	{

@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.ComponentModel;
@@ -29,8 +30,10 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorMeanDeviation.html
 	/// </remarks>
-	[DisplayName("MeanDeviation")]
-	[DescriptionLoc(LocalizedStrings.Str744Key)]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MeanDevKey,
+		Description = LocalizedStrings.Str744Key)]
 	[Doc("topics/IndicatorMeanDeviation.html")]
 	public class MeanDeviation : LengthIndicator<decimal>
 	{
