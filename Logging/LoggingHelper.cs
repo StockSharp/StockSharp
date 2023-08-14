@@ -22,7 +22,6 @@ namespace StockSharp.Logging
 	using System.Reflection;
 
 	using Ecng.Common;
-	using Ecng.Configuration;
 
 	using StockSharp.Localization;
 
@@ -161,16 +160,6 @@ namespace StockSharp.Logging
 
 				return msg;
 			}));
-		}
-
-		/// <summary>
-		/// To record an error to the log.
-		/// </summary>
-		/// <param name="message">Text message.</param>
-		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
-		public static void AddErrorLog(this string message, params object[] args)
-		{
-			ConfigManager.TryGetService<LogManager>()?.Application.AddMessage(LogLevels.Error, message, args);
 		}
 
 		/// <summary>

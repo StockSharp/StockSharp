@@ -18,7 +18,6 @@
     <MsTestVer>3.*</MsTestVer>
     <MsTestSdkVer>17.*</MsTestSdkVer>
     <MsExtensionsVer>6.*</MsExtensionsVer>
-    <RestSharpXmlVer>108.0.2</RestSharpXmlVer>
 
     <!--
     версия nuget должна совпадать с версией нугет либ которые использует мсбилд на сервере стокшарп
@@ -38,6 +37,6 @@
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
 
     <MicrosoftCodeAnalysisCSharpVer>4.6.0</MicrosoftCodeAnalysisCSharpVer>
-    <MicrosoftCodeAnalysisAnalyzersVer>3.3.3</MicrosoftCodeAnalysisAnalyzersVer>
+    <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
