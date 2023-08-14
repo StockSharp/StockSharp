@@ -204,6 +204,9 @@
 		{
 			_dataThreadActions.Add(() =>
 			{
+				_drawCts.Cancel();
+				_drawCts = new();
+
 				if (element is IChartIndicatorElement indElem)
 					_indicators.Remove(indElem);
 			});
@@ -254,11 +257,9 @@
 				_tradeGenerator.Init();
 				_tradeGenerator.Process(_security.ToMessage());
 
-				var series = SeriesEditor.DataType.ToCandleSeries(_security);
-				series.IsCalcVolumeProfile = true;
-
 				_candleElement = Chart.CreateCandleElement();
-				Chart.AddElement(_areaComb, _candleElement, series);
+				((ChartCandleElement)_candleElement).PriceStep = 0.01m;
+				Chart.AddElement(_areaComb, _candleElement, SeriesEditor.DataType.ToCandleSeries(_security));
 			});
 		}
 
@@ -291,6 +292,7 @@
 				IsSubscribe = true,
 				DataType2 = dt,
 				SecurityId = secId,
+				IsCalcVolumeProfile = true,
 			};
 
 			var token = _drawCts.Token;
