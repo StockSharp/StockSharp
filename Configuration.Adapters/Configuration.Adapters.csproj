@@ -46,7 +46,6 @@
     <ProjectReference Include="$(ConnectorsAppsPath)Deribit\Deribit.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Digifinex\Digifinex.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)DukasCopy\DukasCopy.csproj" />
-    <ProjectReference Include="$(ConnectorsAppsPath)ETrade\ETrade.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Exmo\Exmo.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)FatBTC\FatBTC.csproj" />
     <ProjectReference Include="$(ConnectorsAppsPath)Finam\Finam.csproj" />

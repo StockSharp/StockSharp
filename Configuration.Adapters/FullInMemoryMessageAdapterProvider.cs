@@ -45,7 +45,6 @@ namespace StockSharp.Configuration
 	using StockSharp.Deribit;
 	using StockSharp.Digifinex;
 	using StockSharp.DukasCopy;
-	using StockSharp.ETrade;
 	using StockSharp.Exmo;
 	using StockSharp.FatBTC;
 	using StockSharp.Finam;
@@ -144,7 +143,6 @@ namespace StockSharp.Configuration
 			() => typeof(BtceMessageAdapter),
 			() => typeof(CqgComMessageAdapter),
 			() => typeof(CqgContinuumMessageAdapter),
-			() => typeof(ETradeMessageAdapter),
 			() => typeof(FixMessageAdapter),
 			() => typeof(FastMessageAdapter),
 			() => typeof(InteractiveBrokersMessageAdapter),

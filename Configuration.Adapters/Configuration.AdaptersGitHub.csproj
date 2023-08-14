@@ -39,7 +39,6 @@
     <PackageReference Include="StockSharp.DeribitStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.DigifinexStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.DukasCopy" Version="$(StockSharpVer)" />
-    <PackageReference Include="StockSharp.ETradeStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.ExmoStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.FatBTCStub" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Finam" Version="$(StockSharpVer)" />
