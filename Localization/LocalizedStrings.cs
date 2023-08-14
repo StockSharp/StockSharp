@@ -21,7 +21,6 @@ namespace StockSharp.Localization
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Configuration;
 
 	/// <summary>
 	/// Extension for <see cref="LocalizedStrings"/>.
@@ -50,7 +49,7 @@ namespace StockSharp.Localization
 			{
 				var manager = new LocalizationManager();
 				manager.Init(new StreamReader(LocalizedStringsExtension.GetResourceStream()));
-				ConfigManager.RegisterService(manager);
+				_localizationManager = manager;
 			}
 			catch (Exception ex)
 			{
@@ -68,7 +67,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Localization manager.
 		/// </summary>
-		public static LocalizationManager LocalizationManager => _localizationManager ??= ConfigManager.TryGetService<LocalizationManager>();
+		public static LocalizationManager LocalizationManager => _localizationManager ?? throw new InvalidOperationException("Not initialized.");
 
 		/// <summary>
 		/// Error handler to track missed translations or resource keys.
