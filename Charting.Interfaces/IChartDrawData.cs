@@ -30,13 +30,14 @@
 			/// </summary>
 			/// <param name="element">The chart element representing a candle.</param>
 			/// <param name="dataType"><see cref="DataType"/>.</param>
+			/// <param name="secId"><see cref="SecurityId"/>.</param>
 			/// <param name="openPrice">Opening price.</param>
 			/// <param name="highPrice">Highest price.</param>
 			/// <param name="lowPrice">Lowest price.</param>
 			/// <param name="closePrice">Closing price.</param>
 			/// <param name="priceLevels">Price levels.</param>
 			/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-			IChartDrawDataItem Add(IChartCandleElement element, DataType dataType, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels);
+			IChartDrawDataItem Add(IChartCandleElement element, DataType dataType, SecurityId secId, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels);
 
 			/// <summary>
 			/// Put the indicator data.

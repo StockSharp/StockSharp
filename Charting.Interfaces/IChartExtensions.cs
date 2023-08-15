@@ -184,7 +184,7 @@
 				return item;
 			}
 
-			return item.Add(element, candle.DataType, openPrice, highPrice, lowPrice, closePrice, priceLevels);
+			return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, priceLevels);
 		}
 
 		/// <summary>
