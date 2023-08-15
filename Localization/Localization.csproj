@@ -14,7 +14,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="translation.json" />
-  </ItemGroup>
+    <AdditionalFiles Include="translation.json" />
+   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Localization.Generator\Localization.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
