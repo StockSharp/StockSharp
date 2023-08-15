@@ -6,7 +6,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
-  </ItemGroup>
 </Project>

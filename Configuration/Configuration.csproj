@@ -8,5 +8,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVer)" />
+    <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
   </ItemGroup>
 </Project>

@@ -23,7 +23,6 @@ namespace StockSharp.Logging
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -37,7 +36,7 @@ namespace StockSharp.Logging
 		{
 			public ApplicationReceiver()
 			{
-				Name = ConfigManager.TryGet("appName", TypeHelper.ApplicationName);
+				Name = TypeHelper.ApplicationName;
 				LogLevel = LogLevels.Info;
 			}
 		}
@@ -104,7 +103,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Instance.
 		/// </summary>
-		public static LogManager Instance => ConfigManager.TryGetService<LogManager>();
+		public static LogManager Instance { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogManager"/>.
@@ -120,7 +119,7 @@ namespace StockSharp.Logging
 		/// <param name="asyncMode">Asynchronous mode.</param>
 		public LogManager(bool asyncMode)
 		{
-			ConfigManager.TryRegisterService(this);
+			Instance ??= this;
 
 			Sources = new LogSourceList(this)
 			{
