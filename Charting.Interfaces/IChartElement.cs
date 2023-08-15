@@ -40,21 +40,6 @@
 		Func<IComparable, Color?> Colorer { get; set; }
 
 		/// <summary>
-		/// X axis this element currently attached to.
-		/// </summary>
-		IChartAxis XAxis { get; }
-
-		/// <summary>
-		/// Y axis this element currently attached to.
-		/// </summary>
-		IChartAxis YAxis { get; }
-
-		/// <summary>
-		/// The chart on which the element is drawn.
-		/// </summary>
-		IChart Chart { get; }
-
-		/// <summary>
 		/// The chart area on which the element is drawn.
 		/// </summary>
 		IChartArea ChartArea { get; }

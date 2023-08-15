@@ -55,11 +55,7 @@ public class DummyChartBuilder : IChartBuilder
 		public string YAxisId { get; set; }
 		Func<IComparable, Color?> IChartElement.Colorer { get; set; }
 
-		IChartAxis IChartElement.XAxis => throw new NotSupportedException();
-		IChartAxis IChartElement.YAxis => throw new NotSupportedException();
-
-		IChart IChartElement.Chart => throw new NotSupportedException();
-		IChartArea IChartElement.ChartArea => throw new NotSupportedException();
+		public IChartArea ChartArea { get; set; }
 		IChartArea IChartElement.PersistantChartArea => throw new NotSupportedException();
 
 		public override void Load(SettingsStorage storage)
@@ -118,7 +114,20 @@ public class DummyChartBuilder : IChartBuilder
 
 	private class DummyArea : DummyPart<IChartArea>, IChartArea
 	{
-		INotifyList<IChartElement> IChartArea.Elements { get; } = new SynchronizedList<IChartElement>();
+        public DummyArea()
+        {
+			_elements.Added += e => ((DummyElement)e).ChartArea = this;
+			_elements.Removed += e => ((DummyElement)e).ChartArea = null;
+			_elements.Clearing += () =>
+			{
+				_elements.ForEach(e => ((DummyElement)e).ChartArea = null);
+				return true;
+			};
+		}
+
+		private readonly SynchronizedList<IChartElement> _elements = new();
+		INotifyList<IChartElement> IChartArea.Elements => _elements;
+
 		INotifyList<IChartAxis> IChartArea.XAxises { get; } = new SynchronizedList<IChartAxis>();
 		INotifyList<IChartAxis> IChartArea.YAxises { get; } = new SynchronizedList<IChartAxis>();
 

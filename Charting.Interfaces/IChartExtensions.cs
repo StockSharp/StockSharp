@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -238,5 +239,29 @@
 		/// <param name="value">To use automatic range for the X-axis.</param>
 		public static void SetAutoRange(this IChartArea area, bool value)
 			=> area.XAxises.ForEach(a => a.AutoRange = value);
+
+		/// <summary>
+		/// The chart on which the element is drawn.
+		/// </summary>
+		/// <param name="elem"><see cref="IChartElement"/></param>
+		/// <returns>The chart on which the element is drawn.</returns>
+		public static IChart TryGetChart(this IChartElement elem)
+			=> elem.CheckOnNull(nameof(elem)).ChartArea?.Chart;
+
+		/// <summary>
+		/// X axis this element currently attached to.
+		/// </summary>
+		/// <param name="elem"><see cref="IChartElement"/></param>
+		/// <returns>X axis this element currently attached to.</returns>
+		public static IChartAxis TryGetXAxis(this IChartElement elem)
+			=> elem.CheckOnNull(nameof(elem)).ChartArea?.XAxises.FirstOrDefault(xa => xa.Id == elem.XAxisId);
+
+		/// <summary>
+		/// Y axis this element currently attached to.
+		/// </summary>
+		/// <param name="elem"><see cref="IChartElement"/></param>
+		/// <returns>Y axis this element currently attached to.</returns>
+		public static IChartAxis TryGetYAxis(this IChartElement elem)
+			=> elem.CheckOnNull(nameof(elem)).ChartArea?.YAxises.FirstOrDefault(xa => xa.Id == elem.YAxisId);
 	}
 }
