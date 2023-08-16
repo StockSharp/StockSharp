@@ -77,6 +77,12 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="value">Value.</param>
 		/// <returns>New object, containing input value.</returns>
 		IIndicatorValue SetValue<T>(IIndicator indicator, T value);
+
+		/// <summary>
+		/// Convert to primitive values.
+		/// </summary>
+		/// <returns>Primitive values.</returns>
+		IEnumerable<object> ToValues();
 	}
 
 	/// <summary>
@@ -131,6 +137,9 @@ namespace StockSharp.Algo.Indicators
 
 			return CompareTo(value);
 		}
+
+		/// <inheritdoc />
+		public abstract IEnumerable<object> ToValues();
 	}
 
 	/// <summary>
@@ -210,6 +219,12 @@ namespace StockSharp.Algo.Indicators
 		/// <returns><typeparamref name="TValue"/> value.</returns>
 		public static explicit operator TValue(SingleIndicatorValue<TValue> value)
 			=> value.Value;
+
+		/// <inheritdoc />
+		public override IEnumerable<object> ToValues()
+		{
+			yield return Value;
+		}
 	}
 
 	/// <summary>
@@ -485,5 +500,15 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
+
+		/// <inheritdoc />
+		public override IEnumerable<object> ToValues()
+		{
+			foreach (var ii in ((IComplexIndicator)Indicator).InnerIndicators)
+			{
+				foreach (var v1 in InnerValues[ii].ToValues())
+					yield return v1;
+			}
+		}
 	}
 }

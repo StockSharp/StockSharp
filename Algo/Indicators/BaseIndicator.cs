@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
+	using System.Linq;
 	using System.Collections.Generic;
 
 	using Ecng.Common;
@@ -219,5 +220,9 @@ namespace StockSharp.Algo.Indicators
 
 			return max;
 		}
+
+		/// <inheritdoc/>
+		public virtual IIndicatorValue CreateValue(IEnumerable<object> values)
+			=> new DecimalIndicatorValue(this, values.First().To<decimal>());
 	}
 }

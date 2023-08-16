@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.Linq;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 
@@ -40,6 +41,39 @@ namespace StockSharp.Algo.Indicators
 	[Doc("topics/IndicatorVolumeProfileIndicator.html")]
 	public class VolumeProfileIndicator : BaseIndicator
 	{
+		/// <summary>
+		/// The indicator value <see cref="VolumeProfileIndicator"/>, derived in result of calculation.
+		/// </summary>
+		private class VolumeProfileIndicatorValue : SingleIndicatorValue<IDictionary<decimal, decimal>>
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="VolumeProfileIndicatorValue"/>.
+			/// </summary>
+			/// <param name="indicator">Indicator.</param>
+			public VolumeProfileIndicatorValue(IIndicator indicator)
+				: base(indicator)
+			{
+				Levels = new Dictionary<decimal, decimal>();
+			}
+
+			/// <summary>
+			/// Embedded values.
+			/// </summary>
+			public IDictionary<decimal, decimal> Levels { get; }
+
+			/// <inheritdoc />
+			public override bool IsSupport(Type valueType) => valueType == typeof(decimal);
+
+			/// <inheritdoc />
+			public override T GetValue<T>() => throw new NotSupportedException();
+
+			/// <inheritdoc />
+			public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
+
+			/// <inheritdoc />
+			public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
+		}
+
 		private readonly Dictionary<decimal, decimal> _levels = new();
 
 		/// <summary>
@@ -98,38 +132,9 @@ namespace StockSharp.Algo.Indicators
 
 			_levels[level] = currentValue + volume;
 		}
-	}
-
-	/// <summary>
-	/// The indicator value <see cref="VolumeProfileIndicator"/>, derived in result of calculation.
-	/// </summary>
-	public class VolumeProfileIndicatorValue : SingleIndicatorValue<IDictionary<decimal, decimal>>
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VolumeProfileIndicatorValue"/>.
-		/// </summary>
-		/// <param name="indicator">Indicator.</param>
-		public VolumeProfileIndicatorValue(IIndicator indicator)
-			: base(indicator)
-		{
-			Levels = new Dictionary<decimal, decimal>();
-		}
-
-		/// <summary>
-		/// Embedded values.
-		/// </summary>
-		public IDictionary<decimal, decimal> Levels { get; }
 
 		/// <inheritdoc />
-		public override bool IsSupport(Type valueType) => valueType == typeof(decimal);
-
-		/// <inheritdoc />
-		public override T GetValue<T>() => throw new NotSupportedException();
-
-		/// <inheritdoc />
-		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
-
-		/// <inheritdoc />
-		public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
+		public override IIndicatorValue CreateValue(IEnumerable<object> values)
+			=> throw new NotSupportedException();
 	}
 }

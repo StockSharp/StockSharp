@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -113,5 +114,12 @@ namespace StockSharp.Algo.Indicators
 		/// <see cref="IndicatorMeasures"/>.
 		/// </summary>
 		IndicatorMeasures Measure { get; }
+
+		/// <summary>
+		/// Convert to indicator value.
+		/// </summary>
+		/// <param name="values"><see cref="IIndicatorValue.ToValues"/></param>
+		/// <returns><see cref="IIndicatorValue"/></returns>
+		IIndicatorValue CreateValue(IEnumerable<object> values);
 	}
 }

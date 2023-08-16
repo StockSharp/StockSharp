@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	/// <summary>
 	/// Embedded indicators processing modes.
@@ -148,6 +149,26 @@ namespace StockSharp.Algo.Indicators
 				indicator.Load(storage.GetValue<SettingsStorage>(indicator.Name + index));
 				index++;
 			}
+		}
+
+		/// <inheritdoc />
+		public override IIndicatorValue CreateValue(IEnumerable<object> values)
+		{
+			var value = new ComplexIndicatorValue(this);
+
+			var arr = values.ToArray();
+
+			for (var i = 0; i < InnerIndicators.Count; i++)
+			{
+				var ii = InnerIndicators[i];
+
+				var val = i < arr.Length ? new DecimalIndicatorValue(ii, arr[i].To<decimal>()) : new DecimalIndicatorValue(ii);
+				val.IsFinal = val.IsFormed = true;
+
+				value.InnerValues.Add(ii, val);
+			}
+
+			return value;
 		}
 	}
 }
