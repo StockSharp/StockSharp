@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Risk
 		/// <summary>
 		/// Rule list.
 		/// </summary>
-		SynchronizedSet<IRiskRule> Rules { get; }
+		INotifyList<IRiskRule> Rules { get; }
 
 		/// <summary>
 		/// To process the trade message.

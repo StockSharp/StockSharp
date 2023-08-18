@@ -832,7 +832,7 @@ namespace StockSharp.Algo.Strategies
 		/// To call events <see cref="ParametersChanged"/> and <see cref="PropertyChanged"/>.
 		/// </summary>
 		/// <param name="name">Parameter name.</param>
-		protected internal void RaiseParametersChanged([CallerMemberName]string name = default)
+		public void RaiseParametersChanged([CallerMemberName]string name = default)
 		{
 			ParametersChanged?.Invoke();
 			this.Notify(name);
