@@ -93,10 +93,10 @@
 			StatisticManager.AddPnL(time, PnL, Commission);
 		}
 
-		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new();
+		private readonly CachedSynchronizedDictionary<(Security, Portfolio), Position> _positions = new();
 
-		private static Tuple<Security, Portfolio> CreatePositionKey(Security security, Portfolio portfolio)
-			=> Tuple.Create(security ?? throw new ArgumentNullException(nameof(security)), portfolio ?? throw new ArgumentNullException(nameof(portfolio)));
+		private static (Security, Portfolio) CreatePositionKey(Security security, Portfolio portfolio)
+			=> (security ?? throw new ArgumentNullException(nameof(security)), portfolio ?? throw new ArgumentNullException(nameof(portfolio)));
 
 		/// <summary>
 		/// Get position.
@@ -199,7 +199,7 @@
 		}
 
 		Position IPositionProvider.GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType)
-			=> _positions.TryGetValue(Tuple.Create(security, portfolio));
+			=> _positions.TryGetValue((security, portfolio));
 
 		Portfolio IPortfolioProvider.LookupByPortfolioName(string name)
 			=> SafeGetConnector().LookupByPortfolioName(name);

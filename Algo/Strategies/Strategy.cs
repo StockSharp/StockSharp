@@ -28,7 +28,6 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Statistics;
@@ -65,6 +64,50 @@ namespace StockSharp.Algo.Strategies
 		[EnumMember]
 		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NameKey)]
 		Name,
+	}
+
+	/// <summary>
+	/// Strategy trading modes.
+	/// </summary>
+	[DataContract]
+	[Serializable]
+	public enum StrategyTradingModes
+	{
+		/// <summary>
+		/// Allow trading.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str3599Key,
+			Description = LocalizedStrings.AllowTradingKey)]
+		Allow,
+
+		/// <summary>
+		/// Disabled trading.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str2558Key,
+			Description = LocalizedStrings.TradingDisabledKey)]
+		Disabled,
+
+		/// <summary>
+		/// Cancel orders only.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str858Key,
+			Description = LocalizedStrings.Str858Key)]
+		CancelOrdersOnly,
+
+		/// <summary>
+		/// Accept orders for reduce position only.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PosConditionReduceOnlyKey,
+			Description = LocalizedStrings.PosConditionReduceOnlyDetailsKey)]
+		ReducePositionOnly,
 	}
 
 	/// <summary>
@@ -373,7 +416,7 @@ namespace StockSharp.Algo.Strategies
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
-			_allowTrading = this.Param(nameof(AllowTrading), true);
+			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Allow);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
@@ -1156,7 +1199,7 @@ namespace StockSharp.Algo.Strategies
 			set => _restoreChildOrders.Value = value;
 		}
 
-		private readonly StrategyParam<bool> _allowTrading;
+		private readonly StrategyParam<StrategyTradingModes> _tradingMode;
 
 		/// <summary>
 		/// Allow trading.
@@ -1167,10 +1210,10 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.AllowTradingKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		public bool AllowTrading
+		public StrategyTradingModes TradingMode
 		{
-			get => _allowTrading.Value;
-			set => _allowTrading.Value = value;
+			get => _tradingMode.Value;
+			set => _tradingMode.Value = value;
 		}
 
 		/// <summary>
@@ -1650,9 +1693,9 @@ namespace StockSharp.Algo.Strategies
 
 		private string _lastCantTradeReason;
 
-		private bool CanTrade()
+		private bool CanTrade(bool reducePosition)
 		{
-			if(CanTrade(CurrentTime, out var reason))
+			if(CanTrade(CurrentTime, reducePosition, out var reason))
 			{
 				_lastCantTradeReason = null;
 				return true;
@@ -1668,7 +1711,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Check if can trade.
 		/// </summary>
-		protected virtual bool CanTrade(DateTimeOffset time, out string noTradeReason)
+		protected virtual bool CanTrade(DateTimeOffset time, bool reducePosition, out string noTradeReason)
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
@@ -1682,9 +1725,14 @@ namespace StockSharp.Algo.Strategies
 				return false;
 			}
 
-			if (!AllowTrading)
+			if (TradingMode == StrategyTradingModes.Disabled)
 			{
-				noTradeReason = LocalizedStrings.AllowTrading;
+				noTradeReason = LocalizedStrings.TradingDisabled;
+				return false;
+			}
+			else if (TradingMode == StrategyTradingModes.ReducePositionOnly && !reducePosition)
+			{
+				noTradeReason = LocalizedStrings.PosConditionReduceOnlyKey;
 				return false;
 			}
 
@@ -1716,7 +1764,9 @@ namespace StockSharp.Algo.Strategies
 			if (order is null)
 				throw new ArgumentNullException(nameof(order));
 
-			if (!CanTrade())
+			var pos = _positions.TryGetValue((order.Security, order.Portfolio))?.CurrentValue;
+
+			if (!CanTrade(pos > 0 && pos.Value.GetDirection() == order.Side.Invert() && pos.Value.Abs() >= order.Volume))
 				return;
 
 			this.AddInfoLog(LocalizedStrings.Str1382Params,
@@ -1763,7 +1813,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.AddInfoLog("EditOrder: {0}", order);
 
-			if (!CanTrade())
+			if (!CanTrade(changes.Volume > 0 && order.Balance > changes.Volume))
 				return;
 
 			SafeGetConnector().EditOrder(order, changes);
@@ -1780,7 +1830,7 @@ namespace StockSharp.Algo.Strategies
 
 			this.AddInfoLog(LocalizedStrings.Str1384Params, oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
-			if (!CanTrade())
+			if (!CanTrade(newOrder.Volume > 0 && oldOrder.Balance > newOrder.Volume))
 				return;
 
 			AddOrder(newOrder, false);
@@ -1919,6 +1969,12 @@ namespace StockSharp.Algo.Strategies
 
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
+
+			if (TradingMode == StrategyTradingModes.Disabled)
+			{
+				this.AddWarningLog(LocalizedStrings.TradingDisabled);
+				return;
+			}
 
 			lock (_ordersInfo.SyncRoot)
 			{
