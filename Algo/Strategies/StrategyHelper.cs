@@ -848,6 +848,6 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="strategy"><see cref="Strategy"/></param>
 		/// <returns>Check result.</returns>
 		public static bool IsFormedAndAllowTrading(this Strategy strategy)
-			=> strategy.CheckOnNull(nameof(strategy)).IsFormed && strategy.TradingMode == StrategyTradingModes.Allow;
+			=> strategy.CheckOnNull(nameof(strategy)).IsFormed && strategy.TradingMode != StrategyTradingModes.Disabled;
 	}
 }
