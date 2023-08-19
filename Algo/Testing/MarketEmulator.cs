@@ -14,7 +14,7 @@ Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
 
-#define EMU_DBG
+//#define EMU_DBG
 
 namespace StockSharp.Algo.Testing
 {
