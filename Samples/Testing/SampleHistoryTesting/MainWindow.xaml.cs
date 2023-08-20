@@ -40,7 +40,7 @@ namespace SampleHistoryTesting
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
-	using StockSharp.Algo.Candles;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
@@ -65,6 +65,14 @@ namespace SampleHistoryTesting
 		private DateTime _startEmulationTime;
 
 		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new();
+		private readonly (
+			CheckBox enabled,
+			ProgressBar progress,
+			StatisticParameterGrid stat,
+			EmulationInfo info,
+			ChartPanel chart,
+			EquityCurveChart equity,
+			EquityCurveChart pos)[] _settings;
 
 		public MainWindow()
 		{
@@ -108,6 +116,193 @@ namespace SampleHistoryTesting
 				YahooCandlesCheckBox,
 				RandomCheckBox,
 			});
+
+			// create backtesting modes
+			_settings = new[]
+			{
+				(
+					TicksCheckBox,
+					TicksProgress,
+					TicksParameterGrid,
+					// ticks
+					new EmulationInfo
+					{
+						UseTicks = true,
+						CurveColor = Colors.DarkGreen,
+						StrategyName = LocalizedStrings.Ticks
+					},
+					TicksChart,
+					TicksEquity,
+					TicksPosition
+				),
+
+				(
+					TicksAndDepthsCheckBox,
+					TicksAndDepthsProgress,
+					TicksAndDepthsParameterGrid,
+					// ticks + order book
+					new EmulationInfo
+					{
+						UseTicks = true,
+						UseMarketDepth = true,
+						CurveColor = Colors.Red,
+						StrategyName = LocalizedStrings.XamlStr757
+					},
+					TicksAndDepthsChart,
+					TicksAndDepthsEquity,
+					TicksAndDepthsPosition
+				),
+
+				(
+					DepthsCheckBox,
+					DepthsProgress,
+					DepthsParameterGrid,
+					// order book
+					new EmulationInfo
+					{
+						UseMarketDepth = true,
+						CurveColor = Colors.OrangeRed,
+						StrategyName = LocalizedStrings.MarketDepths
+					},
+					DepthsChart,
+					DepthsEquity,
+					DepthsPosition
+				),
+
+				(
+					CandlesCheckBox,
+					CandlesProgress,
+					CandlesParameterGrid,
+					// candles
+					new EmulationInfo
+					{
+						UseCandle = CandleSettings.DataType,
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.Candles
+					},
+					CandlesChart,
+					CandlesEquity,
+					CandlesPosition
+				),
+
+				(
+					CandlesAndDepthsCheckBox,
+					CandlesAndDepthsProgress,
+					CandlesAndDepthsParameterGrid,
+					// candles + orderbook
+					new EmulationInfo
+					{
+						UseMarketDepth = true,
+						UseCandle = CandleSettings.DataType,
+						CurveColor = Colors.Cyan,
+						StrategyName = LocalizedStrings.XamlStr635
+					},
+					CandlesAndDepthsChart,
+					CandlesAndDepthsEquity,
+					CandlesAndDepthsPosition
+				),
+
+				(
+					OrderLogCheckBox,
+					OrderLogProgress,
+					OrderLogParameterGrid,
+					// order log
+					new EmulationInfo
+					{
+						UseOrderLog = true,
+						CurveColor = Colors.CornflowerBlue,
+						StrategyName = LocalizedStrings.OrderLog
+					},
+					OrderLogChart,
+					OrderLogEquity,
+					OrderLogPosition
+				),
+
+				(
+					LastTradeCheckBox,
+					LastTradeProgress,
+					LastTradeParameterGrid,
+					// order log
+					new EmulationInfo
+					{
+						UseLevel1 = true,
+						CurveColor = Colors.Aquamarine,
+						StrategyName = LocalizedStrings.Level1,
+						BuildField = Level1Fields.LastTradePrice,
+					},
+					LastTradeChart,
+					LastTradeEquity,
+					LastTradePosition
+				),
+
+				(
+					SpreadCheckBox,
+					SpreadProgress,
+					SpreadParameterGrid,
+					// order log
+					new EmulationInfo
+					{
+						UseLevel1 = true,
+						CurveColor = Colors.Aquamarine,
+						StrategyName = LocalizedStrings.Level1,
+						BuildField = Level1Fields.SpreadMiddle,
+					},
+					SpreadChart,
+					SpreadEquity,
+					SpreadPosition
+				),
+
+				(
+					FinamCandlesCheckBox,
+					FinamCandlesProgress,
+					FinamCandlesParameterGrid,
+					// candles
+					new EmulationInfo
+					{
+						UseCandle = CandleSettings.DataType,
+						CustomHistoryAdapter = g => new FinamMessageAdapter(g),
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.FinamCandles
+					},
+					FinamCandlesChart,
+					FinamCandlesEquity,
+					FinamCandlesPosition
+				),
+
+				(
+					YahooCandlesCheckBox,
+					YahooCandlesProgress,
+					YahooCandlesParameterGrid,
+					// candles
+					new EmulationInfo
+					{
+						UseCandle = CandleSettings.DataType,
+						CustomHistoryAdapter = g => new YahooMessageAdapter(g),
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.YahooCandles
+					},
+					YahooCandlesChart,
+					YahooCandlesEquity,
+					YahooCandlesPosition
+				),
+
+				(
+					RandomCheckBox,
+					RandomProgress,
+					RandomParameterGrid,
+					// candles
+					new EmulationInfo
+					{
+						UseCandle = CandleSettings.DataType,
+						CustomHistoryAdapter = g => new OwnMessageAdapter(g),
+						CurveColor = Colors.DarkBlue,
+						StrategyName = LocalizedStrings.Custom
+					},
+					RandomChart,
+					RandomEquity,
+					RandomPosition
+				),
+			};
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
@@ -149,183 +344,6 @@ namespace SampleHistoryTesting
 				Id = SecId.Text, // sec id has the same name as folder with historical data
 				Code = secCode,
 				Board = board,
-				PriceStep = 0.01m,
-			};
-
-			// create backtesting modes
-			var settings = new[]
-			{
-				Tuple.Create(
-					TicksCheckBox,
-					TicksProgress,
-					TicksParameterGrid,
-					// ticks
-					new EmulationInfo
-					{
-						UseTicks = true,
-						CurveColor = Colors.DarkGreen,
-						StrategyName = LocalizedStrings.Ticks
-					},
-					TicksChart,
-					TicksEquity,
-					TicksPosition),
-
-				Tuple.Create(
-					TicksAndDepthsCheckBox,
-					TicksAndDepthsProgress,
-					TicksAndDepthsParameterGrid,
-					// ticks + order book
-					new EmulationInfo
-					{
-						UseTicks = true,
-						UseMarketDepth = true,
-						CurveColor = Colors.Red,
-						StrategyName = LocalizedStrings.XamlStr757
-					},
-					TicksAndDepthsChart,
-					TicksAndDepthsEquity,
-					TicksAndDepthsPosition),
-
-				Tuple.Create(
-					DepthsCheckBox,
-					DepthsProgress,
-					DepthsParameterGrid,
-					// order book
-					new EmulationInfo
-					{
-						UseMarketDepth = true,
-						CurveColor = Colors.OrangeRed,
-						StrategyName = LocalizedStrings.MarketDepths
-					},
-					DepthsChart,
-					DepthsEquity,
-					DepthsPosition),
-
-				Tuple.Create(
-					CandlesCheckBox,
-					CandlesProgress,
-					CandlesParameterGrid,
-					// candles
-					new EmulationInfo
-					{
-						UseCandle = CandleSettings.DataType,
-						CurveColor = Colors.DarkBlue,
-						StrategyName = LocalizedStrings.Candles
-					},
-					CandlesChart,
-					CandlesEquity,
-					CandlesPosition),
-				
-				Tuple.Create(
-					CandlesAndDepthsCheckBox,
-					CandlesAndDepthsProgress,
-					CandlesAndDepthsParameterGrid,
-					// candles + orderbook
-					new EmulationInfo
-					{
-						UseMarketDepth = true,
-						UseCandle = CandleSettings.DataType,
-						CurveColor = Colors.Cyan,
-						StrategyName = LocalizedStrings.XamlStr635
-					},
-					CandlesAndDepthsChart,
-					CandlesAndDepthsEquity,
-					CandlesAndDepthsPosition),
-			
-				Tuple.Create(
-					OrderLogCheckBox,
-					OrderLogProgress,
-					OrderLogParameterGrid,
-					// order log
-					new EmulationInfo
-					{
-						UseOrderLog = true,
-						CurveColor = Colors.CornflowerBlue,
-						StrategyName = LocalizedStrings.OrderLog
-					},
-					OrderLogChart,
-					OrderLogEquity,
-					OrderLogPosition),
-
-				Tuple.Create(
-					LastTradeCheckBox,
-					LastTradeProgress,
-					LastTradeParameterGrid,
-					// order log
-					new EmulationInfo
-					{
-						UseLevel1 = true,
-						CurveColor = Colors.Aquamarine,
-						StrategyName = LocalizedStrings.Level1,
-						BuildField = Level1Fields.LastTradePrice,
-					},
-					LastTradeChart,
-					LastTradeEquity,
-					LastTradePosition),
-
-				Tuple.Create(
-					SpreadCheckBox,
-					SpreadProgress,
-					SpreadParameterGrid,
-					// order log
-					new EmulationInfo
-					{
-						UseLevel1 = true,
-						CurveColor = Colors.Aquamarine,
-						StrategyName = LocalizedStrings.Level1,
-						BuildField = Level1Fields.SpreadMiddle,
-					},
-					SpreadChart,
-					SpreadEquity,
-					SpreadPosition),
-
-				Tuple.Create(
-					FinamCandlesCheckBox,
-					FinamCandlesProgress,
-					FinamCandlesParameterGrid,
-					// candles
-					new EmulationInfo
-					{
-						UseCandle = CandleSettings.DataType,
-						CustomHistoryAdapter = g => new FinamMessageAdapter(g),
-						CurveColor = Colors.DarkBlue,
-						StrategyName = LocalizedStrings.FinamCandles
-					},
-					FinamCandlesChart,
-					FinamCandlesEquity,
-					FinamCandlesPosition),
-
-				Tuple.Create(
-					YahooCandlesCheckBox,
-					YahooCandlesProgress,
-					YahooCandlesParameterGrid,
-					// candles
-					new EmulationInfo
-					{
-						UseCandle = CandleSettings.DataType,
-						CustomHistoryAdapter = g => new YahooMessageAdapter(g),
-						CurveColor = Colors.DarkBlue,
-						StrategyName = LocalizedStrings.YahooCandles
-					},
-					YahooCandlesChart,
-					YahooCandlesEquity,
-					YahooCandlesPosition),
-
-				Tuple.Create(
-					RandomCheckBox,
-					RandomProgress,
-					RandomParameterGrid,
-					// candles
-					new EmulationInfo
-					{
-						UseCandle = CandleSettings.DataType,
-						CustomHistoryAdapter = g => new OwnMessageAdapter(g),
-						CurveColor = Colors.DarkBlue,
-						StrategyName = LocalizedStrings.Custom
-					},
-					RandomChart,
-					RandomEquity,
-					RandomPosition),
 			};
 
 			// storage to historical data
@@ -361,26 +379,22 @@ namespace SampleHistoryTesting
 
 			SetIsEnabled(false, false, false);
 
-			foreach (var set in settings)
+			foreach (var (enabled, progressBar, statistic, emulationInfo, chart, equity, pos) in _settings)
 			{
-				if (set.Item1.IsChecked == false)
+				if (enabled.IsChecked == false)
 					continue;
 
-				var title = (string)set.Item1.Content;
+				var title = emulationInfo.StrategyName;
 
-				ClearChart(set.Item5, set.Item6, set.Item7);
-
-				var progressBar = set.Item2;
-				var statistic = set.Item3;
-				var emulationInfo = set.Item4;
+				ClearChart(chart, equity, pos);
 
 				var level1Info = new Level1ChangeMessage
 				{
 					SecurityId = secId,
 					ServerTime = startTime,
 				}
-				.TryAdd(Level1Fields.PriceStep, security.PriceStep)
-				.TryAdd(Level1Fields.StepPrice, 0.01m)
+				//.TryAdd(Level1Fields.PriceStep, security.PriceStep)
+				//.TryAdd(Level1Fields.StepPrice, 0.01m)
 				.TryAdd(Level1Fields.MinPrice, 0.01m)
 				.TryAdd(Level1Fields.MaxPrice, 1000000m)
 				.TryAdd(Level1Fields.MarginBuy, 10000m)
@@ -469,8 +483,6 @@ namespace SampleHistoryTesting
 					strategy.BuildFrom = DataType.OrderLog;
 				else if (emulationInfo.UseMarketDepth)
 					strategy.BuildFrom = DataType.MarketDepth;
-
-				var chart = set.Item5;
 
 				var area = chart.CreateArea();
 				chart.AddArea(area);
@@ -567,8 +579,6 @@ namespace SampleHistoryTesting
 				statistic.Parameters.Clear();
 				statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
-				var equity = set.Item6;
-
 				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, ChartIndicatorDrawStyles.Area);
 				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
 				var commissionCurve = equity.CreateCurve(LocalizedStrings.Commission + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
@@ -586,17 +596,17 @@ namespace SampleHistoryTesting
 					equity.Draw(data);
 				};
 
-				var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor, ChartIndicatorDrawStyles.Line);
+				var posItems = pos.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor, ChartIndicatorDrawStyles.Line);
 
 				strategy.PositionReceived += (s, p) =>
 				{
-					var data = set.Item7.CreateData();
+					var data = pos.CreateData();
 
 					data
 						.Group(p.LocalTime)
 							.Add(posItems, p.CurrentValue);
 
-					set.Item7.Draw(data);
+					pos.Draw(data);
 				};
 
 				connector.ProgressChanged += steps => this.GuiAsync(() => progressBar.Value = steps);

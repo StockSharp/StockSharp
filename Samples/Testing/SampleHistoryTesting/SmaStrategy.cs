@@ -150,6 +150,10 @@ namespace SampleHistoryTesting
 			// or user turned off allow trading
 			if (this.IsFormedAndAllowTrading())
 			{
+				// in case we subscribed on non finished only candles
+				if (candle.State != CandleStates.Finished)
+					return;
+
 				// calc new values for short and long
 				var isShortLessThenLong = shortValue.GetValue<decimal>() < longValue.GetValue<decimal>();
 
@@ -165,8 +169,8 @@ namespace SampleHistoryTesting
 					// calc size for open position or revert
 					var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
 
-					// calc order price as a close price + offset
-					var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
+					// calc order price as a close price
+					var price = candle.ClosePrice;
 
 					RegisterOrder(this.CreateOrder(direction, price, volume));
 
