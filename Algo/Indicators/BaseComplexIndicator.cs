@@ -152,17 +152,15 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override IIndicatorValue CreateValue(IEnumerable<object> values)
+		public override IIndicatorValue CreateValue(object[] values)
 		{
 			var value = new ComplexIndicatorValue(this);
-
-			var arr = values.ToArray();
 
 			for (var i = 0; i < InnerIndicators.Count; i++)
 			{
 				var ii = InnerIndicators[i];
 
-				var val = i < arr.Length ? new DecimalIndicatorValue(ii, arr[i].To<decimal>()) : new DecimalIndicatorValue(ii);
+				var val = i < values.Length ? new DecimalIndicatorValue(ii, values[i].To<decimal>()) : new DecimalIndicatorValue(ii);
 				val.IsFinal = val.IsFormed = true;
 
 				value.InnerValues.Add(ii, val);

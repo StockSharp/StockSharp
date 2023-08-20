@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// The shifted value of the indicator.
@@ -56,5 +57,17 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => new ShiftedIndicatorValue(indicator, Shift, Value);
+
+		/// <inheritdoc />
+		public override IEnumerable<object> ToValues()
+		{
+			if (IsEmpty)
+				yield break;
+
+			yield return Shift;
+
+			foreach (var v in Value.ToValues())
+				yield return v;
+		}
 	}
 }

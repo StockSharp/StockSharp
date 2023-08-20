@@ -16,10 +16,10 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
-	using System.Linq;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
@@ -71,7 +71,17 @@ namespace StockSharp.Algo.Indicators
 			public override IIndicatorValue SetValue<T>(IIndicator indicator, T value) => throw new NotSupportedException();
 
 			/// <inheritdoc />
-			public override int CompareTo(IIndicatorValue other) => throw new NotSupportedException();
+			public override IEnumerable<object> ToValues()
+			{
+				if (IsEmpty)
+					yield break;
+
+				foreach (var level in Levels)
+				{
+					yield return level.Key;
+					yield return level.Value;
+				}
+			}
 		}
 
 		private readonly Dictionary<decimal, decimal> _levels = new();
@@ -134,7 +144,19 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
-		public override IIndicatorValue CreateValue(IEnumerable<object> values)
-			=> throw new NotSupportedException();
+		public override IIndicatorValue CreateValue(object[] values)
+		{
+			var value = new VolumeProfileIndicatorValue(this);
+
+			if (values.Length > 0)
+			{
+				for (var i = 0; i < values.Length; i += 2)
+				{
+					value.Levels.Add(values[i].To<decimal>(), values[i + 1].To<decimal>());
+				}
+			}
+			
+			return value;
+		}
 	}
 }

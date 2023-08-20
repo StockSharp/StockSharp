@@ -223,7 +223,8 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override IEnumerable<object> ToValues()
 		{
-			yield return Value;
+			if (!IsEmpty)
+				yield return Value;
 		}
 	}
 
@@ -504,6 +505,9 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override IEnumerable<object> ToValues()
 		{
+			if (IsEmpty)
+				yield break;
+
 			foreach (var ii in ((IComplexIndicator)Indicator).InnerIndicators)
 			{
 				foreach (var v1 in InnerValues[ii].ToValues())

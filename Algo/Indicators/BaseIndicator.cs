@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc/>
-		public virtual IIndicatorValue CreateValue(IEnumerable<object> values)
-			=> new DecimalIndicatorValue(this, values.First().To<decimal>());
+		public virtual IIndicatorValue CreateValue(object[] values)
+			=> values.Length == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, values[0].To<decimal>());
 	}
 }

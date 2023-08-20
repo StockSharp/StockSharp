@@ -120,6 +120,6 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <param name="values"><see cref="IIndicatorValue.ToValues"/></param>
 		/// <returns><see cref="IIndicatorValue"/></returns>
-		IIndicatorValue CreateValue(IEnumerable<object> values);
+		IIndicatorValue CreateValue(object[] values);
 	}
 }

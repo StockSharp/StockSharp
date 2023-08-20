@@ -45,6 +45,21 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 	/// <returns><see cref="bool"/> value.</returns>
 	public static explicit operator bool(CandlePatternIndicatorValue value)
 		=> value.Value;
+
+	/// <inheritdoc />
+	public override IEnumerable<object> ToValues()
+	{
+		if (IsEmpty)
+			yield break;
+
+		yield return Value;
+
+		if (CandleOpenTimes is not null)
+		{
+			foreach (var time in CandleOpenTimes)
+				yield return time;
+		}
+	}
 }
 
 /// <summary>
@@ -105,7 +120,7 @@ public class CandlePatternIndicator : BaseIndicator
 	/// Number of candles in the pattern.
 	/// </summary>
 	[Browsable(false)]
-	public int PatternLength => Pattern?.CandlesCount ?? 0;
+	public int CandlesCount => Pattern?.CandlesCount ?? 0;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CandlePatternIndicator"/>.
@@ -157,12 +172,16 @@ public class CandlePatternIndicator : BaseIndicator
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		if(!(Pattern?.CandlesCount > 0))
-			return new CandlePatternIndicatorValue(this, false)
+		var candlesCount = CandlesCount;
+
+		if (candlesCount == 0)
+		{
+			return new CandlePatternIndicatorValue(this)
 			{
 				IsFinal = input.IsFinal,
 				InputValue = input,
 			};
+		}
 
 		var candle = input.GetValue<ICandleMessage>();
 		var recognized = false;
@@ -172,13 +191,13 @@ public class CandlePatternIndicator : BaseIndicator
 		{
 			_buffer.Add(candle);
 
-			if (_buffer.Count == Pattern.CandlesCount)
+			if (_buffer.Count == candlesCount)
 			{
 				recognized = Pattern.Recognize(CollectionsMarshal.AsSpan(_buffer));
 
 				if (recognized)
 				{
-					times = new DateTimeOffset[Pattern.CandlesCount];
+					times = new DateTimeOffset[candlesCount];
 
 					for (var i = 0; i < times.Length; ++i)
 						times[i] = _buffer[i].OpenTime;
@@ -208,6 +227,9 @@ public class CandlePatternIndicator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override IIndicatorValue CreateValue(IEnumerable<object> values)
-		=> new CandlePatternIndicatorValue(this, values.First().To<bool>());
+	public override IIndicatorValue CreateValue(object[] values)
+		=> values.Length == 0 ? new CandlePatternIndicatorValue(this) : new CandlePatternIndicatorValue(this, values[0].To<bool>())
+		{
+			CandleOpenTimes = values.Length == 1 ? null : values.Skip(1).Select(v => (DateTimeOffset)v.To<DateTime>().UtcKind()).ToArray(),
+		};
 }

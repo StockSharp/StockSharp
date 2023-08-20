@@ -417,8 +417,8 @@
 		{
 		}
 
-		IIndicatorValue IIndicator.CreateValue(IEnumerable<object> values)
-			=> new DecimalIndicatorValue(this, values.First().To<decimal>());
+		IIndicatorValue IIndicator.CreateValue(object[] values)
+			=> values.Length == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, values[0].To<decimal>());
 
 		int IIndicator.NumValuesToInitialize => _period;
 
