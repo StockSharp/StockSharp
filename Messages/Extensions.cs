@@ -1953,12 +1953,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var balance = message.Balance;
-
-			if (balance != null)
-				return balance.Value;
-
-			throw new ArgumentOutOfRangeException(nameof(message));
+			return message.Balance ?? throw new ArgumentOutOfRangeException(nameof(message));
 		}
 
 		/// <summary>

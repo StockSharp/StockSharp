@@ -438,12 +438,12 @@ namespace StockSharp.Algo.Testing
 
 							(Sides? side, decimal price, decimal vol, DateTimeOffset time)[] ticks = null;
 
-							if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
+							if (_securityDefinition is not null && _ticksSubscription is not null)
 							{
 								ticks = _tickPool.Allocate();
 								candleMsg.ConvertToTrades(GetVolumeStep(), _volumeDecimals, ticks);
 
-								ProcessTick(candleMsg.SecurityId, candleMsg.LocalTime, ticks[0], result);
+								//ProcessTick(candleMsg.SecurityId, candleMsg.LocalTime, ticks[0], result);
 							}
 
 							candles.Add((candleMsg, ticks));
@@ -492,7 +492,7 @@ namespace StockSharp.Algo.Testing
 
 				bool NeedCheckVolume(OrderRegisterMessage message)
 				{
-					if (!_settings.IncreaseDepthVolume)
+					if (!_settings.IncreaseDepthVolume || _candlesSubscription is not null)
 						return false;
 
 					var orderSide = message.Side;
@@ -1825,7 +1825,19 @@ namespace StockSharp.Algo.Testing
 						Verify();
 #endif
 
-						MatchOrder(execution.LocalTime, execution, result, true);
+						var matchByCandles = _candlesSubscription is not null;
+
+						if (matchByCandles)
+						{
+							var candle = _candleInfo.LastOrDefault().Value?.FirstOrDefault().candle;
+
+							if (candle is not null)
+							{
+								MatchOrderByCandle(execution.LocalTime, execution, candle, result);
+							}
+						}
+						else
+							MatchOrder(execution.LocalTime, execution, result, true);
 
 #if EMU_DBG
 						Verify();
@@ -1837,8 +1849,11 @@ namespace StockSharp.Algo.Testing
 
 							AddActiveOrder(execution, time);
 
-							// изменяем текущие котировки, добавляя туда наши цену и объем
-							UpdateQuote(execution, true);
+							if (!matchByCandles)
+							{
+								// изменяем текущие котировки, добавляя туда наши цену и объем
+								UpdateQuote(execution, true);
+							}
 						}
 						else if (execution.IsCanceled())
 						{
@@ -1957,6 +1972,53 @@ namespace StockSharp.Algo.Testing
 					Sides.Sell => _asks,
 					_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.Str1219),
 				};
+			}
+
+			private void MatchOrderByCandle(DateTimeOffset time, ExecutionMessage order, CandleMessage candle, ICollection<Message> result)
+			{
+#if EMU_DBG
+				Verify();
+#endif
+
+				var balance = order.GetBalance();
+
+				var leftBalance = candle.TotalVolume == 0 /* candle no volume info - assume candle's volume much more order's balance */
+					? 0
+					: (order.GetBalance() - candle.TotalVolume).Max(0);
+
+				if (leftBalance > 0 && order.TimeInForce == TimeInForce.MatchOrCancel)
+					return;
+
+				var isMarket = order.OrderType == OrderTypes.Market;
+
+				decimal execPrice;
+
+				if (order.OrderType == OrderTypes.Market)
+				{
+					execPrice = candle.GetMiddlePrice(GetPriceStep());
+
+					// price step is wrong, so adjust by candle boundaries
+					if (execPrice > candle.HighPrice || execPrice < candle.LowPrice)
+						execPrice = candle.ClosePrice;
+				}
+				else
+				{
+					if (order.OrderPrice > candle.HighPrice || order.OrderPrice < candle.LowPrice)
+						return;
+
+					execPrice = order.OrderPrice;
+				}
+
+				var executions = new List<(decimal price, decimal volume)>
+				{
+					(execPrice, balance - leftBalance)
+				};
+
+				MatchOrderPostProcess(time, order, executions, leftBalance, false, result);
+
+#if EMU_DBG
+				Verify();
+#endif
 			}
 
 			private void MatchOrder(DateTimeOffset time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
@@ -2143,6 +2205,11 @@ namespace StockSharp.Algo.Testing
 					return;
 				}
 
+				MatchOrderPostProcess(time, order, executions, leftBalance, isCrossTrade, result);
+			}
+
+			private void MatchOrderPostProcess(DateTimeOffset time, ExecutionMessage order, List<(decimal price, decimal volume)> executions, decimal leftBalance, bool isCrossTrade, ICollection<Message> result)
+			{
 				switch (order.TimeInForce)
 				{
 					case null:
@@ -2161,7 +2228,7 @@ namespace StockSharp.Algo.Testing
 							ProcessOrder(time, order, result);
 						}
 
-						if (isMarket)
+						if (order.OrderType == OrderTypes.Market)
 						{
 							if (leftBalance > 0)
 							{
@@ -2218,9 +2285,7 @@ namespace StockSharp.Algo.Testing
 				}
 
 				foreach (var (price, volume) in executions)
-				{
 					ProcessTrade(time, order, price, volume, result);
-				}
 			}
 
 			private void ProcessTime(Message message, ICollection<Message> result)
@@ -2234,6 +2299,8 @@ namespace StockSharp.Algo.Testing
 			{
 				if (_candleInfo.Count == 0)
 					return;
+
+				var matchByCandle = _candlesSubscription is not null;
 
 				List<DateTimeOffset> toRemove = null;
 
@@ -2305,6 +2372,20 @@ namespace StockSharp.Algo.Testing
 
 						if (ticks is not null)
 							_tickPool.Free(ticks);
+
+						if (matchByCandle && _activeOrders.Count > 0)
+						{
+							foreach (var order in _activeOrders.Values.ToArray())
+							{
+								if (order.OrderPrice <= candle.HighPrice && order.OrderPrice >= candle.LowPrice)
+								{
+									MatchOrderByCandle(message.LocalTime, order, candle, result);
+
+									if (order.OrderState == OrderStates.Done)
+										TryRemoveActiveOrder(order.TransactionId, out _);
+								}
+							}
+						}
 					}
 				}
 
