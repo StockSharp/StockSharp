@@ -57,7 +57,7 @@ public class CandlePatternIndicatorValue : SingleIndicatorValue<bool>
 		if (CandleOpenTimes is not null)
 		{
 			foreach (var time in CandleOpenTimes)
-				yield return time;
+				yield return time.UtcDateTime;
 		}
 	}
 }
