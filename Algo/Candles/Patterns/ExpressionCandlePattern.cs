@@ -297,7 +297,7 @@ public class ExpressionCandlePattern : ICandlePattern
 	void IPersistable.Save(SettingsStorage storage)
 	{
 		storage.Set(nameof(Name), Name);
-		storage.SetValue(nameof(Conditions), Conditions.Select(c => c.Save()).ToArray());
+		storage.Set(nameof(Conditions), Conditions.Select(c => c.Save()).ToArray());
 	}
 
 	/// <inheritdoc />
