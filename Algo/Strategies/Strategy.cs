@@ -167,6 +167,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderRegisterFailed += _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed += _parent.OnChildOrderCancelFailed;
 				item.NewMyTrade += _parent.AddMyTrade;
+				item.OwnTradeReceived += _parent.OnChildOwnTradeReceived;
 				item.OrderReRegistering += _parent.OnOrderReRegistering;
 				item.ProcessStateChanged += OnChildProcessStateChanged;
 				item.Error += _parent.OnError;
@@ -227,6 +228,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderCancelFailed -= _parent.OnChildOrderCancelFailed;
 				item.OrderCanceling -= _parent.OnOrderCanceling;
 				item.NewMyTrade -= _parent.AddMyTrade;
+				item.OwnTradeReceived -= _parent.OnChildOwnTradeReceived;
 				item.OrderReRegistering -= _parent.OnOrderReRegistering;
 				item.ProcessStateChanged -= OnChildProcessStateChanged;
 				item.Error -= _parent.OnError;
@@ -2704,6 +2706,11 @@ namespace StockSharp.Algo.Strategies
 					.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(security, Level1Fields.Multiplier) ?? security.Multiplier);
 
 			PnLManager.ProcessMessage(msg);
+		}
+
+		private void OnChildOwnTradeReceived(Subscription subscription, MyTrade trade)
+		{
+			TryInvoke(() => OwnTradeReceived?.Invoke(subscription, trade));
 		}
 
 		private void AddMyTrade(MyTrade trade) => TryAddMyTrade(trade);
