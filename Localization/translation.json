@@ -1,4 +1,8 @@
 {
+  "ServerStopOrders": {
+    "en": "Try use server-side stop orders if underlying connector provide it.",
+    "ru": "Попытаться использовать серверные стоп-ордера если подключение их поддерживает."
+  },
   "SupportEmptyDepth": {
     "en": "Translates empty depth.",
     "ru": "Передавать пустые стаканы."
