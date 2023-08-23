@@ -1635,6 +1635,15 @@ namespace StockSharp.Algo
 			wrapper.SendInMessage(message);
 		}
 
+		/// <summary>
+		/// Try find adapter by portfolio name.
+		/// </summary>
+		/// <param name="porfolioName">Portfolio name.</param>
+		/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+		/// <returns>Found <see cref="IMessageAdapter"/>.</returns>
+		public bool TryGetAdapter(string porfolioName, out IMessageAdapter adapter)
+			=> _portfolioAdapters.TryGetValue(porfolioName, out adapter);
+
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
 			if (message.IsSubscribe)
@@ -1692,7 +1701,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (!_portfolioAdapters.TryGetValue(portfolioName, out var adapter))
+			if (!TryGetAdapter(portfolioName, out var adapter))
 			{
 				return GetAdapters(message, out isPended, out _).FirstOrDefault();
 			}
