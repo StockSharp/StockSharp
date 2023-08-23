@@ -1,4 +1,8 @@
 {
+  "SupportEmptyDepth": {
+    "en": "Translates empty depth.",
+    "ru": "Передавать пустые стаканы."
+  },
   "Tenkan": {
     "en": "Tenkan",
     "ru": "Tenkan"
