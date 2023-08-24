@@ -1,4 +1,12 @@
 {
+  "Validation": {
+    "en": "Validation",
+    "ru": "Проверка"
+  },
+  "ValidationInputValues": {
+    "en": "Validation input values expression.",
+    "ru": "Выражение проверки входных значений."
+  },
   "Empty": {
     "en": "Empty",
     "ru": "Пустое"
