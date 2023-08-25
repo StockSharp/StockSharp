@@ -452,6 +452,12 @@ namespace StockSharp.Messages
 
 			var curr = this;
 
+			if (curr.Type is UnitTypes.Point or UnitTypes.Step && curr.GetTypeValue is null)
+				return false;
+
+			if (other.Type is UnitTypes.Point or UnitTypes.Step && other.GetTypeValue is null)
+				return false;
+
 			if (other.Type == UnitTypes.Absolute)
 			{
 				curr = Convert(other.Type, false);
