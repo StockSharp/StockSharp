@@ -650,6 +650,8 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
+			private decimal GetRandomVolume() => _volumeRandom.Next(10, 100);
+
 			private void ProcessLevel1(Level1ChangeMessage message, ICollection<Message> result)
 			{
 				UpdateSecurityDefinition(message);
@@ -684,12 +686,12 @@ namespace StockSharp.Algo.Testing
 					if (_l1BidVol == 0)
 						_l1BidVol = null;
 					else
-						_l1BidVol ??= 1;
+						_l1BidVol ??= GetRandomVolume();
 
 					if (_l1AskVol == 0)
 						_l1AskVol = null;
 					else
-						_l1AskVol ??= 1;
+						_l1AskVol ??= GetRandomVolume();
 
 					if (prevBidPrice == _l1BidPrice && prevAskPrice == _l1AskPrice && prevBidVol == _l1BidVol && prevAskVol == _l1AskVol)
 						return;
@@ -1333,6 +1335,10 @@ namespace StockSharp.Algo.Testing
 
 				UpdateSteps(tradePrice, tradeVolume);
 
+				// some feeds send zero volume
+				if (tradeVolume == 0)
+					tradeVolume = GetRandomVolume();
+
 				var bestBid = _bids.FirstOrDefault();
 				var bestAsk = _asks.FirstOrDefault();
 
@@ -1500,7 +1506,7 @@ namespace StockSharp.Algo.Testing
 					{
 						if (bestAsk.Key > newBestPrice)
 						{
-							UpdateQuote(CreateMessage(localTime, serverTime, Sides.Sell, newBestPrice, _volumeRandom.Next(10, 100)), true);
+							UpdateQuote(CreateMessage(localTime, serverTime, Sides.Sell, newBestPrice, GetRandomVolume()), true);
 							newBestPrice += spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 						}
 						else
@@ -1514,7 +1520,7 @@ namespace StockSharp.Algo.Testing
 					{
 						if (newBestPrice > bestBid.Key)
 						{
-							UpdateQuote(CreateMessage(localTime, serverTime, Sides.Buy, newBestPrice, _volumeRandom.Next(10, 100)), true);
+							UpdateQuote(CreateMessage(localTime, serverTime, Sides.Buy, newBestPrice, GetRandomVolume()), true);
 							newBestPrice -= spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 						}
 						else
@@ -1611,7 +1617,7 @@ namespace StockSharp.Algo.Testing
 
 				if (!_volumeStepUpdated)
 				{
-					if (volume != null)
+					if (volume > 0)
 					{
 						_securityDefinition.VolumeStep = volume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
 						_volumeStepUpdated = true;
