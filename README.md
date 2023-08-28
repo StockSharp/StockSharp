@@ -1,7 +1,7 @@
 <img src="./Media/SLogo.png" align="right" />
 
 # [StockSharp - trading platform][1] 
-## [Documentation][2] | [Download][3] | [Support][7] | [Algotrading training][4]
+## [Doc][2] | [Download][3] | [Chat][7] | [Education][4]
 
 ## Introduction ##
 
@@ -213,7 +213,7 @@ public class SimpleStrategy : Strategy
   [4]: https://stocksharp.com/edu/
   [5]: https://stocksharp.com/forum/
   [6]: https://stocksharp.com/broker/
-  [7]: https://stocksharp.com/support/
+  [7]: https://stocksharp.com/chat/
   [8]: https://stocksharp.com/store/strategy%20designer/
   [9]: https://stocksharp.com/store/hydra/
   [10]: https://stocksharp.com/store/trading%20terminal/
