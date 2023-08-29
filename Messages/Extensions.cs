@@ -40,11 +40,11 @@ namespace StockSharp.Messages
 			static string TimeSpanToString(TimeSpan arg) => arg.ToString().Replace(':', '-');
 			static TimeSpan StringToTimeSpan(string str) => str.Replace('-', ':').To<TimeSpan>();
 
-			RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString);
-			RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, typeof(TickCandleMessage).Name.Remove(nameof(Message)), str => str.To<int>(), arg => arg.ToString());
-			RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, typeof(VolumeCandleMessage).Name.Remove(nameof(Message)), str => str.To<decimal>(), arg => arg.ToString());
-			RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, typeof(RangeCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString());
-			RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, typeof(RenkoCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString());
+			RegisterCandleType(typeof(TimeFrameCandleMessage), MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame, typeof(TimeFrameCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
+			RegisterCandleType(typeof(TickCandleMessage), MessageTypes.CandleTick, MarketDataTypes.CandleTick, typeof(TickCandleMessage).Name.Remove(nameof(Message)), str => str.To<int>(), arg => arg.ToString(), a => a > 0);
+			RegisterCandleType(typeof(VolumeCandleMessage), MessageTypes.CandleVolume, MarketDataTypes.CandleVolume, typeof(VolumeCandleMessage).Name.Remove(nameof(Message)), str => str.To<decimal>(), arg => arg.ToString(), a => a > 0);
+			RegisterCandleType(typeof(RangeCandleMessage), MessageTypes.CandleRange, MarketDataTypes.CandleRange, typeof(RangeCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), a => a > 0);
+			RegisterCandleType(typeof(RenkoCandleMessage), MessageTypes.CandleRenko, MarketDataTypes.CandleRenko, typeof(RenkoCandleMessage).Name.Remove(nameof(Message)), str => str.ToUnit(), arg => arg.ToString(), a => a > 0);
 			RegisterCandleType(typeof(PnFCandleMessage), MessageTypes.CandlePnF, MarketDataTypes.CandlePnF, typeof(PnFCandleMessage).Name.Remove(nameof(Message)), str =>
 			{
 				var parts = str.Split('_');
@@ -54,8 +54,8 @@ namespace StockSharp.Messages
 					BoxSize = parts[0].ToUnit(),
 					ReversalAmount = parts[1].To<int>()
 				};
-			}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}");
-			RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, typeof(HeikinAshiCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString);
+			}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}", a => a is not null && a.BoxSize > 0 && a.ReversalAmount > 0);
+			RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, typeof(HeikinAshiCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
 		}
 
 		/// <summary>
@@ -568,6 +568,17 @@ namespace StockSharp.Messages
 		public static Type GetCandleArgType(this Type candleMessageType)
 			=> _candleArgTypes[candleMessageType];
 
+		private static readonly SynchronizedDictionary<Type, Func<object, bool>> _candleArgValidators = new();
+
+		/// <summary>
+		/// Validate candle arg.
+		/// </summary>
+		/// <param name="candleMessageType">Candle message type.</param>
+		/// <param name="value">Candle arg.</param>
+		/// <returns>Check result.</returns>
+		public static bool ValidateCandleArg(this Type candleMessageType, object value)
+			=> _candleArgValidators[candleMessageType](value);
+
 		private static readonly CachedSynchronizedPairSet<MessageTypes, Type> _candleDataTypes = new();
 
 		/// <summary>
@@ -771,23 +782,30 @@ namespace StockSharp.Messages
 		/// <param name="type">Message type.</param>
 		/// <param name="dataType">Candles type.</param>
 		/// <param name="fileName">File name.</param>
-		/// <param name="argParserTo"><see cref="string"/> to <typeparamref name="TArg"/> converter.</param>
-		/// <param name="argParserFrom"><typeparamref name="TArg"/> to <see cref="string"/> converter.</param>
-		public static void RegisterCandleType<TArg>(Type messageType, MessageTypes type, MarketDataTypes dataType, string fileName, Func<string, TArg> argParserTo, Func<TArg, string> argParserFrom)
+		/// <param name="argParse"><see cref="string"/> to <typeparamref name="TArg"/> converter.</param>
+		/// <param name="argToString"><typeparamref name="TArg"/> to <see cref="string"/> converter.</param>
+		/// <param name="argValidator">Arg validator.</param>
+		public static void RegisterCandleType<TArg>(
+			Type messageType, MessageTypes type, MarketDataTypes dataType, string fileName,
+			Func<string, TArg> argParse, Func<TArg, string> argToString,
+			Func<TArg, bool> argValidator)
 		{
 			if (messageType is null)
 				throw new ArgumentNullException(nameof(messageType));
 
-			if (argParserTo is null)
-				throw new ArgumentNullException(nameof(argParserTo));
+			if (argParse is null)
+				throw new ArgumentNullException(nameof(argParse));
 
-			if (argParserFrom is null)
-				throw new ArgumentNullException(nameof(argParserFrom));
+			if (argToString is null)
+				throw new ArgumentNullException(nameof(argToString));
+
+			if (argValidator is null)
+				throw new ArgumentNullException(nameof(argValidator));
 
 			static T Do<T>(Func<T> func) => Ecng.Common.Do.Invariant(func);
 
-			object p1(string str) => Do(() => argParserTo(str));
-			string p2(object arg) => arg is string s ? s : Do(() => argParserFrom((TArg)arg));
+			object p1(string str) => Do(() => argParse(str));
+			string p2(object arg) => arg is string s ? s : Do(() => argToString((TArg)arg));
 
 #pragma warning disable CS0612 // Type or member is obsolete
 			_messageTypeMapOld.Add(dataType, (type, default));
@@ -797,6 +815,7 @@ namespace StockSharp.Messages
 			_dataTypeArgConverters.Add(messageType, (p1, p2));
 			_fileNames.Add(DataType.Create(messageType, null), fileName);
 			_candleArgTypes.Add(messageType, messageType.CreateInstance<ICandleMessage>().ArgType);
+			_candleArgValidators.Add(messageType, a => argValidator((TArg)a));
 		}
 
 		/// <summary>

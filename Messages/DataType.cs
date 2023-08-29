@@ -46,7 +46,13 @@ namespace StockSharp.Messages
 		/// <returns>Data type info.</returns>
 		public static DataType Create(Type messageType, object arg, bool isSecurityRequired)
 		{
-			return new DataType
+			if (!isSecurityRequired && arg is not null && messageType.IsCandleMessage())
+			{
+				if (!messageType.ValidateCandleArg(arg))
+					throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.Str1219);
+			}
+
+			return new()
 			{
 				MessageType = messageType,
 				Arg = arg,
@@ -266,7 +272,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override DataType Clone()
 		{
-			return new DataType
+			return new()
 			{
 				MessageType = MessageType,
 				Arg = Arg,
