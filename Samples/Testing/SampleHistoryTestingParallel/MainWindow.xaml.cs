@@ -79,17 +79,21 @@ namespace SampleHistoryTestingParallel
 			var fileLogListener = new FileLogListener("sample.log");
 			logManager.Listeners.Add(fileLogListener);
 
-			(int min, int max) longRange = new(50, 100);
-			(int min, int max) shortRange = new(5, 40);
+			(int min, int max, int step) longRange = new(50, 100, 5);
+			(int min, int max, int step) shortRange = new(20, 40, 1);
+			(TimeSpan min, TimeSpan max, TimeSpan step) tfRange = new(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(5));
 
 			// SMA periods
-			var periods = new List<(int longMa, int shortMa, Color color)>();
+			var periods = new List<(int longMa, int shortMa, TimeSpan tf, Color color)>();
 
-			for (var l = longRange.max; l >= longRange.min; l -= 1)
+			for (var l = longRange.max; l >= longRange.min; l -= longRange.step)
 			{
-				for (var s = shortRange.max; s >= shortRange.min; s -= 1)
+				for (var s = shortRange.max; s >= shortRange.min; s -= shortRange.step)
 				{
-					periods.Add((l, s, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
+					for (var t = tfRange.max; t >= tfRange.min; t -= tfRange.step)
+					{
+						periods.Add((l, s, t, Color.FromRgb((byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255), (byte)RandomGen.GetInt(255))));
+					}
 				}
 			}
 
@@ -216,14 +220,20 @@ namespace SampleHistoryTestingParallel
 							UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
 
 							Name = $"L={period.longMa} S={period.shortMa}",
+
+							CandleTimeFrame = period.tf,
 						};
 
 						return ((Strategy)strategy, new IStrategyParam[]
 						{
 							strategy.Parameters.GetByName(nameof(strategy.ShortSma)),
 							strategy.Parameters.GetByName(nameof(strategy.LongSma)),
+							strategy.Parameters.GetByName(nameof(strategy.CandleTimeFrame)),
 						});
 					});
+
+				// all iterations must be done
+				btOptimizer.EmulationSettings.MaxIterations = periods.Count;
 
 				// start emulation
 				btOptimizer.Start(strategies, periods.Count);
@@ -244,10 +254,11 @@ namespace SampleHistoryTestingParallel
 
 				var go = (GeneticOptimizer)_optimizer;
 				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
-				go.Start(strategy, new (IStrategyParam, object, object, int, object)[]
+				go.Start(strategy, new (IStrategyParam, object, object, object, object)[]
 				{
-					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, 0, null),
-					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, 0, null),
+					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, shortRange.step, null),
+					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, longRange.step, null),
+					(strategy.Parameters.GetByName(nameof(strategy.CandleTimeFrame)), tfRange.min, tfRange.max, tfRange.step, null),
 				});
 			}
 		}

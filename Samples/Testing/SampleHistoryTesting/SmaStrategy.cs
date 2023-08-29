@@ -49,10 +49,19 @@ namespace SampleHistoryTesting
 			_longSmaParam = this.Param(nameof(LongSma), 80);
 			_shortSmaParam = this.Param(nameof(ShortSma), 30);
 			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1)));
+			_candleTimeFrameParam = this.Param<TimeSpan?>(nameof(CandleTimeFrame));
 			_buildFromParam = this.Param<DataType>(nameof(BuildFrom));
 			_buildFieldParam = this.Param<Level1Fields?>(nameof(BuildField));
 
 			_candleTypeParam.AllowNull = false;
+		}
+
+		private readonly StrategyParam<TimeSpan?> _candleTimeFrameParam;
+
+		public TimeSpan? CandleTimeFrame
+		{
+			get => _candleTimeFrameParam.Value;
+			set => _candleTimeFrameParam.Value = value;
 		}
 
 		private readonly StrategyParam<int> _longSmaParam;
@@ -103,7 +112,14 @@ namespace SampleHistoryTesting
 
 			_chart = this.GetChart();
 
-			var subscription = new Subscription(CandleType, Security)
+			var dt = CandleType;
+
+			if (CandleTimeFrame is not null)
+			{
+				dt = DataType.Create(dt.MessageType, CandleTimeFrame);
+			}
+
+			var subscription = new Subscription(dt, Security)
 			{
 				MarketData =
 				{

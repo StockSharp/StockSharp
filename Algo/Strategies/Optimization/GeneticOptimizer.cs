@@ -114,9 +114,9 @@ public class GeneticOptimizer : BaseOptimizer
 
 	private class StrategyParametersChromosome : ChromosomeBase
 	{
-		private readonly (IStrategyParam param, object from, object to, int precision, object value)[] _parameters;
+		private readonly (IStrategyParam param, object from, object to, object step, object value)[] _parameters;
 
-		public StrategyParametersChromosome((IStrategyParam, object, object, int, object)[] parameters)
+		public StrategyParametersChromosome((IStrategyParam, object, object, object, object)[] parameters)
 			: base(parameters.CheckOnNull(nameof(parameters)).Length)
 		{
 			_parameters = parameters;
@@ -132,47 +132,71 @@ public class GeneticOptimizer : BaseOptimizer
 
 		public override Gene GenerateGene(int geneIndex)
 		{
-			var (p, f, t, precision, v) = _parameters[geneIndex];
+			var (p, f, t, s, v) = _parameters[geneIndex];
 
 			if (f is null && t is null && v is null)
 				throw new InvalidOperationException($"No values for {p.Name}.");
 
 			object val;
 
-			if (p.Type == typeof(Security))
+			var type = p.Type;
+
+			type = type.IsNullable() ? type.GetUnderlyingType() : type;
+
+			if (type == typeof(Security))
 			{
 				val = RandomGen.GetElement((IEnumerable<Security>)v);
 			}
-			else if (p.Type == typeof(Unit))
+			else if (type == typeof(Unit))
 			{
 				if (f is not null && t is not null)
 				{
-					var u = f.To<Unit>();
-					val = new Unit(RandomGen.GetDecimal(u.Value, u.Value, precision), u.Type);
+					var u = (Unit)f;
+					var su = (Unit)s;
+
+					var vu = new Unit(RandomGen.GetDecimal(u.Value, u.Value, su.Value.GetDecimalInfo().EffectiveScale), u.Type);
+
+					if (su > 0)
+						vu.Value = MathHelper.Round(vu.Value, su.Value, null);
+
+					val = vu;
 				}
 				else
 					val = RandomGen.GetElement((IEnumerable<Unit>)v);
 			}
-			else if (p.Type == typeof(decimal))
+			else if (type == typeof(decimal))
 			{
 				if (f is not null && t is not null)
-					val = RandomGen.GetDecimal(f.To<decimal>(), t.To<decimal>(), precision);
-				else
-					val = RandomGen.GetElement(((IEnumerable)v).Cast<object>());
+				{
+					var sd = (decimal)s;
 
-				val = val.To(p.Type);
+					val = RandomGen.GetDecimal((decimal)f, (decimal)t, sd.GetDecimalInfo().EffectiveScale);
+
+					if (sd > 0)
+						val = MathHelper.Round((decimal)val, sd, null);
+				}
+				else
+					val = RandomGen.GetElement((IEnumerable<decimal>)v);
 			}
-			else if (p.Type.IsPrimitive())
+			else if (type.IsPrimitive() || type == typeof(TimeSpan))
 			{
 				if (f is not null && t is not null)
-					val = RandomGen.GetLong(f.To<long>(), t.To<long>());
+				{
+					var l = RandomGen.GetLong(f.To<long>(), t.To<long>());
+					var sl = s.To<long>();
+
+					if (sl != 0)
+						l = (l / sl) * sl;
+
+					val = l;
+				}
 				else
 					val = RandomGen.GetElement(((IEnumerable)v).Cast<object>());
 
-				val = val.To(p.Type);
+				val = val.To(type);
 			}
 			else
-				throw new NotSupportedException($"Type {p.Type} not supported.");
+				throw new NotSupportedException($"Type {type} not supported.");
 
 			return new((p, val));
 		}
@@ -283,7 +307,7 @@ public class GeneticOptimizer : BaseOptimizer
 	[CLSCompliant(false)]
 	public void Start(
 		Strategy strategy,
-		IEnumerable<(IStrategyParam param, object from, object to, int precision, object value)> parameters,
+		IEnumerable<(IStrategyParam param, object from, object to, object step, object value)> parameters,
 		Func<Strategy, decimal> calcFitness = default,
 		ISelection selection = default,
 		ICrossover crossover = default,
