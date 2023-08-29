@@ -424,6 +424,8 @@ namespace StockSharp.Algo.Strategies
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
 
+			_ordersKeepTime.CanOptimize =
+			_registerInterval.CanOptimize =
 			_maxErrorCount.CanOptimize =
 			_maxOrderRegisterErrorCount.CanOptimize =
 			_maxRegisterCount.CanOptimize = false;
