@@ -79,6 +79,15 @@ namespace StockSharp.Messages
 	[DataContract]
 	public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable
 	{
+		private class UnitOperator : BaseOperator<Unit>
+		{
+			public override Unit Add(Unit first, Unit second) => first + second;
+			public override int Compare(Unit x, Unit y) => x.CompareTo(y);
+			public override Unit Divide(Unit first, Unit second) => first / second;
+			public override Unit Multiply(Unit first, Unit second) => first * second;
+			public override Unit Subtract(Unit first, Unit second) => first - second;
+		}
+
 		static Unit()
 		{
 			Converter.AddTypedConverter<Unit, decimal>(input => (decimal)input);
@@ -86,6 +95,8 @@ namespace StockSharp.Messages
 			Converter.AddTypedConverter<decimal, Unit>(input => input);
 			Converter.AddTypedConverter<int, Unit>(input => input);
 			Converter.AddTypedConverter<double, Unit>(input => input);
+
+			OperatorRegistry.AddOperator(new UnitOperator());
 		}
 
 		/// <summary>
