@@ -558,6 +558,16 @@ namespace StockSharp.Messages
 			return adapter.SupportedOutMessages.Contains(type);
 		}
 
+		private static readonly SynchronizedDictionary<Type, Type> _candleArgTypes = new();
+
+		/// <summary>
+		/// Get candle arg type.
+		/// </summary>
+		/// <param name="candleMessageType">Candle message type.</param>
+		/// <returns>Candle arg type.</returns>
+		public static Type GetCandleArgType(this Type candleMessageType)
+			=> _candleArgTypes[candleMessageType];
+
 		private static readonly CachedSynchronizedPairSet<MessageTypes, Type> _candleDataTypes = new();
 
 		/// <summary>
@@ -627,9 +637,9 @@ namespace StockSharp.Messages
 		/// <returns>Candles type.</returns>
 		public static Type ToCandleMessageType(this MessageTypes type) => _candleDataTypes[type];
 
-		private static readonly SynchronizedDictionary<Type, Tuple<Func<string, object>, Func<object, string>>> _dataTypeArgConverters = new()
+		private static readonly SynchronizedDictionary<Type, (Func<string, object> parse, Func<object, string> toString)> _dataTypeArgConverters = new()
 		{
-			{ typeof(ExecutionMessage), Tuple.Create((Func<string, object>)(str => str.To<ExecutionTypes>()), (Func<object, string>)(arg => arg.To<string>())) }
+			{ typeof(ExecutionMessage), (str => str.To<ExecutionTypes>(), arg => arg.To<string>()) }
 		};
 
 		/// <summary>
@@ -650,7 +660,7 @@ namespace StockSharp.Messages
 			}
 
 			if (_dataTypeArgConverters.TryGetValue(messageType, out var converter))
-				return converter.Item1(str);
+				return converter.parse(str);
 
 			return str;
 			//throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
@@ -681,7 +691,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(messageType));
 
 			if (_dataTypeArgConverters.TryGetValue(messageType, out var converter))
-				return converter.Item2(arg);
+				return converter.toString(arg);
 
 			return arg.To<string>();
 			//throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
@@ -784,8 +794,9 @@ namespace StockSharp.Messages
 #pragma warning restore CS0612 // Type or member is obsolete
 
 			_candleDataTypes.Add(type, messageType);
-			_dataTypeArgConverters.Add(messageType, Tuple.Create(p1, p2));
+			_dataTypeArgConverters.Add(messageType, (p1, p2));
 			_fileNames.Add(DataType.Create(messageType, null), fileName);
+			_candleArgTypes.Add(messageType, messageType.CreateInstance<ICandleMessage>().ArgType);
 		}
 
 		/// <summary>
