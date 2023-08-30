@@ -69,6 +69,9 @@ namespace StockSharp.Algo.Strategies
 			if (type is null)
 				throw new ArgumentNullException(nameof(type));
 
+			if (type.IsNullable())
+				type = type.GetUnderlyingType();
+
 			return type.IsNumeric() && !type.IsEnum() || type == typeof(Unit) || type == typeof(TimeSpan);
 		}
 	}

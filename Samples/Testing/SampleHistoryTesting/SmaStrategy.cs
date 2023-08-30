@@ -125,7 +125,7 @@ namespace SampleHistoryTesting
 				{
 					IsFinishedOnly = true,
 					BuildFrom = BuildFrom,
-					BuildMode = BuildFrom is null ? MarketDataBuildModes.Load : MarketDataBuildModes.Build,
+					BuildMode = BuildFrom is null ? MarketDataBuildModes.LoadAndBuild : MarketDataBuildModes.Build,
 					BuildField = BuildField,
 				}
 			};
