@@ -95,6 +95,12 @@ namespace StockSharp.Algo.Strategies
 
 			_subscriptionsById.Add(subscription.TransactionId, subscription);
 
+			if (_rulesSuspendCount > 0)
+			{
+				_suspendSubscriptions.Add(subscription);
+				return;
+			}
+
 			SubscriptionProvider.Subscribe(subscription);
 
 			CheckRefreshOnlineState();
@@ -103,6 +109,13 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public virtual void UnSubscribe(Subscription subscription)
 		{
+			if (_rulesSuspendCount > 0 && _suspendSubscriptions.Remove(subscription))
+			{
+				_subscriptions.Remove(subscription);
+				_subscriptionsById.Remove(subscription.TransactionId);
+				return;
+			}
+
 			SubscriptionProvider.UnSubscribe(subscription);
 		}
 

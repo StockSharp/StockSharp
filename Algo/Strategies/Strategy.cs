@@ -379,6 +379,7 @@ namespace StockSharp.Algo.Strategies
 
 		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new();
 		private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = new();
+		private readonly CachedSynchronizedSet<Subscription> _suspendSubscriptions = new();
 		private Subscription _pfSubscription;
 		private Subscription _orderSubscription;
 
@@ -2312,7 +2313,18 @@ namespace StockSharp.Algo.Strategies
 		void IMarketRuleContainer.ResumeRules()
 		{
 			if (_rulesSuspendCount > 0)
+			{
 				_rulesSuspendCount--;
+
+				if (_rulesSuspendCount == 0)
+				{
+					foreach (var subscription in _suspendSubscriptions.CopyAndClear())
+					{
+						SubscriptionProvider.Subscribe(subscription);
+						CheckRefreshOnlineState();
+					}
+				}
+			}
 
 			this.AddDebugLog(LocalizedStrings.Str1395Params, _rulesSuspendCount);
 		}
