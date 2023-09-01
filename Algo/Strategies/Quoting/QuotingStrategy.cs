@@ -575,7 +575,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 				//if (_manualReRegisterOrder != null)
 				//	return;
 
-				if (!this.IsFormedAndAllowTrading())
+				if (!this.IsFormedAndOnlineAndAllowTrading())
 					return;
 
 				_order = this.CreateOrder(QuotingDirection, newPrice.Value, newVolume);

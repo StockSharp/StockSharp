@@ -164,7 +164,7 @@ namespace SampleHistoryTesting
 
 			// all indicators added in OnStarted now is fully formed and we can use it
 			// or user turned off allow trading
-			if (this.IsFormedAndAllowTrading())
+			if (this.IsFormedAndOnlineAndAllowTrading())
 			{
 				// in case we subscribed on non finished only candles
 				if (candle.State != CandleStates.Finished)

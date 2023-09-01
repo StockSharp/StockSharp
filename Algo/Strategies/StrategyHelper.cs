@@ -846,8 +846,23 @@ namespace StockSharp.Algo.Strategies
 		/// <see cref="Strategy.IsFormed"/> and <see cref="Strategy.TradingMode"/>.
 		/// </summary>
 		/// <param name="strategy"><see cref="Strategy"/></param>
+		/// <param name="required">Required action.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsFormedAndAllowTrading(this Strategy strategy)
-			=> strategy.CheckOnNull(nameof(strategy)).IsFormed && strategy.TradingMode != StrategyTradingModes.Disabled;
+		public static bool IsFormedAndOnlineAndAllowTrading(this Strategy strategy, StrategyTradingModes required = StrategyTradingModes.Full)
+		{
+			if (strategy is null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			if (!strategy.IsFormed || !strategy.IsOnline || strategy.TradingMode == StrategyTradingModes.Disabled)
+				return false;
+
+			return required switch
+			{
+				StrategyTradingModes.Full => strategy.TradingMode == StrategyTradingModes.Full,
+				StrategyTradingModes.CancelOrdersOnly => true,
+				StrategyTradingModes.ReducePositionOnly => strategy.TradingMode != StrategyTradingModes.CancelOrdersOnly,
+				_ => throw new ArgumentOutOfRangeException(nameof(required), required, LocalizedStrings.Str1219),
+			};
+		}
 	}
 }

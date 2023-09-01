@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Strategies
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str3599Key,
 			Description = LocalizedStrings.AllowTradingKey)]
-		Allow,
+		Full,
 
 		/// <summary>
 		/// Disabled trading.
@@ -418,7 +418,7 @@ namespace StockSharp.Algo.Strategies
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
-			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Allow);
+			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Full);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
@@ -1265,7 +1265,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.UnsubscribeOnStopKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
-		public virtual bool UnsubscribeOnStop
+		public bool UnsubscribeOnStop
 		{
 			get => _unsubscribeOnStop.Value;
 			set => _unsubscribeOnStop.Value = value;
