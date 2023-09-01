@@ -720,6 +720,11 @@ namespace StockSharp.Algo
 		public bool SupportBuildingFromOrderLog { get; set; } = true;
 
 		/// <summary>
+		/// Use <see cref="StorageMessageAdapter"/>.
+		/// </summary>
+		public bool SupportStorage { get; set; } = true;
+
+		/// <summary>
 		/// Use <see cref="OrderBookTruncateMessageAdapter"/>.
 		/// </summary>
 		public bool SupportOrderBookTruncate { get; set; } = true;
@@ -942,7 +947,7 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new CandleHolderMessageAdapter(adapter));
 			}
 
-			if (StorageProcessor.Settings.StorageRegistry != null)
+			if (SupportStorage && StorageProcessor.Settings.StorageRegistry != null)
 			{
 				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
 			}
@@ -2233,6 +2238,7 @@ namespace StockSharp.Algo
 				Level1Extend = Level1Extend,
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
+				SupportStorage = SupportStorage,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 				SupportOrderBookTruncate = SupportOrderBookTruncate,
 				SupportOffline = SupportOffline,
