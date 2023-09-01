@@ -578,25 +578,6 @@ namespace StockSharp.Algo.Strategies
 					isp.SubscriptionStarted       += OnConnectorSubscriptionStarted;
 					isp.SubscriptionStopped       += OnConnectorSubscriptionStopped;
 					isp.SubscriptionFailed        += OnConnectorSubscriptionFailed;
-
-					if (IsRootStrategy)
-					{
-						_pfSubscription = new Subscription(new PortfolioLookupMessage
-						{
-							IsSubscribe = true,
-							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null);
-
-						Subscribe(_pfSubscription, true);
-					}
-
-					_orderSubscription = new Subscription(new OrderStatusMessage
-					{
-						IsSubscribe = true,
-						StrategyId = EnsureGetId(),
-					}, (SecurityMessage)null);
-
-					Subscribe(_orderSubscription, true);
 				}
 
 				foreach (var strategy in ChildStrategies)
@@ -1613,6 +1594,25 @@ namespace StockSharp.Algo.Strategies
 				throw new InvalidOperationException(LocalizedStrings.Str1381);
 
 			InitStartValues();
+
+			if (IsRootStrategy)
+			{
+				_pfSubscription = new Subscription(new PortfolioLookupMessage
+				{
+					IsSubscribe = true,
+					StrategyId = EnsureGetId(),
+				}, (SecurityMessage)null);
+
+				Subscribe(_pfSubscription, true);
+			}
+
+			_orderSubscription = new Subscription(new OrderStatusMessage
+			{
+				IsSubscribe = true,
+				StrategyId = EnsureGetId(),
+			}, (SecurityMessage)null);
+
+			Subscribe(_orderSubscription, true);
 		}
 
 		/// <summary>

@@ -106,6 +106,8 @@ namespace SampleHistoryTesting
 
 		protected override void OnStarted(DateTimeOffset time)
 		{
+			base.OnStarted(time);
+
 			// !!! DO NOT FORGET add it in case use IsFormed property (see code below)
 			Indicators.Add(_longSma = new SimpleMovingAverage { Length = LongSma });
 			Indicators.Add(_shortSma = new SimpleMovingAverage { Length = ShortSma });
@@ -143,8 +145,6 @@ namespace SampleHistoryTesting
 			_isShortLessThenLong = null;
 
 			Subscribe(subscription);
-
-			base.OnStarted(time);
 		}
 
 		private void ProcessCandle(ICandleMessage candle)
