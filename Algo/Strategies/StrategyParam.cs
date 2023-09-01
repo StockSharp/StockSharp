@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Strategies
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
@@ -25,6 +24,7 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The strategy parameter.
@@ -219,7 +219,16 @@ namespace StockSharp.Algo.Strategies
 		{
 			Id = storage.GetValue<string>(nameof(Id));
 			Name = storage.GetValue<string>(nameof(Name));
-			Value = storage.GetValue<T>(nameof(Value));
+
+			try
+			{
+				Value = storage.GetValue<T>(nameof(Value));
+			}
+			catch (Exception ex)
+			{
+				_strategy.AddErrorLog(ex);
+			}
+
 			CanOptimize = storage.GetValue(nameof(CanOptimize), CanOptimize);
 			OptimizeFrom = storage.GetValue<SettingsStorage>(nameof(OptimizeFrom))?.FromStorage();
 			OptimizeTo = storage.GetValue<SettingsStorage>(nameof(OptimizeTo))?.FromStorage();
