@@ -442,6 +442,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		};
 
 		strategy.Connector = connector;
+		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
 
 		StrategyInitialized?.Invoke(strategy, parameters);
