@@ -15,6 +15,7 @@ using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 using StockSharp.Logging;
+using StockSharp.Localization;
 
 namespace StockSharp.Algo.Strategies.Optimization;
 
@@ -321,6 +322,21 @@ public class GeneticOptimizer : BaseOptimizer
 			throw new InvalidOperationException("Not stopped.");
 
 		var paramArr = parameters.ToArray();
+
+		foreach (var (p, f, t, s, v) in paramArr)
+		{
+			if (v is not null)
+				continue;
+
+			if (f is null)
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.From));
+
+			if (t is null)
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.Until));
+
+			if (s is null)
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.Str812));
+		}
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
