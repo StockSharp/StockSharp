@@ -48,8 +48,15 @@
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
 			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
 
-			var settings = Settings.LoadDefaultSettings(null);
-			HistoryDataPath = GetHistoryDataPath(SettingsUtility.GetGlobalPackagesFolder(settings));
+			try
+			{
+				var settings = Settings.LoadDefaultSettings(null);
+				HistoryDataPath = GetHistoryDataPath(SettingsUtility.GetGlobalPackagesFolder(settings));
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Trace.WriteLine(ex);
+			}
 		}
 
 		/// <summary>
