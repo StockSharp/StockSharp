@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Storages
 
 		private SyncObject GetSync(DateTime time) => _syncRoots.SafeAdd(time);
 
-		private Stream LoadStream(DateTime date) => Drive.LoadStream(date);
+		private Stream LoadStream(DateTime date, bool readOnly) => Drive.LoadStream(date, readOnly);
 
 		private bool SecurityIdEqual(SecurityId securityId) => securityId.SecurityCode.EqualsIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.EqualsIgnoreCase(SecurityId.BoardCode);
 
@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Storages
 
 				lock (GetSync(date))
 				{
-					var stream = LoadStream(date);
+					var stream = LoadStream(date, false);
 
 					try
 					{
@@ -271,7 +271,7 @@ namespace StockSharp.Algo.Storages
 
 				lock (GetSync(date))
 				{
-					var stream = LoadStream(date);
+					var stream = LoadStream(date, true);
 
 					try
 					{
@@ -308,7 +308,7 @@ namespace StockSharp.Algo.Storages
 							{
 								// повторная иницилизация потока, так как предыдущий раз он был закрыл выше
 								// при десериализации
-								stream = LoadStream(date);
+								stream = LoadStream(date, false);
 
 								Save(stream, Serializer.CreateMetaInfo(date),
 									loadedData.Values.SelectMany(l => l).ToArray(), true);
@@ -345,7 +345,7 @@ namespace StockSharp.Algo.Storages
 
 			lock (GetSync(date))
 			{
-				var stream = LoadStream(date);
+				var stream = LoadStream(date, true);
 
 				try
 				{
@@ -372,7 +372,7 @@ namespace StockSharp.Algo.Storages
 
 			lock (GetSync(date))
 			{
-				using (var stream = LoadStream(date))
+				using (var stream = LoadStream(date, true))
 					return GetInfo(stream, date);
 			}
 		}

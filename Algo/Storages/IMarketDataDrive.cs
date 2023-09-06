@@ -62,8 +62,9 @@ namespace StockSharp.Algo.Storages
 		/// To load data in the format of StockSharp storage.
 		/// </summary>
 		/// <param name="date">Date, for which data shall be loaded.</param>
+		/// <param name="readOnly">Get stream in read mode only.</param>
 		/// <returns>Data in the format of StockSharp storage. If no data exists, <see cref="Stream.Null"/> will be returned.</returns>
-		Stream LoadStream(DateTime date);
+		Stream LoadStream(DateTime date, bool readOnly = false);
 	}
 
 	/// <summary>

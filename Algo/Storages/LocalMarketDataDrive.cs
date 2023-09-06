@@ -163,12 +163,12 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
+			Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
 			{
 				var path = GetPath(date.UtcKind(), true);
 
 				return File.Exists(path)
-					? File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read)
+					? File.Open(path, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read)
 					: Stream.Null;
 			}
 
