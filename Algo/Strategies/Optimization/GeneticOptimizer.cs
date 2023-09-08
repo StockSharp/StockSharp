@@ -225,6 +225,8 @@ public class GeneticOptimizer : BaseOptimizer
 	private readonly SyncObject _leftIterLock = new();
 	private int? _leftIterations;
 
+	private readonly AssemblyLoadContextTracker _context = new();
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GeneticOptimizer"/>.
 	/// </summary>
@@ -263,7 +265,7 @@ public class GeneticOptimizer : BaseOptimizer
 		if (ServicesRegistry.TryCompiler is null)
 			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
 
-		var expression = formula.Compile<decimal>();
+		var expression = formula.Compile<decimal>(_context);
 
 		if (!expression.Error.IsEmpty())
 			throw new InvalidOperationException(expression.Error);

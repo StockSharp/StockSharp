@@ -85,17 +85,28 @@ public class CodeInfo : IPersistable
 		if (isTypeCompatible is null)
 			throw new ArgumentNullException(nameof(isTypeCompatible));
 
-		var source = new[] { Text };
+		var sources = new[] { Text };
 
 		if (ExtraSources is not null)
-			source = source.Concat(ExtraSources);
+			sources = sources.Concat(ExtraSources);
 
-		var result = ServicesRegistry.Compiler.CompileCode(source, string.Empty, References);
+		var refs = References.ToValidPaths().ToArray();
 
-		if (result.HasErrors())
-			return result;
+		byte[] asm = null;
+		var errors = new List<CompilationError>();
 
-		var type = _context.LoadFromStream(result.Assembly).GetTypes().FirstOrDefault(isTypeCompatible);
+		if (ServicesRegistry.TryCompilerCache?.TryGet(sources, refs, out asm) != true)
+		{
+			var result = ServicesRegistry.Compiler.Compile("Strategy", sources, refs);
+
+			if (result.HasErrors())
+				return result;
+
+			errors.AddRange(result.Errors);
+			ServicesRegistry.TryCompilerCache?.Add(sources, refs, asm = result.Assembly);
+		}
+
+		var type = _context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
 
 		ObjectType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
 
@@ -108,7 +119,11 @@ public class CodeInfo : IPersistable
 			ex.LogError();
 		}
 
-		return result;
+		return new()
+		{
+			Assembly = asm,
+			Errors = errors.ToArray(),
+		};
 	}
 
 	/// <summary>

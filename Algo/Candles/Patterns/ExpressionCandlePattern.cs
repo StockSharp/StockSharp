@@ -54,6 +54,7 @@ public class CandleExpressionCondition : IPersistable
 
 	private delegate decimal ValueGetterDelegate(ReadOnlySpan<ICandleMessage> candles, int idx);
 
+	private readonly AssemblyLoadContextTracker _context = new();
 	private readonly Dictionary<string, ValueGetterDelegate> _varGetters = new(StringComparer.InvariantCultureIgnoreCase);
 	private string[] _variables;
 	private decimal[] _varValues;
@@ -97,7 +98,7 @@ public class CandleExpressionCondition : IPersistable
 		if (ServicesRegistry.TryCompiler is null)
 			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
 
-		_formula = Expression.Compile<bool>();
+		_formula = Expression.Compile<bool>(_context);
 
 		if (!_formula.Error.IsEmpty())
 			throw new InvalidOperationException(_formula.Error);

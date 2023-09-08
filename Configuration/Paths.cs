@@ -44,6 +44,7 @@
 			StorageDir = Path.Combine(AppDataPath, "Storage");
 			SnapshotsDir = Path.Combine(AppDataPath, "Snapshots");
 			CandlePatternsFile = Path.Combine(AppDataPath, $"candle_patterns{DefaultSettingsExt}");
+			CompilerCacheDir = Path.Combine(AppDataPath, "compiler_cache");
 			LogsDir = Path.Combine(AppDataPath, "Logs");
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
 			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
@@ -165,6 +166,11 @@
 		/// The path to the file with candle patterns.
 		/// </summary>
 		public static readonly string CandlePatternsFile;
+
+		/// <summary>
+		/// The path to the compiler cache directory.
+		/// </summary>
+		public static readonly string CompilerCacheDir;
 
 		/// <summary>
 		/// The path to the logs directory.

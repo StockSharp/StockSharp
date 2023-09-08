@@ -260,5 +260,15 @@ namespace StockSharp.Algo
 		/// <see cref="CandleBuilderProvider"/>
 		/// </summary>
 		public static CandleBuilderProvider CandleBuilderProvider => ConfigManager.GetService<CandleBuilderProvider>();
+
+		/// <summary>
+		/// <see cref="ICompilerCache"/>
+		/// </summary>
+		public static ICompilerCache TryCompilerCache => ConfigManager.TryGetService<ICompilerCache>();
+
+		/// <summary>
+		/// <see cref="ICompilerCache"/>
+		/// </summary>
+		public static ICompilerCache CompilerCache => ConfigManager.GetService<ICompilerCache>();
 	}
 }
