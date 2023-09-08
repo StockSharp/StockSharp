@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Compilation;
 
 using System;
 using System.Linq;
-using System.Runtime.Loader;
 using System.Collections.Generic;
 
 using Ecng.Common;
@@ -74,7 +73,7 @@ public class CodeInfo : IPersistable
     /// </summary>
     public event Action Compiled;
 
-	private AssemblyLoadContext _context;
+	private readonly AssemblyLoadContextTracker _context = new();
 
 	/// <summary>
 	/// Compile code.
@@ -86,36 +85,23 @@ public class CodeInfo : IPersistable
 		if (isTypeCompatible is null)
 			throw new ArgumentNullException(nameof(isTypeCompatible));
 
-		var prev = _context;
-
-		_context = new(default, true);
-
 		var source = new[] { Text };
 
 		if (ExtraSources is not null)
 			source = source.Concat(ExtraSources);
 
-		var result = ServicesRegistry.Compiler.CompileCode(_context, source, string.Empty, References);
+		var result = ServicesRegistry.Compiler.CompileCode(source, string.Empty, References);
 
 		if (result.HasErrors())
 			return result;
 
-		var type = result.Assembly.GetTypes().FirstOrDefault(isTypeCompatible);
+		var type = _context.LoadFromStream(result.Assembly).GetTypes().FirstOrDefault(isTypeCompatible);
 
 		ObjectType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
 
 		try
 		{
 			Compiled?.Invoke();
-		}
-		catch (Exception ex)
-		{
-			ex.LogError();
-		}
-
-		try
-		{
-			prev?.Unload();
 		}
 		catch (Exception ex)
 		{
