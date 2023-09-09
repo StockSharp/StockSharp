@@ -3104,6 +3104,18 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
+		/// <summary>
+		/// Get all securities required for strategy.
+		/// </summary>
+		/// <returns>Securities.</returns>
+		public virtual IEnumerable<Security> GetWorkingSecurities()
+		{
+			var security = Security;
+
+			if (security is not null)
+				yield return security;
+		}
+
 		private ISecurityProvider SecurityProvider => SafeGetConnector();
 
 		int ISecurityProvider.Count => SecurityProvider.Count;
