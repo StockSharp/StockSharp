@@ -1,4 +1,48 @@
 {
+  "CandleSourceElementDescription": {
+    "en": "The element is used to build candles for a specified instrument.",
+    "ru": "Кубик используется для построения свечей по заданному инструменту."
+  },
+  "Level1ElementDescription": {
+    "en": "The element is used to get the Level1 data by the instrument.",
+    "ru": "Кубик используется для получения Level1 данных по инструменту."
+  },
+  "VariableElementDescription": {
+    "en": "The element is used to store values, pass the previously stored value further along the chain of elements.",
+    "ru": "Кубик используется для хранения значений, передачи ранее сохраненного значения дальше по цепочке элементов."
+  },
+  "CrossingElementDescription": {
+    "en": "The element is used to fire a signal when the first value becomes bigger (crossing up) or smaller (crossing down) than the second value.",
+    "ru": "Кубик используется для получения сигнала когда первое значение становится больше (пересечение вверх) или меньше (пересечение вниз) чем второе значение."
+  },
+  "IndicatorElementDescription": {
+    "en": "The element is used to calculate indicator values.",
+    "ru": "Кубик используется для расчета значений индикатора."
+  },
+  "LogicalConditionElementDescription": {
+    "en": "The element is used to calculate a logical formula with two arguments.",
+    "ru": "Элемент используется для вычисления логической формулы с двумя аргументами."
+  },
+  "CombinationElementDescription": {
+    "en": "The element is used to combine the same type of data coming from different cubes into one output parameter for further passing to some element. Or dividing the received data into several elements.",
+    "ru": "Кубик используется для объединения однотипных данных поступающих из разных кубиков в один выходной параметр для дальнейшей передачи в какой-либо элемент. Или разделения получаемых данных на несколько элементов."
+  },
+  "PositionProtectionElementDescription": {
+    "en": "The element is used to automatically protect opened trades using stop loss and take-profit.",
+    "ru": "Кубик используется для автоматической защиты открываемых сделок с помощью стоп-лосса и тейк-профита."
+  },
+  "IsTradeAllowedElementDescription": {
+    "en": "The element is used to check if trade is currently allowed.",
+    "ru": "Кубик используется для проверки разрешена ли торговля в текущий момент."
+  },
+  "IndexerElementDescription": {
+    "en": "The element is used to get an element from a collection with the specified index.",
+    "ru": "Элемент используется для получения элемента из коллекции с указанным индексом."
+  },
+  "ConverterDescription": {
+    "en": "This element is used to convert complex objects into simple data types. For example, it allows to get the value of the price step for the instrument.",
+    "ru": "Кубик используется для конвертации сложных объектов в простые типы данных. Например, позволяет получить значение шага цены для инструмента."
+  },
   "Tenkan": {
     "en": "Tenkan",
     "ru": "Tenkan"
