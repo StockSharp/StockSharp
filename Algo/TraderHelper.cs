@@ -21,6 +21,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Compilation;
 	using Ecng.Compilation.Expressions;
 
 	using StockSharp.Algo.Storages;
@@ -2677,9 +2678,10 @@ namespace StockSharp.Algo
 		/// Compile mathematical formula.
 		/// </summary>
 		/// <param name="expression">Text expression.</param>
+		/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 		/// <returns>Compiled mathematical formula.</returns>
-		public static ExpressionFormula<decimal> Compile(this string expression)
-			=> Compile<decimal>(expression);
+		public static ExpressionFormula<decimal> Compile(this string expression, AssemblyLoadContextTracker tracker)
+			=> Compile<decimal>(expression, tracker);
 
 		private static class CacheHolder<TResult>
 		{
@@ -2691,9 +2693,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <typeparam name="TResult">Result type.</typeparam>
 		/// <param name="expression">Text expression.</param>
+		/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 		/// <returns>Compiled mathematical formula.</returns>
-		public static ExpressionFormula<TResult> Compile<TResult>(this string expression)
-			=> CacheHolder<TResult>.Cache.SafeAdd(expression, key => ServicesRegistry.Compiler.Compile<TResult>(new(), key));
+		public static ExpressionFormula<TResult> Compile<TResult>(this string expression, AssemblyLoadContextTracker tracker)
+			=> CacheHolder<TResult>.Cache.SafeAdd(expression, key => ServicesRegistry.Compiler.Compile<TResult>(tracker, key, ServicesRegistry.TryCompilerCache));
 
 		/// <summary>
 		/// Create <see cref="IMessageAdapter"/>.

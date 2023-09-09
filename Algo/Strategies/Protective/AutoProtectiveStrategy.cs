@@ -304,10 +304,10 @@ namespace StockSharp.Algo.Strategies.Protective
 			else
 				protectiveStrategy = stopLoss;
 
-			if (protectiveStrategy != null)
+			if (protectiveStrategy is IProtectiveStrategy p)
 			{
-				protectiveStrategy.DisposeOnStop = true;
-				((IProtectiveStrategy)protectiveStrategy).ProtectiveVolume = volume;
+				//protectiveStrategy.DisposeOnStop = true;
+				p.ProtectiveVolume = volume;
 			}
 
 			return protectiveStrategy;

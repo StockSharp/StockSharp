@@ -149,6 +149,9 @@ namespace StockSharp.Algo.Testing
 			SupportFilteredMarketDepth = false;
 			UpdateSecurityLastQuotes = false;
 			UpdateSecurityByLevel1 = false;
+
+			if (innerAdapter.Parent is null)
+				innerAdapter.Parent = this;
 		}
 
 		/// <inheritdoc />

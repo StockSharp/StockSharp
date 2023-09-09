@@ -325,6 +325,9 @@ namespace StockSharp.Algo.Candles
 		public DataType BuildFrom { get; set; }
 
 		/// <inheritdoc />
+		public abstract Type ArgType { get; }
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return "{0:HH:mm:ss} {1} (O:{2}, H:{3}, L:{4}, C:{5}, V:{6})"
@@ -421,6 +424,9 @@ namespace StockSharp.Algo.Candles
 			get => TypedArg;
 			set => TypedArg = (TArg)value;
 		}
+
+		/// <inheritdoc />
+		public override Type ArgType => typeof(TArg);
 	}
 
 	/// <summary>

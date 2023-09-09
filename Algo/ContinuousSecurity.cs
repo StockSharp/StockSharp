@@ -280,7 +280,7 @@ namespace StockSharp.Algo
 
 				_expirationJumps.AddRange(text.SplitByComma().Select(p =>
 				{
-					var parts = p.SplitBySep("=");
+					var parts = p.SplitByEqual();
 					return new KeyValuePair<SecurityId, DateTimeOffset>(parts[0].ToSecurityId(), parts[1].ToDateTime(_dateFormat).UtcKind());
 				}));
 			}

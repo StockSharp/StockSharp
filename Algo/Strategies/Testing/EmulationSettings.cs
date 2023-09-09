@@ -206,7 +206,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1418Key,
+			Name = LocalizedStrings.ParallelKey,
 			Description = LocalizedStrings.Str1419Key,
 			GroupName = LocalizedStrings.OptimizationKey,
 			Order = 200)]

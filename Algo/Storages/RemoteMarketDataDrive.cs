@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Storages
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
 				=> _parent.CreateClient().SaveStream(_securityId, _dataType, _format, date, stream);
 
-			Stream IMarketDataStorageDrive.LoadStream(DateTime date)
+			Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
 				=> _parent.CreateClient().LoadStream(_securityId, _dataType, _format, date);
 		}
 

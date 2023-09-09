@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Strategies
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str3599Key,
 			Description = LocalizedStrings.AllowTradingKey)]
-		Allow,
+		Full,
 
 		/// <summary>
 		/// Disabled trading.
@@ -167,6 +167,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderRegisterFailed += _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed += _parent.OnChildOrderCancelFailed;
 				item.NewMyTrade += _parent.AddMyTrade;
+				item.OwnTradeReceived += _parent.OnChildOwnTradeReceived;
 				item.OrderReRegistering += _parent.OnOrderReRegistering;
 				item.ProcessStateChanged += OnChildProcessStateChanged;
 				item.Error += _parent.OnError;
@@ -227,6 +228,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderCancelFailed -= _parent.OnChildOrderCancelFailed;
 				item.OrderCanceling -= _parent.OnOrderCanceling;
 				item.NewMyTrade -= _parent.AddMyTrade;
+				item.OwnTradeReceived -= _parent.OnChildOwnTradeReceived;
 				item.OrderReRegistering -= _parent.OnOrderReRegistering;
 				item.ProcessStateChanged -= OnChildProcessStateChanged;
 				item.Error -= _parent.OnError;
@@ -377,6 +379,7 @@ namespace StockSharp.Algo.Strategies
 
 		private readonly CachedSynchronizedDictionary<Subscription, bool> _subscriptions = new();
 		private readonly SynchronizedDictionary<long, Subscription> _subscriptionsById = new();
+		private readonly CachedSynchronizedSet<Subscription> _suspendSubscriptions = new();
 		private Subscription _pfSubscription;
 		private Subscription _orderSubscription;
 
@@ -416,12 +419,14 @@ namespace StockSharp.Algo.Strategies
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
-			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Allow);
+			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Full);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
 
+			_ordersKeepTime.CanOptimize =
+			_registerInterval.CanOptimize =
 			_maxErrorCount.CanOptimize =
 			_maxOrderRegisterErrorCount.CanOptimize =
 			_maxRegisterCount.CanOptimize = false;
@@ -573,25 +578,6 @@ namespace StockSharp.Algo.Strategies
 					isp.SubscriptionStarted       += OnConnectorSubscriptionStarted;
 					isp.SubscriptionStopped       += OnConnectorSubscriptionStopped;
 					isp.SubscriptionFailed        += OnConnectorSubscriptionFailed;
-
-					if (IsRootStrategy)
-					{
-						_pfSubscription = new Subscription(new PortfolioLookupMessage
-						{
-							IsSubscribe = true,
-							StrategyId = EnsureGetId(),
-						}, (SecurityMessage)null);
-
-						Subscribe(_pfSubscription, true);
-					}
-
-					_orderSubscription = new Subscription(new OrderStatusMessage
-					{
-						IsSubscribe = true,
-						StrategyId = EnsureGetId(),
-					}, (SecurityMessage)null);
-
-					Subscribe(_orderSubscription, true);
 				}
 
 				foreach (var strategy in ChildStrategies)
@@ -898,7 +884,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.MaxOrderRegisterErrorCountDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 12)]
-		public virtual int MaxOrderRegisterErrorCount
+		public int MaxOrderRegisterErrorCount
 		{
 			get => _maxOrderRegisterErrorCount.Value;
 			set
@@ -949,7 +935,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.MaxRegisterCountDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 13)]
-		public virtual int MaxRegisterCount
+		public int MaxRegisterCount
 		{
 			get => _maxRegisterCount.Value;
 			set
@@ -975,7 +961,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.RegisterIntervalDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 14)]
-		public virtual TimeSpan RegisterInterval
+		public TimeSpan RegisterInterval
 		{
 			get => _registerInterval.Value;
 			set
@@ -1143,7 +1129,7 @@ namespace StockSharp.Algo.Strategies
 		/// To cancel active orders at stop. Is On by default.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool CancelOrdersWhenStopping
+		public bool CancelOrdersWhenStopping
 		{
 			get => _cancelOrdersWhenStopping.Value;
 			set => _cancelOrdersWhenStopping.Value = value;
@@ -1261,7 +1247,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.UnsubscribeOnStopKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
-		public virtual bool UnsubscribeOnStop
+		public bool UnsubscribeOnStop
 		{
 			get => _unsubscribeOnStop.Value;
 			set => _unsubscribeOnStop.Value = value;
@@ -1300,7 +1286,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.Str1376Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]
-		public virtual decimal Volume
+		public decimal Volume
 		{
 			get => _volume.Value;
 			set
@@ -1410,7 +1396,7 @@ namespace StockSharp.Algo.Strategies
 		/// Wait <see cref="Rules"/> to finish before strategy become into <see cref="ProcessStates.Stopped"/> state.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool WaitRulesOnStop
+		public bool WaitRulesOnStop
 		{
 			get => _waitRulesOnStop.Value;
 			set => _waitRulesOnStop.Value = value;
@@ -1445,7 +1431,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.Str136Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		public virtual StrategyCommentModes CommentMode
+		public StrategyCommentModes CommentMode
 		{
 			get => _commentMode.Value;
 			set => _commentMode.Value = value;
@@ -1608,6 +1594,25 @@ namespace StockSharp.Algo.Strategies
 				throw new InvalidOperationException(LocalizedStrings.Str1381);
 
 			InitStartValues();
+
+			if (IsRootStrategy)
+			{
+				_pfSubscription = new Subscription(new PortfolioLookupMessage
+				{
+					IsSubscribe = true,
+					StrategyId = EnsureGetId(),
+				}, (SecurityMessage)null);
+
+				Subscribe(_pfSubscription, true);
+			}
+
+			_orderSubscription = new Subscription(new OrderStatusMessage
+			{
+				IsSubscribe = true,
+				StrategyId = EnsureGetId(),
+			}, (SecurityMessage)null);
+
+			Subscribe(_orderSubscription, true);
 		}
 
 		/// <summary>
@@ -2308,7 +2313,18 @@ namespace StockSharp.Algo.Strategies
 		void IMarketRuleContainer.ResumeRules()
 		{
 			if (_rulesSuspendCount > 0)
+			{
 				_rulesSuspendCount--;
+
+				if (_rulesSuspendCount == 0)
+				{
+					foreach (var subscription in _suspendSubscriptions.CopyAndClear())
+					{
+						SubscriptionProvider.Subscribe(subscription);
+						CheckRefreshOnlineState();
+					}
+				}
+			}
 
 			this.AddDebugLog(LocalizedStrings.Str1395Params, _rulesSuspendCount);
 		}
@@ -2384,7 +2400,7 @@ namespace StockSharp.Algo.Strategies
 		/// The interval for unrealized profit recalculation. The default value is 1 minute.
 		/// </summary>
 		[Browsable(false)]
-		public virtual TimeSpan UnrealizedPnLInterval
+		public TimeSpan UnrealizedPnLInterval
 		{
 			get => _unrealizedPnLInterval;
 			set
@@ -2704,6 +2720,11 @@ namespace StockSharp.Algo.Strategies
 					.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(security, Level1Fields.Multiplier) ?? security.Multiplier);
 
 			PnLManager.ProcessMessage(msg);
+		}
+
+		private void OnChildOwnTradeReceived(Subscription subscription, MyTrade trade)
+		{
+			TryInvoke(() => OwnTradeReceived?.Invoke(subscription, trade));
 		}
 
 		private void AddMyTrade(MyTrade trade) => TryAddMyTrade(trade);
@@ -3081,6 +3102,18 @@ namespace StockSharp.Algo.Strategies
 						throw new ArgumentOutOfRangeException();
 				}
 			}
+		}
+
+		/// <summary>
+		/// Get all securities required for strategy.
+		/// </summary>
+		/// <returns>Securities.</returns>
+		public virtual IEnumerable<Security> GetWorkingSecurities()
+		{
+			var security = Security;
+
+			if (security is not null)
+				yield return security;
 		}
 
 		private ISecurityProvider SecurityProvider => SafeGetConnector();

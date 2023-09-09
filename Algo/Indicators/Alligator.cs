@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="Alligator"/>.
 		/// </summary>
 		public Alligator()
-			: this(new() { Length = 13, Shift = 8 }, new() { Length = 8, Shift = 5 }, new() { Length = 5, Shift = 3 })
+			: this(new() { Name = nameof(Jaw), Length = 13, Shift = 8 }, new() { Name = nameof(Teeth), Length = 8, Shift = 5 }, new() { Name = nameof(Lips), Length = 5, Shift = 3 })
 		{
 		}
 

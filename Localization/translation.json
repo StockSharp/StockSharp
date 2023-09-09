@@ -43,6 +43,34 @@
     "en": "This element is used to convert complex objects into simple data types. For example, it allows to get the value of the price step for the instrument.",
     "ru": "Кубик используется для конвертации сложных объектов в простые типы данных. Например, позволяет получить значение шага цены для инструмента."
   },
+  "ParamDoesntContain": {
+    "en": "Param {0} doesn't contain {1} value.",
+    "ru": "Параметр {0} не содержит {1} значение."
+  },
+  "Validation": {
+    "en": "Validation",
+    "ru": "Проверка"
+  },
+  "ValidationInputValues": {
+    "en": "Validation input values expression.",
+    "ru": "Выражение проверки входных значений."
+  },
+  "Empty": {
+    "en": "Empty",
+    "ru": "Пустое"
+  },
+  "SendEmptyIndicatorValues": {
+    "en": "Send empty indicator values.",
+    "ru": "Отправлять пустые значения индикаторов."
+  },
+  "ServerStopOrders": {
+    "en": "Try use server-side stop orders if underlying connector provide it.",
+    "ru": "Попытаться использовать серверные стоп-ордера если подключение их поддерживает."
+  },
+  "SupportEmptyDepth": {
+    "en": "Translates empty depth.",
+    "ru": "Передавать пустые стаканы."
+  },
   "Tenkan": {
     "en": "Tenkan",
     "ru": "Tenkan"

@@ -25,6 +25,8 @@ namespace StockSharp.Algo.Expressions
 	[BasketCode("EI")]
 	public class ExpressionIndexSecurity : IndexSecurity
 	{
+		private readonly AssemblyLoadContextTracker _context = new();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExpressionIndexSecurity"/>.
 		/// </summary>
@@ -55,7 +57,7 @@ namespace StockSharp.Algo.Expressions
 
 				if (ServicesRegistry.TryCompiler is not null)
 				{
-					Formula = value.Compile();
+					Formula = value.Compile(_context);
 
 					_innerSecurityIds.Clear();
 

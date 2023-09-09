@@ -129,6 +129,11 @@ public interface ICandleMessage :
 	/// Open interest.
 	/// </summary>
 	decimal? OpenInterest { get; set; }
+
+	/// <summary>
+	/// Type of argument.
+	/// </summary>
+	Type ArgType { get; }
 }
 
 /// <summary>

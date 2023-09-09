@@ -93,7 +93,7 @@ namespace StockSharp.Algo
 				Weights.Clear();
 				Weights.AddRange(text.SplitByComma().Select(p =>
 				{
-					var parts = p.SplitBySep("=");
+					var parts = p.SplitByEqual();
 					return new KeyValuePair<SecurityId, decimal>(parts[0].ToSecurityId(), parts[1].To<decimal>());
 				}));
 			}

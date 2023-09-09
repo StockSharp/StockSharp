@@ -20,8 +20,7 @@ namespace StockSharp.Algo.Strategies.Protective
 	{
 		private readonly bool _isUpTrend;
 		private bool _quotingStarted;
-		private decimal? _prevBestPrice;
-		private bool _isTrailingActivated;
+		private ProtectiveProcessor _processor;
 
 		/// <summary>
 		/// Initialize <see cref="ProtectiveStrategy"/>.
@@ -41,11 +40,11 @@ namespace StockSharp.Algo.Strategies.Protective
 			_priceOffset = this.Param(nameof(PriceOffset), new Unit());
 			_isTrailing = this.Param<bool>(nameof(IsTrailing));
 
+			_isUpTrend = isUpTrend;
+		
 			ProtectiveSide = protectiveSide;
 			ProtectivePrice = protectivePrice;
 			ProtectiveLevel = protectiveLevel;
-
-			_isUpTrend = isUpTrend;
 		}
 
 		/// <inheritdoc />
@@ -103,109 +102,6 @@ namespace StockSharp.Algo.Strategies.Protective
 		}
 
 		/// <summary>
-		/// The absolute value of the price when the one is reached the protective strategy is activated.
-		/// </summary>
-		/// <remarks>If the price is equal to <see langword="null" /> then the activation is not required.</remarks>
-		public virtual decimal? GetActivationPrice(DateTimeOffset currentTime)
-		{
-			//var isBuy = ProtectiveSide == Sides.Buy;
-
-			if (_prevBestPrice == null)
-				_prevBestPrice = ProtectivePrice;
-
-			var ltp = LastTradePrice;
-			var bestPrice = UseLastTradePrice && ltp != null ? ltp : BestPrice;
-
-			if (bestPrice == null)
-			{
-				this.AddDebugLog("Best price is null.");
-				return null;
-			}
-
-			if (IsTimeOut(currentTime) && (_isUpTrend ? bestPrice > ProtectivePrice : bestPrice < ProtectivePrice))
-			{
-				this.AddDebugLog("Timeout.");
-				return ClosePositionPrice;
-			}
-
-			this.AddDebugLog("PrevBest={0} CurrBest={1}", _prevBestPrice, bestPrice);
-
-			if (IsTrailing)
-			{
-				if (_isUpTrend)
-				{
-					if (_prevBestPrice < bestPrice)
-					{
-						_prevBestPrice = bestPrice;
-					}
-					else if (_prevBestPrice > bestPrice)
-					{
-						_isTrailingActivated = true;
-					}
-				}
-				else
-				{
-					if (_prevBestPrice > bestPrice)
-					{
-						_prevBestPrice = bestPrice;
-					}
-					else if (_prevBestPrice < bestPrice)
-					{
-						_isTrailingActivated = true;
-					}
-				}
-
-				if (!_isTrailingActivated)
-					return null;
-
-				var activationPrice = _isUpTrend
-					? _prevBestPrice.Value - ProtectiveLevel
-					: _prevBestPrice.Value + ProtectiveLevel;
-
-				this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, ProtectiveLevel);
-
-				if (_isUpTrend)
-				{
-					if (bestPrice <= activationPrice)
-						return ClosePositionPrice;
-				}
-				else
-				{
-					if (bestPrice >= activationPrice)
-						return ClosePositionPrice;
-				}
-
-				return null;
-			}
-			else
-			{
-				var activationPrice = (ProtectiveLevel.Type == UnitTypes.Limit)
-					? ProtectiveLevel
-					: (_isUpTrend ? _prevBestPrice + ProtectiveLevel : _prevBestPrice - ProtectiveLevel);
-
-				this.AddDebugLog("ActivationPrice={0} level={1}", activationPrice, ProtectiveLevel);
-
-				// protectiveLevel may has extra big value.
-				// In that case activationPrice may less that zero.
-				if (activationPrice <= 0)
-					activationPrice = Security.MinPrice ?? 1m;
-
-				if (_isUpTrend)
-				{
-					if (bestPrice >= activationPrice)
-						return ClosePositionPrice;
-				}
-				else
-				{
-					if (bestPrice <= activationPrice)
-						return ClosePositionPrice;
-				}
-
-				return null;
-			}
-		}
-
-		/// <summary>
 		/// Whether the protective strategy is activated.
 		/// </summary>
 		public bool IsActivated { get; private set; }
@@ -229,8 +125,11 @@ namespace StockSharp.Algo.Strategies.Protective
 		private readonly StrategyParam<bool> _useMarketOrders;
 
 		/// <summary>
-		/// Whether to use <see cref="OrderTypes.Market"/> for protection. By default, orders <see cref="OrderTypes.Limit"/> are used.
+		/// Whether to use <see cref="OrderTypes.Market"/> for protection.
 		/// </summary>
+		/// <remarks>
+		/// By default, orders <see cref="OrderTypes.Limit"/> are used.
+		/// </remarks>
 		public bool UseMarketOrders
 		{
 			get => _useMarketOrders.Value;
@@ -292,45 +191,21 @@ namespace StockSharp.Algo.Strategies.Protective
 		/// <inheritdoc />
 		protected override void OnStarted(DateTimeOffset time)
 		{
+			base.OnStarted(time);
+
 			this.AddInfoLog(LocalizedStrings.Str1283Params,
 				ProtectiveSide, ProtectivePrice, ProtectiveVolume, ProtectiveLevel, IsTrailing, UseMarketOrders, UseQuoting, PriceOffset);
 
 			this.SubscribeTrades(Security);
-
-			base.OnStarted(time);
 		}
 
 		/// <inheritdoc />
 		protected override void OnReseted()
 		{
-			_quotingStarted = false;
-			_prevBestPrice = null;
-			_isTrailingActivated = false;
+			_quotingStarted = default;
+			_processor = default;
 
 			base.OnReseted();
-		}
-
-		/// <summary>
-		/// The market price of position closing. If there is no information about the current price, then the <see langword="null" /> will be returned.
-		/// </summary>
-		protected virtual decimal? ClosePositionPrice
-		{
-			get
-			{
-				if (UseMarketOrders)
-					return 0;
-
-				//if (!Security.Board.IsSupportMarketOrders)
-				//	return this.GetMarketPrice(QuotingDirection);
-
-				var price = GetFilteredQuotes(QuotingDirection)?.FirstOr()?.Price;
-
-				if (price != null)
-					return (decimal)(price.Value + (QuotingDirection == Sides.Buy ? PriceOffset : -PriceOffset));
-
-				this.AddWarningLog(LocalizedStrings.Str1284Params.Put(Security, QuotingDirection));
-				return null;
-			}
 		}
 
 		/// <inheritdoc />
@@ -361,9 +236,14 @@ namespace StockSharp.Algo.Strategies.Protective
 				return null;
 			}
 
-			var price = GetActivationPrice(currentTime);
+			var ltp = LastTradePrice;
+			var bestPrice = UseLastTradePrice && ltp != null ? ltp : BestPrice;
 
-			if (price == null)
+			_processor ??= new(ProtectiveSide, ProtectivePrice, _isUpTrend, IsTrailing, ProtectiveLevel, UseMarketOrders, PriceOffset, TimeOut) { Parent = this };
+			
+			var price = _processor.GetActivationPrice(bestPrice, currentTime);
+
+			if (price is null)
 				return null;
 
 			RaiseActivated(price.Value);

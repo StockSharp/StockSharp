@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Compilation;
 
 using System;
 using System.Linq;
-using System.Runtime.Loader;
 using System.Collections.Generic;
 
 using Ecng.Common;
@@ -74,7 +73,7 @@ public class CodeInfo : IPersistable
     /// </summary>
     public event Action Compiled;
 
-	private AssemblyLoadContext _context;
+	private readonly AssemblyLoadContextTracker _context = new();
 
 	/// <summary>
 	/// Compile code.
@@ -86,21 +85,28 @@ public class CodeInfo : IPersistable
 		if (isTypeCompatible is null)
 			throw new ArgumentNullException(nameof(isTypeCompatible));
 
-		var prev = _context;
-
-		_context = new(default, true);
-
-		var source = new[] { Text };
+		var sources = new[] { Text };
 
 		if (ExtraSources is not null)
-			source = source.Concat(ExtraSources);
+			sources = sources.Concat(ExtraSources);
 
-		var result = ServicesRegistry.Compiler.CompileCode(_context, source, string.Empty, References);
+		var refs = References.ToValidPaths().ToArray();
 
-		if (result.HasErrors())
-			return result;
+		byte[] asm = null;
+		var errors = new List<CompilationError>();
 
-		var type = result.Assembly.GetTypes().FirstOrDefault(isTypeCompatible);
+		if (ServicesRegistry.TryCompilerCache?.TryGet(sources, refs, out asm) != true)
+		{
+			var result = ServicesRegistry.Compiler.Compile("Strategy", sources, refs);
+
+			if (result.HasErrors())
+				return result;
+
+			errors.AddRange(result.Errors);
+			ServicesRegistry.TryCompilerCache?.Add(sources, refs, asm = result.Assembly);
+		}
+
+		var type = _context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
 
 		ObjectType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
 
@@ -113,16 +119,11 @@ public class CodeInfo : IPersistable
 			ex.LogError();
 		}
 
-		try
+		return new()
 		{
-			prev?.Unload();
-		}
-		catch (Exception ex)
-		{
-			ex.LogError();
-		}
-
-		return result;
+			Assembly = asm,
+			Errors = errors.ToArray(),
+		};
 	}
 
 	/// <summary>

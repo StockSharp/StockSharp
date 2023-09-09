@@ -42,6 +42,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 	private readonly HashSet<HistoryEmulationConnector> _startedConnectors = new();
 	private bool _cancelEmulation;
+	private bool _finished;
 	private int _lastTotalProgress;
 	private DateTime _startedAt;
 
@@ -207,6 +208,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	protected void OnStart()
 	{
 		_cancelEmulation = false;
+		_finished = false;
 		_startedAt = DateTime.UtcNow;
 		_lastTotalProgress = -1;
 
@@ -341,14 +343,21 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 			if (_cancelEmulation || (t = tryGetNext()) is null)
 			{
-				if (State == ChannelStates.Stopped)
+				if (_finished || State == ChannelStates.Stopped)
 					return;
 
 				if (State != ChannelStates.Stopping)
 					State = ChannelStates.Stopping;
 
-				Stop();
-				RaiseStopped();
+				if (_cancelEmulation)
+				{
+					Stop();
+					RaiseStopped();
+				}
+				else
+				{
+					_finished = true;
+				}
 
 				return;
 			}
@@ -393,6 +402,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (lastStep < 100)
 				SingleProgressChanged?.Invoke(strategy, parameters, 100);
 
+			var needStop = false;
+
 			int? progress;
 
 			lock (_sync)
@@ -405,6 +416,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					progress = null;
 				else
 					_lastTotalProgress = progress.Value;
+
+				needStop = _finished && _startedConnectors.IsEmpty();
 			}
 
 			if (progress is not null)
@@ -420,9 +433,16 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			}
 
 			iterationFinished();
+
+			if (needStop)
+			{
+				Stop();
+				RaiseStopped();
+			}
 		};
 
 		strategy.Connector = connector;
+		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
 
 		StrategyInitialized?.Invoke(strategy, parameters);

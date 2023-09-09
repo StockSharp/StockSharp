@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Analytics
 				.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));
 
 			// put our calculations into grid
-			var grid = panel.CreateGrid("Price", "Volume");
+			var grid = panel.CreateGrid("Time", "Volume");
 
 			foreach (var row in rows)
 				grid.SetRow(row.Key, row.Value);

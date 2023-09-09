@@ -720,6 +720,11 @@ namespace StockSharp.Algo
 		public bool SupportBuildingFromOrderLog { get; set; } = true;
 
 		/// <summary>
+		/// Use <see cref="StorageMessageAdapter"/>.
+		/// </summary>
+		public bool SupportStorage { get; set; } = true;
+
+		/// <summary>
 		/// Use <see cref="OrderBookTruncateMessageAdapter"/>.
 		/// </summary>
 		public bool SupportOrderBookTruncate { get; set; } = true;
@@ -942,7 +947,7 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new CandleHolderMessageAdapter(adapter));
 			}
 
-			if (StorageProcessor.Settings.StorageRegistry != null)
+			if (SupportStorage && StorageProcessor.Settings.StorageRegistry != null)
 			{
 				adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
 			}
@@ -1635,6 +1640,15 @@ namespace StockSharp.Algo
 			wrapper.SendInMessage(message);
 		}
 
+		/// <summary>
+		/// Try find adapter by portfolio name.
+		/// </summary>
+		/// <param name="porfolioName">Portfolio name.</param>
+		/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+		/// <returns>Found <see cref="IMessageAdapter"/>.</returns>
+		public bool TryGetAdapter(string porfolioName, out IMessageAdapter adapter)
+			=> _portfolioAdapters.TryGetValue(porfolioName, out adapter);
+
 		private void ProcessPortfolioMessage(PortfolioMessage message)
 		{
 			if (message.IsSubscribe)
@@ -1692,7 +1706,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (!_portfolioAdapters.TryGetValue(portfolioName, out var adapter))
+			if (!TryGetAdapter(portfolioName, out var adapter))
 			{
 				return GetAdapters(message, out isPended, out _).FirstOrDefault();
 			}
@@ -2224,6 +2238,7 @@ namespace StockSharp.Algo
 				Level1Extend = Level1Extend,
 				SuppressReconnectingErrors = SuppressReconnectingErrors,
 				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
+				SupportStorage = SupportStorage,
 				SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 				SupportOrderBookTruncate = SupportOrderBookTruncate,
 				SupportOffline = SupportOffline,

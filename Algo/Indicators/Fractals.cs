@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="Fractals"/>.
 		/// </summary>
 		public Fractals()
-			: this(5, new() { Name = "Up" }, new() { Name = "Down" })
+			: this(5, new() { Name = nameof(Up) }, new() { Name = nameof(Down) })
 		{
 		}
 

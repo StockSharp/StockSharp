@@ -303,7 +303,6 @@ public class DummyChartBuilder : IChartBuilder
 		public bool UseAltIcon { get; set; }
 		public double DrawSize { get; set; }
 
-		/// <inheritdoc />
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
