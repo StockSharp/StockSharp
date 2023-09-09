@@ -26,8 +26,8 @@
 				}
 
 				// draw series on chart as line and histogram
-				lineChart.Append($"{security} (close)", candlesSeries.Keys, candlesSeries.Values, ChartIndicatorDrawStyles.DashedLine, Color.Red);
-				histogramChart.Append($"{security} (vol)", volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram, Color.LightGreen);
+				lineChart.Append($"{security} (close)", candlesSeries.Keys, candlesSeries.Values, ChartIndicatorDrawStyles.DashedLine);
+				histogramChart.Append($"{security} (vol)", volsSeries.Keys, volsSeries.Values, ChartIndicatorDrawStyles.Histogram);
 			}
 
 			return Task.CompletedTask;
