@@ -1,7 +1,5 @@
-﻿namespace StockSharp.Xaml.Charting
+﻿namespace StockSharp.Charting
 {
-	using StockSharp.Charting;
-
 	/// <summary>
 	/// The chart element representing a volatility smile.
 	/// </summary>
