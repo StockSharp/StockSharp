@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Indicators
 			Name = LocalizedStrings.NameKey,
 			Description = LocalizedStrings.Str908Key,
 			GroupName = LocalizedStrings.GeneralKey)]
-		public virtual string Name
+		public string Name
 		{
 			get => _name;
 			set

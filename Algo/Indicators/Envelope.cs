@@ -53,8 +53,8 @@ namespace StockSharp.Algo.Indicators
 			InnerIndicators.Add(Upper = ma.TypedClone());
 			InnerIndicators.Add(Lower = ma.TypedClone());
 
-			Upper.Name = "Upper";
-			Lower.Name = "Lower";
+			Upper.Name = nameof(Upper);
+			Lower.Name = nameof(Lower);
 		}
 
 		/// <summary>
