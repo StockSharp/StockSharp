@@ -884,7 +884,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.MaxOrderRegisterErrorCountDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 12)]
-		public virtual int MaxOrderRegisterErrorCount
+		public int MaxOrderRegisterErrorCount
 		{
 			get => _maxOrderRegisterErrorCount.Value;
 			set
@@ -935,7 +935,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.MaxRegisterCountDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 13)]
-		public virtual int MaxRegisterCount
+		public int MaxRegisterCount
 		{
 			get => _maxRegisterCount.Value;
 			set
@@ -961,7 +961,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.RegisterIntervalDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 14)]
-		public virtual TimeSpan RegisterInterval
+		public TimeSpan RegisterInterval
 		{
 			get => _registerInterval.Value;
 			set
@@ -1129,7 +1129,7 @@ namespace StockSharp.Algo.Strategies
 		/// To cancel active orders at stop. Is On by default.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool CancelOrdersWhenStopping
+		public bool CancelOrdersWhenStopping
 		{
 			get => _cancelOrdersWhenStopping.Value;
 			set => _cancelOrdersWhenStopping.Value = value;
@@ -1286,7 +1286,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.Str1376Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]
-		public virtual decimal Volume
+		public decimal Volume
 		{
 			get => _volume.Value;
 			set
@@ -1396,7 +1396,7 @@ namespace StockSharp.Algo.Strategies
 		/// Wait <see cref="Rules"/> to finish before strategy become into <see cref="ProcessStates.Stopped"/> state.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool WaitRulesOnStop
+		public bool WaitRulesOnStop
 		{
 			get => _waitRulesOnStop.Value;
 			set => _waitRulesOnStop.Value = value;
@@ -1431,7 +1431,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.Str136Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
-		public virtual StrategyCommentModes CommentMode
+		public StrategyCommentModes CommentMode
 		{
 			get => _commentMode.Value;
 			set => _commentMode.Value = value;
@@ -2400,7 +2400,7 @@ namespace StockSharp.Algo.Strategies
 		/// The interval for unrealized profit recalculation. The default value is 1 minute.
 		/// </summary>
 		[Browsable(false)]
-		public virtual TimeSpan UnrealizedPnLInterval
+		public TimeSpan UnrealizedPnLInterval
 		{
 			get => _unrealizedPnLInterval;
 			set
