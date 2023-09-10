@@ -3314,6 +3314,27 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
+		/// <see cref="Draw"/>.
+		/// </summary>
+		public event Action<Subscription, IOrderBookMessage> OrderBookDrawing;
+
+		/// <summary>
+		/// Draw <see cref="IOrderBookMessage"/>.
+		/// </summary>
+		/// <param name="subscription"><see cref="Subscription"/></param>
+		/// <param name="book"><see cref="IOrderBookMessage"/></param>
+		public void Draw(Subscription subscription, IOrderBookMessage book)
+		{
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (book is null)
+				throw new ArgumentNullException(nameof(book));
+
+			OrderBookDrawing?.Invoke(subscription, book);
+		}
+
+		/// <summary>
 		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
