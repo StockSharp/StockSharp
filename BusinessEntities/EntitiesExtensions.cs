@@ -258,6 +258,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <returns>Portfolio identifier.</returns>
+		[Obsolete("Use Portfolio.Name property.")]
 		public static string GetUniqueId(this Portfolio portfolio)
 		{
 			if (portfolio == null)

@@ -87,7 +87,7 @@ namespace StockSharp.Alerts
 			else if (Value is Portfolio portfolio)
 			{
 				storage.SetValue(nameof(Portfolio), true);
-				storage.SetValue(nameof(Value), portfolio.GetUniqueId());
+				storage.SetValue(nameof(Value), portfolio.Name);
 			}
 			else
 				storage.SetValue(nameof(Value), Value.ToString());
