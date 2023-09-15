@@ -3122,6 +3122,18 @@ namespace StockSharp.Algo.Strategies
 				yield return security;
 		}
 
+		/// <summary>
+		/// Get all portfolios required for strategy.
+		/// </summary>
+		/// <returns>Portfolios.</returns>
+		public virtual IEnumerable<Portfolio> GetWorkingPortfolios()
+		{
+			var pf = Portfolio;
+
+			if (pf is not null)
+				yield return pf;
+		}
+
 		private ISecurityProvider SecurityProvider => SafeGetConnector();
 
 		int ISecurityProvider.Count => SecurityProvider.Count;
