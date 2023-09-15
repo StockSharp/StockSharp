@@ -129,8 +129,6 @@ namespace SampleHistoryTestingParallel
 				_optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry);
 
 			_optimizer.EmulationSettings.MarketTimeChangedInterval = TimeSpan.FromMinutes(1);
-			_optimizer.EmulationSettings.StartTime = startTime;
-			_optimizer.EmulationSettings.StopTime = stopTime;
 
 			// set max possible iteration to 100
 			_optimizer.EmulationSettings.MaxIterations = 100;
@@ -236,7 +234,7 @@ namespace SampleHistoryTestingParallel
 				btOptimizer.EmulationSettings.MaxIterations = periods.Count;
 
 				// start emulation
-				btOptimizer.Start(strategies, periods.Count);
+				btOptimizer.Start(startTime, stopTime, strategies, periods.Count);
 			}
 			else
 			{
@@ -254,7 +252,7 @@ namespace SampleHistoryTestingParallel
 
 				var go = (GeneticOptimizer)_optimizer;
 				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
-				go.Start(strategy, new (IStrategyParam, object, object, object, object)[]
+				go.Start(startTime, stopTime, strategy, new (IStrategyParam, object, object, object, object)[]
 				{
 					(strategy.Parameters.GetByName(nameof(strategy.ShortSma)), shortRange.min, shortRange.max, shortRange.step, null),
 					(strategy.Parameters.GetByName(nameof(strategy.LongSma)), longRange.min, longRange.max, longRange.step, null),

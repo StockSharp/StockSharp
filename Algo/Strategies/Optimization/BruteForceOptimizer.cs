@@ -57,9 +57,11 @@ public class BruteForceOptimizer : BaseOptimizer
 	/// <summary>
 	/// Start optimization.
 	/// </summary>
+	/// <param name="startTime">Date in history for starting the paper trading.</param>
+	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="strategies">The strategies and parameters used for optimization.</param>
 	/// <param name="iterationCount">Iteration count.</param>
-	public void Start(IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies, int iterationCount)
+	public void Start(DateTime startTime, DateTime stopTime, IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies, int iterationCount)
 	{
 		if (strategies is null)
 			throw new ArgumentNullException(nameof(strategies));
@@ -90,7 +92,7 @@ public class BruteForceOptimizer : BaseOptimizer
 
 			void _()
 			{
-				TryNextRun(
+				TryNextRun(startTime, stopTime,
 					() =>
 					{
 						if (enumerator.MoveNext())

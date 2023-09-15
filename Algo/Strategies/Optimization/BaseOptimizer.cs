@@ -316,11 +316,13 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <summary>
 	/// Try start next iteration.
 	/// </summary>
+	/// <param name="startTime">Date in history for starting the paper trading.</param>
+	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
 	/// <param name="adapterCache"><see cref="HistoryMessageAdapter.AdapterCache"/></param>
 	/// <param name="storageCache"><see cref="HistoryMessageAdapter.StorageCache"/></param>
 	/// <param name="iterationFinished">Callback to notify the iteration was finished.</param>
-	protected internal void TryNextRun(Func<(Strategy, IStrategyParam[])?> tryGetNext,
+	protected internal void TryNextRun(DateTime startTime, DateTime stopTime, Func<(Strategy, IStrategyParam[])?> tryGetNext,
 		MarketDataStorageCache adapterCache, MarketDataStorageCache storageCache,
 		Action iterationFinished)
 	{
@@ -377,8 +379,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					Drive = StorageSettings.Drive,
 					StorageFormat = StorageSettings.Format,
 
-					StartDate = EmulationSettings.StartTime,
-					StopDate = EmulationSettings.StopTime,
+					StartDate = startTime,
+					StopDate = stopTime,
 
 					AdapterCache = adapterCache,
 					StorageCache = storageCache,

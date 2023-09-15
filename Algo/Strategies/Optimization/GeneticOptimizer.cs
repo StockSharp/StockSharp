@@ -29,12 +29,16 @@ public class GeneticOptimizer : BaseOptimizer
 		private readonly GeneticOptimizer _optimizer;
 		private readonly Strategy _strategy;
 		private readonly Func<Strategy, decimal> _calcFitness;
+		private readonly DateTime _startTime;
+		private readonly DateTime _stopTime;
 
-		public StrategyFitness(GeneticOptimizer optimizer, Strategy strategy, Func<Strategy, decimal> calcFitness)
+		public StrategyFitness(GeneticOptimizer optimizer, Strategy strategy, Func<Strategy, decimal> calcFitness, DateTime startTime, DateTime stopTime)
 		{
 			_optimizer = optimizer ?? throw new ArgumentNullException(nameof(optimizer));
 			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			_calcFitness = calcFitness ?? throw new ArgumentNullException(nameof(calcFitness));
+			_startTime = startTime;
+			_stopTime = stopTime;
 		}
 
 		double IFitness.Evaluate(IChromosome chromosome)
@@ -81,7 +85,7 @@ public class GeneticOptimizer : BaseOptimizer
 				var adapterCache = _optimizer.AllocateAdapterCache();
 				var storageCache = _optimizer.AllocateStorageCache();
 
-				_optimizer.TryNextRun(
+				_optimizer.TryNextRun(_startTime, _stopTime,
 					() => (strategy, parameters),
 					adapterCache,
 					storageCache,
@@ -301,6 +305,8 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <summary>
 	/// Start optimization.
 	/// </summary>
+	/// <param name="startTime">Date in history for starting the paper trading.</param>
+	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="strategy">Strategy.</param>
 	/// <param name="parameters">Parameters used to generate chromosomes.</param>
 	/// <param name="calcFitness">Calc fitness value function. If <see langword="null"/> the value from <see cref="GeneticSettings.Fitness"/> will be used.</param>
@@ -309,6 +315,8 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <param name="mutation"><see cref="IMutation"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Mutation"/> will be used.</param>
 	[CLSCompliant(false)]
 	public void Start(
+		DateTime startTime,
+		DateTime stopTime,
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, object step, object value)> parameters,
 		Func<Strategy, decimal> calcFitness = default,
@@ -373,7 +381,7 @@ public class GeneticOptimizer : BaseOptimizer
 			? terminations[0]
 			: new OrTermination(terminations.ToArray());
 
-		_ga = new(population, new StrategyFitness(this, strategy, calcFitness), selection, crossover, mutation)
+		_ga = new(population, new StrategyFitness(this, strategy, calcFitness, startTime, stopTime), selection, crossover, mutation)
 		{
 			TaskExecutor = new ParallelTaskExecutor
 			{

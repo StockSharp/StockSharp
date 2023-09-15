@@ -55,6 +55,6 @@ public class BatchEmulation : Optimization.BruteForceOptimizer
 	/// <param name="iterationCount">Iteration count.</param>
 	public void Start(IEnumerable<Strategy> strategies, int iterationCount)
 	{
-		Start(strategies.Select(s => (s, s.Parameters.Values.ToArray())), iterationCount);
+		Start(EmulationSettings.StartTime, EmulationSettings.StopTime, strategies.Select(s => (s, s.Parameters.Values.ToArray())), iterationCount);
 	}
 }
