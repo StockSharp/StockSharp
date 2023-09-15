@@ -4,6 +4,8 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Common;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Attribute, applied to indicator, to provide information about type of values <see cref="IIndicatorValue"/>.
 	/// </summary>
@@ -30,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 				throw new ArgumentNullException(nameof(type));
 
 			if (!type.Is<IIndicatorValue>())
-				throw new ArgumentException(nameof(type));
+				throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(type.Name, nameof(IIndicatorValue)), nameof(type));
 
 			Type = type;
 			IsInput = isInput;

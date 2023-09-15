@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -198,7 +199,7 @@ namespace StockSharp.Algo.Indicators
 				throw new ArgumentNullException(nameof(indicatorType));
 
 			if (!indicatorType.Is<IIndicator>())
-				throw new ArgumentException(nameof(indicatorType));
+				throw new ArgumentException(LocalizedStrings.TypeNotImplemented.Put(indicatorType.Name, nameof(IIndicator)), nameof(indicatorType));
 
 			return (isInput
 					? (IndicatorValueAttribute)indicatorType.GetAttribute<IndicatorInAttribute>()

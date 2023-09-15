@@ -1,4 +1,8 @@
 {
+  "OwnElements": {
+    "en": "Own elements",
+    "ru": "Собственные кубики"
+  },
   "CandleSourceElementDescription": {
     "en": "The element is used to build candles for a specified instrument.",
     "ru": "Кубик используется для построения свечей по заданному инструменту."
