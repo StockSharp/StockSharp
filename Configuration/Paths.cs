@@ -395,12 +395,12 @@
 		/// <summary>
 		/// Begin date of <see cref="HistoryDataPath"/>.
 		/// </summary>
-		public static readonly DateTime HistoryBeginDate = new(2020, 4, 1);
+		public static readonly DateTime HistoryBeginDate = new DateTime(2020, 4, 1).UtcKind();
 
 		/// <summary>
 		/// End date of <see cref="HistoryDataPath"/>.
 		/// </summary>
-		public static readonly DateTime HistoryEndDate = new(2020, 4, 30);
+		public static readonly DateTime HistoryEndDate = new DateTime(2020, 4, 30).UtcKind();
 
 		/// <summary>
 		/// Default extension for settings file.
