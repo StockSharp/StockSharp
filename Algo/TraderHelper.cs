@@ -29,6 +29,8 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Algo.Indicators;
+	using StockSharp.Algo.Strategies;
 
 	/// <summary>
 	/// The auxiliary class for provision of various algorithmic functionalities.
@@ -2769,6 +2771,19 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(board));
 
 			return generator.GenerateId(secCode, board.Code);
+		}
+
+		/// <summary>
+		/// Is type compatible.
+		/// </summary>
+		/// <param name="type">Type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsStrategyOrIndicator(this Type type)
+		{
+			if (type == null)
+				throw new ArgumentNullException(nameof(type));
+
+			return !type.IsAbstract && type.IsPublic && (type.IsSubclassOf(typeof(Strategy)) || type.Is<IIndicator>());
 		}
 	}
 }
