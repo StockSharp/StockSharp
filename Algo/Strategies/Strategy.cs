@@ -1574,6 +1574,11 @@ namespace StockSharp.Algo.Strategies
 		public Exception LastError { get; private set; }
 
 		/// <summary>
+		/// Strategy stopped by critical reason.
+		/// </summary>
+		public Exception CriticalError { get; set; }
+
+		/// <summary>
 		/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		[Obsolete("Use overload with time param.")]
@@ -2248,13 +2253,13 @@ namespace StockSharp.Algo.Strategies
 
 			PnLManager.Reset();
 
-			Commission = null;
+			Commission = default;
 			//CommissionManager.Reset();
 
-			Latency = null;
+			Latency = default;
 			//LatencyManager.Reset();
 
-			Slippage = null;
+			Slippage = default;
 			//SlippageManager.Reset();
 
 			RiskManager.Reset();
@@ -2264,12 +2269,13 @@ namespace StockSharp.Algo.Strategies
 
 			ProcessState = ProcessStates.Stopped;
 			ErrorState = LogLevels.Info;
-			ErrorCount = 0;
-			LastError = null;
+			ErrorCount = default;
+			LastError = default;
+			CriticalError = default;
 
-			_boardMsg = null;
+			_boardMsg = default;
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
-			_idStr = null;
+			_idStr = default;
 
 			_positions.Clear();
 
