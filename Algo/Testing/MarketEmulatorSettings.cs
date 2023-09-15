@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Testing
 		private TimeSpan _latency;
 
 		/// <summary>
-		/// The minimal value of the registered orders delay. By default, it is <see cref="TimeSpan.Zero"/>, which means instant adoption of registered orders by  exchange.
+		/// The minimal value of the registered orders delay. By default, it is <see cref="TimeSpan.Zero"/>, which means instant adoption of registered orders by exchange.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
