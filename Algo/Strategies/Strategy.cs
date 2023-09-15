@@ -1576,6 +1576,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Strategy stopped by critical reason.
 		/// </summary>
+		[Browsable(false)]
 		public Exception CriticalError { get; set; }
 
 		/// <summary>
