@@ -5,9 +5,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Derivatives;
-	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies.Quoting;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -15,20 +13,15 @@ namespace StockSharp.Algo.Strategies.Derivatives
 	/// </summary>
 	public class VolatilityQuotingStrategy : BestByPriceQuotingStrategy
 	{
-		private readonly IExchangeInfoProvider _exchangeInfoProvider;
-		private BlackScholes _bs;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VolatilityQuotingStrategy"/>.
 		/// </summary>
 		/// <param name="quotingDirection">Quoting direction.</param>
 		/// <param name="quotingVolume">Total quoting volume.</param>
 		/// <param name="ivRange">Volatility range.</param>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public VolatilityQuotingStrategy(Sides quotingDirection, decimal quotingVolume, Range<decimal> ivRange, IExchangeInfoProvider exchangeInfoProvider)
+		public VolatilityQuotingStrategy(Sides quotingDirection, decimal quotingVolume, Range<decimal> ivRange)
 			: base(quotingDirection, quotingVolume)
 		{
-			_exchangeInfoProvider = exchangeInfoProvider;
 			_ivRange = this.Param(nameof(IVRange), ivRange);
 		}
 
@@ -43,25 +36,25 @@ namespace StockSharp.Algo.Strategies.Derivatives
 			set => _ivRange.Value = value;
 		}
 
-		/// <inheritdoc />
-		public override Security Security
-		{
-			set
-			{
-				_bs = new BlackScholes(value, this, this, _exchangeInfoProvider);
-				base.Security = value;
-			}
-		}
+		/// <summary>
+		/// <see cref="IBlackScholes"/>
+		/// </summary>
+		public IBlackScholes Model { get; set; }
 
-		/// <inheritdoc />
-		protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
+        /// <inheritdoc />
+        protected override decimal? NeedQuoting(DateTimeOffset currentTime, decimal? currentPrice, decimal? currentVolume, decimal newVolume)
 		{
-			var minPrice = _bs.Premium(currentTime, IVRange.Min / 100);
+			var model = Model;
+
+			if (model is null)
+				return null;
+
+			var minPrice = model.Premium(currentTime, IVRange.Min / 100);
 
 			if (minPrice == null)
 				return null;
 
-			var maxPrice = _bs.Premium(currentTime, IVRange.Max / 100);
+			var maxPrice = model.Premium(currentTime, IVRange.Max / 100);
 
 			if (maxPrice == null)
 				return null;
