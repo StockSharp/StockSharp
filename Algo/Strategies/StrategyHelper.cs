@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 	using StockSharp.Algo.Strategies.Protective;
 	using StockSharp.Algo.Strategies.Quoting;
+	using StockSharp.Algo.Derivatives;
 
 	/// <summary>
 	/// Extension class for <see cref="Strategy"/>.
@@ -175,13 +176,35 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To get the strategy start-up mode (paper trading or real).
+		/// To set the strategy start-up mode (paper trading or real).
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="isEmulation">If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</param>
 		public static void SetIsEmulation(this Strategy strategy, bool isEmulation)
 		{
 			strategy.Environment.SetValue(_isEmulationModeKey, isEmulation);
+		}
+
+		private const string _optionDeskKey = "OptionDesk";
+
+		/// <summary>
+		/// To get the <see cref="IOptionDesk"/>.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <returns><see cref="IOptionDesk"/>.</returns>
+		public static IOptionDesk GetOptionDesk(this Strategy strategy)
+		{
+			return strategy.Environment.GetValue<IOptionDesk>(_optionDeskKey);
+		}
+
+		/// <summary>
+		/// To set the <see cref="IOptionDesk"/>.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="desk"><see cref="IOptionDesk"/>.</param>
+		public static void SetIsEmulation(this Strategy strategy, IOptionDesk desk)
+		{
+			strategy.Environment.SetValue(_optionDeskKey, desk);
 		}
 
 		/// <summary>

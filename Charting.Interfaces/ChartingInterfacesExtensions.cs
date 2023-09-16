@@ -89,33 +89,60 @@
 			chart.Draw(data);
 		}
 
+		private const string _keyChart = "Chart";
+
 		/// <summary>
-		/// To get the chart associated with the passed strategy.
+		/// To get the <see cref="IChart"/> associated with the passed strategy.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <returns>Chart.</returns>
 		public static IChart GetChart(this Strategy strategy)
 		{
-			if (strategy == null)
+			if (strategy is null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			return strategy.Environment.GetValue<IChart>("Chart");
+			return strategy.Environment.GetValue<IChart>(_keyChart);
 		}
 
 		/// <summary>
-		/// To set a chart for the strategy.
+		/// To set a <see cref="IChart"/> for the strategy.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="chart">Chart.</param>
 		public static void SetChart(this Strategy strategy, IChart chart)
 		{
-			if (strategy == null)
+			if (strategy is null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			//if (chart == null)
-			//	throw new ArgumentNullException(nameof(chart));
+			strategy.Environment.SetValue(_keyChart, chart);
+		}
 
-			strategy.Environment.SetValue("Chart", chart);
+		private const string _keyOptionPositionChart = "OptionPositionChart";
+
+		/// <summary>
+		/// To get the <see cref="IOptionPositionChart"/> associated with the passed strategy.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <returns>Chart.</returns>
+		public static IOptionPositionChart GetOptionPositionChart(this Strategy strategy)
+		{
+			if (strategy is null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			return strategy.Environment.GetValue<IOptionPositionChart>(_keyOptionPositionChart);
+		}
+
+		/// <summary>
+		/// To set a <see cref="IChart"/> for the strategy.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="chart">Chart.</param>
+		public static void SetOptionPositionChart(this Strategy strategy, IOptionPositionChart chart)
+		{
+			if (strategy is null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			strategy.Environment.SetValue(_keyOptionPositionChart, chart);
 		}
 
 		/// <summary>
