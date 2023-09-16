@@ -1,4 +1,24 @@
 {
+  "BasketBlackScholes": {
+    "en": "Portfolio model for calculating the values of Greeks by the Black-Scholes formula.",
+    "ru": "Портфельная модель вычисления значений Греков на основе Блэк-Шоулз формулы."
+  },
+  "Strikes": {
+    "en": "Strikes",
+    "ru": "Страйки"
+  },
+  "Premium": {
+    "en": "Premium",
+    "ru": "Премия"
+  },
+  "Greeks": {
+    "en": "Greeks",
+    "ru": "Греки"
+  },
+  "GreeksElement": {
+    "en": "The element calculates 'Greeks' from Black-Scholes model.",
+    "ru": "Элемент вычисляющий 'Греки' по модели Блэк-Шоулз."
+  },
   "OwnElements": {
     "en": "Own elements",
     "ru": "Собственные кубики"
@@ -21364,8 +21384,8 @@
     "ru": "Элемент диаграммы, фильтрующий опционы по базовому активу."
   },
   "OptionsBlackScholesDiagramElement": {
-    "en": "The Black-Scholes \"Greeks\" evaluation element.",
-    "ru": "Элемент вычисления \"греков\" по формуле Black-Scholes."
+    "en": "The Black-Scholes model element.",
+    "ru": "Элемент вычисления модели по формуле Black-Scholes."
   },
   "SecurityDoNotContainsLegs": {
     "en": "Basket security '{0}' do not contains legs.",
