@@ -215,16 +215,16 @@ namespace SampleOptionQuoting
 			//
 			// draw test data on the pos chart
 
-			PosChart.MarketDataProvider = dummyProvider;
-			PosChart.ExchangeInfoProvider = _model.ExchangeInfoProvider;
-			PosChart.SecurityProvider = dummyProvider;
-			PosChart.PositionProvider = dummyProvider;
+			var model = new BasketBlackScholes(asset, dummyProvider, _model.ExchangeInfoProvider, dummyProvider);
 
-			PosChart.UnderlyingAsset = asset;
-			PosChart.Options.Add(securities.First(s => s.OptionType == OptionTypes.Call));
-			PosChart.Options.Add(securities.First(s => s.OptionType == OptionTypes.Put));
+			foreach (var s in securities.Where(s => s.OptionType == OptionTypes.Call || s.OptionType == OptionTypes.Put))
+			{
+				model.InnerModels.Add(new(s, dummyProvider, dummyProvider, _model.ExchangeInfoProvider));
+			}
 
-			PosChart.Refresh(null, currDate, expiryDate);
+			PosChart.Model = model;
+
+			PosChart.Refresh(150000, currDate, expiryDate);
 
 			//
 			// draw test data on the desk
@@ -319,7 +319,7 @@ namespace SampleOptionQuoting
 				if (!assetPos && !newPos)
 					return;
 
-				if ((PosChart.UnderlyingAsset != null && PosChart.UnderlyingAsset == position.Security) || PosChart.Options.Contains(position.Security))
+				if ((PosChart.Model != null && PosChart.Model.UnderlyingAsset != null && PosChart.Model.UnderlyingAsset == position.Security) || PosChart.Model.InnerModels.Any(m => m.Option == position.Security))
 					RefreshChart();
 			});
 
@@ -380,16 +380,14 @@ namespace SampleOptionQuoting
 
 				ClearSmiles();
 
-				PosChart.UnderlyingAsset = null;
+				PosChart.Model = null;
 				//PosChart.Positions.Clear();
 				//PosChart.AssetPosition = null;
 				//PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
 
 				Portfolio.Portfolios = new PortfolioDataSource(Connector);
 
-				PosChart.MarketDataProvider = Connector;
-				PosChart.SecurityProvider = Connector;
-				PosChart.PositionProvider = Connector;
+				PosChart.Model = new(Connector, Connector, Connector.ExchangeInfoProvider, Connector);
 
 				Connector.Connect();
 			}
@@ -536,7 +534,7 @@ namespace SampleOptionQuoting
 			//TryUpdateDepth(Connector.GetMarketDepth(option));
 
 			// create delta hedge strategy
-			var hedge = new DeltaHedgeStrategy(_model.ExchangeInfoProvider)
+			var hedge = new DeltaHedgeStrategy(PosChart.Model)
 			{
 				Security = option.GetUnderlyingAsset(Connector),
 				Portfolio = Portfolio.SelectedPortfolio,
@@ -545,7 +543,7 @@ namespace SampleOptionQuoting
 
 			// create option quoting for 20 contracts
 			var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
-					new Range<decimal>((decimal?)ImpliedVolatilityMin.EditValue ?? 0, (decimal?)ImpliedVolatilityMax.EditValue ?? 100), _model.ExchangeInfoProvider)
+					new Range<decimal>((decimal?)ImpliedVolatilityMin.EditValue ?? 0, (decimal?)ImpliedVolatilityMax.EditValue ?? 100))
 			{
 				// working size is 1 contract
 				Volume = 1,
