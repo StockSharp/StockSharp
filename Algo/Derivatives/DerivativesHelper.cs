@@ -899,6 +899,9 @@ namespace StockSharp.Algo.Derivatives
 			var high = 2m;
 			var low = 0m;
 
+			const int maxIter = 10000;
+			var currIter = 0;
+
 			while ((high - low) > min)
 			{
 				deviation = (high + low) / 2;
@@ -907,6 +910,9 @@ namespace StockSharp.Algo.Derivatives
 					high = deviation;
 				else
 					low = deviation;
+
+				if (++currIter > maxIter)
+					throw new InvalidOperationException("Too much iterations.");
 			}
 
 			return ((high + low) / 2) * 100;
