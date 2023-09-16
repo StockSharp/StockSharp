@@ -9,7 +9,6 @@ namespace StockSharp.Algo.Strategies.Derivatives
 	using Ecng.Common;
 
 	using StockSharp.Algo.Derivatives;
-	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies.Quoting;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -42,13 +41,13 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		/// <summary>
 		/// Initialize <see cref="HedgeStrategy"/>.
 		/// </summary>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		protected HedgeStrategy(IExchangeInfoProvider exchangeInfoProvider)
+		/// <param name="blackScholes"><see cref="BasketBlackScholes"/>.</param>
+		protected HedgeStrategy(BasketBlackScholes blackScholes)
 		{
-			BlackScholes = new BasketBlackScholes(this, this, exchangeInfoProvider, this);
+			BlackScholes = blackScholes ?? throw new ArgumentNullException(nameof(blackScholes));
 
-			_useQuoting = new StrategyParam<bool>(this, nameof(UseQuoting));
-			_priceOffset = new StrategyParam<Unit>(this, nameof(PriceOffset), new Unit());
+			_useQuoting = this.Param<bool>(nameof(UseQuoting));
+			_priceOffset = this.Param<Unit>(nameof(PriceOffset), new());
 		}
 
 		/// <summary>

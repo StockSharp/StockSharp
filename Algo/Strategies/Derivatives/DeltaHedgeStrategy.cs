@@ -1,17 +1,17 @@
 namespace StockSharp.Algo.Strategies.Derivatives
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Common;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using System;
+	using StockSharp.Algo.Derivatives;
 
 	/// <summary>
 	/// The options delta hedging strategy.
@@ -21,11 +21,11 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeltaHedgeStrategy"/>.
 		/// </summary>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
-		public DeltaHedgeStrategy(IExchangeInfoProvider exchangeInfoProvider)
-			: base(exchangeInfoProvider)
+		/// <param name="blackScholes"><see cref="BasketBlackScholes"/>.</param>
+		public DeltaHedgeStrategy(BasketBlackScholes blackScholes)
+			: base(blackScholes)
 		{
-			_positionOffset = new StrategyParam<decimal>(this, nameof(PositionOffset));
+			_positionOffset = this.Param<decimal>(nameof(PositionOffset));
 		}
 
 		private readonly StrategyParam<decimal> _positionOffset;
