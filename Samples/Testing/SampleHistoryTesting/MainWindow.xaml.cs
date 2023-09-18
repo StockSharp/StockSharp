@@ -484,29 +484,6 @@ namespace SampleHistoryTesting
 				else if (emulationInfo.UseMarketDepth)
 					strategy.BuildFrom = DataType.MarketDepth;
 
-				var area = chart.CreateArea();
-				chart.AddArea(area);
-
-				var candlesElem = strategy.ChartCandlesElem = chart.CreateCandleElement();
-				candlesElem.ShowAxisMarker = false;
-				chart.AddElement(area, candlesElem);
-
-				var tradesElem = strategy.ChartTradesElem = chart.CreateTradeElement();
-				tradesElem.FullTitle = LocalizedStrings.Trades;
-				chart.AddElement(area, tradesElem);
-
-				var shortElem = strategy.ChartShortElem = chart.CreateIndicatorElement();
-				shortElem.Color = System.Drawing.Color.Coral;
-				shortElem.ShowAxisMarker = false;
-				shortElem.FullTitle = strategy.ShortSma.ToString();
-
-				chart.AddElement(area, shortElem);
-
-				var longElem = strategy.ChartLongElem = chart.CreateIndicatorElement();
-				longElem.ShowAxisMarker = false;
-				longElem.FullTitle = strategy.LongSma.ToString();
-				chart.AddElement(area, longElem);
-
 				chart.IsInteracted = false;
 				strategy.SetChart(chart);
 
@@ -663,8 +640,12 @@ namespace SampleHistoryTesting
 				//	};
 				//}
 
-				// start strategy before emulation started
-				strategy.Start();
+				// TODO for test purpose - calling start in non UI thread
+				ThreadingHelper.Thread(() =>
+				{
+					// start strategy before emulation started
+					strategy.Start();
+				}).Launch();
 
 				_connectors.Add(connector);
 

@@ -39,10 +39,10 @@ namespace SampleHistoryTesting
 		private SimpleMovingAverage _shortSma;
 		private SimpleMovingAverage _longSma;
 
-		public IChartCandleElement ChartCandlesElem { get; set; }
-		public IChartTradeElement ChartTradesElem { get; set; }
-		public IChartIndicatorElement ChartLongElem { get; set; }
-		public IChartIndicatorElement ChartShortElem { get; set; }
+		private IChartCandleElement _chartCandlesElem;
+		private IChartTradeElement _chartTradesElem;
+		private IChartIndicatorElement _chartLongElem;
+		private IChartIndicatorElement _chartShortElem;
 
 		public SmaStrategy()
         {
@@ -111,8 +111,33 @@ namespace SampleHistoryTesting
 			// !!! DO NOT FORGET add it in case use IsFormed property (see code below)
 			Indicators.Add(_longSma = new SimpleMovingAverage { Length = LongSma });
 			Indicators.Add(_shortSma = new SimpleMovingAverage { Length = ShortSma });
-
+			
 			_chart = this.GetChart();
+
+			if (_chart != null)
+			{
+				var area = _chart.CreateArea();
+				_chart.AddArea(area);
+
+				_chartCandlesElem = _chart.CreateCandleElement();
+				//_chartCandlesElem.ShowAxisMarker = false;
+				_chart.AddElement(area, _chartCandlesElem);
+
+				_chartTradesElem = _chart.CreateTradeElement();
+				//_chartTradesElem.FullTitle = LocalizedStrings.Trades;
+				_chart.AddElement(area, _chartTradesElem);
+
+				_chartShortElem = _chart.CreateIndicatorElement();
+				_chartShortElem.Color = System.Drawing.Color.Coral;
+				//_chartShortElem.ShowAxisMarker = false;
+				_chartShortElem.FullTitle = _shortSma.ToString();
+				_chart.AddElement(area, _chartShortElem);
+
+				_chartLongElem = _chart.CreateIndicatorElement();
+				//_chartLongElem.ShowAxisMarker = false;
+				_chartLongElem.FullTitle = _longSma.ToString();
+				_chart.AddElement(area, _chartLongElem);
+			}
 
 			var dt = CandleType;
 
@@ -167,35 +192,35 @@ namespace SampleHistoryTesting
 			if (this.IsFormedAndOnlineAndAllowTrading())
 			{
 				// in case we subscribed on non finished only candles
-				if (candle.State != CandleStates.Finished)
-					return;
-
-				// calc new values for short and long
-				var isShortLessThenLong = shortValue.GetValue<decimal>() < longValue.GetValue<decimal>();
-
-				if (_isShortLessThenLong == null)
+				if (candle.State == CandleStates.Finished)
 				{
-					_isShortLessThenLong = isShortLessThenLong;
-				}
-				else if (_isShortLessThenLong != isShortLessThenLong) // crossing happened
-				{
-					// if short less than long, the sale, otherwise buy
-					var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+					// calc new values for short and long
+					var isShortLessThenLong = shortValue.GetValue<decimal>() < longValue.GetValue<decimal>();
 
-					// calc size for open position or revert
-					var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+					if (_isShortLessThenLong == null)
+					{
+						_isShortLessThenLong = isShortLessThenLong;
+					}
+					else if (_isShortLessThenLong != isShortLessThenLong) // crossing happened
+					{
+						// if short less than long, the sale, otherwise buy
+						var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
 
-					// calc order price as a close price
-					var price = candle.ClosePrice;
+						// calc size for open position or revert
+						var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
 
-					RegisterOrder(this.CreateOrder(direction, price, volume));
+						// calc order price as a close price
+						var price = candle.ClosePrice;
 
-					// or revert position via market quoting
-					//var strategy = new MarketQuotingStrategy(direction, volume);
-					//ChildStrategies.Add(strategy);
+						RegisterOrder(this.CreateOrder(direction, price, volume));
 
-					// store current values for short and long
-					_isShortLessThenLong = isShortLessThenLong;
+						// or revert position via market quoting
+						//var strategy = new MarketQuotingStrategy(direction, volume);
+						//ChildStrategies.Add(strategy);
+
+						// store current values for short and long
+						_isShortLessThenLong = isShortLessThenLong;
+					}
 				}
 			}
 
@@ -209,10 +234,10 @@ namespace SampleHistoryTesting
 
 			data
 				.Group(candle.OpenTime)
-					.Add(ChartCandlesElem, candle)
-					.Add(ChartShortElem, shortValue)
-					.Add(ChartLongElem, longValue)
-					.Add(ChartTradesElem, trade)
+					.Add(_chartCandlesElem, candle)
+					.Add(_chartShortElem, shortValue)
+					.Add(_chartLongElem, longValue)
+					.Add(_chartTradesElem, trade)
 					;
 
 			_chart.Draw(data);
