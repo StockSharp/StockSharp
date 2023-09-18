@@ -2776,14 +2776,24 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Is type compatible.
 		/// </summary>
+		/// <typeparam name="T">Required type.</typeparam>
 		/// <param name="type">Type.</param>
 		/// <returns>Check result.</returns>
-		public static bool IsStrategyOrIndicator(this Type type)
+		public static bool IsRequiredType<T>(this Type type)
+			=> IsRequiredType(type, typeof(T));
+
+		/// <summary>
+		/// Is type compatible.
+		/// </summary>
+		/// <param name="type">Type.</param>
+		/// <param name="required">Required type.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsRequiredType(this Type type, Type required)
 		{
-			if (type == null)
+			if (type is null)
 				throw new ArgumentNullException(nameof(type));
 
-			return !type.IsAbstract && type.IsPublic && (type.IsSubclassOf(typeof(Strategy)) || type.Is<IIndicator>());
+			return !type.IsAbstract && type.IsPublic && required.IsAssignableFrom(type);
 		}
 	}
 }
