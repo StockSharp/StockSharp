@@ -116,27 +116,15 @@ namespace SampleHistoryTesting
 
 			if (_chart != null)
 			{
-				var area = _chart.CreateArea();
-				_chart.AddArea(area);
+				var area = _chart.AddArea();
 
-				_chartCandlesElem = _chart.CreateCandleElement();
-				//_chartCandlesElem.ShowAxisMarker = false;
-				_chart.AddElement(area, _chartCandlesElem);
+				_chartCandlesElem = area.AddCandles();
+				_chartTradesElem = area.AddTrades();
+				_chartShortElem = area.AddIndicator(_shortSma);
+				_chartLongElem = area.AddIndicator(_longSma);
 
-				_chartTradesElem = _chart.CreateTradeElement();
-				//_chartTradesElem.FullTitle = LocalizedStrings.Trades;
-				_chart.AddElement(area, _chartTradesElem);
-
-				_chartShortElem = _chart.CreateIndicatorElement();
+				// make short line coral color
 				_chartShortElem.Color = System.Drawing.Color.Coral;
-				//_chartShortElem.ShowAxisMarker = false;
-				_chartShortElem.FullTitle = _shortSma.ToString();
-				_chart.AddElement(area, _chartShortElem);
-
-				_chartLongElem = _chart.CreateIndicatorElement();
-				//_chartLongElem.ShowAxisMarker = false;
-				_chartLongElem.FullTitle = _longSma.ToString();
-				_chart.AddElement(area, _chartLongElem);
 			}
 
 			var dt = CandleType;

@@ -66,8 +66,7 @@ namespace SampleRealTimeEmulation
 
 			_logManager.Sources.Add(_realConnector);
 
-			var area = Chart.CreateArea();
-			Chart.Areas.Add(area);
+			var area = Chart.AddArea();
 
 			_candlesElem = Chart.CreateCandleElement();
 			area.Elements.Add(_candlesElem);

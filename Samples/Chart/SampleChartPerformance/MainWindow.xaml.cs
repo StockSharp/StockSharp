@@ -108,15 +108,13 @@
 		{
 			Chart.ClearAreas();
 
-			_area = Chart.CreateArea();
+			_area = Chart.AddArea();
 
 			var yAxis = _area.YAxises.First();
 
 			yAxis.AutoRange = true;
 			Chart.IsAutoRange = true;
 			Chart.IsAutoScroll = true;
-
-			Chart.AddArea(_area);
 
 			var series = _security.TimeFrame(TimeSpan.FromMinutes(_timeframe));
 

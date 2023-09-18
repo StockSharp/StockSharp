@@ -7,7 +7,7 @@
 
 	using StockSharp.Messages;
 	using StockSharp.Algo.Strategies;
-	using StockSharp.Localization;
+	using StockSharp.Algo.Indicators;
 
 	/// <summary>
 	/// Extension class for <see cref="IChart"/>.
@@ -152,5 +152,85 @@
 		/// <returns>Check result.</returns>
 		public static bool IsVolumeProfileChart(this ChartCandleDrawStyles style)
 			=> style == ChartCandleDrawStyles.BoxVolume || style == ChartCandleDrawStyles.ClusterProfile;
+
+		/// <summary>
+		/// Create <see cref="IChartArea"/>.
+		/// </summary>
+		/// <param name="chart"><see cref="IChart"/></param>
+		/// <returns><see cref="IChartArea"/></returns>
+		public static IChartArea AddArea(this IChart chart)
+		{
+			if (chart is null)
+				throw new ArgumentNullException(nameof(chart));
+
+			var area = chart.CreateArea();
+			chart.AddArea(area);
+			return area;
+		}
+
+		/// <summary>
+		/// Create <see cref="IChartCandleElement"/> element.
+		/// </summary>
+		/// <param name="area"><see cref="IChartArea"/></param>
+		/// <returns><see cref="IChartCandleElement"/></returns>
+		public static IChartCandleElement AddCandles(this IChartArea area)
+		{
+			if (area is null)
+				throw new ArgumentNullException(nameof(area));
+
+			var elem = area.Chart.CreateCandleElement();
+			area.Chart.AddElement(area, elem);
+			return elem;
+		}
+
+		/// <summary>
+		/// Create <see cref="IChartTradeElement"/> element.
+		/// </summary>
+		/// <param name="area"><see cref="IChartArea"/></param>
+		/// <returns><see cref="IChartTradeElement"/></returns>
+		public static IChartTradeElement AddTrades(this IChartArea area)
+		{
+			if (area is null)
+				throw new ArgumentNullException(nameof(area));
+
+			var elem = area.Chart.CreateTradeElement();
+			area.Chart.AddElement(area, elem);
+			return elem;
+		}
+
+		/// <summary>
+		/// Create <see cref="IChartOrderElement"/> element.
+		/// </summary>
+		/// <param name="area"><see cref="IChartArea"/></param>
+		/// <returns><see cref="IChartOrderElement"/></returns>
+		public static IChartOrderElement AddOrders(this IChartArea area)
+		{
+			if (area is null)
+				throw new ArgumentNullException(nameof(area));
+
+			var elem = area.Chart.CreateOrderElement();
+			area.Chart.AddElement(area, elem);
+			return elem;
+		}
+
+		/// <summary>
+		/// Create <see cref="IChartIndicatorElement"/> element.
+		/// </summary>
+		/// <param name="area"><see cref="IChartArea"/></param>
+		/// <param name="indicator"><see cref="IIndicator"/></param>
+		/// <returns><see cref="IChartIndicatorElement"/></returns>
+		public static IChartIndicatorElement AddIndicator(this IChartArea area, IIndicator indicator)
+		{
+			if (area is null)
+				throw new ArgumentNullException(nameof(area));
+
+			if (indicator is null)
+				throw new ArgumentNullException(nameof(indicator));
+
+			var elem = area.Chart.CreateIndicatorElement();
+			elem.FullTitle = indicator.ToString();
+			area.Chart.AddElement(area, elem);
+			return elem;
+		}
 	}
 }

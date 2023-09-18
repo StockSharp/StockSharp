@@ -29,8 +29,7 @@
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
-			var area = Chart.CreateArea();
-			Chart.Areas.Add(area);
+			var area = Chart.AddArea();
 
 			_candleElem = Chart.CreateCandleElement();
 			_candleElem.AntiAliasing = false;

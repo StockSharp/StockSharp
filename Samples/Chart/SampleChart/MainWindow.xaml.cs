@@ -227,15 +227,13 @@
 			{
 				Chart.ClearAreas();
 
-				_areaComb = Chart.CreateArea();
+				_areaComb = Chart.AddArea();
 
 				var yAxis = _areaComb.YAxises.First();
 
 				yAxis.AutoRange = true;
 				Chart.IsAutoRange = true;
 				Chart.IsAutoScroll = true;
-
-				Chart.AddArea(_areaComb);
 
 				var id = (SecurityId)Securities.SelectedItem;
 
