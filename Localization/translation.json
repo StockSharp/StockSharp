@@ -1,4 +1,8 @@
 {
+  "ExportOnlyCodeFile": {
+    "en": "Export only C# file.",
+    "ru": "Экспортировать только C# файл."
+  },
   "BasketBlackScholes": {
     "en": "Portfolio model for calculating the values of Greeks by the Black-Scholes formula.",
     "ru": "Портфельная модель вычисления значений Греков на основе Блэк-Шоулз формулы."
