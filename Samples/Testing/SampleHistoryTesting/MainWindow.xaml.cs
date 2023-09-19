@@ -641,11 +641,11 @@ namespace SampleHistoryTesting
 				//}
 
 				// TODO for test purpose - calling start in non UI thread
-				ThreadingHelper.Thread(() =>
-				{
-					// start strategy before emulation started
-					strategy.Start();
-				}).Launch();
+				//ThreadingHelper.Thread(() =>
+				//{
+				// start strategy before emulation started
+				strategy.Start();
+				//}).Launch();
 
 				_connectors.Add(connector);
 
