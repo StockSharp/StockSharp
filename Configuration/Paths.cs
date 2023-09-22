@@ -405,12 +405,27 @@
 		/// <summary>
 		/// Default extension for settings file.
 		/// </summary>
-		public const string DefaultSettingsExt = ".json";
+		public const string DefaultSettingsExt = JsonEx;
 
 		/// <summary>
 		/// Backup extension for settings file.
 		/// </summary>
 		public const string BackupExt = ".bak";
+
+		/// <summary>
+		/// CS file extension.
+		/// </summary>
+		public const string CsEx = ".cs";
+
+		/// <summary>
+		/// Assembly file extension.
+		/// </summary>
+		public const string DllEx = ".dll";
+
+		/// <summary>
+		/// JSON file extension.
+		/// </summary>
+		public const string JsonEx = ".json";
 
 		/// <summary>
 		/// Returns an files with <see cref="DefaultSettingsExt"/> extension.
