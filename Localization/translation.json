@@ -15356,8 +15356,8 @@
     "ru": "Не удалось загрузить сборку {0}."
   },
   "Str3608": {
-    "en": "Strategy type not found in compiled assembly.",
-    "ru": "Не найден тип стратегии в скомпилированной сборке."
+    "en": "Required type not found in compiled assembly.",
+    "ru": "Не найден требуемый тип в скомпилированной сборке."
   },
   "Str3609": {
     "en": "Moving averages crossing strategy, created in visual diagram designer.",
