@@ -4,7 +4,6 @@
 	using System.Linq;
 	using System.Collections.Generic;
 
-	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Reflection;
 

@@ -95,7 +95,9 @@ public class CodeInfo : IPersistable
 		byte[] asm = null;
 		var errors = new List<CompilationError>();
 
-		if (ServicesRegistry.TryCompilerCache?.TryGet(sources, refs, out asm) != true)
+		var cache = ServicesRegistry.TryCompilerCache;
+
+		if (cache?.TryGet(sources, refs, out asm) != true)
 		{
 			var result = ServicesRegistry.Compiler.Compile("Strategy", sources, refs);
 
@@ -103,7 +105,7 @@ public class CodeInfo : IPersistable
 				return result;
 
 			errors.AddRange(result.Errors);
-			ServicesRegistry.TryCompilerCache?.Add(sources, refs, asm = result.Assembly);
+			cache?.Add(sources, refs, asm = result.Assembly);
 		}
 
 		var type = _context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
@@ -144,10 +146,11 @@ public class CodeInfo : IPersistable
 
 	void IPersistable.Save(SettingsStorage storage)
 	{
-		storage.SetValue(nameof(Id), Id);
-		storage.SetValue(nameof(Name), Name);
-		storage.SetValue(nameof(ExtraSources), ExtraSources);
-		storage.SetValue(nameof(Text), Text);
-		storage.SetValue(nameof(References), _references.Cache.Select(r => r.Save()).ToArray());
+		storage
+			.Set(nameof(Id), Id)
+			.Set(nameof(Name), Name)
+			.Set(nameof(ExtraSources), ExtraSources)
+			.Set(nameof(Text), Text)
+			.Set(nameof(References), _references.Cache.Select(r => r.Save()).ToArray());
 	}
 }
