@@ -1151,9 +1151,13 @@
     "en": "The Binance connector during connection/reconnection process will request order/trade status for the listed securities. Security ids, comma-separated. For example: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB",
     "ru": "Коннектор Binance в процессе подключения/переподключения будет запрашивать состояние заявок/сделок по перечисленным инструментам. Id инструментов через запятую. Например: BTC/USDT@BNB,BTCUSDT_PERPETUAL@BNB"
   },
+  "Dialogs": {
+    "en": "Dialogs",
+    "ru": "Окна"
+  },
   "ErrorsDialogs": {
-    "en": "Show error dialog windows",
-    "ru": "Показывать ошибки в диалоговых окнах"
+    "en": "Show error dialog windows.",
+    "ru": "Показывать ошибки в диалоговых окнах."
   },
   "ConfirmNewVersionPublishParams": {
     "en": "Do you want to publish the new version of \"{0}\"?",
