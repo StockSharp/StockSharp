@@ -1,4 +1,8 @@
 {
+  "ValueMustBeOfType": {
+    "en": "Value '{0}' must be of type '{1}'.",
+    "ru": "Значение должно быть типа '{1}'."
+  },
   "ExportOnlyCodeFile": {
     "en": "Export only C# file.",
     "ru": "Экспортировать только C# файл."
