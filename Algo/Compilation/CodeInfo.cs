@@ -128,12 +128,8 @@ public class CodeInfo : IPersistable
 		};
 	}
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public string Key => $"_{Id:N}";
-
-	void IPersistable.Load(SettingsStorage storage)
+	/// <inheritdoc />
+	public void Load(SettingsStorage storage)
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
@@ -144,7 +140,8 @@ public class CodeInfo : IPersistable
 		_references.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(References)).Select(s => s.Load<CodeReference>()).ToArray());
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	/// <inheritdoc />
+	public void Save(SettingsStorage storage)
 	{
 		storage
 			.Set(nameof(Id), Id)
