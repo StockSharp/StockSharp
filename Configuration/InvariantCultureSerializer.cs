@@ -30,6 +30,15 @@
 		/// <summary>
 		/// Serialize the specified storage into byte array.
 		/// </summary>
+		/// <param name="settings"><see cref="IPersistable"/></param>
+		/// <param name="bom">Add UTF8 BOM preamble.</param>
+		/// <returns></returns>
+		public static byte[] SerializeInvariant(this IPersistable settings, bool bom = true)
+			=> settings.Save().SerializeInvariant(bom);
+
+		/// <summary>
+		/// Serialize the specified storage into byte array.
+		/// </summary>
 		/// <param name="settings"><see cref="SettingsStorage"/></param>
 		/// <param name="bom">Add UTF8 BOM preamble.</param>
 		/// <returns></returns>
