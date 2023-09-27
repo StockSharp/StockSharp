@@ -19303,9 +19303,9 @@
     "en": "Composition {0} not found.",
     "ru": "Схема {0} не найдена."
   },
-  "CompositionWasChangedParams": {
-    "en": "Composition {0} was changed. Update?",
-    "ru": "Схема {0} была изменена. Обновить?"
+  "StrategyWasChangedParams": {
+    "en": "Strategy {0} was changed. Update?",
+    "ru": "Стратегия {0} была изменена. Обновить?"
   },
   "SparsedMarketDepth": {
     "en": "Sparsed market depth",
