@@ -41,6 +41,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// Date in history for starting the paper trading.
 		/// </summary>
 		[Browsable(false)]
+		[Obsolete("Use specified parameters in Start methods.")]
 		public DateTime StartTime
 		{
 			get => _startTime;
@@ -57,6 +58,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// Date in history to stop the paper trading (date is included).
 		/// </summary>
 		[Browsable(false)]
+		[Obsolete("Use specified parameters in Start methods.")]
 		public DateTime StopTime
 		{
 			get => _stopTime;
@@ -277,8 +279,10 @@ namespace StockSharp.Algo.Strategies.Testing
 			base.Save(storage);
 
 			storage
+#pragma warning disable CS0618 // Type or member is obsolete
 				.Set(nameof(StartTime), StartTime)
 				.Set(nameof(StopTime), StopTime)
+#pragma warning restore CS0618 // Type or member is obsolete
 				.Set(nameof(OrderLogDataMode), OrderLogDataMode.To<string>())
 				.Set(nameof(DepthDataMode), DepthDataMode.To<string>())
 				.Set(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval)
@@ -299,8 +303,10 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			base.Load(storage);
 
+#pragma warning disable CS0618 // Type or member is obsolete
 			StartTime = storage.GetValue(nameof(StartTime), StartTime);
 			StopTime = storage.GetValue(nameof(StopTime), StopTime);
+#pragma warning restore CS0618 // Type or member is obsolete
 			OrderLogDataMode = storage.GetValue(nameof(OrderLogDataMode), OrderLogDataMode);
 			DepthDataMode = storage.GetValue(nameof(DepthDataMode), DepthDataMode);
 			MarketTimeChangedInterval = storage.GetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
