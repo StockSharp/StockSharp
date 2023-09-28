@@ -22,8 +22,6 @@ namespace StockSharp.Messages
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Localization;
-
 	/// <summary>
 	/// Base interface for order book builder.
 	/// </summary>

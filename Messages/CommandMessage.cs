@@ -5,7 +5,6 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
-	using Ecng.Common;
 	using Ecng.Collections;
 
 	/// <summary>

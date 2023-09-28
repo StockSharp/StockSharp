@@ -1,7 +1,5 @@
 namespace StockSharp.Messages
 {
-	using System.Collections.Generic;
-
 	using Ecng.Collections;
 	using Ecng.Common;
 

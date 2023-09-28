@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Algo.Strategies.Reporting;
 
 using System.Text;
-using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 using Ecng.Common;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 using StockSharp.Messages;
 

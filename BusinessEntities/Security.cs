@@ -16,14 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 	using System.Runtime.CompilerServices;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 

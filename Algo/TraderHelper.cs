@@ -30,7 +30,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Algo.Indicators;
-	using StockSharp.Algo.Strategies;
 
 	/// <summary>
 	/// The auxiliary class for provision of various algorithmic functionalities.

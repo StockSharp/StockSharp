@@ -7,7 +7,6 @@ namespace StockSharp.Algo.Import
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 

@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Alerts
 {
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 

@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages.Binary;
 	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;

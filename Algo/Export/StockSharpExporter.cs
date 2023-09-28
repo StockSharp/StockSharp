@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Export
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Messages;

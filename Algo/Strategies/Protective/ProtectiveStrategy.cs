@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Strategies.Protective
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 
 	using StockSharp.Algo.Strategies.Quoting;
 	using StockSharp.BusinessEntities;

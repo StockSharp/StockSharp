@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Ecng.Collections;
 using Ecng.ComponentModel;
 
 using StockSharp.Algo.Strategies;
