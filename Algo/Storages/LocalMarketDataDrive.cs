@@ -386,10 +386,13 @@ namespace StockSharp.Algo.Storages
 
 					if (!tuple.Second)
 					{
-						tuple.First.AddRange(Directory
-		                     .EnumerateDirectories(Path)
-		                     .SelectMany(Directory.EnumerateDirectories)
-		                     .SelectMany(GetDataTypes));
+						if (Directory.Exists(Path))
+						{
+							tuple.First.AddRange(Directory
+								.EnumerateDirectories(Path)
+								.SelectMany(Directory.EnumerateDirectories)
+								.SelectMany(GetDataTypes));
+						}
 
 						tuple.Second = true;
 					}
