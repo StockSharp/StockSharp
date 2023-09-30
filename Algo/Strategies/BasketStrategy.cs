@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Strategies
 	public class BasketStrategy : Strategy
 	{
 		/// <summary>
-		/// Create strategy.
+		/// Initializes a new instance of the <see cref="BasketStrategy"/>.
 		/// </summary>
 		/// <param name="finishMode">The condition of subsidiary strategies operation end.</param>
 		public BasketStrategy(BasketStrategyFinishModes finishMode)
