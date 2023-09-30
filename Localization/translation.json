@@ -13308,8 +13308,8 @@
     "ru": "Схема содержит ошибки."
   },
   "Str3045Params": {
-    "en": "Error deleting composite element {0}. Element is used in the following diagrams: {1}.",
-    "ru": "Ошибка удаления составного элемента {0}. Элемент используется в следующих схемах: {1}."
+    "en": "Error deleting {0}, is used in the following diagrams: {1}.",
+    "ru": "Ошибка удаления {0}, используется в следующих схемах: {1}."
   },
   "Str3046Params": {
     "en": "Error loading diagram component: {0}",
