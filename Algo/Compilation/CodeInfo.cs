@@ -8,6 +8,7 @@ using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Compilation;
 using Ecng.Collections;
+using Ecng.ComponentModel;
 
 using StockSharp.Logging;
 using StockSharp.Localization;
@@ -16,17 +17,42 @@ using StockSharp.Algo;
 /// <summary>
 /// Code info.
 /// </summary>
-public class CodeInfo : IPersistable
+public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 {
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CodeInfo"/>.
+	/// </summary>
+	public CodeInfo()
+    {
+		_references.Changed += OnReferencesChanged;
+	}
+
+	void IDisposable.Dispose()
+	{
+		_references.Changed -= OnReferencesChanged;
+		GC.SuppressFinalize(this);
+	}
+
+	private void OnReferencesChanged()
+		=> NotifyChanged(nameof(References));
+
+	private Guid _id = Guid.NewGuid();
+
 	/// <summary>
 	/// Identifier.
 	/// </summary>
-	public Guid Id { get; set; } = Guid.NewGuid();
+	public Guid Id
+	{
+		get => _id;
+		set
+		{
+			if (_id == value)
+				return;
 
-	/// <summary>
-	/// <see cref="Name"/> changed event.
-	/// </summary>
-	public event Action<CodeInfo> NameChanged;
+			_id = value;
+			NotifyChanged();
+		}
+	}
 
 	private string _name;
 
@@ -42,14 +68,27 @@ public class CodeInfo : IPersistable
 				return;
 
 			_name = value;
-			NameChanged?.Invoke(this);
+			NotifyChanged();
 		}
 	}
+
+	private string _text;
 
 	/// <summary>
 	/// Code.
 	/// </summary>
-	public string Text { get; set; }
+	public string Text
+	{
+		get => _text;
+		set
+		{
+			if (_text == value)
+				return;
+
+			_text = value;
+			NotifyChanged();
+		}
+	}
 
 	private readonly CachedSynchronizedSet<CodeReference> _references = new(CodeExtensions.DefaultReferences);
 
@@ -63,15 +102,28 @@ public class CodeInfo : IPersistable
 	/// </summary>
 	public Type ObjectType { get; private set; }
 
+	private string[] _extraSources;
+
 	/// <summary>
 	/// Extra source codes.
 	/// </summary>
-    public string[] ExtraSources { get; set; }
+	public string[] ExtraSources
+	{
+		get => _extraSources;
+		set
+		{
+			if ((_extraSources is null && value is null) || (_extraSources is not null && value is not null && _extraSources.SequenceEqual(value)))
+				return;
 
-    /// <summary>
-    /// Compiled event.
-    /// </summary>
-    public event Action Compiled;
+			_extraSources = value;
+			NotifyChanged();
+		}
+	}
+
+	/// <summary>
+	/// Compiled event.
+	/// </summary>
+	public event Action Compiled;
 
 	private readonly AssemblyLoadContextTracker _context = new();
 
