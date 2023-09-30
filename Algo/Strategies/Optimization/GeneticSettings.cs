@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+
 using Ecng.Collections;
 using Ecng.Common;
 using Ecng.ComponentModel;
@@ -18,7 +19,7 @@ namespace StockSharp.Algo.Strategies.Optimization;
 /// <summary>
 /// Genetic settings.
 /// </summary>
-public class GeneticSettings : IPersistable
+public class GeneticSettings : NotifiableObject, IPersistable
 {
 	private class ReinsertionItemsSource : ItemsSourceBase<Type>
 	{
@@ -130,7 +131,14 @@ public class GeneticSettings : IPersistable
 	public string Fitness
 	{
 		get => _fitness;
-		set => _fitness = value.ThrowIfEmpty(nameof(value));
+		set
+		{
+			if (_fitness == value)
+				return;
+
+			_fitness = value.ThrowIfEmpty(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private int _population = 8;
@@ -147,7 +155,14 @@ public class GeneticSettings : IPersistable
 	public int Population
 	{
 		get => _population;
-		set => _population = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+		set
+		{
+			if (_population == value)
+				return;
+
+			_population = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private int _populationMax = 16;
@@ -164,7 +179,14 @@ public class GeneticSettings : IPersistable
 	public int PopulationMax
 	{
 		get => _populationMax;
-		set => _populationMax = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+		set
+		{
+			if (_populationMax == value)
+				return;
+
+			_populationMax = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private int _generationsMax = 20;
@@ -181,7 +203,14 @@ public class GeneticSettings : IPersistable
 	public int GenerationsMax
 	{
 		get => _generationsMax;
-		set => _generationsMax = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+		set
+		{
+			if (_generationsMax == value)
+				return;
+
+			_generationsMax = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private int _generationsStagnation = 5;
@@ -198,7 +227,14 @@ public class GeneticSettings : IPersistable
 	public int GenerationsStagnation
 	{
 		get => _generationsStagnation;
-		set => _generationsStagnation = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+		set
+		{
+			if (_generationsStagnation == value)
+				return;
+
+			_generationsStagnation = value >= 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private decimal _mutationProbability = (decimal)GeneticAlgorithm.DefaultMutationProbability;
@@ -215,7 +251,14 @@ public class GeneticSettings : IPersistable
 	public decimal MutationProbability
 	{
 		get => _mutationProbability;
-		set => _mutationProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+		set
+		{
+			if (_mutationProbability == value)
+				return;
+
+			_mutationProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private decimal _crossoverProbability = (decimal)GeneticAlgorithm.DefaultCrossoverProbability;
@@ -232,7 +275,14 @@ public class GeneticSettings : IPersistable
 	public decimal CrossoverProbability
 	{
 		get => _crossoverProbability;
-		set => _crossoverProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+		set
+		{
+			if (_crossoverProbability == value)
+				return;
+
+			_crossoverProbability = value > 0 ? value : throw new ArgumentOutOfRangeException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private Type _reinsertion = typeof(ElitistReinsertion);
@@ -250,7 +300,14 @@ public class GeneticSettings : IPersistable
 	public Type Reinsertion
 	{
 		get => _reinsertion;
-		set => _reinsertion = value ?? throw new ArgumentNullException(nameof(value));
+		set
+		{
+			if (_reinsertion == value)
+				return;
+
+			_reinsertion = value ?? throw new ArgumentNullException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private Type _mutation = typeof(UniformMutation);
@@ -268,7 +325,14 @@ public class GeneticSettings : IPersistable
 	public Type Mutation
 	{
 		get => _mutation;
-		set => _mutation = value ?? throw new ArgumentNullException(nameof(value));
+		set
+		{
+			if (_mutation == value)
+				return;
+
+			_mutation = value ?? throw new ArgumentNullException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private Type _crossover = typeof(OnePointCrossover);
@@ -286,7 +350,14 @@ public class GeneticSettings : IPersistable
 	public Type Crossover
 	{
 		get => _crossover;
-		set => _crossover = value ?? throw new ArgumentNullException(nameof(value));
+		set
+		{
+			if (_crossover == value)
+				return;
+
+			_crossover = value ?? throw new ArgumentNullException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	private Type _selection = typeof(TournamentSelection);
@@ -304,7 +375,14 @@ public class GeneticSettings : IPersistable
 	public Type Selection
 	{
 		get => _selection;
-		set => _selection = value ?? throw new ArgumentNullException(nameof(value));
+		set
+		{
+			if (_selection == value)
+				return;
+
+			_selection = value ?? throw new ArgumentNullException(nameof(value));
+			NotifyChanged();
+		}
 	}
 
 	void IPersistable.Load(SettingsStorage storage)
