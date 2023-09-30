@@ -25,6 +25,11 @@
 		public static IIndicatorProvider IndicatorProvider => ConfigManager.GetService<IIndicatorProvider>();
 
 		/// <summary>
+		/// <see cref="IIndicatorProvider"/>
+		/// </summary>
+		public static IIndicatorProvider TryIndicatorProvider => ConfigManager.TryGetService<IIndicatorProvider>();
+
+		/// <summary>
 		/// Exclude obsolete indicators.
 		/// </summary>
 		/// <param name="types">All indicator types.</param>
@@ -44,7 +49,7 @@
 				throw new ArgumentNullException(nameof(chart));
 
 			chart.IndicatorTypes.Clear();
-			chart.IndicatorTypes.AddRange(IndicatorProvider.GetIndicatorTypes().ExcludeObsolete().Where(it => it.Indicator.IsIndicatorSupportedByChart()));
+			chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete().Where(it => it.Indicator.IsIndicatorSupportedByChart()));
 		}
 
 		private static readonly Type[] _chartUnsupportedIndicators =
