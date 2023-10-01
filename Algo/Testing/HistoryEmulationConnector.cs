@@ -27,6 +27,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Algo.Risk;
+	using StockSharp.Algo.Commissions;
 
 	/// <summary>
 	/// The emulation connection. It uses historical data and/or occasionally generated.
@@ -290,6 +291,11 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
+		/// <summary>
+		/// Commission rules.
+		/// </summary>
+		public IEnumerable<CommissionRule> CommissionRules { get; set; }
+
 		/// <inheritdoc />
 		public override void ClearCache()
 		{
@@ -342,10 +348,18 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public void Start()
 		{
-			if (/*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended)
+			var isResuming = /*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended;
+
+			if (isResuming)
 				EmulationAdapter.InChannel.Resume();
 
 			SendEmulationState(ChannelStates.Starting);
+
+			if (!isResuming && CommissionRules is not null)
+			{
+				foreach (var rule in CommissionRules)
+					SendInMessage(new CommissionRuleMessage { Rule = rule });
+			}
 		}
 
 		/// <summary>

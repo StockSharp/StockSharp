@@ -441,6 +441,12 @@ namespace SampleHistoryTesting
 
 					// set market time freq as time frame
 					//MarketTimeChangedInterval = timeFrame,
+
+					// 1 cent commission for trade
+					CommissionRules = new CommissionRule[]
+					{
+						new CommissionPerTradeRule { Value = 0.01m },
+					},
 				};
 
 				((ILogSource)connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
@@ -658,12 +664,6 @@ namespace SampleHistoryTesting
 
 				// start historical data loading when connection established successfully and all data subscribed
 				connector.Start();
-
-				// 1 cent commission for trade
-				connector.SendInMessage(new CommissionRuleMessage
-				{
-					Rule = new CommissionPerTradeRule { Value = 0.01m }
-				});
 			}
 
 			TabControl.Items.Cast<TabItem>().First(i => i.Visibility == Visibility.Visible).IsSelected = true;

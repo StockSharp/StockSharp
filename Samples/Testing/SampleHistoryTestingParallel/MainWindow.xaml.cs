@@ -39,6 +39,7 @@ namespace SampleHistoryTestingParallel
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
 	using StockSharp.Algo;
+	using StockSharp.Algo.Commissions;
 
 	public partial class MainWindow
 	{
@@ -128,10 +129,18 @@ namespace SampleHistoryTestingParallel
 			else
 				_optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry);
 
-			_optimizer.EmulationSettings.MarketTimeChangedInterval = TimeSpan.FromMinutes(1);
+			var settings = _optimizer.EmulationSettings;
+
+			settings.MarketTimeChangedInterval = TimeSpan.FromMinutes(1);
 
 			// set max possible iteration to 100
-			_optimizer.EmulationSettings.MaxIterations = 100;
+			settings.MaxIterations = 100;
+
+			// 1 cent commission for trade
+			settings.CommissionRules = new CommissionRule[]
+			{
+				new CommissionPerTradeRule { Value = 0.01m },
+			};
 
 			// count of parallel testing strategies
 			// if not set, then CPU count * 2

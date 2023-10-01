@@ -87,7 +87,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <summary>
 	/// Emulation settings.
 	/// </summary>
-	public EmulationSettings EmulationSettings { get; }
+	public OptimizerSettings EmulationSettings { get; }
 
 	/// <summary>
 	/// <see cref="HistoryMessageAdapter.AdapterCache"/>.
@@ -385,6 +385,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					AdapterCache = adapterCache,
 					StorageCache = storageCache,
 				},
+
+				CommissionRules = EmulationSettings.CommissionRules,
 			};
 
 			_startedConnectors.Add(connector);

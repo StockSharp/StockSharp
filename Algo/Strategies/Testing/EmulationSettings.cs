@@ -18,6 +18,8 @@ namespace StockSharp.Algo.Strategies.Testing
 	using System;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -25,6 +27,7 @@ namespace StockSharp.Algo.Strategies.Testing
 	using StockSharp.Algo.Testing;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Algo.Commissions;
 
 	/// <summary>
 	/// Emulation settings.
@@ -201,54 +204,6 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private int _batchSize = Environment.ProcessorCount * 2;
-
-		/// <summary>
-		/// Number of simultaneously tested strategies.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ParallelKey,
-			Description = LocalizedStrings.Str1419Key,
-			GroupName = LocalizedStrings.OptimizationKey,
-			Order = 200)]
-		public int BatchSize
-		{
-			get => _batchSize;
-			set
-			{
-				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_batchSize = value;
-				NotifyPropertyChanged();
-			}
-		}
-
-		private int _maxIterations;
-
-		/// <summary>
-		/// Maximum possible iterations count. Zero means the option is ignored.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.IterationsKey,
-			Description = LocalizedStrings.MaxIterationsKey,
-			GroupName = LocalizedStrings.OptimizationKey,
-			Order = 201)]
-		public int MaxIterations
-		{
-			get => _maxIterations;
-			set
-			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_maxIterations = value;
-				NotifyPropertyChanged();
-			}
-		}
-
 		private LogLevels _logLevel = LogLevels.Info;
 
 		/// <summary>
@@ -267,6 +222,27 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				_logLevel = value;
 				NotifyPropertyChanged();
+			}
+		}
+
+		private IEnumerable<CommissionRule> _commissionRules = Enumerable.Empty<CommissionRule>();
+
+		/// <summary>
+		/// Commission rules.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			GroupName = LocalizedStrings.BacktestKey,
+			Name = LocalizedStrings.CommissionKey,
+			Description = LocalizedStrings.Str160Key,
+			Order = 110)]
+		public IEnumerable<CommissionRule> CommissionRules
+		{
+			get => _commissionRules;
+			set
+			{
+				_commissionRules = value ?? throw new ArgumentNullException(nameof(value));
+				NotifyChanged();
 			}
 		}
 
@@ -289,9 +265,8 @@ namespace StockSharp.Algo.Strategies.Testing
 				.Set(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval)
 				.Set(nameof(TradeDataMode), TradeDataMode.To<string>())
 				.Set(nameof(CheckTradableDates), CheckTradableDates)
-				.Set(nameof(BatchSize), BatchSize)
-				.Set(nameof(MaxIterations), MaxIterations)
 				.Set(nameof(LogLevel), LogLevel.To<string>())
+				.Set(nameof(CommissionRules), CommissionRules.Select(c => c.SaveEntire(false)).ToArray())
 			;
 		}
 
@@ -313,9 +288,11 @@ namespace StockSharp.Algo.Strategies.Testing
 			UnrealizedPnLInterval = storage.GetValue(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval);
 			TradeDataMode = storage.GetValue(nameof(TradeDataMode), TradeDataMode);
 			CheckTradableDates = storage.GetValue(nameof(CheckTradableDates), CheckTradableDates);
-			BatchSize = storage.GetValue(nameof(BatchSize), BatchSize);
-			MaxIterations = storage.GetValue(nameof(MaxIterations), MaxIterations);
 			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
+
+			var commRules = storage.GetValue<SettingsStorage[]>(nameof(CommissionRules));
+			if (commRules is not null)
+				CommissionRules = commRules.Select(i => i.LoadEntire<CommissionRule>()).ToArray();
 		}
 	}
 }
