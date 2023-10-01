@@ -2797,5 +2797,33 @@ namespace StockSharp.Algo
 
 			return !type.IsAbstract && type.IsPublic && required.IsAssignableFrom(type);
 		}
+
+		/// <summary>
+		/// Convert <see cref="ChannelStates"/> value to <see cref="ProcessStates"/>.
+		/// </summary>
+		/// <param name="state"><see cref="ChannelStates"/> value.</param>
+		/// <returns><see cref="ProcessStates"/> value.</returns>
+		public static ProcessStates ToProcessState(this ChannelStates state)
+			=> state switch
+			{
+				ChannelStates.Starting or ChannelStates.Stopped => ProcessStates.Stopped,
+				ChannelStates.Stopping => ProcessStates.Stopping,
+				ChannelStates.Started or ChannelStates.Suspending or ChannelStates.Suspended => ProcessStates.Started,
+				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219)
+			};
+
+		/// <summary>
+		/// Convert <see cref="ProcessStates"/> value to <see cref="ChannelStates"/>.
+		/// </summary>
+		/// <param name="state"><see cref="ProcessStates"/> value.</param>
+		/// <returns><see cref="ChannelStates"/> value.</returns>
+		public static ChannelStates ToChannelState(this ProcessStates state)
+			=> state switch
+			{
+				ProcessStates.Stopped => ChannelStates.Stopped,
+				ProcessStates.Stopping => ChannelStates.Stopping,
+				ProcessStates.Started => ChannelStates.Started,
+				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219)
+			};
 	}
 }
