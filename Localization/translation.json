@@ -1,4 +1,8 @@
 {
+  "ConfigurationIsInvalid": {
+    "en": "Configuration is invalid.",
+    "ru": "Конфигурация не валидна."
+  },
   "ValueMustBeOfType": {
     "en": "Value '{0}' must be of type '{1}'.",
     "ru": "Значение должно быть типа '{1}'."
