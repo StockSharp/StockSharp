@@ -14,6 +14,11 @@ namespace StockSharp.Algo.Indicators
 		private Type _indicator;
 
 		/// <summary>
+		/// Identifier.
+		/// </summary>
+		public virtual string Id => Indicator?.GetTypeName(false);
+
+		/// <summary>
 		/// Indicator name.
 		/// </summary>
 		public string Name { get; private set; }
@@ -29,12 +34,15 @@ namespace StockSharp.Algo.Indicators
 		public Type Indicator
 		{
 			get => _indicator;
-			private set
+			protected set
 			{
 				_indicator = value;
 
-				Name = _indicator != null ? _indicator.GetDisplayName() : string.Empty;
-				Description = _indicator != null ? _indicator.GetDescription() : string.Empty;
+				Name = _indicator?.GetDisplayName() ?? string.Empty;
+				Description = _indicator?.GetDescription() ?? string.Empty;
+				IsObsolete = _indicator?.IsObsolete() ?? false;
+				DocUrl = _indicator?.GetDocUrl() ?? string.Empty;
+				IsComplex = _indicator?.Is<IComplexIndicator>() ?? false;
 
 				InputValue = _indicator?.GetValueType(true);
 				OutputValue = _indicator?.GetValueType(false);
@@ -57,6 +65,21 @@ namespace StockSharp.Algo.Indicators
 		public Type OutputValue { get; private set; }
 
 		/// <summary>
+		/// The <see cref="IndicatorType"/> is obsolete.
+		/// </summary>
+		public bool IsObsolete { get; private set; }
+
+		/// <summary>
+		/// Documentation url.
+		/// </summary>
+		public string DocUrl { get; private set; }
+
+		/// <summary>
+		/// <see cref="IComplexIndicator"/>.
+		/// </summary>
+		public bool IsComplex { get; private set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="IndicatorType"/>.
 		/// </summary>
 		public IndicatorType()
@@ -70,12 +93,16 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="painter">The renderer type for indicator extended drawing.</param>
 		public IndicatorType(Type indicator, Type painter)
 		{
-			if (indicator == null)
-				throw new ArgumentNullException(nameof(indicator));
-
-			Indicator = indicator;
+			Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
 			Painter = painter;
 		}
+
+		/// <summary>
+		/// Create indicator.
+		/// </summary>
+		/// <returns><see cref="IIndicator"/></returns>
+		public IIndicator CreateIndicator()
+			=> Indicator.CreateInstance<IIndicator>();
 
 		/// <summary>
 		/// Create a copy of <see cref="IndicatorType"/>.

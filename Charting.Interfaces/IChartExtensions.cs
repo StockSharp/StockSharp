@@ -36,7 +36,7 @@
 		/// <returns>Filtered collection.</returns>
 		public static IEnumerable<IndicatorType> ExcludeObsolete(this IEnumerable<IndicatorType> types)
 		{
-			return types.Where(t => !t.Indicator.IsObsolete());
+			return types.Where(t => !t.IsObsolete);
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@
 				throw new ArgumentNullException(nameof(chart));
 
 			chart.IndicatorTypes.Clear();
-			chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete().Where(it => it.Indicator.IsIndicatorSupportedByChart()));
+			chart.IndicatorTypes.AddRange(IndicatorProvider.All.ExcludeObsolete().Where(it => it.Indicator?.IsIndicatorSupportedByChart() == true));
 		}
 
 		private static readonly Type[] _chartUnsupportedIndicators =
