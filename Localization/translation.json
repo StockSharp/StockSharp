@@ -1,4 +1,8 @@
 {
+  "ChartPaneGroupDescription": {
+    "en": "Chart panes with same group id scroll and zoom together.",
+    "ru": "Панели графика с одинаковым идентификатором группы скроллируются и масштабируются вместе."
+  },
   "ConfigurationIsInvalid": {
     "en": "Configuration is invalid.",
     "ru": "Конфигурация не валидна."

@@ -134,6 +134,7 @@ public class DummyChartBuilder : IChartBuilder
 		public ChartAxisType XAxisType { get; set; } = ChartAxisType.CategoryDateTime;
 		public string Title { get; set; }
 		public double Height { get; set; }
+		public string GroupId { get; set; }
 		IChart IChartArea.Chart => throw new NotSupportedException();
 
 		public override void Load(SettingsStorage storage)
@@ -141,6 +142,7 @@ public class DummyChartBuilder : IChartBuilder
 			base.Load(storage);
 
 			Title = storage.GetValue<string>(nameof(Title));
+			GroupId = storage.GetValue<string>(nameof(GroupId));
 			Height = storage.GetValue<double>(nameof(Height));
 			XAxisType = storage.GetValue<ChartAxisType>(nameof(XAxisType));
 		}
