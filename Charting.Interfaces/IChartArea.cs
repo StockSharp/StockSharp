@@ -41,5 +41,10 @@
 		/// Chart.
 		/// </summary>
 		IChart Chart { get; }
+
+		/// <summary>
+		/// Chart group name.
+		/// </summary>
+		string GroupId { get; set; }
 	}
 }
