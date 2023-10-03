@@ -160,9 +160,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			cache?.Add(sources, refs, asm = result.Assembly);
 		}
 
-		var type = _context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
-
-		ObjectType = type ?? throw new InvalidOperationException(LocalizedStrings.Str3608);
+		ObjectType = _context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
 
 		try
 		{
