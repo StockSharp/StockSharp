@@ -19156,8 +19156,8 @@
     "ru": "Файл превысил максимальный размер."
   },
   "StrategyEncrypted": {
-    "en": "Strategy has been encrypted and cannot be viewed.",
-    "ru": "Стратегия зашифрована и не может быть просмотрена."
+    "en": "Strategy has been encrypted and cannot be viewed or exported.",
+    "ru": "Стратегия зашифрована и не может быть просмотрена или экспортирована."
   },
   "Email": {
     "en": "Email",
