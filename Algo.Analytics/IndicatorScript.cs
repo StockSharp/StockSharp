@@ -7,6 +7,12 @@
 	{
 		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
+			if (securities.Length == 0)
+			{
+				logs.AddWarningLog("No instruments.");
+				return Task.CompletedTask;
+			}
+
 			// creating 2 panes for candles and indicator series
 			var candleChart = panel.CreateChart<DateTimeOffset, decimal>();
 			var indicatorChart = panel.CreateChart<DateTimeOffset, decimal>();

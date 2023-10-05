@@ -7,6 +7,12 @@
 	{
 		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
+			if (securities.Length == 0)
+			{
+				logs.AddWarningLog("No instruments.");
+				return Task.CompletedTask;
+			}
+
 			var chart = panel.CreateChart<DateTimeOffset, decimal>();
 
 			foreach (var security in securities)
