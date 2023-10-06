@@ -40,6 +40,11 @@ namespace StockSharp.Algo.Statistics
 		StatisticParameterTypes Type { get; }
 
 		/// <summary>
+		/// <see cref="Value"/> type.
+		/// </summary>
+		Type ValueType { get; }
+
+		/// <summary>
 		/// The current value of the parameter.
 		/// </summary>
 		object Value { get; }
@@ -164,6 +169,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		object IStatisticParameter.Value => Value;
+
+		/// <inheritdoc />
+		public Type ValueType => typeof(TValue);
 
 		/// <inheritdoc />
 		public event Action ValueChanged;
