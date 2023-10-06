@@ -37,5 +37,13 @@ public interface IAnalyticsPanel
 	/// <param name="xTitles">X titles.</param>
 	/// <param name="yTitles">Y titles.</param>
 	/// <param name="data">Data.</param>
-	void DrawHeatmap(string[] xTitles, string[] yTitles, double[,] data);
+	void DrawHeatmap(IEnumerable<string> xTitles, IEnumerable<string> yTitles, double[,] data);
+
+	/// <summary>
+	/// Draw 3D to show analytics result.
+	/// </summary>
+	/// <param name="xTitles">X titles.</param>
+	/// <param name="yTitles">Y titles.</param>
+	/// <param name="data">Data.</param>
+	void Draw3D(IEnumerable<string> xTitles, IEnumerable<string> yTitles, double[,] data);
 }
