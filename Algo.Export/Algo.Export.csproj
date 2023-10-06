@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Data.Linq2db" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.DXRefs" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algo\Algo.csproj" />
