@@ -18,6 +18,10 @@
 
 			foreach (var security in securities)
 			{
+				// stop calculation if user cancel script execution
+				if (cancellationToken.IsCancellationRequested)
+					break;
+
 				var candlesSeries = new Dictionary<DateTimeOffset, decimal>();
 				var volsSeries = new Dictionary<DateTimeOffset, decimal>();
 

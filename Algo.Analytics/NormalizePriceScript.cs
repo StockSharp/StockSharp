@@ -17,6 +17,10 @@
 
 			foreach (var security in securities)
 			{
+				// stop calculation if user cancel script execution
+				if (cancellationToken.IsCancellationRequested)
+					break;
+
 				var series = new Dictionary<DateTimeOffset, decimal>();
 
 				// get candle storage

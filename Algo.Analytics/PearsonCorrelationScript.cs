@@ -19,6 +19,10 @@
 
 			foreach (var security in securities)
 			{
+				// stop calculation if user cancel script execution
+				if (cancellationToken.IsCancellationRequested)
+					break;
+
 				// get candle storage
 				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 

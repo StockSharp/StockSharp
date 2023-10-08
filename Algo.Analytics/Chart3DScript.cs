@@ -25,6 +25,10 @@
 
 			for (var i = 0; i < securities.Length; i++)
 			{
+				// stop calculation if user cancel script execution
+				if (cancellationToken.IsCancellationRequested)
+					break;
+
 				var security = securities[i];
 
 				// fill X labels
