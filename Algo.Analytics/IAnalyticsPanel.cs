@@ -45,5 +45,8 @@ public interface IAnalyticsPanel
 	/// <param name="xTitles">X titles.</param>
 	/// <param name="yTitles">Y titles.</param>
 	/// <param name="data">Data.</param>
-	void Draw3D(IEnumerable<string> xTitles, IEnumerable<string> yTitles, double[,] data);
+	/// <param name="xTitle">Title for X axis.</param>
+	/// <param name="yTitle">Title for Y axis.</param>
+	/// <param name="zTitle">Title for Z axis.</param>
+	void Draw3D(IEnumerable<string> xTitles, IEnumerable<string> yTitles, double[,] data, string xTitle = default, string yTitle = default, string zTitle = default);
 }

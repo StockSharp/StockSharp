@@ -56,7 +56,7 @@
 					z[i, pair.Key] = (double)pair.Value;
 			}
 
-			panel.Draw3D(x, y, z);
+			panel.Draw3D(x, y, z, "Instruments", "Hours", "Volume");
 
 			return Task.CompletedTask;
 		}
