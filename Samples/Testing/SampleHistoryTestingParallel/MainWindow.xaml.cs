@@ -74,7 +74,9 @@ namespace SampleHistoryTestingParallel
 
 			TestingProcess.Value = 0;
 			TestingProcessText.Text = string.Empty;
+
 			Stat.Clear();
+			Stat.CreateColumns(new SampleHistoryTesting.SmaStrategy());
 
 			var logManager = new LogManager();
 			var fileLogListener = new FileLogListener("sample.log");
