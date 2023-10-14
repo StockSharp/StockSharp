@@ -741,7 +741,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// <see cref="PnL"/> change event.
 		/// </summary>
-		public event Action<Subscription, DateTimeOffset, decimal, decimal?, decimal?> PnLReceived2;
+		public event Action<Subscription, Portfolio, DateTimeOffset, decimal, decimal?, decimal?> PnLReceived2;
 
 		/// <summary>
 		/// Total commission.
@@ -2837,7 +2837,7 @@ namespace StockSharp.Algo.Strategies
 				if (evt is not null)
 				{
 					var manager = PnLManager;
-					evt(_pfSubscription, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
+					evt(_pfSubscription, Portfolio, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
 				}
 			}
 

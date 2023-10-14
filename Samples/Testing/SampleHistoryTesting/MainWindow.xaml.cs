@@ -566,7 +566,7 @@ namespace SampleHistoryTesting
 				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
 				var commissionCurve = equity.CreateCurve(LocalizedStrings.Commission + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
 				
-				strategy.PnLReceived2 += (s, t, r, u, c) =>
+				strategy.PnLReceived2 += (s, pf, t, r, u, c) =>
 				{
 					var data = equity.CreateData();
 
