@@ -170,24 +170,6 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// To get the input value for <see cref="IIndicatorValue"/>.
-		/// </summary>
-		/// <typeparam name="T">Value type.</typeparam>
-		/// <param name="indicatorValue">Indicator value.</param>
-		/// <returns>The input value of the specified type.</returns>
-		public static T GetInputValue<T>(this IIndicatorValue indicatorValue)
-		{
-			var input = indicatorValue.InputValue;
-
-			while (input != null && !input.IsSupport(typeof(T)))
-			{
-				input = input.InputValue;
-			}
-
-			return input == null ? default : input.GetValue<T>();
-		}
-
-		/// <summary>
 		/// Get value type for specified indicator.
 		/// </summary>
 		/// <param name="indicatorType">Indicator type.</param>
