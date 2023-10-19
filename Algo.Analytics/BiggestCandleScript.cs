@@ -34,10 +34,10 @@
 				var bigPriceCandle = allCandles.OrderByDescending(c => c.GetLength()).FirstOrDefault();
 				var bigVolCandle = allCandles.OrderByDescending(c => c.TotalVolume).FirstOrDefault();
 
-				if (bigPriceCandle is not null)
+				if (bigPriceCandle != null)
 					bigPriceCandles.Add(bigPriceCandle);
 
-				if (bigVolCandle is not null)
+				if (bigVolCandle != null)
 					bigVolCandles.Add(bigVolCandle);
 			}
 
