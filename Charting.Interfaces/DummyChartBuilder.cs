@@ -135,7 +135,7 @@ public class DummyChartBuilder : IChartBuilder
 		public string Title { get; set; }
 		public double Height { get; set; }
 		public string GroupId { get; set; }
-		IChart IChartArea.Chart => throw new NotSupportedException();
+		IChart IChartArea.Chart { get; set; }
 
 		public override void Load(SettingsStorage storage)
 		{
