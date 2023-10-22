@@ -11,7 +11,6 @@ using Ecng.Collections;
 using Ecng.ComponentModel;
 
 using StockSharp.Logging;
-using StockSharp.Localization;
 using StockSharp.Algo;
 
 /// <summary>
@@ -30,6 +29,8 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	void IDisposable.Dispose()
 	{
 		_references.Changed -= OnReferencesChanged;
+		Context.Dispose();
+
 		GC.SuppressFinalize(this);
 	}
 
@@ -125,7 +126,10 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// </summary>
 	public event Action Compiled;
 
-	private readonly AssemblyLoadContextTracker _context = new();
+	/// <summary>
+	/// <see cref="AssemblyLoadContextTracker"/>
+	/// </summary>
+	public AssemblyLoadContextTracker Context { get; } = new();
 
 	/// <summary>
 	/// Compile code.
@@ -160,7 +164,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			cache?.Add(sources, refs, asm = result.Assembly);
 		}
 
-		ObjectType = _context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
+		ObjectType = Context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
 
 		try
 		{
