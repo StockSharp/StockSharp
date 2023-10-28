@@ -1,4 +1,12 @@
 {
+  "InstallerNotStarted": {
+    "en": "Installer is not running. Do you want to launch it?",
+    "ru": "S#.Installer не запущен. Хотите запустить его?"
+  },
+  "InstallerNotFound": {
+    "en": "S#.Installer not found on the computer.",
+    "ru": "S#.Installer не найден на компьютере."
+  },
   "Copy2": {
     "en": "Copy",
     "ru": "Копия"
