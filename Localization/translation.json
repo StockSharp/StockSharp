@@ -1347,9 +1347,9 @@
     "en": "New version",
     "ru": "Новая версия"
   },
-  "SelectCsprojForProduct": {
-    "en": "Select .nupkg or .csproj for your product. In case of .csproj, before package publishing you have to build it in Visual Studio in Release configuration.",
-    "ru": "Выберите .nupkg или .csproj вашего продукта. В случае .csproj, перед публикацией проект должен быть построен в Visual Studio в конфигурации Release."
+  "SelectNupkg": {
+    "en": "Select .nupkg package.",
+    "ru": "Выберите .nupkg пакет."
   },
   "DotNetRuntimeNotInstalled": {
     "en": ".NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/6.0",
