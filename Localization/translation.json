@@ -1187,10 +1187,6 @@
     "en": "Do you want to publish the new version of \"{0}\"?",
     "ru": "Опубликовать новую версию \"{0}\"?"
   },
-  "InvalidProductForDesignerSchemeParams": {
-    "en": "Product \"{0}\" does not support S#.Designer scheme publishing. You need to select or create product with corresponding content type.",
-    "ru": "Продукт \"{0}\" не поддерживает публикацию диаграм S#.Designer. Вам необходимо выбрать или создать продукт с соответствующим типом контента."
-  },
   "RequestWasCanceled": {
     "en": "The request was canceled",
     "ru": "Запрос был отменен"
