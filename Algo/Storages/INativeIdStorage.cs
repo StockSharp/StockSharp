@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -242,9 +243,22 @@ namespace StockSharp.Algo.Storages
 			return _inMemory.TryGetBySecurityId(storageName, securityId);
 		}
 
-		private static void WriteHeader(CsvFileWriter writer, object nativeId)
+		private static object[] TryTupleToValues(object nativeId)
 		{
 			var tupleValues = nativeId.TryTupleToValues();
+
+			if (tupleValues is null)
+				return null;
+
+			if (tupleValues.Length == 0)
+				throw new ArgumentOutOfRangeException(nameof(nativeId), nativeId, LocalizedStrings.Str1219);
+
+			return tupleValues;
+		}
+
+		private static void WriteHeader(CsvFileWriter writer, object nativeId)
+		{
+			var tupleValues = TryTupleToValues(nativeId);
 
 			if (tupleValues != null)
 			{
@@ -267,7 +281,7 @@ namespace StockSharp.Algo.Storages
 
 		private static void WriteItem(CsvFileWriter writer, SecurityId securityId, object nativeId)
 		{
-			var tupleValues = nativeId.TryTupleToValues();
+			var tupleValues = TryTupleToValues(nativeId);
 
 			if (tupleValues != null)
 			{
