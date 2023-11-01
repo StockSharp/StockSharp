@@ -221,13 +221,12 @@ namespace StockSharp.Algo.Storages
 				if (items.Length == 0)
 					return;
 
-				using (var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append)))
-				{
-					WriteHeader(writer, items.FirstOrDefault().Item2);
+				using var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append));
 
-					foreach (var item in items)
-						WriteItem(writer, item.Item1, item.Item2);
-				}
+				WriteHeader(writer, items.FirstOrDefault().Item2);
+
+				foreach (var item in items)
+					WriteItem(writer, item.Item1, item.Item2);
 			});
 		}
 
@@ -243,7 +242,7 @@ namespace StockSharp.Algo.Storages
 			return _inMemory.TryGetBySecurityId(storageName, securityId);
 		}
 
-		private void WriteHeader(CsvFileWriter writer, object nativeId)
+		private static void WriteHeader(CsvFileWriter writer, object nativeId)
 		{
 			var tupleValues = nativeId.TryTupleToValues();
 
@@ -266,7 +265,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private void WriteItem(CsvFileWriter writer, SecurityId securityId, object nativeId)
+		private static void WriteItem(CsvFileWriter writer, SecurityId securityId, object nativeId)
 		{
 			var tupleValues = nativeId.TryTupleToValues();
 
@@ -304,14 +303,13 @@ namespace StockSharp.Algo.Storages
 
 				var appendHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 
-				using (var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append)))
-				{
-					if (appendHeader)
-						WriteHeader(writer, nativeId);
+				using var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append));
 
-					foreach (var item in items)
-						WriteItem(writer, item.Key, item.Value);
-				}
+				if (appendHeader)
+					WriteHeader(writer, nativeId);
+
+				foreach (var item in items)
+					WriteItem(writer, item.Key, item.Value);
 			});
 		}
 
