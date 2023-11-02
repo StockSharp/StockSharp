@@ -433,7 +433,7 @@ namespace StockSharp.Algo.Strategies
 
 			InitMaxOrdersKeepTime();
 
-			RiskManager = new RiskManager { Parent = this };
+			_riskManager = new RiskManager { Parent = this };
 
 			_positionManager = new ChildStrategyPositionManager { Parent = this };
 
@@ -2775,7 +2775,11 @@ namespace StockSharp.Algo.Strategies
 			if (tradeInfo != null)
 			{
 				if (tradeInfo.PnL != 0)
+				{
 					pnLChangeTime = execMsg.LocalTime;
+
+					trade.PnL ??= tradeInfo.PnL;
+				}
 
 				StatisticManager.AddMyTrade(tradeInfo);
 			}
@@ -2787,6 +2791,8 @@ namespace StockSharp.Algo.Strategies
 				Slippage += trade.Slippage.Value;
 				isSlipChanged = true;
 			}
+
+			trade.Position ??= GetPositionValue(trade.Order.Security, trade.Order.Portfolio);
 
 			TryInvoke(() => OnNewMyTrade(trade));
 
