@@ -1,11 +1,23 @@
 {
-  "InstallerNotStarted": {
-    "en": "Installer is not running. Do you want to launch it?",
-    "ru": "S#.Installer не запущен. Хотите запустить его?"
+  "PublishDesc": {
+    "en": "Publish content publicly in S#.Store or for private use with a team.",
+    "ru": "Опубликовать контент публично в S#.Магазин или для приватного пользования с командой."
   },
-  "InstallerNotFound": {
-    "en": "S#.Installer not found on the computer.",
-    "ru": "S#.Installer не найден на компьютере."
+  "Runner": {
+    "en": "S#.Runner",
+    "ru": "S#.Раннер"
+  },
+  "RunnerDesc": {
+    "en": "Launch strategy in S#.Runner (cross-platform tiny console application).",
+    "ru": "Запустить стратегию в S#.Раннер (кросс-платформенное маленькое консольное приложение)."
+  },
+  "InstallerNotStarted": {
+    "en": "S#.Installer is not running. Do you want to launch it?",
+    "ru": "S#.Инсталлер не запущен. Хотите запустить его?"
+  },
+  "AppNotFound": {
+    "en": "{0} not found on the computer. Please install it first.",
+    "ru": "{0} не найден на компьютере. Пожалуйста, установите его сначала."
   },
   "Copy2": {
     "en": "Copy",
@@ -1733,19 +1745,15 @@
   },
   "ExitingAppForInstaller": {
     "en": "The application will be stopped in order to run installer",
-    "ru": "Для запуска установщика приложение будет закрыто"
+    "ru": "Для запуска инсталлера приложение будет закрыто"
   },
   "UpdateIsNotRequired": {
     "en": "Update is not required",
     "ru": "Обновление не требуется"
   },
-  "InstallerNotFound": {
-    "en": "The installer was not found",
-    "ru": "Установщик не найден"
-  },
   "InstallerNotFoundDetailParams": {
     "en": "The installer was not found. In order to be able to update the applications you need to download application installer at {0}.",
-    "ru": "Программа-установщик обновлений не найдена. Чтобы использовать функцию обновления приложений, необходимо скачать установщик обновлений по адресу {0}."
+    "ru": "Программа-инсталлер обновлений не найдена. Чтобы использовать функцию обновления приложений, необходимо скачать установщик обновлений по адресу {0}."
   },
   "AppInstallDir": {
     "en": "Application install folder",
@@ -1789,7 +1797,7 @@
   },
   "StockSharpInstaller": {
     "en": "S#.Installer",
-    "ru": "S#.Установщик"
+    "ru": "S#.Инсталлер"
   },
   "SetupType": {
     "en": "Setup type",
@@ -17095,10 +17103,6 @@
     "en": "Optimize",
     "ru": "Оптимизировать"
   },
-  "XamlStr395": {
-    "en": "Publish",
-    "ru": "Опубликовать"
-  },
   "XamlStr396": {
     "en": "Option calculator",
     "ru": "Опционный калькулятор"
@@ -19135,7 +19139,7 @@
     "en": "Price type",
     "ru": "Тип цены"
   },
-  "PublishStrategy": {
+  "Publish": {
     "en": "Publish",
     "ru": "Опубликовать"
   },
