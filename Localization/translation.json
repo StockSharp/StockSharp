@@ -1,4 +1,36 @@
 {
+  "LaunchRunner": {
+    "en": "Launch S#.Runner",
+    "ru": "Запустить S#.Раннер"
+  },
+  "CopyLicense": {
+    "en": "Copy license file. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
+    "ru": "Копировать файл лицензии. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
+  },
+  "TelegramAlerts": {
+    "en": "Telegram alerts",
+    "ru": "Уведомления Телеграм"
+  },
+  "Bot": {
+    "en": "Bot",
+    "ru": "Бот"
+  },
+  "TelegramAlertsDesc": {
+    "en": "Use Telegram to receive notifications about the trading progress.",
+    "ru": "Использовать Телеграм для получения уведомления о ходе торгов."
+  },
+  "TelegramControlDesc": {
+    "en": "Use Telegram to manage the strategy through a Telegram bot.",
+    "ru": "Использовать Телеграм для управления стратегией через Телеграм бота."
+  },
+  "CopyRunner": {
+    "en": "Copy S#.Runner",
+    "ru": "Копировать S#.Раннер"
+  },
+  "CopyRunnerDesc": {
+    "en": "Copy all files of S#.Runner from the folder where it is installed. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
+    "ru": "Копировать все файлы S#.Раннер из папки, где он установлен. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
+  },
   "PublishDesc": {
     "en": "Publish content publicly in S#.Store or for private use with a team.",
     "ru": "Опубликовать контент публично в S#.Магазин или для приватного пользования с командой."
