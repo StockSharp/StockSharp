@@ -1,7 +1,11 @@
 {
+  "CopyStrategy": {
+    "en": "Copy the strategy file. Turn off if you want to change the strategy in Designer and have the ability to launch in Runner with the latest strategy changes without the need for constant exporting.",
+    "ru": "Копировать файл стратегии. Выключите, если хотите менять стратегию в Дизайнере, и иметь возможность запуска в Раннере с последними изменениями стратегии без необходимости постоянного экспорта."
+  },
   "LaunchRunner": {
-    "en": "Launch S#.Runner",
-    "ru": "Запустить S#.Раннер"
+    "en": "Launch Runner",
+    "ru": "Запустить Раннер"
   },
   "CopyLicense": {
     "en": "Copy license file. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
@@ -24,24 +28,24 @@
     "ru": "Использовать Телеграм для управления стратегией через Телеграм бота."
   },
   "CopyRunner": {
-    "en": "Copy S#.Runner",
-    "ru": "Копировать S#.Раннер"
+    "en": "Copy Runner",
+    "ru": "Копировать Раннер"
   },
   "CopyRunnerDesc": {
-    "en": "Copy all files of S#.Runner from the folder where it is installed. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
-    "ru": "Копировать все файлы S#.Раннер из папки, где он установлен. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
+    "en": "Copy all files of Runner from the folder where it is installed. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
+    "ru": "Копировать все файлы Раннер из папки, где он установлен. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
   },
   "PublishDesc": {
-    "en": "Publish content publicly in S#.Store or for private use with a team.",
-    "ru": "Опубликовать контент публично в S#.Магазин или для приватного пользования с командой."
+    "en": "Publish content publicly in Store or for private use with a team.",
+    "ru": "Опубликовать контент публично в Магазин или для приватного пользования с командой."
   },
   "Runner": {
-    "en": "S#.Runner",
-    "ru": "S#.Раннер"
+    "en": "Runner",
+    "ru": "Раннер"
   },
   "RunnerDesc": {
-    "en": "Launch strategy in S#.Runner (cross-platform tiny console application).",
-    "ru": "Запустить стратегию в S#.Раннер (кросс-платформенное маленькое консольное приложение)."
+    "en": "Launch strategy in Runner (cross-platform tiny console application).",
+    "ru": "Запустить стратегию в Раннер (кросс-платформенное маленькое консольное приложение)."
   },
   "InstallerNotStarted": {
     "en": "S#.Installer is not running. Do you want to launch it?",
