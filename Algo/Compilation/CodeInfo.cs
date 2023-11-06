@@ -132,6 +132,11 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	public AssemblyLoadContextTracker Context { get; } = new();
 
 	/// <summary>
+	/// Last built assembly.
+	/// </summary>
+	public byte[] Assembly { get; private set; }
+
+	/// <summary>
 	/// Compile code.
 	/// </summary>
 	/// <param name="isTypeCompatible">Is type compatible.</param>
@@ -174,6 +179,8 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		{
 			ex.LogError();
 		}
+
+		Assembly = asm;
 
 		return new()
 		{
