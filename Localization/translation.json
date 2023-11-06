@@ -19219,13 +19219,9 @@
     "en": "{0} {1} already exist.",
     "ru": "{0} {1} уже существует."
   },
-  "WithEncryption": {
-    "en": "With encryption",
-    "ru": "С шифрованием"
-  },
-  "WithoutEncryption": {
-    "en": "Without encryption",
-    "ru": "Без шифрования"
+  "ExportWithEncryption": {
+    "en": "Export with encryption?",
+    "ru": "Экспортировать с шифрованием?"
   },
   "IV": {
     "en": "IV",
