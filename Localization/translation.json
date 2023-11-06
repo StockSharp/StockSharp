@@ -72,8 +72,16 @@
     "ru": "Значение должно быть типа '{1}'."
   },
   "ExportOnlyCodeFile": {
-    "en": "Export only C# file.",
-    "ru": "Экспортировать только C# файл."
+    "en": "Export only C# file",
+    "ru": "Экспортировать только C# файл"
+  },
+  "ExportWithReferences": {
+    "en": "Export with references",
+    "ru": "Экспортировать с зависимостями"
+  },
+  "ExportAsDll": {
+    "en": "Export as DLL",
+    "ru": "Экспортировать как DLL"
   },
   "BasketBlackScholes": {
     "en": "Portfolio model for calculating the values of Greeks by the Black-Scholes formula.",
