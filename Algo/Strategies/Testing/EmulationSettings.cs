@@ -204,27 +204,6 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private LogLevels _logLevel = LogLevels.Info;
-
-		/// <summary>
-		/// Logging level.
-		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str9Key,
-			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str12Key,
-			Order = 300)]
-		public LogLevels LogLevel
-		{
-			get => _logLevel;
-			set
-			{
-				_logLevel = value;
-				NotifyPropertyChanged();
-			}
-		}
-
 		private IEnumerable<CommissionRule> _commissionRules = Enumerable.Empty<CommissionRule>();
 
 		/// <summary>
@@ -265,7 +244,6 @@ namespace StockSharp.Algo.Strategies.Testing
 				.Set(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval)
 				.Set(nameof(TradeDataMode), TradeDataMode.To<string>())
 				.Set(nameof(CheckTradableDates), CheckTradableDates)
-				.Set(nameof(LogLevel), LogLevel.To<string>())
 				.Set(nameof(CommissionRules), CommissionRules.Select(c => c.SaveEntire(false)).ToArray())
 			;
 		}
@@ -288,7 +266,6 @@ namespace StockSharp.Algo.Strategies.Testing
 			UnrealizedPnLInterval = storage.GetValue(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval);
 			TradeDataMode = storage.GetValue(nameof(TradeDataMode), TradeDataMode);
 			CheckTradableDates = storage.GetValue(nameof(CheckTradableDates), CheckTradableDates);
-			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
 
 			var commRules = storage.GetValue<SettingsStorage[]>(nameof(CommissionRules));
 			if (commRules is not null)
