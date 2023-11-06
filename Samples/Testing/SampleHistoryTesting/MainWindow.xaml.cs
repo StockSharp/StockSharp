@@ -594,9 +594,9 @@ namespace SampleHistoryTesting
 
 				connector.ProgressChanged += steps => this.GuiAsync(() => progressBar.Value = steps);
 
-				connector.StateChanged += () =>
+				connector.StateChanged2 += state =>
 				{
-					if (connector.State == ChannelStates.Stopped)
+					if (state == ChannelStates.Stopped)
 					{
 						strategy.Stop();
 
@@ -621,14 +621,14 @@ namespace SampleHistoryTesting
 								MessageBox.Show(this, LocalizedStrings.cancelled, title);
 						});
 					}
-					else if (connector.State == ChannelStates.Started)
+					else if (state == ChannelStates.Started)
 					{
 						if (_connectors.All(c => c.State == ChannelStates.Started))
 							SetIsEnabled(false, true, true);
 
 						SetIsChartEnabled(chart, true);
 					}
-					else if (connector.State == ChannelStates.Suspended)
+					else if (state == ChannelStates.Suspended)
 					{
 						if (_connectors.All(c => c.State == ChannelStates.Suspended))
 							SetIsEnabled(true, false, true);

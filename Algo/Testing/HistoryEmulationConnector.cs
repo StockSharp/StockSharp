@@ -240,6 +240,7 @@ namespace StockSharp.Algo.Testing
 				try
 				{
 					StateChanged?.Invoke();
+					StateChanged2?.Invoke(value);
 				}
 				catch (Exception ex)
 				{
@@ -251,7 +252,13 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The event on the emulator state change <see cref="State"/>.
 		/// </summary>
+		[Obsolete("Use StateChanged event.")]
 		public event Action StateChanged;
+
+		/// <summary>
+		/// The event on the emulator state change <see cref="State"/>.
+		/// </summary>
+		public event Action<ChannelStates> StateChanged2;
 
 		/// <summary>
 		/// Progress changed event.
