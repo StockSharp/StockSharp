@@ -82,51 +82,57 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		WriteEndElement();
 
-		WriteStartElement("orders");
-
-		foreach (var o in strategy.Orders)
+		if (IncludeOrders)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
+			WriteStartElement("orders");
 
-			WriteStartElement("order");
+			foreach (var o in strategy.Orders)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
 
-			WriteAttributeString("id", o.Id);
-			WriteAttributeString("transactionId", o.TransactionId);
-			WriteAttributeString("direction", o.Side);
-			WriteAttributeString("time", o.Time);
-			WriteAttributeString("price", o.Price);
-			WriteAttributeString("state", o.State);
-			WriteAttributeString("balance", o.Balance);
-			WriteAttributeString("volume", o.Volume);
-			WriteAttributeString("type", o.Type);
-			WriteAttributeString("comment", o.Comment);
+				WriteStartElement("order");
+
+				WriteAttributeString("id", o.Id);
+				WriteAttributeString("transactionId", o.TransactionId);
+				WriteAttributeString("direction", o.Side);
+				WriteAttributeString("time", o.Time);
+				WriteAttributeString("price", o.Price);
+				WriteAttributeString("state", o.State);
+				WriteAttributeString("balance", o.Balance);
+				WriteAttributeString("volume", o.Volume);
+				WriteAttributeString("type", o.Type);
+				WriteAttributeString("comment", o.Comment);
+
+				WriteEndElement();
+			}
 
 			WriteEndElement();
 		}
 
-		WriteEndElement();
-
-		WriteStartElement("trades");
-
-		foreach (var t in strategy.MyTrades)
+		if (IncludeTrades)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
+			WriteStartElement("trades");
 
-			WriteStartElement("trade");
+			foreach (var t in strategy.MyTrades)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
 
-			WriteAttributeString("id", t.Trade.Id);
-			WriteAttributeString("transactionId", t.Order.TransactionId);
-			WriteAttributeString("time", t.Trade.ServerTime);
-			WriteAttributeString("price", t.Trade.Price);
-			WriteAttributeString("volume", t.Trade.Volume);
-			WriteAttributeString("order", t.Order.Id);
-			WriteAttributeString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
-			WriteAttributeString("slippage", t.Slippage);
+				WriteStartElement("trade");
+
+				WriteAttributeString("id", t.Trade.Id);
+				WriteAttributeString("transactionId", t.Order.TransactionId);
+				WriteAttributeString("time", t.Trade.ServerTime);
+				WriteAttributeString("price", t.Trade.Price);
+				WriteAttributeString("volume", t.Trade.Volume);
+				WriteAttributeString("order", t.Order.Id);
+				WriteAttributeString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
+				WriteAttributeString("slippage", t.Slippage);
+
+				WriteEndElement();
+			}
 
 			WriteEndElement();
 		}
-
-		WriteEndElement();
 
 		WriteEndElement();
 

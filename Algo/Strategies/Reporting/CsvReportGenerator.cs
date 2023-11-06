@@ -73,26 +73,32 @@ public class CsvReportGenerator : BaseReportGenerator
 		WriteValues(statParameters.Select(p => (object)p.Name).ToArray());
 		WriteValues(statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : (p.Value is DateTimeOffset dto ? dto.Format() : p.Value)).ToArray());
 
-		WriteValues(LocalizedStrings.Orders);
-		WriteValues(LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Time, LocalizedStrings.Price,
-			LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Str1325,
-			LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.Str1326, LocalizedStrings.Str1327);
-
-		foreach (var order in strategy.Orders)
+		if (IncludeOrders)
 		{
-			WriteValues(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
-				order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : string.Empty), order.Balance,
-					order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
+			WriteValues(LocalizedStrings.Orders);
+			WriteValues(LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Time, LocalizedStrings.Price,
+				LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Str1325,
+				LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.Str1326, LocalizedStrings.Str1327);
+
+			foreach (var order in strategy.Orders)
+			{
+				WriteValues(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
+					order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : string.Empty), order.Balance,
+						order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
+			}
 		}
 
-		WriteValues(LocalizedStrings.Trades);
-		WriteValues(LocalizedStrings.Str1192, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
-			LocalizedStrings.Str128, LocalizedStrings.Str1190, LocalizedStrings.Str1330, LocalizedStrings.Str163);
-
-		foreach (var trade in strategy.MyTrades)
+		if (IncludeTrades)
 		{
-			WriteValues(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.ServerTime.Format(), trade.Trade.Price, trade.Trade.Volume,
-				trade.Order.Side.GetDisplayName(), trade.Order.Id, strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL, trade.Slippage);
+			WriteValues(LocalizedStrings.Trades);
+			WriteValues(LocalizedStrings.Str1192, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
+				LocalizedStrings.Str128, LocalizedStrings.Str1190, LocalizedStrings.Str1330, LocalizedStrings.Str163);
+
+			foreach (var trade in strategy.MyTrades)
+			{
+				WriteValues(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.ServerTime.Format(), trade.Trade.Price, trade.Trade.Volume,
+					trade.Order.Side.GetDisplayName(), trade.Order.Id, strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL, trade.Slippage);
+			}
 		}
 
 		return default;

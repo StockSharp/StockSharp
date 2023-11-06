@@ -39,16 +39,6 @@ public class ExcelReportGenerator : BaseReportGenerator
 	public string Template { get; }
 
 	/// <summary>
-	/// The Excel version. It affects the maximal number of strings. The default value is 2007.
-	/// </summary>
-	public int ExcelVersion { get; set; } = 2007;
-
-	/// <summary>
-	/// To add orders to the report. Orders are added by default.
-	/// </summary>
-	public bool IncludeOrders { get; set; } = true;
-
-	/// <summary>
 	/// The number of decimal places. By default, it equals to 2.
 	/// </summary>
 	public int Decimals { get; set; } = 2;
@@ -162,68 +152,71 @@ public class ExcelReportGenerator : BaseReportGenerator
 
 		var columnShift = 3;
 
-		worker
-			.SetCell(columnShift + 0, 0, LocalizedStrings.Trades)
-
-			.SetCell(columnShift + 0, 1, LocalizedStrings.Str1192).SetStyle(columnShift + 0, typeof(long))
-			.SetCell(columnShift + 1, 1, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
-			.SetCell(columnShift + 2, 1, LocalizedStrings.Time).SetStyle(columnShift + 2, "HH:mm:ss.fff")
-			.SetCell(columnShift + 3, 1, LocalizedStrings.Price).SetStyle(columnShift + 3, typeof(decimal))
-			.SetCell(columnShift + 4, 1, LocalizedStrings.Str1341).SetStyle(columnShift + 4, typeof(decimal))
-			.SetCell(columnShift + 5, 1, LocalizedStrings.Volume).SetStyle(columnShift + 5, typeof(decimal))
-			.SetCell(columnShift + 6, 1, LocalizedStrings.Str128)
-			.SetCell(columnShift + 7, 1, LocalizedStrings.Str1190).SetStyle(columnShift + 7, typeof(long))
-			.SetCell(columnShift + 8, 1, LocalizedStrings.Str163).SetStyle(columnShift + 8, typeof(decimal))
-			.SetCell(columnShift + 9, 1, LocalizedStrings.Comment)
-			.SetCell(columnShift + 10, 1, LocalizedStrings.Str1342).SetStyle(columnShift + 11, typeof(decimal))
-			.SetCell(columnShift + 11, 1, LocalizedStrings.Str1343).SetStyle(columnShift + 12, typeof(decimal))
-			.SetCell(columnShift + 12, 1, LocalizedStrings.Str1344).SetStyle(columnShift + 13, typeof(decimal))
-			.SetCell(columnShift + 13, 1, LocalizedStrings.Str1345).SetStyle(columnShift + 14, typeof(decimal))
-			.SetCell(columnShift + 14, 1, LocalizedStrings.Str862).SetStyle(columnShift + 15, typeof(decimal));
-
-		//worker
-		//	.SetConditionalFormatting(columnShift + 10, ComparisonOperator.Less, "0", null, Colors.Red)
-		//	.SetConditionalFormatting(columnShift + 11, ComparisonOperator.Less, "0", null, Colors.Red)
-		//	.SetConditionalFormatting(columnShift + 12, ComparisonOperator.Less, "0", null, Colors.Red)
-		//	.SetConditionalFormatting(columnShift + 13, ComparisonOperator.Less, "0", null, Colors.Red);
-
-		var totalPnL = 0m;
-		var position = 0m;
-
-		var queues = new Dictionary<Security, PnLQueue>();
-
-		rowIndex = 2;
-		foreach (var trade in strategy.MyTrades.ToArray())
+		if (IncludeTrades)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
-
-			var tradePnL = strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL ?? 0;
-
-			totalPnL += tradePnL;
-			position += trade.GetPosition() ?? 0;
-
-			var queue = queues.SafeAdd(trade.Trade.Security, key => new PnLQueue(key.ToSecurityId()));
-
-			var localInfo = queue.Process(trade.ToMessage());
-
 			worker
-				.SetCell(columnShift + 0, rowIndex, trade.Trade.Id)
-				.SetCell(columnShift + 1, rowIndex, trade.Order.TransactionId)
-				.SetCell(columnShift + 2, rowIndex, trade.Trade.ServerTime.Format())
-				.SetCell(columnShift + 3, rowIndex, trade.Trade.Price)
-				.SetCell(columnShift + 4, rowIndex, trade.Order.Price)
-				.SetCell(columnShift + 5, rowIndex, trade.Trade.Volume)
-				.SetCell(columnShift + 6, rowIndex, trade.Order.Side.GetDisplayName())
-				.SetCell(columnShift + 7, rowIndex, trade.Order.Id)
-				.SetCell(columnShift + 8, rowIndex, trade.Slippage)
-				.SetCell(columnShift + 9, rowIndex, trade.Order.Comment)
-				.SetCell(columnShift + 10, rowIndex, tradePnL.Round(Decimals))
-				.SetCell(columnShift + 11, rowIndex, localInfo.PnL.Round(Decimals))
-				.SetCell(columnShift + 12, rowIndex, totalPnL.Round(Decimals))
-				.SetCell(columnShift + 13, rowIndex, queue.RealizedPnL.Round(Decimals))
-				.SetCell(columnShift + 14, rowIndex, position);
+				.SetCell(columnShift + 0, 0, LocalizedStrings.Trades)
 
-			rowIndex++;
+				.SetCell(columnShift + 0, 1, LocalizedStrings.Str1192).SetStyle(columnShift + 0, typeof(long))
+				.SetCell(columnShift + 1, 1, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
+				.SetCell(columnShift + 2, 1, LocalizedStrings.Time).SetStyle(columnShift + 2, "HH:mm:ss.fff")
+				.SetCell(columnShift + 3, 1, LocalizedStrings.Price).SetStyle(columnShift + 3, typeof(decimal))
+				.SetCell(columnShift + 4, 1, LocalizedStrings.Str1341).SetStyle(columnShift + 4, typeof(decimal))
+				.SetCell(columnShift + 5, 1, LocalizedStrings.Volume).SetStyle(columnShift + 5, typeof(decimal))
+				.SetCell(columnShift + 6, 1, LocalizedStrings.Str128)
+				.SetCell(columnShift + 7, 1, LocalizedStrings.Str1190).SetStyle(columnShift + 7, typeof(long))
+				.SetCell(columnShift + 8, 1, LocalizedStrings.Str163).SetStyle(columnShift + 8, typeof(decimal))
+				.SetCell(columnShift + 9, 1, LocalizedStrings.Comment)
+				.SetCell(columnShift + 10, 1, LocalizedStrings.Str1342).SetStyle(columnShift + 11, typeof(decimal))
+				.SetCell(columnShift + 11, 1, LocalizedStrings.Str1343).SetStyle(columnShift + 12, typeof(decimal))
+				.SetCell(columnShift + 12, 1, LocalizedStrings.Str1344).SetStyle(columnShift + 13, typeof(decimal))
+				.SetCell(columnShift + 13, 1, LocalizedStrings.Str1345).SetStyle(columnShift + 14, typeof(decimal))
+				.SetCell(columnShift + 14, 1, LocalizedStrings.Str862).SetStyle(columnShift + 15, typeof(decimal));
+
+			//worker
+			//	.SetConditionalFormatting(columnShift + 10, ComparisonOperator.Less, "0", null, Colors.Red)
+			//	.SetConditionalFormatting(columnShift + 11, ComparisonOperator.Less, "0", null, Colors.Red)
+			//	.SetConditionalFormatting(columnShift + 12, ComparisonOperator.Less, "0", null, Colors.Red)
+			//	.SetConditionalFormatting(columnShift + 13, ComparisonOperator.Less, "0", null, Colors.Red);
+
+			var totalPnL = 0m;
+			var position = 0m;
+
+			var queues = new Dictionary<Security, PnLQueue>();
+
+			rowIndex = 2;
+			foreach (var trade in strategy.MyTrades.ToArray())
+			{
+				cancellationToken.ThrowIfCancellationRequested();
+
+				var tradePnL = strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL ?? 0;
+
+				totalPnL += tradePnL;
+				position += trade.GetPosition() ?? 0;
+
+				var queue = queues.SafeAdd(trade.Trade.Security, key => new PnLQueue(key.ToSecurityId()));
+
+				var localInfo = queue.Process(trade.ToMessage());
+
+				worker
+					.SetCell(columnShift + 0, rowIndex, trade.Trade.Id)
+					.SetCell(columnShift + 1, rowIndex, trade.Order.TransactionId)
+					.SetCell(columnShift + 2, rowIndex, trade.Trade.ServerTime.Format())
+					.SetCell(columnShift + 3, rowIndex, trade.Trade.Price)
+					.SetCell(columnShift + 4, rowIndex, trade.Order.Price)
+					.SetCell(columnShift + 5, rowIndex, trade.Trade.Volume)
+					.SetCell(columnShift + 6, rowIndex, trade.Order.Side.GetDisplayName())
+					.SetCell(columnShift + 7, rowIndex, trade.Order.Id)
+					.SetCell(columnShift + 8, rowIndex, trade.Slippage)
+					.SetCell(columnShift + 9, rowIndex, trade.Order.Comment)
+					.SetCell(columnShift + 10, rowIndex, tradePnL.Round(Decimals))
+					.SetCell(columnShift + 11, rowIndex, localInfo.PnL.Round(Decimals))
+					.SetCell(columnShift + 12, rowIndex, totalPnL.Round(Decimals))
+					.SetCell(columnShift + 13, rowIndex, queue.RealizedPnL.Round(Decimals))
+					.SetCell(columnShift + 14, rowIndex, position);
+
+				rowIndex++;
+			}
 		}
 
 		if (IncludeOrders)

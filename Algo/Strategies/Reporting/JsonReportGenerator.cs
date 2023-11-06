@@ -83,52 +83,58 @@ public class JsonReportGenerator : BaseReportGenerator
 
 		WriteEndElement();
 
-		WritePropertyName("orders");
-		WriteStartArray();
-
-		foreach (var o in strategy.Orders)
+		if (IncludeOrders)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
+			WritePropertyName("orders");
+			WriteStartArray();
 
-			WriteStartElement();
+			foreach (var o in strategy.Orders)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
 
-			WriteElementString("id", o.Id);
-			WriteElementString("transactionId", o.TransactionId);
-			WriteElementString("direction", o.Side);
-			WriteElementString("time", o.Time);
-			WriteElementString("price", o.Price);
-			WriteElementString("state", o.State);
-			WriteElementString("balance", o.Balance);
-			WriteElementString("volume", o.Volume);
-			WriteElementString("type", o.Type);
+				WriteStartElement();
 
-			WriteEndElement();
+				WriteElementString("id", o.Id);
+				WriteElementString("transactionId", o.TransactionId);
+				WriteElementString("direction", o.Side);
+				WriteElementString("time", o.Time);
+				WriteElementString("price", o.Price);
+				WriteElementString("state", o.State);
+				WriteElementString("balance", o.Balance);
+				WriteElementString("volume", o.Volume);
+				WriteElementString("type", o.Type);
+
+				WriteEndElement();
+			}
+
+			WriteEndArray();
 		}
 
-		WriteEndArray();
-
-		WritePropertyName("trades");
-		WriteStartArray();
-
-		foreach (var t in strategy.MyTrades)
+		if (IncludeTrades)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
+			WritePropertyName("trades");
+			WriteStartArray();
 
-			WriteStartElement();
+			foreach (var t in strategy.MyTrades)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
 
-			WriteElementString("id", t.Trade.Id);
-			WriteElementString("transactionId", t.Order.TransactionId);
-			WriteElementString("time", t.Trade.ServerTime);
-			WriteElementString("price", t.Trade.Price);
-			WriteElementString("volume", t.Trade.Volume);
-			WriteElementString("order", t.Order.Id);
-			WriteElementString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
-			WriteElementString("slippage", t.Slippage);
+				WriteStartElement();
 
-			WriteEndElement();
+				WriteElementString("id", t.Trade.Id);
+				WriteElementString("transactionId", t.Order.TransactionId);
+				WriteElementString("time", t.Trade.ServerTime);
+				WriteElementString("price", t.Trade.Price);
+				WriteElementString("volume", t.Trade.Volume);
+				WriteElementString("order", t.Order.Id);
+				WriteElementString("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage())?.PnL);
+				WriteElementString("slippage", t.Slippage);
+
+				WriteEndElement();
+			}
+
+			WriteEndArray();
 		}
-
-		WriteEndArray();
 
 		WriteEndElement();
 

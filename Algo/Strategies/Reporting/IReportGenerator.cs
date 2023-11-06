@@ -3,6 +3,8 @@ namespace StockSharp.Algo.Strategies.Reporting;
 using System.Threading;
 using System.Threading.Tasks;
 
+using StockSharp.BusinessEntities;
+
 /// <summary>
 /// The interface describe report generator for strategies.
 /// </summary>
@@ -17,6 +19,16 @@ public interface IReportGenerator
 	/// Extension without leading dot char.
 	/// </summary>
 	string Extension { get; }
+
+	/// <summary>
+	/// To add <see cref="Order"/> to the report. <see cref="Order"/> are added by default.
+	/// </summary>
+	bool IncludeOrders { get; set; }
+
+	/// <summary>
+	/// To add <see cref="MyTrade"/> to the report. <see cref="MyTrade"/> are added by default.
+	/// </summary>
+	bool IncludeTrades { get; set; }
 
 	/// <summary>
 	/// To generate the report.
@@ -38,6 +50,12 @@ public abstract class BaseReportGenerator : IReportGenerator
 	protected BaseReportGenerator()
 	{
 	}
+
+	/// <inheritdoc />
+	public bool IncludeOrders { get; set; } = true;
+
+	/// <inheritdoc />
+	public bool IncludeTrades { get; set; } = true;
 
 	/// <inheritdoc />
 	public abstract string Name { get; }
