@@ -1571,13 +1571,8 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The last error that caused the strategy to stop.
 		/// </summary>
-		public Exception LastError { get; private set; }
-
-		/// <summary>
-		/// Strategy stopped by critical reason.
-		/// </summary>
 		[Browsable(false)]
-		public Exception CriticalError { get; set; }
+		public Exception LastError { get; private set; }
 
 		/// <summary>
 		/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
@@ -2221,6 +2216,18 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
+		/// To stop the trade algorithm by error reason.
+		/// </summary>
+		/// <param name="error">Error.</param>
+		public void Stop(Exception error)
+		{
+			this.AddErrorLog(error);
+
+			LastError = error ?? throw new ArgumentNullException(nameof(error));
+			Stop();
+		}
+
+		/// <summary>
 		/// The event of the strategy re-initialization.
 		/// </summary>
 		public event Action Reseted;
@@ -2272,7 +2279,6 @@ namespace StockSharp.Algo.Strategies
 			ErrorState = LogLevels.Info;
 			ErrorCount = default;
 			LastError = default;
-			CriticalError = default;
 
 			_boardMsg = default;
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
@@ -2493,13 +2499,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void TryAddChildOrder(Order order)
 		{
-			lock (_ordersInfo.SyncRoot)
-			{
-				var info = _ordersInfo.TryGetValue(order);
-
-				if (info == null)
-					_ordersInfo.Add(order, new OrderInfo { IsOwn = false });
-			}
+			_ordersInfo.SafeAdd(order, key => new() { IsOwn = false });
 		}
 
 		private void OnConnectorNewMessage(Message message)
@@ -3055,10 +3055,7 @@ namespace StockSharp.Algo.Strategies
 			this.AddErrorLog(error.ToString());
 
 			if (ErrorCount >= MaxErrorCount)
-			{
-				LastError = error;
-				Stop();
-			}
+				Stop(error);
 		}
 
 		object ICloneable.Clone() => Clone();
