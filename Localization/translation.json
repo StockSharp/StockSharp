@@ -1,4 +1,68 @@
 {
+  "PluginIsPurchased": {
+    "en": "The plugin was purchased successfully. In order to use it, you need to reinstall applications which support plugins.",
+    "ru": "Плагин успешно приобретен. Для использования переустановите приложения, поддерживающие работу с плагинами."
+  },
+  "CopyStrategy": {
+    "en": "Copy the strategy file. Turn off if you want to change the strategy in Designer and have the ability to launch in Runner with the latest strategy changes without the need for constant exporting.",
+    "ru": "Копировать файл стратегии. Выключите, если хотите менять стратегию в Дизайнере, и иметь возможность запуска в Раннере с последними изменениями стратегии без необходимости постоянного экспорта."
+  },
+  "LaunchRunner": {
+    "en": "Launch Runner",
+    "ru": "Запустить Раннер"
+  },
+  "CopyLicense": {
+    "en": "Copy license file. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
+    "ru": "Копировать файл лицензии. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
+  },
+  "TelegramAlerts": {
+    "en": "Telegram alerts",
+    "ru": "Уведомления Телеграм"
+  },
+  "Bot": {
+    "en": "Bot",
+    "ru": "Бот"
+  },
+  "TelegramAlertsDesc": {
+    "en": "Use Telegram to receive notifications about the trading progress.",
+    "ru": "Использовать Телеграм для получения уведомления о ходе торгов."
+  },
+  "TelegramControlDesc": {
+    "en": "Use Telegram to manage the strategy through a Telegram bot.",
+    "ru": "Использовать Телеграм для управления стратегией через Телеграм бота."
+  },
+  "CopyRunner": {
+    "en": "Copy Runner",
+    "ru": "Копировать Раннер"
+  },
+  "CopyRunnerDesc": {
+    "en": "Copy all files of Runner from the folder where it is installed. This is useful when you need to transfer all necessary files for the strategy to another computer (server).",
+    "ru": "Копировать все файлы Раннер из папки, где он установлен. Подходит для случаев, когда необходимо перенести на другой компьютер (сервер) все необходимые файлы для работы стратегии."
+  },
+  "PublishDesc": {
+    "en": "Publish content publicly in Store or for private use with a team.",
+    "ru": "Опубликовать контент публично в Магазин или для приватного пользования с командой."
+  },
+  "Runner": {
+    "en": "Runner",
+    "ru": "Раннер"
+  },
+  "RunnerDesc": {
+    "en": "Launch strategy in Runner (cross-platform tiny console application).",
+    "ru": "Запустить стратегию в Раннер (кросс-платформенное маленькое консольное приложение)."
+  },
+  "InstallerNotStarted": {
+    "en": "S#.Installer is not running. Do you want to launch it?",
+    "ru": "S#.Инсталлер не запущен. Хотите запустить его?"
+  },
+  "AppNotFound": {
+    "en": "{0} not found on the computer. Please install it first.",
+    "ru": "{0} не найден на компьютере. Пожалуйста, установите его сначала."
+  },
+  "Copy2": {
+    "en": "Copy",
+    "ru": "Копия"
+  },
   "ChartPaneGroupDescription": {
     "en": "Chart panes with same group id scroll and zoom together.",
     "ru": "Панели графика с одинаковым идентификатором группы скроллируются и масштабируются вместе."
@@ -1175,10 +1239,6 @@
     "en": "Do you want to publish the new version of \"{0}\"?",
     "ru": "Опубликовать новую версию \"{0}\"?"
   },
-  "InvalidProductForDesignerSchemeParams": {
-    "en": "Product \"{0}\" does not support S#.Designer scheme publishing. You need to select or create product with corresponding content type.",
-    "ru": "Продукт \"{0}\" не поддерживает публикацию диаграм S#.Designer. Вам необходимо выбрать или создать продукт с соответствующим типом контента."
-  },
   "RequestWasCanceled": {
     "en": "The request was canceled",
     "ru": "Запрос был отменен"
@@ -1335,9 +1395,9 @@
     "en": "New version",
     "ru": "Новая версия"
   },
-  "SelectCsprojForProduct": {
-    "en": "Select .nupkg or .csproj for your product. In case of .csproj, before package publishing you have to build it in Visual Studio in Release configuration.",
-    "ru": "Выберите .nupkg или .csproj вашего продукта. В случае .csproj, перед публикацией проект должен быть построен в Visual Studio в конфигурации Release."
+  "SelectNupkg": {
+    "en": "Select .nupkg package.",
+    "ru": "Выберите .nupkg пакет."
   },
   "DotNetRuntimeNotInstalled": {
     "en": ".NET SDK v5.0+ is not installed. You can download it here: https://dotnet.microsoft.com/download/dotnet/6.0",
@@ -1725,19 +1785,15 @@
   },
   "ExitingAppForInstaller": {
     "en": "The application will be stopped in order to run installer",
-    "ru": "Для запуска установщика приложение будет закрыто"
+    "ru": "Для запуска инсталлера приложение будет закрыто"
   },
   "UpdateIsNotRequired": {
     "en": "Update is not required",
     "ru": "Обновление не требуется"
   },
-  "InstallerNotFound": {
-    "en": "The installer was not found",
-    "ru": "Установщик не найден"
-  },
   "InstallerNotFoundDetailParams": {
     "en": "The installer was not found. In order to be able to update the applications you need to download application installer at {0}.",
-    "ru": "Программа-установщик обновлений не найдена. Чтобы использовать функцию обновления приложений, необходимо скачать установщик обновлений по адресу {0}."
+    "ru": "Программа-инсталлер обновлений не найдена. Чтобы использовать функцию обновления приложений, необходимо скачать установщик обновлений по адресу {0}."
   },
   "AppInstallDir": {
     "en": "Application install folder",
@@ -1781,7 +1837,7 @@
   },
   "StockSharpInstaller": {
     "en": "S#.Installer",
-    "ru": "S#.Установщик"
+    "ru": "S#.Инсталлер"
   },
   "SetupType": {
     "en": "Setup type",
@@ -17087,10 +17143,6 @@
     "en": "Optimize",
     "ru": "Оптимизировать"
   },
-  "XamlStr395": {
-    "en": "Publish",
-    "ru": "Опубликовать"
-  },
   "XamlStr396": {
     "en": "Option calculator",
     "ru": "Опционный калькулятор"
@@ -19127,7 +19179,7 @@
     "en": "Price type",
     "ru": "Тип цены"
   },
-  "PublishStrategy": {
+  "Publish": {
     "en": "Publish",
     "ru": "Опубликовать"
   },
@@ -19156,8 +19208,8 @@
     "ru": "Файл превысил максимальный размер."
   },
   "StrategyEncrypted": {
-    "en": "Strategy has been encrypted and cannot be viewed.",
-    "ru": "Стратегия зашифрована и не может быть просмотрена."
+    "en": "Strategy has been encrypted and cannot be viewed or exported.",
+    "ru": "Стратегия зашифрована и не может быть просмотрена или экспортирована."
   },
   "Email": {
     "en": "Email",
