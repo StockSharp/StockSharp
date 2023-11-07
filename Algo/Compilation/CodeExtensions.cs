@@ -28,7 +28,6 @@ namespace StockSharp.Algo.Compilation
 			"System.ComponentModel.Annotations",
 			"System.Collections",
 			"System.Drawing.Primitives",
-			"System.Drawing.Common",
 
 			"Ecng.Common",
 			"Ecng.Collections",

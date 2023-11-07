@@ -160,15 +160,20 @@ namespace StockSharp.Algo.Candles.Compression
 	public class QuoteCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 	{
 		private readonly decimal? _priceStep;
+		private readonly decimal? _volStep;
+		private decimal? _prevBidVol;
+		private decimal? _prevAskVol;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QuoteCandleBuilderValueTransform"/>.
 		/// </summary>
 		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
-		public QuoteCandleBuilderValueTransform(decimal? priceStep)
+		/// <param name="volStep"><see cref="SecurityMessage.VolumeStep"/></param>
+		public QuoteCandleBuilderValueTransform(decimal? priceStep, decimal? volStep)
 			: base(DataType.MarketDepth)
 		{
 			_priceStep = priceStep;
+			_volStep = volStep;
 		}
 
 		/// <summary>
@@ -180,7 +185,14 @@ namespace StockSharp.Algo.Candles.Compression
 		public override bool Process(Message message)
 		{
 			if (message is not QuoteChangeMessage md)
+			{
+				if (message.Type == MessageTypes.Reset)
+				{
+					_prevBidVol = _prevAskVol = null;
+				}
+
 				return base.Process(message);
+			}
 
 			switch (Type)
 			{
@@ -209,12 +221,25 @@ namespace StockSharp.Algo.Candles.Compression
 				//case Level1Fields.SpreadMiddle:
 				default:
 				{
-					var price = md.GetSpreadMiddle(_priceStep);
+					var bestBid = md.GetBestBid();
+					var bestAsk = md.GetBestAsk();
 
-					if (price == null)
+					var price = (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, _priceStep);
+
+					if (price is null)
 						return false;
 
-					Update(md.ServerTime, price.Value, null, null, null, null);
+					_prevBidVol = bestBid?.Volume ?? _prevBidVol;
+					_prevAskVol = bestAsk?.Volume ?? _prevAskVol;
+
+					decimal? spreadVol = null;
+
+					if (_prevBidVol is not null && _prevAskVol is not null)
+					{
+						spreadVol = _prevBidVol.Value.GetSpreadMiddle(_prevAskVol.Value, _volStep);
+					}
+
+					Update(md.ServerTime, price.Value, spreadVol, null, null, null);
 					return true;
 				}
 
@@ -230,17 +255,22 @@ namespace StockSharp.Algo.Candles.Compression
 	public class Level1CandleBuilderValueTransform : BaseCandleBuilderValueTransform
 	{
 		private readonly decimal? _priceStep;
-		private decimal? _prevBestBid;
-		private decimal? _prevBestAsk;
+		private readonly decimal? _volStep;
+		private decimal? _prevBidPrice;
+		private decimal? _prevAskPrice;
+		private decimal? _prevBidVol;
+		private decimal? _prevAskVol;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CandleBuilderValueTransform"/>.
 		/// </summary>
 		/// <param name="priceStep"><see cref="SecurityMessage.PriceStep"/></param>
-		public Level1CandleBuilderValueTransform(decimal? priceStep)
+		/// <param name="volStep"><see cref="SecurityMessage.VolumeStep"/></param>
+		public Level1CandleBuilderValueTransform(decimal? priceStep, decimal? volStep)
 			: base(DataType.Level1)
 		{
 			_priceStep = priceStep;
+			_volStep = volStep;
 		}
 
 		/// <summary>
@@ -255,7 +285,8 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				if (message.Type == MessageTypes.Reset)
 				{
-					_prevBestBid = _prevBestAsk = null;
+					_prevBidPrice = _prevAskPrice = null;
+					_prevBidVol = _prevAskVol = null;
 				}
 
 				return base.Process(message);
@@ -307,23 +338,33 @@ namespace StockSharp.Algo.Candles.Compression
 					var currBidPrice = l1.TryGetDecimal(Level1Fields.BestBidPrice);
 					var currAskPrice = l1.TryGetDecimal(Level1Fields.BestAskPrice);
 
-					_prevBestBid = currBidPrice ?? _prevBestBid;
-					_prevBestAsk = currAskPrice ?? _prevBestAsk;
+					_prevBidPrice = currBidPrice ?? _prevBidPrice;
+					_prevAskPrice = currAskPrice ?? _prevAskPrice;
 
 					var spreadMiddle = l1.TryGetDecimal(Level1Fields.SpreadMiddle);
 
-					if (spreadMiddle == null)
+					if (spreadMiddle is null)
 					{
-						if (currBidPrice == null && currAskPrice == null)
+						if (currBidPrice is null && currAskPrice is null)
 							return false;
 
-						if (_prevBestBid == null || _prevBestAsk == null)
+						if (_prevBidPrice is null || _prevAskPrice is null)
 							return false;
 
-						spreadMiddle = _prevBestBid.Value.GetSpreadMiddle(_prevBestAsk.Value, _priceStep);
+						spreadMiddle = _prevBidPrice.Value.GetSpreadMiddle(_prevAskPrice.Value, _priceStep);
 					}
 
-					Update(time, spreadMiddle.Value, null, null, null, null);
+					_prevBidVol = l1.TryGetDecimal(Level1Fields.BestBidVolume) ?? _prevBidVol;
+					_prevAskVol = l1.TryGetDecimal(Level1Fields.BestAskVolume) ?? _prevAskVol;
+
+					decimal? spreadVol = null;
+
+					if (_prevBidVol is not null && _prevAskVol is not null)
+					{
+						spreadVol = _prevBidVol.Value.GetSpreadMiddle(_prevAskVol.Value, _volStep);
+					}
+
+					Update(time, spreadMiddle.Value, spreadVol, null, null, null);
 					return true;
 				}
 

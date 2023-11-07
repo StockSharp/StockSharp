@@ -51,7 +51,16 @@
 		/// <param name="fileName">File name.</param>
 		/// <returns><see cref="SettingsStorage"/></returns>
 		public static SettingsStorage DeserializeInvariant(this string fileName)
-			=> Do.Invariant(fileName.Deserialize<SettingsStorage>);
+			=> DeserializeInvariant<SettingsStorage>(fileName);
+
+		/// <summary>
+		/// Deserialize storage from the specified file.
+		/// </summary>
+		/// <typeparam name="T">Type implemented <see cref="IPersistable"/>.</typeparam>
+		/// <param name="fileName">File name.</param>
+		/// <returns><typeparamref name="T"/></returns>
+		public static T DeserializeInvariant<T>(this string fileName)
+			=> Do.Invariant(fileName.Deserialize<T>);
 
 		/// <summary>
 		/// Deserialize storage from the specified byte array.

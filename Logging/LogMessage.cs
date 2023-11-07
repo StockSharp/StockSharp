@@ -62,7 +62,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// The log source.
 		/// </summary>
-		public ILogSource Source { get; }
+		public ILogSource Source { get; set; }
 
 		/// <summary>
 		/// Message creating time.

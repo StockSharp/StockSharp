@@ -398,9 +398,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		connector.ProgressChanged += step => SingleProgressChanged?.Invoke(strategy, parameters, lastStep = step);
 
-		connector.StateChanged += () =>
+		connector.StateChanged2 += state =>
 		{
-			if (connector.State != ChannelStates.Stopped)
+			if (state != ChannelStates.Stopped)
 				return;
 
 			if (lastStep < 100)

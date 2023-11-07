@@ -8,7 +8,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StockSharp.Configuration.Adapters" Version="$(StockSharpVer)" />
     <PackageReference Include="StockSharp.Xaml.Charting" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>

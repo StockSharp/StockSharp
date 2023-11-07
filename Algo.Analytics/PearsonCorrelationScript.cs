@@ -19,6 +19,10 @@
 
 			foreach (var security in securities)
 			{
+				// stop calculation if user cancel script execution
+				if (cancellationToken.IsCancellationRequested)
+					break;
+
 				// get candle storage
 				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 
@@ -49,7 +53,7 @@
 			var matrix = Correlation.PearsonMatrix(closes);
 
 			// displaing result into heatmap
-			var ids = securities.Select(s => s.ToStringId()).ToArray();
+			var ids = securities.Select(s => s.ToStringId());
 			panel.DrawHeatmap(ids, ids, matrix.ToArray());
 
 			return Task.CompletedTask;

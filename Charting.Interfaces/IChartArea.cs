@@ -40,7 +40,7 @@
 		/// <summary>
 		/// Chart.
 		/// </summary>
-		IChart Chart { get; }
+		IChart Chart { get; set; }
 
 		/// <summary>
 		/// Chart group name.

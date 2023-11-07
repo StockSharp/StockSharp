@@ -188,6 +188,11 @@
 		public static readonly string InstallerInstallationsConfigPath;
 
 		/// <summary>
+		/// Installer exe name.
+		/// </summary>
+		public const string InstallerAppName = "StockSharp.Installer.UI";
+
+		/// <summary>
 		/// Web site domain.
 		/// </summary>
 		public static string Domain => LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "ru" : "com";
@@ -325,7 +330,7 @@
 
 				try
 				{
-					_installedVersion = GetInstalledVersion(Directory.GetCurrentDirectory()) ?? GetAssemblyVersion();
+					_installedVersion = TryGetInstalledVersion(Directory.GetCurrentDirectory()) ?? GetAssemblyVersion();
 				}
 				catch
 				{
@@ -343,30 +348,56 @@
 		/// </summary>
 		public static void ResetInstalledVersionCache() => _installedVersion = null;
 
-		/// <summary>
-		/// Get currently installed version of the product.
-		/// </summary>
-		/// <param name="productInstallPath">File system path to product installation.</param>
-		/// <returns>Installed version of the product.</returns>
-		public static string GetInstalledVersion(string productInstallPath)
+		private static SettingsStorage[] GetInstallations()
 		{
-			if (productInstallPath.IsEmpty())
-				throw new ArgumentException(nameof(productInstallPath));
-
 			if (!InstallerInstallationsConfigPath.IsConfigExists())
 				return null;
 
-			var storage = Do.Invariant(() =>
-			{
-				lock(InstallerInstallationsConfigPath)
-					return InstallerInstallationsConfigPath.Deserialize<SettingsStorage>();
-			});
+			SettingsStorage storage;
+
+			lock (InstallerInstallationsConfigPath)
+				storage = InstallerInstallationsConfigPath.DeserializeInvariant();
 
 			if (storage is null)
 				return null;
 
 			var installations = storage?.GetValue<SettingsStorage[]>("Installations");
 			if (!(installations?.Length > 0))
+				return null;
+
+			return installations;
+		}
+
+		/// <summary>
+		/// Try get installed path by product id.
+		/// </summary>
+		/// <param name="productId">Identifier.</param>
+		/// <returns>Installed path.</returns>
+		public static string TryGetInstalledPath(long productId)
+		{
+			var installations = GetInstallations();
+			if (installations == null)
+				return null;
+
+			var installation = installations.FirstOrDefault(ss => productId == ss.TryGet<long>("ProductKey"));
+			if (installation == null)
+				return null;
+
+			return installation.TryGet<string>("InstallDirectory");
+		}
+
+		/// <summary>
+		/// Get currently installed version of the product.
+		/// </summary>
+		/// <param name="productInstallPath">File system path to product installation.</param>
+		/// <returns>Installed version of the product.</returns>
+		public static string TryGetInstalledVersion(string productInstallPath)
+		{
+			if (productInstallPath.IsEmpty())
+				throw new ArgumentException(nameof(productInstallPath));
+
+			var installations = GetInstallations();
+			if (installations == null)
 				return null;
 
 			var installation = installations.FirstOrDefault(ss => productInstallPath.ComparePaths(ss.TryGet<string>("InstallDirectory")));
@@ -558,6 +589,28 @@
 				return serializer.Deserialize(data);
 			}
 			catch(Exception e)
+			{
+				e.LogError();
+			}
+
+			return default;
+		}
+
+		/// <summary>
+		/// Deserialize value from the serialized data.
+		/// </summary>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="data">Serialized data.</param>
+		/// <returns>Value.</returns>
+		public static T Deserialize<T>(this Stream data)
+		{
+			var serializer = CreateSerializer<T>();
+
+			try
+			{
+				return serializer.Deserialize(data);
+			}
+			catch (Exception e)
 			{
 				e.LogError();
 			}

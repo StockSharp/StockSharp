@@ -178,8 +178,7 @@ public class CandlePatternIndicator : BaseIndicator
 		{
 			return new CandlePatternIndicatorValue(this)
 			{
-				IsFinal = input.IsFinal,
-				InputValue = input,
+				IsFinal = input.IsFinal
 			};
 		}
 
@@ -215,7 +214,6 @@ public class CandlePatternIndicator : BaseIndicator
 			return new CandlePatternIndicatorValue(this, recognized)
 			{
 				IsFinal = input.IsFinal,
-				InputValue = input,
 				CandleOpenTimes = times,
 			};
 		}

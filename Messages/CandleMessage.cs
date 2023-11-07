@@ -545,7 +545,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class PnFArg : Equatable<PnFArg>
 	{
-		private Unit _boxSize = new();
+		private Unit _boxSize = new(1);
 
 		/// <summary>
 		/// Range of price above which increase the candle body.

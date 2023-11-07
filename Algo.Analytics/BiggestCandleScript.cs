@@ -7,6 +7,12 @@
 	{
 		Task IAnalyticsScript.Run(ILogReceiver logs, IAnalyticsPanel panel, SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, TimeSpan timeFrame, CancellationToken cancellationToken)
 		{
+			if (securities.Length == 0)
+			{
+				logs.AddWarningLog("No instruments.");
+				return Task.CompletedTask;
+			}
+
 			var priceChart = panel.CreateChart<DateTimeOffset, decimal, decimal>();
 			var volChart = panel.CreateChart<DateTimeOffset, decimal, decimal>();
 
@@ -15,6 +21,10 @@
 
 			foreach (var security in securities)
 			{
+				// stop calculation if user cancel script execution
+				if (cancellationToken.IsCancellationRequested)
+					break;
+
 				// get candle storage
 				var candleStorage = storage.GetTimeFrameCandleMessageStorage(security, timeFrame, drive, format);
 
@@ -24,10 +34,10 @@
 				var bigPriceCandle = allCandles.OrderByDescending(c => c.GetLength()).FirstOrDefault();
 				var bigVolCandle = allCandles.OrderByDescending(c => c.TotalVolume).FirstOrDefault();
 
-				if (bigPriceCandle is not null)
+				if (bigPriceCandle != null)
 					bigPriceCandles.Add(bigPriceCandle);
 
-				if (bigVolCandle is not null)
+				if (bigVolCandle != null)
 					bigVolCandles.Add(bigVolCandle);
 			}
 

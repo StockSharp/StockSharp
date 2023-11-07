@@ -53,7 +53,10 @@ namespace StockSharp.Algo.Indicators
 			if (input.IsFinal)
 				IsFormed = true;
 
-			return new CandleIndicatorValue(this, input.GetValue<ICandleMessage>(), c => c.TotalVolume);
+			return new DecimalIndicatorValue(this, input.GetValue<ICandleMessage>().TotalVolume)
+			{
+				IsFinal = input.IsFinal,
+			};
 		}
 	}
 }

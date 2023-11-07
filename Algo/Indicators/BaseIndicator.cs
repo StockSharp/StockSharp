@@ -152,7 +152,6 @@ namespace StockSharp.Algo.Indicators
 			if(result.Indicator != this)
 				throw new InvalidOperationException($"invalid indicator value. expected {GetType().Name} got {result.Indicator?.GetType()}");
 
-			result.InputValue = input;
 			//var result = value as IIndicatorValue ?? input.SetValue(value);
 
 			if (input.IsFinal)

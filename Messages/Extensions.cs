@@ -5518,41 +5518,58 @@ namespace StockSharp.Messages
 				return ask is null;
 		}
 
-		private static readonly SynchronizedDictionary<Type, bool> _basicSettingsSupportDict = new();
-
-		/// <summary>
-		/// Determines the specified adapter supports basic settings.
-		/// </summary>
-		/// <param name="adapter"><see cref="IMessageAdapter"/></param>
-		/// <returns>Check result.</returns>
-		public static bool IsBasicSupported(this IMessageAdapter adapter)
-		{
-			if (adapter is null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			var type = adapter.GetType();
-			if (_basicSettingsSupportDict.TryGetValue(type, out var supported))
-				return supported;
-
-			_basicSettingsSupportDict[type] = supported =
-				adapter is IKeySecretAdapter or ILoginPasswordAdapter or ITokenAdapter or IDemoAdapter or ISenderTargetAdapter || adapter.GetType().GetGenericType(typeof(IAddressAdapter<>)) is not null || adapter.GetBasicProperties().Any();
-
-			return supported;
-		}
+		private static readonly SynchronizedDictionary<Type, IEnumerable<PropertyInfo>> _basicSettingsCache = new();
 
 		/// <summary>
 		/// Find properties marked by <see cref="BasicSettingAttribute"/>.
 		/// </summary>
-		/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+		/// <param name="adapterType">Type.</param>
 		/// <returns>Properties marked by <see cref="BasicSettingAttribute"/>.</returns>
-		public static IEnumerable<PropertyInfo> GetBasicProperties(this IMessageAdapter adapter)
+		public static IEnumerable<PropertyInfo> GetBasicProperties(this Type adapterType)
 		{
-			if (adapter is null)
-				throw new ArgumentNullException(nameof(adapter));
+			if (adapterType is null)
+				throw new ArgumentNullException(nameof(adapterType));
 
-			return adapter.GetType()
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				.Where(pi => pi.GetAttribute<BasicSettingAttribute>() is not null);
+			return _basicSettingsCache.SafeAdd(adapterType, key =>
+			{
+				var props = new HashSet<PropertyInfo>();
+
+				void addProp(string propName)
+					=> props.Add(adapterType.GetProperty(propName));
+
+				if (adapterType.Is<IKeySecretAdapter>())
+				{
+					addProp(nameof(IKeySecretAdapter.Key));
+					addProp(nameof(IKeySecretAdapter.Secret));
+				}
+
+				if (adapterType.Is<ILoginPasswordAdapter>())
+				{
+					addProp(nameof(ILoginPasswordAdapter.Login));
+					addProp(nameof(ILoginPasswordAdapter.Password));
+				}
+
+				if (adapterType.Is<IDemoAdapter>())
+					addProp(nameof(IDemoAdapter.IsDemo));
+
+				if (adapterType.Is<ITokenAdapter>())
+					addProp(nameof(ITokenAdapter.Token));
+
+				if (adapterType.Is<ISenderTargetAdapter>())
+				{
+					addProp(nameof(ISenderTargetAdapter.SenderCompId));
+					addProp(nameof(ISenderTargetAdapter.TargetCompId));
+				}
+
+				if (adapterType.GetGenericType(typeof(IAddressAdapter<>)) is not null)
+					addProp(nameof(IAddressAdapter<int>.Address));
+
+				props.AddRange(adapterType
+					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+					.Where(pi => pi.GetAttribute<BasicSettingAttribute>() is not null));
+
+				return props;
+			});
 		}
 	}
 }

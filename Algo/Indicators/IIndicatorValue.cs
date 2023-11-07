@@ -51,11 +51,6 @@ namespace StockSharp.Algo.Indicators
 		bool IsFormed { get; set; }
 
 		/// <summary>
-		/// The input value.
-		/// </summary>
-		IIndicatorValue InputValue { get; set; }
-
-		/// <summary>
 		/// Does value support data type, required for the indicator.
 		/// </summary>
 		/// <param name="valueType">The data type, operated by indicator.</param>
@@ -111,9 +106,6 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public bool IsFormed { get; set; }
-
-		/// <inheritdoc />
-		public abstract IIndicatorValue InputValue { get; set; }
 
 		/// <inheritdoc />
 		public abstract bool IsSupport(Type valueType);
@@ -182,9 +174,6 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsFinal { get; set; }
 
 		/// <inheritdoc />
-		public override IIndicatorValue InputValue { get; set; }
-
-		/// <inheritdoc />
 		public override bool IsSupport(Type valueType) => valueType.IsAssignableFrom(typeof(TValue));
 
 		/// <inheritdoc />
@@ -197,7 +186,7 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
-			return new SingleIndicatorValue<T>(indicator, value) { IsFinal = IsFinal, InputValue = this };
+			return new SingleIndicatorValue<T>(indicator, value) { IsFinal = IsFinal };
 		}
 
 		private void ThrowIfEmpty()
@@ -256,7 +245,7 @@ namespace StockSharp.Algo.Indicators
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return typeof(T) == typeof(decimal)
-				? new DecimalIndicatorValue(indicator, value.To<decimal>()) { IsFinal = IsFinal, InputValue = this }
+				? new DecimalIndicatorValue(indicator, value.To<decimal>()) { IsFinal = IsFinal }
 				: base.SetValue(indicator, value);
 		}
 
@@ -345,7 +334,7 @@ namespace StockSharp.Algo.Indicators
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return value is ICandleMessage candle
-					? new CandleIndicatorValue(indicator, candle) { InputValue = this }
+					? new CandleIndicatorValue(indicator, candle)
 					: value.IsNull() ? new CandleIndicatorValue(indicator) : base.SetValue(indicator, value);
 		}
 	}
@@ -419,8 +408,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			return new MarketDepthIndicatorValue(indicator, base.GetValue<IOrderBookMessage>(), _getPart)
 			{
-				IsFinal = IsFinal,
-				InputValue = this
+				IsFinal = IsFinal
 			};
 		}
 	}
@@ -455,8 +443,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>())
 			{
-				IsFinal = IsFinal,
-				InputValue = this
+				IsFinal = IsFinal
 			};
 		}
 	}
@@ -481,9 +468,6 @@ namespace StockSharp.Algo.Indicators
 
 		/// <inheritdoc />
 		public override bool IsFinal { get; set; }
-
-		/// <inheritdoc />
-		public override IIndicatorValue InputValue { get; set; }
 
 		/// <summary>
 		/// Embedded values.
