@@ -1,4 +1,8 @@
 {
+  "PluginIsPurchased": {
+    "en": "The plugin was purchased successfully. In order to use it, you need to reinstall applications which support plugins.",
+    "ru": "Плагин успешно приобретен. Для использования переустановите приложения, поддерживающие работу с плагинами."
+  },
   "CopyStrategy": {
     "en": "Copy the strategy file. Turn off if you want to change the strategy in Designer and have the ability to launch in Runner with the latest strategy changes without the need for constant exporting.",
     "ru": "Копировать файл стратегии. Выключите, если хотите менять стратегию в Дизайнере, и иметь возможность запуска в Раннере с последними изменениями стратегии без необходимости постоянного экспорта."
