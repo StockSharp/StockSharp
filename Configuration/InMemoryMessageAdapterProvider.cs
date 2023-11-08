@@ -9,7 +9,6 @@ namespace StockSharp.Configuration
 
 	using Ecng.Common;
 	using Ecng.Reflection;
-	using Ecng.Configuration;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -41,17 +40,8 @@ namespace StockSharp.Configuration
 		/// Initialize <see cref="InMemoryMessageAdapterProvider"/>.
 		/// </summary>
 		/// <param name="currentAdapters">All currently available adapters.</param>
-		public InMemoryMessageAdapterProvider(IEnumerable<IMessageAdapter> currentAdapters)
-			: this(currentAdapters, ConfigManager.TryGet<Type>("transportAdapter"))
-		{
-		}
-
-		/// <summary>
-		/// Initialize <see cref="InMemoryMessageAdapterProvider"/>.
-		/// </summary>
-		/// <param name="currentAdapters">All currently available adapters.</param>
 		/// <param name="transportAdapter"><see cref="CreateTransportAdapter"/></param>
-		public InMemoryMessageAdapterProvider(IEnumerable<IMessageAdapter> currentAdapters, Type transportAdapter)
+		public InMemoryMessageAdapterProvider(IEnumerable<IMessageAdapter> currentAdapters, Type transportAdapter = null)
 		{
 			CurrentAdapters = currentAdapters ?? throw new ArgumentNullException(nameof(currentAdapters));
 			_transportAdapter = transportAdapter;
