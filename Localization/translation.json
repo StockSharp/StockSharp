@@ -12767,10 +12767,6 @@
     "en": "File path not specified.",
     "ru": "Путь к файлу не указан."
   },
-  "Str2866Params": {
-    "en": "File {0} does not exist.",
-    "ru": "Файл {0} не существует."
-  },
   "Str2867Params": {
     "en": "Field {0} is required. It must be given a default value or an ordinal number.",
     "ru": "Поле {0} является обязательным. Для него необходимо задать или значение по умолчанию, или порядковый номер."
