@@ -12,7 +12,6 @@
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
     <RepoWebPath>$(RepoGitHubPath)..\Web\</RepoWebPath>
-    <ConnectorsStubPath>$(RepoAppsPath)ConnectorsStub\</ConnectorsStubPath>
     <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
 
