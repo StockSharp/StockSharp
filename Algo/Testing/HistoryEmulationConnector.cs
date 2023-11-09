@@ -252,7 +252,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The event on the emulator state change <see cref="State"/>.
 		/// </summary>
-		[Obsolete("Use StateChanged event.")]
+		[Obsolete("Use StateChanged2 event.")]
 		public event Action StateChanged;
 
 		/// <summary>
