@@ -402,11 +402,15 @@
 				return null;
 
 			var installation = installations.FirstOrDefault(ss => productInstallPath.ComparePaths(ss.TryGet<string>("InstallDirectory")));
-			if(installation == null)
+			if (installation == null)
 				return null;
 
-			var identityStr = installation
-				.TryGet<SettingsStorage>("Version")?
+			var version = installation.GetValue<object>("Version");
+
+			if (version is string str)
+				return str;
+
+			var identityStr = ((SettingsStorage)version)?
 				.TryGet<SettingsStorage>("Metadata")?
 				.TryGet<string>("Identity");
 
