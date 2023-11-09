@@ -11,6 +11,7 @@
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Localization;
+	using Ecng.ComponentModel;
 
 	using Newtonsoft.Json;
 
@@ -633,5 +634,10 @@
 		/// <returns>Check result.</returns>
 		public static bool IsConfigExists(this string configFile)
 			=> File.Exists(configFile);
+
+		/// <summary>
+		/// <see cref="ServerCredentials.Email"/> in case <see cref="ServerCredentials.Token"/>.
+		/// </summary>
+		public const string TokenBasedEmail = "x";
 	}
 }
