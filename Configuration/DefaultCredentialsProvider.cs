@@ -16,10 +16,6 @@
 	{
 		private ServerCredentials _credentials;
 
-		// ReSharper disable InconsistentlySynchronizedField
-		private bool IsValid => _credentials != null && (!_credentials.Password.IsEmpty() || !_credentials.Token.IsEmpty());
-		// ReSharper restore InconsistentlySynchronizedField
-
 		bool ICredentialsProvider.TryLoad(out ServerCredentials credentials)
 		{
 			lock (this)
@@ -27,7 +23,7 @@
 				if(_credentials != null)
 				{
 					credentials = _credentials.Clone();
-					return IsValid;
+					return credentials.CanAutoLogin();
 				}
 
 				var file = Paths.CredentialsFile;
@@ -48,24 +44,26 @@
 					ex.LogError();
 				}
 
-				return IsValid;
+				return credentials?.CanAutoLogin() == true;
 			}
 		}
 
-		void ICredentialsProvider.Save(ServerCredentials credentials)
+		void ICredentialsProvider.Save(ServerCredentials credentials, bool keepSecret)
 		{
 			if (credentials is null)
 				throw new ArgumentNullException(nameof(credentials));
 
 			lock (this)
 			{
-				var clone = credentials.Clone();
+				_credentials = credentials.Clone();
 
 				Directory.CreateDirectory(Paths.CompanyPath);
 
-				clone.Save().Serialize(Paths.CredentialsFile);
+				var clone = credentials.Clone();
+				if (!keepSecret)
+					clone.Password = clone.Token = null;
 
-				_credentials = clone;
+				clone.Save().Serialize(Paths.CredentialsFile);
 			}
 		}
 

@@ -18,7 +18,8 @@
 		/// Save credentials.
 		/// </summary>
 		/// <param name="credentials"><see cref="ServerCredentials"/>.</param>
-		void Save(ServerCredentials credentials);
+		/// <param name="keepSecret">Save <see cref="ServerCredentials.Password"/> and <see cref="ServerCredentials.Token"/>.</param>
+		void Save(ServerCredentials credentials, bool keepSecret);
 
 		/// <summary>
 		/// Delete credentials.
