@@ -35,7 +35,7 @@
     <AWSSDKVer>3.*</AWSSDKVer>
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.6.0</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisCSharpVer>4.7.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
