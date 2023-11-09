@@ -5535,7 +5535,12 @@ namespace StockSharp.Messages
 				var props = new HashSet<PropertyInfo>();
 
 				void addProp(string propName)
-					=> props.Add(adapterType.GetProperty(propName));
+				{
+					var prop = adapterType.GetMember<PropertyInfo>(propName)
+						?? throw new ArgumentException(propName, nameof(propName));
+
+					props.Add(prop);
+				}
 
 				if (adapterType.Is<IKeySecretAdapter>())
 				{
