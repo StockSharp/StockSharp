@@ -1,4 +1,8 @@
 {
+  "LeftSeconds": {
+    "en": "{0} sec left",
+    "ru": "{0} сек осталось"
+  },
   "PluginIsPurchased": {
     "en": "The plugin was purchased successfully. In order to use it, you need to reinstall applications which support plugins.",
     "ru": "Плагин успешно приобретен. Для использования переустановите приложения, поддерживающие работу с плагинами."
