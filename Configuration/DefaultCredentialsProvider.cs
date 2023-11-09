@@ -61,9 +61,6 @@
 			{
 				var clone = credentials.Clone();
 
-				if (!clone.AutoLogon)
-					clone.Password = null;
-
 				Directory.CreateDirectory(Paths.CompanyPath);
 
 				clone.Save().Serialize(Paths.CredentialsFile);
