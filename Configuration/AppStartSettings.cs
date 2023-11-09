@@ -11,31 +11,17 @@
 	public class AppStartSettings : IPersistable
 	{
 		/// <summary>
-		/// Skip settings window.
-		/// </summary>
-		public bool AutoStart { get; set; }
-
-		/// <summary>
 		/// Selected application language.
 		/// </summary>
-		public string Language { get; set; }
+		public string Language { get; set; } = LocalizedStrings.ActiveLanguage;
 
 		/// <summary>
 		/// Online mode.
 		/// </summary>
 		public bool Online { get; set; } = true;
 
-		/// <summary>
-		/// Create instance of <see cref="AppStartSettings"/>.
-		/// </summary>
-		public AppStartSettings()
-		{
-			Language = LocalizedStrings.ActiveLanguage;
-		}
-
 		void IPersistable.Load(SettingsStorage storage)
 		{
-			AutoStart = storage.GetValue<bool>(nameof(AutoStart));
 			Online = storage.GetValue(nameof(Online), Online);
 			Language = storage.GetValue<string>(nameof(Language));
 		}
@@ -43,7 +29,6 @@
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			storage
-				.Set(nameof(AutoStart), AutoStart)
 				.Set(nameof(Language), Language)
 				.Set(nameof(Online), Online);
 		}
