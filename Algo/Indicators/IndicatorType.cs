@@ -36,7 +36,10 @@ namespace StockSharp.Algo.Indicators
 			get => _indicator;
 			protected set
 			{
-				_indicator = value;
+				if (_indicator == value)
+					return;
+
+				_indicator = value ?? throw new ArgumentNullException(nameof(value));
 
 				Name = _indicator?.GetDisplayName() ?? string.Empty;
 				Description = _indicator?.GetDescription() ?? string.Empty;
@@ -46,8 +49,15 @@ namespace StockSharp.Algo.Indicators
 
 				InputValue = _indicator?.GetValueType(true);
 				OutputValue = _indicator?.GetValueType(false);
+
+				IndicatorChanged?.Invoke();
 			}
 		}
+
+		/// <summary>
+		/// <see cref="Indicator"/> changed event.
+		/// </summary>
+		public event Action IndicatorChanged;
 
 		/// <summary>
 		/// The renderer type for indicator extended drawing.
@@ -93,7 +103,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="painter">The renderer type for indicator extended drawing.</param>
 		public IndicatorType(Type indicator, Type painter)
 		{
-			Indicator = indicator ?? throw new ArgumentNullException(nameof(indicator));
+			Indicator = indicator;
 			Painter = painter;
 		}
 
