@@ -87,13 +87,25 @@
     "en": "Export only C# file",
     "ru": "Экспортировать только C# файл"
   },
+  "ExportOnlyCodeFileDesc": {
+    "en": "Export only C# file. Result file will be .cs extension.",
+    "ru": "Экспортировать только C# файл. Полученный файл будет иметь .cs расширение."
+  },
   "ExportWithReferences": {
     "en": "Export with references",
     "ru": "Экспортировать с зависимостями"
   },
+  "ExportWithReferencesDesc": {
+    "en": "Export with references. Result file will be .json extension and contains code + references (paths).",
+    "ru": "Экспортировать с зависимостями. Полученный файл будет иметь .json расширение и содержать код + зависимости (пути)."
+  },
   "ExportAsDll": {
     "en": "Export as DLL",
     "ru": "Экспортировать как DLL"
+  },
+  "ExportAsDllDesc": {
+    "en": "Export as DLL. Result file will contains compiled .NET assembly.",
+    "ru": "Экспортировать как DLL. Полученный файл будет содержать .NET сборку."
   },
   "BasketBlackScholes": {
     "en": "Portfolio model for calculating the values of Greeks by the Black-Scholes formula.",
@@ -19303,9 +19315,13 @@
     "en": "View only",
     "ru": "Только просмотр"
   },
-  "IsIndependent": {
-    "en": "Independent",
+  "Standalone": {
+    "en": "Standalone",
     "ru": "Независимая"
+  },
+  "StandaloneSchemaDesc": {
+    "en": "The standalone scheme contains all dependencies (external dlls, schemes, indicators) within itself.",
+    "ru": "Независимая схема содержит внутри себя все зависимости (внешние dll, схемы, индикаторы)."
   },
   "DaysPart": {
     "en": "Days",
