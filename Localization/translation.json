@@ -1,4 +1,8 @@
 {
+  "CompileCodeFirst": {
+    "en": "Compile code first.",
+    "ru": "Код должен быть скомпилирован."
+  },
   "LeftSeconds": {
     "en": "{0} sec left",
     "ru": "{0} сек осталось"
