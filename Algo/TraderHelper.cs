@@ -36,44 +36,49 @@ namespace StockSharp.Algo
 	/// </summary>
 	public static partial class TraderHelper
 	{
-		private static readonly bool[][] _stateChangePossibilities;
+		private class StateChangeValidator<T>
+		{
+			private readonly bool[][] _map;
+
+			private readonly Func<T, int> _converter;
+
+			public StateChangeValidator(Func<T, int> converter)
+			{
+				_converter = converter ?? throw new ArgumentNullException(nameof(converter));
+				
+				_map = new bool[Enumerator.GetValues<T>().Count()][];
+
+				for (var i = 0; i < _map.Length; i++)
+					_map[i] = new bool[_map.Length];
+			}
+
+			public bool this[T from, T to]
+			{
+				get => _map[_converter(from)][_converter(to)];
+				set => _map[_converter(from)][_converter(to)] = value;
+			}
+		}
+
+		private static readonly StateChangeValidator<OrderStates> _orderStateValidator;
 
 		static TraderHelper()
 		{
-			_stateChangePossibilities = new bool[5][];
+			_orderStateValidator = new(s => (int)s);
 
-			for (var i = 0; i < _stateChangePossibilities.Length; i++)
-				_stateChangePossibilities[i] = new bool[_stateChangePossibilities.Length];
+			_orderStateValidator[OrderStates.None, OrderStates.None] = true;
+			_orderStateValidator[OrderStates.None, OrderStates.Pending] = true;
+			_orderStateValidator[OrderStates.None, OrderStates.Active] = true;
+			_orderStateValidator[OrderStates.None, OrderStates.Done] = true;
+			_orderStateValidator[OrderStates.None, OrderStates.Failed] = true;
 
-			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.None] = true;
-			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Pending] = true;
-			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Active] = true;
-			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Done] = true;
-			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Failed] = true;
-
-			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.None] = false;
-			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Pending] = true;
-			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Active] = true;
-			//_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Done] = true;
-			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Failed] = true;
-
-			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.None] = false;
-			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Pending] = false;
-			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Active] = true;
-			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Done] = true;
-			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Failed] = false;
-
-			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.None] = false;
-			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Pending] = false;
-			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Active] = false;
-			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Done] = true;
-			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Failed] = false;
-
-			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.None] = false;
-			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Pending] = false;
-			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Active] = false;
-			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Done] = false;
-			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Failed] = true;
+			_orderStateValidator[OrderStates.Pending, OrderStates.Pending] = true;
+			_orderStateValidator[OrderStates.Pending, OrderStates.Active] = true;
+			//_orderStateValidator[OrderStates.Pending, OrderStates.Done] = true;
+			_orderStateValidator[OrderStates.Pending, OrderStates.Failed] = true;
+			_orderStateValidator[OrderStates.Active, OrderStates.Active] = true;
+			_orderStateValidator[OrderStates.Active, OrderStates.Done] = true;
+			_orderStateValidator[OrderStates.Done, OrderStates.Done] = true;
+			_orderStateValidator[OrderStates.Failed, OrderStates.Failed] = true;
 		}
 
 		/// <summary>
@@ -98,7 +103,7 @@ namespace StockSharp.Algo
 		/// <returns>Check result.</returns>
 		public static bool VerifyOrderState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs)
 		{
-			var isInvalid = currState != null && !_stateChangePossibilities[(int)currState.Value][(int)newState];
+			var isInvalid = currState != null && !_orderStateValidator[currState.Value, newState];
 
 			if (isInvalid)
 				logs?.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
