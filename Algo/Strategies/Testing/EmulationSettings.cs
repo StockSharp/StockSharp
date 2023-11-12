@@ -204,6 +204,28 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
+		private LogLevels _logLevel = LogLevels.Info;
+
+		/// <summary>
+		/// Logging level.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str9Key,
+			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str12Key,
+			Order = 300)]
+		[Obsolete("Use external storage.")]
+		public LogLevels LogLevel
+		{
+			get => _logLevel;
+			set
+			{
+				_logLevel = value;
+				NotifyPropertyChanged();
+			}
+		}
+
 		private IEnumerable<CommissionRule> _commissionRules = Enumerable.Empty<CommissionRule>();
 
 		/// <summary>
@@ -237,6 +259,7 @@ namespace StockSharp.Algo.Strategies.Testing
 #pragma warning disable CS0618 // Type or member is obsolete
 				.Set(nameof(StartTime), StartTime)
 				.Set(nameof(StopTime), StopTime)
+				.Set(nameof(LogLevel), LogLevel.To<string>())
 #pragma warning restore CS0618 // Type or member is obsolete
 				.Set(nameof(OrderLogDataMode), OrderLogDataMode.To<string>())
 				.Set(nameof(DepthDataMode), DepthDataMode.To<string>())
@@ -259,6 +282,7 @@ namespace StockSharp.Algo.Strategies.Testing
 #pragma warning disable CS0618 // Type or member is obsolete
 			StartTime = storage.GetValue(nameof(StartTime), StartTime);
 			StopTime = storage.GetValue(nameof(StopTime), StopTime);
+			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
 #pragma warning restore CS0618 // Type or member is obsolete
 			OrderLogDataMode = storage.GetValue(nameof(OrderLogDataMode), OrderLogDataMode);
 			DepthDataMode = storage.GetValue(nameof(DepthDataMode), DepthDataMode);
