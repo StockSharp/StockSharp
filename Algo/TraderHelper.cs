@@ -60,6 +60,7 @@ namespace StockSharp.Algo
 		}
 
 		private static readonly StateChangeValidator<OrderStates> _orderStateValidator;
+		private static readonly StateChangeValidator<ChannelStates> _channelStateValidator;
 
 		static TraderHelper()
 		{
@@ -72,6 +73,29 @@ namespace StockSharp.Algo
 			_orderStateValidator[OrderStates.Pending, OrderStates.Active] = true;
 			_orderStateValidator[OrderStates.Pending, OrderStates.Failed] = true;
 			_orderStateValidator[OrderStates.Active, OrderStates.Done] = true;
+
+			_channelStateValidator = new(s => (int)s);
+
+			_channelStateValidator[ChannelStates.Stopped, ChannelStates.Starting] = true;
+			_channelStateValidator[ChannelStates.Starting, ChannelStates.Stopped] = true;
+			_channelStateValidator[ChannelStates.Starting, ChannelStates.Started] = true;
+			_channelStateValidator[ChannelStates.Started, ChannelStates.Stopping] = true;
+			_channelStateValidator[ChannelStates.Started, ChannelStates.Suspending] = true;
+			_channelStateValidator[ChannelStates.Suspending, ChannelStates.Suspended] = true;
+			_channelStateValidator[ChannelStates.Suspended, ChannelStates.Starting] = true;
+			_channelStateValidator[ChannelStates.Suspended, ChannelStates.Stopping] = true;
+			_channelStateValidator[ChannelStates.Stopping, ChannelStates.Stopped] = true;
+		}
+
+		/// <summary>
+		/// Validate state change.
+		/// </summary>
+		/// <param name="currState">Current state.</param>
+		/// <param name="newState">New state.</param>
+		public static void ValidateChannelState(this ChannelStates currState, ChannelStates newState)
+		{
+			if (!_channelStateValidator[currState, newState])
+				throw new InvalidOperationException($"{currState}->{newState}");
 		}
 
 		/// <summary>
