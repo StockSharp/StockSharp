@@ -543,7 +543,9 @@ namespace StockSharp.Algo.Strategies
 					isp.SubscriptionStopped       -= OnConnectorSubscriptionStopped;
 					isp.SubscriptionFailed        -= OnConnectorSubscriptionFailed;
 
-					UnSubscribe(true);
+					// do not make any trading activity on disposing stage
+					if (!IsDisposeStarted)
+						UnSubscribe(true);
 				}
 
 				_connector = value;
@@ -3363,8 +3365,6 @@ namespace StockSharp.Algo.Strategies
 		{
 			ChildStrategies.ForEach(s => s.Dispose());
 			ChildStrategies.Clear();
-
-			UnSubscribe(true);
 
 			Connector = null;
 
