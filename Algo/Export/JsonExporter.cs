@@ -6,11 +6,25 @@
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 	
 	using Newtonsoft.Json;
 
 	using StockSharp.Messages;
+
+	static class Helper
+	{
+		[Obsolete]
+		public static JsonWriter WriteProperty(this JsonWriter writer, string name, object value)
+		{
+			if (writer is null)
+				throw new ArgumentNullException(nameof(writer));
+
+			writer.WritePropertyName(name);
+			writer.WriteValue(value);
+
+			return writer;
+		}
+	}
 
 	/// <summary>
 	/// The export into json.

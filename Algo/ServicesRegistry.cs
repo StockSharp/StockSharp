@@ -187,34 +187,14 @@ namespace StockSharp.Algo
 		public static DriveCache TryDriveCache => ConfigManager.TryGetService<DriveCache>();
 
 		/// <summary>
-		/// Compiler service.
+		/// <see cref="ICompiler"/>.
 		/// </summary>
-		[Obsolete]
-		public static ICompilerService CompilerService => ConfigManager.GetService<ICompilerService>();
-
-		/// <summary>
-		/// Compiler service.
-		/// </summary>
-		[Obsolete]
-		public static ICompilerService TryCompilerService => ConfigManager.TryGetService<ICompilerService>();
+		public static ICompiler Compiler => ConfigManager.GetService<ICompiler>();
 
 		/// <summary>
 		/// <see cref="ICompiler"/>.
 		/// </summary>
-		public static ICompiler Compiler => ConfigManager.GetService<ICompiler>()
-#pragma warning disable CS0612 // Type or member is obsolete
-			?? CompilerService?.GetCompiler()
-#pragma warning restore CS0612 // Type or member is obsolete
-		;
-
-		/// <summary>
-		/// <see cref="ICompiler"/>.
-		/// </summary>
-		public static ICompiler TryCompiler => ConfigManager.TryGetService<ICompiler>()
-#pragma warning disable CS0612 // Type or member is obsolete
-			?? TryCompilerService?.GetCompiler()
-#pragma warning restore CS0612 // Type or member is obsolete
-		;
+		public static ICompiler TryCompiler => ConfigManager.TryGetService<ICompiler>();
 
 		/// <summary>
 		/// Excel provider.
