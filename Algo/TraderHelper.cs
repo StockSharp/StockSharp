@@ -65,20 +65,13 @@ namespace StockSharp.Algo
 		{
 			_orderStateValidator = new(s => (int)s);
 
-			_orderStateValidator[OrderStates.None, OrderStates.None] = true;
 			_orderStateValidator[OrderStates.None, OrderStates.Pending] = true;
 			_orderStateValidator[OrderStates.None, OrderStates.Active] = true;
 			_orderStateValidator[OrderStates.None, OrderStates.Done] = true;
 			_orderStateValidator[OrderStates.None, OrderStates.Failed] = true;
-
-			_orderStateValidator[OrderStates.Pending, OrderStates.Pending] = true;
 			_orderStateValidator[OrderStates.Pending, OrderStates.Active] = true;
-			//_orderStateValidator[OrderStates.Pending, OrderStates.Done] = true;
 			_orderStateValidator[OrderStates.Pending, OrderStates.Failed] = true;
-			_orderStateValidator[OrderStates.Active, OrderStates.Active] = true;
 			_orderStateValidator[OrderStates.Active, OrderStates.Done] = true;
-			_orderStateValidator[OrderStates.Done, OrderStates.Done] = true;
-			_orderStateValidator[OrderStates.Failed, OrderStates.Failed] = true;
 		}
 
 		/// <summary>
@@ -103,7 +96,7 @@ namespace StockSharp.Algo
 		/// <returns>Check result.</returns>
 		public static bool VerifyOrderState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs)
 		{
-			var isInvalid = currState != null && !_orderStateValidator[currState.Value, newState];
+			var isInvalid = currState is not null && currState != newState && !_orderStateValidator[currState.Value, newState];
 
 			if (isInvalid)
 				logs?.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
