@@ -35,6 +35,33 @@ namespace StockSharp.Messages
 	/// </summary>
 	public static partial class Extensions
 	{
+		private class StateChangeValidator<T>
+		{
+			private readonly bool[][] _map;
+
+			private readonly Func<T, int> _converter;
+
+			public StateChangeValidator(Func<T, int> converter)
+			{
+				_converter = converter ?? throw new ArgumentNullException(nameof(converter));
+
+				_map = new bool[Enumerator.GetValues<T>().Count()][];
+
+				for (var i = 0; i < _map.Length; i++)
+					_map[i] = new bool[_map.Length];
+			}
+
+			public bool this[T from, T to]
+			{
+				get => _map[_converter(from)][_converter(to)];
+				set => _map[_converter(from)][_converter(to)] = value;
+			}
+		}
+
+		private static readonly StateChangeValidator<OrderStates> _orderStateValidator;
+		private static readonly StateChangeValidator<ChannelStates> _channelStateValidator;
+
+
 		static Extensions()
 		{
 			static string TimeSpanToString(TimeSpan arg) => arg.ToString().Replace(':', '-');
@@ -56,6 +83,28 @@ namespace StockSharp.Messages
 				};
 			}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}", a => a is not null && a.BoxSize > 0 && a.ReversalAmount > 0);
 			RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, MarketDataTypes.CandleHeikinAshi, typeof(HeikinAshiCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
+
+			_orderStateValidator = new(s => (int)s);
+
+			_orderStateValidator[OrderStates.None, OrderStates.Pending] = true;
+			_orderStateValidator[OrderStates.None, OrderStates.Active] = true;
+			_orderStateValidator[OrderStates.None, OrderStates.Done] = true;
+			_orderStateValidator[OrderStates.None, OrderStates.Failed] = true;
+			_orderStateValidator[OrderStates.Pending, OrderStates.Active] = true;
+			_orderStateValidator[OrderStates.Pending, OrderStates.Failed] = true;
+			_orderStateValidator[OrderStates.Active, OrderStates.Done] = true;
+
+			_channelStateValidator = new(s => (int)s);
+
+			_channelStateValidator[ChannelStates.Stopped, ChannelStates.Starting] = true;
+			_channelStateValidator[ChannelStates.Starting, ChannelStates.Stopped] = true;
+			_channelStateValidator[ChannelStates.Starting, ChannelStates.Started] = true;
+			_channelStateValidator[ChannelStates.Started, ChannelStates.Stopping] = true;
+			_channelStateValidator[ChannelStates.Started, ChannelStates.Suspending] = true;
+			_channelStateValidator[ChannelStates.Suspending, ChannelStates.Suspended] = true;
+			_channelStateValidator[ChannelStates.Suspended, ChannelStates.Starting] = true;
+			_channelStateValidator[ChannelStates.Suspended, ChannelStates.Stopping] = true;
+			_channelStateValidator[ChannelStates.Stopping, ChannelStates.Stopped] = true;
 		}
 
 		/// <summary>
@@ -5575,6 +5624,139 @@ namespace StockSharp.Messages
 
 				return props;
 			});
+		}
+
+		/// <summary>
+		/// Convert order changes to final snapshot.
+		/// </summary>
+		/// <param name="diffs">Changes.</param>
+		/// <param name="transactionId">Transaction ID.</param>
+		/// <param name="logs">Logs.</param>
+		/// <returns>Snapshot.</returns>
+		public static ExecutionMessage ToOrderSnapshot(this IEnumerable<ExecutionMessage> diffs, long transactionId, ILogReceiver logs)
+		{
+			if (diffs is null)
+				throw new ArgumentNullException(nameof(diffs));
+
+			diffs = diffs.OrderBy(m =>
+			{
+				return m.OrderState switch
+				{
+					null or OrderStates.None => 0,
+					OrderStates.Pending => 1,
+					OrderStates.Active => 2,
+					OrderStates.Done or OrderStates.Failed => 3,
+					_ => throw new ArgumentOutOfRangeException(m.OrderState.ToString()),
+				};
+			});
+
+			ExecutionMessage snapshot = null;
+
+			foreach (var execMsg in diffs)
+			{
+				if (!execMsg.HasOrderInfo)
+					throw new InvalidOperationException(LocalizedStrings.Str3794Params.Put(transactionId));
+
+				if (snapshot is null)
+					snapshot = execMsg;
+				else
+				{
+					if (execMsg.Balance != null)
+						snapshot.Balance = snapshot.Balance.ApplyNewBalance(execMsg.Balance.Value, transactionId, logs);
+
+					if (execMsg.OrderState != null)
+					{
+						snapshot.OrderState.VerifyOrderState(execMsg.OrderState.Value, transactionId, logs);
+						snapshot.OrderState = execMsg.OrderState.Value;
+					}
+
+					if (execMsg.OrderStatus != null)
+						snapshot.OrderStatus = execMsg.OrderStatus;
+
+					if (execMsg.OrderId != null)
+						snapshot.OrderId = execMsg.OrderId;
+
+					if (!execMsg.OrderStringId.IsEmpty())
+						snapshot.OrderStringId = execMsg.OrderStringId;
+
+					if (execMsg.OrderBoardId != null)
+						snapshot.OrderBoardId = execMsg.OrderBoardId;
+
+					if (execMsg.PnL != null)
+						snapshot.PnL = execMsg.PnL;
+
+					if (execMsg.Position != null)
+						snapshot.Position = execMsg.Position;
+
+					if (execMsg.Commission != null)
+						snapshot.Commission = execMsg.Commission;
+
+					if (execMsg.CommissionCurrency != null)
+						snapshot.CommissionCurrency = execMsg.CommissionCurrency;
+
+					if (execMsg.AveragePrice != null)
+						snapshot.AveragePrice = execMsg.AveragePrice;
+
+					if (execMsg.Latency != null)
+						snapshot.Latency = execMsg.Latency;
+				}
+			}
+
+			if (snapshot is null)
+				throw new InvalidOperationException(LocalizedStrings.Str1702Params.Put(transactionId));
+
+			return snapshot;
+		}
+
+		/// <summary>
+		/// Check the possibility <see cref="ExecutionMessage.Balance"/> change.
+		/// </summary>
+		/// <param name="currBal">Current balance.</param>
+		/// <param name="newBal">New balance.</param>
+		/// <param name="transactionId">Transaction id.</param>
+		/// <param name="logs">Logs.</param>
+		/// <returns>New balance.</returns>
+		public static decimal ApplyNewBalance(this decimal? currBal, decimal newBal, long transactionId, ILogReceiver logs)
+		{
+			if (logs is null)
+				throw new ArgumentNullException(nameof(logs));
+
+			if (newBal < 0)
+				logs.AddErrorLog($"Order {transactionId}: balance {newBal} < 0");
+
+			if (currBal < newBal)
+				logs.AddErrorLog($"Order {transactionId}: bal_old {currBal} -> bal_new {newBal}");
+
+			return newBal;
+		}
+
+		/// <summary>
+		/// Validate state change.
+		/// </summary>
+		/// <param name="currState">Current state.</param>
+		/// <param name="newState">New state.</param>
+		public static void ValidateChannelState(this ChannelStates currState, ChannelStates newState)
+		{
+			if (!_channelStateValidator[currState, newState])
+				throw new InvalidOperationException($"{currState}->{newState}");
+		}
+
+		/// <summary>
+		/// Check the possibility <see cref="OrderStates"/> change.
+		/// </summary>
+		/// <param name="currState">Current order's state.</param>
+		/// <param name="newState">New state.</param>
+		/// <param name="transactionId">Transaction id.</param>
+		/// <param name="logs">Logs.</param>
+		/// <returns>Check result.</returns>
+		public static bool VerifyOrderState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs)
+		{
+			var isInvalid = currState is not null && currState != newState && !_orderStateValidator[currState.Value, newState];
+
+			if (isInvalid)
+				logs?.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
+
+			return !isInvalid;
 		}
 	}
 }
