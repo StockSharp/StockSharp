@@ -28,23 +28,23 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PnLInfo"/>.
 		/// </summary>
-		/// <param name="trade">Own trade.</param>
+		/// <param name="serverTime"><see cref="ServerTime"/>.</param>
 		/// <param name="closedVolume">The volume of position, which was closed by own trade.</param>
 		/// <param name="pnL">The profit, realized by this trade.</param>
-		public PnLInfo(ExecutionMessage trade, decimal closedVolume, decimal pnL)
+		public PnLInfo(DateTimeOffset serverTime, decimal closedVolume, decimal pnL)
 		{
 			if (closedVolume < 0)
 				throw new ArgumentOutOfRangeException(nameof(closedVolume), closedVolume, LocalizedStrings.Str946);
 
-			Trade = trade ?? throw new ArgumentNullException(nameof(trade));
+			ServerTime = serverTime;
 			ClosedVolume = closedVolume;
 			PnL = pnL;
 		}
 
 		/// <summary>
-		/// Own trade.
+		/// Time.
 		/// </summary>
-		public ExecutionMessage Trade { get; }
+		public DateTimeOffset ServerTime { get; }
 
 		/// <summary>
 		/// The volume of position, which was closed by own trade.

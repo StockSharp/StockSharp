@@ -234,7 +234,7 @@ namespace StockSharp.Algo.PnL
 				RealizedPnL += tradePnL;
 			}
 
-			return new PnLInfo(trade, closedVolume, tradePnL);
+			return new(trade.ServerTime, closedVolume, tradePnL);
 		}
 
 		/// <summary>

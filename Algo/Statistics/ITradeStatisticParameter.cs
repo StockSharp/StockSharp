@@ -398,7 +398,7 @@ namespace StockSharp.Algo.Statistics
 			if (info is null)
 				throw new ArgumentNullException(nameof(info));
 
-			var date = Align(info.Trade.ServerTime.UtcDateTime);
+			var date = Align(info.ServerTime.UtcDateTime);
 
 			if (_currStart == default)
 			{
