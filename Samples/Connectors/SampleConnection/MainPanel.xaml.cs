@@ -19,6 +19,7 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
+	using StockSharp.Xaml.GridControl;
 
 	public partial class MainPanel
 	{
@@ -185,6 +186,9 @@
 			}
 
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
+
+			// for show mini chart in SecurityGrid
+			_securitiesWindow.SecurityPicker.PriceChartDataProvider = new PriceChartDataProvider(Connector);
 
 			try
 			{
