@@ -7,8 +7,6 @@ using System.Linq;
 using Ecng.Collections;
 using Ecng.Common;
 
-using StockSharp.Localization;
-
 /// <summary>
 /// <see cref="IStrategyParam"/> dictionary.
 /// </summary>
@@ -42,18 +40,13 @@ public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, 
 	public IStrategyParam GetByName(string name)
 		=> TryGetByName(name) ?? throw new ArgumentException($"Parameter {name} doesn't exist.");
 
+	private static string GetKey(IStrategyParam p) => p.CheckOnNull(nameof(p)).Id;
+
 	/// <summary>
 	/// Add parameter.
 	/// </summary>
 	/// <param name="p"><see cref="IStrategyParam"/></param>
-	public void Add(IStrategyParam p)
-	{
-		if (p is null)
-			throw new ArgumentNullException(nameof(p));
-
-		if (!_strategy.Parameters.TryAdd2(p.Id, p))
-			throw new ArgumentException(LocalizedStrings.CompositionAlreadyExistParams.Put(p.Name, string.Empty), nameof(p));
-	}
+	public void Add(IStrategyParam p) => Add(GetKey(p), p);
 
 	/// <inheritdoc/>
 	public override void Add(string key, IStrategyParam value)
@@ -62,28 +55,40 @@ public class StrategyParameterDictionary : CachedSynchronizedDictionary<string, 
 		value.PropertyChanged += OnPropertyChanged;
 	}
 
+	/// <summary>
+	/// Remove parameter.
+	/// </summary>
+	/// <param name="p"><see cref="IStrategyParam"/></param>
+	public bool Remove(IStrategyParam p) => Remove(GetKey(p));
+
 	/// <inheritdoc/>
 	public override bool Remove(string key)
 	{
-		if (!this.TryGetAndRemove(key, out var p))
-			return false;
+		lock (SyncRoot)
+		{
+			if (!TryGetValue(key, out var p))
+				return false;
 
-		p.PropertyChanged -= OnPropertyChanged;
+			base.Remove(key);
+			p.PropertyChanged -= OnPropertyChanged;
+		}
+
 		return true;
 	}
 
 	/// <inheritdoc/>
 	public override void Clear()
 	{
-		CachedValues.ForEach(p => p.PropertyChanged -= OnPropertyChanged);
-
+		Unsubscribe();
 		base.Clear();
 	}
+
+	private void Unsubscribe() => CachedValues.ForEach(p => p.PropertyChanged -= OnPropertyChanged);
 
 	/// <inheritdoc/>
 	public void Dispose()
 	{
-		CachedValues.ForEach(p => p.PropertyChanged -= OnPropertyChanged);
+		Unsubscribe();
 		GC.SuppressFinalize(this);
 	}
 
