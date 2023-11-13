@@ -60,7 +60,7 @@
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 			<sx:PropertyGridEx x:Name="GeneticSettings" IsEnabled="{Binding ElementName=Genetic, Path=IsChecked}" />
-			<sx:StrategiesStatisticsPanel x:Name="Stat" Grid.Column="2" ShowProgress="False" />
+			<sx:StrategiesStatisticsPanel x:Name="Stat" Grid.Column="2" ShowProgress="True" ShowPnLChart="True" />
 		</Grid>
 	</Grid>
 </Window>

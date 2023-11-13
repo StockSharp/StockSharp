@@ -29,17 +29,19 @@ namespace SampleHistoryTestingParallel
 	using Ecng.Compilation;
 	using Ecng.Configuration;
 	using Ecng.Compilation.Roslyn;
+	using Ecng.ComponentModel;
+	using Ecng.Collections;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Optimization;
+	using StockSharp.Algo.Commissions;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Configuration;
-	using StockSharp.Algo;
-	using StockSharp.Algo.Commissions;
 
 	public partial class MainWindow
 	{
@@ -76,6 +78,7 @@ namespace SampleHistoryTestingParallel
 			TestingProcessText.Text = string.Empty;
 
 			Stat.Clear();
+			Stat.ClearColumns();
 			Stat.CreateColumns(new SampleHistoryTesting.SmaStrategy());
 
 			var logManager = new LogManager();
@@ -151,13 +154,15 @@ namespace SampleHistoryTestingParallel
 			// settings caching mode non security optimized param
 			_optimizer.AdapterCache = new();
 
+			var ids = new SynchronizedSet<Guid>();
+
 			// handle single iteration progress
 			_optimizer.SingleProgressChanged += (s, a, p) =>
 			{
-				if (p != 100)
-					return;
-
-				this.GuiAsync(() => Stat.AddStrategy(s));
+				if (ids.TryAdd(s.Id))
+					this.GuiAsync(() => Stat.AddStrategy(s));
+				else
+					this.GuiAsync(() => Stat.UpdateProgress(s, p));
 			};
 
 			// handle historical time for update ProgressBar
