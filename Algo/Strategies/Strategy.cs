@@ -405,6 +405,8 @@ namespace StockSharp.Algo.Strategies
 			NameGenerator = new StrategyNameGenerator(this);
 			NameGenerator.Changed += name => _name.Value = name;
 
+			Parameters = new(this);
+
 			_id = this.Param(nameof(Id), base.Id);
 			_volume = this.Param<decimal>(nameof(Volume), 1);
 			_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
@@ -809,7 +811,7 @@ namespace StockSharp.Algo.Strategies
 		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
-		public StrategyParameterDictionary Parameters { get; } = new();
+		public StrategyParameterDictionary Parameters { get; }
 
 		/// <summary>
 		/// <see cref="Parameters"/> change event.
@@ -3367,6 +3369,8 @@ namespace StockSharp.Algo.Strategies
 			ChildStrategies.Clear();
 
 			Connector = null;
+
+			Parameters.Dispose();
 
 			base.DisposeManaged();
 		}

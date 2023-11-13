@@ -11,6 +11,16 @@ namespace StockSharp.Algo.Strategies
 	/// </summary>
 	public static class StrategyParamHelper
 	{
+		private static StrategyParam<T> TryAdd<T>(this Strategy strategy, StrategyParam<T> p)
+		{
+			if (strategy is null)
+				throw new ArgumentNullException(nameof(strategy));
+
+			strategy.Parameters.Add(p);
+
+			return p;
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
@@ -21,7 +31,7 @@ namespace StockSharp.Algo.Strategies
 		/// <returns>The strategy parameter.</returns>
 		public static StrategyParam<T> Param<T>(this Strategy strategy, string name, T initialValue = default)
 		{
-			return new StrategyParam<T>(strategy, name, initialValue);
+			return strategy.TryAdd(new StrategyParam<T>(name, initialValue));
 		}
 
 		/// <summary>
@@ -35,7 +45,7 @@ namespace StockSharp.Algo.Strategies
 		/// <returns>The strategy parameter.</returns>
 		public static StrategyParam<T> Param<T>(this Strategy strategy, string id, string name, T initialValue = default)
 		{
-			return new StrategyParam<T>(strategy, id, name, initialValue);
+			return strategy.TryAdd(new StrategyParam<T>(id, name, initialValue));
 		}
 
 		/// <summary>

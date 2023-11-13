@@ -22,14 +22,14 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	/// <summary>
 	/// The strategy parameter.
 	/// </summary>
-	public interface IStrategyParam : IPersistable
+	public interface IStrategyParam : IPersistable, INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Parameter identifier.
@@ -76,51 +76,46 @@ namespace StockSharp.Algo.Strategies
 	/// Wrapper for typified access to the strategy parameter.
 	/// </summary>
 	/// <typeparam name="T">The type of the parameter value.</typeparam>
-	public class StrategyParam<T> : IStrategyParam
+	public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	{
 		private readonly IEqualityComparer<T> _comparer;
-		private readonly Strategy _strategy;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <param name="strategy">Strategy.</param>
 		/// <param name="name">Parameter name.</param>
-		public StrategyParam(Strategy strategy, string name)
-			: this(strategy, name, name)
+		public StrategyParam(string name)
+			: this(name, name)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <param name="strategy">Strategy.</param>
 		/// <param name="id">Parameter identifier.</param>
 		/// <param name="name">Parameter name.</param>
-		public StrategyParam(Strategy strategy, string id, string name)
-			: this(strategy, id, name, default)
+		public StrategyParam(string id, string name)
+			: this(id, name, default)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <param name="strategy">Strategy.</param>
 		/// <param name="name">Parameter name.</param>
 		/// <param name="initialValue">The initial value.</param>
-		public StrategyParam(Strategy strategy, string name, T initialValue)
-			: this(strategy, name, name, initialValue)
+		public StrategyParam(string name, T initialValue)
+			: this(name, name, initialValue)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <param name="strategy">Strategy.</param>
 		/// <param name="id">Parameter identifier.</param>
 		/// <param name="name">Parameter name.</param>
 		/// <param name="initialValue">The initial value.</param>
-		public StrategyParam(Strategy strategy, string id, string name, T initialValue)
+		public StrategyParam(string id, string name, T initialValue)
 		{
 			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
@@ -128,13 +123,9 @@ namespace StockSharp.Algo.Strategies
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
-			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			Id = id;
 			Name = name;
 			_value = initialValue;
-
-			if (!_strategy.Parameters.TryAdd2(id, this))
-				throw new ArgumentException(LocalizedStrings.CompositionAlreadyExistParams.Put(name, string.Empty), nameof(name));
 
 			CanOptimize = typeof(T).CanOptimize();
 			AllowNull = typeof(T).IsNullable() || typeof(T).IsClass || typeof(T).IsInterface;
@@ -179,7 +170,7 @@ namespace StockSharp.Algo.Strategies
 					propChange.PropertyChanged -= OnValueInnerStateChanged;
 
 				_value = value;
-				_strategy.RaiseParametersChanged(Name);
+				this.NotifyChanged(nameof(Value));
 
 				if (_value is INotifyPropertyChanged propChange2)
 					propChange2.PropertyChanged += OnValueInnerStateChanged;
@@ -208,7 +199,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnValueInnerStateChanged(object sender, PropertyChangedEventArgs e)
 		{
-			_strategy.RaiseParametersChanged(Name);
+			this.NotifyChanged(nameof(Value));
 		}
 
 		/// <summary>
@@ -226,7 +217,7 @@ namespace StockSharp.Algo.Strategies
 			}
 			catch (Exception ex)
 			{
-				_strategy.AddErrorLog(ex);
+				ex.LogError();
 			}
 
 			CanOptimize = storage.GetValue(nameof(CanOptimize), CanOptimize);

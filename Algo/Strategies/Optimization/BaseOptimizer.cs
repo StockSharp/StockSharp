@@ -404,7 +404,12 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				return;
 
 			if (lastStep < 100)
+			{
 				SingleProgressChanged?.Invoke(strategy, parameters, 100);
+
+				strategy.Stop();
+				strategy.Dispose();
+			}
 
 			var needStop = false;
 

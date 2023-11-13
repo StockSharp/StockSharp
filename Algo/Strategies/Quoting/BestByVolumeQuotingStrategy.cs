@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		public BestByVolumeQuotingStrategy(Sides quotingDirection, decimal quotingVolume)
 			: base(quotingDirection, quotingVolume)
 		{
-			_volumeExchange = new StrategyParam<Unit>(this, nameof(VolumeExchange), new Unit());
+			_volumeExchange = this.Param(nameof(VolumeExchange), new Unit());
 		}
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		public BestByVolumeQuotingStrategy(Order order, Unit volumeExchange)
 			: base(order)
 		{
-			_volumeExchange = new StrategyParam<Unit>(this, nameof(VolumeExchange), volumeExchange);
+			_volumeExchange = this.Param(nameof(VolumeExchange), volumeExchange);
 		}
 
 		private readonly StrategyParam<Unit> _volumeExchange;
