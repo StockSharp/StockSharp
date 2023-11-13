@@ -1600,7 +1600,7 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			return provider.Lookup(LookupAllCriteria);
+			return provider.Lookup(Extensions.LookupAllCriteriaMessage);
 		}
 
 		/// <summary>
