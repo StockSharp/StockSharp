@@ -47,6 +47,7 @@
 			CandlePatternsFile = Path.Combine(AppDataPath, $"candle_patterns{DefaultSettingsExt}");
 			CompilerCacheDir = Path.Combine(AppDataPath, "compiler_cache");
 			LogsDir = Path.Combine(AppDataPath, "Logs");
+			ReportLogsPath = Path.Combine(AppDataPath, "BugReports");
 			InstallerDir = Path.Combine(CompanyPath, "Installer");
 			InstallerInstallationsConfigPath = Path.Combine(InstallerDir, $"installer_apps_installed{DefaultSettingsExt}");
 
@@ -127,6 +128,11 @@
 		/// The path to the settings directory.
 		/// </summary>
 		public static readonly string AppDataPath;
+
+		/// <summary>
+		/// The path to the settings directory.
+		/// </summary>
+		public static readonly string ReportLogsPath;
 
 		/// <summary>
 		/// The path to the configuration file of platform definition.
