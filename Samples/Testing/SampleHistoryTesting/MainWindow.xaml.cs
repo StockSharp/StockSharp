@@ -443,7 +443,7 @@ namespace SampleHistoryTesting
 					//MarketTimeChangedInterval = timeFrame,
 
 					// 1 cent commission for trade
-					CommissionRules = new CommissionRule[]
+					CommissionRules = new ICommissionRule[]
 					{
 						new CommissionPerTradeRule { Value = 0.01m },
 					},

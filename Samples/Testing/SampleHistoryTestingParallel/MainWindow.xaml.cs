@@ -142,7 +142,7 @@ namespace SampleHistoryTestingParallel
 			settings.MaxIterations = 100;
 
 			// 1 cent commission for trade
-			settings.CommissionRules = new CommissionRule[]
+			settings.CommissionRules = new ICommissionRule[]
 			{
 				new CommissionPerTradeRule { Value = 0.01m },
 			};

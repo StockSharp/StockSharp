@@ -226,7 +226,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			}
 		}
 
-		private IEnumerable<CommissionRule> _commissionRules = Enumerable.Empty<CommissionRule>();
+		private IEnumerable<ICommissionRule> _commissionRules = Enumerable.Empty<ICommissionRule>();
 
 		/// <summary>
 		/// Commission rules.
@@ -237,7 +237,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Name = LocalizedStrings.CommissionKey,
 			Description = LocalizedStrings.Str160Key,
 			Order = 110)]
-		public IEnumerable<CommissionRule> CommissionRules
+		public IEnumerable<ICommissionRule> CommissionRules
 		{
 			get => _commissionRules;
 			set
@@ -293,7 +293,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			var commRules = storage.GetValue<SettingsStorage[]>(nameof(CommissionRules));
 			if (commRules is not null)
-				CommissionRules = commRules.Select(i => i.LoadEntire<CommissionRule>()).ToArray();
+				CommissionRules = commRules.Select(i => i.LoadEntire<ICommissionRule>()).ToArray();
 		}
 	}
 }
