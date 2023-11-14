@@ -1,4 +1,8 @@
 {
+  "RemoveAppDataFolder": {
+    "en": "Remove the application data folder including all downloaded data and settings",
+    "ru": "Удалить папку данных приложения включая все скачанные данные и настройки"
+  },
   "CompileCodeFirst": {
     "en": "Compile code first.",
     "ru": "Код должен быть скомпилирован."
