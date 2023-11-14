@@ -5735,11 +5735,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="currState">Current state.</param>
 		/// <param name="newState">New state.</param>
-		public static void ValidateChannelState(this ChannelStates currState, ChannelStates newState)
-		{
-			if (!_channelStateValidator[currState, newState])
-				throw new InvalidOperationException($"{currState}->{newState}");
-		}
+		public static bool ValidateChannelState(this ChannelStates currState, ChannelStates newState)
+			=> _channelStateValidator[currState, newState];
 
 		/// <summary>
 		/// Check the possibility <see cref="OrderStates"/> change.
