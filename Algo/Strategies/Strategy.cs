@@ -783,13 +783,13 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public event Action LatencyChanged;
 
-		private StatisticManager _statisticManager = new();
+		private IStatisticManager _statisticManager = new StatisticManager();
 
 		/// <summary>
 		/// The statistics manager.
 		/// </summary>
 		[Browsable(false)]
-		public StatisticManager StatisticManager
+		public IStatisticManager StatisticManager
 		{
 			get => _statisticManager;
 			protected set => _statisticManager = value ?? throw new ArgumentNullException(nameof(value));
@@ -1639,7 +1639,7 @@ namespace StockSharp.Algo.Strategies
 			_lastRegisterTime = default;
 
 			if (Portfolio?.CurrentValue is not null)
-				StatisticManager.Init(Portfolio.CurrentValue.Value);
+				StatisticManager.Init<IPnLStatisticParameter, decimal>(Portfolio.CurrentValue.Value);
 		}
 
 		/// <summary>

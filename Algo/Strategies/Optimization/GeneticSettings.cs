@@ -91,7 +91,7 @@ public class GeneticSettings : NotifiableObject, IPersistable
 		{
 			_acronymsDict = new PairSet<string, StatisticParameterTypes>(StringComparer.InvariantCultureIgnoreCase);
 			_acronyms.ForEach(a => _acronymsDict.Add(a.acronym, a.type));
-			_allParams = StatisticManager.GetAllParameters().OrderBy(VarNameFromParam).ToArray();
+			_allParams = StatisticParameterRegistry.All.OrderBy(VarNameFromParam).ToArray();
 			_paramByType = _allParams.ToDictionary(v => v.Type);
 		}
 

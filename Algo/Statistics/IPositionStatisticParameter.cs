@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The interface, describing statistic parameter, calculated based on position.
 	/// </summary>
-	public interface IPositionStatisticParameter
+	public interface IPositionStatisticParameter : IStatisticParameter
 	{
 		/// <summary>
 		/// To add the new position value to the parameter.

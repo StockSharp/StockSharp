@@ -78,6 +78,12 @@ namespace StockSharp.Algo.Statistics
 		/// To reset the parameter value.
 		/// </summary>
 		void Reset();
+
+		/// <summary>
+		/// Init by initial value.
+		/// </summary>
+		/// <param name="beginValue">Initial value.</param>
+		void Init(object beginValue);
 	}
 
 	/// <summary>
@@ -90,6 +96,12 @@ namespace StockSharp.Algo.Statistics
 		/// The current value of the parameter.
 		/// </summary>
 		new TValue Value { get; }
+
+		/// <summary>
+		/// Init by initial value.
+		/// </summary>
+		/// <param name="beginValue">Initial value.</param>
+		void Init(TValue beginValue);
 	}
 
 	/// <summary>
@@ -177,10 +189,12 @@ namespace StockSharp.Algo.Statistics
 		public event Action ValueChanged;
 
 		/// <inheritdoc />
-		public virtual void Reset()
-		{
-			Value = default;
-		}
+		public virtual void Reset() => Value = default;
+
+		void IStatisticParameter.Init(object beginValue) => Init((TValue)beginValue);
+
+		/// <inheritdoc/>
+		public virtual void Init(TValue beginValue) { }
 
 		/// <summary>
 		/// To call the event <see cref="ValueChanged"/>.

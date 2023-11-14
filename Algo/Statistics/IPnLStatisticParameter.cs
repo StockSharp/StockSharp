@@ -26,14 +26,8 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The interface, describing statistic parameter, calculated based on the profit-loss value (maximal contraction, Sharp coefficient etc.).
 	/// </summary>
-	public interface IPnLStatisticParameter
+	public interface IPnLStatisticParameter : IStatisticParameter
 	{
-		/// <summary>
-		/// Init by initial value.
-		/// </summary>
-		/// <param name="beginValue">Initial value.</param>
-		void Init(decimal beginValue);
-
 		/// <summary>
 		/// To add new data to the parameter.
 		/// </summary>
@@ -62,11 +56,6 @@ namespace StockSharp.Algo.Statistics
 		/// <inheritdoc />
 		public virtual void Add(DateTimeOffset marketTime, decimal pnl, decimal? commission)
 			=> throw new NotSupportedException();
-
-		/// <inheritdoc />
-		public virtual void Init(decimal beginValue)
-		{
-		}
 	}
 
 	/// <summary>

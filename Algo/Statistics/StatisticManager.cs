@@ -17,7 +17,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Statistics
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -25,12 +24,11 @@ namespace StockSharp.Algo.Statistics
 
 	using StockSharp.Algo.PnL;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The statistics manager.
 	/// </summary>
-	public class StatisticManager
+	public class StatisticManager : IStatisticManager
 	{
 		private sealed class EquityParameterList : CachedSynchronizedSet<IStatisticParameter>
 		{
@@ -103,8 +101,6 @@ namespace StockSharp.Algo.Statistics
 			}
 		}
 
-		private readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = new();
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StatisticManager"/>.
 		/// </summary>
@@ -148,97 +144,34 @@ namespace StockSharp.Algo.Statistics
 				new OrderCountParameter(),
 				new OrderErrorCountParameter(),
 				new OrderInsufficientFundErrorCountParameter(),
-				//new MaxSlippageParameter(),
-				//new MinSlippageParameter()
 			};
-
-			foreach (var p in _parameters.Cache)
-				_dict.Add(p.Type, p);
 		}
 
 		private readonly EquityParameterList _parameters;
+		IStatisticParameter[] IStatisticManager.Parameters => _parameters.Cache;
 
-		/// <summary>
-		/// Calculated parameters.
-		/// </summary>
-		public IStatisticParameter[] Parameters => _parameters.Cache;
-
-		/// <summary>
-		/// Get <see cref="IStatisticParameter"/> by the specified type.
-		/// </summary>
-		/// <param name="type"><see cref="StatisticParameterTypes"/></param>
-		/// <returns><see cref="IStatisticParameter"/></returns>
-		public IStatisticParameter GetByType(StatisticParameterTypes type)
-			=> _dict[type];
-
-		/// <summary>
-		/// Init by initial value.
-		/// </summary>
-		/// <param name="beginValue">Initial value.</param>
-		public virtual void Init(decimal beginValue)
-			=> _parameters.PnLParams.ForEach(p => p.Init(beginValue));
-
-		/// <summary>
-		/// To add the new profit-loss value.
-		/// </summary>
-		/// <param name="time">The change time <paramref name="pnl" />.</param>
-		/// <param name="pnl">New profit-loss value.</param>
-		/// <param name="commission">Commission.</param>
-		public virtual void AddPnL(DateTimeOffset time, decimal pnl, decimal? commission)
+		void IStatisticManager.AddPnL(DateTimeOffset time, decimal pnl, decimal? commission)
 			=> _parameters.PnLParams.ForEach(p => p.Add(time, pnl, commission));
 
-		/// <summary>
-		/// To add the new position value.
-		/// </summary>
-		/// <param name="time">The change time <paramref name="position" />.</param>
-		/// <param name="position">The new position value.</param>
-		public virtual void AddPosition(DateTimeOffset time, decimal position)
+		void IStatisticManager.AddPosition(DateTimeOffset time, decimal position)
 			=> _parameters.PositionParams.ForEach(p => p.Add(time, position));
 
-		/// <summary>
-		/// To add information about new trade.
-		/// </summary>
-		/// <param name="info">Information on new trade.</param>
-		public virtual void AddMyTrade(PnLInfo info)
+		void IStatisticManager.AddMyTrade(PnLInfo info)
 			=> _parameters.TradeParams.ForEach(p => p.Add(info));
 
-		/// <summary>
-		/// To add new order.
-		/// </summary>
-		/// <param name="order">New order.</param>
-		public virtual void AddNewOrder(Order order)
+		void IStatisticManager.AddNewOrder(Order order)
 			=> _parameters.OrderParams.ForEach(p => p.New(order));
 
-		/// <summary>
-		/// To add the changed order.
-		/// </summary>
-		/// <param name="order">The changed order.</param>
-		public virtual void AddChangedOrder(Order order)
+		void IStatisticManager.AddChangedOrder(Order order)
 			=> _parameters.OrderParams.ForEach(p => p.Changed(order));
 
-		/// <summary>
-		/// To add the order registration error.
-		/// </summary>
-		/// <param name="fail">Error registering order.</param>
-		public virtual void AddRegisterFailedOrder(OrderFail fail)
+		void IStatisticManager.AddRegisterFailedOrder(OrderFail fail)
 			=> _parameters.OrderParams.ForEach(p => p.RegisterFailed(fail));
 
-		/// <summary>
-		/// To add the order cancelling error.
-		/// </summary>
-		/// <param name="fail">The order error.</param>
-		public virtual void AddFailedOrderCancel(OrderFail fail)
+		void IStatisticManager.AddFailedOrderCancel(OrderFail fail)
 			=> _parameters.OrderParams.ForEach(p => p.CancelFailed(fail));
 
-		/// <summary>
-		/// To clear data on equity.
-		/// </summary>
-		public virtual void Reset()
+		void IStatisticManager.Reset()
 			=> _parameters.SyncDo(c => c.ForEach(p => p.Reset()));
-
-		/// <summary>
-		/// Return all available parameters.
-		/// </summary>
-		public static IStatisticParameter[] GetAllParameters() => new StatisticManager().Parameters;
 	}
 }

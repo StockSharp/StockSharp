@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The interface, describing statistic parameter, calculated based on trade.
 	/// </summary>
-	public interface ITradeStatisticParameter
+	public interface ITradeStatisticParameter : IStatisticParameter
 	{
 		/// <summary>
 		/// To add information about new trade to the parameter.

@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Statistics
 	/// <summary>
 	/// The interface, describing statistic parameter, calculated based on orders.
 	/// </summary>
-	public interface IOrderStatisticParameter
+	public interface IOrderStatisticParameter : IStatisticParameter
 	{
 		/// <summary>
 		/// To add to the parameter an information on new order.
