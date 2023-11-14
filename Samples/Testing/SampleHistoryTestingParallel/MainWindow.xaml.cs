@@ -246,9 +246,6 @@ namespace SampleHistoryTestingParallel
 						});
 					});
 
-				// all iterations must be done
-				btOptimizer.EmulationSettings.MaxIterations = periods.Count;
-
 				// start emulation
 				btOptimizer.Start(startTime, stopTime, strategies, periods.Count);
 			}
