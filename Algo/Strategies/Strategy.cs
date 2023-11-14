@@ -808,6 +808,31 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
+		/// The risk rules.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			GroupName = LocalizedStrings.SettingsKey,
+			Name = LocalizedStrings.XamlStr613Key,
+			Description = LocalizedStrings.RiskSettingsKey,
+			Order = 300)]
+		//[HideInOptimizer]
+		public IEnumerable<IRiskRule> RiskRules
+		{
+			get => _riskManager.Rules;
+			set
+			{
+				if (value is null)
+					throw new ArgumentNullException(nameof(value));
+
+				_riskManager.Rules.Clear();
+				_riskManager.Rules.AddRange(value);
+
+				RaiseParametersChanged();
+			}
+		}
+
+		/// <summary>
 		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
