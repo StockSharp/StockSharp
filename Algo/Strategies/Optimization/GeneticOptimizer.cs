@@ -39,6 +39,12 @@ public class GeneticOptimizer : BaseOptimizer
 			_calcFitness = calcFitness ?? throw new ArgumentNullException(nameof(calcFitness));
 			_startTime = startTime;
 			_stopTime = stopTime;
+
+			if (_strategy.Security is null)
+				throw new ArgumentException(LocalizedStrings.Str1380, nameof(strategy));
+
+			if (_strategy.Portfolio is null)
+				throw new ArgumentException(LocalizedStrings.Str1381, nameof(strategy));
 		}
 
 		double IFitness.Evaluate(IChromosome chromosome)
@@ -62,7 +68,7 @@ public class GeneticOptimizer : BaseOptimizer
 				strategy = _strategy.Clone();
 
 			strategy.Security = _strategy.Security;
-			strategy.Portfolio = Portfolio.CreateSimulator();
+			strategy.Portfolio = _strategy.Portfolio;
 
 			var genes = spc.GetGenes();
 			var parameters = new IStrategyParam[genes.Length];
