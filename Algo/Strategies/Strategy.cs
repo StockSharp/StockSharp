@@ -1852,6 +1852,8 @@ namespace StockSharp.Algo.Strategies
 				return;
 
 			SafeGetConnector().EditOrder(order, changes);
+
+			ProcessRisk(() => order.CreateReplaceMessage(changes, order.Security.ToSecurityId()));
 		}
 
 		/// <inheritdoc />
@@ -1882,8 +1884,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void ProcessRisk(Order order)
 		{
-			if (RiskManager.Rules.Count > 0)
-				ProcessRisk(order.CreateRegisterMessage());
+			ProcessRisk(() => order.CreateRegisterMessage());
 		}
 
 		private void ProcessChildOrderRegistering(Order order)
@@ -2524,6 +2525,8 @@ namespace StockSharp.Algo.Strategies
 		{
 			OrderRegisterFailed?.Invoke(fail);
 			StatisticManager.AddRegisterFailedOrder(fail);
+
+			ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
 		}
 
 		private void TryAddChildOrder(Order order)
@@ -2745,7 +2748,32 @@ namespace StockSharp.Algo.Strategies
 			if(IsDisposeStarted)
 				return;
 
-			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
+			OrderInfo info;
+
+			lock (_ordersInfo.SyncRoot)
+			{
+				info = _ordersInfo.TryGetValue(fail.Order);
+
+				if (info == null)
+					return;
+
+				info.RegistrationFail = fail;
+			}
+
+			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.TransactionId, fail.Error.Message);
+			//SlippageManager.RegisterFailed(fail);
+
+			TryInvoke(() => OnOrderRegisterFailed(fail));
+
+			if (info.IsOwn && MaxOrderRegisterErrorCount != -1)
+			{
+				OrderRegisterErrorCount++;
+
+				this.AddInfoLog(LocalizedStrings.Str1297Params, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
+
+				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
+					Stop();
+			}
 		}
 
 		private void UpdatePnLManager(Security security)
@@ -2841,7 +2869,7 @@ namespace StockSharp.Algo.Strategies
 					RaiseSlippageChanged();
 			});
 
-			ProcessRisk(execMsg);
+			ProcessRisk(() => execMsg);
 
 			return true;
 		}
@@ -2873,6 +2901,18 @@ namespace StockSharp.Algo.Strategies
 				{
 					var manager = PnLManager;
 					evt(_pfSubscription, Portfolio, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
+
+					ProcessRisk(() => new PositionChangeMessage
+					{
+						PortfolioName = Portfolio.Name,
+						SecurityId = SecurityId.Money,
+						ServerTime = time,
+						OriginalTransactionId = _pfSubscription.TransactionId,
+					}
+					.TryAdd(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
+					.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL)
+					.TryAdd(PositionChangeTypes.Commission, Commission)
+					);
 				}
 			}
 
@@ -3038,36 +3078,6 @@ namespace StockSharp.Algo.Strategies
 			StatisticManager.AddFailedOrderCancel(fail);
 		}
 
-		private void ProcessRegisterOrderFail(OrderFail fail, Action<OrderFail> evt)
-		{
-			OrderInfo info;
-
-			lock (_ordersInfo.SyncRoot)
-			{
-				info = _ordersInfo.TryGetValue(fail.Order);
-
-				if (info == null)
-					return;
-
-				info.RegistrationFail = fail;
-			}
-
-			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.TransactionId, fail.Error.Message);
-			//SlippageManager.RegisterFailed(fail);
-
-			TryInvoke(() => evt?.Invoke(fail));
-
-			if (info.IsOwn && MaxOrderRegisterErrorCount != -1)
-			{
-				OrderRegisterErrorCount++;
-
-				this.AddInfoLog(LocalizedStrings.Str1297Params, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
-
-				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
-					Stop();
-			}
-		}
-
 		/// <summary>
 		/// Processing of error, occurred as result of strategy operation.
 		/// </summary>
@@ -3119,9 +3129,15 @@ namespace StockSharp.Algo.Strategies
 			return info != null && info.IsOwn;
 		}
 
-		private void ProcessRisk(Message message)
+		private void ProcessRisk(Func<Message> getMessage)
 		{
-			foreach (var rule in RiskManager.ProcessRules(message))
+			if (getMessage is null)
+				throw new ArgumentNullException(nameof(getMessage));
+
+			if (RiskManager.Rules.Count == 0)
+				return;
+
+			foreach (var rule in RiskManager.ProcessRules(getMessage()))
 			{
 				this.AddWarningLog(LocalizedStrings.Str855Params,
 					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
@@ -3138,7 +3154,7 @@ namespace StockSharp.Algo.Strategies
 						CancelActiveOrders();
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(rule.Action.ToString());
 				}
 			}
 		}
