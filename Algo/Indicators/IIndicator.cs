@@ -67,8 +67,8 @@ namespace StockSharp.Algo.Indicators
 		bool IsFormed { get; }
 
 		/// <summary>
-		/// Number of values that need to be processed in order for the indicator to initialize (be "formed").
-		/// Null if undefined.
+		/// Number of values that need to be processed in order for the indicator to initialize (be <see cref="IsFormed"/> equals <see langword="true"/>).
+		/// <see langword="null"/> if undefined.
 		/// </summary>
 		int NumValuesToInitialize { get; }
 

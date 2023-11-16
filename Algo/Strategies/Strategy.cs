@@ -36,6 +36,7 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Algo.Indicators;
+	using StockSharp.Algo.Testing;
 
 	/// <summary>
 	/// <see cref="Order.Comment"/> auto-fill modes.
@@ -3182,6 +3183,40 @@ namespace StockSharp.Algo.Strategies
 			if (pf is not null)
 				yield return pf;
 		}
+
+		private TimeSpan? _historyRequired;
+
+		/// <summary>
+		/// History to initialize the strategy on Live trading.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings),
+			GroupName = LocalizedStrings.SettingsKey,
+			Name = LocalizedStrings.Str3172Key,
+			Description = LocalizedStrings.Str3173Key,
+			Order = 20)]
+		[TimeSpanEditor(Mask = TimeSpanEditorMask.Days | TimeSpanEditorMask.Hours | TimeSpanEditorMask.Minutes | TimeSpanEditorMask.Seconds)]
+		public TimeSpan? HistoryRequired
+		{
+			get => _historyRequired;
+			set
+			{
+				if (_historyRequired == value)
+					return;
+
+				_historyRequired = value;
+				RaiseParametersChanged();
+			}
+		}
+
+		/// <summary>
+		/// Calculated from code version of <see cref="HistoryRequired"/>.
+		/// </summary>
+		protected virtual TimeSpan? HistoryCalculated => null;
+
+		/// <summary>
+		/// Determines <see cref="Connector"/> is <see cref="HistoryEmulationConnector"/>.
+		/// </summary>
+		protected bool IsBacktesting => Connector is HistoryEmulationConnector;
 
 		private ISecurityProvider SecurityProvider => SafeGetConnector();
 
