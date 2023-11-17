@@ -280,7 +280,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="value">Value.</param>
-		/// <param name="getPart">The candle converter, through which its parameter can be got. By default, the <see cref="CandleIndicatorValue.ByClose"/> is used.</param>
+		/// <param name="getPart">The candle converter, through which its parameter can be got. By default, the <see cref="ByClose"/> is used.</param>
 		public CandleIndicatorValue(IIndicator indicator, ICandleMessage value, Func<ICandleMessage, decimal> getPart)
 			: base(indicator, value)
 		{

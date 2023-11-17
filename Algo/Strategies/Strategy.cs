@@ -163,7 +163,6 @@ namespace StockSharp.Algo.Strategies
 
 				item.OrderRegistering += _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered += _parent.ProcessOrder;
-				//item.ReRegistering += _parent.ReRegisterSlippage;
 				item.OrderChanged += _parent.OnChildOrderChanged;
 				item.OrderRegisterFailed += _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed += _parent.OnChildOrderCancelFailed;
@@ -223,7 +222,6 @@ namespace StockSharp.Algo.Strategies
 
 				item.OrderRegistering -= _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered -= _parent.ProcessOrder;
-				//item.ReRegistering -= _parent.ReRegisterSlippage;
 				item.OrderChanged -= _parent.OnChildOrderChanged;
 				item.OrderRegisterFailed -= _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed -= _parent.OnChildOrderCancelFailed;
@@ -289,7 +287,6 @@ namespace StockSharp.Algo.Strategies
 			public bool IsCanceled { get; set; }
 			public decimal ReceivedVolume { get; set; }
 			public OrderFail RegistrationFail { get; set; }
-			//public OrderFail CancelationFail { get; set; }
 			public OrderStates PrevState { get; set; }
 		}
 
@@ -687,8 +684,6 @@ namespace StockSharp.Algo.Strategies
 				RaiseParametersChanged();
 
 				this.Notify(nameof(Position));
-
-				//PositionManager.SecurityId = value?.ToSecurityId();
 			}
 		}
 
@@ -713,7 +708,7 @@ namespace StockSharp.Algo.Strategies
 		private IPnLManager _pnLManager = new PnLManager { UseOrderBook = true };
 
 		/// <summary>
-		/// The profit-loss manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="Strategy.ChildStrategies"/>.
+		/// The profit-loss manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="ChildStrategies"/>.
 		/// </summary>
 		[Browsable(false)]
 		public IPnLManager PnLManager
@@ -723,7 +718,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// The aggregate value of profit-loss without accounting commission <see cref="Strategy.Commission"/>.
+		/// The aggregate value of profit-loss without accounting commission <see cref="Commission"/>.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -820,7 +815,6 @@ namespace StockSharp.Algo.Strategies
 			Name = LocalizedStrings.XamlStr613Key,
 			Description = LocalizedStrings.RiskSettingsKey,
 			Order = 300)]
-		//[HideInOptimizer]
 		public IEnumerable<IRiskRule> RiskRules
 		{
 			get => _riskManager.Rules;
@@ -1145,7 +1139,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Strategy> ProcessStateChanged;
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.ProcessStateChanged"/>.
+		/// To call the event <see cref="ProcessStateChanged"/>.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		protected void RaiseProcessStateChanged(Strategy strategy)
@@ -1404,7 +1398,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<bool> _disposeOnStop;
 
 		/// <summary>
-		/// Automatically to clear resources, used by the strategy, when it stops (state <see cref="Strategy.ProcessState"/> becomes equal to <see cref="ProcessStates.Stopped"/>) and delete it from the parent strategy through <see cref="Strategy.ChildStrategies"/>.
+		/// Automatically to clear resources, used by the strategy, when it stops (state <see cref="ProcessState"/> becomes equal to <see cref="ProcessStates.Stopped"/>) and delete it from the parent strategy through <see cref="ChildStrategies"/>.
 		/// </summary>
 		/// <remarks>
 		/// The mode is used only for one-time strategies, i.e. for those strategies, which will not be started again (for example, quoting). It is disabled by default.
@@ -1873,8 +1867,6 @@ namespace StockSharp.Algo.Strategies
 			{
 				OnOrderReRegistering(oOrder, nOrder);
 
-				//ReRegisterSlippage(oOrder, nOrder);
-
 				SafeGetConnector().ReRegisterOrder(oOrder, nOrder);
 			});
 		}
@@ -2074,17 +2066,14 @@ namespace StockSharp.Algo.Strategies
 			{
 				if (order.Type == OrderTypes.Conditional)
 				{
-					//_stopOrders.Add(order);
 					OnOrderRegistered(order);
 
 					StatisticManager.AddNewOrder(order);
 				}
 				else
 				{
-					//_orders.Add(order);
 					OnOrderRegistered(order);
 
-					//SlippageManager.Registered(order);
 					PositionChangeMessage posChange = null;
 
 					if(!IsRootStrategy)
@@ -2152,7 +2141,7 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// It is used to restore a state of the strategy, when it is necessary to subscribe for getting data on orders, registered earlier.
 		/// </remarks>
-		[Obsolete]
+		[Obsolete("CanAttach method must be overrided.")]
 		public virtual void AttachOrder(Order order, IEnumerable<MyTrade> myTrades)
 		{
 			if (order == null)
@@ -2162,8 +2151,6 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(myTrades));
 
 			AttachOrder(order, true);
-
-			//myTrades.ForEach(OnConnectorNewMyTrade);
 		}
 
 		private void AttachOrder(Order order, bool restored)
@@ -2274,14 +2261,6 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.AddInfoLog(LocalizedStrings.Str1393);
 
-			//ThrowIfTraderNotRegistered();
-
-			//if (Security == null)
-			//	throw new InvalidOperationException(LocalizedStrings.Str1380);
-
-			//if (Portfolio == null)
-			//	throw new InvalidOperationException(LocalizedStrings.Str1381);
-
 			ChildStrategies.ForEach(s => s.Reset());
 
 			StatisticManager.Reset();
@@ -2289,13 +2268,8 @@ namespace StockSharp.Algo.Strategies
 			PnLManager.Reset();
 
 			Commission = default;
-			//CommissionManager.Reset();
-
 			Latency = default;
-			//LatencyManager.Reset();
-
 			Slippage = default;
-			//SlippageManager.Reset();
 
 			RiskManager.Reset();
 
@@ -2403,8 +2377,6 @@ namespace StockSharp.Algo.Strategies
 
 			if (DisposeOnStop)
 			{
-				//Trace.WriteLine(Name+" strategy-dispose-on-stop");
-
 				ParentStrategy?.ChildStrategies.Remove(this);
 
 				Dispose();
@@ -2462,7 +2434,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.OrderRegistering"/>.
+		/// To call the event <see cref="OrderRegistering"/>.
 		/// </summary>
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderRegistering(Order order)
@@ -2470,7 +2442,6 @@ namespace StockSharp.Algo.Strategies
 			TryAddChildOrder(order);
 
 			OrderRegistering?.Invoke(order);
-			//SlippageManager.Registering(order);
 		}
 
 		/// <summary>
@@ -2602,8 +2573,6 @@ namespace StockSharp.Algo.Strategies
 					{
 						switch (stateMsg.State)
 						{
-							//case ProcessStates.Stopped:
-							//	break;
 							case ProcessStates.Stopping:
 							{
 								if (ProcessState == ProcessStates.Started)
@@ -2622,8 +2591,6 @@ namespace StockSharp.Algo.Strategies
 
 								break;
 							}
-							//default:
-							//	throw new ArgumentOutOfRangeException();
 						}
 					}
 
@@ -2758,7 +2725,6 @@ namespace StockSharp.Algo.Strategies
 			}
 
 			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.TransactionId, fail.Error.Message);
-			//SlippageManager.RegisterFailed(fail);
 
 			TryInvoke(() => OnOrderRegisterFailed(fail));
 
@@ -2935,7 +2901,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To process orders, received for the connection <see cref="Strategy.Connector"/>, and find among them those, belonging to the strategy.
+		/// To process orders, received for the connection <see cref="Connector"/>, and find among them those, belonging to the strategy.
 		/// </summary>
 		/// <param name="newOrders">New orders.</param>
 		/// <returns>Orders, belonging to the strategy.</returns>
@@ -2979,8 +2945,6 @@ namespace StockSharp.Algo.Strategies
 
 			storage.SetValue(nameof(PnLManager), PnLManager.Save());
 			storage.SetValue(nameof(RiskManager), RiskManager.Save());
-			//storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
-			//storage.SetValue(nameof(PositionManager), PositionManager.Save());
 		}
 
 		/// <inheritdoc />
@@ -3039,7 +3003,6 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnChildOrderRegisterFailed(OrderFail fail)
 		{
-			//SlippageManager.RegisterFailed(fail);
 			TryInvoke(() => OrderRegisterFailed?.Invoke(fail));
 		}
 

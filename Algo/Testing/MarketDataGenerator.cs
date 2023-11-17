@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Testing
 		private RandomArray<int> _volumes;
 
 		/// <summary>
-		/// The massive of random volumes in the range from <see cref="MarketDataGenerator.MinVolume"/> to <see cref="MarketDataGenerator.MaxVolume"/>.
+		/// The massive of random volumes in the range from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
 		/// </summary>
 		public RandomArray<int> Volumes
 		{
@@ -201,7 +201,7 @@ namespace StockSharp.Algo.Testing
 		private RandomArray<int> _steps;
 
 		/// <summary>
-		/// The massive of random price increments in the range from 1 to <see cref="MarketDataGenerator.MaxPriceStepCount"/>.
+		/// The massive of random price increments in the range from 1 to <see cref="MaxPriceStepCount"/>.
 		/// </summary>
 		public RandomArray<int> Steps
 		{

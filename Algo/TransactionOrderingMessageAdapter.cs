@@ -19,7 +19,7 @@
 		{
 			public SubscriptionInfo(OrderStatusMessage original)
 			{
-				Original = original ?? throw new System.ArgumentNullException(nameof(original));
+				Original = original ?? throw new ArgumentNullException(nameof(original));
 			}
 
 			public SyncObject Sync { get; } = new SyncObject();

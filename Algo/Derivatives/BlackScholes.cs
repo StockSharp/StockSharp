@@ -178,7 +178,7 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// To round to <see cref="BlackScholes.RoundDecimals"/>.
+		/// To round to <see cref="RoundDecimals"/>.
 		/// </summary>
 		/// <param name="value">The initial value.</param>
 		/// <returns>The rounded value.</returns>
