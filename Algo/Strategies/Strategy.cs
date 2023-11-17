@@ -427,12 +427,14 @@ namespace StockSharp.Algo.Strategies
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
+			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired));
 
 			_ordersKeepTime.CanOptimize =
 			_registerInterval.CanOptimize =
 			_maxErrorCount.CanOptimize =
 			_maxOrderRegisterErrorCount.CanOptimize =
-			_maxRegisterCount.CanOptimize = false;
+			_maxRegisterCount.CanOptimize =
+			_historyRequired.CanOptimize = false;
 
 			InitMaxOrdersKeepTime();
 
@@ -3184,7 +3186,7 @@ namespace StockSharp.Algo.Strategies
 				yield return pf;
 		}
 
-		private TimeSpan? _historyRequired;
+		private readonly StrategyParam<TimeSpan?> _historyRequired;
 
 		/// <summary>
 		/// History to initialize the strategy on Live trading.
@@ -3197,14 +3199,13 @@ namespace StockSharp.Algo.Strategies
 		[TimeSpanEditor(Mask = TimeSpanEditorMask.Days | TimeSpanEditorMask.Hours | TimeSpanEditorMask.Minutes | TimeSpanEditorMask.Seconds)]
 		public TimeSpan? HistoryRequired
 		{
-			get => _historyRequired;
+			get => _historyRequired.Value;
 			set
 			{
-				if (_historyRequired == value)
-					return;
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
-				_historyRequired = value;
-				RaiseParametersChanged();
+				_historyRequired.Value = value;
 			}
 		}
 
