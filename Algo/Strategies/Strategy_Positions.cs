@@ -31,6 +31,8 @@
 			if(message == null)
 				return;
 
+			ProcessRisk(() => message);
+
 			var connector = SafeGetConnector();
 
 			var security = connector.LookupById(message.SecurityId);
@@ -69,6 +71,8 @@
 				this.AddWarningLog("Position {0} has StrategyId '{1}' instead of '{2}'.", position, position.StrategyId, EnsureGetId());
 				return;
 			}
+
+			ProcessRisk(() => position.ToChangeMessage());
 
 			_positions.SafeAdd(CreatePositionKey(position.Security, position.Portfolio), k => position, out var isNew);
 

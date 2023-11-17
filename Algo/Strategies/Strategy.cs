@@ -3097,7 +3097,7 @@ namespace StockSharp.Algo.Strategies
 			foreach (var rule in RiskManager.ProcessRules(getMessage()))
 			{
 				this.AddWarningLog(LocalizedStrings.Str855Params,
-					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
+					rule.Name, rule.Title, rule.Action);
 
 				switch (rule.Action)
 				{
