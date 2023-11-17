@@ -630,12 +630,25 @@
 		}
 
 		/// <summary>
+		/// Get file name without extension for the specified id.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <param name="by">Replacing character.</param>
+		/// <returns>File name without extension.</returns>
+		public static string GetFileNameWithoutExtension(this Guid id, char? by = '_')
+		{
+			var s = id.ToString();
+
+			return by is null ? s.Remove("-") : s.Replace('-', by.Value);
+		}
+
+		/// <summary>
 		/// Get file name for the specified id.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		/// <returns>File name.</returns>
 		public static string GetFileName(this Guid id)
-			=> $"{id.ToString().Replace('-', '_')}{DefaultSettingsExt}";
+			=> $"{id.GetFileNameWithoutExtension()}{DefaultSettingsExt}";
 
 		/// <summary>
 		/// Determines the specified config file exists.
