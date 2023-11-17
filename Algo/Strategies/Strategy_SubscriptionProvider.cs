@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Strategies
 
 			if (!IsBacktesting)
 			{
-				var history = (HistoryRequired ?? TimeSpan.Zero);
+				var history = HistoryRequired ?? TimeSpan.Zero;
 
 				if (history < HistoryCalculated)
 					history = HistoryCalculated.Value;
