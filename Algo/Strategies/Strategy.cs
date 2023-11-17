@@ -427,6 +427,7 @@ namespace StockSharp.Algo.Strategies
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
+			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true);
 			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired));
 
 			_ordersKeepTime.CanOptimize =
@@ -1240,23 +1241,16 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool IsOnline { get; private set; }
 
-		private bool _isOnlineStateIncludesChildren;
+		private readonly StrategyParam<bool> _isOnlineStateIncludesChildren;
 
 		/// <summary>
-		/// If true, the strategy can only be online if all of its children are online as well.
+		/// If <see langword="true"/>, the strategy can only be <see cref="IsOnline"/> if all of its <see cref="ChildStrategies"/> are online as well.
 		/// </summary>
 		[Browsable(false)]
 		public bool IsOnlineStateIncludesChildren
 		{
-			get => _isOnlineStateIncludesChildren;
-			set
-			{
-				if(_isOnlineStateIncludesChildren == value)
-					return;
-
-				_isOnlineStateIncludesChildren = value;
-				this.Notify();
-			}
+			get => _isOnlineStateIncludesChildren.Value;
+			set => _isOnlineStateIncludesChildren.Value = value;
 		}
 
 		/// <summary>
@@ -2976,8 +2970,6 @@ namespace StockSharp.Algo.Strategies
 
 			if (riskStorage != null)
 				RiskManager.Load(riskStorage);
-
-			IsOnlineStateIncludesChildren = storage.GetValue<bool>(nameof(IsOnlineStateIncludesChildren));
 		}
 
 		/// <inheritdoc />
@@ -2987,7 +2979,6 @@ namespace StockSharp.Algo.Strategies
 
 			storage.SetValue(nameof(PnLManager), PnLManager.Save());
 			storage.SetValue(nameof(RiskManager), RiskManager.Save());
-			storage.SetValue(nameof(IsOnlineStateIncludesChildren), IsOnlineStateIncludesChildren);
 			//storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
 			//storage.SetValue(nameof(PositionManager), PositionManager.Save());
 		}
@@ -3342,44 +3333,20 @@ namespace StockSharp.Algo.Strategies
 
 		private void CheckRefreshOnlineState()
 		{
-			int numSubs, numSubsOnline, numChildren, numChildrenOnline;
-			numSubs = numSubsOnline = numChildren = numChildrenOnline = 0;
-
 			lock (_onlineStateLock)
 			{
 				var online = ProcessState == ProcessStates.Started;
 
-				_subscriptions.SyncDo(d =>
-				{
-					foreach (var sub in d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()))
-					{
-						++numSubs;
-						if(sub.State == SubscriptionStates.Online)
-							++numSubsOnline;
-					}
-				});
+				if (online)
+					online = _subscriptions.SyncGet(d => d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()).All(s => s.State == SubscriptionStates.Online));
 
-				online &= numSubs == numSubsOnline;
-
-				if (IsOnlineStateIncludesChildren)
-				{
-					_childStrategies.SyncDo(s =>
-					{
-						foreach (var child in s)
-						{
-							++numChildren;
-							if(child.IsOnline)
-								++numChildrenOnline;
-						}
-					});
-
-					online &= numChildren == numChildrenOnline;
-				}
+				if (online && IsOnlineStateIncludesChildren)
+					online = _childStrategies.SyncGet(c => c.All(s => s.IsOnline));
 
 				if(online == IsOnline)
 					return;
 
-				this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, subs: {3}/{4}, children({5}): {6}/{7}", IsOnline, online, ProcessState, numSubsOnline, numSubs, IsOnlineStateIncludesChildren, numChildrenOnline, numChildren);
+				this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, children({3})", IsOnline, online, ProcessState, IsOnlineStateIncludesChildren);
 
 				IsOnline = online;
 			}
