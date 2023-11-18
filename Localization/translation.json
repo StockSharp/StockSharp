@@ -111,6 +111,10 @@
     "en": "Export as DLL. Result file will contains compiled .NET assembly.",
     "ru": "Экспортировать как DLL. Полученный файл будет содержать .NET сборку."
   },
+  "ExportAsCodeGenDesc": {
+    "en": "Export as generated C# code.",
+    "ru": "Экспортировать как сгенерированный C# код."
+  },
   "BasketBlackScholes": {
     "en": "Portfolio model for calculating the values of Greeks by the Black-Scholes formula.",
     "ru": "Портфельная модель вычисления значений Греков на основе Блэк-Шоулз формулы."
