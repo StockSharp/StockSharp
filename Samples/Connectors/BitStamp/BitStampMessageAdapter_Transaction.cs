@@ -49,7 +49,7 @@ partial class BitStampMessageAdapter
 				return;
 			}
 			default:
-				throw new NotSupportedException(LocalizedStrings.Str1601Params.Put(regMsg.OrderType, regMsg.TransactionId));
+				throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
 		}
 
 		var price = regMsg.OrderType == OrderTypes.Market ? (decimal?)null : regMsg.Price;
@@ -73,7 +73,7 @@ partial class BitStampMessageAdapter
 	protected override async ValueTask OnCancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
-			throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(cancelMsg.OriginalTransactionId));
+			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
 
 		await _httpClient.CancelOrder(cancelMsg.OrderId.Value, cancellationToken);
 

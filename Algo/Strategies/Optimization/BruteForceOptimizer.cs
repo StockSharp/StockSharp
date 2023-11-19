@@ -67,7 +67,7 @@ public class BruteForceOptimizer : BaseOptimizer
 			throw new ArgumentNullException(nameof(strategies));
 
 		if (iterationCount <= 0)
-			throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.Str1219);
+			throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.InvalidValue);
 
 		var maxIters = EmulationSettings.MaxIterations;
 		if (maxIters > 0 && iterationCount > maxIters)

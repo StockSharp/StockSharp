@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_postTradeMarketTimeChangedCount = value;
 			}

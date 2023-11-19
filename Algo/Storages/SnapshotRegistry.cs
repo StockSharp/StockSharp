@@ -602,7 +602,7 @@ namespace StockSharp.Algo.Storages
 							storage = new SnapshotStorage<string, ExecutionMessage>(_path, new TransactionBinarySnapshotSerializer());
 							break;
 						default:
-							throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.Str1219);
+							throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.InvalidValue);
 					}
 				}
 				else

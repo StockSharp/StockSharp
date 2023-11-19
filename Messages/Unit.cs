@@ -247,7 +247,7 @@ namespace StockSharp.Messages
 
 					return unit.Value * step.Value;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.InvalidValue);
 			}
 		}
 

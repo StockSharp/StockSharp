@@ -49,7 +49,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str175Key,
 			Description = LocalizedStrings.Str176Key,
-			GroupName = LocalizedStrings.Str174Key)]
+			GroupName = LocalizedStrings.ConnectionKey)]
 		public TimeSpan Interval
 		{
 			get => _interval;
@@ -71,7 +71,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str178Key,
 			Description = LocalizedStrings.Str179Key,
-			GroupName = LocalizedStrings.Str174Key)]
+			GroupName = LocalizedStrings.ConnectionKey)]
 		public int AttemptCount
 		{
 			get => _attemptCount;
@@ -93,7 +93,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str180Key,
 			Description = LocalizedStrings.Str181Key,
-			GroupName = LocalizedStrings.Str174Key)]
+			GroupName = LocalizedStrings.ConnectionKey)]
 		public int ReAttemptCount
 		{
 			get => _reAttemptCount;
@@ -115,7 +115,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str182Key,
 			Description = LocalizedStrings.Str183Key,
-			GroupName = LocalizedStrings.Str174Key)]
+			GroupName = LocalizedStrings.ConnectionKey)]
 		public TimeSpan TimeOutInterval
 		{
 			get => _timeOutInterval;
@@ -137,7 +137,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str184Key,
 			Description = LocalizedStrings.Str185Key,
-			GroupName = LocalizedStrings.Str174Key)]
+			GroupName = LocalizedStrings.ConnectionKey)]
 		public WorkingTime WorkingTime
 		{
 			get => _workingTime;

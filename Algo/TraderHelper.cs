@@ -202,7 +202,7 @@ namespace StockSharp.Algo
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException(nameof(priceType), priceType, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(priceType), priceType, LocalizedStrings.InvalidValue);
 			}
 
 			return currentPrice == null
@@ -989,7 +989,7 @@ namespace StockSharp.Algo
 
 						// skip unknown fields
 						//default:
-						//	throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
+						//	throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.InvalidValue);
 					}
 				}
 				catch (Exception ex)
@@ -2647,7 +2647,7 @@ namespace StockSharp.Algo
 				ChannelStates.Starting or ChannelStates.Stopped => ProcessStates.Stopped,
 				ChannelStates.Stopping => ProcessStates.Stopping,
 				ChannelStates.Started or ChannelStates.Suspending or ChannelStates.Suspended => ProcessStates.Started,
-				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219)
+				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue)
 			};
 
 		/// <summary>
@@ -2661,7 +2661,7 @@ namespace StockSharp.Algo
 				ProcessStates.Stopped => ChannelStates.Stopped,
 				ProcessStates.Stopping => ChannelStates.Stopping,
 				ProcessStates.Started => ChannelStates.Started,
-				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219)
+				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue)
 			};
 	}
 }

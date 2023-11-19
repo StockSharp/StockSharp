@@ -247,7 +247,7 @@ namespace StockSharp.Algo.Storages
 			var tupleValues = nativeId.ToValues().ToArray();
 
 			if (tupleValues.Length == 0)
-				throw new ArgumentOutOfRangeException(nameof(nativeId), nativeId, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(nativeId), nativeId, LocalizedStrings.InvalidValue);
 
 			return tupleValues;
 		}

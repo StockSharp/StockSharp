@@ -226,7 +226,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_skipFromHeader = value;
 				NotifyChanged();
@@ -496,7 +496,7 @@ namespace StockSharp.Algo.Import
 			else if (DataType == DataType.Transactions)
 				return LocalizedStrings.Transactions;
 			else
-				throw new ArgumentOutOfRangeException(nameof(DataType.MessageType), msgType, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(DataType.MessageType), msgType, LocalizedStrings.InvalidValue);
 		}
 
 		/// <summary>

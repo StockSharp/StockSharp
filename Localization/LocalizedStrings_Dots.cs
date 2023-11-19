@@ -187,7 +187,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str3304Dot => AppendDot(Str3304);
+		public static string KeyDot => AppendDot(Key);
 
 		/// <summary>
 		/// 
@@ -202,7 +202,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str3451Dot => AppendDot(Str3451);
+		public static string TokenDot => AppendDot(Token);
 
 		/// <summary>
 		/// 

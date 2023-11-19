@@ -537,7 +537,7 @@ namespace StockSharp.Algo.Storages
 				case StorageFormats.Csv:
 					return ".csv";
 				default:
-					throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue);
 			}
 		}
 

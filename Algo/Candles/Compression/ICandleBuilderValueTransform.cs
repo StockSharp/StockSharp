@@ -244,7 +244,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				//default:
-				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
+				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.InvalidValue);
 			}
 		}
 	}
@@ -369,7 +369,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				//default:
-				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
+				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.InvalidValue);
 			}
 		}
 	}
@@ -419,7 +419,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				//default:
-				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);	
+				//	throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.InvalidValue);	
 			}
 		}
 	}

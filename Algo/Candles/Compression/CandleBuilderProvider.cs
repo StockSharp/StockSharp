@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var builder = _builders.TryGetValue(type);
 
 			if (builder == null)
-				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 
 			return builder;
 		}

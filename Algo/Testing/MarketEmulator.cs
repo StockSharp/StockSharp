@@ -248,7 +248,7 @@ namespace StockSharp.Algo.Testing
 								result.Add(execMsg);
 						}
 						else
-							throw new ArgumentOutOfRangeException(nameof(message), execMsg.DataType, LocalizedStrings.Str1219);
+							throw new ArgumentOutOfRangeException(nameof(message), execMsg.DataType, LocalizedStrings.InvalidValue);
 
 						break;
 					}
@@ -451,7 +451,7 @@ namespace StockSharp.Algo.Testing
 							break;
 						}
 
-						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.InvalidValue);
 					}
 				}
 
@@ -646,7 +646,7 @@ namespace StockSharp.Algo.Testing
 						throw new NotSupportedException();
 
 					default:
-						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.InvalidValue);
 				}
 			}
 
@@ -1976,7 +1976,7 @@ namespace StockSharp.Algo.Testing
 				{
 					Sides.Buy => _bids,
 					Sides.Sell => _asks,
-					_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.Str1219),
+					_ => throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.InvalidValue),
 				};
 			}
 
@@ -2636,7 +2636,7 @@ namespace StockSharp.Algo.Testing
 			private void ProcessTrade(DateTimeOffset time, ExecutionMessage order, decimal price, decimal volume, ICollection<Message> result)
 			{
 				if (volume <= 0)
-					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.InvalidValue);
 
 				var tradeMsg = new ExecutionMessage
 				{

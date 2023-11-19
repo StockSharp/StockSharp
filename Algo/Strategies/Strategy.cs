@@ -917,7 +917,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxOrderRegisterErrorCount.Value = value;
 			}
@@ -1124,7 +1124,7 @@ namespace StockSharp.Algo.Strategies
 				ProcessStates.Stopped => LocalizedStrings.Str1371,
 				ProcessStates.Stopping => LocalizedStrings.Str1372,
 				ProcessStates.Started => LocalizedStrings.Str1373,
-				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219),
+				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue),
 			};
 
 			var ps = ParentStrategy;
@@ -2418,7 +2418,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_unrealizedPnLInterval = value;
 			}

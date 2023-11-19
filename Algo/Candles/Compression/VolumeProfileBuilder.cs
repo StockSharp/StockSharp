@@ -51,7 +51,7 @@
 			set
 			{
 				if (value is < 0 or > 100)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_volumePercent = value;
 			}

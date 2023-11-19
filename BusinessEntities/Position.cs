@@ -519,7 +519,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				//if (value < 0)
-				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_leverage = value;
 				NotifyChanged();

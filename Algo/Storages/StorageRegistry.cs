@@ -175,7 +175,7 @@ namespace StockSharp.Algo.Storages
 				{
 					StorageFormats.Binary => new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider) { PassThroughOrderBookInrement = passThroughOrderBookInrement },
 					StorageFormats.Csv => new MarketDepthCsvSerializer(key.Item1),
-					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 				};
 
 				return new MarketDepthStorage(securityId, key.Item2, serializer);
@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Storages
 				{
 					StorageFormats.Binary => new Level1BinarySerializer(key.Item1, ExchangeInfoProvider),
 					StorageFormats.Csv => new Level1CsvSerializer(key.Item1),
-					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 				};
 
 				return new Level1Storage(securityId, key.Item2, serializer);
@@ -231,7 +231,7 @@ namespace StockSharp.Algo.Storages
 				{
 					StorageFormats.Binary => new PositionBinarySerializer(key.Item1, ExchangeInfoProvider),
 					StorageFormats.Csv => new PositionCsvSerializer(key.Item1),
-					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 				};
 
 				return new PositionChangeStorage(securityId, key.Item2, serializer);
@@ -261,7 +261,7 @@ namespace StockSharp.Algo.Storages
 				{
 					StorageFormats.Binary => typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, dataType, ExchangeInfoProvider),
 					StorageFormats.Csv => typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(key.Item1, dataType, null),
-					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 				};
 
 				return typeof(CandleStorage<>).Make(candleMessageType).CreateInstance<IMarketDataStorage<CandleMessage>>(key.Item1, arg, key.Item2, serializer);
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Storages
 						{
 							StorageFormats.Binary => new TickBinarySerializer(key.Item1, ExchangeInfoProvider),
 							StorageFormats.Csv => new TickCsvSerializer(key.Item1),
-							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 						};
 
 						return new TradeStorage(securityId, mdDrive, serializer);
@@ -298,7 +298,7 @@ namespace StockSharp.Algo.Storages
 						{
 							StorageFormats.Binary => new TransactionBinarySerializer(secId, ExchangeInfoProvider),
 							StorageFormats.Csv => new TransactionCsvSerializer(secId),
-							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 						};
 
 						return new TransactionStorage(securityId, mdDrive, serializer);
@@ -309,13 +309,13 @@ namespace StockSharp.Algo.Storages
 						{
 							StorageFormats.Binary => new OrderLogBinarySerializer(secId, ExchangeInfoProvider),
 							StorageFormats.Csv => new OrderLogCsvSerializer(secId),
-							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+							_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 						};
 
 						return new OrderLogStorage(securityId, mdDrive, serializer);
 					}
 					default:
-						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 				}
 			});
 		}
@@ -367,7 +367,7 @@ namespace StockSharp.Algo.Storages
 				{
 					StorageFormats.Binary => new NewsBinarySerializer(ExchangeInfoProvider),
 					StorageFormats.Csv => new NewsCsvSerializer(),
-					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 				};
 
 				return new NewsStorage(securityId, serializer, key);
@@ -383,7 +383,7 @@ namespace StockSharp.Algo.Storages
 				{
 					StorageFormats.Binary => new BoardStateBinarySerializer(ExchangeInfoProvider),
 					StorageFormats.Csv => new BoardStateCsvSerializer(),
-					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219),
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
 				};
 
 				return new BoardStateStorage(default, serializer, key);

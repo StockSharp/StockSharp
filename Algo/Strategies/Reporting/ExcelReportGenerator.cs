@@ -235,7 +235,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 				.SetCell(columnShift + 6, 1, LocalizedStrings.Price).SetStyle(columnShift + 6, typeof(decimal))
 				.SetCell(columnShift + 7, 1, LocalizedStrings.Str1324)
 				.SetCell(columnShift + 8, 1, LocalizedStrings.State)
-				.SetCell(columnShift + 9, 1, LocalizedStrings.Str1325).SetStyle(columnShift + 10, typeof(decimal))
+				.SetCell(columnShift + 9, 1, LocalizedStrings.Balance).SetStyle(columnShift + 10, typeof(decimal))
 				.SetCell(columnShift + 10, 1, LocalizedStrings.Volume).SetStyle(columnShift + 11, typeof(decimal))
 				.SetCell(columnShift + 11, 1, LocalizedStrings.Type)
 				.SetCell(columnShift + 12, 1, LocalizedStrings.Str1326)

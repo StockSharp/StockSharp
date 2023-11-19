@@ -317,7 +317,7 @@ namespace StockSharp.Algo.Candles
 				else if (execMsg.DataType == DataType.OrderLog)
 					return new OrderLogCandleBuilderValueTransform();
 				else
-					throw new ArgumentOutOfRangeException(nameof(execMsg), execMsg.DataType, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(execMsg), execMsg.DataType, LocalizedStrings.InvalidValue);
 			}, candleBuilderProvider);
 		}
 

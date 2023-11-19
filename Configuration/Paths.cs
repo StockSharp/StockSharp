@@ -303,7 +303,7 @@
 				Pages.Store => "store",
 				Pages.Login => "login",
 				Pages.Profile => "profile",
-				_ => throw new ArgumentOutOfRangeException(nameof(id), id, LocalizedStrings.Str1219),
+				_ => throw new ArgumentOutOfRangeException(nameof(id), id, LocalizedStrings.InvalidValue),
 			};
 
 			url += "/";

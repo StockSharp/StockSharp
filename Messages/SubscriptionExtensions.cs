@@ -51,7 +51,7 @@ public static class SubscriptionExtensions
 					isOk = newState != SubscriptionStates.Active;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(currState), currState, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(currState), currState, LocalizedStrings.InvalidValue);
 			}
 		}
 
@@ -103,6 +103,6 @@ public static class SubscriptionExtensions
 		else if (dataType == DataType.Command)
 			return new CommandMessage();
 		else
-			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 	}
 }

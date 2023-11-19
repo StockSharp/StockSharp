@@ -159,7 +159,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(3, 0, LocalizedStrings.OrderId)
 					.SetCell(4, 0, LocalizedStrings.Price).SetStyle(2, typeof(decimal))
 					.SetCell(5, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
-					.SetCell(6, 0, LocalizedStrings.Str1325).SetStyle(3, typeof(decimal))
+					.SetCell(6, 0, LocalizedStrings.Balance).SetStyle(3, typeof(decimal))
 					.SetCell(7, 0, LocalizedStrings.Str128)
 					.SetCell(8, 0, LocalizedStrings.Str132)
 					.SetCell(9, 0, LocalizedStrings.Str134)

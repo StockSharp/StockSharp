@@ -77,7 +77,7 @@ public class CsvReportGenerator : BaseReportGenerator
 		{
 			WriteValues(LocalizedStrings.Orders);
 			WriteValues(LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Time, LocalizedStrings.Price,
-				LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Str1325,
+				LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Balance,
 				LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.Str1326, LocalizedStrings.Str1327);
 
 			foreach (var order in strategy.Orders)

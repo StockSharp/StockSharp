@@ -2847,7 +2847,7 @@
     "en": "Connection and export settings.",
     "ru": "Настройки для подключения или экспорта."
   },
-  "Str174": {
+  "Connection": {
     "en": "Connection",
     "ru": "Подключение"
   },
@@ -6687,7 +6687,7 @@
     "en": "Exchange board with code {0} not found.",
     "ru": "Биржевая площадка с кодом {0} не найдена."
   },
-  "Str1219": {
+  "InvalidValue": {
     "en": "Invalid value.",
     "ru": "Недопустимое значение."
   },
@@ -7098,10 +7098,6 @@
   "Str1324": {
     "en": "Status",
     "ru": "Статус"
-  },
-  "Str1325": {
-    "en": "Balance",
-    "ru": "Баланс"
   },
   "Str1326": {
     "en": "Registration latency",
@@ -8131,7 +8127,7 @@
     "en": "Unknown type of order.",
     "ru": "Неизвестный тип заявки."
   },
-  "Str1601Params": {
+  "OrderUnsupportedType": {
     "en": "Unsupported type {0} of order {1}.",
     "ru": "Неподдерживаемый тип {0} заявки {1}."
   },
@@ -8199,7 +8195,7 @@
     "en": "Unsupported type of market-data.",
     "ru": "Неподдерживаемый тип маркет-данных."
   },
-  "Str1619": {
+  "NotDisconnectPrevTime": {
     "en": "Connection was not disconnected from previous time.",
     "ru": "Подключение не было разорвано с предыдущего раза."
   },
@@ -9115,7 +9111,7 @@
     "en": "Unregistered candles series securityId = {0} timeFrame = {1}.",
     "ru": "Незарегистрированная ранее серия свечей securityId = {0} timeFrame = {1}."
   },
-  "Str1856": {
+  "ConnectionNotOk": {
     "en": "Connection was not successful.",
     "ru": "Подключение не было произведено."
   },
@@ -10531,7 +10527,7 @@
     "en": "Download news.",
     "ru": "Скачивать новости."
   },
-  "Str2252Params": {
+  "OrderNoExchangeId": {
     "en": "Order {0} does not have an exchange ID.",
     "ru": "Заявка {0} не имеет биржевого идентификатора."
   },
@@ -10558,10 +10554,6 @@
   "Str2259Params": {
     "en": "Trade with ID {0} has zero ID of initialized order",
     "ru": "Сделка с идентификатором {0} имеет нулевой идентификатор иниц. заявки"
-  },
-  "Str2261": {
-    "en": "Alfa-Direct terminal login.",
-    "ru": "Имя пользователя в терминале Альфа-Директ."
   },
   "Str2262": {
     "en": "Password to enter the terminal.",
@@ -13775,10 +13767,6 @@
     "en": "Offset size.",
     "ru": "Размер сдвига."
   },
-  "Str3143": {
-    "en": "Connection",
-    "ru": "Соединение"
-  },
   "Str3144": {
     "en": "Connection type.",
     "ru": "Тип соединения."
@@ -14379,15 +14367,15 @@
     "en": "Bitcoins",
     "ru": "Биткоины"
   },
-  "Str3304": {
+  "Key": {
     "en": "Key",
     "ru": "Ключ"
   },
-  "Str3306": {
+  "Secret": {
     "en": "Secret",
     "ru": "Секрет"
   },
-  "Str3307": {
+  "SecretDesc": {
     "en": "Secret.",
     "ru": "Секрет."
   },
@@ -14667,7 +14655,7 @@
     "en": "Take-profit offset.",
     "ru": "Отступ тейк-профита."
   },
-  "Str3388": {
+  "DemoTradingConnect": {
     "en": "Connect to demo trading instead of real trading server.",
     "ru": "Подключаться ли к демо торгам вместо сервера с реальной торговлей."
   },
@@ -14879,7 +14867,7 @@
     "en": "Server.",
     "ru": "Сервер."
   },
-  "Str3451": {
+  "Token": {
     "en": "Token",
     "ru": "Токен"
   },
@@ -15751,11 +15739,11 @@
     "en": "Proxy server address.",
     "ru": "Адрес Proxy сервера."
   },
-  "Str3689": {
+  "KeyNotSpecified": {
     "en": "Key not specified.",
     "ru": "Не указан ключ."
   },
-  "Str3690": {
+  "SecretNotSpecified": {
     "en": "Secret not specified.",
     "ru": "Не указан секрет."
   },

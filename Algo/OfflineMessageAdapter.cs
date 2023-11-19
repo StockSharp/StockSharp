@@ -44,7 +44,7 @@
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxMessageCount = value;
 			}
@@ -246,7 +246,7 @@
 							return true;
 						}
 						default:
-							throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1219);
+							throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.InvalidValue);
 					}
 
 					break;

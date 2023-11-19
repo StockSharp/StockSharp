@@ -59,7 +59,7 @@ namespace StockSharp.Algo.PnL
 			private set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_priceStep = value;
 				UpdateMultiplier();
@@ -77,7 +77,7 @@ namespace StockSharp.Algo.PnL
 			private set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_stepPrice = value;
 				UpdateMultiplier();
@@ -95,7 +95,7 @@ namespace StockSharp.Algo.PnL
 			set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_leverage = value;
 				UpdateMultiplier();
@@ -113,7 +113,7 @@ namespace StockSharp.Algo.PnL
 			set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_lotMultiplier = value;
 				UpdateMultiplier();

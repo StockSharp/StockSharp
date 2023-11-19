@@ -1042,7 +1042,7 @@ namespace StockSharp.Algo.Storages
 						else if (buildFrom == DataType.MarketDepth)
 							storage = GetStorage<QuoteChangeMessage>(secId, null);
 						else
-							throw new ArgumentOutOfRangeException(nameof(subscription), buildFrom, LocalizedStrings.Str1219);
+							throw new ArgumentOutOfRangeException(nameof(subscription), buildFrom, LocalizedStrings.InvalidValue);
 
 						var range = GetRange(storage, subscription, TimeSpan.FromDays(2));
 
@@ -1114,7 +1114,7 @@ namespace StockSharp.Algo.Storages
 													.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), range.Item1, subscription.TransactionId, SendReply, SendOut);
 							}
 							else
-								throw new ArgumentOutOfRangeException(nameof(subscription), subscription.BuildFrom, LocalizedStrings.Str1219);
+								throw new ArgumentOutOfRangeException(nameof(subscription), subscription.BuildFrom, LocalizedStrings.InvalidValue);
 						}
 
 						return null;
@@ -1316,7 +1316,7 @@ namespace StockSharp.Algo.Storages
 				arg3 = pnf.ReversalAmount;
 			}
 			else
-				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 
 			return (messageType, arg1, arg2, arg3);
 		}
@@ -1352,10 +1352,10 @@ namespace StockSharp.Algo.Storages
 					};
 				}
 				else
-					throw new ArgumentOutOfRangeException(nameof(messageType), argType, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(messageType), argType, LocalizedStrings.InvalidValue);
 			}
 			else
-				throw new ArgumentOutOfRangeException(nameof(messageType), type, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(messageType), type, LocalizedStrings.InvalidValue);
 
 			return DataType.Create(type, arg);
 		}

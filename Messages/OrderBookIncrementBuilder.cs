@@ -181,7 +181,7 @@
 							break;
 						}
 						default:
-							throw new ArgumentOutOfRangeException(nameof(from), quote.Action, LocalizedStrings.Str1219);
+							throw new ArgumentOutOfRangeException(nameof(from), quote.Action, LocalizedStrings.InvalidValue);
 					}
 				}
 			}

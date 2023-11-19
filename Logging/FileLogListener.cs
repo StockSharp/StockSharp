@@ -166,7 +166,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxLength = value;
 			}
@@ -183,7 +183,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxCount = value;
 			}
@@ -360,7 +360,7 @@ namespace StockSharp.Logging
 					isDir = true;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(SeparateByDates), SeparateByDates, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(SeparateByDates), SeparateByDates, LocalizedStrings.InvalidValue);
 			}
 
 			if (SeparateByDates == SeparateByDateModes.None)
@@ -386,7 +386,7 @@ namespace StockSharp.Logging
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException(nameof(HistoryPolicy), policy, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(HistoryPolicy), policy, LocalizedStrings.InvalidValue);
 			}
 
 			var files = new List<string>();

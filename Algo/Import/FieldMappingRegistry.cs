@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), LocalizedStrings.Id, LocalizedStrings.OrderId, (i, v) => i.OrderId = v));
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), LocalizedStrings.Price, LocalizedStrings.OrderPrice, (i, v) => { i.OrderPrice = v; i.HasOrderInfo = true; }) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), LocalizedStrings.Volume, LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.Balance), LocalizedStrings.Str1325, LocalizedStrings.Str131, (i, v) => i.Balance = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.Balance), LocalizedStrings.Balance, LocalizedStrings.Str131, (i, v) => i.Balance = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), LocalizedStrings.Str329, LocalizedStrings.Str129, (i, v) => i.Side = v));
 						fields.Add(new FieldMapping<ExecutionMessage, OrderTypes>(nameof(ExecutionMessage.OrderType), LocalizedStrings.Str132, LocalizedStrings.Str133, (i, v) => i.OrderType = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.State, LocalizedStrings.Str134, (i, v) => i.OrderState = v) { IsRequired = true });
@@ -156,7 +156,7 @@ namespace StockSharp.Algo.Import
 						break;
 					}
 					default:
-						throw new ArgumentOutOfRangeException(nameof(dataType), msgType, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(dataType), msgType, LocalizedStrings.InvalidValue);
 				}
 			}
 			else if (msgType == typeof(CandleMessage) || msgType.IsCandleMessage())

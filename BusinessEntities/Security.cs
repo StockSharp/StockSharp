@@ -323,7 +323,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_volumeStep = value;
 				Notify();
@@ -352,7 +352,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_minVolume = value;
 				Notify();
@@ -381,7 +381,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxVolume = value;
 				Notify();
@@ -409,7 +409,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_multiplier = value;
 				Notify();
@@ -438,7 +438,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_decimals = value;
 				Notify();
@@ -1104,7 +1104,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				//if (value < 0)
-				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_strike = value;
 				Notify();

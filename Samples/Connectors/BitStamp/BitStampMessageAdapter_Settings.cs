@@ -34,18 +34,18 @@ public partial class BitStampMessageAdapter : IKeySecretAdapter
 	/// <inheritdoc />
 	[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str3304Key,
-			Description = LocalizedStrings.Str3304Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str174Key,
+			Name = LocalizedStrings.KeyKey,
+			Description = LocalizedStrings.KeyKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.ConnectionKey,
 			Order = 0)]
 	public SecureString Key { get; set; }
 
 	/// <inheritdoc />
 	[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str3306Key,
-			Description = LocalizedStrings.Str3307Key,
-			GroupName = LocalizedStrings.Str174Key,
+			Name = LocalizedStrings.SecretKey,
+			Description = LocalizedStrings.SecretDescKey,
+			GroupName = LocalizedStrings.ConnectionKey,
 			Order = 1)]
 	public SecureString Secret { get; set; }
 
@@ -56,9 +56,9 @@ public partial class BitStampMessageAdapter : IKeySecretAdapter
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str1325Key,
+		Name = LocalizedStrings.BalanceKey,
 		Description = LocalizedStrings.BalanceCheckIntervalKey,
-		GroupName = LocalizedStrings.Str174Key,
+		GroupName = LocalizedStrings.ConnectionKey,
 		Order = 3)]
 	public TimeSpan BalanceCheckInterval
 	{
@@ -95,6 +95,6 @@ public partial class BitStampMessageAdapter : IKeySecretAdapter
 	/// <inheritdoc />
 	public override string ToString()
 	{
-		return base.ToString() + ": " + LocalizedStrings.Str3304 + " = " + Key.ToId();
+		return base.ToString() + ": " + LocalizedStrings.Key + " = " + Key.ToId();
 	}
 }

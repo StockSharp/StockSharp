@@ -683,7 +683,7 @@ namespace StockSharp.Messages
 						type1.ToMessageType();
 
 					if (!_messageTypeMap.TryGetValue(type, out typeVal))
-						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 				}
 
 				return typeVal;
@@ -986,7 +986,7 @@ namespace StockSharp.Messages
 				ExecutionTypes.Tick => DataType.Ticks,
 				ExecutionTypes.Transaction => DataType.Transactions,
 				ExecutionTypes.OrderLog => DataType.OrderLog,
-				_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219),
+				_ => throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue),
 			};
 		}
 
@@ -1004,7 +1004,7 @@ namespace StockSharp.Messages
 			else if (type == DataType.OrderLog)
 				return ExecutionTypes.OrderLog;
 			else
-				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 		}
 
 		/// <summary>
@@ -3390,7 +3390,7 @@ namespace StockSharp.Messages
 			else
 			{
 				return _messageTypes.SafeAdd(type, key => key.MessageType.ToMessageType());
-				//throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				//throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 			}
 		}
 
@@ -4488,7 +4488,7 @@ namespace StockSharp.Messages
 						OptionTypes.Call => "OCXXXX",
 						OptionTypes.Put => "OPXXXX",
 						null => "OXXXXX",
-						_ => throw new ArgumentOutOfRangeException(nameof(security), security.OptionType, LocalizedStrings.Str1219),
+						_ => throw new ArgumentOutOfRangeException(nameof(security), security.OptionType, LocalizedStrings.InvalidValue),
 					};
 				}
 				case SecurityTypes.Index:
@@ -4520,7 +4520,7 @@ namespace StockSharp.Messages
 				case null:
 					return "XXXXXX";
 				default:
-					throw new ArgumentOutOfRangeException(nameof(security), security.SecurityType, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(security), security.SecurityType, LocalizedStrings.InvalidValue);
 			}
 		}
 

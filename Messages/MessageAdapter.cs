@@ -172,7 +172,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_heartbeatInterval = value;
 			}
@@ -291,7 +291,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str172Key,
 			Description = LocalizedStrings.Str978Key,
-			GroupName = LocalizedStrings.Str174Key)]
+			GroupName = LocalizedStrings.ConnectionKey)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
 		private IdGenerator _transactionIdGenerator;

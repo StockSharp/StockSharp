@@ -228,7 +228,7 @@ namespace StockSharp.Algo.Testing
 
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 				}
 
 				if (throwError)

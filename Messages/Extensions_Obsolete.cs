@@ -29,7 +29,7 @@
 		public static MessageTypes ToMessageType(this MarketDataTypes type, out object arg)
 		{
 			if (!_messageTypeMapOld.TryGetValue(type, out var tuple))
-				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 
 			arg = tuple.Item2;
 			return tuple.Item1;
@@ -85,7 +85,7 @@
 					if (msgType.IsCandle())
 						return DataType.Create(msgType.ToCandleMessage(), arg);
 
-					throw new ArgumentOutOfRangeException(nameof(msgType), msgType, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(msgType), msgType, LocalizedStrings.InvalidValue);
 				}
 			}
 		}
@@ -120,12 +120,12 @@
 				if (_messageTypeMapOld.TryGetKey((msgType, default), out var dataType2))
 					return dataType2;
 
-				throw new ArgumentOutOfRangeException(nameof(msgType), msgType, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(msgType), msgType, LocalizedStrings.InvalidValue);
 			}
 			else if (dataType == DataType.FilteredMarketDepth)
 				return MarketDataTypes.MarketDepth;
 			else
-				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 		}
 	}
 }

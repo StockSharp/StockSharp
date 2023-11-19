@@ -171,7 +171,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_spreadSize = value;
 				NotifyChanged();
@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxDepth = value;
 				NotifyChanged();

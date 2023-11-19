@@ -322,7 +322,7 @@ namespace StockSharp.Algo.Risk
 					return;
 
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_time = value;
 				UpdateTitle();
@@ -669,7 +669,7 @@ namespace StockSharp.Algo.Risk
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_volume = value;
 				UpdateTitle();
@@ -754,7 +754,7 @@ namespace StockSharp.Algo.Risk
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_count = value;
 				UpdateTitle();
@@ -782,7 +782,7 @@ namespace StockSharp.Algo.Risk
 					return;
 
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_interval = value;
 				UpdateTitle();
@@ -970,7 +970,7 @@ namespace StockSharp.Algo.Risk
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_volume = value;
 				UpdateTitle();
@@ -1047,7 +1047,7 @@ namespace StockSharp.Algo.Risk
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_count = value;
 				UpdateTitle();
@@ -1074,7 +1074,7 @@ namespace StockSharp.Algo.Risk
 					return;
 
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_interval = value;
 				UpdateTitle();

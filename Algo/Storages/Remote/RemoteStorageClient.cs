@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Storages.Remote
 			set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_securityBatchSize = value;
 			}

@@ -871,7 +871,7 @@ namespace StockSharp.Algo.Strategies
 				StrategyTradingModes.Full => strategy.TradingMode == StrategyTradingModes.Full,
 				StrategyTradingModes.CancelOrdersOnly => true,
 				StrategyTradingModes.ReducePositionOnly => strategy.TradingMode != StrategyTradingModes.CancelOrdersOnly,
-				_ => throw new ArgumentOutOfRangeException(nameof(required), required, LocalizedStrings.Str1219),
+				_ => throw new ArgumentOutOfRangeException(nameof(required), required, LocalizedStrings.InvalidValue),
 			};
 		}
 	}

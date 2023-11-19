@@ -97,10 +97,10 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		if (this.IsTransactional())
 		{
 			if (Key.IsEmpty())
-				throw new InvalidOperationException(LocalizedStrings.Str3689);
+				throw new InvalidOperationException(LocalizedStrings.KeyNotSpecified);
 
 			if (Secret.IsEmpty())
-				throw new InvalidOperationException(LocalizedStrings.Str3690);
+				throw new InvalidOperationException(LocalizedStrings.SecretNotSpecified);
 		}
 
 #if !NO_LICENSE
@@ -115,10 +115,10 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 #endif
 
 		if (_httpClient != null)
-			throw new InvalidOperationException(LocalizedStrings.Str1619);
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
 		if (_pusherClient != null)
-			throw new InvalidOperationException(LocalizedStrings.Str1619);
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
 		_httpClient = new HttpClient(Key, Secret) { Parent = this };
 
@@ -131,10 +131,10 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	protected override ValueTask OnDisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient == null)
-			throw new InvalidOperationException(LocalizedStrings.Str1856);
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
 
 		if (_pusherClient == null)
-			throw new InvalidOperationException(LocalizedStrings.Str1856);
+			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
 
 		_httpClient.Dispose();
 		_httpClient = null;

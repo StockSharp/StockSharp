@@ -277,7 +277,7 @@ public static class IStorageRegistryObsoleteExtensions
 				toMessage = e => converter(e.To<Candle>()).To<TMessage>();
 		}
 		else
-			throw new ArgumentOutOfRangeException(nameof(TEntity), typeof(TEntity), LocalizedStrings.Str1219);
+			throw new ArgumentOutOfRangeException(nameof(TEntity), typeof(TEntity), LocalizedStrings.InvalidValue);
 
 		return (IEntityMarketDataStorage<TEntity, TMessage>)_convertedStorages.SafeAdd(storage, key => new ConvertableStorage<TMessage, TEntity>(security, storage, exchangeInfoProvider ?? new InMemoryExchangeInfoProvider(), toMessage));
 	}

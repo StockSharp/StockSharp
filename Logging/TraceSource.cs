@@ -90,7 +90,7 @@ namespace StockSharp.Logging
 					case TraceEventType.Transfer:
 						return null;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(eventType), eventType, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(eventType), eventType, LocalizedStrings.InvalidValue);
 				}
 			}
 		}

@@ -49,7 +49,7 @@ namespace StockSharp.Messages
 			if (!isSecurityRequired && arg is not null && messageType.IsCandleMessage())
 			{
 				if (!messageType.ValidateCandleArg(arg))
-					throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.InvalidValue);
 			}
 
 			return new()

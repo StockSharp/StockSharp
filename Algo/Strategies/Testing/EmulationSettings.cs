@@ -89,7 +89,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_marketTimeChangedInterval = value;
 				NotifyPropertyChanged();
@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_unrealizedPnLInterval = value;
 				NotifyPropertyChanged();

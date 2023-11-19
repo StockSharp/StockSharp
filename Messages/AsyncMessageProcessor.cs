@@ -315,7 +315,7 @@ public class AsyncMessageProcessor : BaseLogReceiver
 	private ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
 	{
 		if(_isConnectionStarted)
-			throw new InvalidOperationException(LocalizedStrings.Str1619);
+			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
 		_isConnectionStarted = true;
 
