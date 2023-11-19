@@ -475,7 +475,7 @@ namespace StockSharp.Messages
 		/// <param name="expected">Is disconnect expected.</param>
 		protected void SendOutDisconnectMessage(bool expected)
 		{
-			SendOutDisconnectMessage(expected ? null : new InvalidOperationException(LocalizedStrings.Str2551));
+			SendOutDisconnectMessage(expected ? null : new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection));
 		}
 
 		/// <summary>

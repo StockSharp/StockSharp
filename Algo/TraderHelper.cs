@@ -2296,7 +2296,7 @@ namespace StockSharp.Algo
 						throw new TimeoutException();
 
 					if (error != null)
-						throw new InvalidOperationException(LocalizedStrings.Str2959, (Exception)error);
+						throw new InvalidOperationException(LocalizedStrings.ErrorConnection, (Exception)error);
 				}
 
 				foreach (var request in requests)

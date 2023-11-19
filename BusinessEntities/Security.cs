@@ -396,7 +396,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str330Key,
+			Name = LocalizedStrings.LotKey,
 			Description = LocalizedStrings.LotVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 12)]
@@ -629,7 +629,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str290Key,
+			Name = LocalizedStrings.StepPriceKey,
 			Description = LocalizedStrings.Str555Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 200)]
@@ -660,7 +660,7 @@ namespace StockSharp.BusinessEntities
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str289Key,
+			Name = LocalizedStrings.LastTradeKey,
 			Description = LocalizedStrings.Str557Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 201)]
@@ -695,7 +695,7 @@ namespace StockSharp.BusinessEntities
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str289Key,
+			Name = LocalizedStrings.LastTradeKey,
 			Description = LocalizedStrings.Str557Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 201)]
@@ -768,7 +768,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str288Key,
+			Name = LocalizedStrings.LowPriceKey,
 			Description = LocalizedStrings.Str562Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 204)]
@@ -984,7 +984,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str304Key,
+			Name = LocalizedStrings.MarginBuyKey,
 			Description = LocalizedStrings.MarginBuyKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 212)]
@@ -1012,7 +1012,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str305Key,
+			Name = LocalizedStrings.MarginSellKey,
 			Description = LocalizedStrings.MarginSellKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 213)]
@@ -1119,7 +1119,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str552Key,
+			Name = LocalizedStrings.BinaryKey,
 			Description = LocalizedStrings.TypeBinaryOptionKey,
 			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 103)]
@@ -1146,7 +1146,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IVKey,
-			Description = LocalizedStrings.Str293Key + LocalizedStrings.Dot,
+			Description = LocalizedStrings.ImpliedVolatilityKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 104)]
 		[Browsable(false)]
@@ -1174,7 +1174,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.HVKey,
-			Description = LocalizedStrings.Str299Key + LocalizedStrings.Dot,
+			Description = LocalizedStrings.HistoricalVolatilityKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 105)]
 		[Browsable(false)]
@@ -1201,7 +1201,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str294Key,
+			Name = LocalizedStrings.TheorPriceKey,
 			Description = LocalizedStrings.TheoreticalPriceKey,
 			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 106)]
@@ -1368,7 +1368,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str150Key,
+			Name = LocalizedStrings.OpenInterestKey,
 			Description = LocalizedStrings.Str151Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 220)]
@@ -1433,7 +1433,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str295Key,
+			Name = LocalizedStrings.BidsVolumeKey,
 			Description = LocalizedStrings.BidsVolumeKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 221)]
@@ -1483,7 +1483,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str297Key,
+			Name = LocalizedStrings.AsksVolumeKey,
 			Description = LocalizedStrings.AsksVolumeKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 223)]
@@ -1558,7 +1558,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str319Key,
+			Name = LocalizedStrings.BidMaxKey,
 			Description = LocalizedStrings.Str594Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 226)]
@@ -1583,7 +1583,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str320Key,
+			Name = LocalizedStrings.AskMinKey,
 			Description = LocalizedStrings.Str595Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 227)]
@@ -1607,8 +1607,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str321Key,
-			Description = LocalizedStrings.Str321Key + LocalizedStrings.Dot,
+			Name = LocalizedStrings.YieldKey,
+			Description = LocalizedStrings.YieldKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 228)]
 		[XmlIgnore]
@@ -1657,7 +1657,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str312Key,
+			Name = LocalizedStrings.SettlementPriceKey,
 			Description = LocalizedStrings.SettlementPriceKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 230)]

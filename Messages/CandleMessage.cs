@@ -111,7 +111,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str79Key,
+			Name = LocalizedStrings.OpenPriceKey,
 			Description = LocalizedStrings.Str80Key,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal OpenPrice { get; set; }

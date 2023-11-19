@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str862Key,
+		Name = LocalizedStrings.PositionKey,
 		Description = LocalizedStrings.Str863Key,
 		GroupName = LocalizedStrings.PositionsKey)]
 	public class RiskPositionSizeRule : RiskRule
@@ -236,7 +236,7 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str862Key,
+			Name = LocalizedStrings.PositionKey,
 			Description = LocalizedStrings.Str864Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
@@ -741,7 +741,7 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str878Key,
+			Name = LocalizedStrings.CountKey,
 			Description = LocalizedStrings.Str957Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
@@ -1034,7 +1034,7 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str878Key,
+			Name = LocalizedStrings.CountKey,
 			Description = LocalizedStrings.Str232Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]

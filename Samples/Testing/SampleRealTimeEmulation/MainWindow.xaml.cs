@@ -154,7 +154,7 @@ namespace SampleRealTimeEmulation
 				// update gui labels
 				ChangeConnectStatus(false);
 
-				//MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+				//MessageBox.Show(this, error.ToString(), LocalizedStrings.ErrorConnection);
 			});
 
 			_emuConnector.OrderBookReceived += OnDepth;

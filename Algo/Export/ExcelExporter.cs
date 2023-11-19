@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(7, 0, LocalizedStrings.Str128)
 					.SetCell(8, 0, LocalizedStrings.Str132)
 					.SetCell(9, 0, LocalizedStrings.Str134)
-					.SetCell(10, 0, LocalizedStrings.Str506)
+					.SetCell(10, 0, LocalizedStrings.Trade)
 					.SetCell(11, 0, LocalizedStrings.TradePrice).SetStyle(3, typeof(decimal));
 
 				//worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
@@ -475,7 +475,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(3, row, LocalizedStrings.Board).SetStyle(3, typeof(string))
 					.SetCell(4, row, LocalizedStrings.Header).SetStyle(4, typeof(string))
 					.SetCell(5, row, LocalizedStrings.Text).SetStyle(5, typeof(string))
-					.SetCell(6, row, LocalizedStrings.Str213).SetStyle(6, typeof(string))
+					.SetCell(6, row, LocalizedStrings.Source).SetStyle(6, typeof(string))
 					.SetCell(7, row, LocalizedStrings.Link).SetStyle(6, typeof(string));
 
 				row++;
@@ -520,7 +520,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, LocalizedStrings.VolumeStep).SetStyle(colIndex++, typeof(decimal))
 					.SetCell(colIndex, 0, LocalizedStrings.MinVolume).SetStyle(colIndex++, typeof(decimal))
 					.SetCell(colIndex, 0, LocalizedStrings.MaxVolume).SetStyle(colIndex++, typeof(decimal))
-					.SetCell(colIndex, 0, LocalizedStrings.Str330).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.Lot).SetStyle(colIndex++, typeof(decimal))
 					.SetCell(colIndex, 0, LocalizedStrings.Type).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.Decimals).SetStyle(colIndex++, typeof(decimal))
 					.SetCell(colIndex, 0, LocalizedStrings.Str551).SetStyle(colIndex++, typeof(string))

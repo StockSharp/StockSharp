@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		/// Conditional (stop-loss, take-profit).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str242Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StopOrderTypeKey)]
 		Conditional,
 	}
 }

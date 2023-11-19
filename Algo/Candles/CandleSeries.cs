@@ -140,7 +140,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.FromKey,
-			Description = LocalizedStrings.Str344Key,
+			Description = LocalizedStrings.StartDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
 		public DateTimeOffset? From { get; set; }
@@ -151,7 +151,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UntilKey,
-			Description = LocalizedStrings.Str346Key,
+			Description = LocalizedStrings.ToDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]
 		public DateTimeOffset? To { get; set; }
@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		//[Display(
 		//	ResourceType = typeof(LocalizedStrings),
-		//	Name = LocalizedStrings.Str213Key,
+		//	Name = LocalizedStrings.SourceKey,
 		//	Description = LocalizedStrings.CandlesBuildSourceKey,
 		//	GroupName = LocalizedStrings.BuildKey,
 		//	Order = 21)]
@@ -225,7 +225,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str213Key,
+			Name = LocalizedStrings.SourceKey,
 			Description = LocalizedStrings.CandlesBuildSourceKey,
 			GroupName = LocalizedStrings.BuildKey,
 			Order = 21)]

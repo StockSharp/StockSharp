@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Storage.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1405Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StorageKey)]
 		Storage,
 
 		/// <summary>

@@ -91,8 +91,8 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc/>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str203Key,
-			Description = LocalizedStrings.Str204Key,
+			Name = LocalizedStrings.LocalTimeKey,
+			Description = LocalizedStrings.LocalTimeDescKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 3)]
 		public DateTimeOffset LocalTime { get; set; }
@@ -154,13 +154,13 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str291Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BestBidKey)]
 		public QuoteChange? BestBid2 { get; private set; }
 
 		/// <summary>
 		/// The best ask. If the order book does not contain asks, will be returned <see langword="null" />.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str292Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BestAskKey)]
 		public QuoteChange? BestAsk2 { get; private set; }
 
 		/// <summary>

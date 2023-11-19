@@ -125,7 +125,7 @@ namespace SampleStrategies
 			Connector.ConnectionError += error => this.GuiAsync(() =>
 			{
 				ChangeConnectStatus(false);
-				MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+				MessageBox.Show(this, error.ToString(), LocalizedStrings.ErrorConnection);
 			});
 
 			Connector.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));

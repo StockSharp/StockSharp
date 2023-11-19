@@ -30,8 +30,8 @@ public class BitStampOrderCondition : BaseWithdrawOrderCondition, IStopLossOrder
 	[DataMember]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str2455Key,
-		Description = LocalizedStrings.Str3460Key,
+		Name = LocalizedStrings.StopPriceKey,
+		Description = LocalizedStrings.StopPriceDescKey,
 		GroupName = LocalizedStrings.StopLossKey,
 		Order = 0)]
 	public decimal? StopPrice

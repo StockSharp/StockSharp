@@ -34,7 +34,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str862Key,
+		Name = LocalizedStrings.PositionKey,
 		Description = LocalizedStrings.PositionDescKey)]
 	public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 	{
@@ -293,7 +293,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str312Key,
+			Name = LocalizedStrings.SettlementPriceKey,
 			Description = LocalizedStrings.SettlementPriceKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
@@ -507,7 +507,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LeverageKey,
-			Description = LocalizedStrings.Str261Key,
+			Description = LocalizedStrings.MarginLeverageKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Leverage

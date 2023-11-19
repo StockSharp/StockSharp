@@ -88,7 +88,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 			.SetCell(0, 4, LocalizedStrings.Str1335)
 			//.SetCell(1, 4, FormatTime(base.Strategy.TotalCPUTime))
 
-			.SetCell(0, 5, LocalizedStrings.Str862 + ":")
+			.SetCell(0, 5, LocalizedStrings.Position + ":")
 			.SetCell(1, 5, strategy.Position)
 
 			.SetCell(0, 6, LocalizedStrings.PnL + ":")
@@ -171,7 +171,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 				.SetCell(columnShift + 11, 1, LocalizedStrings.Str1343).SetStyle(columnShift + 12, typeof(decimal))
 				.SetCell(columnShift + 12, 1, LocalizedStrings.Str1344).SetStyle(columnShift + 13, typeof(decimal))
 				.SetCell(columnShift + 13, 1, LocalizedStrings.Str1345).SetStyle(columnShift + 14, typeof(decimal))
-				.SetCell(columnShift + 14, 1, LocalizedStrings.Str862).SetStyle(columnShift + 15, typeof(decimal));
+				.SetCell(columnShift + 14, 1, LocalizedStrings.Position).SetStyle(columnShift + 15, typeof(decimal));
 
 			//worker
 			//	.SetConditionalFormatting(columnShift + 10, ComparisonOperator.Less, "0", null, Colors.Red)

@@ -167,7 +167,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.FromKey,
-			Description = LocalizedStrings.Str344Key,
+			Description = LocalizedStrings.StartDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? From { get; set; }
 
@@ -176,7 +176,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UntilKey,
-			Description = LocalizedStrings.Str346Key,
+			Description = LocalizedStrings.ToDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? To { get; set; }
 
@@ -185,8 +185,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2522Key,
-			Description = LocalizedStrings.Str2523Key,
+			Name = LocalizedStrings.MarketDataFieldsKey,
+			Description = LocalizedStrings.MarketDataFieldsDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
 		public IEnumerable<Level1Fields> Fields { get; set; }
@@ -227,8 +227,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str347Key,
-			Description = LocalizedStrings.Str348Key,
+			Name = LocalizedStrings.ArgumentKey,
+			Description = LocalizedStrings.ArgumentDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Obsolete("Use DataType2 property.")]
 		public object Arg

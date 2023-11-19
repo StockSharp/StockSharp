@@ -58,7 +58,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			writer.WriteLine();
 		}
 
-		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Str862, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Str163, LocalizedStrings.Str161);
+		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Str163, LocalizedStrings.Str161);
 		WriteValues(
 			strategy.Name, strategy.Security != null ? strategy.Security.Id : string.Empty, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty,
 			strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);

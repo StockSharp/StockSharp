@@ -466,10 +466,10 @@ namespace StockSharp.Algo.Testing
 			private ExecutionMessage CreateMessage(DateTimeOffset localTime, DateTimeOffset serverTime, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
 			{
 				if (price <= 0)
-					throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str1144);
+					throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
 
 				if (volume <= 0)
-					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str3344);
+					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.InvalidValue);
 
 				return new()
 				{

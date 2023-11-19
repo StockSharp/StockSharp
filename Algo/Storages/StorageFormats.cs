@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The binary format StockSharp.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str552Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BinaryKey)]
 		[EnumMember]
 		Binary,
 		

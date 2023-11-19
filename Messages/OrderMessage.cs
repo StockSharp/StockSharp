@@ -101,7 +101,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str154Key,
+			Name = LocalizedStrings.ConditionKey,
 			Description = LocalizedStrings.Str155Key,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[XmlIgnore]

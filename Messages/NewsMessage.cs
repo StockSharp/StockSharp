@@ -44,7 +44,7 @@ namespace StockSharp.Messages
 		/// Regular.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1629Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RegularKey)]
 		Regular,
 
 		/// <summary>
@@ -105,8 +105,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str213Key,
-			Description = LocalizedStrings.Str214Key,
+			Name = LocalizedStrings.SourceKey,
+			Description = LocalizedStrings.NewsSourceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Source { get; set; }
 
@@ -128,7 +128,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TextKey,
-			Description = LocalizedStrings.Str218Key,
+			Description = LocalizedStrings.NewsTextKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Story { get; set; }
 
@@ -148,7 +148,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LinkKey,
-			Description = LocalizedStrings.Str222Key,
+			Description = LocalizedStrings.NewsLinkKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Url { get; set; }
 

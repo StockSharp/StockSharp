@@ -98,16 +98,16 @@
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Candles}" Grid.Row="5" Grid.Column="0" Name="CandlesCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr635}" Grid.Row="6" Grid.Column="0" Name="CandlesAndDepthsCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Grid.Row="7" Grid.Column="0" Name="OrderLogCheckBox" Click="CheckBoxClick" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Str289}" Grid.Row="8" Grid.Column="0" Name="LastTradeCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.LastTrade}" Grid.Row="8" Grid.Column="0" Name="LastTradeCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Spread}" Grid.Row="9" Grid.Column="0" Name="SpreadCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.FinamCandles}" Grid.Row="10" Grid.Column="0" Name="FinamCandlesCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.YahooCandles}" Grid.Row="11" Grid.Column="0" Name="YahooCandlesCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Random}" Grid.Row="12" Grid.Column="0" Name="RandomCheckBox" Click="CheckBoxClick" />
 
                     <StackPanel Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                        <Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" IsEnabled="False"/>
+                        <Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Start}" Width="100" Click="StartBtnClick" IsEnabled="False"/>
                         <Button x:Name="PauseBtn" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
-                        <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+                        <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Stop}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
                     </StackPanel>
 					
 					<CheckBox x:Name="GenDepthsCheckBox" Content="{x:Static loc:LocalizedStrings.XamlStr97}" Grid.Row="14" Grid.Column="0" Click="CheckBoxClick" />
@@ -133,7 +133,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="TicksParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="TicksPosition" />
 							</TabItem>
 						</TabControl>
@@ -149,7 +149,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="TicksAndDepthsParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="TicksAndDepthsPosition" />
 							</TabItem>
 						</TabControl>
@@ -165,7 +165,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="DepthsParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="DepthsPosition" />
 							</TabItem>
 						</TabControl>
@@ -181,7 +181,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="CandlesPosition" />
 							</TabItem>
 						</TabControl>
@@ -197,7 +197,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="CandlesAndDepthsParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="CandlesAndDepthsPosition" />
 							</TabItem>
 						</TabControl>
@@ -213,12 +213,12 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="OrderLogParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="OrderLogPosition" />
 							</TabItem>
 						</TabControl>
 					</TabItem>
-					<TabItem Header="{x:Static loc:LocalizedStrings.Str289}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=LastTradeCheckBox, Path=IsChecked}">
+					<TabItem Header="{x:Static loc:LocalizedStrings.LastTrade}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=LastTradeCheckBox, Path=IsChecked}">
 						<TabControl>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
 								<charting:ChartPanel x:Name="LastTradeChart" ShowOverview="False" />
@@ -229,7 +229,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="LastTradeParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="LastTradePosition" />
 							</TabItem>
 						</TabControl>
@@ -245,7 +245,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="SpreadParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="SpreadPosition" />
 							</TabItem>
 						</TabControl>
@@ -261,7 +261,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="FinamCandlesParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="FinamCandlesPosition" />
 							</TabItem>
 						</TabControl>
@@ -277,7 +277,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="YahooCandlesParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="YahooCandlesPosition" />
 							</TabItem>
 						</TabControl>
@@ -293,7 +293,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Statistics}">
 								<sx:StatisticParameterGrid x:Name="RandomParameterGrid" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Position}">
 								<charting:EquityCurveChart x:Name="RandomPosition" />
 							</TabItem>
 						</TabControl>

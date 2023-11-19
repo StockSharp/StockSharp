@@ -74,8 +74,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str213Key,
-			Description = LocalizedStrings.Str214Key,
+			Name = LocalizedStrings.SourceKey,
+			Description = LocalizedStrings.NewsSourceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Source { get; set; }
 
@@ -99,7 +99,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TextKey,
-			Description = LocalizedStrings.Str218Key,
+			Description = LocalizedStrings.NewsTextKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Story
 		{
@@ -140,7 +140,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LinkKey,
-			Description = LocalizedStrings.Str222Key,
+			Description = LocalizedStrings.NewsLinkKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Url]
 		public string Url { get; set; }

@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str968Key,
+		Name = LocalizedStrings.NetProfitKey,
 		Description = LocalizedStrings.Str969Key,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 0

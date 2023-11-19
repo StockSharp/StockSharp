@@ -2066,7 +2066,7 @@ namespace StockSharp.Messages
 					nullSecIdMsg.SecurityId = securityId;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.InvalidValue);
 			}
 		}
 

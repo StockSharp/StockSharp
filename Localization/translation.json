@@ -1711,10 +1711,6 @@
     "en": "Repair",
     "ru": "Переустановить"
   },
-  "InstallerRemove": {
-    "en": "Remove",
-    "ru": "Удалить"
-  },
   "InstallerSkip": {
     "en": "Skip",
     "ru": "Пропустить"
@@ -2467,7 +2463,7 @@
     "en": "Time of candle close",
     "ru": "Время закрытия свечи"
   },
-  "Str79": {
+  "OpenPrice": {
     "en": "Opening price",
     "ru": "Цена открытия"
   },
@@ -2751,7 +2747,7 @@
     "en": "Deal initiator (seller or buyer).",
     "ru": "Инициатор сделки (продавец или покупатель)."
   },
-  "Str150": {
+  "OpenInterest": {
     "en": "Open interest",
     "ru": "Открытый интерес"
   },
@@ -2767,7 +2763,7 @@
     "en": "Error registering/cancelling order",
     "ru": "Ошибка регистрации/отмены заявки"
   },
-  "Str154": {
+  "Condition": {
     "en": "Condition",
     "ru": "Условие"
   },
@@ -2963,11 +2959,11 @@
     "en": "Messages",
     "ru": "Сообщения"
   },
-  "Str203": {
+  "LocalTime": {
     "en": "Local time",
     "ru": "Локальное время"
   },
-  "Str204": {
+  "LocalTimeDesc": {
     "en": "Local timestamp when a message was received/created.",
     "ru": "Метка локального времени, когда сообщение было получено/создано."
   },
@@ -2995,11 +2991,11 @@
     "en": "Security ID, for which news have been published.",
     "ru": "Идентификатор инструмента, для которого опубликована новость."
   },
-  "Str213": {
+  "Source": {
     "en": "Source",
     "ru": "Источник"
   },
-  "Str214": {
+  "NewsSource": {
     "en": "News source.",
     "ru": "Источник новости."
   },
@@ -3011,7 +3007,7 @@
     "en": "Text",
     "ru": "Текст"
   },
-  "Str218": {
+  "NewsText": {
     "en": "News text.",
     "ru": "Текст новости."
   },
@@ -3027,7 +3023,7 @@
     "en": "Link",
     "ru": "Ссылка"
   },
-  "Str222": {
+  "NewsLink": {
     "en": "News link in the internet.",
     "ru": "Ссылка на новость в интернете."
   },
@@ -3095,7 +3091,7 @@
     "en": "Market",
     "ru": "Рыночная"
   },
-  "Str242": {
+  "StopOrderType": {
     "en": "Stop",
     "ru": "Стоп"
   },
@@ -3171,7 +3167,7 @@
     "en": "Variation margin",
     "ru": "Вариационная маржа"
   },
-  "Str261": {
+  "MarginLeverage": {
     "en": "Margin leverage",
     "ru": "Плечо маржи"
   },
@@ -3267,55 +3263,55 @@
     "en": "Quotes change time",
     "ru": "Время изменения котировок"
   },
-  "Str287": {
+  "HighPrice": {
     "en": "Highest price",
     "ru": "Наибольшая цена"
   },
-  "Str288": {
+  "LowPrice": {
     "en": "Lowest price",
     "ru": "Наименьшая цена"
   },
-  "Str289": {
+  "LastTrade": {
     "en": "Last trade",
     "ru": "Последняя сделка"
   },
-  "Str290": {
+  "StepPrice": {
     "en": "Step price",
     "ru": "Стоимость шага"
   },
-  "Str291": {
+  "BestBid": {
     "en": "Best bid",
     "ru": "Лучший бид"
   },
-  "Str292": {
+  "BestAsk": {
     "en": "Best ask",
     "ru": "Лучший оффер"
   },
-  "Str293": {
+  "ImpliedVolatility": {
     "en": "Volatility (implied)",
     "ru": "Волатильность (подразумеваемая)"
   },
-  "Str294": {
+  "TheorPrice": {
     "en": "Theoretical price",
     "ru": "Теоретическая цена"
   },
-  "Str295": {
+  "BidsVolume": {
     "en": "Bids volume",
     "ru": "Объем бидов"
   },
-  "Str296": {
+  "BidsCount": {
     "en": "Number of bids",
     "ru": "Количество бидов"
   },
-  "Str297": {
+  "AsksVolume": {
     "en": "Ask volume",
     "ru": "Объем офферов"
   },
-  "Str298": {
+  "AsksCount": {
     "en": "Number of asks",
     "ru": "Количество офферов"
   },
-  "Str299": {
+  "HistoricalVolatility": {
     "en": "Volatility (historical)",
     "ru": "Волатильность (историческая)"
   },
@@ -3335,55 +3331,55 @@
     "en": "Theta",
     "ru": "Тета"
   },
-  "Str304": {
+  "MarginBuy": {
     "en": "Margin (buy)",
     "ru": "ГО (покупка)"
   },
-  "Str305": {
+  "MarginSell": {
     "en": "Margin (sell)",
     "ru": "ГО (продажа)"
   },
-  "Str306": {
+  "PriceStep": {
     "en": "Minimum price step",
     "ru": "Минимальный шаг цены"
   },
-  "Str307": {
+  "VolumeStep": {
     "en": "Minimum volume step",
     "ru": "Минимальный шаг объема"
   },
-  "Str308": {
+  "LastTradePrice": {
     "en": "Last trade price",
     "ru": "Цена последней сделки"
   },
-  "Str309": {
+  "LastTradeVolume": {
     "en": "Last trade volume",
     "ru": "Объем последней сделки"
   },
-  "Str310": {
+  "VolumePerSession": {
     "en": "Volume per session",
     "ru": "Объем за сессию"
   },
-  "Str311": {
+  "AveragePricePerSession": {
     "en": "Average price per session",
     "ru": "Средняя цена за сессию"
   },
-  "Str312": {
+  "SettlementPrice": {
     "en": "Settlement price",
     "ru": "Расчетная цена"
   },
-  "Str313": {
+  "BestBidPrice": {
     "en": "Best bid price",
     "ru": "Лучшая цена покупки"
   },
-  "Str314": {
+  "BestBidVolume": {
     "en": "Best bid volume",
     "ru": "Лучший объем покупки"
   },
-  "Str315": {
+  "BestAskPrice": {
     "en": "Best ask price",
     "ru": "Лучшая цена продажи"
   },
-  "Str316": {
+  "BestAskVolume": {
     "en": "Best ask volume",
     "ru": "Лучший объем продажи"
   },
@@ -3391,23 +3387,23 @@
     "en": "Rho",
     "ru": "Ро"
   },
-  "Str318": {
+  "AccruedCouponIncome": {
     "en": "Accrued Coupon Interest",
     "ru": "НКД"
   },
-  "Str319": {
+  "BidMax": {
     "en": "Bid (max)",
     "ru": "Бид (макс)"
   },
-  "Str320": {
+  "AskMin": {
     "en": "Ask (min)",
     "ru": "Оффер (мин)"
   },
-  "Str321": {
+  "Yield": {
     "en": "Yield",
     "ru": "Доходность"
   },
-  "Str322": {
+  "LastTradeTime": {
     "en": "Time of last trade",
     "ru": "Время последней сделки"
   },
@@ -3415,31 +3411,31 @@
     "en": "Number of trades",
     "ru": "Количество сделок"
   },
-  "Str325": {
+  "LastTradeId": {
     "en": "Last trade ID",
     "ru": "Идентификатор последней сделки"
   },
-  "Str326": {
+  "BestBidTime": {
     "en": "Best bid time",
     "ru": "Время лучшего бида"
   },
-  "Str327": {
+  "BestAskTime": {
     "en": "Best ask time",
     "ru": "Время лучшего оффера"
   },
-  "Str328": {
+  "Trend": {
     "en": "Trend",
     "ru": "Тренд"
   },
-  "Str329": {
+  "Initiator": {
     "en": "Initiator",
     "ru": "Инициатор"
   },
-  "Str330": {
+  "Lot": {
     "en": "Lot",
     "ru": "Лот"
   },
-  "Str331": {
+  "NumOfShares": {
     "en": "Number of shares",
     "ru": "Количество акций"
   },
@@ -3491,7 +3487,7 @@
     "en": "From",
     "ru": "От"
   },
-  "Str344": {
+  "StartDateDesc": {
     "en": "Start date, from which data needs to be retrieved.",
     "ru": "Дата начала, с которой необходимо получать данные."
   },
@@ -3499,15 +3495,15 @@
     "en": "Until",
     "ru": "До"
   },
-  "Str346": {
+  "ToDateDesc": {
     "en": "End date, until which data needs to be retrieved.",
     "ru": "Дата окончания, до которой необходимо получать данные."
   },
-  "Str347": {
+  "Argument": {
     "en": "Argument",
     "ru": "Аргумент"
   },
-  "Str348": {
+  "ArgumentDesc": {
     "en": "Additional argument for market data request.",
     "ru": "Дополнительный аргумент для запроса маркет-данных."
   },
@@ -3975,7 +3971,7 @@
     "en": "Order, for which a trade was filled.",
     "ru": "Заявка, по которой совершена сделка."
   },
-  "Str506": {
+  "Trade": {
     "en": "Trade",
     "ru": "Сделка"
   },
@@ -4151,7 +4147,7 @@
     "en": "Option type",
     "ru": "Тип опциона"
   },
-  "Str552": {
+  "Binary": {
     "en": "Binary",
     "ru": "Бинарный"
   },
@@ -4391,7 +4387,7 @@
     "en": "Connection error for {0}: {1}",
     "ru": "Ошибка подключения для {0}: {1}"
   },
-  "Str626": {
+  "SomeConnectionFailed": {
     "en": "Failed to connect of some connections.",
     "ru": "Не удалось установить некоторые подключения."
   },
@@ -5255,7 +5251,7 @@
     "en": "Median price",
     "ru": "Медианная цена"
   },
-  "Str844": {
+  "Fractals": {
     "en": "Fractals",
     "ru": "Фракталы"
   },
@@ -5319,7 +5315,7 @@
     "en": "Profit-loss.",
     "ru": "Прибыль-убыток."
   },
-  "Str862": {
+  "Position": {
     "en": "Position",
     "ru": "Позиция"
   },
@@ -5382,10 +5378,6 @@
   "Str877": {
     "en": "Risk-rule, tracking orders placing frequency.",
     "ru": "Риск-правило, отслеживающее частоту выставления заявок."
-  },
-  "Str878": {
-    "en": "Quantity",
-    "ru": "Количество"
   },
   "Str879": {
     "en": "Interval, during which orders quantity will be monitored.",
@@ -5735,7 +5727,7 @@
     "en": "Recovery factor (net profit / maximum drawdown).",
     "ru": "Коэффициент восстановления (чистая прибыль / максимальная просадка)."
   },
-  "Str968": {
+  "NetProfit": {
     "en": "Net profit",
     "ru": "Чистая прибыль"
   },
@@ -6398,10 +6390,6 @@
   "Str1143": {
     "en": "Cannot generate a new market depth, because there were no new trades for an extended period of time.",
     "ru": "Невозможно сгенерировать новый стакан, так как длительное время не было новых сделок."
-  },
-  "Str1144": {
-    "en": "Price is incorrectly specified.",
-    "ru": "Цена задана не верно."
   },
   "Str1145Params": {
     "en": "Waiting {0} for order {1}.",
@@ -7379,7 +7367,7 @@
     "en": "Strategy settings loading caused identifier to change.",
     "ru": "Загрузка настроек стратегии привела к изменению идентификатора."
   },
-  "Str1405": {
+  "Storage": {
     "en": "Storage",
     "ru": "Хранилище"
   },
@@ -7823,7 +7811,7 @@
     "en": "Save",
     "ru": "Сохранить"
   },
-  "Str1520": {
+  "ResetSettings": {
     "en": "Reset settings",
     "ru": "Сбросить настройки"
   },
@@ -8231,7 +8219,7 @@
     "en": "Unknown password change error.",
     "ru": "Неизвестная ошибка смены пароля."
   },
-  "Str1629": {
+  "Regular": {
     "en": "Regular",
     "ru": "Обычное"
   },
@@ -8679,7 +8667,7 @@
     "en": "Stop price",
     "ru": "Стоп цена"
   },
-  "Str1744": {
+  "StopPriceDesc": {
     "en": "Stop price, which sets the condition of stop-order execution.",
     "ru": "Стоп цена, которая задает условие срабатывания стоп-заявки."
   },
@@ -9891,7 +9879,7 @@
     "en": "Line smoothing.",
     "ru": "Сглаживание линии."
   },
-  "Str2060": {
+  "Delete": {
     "en": "Delete",
     "ru": "Удалить"
   },
@@ -10179,7 +10167,7 @@
     "en": "Interval {0} isn't supported.",
     "ru": "Интервал {0} не поддерживается."
   },
-  "Str2140Params": {
+  "UnknownInstrumentType": {
     "en": "Unknown type of security '{0}'.",
     "ru": "Неизвестный тип инструмента '{0}'."
   },
@@ -11091,7 +11079,7 @@
     "en": "Replace action.",
     "ru": "Заместить действие."
   },
-  "Str2421": {
+  "Start": {
     "en": "Start",
     "ru": "Старт"
   },
@@ -11223,7 +11211,7 @@
     "en": "Shift in price for order of Relative type.",
     "ru": "Сдвиг в цене для заявки типа Relative."
   },
-  "Str2455": {
+  "ActivationPrice": {
     "en": "Activation price",
     "ru": "Цена активации"
   },
@@ -11479,11 +11467,11 @@
     "en": "Server messages logging level.",
     "ru": "Уровень логирования сообщений сервера."
   },
-  "Str2522": {
+  "MarketDataFields": {
     "en": "Market data fields",
     "ru": "Поля маркет-данных"
   },
-  "Str2523": {
+  "MarketDataFieldsDesc": {
     "en": "Market data fields, which will be received with subscribed to Level1 messages.",
     "ru": "Поля маркет-данных, которые будут получаться при подписке на Level1 сообщения."
   },
@@ -11583,7 +11571,7 @@
     "en": "Download has been interrupted.",
     "ru": "Загрузка была прервана."
   },
-  "Str2551": {
+  "UnexpectedDisconnection": {
     "en": "Unexpected disconnection.",
     "ru": "Неожиданное отключение."
   },
@@ -11867,7 +11855,7 @@
     "en": "Error connecting to Plaza server.",
     "ru": "Ошибка подключения к серверу Plaza."
   },
-  "Str2631Params": {
+  "ConnectionLostStateIs": {
     "en": "Connection lost. Connection state {0}.",
     "ru": "Подключение потеряно. Состояние подключения {0}."
   },
@@ -12427,10 +12415,6 @@
     "en": "Time-out.",
     "ru": "Тайм-аут."
   },
-  "Str2770": {
-    "en": "Unknown type of message.",
-    "ru": "Неизвестный тип сообщения."
-  },
   "Str2771": {
     "en": "Error initializing CGate.",
     "ru": "Ошибка инициализации CGate."
@@ -12855,7 +12839,7 @@
     "en": "No data to combine.",
     "ru": "Нет данных для склеивания."
   },
-  "Str2890": {
+  "Stop": {
     "en": "Stop",
     "ru": "Остановить"
   },
@@ -12999,10 +12983,6 @@
     "en": "Dates cache for security {0} in directory '{1}' was reset.",
     "ru": "Кэш дат для инструмента {0} в директории '{1}' сброшен."
   },
-  "Str2932": {
-    "en": "Start",
-    "ru": "Запустить"
-  },
   "Str2933": {
     "en": "Show",
     "ru": "Показать"
@@ -13071,11 +13051,11 @@
     "en": "Error subscribing to {0} for {1}",
     "ru": "Ошибка подписки на {0} для {1}"
   },
-  "Str2958": {
+  "ConnectionRestored": {
     "en": "Connection restored.",
     "ru": "Подключение восстановлено."
   },
-  "Str2959": {
+  "ErrorConnection": {
     "en": "Error connection",
     "ru": "Ошибка соединения"
   },
@@ -13143,11 +13123,11 @@
     "en": " 5 secs",
     "ru": " 5 сек"
   },
-  "Str2974": {
+  "LoginNotSpecified": {
     "en": "Login is not specified.",
     "ru": "Не указан логин."
   },
-  "Str2975": {
+  "PasswordNotSpecified": {
     "en": "Password is not specified.",
     "ru": "Не указан пароль."
   },
@@ -13839,7 +13819,7 @@
     "en": "Element value.",
     "ru": "Значение элемента."
   },
-  "Str3162": {
+  "Notification": {
     "en": "Notification",
     "ru": "Уведомление"
   },
@@ -13855,7 +13835,7 @@
     "en": "Signal header.",
     "ru": "Заголовок сигнала."
   },
-  "Str3166": {
+  "Message": {
     "en": "Message",
     "ru": "Сообщение"
   },
@@ -14091,7 +14071,7 @@
     "en": "Security {0} code does not contain expiration date.",
     "ru": "Код инструмента {0} не содержит информации о дате экспирации."
   },
-  "Str3229": {
+  "Add": {
     "en": "Add",
     "ru": "Добавить"
   },
@@ -14391,11 +14371,7 @@
     "en": "The number of requests in {0} minutes exceeded {1}. Read more about the limits at https://bitstamp.net/api/.",
     "ru": "Количество запросов за {0} минут превысило {1}. Подробнее об ограничении https://bitstamp.net/api/ ."
   },
-  "Str3311Params": {
-    "en": "Unknown channel {0}.",
-    "ru": "Неизвестный канал {0}."
-  },
-  "Str3312Params": {
+  "UnknownEvent": {
     "en": "Unknown event {0}.",
     "ru": "Неизвестное событие {0}."
   },
@@ -14507,14 +14483,6 @@
     "en": "Wrong category value.",
     "ru": "Неправильное значение категории."
   },
-  "Str3343": {
-    "en": "Wrong price.",
-    "ru": "Неправильная цена."
-  },
-  "Str3344": {
-    "en": "Wrong volume.",
-    "ru": "Неправильный объем."
-  },
   "Str3346Params": {
     "en": "Error receiving request token: server reply '{0}'.",
     "ru": "Ошибка получения request token: ответ сервера '{0}'."
@@ -14622,10 +14590,6 @@
   "Str3377": {
     "en": "To continue, you must enter a verification code.",
     "ru": "Для продолжения необходимо ввести в поле код верификации."
-  },
-  "Str3378": {
-    "en": "Connection was not stopped from previous time.",
-    "ru": "Подключение не было остановлено с предыдущего раза."
   },
   "Str3379Params": {
     "en": "Method {0} threw a system exception '{1}'. Description '{2}'.",
@@ -14735,7 +14699,7 @@
     "en": "Path to mtesrl.dll file.",
     "ru": "Путь к файлу mtesrl.dll."
   },
-  "Str3412": {
+  "ConnectionType": {
     "en": "Connection type",
     "ru": "Тип подключения"
   },
@@ -14783,7 +14747,7 @@
     "en": "Client code assigned by the broker.",
     "ru": "Код клиента, присвоенный брокером."
   },
-  "Str3427": {
+  "Service": {
     "en": "Service",
     "ru": "Сервис"
   },
@@ -14895,10 +14859,6 @@
     "en": "Error connecting: '{0}'.",
     "ru": "Ошибка подключения: '{0}'."
   },
-  "Str3460": {
-    "en": "Activation price, when reached an order will be placed.",
-    "ru": "Цена активации, при достижении которой будет выставлена заявка."
-  },
   "Str3461": {
     "en": "Test",
     "ru": "Тестовый"
@@ -14991,11 +14951,11 @@
     "en": "Connection point for access to history data.",
     "ru": "Точка подключения для получения исторических данных."
   },
-  "Str3485": {
+  "DomainAddress": {
     "en": "Domain (address)",
     "ru": "Домен (адрес)"
   },
-  "Str3486": {
+  "DomainAddressDesc": {
     "en": "Domain address.",
     "ru": "Адрес домена."
   },
@@ -15859,7 +15819,7 @@
     "en": "Stop-order replacing is not supported.",
     "ru": "Замена стоп-заявок не поддерживается."
   },
-  "Str3720": {
+  "Port": {
     "en": "Port",
     "ru": "Порт"
   },
@@ -16151,7 +16111,7 @@
     "en": "Client number is not specified.",
     "ru": "Не указан номер клиента."
   },
-  "Str3836": {
+  "TokenNotSpecified": {
     "en": "Token is not specified.",
     "ru": "Не указан токен."
   },
@@ -16347,7 +16307,7 @@
     "en": "Undo changes",
     "ru": "Вернуть изменения"
   },
-  "XamlStr61": {
+  "On": {
     "en": "On",
     "ru": "Вкл."
   },
@@ -16567,7 +16527,7 @@
     "en": "Add connection",
     "ru": "Добавить подключение"
   },
-  "XamlStr145": {
+  "AddRule": {
     "en": "Add rule",
     "ru": "Добавить правило"
   },
@@ -16602,10 +16562,6 @@
   "XamlStr159": {
     "en": "Forgot password?",
     "ru": "Забыли пароль?"
-  },
-  "XamlStr161": {
-    "en": "Title:",
-    "ru": "Заголовок:"
   },
   "XamlStr162": {
     "en": "Load all securities:",
@@ -16831,7 +16787,7 @@
     "en": "Commission",
     "ru": "Комиссии"
   },
-  "XamlStr252": {
+  "Components": {
     "en": "Components",
     "ru": "Компоненты"
   },
@@ -16931,11 +16887,11 @@
     "en": "Scale:",
     "ru": "Масштаб:"
   },
-  "XamlStr301": {
+  "Melody": {
     "en": "Melody",
     "ru": "Мелодия"
   },
-  "XamlStr302": {
+  "Menu": {
     "en": "Menu",
     "ru": "Меню"
   },
@@ -17011,7 +16967,7 @@
     "en": "Risk management settings.",
     "ru": "Настройка контроля рисков."
   },
-  "XamlStr332": {
+  "PortfoliosAndConnectionsDesc": {
     "en": "Mapping configuration for portfolios and connections",
     "ru": "Настройка сопоставления портфелей и подключений"
   },
@@ -17495,7 +17451,7 @@
     "en": "Users",
     "ru": "Пользователи"
   },
-  "XamlStr509": {
+  "PortfoliosAndConnections": {
     "en": "Portfolios and connections",
     "ru": "Портфели и подключения"
   },
@@ -17735,7 +17691,7 @@
     "en": "Edit complex element",
     "ru": "Редактировать составной элемент"
   },
-  "XamlStr610": {
+  "LaunchMode": {
     "en": "Launch mode...",
     "ru": "Режим запуска..."
   },
@@ -17919,10 +17875,6 @@
     "en": "Create element",
     "ru": "Создать элемент"
   },
-  "XamlStr684": {
-    "en": "Message:",
-    "ru": "Сообщение:"
-  },
   "XamlStr685": {
     "en": "Messages",
     "ru": "Сообщений"
@@ -18039,9 +17991,9 @@
     "en": "Current:",
     "ru": "Существующие:"
   },
-  "XamlStr738": {
+  "Title": {
     "en": "Title",
-    "ru": "Текст надписи"
+    "ru": "Заголовок"
   },
   "XamlStr739": {
     "en": "Current date:",
@@ -18123,11 +18075,7 @@
     "en": "Only public",
     "ru": "Только публичные"
   },
-  "XamlStr776": {
-    "en": "Trader",
-    "ru": "Трейдер"
-  },
-  "XamlStr780": {
+  "Events": {
     "en": "Events",
     "ru": "Уведомления"
   },
@@ -18135,7 +18083,7 @@
     "en": "Data deletion",
     "ru": "Удаление данных"
   },
-  "XamlStr782": {
+  "Remotely": {
     "en": "Remotely",
     "ru": "Удалённое"
   },
@@ -18187,7 +18135,7 @@
     "en": "Delete connection",
     "ru": "Удалить подключение"
   },
-  "XamlStr796": {
+  "DeleteRule": {
     "en": "Delete rule",
     "ru": "Удалить правило"
   },

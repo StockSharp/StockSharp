@@ -106,7 +106,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str330Key,
+			Name = LocalizedStrings.LotKey,
 			Description = LocalizedStrings.LotVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]

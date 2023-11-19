@@ -44,9 +44,9 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
-			<Button x:Name="StartBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" />
+			<Button x:Name="StartBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Start}" Width="100" Click="StartBtnClick" />
 			<Button x:Name="PauseBtn" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
-			<Button x:Name="StopBtn" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+			<Button x:Name="StopBtn" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Stop}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
 			
 			<Grid Grid.Column="3" Grid.Row="2">  
 			   <ProgressBar x:Name="TestingProcess" Maximum="100" />

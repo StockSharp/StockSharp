@@ -63,7 +63,7 @@ namespace StockSharp.BusinessEntities
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str506Key,
+			Name = LocalizedStrings.TradeKey,
 			Description = LocalizedStrings.Str507Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
@@ -131,8 +131,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str862Key,
-			Description = LocalizedStrings.Str862Key + LocalizedStrings.Dot,
+			Name = LocalizedStrings.PositionKey,
+			Description = LocalizedStrings.PositionKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 2)]
 		public decimal? Position { get; set; }

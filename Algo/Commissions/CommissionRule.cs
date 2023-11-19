@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Commissions
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str506Key,
+		Name = LocalizedStrings.TradeKey,
 		Description = LocalizedStrings.Str661Key,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradeRule : CommissionRule

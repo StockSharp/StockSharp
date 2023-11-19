@@ -427,7 +427,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str150Key,
+			Name = LocalizedStrings.OpenInterestKey,
 			Description = LocalizedStrings.Str151Key,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
@@ -447,7 +447,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str154Key,
+			Name = LocalizedStrings.ConditionKey,
 			Description = LocalizedStrings.Str155Key,
 			GroupName = LocalizedStrings.Str156Key)]
 		[XmlIgnore]
@@ -551,8 +551,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str862Key,
-			Description = LocalizedStrings.Str862Key,
+			Name = LocalizedStrings.PositionKey,
+			Description = LocalizedStrings.PositionKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? Position { get; set; }

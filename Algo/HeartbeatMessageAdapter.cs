@@ -155,7 +155,7 @@ namespace StockSharp.Algo
 
 					if (isRestored)
 					{
-						this.AddInfoLog(LocalizedStrings.Str2958);
+						this.AddInfoLog(LocalizedStrings.ConnectionRestored);
 
 						if (SuppressReconnectingErrors)
 							RaiseNewOutMessage(new ReconnectingFinishedMessage { Adapter = message.Adapter });

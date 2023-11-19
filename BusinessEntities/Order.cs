@@ -509,7 +509,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str154Key,
+			Name = LocalizedStrings.ConditionKey,
 			Description = LocalizedStrings.Str155Key,
 			GroupName = LocalizedStrings.Str156Key)]
 		public OrderCondition Condition { get; set; }
@@ -704,7 +704,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LeverageKey,
-			Description = LocalizedStrings.Str261Key,
+			Description = LocalizedStrings.MarginLeverageKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int? Leverage { get; set; }
 

@@ -106,7 +106,7 @@ namespace StockSharp.Messages
 		/// Margin leverage.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str261Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarginLeverageKey)]
 		Leverage,
 
 		/// <summary>
@@ -163,7 +163,7 @@ namespace StockSharp.Messages
 		/// Settlement price.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str312Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SettlementPriceKey)]
 		SettlementPrice,
 
 		/// <summary>
@@ -184,14 +184,14 @@ namespace StockSharp.Messages
 		/// Margin (buy).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str304Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarginBuyKey)]
 		BuyOrdersMargin,
 		
 		/// <summary>
 		/// Margin (sell).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str305Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarginSellKey)]
 		SellOrdersMargin,
 		
 		/// <summary>
@@ -230,7 +230,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str862Key,
+		Name = LocalizedStrings.PositionKey,
 		Description = LocalizedStrings.PositionDescKey)]
 	public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
 		PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage, IStrategyIdMessage

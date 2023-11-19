@@ -158,7 +158,7 @@ public class CandleExpressionCondition : IPersistable
 	/// </summary>
 	public static readonly Variable[] Variables =
 	{
-		new("O",   LocalizedStrings.Str79,          msg => msg.OpenPrice),
+		new("O",   LocalizedStrings.OpenPrice,      msg => msg.OpenPrice),
 		new("H",   LocalizedStrings.HighestPrice,   msg => msg.HighPrice),
 		new("L",   LocalizedStrings.LowestPrice,    msg => msg.LowPrice),
 		new("C",   LocalizedStrings.ClosingPrice,   msg => msg.ClosePrice),

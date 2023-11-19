@@ -35,8 +35,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str844Key,
-		Description = LocalizedStrings.Str844Key)]
+		Name = LocalizedStrings.FractalsKey,
+		Description = LocalizedStrings.FractalsKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorFractals.html")]
 	public class Fractals : BaseComplexIndicator

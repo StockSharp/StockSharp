@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str506Key,
+		Name = LocalizedStrings.TradeKey,
 		Description = LocalizedStrings.TickTradeKey)]
 	[Obsolete("Use ITickTradeMessage.")]
 	public class Trade : Cloneable<Trade>, ITickTradeMessage
@@ -167,7 +167,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str150Key,
+			Name = LocalizedStrings.OpenInterestKey,
 			Description = LocalizedStrings.Str151Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 10)]

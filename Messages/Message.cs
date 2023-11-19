@@ -76,8 +76,8 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str203Key,
-			Description = LocalizedStrings.Str204Key,
+			Name = LocalizedStrings.LocalTimeKey,
+			Description = LocalizedStrings.LocalTimeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[DataMember]
 		public DateTimeOffset LocalTime { get; set; }

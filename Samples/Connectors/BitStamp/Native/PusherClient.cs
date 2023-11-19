@@ -48,7 +48,7 @@ namespace StockSharp.BitStamp.Native
 					if (expected)
 						this.AddInfoLog(LocalizedStrings.Disconnected);
 					else
-						this.AddErrorLog(LocalizedStrings.Str2959);
+						this.AddErrorLog(LocalizedStrings.ErrorConnection);
 
 					Disconnected?.Invoke(expected);
 				},
@@ -122,7 +122,7 @@ namespace StockSharp.BitStamp.Native
 					else if (channel.StartsWith(ChannelNames.OrderLog))
 						OrderLogSubscribed?.Invoke(GetPair(channel, ChannelNames.OrderLog));
 					else
-						this.AddErrorLog(LocalizedStrings.Str3311Params, channel);
+						this.AddErrorLog(LocalizedStrings.UnknownEvent, channel);
 
 					break;
 				}
@@ -136,7 +136,7 @@ namespace StockSharp.BitStamp.Native
 					else if (channel.StartsWith(ChannelNames.OrderLog))
 						OrderLogUnSubscribed?.Invoke(GetPair(channel, ChannelNames.OrderLog));
 					else
-						this.AddErrorLog(LocalizedStrings.Str3311Params, channel);
+						this.AddErrorLog(LocalizedStrings.UnknownEvent, channel);
 
 					break;
 				}
@@ -156,7 +156,7 @@ namespace StockSharp.BitStamp.Native
 					break;
 
 				default:
-					this.AddErrorLog(LocalizedStrings.Str3312Params, evt);
+					this.AddErrorLog(LocalizedStrings.UnknownEvent, evt);
 					break;
 			}
 		}

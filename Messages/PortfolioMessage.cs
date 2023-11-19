@@ -113,7 +113,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.FromKey,
-			Description = LocalizedStrings.Str344Key,
+			Description = LocalizedStrings.StartDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? From { get; set; }
 
@@ -122,7 +122,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UntilKey,
-			Description = LocalizedStrings.Str346Key,
+			Description = LocalizedStrings.ToDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? To { get; set; }
 

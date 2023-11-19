@@ -112,7 +112,7 @@
 			Connector.ConnectionError += error => this.GuiAsync(() =>
 			{
 				ChangeConnectStatus(false);
-				MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.Str2959);
+				MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.ErrorConnection);
 			});
 
 			Connector.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
