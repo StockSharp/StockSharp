@@ -55,7 +55,7 @@ namespace StockSharp.BusinessEntities
 		[ReadOnly(true)]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str361Key,
+			Name = LocalizedStrings.IdentifierKey,
 			Description = LocalizedStrings.SecurityIdKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
@@ -81,7 +81,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CodeKey,
-			Description = LocalizedStrings.Str349Key + LocalizedStrings.Dot,
+			Description = LocalizedStrings.SecCodeKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
 		[Required(AllowEmptyStrings = false)]
@@ -107,7 +107,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BoardKey,
-			Description = LocalizedStrings.Str549Key,
+			Description = LocalizedStrings.ExchangeBoardDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 2)]
 		[Required]
@@ -133,7 +133,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TypeKey,
-			Description = LocalizedStrings.Str360Key,
+			Description = LocalizedStrings.SecurityTypeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
 		public virtual SecurityTypes? Type
@@ -158,7 +158,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str362Key,
+			Description = LocalizedStrings.SecurityNameKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]
 		public string Name
@@ -182,8 +182,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str363Key,
-			Description = LocalizedStrings.Str364Key,
+			Name = LocalizedStrings.ShortNameKey,
+			Description = LocalizedStrings.ShortNameDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 5)]
 		public string ShortName
@@ -209,7 +209,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.Str382Key,
+			Description = LocalizedStrings.CurrencyDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 6)]
 		[EditorExtension(AutoComplete = true, Sorted = true)]
@@ -231,8 +231,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str553Key,
-			Description = LocalizedStrings.Str554Key,
+			Name = LocalizedStrings.ExternalIdKey,
+			Description = LocalizedStrings.ExternalIdDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 7)]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
@@ -310,7 +310,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeStepKey,
-			Description = LocalizedStrings.Str366Key,
+			Description = LocalizedStrings.MinVolStepKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
 		[GreaterThanZero]
@@ -425,7 +425,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DecimalsKey,
-			Description = LocalizedStrings.Str548Key,
+			Description = LocalizedStrings.DecimalsDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 13)]
 		//[ReadOnly(true)]
@@ -454,7 +454,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExpiryDateKey,
-			Description = LocalizedStrings.Str371Key,
+			Description = LocalizedStrings.ExpiryDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 14)]
 		public DateTimeOffset? ExpiryDate
@@ -479,7 +479,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SettlementDateKey,
-			Description = LocalizedStrings.Str373Key,
+			Description = LocalizedStrings.SettlementDateForSecurityKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 15)]
 		public DateTimeOffset? SettlementDate
@@ -553,7 +553,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.XamlStr527Key,
+			Name = LocalizedStrings.SettlementKey,
 			Description = LocalizedStrings.SettlementTypeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 18)]
@@ -630,7 +630,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StepPriceKey,
-			Description = LocalizedStrings.Str555Key,
+			Description = LocalizedStrings.StepPriceDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 200)]
 		[Browsable(false)]
@@ -661,7 +661,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LastTradeKey,
-			Description = LocalizedStrings.Str557Key,
+			Description = LocalizedStrings.LastTradeDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 201)]
 		[Browsable(false)]
@@ -696,7 +696,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LastTradeKey,
-			Description = LocalizedStrings.Str557Key,
+			Description = LocalizedStrings.LastTradeDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 201)]
 		[Browsable(false)]
@@ -712,8 +712,8 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str558Key,
-			Description = LocalizedStrings.Str559Key,
+			Name = LocalizedStrings.FirstTradePriceKey,
+			Description = LocalizedStrings.FirstTradePriceForSessionKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 202)]
 		[Browsable(false)]
@@ -740,8 +740,8 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str560Key,
-			Description = LocalizedStrings.Str561Key,
+			Name = LocalizedStrings.LastTradePriceKey,
+			Description = LocalizedStrings.LastTradePriceDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 203)]
 		[Browsable(false)]
@@ -769,7 +769,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LowPriceKey,
-			Description = LocalizedStrings.Str562Key,
+			Description = LocalizedStrings.LowPriceForSessionKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 204)]
 		[Browsable(false)]
@@ -796,8 +796,8 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str563Key,
-			Description = LocalizedStrings.Str564Key,
+			Name = LocalizedStrings.HighestPriceKey,
+			Description = LocalizedStrings.HighestPriceForSessionKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 205)]
 		[Browsable(false)]
@@ -1066,7 +1066,7 @@ namespace StockSharp.BusinessEntities
 		//[Nullable]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str551Key,
+			Name = LocalizedStrings.OptionTypeKey,
 			Description = LocalizedStrings.OptionContractTypeKey,
 			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 101)]
@@ -1369,7 +1369,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OpenInterestKey,
-			Description = LocalizedStrings.Str151Key,
+			Description = LocalizedStrings.OpenInterestDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 220)]
 		[XmlIgnore]
@@ -1534,7 +1534,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TradesOfKey,
-			Description = LocalizedStrings.Str232Key + LocalizedStrings.Dot,
+			Description = LocalizedStrings.LimitOrderTifKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 225)]
 		[Browsable(false)]
@@ -1559,7 +1559,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BidMaxKey,
-			Description = LocalizedStrings.Str594Key,
+			Description = LocalizedStrings.BidMaxDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 226)]
 		[Browsable(false)]
@@ -1584,7 +1584,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AskMinKey,
-			Description = LocalizedStrings.Str595Key,
+			Description = LocalizedStrings.AskMinDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 227)]
 		[Browsable(false)]
@@ -1683,7 +1683,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AveragePriceKey,
-			Description = LocalizedStrings.Str600Key,
+			Description = LocalizedStrings.AveragePriceDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 231)]
 		[XmlIgnore]
@@ -1708,7 +1708,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
-			Description = LocalizedStrings.Str601Key,
+			Description = LocalizedStrings.VolumeDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 232)]
 		[XmlIgnore]

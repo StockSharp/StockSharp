@@ -36,7 +36,7 @@ namespace StockSharp.BusinessEntities
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.OrderKey,
-		Description = LocalizedStrings.Str516Key)]
+		Description = LocalizedStrings.InfoAboutOrderKey)]
 	public class Order : NotifiableObject, IOrderMessage
 	{
 		/// <summary>
@@ -64,9 +64,9 @@ namespace StockSharp.BusinessEntities
 		//[TimeSpan]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str538Key,
-			Description = LocalizedStrings.Str518Key,
-			GroupName = LocalizedStrings.Str161Key,
+			Name = LocalizedStrings.RegistrationKey,
+			Description = LocalizedStrings.OrderRegLatencyKey,
+			GroupName = LocalizedStrings.LatencyKey,
 			Order = 1000)]
 		public TimeSpan? LatencyRegistration
 		{
@@ -88,9 +88,9 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str537Key,
-			Description = LocalizedStrings.Str520Key,
-			GroupName = LocalizedStrings.Str161Key,
+			Name = LocalizedStrings.CancellationKey,
+			Description = LocalizedStrings.OrderCancelLatencyKey,
+			GroupName = LocalizedStrings.LatencyKey,
 			Order = 1001)]
 		public TimeSpan? LatencyCancellation
 		{
@@ -114,7 +114,7 @@ namespace StockSharp.BusinessEntities
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.EditionKey,
 			Description = LocalizedStrings.EditionLatencyKey,
-			GroupName = LocalizedStrings.Str161Key,
+			GroupName = LocalizedStrings.LatencyKey,
 			Order = 1002)]
 		public TimeSpan? LatencyEdition
 		{
@@ -137,8 +137,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str361Key,
-			Description = LocalizedStrings.OrderIdStringKey + LocalizedStrings.Dot,
+			Name = LocalizedStrings.IdentifierKey,
+			Description = LocalizedStrings.IdStringKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public long? Id
 		{
@@ -161,7 +161,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str521Key,
+			Name = LocalizedStrings.IdStringKey,
 			Description = LocalizedStrings.OrderIdStringDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string StringId
@@ -182,8 +182,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str117Key,
-			Description = LocalizedStrings.Str118Key,
+			Name = LocalizedStrings.OrderBoardIdKey,
+			Description = LocalizedStrings.OrderBoardIdDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string BoardId
 		{
@@ -203,8 +203,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str522Key,
-			Description = LocalizedStrings.Str523Key,
+			Name = LocalizedStrings.RegTimeKey,
+			Description = LocalizedStrings.RegTimeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset Time
 		{
@@ -237,7 +237,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SecurityKey,
-			Description = LocalizedStrings.Str524Key,
+			Description = LocalizedStrings.OrderSecurityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Security Security { get; set; }
 
@@ -250,7 +250,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StateKey,
-			Description = LocalizedStrings.Str134Key,
+			Description = LocalizedStrings.OrderStateDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public OrderStates State
 		{
@@ -272,7 +272,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PortfolioKey,
-			Description = LocalizedStrings.Str525Key,
+			Description = LocalizedStrings.OrderPortfolioKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Portfolio Portfolio { get; set; }
 
@@ -282,8 +282,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str528Key,
-			Description = LocalizedStrings.Str529Key,
+			Name = LocalizedStrings.ChangedKey,
+			Description = LocalizedStrings.OrderLastChangeTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime
 		{
@@ -317,8 +317,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str530Key,
-			Description = LocalizedStrings.Str531Key,
+			Name = LocalizedStrings.LocalTimeKey,
+			Description = LocalizedStrings.LocalTimeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset LocalTime
 		{
@@ -362,7 +362,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VisibleVolumeKey,
-			Description = LocalizedStrings.Str127Key,
+			Description = LocalizedStrings.VisibleVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? VisibleVolume { get; set; }
 
@@ -370,8 +370,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str128Key,
-			Description = LocalizedStrings.Str129Key,
+			Name = LocalizedStrings.DirectionKey,
+			Description = LocalizedStrings.OrderSideKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides Side { get; set; }
 
@@ -395,7 +395,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BalanceKey,
-			Description = LocalizedStrings.Str131Key,
+			Description = LocalizedStrings.OrderBalanceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Balance
 		{
@@ -438,8 +438,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str139Key,
-			Description = LocalizedStrings.Str140Key,
+			Name = LocalizedStrings.SystemKey,
+			Description = LocalizedStrings.IsSystemTradeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsSystem
 		{
@@ -461,7 +461,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommentKey,
-			Description = LocalizedStrings.Str136Key,
+			Description = LocalizedStrings.OrderCommentKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Comment { get; set; }
 
@@ -471,8 +471,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str132Key,
-			Description = LocalizedStrings.Str133Key,
+			Name = LocalizedStrings.OrderTypeKey,
+			Description = LocalizedStrings.OrderTypeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public OrderTypes? Type { get; set; }
 
@@ -487,8 +487,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str141Key,
-			Description = LocalizedStrings.Str142Key,
+			Name = LocalizedStrings.ExpirationKey,
+			Description = LocalizedStrings.OrderExpirationTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? ExpiryDate
 		{
@@ -510,8 +510,8 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ConditionKey,
-			Description = LocalizedStrings.Str155Key,
-			GroupName = LocalizedStrings.Str156Key)]
+			Description = LocalizedStrings.OrderConditionDescKey,
+			GroupName = LocalizedStrings.ConditionalOrderKey)]
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>
@@ -520,7 +520,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeInForceKey,
-			Description = LocalizedStrings.Str232Key,
+			Description = LocalizedStrings.LimitOrderTifKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public TimeInForce? TimeInForce { get; set; }
 
@@ -533,9 +533,9 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str532Key,
-			Description = LocalizedStrings.Str533Key,
-			GroupName = LocalizedStrings.Str156Key)]
+			Name = LocalizedStrings.LinkedOrderKey,
+			Description = LocalizedStrings.LinkedOrderDescKey,
+			GroupName = LocalizedStrings.ConditionalOrderKey)]
 		[Obsolete("No longer used.")]
 		public Order DerivedOrder
 		{
@@ -557,7 +557,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.Str160Key,
+			Description = LocalizedStrings.CommissionDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? Commission { get; set; }
 
@@ -572,8 +572,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str165Key,
-			Description = LocalizedStrings.Str166Key,
+			Name = LocalizedStrings.UserIdKey,
+			Description = LocalizedStrings.UserOrderIdKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string UserOrderId { get; set; }
 
@@ -590,7 +590,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BrokerKey,
-			Description = LocalizedStrings.Str2619Key,
+			Description = LocalizedStrings.BrokerCodeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string BrokerCode { get; set; }
 
@@ -612,7 +612,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.Str382Key,
+			Description = LocalizedStrings.CurrencyDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public CurrencyTypes? Currency { get; set; }
 
@@ -644,8 +644,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str163Key,
-			Description = LocalizedStrings.Str164Key,
+			Name = LocalizedStrings.SlippageKey,
+			Description = LocalizedStrings.SlippageTradeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? Slippage { get; set; }
 

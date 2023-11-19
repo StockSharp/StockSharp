@@ -146,7 +146,7 @@ namespace SampleHistoryTesting
 						UseTicks = true,
 						UseMarketDepth = true,
 						CurveColor = Colors.Red,
-						StrategyName = LocalizedStrings.XamlStr757
+						StrategyName = LocalizedStrings.TicksAndDepths
 					},
 					TicksAndDepthsChart,
 					TicksAndDepthsEquity,
@@ -195,7 +195,7 @@ namespace SampleHistoryTesting
 						UseMarketDepth = true,
 						UseCandle = CandleSettings.DataType,
 						CurveColor = Colors.Cyan,
-						StrategyName = LocalizedStrings.XamlStr635
+						StrategyName = LocalizedStrings.CandlesAndDepths
 					},
 					CandlesAndDepthsChart,
 					CandlesAndDepthsEquity,

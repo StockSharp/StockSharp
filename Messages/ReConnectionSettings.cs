@@ -47,7 +47,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str175Key,
+			Name = LocalizedStrings.IntervalKey,
 			Description = LocalizedStrings.Str176Key,
 			GroupName = LocalizedStrings.ConnectionKey)]
 		public TimeSpan Interval

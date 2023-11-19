@@ -18,13 +18,13 @@
 		/// <summary>
 		/// Time without breaks.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1915Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TimeNoBreaksKey)]
 		CategoryDateTime,
 
 		/// <summary>
 		/// Number.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1916Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NumericKey)]
 		Numeric
 	}
 }

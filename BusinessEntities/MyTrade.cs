@@ -32,8 +32,8 @@ namespace StockSharp.BusinessEntities
 	[DataContract]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str502Key,
-		Description = LocalizedStrings.Str503Key)]
+		Name = LocalizedStrings.OwnTradeKey,
+		Description = LocalizedStrings.OwnTradeDescKey)]
 	public class MyTrade : NotifiableObject
 	{
 		/// <summary>
@@ -51,7 +51,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OrderKey,
-			Description = LocalizedStrings.Str505Key,
+			Description = LocalizedStrings.OwnTradeOrderKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public Order Order { get; set; }
@@ -64,7 +64,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TradeKey,
-			Description = LocalizedStrings.Str507Key,
+			Description = LocalizedStrings.TickTradeInfoKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.Str160Key,
+			Description = LocalizedStrings.CommissionDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 0)]
 		public decimal? Commission { get; set; }
@@ -94,8 +94,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str163Key,
-			Description = LocalizedStrings.Str164Key,
+			Name = LocalizedStrings.SlippageKey,
+			Description = LocalizedStrings.SlippageTradeKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 1)]
 		public decimal? Slippage { get; set; }

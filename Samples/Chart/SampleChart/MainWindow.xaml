@@ -5,7 +5,7 @@
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
 		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="1000">
+		Title="{x:Static loc:LocalizedStrings.SampleAppFor}" Height="500" Width="1000">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -15,7 +15,7 @@
 		<WrapPanel  Orientation="Horizontal">
 			<GroupBox Padding="5" VerticalAlignment="Center">
 				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static loc:LocalizedStrings.TimeFrame}" VerticalAlignment="Center"/>
 					<sx:CandleSettingsEditor x:Name="SeriesEditor" Margin="3,0" />
 					<CheckBox x:Name="BuildFromTicks" Content="Build from ticks" IsChecked="True" VerticalAlignment="Center"/>
 

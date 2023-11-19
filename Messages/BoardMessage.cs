@@ -38,7 +38,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExchangeInfoKey,
-			Description = LocalizedStrings.Str56Key,
+			Description = LocalizedStrings.BoardExchangeCodeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string ExchangeCode { get; set; }
 
@@ -60,7 +60,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExpiryDateKey,
-			Description = LocalizedStrings.Str64Key,
+			Description = LocalizedStrings.SecExpirationTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public TimeSpan ExpiryTime { get; set; }
 
@@ -100,7 +100,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeZoneKey,
-			Description = LocalizedStrings.Str68Key,
+			Description = LocalizedStrings.BoardTimeZoneKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[XmlIgnore]
 		//[Ecng.Serialization.TimeZoneInfo]

@@ -68,7 +68,7 @@ namespace StockSharp.Messages
 		/// The limited value. This unit allows to set a specific change number, which cannot be used in arithmetic operations <see cref="Unit"/>.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str272Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LimitKey)]
 		Limit,
 	}
 

@@ -49,8 +49,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str361Key,
-			Description = LocalizedStrings.Str145Key,
+			Name = LocalizedStrings.IdentifierKey,
+			Description = LocalizedStrings.TradeIdKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public long? Id { get; set; }
@@ -59,8 +59,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.OrderIdStringKey,
-			Description = LocalizedStrings.Str146Key,
+			Name = LocalizedStrings.IdStringKey,
+			Description = LocalizedStrings.TradeIdStringKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
 		public string StringId { get; set; }
@@ -86,7 +86,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeKey,
-			Description = LocalizedStrings.Str605Key,
+			Description = LocalizedStrings.TradeTimeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
 		public DateTimeOffset ServerTime { get; set; }
@@ -104,8 +104,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str514Key,
-			Description = LocalizedStrings.Str606Key,
+			Name = LocalizedStrings.LocalTimeKey,
+			Description = LocalizedStrings.TradeLocalTimeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 9)]
 		public DateTimeOffset LocalTime { get; set; }
@@ -125,7 +125,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
-			Description = LocalizedStrings.Str147Key,
+			Description = LocalizedStrings.TradePriceKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
 		public decimal Price { get; set; }
@@ -134,8 +134,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str128Key,
-			Description = LocalizedStrings.Str608Key,
+			Name = LocalizedStrings.InitiatorKey,
+			Description = LocalizedStrings.DirectionDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 5)]
 		public Sides? OriginSide { get; set; }
@@ -168,7 +168,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OpenInterestKey,
-			Description = LocalizedStrings.Str151Key,
+			Description = LocalizedStrings.OpenInterestDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 10)]
 		public decimal? OpenInterest { get; set; }
@@ -177,8 +177,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str157Key,
-			Description = LocalizedStrings.Str158Key,
+			Name = LocalizedStrings.UpTrendKey,
+			Description = LocalizedStrings.UpTrendDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 11)]
 		public bool? IsUpTick { get; set; }
@@ -188,7 +188,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.Str382Key,
+			Description = LocalizedStrings.CurrencyDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 7)]
 		public CurrencyTypes? Currency { get; set; }

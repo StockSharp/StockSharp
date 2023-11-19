@@ -137,7 +137,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeKey,
-			Description = LocalizedStrings.Str220Key,
+			Description = LocalizedStrings.NewsTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 

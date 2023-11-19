@@ -4,7 +4,7 @@
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="http://schemas.stocksharp.com/xaml"
         xmlns:ex="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
-        Title="{x:Static loc:LocalizedStrings.XamlStr563}" Height="430" Width="525">
+        Title="{x:Static loc:LocalizedStrings.SampleOptimizationApp}" Height="430" Width="525">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -22,7 +22,7 @@
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 			
-			<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
+			<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Path}" />
 		    <ex:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 		</Grid>
 		

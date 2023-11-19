@@ -36,33 +36,33 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, string>(GetSecurityCodeField(nameof(SecurityMessage.SecurityId)), LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 				fields.Add(new FieldMapping<SecurityMessage, string>(GetBoardCodeField(nameof(SecurityMessage.SecurityId)), LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
-				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.Name), LocalizedStrings.Name, LocalizedStrings.Str362, (i, v) => i.Name = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.Name), LocalizedStrings.Name, LocalizedStrings.SecurityName, (i, v) => i.Name = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.PriceStep), LocalizedStrings.PriceStep, LocalizedStrings.MinPriceStep, (i, v) => i.PriceStep = v));
-				fields.Add(new FieldMapping<SecurityMessage, int>(nameof(SecurityMessage.Decimals), LocalizedStrings.Decimals, LocalizedStrings.Str548, (i, v) => i.Decimals = v));
-				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.VolumeStep), LocalizedStrings.VolumeStep, LocalizedStrings.Str366, (i, v) => i.VolumeStep = v));
+				fields.Add(new FieldMapping<SecurityMessage, int>(nameof(SecurityMessage.Decimals), LocalizedStrings.Decimals, LocalizedStrings.DecimalsDesc, (i, v) => i.Decimals = v));
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.VolumeStep), LocalizedStrings.VolumeStep, LocalizedStrings.MinVolStep, (i, v) => i.VolumeStep = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.MinVolume), LocalizedStrings.MinVolume, LocalizedStrings.MinVolumeDesc, (i, v) => i.MinVolume = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.MaxVolume), LocalizedStrings.MaxVolume, LocalizedStrings.MaxVolumeDesc, (i, v) => i.MaxVolume = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Multiplier), LocalizedStrings.Lot, LocalizedStrings.LotVolume, (i, v) => i.Multiplier = v));
-				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.SecurityType), LocalizedStrings.Type, LocalizedStrings.Str360, (i, v) => i.SecurityType = v));
-				fields.Add(new FieldMapping<SecurityMessage, CurrencyTypes>(nameof(SecurityMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));
+				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.SecurityType), LocalizedStrings.Type, LocalizedStrings.SecurityTypeDesc, (i, v) => i.SecurityType = v));
+				fields.Add(new FieldMapping<SecurityMessage, CurrencyTypes>(nameof(SecurityMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.UnderlyingSecurityCode), LocalizedStrings.UnderlyingAsset, LocalizedStrings.UnderlyingAssetCode, (i, v) => i.UnderlyingSecurityCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.UnderlyingSecurityType), LocalizedStrings.UnderlyingSecurityType, LocalizedStrings.UnderlyingSecurityType, (i, v) => i.UnderlyingSecurityType = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.UnderlyingSecurityMinVolume), LocalizedStrings.UnderlyingMinVolume, LocalizedStrings.UnderlyingMinVolumeDesc, (i, v) => i.UnderlyingSecurityMinVolume = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Strike), LocalizedStrings.Strike, LocalizedStrings.OptionStrikePrice, (i, v) => i.Strike = v));
 				fields.Add(new FieldMapping<SecurityMessage, OptionTypes>(nameof(SecurityMessage.OptionType), LocalizedStrings.OptionsContract, LocalizedStrings.OptionContractType, (i, v) => i.OptionType = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BinaryOptionType), LocalizedStrings.BinaryOption, LocalizedStrings.TypeBinaryOption, (i, v) => i.BinaryOptionType = v));
-				fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.ExpiryDate), LocalizedStrings.ExpiryDate, LocalizedStrings.Str371, (i, v) => i.ExpiryDate = v));
+				fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.ExpiryDate), LocalizedStrings.ExpiryDate, LocalizedStrings.ExpiryDateDesc, (i, v) => i.ExpiryDate = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.Class), LocalizedStrings.Class, LocalizedStrings.SecurityClass, (i, v) => i.Class = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.IssueSize), LocalizedStrings.IssueSize, LocalizedStrings.IssueSize, (i, v) => i.IssueSize = v));
 				fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.IssueDate), LocalizedStrings.IssueDate, LocalizedStrings.IssueDate, (i, v) => i.IssueDate = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.CfiCode), LocalizedStrings.CfiCode, LocalizedStrings.CfiCodeDesc, (i, v) => i.CfiCode = v));
-				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.ShortName), LocalizedStrings.Str363, LocalizedStrings.Str364, (i, v) => i.ShortName = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.ShortName), LocalizedStrings.ShortName, LocalizedStrings.ShortNameDesc, (i, v) => i.ShortName = v));
 				fields.Add(new FieldMapping<SecurityMessage, bool>(nameof(SecurityMessage.Shortable), LocalizedStrings.Shortable, LocalizedStrings.ShortableDesc, (i, v) => i.Shortable = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketCode), LocalizedStrings.Basket, LocalizedStrings.BasketCode, (i, v) => i.BasketCode = v));
 				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BasketExpression), LocalizedStrings.Expression, LocalizedStrings.ExpressionDesc, (i, v) => i.BasketExpression = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.FaceValue), LocalizedStrings.FaceValue, LocalizedStrings.FaceValueDesc, (i, v) => i.FaceValue = v));
 				fields.Add(new FieldMapping<SecurityMessage, OptionStyles>(nameof(SecurityMessage.OptionStyle), LocalizedStrings.OptionStyle, LocalizedStrings.OptionStyleDesc, (i, v) => i.OptionStyle = v));
-				fields.Add(new FieldMapping<SecurityMessage, SettlementTypes>(nameof(SecurityMessage.SettlementType), LocalizedStrings.XamlStr527, LocalizedStrings.SettlementTypeDesc, (i, v) => i.SettlementType = v));
+				fields.Add(new FieldMapping<SecurityMessage, SettlementTypes>(nameof(SecurityMessage.SettlementType), LocalizedStrings.Settlement, LocalizedStrings.SettlementTypeDesc, (i, v) => i.SettlementType = v));
 
 				//fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.SecurityId.Native), LocalizedStrings.NativeId, LocalizedStrings.NativeIdDesc, (i, v) => { }));
 				fields.Add(new FieldMapping<SecurityIdMapping, string>(GetSecurityCodeField(LocalizedStrings.Adapter), LocalizedStrings.AdapterCode, secCodeDescr, (i, v) =>
@@ -93,11 +93,11 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Price, string.Empty, (i, v) => i.TradePrice = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), LocalizedStrings.Volume, string.Empty, (i, v) => i.TradeVolume = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.OriginSide), LocalizedStrings.Initiator, LocalizedStrings.Str149, (i, v) => i.OriginSide = v));
-						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), LocalizedStrings.OpenInterest, LocalizedStrings.Str151, (i, v) => i.OpenInterest = v));
-						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.Str342, LocalizedStrings.Str140, (i, v) => i.IsSystem = v));
-						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsUpTick), LocalizedStrings.Str157, LocalizedStrings.Str158, (i, v) => i.IsUpTick = v));
-						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));
+						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.OriginSide), LocalizedStrings.Initiator, LocalizedStrings.DirectionDesc, (i, v) => i.OriginSide = v));
+						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), LocalizedStrings.OpenInterest, LocalizedStrings.OpenInterestDesc, (i, v) => i.OpenInterest = v));
+						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.System, LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
+						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsUpTick), LocalizedStrings.UpTrend, LocalizedStrings.UpTrendDesc, (i, v) => i.IsUpTick = v));
+						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v));
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderBuyId), LocalizedStrings.Buy, LocalizedStrings.OrderBuyId, (i, v) => i.OrderBuyId = v));
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderSellId), LocalizedStrings.Sell, LocalizedStrings.OrderSellId, (i, v) => i.OrderSellId = v));
 
@@ -113,13 +113,13 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), LocalizedStrings.Price, LocalizedStrings.OrderPrice, (i, v) => i.OrderPrice = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), LocalizedStrings.Volume, LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), LocalizedStrings.Str128, LocalizedStrings.Str129, (i, v) => i.Side = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.Str342, LocalizedStrings.Str140, (i, v) => i.IsSystem = v));
-						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.Str722, LocalizedStrings.Str134, (i, v) => i.OrderState = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.Str144, (i, v) => i.TimeInForce = v) { IsRequired = false });
-						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.Str145, (i, v) => i.TradeId = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Str724, LocalizedStrings.Str147, (i, v) => i.TradePrice = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), LocalizedStrings.OpenInterest, LocalizedStrings.Str151, (i, v) => i.OpenInterest = v));
+						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), LocalizedStrings.Direction, LocalizedStrings.OrderSide, (i, v) => i.Side = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.System, LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
+						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.Str722, LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Str724, LocalizedStrings.TradePrice, (i, v) => i.TradePrice = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), LocalizedStrings.OpenInterest, LocalizedStrings.OpenInterestDesc, (i, v) => i.OpenInterest = v));
 
 						break;
 					}
@@ -134,15 +134,15 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.OrderId), LocalizedStrings.Id, LocalizedStrings.OrderId, (i, v) => i.OrderId = v));
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderPrice), LocalizedStrings.Price, LocalizedStrings.OrderPrice, (i, v) => { i.OrderPrice = v; i.HasOrderInfo = true; }) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), LocalizedStrings.Volume, LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.Balance), LocalizedStrings.Balance, LocalizedStrings.Str131, (i, v) => i.Balance = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), LocalizedStrings.Initiator, LocalizedStrings.Str129, (i, v) => i.Side = v));
-						fields.Add(new FieldMapping<ExecutionMessage, OrderTypes>(nameof(ExecutionMessage.OrderType), LocalizedStrings.Str132, LocalizedStrings.Str133, (i, v) => i.OrderType = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.State, LocalizedStrings.Str134, (i, v) => i.OrderState = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.Str144, (i, v) => i.TimeInForce = v) { IsRequired = false });
-						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.Str145, (i, v) => i.TradeId = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.UserOrderId), LocalizedStrings.Str165, LocalizedStrings.Str166, (i, v) => i.UserOrderId = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.Balance), LocalizedStrings.Balance, LocalizedStrings.OrderBalance, (i, v) => i.Balance = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), LocalizedStrings.Initiator, LocalizedStrings.OrderSide, (i, v) => i.Side = v));
+						fields.Add(new FieldMapping<ExecutionMessage, OrderTypes>(nameof(ExecutionMessage.OrderType), LocalizedStrings.OrderType, LocalizedStrings.OrderTypeDesc, (i, v) => i.OrderType = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.State, LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.UserOrderId), LocalizedStrings.UserId, LocalizedStrings.UserOrderId, (i, v) => i.UserOrderId = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.StrategyId), LocalizedStrings.Strategy, LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
-						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMarketMaker), LocalizedStrings.MarketMaker, LocalizedStrings.MarketMakerOrder, (i, v) => i.IsMarketMaker = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsMargin), LocalizedStrings.Margin, LocalizedStrings.IsMargin, (i, v) => i.IsMargin = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsManual), LocalizedStrings.Manual, LocalizedStrings.IsOrderManual, (i, v) => i.IsManual = v) { IsRequired = false });
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, OrderPositionEffects>(nameof(ExecutionMessage.PositionEffect), LocalizedStrings.PositionEffect, LocalizedStrings.PositionEffectDesc, (i, v) => i.PositionEffect = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.PostOnly), LocalizedStrings.PostOnly, LocalizedStrings.PostOnlyOrder, (i, v) => i.PostOnly = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.Initiator), LocalizedStrings.Initiator, LocalizedStrings.InitiatorTrade, (i, v) => i.Initiator = v) { IsRequired = false });
-						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.SeqNum), LocalizedStrings.Str1916, LocalizedStrings.SequenceNumber, (i, v) => i.SeqNum = v) { IsRequired = false });
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.SeqNum), LocalizedStrings.SeqNum, LocalizedStrings.SequenceNumber, (i, v) => i.SeqNum = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, int>(nameof(ExecutionMessage.Leverage), LocalizedStrings.Leverage, LocalizedStrings.MarginLeverage, (i, v) => i.Leverage = v) { IsRequired = false });
 
 						break;
@@ -181,9 +181,9 @@ namespace StockSharp.Algo.Import
 				}));
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.OpenInterest), LocalizedStrings.OpenInterest, string.Empty, (i, v) => i.OpenInterest = v));
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.OpenPrice), "O", LocalizedStrings.Str80, (i, v) => i.OpenPrice = v) { IsRequired = true });
-				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.HighPrice), "H", LocalizedStrings.Str82, (i, v) => i.HighPrice = v) { IsRequired = true });
-				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.LowPrice), "L", LocalizedStrings.Str84, (i, v) => i.LowPrice = v) { IsRequired = true });
-				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.ClosePrice), "C", LocalizedStrings.Str86, (i, v) => i.ClosePrice = v) { IsRequired = true });
+				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.HighPrice), "H", LocalizedStrings.HighPriceOfCandle, (i, v) => i.HighPrice = v) { IsRequired = true });
+				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.LowPrice), "L", LocalizedStrings.LowPriceOfCandle, (i, v) => i.LowPrice = v) { IsRequired = true });
+				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.ClosePrice), "C", LocalizedStrings.ClosePriceOfCandle, (i, v) => i.ClosePrice = v) { IsRequired = true });
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.TotalVolume), "V", LocalizedStrings.TotalCandleVolume, (i, v) => i.TotalVolume = v) { IsRequired = true });
 				//_allFields.Add(new FieldMapping<CandleMessage>("Arg", "Параметр", string.Empty, typeof(object), (i, v) => i.Arg = v) { IsRequired = true });
 				fields.Add(new FieldMapping<CandleMessage, int>(nameof(CandleMessage.UpTicks), LocalizedStrings.TickUp, LocalizedStrings.TickUpCount, (i, v) => i.UpTicks = v) { IsRequired = false });
@@ -209,8 +209,8 @@ namespace StockSharp.Algo.Import
 					q.Volume = v;
 					i.Quote = q;
 				}) { IsRequired = true });
-				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Str128, LocalizedStrings.Str277, (i, v) => i.Side = v) { IsRequired = true });
-				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.OrdersCount), LocalizedStrings.Str668, LocalizedStrings.XamlStr248, (i, v) =>
+				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Direction, LocalizedStrings.Str277, (i, v) => i.Side = v) { IsRequired = true });
+				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.OrdersCount), LocalizedStrings.Str668, LocalizedStrings.OrdersCount, (i, v) =>
 				{
 					var q = i.Quote;
 					q.OrdersCount = v;

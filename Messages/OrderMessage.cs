@@ -56,8 +56,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str132Key,
-			Description = LocalizedStrings.Str133Key,
+			Name = LocalizedStrings.OrderTypeKey,
+			Description = LocalizedStrings.OrderTypeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public OrderTypes? OrderType { get; set; }
 
@@ -67,8 +67,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str165Key,
-			Description = LocalizedStrings.Str166Key,
+			Name = LocalizedStrings.UserIdKey,
+			Description = LocalizedStrings.UserOrderIdKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string UserOrderId { get; set; }
 
@@ -82,7 +82,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BrokerKey,
-			Description = LocalizedStrings.Str2619Key,
+			Description = LocalizedStrings.BrokerCodeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string BrokerCode { get; set; }
 
@@ -102,7 +102,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ConditionKey,
-			Description = LocalizedStrings.Str155Key,
+			Description = LocalizedStrings.OrderConditionDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[XmlIgnore]
 		public OrderCondition Condition { get; set; }
@@ -114,7 +114,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommentKey,
-			Description = LocalizedStrings.Str136Key,
+			Description = LocalizedStrings.OrderCommentKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Comment { get; set; }
 

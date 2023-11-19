@@ -59,8 +59,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str253Key,
-			Description = LocalizedStrings.Str424Key,
+			Name = LocalizedStrings.BeginValueKey,
+			Description = LocalizedStrings.PosBeginValueKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
@@ -85,8 +85,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str254Key,
-			Description = LocalizedStrings.Str425Key,
+			Name = LocalizedStrings.CurrentValueKey,
+			Description = LocalizedStrings.CurrentPosSizeKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		//[Browsable(false)]
@@ -111,8 +111,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str255Key,
-			Description = LocalizedStrings.Str426Key,
+			Name = LocalizedStrings.BlockedKey,
+			Description = LocalizedStrings.PosBlockedSizeKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
@@ -138,8 +138,8 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str256Key,
-			Description = LocalizedStrings.Str428Key,
+			Name = LocalizedStrings.PosPriceKey,
+			Description = LocalizedStrings.PosPriceDescKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? CurrentPrice
@@ -165,7 +165,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AveragePriceKey,
-			Description = LocalizedStrings.Str429Key,
+			Description = LocalizedStrings.AveragePriceCalcTradesKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? AveragePrice
@@ -190,8 +190,8 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str258Key,
-			Description = LocalizedStrings.Str430Key,
+			Name = LocalizedStrings.UnrealizedProfitKey,
+			Description = LocalizedStrings.UnrealizedProfitDescKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? UnrealizedPnL
@@ -216,8 +216,8 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str259Key,
-			Description = LocalizedStrings.Str431Key,
+			Name = LocalizedStrings.RealizedProfitKey,
+			Description = LocalizedStrings.RealizedProfitDescKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public decimal? RealizedPnL
@@ -241,8 +241,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str260Key,
-			Description = LocalizedStrings.Str432Key,
+			Name = LocalizedStrings.VariationMarginKey,
+			Description = LocalizedStrings.VariationMarginDescKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
@@ -268,7 +268,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.Str433Key,
+			Description = LocalizedStrings.TotalCommissionKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
@@ -319,8 +319,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str434Key,
-			Description = LocalizedStrings.Str435Key,
+			Name = LocalizedStrings.ChangedKey,
+			Description = LocalizedStrings.TimePosLastChangeKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public DateTimeOffset LastChangeTime
@@ -341,8 +341,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str530Key,
-			Description = LocalizedStrings.Str530Key,
+			Name = LocalizedStrings.LocalTimeKey,
+			Description = LocalizedStrings.LocalTimeDescKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		[Browsable(false)]
 		public DateTimeOffset LocalTime
@@ -364,7 +364,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DescriptionKey,
-			Description = LocalizedStrings.Str269Key,
+			Description = LocalizedStrings.PosTextKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Description
 		{
@@ -385,7 +385,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.Str251Key,
+			Description = LocalizedStrings.PortfolioCurrencyKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public CurrencyTypes? Currency
 		{
@@ -436,7 +436,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PortfolioKey,
-			Description = LocalizedStrings.Str270Key,
+			Description = LocalizedStrings.PosPortfolioKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Portfolio Portfolio { get; set; }
 
@@ -447,7 +447,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SecurityKey,
-			Description = LocalizedStrings.Str271Key,
+			Description = LocalizedStrings.PosSecurityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Security Security { get; set; }
 
@@ -467,8 +467,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str272Key,
-			Description = LocalizedStrings.Str267Key,
+			Name = LocalizedStrings.LimitKey,
+			Description = LocalizedStrings.PosLimitKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		[DataMember]
@@ -481,7 +481,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StrategyKey,
-			Description = LocalizedStrings.Str361Key,
+			Description = LocalizedStrings.IdentifierKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 100)]
 		public virtual string StrategyId { get; set; }
@@ -493,7 +493,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SideKey,
-			Description = LocalizedStrings.Str3126Key,
+			Description = LocalizedStrings.PosSideKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 101)]
 		public virtual Sides? Side { get; set; }

@@ -459,7 +459,7 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str9Key,
+			Name = LocalizedStrings.LogLevelKey,
 			Description = LocalizedStrings.Str1358Key,
 			GroupName = LocalizedStrings.LoggingKey)]
 		public override LogLevels LogLevel
@@ -692,7 +692,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str163Key,
+			Name = LocalizedStrings.SlippageKey,
 			Description = LocalizedStrings.Str1363Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 99)]
@@ -769,7 +769,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str161Key,
+			Name = LocalizedStrings.LatencyKey,
 			Description = LocalizedStrings.Str1366Key,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 102)]
@@ -812,7 +812,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			GroupName = LocalizedStrings.SettingsKey,
-			Name = LocalizedStrings.XamlStr613Key,
+			Name = LocalizedStrings.RisksKey,
 			Description = LocalizedStrings.RiskSettingsKey,
 			Order = 300)]
 		public IEnumerable<IRiskRule> RiskRules
@@ -1263,7 +1263,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.XamlStr426Key,
+			Name = LocalizedStrings.UnsubscribeKey,
 			Description = LocalizedStrings.UnsubscribeOnStopKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]
@@ -1448,7 +1448,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommentKey,
-			Description = LocalizedStrings.Str136Key,
+			Description = LocalizedStrings.OrderCommentKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
 		public StrategyCommentModes CommentMode

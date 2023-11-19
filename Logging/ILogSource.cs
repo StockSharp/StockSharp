@@ -148,8 +148,8 @@ namespace StockSharp.Logging
 		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str9Key,
-			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
+			Name = LocalizedStrings.LogLevelKey,
+			Description = LocalizedStrings.LogLevelKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.LoggingKey,
 			Order = 1001)]
 		public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;

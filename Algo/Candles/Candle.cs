@@ -126,7 +126,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ClosingPriceKey,
-			Description = LocalizedStrings.Str86Key,
+			Description = LocalizedStrings.ClosePriceOfCandleKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal ClosePrice { get; set; }
 
@@ -135,7 +135,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.HighestPriceKey,
-			Description = LocalizedStrings.Str82Key,
+			Description = LocalizedStrings.HighPriceOfCandleKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal HighPrice { get; set; }
 
@@ -144,7 +144,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LowestPriceKey,
-			Description = LocalizedStrings.Str84Key,
+			Description = LocalizedStrings.LowPriceOfCandleKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal LowPrice { get; set; }
 
@@ -215,8 +215,8 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.XamlStr493Key,
-			Description = LocalizedStrings.XamlStr493Key,
+			Name = LocalizedStrings.BuyVolumeKey,
+			Description = LocalizedStrings.BuyVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? BuyVolume { get; set; }
 
@@ -224,8 +224,8 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.XamlStr579Key,
-			Description = LocalizedStrings.XamlStr579Key,
+			Name = LocalizedStrings.SellVolumeKey,
+			Description = LocalizedStrings.SellVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? SellVolume { get; set; }
 

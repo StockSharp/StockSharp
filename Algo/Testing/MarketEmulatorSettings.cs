@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1176Key,
 			Description = LocalizedStrings.Str1177Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 200)]
 		public bool MatchOnTouch
 		{
@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1180Key,
 			Description = LocalizedStrings.Str1181Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 202)]
 		public double Failing
 		{
@@ -95,9 +95,9 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str161Key,
+			Name = LocalizedStrings.LatencyKey,
 			Description = LocalizedStrings.Str1184Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 203)]
 		public TimeSpan Latency
 		{
@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1190Key,
 			Description = LocalizedStrings.Str1191Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 206)]
 		public long InitialOrderId
 		{
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1192Key,
 			Description = LocalizedStrings.Str1193Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 207)]
 		public long InitialTradeId
 		{
@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1195Key,
 			Description = LocalizedStrings.Str1196Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 209)]
 		public int SpreadSize
 		{
@@ -185,9 +185,9 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1197Key,
+			Name = LocalizedStrings.DepthOfBookKey,
 			Description = LocalizedStrings.Str1198Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 210)]
 		public int MaxDepth
 		{
@@ -211,7 +211,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1201Key,
 			Description = LocalizedStrings.Str1202Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 212)]
 		public TimeSpan PortfolioRecalcInterval
 		{
@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1203Key,
 			Description = LocalizedStrings.Str1204Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 213)]
 		public bool ConvertTime
 		{
@@ -255,8 +255,8 @@ namespace StockSharp.Algo.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeZoneKey,
-			Description = LocalizedStrings.Str68Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			Description = LocalizedStrings.BoardTimeZoneKey,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 214)]
 		public TimeZoneInfo TimeZone
 		{
@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1205Key,
 			Description = LocalizedStrings.Str1206Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 215)]
 		public Unit PriceLimitOffset
 		{
@@ -298,7 +298,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1207Key,
 			Description = LocalizedStrings.Str1208Key,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 216)]
 		public bool IncreaseDepthVolume
 		{
@@ -319,7 +319,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SessionStateKey,
 			Description = LocalizedStrings.CheckTradingStateKey,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 217)]
 		public bool CheckTradingState
 		{
@@ -340,7 +340,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1543Key,
 			Description = LocalizedStrings.CheckMoneyKey,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 218)]
 		public bool CheckMoney
 		{
@@ -359,7 +359,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ShortableKey,
 			Description = LocalizedStrings.ShortableDescKey,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 218)]
 		public bool CheckShortable { get; set; }
 
@@ -370,7 +370,7 @@ namespace StockSharp.Algo.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StorageKey,
 			//Description = ,
-			GroupName = LocalizedStrings.Str1175Key,
+			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 219)]
 		public bool AllowStoreGenerateMessages { get; set; }
 

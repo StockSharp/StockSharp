@@ -37,14 +37,14 @@ namespace StockSharp.Messages
 		/// Empty state (candle doesn't exist).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1658Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 		None,
 
 		/// <summary>
 		/// Candle active.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ActiveKey)]
 		Active,
 
 		/// <summary>
@@ -121,7 +121,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.HighestPriceKey,
-			Description = LocalizedStrings.Str82Key,
+			Description = LocalizedStrings.HighPriceOfCandleKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal HighPrice { get; set; }
 
@@ -130,7 +130,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LowestPriceKey,
-			Description = LocalizedStrings.Str84Key,
+			Description = LocalizedStrings.LowPriceOfCandleKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal LowPrice { get; set; }
 
@@ -139,7 +139,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ClosingPriceKey,
-			Description = LocalizedStrings.Str86Key,
+			Description = LocalizedStrings.ClosePriceOfCandleKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal ClosePrice { get; set; }
 
@@ -188,7 +188,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.XamlStr493Key,
+			Name = LocalizedStrings.BuyVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? BuyVolume { get; set; }
 
@@ -196,7 +196,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.XamlStr579Key,
+			Name = LocalizedStrings.SellVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? SellVolume { get; set; }
 

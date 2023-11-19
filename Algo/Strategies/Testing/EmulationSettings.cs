@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str175Key,
+			Name = LocalizedStrings.IntervalKey,
 			Description = LocalizedStrings.Str1409Key,
 			GroupName = LocalizedStrings.BacktestKey,
 			Order = 100)]
@@ -211,8 +211,8 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str9Key,
-			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
+			Name = LocalizedStrings.LogLevelKey,
+			Description = LocalizedStrings.LogLevelKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.Str12Key,
 			Order = 300)]
 		[Obsolete("Use external storage.")]
@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			GroupName = LocalizedStrings.BacktestKey,
 			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.Str160Key,
+			Description = LocalizedStrings.CommissionDescKey,
 			Order = 110)]
 		public IEnumerable<ICommissionRule> CommissionRules
 		{

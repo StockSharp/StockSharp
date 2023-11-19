@@ -585,7 +585,7 @@ namespace StockSharp.Messages
 		/// System info.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str342Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SystemKey)]
 		IsSystem,
 
 		/// <summary>

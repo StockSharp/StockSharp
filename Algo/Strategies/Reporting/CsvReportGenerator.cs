@@ -58,7 +58,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			writer.WriteLine();
 		}
 
-		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Str163, LocalizedStrings.Str161);
+		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
 		WriteValues(
 			strategy.Name, strategy.Security != null ? strategy.Security.Id : string.Empty, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty,
 			strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
@@ -76,8 +76,8 @@ public class CsvReportGenerator : BaseReportGenerator
 		if (IncludeOrders)
 		{
 			WriteValues(LocalizedStrings.Orders);
-			WriteValues(LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Time, LocalizedStrings.Price,
-				LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Balance,
+			WriteValues(LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
+				LocalizedStrings.Status, LocalizedStrings.State, LocalizedStrings.Balance,
 				LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.Str1326, LocalizedStrings.Str1327);
 
 			foreach (var order in strategy.Orders)
@@ -92,7 +92,7 @@ public class CsvReportGenerator : BaseReportGenerator
 		{
 			WriteValues(LocalizedStrings.Trades);
 			WriteValues(LocalizedStrings.Str1192, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
-				LocalizedStrings.Str128, LocalizedStrings.Str1190, LocalizedStrings.Str1330, LocalizedStrings.Str163);
+				LocalizedStrings.Direction, LocalizedStrings.Str1190, LocalizedStrings.Str1330, LocalizedStrings.Slippage);
 
 			foreach (var trade in strategy.MyTrades)
 			{

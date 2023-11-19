@@ -239,7 +239,7 @@
 
 			this.GuiAsync(() =>
 			{
-				MessageBox.Show(this.GetWindow(), fail.Error.ToString(), LocalizedStrings.Str153);
+				MessageBox.Show(this.GetWindow(), fail.Error.ToString(), LocalizedStrings.OrderError);
 			});
 		}
 

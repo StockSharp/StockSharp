@@ -32,21 +32,21 @@ namespace StockSharp.Messages
 		/// Session assigned. Cannot register new orders, but can cancel.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str399Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.AssignedKey)]
 		Assigned,
 
 		/// <summary>
 		/// Session active. Can register and cancel orders.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ActiveKey)]
 		Active,
 
 		/// <summary>
 		/// Suspended. Cannot register new orders, but can cancel.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str400Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SuspendedKey)]
 		Paused,
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace StockSharp.Messages
 		/// Finished. Cannot register and cancel orders.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str402Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FinishedKey)]
 		Ended,
 	}
 

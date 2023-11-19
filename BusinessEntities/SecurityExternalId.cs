@@ -32,7 +32,7 @@ namespace StockSharp.BusinessEntities
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.IdentifiersKey,
-		Description = LocalizedStrings.Str603Key)]
+		Description = LocalizedStrings.SecIdInOtherSystemsKey)]
 	public class SecurityExternalId : NotifiableObject, ICloneable<SecurityExternalId>, IEquatable<SecurityExternalId>
 	{
 		private string _sedol;
@@ -58,7 +58,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SedolKey,
-			Description = LocalizedStrings.Str351Key)]
+			Description = LocalizedStrings.SedolDescKey)]
 		public string Sedol
 		{
 			get => _sedol;
@@ -76,7 +76,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CusipKey,
-			Description = LocalizedStrings.Str352Key)]
+			Description = LocalizedStrings.CusipDescKey)]
 		public string Cusip
 		{
 			get => _cusip;
@@ -94,7 +94,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IsinKey,
-			Description = LocalizedStrings.Str353Key)]
+			Description = LocalizedStrings.IsinDescKey)]
 		public string Isin
 		{
 			get => _isin;
@@ -112,7 +112,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.RicKey,
-			Description = LocalizedStrings.Str354Key)]
+			Description = LocalizedStrings.RicDescKey)]
 		public string Ric
 		{
 			get => _ric;
@@ -130,7 +130,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BloombergKey,
-			Description = LocalizedStrings.Str355Key)]
+			Description = LocalizedStrings.BloombergDescKey)]
 		public string Bloomberg
 		{
 			get => _bloomberg;
@@ -148,7 +148,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IQFeedKey,
-			Description = LocalizedStrings.Str356Key)]
+			Description = LocalizedStrings.IQFeedDescKey)]
 		public string IQFeed
 		{
 			get => _iqFeed;
@@ -166,7 +166,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.InteractiveBrokersKey,
-			Description = LocalizedStrings.Str357Key)]
+			Description = LocalizedStrings.InteractiveBrokersDescKey)]
 		//[Nullable]
 		public int? InteractiveBrokers
 		{
@@ -185,7 +185,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PlazaKey,
-			Description = LocalizedStrings.Str358Key)]
+			Description = LocalizedStrings.PlazaDescKey)]
 		public string Plaza
 		{
 			get => _plaza;

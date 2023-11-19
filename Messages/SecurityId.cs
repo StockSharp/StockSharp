@@ -48,8 +48,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str349Key,
-			Description = LocalizedStrings.Str349Key,
+			Name = LocalizedStrings.SecCodeKey,
+			Description = LocalizedStrings.SecCodeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string SecurityCode
 		{
@@ -143,7 +143,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SedolKey,
-			Description = LocalizedStrings.Str351Key)]
+			Description = LocalizedStrings.SedolDescKey)]
 		public string Sedol { get; set; }
 
 		/// <summary>
@@ -153,7 +153,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CusipKey,
-			Description = LocalizedStrings.Str352Key)]
+			Description = LocalizedStrings.CusipDescKey)]
 		public string Cusip { get; set; }
 
 		/// <summary>
@@ -163,7 +163,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IsinKey,
-			Description = LocalizedStrings.Str353Key)]
+			Description = LocalizedStrings.IsinDescKey)]
 		public string Isin { get; set; }
 
 		/// <summary>
@@ -173,7 +173,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.RicKey,
-			Description = LocalizedStrings.Str354Key)]
+			Description = LocalizedStrings.RicDescKey)]
 		public string Ric { get; set; }
 
 		/// <summary>
@@ -183,7 +183,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BloombergKey,
-			Description = LocalizedStrings.Str355Key)]
+			Description = LocalizedStrings.BloombergDescKey)]
 		public string Bloomberg { get; set; }
 
 		/// <summary>
@@ -193,7 +193,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IQFeedKey,
-			Description = LocalizedStrings.Str356Key)]
+			Description = LocalizedStrings.IQFeedDescKey)]
 		public string IQFeed { get; set; }
 
 		/// <summary>
@@ -204,7 +204,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.InteractiveBrokersKey,
-			Description = LocalizedStrings.Str357Key)]
+			Description = LocalizedStrings.InteractiveBrokersDescKey)]
 		public int? InteractiveBrokers { get; set; }
 
 		/// <summary>
@@ -214,7 +214,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PlazaKey,
-			Description = LocalizedStrings.Str358Key)]
+			Description = LocalizedStrings.PlazaDescKey)]
 		public string Plaza { get; set; }
 
 		private int _hashCode;

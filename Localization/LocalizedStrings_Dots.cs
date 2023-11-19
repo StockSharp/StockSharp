@@ -102,7 +102,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str2933Dot => AppendDot(Str2933);
+		public static string ShowDot => AppendDot(Show);
 
 		/// <summary>
 		/// 
@@ -152,17 +152,17 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str1924Dot => AppendDot(Str1924);
+		public static string AutoRangeDot => AppendDot(AutoRange);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str1926Dot => AppendDot(Str1926);
+		public static string FlipCoordsDot => AppendDot(FlipCoords);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str1938Dot => AppendDot(Str1938);
+		public static string LabelsFormatDot => AppendDot(LabelsFormat);
 
 		/// <summary>
 		/// 
@@ -212,12 +212,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str2121Dot => AppendDot(Str2121);
+		public static string AdditionalDot => AppendDot(Additional);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str1197Dot => AppendDot(Str1197);
+		public static string DepthOfBookDot => AppendDot(DepthOfBook);
 
 		/// <summary>
 		/// 
@@ -247,7 +247,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str2137Dot => AppendDot(Str2137);
+		public static string FileWithSecsDot => AppendDot(FileWithSecs);
 
 		/// <summary>
 		/// 
@@ -292,7 +292,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str349Dot => AppendDot(Str349);
+		public static string SecCodeDot => AppendDot(SecCode);
 
 		/// <summary>
 		/// 
@@ -312,11 +312,6 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str232Dot => AppendDot(Str232);
-
-		/// <summary>
-		/// 
-		/// </summary>
 		public static string YieldDot => AppendDot(Yield);
 
 		/// <summary>
@@ -327,7 +322,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str9Dot => AppendDot(Str9);
+		public static string LogLevelDot => AppendDot(LogLevel);
 
 		/// <summary>
 		/// 
@@ -337,12 +332,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str2223Dot => AppendDot(Str2223);
+		public static string TimeForAutoStopDot => AppendDot(TimeForAutoStop);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str2235Dot => AppendDot(Str2235);
+		public static string WorkIntervalDot => AppendDot(WorkInterval);
 
 		/// <summary>
 		/// 
@@ -352,7 +347,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str2237Dot => AppendDot(Str2237);
+		public static string DataDirectoryDot => AppendDot(DataDirectory);
 
 		/// <summary>
 		/// 
@@ -377,7 +372,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str3526Dot => AppendDot(Str3526);
+		public static string UseCreditDot => AppendDot(UseCredit);
 
 		/// <summary>
 		/// 
@@ -387,22 +382,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str1864Dot => AppendDot(Str1864);
+		public static string ServerConfigDot => AppendDot(ServerConfig);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str2572TrailingDelta => Str2572.Put(TrailingDelta);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static string Str2577TrailingReferencePrice => Str2572.Put(TrailingReferencePrice);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static string Str3423Dot => AppendDot(Str3423);
+		public static string CompressionDot => AppendDot(Compression);
 
 		/// <summary>
 		/// 
@@ -442,7 +427,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str436Dot => AppendDot(Statistics);
+		public static string StatisticsDot => AppendDot(Statistics);
 
 		/// <summary>
 		/// 
@@ -462,7 +447,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str1324Dot => AppendDot(Str1324);
+		public static string StatusDot => AppendDot(Status);
 
 		/// <summary>
 		/// 
@@ -537,7 +522,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str3400Dot => AppendDot(Str3400);
+		public static string ActivationTimeDot => AppendDot(ActivationTime);
 				
 		/// <summary>
 		/// 
@@ -612,7 +597,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str3506Dot => AppendDot(Str3506);
+		public static string DatesFormatDot => AppendDot(DatesFormat);
 
 		/// <summary>
 		/// 
@@ -637,7 +622,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string Str254Dot => AppendDot(Str254);
+		public static string CurrentValueDot => AppendDot(CurrentValue);
 
 		/// <summary>
 		/// 
@@ -652,7 +637,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string OrderIdStringDot => AppendDot(OrderIdString);
+		public static string OrderIdStringDot => AppendDot(IdString);
 
 		/// <summary>
 		/// 

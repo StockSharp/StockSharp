@@ -4,7 +4,7 @@
 		xmlns:charting="http://schemas.stocksharp.com/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="970">
+		Title="{x:Static loc:LocalizedStrings.SampleAppFor}" Height="400" Width="970">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>

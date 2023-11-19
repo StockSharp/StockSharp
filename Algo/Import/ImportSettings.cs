@@ -101,8 +101,8 @@ namespace StockSharp.Algo.Import
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2237Key,
-			Description = LocalizedStrings.Str2237Key + LocalizedStrings.Dot,
+			Name = LocalizedStrings.DataDirectoryKey,
+			Description = LocalizedStrings.DataDirectoryKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 2)]
 		[Editor(typeof(IFolderBrowserEditor), typeof(IFolderBrowserEditor))]
@@ -261,7 +261,7 @@ namespace StockSharp.Algo.Import
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str175Key,
+			Name = LocalizedStrings.IntervalKey,
 			Description = LocalizedStrings.IntervalDataUpdatesKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 8)]

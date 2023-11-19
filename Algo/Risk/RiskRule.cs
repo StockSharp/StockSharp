@@ -496,7 +496,7 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str163Key,
+		Name = LocalizedStrings.SlippageKey,
 		Description = LocalizedStrings.Str870Key,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class RiskSlippageRule : RiskRule
@@ -508,7 +508,7 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str163Key,
+			Name = LocalizedStrings.SlippageKey,
 			Description = LocalizedStrings.Str871Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
@@ -769,7 +769,7 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str175Key,
+			Name = LocalizedStrings.IntervalKey,
 			Description = LocalizedStrings.Str879Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
@@ -890,7 +890,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
-			Description = LocalizedStrings.Str147Key,
+			Description = LocalizedStrings.TradePriceKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Price
@@ -1035,7 +1035,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CountKey,
-			Description = LocalizedStrings.Str232Key,
+			Description = LocalizedStrings.LimitOrderTifKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public int Count
@@ -1061,7 +1061,7 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str175Key,
+			Name = LocalizedStrings.IntervalKey,
 			Description = LocalizedStrings.Str885Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]

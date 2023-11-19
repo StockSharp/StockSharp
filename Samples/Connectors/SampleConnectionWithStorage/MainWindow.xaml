@@ -3,6 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:local="clr-namespace:SampleConnection"
-    Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="500" Width="850">
+    Title="{x:Static loc:LocalizedStrings.SampleAppFor}" Height="500" Width="850">
     <local:MainPanel x:Name="MainPanel" CreateConnector="MainPanel_OnCreateConnector"/>
 </Window>

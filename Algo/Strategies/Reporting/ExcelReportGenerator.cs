@@ -97,10 +97,10 @@ public class ExcelReportGenerator : BaseReportGenerator
 			.SetCell(0, 7, LocalizedStrings.Commission + ":")
 			.SetCell(1, 7, strategy.Commission)
 
-			.SetCell(0, 8, LocalizedStrings.Str163 + ":")
+			.SetCell(0, 8, LocalizedStrings.Slippage + ":")
 			.SetCell(1, 8, strategy.Slippage)
 
-			.SetCell(0, 9, LocalizedStrings.Str161 + ":")
+			.SetCell(0, 9, LocalizedStrings.Latency + ":")
 			.SetCell(1, 9, strategy.Latency.Format());
 
 		var rowIndex = 11;
@@ -163,9 +163,9 @@ public class ExcelReportGenerator : BaseReportGenerator
 				.SetCell(columnShift + 3, 1, LocalizedStrings.Price).SetStyle(columnShift + 3, typeof(decimal))
 				.SetCell(columnShift + 4, 1, LocalizedStrings.Str1341).SetStyle(columnShift + 4, typeof(decimal))
 				.SetCell(columnShift + 5, 1, LocalizedStrings.Volume).SetStyle(columnShift + 5, typeof(decimal))
-				.SetCell(columnShift + 6, 1, LocalizedStrings.Str128)
+				.SetCell(columnShift + 6, 1, LocalizedStrings.Direction)
 				.SetCell(columnShift + 7, 1, LocalizedStrings.Str1190).SetStyle(columnShift + 7, typeof(long))
-				.SetCell(columnShift + 8, 1, LocalizedStrings.Str163).SetStyle(columnShift + 8, typeof(decimal))
+				.SetCell(columnShift + 8, 1, LocalizedStrings.Slippage).SetStyle(columnShift + 8, typeof(decimal))
 				.SetCell(columnShift + 9, 1, LocalizedStrings.Comment)
 				.SetCell(columnShift + 10, 1, LocalizedStrings.Str1342).SetStyle(columnShift + 11, typeof(decimal))
 				.SetCell(columnShift + 11, 1, LocalizedStrings.Str1343).SetStyle(columnShift + 12, typeof(decimal))
@@ -228,12 +228,12 @@ public class ExcelReportGenerator : BaseReportGenerator
 
 				.SetCell(columnShift + 0, 1, LocalizedStrings.Str1190).SetStyle(columnShift + 0, typeof(long))
 				.SetCell(columnShift + 1, 1, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
-				.SetCell(columnShift + 2, 1, LocalizedStrings.Str128)
+				.SetCell(columnShift + 2, 1, LocalizedStrings.Direction)
 				.SetCell(columnShift + 3, 1, LocalizedStrings.Str1346).SetStyle(columnShift + 3, "HH:mm:ss.fff")
 				.SetCell(columnShift + 4, 1, LocalizedStrings.Str1347).SetStyle(columnShift + 4, "HH:mm:ss.fff")
 				.SetCell(columnShift + 5, 1, LocalizedStrings.Str1348)
 				.SetCell(columnShift + 6, 1, LocalizedStrings.Price).SetStyle(columnShift + 6, typeof(decimal))
-				.SetCell(columnShift + 7, 1, LocalizedStrings.Str1324)
+				.SetCell(columnShift + 7, 1, LocalizedStrings.Status)
 				.SetCell(columnShift + 8, 1, LocalizedStrings.State)
 				.SetCell(columnShift + 9, 1, LocalizedStrings.Balance).SetStyle(columnShift + 10, typeof(decimal))
 				.SetCell(columnShift + 10, 1, LocalizedStrings.Volume).SetStyle(columnShift + 11, typeof(decimal))
@@ -244,7 +244,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 
 			//worker
 			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str1329), null, Colors.Green)
-			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str238), null, Colors.Red);
+			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Active), null, Colors.Red);
 
 			rowIndex = 2;
 			foreach (var order in strategy.Orders.ToArray())
@@ -260,7 +260,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 					.SetCell(columnShift + 5, rowIndex, (order.ServerTime - order.Time).Format())
 					.SetCell(columnShift + 6, rowIndex, order.Price)
 					.SetCell(columnShift + 7, rowIndex, order.State.GetDisplayName())
-					.SetCell(columnShift + 8, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : LocalizedStrings.Str238))
+					.SetCell(columnShift + 8, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : LocalizedStrings.Active))
 					.SetCell(columnShift + 9, rowIndex, order.Balance)
 					.SetCell(columnShift + 10, rowIndex, order.Volume)
 					.SetCell(columnShift + 11, rowIndex, order.Type.GetDisplayName())

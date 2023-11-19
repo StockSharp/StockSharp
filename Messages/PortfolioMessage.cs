@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str247Key,
+			Description = LocalizedStrings.PortfolioNameKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string PortfolioName { get; set; }
 
@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.Str251Key,
+			Description = LocalizedStrings.PortfolioCurrencyKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public CurrencyTypes? Currency { get; set; }
 

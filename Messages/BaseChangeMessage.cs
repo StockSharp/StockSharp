@@ -42,7 +42,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ServerTimeKey,
-			Description = LocalizedStrings.Str168Key,
+			Description = LocalizedStrings.ChangeServerTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 

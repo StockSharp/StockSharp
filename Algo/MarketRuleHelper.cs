@@ -52,7 +52,7 @@ namespace StockSharp.Algo
 			public IntervalTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
 				: base(connector)
 			{
-				Name = LocalizedStrings.Str175 + " " + interval;
+				Name = LocalizedStrings.Interval + " " + interval;
 
 				_timer = new MarketTimer(connector, () => Activate(connector))
 					.Interval(interval)

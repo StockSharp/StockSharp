@@ -47,7 +47,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TypeKey,
-			Description = LocalizedStrings.Str360Key,
+			Description = LocalizedStrings.SecurityTypeDescKey,
 			GroupName = LocalizedStrings.OptionsKey)]
 		public SecurityTypes[] SecurityTypes { get; set; }
 

@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VisibleVolumeKey,
-			Description = LocalizedStrings.Str127Key,
+			Description = LocalizedStrings.VisibleVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? VisibleVolume { get; set; }
@@ -68,8 +68,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str128Key,
-			Description = LocalizedStrings.Str129Key,
+			Name = LocalizedStrings.DirectionKey,
+			Description = LocalizedStrings.OrderSideKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides Side { get; set; }
 
@@ -82,8 +82,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str141Key,
-			Description = LocalizedStrings.Str142Key,
+			Name = LocalizedStrings.ExpirationKey,
+			Description = LocalizedStrings.OrderExpirationTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset? TillDate { get; set; }
 
@@ -93,7 +93,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeInForceKey,
-			Description = LocalizedStrings.Str232Key,
+			Description = LocalizedStrings.LimitOrderTifKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public TimeInForce? TimeInForce { get; set; }
@@ -115,8 +115,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str163Key,
-			Description = LocalizedStrings.Str164Key,
+			Name = LocalizedStrings.SlippageKey,
+			Description = LocalizedStrings.SlippageTradeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? Slippage { get; set; }
 

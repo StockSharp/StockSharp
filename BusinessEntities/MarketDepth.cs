@@ -72,7 +72,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ServerTimeKey,
-			Description = LocalizedStrings.Str168Key,
+			Description = LocalizedStrings.ChangeServerTimeKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 2)]
 		public DateTimeOffset ServerTime { get; set; }
@@ -120,8 +120,8 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc/>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str281Key,
-			Description = LocalizedStrings.Str282Key,
+			Name = LocalizedStrings.BidsKey,
+			Description = LocalizedStrings.QuotesBuyKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 0)]
 		public QuoteChange[] Bids
@@ -135,8 +135,8 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc/>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str283Key,
-			Description = LocalizedStrings.Str284Key,
+			Name = LocalizedStrings.AsksKey,
+			Description = LocalizedStrings.QuotesSellKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 1)]
 		public QuoteChange[] Asks
@@ -214,7 +214,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Depth of book.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1197Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DepthOfBookKey)]
 		public int Depth { get; private set; }
 
 		/// <summary>

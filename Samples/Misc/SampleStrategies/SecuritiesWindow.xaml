@@ -24,7 +24,7 @@
 			</Button>
 
 			<StackPanel Grid.Column="2" Orientation="Horizontal">
-				<Button x:Name="Quotes" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
+				<Button x:Name="Quotes" Content="{x:Static loc:LocalizedStrings.BidAsk}" Width="100" IsEnabled="False" Click="QuotesClick" />
 				<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
 				</Button>

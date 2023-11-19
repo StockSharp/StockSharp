@@ -489,7 +489,7 @@ namespace StockSharp.Algo
 					return LocalizedStrings.Reconnecting;
 
 				case _none:
-					return LocalizedStrings.Str1658;
+					return LocalizedStrings.None;
 
 				default:
 					return state.GetDisplayName();

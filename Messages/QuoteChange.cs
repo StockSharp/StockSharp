@@ -60,7 +60,7 @@ namespace StockSharp.Messages
 		/// Active.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ActiveKey)]
 		Active,
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace StockSharp.Messages
 	[Serializable]
 	//[Display(
 	//	ResourceType = typeof(LocalizedStrings),
-	//	Name = LocalizedStrings.Str273Key,
+	//	Name = LocalizedStrings.QuoteKey,
 	//	Description = LocalizedStrings.Str274Key)]
 	public struct QuoteChange
 	{

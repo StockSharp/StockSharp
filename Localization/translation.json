@@ -1,4 +1,8 @@
 {
+  "Numeric": {
+    "en": "Numeric",
+    "ru": "Числовое"
+  },
   "RemoveAppDataFolder": {
     "en": "Remove the application data folder including all downloaded data and settings",
     "ru": "Удалить папку данных приложения включая все скачанные данные и настройки"
@@ -1835,10 +1839,6 @@
     "en": "install",
     "ru": "установить"
   },
-  "ResetApp": {
-    "en": "reset",
-    "ru": "сбросить"
-  },
   "Installing": {
     "en": "installing",
     "ru": "установка"
@@ -2219,7 +2219,7 @@
     "en": "Parent at source {0} is already set in {1}.",
     "ru": "Родитель у источника {0} уже установлен в {1}."
   },
-  "Str9": {
+  "LogLevel": {
     "en": "Logging level",
     "ru": "Уровень логирования"
   },
@@ -2399,7 +2399,7 @@
     "en": "Stock exchange",
     "ru": "Фондовая биржа"
   },
-  "Str56": {
+  "BoardExchangeCode": {
     "en": "Code of the exchange, to which the board belongs.",
     "ru": "Код биржи, которой принадлежит площадка."
   },
@@ -2427,7 +2427,7 @@
     "en": "Are market type orders supported.",
     "ru": "Поддерживается ли рыночный тип заявок."
   },
-  "Str64": {
+  "SecExpirationTime": {
     "en": "Securities expiration times.",
     "ru": "Время экспирации инструментов."
   },
@@ -2439,7 +2439,7 @@
     "en": "Time zone",
     "ru": "Часовой пояс"
   },
-  "Str68": {
+  "BoardTimeZone": {
     "en": "Information about the time zone where the exchange is located.",
     "ru": "Информация о временной зоне, где находится биржа."
   },
@@ -2475,7 +2475,7 @@
     "en": "Highest price",
     "ru": "Максимальная цена"
   },
-  "Str82": {
+  "HighPriceOfCandle": {
     "en": "Highest price of a candle.",
     "ru": "Максимальная цена свечи."
   },
@@ -2483,7 +2483,7 @@
     "en": "Lowest price",
     "ru": "Минимальная цена"
   },
-  "Str84": {
+  "LowPriceOfCandle": {
     "en": "Lowest price of a candle.",
     "ru": "Минимальная цена свечи."
   },
@@ -2491,7 +2491,7 @@
     "en": "Closing price",
     "ru": "Цена закрытия"
   },
-  "Str86": {
+  "ClosePriceOfCandle": {
     "en": "Candle closing price.",
     "ru": "Цена закрытия свечи."
   },
@@ -2595,10 +2595,6 @@
     "en": "Data type",
     "ru": "Тип данных"
   },
-  "Str110": {
-    "en": "Data type, information about which is contained in the message.",
-    "ru": "Тип данных, информация о которых содержится в сообщении."
-  },
   "Cancel": {
     "en": "Cancel",
     "ru": "Отмена"
@@ -2611,19 +2607,19 @@
     "en": "Order ID",
     "ru": "Идентификатор заявки"
   },
-  "OrderIdString": {
-    "en": "Order ID (string)",
-    "ru": "Идентификатор заявки (строка)"
+  "IdString": {
+    "en": "ID (string)",
+    "ru": "Идентификатор (строка)"
   },
   "OrderIdStringDesc": {
     "en": "Order ID (as string, if electronic board does not use numeric order ID representation).",
     "ru": "Идентификатор заявки (в виде строки, если электронная площадка не использует числовое представление идентификатора заявки)."
   },
-  "Str117": {
+  "OrderBoardId": {
     "en": "Order ID (board)",
     "ru": "Идентификатор заявки (площадка)"
   },
-  "Str118": {
+  "OrderBoardIdDesc": {
     "en": "Electronic board order ID.",
     "ru": "Идентификатор заявки электронной площадки."
   },
@@ -2659,15 +2655,15 @@
     "en": "Visible volume",
     "ru": "Видимый объем"
   },
-  "Str127": {
+  "VisibleVolumeDesc": {
     "en": "Visible quantity of contracts in order.",
     "ru": "Видимое количество контрактов в заявке."
   },
-  "Str128": {
+  "Direction": {
     "en": "Direction",
     "ru": "Направление"
   },
-  "Str129": {
+  "OrderSide": {
     "en": "Order side (buy or sell).",
     "ru": "Направление заявки (покупка или продажа)."
   },
@@ -2675,19 +2671,19 @@
     "en": "Balance",
     "ru": "Остаток"
   },
-  "Str131": {
+  "OrderBalance": {
     "en": "Order contracts balance.",
     "ru": "Остаток контрактов в заявке."
   },
-  "Str132": {
+  "OrderType": {
     "en": "Order type",
     "ru": "Тип заявки"
   },
-  "Str133": {
+  "OrderTypeDesc": {
     "en": "Order type (Limit, Market, Stop-order etc.).",
     "ru": "Тип заявки (Лимитированная, Рыночная, Стоп-заявка и т.д.)."
   },
-  "Str134": {
+  "OrderStateDesc": {
     "en": "Order state (Active, Not active, Error).",
     "ru": "Состояние заявки (Активна, Не активна, Ошибка)."
   },
@@ -2695,63 +2691,51 @@
     "en": "Comment",
     "ru": "Комментарий"
   },
-  "Str136": {
+  "OrderComment": {
     "en": "Placed order comment.",
     "ru": "Комментарий к выставляемой заявке."
   },
-  "Str137": {
-    "en": "Message for order",
-    "ru": "Сообщение к заявке"
+  "SystemComment": {
+    "en": "System comment",
+    "ru": "Системное сообщение"
   },
-  "Str138": {
-    "en": "Message for order (created by the trading system when registered, changed or cancelled).",
-    "ru": "Сообщение к заявке (создается торговой системой при регистрации, изменении или снятии)."
+  "SystemCommentDesc": {
+    "en": "System comment for order (created by the trading system when registered, changed or cancelled).",
+    "ru": "Системное сообщение к заявке (создается торговой системой при регистрации, изменении или снятии)."
   },
-  "Str139": {
-    "en": "System order",
-    "ru": "Системная заявка"
-  },
-  "Str140": {
+  "IsSystemTrade": {
     "en": "Is a system trade.",
     "ru": "Является ли заявка системной."
   },
-  "Str141": {
-    "en": "Order expiration time",
-    "ru": "Время экспирации заявки"
-  },
-  "Str142": {
+  "OrderExpirationTime": {
     "en": "Order expiration time.",
     "ru": "Время истечения срока действия заявки."
   },
-  "Str143": {
+  "ExecutionCondition": {
     "en": "Execution condition",
     "ru": "Условие исполнения"
   },
-  "Str144": {
+  "ExecutionConditionDesc": {
     "en": "Limit order execution condition.",
     "ru": "Условие исполнения лимитированной заявки."
   },
-  "Str145": {
+  "TradeId": {
     "en": "Trade ID.",
     "ru": "Идентификатор сделки."
   },
-  "Str146": {
+  "TradeIdString": {
     "en": "Trade ID (as string, if electronic board does not use numeric order ID representation).",
     "ru": "Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки)."
   },
-  "Str147": {
+  "TradePrice": {
     "en": "Trade price.",
     "ru": "Цена сделки."
-  },
-  "Str149": {
-    "en": "Deal initiator (seller or buyer).",
-    "ru": "Инициатор сделки (продавец или покупатель)."
   },
   "OpenInterest": {
     "en": "Open interest",
     "ru": "Открытый интерес"
   },
-  "Str151": {
+  "OpenInterestDesc": {
     "en": "Number of open positions (open interest).",
     "ru": "Количество открытых позиций (открытый интерес)."
   },
@@ -2759,7 +2743,7 @@
     "en": "Error",
     "ru": "Ошибка"
   },
-  "Str153": {
+  "OrderError": {
     "en": "Error registering/cancelling order",
     "ru": "Ошибка регистрации/отмены заявки"
   },
@@ -2767,19 +2751,19 @@
     "en": "Condition",
     "ru": "Условие"
   },
-  "Str155": {
+  "OrderConditionDesc": {
     "en": "Order condition (e.g., stop- and algo- orders parameters).",
     "ru": "Условие заявки (например, параметры стоп - или алго- заявки)."
   },
-  "Str156": {
+  "ConditionalOrder": {
     "en": "Conditional order",
     "ru": "Условная заявка"
   },
-  "Str157": {
+  "UpTrend": {
     "en": "Uptrend",
-    "ru": "Восходящий тренд"
+    "ru": "Восходящий"
   },
-  "Str158": {
+  "UpTrendDesc": {
     "en": "Is tick ascending or descending in price.",
     "ru": "Является ли тик восходящим или нисходящим в цене."
   },
@@ -2787,31 +2771,31 @@
     "en": "Commission",
     "ru": "Комиссия"
   },
-  "Str160": {
+  "CommissionDesc": {
     "en": "Commission (broker, exchange etc.).",
     "ru": "Комиссия (брокерская, биржевая и т.д.)."
   },
-  "Str161": {
+  "Latency": {
     "en": "Latency",
     "ru": "Задержка"
   },
-  "Str162": {
+  "NetworkLatency": {
     "en": "Network latency.",
     "ru": "Сетевая задержка."
   },
-  "Str163": {
+  "Slippage": {
     "en": "Slippage",
     "ru": "Проскальзывание"
   },
-  "Str164": {
+  "SlippageTrade": {
     "en": "Slippage in trade price.",
     "ru": "Проскальзывание в цене сделки."
   },
-  "Str165": {
+  "UserId": {
     "en": "ID (user)",
     "ru": "Идентификатор (пользоват.)"
   },
-  "Str166": {
+  "UserOrderId": {
     "en": "User's order ID.",
     "ru": "Пользовательский идентификатор заявки."
   },
@@ -2819,7 +2803,7 @@
     "en": "General",
     "ru": "Основные"
   },
-  "Str168": {
+  "ChangeServerTime": {
     "en": "Change server time.",
     "ru": "Серверное время изменения."
   },
@@ -2847,7 +2831,7 @@
     "en": "Connection",
     "ru": "Подключение"
   },
-  "Str175": {
+  "Interval": {
     "en": "Interval",
     "ru": "Интервал"
   },
@@ -3015,7 +2999,7 @@
     "en": "Time",
     "ru": "Время"
   },
-  "Str220": {
+  "NewsTime": {
     "en": "Time of news arrival.",
     "ru": "Время появления новости."
   },
@@ -3059,7 +3043,7 @@
     "en": "Time in force",
     "ru": "Время жизни"
   },
-  "Str232": {
+  "LimitOrderTif": {
     "en": "Limit order time in force.",
     "ru": "Время жизни лимитной заявки."
   },
@@ -3079,7 +3063,7 @@
     "en": "Information for Negotiated Trades Mode orders.",
     "ru": "Информация для заявок РПС."
   },
-  "Str238": {
+  "OrderActive": {
     "en": "Active",
     "ru": "Активна"
   },
@@ -3115,7 +3099,7 @@
     "en": "Filling",
     "ru": "Исполнение"
   },
-  "Str247": {
+  "PortfolioName": {
     "en": "Portfolio code name.",
     "ru": "Кодовое название портфеля."
   },
@@ -3131,39 +3115,39 @@
     "en": "Currency",
     "ru": "Валюта"
   },
-  "Str251": {
+  "PortfolioCurrency": {
     "en": "Portfolio currency.",
     "ru": "Валюта портфеля."
   },
-  "Str252": {
+  "PortfolioState": {
     "en": "Portfolio state.",
     "ru": "Состояние портфеля."
   },
-  "Str253": {
+  "BeginValue": {
     "en": "Initial value",
     "ru": "Начальное значение"
   },
-  "Str254": {
+  "CurrentValue": {
     "en": "Current value",
     "ru": "Текущая значение"
   },
-  "Str255": {
+  "Blocked": {
     "en": "Blocked",
     "ru": "Заблокировано"
   },
-  "Str256": {
+  "PosPrice": {
     "en": "Position price",
     "ru": "Стоимость позиции"
   },
-  "Str258": {
+  "UnrealizedProfit": {
     "en": "Unrealized profit",
     "ru": "Нереализованная прибыль"
   },
-  "Str259": {
+  "RealizedProfit": {
     "en": "Realized profit",
     "ru": "Реализованная прибыль"
   },
-  "Str260": {
+  "VariationMargin": {
     "en": "Variation margin",
     "ru": "Вариационная маржа"
   },
@@ -3191,7 +3175,7 @@
     "en": "Limit type",
     "ru": "Вид лимита"
   },
-  "Str267": {
+  "PosLimit": {
     "en": "Limit type for Т+ market. If delivery is immediate, then limit is equal Т+0.",
     "ru": "Вид лимита для Т+ рынка. Если поставка выполняется сразу, то лимит равен Т+0."
   },
@@ -3199,23 +3183,23 @@
     "en": "Description",
     "ru": "Описание"
   },
-  "Str269": {
+  "PosText": {
     "en": "Text position description.",
     "ru": "Текстовое описание позиции."
   },
-  "Str270": {
+  "PosPortfolio": {
     "en": "Portfolio, in which position is created.",
     "ru": "Портфель, в котором создана позиция."
   },
-  "Str271": {
+  "PosSecurity": {
     "en": "Security, for which a position was created.",
     "ru": "Инструмент, по которому создана позиция."
   },
-  "Str272": {
+  "Limit": {
     "en": "Limit",
     "ru": "Лимит"
   },
-  "Str273": {
+  "Quote": {
     "en": "Quote",
     "ru": "Котировка"
   },
@@ -3243,19 +3227,19 @@
     "en": "Ask",
     "ru": "Оффер"
   },
-  "Str281": {
+  "Bids": {
     "en": "Bids",
     "ru": "Биды"
   },
-  "Str282": {
+  "QuotesBuy": {
     "en": "Quotes to buy.",
     "ru": "Котировки на покупку."
   },
-  "Str283": {
+  "Asks": {
     "en": "Asks",
     "ru": "Оффера"
   },
-  "Str284": {
+  "QuotesSell": {
     "en": "Quotes to sell.",
     "ru": "Котировки на продажу."
   },
@@ -3292,8 +3276,8 @@
     "ru": "Волатильность (подразумеваемая)"
   },
   "TheorPrice": {
-    "en": "Theoretical price",
-    "ru": "Теоретическая цена"
+    "en": "Theor price",
+    "ru": "Теорет. цена"
   },
   "BidsVolume": {
     "en": "Bids volume",
@@ -3349,11 +3333,11 @@
   },
   "LastTradePrice": {
     "en": "Last trade price",
-    "ru": "Цена последней сделки"
+    "ru": "Цена послед. сделки"
   },
   "LastTradeVolume": {
     "en": "Last trade volume",
-    "ru": "Объем последней сделки"
+    "ru": "Объем послед. сделки"
   },
   "VolumePerSession": {
     "en": "Volume per session",
@@ -3479,7 +3463,7 @@
     "en": "HV (month)",
     "ru": "HV (месяц)"
   },
-  "Str342": {
+  "System": {
     "en": "System",
     "ru": "Системная"
   },
@@ -3507,39 +3491,39 @@
     "en": "Additional argument for market data request.",
     "ru": "Дополнительный аргумент для запроса маркет-данных."
   },
-  "Str349": {
+  "SecCode": {
     "en": "Security code",
     "ru": "Код инструмента"
   },
-  "Str351": {
+  "SedolDesc": {
     "en": "ID in SEDOL format (Stock Exchange Daily Official List).",
     "ru": "Идентификатор в формате SEDOL (Stock Exchange Daily Official List)."
   },
-  "Str352": {
+  "CusipDesc": {
     "en": "ID in CUSIP format (Committee on Uniform Securities Identification Procedures).",
     "ru": "Идентификатор в формате CUSIP (Committee on Uniform Securities Identification Procedures)."
   },
-  "Str353": {
+  "IsinDesc": {
     "en": "ID in ISIN format (International Securities Identification Number).",
     "ru": "Идентификатор в формате ISIN (International Securities Identification Number)."
   },
-  "Str354": {
+  "RicDesc": {
     "en": "ID in RIC format (Reuters Instrument Code).",
     "ru": "Идентификатор в формате RIC (Reuters Instrument Code)."
   },
-  "Str355": {
+  "BloombergDesc": {
     "en": "ID in Bloomberg format.",
     "ru": "Идентификатор в формате Bloomberg."
   },
-  "Str356": {
+  "IQFeedDesc": {
     "en": "ID in IQFeed format.",
     "ru": "Идентификатор в формате IQFeed."
   },
-  "Str357": {
+  "InteractiveBrokersDesc": {
     "en": "ID in Interactive Brokers format.",
     "ru": "Идентификатор в формате Interactive Brokers."
   },
-  "Str358": {
+  "PlazaDesc": {
     "en": "ID in Plaza format.",
     "ru": "Идентификатор в формате Plaza."
   },
@@ -3547,23 +3531,23 @@
     "en": "Type",
     "ru": "Тип"
   },
-  "Str360": {
+  "SecurityTypeDesc": {
     "en": "Security type.",
     "ru": "Тип инструмента."
   },
-  "Str361": {
+  "Identifier": {
     "en": "Identifier",
     "ru": "Идентификатор"
   },
-  "Str362": {
+  "SecurityName": {
     "en": "Security name.",
     "ru": "Название инструмента."
   },
-  "Str363": {
+  "ShortName": {
     "en": "Short name",
     "ru": "Короткое название"
   },
-  "Str364": {
+  "ShortNameDesc": {
     "en": "Short security name.",
     "ru": "Короткое название инструмента."
   },
@@ -3571,7 +3555,7 @@
     "en": "Volume step",
     "ru": "Шаг объема"
   },
-  "Str366": {
+  "MinVolStep": {
     "en": "Minimum volume step.",
     "ru": "Минимальный шаг объема."
   },
@@ -3591,7 +3575,7 @@
     "en": "Expiration date",
     "ru": "Дата экспирация"
   },
-  "Str371": {
+  "ExpiryDateDesc": {
     "en": "Security expiration date (for derivatives - expiration, for bonds — redemption).",
     "ru": "Дата экспирация инструмента (для деривативов - экспирация, для облигаций - погашение)."
   },
@@ -3599,7 +3583,7 @@
     "en": "Settlement date",
     "ru": "Дата выплат"
   },
-  "Str373": {
+  "SettlementDateForSecurity": {
     "en": "Settlement date for security (for derivatives and bonds).",
     "ru": "Дата выплат по инструменту (для деривативов и облигаций)."
   },
@@ -3635,7 +3619,7 @@
     "en": "Type of binary option.",
     "ru": "Тип бинарного опциона."
   },
-  "Str382": {
+  "CurrencyDesc": {
     "en": "Trading security currency.",
     "ru": "Валюта торгового инструмента."
   },
@@ -3650,10 +3634,6 @@
   "SecurityActive": {
     "en": "Active",
     "ru": "Активен"
-  },
-  "SecuritySuspended": {
-    "en": "Suspended",
-    "ru": "Приостановлен"
   },
   "Stock": {
     "en": "Stock",
@@ -3699,21 +3679,13 @@
     "en": "Cryptocurrency",
     "ru": "Крипто-валюта"
   },
-  "Str399": {
+  "Assigned": {
     "en": "Assigned",
     "ru": "Назначена"
-  },
-  "Str400": {
-    "en": "Suspended",
-    "ru": "Приостановлена"
   },
   "Str401": {
     "en": "Completed (forced)",
     "ru": "Завершена (принудительно)"
-  },
-  "Str402": {
-    "en": "Completed",
-    "ru": "Завершена"
   },
   "Str403": {
     "en": "Buy",
@@ -3775,7 +3747,7 @@
     "en": "Value {0} has duplicates.",
     "ru": "Значение {0} имеет дубликаты."
   },
-  "Str416": {
+  "Schedule": {
     "en": "Schedule",
     "ru": "Расписание"
   },
@@ -3807,15 +3779,15 @@
     "en": "Inserted quote must be for security {0}. Current security {1}.",
     "ru": "Вложенная котировка должна быть для инструмента {0}. Текущий инструмент {1}."
   },
-  "Str424": {
+  "PosBeginValue": {
     "en": "Position size at the beginning of the trading session.",
     "ru": "Размер позиции на начало торговой сессии."
   },
-  "Str425": {
+  "CurrentPosSize": {
     "en": "Current position size.",
     "ru": "Размер позиции на текущий момент."
   },
-  "Str426": {
+  "PosBlockedSize": {
     "en": "Position size, registered for active orders.",
     "ru": "Размер позиции, зарезервированной под активные заявки."
   },
@@ -3823,35 +3795,35 @@
     "en": "Required when extra information is stored in the program.",
     "ru": "Необходима в случае хранения в программе дополнительной информации."
   },
-  "Str428": {
+  "PosPriceDesc": {
     "en": "Position price, calculated using current market price of security.",
     "ru": "Стоимость позиции, рассчитанная по текущей рыночной цене инструмента."
   },
-  "Str429": {
+  "AveragePriceCalcTrades": {
     "en": "Average price, calculated using execution prices.",
     "ru": "Средневзвешенная цена, рассчитанная по ценам исполнения."
   },
-  "Str430": {
+  "UnrealizedProfitDesc": {
     "en": "Unrealized profit, calculated with including open position.",
     "ru": "Нереализованная прибыль, рассчитанная с учетом открытой позиции."
   },
-  "Str431": {
+  "RealizedProfitDesc": {
     "en": "Realized profit, calculated from closed trades.",
     "ru": "Реализованная прибыль, рассчитанная по закрытым сделкам."
   },
-  "Str432": {
+  "VariationMarginDesc": {
     "en": "Variation margin.",
     "ru": "Вариационная маржа."
   },
-  "Str433": {
+  "TotalCommission": {
     "en": "Total commission.",
     "ru": "Общий размер комиссий."
   },
-  "Str434": {
+  "Changed": {
     "en": "Changed",
     "ru": "Изменен"
   },
-  "Str435": {
+  "TimePosLastChange": {
     "en": "Time of last position change.",
     "ru": "Время последнего изменения позиции."
   },
@@ -3863,7 +3835,7 @@
     "en": "Derivatives",
     "ru": "Деривативы"
   },
-  "Str479": {
+  "BoardExchange": {
     "en": "Exchange, where board is situated.",
     "ru": "Биржа, на которой расположена площадка."
   },
@@ -3923,27 +3895,27 @@
     "en": "Ask can only be to buy.",
     "ru": "Оффер может быть только на продажу."
   },
-  "Str494": {
+  "QuoteBuy": {
     "en": "Quote to buy.",
     "ru": "Котировка на покупку."
   },
-  "Str495": {
+  "QuoteSell": {
     "en": "Quote to sell.",
     "ru": "Котировка на продажу."
   },
-  "Str496": {
+  "SpreadPrice": {
     "en": "Price spread",
     "ru": "Спред по цене"
   },
-  "Str497": {
+  "SpreadPriceDesc": {
     "en": "Size of price spread.",
     "ru": "Размер спреда по цене."
   },
-  "Str498": {
+  "SpreadVolume": {
     "en": "Volume spread",
     "ru": "Спреда по объему"
   },
-  "Str499": {
+  "SpreadVolumeDesc": {
     "en": "Size of volume spread. If value is negative, then best ask has a larger volume than best bid.",
     "ru": "Размер спреда по объему. Если значение отрицательное, значит лучший оффер имеет больший объем, чем лучший бид."
   },
@@ -3955,11 +3927,11 @@
     "en": "Spread middle",
     "ru": "Середина спреда"
   },
-  "Str502": {
+  "OwnTrade": {
     "en": "Own trade",
     "ru": "Собственная сделка"
   },
-  "Str503": {
+  "OwnTradeDesc": {
     "en": "Information about own trade.",
     "ru": "Информация о собственной сделке."
   },
@@ -3967,7 +3939,7 @@
     "en": "Order",
     "ru": "Заявка"
   },
-  "Str505": {
+  "OwnTradeOrder": {
     "en": "Order, for which a trade was filled.",
     "ru": "Заявка, по которой совершена сделка."
   },
@@ -3975,7 +3947,7 @@
     "en": "Trade",
     "ru": "Сделка"
   },
-  "Str507": {
+  "TickTradeInfo": {
     "en": "Information about tick trade.",
     "ru": "Информация о тиковой сделке."
   },
@@ -3983,7 +3955,7 @@
     "en": "{0} from order {1}",
     "ru": "{0} от заявки {1}"
   },
-  "Str510": {
+  "NewsDesc": {
     "en": "News, released for a particular security, whole board or globally for the market.",
     "ru": "Новость, выпущенная для конкретного инструмента, всей площадки или глобально по рынку."
   },
@@ -3991,23 +3963,15 @@
     "en": "Electronic board",
     "ru": "Электронная площадка"
   },
-  "Str512": {
+  "ElectronicBoardDesc": {
     "en": "Electronic board, for which news have been published.",
     "ru": "Электронная площадка, для которой опубликована новость."
   },
-  "Str513": {
+  "NewsSecurity": {
     "en": "Security, for which news have been published.",
     "ru": "Инструмент, для которого опубликована новость."
   },
-  "Str514": {
-    "en": "Time (local)",
-    "ru": "Время (локальное)"
-  },
-  "Str515": {
-    "en": "News received local time.",
-    "ru": "Локальное время получения новости."
-  },
-  "Str516": {
+  "InfoAboutOrder": {
     "en": "Information about the order.",
     "ru": "Информация о заявке."
   },
@@ -4015,7 +3979,7 @@
     "en": "Latency in registration",
     "ru": "Задержка при регистрации"
   },
-  "Str518": {
+  "OrderRegLatency": {
     "en": "Time taken to register an order.",
     "ru": "Время, которое потребовалось для регистрации заявки."
   },
@@ -4023,27 +3987,23 @@
     "en": "Latency in cancellation",
     "ru": "Задержка при отмене"
   },
-  "Str520": {
+  "OrderCancelLatency": {
     "en": "Time taken to cancel an order.",
     "ru": "Время, которое потребовалось для отмены заявки."
   },
-  "Str521": {
-    "en": "ID (string)",
-    "ru": "Идентификатор (строка)"
-  },
-  "Str522": {
-    "en": "Placing time",
+  "RegTime": {
+    "en": "Reg time",
     "ru": "Время выставления"
   },
-  "Str523": {
-    "en": "Order placing time on exchange.",
+  "RegTimeDesc": {
+    "en": "Order registration time on exchange.",
     "ru": "Время выставления заявки на бирже."
   },
-  "Str524": {
+  "OrderSecurity": {
     "en": "Security, for which an order is being placed.",
     "ru": "Инструмент, по которому выставляется заявка."
   },
-  "Str525": {
+  "OrderPortfolio": {
     "en": "Portfolio, in which the order is being traded.",
     "ru": "Портфель, в рамках которого торгуется заявка."
   },
@@ -4059,23 +4019,15 @@
     "en": "Time of last change",
     "ru": "Время последнего изменения"
   },
-  "Str529": {
+  "OrderLastChangeTime": {
     "en": "Time of last order change (Cancellation, Fill).",
     "ru": "Время последнего изменения заявки (Снятие, Сведение)."
   },
-  "Str530": {
-    "en": "Last change local time",
-    "ru": "Локальное время последнего изменения"
-  },
-  "Str531": {
-    "en": "Last trade change local time (Cancellation, Fill).",
-    "ru": "Локальное время последнего изменения заявки (Снятие, Сведение)."
-  },
-  "Str532": {
+  "LinkedOrder": {
     "en": "Linked order",
     "ru": "Связанная заявка"
   },
-  "Str533": {
+  "LinkedOrderDesc": {
     "en": "Order created by a stop-order during condition activation (empty value, if stop-condition has not been activated).",
     "ru": "Биржевая заявка, которая была создана стоп-заявкой при активации условия (пустое значение, если стоп-условие еще не было активировано)."
   },
@@ -4083,7 +4035,7 @@
     "en": "{0}/{1} {2} {3} {4} Price={5} Volume={6} State={7} Bal={8} Type={9}",
     "ru": "{0}/{1} {2} {3} {4} Цена={5} Объем={6} Сост={7} Бал={8} Тип={9}"
   },
-  "Str535": {
+  "OrderLogDesc": {
     "en": "Orders log item.",
     "ru": "Строка лога заявок."
   },
@@ -4091,11 +4043,11 @@
     "en": "{0} orders {1}",
     "ru": "{0} заявки {1}"
   },
-  "Str537": {
+  "Cancellation": {
     "en": "Cancellation",
     "ru": "Снятие"
   },
-  "Str538": {
+  "Registration": {
     "en": "Registration",
     "ru": "Регистрация"
   },
@@ -4107,7 +4059,7 @@
     "en": "per trade {0}",
     "ru": "на сделку {0}"
   },
-  "Str541": {
+  "PortfolioDesc": {
     "en": "Portfolio, describing the trading account and the size of its generated commission.",
     "ru": "Портфель, описывающий торговый счет и размер сгенерированной комиссии по нему."
   },
@@ -4115,7 +4067,7 @@
     "en": "Leverage",
     "ru": "Плечо"
   },
-  "Str544": {
+  "PortfolioBoard": {
     "en": "Exchange board, for which the current portfolio is active.",
     "ru": "Биржевая площадка, для которой действует данный портфель."
   },
@@ -4131,11 +4083,11 @@
     "en": "Decimals",
     "ru": "Точность"
   },
-  "Str548": {
+  "DecimalsDesc": {
     "en": "Number of digits in price after coma.",
     "ru": "Количество знаков в цене после запятой."
   },
-  "Str549": {
+  "ExchangeBoardDesc": {
     "en": "Exchange board where the security is traded.",
     "ru": "Биржевая площадка, на которой торгуется инструмент."
   },
@@ -4143,7 +4095,7 @@
     "en": "Underlying asset on which the current security is built.",
     "ru": "Базовый актив, на основе которого построен данный инструмент."
   },
-  "Str551": {
+  "OptionType": {
     "en": "Option type",
     "ru": "Тип опциона"
   },
@@ -4151,15 +4103,15 @@
     "en": "Binary",
     "ru": "Бинарный"
   },
-  "Str553": {
+  "ExternalId": {
     "en": "External ID",
     "ru": "Внешний идентификатор"
   },
-  "Str554": {
+  "ExternalIdDesc": {
     "en": "Security ID in other systems.",
     "ru": "Идентификатор инструмента в других системах."
   },
-  "Str555": {
+  "StepPriceDesc": {
     "en": "Step price.",
     "ru": "Стоимость шага цены."
   },
@@ -4167,35 +4119,31 @@
     "en": "Step price cannot be less than zero.",
     "ru": "Стоимость шага цены не может быть меньше нуля."
   },
-  "Str557": {
+  "LastTradeDesc": {
     "en": "Information about the last trade.",
     "ru": "Информация о последней сделке."
   },
-  "Str558": {
+  "FirstTradePrice": {
     "en": "First trade price",
     "ru": "Первая цена сделки"
   },
-  "Str559": {
+  "FirstTradePriceForSession": {
     "en": "First trade price for the session.",
     "ru": "Первая цена сделки за сессию."
   },
-  "Str560": {
-    "en": "Last trade price",
-    "ru": "Последняя цена сделки"
-  },
-  "Str561": {
+  "LastTradePriceDesc": {
     "en": "Last trade price for the previous session.",
     "ru": "Последняя цена сделки за предыдущую сессию."
   },
-  "Str562": {
+  "LowPriceForSession": {
     "en": "Lowest price for the session.",
     "ru": "Наименьшая цена сделки за сессию."
   },
-  "Str563": {
+  "MaxPrice": {
     "en": "Highest price",
     "ru": "Наивысшая цена"
   },
-  "Str564": {
+  "HighestPriceForSession": {
     "en": "Highest price for the session.",
     "ru": "Наивысшая цена сделки за сессию."
   },
@@ -4295,11 +4243,11 @@
     "en": "Trades",
     "ru": "Сделок"
   },
-  "Str594": {
+  "BidMaxDesc": {
     "en": "Maximum bid during the session.",
     "ru": "Максимальный бид за сессию."
   },
-  "Str595": {
+  "AskMinDesc": {
     "en": "Minimum ask during the session.",
     "ru": "Минимальный оффер за сессию."
   },
@@ -4311,11 +4259,11 @@
     "en": "Settlement price.",
     "ru": "Расчетная цена."
   },
-  "Str600": {
+  "AveragePriceDesc": {
     "en": "Average price per session.",
     "ru": "Средняя цена за сессию."
   },
-  "Str601": {
+  "VolumeDesc": {
     "en": "Volume per session.",
     "ru": "Объем за сессию."
   },
@@ -4323,7 +4271,7 @@
     "en": "Identifiers",
     "ru": "Идентификаторы"
   },
-  "Str603": {
+  "SecIdInOtherSystems": {
     "en": "Security IDs in other systems",
     "ru": "Идентификаторы инструмента в других системах"
   },
@@ -4331,11 +4279,11 @@
     "en": "Tick trade.",
     "ru": "Тиковая сделка."
   },
-  "Str605": {
+  "TradeTime": {
     "en": "Trade time.",
     "ru": "Время совершения сделки."
   },
-  "Str606": {
+  "TradeLocalTime": {
     "en": "Trade received local time.",
     "ru": "Локальное время получения сделки."
   },
@@ -4343,7 +4291,7 @@
     "en": "Number of contracts in the trade.",
     "ru": "Количество контрактов в сделке."
   },
-  "Str608": {
+  "DirectionDesc": {
     "en": "Order side (buy or sell), which led to the trade.",
     "ru": "Направление заявки (покупка или продажа), которая привела к сделке."
   },
@@ -5376,7 +5324,7 @@
     "ru": "Заявка (частота)"
   },
   "Str877": {
-    "en": "Risk-rule, tracking orders placing frequency.",
+    "en": "Risk-rule, tracking orders registration frequency.",
     "ru": "Риск-правило, отслеживающее частоту выставления заявок."
   },
   "Str879": {
@@ -6271,11 +6219,11 @@
     "en": "Stopped",
     "ru": "Остановлено"
   },
-  "Str1114": {
+  "Stopping": {
     "en": "Stopping",
     "ru": "Останавливается"
   },
-  "Str1115": {
+  "Started": {
     "en": "Started",
     "ru": "Запущено"
   },
@@ -6327,25 +6275,21 @@
     "en": "History (from {0} to {1})",
     "ru": "История (c {0} по {1})"
   },
-  "Str1128": {
+  "Stopped": {
     "en": "Stopped",
     "ru": "Остановлен"
   },
-  "Str1129": {
+  "Starting": {
     "en": "Starting",
     "ru": "Запускается"
   },
-  "Str1130": {
-    "en": "Working",
-    "ru": "Работает"
-  },
-  "Str1131": {
+  "Suspending": {
     "en": "Suspending",
     "ru": "Приостанавливается"
   },
-  "Str1132": {
+  "Suspended": {
     "en": "Suspended",
-    "ru": "Приостановлен"
+    "ru": "Приостановлено"
   },
   "Str1133": {
     "en": "Maximum volume cannot be less than 1.",
@@ -6507,7 +6451,7 @@
     "en": "Price {0} of order {1} is greater than allowed maximum {2}.",
     "ru": "Цена {0} заявки {1} больше максимально допустимой {2}."
   },
-  "Str1175": {
+  "BacktestExtra": {
     "en": "Backtesting (extra)",
     "ru": "Эмуляция (дополнительно)"
   },
@@ -6595,7 +6539,7 @@
     "en": "Spread size in price steps. Used in determining spread when generating market depths from ticks.",
     "ru": "Размер спреда в шагах цены. Используется при определении спреда для генерации стакана из тиковых сделок."
   },
-  "Str1197": {
+  "DepthOfBook": {
     "en": "Depth of book",
     "ru": "Глубина стакана"
   },
@@ -6640,7 +6584,7 @@
     "ru": "Добавлять доп. объем"
   },
   "Str1208": {
-    "en": "Add extra volume in the market depth when placing orders with large volume.",
+    "en": "Add extra volume in the market depth when registration orders with large volume.",
     "ru": "Добавлять дополнительный объем в стакан при выставлении заявок с большим объемом."
   },
   "Str1209": {
@@ -6763,11 +6707,11 @@
     "en": "Market depth information is missing. Impossible to calculate volume before order being placed.",
     "ru": "Отсутствует информация о стакане. Невозможно посчитать объём перед заявкой."
   },
-  "Str1242": {
+  "TimeFrame": {
     "en": "Time-frame",
     "ru": "Тайм-фрейм"
   },
-  "Str1243": {
+  "TimeFrameDesc": {
     "en": "Time-frame of time candles, which have to be downloaded from storage for calculations.",
     "ru": "Тайм-фрейм временных свечей, которые необходимо загрузить из хранилища для расчетов."
   },
@@ -7083,7 +7027,7 @@
     "en": "Price (average)",
     "ru": "Цена (усредн.)"
   },
-  "Str1324": {
+  "Status": {
     "en": "Status",
     "ru": "Статус"
   },
@@ -7487,7 +7431,7 @@
     "en": "Proxy-server",
     "ru": "Прокси-сервер"
   },
-  "Str1437": {
+  "Active3": {
     "en": "Active",
     "ru": "Включено"
   },
@@ -8335,7 +8279,7 @@
     "en": "For message with transaction ID {0} the original transaction ID was not found.",
     "ru": "Для сообщения с идентификатором транзакции {0} не найден исходный идентификатор транзакции."
   },
-  "Str1658": {
+  "None": {
     "en": "None",
     "ru": "Отсутствует"
   },
@@ -8343,7 +8287,7 @@
     "en": "Quotes",
     "ru": "Котировки"
   },
-  "Str1660": {
+  "Depth": {
     "en": "Depth",
     "ru": "Глубина"
   },
@@ -8463,7 +8407,7 @@
     "en": "Trailing take-profit",
     "ru": "Скользящий тейк"
   },
-  "Str1691": {
+  "StopOrderTypeDesc": {
     "en": "Stop-order type.",
     "ru": "Тип стоп-заявки."
   },
@@ -9119,7 +9063,7 @@
     "en": "SmartCOM 3.x client part configuration settings",
     "ru": "Настройки конфигурации клиентской части SmartCOM 3.x"
   },
-  "Str1864": {
+  "ServerConfig": {
     "en": "Server configuration",
     "ru": "Конфигурация сервера"
   },
@@ -9331,13 +9275,13 @@
     "en": "Bottom",
     "ru": "Снизу"
   },
-  "Str1915": {
+  "TimeNoBreaks": {
     "en": "Time without breaks",
     "ru": "Время без разрывов"
   },
-  "Str1916": {
+  "SeqNum": {
     "en": "Number",
-    "ru": "Число"
+    "ru": "Номер"
   },
   "Str1917": {
     "en": "Unique ID.",
@@ -9367,11 +9311,11 @@
     "en": "Axis type.",
     "ru": "Тип оси."
   },
-  "Str1924": {
+  "AutoRange": {
     "en": "Auto range",
     "ru": "Автоматический диапазон"
   },
-  "Str1926": {
+  "FlipCoords": {
     "en": "Flip coordinates",
     "ru": "Перевернуть координаты"
   },
@@ -9415,7 +9359,7 @@
     "en": "Show labels on the axis.",
     "ru": "Показывать надписи на оси."
   },
-  "Str1938": {
+  "LabelsFormat": {
     "en": "Labels format",
     "ru": "Формат надписей"
   },
@@ -9632,7 +9576,7 @@
     "ru": "Инструмент, для которого будут выставляться заявки с графика. Если не указан, то используется инструмент стратегии."
   },
   "Str1997": {
-    "en": "Portfolio, which will be used for placing orders. If not specified, then strategy portfolio is used.",
+    "en": "Portfolio, which will be used for registration orders. If not specified, then strategy portfolio is used.",
     "ru": "Портфель, который будет использоваться при выставлении заявок. Если не указан, то используется портфель стратегии."
   },
   "Str1998": {
@@ -9851,7 +9795,7 @@
     "en": "Use automatic scaling «Bubble» mode.",
     "ru": "Использовать автоматическое масштабирование для режима «Пузырь»."
   },
-  "Str2053": {
+  "Scale": {
     "en": "Scale",
     "ru": "Масштаб"
   },
@@ -10091,7 +10035,7 @@
     "en": "US/EU",
     "ru": "США/ЕС"
   },
-  "Str2121": {
+  "Additional": {
     "en": "Additional",
     "ru": "Дополнительно"
   },
@@ -10155,7 +10099,7 @@
     "en": "Should the whole set of securities be loaded from IQFeed website archive.",
     "ru": "Загружать ли инструменты из архива с сайта IQFeed."
   },
-  "Str2137": {
+  "FileWithSecs": {
     "en": "File with securities",
     "ru": "Файл с инструментами"
   },
@@ -10407,7 +10351,7 @@
     "en": "Stop work on time.",
     "ru": "Остановка работы по времени."
   },
-  "Str2223": {
+  "TimeForAutoStop": {
     "en": "Time for autostop",
     "ru": "Время для Автостоп"
   },
@@ -10451,31 +10395,31 @@
     "en": "End of work time.",
     "ru": "Время окончания работы."
   },
-  "Str2235": {
+  "WorkInterval": {
     "en": "Work interval",
     "ru": "Интервал работы"
   },
-  "Str2237": {
+  "DataDirectory": {
     "en": "Data directory",
     "ru": "Директория с данными"
   },
-  "Str2238": {
+  "DataDirectoryDesc": {
     "en": "Data directory where resulting files in the StockSharp format will be saved.",
     "ru": "Директория с данными, куда будут сохраняться конечные файлы в формате StockSharp."
   },
-  "Str2239": {
+  "Format": {
     "en": "Format",
     "ru": "Формат"
   },
-  "Str2240": {
+  "DataFormat": {
     "en": "Data format.",
     "ru": "Формат данных."
   },
-  "Str2241": {
+  "Dependency": {
     "en": "Dependency",
     "ru": "Зависимость"
   },
-  "Str2242": {
+  "DependencyDesc": {
     "en": "Task that has to performed before launching the current task.",
     "ru": "Задача, которая должна быть выполнена перед запуском текущей."
   },
@@ -10483,23 +10427,19 @@
     "en": "Cyclic dependency of task '{0}'.",
     "ru": "Циклическая зависимость задачи '{0}'."
   },
-  "Str2244": {
+  "MaxErrors": {
     "en": "Max. errors",
     "ru": "Макс. ошибок"
   },
-  "Str2245": {
+  "MaxErrorsDesc": {
     "en": "Maximum error count, exceeding which a task will be stopped. By default equal to 0, which means error count is ignored.",
     "ru": "Максимальное количество ошибок, после которого задача будет остановлена. По умолчанию равно 0, что означает игнорирование количества ошибок."
   },
-  "Str2246": {
-    "en": "Level1 fields",
-    "ru": "Поля Level1"
-  },
-  "Str2247": {
+  "Level1FieldsDesc": {
     "en": "Supported fields of level one market-data.",
     "ru": "Поддерживаемые поля маркет-данных первого уровня."
   },
-  "Str2248": {
+  "TeskHeader": {
     "en": "Task header.",
     "ru": "Заголовок задачи."
   },
@@ -10627,7 +10567,7 @@
     "en": "From what date to begin downloading data.",
     "ru": "С какой даты начать скачивать данные."
   },
-  "Str2284": {
+  "TimeOffset": {
     "en": "Time offset",
     "ru": "Временной отступ"
   },
@@ -11263,7 +11203,7 @@
     "en": "Starting price. Only for BOX stock exchange.",
     "ru": "Стартовая цена. Только для биржи BOX."
   },
-  "Str2468": {
+  "UnderlyingAssetPrice": {
     "en": "Underlying asset price",
     "ru": "Цена базового актива"
   },
@@ -11807,7 +11747,7 @@
     "en": "Transmit only system trades. By default equal true.",
     "ru": "Передавать только системные сделки. По умолчанию значение равно true."
   },
-  "Str2619": {
+  "BrokerCode": {
     "en": "Broker firm code.",
     "ru": "Код брокерской фирмы."
   },
@@ -12543,7 +12483,7 @@
     "en": "Use for old DDE connection.",
     "ru": "Использовать старое подключение DDE."
   },
-  "Str2804": {
+  "Path": {
     "en": "Path",
     "ru": "Путь"
   },
@@ -12915,7 +12855,7 @@
     "en": "S#.Data — error.",
     "ru": "S#.Data - ошибка."
   },
-  "Str2916": {
+  "OpenFolder": {
     "en": "Open data folder",
     "ru": "Открыть папку с данными"
   },
@@ -12983,7 +12923,7 @@
     "en": "Dates cache for security {0} in directory '{1}' was reset.",
     "ru": "Кэш дат для инструмента {0} в директории '{1}' сброшен."
   },
-  "Str2933": {
+  "Show": {
     "en": "Show",
     "ru": "Показать"
   },
@@ -13392,8 +13332,8 @@
     "ru": "Информирование"
   },
   "Sources": {
-    "en": "Data sources",
-    "ru": "Источники данных"
+    "en": "Sources",
+    "ru": "Источники"
   },
   "Composition": {
     "en": "Composite elements",
@@ -13679,7 +13619,7 @@
     "en": "Portfolio, in which the position will be created. If the value is not specified, then strategy portfolio will be used.",
     "ru": "Портфель, в котором будет создана позиция. Если значение не указано, то будет использоваться портфель стратегии."
   },
-  "Str3126": {
+  "PosSide": {
     "en": "Position direction (short or long).",
     "ru": "Направление позиции (короткая или длинная)."
   },
@@ -13944,7 +13884,7 @@
     "ru": "Рабочий объем"
   },
   "Str3194": {
-    "en": "Working volume for placing orders from the market depth.",
+    "en": "Working volume for registration orders from the market depth.",
     "ru": "Рабочий объем при выставлении заявок из стакана."
   },
   "Str3195": {
@@ -13960,11 +13900,11 @@
     "ru": "Лимитные заявки"
   },
   "Str3198": {
-    "en": "Show panel for placing limit orders.",
+    "en": "Show panel for registration limit orders.",
     "ru": "Показывать панель для выставления лимитных заявок."
   },
   "Str3199": {
-    "en": "Show panel for placing market orders.",
+    "en": "Show panel for registration market orders.",
     "ru": "Показывать панель для выставления рыночных заявок."
   },
   "Chart": {
@@ -14288,7 +14228,7 @@
     "ru": "Долевой виртуальный счет"
   },
   "Str3288": {
-    "en": "A percentage of the total is shown for sub-accounts. For example, 30% + 30% + 40% when placing a 10 contract bid on a virtual account, is distributed as 3 + 3 + 4 to sub-accounts.",
+    "en": "A percentage of the total is shown for sub-accounts. For example, 30% + 30% + 40% when registration a 10 contract bid on a virtual account, is distributed as 3 + 3 + 4 to sub-accounts.",
     "ru": "Для субсчетов показывается процент от общего объема. Например, 30% + 30% + 40% при выставлении заявки в 10 контрактов на виртуальном счете, распределяется по субсчетам как 3 + 3 + 4."
   },
   "Str3289": {
@@ -14663,7 +14603,7 @@
     "en": "Field {0} does not contain data.",
     "ru": "Поле {0} не содержит данных."
   },
-  "Str3400": {
+  "ActivationTime": {
     "en": "Activation time",
     "ru": "Время активации"
   },
@@ -14731,7 +14671,7 @@
     "en": "Logging level in N,M format. Maximum logging level is equal to «5,2». Minimum (disabled) is «0,0».",
     "ru": "Уровень логирования в формате N,M. Максимальный уровень логирования равен «5,2». Минимальный (выключен) «0,0»."
   },
-  "Str3423": {
+  "Compression": {
     "en": "Compression",
     "ru": "Компрессия"
   },
@@ -15031,7 +14971,7 @@
     "en": "RSS feed address.",
     "ru": "Адрес RSS фида."
   },
-  "Str3506": {
+  "DatesFormat": {
     "en": "Dates format",
     "ru": "Формат дат"
   },
@@ -15107,7 +15047,7 @@
     "en": "Volume (absolute or percentage value).",
     "ru": "Объем (абсолютное значение или в процентах)."
   },
-  "Str3526": {
+  "UseCredit": {
     "en": "Use credit",
     "ru": "Использовать кредит"
   },
@@ -15311,7 +15251,7 @@
     "en": "Set for trading",
     "ru": "Установить для торговли"
   },
-  "Str3580": {
+  "Optimizer": {
     "en": "Optimizer",
     "ru": "Оптимизатор"
   },
@@ -15816,7 +15756,7 @@
     "ru": "Портфель {0} для стоп-заявки не найден."
   },
   "Str3719": {
-    "en": "Stop-order replacing is not supported.",
+    "en": "Stop-order registration is not supported.",
     "ru": "Замена стоп-заявок не поддерживается."
   },
   "Port": {
@@ -16027,7 +15967,7 @@
     "en": "Order books to candle",
     "ru": "Стаканы в свечи"
   },
-  "Str3778": {
+  "TimeOffsetDesc": {
     "en": "Time offset in days from date of launching task.",
     "ru": "Временной отступ в днях от даты запуска задачи."
   },
@@ -16035,19 +15975,19 @@
     "en": "From what date to start data conversion.",
     "ru": "С какой даты начать конвертировать данные."
   },
-  "Str3781": {
+  "DepthGenerationInterval": {
     "en": "Market depths generation interval.",
     "ru": "Интервал генерации стаканов."
   },
-  "Str3782": {
+  "MaxDepthGeneration": {
     "en": "Maximum depth of market depths generation.",
     "ru": "Максимальная глубина генерации стаканов."
   },
-  "Str3783": {
+  "Where": {
     "en": "Where",
     "ru": "Куда"
   },
-  "Str3784": {
+  "DestinationDirectory": {
     "en": "Data directory where converted data will be saved.",
     "ru": "Директория с данными, куда будут сохраняться сконвертированные данные."
   },
@@ -16171,11 +16111,11 @@
     "en": "Action for socket {0} not found.",
     "ru": "Действие для параметра {0} не найдено."
   },
-  "XamlStr4": {
+  "BuyCtrlLeftMouse": {
     "en": "Buy: Ctrl + left mouse button",
     "ru": "Buy: Ctrl + левая кнопка мыши"
   },
-  "XamlStr8": {
+  "SellCtrlRightMouse": {
     "en": "Sell: Ctrl + right mouse button",
     "ru": "Sell: Ctrl + правая кнопка мыши"
   },
@@ -16183,71 +16123,43 @@
     "en": "Sln project:",
     "ru": "Sln проект:"
   },
-  "XamlStr10": {
-    "en": "Wyp project:",
-    "ru": "Wyp проект:"
-  },
-  "XamlStr11": {
+  "Auto": {
     "en": "Auto",
     "ru": "Авто"
   },
-  "XamlStr13": {
+  "AutoAlign": {
     "en": "Auto alignment",
     "ru": "Автовыравнивание"
   },
-  "XamlStr14": {
+  "AutoScaling": {
     "en": "Auto scaling (by order and trades)",
     "ru": "Автомасштабирование с учетом заявок и сделок"
   },
-  "XamlStr15": {
+  "BuildTransAuto": {
     "en": "Build transitions automatically",
     "ru": "Автоматически построить переходы"
   },
-  "XamlStr16": {
+  "AutoConnect": {
     "en": "Auto connect",
     "ru": "Авто-подключение"
   },
-  "XamlStr17": {
+  "AutoScroll": {
     "en": "Auto scroll",
     "ru": "Автопрокрутка"
   },
-  "XamlStr19": {
-    "en": "E*TRADE authorization",
-    "ru": "Авторизация в системе E*TRADE"
-  },
-  "XamlStr21": {
-    "en": "Quik Fix Server address:",
-    "ru": "Адрес Quik Fix Server:"
-  },
-  "XamlStr23": {
-    "en": "Active",
-    "ru": "Активные"
-  },
-  "XamlStr28": {
+  "Associations": {
     "en": "Associations",
     "ru": "Ассоциации"
   },
-  "XamlStr29": {
+  "AssociationsForField": {
     "en": "Associations for field '{0}'",
     "ru": "Ассоциации для поля '{0}'"
   },
-  "XamlStr35": {
-    "en": "Bid (time)",
-    "ru": "Бид (время)"
-  },
-  "XamlStr36": {
-    "en": "Bid (volume)",
-    "ru": "Бид (объем)"
-  },
-  "XamlStr37": {
+  "BidOwn": {
     "en": "Bid (own)",
     "ru": "Бид (свое)"
   },
-  "XamlStr38": {
-    "en": "Bid (price)",
-    "ru": "Бид (цена)"
-  },
-  "XamlStr40": {
+  "BidAsk": {
     "en": "Bid-Ask",
     "ru": "Бид-Оффер"
   },
@@ -16255,21 +16167,9 @@
     "en": "Broker license",
     "ru": "Брокерская лицензия"
   },
-  "XamlStr45": {
-    "en": "In source",
-    "ru": "В источнике"
-  },
-  "XamlStr46": {
-    "en": "It might be necessary to enter your username and password on E*TRADE website in the process of verification code obtaining. In this case it is necessary after successful authentication to press the button above once more to obtain verification code.",
-    "ru": "В процессе получения кода верификации может потребоваться ввести имя пользователя и пароль на сайте E*TRADE. В этом случае после успешной аутентификации на сайте E*TRADE необходимо нажать кнопку выше повторно для получения кода верификации."
-  },
-  "XamlStr47": {
+  "Is64BitMode": {
     "en": "in 64-bit mode",
     "ru": "в 64-ех битном режиме"
-  },
-  "XamlStr48": {
-    "en": "in 32-bit mode",
-    "ru": "в 32-ух битном режиме"
   },
   "Online": {
     "en": "Online",
@@ -16283,17 +16183,9 @@
     "en": "In storage",
     "ru": "В хранилище"
   },
-  "XamlStr52": {
-    "en": "To:",
-    "ru": "В:"
-  },
-  "XamlStr54": {
+  "VarMargin": {
     "en": "Var margin",
     "ru": "Вар. маржа"
-  },
-  "XamlStr57": {
-    "en": "Size of the movement:",
-    "ru": "Величина движения:"
   },
   "Undo": {
     "en": "Undo",
@@ -16311,39 +16203,23 @@
     "en": "On",
     "ru": "Вкл."
   },
-  "XamlStr62": {
+  "NonSystem": {
     "en": "Non system",
     "ru": "Внесистемные"
   },
-  "XamlStr63": {
+  "VolaMax": {
     "en": "Vola (max):",
     "ru": "Вола (макс):"
   },
-  "XamlStr64": {
+  "VolaMin": {
     "en": "Vola (min):",
     "ru": "Вола (мин):"
   },
-  "XamlStr66": {
-    "en": "Have a question?",
-    "ru": "Вопрос?"
-  },
-  "XamlStr67": {
-    "en": "Uptrend",
-    "ru": "Восходящий"
-  },
-  "XamlStr70": {
-    "en": "Order registration time.",
-    "ru": "Время выставления заявки на Биржу."
-  },
-  "XamlStr73": {
+  "LastTradeTime": {
     "en": "Last trade time",
     "ru": "Время посл. сделки"
   },
-  "XamlStr74": {
-    "en": "Last operation time",
-    "ru": "Время последней операции"
-  },
-  "XamlStr76": {
+  "SettingsOk": {
     "en": "Settings OK.",
     "ru": "Все настроено правильно."
   },
@@ -16351,49 +16227,33 @@
     "en": "Paste",
     "ru": "Вставить"
   },
-  "XamlStr78": {
+  "AutoLogin": {
     "en": "Auto login",
     "ru": "Входить автоматически"
   },
-  "XamlStr79": {
+  "SelectSecurity": {
     "en": "Select security...",
     "ru": "Выберите инструмент..."
   },
-  "XamlStr80": {
+  "SecuritySelection": {
     "en": "Security selection",
     "ru": "Выбор инструмента"
   },
-  "XamlStr81": {
+  "PortfolioSelection": {
     "en": "Portfolio selection",
     "ru": "Выбор портфеля"
   },
-  "XamlStr82": {
-    "en": "Selected columns",
-    "ru": "Выбранные колонки"
-  },
-  "XamlStr83": {
-    "en": "Selected: 0",
-    "ru": "Выбрано: 0"
-  },
-  "XamlStr84": {
+  "SelectConnection": {
     "en": "Select connection",
     "ru": "Выбрать подключение"
   },
-  "XamlStr85": {
+  "ShowMarketDepth": {
     "en": "Show market depth",
     "ru": "Выводить стакан"
   },
-  "XamlStr86": {
+  "UnloadNonSystem": {
     "en": "Upload non system ticks",
     "ru": "Выгружать ли внесистемные сделки"
-  },
-  "XamlStr87": {
-    "en": "Uploaded 0",
-    "ru": "Выгружено 0"
-  },
-  "XamlStr91": {
-    "en": "Securities search in progress. Wait...",
-    "ru": "Выполняется поиск инструментов. Подождите..."
   },
   "LineAlignment": {
     "en": "Line alignment",
@@ -16403,15 +16263,15 @@
     "en": "Cut",
     "ru": "Вырезать"
   },
-  "XamlStr94": {
+  "RegOrdersByClick": {
     "en": "Register orders by click",
     "ru": "Выставлять заявки с графика"
   },
-  "XamlStr97": {
+  "DepthGenerator": {
     "en": "Generator (depth)",
     "ru": "Генератор (стакан)"
   },
-  "XamlStr98": {
+  "MarketDepthSize": {
     "en": "Size of market depth. Can be trimmed if size in storage is bigger than specified",
     "ru": "Глубина стакана. Обрезается, если глубина в хранилище больше указанной"
   },
@@ -16423,10 +16283,6 @@
     "en": "Speech",
     "ru": "Речь"
   },
-  "XamlStr106": {
-    "en": "Graphical monitoring",
-    "ru": "Графический мониторинг"
-  },
   "Yes": {
     "en": "Yes",
     "ru": "Да"
@@ -16435,45 +16291,29 @@
     "en": "Data",
     "ru": "Данные"
   },
-  "XamlStr111": {
+  "DateNotSelected": {
     "en": "Date is not selected",
     "ru": "Дата не выбрана"
   },
-  "XamlStr112": {
+  "EndDateValidity": {
     "en": "End date of the schedule validity",
     "ru": "Дата окончания периода действия расписания"
   },
-  "XamlStr113": {
+  "LastTradeDate": {
     "en": "Last trade date",
     "ru": "Дата посл. сделки"
   },
-  "XamlStr115": {
+  "ValidEndDate": {
     "en": "The date until which the schedule is valid",
     "ru": "Дата, до которой распространяется действие расписания работы площадки"
   },
-  "XamlStr116": {
-    "en": "Date:",
-    "ru": "Дата:"
-  },
-  "XamlStr117": {
+  "DebugLog": {
     "en": "Debug log",
     "ru": "Дебаг лог"
   },
-  "XamlStr120": {
-    "en": "Valid until",
-    "ru": "Действительно до"
-  },
-  "XamlStr123": {
+  "Day": {
     "en": "Day",
     "ru": "День"
-  },
-  "XamlStr124": {
-    "en": "A day from Monday to Friday falling to the holiday",
-    "ru": "День с понедельника по пятницу, приходящийся на выходной"
-  },
-  "XamlStr125": {
-    "en": "Depo",
-    "ru": "Депо"
   },
   "Details": {
     "en": "Details",
@@ -16487,43 +16327,31 @@
     "en": "Settings directory",
     "ru": "Директория с настройками"
   },
-  "XamlStr131": {
-    "en": "To continue the E*TRADE authorization process it is necessary to get verification code on the official E*TRADE website and copy it to the text field below.",
-    "ru": "Для продолжения процесса авторизации в системе E*TRADE необходимо получить код верификации на официальном сайте E*TRADE и скопировать его в текстовое поле ниже."
-  },
-  "XamlStr135": {
-    "en": "Change mapping...",
-    "ru": "Добавить ассоциацию..."
-  },
-  "XamlStr136": {
+  "AddTools": {
     "en": "Add tools",
     "ru": "Добавить задачи"
   },
-  "XamlStr137": {
+  "AddSecurity": {
     "en": "Add security...",
     "ru": "Добавить инструмент..."
   },
-  "XamlStr138": {
+  "AddSecurities": {
     "en": "Add securities",
     "ru": "Добавить инструменты"
   },
-  "XamlStr140": {
+  "AddSources": {
     "en": "Add sources",
     "ru": "Добавить источники"
   },
-  "XamlStr141": {
-    "en": "Add new backtesting",
-    "ru": "Добавить новый тест"
-  },
-  "XamlStr142": {
+  "AddAxis": {
     "en": "Add axis",
     "ru": "Добавить ось"
   },
-  "XamlStr143": {
+  "AddPanel": {
     "en": "Add panel",
     "ru": "Добавить панель"
   },
-  "XamlStr144": {
+  "AddConnection": {
     "en": "Add connection",
     "ru": "Добавить подключение"
   },
@@ -16531,133 +16359,61 @@
     "en": "Add rule",
     "ru": "Добавить правило"
   },
-  "XamlStr146": {
-    "en": "Add breakpoint",
-    "ru": "Добавить точку остановки"
-  },
-  "XamlStr147": {
-    "en": "Add:",
-    "ru": "Добавить:"
-  },
-  "XamlStr148": {
+  "Documentation": {
     "en": "Documentation",
     "ru": "Документация"
   },
-  "XamlStr151": {
+  "ExtraRefs": {
     "en": "Extra references",
     "ru": "Дополнительные библиотеки"
   },
-  "XamlStr152": {
+  "ExtraCriteria": {
     "en": "Extra criteria",
     "ru": "Дополнительный фильтр"
   },
-  "XamlStr155": {
-    "en": "Available columns",
-    "ru": "Доступные колонки"
-  },
-  "XamlStr157": {
-    "en": "Other",
-    "ru": "Другие"
-  },
-  "XamlStr159": {
+  "ForgotPassword": {
     "en": "Forgot password?",
     "ru": "Забыли пароль?"
   },
-  "XamlStr162": {
-    "en": "Load all securities:",
-    "ru": "Загружать все инструменты:"
-  },
-  "XamlStr163": {
+  "LoadLayout": {
     "en": "Load layout...",
     "ru": "Загрузить разметку..."
   },
-  "XamlStr164": {
-    "en": "Boot test",
-    "ru": "Загрузочный тест"
-  },
-  "XamlStr165": {
-    "en": "Ask message on forum",
-    "ru": "Задать вопрос на форуме"
-  },
-  "XamlStr166": {
+  "Tasks": {
     "en": "Tasks",
     "ru": "Задачи"
   },
-  "XamlStr168": {
+  "LatencyCancel": {
     "en": "Latency (cancellation)",
     "ru": "Задержка (отмены)"
   },
-  "XamlStr169": {
+  "LatencyReg": {
     "en": "Latency (registration)",
     "ru": "Задержка (регистрации)"
   },
-  "XamlStr171": {
-    "en": "Close",
-    "ru": "Закрытие"
-  },
-  "XamlStr173": {
+  "ClosePosition": {
     "en": "Close position",
     "ru": "Закрыть позицию"
   },
-  "XamlStr174": {
+  "ChangeOrder": {
     "en": "Change order",
     "ru": "Заменить заявку"
   },
-  "XamlStr175": {
-    "en": "Sign up for the next algotrading course",
-    "ru": "Записаться на ближайшие курсы по алготрейдингу"
-  },
-  "XamlStr176": {
-    "en": "Remember choice (start selected configuration automatically)",
-    "ru": "Запомнить выбор (запускать выбранную конфигурацию автоматически)"
-  },
-  "XamlStr177": {
-    "en": "Request all securities",
-    "ru": "Запрашивать все инструменты"
-  },
-  "XamlStr178": {
-    "en": "The launch is available in 32- or 64- bit modes.",
-    "ru": "Запуск возможен в режимах 32-ух и 64-ех бит."
-  },
-  "XamlStr180": {
-    "en": "Runned Quiks:",
-    "ru": "Запущенные Quik:"
-  },
-  "XamlStr182": {
+  "OrderFail": {
     "en": "Order fail",
     "ru": "Заявка-Ошибка"
   },
-  "XamlStr186": {
+  "ValueInStockSharp": {
     "en": "Value (S#)",
     "ru": "Значение (S#)"
   },
-  "XamlStr187": {
+  "ValueInFile": {
     "en": "Value (file)",
     "ru": "Значение (файл)"
   },
-  "XamlStr189": {
+  "LoadingDataWait": {
     "en": "Loading data. Wait...",
     "ru": "Идет загрузка данных. Подождите..."
-  },
-  "XamlStr191": {
-    "en": "From OL",
-    "ru": "Из ОЛ"
-  },
-  "XamlStr192": {
-    "en": "From composite element",
-    "ru": "Из составного элемента"
-  },
-  "XamlStr193": {
-    "en": "From",
-    "ru": "Из"
-  },
-  "XamlStr196": {
-    "en": "Change orders with single transaction",
-    "ru": "Изменение заявок одной транзакцией"
-  },
-  "XamlStr197": {
-    "en": "Price change:",
-    "ru": "Изменение цены:"
   },
   "Change": {
     "en": "Change",
@@ -16666,10 +16422,6 @@
   "Import": {
     "en": "Import",
     "ru": "Импорт"
-  },
-  "XamlStr210": {
-    "en": "Market depth generation interval in ms.",
-    "ru": "Интервал генерации стакана в мс."
   },
   "ExchangeInfo": {
     "en": "Exchange info",
@@ -16683,135 +16435,43 @@
     "en": "Find",
     "ru": "Искать"
   },
-  "XamlStr215": {
-    "en": "Exclude:",
-    "ru": "Исключить:"
-  },
-  "XamlStr216": {
-    "en": "Use virtual portfolio",
-    "ru": "Использовать виртуальный счет"
-  },
-  "XamlStr217": {
-    "en": "Use locally:",
-    "ru": "Использовать локально:"
-  },
-  "XamlStr218": {
-    "en": "Use:",
-    "ru": "Использовать:"
-  },
-  "XamlStr219": {
-    "en": "Historical candles",
-    "ru": "Исторические свечи"
-  },
-  "XamlStr220": {
-    "en": "Historical ticks",
-    "ru": "Исторические сделки"
-  },
-  "XamlStr222": {
-    "en": "Candle history...",
-    "ru": "История свечей..."
-  },
-  "XamlStr223": {
+  "TicksHistory": {
     "en": "Tick history...",
     "ru": "История сделок..."
   },
-  "XamlStr226": {
-    "en": "The source does not support security search on the exchange. The search will be carried out locally.",
-    "ru": "Источник не предоставляет возможность поиска инструментов на бирже. Поиск будет осуществлен локально."
-  },
-  "XamlStr227": {
-    "en": "Sources",
-    "ru": "Источники"
-  },
-  "XamlStr228": {
-    "en": "Underlying securities",
-    "ru": "Исходные инструменты"
-  },
-  "XamlStr229": {
-    "en": "To output",
-    "ru": "К выходному параметру"
-  },
-  "XamlStr230": {
-    "en": "Next element",
-    "ru": "К следующему элементу"
-  },
-  "XamlStr233": {
+  "Category": {
     "en": "Category",
     "ru": "Категория"
-  },
-  "XamlStr234": {
-    "en": "Key:",
-    "ru": "Ключ:"
-  },
-  "XamlStr236": {
-    "en": "Code IB:",
-    "ru": "Код IB:"
-  },
-  "XamlStr239": {
-    "en": "Bid count",
-    "ru": "Кол-во бидов"
   },
   "OrderCount": {
     "en": "Order count",
     "ru": "Кол-во заявок"
   },
-  "XamlStr241": {
-    "en": "Order count per sec.",
-    "ru": "Кол-во заявок в сек."
-  },
-  "XamlStr242": {
-    "en": "Log count",
-    "ru": "Кол-во операций"
-  },
-  "XamlStr243": {
-    "en": "Log count per sec.",
-    "ru": "Кол-во операций в сек."
-  },
-  "XamlStr244": {
-    "en": "Ask count",
-    "ru": "Кол-во офферов"
-  },
-  "XamlStr245": {
+  "TicksCount": {
     "en": "Tick count",
     "ru": "Кол-во сделок"
   },
-  "XamlStr246": {
-    "en": "Tick count per sec.",
-    "ru": "Кол-во сделок в сек."
-  },
-  "XamlStr248": {
+  "OrdersCount": {
     "en": "Order count",
     "ru": "Количество заявок"
   },
-  "XamlStr249": {
-    "en": "Commission",
+  "Commissions": {
+    "en": "Commissions",
     "ru": "Комиссии"
   },
   "Components": {
     "en": "Components",
     "ru": "Компоненты"
   },
-  "XamlStr253": {
-    "en": "Strategy components",
-    "ru": "Компоненты для стратегии"
-  },
-  "XamlStr254": {
-    "en": "End:",
-    "ru": "Конец:"
-  },
-  "XamlStr255": {
-    "en": "Configurations",
-    "ru": "Конфигурации"
-  },
   "Copy": {
     "en": "Copy",
     "ru": "Копировать"
   },
-  "XamlStr257": {
+  "BasketPortfolio": {
     "en": "Basket portfolio",
     "ru": "Корзина портфелей"
   },
-  "XamlStr260": {
+  "BuyByMarket": {
     "en": "Buy by market",
     "ru": "Купить по рынку"
   },
@@ -16855,37 +16515,13 @@
     "en": "Credentials to StockSharp.com",
     "ru": "Логин/пароль к сайту StockSharp.com"
   },
-  "XamlStr284": {
-    "en": "Best bid price or a trade by specified price or higher.",
-    "ru": "Лучшая цена покупки или сделка по заданной цене и выше."
-  },
-  "XamlStr286": {
-    "en": "Best ask price or a trade by specified price or lower.",
-    "ru": "Лучшая цена продажи или сделка по заданной цене и ниже."
-  },
   "LciViewer": {
     "en": "BPI Viewer",
     "ru": "ЛЧИ Графики"
   },
-  "XamlStr291": {
-    "en": "Max depth order book generation",
-    "ru": "Максимальная глубина генерируемого стакана"
-  },
-  "XamlStr292": {
-    "en": "Max",
-    "ru": "Максимальное"
-  },
-  "XamlStr293": {
+  "MaxVolForGeneration": {
     "en": "Max quote volume in generated depth",
     "ru": "Максимальный объем котировки генерируемого стакана"
-  },
-  "XamlStr297": {
-    "en": "MarginCall",
-    "ru": "МаржКол"
-  },
-  "XamlStr300": {
-    "en": "Scale:",
-    "ru": "Масштаб:"
   },
   "Melody": {
     "en": "Melody",
@@ -16911,15 +16547,15 @@
     "en": "Black model",
     "ru": "Модель Блэка"
   },
-  "XamlStr308": {
+  "CurrentDateModifier": {
     "en": "Current date modifier",
     "ru": "Модификатор текущей даты"
   },
-  "XamlStr309": {
+  "StrikeModifierForAsset": {
     "en": "Price modifier of the underlying asset",
     "ru": "Модификатор цены базового актива"
   },
-  "XamlStr310": {
+  "ModifiedCurrentDate": {
     "en": "Modified current date",
     "ru": "Модифицированная текущая дата"
   },
@@ -16927,37 +16563,21 @@
     "en": "Own trades",
     "ru": "Мои сделки"
   },
-  "XamlStr313": {
-    "en": "Work monitoring",
-    "ru": "Мониторинг работы"
-  },
-  "XamlStr314": {
+  "PressButtonToCreateExchange": {
     "en": "Press the button to save new exchange",
     "ru": "Нажмите кнопку, чтобы сохранить новую биржу"
   },
-  "XamlStr315": {
+  "PressButtonToCreateBoard": {
     "en": "Press the button to save new exchange board",
     "ru": "Нажмите кнопку, чтобы сохранить новую площадку"
   },
-  "XamlStr317": {
-    "en": "Name (short)",
-    "ru": "Название (короткое)"
-  },
-  "XamlStr320": {
+  "HighBidPrice": {
     "en": "Highest bid",
     "ru": "Наивысший бид"
   },
-  "XamlStr323": {
+  "LowAskPrice": {
     "en": "Lowest ask",
     "ru": "Наименьший оффер"
-  },
-  "XamlStr324": {
-    "en": "Find security",
-    "ru": "Найти инструмент"
-  },
-  "XamlStr325": {
-    "en": "Find securities:",
-    "ru": "Найти инструменты:"
   },
   "CommissionSettings": {
     "en": "Commission settings",
@@ -16983,19 +16603,11 @@
     "en": "Start time",
     "ru": "Начало работы"
   },
-  "XamlStr341": {
-    "en": "Begin:",
-    "ru": "Начало:"
-  },
-  "XamlStr342": {
+  "Begin": {
     "en": "Begin",
     "ru": "Начальное"
   },
-  "XamlStr343": {
-    "en": "Start drawing chart for the security",
-    "ru": "Начать построение графика для инструмента"
-  },
-  "XamlStr344": {
+  "NoDataTypeSelected": {
     "en": "No data type is selected.",
     "ru": "Не выбран ни один тип данных."
   },
@@ -17015,45 +16627,21 @@
     "en": "New stop-order",
     "ru": "Новая стоп-заявка"
   },
-  "XamlStr355": {
-    "en": "New",
-    "ru": "Новое"
-  },
-  "XamlStr356": {
-    "en": "New connection",
-    "ru": "Новое подключение"
-  },
-  "XamlStr357": {
-    "en": "New:",
-    "ru": "Новое:"
-  },
-  "XamlStr360": {
+  "NewPassword": {
     "en": "New password",
     "ru": "Новый пароль"
-  },
-  "XamlStr361": {
-    "en": "New test",
-    "ru": "Новый тест"
   },
   "IsRegistered": {
     "en": "Not registered?",
     "ru": "Новый юзер?"
   },
-  "XamlStr365": {
+  "BoardId": {
     "en": "ID (board)",
     "ru": "Идентификатор (площадка)"
   },
-  "XamlStr368": {
-    "en": "Margin is higher than specified.",
-    "ru": "Обеспеченность выше заданной."
-  },
-  "XamlStr369": {
-    "en": "Margin is lower than specified.",
-    "ru": "Обеспеченность ниже заданной."
-  },
-  "XamlStr370": {
-    "en": "Overview:",
-    "ru": "Обзор:"
+  "Overview": {
+    "en": "Overview",
+    "ru": "Обзор"
   },
   "OverviewArea": {
     "en": "Overview area",
@@ -17067,14 +16655,6 @@
     "en": "Join",
     "ru": "Объединить"
   },
-  "XamlStr376": {
-    "en": "Merge selected elements into a composite element",
-    "ru": "Объединить выбранные элементы в составной элемент"
-  },
-  "XamlStr382": {
-    "en": "Last trade volume",
-    "ru": "Объем посл. сделки"
-  },
   "OK": {
     "en": "OK",
     "ru": "ОК"
@@ -17082,10 +16662,6 @@
   "Window": {
     "en": "Window",
     "ru": "Окно"
-  },
-  "XamlStr387": {
-    "en": "End time",
-    "ru": "Окончание работы"
   },
   "OrderLogOf": {
     "en": "OL",
@@ -17107,131 +16683,43 @@
     "en": "The difference between {0} and {1} cannot be more than 1 day.",
     "ru": "Разница между {0} и {1} не может быть больше 1 дня."
   },
-  "XamlStr391": {
+  "SourcesDescription": {
     "en": "Description of the source and its data",
     "ru": "Описание источника и получаемых данных"
   },
-  "XamlStr392": {
+  "TaskDescription": {
     "en": "Task description:",
     "ru": "Описание источника:"
   },
-  "XamlStr394": {
-    "en": "Optimize",
-    "ru": "Оптимизировать"
-  },
-  "XamlStr396": {
+  "OptionCalc": {
     "en": "Option calculator",
     "ru": "Опционный калькулятор"
   },
-  "XamlStr397": {
-    "en": "{0} messages left",
-    "ru": "Осталось {0} писем"
-  },
-  "XamlStr398": {
-    "en": "{0} SMS left",
-    "ru": "Осталось {0} смс"
-  },
-  "XamlStr401": {
-    "en": "Cancel building",
-    "ru": "Остановить построение"
-  },
-  "XamlStr402": {
-    "en": "Stop drawing chart for the security",
-    "ru": "Остановить построение графика для инструмента"
-  },
-  "XamlStr403": {
-    "en": "from",
-    "ru": "от"
-  },
-  "XamlStr405": {
-    "en": "Reject",
-    "ru": "Отклонить"
-  },
-  "XamlStr407": {
-    "en": "Public:",
-    "ru": "Открытая:"
-  },
-  "XamlStr408": {
-    "en": "Open time",
-    "ru": "Открытие"
-  },
-  "XamlStr410": {
-    "en": "Open configuration",
-    "ru": "Открыть конфигурацию"
-  },
-  "XamlStr411": {
-    "en": "Open Terminal configuration",
-    "ru": "Открыть конфигурацию Терминала"
-  },
-  "XamlStr412": {
-    "en": "Open settings",
-    "ru": "Открыть настройки"
-  },
-  "XamlStr413": {
-    "en": "Open script",
-    "ru": "Открыть скрипт"
-  },
-  "XamlStr414": {
+  "OpenStrategy": {
     "en": "Open strategy",
     "ru": "Открыть стратегию"
   },
-  "XamlStr415": {
-    "en": "Open Terminal",
-    "ru": "Открыть Терминал"
-  },
-  "XamlStr416": {
-    "en": "Open file...",
-    "ru": "Открыть файл..."
-  },
-  "XamlStr419": {
-    "en": "Cancel",
-    "ru": "Отменить"
-  },
-  "XamlStr420": {
+  "CancelAllOrders": {
     "en": "Cancel all orders",
     "ru": "Отменить все заявки"
   },
-  "XamlStr421": {
+  "CancelSelectedOrders": {
     "en": "Cancel selected orders",
     "ru": "Отменить выбранные заявки"
   },
-  "XamlStr422": {
-    "en": "Cancel orders",
-    "ru": "Отменить заявки"
-  },
-  "XamlStr423": {
-    "en": "Cancel order",
-    "ru": "Отменить заявку"
-  },
-  "XamlStr424": {
+  "CancelChanges": {
     "en": "Cancel changes",
     "ru": "Отменить изменения"
   },
-  "XamlStr425": {
-    "en": "Cancel drawing",
-    "ru": "Отменить отрисовку"
-  },
-  "XamlStr426": {
+  "Unsubscribe": {
     "en": "Unsubscribe",
     "ru": "Отписаться"
   },
-  "XamlStr427": {
+  "Send": {
     "en": "Send",
     "ru": "Отправить"
   },
-  "XamlStr428": {
-    "en": "Send request",
-    "ru": "Отправить запрос"
-  },
-  "XamlStr429": {
-    "en": "Send license request to the broker",
-    "ru": "Отправить запрос на получение лицензии брокеру"
-  },
-  "XamlStr430": {
-    "en": "Sent orders",
-    "ru": "Отправленные заявки"
-  },
-  "XamlStr431": {
+  "FilteredOutFrom": {
     "en": "Filtered {0} from {1}",
     "ru": "Отфильтровано {0} из {1}"
   },
@@ -17243,47 +16731,15 @@
     "en": "Reports",
     "ru": "Отчеты"
   },
-  "XamlStr435": {
-    "en": "Ask (time)",
-    "ru": "Оффер (время)"
-  },
-  "XamlStr436": {
-    "en": "Ask (volume)",
-    "ru": "Оффер (объем)"
-  },
-  "XamlStr437": {
+  "AskOwn": {
     "en": "Ask (own)",
     "ru": "Оффер (свое)"
   },
-  "XamlStr438": {
-    "en": "Ask (price)",
-    "ru": "Оффер (цена)"
-  },
-  "XamlStr439": {
-    "en": "Ask:",
-    "ru": "Оффер:"
-  },
-  "XamlStr440": {
+  "Reset": {
     "en": "Reset",
     "ru": "Очистить"
   },
-  "XamlStr441": {
-    "en": "Reset filter",
-    "ru": "Очистить фильтр"
-  },
-  "XamlStr442": {
-    "en": "Reset form",
-    "ru": "Очистить форму"
-  },
-  "XamlStr443": {
-    "en": "Errors",
-    "ru": "Ошибок"
-  },
-  "XamlStr445": {
-    "en": "Element panel",
-    "ru": "Панель элементов"
-  },
-  "XamlStr447": {
+  "OptimizationParams": {
     "en": "Optimization parameters",
     "ru": "Параметры для оптимизации"
   },
@@ -17303,25 +16759,9 @@
     "en": "Convert",
     "ru": "Перевести"
   },
-  "XamlStr453": {
-    "en": "Duration:",
-    "ru": "Период действия:"
-  },
-  "XamlStr454": {
-    "en": "Period from",
-    "ru": "Период с"
-  },
-  "till": {
-    "en": "till",
+  "Till": {
+    "en": "Till",
     "ru": "по"
-  },
-  "XamlStr461": {
-    "en": "Till:",
-    "ru": "По:"
-  },
-  "XamlStr462": {
-    "en": "Share",
-    "ru": "Поделиться"
   },
   "ShareImage": {
     "en": "Share image",
@@ -17335,14 +16775,6 @@
     "en": "Connections",
     "ru": "Подключения"
   },
-  "XamlStr469": {
-    "en": "Connector to S# server",
-    "ru": "Подключиться к серверу S#"
-  },
-  "XamlStr470": {
-    "en": "Connect to chat",
-    "ru": "Подключиться к чату"
-  },
   "Subscribe": {
     "en": "Subscribe",
     "ru": "Подписаться"
@@ -17351,23 +16783,15 @@
     "en": "Market data subscription",
     "ru": "Подписка на данные"
   },
-  "XamlStr477": {
-    "en": "Security search",
-    "ru": "Поиск инструмента"
-  },
-  "XamlStr479": {
+  "SearchOnExchange": {
     "en": "Search on the exchange",
     "ru": "Поиск на бирже"
   },
-  "XamlStr480": {
-    "en": "Until cancelled",
-    "ru": "Пока не снимется"
-  },
-  "XamlStr481": {
-    "en": "Show review panel",
+  "ShowOverviewPanel": {
+    "en": "Show overview panel",
     "ru": "Показать панель обзора"
   },
-  "XamlStr482": {
+  "ShowCandlesOnChart": {
     "en": "Show candles on chart...",
     "ru": "Показать свечи на графике..."
   },
@@ -17387,7 +16811,7 @@
     "en": "Show value",
     "ru": "Показывать значение"
   },
-  "XamlStr487": {
+  "ShowValuesOnAxis": {
     "en": "Show values on axis",
     "ru": "Показывать значения на оси"
   },
@@ -17395,31 +16819,19 @@
     "en": "Show cross",
     "ru": "Показывать перекрестие"
   },
-  "XamlStr489": {
-    "en": "Show strategies without equity",
-    "ru": "Показывать стратегии без эквити"
-  },
-  "XamlStr490": {
-    "en": "Bids (count)",
-    "ru": "Покупатели (кол-во)"
-  },
-  "XamlStr491": {
-    "en": "Bids (volume)",
-    "ru": "Покупатели (объем)"
-  },
-  "XamlStr493": {
+  "BuyVolume": {
     "en": "Buy (volume)",
     "ru": "Покупка (объем)"
   },
-  "XamlStr494": {
+  "BidPrice": {
     "en": "Buy (price)",
     "ru": "Покупка (цена)"
   },
-  "XamlStr495": {
+  "StockSharpField": {
     "en": "S# field",
     "ru": "Поле S#"
   },
-  "XamlStr496": {
+  "ReceivedData": {
     "en": "Received data:",
     "ru": "Получаемые данные:"
   },
@@ -17431,10 +16843,6 @@
     "en": "Retrieving hardware id...",
     "ru": "Получение id компьютера..."
   },
-  "XamlStr500": {
-    "en": "Get for a date",
-    "ru": "Получить для даты"
-  },
   "GetVerificationCode": {
     "en": "Get verification code",
     "ru": "Получить код верификации"
@@ -17442,10 +16850,6 @@
   "GenerateLicense": {
     "en": "Generate license",
     "ru": "Получить лицензию"
-  },
-  "XamlStr503": {
-    "en": "Get full list of securities from IQFeed website",
-    "ru": "Получить полный список инструментов с сайта IQFeed"
   },
   "Users": {
     "en": "Users",
@@ -17455,147 +16859,59 @@
     "en": "Portfolios and connections",
     "ru": "Портфели и подключения"
   },
-  "XamlStr510": {
-    "en": "Portfolios...",
-    "ru": "Портфели..."
-  },
   "IndexNum": {
     "en": "Index num",
     "ru": "Порядковый номер"
   },
-  "XamlStr515": {
-    "en": "Last Level 1",
-    "ru": "Послед. L1"
-  },
-  "XamlStr516": {
-    "en": "Last OL",
-    "ru": "Послед. ОЛ"
-  },
-  "XamlStr517": {
-    "en": "Last candle",
-    "ru": "Послед. свеча"
-  },
-  "XamlStr525": {
-    "en": "Last market depth",
-    "ru": "Послед. стакан"
-  },
-  "XamlStr526": {
+  "Last2": {
     "en": "Last:",
     "ru": "Послед.:"
   },
-  "XamlStr527": {
+  "Settlement": {
     "en": "Settlement",
     "ru": "Поставка"
   },
-  "XamlStr528": {
-    "en": "Build chart",
-    "ru": "Построить график"
-  },
-  "XamlStr529": {
+  "BuildFrom2": {
     "en": "Build from:",
     "ru": "Построить из:"
   },
-  "XamlStr530": {
-    "en": "Build trades from order log",
-    "ru": "Построить сделки из лога заявок"
-  },
-  "XamlStr531": {
-    "en": "Build market depths from order log",
-    "ru": "Построить стаканы из лога заявок"
-  },
-  "XamlStr533": {
+  "HolidaysDesc": {
     "en": "Holidays which fall to days from Monday to Friday",
     "ru": "Праздничные дни с понедельника по пятницу"
   },
-  "XamlStr534": {
-    "en": "Warnings",
-    "ru": "Предупреждений"
-  },
-  "XamlStr537": {
+  "Apply": {
     "en": "Apply",
     "ru": "Применить"
   },
-  "XamlStr538": {
-    "en": "Currency conversion sample application",
-    "ru": "Пример - перевод валют"
-  },
-  "XamlStr539": {
+  "SampleOptionApp": {
     "en": "Option quoting sample application",
     "ru": "Пример котирования по волатильности"
   },
-  "XamlStr540": {
+  "SampleAppFor": {
     "en": "{0} sample application",
     "ru": "Пример работы с {0}"
   },
-  "XamlStr561": {
+  "SampleMarketEmulation": {
     "en": "Market simulator sample application",
     "ru": "Пример симулятора торгов"
   },
-  "XamlStr562": {
+  "SampleBacktestApp": {
     "en": "Backtesting sample application",
     "ru": "Пример тестирование на истории"
   },
-  "XamlStr563": {
+  "SampleOptimizationApp": {
     "en": "Backtesting (multi thread) sample application",
     "ru": "Пример тестирование на истории (многопоточный)"
   },
-  "XamlStr564": {
-    "en": "Sample data testing application",
-    "ru": "Пример тестирование на случайных данных"
-  },
-  "XamlStr565": {
-    "en": "Quik. Export tables sample application",
-    "ru": "Пример экспорта произвольных таблиц с Quik"
-  },
-  "XamlStr566": {
-    "en": "Quik. Export extended tables sample application",
-    "ru": "Пример экспорта расширенных таблиц с Quik"
-  },
-  "XamlStr567": {
-    "en": "Quik. Async orders",
-    "ru": "Пример-Асинхронные заявки"
-  },
-  "XamlStr568": {
-    "en": "Candles sample application",
-    "ru": "Пример-свечи"
-  },
-  "XamlStr569": {
-    "en": "Sync connector sample application",
-    "ru": "Пример-Синхронизированное подключение"
-  },
-  "XamlStr570": {
-    "en": "SMA sample application",
-    "ru": "Пример-Скользящие Средние"
-  },
-  "XamlStr571": {
-    "en": "Approve",
-    "ru": "Принять"
-  },
-  "XamlStr572": {
+  "Verify": {
     "en": "Verify",
     "ru": "Проверить"
   },
-  "XamlStr573": {
-    "en": "Check DDE:",
-    "ru": "Проверить DDE:"
-  },
-  "XamlStr574": {
-    "en": "Check Quik's tables settings",
-    "ru": "Проверить настройки таблиц в Quik"
-  },
-  "XamlStr576": {
-    "en": "Asks (count)",
-    "ru": "Продавцы (кол-во)"
-  },
-  "XamlStr577": {
-    "en": "Asks (volume)",
-    "ru": "Продавцы (объем)"
-  },
-  "XamlStr579": {
+  "SellVolume": {
     "en": "Sell (volume)",
     "ru": "Продажа (объем)"
   },
-  "XamlStr580": {
+  "AskPrice": {
     "en": "Sell (price)",
     "ru": "Продажа (цена)"
   },
@@ -17603,323 +16919,111 @@
     "en": "Sell",
     "ru": "Продать"
   },
-  "XamlStr582": {
+  "SellByMarket": {
     "en": "Sell by market",
     "ru": "Продать по рынку"
   },
-  "XamlStr583": {
-    "en": "Renew license",
-    "ru": "Продлить лицензию"
-  },
-  "XamlStr584": {
+  "Continue": {
     "en": "Continue",
     "ru": "Продолжить"
   },
-  "XamlStr585": {
-    "en": "Transparency",
-    "ru": "Прозрачность"
-  },
-  "XamlStr586": {
-    "en": "Slippage:",
-    "ru": "Проскаль.:"
-  },
-  "XamlStr587": {
-    "en": "Available market data",
-    "ru": "Просмотр доступных данных"
-  },
-  "XamlStr588": {
+  "Elapsed": {
     "en": "Elapsed:",
     "ru": "Прошло:"
   },
-  "XamlStr591": {
-    "en": "Path to dll",
-    "ru": "Путь к dll с кодом стратегии"
-  },
-  "XamlStr592": {
-    "en": "Quik's path:",
-    "ru": "Путь к Quik:"
-  },
-  "XamlStr593": {
-    "en": "Historical data:",
-    "ru": "Путь к истории:"
-  },
-  "XamlStr594": {
-    "en": "Path:",
-    "ru": "Путь:"
-  },
-  "XamlStr595": {
-    "en": "Working day with falls to Saturday or Sunday",
-    "ru": "Рабочий день суббота или воскресенье"
-  },
-  "XamlStr596": {
-    "en": "Board schedule",
-    "ru": "Расписание площадки"
-  },
-  "XamlStr597": {
-    "en": "Trade schedule in the selected period",
-    "ru": "Расписание торгов в заданный период действия"
-  },
-  "XamlStr598": {
-    "en": "Schedule:",
-    "ru": "Расписание:"
-  },
-  "XamlStr599": {
-    "en": "Value position",
-    "ru": "Расположение значения"
-  },
-  "XamlStr600": {
-    "en": "Settle. price",
-    "ru": "Расчет. цена"
-  },
-  "XamlStr604": {
+  "OrderConditionRegistration": {
     "en": "Condition order registration",
     "ru": "Регистрация условной заявки"
   },
-  "XamlStr605": {
+  "EditIndex": {
     "en": "Editing the index",
     "ru": "Редактирование индекса"
   },
-  "XamlStr607": {
+  "Edit": {
     "en": "Edit",
     "ru": "Редактировать"
   },
-  "XamlStr608": {
+  "EditSecurities": {
     "en": "Edit securities",
     "ru": "Редактировать инструменты"
-  },
-  "XamlStr609": {
-    "en": "Edit complex element",
-    "ru": "Редактировать составной элемент"
   },
   "LaunchMode": {
     "en": "Launch mode...",
     "ru": "Режим запуска..."
   },
-  "XamlStr612": {
-    "en": "Optimization results",
-    "ru": "Результаты оптимизации"
+  "Results": {
+    "en": "Results",
+    "ru": "Результаты"
   },
-  "XamlStr613": {
-    "en": "Risk",
+  "Risks": {
+    "en": "Risks",
     "ru": "Риски"
   },
-  "XamlStr614": {
+  "RiskManagement": {
     "en": "Risk management",
     "ru": "Риск-менеджмент"
   },
-  "XamlStr616": {
-    "en": "Parent room:",
-    "ru": "Родительская комната:"
-  },
-  "XamlStr620": {
-    "en": "Manual selection mode when the application starts",
-    "ru": "Ручной выбор режима при запуске приложения"
-  },
-  "XamlStr623": {
-    "en": "Market order type",
-    "ru": "Рыночный тип заявок"
-  },
-  "XamlStr624": {
-    "en": "From",
-    "ru": "С"
-  },
-  "XamlStr625": {
-    "en": "From:",
-    "ru": "С:"
-  },
-  "XamlStr626": {
-    "en": "Assembly:",
-    "ru": "Сборка:"
-  },
-  "XamlStr628": {
+  "ResetCurrentDateModifier": {
     "en": "Reset current date modification",
     "ru": "Сбросить модифицированную текущую дату"
   },
-  "XamlStr629": {
+  "ResetPriceModification": {
     "en": "Reset price modification",
     "ru": "Сбросить модифицированную цену"
   },
-  "XamlStr631": {
-    "en": "Candles",
-    "ru": "Свечек"
-  },
-  "XamlStr633": {
-    "en": "Candles (history)",
-    "ru": "Свечи (история)"
-  },
-  "XamlStr634": {
-    "en": "Candles (real-time)",
-    "ru": "Свечи (реал-тайм)"
-  },
-  "XamlStr635": {
+  "CandlesAndDepths": {
     "en": "Candles and depths",
     "ru": "Свечи и стаканы"
   },
-  "XamlStr639": {
-    "en": "Security parameters",
-    "ru": "Свойства инструмента"
-  },
-  "XamlStr641": {
-    "en": "Trade on the market with specified price or higher.",
-    "ru": "Сделка на рынке по заданной цене или выше."
-  },
-  "XamlStr642": {
-    "en": "Trade on the market with specified price or lower.",
-    "ru": "Сделка на рынке по заданной цене или ниже."
-  },
-  "XamlStr646": {
-    "en": "Secret:",
-    "ru": "Секрет:"
-  },
-  "XamlStr651": {
-    "en": "Server:",
-    "ru": "Сервер:"
-  },
-  "XamlStr652": {
+  "SynchronizeData": {
     "en": "Synchronize data with directories",
     "ru": "Синхронизировать данные с директориями"
   },
-  "XamlStr655": {
+  "Download": {
     "en": "Download",
     "ru": "Скачать"
   },
-  "XamlStr658": {
+  "Compile": {
     "en": "Compile",
     "ru": "Скомпилировать"
   },
-  "XamlStr659": {
-    "en": "copy",
-    "ru": "скопировать"
-  },
-  "XamlStr660": {
+  "CopyToClipboard": {
     "en": "Copy to clipboard",
     "ru": "Скопировать в буфер"
   },
-  "XamlStr661": {
-    "en": "Script",
-    "ru": "Скрипт"
-  },
-  "XamlStr662": {
-    "en": "Scripts",
-    "ru": "Скрипты"
-  },
-  "XamlStr664": {
-    "en": "Change",
-    "ru": "Сменить"
-  },
-  "XamlStr665": {
+  "ChangePassword": {
     "en": "Change password",
     "ru": "Сменить пароль"
   },
-  "XamlStr666": {
-    "en": "Connect",
-    "ru": "Соединиться"
-  },
-  "XamlStr667": {
+  "CreateNewSecurity": {
     "en": "Create new security",
     "ru": "Создание нового инструмента"
   },
-  "XamlStr668": {
-    "en": "Create",
-    "ru": "Создать"
-  },
-  "XamlStr670": {
-    "en": "Create room",
-    "ru": "Создать комнату"
-  },
-  "XamlStr671": {
-    "en": "Create configuration",
-    "ru": "Создать конфигурацию"
-  },
-  "XamlStr672": {
-    "en": "Create Terminal configuration",
-    "ru": "Создать конфигурацию Терминала"
-  },
-  "XamlStr673": {
+  "CreatePosition": {
     "en": "Create position",
     "ru": "Создать позицию"
   },
-  "XamlStr674": {
-    "en": "Create position...",
-    "ru": "Создать позицию..."
-  },
-  "XamlStr675": {
+  "CreatePortfolio": {
     "en": "Create portfolio",
     "ru": "Создать портфель"
-  },
-  "XamlStr676": {
-    "en": "Create portfolio...",
-    "ru": "Создать портфель..."
-  },
-  "XamlStr677": {
-    "en": "Create security",
-    "ru": "Создать простой инструмент"
-  },
-  "XamlStr678": {
-    "en": "Create continuous security",
-    "ru": "Создать склеенный фьючерс"
-  },
-  "XamlStr679": {
-    "en": "Create script",
-    "ru": "Создать скрипт"
-  },
-  "XamlStr680": {
-    "en": "Create composite element",
-    "ru": "Создать составной элемент"
   },
   "CreateStrategy": {
     "en": "Create strategy",
     "ru": "Создать стратегию"
   },
-  "XamlStr682": {
-    "en": "Create element",
-    "ru": "Создать элемент"
-  },
-  "XamlStr685": {
-    "en": "Messages",
-    "ru": "Сообщений"
-  },
-  "XamlStr687": {
+  "PortfoliosConnections": {
     "en": "Portfolios <-> connections",
     "ru": "Портфели <-> подключения"
   },
-  "XamlStr688": {
-    "en": "Composite element",
-    "ru": "Составной элемент"
-  },
-  "XamlStr691": {
+  "SaveDataFromChart": {
     "en": "Save data from the chart",
     "ru": "Сохранить данные с графика"
   },
-  "XamlStr692": {
-    "en": "Save security",
-    "ru": "Сохранить инструмент"
-  },
-  "XamlStr693": {
-    "en": "Save new board",
-    "ru": "Сохранить новую площадку"
-  },
-  "XamlStr694": {
+  "SaveLayout": {
     "en": "Save layout...",
     "ru": "Сохранить разметку..."
   },
-  "XamlStr695": {
-    "en": "Save basket security",
-    "ru": "Сохранить составной инструмент"
-  },
-  "XamlStr696": {
-    "en": "Special non-working days:",
-    "ru": "Специальные выходные дни:"
-  },
-  "XamlStr697": {
-    "en": "Special working days:",
-    "ru": "Специальные рабочие дни:"
-  },
-  "XamlStr698": {
-    "en": "Change list:",
-    "ru": "Список изменений:"
-  },
-  "XamlStr699": {
+  "ErrorList": {
     "en": "Error list",
     "ru": "Список ошибок"
   },
@@ -17943,10 +17047,6 @@
     "en": "Depths",
     "ru": "Стаканов"
   },
-  "XamlStr709": {
-    "en": "Depths (OL)",
-    "ru": "Стаканов (ОЛ)"
-  },
   "ObsoleteDDE": {
     "en": "Obsolete (DDE)",
     "ru": "Устаревшее (DDE)"
@@ -17963,23 +17063,11 @@
     "en": "Stop orders",
     "ru": "Стоп-заявки"
   },
-  "XamlStr724": {
-    "en": "Exchange country",
-    "ru": "Страна расположения биржи"
-  },
-  "XamlStr727": {
-    "en": "Strategy was changed. It is necessary to restart.",
-    "ru": "Стратегия была изменена. Необходимо выполнить перезапуск."
-  },
-  "XamlStr728": {
-    "en": "Build chart of the initial securities",
-    "ru": "Строить график исходных инструментов"
-  },
   "Line": {
     "en": "Line",
     "ru": "Строка"
   },
-  "XamlStr730": {
+  "WorkingHolidays": {
     "en": "Working days with fall to Saturday or Sunday",
     "ru": "Субботние и воскресные рабочие дни"
   },
@@ -17987,83 +17075,47 @@
     "en": "Amount",
     "ru": "Сумма"
   },
-  "XamlStr732": {
-    "en": "Current:",
-    "ru": "Существующие:"
-  },
   "Title": {
     "en": "Title",
     "ru": "Заголовок"
   },
-  "XamlStr739": {
-    "en": "Current date:",
-    "ru": "Текущая дата:"
+  "CurrentDate": {
+    "en": "Current date",
+    "ru": "Текущая дата"
   },
-  "XamlStr740": {
+  "Current": {
     "en": "Current",
     "ru": "Текущее"
   },
-  "XamlStr741": {
-    "en": "Current licenses",
-    "ru": "Текущие лицензии"
-  },
-  "XamlStr742": {
+  "CurrentPassword": {
     "en": "Current password",
     "ru": "Текущий пароль"
   },
-  "XamlStr743": {
-    "en": "Theor. price",
-    "ru": "Теор. цена"
-  },
-  "XamlStr745": {
-    "en": "Test (speech)",
-    "ru": "Тест (говорить)"
-  },
-  "XamlStr746": {
+  "TestSound": {
     "en": "Test (sound)",
-    "ru": "Тест (играть)"
+    "ru": "Тест (звук)"
   },
-  "XamlStr747": {
+  "TestLog": {
     "en": "Test (log)",
-    "ru": "Тест (написать)"
+    "ru": "Тест (лог)"
   },
-  "XamlStr748": {
+  "TestWindow": {
     "en": "Test (window)",
-    "ru": "Тест (показать)"
+    "ru": "Тест (окно)"
   },
   "Backtest": {
     "en": "Backtest",
     "ru": "Бэктест"
   },
-  "XamlStr751": {
-    "en": "Backtest configuration",
-    "ru": "Конфиг бэктеста"
-  },
-  "XamlStr752": {
-    "en": "Optimization",
-    "ru": "Оптимизация"
-  },
-  "XamlStr755": {
-    "en": "Ticker:",
-    "ru": "Тикер:"
-  },
-  "XamlStr757": {
+  "TicksAndDepths": {
     "en": "Ticks and depths",
     "ru": "Тики и стаканы"
   },
-  "XamlStr759": {
-    "en": "Ticks (OL)",
-    "ru": "Тиков (ОЛ)"
-  },
-  "XamlStr762": {
+  "TypeOfValues": {
     "en": "Type (values)",
     "ru": "Тип (значение)"
   },
-  "XamlStr763": {
-    "en": "Type (option)",
-    "ru": "Тип (опцион)"
-  },
-  "XamlStr765": {
+  "StrategyType": {
     "en": "Strategy type",
     "ru": "Тип стратегии"
   },
@@ -18079,7 +17131,7 @@
     "en": "Events",
     "ru": "Уведомления"
   },
-  "XamlStr781": {
+  "DataDeletion": {
     "en": "Data deletion",
     "ru": "Удаление данных"
   },
@@ -18087,51 +17139,27 @@
     "en": "Remotely",
     "ru": "Удалённое"
   },
-  "XamlStr784": {
-    "en": "Delete association",
-    "ru": "Удалить ассоциацию"
-  },
-  "XamlStr785": {
+  "DeleteDataForPeriod": {
     "en": "Remove data for selected period for all/selected securities",
     "ru": "Удалить данные за выбранный период по всем/выбранным инструментам"
   },
-  "XamlStr786": {
+  "DeleteData": {
     "en": "Delete data...",
     "ru": "Удалить данные..."
   },
-  "XamlStr787": {
+  "DeleteTask": {
     "en": "Delete task",
     "ru": "Удалить задачу"
   },
-  "XamlStr788": {
+  "DeleteSecurity": {
     "en": "Delete security",
     "ru": "Удалить инструмент"
   },
-  "XamlStr789": {
+  "DeleteSecurities": {
     "en": "Delete securities",
     "ru": "Удалить инструменты"
   },
-  "XamlStr790": {
-    "en": "Delete room",
-    "ru": "Удалить комнату"
-  },
-  "XamlStr791": {
-    "en": "Delete configuration",
-    "ru": "Удалить конфигурацию"
-  },
-  "XamlStr792": {
-    "en": "Delete Terminal configuration",
-    "ru": "Удалить конфигурацию Терминала"
-  },
-  "XamlStr793": {
-    "en": "Delete license",
-    "ru": "Удалить лицензию"
-  },
-  "XamlStr794": {
-    "en": "Delete for all securities",
-    "ru": "Удалить по всем инструментам"
-  },
-  "XamlStr795": {
+  "DeleteConnection": {
     "en": "Delete connection",
     "ru": "Удалить подключение"
   },
@@ -18139,19 +17167,7 @@
     "en": "Delete rule",
     "ru": "Удалить правило"
   },
-  "XamlStr797": {
-    "en": "Delete script",
-    "ru": "Удалить скрипт"
-  },
-  "XamlStr798": {
-    "en": "Delete composite element",
-    "ru": "Удалить составной элемент"
-  },
-  "XamlStr799": {
-    "en": "Delete strategy",
-    "ru": "Удалить стратегию"
-  },
-  "XamlStr800": {
+  "DeleteBreakpoint": {
     "en": "Delete breakpoint",
     "ru": "Удалить точку остановки"
   },
@@ -18163,19 +17179,15 @@
     "en": "File (assembly)",
     "ru": "Файл (сборка)"
   },
-  "XamlStr807": {
-    "en": "Volume filter (do not show ticks with volume less than specified)",
-    "ru": "Фильтр объема (не показывать тики меньше заданного)"
-  },
-  "XamlStr808": {
+  "MaxStrikeFilter": {
     "en": "Maximum strike filter",
     "ru": "Фильтр по максимальному страйку"
   },
-  "XamlStr809": {
+  "MinStrikeFilter": {
     "en": "Minimum strike filter",
     "ru": "Фильтр по минимальному страйку"
   },
-  "XamlStr810": {
+  "FilterForOptions": {
     "en": "Exact expiration filter for options",
     "ru": "Фильтр по точной экспирации опционов"
   },
@@ -18186,10 +17198,6 @@
   "Forex": {
     "en": "Forex",
     "ru": "Форекс"
-  },
-  "XamlStr814": {
-    "en": "Text value format. Used only for dates and times.",
-    "ru": "Формат текстового значения. Используется только для дат и времени."
   },
   "StorageFormat": {
     "en": "Storage format",
@@ -18219,41 +17227,13 @@
     "en": "Background color",
     "ru": "Цвет фона"
   },
-  "XamlStr829": {
-    "en": "Limit order price",
-    "ru": "Цена лимитной заявки"
-  },
-  "XamlStr830": {
-    "en": "Highest price",
-    "ru": "Цена наивысшая"
-  },
-  "XamlStr831": {
-    "en": "Lowest price",
-    "ru": "Цена наименьшая"
-  },
-  "XamlStr833": {
-    "en": "Last trade price",
-    "ru": "Цена посл. сделки"
-  },
   "TradePrice": {
     "en": "Trade price",
     "ru": "Цена сделки"
   },
-  "XamlStr846": {
-    "en": "Equity from",
-    "ru": "Эквити от"
-  },
-  "XamlStr848": {
+  "Expiration": {
     "en": "Expiration",
     "ru": "Экспирация"
-  },
-  "XamlStr850": {
-    "en": "Export DDE",
-    "ru": "Экспорт DDE"
-  },
-  "XamlStr852": {
-    "en": "Export report",
-    "ru": "Экспорт отчета"
   },
   "Str2898": {
     "en": "Creating task '{0}'.",
@@ -20776,7 +19756,7 @@
     "ru": "Гарантийное обеспечения на один контракт для тестирования"
   },
   "MinimumSizeSpreadPriceSteps": {
-    "en": "The minimum size of the spread in the price steps for placing orders",
+    "en": "The minimum size of the spread in the price steps for registration orders",
     "ru": "Минимальный размер спреда в шагах цены для выставления ордеров"
   },
   "IndentThePriceSteps": {

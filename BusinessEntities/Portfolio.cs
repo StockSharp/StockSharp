@@ -31,7 +31,7 @@ namespace StockSharp.BusinessEntities
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PortfolioKey,
-		Description = LocalizedStrings.Str541Key)]
+		Description = LocalizedStrings.PortfolioDescKey)]
 	public class Portfolio : Position
 	{
 		/// <summary>
@@ -50,7 +50,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str247Key,
+			Description = LocalizedStrings.PortfolioNameKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Name
 		{
@@ -72,7 +72,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BoardKey,
-			Description = LocalizedStrings.Str544Key,
+			Description = LocalizedStrings.PortfolioBoardKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public ExchangeBoard Board { get; set; }
 
@@ -85,7 +85,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StateKey,
-			Description = LocalizedStrings.Str252Key,
+			Description = LocalizedStrings.PortfolioStateKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(false)]
 		public PortfolioStates? State

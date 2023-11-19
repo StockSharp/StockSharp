@@ -79,8 +79,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str281Key,
-			Description = LocalizedStrings.Str282Key,
+			Name = LocalizedStrings.BidsKey,
+			Description = LocalizedStrings.QuotesBuyKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public QuoteChange[] Bids
 		{
@@ -94,8 +94,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str283Key,
-			Description = LocalizedStrings.Str284Key,
+			Name = LocalizedStrings.AsksKey,
+			Description = LocalizedStrings.QuotesSellKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public QuoteChange[] Asks
 		{
@@ -108,7 +108,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ServerTimeKey,
-			Description = LocalizedStrings.Str168Key,
+			Description = LocalizedStrings.ChangeServerTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 
@@ -127,7 +127,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.Str382Key,
+			Description = LocalizedStrings.CurrencyDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Ecng.Serialization.Nullable]
 		public CurrencyTypes? Currency { get; set; }

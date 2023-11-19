@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str128Key,
+			Name = LocalizedStrings.DirectionKey,
 			Description = LocalizedStrings.Str228Key,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides? Side { get; set; }

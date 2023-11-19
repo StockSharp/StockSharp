@@ -36,7 +36,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str361Key,
+			Name = LocalizedStrings.IdentifierKey,
 			Description = LocalizedStrings.SecurityIdKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[TypeConverter(typeof(StringToSecurityIdTypeConverter))]
@@ -49,7 +49,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str362Key,
+			Description = LocalizedStrings.SecurityNameKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Name { get; set; }
 
@@ -59,8 +59,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str363Key,
-			Description = LocalizedStrings.Str364Key,
+			Name = LocalizedStrings.ShortNameKey,
+			Description = LocalizedStrings.ShortNameDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string ShortName { get; set; }
 
@@ -71,7 +71,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeStepKey,
-			Description = LocalizedStrings.Str366Key,
+			Description = LocalizedStrings.MinVolStepKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? VolumeStep { get; set; }
@@ -119,7 +119,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DecimalsKey,
-			Description = LocalizedStrings.Str548Key,
+			Description = LocalizedStrings.DecimalsDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public int? Decimals { get; set; }
@@ -149,7 +149,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TypeKey,
-			Description = LocalizedStrings.Str360Key,
+			Description = LocalizedStrings.SecurityTypeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public SecurityTypes? SecurityType { get; set; }
@@ -172,7 +172,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExpiryDateKey,
-			Description = LocalizedStrings.Str371Key,
+			Description = LocalizedStrings.ExpiryDateDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public DateTimeOffset? ExpiryDate { get; set; }
@@ -184,7 +184,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SettlementDateKey,
-			Description = LocalizedStrings.Str373Key,
+			Description = LocalizedStrings.SettlementDateForSecurityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public DateTimeOffset? SettlementDate { get; set; }
@@ -254,7 +254,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CurrencyKey,
-			Description = LocalizedStrings.Str382Key,
+			Description = LocalizedStrings.CurrencyDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public CurrencyTypes? Currency { get; set; }

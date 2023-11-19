@@ -31,7 +31,7 @@ namespace StockSharp.BusinessEntities
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.OrderLogOfKey,
-		Description = LocalizedStrings.Str535Key)]
+		Description = LocalizedStrings.OrderLogDescKey)]
 	[Obsolete("Use IOrderLogMessage.")]
 	public class OrderLogItem : MyTrade, IOrderLogMessage
 	{
@@ -48,7 +48,7 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var result = LocalizedStrings.Str536Params.Put(Trade == null ? (Order.State == OrderStates.Done ? LocalizedStrings.Str537 : LocalizedStrings.Str538) : LocalizedStrings.Str539, Order);
+			var result = LocalizedStrings.Str536Params.Put(Trade == null ? (Order.State == OrderStates.Done ? LocalizedStrings.Cancellation : LocalizedStrings.Registration) : LocalizedStrings.Str539, Order);
 
 			if (Trade != null)
 				result += " " + LocalizedStrings.Str540Params.Put(Trade);

@@ -35,28 +35,28 @@ namespace StockSharp.Messages
 		/// Initial value.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str253Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BeginValueKey)]
 		BeginValue,
 
 		/// <summary>
 		/// Current value.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str254Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CurrentValueKey)]
 		CurrentValue,
 
 		/// <summary>
 		/// Blocked.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str255Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BlockedKey)]
 		BlockedValue,
 
 		/// <summary>
 		/// Position price.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str256Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PosPriceKey)]
 		CurrentPrice,
 
 		/// <summary>
@@ -70,21 +70,21 @@ namespace StockSharp.Messages
 		/// Unrealized profit.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str258Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UnrealizedProfitKey)]
 		UnrealizedPnL,
 
 		/// <summary>
 		/// Realized profit.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str259Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RealizedProfitKey)]
 		RealizedPnL,
 
 		/// <summary>
 		/// Variation margin.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str260Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VariationMarginKey)]
 		VariationMargin,
 
 		/// <summary>
@@ -240,7 +240,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str247Key,
+			Description = LocalizedStrings.PortfolioNameKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string PortfolioName { get; set; }
 
@@ -280,7 +280,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str266Key,
-			Description = LocalizedStrings.Str267Key,
+			Description = LocalizedStrings.PosLimitKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public TPlusLimits? LimitType { get; set; }
@@ -292,7 +292,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DescriptionKey,
-			Description = LocalizedStrings.Str269Key,
+			Description = LocalizedStrings.PosTextKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Description { get; set; }
 

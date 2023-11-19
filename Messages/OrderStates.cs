@@ -35,14 +35,14 @@ namespace StockSharp.Messages
 		/// The original state of the order, when the transaction is not sent to the trading system.
 		/// </remarks>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1658Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 		None,
 
 		/// <summary>
 		/// The order is accepted by the exchange and is active.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ActiveKey)]
 		Active,
 
 		/// <summary>

@@ -32,7 +32,7 @@ namespace StockSharp.BusinessEntities
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.NewsKey,
-		Description = LocalizedStrings.Str510Key)]
+		Description = LocalizedStrings.NewsDescKey)]
 	public class News : NotifiableObject
 	{
 		/// <summary>
@@ -52,8 +52,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str511Key,
-			Description = LocalizedStrings.Str512Key,
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.ElectronicBoardDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public ExchangeBoard Board { get; set; }
 
@@ -64,7 +64,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SecurityKey,
-			Description = LocalizedStrings.Str513Key,
+			Description = LocalizedStrings.NewsSecurityKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Security Security { get; set; }
 
@@ -118,7 +118,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeKey,
-			Description = LocalizedStrings.Str220Key,
+			Description = LocalizedStrings.NewsTimeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset ServerTime { get; set; }
 
@@ -128,8 +128,8 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str514Key,
-			Description = LocalizedStrings.Str515Key,
+			Name = LocalizedStrings.LocalTimeKey,
+			Description = LocalizedStrings.LocalTimeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTimeOffset LocalTime { get; set; }
 

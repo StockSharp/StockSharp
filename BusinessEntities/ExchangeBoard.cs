@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExpiryDateKey,
-			Description = LocalizedStrings.Str64Key,
+			Description = LocalizedStrings.SecExpirationTimeKey,
 			GroupName = LocalizedStrings.GeneralKey
 		)]
 		[XmlIgnore]
@@ -115,7 +115,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ExchangeInfoKey,
-			Description = LocalizedStrings.Str479Key,
+			Description = LocalizedStrings.BoardExchangeKey,
 			GroupName = LocalizedStrings.GeneralKey
 		)]
 		public Exchange Exchange { get; set; }

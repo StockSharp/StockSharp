@@ -313,7 +313,7 @@ namespace StockSharp.Algo.Commissions
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TradesOfKey,
-			Description = LocalizedStrings.Str232Key,
+			Description = LocalizedStrings.LimitOrderTifKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Count
 		{
@@ -473,7 +473,7 @@ namespace StockSharp.Algo.Commissions
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TypeKey,
-			Description = LocalizedStrings.Str360Key,
+			Description = LocalizedStrings.SecurityTypeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityTypes SecurityType
 		{

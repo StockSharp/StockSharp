@@ -39,7 +39,7 @@ namespace StockSharp.Messages
 		/// Suspended.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SecuritySuspendedKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SuspendedKey)]
 		Stoped,
 	}
 }

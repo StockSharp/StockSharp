@@ -51,7 +51,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BidKey,
-			Description = LocalizedStrings.Str494Key,
+			Description = LocalizedStrings.QuoteBuyKey,
 			GroupName = LocalizedStrings.CommonKey)]
 		public QuoteChange? Bid { get; }
 
@@ -61,7 +61,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AskKey,
-			Description = LocalizedStrings.Str495Key,
+			Description = LocalizedStrings.QuoteSellKey,
 			GroupName = LocalizedStrings.CommonKey)]
 		public QuoteChange? Ask { get; }
 
@@ -70,8 +70,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str496Key,
-			Description = LocalizedStrings.Str497Key,
+			Name = LocalizedStrings.SpreadPriceKey,
+			Description = LocalizedStrings.SpreadPriceDescKey,
 			GroupName = LocalizedStrings.CommonKey)]
 		public decimal? SpreadPrice => _isFull ? (Ask.Value.Price - Bid.Value.Price) : null;
 
@@ -80,8 +80,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str498Key,
-			Description = LocalizedStrings.Str499Key,
+			Name = LocalizedStrings.SpreadVolumeKey,
+			Description = LocalizedStrings.SpreadVolumeDescKey,
 			GroupName = LocalizedStrings.CommonKey)]
 		public decimal? SpreadVolume => _isFull ? (Ask.Value.Volume - Bid.Value.Volume).Abs() : null;
 
