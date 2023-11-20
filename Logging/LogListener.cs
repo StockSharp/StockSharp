@@ -97,7 +97,7 @@ namespace StockSharp.Logging
 		/// <param name="message">A debug message.</param>
 		protected virtual void OnWriteMessage(LogMessage message)
 		{
-			throw new NotSupportedException(LocalizedStrings.Str17);
+			throw new NotSupportedException(LocalizedStrings.MethodMustBeOverrided);
 		}
 
 		/// <summary>

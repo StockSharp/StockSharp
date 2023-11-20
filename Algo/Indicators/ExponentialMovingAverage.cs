@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.EMAKey,
-		Description = LocalizedStrings.Str785Key)]
+		Description = LocalizedStrings.ExponentialMovingAverageKey)]
 	[Doc("topics/IndicatorExponentialMovingAverage.html")]
 	public class ExponentialMovingAverage : LengthIndicator<decimal>
 	{

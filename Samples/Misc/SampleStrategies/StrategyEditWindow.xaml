@@ -5,7 +5,7 @@
         xmlns:sx="http://schemas.stocksharp.com/xaml"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=StockSharp.Xaml"
-        Title="{x:Static loc:LocalizedStrings.Str1264}"
+        Title="{x:Static loc:LocalizedStrings.Quoting}"
         ShowInTaskbar="False" Width="300" SizeToContent="Height">
     <Grid Margin="5">
         <Grid.RowDefinitions>

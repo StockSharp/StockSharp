@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 
 			if (quotes == null || quotes.IsEmpty() && currentPrice == null)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1241);
+				this.AddWarningLog(LocalizedStrings.NoOrderBookInfo);
 				return null;
 			}
 

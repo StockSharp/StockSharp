@@ -435,7 +435,7 @@ namespace StockSharp.Algo
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeIntervalKey,
 			Description = LocalizedStrings.Str195Key,
-			GroupName = LocalizedStrings.Str186Key)]
+			GroupName = LocalizedStrings.AdaptersKey)]
 		public virtual TimeSpan MarketTimeChangedInterval
 		{
 			get => _marketTimeChangedInterval;
@@ -1065,12 +1065,12 @@ namespace StockSharp.Algo
 					.FirstOrDefault();
 
 				if (subscrSecId == null || subscrSecId.Value == default)
-					throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str1025);
+					throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.EmptySecId);
 
 				secId = subscrSecId.Value;
 			}
 
-			return TryGetSecurity(secId) ?? throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.Str704Params.Put(secId));
+			return TryGetSecurity(secId) ?? throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.SecurityNoFound.Put(secId));
 		}
 
 		/// <summary>

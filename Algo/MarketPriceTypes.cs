@@ -29,14 +29,14 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The counter-price (for quick closure of position).
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str975Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OppositeKey)]
 		[EnumMember]
 		Opposite,
 
 		/// <summary>
 		/// The concurrent price (for quoting at the edge of spread).
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str976Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.FollowingKey)]
 		[EnumMember]
 		Following,
 

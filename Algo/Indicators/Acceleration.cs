@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MAKey,
-			Description = LocalizedStrings.Str731Key,
+			Description = LocalizedStrings.MovingAverageKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage Sma { get; }
 

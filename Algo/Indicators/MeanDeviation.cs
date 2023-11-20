@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MeanDevKey,
-		Description = LocalizedStrings.Str744Key)]
+		Description = LocalizedStrings.AverageDeviationKey)]
 	[Doc("topics/IndicatorMeanDeviation.html")]
 	public class MeanDeviation : LengthIndicator<decimal>
 	{

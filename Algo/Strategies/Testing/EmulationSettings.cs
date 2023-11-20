@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LogLevelKey,
 			Description = LocalizedStrings.LogLevelKey + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str12Key,
+			GroupName = LocalizedStrings.DebugKey,
 			Order = 300)]
 		[Obsolete("Use external storage.")]
 		public LogLevels LogLevel

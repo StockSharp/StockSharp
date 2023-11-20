@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TroughKey,
-		Description = LocalizedStrings.Str821Key)]
+		Description = LocalizedStrings.TroughDescKey)]
 	[Doc("topics/IndicatorTrough.html")]
 	public sealed class Trough : ZigZagEquis
 	{

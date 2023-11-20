@@ -144,7 +144,7 @@ namespace StockSharp.Algo.Storages.Binary
 			foreach (var msg in messages)
 			{
 				if (msg.DataType != DataType.Ticks)
-					throw new ArgumentOutOfRangeException(nameof(messages), msg.DataType, LocalizedStrings.Str1695Params.Put(msg));
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.DataType, LocalizedStrings.UnknownType.Put(msg));
 
 				var tradeId = msg.TradeId ?? 0;
 

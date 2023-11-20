@@ -98,7 +98,7 @@ namespace StockSharp.Algo
 				foreach (var order in orders)
 				{
 					if (!dict.SafeAdd(Tuple.Create(order.Side, order.Price)).Add(order))
-						throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
+						throw new InvalidOperationException(LocalizedStrings.HasDuplicates.Put(order));
 				}
 
 				var bids = depth.Bids.ToList();
@@ -418,7 +418,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(securityProvider));
 
 			return security.InnerSecurityIds.Select(id =>
-				securityProvider.LookupById(id) ?? throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id))
+				securityProvider.LookupById(id) ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id))
 			).ToArray();
 		}
 
@@ -684,7 +684,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
 		{
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
+				throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(from, to));
 
 			var board = ExchangeBoard.Forts.ToMessage();
 
@@ -734,7 +734,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(baseCode));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
+				throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(from, to));
 
 			if (getSecurity == null)
 				throw new ArgumentNullException(nameof(getSecurity));
@@ -774,7 +774,7 @@ namespace StockSharp.Algo
 					if (security == null)
 					{
 						if (throwIfNotExists)
-							throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(code));
+							throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(code));
 
 						continue;
 					}
@@ -822,7 +822,7 @@ namespace StockSharp.Algo
 				var expDate = security.ExpiryDate;
 
 				if (expDate == null)
-					throw new InvalidOperationException(LocalizedStrings.Str698Params.Put(security.Id));
+					throw new InvalidOperationException(LocalizedStrings.NoExpirationDate.Put(security.Id));
 
 				continuousSecurity.ExpirationJumps.Add(security.ToSecurityId(), expDate.Value);
 			}
@@ -1873,7 +1873,7 @@ namespace StockSharp.Algo
 			Id = Extensions.AllSecurityId,
 			Code = SecurityId.AssociatedBoardCode,
 			//Class = task.GetDisplayName(),
-			Name = LocalizedStrings.Str2835,
+			Name = LocalizedStrings.AllSecurities,
 			Board = ExchangeBoard.Associated,
 		};
 
@@ -1932,7 +1932,7 @@ namespace StockSharp.Algo
 			if (firstIndex == -1)
 			{
 				id += "@ALL";
-				//return LocalizedStrings.Str2926;
+				//return LocalizedStrings.BoardNotSpecified;
 			}
 
 			var lastIndex = id.LastIndexOf('@');
@@ -1944,9 +1944,9 @@ namespace StockSharp.Algo
 				return null;
 
 			if (firstIndex == 0)
-				return LocalizedStrings.Str2923;
+				return LocalizedStrings.SecCodeNotFilled;
 			else if (firstIndex == (id.Length - 1))
-				return LocalizedStrings.Str2926;
+				return LocalizedStrings.BoardNotSpecified;
 
 			return null;
 		}
@@ -2307,7 +2307,7 @@ namespace StockSharp.Algo
 					if (!adapter.SendInMessage(request))
 					{
 						// the real error will be later, so ignore here
-						//throw new InvalidOperationException(LocalizedStrings.Str2142Params.Put(request.Type));
+						//throw new InvalidOperationException(LocalizedStrings.UnknownType.Put(request.Type));
 					}
 				}
 

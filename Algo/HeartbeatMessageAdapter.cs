@@ -409,10 +409,10 @@ namespace StockSharp.Algo
 						{
 							case ConnectionStates.Connecting:
 								if (!SuppressReconnectingErrors || _connectingAttemptCount == 0)
-									RaiseNewOutMessage(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.Str170) });
+									RaiseNewOutMessage(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.ConnectionTimeout) });
 								break;
 							case ConnectionStates.Disconnecting:
-								RaiseNewOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.Str171) });
+								RaiseNewOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.DisconnectTimeout) });
 								break;
 						}
 

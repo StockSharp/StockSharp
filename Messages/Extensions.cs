@@ -1143,7 +1143,7 @@ namespace StockSharp.Messages
 			if (message.From != null && message.To != null)
 			{
 				if (message.From.Value > message.To.Value)
-					throw new ArgumentOutOfRangeException(nameof(message), message.To, LocalizedStrings.Str1014.Put(message.From));
+					throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(message.From, message.To));
 			}
 
 			return message;
@@ -3918,13 +3918,13 @@ namespace StockSharp.Messages
 			foreach (var change in from)
 			{
 				if (!mapFrom.TryAdd2(change.Price, change))
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(from));
+					throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(change.Price), nameof(from));
 			}
 
 			foreach (var change in to)
 			{
 				if (!mapTo.TryAdd2(change.Price, change))
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(to));
+					throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(change.Price), nameof(to));
 			}
 
 			foreach (var pair in mapFrom)
@@ -4644,7 +4644,7 @@ namespace StockSharp.Messages
 				'C' => OptionTypes.Call,
 				'P' => OptionTypes.Put,
 				'X' or ' ' => null,
-				_ => throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1606Params.Put(cfi)),
+				_ => throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.UnknownType.Put(cfi)),
 			};
 		}
 

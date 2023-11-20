@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.StochasticKKey,
-		Description = LocalizedStrings.Str774Key)]
+		Description = LocalizedStrings.StochasticKDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorStochasticK.html")]
 	public class StochasticK : LengthIndicator<decimal>

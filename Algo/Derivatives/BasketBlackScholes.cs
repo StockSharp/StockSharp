@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Derivatives
 					var model = _innerModels.SyncGet(c => c.FirstOrDefault());
 
 					if (model == null)
-						throw new InvalidOperationException(LocalizedStrings.Str700);
+						throw new InvalidOperationException(LocalizedStrings.ModelNoOptions);
 
 					base.UnderlyingAsset = model.Option.GetAsset(SecurityProvider);
 				}

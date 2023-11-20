@@ -177,8 +177,8 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str736Key,
-			Description = LocalizedStrings.Str778Key,
+			Name = LocalizedStrings.PeriodKey,
+			Description = LocalizedStrings.PeriodLengthKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public virtual int Length
 		{

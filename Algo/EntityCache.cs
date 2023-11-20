@@ -432,12 +432,12 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(getPortfolio));
 
 			if (message.Error != null)
-				throw new ArgumentException(LocalizedStrings.Str714Params.PutEx(message));
+				throw new ArgumentException(LocalizedStrings.MessageHasStateAndError.PutEx(message));
 
 			var securityData = GetData(security);
 
 			if (transactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str719);
+				throw new ArgumentException(LocalizedStrings.NoOrderIds);
 
 			if (transactionId == 0)
 			{
@@ -455,7 +455,7 @@ namespace StockSharp.Algo
 				if (info == null)
 				{
 					yield return OrderChangeInfo.NotExist;
-					//throw new InvalidOperationException(LocalizedStrings.Str1156Params.Put(orderId.To<string>() ?? orderStringId));
+					//throw new InvalidOperationException(LocalizedStrings.OrderNotFound.Put(orderId.To<string>() ?? orderStringId));
 				}
 				else
 				{
@@ -594,7 +594,7 @@ namespace StockSharp.Algo
 			var orders = new List<Tuple<Order, OrderOperations>>();
 
 			if (message.OriginalTransactionId == 0)
-				throw new ArgumentOutOfRangeException(nameof(message), message.OriginalTransactionId, LocalizedStrings.Str715);
+				throw new ArgumentOutOfRangeException(nameof(message), message.OriginalTransactionId, LocalizedStrings.TransactionInvalid);
 
 			var orderType = message.OrderType;
 
@@ -703,7 +703,7 @@ namespace StockSharp.Algo
 				if (!message.CommissionCurrency.IsEmpty())
 					o.CommissionCurrency = message.CommissionCurrency;
 
-				var error = message.Error ?? new InvalidOperationException(operation == OrderOperations.Cancel ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
+				var error = message.Error ?? new InvalidOperationException(operation == OrderOperations.Cancel ? LocalizedStrings.ErrorCancelling : LocalizedStrings.ErrorRegistering);
 
 				var fail = new OrderFail
 				{
@@ -728,7 +728,7 @@ namespace StockSharp.Algo
 			var securityData = GetData(security);
 
 			if (transactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
-				throw new ArgumentOutOfRangeException(nameof(message), transactionId, LocalizedStrings.Str715);
+				throw new ArgumentOutOfRangeException(nameof(message), transactionId, LocalizedStrings.TransactionInvalid);
 
 			var tradeKey = Tuple.Create(transactionId, message.TradeId ?? 0, message.TradeStringId ?? string.Empty);
 
@@ -744,7 +744,7 @@ namespace StockSharp.Algo
 				var orderStringId = message.OrderStringId;
 
 				if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
-					throw new ArgumentException(LocalizedStrings.Str719);
+					throw new ArgumentException(LocalizedStrings.NoOrderIds);
 
 				var data = GetData(security);
 
@@ -875,7 +875,7 @@ namespace StockSharp.Algo
 		private static Tuple<long, bool, OrderOperations> CreateOrderKey(OrderTypes? type, long transactionId, OrderOperations operation)
 		{
 			if (transactionId <= 0)
-				throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.Str718);
+				throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.TransactionInvalid);
 
 			return Tuple.Create(transactionId, type == OrderTypes.Conditional, operation);
 		}

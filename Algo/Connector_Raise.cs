@@ -687,7 +687,7 @@ namespace StockSharp.Algo
 			var msg = LocalizedStrings.SubscribedOk.Put(securityId, message.DataType2);
 
 			if (message.From != null && message.To != null)
-				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
+				msg += LocalizedStrings.FromTill.Put(message.From.Value, message.To.Value);
 
 			this.AddDebugLog(msg + ".");
 
@@ -739,7 +739,7 @@ namespace StockSharp.Algo
 			var msg = LocalizedStrings.UnSubscribedOk.Put(securityId,	message.DataType2);
 
 			if (message.From != null && message.To != null)
-				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
+				msg += LocalizedStrings.FromTill.Put(message.From.Value, message.To.Value);
 
 			this.AddDebugLog(msg + ".");
 			MarketDataUnSubscriptionSucceeded?.Invoke(TryGetSecurity(securityId), message);

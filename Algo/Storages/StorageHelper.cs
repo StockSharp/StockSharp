@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Storages
 					throw new ArgumentNullException(nameof(getTime));
 
 				if (from > to)
-					throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
+					throw new InvalidOperationException(LocalizedStrings.StartCannotBeMoreEnd.Put(from, to));
 
 				//_storage = storage;
 				//_from = from;
@@ -1389,7 +1389,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(path));
 
 			if (path.Length < 3)
-				throw new ArgumentOutOfRangeException(nameof(path), path, LocalizedStrings.Str3014);
+				throw new ArgumentOutOfRangeException(nameof(path), path, LocalizedStrings.WrongPath);
 
 			return !(path[0] >= 'A' && path[1] <= 'z' && path[1] == ':' && path[2] == '\\');
 		}

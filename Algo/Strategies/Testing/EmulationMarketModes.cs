@@ -33,13 +33,13 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Generated.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1406Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GeneratedKey)]
 		Generate,
 
 		/// <summary>
 		/// None.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1407Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoneKey)]
 		No
 	}
 }

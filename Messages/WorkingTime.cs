@@ -53,8 +53,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2229Key,
-			Description = LocalizedStrings.Str2230Key,
+			Name = LocalizedStrings.ActiveKey,
+			Description = LocalizedStrings.TaskOnKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public bool IsEnabled { get; set; }
@@ -159,7 +159,7 @@ namespace StockSharp.Messages
 			var dupDate = dates.GroupBy(d => d).FirstOrDefault(g => g.Count() > 1);
 
 			if (dupDate != null)
-				throw new ArgumentException(LocalizedStrings.Str415Params.Put(dupDate.Key), nameof(dates));
+				throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(dupDate.Key), nameof(dates));
 
 			return dates;
 		}

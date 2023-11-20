@@ -30,8 +30,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str837Key,
-		Description = LocalizedStrings.Str837Key)]
+		Name = LocalizedStrings.AlligatorKey,
+		Description = LocalizedStrings.AlligatorKey)]
 	[Doc("topics/IndicatorAlligator.html")]
 	public class Alligator : BaseComplexIndicator
 	{
@@ -63,8 +63,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str838Key,
-			Description = LocalizedStrings.Str838Key,
+			Name = LocalizedStrings.JawKey,
+			Description = LocalizedStrings.JawKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public AlligatorLine Jaw { get; }
@@ -75,8 +75,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str839Key,
-			Description = LocalizedStrings.Str839Key,
+			Name = LocalizedStrings.TeethKey,
+			Description = LocalizedStrings.TeethKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public AlligatorLine Teeth { get; }
@@ -87,8 +87,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str840Key,
-			Description = LocalizedStrings.Str840Key,
+			Name = LocalizedStrings.LipsKey,
+			Description = LocalizedStrings.LipsKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public AlligatorLine Lips { get; }

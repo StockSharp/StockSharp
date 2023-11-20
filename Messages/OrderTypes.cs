@@ -32,14 +32,14 @@ namespace StockSharp.Messages
 		/// Limit.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1353Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LimitOrderKey)]
 		Limit,
 
 		/// <summary>
 		/// Market.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str241Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MarketKey)]
 		Market,
 
 		/// <summary>

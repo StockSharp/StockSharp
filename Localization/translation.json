@@ -2227,7 +2227,7 @@
     "en": "Inherited",
     "ru": "Наследуемый"
   },
-  "Str12": {
+  "Debug": {
     "en": "Debug",
     "ru": "Отладка"
   },
@@ -2247,7 +2247,7 @@
     "en": "Off",
     "ru": "Выкл"
   },
-  "Str17": {
+  "MethodMustBeOverrided": {
     "en": "Method should be implemented in the inherited class.",
     "ru": "Метод должен быть реализован в наследуемом классе."
   },
@@ -2467,7 +2467,7 @@
     "en": "Opening price",
     "ru": "Цена открытия"
   },
-  "Str80": {
+  "CandleOpenPrice": {
     "en": "Candle opening price.",
     "ru": "Цена открытия свечи."
   },
@@ -2811,11 +2811,7 @@
     "en": "Current process bit-width is not compatible with adapter {0}. Recompile under {1}.",
     "ru": "Текущая разрядность процесса не совместима с адаптером {0}. Необходимо перекомпилировать под {1}."
   },
-  "Str170": {
-    "en": "Connection was not established in allowed time.",
-    "ru": "Подключение не было установлено в отведенный отрезок времени."
-  },
-  "Str171": {
+  "DisconnectTimeout": {
     "en": "Connection was not disconnected in allowed time.",
     "ru": "Подключение не было разорвано в отведенный отрезок времени."
   },
@@ -2875,7 +2871,7 @@
     "en": "Work schedule, during which connections must be established.",
     "ru": "Режим работы, во время которого необходимо производить подключения."
   },
-  "Str186": {
+  "Adapters": {
     "en": "Adapters",
     "ru": "Адаптеры"
   },
@@ -2899,11 +2895,11 @@
     "en": "Use session to send transactions.",
     "ru": "Использовать сессию для отправки транзакций."
   },
-  "Str192": {
+  "HeartBeat": {
     "en": "Heart beat",
     "ru": "Интервал контроля"
   },
-  "Str193": {
+  "HeartBeatDesc": {
     "en": "Server check interval for track the connection alive. By default equal to 1 minute.",
     "ru": "Интервал оповещения сервера о том, что подключение еще живое. По умолчанию равно 1 минуте."
   },
@@ -2971,7 +2967,7 @@
     "en": "Security",
     "ru": "Инструмент"
   },
-  "Str212": {
+  "NewsSecurityId": {
     "en": "Security ID, for which news have been published.",
     "ru": "Идентификатор инструмента, для которого опубликована новость."
   },
@@ -3071,7 +3067,7 @@
     "en": "Not active",
     "ru": "Не активна"
   },
-  "Str241": {
+  "Market": {
     "en": "Market",
     "ru": "Рыночная"
   },
@@ -3155,23 +3151,15 @@
     "en": "Margin leverage",
     "ru": "Плечо маржи"
   },
-  "Str262": {
+  "TotalCommission": {
     "en": "Total commission",
     "ru": "Общий размер комиссий"
   },
-  "Str263": {
+  "CurrValueInLots": {
     "en": "Current value (in lots)",
     "ru": "Текущее значение (в лотах)"
   },
-  "Str264": {
-    "en": "Depositary name",
-    "ru": "Название депозитария"
-  },
-  "Str265": {
-    "en": "Portfolio state",
-    "ru": "Состояние портфеля"
-  },
-  "Str266": {
+  "LimitType": {
     "en": "Limit type",
     "ru": "Вид лимита"
   },
@@ -3687,11 +3675,11 @@
     "en": "Completed (forced)",
     "ru": "Завершена (принудительно)"
   },
-  "Str403": {
+  "Buy2": {
     "en": "Buy",
     "ru": "Покупка"
   },
-  "Str404": {
+  "Sell2": {
     "en": "Sell",
     "ru": "Продажа"
   },
@@ -3743,9 +3731,9 @@
     "en": "Holidays that fall on workdays.",
     "ru": "Выходные дни, выпадающие на будни."
   },
-  "Str415Params": {
-    "en": "Value {0} has duplicates.",
-    "ru": "Значение {0} имеет дубликаты."
+  "HasDuplicates": {
+    "en": "{0} duplicated.",
+    "ru": "{0} дублируется."
   },
   "Schedule": {
     "en": "Schedule",
@@ -3754,10 +3742,6 @@
   "Str417": {
     "en": "Schedule validity period.",
     "ru": "Период действия расписания."
-  },
-  "Str418": {
-    "en": "End date",
-    "ru": "Дата окончания"
   },
   "Str419": {
     "en": "Schedule expiration date.",
@@ -3959,7 +3943,7 @@
     "en": "News, released for a particular security, whole board or globally for the market.",
     "ru": "Новость, выпущенная для конкретного инструмента, всей площадки или глобально по рынку."
   },
-  "Str511": {
+  "ElectronicBoard": {
     "en": "Electronic board",
     "ru": "Электронная площадка"
   },
@@ -4091,7 +4075,7 @@
     "en": "Exchange board where the security is traded.",
     "ru": "Биржевая площадка, на которой торгуется инструмент."
   },
-  "Str550": {
+  "UnderlyingAssetDesc": {
     "en": "Underlying asset on which the current security is built.",
     "ru": "Базовый актив, на основе которого построен данный инструмент."
   },
@@ -4151,7 +4135,7 @@
     "en": "Best bid",
     "ru": "Лучшая покупка"
   },
-  "Str566": {
+  "BestBidDesc": {
     "en": "Best bid in market depth.",
     "ru": "Лучшая покупка в стакане."
   },
@@ -4331,7 +4315,7 @@
     "en": "Adapter for work with portfolio {0} not found.",
     "ru": "Адаптер для работы с портфелем {0} не найден."
   },
-  "Str625Params": {
+  "ConnectionErrorFor": {
     "en": "Connection error for {0}: {1}",
     "ru": "Ошибка подключения для {0}: {1}"
   },
@@ -4339,7 +4323,7 @@
     "en": "Failed to connect of some connections.",
     "ru": "Не удалось установить некоторые подключения."
   },
-  "Str627Params": {
+  "ErrorDisconnectFor": {
     "en": "Error disconnecting for {0}: {1}",
     "ru": "Ошибка отключения для {0}: {1}"
   },
@@ -4347,7 +4331,7 @@
     "en": "Errors occurred during shutdown.",
     "ru": "В процессе отключения возникли ошибки."
   },
-  "Str629Params": {
+  "NoAdapterFoundFor": {
     "en": "No suitable adapter found for {0}.",
     "ru": "Не найден подходящий адаптер для {0}."
   },
@@ -4374,10 +4358,6 @@
   "Str636Params": {
     "en": "Series {0} was not stopped before that.",
     "ru": "Серия {0} не была остановлена до этого."
-  },
-  "Str637": {
-    "en": "Method should be overridden for the factory.",
-    "ru": "Метод должен быть переопределен у фабрики."
   },
   "OffsetValueIncorrect": {
     "en": "Offset value is incorrect.",
@@ -4419,7 +4399,7 @@
     "en": "Series {0} was not started earlier.",
     "ru": "Серия {0} не была ранее запущена."
   },
-  "Str649": {
+  "CannotChangeFormedCandle": {
     "en": "Cannot change formed candle.",
     "ru": "Невозможно изменить сформированную свечу."
   },
@@ -4459,67 +4439,51 @@
     "en": "Commission value.",
     "ru": "Значение комиссии."
   },
-  "Str660": {
+  "OrderCommission": {
     "en": "Order commission",
     "ru": "Комиссия за заявку"
   },
-  "Str661": {
+  "TradeCommission": {
     "en": "Trade commission",
     "ru": "Комиссия за сделку"
   },
-  "Str662": {
-    "en": "Order (volume)",
-    "ru": "Заявка (объем)"
-  },
-  "Str663": {
+  "OrderVolCommission": {
     "en": "Order volume commission",
     "ru": "Комиссия за объем в заявке"
   },
-  "Str664": {
+  "TradeVolume": {
     "en": "Trade (volume)",
     "ru": "Сделка (объем)"
   },
-  "Str665": {
+  "TradeVolCommission": {
     "en": "Trade volume commission",
     "ru": "Комиссия за объем в сделке"
   },
-  "Str666": {
-    "en": "Orders (quantity)",
-    "ru": "Заявки (количество)"
-  },
-  "Str667": {
+  "OrderCountCommission": {
     "en": "Number of orders commission",
     "ru": "Комиссия за количество заявок"
   },
-  "Str668": {
-    "en": "Orders",
-    "ru": "Заявок"
-  },
-  "Str670": {
+  "TradesCount": {
     "en": "Trade (quantity)",
     "ru": "Сделка (количество)"
   },
-  "Str671": {
+  "TradesCountCommission": {
     "en": "Number of trades commission",
     "ru": "Комиссия за количество сделок"
   },
-  "Str672": {
-    "en": "Trade (price)",
-    "ru": "Сделка (цена)"
-  },
-  "Str673": {
+  "TradePriceCommission": {
     "en": "Trade price commission",
     "ru": "Комиссия за цену в сделке"
   },
-  "Str674": {
+  "SecurityCommission": {
     "en": "Security commission",
     "ru": "Комиссия инструмента"
   },
-  "Str675": {
+  "SecurityType": {
     "en": "Security (type)",
     "ru": "Инструмент (тип)"
   },
-  "Str676": {
+  "SecurityTypeCommission": {
     "en": "Security type commission",
     "ru": "Комиссия типа инструмента"
   },
@@ -4535,7 +4499,7 @@
     "en": "Turnover commission",
     "ru": "Комиссия за оборот"
   },
-  "Str681Params": {
+  "MessageCauseError": {
     "en": "Message '{0}' caused processing error.",
     "ru": "Сообщение '{0}' привело к ошибке обработки."
   },
@@ -4595,7 +4559,7 @@
     "en": "Security {0} is unsubscribing from {1}",
     "ru": "Инструмент {0} отписывается от {1}"
   },
-  "Str691Params": {
+  "FromTill": {
     "en": " from {0} till {1}",
     "ru": " с {0} по {1}"
   },
@@ -4615,95 +4579,67 @@
     "en": "Continuous security",
     "ru": "Непрерывный инструмент"
   },
-  "Str696": {
+  "ContinuousSecurityDesc": {
     "en": "Continuous security (generally, a futures contract), containing expirable securities.",
     "ru": "Непрерывный инструмент (как правило, фьючерс), содержащий в себе инструменты, подверженные экспирации."
   },
-  "Str697Params": {
+  "NotInternalSecurity": {
     "en": "Security {0} is not an internal security.",
     "ru": "Инструмент {0} не является внутренним инструментом."
   },
-  "Str698Params": {
-    "en": "Security {0} does not have information about expiration time.",
-    "ru": "Инструмент {0} не имеет информацию о времени экспирации."
-  },
-  "Str699Params": {
-    "en": "For security {0} expiration time after shift {1} exceeded the actual expiration time {2}.",
-    "ru": "Для инструмента {0} значение экспирации после сдвига {1} превысило реальное время экспирации {2}."
-  },
-  "Str700": {
+  "ModelNoOptions": {
     "en": "Portfolio model does not contain options.",
     "ru": "Портфельная модель не содержит опционы."
   },
-  "Str701Params": {
+  "DivsNotPaid": {
     "en": "Asset {0} dividends not paid.",
     "ru": "Дивиденды на актив {0} не начисляются."
   },
-  "Str702": {
-    "en": "Number of digits after coma is incorrect.",
-    "ru": "Количество знаков после запятой не верно."
-  },
-  "Str703Params": {
+  "OrderTypeMissed": {
     "en": "Type of option {0} is missing.",
     "ru": "Тип опциона {0} отсутствует."
   },
-  "Str704Params": {
+  "SecurityNoFound": {
     "en": "Security {0} not found.",
     "ru": "Инструмент {0} не найден."
   },
-  "Str705Params": {
+  "UnderlyingAssentNotFound": {
     "en": "Underlying asset was not found for derivative {0}.",
     "ru": "Для дериватива {0} не было найдено базового актива."
   },
-  "Str706Params": {
+  "OppositeOptionNotFound": {
     "en": "Opposite option contract for {0} not found.",
     "ru": "Противоположный опцион для {0} не найден."
   },
-  "Str707Params": {
+  "OptionNotFound": {
     "en": "Options contract for {0} not found.",
     "ru": "Опцион для {0} не найден."
   },
-  "Str708": {
+  "CannotCalcStrikeStep": {
     "en": "Insufficient information to determine the strike step.",
     "ru": "Недостаточно информации для определения шага страйка."
   },
-  "Str709Params": {
-    "en": "Security {0} does not have information about expiration date.",
-    "ru": "Инструмент {0} не имеет информацию о дате экспирации."
+  "NoExpirationDate": {
+    "en": "Security {0} does not have information about the expiration date.",
+    "ru": "Инструмент {0} не имеет информации о дате истечения."
   },
-  "Str710Params": {
-    "en": "Expiration time for {0} has passed. Current date {1}.",
-    "ru": "Время экспирации для {0} прошло. Текущая дата {1}."
-  },
-  "Str711": {
-    "en": "Standard deviation has an unacceptable value.",
-    "ru": "Стандартное отклонение имеет недопустимое значение."
-  },
-  "Str712": {
-    "en": "Security does not have information about the expiration date.",
-    "ru": "Инструмент не имеет информации о дате истечения."
-  },
-  "Str714Params": {
+  "MessageHasStateAndError": {
     "en": "Message has state {OrderState} and information about error '{Error.Message}'.",
     "ru": "Сообщение имеет состояние {OrderState} и имеет информацию об ошибке '{Error.Message}'."
   },
-  "Str715": {
-    "en": "Transaction number must be different from zero.",
-    "ru": "Идентификатор транзакции должен быть отличен от нуля."
+  "TransactionInvalid": {
+    "en": "Transaction number invalid.",
+    "ru": "Идентификатор транзакции неправильный."
   },
-  "Str716": {
+  "ErrorCancelling": {
     "en": "Error cancelling.",
     "ru": "Ошибка снятия."
   },
-  "Str717": {
+  "ErrorRegistering": {
     "en": "Error registering.",
     "ru": "Ошибка регистрации."
   },
-  "Str718": {
-    "en": "Transaction number is incorrectly set.",
-    "ru": "Идентификатор транзакции задан неверно."
-  },
-  "Str719": {
+  "NoOrderIds": {
     "en": "None of the possible order IDs is specified.",
     "ru": "Не указан ни один из возможных идентификаторов заявки."
   },
@@ -4711,11 +4647,7 @@
     "en": "Order for transaction {0} was not created.",
     "ru": "Заявка для транзакции {0} не была создана."
   },
-  "Str721": {
-    "en": "Wrong type of market-data.",
-    "ru": "Неправильный тип маркет-данных."
-  },
-  "Str722": {
+  "Action": {
     "en": "Action",
     "ru": "Действие"
   },
@@ -4739,7 +4671,7 @@
     "en": "Ending time",
     "ru": "Время окончания"
   },
-  "Str728": {
+  "IndexSecurity": {
     "en": "Index, built from a combination of several securities through a mathematical formula.",
     "ru": "Индекс, построенный из комбинации нескольких инструментов через математическую формулу."
   },
@@ -4747,7 +4679,7 @@
     "en": "Chaikin volatility.",
     "ru": "Волатильность Чайкина."
   },
-  "Str731": {
+  "MovingAverage": {
     "en": "Moving Average.",
     "ru": "Скользящая средняя."
   },
@@ -4759,7 +4691,7 @@
     "en": "Maximum value for a period.",
     "ru": "Максимальное значение за период."
   },
-  "Str734": {
+  "LinearRegression": {
     "en": "Linear regression - Value returns the last point prediction.",
     "ru": "Линейная регрессия - Value возвращает прогноз последней точки."
   },
@@ -4767,11 +4699,11 @@
     "en": "Complete linear regression, simultaneously calculates LinearReg, LinearRegSlope, RSquared and StandardError.",
     "ru": "Полная линейная регрессия, считает одновременно LinearReg, LinearRegSlope, RSquared и StandardError."
   },
-  "Str736": {
+  "Period": {
     "en": "Period",
     "ru": "Период"
   },
-  "Str737": {
+  "IndicatorPeriod": {
     "en": "Indicator period.",
     "ru": "Период индикатора."
   },
@@ -4799,11 +4731,11 @@
     "en": "Minimum value for a period.",
     "ru": "Минимальное значение за период."
   },
-  "Str744": {
+  "AverageDeviation": {
     "en": "Average deviation.",
     "ru": "Среднее отклонение."
   },
-  "Str745": {
+  "MedianPrice": {
     "en": "Median price.",
     "ru": "Медианная цена."
   },
@@ -4811,15 +4743,15 @@
     "en": "Linear regression R-squared.",
     "ru": "R-квадрат в линейной регрессии."
   },
-  "Str747": {
+  "Level1Indicator": {
     "en": "Indicator based on the security property value.",
     "ru": "Индикатор, строящийся на основе значения свойства инструмента."
   },
-  "Str748": {
+  "Field": {
     "en": "Field",
     "ru": "Поле"
   },
-  "Str749": {
+  "Level1Field": {
     "en": "Level one market-data field, which is used as an indicator value.",
     "ru": "Поле маркет-данных первого уровня, которое используется как значение индикатора."
   },
@@ -4827,7 +4759,7 @@
     "en": "Standard error in linear regression.",
     "ru": "Стандартная ошибка в линейной регрессии."
   },
-  "Str751": {
+  "SumNLastValues": {
     "en": "Sum of N last values.",
     "ru": "Сумма N последних значений."
   },
@@ -4843,7 +4775,7 @@
     "en": "Vertical-horizontal filter.",
     "ru": "Вертикально-горизонтальный фильтр."
   },
-  "Str755": {
+  "VariableIndexDynamicAverage": {
     "en": "Variable Index Dynamic Average.",
     "ru": "Динамическая средняя переменного индекса."
   },
@@ -4851,7 +4783,7 @@
     "en": "Candle volume.",
     "ru": "Объем свечи."
   },
-  "Str757": {
+  "AverageDirectionalIndex": {
     "en": "Welles Wilder Average Directional Index.",
     "ru": "Индекс среднего направления движения Welles Wilder."
   },
@@ -4879,11 +4811,11 @@
     "en": "Ichimoku",
     "ru": "Ишимоку"
   },
-  "Str764": {
+  "TenkanLine": {
     "en": "Tenkan line",
     "ru": "Линия Tenkan"
   },
-  "Str765": {
+  "KijunLine": {
     "en": "Kijun line",
     "ru": "Линия Kijun"
   },
@@ -4895,11 +4827,11 @@
     "en": "Senkou (B) line",
     "ru": "Линия Senkou (B)"
   },
-  "Str768": {
+  "ChinkouLine": {
     "en": "Chinkou line",
     "ru": "Линия Chinkou"
   },
-  "Str769": {
+  "Momentum": {
     "en": "Momentum",
     "ru": "Моментум"
   },
@@ -4911,19 +4843,19 @@
     "en": "Relative Strength Index.",
     "ru": "Индекс относительной силы."
   },
-  "Str771": {
+  "RelativeVigorIndex": {
     "en": "Relative Vigor Index.",
     "ru": "Индекс Относительной Энергии."
   },
-  "Str772": {
+  "AveragePart": {
     "en": "Average indicator part.",
     "ru": "Средневзвешенная часть индикатора."
   },
-  "Str773": {
+  "SignalPart": {
     "en": "Signaling part of indicator.",
     "ru": "Сигнальная часть индикатора."
   },
-  "Str774": {
+  "StochasticKDesc": {
     "en": "Stochastic %K.",
     "ru": "Стохастик %K."
   },
@@ -4939,7 +4871,7 @@
     "en": "Bollinger Bands.",
     "ru": "Полосы Боллинджера."
   },
-  "Str778": {
+  "PeriodLength": {
     "en": "Period length",
     "ru": "Длина периода"
   },
@@ -4967,7 +4899,7 @@
     "en": "Indicator changes threshold.",
     "ru": "Порог изменения индикатора."
   },
-  "Str785": {
+  "ExponentialMovingAverage": {
     "en": "Exponential Moving Average.",
     "ru": "Экспоненциальная скользящая средняя."
   },
@@ -5015,7 +4947,7 @@
     "en": "Slow EMA period. By default value is 30.",
     "ru": "Период медленной EMA. Значение по умолчанию 30."
   },
-  "Str797": {
+  "MACDDesc": {
     "en": "Convergence/divergence of moving averages.",
     "ru": "Схождение/расхождение скользящих средних."
   },
@@ -5035,19 +4967,19 @@
     "en": "Short moving average.",
     "ru": "Короткая скользящая средняя."
   },
-  "Str802": {
+  "HistogramDesc": {
     "en": "Convergence/divergence of moving averages. Histogram.",
     "ru": "Схождение/расхождение скользящих средних. Гистограмма."
   },
-  "Str803": {
+  "MACDDesc": {
     "en": "Convergence/divergence of moving averages with signal line.",
     "ru": "Схождение/расхождение скользящих средних с сигнальной линией."
   },
-  "Str804": {
+  "SignalMa": {
     "en": "Signaling MA",
     "ru": "Сигнальная MA"
   },
-  "Str805": {
+  "SignalMaDesc": {
     "en": "Signaling Moving Average.",
     "ru": "Сигнальная скользящая средняя."
   },
@@ -5059,23 +4991,23 @@
     "en": "Multiplication factor.",
     "ru": "Множитель."
   },
-  "Str809": {
+  "ParabolicSARDesc": {
     "en": "Parabolic SAR trend indicator implementation.",
     "ru": "Реализация индикатора тренда Parabolic SAR."
   },
-  "Str810": {
+  "Acceleration": {
     "en": "Factor",
     "ru": "Фактор"
   },
-  "Str811": {
+  "AccelerationFactor": {
     "en": "Acceleration factor.",
     "ru": "Фактор ускорения."
   },
-  "Str812": {
+  "Step": {
     "en": "Step",
     "ru": "Шаг"
   },
-  "Str813": {
+  "AccelerationFactorStep": {
     "en": "Acceleration factor step.",
     "ru": "Шаг фактора ускорения."
   },
@@ -5083,11 +5015,11 @@
     "en": "Max",
     "ru": "Макс"
   },
-  "Str815": {
+  "MaxAccelerationFactor": {
     "en": "Maximum acceleration factor.",
     "ru": "Максимальный фактор ускорения."
   },
-  "Str816": {
+  "Peak": {
     "en": "Peak",
     "ru": "Пик"
   },
@@ -5107,7 +5039,7 @@
     "en": "Standard deviation.",
     "ru": "Стандартное отклонение."
   },
-  "Str821": {
+  "TroughDesc": {
     "en": "Trough.",
     "ru": "Впадина."
   },
@@ -5171,27 +5103,27 @@
     "en": "Awesome Oscillator.",
     "ru": "Чудесный осциллятор."
   },
-  "Str837": {
+  "Alligator": {
     "en": "Alligator",
     "ru": "Аллигатор"
   },
-  "Str838": {
+  "Jaw": {
     "en": "Jaw",
     "ru": "Челюсть"
   },
-  "Str839": {
+  "Teeth": {
     "en": "Teeth",
     "ru": "Зубы"
   },
-  "Str840": {
+  "Lips": {
     "en": "Lips",
     "ru": "Губы"
   },
-  "Str841": {
+  "Shift": {
     "en": "Shift",
     "ru": "Сдвиг"
   },
-  "Str842": {
+  "ShiftToFuture": {
     "en": "Shift to the future.",
     "ru": "Сдвиг в будущее."
   },
@@ -5219,11 +5151,11 @@
     "en": "Gator oscillator.",
     "ru": "Gator осциллятор."
   },
-  "Str851": {
+  "TopHistogram": {
     "en": "Top histogram.",
     "ru": "Верхняя гистограмма."
   },
-  "Str852": {
+  "LowHistogram": {
     "en": "Lower histogram.",
     "ru": "Нижняя гистограмма."
   },
@@ -5231,23 +5163,23 @@
     "en": "Market Facilitation Index.",
     "ru": "Индекс Облегчения Рынка."
   },
-  "Str854": {
+  "WilliamsR": {
     "en": "Williams Percent Range.",
     "ru": "Процентный диапазон Уильямса."
   },
-  "Str855Params": {
+  "ActivatingRiskRule": {
     "en": "Activation of risk-rule {0}-{1} with action {2}.",
     "ru": "Активация риск-правила {0}-{1} с действием {2}."
   },
-  "Str856": {
+  "ClosePositions": {
     "en": "Close positions",
     "ru": "Закрыть позиции"
   },
-  "Str857": {
+  "StopTrading": {
     "en": "Stop trading",
     "ru": "Остановить торговлю"
   },
-  "Str858": {
+  "CancelOrders": {
     "en": "Cancel orders",
     "ru": "Отменить заявки"
   },
@@ -5363,10 +5295,6 @@
     "en": "Custom",
     "ru": "Пользовательский"
   },
-  "Str888Params": {
-    "en": "Type of data '{0}' is not supported.",
-    "ru": "Тип данных '{0}' не поддерживается."
-  },
   "Str889": {
     "en": "Conditional order does not have a condition.",
     "ru": "Условная заявка не имеет условие."
@@ -5411,15 +5339,11 @@
     "en": "Order has neither exchange identifier nor transaction ID. Possibly, it was not registered.",
     "ru": "Заявка не имеет ни биржевой идентификатор, ни идентификатор транзакции. Возможно, она не была зарегистрирована."
   },
-  "Str900Params": {
+  "WrongSecType": {
     "en": "Wrong type {0} of security.",
     "ru": "Неправильный тип {0} инструмента."
   },
-  "Str901Params": {
-    "en": "Option {0} does not have information about expiration date.",
-    "ru": "Дата экспирации опциона {0} отсутствует."
-  },
-  "Str902Params": {
+  "NoAssetInfo": {
     "en": "Information about the underlying security {0} is missing.",
     "ru": "Информация о базовом инструменте {0} отсутствует."
   },
@@ -5435,15 +5359,15 @@
     "en": "Security {0} price step is equal zero.",
     "ru": "Инструмент {0} имеет нулевой шаг цены."
   },
-  "Str906Params": {
+  "RuleNotInContainer": {
     "en": "Rule {0} not registered in container {1}.",
     "ru": "Правило {0} не зарегистрировано в контейнере {1}."
   },
-  "Str907": {
+  "Deleting": {
     "en": "Deleting.",
     "ru": "Удаляется."
   },
-  "Str908": {
+  "IndicatorName": {
     "en": "Indicator name.",
     "ru": "Название индикатора."
   },
@@ -5487,7 +5411,7 @@
     "en": "level1 (local)",
     "ru": "level1 (локальное)"
   },
-  "Str920": {
+  "MessageDoNotContainsChanges": {
     "en": "Message does not contain changes.",
     "ru": "Сообщение не содержит изменения."
   },
@@ -5567,10 +5491,6 @@
     "en": "Interval cannot be less than zero.",
     "ru": "Интервал не может быть отрицательным."
   },
-  "Str941": {
-    "en": "Market depth cannot be less than zero.",
-    "ru": "Глубина стакана не может быть отрицательной."
-  },
   "Str942": {
     "en": "Market depth must be sorted.",
     "ru": "Стакан должен быть отсортирован."
@@ -5579,17 +5499,9 @@
     "en": "Unknown item in order log {0}.",
     "ru": "Неизвестная строка лога заявок {0}."
   },
-  "Str944": {
-    "en": "Interval is incorrectly specified.",
-    "ru": "Интервал задан неверно."
-  },
-  "Str945": {
+  "IntervalNotSet": {
     "en": "Interval is not specified.",
     "ru": "Интервал не установлен."
-  },
-  "Str946": {
-    "en": "Closed volume is out of range.",
-    "ru": "Закрытый объем вне диапазона."
   },
   "Str947": {
     "en": "Max order registration latency",
@@ -5630,10 +5542,6 @@
   "Str956": {
     "en": "Total orders",
     "ru": "Всего заявок"
-  },
-  "Str957": {
-    "en": "Total number of orders.",
-    "ru": "Общее количество заявок."
   },
   "Str958": {
     "en": "Max profit",
@@ -5703,11 +5611,11 @@
     "en": "Maximum short position size.",
     "ru": "Максимальный размер короткой позиции."
   },
-  "Str975": {
+  "Opposite": {
     "en": "Opposite",
     "ru": "Встречная"
   },
-  "Str976": {
+  "Following": {
     "en": "Following",
     "ru": "Попутная"
   },
@@ -5851,10 +5759,6 @@
     "en": "orders",
     "ru": "заявки"
   },
-  "Str1014": {
-    "en": "To value cannot be less than {0} value.",
-    "ru": "Значение to не может быть меньше значения {0}."
-  },
   "Str1016Params": {
     "en": "Wrong parameter of candle {0}. Candle parameter is equal {1}, storage accepts {2}.",
     "ru": "Неправильный параметр свечи {0}. Параметр свечи равен {1}, хранилище принимает {2}."
@@ -5862,10 +5766,6 @@
   "WrongCandleType": {
     "en": "Wrong type of candle.",
     "ru": "Неправильный тип свечи."
-  },
-  "Str1018": {
-    "en": "Unknown type of market-data.",
-    "ru": "Неизвестный тип маркет-данных."
   },
   "Str1020": {
     "en": "Wrong trade ID.",
@@ -5883,7 +5783,7 @@
     "en": "trades (local)",
     "ru": "сделки (локальное)"
   },
-  "Str1025": {
+  "EmptySecId": {
     "en": "Empty security ID.",
     "ru": "Идентификатор инструмента пустой."
   },
@@ -5947,7 +5847,7 @@
     "en": "Portfolio {0} balance increased above {1}",
     "ru": "Увеличение денег портфеля {0} выше {1}"
   },
-  "Str1042": {
+  "PositionChange": {
     "en": "Position change",
     "ru": "Изменение позиции"
   },
@@ -5967,7 +5867,7 @@
     "en": "Security change",
     "ru": "Изменение инструмента"
   },
-  "Str1047": {
+  "TradesElement": {
     "en": "New trades of a security",
     "ru": "Новые сделки инструмента"
   },
@@ -6071,7 +5971,7 @@
     "en": "Started candles.",
     "ru": "Начатые свечи."
   },
-  "Str1073": {
+  "FinishedCandles": {
     "en": "Finished candles.",
     "ru": "Законченные свечи."
   },
@@ -6123,21 +6023,13 @@
     "en": "Rules",
     "ru": "Правила"
   },
-  "Str1089": {
-    "en": "Suspended.",
-    "ru": "Приостановлено."
-  },
-  "Str1090": {
+  "Resumed": {
     "en": "Resumed.",
     "ru": "Возобновлено."
   },
-  "Str1091Params": {
+  "RuleAlreadyExistInContainer": {
     "en": "Rule '{0}' was earlier added to container '{1}'.",
     "ru": "Правило '{0}' уже было ранее добавлено в контейнер '{1}'."
-  },
-  "Str1092": {
-    "en": "Resources freed.",
-    "ru": "Освободило ресурсы."
   },
   "Str1093": {
     "en": "Connectors",
@@ -6179,19 +6071,19 @@
     "en": "Security for ID '{0}' was not created.",
     "ru": "Инструмент для идентификатора '{0}' не был создан."
   },
-  "Str1104Params": {
+  "PortfolioNotCreated": {
     "en": "Portfolio for account '{0}' was not created.",
     "ru": "Портфель для счета '{0}' не был создан."
   },
-  "Str1105Params": {
+  "NewPortfolioCreated": {
     "en": "New portfolio {0} created.",
     "ru": "Создан новый портфель {0}."
   },
-  "Str1106Params": {
+  "TransactionRegAlreadyAdded": {
     "en": "Transaction {0} was already added to track the latency of registration.",
     "ru": "Транзакция {0} уже была добавлена на отслеживание задержки регистрации."
   },
-  "Str1107Params": {
+  "TransactionCancelAlreadyAdded": {
     "en": "Transaction {0} was already added to track the latency of cancellation.",
     "ru": "Транзакция {0} уже была добавлена на отслеживание задержки отмены."
   },
@@ -6215,10 +6107,6 @@
     "en": "Security's {0} corresponding connection is {1}.",
     "ru": "Инструменту {0} соответствует подключению {1}."
   },
-  "Str1113": {
-    "en": "Stopped",
-    "ru": "Остановлено"
-  },
   "Stopping": {
     "en": "Stopping",
     "ru": "Останавливается"
@@ -6239,7 +6127,7 @@
     "en": "Emulator does not support receiving data for {0}.",
     "ru": "Эмулятор не поддерживает получение данных для {0}."
   },
-  "Str1119Params": {
+  "StartCannotBeMoreEnd": {
     "en": "Start date {0} is greater than end date {1}.",
     "ru": "Дата начала {0} больше даты окончания {1}."
   },
@@ -6379,7 +6267,7 @@
     "en": "Order {0} cancelled.",
     "ru": "Заявка {0} снята."
   },
-  "Str1156Params": {
+  "OrderNotFound": {
     "en": "Order {0} not found.",
     "ru": "Заявка {0} не найдена."
   },
@@ -6631,10 +6519,6 @@
     "en": "Analytics",
     "ru": "Аналитика"
   },
-  "Str1222": {
-    "en": "Start date.",
-    "ru": "Дата начала."
-  },
   "Str1224": {
     "en": "Daughter strategies are missing.",
     "ru": "Дочерние стратегии отсутствуют."
@@ -6703,7 +6587,7 @@
     "en": "Protective strategies stop.",
     "ru": "Остановка защитных стратегий."
   },
-  "Str1241": {
+  "NoOrderBookInfo": {
     "en": "Market depth information is missing. Impossible to calculate volume before order being placed.",
     "ru": "Отсутствует информация о стакане. Невозможно посчитать объём перед заявкой."
   },
@@ -6715,7 +6599,7 @@
     "en": "Time-frame of time candles, which have to be downloaded from storage for calculations.",
     "ru": "Тайм-фрейм временных свечей, которые необходимо загрузить из хранилища для расчетов."
   },
-  "Str1244": {
+  "Hedging": {
     "en": "Hedging",
     "ru": "Хеджирование"
   },
@@ -6731,7 +6615,7 @@
     "en": "Delta total {0}, Futures position {1}, Directional position {2}, Difference in position {3}.",
     "ru": "Дельта суммарная {0}, Фьючерсная позиция {1}, Направленная позиция {2}, Разница в позиции {3}."
   },
-  "Str1248": {
+  "NoTakeAndStop": {
     "en": "Information about both take-profit and stop-loss is missing.",
     "ru": "Одновременно отсутствует информация о тейк-профит и стол-лоссе."
   },
@@ -6795,7 +6679,7 @@
     "en": "Rule {0} not registered in strategy.",
     "ru": "Правило {0} не зарегистрировано в стратегии."
   },
-  "Str1264": {
+  "Quoting": {
     "en": "Quoting",
     "ru": "Котирование"
   },
@@ -6895,10 +6779,6 @@
     "en": "Quoted volume must be positive.",
     "ru": "Котируемый объем должен быть положительным."
   },
-  "Str1291": {
-    "en": "Wrong value.",
-    "ru": "Неправильное значение."
-  },
   "Str1292": {
     "en": "Action was not executed. Strategy is expected to stop.",
     "ru": "Действие не выполнено. Ожидается остановка стратегии."
@@ -6967,7 +6847,7 @@
     "en": "Reregistration was not complete. Waiting for order {0} to fill.",
     "ru": "Перерегистрация не была выполнена. Ожидание исполнения заявки {0}."
   },
-  "Str1309": {
+  "MarketDepthIsEmpty": {
     "en": "Market depth is empty.",
     "ru": "Стакан пустой."
   },
@@ -6999,15 +6879,15 @@
     "en": "Order {0} was canceled. Cancellation time {1}.",
     "ru": "Заявка {0} была снята. Время снятия {1}."
   },
-  "Str1317Params": {
-    "en": "Cannot requote. Maximum number {0} of tries was made.",
-    "ru": "Невозможно перекотировать. Было совершено максимальное количество {0} попыток."
+  "RegisterMaxAttemptsExceed": {
+    "en": "Cannot register. Maximum number {0} of tries was made.",
+    "ru": "Невозможно зарегистрировать. Было совершено максимальное количество {0} попыток."
   },
-  "Str1318": {
+  "CannotRegisterCauseInterval": {
     "en": "Order cannot be reregistered, since the interval has not yet expired.",
     "ru": "Заявка не может быть перерегистрирована, так как еще не истек интервал."
   },
-  "Str1319Params": {
+  "RemBeginCurrInterval": {
     "en": "Remaining {0}, beginning {1}, current {2}, interval {3}.",
     "ru": "Осталось {0}, начало {1}, текущее {2}, интервал {3}."
   },
@@ -7038,14 +6918,6 @@
   "Str1327": {
     "en": "Cancellation latency",
     "ru": "Задержка отмены"
-  },
-  "Str1328": {
-    "en": "Filled",
-    "ru": "Исполнена"
-  },
-  "Str1329": {
-    "en": "Cancelled",
-    "ru": "Отменена"
   },
   "Str1330": {
     "en": "Profit",
@@ -7107,7 +6979,7 @@
     "en": "Derivative order ID",
     "ru": "Идентификатор производной заявки"
   },
-  "Str1353": {
+  "LimitOrder": {
     "en": "Limit",
     "ru": "Лимитная"
   },
@@ -7211,14 +7083,6 @@
     "en": "Strategy start time.",
     "ru": "Время запуска стратегии."
   },
-  "Str1380": {
-    "en": "Security is not initialized.",
-    "ru": "Инструмент не инициализирован."
-  },
-  "Str1381": {
-    "en": "Portfolio is not initialized.",
-    "ru": "Портфель не инициализирован."
-  },
   "Str1382Params": {
     "en": "Registration of new {0} (0x{5:X}) order for {1} with price {2} and volume {3}. {4}",
     "ru": "Регистрация новой {0} (0x{5:X}) заявки на {1} с ценой {2} и объемом {3}. {4}"
@@ -7315,13 +7179,9 @@
     "en": "Storage",
     "ru": "Хранилище"
   },
-  "Str1406": {
+  "Generated": {
     "en": "Generated",
     "ru": "Сгенерированные"
-  },
-  "Str1407": {
-    "en": "None",
-    "ru": "Никакие"
   },
   "Str1408": {
     "en": "Emulation settings.",
@@ -7363,19 +7223,15 @@
     "en": "Number of simultaneously tested strategies.",
     "ru": "Количество одновременно тестируемых стратегий."
   },
-  "Str1420": {
+  "CodeIsExecuting": {
     "en": "Code is executing. Execution must be restarted.",
     "ru": "Код выполняется. Необходимо перезапустить выполнение."
   },
-  "Str1421": {
+  "CompilationWasOk": {
     "en": "Compilation was successful.",
     "ru": "Компиляция выполнена успешно."
   },
-  "Str1422": {
-    "en": "Assemblies (*.dll)|*.dll|All files (*.*)|*.*",
-    "ru": "Сборки (*.dll)|*.dll|All files (*.*)|*.*"
-  },
-  "Str1423": {
+  "NotDotNetAssembly": {
     "en": "File being opened is not a .NET assembly.",
     "ru": "Открываемый файл не является .NET сборкой."
   },
@@ -7383,25 +7239,17 @@
     "en": "Link to be deleted is not selected.",
     "ru": "Не выбрана ссылка для удаления."
   },
-  "Str1425": {
+  "ToSaveFormClickButton": {
     "en": "To save a new record, fill in the form and click the save button.",
     "ru": "Для сохранения новой записи заполните форму и нажмите кнопку сохранения."
   },
-  "Str1426": {
+  "SaveInfoFirst": {
     "en": "Before saving exchange board first save information about the exchange.",
     "ru": "Перед сохранением биржевой площадки сначала сохраните информацию о бирже."
   },
-  "Str1427": {
-    "en": "Error: entered date is already in the list.",
-    "ru": "Ошибка: заданная дата уже в списке."
-  },
-  "Str1428": {
-    "en": "Error: trading session ending time must be less than starting time.",
-    "ru": "Ошибка: время конца отрезка торговой сессии должно быть больше времени начала."
-  },
-  "Str1429": {
-    "en": "Error: trading session time periods should not overlap.",
-    "ru": "Ошибка: временные отрезки торговой сессии не должны пересекаться."
+  "PeriodsCannotOverlap": {
+    "en": "Trading session time periods should not overlap.",
+    "ru": "Временные отрезки торговой сессии не должны пересекаться."
   },
   "Str1430": {
     "en": "Error: selected date is already in the list of special holidays",
@@ -7411,23 +7259,15 @@
     "en": "Error: selected date is already in the list of special work days",
     "ru": "Ошибка: выбранная дата уже в списке специальных рабочих дней"
   },
-  "Str1432": {
+  "DateAlreadyInList": {
     "en": "Selected date is already in the list.",
     "ru": "Выбранная дата уже в списке."
   },
-  "Str1433": {
-    "en": "To save data, enter board code.",
-    "ru": "Для сохранения данных введите код площадки."
-  },
-  "Str1434": {
-    "en": "Error: lists of holidays and work days overlap.",
-    "ru": "Ошибка: списки выходных и рабочих дней пересекаются."
-  },
-  "Str1435": {
+  "ProxyServerSettings": {
     "en": "Proxy-server settings",
     "ru": "Настройки прокси-сервера"
   },
-  "Str1436": {
+  "ProxyServer": {
     "en": "Proxy-server",
     "ru": "Прокси-сервер"
   },
@@ -7435,7 +7275,7 @@
     "en": "Active",
     "ru": "Включено"
   },
-  "Str1438": {
+  "UseProxyServer": {
     "en": "Use proxy-server.",
     "ru": "Использовать прокси-сервер."
   },
@@ -7443,15 +7283,15 @@
     "en": "Address",
     "ru": "Адрес"
   },
-  "Str1440": {
+  "ProxyAddress": {
     "en": "Proxy server address.",
     "ru": "Адрес прокси-сервера."
   },
-  "Str1441": {
+  "Locally": {
     "en": "Locally",
     "ru": "Локально"
   },
-  "Str1442": {
+  "UseLocalAddress": {
     "en": "Use for local addresses.",
     "ru": "Использовать для локальных адресов."
   },
@@ -7459,7 +7299,7 @@
     "en": "Authorization",
     "ru": "Авторизация"
   },
-  "Str1444": {
+  "UseCredentials": {
     "en": "Use login and password authorization.",
     "ru": "Использовать авторизацию по логину и паролю."
   },
@@ -7471,27 +7311,19 @@
     "en": "Password",
     "ru": "Пароль"
   },
-  "Str1449": {
-    "en": "No transition was specified.",
-    "ru": "Не указан ни один переход."
-  },
-  "Str1450": {
+  "SomeSecuritiesNotFilled": {
     "en": "Some securities are not filled in.",
     "ru": "Некоторые инструменты не заполнены."
   },
-  "Str1451": {
+  "SecurityIsComposite": {
     "en": "Security '{0}' is composite.",
     "ru": "Инструмент '{0}' являются составным."
   },
-  "Str1452": {
+  "SomeDatesAreMissed": {
     "en": "Some dates are not filled in.",
     "ru": "Некоторые даты не заполнены."
   },
-  "Str1453": {
-    "en": "Security '{0}' is duplicated.",
-    "ru": "Инструмент '{0}' дублируется."
-  },
-  "Str1454": {
+  "DatesDuplicated": {
     "en": "Date '{0}' is duplicated.",
     "ru": "Дата '{0}' дублируется."
   },
@@ -7499,7 +7331,7 @@
     "en": "Continuous futures contract built.",
     "ru": "Непрерывный фьючерс перестроен."
   },
-  "Str1456": {
+  "NotEnoughData": {
     "en": "Insufficient data to automatically form a continuous futures contract.",
     "ru": "Недостаточно данных для автоматического построения непрерывного фьючерса."
   },
@@ -7510,10 +7342,6 @@
   "Str1458": {
     "en": "Enter",
     "ru": "Войти"
-  },
-  "Str1459": {
-    "en": "Incorrect address.",
-    "ru": "Неверно указан адрес."
   },
   "Str1460": {
     "en": "To save a new record, fill in the form and click the add exchange button.",
@@ -7535,7 +7363,7 @@
     "en": "To save data, enter the country of the exchange.",
     "ru": "Для сохранения данных укажите страну биржи."
   },
-  "Str1465": {
+  "TimeZoneNotSpecified": {
     "en": "To save data, enter the time zone of the exchange.",
     "ru": "Для сохранения данных выберите часовой пояс биржи."
   },
@@ -7563,7 +7391,7 @@
     "en": "Checking for updates",
     "ru": "Выполняется проверка обновлений"
   },
-  "Str1472": {
+  "Close": {
     "en": "Close",
     "ru": "Закрыть"
   },
@@ -7591,7 +7419,7 @@
     "en": "Error unpacking updates",
     "ru": "Ошибка при распаковке обновлений"
   },
-  "Str1479": {
+  "Hide": {
     "en": "Hide",
     "ru": "Скрыть"
   },
@@ -7703,7 +7531,7 @@
     "en": "Open tabs",
     "ru": "Открытые вкладки"
   },
-  "Str1507": {
+  "Properties": {
     "en": "Properties",
     "ru": "Свойства"
   },
@@ -7711,7 +7539,7 @@
     "en": "Window opening",
     "ru": "Открытие окна"
   },
-  "Str1509": {
+  "Open": {
     "en": "Open",
     "ru": "Открыть"
   },
@@ -7763,7 +7591,7 @@
     "en": "< Choose >",
     "ru": "< Выберите >"
   },
-  "Str1523Params": {
+  "ErrorIndexFormat": {
     "en": "Error in index '{0}' format.",
     "ru": "Ошибка в формате индекса '{0}'."
   },
@@ -7771,19 +7599,19 @@
     "en": "Options have different underlying assets.",
     "ru": "Опционы имеют разные базовые активы."
   },
-  "Str1525": {
+  "PairOptions": {
     "en": "Pair options",
     "ru": "Пара опционов"
   },
-  "Str1526": {
+  "InfoAboutOption": {
     "en": "Information about the option.",
     "ru": "Информация об опционе."
   },
-  "Str1527": {
+  "ProfitOptionContract": {
     "en": "Profitability of an option contract",
     "ru": "Прибыльность опциона"
   },
-  "Str1528": {
+  "ProfitOptionContractDesc": {
     "en": "Profitability of an option contract.",
     "ru": "Прибыльность опциона."
   },
@@ -7791,39 +7619,39 @@
     "en": "Options",
     "ru": "Опционы"
   },
-  "Str1530": {
+  "CallAndPutAreMissed": {
     "en": "AND Call and Put not found.",
     "ru": "И Call и Put не найдены."
   },
-  "Str1531": {
+  "OptionImpliedVolatility": {
     "en": "Option volatility (implied).",
     "ru": "Волатильность (подразумеваемая) опциона."
   },
-  "Str1532": {
+  "OptionHistoricalVolatility": {
     "en": "Option volatility (historical).",
     "ru": "Волатильность (историческая) опциона."
   },
-  "Str1533": {
+  "UnderlyingAssetInfo": {
     "en": "Information about the underlying asset.",
     "ru": "Информация о базовом активе."
   },
-  "Str1534": {
+  "CallOptionParams": {
     "en": "Call option parameters.",
     "ru": "Параметры Call опциона."
   },
-  "Str1535": {
+  "PutOptionParams": {
     "en": "Put option parameters.",
     "ru": "Параметры Put опциона."
   },
-  "Str1536": {
-    "en": "EXPIRED",
-    "ru": "ИСТЕКЛА"
+  "Expired": {
+    "en": "Expired",
+    "ru": "Истекла"
   },
-  "Str1537": {
-    "en": " days",
-    "ru": " дней"
+  "DaysLeft": {
+    "en": "{0} days",
+    "ru": "{0} дней"
   },
-  "Str1538": {
+  "ErrorProcessing": {
     "en": "Error processing request to refresh the table.",
     "ru": "Ошибка обработки запроса обновления таблицы."
   },
@@ -7847,15 +7675,11 @@
     "en": "Session",
     "ru": "Сессия"
   },
-  "Str1541": {
-    "en": "Unsupported action time.",
-    "ru": "Неподдерживаемое время действия."
-  },
-  "Str1542Params": {
+  "AdapterAlreadySpecifiedForPortfolio": {
     "en": "For portfolio {0} adapter is already specified.",
     "ru": "Для портфеля {0} уже указан адаптер."
   },
-  "Str1543": {
+  "Money": {
     "en": "Money",
     "ru": "Деньги"
   },
@@ -7863,11 +7687,11 @@
     "en": "Selected: ",
     "ru": "Выбрано: "
   },
-  "Str1545Params": {
+  "EditingOf": {
     "en": "Editing {0}",
     "ru": "Редактирование {0}"
   },
-  "Str1548Params": {
+  "SecNotPresentInCollection": {
     "en": "Security {0} is missing in the collection.",
     "ru": "Инструмент {0} отсутствует в коллекции."
   },
@@ -7879,7 +7703,7 @@
     "en": "Symbol @ is met several times.",
     "ru": "Символ @ встречается несколько раз."
   },
-  "Str1553Params": {
+  "ConnectionDescriptionNotFound": {
     "en": "Description of connection {0} not found.",
     "ru": "Описание для подключения {0} не найдено."
   },
@@ -7887,7 +7711,7 @@
     "en": "Working connection cannot be deleted.",
     "ru": "Нельзя удалить подключенное соединение."
   },
-  "Str1555": {
+  "CannotEditStartedConnections": {
     "en": "Working connection cannot be edited.",
     "ru": "Нельзя редактировать подключенное соединение."
   },
@@ -7907,21 +7731,13 @@
     "en": "Common",
     "ru": "Общее"
   },
-  "Str1560": {
-    "en": "Connection successfully checked.",
-    "ru": "Подключение успешно проверено."
-  },
-  "Str1561": {
+  "CannotConnect": {
     "en": "Cannot connect.",
     "ru": "Невозможно установить подключение."
   },
-  "Str1562": {
+  "CannotCreateConnectionDataInvalid": {
     "en": "Cannot create a connection, because some data was not entered.",
     "ru": "Невозможно создать подключение так как не были заполнены все данные."
-  },
-  "Str1563": {
-    "en": "At least one type of connection must be selected.",
-    "ru": "Необходимо выбрать хотя бы один тип подключения."
   },
   "Str1564": {
     "en": "Failed to get Dispatcher instance to show window.",
@@ -7931,10 +7747,6 @@
     "en": "Log (monitor)",
     "ru": "Лог (монитор)"
   },
-  "Str1566": {
-    "en": "Order registration",
-    "ru": "Регистрация заявки"
-  },
   "Str1567": {
     "en": "Price NULL Volume NULL",
     "ru": "Цена NULL Объем NULL"
@@ -7943,19 +7755,19 @@
     "en": "Price {0} Volume {1}",
     "ru": "Цена {0} Объем {1}"
   },
-  "Str1569": {
+  "All": {
     "en": "All",
     "ru": "Все"
   },
-  "Str1570": {
+  "Progress": {
     "en": "Progress",
     "ru": "Прогресс"
   },
-  "Str1574": {
+  "FileLoading": {
     "en": "File loading...",
     "ru": "Загрузка файла..."
   },
-  "Str1575": {
+  "SpecifiedFileNotExist": {
     "en": "Specified file not found.",
     "ru": "Указанный файл не найден."
   },
@@ -7975,7 +7787,7 @@
     "en": "Reference files copied.",
     "ru": "Reference файлы скопированы."
   },
-  "Str1580Params": {
+  "FileCopied": {
     "en": "File {0} copied.",
     "ru": "Файл {0} скопирован."
   },
@@ -8039,7 +7851,7 @@
     "en": "Unknown order side.",
     "ru": "Неизвестное направление заявки."
   },
-  "Str1596Params": {
+  "WrongStateOrder": {
     "en": "Wrong state {0} of order {1}.",
     "ru": "Неправильное состояние {0} заявки {1}."
   },
@@ -8079,14 +7891,6 @@
     "en": "Code {0} does not contain information about option type.",
     "ru": "Код {0} не содержит информации о типе опциона."
   },
-  "Str1606Params": {
-    "en": "Unknown type of option {0}.",
-    "ru": "Неизвестный тип опциона {0}."
-  },
-  "Str1608": {
-    "en": "Unknown market-data field.",
-    "ru": "Неизвестное поле маркет-данных."
-  },
   "Str1609": {
     "en": "Unknown FIX version.",
     "ru": "Неизвестная версия FIX."
@@ -8102,10 +7906,6 @@
   "Str1612Params": {
     "en": "Message {0} is too long.",
     "ru": "Длина сообщения {0} слишком большая."
-  },
-  "Str1613": {
-    "en": "Binary",
-    "ru": "Бинарный"
   },
   "Str1614Params": {
     "en": "Quotations {0} request for {1} was not correctly handled by the FIX server. Error code {2}.",
@@ -8183,13 +7983,9 @@
     "en": "For message with transaction ID {0} the server transaction ID was not found.",
     "ru": "Для сообщения с идентификатором транзакции {0} не найден серверный идентификатор транзакции."
   },
-  "Str1634": {
+  "ExchangeIdAndClientIdNotSpecified": {
     "en": "Exchange identifier and transaction ID are not specified.",
     "ru": "Биржевой идентификатор и идентификатор транзакции не заданы."
-  },
-  "Str1635Params": {
-    "en": "Unknown type {0} market-data.",
-    "ru": "Неизвестный тип {0} маркет-данных."
   },
   "Str1636": {
     "en": "Cannot process the request.",
@@ -8203,7 +7999,7 @@
     "en": "Password change is impossible.",
     "ru": "Смена пароля невозможна."
   },
-  "Str1639": {
+  "UserLoggedOut": {
     "en": "User logged out.",
     "ru": "Пользователь разлогинен."
   },
@@ -8267,10 +8063,6 @@
     "en": "Client {0} was disconnected earlier.",
     "ru": "Клиент {0} был ранее отключен."
   },
-  "Str1655": {
-    "en": "Wrong type of data.",
-    "ru": "Неправильный тип данных."
-  },
   "Str1656Params": {
     "en": "Security {0} found.",
     "ru": "Найден инструмент {0}."
@@ -8283,7 +8075,7 @@
     "en": "None",
     "ru": "Отсутствует"
   },
-  "Str1659": {
+  "Quotes": {
     "en": "Quotes",
     "ru": "Котировки"
   },
@@ -8311,19 +8103,19 @@
     "en": "FIX protocol format.",
     "ru": "Формат FIX протокола."
   },
-  "Str1664": {
+  "Sender": {
     "en": "Sender",
     "ru": "Отправитель"
   },
-  "Str1665": {
+  "SenderCompId": {
     "en": "Sender ID.",
     "ru": "Идентификатор отправителя."
   },
-  "Str1666": {
+  "Target": {
     "en": "Target",
     "ru": "Получатель"
   },
-  "Str1667": {
+  "TargetCompId": {
     "en": "Target ID.",
     "ru": "Идентификатор получателя."
   },
@@ -8415,17 +8207,13 @@
     "en": "Stop-price",
     "ru": "Стоп-цена"
   },
-  "Str1693": {
+  "StopPriceValue": {
     "en": "Stop-price value.",
     "ru": "Значение стоп-цены."
   },
   "Str1694Params": {
     "en": "Error registering for unknown order. Message '{0}'.",
     "ru": "Ошибка регистрации по неизвестной заявке. Сообщение '{0}'."
-  },
-  "Str1695Params": {
-    "en": "Unknown type of execution {0}.",
-    "ru": "Неизвестный тип исполнения {0}."
   },
   "Str1696Params": {
     "en": "Error cancelling order {0}. Text '{1}'.",
@@ -8443,10 +8231,6 @@
     "en": "Receiving positions for {0} was rejected. Error code {1}.",
     "ru": "Получение позиций для {0} было отвергнуто. Код ошибки {1}."
   },
-  "Str1700Params": {
-    "en": "Transaction ID {0} is out of range.",
-    "ru": "Идентификатор транзакции {0} вне допустимого диапазона."
-  },
   "Str1701Params": {
     "en": "Error code {0} Message {1}",
     "ru": "Код ошибки {0} Сообщение {1}"
@@ -8463,7 +8247,7 @@
     "en": "Column {0} cannot be added to this table since it is being added to another.",
     "ru": "Колонка {0} не может быть добавлена в данную таблицу, так как она добавляется в другую."
   },
-  "Str1705Params": {
+  "ColumnAlreadyAdded": {
     "en": "Column {0} is already added.",
     "ru": "Колонка {0} уже добавлена."
   },
@@ -8518,10 +8302,6 @@
   "Str1718": {
     "en": "Wrong value for stop-order execution result.",
     "ru": "Неправильное значение для результата исполнения стоп-заявки."
-  },
-  "Str1719": {
-    "en": "Wrong value for limit type.",
-    "ru": "Неправильное значение для типа лимита."
   },
   "Str1720Params": {
     "en": "Incorrect type of limit {0}",
@@ -8587,7 +8367,7 @@
     "en": "Stop-order type",
     "ru": "Тип стоп-заявки"
   },
-  "Str1738": {
+  "Result": {
     "en": "Result",
     "ru": "Результат"
   },
@@ -9019,15 +8799,11 @@
     "en": "Type of order {0} is not supported.",
     "ru": "Тип заявки {0} не поддерживается."
   },
-  "Str1850": {
-    "en": "Underlying asset information is missing for security.",
-    "ru": "Для инструмента отсутствует информация о базовом активе."
-  },
   "Str1851Params": {
     "en": "Message contains wrong type of security {0}.",
     "ru": "Сообщение содержит неправильный тип инструмента {0}."
   },
-  "Str1852Params": {
+  "SelectedOf": {
     "en": "Selected: {0}",
     "ru": "Выбрано: {0}"
   },
@@ -9111,7 +8887,7 @@
     "en": "Connection to SmartCOM is not initialized.",
     "ru": "Подключение к SmartCOM не инициализировано."
   },
-  "Str1876": {
+  "ConnectionTimeout": {
     "en": "Connection timeout.",
     "ru": "Время установления связи вышло."
   },
@@ -9215,19 +8991,11 @@
     "en": "SmartCOM server address not specified.",
     "ru": "Адрес сервера SmartCOM не указан."
   },
-  "Str1896": {
-    "en": "Login is not specified.",
-    "ru": "Логин не указан."
-  },
-  "Str1897": {
-    "en": "Password in not specified.",
-    "ru": "Пароль не указан."
-  },
-  "Str1898": {
+  "Line2": {
     "en": "Line",
     "ru": "Линия"
   },
-  "Str1899": {
+  "Pointer": {
     "en": "Pointer",
     "ru": "Указатель"
   },
@@ -9235,23 +9003,23 @@
     "en": "Area",
     "ru": "Область"
   },
-  "Str1901": {
+  "HorLine": {
     "en": "Horizontal line",
     "ru": "Горизонтальная линия"
   },
-  "Str1902": {
+  "VerLine": {
     "en": "Vertical line",
     "ru": "Вертикальная линия"
   },
-  "Str1903": {
+  "ChartArea": {
     "en": "Chart area",
     "ru": "Область графика"
   },
-  "Str1904Params": {
+  "AxisAlreadyAdded": {
     "en": "Chart axis with ID {0} was added earlier.",
     "ru": "Ось графика с идентификатором {0} уже добавлена ранее."
   },
-  "Str1905": {
+  "ChartAreaName": {
     "en": "Chart area name.",
     "ru": "Название области графика."
   },
@@ -9283,11 +9051,11 @@
     "en": "Number",
     "ru": "Номер"
   },
-  "Str1917": {
+  "UniqueId": {
     "en": "Unique ID.",
     "ru": "Уникальный идентификатор."
   },
-  "Str1918": {
+  "AxisHeader": {
     "en": "Axis header.",
     "ru": "Заголовок оси."
   },
@@ -9319,43 +9087,43 @@
     "en": "Flip coordinates",
     "ru": "Перевернуть координаты"
   },
-  "Str1928": {
+  "LinesOnAxis": {
     "en": "Lines on axis",
     "ru": "Линии на оси"
   },
-  "Str1929": {
+  "MainGridLinesOnAxis": {
     "en": "Show main grid lines on the axis.",
     "ru": "Показывать основные линии сетки на оси."
   },
-  "Str1930": {
+  "GridLines": {
     "en": "Grid lines",
     "ru": "Линии сетки"
   },
-  "Str1931": {
+  "ShowMainGridLines": {
     "en": "Show main grid lines.",
     "ru": "Показывать основные линии сетки."
   },
-  "Str1932": {
+  "ExtraLinesOnAxis": {
     "en": "Extra lines on axis",
     "ru": "Доп. линии на оси"
   },
-  "Str1933": {
+  "ShowExtraLinesOnAxis": {
     "en": "Show extra grid lines on the axis.",
     "ru": "Показывать дополнительные линии сетки на оси."
   },
-  "Str1934": {
+  "ExtraGridLines": {
     "en": "Extra grid lines",
     "ru": "Доп. линии сетки"
   },
-  "Str1935": {
+  "ShowExtraGridLines": {
     "en": "Show extra grid lines.",
     "ru": "Показывать дополнительные линии сетки."
   },
-  "Str1936": {
+  "AxisLabels": {
     "en": "Axis labels",
     "ru": "Надписи на оси"
   },
-  "Str1937": {
+  "ShowAxisLabels": {
     "en": "Show labels on the axis.",
     "ru": "Показывать надписи на оси."
   },
@@ -9371,7 +9139,7 @@
     "en": "Bars",
     "ru": "Бары"
   },
-  "Str1942": {
+  "CandleSettings": {
     "en": "Candles settings",
     "ru": "Настройки свечей"
   },
@@ -9379,79 +9147,75 @@
     "en": "Series header that will be shown on chart.",
     "ru": "Заголовок серии, который будет отображаться на графике."
   },
-  "Str1946": {
+  "Style": {
     "en": "Style",
     "ru": "Стиль"
   },
-  "Str1947": {
+  "StyleCandlesRender": {
     "en": "Style of candles rendering.",
     "ru": "Стиль отрисовки свечей."
   },
-  "Str1948": {
+  "Decrease": {
     "en": "Decrease",
     "ru": "Убывание"
   },
-  "Str1949": {
+  "ColorOfDecreaseCandle": {
     "en": "Body color of decreasing candle.",
     "ru": "Цвет тела убывающей свечи."
   },
-  "Str1950": {
+  "Increase": {
     "en": "Increase",
     "ru": "Возрастание"
   },
-  "Str1951": {
+  "ColorOfIncreaseCandle": {
     "en": "Body color of increasing candle.",
     "ru": "Цвет тела возрастающей свечи."
   },
-  "Str1952": {
-    "en": "Decrease (contour)",
-    "ru": "Убывание(контур)"
+  "DecreaseBorder": {
+    "en": "Decrease (border)",
+    "ru": "Убывание (контур)"
   },
-  "Str1953": {
+  "DecreaseBorderDesc": {
     "en": "Border color of decreasing candle.",
     "ru": "Цвет контура убывающей свечи."
   },
-  "Str1954": {
+  "IncreaseBorder": {
     "en": "Increase (border)",
     "ru": "Возрастание(контур)"
   },
-  "Str1955": {
+  "IncreaseBorderDesc": {
     "en": "Border color of increasing candle.",
     "ru": "Цвет контура возрастающей свечи."
   },
-  "Str1956": {
+  "LineWidth": {
     "en": "Line width",
     "ru": "Толщина линии"
   },
-  "Str1957": {
+  "LineWidthDesc": {
     "en": "Line width (bar or border), with which candle will be drawn on chart.",
     "ru": "Толщина линии (бара или окантовки), с которой будет рисоваться свеча на графике."
   },
-  "Str1958": {
-    "en": "Value must be in the interval from 1 to 10.",
-    "ru": "Значение должно быть в интервале от 1 до 10."
-  },
-  "Str1959": {
-    "en": "Smoothing",
+  "AntiAliasing": {
+    "en": "Anti aliasing",
     "ru": "Сглаживание"
   },
-  "Str1960": {
-    "en": "Candles rendering smoothing (enabled by default).",
+  "CandlesRenderAntiAliasing": {
+    "en": "Candles rendering anti aliasing (enabled by default).",
     "ru": "Сглаживание отрисовки свечей (по умолчанию включено)."
   },
-  "Str1961": {
+  "Marker": {
     "en": "Marker",
     "ru": "Маркер"
   },
-  "Str1962": {
-    "en": "Show Y-axis market.",
+  "ShowAxisMarker": {
+    "en": "Show Y-axis marker.",
     "ru": "Показывать маркер на оси Y."
   },
   "Str1963": {
     "en": "Type",
     "ru": "Вид"
   },
-  "Str1964": {
+  "Legend": {
     "en": "Legend",
     "ru": "Легенда"
   },
@@ -9459,25 +9223,21 @@
     "en": "Should legend be shown on chart.",
     "ru": "Отображать ли легенду на графике."
   },
-  "Str1966": {
+  "XAxis": {
     "en": "X-axis",
     "ru": "Ось X"
   },
-  "Str1967": {
+  "XAxisDesc": {
     "en": "X-axis.",
     "ru": "Ось X."
   },
-  "Str1968": {
+  "YAxis": {
     "en": "Y-axis",
     "ru": "Ось Y"
   },
-  "Str1969": {
+  "YAxisDesc": {
     "en": "Y-axis.",
     "ru": "Ось Y."
-  },
-  "Str1970Params": {
-    "en": "Unknown type of chart {0}.",
-    "ru": "Неизвестный тип графика {0}."
   },
   "Str1972": {
     "en": "Line (no gaps)",
@@ -9487,7 +9247,7 @@
     "en": "Stepped line",
     "ru": "Ступенчатая линия"
   },
-  "Str1974": {
+  "Band": {
     "en": "Band",
     "ru": "Диапазон"
   },
@@ -9499,11 +9259,11 @@
     "en": "Dot",
     "ru": "Точки"
   },
-  "Str1976": {
+  "Histogram": {
     "en": "Histogram",
     "ru": "Гистограмма"
   },
-  "Str1977": {
+  "Bubble": {
     "en": "Bubble",
     "ru": "Пузыри"
   },
@@ -9511,7 +9271,7 @@
     "en": "Stacked bar chart",
     "ru": "Штабельная диаграмма"
   },
-  "Str1979": {
+  "IndicatorSettings": {
     "en": "Indicator settings",
     "ru": "Настройки индикатора"
   },
@@ -9523,7 +9283,7 @@
     "en": "Indicator header that will be shown on chart.",
     "ru": "Заголовок индикатора, который будет отображаться на графике."
   },
-  "Str1984": {
+  "Color": {
     "en": "Color",
     "ru": "Цвет"
   },
@@ -9531,7 +9291,7 @@
     "en": "Line color (bars, etc.), with which the indicator will be drawn on chart.",
     "ru": "Цвет линии (бара и т.д.), которой будет рисоваться на графике индикатор."
   },
-  "Str1986": {
+  "AdditionalColor": {
     "en": "Additional color",
     "ru": "Дополнительный цвет"
   },
@@ -9543,10 +9303,6 @@
     "en": "Line width (bars, etc.), with which indicator will be drawn on chart.",
     "ru": "Толщина линии (бара и т.д.), с которой будет рисоваться индикатор на графике."
   },
-  "Str1989": {
-    "en": "Value must be above or equal to 1.",
-    "ru": "Значение должно быть больше или равно 1."
-  },
   "Str1990": {
     "en": "Renderer",
     "ru": "Рендерер"
@@ -9555,7 +9311,7 @@
     "en": "Renderer for extended indicator rendering.",
     "ru": "Рендерер для расширенной отрисовки индикатора."
   },
-  "Str1992": {
+  "StyleRender": {
     "en": "Style of indicator rendering.",
     "ru": "Стиль отрисовки индикатора."
   },
@@ -9571,75 +9327,67 @@
     "en": "Indicator smoothing.",
     "ru": "Сглаживание индикатора."
   },
-  "Str1996": {
+  "ChartPanelSecurity": {
     "en": "Security, for which orders from chart will be placed. If not specified, then strategy security is used.",
     "ru": "Инструмент, для которого будут выставляться заявки с графика. Если не указан, то используется инструмент стратегии."
   },
-  "Str1997": {
+  "ChartPanelPortfolio": {
     "en": "Portfolio, which will be used for registration orders. If not specified, then strategy portfolio is used.",
     "ru": "Портфель, который будет использоваться при выставлении заявок. Если не указан, то используется портфель стратегии."
   },
-  "Str1998": {
+  "AutoPublish": {
     "en": "Auto-publishing",
     "ru": "Автопубликация"
   },
-  "Str1999": {
+  "AutoPublishDesc": {
     "en": "Activate automatic chart publication into cloud.",
     "ru": "Включить автоматическую публикацию графика в облако."
   },
-  "Str2000": {
+  "ChartPublishPeriod": {
     "en": "Chart publishing period.",
     "ru": "Период публикации графика."
   },
-  "Str2001": {
-    "en": "Period must be greater than 0.",
-    "ru": "Период должен быть больше 0."
-  },
-  "Str2002": {
+  "FileName": {
     "en": "File name",
     "ru": "Имя файла"
   },
-  "Str2003": {
+  "ImageCloudFileName": {
     "en": "File name, where an image on cloud will be saved.",
     "ru": "Имя файла, куда будет сохраняться изображение в облаке."
   },
-  "Str2004": {
-    "en": "Chart does not contain any candle series.",
-    "ru": "График не содержит ни одной серии свечей."
-  },
-  "Str2006": {
+  "BuyColor": {
     "en": "Buy color",
     "ru": "Цвет покупки"
   },
-  "Str2007": {
+  "BuyColorDesc": {
     "en": "Color of graphics element on chart, indicating buy.",
     "ru": "Цвет графического элемента на графике, обозначающий покупку."
   },
-  "Str2008": {
+  "BuyBorderColor": {
     "en": "Buy border color",
     "ru": "Цвет границы покупки"
   },
-  "Str2009": {
+  "BuyBorderColorDesc": {
     "en": "Border color of graphics element on chart, indicating buy.",
     "ru": "Цвет границы графического элемента на графике, обозначающий покупку."
   },
-  "Str2010": {
+  "SellColor": {
     "en": "Sell color",
     "ru": "Цвет продажи"
   },
-  "Str2011": {
+  "SellColorDesc": {
     "en": "Color of graphics element on chart, indicating sell.",
     "ru": "Цвет графического элемента на графике, обозначающий продажу."
   },
-  "Str2012": {
+  "SellBorderColor": {
     "en": "Sell border color",
     "ru": "Цвет границы продажи"
   },
-  "Str2013": {
+  "SellBorderColorDesc": {
     "en": "Border color of graphics element on chart, indicating sell.",
     "ru": "Цвет границы графического элемента на графике, обозначающий продажу."
   },
-  "Str2014Params": {
+  "NewXValueIsLessThanPrev": {
     "en": "New X value {0} is less than earlier added {1}.",
     "ru": "Новое X значение {0} меньше ранее добавленного {1}."
   },
@@ -9675,27 +9423,27 @@
     "en": "Jaw line color.",
     "ru": "Цвет Jaw линии."
   },
-  "Str2023": {
+  "DiPlus": {
     "en": "DI+",
     "ru": "DI+"
   },
-  "Str2024": {
+  "DiPlusLine": {
     "en": "DI+ line.",
     "ru": "DI+ линия."
   },
-  "Str2025": {
+  "DiMinus": {
     "en": "DI-",
     "ru": "DI-"
   },
-  "Str2026": {
+  "DiMinusLine": {
     "en": "DI- line.",
     "ru": "DI- линия."
   },
-  "Str2027": {
+  "Adx": {
     "en": "ADX",
     "ru": "ADX"
   },
-  "Str2028": {
+  "AdxLine": {
     "en": "ADX line.",
     "ru": "ADX линия."
   },
@@ -9723,19 +9471,19 @@
     "en": "Color of average line.",
     "ru": "Цвет средней линии."
   },
-  "Str2035": {
+  "UpColor": {
     "en": "Up color",
     "ru": "Цвет Up"
   },
-  "Str2036": {
+  "UpLineColor": {
     "en": "Up line color.",
     "ru": "Цвет Up линии."
   },
-  "Str2037": {
+  "DownColor": {
     "en": "Down color",
     "ru": "Цвет Down"
   },
-  "Str2038": {
+  "DownLineColor": {
     "en": "Down line color.",
     "ru": "Цвет Down линии."
   },
@@ -9779,11 +9527,11 @@
     "en": "Chinkou line color.",
     "ru": "Цвет Chinkou линии."
   },
-  "Str2049": {
+  "UpCandleColor": {
     "en": "Color of increasing candle.",
     "ru": "Цвет для возрастающей свечи."
   },
-  "Str2050": {
+  "DownCandleColor": {
     "en": "Color of decreasing candle.",
     "ru": "Цвет для убывающей свечи."
   },
@@ -9807,39 +9555,31 @@
     "en": "Line settings",
     "ru": "Настройки линии"
   },
-  "Str2056": {
+  "ColorDesc": {
     "en": "Line color (bars, etc.), with which it will be drawn on chart.",
     "ru": "Цвет линии (бара и т.д.), с которым она будет рисоваться на графике."
   },
-  "Str2057": {
+  "AdditionalColorDesc": {
     "en": "Additional line color (bars, etc.), with which it will be drawn on the chart.",
     "ru": "Дополнительный цвет линии (бара и т.д.), с которым она будет рисоваться на графике."
   },
-  "Str2058": {
+  "LineWidthDesc": {
     "en": "Line width (bars, etc.), with which it will be drawn on chart.",
     "ru": "Толщина линии (бара и т.д.), с которой она будет рисоваться на графике."
   },
-  "Str2059": {
-    "en": "Line smoothing.",
+  "LineAntiAliasing": {
+    "en": "Line anti aliasing.",
     "ru": "Сглаживание линии."
   },
   "Delete": {
     "en": "Delete",
     "ru": "Удалить"
   },
-  "Str2061Params": {
-    "en": "Unknown type of annotation {0}.",
-    "ru": "Неизвестный тип аннотации {0}."
+  "UnknownType": {
+    "en": "Unknown type {0}.",
+    "ru": "Неизвестный тип {0}."
   },
-  "Str2062Params": {
-    "en": "Unknown element of chart {0}.",
-    "ru": "Неизвестный элемент графика {0}."
-  },
-  "Str2063Params": {
-    "en": "Type of line {0} is not supported.",
-    "ru": "Тип линии {0} не поддерживается."
-  },
-  "Str2064Params": {
+  "CannotChangeCandleValue": {
     "en": "Cannot change candle value for date {0} last added value is for date {1}.",
     "ru": "Невозможно изменить значение для свечи для даты {0} последнее добавленное значение для даты {1}."
   },
@@ -9899,7 +9639,7 @@
     "en": "Type of data {0} is not supported.",
     "ru": "Тип данных {0} не поддерживается."
   },
-  "Str2083": {
+  "HydraServerNotAvailable": {
     "en": "HydraServer is not available.",
     "ru": "HydraServer недоступен."
   },
@@ -10111,17 +9851,9 @@
     "en": "Interval {0} isn't supported.",
     "ru": "Интервал {0} не поддерживается."
   },
-  "UnknownInstrumentType": {
-    "en": "Unknown type of security '{0}'.",
-    "ru": "Неизвестный тип инструмента '{0}'."
-  },
   "Str2141Params": {
     "en": "Error parsing string '{0}'.",
     "ru": "Ошибка парсинга строки '{0}'."
-  },
-  "Str2142Params": {
-    "en": "Unknown type of message '{0}'.",
-    "ru": "Неизвестный тип сообщения '{0}'."
   },
   "Str2143Params": {
     "en": "Message type {0} is not supported by IQFeed.",
@@ -10187,7 +9919,7 @@
     "en": "Connected successfully.",
     "ru": "Подключение было произведено успешно."
   },
-  "Str2170": {
+  "Connecting": {
     "en": "Connecting...",
     "ru": "Производим подключение..."
   },
@@ -10215,27 +9947,27 @@
     "en": "Current value of spread middle {0:0.##}",
     "ru": "Текущее значение середины спреда {0:0.##}"
   },
-  "Str2188Params": {
+  "ReceivedSecurity": {
     "en": "Received security {0}.",
     "ru": "Получен инструмент {0}."
   },
-  "Str2189Params": {
+  "TaskCannotChangeState": {
     "en": "Task state cannot be changed from {0} to {1}.",
     "ru": "Нельзя перевести задачу из состояния {0} в состояние {1}."
   },
-  "Str2190Params": {
+  "MovedIntoState": {
     "en": "Moved into state {0}.",
     "ru": "Перешел в состояние {0}."
   },
-  "Str2191": {
+  "SourceWasTimeoutToStart": {
     "en": "When source was launched a maximum timeout occurred. Source will be stopped.",
     "ru": "При запуске источника произошел максимально допустимый таймаут. Источник будет остановлен."
   },
-  "Str2192": {
+  "ErrorToStart": {
     "en": "Error launching source. Source will be stopped.",
     "ru": "Ошибка при запуске источника. Источник будет остановлен."
   },
-  "Str2193": {
+  "MaxErrorsReceived": {
     "en": "During source work a maximum number of errors occurred. Source will be stopped.",
     "ru": "При работе источника произошло максимально допустимое количество ошибок. Источник будет остановлен."
   },
@@ -10303,11 +10035,11 @@
     "en": "Select path...",
     "ru": "Выберите путь..."
   },
-  "Str2211": {
-    "en": "S#.Data settings",
-    "ru": "Настройки S#.Data"
+  "HydraServerSettings": {
+    "en": "S#.Data server settings",
+    "ru": "Настройки S#.Data сервера"
   },
-  "Str2212": {
+  "ServerMode": {
     "en": "Server mode",
     "ru": "Серверный режим"
   },
@@ -10315,32 +10047,32 @@
     "en": "Turn on S#.Data into server mode to allow other application get downloaded market data?",
     "ru": "Перевести S#.Data в серверный режим чтобы позволить другим программам получать скаченные маркет-данные."
   },
-  "Str2214": {
+  "SecCount": {
     "en": "Number of securities",
     "ru": "Количество инструментов"
   },
-  "Str2215": {
+  "MaxSecurityCountPerRequest": {
     "en": "Maximum number of securities which can be requested from the server.",
     "ru": "Максимальное количество инструментов, которое можно запрашивать с сервера."
   },
-  "Str2216": {
+  "HydraServerAuthorization": {
     "en": "Authorization for access to S#.Data server.",
     "ru": "Авторизация для получения доступа к S#.Data сервер."
   },
-  "Str2217": {
+  "AutoStart": {
     "en": "Autostart",
     "ru": "Автостарт"
   },
-  "Str2218": {
+  "AutoStartDownloading": {
     "en": "Autostart of quotes downloading at startup.",
     "ru": "Автостарт скачивания котировок при запуске."
   },
-  "Str2219": {
+  "Tray": {
     "en": "Tray",
     "ru": "Трей"
   },
-  "Str2220": {
-    "en": "Collapse to tray.",
+  "MinimizeToTray": {
+    "en": "Minimize to tray.",
     "ru": "Сворачивать в трей."
   },
   "Str2221": {
@@ -10355,11 +10087,11 @@
     "en": "Time for autostop",
     "ru": "Время для Автостоп"
   },
-  "Str2225": {
+  "ErrorsCount": {
     "en": "Errors (quantity)",
     "ru": "Ошибки (кол-во)"
   },
-  "Str2226": {
+  "ErrorsCountDesc": {
     "en": "Errors count, after which an email about the error will be sent. Value of 0 means a disabled.",
     "ru": "Количество ошибок, после которых будет отправлено письмо на почту с сообщение об ошибке. Значение 0 означает выключенный режим."
   },
@@ -10367,15 +10099,11 @@
     "en": "Errors (email)",
     "ru": "Ошибки (email)"
   },
-  "Str2228": {
+  "EmailErrorTo": {
     "en": "E-mail, where a message will be sent about exceeding the maximum number of errors.",
     "ru": "Адрес почты, куда будет отправлено письмо с сообщением о превышении максимально допустимого количества ошибок."
   },
-  "Str2229": {
-    "en": "Active",
-    "ru": "Включена"
-  },
-  "Str2230": {
+  "TaskOn": {
     "en": "Is task on.",
     "ru": "Включена ли задача."
   },
@@ -10451,7 +10179,7 @@
     "en": "News",
     "ru": "Новости"
   },
-  "Str2251": {
+  "DownloadNews": {
     "en": "Download news.",
     "ru": "Скачивать новости."
   },
@@ -10507,7 +10235,7 @@
     "en": "Price of fixing profits.",
     "ru": "Цена фиксирования прибыли."
   },
-  "Str2268": {
+  "MaxDeviation": {
     "en": "Maximum deviation",
     "ru": "Максимальное отклонение"
   },
@@ -10571,15 +10299,15 @@
     "en": "Time offset",
     "ru": "Временной отступ"
   },
-  "Str2285": {
+  "TimeOffsetDesc": {
     "en": "Time offset in days from current date, which is necessary to stop incomplete data for the current trading session being downloaded.",
     "ru": "Временной отступ в днях от текущей даты, который необходим для предотвращения скачивания неполных данных за текущую торговую сессию."
   },
-  "Str2286": {
+  "Weekend": {
     "en": "Weekend",
     "ru": "Выходные"
   },
-  "Str2287": {
+  "IgnoreWeekends": {
     "en": "Ignore weekends and holidays (do not download data).",
     "ru": "Игнорировать выходные и праздничные дни (не скачивать данные)."
   },
@@ -10599,7 +10327,7 @@
     "en": "Security {0} does not contain {1} identifier and it will be removed from the downloads list.",
     "ru": "Инструмент {0} не содержит идентификатор {1} и он будет удален из списка скачиваемых."
   },
-  "Str2292": {
+  "NoSecurities": {
     "en": "No securities.",
     "ru": "Нет инструментов."
   },
@@ -10631,15 +10359,15 @@
     "en": "Error loading {0} candles for {1:d} date and {2} security.",
     "ru": "Ошибка загрузки {0} свечей за {1:d} для {2}."
   },
-  "Str2300": {
+  "EndOfIteration": {
     "en": "End of iteration.",
     "ru": "Окончание итерации."
   },
-  "Str2302": {
+  "LoginDesc": {
     "en": "Login. Required if server authorization is on.",
     "ru": "Имя пользователя. Требуется при включенной авторизации на сервере."
   },
-  "Str2303": {
+  "Password": {
     "en": "Password. Require when server authorization is enabled.",
     "ru": "Пароль. Требуется при включенной авторизации на сервере."
   },
@@ -10695,7 +10423,7 @@
     "en": "Volatility",
     "ru": "Волатильность"
   },
-  "Str2319": {
+  "ByDefault": {
     "en": "By default",
     "ru": "По умолчанию"
   },
@@ -10735,7 +10463,7 @@
     "en": "Quote (double)",
     "ru": "Котировка (двойная)"
   },
-  "Str2331": {
+  "Last": {
     "en": "Last",
     "ru": "Последняя"
   },
@@ -10743,9 +10471,9 @@
     "en": "Last (double)",
     "ru": "Последняя (двойная)"
   },
-  "Str2333": {
+  "Any": {
     "en": "Any",
-    "ru": "Любая"
+    "ru": "Любое"
   },
   "Str2334": {
     "en": "Private trader",
@@ -11027,11 +10755,7 @@
     "en": "Start time.",
     "ru": "Время старта."
   },
-  "Str2424": {
-    "en": "Extended condition",
-    "ru": "Расширенное условие"
-  },
-  "Str2425": {
+  "ExtraConditionsDesc": {
     "en": "Extended condition.",
     "ru": "Расширенное условие."
   },
@@ -11327,45 +11051,17 @@
     "en": "Type of security {0} is not supported.",
     "ru": "Тип инструмента {0} не поддерживается."
   },
-  "Str2500": {
-    "en": "Unknown type of extended order.",
-    "ru": "Неизвестный расширенный тип заявки."
-  },
   "Str2501Params": {
     "en": "Unsupported type of order {0}.",
     "ru": "Неподдерживаемый тип заявки {0}."
-  },
-  "Str2502Params": {
-    "en": "Unknown type '{0}' of security.",
-    "ru": "Неизвестный тип '{0}' инструмента."
   },
   "Str2503Params": {
     "en": "Unknown status of order {0}.",
     "ru": "Неизвестный статус заявки {0}."
   },
-  "Str2504Params": {
-    "en": "Unknown type of order {0}.",
-    "ru": "Неизвестный тип заявки {0}."
-  },
-  "Str2505Params": {
-    "en": "Unknown type of method {0}.",
-    "ru": "Неизвестный тип метода {0}."
-  },
   "Str2506Params": {
     "en": "Unknown order {0} side.",
     "ru": "Неизвестное направление заявки {0}."
-  },
-  "Str2507Params": {
-    "en": "Unknown type of trader {0}.",
-    "ru": "Неизвестный тип трейдера {0}."
-  },
-  "Str2508Params": {
-    "en": "Unknown type of parameter {0}.",
-    "ru": "Неизвестный тип параметра {0}."
-  },
-  "Str2509Params": {
-    "en": "Unknown type of ID {0}.",
-    "ru": "Неизвестный тип идентификатора {0}."
   },
   "Str2510Params": {
     "en": "Unknown type of clearing aim {0}.",
@@ -12215,17 +11911,13 @@
     "en": "Error cancelling a group of transaction.",
     "ru": "Ошибка при отмене группы транзакций."
   },
-  "Str2735Params": {
+  "RegOrderFailed": {
     "en": "Failed to register order {0}.",
     "ru": "Не удалось зарегистрировать заявку {0}."
   },
   "Str2736": {
     "en": "Incorrect ID value.",
     "ru": "Неверное значение идентификатора."
-  },
-  "Str2737": {
-    "en": "Comment cannot be longer than 20 symbols.",
-    "ru": "Комментарий не может быть длиннее 20 символов."
   },
   "Str2738Params": {
     "en": "Path in registry {0} is missing.",
@@ -12258,10 +11950,6 @@
   "Str2745Params": {
     "en": "{0} Code {1}, description '{2}'.",
     "ru": "{0} Код {1}, описание '{2}'."
-  },
-  "Str2746": {
-    "en": "Unknown type of state.",
-    "ru": "Неизвестный тип состояния."
   },
   "Str2747Params": {
     "en": "Column {0} of table {1} with index {2} is missing in the data.",
@@ -12331,14 +12019,6 @@
     "en": "New entry for table {0} has wrong revision {1}.",
     "ru": "Новая запись для таблицы {0} имеет неправильную ревизию {1}."
   },
-  "Str2764Params": {
-    "en": "Unacceptable type of data: {0}",
-    "ru": "Неприемлемый тип данных: {0}"
-  },
-  "Str2765Params": {
-    "en": "Incorrect format: {0}",
-    "ru": "Неверный формат: {0}"
-  },
   "Str2766": {
     "en": "Transactional threads were not stopped since the previous run.",
     "ru": "Транзакционные потоки не были остановлены с предыдущего запуска."
@@ -12346,10 +12026,6 @@
   "Str2767": {
     "en": "Wrong conversion to decimal.",
     "ru": "Неправильная конвертация в decimal."
-  },
-  "Str2768Params": {
-    "en": "Unknown type for column {0}.",
-    "ru": "Неизвестный тип для колонки {0}."
   },
   "Str2769": {
     "en": "Time-out.",
@@ -12447,10 +12123,6 @@
     "en": "Error destroying publisher '{0}'.",
     "ru": "Ошибка уничтожения публикатора '{0}'."
   },
-  "Str2794Params": {
-    "en": "Unknown type of reply '{0}'.",
-    "ru": "Неизвестный тип реплики '{0}'."
-  },
   "Str2795Params": {
     "en": "Unknown stream {0} state.",
     "ru": "Неизвестное состояние потока {0}."
@@ -12459,7 +12131,7 @@
     "en": "Parameter value cannot be less than zero.",
     "ru": "Значение параметра не может быть отрицательным."
   },
-  "Str2797": {
+  "UnknownError": {
     "en": "Unknown error.",
     "ru": "Неизвестная ошибка."
   },
@@ -12583,31 +12255,31 @@
     "en": "UX (website)",
     "ru": "UX (сайт)"
   },
-  "Str2831": {
+  "Boards": {
     "en": "Boards",
     "ru": "Площадки"
   },
-  "Str2832": {
+  "SomeMappingNoFileValues": {
     "en": "Some associations do not have a filled in text value.",
     "ru": "Некоторые ассоциации не имеют заполненного текстового значения."
   },
-  "Str2833": {
+  "SomeMappingNoStockSharpValues": {
     "en": "Some associations do not have a filled in S# value.",
     "ru": "Некоторые ассоциации не имеют заполненного S# значения."
   },
-  "Str2834": {
+  "SecSeachInProgressWait": {
     "en": "Securities search in progress. Wait...",
     "ru": "Идет поиск инструментов. Подождите..."
   },
-  "Str2835": {
+  "AllSecurities": {
     "en": "All securities",
     "ru": "Все инструменты"
   },
-  "Str2836": {
+  "ScriptParameters": {
     "en": "Script parameters.",
     "ru": "Параметры скрипта."
   },
-  "Str2838": {
+  "PathToData": {
     "en": "Path to data.",
     "ru": "Путь к данным."
   },
@@ -12623,7 +12295,7 @@
     "en": "Calculate volume profile. Tick market data is required.",
     "ru": "Вычислять профиль объема. Требуется тиковый источник данных."
   },
-  "Str2842": {
+  "ImportSettings": {
     "en": "Settings of import",
     "ru": "Настройки импорта"
   },
@@ -12631,7 +12303,7 @@
     "en": "Full path to CSV file.",
     "ru": "Полный путь к CSV файлу."
   },
-  "Str2844": {
+  "ColumnSeparator": {
     "en": "Column separator",
     "ru": "Разделитель колонок"
   },
@@ -12639,7 +12311,7 @@
     "en": "Column separator. Tabulation is denoted by TAB.",
     "ru": "Разделитель колонок. Табуляция обозначается TAB."
   },
-  "Str2846": {
+  "SkipLines": {
     "en": "Skip lines",
     "ru": "Отступ с начала"
   },
@@ -12679,14 +12351,6 @@
     "en": "Date",
     "ru": "Дата"
   },
-  "Str2858": {
-    "en": "orders log",
-    "ru": "лога заявок"
-  },
-  "Str2859": {
-    "en": "candles",
-    "ru": "свечей"
-  },
   "Str2860": {
     "en": "Time (opening)",
     "ru": "Время (открытие)"
@@ -12695,43 +12359,27 @@
     "en": "Time (closing)",
     "ru": "Время (закрытие)"
   },
-  "Str2862": {
-    "en": "market depths",
-    "ru": "стаканов"
-  },
-  "Str2863": {
-    "en": "news",
-    "ru": "новостей"
-  },
-  "Str2864": {
-    "en": "Import",
-    "ru": "Импорт"
-  },
-  "Str2865": {
+  "PathNotSpecified": {
     "en": "File path not specified.",
     "ru": "Путь к файлу не указан."
   },
-  "Str2867Params": {
+  "FieldIsRequired": {
     "en": "Field {0} is required. It must be given a default value or an ordinal number.",
     "ru": "Поле {0} является обязательным. Для него необходимо задать или значение по умолчанию, или порядковый номер."
   },
-  "Str2868Params": {
-    "en": "Field {0} is an enumeration. You have to set up corresponding values for it.",
-    "ru": "Поле {0} является перечисление. Для него необходимо задать значения соответствий."
-  },
-  "Str2869Params": {
+  "IndexMoreThanLen": {
     "en": "Field '{0}' has index {1}, which is greater than length {2} of values array.",
     "ru": "Поле '{0}' имеет индекс {1}, которое больше длины {2} массива значений."
   },
-  "Str2870Params": {
+  "ImportOfType": {
     "en": "Import '{0}' of type '{1}'.",
     "ru": "Импорт '{0}' типа '{1}'."
   },
-  "Str2871Params": {
+  "CreatingSec": {
     "en": "Creating security '{0}'.",
     "ru": "Создание инструмента '{0}'."
   },
-  "Str2872Params": {
+  "UnsupportedType": {
     "en": "Unsupported type '{0}'.",
     "ru": "Неподдерживаемый тип '{0}'."
   },
@@ -12739,15 +12387,7 @@
     "en": "Cannot authorize, because authorization module was not found.",
     "ru": "Невозможно произвести авторизацию, так как модуль авторизации не был найден."
   },
-  "Str2874Params": {
-    "en": "Unknown item {0} of candle formation.",
-    "ru": "Неизвестный пункт {0} построения свечей."
-  },
-  "Str2875": {
-    "en": "Security must be selected.",
-    "ru": "Необходимо выбрать инструмент."
-  },
-  "Str2876": {
+  "PathsMustBeDifferent": {
     "en": "Path to copied data in bin format should not be same as path to source data.",
     "ru": "Путь для копирования данных в формате bin не должен совпадать с путем к исходным данным."
   },
@@ -12803,11 +12443,11 @@
     "en": "File {0} is not a .NET assembly.",
     "ru": "Файл {0} не является .NET сборкой."
   },
-  "Str2899Params": {
+  "UnknownTypeDataWillDelete": {
     "en": "Unknown type of task {0}. Data will be deleted.",
     "ru": "Неизвестный тип задачи {0}. Данные будут удалены."
   },
-  "Str2900Params": {
+  "TaskNotFound": {
     "en": "Task {0} not found.",
     "ru": "Задача {0} не найдена."
   },
@@ -12815,7 +12455,7 @@
     "en": "License does not support simultaneous work of several copies '{0}'.",
     "ru": "Лицензия не поддерживает одновременную работу нескольких копий '{0}'."
   },
-  "Str2904Params": {
+  "AddTask": {
     "en": "Add task {0}...",
     "ru": "Добавление задачи {0}..."
   },
@@ -12823,17 +12463,13 @@
     "en": "Task settings match default settings. Task will be disabled.",
     "ru": "Настройки задачи соответствуют настройкам по умолчанию. Задача будет выключена."
   },
-  "Str2906": {
+  "Initializing": {
     "en": "Initializing",
     "ru": "Инициализируется"
   },
-  "Str2907": {
+  "TaskNoSecurities": {
     "en": "Task has no selected securities.",
     "ru": "Задача не имеет выбранных инструментов."
-  },
-  "Str2910Params": {
-    "en": "Unknown type of export '{0}'.",
-    "ru": "Неизвестный тип экспорта '{0}'."
   },
   "Str2911": {
     "en": "Too much data to display",
@@ -12843,7 +12479,7 @@
     "en": "Uploaded {0} of {1}",
     "ru": "Выгружено {0} из {1}"
   },
-  "Str2913": {
+  "NoData2": {
     "en": "No data",
     "ru": "Данные отсутствуют"
   },
@@ -12859,7 +12495,7 @@
     "en": "Open data folder",
     "ru": "Открыть папку с данными"
   },
-  "Str2917Params": {
+  "CannotOpenDataDirectory": {
     "en": "Cannot open data storage directory. Error '{0}'. Path can be incorrect in settings: '{1}'",
     "ru": "Невозможно открыть директорию хранения данных. Ошибка '{0}'. Возможно неверно задан путь в настройках: '{1}'"
   },
@@ -12879,7 +12515,7 @@
     "en": "{0:0} sec(-s)",
     "ru": "{0:0} сек(-ы)"
   },
-  "Str2921": {
+  "CreateSecurity": {
     "en": "Create security",
     "ru": "Создать инструмент"
   },
@@ -12887,31 +12523,31 @@
     "en": "Change security",
     "ru": "Изменить инструмент"
   },
-  "Str2923": {
+  "SecCodeNotFilled": {
     "en": "Security code is not filled.",
     "ru": "Не заполнен код инструмента."
   },
-  "Str2924": {
+  "VolumeStepNotSpecified": {
     "en": "Volume step is not filled.",
     "ru": "Не заполнен шаг объема."
   },
-  "Str2925": {
+  "PriceStepNotSpecified": {
     "en": "Price step is not filled.",
     "ru": "Не заполнен шаг цены."
   },
-  "Str2926": {
+  "BoardNotSpecified": {
     "en": "Board is not specified.",
     "ru": "Не выбрана площадка."
   },
-  "Str2927Params": {
-    "en": "Security {0} already exists in the database.",
-    "ru": "Инструмент {0} уже существует в базе данных."
+  "SecurityAlreadyExist": {
+    "en": "Security {0} already exists.",
+    "ru": "Инструмент {0} уже существует."
   },
-  "Str2928": {
+  "ProcessMustBeStopped": {
     "en": "Process must be stopped. Would you like to do it now?",
     "ru": "Необходимо остановить операцию. Сделать это сейчас?"
   },
-  "Str2929Params": {
+  "FileWrongFormat": {
     "en": "File {0} has wrong format.",
     "ru": "Файл {0} имеет неправильный формат."
   },
@@ -12927,7 +12563,7 @@
     "en": "Show",
     "ru": "Показать"
   },
-  "Str2935": {
+  "AtLeastOneFieldSelected": {
     "en": "At least one change must be selected.",
     "ru": "Необходимо выбрать хотя бы одно изменение."
   },
@@ -12935,7 +12571,7 @@
     "en": "One of the fields in incorrectly set.",
     "ru": "Одно из полей задано неверно."
   },
-  "Str2940Params": {
+  "MaxErrorsExceed": {
     "en": "Errors count exceeded {0}.",
     "ru": "Количество ошибок превысило {0}."
   },
@@ -12963,7 +12599,7 @@
     "en": "Autostart of quotes downloading is impossible.",
     "ru": "Автостарт скачивания котировок невозможен."
   },
-  "Str2949": {
+  "WantContinue": {
     "en": "Continue?",
     "ru": "Продолжить?"
   },
@@ -12975,11 +12611,11 @@
     "en": "No task was launched. Detailed information is available in the log.",
     "ru": "Ни одна из задач не была запущена. Детальная информация доступна в логе."
   },
-  "Str2952Params": {
+  "MustRestartApp": {
     "en": "You must restart {0} to apply these changes. Restart now?",
     "ru": "Для работы в выбранном режиме необходимо перезапустить {0}. Перезапустить сейчас?"
   },
-  "Str2954Params": {
+  "SettingsWillBeResetContinue": {
     "en": "{0} settings will be reset. This operation is irreversible. Are you sure you want to continue?",
     "ru": "Настройки {0} будут сброшены. Данная операция не обратима. Вы уверены, что хотите продолжить?"
   },
@@ -13199,10 +12835,6 @@
     "en": "Quik is off.",
     "ru": "Quik выключен."
   },
-  "Str3009": {
-    "en": "Portfolio not selected.",
-    "ru": "Портфель не выбран."
-  },
   "Long": {
     "en": "Long",
     "ru": "Длинная"
@@ -13219,7 +12851,7 @@
     "en": "Waiting for Lukoil security data to update...",
     "ru": "Дожидаемся обновления данных по инструменту Лукойл..."
   },
-  "Str3014": {
+  "WrongPath": {
     "en": "Wrong path.",
     "ru": "Неправильный путь."
   },
@@ -13243,7 +12875,7 @@
     "en": "Completed in {0}.",
     "ru": "Закончено за {0}."
   },
-  "cancelled": {
+  "Cancelled": {
     "en": "Cancelled",
     "ru": "Отменено"
   },
@@ -13323,7 +12955,7 @@
     "en": "Error loading diagram component: {0}",
     "ru": "Ошибка загрузки составного элемента схемы: {0}"
   },
-  "Str3047Params": {
+  "ElementWithTypeNotFound": {
     "en": "Element with type '{0}' not found.",
     "ru": "Элемент с типом '{0}' не найден."
   },
@@ -13379,7 +13011,7 @@
     "en": "Exit",
     "ru": "Выход"
   },
-  "Str3060": {
+  "ElemAlreadySpecified": {
     "en": "Element for diagram element is already specified.",
     "ru": "Элемент для элемента схемы уже задан."
   },
@@ -13539,7 +13171,7 @@
     "en": "For diagram '{0}' element, indicator type is not specified.",
     "ru": "Для элемента схемы '{0}' не указан тип индикатора."
   },
-  "Str3106Params": {
+  "IndicatorNotWorkWithType": {
     "en": "Indicator does not work with data type '{0}'.",
     "ru": "Индикатор не поддерживает работу с типом данных '{0}'."
   },
@@ -13583,7 +13215,7 @@
     "en": "Logic function with one argument.",
     "ru": "Логическая функция с одним аргументом."
   },
-  "Str3117": {
+  "MarketDepthElement": {
     "en": "Security market depth changes receiving element.",
     "ru": "Элемент получения изменений стакана по инструменту."
   },
@@ -13607,11 +13239,11 @@
     "en": "Formula with two arguments element.",
     "ru": "Элемент формулы с двумя аргументами."
   },
-  "Str3123": {
+  "OrderRegistering": {
     "en": "Order registering",
     "ru": "Регистрация заявки"
   },
-  "Str3124": {
+  "OrderRegisteringDesc": {
     "en": "Order registering element.",
     "ru": "Элемент регистрации заявки."
   },
@@ -13623,19 +13255,15 @@
     "en": "Position direction (short or long).",
     "ru": "Направление позиции (короткая или длинная)."
   },
-  "Str3127": {
+  "PosOpenByMarket": {
     "en": "Should position be created with a market order.",
     "ru": "Создавать ли позицию рыночной заявкой."
   },
-  "Str3128": {
-    "en": "Security for position opening is not specified.",
-    "ru": "Инструмент для открытия позиции не указан."
-  },
-  "Str3129": {
+  "OrderTrades": {
     "en": "Trades for order",
     "ru": "Сделки по заявке"
   },
-  "Str3130": {
+  "OrderTradesElement": {
     "en": "Trades per order element.",
     "ru": "Элемент сделок по заявке."
   },
@@ -13651,11 +13279,11 @@
     "en": "Property",
     "ru": "Свойство"
   },
-  "Str3134": {
+  "ObjectPropertyValue": {
     "en": "Object property, from which a value must be obtained.",
     "ru": "Свойство объекта, из которого необходимо получить значение."
   },
-  "Str3135": {
+  "Combination": {
     "en": "Combination",
     "ru": "Объединение"
   },
@@ -13663,7 +13291,7 @@
     "en": "Combined values element.",
     "ru": "Элемент объединения значений."
   },
-  "Str3137": {
+  "PositionElement": {
     "en": "Position element (for security and money) for the specified portfolio.",
     "ru": "Элемент позиции (по инструменту или деньгами) для указанного портфеля."
   },
@@ -13671,19 +13299,19 @@
     "en": "Portfolio, for which position size must be obtained. If value is not specified, then strategy portfolio will be used.",
     "ru": "Портфель, для которого необходимо получить значение позиции. Если значение не указано, то будет использоваться портфель стратегии."
   },
-  "Str3139": {
+  "MoneyPositionDesc": {
     "en": "Whether to receive cash position or security position.",
     "ru": "Получать ли денежную позиция или позицию по инструменту."
   },
-  "Str3140": {
+  "PreviousValue": {
     "en": "Previous value",
     "ru": "Предыдущее значение"
   },
-  "Str3141": {
+  "PreviousValueElement": {
     "en": "Previous value receiving element.",
     "ru": "Элемент получения предыдущего значения."
   },
-  "Str3142": {
+  "OffsetSize": {
     "en": "Offset size.",
     "ru": "Размер сдвига."
   },
@@ -13691,7 +13319,7 @@
     "en": "Connection type.",
     "ru": "Тип соединения."
   },
-  "Str3145": {
+  "PosProtection": {
     "en": "Position protection",
     "ru": "Защита позиции"
   },
@@ -13699,7 +13327,7 @@
     "en": "Open position protection element.",
     "ru": "Элемент защиты открытой позиции."
   },
-  "Str3147": {
+  "OrderOut": {
     "en": "Order (out)",
     "ru": "Заявка вых"
   },
@@ -13711,7 +13339,7 @@
     "en": "Is take-profit active.",
     "ru": "Включен ли тейк-профит."
   },
-  "Str3150": {
+  "ProtectLevelTakeProfit": {
     "en": "Protection level for take-profit.",
     "ru": "Защитный уровень для тейк-профита."
   },
@@ -13719,7 +13347,7 @@
     "en": "Is stop-loss active.",
     "ru": "Включен ли стоп-лосс."
   },
-  "Str3152": {
+  "ProtectLevelStopLoss": {
     "en": "Protection level for stop-loss.",
     "ru": "Защитный уровень для стоп-лосса."
   },
@@ -13727,19 +13355,19 @@
     "en": "Security changes receiving element.",
     "ru": "Элемент получения изменений инструмента."
   },
-  "Str3154": {
+  "Change2": {
     "en": "Change",
     "ru": "Изменение"
   },
-  "Str3155": {
+  "StrategyTrades": {
     "en": "Strategy trades",
     "ru": "Сделки стратегии"
   },
-  "Str3156": {
+  "StrategyTradesElement": {
     "en": "Strategy trades element.",
     "ru": "Элемент сделок стратегии."
   },
-  "Str3157": {
+  "DataTypeDesc": {
     "en": "Data type.",
     "ru": "Тип данных."
   },
@@ -13747,7 +13375,7 @@
     "en": "Connection {0} not found.",
     "ru": "Соединение {0} не найдено."
   },
-  "Str3159": {
+  "Variable": {
     "en": "Variable",
     "ru": "Переменная"
   },
@@ -13755,7 +13383,7 @@
     "en": "Value storage element.",
     "ru": "Элемент хранения значение."
   },
-  "Str3161": {
+  "ElemValue": {
     "en": "Element value.",
     "ru": "Значение элемента."
   },
@@ -13819,14 +13447,6 @@
     "en": "Optimization",
     "ru": "Оптимизация"
   },
-  "Str3178": {
-    "en": "Stopped",
-    "ru": "Остановлена"
-  },
-  "Str3179": {
-    "en": "Running",
-    "ru": "Выполняется"
-  },
   "SourceCode": {
     "en": "Source code",
     "ru": "Исходный код"
@@ -13875,35 +13495,35 @@
     "en": "Path to assembly, where strategy executable code is.",
     "ru": "Путь к сборке, где находится исполняемый код стратегии."
   },
-  "Str3192": {
+  "BuySellSettingsSecurity": {
     "en": "Security, for which the market depth will be shown. If not specified, then strategy security is used.",
     "ru": "Инструмент, для которого будет отображаться стакан. Если не указан, то используется инструмент стратегии."
   },
-  "Str3193": {
+  "WorkingVolume": {
     "en": "Working volume",
     "ru": "Рабочий объем"
   },
-  "Str3194": {
+  "WorkingVolumeDesc": {
     "en": "Working volume for registration orders from the market depth.",
     "ru": "Рабочий объем при выставлении заявок из стакана."
   },
-  "Str3195": {
+  "DepthVisible": {
     "en": "Number of visible quotes to buy and sell.",
     "ru": "Количество видимых котировок на покупку и продажу."
   },
-  "Str3196": {
+  "AllowCancelAllOrders": {
     "en": "Show all active orders cancellation button.",
     "ru": "Показывать кнопку отмены всех активных заявок."
   },
-  "Str3197": {
+  "LimitOrders": {
     "en": "Limit orders",
     "ru": "Лимитные заявки"
   },
-  "Str3198": {
+  "ShowPanelLimitOrders": {
     "en": "Show panel for registration limit orders.",
     "ru": "Показывать панель для выставления лимитных заявок."
   },
-  "Str3199": {
+  "ShowPanelMarketOrders": {
     "en": "Show panel for registration market orders.",
     "ru": "Показывать панель для выставления рыночных заявок."
   },
@@ -13911,7 +13531,7 @@
     "en": "Chart",
     "ru": "График"
   },
-  "Str3201": {
+  "CandleChartPanel": {
     "en": "Chart to display a series of candles.",
     "ru": "График для отображения серий свечей."
   },
@@ -13939,7 +13559,7 @@
     "en": "Chat ({0})",
     "ru": "Чат ({0})"
   },
-  "Str3211": {
+  "Online": {
     "en": "online",
     "ru": "онлайн"
   },
@@ -14027,11 +13647,11 @@
     "en": "Debugging is only available to designer based strategies.",
     "ru": "Отладка доступна только для стратегий на базе дизайнера."
   },
-  "Str3234": {
+  "BoardEditor": {
     "en": "Board editor",
     "ru": "Редактор площадок"
   },
-  "Str3235": {
+  "ExchangeEditorPanel": {
     "en": "Panel for editing information about exchange boards.",
     "ru": "Панель для редактирования информации и биржевых площадках."
   },
@@ -14047,15 +13667,15 @@
     "en": "Logs",
     "ru": "Логи"
   },
-  "Str3238": {
+  "NewsPanel": {
     "en": "Panel for viewing news data.",
     "ru": "Панель для просмотра данных по новостям."
   },
-  "Str3239": {
+  "OptionsPositions": {
     "en": "Positions (options)",
     "ru": "Позиции (опционы)"
   },
-  "Str3240": {
+  "OptionsPositionsElement": {
     "en": "Panel for viewing options positions and greeks chart in respect to the underlying asset.",
     "ru": "Панель для просмотра графика позиции и греков опционов относительно базового актива."
   },
@@ -14067,55 +13687,51 @@
     "en": "Panel for viewing and managing conditional orders.",
     "ru": "Панель для просмотра и управления условными заявками."
   },
-  "Str3244": {
+  "PositionChart": {
     "en": "Positions (chart)",
     "ru": "Позиции (график)"
   },
-  "Str3245": {
+  "PositionChartPanel": {
     "en": "Chart to view the dynamics of position change over time.",
     "ru": "График для просмотра динамики изменения позиций во времени."
   },
-  "Str3246": {
+  "CreatingPortfolio": {
     "en": "Creating portfolio",
     "ru": "Создание портфеля"
   },
-  "Str3247": {
+  "PortfolioEditing": {
     "en": "Portfolio editing",
     "ru": "Редактирование портфеля"
   },
-  "Str3248": {
+  "CreatingPosition": {
     "en": "Creating position",
     "ru": "Создание позиции"
   },
-  "Str3249": {
+  "PositionEditing": {
     "en": "Position editing",
     "ru": "Редактирование позиции"
   },
-  "Str3250": {
+  "Creating": {
     "en": "Creating",
     "ru": "Создание"
   },
-  "Str3251": {
-    "en": "Portfolio name is not specified.",
-    "ru": "Не указано название портфеля."
-  },
-  "Str3252": {
+  "SecurityNotSpecified": {
     "en": "Security is not specified.",
     "ru": "Не указан инструмент."
   },
-  "Str3253": {
+  "PortfolioNotSpecified": {
     "en": "Portfolio is not specified.",
     "ru": "Не указан портфель."
   },
-  "Str3254": {
+  "PositionsPanel": {
     "en": "Panel for viewing portfolios and positions data.",
     "ru": "Панель для просмотра данных по портфелям и позициям."
   },
-  "Str3255": {
+  "Found": {
     "en": "Found",
     "ru": "Найденные"
   },
-  "Str3256": {
+  "Selected": {
     "en": "Selected",
     "ru": "Выбранные"
   },
@@ -14123,11 +13739,11 @@
     "en": "Sessions",
     "ru": "Сессии"
   },
-  "Str3259": {
+  "StatisticsPanel": {
     "en": "Panel for viewing statistics data.",
     "ru": "Панель для просмотра данных по статистике."
   },
-  "Str3260": {
+  "EquityCurveChartPanel": {
     "en": "Chart of profit-loss curve.",
     "ru": "График вывода кривой прибыли-убытка."
   },
@@ -14143,7 +13759,7 @@
     "en": "Selected directory does not exist. Continue?",
     "ru": "Выбранная директория не существует. Продолжить?"
   },
-  "Str3264Params": {
+  "NSecAdded": {
     "en": "{0} new securities added.",
     "ru": "Добавлено {0} новых инструментов."
   },
@@ -14155,27 +13771,27 @@
     "en": "Panel for viewing option desk.",
     "ru": "Панель для просмотра доски опционов."
   },
-  "Str3268": {
+  "OrdersPanel": {
     "en": "Panel for viewing and managing orders.",
     "ru": "Панель для просмотра и управления заявками."
   },
-  "Str3269": {
+  "PortfoliosPanel": {
     "en": "Trading portfolios (checking account balance, open positions, etc.).",
     "ru": "Торговых портфелей (просмотр остатков на счету, открытых позиций и т.д.)."
   },
-  "Str3270": {
+  "PropertiesPanel": {
     "en": "Panel for viewing parameters (securities, portfolios, trades, etc.).",
     "ru": "Панель для просмотра параметров (инструментов, портфелей, сделок и т.д.)."
   },
-  "Str3271": {
+  "MyTradesTable": {
     "en": "Panel for viewing own trades data.",
     "ru": "Панель для просмотра данных по собственным сделкам."
   },
-  "Str3272": {
+  "ScalpingMarketDepthControl": {
     "en": "Market depth with quotes, showing the depth of market.",
     "ru": "Стакан с котировками, показывающий глубину рынка."
   },
-  "Str3273": {
+  "IncorrectLimitOrderPrice": {
     "en": "Incorrect limit order price.",
     "ru": "Неверно указана цена для лимитной заявки."
   },
@@ -14187,11 +13803,11 @@
     "en": "Open market depth",
     "ru": "Открыть стакан"
   },
-  "Str3278": {
+  "TradesFeed": {
     "en": "Trades feed",
     "ru": "Лента сделок"
   },
-  "Str3279": {
+  "TradesPanel": {
     "en": "Panel for viewing tick data.",
     "ru": "Панель для просмотра данных по тиковым сделкам."
   },
@@ -14627,9 +14243,9 @@
     "en": "Good",
     "ru": "Хорошая"
   },
-  "Str3407": {
+  "Maximum": {
     "en": "Maximum",
-    "ru": "Максимальная"
+    "ru": "Максимально"
   },
   "Str3410": {
     "en": "Path to dll",
@@ -14651,7 +14267,7 @@
     "en": "List of addresses and ports for access servers.",
     "ru": "Список адресов и портов серверов доступа."
   },
-  "Str3416": {
+  "Server": {
     "en": "Server",
     "ru": "Сервер"
   },
@@ -14695,7 +14311,7 @@
     "en": "Trading system service name.",
     "ru": "Имя сервиса торговой системы."
   },
-  "Str3429": {
+  "Language": {
     "en": "Language",
     "ru": "Язык"
   },
@@ -14745,7 +14361,7 @@
   },
   "Str3443": {
     "en": "Minimum",
-    "ru": "Минимальная"
+    "ru": "Минимально"
   },
   "Str3444": {
     "en": "Minimum execution price.",
@@ -14791,11 +14407,11 @@
     "en": "Login or password missing.",
     "ru": "Имя пользователя или пароль не указаны."
   },
-  "Str3457Params": {
+  "FileNotExist": {
     "en": "File '{0}' does not exist.",
     "ru": "Файл '{0}' не существует."
   },
-  "Str3458Params": {
+  "ErrorConnecting": {
     "en": "Error connecting: '{0}'.",
     "ru": "Ошибка подключения: '{0}'."
   },
@@ -14907,7 +14523,7 @@
     "en": "Domain name.",
     "ru": "Имя домена."
   },
-  "Str3489": {
+  "Licenses": {
     "en": "Licenses",
     "ru": "Лицензии"
   },
@@ -14979,17 +14595,9 @@
     "en": "Dates format. Required to be filled if RSS stream format is different from ddd, dd MMM yyyy HH:mm:ss zzzz.",
     "ru": "Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy HH:mm:ss zzzz."
   },
-  "Str3508": {
-    "en": "Minimum",
-    "ru": "Минимально"
-  },
   "Str3509": {
     "en": "Standard",
     "ru": "Стандарт"
-  },
-  "Str3510": {
-    "en": "Maximum",
-    "ru": "Максимально"
   },
   "Str3511Params": {
     "en": "Number of headers {0} cannot be less than zero.",
@@ -15039,7 +14647,7 @@
     "en": "Place a market order(in this case the order price is ignored).",
     "ru": "Выставить заявку по рынку (в этом случае цена заявки игнорируется)."
   },
-  "Str3524": {
+  "OrderVolume2": {
     "en": "Order volume",
     "ru": "Объем заявки"
   },
@@ -15191,11 +14799,11 @@
     "en": "Margin is higher",
     "ru": "Обеспеченность выше"
   },
-  "Str3564": {
+  "Up": {
     "en": "Up",
     "ru": "Вверх"
   },
-  "Str3565": {
+  "Down": {
     "en": "Down",
     "ru": "Вниз"
   },
@@ -15267,29 +14875,21 @@
     "en": "Parameters generation completed.",
     "ru": "Генерация параметров завершена."
   },
-  "Str3584": {
+  "LayoutFilter": {
     "en": "Layout (.json)|*.json",
     "ru": "Разметка (.json)|*.json"
   },
-  "Str3585": {
+  "IssuedFor": {
     "en": "Issued for",
     "ru": "Выдана на"
   },
-  "Str3586": {
+  "Remaining": {
     "en": "Remaining:",
     "ru": "Осталось:"
   },
-  "Str3587": {
-    "en": "Number:",
-    "ru": "Номер:"
-  },
-  "Str3588": {
+  "IssuedDate": {
     "en": "Issued:",
     "ru": "Выдана:"
-  },
-  "Str3590": {
-    "en": "Create...",
-    "ru": "Создать..."
   },
   "Str3591Params": {
     "en": "Report (.{0})|*.{0}",
@@ -15311,11 +14911,7 @@
     "en": "Storage initialization.",
     "ru": "Инициализация хранилища."
   },
-  "Str3596": {
-    "en": "Command cannot be processed synchronously outside of the WPF thread.",
-    "ru": "Невозможно обработать синхронно команду вне WPF потока."
-  },
-  "Str3597Params": {
+  "CannotDetermineScope": {
     "en": "Cannot determine scope for {0}.",
     "ru": "Невозможно определить область видимости для {0}."
   },
@@ -15323,7 +14919,7 @@
     "en": "Start testing",
     "ru": "Запуск тестирования"
   },
-  "Str3599": {
+  "Trading": {
     "en": "Trading",
     "ru": "Торговля"
   },
@@ -15459,10 +15055,6 @@
     "en": "Error saving composite element: {0}",
     "ru": "Ошибка сохранения составного элемента: {0}"
   },
-  "Str3636": {
-    "en": "Empty",
-    "ru": "Пустая"
-  },
   "Str3637": {
     "en": "Arbitrage",
     "ru": "Арбитраж"
@@ -15475,7 +15067,7 @@
     "en": "Volume distribution by price levels",
     "ru": "Распределение объема по ценовым уровням"
   },
-  "Str3640": {
+  "AssembliesFilter": {
     "en": ".NET assemblies (.dll)|*.dll",
     "ru": ".NET сборки (.dll)|*.dll"
   },
@@ -15503,23 +15095,15 @@
     "en": "Error requesting license from broker: ",
     "ru": "Ошибка при запросе лицензии у брокера: "
   },
-  "Str3647": {
-    "en": "Error authorizing: ",
-    "ru": "Ошибка при авторизации: "
-  },
   "Str3648Params": {
     "en": "To close the tab {0} all running strategies must be stopped.",
     "ru": "Для закрытия вкладки {0} необходимо остановить все работающие стратегии."
   },
-  "Str3649": {
-    "en": "Error loading settings: {0}",
-    "ru": "Ошибка загрузки настроек: {0}"
-  },
-  "Str3650": {
+  "AtLeastOneConnectionMustBe": {
     "en": "At least one connection should be made.",
     "ru": "Необходимо создать хотя бы одно подключение."
   },
-  "Str3651": {
+  "AtLeastOneConnectionActive": {
     "en": "At least one connection must be active.",
     "ru": "Необходимо активировать хотя бы одно подключение."
   },
@@ -15531,7 +15115,7 @@
     "en": "Details: ",
     "ru": "Детали: "
   },
-  "Str3657": {
+  "Search": {
     "en": "Search",
     "ru": "Поиск"
   },
@@ -15779,7 +15363,7 @@
     "en": "Use long transaction IDs. Does not work for real connections.",
     "ru": "Использовать длинные идентификаторы транзакций. Не работает для реальных подключений."
   },
-  "Str3725": {
+  "User": {
     "en": "User",
     "ru": "Пользователь"
   },
@@ -15835,7 +15419,7 @@
     "en": "Password was not changed because of incorrect data.",
     "ru": "Пароль не был изменен из-за некорректных данных."
   },
-  "Str3739": {
+  "PasswordChangedOk": {
     "en": "Password was successfully changed.",
     "ru": "Пароль был успешно изменен."
   },
@@ -15871,7 +15455,7 @@
     "en": "Login is not specified.",
     "ru": "Не указано имя пользователя."
   },
-  "Str3754": {
+  "ExportAuto": {
     "en": "Export (auto)",
     "ru": "Экспорт (авто)"
   },
@@ -15879,7 +15463,7 @@
     "en": "Database",
     "ru": "База данных"
   },
-  "Str3756": {
+  "ExportFormat": {
     "en": "Export type (format).",
     "ru": "Тип экспорта (формат)."
   },
@@ -15887,43 +15471,39 @@
     "en": "From what date to begin exporting data.",
     "ru": "С какой даты начать экспортировать данные."
   },
-  "Str3758": {
+  "ExportDir": {
     "en": "Export directory",
     "ru": "Директория экспорта"
   },
-  "Str3759": {
+  "ExportDirDesc": {
     "en": "Directory where data will be exported.",
     "ru": "Директория, куда будут экспортироваться данные."
-  },
-  "Str3760": {
-    "en": "Time offset in days.",
-    "ru": "Временной отступ в днях."
   },
   "Str3761": {
     "en": "Candles parameters.",
     "ru": "Параметры свечей."
   },
-  "Str3762": {
+  "ConnectionDatabaseDesc": {
     "en": "Connection to database. Used in exporting through SQL.",
     "ru": "Подключение к базе данных. Использует в случае экспорта через SQL."
   },
-  "Str3763": {
+  "Batch": {
     "en": "Batch",
     "ru": "Пакет"
   },
-  "Str3764": {
+  "DatabaseBatchSize": {
     "en": "Transmitted data package size. By default equal to 50 elements. Used when exporting through SQL.",
     "ru": "Размер пакета передаваемых данных. По умолчанию равен 50 элементам. Использует в случае экспорта через SQL."
   },
-  "Str3765": {
+  "Unique": {
     "en": "Uniqueness",
     "ru": "Уникальность"
   },
-  "Str3766": {
+  "CheckUnique": {
     "en": "To check the uniqueness of the data in the database. Affects performance. By default is enabled. Used when exporting through SQL.",
     "ru": "Проверять уникальность данных в базе данных. Влияет на производительность. По умолчанию включено. Использует в случае экспорта через SQL."
   },
-  "Str3767": {
+  "ExportTask": {
     "en": "Task designed for automatic schedule data export to external files (txt, excel, etc.).",
     "ru": "Задача предназначена для автоматического экспорта данных по расписанию во внешние файлы (txt, excel и т.д.)."
   },
@@ -17239,7 +16819,7 @@
     "en": "Creating task '{0}'.",
     "ru": "Создание задачи '{0}'."
   },
-  "Str2902Params": {
+  "TaskDeleting": {
     "en": "Deleting task '{0}'.",
     "ru": "Удаление задачи '{0}'."
   },
@@ -17810,10 +17390,6 @@
   "LessOrEqual": {
     "en": "Less or equal",
     "ru": "Меньше или равно"
-  },
-  "Any": {
-    "en": "Any",
-    "ru": "Любое"
   },
   "LoadingVariableErrorParams": {
     "en": "Loading variable parameter error: {0}.",
@@ -19806,10 +19382,6 @@
   "CsvDirectoryDesc": {
     "en": "Directory with CSV files.",
     "ru": "Директория с CSV файлами."
-  },
-  "Heartbeat": {
-    "en": "Heartbeat",
-    "ru": "Heartbeat"
   },
   "HeartbeatInterval": {
     "en": "Heartbeat interval",

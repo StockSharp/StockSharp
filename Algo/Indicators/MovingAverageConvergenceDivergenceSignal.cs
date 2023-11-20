@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MACDSignalKey,
-		Description = LocalizedStrings.Str803Key)]
+		Description = LocalizedStrings.MACDDescKey)]
 	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceSignal.html")]
 	public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 	{
@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MACDKey,
-			Description = LocalizedStrings.Str797Key,
+			Description = LocalizedStrings.MACDDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public MovingAverageConvergenceDivergence Macd { get; }
 
@@ -76,8 +76,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str804Key,
-			Description = LocalizedStrings.Str805Key,
+			Name = LocalizedStrings.SignalMaKey,
+			Description = LocalizedStrings.SignalMaDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public ExponentialMovingAverage SignalMa { get; }
 

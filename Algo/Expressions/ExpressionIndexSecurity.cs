@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Expressions
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.IndexKey,
-		Description = LocalizedStrings.Str728Key)]
+		Description = LocalizedStrings.IndexSecurityKey)]
 	[BasketCode("EI")]
 	public class ExpressionIndexSecurity : IndexSecurity
 	{

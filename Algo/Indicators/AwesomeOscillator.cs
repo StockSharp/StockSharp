@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str843Key,
-			Description = LocalizedStrings.Str745Key,
+			Description = LocalizedStrings.MedianPriceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public MedianPrice MedianPrice { get; }
 

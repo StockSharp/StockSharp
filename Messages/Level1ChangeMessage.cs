@@ -844,7 +844,7 @@ namespace StockSharp.Messages
 		/// Median price.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MedianKey, Description = LocalizedStrings.Str745Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.MedianKey, Description = LocalizedStrings.MedianPriceKey)]
 		MedianPrice,
 		
 		/// <summary>

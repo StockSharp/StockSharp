@@ -41,10 +41,10 @@ public class GeneticOptimizer : BaseOptimizer
 			_stopTime = stopTime;
 
 			if (_strategy.Security is null)
-				throw new ArgumentException(LocalizedStrings.Str1380, nameof(strategy));
+				throw new ArgumentException(LocalizedStrings.SecurityNotSpecified, nameof(strategy));
 
 			if (_strategy.Portfolio is null)
-				throw new ArgumentException(LocalizedStrings.Str1381, nameof(strategy));
+				throw new ArgumentException(LocalizedStrings.PortfolioNotSpecified, nameof(strategy));
 		}
 
 		double IFitness.Evaluate(IChromosome chromosome)
@@ -351,7 +351,7 @@ public class GeneticOptimizer : BaseOptimizer
 				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.Until));
 
 			if (s is null)
-				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.Str812));
+				throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(p.Name, LocalizedStrings.Step));
 		}
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));

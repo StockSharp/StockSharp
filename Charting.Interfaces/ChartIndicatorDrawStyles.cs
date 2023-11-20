@@ -12,7 +12,7 @@ namespace StockSharp.Charting
 		/// <summary>
 		/// Line.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1898Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Line2Key)]
 		Line,
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace StockSharp.Charting
 		/// <summary>
 		/// Band.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1974Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BandKey)]
 		Band,
 
 		/// <summary>
@@ -48,13 +48,13 @@ namespace StockSharp.Charting
 		/// <summary>
 		/// Histogram.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1976Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HistogramKey)]
 		Histogram,
 
 		/// <summary>
 		/// Bubble.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1977Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BubbleKey)]
 		Bubble,
 
 		/// <summary>

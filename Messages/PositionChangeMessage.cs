@@ -113,21 +113,21 @@ namespace StockSharp.Messages
 		/// Total commission.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str262Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalCommissionKey)]
 		Commission,
 
 		/// <summary>
 		/// Current value (in lots).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str263Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CurrValueInLotsKey)]
 		CurrentValueInLots,
 
 		/// <summary>
 		/// The depositary where the physical security.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str264Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DepoKey)]
 		[Obsolete]
 		DepoName,
 
@@ -135,7 +135,7 @@ namespace StockSharp.Messages
 		/// Portfolio state.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str265Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StateKey)]
 		State,
 
 		/// <summary>
@@ -205,7 +205,7 @@ namespace StockSharp.Messages
 		/// Orders.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str668Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OrdersCountKey)]
 		OrdersCount,
 
 		/// <summary>
@@ -269,7 +269,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str264Key,
+			Name = LocalizedStrings.DepoKey,
 			Description = LocalizedStrings.DepoNameKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string DepoName { get; set; }
@@ -279,7 +279,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str266Key,
+			Name = LocalizedStrings.LimitTypeKey,
 			Description = LocalizedStrings.PosLimitKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]

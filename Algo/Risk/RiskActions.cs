@@ -27,19 +27,19 @@ namespace StockSharp.Algo.Risk
 		/// <summary>
 		/// Close positions.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str856Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ClosePositionsKey)]
 		ClosePositions,
 
 		/// <summary>
 		/// Stop trading.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str857Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StopTradingKey)]
 		StopTrading,
 
 		/// <summary>
 		/// Cancel orders.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str858Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CancelOrdersKey)]
 		CancelOrders,
 	}
 }

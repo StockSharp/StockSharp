@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MedPrKey,
-		Description = LocalizedStrings.Str745Key)]
+		Description = LocalizedStrings.MedianPriceKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorMedianPrice.html")]
 	public class MedianPrice : BaseIndicator

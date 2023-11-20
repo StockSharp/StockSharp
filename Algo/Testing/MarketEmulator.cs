@@ -1797,9 +1797,9 @@ namespace StockSharp.Algo.Testing
 					}
 					else
 					{
-						result.Add(CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.Str1156Params.Put(execution.OriginalTransactionId))));
+						result.Add(CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.OrderNotFound.Put(execution.OriginalTransactionId))));
 
-						this.AddErrorLog(LocalizedStrings.Str1156Params, execution.OriginalTransactionId);
+						this.AddErrorLog(LocalizedStrings.OrderNotFound, execution.OriginalTransactionId);
 					}
 				}
 				else

@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VidyaKey,
-		Description = LocalizedStrings.Str755Key)]
+		Description = LocalizedStrings.VariableIndexDynamicAverageKey)]
 	[Doc("topics/IndicatorVidya.html")]
 	public class Vidya : LengthIndicator<decimal>
 	{

@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Derivatives
 			set
 			{
 				if (value != 0)
-					throw new ArgumentOutOfRangeException(LocalizedStrings.Str701Params.Put(UnderlyingAsset));
+					throw new ArgumentOutOfRangeException(LocalizedStrings.DivsNotPaid.Put(UnderlyingAsset));
 
 				base.Dividend = value;
 			}

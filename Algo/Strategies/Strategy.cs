@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str3599Key,
+			Name = LocalizedStrings.TradingKey,
 			Description = LocalizedStrings.AllowTradingKey)]
 		Full,
 
@@ -97,8 +97,8 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str858Key,
-			Description = LocalizedStrings.Str858Key)]
+			Name = LocalizedStrings.CancelOrdersKey,
+			Description = LocalizedStrings.CancelOrdersKey)]
 		CancelOrdersOnly,
 
 		/// <summary>
@@ -968,7 +968,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1291);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxRegisterCount.Value = value;
 			}
@@ -1219,7 +1219,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str3599Key,
+			Name = LocalizedStrings.TradingKey,
 			Description = LocalizedStrings.AllowTradingKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
@@ -1609,10 +1609,10 @@ namespace StockSharp.Algo.Strategies
 		protected virtual void OnStarted(DateTimeOffset time)
 		{
 			if (Security == null)
-				throw new InvalidOperationException(LocalizedStrings.Str1380);
+				throw new InvalidOperationException(LocalizedStrings.SecurityNotSpecified);
 
 			if (Portfolio == null)
-				throw new InvalidOperationException(LocalizedStrings.Str1381);
+				throw new InvalidOperationException(LocalizedStrings.PortfolioNotSpecified);
 
 			InitStartValues();
 
@@ -1686,7 +1686,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			if (CurrentRegisterCount >= MaxRegisterCount)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1317Params, MaxRegisterCount);
+				this.AddWarningLog(LocalizedStrings.RegisterMaxAttemptsExceed, MaxRegisterCount);
 				Stop();
 				return false;
 			}
@@ -1705,8 +1705,8 @@ namespace StockSharp.Algo.Strategies
 
 			if (diff >= TimeSpan.Zero)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1318 + " " +
-					LocalizedStrings.Str1319Params, diff, _lastRegisterTime, now, RegisterInterval);
+				this.AddInfoLog(LocalizedStrings.CannotRegisterCauseInterval + " " +
+					LocalizedStrings.RemBeginCurrInterval, diff, _lastRegisterTime, now, RegisterInterval);
 
 				return false;
 			}
@@ -1950,7 +1950,7 @@ namespace StockSharp.Algo.Strategies
 
 					if (!_ordersInfo.TryGetValue(order, out var info))
 					{
-						this.AddWarningLog(LocalizedStrings.Str1156Params, order.TransactionId);
+						this.AddWarningLog(LocalizedStrings.OrderNotFound, order.TransactionId);
 						return false;
 					}
 
@@ -3096,7 +3096,7 @@ namespace StockSharp.Algo.Strategies
 
 			foreach (var rule in RiskManager.ProcessRules(getMessage()))
 			{
-				this.AddWarningLog(LocalizedStrings.Str855Params,
+				this.AddWarningLog(LocalizedStrings.ActivatingRiskRule,
 					rule.Name, rule.Title, rule.Action);
 
 				switch (rule.Action)

@@ -34,7 +34,7 @@ namespace StockSharp.Algo
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ContinuousSecurityKey,
-		Description = LocalizedStrings.Str696Key)]
+		Description = LocalizedStrings.ContinuousSecurityDescKey)]
 	public abstract class ContinuousSecurity : BasketSecurity
 	{
 	}
@@ -45,7 +45,7 @@ namespace StockSharp.Algo
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ContinuousSecurityKey,
-		Description = LocalizedStrings.Str696Key)]
+		Description = LocalizedStrings.ContinuousSecurityDescKey)]
 	[BasketCode("CE")]
 	public class ExpirationContinuousSecurity : ContinuousSecurity
 	{
@@ -208,7 +208,7 @@ namespace StockSharp.Algo
 				lock (SyncRoot)
 				{
 					if (!ContainsKey(security))
-						throw new ArgumentException(LocalizedStrings.Str697Params.Put(security));
+						throw new ArgumentException(LocalizedStrings.NotInternalSecurity.Put(security));
 
 					var index = InnerSecurities.IndexOf(security);
 					return index == InnerSecurities.Length - 1 ? null : InnerSecurities[index + 1];
@@ -220,7 +220,7 @@ namespace StockSharp.Algo
 				lock (SyncRoot)
 				{
 					if (!ContainsKey(security))
-						throw new ArgumentException(LocalizedStrings.Str697Params.Put(security));
+						throw new ArgumentException(LocalizedStrings.NotInternalSecurity.Put(security));
 
 					var index = InnerSecurities.IndexOf(security);
 					return index == 0 ? null : InnerSecurities[index - 1];
@@ -285,34 +285,6 @@ namespace StockSharp.Algo
 				}));
 			}
 		}
-
-		///// <summary>
-		///// To shift the expiration of internal instruments <see cref="ExpirationJumps"/> to a size equas to <paramref name="offset" />.
-		///// </summary>
-		///// <param name="offset">The size of the expiration shift.</param>
-		//public void Offset(TimeSpan offset)
-		//{
-		//	lock (_expirationJumps.SyncRoot)
-		//	{
-		//		var dict = new PairSet<Security, DateTimeOffset>();
-
-		//		foreach (var security in InnerSecurityIds)
-		//		{
-		//			if (security.ExpiryDate == null)
-		//				throw new InvalidOperationException(LocalizedStrings.Str698Params.Put(security.Id));
-
-		//			var expiryDate = (DateTimeOffset)security.ExpiryDate + offset;
-
-		//			if (expiryDate > security.ExpiryDate)
-		//				throw new ArgumentOutOfRangeException(nameof(offset), offset, LocalizedStrings.Str699Params.Put(security.Id, expiryDate, security.ExpiryDate));
-
-		//			dict.Add(security, expiryDate);
-		//		}
-
-		//		_expirationJumps.Clear();
-		//		_expirationJumps.AddRange(dict);
-		//	}
-		//}
 	}
 
 	/// <summary>
@@ -321,7 +293,7 @@ namespace StockSharp.Algo
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ContinuousSecurityKey,
-		Description = LocalizedStrings.Str696Key)]
+		Description = LocalizedStrings.ContinuousSecurityDescKey)]
 	[BasketCode("CV")]
 	public class VolumeContinuousSecurity : ContinuousSecurity
 	{

@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SecurityKey,
-		Description = LocalizedStrings.Str747Key)]
+		Description = LocalizedStrings.Level1IndicatorKey)]
 	[IndicatorIn(typeof(SingleIndicatorValue<Level1ChangeMessage>))]
 	public class Level1Indicator : BaseIndicator
 	{
@@ -37,8 +37,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str748Key,
-			Description = LocalizedStrings.Str749Key,
+			Name = LocalizedStrings.FieldKey,
+			Description = LocalizedStrings.Level1FieldKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Level1Fields Field { get; set; }
 

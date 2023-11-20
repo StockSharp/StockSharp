@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TenkanKey,
-			Description = LocalizedStrings.Str764Key,
+			Description = LocalizedStrings.TenkanLineKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuLine Tenkan { get; }
@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.KijunKey,
-			Description = LocalizedStrings.Str765Key,
+			Description = LocalizedStrings.KijunLineKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuLine Kijun { get; }
@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ChinkouKey,
-			Description = LocalizedStrings.Str768Key,
+			Description = LocalizedStrings.ChinkouLineKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuChinkouLine Chinkou { get; }

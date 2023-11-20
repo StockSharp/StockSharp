@@ -34,7 +34,7 @@ namespace StockSharp.Algo.PnL
 		public PnLInfo(DateTimeOffset serverTime, decimal closedVolume, decimal pnL)
 		{
 			if (closedVolume < 0)
-				throw new ArgumentOutOfRangeException(nameof(closedVolume), closedVolume, LocalizedStrings.Str946);
+				throw new ArgumentOutOfRangeException(nameof(closedVolume), closedVolume, LocalizedStrings.InvalidValue);
 
 			ServerTime = serverTime;
 			ClosedVolume = closedVolume;

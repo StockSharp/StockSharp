@@ -70,7 +70,7 @@ namespace SampleHistoryTestingParallel
 
 			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
-				MessageBox.Show(this, LocalizedStrings.Str3014);
+				MessageBox.Show(this, LocalizedStrings.WrongPath);
 				return;
 			}
 
@@ -194,7 +194,7 @@ namespace SampleHistoryTestingParallel
 								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
 							}
 							else
-								MessageBox.Show(this, LocalizedStrings.cancelled);
+								MessageBox.Show(this, LocalizedStrings.Cancelled);
 
 							_optimizer = null;
 

@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 
 		    if (bestPrice == null)
 		    {
-				//this.AddWarningLog(LocalizedStrings.Str1309);
+				//this.AddWarningLog(LocalizedStrings.MarketDepthIsEmpty);
 			    return null;
 		    }
 
@@ -550,7 +550,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 			//var priceRange = GetAcceptablePriceRange();
 			//if (priceRange == null)
 			//{
-			//	this.AddWarningLog(LocalizedStrings.Str1309);
+			//	this.AddWarningLog(LocalizedStrings.MarketDepthIsEmpty);
 			//	return;
 			//}
 

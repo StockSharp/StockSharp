@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Derivatives
 					var underlyingSecurity = provider.LookupById(key.UnderlyingSecurityId);
 
 					if (underlyingSecurity == null)
-						throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(key.UnderlyingSecurityId));
+						throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(key.UnderlyingSecurityId));
 
 					return underlyingSecurity;
 				});
@@ -202,7 +202,7 @@ namespace StockSharp.Algo.Derivatives
 			var asset = provider.LookupById(derivative.UnderlyingSecurityId);
 
 			if (asset == null)
-				throw new ArgumentException(LocalizedStrings.Str705Params.Put(derivative));
+				throw new ArgumentException(LocalizedStrings.UnderlyingAssentNotFound.Put(derivative));
 
 			return asset;
 		}
@@ -241,7 +241,7 @@ namespace StockSharp.Algo.Derivatives
 				.FirstOrDefault();
 
 			if (oppositeOption == null)
-				throw new ArgumentException(LocalizedStrings.Str706Params.Put(option.Id), nameof(option));
+				throw new ArgumentException(LocalizedStrings.OppositeOptionNotFound.Put(option.Id), nameof(option));
 
 			return oppositeOption;
 		}
@@ -300,7 +300,7 @@ namespace StockSharp.Algo.Derivatives
 				.FirstOrDefault();
 
 			if (option == null)
-				throw new ArgumentException(LocalizedStrings.Str707Params.Put(future.Id), nameof(future));
+				throw new ArgumentException(LocalizedStrings.OptionNotFound.Put(future.Id), nameof(future));
 
 			return option;
 		}
@@ -355,7 +355,7 @@ namespace StockSharp.Algo.Derivatives
 				.FirstOrDefault();
 
 			if (group == null)
-				throw new InvalidOperationException(LocalizedStrings.Str708);
+				throw new InvalidOperationException(LocalizedStrings.CannotCalcStrikeStep);
 
 			var orderedStrikes = group.OrderBy(s => s.Strike).Take(2).ToArray();
 			return orderedStrikes[1].Strike.Value - orderedStrikes[0].Strike.Value;
@@ -527,7 +527,7 @@ namespace StockSharp.Algo.Derivatives
 				throw new ArgumentNullException(nameof(provider));
 
 			if (security.ExpiryDate == null)
-				throw new ArgumentException(LocalizedStrings.Str709Params.Put(security.Id), nameof(security));
+				throw new ArgumentException(LocalizedStrings.NoExpirationDate.Put(security.Id), nameof(security));
 
 			var expDate = security.ExpiryDate.Value;
 
@@ -705,7 +705,6 @@ namespace StockSharp.Algo.Derivatives
 
 			if (retVal <= TimeSpan.Zero)
 				return null;
-				//throw new InvalidOperationException(LocalizedStrings.Str710Params.Put(expirationTime, currentTime));
 
 			return (double)retVal.Ticks / timeLine.Ticks;
 		}
@@ -742,7 +741,7 @@ namespace StockSharp.Algo.Derivatives
 		public static double D1(decimal assetPrice, decimal strike, decimal riskFree, decimal dividend, decimal deviation, double timeToExp)
 		{
 			if (deviation < 0)
-				throw new ArgumentOutOfRangeException(nameof(deviation), deviation, LocalizedStrings.Str711);
+				throw new ArgumentOutOfRangeException(nameof(deviation), deviation, LocalizedStrings.InvalidValue);
 
 			return ((double)(assetPrice / strike).Log() +
 				(double)(riskFree - dividend + deviation * deviation / 2.0m) * timeToExp) / ((double)deviation * timeToExp.Sqrt());
@@ -927,16 +926,16 @@ namespace StockSharp.Algo.Derivatives
 				throw new ArgumentNullException(nameof(option));
 
 			if (option.Type != SecurityTypes.Option)
-				throw new ArgumentException(LocalizedStrings.Str900Params.Put(option.Type), nameof(option));
+				throw new ArgumentException(LocalizedStrings.WrongSecType.Put(option.Type), nameof(option));
 
 			if (option.OptionType == null)
-				throw new ArgumentException(LocalizedStrings.Str703Params.Put(option), nameof(option));
+				throw new ArgumentException(LocalizedStrings.OrderTypeMissed.Put(option), nameof(option));
 
 			if (option.ExpiryDate == null)
-				throw new ArgumentException(LocalizedStrings.Str901Params.Put(option), nameof(option));
+				throw new ArgumentException(LocalizedStrings.NoExpirationDate.Put(option), nameof(option));
 
 			if (option.UnderlyingSecurityId == null)
-				throw new ArgumentException(LocalizedStrings.Str902Params.Put(option), nameof(option));
+				throw new ArgumentException(LocalizedStrings.NoAssetInfo.Put(option), nameof(option));
 		}
 	}
 }

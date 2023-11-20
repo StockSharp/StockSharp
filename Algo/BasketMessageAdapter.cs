@@ -1098,7 +1098,7 @@ namespace StockSharp.Algo
 					}));
 
 					if (Wrappers.Length == 0)
-						throw new InvalidOperationException(LocalizedStrings.Str3650);
+						throw new InvalidOperationException(LocalizedStrings.AtLeastOneConnectionMustBe);
 
 					Wrappers.ForEach(w =>
 					{
@@ -1188,7 +1188,7 @@ namespace StockSharp.Algo
 					var adapter = GetSortedAdapters().FirstOrDefault(a => a.IsMessageSupported(MessageTypes.ChangePassword));
 
 					if (adapter == null)
-						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
+						throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message.Type));
 
 					adapter.SendInMessage(message);
 					break;
@@ -1354,8 +1354,8 @@ namespace StockSharp.Algo
 
 			if (adapters.Length == 0)
 			{
-				this.AddInfoLog(LocalizedStrings.Str629Params.Put(message));
-				//throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message));
+				this.AddInfoLog(LocalizedStrings.NoAdapterFoundFor.Put(message));
+				//throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message));
 			}
 
 			return adapters;
@@ -1435,7 +1435,7 @@ namespace StockSharp.Algo
 			}).ToArray();
 
 			//if (!isPended && adapters.Length == 0)
-			//	throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
+			//	throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(mdMsg));
 
 			return adapters;
 		}
@@ -1583,7 +1583,7 @@ namespace StockSharp.Algo
 
 					this.AddDebugLog("No adapter for {0}", message);
 
-					SendOutMessage(message.CreateReply(new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))));
+					SendOutMessage(message.CreateReply(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))));
 					return;
 				}
 			}
@@ -1662,7 +1662,7 @@ namespace StockSharp.Algo
 
 					this.AddDebugLog("No adapter for {0}", message);
 
-					SendOutMessage(message.CreateResponse(new InvalidOperationException(LocalizedStrings.Str629Params.Put(message))));
+					SendOutMessage(message.CreateResponse(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))));
 				}
 				else
 				{
@@ -1883,7 +1883,7 @@ namespace StockSharp.Algo
 			var error = message.Error;
 
 			if (error != null)
-				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter, error);
+				this.AddErrorLog(LocalizedStrings.ConnectionErrorFor, underlyingAdapter, error);
 			else
 				this.AddInfoLog("Connected to '{0}'.", underlyingAdapter);
 
@@ -1914,7 +1914,7 @@ namespace StockSharp.Algo
 			{
 				foreach (var notSupportedMsg in notSupportedMsgs)
 				{
-					SendOutError(new InvalidOperationException(LocalizedStrings.Str629Params.Put(notSupportedMsg.Type)));
+					SendOutError(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(notSupportedMsg.Type)));
 				}
 			}
 
@@ -1931,7 +1931,7 @@ namespace StockSharp.Algo
 			if (error == null)
 				this.AddInfoLog("Disconnected from '{0}'.", underlyingAdapter);
 			else
-				this.AddErrorLog(LocalizedStrings.Str627Params, underlyingAdapter, error);
+				this.AddErrorLog(LocalizedStrings.ErrorDisconnectFor, underlyingAdapter, error);
 
 			lock (_connectedResponseLock)
 			{
@@ -2084,7 +2084,7 @@ namespace StockSharp.Algo
 					_subscription.Remove(parentId.Value);
 
 				return needParentResponse
-					? parentId.Value.CreateSubscriptionResponse(allError ? new AggregateException(LocalizedStrings.Str629Params.Put(originMsg), innerErrors) : null)
+					? parentId.Value.CreateSubscriptionResponse(allError ? new AggregateException(LocalizedStrings.NoAdapterFoundFor.Put(originMsg), innerErrors) : null)
 					: null;
 			}
 			else

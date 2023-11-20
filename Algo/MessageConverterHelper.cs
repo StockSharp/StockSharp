@@ -1730,7 +1730,7 @@ namespace StockSharp.Algo
 			else if (dataType == typeof(Security))
 				return typeof(SecurityMessage);
 			else
-				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 		}
 
 		/// <summary>

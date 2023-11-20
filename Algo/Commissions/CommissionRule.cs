@@ -149,7 +149,7 @@ namespace StockSharp.Algo.Commissions
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.OrderKey,
-		Description = LocalizedStrings.Str660Key,
+		Description = LocalizedStrings.OrderCommissionKey,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class CommissionPerOrderRule : CommissionRule
 	{
@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Commissions
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TradeKey,
-		Description = LocalizedStrings.Str661Key,
+		Description = LocalizedStrings.TradeCommissionKey,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradeRule : CommissionRule
 	{
@@ -188,8 +188,8 @@ namespace StockSharp.Algo.Commissions
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str662Key,
-		Description = LocalizedStrings.Str663Key,
+		Name = LocalizedStrings.OrderVolume2Key,
+		Description = LocalizedStrings.OrderVolCommissionKey,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class CommissionPerOrderVolumeRule : CommissionRule
 	{
@@ -208,8 +208,8 @@ namespace StockSharp.Algo.Commissions
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str664Key,
-		Description = LocalizedStrings.Str665Key,
+		Name = LocalizedStrings.TradeVolumeKey,
+		Description = LocalizedStrings.TradeVolCommissionKey,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradeVolumeRule : CommissionRule
 	{
@@ -228,8 +228,8 @@ namespace StockSharp.Algo.Commissions
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str666Key,
-		Description = LocalizedStrings.Str667Key,
+		Name = LocalizedStrings.OrderCountKey,
+		Description = LocalizedStrings.OrderCountCommissionKey,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class CommissionPerOrderCountRule : CommissionRule
 	{
@@ -241,8 +241,8 @@ namespace StockSharp.Algo.Commissions
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str668Key,
-			Description = LocalizedStrings.Str957Key,
+			Name = LocalizedStrings.OrdersKey,
+			Description = LocalizedStrings.OrdersCountKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Count
 		{
@@ -299,8 +299,8 @@ namespace StockSharp.Algo.Commissions
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str670Key,
-		Description = LocalizedStrings.Str671Key,
+		Name = LocalizedStrings.TradesCountKey,
+		Description = LocalizedStrings.TradesCountCommissionKey,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradeCountRule : CommissionRule
 	{
@@ -370,8 +370,8 @@ namespace StockSharp.Algo.Commissions
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str672Key,
-		Description = LocalizedStrings.Str673Key,
+		Name = LocalizedStrings.TradePriceKey,
+		Description = LocalizedStrings.TradePriceCommissionKey,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class CommissionPerTradePriceRule : CommissionRule
 	{
@@ -391,7 +391,7 @@ namespace StockSharp.Algo.Commissions
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SecurityKey,
-		Description = LocalizedStrings.Str674Key,
+		Description = LocalizedStrings.SecurityCommissionKey,
 		GroupName = LocalizedStrings.SecuritiesKey)]
 	public class CommissionSecurityIdRule : CommissionRule
 	{
@@ -452,8 +452,8 @@ namespace StockSharp.Algo.Commissions
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str675Key,
-		Description = LocalizedStrings.Str676Key,
+		Name = LocalizedStrings.SecurityTypeKey,
+		Description = LocalizedStrings.SecurityTypeCommissionKey,
 		GroupName = LocalizedStrings.SecuritiesKey)]
 	public class CommissionSecurityTypeRule : CommissionRule
 	{

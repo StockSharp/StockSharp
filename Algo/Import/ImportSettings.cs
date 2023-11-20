@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Import
 	/// <summary>
 	/// Settings of import.
 	/// </summary>
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2842Key)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ImportSettingsKey)]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class ImportSettings : NotifiableObject, IPersistable
 	{
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Import
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2002Key,
+			Name = LocalizedStrings.FileNameKey,
 			Description = LocalizedStrings.Str2843Key,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 1)]
@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Import
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2844Key,
+			Name = LocalizedStrings.ColumnSeparatorKey,
 			Description = LocalizedStrings.Str2845Key,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 5)]
@@ -216,7 +216,7 @@ namespace StockSharp.Algo.Import
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2846Key,
+			Name = LocalizedStrings.SkipLinesKey,
 			Description = LocalizedStrings.Str2847Key,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 6)]

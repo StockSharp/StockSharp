@@ -107,7 +107,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Trading.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3599Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TradingKey)]
 		[EnumMember]
 		Trading = ServerManage << 1,
 

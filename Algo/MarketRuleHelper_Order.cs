@@ -67,7 +67,7 @@
 			public RegisterFailedOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
 			{
-				Name = LocalizedStrings.Str717 + " ";
+				Name = LocalizedStrings.ErrorRegistering + " ";
 				TrySubscribe();
 			}
 

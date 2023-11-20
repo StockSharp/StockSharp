@@ -90,7 +90,7 @@ namespace SampleRealTimeEmulation
 			_realConnector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
 			_realConnector.MassOrderCancelFailed += (transId, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.ErrorCancelling));
 
 			_realConnector.OrderBookReceived += OnRealDepth;
 
@@ -175,7 +175,7 @@ namespace SampleRealTimeEmulation
 			};
 
 			_emuConnector.MassOrderCancelFailed += (transId, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.ErrorCancelling));
 
 			// subscribe on error event
 			//_emuConnector.Error += error =>

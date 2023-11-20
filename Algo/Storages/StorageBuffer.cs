@@ -361,7 +361,7 @@ namespace StockSharp.Algo.Storages
 					else if (dataType == DataType.OrderLog)
 						buffer = _orderLogBuffer;
 					else
-						throw new ArgumentOutOfRangeException(nameof(message), dataType, LocalizedStrings.Str1695Params.Put(message));
+						throw new ArgumentOutOfRangeException(nameof(message), dataType, LocalizedStrings.UnknownType.Put(message));
 
 					TryStore(buffer, execMsg);
 					break;

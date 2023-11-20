@@ -145,7 +145,7 @@ namespace StockSharp.Algo
 						break;
 					}
 
-					throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str2142Params.Put(message.Type));
+					throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.UnknownType.Put(message.Type));
 				}
 			}
 

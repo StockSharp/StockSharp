@@ -61,7 +61,7 @@ namespace StockSharp.Messages
 
 			var duplicate = arr.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
 			if (duplicate != null)
-				throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+				throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(duplicate.Key), nameof(value));
 
 			OnPropertyChanged(propName);
 
@@ -115,7 +115,7 @@ namespace StockSharp.Messages
 
 				var duplicate = value.GroupBy(m => m.Type).FirstOrDefault(g => g.Count() > 1);
 				if (duplicate != null)
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+					throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(duplicate.Key), nameof(value));
 
 				_possibleSupportedMessages = value;
 				OnPropertyChanged();
@@ -138,7 +138,7 @@ namespace StockSharp.Messages
 
 				var duplicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
 				if (duplicate != null)
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+					throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(duplicate.Key), nameof(value));
 
 				_supportedMarketDataTypes = value.ToArray();
 				OnPropertyChanged();
@@ -162,9 +162,9 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str192Key,
-			Description = LocalizedStrings.Str193Key,
-			GroupName = LocalizedStrings.Str186Key,
+			Name = LocalizedStrings.HeartBeatKey,
+			Description = LocalizedStrings.HeartBeatDescKey,
+			GroupName = LocalizedStrings.AdaptersKey,
 			Order = 300)]
 		public TimeSpan HeartbeatInterval
 		{
@@ -265,7 +265,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.EnqueueSubscriptionsKey,
 			Description = LocalizedStrings.EnqueueSubscriptionsDescKey,
-			GroupName = LocalizedStrings.Str186Key,
+			GroupName = LocalizedStrings.AdaptersKey,
 			Order = 301)]
 		public virtual bool EnqueueSubscriptions { get; set; }
 
@@ -282,7 +282,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Level1Key,
 			Description = LocalizedStrings.Level1ToOrderBooksKey,
-			GroupName = LocalizedStrings.Str186Key,
+			GroupName = LocalizedStrings.AdaptersKey,
 			Order = 302)]
 		public virtual bool GenerateOrderBookFromLevel1 { get; set; } = true;
 
@@ -597,7 +597,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ChannelsKey,
 			Description = LocalizedStrings.UseChannelsKey,
-			GroupName = LocalizedStrings.Str186Key,
+			GroupName = LocalizedStrings.AdaptersKey,
 			Order = 303)]
 		public virtual bool UseChannels { get; set; }
 
@@ -606,7 +606,7 @@ namespace StockSharp.Messages
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IterationsKey,
 			Description = LocalizedStrings.IterationIntervalKey,
-			GroupName = LocalizedStrings.Str186Key,
+			GroupName = LocalizedStrings.AdaptersKey,
 			Order = 304)]
 		public virtual TimeSpan IterationInterval { get; set; } = TimeSpan.FromSeconds(2);
 

@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="transform">The data source transformation.</param>
 		/// <returns>Created candle.</returns>
 		protected virtual TCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
-			=> throw new NotSupportedException(LocalizedStrings.Str637);
+			=> throw new NotSupportedException(LocalizedStrings.MethodMustBeOverrided);
 
 		/// <summary>
 		/// Whether the candle is created before data adding.

@@ -77,8 +77,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str736Key,
-			Description = LocalizedStrings.Str737Key,
+			Name = LocalizedStrings.PeriodKey,
+			Description = LocalizedStrings.IndicatorPeriodKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{
@@ -96,8 +96,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2023Key,
-			Description = LocalizedStrings.Str2024Key,
+			Name = LocalizedStrings.DiPlusKey,
+			Description = LocalizedStrings.DiPlusLineKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DiPlus Plus { get; }
 
@@ -107,8 +107,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2025Key,
-			Description = LocalizedStrings.Str2026Key,
+			Name = LocalizedStrings.DiMinusKey,
+			Description = LocalizedStrings.DiMinusLineKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DiMinus Minus { get; }
 

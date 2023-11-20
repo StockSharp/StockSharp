@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MACDHistogramKey,
-		Description = LocalizedStrings.Str802Key)]
+		Description = LocalizedStrings.HistogramDescKey)]
 	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceHistogram.html")]
 	public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConvergenceDivergenceSignal
 	{

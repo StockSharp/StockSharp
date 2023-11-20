@@ -759,7 +759,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var security = secId.IsMoney() ? TraderHelper.MoneySecurity : Registry.Securities.ReadById(secId);
 
 				if (security == null)
-					throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id));
+					throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id));
 
 				return security;
 			}

@@ -257,7 +257,7 @@ namespace StockSharp.Algo.Storages.Binary
 				var count = message.Changes.Count;
 
 				if (count == 0)
-					throw new ArgumentException(LocalizedStrings.Str920, nameof(messages));
+					throw new ArgumentException(LocalizedStrings.MessageDoNotContainsChanges, nameof(messages));
 
 				writer.WriteInt(count);
 

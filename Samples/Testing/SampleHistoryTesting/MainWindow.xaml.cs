@@ -317,7 +317,7 @@ namespace SampleHistoryTesting
 
 			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
-				MessageBox.Show(this, LocalizedStrings.Str3014);
+				MessageBox.Show(this, LocalizedStrings.WrongPath);
 				return;
 			}
 
@@ -618,7 +618,7 @@ namespace SampleHistoryTesting
 								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime), title);
 							}
 							else
-								MessageBox.Show(this, LocalizedStrings.cancelled, title);
+								MessageBox.Show(this, LocalizedStrings.Cancelled, title);
 						});
 					}
 					else if (state == ChannelStates.Started)

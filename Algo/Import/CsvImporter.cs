@@ -75,7 +75,7 @@
 				FlushBuffer(buffer);
 			}
 
-			this.AddInfoLog(LocalizedStrings.Str2870Params.Put(fileName, DataType.MessageType.Name));
+			this.AddInfoLog(LocalizedStrings.ImportOfType.Put(fileName, DataType.MessageType.Name));
 
 			try
 			{
@@ -104,7 +104,7 @@
 						{
 							if (!UpdateDuplicateSecurities)
 							{
-								this.AddErrorLog(LocalizedStrings.Str1453.Put(secMsg.SecurityId));
+								this.AddErrorLog(LocalizedStrings.HasDuplicates.Put(secMsg.SecurityId));
 								continue;
 							}
 
@@ -158,7 +158,7 @@
 			};
 
 			_securityStorage.Save(security, false);
-			this.AddInfoLog(LocalizedStrings.Str2871Params.Put(securityId));
+			this.AddInfoLog(LocalizedStrings.CreatingSec.Put(securityId));
 
 			return securityId;
 		}
@@ -231,7 +231,7 @@
 							else if (dataType == typeof(Level1ChangeMessage))
 								((IMarketDataStorage<Level1ChangeMessage>)storage).Save(secGroup.Cast<Level1ChangeMessage>().OrderBy(m => m.ServerTime));
 							else
-								throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.Name));
+								throw new NotSupportedException(LocalizedStrings.UnsupportedType.Put(dataType.Name));
 						}
 					}
 				}

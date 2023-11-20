@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OrderVolume), LocalizedStrings.Volume, LocalizedStrings.OrderVolume, (i, v) => i.OrderVolume = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, Sides>(nameof(ExecutionMessage.Side), LocalizedStrings.Direction, LocalizedStrings.OrderSide, (i, v) => i.Side = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.System, LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
-						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.Str722, LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.Action, LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Str724, LocalizedStrings.TradePrice, (i, v) => i.TradePrice = v) { IsRequired = true });
@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Import
 						i.CloseTime += v;
 				}));
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.OpenInterest), LocalizedStrings.OpenInterest, string.Empty, (i, v) => i.OpenInterest = v));
-				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.OpenPrice), "O", LocalizedStrings.Str80, (i, v) => i.OpenPrice = v) { IsRequired = true });
+				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.OpenPrice), "O", LocalizedStrings.CandleOpenPrice, (i, v) => i.OpenPrice = v) { IsRequired = true });
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.HighPrice), "H", LocalizedStrings.HighPriceOfCandle, (i, v) => i.HighPrice = v) { IsRequired = true });
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.LowPrice), "L", LocalizedStrings.LowPriceOfCandle, (i, v) => i.LowPrice = v) { IsRequired = true });
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.ClosePrice), "C", LocalizedStrings.ClosePriceOfCandle, (i, v) => i.ClosePrice = v) { IsRequired = true });
@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Import
 					i.Quote = q;
 				}) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Direction, LocalizedStrings.Str277, (i, v) => i.Side = v) { IsRequired = true });
-				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.OrdersCount), LocalizedStrings.Str668, LocalizedStrings.OrdersCount, (i, v) =>
+				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.OrdersCount), LocalizedStrings.Orders, LocalizedStrings.OrdersCount, (i, v) =>
 				{
 					var q = i.Quote;
 					q.OrdersCount = v;
@@ -234,7 +234,7 @@ namespace StockSharp.Algo.Import
 					q.EndPosition = v;
 					i.Quote = q;
 				}));
-				fields.Add(new FieldMapping<TimeQuoteChange, QuoteChangeActions>(nameof(QuoteChange.Action), LocalizedStrings.Str722, LocalizedStrings.Str722, (i, v) =>
+				fields.Add(new FieldMapping<TimeQuoteChange, QuoteChangeActions>(nameof(QuoteChange.Action), LocalizedStrings.Action, LocalizedStrings.Action, (i, v) =>
 				{
 					var q = i.Quote;
 					q.Action = v;
@@ -298,10 +298,10 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Source), LocalizedStrings.Source, LocalizedStrings.NewsSource, (i, v) => i.Source = v));
 				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Url), LocalizedStrings.Link, LocalizedStrings.NewsLink, (i, v) => i.Url = v));
 				fields.Add(new FieldMapping<NewsMessage, NewsPriorities>(nameof(NewsMessage.Priority), LocalizedStrings.Priority, LocalizedStrings.NewsPriority, (i, v) => i.Priority = v));
-				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Language), LocalizedStrings.Str3429, LocalizedStrings.Str3429, (i, v) => i.Language = v));
+				fields.Add(new FieldMapping<NewsMessage, string>(nameof(NewsMessage.Language), LocalizedStrings.Language, LocalizedStrings.Language, (i, v) => i.Language = v));
 			}
 			else
-				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1655);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 
 			return fields;
 		}

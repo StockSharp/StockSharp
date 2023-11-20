@@ -82,8 +82,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str778Key,
-			Description = LocalizedStrings.Str779Key,
+			Name = LocalizedStrings.PeriodKey,
+			Description = LocalizedStrings.IndicatorPeriodKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{

@@ -117,7 +117,7 @@
 			public PositionRule(Position position, IPositionProvider provider)
 				: this(position, provider, p => true)
 			{
-				Name = LocalizedStrings.Str1042 + " " + position.Portfolio.Name;
+				Name = LocalizedStrings.PositionChange + " " + position.Portfolio.Name;
 			}
 
 			public PositionRule(Position position, IPositionProvider provider, Func<Position, bool> changed)

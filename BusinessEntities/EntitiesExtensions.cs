@@ -133,7 +133,7 @@ namespace StockSharp.BusinessEntities
 				throw new ArgumentNullException(nameof(security));
 
 			if (security.PriceStep == null)
-				throw new ArgumentException(LocalizedStrings.Str2925, nameof(security));
+				throw new ArgumentException(LocalizedStrings.PriceStepNotSpecified, nameof(security));
 
 			return price.Round(security.PriceStep ?? 1m, security.Decimals ?? 0);
 		}
@@ -169,7 +169,7 @@ namespace StockSharp.BusinessEntities
 
 					return security.PriceStep;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1291);
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.InvalidValue);
 			}
 		}
 

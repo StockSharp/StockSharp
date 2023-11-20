@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str418Key,
+			Name = LocalizedStrings.TillKey,
 			Description = LocalizedStrings.Str419Key,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTime Till { get; set; }

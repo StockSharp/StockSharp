@@ -294,7 +294,7 @@ namespace StockSharp.Algo.Storages.Binary
 			foreach (var msg in messages)
 			{
 				if (msg.DataType != DataType.Transactions)
-					throw new ArgumentOutOfRangeException(nameof(messages), msg.DataType, LocalizedStrings.Str1695Params.Put(msg));
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.DataType, LocalizedStrings.UnknownType.Put(msg));
 
 				// нулевой номер заявки возможен при сохранении в момент регистрации
 				if (msg.OrderId < 0)

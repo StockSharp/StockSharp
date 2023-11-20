@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1245Key,
 			Description = LocalizedStrings.Str1246Key,
-			GroupName = LocalizedStrings.Str1244Key,
+			GroupName = LocalizedStrings.HedgingKey,
 			Order = 0)]
 		public decimal PositionOffset
 		{

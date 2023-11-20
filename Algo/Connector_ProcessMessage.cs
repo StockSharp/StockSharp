@@ -705,14 +705,14 @@ namespace StockSharp.Algo
 							ProcessSubscriptionMessage(subscrMsg);
 
 						// если адаптеры передают специфичные сообщения
-						// throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
+						// throw new ArgumentOutOfRangeException(LocalizedStrings.UnknownType.Put(message.Type));
 						break;
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				RaiseError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
+				RaiseError(new InvalidOperationException(LocalizedStrings.MessageCauseError.Put(message), ex));
 			}
 		}
 
@@ -1037,7 +1037,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(name));
 
 			var portfolio = PositionStorage.GetOrCreatePortfolio(name,
-				key => new Portfolio { Name = key } ?? throw new InvalidOperationException(LocalizedStrings.Str1104Params.Put(name)),
+				key => new Portfolio { Name = key } ?? throw new InvalidOperationException(LocalizedStrings.PortfolioNotCreated.Put(name)),
 				out isNew);
 
 			var isChanged = false;
@@ -1046,7 +1046,7 @@ namespace StockSharp.Algo
 
 			if (_existingPortfolios.TryAdd(portfolio))
 			{
-				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
+				this.AddInfoLog(LocalizedStrings.NewPortfolioCreated, portfolio.Name);
 				RaiseNewPortfolio(portfolio);
 			}
 			else if (isChanged)
@@ -1425,7 +1425,7 @@ namespace StockSharp.Algo
 				{
 					if (change == EntityCache.OrderChangeInfo.NotExist)
 					{
-						this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
+						this.AddWarningLog(LocalizedStrings.OrderNotFound, message.OrderId.To<string>() ?? message.OrderStringId);
 						continue;
 					}
 
@@ -1565,7 +1565,7 @@ namespace StockSharp.Algo
 			{
 				if (message.SecurityId == default)
 				{
-					this.AddWarningLog(LocalizedStrings.Str1025);
+					this.AddWarningLog(LocalizedStrings.EmptySecId);
 					this.AddWarningLog(message.ToString());
 					return;
 				}
@@ -1595,7 +1595,7 @@ namespace StockSharp.Algo
 			}
 
 			if (!processed)
-				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.Str1695Params.Put(message));
+				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.UnknownType.Put(message));
 		}
 
 		private void ProcessExecutionMessage(ExecutionMessage message)
@@ -1607,7 +1607,7 @@ namespace StockSharp.Algo
 			else if (message.DataType == DataType.OrderLog)
 				ProcessOrderLogMessage(message);
 			else
-				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.Str1695Params.Put(message));
+				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.UnknownType.Put(message));
 		}
 
 		private void ProcessCandleMessage(CandleMessage message)

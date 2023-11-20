@@ -83,7 +83,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			foreach (var order in strategy.Orders)
 			{
 				WriteValues(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
-					order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : string.Empty), order.Balance,
+					order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Done : (order.IsCanceled() ? LocalizedStrings.Cancelled : string.Empty), order.Balance,
 						order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
 			}
 		}

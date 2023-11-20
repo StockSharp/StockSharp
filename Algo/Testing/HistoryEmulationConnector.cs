@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Testing
 				}
 
 				if (throwError)
-					throw new InvalidOperationException(LocalizedStrings.Str2189Params.Put(_state, value));
+					throw new InvalidOperationException(LocalizedStrings.TaskCannotChangeState.Put(_state, value));
 
 				this.AddInfoLog(LocalizedStrings.Str1121Params, _state, value);
 				_state = value;

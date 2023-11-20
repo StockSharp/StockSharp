@@ -19,13 +19,13 @@
 		/// <summary>
 		/// Line.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1898Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Line2Key)]
 		LineAnnotation,
 
 		/// <summary>
 		/// Pointer.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1899Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PointerKey)]
 		LineArrowAnnotation,
 
 		/// <summary>
@@ -43,19 +43,19 @@
 		/// <summary>
 		/// Horizontal line.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1901Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.HorLineKey)]
 		HorizontalLineAnnotation,
 
 		/// <summary>
 		/// Vertical line.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1902Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VerLineKey)]
 		VerticalLineAnnotation,
 
 		/// <summary>
 		/// Ruler.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1902Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.RulerKey)]
 		RulerAnnotation,
 	}
 }

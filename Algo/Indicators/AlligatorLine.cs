@@ -51,8 +51,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str841Key,
-			Description = LocalizedStrings.Str842Key,
+			Name = LocalizedStrings.ShiftKey,
+			Description = LocalizedStrings.ShiftToFutureKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Shift
 		{

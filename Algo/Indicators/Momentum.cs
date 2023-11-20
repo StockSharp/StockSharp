@@ -29,8 +29,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str769Key,
-		Description = LocalizedStrings.Str769Key)]
+		Name = LocalizedStrings.MomentumKey,
+		Description = LocalizedStrings.MomentumKey)]
 	[Doc("topics/IndicatorMomentum.html")]
 	public class Momentum : LengthIndicator<decimal>
 	{

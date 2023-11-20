@@ -31,7 +31,8 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// https://doc.stocksharp.com/topics/IndicatorEnvelope.html
 	/// </remarks>
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.EnvelopeKey)]
+	[Display(ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.EnvelopeKey)]
 	[Doc("topics/IndicatorEnvelope.html")]
 	public class Envelope : BaseComplexIndicator
 	{
@@ -80,8 +81,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str778Key,
-			Description = LocalizedStrings.Str779Key,
+			Name = LocalizedStrings.PeriodKey,
+			Description = LocalizedStrings.IndicatorPeriodKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{

@@ -169,7 +169,7 @@ namespace StockSharp.Algo
 			{
 				_isSuspended = value;
 
-				_container?.AddRuleLog(LogLevels.Info, this, value ? LocalizedStrings.Str1089 : LocalizedStrings.Str1090);
+				_container?.AddRuleLog(LogLevels.Info, this, value ? LocalizedStrings.Suspended : LocalizedStrings.Resumed);
 			}
 		}
 
@@ -192,7 +192,7 @@ namespace StockSharp.Algo
 			set
 			{
 				if (Container != null)
-					throw new ArgumentException(LocalizedStrings.Str1091Params.Put(this, Container));
+					throw new ArgumentException(LocalizedStrings.RuleAlreadyExistInContainer.Put(this, Container));
 
 				_container = value ?? throw new ArgumentNullException(nameof(value));
 			}
@@ -374,7 +374,6 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Str1092);
 			_container = null;
 
 			base.DisposeManaged();

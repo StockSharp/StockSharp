@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1042Key,
+			Name = LocalizedStrings.PositionChangeKey,
 			Description = LocalizedStrings.TemplateTxtPositionChangeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 11)]

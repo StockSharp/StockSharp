@@ -236,14 +236,14 @@ namespace StockSharp.Messages
 					var point = unit.GetTypeValue?.Invoke(unit.Type);
 
 					if (point is null)
-						throw new InvalidOperationException(LocalizedStrings.Str2925);
+						throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
 
 					return unit.Value * point.Value;
 				case UnitTypes.Step:
 					var step = unit.GetTypeValue?.Invoke(unit.Type);
 
 					if (step is null)
-						throw new InvalidOperationException(LocalizedStrings.Str2925);
+						throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
 
 					return unit.Value * step.Value;
 				default:
@@ -315,7 +315,7 @@ namespace StockSharp.Messages
 			value = getTypeValue(Type);
 
 			if (value is null or 0)
-				throw new InvalidOperationException(LocalizedStrings.Str1291);
+				throw new InvalidOperationException(LocalizedStrings.InvalidValue);
 
 			return value.Value;
 		}
@@ -630,7 +630,7 @@ namespace StockSharp.Messages
 						if (step is null or 0)
 						{
 							if (throwException)
-								throw new InvalidOperationException(LocalizedStrings.Str2925);
+								throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
 
 							return null;
 						}

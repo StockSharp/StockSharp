@@ -712,7 +712,7 @@ namespace StockSharp.BusinessEntities
 		public override string ToString()
 		{
 			var str = LocalizedStrings.Str534Params
-				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Side == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance, Type);
+				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Side == Sides.Buy ? LocalizedStrings.Buy2 : LocalizedStrings.Sell2, Price, Volume, State, Balance, Type);
 
 			if (!UserOrderId.IsEmpty())
 				str += $" UID={UserOrderId}";

@@ -73,8 +73,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str3564Key,
-			Description = LocalizedStrings.Str851Key,
+			Name = LocalizedStrings.UpKey,
+			Description = LocalizedStrings.TopHistogramKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public GatorHistogram Histogram1 { get; }
 
@@ -84,8 +84,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str3565Key,
-			Description = LocalizedStrings.Str852Key,
+			Name = LocalizedStrings.DownKey,
+			Description = LocalizedStrings.LowHistogramKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public GatorHistogram Histogram2 { get; }
 

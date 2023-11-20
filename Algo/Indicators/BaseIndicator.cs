@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str908Key,
+			Description = LocalizedStrings.IndicatorNameKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string Name
 		{

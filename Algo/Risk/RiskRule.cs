@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Risk
 		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str722Key,
+			Name = LocalizedStrings.ActionKey,
 			Description = LocalizedStrings.Str859Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
@@ -644,7 +644,7 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str662Key,
+		Name = LocalizedStrings.OrderVolume2Key,
 		Description = LocalizedStrings.Str874Key,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class RiskOrderVolumeRule : RiskRule
@@ -742,7 +742,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CountKey,
-			Description = LocalizedStrings.Str957Key,
+			Description = LocalizedStrings.OrdersCountKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public int Count
@@ -877,7 +877,7 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str672Key,
+		Name = LocalizedStrings.TradePriceKey,
 		Description = LocalizedStrings.Str880Key,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class RiskTradePriceRule : RiskRule
@@ -945,7 +945,7 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str664Key,
+		Name = LocalizedStrings.TradeVolumeKey,
 		Description = LocalizedStrings.Str881Key,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class RiskTradeVolumeRule : RiskRule

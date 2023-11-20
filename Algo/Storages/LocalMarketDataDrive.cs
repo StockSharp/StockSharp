@@ -499,7 +499,7 @@ namespace StockSharp.Algo.Storages
 							}
 							catch (Exception ex)
 							{
-								throw new InvalidOperationException(LocalizedStrings.Str2929Params.Put(firstDataFile), ex);
+								throw new InvalidOperationException(LocalizedStrings.FileWrongFormat.Put(firstDataFile), ex);
 							}
 						}
 						else
@@ -573,7 +573,7 @@ namespace StockSharp.Algo.Storages
 			if (fileName == null)
 			{
 				if (throwIfUnknown)
-					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.ToString()));
+					throw new NotSupportedException(LocalizedStrings.UnsupportedType.Put(dataType.ToString()));
 
 				return null;
 			}

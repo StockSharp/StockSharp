@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Export
 				}
 			}
 			else
-				throw new ArgumentOutOfRangeException(nameof(value), value.GetType(), LocalizedStrings.Str1655);
+				throw new ArgumentOutOfRangeException(nameof(value), value.GetType(), LocalizedStrings.InvalidValue);
 		}
 
 		DateTimeOffset IServerTimeMessage.ServerTime

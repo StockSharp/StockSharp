@@ -606,7 +606,7 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 				else
-					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);
+					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 
 				return storage;
 			});

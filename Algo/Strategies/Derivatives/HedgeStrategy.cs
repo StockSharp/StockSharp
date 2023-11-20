@@ -62,9 +62,9 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1264Key,
+			Name = LocalizedStrings.QuotingKey,
 			Description = LocalizedStrings.Str1265Key,
-			GroupName = LocalizedStrings.Str1244Key,
+			GroupName = LocalizedStrings.HedgingKey,
 			Order = 0)]
 		public bool UseQuoting
 		{
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1266Key,
 			Description = LocalizedStrings.Str1267Key,
-			GroupName = LocalizedStrings.Str1244Key,
+			GroupName = LocalizedStrings.HedgingKey,
 			Order = 1)]
 		public Unit PriceOffset
 		{
@@ -199,7 +199,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 				.Or(order.WhenCanceled(this))
 				.Do((rule, o) =>
 				{
-					parentStrategy.AddInfoLog(LocalizedStrings.Str1272Params, o.TransactionId, o.IsMatched() ? LocalizedStrings.Str1328 : LocalizedStrings.Str1329, o.ServerTime);
+					parentStrategy.AddInfoLog(LocalizedStrings.Str1272Params, o.TransactionId, o.IsMatched() ? LocalizedStrings.Done : LocalizedStrings.Cancelled, o.ServerTime);
 
 					Rules.RemoveRulesByToken(o, rule);
 

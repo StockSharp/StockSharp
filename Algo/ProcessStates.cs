@@ -30,7 +30,7 @@ namespace StockSharp.Algo
 		/// Stopped.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1113Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StoppedKey)]
 		Stopped,
 
 		/// <summary>

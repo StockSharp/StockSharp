@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Risk
 		{
 			foreach (var rule in RiskManager.ProcessRules(message))
 			{
-				this.AddWarningLog(LocalizedStrings.Str855Params,
+				this.AddWarningLog(LocalizedStrings.ActivatingRiskRule,
 					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
 
 				switch (rule.Action)

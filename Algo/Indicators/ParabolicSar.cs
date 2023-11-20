@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ParabolicSARKey,
-		Description = LocalizedStrings.Str809Key)]
+		Description = LocalizedStrings.ParabolicSARDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorParabolicSar.html")]
 	public class ParabolicSar : BaseIndicator
@@ -250,8 +250,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str810Key,
-			Description = LocalizedStrings.Str811Key,
+			Name = LocalizedStrings.AccelerationKey,
+			Description = LocalizedStrings.AccelerationFactorKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Acceleration
 		{
@@ -268,8 +268,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str812Key,
-			Description = LocalizedStrings.Str813Key,
+			Name = LocalizedStrings.StepKey,
+			Description = LocalizedStrings.AccelerationFactorStepKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal AccelerationStep
 		{
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MaxKey,
-			Description = LocalizedStrings.Str815Key,
+			Description = LocalizedStrings.MaxAccelerationFactorKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal AccelerationMax
 		{

@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Statistics
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.Str956Key,
-		Description = LocalizedStrings.Str957Key,
+		Description = LocalizedStrings.OrdersCountKey,
 		GroupName = LocalizedStrings.OrdersKey,
 		Order = 304
 	)]

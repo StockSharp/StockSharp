@@ -17,14 +17,14 @@ public enum SubscriptionStates
 	/// Stopped.
 	/// </summary>
 	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3178Key)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StoppedKey)]
 	Stopped,
 
 	/// <summary>
 	/// Active.
 	/// </summary>
 	[EnumMember]
-	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2229Key)]
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ActiveKey)]
 	Active,
 
 	/// <summary>

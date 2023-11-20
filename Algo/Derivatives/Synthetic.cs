@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Derivatives
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using Ecng.Common;
 
 	/// <summary>
 	/// The synthetic positions builder.
@@ -147,7 +148,7 @@ namespace StockSharp.Algo.Derivatives
 		private DateTimeOffset GetExpiryDate()
 		{
 			if (_security.ExpiryDate == null)
-				throw new InvalidOperationException(LocalizedStrings.Str712);
+				throw new InvalidOperationException(LocalizedStrings.NoExpirationDate.Put(_security.Id));
 
 			return _security.ExpiryDate.Value;
 		}

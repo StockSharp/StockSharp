@@ -243,7 +243,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 				.SetCell(columnShift + 14, 1, LocalizedStrings.Comment);
 
 			//worker
-			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Str1329), null, Colors.Green)
+			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Cancelled), null, Colors.Green)
 			//	.SetConditionalFormatting(columnShift + 8, ComparisonOperator.Equal, "\"{0}\"".Put(LocalizedStrings.Active), null, Colors.Red);
 
 			rowIndex = 2;
@@ -260,7 +260,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 					.SetCell(columnShift + 5, rowIndex, (order.ServerTime - order.Time).Format())
 					.SetCell(columnShift + 6, rowIndex, order.Price)
 					.SetCell(columnShift + 7, rowIndex, order.State.GetDisplayName())
-					.SetCell(columnShift + 8, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : LocalizedStrings.Active))
+					.SetCell(columnShift + 8, rowIndex, order.IsMatched() ? LocalizedStrings.Done : (order.IsCanceled() ? LocalizedStrings.Cancelled : LocalizedStrings.Active))
 					.SetCell(columnShift + 9, rowIndex, order.Balance)
 					.SetCell(columnShift + 10, rowIndex, order.Volume)
 					.SetCell(columnShift + 11, rowIndex, order.Type.GetDisplayName())

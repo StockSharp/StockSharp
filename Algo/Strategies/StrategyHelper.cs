@@ -804,7 +804,7 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(rule));
 
 			if (takeProfit == null && stopLoss == null)
-				throw new ArgumentException(LocalizedStrings.Str1248);
+				throw new ArgumentException(LocalizedStrings.NoTakeAndStop);
 
 			Strategy CreateProtection(MyTrade trade)
 			{

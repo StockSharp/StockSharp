@@ -405,7 +405,7 @@
 		/// <returns>Rule.</returns>
 		public static MarketRule<Subscription, TCandle> WhenCandlesFinished<TCandle>(this ISubscriptionProvider subscriptionProvider, Subscription subscription)
 			where TCandle : ICandleMessage
-			=> new CandleStateSeriesRule<TCandle>(subscriptionProvider, subscription, CandleStates.Finished) { Name = LocalizedStrings.Str1073 + " " + subscription };
+			=> new CandleStateSeriesRule<TCandle>(subscriptionProvider, subscription, CandleStates.Finished) { Name = LocalizedStrings.FinishedCandles + " " + subscription };
 
 		/// <summary>
 		/// To create a rule for the event of candles occurrence, change and end.

@@ -44,7 +44,7 @@ namespace StockSharp.Logging
 		/// Debug message, information, warnings and errors.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str12Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DebugKey)]
 		Debug,
 		
 		/// <summary>

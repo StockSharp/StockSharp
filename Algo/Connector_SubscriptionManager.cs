@@ -537,7 +537,7 @@ namespace StockSharp.Algo
 
 					if (info.LookupItems == null)
 					{
-						_connector.AddWarningLog(LocalizedStrings.Str2142Params, info.Subscription.SubscriptionMessage);
+						_connector.AddWarningLog(LocalizedStrings.UnknownType, info.Subscription.SubscriptionMessage);
 						continue;
 					}
 
@@ -625,7 +625,7 @@ namespace StockSharp.Algo
 							if (security == null)
 							{
 								info.SecurityNotFound = true;
-								_connector.AddWarningLog(LocalizedStrings.Str704Params.Put(info.Subscription.SecurityId));
+								_connector.AddWarningLog(LocalizedStrings.SecurityNoFound.Put(info.Subscription.SecurityId));
 								continue;
 							}
 

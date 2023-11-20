@@ -112,7 +112,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OpenPriceKey,
-			Description = LocalizedStrings.Str80Key,
+			Description = LocalizedStrings.CandleOpenPriceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal OpenPrice { get; set; }
 

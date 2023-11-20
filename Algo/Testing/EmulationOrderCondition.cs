@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StopPriceKey,
-			Description = LocalizedStrings.Str1693Key,
+			Description = LocalizedStrings.StopPriceValueKey,
 			GroupName = LocalizedStrings.ParametersKey,
 			Order = 1)]
 		public decimal? StopPrice

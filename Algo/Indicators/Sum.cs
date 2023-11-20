@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SumKey,
-		Description = LocalizedStrings.Str751Key)]
+		Description = LocalizedStrings.SumNLastValuesKey)]
 	[Doc("topics/IndicatorSum.html")]
 	public class Sum : LengthIndicator<decimal>
 	{

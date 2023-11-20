@@ -825,7 +825,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str565Key,
-			Description = LocalizedStrings.Str566Key,
+			Description = LocalizedStrings.BestBidDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 206)]
 		[Browsable(false)]
@@ -1041,7 +1041,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.UnderlyingAssetKey,
-			Description = LocalizedStrings.Str550Key,
+			Description = LocalizedStrings.UnderlyingAssetDescKey,
 			GroupName = LocalizedStrings.DerivativesKey,
 			Order = 100)]
 		public string UnderlyingSecurityId

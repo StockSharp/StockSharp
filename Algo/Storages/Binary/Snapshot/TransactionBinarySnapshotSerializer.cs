@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				throw new ArgumentNullException(nameof(message));
 
 			if (message.DataType != DataType.Transactions)
-				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.Str1695Params.Put(message));
+				throw new ArgumentOutOfRangeException(nameof(message), message.DataType, LocalizedStrings.UnknownType.Put(message));
 
 			if (message.TransactionId == 0)
 				throw new InvalidOperationException("TransId == 0");

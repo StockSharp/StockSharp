@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Export
 				else if (DataType == TraderHelper.IndicatorValue)
 					return Export((IEnumerable<IndicatorValue>)values);
 				else
-					throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.Str721);
+					throw new ArgumentOutOfRangeException(nameof(DataType), DataType, LocalizedStrings.InvalidValue);
 			});
 		}
 

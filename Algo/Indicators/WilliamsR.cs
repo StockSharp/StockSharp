@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.WRKey,
-		Description = LocalizedStrings.Str854Key)]
+		Description = LocalizedStrings.WilliamsRKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorWilliamsR.html")]
 	public class WilliamsR : LengthIndicator<decimal>

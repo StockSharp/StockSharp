@@ -405,7 +405,7 @@ namespace StockSharp.Algo.Testing
 
 			if (SecurityProvider.LookupById(securityId) == null)
 			{
-				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId)));
+				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(securityId)));
 				return;
 			}
 

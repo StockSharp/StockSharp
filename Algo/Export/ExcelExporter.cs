@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(2, 0, LocalizedStrings.Price).SetStyle(2, typeof(decimal))
 					.SetCell(3, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
 					.SetCell(4, 0, LocalizedStrings.Direction)
-					.SetCell(5, 0, LocalizedStrings.Str722)
+					.SetCell(5, 0, LocalizedStrings.Action)
 					.SetCell(6, 0, LocalizedStrings.Type)
 					.SetCell(7, 0, LocalizedStrings.System)
 					.SetCell(8, 0, LocalizedStrings.Str723).SetStyle(8, typeof(string))

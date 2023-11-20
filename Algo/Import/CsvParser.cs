@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Import
 					foreach (var field in fields)
 					{
 						if (field.Order >= cells.Count)
-							throw new InvalidOperationException(LocalizedStrings.Str2869Params.Put(field.DisplayName, field.Order, cells.Count));
+							throw new InvalidOperationException(LocalizedStrings.IndexMoreThanLen.Put(field.DisplayName, field.Order, cells.Count));
 
 						try
 						{

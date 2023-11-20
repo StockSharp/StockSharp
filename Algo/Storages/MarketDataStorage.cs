@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Storages
 			_dataType = DataType.Create<TMessage>(arg);
 
 			if (_dataType.IsSecurityRequired && securityId == default)
-				throw new ArgumentException(LocalizedStrings.Str1025, nameof(securityId));
+				throw new ArgumentException(LocalizedStrings.EmptySecId, nameof(securityId));
 
 			SecurityId = securityId;
 

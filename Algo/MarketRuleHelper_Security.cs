@@ -72,7 +72,7 @@
 			public SecurityNewTradeRule(Security security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
-				Name = LocalizedStrings.Str1047 + " " + security;
+				Name = LocalizedStrings.TradesElement + " " + security;
 				Provider.NewTrade += OnNewTrade;
 			}
 

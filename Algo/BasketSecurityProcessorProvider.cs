@@ -79,7 +79,7 @@ namespace StockSharp.Algo
 			if (_processors.TryGetValue(basketCode, out var processor))
 				return processor;
 
-			throw new ArgumentException(LocalizedStrings.UnknownInstrumentType.Put(basketCode));
+			throw new ArgumentException(LocalizedStrings.UnknownType.Put(basketCode));
 		}
 
 		Type IBasketSecurityProcessorProvider.GetProcessorType(string basketCode)

@@ -117,7 +117,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OpenPriceKey,
-			Description = LocalizedStrings.Str80Key,
+			Description = LocalizedStrings.CandleOpenPriceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal OpenPrice { get; set; }
 
@@ -337,7 +337,7 @@ namespace StockSharp.Algo.Candles
 		private void ThrowIfFinished()
 		{
 			if (State == CandleStates.Finished)
-				throw new InvalidOperationException(LocalizedStrings.Str649);
+				throw new InvalidOperationException(LocalizedStrings.CannotChangeFormedCandle);
 		}
 
 		/// <summary>

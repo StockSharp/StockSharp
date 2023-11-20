@@ -43,7 +43,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ParallelKey,
 		Description = LocalizedStrings.ParallelDescKey,
-		GroupName = LocalizedStrings.Str186Key,
+		GroupName = LocalizedStrings.AdaptersKey,
 		Order = 310)]
 	public int MaxParallelMessages { get; set; } = IAsyncMessageAdapter.DefaultMaxParallelMessages;
 

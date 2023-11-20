@@ -118,7 +118,7 @@
 						double d => item.Add(lineElem, d),
 						decimal d => item.Add(lineElem, (double)d),
 						Tuple<double, double> t => item.Add(lineElem, t.Item1, t.Item2),
-						_ => throw new ArgumentException(LocalizedStrings.Str888Params.Put(value.GetType().Name)),
+						_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
 					};
 				case IChartBandElement belem:
 					return value switch
@@ -127,10 +127,10 @@
 						double d => item.Add(belem, d, 0),
 						decimal d => item.Add(belem, d),
 						Tuple<double, double> t => item.Add(belem, t.Item1, t.Item2),
-						_ => throw new ArgumentException(LocalizedStrings.Str888Params.Put(value.GetType().Name)),
+						_ => throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(value.GetType().Name)),
 					};
 				default:
-					throw new ArgumentException(LocalizedStrings.Str2062Params.Put(element));
+					throw new ArgumentException(LocalizedStrings.UnsupportedType.Put(element));
 			}
 		}
 

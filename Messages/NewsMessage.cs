@@ -95,7 +95,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SecurityKey,
-			Description = LocalizedStrings.Str212Key,
+			Description = LocalizedStrings.NewsSecurityIdKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public SecurityId? SecurityId { get; set; }
 

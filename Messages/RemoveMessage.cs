@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 		/// User.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str3725Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.UserKey)]
 		User,
 	}
 

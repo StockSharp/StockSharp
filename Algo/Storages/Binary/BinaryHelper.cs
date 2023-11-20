@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var priceStep = info.LastPriceStep;
 
 			if (priceStep == 0)
-				throw new InvalidOperationException(LocalizedStrings.Str2925);
+				throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
 
 			if ((price % priceStep) != 0)
 			{

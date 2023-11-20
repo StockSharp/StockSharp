@@ -54,7 +54,7 @@ namespace StockSharp.Algo
 		public MarketTimer Interval(TimeSpan interval)
 		{
 			if (interval <= TimeSpan.Zero)
-				throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.Str944);
+				throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.InvalidValue);
 
 			lock (_syncLock)
 			{
@@ -72,7 +72,7 @@ namespace StockSharp.Algo
 		public MarketTimer Start()
 		{
 			if (_interval == default)
-				throw new InvalidOperationException(LocalizedStrings.Str945);
+				throw new InvalidOperationException(LocalizedStrings.IntervalNotSet);
 
 			lock (_syncLock)
 			{

@@ -32,8 +32,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str2027Key,
-		Description = LocalizedStrings.Str757Key)]
+		Name = LocalizedStrings.AdxKey,
+		Description = LocalizedStrings.AverageDirectionalIndexKey)]
 	[Doc("topics/IndicatorAverageDirectionalIndex.html")]
 	public class AverageDirectionalIndex : BaseComplexIndicator
 	{
@@ -83,8 +83,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str736Key,
-			Description = LocalizedStrings.Str737Key,
+			Name = LocalizedStrings.PeriodKey,
+			Description = LocalizedStrings.IndicatorPeriodKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Length
 		{

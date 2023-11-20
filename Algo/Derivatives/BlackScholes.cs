@@ -116,7 +116,7 @@ namespace StockSharp.Algo.Derivatives
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str702);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_roundDecimals = value;
 			}
@@ -171,7 +171,7 @@ namespace StockSharp.Algo.Derivatives
 				var type = Option.OptionType;
 
 				if (type == null)
-					throw new InvalidOperationException(LocalizedStrings.Str703Params.Put(Option));
+					throw new InvalidOperationException(LocalizedStrings.OrderTypeMissed.Put(Option));
 
 				return type.Value;
 			}

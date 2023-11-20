@@ -29,8 +29,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str816Key,
-		Description = LocalizedStrings.Str816Key)]
+		Name = LocalizedStrings.PeakKey,
+		Description = LocalizedStrings.PeakKey)]
 	[Doc("topics/IndicatorPeak.html")]
 	public sealed class Peak : ZigZagEquis
 	{

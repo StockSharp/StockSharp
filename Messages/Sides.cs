@@ -32,14 +32,14 @@ namespace StockSharp.Messages
 		/// Buy.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str403Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Buy2Key)]
 		Buy,
 
 		/// <summary>
 		/// Sell.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str404Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Sell2Key)]
 		Sell,
 	}
 }

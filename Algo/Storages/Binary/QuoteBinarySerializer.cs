@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 
 				//if (m.IsFullEmpty())
-				//	throw new ArgumentException(LocalizedStrings.Str1309, nameof(messages));
+				//	throw new ArgumentException(LocalizedStrings.MarketDepthIsEmpty, nameof(messages));
 
 				//var bid = quoteMsg.GetBestBid();
 				//var ask = quoteMsg.GetBestAsk();

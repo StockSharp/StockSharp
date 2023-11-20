@@ -1183,7 +1183,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<Level1ChangeMessage> GetFortsEndOfDay(this string securityName, DateTime fromDate, DateTime toDate)
 		{
 			if (fromDate > toDate)
-				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
+				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.StartCannotBeMoreEnd.Put(fromDate, toDate));
 
 			static decimal GetPart(string item)
 				=> !decimal.TryParse(item, out var pardesData) ? 0 : pardesData;
@@ -1253,7 +1253,7 @@ namespace StockSharp.Algo
 		public static IDictionary<DateTimeOffset, decimal> GetFortsRate(this SecurityId securityId, DateTime fromDate, DateTime toDate)
 		{
 			if (fromDate > toDate)
-				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.Str1119Params.Put(fromDate, toDate));
+				throw new ArgumentOutOfRangeException(nameof(fromDate), fromDate, LocalizedStrings.StartCannotBeMoreEnd.Put(fromDate, toDate));
 
 			using var client = new WebClient();
 

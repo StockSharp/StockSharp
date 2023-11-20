@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.RVIKey,
-		Description = LocalizedStrings.Str771Key)]
+		Description = LocalizedStrings.RelativeVigorIndexKey)]
 	[Doc("topics/IndicatorRelativeVigorIndex.html")]
 	public class RelativeVigorIndex : BaseComplexIndicator
 	{
@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AverageKey,
-			Description = LocalizedStrings.Str772Key,
+			Description = LocalizedStrings.AveragePartKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public RelativeVigorIndexAverage Average { get; }
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SignalKey,
-			Description = LocalizedStrings.Str773Key,
+			Description = LocalizedStrings.SignalPartKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public RelativeVigorIndexSignal Signal { get; }

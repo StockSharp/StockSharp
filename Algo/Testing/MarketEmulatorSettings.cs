@@ -338,7 +338,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1543Key,
+			Name = LocalizedStrings.MoneyKey,
 			Description = LocalizedStrings.CheckMoneyKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 218)]
