@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The quoting according to the Best By Volume rule. For this quoting the volume delta <see cref="BestByVolumeQuotingStrategy.VolumeExchange"/> is specified, which can stand in front of the quoted order.
+	/// The quoting according to the Best By Volume rule. For this quoting the volume delta <see cref="VolumeExchange"/> is specified, which can stand in front of the quoted order.
 	/// </summary>
 	public class BestByVolumeQuotingStrategy : QuotingStrategy
 	{

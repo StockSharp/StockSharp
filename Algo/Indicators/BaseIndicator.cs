@@ -201,24 +201,6 @@ namespace StockSharp.Algo.Indicators
 		/// <inheritdoc />
 		public override string ToString() => Name;
 
-		/// <summary>
-		/// Returns max <see cref="NumValuesToInitialize"/> or null if any value is null.
-		/// </summary>
-		public static T? GetMaxOrNull<T>(IEnumerable<T?> values) where T: struct, IComparable<T>
-		{
-			T max = default;
-			foreach (var v in values)
-			{
-				if(v == null)
-					return null;
-
-				if(v.Value.CompareTo(max) > 0)
-					max = v.Value;
-			}
-
-			return max;
-		}
-
 		/// <inheritdoc/>
 		public virtual IIndicatorValue CreateValue(object[] values)
 			=> values.Length == 0 ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, values[0].To<decimal>());

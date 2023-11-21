@@ -301,7 +301,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Commission rules.
 		/// </summary>
-		public IEnumerable<CommissionRule> CommissionRules { get; set; }
+		public IEnumerable<ICommissionRule> CommissionRules { get; set; }
 
 		/// <inheritdoc />
 		public override void ClearCache()

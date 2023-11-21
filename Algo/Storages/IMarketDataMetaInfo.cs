@@ -36,12 +36,12 @@ namespace StockSharp.Algo.Storages
 		int Count { get; set; }
 
 		/// <summary>
-		/// Value <see cref="Security.PriceStep"/> at day <see cref="IMarketDataMetaInfo.Date"/>.
+		/// Value <see cref="Security.PriceStep"/> at day <see cref="Date"/>.
 		/// </summary>
 		decimal PriceStep { get; set; }
 
 		/// <summary>
-		/// Value <see cref="Security.VolumeStep"/> at day <see cref="IMarketDataMetaInfo.Date"/>.
+		/// Value <see cref="Security.VolumeStep"/> at day <see cref="Date"/>.
 		/// </summary>
 		decimal VolumeStep { get; set; }
 

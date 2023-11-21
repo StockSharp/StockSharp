@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The commission calculating rule.
 		/// </summary>
-		public CommissionRule Rule { get; set; }
+		public ICommissionRule Rule { get; set; }
 
 		/// <summary>
 		/// The portfolio name. If it is given, then <see cref="Rule"/> is applied to specific portfolio.

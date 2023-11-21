@@ -81,8 +81,32 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Subscription, Exception, bool> SubscriptionFailed;
 
 		/// <inheritdoc />
-		public virtual void Subscribe(Subscription subscription)
+		public void Subscribe(Subscription subscription)
 		{
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			if (!IsBacktesting)
+			{
+				var history = HistoryRequired ?? TimeSpan.Zero;
+
+				if (history < HistoryCalculated)
+					history = HistoryCalculated.Value;
+
+				if (history > TimeSpan.Zero)
+				{
+					var subscrMsg = subscription.SubscriptionMessage;
+
+					if (subscrMsg.From is null)
+					{
+						var dataType = subscrMsg.DataType;
+
+						if (dataType.IsMarketData && dataType.IsSecurityRequired)
+							subscrMsg.From = DateTimeOffset.Now - history;
+					}
+				}
+			}
+
 			Subscribe(subscription, false);
 		}
 
@@ -107,7 +131,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <inheritdoc />
-		public virtual void UnSubscribe(Subscription subscription)
+		public void UnSubscribe(Subscription subscription)
 		{
 			if (_rulesSuspendCount > 0 && _suspendSubscriptions.Remove(subscription))
 			{

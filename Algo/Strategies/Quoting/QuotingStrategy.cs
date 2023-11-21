@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		private readonly StrategyParam<TimeSpan> _timeOut;
 
 		/// <summary>
-		/// The time limit during which the quoting should be fulfilled. If the total volume of <see cref="QuotingStrategy.QuotingVolume"/> will not be fulfilled by this time, the strategy will stop operating.
+		/// The time limit during which the quoting should be fulfilled. If the total volume of <see cref="QuotingVolume"/> will not be fulfilled by this time, the strategy will stop operating.
 		/// </summary>
 		/// <remarks>
 		/// By default, the limit is disabled and it is equal to <see cref="TimeSpan.Zero"/>.
@@ -186,7 +186,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		/// </summary>
 		/// <returns><see langword="true" /> it is possible, otherwise, <see langword="false" />.</returns>
 		/// <remarks>
-		/// By default, the quoting is stopped when all contracts are fulfilled and <see cref="QuotingStrategy.LeftVolume"/> is equal to 0.
+		/// By default, the quoting is stopped when all contracts are fulfilled and <see cref="LeftVolume"/> is equal to 0.
 		/// </remarks>
 		protected virtual bool NeedFinish()
 		{

@@ -36,6 +36,7 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Algo.Indicators;
+	using StockSharp.Algo.Testing;
 
 	/// <summary>
 	/// <see cref="Order.Comment"/> auto-fill modes.
@@ -162,7 +163,6 @@ namespace StockSharp.Algo.Strategies
 
 				item.OrderRegistering += _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered += _parent.ProcessOrder;
-				//item.ReRegistering += _parent.ReRegisterSlippage;
 				item.OrderChanged += _parent.OnChildOrderChanged;
 				item.OrderRegisterFailed += _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed += _parent.OnChildOrderCancelFailed;
@@ -222,7 +222,6 @@ namespace StockSharp.Algo.Strategies
 
 				item.OrderRegistering -= _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered -= _parent.ProcessOrder;
-				//item.ReRegistering -= _parent.ReRegisterSlippage;
 				item.OrderChanged -= _parent.OnChildOrderChanged;
 				item.OrderRegisterFailed -= _parent.OnChildOrderRegisterFailed;
 				item.OrderCancelFailed -= _parent.OnChildOrderCancelFailed;
@@ -288,7 +287,6 @@ namespace StockSharp.Algo.Strategies
 			public bool IsCanceled { get; set; }
 			public decimal ReceivedVolume { get; set; }
 			public OrderFail RegistrationFail { get; set; }
-			//public OrderFail CancelationFail { get; set; }
 			public OrderStates PrevState { get; set; }
 		}
 
@@ -426,12 +424,15 @@ namespace StockSharp.Algo.Strategies
 			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
 			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
+			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true);
+			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired));
 
 			_ordersKeepTime.CanOptimize =
 			_registerInterval.CanOptimize =
 			_maxErrorCount.CanOptimize =
 			_maxOrderRegisterErrorCount.CanOptimize =
-			_maxRegisterCount.CanOptimize = false;
+			_maxRegisterCount.CanOptimize =
+			_historyRequired.CanOptimize = false;
 
 			InitMaxOrdersKeepTime();
 
@@ -683,8 +684,6 @@ namespace StockSharp.Algo.Strategies
 				RaiseParametersChanged();
 
 				this.Notify(nameof(Position));
-
-				//PositionManager.SecurityId = value?.ToSecurityId();
 			}
 		}
 
@@ -709,7 +708,7 @@ namespace StockSharp.Algo.Strategies
 		private IPnLManager _pnLManager = new PnLManager { UseOrderBook = true };
 
 		/// <summary>
-		/// The profit-loss manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="Strategy.ChildStrategies"/>.
+		/// The profit-loss manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="ChildStrategies"/>.
 		/// </summary>
 		[Browsable(false)]
 		public IPnLManager PnLManager
@@ -719,7 +718,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// The aggregate value of profit-loss without accounting commission <see cref="Strategy.Commission"/>.
+		/// The aggregate value of profit-loss without accounting commission <see cref="Commission"/>.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -805,6 +804,30 @@ namespace StockSharp.Algo.Strategies
 		{
 			get => _riskManager;
 			set => _riskManager = value ?? throw new ArgumentNullException(nameof(value));
+		}
+
+		/// <summary>
+		/// The risk rules.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			GroupName = LocalizedStrings.SettingsKey,
+			Name = LocalizedStrings.XamlStr613Key,
+			Description = LocalizedStrings.RiskSettingsKey,
+			Order = 300)]
+		public IEnumerable<IRiskRule> RiskRules
+		{
+			get => _riskManager.Rules;
+			set
+			{
+				if (value is null)
+					throw new ArgumentNullException(nameof(value));
+
+				_riskManager.Rules.Clear();
+				_riskManager.Rules.AddRange(value);
+
+				RaiseParametersChanged();
+			}
 		}
 
 		/// <summary>
@@ -1116,7 +1139,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Strategy> ProcessStateChanged;
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.ProcessStateChanged"/>.
+		/// To call the event <see cref="ProcessStateChanged"/>.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		protected void RaiseProcessStateChanged(Strategy strategy)
@@ -1212,23 +1235,16 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool IsOnline { get; private set; }
 
-		private bool _isOnlineStateIncludesChildren;
+		private readonly StrategyParam<bool> _isOnlineStateIncludesChildren;
 
 		/// <summary>
-		/// If true, the strategy can only be online if all of its children are online as well.
+		/// If <see langword="true"/>, the strategy can only be <see cref="IsOnline"/> if all of its <see cref="ChildStrategies"/> are online as well.
 		/// </summary>
 		[Browsable(false)]
 		public bool IsOnlineStateIncludesChildren
 		{
-			get => _isOnlineStateIncludesChildren;
-			set
-			{
-				if(_isOnlineStateIncludesChildren == value)
-					return;
-
-				_isOnlineStateIncludesChildren = value;
-				this.Notify();
-			}
+			get => _isOnlineStateIncludesChildren.Value;
+			set => _isOnlineStateIncludesChildren.Value = value;
 		}
 
 		/// <summary>
@@ -1382,7 +1398,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<bool> _disposeOnStop;
 
 		/// <summary>
-		/// Automatically to clear resources, used by the strategy, when it stops (state <see cref="Strategy.ProcessState"/> becomes equal to <see cref="ProcessStates.Stopped"/>) and delete it from the parent strategy through <see cref="Strategy.ChildStrategies"/>.
+		/// Automatically to clear resources, used by the strategy, when it stops (state <see cref="ProcessState"/> becomes equal to <see cref="ProcessStates.Stopped"/>) and delete it from the parent strategy through <see cref="ChildStrategies"/>.
 		/// </summary>
 		/// <remarks>
 		/// The mode is used only for one-time strategies, i.e. for those strategies, which will not be started again (for example, quoting). It is disabled by default.
@@ -1827,6 +1843,8 @@ namespace StockSharp.Algo.Strategies
 				return;
 
 			SafeGetConnector().EditOrder(order, changes);
+
+			ProcessRisk(() => order.CreateReplaceMessage(changes, order.Security.ToSecurityId()));
 		}
 
 		/// <inheritdoc />
@@ -1849,16 +1867,13 @@ namespace StockSharp.Algo.Strategies
 			{
 				OnOrderReRegistering(oOrder, nOrder);
 
-				//ReRegisterSlippage(oOrder, nOrder);
-
 				SafeGetConnector().ReRegisterOrder(oOrder, nOrder);
 			});
 		}
 
 		private void ProcessRisk(Order order)
 		{
-			if (RiskManager.Rules.Count > 0)
-				ProcessRisk(order.CreateRegisterMessage());
+			ProcessRisk(() => order.CreateRegisterMessage());
 		}
 
 		private void ProcessChildOrderRegistering(Order order)
@@ -2051,17 +2066,14 @@ namespace StockSharp.Algo.Strategies
 			{
 				if (order.Type == OrderTypes.Conditional)
 				{
-					//_stopOrders.Add(order);
 					OnOrderRegistered(order);
 
 					StatisticManager.AddNewOrder(order);
 				}
 				else
 				{
-					//_orders.Add(order);
 					OnOrderRegistered(order);
 
-					//SlippageManager.Registered(order);
 					PositionChangeMessage posChange = null;
 
 					if(!IsRootStrategy)
@@ -2129,7 +2141,7 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// It is used to restore a state of the strategy, when it is necessary to subscribe for getting data on orders, registered earlier.
 		/// </remarks>
-		[Obsolete]
+		[Obsolete("CanAttach method must be overrided.")]
 		public virtual void AttachOrder(Order order, IEnumerable<MyTrade> myTrades)
 		{
 			if (order == null)
@@ -2139,8 +2151,6 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(myTrades));
 
 			AttachOrder(order, true);
-
-			//myTrades.ForEach(OnConnectorNewMyTrade);
 		}
 
 		private void AttachOrder(Order order, bool restored)
@@ -2251,14 +2261,6 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.AddInfoLog(LocalizedStrings.Str1393);
 
-			//ThrowIfTraderNotRegistered();
-
-			//if (Security == null)
-			//	throw new InvalidOperationException(LocalizedStrings.Str1380);
-
-			//if (Portfolio == null)
-			//	throw new InvalidOperationException(LocalizedStrings.Str1381);
-
 			ChildStrategies.ForEach(s => s.Reset());
 
 			StatisticManager.Reset();
@@ -2266,13 +2268,8 @@ namespace StockSharp.Algo.Strategies
 			PnLManager.Reset();
 
 			Commission = default;
-			//CommissionManager.Reset();
-
 			Latency = default;
-			//LatencyManager.Reset();
-
 			Slippage = default;
-			//SlippageManager.Reset();
 
 			RiskManager.Reset();
 
@@ -2380,8 +2377,6 @@ namespace StockSharp.Algo.Strategies
 
 			if (DisposeOnStop)
 			{
-				//Trace.WriteLine(Name+" strategy-dispose-on-stop");
-
 				ParentStrategy?.ChildStrategies.Remove(this);
 
 				Dispose();
@@ -2439,7 +2434,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.OrderRegistering"/>.
+		/// To call the event <see cref="OrderRegistering"/>.
 		/// </summary>
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderRegistering(Order order)
@@ -2447,7 +2442,6 @@ namespace StockSharp.Algo.Strategies
 			TryAddChildOrder(order);
 
 			OrderRegistering?.Invoke(order);
-			//SlippageManager.Registering(order);
 		}
 
 		/// <summary>
@@ -2499,6 +2493,8 @@ namespace StockSharp.Algo.Strategies
 		{
 			OrderRegisterFailed?.Invoke(fail);
 			StatisticManager.AddRegisterFailedOrder(fail);
+
+			ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
 		}
 
 		private void TryAddChildOrder(Order order)
@@ -2577,8 +2573,6 @@ namespace StockSharp.Algo.Strategies
 					{
 						switch (stateMsg.State)
 						{
-							//case ProcessStates.Stopped:
-							//	break;
 							case ProcessStates.Stopping:
 							{
 								if (ProcessState == ProcessStates.Started)
@@ -2597,8 +2591,6 @@ namespace StockSharp.Algo.Strategies
 
 								break;
 							}
-							//default:
-							//	throw new ArgumentOutOfRangeException();
 						}
 					}
 
@@ -2720,7 +2712,31 @@ namespace StockSharp.Algo.Strategies
 			if(IsDisposeStarted)
 				return;
 
-			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
+			OrderInfo info;
+
+			lock (_ordersInfo.SyncRoot)
+			{
+				info = _ordersInfo.TryGetValue(fail.Order);
+
+				if (info == null)
+					return;
+
+				info.RegistrationFail = fail;
+			}
+
+			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.TransactionId, fail.Error.Message);
+
+			TryInvoke(() => OnOrderRegisterFailed(fail));
+
+			if (info.IsOwn && MaxOrderRegisterErrorCount != -1)
+			{
+				OrderRegisterErrorCount++;
+
+				this.AddInfoLog(LocalizedStrings.Str1297Params, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
+
+				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
+					Stop();
+			}
 		}
 
 		private void UpdatePnLManager(Security security)
@@ -2816,7 +2832,7 @@ namespace StockSharp.Algo.Strategies
 					RaiseSlippageChanged();
 			});
 
-			ProcessRisk(execMsg);
+			ProcessRisk(() => execMsg);
 
 			return true;
 		}
@@ -2848,6 +2864,18 @@ namespace StockSharp.Algo.Strategies
 				{
 					var manager = PnLManager;
 					evt(_pfSubscription, Portfolio, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
+
+					ProcessRisk(() => new PositionChangeMessage
+					{
+						PortfolioName = Portfolio.Name,
+						SecurityId = SecurityId.Money,
+						ServerTime = time,
+						OriginalTransactionId = _pfSubscription.TransactionId,
+					}
+					.TryAdd(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
+					.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL)
+					.TryAdd(PositionChangeTypes.Commission, Commission)
+					);
 				}
 			}
 
@@ -2873,7 +2901,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To process orders, received for the connection <see cref="Strategy.Connector"/>, and find among them those, belonging to the strategy.
+		/// To process orders, received for the connection <see cref="Connector"/>, and find among them those, belonging to the strategy.
 		/// </summary>
 		/// <param name="newOrders">New orders.</param>
 		/// <returns>Orders, belonging to the strategy.</returns>
@@ -2908,8 +2936,6 @@ namespace StockSharp.Algo.Strategies
 
 			if (riskStorage != null)
 				RiskManager.Load(riskStorage);
-
-			IsOnlineStateIncludesChildren = storage.GetValue<bool>(nameof(IsOnlineStateIncludesChildren));
 		}
 
 		/// <inheritdoc />
@@ -2919,9 +2945,6 @@ namespace StockSharp.Algo.Strategies
 
 			storage.SetValue(nameof(PnLManager), PnLManager.Save());
 			storage.SetValue(nameof(RiskManager), RiskManager.Save());
-			storage.SetValue(nameof(IsOnlineStateIncludesChildren), IsOnlineStateIncludesChildren);
-			//storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
-			//storage.SetValue(nameof(PositionManager), PositionManager.Save());
 		}
 
 		/// <inheritdoc />
@@ -2980,7 +3003,6 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnChildOrderRegisterFailed(OrderFail fail)
 		{
-			//SlippageManager.RegisterFailed(fail);
 			TryInvoke(() => OrderRegisterFailed?.Invoke(fail));
 		}
 
@@ -3011,36 +3033,6 @@ namespace StockSharp.Algo.Strategies
 			OrderCancelFailed?.Invoke(fail);
 
 			StatisticManager.AddFailedOrderCancel(fail);
-		}
-
-		private void ProcessRegisterOrderFail(OrderFail fail, Action<OrderFail> evt)
-		{
-			OrderInfo info;
-
-			lock (_ordersInfo.SyncRoot)
-			{
-				info = _ordersInfo.TryGetValue(fail.Order);
-
-				if (info == null)
-					return;
-
-				info.RegistrationFail = fail;
-			}
-
-			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.TransactionId, fail.Error.Message);
-			//SlippageManager.RegisterFailed(fail);
-
-			TryInvoke(() => evt?.Invoke(fail));
-
-			if (info.IsOwn && MaxOrderRegisterErrorCount != -1)
-			{
-				OrderRegisterErrorCount++;
-
-				this.AddInfoLog(LocalizedStrings.Str1297Params, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
-
-				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
-					Stop();
-			}
 		}
 
 		/// <summary>
@@ -3094,12 +3086,18 @@ namespace StockSharp.Algo.Strategies
 			return info != null && info.IsOwn;
 		}
 
-		private void ProcessRisk(Message message)
+		private void ProcessRisk(Func<Message> getMessage)
 		{
-			foreach (var rule in RiskManager.ProcessRules(message))
+			if (getMessage is null)
+				throw new ArgumentNullException(nameof(getMessage));
+
+			if (RiskManager.Rules.Count == 0)
+				return;
+
+			foreach (var rule in RiskManager.ProcessRules(getMessage()))
 			{
 				this.AddWarningLog(LocalizedStrings.Str855Params,
-					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
+					rule.Name, rule.Title, rule.Action);
 
 				switch (rule.Action)
 				{
@@ -3113,7 +3111,7 @@ namespace StockSharp.Algo.Strategies
 						CancelActiveOrders();
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(rule.Action.ToString());
 				}
 			}
 		}
@@ -3141,6 +3139,39 @@ namespace StockSharp.Algo.Strategies
 			if (pf is not null)
 				yield return pf;
 		}
+
+		private readonly StrategyParam<TimeSpan?> _historyRequired;
+
+		/// <summary>
+		/// History to initialize the strategy on Live trading.
+		/// </summary>
+		[Display(ResourceType = typeof(LocalizedStrings),
+			GroupName = LocalizedStrings.SettingsKey,
+			Name = LocalizedStrings.Str3172Key,
+			Description = LocalizedStrings.Str3173Key,
+			Order = 20)]
+		[TimeSpanEditor(Mask = TimeSpanEditorMask.Days | TimeSpanEditorMask.Hours | TimeSpanEditorMask.Minutes | TimeSpanEditorMask.Seconds)]
+		public TimeSpan? HistoryRequired
+		{
+			get => _historyRequired.Value;
+			set
+			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
+
+				_historyRequired.Value = value;
+			}
+		}
+
+		/// <summary>
+		/// Calculated from code version of <see cref="HistoryRequired"/>.
+		/// </summary>
+		protected virtual TimeSpan? HistoryCalculated => null;
+
+		/// <summary>
+		/// Determines <see cref="Connector"/> is <see cref="HistoryEmulationConnector"/>.
+		/// </summary>
+		protected bool IsBacktesting => Connector is HistoryEmulationConnector;
 
 		private ISecurityProvider SecurityProvider => SafeGetConnector();
 
@@ -3265,44 +3296,20 @@ namespace StockSharp.Algo.Strategies
 
 		private void CheckRefreshOnlineState()
 		{
-			int numSubs, numSubsOnline, numChildren, numChildrenOnline;
-			numSubs = numSubsOnline = numChildren = numChildrenOnline = 0;
-
 			lock (_onlineStateLock)
 			{
 				var online = ProcessState == ProcessStates.Started;
 
-				_subscriptions.SyncDo(d =>
-				{
-					foreach (var sub in d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()))
-					{
-						++numSubs;
-						if(sub.State == SubscriptionStates.Online)
-							++numSubsOnline;
-					}
-				});
+				if (online)
+					online = _subscriptions.SyncGet(d => d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()).All(s => s.State == SubscriptionStates.Online));
 
-				online &= numSubs == numSubsOnline;
-
-				if (IsOnlineStateIncludesChildren)
-				{
-					_childStrategies.SyncDo(s =>
-					{
-						foreach (var child in s)
-						{
-							++numChildren;
-							if(child.IsOnline)
-								++numChildrenOnline;
-						}
-					});
-
-					online &= numChildren == numChildrenOnline;
-				}
+				if (online && IsOnlineStateIncludesChildren)
+					online = _childStrategies.SyncGet(c => c.All(s => s.IsOnline));
 
 				if(online == IsOnline)
 					return;
 
-				this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, subs: {3}/{4}, children({5}): {6}/{7}", IsOnline, online, ProcessState, numSubsOnline, numSubs, IsOnlineStateIncludesChildren, numChildrenOnline, numChildren);
+				this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, children({3})", IsOnline, online, ProcessState, IsOnlineStateIncludesChildren);
 
 				IsOnline = online;
 			}

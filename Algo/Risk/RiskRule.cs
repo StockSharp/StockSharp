@@ -26,6 +26,14 @@ namespace StockSharp.Algo.Risk
 			UpdateTitle();
 		}
 
+		/// <inheritdoc/>
+		[Browsable(false)]
+		public override Guid Id { get => base.Id; set => base.Id = value; }
+
+		/// <inheritdoc/>
+		[Browsable(false)]
+		public override string Name { get => base.Name; set => base.Name = value; }
+
 		/// <summary>
 		/// Get title.
 		/// </summary>
@@ -59,12 +67,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str722Key,
 			Description = LocalizedStrings.Str859Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public RiskActions Action
 		{
 			get => _action;
 			set
 			{
+				if (_action == value)
+					return;
+
 				_action = value;
 				NotifyChanged();
 			}
@@ -136,12 +148,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PnLKey,
 			Description = LocalizedStrings.Str861Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public Unit PnL
 		{
 			get => _pnL;
 			set
 			{
+				if (_pnL == value)
+					return;
+
 				_pnL = value ?? throw new ArgumentNullException(nameof(value));
 				UpdateTitle();
 			}
@@ -222,12 +238,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str862Key,
 			Description = LocalizedStrings.Str864Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public decimal Position
 		{
 			get => _position;
 			set
 			{
+				if (_position == value)
+					return;
+
 				_position = value;
 				UpdateTitle();
 			}
@@ -291,12 +311,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeKey,
 			Description = LocalizedStrings.Str867Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public TimeSpan Time
 		{
 			get => _time;
 			set
 			{
+				if (_time == value)
+					return;
+
 				if (value < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
@@ -413,12 +437,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommissionKey,
 			Description = LocalizedStrings.Str869Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public decimal Commission
 		{
 			get => _commission;
 			set
 			{
+				if (_commission == value)
+					return;
+
 				_commission = value;
 				UpdateTitle();
 			}
@@ -482,12 +510,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str163Key,
 			Description = LocalizedStrings.Str871Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public decimal Slippage
 		{
 			get => _slippage;
 			set
 			{
+				if (_slippage == value)
+					return;
+
 				_slippage = value;
 				UpdateTitle();
 			}
@@ -550,12 +582,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
 			Description = LocalizedStrings.OrderPriceKey,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public decimal Price
 		{
 			get => _price;
 			set
 			{
+				if (_price == value)
+					return;
+
 				_price = value;
 				UpdateTitle();
 			}
@@ -622,12 +658,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
 			Description = LocalizedStrings.Str875Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public decimal Volume
 		{
 			get => _volume;
 			set
 			{
+				if (_volume == value)
+					return;
+
 				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
@@ -703,12 +743,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str878Key,
 			Description = LocalizedStrings.Str957Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public int Count
 		{
 			get => _count;
 			set
 			{
+				if (_count == value)
+					return;
+
 				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
@@ -727,12 +771,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str175Key,
 			Description = LocalizedStrings.Str879Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 1)]
 		public TimeSpan Interval
 		{
 			get => _interval;
 			set
 			{
+				if (_interval == value)
+					return;
+
 				if (value < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
@@ -843,12 +891,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
 			Description = LocalizedStrings.Str147Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public decimal Price
 		{
 			get => _price;
 			set
 			{
+				if (_price == value)
+					return;
+
 				_price = value;
 				UpdateTitle();
 			}
@@ -907,12 +959,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
 			Description = LocalizedStrings.Str882Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public decimal Volume
 		{
 			get => _volume;
 			set
 			{
+				if (_volume == value)
+					return;
+
 				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
@@ -980,12 +1036,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str878Key,
 			Description = LocalizedStrings.Str232Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public int Count
 		{
 			get => _count;
 			set
 			{
+				if (_count == value)
+					return;
+
 				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
@@ -1003,12 +1063,16 @@ namespace StockSharp.Algo.Risk
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str175Key,
 			Description = LocalizedStrings.Str885Key,
-			GroupName = LocalizedStrings.GeneralKey)]
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 1)]
 		public TimeSpan Interval
 		{
 			get => _interval;
 			set
 			{
+				if (_interval == value)
+					return;
+
 				if (value < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 

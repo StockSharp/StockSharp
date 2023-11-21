@@ -40,17 +40,17 @@ namespace StockSharp.Algo
 		/// Is rules execution suspended.
 		/// </summary>
 		/// <remarks>
-		/// Rules suspension is performed through the method <see cref="IMarketRuleContainer.SuspendRules"/>.
+		/// Rules suspension is performed through the method <see cref="SuspendRules"/>.
 		/// </remarks>
 		bool IsRulesSuspended { get; }
 
 		/// <summary>
-		/// To suspend rules execution until next restoration through the method <see cref="IMarketRuleContainer.ResumeRules"/>.
+		/// To suspend rules execution until next restoration through the method <see cref="ResumeRules"/>.
 		/// </summary>
 		void SuspendRules();
 
 		/// <summary>
-		/// To restore rules execution, suspended through the method <see cref="IMarketRuleContainer.SuspendRules"/>.
+		/// To restore rules execution, suspended through the method <see cref="SuspendRules"/>.
 		/// </summary>
 		void ResumeRules();
 

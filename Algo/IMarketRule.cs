@@ -313,7 +313,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To add the processor, accepting argument from <see cref="Do{TResult}(System.Func{TResult})"/>, which will be called at action activation.
+		/// To add the processor, accepting argument from <see cref="Do{TResult}(Func{TResult})"/>, which will be called at action activation.
 		/// </summary>
 		/// <typeparam name="TResult">The type of result, returned from the processor.</typeparam>
 		/// <param name="handler">The handler.</param>
@@ -338,7 +338,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To activate the rule.
 		/// </summary>
-		/// <param name="arg">The value, which will be sent to processor, registered through <see cref="Do(System.Action{TArg})"/>.</param>
+		/// <param name="arg">The value, which will be sent to processor, registered through <see cref="Do(Action{TArg})"/>.</param>
 		protected virtual void Activate(TArg arg)
 		{
 			if (!IsReady || IsSuspended)

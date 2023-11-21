@@ -2593,7 +2593,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Indicator value.
 		/// </summary>
-		public static DataType IndicatorValue { get; } = DataType.Create<Indicators.IIndicatorValue>();//.Immutable();
+		public static DataType IndicatorValue { get; } = DataType.Create<IIndicatorValue>();//.Immutable();
 
 		/// <summary>
 		/// Generate <see cref="SecurityId"/> security.

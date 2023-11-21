@@ -44,7 +44,7 @@ namespace StockSharp.Algo
 	}
 
 	/// <summary>
-	/// Portfolios basket based on the weights <see cref="WeightedPortfolio.Weights"/>.
+	/// Portfolios basket based on the weights <see cref="Weights"/>.
 	/// </summary>
 	public class WeightedPortfolio : BasketPortfolio
 	{

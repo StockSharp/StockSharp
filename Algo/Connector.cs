@@ -422,7 +422,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// The number of errors passed through the <see cref="Connector.Error"/> event.
+		/// The number of errors passed through the <see cref="Error"/> event.
 		/// </summary>
 		public int ErrorCount { get; private set; }
 
@@ -1175,7 +1175,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To release allocated resources. In particular, to disconnect from the trading system via <see cref="Connector.Disconnect"/>.
+		/// To release allocated resources. In particular, to disconnect from the trading system via <see cref="Disconnect"/>.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
