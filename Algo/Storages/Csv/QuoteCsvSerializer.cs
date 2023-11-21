@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Storages.Csv
 			var quote = data.Quote;
 
 			if (quote != null && quote.Value.Volume < 0)
-				throw new ArgumentOutOfRangeException(nameof(data), quote.Value.Volume, LocalizedStrings.Str936);
+				throw new ArgumentOutOfRangeException(nameof(data), quote.Value.Volume, LocalizedStrings.InvalidValue);
 
 			writer.WriteRow(new[]
 			{

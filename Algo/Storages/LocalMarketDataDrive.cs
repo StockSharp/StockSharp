@@ -180,13 +180,6 @@ namespace StockSharp.Algo.Storages
 					{
 						using (var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read)))
 						{
-							//var version = new Version(file.ReadByte(), file.ReadByte());
-
-							//if (version > _dateVersion)
-							//	throw new InvalidOperationException(LocalizedStrings.Str1002Params.Put(_datesPath, version, _dateVersion));
-
-							//var count = file.Read<int>();
-
 							var dates = new List<DateTime>();
 
 							while (true)
@@ -210,7 +203,7 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (Exception ex)
 				{
-					throw new InvalidOperationException(LocalizedStrings.Str1003Params.Put(_datesPath), ex);
+					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPath), ex);
 				}
 			}
 
@@ -273,7 +266,7 @@ namespace StockSharp.Algo.Storages
 				var name = IOPath.GetDirectoryName(path);
 
 				if (name == null)
-					throw new ArgumentException(LocalizedStrings.Str1004Params.Put(path));
+					throw new ArgumentException(path);
 
 				return name;
 			}

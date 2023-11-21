@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var exchange = Registry.Exchanges.ReadById(exchangeCode);
 
 				if (exchange == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(exchangeCode));
+					throw new InvalidOperationException(LocalizedStrings.BoardNotFound.Put(exchangeCode));
 
 				return exchange;
 			}
@@ -381,7 +381,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var liteSec = _cache.TryGetValue(security.ToSecurityId());
 
 				if (liteSec == null)
-					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
+					throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(security.Id));
 
 				if (IsChanged(security.Name, liteSec.Name, forced))
 					return true;
@@ -748,7 +748,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var portfolio = Registry.Portfolios.ReadById(id);
 
 				if (portfolio == null)
-					throw new InvalidOperationException(LocalizedStrings.Str3622Params.Put(id));
+					throw new InvalidOperationException(LocalizedStrings.PortfolioNotFound.Put(id));
 
 				return portfolio;
 			}
@@ -1150,7 +1150,7 @@ namespace StockSharp.Algo.Storages.Csv
 			board = ServicesRegistry.EnsureGetExchangeInfoProvider().GetExchangeBoard(boardCode);
 
 			if (board == null)
-				throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
+				throw new InvalidOperationException(LocalizedStrings.BoardNotFound.Put(boardCode));
 
 			return board;
 		}

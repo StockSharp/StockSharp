@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var diff = value - prevValue;
 
 			if (value != prevValue + diff)
-				throw new ArgumentOutOfRangeException(nameof(value), LocalizedStrings.Str1006Params.Put(value, prevValue));
+				throw new ArgumentOutOfRangeException(nameof(value), LocalizedStrings.TooLowDiff.Put(value, prevValue));
 
 			writer.WriteDecimal(diff);
 
@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if ((price % priceStep) != 0)
 			{
 				if (!nonAdjustPrice)
-					throw new ArgumentException(LocalizedStrings.Str1007Params.Put(priceStep, securityId, price), nameof(info));
+					throw new ArgumentException(LocalizedStrings.MinPriceStepNotCorrecpondPrice.Put(priceStep, securityId, price), nameof(info));
 
 				writer.Write(false);
 
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 
 					if (!found)
-						throw new ArgumentException(LocalizedStrings.Str1007Params.Put(priceStep, securityId, price), nameof(info));
+						throw new ArgumentException(LocalizedStrings.MinPriceStepNotCorrecpondPrice.Put(priceStep, securityId, price), nameof(info));
 
 					info.LastPriceStep = newPriceStep;
 
@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			catch (OverflowException ex)
 			{
-				throw new ArgumentException(LocalizedStrings.Str1008Params.Put(price, prevPrice, priceStep, useLong), ex);
+				throw new ArgumentException(LocalizedStrings.CannotConvertToInt.Put(price, prevPrice, priceStep, useLong), ex);
 			}
 		}
 
@@ -336,7 +336,7 @@ namespace StockSharp.Algo.Storages.Binary
 			else
 			{
 				if (timeDiff < TimeSpan.Zero)
-					throw new ArgumentException(LocalizedStrings.Str1009Params.Put(name, prevTime, time), nameof(dto));
+					throw new ArgumentException(LocalizedStrings.UnsortedData.Put(name, prevTime, time), nameof(dto));
 
 				if (timeDiff >= TimeSpan.FromMinutes(1))
 				{
@@ -452,7 +452,7 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					writer.Write(false);
-					throw new NotSupportedException(LocalizedStrings.Str1010Params.Put(volume));
+					throw new NotSupportedException(LocalizedStrings.FractionalVolumeUnsupported.Put(volume));
 				}
 			}
 			else
@@ -484,7 +484,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (reader.Read())
 					return reader.ReadLong();
 				else
-					throw new NotSupportedException(LocalizedStrings.Str1011);
+					throw new NotSupportedException(LocalizedStrings.FractionalVolumeUnsupported.Put("read"));
 			}
 			else
 			{

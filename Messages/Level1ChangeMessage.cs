@@ -508,49 +508,49 @@ namespace StockSharp.Messages
 		/// Liquidity (current).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str332Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CurrentRatioKey)]
 		CurrentRatio,
 
 		/// <summary>
 		/// Liquidity (instantaneous).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str333Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.QuickRatioKey)]
 		QuickRatio,
 
 		/// <summary>
 		/// Capital (long-term debt).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str334Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.LongTermDebtEquityKey)]
 		LongTermDebtEquity,
 
 		/// <summary>
 		/// Capital (debt).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str335Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.TotalDebtEquityKey)]
 		TotalDebtEquity,
 
 		/// <summary>
 		/// Assets margin (gross).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str336Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.GrossMarginKey)]
 		GrossMargin,
 
 		/// <summary>
 		/// Assets margin.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str337Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.OperatingMarginKey)]
 		OperatingMargin,
 
 		/// <summary>
 		/// Profit margin.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str338Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ProfitMarginKey)]
 		ProfitMargin,
 
 		/// <summary>
@@ -571,14 +571,14 @@ namespace StockSharp.Messages
 		/// Volatility (week).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str340Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VolatilityWeekKey)]
 		HistoricalVolatilityWeek,
 
 		/// <summary>
 		/// Volatility (month).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str341Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.VolatilityMonthKey)]
 		HistoricalVolatilityMonth,
 
 		/// <summary>

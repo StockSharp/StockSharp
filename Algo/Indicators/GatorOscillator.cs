@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.GatorKey,
-		Description = LocalizedStrings.Str850Key)]
+		Description = LocalizedStrings.GatorOscillatorKey)]
 	[Doc("topics/IndicatorGatorOscillator.html")]
 	public class GatorOscillator : BaseComplexIndicator
 	{

@@ -110,7 +110,7 @@ namespace StockSharp.Algo.Strategies
 			var security = strategy.Security;
 
 			if (security == null)
-				throw new InvalidOperationException(LocalizedStrings.Str1403Params.Put(strategy.Name));
+				throw new InvalidOperationException(LocalizedStrings.SecurityNotSpecified);
 
 			var order = new Order
 			{
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Strategies
 			public PositionManagerStrategyRule(Strategy strategy)
 				: this(strategy, v => true)
 			{
-				Name = LocalizedStrings.Str1250;
+				Name = LocalizedStrings.Positions;
 			}
 
 			public PositionManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
@@ -316,7 +316,7 @@ namespace StockSharp.Algo.Strategies
 			public NewMyTradeStrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				Name = LocalizedStrings.Str1251 + " " + strategy;
+				Name = LocalizedStrings.NewTrades + " " + strategy;
 				Strategy.NewMyTrade += OnStrategyNewMyTrade;
 			}
 
@@ -337,7 +337,7 @@ namespace StockSharp.Algo.Strategies
 			public OrderRegisteredStrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				Name = LocalizedStrings.Str1252 + " " + strategy;
+				Name = LocalizedStrings.Orders + " " + strategy;
 				Strategy.OrderRegistered += Activate;
 			}
 
@@ -353,7 +353,7 @@ namespace StockSharp.Algo.Strategies
 			public OrderChangedStrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				Name = LocalizedStrings.Str1253 + " " + strategy;
+				Name = LocalizedStrings.Orders + " " + strategy;
 				Strategy.OrderChanged += Activate;
 			}
 
@@ -423,7 +423,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				_processChildStrategyErrors = processChildStrategyErrors;
 
-				Name = strategy + LocalizedStrings.Str1254;
+				Name = strategy + LocalizedStrings.Error;
 				Strategy.Error += OnError;
 			}
 
@@ -500,7 +500,7 @@ namespace StockSharp.Algo.Strategies
 
 			return new PositionManagerStrategyRule(strategy, pos => pos < finishPosition)
 			{
-				Name = LocalizedStrings.Str1255Params.Put(finishPosition)
+				Name = $"Pos < {value}"
 			};
 		}
 
@@ -522,7 +522,7 @@ namespace StockSharp.Algo.Strategies
 
 			return new PositionManagerStrategyRule(strategy, pos => pos > finishPosition)
 			{
-				Name = LocalizedStrings.Str1256Params.Put(finishPosition)
+				Name = $"Pos > {value}"
 			};
 		}
 
@@ -544,7 +544,7 @@ namespace StockSharp.Algo.Strategies
 
 			return new PnLManagerStrategyRule(strategy, pos => pos < finishPosition)
 			{
-				Name = LocalizedStrings.Str1257Params.Put(finishPosition)
+				Name = $"P&L < {value}"
 			};
 		}
 
@@ -566,7 +566,7 @@ namespace StockSharp.Algo.Strategies
 
 			return new PnLManagerStrategyRule(strategy, pos => pos > finishPosition)
 			{
-				Name = LocalizedStrings.Str1258Params.Put(finishPosition)
+				Name = $"P&L > {value}"
 			};
 		}
 
@@ -589,7 +589,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Started)
 			{
-				Name = strategy + LocalizedStrings.Str1259,
+				Name = strategy + LocalizedStrings.Started,
 			};
 		}
 
@@ -602,7 +602,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Stopping)
 			{
-				Name = strategy + LocalizedStrings.Str1260,
+				Name = strategy + LocalizedStrings.Stopping,
 			};
 		}
 
@@ -615,7 +615,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Stopped)
 			{
-				Name = strategy + LocalizedStrings.Str1261,
+				Name = strategy + LocalizedStrings.Stopped,
 			};
 		}
 
@@ -639,7 +639,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			return new PropertyChangedStrategyRule(strategy, s => s.ErrorState == LogLevels.Warning)
 			{
-				Name = strategy + LocalizedStrings.Str1262,
+				Name = strategy + LocalizedStrings.Warning,
 			};
 		}
 
@@ -710,7 +710,7 @@ namespace StockSharp.Algo.Strategies
 				throw new ArgumentNullException(nameof(rule));
 
 			if (rule.Container is not Strategy strategy)
-				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule), nameof(rule));
+				throw new ArgumentException(LocalizedStrings.RuleNotRegisteredInStrategy.Put(rule), nameof(rule));
 
 			return strategy;
 		}
@@ -829,7 +829,7 @@ namespace StockSharp.Algo.Strategies
 			public ActivatedStrategyRule(ProtectiveStrategy strategy)
 				: base(strategy)
 			{
-				Name = LocalizedStrings.Str1082;
+				Name = LocalizedStrings.Activation;
 
 				_strategy = strategy;
 				_strategy.Activated += Activate;

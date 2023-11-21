@@ -27,8 +27,8 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str738Key,
-		Description = LocalizedStrings.Str735Key)]
+		Name = LocalizedStrings.LinearRegressionKey,
+		Description = LocalizedStrings.LinearRegressionDescKey)]
 	[Browsable(false)]
 	public class LinearRegression : BaseComplexIndicator
 	{
@@ -83,8 +83,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str738Key,
-			Description = LocalizedStrings.Str738Key,
+			Name = LocalizedStrings.LinearRegressionKey,
+			Description = LocalizedStrings.LinearRegressionKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public LinearReg LinearReg { get; }
 
@@ -94,8 +94,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str739Key,
-			Description = LocalizedStrings.Str739Key,
+			Name = LocalizedStrings.RSquaredKey,
+			Description = LocalizedStrings.RSquaredKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public LinearRegRSquared RSquared { get; }
 
@@ -105,8 +105,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str740Key,
-			Description = LocalizedStrings.Str750Key,
+			Name = LocalizedStrings.StandardErrorKey,
+			Description = LocalizedStrings.StandardErrorLinearRegKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public StandardError StandardError { get; }
 
@@ -117,7 +117,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LRSKey,
-			Description = LocalizedStrings.Str742Key,
+			Description = LocalizedStrings.LinearRegSlopeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public LinearRegSlope LinearRegSlope { get; }
 

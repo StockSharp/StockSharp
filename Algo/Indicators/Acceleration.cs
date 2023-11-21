@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ADKey,
-		Description = LocalizedStrings.Str835Key)]
+		Description = LocalizedStrings.AccDecIndicatorKey)]
 	[Doc("topics/IndicatorAcceleration.html")]
 	public class Acceleration : BaseIndicator
 	{
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AOKey,
-			Description = LocalizedStrings.Str836Key,
+			Description = LocalizedStrings.AwesomeOscillatorKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public AwesomeOscillator Ao { get; }
 

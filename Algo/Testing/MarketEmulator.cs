@@ -228,7 +228,7 @@ namespace StockSharp.Algo.Testing
 
 							if (_settings.Latency > TimeSpan.Zero)
 							{
-								this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancellation ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
+								this.AddInfoLog(LocalizedStrings.WaitingForOrder, execMsg.IsCancellation ? LocalizedStrings.Cancellation : LocalizedStrings.Registration, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
 								_pendingExecutions.Add(execMsg.TypedClone(), _settings.Latency);
 							}
 							else
@@ -291,7 +291,7 @@ namespace StockSharp.Algo.Testing
 							}
 							else if (execMsg.IsCancellation)
 							{
-								var error = LocalizedStrings.Str1148Params.Put(execMsg.OrderId);
+								var error = LocalizedStrings.OrderForReplaceNotFound.Put(execMsg.OrderId);
 								var serverTime = GetServerTime(orderMsg.LocalTime);
 
 								// cancellation error
@@ -325,7 +325,7 @@ namespace StockSharp.Algo.Testing
 									StrategyId = orderMsg.StrategyId,
 								});
 
-								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OriginalTransactionId);
+								this.AddErrorLog(LocalizedStrings.OrderForReplaceNotFound, orderMsg.OriginalTransactionId);
 							}
 						}
 
@@ -1755,9 +1755,9 @@ namespace StockSharp.Algo.Testing
 				{
 					if (RandomGen.GetDouble() < (_settings.Failing / 100.0))
 					{
-						this.AddErrorLog(LocalizedStrings.Str1151Params, execution.IsCancellation ? LocalizedStrings.Str1152 : LocalizedStrings.Str1153, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
+						this.AddErrorLog(LocalizedStrings.ErrorForOrder, execution.IsCancellation ? LocalizedStrings.Cancellation : LocalizedStrings.Registration, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
 
-						var replyMsg = CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.Str1154));
+						var replyMsg = CreateReply(execution, time, new InvalidOperationException(LocalizedStrings.Random));
 
 						replyMsg.Balance = execution.OrderVolume;
 
@@ -1789,7 +1789,7 @@ namespace StockSharp.Algo.Testing
 
 						result.Add(replyMsg);
 
-						this.AddInfoLog(LocalizedStrings.Str1155Params, execution.OriginalTransactionId);
+						this.AddInfoLog(LocalizedStrings.OrderCancelled, execution.OriginalTransactionId);
 
 						replyMsg.Commission = _parent
 							.GetPortfolioInfo(execution.PortfolioName)
@@ -1811,7 +1811,7 @@ namespace StockSharp.Algo.Testing
 
 					if (error is null)
 					{
-						this.AddInfoLog(LocalizedStrings.Str1157Params, execution.TransactionId);
+						this.AddInfoLog(LocalizedStrings.OrderRegistered, execution.TransactionId);
 
 						// при восстановлении заявки у нее уже есть номер
 						if (execution.OrderId == null)
@@ -1879,7 +1879,7 @@ namespace StockSharp.Algo.Testing
 					}
 					else
 					{
-						this.AddInfoLog(LocalizedStrings.Str1158Params, execution.TransactionId, error.Message);
+						this.AddInfoLog(LocalizedStrings.ErrorRegOrder, execution.TransactionId, error.Message);
 					}
 				}
 			}
@@ -1914,10 +1914,10 @@ namespace StockSharp.Algo.Testing
 				// матчинг чужих заявок на равне со своими дает наиболее реалистичный сценарий обновления стакана.
 
 				if (message.TradeId != null)
-					throw new ArgumentException(LocalizedStrings.Str1159, nameof(message));
+					throw new ArgumentOutOfRangeException(nameof(message), message.TradeId, LocalizedStrings.TradeId);
 
 				if (message.OrderVolume is null or <= 0)
-					throw new ArgumentOutOfRangeException(nameof(message), message.OrderVolume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
+					throw new ArgumentOutOfRangeException(nameof(message), message.OrderVolume, LocalizedStrings.OrderVolume);
 
 				if (message.IsCancellation)
 				{
@@ -2082,7 +2082,7 @@ namespace StockSharp.Algo.Testing
 						if (crossOrders.Length > 0)
 						{
 							// матчинг идет о заявки с таким же портфелем
-							var matchError = LocalizedStrings.Str1161Params.Put(crossOrders.Select(o => o.TransactionId.To<string>()).JoinCommaSpace(), order.TransactionId);
+							var matchError = LocalizedStrings.CrossTrades.Put(crossOrders.Select(o => o.TransactionId.To<string>()).JoinCommaSpace(), order.TransactionId);
 							this.AddErrorLog(matchError);
 
 							break;
@@ -2228,7 +2228,7 @@ namespace StockSharp.Algo.Testing
 							if (leftBalance == 0)
 							{
 								order.OrderState = OrderStates.Done;
-								this.AddInfoLog(LocalizedStrings.Str1164Params, order.TransactionId);
+								this.AddInfoLog(LocalizedStrings.OrderMatched, order.TransactionId);
 							}
 
 							ProcessOrder(time, order, result);
@@ -2238,7 +2238,7 @@ namespace StockSharp.Algo.Testing
 						{
 							if (leftBalance > 0)
 							{
-								this.AddInfoLog(LocalizedStrings.Str1165Params, order.TransactionId, leftBalance);
+								this.AddInfoLog(LocalizedStrings.OrderCancellingNotAllBalance, order.TransactionId, leftBalance);
 
 								order.OrderState = OrderStates.Done;
 								ProcessOrder(time, order, result);
@@ -2253,7 +2253,7 @@ namespace StockSharp.Algo.Testing
 						if (leftBalance == 0)
 							order.Balance = 0;
 
-						this.AddInfoLog(LocalizedStrings.Str1166Params, order.TransactionId);
+						this.AddInfoLog(LocalizedStrings.OrderFOKMatched, order.TransactionId);
 
 						order.OrderState = OrderStates.Done;
 						ProcessOrder(time, order, result);
@@ -2267,7 +2267,7 @@ namespace StockSharp.Algo.Testing
 
 					case TimeInForce.CancelBalance:
 					{
-						this.AddInfoLog(LocalizedStrings.Str1167Params, order.TransactionId);
+						this.AddInfoLog(LocalizedStrings.OrderIOCMatched, order.TransactionId);
 
 						order.Balance = leftBalance;
 						order.OrderState = OrderStates.Done;
@@ -2654,7 +2654,7 @@ namespace StockSharp.Algo.Testing
 				};
 				result.Add(tradeMsg);
 
-				this.AddInfoLog(LocalizedStrings.Str1168Params, tradeMsg.TradeId, tradeMsg.OriginalTransactionId, price, volume);
+				this.AddInfoLog("Trade {0} of order {1} P={2} V={3}.", tradeMsg.TradeId, tradeMsg.OriginalTransactionId, price, volume);
 				var info = _parent.GetPortfolioInfo(order.PortfolioName);
 
 				info.ProcessTrade(order.Side, tradeMsg, result);
@@ -3040,7 +3040,7 @@ namespace StockSharp.Algo.Testing
 
 					if (_currentMoney < needBlock)
 					{
-						return new InsufficientFundException(LocalizedStrings.Str1169Params
+						return new InsufficientFundException(LocalizedStrings.InsufficientBalance
 							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice));
 					}
 				}
@@ -3546,12 +3546,8 @@ namespace StockSharp.Algo.Testing
 
 				if (board != null)
 				{
-					//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
-					//if (!Settings.IsSupportAtomicReRegister)
-					//	return new(LocalizedStrings.Str1170Params.Put(board.Code));
-
 					if (!board.IsTradeTime(execMsg.ServerTime))
-						return new(LocalizedStrings.Str1171);
+						return new(LocalizedStrings.SessionNotActive);
 				}
 			}
 
@@ -3578,10 +3574,10 @@ namespace StockSharp.Algo.Testing
 				priceStep ??= (decimal?)state.TryGetValue(Level1Fields.PriceStep);
 
 				if (minPrice != null && minPrice > 0 && execMsg.OrderPrice < minPrice)
-					return new(LocalizedStrings.Str1172Params.Put(execMsg.OrderPrice, execMsg.TransactionId, minPrice));
+					return new(LocalizedStrings.OrderPriceTooLow.Put(execMsg.OrderPrice, execMsg.TransactionId, minPrice));
 
 				if (maxPrice != null && maxPrice > 0 && execMsg.OrderPrice > maxPrice)
-					return new(LocalizedStrings.Str1173Params.Put(execMsg.OrderPrice, execMsg.TransactionId, maxPrice));
+					return new(LocalizedStrings.OrderPriceTooHigh.Put(execMsg.OrderPrice, execMsg.TransactionId, maxPrice));
 			}
 
 			if (priceStepExplicit && priceStep != null && priceStep > 0 && execMsg.OrderPrice % priceStep != 0)

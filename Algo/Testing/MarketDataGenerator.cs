@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1133);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxVolume = value;
 			}
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1134);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_minVolume = value;
 			}
@@ -140,7 +140,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1135);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxPriceStepCount = value;
 			}
@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Testing
 			get
 			{
 				if (_volumes == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1136);
+					throw new InvalidOperationException(LocalizedStrings.GeneratorNotInitialized);
 
 				return _volumes;
 			}
@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Testing
 			get
 			{
 				if (_steps == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1136);
+					throw new InvalidOperationException(LocalizedStrings.GeneratorNotInitialized);
 
 				return _steps;
 			}

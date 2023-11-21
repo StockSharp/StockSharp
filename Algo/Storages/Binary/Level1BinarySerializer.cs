@@ -565,7 +565,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo.Version < MarketDataVersions.Version45)
 			{
 				if (!_oldMap.TryGetValue(field, out var fieldCode))
-					throw new ArgumentException(LocalizedStrings.Str917Params.Put(field));
+					throw new ArgumentException(LocalizedStrings.CodeForFieldNotFound.Put(field));
 
 				return fieldCode;
 			}
@@ -578,7 +578,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo.Version < MarketDataVersions.Version45)
 			{
 				if (!_oldMap.TryGetKey(fieldCode, out var field))
-					throw new ArgumentException(LocalizedStrings.Str918Params.Put(fieldCode));
+					throw new ArgumentException(LocalizedStrings.FieldForCodeNotFound.Put(fieldCode));
 
 				return field;
 			}
@@ -627,7 +627,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (hasLocalTime)
 					{
 						lastOffset = metaInfo.LastLocalOffset;
-						metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
+						metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Level1, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
 						metaInfo.LastLocalOffset = lastOffset;
 					}
 
@@ -923,7 +923,7 @@ namespace StockSharp.Algo.Storages.Binary
 							}
 
 							var lastOffset = metaInfo.LastServerOffset;
-							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.LastTradeTime, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 							metaInfo.LastServerOffset = lastOffset;
 							break;
 						}
@@ -1126,7 +1126,7 @@ namespace StockSharp.Algo.Storages.Binary
 							}
 
 							var lastOffset = info.LastDateOffset;
-							info.LastDateTime = writer.WriteTime(timeValue, info.LastDateTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+							info.LastDateTime = writer.WriteTime(timeValue, info.LastDateTime, LocalizedStrings.LastTradeTime, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 							info.LastDateOffset = lastOffset;
 							break;
 						}
@@ -1171,12 +1171,12 @@ namespace StockSharp.Algo.Storages.Binary
 							}
 
 							var lastOffset = info.LastDateOffset;
-							info.LastDateTime = writer.WriteTime(timeValue, info.LastDateTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+							info.LastDateTime = writer.WriteTime(timeValue, info.LastDateTime, LocalizedStrings.LastTradeTime, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 							info.LastDateOffset = lastOffset;
 							break;
 						}
 						default:
-							throw new ArgumentOutOfRangeException(nameof(messages), change.Key, LocalizedStrings.Str922);
+							throw new ArgumentOutOfRangeException(nameof(messages), change.Key, LocalizedStrings.InvalidValue);
 					}
 				}
 			}
@@ -1749,7 +1749,7 @@ namespace StockSharp.Algo.Storages.Binary
 						break;
 					}
 					default:
-						throw new InvalidOperationException(LocalizedStrings.Str923Params.Put(field));
+						throw new InvalidOperationException(LocalizedStrings.UnsupportedType.Put(field));
 				}
 			}
 			

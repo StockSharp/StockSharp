@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SMMAKey,
-		Description = LocalizedStrings.Str819Key)]
+		Description = LocalizedStrings.SmoothedMovingAverageKey)]
 	[Doc("topics/IndicatorSmoothedMovingAverage.html")]
 	public class SmoothedMovingAverage : LengthIndicator<decimal>
 	{

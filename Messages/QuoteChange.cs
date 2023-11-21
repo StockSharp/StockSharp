@@ -76,10 +76,6 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	//[Display(
-	//	ResourceType = typeof(LocalizedStrings),
-	//	Name = LocalizedStrings.QuoteKey,
-	//	Description = LocalizedStrings.Str274Key)]
 	public struct QuoteChange
 	{
 		/// <summary>
@@ -112,7 +108,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
-			Description = LocalizedStrings.Str275Key,
+			Description = LocalizedStrings.QuotePriceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Price { get; set; }
 
@@ -123,7 +119,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
-			Description = LocalizedStrings.Str276Key,
+			Description = LocalizedStrings.QuoteVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Volume { get; set; }
 

@@ -31,8 +31,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str763Key,
-		Description = LocalizedStrings.Str763Key)]
+		Name = LocalizedStrings.IchimokuKey,
+		Description = LocalizedStrings.IchimokuKey)]
 	[Doc("topics/IndicatorIchimoku.html")]
 	public class Ichimoku : BaseComplexIndicator
 	{
@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SenkouAKey,
-			Description = LocalizedStrings.Str766Key,
+			Description = LocalizedStrings.SenkouADescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuSenkouALine SenkouA { get; }
@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SenkouBKey,
-			Description = LocalizedStrings.Str767Key,
+			Description = LocalizedStrings.SenkouBDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		[Browsable(true)]
 		public IchimokuSenkouBLine SenkouB { get; }

@@ -102,7 +102,7 @@ namespace StockSharp.Logging
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str7Key,
+			Description = LocalizedStrings.LogSourceNameKey,
 			GroupName = LocalizedStrings.LoggingKey,
 			Order = 1001)]
 		public virtual string Name
@@ -130,7 +130,7 @@ namespace StockSharp.Logging
 					return;
 
 				if (value != null && _parent != null)
-					throw new ArgumentException(LocalizedStrings.Str8Params.Put(this, _parent), nameof(value));
+					throw new ArgumentException(LocalizedStrings.ParentAlreadySet.Put(this, _parent), nameof(value));
 
 				if (value == this)
 					throw new ArgumentException(LocalizedStrings.CyclicDependency.Put(this), nameof(value));

@@ -234,7 +234,7 @@ namespace StockSharp.Algo.Testing
 				if (throwError)
 					throw new InvalidOperationException(LocalizedStrings.TaskCannotChangeState.Put(_state, value));
 
-				this.AddInfoLog(LocalizedStrings.Str1121Params, _state, value);
+				this.AddInfoLog("State: {0}->{1}", _state, value);
 				_state = value;
 
 				try

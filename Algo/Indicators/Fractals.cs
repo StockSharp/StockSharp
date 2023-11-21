@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			if (length % 2 == 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(length), length, LocalizedStrings.Str845);
+				throw new ArgumentOutOfRangeException(nameof(length), length, LocalizedStrings.InvalidValue);
 			}
 
 			_length = length;
@@ -110,8 +110,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str846Key,
-			Description = LocalizedStrings.Str846Key,
+			Name = LocalizedStrings.UpKey,
+			Description = LocalizedStrings.FractalUpKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public FractalPart Up { get; }
 
@@ -121,8 +121,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str848Key,
-			Description = LocalizedStrings.Str848Key,
+			Name = LocalizedStrings.DownKey,
+			Description = LocalizedStrings.FractalDownKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public FractalPart Down { get; }
 

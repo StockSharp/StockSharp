@@ -169,7 +169,7 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			this.AddInfoLog(LocalizedStrings.Str3634Params, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
+			this.AddInfoLog(LocalizedStrings.SmaNewCandleLog, candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.SecurityId);
 
 			// process new candle
 			var longValue = _longSma.Process(candle);

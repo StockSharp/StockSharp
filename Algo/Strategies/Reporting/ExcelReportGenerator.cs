@@ -74,7 +74,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 		}
 
 		worker
-			.SetCell(0, 0, LocalizedStrings.Str1331)
+			.SetCell(0, 0, LocalizedStrings.Info)
 
 			.SetCell(0, 1, LocalizedStrings.Security + ":")
 			.SetCell(1, 1, strategy.Security != null ? strategy.Security.Id : string.Empty)
@@ -82,11 +82,8 @@ public class ExcelReportGenerator : BaseReportGenerator
 			.SetCell(0, 2, LocalizedStrings.Portfolio + ":")
 			.SetCell(1, 2, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty)
 
-			.SetCell(0, 3, LocalizedStrings.Str1334)
+			.SetCell(0, 3, LocalizedStrings.WorkingTime)
 			.SetCell(1, 3, strategy.TotalWorkingTime.Format())
-
-			.SetCell(0, 4, LocalizedStrings.Str1335)
-			//.SetCell(1, 4, FormatTime(base.Strategy.TotalCPUTime))
 
 			.SetCell(0, 5, LocalizedStrings.Position + ":")
 			.SetCell(1, 5, strategy.Position)
@@ -126,7 +123,7 @@ public class ExcelReportGenerator : BaseReportGenerator
 		}
 
 		rowIndex += 2;
-		worker.SetCell(0, rowIndex, LocalizedStrings.Str1340);
+		worker.SetCell(0, rowIndex, LocalizedStrings.Parameters);
 		rowIndex++;
 
 		foreach (var strategyParam in strategy.Parameters.CachedValues)
@@ -157,20 +154,17 @@ public class ExcelReportGenerator : BaseReportGenerator
 			worker
 				.SetCell(columnShift + 0, 0, LocalizedStrings.Trades)
 
-				.SetCell(columnShift + 0, 1, LocalizedStrings.Str1192).SetStyle(columnShift + 0, typeof(long))
+				.SetCell(columnShift + 0, 1, LocalizedStrings.Identifier).SetStyle(columnShift + 0, typeof(long))
 				.SetCell(columnShift + 1, 1, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
 				.SetCell(columnShift + 2, 1, LocalizedStrings.Time).SetStyle(columnShift + 2, "HH:mm:ss.fff")
 				.SetCell(columnShift + 3, 1, LocalizedStrings.Price).SetStyle(columnShift + 3, typeof(decimal))
-				.SetCell(columnShift + 4, 1, LocalizedStrings.Str1341).SetStyle(columnShift + 4, typeof(decimal))
+				.SetCell(columnShift + 4, 1, LocalizedStrings.OrderPrice2).SetStyle(columnShift + 4, typeof(decimal))
 				.SetCell(columnShift + 5, 1, LocalizedStrings.Volume).SetStyle(columnShift + 5, typeof(decimal))
 				.SetCell(columnShift + 6, 1, LocalizedStrings.Direction)
-				.SetCell(columnShift + 7, 1, LocalizedStrings.Str1190).SetStyle(columnShift + 7, typeof(long))
+				.SetCell(columnShift + 7, 1, LocalizedStrings.Order).SetStyle(columnShift + 7, typeof(long))
 				.SetCell(columnShift + 8, 1, LocalizedStrings.Slippage).SetStyle(columnShift + 8, typeof(decimal))
 				.SetCell(columnShift + 9, 1, LocalizedStrings.Comment)
-				.SetCell(columnShift + 10, 1, LocalizedStrings.Str1342).SetStyle(columnShift + 11, typeof(decimal))
-				.SetCell(columnShift + 11, 1, LocalizedStrings.Str1343).SetStyle(columnShift + 12, typeof(decimal))
-				.SetCell(columnShift + 12, 1, LocalizedStrings.Str1344).SetStyle(columnShift + 13, typeof(decimal))
-				.SetCell(columnShift + 13, 1, LocalizedStrings.Str1345).SetStyle(columnShift + 14, typeof(decimal))
+				.SetCell(columnShift + 10, 1, LocalizedStrings.PnL).SetStyle(columnShift + 11, typeof(decimal))
 				.SetCell(columnShift + 14, 1, LocalizedStrings.Position).SetStyle(columnShift + 15, typeof(decimal));
 
 			//worker
@@ -182,21 +176,15 @@ public class ExcelReportGenerator : BaseReportGenerator
 			var totalPnL = 0m;
 			var position = 0m;
 
-			var queues = new Dictionary<Security, PnLQueue>();
-
 			rowIndex = 2;
 			foreach (var trade in strategy.MyTrades.ToArray())
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
-				var tradePnL = strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL ?? 0;
+				var pnl = strategy.PnLManager.ProcessMessage(trade.ToMessage())?.PnL ?? 0;
 
-				totalPnL += tradePnL;
-				position += trade.GetPosition() ?? 0;
-
-				var queue = queues.SafeAdd(trade.Trade.Security, key => new PnLQueue(key.ToSecurityId()));
-
-				var localInfo = queue.Process(trade.ToMessage());
+				totalPnL += pnl;
+				position += trade.Position ?? 0;
 
 				worker
 					.SetCell(columnShift + 0, rowIndex, trade.Trade.Id)
@@ -209,10 +197,8 @@ public class ExcelReportGenerator : BaseReportGenerator
 					.SetCell(columnShift + 7, rowIndex, trade.Order.Id)
 					.SetCell(columnShift + 8, rowIndex, trade.Slippage)
 					.SetCell(columnShift + 9, rowIndex, trade.Order.Comment)
-					.SetCell(columnShift + 10, rowIndex, tradePnL.Round(Decimals))
-					.SetCell(columnShift + 11, rowIndex, localInfo.PnL.Round(Decimals))
+					.SetCell(columnShift + 10, rowIndex, pnl)
 					.SetCell(columnShift + 12, rowIndex, totalPnL.Round(Decimals))
-					.SetCell(columnShift + 13, rowIndex, queue.RealizedPnL.Round(Decimals))
 					.SetCell(columnShift + 14, rowIndex, position);
 
 				rowIndex++;
@@ -226,20 +212,20 @@ public class ExcelReportGenerator : BaseReportGenerator
 			worker
 				.SetCell(columnShift + 0, 0, LocalizedStrings.Orders)
 
-				.SetCell(columnShift + 0, 1, LocalizedStrings.Str1190).SetStyle(columnShift + 0, typeof(long))
+				.SetCell(columnShift + 0, 1, LocalizedStrings.Identifier).SetStyle(columnShift + 0, typeof(long))
 				.SetCell(columnShift + 1, 1, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
 				.SetCell(columnShift + 2, 1, LocalizedStrings.Direction)
-				.SetCell(columnShift + 3, 1, LocalizedStrings.Str1346).SetStyle(columnShift + 3, "HH:mm:ss.fff")
-				.SetCell(columnShift + 4, 1, LocalizedStrings.Str1347).SetStyle(columnShift + 4, "HH:mm:ss.fff")
-				.SetCell(columnShift + 5, 1, LocalizedStrings.Str1348)
+				.SetCell(columnShift + 3, 1, LocalizedStrings.RegTime).SetStyle(columnShift + 3, "HH:mm:ss.fff")
+				.SetCell(columnShift + 4, 1, LocalizedStrings.ChangeTime).SetStyle(columnShift + 4, "HH:mm:ss.fff")
+				.SetCell(columnShift + 5, 1, LocalizedStrings.Duration)
 				.SetCell(columnShift + 6, 1, LocalizedStrings.Price).SetStyle(columnShift + 6, typeof(decimal))
 				.SetCell(columnShift + 7, 1, LocalizedStrings.Status)
 				.SetCell(columnShift + 8, 1, LocalizedStrings.State)
 				.SetCell(columnShift + 9, 1, LocalizedStrings.Balance).SetStyle(columnShift + 10, typeof(decimal))
 				.SetCell(columnShift + 10, 1, LocalizedStrings.Volume).SetStyle(columnShift + 11, typeof(decimal))
 				.SetCell(columnShift + 11, 1, LocalizedStrings.Type)
-				.SetCell(columnShift + 12, 1, LocalizedStrings.Str1326)
-				.SetCell(columnShift + 13, 1, LocalizedStrings.Str1327)
+				.SetCell(columnShift + 12, 1, LocalizedStrings.LatencyReg)
+				.SetCell(columnShift + 13, 1, LocalizedStrings.LatencyCancel)
 				.SetCell(columnShift + 14, 1, LocalizedStrings.Comment);
 
 			//worker

@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ZigZagMetaStockKey,
-		Description = LocalizedStrings.Str826Key)]
+		Description = LocalizedStrings.ZigZagDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(ShiftedIndicatorValue))]
 	[Doc("topics/IndicatorZigZagEquis.html")]
@@ -66,8 +66,8 @@ namespace StockSharp.Algo.Indicators
 		/// </remarks>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str833Key,
-			Description = LocalizedStrings.Str834Key,
+			Name = LocalizedStrings.PercentageChangeKey,
+			Description = LocalizedStrings.PercentageChangeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Deviation
 		{

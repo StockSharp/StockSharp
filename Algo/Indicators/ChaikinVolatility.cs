@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ChaikinVolatilityKey,
-		Description = LocalizedStrings.Str730Key)]
+		Description = LocalizedStrings.ChaikinVolatilityIndicatorKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorChaikinVolatility.html")]
 	public class ChaikinVolatility : BaseIndicator
@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ROCKey,
-			Description = LocalizedStrings.Str732Key,
+			Description = LocalizedStrings.RateOfChangeKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public RateOfChange Roc { get; }
 

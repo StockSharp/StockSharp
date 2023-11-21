@@ -82,7 +82,7 @@ namespace StockSharp.Algo
 			public NewMyTradeTraderRule(ITransactionProvider provider)
 				: base(provider)
 			{
-				Name = LocalizedStrings.Str1080;
+				Name = LocalizedStrings.Trades;
 				Provider.NewMyTrade += OnNewMyTrade;
 			}
 
@@ -103,7 +103,7 @@ namespace StockSharp.Algo
 			public NewOrderTraderRule(ITransactionProvider provider)
 				: base(provider)
 			{
-				Name = LocalizedStrings.Str1081;
+				Name = LocalizedStrings.Orders;
 				Provider.NewOrder += OnNewOrder;
 			}
 
@@ -317,7 +317,7 @@ namespace StockSharp.Algo
 			if (process == null)
 				throw new ArgumentNullException(nameof(process));
 
-			container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Str1082);
+			container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Activation);
 
 			List<IMarketRule> removedRules = null;
 
@@ -355,7 +355,7 @@ namespace StockSharp.Algo
 
 			foreach (var removedRule in removedRules)
 			{
-				container.AddRuleLog(LogLevels.Debug, removedRule, LocalizedStrings.Str1083);
+				container.AddRuleLog(LogLevels.Debug, removedRule, LocalizedStrings.Delete);
 			}
 		}
 
@@ -464,7 +464,7 @@ namespace StockSharp.Algo
 
 			if (isRemoved)
 			{
-				container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Str1084, rule);
+				container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Delete, rule);
 			}
 
 			return isRemoved;
@@ -514,7 +514,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(rule2));
 
 			if (rule1 == rule2)
-				throw new ArgumentException(LocalizedStrings.Str1085Params.Put(rule1), nameof(rule2));
+				throw new ArgumentException(LocalizedStrings.RulesSame.Put(rule1), nameof(rule2));
 
 			rule1.ExclusiveRules.Add(rule2);
 			rule2.ExclusiveRules.Add(rule1);
@@ -535,7 +535,7 @@ namespace StockSharp.Algo
 				_innerRules.AddRange(innerRules.Select(Init));
 
 				if (_innerRules.IsEmpty())
-					throw new InvalidOperationException(LocalizedStrings.Str1086);
+					throw new InvalidOperationException(LocalizedStrings.RulesEmpty);
 
 				Name = _innerRules.Select(r => r.Name).Join(" OR ");
 
@@ -893,7 +893,7 @@ namespace StockSharp.Algo
 			if (rule.LogLevel != LogLevels.Inherit && rule.LogLevel > level)
 				return;
 
-			container.AddLog(level, () => LocalizedStrings.Str1087Params.Put(rule, message.Put(args)));
+			container.AddLog(level, () => $"Rule '{rule}'. {message.Put(args)}");
 		}
 	}
 }

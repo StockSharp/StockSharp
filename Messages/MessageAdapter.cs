@@ -289,8 +289,8 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str172Key,
-			Description = LocalizedStrings.Str978Key,
+			Name = LocalizedStrings.ReConnectionSettingsKey,
+			Description = LocalizedStrings.ReConnectionDescKey,
 			GroupName = LocalizedStrings.ConnectionKey)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
@@ -361,7 +361,7 @@ namespace StockSharp.Messages
 				{
 					SendOutMessage(new ConnectMessage
 					{
-						Error = new InvalidOperationException(LocalizedStrings.Str169Params.Put(GetType().Name, Platform))
+						Error = new InvalidOperationException(LocalizedStrings.BitSystemIncompatible.Put(GetType().Name, Platform))
 					});
 
 					return true;

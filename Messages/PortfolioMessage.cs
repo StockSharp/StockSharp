@@ -41,7 +41,7 @@ namespace StockSharp.Messages
 		/// Blocked.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str249Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BlockedKey)]
 		Blocked,
 	}
 

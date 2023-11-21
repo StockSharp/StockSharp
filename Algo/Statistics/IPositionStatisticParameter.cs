@@ -41,8 +41,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str970Key,
-		Description = LocalizedStrings.Str971Key,
+		Name = LocalizedStrings.MaxLongPosKey,
+		Description = LocalizedStrings.MaxLongPosDescKey,
 		GroupName = LocalizedStrings.PositionsKey,
 		Order = 200
 	)]
@@ -73,8 +73,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str973Key,
-		Description = LocalizedStrings.Str974Key,
+		Name = LocalizedStrings.MaxShortPosKey,
+		Description = LocalizedStrings.MaxShortPosDescKey,
 		GroupName = LocalizedStrings.PositionsKey,
 		Order = 201
 	)]

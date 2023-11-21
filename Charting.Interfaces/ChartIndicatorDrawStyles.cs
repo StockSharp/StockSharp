@@ -18,13 +18,13 @@ namespace StockSharp.Charting
 		/// <summary>
 		/// Line (no gaps).
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1972Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.NoGapLineKey)]
 		NoGapLine,
 
 		/// <summary>
 		/// Stepped line.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1973Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StepLineKey)]
 		StepLine,
 
 		/// <summary>
@@ -36,13 +36,13 @@ namespace StockSharp.Charting
 		/// <summary>
 		/// The range with a single value.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1974_2Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BandOneValueKey)]
 		BandOneValue,
 
 		/// <summary>
 		/// Dot.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1975Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DotStyleKey)]
 		Dot,
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace StockSharp.Charting
 		/// <summary>
 		/// Stacked bar chart.
 		/// </summary>
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str1978Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StackedBarKey)]
 		StackedBar,
 
 		/// <summary>

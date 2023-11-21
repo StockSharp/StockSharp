@@ -248,7 +248,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.FinishedKey,
-			Description = LocalizedStrings.FinishedCandlesKey,
+			Description = LocalizedStrings.FinishedKey,
 			GroupName = LocalizedStrings.BuildKey,
 			Order = 23)]
 		public bool IsFinishedOnly { get; set; }

@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Indicators
 			var value = other as IIndicatorValue;
 
 			if (other == null)
-				throw new ArgumentException(LocalizedStrings.Str911, nameof(other));
+				throw new ArgumentOutOfRangeException(nameof(other), other, LocalizedStrings.InvalidValue);
 
 			return CompareTo(value);
 		}
@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Indicators
 		private void ThrowIfEmpty()
 		{
 			if (IsEmpty)
-				throw new InvalidOperationException(LocalizedStrings.Str910);
+				throw new InvalidOperationException(LocalizedStrings.NoData2);
 		}
 
 		/// <inheritdoc />

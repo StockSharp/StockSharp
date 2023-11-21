@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Import
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.FileNameKey,
-			Description = LocalizedStrings.Str2843Key,
+			Description = LocalizedStrings.FilePathCsvKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 1)]
 		[Editor(typeof(IFileBrowserEditor), typeof(IFileBrowserEditor))]
@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Import
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ColumnSeparatorKey,
-			Description = LocalizedStrings.Str2845Key,
+			Description = LocalizedStrings.ColumnSeparatorDescKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 5)]
 		public string ColumnSeparator
@@ -217,7 +217,7 @@ namespace StockSharp.Algo.Import
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SkipLinesKey,
-			Description = LocalizedStrings.Str2847Key,
+			Description = LocalizedStrings.SkipLinesDescKey,
 			GroupName = LocalizedStrings.CommonKey,
 			Order = 6)]
 		public int SkipFromHeader
@@ -272,7 +272,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_interval = value;
 				NotifyChanged();

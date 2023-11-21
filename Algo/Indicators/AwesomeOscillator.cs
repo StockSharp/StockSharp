@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.AOKey,
-		Description = LocalizedStrings.Str836Key)]
+		Description = LocalizedStrings.AwesomeOscillatorKey)]
 	[Doc("topics/IndicatorAwesomeOscillator.html")]
 	public class AwesomeOscillator : BaseIndicator
 	{
@@ -69,8 +69,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str798Key,
-			Description = LocalizedStrings.Str799Key,
+			Name = LocalizedStrings.LongMaKey,
+			Description = LocalizedStrings.LongMaDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage LongMa { get; }
 
@@ -80,8 +80,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str800Key,
-			Description = LocalizedStrings.Str799Key,
+			Name = LocalizedStrings.ShortMaKey,
+			Description = LocalizedStrings.ShortMaDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage ShortMa { get; }
 
@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str843Key,
+			Name = LocalizedStrings.MedPriceKey,
 			Description = LocalizedStrings.MedianPriceKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public MedianPrice MedianPrice { get; }

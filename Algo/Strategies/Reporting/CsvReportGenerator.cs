@@ -58,13 +58,13 @@ public class CsvReportGenerator : BaseReportGenerator
 			writer.WriteLine();
 		}
 
-		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
+		WriteValues(LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.WorkingTime, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
 		WriteValues(
 			strategy.Name, strategy.Security != null ? strategy.Security.Id : string.Empty, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty,
 			strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
 
 		var parameters = strategy.Parameters.CachedValues;
-		WriteValues(LocalizedStrings.Str1322);
+		WriteValues(LocalizedStrings.Parameters);
 		WriteValues(parameters.Select(p => (object)p.Name).ToArray());
 		WriteValues(parameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value).ToArray());
 
@@ -76,9 +76,9 @@ public class CsvReportGenerator : BaseReportGenerator
 		if (IncludeOrders)
 		{
 			WriteValues(LocalizedStrings.Orders);
-			WriteValues(LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
+			WriteValues(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
 				LocalizedStrings.Status, LocalizedStrings.State, LocalizedStrings.Balance,
-				LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.Str1326, LocalizedStrings.Str1327);
+				LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.LatencyReg, LocalizedStrings.LatencyCancel);
 
 			foreach (var order in strategy.Orders)
 			{
@@ -91,8 +91,8 @@ public class CsvReportGenerator : BaseReportGenerator
 		if (IncludeTrades)
 		{
 			WriteValues(LocalizedStrings.Trades);
-			WriteValues(LocalizedStrings.Str1192, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
-				LocalizedStrings.Direction, LocalizedStrings.Str1190, LocalizedStrings.Str1330, LocalizedStrings.Slippage);
+			WriteValues(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
+				LocalizedStrings.Direction, LocalizedStrings.OrderId, LocalizedStrings.PnL, LocalizedStrings.Slippage);
 
 			foreach (var trade in strategy.MyTrades)
 			{

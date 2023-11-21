@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.DPOKey,
-		Description = LocalizedStrings.Str761Key)]
+		Description = LocalizedStrings.DetrendedPriceOscillatorKey)]
 	[Doc("topics/IndicatorDetrendedPriceOscillator.html")]
 	public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	{

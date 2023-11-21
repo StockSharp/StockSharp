@@ -38,7 +38,7 @@
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
-				Name = LocalizedStrings.Str1056 + " " + depth.Security;
+				Name = LocalizedStrings.MarketDepth + " " + depth.Security;
 
 				_provider = provider ?? throw new ArgumentNullException(nameof(provider));
 				_provider.MarketDepthChanged += ProviderOnMarketDepthChanged;
@@ -90,7 +90,7 @@
 			var firstPrice = pair?.SpreadPrice ?? 0;
 			return new MarketDepthChangedRule(depth, provider, d => d.BestPair != null && d.BestPair.SpreadPrice > (firstPrice + price))
 			{
-				Name = LocalizedStrings.Str1057Params.Put(depth.Security, price)
+				Name = $"{depth.Security} spread > {price}"
 			};
 		}
 
@@ -108,7 +108,7 @@
 			var firstPrice = pair?.SpreadPrice ?? 0;
 			return new MarketDepthChangedRule(depth, provider, d => d.BestPair != null && d.BestPair.SpreadPrice < (firstPrice - price))
 			{
-				Name = LocalizedStrings.Str1058Params.Put(depth.Security, price)
+				Name = $"{depth.Security} spread < {price}"
 			};
 		}
 
@@ -124,7 +124,7 @@
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, false))
 			{
-				Name = LocalizedStrings.Str1059Params.Put(depth.Security, price)
+				Name = $"{depth.Security} {LocalizedStrings.BestBid} > {price}"
 			};
 		}
 
@@ -140,7 +140,7 @@
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestBid2, true))
 			{
-				Name = LocalizedStrings.Str1060Params.Put(depth.Security, price)
+				Name = $"{depth.Security} {LocalizedStrings.BestBid} < {price}"
 			};
 		}
 
@@ -156,7 +156,7 @@
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, false))
 			{
-				Name = LocalizedStrings.Str1061Params.Put(depth.Security, price)
+				Name = $"{depth.Security} {LocalizedStrings.BestAsk} > {price}"
 			};
 		}
 
@@ -172,7 +172,7 @@
 		{
 			return new MarketDepthChangedRule(depth, provider, CreateDepthCondition(price, () => depth.BestAsk2, true))
 			{
-				Name = LocalizedStrings.Str1062Params.Put(depth.Security, price)
+				Name = $"{depth.Security} {LocalizedStrings.BestAsk} < {price}"
 			};
 		}
 
@@ -185,15 +185,12 @@
 			if (currentQuote == null)
 				throw new ArgumentNullException(nameof(currentQuote));
 
-			if (price.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, nameof(price));
-
-			if (price.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, nameof(price));
+			if (price <= 0)
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
 
 			var q = currentQuote();
 			if (q == null)
-				throw new ArgumentException(LocalizedStrings.Str1063, nameof(currentQuote));
+				throw new ArgumentException(LocalizedStrings.QuoteMissed, nameof(currentQuote));
 
 			var curQuote = q.Value;
 

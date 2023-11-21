@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.HighestKey,
-		Description = LocalizedStrings.Str733Key)]
+		Description = LocalizedStrings.MaxValueForPeriodKey)]
 	[Doc("topics/IndicatorHighest.html")]
 	public class Highest : LengthIndicator<decimal>
 	{

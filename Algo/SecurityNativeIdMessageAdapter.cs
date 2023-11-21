@@ -99,8 +99,7 @@
 								{
 									if (noNative != prevId.Value)
 									{
-										//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
-										this.AddWarningLog(LocalizedStrings.Str687Params.Put(noNative, prevId.Value, nativeSecurityId));
+										this.AddWarningLog(LocalizedStrings.DuplicateSystemId.Put(noNative, prevId.Value, nativeSecurityId));
 
 										Storage.RemoveBySecurityId(storageName, prevId.Value);
 										Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
@@ -108,8 +107,7 @@
 								}
 								else
 								{
-									//throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
-									this.AddWarningLog(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, noNative), nativeSecurityId, noNative));
+									this.AddWarningLog(LocalizedStrings.DuplicateSystemId.Put(Storage.TryGetBySecurityId(storageName, noNative), nativeSecurityId, noNative));
 
 									Storage.RemoveByNativeId(storageName, nativeSecurityId);
 									Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
@@ -403,14 +401,6 @@
 					}
 
 					message.ReplaceSecurityId(foundId.Value);
-
-					//// если указан код и тип инструмента, то пытаемся найти инструмент по ним
-					//if (securityId.SecurityType != null)
-					//{
-
-					//}
-					//else
-					//	throw new ArgumentException(nameof(securityId), LocalizedStrings.Str682Params.Put(securityCode, securityId.SecurityType));
 				}
 			}
 

@@ -32,8 +32,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str740Key,
-		Description = LocalizedStrings.Str750Key)]
+		Name = LocalizedStrings.StandardErrorKey,
+		Description = LocalizedStrings.StandardErrorLinearRegKey)]
 	[Doc("topics/IndicatorStandardError.html")]
 	public class StandardError : LengthIndicator<decimal>
 	{

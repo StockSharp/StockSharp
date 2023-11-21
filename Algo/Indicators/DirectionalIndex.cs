@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.DMIKey,
-		Description = LocalizedStrings.Str762Key)]
+		Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
 	[Doc("topics/IndicatorDirectionalIndex.html")]
 	public class DirectionalIndex : BaseComplexIndicator
 	{

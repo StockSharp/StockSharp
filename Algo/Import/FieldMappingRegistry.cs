@@ -22,11 +22,11 @@ namespace StockSharp.Algo.Import
 		/// <returns>Importing fields.</returns>
 		public static IEnumerable<FieldMapping> CreateFields(DataType dataType)
 		{
-			var secCodeDescr = LocalizedStrings.Str2850;
-			var boardCodeDescr = LocalizedStrings.Str2851;
+			var secCodeDescr = LocalizedStrings.SecCodeDescription;
+			var boardCodeDescr = LocalizedStrings.BoardCodeDescription;
 
-			var dateDescr = LocalizedStrings.Str2852;
-			var timeDescr = LocalizedStrings.Str2853;
+			var dateDescr = LocalizedStrings.DateDescription;
+			var timeDescr = LocalizedStrings.TimeDescription;
 
 			var fields = new List<FieldMapping>();
 			var msgType = dataType.MessageType;
@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, string>(GetBoardCodeField(nameof(ExecutionMessage.SecurityId)), LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
 						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Id, string.Empty, (i, v) => i.TradeId = v));
-						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.TradeStringId), LocalizedStrings.Str2856, string.Empty, (i, v) => i.TradeStringId = v));
+						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.TradeStringId), LocalizedStrings.StringId, string.Empty, (i, v) => i.TradeStringId = v));
 						fields.Add(new FieldMapping<ExecutionMessage, DateTimeOffset>(GetDateField(nameof(ExecutionMessage.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, TimeSpan>(GetTimeOfDayField(nameof(ExecutionMessage.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Price, string.Empty, (i, v) => i.TradePrice = v) { IsRequired = true });
@@ -117,8 +117,8 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, bool>(nameof(ExecutionMessage.IsSystem), LocalizedStrings.System, LocalizedStrings.IsSystemTrade, (i, v) => i.IsSystem = v));
 						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.Action, LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
-						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
-						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.Str724, LocalizedStrings.TradePrice, (i, v) => i.TradePrice = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.IdTrade, LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), LocalizedStrings.TradePrice, LocalizedStrings.TradePrice, (i, v) => i.TradePrice = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.OpenInterest), LocalizedStrings.OpenInterest, LocalizedStrings.OpenInterestDesc, (i, v) => i.OpenInterest = v));
 
 						break;
@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Import
 						fields.Add(new FieldMapping<ExecutionMessage, OrderTypes>(nameof(ExecutionMessage.OrderType), LocalizedStrings.OrderType, LocalizedStrings.OrderTypeDesc, (i, v) => i.OrderType = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, OrderStates>(nameof(ExecutionMessage.OrderState), LocalizedStrings.State, LocalizedStrings.OrderStateDesc, (i, v) => i.OrderState = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, TimeInForce>(nameof(ExecutionMessage.TimeInForce), LocalizedStrings.TimeInForce, LocalizedStrings.ExecutionConditionDesc, (i, v) => i.TimeInForce = v) { IsRequired = false });
-						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.Str723, LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
+						fields.Add(new FieldMapping<ExecutionMessage, long>(nameof(ExecutionMessage.TradeId), LocalizedStrings.IdTrade, LocalizedStrings.TradeId, (i, v) => i.TradeId = v) { IsRequired = true });
 						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.UserOrderId), LocalizedStrings.UserId, LocalizedStrings.UserOrderId, (i, v) => i.UserOrderId = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, string>(nameof(ExecutionMessage.StrategyId), LocalizedStrings.Strategy, LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
 						fields.Add(new FieldMapping<ExecutionMessage, CurrencyTypes>(nameof(ExecutionMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.CurrencyDesc, (i, v) => i.Currency = v) { IsRequired = false });
@@ -171,8 +171,8 @@ namespace StockSharp.Algo.Import
 					if (i.CloseTime != default)
 						i.CloseTime = v + i.CloseTime.TimeOfDay;
 				}) { IsRequired = true });
-				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(GetTimeOfDayField(nameof(CandleMessage.OpenTime)), LocalizedStrings.Str2860, LocalizedStrings.CandleOpenTime, (i, v) => i.OpenTime += v));
-				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(nameof(CandleMessage.CloseTime), LocalizedStrings.Str2861, LocalizedStrings.CandleCloseTime, (i, v) =>
+				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(GetTimeOfDayField(nameof(CandleMessage.OpenTime)), LocalizedStrings.CandleOpenTime, LocalizedStrings.CandleOpenTime, (i, v) => i.OpenTime += v));
+				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(nameof(CandleMessage.CloseTime), LocalizedStrings.CandleCloseTime, LocalizedStrings.CandleCloseTime, (i, v) =>
 				{
 					if (i.CloseTime == default)
 						i.CloseTime = i.OpenTime - i.OpenTime.TimeOfDay + v;
@@ -197,19 +197,19 @@ namespace StockSharp.Algo.Import
 
 				fields.Add(new FieldMapping<TimeQuoteChange, DateTimeOffset>(GetDateField(nameof(TimeQuoteChange.ServerTime)), LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, TimeSpan>(GetTimeOfDayField(nameof(TimeQuoteChange.ServerTime)), LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
-				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Price), LocalizedStrings.Price, LocalizedStrings.Str275, (i, v) =>
+				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Price), LocalizedStrings.Price, LocalizedStrings.QuotePrice, (i, v) =>
 				{
 					var q = i.Quote;
 					q.Price = v;
 					i.Quote = q;
 				}) { IsRequired = true });
-				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Volume), LocalizedStrings.Volume, LocalizedStrings.Str276, (i, v) =>
+				fields.Add(new FieldMapping<TimeQuoteChange, decimal>(nameof(QuoteChange.Volume), LocalizedStrings.Volume, LocalizedStrings.QuoteVolume, (i, v) =>
 				{
 					var q = i.Quote;
 					q.Volume = v;
 					i.Quote = q;
 				}) { IsRequired = true });
-				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Direction, LocalizedStrings.Str277, (i, v) => i.Side = v) { IsRequired = true });
+				fields.Add(new FieldMapping<TimeQuoteChange, Sides>(nameof(TimeQuoteChange.Side), LocalizedStrings.Direction, LocalizedStrings.DirBuyOrSell, (i, v) => i.Side = v) { IsRequired = true });
 				fields.Add(new FieldMapping<TimeQuoteChange, int>(nameof(QuoteChange.OrdersCount), LocalizedStrings.Orders, LocalizedStrings.OrdersCount, (i, v) =>
 				{
 					var q = i.Quote;

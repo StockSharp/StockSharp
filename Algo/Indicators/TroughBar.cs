@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TroughBarKey,
-		Description = LocalizedStrings.Str822Key)]
+		Description = LocalizedStrings.TroughBarDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorTroughBar.html")]
 	public class TroughBar : BaseIndicator
@@ -56,8 +56,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str783Key,
-			Description = LocalizedStrings.Str784Key,
+			Name = LocalizedStrings.ThresholdKey,
+			Description = LocalizedStrings.ThresholdDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Unit ReversalAmount
 		{

@@ -95,7 +95,7 @@ namespace SampleRealTimeEmulation
 			_realConnector.OrderBookReceived += OnRealDepth;
 
 			//_realConnector.Error += error =>
-			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.DataProcessError));
 
 			ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_realConnector.Adapter.InnerAdapters));
 
@@ -179,7 +179,7 @@ namespace SampleRealTimeEmulation
 
 			// subscribe on error event
 			//_emuConnector.Error += error =>
-			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.DataProcessError));
 
 			// subscribe on error of market data subscription event
 			_emuConnector.SubscriptionFailed += (sub, error, isSubscribe) =>
@@ -187,7 +187,7 @@ namespace SampleRealTimeEmulation
 				if (error == null)
 					return;
 
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(sub.DataType, sub.SecurityId)));
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.ErrorSubDetails.Put(sub.DataType, sub.SecurityId)));
 			};
 		}
 

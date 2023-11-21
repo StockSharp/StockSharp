@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VolumeKey,
-		Description = LocalizedStrings.Str756Key)]
+		Description = LocalizedStrings.CandleVolumeKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[IndicatorOut(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorVolumeIndicator.html")]

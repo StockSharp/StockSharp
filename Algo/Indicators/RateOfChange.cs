@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ROCKey,
-		Description = LocalizedStrings.Str732Key)]
+		Description = LocalizedStrings.RateOfChangeKey)]
 	[Doc("topics/IndicatorRateOfChange.html")]
 	public class RateOfChange : Momentum
 	{

@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ZigZagKey,
-		Description = LocalizedStrings.Str826Key)]
+		Description = LocalizedStrings.ZigZagDescKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorZigZag.html")]
 	public class ZigZag : BaseIndicator
@@ -64,12 +64,12 @@ namespace StockSharp.Algo.Indicators
 		public override int NumValuesToInitialize => 2;
 
 		/// <summary>
-		/// Minimum number of bars between local maximums, minimums.
+		/// Minimum number of candles between local maximums, minimums.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str827Key,
-			Description = LocalizedStrings.Str828Key,
+			Name = LocalizedStrings.CandlesKey,
+			Description = LocalizedStrings.BackStepKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int BackStep
 		{
@@ -85,12 +85,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Bars minimum, on which Zigzag will not build a second maximum (or minimum), if it is smaller (or larger) by a deviation of the previous respectively.
+		/// Candles minimum, on which Zigzag will not build a second maximum (or minimum), if it is smaller (or larger) by a deviation of the previous respectively.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str829Key,
-			Description = LocalizedStrings.Str830Key,
+			Name = LocalizedStrings.DepthKey,
+			Description = LocalizedStrings.ZigZagDepthKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Depth
 		{
@@ -106,13 +106,14 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		private Unit _deviation = new(0.45m, UnitTypes.Percent);
+
 		/// <summary>
-		/// Minimum number of points between maximums (minimums) of two adjacent bars used by Zigzag indicator to form a local peak (local trough).
+		/// Minimum number of points between maximums (minimums) of two adjacent candles used by Zigzag indicator to form a local peak (local trough).
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str831Key,
-			Description = LocalizedStrings.Str832Key,
+			Name = LocalizedStrings.MinimumChangeKey,
+			Description = LocalizedStrings.MinimumChangeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Unit Deviation
 		{

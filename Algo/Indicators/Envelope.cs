@@ -101,8 +101,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str783Key,
-			Description = LocalizedStrings.Str784Key,
+			Name = LocalizedStrings.ThresholdKey,
+			Description = LocalizedStrings.ThresholdDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Shift
 		{

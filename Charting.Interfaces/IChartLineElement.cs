@@ -8,17 +8,17 @@
 	public interface IChartLineElement : IChartElement
 	{
 		/// <summary>
-		/// Line color (bars, etc.), with which it will be drawn on chart.
+		/// Line color (candles, etc.), with which it will be drawn on chart.
 		/// </summary>
 		Color Color { get; set; }
 
 		/// <summary>
-		/// Additional line color (bars, etc.), with which it will be drawn on the chart.
+		/// Additional line color (candles, etc.), with which it will be drawn on the chart.
 		/// </summary>
 		Color AdditionalColor { get; set; }
 
 		/// <summary>
-		/// The thickness of the line (bar, etc.) with which it will be drawn on the chart. The default is 1.
+		/// The thickness of the line (candle, etc.) with which it will be drawn on the chart. The default is 1.
 		/// </summary>
 		int StrokeThickness { get; set; }
 

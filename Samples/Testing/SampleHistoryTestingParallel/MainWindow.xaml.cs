@@ -191,7 +191,7 @@ namespace SampleHistoryTestingParallel
 							if (!_optimizer.IsCancelled)
 							{
 								TestingProcess.Value = TestingProcess.Maximum;
-								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+								MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.Now - _startEmulationTime));
 							}
 							else
 								MessageBox.Show(this, LocalizedStrings.Cancelled);

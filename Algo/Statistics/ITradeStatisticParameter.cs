@@ -41,8 +41,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str983Key,
-		Description = LocalizedStrings.Str984Key,
+		Name = LocalizedStrings.ProfitTradesKey,
+		Description = LocalizedStrings.ProfitTradesDescKey,
 		GroupName = LocalizedStrings.TradesKey,
 		Order = 100
 	)]
@@ -74,8 +74,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str986Key,
-		Description = LocalizedStrings.Str987Key,
+		Name = LocalizedStrings.LossTradesKey,
+		Description = LocalizedStrings.LossTradesDescKey,
 		GroupName = LocalizedStrings.TradesKey,
 		Order = 101
 	)]
@@ -105,8 +105,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str988Key,
-		Description = LocalizedStrings.Str989Key,
+		Name = LocalizedStrings.TotalTradesKey,
+		Description = LocalizedStrings.TotalTradesDescKey,
 		GroupName = LocalizedStrings.TradesKey,
 		Order = 102
 	)]
@@ -132,8 +132,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str990Key,
-		Description = LocalizedStrings.Str991Key,
+		Name = LocalizedStrings.ClosingTradesKey,
+		Description = LocalizedStrings.ClosingTradesDescKey,
 		GroupName = LocalizedStrings.TradesKey,
 		Order = 103
 	)]
@@ -160,8 +160,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str992Key,
-		Description = LocalizedStrings.Str993Key,
+		Name = LocalizedStrings.AverageProfitKey,
+		Description = LocalizedStrings.AverageTradeProfitKey,
 		GroupName = LocalizedStrings.TradesKey,
 		Order = 104
 	)]
@@ -225,8 +225,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str994Key,
-		Description = LocalizedStrings.Str995Key,
+		Name = LocalizedStrings.AverageWinKey,
+		Description = LocalizedStrings.AverageWinTradeKey,
 		GroupName = LocalizedStrings.TradesKey,
 		Order = 105
 	)]
@@ -293,8 +293,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str996Key,
-		Description = LocalizedStrings.Str997Key,
+		Name = LocalizedStrings.AverageLossKey,
+		Description = LocalizedStrings.AverageLossTradeKey,
 		GroupName = LocalizedStrings.TradesKey,
 		Order = 106
 	)]

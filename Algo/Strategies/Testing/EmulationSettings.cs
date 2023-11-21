@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Strategies.Testing
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SettingsKey,
-		Description = LocalizedStrings.Str1408Key)]
+		Description = LocalizedStrings.EmulationSettingsDescKey)]
 	public class EmulationSettings : MarketEmulatorSettings
 	{
 		private DateTime _startTime = DateTime.Today.AddYears(-1);
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IntervalKey,
-			Description = LocalizedStrings.Str1409Key,
+			Description = LocalizedStrings.TimeChangedIntervalKey,
 			GroupName = LocalizedStrings.BacktestKey,
 			Order = 100)]
 		public TimeSpan MarketTimeChangedInterval
@@ -103,8 +103,8 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1410Key,
-			Description = LocalizedStrings.Str1411Key,
+			Name = LocalizedStrings.UnrealizedProfitKey,
+			Description = LocalizedStrings.UnrealizedPnLIntervalKey,
 			GroupName = LocalizedStrings.BacktestKey,
 			Order = 101)]
 		public TimeSpan UnrealizedPnLInterval
@@ -128,7 +128,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TradesKey,
-			Description = LocalizedStrings.Str1413Key,
+			Description = LocalizedStrings.TradeDataModeKey,
 			GroupName = LocalizedStrings.BacktestKey,
 			Order = 102)]
 		public EmulationMarketDataModes TradeDataMode
@@ -149,7 +149,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MarketDepthsKey,
-			Description = LocalizedStrings.Str1415Key,
+			Description = LocalizedStrings.DepthDataModeKey,
 			GroupName = LocalizedStrings.BacktestKey,
 			Order = 103)]
 		public EmulationMarketDataModes DepthDataMode
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OrderLogKey,
-			Description = LocalizedStrings.Str1417Key,
+			Description = LocalizedStrings.OrderLogDataModeKey,
 			GroupName = LocalizedStrings.BacktestKey,
 			Order = 104)]
 		public EmulationMarketDataModes OrderLogDataMode

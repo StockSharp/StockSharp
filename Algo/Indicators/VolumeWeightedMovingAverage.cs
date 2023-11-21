@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VMAKey,
-		Description = LocalizedStrings.Str823Key)]
+		Description = LocalizedStrings.VolumeWeightedMovingAverageKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorVolumeWeightedMovingAverage.html")]
 	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>

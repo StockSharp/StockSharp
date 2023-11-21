@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.QuotingKey,
-			Description = LocalizedStrings.Str1265Key,
+			Description = LocalizedStrings.UseQuotingDescKey,
 			GroupName = LocalizedStrings.HedgingKey,
 			Order = 0)]
 		public bool UseQuoting
@@ -79,8 +79,8 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1266Key,
-			Description = LocalizedStrings.Str1267Key,
+			Name = LocalizedStrings.PriceOffsetKey,
+			Description = LocalizedStrings.PriceOffsetForOrderKey,
 			GroupName = LocalizedStrings.HedgingKey,
 			Order = 1)]
 		public Unit PriceOffset
@@ -119,10 +119,10 @@ namespace StockSharp.Algo.Strategies.Derivatives
 					_assetStrategy = new AssetStrategy(Security);
 					ChildStrategies.Add(_assetStrategy);
 
-					this.AddInfoLog(LocalizedStrings.Str1268);
+					this.AddInfoLog(LocalizedStrings.AssetStrategyCreated);
 				}
 				else
-					this.AddInfoLog(LocalizedStrings.Str1269Params.Put(_assetStrategy));
+					this.AddInfoLog(LocalizedStrings.AssetStrategyFound.Put(_assetStrategy));
 			}
 
 			_strategies.Add(Security, _assetStrategy);
@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 			if (BlackScholes.UnderlyingAsset == null)
 			{
 				BlackScholes.UnderlyingAsset = _assetStrategy.Security;
-				this.AddInfoLog(LocalizedStrings.Str1270);
+				this.AddInfoLog(LocalizedStrings.AssetPosSpecified);
 			}
 
 			BlackScholes.InnerModels.Clear();
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 					BlackScholes.InnerModels.Add(new BlackScholes(strategy.Security, this, this, BlackScholes.ExchangeInfoProvider));
 					_strategies.Add(strategy.Security, strategy);
 
-					this.AddInfoLog(LocalizedStrings.Str1271Params.Put(strategy));
+					this.AddInfoLog(LocalizedStrings.StrikeStrategyFound.Put(strategy));
 				}
 			}
 
@@ -199,7 +199,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 				.Or(order.WhenCanceled(this))
 				.Do((rule, o) =>
 				{
-					parentStrategy.AddInfoLog(LocalizedStrings.Str1272Params, o.TransactionId, o.IsMatched() ? LocalizedStrings.Done : LocalizedStrings.Cancelled, o.ServerTime);
+					parentStrategy.AddInfoLog("Order {0} {1} in {2}.", o.TransactionId, o.IsMatched() ? LocalizedStrings.Done : LocalizedStrings.Cancelled, o.ServerTime);
 
 					Rules.RemoveRulesByToken(o, rule);
 
@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			var regRule = order
 				.WhenRegistered(this)
-				.Do(o => parentStrategy.AddInfoLog(LocalizedStrings.Str1275Params, o.TransactionId, o.Id, o.Time))
+				.Do(o => parentStrategy.AddInfoLog("Order {0} registered with ID {1} in {2}.", o.TransactionId, o.Id, o.Time))
 				.Once()
 				.Apply(parentStrategy);
 
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 				.WhenRegisterFailed(this)
 				.Do((rule, fail) =>
 				{
-					parentStrategy.AddErrorLog(LocalizedStrings.Str1276Params, fail.Order.TransactionId, fail.Error);
+					parentStrategy.AddErrorLog(LocalizedStrings.ErrorRegOrder, fail.Order.TransactionId, fail.Error);
 
 					TryResumeMonitoring(order);
 					ReHedge(fail.ServerTime);
@@ -243,12 +243,12 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			foreach (var order in orders)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1277Params, order.Security, order.Side, order.Volume, order.Price);
+				this.AddInfoLog("Rehedging with order {0} {1} volume {2} with price {3}.", order.Security, order.Side, order.Volume, order.Price);
 
 				var strategy = _strategies.TryGetValue(order.Security);
 
 				if (strategy == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1278Params.Put(order.Security.Id));
+					throw new InvalidOperationException(LocalizedStrings.ForSecurityNoChildStrategy.Put(order.Security.Id));
 
 				if (UseQuoting)
 				{
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			if (!_awaitingOrders.IsEmpty())
 			{
-				this.AddInfoLog(LocalizedStrings.Str1279Params, _awaitingOrders.Count);
+				this.AddInfoLog(LocalizedStrings.ResumeSuspended, _awaitingOrders.Count);
 				ReHedge(orders);
 			}
 		}
@@ -298,9 +298,9 @@ namespace StockSharp.Algo.Strategies.Derivatives
 				return;
 
 			if (_awaitingOrders.IsEmpty())
-				this.AddInfoLog(LocalizedStrings.Str1280);
+				this.AddInfoLog(LocalizedStrings.Resumed);
 			else
-				this.AddInfoLog(LocalizedStrings.Str1281Params, _awaitingOrders.Count);
+				this.AddInfoLog(LocalizedStrings.PartRulesResumes, _awaitingOrders.Count);
 		}
 
 		/// <summary>

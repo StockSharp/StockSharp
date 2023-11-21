@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.RSIKey,
-		Description = LocalizedStrings.Str770Key)]
+		Description = LocalizedStrings.RelativeStrengthIndexKey)]
 	[Doc("topics/IndicatorRelativeStrengthIndex.html")]
 	public class RelativeStrengthIndex : LengthIndicator<decimal>
 	{

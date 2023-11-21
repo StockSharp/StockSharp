@@ -368,7 +368,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.OrderIdKey,
+			Name = LocalizedStrings.TradeIdKey,
 			Description = LocalizedStrings.TradeIdKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
@@ -392,7 +392,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
-			Description = LocalizedStrings.TradePriceKey,
+			Description = LocalizedStrings.TradePriceDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? TradePrice { get; set; }

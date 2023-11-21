@@ -49,7 +49,7 @@ namespace StockSharp.Messages
 		/// The order is no longer active on an exchange (it was fully matched or cancelled).
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str239Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DoneKey)]
 		Done,
 
 		/// <summary>

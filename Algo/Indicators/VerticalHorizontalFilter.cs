@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.VHFKey,
-		Description = LocalizedStrings.Str754Key)]
+		Description = LocalizedStrings.VerticalHorizontalFilterKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorVerticalHorizontalFilter.html")]
 	public class VerticalHorizontalFilter : LengthIndicator<decimal>

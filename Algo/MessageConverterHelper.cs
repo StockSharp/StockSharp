@@ -1005,7 +1005,7 @@ namespace StockSharp.Algo
 						else if (execMsg.DataType == DataType.Transactions)
 							return execMsg.ToOrder(_security).To<TEntity>();
 						else
-							throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1122Params.Put(execMsg.DataType));
+							throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.UnsupportedType.Put(execMsg.DataType));
 					}
 
 					case MessageTypes.QuoteChange:
@@ -1507,11 +1507,11 @@ namespace StockSharp.Algo
 						};
 					}
 
-					throw new ArgumentException(LocalizedStrings.Str1123);
+					throw new ArgumentException(LocalizedStrings.SecurityNotContainsId);
 				}
 
 				if (security.Board == null && boardIsRequired)
-					throw new ArgumentException(LocalizedStrings.Str1124Params.Put(security.Code));
+					throw new ArgumentException(LocalizedStrings.SecurityNotContainsBoard.Put(security.Code));
 
 				secCode = security.Code;
 				boardCode = security.Board?.Code;

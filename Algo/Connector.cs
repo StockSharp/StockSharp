@@ -394,11 +394,6 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str200Key,
-			Description = LocalizedStrings.Str201Key,
-			GroupName = LocalizedStrings.GeneralKey)]
 		[Obsolete("Use SupportLevel1DepthBuilder property.")]
 		public bool CreateDepthFromLevel1
 		{
@@ -409,11 +404,6 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Create a combined security for securities from different boards.
 		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str197Key,
-			Description = LocalizedStrings.Str198Key,
-			GroupName = LocalizedStrings.GeneralKey)]
 		[Obsolete("Use SupportAssociatedSecurity property.")]
 		public bool CreateAssociatedSecurity
 		{
@@ -431,18 +421,13 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The <see cref="TimeMessage"/> message generating Interval. The default is 10 milliseconds.
 		/// </summary>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.TimeIntervalKey,
-			Description = LocalizedStrings.Str195Key,
-			GroupName = LocalizedStrings.AdaptersKey)]
 		public virtual TimeSpan MarketTimeChangedInterval
 		{
 			get => _marketTimeChangedInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str196);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_marketTimeChangedInterval = value;
 			}
@@ -481,7 +466,7 @@ namespace StockSharp.Algo
 			{
 				if (ConnectionState is not ConnectionStates.Disconnected and not ConnectionStates.Failed)
 				{
-					this.AddWarningLog(LocalizedStrings.Str1095Params, ConnectionState);
+					this.AddWarningLog(LocalizedStrings.CannotConnectReasonState, ConnectionState);
 					return;
 				}
 
@@ -516,7 +501,7 @@ namespace StockSharp.Algo
 
 			if (ConnectionState != ConnectionStates.Connected)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1096Params, ConnectionState);
+				this.AddWarningLog(LocalizedStrings.CannotDisconnectReasonState, ConnectionState);
 				return;
 			}
 
@@ -594,11 +579,8 @@ namespace StockSharp.Algo
 
 				if (order.Type != OrderTypes.Conditional)
 				{
-					if (order.Volume == 0)
-						throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
-
-					if (order.Volume < 0)
-						throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895.Put(order.Price));
+					if (order.Volume <= 0)
+						throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.InvalidValue);
 				}
 
 				if (order.Type == null)
@@ -672,7 +654,7 @@ namespace StockSharp.Algo
 				this.AddOrderInfoLog(oldOrder, nameof(ReRegisterOrder));
 
 				if (oldOrder.Security != newOrder.Security)
-					throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
+					throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
 
 				CheckOnOld(oldOrder);
 				CheckOnNew(newOrder);
@@ -721,10 +703,10 @@ namespace StockSharp.Algo
 			try
 			{
 				if (oldOrder1.Security != newOrder1.Security)
-					throw new ArgumentException(LocalizedStrings.Str1099Params.Put(newOrder1.Security.Id, oldOrder1.Security.Id), nameof(newOrder1));
+					throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder1.Security.Id, oldOrder1.Security.Id), nameof(newOrder1));
 
 				if (oldOrder2.Security != newOrder2.Security)
-					throw new ArgumentException(LocalizedStrings.Str1100Params.Put(newOrder2.Security.Id, oldOrder2.Security.Id), nameof(newOrder2));
+					throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder2.Security.Id, oldOrder2.Security.Id), nameof(newOrder2));
 
 				if (oldOrder1.Type == OrderTypes.Conditional || oldOrder2.Type == OrderTypes.Conditional)
 				{
@@ -816,13 +798,13 @@ namespace StockSharp.Algo
 			CheckOrderState(order);
 
 			if (order.TransactionId != 0)
-				throw new ArgumentException(LocalizedStrings.Str897Params.Put(order.TransactionId), nameof(order));
+				throw new ArgumentException(LocalizedStrings.OrderAlreadyTransId.Put(order.TransactionId), nameof(order));
 
 			if (order.State != OrderStates.None)
-				throw new ArgumentException(LocalizedStrings.Str898Params.Put(order.State), nameof(order));
+				throw new ArgumentException(LocalizedStrings.OrderAlreadyState.Put(order.State), nameof(order));
 
 			if (order.Id != null || !order.StringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
+				throw new ArgumentException(LocalizedStrings.OrderAlreadyId.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
 
 			if (CheckSteps)
 			{
@@ -846,7 +828,7 @@ namespace StockSharp.Algo
 			CheckOrderState(order);
 
 			if (order.TransactionId == 0)
-				throw new ArgumentException(LocalizedStrings.Str899, nameof(order));
+				throw new ArgumentException(LocalizedStrings.OrderNoTransId, nameof(order));
 		}
 
 		private static void CheckOrderState(Order order)
@@ -855,19 +837,19 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(order));
 
 			if (order.Type == OrderTypes.Conditional && order.Condition == null)
-				throw new ArgumentException(LocalizedStrings.Str889, nameof(order));
+				throw new ArgumentException(LocalizedStrings.ConditionNotSpecified, nameof(order));
 
 			if (order.Security == null)
-				throw new ArgumentException(LocalizedStrings.Str890, nameof(order));
+				throw new ArgumentException(LocalizedStrings.SecurityNotSpecified, nameof(order));
 
 			if (order.Portfolio == null)
-				throw new ArgumentException(LocalizedStrings.Str891, nameof(order));
+				throw new ArgumentException(LocalizedStrings.PortfolioNotSpecified, nameof(order));
 
 			if (order.Price < 0)
-				throw new ArgumentOutOfRangeException(nameof(order), order.Price, LocalizedStrings.Str892);
+				throw new ArgumentOutOfRangeException(nameof(order), order.Price, LocalizedStrings.InvalidValue);
 
 			if (order.Price == 0 && order.Type == OrderTypes.Limit)
-				throw new ArgumentException(LocalizedStrings.Str893, nameof(order));
+				throw new ArgumentException(LocalizedStrings.LimitOrderMustPrice, nameof(order));
 		}
 
 		/// <summary>

@@ -711,7 +711,7 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var str = LocalizedStrings.Str534Params
+			var str = LocalizedStrings.OrderDetails
 				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Security?.Id, Portfolio?.Name, Side == Sides.Buy ? LocalizedStrings.Buy2 : LocalizedStrings.Sell2, Price, Volume, State, Balance, Type);
 
 			if (!UserOrderId.IsEmpty())

@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.WilderMAKey,
-		Description = LocalizedStrings.Str825Key)]
+		Description = LocalizedStrings.WilderMovingAverageKey)]
 	[Doc("topics/IndicatorWilderMovingAverage.html")]
 	public class WilderMovingAverage : LengthIndicator<decimal>
 	{

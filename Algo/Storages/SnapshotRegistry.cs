@@ -429,7 +429,7 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (Exception ex)
 				{
-					throw new InvalidOperationException(LocalizedStrings.Str1003Params.Put(_datesPath), ex);
+					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPath), ex);
 				}
 			}
 

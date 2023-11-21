@@ -28,8 +28,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str172Key,
-		Description = LocalizedStrings.Str978Key)]
+		Name = LocalizedStrings.ReConnectionSettingsKey,
+		Description = LocalizedStrings.ReConnectionDescKey)]
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class ReConnectionSettings : IPersistable
 	{
@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IntervalKey,
-			Description = LocalizedStrings.Str176Key,
+			Description = LocalizedStrings.IntervalToConnectKey,
 			GroupName = LocalizedStrings.ConnectionKey)]
 		public TimeSpan Interval
 		{
@@ -56,7 +56,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_interval = value;
 			}
@@ -69,8 +69,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str178Key,
-			Description = LocalizedStrings.Str179Key,
+			Name = LocalizedStrings.InitiallyKey,
+			Description = LocalizedStrings.InitiallyConnectKey,
 			GroupName = LocalizedStrings.ConnectionKey)]
 		public int AttemptCount
 		{
@@ -78,7 +78,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_attemptCount = value;
 			}
@@ -91,8 +91,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str180Key,
-			Description = LocalizedStrings.Str181Key,
+			Name = LocalizedStrings.ReconnectionKey,
+			Description = LocalizedStrings.ReconnectAttemptsKey,
 			GroupName = LocalizedStrings.ConnectionKey)]
 		public int ReAttemptCount
 		{
@@ -100,7 +100,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_reAttemptCount = value;
 			}
@@ -113,8 +113,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str182Key,
-			Description = LocalizedStrings.Str183Key,
+			Name = LocalizedStrings.TimeOutKey,
+			Description = LocalizedStrings.ConnectDisconnectTimeoutKey,
 			GroupName = LocalizedStrings.ConnectionKey)]
 		public TimeSpan TimeOutInterval
 		{
@@ -122,7 +122,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_timeOutInterval = value;
 			}
@@ -135,8 +135,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str184Key,
-			Description = LocalizedStrings.Str185Key,
+			Name = LocalizedStrings.WorkScheduleKey,
+			Description = LocalizedStrings.ReConnectWorkScheduleKey,
 			GroupName = LocalizedStrings.ConnectionKey)]
 		public WorkingTime WorkingTime
 		{

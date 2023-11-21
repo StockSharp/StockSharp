@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.LRSKey,
-		Description = LocalizedStrings.Str742Key)]
+		Description = LocalizedStrings.LinearRegSlopeKey)]
 	[Doc("topics/IndicatorLinearRegSlope.html")]
 	public class LinearRegSlope : LengthIndicator<decimal>
 	{

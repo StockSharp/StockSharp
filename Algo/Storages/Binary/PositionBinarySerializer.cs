@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (hasLocalTime)
 				{
 					lastOffset = metaInfo.LastLocalOffset;
-					metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, true, true, metaInfo.LocalOffset, true, true, ref lastOffset, true);
+					metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Level1, true, true, metaInfo.LocalOffset, true, true, ref lastOffset, true);
 					metaInfo.LastLocalOffset = lastOffset;
 				}
 

@@ -157,7 +157,7 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return LocalizedStrings.Str509Params.Put(Trade, Order);
+			return LocalizedStrings.TradeFromOrder.Put(Trade, Order);
 		}
 	}
 }

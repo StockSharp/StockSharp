@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.WMAKey,
-		Description = LocalizedStrings.Str824Key)]
+		Description = LocalizedStrings.WeightedMovingAverageKey)]
 	[Doc("topics/IndicatorWeightedMovingAverage.html")]
 	public class WeightedMovingAverage : LengthIndicator<decimal>
 	{

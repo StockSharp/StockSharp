@@ -40,7 +40,7 @@
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
-				Name = LocalizedStrings.Str1046 + " " + security;
+				Name = LocalizedStrings.Level1 + " " + security;
 
 				Provider.SecurityChanged += OnSecurityChanged;
 			}
@@ -101,7 +101,7 @@
 			public SecurityNewOrderLogItemRule(Security security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
-				Name = LocalizedStrings.Str1048 + " " + security;
+				Name = LocalizedStrings.OrderLog + " " + security;
 				Provider.NewOrderLogItem += OnNewOrderLogItem;
 			}
 
@@ -134,7 +134,7 @@
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
-				Name = LocalizedStrings.Str1049 + " " + security;
+				Name = LocalizedStrings.LastTrade + " " + security;
 
 				Provider.SecurityChanged += OnSecurityChanged;
 				Provider.NewTrade += OnNewTrade;
@@ -186,7 +186,7 @@
 			public SecurityMarketDepthChangedRule(Security security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
-				Name = LocalizedStrings.Str1050 + " " + security;
+				Name = LocalizedStrings.MarketDepth + " " + security;
 				Provider.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
@@ -211,7 +211,7 @@
 			public BasketSecurityMarketDepthChangedRule(BasketSecurity security, IMarketDataProvider provider)
 				: base(security, provider)
 			{
-				Name = LocalizedStrings.Str1050 + " " + security;
+				Name = LocalizedStrings.MarketDepth + " " + security;
 				Provider.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
@@ -382,16 +382,13 @@
 			if (offset == null)
 				throw new ArgumentNullException(nameof(offset));
 
-			if (offset.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, nameof(offset));
-
-			if (offset.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, nameof(offset));
+			if (offset <= 0)
+				throw new ArgumentOutOfRangeException(nameof(offset), offset, LocalizedStrings.InvalidValue);
 
 			var price = (decimal?)provider.GetSecurityValue(security, field);
 
 			if (price == null && offset.Type != UnitTypes.Limit)
-				throw new InvalidOperationException(LocalizedStrings.Str1053);
+				throw new InvalidOperationException(LocalizedStrings.QuoteMissed);
 
 			if (isLess)
 			{
@@ -425,16 +422,13 @@
 			if (offset == null)
 				throw new ArgumentNullException(nameof(offset));
 
-			if (offset.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, nameof(offset));
-
-			if (offset.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, nameof(offset));
+			if (offset <= 0)
+				throw new ArgumentOutOfRangeException(nameof(offset), offset, LocalizedStrings.InvalidValue);
 
 			var price = (decimal?)provider.GetSecurityValue(security, Level1Fields.LastTradePrice);
 
 			if (price == null && offset.Type != UnitTypes.Limit)
-				throw new ArgumentException(LocalizedStrings.Str1054, nameof(security));
+				throw new ArgumentException(LocalizedStrings.NoInfoAboutLastTrade, nameof(security));
 
 			if (isLess)
 			{
@@ -479,7 +473,7 @@
 				if (timesList.IsEmpty())
 					return;
 
-				Name = LocalizedStrings.Str1055;
+				Name = LocalizedStrings.Time;
 
 				var index = 0;
 

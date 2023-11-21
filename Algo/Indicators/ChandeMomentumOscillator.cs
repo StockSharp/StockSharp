@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CMOKey,
-		Description = LocalizedStrings.Str759Key)]
+		Description = LocalizedStrings.ChandeMomentumOscillatorKey)]
 	[Doc("topics/IndicatorChandeMomentumOscillator.html")]
 	public class ChandeMomentumOscillator : LengthIndicator<decimal>
 	{

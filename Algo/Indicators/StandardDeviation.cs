@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.StdDevKey,
-		Description = LocalizedStrings.Str820Key)]
+		Description = LocalizedStrings.StandardDeviationKey)]
 	[Doc("topics/IndicatorStandardDeviation.html")]
 	public class StandardDeviation : LengthIndicator<decimal>
 	{

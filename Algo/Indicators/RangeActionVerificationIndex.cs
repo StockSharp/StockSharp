@@ -56,8 +56,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str800Key,
-			Description = LocalizedStrings.Str801Key,
+			Name = LocalizedStrings.ShortMaKey,
+			Description = LocalizedStrings.ShortMaDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage ShortSma { get; }
 
@@ -67,8 +67,8 @@ namespace StockSharp.Algo.Indicators
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str798Key,
-			Description = LocalizedStrings.Str799Key,
+			Name = LocalizedStrings.LongMaKey,
+			Description = LocalizedStrings.LongMaDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public SimpleMovingAverage LongSma { get; }
 

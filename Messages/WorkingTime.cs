@@ -37,8 +37,8 @@ namespace StockSharp.Messages
 	[DataContract]
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str184Key,
-		Description = LocalizedStrings.Str408Key)]
+		Name = LocalizedStrings.WorkScheduleKey,
+		Description = LocalizedStrings.WorkScheduleDescKey)]
 	public class WorkingTime : IPersistable
 	{
 		/// <summary>
@@ -67,8 +67,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str409Key,
-			Description = LocalizedStrings.Str410Key,
+			Name = LocalizedStrings.PeriodsKey,
+			Description = LocalizedStrings.PeriodsDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
 		public List<WorkingTimePeriod> Periods
@@ -80,13 +80,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Working days, falling on Saturday and Sunday.
 		/// </summary>
-		//[Display(
-		//	ResourceType = typeof(LocalizedStrings),
-		//	Name = LocalizedStrings.Str411Key,
-		//	Description = LocalizedStrings.Str412Key,
-		//	GroupName = LocalizedStrings.GeneralKey,
-		//	Order = 2)]
-		//[DataMember]
 		[XmlIgnore]
 		[Browsable(false)]
 		public DateTime[] SpecialWorkingDays
@@ -108,13 +101,6 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Holidays that fall on workdays.
 		/// </summary>
-		//[DataMember]
-		//[Display(
-		//	ResourceType = typeof(LocalizedStrings),
-		//	Name = LocalizedStrings.Str413Key,
-		//	Description = LocalizedStrings.Str414Key,
-		//	GroupName = LocalizedStrings.GeneralKey,
-		//	Order = 3)]
 		[XmlIgnore]
 		[Browsable(false)]
 		public DateTime[] SpecialHolidays

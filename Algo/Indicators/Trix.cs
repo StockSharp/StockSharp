@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TrixKey,
-		Description = LocalizedStrings.Str752Key)]
+		Description = LocalizedStrings.TripleExponentialMovingAverageKey)]
 	[Doc("topics/IndicatorTrix.html")]
 	public class Trix : LengthIndicator<IIndicatorValue>
 	{
@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ROCKey,
-			Description = LocalizedStrings.Str753Key,
+			Description = LocalizedStrings.RocLengthKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int RocLength
 		{

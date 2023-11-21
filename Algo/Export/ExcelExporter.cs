@@ -64,9 +64,9 @@ namespace StockSharp.Algo.Export
 					.SetCell(5, 0, LocalizedStrings.Action)
 					.SetCell(6, 0, LocalizedStrings.Type)
 					.SetCell(7, 0, LocalizedStrings.System)
-					.SetCell(8, 0, LocalizedStrings.Str723).SetStyle(8, typeof(string))
-					.SetCell(9, 0, LocalizedStrings.Str724).SetStyle(9, typeof(decimal))
-					.SetCell(10, 0, LocalizedStrings.Str725).SetStyle(10, typeof(decimal));
+					.SetCell(8, 0, LocalizedStrings.IdTrade).SetStyle(8, typeof(string))
+					.SetCell(9, 0, LocalizedStrings.TradePrice).SetStyle(9, typeof(decimal))
+					.SetCell(10, 0, LocalizedStrings.OITrade).SetStyle(10, typeof(decimal));
 
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
 				//worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
@@ -428,7 +428,7 @@ namespace StockSharp.Algo.Export
 				var row = 0;
 
 				worker
-					.SetCell(0, row, LocalizedStrings.Str726).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(0, row, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
 					.SetCell(1, row, "O").SetStyle(2, typeof(decimal))
 					.SetCell(2, row, "H").SetStyle(3, typeof(decimal))
 					.SetCell(3, row, "L").SetStyle(4, typeof(decimal))

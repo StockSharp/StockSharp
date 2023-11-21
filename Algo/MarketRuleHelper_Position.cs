@@ -54,7 +54,7 @@
 
 			return new PortfolioRule(portfolio, provider, pf => true)
 			{
-				Name = "Pf {0} change".Put(portfolio)
+				Name = $"PF {portfolio.Name} change"
 			};
 		}
 
@@ -77,7 +77,7 @@
 
 			return new PortfolioRule(portfolio, provider, pf => pf.CurrentValue < finishMoney)
 			{
-				Name = LocalizedStrings.Str1040Params.Put(portfolio, finishMoney)
+				Name = $"PF {portfolio.Name} < {finishMoney}"
 			};
 		}
 
@@ -100,7 +100,7 @@
 
 			return new PortfolioRule(portfolio, provider, pf => pf.CurrentValue > finishMoney)
 			{
-				Name = LocalizedStrings.Str1041Params.Put(portfolio, finishMoney)
+				Name = $"PF {portfolio.Name} > {finishMoney}"
 			};
 		}
 
@@ -162,7 +162,7 @@
 
 			return new PositionRule(position, provider, pf => pf.CurrentValue < finishPosition)
 			{
-				Name = LocalizedStrings.Str1044Params.Put(position, finishPosition)
+				Name = $"Pos {position} < {value}"
 			};
 		}
 
@@ -185,7 +185,7 @@
 
 			return new PositionRule(position, provider, pf => pf.CurrentValue > finishPosition)
 			{
-				Name = LocalizedStrings.Str1045Params.Put(position, finishPosition)
+				Name = $"Pos {position} < {value}"
 			};
 		}
 

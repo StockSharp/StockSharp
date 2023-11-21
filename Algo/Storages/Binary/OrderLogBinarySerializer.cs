@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (orderId is null)
 				{
 					if (!stringId)
-						throw new ArgumentOutOfRangeException(nameof(messages), message.TransactionId, LocalizedStrings.Str925);
+						throw new ArgumentOutOfRangeException(nameof(messages), message.TransactionId, LocalizedStrings.TransactionId);
 				}
 
 				if (message.DataType != DataType.OrderLog)
@@ -228,11 +228,11 @@ namespace StockSharp.Algo.Storages.Binary
 				// execution ticks (like option execution) may be a zero cost
 				// ticks for spreads may be a zero cost or less than zero
 				//if (item.Price < 0)
-				//	throw new ArgumentOutOfRangeException(nameof(messages), item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
+				//	throw new ArgumentOutOfRangeException();
 
 				var volume = message.SafeGetVolume();
 				if (volume <= 0 && message.OrderState != OrderStates.Done)
-					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(message.TransactionId));
+					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.WrongOrderVolume.Put(message.TransactionId));
 
 				long? tradeId = null;
 
@@ -243,13 +243,13 @@ namespace StockSharp.Algo.Storages.Binary
 					if (tradeId is null or <= 0)
 					{
 						if (!stringId)
-							throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.Str1012Params.Put(message.TransactionId));
+							throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.TradeId);
 					}
 
 					// execution ticks (like option execution) may be a zero cost
 					// ticks for spreads may be a zero cost or less than zero
 					//if (item.TradePrice <= 0)
-					//	throw new ArgumentOutOfRangeException(nameof(messages), item.TradePrice, LocalizedStrings.Str929Params.Put(item.TradeId, item.OrderId));
+					//	throw new ArgumentOutOfRangeException();
 				}
 
 				metaInfo.LastOrderId = writer.SerializeId(orderId ?? 0, metaInfo.LastOrderId);
@@ -286,7 +286,7 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.Write(message.Side == Sides.Buy);
 
 				var lastOffset = metaInfo.LastServerOffset;
-				metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1013, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+				metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, LocalizedStrings.Orders, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
 				if (hasTrade)

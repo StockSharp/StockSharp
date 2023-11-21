@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MFIKey,
-		Description = LocalizedStrings.Str853Key)]
+		Description = LocalizedStrings.MarketFacilitationIndexKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorMarketFacilitationIndex.html")]
 	public class MarketFacilitationIndex : BaseIndicator

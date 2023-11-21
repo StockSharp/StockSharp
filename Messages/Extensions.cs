@@ -1351,7 +1351,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				throw new InvalidOperationException(LocalizedStrings.Str2141Params.Put(input), ex);
+				throw new InvalidOperationException(LocalizedStrings.ErrorParsing.Put(input), ex);
 			}
 
 			return periods;
@@ -1393,7 +1393,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				throw new InvalidOperationException(LocalizedStrings.Str2141Params.Put(input), ex);
+				throw new InvalidOperationException(LocalizedStrings.ErrorParsing.Put(input), ex);
 			}
 
 			return specialDays;
@@ -2019,7 +2019,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.TradePrice ?? throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str1021Params.Put(message.TradeId));
+			return message.TradePrice ?? throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.PriceIsNotSpecified.Put(message.TradeId));
 		}
 
 		/// <summary>
@@ -3567,7 +3567,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(priceRange));
 
 			if (priceRange <= 0)
-				throw new ArgumentOutOfRangeException(nameof(priceRange), priceRange, LocalizedStrings.Str1213);
+				throw new ArgumentOutOfRangeException(nameof(priceRange), priceRange, LocalizedStrings.InvalidValue);
 		}
 
 		private static decimal GetActualPriceRange(Unit priceRange)
@@ -3576,7 +3576,7 @@ namespace StockSharp.Messages
 			ValidatePriceRange(val);
 
 			if (priceRange.Type is not UnitTypes.Absolute and not UnitTypes.Step)
-				throw new ArgumentOutOfRangeException(LocalizedStrings.Str1844Params.Put(priceRange.Type));
+				throw new ArgumentOutOfRangeException(LocalizedStrings.UnsupportedType.Put(priceRange.Type));
 
 			// ReSharper disable once PossibleInvalidOperationException
 			return val.Value;
@@ -4105,7 +4105,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(book));
 
 			if (depthIndex < 0)
-				throw new ArgumentOutOfRangeException(nameof(depthIndex), depthIndex, LocalizedStrings.Str483);
+				throw new ArgumentOutOfRangeException(nameof(depthIndex), depthIndex, LocalizedStrings.InvalidValue);
 
 			var bid = book.GetQuote(Sides.Buy, depthIndex);
 			var ask = book.GetQuote(Sides.Sell, depthIndex);
@@ -4128,7 +4128,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(book));
 
 			if (depth < 0)
-				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
+				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.InvalidValue);
 
 			var retVal = new List<(QuoteChange?, QuoteChange?)>();
 
@@ -4157,7 +4157,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(book));
 
 			if (depth < 0)
-				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
+				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.InvalidValue);
 
 			var retVal = new List<QuoteChange>();
 
@@ -4446,13 +4446,13 @@ namespace StockSharp.Messages
 			var str = string.Empty;
 
 			if (tf.Days > 0)
-				str += LocalizedStrings.Str2918Params.Put(tf.Days);
+				str += LocalizedStrings.DaysParams.Put(tf.Days);
 
 			if (tf.Hours > 0)
-				str = (str + " " + LocalizedStrings.Str2919Params.Put(tf.Hours)).Trim();
+				str = (str + " " + LocalizedStrings.HoursParams.Put(tf.Hours)).Trim();
 
 			if (tf.Minutes > 0)
-				str = (str + " " + LocalizedStrings.Str2920Params.Put(tf.Minutes)).Trim();
+				str = (str + " " + LocalizedStrings.MinsParams.Put(tf.Minutes)).Trim();
 
 			if (tf.Seconds > 0)
 				str = (str + " " + LocalizedStrings.Seconds.Put(tf.Seconds)).Trim();
@@ -4540,7 +4540,7 @@ namespace StockSharp.Messages
 			if (cfi.Length != 6)
 			{
 				return null;
-				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
+				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.InvalidValue);
 			}
 
 			switch (cfi[0])
@@ -4634,10 +4634,9 @@ namespace StockSharp.Messages
 
 			if (cfi[0] != 'O')
 				return null;
-			//throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
 
 			if (cfi.Length < 2)
-				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1605Params.Put(cfi));
+				throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.InvalidValue);
 
 			return cfi[1] switch
 			{
@@ -4727,8 +4726,8 @@ namespace StockSharp.Messages
 				return volume.Value;
 
 			var errorMsg = message.DataType == DataType.Ticks || message.HasTradeInfo()
-				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
-				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
+				? LocalizedStrings.WrongTradeVolume.Put((object)message.TradeId ?? message.TradeStringId)
+				: LocalizedStrings.WrongOrderVolume.Put((object)message.OrderId ?? message.OrderStringId);
 
 			throw new ArgumentOutOfRangeException(nameof(message), null, errorMsg);
 		}
@@ -4748,7 +4747,7 @@ namespace StockSharp.Messages
 			if (orderId != null)
 				return orderId.Value;
 
-			throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str925);
+			throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.InvalidValue);
 		}
 
 		/// <summary>
@@ -4794,10 +4793,10 @@ namespace StockSharp.Messages
 		public static OrderLogCancelReasons GetOrderLogCancelReason(this ExecutionMessage item)
 		{
 			if (!item.IsOrderLogCanceled())
-				throw new ArgumentException(LocalizedStrings.Str937, nameof(item));
+				throw new ArgumentException(LocalizedStrings.OrderLogIsNotCancellation, nameof(item));
 
 			if (item.OrderStatus == null)
-				throw new ArgumentException(LocalizedStrings.Str938, nameof(item));
+				throw new ArgumentException(LocalizedStrings.OrderLogNotStatus, nameof(item));
 
 			var status = item.OrderStatus.Value;
 
@@ -4810,7 +4809,7 @@ namespace StockSharp.Messages
 			else if (status.HasBits(0x800000))
 				return OrderLogCancelReasons.CrossTrade;
 			else
-				throw new ArgumentOutOfRangeException(nameof(item), status, LocalizedStrings.Str939);
+				throw new ArgumentOutOfRangeException(nameof(item), status, LocalizedStrings.InvalidValue);
 		}
 
 		private static readonly WorkingTime _time = new() { IsEnabled = true };
@@ -5655,7 +5654,7 @@ namespace StockSharp.Messages
 			foreach (var execMsg in diffs)
 			{
 				if (!execMsg.HasOrderInfo)
-					throw new InvalidOperationException(LocalizedStrings.Str3794Params.Put(transactionId));
+					throw new InvalidOperationException(LocalizedStrings.NoInfoAboutOrder.Put(transactionId));
 
 				if (snapshot is null)
 					snapshot = execMsg;
@@ -5703,7 +5702,7 @@ namespace StockSharp.Messages
 			}
 
 			if (snapshot is null)
-				throw new InvalidOperationException(LocalizedStrings.Str1702Params.Put(transactionId));
+				throw new InvalidOperationException(LocalizedStrings.ElementNotFoundParams.Put(transactionId));
 
 			return snapshot;
 		}

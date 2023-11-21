@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Strategies
 		/// Disabled.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2558Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.DisabledKey)]
 		Disabled,
 
 		/// <summary>
@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str2558Key,
+			Name = LocalizedStrings.DisabledKey,
 			Description = LocalizedStrings.TradingDisabledKey)]
 		Disabled,
 
@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Strategies
 				base.OnAdded(item);
 
 				if (item.Parent != null)
-					throw new ArgumentException(LocalizedStrings.Str1356);
+					throw new ArgumentException(LocalizedStrings.ParentAlreadySet.Put(item, item.Parent));
 
 				item.Parent = _parent;
 				item.Connector = _parent.Connector;
@@ -460,7 +460,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LogLevelKey,
-			Description = LocalizedStrings.Str1358Key,
+			Description = LocalizedStrings.LogLevelKey + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.LoggingKey)]
 		public override LogLevels LogLevel
 		{
@@ -476,7 +476,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.NameKey,
-			Description = LocalizedStrings.Str1359Key,
+			Description = LocalizedStrings.StrategyNameKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public override string Name
@@ -621,7 +621,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <returns>Connector.</returns>
 		public IConnector SafeGetConnector()
-			=> Connector ?? throw new InvalidOperationException(LocalizedStrings.Str1360);
+			=> Connector ?? throw new InvalidOperationException(LocalizedStrings.ConnectionNotInit);
 
 		private Portfolio _portfolio;
 
@@ -631,7 +631,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PortfolioKey,
-			Description = LocalizedStrings.Str1361Key,
+			Description = LocalizedStrings.StrategyPortfolioKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
 		public virtual Portfolio Portfolio
@@ -663,7 +663,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SecurityKey,
-			Description = LocalizedStrings.Str1362Key,
+			Description = LocalizedStrings.StrategySecurityKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 2)]
 		public virtual Security Security
@@ -693,7 +693,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SlippageKey,
-			Description = LocalizedStrings.Str1363Key,
+			Description = LocalizedStrings.TotalSlippageKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 99)]
 		[ReadOnly(true)]
@@ -723,7 +723,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PnLKey,
-			Description = LocalizedStrings.Str1364Key,
+			Description = LocalizedStrings.TotalPnLKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 100)]
 		[ReadOnly(true)]
@@ -752,7 +752,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.Str1365Key,
+			Description = LocalizedStrings.TotalCommissionDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 101)]
 		[ReadOnly(true)]
@@ -770,7 +770,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LatencyKey,
-			Description = LocalizedStrings.Str1366Key,
+			Description = LocalizedStrings.TotalLatencyKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 102)]
 		[ReadOnly(true)]
@@ -872,7 +872,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1367);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxErrorCount.Value = value;
 			}
@@ -994,7 +994,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_registerInterval.Value = value;
 			}
@@ -1041,10 +1041,10 @@ namespace StockSharp.Algo.Strategies
 				if (_processState == value)
 					return;
 
-				this.AddDebugLog(LocalizedStrings.Str1368Params, _processState, value);
+				this.AddDebugLog("State: {0}->{1}", _processState, value);
 
 				if (_processState == ProcessStates.Stopped && value == ProcessStates.Stopping)
-					throw new InvalidOperationException(LocalizedStrings.Str1369Params.Put(Name, value));
+					throw new InvalidOperationException(LocalizedStrings.StrategyAlreadyStopped.Put(Name, value));
 
 				_processState = value;
 
@@ -1102,7 +1102,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					if (CancelOrdersWhenStopping)
 					{
-						this.AddInfoLog(LocalizedStrings.Str1370);
+						this.AddInfoLog(LocalizedStrings.WaitingCancellingAllOrders);
 						ProcessCancelActiveOrders();
 					}
 
@@ -1121,14 +1121,14 @@ namespace StockSharp.Algo.Strategies
 		{
 			var stateStr = state switch
 			{
-				ProcessStates.Stopped => LocalizedStrings.Str1371,
-				ProcessStates.Stopping => LocalizedStrings.Str1372,
-				ProcessStates.Started => LocalizedStrings.Str1373,
+				ProcessStates.Stopped => LocalizedStrings.Stopped,
+				ProcessStates.Stopping => LocalizedStrings.Stopping,
+				ProcessStates.Started => LocalizedStrings.Started,
 				_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue),
 			};
 
 			var ps = ParentStrategy;
-			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, ps != null ? ps.ChildStrategies.Count : -1, Position);
+			this.AddInfoLog("Strategy {0}. [{1},{2}]. Position {3}.", stateStr, ChildStrategies.Count, ps != null ? ps.ChildStrategies.Count : -1, Position);
 		}
 
 		private Strategy ParentStrategy => Parent as Strategy;
@@ -1192,7 +1192,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1375);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_ordersKeepTime.Value = value;
 				InitMaxOrdersKeepTime();
@@ -1303,7 +1303,7 @@ namespace StockSharp.Algo.Strategies
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
-			Description = LocalizedStrings.Str1376Key,
+			Description = LocalizedStrings.StrategyVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]
 		public virtual decimal Volume
@@ -1312,7 +1312,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1377);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_volume.Value = value;
 			}
@@ -1352,8 +1352,8 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1378Key,
-			Description = LocalizedStrings.Str1379Key,
+			Name = LocalizedStrings.StartTimeKey,
+			Description = LocalizedStrings.StrategyStartTimeKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 105)]
 		[ReadOnly(true)]
@@ -1741,7 +1741,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
-				noTradeReason = LocalizedStrings.Str1383Params.Put(ProcessState);
+				noTradeReason = LocalizedStrings.StrategyInStateCannotRegisterOrder.Put(ProcessState);
 				return false;
 			}
 
@@ -1795,7 +1795,7 @@ namespace StockSharp.Algo.Strategies
 			if (!CanTrade(pos > 0 && pos.Value.GetDirection() == order.Side.Invert() && pos.Value.Abs() >= order.Volume))
 				return;
 
-			this.AddInfoLog(LocalizedStrings.Str1382Params,
+			this.AddInfoLog("Registration {0} (0x{5:X}) order for {1} with price {2} and volume {3}. {4}",
 				order.Type, order.Side, order.Price, order.Volume, order.Comment, order.GetHashCode());
 
 			order.Security ??= Security;
@@ -1856,7 +1856,7 @@ namespace StockSharp.Algo.Strategies
 			if (newOrder == null)
 				throw new ArgumentNullException(nameof(newOrder));
 
-			this.AddInfoLog(LocalizedStrings.Str1384Params, oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
+			this.AddInfoLog("Reregistration {0} with price {1} to price {2}. {3}", oldOrder.TransactionId, oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
 			if (!CanTrade(newOrder.Volume > 0 && oldOrder.Balance > newOrder.Volume))
 				return;
@@ -1933,7 +1933,7 @@ namespace StockSharp.Algo.Strategies
 			var successRule = order
 				.WhenCanceled(this)
 				.Or(matchedRule, order.WhenRegisterFailed(this))
-				.Do(() => this.AddInfoLog(LocalizedStrings.Str1386Params.Put(order.TransactionId)))
+				.Do(() => this.AddInfoLog(LocalizedStrings.OrderNoLongerActive.Put(order.TransactionId)))
 				.Until(() =>
 				{
 					if (order.State == OrderStates.Failed)
@@ -1970,13 +1970,13 @@ namespace StockSharp.Algo.Strategies
 
 			order
 				.WhenCancelFailed(this)
-				.Do(() =>
+				.Do(f =>
 				{
 					if (ProcessState != ProcessStates.Stopping)
 						return;
 
 					canFinish = true;
-					this.AddInfoLog(LocalizedStrings.Str1387Params.Put(order.TransactionId));
+					this.AddInfoLog(LocalizedStrings.ErrorCancellingOrder.Put(order.TransactionId, f.Error.Message));
 				})
 				.Until(() => canFinish)
 				.Apply(this)
@@ -1988,7 +1988,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1388Params, ProcessState);
+				this.AddWarningLog(LocalizedStrings.StrategyInStateCannotCancelOrder, ProcessState);
 				return;
 			}
 
@@ -2006,11 +2006,11 @@ namespace StockSharp.Algo.Strategies
 				var info = _ordersInfo.TryGetValue(order);
 
 				if (info == null || !info.IsOwn)
-					throw new ArgumentException(LocalizedStrings.Str1389Params.Put(order.TransactionId, Name));
+					throw new ArgumentException(LocalizedStrings.OrderNotFromStrategy.Put(order.TransactionId, Name));
 
 				if (info.IsCanceled)
 				{
-					this.AddWarningLog(LocalizedStrings.Str1390Params, order.TransactionId);
+					this.AddWarningLog(LocalizedStrings.OrderAlreadySentCancel, order.TransactionId);
 					return;
 				}
 
@@ -2025,7 +2025,7 @@ namespace StockSharp.Algo.Strategies
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			this.AddInfoLog(LocalizedStrings.Str1315Params, order.TransactionId);
+			this.AddInfoLog(LocalizedStrings.OrderCancelling + " " + order.TransactionId);
 
 			OnOrderCanceling(order);
 
@@ -2259,7 +2259,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Reset()
 		{
-			this.AddInfoLog(LocalizedStrings.Str1393);
+			this.AddInfoLog(LocalizedStrings.Initialization);
 
 			ChildStrategies.ForEach(s => s.Reset());
 
@@ -2321,7 +2321,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			_rulesSuspendCount++;
 
-			this.AddDebugLog(LocalizedStrings.Str1394Params, _rulesSuspendCount);
+			this.AddDebugLog(LocalizedStrings.RulesSuspended, _rulesSuspendCount);
 		}
 
 		void IMarketRuleContainer.ResumeRules()
@@ -2340,7 +2340,7 @@ namespace StockSharp.Algo.Strategies
 				}
 			}
 
-			this.AddDebugLog(LocalizedStrings.Str1395Params, _rulesSuspendCount);
+			this.AddDebugLog(LocalizedStrings.RulesResume, _rulesSuspendCount);
 		}
 
 		private void TryFinalStop()
@@ -2362,7 +2362,7 @@ namespace StockSharp.Algo.Strategies
 				if (WaitRulesOnStop)
 				{
 					this.AddLog(LogLevels.Info,
-						() => LocalizedStrings.Str1396Params.Put(rules.Length, rules.Select(r => r.ToString()).JoinCommaSpace()));
+						() => LocalizedStrings.AttemptsStopRules.Put(rules.Length, rules.Select(r => r.ToString()).JoinCommaSpace()));
 
 					return;
 				}
@@ -2387,7 +2387,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			if (_rulesSuspendCount > 0)
 			{
-				this.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Str1397);
+				this.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.CannotProcessRulesSuspended);
 				return;
 			}
 
@@ -2578,7 +2578,7 @@ namespace StockSharp.Algo.Strategies
 								if (ProcessState == ProcessStates.Started)
 									ProcessState = ProcessStates.Stopping;
 								else
-									this.AddDebugLog(LocalizedStrings.Str1392Params, ProcessState);
+									this.AddDebugLog(LocalizedStrings.StrategyStopping, ProcessState);
 
 								break;
 							}
@@ -2587,7 +2587,7 @@ namespace StockSharp.Algo.Strategies
 								if (ProcessState == ProcessStates.Stopped)
 									ProcessState = ProcessStates.Started;
 								else
-									this.AddDebugLog(LocalizedStrings.Str1391Params, ProcessState);
+									this.AddDebugLog(LocalizedStrings.StrategyStarting, ProcessState);
 
 								break;
 							}
@@ -2724,7 +2724,7 @@ namespace StockSharp.Algo.Strategies
 				info.RegistrationFail = fail;
 			}
 
-			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.TransactionId, fail.Error.Message);
+			this.AddErrorLog(LocalizedStrings.ErrorRegOrder, fail.Order.TransactionId, fail.Error.Message);
 
 			TryInvoke(() => OnOrderRegisterFailed(fail));
 
@@ -2732,7 +2732,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				OrderRegisterErrorCount++;
 
-				this.AddInfoLog(LocalizedStrings.Str1297Params, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
+				this.AddInfoLog(LocalizedStrings.CurrErrorsCounter, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
 
 				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
 					Stop();
@@ -2773,7 +2773,7 @@ namespace StockSharp.Algo.Strategies
 			var isComChanged = false;
 			var isSlipChanged = false;
 
-			this.AddInfoLog(LocalizedStrings.Str1398Params,
+			this.AddInfoLog("{0} trade {1} at price {2} for {3} orders {4}.",
 				trade.Order.Side,
 				(trade.Trade.Id is null ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
 				trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
@@ -2962,11 +2962,11 @@ namespace StockSharp.Algo.Strategies
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1400Params, ProcessState);
+				this.AddWarningLog(LocalizedStrings.StrategyInStateCannotCancelOrder, ProcessState);
 				return;
 			}
 
-			this.AddInfoLog(LocalizedStrings.Str1401);
+			this.AddInfoLog(LocalizedStrings.CancelAll);
 
 			ProcessCancelActiveOrders();
 		}
@@ -2986,7 +2986,7 @@ namespace StockSharp.Algo.Strategies
 
 				if (info.IsCanceled)
 				{
-					this.AddWarningLog(LocalizedStrings.Str1390Params, o.TransactionId);
+					this.AddWarningLog(LocalizedStrings.OrderAlreadySentCancel, o.TransactionId);
 					return;
 				}
 
@@ -3028,7 +3028,7 @@ namespace StockSharp.Algo.Strategies
 				info.IsCanceled = false;
 			}
 
-			this.AddErrorLog(LocalizedStrings.Str1402Params, order.TransactionId, fail.Error);
+			this.AddErrorLog(LocalizedStrings.ErrorCancellingOrder, order.TransactionId, fail.Error);
 
 			OrderCancelFailed?.Invoke(fail);
 
@@ -3147,8 +3147,8 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Display(ResourceType = typeof(LocalizedStrings),
 			GroupName = LocalizedStrings.SettingsKey,
-			Name = LocalizedStrings.Str3172Key,
-			Description = LocalizedStrings.Str3173Key,
+			Name = LocalizedStrings.DaysHistoryKey,
+			Description = LocalizedStrings.DaysHistoryDescKey,
 			Order = 20)]
 		[TimeSpanEditor(Mask = TimeSpanEditorMask.Days | TimeSpanEditorMask.Hours | TimeSpanEditorMask.Minutes | TimeSpanEditorMask.Seconds)]
 		public TimeSpan? HistoryRequired
@@ -3157,7 +3157,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_historyRequired.Value = value;
 			}

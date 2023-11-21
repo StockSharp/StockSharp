@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str196);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_marketTimeChangedInterval = value;
 			}
@@ -261,7 +261,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Connect:
 				{
 					if (_isStarted)
-						throw new InvalidOperationException(LocalizedStrings.Str1116);
+						throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
 					SendOutMessage(new ConnectMessage { LocalTime = StartDate });
 					break;
@@ -411,7 +411,7 @@ namespace StockSharp.Algo.Testing
 
 			if (StorageRegistry == null)
 			{
-				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.Str1117Params.Put(dataType, securityId)));
+				SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, securityId)));
 				return;
 			}
 
@@ -536,7 +536,7 @@ namespace StockSharp.Algo.Testing
 			}
 			else
 			{
-				error = new InvalidOperationException(LocalizedStrings.Str1118Params.Put(dataType));
+				error = new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, Messages.Extensions.AllSecurityId));
 			}
 
 			SendSubscriptionReply(transId, error);
@@ -837,7 +837,7 @@ namespace StockSharp.Algo.Testing
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return LocalizedStrings.Str1127Params.Put(StartDate, StopDate);
+			return $"Hist: {StartDate}-{StopDate}";
 		}
 	}
 }

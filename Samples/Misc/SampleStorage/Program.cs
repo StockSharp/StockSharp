@@ -85,7 +85,7 @@ namespace SampleStorage
 
 					foreach (var trade in loadedTrades)
 					{
-						Console.WriteLine(LocalizedStrings.Str2968Params, trade.TradeId, trade);
+						Console.WriteLine(LocalizedStrings.TradeDetails, trade.TradeId, trade);
 					}	
 				}
 

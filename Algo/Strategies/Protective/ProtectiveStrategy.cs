@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			set
 			{
 				if (value && ProtectiveLevel.Type == UnitTypes.Limit)
-					throw new ArgumentException(LocalizedStrings.Str1282);
+					throw new ArgumentException(LocalizedStrings.TrailingCannotUse);
 
 				_isTrailing.Value = value;
 			}
@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Strategies.Protective
 		{
 			base.OnStarted(time);
 
-			this.AddInfoLog(LocalizedStrings.Str1283Params,
+			this.AddInfoLog("Position protection {0}/{1} with volume {2}. Level={3}, Trailing={4}, Market orders={5}, Quoting={6}, Slippage={7}",
 				ProtectiveSide, ProtectivePrice, ProtectiveVolume, ProtectiveLevel, IsTrailing, UseMarketOrders, UseQuoting, PriceOffset);
 
 			this.SubscribeTrades(Security);
@@ -250,7 +250,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			if (!UseQuoting)
 				return price;
 
-			this.AddInfoLog(LocalizedStrings.Str1285);
+			this.AddInfoLog(LocalizedStrings.Reregistering);
 
 			_quotingStarted = true;
 
@@ -295,7 +295,7 @@ namespace StockSharp.Algo.Strategies.Protective
 
 		private void RaiseActivated(decimal price)
 		{
-			this.AddInfoLog(LocalizedStrings.Str1286Params, price == 0 ? LocalizedStrings.Str1287 : price.To<string>());
+			this.AddInfoLog(LocalizedStrings.ProtectionActivated, price == 0 ? LocalizedStrings.Market : price.To<string>());
 
 			IsActivated = true;
 			Activated?.Invoke();

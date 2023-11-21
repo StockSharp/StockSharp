@@ -36,7 +36,7 @@ namespace StockSharp.BusinessEntities
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SecurityKey,
-		Description = LocalizedStrings.Str546Key)]
+		Description = LocalizedStrings.SecurityDescKey)]
 	public class Security : Cloneable<Security>, INotifyPropertyChanged
 	{
 		/// <summary>
@@ -640,9 +640,6 @@ namespace StockSharp.BusinessEntities
 			get => _stepPrice;
 			set
 			{
-				//if (value < 0)
-				//	throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str556);
-
 				if (_stepPrice == value)
 					return;
 
@@ -824,7 +821,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str565Key,
+			Name = LocalizedStrings.BestBidKey,
 			Description = LocalizedStrings.BestBidDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 206)]
@@ -901,7 +898,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.StateKey,
-			Description = LocalizedStrings.Str569Key,
+			Description = LocalizedStrings.SecurityStateKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 209)]
 		[XmlIgnore]

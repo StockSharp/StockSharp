@@ -88,7 +88,7 @@
 
 		private void RaisePositionChanged(DateTimeOffset time)
 		{
-			this.AddInfoLog(LocalizedStrings.Str1399Params, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value.CurrentValue).JoinCommaSpace());
+			this.AddInfoLog(LocalizedStrings.NewPosition, _positions.CachedPairs.Select(pos => pos.Key + "=" + pos.Value.CurrentValue).JoinCommaSpace());
 
 			this.Notify(nameof(Position));
 			PositionChanged?.Invoke();

@@ -9,6 +9,8 @@
 	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using Ecng.ComponentModel;
+	using System.Xml.Linq;
 
 	partial class MarketRuleHelper
 	{
@@ -131,7 +133,7 @@
 				: base(subscriptionProvider, subscription)
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
-				Name = LocalizedStrings.Str1064 + " " + subscription;
+				Name = LocalizedStrings.Candles + " " + subscription;
 			}
 
 			protected override void OnProcessCandle(ICandleMessage candle)
@@ -206,7 +208,7 @@
 				: base(subscriptionProvider, candle)
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
-				Name = LocalizedStrings.Str1065 + " " + candle;
+				Name = LocalizedStrings.Candles + " " + candle;
 			}
 
 			protected override void OnProcessCandle(ICandleMessage candle)
@@ -222,7 +224,7 @@
 			public FinishedCandleRule(ISubscriptionProvider subscriptionProvider, TCandle candle)
 				: base(subscriptionProvider, candle)
 			{
-				Name = LocalizedStrings.Str1066 + " " + candle;
+				Name = LocalizedStrings.Candles + " " + candle;
 			}
 
 			protected override void OnProcessCandle(ICandleMessage candle)
@@ -245,7 +247,7 @@
 		{
 			return new ChangedCandleRule<TCandle>(subscriptionProvider, candle, candle.CreateCandleCondition(price, c => c.ClosePrice, false))
 			{
-				Name = LocalizedStrings.Str1067Params.Put(candle, price)
+				Name = $"({candle.SecurityId}) C > {price}"
 			};
 		}
 
@@ -262,7 +264,7 @@
 		{
 			return new ChangedCandleRule<TCandle>(subscriptionProvider, candle, candle.CreateCandleCondition(price, c => c.ClosePrice, true))
 			{
-				Name = LocalizedStrings.Str1068Params.Put(candle, price)
+				Name = $"({candle.SecurityId}) C < {price}"
 			};
 		}
 
@@ -278,11 +280,8 @@
 			if (currentPrice == null)
 				throw new ArgumentNullException(nameof(currentPrice));
 
-			if (price.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, nameof(price));
-
-			if (price.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, nameof(price));
+			if (price <= 0)
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
 
 			if (isLess)
 			{
@@ -314,7 +313,7 @@
 
 			return new ChangedCandleRule<TCandle>(subscriptionProvider, candle, c => c.TotalVolume > finishVolume)
 			{
-				Name = candle + LocalizedStrings.Str1069Params.Put(volume)
+				Name = $"({candle.SecurityId}) V > {volume}"
 			};
 		}
 
@@ -365,7 +364,7 @@
 		/// <returns>Rule.</returns>
 		public static MarketRule<Subscription, TCandle> WhenCandlesStarted<TCandle>(this ISubscriptionProvider subscriptionProvider, Subscription subscription)
 			where TCandle : ICandleMessage
-			=> new CandleStartedRule<TCandle>(subscriptionProvider, subscription) { Name = LocalizedStrings.Str1072 + " " + subscription };
+			=> new CandleStartedRule<TCandle>(subscriptionProvider, subscription) { Name = LocalizedStrings.Candles + " " + subscription };
 
 		/// <summary>
 		/// To create a rule for candle change event.
@@ -405,7 +404,7 @@
 		/// <returns>Rule.</returns>
 		public static MarketRule<Subscription, TCandle> WhenCandlesFinished<TCandle>(this ISubscriptionProvider subscriptionProvider, Subscription subscription)
 			where TCandle : ICandleMessage
-			=> new CandleStateSeriesRule<TCandle>(subscriptionProvider, subscription, CandleStates.Finished) { Name = LocalizedStrings.FinishedCandles + " " + subscription };
+			=> new CandleStateSeriesRule<TCandle>(subscriptionProvider, subscription, CandleStates.Finished) { Name = LocalizedStrings.Candles + " " + subscription };
 
 		/// <summary>
 		/// To create a rule for the event of candles occurrence, change and end.
@@ -455,7 +454,7 @@
 			where TCandle : ICandleMessage
 			=> new ChangedCandleRule<TCandle>(subscriptionProvider, candle, c => c.IsCandlePartiallyFinished(percent))
 			{
-				Name = LocalizedStrings.Str1075Params.Put(percent)
+				Name = $"({candle.SecurityId}) {percent}%"
 			};
 
 		/// <summary>
@@ -470,7 +469,7 @@
 			where TCandle : ICandleMessage
 			=> new CandleChangedSeriesRule<TCandle>(subscriptionProvider, subscription, candle => candle.IsCandlePartiallyFinished(percent))
 			{
-				Name = LocalizedStrings.Str1076Params.Put(percent)
+				Name = $"({subscription.SecurityId}) {percent}%"
 			};
 
 		private static bool IsCandlePartiallyFinished<TCandle>(this TCandle candle, decimal percent)
@@ -480,7 +479,7 @@
 				throw new ArgumentNullException(nameof(candle));
 
 			if (percent <= 0)
-				throw new ArgumentOutOfRangeException(nameof(percent), LocalizedStrings.Str1077);
+				throw new ArgumentOutOfRangeException(nameof(percent), percent, LocalizedStrings.InvalidValue);
 
 			var realPercent = percent / 100;
 

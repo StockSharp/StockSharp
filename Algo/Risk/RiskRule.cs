@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ActionKey,
-			Description = LocalizedStrings.Str859Key,
+			Description = LocalizedStrings.RiskRuleActionKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public RiskActions Action
@@ -126,7 +126,7 @@ namespace StockSharp.Algo.Risk
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PnLKey,
-		Description = LocalizedStrings.Str860Key,
+		Description = LocalizedStrings.RulePnLKey,
 		GroupName = LocalizedStrings.PnLKey)]
 	public class RiskPnLRule : RiskRule
 	{
@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PnLKey,
-			Description = LocalizedStrings.Str861Key,
+			Description = LocalizedStrings.PnLKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public Unit PnL
@@ -225,7 +225,7 @@ namespace StockSharp.Algo.Risk
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.PositionKey,
-		Description = LocalizedStrings.Str863Key,
+		Description = LocalizedStrings.RulePositionKey,
 		GroupName = LocalizedStrings.PositionsKey)]
 	public class RiskPositionSizeRule : RiskRule
 	{
@@ -237,7 +237,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PositionKey,
-			Description = LocalizedStrings.Str864Key,
+			Description = LocalizedStrings.PositionSizeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Position
@@ -296,8 +296,8 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str865Key,
-		Description = LocalizedStrings.Str866Key,
+		Name = LocalizedStrings.PositionTimeKey,
+		Description = LocalizedStrings.RulePositionTimeKey,
 		GroupName = LocalizedStrings.PositionsKey)]
 	public class RiskPositionTimeRule : RiskRule
 	{
@@ -310,7 +310,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeKey,
-			Description = LocalizedStrings.Str867Key,
+			Description = LocalizedStrings.PositionTimeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public TimeSpan Time
@@ -424,7 +424,7 @@ namespace StockSharp.Algo.Risk
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CommissionKey,
-		Description = LocalizedStrings.Str868Key,
+		Description = LocalizedStrings.RiskCommissionKey,
 		GroupName = LocalizedStrings.PnLKey)]
 	public class RiskCommissionRule : RiskRule
 	{
@@ -436,7 +436,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.Str869Key,
+			Description = LocalizedStrings.CommissionDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Commission
@@ -497,7 +497,7 @@ namespace StockSharp.Algo.Risk
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.SlippageKey,
-		Description = LocalizedStrings.Str870Key,
+		Description = LocalizedStrings.RiskSlippageKey,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class RiskSlippageRule : RiskRule
 	{
@@ -509,7 +509,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SlippageKey,
-			Description = LocalizedStrings.Str871Key,
+			Description = LocalizedStrings.SlippageSizeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Slippage
@@ -568,8 +568,8 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str872Key,
-		Description = LocalizedStrings.Str873Key,
+		Name = LocalizedStrings.OrderPrice2Key,
+		Description = LocalizedStrings.RiskOrderPriceKey,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class RiskOrderPriceRule : RiskRule
 	{
@@ -645,7 +645,7 @@ namespace StockSharp.Algo.Risk
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.OrderVolume2Key,
-		Description = LocalizedStrings.Str874Key,
+		Description = LocalizedStrings.RiskOrderVolumeKey,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class RiskOrderVolumeRule : RiskRule
 	{
@@ -657,7 +657,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
-			Description = LocalizedStrings.Str875Key,
+			Description = LocalizedStrings.OrderVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Volume
@@ -723,8 +723,8 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str876Key,
-		Description = LocalizedStrings.Str877Key,
+		Name = LocalizedStrings.OrderFreqKey,
+		Description = LocalizedStrings.RiskOrderFreqKey,
 		GroupName = LocalizedStrings.OrdersKey)]
 	public class RiskOrderFreqRule : RiskRule
 	{
@@ -770,7 +770,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IntervalKey,
-			Description = LocalizedStrings.Str879Key,
+			Description = LocalizedStrings.RiskIntervalDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
 		public TimeSpan Interval
@@ -878,7 +878,7 @@ namespace StockSharp.Algo.Risk
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TradePriceKey,
-		Description = LocalizedStrings.Str880Key,
+		Description = LocalizedStrings.RiskTradePriceKey,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class RiskTradePriceRule : RiskRule
 	{
@@ -890,7 +890,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
-			Description = LocalizedStrings.TradePriceKey,
+			Description = LocalizedStrings.TradePriceDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Price
@@ -946,7 +946,7 @@ namespace StockSharp.Algo.Risk
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TradeVolumeKey,
-		Description = LocalizedStrings.Str881Key,
+		Description = LocalizedStrings.RiskTradeVolumeKey,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class RiskTradeVolumeRule : RiskRule
 	{
@@ -958,7 +958,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
-			Description = LocalizedStrings.Str882Key,
+			Description = LocalizedStrings.TradeVolumeKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Volume
@@ -1016,8 +1016,8 @@ namespace StockSharp.Algo.Risk
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str883Key,
-		Description = LocalizedStrings.Str884Key,
+		Name = LocalizedStrings.TradeFreqKey,
+		Description = LocalizedStrings.RiskTradeFreqKey,
 		GroupName = LocalizedStrings.TradesKey)]
 	public class RiskTradeFreqRule : RiskRule
 	{
@@ -1062,7 +1062,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.IntervalKey,
-			Description = LocalizedStrings.Str885Key,
+			Description = LocalizedStrings.TradesIntervalKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
 		public TimeSpan Interval

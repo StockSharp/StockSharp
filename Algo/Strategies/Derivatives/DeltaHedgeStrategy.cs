@@ -35,8 +35,8 @@ namespace StockSharp.Algo.Strategies.Derivatives
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1245Key,
-			Description = LocalizedStrings.Str1246Key,
+			Name = LocalizedStrings.PositionOffsetKey,
+			Description = LocalizedStrings.PositionOffsetDescKey,
 			GroupName = LocalizedStrings.HedgingKey,
 			Order = 0)]
 		public decimal PositionOffset
@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Strategies.Derivatives
 
 			var diff = futurePosition.Value.Round() + PositionOffset;
 
-			this.AddInfoLog(LocalizedStrings.Str1247Params, futurePosition, BlackScholes.UnderlyingAsset, PositionOffset, diff);
+			this.AddInfoLog("Delta total {0}, Futures position {1}, Directional position {2}, Difference in position {3}.", futurePosition, BlackScholes.UnderlyingAsset, PositionOffset, diff);
 
 			if (diff == 0)
 				return Enumerable.Empty<Order>();

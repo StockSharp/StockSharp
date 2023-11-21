@@ -136,8 +136,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str806Key,
-			Description = LocalizedStrings.Str807Key,
+			Name = LocalizedStrings.MultiplicationFactorKey,
+			Description = LocalizedStrings.MultiplicationFactorDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Multiple
 		{

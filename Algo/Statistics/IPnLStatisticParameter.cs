@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Statistics
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.NetProfitKey,
-		Description = LocalizedStrings.Str969Key,
+		Description = LocalizedStrings.NetProfitWholeTimeKey,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 0
 	)]
@@ -130,8 +130,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str958Key,
-		Description = LocalizedStrings.Str959Key,
+		Name = LocalizedStrings.MaxProfitKey,
+		Description = LocalizedStrings.MaxProfitWholePeriodKey,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 2
 	)]
@@ -214,8 +214,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str960Key,
-		Description = LocalizedStrings.Str961Key,
+		Name = LocalizedStrings.MaxDrawdownKey,
+		Description = LocalizedStrings.MaxDrawdownDescKey,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 4
 	)]
@@ -365,8 +365,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str962Key,
-		Description = LocalizedStrings.Str963Key,
+		Name = LocalizedStrings.RelativeDrawdownKey,
+		Description = LocalizedStrings.MaxRelativeDrawdownKey,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 7
 	)]
@@ -418,8 +418,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str964Key,
-		Description = LocalizedStrings.Str965Key,
+		Name = LocalizedStrings.RelativeIncomeKey,
+		Description = LocalizedStrings.RelativeIncomeWholePeriodKey,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 8
 	)]
@@ -471,8 +471,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str966Key,
-		Description = LocalizedStrings.Str967Key,
+		Name = LocalizedStrings.RecoveryFactorKey,
+		Description = LocalizedStrings.RecoveryFactorDescKey,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 9
 	)]
@@ -507,7 +507,7 @@ namespace StockSharp.Algo.Statistics
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CommissionKey,
-		Description = LocalizedStrings.Str1365Key,
+		Description = LocalizedStrings.TotalCommissionDescKey,
 		GroupName = LocalizedStrings.PnLKey,
 		Order = 10
 	)]

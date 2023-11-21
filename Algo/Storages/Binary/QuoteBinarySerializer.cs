@@ -231,7 +231,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				// LMAX has equals best bid and ask
 				//if (bid != null && ask != null && bid.Price > ask.Price)
-				//	throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), nameof(messages));
+				//	throw new ArgumentException();
 
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(quoteMsg.ServerTime, metaInfo.LastTime, LocalizedStrings.MarketDepth, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
@@ -278,7 +278,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (hasLocalTime)
 					{
 						lastOffset = metaInfo.LastLocalOffset;
-						metaInfo.LastLocalTime = writer.WriteTime(quoteMsg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str934, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
+						metaInfo.LastLocalTime = writer.WriteTime(quoteMsg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.MarketDepths, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
 						metaInfo.LastLocalOffset = lastOffset;
 					}
 				}
@@ -442,12 +442,12 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				// quotes for indices may have zero prices
 				//if (quote.Price <= 0)
-				//	throw new ArgumentOutOfRangeException(nameof(quotes), quote.Price, LocalizedStrings.Str935);
+				//	throw new ArgumentOutOfRangeException();
 
 				// some forex connectors do not translate volume
 				//
 				if (quote.Volume < 0/* || (isFull && quote.Volume == 0)*/)
-					throw new ArgumentOutOfRangeException(nameof(quotes), quote.Volume, LocalizedStrings.Str936);
+					throw new ArgumentOutOfRangeException(nameof(quotes), quote.Volume, LocalizedStrings.Volume);
 
 				var pricePrice = metaInfo.LastPrice;
 				writer.WritePrice(quote.Price, ref pricePrice, metaInfo, SecurityId, useLong, nonAdjustPrice);

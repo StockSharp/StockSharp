@@ -119,11 +119,11 @@
 
 			// subscribe on error event
 			//Connector.Error += error =>
-			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+			//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.DataProcessError));
 
 			// subscribe on error of market data subscription event
 			Connector.SubscriptionFailed += (sub, error, isSubscribe) =>
-				this.GuiAsync(() => MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.Str2956Params.Put(sub.DataType, sub.SecurityId)));
+				this.GuiAsync(() => MessageBox.Show(this.GetWindow(), error.ToString(), LocalizedStrings.ErrorSubDetails.Put(sub.DataType, sub.SecurityId)));
 
 			Connector.SecurityReceived += (s, sec) => _securitiesWindow.SecurityPicker.Securities.Add(sec);
 			Connector.TickTradeReceived += (s, t) => _tradesWindow.TradeGrid.Trades.Add(t);

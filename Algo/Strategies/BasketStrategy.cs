@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Strategies
 		protected override void OnStarted(DateTimeOffset time)
 		{
 			if (FinishMode != BasketStrategyFinishModes.None && ChildStrategies.Count == 0)
-				throw new InvalidOperationException(LocalizedStrings.Str1224);
+				throw new InvalidOperationException(LocalizedStrings.NoChildStrategies);
 
 			base.OnStarted(time);
 		}

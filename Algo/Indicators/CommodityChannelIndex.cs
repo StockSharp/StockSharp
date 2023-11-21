@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.CCIKey,
-		Description = LocalizedStrings.Str760Key)]
+		Description = LocalizedStrings.CommodityChannelIndexKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorCommodityChannelIndex.html")]
 	public class CommodityChannelIndex : LengthIndicator<decimal>

@@ -125,7 +125,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PriceKey,
-			Description = LocalizedStrings.TradePriceKey,
+			Description = LocalizedStrings.TradePriceDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 3)]
 		public decimal Price { get; set; }

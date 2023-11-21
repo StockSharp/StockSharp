@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.TRKey,
-		Description = LocalizedStrings.Str775Key)]
+		Description = LocalizedStrings.TrueRangeKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorTrueRange.html")]
 	public class TrueRange : BaseIndicator

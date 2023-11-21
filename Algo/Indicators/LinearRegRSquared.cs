@@ -31,8 +31,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str739Key,
-		Description = LocalizedStrings.Str746Key)]
+		Name = LocalizedStrings.RSquaredKey,
+		Description = LocalizedStrings.LinearRegRSquaredKey)]
 	[Doc("topics/IndicatorLinearRegRSquared.html")]
 	public class LinearRegRSquared : LengthIndicator<decimal>
 	{

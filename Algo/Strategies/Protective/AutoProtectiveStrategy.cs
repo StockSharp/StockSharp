@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			set
 			{
 				if (value && StopLossLevel.Type == UnitTypes.Limit)
-					throw new ArgumentException(LocalizedStrings.Str1225);
+					throw new InvalidOperationException(LocalizedStrings.UnsupportedType.Put(UnitTypes.Limit));
 
 				_isTrailingStopLoss.Value = value;
 			}
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			set
 			{
 				if (value && TakeProfitLevel.Type == UnitTypes.Limit)
-					throw new ArgumentException(LocalizedStrings.Str1226);
+					throw new InvalidOperationException(LocalizedStrings.UnsupportedType.Put(UnitTypes.Limit));
 
 				_isTrailingTakeProfit.Value = value;
 			}
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1227);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_stopLossTimeOut.Value = value;
 			}
@@ -146,7 +146,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1227);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_takeProfitTimeOut.Value = value;
 			}
@@ -330,8 +330,6 @@ namespace StockSharp.Algo.Strategies.Protective
 		/// <param name="trade">Trade.</param>
 		public void ProcessNewMyTrade(MyTrade trade)
 		{
-			//this.AddInfoLog(LocalizedStrings.Str1229Params, trades.Count());
-
 			var security = trade.Trade.Security;
 
 			var manager = GetPositionManager(security);
@@ -340,7 +338,7 @@ namespace StockSharp.Algo.Strategies.Protective
 
 			manager.ProcessMessage(trade.ToMessage());
 
-			this.AddInfoLog(LocalizedStrings.Str1230Params, security.Id, prevPos, manager.Position);
+			this.AddInfoLog(LocalizedStrings.PrevPosNewPos, security.Id, prevPos, manager.Position);
 
 			if (prevPos == 0)
 			{
@@ -357,7 +355,7 @@ namespace StockSharp.Algo.Strategies.Protective
 				// переворот позы
 				if (manager.Position != 0)
 				{
-					this.AddInfoLog(LocalizedStrings.Str1231);
+					this.AddInfoLog(LocalizedStrings.ReversePos);
 					Protect(manager, trade, manager.Position.Abs());
 				}
 			}
@@ -371,7 +369,7 @@ namespace StockSharp.Algo.Strategies.Protective
 				// увеличение позы
 				if (diffVolume > 0)
 				{
-					this.AddInfoLog(LocalizedStrings.Str1232Params, diffVolume);
+					this.AddInfoLog(LocalizedStrings.PosIncreased, diffVolume);
 					Protect(manager, trade, diffVolume);
 				}
 				// уменьшение позы
@@ -400,14 +398,14 @@ namespace StockSharp.Algo.Strategies.Protective
 
 			if (strategy != null)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1233Params, position);
+				this.AddInfoLog(LocalizedStrings.PosChanged, position);
 				ChildStrategies.Add((Strategy)strategy);
 			}
 		}
 
 		private void DecreasePosition(Security security, decimal diffVolume)
 		{
-			this.AddInfoLog(LocalizedStrings.Str1234Params, diffVolume);
+			this.AddInfoLog(LocalizedStrings.PosDecreased, diffVolume);
 
 			var groups = ChildStrategies
 				.Where(s => s.Security == security)
@@ -417,13 +415,13 @@ namespace StockSharp.Algo.Strategies.Protective
 
 			if (groups.Length == 0)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1235);
+				this.AddWarningLog(LocalizedStrings.StopsNotFound);
 				return;
 			}
 
 			foreach (var strategies in Sort(groups))
 			{
-				this.AddInfoLog(LocalizedStrings.Str1236Params, diffVolume);
+				this.AddInfoLog(LocalizedStrings.StopsDecreased, diffVolume);
 
 				diffVolume = ChangeVolume(strategies.ToArray(), diffVolume);
 
@@ -443,19 +441,18 @@ namespace StockSharp.Algo.Strategies.Protective
 
 			if (strategy == null)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1237);
+				this.AddWarningLog(LocalizedStrings.NoProtectiveStrategies);
 				return;
 			}
 
 			strategy.NewMyTrade += protectiveTrade =>
 			{
-				//this.AddInfoLog(LocalizedStrings.Str1238Params, protectiveTrades.Count(), s.Name);
-
 				var prevPos = positionManager.Position;
 
 				positionManager.ProcessMessage(protectiveTrade.ToMessage());
 
-				this.AddInfoLog(LocalizedStrings.Str1239Params, protectiveTrade.Trade.Security.Id, prevPos, positionManager.Position, protectiveTrade);
+				this.AddInfoLog(protectiveTrade.ToString());
+				this.AddInfoLog(LocalizedStrings.PrevPosNewPos, protectiveTrade.Trade.Security.Id, prevPos, positionManager.Position);
 			};
 
 			ChildStrategies.Add(strategy);
@@ -464,7 +461,7 @@ namespace StockSharp.Algo.Strategies.Protective
 		private decimal ChangeVolume(IProtectiveStrategy[] strategies, decimal removableVolume)
 		{
 			if (removableVolume <= 0)
-				throw new ArgumentOutOfRangeException();
+				throw new ArgumentOutOfRangeException(nameof(removableVolume), removableVolume, LocalizedStrings.InvalidValue);
 
 			// старый котируемый объем
 			var volume = strategies.First().ProtectiveVolume;
@@ -474,7 +471,7 @@ namespace StockSharp.Algo.Strategies.Protective
 
 			if (newVolume == 0)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1240);
+				this.AddInfoLog(LocalizedStrings.Stop);
 
 				strategies.Cast<Strategy>().ForEach(s => s.Stop());
 			}

@@ -39,7 +39,7 @@
 			protected void TrySubscribe()
 			{
 				Subscribe();
-				Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Str1028);
+				Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Subscribe);
 			}
 
 			protected abstract void Subscribe();
@@ -93,7 +93,7 @@
 			public CancelFailedOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
 			{
-				Name = LocalizedStrings.Str1030;
+				Name = LocalizedStrings.ErrorCancelling;
 				TrySubscribe();
 			}
 
@@ -129,7 +129,7 @@
 			{
 				_condition = condition ?? throw new ArgumentNullException(nameof(condition));
 
-				Name = LocalizedStrings.Str1031;
+				Name = LocalizedStrings.OrderChange;
 
 				TrySubscribe();
 			}
@@ -217,7 +217,7 @@
 			public NewTradeOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
 			{
-				Name = LocalizedStrings.Str1032;
+				Name = LocalizedStrings.NewTrades;
 				TrySubscribe();
 			}
 
@@ -255,7 +255,7 @@
 			public AllTradesOrderRule(Order order, ITransactionProvider provider)
 				: base(order, provider)
 			{
-				Name = LocalizedStrings.Str1033;
+				Name = LocalizedStrings.AllTradesForOrder;
 				TrySubscribe();
 			}
 
@@ -423,22 +423,8 @@
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			return new ChangedOrNewOrderRule(order, provider, o => o.State is OrderStates.Active or OrderStates.Done) { Name = LocalizedStrings.Str1034 }.Once();
+			return new ChangedOrNewOrderRule(order, provider, o => o.State is OrderStates.Active or OrderStates.Done) { Name = LocalizedStrings.OrderRegistering }.Once();
 		}
-
-		///// <summary>
-		///// To create a rule for the stop order activation.
-		///// </summary>
-		///// <param name="stopOrder">The stop order to be traced for the activation event.</param>
-		///// <param name="connector">The connection of interaction with trade systems.</param>
-		///// <returns>Rule.</returns>
-		//public static MarketRule<Order, Order> WhenActivated(this Order stopOrder, IConnector connector)
-		//{
-		//	if (stopOrder == null)
-		//		throw new ArgumentNullException(nameof(stopOrder));
-
-		//	return new ChangedOrNewOrderRule(stopOrder, connector, o => o.DerivedOrder != null) { Name = LocalizedStrings.Str1035 }.Once();
-		//}
 
 		/// <summary>
 		/// To create a rule for the event of order partial matching.
@@ -468,7 +454,7 @@
 				return result;
 			})
 			{
-				Name = LocalizedStrings.Str1036,
+				Name = LocalizedStrings.OrderFilledPartially,
 			};
 		}
 
@@ -502,7 +488,7 @@
 		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenCanceled(this Order order, ITransactionProvider provider)
 		{
-			return new ChangedOrNewOrderRule(order, provider, o => o.IsCanceled()) { Name = LocalizedStrings.Str1037 }.Once();
+			return new ChangedOrNewOrderRule(order, provider, o => o.IsCanceled()) { Name = LocalizedStrings.CancelOrders }.Once();
 		}
 
 		/// <summary>
@@ -513,7 +499,7 @@
 		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenMatched(this Order order, ITransactionProvider provider)
 		{
-			return new ChangedOrNewOrderRule(order, provider, o => o.IsMatched()) { Name = LocalizedStrings.Str1038 }.Once();
+			return new ChangedOrNewOrderRule(order, provider, o => o.IsMatched()) { Name = LocalizedStrings.Matching }.Once();
 		}
 
 		/// <summary>

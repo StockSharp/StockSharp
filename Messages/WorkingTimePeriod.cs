@@ -37,7 +37,7 @@ namespace StockSharp.Messages
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ScheduleKey,
-		Description = LocalizedStrings.Str417Key)]
+		Description = LocalizedStrings.ScheduleValidityPeriodKey)]
 	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	{
 		/// <summary>
@@ -47,7 +47,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TillKey,
-			Description = LocalizedStrings.Str419Key,
+			Description = LocalizedStrings.WorkingTimeTillKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public DateTime Till { get; set; }
 
@@ -60,7 +60,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.ScheduleKey,
-			Description = LocalizedStrings.Str420Key,
+			Description = LocalizedStrings.WorkScheduleDayKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public List<Range<TimeSpan>> Times
 		{

@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.KAMAKey,
-		Description = LocalizedStrings.Str792Key)]
+		Description = LocalizedStrings.KaufmannAdaptiveMovingAverageKey)]
 	[Doc("topics/IndicatorKaufmannAdaptiveMovingAverage.html")]
 	public class KaufmannAdaptiveMovingAverage : LengthIndicator<decimal>
 	{
@@ -55,8 +55,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str793Key,
-			Description = LocalizedStrings.Str794Key,
+			Name = LocalizedStrings.FastMaKey,
+			Description = LocalizedStrings.FastMaDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int FastSCPeriod { get; set; }
 
@@ -65,8 +65,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str795Key,
-			Description = LocalizedStrings.Str796Key,
+			Name = LocalizedStrings.SlowMaKey,
+			Description = LocalizedStrings.SlowMaDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int SlowSCPeriod { get; set; }
 

@@ -48,10 +48,10 @@ namespace StockSharp.BusinessEntities
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			var result = LocalizedStrings.Str536Params.Put(Trade == null ? (Order.State == OrderStates.Done ? LocalizedStrings.Cancellation : LocalizedStrings.Registration) : LocalizedStrings.Str539, Order);
+			var result = LocalizedStrings.OLFromOrder.Put(Trade == null ? (Order.State == OrderStates.Done ? LocalizedStrings.Cancellation : LocalizedStrings.Registration) : LocalizedStrings.Matching, Order);
 
 			if (Trade != null)
-				result += " " + LocalizedStrings.Str540Params.Put(Trade);
+				result += " " + LocalizedStrings.OLFromTrade.Put(Trade);
 
 			return result;
 		}

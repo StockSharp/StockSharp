@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.PortfolioKey,
-			Description = LocalizedStrings.Str229Key,
+			Description = LocalizedStrings.OrderPortfolioNameKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public string PortfolioName { get; set; }
 

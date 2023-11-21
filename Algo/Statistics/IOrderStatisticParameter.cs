@@ -96,8 +96,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str947Key,
-		Description = LocalizedStrings.Str948Key,
+		Name = LocalizedStrings.MaxLatencyRegistrationKey,
+		Description = LocalizedStrings.MaxLatencyRegistrationDescKey,
 		GroupName = LocalizedStrings.OrdersKey,
 		Order = 300
 	)]
@@ -124,8 +124,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str950Key,
-		Description = LocalizedStrings.Str951Key,
+		Name = LocalizedStrings.MaxLatencyCancellationKey,
+		Description = LocalizedStrings.MaxLatencyCancellationDescKey,
 		GroupName = LocalizedStrings.OrdersKey,
 		Order = 301
 	)]
@@ -152,8 +152,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str952Key,
-		Description = LocalizedStrings.Str953Key,
+		Name = LocalizedStrings.MinLatencyRegistrationKey,
+		Description = LocalizedStrings.MinLatencyRegistrationDescKey,
 		GroupName = LocalizedStrings.OrdersKey,
 		Order = 302
 	)]
@@ -180,8 +180,8 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str954Key,
-		Description = LocalizedStrings.Str955Key,
+		Name = LocalizedStrings.MinLatencyCancellationKey,
+		Description = LocalizedStrings.MinLatencyCancellationDescKey,
 		GroupName = LocalizedStrings.OrdersKey,
 		Order = 303
 	)]
@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str956Key,
+		Name = LocalizedStrings.TotalOrdersKey,
 		Description = LocalizedStrings.OrdersCountKey,
 		GroupName = LocalizedStrings.OrdersKey,
 		Order = 304

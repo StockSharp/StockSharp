@@ -34,8 +34,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str226Key,
-			Description = LocalizedStrings.Str227Key,
+			Name = LocalizedStrings.StopOrdersKey,
+			Description = LocalizedStrings.StopOrdersDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public bool? IsStop { get; set; }
 
@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DirectionKey,
-			Description = LocalizedStrings.Str228Key,
+			Description = LocalizedStrings.CancelOrdersSideKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides? Side { get; set; }
 

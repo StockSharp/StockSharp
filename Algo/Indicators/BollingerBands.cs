@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.BollingerKey,
-		Description = LocalizedStrings.Str777Key)]
+		Description = LocalizedStrings.BollingerBandsKey)]
 	[Doc("topics/IndicatorBollingerBands.html")]
 	public class BollingerBands : BaseComplexIndicator
 	{
@@ -100,8 +100,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str780Key,
-			Description = LocalizedStrings.Str781Key,
+			Name = LocalizedStrings.ChannelWidthKey,
+			Description = LocalizedStrings.ChannelWidthDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal Width
 		{
@@ -109,7 +109,7 @@ namespace StockSharp.Algo.Indicators
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str782);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				UpBand.Width = value;
 				LowBand.Width = -value;

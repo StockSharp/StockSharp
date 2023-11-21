@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ATRKey,
-		Description = LocalizedStrings.Str758Key)]
+		Description = LocalizedStrings.AverageTrueRangeKey)]
 	[Doc("topics/IndicatorAverageTrueRange.html")]
 	public class AverageTrueRange : LengthIndicator<IIndicatorValue>
 	{

@@ -248,7 +248,7 @@ partial class BitStampMessageAdapter
 		info.Second -= volume;
 
 		if (info.Second < 0)
-			throw new InvalidOperationException(LocalizedStrings.Str3301Params.Put(transaction.OrderId, info.Second));
+			throw new InvalidOperationException(LocalizedStrings.OrderBalanceNotEnough.Put(transaction.OrderId, info.Second));
 
 		SendOutMessage(new ExecutionMessage
 		{

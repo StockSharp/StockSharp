@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.JMAKey,
-		Description = LocalizedStrings.Str789Key)]
+		Description = LocalizedStrings.JurikMovingAverageKey)]
 	[Doc("topics/IndicatorJurikMovingAverage.html")]
 	public class JurikMovingAverage : LengthIndicator<decimal>
 	{
@@ -653,8 +653,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str790Key,
-			Description = LocalizedStrings.Str791Key,
+			Name = LocalizedStrings.PhaseKey,
+			Description = LocalizedStrings.MaPhaseKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int Phase
 		{

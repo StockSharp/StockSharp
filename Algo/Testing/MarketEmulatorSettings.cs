@@ -44,8 +44,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1176Key,
-			Description = LocalizedStrings.Str1177Key,
+			Name = LocalizedStrings.MatchOnTouchKey,
+			Description = LocalizedStrings.MatchOnTouchDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 200)]
 		public bool MatchOnTouch
@@ -68,8 +68,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1180Key,
-			Description = LocalizedStrings.Str1181Key,
+			Name = LocalizedStrings.ErrorPercentKey,
+			Description = LocalizedStrings.ErrorPercentDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 202)]
 		public double Failing
@@ -77,11 +77,8 @@ namespace StockSharp.Algo.Testing
 			get => _failing;
 			set
 			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1182);
-
-				if (value > 100)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1183);
+				if (value < 0 || value > 100)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_failing = value;
 				NotifyChanged();
@@ -96,7 +93,7 @@ namespace StockSharp.Algo.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.LatencyKey,
-			Description = LocalizedStrings.Str1184Key,
+			Description = LocalizedStrings.LatencyDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 203)]
 		public TimeSpan Latency
@@ -105,7 +102,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1185);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_latency = value;
 				NotifyChanged();
@@ -119,8 +116,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1190Key,
-			Description = LocalizedStrings.Str1191Key,
+			Name = LocalizedStrings.OrderIdKey,
+			Description = LocalizedStrings.OrderIdGenerationKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 206)]
 		public long InitialOrderId
@@ -140,8 +137,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1192Key,
-			Description = LocalizedStrings.Str1193Key,
+			Name = LocalizedStrings.TradeIdKey,
+			Description = LocalizedStrings.TradeIdGenerationKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 207)]
 		public long InitialTradeId
@@ -161,8 +158,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1195Key,
-			Description = LocalizedStrings.Str1196Key,
+			Name = LocalizedStrings.SpreadKey,
+			Description = LocalizedStrings.SpreadSizeDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 209)]
 		public int SpreadSize
@@ -186,7 +183,7 @@ namespace StockSharp.Algo.Testing
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DepthOfBookKey,
-			Description = LocalizedStrings.Str1198Key,
+			Description = LocalizedStrings.DepthOfBookDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 210)]
 		public int MaxDepth
@@ -209,8 +206,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1201Key,
-			Description = LocalizedStrings.Str1202Key,
+			Name = LocalizedStrings.PortfoliosIntervalKey,
+			Description = LocalizedStrings.PortfoliosIntervalDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 212)]
 		public TimeSpan PortfolioRecalcInterval
@@ -219,7 +216,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_portfolioRecalcInterval = value;
 				NotifyChanged();
@@ -233,8 +230,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1203Key,
-			Description = LocalizedStrings.Str1204Key,
+			Name = LocalizedStrings.ChangeTimeKey,
+			Description = LocalizedStrings.ConvertTimeDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 213)]
 		public bool ConvertTime
@@ -275,8 +272,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1205Key,
-			Description = LocalizedStrings.Str1206Key,
+			Name = LocalizedStrings.PriceShiftKey,
+			Description = LocalizedStrings.PriceShiftDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 215)]
 		public Unit PriceLimitOffset
@@ -296,8 +293,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str1207Key,
-			Description = LocalizedStrings.Str1208Key,
+			Name = LocalizedStrings.ExtraVolumeKey,
+			Description = LocalizedStrings.ExtraVolumeDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 216)]
 		public bool IncreaseDepthVolume

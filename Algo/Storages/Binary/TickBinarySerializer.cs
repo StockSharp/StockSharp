@@ -150,12 +150,12 @@ namespace StockSharp.Algo.Storages.Binary
 
 				// сделки для индексов имеют нулевой номер
 				if (tradeId < 0)
-					throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.Str1020);
+					throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.TradeId);
 
 				// execution ticks (like option execution) may be a zero cost
 				// ticks for spreads may be a zero cost or less than zero
 				//if (msg.TradePrice < 0)
-				//	throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.Str1021Params.Put(msg.TradeId));
+				//	throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.PriceIsNotSpecified.Put(msg.TradeId));
 
 				metaInfo.PrevId = writer.SerializeId(tradeId, metaInfo.PrevId);
 
@@ -167,10 +167,10 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version53)
 				{
 					if (volume == null)
-						throw new ArgumentException(LocalizedStrings.Str1022Params.Put((object)msg.TradeId ?? msg.TradeStringId), nameof(messages));
+						throw new ArgumentException(LocalizedStrings.WrongTradeVolume.Put((object)msg.TradeId ?? msg.TradeStringId), nameof(messages));
 
 					if (volume < 0)
-						throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
+						throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.WrongTradeVolume.Put(msg.TradeId));
 
 					writer.WriteVolume(volume.Value, metaInfo, false);
 				}
@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (volume != null)
 					{
 						if (volume < 0 && !largeDecimal)
-							throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
+							throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.WrongTradeVolume.Put(msg.TradeId));
 
 						writer.WriteVolume(volume.Value, metaInfo, largeDecimal);
 					}
@@ -212,7 +212,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (hasLocalTime)
 					{
 						lastOffset = metaInfo.LastLocalOffset;
-						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str1024, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
+						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Trades, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
 						metaInfo.LastLocalOffset = lastOffset;
 					}
 				}

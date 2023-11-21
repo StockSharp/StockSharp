@@ -53,7 +53,7 @@ namespace StockSharp.Messages
 		/// Rejected. Cannot register and cancel orders.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str401Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.StoppedKey)]
 		ForceStopped,
 
 		/// <summary>

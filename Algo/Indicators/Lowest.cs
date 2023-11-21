@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.LowestKey,
-		Description = LocalizedStrings.Str743Key)]
+		Description = LocalizedStrings.MinValuePeriodKey)]
 	[Doc("topics/IndicatorLowest.html")]
 	public class Lowest : LengthIndicator<decimal>
 	{

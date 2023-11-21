@@ -308,7 +308,6 @@ namespace StockSharp.Algo.Storages
 			if (from > to)
 			{
 				return null;
-				//throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 			}
 
 			var dates = storage.Dates.ToArray();
@@ -327,13 +326,13 @@ namespace StockSharp.Algo.Storages
 
 			if (firstInfo is null)
 			{
-				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.Str1702Params.Put(first));
+				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.ElementNotFoundParams.Put(first));
 				return null;
 			}
 
 			if (lastInfo is null)
 			{
-				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.Str1702Params.Put(last));
+				GlobalLogReceiver.Instance.AddWarningLog(LocalizedStrings.ElementNotFoundParams.Put(last));
 				return null;
 			}
 
@@ -463,7 +462,7 @@ namespace StockSharp.Algo.Storages
 
 					updateProgress(progress++, iterCount);
 
-					logsReceiver.AddInfoLog(LocalizedStrings.Str2931Params, secId, drive.Path);
+					logsReceiver.AddInfoLog(LocalizedStrings.DatesCacheResetted, secId, drive.Path);
 				}
 
 				if (isCancelled())

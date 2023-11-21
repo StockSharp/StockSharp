@@ -32,8 +32,8 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.Str817Key,
-		Description = LocalizedStrings.Str817Key)]
+		Name = LocalizedStrings.PeakBarKey,
+		Description = LocalizedStrings.PeakBarKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorPeakBar.html")]
 	public class PeakBar : BaseIndicator
@@ -58,8 +58,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str783Key,
-			Description = LocalizedStrings.Str784Key,
+			Name = LocalizedStrings.ThresholdKey,
+			Description = LocalizedStrings.ThresholdDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Unit ReversalAmount
 		{

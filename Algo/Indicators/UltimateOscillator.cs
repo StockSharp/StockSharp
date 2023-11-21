@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.UltimateOscKey,
-		Description = LocalizedStrings.Str776Key)]
+		Description = LocalizedStrings.UltimateOscillatorKey)]
 	[IndicatorIn(typeof(CandleIndicatorValue))]
 	[Doc("topics/IndicatorUltimateOscillator.html")]
 	public class UltimateOscillator : BaseIndicator

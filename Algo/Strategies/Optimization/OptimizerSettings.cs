@@ -21,7 +21,7 @@ public class OptimizerSettings : EmulationSettings
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ParallelKey,
-		Description = LocalizedStrings.Str1419Key,
+		Description = LocalizedStrings.ParallelDescKey,
 		GroupName = LocalizedStrings.OptimizationKey,
 		Order = 200)]
 	public int BatchSize

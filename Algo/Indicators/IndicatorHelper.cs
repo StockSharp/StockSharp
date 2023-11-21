@@ -105,13 +105,7 @@ namespace StockSharp.Algo.Indicators
 			var container = indicator.Container;
 
 			if (index >= container.Count)
-			{
 				return default;
-				//if (index == 0 && typeof(decimal) == typeof(T))
-				//	return 0m.To<T>();
-				//else
-				//throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str914Params.Put(indicator.Name));
-			}
 
 			var value = container.GetValue(index).output;
 

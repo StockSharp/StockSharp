@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.HMAKey,
-		Description = LocalizedStrings.Str786Key)]
+		Description = LocalizedStrings.HullMovingAverageKey)]
 	[Doc("topics/IndicatorHullMovingAverage.html")]
 	public class HullMovingAverage : LengthIndicator<decimal>
 	{
@@ -56,8 +56,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.Str787Key,
-			Description = LocalizedStrings.Str788Key,
+			Name = LocalizedStrings.PeriodResAvgKey,
+			Description = LocalizedStrings.PeriodResAvgDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public int SqrtPeriod
 		{

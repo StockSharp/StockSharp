@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 					return;
 
 				if (Position != 0)
-					throw new InvalidOperationException(LocalizedStrings.Str1288);
+					throw new InvalidOperationException("Pos != 0");
 
 				_quotingDirection.Value = value;
 			}
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 				if (value == QuotingVolume)
 					return;
 
-				this.AddInfoLog(LocalizedStrings.Str1289Params, QuotingVolume, value);
+				this.AddInfoLog(LocalizedStrings.OldVolNewVol, QuotingVolume, value);
 
 				CheckQuotingVolume(value);
 
@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		private static void CheckQuotingVolume(decimal quotingVolume)
 		{
 			if (quotingVolume <= 0)
-				throw new ArgumentOutOfRangeException(nameof(quotingVolume), quotingVolume, LocalizedStrings.Str1290);
+				throw new ArgumentOutOfRangeException(nameof(quotingVolume), quotingVolume, LocalizedStrings.InvalidValue);
 
 			//if (checkOnZero && quotingVolume == 0)
 			//	throw new ArgumentOutOfRangeException("quotingVolume", quotingVolume, "Котируемый объем не может быть нулевым.");
@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1227);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_timeOut.Value = value;
 			}
@@ -302,7 +302,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 			_filteredBook = default;
 			_lastTrade = default;
 
-			this.AddInfoLog(LocalizedStrings.Str1293Params, QuotingDirection, QuotingVolume);
+			this.AddInfoLog(LocalizedStrings.QuotingForVolume, QuotingDirection, QuotingVolume);
 
 			this.SuspendRules(() =>
 			{
@@ -323,7 +323,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 					.Do(() =>
 					{
 						if (LeftVolume > 0)
-							this.AddWarningLog(LocalizedStrings.Str1294Params, LeftVolume);
+							this.AddWarningLog(LocalizedStrings.QuotingFinishedNotFull, LeftVolume);
 					})
 					.Once()
 					.Apply(this);
@@ -341,11 +341,11 @@ namespace StockSharp.Algo.Strategies.Quoting
 					.WhenPositionChanged()
 					.Do(() =>
 					{
-						this.AddInfoLog(LocalizedStrings.Str1295Params, Position, LeftVolume);
+						this.AddInfoLog(LocalizedStrings.PrevPosNewPos, Security, Position, LeftVolume);
 
 						if (NeedFinish())
 						{
-							this.AddInfoLog(LocalizedStrings.Str1296);
+							this.AddInfoLog(LocalizedStrings.Stopped);
 							Stop();
 						}
 					})
@@ -401,11 +401,11 @@ namespace StockSharp.Algo.Strategies.Quoting
 			if (o == _order)
 			{
 				_isRegistering = false;
-				this.AddInfoLog(LocalizedStrings.Str1299Params, o.TransactionId);
+				this.AddInfoLog(LocalizedStrings.OrderAcceptedByExchange, o.TransactionId);
 			}
 			else if (o == _reRegisteringOrder)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1300Params, _order.TransactionId, _reRegisteringOrder.TransactionId);
+				this.AddInfoLog(LocalizedStrings.OrderReplacedByNew, _order.TransactionId, _reRegisteringOrder.TransactionId);
 
 				Rules.RemoveRulesByToken(_order, null);
 
@@ -413,7 +413,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 				_reRegisteringOrder = null;
 			}
 			else
-				this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);
+				this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 
 			ProcessQuoting(o.ServerTime);
 		}
@@ -432,7 +432,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 				{
 					var o = fail.Order;
 
-					this.AddErrorLog(LocalizedStrings.Str1302Params, o.TransactionId, fail.Error.Message);
+					this.AddErrorLog(LocalizedStrings.ErrorRegOrder, o.TransactionId, fail.Error.Message);
 
 					var canProcess = false;
 
@@ -448,7 +448,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 						_isReRegistedFailed = true;
 					}
 					else
-						this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);
+						this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 
 					if (canProcess)
 						ProcessQuoting(fail.ServerTime);
@@ -462,7 +462,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 				.WhenMatched(this)
 				.Do((r, o) =>
 				{
-					this.AddInfoLog(LocalizedStrings.Str1303Params, o.TransactionId, LeftVolume);
+					this.AddInfoLog(LocalizedStrings.OrderMatchedRemainBalance, o.TransactionId, LeftVolume);
 
 					Rules.RemoveRulesByToken(o, r);
 
@@ -475,7 +475,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 					// http://stocksharp.com/forum/yaf_postst1708_MarketQuotingStrategy---Obiem-zaiavki-nie-mozhiet-byt--nulievym.aspx
 					if (NeedFinish())
 					{
-						this.AddInfoLog(LocalizedStrings.Str1296);
+						this.AddInfoLog(LocalizedStrings.Stopped);
 						Stop();
 					}
 					else
@@ -492,7 +492,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 							ProcessQuoting(o.ServerTime);
 						}
 						else
-							this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);
+							this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 					}
 				})
 				.Once()
@@ -509,7 +509,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 		{
 			if (ProcessState != ProcessStates.Started)
 			{
-				this.AddWarningLog(LocalizedStrings.Str1304Params, ProcessState);
+				this.AddWarningLog(LocalizedStrings.StrategyInState, ProcessState);
 				return;
 			}
 
@@ -517,27 +517,27 @@ namespace StockSharp.Algo.Strategies.Quoting
 			{
 				if (_isCanceling)
 				{
-					this.AddDebugLog(LocalizedStrings.Str1305Params, _order.TransactionId);
+					this.AddDebugLog(LocalizedStrings.OrderNRegistering, _order.TransactionId);
 					return;
 				}
 				else if (_isRegistering)
 				{
-					this.AddDebugLog(LocalizedStrings.Str1306Params, _order.TransactionId);
+					this.AddDebugLog(LocalizedStrings.OrderNReplacing, _order.TransactionId);
 					return;
 				}
 				else if (_editingChanges != null)
 				{
-					this.AddDebugLog(LocalizedStrings.Str1307Params, _order.TransactionId, _editingChanges.TransactionId);
+					this.AddDebugLog(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _editingChanges.TransactionId);
 					return;
 				}
 				else if (_reRegisteringOrder != null)
 				{
-					this.AddDebugLog(LocalizedStrings.Str1307Params, _order.TransactionId, _reRegisteringOrder.TransactionId);
+					this.AddDebugLog(LocalizedStrings.OrderReplacingInto, _order.TransactionId, _reRegisteringOrder.TransactionId);
 					return;
 				}
 				else if (_isReRegistedFailed)
 				{
-					this.AddDebugLog(LocalizedStrings.Str1308Params, _order.TransactionId);
+					this.AddDebugLog(LocalizedStrings.ReplacingNotCompleteWaitingFor, _order.TransactionId);
 					return;
 				}
 
@@ -563,12 +563,12 @@ namespace StockSharp.Algo.Strategies.Quoting
 
 			newPrice = Security.ShrinkPrice(newPrice.Value);
 
-			this.AddInfoLog(LocalizedStrings.Str1310Params, _order?.Price ?? (object)"NULL", newPrice);
+			this.AddInfoLog(LocalizedStrings.CurrPriceBestPrice, _order?.Price ?? (object)"NULL", newPrice);
 
 			var bidPrice = _filteredBook?.Bids?.FirstOr()?.Price ?? this.GetSecurityValue<decimal?>(Level1Fields.BestBidPrice);
 			var askPrice = _filteredBook?.Asks?.FirstOr()?.Price ?? this.GetSecurityValue<decimal?>(Level1Fields.BestAskPrice);
 
-			this.AddInfoLog(LocalizedStrings.Str1311Params, bidPrice ?? (object)"NULL", askPrice ?? (object)"NULL");
+			this.AddInfoLog(LocalizedStrings.BestBidAsk, bidPrice ?? (object)"NULL", askPrice ?? (object)"NULL");
 
 			if (_order == null)
 			{
@@ -583,13 +583,13 @@ namespace StockSharp.Algo.Strategies.Quoting
 			}
 			else
 			{
-				this.AddInfoLog(LocalizedStrings.Str1312Params, _order.TransactionId, _order.Side, _order.Price, _order.Volume);
+				this.AddInfoLog("Quoting order {0} to {1} with price {2} volume {3}.", _order.TransactionId, _order.Side, _order.Price, _order.Volume);
 
 				if (IsSupportAtomicReRegister && IsOrderReplaceable(_order) == true)
 				{
 					if (newPrice == 0)
 					{
-						this.AddWarningLog(LocalizedStrings.Str1313);
+						this.AddWarningLog(LocalizedStrings.CannotChangePriceToZero);
 						return;
 					}
 
@@ -624,7 +624,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 									canProcess = true;
 								}
 								else
-									this.AddWarningLog(LocalizedStrings.Str1301Params, fail.Order.TransactionId);
+									this.AddWarningLog(LocalizedStrings.OrderOutOfDate, fail.Order.TransactionId);
 
 								_editingChanges = null;
 
@@ -648,17 +648,17 @@ namespace StockSharp.Algo.Strategies.Quoting
 						ReRegisterOrder(_order, newOrder);
 					}
 
-					this.AddInfoLog(LocalizedStrings.Str1314Params, _order.TransactionId, newOrder.Price, newOrder.Volume);
+					this.AddInfoLog("Requoting registered for order {0} with price {1} and volume {2}.", _order.TransactionId, newOrder.Price, newOrder.Volume);
 				}
 				else
 				{
-					this.AddInfoLog(LocalizedStrings.Str1315Params, _order.TransactionId);
+					this.AddInfoLog(LocalizedStrings.CancellingOrderN, _order.TransactionId);
 
 					_order
 						.WhenCanceled(this)
 						.Do((r, o) =>
 						{
-							this.AddInfoLog(LocalizedStrings.Str1316Params, o.TransactionId, o.ServerTime);
+							this.AddInfoLog(LocalizedStrings.OrderCancelledAt, o.TransactionId, o.ServerTime);
 
 							Rules.RemoveRulesByToken(o, r);
 
@@ -670,7 +670,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 								ProcessQuoting(o.ServerTime);
 							}
 							else
-								this.AddWarningLog(LocalizedStrings.Str1301Params, o.TransactionId);
+								this.AddWarningLog(LocalizedStrings.OrderOutOfDate, o.TransactionId);
 						})
 						.Once()
 						.Apply(this);
@@ -679,7 +679,7 @@ namespace StockSharp.Algo.Strategies.Quoting
 						.WhenCancelFailed(this)
 						.Do((r, f) =>
 						{
-							this.AddInfoLog(LocalizedStrings.Str3373Params, f.Order.TransactionId, f.Error);
+							this.AddInfoLog(LocalizedStrings.ErrorCancellingOrder, f.Order.TransactionId, f.Error);
 							_isCanceling = false;
 						})
 						.Once()

@@ -994,7 +994,7 @@ namespace StockSharp.Algo
 				}
 				catch (Exception ex)
 				{
-					throw new InvalidOperationException(LocalizedStrings.Str1220Params.Put(change.Key), ex);
+					throw new InvalidOperationException(LocalizedStrings.CommandNotProcessedReason.Put(nameof(PositionChangeMessage), change.Key), ex);
 				}
 			}
 
@@ -1235,7 +1235,7 @@ namespace StockSharp.Algo
 				}
 				catch (Exception ex)
 				{
-					throw new InvalidOperationException(LocalizedStrings.Str1220Params.Put(pair.Key), ex);
+					throw new InvalidOperationException(LocalizedStrings.CommandNotProcessedReason.Put(nameof(Level1ChangeMessage), pair.Key), ex);
 				}
 			}
 
@@ -1923,8 +1923,7 @@ namespace StockSharp.Algo
 			//var invalidChars = Path.GetInvalidFileNameChars().Where(id.Contains).ToArray();
 			//if (invalidChars.Any())
 			//{
-			//	return LocalizedStrings.Str1549Params
-			//		.Put(id, invalidChars.Select(c => c.To<string>()).Join(", "));
+			//	return invalidChars.Select(c => c.To<string>()).Join(", ");
 			//}
 
 			var firstIndex = id.IndexOf('@');
@@ -1936,9 +1935,6 @@ namespace StockSharp.Algo
 			}
 
 			var lastIndex = id.LastIndexOf('@');
-
-			//if (firstIndex != id.LastIndexOf('@'))
-			//	return LocalizedStrings.Str1550;
 
 			if (firstIndex != lastIndex)
 				return null;
@@ -2319,7 +2315,7 @@ namespace StockSharp.Algo
 							throw new TimeoutException("Processing too long.");
 
 						if (error != null)
-							throw new InvalidOperationException(LocalizedStrings.Str2955, (Exception)error);
+							throw new InvalidOperationException(LocalizedStrings.DataProcessError, (Exception)error);
 					}
 				}
 

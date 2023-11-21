@@ -44,10 +44,10 @@ namespace StockSharp.Messages
 		Absolute,
 
 		/// <summary>
-		/// Percents.Step change - one hundredth of a percent.
+		/// Percents. Step change - one hundredth of a percent.
 		/// </summary>
 		[EnumMember]
-		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str2343Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.PercentKey)]
 		Percent,
 
 		/// <summary>
@@ -340,9 +340,6 @@ namespace StockSharp.Messages
 
 			//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
 			//	throw new ArgumentException("One of the values has uninitialized value handler.");
-
-			//if (u1.GetTypeValue != null && u2.GetTypeValue != null && u1.GetTypeValue != u2.GetTypeValue)
-			//	throw new ArgumentException(LocalizedStrings.Str614Params.Put(u1.Security.Id, u2.Security.Id));
 
 			var result = new Unit
 			{

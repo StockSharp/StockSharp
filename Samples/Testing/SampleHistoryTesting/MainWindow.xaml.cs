@@ -323,17 +323,11 @@ namespace SampleHistoryTesting
 
 			if (_connectors.Any(t => t.State != ChannelStates.Stopped))
 			{
-				MessageBox.Show(this, LocalizedStrings.Str3015);
+				MessageBox.Show(this, LocalizedStrings.AlreadyStarted);
 				return;
 			}
 
 			var id = SecId.Text.ToSecurityId();
-
-			//if (secIdParts.Length != 2)
-			//{
-			//	MessageBox.Show(this, LocalizedStrings.Str3016);
-			//	return;
-			//}
 
 			var secCode = id.SecurityCode;
 			var board = _exchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
@@ -615,7 +609,7 @@ namespace SampleHistoryTesting
 							if (connector.IsFinished)
 							{
 								progressBar.Value = progressBar.Maximum;
-								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime), title);
+								MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.Now - _startEmulationTime), title);
 							}
 							else
 								MessageBox.Show(this, LocalizedStrings.Cancelled, title);

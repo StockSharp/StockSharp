@@ -226,9 +226,9 @@ namespace StockSharp.BusinessEntities
 			var currentDepth = Depth;
 
 			if (newDepth < 0)
-				throw new ArgumentOutOfRangeException(nameof(newDepth), newDepth, LocalizedStrings.Str481);
+				throw new ArgumentOutOfRangeException(nameof(newDepth), newDepth, LocalizedStrings.InvalidValue);
 			else if (newDepth > currentDepth)
-				throw new ArgumentOutOfRangeException(nameof(newDepth), newDepth, LocalizedStrings.Str482Params.Put(currentDepth));
+				throw new ArgumentOutOfRangeException(nameof(newDepth), newDepth, LocalizedStrings.NewDepthCannotMoreCurrent.Put(currentDepth));
 
 			Bids = Decrease(_bids, newDepth);
 			Asks = Decrease(_asks, newDepth);
@@ -474,9 +474,6 @@ namespace StockSharp.BusinessEntities
 				}
 
 				UpdateDepthAndTime();
-
-				//if (quotes.Length > MaxDepth)
-				//	throw new InvalidOperationException(LocalizedStrings.Str486Params.Put(MaxDepth, quotes.Length));
 			//}
 
 			//if (outOfDepthQuote != null)
@@ -519,7 +516,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="lastChangeTime">Order book change time.</param>
 		public void Remove(decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
-			var dir = GetDirection(price) ?? throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str487);
+			var dir = GetDirection(price) ?? throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.QuotePriceNotSpecified);
 
 			Remove(dir, price, volume, lastChangeTime);
 		}
@@ -534,16 +531,16 @@ namespace StockSharp.BusinessEntities
 		public void Remove(Sides direction, decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default)
 		{
 			if (price <= 0)
-				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str488);
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.InvalidValue);
 
 			if (volume < 0)
-				throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str489);
+				throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.InvalidValue);
 
 			var quotes = GetQuotesInternal(direction);
 			var index = GetQuoteIndex(quotes, price);
 
 			if (index == -1)
-				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str487);
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.QuotePriceNotSpecified);
 
 			var quote = quotes[index];
 
@@ -552,7 +549,7 @@ namespace StockSharp.BusinessEntities
 			if (volume > 0)
 			{
 				if (quote.Volume < volume)
-					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str490Params.Put(quote));
+					throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.VolumeLessThanRequired.Put(quote));
 
 				leftVolume = quote.Volume - volume;
 

@@ -298,24 +298,21 @@ namespace StockSharp.Algo.Storages.Binary
 
 				// нулевой номер заявки возможен при сохранении в момент регистрации
 				if (msg.OrderId < 0)
-					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderId, LocalizedStrings.Str925);
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderId, LocalizedStrings.OrderId);
 
 				// нулевая цена возможна, если идет "рыночная" продажа по инструменту без планок
 				if (msg.OrderPrice < 0)
-					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderPrice, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderPrice, LocalizedStrings.OrderPrice2);
 
 				//var volume = msg.Volume;
 
 				//if (volume < 0)
-				//	throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
+				//	throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.WrongOrderVolume.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
 				if (msg.HasTradeInfo())
 				{
-					//if ((msg.TradeId == null && msg.TradeStringId.IsEmpty()) || msg.TradeId <= 0)
-					//	throw new ArgumentOutOfRangeException(nameof(messages), msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
-
 					if (msg.TradePrice is null or <= 0)
-						throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.Str929Params.Put(msg.TradeId, msg.OrderId));
+						throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.TradePrice);
 				}
 
 				metaInfo.LastTransactionId = writer.SerializeId(msg.TransactionId, metaInfo.LastTransactionId);
@@ -387,7 +384,7 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WriteVolume(msg.Balance.Value, metaInfo, largeDecimal);
 
 				var lastOffset = metaInfo.LastServerOffset;
-				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Matching, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
 				writer.WriteNullableInt((int?)msg.OrderType);

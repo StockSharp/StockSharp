@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1137);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_minSpreadStepCount = value;
 			}
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1138);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxSpreadStepCount = value;
 			}
@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1139);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxBidsDepth = value;
 			}
@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1140);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxAsksDepth = value;
 			}
@@ -151,7 +151,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1141);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_maxGenerations = value;
 			}
@@ -365,13 +365,13 @@ namespace StockSharp.Algo.Testing
 			if (_bestBidPrice == null || _bestAskPrice == null)
 			{
 				if (_lastTradePrice == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1142);
+					throw new InvalidOperationException(LocalizedStrings.NoInfoAboutLastTrade);
 
 				_bestBidPrice = _bestAskPrice = _lastTradePrice;
 			}
 
 			if (_currGenerations == 0)
-				throw new InvalidOperationException(LocalizedStrings.Str1143);
+				throw new InvalidOperationException(LocalizedStrings.NoData2);
 
 			var bidPrice = _bestBidPrice;
 			var askPrice = _bestAskPrice;
