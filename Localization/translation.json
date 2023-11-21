@@ -1,4 +1,8 @@
 {
+  "InstallerAutoKillApplication": {
+    "en": "Try to close target application if it's not responding",
+    "ru": "Попытаться закрыть целевое приложение если оно не отвечает"
+  },
   "Numeric": {
     "en": "Numeric",
     "ru": "Числовое"
