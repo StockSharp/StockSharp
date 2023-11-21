@@ -1,4 +1,8 @@
 {
+  "InstallerAutoKillApplication": {
+    "en": "Try to close target application if it's not responding",
+    "ru": "Попытаться закрыть целевое приложение если оно не отвечает"
+  },
   "RemoveAppDataFolder": {
     "en": "Remove the application data folder including all downloaded data and settings",
     "ru": "Удалить папку данных приложения включая все скачанные данные и настройки"
