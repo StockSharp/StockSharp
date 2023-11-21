@@ -3599,10 +3599,6 @@
     "en": "Sell",
     "ru": "Продажа"
   },
-  "Str405": {
-    "en": "Put in queue",
-    "ru": "Поставить в очередь"
-  },
   "FOK": {
     "en": "FOK",
     "ru": "FOK"
@@ -3631,22 +3627,6 @@
     "en": "Schedule validity periods.",
     "ru": "Периоды действия расписания."
   },
-  "Str411": {
-    "en": "Working days",
-    "ru": "Рабочие дни"
-  },
-  "Str412": {
-    "en": "Working days, falling on Saturday and Sunday.",
-    "ru": "Рабочие дни, выпадающие на субботу и воскресенье."
-  },
-  "Str413": {
-    "en": "Holidays",
-    "ru": "Выходные дни"
-  },
-  "Str414": {
-    "en": "Holidays that fall on workdays.",
-    "ru": "Выходные дни, выпадающие на будни."
-  },
   "HasDuplicates": {
     "en": "{0} duplicated.",
     "ru": "{0} дублируется."
@@ -3667,18 +3647,6 @@
     "en": "Work schedule within day.",
     "ru": "Расписание работы внутри дня."
   },
-  "Str421Params": {
-    "en": "Inserted quote must have price {0}. Current price is equal to {1}.",
-    "ru": "Вложенная котировка должна иметь цену {0}. Текущая цена равна {1}."
-  },
-  "Str422Params": {
-    "en": "Inserted quote must have {0} direction. Current direction is {1}.",
-    "ru": "Вложенная котировка должна иметь направление {0}. Текущее направление {1}."
-  },
-  "Str423Params": {
-    "en": "Inserted quote must be for security {0}. Current security {1}.",
-    "ru": "Вложенная котировка должна быть для инструмента {0}. Текущий инструмент {1}."
-  },
   "PosBeginValue": {
     "en": "Position size at the beginning of the trading session.",
     "ru": "Размер позиции на начало торговой сессии."
@@ -3690,10 +3658,6 @@
   "PosBlockedSize": {
     "en": "Position size, registered for active orders.",
     "ru": "Размер позиции, зарезервированной под активные заявки."
-  },
-  "Str427": {
-    "en": "Required when extra information is stored in the program.",
-    "ru": "Необходима в случае хранения в программе дополнительной информации."
   },
   "PosPriceDesc": {
     "en": "Position price, calculated using current market price of security.",
@@ -3739,17 +3703,9 @@
     "en": "Exchange, where board is situated.",
     "ru": "Биржа, на которой расположена площадка."
   },
-  "Str480": {
-    "en": "Wrong maximum depth value of market depth.",
-    "ru": "Неправильное значение максимальной глубины стакана."
-  },
   "NewDepthCannotMoreCurrent": {
     "en": "New depth cannot be greater than the current {0}.",
     "ru": "Новая глубина не может быть большую текущей {0}."
-  },
-  "Str485": {
-    "en": "Incoming quotes did not pass verification.",
-    "ru": "Поступающие котировки не прошли проверку."
   },
   "QuotePriceNotSpecified": {
     "en": "Quote for specified price is missing.",
@@ -3758,18 +3714,6 @@
   "VolumeLessThanRequired": {
     "en": "Volume of quote {0} is less than the required deletion volume.",
     "ru": "Объем котировки {0} меньше требуемого объёма для удаления."
-  },
-  "Str491Params": {
-    "en": "Quote has a wrong security {0} for market depth for {1}.",
-    "ru": "Котировка имеет неправильный инструмент {0} по стакану для {1}."
-  },
-  "Str492": {
-    "en": "Bid can only be to buy.",
-    "ru": "Бид может быть только на покупку."
-  },
-  "Str493": {
-    "en": "Ask can only be to buy.",
-    "ru": "Оффер может быть только на продажу."
   },
   "QuoteBuy": {
     "en": "Quote to buy.",
@@ -3851,17 +3795,9 @@
     "en": "Information about the order.",
     "ru": "Информация о заявке."
   },
-  "Str517": {
-    "en": "Latency in registration",
-    "ru": "Задержка при регистрации"
-  },
   "OrderRegLatency": {
     "en": "Time taken to register an order.",
     "ru": "Время, которое потребовалось для регистрации заявки."
-  },
-  "Str519": {
-    "en": "Latency in cancellation",
-    "ru": "Задержка при отмене"
   },
   "OrderCancelLatency": {
     "en": "Time taken to cancel an order.",
@@ -3882,18 +3818,6 @@
   "OrderPortfolio": {
     "en": "Portfolio, in which the order is being traded.",
     "ru": "Портфель, в рамках которого торгуется заявка."
-  },
-  "Str526": {
-    "en": "Messages for order",
-    "ru": "Сообщения к заявке"
-  },
-  "Str527": {
-    "en": "Messages for order (created by the trading system when registered, changed or cancelled).",
-    "ru": "Сообщения к заявке (создаются торговой системой при регистрации, изменении или снятии)."
-  },
-  "Str528": {
-    "en": "Time of last change",
-    "ru": "Время последнего изменения"
   },
   "OrderLastChangeTime": {
     "en": "Time of last order change (Cancellation, Fill).",
@@ -3947,10 +3871,6 @@
     "en": "Exchange board, for which the current portfolio is active.",
     "ru": "Биржевая площадка, для которой действует данный портфель."
   },
-  "Str545": {
-    "en": "Anonymous account",
-    "ru": "Анонимный счет"
-  },
   "SecurityDesc": {
     "en": "Security (shares, futures, options etc.).",
     "ru": "Инструмент (акция, фьючерс, опцион и т.д.)."
@@ -3990,10 +3910,6 @@
   "StepPriceDesc": {
     "en": "Step price.",
     "ru": "Стоимость шага цены."
-  },
-  "Str556": {
-    "en": "Step price cannot be less than zero.",
-    "ru": "Стоимость шага цены не может быть меньше нуля."
   },
   "LastTradeDesc": {
     "en": "Information about the last trade.",
@@ -4199,10 +4115,6 @@
     "en": "Price step cost is equal to zero.",
     "ru": "Значение стоимости шага цены равно нулю."
   },
-  "Str623Params": {
-    "en": "Adapter for work with portfolio {0} not found.",
-    "ru": "Адаптер для работы с портфелем {0} не найден."
-  },
   "ConnectionErrorFor": {
     "en": "Connection error for {0}: {1}",
     "ru": "Ошибка подключения для {0}: {1}"
@@ -4215,45 +4127,17 @@
     "en": "Error disconnecting for {0}: {1}",
     "ru": "Ошибка отключения для {0}: {1}"
   },
-  "Str628": {
-    "en": "Errors occurred during shutdown.",
-    "ru": "В процессе отключения возникли ошибки."
-  },
   "NoAdapterFoundFor": {
     "en": "No suitable adapter found for {0}.",
     "ru": "Не найден подходящий адаптер для {0}."
-  },
-  "Str630Params": {
-    "en": "Security's {0} corresponding adapter is {1}.",
-    "ru": "Инструменту {0} соответствует адаптер {1}."
-  },
-  "Str631Params": {
-    "en": "Adapter {0} does not support security {1} for {2}: {3}",
-    "ru": "Адаптер {0} не поддерживает инструмент {1} для {2}: {3}"
   },
   "SubscriptionProcessCancelled": {
     "en": "Subscription process cancelled by user.",
     "ru": "Процесс подписки отменен пользователем."
   },
-  "Str633Params": {
-    "en": "For security {0} action for subscription for {1} was not found.",
-    "ru": "Для инструмента {0} не найдено действие на подписку для {1}."
-  },
-  "Str635Params": {
-    "en": "Ending time is less or equal than beginning time {0}.",
-    "ru": "Время окончания меньше или равно времени начала {0}."
-  },
-  "Str636Params": {
-    "en": "Series {0} was not stopped before that.",
-    "ru": "Серия {0} не была остановлена до этого."
-  },
   "OffsetValueIncorrect": {
     "en": "Offset value is incorrect.",
     "ru": "Значение сдвига неправильное."
-  },
-  "Str640": {
-    "en": "Time-frame must be above zero.",
-    "ru": "Тайм-фрейм должен быть больше нуля."
   },
   "TickCountMustBePositive": {
     "en": "Number of ticks should be positive.",
@@ -4271,57 +4155,17 @@
     "en": "Candles manager is not set.",
     "ru": "Менеджер свечей не установлен."
   },
-  "Str645": {
-    "en": "Price change should be greater than zero.",
-    "ru": "Изменение цены должно быть больше нуля."
-  },
   "Candles": {
     "en": "Candles",
     "ru": "Свечи"
-  },
-  "Str647": {
-    "en": "Candles storage time cannot be less than zero.",
-    "ru": "Время хранения свечей не может быть отрицательным."
-  },
-  "Str648Params": {
-    "en": "Series {0} was not started earlier.",
-    "ru": "Серия {0} не была ранее запущена."
   },
   "CannotChangeFormedCandle": {
     "en": "Cannot change formed candle.",
     "ru": "Невозможно изменить сформированную свечу."
   },
-  "Str650Params": {
-    "en": "Series {0} was not stopped.",
-    "ru": "Серия {0} не была остановлена."
-  },
   "CandlesElem": {
     "en": "Candles (elements)",
     "ru": "Свечи (элементы)"
-  },
-  "Str652": {
-    "en": "Data keep time cannot be less than zero.",
-    "ru": "Время хранения данных не может быть отрицательным."
-  },
-  "Str653Params": {
-    "en": "Type '{0}' cannot be used as source data for candles.",
-    "ru": "Тип '{0}' не может быть использован как исходные данные для свечей."
-  },
-  "Str654Params": {
-    "en": "Candle for {0} is already filled for buffer.",
-    "ru": "Свеча за {0} уже заполнена для буфера."
-  },
-  "Str655": {
-    "en": "Insufficient data to form a spread-candle.",
-    "ru": "Недостаточно данных для формирования спред-свечи."
-  },
-  "Str656": {
-    "en": "Insufficient data to form the last spread-candle.",
-    "ru": "Недостаточно данных для формирование последней спред-свечи."
-  },
-  "Str657": {
-    "en": "Cannot calculate security basket value.",
-    "ru": "Невозможно вычислить значение корзины инструментов."
   },
   "CommissionValue": {
     "en": "Commission value.",
@@ -4391,21 +4235,9 @@
     "en": "Message '{0}' caused processing error.",
     "ru": "Сообщение '{0}' привело к ошибке обработки."
   },
-  "Str682Params": {
-    "en": "Empty associative information. Code {0} type {1}.",
-    "ru": "Ассоциативная информация пустая. Код {0} тип {1}."
-  },
   "UnexpectedDisconnect": {
     "en": "Connection process was interrupted because of an unexpected disconnection.",
     "ru": "Процесс подключения был прервал из-за неожиданного отключения."
-  },
-  "Str684": {
-    "en": "Disconnection process was interrupted because of an unexpected connection.",
-    "ru": "Процесс отключения был прерван из-за неожиданного подключения."
-  },
-  "Str685Params": {
-    "en": "Connection in state {0} received an unexpected message of type '{1}'.",
-    "ru": "Подключение в состоянии {0} получило неожиданное сообщение типа '{1}'."
   },
   "ConnectionNotSupportSecurity": {
     "en": "Connection does not support security {0}.",
@@ -4414,14 +4246,6 @@
   "DuplicateSystemId": {
     "en": "Securities {0} and {1} have the same trading system {2} ID.",
     "ru": "Инструменты {0} и {1} имеют одинаковый идентификатор торговой системы {2}."
-  },
-  "Str688Params": {
-    "en": "Message '{0}' does not have information about the type of data being transferred.",
-    "ru": "Сообщение '{0}' не имеет информации о передаваемом типе данных."
-  },
-  "Str689Params": {
-    "en": "For order {0}/{1} security information has not been submitted.",
-    "ru": "Для заявки {0}/{1} не была передана информация об инструменте."
   },
   "SubscribedOk": {
     "en": "Security {0} is subscribed for {1}",
@@ -4450,18 +4274,6 @@
   "FromTill": {
     "en": " from {0} till {1}",
     "ru": " с {0} по {1}"
-  },
-  "Str692Params": {
-    "en": "Security {0} for connection {1} not found.",
-    "ru": "Инструмент {0} для подключения {1} не найден."
-  },
-  "Str693Params": {
-    "en": "Cannot start export, because export is in state {0}.",
-    "ru": "Невозможно выполнить запуск экспорта, так как экспорт находится в состоянии {0}."
-  },
-  "Str694Params": {
-    "en": "Cannot stop export, because export is in state {0}.",
-    "ru": "Невозможно выполнить остановку экспорта, так как экспорт находится в состоянии {0}."
   },
   "ContinuousSecurity": {
     "en": "Continuous security",
@@ -4531,10 +4343,6 @@
     "en": "None of the possible order IDs is specified.",
     "ru": "Не указан ни один из возможных идентификаторов заявки."
   },
-  "Str720Params": {
-    "en": "Order for transaction {0} was not created.",
-    "ru": "Заявка для транзакции {0} не была создана."
-  },
   "Action": {
     "en": "Action",
     "ru": "Действие"
@@ -4594,10 +4402,6 @@
   "StandardError": {
     "en": "Standard error",
     "ru": "Стандартная ошибка"
-  },
-  "Str741": {
-    "en": "Coefficient with independent variable, slope of a straight line.",
-    "ru": "Коэффициент при независимой переменной, угол наклона прямой."
   },
   "LinearRegSlope": {
     "en": "Linear regression gradient.",
@@ -4750,10 +4554,6 @@
   "PeriodLength": {
     "en": "Period length",
     "ru": "Длина периода"
-  },
-  "Str779": {
-    "en": "Period length. By default equal to 1.",
-    "ru": "Длина периода. По умолчанию длина равна 1."
   },
   "ChannelWidth": {
     "en": "Channel width",
@@ -5051,10 +4851,6 @@
     "en": "Risk-rule, tracking profit-loss.",
     "ru": "Риск-правило, отслеживающее прибыль-убыток."
   },
-  "Str861": {
-    "en": "Profit-loss.",
-    "ru": "Прибыль-убыток."
-  },
   "Position": {
     "en": "Position",
     "ru": "Позиция"
@@ -5095,10 +4891,6 @@
     "en": "Slippage size.",
     "ru": "Размер проскальзывания."
   },
-  "Str872": {
-    "en": "Order (price)",
-    "ru": "Заявка (цена)"
-  },
   "RiskOrderPrice": {
     "en": "Risk-rule, tracking order price.",
     "ru": "Риск-правило, отслеживающее цену заявки."
@@ -5106,10 +4898,6 @@
   "RiskOrderVolume": {
     "en": "Risk-rule, tracking order volume.",
     "ru": "Риск-правило, отслеживающее объем заявки."
-  },
-  "Str875": {
-    "en": "Order volume.",
-    "ru": "Объем заявки."
   },
   "OrderFreq": {
     "en": "Order (frequency)",
@@ -5130,10 +4918,6 @@
   "RiskTradeVolume": {
     "en": "Risk-rule, tracking trade volume.",
     "ru": "Риск-правило, отслеживающее объем сделки."
-  },
-  "Str882": {
-    "en": "Trade volume.",
-    "ru": "Объем сделки."
   },
   "TradeFreq": {
     "en": "Trade (frequency)",
@@ -5187,18 +4971,6 @@
     "en": "Information about the underlying security {0} is missing.",
     "ru": "Информация о базовом инструменте {0} отсутствует."
   },
-  "Str903Params": {
-    "en": "Security {0} is missing information about the exchange board.",
-    "ru": "У инструмента {0} отсутствует информация о биржевой площадке."
-  },
-  "Str904Params": {
-    "en": "Order {0} does not have information about connection.",
-    "ru": "Заявка {0} не имеет информации о подключении."
-  },
-  "Str905Params": {
-    "en": "Security {0} price step is equal zero.",
-    "ru": "Инструмент {0} имеет нулевой шаг цены."
-  },
   "RuleNotInContainer": {
     "en": "Rule {0} not registered in container {1}.",
     "ru": "Правило {0} не зарегистрировано в контейнере {1}."
@@ -5211,18 +4983,6 @@
     "en": "Indicator name.",
     "ru": "Название индикатора."
   },
-  "Str909": {
-    "en": "Insufficient data to determine if it is possible to process IIndicatorInput.",
-    "ru": "Недостаточно сведений для определения возможности обработки IIndicatorInput."
-  },
-  "Str912": {
-    "en": "Index must be positive.",
-    "ru": "Индекс должен быть положительным."
-  },
-  "Str913": {
-    "en": "Index is greater than the allowed range.",
-    "ru": "Индекс больше допустимого диапазона."
-  },
   "CodeForFieldNotFound": {
     "en": "Code for field {0} not found.",
     "ru": "Код для поля {0} не найден."
@@ -5231,61 +4991,13 @@
     "en": "Field for code {0} not found.",
     "ru": "Поле для кода {0} не найдено."
   },
-  "Str919": {
-    "en": "level1 (local)",
-    "ru": "level1 (локальное)"
-  },
   "MessageDoNotContainsChanges": {
     "en": "Message does not contain changes.",
     "ru": "Сообщение не содержит изменения."
   },
-  "Str921Params": {
-    "en": "time of last {0}",
-    "ru": "время последнего {0}"
-  },
-  "Str922": {
-    "en": "Unknown security change.",
-    "ru": "Неизвестное изменение инструмента."
-  },
-  "Str923Params": {
-    "en": "Unknown security change {0}.",
-    "ru": "Неизвестное изменение {0} инструмента."
-  },
-  "Str926Params": {
-    "en": "Wrong price of order {0}.",
-    "ru": "Неправильная цена заявки {0}."
-  },
   "WrongOrderVolume": {
     "en": "Wrong volume of order {0}.",
     "ru": "Неправильный объем заявки {0}."
-  },
-  "Str928Params": {
-    "en": "Wrong ID of trade transaction {0}.",
-    "ru": "Неправильный идентификатор сделки транзакции {0}."
-  },
-  "Str929Params": {
-    "en": "Wrong price of trade {0} order {1}.",
-    "ru": "Неправильная цена сделки {0} заявки {1}."
-  },
-  "Str930": {
-    "en": "filling",
-    "ru": "исполнения"
-  },
-  "Str931": {
-    "en": "All transferred changes are empty.",
-    "ru": "Все переданные изменения являются пустыми."
-  },
-  "Str932Params": {
-    "en": "Best bid {0} is greater or equal to best ask {1} during {2}.",
-    "ru": "Лучший бид {0} больше или равен лучшему офферу {1} во время {2}."
-  },
-  "Str934": {
-    "en": "market depths (local)",
-    "ru": "стаканы (локальное)"
-  },
-  "Str935": {
-    "en": "Wrong price of quote.",
-    "ru": "Неправильная цена котировки."
   },
   "OrderLogIsNotCancellation": {
     "en": "Order log item is not an order cancellation operation.",
@@ -5294,10 +5006,6 @@
   "OrderLogNotStatus": {
     "en": "Order log item does not contain information on why the order was cancelled.",
     "ru": "Строка лога заявок не содержит информацию о причине отмены заявки."
-  },
-  "Str942": {
-    "en": "Market depth must be sorted.",
-    "ru": "Стакан должен быть отсортирован."
   },
   "IntervalNotSet": {
     "en": "Interval is not specified.",
@@ -8519,10 +8227,6 @@
     "en": "Quik is disconnected from trading.",
     "ru": "Quik отключен от торговли."
   },
-  "Str3008": {
-    "en": "Quik is off.",
-    "ru": "Quik выключен."
-  },
   "Long": {
     "en": "Long",
     "ru": "Длинная"
@@ -8530,14 +8234,6 @@
   "Short": {
     "en": "Short",
     "ru": "Короткая"
-  },
-  "Str3012": {
-    "en": "Enter account number through which an order will be placed: ",
-    "ru": "Введите номер счета, через который будет выставлена заявка: "
-  },
-  "Str3013": {
-    "en": "Waiting for Lukoil security data to update...",
-    "ru": "Дожидаемся обновления данных по инструменту Лукойл..."
   },
   "WrongPath": {
     "en": "Wrong path.",
@@ -8563,10 +8259,6 @@
     "en": "Cancelled",
     "ru": "Отменено"
   },
-  "Str3026Params": {
-    "en": "Long {0} Short {1}",
-    "ru": "Длинная {0} Короткая {1}"
-  },
   "ObtainingLicense": {
     "en": "Obtaining license...",
     "ru": "Получение лицензии..."
@@ -8574,14 +8266,6 @@
   "InvalidProcess": {
     "en": "Invalid process.",
     "ru": "Неподходящий процесс для обработки."
-  },
-  "Str3030Params": {
-    "en": "DDE export. {0}",
-    "ru": "Экспорт DDE. {0}"
-  },
-  "Str3031Params": {
-    "en": "Table {0}. {1}",
-    "ru": "Таблица {0}. {1}"
   },
   "Warning": {
     "en": "Warning",
@@ -8619,14 +8303,6 @@
     "en": "Diagram parameters",
     "ru": "Параметры схемы"
   },
-  "Str3042": {
-    "en": "Element name description.",
-    "ru": "Описание названия элемента."
-  },
-  "Str3043": {
-    "en": "Element with the same name is already on the diagram.",
-    "ru": "Элемент с таким именем уже есть на схеме."
-  },
   "DiagramHasError": {
     "en": "Diagram contains errors.",
     "ru": "Схема содержит ошибки."
@@ -8634,10 +8310,6 @@
   "ErrorDeleteUsesInConfigs": {
     "en": "Error deleting {0}, is used in the following diagrams: {1}.",
     "ru": "Ошибка удаления {0}, используется в следующих схемах: {1}."
-  },
-  "Str3046Params": {
-    "en": "Error loading diagram component: {0}",
-    "ru": "Ошибка загрузки составного элемента схемы: {0}"
   },
   "ElementWithTypeNotFound": {
     "en": "Element with type '{0}' not found.",
@@ -8671,17 +8343,9 @@
     "en": "Show element parameters in higher order elements.",
     "ru": "Отображать параметры элемента в элементах более высокого уровня."
   },
-  "Str3055Params": {
-    "en": "No socket with ID {0} found",
-    "ru": "Не найден сокет с идентификатором {0}"
-  },
   "ElemAlreadyBinded": {
     "en": "Element {0} already binded with {1} through {2}.",
     "ru": "Элемент {0} уже связан с {1} через {2}."
-  },
-  "Str3057": {
-    "en": "Current values of diagram element parameters",
-    "ru": "Текущие значения параметров элемента схемы"
   },
   "Input": {
     "en": "Input",
@@ -8739,10 +8403,6 @@
     "en": "Strategy diagram contains errors.",
     "ru": "Схема стратегии содержит ошибки."
   },
-  "Str3071": {
-    "en": "Candles source element.",
-    "ru": "Элемент источника свечей."
-  },
   "Series": {
     "en": "Series",
     "ru": "Серия"
@@ -8778,10 +8438,6 @@
   "PanelName": {
     "en": "Panel name",
     "ru": "Название панели"
-  },
-  "Str3082Params": {
-    "en": "For sender {0} there is no registered element.",
-    "ru": "Для отправителя {0} нет зарегистрированного элемента."
   },
   "WorkingTime": {
     "en": "Working time",
@@ -8851,10 +8507,6 @@
     "en": "Indicator type.",
     "ru": "Тип индикатора."
   },
-  "Str3105Params": {
-    "en": "For diagram '{0}' element, indicator type is not specified.",
-    "ru": "Для элемента схемы '{0}' не указан тип индикатора."
-  },
   "IndicatorNotWorkWithType": {
     "en": "Indicator does not work with data type '{0}'.",
     "ru": "Индикатор не поддерживает работу с типом данных '{0}'."
@@ -8862,10 +8514,6 @@
   "LogicalCondition": {
     "en": "Logical condition",
     "ru": "Логическое условие"
-  },
-  "Str3108": {
-    "en": "Logical condition element.",
-    "ru": "Элемент логического условия."
   },
   "AND": {
     "en": "AND",
@@ -8883,45 +8531,13 @@
     "en": "Logical condition.",
     "ru": "Логическое условие."
   },
-  "Str3113": {
-    "en": "Logic function with one argument",
-    "ru": "Логическая функция с одним аргументом"
-  },
-  "Str3114": {
-    "en": "Logical function with one argument element",
-    "ru": "Элемент логической функции с одним аргументом"
-  },
   "Formula": {
     "en": "Formula",
     "ru": "Формула"
   },
-  "Str3116": {
-    "en": "Logic function with one argument.",
-    "ru": "Логическая функция с одним аргументом."
-  },
   "MarketDepthElement": {
     "en": "Security market depth changes receiving element.",
     "ru": "Элемент получения изменений стакана по инструменту."
-  },
-  "Str3118": {
-    "en": "Formula with a single argument",
-    "ru": "Формула с одним аргументом"
-  },
-  "Str3119": {
-    "en": "Formula with one argument element.",
-    "ru": "Элемент формулы с одним аргументом."
-  },
-  "Str3120": {
-    "en": "Formula with a single argument.",
-    "ru": "Формула с одним аргументом."
-  },
-  "Str3121": {
-    "en": "Formula with two arguments",
-    "ru": "Формула с двумя аргументами"
-  },
-  "Str3122": {
-    "en": "Formula with two arguments element.",
-    "ru": "Элемент формулы с двумя аргументами."
   },
   "OrderRegistering": {
     "en": "Order registering",
@@ -8930,10 +8546,6 @@
   "OrderRegisteringDesc": {
     "en": "Order registering element.",
     "ru": "Элемент регистрации заявки."
-  },
-  "Str3125": {
-    "en": "Portfolio, in which the position will be created. If the value is not specified, then strategy portfolio will be used.",
-    "ru": "Портфель, в котором будет создана позиция. Если значение не указано, то будет использоваться портфель стратегии."
   },
   "PosSide": {
     "en": "Position direction (short or long).",
@@ -8955,10 +8567,6 @@
     "en": "Converter",
     "ru": "Конвертер"
   },
-  "Str3132": {
-    "en": "Composite value of a complex object receiving element.",
-    "ru": "Элемент получения составного значения сложного объекта."
-  },
   "Property": {
     "en": "Property",
     "ru": "Свойство"
@@ -8971,17 +8579,9 @@
     "en": "Combination",
     "ru": "Объединение"
   },
-  "Str3136": {
-    "en": "Combined values element.",
-    "ru": "Элемент объединения значений."
-  },
   "PositionElement": {
     "en": "Position element (for security and money) for the specified portfolio.",
     "ru": "Элемент позиции (по инструменту или деньгами) для указанного портфеля."
-  },
-  "Str3138": {
-    "en": "Portfolio, for which position size must be obtained. If value is not specified, then strategy portfolio will be used.",
-    "ru": "Портфель, для которого необходимо получить значение позиции. Если значение не указано, то будет использоваться портфель стратегии."
   },
   "MoneyPositionDesc": {
     "en": "Whether to receive cash position or security position.",
@@ -8999,41 +8599,21 @@
     "en": "Offset size.",
     "ru": "Размер сдвига."
   },
-  "Str3144": {
-    "en": "Connection type.",
-    "ru": "Тип соединения."
-  },
   "PosProtection": {
     "en": "Position protection",
     "ru": "Защита позиции"
-  },
-  "Str3146": {
-    "en": "Open position protection element.",
-    "ru": "Элемент защиты открытой позиции."
   },
   "OrderOut": {
     "en": "Order (out)",
     "ru": "Заявка вых"
   },
-  "Str3149": {
-    "en": "Is take-profit active.",
-    "ru": "Включен ли тейк-профит."
-  },
   "ProtectLevelTakeProfit": {
     "en": "Protection level for take-profit.",
     "ru": "Защитный уровень для тейк-профита."
   },
-  "Str3151": {
-    "en": "Is stop-loss active.",
-    "ru": "Включен ли стоп-лосс."
-  },
   "ProtectLevelStopLoss": {
     "en": "Protection level for stop-loss.",
     "ru": "Защитный уровень для стоп-лосса."
-  },
-  "Str3153": {
-    "en": "Security changes receiving element.",
-    "ru": "Элемент получения изменений инструмента."
   },
   "Change2": {
     "en": "Change",
@@ -9051,17 +8631,9 @@
     "en": "Data type.",
     "ru": "Тип данных."
   },
-  "Str3158Params": {
-    "en": "Connection {0} not found.",
-    "ru": "Соединение {0} не найдено."
-  },
   "Variable": {
     "en": "Variable",
     "ru": "Переменная"
-  },
-  "Str3160": {
-    "en": "Value storage element.",
-    "ru": "Элемент хранения значение."
   },
   "ElemValue": {
     "en": "Element value.",
@@ -9091,18 +8663,6 @@
     "en": "Message text.",
     "ru": "Текст сообщения."
   },
-  "Str3169": {
-    "en": "Container",
-    "ru": "Контейнер"
-  },
-  "Str3170": {
-    "en": "Container for S# Studio strategies.",
-    "ru": "Контейнер для стратегий S# Studio."
-  },
-  "Str3171": {
-    "en": " - Test",
-    "ru": " - Тест"
-  },
   "DaysHistory": {
     "en": "Days of history data",
     "ru": "Дней истории"
@@ -9110,14 +8670,6 @@
   "DaysHistoryDesc": {
     "en": "Number of history days for strategy initialization.",
     "ru": "Количество дней истории для инициализации стратегии."
-  },
-  "Str3174": {
-    "en": "Strategy not compiled.",
-    "ru": "Стратегия не скомпилирована."
-  },
-  "Str3175Params": {
-    "en": "Error initializing strategy diagram: {0}",
-    "ru": "Ошибка инициализации схемы стратегии: {0}"
   },
   "Live": {
     "en": "Live",
@@ -9138,42 +8690,6 @@
   "Assembly": {
     "en": "Assembly",
     "ru": "Сборка"
-  },
-  "Str3183": {
-    "en": "Terminal",
-    "ru": "Терминал"
-  },
-  "Str3184": {
-    "en": "Information about the strategy.",
-    "ru": "Информация о стратегии."
-  },
-  "Str3185": {
-    "en": "Strategy description.",
-    "ru": "Описание стратегии."
-  },
-  "Str3186": {
-    "en": "Current state of strategy (depends on launched configurations).",
-    "ru": "Текущее состояние стратегии (зависит от запущенных конфигураций)."
-  },
-  "Str3187": {
-    "en": "Data type (source code, designer, assembly), on the basis of which configurations will be created.",
-    "ru": "Тип данных (исходный код, дизайнер, сборка), на основе которых будут создаваться конфигурации."
-  },
-  "Str3188": {
-    "en": "Strategy type name",
-    "ru": "Имя типа стратегии"
-  },
-  "Str3189": {
-    "en": "Strategy type name, based on which configurations will be created.",
-    "ru": "Имя типа стратегии, на основе которого будут создаваться конфигурации."
-  },
-  "Str3190Params": {
-    "en": "Strategy contains metainformation about the type of strategy '{0}'. Type can only be changed through StrategyType property.",
-    "ru": "Стратегия содержит метаинформацию о типе стратегии '{0}'. Изменение типа возможно только через свойство StrategyType."
-  },
-  "Str3191": {
-    "en": "Path to assembly, where strategy executable code is.",
-    "ru": "Путь к сборке, где находится исполняемый код стратегии."
   },
   "BuySellSettingsSecurity": {
     "en": "Security, for which the market depth will be shown. If not specified, then strategy security is used.",
@@ -9219,97 +8735,9 @@
     "en": "Chat",
     "ru": "Чат"
   },
-  "Str3206": {
-    "en": "Chat with other participants.",
-    "ru": "Чат с другими участниками."
-  },
-  "Str3207": {
-    "en": "To enter chat you must connect to S#. Connect now?",
-    "ru": "Для входа в чат необходимо подключиться к S#. Подключиться сейчас?"
-  },
-  "Str3208Params": {
-    "en": "User '{0}' left chat.",
-    "ru": "Пользователь '{0}' покинул чат."
-  },
-  "Str3209Params": {
-    "en": "User '{0}' joined chat.",
-    "ru": "Пользователь '{0}' присоединился к чату."
-  },
-  "Str3210Params": {
-    "en": "Chat ({0})",
-    "ru": "Чат ({0})"
-  },
   "Online": {
     "en": "online",
     "ru": "онлайн"
-  },
-  "Str3212": {
-    "en": "offline",
-    "ru": "не в сети"
-  },
-  "Str3213": {
-    "en": "Enter message",
-    "ru": "Введите сообщение"
-  },
-  "Str3214": {
-    "en": "You must be subscribed to a room in order to send messages",
-    "ru": "Для отправки сообщений необходимо подписаться на комнату"
-  },
-  "Str3215Params": {
-    "en": "Connection order from user {0}",
-    "ru": "Заявка на присоединение от пользователя {0}"
-  },
-  "Str3216": {
-    "en": "Your order is rejected.",
-    "ru": "Ваша заявка отклонена."
-  },
-  "Str3217": {
-    "en": "New security",
-    "ru": "Новый инструмент"
-  },
-  "Str3218Params": {
-    "en": "Security {0} is used in embedded security {1}.",
-    "ru": "Инструмент {0} используется во вложенном инструменте {1}."
-  },
-  "Str3219Params": {
-    "en": "Security {0} is used as embedded for {0}.",
-    "ru": "Инструмент {0} используется в качестве вложенного для {0}."
-  },
-  "Str3220": {
-    "en": "Error saving composite security",
-    "ru": "Ошибка сохранения составного инструмента"
-  },
-  "Str3221": {
-    "en": "Incorrect security code or board.",
-    "ru": "Неверно указан код инструмента или площадка."
-  },
-  "Str3222": {
-    "en": "Error saving index",
-    "ru": "Ошибка сохранения индекса"
-  },
-  "Str3223Params": {
-    "en": "Security {0} with type {1} is already in the database.",
-    "ru": "Инструмент {0} с типом {1} уже есть в базе данных."
-  },
-  "Str3224Params": {
-    "en": "Security {0} is already in the database. Replace?",
-    "ru": "Инструмент {0} уже есть в базе данных. Заменить?"
-  },
-  "Str3225": {
-    "en": "Panel for building and viewing data for a composite security.",
-    "ru": "Панель для построения и просмотра данных по составному инструменту."
-  },
-  "Str3226": {
-    "en": "Continuous securities",
-    "ru": "Непрерывные инструменты"
-  },
-  "Str3227": {
-    "en": "Panel for building and viewing data for a continuous security.",
-    "ru": "Панель для построения и просмотра данных по непрерывному инструменту."
-  },
-  "Str3228Params": {
-    "en": "Security {0} code does not contain expiration date.",
-    "ru": "Код инструмента {0} не содержит информации о дате экспирации."
   },
   "Add": {
     "en": "Add",
@@ -9322,10 +8750,6 @@
   "DiagramEditorPanel": {
     "en": "Panel for debugging strategies on the basis of the designer.",
     "ru": "Панель для отладки стратегий на базе дизайнера."
-  },
-  "Str3232": {
-    "en": "Debugging is only available to designer based strategies.",
-    "ru": "Отладка доступна только для стратегий на базе дизайнера."
   },
   "BoardEditor": {
     "en": "Board editor",
@@ -9358,14 +8782,6 @@
   "OptionsPositionsElement": {
     "en": "Panel for viewing options positions and greeks chart in respect to the underlying asset.",
     "ru": "Панель для просмотра графика позиции и греков опционов относительно базового актива."
-  },
-  "Str3242": {
-    "en": "Conditional orders",
-    "ru": "Условные заявки"
-  },
-  "Str3243": {
-    "en": "Panel for viewing and managing conditional orders.",
-    "ru": "Панель для просмотра и управления условными заявками."
   },
   "PositionChart": {
     "en": "Positions (chart)",
@@ -9435,10 +8851,6 @@
     "en": "Storage settings.",
     "ru": "Настройки хранилища."
   },
-  "Str3263": {
-    "en": "Selected directory does not exist. Continue?",
-    "ru": "Выбранная директория не существует. Продолжить?"
-  },
   "NSecAdded": {
     "en": "{0} new securities added.",
     "ru": "Добавлено {0} новых инструментов."
@@ -9475,14 +8887,6 @@
     "en": "Incorrect limit order price.",
     "ru": "Неверно указана цена для лимитной заявки."
   },
-  "Str3276": {
-    "en": "New securities in storage",
-    "ru": "Новые инструменты в хранилище"
-  },
-  "Str3277": {
-    "en": "Open market depth",
-    "ru": "Открыть стакан"
-  },
   "TradesFeed": {
     "en": "Trades feed",
     "ru": "Лента сделок"
@@ -9495,93 +8899,9 @@
     "en": "Table",
     "ru": "Таблица"
   },
-  "Str3281": {
-    "en": "Strategy started.",
-    "ru": "Стратегия запущена."
-  },
-  "Str3282": {
-    "en": "Reset state.",
-    "ru": "Сброс состояния."
-  },
-  "Str3283": {
-    "en": "Strategy stopped.",
-    "ru": "Стратегия остановлена."
-  },
-  "Str3284": {
-    "en": "User element",
-    "ru": "Пользовательский элемент"
-  },
-  "Str3285": {
-    "en": "UI Strategy",
-    "ru": "UI Стратегия"
-  },
-  "Str3286": {
-    "en": "Strategy that creates its own graphical component to place market orders.",
-    "ru": "Стратегия, создающая собственный графической компонент для выставления заявок по рынку."
-  },
-  "Str3287": {
-    "en": "Shared virtual account",
-    "ru": "Долевой виртуальный счет"
-  },
-  "Str3288": {
-    "en": "A percentage of the total is shown for sub-accounts. For example, 30% + 30% + 40% when registration a 10 contract bid on a virtual account, is distributed as 3 + 3 + 4 to sub-accounts.",
-    "ru": "Для субсчетов показывается процент от общего объема. Например, 30% + 30% + 40% при выставлении заявки в 10 контрактов на виртуальном счете, распределяется по субсчетам как 3 + 3 + 4."
-  },
-  "Str3289": {
-    "en": "From free money on the account",
-    "ru": "От свободных денег на счету"
-  },
-  "Str3290": {
-    "en": "For example, 10% and 20%. When a 10 contract order is placed on a virtual account, it is distributed over subaccounts as v1 = (pf1.freemoney * 0.1) / sec.price и v2 = (pf2.freemoney * 0.2) / sec.price.",
-    "ru": "Например, 10% и 20%. При выставлении заявки 10 контрактов на виртуальном счете, распределяется по субсчетам как v1 = (pf1.freemoney * 0.1) / sec.price и v2 = (pf2.freemoney * 0.2) / sec.price."
-  },
-  "Str3291": {
-    "en": "Moving averages",
-    "ru": "Скользящие средние"
-  },
-  "Str3292": {
-    "en": "Strategy based on moving averages crossing.",
-    "ru": "Стратегия на основе пересечения скользящих средних."
-  },
-  "Str3293": {
-    "en": "Moving average",
-    "ru": "Скользящие средние"
-  },
-  "Str3294": {
-    "en": "Working time-frame of strategy.",
-    "ru": "Рабочий тайм-фрейм стратегии."
-  },
-  "Str3295": {
-    "en": "Long moving average period.",
-    "ru": "Период длинной скользящей средней."
-  },
-  "Str3296": {
-    "en": "Short moving average period.",
-    "ru": "Период короткой скользящей средней."
-  },
-  "Str3297": {
-    "en": "New signal for a long.",
-    "ru": "Новый сигнал на лонг."
-  },
-  "Str3298": {
-    "en": "New signal for a short.",
-    "ru": "Новый сигнал на шорт."
-  },
-  "Str3299": {
-    "en": "Virtual account",
-    "ru": "Виртуальный счет"
-  },
-  "Str3300": {
-    "en": "Error cancelling order.",
-    "ru": "Ошибка снятия заявки."
-  },
   "OrderBalanceNotEnough": {
     "en": "Balance for order {0} is equal {1}.",
     "ru": "Баланс для заявки {0} равен {1}."
-  },
-  "Str3302": {
-    "en": "Bitcoins",
-    "ru": "Биткоины"
   },
   "Key": {
     "en": "Key",
@@ -9599,73 +8919,9 @@
     "en": "Client ID.",
     "ru": "Идентификатор клиента."
   },
-  "Str3309": {
-    "en": "Path to script to start the gate.",
-    "ru": "Путь к скрипту для старта шлюза."
-  },
-  "Str3310Params": {
-    "en": "The number of requests in {0} minutes exceeded {1}. Read more about the limits at https://bitstamp.net/api/.",
-    "ru": "Количество запросов за {0} минут превысило {1}. Подробнее об ограничении https://bitstamp.net/api/ ."
-  },
   "UnknownEvent": {
     "en": "Unknown event {0}.",
     "ru": "Неизвестное событие {0}."
-  },
-  "Str3313": {
-    "en": "Security code is not specified.",
-    "ru": "Не указан код инструмента."
-  },
-  "Str3314Params": {
-    "en": "Security {0} not found in Blackwood system.",
-    "ru": "Инструмент {0} в системе Blackwood не найден."
-  },
-  "Str3315Params": {
-    "en": "Exchange information is missing in message '{0}'.",
-    "ru": "Отсутствует информация о бирже в сообщении '{0}'."
-  },
-  "Str3316": {
-    "en": "Close at market",
-    "ru": "Закрытие по рынку"
-  },
-  "Str3317": {
-    "en": "Opening at market",
-    "ru": "Открытие по рынку"
-  },
-  "Str3318": {
-    "en": "Opening limit",
-    "ru": "Открытие лимит"
-  },
-  "Str3319": {
-    "en": "Market NYSE",
-    "ru": "Рыночная NYSE"
-  },
-  "Str3320": {
-    "en": "NYSE limit",
-    "ru": "Лимит NYSE"
-  },
-  "Str3321": {
-    "en": "Closing limit",
-    "ru": "Закрытие лимит"
-  },
-  "Str3322": {
-    "en": "Bid (SMART)",
-    "ru": "Бид (SMART)"
-  },
-  "Str3323": {
-    "en": "Ask (SMART)",
-    "ru": "Оффер (SMART)"
-  },
-  "Str3324": {
-    "en": "Last (SMART)",
-    "ru": "Последняя (SMART)"
-  },
-  "Str3325": {
-    "en": "Spread (SMART)",
-    "ru": "Спред (SMART)"
-  },
-  "Str3328": {
-    "en": "Market data server address.",
-    "ru": "Адрес сервера рыночных данных."
   },
   "History": {
     "en": "History",
@@ -9675,205 +8931,21 @@
     "en": "History data server address.",
     "ru": "Адрес сервера исторических данных."
   },
-  "Str3331": {
-    "en": "Server address of transactions execution.",
-    "ru": "Адрес сервера исполнения транзакций."
-  },
   "PathLogs": {
     "en": "Path to logs",
     "ru": "Путь к логам"
-  },
-  "Str3333": {
-    "en": "Path to directory, where BWOrders.log file will be created.",
-    "ru": "Путь к директории, где будет создан файл BWOrders.log."
-  },
-  "Str3334Params": {
-    "en": "Login = {0} Transaction = {1} Market-data = {2} History = {3}",
-    "ru": "Логин = {0} Транзакции = {1} Маркет-дата = {2} История = {3}"
-  },
-  "Str3335Params": {
-    "en": "For order {0} registration information is missing.",
-    "ru": "Для заявки {0} отсутствует информация о регистрации."
-  },
-  "Str3336Params": {
-    "en": "Order {0} side has an incorrect value {1}.",
-    "ru": "Направление заявки {0} имеет неправильное значение {1}."
-  },
-  "Str3337Params": {
-    "en": "Unknown action time value {0} order {1}.",
-    "ru": "Неизвестное значение время действия {0} заявки {1}."
-  },
-  "Str3338": {
-    "en": "Unknown board code.",
-    "ru": "Неизвестный код площадки."
-  },
-  "Str3339Params": {
-    "en": "Direction {0} for orders is not supported.",
-    "ru": "Направление {0} заявки не поддерживается."
-  },
-  "Str3340Params": {
-    "en": "Unknown order direction {0}.",
-    "ru": "Неизвестное направление {0} заявки."
-  },
-  "Str3341": {
-    "en": "Wrong category value.",
-    "ru": "Неправильное значение категории."
-  },
-  "Str3346Params": {
-    "en": "Error receiving request token: server reply '{0}'.",
-    "ru": "Ошибка получения request token: ответ сервера '{0}'."
-  },
-  "Str3347Params": {
-    "en": "Error receiving access token: server reply '{0}'.",
-    "ru": "Ошибка получения access token: ответ сервера '{0}'."
-  },
-  "Str3348": {
-    "en": "GetAccessToken: token and/or secret not received.",
-    "ru": "GetAccessToken: token и/или secret не получены."
-  },
-  "Str3349Params": {
-    "en": "Error renewing access token: server reply '{0}'.",
-    "ru": "Ошибка обновления access token: ответ сервера '{0}'."
   },
   "AuthFailed": {
     "en": "Authorization failed.",
     "ru": "Авторизация не выполнена."
   },
-  "Str3351": {
-    "en": "Authorization is invalid.",
-    "ru": "Авторизация недействительна."
-  },
-  "Str3352Params": {
-    "en": "{0}: error fulfilling request (status={1}).",
-    "ru": "{0}: ошибка выполнения запроса (status={1})."
-  },
-  "Str3353Params": {
-    "en": "{0}: Server returned an unexpected code '{1}'.",
-    "ru": "{0}: Сервер вернул неожиданный код '{1}'."
-  },
-  "Str3354": {
-    "en": "Exact date specification for orders expiration is not supported in ETrade.",
-    "ru": "Указание конкретной даты экспирации заявок не поддерживается в ETrade."
-  },
-  "Str3355Params": {
-    "en": "Error in stream '{0}': {1}",
-    "ru": "Ошибка в потоке '{0}': {1}"
-  },
-  "Str3356": {
-    "en": "No connection to ETrade.",
-    "ru": "Отсутствует подключение к ETrade."
-  },
-  "Str3357": {
-    "en": "Empty security name in request.",
-    "ru": "Пустое имя инструмента в запросе."
-  },
-  "Str3358": {
-    "en": "Authorization was canceled by the user.",
-    "ru": "Авторизация была прервана пользователем."
-  },
-  "Str3362Params": {
-    "en": "Work of module '{0}' ended in error.",
-    "ru": "Работа модуля '{0}' завершилась с ошибкой."
-  },
-  "Str3363": {
-    "en": "Securities search ended with an error.",
-    "ru": "Поиск инструментов завершился с ошибкой."
-  },
-  "Str3364Params": {
-    "en": "Connection to ETrade {0}",
-    "ru": "Подключение к ETrade {0}"
-  },
-  "Str3365": {
-    "en": "established",
-    "ru": "установлено"
-  },
-  "Str3366": {
-    "en": "disconnected",
-    "ru": "разорвано"
-  },
   "DemoMode": {
     "en": "Demo mode.",
     "ru": "Демо режим."
   },
-  "Str3370": {
-    "en": "Verification code",
-    "ru": "Код верификации"
-  },
-  "Str3371": {
-    "en": "Verification code, received by user in browser, after confirming program's permission to work.",
-    "ru": "Код верификации, полученный пользователем в браузере после подтверждения разрешения на работу приложения."
-  },
-  "Str3372": {
-    "en": "Incorrect serialized data type.",
-    "ru": "Неверный формат сериализованных данных."
-  },
-  "Str3373Params": {
-    "en": "Error cancelling order with ID {0}. {1}",
-    "ru": "Ошибка отмены заявки с идентификатором {0}. {1}"
-  },
-  "Str3374Params": {
-    "en": "Unsupported type of price '{0}'",
-    "ru": "Неподдерживаемый тип цены priceType '{0}'"
-  },
-  "Str3375": {
-    "en": "Portfolios update caused an error.",
-    "ru": "Обновление портфелей завершилось с ошибкой."
-  },
-  "Str3376": {
-    "en": "Positions update caused an error.",
-    "ru": "Обновление позиций завершилось с ошибкой."
-  },
-  "Str3377": {
-    "en": "To continue, you must enter a verification code.",
-    "ru": "Для продолжения необходимо ввести в поле код верификации."
-  },
-  "Str3379Params": {
-    "en": "Method {0} threw a system exception '{1}'. Description '{2}'.",
-    "ru": "Метод {0} выбросил системную ошибку '{1}'. Описание '{2}'."
-  },
-  "Str3380Params": {
-    "en": "Method {0} threw an exception '{1}'. Description '{2}'.",
-    "ru": "Метод {0} выбросил ошибку '{1}'. Описание '{2}'."
-  },
-  "Str3381": {
-    "en": "Market data stream was suspended.",
-    "ru": "Поток маркет-данных был приостановлен."
-  },
-  "Str3383": {
-    "en": "Stop-loss offset",
-    "ru": "Отступ стоп-лосса"
-  },
-  "Str3384": {
-    "en": "Stop-loss offset.",
-    "ru": "Отступ стоп-лосса."
-  },
-  "Str3385": {
-    "en": "Take-profit offset",
-    "ru": "Отступ тейк-профита"
-  },
-  "Str3386": {
-    "en": "Take-profit offset.",
-    "ru": "Отступ тейк-профита."
-  },
   "DemoTradingConnect": {
     "en": "Connect to demo trading instead of real trading server.",
     "ru": "Подключаться ли к демо торгам вместо сервера с реальной торговлей."
-  },
-  "Str3389": {
-    "en": "Should the whole set of securities be loaded from LMAX website. Switched off by default.",
-    "ru": "Загружать ли инструменты из архива с сайта LMAX. По умолчанию выключено."
-  },
-  "Str3391": {
-    "en": "Search criteria by security code must be specified.",
-    "ru": "Критерий поиска под коду инструмента должен быть заполнен."
-  },
-  "Str3392Params": {
-    "en": "For security {0} internal trading system identifier is missing.",
-    "ru": "Для инструмента {0} отсутствует внутренний идентификатор торговой системы."
-  },
-  "Str3393Params": {
-    "en": "Series has wrong time-frame {0}.",
-    "ru": "Серия имеет неправильный тайм-фрейм {0}."
   },
   "PriceNotSpecified": {
     "en": "Order {0} has unfilled limit price.",
@@ -9915,10 +8987,6 @@
     "en": "Router",
     "ru": "Роутер"
   },
-  "Str3406": {
-    "en": "Good",
-    "ru": "Хорошая"
-  },
   "Maximum": {
     "en": "Maximum",
     "ru": "Максимально"
@@ -9926,10 +8994,6 @@
   "PathDll": {
     "en": "Path to dll",
     "ru": "Путь к dll"
-  },
-  "Str3411": {
-    "en": "Path to mtesrl.dll file.",
-    "ru": "Путь к файлу mtesrl.dll."
   },
   "ConnectionType": {
     "en": "Connection type",
@@ -9939,17 +9003,9 @@
     "en": "Addresses",
     "ru": "Адреса"
   },
-  "Str3415": {
-    "en": "List of addresses and ports for access servers.",
-    "ru": "Список адресов и портов серверов доступа."
-  },
   "Server": {
     "en": "Server",
     "ru": "Сервер"
-  },
-  "Str3417": {
-    "en": "Access server ID, e.g. «EQ_TEST».",
-    "ru": "Идентификатор сервера доступа, например «EQ_TEST»."
   },
   "Interface": {
     "en": "Interface",
@@ -10019,30 +9075,6 @@
     "en": "Wrong result length {0}. Length must be {1} instead of {2}.",
     "ru": "Неправильная длина результата {0}. Длина должна быть {1} вместо {2}."
   },
-  "Str3441": {
-    "en": "IMIT mode",
-    "ru": "Режим IMIT"
-  },
-  "Str3442": {
-    "en": "If Market If Touched mode.",
-    "ru": "Режим If Market If Touched."
-  },
-  "Str3443": {
-    "en": "Minimum",
-    "ru": "Минимально"
-  },
-  "Str3444": {
-    "en": "Minimum execution price.",
-    "ru": "Минимальная цена исполнения."
-  },
-  "Str3445": {
-    "en": "Maximum execution price.",
-    "ru": "Максимальная цена исполнения."
-  },
-  "Str3446": {
-    "en": "Trailing stop-loss",
-    "ru": "Скользящий стоп-лосс"
-  },
   "TrailingStopLossOffset": {
     "en": "Offset of a trailing stop-loss.",
     "ru": "Отступ скользящего стоп-лосса."
@@ -10050,10 +9082,6 @@
   "Real": {
     "en": "Real",
     "ru": "Реальный"
-  },
-  "Str3450": {
-    "en": "Server.",
-    "ru": "Сервер."
   },
   "Token": {
     "en": "Token",
@@ -10063,14 +9091,6 @@
     "en": "No portfolios received.",
     "ru": "Не получен ни один портфель."
   },
-  "Str3454Params": {
-    "en": "For portfolio {0} OANDA identifier was not received.",
-    "ru": "Для портфеля {0} не получен идентификатор OANDA."
-  },
-  "Str3455Params": {
-    "en": "For account ID {0} the portfolio information is missing.",
-    "ru": "Для идентификатора счета {0} нет информации о портфеле."
-  },
   "FileNotExist": {
     "en": "File '{0}' does not exist.",
     "ru": "Файл '{0}' не существует."
@@ -10079,93 +9099,33 @@
     "en": "Error connecting: '{0}'.",
     "ru": "Ошибка подключения: '{0}'."
   },
-  "Str3461": {
-    "en": "Test",
-    "ru": "Тестовый"
-  },
-  "Str3462": {
-    "en": "On live data",
-    "ru": "На живых данных"
-  },
-  "Str3463": {
-    "en": "Real",
-    "ru": "Реальное"
-  },
   "Certificate": {
     "en": "Certificate",
     "ru": "Сертификат"
-  },
-  "Str3466": {
-    "en": "Path to certificate file, necessary to connect to Rithmic system.",
-    "ru": "Путь к файлу сертификата, необходимому для подключения к системе Rithmic."
-  },
-  "Str3467": {
-    "en": "Login (trans)",
-    "ru": "Логин (транзак)"
   },
   "TransactionalLogin": {
     "en": "Additional login. Used when transaction sending is carried out to a separate server.",
     "ru": "Дополнительное имя пользователя. Используется в случае, если отправка транзакций осуществляется на отдельный сервер."
   },
-  "Str3469": {
-    "en": "Password (trans)",
-    "ru": "Пароль (транзак)"
-  },
   "TransactionalPassword": {
     "en": "Additional password. Used when transaction sending is carried out to a separate server.",
     "ru": "Дополнительный пароль. Используется в случае, если отправка транзакций осуществляется на отдельный сервер."
-  },
-  "Str3471": {
-    "en": "File log",
-    "ru": "Лог файл"
-  },
-  "Str3472": {
-    "en": "Path to log file.",
-    "ru": "Путь к лог файлу."
-  },
-  "Str3473": {
-    "en": "Server type",
-    "ru": "Тип сервера"
-  },
-  "Str3474": {
-    "en": "Server type.",
-    "ru": "Тип сервера."
-  },
-  "Str3475": {
-    "en": "Point (admin)",
-    "ru": "Точка (админ)"
   },
   "AdminConnectionPoint": {
     "en": "Connection point for administrative functions (initialization/deinitialization).",
     "ru": "Точка подключения для административных функций (инициализация/деинициализация)."
   },
-  "Str3477": {
-    "en": "Point (data)",
-    "ru": "Точка (данные)"
-  },
   "MarketDataConnectionPoint": {
     "en": "Connection point to market data.",
     "ru": "Точка подключения к рыночным данным."
-  },
-  "Str3479": {
-    "en": "Point (transactions)",
-    "ru": "Точка (транзакции)"
   },
   "TransactionConnectionPoint": {
     "en": "Connection point to the transactions execution system.",
     "ru": "Точка подключения к системе исполнения транзакций."
   },
-  "Str3481": {
-    "en": "Point (positions)",
-    "ru": "Точка (позиции)"
-  },
   "PositionConnectionPoint": {
     "en": "Connection point for access to portfolios and positions information.",
     "ru": "Точка подключения для получения информации по портфелях и позициях."
-  },
-  "Str3483": {
-    "en": "Point (history)",
-    "ru": "Точка (история)"
   },
   "HistoricalConnectionPoint": {
     "en": "Connection point for access to history data.",
@@ -10199,33 +9159,9 @@
     "en": "Broker address.",
     "ru": "Адрес брокера."
   },
-  "Str3492": {
-    "en": "Log (address)",
-    "ru": "Лог (адрес)"
-  },
   "LoggerAddress": {
     "en": "Logger address.",
     "ru": "Адрес логгера."
-  },
-  "Str3494Params": {
-    "en": "Activation price for order {0} not specified.",
-    "ru": "Цена активации для заявки {0} не установлена."
-  },
-  "Str3496": {
-    "en": "Order was not cancelled.",
-    "ru": "Заявка не была отменена."
-  },
-  "Str3497": {
-    "en": "Order was not changed.",
-    "ru": "Заявка не была изменена."
-  },
-  "Str3498": {
-    "en": "Order was not registered.",
-    "ru": "Заявка не была зарегистрирована."
-  },
-  "Str3503": {
-    "en": "RSS feed address not specified.",
-    "ru": "Адрес RSS фида не указан."
   },
   "RssAdapter": {
     "en": "Connection to news channels through RSS.",
@@ -10307,10 +9243,6 @@
     "en": "Protective spread. Quantity, which will be added (in case of TP to buy) or subtracted (in case of TP to sell) to activation price, when the order is sent to the exchange. Absolute or percentage value.",
     "ru": "Защитный спред. Величина, которая будет прибавляться (при TP на покупку) или отниматься (при TP на продажу) к цене активации, при отправке заявки на биржу. Абсолютное значение, или в процентах."
   },
-  "Str3538": {
-    "en": "Connection to broker using Transaq.",
-    "ru": "Подключение к брокеру, использующий Transaq."
-  },
   "Proxy": {
     "en": "Proxy",
     "ru": "Прокси"
@@ -10350,10 +9282,6 @@
   "NoSystemId": {
     "en": "For {0} there is no system identifier.",
     "ru": "Для {0} нет системного идентификатора."
-  },
-  "Str3552": {
-    "en": "Condition.",
-    "ru": "Условие."
   },
   "ValidConditions": {
     "en": "Order validity condition.",
@@ -10403,17 +9331,9 @@
     "en": "Immediately",
     "ru": "Немедленно"
   },
-  "Str3568Params": {
-    "en": "Series {0} were earlier subscribed to.",
-    "ru": "Для серии {0} уже была ранее произведена подписка."
-  },
   "ChangeStepCannotBeZero": {
     "en": "Parameter change step must be different from 0.",
     "ru": "Шаг изменения параметра должен быть отличен от 0."
-  },
-  "Str3572Params": {
-    "en": "The bounds From ({0}) and To ({1}) must be different.",
-    "ru": "Границы От ({0}) и До ({1}) должны отличаться."
   },
   "ChangeStepMustBeNegative": {
     "en": "When parameter ({0}) change Step is positive the value From ({1}) must be less than value To ({2}).",
@@ -10422,18 +9342,6 @@
   "ChangeStepMustBePositive": {
     "en": "When parameter ({0}) change Step is negative the value From ({1}) must be greater than value To ({2}).",
     "ru": "При отрицательном Шаге изменения параметра ({0}) значение От ({1}) должно быть больше значения До ({2})."
-  },
-  "Str3576": {
-    "en": "Optim",
-    "ru": "Оптим"
-  },
-  "Str3578": {
-    "en": "Show result",
-    "ru": "Показать результат"
-  },
-  "Str3579": {
-    "en": "Set for trading",
-    "ru": "Установить для торговли"
   },
   "Optimizer": {
     "en": "Optimizer",
@@ -10467,213 +9375,33 @@
     "en": "Issued:",
     "ru": "Выдана:"
   },
-  "Str3591Params": {
-    "en": "Report (.{0})|*.{0}",
-    "ru": "Отчет (.{0})|*.{0}"
-  },
-  "Str3592": {
-    "en": "Strategies and emulators generation.",
-    "ru": "Генерация стратегий и эмуляторов."
-  },
-  "Str3593": {
-    "en": "Strategies generation completed.",
-    "ru": "Генерация стратегий завершена."
-  },
-  "Str3594": {
-    "en": "Creating emulation session.",
-    "ru": "Создание эмуляционной сессии."
-  },
-  "Str3595": {
-    "en": "Storage initialization.",
-    "ru": "Инициализация хранилища."
-  },
   "CannotDetermineScope": {
     "en": "Cannot determine scope for {0}.",
     "ru": "Невозможно определить область видимости для {0}."
-  },
-  "Str3598": {
-    "en": "Start testing",
-    "ru": "Запуск тестирования"
   },
   "Trading": {
     "en": "Trading",
     "ru": "Торговля"
   },
-  "Str3600": {
-    "en": "Testing",
-    "ru": "Тестирование"
-  },
-  "Str3601": {
-    "en": "Optimization result",
-    "ru": "Результат оптимизации"
-  },
-  "Str3605": {
-    "en": "Terminal",
-    "ru": "Терминал"
-  },
-  "Str3606": {
-    "en": "Testing",
-    "ru": "Тестирование"
-  },
-  "Str3607Params": {
-    "en": "Failed to load assembly {0}.",
-    "ru": "Не удалось загрузить сборку {0}."
-  },
   "TypeNotFoundInAssembly": {
     "en": "Required type not found in compiled assembly.",
     "ru": "Не найден требуемый тип в скомпилированной сборке."
-  },
-  "Str3609": {
-    "en": "Moving averages crossing strategy, created in visual diagram designer.",
-    "ru": "Стратегия пересечения скользящих средних, сделанная с помощью дизайнера."
-  },
-  "Str3610": {
-    "en": "Classical arbitrage",
-    "ru": "Классический арбитраж"
-  },
-  "Str3611": {
-    "en": "Classical arbitrage strategy, created in visual diagram designer.",
-    "ru": "Стратегия классического арбитража, сделанная с помощью визуальной схемы."
-  },
-  "Str3612": {
-    "en": "Strategy that provides the ability to trade manually, rendering candles and indicators on the chart.",
-    "ru": "Стратегия, предоставляющая возможность ручной торговли, отрисовки свечей и индикаторов на графике."
-  },
-  "Str3613Params": {
-    "en": "Strategy '{0}' does not have information about security.",
-    "ru": "Стратегия '{0}' не имеет информации об инструменте."
-  },
-  "Str3614Params": {
-    "en": "Strategy '{0}' does not have information about portfolio.",
-    "ru": "Стратегия '{0}' не имеет информации о портфеле."
-  },
-  "Str3615Params": {
-    "en": "For strategy '{0}' scheme is not specified.",
-    "ru": "Для стратегии '{0}' не задана схема."
-  },
-  "Str3616Params": {
-    "en": "Strategy '{0}' diagram contains errors.",
-    "ru": "Схема стратегии '{0}' содержит ошибки."
   },
   "CannotCloseTabForStartedStrategy": {
     "en": "To close the tab {0} strategy or testing process must be stopped.",
     "ru": "Для закрытия вкладки {0} необходимо остановить стратегию или процесс тестирования."
   },
-  "Str3618Params": {
-    "en": "Security {0} added to saving.",
-    "ru": "Добавление на сохранение инструмента {0}."
-  },
-  "Str3619Params": {
-    "en": "Portfolio {0} added to saving.",
-    "ru": "Добавление на сохранение портфеля {0}."
-  },
-  "Str3620Params": {
-    "en": "News {0} added to saving.",
-    "ru": "Добавление на сохранение новости {0}."
-  },
-  "Str3621Params": {
-    "en": "Search for portfolio {0}.",
-    "ru": "Поиск портфеля {0}."
-  },
   "PortfolioNotFound": {
     "en": "No suitable portfolio {0}.",
     "ru": "Нет подходящего портфеля {0}."
-  },
-  "Str3623Params": {
-    "en": "Search for security {0}.",
-    "ru": "Поиск инструмента {0}."
-  },
-  "Str3624Params": {
-    "en": "No suitable security {0}.",
-    "ru": "Нет подходящего инструмента {0}."
-  },
-  "Str3625": {
-    "en": "Emulation adapter not found.",
-    "ru": "Эмуляционный адаптер не найден."
-  },
-  "Str3626Params": {
-    "en": "Security {0} is associated with unknown board.",
-    "ru": "Инструмент {0} ассоциирован с неизвестной площадкой."
-  },
-  "Str3627Params": {
-    "en": "Error loading strategy '{0}': {1}",
-    "ru": "Ошибка загрузки стратегии '{0}': {1}"
-  },
-  "Str3628Params": {
-    "en": "Current version {0} of {1} database is out of date and will be updated to {2} with old copy saved.",
-    "ru": "Текущая версия {0} базы данных {1} устарела и будет обновлена до {2} с сохранением старой копии."
-  },
-  "Str3629Params": {
-    "en": "Error updating database: {0}",
-    "ru": "Ошибка при обновлении базы данных: {0}"
-  },
-  "Str3630Params": {
-    "en": "Error updating database.{0}{1}",
-    "ru": "Ошибка при обновлении базы данных.{0}{1}"
-  },
-  "Str3631": {
-    "en": "Impossible to reverse position since it is equal to zero.",
-    "ru": "Невозможно перевернуть позицию, так как она равна нулю."
-  },
-  "Str3632": {
-    "en": "Impossible to close position since it is equal to zero.",
-    "ru": "Невозможно закрыть позицию, так как она равна нулю."
-  },
-  "Str3633": {
-    "en": "Strategy does not contain information about CandleManager.",
-    "ru": "Стратегия не содержит информации о CandleManager."
   },
   "SmaNewCandleLog": {
     "en": "New candle {0}: {6} {1};{2};{3};{4}; volume {5}",
     "ru": "Новая свеча {0}: {6} {1};{2};{3};{4}; объем {5}"
   },
-  "Str3635Params": {
-    "en": "Error saving composite element: {0}",
-    "ru": "Ошибка сохранения составного элемента: {0}"
-  },
-  "Str3637": {
-    "en": "Arbitrage",
-    "ru": "Арбитраж"
-  },
-  "Str3638": {
-    "en": "Largest volume distribution by hour",
-    "ru": "Распределение наибольшего объема по часам"
-  },
-  "Str3639": {
-    "en": "Volume distribution by price levels",
-    "ru": "Распределение объема по ценовым уровням"
-  },
   "AssembliesFilter": {
     "en": ".NET assemblies (.dll)|*.dll",
     "ru": ".NET сборки (.dll)|*.dll"
-  },
-  "Str3641Params": {
-    "en": "Strategy '{0}' was loaded earlier.",
-    "ru": "Стратегия '{0}' уже была ранее загружена."
-  },
-  "Str3642Params": {
-    "en": "Strategy '{0}' does not have information about metadata.",
-    "ru": "Стратегия '{0}' не имеет информации о метаданных."
-  },
-  "Str3643": {
-    "en": "To get a license you must connect to S#. Connect now?",
-    "ru": "Для получения лицензии необходимо подключиться к S#. Подключиться сейчас?"
-  },
-  "Str3644": {
-    "en": "Error receiving a license: ",
-    "ru": "Ошибка при получении лицензии: "
-  },
-  "Str3645": {
-    "en": "Request for broker license sent.",
-    "ru": "Запрос на получение лицензии у брокера отправлен."
-  },
-  "Str3646": {
-    "en": "Error requesting license from broker: ",
-    "ru": "Ошибка при запросе лицензии у брокера: "
-  },
-  "Str3648Params": {
-    "en": "To close the tab {0} all running strategies must be stopped.",
-    "ru": "Для закрытия вкладки {0} необходимо остановить все работающие стратегии."
   },
   "AtLeastOneConnectionMustBe": {
     "en": "At least one connection should be made.",
@@ -10683,93 +9411,9 @@
     "en": "At least one connection must be active.",
     "ru": "Необходимо активировать хотя бы одно подключение."
   },
-  "Str3652Params": {
-    "en": "Strategy '{0}' is running for several configurations. They must first be stopped.",
-    "ru": "Стратегия '{0}' запущена для нескольких конфигураций. Необходимо предварительно их остановить."
-  },
-  "Str3654": {
-    "en": "Details: ",
-    "ru": "Детали: "
-  },
   "Search": {
     "en": "Search",
     "ru": "Поиск"
-  },
-  "Str3658Params": {
-    "en": "Publishing project {0}",
-    "ru": "Публикация проекта {0}"
-  },
-  "Str3659Params": {
-    "en": "Version {0} is already present in releases.",
-    "ru": "Версия {0} уже есть в релизах."
-  },
-  "Str3660Params": {
-    "en": "Copying files from {0} to {1}",
-    "ru": "Копирование файлов из {0} в {1}"
-  },
-  "Str3661Params": {
-    "en": "Compilation of project {0}|{1} {2}",
-    "ru": "Компиляция проекта {0}|{1} {2}"
-  },
-  "Str3662": {
-    "en": "Error compiling project",
-    "ru": "Ошибка при компиляции проекта"
-  },
-  "Str3663": {
-    "en": "Project successfully compiled.",
-    "ru": "Проект успешно скомпилирован."
-  },
-  "Str3666": {
-    "en": "Obfuscation of files",
-    "ru": "Обфускация файлов"
-  },
-  "Str3667Params": {
-    "en": "Obfuscation {0}.",
-    "ru": "Обфускация {0}."
-  },
-  "Str3668Params": {
-    "en": "Obfuscation error for {0}.",
-    "ru": "Ошибка обфускации для {0}."
-  },
-  "Str3669": {
-    "en": "Building updates",
-    "ru": "Построение обновлений"
-  },
-  "Str3670Params": {
-    "en": "File with description of version {0}",
-    "ru": "Файл с описанием версии {0}"
-  },
-  "Str3671": {
-    "en": "Error building updates",
-    "ru": "Ошибка при построении обновлений"
-  },
-  "Str3672": {
-    "en": "Completed building updates.",
-    "ru": "Построение обновлений завершено."
-  },
-  "Str3673": {
-    "en": "Path to a directory where publication data is stored is not specified.",
-    "ru": "Не указан путь к директории где хранятся данные для публикации."
-  },
-  "Str3674": {
-    "en": "WyBuild project file name is not specified.",
-    "ru": "Не указано имя файла проекта wyBuild."
-  },
-  "Str3675": {
-    "en": "Path to the assembly of a published project is not specified.",
-    "ru": "Не указан путь к сборке публикуемого проекта."
-  },
-  "Str3676Params": {
-    "en": "Scheme {0} has changed. Save changes?",
-    "ru": "Схема {0} была изменена. Сохранить изменения?"
-  },
-  "Str3677": {
-    "en": "Executable file is not specified.",
-    "ru": "Не указан файл для запуска."
-  },
-  "Str3678Params": {
-    "en": "New order for '{0}'",
-    "ru": "Новая заявка на '{0}'"
   },
   "ProxyUsed": {
     "en": "Is proxy used to connect to the internet.",
@@ -10799,189 +9443,13 @@
     "en": "Secret not specified.",
     "ru": "Не указан секрет."
   },
-  "Str3691Params": {
-    "en": "Token deserialization error: {0}",
-    "ru": "Ошибка десериализации токена: {0}"
-  },
-  "Str3692": {
-    "en": "Access server ID.",
-    "ru": "Идентификатор сервера доступа."
-  },
-  "Str3693": {
-    "en": " quotes",
-    "ru": " котировки"
-  },
-  "Str3694": {
-    "en": "History address",
-    "ru": "Адрес истории"
-  },
-  "Str3695": {
-    "en": "History server address.",
-    "ru": "Адрес сервера истории."
-  },
-  "Str3696": {
-    "en": "Market data address",
-    "ru": "Адрес маркет-данных"
-  },
-  "Str3697": {
-    "en": "Market data server address.",
-    "ru": "Адрес сервера маркет-данных."
-  },
-  "Str3698": {
-    "en": "Error code",
-    "ru": "Код ошибки"
-  },
-  "Str3700Params": {
-    "en": "Column {0} is missing in table {1}.",
-    "ru": "Колонка {0} отсутствует в таблице {1}."
-  },
-  "Str3701": {
-    "en": "Tables metainformation was not received.",
-    "ru": "Метаинформация о таблицах не получена."
-  },
-  "Str3702Params": {
-    "en": "Metainformation about table {0} was not received.",
-    "ru": "Метаинформация о таблице {0} не получена."
-  },
-  "Str3703Params": {
-    "en": "Unable to open table {0}.",
-    "ru": "Не удалось открыть таблицу {0}."
-  },
-  "Str3704": {
-    "en": "Failed to get security from secCode",
-    "ru": "Не удалось получить security по secCode"
-  },
-  "Str3705": {
-    "en": "Unsuccessful attempt to establish a connection.",
-    "ru": "Неудачная попытка установить соединение."
-  },
-  "Str3706Params": {
-    "en": "Type of order {0} is unknown.",
-    "ru": "Тип заявки {0} не известен."
-  },
-  "Str3707Params": {
-    "en": "Order {0} side is unknown.",
-    "ru": "Направление заявки {0} не известно."
-  },
-  "Str3708Params": {
-    "en": "Type of stop-order {0} is unknown.",
-    "ru": "Тип стоп заявки {0} не известен."
-  },
-  "Str3709Params": {
-    "en": "Cannot start market depth export for {0}.",
-    "ru": "Невозможно запустить экспорт стакана для {0}."
-  },
-  "Str3710": {
-    "en": "Load securities from LMAX website",
-    "ru": "Загружать инструменты с сайта LMAX"
-  },
-  "Str3711": {
-    "en": "Should the whole set of securities be loaded from LMAX website. If switched off, securities have to be searched through Search.",
-    "ru": "Загружать ли весь набор инструментов с сайта LMAX. Если выключено, то инструменты необходимо искать через поиск."
-  },
-  "Str3712Params": {
-    "en": "User '{0}' not found.",
-    "ru": "Пользователь '{0}' не найден."
-  },
-  "Str3713Params": {
-    "en": "User '{0}' does not support current authorization type.",
-    "ru": "Пользователь '{0}' не поддерживает текущий вид авторизации."
-  },
-  "Str3714Params": {
-    "en": "User '{0}' entered wrong password.",
-    "ru": "Пользователь '{0}' передал неправильный пароль."
-  },
-  "Str3715Params": {
-    "en": "Account activity {0} has been suspended.",
-    "ru": "Действие счета {0} приостановлено."
-  },
-  "Str3716Params": {
-    "en": "Portfolio {0} for orders restoration not found.",
-    "ru": "Портфель {0} для восстановления заявок не найден."
-  },
-  "Str3717Params": {
-    "en": "Security {0} for stop-order not found.",
-    "ru": "Инструмент {0} для стоп-заявки не найден."
-  },
-  "Str3718Params": {
-    "en": "Portfolio {0} for stop-orders not found.",
-    "ru": "Портфель {0} для стоп-заявки не найден."
-  },
-  "Str3719": {
-    "en": "Stop-order registration is not supported.",
-    "ru": "Замена стоп-заявок не поддерживается."
-  },
   "Port": {
     "en": "Port",
     "ru": "Порт"
   },
-  "Str3721": {
-    "en": "FIX listening port.",
-    "ru": "Слушающий порт FIX."
-  },
-  "Str3722": {
-    "en": "Authorization for server access.",
-    "ru": "Авторизация для получения доступа к серверу."
-  },
-  "Str3723": {
-    "en": "Long IDs",
-    "ru": "Длинные идентификаторы"
-  },
-  "Str3724": {
-    "en": "Use long transaction IDs. Does not work for real connections.",
-    "ru": "Использовать длинные идентификаторы транзакций. Не работает для реальных подключений."
-  },
   "User": {
     "en": "User",
     "ru": "Пользователь"
-  },
-  "Str3726": {
-    "en": "Role",
-    "ru": "Роль"
-  },
-  "Str3727": {
-    "en": "Role of user in system.",
-    "ru": "Роль пользователя в системе."
-  },
-  "Str3728": {
-    "en": "Is system access blocked.",
-    "ru": "Заблокирован ли доступ к системе."
-  },
-  "Str3729": {
-    "en": "Current account balance.",
-    "ru": "Текущее количество денег на счету."
-  },
-  "Str3730": {
-    "en": "Margin call",
-    "ru": "МаржинКол"
-  },
-  "Str3731": {
-    "en": "Offset from zero, when its value decreases below available account balance the account gets blocked.",
-    "ru": "Отступ от нуля, при уменьшении которого ниже денег на счете наступает блокировка счета."
-  },
-  "Str3732": {
-    "en": "Market data sending interval.",
-    "ru": "Интервал рассылки маркет-данных."
-  },
-  "Str3733Params": {
-    "en": "State of security {0}.",
-    "ru": "Сохранение инструмента {0}."
-  },
-  "Str3734Params": {
-    "en": "Portfolio {0} change.",
-    "ru": "Изменение портфеля {0}."
-  },
-  "Str3735Params": {
-    "en": "Saving portfolio {0}.",
-    "ru": "Сохранение портфеля {0}."
-  },
-  "Str3736Params": {
-    "en": "Creating new portfolio {0}.",
-    "ru": "Создание нового портфеля {0}."
-  },
-  "Str3737Params": {
-    "en": "Creating new user {0}.",
-    "ru": "Создание нового пользователя {0}."
   },
   "PasswordWasNotChangedCauseError": {
     "en": "Password was not changed because of incorrect data.",
@@ -10990,38 +9458,6 @@
   "PasswordChangedOk": {
     "en": "Password was successfully changed.",
     "ru": "Пароль был успешно изменен."
-  },
-  "Str3740Params": {
-    "en": "New security {0}.",
-    "ru": "Новый инструмент {0}."
-  },
-  "Str3745Params": {
-    "en": "Account {0} blocked because of margin call.",
-    "ru": "Счет {0} заблокирован из-за маржин кола."
-  },
-  "Str3746": {
-    "en": "Market data session.",
-    "ru": "Сессия маркет-данных."
-  },
-  "Str3747": {
-    "en": " candles history",
-    "ru": " история свечей"
-  },
-  "Str3748": {
-    "en": "Time period for which the data has to be received is not specified.",
-    "ru": "Не указан период, за который необходимо получить данные."
-  },
-  "Str3749": {
-    "en": " trades history",
-    "ru": " история сделок"
-  },
-  "Str3750": {
-    "en": "Date for which data has to be received is not specified.",
-    "ru": "Не указана дата, за которую необходимо получить данные."
-  },
-  "Str3751": {
-    "en": "Login is not specified.",
-    "ru": "Не указано имя пользователя."
   },
   "ExportAuto": {
     "en": "Export (auto)",
@@ -11035,10 +9471,6 @@
     "en": "Export type (format).",
     "ru": "Тип экспорта (формат)."
   },
-  "Str3757": {
-    "en": "From what date to begin exporting data.",
-    "ru": "С какой даты начать экспортировать данные."
-  },
   "ExportDir": {
     "en": "Export directory",
     "ru": "Директория экспорта"
@@ -11046,10 +9478,6 @@
   "ExportDirDesc": {
     "en": "Directory where data will be exported.",
     "ru": "Директория, куда будут экспортироваться данные."
-  },
-  "Str3761": {
-    "en": "Candles parameters.",
-    "ru": "Параметры свечей."
   },
   "ConnectionDatabaseDesc": {
     "en": "Connection to database. Used in exporting through SQL.",
@@ -11091,33 +9519,9 @@
     "en": "{0}. Export {1} to {2}. Dates {3}-{4}.",
     "ru": "{0}. Экспорт {1} в {2}. Даты {3}-{4}."
   },
-  "Str3773": {
-    "en": "OL to ticks",
-    "ru": "ОЛ в тики"
-  },
-  "Str3774": {
-    "en": "OL to order books",
-    "ru": "ОЛ в стаканы"
-  },
-  "Str3775": {
-    "en": "OL to candles",
-    "ru": "ОЛ в свечи"
-  },
-  "Str3776": {
-    "en": "Ticks to candles",
-    "ru": "Тики в свечи"
-  },
-  "Str3777": {
-    "en": "Order books to candle",
-    "ru": "Стаканы в свечи"
-  },
   "TimeOffsetDesc": {
     "en": "Time offset in days from date of launching task.",
     "ru": "Временной отступ в днях от даты запуска задачи."
-  },
-  "Str3779": {
-    "en": "From what date to start data conversion.",
-    "ru": "С какой даты начать конвертировать данные."
   },
   "DepthGenerationInterval": {
     "en": "Market depths generation interval.",
@@ -11143,10 +9547,6 @@
     "en": "Processing security {0}. Conversion {1} to {2} at {3}.",
     "ru": "Обработка инструмента {0}. Конвертация {1} в {2} за {3}."
   },
-  "Str3789": {
-    "en": "Quote type (bid or ask).",
-    "ru": "Тип котировки (бид или оффер)."
-  },
   "Pin": {
     "en": "Pin",
     "ru": "Пин"
@@ -11163,18 +9563,6 @@
     "en": "Unsupported type of security {0}.",
     "ru": "Неподдерживаемый тип инструмента {0}."
   },
-  "Str3800": {
-    "en": "Options orders settings.",
-    "ru": "Настройки для заявок на опционы."
-  },
-  "Str3802": {
-    "en": "Unknown direction value.",
-    "ru": "Неизвестное значение направления."
-  },
-  "Str3803": {
-    "en": "Extended type of order not initialized.",
-    "ru": "Расширенный тип заявки не инициализирован."
-  },
   "AddrNotSpecified": {
     "en": "Address is not specified.",
     "ru": "Не указан адрес."
@@ -11187,10 +9575,6 @@
     "en": "Alor (history)",
     "ru": "Alor (история)"
   },
-  "Str3835": {
-    "en": "Client number is not specified.",
-    "ru": "Не указан номер клиента."
-  },
   "TokenNotSpecified": {
     "en": "Token is not specified.",
     "ru": "Не указан токен."
@@ -11198,26 +9582,6 @@
   "OandaHistory": {
     "en": "OANDA (history)",
     "ru": "OANDA (история)"
-  },
-  "Str3838Params": {
-    "en": "Start downloading quotes for {0} for {1}.",
-    "ru": "Старт загрузки котировок за {0} для {1}."
-  },
-  "Str3839Params": {
-    "en": "Error loading quotes for {0} for {1}.",
-    "ru": "Ошибка загрузки котировок за {0} для {1}."
-  },
-  "Str3843": {
-    "en": "Cannot cast adapter with type {0} to {1}.",
-    "ru": "Невозможно привести адаптера с типом {0} к {1}."
-  },
-  "Str3844": {
-    "en": "The path to gate launch script not set.",
-    "ru": "Не задан путь к скрипту запуска шлюза для подключения к маркету."
-  },
-  "Str3845": {
-    "en": "Gate launch script file not found. Path: {0}.",
-    "ru": "Не найден файл скрипта запуска шлюза для подключения к маркету. Путь {0}"
   },
   "TaskSettings": {
     "en": "{0} task settings",
@@ -12378,10 +10742,6 @@
   "TaskDeleting": {
     "en": "Deleting task '{0}'.",
     "ru": "Удаление задачи '{0}'."
-  },
-  "Str3028Params": {
-    "en": "License file was downloaded into folder '{0}'.",
-    "ru": "Файл лицензии был сохранен в директорию '{0}'."
   },
   "TasksHasSameDirectories": {
     "en": "Tasks '{0}' has same working directory '{1}'.",
