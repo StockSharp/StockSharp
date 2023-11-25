@@ -1,4 +1,8 @@
 {
+  "RandomElement": {
+    "en": "The diagram element to generate random value.",
+    "ru": "Элемент диаграммы, генерирующее случайное значение."
+  },
   "InstallerAutoKillApplication": {
     "en": "Try to close target application if it's not responding",
     "ru": "Попытаться закрыть целевое приложение если оно не отвечает"
