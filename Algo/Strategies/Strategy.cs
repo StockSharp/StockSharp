@@ -3016,7 +3016,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Determines <see cref="Connector"/> is <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
-		protected bool IsBacktesting => Connector is HistoryEmulationConnector;
+		public bool IsBacktesting => Connector is HistoryEmulationConnector;
 
 		private ISecurityProvider SecurityProvider => SafeGetConnector();
 

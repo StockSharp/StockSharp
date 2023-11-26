@@ -170,6 +170,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <returns>If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</returns>
+		[Obsolete("Use Strategy.IsBacktesting property.")]
 		public static bool GetIsEmulation(this Strategy strategy)
 		{
 			return strategy.Environment.GetValue(_isEmulationModeKey, false);
@@ -180,6 +181,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="isEmulation">If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</param>
+		[Obsolete("Use Strategy.IsBacktesting property.")]
 		public static void SetIsEmulation(this Strategy strategy, bool isEmulation)
 		{
 			strategy.Environment.SetValue(_isEmulationModeKey, isEmulation);
