@@ -37,6 +37,7 @@ partial class Strategy
 		set => CommentMode = value ? StrategyCommentModes.Name : StrategyCommentModes.Disabled;
 	}
 
+#pragma warning disable 67
 	/// <inheritdoc />
 	[Obsolete("Use OrderRegisterFailed event.")]
 	public event Action<OrderFail> StopOrderRegisterFailed;
@@ -72,6 +73,7 @@ partial class Strategy
 	/// <inheritdoc />
 	[Obsolete("Use OrderCancelFailed event.")]
 	public event Action<OrderFail> StopOrderCancelFailed;
+#pragma warning restore 67
 
 	/// <summary>
 	/// The method is called when the <see cref="Start()"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
