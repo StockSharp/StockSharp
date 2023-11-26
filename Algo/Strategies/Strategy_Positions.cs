@@ -115,7 +115,7 @@
 		// Also, child strategies do not subscribe for positions
 		// So, child strategies do not recieve and position updates.
 		// This manager allows child strategies to track their own position based on order state/balance.
-		class ChildStrategyPositionManager : BaseLogReceiver, IPositionManager
+		private class ChildStrategyPositionManager : BaseLogReceiver, IPositionManager
 		{
 			readonly StrategyPositionManager _inner;
 			readonly CachedSynchronizedDictionary<(SecurityId secId, string portName), decimal> _positions = new();
