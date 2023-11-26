@@ -64,11 +64,8 @@ public class GeneticOptimizer : BaseOptimizer
 
 			Strategy strategy;
 
-			lock (_optimizer)
-			{
-				using (new Scope<CloneHelper.CloneWithoutUI>())
-					strategy = _strategy.Clone();
-			}
+			using (new Scope<CloneHelper.CloneWithoutUI>())
+				strategy = _strategy.Clone();
 
 			strategy.Security = _strategy.Security;
 			strategy.Portfolio = _strategy.Portfolio;
