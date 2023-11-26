@@ -50,10 +50,8 @@ namespace SampleHistoryTesting
 			_shortSmaParam = this.Param(nameof(ShortSma), 30);
 			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1)));
 			_candleTimeFrameParam = this.Param<TimeSpan?>(nameof(CandleTimeFrame));
-			_buildFromParam = this.Param<DataType>(nameof(BuildFrom));
+			_buildFromParam = this.Param<DataType>(nameof(BuildFrom)).NotNull();
 			_buildFieldParam = this.Param<Level1Fields?>(nameof(BuildField));
-
-			_candleTypeParam.AllowNull = false;
 		}
 
 		private readonly StrategyParam<TimeSpan?> _candleTimeFrameParam;

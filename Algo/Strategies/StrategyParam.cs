@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.ComponentModel;
 
 	using StockSharp.Logging;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// The strategy parameter.
@@ -128,7 +129,6 @@ namespace StockSharp.Algo.Strategies
 			_value = initialValue;
 
 			CanOptimize = typeof(T).CanOptimize();
-			AllowNull = typeof(T).IsNullable() || typeof(T).IsClass || typeof(T).IsInterface;
 
 			_comparer = EqualityComparer<T>.Default;
 		}
@@ -139,11 +139,6 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public string Name { get; private set; }
 
-		/// <summary>
-		/// Is it possible to store in <see cref="Value"/> a value, equal to <see langword="null" />.
-		/// </summary>
-		public bool AllowNull { get; set; }
-
 		private T _value;
 
 		/// <inheritdoc />
@@ -152,30 +147,27 @@ namespace StockSharp.Algo.Strategies
 			get => _value;
 			set
 			{
-				if (value is null)
-				{
-					if (!AllowNull)
-						throw new ArgumentNullException(nameof(value));
+				if (Validator?.Invoke(value) == false)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
-					if (_value is null)
-						return;
-				}
-				else
-				{
-					if (_comparer.Equals(_value, value))
-						return;
-				}
+				if (_comparer.Equals(_value, value))
+					return;
 
 				if (_value is INotifyPropertyChanged propChange)
 					propChange.PropertyChanged -= OnValueInnerStateChanged;
 
 				_value = value;
-				this.NotifyChanged(nameof(Value));
+				NotifyChanged(nameof(Value));
 
 				if (_value is INotifyPropertyChanged propChange2)
 					propChange2.PropertyChanged += OnValueInnerStateChanged;
 			}
 		}
+
+		/// <summary>
+		/// <see cref="Value"/> validator.
+		/// </summary>
+		public Func<T, bool> Validator { get; set; }
 
 		Type IStrategyParam.Type => typeof(T);
 

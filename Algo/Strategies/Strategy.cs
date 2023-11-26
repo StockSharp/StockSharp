@@ -406,26 +406,26 @@ namespace StockSharp.Algo.Strategies
 			Parameters = new(this);
 
 			_id = this.Param(nameof(Id), base.Id);
-			_volume = this.Param<decimal>(nameof(Volume), 1);
+			_volume = this.Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0);
 			_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
-			_maxErrorCount = this.Param(nameof(MaxErrorCount), 1);
-			_maxOrderRegisterErrorCount = this.Param(nameof(MaxOrderRegisterErrorCount), 10);
+			_maxErrorCount = this.Param(nameof(MaxErrorCount), 1).SetValidator(v => v >= 1);
+			_maxOrderRegisterErrorCount = this.Param(nameof(MaxOrderRegisterErrorCount), 10).SetValidator(v => v >= -1);
 			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
 			_waitRulesOnStop = this.Param(nameof(WaitRulesOnStop), true);
 			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
 			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
 			_commentMode = this.Param<StrategyCommentModes>(nameof(CommentMode));
-			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1));
+			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1)).SetValidator(v => v >= TimeSpan.Zero);
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
 			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Full);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
-			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue);
-			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval));
-			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime());
+			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue).SetValidator(v => v >= 0);
+			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval)).SetValidator(v => v >= TimeSpan.Zero);
+			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime()).NotNull();
 			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true);
-			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired));
+			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired)).SetValidator(v => v is null || v >= TimeSpan.Zero);
 
 			_ordersKeepTime.CanOptimize =
 			_registerInterval.CanOptimize =
@@ -433,8 +433,6 @@ namespace StockSharp.Algo.Strategies
 			_maxOrderRegisterErrorCount.CanOptimize =
 			_maxRegisterCount.CanOptimize =
 			_historyRequired.CanOptimize = false;
-
-			InitMaxOrdersKeepTime();
 
 			_riskManager = new RiskManager { Parent = this };
 
@@ -869,13 +867,7 @@ namespace StockSharp.Algo.Strategies
 		public int MaxErrorCount
 		{
 			get => _maxErrorCount.Value;
-			set
-			{
-				if (value < 1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-				_maxErrorCount.Value = value;
-			}
+			set => _maxErrorCount.Value = value;
 		}
 
 		private int _errorCount;
@@ -914,13 +906,7 @@ namespace StockSharp.Algo.Strategies
 		public int MaxOrderRegisterErrorCount
 		{
 			get => _maxOrderRegisterErrorCount.Value;
-			set
-			{
-				if (value < -1)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-				_maxOrderRegisterErrorCount.Value = value;
-			}
+			set => _maxOrderRegisterErrorCount.Value = value;
 		}
 
 		private int _orderRegisterErrorCount;
@@ -965,13 +951,7 @@ namespace StockSharp.Algo.Strategies
 		public int MaxRegisterCount
 		{
 			get => _maxRegisterCount.Value;
-			set
-			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-				_maxRegisterCount.Value = value;
-			}
+			set => _maxRegisterCount.Value = value;
 		}
 
 		private readonly StrategyParam<TimeSpan> _registerInterval;
@@ -991,13 +971,7 @@ namespace StockSharp.Algo.Strategies
 		public TimeSpan RegisterInterval
 		{
 			get => _registerInterval.Value;
-			set
-			{
-				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-				_registerInterval.Value = value;
-			}
+			set => _registerInterval.Value = value;
 		}
 
 		bool IScheduledTask.CanStart => ProcessState == ProcessStates.Stopped;
@@ -1015,16 +989,7 @@ namespace StockSharp.Algo.Strategies
 		public WorkingTime WorkingTime
 		{
 			get => _workingTime.Value;
-			set
-			{
-				if (value is null)
-					throw new ArgumentNullException(nameof(value));
-
-				if (WorkingTime == value)
-					return;
-
-				_workingTime.Value = value;
-			}
+			set => _workingTime.Value = value;
 		}
 
 		private ProcessStates _processState;
@@ -1189,15 +1154,7 @@ namespace StockSharp.Algo.Strategies
 		public TimeSpan OrdersKeepTime
 		{
 			get => _ordersKeepTime.Value;
-			set
-			{
-				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-				_ordersKeepTime.Value = value;
-				InitMaxOrdersKeepTime();
-				RecycleOrders();
-			}
+			set => _ordersKeepTime.Value = value;
 		}
 
 		private readonly StrategyParam<bool> _restoreChildOrders;
@@ -1273,11 +1230,6 @@ namespace StockSharp.Algo.Strategies
 			set => _unsubscribeOnStop.Value = value;
 		}
 
-		private void InitMaxOrdersKeepTime()
-		{
-			_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
-		}
-
 		private readonly CachedSynchronizedSet<MyTrade> _myTrades = new();
 
 		/// <summary>
@@ -1297,9 +1249,6 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Operational volume.
 		/// </summary>
-		/// <remarks>
-		/// If the value is set 0, the parameter is ignored.
-		/// </remarks>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
@@ -1309,13 +1258,7 @@ namespace StockSharp.Algo.Strategies
 		public virtual decimal Volume
 		{
 			get => _volume.Value;
-			set
-			{
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-				_volume.Value = value;
-			}
+			set => _volume.Value = value;
 		}
 
 		private LogLevels _errorState;
@@ -1656,6 +1599,8 @@ namespace StockSharp.Algo.Strategies
 
 			if (Portfolio?.CurrentValue is not null)
 				StatisticManager.Init<IPnLStatisticParameter, decimal>(Portfolio.CurrentValue.Value);
+
+			_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
 		}
 
 		/// <summary>
@@ -3154,13 +3099,7 @@ namespace StockSharp.Algo.Strategies
 		public TimeSpan? HistoryRequired
 		{
 			get => _historyRequired.Value;
-			set
-			{
-				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-
-				_historyRequired.Value = value;
-			}
+			set => _historyRequired.Value = value;
 		}
 
 		/// <summary>
