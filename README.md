@@ -1,11 +1,14 @@
 <img src="./Media/SLogo.png" align="right" />
+### this is a custom project building off of StockSharp, "master" branch is only used to grab latest source code from StockSharp for comparison, there will be a release branch once things are working.  This project will remain FOSS, I'm learning as I go, so progress will be slow but if you'd like to contribute, please contact me and I'll include you in the project ###
 
-# [StockSharp - trading platform][1] 
+
+
+# [StockSharpR - trading platform][1] 
 ## [Doc][2] | [Download][3] | [Chat][7] | [Education][4]
 
 ## Introduction ##
 
-**StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
+**StockSharpR** (shortly **S#R**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
 **Available connections**: FIX/FAST, ITCH (LSE, NASDAQ), Blackwood/Fusion, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, OpenECry, Rithmic, RSS, Sterling, BTCE, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, KuCoin, BITEXBOOK, CoinExchange, QuantFEED and many other.
 
