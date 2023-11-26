@@ -48,9 +48,9 @@ namespace SampleHistoryTesting
         {
 			_longSmaParam = this.Param(nameof(LongSma), 80);
 			_shortSmaParam = this.Param(nameof(ShortSma), 30);
-			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1)));
+			_candleTypeParam = this.Param(nameof(CandleType), DataType.TimeFrame(TimeSpan.FromMinutes(1))).NotNull();
 			_candleTimeFrameParam = this.Param<TimeSpan?>(nameof(CandleTimeFrame));
-			_buildFromParam = this.Param<DataType>(nameof(BuildFrom)).NotNull();
+			_buildFromParam = this.Param<DataType>(nameof(BuildFrom));
 			_buildFieldParam = this.Param<Level1Fields?>(nameof(BuildField));
 		}
 
