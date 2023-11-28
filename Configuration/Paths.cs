@@ -200,6 +200,11 @@
 		public const string InstallerAppName = "StockSharp.Installer.UI";
 
 		/// <summary>
+		/// Setup name.
+		/// </summary>
+		public const string SetupName = "stocksharp_setup";
+
+		/// <summary>
 		/// Web site domain.
 		/// </summary>
 		public static string Domain => LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "ru" : "com";
