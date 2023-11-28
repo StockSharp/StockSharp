@@ -310,7 +310,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.TimeKey,
-			Description = LocalizedStrings.PositionTimeKey,
+			Description = LocalizedStrings.PositionTimeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public TimeSpan Time
@@ -958,7 +958,7 @@ namespace StockSharp.Algo.Risk
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
-			Description = LocalizedStrings.TradeVolumeKey,
+			Description = LocalizedStrings.TradeVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 0)]
 		public decimal Volume

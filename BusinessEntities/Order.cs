@@ -371,7 +371,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DirectionKey,
-			Description = LocalizedStrings.OrderSideKey,
+			Description = LocalizedStrings.OrderSideDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides Side { get; set; }
 

@@ -268,7 +268,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.CommissionKey,
-			Description = LocalizedStrings.TotalCommissionKey,
+			Description = LocalizedStrings.TotalCommissionDescKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]
@@ -294,7 +294,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SettlementPriceKey,
-			Description = LocalizedStrings.SettlementPriceKey,
+			Description = LocalizedStrings.SettlementPriceDescKey,
 			GroupName = LocalizedStrings.StatisticsKey)]
 		//[Nullable]
 		[Browsable(false)]

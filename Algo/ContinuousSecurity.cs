@@ -316,7 +316,7 @@ namespace StockSharp.Algo
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OIKey,
-			Description = LocalizedStrings.OpenInterestKey,
+			Description = LocalizedStrings.OpenInterestDescKey,
 			GroupName = LocalizedStrings.ContinuousSecurityKey,
 			Order = 1)]
 		public bool IsOpenInterest { get; set; }

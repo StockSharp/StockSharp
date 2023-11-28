@@ -238,7 +238,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeTradeKey,
-			Description = LocalizedStrings.TradeVolumeKey,
+			Description = LocalizedStrings.TradeVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		//[Nullable]
 		public decimal? TradeVolume { get; set; }
@@ -262,7 +262,7 @@ namespace StockSharp.Messages
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.DirectionKey,
-			Description = LocalizedStrings.OrderSideKey,
+			Description = LocalizedStrings.OrderSideDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public Sides Side { get; set; }
 

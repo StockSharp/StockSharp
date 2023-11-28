@@ -230,7 +230,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.ChangeTimeKey,
+			Name = LocalizedStrings.ConvertTimeKey,
 			Description = LocalizedStrings.ConvertTimeDescKey,
 			GroupName = LocalizedStrings.BacktestExtraKey,
 			Order = 213)]

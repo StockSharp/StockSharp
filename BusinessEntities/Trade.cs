@@ -115,7 +115,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.VolumeKey,
-			Description = LocalizedStrings.TradeVolumeKey,
+			Description = LocalizedStrings.TradeVolumeDescKey,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]
 		public decimal Volume { get; set; }

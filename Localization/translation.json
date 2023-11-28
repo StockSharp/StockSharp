@@ -217,7 +217,7 @@
   },
   "ServerStopOrders": {
     "en": "Try use server-side stop orders if underlying connector provide it.",
-    "ru": "Попытаться использовать серверные стоп-ордера если подключение их поддерживает."
+    "ru": "Попытаться использовать серверные стоп-заявки если подключение их поддерживает."
   },
   "SupportEmptyDepth": {
     "en": "Translates empty depth.",
@@ -359,10 +359,6 @@
     "en": "%R",
     "ru": "%R"
   },
-  "MFI": {
-    "en": "MFI",
-    "ru": "MFI"
-  },
   "ChaikinVolatility": {
     "en": "Chaikin's Volatility",
     "ru": "Волатильность Чайкина"
@@ -426,10 +422,6 @@
   "ATR": {
     "en": "ATR",
     "ru": "ATR"
-  },
-  "ROC": {
-    "en": "ROC",
-    "ru": "ROC"
   },
   "AO": {
     "en": "AO",
@@ -842,10 +834,6 @@
   "Parallel": {
     "en": "Parallel",
     "ru": "Parallel"
-  },
-  "ParallelDesc": {
-    "en": "Max number of parallel messages processing.",
-    "ru": "Максимальное количество параллельных сообщений для обработки."
   },
   "PolygonIO": {
     "en": "Polygon.io",
@@ -2053,19 +2041,11 @@
   },
   "BuyPendingColor": {
     "en": "Buy pending color",
-    "ru": "Цвет неактивного Buy ордера"
-  },
-  "BuyColor": {
-    "en": "Buy color",
-    "ru": "Цвет Buy ордера"
+    "ru": "Цвет неактивной покупки"
   },
   "SellPendingColor": {
     "en": "Sell pending color",
-    "ru": "Цвет неактивного Sell ордера"
-  },
-  "SellColor": {
-    "en": "Sell color",
-    "ru": "Цвет Sell ордера"
+    "ru": "Цвет неактивной продажи"
   },
   "CancelButtonColor": {
     "en": "Cancel button color",
@@ -2282,10 +2262,6 @@
   "WrongLoginOrPassword": {
     "en": "Wrong login or password.",
     "ru": "Неправильный логин или пароль."
-  },
-  "UserBlocked": {
-    "en": "User account blocked.",
-    "ru": "Учетная запись заблокирована."
   },
   "SessionExpired": {
     "en": "Session was expired or not created.",
@@ -2511,10 +2487,6 @@
     "en": "OI",
     "ru": "ОИ"
   },
-  "OpenInterest": {
-    "en": "Open interest.",
-    "ru": "Открытый интерес."
-  },
   "Tick": {
     "en": "Tick",
     "ru": "Тик"
@@ -2659,7 +2631,7 @@
     "en": "Direction",
     "ru": "Направление"
   },
-  "OrderSide": {
+  "OrderSideDesc": {
     "en": "Order side (buy or sell).",
     "ru": "Направление заявки (покупка или продажа)."
   },
@@ -2701,7 +2673,7 @@
   },
   "IsSystemTrade": {
     "en": "Is a system trade.",
-    "ru": "Является ли заявка системной."
+    "ru": "Является ли сделка системной."
   },
   "OrderExpirationTime": {
     "en": "Order expiration time.",
@@ -2786,10 +2758,6 @@
   "SlippageTrade": {
     "en": "Slippage in trade price.",
     "ru": "Проскальзывание в цене сделки."
-  },
-  "UserId": {
-    "en": "ID (user)",
-    "ru": "Идентификатор (пользоват.)"
   },
   "UserOrderId": {
     "en": "User's order ID.",
@@ -3035,10 +3003,6 @@
     "en": "Negotiated Trades Mode",
     "ru": "Режим переговорных сделок"
   },
-  "PortfolioName": {
-    "en": "Portfolio code name.",
-    "ru": "Кодовое название портфеля."
-  },
   "Active": {
     "en": "Active",
     "ru": "Активен"
@@ -3089,7 +3053,7 @@
   },
   "TotalCommission": {
     "en": "Total commission",
-    "ru": "Общий размер комиссий"
+    "ru": "Суммарная комиссия"
   },
   "CurrValueInLots": {
     "en": "Current value (in lots)",
@@ -3240,12 +3204,8 @@
     "ru": "ГО (продажа)"
   },
   "PriceStep": {
-    "en": "Minimum price step",
-    "ru": "Минимальный шаг цены"
-  },
-  "VolumeStep": {
-    "en": "Minimum volume step",
-    "ru": "Минимальный шаг объема"
+    "en": "Price step",
+    "ru": "Шаг цены"
   },
   "LastTradePrice": {
     "en": "Last trade price",
@@ -3302,10 +3262,6 @@
   "Yield": {
     "en": "Yield",
     "ru": "Доходность"
-  },
-  "LastTradeTime": {
-    "en": "Time of last trade",
-    "ru": "Время последней сделки"
   },
   "NumOfTrades": {
     "en": "Number of trades",
@@ -3478,10 +3434,6 @@
   "LotVolume": {
     "en": "Lot volume.",
     "ru": "Объем лота."
-  },
-  "PriceStep": {
-    "en": "Price step",
-    "ru": "Шаг цены"
   },
   "MinPriceStep": {
     "en": "Minimum price step.",
@@ -3687,10 +3639,6 @@
     "en": "Variation margin.",
     "ru": "Вариационная маржа."
   },
-  "TotalCommission": {
-    "en": "Total commission.",
-    "ru": "Общий размер комиссий."
-  },
   "Changed": {
     "en": "Changed",
     "ru": "Изменен"
@@ -3755,10 +3703,6 @@
     "en": "Spread middle",
     "ru": "Середина спреда"
   },
-  "OwnTrade": {
-    "en": "Own trade",
-    "ru": "Собственная сделка"
-  },
   "OwnTradeDesc": {
     "en": "Information about own trade.",
     "ru": "Информация о собственной сделке."
@@ -3810,10 +3754,6 @@
   "OrderCancelLatency": {
     "en": "Time taken to cancel an order.",
     "ru": "Время, которое потребовалось для отмены заявки."
-  },
-  "RegTime": {
-    "en": "Reg time",
-    "ru": "Время выставления"
   },
   "RegTimeDesc": {
     "en": "Order registration time on exchange.",
@@ -3951,10 +3891,6 @@
     "en": "Best bid in market depth.",
     "ru": "Лучшая покупка в стакане."
   },
-  "BestAsk": {
-    "en": "Best ask",
-    "ru": "Лучшая продажа"
-  },
   "BestAskDesc": {
     "en": "Best ask in market depth.",
     "ru": "Лучшая продажа в стакане."
@@ -3979,11 +3915,11 @@
     "en": "Upper price limit.",
     "ru": "Верхний лимит цены."
   },
-  "MarginBuy": {
+  "MarginBuyDesc": {
     "en": "Initial margin to buy.",
     "ru": "Гарантийное обеспечение на покупку."
   },
-  "MarginSell": {
+  "MarginSellDesc": {
     "en": "Initial margin to sell.",
     "ru": "Гарантийное обеспечение на продажу."
   },
@@ -4011,27 +3947,19 @@
     "en": "Option rho.",
     "ru": "Ро опциона."
   },
-  "BidsVolume": {
+  "BidsVolumeDesc": {
     "en": "Total volume in all buy orders.",
     "ru": "Суммарный объем во всех заявках на покупку."
   },
-  "Bids": {
-    "en": "Bids",
-    "ru": "Бидов"
-  },
-  "BidsCount": {
+  "BidsCountDesc": {
     "en": "Number of buy orders.",
     "ru": "Количество заявок на покупку."
   },
-  "AsksVolume": {
+  "AsksVolumeDesc": {
     "en": "Total volume in all sell orders.",
     "ru": "Суммарный объем во всех заявках на продажу."
   },
-  "Asks": {
-    "en": "Asks",
-    "ru": "Офферов"
-  },
-  "AsksCount": {
+  "AsksCountDesc": {
     "en": "Number of sell orders.",
     "ru": "Количество заявок на продажу."
   },
@@ -4051,7 +3979,7 @@
     "en": "Average price",
     "ru": "Средневзвешенная цена"
   },
-  "SettlementPrice": {
+  "SettlementPriceDesc": {
     "en": "Settlement price.",
     "ru": "Расчетная цена."
   },
@@ -4083,7 +4011,7 @@
     "en": "Trade received local time.",
     "ru": "Локальное время получения сделки."
   },
-  "TradeVolume": {
+  "TradeVolumeDesc": {
     "en": "Number of contracts in the trade.",
     "ru": "Количество контрактов в сделке."
   },
@@ -4094,10 +4022,6 @@
   "SystemTrade": {
     "en": "System trade",
     "ru": "Системная сделка"
-  },
-  "IsSystemTrade": {
-    "en": "Is a system trade.",
-    "ru": "Является ли сделка системной."
   },
   "LimitedValueNotMath": {
     "en": "Limited value cannot participate in mathematical operations.",
@@ -4383,10 +4307,6 @@
     "en": "Maximum value for a period.",
     "ru": "Максимальное значение за период."
   },
-  "LinearRegression": {
-    "en": "Linear regression - Value returns the last point prediction.",
-    "ru": "Линейная регрессия - Value возвращает прогноз последней точки."
-  },
   "LinearRegressionDesc": {
     "en": "Complete linear regression, simultaneously calculates LinearReg, LinearRegSlope, RSquared and StandardError.",
     "ru": "Полная линейная регрессия, считает одновременно LinearReg, LinearRegSlope, RSquared и StandardError."
@@ -4438,10 +4358,6 @@
   "Field": {
     "en": "Field",
     "ru": "Поле"
-  },
-  "Level1Field": {
-    "en": "Level one market-data field, which is used as an indicator value.",
-    "ru": "Поле маркет-данных первого уровня, которое используется как значение индикатора."
   },
   "StandardErrorLinearReg": {
     "en": "Standard error in linear regression.",
@@ -4651,7 +4567,7 @@
     "en": "Convergence/divergence of moving averages. Histogram.",
     "ru": "Схождение/расхождение скользящих средних. Гистограмма."
   },
-  "MACDDesc": {
+  "MACDSignalDesc": {
     "en": "Convergence/divergence of moving averages with signal line.",
     "ru": "Схождение/расхождение скользящих средних с сигнальной линией."
   },
@@ -4879,17 +4795,13 @@
     "en": "Risk-rule, tracking position lifetime.",
     "ru": "Риск-правило, отслеживающее время жизни позиции."
   },
-  "PositionTime": {
+  "PositionTimeDesc": {
     "en": "Position lifetime.",
     "ru": "Время жизни позиции."
   },
   "RiskCommission": {
     "en": "Risk-rule, tracking commission size.",
     "ru": "Риск-правило, отслеживающее размер комиссии."
-  },
-  "CommissionDesc": {
-    "en": "Commission size.",
-    "ru": "Размер комиссии."
   },
   "RiskSlippage": {
     "en": "Risk-rule, tracking slippage size.",
@@ -5503,8 +5415,8 @@
     "en": "Portfolios data recalculation interval. If interval is equal to zero, then recalculation is not performed.",
     "ru": "Интервал перерасчета данных по портфелям. Если интервал равен нулю, то перерасчет не выполняется."
   },
-  "ChangeTime": {
-    "en": "Change time",
+  "ConvertTime": {
+    "en": "Convert time",
     "ru": "Переводить время"
   },
   "ConvertTimeDesc": {
@@ -6451,10 +6363,6 @@
     "en": "More or equal",
     "ru": "Больше или равно"
   },
-  "LessOrEqual": {
-    "en": "Less than or equal",
-    "ru": "Меньше или равно"
-  },
   "StopLimit": {
     "en": "Stop-limit",
     "ru": "Стоп-лимит"
@@ -6763,10 +6671,6 @@
     "en": "Line width",
     "ru": "Толщина линии"
   },
-  "LineWidthDesc": {
-    "en": "Line width (bar or border), with which candle will be drawn on chart.",
-    "ru": "Толщина линии (бара или окантовки), с которой будет рисоваться свеча на графике."
-  },
   "AntiAliasing": {
     "en": "Anti aliasing",
     "ru": "Сглаживание"
@@ -7067,14 +6971,6 @@
     "en": "Data for Level1",
     "ru": "Данные Level1"
   },
-  "Level1FieldsDesc": {
-    "en": "All types of data for Level1, which have to be translated.",
-    "ru": "Все типы данных для Level1, которые необходимо транслировать."
-  },
-  "DownloadSecurities": {
-    "en": "Load securities",
-    "ru": "Загружать инструменты"
-  },
   "DownloadSecuritiesDesc": {
     "en": "Should the whole set of securities be loaded from IQFeed website archive.",
     "ru": "Загружать ли инструменты из архива с сайта IQFeed."
@@ -7098,10 +6994,6 @@
   "ErrorSendCommand": {
     "en": "Error sending command: {0}",
     "ru": "Ошибка при отправке команды: {0}"
-  },
-  "Connecting": {
-    "en": "Connecting...",
-    "ru": "Производим подключение..."
   },
   "ReceivedSecurity": {
     "en": "Received security {0}.",
@@ -7331,7 +7223,7 @@
     "en": "Login. Required if server authorization is on.",
     "ru": "Имя пользователя. Требуется при включенной авторизации на сервере."
   },
-  "Password": {
+  "PasswordDesc": {
     "en": "Password. Require when server authorization is enabled.",
     "ru": "Пароль. Требуется при включенной авторизации на сервере."
   },
@@ -7904,8 +7796,8 @@
     "ru": "Профиль объема"
   },
   "VolumeProfileCalc": {
-    "en": "Calculate volume profile. Tick market data is required.",
-    "ru": "Вычислять профиль объема. Требуется тиковый источник данных."
+    "en": "Calculate volume profile.",
+    "ru": "Вычислять профиль объема."
   },
   "ImportSettings": {
     "en": "Settings of import",
@@ -8030,10 +7922,6 @@
   "UnkErrorWhileProcessing": {
     "en": "Unknown error during stream task processing.",
     "ru": "Неизвестная ошибка в процессе выполнения потоковой задачи."
-  },
-  "OpenFolder": {
-    "en": "Open data folder",
-    "ru": "Открыть папку с данными"
   },
   "CannotOpenDataDirectory": {
     "en": "Cannot open data storage directory. Error '{0}'. Path can be incorrect in settings: '{1}'",
@@ -8427,10 +8315,6 @@
     "en": "Send only formed candles.",
     "ru": "Выдавать только сформированные свечи."
   },
-  "VolumeProfileCalc": {
-    "en": "Perform profile volume calculation.",
-    "ru": "Производить расчет профиля объема."
-  },
   "ChartPanel": {
     "en": "Chart panel",
     "ru": "Панель графика"
@@ -8742,10 +8626,6 @@
   "Chat": {
     "en": "Chat",
     "ru": "Чат"
-  },
-  "Online": {
-    "en": "online",
-    "ru": "онлайн"
   },
   "Add": {
     "en": "Add",
@@ -9203,10 +9083,6 @@
     "en": "Take + stop",
     "ru": "Тейк + стоп"
   },
-  "LinkedOrderDesc": {
-    "en": "Linked order.",
-    "ru": "Связанная заявка."
-  },
   "StopLossActivationPrice": {
     "en": "Activation price, when reached an order will be placed at the price specified in the price field.",
     "ru": "Цена активации, при достижении которой будет выставлена заявка по цене, указанной в поле цена."
@@ -9526,10 +9402,6 @@
   "ExportFromToForDates": {
     "en": "{0}. Export {1} to {2}. Dates {3}-{4}.",
     "ru": "{0}. Экспорт {1} в {2}. Даты {3}-{4}."
-  },
-  "TimeOffsetDesc": {
-    "en": "Time offset in days from date of launching task.",
-    "ru": "Временной отступ в днях от даты запуска задачи."
   },
   "DepthGenerationInterval": {
     "en": "Market depths generation interval.",
@@ -10571,10 +10443,6 @@
     "en": "Memory statistics",
     "ru": "Статистика памяти"
   },
-  "StopOrders": {
-    "en": "Stop orders",
-    "ru": "Стоп-заявки"
-  },
   "Line": {
     "en": "Line",
     "ru": "Строка"
@@ -10982,14 +10850,6 @@
   "WrongTimeOffset": {
     "en": "Time {0} has wrong offset. Expected {1}.",
     "ru": "Время {0} имеет неправильное смещение. Ожидается {1}."
-  },
-  "TimeOffset": {
-    "en": "Time offset",
-    "ru": "Смещение времени"
-  },
-  "TimeOffsetDescription": {
-    "en": "UTC based time offset for market data timestamp.",
-    "ru": "Смещение времени относительно UTC для серверного времени данных."
   },
   "AssociatedSecurityBoard": {
     "en": "Combined board code",
@@ -11514,10 +11374,6 @@
   "CqgContinuum": {
     "en": "CQG Continuum",
     "ru": "CQG Continuum"
-  },
-  "Initializing": {
-    "en": "Initializing...",
-    "ru": "Инициализация..."
   },
   "InitializingDatabase": {
     "en": "Initializing database...",
@@ -12387,14 +12243,6 @@
     "en": "Load securities",
     "ru": "Загрузка инструментов"
   },
-  "EditSecurities": {
-    "en": "Edit data",
-    "ru": "Редактирование инструментов"
-  },
-  "DeleteSecurities": {
-    "en": "Delete data",
-    "ru": "Удаление инструментов"
-  },
   "LoadExchanges": {
     "en": "Load exchanges",
     "ru": "Загрузка бирж"
@@ -13257,11 +13105,11 @@
   },
   "MinimumSizeSpreadPriceSteps": {
     "en": "The minimum size of the spread in the price steps for registration orders",
-    "ru": "Минимальный размер спреда в шагах цены для выставления ордеров"
+    "ru": "Минимальный размер спреда в шагах цены для выставления заявок"
   },
   "IndentThePriceSteps": {
-    "en": "Indent in the price steps from the edge of the order glass. > 0 - far from the spread, <0 - the spread of the spread",
-    "ru": "Отступ в шагах цены от края стакана для ордеров. > 0 - вдаль от спреда, < 0 - вглубь спреда"
+    "en": "Indent in the price steps from the edge of the order glass. > 0 - far from the spread, < 0 - the spread of the spread",
+    "ru": "Отступ в шагах цены от края стакана для заявок. > 0 - вдаль от спреда, < 0 - вглубь спреда"
   },
   "StopSecondsOpenPosition": {
     "en": "Stop in seconds how much to keep open position",
@@ -13269,7 +13117,7 @@
   },
   "StopClosingOrderType": {
     "en": "Stop order closing order type",
-    "ru": "Тип ордеров закрытия позиций по стопу"
+    "ru": "Тип заявки закрытия позиций по стопу"
   },
   "ShiftThePriceStepsFromTheEdge": {
     "en": "A shift in the price steps from the edge of the spread in price steps. To buy at a value of> 0 shifts the spread inside, <0 away from the spread.",
@@ -15034,10 +14882,6 @@
   "PositionEffectCloseOnly": {
     "en": "A trade should bring the position towards zero, i.e. close as much as possible of any existing position and open an opposite position for any remainder.",
     "ru": "Сделка должна привести позицию к нулю, то есть максимально закрыть любую существующую позицию и открыть противоположную позицию для любого остатка."
-  },
-  "Initiator": {
-    "en": "Initiator",
-    "ru": "Инициатор"
   },
   "InitiatorTrade": {
     "en": "Used to identify whether the order initiator is an aggressor or not in the trade.",

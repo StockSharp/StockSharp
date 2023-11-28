@@ -982,7 +982,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MarginBuyKey,
-			Description = LocalizedStrings.MarginBuyKey,
+			Description = LocalizedStrings.MarginBuyDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 212)]
 		[XmlIgnore]
@@ -1010,7 +1010,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.MarginSellKey,
-			Description = LocalizedStrings.MarginSellKey,
+			Description = LocalizedStrings.MarginSellDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 213)]
 		[XmlIgnore]
@@ -1431,7 +1431,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BidsVolumeKey,
-			Description = LocalizedStrings.BidsVolumeKey,
+			Description = LocalizedStrings.BidsVolumeDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 221)]
 		[Browsable(false)]
@@ -1456,7 +1456,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BidsKey,
-			Description = LocalizedStrings.BidsCountKey,
+			Description = LocalizedStrings.BidsCountDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 222)]
 		[Browsable(false)]
@@ -1481,7 +1481,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AsksVolumeKey,
-			Description = LocalizedStrings.AsksVolumeKey,
+			Description = LocalizedStrings.AsksVolumeDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 223)]
 		[Browsable(false)]
@@ -1506,7 +1506,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.AsksKey,
-			Description = LocalizedStrings.AsksCountKey,
+			Description = LocalizedStrings.AsksCountDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 224)]
 		[Browsable(false)]
@@ -1655,7 +1655,7 @@ namespace StockSharp.BusinessEntities
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.SettlementPriceKey,
-			Description = LocalizedStrings.SettlementPriceKey,
+			Description = LocalizedStrings.SettlementPriceDescKey,
 			GroupName = LocalizedStrings.StatisticsKey,
 			Order = 230)]
 		[XmlIgnore]

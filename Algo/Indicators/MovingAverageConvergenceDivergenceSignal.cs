@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.MACDSignalKey,
-		Description = LocalizedStrings.MACDDescKey)]
+		Description = LocalizedStrings.MACDSignalDescKey)]
 	[Doc("topics/IndicatorMovingAverageConvergenceDivergenceSignal.html")]
 	public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 	{

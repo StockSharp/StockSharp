@@ -312,7 +312,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.OIKey,
-			Description = LocalizedStrings.OpenInterestKey,
+			Description = LocalizedStrings.OpenInterestDescKey,
 			GroupName = LocalizedStrings.GeneralKey)]
 		public decimal? OpenInterest { get; set; }
 
