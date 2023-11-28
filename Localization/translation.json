@@ -1,4 +1,8 @@
 {
+  "Manage": {
+    "en": "Manage",
+    "ru": "Управление"
+  },
   "RandomElement": {
     "en": "The diagram element to generate random value.",
     "ru": "Элемент диаграммы, генерирующее случайное значение."
