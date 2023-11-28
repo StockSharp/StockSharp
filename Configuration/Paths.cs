@@ -195,9 +195,14 @@
 		public static readonly string InstallerInstallationsConfigPath;
 
 		/// <summary>
-		/// Installer exe name.
+		/// Installer UI exe name.
 		/// </summary>
-		public const string InstallerAppName = "StockSharp.Installer.UI";
+		public const string InstallerUIName = "StockSharp.Installer.UI";
+
+		/// <summary>
+		/// Installer console exe name.
+		/// </summary>
+		public const string InstallerConsoleName = "StockSharp.Installer.Console";
 
 		/// <summary>
 		/// Setup name.
