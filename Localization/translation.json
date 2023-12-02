@@ -1,4 +1,20 @@
 {
+  "SelectNupkgParams": {
+    "en": "Select .nupkg package {0}.",
+    "ru": "Выберите .nupkg пакет {0}."
+  },
+  "PackageNotSelected": {
+    "en": "Package was not selected",
+    "ru": "Пакет не был выбран"
+  },
+  "InvalidPackageIdParams": {
+    "en": "Invalid nuget package id. Expected '{0}', got '{1}'",
+    "ru": "Неверный идентификатор пакета. Требуется '{0}' вместо '{1}'"
+  },
+  "Manage": {
+    "en": "Manage",
+    "ru": "Управление"
+  },
   "RandomElement": {
     "en": "The diagram element to generate random value.",
     "ru": "Элемент диаграммы, генерирующее случайное значение."
