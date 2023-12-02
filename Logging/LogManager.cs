@@ -338,7 +338,7 @@ namespace StockSharp.Logging
 		{
 			storage.SetValue(nameof(FlushInterval), FlushInterval);
 			//storage.SetValue(nameof(MaxMessageCount), MaxMessageCount);
-			storage.SetValue(nameof(Listeners), Listeners.Select(l => l.SaveEntire(false)).ToArray());
+			storage.SetValue(nameof(Listeners), Listeners.Where(l => l.CanSave).Select(l => l.SaveEntire(false)).ToArray());
 
 			if (LocalTimeZone != null)
 				storage.SetValue(nameof(LocalTimeZone), LocalTimeZone);

@@ -35,6 +35,8 @@ namespace StockSharp.Logging
 		protected LogListener()
 		{
 			Filters = new List<Func<LogMessage, bool>>();
+
+			CanSave = GetType().GetConstructor(Array.Empty<Type>()) is not null;
 		}
 
 		/// <summary>
@@ -75,6 +77,9 @@ namespace StockSharp.Logging
 				_timeFormat = value;
 			}
 		}
+
+		/// <inheritdoc />
+		public virtual bool CanSave { get; }
 
 		/// <inheritdoc />
 		public void WriteMessages(IEnumerable<LogMessage> messages)

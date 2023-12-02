@@ -26,6 +26,11 @@ namespace StockSharp.Logging
 	public interface ILogListener : IPersistable, IDisposable
 	{
 		/// <summary>
+		/// Can save listener.
+		/// </summary>
+		bool CanSave { get; }
+
+		/// <summary>
 		/// To record messages.
 		/// </summary>
 		/// <param name="messages">Debug messages.</param>
