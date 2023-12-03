@@ -1,11 +1,15 @@
 {
+  "NotApproved": {
+    "en": "Not approved",
+    "ru": "Не утвержден"
+  },
+  "NotInCatalog": {
+    "en": "Not in catalog",
+    "ru": "Не в каталоге"
+  },
   "SelectNupkgParams": {
     "en": "Select .nupkg package {0}.",
     "ru": "Выберите .nupkg пакет {0}."
-  },
-  "PackageNotSelected": {
-    "en": "Package was not selected",
-    "ru": "Пакет не был выбран"
   },
   "InvalidPackageIdParams": {
     "en": "Invalid nuget package id. Expected '{0}', got '{1}'",
@@ -1436,8 +1440,8 @@
     "ru": "Менеджеры продукта"
   },
   "NewVersionMustBeGreater": {
-    "en": "New version must be greater than current.",
-    "ru": "Новая версия должна быть больше текущей."
+    "en": "New version {0} must be greater than current {1}.",
+    "ru": "Новая версия {0} должна быть больше текущей {1}."
   },
   "CurrentVersion": {
     "en": "Current version",
