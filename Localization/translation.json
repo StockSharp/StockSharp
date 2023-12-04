@@ -1,4 +1,8 @@
 {
+  "ReleaseNotes": {
+    "en": "Release notes",
+    "ru": "Примечания к обновлению"
+  },
   "NotApproved": {
     "en": "Not approved",
     "ru": "Не утвержден"
