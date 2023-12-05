@@ -123,6 +123,10 @@
     "en": "Value '{0}' must be of type '{1}'.",
     "ru": "Значение должно быть типа '{1}'."
   },
+  "ExportSchema": {
+    "en": "Export schema.",
+    "ru": "Экспортировать схему."
+  },
   "ExportOnlyCodeFile": {
     "en": "Export only C# file",
     "ru": "Экспортировать только C# файл"
