@@ -1,7 +1,5 @@
 namespace StockSharp.Localization
 {
-	using Ecng.Common;
-
 	partial class LocalizedStrings
 	{
 		/// <summary>
@@ -637,7 +635,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public static string OrderIdStringDot => AppendDot(IdString);
+		public static string IdStringDot => AppendDot(IdString);
 
 		/// <summary>
 		/// 
