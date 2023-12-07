@@ -264,7 +264,7 @@ namespace StockSharp.BitStamp.Native
 				.ToQueryString(false);
 
 			var str = apiKey +
-				        request.Method +
+				        request.Method.ToString().ToUpperInvariant() +
 				        url.Host +
 				        url.PathAndQuery.Remove(url.Query, true) +
 				        url.Query +
