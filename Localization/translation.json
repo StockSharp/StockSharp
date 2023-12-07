@@ -1,4 +1,8 @@
 {
+  "ValidPackageIdHint": {
+    "en": "Valid symbols: 'a-z', 'A-Z', '0-9', '.', '-'",
+    "ru": "Допустимые символы: 'a-z', 'A-Z', '0-9', '.', '-'"
+  },
   "ReleaseNotes": {
     "en": "Release notes",
     "ru": "Примечания к обновлению"
