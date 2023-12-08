@@ -196,8 +196,8 @@
     "ru": "Кубик используется для хранения значений, передачи ранее сохраненного значения дальше по цепочке элементов."
   },
   "CrossingElementDescription": {
-    "en": "The element is used to fire a signal when the first value becomes bigger (crossing up) or smaller (crossing down) than the second value.",
-    "ru": "Кубик используется для получения сигнала когда первое значение становится больше (пересечение вверх) или меньше (пересечение вниз) чем второе значение."
+    "en": "The element is used to fire a signal when the first value (up socket) becomes bigger (crossing up) or smaller than the second value (down socket).",
+    "ru": "Кубик используется для получения сигнала когда первое значение (верний сокет) становится больше (пересечение вверх) или меньше (пересечение вниз) чем второе значение (нижний сокет)."
   },
   "IndicatorElementDescription": {
     "en": "The element is used to calculate indicator values.",
