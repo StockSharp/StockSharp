@@ -1,4 +1,32 @@
 {
+  "Public": {
+    "en": "Public",
+    "ru": "Публично"
+  },
+  "Restricted": {
+    "en": "Restricted",
+    "ru": "Ограниченное"
+  },
+  "Catalog": {
+    "en": "Catalog",
+    "ru": "Каталог"
+  },
+  "Reserved": {
+    "en": "Reserved",
+    "ru": "Зарезервировано"
+  },
+  "Declared": {
+    "en": "Declared",
+    "ru": "Задекларировано"
+  },
+  "Refund": {
+    "en": "Refund",
+    "ru": "Возврат"
+  },
+  "Trial": {
+    "en": "Trial",
+    "ru": "Пробный"
+  },
   "ValidPackageIdHint": {
     "en": "Valid symbols: 'a-z', 'A-Z', '0-9', '.', '-'",
     "ru": "Допустимые символы: 'a-z', 'A-Z', '0-9', '.', '-'"
