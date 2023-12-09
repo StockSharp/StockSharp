@@ -1691,6 +1691,10 @@
     "en": "Updates available",
     "ru": "Доступны обновления"
   },
+  "InstallerPluginUpdatesAvailable": {
+    "en": "Plugin updates available",
+    "ru": "Доступны обновления плагинов"
+  },
   "InstallSettings": {
     "en": "Install options",
     "ru": "Параметры установки"
