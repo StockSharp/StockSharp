@@ -548,7 +548,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (isUtc)
 				return metaInfo.ServerOffset;
 
-			var board = exchangeInfoProvider.GetExchangeBoard(securityId.BoardCode);
+			var board = exchangeInfoProvider.TryGetExchangeBoard(securityId.BoardCode);
 
 			return board == null ? metaInfo.LocalOffset : board.TimeZone.BaseUtcOffset;
 		}

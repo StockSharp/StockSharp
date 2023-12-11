@@ -123,13 +123,13 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.Board:
 				{
 					var boardMsg = (BoardMessage)message;
-					var board = _exchangeInfoProvider.GetExchangeBoard(boardMsg.Code);
+					var board = _exchangeInfoProvider.TryGetExchangeBoard(boardMsg.Code);
 
 					if (board == null)
 					{
 						board = _exchangeInfoProvider.GetOrCreateBoard(boardMsg.Code, code =>
 						{
-							var exchange = _exchangeInfoProvider.GetExchange(boardMsg.ExchangeCode) ?? boardMsg.ToExchange(new Exchange
+							var exchange = _exchangeInfoProvider.TryGetExchange(boardMsg.ExchangeCode) ?? boardMsg.ToExchange(new Exchange
 							{
 								Name = boardMsg.ExchangeCode
 							});

@@ -1803,7 +1803,7 @@ namespace StockSharp.Algo
 			//if (code.EqualsIgnoreCase("RTS"))
 			//	return ExchangeBoard.Forts;
 
-			var board = exchangeInfoProvider.GetExchangeBoard(code);
+			var board = exchangeInfoProvider.TryGetExchangeBoard(code);
 
 			if (board != null)
 				return board;
@@ -1812,7 +1812,7 @@ namespace StockSharp.Algo
 
 			if (createBoard == null)
 			{
-				var exchange = exchangeInfoProvider.GetExchange(code);
+				var exchange = exchangeInfoProvider.TryGetExchange(code);
 
 				if (exchange == null)
 				{
@@ -1830,7 +1830,7 @@ namespace StockSharp.Algo
 			{
 				board = createBoard(code);
 
-				if (exchangeInfoProvider.GetExchange(board.Exchange.Name) == null)
+				if (exchangeInfoProvider.TryGetExchange(board.Exchange.Name) == null)
 					exchangeInfoProvider.Save(board.Exchange);
 			}
 

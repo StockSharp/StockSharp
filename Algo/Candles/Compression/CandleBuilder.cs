@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!message.IsRegularTradingHours)
 				return true;
 
-			var board = ExchangeInfoProvider.GetExchangeBoard(message.SecurityId.BoardCode);
+			var board = ExchangeInfoProvider.TryGetExchangeBoard(message.SecurityId.BoardCode);
 
 			if (board == null)
 				return true;

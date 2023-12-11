@@ -50,14 +50,14 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="code">The board code <see cref="ExchangeBoard.Code"/>.</param>
 		/// <returns>Trading board. If the board with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
-		ExchangeBoard GetExchangeBoard(string code);
+		ExchangeBoard TryGetExchangeBoard(string code);
 
 		/// <summary>
 		/// To get an exchange by the code.
 		/// </summary>
 		/// <param name="code">The exchange code <see cref="Exchange.Name"/>.</param>
 		/// <returns>Exchange. If the exchange with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
-		Exchange GetExchange(string code);
+		Exchange TryGetExchange(string code);
 
 		/// <summary>
 		/// To save the board.
@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public ExchangeBoard GetExchangeBoard(string code)
+		public ExchangeBoard TryGetExchangeBoard(string code)
 		{
 			if (code.IsEmpty())
 				throw new ArgumentNullException(nameof(code));
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public Exchange GetExchange(string code)
+		public Exchange TryGetExchange(string code)
 		{
 			if (code.IsEmpty())
 				throw new ArgumentNullException(nameof(code));

@@ -574,7 +574,7 @@ namespace StockSharp.Algo.Commissions
 			var boardCode = storage.GetValue<string>(nameof(Board));
 
 			if (!boardCode.IsEmpty())
-				Board = ServicesRegistry.TryExchangeInfoProvider?.GetExchangeBoard(boardCode);
+				Board = ServicesRegistry.TryExchangeInfoProvider?.TryGetExchangeBoard(boardCode);
 		}
 	}
 

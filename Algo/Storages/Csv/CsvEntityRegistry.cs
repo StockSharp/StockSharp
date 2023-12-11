@@ -1147,7 +1147,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (board != null)
 				return board;
 
-			board = ServicesRegistry.EnsureGetExchangeInfoProvider().GetExchangeBoard(boardCode);
+			board = ServicesRegistry.EnsureGetExchangeInfoProvider().TryGetExchangeBoard(boardCode);
 
 			if (board == null)
 				throw new InvalidOperationException(LocalizedStrings.BoardNotFound.Put(boardCode));
