@@ -16,11 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Message channel base interface.

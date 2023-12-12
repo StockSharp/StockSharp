@@ -56,16 +56,16 @@ namespace StockSharp.Algo.Candles.Compression
 			public ICandleBuilderValueTransform Transform { get; set; }
 
 			public DateTimeOffset? LastTime { get; set; }
-
 			public long? Count { get; set; }
 
-			public CandleMessage CurrentCandle { get; set; }
-			public CandleMessage PrevCandle { get; set; }
+			CandleMessage ICandleBuilderSubscription.CurrentCandle { get; set; }
+			CandleMessage ICandleBuilderSubscription.PrevCandle { get; set; }
+
 			public CandleMessage NonFinishedCandle { get; set; }
 
 			public VolumeProfileBuilder VolumeProfile { get; set; }
 
-			public bool Stopped;
+			public bool Stopped { get; set; }
 		}
 
 		private readonly SyncObject _syncObject = new();
@@ -700,10 +700,10 @@ namespace StockSharp.Algo.Candles.Compression
 						}
 
 						var smaller = InnerAdapter
-										.GetTimeFrames(original.SecurityId, series.LastTime, original.To)
-						                .FilterSmallerTimeFrames(original.GetTimeFrame())
-						                .OrderByDescending()
-						                .FirstOr();
+							.GetTimeFrames(original.SecurityId, series.LastTime, original.To)
+						    .FilterSmallerTimeFrames(original.GetTimeFrame())
+						    .OrderByDescending()
+						    .FirstOr();
 
 						if (smaller != null)
 						{
