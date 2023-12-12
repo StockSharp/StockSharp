@@ -562,7 +562,7 @@ namespace StockSharp.BusinessEntities
 		public decimal? Commission { get; set; }
 
 		/// <summary>
-		/// Commission currency. Can be <see lnagword="null"/>.
+		/// Commission currency. Can be <see langword="null"/>.
 		/// </summary>
 		public string CommissionCurrency { get; set; }
 

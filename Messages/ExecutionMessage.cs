@@ -474,7 +474,7 @@ namespace StockSharp.Messages
 		public decimal? Commission { get; set; }
 
 		/// <summary>
-		/// Commission currency. Can be <see lnagword="null"/>.
+		/// Commission currency. Can be <see langword=""/>.
 		/// </summary>
 		public string CommissionCurrency { get; set; }
 
