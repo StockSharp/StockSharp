@@ -1,4 +1,12 @@
 {
+  "Usdt": {
+    "en": "USDT",
+    "ru": "USDT"
+  },
+  "UsdtSection": {
+    "en": "USDT Section",
+    "ru": "USDT Section"
+  },
   "CurrentTimeElement": {
     "en": "The element is used to provide current time.",
     "ru": "Элемент предоставляющий текущее время."
