@@ -1,4 +1,8 @@
 {
+  "CurrentTimeElement": {
+    "en": "The element is used to provide current time.",
+    "ru": "Элемент предоставляющий текущее время."
+  },
   "Public": {
     "en": "Public",
     "ru": "Публично"
@@ -583,13 +587,13 @@
     "en": "MACD",
     "ru": "MACD"
   },
-  "NCandles": {
+  "DelaySignal": {
     "en": "Delay signal",
     "ru": "Задержка сигнала"
   },
-  "NCandlesDesc": {
-    "en": "The diagram element to delay signal for specified number of candles.",
-    "ru": "Элемент диаграммы, задерживающий исполнение на указанное кол-во свечей."
+  "DelaySignalDesc": {
+    "en": "The diagram element to delay signal for specified number of input values.",
+    "ru": "Элемент диаграммы, задерживающий исполнение на указанное кол-во входящих значений."
   },
   "NetProfitPercent": {
     "en": "% Net profit",
@@ -995,17 +999,17 @@
     "en": "By clicking the Start button below, you will be redirected to the service website to provide access rights.",
     "ru": "Нажимая ниже кнопку Старт вы будете переадресованы на сайт сервиса для предоставления прав доступа."
   },
-  "NCandlesParams": {
-    "en": "{0} candles",
-    "ru": "{0} свечей"
+  "DelayParams": {
+    "en": "{0} values",
+    "ru": "{0} значений"
   },
-  "NCandlesDelayLength": {
+  "DelayLength": {
     "en": "Delay length",
     "ru": "Длительность задержки"
   },
-  "NCandlesDelayLengthDetails": {
-    "en": "Number of candles to delay signal for.",
-    "ru": "Количество свечей на которое будет задержан сигнал."
+  "DelayLengthDetails": {
+    "en": "Number of values to delay signal for.",
+    "ru": "Количество значений на которое будет задержан сигнал."
   },
   "PosCondition": {
     "en": "Position condition",
@@ -11153,7 +11157,7 @@
   },
   "Delay": {
     "en": "Delay",
-    "ru": "Отложено"
+    "ru": "Задержка"
   },
   "SecurityDelayLoad": {
     "en": "Delay load instruments.",
