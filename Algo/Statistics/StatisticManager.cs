@@ -18,9 +18,11 @@ namespace StockSharp.Algo.Statistics
 {
 	using System;
 	using System.Linq;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Serialization;
 
 	using StockSharp.Algo.PnL;
 	using StockSharp.BusinessEntities;
@@ -148,7 +150,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		private readonly EquityParameterList _parameters;
-		IStatisticParameter[] IStatisticManager.Parameters => _parameters.Cache;
+
+		/// <inheritdoc />
+		public IStatisticParameter[] Parameters => _parameters.Cache;
 
 		void IStatisticManager.AddPnL(DateTimeOffset time, decimal pnl, decimal? commission)
 			=> _parameters.PnLParams.ForEach(p => p.Add(time, pnl, commission));
@@ -173,5 +177,21 @@ namespace StockSharp.Algo.Statistics
 
 		void IStatisticManager.Reset()
 			=> _parameters.SyncDo(c => c.ForEach(p => p.Reset()));
+
+		void IPersistable.Load(SettingsStorage storage)
+		{
+			storage.Set(nameof(Parameters), Parameters.Select(p => p.Save()).ToArray());
+		}
+
+		void IPersistable.Save(SettingsStorage storage)
+		{
+			var dict = Parameters.ToDictionary(p => p.Name);
+
+			foreach (var ps in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Parameters)))
+			{
+				if (dict.TryGetValue(ps.GetValue<string>(nameof(IStatisticParameter.Name)), out var p))
+					p.Load(ps);
+			}
+		}
 	}
 }
