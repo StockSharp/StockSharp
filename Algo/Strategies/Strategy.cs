@@ -2100,17 +2100,14 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To call the event <see cref="Reseted"/>.
 		/// </summary>
-		private void RaiseReseted()
-		{
-			Reseted?.Invoke();
-		}
+		private void RaiseReseted() => Reseted?.Invoke();
 
 		/// <summary>
 		/// To re-initialize the trade algorithm. It is called after initialization of the strategy object and loading stored parameters.
 		/// </summary>
-		public virtual void Reset()
+		public void Reset()
 		{
-			this.AddInfoLog(LocalizedStrings.Initialization);
+			this.AddInfoLog(LocalizedStrings.Reset);
 
 			ChildStrategies.ForEach(s => s.Reset());
 
@@ -2783,15 +2780,8 @@ namespace StockSharp.Algo.Strategies
 					param.Load(s);
 			}
 
-			var pnlStorage = storage.GetValue<SettingsStorage>(nameof(PnLManager));
-
-			if (pnlStorage != null)
-				PnLManager.Load(pnlStorage);
-
-			var riskStorage = storage.GetValue<SettingsStorage>(nameof(RiskManager));
-
-			if (riskStorage != null)
-				RiskManager.Load(riskStorage);
+			PnLManager.LoadIfNotNull(storage, nameof(PnLManager));
+			RiskManager.LoadIfNotNull(storage, nameof(RiskManager));
 		}
 
 		/// <inheritdoc />
