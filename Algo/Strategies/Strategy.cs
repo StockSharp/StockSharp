@@ -2093,6 +2093,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
+		/// Keep trading statistics (orders, trades, profit etc.) after restart.
+		/// </summary>
+		[Browsable(false)]
+		public bool KeepStatistics { get; set; }
+
+		/// <summary>
 		/// The event of the strategy re-initialization.
 		/// </summary>
 		public event Action Reseted;
@@ -2111,18 +2117,24 @@ namespace StockSharp.Algo.Strategies
 
 			ChildStrategies.ForEach(s => s.Reset());
 
-			StatisticManager.Reset();
+			if (!KeepStatistics)
+			{
+				StatisticManager.Reset();
 
-			PnLManager.Reset();
+				PnLManager.Reset();
 
-			Commission = default;
-			Latency = default;
-			Slippage = default;
+				Commission = default;
+				Latency = default;
+				Slippage = default;
 
-			RiskManager.Reset();
+				RiskManager.Reset();
 
-			_myTrades.Clear();
-			_ordersInfo.Clear();
+				_myTrades.Clear();
+				_ordersInfo.Clear();
+
+				_positions.Clear();
+				_positionManager.Reset();
+			}
 
 			ProcessState = ProcessStates.Stopped;
 			ErrorState = LogLevels.Info;
@@ -2133,28 +2145,26 @@ namespace StockSharp.Algo.Strategies
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
 			_idStr = default;
 
-			_positions.Clear();
-
 			_subscriptions.Clear();
 			_subscriptionsById.Clear();
-
-			_positionManager.Reset();
+			_indicators.Clear();
 
 			IsOnline = false;
 
 			OnReseted();
 
-			var time = CurrentTime;
+			if (!KeepStatistics)
+			{
+				var time = CurrentTime;
 
-			// события вызываем только после вызова Reseted
-			// чтобы сбросить состояние у подписчиков стратегии.
-			RaisePnLChanged(time);
-			RaiseCommissionChanged();
-			RaiseLatencyChanged();
-			RaisePositionChanged(time);
-			RaiseSlippageChanged();
-
-			_indicators.Clear();
+				// события вызываем только после вызова Reseted
+				// чтобы сбросить состояние у подписчиков стратегии.
+				RaisePnLChanged(time);
+				RaiseCommissionChanged();
+				RaiseLatencyChanged();
+				RaisePositionChanged(time);
+				RaiseSlippageChanged();
+			}
 		}
 
 		/// <summary>
@@ -2780,17 +2790,26 @@ namespace StockSharp.Algo.Strategies
 					param.Load(s);
 			}
 
-			PnLManager.LoadIfNotNull(storage, nameof(PnLManager));
 			RiskManager.LoadIfNotNull(storage, nameof(RiskManager));
+
+			if (!KeepStatistics)
+				return;
+			
+			PnLManager.LoadIfNotNull(storage, nameof(PnLManager));
+			StatisticManager.LoadIfNotNull(storage, nameof(StatisticManager));
 		}
 
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Parameters), Parameters.CachedValues.Select(p => p.Save()).ToArray());
+			storage.SetValue(nameof(RiskManager), RiskManager.Save());
+
+			if (!KeepStatistics)
+				return;
 
 			storage.SetValue(nameof(PnLManager), PnLManager.Save());
-			storage.SetValue(nameof(RiskManager), RiskManager.Save());
+			storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
 		}
 
 		/// <inheritdoc />
