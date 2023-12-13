@@ -1206,7 +1206,7 @@ namespace StockSharp.Algo
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
-			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
+			Adapter.Load(storage, nameof(Adapter));
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
@@ -1228,7 +1228,7 @@ namespace StockSharp.Algo
 			IsAutoPortfoliosSubscribe = storage.GetValue(nameof(IsAutoPortfoliosSubscribe), IsAutoPortfoliosSubscribe);
 
 			if (Buffer != null && storage.ContainsKey(nameof(Buffer)))
-				Buffer.ForceLoad(storage.GetValue<SettingsStorage>(nameof(Buffer)));
+				Buffer.Load(storage, nameof(Buffer));
 
 			base.Load(storage);
 		}

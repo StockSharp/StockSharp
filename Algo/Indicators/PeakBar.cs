@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(storage);
 
-			ReversalAmount.Load(storage.GetValue<SettingsStorage>(nameof(ReversalAmount)));
+			ReversalAmount.Load(storage, nameof(ReversalAmount));
 		}
 
 		/// <inheritdoc />

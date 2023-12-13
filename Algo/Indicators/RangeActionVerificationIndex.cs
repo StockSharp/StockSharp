@@ -89,8 +89,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(storage);
 
-			ShortSma.LoadNotNull(storage, nameof(ShortSma));
-			LongSma.LoadNotNull(storage, nameof(LongSma));
+			ShortSma.LoadIfNotNull(storage, nameof(ShortSma));
+			LongSma.LoadIfNotNull(storage, nameof(LongSma));
 		}
 
 		/// <inheritdoc />

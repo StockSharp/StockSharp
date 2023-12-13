@@ -100,8 +100,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(storage);
 
-			Ema.LoadNotNull(storage, nameof(Ema));
-			Roc.LoadNotNull(storage, nameof(Roc));
+			Ema.LoadIfNotNull(storage, nameof(Ema));
+			Roc.LoadIfNotNull(storage, nameof(Roc));
 		}
 
 		/// <inheritdoc />

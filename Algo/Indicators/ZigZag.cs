@@ -418,7 +418,7 @@ namespace StockSharp.Algo.Indicators
 
 			BackStep = storage.GetValue<int>(nameof(BackStep));
 			Depth = storage.GetValue<int>(nameof(Depth));
-			Deviation.Load(storage.GetValue<SettingsStorage>(nameof(Deviation)));
+			Deviation.Load(storage, nameof(Deviation));
 		}
 
 		/// <inheritdoc />

@@ -374,7 +374,7 @@ namespace StockSharp.Algo.Testing
 		{
 			base.Load(storage);
 
-			Settings.Load(storage.GetValue<SettingsStorage>(nameof(MarketEmulator)));
+			Settings.Load(storage, nameof(MarketEmulator));
 		}
 
 		/// <summary>

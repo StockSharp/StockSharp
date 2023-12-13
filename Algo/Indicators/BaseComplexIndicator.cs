@@ -146,7 +146,7 @@ namespace StockSharp.Algo.Indicators
 
 			foreach (var indicator in InnerIndicators)
 			{
-				indicator.Load(storage.GetValue<SettingsStorage>(indicator.Name + index));
+				indicator.Load(storage, indicator.Name + index);
 				index++;
 			}
 		}

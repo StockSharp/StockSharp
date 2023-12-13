@@ -156,13 +156,6 @@ namespace StockSharp.Algo.Indicators
 			return indicator.Process(new PairIndicatorValue<TValue>(indicator, value) { IsFinal = isFinal });
 		}
 
-		internal static void LoadNotNull(this IPersistable obj, SettingsStorage settings, string name)
-		{
-			var value = settings.GetValue<SettingsStorage>(name);
-			if (value != null)
-				obj.Load(value);
-		}
-
 		/// <summary>
 		/// Get value type for specified indicator.
 		/// </summary>

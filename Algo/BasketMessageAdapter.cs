@@ -2177,7 +2177,7 @@ namespace StockSharp.Algo
 					try
 					{
 						var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
-						adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
+						adapter.Load(s, "AdapterSettings");
 						InnerAdapters[adapter] = s.GetValue<int>("Priority");
 
 						adapters.Add(adapter.Id, adapter);

@@ -231,7 +231,7 @@ namespace StockSharp.Algo.Storages
 			base.Load(storage);
 
 			TargetCompId = storage.GetValue(nameof(TargetCompId), TargetCompId);
-			Credentials.Load(storage.GetValue<SettingsStorage>(nameof(Credentials)));
+			Credentials.Load(storage, nameof(Credentials));
 		}
 
 		/// <inheritdoc />

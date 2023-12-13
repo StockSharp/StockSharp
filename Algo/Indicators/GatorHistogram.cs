@@ -68,8 +68,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(storage);
 
-			_line1.LoadNotNull(storage, "line1");
-			_line2.LoadNotNull(storage, "line2");
+			_line1.LoadIfNotNull(storage, "line1");
+			_line2.LoadIfNotNull(storage, "line2");
 		}
 
 		/// <inheritdoc />

@@ -115,9 +115,9 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(storage);
 
-			LongMa.LoadNotNull(storage, nameof(LongMa));
-			ShortMa.LoadNotNull(storage, nameof(ShortMa));
-			MedianPrice.LoadNotNull(storage, nameof(MedianPrice));
+			LongMa.LoadIfNotNull(storage, nameof(LongMa));
+			ShortMa.LoadIfNotNull(storage, nameof(ShortMa));
+			MedianPrice.LoadIfNotNull(storage, nameof(MedianPrice));
 		}
 
 		/// <inheritdoc />

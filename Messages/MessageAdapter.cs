@@ -643,7 +643,7 @@ namespace StockSharp.Messages
 				}).ToArray();
 
 			if (storage.ContainsKey(nameof(ReConnectionSettings)))
-				ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
+				ReConnectionSettings.Load(storage, nameof(ReConnectionSettings));
 
 			EnqueueSubscriptions = storage.GetValue(nameof(EnqueueSubscriptions), EnqueueSubscriptions);
 			GenerateOrderBookFromLevel1 = storage.GetValue(nameof(GenerateOrderBookFromLevel1), GenerateOrderBookFromLevel1);

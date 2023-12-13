@@ -327,7 +327,7 @@ namespace StockSharp.Logging
 				LocalTimeZone = storage.GetValue<TimeZoneInfo>(nameof(LocalTimeZone));
 
 			if (storage.Contains(nameof(Application)) && Application is IPersistable appPers)
-				appPers.Load(storage.GetValue<SettingsStorage>(nameof(Application)));
+				appPers.Load(storage, nameof(Application));
 		}
 
 		/// <summary>

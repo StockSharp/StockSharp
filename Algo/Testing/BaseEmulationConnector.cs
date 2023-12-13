@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Testing
 		public override void Load(SettingsStorage storage)
 		{
 			if (EmulationAdapter.OwnInnerAdapter)
-				EmulationAdapter.Load(storage.GetValue<SettingsStorage>(nameof(EmulationAdapter)));
+				EmulationAdapter.Load(storage, nameof(EmulationAdapter));
 
 			base.Load(storage);
 		}

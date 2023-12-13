@@ -438,7 +438,7 @@ namespace StockSharp.Messages
 					if (type.Is<IPersistable>())
 					{
 						var instance = type.CreateInstance<IPersistable>();
-						instance.Load(ss.GetValue<SettingsStorage>("value"));
+						instance.Load(ss, "value");
 
 						Arg = instance;
 					}
