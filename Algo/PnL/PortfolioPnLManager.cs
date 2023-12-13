@@ -130,6 +130,10 @@ namespace StockSharp.Algo.PnL
 		/// <returns><see cref="PnL"/> was changed.</returns>
 		public bool ProcessMessage(Message message)
 		{
+			bool TryGetQueue<TMsg>(TMsg msg, out PnLQueue queue)
+				where TMsg : ISecurityIdMessage
+				=> _securityPnLs.TryGetValue(msg.SecurityId, out queue);
+
 			switch (message.Type)
 			{
 				case MessageTypes.Execution:
@@ -139,9 +143,7 @@ namespace StockSharp.Algo.PnL
 					if (execMsg.DataType != DataType.Ticks)
 						break;
 
-					var queue = _securityPnLs.TryGetValue(execMsg.SecurityId);
-
-					if (queue == null)
+					if (!TryGetQueue(execMsg, out var queue))
 						break;
 
 					queue.ProcessExecution(execMsg);
@@ -152,9 +154,7 @@ namespace StockSharp.Algo.PnL
 				{
 					var levelMsg = (Level1ChangeMessage)message;
 
-					var queue = _securityPnLs.TryGetValue(levelMsg.SecurityId);
-
-					if (queue == null)
+					if (!TryGetQueue(levelMsg, out var queue))
 						break;
 
 					queue.ProcessLevel1(levelMsg);
@@ -168,9 +168,7 @@ namespace StockSharp.Algo.PnL
 					if (quoteMsg.State != null)
 						break;
 
-					var queue = _securityPnLs.TryGetValue(quoteMsg.SecurityId);
-
-					if (queue == null)
+					if (!TryGetQueue(quoteMsg, out var queue))
 						break;
 
 					queue.ProcessQuotes(quoteMsg);
@@ -191,6 +189,17 @@ namespace StockSharp.Algo.PnL
 					}
 
 					break;
+				}
+
+				default:
+				{
+					var candleMsg = (CandleMessage)message;
+
+					if (!TryGetQueue(candleMsg, out var queue))
+						break;
+
+					queue.ProcessCandle(candleMsg);
+					return true;
 				}
 			}
 

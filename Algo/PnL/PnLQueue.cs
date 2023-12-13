@@ -123,7 +123,7 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Last price of tick trade.
 		/// </summary>
-		public decimal? TradePrice { get; private set; }
+		public decimal? LastPrice { get; private set; }
 
 		/// <summary>
 		/// Last price of bid.
@@ -151,10 +151,7 @@ namespace StockSharp.Algo.PnL
 				var sum = _openedTrades
 					.SyncGet(c => c.Sum(t =>
 					{
-						var price = _openedPosSide == Sides.Buy ? AskPrice : BidPrice;
-
-						if (price == null)
-							price = TradePrice;
+						var price = (_openedPosSide == Sides.Buy ? AskPrice : BidPrice) ?? LastPrice;
 
 						if (price == null)
 							return null;
@@ -201,8 +198,7 @@ namespace StockSharp.Algo.PnL
 					{
 						while (volume > 0)
 						{
-							if (currTrade == null)
-								currTrade = _openedTrades.Peek();
+							currTrade ??= _openedTrades.Peek();
 
 							var diff = currTrade.Second.Min(volume);
 							closedVolume += diff;
@@ -267,7 +263,7 @@ namespace StockSharp.Algo.PnL
 			var tradePrice = levelMsg.TryGetDecimal(Level1Fields.LastTradePrice);
 			if (tradePrice != null)
 			{
-				TradePrice = (decimal)tradePrice;
+				LastPrice = (decimal)tradePrice;
 				_recalcUnrealizedPnL = true;
 			}
 
@@ -287,6 +283,17 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
+		/// To process <see cref="CandleMessage"/> message.
+		/// </summary>
+		/// <param name="candleMsg"><see cref="CandleMessage"/>.</param>
+		public void ProcessCandle(CandleMessage candleMsg)
+		{
+			LastPrice = candleMsg.ClosePrice;
+
+			_recalcUnrealizedPnL = true;
+		}
+
+		/// <summary>
 		/// To process the message, containing information on tick trade.
 		/// </summary>
 		/// <param name="execMsg">The message, containing information on tick trade.</param>
@@ -295,7 +302,7 @@ namespace StockSharp.Algo.PnL
 			if (execMsg.TradePrice == null)
 				return;
 
-			TradePrice = execMsg.TradePrice.Value;
+			LastPrice = execMsg.TradePrice.Value;
 
 			_recalcUnrealizedPnL = true;
 		}

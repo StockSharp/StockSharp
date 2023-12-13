@@ -2449,7 +2449,12 @@ namespace StockSharp.Algo.Strategies
 				}
 
 				default:
+				{
+					if (message is CandleMessage)
+						PnLManager.ProcessMessage(message);
+
 					return;
+				}
 			}
 
 			if (msgTime == null || msgTime.Value - _lastPnlRefreshTime < UnrealizedPnLInterval)

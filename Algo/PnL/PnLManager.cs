@@ -59,7 +59,12 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Use <see cref="Level1ChangeMessage"/> for <see cref="UnrealizedPnL"/> calculation.
 		/// </summary>
-		public bool UseLevel1 { get; set; } = true;
+		public bool UseLevel1 { get; set; }
+
+		/// <summary>
+		/// Use <see cref="CandleMessage"/> for <see cref="UnrealizedPnL"/> calculation.
+		/// </summary>
+		public bool UseCandles { get; set; } = true;
 
 		/// <inheritdoc />
 		public decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
@@ -82,8 +87,7 @@ namespace StockSharp.Algo.PnL
 
 					if (pnl != null)
 					{
-						if (retVal == null)
-							retVal = 0;
+						retVal ??= 0;
 
 						retVal += pnl.Value;
 					}
@@ -223,7 +227,15 @@ namespace StockSharp.Algo.PnL
 				}
 
 				default:
+				{
+					if (message is CandleMessage)
+					{
+						if (UseCandles)
+							break;
+					}
+
 					return null;
+				}
 			}
 
 			foreach (var manager in _managersByPf.CachedValues)
