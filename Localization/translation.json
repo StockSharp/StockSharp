@@ -6980,8 +6980,8 @@
     "ru": "Неизвестный тип {0}."
   },
   "CannotChangeCandleValue": {
-    "en": "Cannot change candle value for date {0} last added value is for date {1}.",
-    "ru": "Невозможно изменить значение для свечи для даты {0} последнее добавленное значение для даты {1}."
+    "en": "Cannot change value for date {0} last added value is for date {1}.",
+    "ru": "Невозможно изменить значение для даты {0} последнее добавленное значение для даты {1}."
   },
   "HydraServerNotAvailable": {
     "en": "HydraServer is not available.",
