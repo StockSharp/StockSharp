@@ -1,4 +1,16 @@
 {
+  "ShowWhitespace": {
+    "en": "Show whitespaces.",
+    "ru": "Показывать пробелы."
+  },
+  "HighlightCurrentLine": {
+    "en": "Current line highlighting.",
+    "ru": "Подсветка текущей линии."
+  },
+  "ShowLineNumber": {
+    "en": "Show lines numbers.",
+    "ru": "Показывать номера строчек."
+  },
   "Usdt": {
     "en": "USDT",
     "ru": "USDT"
