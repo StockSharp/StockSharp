@@ -918,7 +918,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 
 				_orderRegisterErrorCount = value;
-				this.Notify(nameof(OrderRegisterErrorCount));
+				this.Notify();
 			}
 		}
 
@@ -1020,7 +1020,8 @@ namespace StockSharp.Algo.Strategies
 					{
 						case ProcessStates.Started:
 						{
-							StartedTime = CurrentTime;
+							StartedTime = base.CurrentTime;
+							TotalWorkingTime = default;
 							LogProcessState(value);
 							OnStarted(StartedTime);
 							break;
@@ -1033,7 +1034,9 @@ namespace StockSharp.Algo.Strategies
 						}
 						case ProcessStates.Stopped:
 						{
-							TotalWorkingTime += CurrentTime - StartedTime;
+							if (StartedTime != default)
+								TotalWorkingTime += base.CurrentTime - StartedTime;
+
 							StartedTime = default;
 							LogProcessState(value);
 							OnStopped();
@@ -1050,7 +1053,7 @@ namespace StockSharp.Algo.Strategies
 				{
 					CheckRefreshOnlineState();
 					RaiseProcessStateChanged(this);
-					this.Notify(nameof(ProcessState));
+					this.Notify();
 				}
 				catch (Exception error)
 				{
@@ -1293,6 +1296,9 @@ namespace StockSharp.Algo.Strategies
 			get => _startedTime;
 			private set
 			{
+				if (_startedTime == value)
+					return;
+
 				_startedTime = value;
 				this.Notify();
 			}
@@ -1306,22 +1312,14 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public TimeSpan TotalWorkingTime
 		{
-			get
-			{
-				var retVal = _totalWorkingTime;
-
-				if (StartedTime != default && Connector != null)
-					retVal += CurrentTime - StartedTime;
-
-				return retVal;
-			}
+			get => _totalWorkingTime;
 			private set
 			{
 				if (_totalWorkingTime == value)
 					return;
 
 				_totalWorkingTime = value;
-				this.Notify(nameof(TotalWorkingTime));
+				this.Notify();
 			}
 		}
 
@@ -2140,6 +2138,8 @@ namespace StockSharp.Algo.Strategies
 			ErrorState = LogLevels.Info;
 			ErrorCount = default;
 			LastError = default;
+			TotalWorkingTime = default;
+			StartedTime = default;
 
 			_boardMsg = default;
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default;
