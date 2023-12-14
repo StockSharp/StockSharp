@@ -557,7 +557,8 @@ namespace SampleHistoryTesting
 				statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
 				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, ChartIndicatorDrawStyles.Area);
-				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
+				var realizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLRealized + " " + emulationInfo.StrategyName, Colors.Black, ChartIndicatorDrawStyles.Line);
+				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.DarkGray, ChartIndicatorDrawStyles.Line);
 				var commissionCurve = equity.CreateCurve(LocalizedStrings.Commission + " " + emulationInfo.StrategyName, Colors.Red, ChartIndicatorDrawStyles.DashedLine);
 				
 				strategy.PnLReceived2 += (s, pf, t, r, u, c) =>
@@ -567,6 +568,7 @@ namespace SampleHistoryTesting
 					data
 						.Group(t)
 							.Add(pnlCurve, r - (c ?? 0))
+							.Add(realizedPnLCurve, r)
 							.Add(unrealizedPnLCurve, u ?? 0)
 							.Add(commissionCurve, c ?? 0);
 
