@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Testing
 {
 	using System;
 	using System.ComponentModel.DataAnnotations;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
@@ -24,6 +26,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+	using StockSharp.Algo.Commissions;
 
 	/// <summary>
 	/// Settings of exchange emulator.
@@ -371,30 +374,75 @@ namespace StockSharp.Algo.Testing
 			Order = 219)]
 		public bool AllowStoreGenerateMessages { get; set; }
 
+		private bool _checkTradableDates;
+
+		/// <summary>
+		/// Check loading dates are they tradable.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CheckDatesKey,
+			Description = LocalizedStrings.CheckDatesDescKey,
+			GroupName = LocalizedStrings.BacktestKey,
+			Order = 106)]
+		public bool CheckTradableDates
+		{
+			get => _checkTradableDates;
+			set
+			{
+				_checkTradableDates = value;
+				NotifyPropertyChanged();
+			}
+		}
+
+		private IEnumerable<ICommissionRule> _commissionRules = Enumerable.Empty<ICommissionRule>();
+
+		/// <summary>
+		/// Commission rules.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			GroupName = LocalizedStrings.BacktestKey,
+			Name = LocalizedStrings.CommissionKey,
+			Description = LocalizedStrings.CommissionDescKey,
+			Order = 110)]
+		public IEnumerable<ICommissionRule> CommissionRules
+		{
+			get => _commissionRules;
+			set
+			{
+				_commissionRules = value ?? throw new ArgumentNullException(nameof(value));
+				NotifyChanged();
+			}
+		}
+
 		/// <summary>
 		/// To save the state of paper trading parameters.
 		/// </summary>
 		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(MatchOnTouch), MatchOnTouch);
-			storage.SetValue(nameof(Failing), Failing);
-			storage.SetValue(nameof(Latency), Latency);
-			storage.SetValue(nameof(InitialOrderId), InitialOrderId);
-			storage.SetValue(nameof(InitialTradeId), InitialTradeId);
-			storage.SetValue(nameof(SpreadSize), SpreadSize);
-			storage.SetValue(nameof(MaxDepth), MaxDepth);
-			storage.SetValue(nameof(PortfolioRecalcInterval), PortfolioRecalcInterval);
-			storage.SetValue(nameof(ConvertTime), ConvertTime);
-			storage.SetValue(nameof(PriceLimitOffset), PriceLimitOffset);
-			storage.SetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
-			storage.SetValue(nameof(CheckTradingState), CheckTradingState);
-			storage.SetValue(nameof(CheckMoney), CheckMoney);
-			storage.SetValue(nameof(CheckShortable), CheckShortable);
-			storage.SetValue(nameof(AllowStoreGenerateMessages), AllowStoreGenerateMessages);
+			storage
+				.Set(nameof(MatchOnTouch), MatchOnTouch)
+				.Set(nameof(Failing), Failing)
+				.Set(nameof(Latency), Latency)
+				.Set(nameof(InitialOrderId), InitialOrderId)
+				.Set(nameof(InitialTradeId), InitialTradeId)
+				.Set(nameof(SpreadSize), SpreadSize)
+				.Set(nameof(MaxDepth), MaxDepth)
+				.Set(nameof(PortfolioRecalcInterval), PortfolioRecalcInterval)
+				.Set(nameof(ConvertTime), ConvertTime)
+				.Set(nameof(PriceLimitOffset), PriceLimitOffset)
+				.Set(nameof(IncreaseDepthVolume), IncreaseDepthVolume)
+				.Set(nameof(CheckTradingState), CheckTradingState)
+				.Set(nameof(CheckMoney), CheckMoney)
+				.Set(nameof(CheckShortable), CheckShortable)
+				.Set(nameof(AllowStoreGenerateMessages), AllowStoreGenerateMessages)
+				.Set(nameof(CheckTradableDates), CheckTradableDates)
+				.Set(nameof(CommissionRules), CommissionRules.Select(c => c.SaveEntire(false)).ToArray());
 
 			if (TimeZone != null)
-				storage.SetValue(nameof(TimeZone), TimeZone);
+				storage.Set(nameof(TimeZone), TimeZone);
 		}
 
 		/// <summary>
@@ -418,9 +466,14 @@ namespace StockSharp.Algo.Testing
 			CheckMoney = storage.GetValue(nameof(CheckMoney), CheckMoney);
 			CheckShortable = storage.GetValue(nameof(CheckShortable), CheckShortable);
 			AllowStoreGenerateMessages = storage.GetValue(nameof(AllowStoreGenerateMessages), AllowStoreGenerateMessages);
+			CheckTradableDates = storage.GetValue(nameof(CheckTradableDates), CheckTradableDates);
 
 			if (storage.Contains(nameof(TimeZone)))
 				TimeZone = storage.GetValue<TimeZoneInfo>(nameof(TimeZone));
+
+			var commRules = storage.GetValue<SettingsStorage[]>(nameof(CommissionRules));
+			if (commRules is not null)
+				CommissionRules = commRules.Select(i => i.LoadEntire<ICommissionRule>()).ToArray();
 		}
 	}
 }

@@ -410,6 +410,12 @@ namespace SampleHistoryTesting
 							// It is terned off, and price should go through limit order price level
 							// (more "severe" test mode)
 							MatchOnTouch = false,
+
+							// 1 cent commission for trade
+							CommissionRules = new ICommissionRule[]
+							{
+								new CommissionPerTradeRule { Value = 0.01m },
+							},
 						}
 					},
 
@@ -435,12 +441,6 @@ namespace SampleHistoryTesting
 
 					// set market time freq as time frame
 					//MarketTimeChangedInterval = timeFrame,
-
-					// 1 cent commission for trade
-					CommissionRules = new ICommissionRule[]
-					{
-						new CommissionPerTradeRule { Value = 0.01m },
-					},
 				};
 
 				((ILogSource)connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;

@@ -301,7 +301,13 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Commission rules.
 		/// </summary>
+		[Obsolete("Use EmulationSettings.CommissionRules property.")]
 		public IEnumerable<ICommissionRule> CommissionRules { get; set; }
+
+		/// <summary>
+		/// <see cref="EmulationMessageAdapter.Settings"/>
+		/// </summary>
+		public MarketEmulatorSettings EmulationSettings => EmulationAdapter.Settings;
 
 		/// <inheritdoc />
 		public override void ClearCache()
@@ -362,9 +368,9 @@ namespace StockSharp.Algo.Testing
 
 			SendEmulationState(ChannelStates.Starting);
 
-			if (!isResuming && CommissionRules is not null)
+			if (!isResuming)
 			{
-				foreach (var rule in CommissionRules)
+				foreach (var rule in EmulationSettings.CommissionRules)
 					SendInMessage(new CommissionRuleMessage { Rule = rule });
 			}
 		}

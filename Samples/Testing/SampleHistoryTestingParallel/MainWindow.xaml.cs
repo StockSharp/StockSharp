@@ -136,8 +136,6 @@ namespace SampleHistoryTestingParallel
 
 			var settings = _optimizer.EmulationSettings;
 
-			settings.MarketTimeChangedInterval = TimeSpan.FromMinutes(1);
-
 			// set max possible iteration to 100
 			settings.MaxIterations = 100;
 

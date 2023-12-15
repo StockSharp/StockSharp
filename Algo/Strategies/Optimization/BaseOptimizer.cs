@@ -8,7 +8,6 @@ using Ecng.Common;
 using Ecng.Serialization;
 
 using StockSharp.Algo.Storages;
-using StockSharp.Algo.Strategies.Testing;
 using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
 using StockSharp.Logging;
@@ -385,14 +384,12 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					AdapterCache = adapterCache,
 					StorageCache = storageCache,
 				},
-
-				CommissionRules = EmulationSettings.CommissionRules,
 			};
 
 			_startedConnectors.Add(connector);
 		}
 
-		connector.EmulationAdapter.Settings.Load(EmulationSettings.Save());
+		connector.EmulationSettings.Load(EmulationSettings.Save());
 
 		var lastStep = 0;
 

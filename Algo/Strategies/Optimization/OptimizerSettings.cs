@@ -1,18 +1,53 @@
 ﻿namespace StockSharp.Algo.Strategies.Optimization;
 
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 using Ecng.Serialization;
 
-using StockSharp.Algo.Strategies.Testing;
+using StockSharp.Algo.Testing;
 using StockSharp.Localization;
 
 /// <summary>
 /// Optimizer settings.
 /// </summary>
-public class OptimizerSettings : EmulationSettings
+public class OptimizerSettings : MarketEmulatorSettings
 {
+	private DateTime _startTime = DateTime.Today.AddYears(-1);
+
+	/// <summary>
+	/// Date in history for starting the paper trading.
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Use specified parameters in Start methods.")]
+	public DateTime StartTime
+	{
+		get => _startTime;
+		set
+		{
+			_startTime = value;
+			NotifyPropertyChanged();
+		}
+	}
+
+	private DateTime _stopTime = DateTime.Today;
+
+	/// <summary>
+	/// Date in history to stop the paper trading (date is included).
+	/// </summary>
+	[Browsable(false)]
+	[Obsolete("Use specified parameters in Start methods.")]
+	public DateTime StopTime
+	{
+		get => _stopTime;
+		set
+		{
+			_stopTime = value;
+			NotifyPropertyChanged();
+		}
+	}
+
 	private int _batchSize = Environment.ProcessorCount * 2;
 
 	/// <summary>
@@ -67,6 +102,10 @@ public class OptimizerSettings : EmulationSettings
 		base.Save(storage);
 
 		storage
+#pragma warning disable CS0618 // Type or member is obsolete
+			.Set(nameof(StartTime), StartTime)
+			.Set(nameof(StopTime), StopTime)
+#pragma warning restore CS0618 // Type or member is obsolete
 			.Set(nameof(BatchSize), BatchSize)
 			.Set(nameof(MaxIterations), MaxIterations)
 		;
@@ -77,6 +116,10 @@ public class OptimizerSettings : EmulationSettings
 	{
 		base.Load(storage);
 
+#pragma warning disable CS0618 // Type or member is obsolete
+		StartTime = storage.GetValue(nameof(StartTime), StartTime);
+		StopTime = storage.GetValue(nameof(StopTime), StopTime);
+#pragma warning restore CS0618 // Type or member is obsolete
 		BatchSize = storage.GetValue(nameof(BatchSize), BatchSize);
 		MaxIterations = storage.GetValue(nameof(MaxIterations), MaxIterations);
 	}
