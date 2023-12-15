@@ -9,7 +9,7 @@ namespace StockSharp.Algo.Storages
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
+	using Ecng.Reflection;
 	using Ecng.Interop;
 	using Ecng.Serialization;
 

@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.ComponentModel;
+	using Ecng.Reflection;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
