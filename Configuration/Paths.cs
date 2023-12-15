@@ -533,6 +533,26 @@
 			};
 
 		/// <summary>
+		/// Serialize <paramref name="value"/> state into <see cref="string"/> value.
+		/// </summary>
+		/// <typeparam name="T">Type of <paramref name="value"/>.</typeparam>
+		/// <param name="value">Value.</param>
+		/// <param name="bom">Serializer adds UTF8 BOM preamble.</param>
+		/// <returns><see cref="string"/> value.</returns>
+		public static string SerializeToString<T>(this T value, bool bom = true)
+			=> Serialize(value, bom).UTF8();
+
+		/// <summary>
+		/// Deserialize <paramref name="value"/> state from <paramref name="str"/>.
+		/// </summary>
+		/// <typeparam name="T">Type of <paramref name="value"/>.</typeparam>
+		/// <param name="value">Value.</param>
+		/// <param name="str"><see cref="string"/> value.</param>
+		public static void DeserializeFromString<T>(this T value, string str)
+			where T : IPersistable
+			=> value.Load(Deserialize<SettingsStorage>(str.UTF8()));
+
+		/// <summary>
 		/// Serialize value into the specified file.
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
