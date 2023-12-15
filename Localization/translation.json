@@ -1,4 +1,8 @@
 {
+  "Dedicated": {
+    "en": "Dedicated",
+    "ru": "Выделенное"
+  },
   "ShowWhitespace": {
     "en": "Show whitespaces.",
     "ru": "Показывать пробелы."
