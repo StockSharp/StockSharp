@@ -233,19 +233,13 @@ namespace StockSharp.Messages
 				case UnitTypes.Percent:
 					throw new ArgumentException(LocalizedStrings.PercentagesConvert, nameof(unit));
 				case UnitTypes.Point:
-					var point = unit.GetTypeValue?.Invoke(unit.Type);
+					var point = unit.GetTypeValue?.Invoke(unit.Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
 
-					if (point is null)
-						throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-					return unit.Value * point.Value;
+					return unit.Value * point;
 				case UnitTypes.Step:
-					var step = unit.GetTypeValue?.Invoke(unit.Type);
+					var step = unit.GetTypeValue?.Invoke(unit.Type) ?? throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
 
-					if (step is null)
-						throw new InvalidOperationException(LocalizedStrings.PriceStepNotSpecified);
-
-					return unit.Value * step.Value;
+					return unit.Value * step;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.InvalidValue);
 			}
@@ -299,10 +293,7 @@ namespace StockSharp.Messages
 
 		private decimal SafeGetTypeValue(Func<UnitTypes, decimal?> getTypeValue)
 		{
-			var func = GetTypeValue ?? getTypeValue;
-
-			if (func is null)
-				throw new InvalidOperationException(LocalizedStrings.UnitHandlerNotSet);
+			var func = (GetTypeValue ?? getTypeValue) ?? throw new InvalidOperationException(LocalizedStrings.UnitHandlerNotSet);
 
 			var value = func(Type);
 
@@ -377,7 +368,7 @@ namespace StockSharp.Messages
 							value /= u1.SafeGetTypeValue(result.GetTypeValue);
 							break;
 						default:
-							throw new ArgumentOutOfRangeException();
+							throw new ArgumentOutOfRangeException(result.Type.ToString());
 					}
 
 					result.Value = value;
@@ -547,17 +538,16 @@ namespace StockSharp.Messages
 		/// <returns>String suffix.</returns>
 		public static string GetTypeSuffix(UnitTypes type)
 		{
-			switch (type)
+			return type switch
 			{
-				case UnitTypes.Percent:   return "%";
-				case UnitTypes.Absolute:  return string.Empty;
-				case UnitTypes.Step:      return LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "ш" : "s";
-				case UnitTypes.Point:     return LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "п" : "p";
-				case UnitTypes.Limit:     return LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "л" : "l";
+				UnitTypes.Percent	=> "%",
+				UnitTypes.Absolute	=> string.Empty,
+				UnitTypes.Step		=> LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "ш" : "s",
+				UnitTypes.Point		=> LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "п" : "p",
+				UnitTypes.Limit		=> LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "л" : "l",
 
-				default:
-					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type));
-			}
+				_ => throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type)),
+			};
 		}
 
 		/// <summary>
