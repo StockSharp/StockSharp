@@ -1643,9 +1643,9 @@
     "en": "Error updating data",
     "ru": "Ошибка обновления данных"
   },
-  "RateProduct": {
-    "en": "Rate product",
-    "ru": "Оценить продукт"
+  "WriteReview": {
+    "en": "Write review",
+    "ru": "Написать отзыв"
   },
   "AlreadyRated": {
     "en": "You have already rated this product.",
