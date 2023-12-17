@@ -77,7 +77,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable
+	public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
 	{
 		private class UnitOperator : BaseOperator<Unit>
 		{
@@ -529,7 +529,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public override string ToString() => Value.To<string>() + GetTypeSuffix(Type);
+		public override string ToString()
+			=> ToString(null, null);
+
+		/// <inheritdoc/>
+		public string ToString(string format, IFormatProvider formatProvider)
+			=> Value.ToString(format, formatProvider) + GetTypeSuffix(Type);
 
 		/// <summary>
 		/// Get string suffix.
