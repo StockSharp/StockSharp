@@ -103,6 +103,11 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	/// </summary>
 	public Type ObjectType { get; private set; }
 
+	/// <summary>
+	/// The code is compilable.
+	/// </summary>
+	public bool IsCompilable { get; private set; }
+
 	private string[] _extraSources;
 
 	/// <summary>
@@ -146,6 +151,8 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		if (isTypeCompatible is null)
 			throw new ArgumentNullException(nameof(isTypeCompatible));
 
+		IsCompilable = false;
+
 		var sources = new[] { Text };
 
 		if (ExtraSources is not null)
@@ -168,6 +175,8 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			errors.AddRange(result.Errors);
 			cache?.Add(sources, refs, asm = result.Assembly);
 		}
+
+		IsCompilable = true;
 
 		ObjectType = Context.LoadFromStream(asm).GetTypes().FirstOrDefault(isTypeCompatible);
 
