@@ -1,4 +1,12 @@
 {
+  "TypeNotSupported": {
+    "en": "Type '{0}' not supported.",
+    "ru": "Тип '{0}' не поддерживается."
+  },
+  "CodeNotAllowed": {
+    "en": "C# code is not allowed.",
+    "ru": "C# код не допустим."
+  },
   "Dedicated": {
     "en": "Dedicated",
     "ru": "Выделенное"
@@ -6292,8 +6300,12 @@
     "ru": "Пользователь {0} принудительно разлогинен из-за ошибок отправки данных."
   },
   "NotStartedBefore": {
-    "en": "Server was not launched earlier.",
-    "ru": "Сервер не был запущен ранее."
+    "en": "Was not launched earlier.",
+    "ru": "Не был запущен ранее."
+  },
+  "NotStoppedBefore": {
+    "en": "Was not stopped earlier.",
+    "ru": "Не был остановлен ранее."
   },
   "ClientWasDisconnectEarly": {
     "en": "Client {0} was disconnected earlier.",

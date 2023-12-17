@@ -207,7 +207,7 @@ public class GeneticOptimizer : BaseOptimizer
 				val = val.To(type);
 			}
 			else
-				throw new NotSupportedException($"Type {type} not supported.");
+				throw new NotSupportedException(LocalizedStrings.TypeNotSupported.Put(type));
 
 			return new((p, val));
 		}
@@ -273,7 +273,7 @@ public class GeneticOptimizer : BaseOptimizer
 			throw new ArgumentNullException(nameof(formula));
 
 		if (ServicesRegistry.TryCompiler is null)
-			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
+			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
 		var expression = formula.Compile<decimal>(_context);
 

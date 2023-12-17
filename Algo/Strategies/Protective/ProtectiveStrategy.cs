@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Strategies.Protective
 			set
 			{
 				if (ProcessState == ProcessStates.Started)
-					throw new InvalidOperationException("In process.");
+					throw new InvalidOperationException(LocalizedStrings.NotStoppedBefore);
 
 				_protectiveLevel.Value = value;
 			}

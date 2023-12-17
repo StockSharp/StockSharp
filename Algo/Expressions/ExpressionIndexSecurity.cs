@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Expressions
 						new InvalidOperationException(Formula.Error).LogError();
 				}
 				else
-					new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.").LogError();
+					new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler))).LogError();
 			}
 		}
 

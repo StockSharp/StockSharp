@@ -96,7 +96,7 @@ public class CandleExpressionCondition : IPersistable
 			return;
 
 		if (ServicesRegistry.TryCompiler is null)
-			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
+			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
 		_formula = Expression.Compile<bool>(_context);
 
@@ -257,7 +257,7 @@ public class ExpressionCandlePattern : ICandlePattern
 			throw new InvalidOperationException("all candle formulas are empty");
 
 		if (ServicesRegistry.TryCompiler is null)
-			throw new InvalidOperationException($"Service {nameof(ICompiler)} is not initialized.");
+			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 	}
 
 	bool ICandlePattern.Recognize(ReadOnlySpan<ICandleMessage> candles)
