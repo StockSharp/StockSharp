@@ -8,6 +8,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Candles.Patterns;
+	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies.Reporting;
@@ -250,5 +251,26 @@ namespace StockSharp.Algo
 		/// <see cref="ICompilerCache"/>
 		/// </summary>
 		public static ICompilerCache CompilerCache => ConfigManager.GetService<ICompilerCache>();
+
+		/// <summary>
+		/// <see cref="IRiskRuleProvider"/>
+		/// </summary>
+		public static IRiskRuleProvider TryRiskRuleProvider => ConfigManager.TryGetService<IRiskRuleProvider>();
+
+		/// <summary>
+		/// <see cref="IRiskRuleProvider"/>
+		/// </summary>
+		public static IRiskRuleProvider RiskRuleProvider => ConfigManager.GetService<IRiskRuleProvider>();
+
+		/// <summary>
+		/// <see cref="ICommissionRuleProvider"/>
+		/// </summary>
+		public static ICommissionRuleProvider TryCommissionRuleProvider => ConfigManager.TryGetService<ICommissionRuleProvider>();
+
+		/// <summary>
+		/// <see cref="ICommissionRuleProvider"/>
+		/// </summary>
+		public static ICommissionRuleProvider CommissionRuleProvider => ConfigManager.GetService<ICommissionRuleProvider>();
+
 	}
 }
