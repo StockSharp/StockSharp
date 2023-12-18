@@ -84,18 +84,5 @@ namespace StockSharp.Algo.Risk
 
 			base.Save(storage);
 		}
-
-		RiskActions IRiskRule.Action
-		{
-			get => throw new NotSupportedException();
-			set => throw new NotSupportedException();
-		}
-
-		string IRiskRule.Title => throw new NotSupportedException();
-
-		bool IRiskRule.ProcessMessage(Message message)
-		{
-			throw new NotSupportedException();
-		}
 	}
 }
