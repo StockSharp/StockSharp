@@ -65,19 +65,16 @@ namespace StockSharp.Algo.Commissions
 					if (_rules.Count == 0)
 						return null;
 
+					var execMsg = (ExecutionMessage)message;
+
 					decimal? commission = null;
 
 					foreach (var rule in _rules.Cache)
 					{
-						var ruleCom = rule.Process(message);
+						var ruleCom = rule.Process(execMsg);
 
 						if (ruleCom != null)
-						{
-							if (commission == null)
-								commission = 0;
-
-							commission += ruleCom.Value;
-						}
+							commission = (commission ?? 0) + ruleCom.Value;
 					}
 
 					if (commission != null)
@@ -107,9 +104,5 @@ namespace StockSharp.Algo.Commissions
 		{
 			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
 		}
-
-		string ICommissionRule.Title => throw new NotSupportedException();
-
-		Unit ICommissionRule.Value => throw new NotSupportedException();
 	}
 }

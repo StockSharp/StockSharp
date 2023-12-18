@@ -61,10 +61,6 @@ namespace StockSharp.Algo.Commissions
 			}
 		}
 
-		/// <inheritdoc />
-		[Browsable(false)]
-		public decimal Commission { get; private set; }
-
 		/// <summary>
 		/// Get title.
 		/// </summary>
@@ -92,26 +88,10 @@ namespace StockSharp.Algo.Commissions
 		/// <inheritdoc />
 		public virtual void Reset()
 		{
-			Commission = 0;
 		}
 
 		/// <inheritdoc />
-		public decimal? Process(Message message)
-		{
-			var commission = OnProcessExecution((ExecutionMessage)message);
-
-			if (commission != null)
-				Commission += commission.Value;
-
-			return commission;
-		}
-
-		/// <summary>
-		/// To calculate commission.
-		/// </summary>
-		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
-		protected abstract decimal? OnProcessExecution(ExecutionMessage message);
+		public abstract decimal? Process(ExecutionMessage message);
 
 		/// <summary>
 		/// Load settings.
@@ -131,7 +111,12 @@ namespace StockSharp.Algo.Commissions
 			storage.SetValue(nameof(Value), Value);
 		}
 
-		internal decimal? GetValue(decimal? baseValue)
+		/// <summary>
+		/// Get result value.
+		/// </summary>
+		/// <param name="baseValue">Base value.</param>
+		/// <returns>Result value.</returns>
+		protected decimal? GetValue(decimal? baseValue)
 		{
 			if (baseValue == null)
 				return null;
@@ -154,7 +139,7 @@ namespace StockSharp.Algo.Commissions
 	public class CommissionPerOrderRule : CommissionRule
 	{
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (message.HasOrderInfo())
 				return GetValue(message.OrderPrice);
@@ -174,7 +159,7 @@ namespace StockSharp.Algo.Commissions
 	public class CommissionPerTradeRule : CommissionRule
 	{
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
 				return GetValue(message.TradePrice);
@@ -194,7 +179,7 @@ namespace StockSharp.Algo.Commissions
 	public class CommissionPerOrderVolumeRule : CommissionRule
 	{
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (message.HasOrderInfo())
 				return (decimal)(message.OrderVolume * Value);
@@ -214,7 +199,7 @@ namespace StockSharp.Algo.Commissions
 	public class CommissionPerTradeVolumeRule : CommissionRule
 	{
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
 				return (decimal)(message.TradeVolume * Value);
@@ -265,7 +250,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (!message.HasOrderInfo())
 				return null;
@@ -336,7 +321,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (!message.HasTradeInfo())
 				return null;
@@ -376,7 +361,7 @@ namespace StockSharp.Algo.Commissions
 	public class CommissionPerTradePriceRule : CommissionRule
 	{
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
 				return (decimal)(message.TradePrice * message.TradeVolume * Value);
@@ -421,7 +406,7 @@ namespace StockSharp.Algo.Commissions
 		protected override string GetTitle() => _security?.To<string>();
 
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && message.SecurityId == _securityId)
 				return GetValue(message.TradePrice);
@@ -489,7 +474,7 @@ namespace StockSharp.Algo.Commissions
 		protected override string GetTitle() => _securityType.ToString();
 
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			// TODO
 			//if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
@@ -549,7 +534,7 @@ namespace StockSharp.Algo.Commissions
 		protected override string GetTitle() => _board?.Code;
 
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.EqualsIgnoreCase(Board.Code))
 				return GetValue(message.TradePrice);
@@ -620,7 +605,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <inheritdoc />
-		protected override decimal? OnProcessExecution(ExecutionMessage message)
+		public override decimal? Process(ExecutionMessage message)
 		{
 			if (!message.HasTradeInfo())
 				return null;

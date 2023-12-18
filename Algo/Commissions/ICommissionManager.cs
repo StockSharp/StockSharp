@@ -16,15 +16,35 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Commissions
 {
 	using Ecng.Collections;
+	using Ecng.Serialization;
+
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The commission calculating manager interface.
 	/// </summary>
-	public interface ICommissionManager : ICommissionRule
+	public interface ICommissionManager : IPersistable
 	{
 		/// <summary>
 		/// The list of commission calculating rules.
 		/// </summary>
 		ISynchronizedCollection<ICommissionRule> Rules { get; }
+
+		/// <summary>
+		/// Total commission.
+		/// </summary>
+		decimal Commission { get; }
+
+		/// <summary>
+		/// To reset the state.
+		/// </summary>
+		void Reset();
+
+		/// <summary>
+		/// To calculate commission.
+		/// </summary>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+		decimal? Process(Message message);
 	}
 }
