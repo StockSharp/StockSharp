@@ -422,7 +422,7 @@ namespace StockSharp.Algo.Strategies
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime()).NotNull();
 			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true);
-			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired)).SetValidator(v => v is null || v >= TimeSpan.Zero);
+			_historySize = this.Param<TimeSpan?>(nameof(HistorySize)).SetValidator(v => v is null || v >= TimeSpan.Zero);
 
 			_systemParams = new IStrategyParam[]
 			{
@@ -2924,7 +2924,7 @@ namespace StockSharp.Algo.Strategies
 				yield return pf;
 		}
 
-		private readonly StrategyParam<TimeSpan?> _historyRequired;
+		private readonly StrategyParam<TimeSpan?> _historySize;
 
 		/// <summary>
 		/// History to initialize the strategy on Live trading.
@@ -2935,14 +2935,14 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.DaysHistoryDescKey,
 			Order = 20)]
 		[TimeSpanEditor(Mask = TimeSpanEditorMask.Days | TimeSpanEditorMask.Hours | TimeSpanEditorMask.Minutes | TimeSpanEditorMask.Seconds)]
-		public TimeSpan? HistoryRequired
+		public TimeSpan? HistorySize
 		{
-			get => _historyRequired.Value;
-			set => _historyRequired.Value = value;
+			get => _historySize.Value;
+			set => _historySize.Value = value;
 		}
 
 		/// <summary>
-		/// Calculated from code version of <see cref="HistoryRequired"/>.
+		/// Calculated from code version of <see cref="HistorySize"/>.
 		/// </summary>
 		protected virtual TimeSpan? HistoryCalculated => null;
 
