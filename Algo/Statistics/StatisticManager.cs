@@ -180,11 +180,6 @@ namespace StockSharp.Algo.Statistics
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
-			storage.Set(nameof(Parameters), Parameters.Select(p => p.Save()).ToArray());
-		}
-
-		void IPersistable.Save(SettingsStorage storage)
-		{
 			var dict = Parameters.ToDictionary(p => p.Name);
 
 			foreach (var ps in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Parameters)))
@@ -192,6 +187,11 @@ namespace StockSharp.Algo.Statistics
 				if (dict.TryGetValue(ps.GetValue<string>(nameof(IStatisticParameter.Name)), out var p))
 					p.Load(ps);
 			}
+		}
+
+		void IPersistable.Save(SettingsStorage storage)
+		{
+			storage.Set(nameof(Parameters), Parameters.Select(p => p.Save()).ToArray());
 		}
 	}
 }
