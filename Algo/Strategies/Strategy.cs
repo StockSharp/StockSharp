@@ -390,6 +390,8 @@ namespace StockSharp.Algo.Strategies
 		private bool _stopping;
 		private BoardMessage _boardMsg;
 
+		private readonly IStrategyParam[] _systemParams;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Strategy"/>.
 		/// </summary>
@@ -422,8 +424,24 @@ namespace StockSharp.Algo.Strategies
 			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true);
 			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired)).SetValidator(v => v is null || v >= TimeSpan.Zero);
 
-			_ordersKeepTime.CanOptimize =
-			_historyRequired.CanOptimize = false;
+			_systemParams = new IStrategyParam[]
+			{
+				_id,
+				_disposeOnStop,
+				_waitRulesOnStop,
+				_cancelOrdersWhenStopping,
+				_waitAllTrades,
+				_ordersKeepTime,
+				_ordersKeepTime,
+				_stopOnChildStrategyErrors,
+				_restoreChildOrders,
+				_unsubscribeOnStop,
+				_workingTime,
+				_isOnlineStateIncludesChildren,
+				_historySize,
+			};
+
+			_ordersKeepTime.CanOptimize = _historySize.CanOptimize = false;
 
 			_riskManager = new RiskManager { Parent = this };
 
@@ -2660,16 +2678,14 @@ namespace StockSharp.Algo.Strategies
 		{
 			var parameters = storage.GetValue<SettingsStorage[]>(nameof(Parameters));
 
-			if (parameters == null)
-				return;
-
-			//var dict = Parameters.SyncGet(c => c.ToDictionary(p => p.Id ?? p.Name, p => p, StringComparer.InvariantCultureIgnoreCase));
-
-			// в настройках могут быть дополнительные параметры, которые будут добавлены позже
-			foreach (var s in parameters)
+			if (parameters is not null)
 			{
-				if (Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Id)) ?? s.GetValue<string>(nameof(IStrategyParam.Name)), out var param))
-					param.Load(s);
+				// в настройках могут быть дополнительные параметры, которые будут добавлены позже
+				foreach (var s in parameters)
+				{
+					if (Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Id)) ?? s.GetValue<string>(nameof(IStrategyParam.Name)), out var param))
+						param.Load(s);
+				}
 			}
 
 			RiskManager.LoadIfNotNull(storage, nameof(RiskManager));
@@ -2684,10 +2700,31 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(Parameters), Parameters.CachedValues.Select(p => p.Save()).ToArray());
+			Save(storage, KeepStatistics, true);
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage"><see cref="SettingsStorage"/></param>
+		/// <param name="keepStatistics"><see cref="KeepStatistics"/></param>
+		/// <param name="saveSystemParameters">Save system parameters.</param>
+		public void Save(SettingsStorage storage, bool keepStatistics, bool saveSystemParameters)
+		{
+			var parameters = Parameters.CachedValues;
+
+			if (!saveSystemParameters)
+				parameters = parameters.Except(_systemParams).ToArray();
+
+			storage.SetValue(nameof(Parameters), parameters.Select(p =>
+			{
+				var paramSettings = new SettingsStorage();
+				p.Save(paramSettings, !saveSystemParameters);
+				return paramSettings;
+			}).ToArray());
 			storage.SetValue(nameof(RiskManager), RiskManager.Save());
 
-			if (!KeepStatistics)
+			if (!keepStatistics)
 				return;
 
 			storage.SetValue(nameof(PnLManager), PnLManager.Save());

@@ -71,6 +71,13 @@ namespace StockSharp.Algo.Strategies
 		/// The Increment value at optimization.
 		/// </summary>
 		object OptimizeStep { get; set; }
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage"><see cref="SettingsStorage"/></param>
+		/// <param name="addDescription">Add description info.</param>
+		void Save(SettingsStorage storage, bool addDescription);
 	}
 
 	/// <summary>
@@ -191,7 +198,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnValueInnerStateChanged(object sender, PropertyChangedEventArgs e)
 		{
-			this.NotifyChanged(nameof(Value));
+			NotifyChanged(nameof(Value));
 		}
 
 		/// <summary>
@@ -224,13 +231,32 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(Id), Id);
-			storage.SetValue(nameof(Name), Name);
-			storage.SetValue(nameof(Value), Value);
-			storage.SetValue(nameof(CanOptimize), CanOptimize);
-			storage.SetValue(nameof(OptimizeFrom), OptimizeFrom?.ToStorage());
-			storage.SetValue(nameof(OptimizeTo), OptimizeTo?.ToStorage());
-			storage.SetValue(nameof(OptimizeStep), OptimizeStep?.ToStorage());
+			Save(storage, false);
+		}
+
+		/// <inheritdoc />
+		public void Save(SettingsStorage storage, bool addDescription)
+		{
+			storage
+				.Set(nameof(Id), Id)
+				.Set(nameof(Name), Name)
+				.Set(nameof(Value), Value)
+			;
+
+			if (addDescription)
+			{
+				if (typeof(T).IsEnum)
+					storage.Set("Description", Enumerator.GetNames<T>().JoinPipe());
+			}
+			else
+			{
+				storage
+					.Set(nameof(CanOptimize), CanOptimize)
+					.Set(nameof(OptimizeFrom), OptimizeFrom?.ToStorage())
+					.Set(nameof(OptimizeTo), OptimizeTo?.ToStorage())
+					.Set(nameof(OptimizeStep), OptimizeStep?.ToStorage())
+				;
+			}
 		}
 
 		/// <inheritdoc />
