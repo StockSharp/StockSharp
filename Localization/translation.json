@@ -4927,6 +4927,10 @@
     "en": "Risk-rule, tracking orders registration frequency.",
     "ru": "Риск-правило, отслеживающее частоту выставления заявок."
   },
+  "RiskOrderError": {
+    "en": "Risk-rule, tracking orders orders error count.",
+    "ru": "Риск-правило, отслеживающее количество ошибок выставления заявок."
+  },
   "RiskIntervalDesc": {
     "en": "Interval, during which orders quantity will be monitored.",
     "ru": "Интервал, в пределах которого будет отслеживать количество заявок."
@@ -4938,6 +4942,10 @@
   "RiskTradeVolume": {
     "en": "Risk-rule, tracking trade volume.",
     "ru": "Риск-правило, отслеживающее объем сделки."
+  },
+  "RiskError": {
+    "en": "Risk-rule, tracking orders error count.",
+    "ru": "Риск-правило, отслеживающее количество ошибок."
   },
   "TradeFreq": {
     "en": "Trade (frequency)",

@@ -388,7 +388,6 @@ namespace StockSharp.Algo.Strategies
 		private DateTimeOffset _prevTradeDate;
 		private bool _isPrevDateTradable;
 		private bool _stopping;
-		private DateTimeOffset _lastRegisterTime;
 		private BoardMessage _boardMsg;
 
 		/// <summary>
@@ -408,8 +407,6 @@ namespace StockSharp.Algo.Strategies
 			_id = this.Param(nameof(Id), base.Id);
 			_volume = this.Param<decimal>(nameof(Volume), 1).SetValidator(v => v > 0);
 			_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
-			_maxErrorCount = this.Param(nameof(MaxErrorCount), 1).SetValidator(v => v >= 1);
-			_maxOrderRegisterErrorCount = this.Param(nameof(MaxOrderRegisterErrorCount), 10).SetValidator(v => v >= -1);
 			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
 			_waitRulesOnStop = this.Param(nameof(WaitRulesOnStop), true);
 			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
@@ -421,17 +418,11 @@ namespace StockSharp.Algo.Strategies
 			_restoreChildOrders = this.Param(nameof(RestoreChildOrders), false);
 			_tradingMode = this.Param(nameof(TradingMode), StrategyTradingModes.Full);
 			_unsubscribeOnStop = this.Param(nameof(UnsubscribeOnStop), true);
-			_maxRegisterCount = this.Param(nameof(MaxRegisterCount), int.MaxValue).SetValidator(v => v >= 0);
-			_registerInterval = this.Param<TimeSpan>(nameof(RegisterInterval)).SetValidator(v => v >= TimeSpan.Zero);
 			_workingTime = this.Param(nameof(WorkingTime), new WorkingTime()).NotNull();
 			_isOnlineStateIncludesChildren = this.Param(nameof(IsOnlineStateIncludesChildren), true);
 			_historyRequired = this.Param<TimeSpan?>(nameof(HistoryRequired)).SetValidator(v => v is null || v >= TimeSpan.Zero);
 
 			_ordersKeepTime.CanOptimize =
-			_registerInterval.CanOptimize =
-			_maxErrorCount.CanOptimize =
-			_maxOrderRegisterErrorCount.CanOptimize =
-			_maxRegisterCount.CanOptimize =
 			_historyRequired.CanOptimize = false;
 
 			_riskManager = new RiskManager { Parent = this };
@@ -849,8 +840,6 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public SettingsStorage Environment { get; } = new();
 
-		private readonly StrategyParam<int> _maxErrorCount;
-
 		/// <summary>
 		/// The maximal number of errors, which strategy shall receive prior to stop operation.
 		/// </summary>
@@ -858,32 +847,15 @@ namespace StockSharp.Algo.Strategies
 		/// The default value is 1.
 		/// </remarks>
 		[Browsable(false)]
-		public int MaxErrorCount
-		{
-			get => _maxErrorCount.Value;
-			set => _maxErrorCount.Value = value;
-		}
-
-		private int _errorCount;
+		[Obsolete("Use RiskErrorRule rule.")]
+		public int MaxErrorCount { get; set; }
 
 		/// <summary>
 		/// The current number of errors.
 		/// </summary>
 		[Browsable(false)]
-		public int ErrorCount
-		{
-			get => _errorCount;
-			private set
-			{
-				if (_errorCount == value)
-					return;
-
-				_errorCount = value;
-				this.Notify();
-			}
-		}
-
-		private readonly StrategyParam<int> _maxOrderRegisterErrorCount;
+		[Obsolete("Use RiskErrorRule rule.")]
+		public int ErrorCount { get; private set; }
 
 		/// <summary>
 		/// The maximum number of order registration errors above which the algorithm will be stopped.
@@ -891,44 +863,23 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// The default value is 10.
 		/// </remarks>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.MaxOrderRegisterErrorCountKey,
-			Description = LocalizedStrings.MaxOrderRegisterErrorCountDescKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 12)]
-		public int MaxOrderRegisterErrorCount
-		{
-			get => _maxOrderRegisterErrorCount.Value;
-			set => _maxOrderRegisterErrorCount.Value = value;
-		}
-
-		private int _orderRegisterErrorCount;
+		[Browsable(false)]
+		[Obsolete("Use RiskOrderErrorRule rule.")]
+		public int MaxOrderRegisterErrorCount { get; set; }
 
 		/// <summary>
 		/// Current number of order registration errors.
 		/// </summary>
 		[Browsable(false)]
-		public int OrderRegisterErrorCount
-		{
-			get => _orderRegisterErrorCount;
-			private set
-			{
-				if (_orderRegisterErrorCount == value)
-					return;
-
-				_orderRegisterErrorCount = value;
-				this.Notify();
-			}
-		}
+		[Obsolete("Use RiskOrderErrorRule rule.")]
+		public int OrderRegisterErrorCount { get; private set; }
 
 		/// <summary>
 		/// Current number of order changes.
 		/// </summary>
 		[Browsable(false)]
+		[Obsolete("Use RiskOrderFreqRule rule.")]
 		public int CurrentRegisterCount { get; private set; }
-
-		private readonly StrategyParam<int> _maxRegisterCount;
 
 		/// <summary>
 		/// The maximum number of orders above which the algorithm will be stopped.
@@ -936,19 +887,9 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// The default value is <see cref="int.MaxValue"/>.
 		/// </remarks>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.MaxRegisterCountKey,
-			Description = LocalizedStrings.MaxRegisterCountDescKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 13)]
-		public int MaxRegisterCount
-		{
-			get => _maxRegisterCount.Value;
-			set => _maxRegisterCount.Value = value;
-		}
-
-		private readonly StrategyParam<TimeSpan> _registerInterval;
+		[Browsable(false)]
+		[Obsolete("Use RiskOrderFreqRule rule.")]
+		public int MaxRegisterCount { get; set; }
 
 		/// <summary>
 		/// The order registration interval above which the new order would not be registered.
@@ -956,17 +897,9 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// By default, the interval is disabled and it is equal to <see cref="TimeSpan.Zero"/>.
 		/// </remarks>
-		[Display(
-			ResourceType = typeof(LocalizedStrings),
-			Name = LocalizedStrings.RegisterIntervalKey,
-			Description = LocalizedStrings.RegisterIntervalDescKey,
-			GroupName = LocalizedStrings.GeneralKey,
-			Order = 14)]
-		public TimeSpan RegisterInterval
-		{
-			get => _registerInterval.Value;
-			set => _registerInterval.Value = value;
-		}
+		[Browsable(false)]
+		[Obsolete("Use RiskOrderFreqRule rule.")]
+		public TimeSpan RegisterInterval { get; set; }
 
 		bool IScheduledTask.CanStart => ProcessState == ProcessStates.Stopped;
 		bool IScheduledTask.CanStop => ProcessState == ProcessStates.Started;
@@ -1514,12 +1447,7 @@ namespace StockSharp.Algo.Strategies
 					unit.SetSecurity(Security);
 			}
 
-			ErrorCount = default;
 			ErrorState = LogLevels.Info;
-
-			OrderRegisterErrorCount = default;
-			CurrentRegisterCount = default;
-			_lastRegisterTime = default;
 
 			if (Portfolio?.CurrentValue is not null)
 				StatisticManager.Init<IPnLStatisticParameter, decimal>(Portfolio.CurrentValue.Value);
@@ -1550,41 +1478,6 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[Browsable(false)]
 		public INotifyList<IIndicator> Indicators => _indicators;
-
-		private bool CheckRegisterLimits()
-		{
-			if (CurrentRegisterCount >= MaxRegisterCount)
-			{
-				this.AddWarningLog(LocalizedStrings.RegisterMaxAttemptsExceed, MaxRegisterCount);
-				Stop();
-				return false;
-			}
-
-			CurrentRegisterCount++;
-
-			return true;
-		}
-
-		private bool CheckIntervalLimit(DateTimeOffset now)
-		{
-			if (RegisterInterval == default)
-				return true;
-
-			var diff = (_lastRegisterTime + RegisterInterval) - now;
-
-			if (diff >= TimeSpan.Zero)
-			{
-				this.AddInfoLog(LocalizedStrings.CannotRegisterCauseInterval + " " +
-					LocalizedStrings.RemBeginCurrInterval, diff, _lastRegisterTime, now, RegisterInterval);
-
-				return false;
-			}
-			else
-			{
-				_lastRegisterTime = now;
-				return true;
-			}
-		}
 
 		private string _lastCantTradeReason;
 
@@ -1637,18 +1530,6 @@ namespace StockSharp.Algo.Strategies
 				return false;
 			}
 
-			if (!CheckRegisterLimits())
-			{
-				noTradeReason = "register limit exceeded";
-				return false;
-			}
-
-			if (!CheckIntervalLimit(time))
-			{
-				noTradeReason = "order interval not yet expired";
-				return false;
-			}
-
 			noTradeReason = null;
 			return true;
 		}
@@ -1687,7 +1568,10 @@ namespace StockSharp.Algo.Strategies
 				}
 			}
 
-			AddOrder(order, false);
+			var action = AddOrder(order, false);
+
+			if (action is not null)
+				return;
 
 			ProcessRegisterOrderAction(null, order, (oOrder, nOrder) =>
 			{
@@ -1711,9 +1595,10 @@ namespace StockSharp.Algo.Strategies
 			if (!CanTrade(changes.Volume > 0 && order.Balance > changes.Volume))
 				return;
 
-			SafeGetConnector().EditOrder(order, changes);
+			var action = ProcessRisk(() => order.CreateReplaceMessage(changes, order.Security.ToSecurityId()));
 
-			ProcessRisk(() => order.CreateReplaceMessage(changes, order.Security.ToSecurityId()));
+			if (action is null)
+				SafeGetConnector().EditOrder(order, changes);
 		}
 
 		/// <inheritdoc />
@@ -1730,7 +1615,10 @@ namespace StockSharp.Algo.Strategies
 			if (!CanTrade(newOrder.Volume > 0 && oldOrder.Balance > newOrder.Volume))
 				return;
 
-			AddOrder(newOrder, false);
+			var action = AddOrder(newOrder, false);
+
+			if (action is not null)
+				return;
 
 			ProcessRegisterOrderAction(oldOrder, newOrder, (oOrder, nOrder) =>
 			{
@@ -1740,10 +1628,8 @@ namespace StockSharp.Algo.Strategies
 			});
 		}
 
-		private void ProcessRisk(Order order)
-		{
-			ProcessRisk(() => order.CreateRegisterMessage());
-		}
+		private RiskActions? ProcessRisk(Order order)
+			=> ProcessRisk(() => order.CreateRegisterMessage());
 
 		private void ProcessChildOrderRegistering(Order order)
 		{
@@ -1754,9 +1640,14 @@ namespace StockSharp.Algo.Strategies
 			ProcessRisk(order);
 		}
 
-		private void AddOrder(Order order, bool restored)
+		private RiskActions? AddOrder(Order order, bool restored)
 		{
-			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
+			var action = ProcessRisk(order);
+
+			if (action is not null)
+				return action;
+
+			_ordersInfo.Add(order, new() { IsOwn = true });
 
 			if (!restored)
 				order.UserOrderId = EnsureGetId();
@@ -1768,7 +1659,7 @@ namespace StockSharp.Algo.Strategies
 
 			_newOrder?.Invoke(order);
 
-			ProcessRisk(order);
+			return null;
 		}
 
 		private void ProcessRegisterOrderAction(Order oOrder, Order nOrder, Action<Order, Order> action)
@@ -2136,7 +2027,6 @@ namespace StockSharp.Algo.Strategies
 
 			ProcessState = ProcessStates.Stopped;
 			ErrorState = LogLevels.Info;
-			ErrorCount = default;
 			LastError = default;
 			TotalWorkingTime = default;
 			StartedTime = default;
@@ -2308,7 +2198,6 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderRegistered(Order order)
 		{
-			OrderRegisterErrorCount = 0;
 			OrderRegistered?.Invoke(order);
 		}
 
@@ -2591,15 +2480,8 @@ namespace StockSharp.Algo.Strategies
 
 			TryInvoke(() => OnOrderRegisterFailed(fail));
 
-			if (info.IsOwn && MaxOrderRegisterErrorCount != -1)
-			{
-				OrderRegisterErrorCount++;
-
-				this.AddInfoLog(LocalizedStrings.CurrErrorsCounter, OrderRegisterErrorCount, MaxOrderRegisterErrorCount);
-
-				if (OrderRegisterErrorCount >= MaxOrderRegisterErrorCount)
-					Stop();
-			}
+			if (info.IsOwn)
+				ProcessRisk(() => fail.ToMessage(fail.Order.TransactionId));
 		}
 
 		private void UpdatePnLManager(Security security)
@@ -2907,16 +2789,14 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="error">Error.</param>
 		protected virtual void OnError(Strategy strategy, Exception error)
 		{
-			ErrorCount++;
+			ProcessRisk(() => error.ToErrorMessage());
+
 			Error?.Invoke(strategy, error);
 
 			if (!StopOnChildStrategyErrors && !Equals(this, strategy))
 				return;
 
 			this.AddErrorLog(error.ToString());
-
-			if (ErrorCount >= MaxErrorCount)
-				Stop(error);
 		}
 
 		object ICloneable.Clone() => Clone();
@@ -2951,13 +2831,13 @@ namespace StockSharp.Algo.Strategies
 			return info != null && info.IsOwn;
 		}
 
-		private void ProcessRisk(Func<Message> getMessage)
+		private RiskActions? ProcessRisk(Func<Message> getMessage)
 		{
 			if (getMessage is null)
 				throw new ArgumentNullException(nameof(getMessage));
 
 			if (RiskManager.Rules.Count == 0)
-				return;
+				return null;
 
 			foreach (var rule in RiskManager.ProcessRules(getMessage()))
 			{
@@ -2968,17 +2848,19 @@ namespace StockSharp.Algo.Strategies
 				{
 					case RiskActions.ClosePositions:
 						this.ClosePosition();
-						break;
+						return rule.Action;
 					case RiskActions.StopTrading:
 						Stop();
-						break;
+						return rule.Action;
 					case RiskActions.CancelOrders:
 						CancelActiveOrders();
-						break;
+						return rule.Action;
 					default:
 						throw new InvalidOperationException(rule.Action.ToString());
 				}
 			}
+			
+			return null;
 		}
 
 		/// <summary>
