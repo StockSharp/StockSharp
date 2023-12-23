@@ -1,12 +1,4 @@
-<svg width="403" height="151.34" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
- <defs>
-  <clipPath transform="translate(-56.78 -94.55)" id="clip-path">
-   <rect id="svg_1" fill="none" height="151.33" width="401.03" y="93.56" x="56.78" class="cls-1"/>
-  </clipPath>
-  <clipPath transform="translate(-56.78 -94.55)" id="clip-path-2">
-   <rect id="svg_2" fill="none" height="169.91" width="413.53" y="93.56" x="45" class="cls-1"/>
-  </clipPath>
- </defs>
+<svg viewBox="0 0 420 230" xmlns="http://www.w3.org/2000/svg">
  <g>
   <g id="svg_11">
    <g stroke="null" id="svg_3" clip-path="url(#clip-path)" class="cls-2">
