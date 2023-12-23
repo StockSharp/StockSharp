@@ -2700,35 +2700,47 @@ namespace StockSharp.Algo.Strategies
 		/// <inheritdoc />
 		public override void Save(SettingsStorage storage)
 		{
-			Save(storage, KeepStatistics, true);
+			Save(storage, KeepStatistics, true, false, false);
 		}
 
 		/// <summary>
 		/// Save settings.
 		/// </summary>
 		/// <param name="storage"><see cref="SettingsStorage"/></param>
-		/// <param name="keepStatistics"><see cref="KeepStatistics"/></param>
+		/// <param name="saveStatistics"><see cref="KeepStatistics"/></param>
 		/// <param name="saveSystemParameters">Save system parameters.</param>
-		public void Save(SettingsStorage storage, bool keepStatistics, bool saveSystemParameters)
+		/// <param name="saveSecurity">Save <see cref="Security"/>.</param>
+		/// <param name="savePortfolio">Save <see cref="Portfolio"/>.</param>
+		public void Save(SettingsStorage storage, bool saveStatistics, bool saveSystemParameters, bool saveSecurity, bool savePortfolio)
 		{
 			var parameters = Parameters.CachedValues;
 
 			if (!saveSystemParameters)
 				parameters = parameters.Except(_systemParams).ToArray();
 
-			storage.SetValue(nameof(Parameters), parameters.Select(p =>
+			storage
+				.Set(nameof(Parameters), parameters.Select(p =>
+				{
+					var paramSettings = new SettingsStorage();
+					p.Save(paramSettings, !saveSystemParameters);
+					return paramSettings;
+				}).ToArray())
+				.Set(nameof(RiskManager), RiskManager.Save())
+			;
+
+			if (saveStatistics)
 			{
-				var paramSettings = new SettingsStorage();
-				p.Save(paramSettings, !saveSystemParameters);
-				return paramSettings;
-			}).ToArray());
-			storage.SetValue(nameof(RiskManager), RiskManager.Save());
+				storage
+					.Set(nameof(PnLManager), PnLManager.Save())
+					.Set(nameof(StatisticManager), StatisticManager.Save())
+				;
+			}
 
-			if (!keepStatistics)
-				return;
+			if (saveSecurity)
+				storage.Set(nameof(Security), Security?.Id);
 
-			storage.SetValue(nameof(PnLManager), PnLManager.Save());
-			storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
+			if (savePortfolio)
+				storage.Set(nameof(Portfolio), Portfolio?.Name);
 		}
 
 		/// <inheritdoc />
