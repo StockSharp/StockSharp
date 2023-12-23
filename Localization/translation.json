@@ -1,4 +1,28 @@
 {
+  "UpdatePluginsSelectionHint": {
+    "en": "Selected plugins will be updated",
+    "ru": "Выбранные плагины будут обновлены"
+  },
+  "RepairPluginsSelectionHint": {
+    "en": "Selected plugins will be installed or reinstalled, deselected plugins will be removed",
+    "ru": "Выбранные плагины будут установлены или переустановлены, невыбранные плагины будут удалены"
+  },
+  "NoActionSelected": {
+    "en": "No action is selected",
+    "ru": "Ни одного действия не выбрано"
+  },
+  "MainApplicationParams": {
+    "en": "{0} main application",
+    "ru": "{0} основное приложение"
+  },
+  "DoNotUpdate": {
+    "en": "do not update",
+    "ru": "не обновлять"
+  },
+  "DoNotRepair": {
+    "en": "do not repair",
+    "ru": "не переустанавливать"
+  },
   "TypeNotSupported": {
     "en": "Type '{0}' not supported.",
     "ru": "Тип '{0}' не поддерживается."
