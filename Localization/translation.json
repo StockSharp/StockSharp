@@ -99,6 +99,10 @@
     "en": "Not approved",
     "ru": "Не утвержден"
   },
+  "NotApprovedDesc": {
+    "en": "The product not approved. Please wait for moderation to finish. For any questions, please contact us at info@stocksharp.com",
+    "ru": "Продукт не утвержден. Пожалуйста, дождитесь окончания модерации. По всем вопросам обращайтесь на почту info@stocksharp.com"
+  },
   "NotInCatalog": {
     "en": "Not in catalog",
     "ru": "Не в каталоге"
@@ -1568,8 +1572,8 @@
     "ru": "Иконка"
   },
   "InvalidProductAccessParams": {
-    "en": "You cannot create products with access level '{0}'.",
-    "ru": "Вы не можете создавать продукты с уровнем доступа '{0}'."
+    "en": "You can create products with Private access level only. To open the Public option, please email us about your product at info@stocksharp.com",
+    "ru": "Вы можете создавать продукты с только уровнем доступа Частное. Для открытия опции Публично, пожалуйста, напишите нам о своем продукте на почту info@stocksharp.com"
   },
   "UserLookupError": {
     "en": "User lookup error",
