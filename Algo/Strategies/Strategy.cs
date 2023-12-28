@@ -2183,7 +2183,7 @@ namespace StockSharp.Algo.Strategies
 			get => _unrealizedPnLInterval;
 			set
 			{
-				if (value <= TimeSpan.Zero)
+				if (value < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 				_unrealizedPnLInterval = value;
@@ -2371,7 +2371,8 @@ namespace StockSharp.Algo.Strategies
 				}
 			}
 
-			if (msgTime == null || msgTime.Value - _lastPnlRefreshTime < UnrealizedPnLInterval)
+			var unrealInterval = UnrealizedPnLInterval;
+			if (msgTime == null || unrealInterval == default || (msgTime.Value - _lastPnlRefreshTime) < unrealInterval)
 				return;
 
 			_lastPnlRefreshTime = msgTime.Value;
