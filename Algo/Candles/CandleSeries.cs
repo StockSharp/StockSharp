@@ -262,6 +262,7 @@ namespace StockSharp.Algo.Candles
 			Description = LocalizedStrings.FillGapsKey,
 			GroupName = LocalizedStrings.BuildKey,
 			Order = 24)]
+		[Obsolete("Use separate subscriptions.")]
 		public bool FillGaps { get; set; }
 
 		/// <inheritdoc />
@@ -310,7 +311,7 @@ namespace StockSharp.Algo.Candles
 			IsRegularTradingHours = storage.GetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 			Count = storage.GetValue(nameof(Count), Count);
 			IsFinishedOnly = storage.GetValue(nameof(IsFinishedOnly), IsFinishedOnly);
-			FillGaps = storage.GetValue(nameof(FillGaps), FillGaps);
+			//FillGaps = storage.GetValue(nameof(FillGaps), FillGaps);
 		}
 
 		/// <summary>
@@ -346,7 +347,7 @@ namespace StockSharp.Algo.Candles
 			storage.SetValue(nameof(IsRegularTradingHours), IsRegularTradingHours);
 			storage.SetValue(nameof(Count), Count);
 			storage.SetValue(nameof(IsFinishedOnly), IsFinishedOnly);
-			storage.SetValue(nameof(FillGaps), FillGaps);
+			//storage.SetValue(nameof(FillGaps), FillGaps);
 		}
 	}
 }
