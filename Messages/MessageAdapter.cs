@@ -564,10 +564,16 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get possible time-frames for the specified instrument.
 		/// </summary>
+		protected virtual IEnumerable<TimeSpan> TimeFrames => _timeFrames;
+
+		/// <summary>
+		/// Get possible time-frames for the specified instrument.
+		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <returns>Possible time-frames.</returns>
+		[Obsolete("Use GetCandleArgs method.")]
 		protected virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 			=> _timeFrames;
 
@@ -575,7 +581,7 @@ namespace StockSharp.Messages
 		public virtual IEnumerable<object> GetCandleArgs(Type candleType, SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			return candleType == typeof(TimeFrameCandleMessage)
-				? GetTimeFrames(securityId, from, to).Cast<object>()
+				? TimeFrames.Cast<object>()
 				: Enumerable.Empty<object>();
 		}
 
