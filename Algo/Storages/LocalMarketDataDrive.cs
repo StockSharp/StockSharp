@@ -178,27 +178,21 @@ namespace StockSharp.Algo.Storages
 				{
 					return Do.Invariant(() =>
 					{
-						using (var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read)))
+						using var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read));
+
+						var dates = new List<DateTime>();
+
+						while (true)
 						{
-							var dates = new List<DateTime>();
+							var line = reader.ReadLine();
 
-							while (true)
-							{
-								var line = reader.ReadLine();
+							if (line == null)
+								break;
 
-								if (line == null)
-									break;
-
-								dates.Add(GetDate(line));
-							}
-
-							//for (var i = 0; i < count; i++)
-							//{
-							//	dates[i] = file.Read<DateTime>().UtcKind();
-							//}
-
-							return dates;
+							dates.Add(GetDate(line));
 						}
+
+						return dates;
 					});
 				}
 				catch (Exception ex)
@@ -262,14 +256,7 @@ namespace StockSharp.Algo.Storages
 			}
 
 			private static string GetDirectoryName(string path)
-			{
-				var name = IOPath.GetDirectoryName(path);
-
-				if (name == null)
-					throw new ArgumentException(path);
-
-				return name;
-			}
+				=> IOPath.GetDirectoryName(path) ?? throw new ArgumentException(path);
 
 			public void ResetCache()
 			{
@@ -522,17 +509,12 @@ namespace StockSharp.Algo.Storages
 		/// <param name="format">Format.</param>
 		/// <returns>The extension.</returns>
 		public static string GetExtension(StorageFormats format)
-		{
-			switch (format)
+			=> format switch
 			{
-				case StorageFormats.Binary:
-					return ".bin";
-				case StorageFormats.Csv:
-					return ".csv";
-				default:
-					throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue);
-			}
-		}
+				StorageFormats.Binary => ".bin",
+				StorageFormats.Csv => ".csv",
+				_ => throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.InvalidValue),
+			};
 
 		/// <summary>
 		/// Get data type and parameter for the specified file name.
@@ -585,9 +567,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="dirName">Directory name.</param>
 		/// <returns>The date.</returns>
 		public static DateTime GetDate(string dirName)
-		{
-			return dirName.ToDateTime(_dateFormat).UtcKind();
-		}
+			=> dirName.ToDateTime(_dateFormat).UtcKind();
 
 		/// <summary>
 		/// Convert the date to directory name.
@@ -595,9 +575,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="date">The date.</param>
 		/// <returns>Directory name.</returns>
 		public static string GetDirName(DateTime date)
-		{
-			return date.ToString(_dateFormat);
-		}
+			=> date.ToString(_dateFormat);
 
 		/// <summary>
 		/// To get the path to the folder with market data for the instrument.
