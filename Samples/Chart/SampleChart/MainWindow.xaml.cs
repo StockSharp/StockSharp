@@ -120,7 +120,8 @@
 
 		private void HistoryPath_OnFolderChanged(string path)
 		{
-			var secs = LocalMarketDataDrive.GetAvailableSecurities(path).ToArray();
+			using var drive = new LocalMarketDataDrive(path);
+			var secs = drive.AvailableSecurities.ToArray();
 
 			Securities.ItemsSource = secs;
 

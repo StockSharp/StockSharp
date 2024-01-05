@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class LocalMarketDataDrive : BaseMarketDataDrive
 	{
-		private sealed class LocalMarketDataStorageDrive : IMarketDataStorageDrive
+		private class LocalMarketDataStorageDrive : IMarketDataStorageDrive
 		{
 			private readonly string _path;
 			private readonly string _fileNameWithExtension;
@@ -264,7 +264,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, DataType, StorageFormats>, LocalMarketDataStorageDrive> _drives = new();
+		private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), LocalMarketDataStorageDrive> _drives = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
@@ -309,27 +309,35 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<SecurityId> AvailableSecurities => GetAvailableSecurities(Path);
+		public override IEnumerable<SecurityId> AvailableSecurities
+		{
+			get
+			{
+				var idGenerator = new SecurityIdGenerator();
+
+				if (!Directory.Exists(_path))
+					return Enumerable.Empty<SecurityId>();
+
+				return Directory
+					.EnumerateDirectories(_path)
+					.SelectMany(Directory.EnumerateDirectories)
+					.Select(IOPath.GetFileName)
+					.Select(StorageHelper.FolderNameToSecurityId)
+					.Select(n => idGenerator.Split(n, true))
+					.Where(t => t != default);
+			}
+		}
 
 		/// <summary>
 		/// Get all available instruments.
 		/// </summary>
 		/// <param name="path">The path to the directory with data.</param>
 		/// <returns>All available instruments.</returns>
+		[Obsolete("Use AvailableSecurities property.")]
 		public static IEnumerable<SecurityId> GetAvailableSecurities(string path)
 		{
-			var idGenerator = new SecurityIdGenerator();
-
-			if (!Directory.Exists(path))
-				return Enumerable.Empty<SecurityId>();
-
-			return Directory
-				.EnumerateDirectories(path)
-				.SelectMany(Directory.EnumerateDirectories)
-				.Select(IOPath.GetFileName)
-				.Select(StorageHelper.FolderNameToSecurityId)
-				.Select(n => idGenerator.Split(n, true))
-				.Where(t => t != default);
+			using var drive = new LocalMarketDataDrive(path);
+			return drive.AvailableSecurities.ToArray();
 		}
 
 		private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
@@ -395,7 +403,7 @@ namespace StockSharp.Algo.Storages
 			if (dataType.IsSecurityRequired && securityId == default)
 				throw new ArgumentNullException(nameof(securityId));
 
-			return _drives.SafeAdd(Tuple.Create(securityId, dataType, format),
+			return _drives.SafeAdd((securityId, dataType, format),
 				key => new LocalMarketDataStorageDrive(dataType, GetSecurityPath(securityId), format, this));
 		}
 
