@@ -182,7 +182,7 @@ public class CandlePatternFileStorage : ICandlePatternProvider
 
 		if (File.Exists(_fileName))
 		{
-			Do.Invariant(() => _fileName.Deserialize<SettingsStorage[]>().Select(s =>
+			Do.Invariant(() => _fileName.Deserialize<SettingsStorage[]>()?.Select(s =>
 			{
 				try
 				{
