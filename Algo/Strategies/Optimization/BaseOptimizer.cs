@@ -368,13 +368,12 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 			strategy.Parent ??= this;
 
-			connector = new(SecurityProvider, PortfolioProvider, ExchangeInfoProvider)
+			connector = new(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, StorageSettings.StorageRegistry)
 			{
 				Parent = this,
 
 				HistoryMessageAdapter =
 				{
-					StorageRegistry = StorageSettings.StorageRegistry,
 					Drive = StorageSettings.Drive,
 					StorageFormat = StorageSettings.Format,
 
