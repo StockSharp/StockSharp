@@ -1,4 +1,16 @@
 {
+  "DriveMustBeLocal": {
+    "en": "Drive must be local.",
+    "ru": "Хранилище должно быть локальным."
+  },
+  "BuildIndex": {
+    "en": "Build index. Use for read-only storages only (index non-updatable).",
+    "ru": "Построить индекс. Использовать только для неизменяемых хранилищ (индекс не обновляемый)."
+  },
+  "BuildIndexQuestion": {
+    "en": "Start building an index? An index will speed up access to read data, but its construction needs to be done periodically when updating data.",
+    "ru": "Начать построение индекса? Индекс ускорит доступ к чтению данных, но его построение необходимо делать периодически при обновлении данных."
+  },
   "UpdatePluginsSelectionHint": {
     "en": "Selected plugins will be updated",
     "ru": "Выбранные плагины будут обновлены"
