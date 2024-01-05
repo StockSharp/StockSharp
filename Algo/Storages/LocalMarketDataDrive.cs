@@ -44,23 +44,23 @@ namespace StockSharp.Algo.Storages
 			private readonly string _datesPath;
 			private readonly string _datesPathObsolete;
 			private readonly DataType _dataType;
-
+			private readonly SecurityId _secId;
+			private readonly StorageFormats _format;
 			private readonly SyncObject _cacheSync = new();
 
-			public LocalMarketDataStorageDrive(DataType dataType, string path, StorageFormats format, LocalMarketDataDrive drive)
+			public LocalMarketDataStorageDrive(DataType dataType, SecurityId secId, StorageFormats format, LocalMarketDataDrive drive)
 			{
 				_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
+				_secId = secId;
+				_format = format;
+				_drive = drive ?? throw new ArgumentNullException(nameof(drive));
 
 				var fileName = GetFileName(_dataType);
 
-				if (path.IsEmpty())
-					throw new ArgumentNullException(nameof(path));
+				_path = drive.GetSecurityPath(_secId);
+				_fileNameWithExtension = fileName + GetExtension(_format);
 
-				_path = path;
-				_drive = drive ?? throw new ArgumentNullException(nameof(drive));
-				_fileNameWithExtension = fileName + GetExtension(format);
-
-				var datesPath = IOPath.Combine(_path, $"{fileName}{format}Dates");
+				var datesPath = IOPath.Combine(_path, $"{fileName}{_format}Dates");
 				_datesPath = $"{datesPath}.bin";
 				_datesPathObsolete = $"{datesPath}.txt";
 
@@ -96,7 +96,6 @@ namespace StockSharp.Algo.Storages
 			}
 
 			private readonly LocalMarketDataDrive _drive;
-
 			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
 			public IEnumerable<DateTime> Dates => DatesDict.CachedValues;
@@ -119,6 +118,16 @@ namespace StockSharp.Algo.Storages
 				ResetCache();
 			}
 
+			private void ChangeIndex(DateTime date, bool remove)
+			{
+				Index index;
+
+				lock (_drive._indexLock)
+					index = _drive._index;
+
+				index?.ChangeDate(_secId, _format, _dataType, date, remove);
+			}
+
 			void IMarketDataStorageDrive.Delete(DateTime date)
 			{
 				date = date.UtcKind();
@@ -138,13 +147,12 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 
-				var dates = DatesDict;
-
-				dates.Remove(date);
-
-				SaveDates(Dates.ToArray());
+				DatesDict.Remove(date);
+				SaveDates(DatesDict.CachedValues);
 
 				_availableDataTypes.Remove(_drive.Path);
+
+				ChangeIndex(date, true);
 			}
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
@@ -156,11 +164,8 @@ namespace StockSharp.Algo.Storages
 				using (var file = File.OpenWrite(GetPath(date, false)))
 					stream.CopyTo(file);
 
-				var dates = DatesDict;
-
-				dates[date] = date;
-
-				SaveDates(Dates.ToArray());
+				DatesDict[date] = date;
+				SaveDates(DatesDict.CachedValues);
 
 				lock (_availableDataTypes.SyncRoot)
 				{
@@ -171,6 +176,8 @@ namespace StockSharp.Algo.Storages
 
 					tuple.First.Add(_dataType);
 				}
+
+				ChangeIndex(date, false);
 			}
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
@@ -295,7 +302,7 @@ namespace StockSharp.Algo.Storages
 			return dates;
 		}
 
-		private class Index : CachedSynchronizedDictionary<SecurityId, SynchronizedDictionary<StorageFormats, SynchronizedDictionary<DataType, DateTime[]>>>//, IPersistable
+		private class Index : CachedSynchronizedDictionary<SecurityId, Dictionary<StorageFormats, Dictionary<DataType, HashSet<DateTime>>>>//, IPersistable
 		{
 			private static class SKeys
 			{
@@ -376,11 +383,10 @@ namespace StockSharp.Algo.Storages
 									dt = type.ToDataType(arg);
 								}
 
-								formatDict.Add(dt, ReadDates(stream).ToArray());
+								formatDict.Add(dt, ReadDates(stream).ToHashSet());
 							}
 						}
 					}
-					
 				}
 
 				//foreach (var secStorage in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Index)))
@@ -405,6 +411,8 @@ namespace StockSharp.Algo.Storages
 			{
 				lock (SyncRoot)
 				{
+					_lastTimeChanged = null;
+
 					stream.WriteEx(Count);
 
 					foreach (var (secId, formatsDict) in this)
@@ -442,7 +450,7 @@ namespace StockSharp.Algo.Storages
 									}
 								}
 
-								WriteDates(stream, dates);
+								WriteDates(stream, dates.OrderBy().ToArray());
 							}
 						}
 					}
@@ -464,11 +472,47 @@ namespace StockSharp.Algo.Storages
 				//		})))
 				//)));
 			}
+
+			private DateTime? _lastTimeChanged;
+
+			public void ChangeDate(SecurityId secId, StorageFormats format, DataType dataType, DateTime date, bool remove)
+			{
+				lock (SyncRoot)
+				{
+					if (TryGetValue(secId, out var formatsDict) &&
+						formatsDict.TryGetValue(format, out var typesDict) &&
+						typesDict.TryGetValue(dataType, out var prevDates) &&
+						remove == prevDates.Contains(date))
+					{
+						_lastTimeChanged = DateTime.UtcNow;
+					}
+				}
+			}
+
+			public bool NeedSave(TimeSpan diff)
+			{
+				lock (SyncRoot)
+					return _lastTimeChanged is not null && (DateTime.UtcNow - _lastTimeChanged.Value) >= diff;
+			}
+
+			public IEnumerable<SecurityId> AvailableSecurities => CachedKeys;
+
+			public IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
+			{
+				lock (SyncRoot)
+				{
+					if (securityId == default)
+						return this.SelectMany(p => p.Value.SelectMany(p => p.Value.Keys)).Distinct().ToArray();
+
+					if (TryGetValue(securityId, out var formatsDict) && formatsDict.TryGetValue(format, out var typesDict))
+						return typesDict.Keys;
+				}
+
+				return Enumerable.Empty<DataType>();
+			}
 		}
 
 		private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), LocalMarketDataStorageDrive> _drives = new();
-
-		private string IndexFullPath => IOPath.Combine(_path, "index.bin");
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
@@ -510,10 +554,15 @@ namespace StockSharp.Algo.Storages
 		{
 			lock (_drives.SyncRoot)
 				_drives.Values.ForEach(d => d.ResetCache());
+
+			lock (_indexLock)
+				_index = null;
 		}
 
 		private readonly SyncObject _indexLock = new();
 		private Index _index;
+
+		private string IndexFullPath => IOPath.Combine(_path, "index.bin");
 
 		private bool TryGetIndex(out Index index)
 		{
@@ -556,7 +605,7 @@ namespace StockSharp.Algo.Storages
 			get
 			{
 				if (TryGetIndex(out var index))
-					return index.CachedKeys;
+					return index.AvailableSecurities;
 
 				var idGenerator = new SecurityIdGenerator();
 
@@ -591,15 +640,7 @@ namespace StockSharp.Algo.Storages
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
 			if (TryGetIndex(out var index))
-			{
-				if (securityId == default)
-					return index.SyncGet(d => d.SelectMany(p => p.Value.SelectMany(p => p.Value.Keys)).Distinct().ToArray());
-
-				if (index.TryGetValue(securityId, out var formatsDict) && formatsDict.TryGetValue(format, out var typesDict))
-					return typesDict.Keys.ToArray();
-
-				return Enumerable.Empty<DataType>();
-			}
+				return index.GetAvailableDataTypes(securityId, format);
 
 			var ext = GetExtension(format);
 
@@ -660,7 +701,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(securityId));
 
 			return _drives.SafeAdd((securityId, dataType, format),
-				key => new LocalMarketDataStorageDrive(dataType, GetSecurityPath(securityId), format, this));
+				key => new LocalMarketDataStorageDrive(dataType, securityId, format, this));
 		}
 
 		/// <inheritdoc />
@@ -856,7 +897,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Build index. Use for read-only storages only (index non-updatable).
+		/// Build an index for fast performance of accessing available data types from the storage.
 		/// </summary>
 		public void BuildIndex()
 		{
@@ -874,15 +915,42 @@ namespace StockSharp.Algo.Storages
 					var typesDict = formatDict.SafeAdd(format, key => new());
 
 					foreach (var dt in GetAvailableDataTypes(secId, format))
-						typesDict.Add(dt, GetStorageDrive(secId, dt, format).Dates.ToArray());
+						typesDict.Add(dt, GetStorageDrive(secId, dt, format).Dates.ToHashSet());
 				}
 			}
 
+			lock (_indexLock)
+				_index = index;
+
+			SaveIndex(index);
+		}
+
+		/// <summary>
+		/// Try save existing index.
+		/// </summary>
+		/// <param name="diff">Time diff from prev index change.</param>
+		public void TrySaveIndex(TimeSpan diff)
+		{
+			Index index;
+
+			lock (_indexLock)
+				index = _index;
+
+			if (index?.NeedSave(diff) != true)
+				return;
+
+			SaveIndex(index);
+		}
+
+		private void SaveIndex(Index index)
+		{
 			var stream = new MemoryStream();
 			index.Save(stream);
 
 			stream.Position = 0;
-			stream.Save(IndexFullPath);
+
+			lock (_indexLock)
+				stream.Save(IndexFullPath);
 		}
 	}
 }

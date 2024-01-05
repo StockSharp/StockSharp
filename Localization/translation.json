@@ -4,12 +4,8 @@
     "ru": "Хранилище должно быть локальным."
   },
   "BuildIndex": {
-    "en": "Build index. Use for read-only storages only (index non-updatable).",
-    "ru": "Построить индекс. Использовать только для неизменяемых хранилищ (индекс не обновляемый)."
-  },
-  "BuildIndexQuestion": {
-    "en": "Start building an index? An index will speed up access to read data, but its construction needs to be done periodically when updating data.",
-    "ru": "Начать построение индекса? Индекс ускорит доступ к чтению данных, но его построение необходимо делать периодически при обновлении данных."
+    "en": "Build an index for fast performance of accessing available data types from the storage.",
+    "ru": " Построить индекс для быстрой производительности получения доступных типов данных из хранилища."
   },
   "UpdatePluginsSelectionHint": {
     "en": "Selected plugins will be updated",
