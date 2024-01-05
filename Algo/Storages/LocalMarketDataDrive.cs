@@ -120,12 +120,8 @@ namespace StockSharp.Algo.Storages
 
 			private void ChangeIndex(DateTime date, bool remove)
 			{
-				Index index;
-
-				lock (_drive._indexLock)
-					index = _drive._index;
-
-				index?.ChangeDate(_secId, _format, _dataType, date, remove);
+				if (_drive.TryGetIndex(out var index))
+					index.ChangeDate(_secId, _format, _dataType, date, remove);
 			}
 
 			void IMarketDataStorageDrive.Delete(DateTime date)
@@ -149,10 +145,9 @@ namespace StockSharp.Algo.Storages
 
 				DatesDict.Remove(date);
 				SaveDates(DatesDict.CachedValues);
+				ChangeIndex(date, true);
 
 				_availableDataTypes.Remove(_drive.Path);
-
-				ChangeIndex(date, true);
 			}
 
 			void IMarketDataStorageDrive.SaveStream(DateTime date, Stream stream)
@@ -166,6 +161,7 @@ namespace StockSharp.Algo.Storages
 
 				DatesDict[date] = date;
 				SaveDates(DatesDict.CachedValues);
+				ChangeIndex(date, false);
 
 				lock (_availableDataTypes.SyncRoot)
 				{
@@ -176,8 +172,6 @@ namespace StockSharp.Algo.Storages
 
 					tuple.First.Add(_dataType);
 				}
-
-				ChangeIndex(date, false);
 			}
 
 			Stream IMarketDataStorageDrive.LoadStream(DateTime date, bool readOnly)
@@ -484,6 +478,11 @@ namespace StockSharp.Algo.Storages
 						typesDict.TryGetValue(dataType, out var prevDates) &&
 						remove == prevDates.Contains(date))
 					{
+						if (remove)
+							prevDates.Remove(date);
+						else
+							prevDates.Add(date);
+
 						_lastTimeChanged = DateTime.UtcNow;
 					}
 				}
@@ -944,6 +943,9 @@ namespace StockSharp.Algo.Storages
 
 		private void SaveIndex(Index index)
 		{
+			if (index is null)
+				throw new ArgumentNullException(nameof(index));
+
 			var stream = new MemoryStream();
 			index.Save(stream);
 
