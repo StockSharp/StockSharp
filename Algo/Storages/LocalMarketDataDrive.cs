@@ -42,11 +42,10 @@ namespace StockSharp.Algo.Storages
 			private readonly string _path;
 			private readonly string _fileNameWithExtension;
 			private readonly string _datesPath;
+			private readonly string _datesPathObsolete;
 			private readonly DataType _dataType;
 
 			private readonly SyncObject _cacheSync = new();
-
-			//private static readonly Version _dateVersion = new Version(1, 0);
 
 			public LocalMarketDataStorageDrive(DataType dataType, string path, StorageFormats format, LocalMarketDataDrive drive)
 			{
@@ -60,7 +59,10 @@ namespace StockSharp.Algo.Storages
 				_path = path;
 				_drive = drive ?? throw new ArgumentNullException(nameof(drive));
 				_fileNameWithExtension = fileName + GetExtension(format);
-				_datesPath = IOPath.Combine(_path, fileName + format + "Dates.txt");
+
+				var datesPath = IOPath.Combine(_path, $"{fileName}{format}Dates");
+				_datesPath = $"{datesPath}.bin";
+				_datesPathObsolete = $"{datesPath}.txt";
 
 				_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
 				{
@@ -69,6 +71,11 @@ namespace StockSharp.Algo.Storages
 					if (File.Exists(_datesPath))
 					{
 						foreach (var date in LoadDates())
+							retVal.Add(date, date);
+					}
+					else if (File.Exists(_datesPathObsolete))
+					{
+						foreach (var date in LoadDatesObsolete())
 							retVal.Add(date, date);
 					}
 					else
@@ -103,7 +110,10 @@ namespace StockSharp.Algo.Storages
 				if (Directory.Exists(_path))
 				{
 					lock (_cacheSync)
+					{
 						File.Delete(_datesPath);
+						File.Delete(_datesPathObsolete);
+					}
 				}
 
 				ResetCache();
@@ -176,9 +186,21 @@ namespace StockSharp.Algo.Storages
 			{
 				try
 				{
+					return ReadDates(File.ReadAllBytes(_datesPath).To<Stream>());
+				}
+				catch (Exception ex)
+				{
+					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPath), ex);
+				}
+			}
+
+			private IEnumerable<DateTime> LoadDatesObsolete()
+			{
+				try
+				{
 					return Do.Invariant(() =>
 					{
-						using var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read));
+						using var reader = new StreamReader(new FileStream(_datesPathObsolete, FileMode.Open, FileAccess.Read));
 
 						var dates = new List<DateTime>();
 
@@ -197,7 +219,7 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (Exception ex)
 				{
-					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPath), ex);
+					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPathObsolete), ex);
 				}
 			}
 
@@ -215,25 +237,14 @@ namespace StockSharp.Algo.Storages
 
 					var stream = new MemoryStream();
 
-					//stream.WriteByte((byte)_dateVersion.Major);
-					//stream.WriteByte((byte)_dateVersion.Minor);
-					//stream.Write(dates.Length);
-
-					Do.Invariant(() =>
-					{
-						var writer = new StreamWriter(stream) { AutoFlush = true };
-
-						foreach (var date in dates)
-						{
-							writer.WriteLine(GetDirName(date));
-							//stream.Write(date);
-						}
-					});
+					WriteDates(stream, dates);
+					stream.Position = 0;
 
 					lock (_cacheSync)
 					{
-						stream.Position = 0;
 						stream.Save(_datesPath);
+
+						File.Delete(_datesPathObsolete);
 					}
 				}
 				catch (UnauthorizedAccessException)
@@ -264,7 +275,200 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private static void WriteDates(Stream stream, DateTime[] dates)
+		{
+			stream.WriteEx(dates.Length);
+
+			foreach (var date in dates)
+				stream.WriteEx(date.Ticks);
+		}
+
+		private static IEnumerable<DateTime> ReadDates(Stream stream)
+		{
+			var dates = new List<DateTime>();
+
+			var length = stream.Read<int>();
+
+			for (var i = 0; i < length; i++)
+				dates.Add(stream.Read<DateTime>().UtcKind());
+
+			return dates;
+		}
+
+		private class Index : CachedSynchronizedDictionary<SecurityId, SynchronizedDictionary<StorageFormats, SynchronizedDictionary<DataType, DateTime[]>>>//, IPersistable
+		{
+			private static class SKeys
+			{
+				public const string SecId = nameof(SecId);
+				public const string Formats = nameof(Formats);
+				public const string Format = nameof(Format);
+				public const string Types = nameof(Types);
+				public const string Type = nameof(Type);
+				public const string Arg = nameof(Arg);
+				public const string Dates = nameof(Dates);
+			}
+
+			private const byte _customCode = 0;
+			private const byte _candlesCode = 7;
+
+			private static readonly PairSet<DataType, byte> _map = new()
+			{
+				{ DataType.Ticks, 1 },
+				{ DataType.MarketDepth, 2 },
+				{ DataType.Level1, 3 },
+				{ DataType.PositionChanges, 4 },
+				{ DataType.OrderLog, 5 },
+				{ DataType.Transactions, 6 },
+
+				{ DataType.CandleTimeFrame, _candlesCode + 0 },
+				{ DataType.CandleVolume, _candlesCode + 1 },
+				{ DataType.CandleTick, _candlesCode + 2 },
+				{ DataType.CandleRenko, _candlesCode + 3 },
+				{ DataType.CandlePnF, _candlesCode + 4 },
+				{ DataType.CandleRange, _candlesCode + 5 },
+			};
+
+			public void Load(Stream stream)
+			{
+				lock (SyncRoot)
+				{
+					Clear();
+
+					var secsLen = stream.Read<int>();
+
+					for (var i = 0; i < secsLen; i++)
+					{
+						var secId = new SecurityId
+						{
+							SecurityCode = stream.Read<string>(),
+							BoardCode = stream.Read<string>(),
+						};
+
+						var formatsDict = this.SafeAdd(secId);
+
+						var formatsLen = stream.Read<int>();
+
+						for (var k = 0; k < formatsLen; k++)
+						{
+							var format = (StorageFormats)stream.ReadByte();
+
+							var formatDict = formatsDict.SafeAdd(format);
+
+							var typesLen = stream.Read<int>();
+
+							for (var j = 0; j < typesLen; j++)
+							{
+								var dtCode = (byte)stream.ReadByte();
+
+								if (_map.TryGetKey(dtCode, out var dt))
+								{
+									if (dtCode >= _candlesCode)
+									{
+										var arg = stream.Read<string>();
+										dt = DataType.Create(dt.MessageType, dt.MessageType.ToDataTypeArg(arg));
+									}
+								}
+								else
+								{
+									var type = stream.Read<string>();
+									var arg = stream.Read<string>();
+
+									dt = type.ToDataType(arg);
+								}
+
+								formatDict.Add(dt, ReadDates(stream).ToArray());
+							}
+						}
+					}
+					
+				}
+
+				//foreach (var secStorage in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Index)))
+				//{
+				//	var formatsDict = this.SafeAdd(secStorage.GetValue<string>(SKeys.SecId).ToSecurityId(), key => new());
+
+				//	foreach (var formatStorage in secStorage.GetValue<IEnumerable<SettingsStorage>>(SKeys.Formats))
+				//	{
+				//		var typesDict = formatsDict.SafeAdd(formatStorage.GetValue<StorageFormats>(SKeys.Format), key => new());
+
+				//		foreach (var typeStorage in formatStorage.GetValue<IEnumerable<SettingsStorage>>(SKeys.Types))
+				//		{
+				//			var type = typeStorage.GetValue<string>(SKeys.Type);
+				//			var arg = typeStorage.GetValue<string>(SKeys.Arg);
+				//			typesDict.Add(type.ToDataType(arg), typeStorage.GetValue<DateTime[]>(SKeys.Dates));
+				//		}
+				//	}
+				//}
+			}
+
+			public void Save(Stream stream)
+			{
+				lock (SyncRoot)
+				{
+					stream.WriteEx(Count);
+
+					foreach (var (secId, formatsDict) in this)
+					{
+						stream.WriteEx(secId.SecurityCode);
+						stream.WriteEx(secId.BoardCode);
+
+						stream.WriteEx(formatsDict.Count);
+
+						foreach (var (format, typesDict) in formatsDict)
+						{
+							stream.WriteByte((byte)format);
+
+							stream.WriteEx(typesDict.Count);
+
+							foreach (var (dt, dates) in typesDict)
+							{
+								if (_map.TryGetValue(dt, out var dtCode))
+									stream.WriteByte(dtCode);
+								else
+								{
+									if (dt.IsCandles && _map.TryGetValue(DataType.Create(dt.MessageType, default), out var candleCode))
+									{
+										stream.WriteByte(candleCode);
+										stream.WriteEx(dt.DataTypeArgToString());
+									}
+									else
+									{
+										stream.WriteByte(_customCode);
+
+										var (typeStr, argStr) = dt.FormatToString();
+
+										stream.WriteEx(typeStr);
+										stream.WriteEx(argStr);
+									}
+								}
+
+								WriteDates(stream, dates);
+							}
+						}
+					}
+				}
+
+				//storage.Set(nameof(Index), this.Select(t => new SettingsStorage()
+				//	.Set(SKeys.SecId, t.Key.ToStringId())
+				//	.Set(SKeys.Formats, t.Value.Select(t => new SettingsStorage()
+				//		.Set(SKeys.Format, t.Key)
+				//		.Set(SKeys.Types, t.Value.Select(t =>
+				//		{
+				//			var (dt, arg) = t.Key.FormatToString();
+
+				//			return new SettingsStorage()
+				//				.Set(SKeys.Type, dt)
+				//				.Set(SKeys.Arg, arg)
+				//				.Set(SKeys.Dates, t.Value)
+				//			;
+				//		})))
+				//)));
+			}
+		}
+
 		private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), LocalMarketDataStorageDrive> _drives = new();
+
+		private string IndexFullPath => IOPath.Combine(_path, "index.bin");
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
@@ -308,11 +512,52 @@ namespace StockSharp.Algo.Storages
 				_drives.Values.ForEach(d => d.ResetCache());
 		}
 
+		private readonly SyncObject _indexLock = new();
+		private Index _index;
+
+		private bool TryGetIndex(out Index index)
+		{
+			index = _index;
+
+			if (index is not null)
+				return true;
+
+			lock (_indexLock)
+			{
+				index = _index;
+
+				if (index is not null)
+					return true;
+
+				if (!File.Exists(IndexFullPath))
+					return false;
+
+				try
+				{
+					index = new();
+					index.Load(File.ReadAllBytes(IndexFullPath).To<Stream>());
+
+					_index = index;
+				}
+				catch
+				{
+					index = null;
+					File.Delete(IndexFullPath);
+				}
+
+				return index is not null;
+			}
+
+		}
+
 		/// <inheritdoc />
 		public override IEnumerable<SecurityId> AvailableSecurities
 		{
 			get
 			{
+				if (TryGetIndex(out var index))
+					return index.CachedKeys;
+
 				var idGenerator = new SecurityIdGenerator();
 
 				if (!Directory.Exists(_path))
@@ -345,25 +590,36 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
+			if (TryGetIndex(out var index))
+			{
+				if (securityId == default)
+					return index.SyncGet(d => d.SelectMany(p => p.Value.SelectMany(p => p.Value.Keys)).Distinct().ToArray());
+
+				if (index.TryGetValue(securityId, out var formatsDict) && formatsDict.TryGetValue(format, out var typesDict))
+					return typesDict.Keys.ToArray();
+
+				return Enumerable.Empty<DataType>();
+			}
+
 			var ext = GetExtension(format);
 
 			IEnumerable<DataType> GetDataTypes(string secPath)
 			{
 				return IOHelper
-				       .GetDirectories(secPath)
-				       .SelectMany(dateDir => Directory.GetFiles(dateDir, "*" + ext))
-				       .Select(IOPath.GetFileNameWithoutExtension)
-				       .Distinct()
-				       .Select(GetDataType)
-				       .Where(t => t != null)
-				       .OrderBy(d =>
-				       {
-					       if (!d.IsCandles)
-						       return 0;
+						.GetDirectories(secPath)
+						.SelectMany(dateDir => Directory.GetFiles(dateDir, "*" + ext))
+						.Select(IOPath.GetFileNameWithoutExtension)
+						.Distinct()
+						.Select(GetDataType)
+						.Where(t => t != null)
+						.OrderBy(d =>
+						{
+							if (!d.IsCandles)
+								return 0;
 
-					       return d.IsTFCandles
-							   ? ((TimeSpan)d.Arg).Ticks : long.MaxValue;
-				       });
+							return d.IsTFCandles
+								? ((TimeSpan)d.Arg).Ticks : long.MaxValue;
+						});
 			}
 
 			if (securityId == default)
@@ -597,6 +853,36 @@ namespace StockSharp.Algo.Storages
 			var folderName = id.SecurityIdToFolderName();
 
 			return IOPath.Combine(Path, folderName.Substring(0, 1), folderName);
+		}
+
+		/// <summary>
+		/// Build index. Use for read-only storages only (index non-updatable).
+		/// </summary>
+		public void BuildIndex()
+		{
+			var securities = AvailableSecurities;
+			var formats = Enumerator.GetValues<StorageFormats>().ToArray();
+
+			var index = new Index();
+
+			foreach (var secId in securities)
+			{
+				var formatDict = index.SafeAdd(secId, key => new());
+
+				foreach (var format in formats)
+				{
+					var typesDict = formatDict.SafeAdd(format, key => new());
+
+					foreach (var dt in GetAvailableDataTypes(secId, format))
+						typesDict.Add(dt, GetStorageDrive(secId, dt, format).Dates.ToArray());
+				}
+			}
+
+			var stream = new MemoryStream();
+			index.Save(stream);
+
+			stream.Position = 0;
+			stream.Save(IndexFullPath);
 		}
 	}
 }
