@@ -475,13 +475,18 @@ namespace StockSharp.Algo.Storages
 				{
 					if (TryGetValue(secId, out var formatsDict) &&
 						formatsDict.TryGetValue(format, out var typesDict) &&
-						typesDict.TryGetValue(dataType, out var prevDates) &&
-						remove == prevDates.Contains(date))
+						typesDict.TryGetValue(dataType, out var dates) &&
+						remove == dates.Contains(date))
 					{
 						if (remove)
-							prevDates.Remove(date);
+						{
+							dates.Remove(date);
+
+							if (dates.Count == 0)
+								typesDict.Remove(dataType);
+						}
 						else
-							prevDates.Add(date);
+							dates.Add(date);
 
 						_lastTimeChanged = DateTime.UtcNow;
 					}
@@ -504,7 +509,7 @@ namespace StockSharp.Algo.Storages
 						return this.SelectMany(p => p.Value.SelectMany(p => p.Value.Keys)).Distinct().ToArray();
 
 					if (TryGetValue(securityId, out var formatsDict) && formatsDict.TryGetValue(format, out var typesDict))
-						return typesDict.Keys;
+						return typesDict.Keys.ToArray();
 				}
 
 				return Enumerable.Empty<DataType>();
