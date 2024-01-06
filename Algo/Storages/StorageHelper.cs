@@ -749,7 +749,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The delimiter, replacing '/' in path for instruments with id like USD/EUR. Is equal to '__'.
 		/// </summary>
-		public const string SecurityPairSeparator = "__";
+		public const string SecuritySlashSeparator = "__";
 
 		/// <summary>
 		/// The delimiter, replacing '*' in the path for instruments with id like C.BPO-*@CANADIAN. Is equal to '##STAR##'.
@@ -782,13 +782,19 @@ namespace StockSharp.Algo.Storages
 		///// </summary>
 		//public const string SecurityFirst2Dots = "##DDOT##";
 
+		/// <summary>
+		/// The delimiter, replacing '\\' in path for instruments with id like USD\\EUR. Is equal to '##BS##'.
+		/// </summary>
+		public const string SecurityBackslashSeparator = "##BS##";
+
 		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new()
 		{
-			{ "/", SecurityPairSeparator },
+			{ "/", SecuritySlashSeparator },
 			{ "*", SecurityStarSeparator },
 			{ ":", SecurityColonSeparator },
 			{ "|", SecurityVerticalBarSeparator },
 			{ "?", SecurityQuestionSeparator },
+			{ "\\", SecurityBackslashSeparator },
 		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
