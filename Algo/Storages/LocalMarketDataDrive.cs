@@ -18,6 +18,8 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Threading;
+	using System.Threading.Tasks;
 	using System.IO;
 	using System.Linq;
 	using IOPath = System.IO.Path;
@@ -623,7 +625,7 @@ namespace StockSharp.Algo.Storages
 		private readonly SyncObject _indexLock = new();
 		private Index _index;
 
-		private string IndexFullPath => IOPath.Combine(_path, "index.bin");
+		private string IndexFullPath => IOPath.Combine(Path, "index.bin");
 
 		private bool TryGetIndex(out Index index)
 		{
@@ -657,7 +659,24 @@ namespace StockSharp.Algo.Storages
 
 				return index is not null;
 			}
+		}
 
+		private IEnumerable<SecurityId> ScanAvailableSecurities()
+		{
+			var idGenerator = new SecurityIdGenerator();
+
+			var path = Path;
+
+			if (!Directory.Exists(path))
+				return Enumerable.Empty<SecurityId>();
+
+			return Directory
+				.EnumerateDirectories(path)
+				.SelectMany(Directory.EnumerateDirectories)
+				.Select(IOPath.GetFileName)
+				.Select(StorageHelper.FolderNameToSecurityId)
+				.Select(n => idGenerator.Split(n, true))
+				.Where(t => t != default);
 		}
 
 		/// <inheritdoc />
@@ -668,18 +687,7 @@ namespace StockSharp.Algo.Storages
 				if (TryGetIndex(out var index))
 					return index.AvailableSecurities;
 
-				var idGenerator = new SecurityIdGenerator();
-
-				if (!Directory.Exists(_path))
-					return Enumerable.Empty<SecurityId>();
-
-				return Directory
-					.EnumerateDirectories(_path)
-					.SelectMany(Directory.EnumerateDirectories)
-					.Select(IOPath.GetFileName)
-					.Select(StorageHelper.FolderNameToSecurityId)
-					.Select(n => idGenerator.Split(n, true))
-					.Where(t => t != default);
+				return ScanAvailableSecurities();
 			}
 		}
 
@@ -960,23 +968,81 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Build an index for fast performance of accessing available data types from the storage.
 		/// </summary>
-		public void BuildIndex()
+		/// <param name="updateProgress">Progress handler.</param>
+		/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+		/// <returns><see cref="Task"/></returns>
+		public Task BuildIndexAsync(Action<int, int> updateProgress, CancellationToken cancellationToken)
 		{
-			var securities = AvailableSecurities;
-			var formats = Enumerator.GetValues<StorageFormats>().ToArray();
+			if (updateProgress is null)
+				throw new ArgumentNullException(nameof(updateProgress));
 
 			var index = new Index();
+			var idGenerator = new SecurityIdGenerator();
+			var formats = Enumerator.GetValues<StorageFormats>().ToArray();
+			var path = Path;
 
-			foreach (var secId in securities)
+			if (Directory.Exists(path))
 			{
-				var formatDict = index.SafeAdd(secId, key => new());
+				var secPaths = Directory
+					.EnumerateDirectories(path)
+					.SelectMany(Directory.EnumerateDirectories)
+					.ToArray();
 
-				foreach (var format in formats)
+				for (var i = 0; i < secPaths.Length; i++)
 				{
-					var typesDict = formatDict.SafeAdd(format, key => new());
+					cancellationToken.ThrowIfCancellationRequested();
 
-					foreach (var dt in GetAvailableDataTypes(secId, format))
-						typesDict.Add(dt, GetStorageDrive(secId, dt, format).Dates.ToHashSet());
+					var secPath = secPaths[i];
+
+					var secId = idGenerator.Split(IOPath
+						.GetFileName(secPath)
+						.FolderNameToSecurityId(), true);
+
+					if (secId == default)
+						continue;
+
+					var formatDict = index.SafeAdd(secId, key => new());
+
+					foreach (var format in formats)
+					{
+						cancellationToken.ThrowIfCancellationRequested();
+
+						var ext = GetExtension(format);
+						
+						var dates = IOHelper
+							.GetDirectories(secPath)
+							.ToDictionary(
+								dateDir => GetDate(IOPath.GetFileName(dateDir)),
+								dateDir =>
+								{
+									cancellationToken.ThrowIfCancellationRequested();
+
+									return Directory
+										.GetFiles(dateDir, "*" + ext)
+										.Select(IOPath.GetFileNameWithoutExtension)
+										.Select(GetDataType)
+										.Where(t => t != null)
+										.ToHashSet()
+									;
+								}
+							);
+
+						var typesDict = formatDict.SafeAdd(format, key => new());
+
+						foreach (var dt in dates.Values.SelectMany().Distinct())
+						{
+							cancellationToken.ThrowIfCancellationRequested();
+
+							typesDict.Add(dt, dates
+								.Where(p => p.Value.Contains(dt))
+								.Select(p => p.Key)
+								.OrderBy()
+								.ToHashSet()
+							);
+						}
+					}
+
+					updateProgress(i, secPaths.Length);
 				}
 			}
 
@@ -984,6 +1050,8 @@ namespace StockSharp.Algo.Storages
 				_index = index;
 
 			SaveIndex(index);
+
+			return Task.CompletedTask;
 		}
 
 		/// <summary>
