@@ -280,8 +280,32 @@ namespace StockSharp.Algo.Storages
 		{
 			stream.WriteEx(dates.Length);
 
-			foreach (var date in dates)
-				stream.WriteEx(date.Ticks);
+			DateTime lastDate = default;
+
+			for (var i = 0; i < dates.Length; i++)
+			{
+				var date = dates[i];
+
+				if (i == 0)
+					stream.WriteEx(date.Ticks);
+				else
+				{
+					var shift = (int)(date - lastDate).TotalDays;
+
+					if (shift < 0)
+						throw new InvalidOperationException("Dates non ordered: {0}/{1}.".Put(lastDate, date));
+
+					if (shift >= byte.MaxValue)
+					{
+						stream.WriteByte(byte.MaxValue);
+						stream.WriteEx(date.Ticks);
+					}
+					else
+						stream.WriteByte((byte)shift);
+				}
+
+				lastDate = date;
+			}
 		}
 
 		private static IEnumerable<DateTime> ReadDates(Stream stream)
@@ -290,24 +314,36 @@ namespace StockSharp.Algo.Storages
 
 			var length = stream.Read<int>();
 
+			DateTime lastDate = default;
+
 			for (var i = 0; i < length; i++)
-				dates.Add(stream.Read<DateTime>().UtcKind());
+			{
+				if (i == 0)
+					lastDate = stream.Read<DateTime>();
+				else
+				{
+					var shift = stream.ReadByte();
+
+					if (shift == byte.MaxValue)
+						lastDate = stream.Read<DateTime>();
+					else
+					{
+						if (shift < 0)
+							throw new InvalidOperationException("Dates non ordered: {0}/{1}.".Put(lastDate, shift));
+
+						lastDate = lastDate.AddDays(shift);
+					}
+				}
+
+				dates.Add(lastDate.UtcKind());
+			}
 
 			return dates;
 		}
 
-		private class Index : CachedSynchronizedDictionary<SecurityId, Dictionary<StorageFormats, Dictionary<DataType, HashSet<DateTime>>>>//, IPersistable
+		private class Index : CachedSynchronizedDictionary<SecurityId, Dictionary<StorageFormats, Dictionary<DataType, HashSet<DateTime>>>>
 		{
-			private static class SKeys
-			{
-				public const string SecId = nameof(SecId);
-				public const string Formats = nameof(Formats);
-				public const string Format = nameof(Format);
-				public const string Types = nameof(Types);
-				public const string Type = nameof(Type);
-				public const string Arg = nameof(Arg);
-				public const string Dates = nameof(Dates);
-			}
+			private static readonly Version _ver = new(1, 0);
 
 			private const byte _customCode = 0;
 			private const byte _candlesCode = 7;
@@ -335,6 +371,45 @@ namespace StockSharp.Algo.Storages
 				{
 					Clear();
 
+					var ver = new Version(stream.Read<int>(), stream.Read<int>());
+
+					if (ver > _ver)
+						throw new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(nameof(Index), ver, _ver));
+
+					var boardsLen = stream.Read<int>();
+
+					var boardsDict = new Dictionary<int, string>();
+
+					for (var i = 0; i < boardsLen; i++)
+						boardsDict.Add(i, stream.Read<string>());
+
+					var typesLen = stream.Read<int>();
+
+					var typesDict = new Dictionary<int, DataType>();
+
+					for (var i = 0; i < typesLen; i++)
+					{
+						var dtCode = (byte)stream.ReadByte();
+
+						if (_map.TryGetKey(dtCode, out var dt))
+						{
+							if (dtCode >= _candlesCode)
+							{
+								var arg = stream.Read<string>();
+								dt = DataType.Create(dt.MessageType, dt.MessageType.ToDataTypeArg(arg));
+							}
+						}
+						else
+						{
+							var type = stream.Read<string>();
+							var arg = stream.Read<string>();
+
+							dt = type.ToDataType(arg);
+						}
+
+						typesDict.Add(i, dt);
+					}
+
 					var secsLen = stream.Read<int>();
 
 					for (var i = 0; i < secsLen; i++)
@@ -342,7 +417,7 @@ namespace StockSharp.Algo.Storages
 						var secId = new SecurityId
 						{
 							SecurityCode = stream.Read<string>(),
-							BoardCode = stream.Read<string>(),
+							BoardCode = boardsDict[stream.Read<int>()],
 						};
 
 						var formatsDict = this.SafeAdd(secId);
@@ -355,50 +430,15 @@ namespace StockSharp.Algo.Storages
 
 							var formatDict = formatsDict.SafeAdd(format);
 
-							var typesLen = stream.Read<int>();
+							typesLen = stream.Read<int>();
 
 							for (var j = 0; j < typesLen; j++)
 							{
-								var dtCode = (byte)stream.ReadByte();
-
-								if (_map.TryGetKey(dtCode, out var dt))
-								{
-									if (dtCode >= _candlesCode)
-									{
-										var arg = stream.Read<string>();
-										dt = DataType.Create(dt.MessageType, dt.MessageType.ToDataTypeArg(arg));
-									}
-								}
-								else
-								{
-									var type = stream.Read<string>();
-									var arg = stream.Read<string>();
-
-									dt = type.ToDataType(arg);
-								}
-
-								formatDict.Add(dt, ReadDates(stream).ToHashSet());
+								formatDict.Add(typesDict[stream.Read<int>()], ReadDates(stream).ToHashSet());
 							}
 						}
 					}
 				}
-
-				//foreach (var secStorage in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Index)))
-				//{
-				//	var formatsDict = this.SafeAdd(secStorage.GetValue<string>(SKeys.SecId).ToSecurityId(), key => new());
-
-				//	foreach (var formatStorage in secStorage.GetValue<IEnumerable<SettingsStorage>>(SKeys.Formats))
-				//	{
-				//		var typesDict = formatsDict.SafeAdd(formatStorage.GetValue<StorageFormats>(SKeys.Format), key => new());
-
-				//		foreach (var typeStorage in formatStorage.GetValue<IEnumerable<SettingsStorage>>(SKeys.Types))
-				//		{
-				//			var type = typeStorage.GetValue<string>(SKeys.Type);
-				//			var arg = typeStorage.GetValue<string>(SKeys.Arg);
-				//			typesDict.Add(type.ToDataType(arg), typeStorage.GetValue<DateTime[]>(SKeys.Dates));
-				//		}
-				//	}
-				//}
 			}
 
 			public void Save(Stream stream)
@@ -407,12 +447,56 @@ namespace StockSharp.Algo.Storages
 				{
 					_lastTimeChanged = null;
 
+					stream.WriteEx(_ver.Major);
+					stream.WriteEx(_ver.Minor);
+
+					var boards = AvailableSecurities.Select(id => id.BoardCode).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
+					var boardsDict = new Dictionary<string, int>();
+					
+					stream.WriteEx(boards.Length);
+
+					foreach (var board in boards)
+					{
+						stream.WriteEx(board);
+						boardsDict.Add(board, boardsDict.Count);
+					}
+
+					var dataTypes = this.SelectMany(p => p.Value.SelectMany(p => p.Value.Keys)).Distinct().ToArray();
+					var dtDict = new Dictionary<DataType, int>();
+
+					stream.WriteEx(dataTypes.Length);
+
+					foreach (var dt in dataTypes)
+					{
+						if (_map.TryGetValue(dt, out var dtCode))
+							stream.WriteByte(dtCode);
+						else
+						{
+							if (dt.IsCandles && _map.TryGetValue(DataType.Create(dt.MessageType, default), out var candleCode))
+							{
+								stream.WriteByte(candleCode);
+								stream.WriteEx(dt.DataTypeArgToString());
+							}
+							else
+							{
+								stream.WriteByte(_customCode);
+
+								var (typeStr, argStr) = dt.FormatToString();
+
+								stream.WriteEx(typeStr);
+								stream.WriteEx(argStr);
+							}
+						}
+
+						dtDict.Add(dt, dtDict.Count);
+					}
+
 					stream.WriteEx(Count);
 
 					foreach (var (secId, formatsDict) in this)
 					{
 						stream.WriteEx(secId.SecurityCode);
-						stream.WriteEx(secId.BoardCode);
+						stream.WriteEx(boardsDict[secId.BoardCode]);
 
 						stream.WriteEx(formatsDict.Count);
 
@@ -424,47 +508,12 @@ namespace StockSharp.Algo.Storages
 
 							foreach (var (dt, dates) in typesDict)
 							{
-								if (_map.TryGetValue(dt, out var dtCode))
-									stream.WriteByte(dtCode);
-								else
-								{
-									if (dt.IsCandles && _map.TryGetValue(DataType.Create(dt.MessageType, default), out var candleCode))
-									{
-										stream.WriteByte(candleCode);
-										stream.WriteEx(dt.DataTypeArgToString());
-									}
-									else
-									{
-										stream.WriteByte(_customCode);
-
-										var (typeStr, argStr) = dt.FormatToString();
-
-										stream.WriteEx(typeStr);
-										stream.WriteEx(argStr);
-									}
-								}
-
+								stream.WriteEx(dtDict[dt]);
 								WriteDates(stream, dates.OrderBy().ToArray());
 							}
 						}
 					}
 				}
-
-				//storage.Set(nameof(Index), this.Select(t => new SettingsStorage()
-				//	.Set(SKeys.SecId, t.Key.ToStringId())
-				//	.Set(SKeys.Formats, t.Value.Select(t => new SettingsStorage()
-				//		.Set(SKeys.Format, t.Key)
-				//		.Set(SKeys.Types, t.Value.Select(t =>
-				//		{
-				//			var (dt, arg) = t.Key.FormatToString();
-
-				//			return new SettingsStorage()
-				//				.Set(SKeys.Type, dt)
-				//				.Set(SKeys.Arg, arg)
-				//				.Set(SKeys.Dates, t.Value)
-				//			;
-				//		})))
-				//)));
 			}
 
 			private DateTime? _lastTimeChanged;
@@ -473,22 +522,30 @@ namespace StockSharp.Algo.Storages
 			{
 				lock (SyncRoot)
 				{
-					if (TryGetValue(secId, out var formatsDict) &&
-						formatsDict.TryGetValue(format, out var typesDict) &&
-						typesDict.TryGetValue(dataType, out var dates) &&
-						remove == dates.Contains(date))
+					if (remove)
 					{
-						if (remove)
+						if (TryGetValue(secId, out var formatsDict) &&
+							formatsDict.TryGetValue(format, out var typesDict) &&
+							typesDict.TryGetValue(dataType, out var dates) &&
+							dates.Remove(date))
 						{
-							dates.Remove(date);
-
 							if (dates.Count == 0)
 								typesDict.Remove(dataType);
-						}
-						else
-							dates.Add(date);
 
-						_lastTimeChanged = DateTime.UtcNow;
+							_lastTimeChanged = DateTime.UtcNow;
+						}
+					}
+					else
+					{
+						var dates = this
+							.SafeAdd(secId, out var isNew1)
+							.SafeAdd(format, out var isNew2)
+							.SafeAdd(dataType, out var isNew3);
+
+						var added = dates.Add(date);
+
+						if (isNew1 || isNew2 || isNew3 || added)
+							_lastTimeChanged = DateTime.UtcNow;
 					}
 				}
 			}
@@ -506,7 +563,7 @@ namespace StockSharp.Algo.Storages
 				lock (SyncRoot)
 				{
 					if (securityId == default)
-						return this.SelectMany(p => p.Value.SelectMany(p => p.Value.Keys)).Distinct().ToArray();
+						return this.SelectMany(p => p.Value.TryGetValue(format, out var formatsDict) ? formatsDict.Keys : Enumerable.Empty<DataType>()).Distinct().ToArray();
 
 					if (TryGetValue(securityId, out var formatsDict) && formatsDict.TryGetValue(format, out var typesDict))
 						return typesDict.Keys.ToArray();

@@ -5,7 +5,7 @@
   },
   "BuildIndex": {
     "en": "Build an index for fast performance of accessing available data types from the storage.",
-    "ru": " Построить индекс для быстрой производительности получения доступных типов данных из хранилища."
+    "ru": "Построить индекс для быстрой производительности получения доступных типов данных из хранилища."
   },
   "UpdatePluginsSelectionHint": {
     "en": "Selected plugins will be updated",
