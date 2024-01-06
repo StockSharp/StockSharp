@@ -406,8 +406,8 @@ namespace StockSharp.Algo.Storages
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
 		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		/// <param name="logsReceiver">Logs receiver.</param>
-		public static void ClearDatesCache(this IEnumerable<IMarketDataDrive> drives, Action<int, int> updateProgress,
-			Func<bool> isCancelled, ILogReceiver logsReceiver)
+		public static void ClearDatesCache(this IEnumerable<IMarketDataDrive> drives,
+			Action<int, int> updateProgress, Func<bool> isCancelled, ILogReceiver logsReceiver)
 		{
 			if (drives == null)
 				throw new ArgumentNullException(nameof(drives));
@@ -420,17 +420,6 @@ namespace StockSharp.Algo.Storages
 
 			if (logsReceiver == null)
 				throw new ArgumentNullException(nameof(logsReceiver));
-
-			//var dataTypes = new[]
-			//{
-			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
-			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
-			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
-			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
-			//	Tuple.Create(typeof(QuoteChangeMessage), (object)null),
-			//	Tuple.Create(typeof(Level1ChangeMessage), (object)null),
-			//	Tuple.Create(typeof(NewsMessage), (object)null)
-			//};
 
 			var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 			var progress = 0;
