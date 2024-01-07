@@ -329,6 +329,7 @@ namespace StockSharp.Messages
 		/// Try fill gaps.
 		/// </summary>
 		[DataMember]
+		[Obsolete("Use separate subscriptions.")]
 		public bool FillGaps { get; set; }
 
 		/// <summary>
@@ -394,7 +395,6 @@ namespace StockSharp.Messages
 			destination.BoardCode = BoardCode;
 			destination.RefreshSpeed = RefreshSpeed;
 			destination.DepthBuilder = DepthBuilder;
-			destination.FillGaps = FillGaps;
 			destination.DoNotBuildOrderBookInrement = DoNotBuildOrderBookInrement;
 			destination.Fields = Fields?.ToArray();
 		}
@@ -445,9 +445,6 @@ namespace StockSharp.Messages
 
 			if (RefreshSpeed != null)
 				str += $",Speed={RefreshSpeed}";
-
-			if (FillGaps)
-				str += $",Gaps={FillGaps}";
 
 			if (DoNotBuildOrderBookInrement)
 				str += $",NotBuildInc={DoNotBuildOrderBookInrement}";
