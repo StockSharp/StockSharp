@@ -1,10 +1,10 @@
-﻿using System;
+﻿namespace StockSharp.Messages;
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Ecng.Common;
-
-namespace StockSharp.Messages;
 
 /// <summary>
 /// Historical <see cref="AsyncMessageAdapter"/>.
@@ -52,8 +52,7 @@ public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
 
 		if (from > now)
 		{
-			if(this.IsOutMessageSupported(MessageTypes.SubscriptionFinished))
-				SendSubscriptionFinished(mdMsg.TransactionId);
+			SendSubscriptionFinished(mdMsg.TransactionId);
 			return default;
 		}
 
