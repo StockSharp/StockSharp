@@ -33,9 +33,7 @@
 			CredentialsFile = Path.Combine(CompanyPath, $"credentials{DefaultSettingsExt}");
 
 			AppName = ConfigManager.TryGet("appName", TypeHelper.ApplicationName);
-
-			var settingsPath = PathsHolder.AppDataPath ?? ConfigManager.TryGet<string>("settingsPath");
-			AppDataPath = settingsPath.IsEmpty() ? Path.Combine(CompanyPath, AppName2) : settingsPath.ToFullPathIfNeed();
+			AppDataPath = GetAppDataPath(PathsHolder.AppDataPath ?? ConfigManager.TryGet<string>("settingsPath"), AppName2);
 
 			PlatformConfigurationFile = Path.Combine(AppDataPath, $"platform_config{DefaultSettingsExt}");
 			ProxyConfigurationFile = Path.Combine(CompanyPath, $"proxy_config{DefaultSettingsExt}");
@@ -61,6 +59,17 @@
 				System.Diagnostics.Trace.WriteLine(ex);
 			}
 		}
+
+		/// <summary>
+		/// Get <see cref="AppDataPath"/>.
+		/// </summary>
+		/// <param name="appDataPath">Relative <see cref="AppDataPath"/>.</param>
+		/// <param name="appName"><see cref="AppName2"/></param>
+		/// <returns><see cref="AppDataPath"/></returns>
+		public static string GetAppDataPath(string appDataPath, string appName)
+			=> appDataPath.IsEmpty()
+				? Path.Combine(CompanyPath, appName)
+				: appDataPath.ToFullPathIfNeed();
 
 		/// <summary>
 		/// Get history data path.
