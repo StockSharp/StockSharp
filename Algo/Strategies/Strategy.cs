@@ -2623,15 +2623,16 @@ namespace StockSharp.Algo.Strategies
 				PnLReceived?.Invoke(_pfSubscription);
 
 				var evt = PnLReceived2;
+				var pf = Portfolio;
 
-				if (evt is not null)
+				if (evt is not null && pf is not null)
 				{
 					var manager = PnLManager;
-					evt(_pfSubscription, Portfolio, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
+					evt(_pfSubscription, pf, time, manager.RealizedPnL, manager.UnrealizedPnL, Commission);
 
 					ProcessRisk(() => new PositionChangeMessage
 					{
-						PortfolioName = Portfolio.Name,
+						PortfolioName = pf.Name,
 						SecurityId = SecurityId.Money,
 						ServerTime = time,
 						OriginalTransactionId = _pfSubscription.TransactionId,
