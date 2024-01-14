@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Storages
 		private RemoteMarketDataDrive(EndPoint address, Func<IMessageAdapter> createAdapter)
 		{
 			Address = address;
-			_createAdapter = createAdapter;
+			_createAdapter = createAdapter ?? throw new ArgumentNullException(nameof(createAdapter));
 		}
 
 		/// <summary>
@@ -196,6 +196,8 @@ namespace StockSharp.Algo.Storages
 				login = "stocksharp";
 			((ISenderTargetAdapter)adapter).SenderCompId = login;
 			((ISenderTargetAdapter)adapter).TargetCompId = TargetCompId;
+
+			adapter.Parent ??= ServicesRegistry.LogManager?.Application;
 
 			return new(adapter) { Cache = Cache };
 		}
