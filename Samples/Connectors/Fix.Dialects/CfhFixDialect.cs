@@ -2,6 +2,7 @@ namespace StockSharp.Fix.Dialects
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Text;
 
 	using Ecng.Common;
@@ -11,15 +12,13 @@ namespace StockSharp.Fix.Dialects
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using DataType = StockSharp.Messages.DataType;
 
 	/// <summary>
 	/// CFH FIX protocol dialect.
 	/// </summary>
 	[MediaIcon("CFH_logo.png")]
-	[DisplayNameLoc(LocalizedStrings.CFHKey)]
-#if !NO_LICENSE
-	[Licensing.LicenseFeature("CFH")]
-#endif
+	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.CFHKey)]
 	public class CfhFixDialect : BaseFixDialect
 	{
 		private static class CfhFixTags
@@ -51,6 +50,11 @@ namespace StockSharp.Fix.Dialects
 			: base(transactionIdGenerator, Encoding.UTF8)
 		{
 		}
+
+#if !NO_LICENSE
+		/// <inheritdoc />
+		public override string FeatureName => "FIX_CFH";
+#endif
 
 		/// <inheritdoc />
 		public override IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; } = new[]
@@ -96,7 +100,7 @@ namespace StockSharp.Fix.Dialects
 						case OrderTypes.Conditional:
 							break;
 						default:
-							throw new NotSupportedException(LocalizedStrings.Str1601Params.Put(regMsg.OrderType, regMsg.TransactionId));
+							throw new NotSupportedException(LocalizedStrings.OrderUnsupportedType.Put(regMsg.OrderType, regMsg.TransactionId));
 					}
 
 					var securityId = regMsg.SecurityId;
