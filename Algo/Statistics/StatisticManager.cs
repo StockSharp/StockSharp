@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Statistics
 
 	using StockSharp.Algo.PnL;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The statistics manager.
@@ -78,17 +79,29 @@ namespace StockSharp.Algo.Statistics
 				}
 			}
 
+			private readonly Dictionary<StatisticParameterTypes, IStatisticParameter> _dict = new();
+
+			public bool TryGetValue(StatisticParameterTypes type, out IStatisticParameter parameter)
+			{
+				lock (SyncRoot)
+					return _dict.TryGetValue(type, out parameter);
+			}
+
+			protected override bool OnAdding(IStatisticParameter item)
+			{
+				_dict.Add(item.Type, item);
+				return base.OnAdding(item);
+			}
+
 			protected override bool OnRemoving(IStatisticParameter item)
 			{
-				item.DoDispose();
+				_dict.Remove(item.Type);
 				return base.OnRemoving(item);
 			}
 
 			protected override bool OnClearing()
 			{
-				foreach (var item in this.ToArray())
-					Remove(item);
-
+				_dict.Clear();
 				return true;
 			}
 
@@ -180,18 +193,26 @@ namespace StockSharp.Algo.Statistics
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
-			var dict = Parameters.ToDictionary(p => p.Name);
-
 			foreach (var ps in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Parameters)))
 			{
-				if (dict.TryGetValue(ps.GetValue<string>(nameof(IStatisticParameter.Name)), out var p))
+				var type = ps.GetValue<StatisticParameterTypes?>(nameof(IStatisticParameter.Type));
+
+				if (type is null)
+					continue;
+
+				if (_parameters.TryGetValue(type.Value, out var p))
 					p.Load(ps);
 			}
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
-			storage.Set(nameof(Parameters), Parameters.Select(p => p.Save()).ToArray());
+			storage.Set(nameof(Parameters), Parameters.Select(p =>
+			{
+				var s = p.Save();
+				s.Set(nameof(p.Type), (int)p.Type);
+				return s;
+			}).ToArray());
 		}
 	}
 }
