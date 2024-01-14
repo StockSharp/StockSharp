@@ -8,103 +8,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="..\SampleConnection\App.xaml">
-      <Link>App.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Page Include="..\SampleConnection\ChartWindow.xaml">
-      <Link>ChartWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\Level1Window.xaml">
-      <Link>Level1Window.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\MainPanel.xaml">
-      <Link>MainPanel.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\MyTradesWindow.xaml">
-      <Link>MyTradesWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\NewsWindow.xaml">
-      <Link>NewsWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\OrdersLogWindow.xaml">
-      <Link>OrdersLogWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\OrdersWindow.xaml">
-      <Link>OrdersWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\PortfoliosWindow.xaml">
-      <Link>PortfoliosWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\QuotesWindow.xaml">
-      <Link>QuotesWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\SecuritiesWindow.xaml">
-      <Link>SecuritiesWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\SampleConnection\TradesWindow.xaml">
-      <Link>TradesWindow.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="..\SampleConnection\App.xaml.cs" Link="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="..\SampleConnection\ChartWindow.xaml.cs" Link="ChartWindow.xaml.cs">
-      <DependentUpon>ChartWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\Level1Window.xaml.cs" Link="Level1Window.xaml.cs">
-      <DependentUpon>Level1Window.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\MainPanel.xaml.cs" Link="MainPanel.xaml.cs">
-      <DependentUpon>MainPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\MyTradesWindow.xaml.cs" Link="MyTradesWindow.xaml.cs">
-      <DependentUpon>MyTradesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\NewsWindow.xaml.cs" Link="NewsWindow.xaml.cs">
-      <DependentUpon>NewsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\OrdersLogWindow.xaml.cs" Link="OrdersLogWindow.xaml.cs">
-      <DependentUpon>OrdersLogWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\OrdersWindow.xaml.cs" Link="OrdersWindow.xaml.cs">
-      <DependentUpon>OrdersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\PortfoliosWindow.xaml.cs" Link="PortfoliosWindow.xaml.cs">
-      <DependentUpon>PortfoliosWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\QuotesWindow.xaml.cs" Link="QuotesWindow.xaml.cs">
-      <DependentUpon>QuotesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\SecuritiesWindow.xaml.cs" Link="SecuritiesWindow.xaml.cs">
-      <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\SampleConnection\TradesWindow.xaml.cs" Link="TradesWindow.xaml.cs">
-      <DependentUpon>TradesWindow.xaml</DependentUpon>
-    </Compile>
+    <ApplicationDefinition Include="..\SampleConnection\App.xaml" Link="App.xaml" />
+    <Compile Include="..\SampleConnection\App.xaml.cs" DependentUpon="App.xaml" Link="App.xaml.cs" />
+
+    <Page Include="..\SampleConnection\*.xaml" Exclude="..\SampleConnection\App.xaml;..\SampleConnection\MainWindow.xaml" DependentUpon="%(Filename).xaml" Link="%(Filename).xaml" />
+    <Compile Include="..\SampleConnection\*.xaml.cs" Exclude="..\SampleConnection\App.xaml.cs;..\SampleConnection\MainWindow.xaml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
