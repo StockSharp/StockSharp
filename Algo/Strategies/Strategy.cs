@@ -1983,6 +1983,9 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Stop()
 		{
+			if (ProcessState == ProcessStates.Stopped)
+				return;
+
 			_stopping = true;
 			SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Stopping));
 		}
