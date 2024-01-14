@@ -85,19 +85,6 @@ namespace StockSharp.Algo
 		/// Deleting the element.
 		/// </summary>
 		/// <param name="item">Element.</param>
-		/// <returns>The sign of possible action.</returns>
-		protected override bool OnRemoving(IMarketRule item)
-		{
-			if (!Contains(item))
-				throw new InvalidOperationException(LocalizedStrings.RuleNotInContainer.Put(item, _container.Name));
-
-			return base.OnRemoving(item);
-		}
-
-		/// <summary>
-		/// Deleting the element.
-		/// </summary>
-		/// <param name="item">Element.</param>
 		protected override void OnRemoved(IMarketRule item)
 		{
 			item.Container.AddRuleLog(LogLevels.Debug, item, LocalizedStrings.Deleting);
