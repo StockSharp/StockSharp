@@ -12131,17 +12131,13 @@
     "en": "FIX server",
     "ru": "FIX сервер"
   },
-  "WcfServer": {
-    "en": "WCF server",
-    "ru": "WCF сервер"
-  },
   "HydraFixServer": {
     "en": "FIX server, spread live and historical market data.",
     "ru": "Сервер, распространяющий live и исторические данные через FIX протокол."
   },
-  "HydraWcfServer": {
-    "en": "WCF server, spread historical market data in S# format files.",
-    "ru": "Сервер, распространяющий исторические данные в формате S# через WCF протокол."
+  "HydraServer": {
+    "en": "Hydra server, spread historical market data in StockSharp format files.",
+    "ru": "Гидра сервер, распространяющий исторические данные в формате StockSharp."
   },
   "CandleMaxDays": {
     "en": "Candle (days)",
