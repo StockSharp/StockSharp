@@ -54,7 +54,7 @@ namespace StockSharp.BitStamp.Native
 			return MakeRequest<IEnumerable<Symbol>>(CreateUrl("trading-pairs-info"), CreateRequest(Method.Get), cancellationToken);
 		}
 
-		public ValueTask<IEnumerable<Transaction>> RequestTransactions(string ticker, string interval, CancellationToken cancellationToken)
+		public ValueTask<IEnumerable<Transaction>> GetTransactions(string ticker, string interval, CancellationToken cancellationToken)
 		{
 			var url = CreateUrl($"transactions/{ticker}");
 			var request = CreateRequest(Method.Get);
@@ -63,6 +63,22 @@ namespace StockSharp.BitStamp.Native
 				request.AddParameter("time", interval);
 
 			return MakeRequest<IEnumerable<Transaction>>(url, request, cancellationToken);
+		}
+
+		public async ValueTask<IEnumerable<Ohlc>> GetOhlc(string ticker, int step, int limit, DateTime start/*, DateTime end*/, CancellationToken cancellationToken)
+		{
+			var url = CreateUrl($"ohlc/{ticker}");
+			var request = CreateRequest(Method.Get);
+
+			request.AddParameter("step", step);
+			request.AddParameter("limit", limit);
+			request.AddParameter("start", start.ToUnix());
+			//request.AddParameter("end", end.ToUnix());
+			request.AddParameter("exclude_current_candle", true);
+
+			dynamic result = await MakeRequest<object>(url, request, cancellationToken);
+
+			return ((JToken)result.data.ohlc).DeserializeObject<IEnumerable<Ohlc>>();
 		}
 
 		public async ValueTask<(Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>, Dictionary<string, decimal>)> GetBalances(string ticker, CancellationToken cancellationToken)

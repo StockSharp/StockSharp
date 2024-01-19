@@ -42,6 +42,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		this.AddSupportedMarketDataType(DataType.MarketDepth);
 		//this.AddSupportedMarketDataType(DataType.Level1);
 		this.AddSupportedMarketDataType(DataType.OrderLog);
+		this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
 
 		this.AddSupportedResultMessage(MessageTypes.SecurityLookup);
 		this.AddSupportedResultMessage(MessageTypes.PortfolioLookup);
@@ -54,6 +55,23 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 
 	/// <inheritdoc />
 	public override string AssociatedBoard => BoardCodes.BitStamp;
+
+	/// <inheritdoc />
+	protected override IEnumerable<TimeSpan> TimeFrames { get; } = new[]
+	{
+		TimeSpan.FromMinutes(1),
+		TimeSpan.FromMinutes(3),
+		TimeSpan.FromMinutes(5),
+		TimeSpan.FromMinutes(15),
+		TimeSpan.FromMinutes(30),
+		TimeSpan.FromHours(1),
+		TimeSpan.FromHours(2),
+		TimeSpan.FromHours(4),
+		TimeSpan.FromHours(6),
+		TimeSpan.FromHours(12),
+		TimeSpan.FromDays(1),
+		TimeSpan.FromDays(3),
+	};
 
 	private void SubscribePusherClient()
 	{

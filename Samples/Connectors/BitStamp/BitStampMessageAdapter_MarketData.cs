@@ -58,6 +58,74 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
+	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	{
+		SendSubscriptionReply(mdMsg.TransactionId);
+
+		var currency = mdMsg.SecurityId.ToCurrency();
+
+		if (mdMsg.IsSubscribe)
+		{
+			var step = (int)mdMsg.GetTimeFrame().TotalSeconds;
+
+			if (mdMsg.From is not null || mdMsg.To is not null)
+			{
+				var from = mdMsg.From?.UtcDateTime ?? DateTime.Today;
+				var to = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+
+				while (true)
+				{
+					var ohlc = await _httpClient.GetOhlc(currency, step, 1000, from, cancellationToken);
+
+					var hasData = false;
+
+					foreach (var c in ohlc.OrderBy(t => t.Time))
+					{
+						if (c.Time <= from)
+							continue;
+
+						if (c.Time > to)
+							return;
+
+						SendOutMessage(new TimeFrameCandleMessage
+						{
+							OriginalTransactionId = mdMsg.TransactionId,
+
+							OpenTime = c.Time,
+
+							OpenPrice = (decimal)c.Open,
+							HighPrice = (decimal)c.High,
+							LowPrice = (decimal)c.Low,
+							ClosePrice = (decimal)c.Close,
+							TotalVolume = (decimal)c.Volume,
+
+							State = CandleStates.Finished,
+						});
+
+						hasData = true;
+
+						from = c.Time;
+					}
+
+					if (!hasData)
+						break;
+
+					await IterationInterval.Delay(cancellationToken);
+				}
+			}
+
+			if (mdMsg.IsHistoryOnly())
+				return;
+
+			// bitstamp does not support web sockets for candles
+		}
+		else
+		{
+			// bitstamp does not support web sockets for candles
+		}
+	}
+
+	/// <inheritdoc />
 	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
@@ -97,7 +165,7 @@ partial class BitStampMessageAdapter
 				var from = mdMsg.From?.UtcDateTime ?? DateTime.Today;
 				var to = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
 
-				var trades = await _httpClient.RequestTransactions(currency, "day", cancellationToken);
+				var trades = await _httpClient.GetTransactions(currency, "day", cancellationToken);
 
 				foreach (var trade in trades.OrderBy(t => t.Time))
 				{
