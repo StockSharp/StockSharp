@@ -319,7 +319,8 @@ namespace StockSharp.Algo
 				return;
 
 			var period = ReConnectionSettings.Interval;
-			var needHeartbeat = HeartbeatInterval != TimeSpan.Zero;
+			var heartbeat = HeartbeatInterval;
+			var needHeartbeat = heartbeat > TimeSpan.Zero;
 
 			var time = TimeHelper.Now;
 			var lastHeartBeatTime = TimeHelper.Now;
@@ -330,7 +331,7 @@ namespace StockSharp.Algo
 			if (needHeartbeat)
 			{
 				_canSendTime = true;
-				period = period.Min(HeartbeatInterval);
+				period = period.Min(heartbeat);
 			}
 
 			var outMsgIntervalInitial = TimeSpan.FromSeconds(5);
@@ -352,7 +353,7 @@ namespace StockSharp.Algo
 					    var now = TimeHelper.Now;
 					    var diff = now - time;
 
-					    if (needHeartbeat && now - lastHeartBeatTime >= HeartbeatInterval)
+					    if (needHeartbeat && (now - lastHeartBeatTime) >= heartbeat)
 					    {
 						    ProcessHeartbeat();
 						    lastHeartBeatTime = now;
@@ -380,7 +381,7 @@ namespace StockSharp.Algo
 						    isProcessing = false;
 				    }
 			    })
-			    .Interval(period);
+			    .Interval(period.Min(outMsgIntervalInitial).Max(TimeSpan.FromSeconds(1)));
 		}
 
 		private void StopTimer()
