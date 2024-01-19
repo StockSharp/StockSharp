@@ -1714,7 +1714,7 @@ namespace StockSharp.Messages
 			if (!message.IsSubscribe)
 				return new SubscriptionResponseMessage { OriginalTransactionId = message.TransactionId };
 
-			var reply = message.To == null ? (IOriginalTransactionIdMessage)new SubscriptionOnlineMessage() : new SubscriptionFinishedMessage();
+			var reply = message.IsHistoryOnly() ? (IOriginalTransactionIdMessage)new SubscriptionFinishedMessage() : new SubscriptionOnlineMessage();
 			reply.OriginalTransactionId = message.TransactionId;
 #if MSG_TRACE
 			((Message)reply).StackTrace = ((Message)message).StackTrace;

@@ -542,7 +542,7 @@ namespace StockSharp.Algo.Testing
 			SendSubscriptionReply(transId, error);
 
 			if (isSubscribe && error == null)
-				SendSubscriptionOnline(transId);
+				SendSubscriptionResult(message);
 		}
 
 		private BoardMessage[] GetBoard()
