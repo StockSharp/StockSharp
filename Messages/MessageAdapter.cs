@@ -550,7 +550,7 @@ namespace StockSharp.Messages
 		/// Initialize a new message <see cref="SubscriptionOnlineMessage"/> or <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
 		/// <param name="message">Subscription.</param>
-		protected void SendSubscriptionResult(ISubscriptionMessage message)
+		protected internal void SendSubscriptionResult(ISubscriptionMessage message)
 		{
 			SendOutMessage(message.CreateResult());
 		}

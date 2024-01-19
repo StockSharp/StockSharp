@@ -22,28 +22,28 @@ public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnConnectAsync(ConnectMessage msg, CancellationToken token)
+	public override ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
 	{
 		SendOutMessage(new ConnectMessage());
 		return default;
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnDisconnectAsync(DisconnectMessage msg, CancellationToken token)
+	public override ValueTask DisconnectAsync(DisconnectMessage msg, CancellationToken token)
 	{
 		SendOutMessage(new DisconnectMessage());
 		return default;
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnResetAsync(ResetMessage msg, CancellationToken token)
+	public override ValueTask ResetAsync(ResetMessage msg, CancellationToken token)
 	{
 		SendOutMessage(new ResetMessage());
 		return default;
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	public override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		var now = DateTimeOffset.UtcNow;
 
@@ -52,7 +52,7 @@ public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
 
 		if (from > now)
 		{
-			SendSubscriptionFinished(mdMsg.TransactionId);
+			SendSubscriptionResult(mdMsg);
 			return default;
 		}
 
@@ -77,6 +77,6 @@ public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
 			}
 		}
 
-		return base.RunSubscriptionAsync(mdMsg, cancellationToken);
+		return base.MarketDataAsync(mdMsg, cancellationToken);
 	}
 }

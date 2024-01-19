@@ -94,21 +94,19 @@ partial class BitStampMessageAdapter
 		{
 			if (mdMsg.From is not null || mdMsg.To is not null)
 			{
-				var diff = DateTimeOffset.Now - (mdMsg.From ?? DateTime.Today);
+				var from = mdMsg.From?.UtcDateTime ?? DateTime.Today;
+				var to = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
 
-				string interval;
-
-				if (diff.TotalMinutes < 1)
-					interval = "minute";
-				else if (diff.TotalDays < 1)
-					interval = "hour";
-				else
-					interval = "day";
-
-				var trades = await _httpClient.RequestTransactions(currency, interval, cancellationToken);
+				var trades = await _httpClient.RequestTransactions(currency, "day", cancellationToken);
 
 				foreach (var trade in trades.OrderBy(t => t.Time))
 				{
+					if (trade.Time < from)
+						continue;
+
+					if (trade.Time > to)
+						break;
+
 					SendOutMessage(new ExecutionMessage
 					{
 						DataTypeEx = DataType.Ticks,
@@ -123,10 +121,10 @@ partial class BitStampMessageAdapter
 				}
 			}
 
-			if (mdMsg.To is null)
-				await _pusherClient.SubscribeTrades(currency, cancellationToken);
-			else
-				SendSubscriptionFinished(mdMsg.TransactionId);
+			if (mdMsg.IsHistoryOnly())
+				return;
+			
+			await _pusherClient.SubscribeTrades(currency, cancellationToken);
 		}
 		else
 		{
@@ -135,7 +133,7 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask OnSecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+	public override async ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		var secTypes = lookupMsg.GetSecurityTypes();
 		var left = lookupMsg.Count ?? long.MaxValue;
@@ -161,7 +159,5 @@ partial class BitStampMessageAdapter
 			if (--left <= 0)
 				break;
 		}
-
-		SendSubscriptionResult(lookupMsg);
 	}
 }

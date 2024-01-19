@@ -55,17 +55,6 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	/// <inheritdoc />
 	public override string AssociatedBoard => BoardCodes.BitStamp;
 
-	/// <inheritdoc />
-	public override TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)
-	{
-		var step = base.GetHistoryStepSize(dataType, out iterationInterval);
-		
-		if (dataType == DataType.Ticks)
-			step = TimeSpan.FromDays(1);
-
-		return step;
-	}
-
 	private void SubscribePusherClient()
 	{
 		_pusherClient.Connected += SessionOnPusherConnected;
@@ -92,7 +81,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 #endif
 
 	/// <inheritdoc />
-	protected override async ValueTask OnConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	public override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -104,14 +93,9 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 		}
 
 #if !NO_LICENSE
-		var msg = await "Crypto".ValidateLicenseAsync(component: GetType(), cancellationToken: cancellationToken);
+		var msg = await nameof(BitStamp).ValidateLicenseAsync(component: GetType(), cancellationToken: cancellationToken);
 		if (!msg.IsEmpty())
-		{
-			msg = await nameof(BitStamp).ValidateLicenseAsync(component: GetType(), cancellationToken: cancellationToken);
-
-			if (!msg.IsEmpty())
-				throw new InvalidOperationException(msg);
-		}
+			throw new InvalidOperationException(msg);
 #endif
 
 		if (_httpClient != null)
@@ -128,7 +112,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnDisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	public override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient == null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -145,7 +129,7 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	public override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		_lastMyTradeId = 0;
 		_lastTimeBalanceCheck = null;
@@ -185,17 +169,17 @@ public partial class BitStampMessageAdapter : AsyncMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask OnTimeMessageAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+	public override async ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
 	{
 		if (_orderInfo.Count > 0)
 		{
-			await OnOrderStatusAsync(null, cancellationToken);
-			await OnPortfolioLookupAsync(null, cancellationToken);
+			await OrderStatusAsync(null, cancellationToken);
+			await PortfolioLookupAsync(null, cancellationToken);
 		}
 		else if (BalanceCheckInterval > TimeSpan.Zero &&
 			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
 		{
-			await OnPortfolioLookupAsync(null, cancellationToken);
+			await PortfolioLookupAsync(null, cancellationToken);
 		}
 
 		if (_pusherClient is not null)

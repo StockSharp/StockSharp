@@ -1,22 +1,20 @@
-﻿using System;
+﻿namespace StockSharp.Messages;
+
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Serialization;
 
-using StockSharp.Logging;
 using StockSharp.Localization;
 
-namespace StockSharp.Messages;
-
 /// <summary>
-/// Default implementation <see cref="IAsyncMessageAdapter"/>.
+/// Message adapter with async processing support.
 /// </summary>
-public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
+public abstract class AsyncMessageAdapter : MessageAdapter
 {
 	private readonly AsyncMessageProcessor _asyncMessageProcessor;
 
@@ -27,99 +25,198 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	protected AsyncMessageAdapter(IdGenerator transactionIdGenerator)
 		: base(transactionIdGenerator)
 	{
-		_asyncMessageProcessor = new AsyncMessageProcessor(this);
+		_asyncMessageProcessor = new(this) { Parent = this };
 	}
 
-	/// <inheritdoc />
-	[Browsable(false)]
-	public virtual TimeSpan TransactionTimeout { get; } = TimeSpan.FromSeconds(10);
-
-	/// <inheritdoc />
+	/// <summary>
+	/// Disconnect timeout.
+	/// </summary>
 	[Browsable(false)]
 	public virtual TimeSpan DisconnectTimeout { get; } = TimeSpan.FromSeconds(5);
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Max number of parallel (non-control) messages processing.
+	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
 		Name = LocalizedStrings.ParallelKey,
 		Description = LocalizedStrings.ParallelDescKey,
 		GroupName = LocalizedStrings.AdaptersKey,
 		Order = 310)]
-	public int MaxParallelMessages { get; set; } = IAsyncMessageAdapter.DefaultMaxParallelMessages;
+	public int MaxParallelMessages { get; set; } = int.MaxValue;
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
 		=> _asyncMessageProcessor.EnqueueMessage(message);
 
-	/// <inheritdoc />
-	protected virtual void OnHandleMessageException(Message msg, Exception err)
+	/// <summary>
+	/// Handle error associated with the specified message.
+	/// </summary>
+	/// <param name="msg"><see cref="Message"/>.</param>
+	/// <param name="err"><see cref="Exception"/>.</param>
+	public virtual void HandleMessageException(Message msg, Exception err)
 		=> msg.HandleErrorResponse(err, this, SendOutMessage);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(connectMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="ConnectMessage"/>.
+	/// </summary>
+	/// <param name="connectMsg"><see cref="ConnectMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(connectMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnDisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(disconnectMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="DisconnectMessage"/>.
+	/// </summary>
+	/// <param name="disconnectMsg"><see cref="DisconnectMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(disconnectMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(resetMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="ResetMessage"/>.
+	/// </summary>
+	/// <remarks>
+	/// Must NOT throw.
+	/// </remarks>
+	/// <param name="resetMsg"><see cref="ResetMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(resetMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnSecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(lookupMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="SecurityLookupMessage"/>.
+	/// </summary>
+	/// <param name="lookupMsg"><see cref="SecurityLookupMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(lookupMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnPortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(lookupMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="PortfolioLookupMessage"/>.
+	/// </summary>
+	/// <param name="lookupMsg"><see cref="PortfolioLookupMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(lookupMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnBoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(lookupMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="BoardLookupMessage"/>.
+	/// </summary>
+	/// <param name="lookupMsg"><see cref="BoardLookupMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(lookupMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnOrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(statusMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="OrderStatusMessage"/>.
+	/// </summary>
+	/// <param name="statusMsg"><see cref="OrderStatusMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(statusMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnRegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(regMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="OrderRegisterMessage"/>.
+	/// </summary>
+	/// <param name="regMsg"><see cref="OrderRegisterMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(regMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(replaceMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="OrderReplaceMessage"/>.
+	/// </summary>
+	/// <param name="replaceMsg"><see cref="OrderReplaceMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(replaceMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(replaceMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="OrderPairReplaceMessage"/>.
+	/// </summary>
+	/// <param name="replaceMsg"><see cref="OrderPairReplaceMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask ReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(replaceMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnCancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(cancelMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="OrderCancelMessage"/>.
+	/// </summary>
+	/// <param name="cancelMsg"><see cref="OrderCancelMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(cancelMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnCancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(cancelMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="OrderGroupCancelMessage"/>.
+	/// </summary>
+	/// <param name="cancelMsg"><see cref="OrderGroupCancelMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(cancelMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask OnTimeMessageAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(timeMsg, cancellationToken);
+	/// <summary>
+	/// Process <see cref="TimeMessage"/>.
+	/// </summary>
+	/// <param name="timeMsg"><see cref="TimeMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask TimeAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
+		=> ProcessMessageAsync(timeMsg, cancellationToken);
 
-	/// <inheritdoc />
-	protected virtual ValueTask RunSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	/// <summary>
+	/// Process <see cref="Message"/>.
+	/// </summary>
+	/// <param name="msg"><see cref="Message"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual ValueTask ProcessMessageAsync(Message msg, CancellationToken cancellationToken)
+		=> default;
+
+	/// <summary>
+	/// Process <see cref="MarketDataMessage"/>.
+	/// </summary>
+	/// <param name="mdMsg"><see cref="MarketDataMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="ValueTask"/>.</returns>
+	public virtual async ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		var dataType = mdMsg.DataType2;
+		try
+		{
+			var dataType = mdMsg.DataType2;
 
-		return
-			  dataType == DataType.News         ? OnNewsSubscriptionAsync(mdMsg, cancellationToken)
-			: dataType == DataType.Level1       ? OnLevel1SubscriptionAsync(mdMsg, cancellationToken)
-			: dataType == DataType.Ticks        ? OnTicksSubscriptionAsync(mdMsg, cancellationToken)
-			: dataType == DataType.MarketDepth  ? OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken)
-			: dataType == DataType.OrderLog     ? OnOrderLogSubscriptionAsync(mdMsg, cancellationToken)
-			: dataType.IsTFCandles              ? OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken)
-			: throw SubscriptionResponseMessage.NotSupported;
+			var task =
+				  dataType == DataType.News 		? OnNewsSubscriptionAsync(mdMsg, cancellationToken)
+				: dataType == DataType.Level1 		? OnLevel1SubscriptionAsync(mdMsg, cancellationToken)
+				: dataType == DataType.Ticks 		? OnTicksSubscriptionAsync(mdMsg, cancellationToken)
+				: dataType == DataType.MarketDepth 	? OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken)
+				: dataType == DataType.OrderLog 	? OnOrderLogSubscriptionAsync(mdMsg, cancellationToken)
+				: dataType.IsTFCandles 				? OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken)
+				: dataType.IsCandles 				? OnCandlesSubscriptionAsync(mdMsg, cancellationToken)
+				: throw SubscriptionResponseMessage.NotSupported;
+
+			await task;
+		}
+		catch (OperationCanceledException)
+		{
+			if (!cancellationToken.IsCancellationRequested)
+				throw;
+
+			SendSubscriptionFinished(mdMsg.TransactionId);
+		}
 	}
 
 	/// <summary>
@@ -152,114 +249,10 @@ public abstract class AsyncMessageAdapter : MessageAdapter, IAsyncMessageAdapter
 	protected virtual ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 		=> throw SubscriptionResponseMessage.NotSupported;
 
-
-	/// <inheritdoc />
-	protected virtual ValueTask OnProcessMessageAsync(Message msg, CancellationToken cancellationToken)
-		=> default;
-
-	ValueTask IAsyncMessageAdapter.ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
-		=> OnConnectAsync(connectMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
-		=> OnDisconnectAsync(disconnectMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
-		=> OnResetAsync(resetMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.SecurityLookupAsync(SecurityLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> OnSecurityLookupAsync(lookupMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> OnPortfolioLookupAsync(lookupMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.BoardLookupAsync(BoardLookupMessage lookupMsg, CancellationToken cancellationToken)
-		=> OnBoardLookupAsync(lookupMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
-		=> OnOrderStatusAsync(statusMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
-		=> OnRegisterOrderAsync(regMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.ReplaceOrderAsync(OrderReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> OnReplaceOrderAsync(replaceMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.ReplaceOrderPairAsync(OrderPairReplaceMessage replaceMsg, CancellationToken cancellationToken)
-		=> OnReplaceOrderPairAsync(replaceMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> OnCancelOrderAsync(cancelMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
-		=> OnCancelOrderGroupAsync(cancelMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.TimeMessageAsync(TimeMessage timeMsg, CancellationToken cancellationToken)
-		=> OnTimeMessageAsync(timeMsg, cancellationToken);
-
-	ValueTask IAsyncMessageAdapter.ProcessMessageAsync(Message msg, CancellationToken cancellationToken)
-		=> OnProcessMessageAsync(msg, cancellationToken);
-
-	private readonly SynchronizedDictionary<long, Task> _marketDataTasks = new();
-
-	ValueTask IAsyncMessageAdapter.ProcessMarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-	{
-		if (!mdMsg.IsSubscribe)
-		{
-			var subTask = _marketDataTasks.TryGetValue(mdMsg.OriginalTransactionId);
-			_asyncMessageProcessor.TryCancelChildTokenByTransId(mdMsg.OriginalTransactionId);
-
-			if (subTask == null)
-			{
-				this.AddVerboseLog($"subscription not found: {mdMsg.OriginalTransactionId}");
-				SendSubscriptionReply(mdMsg.TransactionId);
-				return default;
-			}
-
-			return new(subTask.ContinueWith(_ => SendSubscriptionReply(mdMsg.TransactionId), TaskContinuationOptions.ExecuteSynchronously));
-		}
-
-		lock (_marketDataTasks.SyncRoot)
-		{
-			var task = runSub();
-
-			if(!task.IsCompleted)
-				_marketDataTasks[mdMsg.TransactionId] = task.AsTask();
-
-			return task;
-		}
-
-		void trySendFinished(bool checkSupported)
-		{
-			if(mdMsg.IsHistoryOnly() && (!this.IsOutMessageSupported(MessageTypes.SubscriptionFinished) || !checkSupported))
-				SendSubscriptionFinished(mdMsg.TransactionId);
-		}
-
-		async ValueTask runSub()
-		{
-			var childToken = _asyncMessageProcessor.CreateChildTokenByTransId(mdMsg.TransactionId, cancellationToken);
-
-			try
-			{
-				await RunSubscriptionAsync(mdMsg, childToken);
-				trySendFinished(true);
-			}
-			catch (OperationCanceledException)
-			{
-				if (!childToken.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
-					throw;
-
-				trySendFinished(false);
-			}
-			finally
-			{
-				_asyncMessageProcessor.RemoveChildToken(mdMsg.TransactionId);
-				_marketDataTasks.Remove(mdMsg.TransactionId);
-			}
-		}
-	}
-
-	void IAsyncMessageAdapter.HandleMessageException(Message msg, Exception err)
-		=> OnHandleMessageException(msg, err);
+	/// <summary>
+	/// </summary>
+	protected virtual ValueTask OnCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		=> throw SubscriptionResponseMessage.NotSupported;
 
 	/// <inheritdoc />
 	public override TimeSpan GetHistoryStepSize(DataType dataType, out TimeSpan iterationInterval)

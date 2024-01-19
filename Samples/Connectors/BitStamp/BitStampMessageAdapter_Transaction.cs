@@ -18,7 +18,7 @@ partial class BitStampMessageAdapter
 	private string PortfolioName => nameof(BitStamp) + "_" + Key.ToId();
 
 	/// <inheritdoc />
-	protected override async ValueTask OnRegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
+	public override async ValueTask RegisterOrderAsync(OrderRegisterMessage regMsg, CancellationToken cancellationToken)
 	{
 		var condition = (BitStampOrderCondition)regMsg.Condition;
 
@@ -45,7 +45,7 @@ partial class BitStampMessageAdapter
 					HasOrderInfo = true,
 				});
 
-				await OnPortfolioLookupAsync(null, cancellationToken);
+				await PortfolioLookupAsync(null, cancellationToken);
 				return;
 			}
 			default:
@@ -70,7 +70,7 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask OnCancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
+	public override async ValueTask CancelOrderAsync(OrderCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		if (cancelMsg.OrderId == null)
 			throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(cancelMsg.OriginalTransactionId));
@@ -86,12 +86,12 @@ partial class BitStampMessageAdapter
 		//	HasOrderInfo = true,
 		//});
 
-		await OnOrderStatusAsync(null, cancellationToken);
-		await OnPortfolioLookupAsync(null, cancellationToken);
+		await OrderStatusAsync(null, cancellationToken);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask OnCancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
+	public override async ValueTask CancelOrderGroupAsync(OrderGroupCancelMessage cancelMsg, CancellationToken cancellationToken)
 	{
 		await _httpClient.CancelAllOrders(cancellationToken);
 
@@ -103,8 +103,8 @@ partial class BitStampMessageAdapter
 			HasOrderInfo = true,
 		});
 
-		await OnOrderStatusAsync(null, cancellationToken);
-		await OnPortfolioLookupAsync(null, cancellationToken);
+		await OrderStatusAsync(null, cancellationToken);
+		await PortfolioLookupAsync(null, cancellationToken);
 	}
 
 	private void ProcessOrder(UserOrder order, decimal balance, long transId, long origTransId)
@@ -268,7 +268,7 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask OnOrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	public override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		if (statusMsg == null)
 		{
@@ -327,7 +327,7 @@ partial class BitStampMessageAdapter
 			}
 
 			if (portfolioRefresh)
-				await OnPortfolioLookupAsync(null, cancellationToken);
+				await PortfolioLookupAsync(null, cancellationToken);
 		}
 		else
 		{
@@ -351,8 +351,6 @@ partial class BitStampMessageAdapter
 			{
 				ProcessTrade(trade);
 			}
-
-			SendSubscriptionResult(statusMsg);
 		}
 	}
 
@@ -398,7 +396,7 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask OnPortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+	public override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		if (lookupMsg != null)
 		{
@@ -416,9 +414,6 @@ partial class BitStampMessageAdapter
 			BoardCode = BoardCodes.BitStamp,
 			OriginalTransactionId = transactionId,
 		});
-
-		if (lookupMsg != null)
-			SendSubscriptionResult(lookupMsg);
 
 		var tuple = await _httpClient.GetBalances(null, cancellationToken);
 
