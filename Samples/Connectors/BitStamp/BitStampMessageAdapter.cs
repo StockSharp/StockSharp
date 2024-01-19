@@ -1,15 +1,5 @@
 namespace StockSharp.BitStamp;
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-
-using Ecng.Common;
-
-using StockSharp.BitStamp.Native;
-using StockSharp.Messages;
-using StockSharp.Localization;
 #if !NO_LICENSE
 using StockSharp.Licensing;
 #endif

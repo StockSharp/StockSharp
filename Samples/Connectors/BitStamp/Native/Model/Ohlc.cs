@@ -1,11 +1,5 @@
 namespace StockSharp.BitStamp.Native.Model;
 
-using System;
-
-using Newtonsoft.Json;
-
-using Ecng.Serialization;
-
 class Ohlc
 {
 	[JsonProperty("timestamp")]

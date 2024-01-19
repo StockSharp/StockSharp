@@ -1,27 +1,22 @@
-﻿namespace StockSharp.BitStamp.Native.Model
+﻿namespace StockSharp.BitStamp.Native.Model;
+
+class UserOrder
 {
-	using System;
+	[JsonProperty("id")]
+	public long Id { get; set; }
 
-	using Newtonsoft.Json;
+	[JsonProperty("datetime")]
+	public DateTime Time { get; set; }
 
-	class UserOrder
-	{
-		[JsonProperty("id")]
-		public long Id { get; set; }
+	[JsonProperty("type")]
+	public int Type { get; set; }
 
-		[JsonProperty("datetime")]
-		public DateTime Time { get; set; }
+	[JsonProperty("price")]
+	public double Price { get; set; }
 
-		[JsonProperty("type")]
-		public int Type { get; set; }
+	[JsonProperty("amount")]
+	public double Amount { get; set; }
 
-		[JsonProperty("price")]
-		public double Price { get; set; }
-
-		[JsonProperty("amount")]
-		public double Amount { get; set; }
-
-		[JsonProperty("currency_pair")]
-		public string CurrencyPair { get; set; }
-	}
+	[JsonProperty("currency_pair")]
+	public string CurrencyPair { get; set; }
 }

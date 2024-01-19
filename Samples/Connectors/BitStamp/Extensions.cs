@@ -1,11 +1,5 @@
 namespace StockSharp.BitStamp;
 
-using System;
-
-using Ecng.Common;
-
-using StockSharp.Messages;
-
 static class Extensions
 {
 	public static Sides ToSide(this int type)
@@ -22,7 +16,7 @@ static class Extensions
 	{
 		if (format)
 		{
-			if (currency.Length > 3 && !currency.Contains("/"))
+			if (currency.Length > 3 && !currency.Contains('/'))
 				currency = currency.Insert(3, "/");
 
 			currency = currency.ToUpperInvariant();

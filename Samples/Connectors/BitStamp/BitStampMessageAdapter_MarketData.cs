@@ -1,18 +1,5 @@
 namespace StockSharp.BitStamp;
 
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.Common;
-
-using StockSharp.BitStamp.Native.Model;
-using StockSharp.Messages;
-
-using Order = Native.Model.Order;
-using Trade = Native.Model.Trade;
-
 partial class BitStampMessageAdapter
 {
 	private const string _eurusd = "eurusd";

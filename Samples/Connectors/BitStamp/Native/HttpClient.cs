@@ -1,318 +1,299 @@
-namespace StockSharp.BitStamp.Native
+namespace StockSharp.BitStamp.Native;
+
+using System.Security;
+using System.Security.Cryptography;
+
+using Newtonsoft.Json.Linq;
+
+class HttpClient : BaseLogReceiver
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Security;
-	using System.Security.Cryptography;
-	using System.Threading;
-	using System.Threading.Tasks;
+	private readonly SecureString _key;
+	private readonly HashAlgorithm _hasher;
 
-	using Ecng.Collections;
-	using Ecng.Common;
-	using Ecng.Net;
-	using Ecng.Serialization;
+	private const string _baseAddr = "www.bitstamp.net";
 
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Linq;
+	private readonly IdGenerator _nonceGen;
 
-	using RestSharp;
-
-	using StockSharp.Localization;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
-	using StockSharp.BitStamp.Native.Model;
-
-	class HttpClient : BaseLogReceiver
+	public HttpClient(SecureString key, SecureString secret)
 	{
-		private readonly SecureString _key;
-		private readonly HashAlgorithm _hasher;
+		_key = key;
+		_hasher = secret.IsEmpty() ? null : new HMACSHA256(secret.UnSecure().ASCII());
 
-		private const string _baseAddr = "www.bitstamp.net";
+		_nonceGen = new UTCMlsIncrementalIdGenerator();
+	}
 
-		private readonly IdGenerator _nonceGen;
+	protected override void DisposeManaged()
+	{
+		_hasher?.Dispose();
+		base.DisposeManaged();
+	}
 
-		public HttpClient(SecureString key, SecureString secret)
+	// to get readable name after obfuscation
+	public override string Name => nameof(BitStamp) + "_" + nameof(HttpClient);
+
+	public ValueTask<IEnumerable<Symbol>> GetPairsInfo(CancellationToken cancellationToken)
+	{
+		return MakeRequest<IEnumerable<Symbol>>(CreateUrl("trading-pairs-info"), CreateRequest(Method.Get), cancellationToken);
+	}
+
+	public ValueTask<IEnumerable<Transaction>> GetTransactions(string ticker, string interval, CancellationToken cancellationToken)
+	{
+		var url = CreateUrl($"transactions/{ticker}");
+		var request = CreateRequest(Method.Get);
+
+		if (interval != null)
+			request.AddParameter("time", interval);
+
+		return MakeRequest<IEnumerable<Transaction>>(url, request, cancellationToken);
+	}
+
+	public async ValueTask<IEnumerable<Ohlc>> GetOhlc(string ticker, int step, int limit, DateTime start/*, DateTime end*/, CancellationToken cancellationToken)
+	{
+		var url = CreateUrl($"ohlc/{ticker}");
+		var request = CreateRequest(Method.Get);
+
+		request.AddParameter("step", step);
+		request.AddParameter("limit", limit);
+		request.AddParameter("start", start.ToUnix());
+		//request.AddParameter("end", end.ToUnix());
+		request.AddParameter("exclude_current_candle", true);
+
+		dynamic result = await MakeRequest<object>(url, request, cancellationToken);
+
+		return ((JToken)result.data.ohlc).DeserializeObject<IEnumerable<Ohlc>>();
+	}
+
+	public async ValueTask<(Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>, Dictionary<string, decimal>)> GetBalances(string ticker, CancellationToken cancellationToken)
+	{
+		var url = CreateUrl(ticker.IsEmpty() ? "balance" : $"balance/{ticker}");
+		dynamic response = await MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
+
+		var balances = new Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>(StringComparer.InvariantCultureIgnoreCase);
+		var fees = new Dictionary<string, decimal>(StringComparer.InvariantCultureIgnoreCase);
+
+		RefTriple<decimal?, decimal?, decimal?> GetBalance(string symbol)
 		{
-			_key = key;
-			_hasher = secret.IsEmpty() ? null : new HMACSHA256(secret.UnSecure().ASCII());
-
-			_nonceGen = new UTCMlsIncrementalIdGenerator();
+			return balances.SafeAdd(symbol, key => new RefTriple<decimal?, decimal?, decimal?>());
 		}
 
-		protected override void DisposeManaged()
+		foreach (var property in ((JObject)response).Properties())
 		{
-			_hasher?.Dispose();
-			base.DisposeManaged();
-		}
+			var parts = property.Name.Split('_');
+			var symbol = parts[0];
 
-		// to get readable name after obfuscation
-		public override string Name => nameof(BitStamp) + "_" + nameof(HttpClient);
+			var value = (decimal)property.Value;
 
-		public ValueTask<IEnumerable<Symbol>> GetPairsInfo(CancellationToken cancellationToken)
-		{
-			return MakeRequest<IEnumerable<Symbol>>(CreateUrl("trading-pairs-info"), CreateRequest(Method.Get), cancellationToken);
-		}
-
-		public ValueTask<IEnumerable<Transaction>> GetTransactions(string ticker, string interval, CancellationToken cancellationToken)
-		{
-			var url = CreateUrl($"transactions/{ticker}");
-			var request = CreateRequest(Method.Get);
-
-			if (interval != null)
-				request.AddParameter("time", interval);
-
-			return MakeRequest<IEnumerable<Transaction>>(url, request, cancellationToken);
-		}
-
-		public async ValueTask<IEnumerable<Ohlc>> GetOhlc(string ticker, int step, int limit, DateTime start/*, DateTime end*/, CancellationToken cancellationToken)
-		{
-			var url = CreateUrl($"ohlc/{ticker}");
-			var request = CreateRequest(Method.Get);
-
-			request.AddParameter("step", step);
-			request.AddParameter("limit", limit);
-			request.AddParameter("start", start.ToUnix());
-			//request.AddParameter("end", end.ToUnix());
-			request.AddParameter("exclude_current_candle", true);
-
-			dynamic result = await MakeRequest<object>(url, request, cancellationToken);
-
-			return ((JToken)result.data.ohlc).DeserializeObject<IEnumerable<Ohlc>>();
-		}
-
-		public async ValueTask<(Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>, Dictionary<string, decimal>)> GetBalances(string ticker, CancellationToken cancellationToken)
-		{
-			var url = CreateUrl(ticker.IsEmpty() ? "balance" : $"balance/{ticker}");
-			dynamic response = await MakeRequest<object>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
-
-			var balances = new Dictionary<string, RefTriple<decimal?, decimal?, decimal?>>(StringComparer.InvariantCultureIgnoreCase);
-			var fees = new Dictionary<string, decimal>(StringComparer.InvariantCultureIgnoreCase);
-
-			RefTriple<decimal?, decimal?, decimal?> GetBalance(string symbol)
+			switch (parts[1].ToLowerInvariant())
 			{
-				return balances.SafeAdd(symbol, key => new RefTriple<decimal?, decimal?, decimal?>());
-			}
+				case "fee":
+					fees.Add(symbol, value);
+					break;
 
-			foreach (var property in ((JObject)response).Properties())
-			{
-				var parts = property.Name.Split('_');
-				var symbol = parts[0];
+				case "available":
+					GetBalance(symbol).First = value;
+					break;
 
-				var value = (decimal)property.Value;
+				case "balance":
+					GetBalance(symbol).Second = value;
+					break;
 
-				switch (parts[1].ToLowerInvariant())
-				{
-					case "fee":
-						fees.Add(symbol, value);
-						break;
-
-					case "available":
-						GetBalance(symbol).First = value;
-						break;
-
-					case "balance":
-						GetBalance(symbol).Second = value;
-						break;
-
-					case "reserved":
-						GetBalance(symbol).Third = value;
-						break;
-				}
-			}
-
-			return (balances, fees);
-		}
-
-		public ValueTask<UserTransaction[]> RequestUserTransactions(string ticker, int? offset, int? limit, CancellationToken cancellationToken)
-		{
-			var request = CreateRequest(Method.Post);
-
-			if (offset != null)
-				request.AddParameter("offset", offset.Value);
-
-			if (limit != null)
-				request.AddParameter("limit", limit.Value);
-
-			var url = CreateUrl(ticker.IsEmpty() ? "user_transactions" : $"user_transactions/{ticker}");
-			return MakeRequest<UserTransaction[]>(url, ApplySecret(request, url), cancellationToken);
-		}
-
-		public ValueTask<IEnumerable<UserOrder>> RequestOpenOrders(string ticker, CancellationToken cancellationToken)
-		{
-			var url = CreateUrl($"open_orders/{ticker}");
-			return MakeRequest<IEnumerable<UserOrder>>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
-		}
-
-		public ValueTask<UserOrder> RegisterOrder(string pair, string side, decimal? price, decimal volume, decimal? stopPrice, bool daily, bool ioc, CancellationToken cancellationToken)
-		{
-			var market = price == null ? "market/" : string.Empty;
-
-			var request = CreateRequest(Method.Post);
-
-			request.AddParameter("amount", volume);
-
-			if (price != null)
-				request.AddParameter("price", price.Value);
-
-			if (stopPrice != null)
-				request.AddParameter("limit_price", stopPrice.Value);
-
-			if (daily)
-				request.AddParameter("daily_order", true);
-
-			if (ioc)
-				request.AddParameter("ioc_order", true);
-
-			var url = CreateUrl($"{side}/{market}{pair}");
-			return MakeRequest<UserOrder>(url, ApplySecret(request, url), cancellationToken);
-		}
-
-		public ValueTask<UserOrder> CancelOrder(long orderId, CancellationToken cancellationToken)
-		{
-			var url = CreateUrl("cancel_order");
-			return MakeRequest<UserOrder>(url, ApplySecret(CreateRequest(Method.Post).AddParameter("id", orderId), url), cancellationToken);
-		}
-
-		public async ValueTask CancelAllOrders(CancellationToken cancellationToken)
-		{
-			var url = CreateUrl("cancel_all_orders", string.Empty);
-			var result = await MakeRequest<bool>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
-
-			if (!result)
-				throw new InvalidOperationException();
-		}
-
-		public async ValueTask<long> Withdraw(string currency, decimal volume, WithdrawInfo info, CancellationToken cancellationToken)
-		{
-			if (info == null)
-				throw new ArgumentNullException(nameof(info));
-
-			var request = CreateRequest(Method.Post);
-
-			switch (info.Type)
-			{
-				case WithdrawTypes.BankWire:
-				{
-					if (info.BankDetails == null)
-						throw new InvalidOperationException(LocalizedStrings.BankDetailsIsMissing);
-
-					request
-						.AddParameter("amount", volume)
-						.AddParameter("account_currency", info.BankDetails.Currency.To<string>())
-						.AddParameter("name", info.BankDetails.AccountName)
-						.AddParameter("IBAN", info.BankDetails.Iban)
-						.AddParameter("BIC", info.BankDetails.Bic)
-						.AddParameter("address", info.CompanyDetails?.Address)
-						.AddParameter("postal_code", info.CompanyDetails?.PostalCode)
-						.AddParameter("city", info.CompanyDetails?.City)
-						.AddParameter("country", info.CompanyDetails?.Country)
-						.AddParameter("type", volume)
-						.AddParameter("bank_name", info.BankDetails.Name)
-						.AddParameter("bank_address", info.BankDetails.Address)
-						.AddParameter("bank_postal_code", info.BankDetails.PostalCode)
-						.AddParameter("bank_city", info.BankDetails.City)
-						.AddParameter("bank_country", info.BankDetails.Country)
-						.AddParameter("currency", currency)
-						.AddParameter("comment", info.Comment);
-
-					var url = CreateUrl("withdrawal/open");
-					dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
-
-					if (response.id == null)
-						throw new InvalidOperationException();
-
-					return (long)response.id;
-				}
-				case WithdrawTypes.Crypto:
-				{
-					request
-						.AddParameter("amount", volume)
-						.AddParameter("address", info.CryptoAddress);
-
-					if (!info.Comment.IsEmpty())
-						request.AddParameter("destination_tag", info.Comment);
-
-					var url = CreateUrl($"{currency}_withdrawal".ToLowerInvariant());
-					dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
-
-					if (response.id == null)
-						throw new InvalidOperationException();
-
-					return (long)response.id;
-				}
-				default:
-					throw new NotSupportedException(LocalizedStrings.WithdrawTypeNotSupported.Put(info.Type));
+				case "reserved":
+					GetBalance(symbol).Third = value;
+					break;
 			}
 		}
 
-		private static Uri CreateUrl(string methodName, string version = "v2/")
+		return (balances, fees);
+	}
+
+	public ValueTask<UserTransaction[]> RequestUserTransactions(string ticker, int? offset, int? limit, CancellationToken cancellationToken)
+	{
+		var request = CreateRequest(Method.Post);
+
+		if (offset != null)
+			request.AddParameter("offset", offset.Value);
+
+		if (limit != null)
+			request.AddParameter("limit", limit.Value);
+
+		var url = CreateUrl(ticker.IsEmpty() ? "user_transactions" : $"user_transactions/{ticker}");
+		return MakeRequest<UserTransaction[]>(url, ApplySecret(request, url), cancellationToken);
+	}
+
+	public ValueTask<IEnumerable<UserOrder>> RequestOpenOrders(string ticker, CancellationToken cancellationToken)
+	{
+		var url = CreateUrl($"open_orders/{ticker}");
+		return MakeRequest<IEnumerable<UserOrder>>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
+	}
+
+	public ValueTask<UserOrder> RegisterOrder(string pair, string side, decimal? price, decimal volume, decimal? stopPrice, bool daily, bool ioc, CancellationToken cancellationToken)
+	{
+		var market = price == null ? "market/" : string.Empty;
+
+		var request = CreateRequest(Method.Post);
+
+		request.AddParameter("amount", volume);
+
+		if (price != null)
+			request.AddParameter("price", price.Value);
+
+		if (stopPrice != null)
+			request.AddParameter("limit_price", stopPrice.Value);
+
+		if (daily)
+			request.AddParameter("daily_order", true);
+
+		if (ioc)
+			request.AddParameter("ioc_order", true);
+
+		var url = CreateUrl($"{side}/{market}{pair}");
+		return MakeRequest<UserOrder>(url, ApplySecret(request, url), cancellationToken);
+	}
+
+	public ValueTask<UserOrder> CancelOrder(long orderId, CancellationToken cancellationToken)
+	{
+		var url = CreateUrl("cancel_order");
+		return MakeRequest<UserOrder>(url, ApplySecret(CreateRequest(Method.Post).AddParameter("id", orderId), url), cancellationToken);
+	}
+
+	public async ValueTask CancelAllOrders(CancellationToken cancellationToken)
+	{
+		var url = CreateUrl("cancel_all_orders", string.Empty);
+		var result = await MakeRequest<bool>(url, ApplySecret(CreateRequest(Method.Post), url), cancellationToken);
+
+		if (!result)
+			throw new InvalidOperationException();
+	}
+
+	public async ValueTask<long> Withdraw(string currency, decimal volume, WithdrawInfo info, CancellationToken cancellationToken)
+	{
+		if (info == null)
+			throw new ArgumentNullException(nameof(info));
+
+		var request = CreateRequest(Method.Post);
+
+		switch (info.Type)
 		{
-			if (methodName.IsEmpty())
-				throw new ArgumentNullException(nameof(methodName));
+			case WithdrawTypes.BankWire:
+			{
+				if (info.BankDetails == null)
+					throw new InvalidOperationException(LocalizedStrings.BankDetailsIsMissing);
 
-			return $"https://{_baseAddr}/api/{version}{methodName}/".To<Uri>();
+				request
+					.AddParameter("amount", volume)
+					.AddParameter("account_currency", info.BankDetails.Currency.To<string>())
+					.AddParameter("name", info.BankDetails.AccountName)
+					.AddParameter("IBAN", info.BankDetails.Iban)
+					.AddParameter("BIC", info.BankDetails.Bic)
+					.AddParameter("address", info.CompanyDetails?.Address)
+					.AddParameter("postal_code", info.CompanyDetails?.PostalCode)
+					.AddParameter("city", info.CompanyDetails?.City)
+					.AddParameter("country", info.CompanyDetails?.Country)
+					.AddParameter("type", volume)
+					.AddParameter("bank_name", info.BankDetails.Name)
+					.AddParameter("bank_address", info.BankDetails.Address)
+					.AddParameter("bank_postal_code", info.BankDetails.PostalCode)
+					.AddParameter("bank_city", info.BankDetails.City)
+					.AddParameter("bank_country", info.BankDetails.Country)
+					.AddParameter("currency", currency)
+					.AddParameter("comment", info.Comment);
+
+				var url = CreateUrl("withdrawal/open");
+				dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
+
+				if (response.id == null)
+					throw new InvalidOperationException();
+
+				return (long)response.id;
+			}
+			case WithdrawTypes.Crypto:
+			{
+				request
+					.AddParameter("amount", volume)
+					.AddParameter("address", info.CryptoAddress);
+
+				if (!info.Comment.IsEmpty())
+					request.AddParameter("destination_tag", info.Comment);
+
+				var url = CreateUrl($"{currency}_withdrawal".ToLowerInvariant());
+				dynamic response = await MakeRequest<object>(url, ApplySecret(request, url), cancellationToken);
+
+				if (response.id == null)
+					throw new InvalidOperationException();
+
+				return (long)response.id;
+			}
+			default:
+				throw new NotSupportedException(LocalizedStrings.WithdrawTypeNotSupported.Put(info.Type));
 		}
+	}
 
-		private static RestRequest CreateRequest(Method method)
-		{
-			return new RestRequest((string)null, method);
-		}
+	private static Uri CreateUrl(string methodName, string version = "v2/")
+	{
+		if (methodName.IsEmpty())
+			throw new ArgumentNullException(nameof(methodName));
 
-		private static readonly JsonSerializerSettings _serializerSettings = JsonHelper.CreateJsonSerializerSettings();
+		return $"https://{_baseAddr}/api/{version}{methodName}/".To<Uri>();
+	}
 
-		private RestRequest ApplySecret(RestRequest request, Uri url)
-		{
-			if (request == null)
-				throw new ArgumentNullException(nameof(request));
+	private static RestRequest CreateRequest(Method method)
+	{
+		return new RestRequest((string)null, method);
+	}
 
-			var urlStr = url.ToString();
+	private static readonly JsonSerializerSettings _serializerSettings = JsonHelper.CreateJsonSerializerSettings();
 
-			var apiKey = "BITSTAMP " + _key.UnSecure();
-			var version = "v2";
-			var nonce = Guid.NewGuid().ToString();
-			var timeStamp = ((long)TimeHelper.UnixNowMls).To<string>();
+	private RestRequest ApplySecret(RestRequest request, Uri url)
+	{
+		if (request == null)
+			throw new ArgumentNullException(nameof(request));
 
-			var payload = request
-		 		.Parameters
-				.Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
-				.OrderBy(p => p.Name)
-				.ToQueryString(false);
+		var urlStr = url.ToString();
 
-			var str = apiKey +
-				        request.Method.ToString().ToUpperInvariant() +
-				        url.Host +
-				        url.PathAndQuery.Remove(url.Query, true) +
-				        url.Query +
-				        "application/json" +
-				        nonce +
-				        timeStamp +
-				        version +
-				        payload;
+		var apiKey = "BITSTAMP " + _key.UnSecure();
+		var version = "v2";
+		var nonce = Guid.NewGuid().ToString();
+		var timeStamp = ((long)TimeHelper.UnixNowMls).To<string>();
 
-			var signature = _hasher
-				            .ComputeHash(str.UTF8())
-				            .Digest()
-				            .ToUpperInvariant();
+		var payload = request
+	 		.Parameters
+			.Where(p => p.Type == ParameterType.GetOrPost && p.Value != null)
+			.OrderBy(p => p.Name)
+			.ToQueryString(false);
 
-			request
-				.AddHeader("X-Auth", apiKey)
-				.AddHeader("X-Auth-Signature", signature)
-				.AddHeader("X-Auth-Nonce", nonce)
-				.AddHeader("X-Auth-Timestamp", timeStamp)
-				.AddHeader("X-Auth-Version", version);
+		var str = apiKey +
+			        request.Method.ToString().ToUpperInvariant() +
+			        url.Host +
+			        url.PathAndQuery.Remove(url.Query, true) +
+			        url.Query +
+			        "application/json" +
+			        nonce +
+			        timeStamp +
+			        version +
+			        payload;
 
-			return request;
-		}
+		var signature = _hasher
+			            .ComputeHash(str.UTF8())
+			            .Digest()
+			            .ToUpperInvariant();
 
-		private async ValueTask<T> MakeRequest<T>(Uri url, RestRequest request, CancellationToken cancellationToken)
-		{
-			dynamic obj = await request.InvokeAsync(url, this, this.AddVerboseLog, cancellationToken);
+		request
+			.AddHeader("X-Auth", apiKey)
+			.AddHeader("X-Auth-Signature", signature)
+			.AddHeader("X-Auth-Nonce", nonce)
+			.AddHeader("X-Auth-Timestamp", timeStamp)
+			.AddHeader("X-Auth-Version", version);
 
-			if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
-				throw new InvalidOperationException((string)obj.reason.ToString());
+		return request;
+	}
 
-			return ((JToken)obj).DeserializeObject<T>();
-		}
+	private async ValueTask<T> MakeRequest<T>(Uri url, RestRequest request, CancellationToken cancellationToken)
+	{
+		dynamic obj = await request.InvokeAsync(url, this, this.AddVerboseLog, cancellationToken);
+
+		if (((JToken)obj).Type == JTokenType.Object && obj.status == "error")
+			throw new InvalidOperationException((string)obj.reason.ToString());
+
+		return ((JToken)obj).DeserializeObject<T>();
 	}
 }

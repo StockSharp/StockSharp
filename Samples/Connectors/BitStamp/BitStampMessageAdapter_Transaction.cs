@@ -1,18 +1,5 @@
 namespace StockSharp.BitStamp;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Ecng.Collections;
-using Ecng.Common;
-
-using StockSharp.BitStamp.Native.Model;
-using StockSharp.Localization;
-using StockSharp.Messages;
-
 partial class BitStampMessageAdapter
 {
 	private string PortfolioName => nameof(BitStamp) + "_" + Key.ToId();

@@ -1,13 +1,7 @@
 namespace StockSharp.BitStamp;
 
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-
-using Ecng.Collections;
-
-using StockSharp.Localization;
-using StockSharp.Messages;
 
 /// <summary>
 /// <see cref="BitStamp"/> order condition.
