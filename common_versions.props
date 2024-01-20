@@ -23,14 +23,14 @@
     <!-- do not update until task is resolved: https://stocksharp.myjetbrains.com/youtrack/issue/ISLR-10 -->
     <PubnubPCLVer>5.0.1</PubnubPCLVer>
     
-    <MicrosoftDataSqlClientVer>5.0.0</MicrosoftDataSqlClientVer>
+    <MicrosoftDataSqlClientVer>5.1.4</MicrosoftDataSqlClientVer>
     <AsyncLinqVer>6.0.1</AsyncLinqVer>
     <SBEVer>1.23.1.1</SBEVer>
-    <SpectreVer>0.47.0</SpectreVer>
+    <SpectreVer>0.48.0</SpectreVer>
     <AWSSDKVer>3.*</AWSSDKVer>
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
 
-    <MicrosoftCodeAnalysisCSharpVer>4.7.0</MicrosoftCodeAnalysisCSharpVer>
+    <MicrosoftCodeAnalysisCSharpVer>4.8.0</MicrosoftCodeAnalysisCSharpVer>
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
   </PropertyGroup>
 </Project>
