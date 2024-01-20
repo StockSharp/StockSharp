@@ -72,7 +72,7 @@
 
 		private readonly SyncObject _sync = new();
 
-		private readonly PairSet<Tuple<DataType, SecurityId>, SubscriptionInfo> _subscriptionsByKey = new();
+		private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = new();
 		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new();
 		private readonly HashSet<long> _strategyPosSubscriptions = new();
 
@@ -92,10 +92,10 @@
 			{
 				lock (_sync)
 				{
-					if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, default(SecurityId)), out var info))
+					if (_subscriptionsByKey.TryGetValue((DataType.Transactions, default(SecurityId)), out var info))
 						TryAddOrderTransaction(info, orderMsg.TransactionId);
 
-					//if (_subscriptionsByKey.TryGetValue(Tuple.Create(DataType.Transactions, orderMsg.SecurityId), out info))
+					//if (_subscriptionsByKey.TryGetValue((DataType.Transactions, orderMsg.SecurityId), out info))
 					//	TryAddOrderTransaction(info, orderMsg.TransactionId);
 				}
 			}
@@ -262,7 +262,7 @@
 								var dataType = subscrMsg.DataType;
 								var secId = (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default;
 
-								if (!_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, secId), out info) && (secId == default || !_subscriptionsByKey.TryGetValue(Tuple.Create(dataType, default(SecurityId)), out info)))
+								if (!_subscriptionsByKey.TryGetValue((dataType, secId), out info) && (secId == default || !_subscriptionsByKey.TryGetValue((dataType, default(SecurityId)), out info)))
 									break;
 							}
 
@@ -372,11 +372,11 @@
 						if (!extraFilter)
 							extraFilter = message.FilterEnabled;
 
-						var key = Tuple.Create(dataType, secId);
+						var key = (dataType, secId);
 
 						if (!_subscriptionsByKey.TryGetValue(key, out var info))
 						{
-							this.AddInfoLog("Subscription {0} initial.", transId);
+							this.AddInfoLog("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
 
 							sendInMsg = message;
 

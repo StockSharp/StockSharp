@@ -37,22 +37,13 @@ public static class SubscriptionExtensions
 			isOk = false;
 		else
 		{
-			switch (currState)
+			isOk = currState switch
 			{
-				case SubscriptionStates.Stopped:
-				case SubscriptionStates.Active:
-					isOk = true;
-					break;
-				case SubscriptionStates.Error:
-				case SubscriptionStates.Finished:
-					isOk = false;
-					break;
-				case SubscriptionStates.Online:
-					isOk = newState != SubscriptionStates.Active;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(currState), currState, LocalizedStrings.InvalidValue);
-			}
+				SubscriptionStates.Stopped or SubscriptionStates.Active => true,
+				SubscriptionStates.Error or SubscriptionStates.Finished => false,
+				SubscriptionStates.Online => newState != SubscriptionStates.Active,
+				_ => throw new ArgumentOutOfRangeException(nameof(currState), currState, LocalizedStrings.InvalidValue),
+			};
 		}
 
 		const string text = "Subscription {0} {1}->{2}.";
