@@ -213,10 +213,10 @@ public class SimpleStrategy : Strategy
   [4]: https://stocksharp.com/edu/
   [5]: https://stocksharp.com/forum/
   [6]: https://stocksharp.com/broker/
-  [7]: https://stocksharp.com/chat/
-  [8]: https://stocksharp.com/store/strategy%20designer/
-  [9]: https://stocksharp.com/store/hydra/
-  [10]: https://stocksharp.com/store/trading%20terminal/
-  [11]: https://stocksharp.com/store/trading%20shell/
+  [7]: https://t.me/stocksharpchat/361
+  [8]: https://stocksharp.com/store/strategy-designer/
+  [9]: https://stocksharp.com/store/market-data-downloader/
+  [10]: https://stocksharp.com/store/trading-terminal/
+  [11]: https://stocksharp.com/store/trading-shell/
   [12]: https://stocksharp.com/store/api/
 
