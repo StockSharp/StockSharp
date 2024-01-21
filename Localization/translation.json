@@ -1,4 +1,36 @@
 {
+  "CultureCode": {
+    "en": "en-US",
+    "ru": "ru-RU"
+  },
+  "UnitStepPostfix": {
+    "en": "s",
+    "ru": "ш"
+  },
+  "UnitPointPostfix": {
+    "en": "p",
+    "ru": "п"
+  },
+  "UnitLimitPostfix": {
+    "en": "l",
+    "ru": "л"
+  },
+  "StockSharpDomain": {
+    "en": "com",
+    "ru": "ru"
+  },
+  "StockSharpDomain": {
+    "en": "com",
+    "ru": "ru"
+  },
+  "StockSharpChatUrl": {
+    "en": "https://t.me/stocksharpchat/361",
+    "ru": "https://t.me/stocksharpchat/1"
+  },
+  "Alpaca": {
+    "en": "Alpaca",
+    "ru": "Alpaca"
+  },
   "DriveMustBeLocal": {
     "en": "Drive must be local.",
     "ru": "Хранилище должно быть локальным."

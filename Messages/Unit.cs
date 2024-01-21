@@ -547,9 +547,9 @@ namespace StockSharp.Messages
 			{
 				UnitTypes.Percent	=> "%",
 				UnitTypes.Absolute	=> string.Empty,
-				UnitTypes.Step		=> LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "ш" : "s",
-				UnitTypes.Point		=> LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "п" : "p",
-				UnitTypes.Limit		=> LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "л" : "l",
+				UnitTypes.Step		=> LocalizedStrings.UnitStepPostfix,
+				UnitTypes.Point		=> LocalizedStrings.UnitPointPostfix,
+				UnitTypes.Limit		=> LocalizedStrings.UnitLimitPostfix,
 
 				_ => throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(type)),
 			};

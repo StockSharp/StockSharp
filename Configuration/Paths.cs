@@ -221,7 +221,7 @@
 		/// <summary>
 		/// Web site domain.
 		/// </summary>
-		public static string Domain => LocalizedStrings.ActiveLanguage == LangCodes.Ru ? "ru" : "com";
+		public static string Domain => LocalizedStrings.StockSharpDomain;
 
 		/// <summary>
 		/// Get website url.
@@ -238,14 +238,7 @@
 		/// <summary>
 		/// Chat in Telegram.
 		/// </summary>
-		public static string Chat
-		{
-			get
-			{
-				var channelId = LocalizedStrings.ActiveLanguage == LangCodes.Ru ? 1 : 361;
-				return $"https://t.me/stocksharpchat/{channelId}";
-			}
-		}
+		public static string Chat => LocalizedStrings.StockSharpChatUrl;
 
 		/// <summary>
 		/// Bot in Telegram.

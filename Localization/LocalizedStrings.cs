@@ -62,7 +62,7 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static Exception InitError { get; }
 
-		private static LocalizationManager _localizationManager;
+		private readonly static LocalizationManager _localizationManager;
 
 		/// <summary>
 		/// Localization manager.
