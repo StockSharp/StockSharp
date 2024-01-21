@@ -17,7 +17,9 @@ namespace StockSharp.Localization
 {
 	using System;
 	using System.Diagnostics;
+	using System.Globalization;
 	using System.IO;
+	using System.Threading;
 
 	using Ecng.Common;
 	using Ecng.Localization;
@@ -79,6 +81,11 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// <see cref="ActiveLanguage"/> changed event.
+		/// </summary>
+		public static event Action ActiveLanguageChanged;
+
+		/// <summary>
 		/// Current language.
 		/// </summary>
 		public static string ActiveLanguage
@@ -86,8 +93,25 @@ namespace StockSharp.Localization
 			get => LocalizationManager.ActiveLanguage;
 			set
 			{
+				//if (ActiveLanguage == value)
+				//	return;
+
 				LocalizationManager.ActiveLanguage = value;
 				ResetCache();
+
+				try
+				{
+					var cultureInfo = CultureInfo.GetCultureInfo(CultureCode);
+
+					Thread.CurrentThread.CurrentCulture = cultureInfo;
+					Thread.CurrentThread.CurrentUICulture = cultureInfo;
+				}
+				catch (Exception ex)
+				{
+					Trace.WriteLine(ex);
+				}
+
+				ActiveLanguageChanged?.Invoke();
 			}
 		}
 
