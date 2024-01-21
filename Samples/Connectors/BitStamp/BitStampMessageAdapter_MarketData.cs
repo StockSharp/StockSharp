@@ -59,6 +59,7 @@ partial class BitStampMessageAdapter
 			{
 				var from = mdMsg.From?.UtcDateTime ?? DateTime.Today;
 				var to = mdMsg.To?.UtcDateTime ?? DateTime.UtcNow;
+				var left = mdMsg.Count ?? long.MaxValue;
 
 				while (true)
 				{
@@ -88,6 +89,9 @@ partial class BitStampMessageAdapter
 
 							State = CandleStates.Finished,
 						});
+
+						if (--left <= 0)
+							return;
 
 						hasData = true;
 
