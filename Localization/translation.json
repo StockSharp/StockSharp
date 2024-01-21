@@ -7240,16 +7240,16 @@
     "ru": "Выберите путь..."
   },
   "HydraServerSettings": {
-    "en": "S#.Data server settings",
-    "ru": "Настройки S#.Data сервера"
+    "en": "Hydra server settings",
+    "ru": "Настройки Гидра сервера"
   },
   "ServerMode": {
     "en": "Server mode",
     "ru": "Серверный режим"
   },
   "TurnOnServerMode": {
-    "en": "Turn on S#.Data into server mode to allow other application get downloaded market data?",
-    "ru": "Перевести S#.Data в серверный режим чтобы позволить другим программам получать скаченные маркет-данные."
+    "en": "Turn on Hydra into server mode to allow other application get downloaded market data?",
+    "ru": "Перевести Гидру в серверный режим чтобы позволить другим программам получать скаченные маркет-данные."
   },
   "SecCount": {
     "en": "Number of securities",
@@ -7260,8 +7260,8 @@
     "ru": "Максимальное количество инструментов, которое можно запрашивать с сервера."
   },
   "HydraServerAuthorization": {
-    "en": "Authorization for access to S#.Data server.",
-    "ru": "Авторизация для получения доступа к S#.Data сервер."
+    "en": "Authorization for access to Hydra server.",
+    "ru": "Авторизация для получения доступа к Гидра серверу."
   },
   "AutoStart": {
     "en": "Autostart",
@@ -8180,8 +8180,8 @@
     "ru": "Загрузка '{0}'"
   },
   "CurrentlyWorkStopDownloading": {
-    "en": "S#.Data is working. Stop data download?",
-    "ru": "S#.Data в процессе работы. Остановить скачивание данных?"
+    "en": "Hydra is working. Stop data download?",
+    "ru": "Гидра в процессе работы. Остановить скачивание данных?"
   },
   "AtLeastOnTaskMustBeEnabled": {
     "en": "{0}At least one task must be switched on.",
@@ -11484,8 +11484,8 @@
     "ru": "LMAX"
   },
   "DataServer": {
-    "en": "S#.Data Server",
-    "ru": "S#.Data сервер"
+    "en": "Hydra Server",
+    "ru": "Гидра сервер"
   },
   "InteractiveBrokers": {
     "en": "Interactive Brokers",
@@ -12804,8 +12804,8 @@
     "ru": "Японские"
   },
   "NotCompatibleStrategy": {
-    "en": "Selected strategy is not compatible with S#.Designer. You can continue subscribing, but then download separately from web site. Continue subscription?",
-    "ru": "Выбранная стратегия не совместима с S#.Designer. Вы можете продолжить оформление подписки, но скачать потом отдельно через веб сайт. Продолжить подписку?"
+    "en": "Selected strategy is not compatible with Designer. You can continue subscribing, but then download separately from web site. Continue subscription?",
+    "ru": "Выбранная стратегия не совместима с Дизайнером. Вы можете продолжить оформление подписки, но скачать потом отдельно через веб сайт. Продолжить подписку?"
   },
   "Lifetime": {
     "en": "Lifetime",
@@ -13023,17 +13023,17 @@
     "en": "StockSharp LLC",
     "ru": "ООО СтокШарп"
   },
-  "DesignerDesciption": {
-    "en": "S#.Designer is a free application for visual design and programming on C# algorithmic trading strategies.",
-    "ru": "S#.Designer бесплатная программа для создания стратегий в визуальном редакторе или на языке C#."
+  "DesignerDescription": {
+    "en": "Designer is a free application for visual design and programming on C# algorithmic trading strategies.",
+    "ru": "Дизайнер - бесплатная программа для создания стратегий в визуальном редакторе или на языке C#."
   },
   "HydraDescription": {
-    "en": "S#.Data is a free application for downloading and storing market data.",
-    "ru": "S#.Data бесплатная программа для скачивания и хранения маркет-данных."
+    "en": "Hydra is a free application for downloading and storing market data.",
+    "ru": "Гидра - бесплатная программа для скачивания и хранения маркет-данных."
   },
   "TerminalDescription": {
-    "en": "S#.Terminal is a free trading terminal.",
-    "ru": "S#.Terminal бесплатный торговый терминал."
+    "en": "Terminal is a free trading terminal.",
+    "ru": "Терминал - бесплатный торговый терминал."
   },
   "WorkArea": {
     "en": "Work area",
