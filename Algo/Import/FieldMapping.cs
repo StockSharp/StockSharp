@@ -9,6 +9,8 @@ namespace StockSharp.Algo.Import
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Importing field description.
 	/// </summary>
@@ -21,33 +23,31 @@ namespace StockSharp.Algo.Import
 		private readonly HashSet<string> _enumNames = new(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
+		/// Display name.
+		/// </summary>
+		protected readonly Func<string> GetDisplayName;
+
+		/// <summary>
+		/// Description.
+		/// </summary>
+		protected readonly Func<string> GetDescription;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="FieldMapping"/>.
 		/// </summary>
 		/// <param name="name">Name.</param>
-		/// <param name="displayName">Display name.</param>
-		/// <param name="description">Description.</param>
+		/// <param name="getDisplayName">Display name.</param>
+		/// <param name="getDescription">Description.</param>
 		/// <param name="type">Field type.</param>
-		protected FieldMapping(string name, string displayName, string description, Type type)
+		protected FieldMapping(string name, Func<string> getDisplayName, Func<string> getDescription, Type type)
 		{
-			//if (settings == null)
-			//	throw new ArgumentNullException(nameof(settings));
-
-			if (name.IsEmpty())
-				throw new ArgumentNullException(nameof(name));
-
-			if (displayName.IsEmpty())
-				throw new ArgumentNullException(nameof(displayName));
-
-			if (description.IsEmpty())
-				description = displayName;
-
 			Type = type ?? throw new ArgumentNullException(nameof(type));
-			Name = name;
-			DisplayName = displayName;
-			Description = description;
-			IsEnabled = true;
+			Name = name.ThrowIfEmpty(nameof(name));
 
-			//Number = -1;
+			GetDisplayName = getDisplayName ?? throw new ArgumentNullException(nameof(getDisplayName));
+			GetDescription = getDescription ?? throw new ArgumentNullException(nameof(getDescription));
+
+			IsEnabled = true;
 
 			if (Type.IsDateTime())
 				Format = "yyyyMMdd";
@@ -56,6 +56,14 @@ namespace StockSharp.Algo.Import
 
 			if (Type.IsEnum)
 				_enumNames.AddRange(Type.GetNames());
+
+			LocalizedStrings.ActiveLanguageChanged += OnActiveLanguageChanged;
+		}
+
+		private void OnActiveLanguageChanged()
+		{
+			NotifyChanged(nameof(DisplayName));
+			NotifyChanged(nameof(Description));
 		}
 
 		/// <summary>
@@ -71,12 +79,12 @@ namespace StockSharp.Algo.Import
 		/// <summary>
 		/// Display name.
 		/// </summary>
-		public string DisplayName { get; }
+		public string DisplayName => GetDisplayName();
 
 		/// <summary>
 		/// Description.
 		/// </summary>
-		public string Description { get; }
+		public string Description => GetDescription().IsEmpty(GetDisplayName());
 
 		/// <summary>
 		/// Date format.
@@ -105,10 +113,7 @@ namespace StockSharp.Algo.Import
 					return;
 
 				if (value)
-				{
-					if (Order == null)
-						Order = 0;
-				}
+					Order ??= 0;
 				else
 					Order = null;
 
@@ -340,8 +345,7 @@ namespace StockSharp.Algo.Import
 			{
 				if (value is string str)
 				{
-					if (_timeParser == null)
-						_timeParser = new FastTimeSpanParser(Format);
+					_timeParser ??= new FastTimeSpanParser(Format);
 
 					value = _timeParser.Parse(str);
 				}
@@ -404,11 +408,11 @@ namespace StockSharp.Algo.Import
 		/// Initializes a new instance of the <see cref="FieldMapping{TInstance,TValue}"/>.
 		/// </summary>
 		/// <param name="name">Name.</param>
-		/// <param name="displayName">Display name.</param>
-		/// <param name="description">Description.</param>
+		/// <param name="getDisplayName">Display name.</param>
+		/// <param name="getDescription">Description.</param>
 		/// <param name="apply">Apply field value action.</param>
-		public FieldMapping(string name, string displayName, string description, Action<TInstance, TValue> apply)
-			: this(name, displayName, description, typeof(TValue), apply)
+		public FieldMapping(string name, Func<string> getDisplayName, Func<string> getDescription, Action<TInstance, TValue> apply)
+			: this(name, getDisplayName, getDescription, typeof(TValue), apply)
 		{
 		}
 
@@ -416,12 +420,12 @@ namespace StockSharp.Algo.Import
 		/// Initializes a new instance of the <see cref="FieldMapping{TInstance,TValue}"/>.
 		/// </summary>
 		/// <param name="name">Name.</param>
-		/// <param name="displayName">Display name.</param>
-		/// <param name="description">Description.</param>
+		/// <param name="getDisplayName">Display name.</param>
+		/// <param name="getDescription">Description.</param>
 		/// <param name="type">Field type.</param>
 		/// <param name="apply">Apply field value action.</param>
-		public FieldMapping(string name, string displayName, string description, Type type, Action<TInstance, TValue> apply)
-			: base(name, displayName, description, type)
+		public FieldMapping(string name, Func<string> getDisplayName, Func<string> getDescription, Type type, Action<TInstance, TValue> apply)
+			: base(name, getDisplayName, getDescription, type)
 		{
 			_apply = apply ?? throw new ArgumentNullException(nameof(apply));
 		}
@@ -435,7 +439,7 @@ namespace StockSharp.Algo.Import
 		/// <inheritdoc />
 		public override object Clone()
 		{
-			var clone = new FieldMapping<TInstance, TValue>(Name, DisplayName, Description, _apply);
+			var clone = new FieldMapping<TInstance, TValue>(Name, GetDisplayName, GetDescription, _apply);
 			clone.Load(this.Save());
 			return clone;
 		}

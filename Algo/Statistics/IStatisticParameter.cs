@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Statistics
 {
 	using System;
+	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
@@ -23,11 +24,12 @@ namespace StockSharp.Algo.Statistics
 	using Ecng.Common;
 
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// The interface, describing statistic parameter.
 	/// </summary>
-	public interface IStatisticParameter : IPersistable
+	public interface IStatisticParameter : IPersistable, INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Parameter name.
@@ -122,10 +124,23 @@ namespace StockSharp.Algo.Statistics
 			var type2 = GetType();
 			Name = type2.Name.Remove("Parameter");
 
+			ChangeNameAndDescription();
+			Order = type2.GetAttribute<DisplayAttribute>()?.Order ?? default;
+
+			LocalizedStrings.ActiveLanguageChanged += ChangeNameAndDescription;
+		}
+
+		private void ChangeNameAndDescription()
+		{
+			var type2 = GetType();
+
 			DisplayName = type2.GetDisplayName(GetReadableName(Name));
 			Description = type2.GetDescription(DisplayName);
 			Category = type2.GetCategory();
-			Order = type2.GetAttribute<DisplayAttribute>()?.Order ?? default;
+
+			NotifyChanged(nameof(DisplayName));
+			NotifyChanged(nameof(Description));
+			NotifyChanged(nameof(Category));
 		}
 
 		/// <inheritdoc />
@@ -135,13 +150,13 @@ namespace StockSharp.Algo.Statistics
 		public StatisticParameterTypes Type { get; }
 
 		/// <inheritdoc />
-		public string DisplayName { get; }
+		public string DisplayName { get; private set; }
 
 		/// <inheritdoc />
-		public string Description { get; }
+		public string Description { get; private set; }
 
 		/// <inheritdoc />
-		public string Category { get; }
+		public string Category { get; private set; }
 
 		/// <inheritdoc />
 		public int Order { get; }
