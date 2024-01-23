@@ -126,15 +126,25 @@ class AsyncMessageProcessor : BaseLogReceiver
 				if (isControlProcessing)
 					return false;
 
-				// if transaction is processing currently, we can process other non-exclusive messages in parallel (marketdata request for example)
-				if (isTransactionProcessing)
-					msg = numProcessing >= _adapter.MaxParallelMessages
-						? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message)) // can't process more messages because of the limit.
-						: _messages.FirstOrDefault(m => !m.IsStartedProcessing && !(m.IsControl || m.IsTransaction));
+				// heartbeat (=ping) message has first priority
+				msg = _messages.FirstOrDefault(m => m.Message.Type == MessageTypes.Time);
 
-				msg = numProcessing >= _adapter.MaxParallelMessages
-					? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message) || (!m.IsStartedProcessing && m.IsControl)) // if the limit is exceeded we can only process control messages
-					: _messages.FirstOrDefault(m => !m.IsStartedProcessing);
+				if (msg is null)
+				{
+					// if transaction is processing currently, we can process other non-exclusive messages in parallel (marketdata request for example)
+					if (isTransactionProcessing)
+					{
+						msg = numProcessing >= _adapter.MaxParallelMessages
+							? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message)) // can't process more messages because of the limit.
+							: _messages.FirstOrDefault(m => !m.IsStartedProcessing && !(m.IsControl || m.IsTransaction));
+					}
+					else
+					{
+						msg = numProcessing >= _adapter.MaxParallelMessages
+							? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message) || (!m.IsStartedProcessing && m.IsControl)) // if the limit is exceeded we can only process control messages
+							: _messages.FirstOrDefault(m => !m.IsStartedProcessing);
+					}
+				}
 			}
 
 			if (msg is null)
@@ -219,7 +229,6 @@ class AsyncMessageProcessor : BaseLogReceiver
 					if (task.IsCompleted)
 					{
 						finishTask();
-						_processMessageEvt.Set();
 					}
 					else
 					{
