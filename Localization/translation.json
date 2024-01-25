@@ -236,8 +236,8 @@
     "ru": "Запустить стратегию в Раннер (кросс-платформенное маленькое консольное приложение)."
   },
   "InstallerNotStarted": {
-    "en": "S#.Installer is not running. Do you want to launch it?",
-    "ru": "S#.Инсталлер не запущен. Хотите запустить его?"
+    "en": "Installer is not running. Do you want to launch it?",
+    "ru": "Инсталлер не запущен. Хотите запустить его?"
   },
   "AppNotFound": {
     "en": "{0} not found on the computer. Please install it first.",
@@ -1468,8 +1468,8 @@
     "ru": "Доступные стратегии"
   },
   "InstallerMustBeRunning": {
-    "en": "An error has occurred. Please check that latest version of S#.Installer is running.",
-    "ru": "Произошла ошибка. Убедитесь, что последняя версия S#.Installer запущена."
+    "en": "An error has occurred. Please check that latest version of Installer is running.",
+    "ru": "Произошла ошибка. Убедитесь, что последняя версия Installer запущена."
   },
   "ReportProblem": {
     "en": "Report a problem",
@@ -2032,8 +2032,8 @@
     "ru": "Информация об ошибке"
   },
   "StockSharpInstaller": {
-    "en": "S#.Installer",
-    "ru": "S#.Инсталлер"
+    "en": "StockSharp Installer",
+    "ru": "StockSharp Инсталлер"
   },
   "SetupType": {
     "en": "Setup type",
@@ -13908,8 +13908,8 @@
     "ru": "DLL"
   },
   "DllDesc": {
-    "en": "The element which is using compiled strategy, based on S#.API.",
-    "ru": "Элемент, использующий скомпилированную сборку со стратегией, написанной на S#.API."
+    "en": "The element which is using compiled strategy, based on API.",
+    "ru": "Элемент, использующий скомпилированную сборку со стратегией, написанной на API."
   },
   "OptionsHedgeDiagramElement": {
     "en": "Options hedging diagram element.",
