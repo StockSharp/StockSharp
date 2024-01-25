@@ -317,6 +317,17 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// Message adapter, provided <see cref="Passphrase"/> property.
+	/// </summary>
+	public interface IPassphraseAdapter
+	{
+		/// <summary>
+		/// Passphrase.
+		/// </summary>
+		SecureString Passphrase { get; set; }
+	}
+
+	/// <summary>
 	/// Message adapter, provided <see cref="IsDemo"/> property.
 	/// </summary>
 	public interface IDemoAdapter

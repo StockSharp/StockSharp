@@ -5605,6 +5605,9 @@ namespace StockSharp.Messages
 				if (adapterType.Is<IDemoAdapter>())
 					addProp(nameof(IDemoAdapter.IsDemo));
 
+				if (adapterType.Is<IPassphraseAdapter>())
+					addProp(nameof(IPassphraseAdapter.Passphrase));
+
 				if (adapterType.Is<ITokenAdapter>())
 					addProp(nameof(ITokenAdapter.Token));
 
