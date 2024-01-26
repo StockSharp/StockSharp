@@ -33,6 +33,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
+	using StockSharp.Algo.Storages.Binary;
 
 	/// <summary>
 	/// The file storage for market data.
@@ -41,10 +42,13 @@ namespace StockSharp.Algo.Storages
 	{
 		private class LocalMarketDataStorageDrive : IMarketDataStorageDrive
 		{
+			private static readonly Version _ver10 = new(1, 0);
+
 			private readonly string _path;
 			private readonly string _fileNameWithExtension;
 			private readonly string _datesPath;
-			private readonly string _datesPathObsolete;
+			private readonly string _datesPathObsoleteBin;
+			private readonly string _datesPathObsoleteTxt;
 			private readonly DataType _dataType;
 			private readonly SecurityId _secId;
 			private readonly StorageFormats _format;
@@ -63,8 +67,9 @@ namespace StockSharp.Algo.Storages
 				_fileNameWithExtension = fileName + GetExtension(_format);
 
 				var datesPath = IOPath.Combine(_path, $"{fileName}{_format}Dates");
-				_datesPath = $"{datesPath}.bin";
-				_datesPathObsolete = $"{datesPath}.txt";
+				_datesPath = $"{datesPath}2.bin";
+				_datesPathObsoleteBin = $"{datesPath}.bin";
+				_datesPathObsoleteTxt = $"{datesPath}.txt";
 
 				_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
 				{
@@ -75,9 +80,14 @@ namespace StockSharp.Algo.Storages
 						foreach (var date in LoadDates())
 							retVal.Add(date, date);
 					}
-					else if (File.Exists(_datesPathObsolete))
+					else if (File.Exists(_datesPathObsoleteBin))
 					{
-						foreach (var date in LoadDatesObsolete())
+						foreach (var date in LoadDatesObsoleteBin())
+							retVal.Add(date, date);
+					}
+					else if (File.Exists(_datesPathObsoleteTxt))
+					{
+						foreach (var date in LoadDatesObsoleteTxt())
 							retVal.Add(date, date);
 					}
 					else
@@ -113,7 +123,8 @@ namespace StockSharp.Algo.Storages
 					lock (_cacheSync)
 					{
 						File.Delete(_datesPath);
-						File.Delete(_datesPathObsolete);
+						File.Delete(_datesPathObsoleteBin);
+						File.Delete(_datesPathObsoleteTxt);
 					}
 				}
 
@@ -189,7 +200,13 @@ namespace StockSharp.Algo.Storages
 			{
 				try
 				{
-					return ReadDates(File.ReadAllBytes(_datesPath).To<Stream>());
+					var reader = new BitArrayReader(File.ReadAllBytes(_datesPath).To<Stream>());
+					
+					// version
+					reader.ReadInt();
+					reader.ReadInt();
+
+					return ReadDates(reader);
 				}
 				catch (Exception ex)
 				{
@@ -197,13 +214,25 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			private IEnumerable<DateTime> LoadDatesObsolete()
+			private IEnumerable<DateTime> LoadDatesObsoleteBin()
+			{
+				try
+				{
+					return ReadDatesObsolete(File.ReadAllBytes(_datesPathObsoleteBin).To<Stream>());
+				}
+				catch (Exception ex)
+				{
+					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPathObsoleteBin), ex);
+				}
+			}
+
+			private IEnumerable<DateTime> LoadDatesObsoleteTxt()
 			{
 				try
 				{
 					return Do.Invariant(() =>
 					{
-						using var reader = new StreamReader(new FileStream(_datesPathObsolete, FileMode.Open, FileAccess.Read));
+						using var reader = new StreamReader(new FileStream(_datesPathObsoleteTxt, FileMode.Open, FileAccess.Read));
 
 						var dates = new List<DateTime>();
 
@@ -222,7 +251,7 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (Exception ex)
 				{
-					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPathObsolete), ex);
+					throw new InvalidOperationException(LocalizedStrings.ErrorReadFile.Put(_datesPathObsoleteTxt), ex);
 				}
 			}
 
@@ -240,14 +269,22 @@ namespace StockSharp.Algo.Storages
 
 					var stream = new MemoryStream();
 
-					WriteDates(stream, dates);
+					using (var writer = new BitArrayWriter(stream))
+					{
+						writer.WriteInt(_ver10.Major);
+						writer.WriteInt(_ver10.Minor);
+
+						WriteDates(writer, dates);
+					}
+
 					stream.Position = 0;
 
 					lock (_cacheSync)
 					{
 						stream.Save(_datesPath);
 
-						File.Delete(_datesPathObsolete);
+						File.Delete(_datesPathObsoleteBin);
+						File.Delete(_datesPathObsoleteTxt);
 					}
 				}
 				catch (UnauthorizedAccessException)
@@ -278,39 +315,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private static void WriteDates(Stream stream, DateTime[] dates)
-		{
-			stream.WriteEx(dates.Length);
-
-			DateTime lastDate = default;
-
-			for (var i = 0; i < dates.Length; i++)
-			{
-				var date = dates[i];
-
-				if (i == 0)
-					stream.WriteEx(date.Ticks);
-				else
-				{
-					var shift = (int)(date - lastDate).TotalDays;
-
-					if (shift < 0)
-						throw new InvalidOperationException("Dates non ordered: {0}/{1}.".Put(lastDate, date));
-
-					if (shift >= byte.MaxValue)
-					{
-						stream.WriteByte(byte.MaxValue);
-						stream.WriteEx(date.Ticks);
-					}
-					else
-						stream.WriteByte((byte)shift);
-				}
-
-				lastDate = date;
-			}
-		}
-
-		private static IEnumerable<DateTime> ReadDates(Stream stream)
+		private static IEnumerable<DateTime> ReadDatesObsolete(Stream stream)
 		{
 			var dates = new List<DateTime>();
 
@@ -343,9 +348,64 @@ namespace StockSharp.Algo.Storages
 			return dates;
 		}
 
+		private static void WriteDates(BitArrayWriter writer, DateTime[] dates)
+		{
+			writer.WriteInt(dates.Length);
+
+			DateTime lastDate = default;
+
+			for (var i = 0; i < dates.Length; i++)
+			{
+				var date = dates[i];
+
+				if (i == 0)
+					writer.WriteLong(date.Ticks);
+				else
+				{
+					var shift = (int)(date - lastDate).TotalDays;
+
+					if (shift < 0)
+						throw new InvalidOperationException("Dates non ordered: {0}/{1}.".Put(lastDate, date));
+
+					writer.WriteInt(shift);
+				}
+
+				lastDate = date;
+			}
+		}
+
+		private static IEnumerable<DateTime> ReadDates(BitArrayReader reader)
+		{
+			var dates = new List<DateTime>();
+
+			var length = reader.ReadInt();
+
+			DateTime lastDate = default;
+
+			for (var i = 0; i < length; i++)
+			{
+				if (i == 0)
+					lastDate = reader.ReadLong().To<DateTime>();
+				else
+				{
+					var shift = reader.ReadInt();
+
+					if (shift < 0)
+						throw new InvalidOperationException("Dates non ordered: {0}/{1}.".Put(lastDate, shift));
+
+					lastDate = lastDate.AddDays(shift);
+				}
+
+				dates.Add(lastDate.UtcKind());
+			}
+
+			return dates;
+		}
+
 		private class Index : CachedSynchronizedDictionary<SecurityId, Dictionary<StorageFormats, Dictionary<DataType, HashSet<DateTime>>>>
 		{
-			private static readonly Version _ver = new(1, 0);
+			private static readonly Version _ver10 = new(1, 0);
+			private static readonly Version _ver11 = new(1, 1);
 
 			private const byte _customCode = 0;
 			private const byte _candlesCode = 7;
@@ -373,19 +433,23 @@ namespace StockSharp.Algo.Storages
 				{
 					Clear();
 
-					var ver = new Version(stream.Read<int>(), stream.Read<int>());
+					var reader = new BitArrayReader(stream);
 
-					if (ver > _ver)
-						throw new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(nameof(Index), ver, _ver));
+					var ver = new Version(reader.ReadInt(), reader.ReadInt());
 
-					var boardsLen = stream.Read<int>();
+					if (ver > _ver11)
+						throw new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(nameof(Index), ver, _ver11));
+					else if (ver == _ver10)
+						throw new NotSupportedException("osolete format");
+
+					var boardsLen = reader.ReadInt();
 
 					var boardsDict = new Dictionary<int, string>();
 
 					for (var i = 0; i < boardsLen; i++)
-						boardsDict.Add(i, stream.Read<string>());
+						boardsDict.Add(i, reader.ReadStringEx());
 
-					var typesLen = stream.Read<int>();
+					var typesLen = reader.ReadInt();
 
 					var typesDict = new Dictionary<int, DataType>();
 
@@ -397,14 +461,14 @@ namespace StockSharp.Algo.Storages
 						{
 							if (dtCode >= _candlesCode)
 							{
-								var arg = stream.Read<string>();
+								var arg = reader.ReadStringEx();
 								dt = DataType.Create(dt.MessageType, dt.MessageType.ToDataTypeArg(arg));
 							}
 						}
 						else
 						{
-							var type = stream.Read<string>();
-							var arg = stream.Read<string>();
+							var type = reader.ReadStringEx();
+							var arg = reader.ReadStringEx();
 
 							dt = type.ToDataType(arg);
 						}
@@ -412,31 +476,31 @@ namespace StockSharp.Algo.Storages
 						typesDict.Add(i, dt);
 					}
 
-					var secsLen = stream.Read<int>();
+					var secsLen = reader.ReadInt();
 
 					for (var i = 0; i < secsLen; i++)
 					{
 						var secId = new SecurityId
 						{
-							SecurityCode = stream.Read<string>(),
-							BoardCode = boardsDict[stream.Read<int>()],
+							SecurityCode = reader.ReadStringEx(),
+							BoardCode = boardsDict[reader.ReadInt()],
 						};
 
 						var formatsDict = this.SafeAdd(secId);
 
-						var formatsLen = stream.Read<int>();
+						var formatsLen = reader.ReadInt();
 
 						for (var k = 0; k < formatsLen; k++)
 						{
-							var format = (StorageFormats)stream.ReadByte();
+							var format = (StorageFormats)reader.ReadInt();
 
 							var formatDict = formatsDict.SafeAdd(format);
 
-							typesLen = stream.Read<int>();
+							typesLen = reader.ReadInt();
 
 							for (var j = 0; j < typesLen; j++)
 							{
-								formatDict.Add(typesDict[stream.Read<int>()], ReadDates(stream).ToHashSet());
+								formatDict.Add(typesDict[reader.ReadInt()], ReadDates(reader).ToHashSet());
 							}
 						}
 					}
@@ -449,69 +513,71 @@ namespace StockSharp.Algo.Storages
 				{
 					_lastTimeChanged = null;
 
-					stream.WriteEx(_ver.Major);
-					stream.WriteEx(_ver.Minor);
+					using var writer = new BitArrayWriter(stream);
+
+					writer.WriteInt(_ver11.Major);
+					writer.WriteInt(_ver11.Minor);
 
 					var boards = AvailableSecurities.Select(id => id.BoardCode).Distinct(StringComparer.InvariantCultureIgnoreCase).ToArray();
 					var boardsDict = new Dictionary<string, int>();
-					
-					stream.WriteEx(boards.Length);
+
+					writer.WriteInt(boards.Length);
 
 					foreach (var board in boards)
 					{
-						stream.WriteEx(board);
+						writer.WriteStringEx(board);
 						boardsDict.Add(board, boardsDict.Count);
 					}
 
 					var dataTypes = this.SelectMany(p => p.Value.SelectMany(p => p.Value.Keys)).Distinct().ToArray();
 					var dtDict = new Dictionary<DataType, int>();
 
-					stream.WriteEx(dataTypes.Length);
+					writer.WriteInt(dataTypes.Length);
 
 					foreach (var dt in dataTypes)
 					{
 						if (_map.TryGetValue(dt, out var dtCode))
-							stream.WriteByte(dtCode);
+							writer.WriteInt(dtCode);
 						else
 						{
 							if (dt.IsCandles && _map.TryGetValue(DataType.Create(dt.MessageType, default), out var candleCode))
 							{
-								stream.WriteByte(candleCode);
-								stream.WriteEx(dt.DataTypeArgToString());
+								writer.WriteInt(candleCode);
+								writer.WriteStringEx(dt.DataTypeArgToString());
 							}
 							else
 							{
-								stream.WriteByte(_customCode);
+								writer.WriteInt(_customCode);
 
 								var (typeStr, argStr) = dt.FormatToString();
 
-								stream.WriteEx(typeStr);
-								stream.WriteEx(argStr);
+								writer.WriteStringEx(typeStr);
+								writer.WriteStringEx(argStr);
 							}
 						}
 
 						dtDict.Add(dt, dtDict.Count);
 					}
 
-					stream.WriteEx(Count);
+					writer.WriteInt(Count);
 
 					foreach (var (secId, formatsDict) in this)
 					{
-						stream.WriteEx(secId.SecurityCode);
-						stream.WriteEx(boardsDict[secId.BoardCode]);
+						writer.WriteStringEx(secId.SecurityCode);
+						writer.WriteInt(boardsDict[secId.BoardCode]);
 
-						stream.WriteEx(formatsDict.Count);
+						writer.WriteInt(formatsDict.Count);
 
 						foreach (var (format, typesDict) in formatsDict)
 						{
-							stream.WriteByte((byte)format);
+							writer.WriteInt((byte)format);
 
-							stream.WriteEx(typesDict.Count);
+							writer.WriteInt(typesDict.Count);
 
 							foreach (var (dt, dates) in typesDict)
 							{
-								stream.WriteEx(dtDict[dt]);
-								WriteDates(stream, dates.OrderBy().ToArray());
+								writer.WriteInt(dtDict[dt]);
+								WriteDates(writer, dates.OrderBy().ToArray());
 							}
 						}
 					}
