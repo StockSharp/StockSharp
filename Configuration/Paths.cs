@@ -10,7 +10,6 @@
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
-	using Ecng.Localization;
 	using Ecng.ComponentModel;
 
 	using Newtonsoft.Json;

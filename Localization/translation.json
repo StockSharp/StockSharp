@@ -1,4 +1,12 @@
 {
+  "Terminal": {
+    "en": "Terminal",
+    "ru": "Терминал"
+  },
+  "Hydra": {
+    "en": "Hydra",
+    "ru": "Гидра"
+  },
   "CultureCode": {
     "en": "en-US",
     "ru": "ru-RU"
