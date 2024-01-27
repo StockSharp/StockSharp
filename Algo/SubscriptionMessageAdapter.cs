@@ -227,12 +227,30 @@ namespace StockSharp.Algo
 
 							if (subscrMsg is ISecurityIdMessage secIdMsg &&
 								secIdMsg.SecurityId == default &&
-								subscrMsg.OriginalTransactionId != default &&
-								_subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info) &&
-								info.Subscription is ISecurityIdMessage subscriptionMsg &&
-								!subscriptionMsg.SecurityId.IsAllSecurity())
+								subscrMsg.OriginalTransactionId != default)
 							{
-								secIdMsg.SecurityId = subscriptionMsg.SecurityId;
+								SecurityId getSecId(ISecurityIdMessage secIdMsg)
+								{
+									var secId = secIdMsg.SecurityId;
+
+									if (secId.Native is not null && !secId.SecurityCode.IsEmpty() && !secId.BoardCode.IsEmpty())
+										secId.Native = null;
+
+									return secId;
+								}
+
+								if (_subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info) &&
+									info.Subscription is ISecurityIdMessage subscriptionMsg &&
+									!subscriptionMsg.SecurityId.IsAllSecurity())
+								{
+									secIdMsg.SecurityId = getSecId(subscriptionMsg);
+								}
+								else if (_historicalRequests.TryGetValue(subscrMsg.OriginalTransactionId, out var hist) &&
+									hist is ISecurityIdMessage subscriptionMsg2 &&
+									!subscriptionMsg2.SecurityId.IsAllSecurity())
+								{
+									secIdMsg.SecurityId = getSecId(subscriptionMsg2);
+								}
 							}
 						}
 					}
