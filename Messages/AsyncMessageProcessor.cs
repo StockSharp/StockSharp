@@ -36,6 +36,8 @@ class AsyncMessageProcessor : BaseLogReceiver
 				or MessageTypes.OrderPairReplace
 				or MessageTypes.OrderCancel
 				or MessageTypes.OrderGroupCancel;
+
+			IsPing = Message.Type == MessageTypes.Time;
 		}
 
 		public Message Message { get; }
@@ -50,6 +52,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 		public bool IsControl { get; }
 		public bool IsTransaction { get; }
+		public bool IsPing { get; }
 	}
 
 	private readonly SynchronizedList<MessageQueueItem> _messages = new();
@@ -112,6 +115,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 			lock (_messages.SyncRoot)
 			{
 				var isControlProcessing = false;
+				var isPingProcessing = false;
 				var isTransactionProcessing = false;
 				var numProcessing = 0;
 
@@ -119,6 +123,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 				{
 					isControlProcessing |= m.IsControl;
 					isTransactionProcessing |= m.IsTransaction;
+					isPingProcessing |= m.IsPing;
 					++numProcessing;
 				}
 
@@ -127,7 +132,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 					return false;
 
 				// heartbeat (=ping) message has first priority
-				msg = _messages.FirstOrDefault(m => m.Message.Type == MessageTypes.Time);
+				msg = isPingProcessing
+					? null /* cant process parallel pings, select other message type */
+					: _messages.FirstOrDefault(m => m.IsPing);
 
 				if (msg is null)
 				{
