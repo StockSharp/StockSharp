@@ -922,7 +922,7 @@ namespace StockSharp.Algo.Storages.Csv
 					buildFromTuples?.arg,
 					data.Skip.To<string>(),
 					data.DoNotBuildOrderBookInrement.To<string>(),
-					data.Fields.Select(f => ((int)f).To<string>()).JoinComma(),
+					data.Fields?.Select(f => ((int)f).To<string>()).JoinComma(),
 				});
 			}
 
