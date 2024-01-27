@@ -2039,9 +2039,9 @@
     "en": "Update fail details",
     "ru": "Информация об ошибке"
   },
-  "StockSharpInstaller": {
-    "en": "StockSharp Installer",
-    "ru": "StockSharp Инсталлер"
+  "Installer": {
+    "en": "Installer",
+    "ru": "Инсталлер"
   },
   "SetupType": {
     "en": "Setup type",
