@@ -204,6 +204,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsSupportPartialDownloading => true;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual MessageAdapterCategories Categories { get; }
 
 		/// <inheritdoc />

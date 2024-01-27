@@ -320,6 +320,9 @@ namespace StockSharp.Messages
 		public virtual bool IsSupportCandlesPriceLevels => InnerAdapter.IsSupportCandlesPriceLevels;
 
 		/// <inheritdoc />
+		public virtual bool IsSupportPartialDownloading => InnerAdapter.IsSupportPartialDownloading;
+
+		/// <inheritdoc />
 		public virtual MessageAdapterCategories Categories => InnerAdapter.Categories;
 
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;

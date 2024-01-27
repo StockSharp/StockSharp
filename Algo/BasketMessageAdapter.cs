@@ -622,6 +622,8 @@ namespace StockSharp.Algo
 
 		bool IMessageAdapter.IsSupportCandlesPriceLevels => GetSortedAdapters().Any(a => a.IsSupportCandlesPriceLevels);
 
+		bool IMessageAdapter.IsSupportPartialDownloading => GetSortedAdapters().Any(a => a.IsSupportPartialDownloading);
+
 		IEnumerable<Tuple<string, Type>> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
 		IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
@@ -929,7 +931,7 @@ namespace StockSharp.Algo
 				adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter) { CommissionManager = CommissionManager.Clone() });
 			}
 
-			if (SupportPartialDownload)
+			if (SupportPartialDownload && adapter.IsSupportPartialDownloading)
 			{
 				adapter = ApplyOwnInner(new PartialDownloadMessageAdapter(adapter));
 			}

@@ -28,6 +28,10 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		_asyncMessageProcessor = new(this) { Parent = this };
 	}
 
+	/// <inheritdoc />
+	[Browsable(false)]
+	public override bool IsSupportPartialDownloading => false;
+
 	/// <summary>
 	/// Disconnect timeout.
 	/// </summary>

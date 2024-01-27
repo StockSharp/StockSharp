@@ -120,6 +120,11 @@ namespace StockSharp.Messages
 		bool IsSupportCandlesPriceLevels { get; }
 
 		/// <summary>
+		/// Support partial downloading.
+		/// </summary>
+		bool IsSupportPartialDownloading { get; }
+
+		/// <summary>
 		/// Message adapter categories.
 		/// </summary>
 		MessageAdapterCategories Categories { get; }

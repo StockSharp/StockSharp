@@ -3681,6 +3681,7 @@ namespace StockSharp.Algo.Testing
 		bool IMessageAdapter.IsSupportSubscriptions => true;
 		bool IMessageAdapter.IsSupportCandlesUpdates => true;
 		bool IMessageAdapter.IsSupportCandlesPriceLevels => false;
+		bool IMessageAdapter.IsSupportPartialDownloading => false;
 
 		MessageAdapterCategories IMessageAdapter.Categories => default;
 
