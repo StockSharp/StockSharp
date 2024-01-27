@@ -2392,9 +2392,11 @@ namespace StockSharp.Algo
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="beginDate">Start date.</param>
 		/// <param name="endDate">End date.</param>
+		/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
 		/// <param name="fields">Market data fields.</param>
+		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <returns>Level1 market data.</returns>
-		public static IEnumerable<Level1ChangeMessage> GetLevel1(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate, IEnumerable<Level1Fields> fields = null)
+		public static IEnumerable<Level1ChangeMessage> GetLevel1(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, IEnumerable<Level1Fields> fields = default, SecurityTypes? secType = default)
 		{
 			var mdMsg = new MarketDataMessage
 			{
@@ -2403,7 +2405,9 @@ namespace StockSharp.Algo
 				DataType2 = DataType.Level1,
 				From = beginDate,
 				To = endDate,
-				BuildField = fields?.FirstOr(),
+				Fields = fields,
+				SecurityType = secType,
+				Count = maxCount,
 			};
 
 			return adapter.Download<Level1ChangeMessage>(mdMsg);
@@ -2414,20 +2418,22 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <param name="beginDate">Start date.</param>
 		/// <param name="endDate">End date.</param>
+		/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
+		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <returns>Tick data.</returns>
-		public static IEnumerable<ExecutionMessage> GetTicks(this IMessageAdapter adapter, SecurityId securityId, SecurityTypes? secType, DateTime beginDate, DateTime endDate)
+		public static IEnumerable<ExecutionMessage> GetTicks(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
 		{
 			var mdMsg = new MarketDataMessage
 			{
 				SecurityId = securityId,
-				SecurityType = secType,
 				IsSubscribe = true,
 				DataType2 = DataType.Ticks,
 				From = beginDate,
 				To = endDate,
+				SecurityType = secType,
+				Count = maxCount,
 			};
 
 			return adapter.Download<ExecutionMessage>(mdMsg);
@@ -2440,8 +2446,10 @@ namespace StockSharp.Algo
 		/// <param name="securityId">Security ID.</param>
 		/// <param name="beginDate">Start date.</param>
 		/// <param name="endDate">End date.</param>
+		/// <param name="maxCount"><see cref="MarketDataMessage.Count"/></param>
+		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <returns>Order log.</returns>
-		public static IEnumerable<ExecutionMessage> GetOrderLog(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate)
+		public static IEnumerable<ExecutionMessage> GetOrderLog(this IMessageAdapter adapter, SecurityId securityId, DateTime beginDate, DateTime endDate, int? maxCount = default, SecurityTypes? secType = default)
 		{
 			var mdMsg = new MarketDataMessage
 			{
@@ -2450,6 +2458,8 @@ namespace StockSharp.Algo
 				DataType2 = DataType.OrderLog,
 				From = beginDate,
 				To = endDate,
+				SecurityType = secType,
+				Count = maxCount,
 			};
 
 			return adapter.Download<ExecutionMessage>(mdMsg);
@@ -2471,25 +2481,25 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		/// <param name="securityId">Security ID.</param>
-		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <param name="timeFrame">Time-frame.</param>
 		/// <param name="from">Begin period.</param>
 		/// <param name="to">End period.</param>
 		/// <param name="count">Candles count.</param>
 		/// <param name="buildField">Extra info for the <see cref="MarketDataMessage.BuildFrom"/>.</param>
+		/// <param name="secType"><see cref="SecurityMessage.SecurityType"/>.</param>
 		/// <returns>Downloaded candles.</returns>
-		public static IEnumerable<TimeFrameCandleMessage> GetCandles(this IMessageAdapter adapter, SecurityId securityId, SecurityTypes? secType, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null)
+		public static IEnumerable<TimeFrameCandleMessage> GetCandles(this IMessageAdapter adapter, SecurityId securityId, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long? count = null, Level1Fields? buildField = null, SecurityTypes? secType = default)
 		{
 			var mdMsg = new MarketDataMessage
 			{
 				SecurityId = securityId,
-				SecurityType = secType,
 				IsSubscribe = true,
 				DataType2 = timeFrame.TimeFrame(),
 				From = from,
 				To = to,
 				Count = count,
 				BuildField = buildField,
+				SecurityType = secType,
 			};
 
 			return adapter.Download<TimeFrameCandleMessage>(mdMsg);
