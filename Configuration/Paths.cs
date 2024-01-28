@@ -332,6 +332,11 @@
 		/// <returns>Localized url.</returns>
 		public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{Domain}/{docUrl}";
 
+		/// <summary>
+		/// Entry assembly.
+		/// </summary>
+		public static Assembly EntryAssembly => Assembly.GetEntryAssembly();
+
 		private static string _installedVersion;
 
 		/// <summary>
@@ -344,18 +349,16 @@
 				if (_installedVersion != null)
 					return _installedVersion;
 
-				static string GetAssemblyVersion() => (Assembly.GetEntryAssembly() ?? typeof(Paths).Assembly).GetName().Version.To<string>();
+				static string GetAssemblyVersion() => EntryAssembly?.GetName().Version.To<string>();
 
 				try
 				{
-					_installedVersion = TryGetInstalledVersion(Directory.GetCurrentDirectory()) ?? GetAssemblyVersion();
+					_installedVersion = TryGetInstalledVersion(Directory.GetCurrentDirectory()).IsEmpty(ConfigManager.TryGet("actualVersion", "5.0.0").IsEmpty(GetAssemblyVersion()));
 				}
 				catch
 				{
 					_installedVersion = GetAssemblyVersion();
 				}
-
-				_installedVersion ??= "<error>";
 
 				return _installedVersion;
 			}
@@ -365,6 +368,12 @@
 		/// Reset installed version cache so it would be re-generated next time when it's requested.
 		/// </summary>
 		public static void ResetInstalledVersionCache() => _installedVersion = null;
+
+		/// <summary>
+		/// Build info version.
+		/// </summary>
+		public static string BuildVersion
+			=> EntryAssembly?.GetAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
 		private static SettingsStorage[] GetInstallations()
 		{

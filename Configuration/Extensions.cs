@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Configuration;
 
-using System.Reflection;
-
 using Ecng.Common;
 
 /// <summary>
@@ -12,8 +10,8 @@ public static class Extensions
 	/// <summary>
 	/// </summary>
 	public static long? TryGetProductId()
-		=> Assembly
-			.GetEntryAssembly()?
+		=> Paths
+			.EntryAssembly?
 			.GetAttribute<ProductIdAttribute>()?
 			.ProductId;
 }
