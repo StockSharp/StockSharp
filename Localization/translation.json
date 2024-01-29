@@ -6012,8 +6012,8 @@
     "ru": "Использовать лог заявок."
   },
   "ParallelDesc": {
-    "en": "Number of simultaneously tested strategies.",
-    "ru": "Количество одновременно тестируемых стратегий."
+    "en": "Number of simultaneously runned operations.",
+    "ru": "Количество одновременно запускаемых операций."
   },
   "CodeIsExecuting": {
     "en": "Code is executing. Execution must be restarted.",
