@@ -47,7 +47,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		Description = LocalizedStrings.ParallelDescKey,
 		GroupName = LocalizedStrings.AdaptersKey,
 		Order = 310)]
-	public int MaxParallelMessages { get; set; } = int.MaxValue;
+	public int MaxParallelMessages { get; set; } = 5;
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -68,7 +68,10 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
 	public virtual ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(connectMsg, cancellationToken);
+	{
+		SendOutMessage(new ConnectMessage());
+		return default;
+	}
 
 	/// <summary>
 	/// Process <see cref="DisconnectMessage"/>.
@@ -77,7 +80,10 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
 	public virtual ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(disconnectMsg, cancellationToken);
+	{
+		SendOutMessage(new DisconnectMessage());
+		return default;
+	}
 
 	/// <summary>
 	/// Process <see cref="ResetMessage"/>.
@@ -89,7 +95,10 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
 	public virtual ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
-		=> ProcessMessageAsync(resetMsg, cancellationToken);
+	{
+		SendOutMessage(new ResetMessage());
+		return default;
+	}
 
 	/// <summary>
 	/// Process <see cref="SecurityLookupMessage"/>.
@@ -200,6 +209,17 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	{
 		try
 		{
+			var now = DateTimeOffset.UtcNow;
+
+			var from = mdMsg.From;
+			var to = mdMsg.To;
+
+			if (from > now || from > to)
+			{
+				SendSubscriptionResult(mdMsg);
+				return;
+			}
+
 			var dataType = mdMsg.DataType2;
 
 			var task =

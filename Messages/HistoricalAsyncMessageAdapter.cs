@@ -18,49 +18,19 @@ public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
 	protected HistoricalAsyncMessageAdapter(IdGenerator transactionIdGenerator)
 		: base(transactionIdGenerator)
 	{
-		MaxParallelMessages = 1;
-	}
-
-	/// <inheritdoc />
-	public override ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
-	{
-		SendOutMessage(new ConnectMessage());
-		return default;
-	}
-
-	/// <inheritdoc />
-	public override ValueTask DisconnectAsync(DisconnectMessage msg, CancellationToken token)
-	{
-		SendOutMessage(new DisconnectMessage());
-		return default;
-	}
-
-	/// <inheritdoc />
-	public override ValueTask ResetAsync(ResetMessage msg, CancellationToken token)
-	{
-		SendOutMessage(new ResetMessage());
-		return default;
 	}
 
 	/// <inheritdoc />
 	public override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		var now = DateTimeOffset.UtcNow;
-
 		var from = mdMsg.From;
 		var to = mdMsg.To;
-
-		if (from > now)
-		{
-			SendSubscriptionResult(mdMsg);
-			return default;
-		}
 
 		if (to is null || from is null)
 		{
 			mdMsg = (MarketDataMessage)mdMsg.Clone();
 
-			mdMsg.To ??= now;
+			mdMsg.To ??= DateTimeOffset.UtcNow;
 
 			if (from is null)
 			{
