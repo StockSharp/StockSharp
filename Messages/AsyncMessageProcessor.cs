@@ -125,19 +125,21 @@ class AsyncMessageProcessor : BaseLogReceiver
 				if (isControlProcessing)
 					return false;
 
+				var messages = _messages.Where(i => !i.IsStartedProcessing);
+
 				// controls messages - first priority,
 				// heartbeat(=ping) - second
 				// other = third
-				item = _messages.FirstOrDefault(m => m.IsControl)
+				item = messages.FirstOrDefault(m => m.IsControl)
 					?? (
 					isPingProcessing
 						? null /* cant process parallel pings, select other message type */
-						: _messages.FirstOrDefault(m => m.IsPing)
+						: messages.FirstOrDefault(m => m.IsPing)
 					)
 					?? (
 					numProcessing >= _adapter.MaxParallelMessages
-						? _messages.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
-						: _messages.FirstOrDefault(m => !m.IsStartedProcessing && (!isTransactionProcessing || !m.IsTransaction))
+						? messages.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
+						: messages.FirstOrDefault(m => !isTransactionProcessing || !m.IsTransaction)
 					);
 			}
 
