@@ -107,9 +107,6 @@ class AsyncMessageProcessor : BaseLogReceiver
 	{
 		bool nextMessage()
 		{
-			static bool canProcessOverLimit(Message msg)
-				=> msg is ISubscriptionMessage { IsSubscribe: false };
-
 			MessageQueueItem msg;
 
 			lock (_messages.SyncRoot)
@@ -131,27 +128,20 @@ class AsyncMessageProcessor : BaseLogReceiver
 				if (isControlProcessing)
 					return false;
 
-				// heartbeat (=ping) message has first priority
-				msg = isPingProcessing
-					? null /* cant process parallel pings, select other message type */
-					: _messages.FirstOrDefault(m => m.IsPing);
-
-				if (msg is null)
-				{
-					// if transaction is processing currently, we can process other non-exclusive messages in parallel (marketdata request for example)
-					if (isTransactionProcessing)
-					{
-						msg = numProcessing >= _adapter.MaxParallelMessages
-							? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message)) // can't process more messages because of the limit.
-							: _messages.FirstOrDefault(m => !m.IsStartedProcessing && !(m.IsControl || m.IsTransaction));
-					}
-					else
-					{
-						msg = numProcessing >= _adapter.MaxParallelMessages
-							? _messages.FirstOrDefault(m => canProcessOverLimit(m.Message) || (!m.IsStartedProcessing && m.IsControl)) // if the limit is exceeded we can only process control messages
-							: _messages.FirstOrDefault(m => !m.IsStartedProcessing);
-					}
-				}
+				// controls messages - first priority,
+				// heartbeat(=ping) - second
+				// other = third
+				msg = _messages.FirstOrDefault(m => m.IsControl)
+					?? (
+					isPingProcessing
+						? null /* cant process parallel pings, select other message type */
+						: _messages.FirstOrDefault(m => m.IsPing)
+					)
+					?? (
+					numProcessing >= _adapter.MaxParallelMessages
+						? _messages.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
+						: _messages.FirstOrDefault(m => !m.IsStartedProcessing && (!isTransactionProcessing || !m.IsTransaction))
+					);
 			}
 
 			if (msg is null)
