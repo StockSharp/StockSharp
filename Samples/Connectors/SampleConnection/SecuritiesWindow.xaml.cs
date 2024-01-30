@@ -73,7 +73,9 @@ namespace SampleConnection
 
 			public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.LoadAndBuild;
 
-			void IPersistable.Load(SettingsStorage storage)
+            public bool IsFinishedOnly { get; set; }
+
+            void IPersistable.Load(SettingsStorage storage)
 			{
 				throw new NotSupportedException();
 			}
@@ -459,6 +461,7 @@ namespace SampleConnection
 					BuildMode = settings.BuildMode,
 					Skip = settings.Skip,
 					Count = settings.Count,
+					IsFinishedOnly = settings.IsFinishedOnly,
 				};
 				security.ToMessage().CopyTo(mdMsg);
 				var chartWnd = new ChartWindow(mdMsg);
