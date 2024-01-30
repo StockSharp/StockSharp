@@ -73,7 +73,10 @@ partial class BitStampMessageAdapter
 							continue;
 
 						if (c.Time > to)
-							return;
+						{
+							hasData = false;
+							break;
+						}
 
 						SendOutMessage(new TimeFrameCandleMessage
 						{
@@ -91,24 +94,22 @@ partial class BitStampMessageAdapter
 						});
 
 						if (--left <= 0)
-							return;
+							break;
 
 						hasData = true;
 
 						from = c.Time;
 					}
 
-					if (!hasData)
+					if (!hasData || left <= 0)
 						break;
 
 					await IterationInterval.Delay(cancellationToken);
 				}
 			}
 
-			if (mdMsg.IsHistoryOnly())
-				return;
-
 			// bitstamp does not support web sockets for candles
+			SendSubscriptionFinished(mdMsg.TransactionId);
 		}
 		else
 		{
@@ -117,29 +118,39 @@ partial class BitStampMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
 		if (mdMsg.IsSubscribe)
-			return _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+		{
+			if (!mdMsg.IsHistoryOnly())
+				await _pusherClient.SubscribeOrderBook(currency, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
 		else
-			return _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
+			await _pusherClient.UnSubscribeOrderBook(currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
 		if (mdMsg.IsSubscribe)
-			return _pusherClient.SubscribeOrderLog(currency, cancellationToken);
+		{
+			if (!mdMsg.IsHistoryOnly())
+				await _pusherClient.SubscribeOrderLog(currency, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
+		}
 		else
-			return _pusherClient.UnSubscribeOrderLog(currency, cancellationToken);
+			await _pusherClient.UnSubscribeOrderLog(currency, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -180,10 +191,10 @@ partial class BitStampMessageAdapter
 				}
 			}
 
-			if (mdMsg.IsHistoryOnly())
-				return;
-			
-			await _pusherClient.SubscribeTrades(currency, cancellationToken);
+			if (!mdMsg.IsHistoryOnly())
+				await _pusherClient.SubscribeTrades(currency, cancellationToken);
+
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
@@ -218,5 +229,7 @@ partial class BitStampMessageAdapter
 			if (--left <= 0)
 				break;
 		}
+
+		SendSubscriptionFinished(lookupMsg.TransactionId);
 	}
 }

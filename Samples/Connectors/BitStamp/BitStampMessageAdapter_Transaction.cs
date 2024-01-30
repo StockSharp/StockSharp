@@ -318,6 +318,8 @@ partial class BitStampMessageAdapter
 		}
 		else
 		{
+			SendSubscriptionReply(statusMsg.TransactionId);
+
 			if (!statusMsg.IsSubscribe)
 				return;
 
@@ -338,6 +340,8 @@ partial class BitStampMessageAdapter
 			{
 				ProcessTrade(trade);
 			}
+
+			SendSubscriptionResult(statusMsg);
 		}
 	}
 
@@ -387,6 +391,8 @@ partial class BitStampMessageAdapter
 	{
 		if (lookupMsg != null)
 		{
+			SendSubscriptionReply(lookupMsg.TransactionId);
+
 			if (!lookupMsg.IsSubscribe)
 				return;
 		}
@@ -432,5 +438,8 @@ partial class BitStampMessageAdapter
 		}
 
 		_lastTimeBalanceCheck = CurrentTime;
+
+		if (lookupMsg != null)
+			SendSubscriptionResult(lookupMsg);
 	}
 }

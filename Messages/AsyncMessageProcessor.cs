@@ -238,10 +238,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 							this.AddVerboseLog("endprocess: {0}", msg.Type);
 
 							if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
-							{
 								_subscriptionTokens.Remove(subMsg.TransactionId);
-								_adapter.SendSubscriptionResult(subMsg);
-							}
 						}
 					}
 
