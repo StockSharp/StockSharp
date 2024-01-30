@@ -53,6 +53,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 	private readonly SynchronizedList<MessageQueueItem> _messages = new();
 	private readonly SynchronizedDictionary<Task, Func<string>> _childTasks = new();
+	private readonly SynchronizedDictionary<long, CancellationTokenSource> _subscriptionTokens = new();
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
 	private CancellationTokenSource _globalCts = new();
@@ -170,6 +171,27 @@ class AsyncMessageProcessor : BaseLogReceiver
 					{
 						if (!_isConnectionStarted || _isDisconnecting)
 							throw new InvalidOperationException($"unable to process {msg.Message.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
+
+						if (msg.Message is ISubscriptionMessage subMsg)
+						{
+							if (subMsg.IsSubscribe)
+							{
+								var (cts, childToken) = token.CreateChildToken();
+								token = childToken;
+								_subscriptionTokens.Add(subMsg.TransactionId, cts);
+							}
+							else
+							{
+								// in case a subscription still in "subscribe" state
+								// (for example, for long historical data request)
+								if (_subscriptionTokens.TryGetAndRemove(subMsg.OriginalTransactionId, out var cts))
+								{
+									cts.Cancel();
+									msg.Task = Task.CompletedTask;
+									return default;
+								}
+							}
+						}
 					}
 
 					ValueTask vt;
@@ -209,6 +231,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 						if (msg.Message is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
 						{
+							_subscriptionTokens.Remove(subMsg.TransactionId);
 							_adapter.SendSubscriptionResult(subMsg);
 						}
 					}
@@ -329,6 +352,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 		// token is already canceled in EnqueueMessage
 		await AsyncHelper.CatchHandle(() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()));
+
+		foreach (var (_, cts) in _subscriptionTokens.CopyAndClear())
+			cts.Cancel();
 
 		await _adapter.ResetAsync(msg, default); // reset must not throw.
 
