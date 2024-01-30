@@ -23,6 +23,12 @@ public abstract class HistoricalAsyncMessageAdapter : AsyncMessageAdapter
 	/// <inheritdoc />
 	public override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
+		if (!mdMsg.IsSubscribe)
+		{
+			SendSubscriptionReply(mdMsg.TransactionId);
+			return default;
+		}
+
 		var from = mdMsg.From;
 		var to = mdMsg.To;
 

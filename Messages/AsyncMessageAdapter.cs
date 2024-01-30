@@ -209,15 +209,18 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	{
 		try
 		{
-			var now = DateTimeOffset.UtcNow;
-
-			var from = mdMsg.From;
-			var to = mdMsg.To;
-
-			if (from > now || from > to)
+			if (mdMsg.IsSubscribe)
 			{
-				SendSubscriptionResult(mdMsg);
-				return;
+				var now = DateTimeOffset.UtcNow;
+
+				var from = mdMsg.From;
+				var to = mdMsg.To;
+
+				if (from > now || from > to)
+				{
+					SendSubscriptionResult(mdMsg);
+					return;
+				}
 			}
 
 			var dataType = mdMsg.DataType2;
