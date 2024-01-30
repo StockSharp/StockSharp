@@ -20,10 +20,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 {
 	private class MessageQueueItem
 	{
-		public MessageQueueItem(Message message, CancellationTokenSource cts)
+		public MessageQueueItem(Message message)
 		{
 			Message = message ?? throw new ArgumentNullException(nameof(message));
-			Cts = cts ?? throw new ArgumentNullException(nameof(cts));
 
 			IsControl = Message.Type
 				is MessageTypes.Reset
@@ -41,14 +40,11 @@ class AsyncMessageProcessor : BaseLogReceiver
 		}
 
 		public Message Message { get; }
-		public CancellationTokenSource Cts { get; }
 		public Task Task { get; set; }
 
 		public bool IsStartedProcessing => Task != null;
 		public bool IsProcessing => Task?.IsCompleted == false;
 		public bool IsDone => Task?.IsCompleted == true;
-
-		public bool IsCanceled => Cts.Token.IsCancellationRequested;
 
 		public bool IsControl { get; }
 		public bool IsTransaction { get; }
@@ -95,7 +91,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 			if (msg is ResetMessage)
 				CancelAndReplaceGlobalCts();
 
-			_messages.Add(new(msg, _globalCts));
+			_messages.Add(new(msg));
 		}
 
 		_processMessageEvt.Set();
@@ -147,8 +143,6 @@ class AsyncMessageProcessor : BaseLogReceiver
 			if (msg is null)
 				return false;
 
-			var token = _globalCts.Token;
-
 			if (msg.IsStartedProcessing)
 				throw new ArgumentException($"processing is already started for {msg.Message}", nameof(msg));
 
@@ -156,7 +150,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 			{
 				try
 				{
-					if (msg.IsCanceled)
+					var token = _globalCts.Token;
+
+					if (token.IsCancellationRequested)
 					{
 						var tcs = AsyncHelper.CreateTaskCompletionSource(false);
 						tcs.SetCanceled();
@@ -170,45 +166,39 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 					this.AddVerboseLog("beginprocess: {0}", msg.Message.Type);
 
-					ValueTask vt;
-
-					if (msg.IsControl)
-					{
-						vt = msg.Message switch
-						{
-							ConnectMessage m	=> ConnectAsync(m, token),
-							DisconnectMessage m	=> DisconnectAsync(m),
-							ResetMessage m		=> ResetAsync(m),
-							_ => throw new ArgumentOutOfRangeException(nameof(msg), $"unexpected message {msg.Message.Type}")
-						};
-					}
-					else
+					if (!msg.IsControl)
 					{
 						if (!_isConnectionStarted || _isDisconnecting)
 							throw new InvalidOperationException($"unable to process {msg.Message.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
-
-						vt = msg.Message switch
-						{
-							SecurityLookupMessage m		=> _adapter.SecurityLookupAsync(m, token),
-							PortfolioLookupMessage m	=> _adapter.PortfolioLookupAsync(m, token),
-							BoardLookupMessage m		=> _adapter.BoardLookupAsync(m, token),
-
-							TimeMessage m				=> _adapter.TimeAsync(m, token),
-
-							OrderStatusMessage m		=> _adapter.OrderStatusAsync(m, token),
-
-							OrderReplaceMessage m		=> _adapter.ReplaceOrderAsync(m, token),
-							OrderPairReplaceMessage m	=> _adapter.ReplaceOrderPairAsync(m, token),
-							OrderRegisterMessage m		=> _adapter.RegisterOrderAsync(m, token),
-							OrderCancelMessage m		=> _adapter.CancelOrderAsync(m, token),
-							OrderGroupCancelMessage m	=> _adapter.CancelOrderGroupAsync(m, token),
-
-							MarketDataMessage m			=> _adapter.MarketDataAsync(m, token),
-
-							_ => _adapter.ProcessMessageAsync(msg.Message, token)
-						};
 					}
-					
+
+					ValueTask vt;
+
+					vt = msg.Message switch
+					{
+						ConnectMessage m			=> ConnectAsync(m, token),
+						DisconnectMessage m			=> DisconnectAsync(m),
+						ResetMessage m				=> ResetAsync(m),
+
+						SecurityLookupMessage m		=> _adapter.SecurityLookupAsync(m, token),
+						PortfolioLookupMessage m	=> _adapter.PortfolioLookupAsync(m, token),
+						BoardLookupMessage m		=> _adapter.BoardLookupAsync(m, token),
+
+						TimeMessage m				=> _adapter.TimeAsync(m, token),
+
+						OrderStatusMessage m		=> _adapter.OrderStatusAsync(m, token),
+
+						OrderReplaceMessage m		=> _adapter.ReplaceOrderAsync(m, token),
+						OrderPairReplaceMessage m	=> _adapter.ReplaceOrderPairAsync(m, token),
+						OrderRegisterMessage m		=> _adapter.RegisterOrderAsync(m, token),
+						OrderCancelMessage m		=> _adapter.CancelOrderAsync(m, token),
+						OrderGroupCancelMessage m	=> _adapter.CancelOrderGroupAsync(m, token),
+
+						MarketDataMessage m			=> _adapter.MarketDataAsync(m, token),
+
+						_ => _adapter.ProcessMessageAsync(msg.Message, token)
+					};
+										
 					var task = msg.Task = vt.IsCompleted
 						? Task.CompletedTask
 						: vt.AsTask();
