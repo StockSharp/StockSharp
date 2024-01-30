@@ -161,8 +161,6 @@
 		/// <inheritdoc />
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			Message extra = null;
-
 			switch (message.Type)
 			{
 				case MessageTypes.Disconnect:
@@ -186,14 +184,6 @@
 							if (_subscriptionsById.TryGetValue(id, out var info))
 							{
 								ChangeState(info, SubscriptionStates.Active);
-
-								if (!this.IsOutMessageSupported(MessageTypes.SubscriptionOnline))
-								{
-									extra = new SubscriptionOnlineMessage
-									{
-										OriginalTransactionId = id
-									};
-								}
 							}
 						}
 						else
@@ -291,9 +281,6 @@
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
-
-			if (extra != null)
-				base.OnInnerAdapterNewOutMessage(extra);
 		}
 
 		private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId, bool warnOnDuplicate = true)

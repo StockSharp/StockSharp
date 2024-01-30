@@ -567,46 +567,6 @@ namespace StockSharp.Messages
 			return adapter.SupportedResultMessages.Contains(type);
 		}
 
-		/// <summary>
-		/// Add the message type info <see cref="IMessageAdapter.SupportedOutMessages"/>.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <param name="type">Message type.</param>
-		public static void AddSupportedOutMessage(this MessageAdapter adapter, MessageTypes type)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Append(type).Distinct();
-		}
-
-		/// <summary>
-		/// Remove the message type from <see cref="IMessageAdapter.SupportedOutMessages"/>.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <param name="type">Message type.</param>
-		public static void RemoveSupportedOutMessage(this MessageAdapter adapter, MessageTypes type)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			adapter.SupportedOutMessages = adapter.SupportedOutMessages.Where(t => t != type);
-		}
-
-		/// <summary>
-		/// Determines whether the specified message type is contained in <see cref="IMessageAdapter.SupportedOutMessages"/>..
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <param name="type">Message type.</param>
-		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
-		public static bool IsOutMessageSupported(this IMessageAdapter adapter, MessageTypes type)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			return adapter.SupportedOutMessages.Contains(type);
-		}
-
 		private static readonly SynchronizedDictionary<Type, Type> _candleArgTypes = new();
 
 		/// <summary>

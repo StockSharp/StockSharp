@@ -281,9 +281,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <inheritdoc />
-		public virtual IEnumerable<MessageTypes> SupportedOutMessages => InnerAdapter.SupportedOutMessages;
-
-		/// <inheritdoc />
 		public virtual IEnumerable<MessageTypes> SupportedResultMessages => InnerAdapter.SupportedResultMessages;
 
 		/// <inheritdoc />

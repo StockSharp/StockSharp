@@ -3647,7 +3647,6 @@ namespace StockSharp.Algo.Testing
 			//ExtendedMessageTypes.Clearing.ToInfo(),
 		};
 		IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
-		IEnumerable<MessageTypes> IMessageAdapter.SupportedOutMessages { get; } = Enumerable.Empty<MessageTypes>();
 		IEnumerable<MessageTypes> IMessageAdapter.SupportedResultMessages { get; } = new[]
 		{
 			MessageTypes.SecurityLookup,

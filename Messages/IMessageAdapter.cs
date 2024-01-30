@@ -45,11 +45,6 @@ namespace StockSharp.Messages
 		IEnumerable<MessageTypes> SupportedInMessages { get; set; }
 
 		/// <summary>
-		/// Supported by adapter message types.
-		/// </summary>
-		IEnumerable<MessageTypes> SupportedOutMessages { get; }
-
-		/// <summary>
 		/// Supported by adapter result message types.
 		/// </summary>
 		IEnumerable<MessageTypes> SupportedResultMessages { get; }
