@@ -74,7 +74,7 @@
 
 		private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = new();
 		private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = new();
-		private readonly HashSet<long> _strategyPosSubscriptions = new();
+		private readonly HashSet<long> _skipSubscriptions = new();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionOnlineMessageAdapter"/>.
@@ -316,7 +316,7 @@
 			{
 				_subscriptionsByKey.Clear();
 				_subscriptionsById.Clear();
-				_strategyPosSubscriptions.Clear();
+				_skipSubscriptions.Clear();
 			}
 		}
 
@@ -345,7 +345,7 @@
 				{
 					if (message is PortfolioLookupMessage posMsg && !posMsg.StrategyId.IsEmpty())
 					{
-						_strategyPosSubscriptions.Add(posMsg.TransactionId);
+						_skipSubscriptions.Add(posMsg.TransactionId);
 						sendInMsg = message;
 					}
 					else if (!message.IsHistoryOnly())
@@ -381,7 +381,7 @@
 							sendInMsg = message;
 
 							info = new SubscriptionInfo(message.TypedClone());
-						
+
 							_subscriptionsByKey.Add(key, info);
 						}
 						else
@@ -412,7 +412,10 @@
 							info.ExtraFilters.Add(transId);
 					}
 					else
+					{
+						_skipSubscriptions.Add(message.TransactionId);
 						sendInMsg = message;
+					}
 				}
 				else
 				{
@@ -465,7 +468,7 @@
 							}
 						}
 					}
-					else if (_strategyPosSubscriptions.Remove(originId))
+					else if (_skipSubscriptions.Remove(originId))
 					{
 						sendInMsg = message;
 					}
