@@ -29,14 +29,21 @@ class AsyncMessageProcessor : BaseLogReceiver
 				or MessageTypes.Connect
 				or MessageTypes.Disconnect;
 
+			IsPing = Message.Type == MessageTypes.Time;
+
+			IsLookup = Message.Type
+				is MessageTypes.PortfolioLookup
+				or MessageTypes.OrderStatus
+				or MessageTypes.SecurityLookup
+				or MessageTypes.BoardLookup
+				or MessageTypes.TimeFrameLookup;
+
 			IsTransaction = Message.Type
 				is MessageTypes.OrderRegister
 				or MessageTypes.OrderReplace
 				or MessageTypes.OrderPairReplace
 				or MessageTypes.OrderCancel
 				or MessageTypes.OrderGroupCancel;
-
-			IsPing = Message.Type == MessageTypes.Time;
 		}
 
 		public Message Message { get; }
@@ -47,8 +54,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 		public bool IsDone => Task?.IsCompleted == true;
 
 		public bool IsControl { get; }
-		public bool IsTransaction { get; }
 		public bool IsPing { get; }
+		public bool IsLookup { get; }
+		public bool IsTransaction { get; }
 	}
 
 	private readonly SynchronizedList<MessageQueueItem> _messages = new();
@@ -110,14 +118,16 @@ class AsyncMessageProcessor : BaseLogReceiver
 			{
 				var isControlProcessing = false;
 				var isPingProcessing = false;
+				var isLookupProcessing = false;
 				var isTransactionProcessing = false;
 				var numProcessing = 0;
 
 				foreach (var m in _messages.Where(m => m.IsProcessing))
 				{
 					isControlProcessing |= m.IsControl;
-					isTransactionProcessing |= m.IsTransaction;
 					isPingProcessing |= m.IsPing;
+					isLookupProcessing |= m.IsLookup;
+					isTransactionProcessing |= m.IsTransaction;
 					++numProcessing;
 				}
 
@@ -127,19 +137,27 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 				var messages = _messages.Where(i => !i.IsStartedProcessing);
 
-				// controls messages - first priority,
-				// heartbeat(=ping) - second
-				// other = third
+				// priority order:
+				// controls messages	- 1
+				// heartbeat(=ping)		- 2
+				// status				- 3
+				// transactions			- 4
+				// other				- 5
 				item = messages.FirstOrDefault(m => m.IsControl)
 					?? (
 					isPingProcessing
-						? null /* cant process parallel pings, select other message type */
+						? null /* can't process parallel pings, select other message type */
 						: messages.FirstOrDefault(m => m.IsPing)
+					)
+					?? (
+					isLookupProcessing
+						? null /* can't process parallel lookup, select other message type */
+						: messages.FirstOrDefault(m => m.IsLookup)
 					)
 					?? (
 					numProcessing >= _adapter.MaxParallelMessages
 						? messages.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
-						: messages.FirstOrDefault(m => !isTransactionProcessing || !m.IsTransaction)
+						: messages.FirstOrDefault(m => m.IsTransaction == !isTransactionProcessing)
 					);
 			}
 
