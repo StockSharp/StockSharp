@@ -157,7 +157,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 					?? (
 					numProcessing >= _adapter.MaxParallelMessages
 						? messages.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
-						: messages.FirstOrDefault(m => m.IsTransaction == !isTransactionProcessing)
+						: (isTransactionProcessing
+							? messages.FirstOrDefault(m => !m.IsTransaction)
+							: (messages.FirstOrDefault(m => m.IsTransaction) ?? messages.FirstOrDefault()))
 					);
 			}
 
@@ -210,6 +212,8 @@ class AsyncMessageProcessor : BaseLogReceiver
 								{
 									cts.Cancel();
 									item.Task = Task.CompletedTask;
+
+									_processMessageEvt.Reset();
 									return default;
 								}
 							}
@@ -258,6 +262,8 @@ class AsyncMessageProcessor : BaseLogReceiver
 							if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
 								_subscriptionTokens.Remove(subMsg.TransactionId);
 						}
+
+						_processMessageEvt.Reset();
 					}
 
 					var task = item.Task = vt.AsTask();
