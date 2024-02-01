@@ -205,7 +205,10 @@ namespace StockSharp.Algo.Storages.Csv
 				var secId = criteria.SecurityId;
 
 				if (secId == default || secId.BoardCode.IsEmpty())
-					return this.Filter(criteria);
+				{
+					lock (SyncRoot)
+						return this.Filter(criteria);
+				}
 
 				var security = GetById(secId);
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
