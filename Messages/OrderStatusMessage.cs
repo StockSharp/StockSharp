@@ -59,6 +59,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[DataMember]
+		public FillGapsDays? FillGaps { get; set; }
+
+		/// <inheritdoc />
+		[DataMember]
 		public bool IsSubscribe { get; set; }
 
 		private OrderStates[] _states = Array.Empty<OrderStates>();
@@ -101,6 +105,7 @@ namespace StockSharp.Messages
 			destination.To = To;
 			destination.Skip = Skip;
 			destination.Count = Count;
+			destination.FillGaps = FillGaps;
 			destination.IsSubscribe = IsSubscribe;
 			destination.States = States.ToArray();
 		}
@@ -124,16 +129,19 @@ namespace StockSharp.Messages
 			str += $",IsSubscribe={IsSubscribe}";
 
 			if (From != default)
-				str += $",From={From.Value}";
+				str += $",From={From}";
 
 			if (To != default)
-				str += $",To={To.Value}";
+				str += $",To={To}";
 
 			if (Skip != default)
-				str += $",Skip={Skip.Value}";
+				str += $",Skip={Skip}";
 
 			if (Count != default)
-				str += $",Count={Count.Value}";
+				str += $",Count={Count}";
+
+			if (FillGaps != default)
+				str += $",Gaps={FillGaps}";
 
 			if (States.Length > 0)
 				str += $",States={States.Select(s => s.To<string>()).JoinComma()}";

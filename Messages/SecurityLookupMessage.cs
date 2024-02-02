@@ -65,6 +65,10 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long? Count { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public FillGapsDays? FillGaps { get; set; }
+
 		private SecurityId[] _securityIds = Array.Empty<SecurityId>();
 
 		/// <summary>
@@ -127,6 +131,7 @@ namespace StockSharp.Messages
 			destination.Skip = Skip;
 			destination.Count = Count;
 			destination.SecurityIds = SecurityIds.ToArray();
+			destination.FillGaps = FillGaps;
 
 			base.CopyTo(destination);
 		}
@@ -147,6 +152,9 @@ namespace StockSharp.Messages
 
 			if (SecurityIds.Length > 0)
 				str += $",Ids={SecurityIds.Select(id => id.ToString()).JoinComma()}";
+
+			if (FillGaps is not null)
+				str += $",gaps={FillGaps}";
 
 			return str;
 		}

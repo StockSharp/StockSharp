@@ -1,4 +1,16 @@
 {
+  "AllDays": {
+    "en": "All days.",
+    "ru": "Все дни."
+  },
+  "Weekdays": {
+    "en": "Weekdays",
+    "ru": "Будни"
+  },
+  "WeekdaysDesc": {
+    "en": "Weekdays only.",
+    "ru": "Только будни."
+  },
   "Terminal": {
     "en": "Terminal",
     "ru": "Терминал"

@@ -155,6 +155,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// <see cref="IFillGapsBehaviour"/>
+		/// </summary>
+		public IFillGapsBehaviour FillGapsBehaviour { get; set; }
+
+		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
 		/// <remarks>

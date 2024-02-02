@@ -324,13 +324,10 @@ namespace StockSharp.Messages
 		/// Order log to market depth builder.
 		/// </summary>
 		public IOrderLogMarketDepthBuilder DepthBuilder { get; set; }
-		
-		/// <summary>
-		/// Try fill gaps.
-		/// </summary>
+
+		/// <inheritdoc />
 		[DataMember]
-		[Obsolete("Use separate subscriptions.")]
-		public bool FillGaps { get; set; }
+		public FillGapsDays? FillGaps { get; set; }
 
 		/// <summary>
 		/// Pass through incremental <see cref="QuoteChangeMessage"/>.
@@ -395,6 +392,7 @@ namespace StockSharp.Messages
 			destination.BoardCode = BoardCode;
 			destination.RefreshSpeed = RefreshSpeed;
 			destination.DepthBuilder = DepthBuilder;
+			destination.FillGaps = FillGaps;
 			destination.DoNotBuildOrderBookInrement = DoNotBuildOrderBookInrement;
 			destination.Fields = Fields?.ToArray();
 		}
@@ -445,6 +443,9 @@ namespace StockSharp.Messages
 
 			if (RefreshSpeed != null)
 				str += $",Speed={RefreshSpeed}";
+
+			if (FillGaps is not null)
+				str += $",gaps={FillGaps}";
 
 			if (DoNotBuildOrderBookInrement)
 				str += $",NotBuildInc={DoNotBuildOrderBookInrement}";

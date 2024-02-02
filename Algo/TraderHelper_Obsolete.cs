@@ -477,9 +477,10 @@ namespace StockSharp.Algo
 		/// <param name="states">Filter order by the specified states.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="skip">Skip count.</param>
+		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		/// <returns>Subscription.</returns>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribeOrders(this ISubscriptionProvider provider, Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IEnumerable<OrderStates> states = null, IMessageAdapter adapter = null, long? skip = null)
+		public static Subscription SubscribeOrders(this ISubscriptionProvider provider, Security security = default, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, IEnumerable<OrderStates> states = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 		{
 			if (provider is null)
 				throw new ArgumentNullException(nameof(provider));
@@ -493,6 +494,7 @@ namespace StockSharp.Algo
 				Adapter = adapter,
 				Count = count,
 				Skip = skip,
+				FillGaps = fillGaps,
 			};
 
 			if (states != null)
@@ -514,9 +516,10 @@ namespace StockSharp.Algo
 		/// <param name="count">Max count.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="skip">Skip count.</param>
+		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		/// <returns>Subscription.</returns>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribePositions(this ISubscriptionProvider provider, Security security = null, Portfolio portfolio = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null, long? skip = null)
+		public static Subscription SubscribePositions(this ISubscriptionProvider provider, Security security = default, Portfolio portfolio = default, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 		{
 			if (provider is null)
 				throw new ArgumentNullException(nameof(provider));
@@ -531,6 +534,7 @@ namespace StockSharp.Algo
 				To = to,
 				Count = count,
 				Skip = skip,
+				FillGaps = fillGaps,
 			}, (SecurityMessage)null);
 
 			provider.Subscribe(subscription);
@@ -586,10 +590,13 @@ namespace StockSharp.Algo
 		/// <param name="transactionId">Transaction ID.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="skip">Skip count.</param>
+		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		/// <returns>Subscription.</returns>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribeCandles(this ISubscriptionProvider provider, CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null,
-			long? count = null, long? transactionId = null, IMessageAdapter adapter = null, long? skip = null)
+		public static Subscription SubscribeCandles(this ISubscriptionProvider provider,
+			CandleSeries series, DateTimeOffset? from = default, DateTimeOffset? to = default,
+			long? count = default, long? transactionId = default, IMessageAdapter adapter = default,
+			long? skip = default, FillGapsDays? fillGaps = default)
 		{
 			if (provider is null)
 				throw new ArgumentNullException(nameof(provider));
@@ -612,6 +619,9 @@ namespace StockSharp.Algo
 
 			if (skip != null)
 				mdMsg.Skip = skip.Value;
+
+			if (fillGaps != null)
+				mdMsg.FillGaps = fillGaps;
 
 			mdMsg.Adapter = adapter;
 
@@ -897,11 +907,12 @@ namespace StockSharp.Algo
 		/// <param name="passThroughOrderBookInrement">Pass through incremental <see cref="QuoteChangeMessage"/>.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="skip">Skip count.</param>
+		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		/// <returns>Subscription.</returns>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribeMarketDepth(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool passThroughOrderBookInrement = false, IMessageAdapter adapter = null, long? skip = null)
+		public static Subscription SubscribeMarketDepth(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, int? maxDepth = default, TimeSpan? refreshSpeed = default, IOrderLogMarketDepthBuilder depthBuilder = default, bool passThroughOrderBookInrement = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 		{
-			return provider.SubscribeMarketData(security, DataType.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, refreshSpeed, depthBuilder, passThroughOrderBookInrement, adapter, skip: skip);
+			return provider.SubscribeMarketData(security, DataType.MarketDepth, from, to, count, buildMode, buildFrom, null, maxDepth, refreshSpeed, depthBuilder, passThroughOrderBookInrement, adapter, skip: skip, fillGaps: fillGaps);
 		}
 
 		/// <summary>
@@ -927,11 +938,12 @@ namespace StockSharp.Algo
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="skip">Skip count.</param>
+		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		/// <returns>Subscription.</returns>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribeTrades(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null, long? skip = null)
+		public static Subscription SubscribeTrades(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 		{
-			return provider.SubscribeMarketData(security, DataType.Ticks, from, to, count, buildMode, buildFrom, adapter: adapter, skip: skip);
+			return provider.SubscribeMarketData(security, DataType.Ticks, from, to, count, buildMode, buildFrom, adapter: adapter, skip: skip, fillGaps: fillGaps);
 		}
 
 		/// <summary>
@@ -957,11 +969,12 @@ namespace StockSharp.Algo
 		/// <param name="buildFrom">Which market-data type is used as a source value.</param>
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <param name="skip">Skip count.</param>
+		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		/// <returns>Subscription.</returns>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribeLevel1(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, IMessageAdapter adapter = null, long? skip = null)
+		public static Subscription SubscribeLevel1(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, MarketDataBuildModes buildMode = default, DataType buildFrom = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 		{
-			return provider.SubscribeMarketData(security, DataType.Level1, from, to, count, buildMode, buildFrom, adapter: adapter, skip: skip);
+			return provider.SubscribeMarketData(security, DataType.Level1, from, to, count, buildMode, buildFrom, adapter: adapter, skip: skip, fillGaps: fillGaps);
 		}
 
 		/// <summary>
@@ -986,10 +999,11 @@ namespace StockSharp.Algo
 		/// <param name="adapter">Target adapter. Can be <see langword="null" />.</param>
 		/// <returns>Subscription.</returns>
 		/// <param name="skip">Skip count.</param>
+		/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
-		public static Subscription SubscribeOrderLog(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null, long? skip = null)
+		public static Subscription SubscribeOrderLog(this ISubscriptionProvider provider, Security security, DateTimeOffset? from = default, DateTimeOffset? to = default, long? count = default, IMessageAdapter adapter = default, long? skip = default, FillGapsDays? fillGaps = default)
 		{
-			return provider.SubscribeMarketData(security, DataType.OrderLog, from, to, count, adapter: adapter, skip: skip);
+			return provider.SubscribeMarketData(security, DataType.OrderLog, from, to, count, adapter: adapter, skip: skip, fillGaps: fillGaps);
 		}
 
 		/// <summary>
@@ -1101,7 +1115,15 @@ namespace StockSharp.Algo
 			return provider.SubscribeMarketData(security, DataType.FilteredMarketDepth);
 		}
 
-		private static Subscription SubscribeMarketData(this ISubscriptionProvider provider, Security security, DataType type, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, MarketDataBuildModes buildMode = MarketDataBuildModes.LoadAndBuild, DataType buildFrom = null, Level1Fields? buildField = null, int? maxDepth = null, TimeSpan? refreshSpeed = null, IOrderLogMarketDepthBuilder depthBuilder = null, bool doNotBuildOrderBookInrement = false, IMessageAdapter adapter = null, long? skip = null)
+		private static Subscription SubscribeMarketData(
+			this ISubscriptionProvider provider, Security security, DataType type,
+			DateTimeOffset? from = default, DateTimeOffset? to = default,
+			long? count = default, MarketDataBuildModes buildMode = default,
+			DataType buildFrom = default, Level1Fields? buildField = default,
+			int? maxDepth = default, TimeSpan? refreshSpeed = default,
+			IOrderLogMarketDepthBuilder depthBuilder = default, bool doNotBuildOrderBookInrement = default,
+			IMessageAdapter adapter = default, long? skip = default,
+			FillGapsDays? fillGaps = default)
 		{
 			return provider.SubscribeMarketData(security, new MarketDataMessage
 			{
@@ -1119,6 +1141,7 @@ namespace StockSharp.Algo
 				DoNotBuildOrderBookInrement = doNotBuildOrderBookInrement,
 				Adapter = adapter,
 				Skip = skip,
+				FillGaps = fillGaps,
 			});
 		}
 

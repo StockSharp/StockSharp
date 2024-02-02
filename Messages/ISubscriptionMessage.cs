@@ -1,6 +1,33 @@
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
+
+	using StockSharp.Localization;
+
+	/// <summary>
+	/// Fill gaps days.
+	/// </summary>
+	public enum FillGapsDays
+	{
+		/// <summary>
+		/// Weekdays.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.WeekdaysKey,
+			Description = LocalizedStrings.WeekdaysDescKey)]
+		Weekdays,
+
+		/// <summary>
+		/// All days.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AllKey,
+			Description = LocalizedStrings.AllDaysKey)]
+		All,
+	}
 
 	/// <summary>
 	/// The interface describing an message with <see cref="IsSubscribe"/> property.
@@ -41,5 +68,10 @@ namespace StockSharp.Messages
 		/// Data type info.
 		/// </summary>
 		DataType DataType { get; }
+
+		/// <summary>
+		/// <see cref="FillGapsDays"/>.
+		/// </summary>
+		FillGapsDays? FillGaps { get; set; }
 	}
 }

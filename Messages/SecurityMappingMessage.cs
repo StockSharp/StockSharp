@@ -37,6 +37,8 @@ namespace StockSharp.Messages
 		[DataMember]
 		public string StorageName { get; set; }
 
+		FillGapsDays? ISubscriptionMessage.FillGaps { get; set; }
+
 		bool ISubscriptionMessage.FilterEnabled => false;
 
 		DateTimeOffset? ISubscriptionMessage.From

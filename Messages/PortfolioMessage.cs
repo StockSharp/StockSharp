@@ -134,6 +134,10 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long? Count { get; set; }
 
+		/// <inheritdoc />
+		[DataMember]
+		public FillGapsDays? FillGaps { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
@@ -168,7 +172,7 @@ namespace StockSharp.Messages
 				str += $",TransId={TransactionId}";
 
 			if (Currency != default)
-				str += $",Curr={Currency.Value}";
+				str += $",Curr={Currency}";
 
 			if (!BoardCode.IsEmpty())
 				str += $",Board={BoardCode}";
@@ -177,16 +181,19 @@ namespace StockSharp.Messages
 				str += $",IsSubscribe={IsSubscribe}";
 
 			if (From != default)
-				str += $",From={From.Value}";
+				str += $",From={From}";
 
 			if (To != default)
-				str += $",To={To.Value}";
+				str += $",To={To}";
 
 			if (Skip != default)
-				str += $",Skip={Skip.Value}";
+				str += $",Skip={Skip}";
 
 			if (Count != default)
-				str += $",Count={Count.Value}";
+				str += $",Count={Count}";
+
+			if (FillGaps != default)
+				str += $",Gaps={FillGaps}";
 
 			return str;
 		}
@@ -207,6 +214,7 @@ namespace StockSharp.Messages
 			destination.To = To;
 			destination.Skip = Skip;
 			destination.Count = Count;
+			destination.FillGaps = FillGaps;
 		}
 	}
 }

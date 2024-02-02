@@ -926,6 +926,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Skip.To<string>(),
 					data.DoNotBuildOrderBookInrement.To<string>(),
 					data.Fields?.Select(f => ((int)f).To<string>()).JoinComma(),
+					data.FillGaps.To<string>(),
 				});
 			}
 
@@ -992,6 +993,9 @@ namespace StockSharp.Algo.Storages.Csv
 					if (!str.IsEmpty())
 						message.Fields = str.SplitByComma().Select(s => (Level1Fields)s.To<int>()).ToArray();
 				}
+
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					message.FillGaps = reader.ReadNullableEnum<FillGapsDays>();
 
 				return message;
 			}

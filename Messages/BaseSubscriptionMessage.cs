@@ -37,7 +37,11 @@
 		/// <inheritdoc />
 		[DataMember]
 		public virtual long? Count { get; set; }
-		
+
+		/// <inheritdoc />
+		[DataMember]
+		public virtual FillGapsDays? FillGaps { get; set; }
+
 		/// <inheritdoc />
 		[DataMember]
 		public virtual bool IsSubscribe { get; set; }
@@ -66,6 +70,7 @@
 			destination.To = To;
 			destination.Skip = Skip;
 			destination.Count = Count;
+			destination.FillGaps = FillGaps;
 			destination.IsSubscribe = IsSubscribe;
 			destination.TransactionId = TransactionId;
 			destination.OriginalTransactionId = OriginalTransactionId;
@@ -89,6 +94,9 @@
 
 			if (To != default)
 				str += $",To={To}";
+
+			if (FillGaps != default)
+				str += $",Gaps={FillGaps}";
 
 			return str;
 		}

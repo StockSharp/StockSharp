@@ -565,13 +565,37 @@ namespace StockSharp.Algo
 					else
 						items = Array.Empty<object>();
 
-					ChangeState(info, SubscriptionStates.Finished);
 					_requests.Remove(message.OriginalTransactionId);
 
 					if (info.Parent != null)
+					{
+						ChangeState(info, SubscriptionStates.Finished);
 						return null;
+					}
 
-					return info.Subscription;
+					var sub = info.Subscription;
+					var msg = sub.SubscriptionMessage;
+
+					if (msg.FillGaps is not null && msg.From is not null && sub.SecurityId is SecurityId secId && _connector.FillGapsBehaviour is IFillGapsBehaviour behaviour)
+					{
+						var (gapStart, gapsEnd) = behaviour.TryGetNextGap(secId, sub.DataType, msg.From.Value.UtcDateTime, msg.To?.UtcDateTime ?? DateTime.UtcNow, msg.FillGaps.Value);
+
+						if (gapStart is not null)
+						{
+							msg = msg.TypedClone();
+
+							msg.FillGaps = null;
+							msg.From = gapStart;
+							msg.To = gapsEnd;
+
+							SendRequest(msg, sub, false);
+							return null;
+						}
+					}
+
+					ChangeState(info, SubscriptionStates.Finished);
+					
+					return sub;
 				}
 			}
 
