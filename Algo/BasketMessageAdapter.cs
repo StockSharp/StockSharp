@@ -777,6 +777,11 @@ namespace StockSharp.Algo
 		/// <inheritdoc />
 		public bool UseChannels { get; set; } = true;
 
+		/// <summary>
+		/// <see cref="IFillGapsBehaviour"/>
+		/// </summary>
+		public IFillGapsBehaviour FillGapsBehaviour { get; set; }
+
 		TimeSpan IMessageAdapter.IterationInterval => default;
 
 		TimeSpan? IMessageAdapter.LookupTimeout => default;
@@ -975,6 +980,11 @@ namespace StockSharp.Algo
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
 				adapter = ApplyOwnInner(new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage));
+			}
+
+			if (FillGapsBehaviour is not null)
+			{
+				adapter = new FillGapsMessageAdapter(adapter, FillGapsBehaviour);
 			}
 
 			return adapter;
@@ -2248,6 +2258,7 @@ namespace StockSharp.Algo
 				UseChannels = UseChannels,
 				IsSupportTransactionLog = IsSupportTransactionLog,
 				IsSupportPositionEmulation = IsSupportPositionEmulation,
+				FillGapsBehaviour = FillGapsBehaviour,
 			};
 
 			clone.Load(this.Save());

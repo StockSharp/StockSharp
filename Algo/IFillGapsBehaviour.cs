@@ -48,6 +48,9 @@ public class StorageFillGapsBehaviour : IFillGapsBehaviour
 
 	(DateTime?, DateTime?) IFillGapsBehaviour.TryGetNextGap(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps)
 	{
+		if (from >= to)
+			return default;
+
 		var existing = _drive.GetStorageDrive(secId, dataType, _format).Dates.Where(d => d < from || d > to).ToSet();
 
 		DateTime? gapStart = null;
