@@ -268,7 +268,7 @@ namespace StockSharp.Algo
 			private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 			{
 				var subscription = info.Subscription;
-				subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, _connector, info.Parent == null);
+				subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, _connector);
 			}
 
 			public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled)

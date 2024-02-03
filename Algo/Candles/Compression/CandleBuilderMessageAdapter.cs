@@ -194,7 +194,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 							if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 							{
-								this.AddInfoLog("Origin tf: {0}", originalTf);
+								this.AddDebugLog("Origin tf: {0}", originalTf);
 
 								var original = mdMsg.TypedClone();
 

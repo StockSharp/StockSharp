@@ -105,7 +105,7 @@ namespace StockSharp.Algo
 
 		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 		{
-			info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, this, !_allSecIdChilds.Contains(info.Subscription.TransactionId));
+			info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, this);
 		}
 
 		/// <inheritdoc />

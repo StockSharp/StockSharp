@@ -363,7 +363,7 @@
 
 						if (!_subscriptionsByKey.TryGetValue(key, out var info))
 						{
-							this.AddInfoLog("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
+							this.AddDebugLog("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
 
 							sendInMsg = message;
 
@@ -373,7 +373,7 @@
 						}
 						else
 						{
-							this.AddInfoLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
+							this.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
 
 							var resultMsg = message.CreateResult();
 
