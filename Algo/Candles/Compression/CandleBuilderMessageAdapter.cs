@@ -355,7 +355,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private SeriesInfo TryRemoveSeries(long id)
 		{
-			this.AddInfoLog("Series removing {0}.", id);
+			this.AddDebugLog("Series removing {0}.", id);
 
 			lock (_syncObject)
 			{
