@@ -3091,23 +3091,27 @@ namespace StockSharp.Algo.Strategies
 
 		private void CheckRefreshOnlineState()
 		{
+			bool wasOnline, nowOnline;
+
 			lock (_onlineStateLock)
 			{
-				var online = ProcessState == ProcessStates.Started;
+				wasOnline = IsOnline;
 
-				if (online)
-					online = _subscriptions.SyncGet(d => d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()).All(s => s.State == SubscriptionStates.Online));
+				nowOnline = ProcessState == ProcessStates.Started;
 
-				if (online && IsOnlineStateIncludesChildren)
-					online = _childStrategies.SyncGet(c => c.All(s => s.IsOnline));
+				if (nowOnline)
+					nowOnline = _subscriptions.SyncGet(d => d.CachedKeys.Where(s => !s.SubscriptionMessage.IsHistoryOnly()).All(s => s.State == SubscriptionStates.Online));
 
-				if(online == IsOnline)
+				if (nowOnline && IsOnlineStateIncludesChildren)
+					nowOnline = _childStrategies.SyncGet(c => c.All(s => s.IsOnline));
+
+				if(nowOnline == wasOnline)
 					return;
 
-				this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, children({3})", IsOnline, online, ProcessState, IsOnlineStateIncludesChildren);
-
-				IsOnline = online;
+				IsOnline = nowOnline;
 			}
+
+			this.AddInfoLog("IsOnline: {0} ==> {1}. state={2}, children({3})", wasOnline, nowOnline, ProcessState, IsOnlineStateIncludesChildren);
 
 			IsOnlineChanged?.Invoke(this);
 		}

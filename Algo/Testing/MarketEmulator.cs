@@ -3307,6 +3307,8 @@ namespace StockSharp.Algo.Testing
 				{
 					var statusMsg = (OrderStatusMessage)message;
 
+					retVal.Add(statusMsg.CreateResponse());
+
 					if (!statusMsg.IsSubscribe)
 						break;
 
@@ -3315,8 +3317,7 @@ namespace StockSharp.Algo.Testing
 						pair.Value.Process(message, retVal);
 					}
 
-					if (statusMsg.To == null)
-						retVal.Add(new SubscriptionOnlineMessage { OriginalTransactionId = statusMsg.TransactionId });
+					retVal.Add(statusMsg.CreateResult());
 
 					break;
 				}
@@ -3324,6 +3325,8 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.PortfolioLookup:
 				{
 					var lookupMsg = (PortfolioLookupMessage)message;
+
+					retVal.Add(lookupMsg.CreateResponse());
 
 					if (!lookupMsg.IsSubscribe)
 						break;

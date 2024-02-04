@@ -126,8 +126,6 @@ namespace StockSharp.Algo.Strategies
 			}
 
 			SubscriptionProvider.Subscribe(subscription);
-
-			CheckRefreshOnlineState();
 		}
 
 		/// <inheritdoc />
@@ -167,7 +165,6 @@ namespace StockSharp.Algo.Strategies
 				return;
 
 			SubscriptionStarted?.Invoke(subscription);
-			CheckRefreshOnlineState();
 		}
 
 		private void OnConnectorSubscriptionOnline(Subscription subscription)
