@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Storages
 			private readonly BasketMarketDataStorage<TMessage> _storage;
 			private readonly DateTime _date;
 			private readonly SynchronizedQueue<(ActionTypes action, IMarketDataStorage storage, long transId)> _actions = new();
-			private readonly Ecng.Collections.PriorityQueue<DateTimeOffset, (IEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new();
+			private readonly Ecng.Collections.PriorityQueue<long, (IEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new((p1, p2) => (p1 - p2).Abs());
 
 			public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date)
 			{
@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Storages
 
 							// данных в хранилище нет больше последней даты
 							if (hasValues)
-								_enumerators.Enqueue(GetServerTime(enu), (enu, storage, action.Value.transId));
+								_enumerators.Enqueue(GetServerTime(enu).Ticks, (enu, storage, action.Value.transId));
 							else
 								enu.DoDispose();
 
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Storages
 				Current = TrySetTransactionId(enumerator.Current, element.transId);
 
 				if (enumerator.MoveNext())
-					_enumerators.Enqueue(GetServerTime(enumerator), element);
+					_enumerators.Enqueue(GetServerTime(enumerator).Ticks, element);
 				else
 					enumerator.DoDispose();
 

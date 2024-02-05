@@ -33,6 +33,7 @@ namespace StockSharp.Messages
 		/// Initializes a new instance of the <see cref="BaseMessageQueue"/>.
 		/// </summary>
 		protected BaseMessageQueue()
+			: base(new((p1, p2) => (p1 - p2).Abs()))
 		{
 		}
 
