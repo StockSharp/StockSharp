@@ -47,20 +47,19 @@ class AsyncMessageProcessor : BaseLogReceiver
 		}
 
 		public Message Message { get; }
-		public Task Task { get; set; }
 
-		public bool IsStartedProcessing => Task != null;
-		public bool IsProcessing => Task?.IsCompleted == false;
-		public bool IsDone => Task?.IsCompleted == true;
+		public bool IsProcessing { get; set; }
 
 		public bool IsControl { get; }
 		public bool IsPing { get; }
 		public bool IsLookup { get; }
 		public bool IsTransaction { get; }
+
+		public override string ToString() => Message.ToString();
 	}
 
 	private readonly SynchronizedList<MessageQueueItem> _messages = new();
-	private readonly SynchronizedDictionary<Task, Func<string>> _childTasks = new();
+	private readonly SynchronizedDictionary<MessageQueueItem, Task> _childTasks = new();
 	private readonly SynchronizedDictionary<long, CancellationTokenSource> _subscriptionTokens = new();
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
@@ -135,7 +134,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 				if (isControlProcessing)
 					return false;
 
-				var messages = _messages.Where(i => !i.IsStartedProcessing);
+				var nonProcessing = _messages.Where(i => !i.IsProcessing);
 
 				// priority order:
 				// controls messages	- 1
@@ -143,86 +142,80 @@ class AsyncMessageProcessor : BaseLogReceiver
 				// status				- 3
 				// transactions			- 4
 				// other				- 5
-				item = messages.FirstOrDefault(m => m.IsControl)
+				item = nonProcessing.FirstOrDefault(m => m.IsControl)
 					?? (
 					isPingProcessing
 						? null /* can't process parallel pings, select other message type */
-						: messages.FirstOrDefault(m => m.IsPing)
+						: nonProcessing.FirstOrDefault(m => m.IsPing)
 					)
 					?? (
 					isLookupProcessing
 						? null /* can't process parallel lookup, select other message type */
-						: messages.FirstOrDefault(m => m.IsLookup)
+						: nonProcessing.FirstOrDefault(m => m.IsLookup)
 					)
 					?? (
 					numProcessing >= _adapter.MaxParallelMessages
-						? messages.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
+						? nonProcessing.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
 						: (isTransactionProcessing
-							? messages.FirstOrDefault(m => !m.IsTransaction)
-							: (messages.FirstOrDefault(m => m.IsTransaction) ?? messages.FirstOrDefault()))
+							? nonProcessing.FirstOrDefault(m => !m.IsTransaction)
+							: (nonProcessing.FirstOrDefault(m => m.IsTransaction) ?? nonProcessing.FirstOrDefault()))
 					);
+
+				if (item is null)
+					return false;
+
+				if (item.IsProcessing)
+					throw new InvalidOperationException($"processing is already started for {item.Message}");
+
+				item.IsProcessing = true;
 			}
-
-			if (item is null)
-				return false;
-
-			if (item.IsStartedProcessing)
-				throw new InvalidOperationException($"processing is already started for {item.Message}");
 
 			var msg = item.Message;
 
 			async ValueTask wrapper()
 			{
-				try
+				var token = _globalCts.Token;
+
+				if (token.IsCancellationRequested)
 				{
-					var token = _globalCts.Token;
+					if (item.IsTransaction)
+						_adapter.HandleMessageException(msg, new OperationCanceledException("canceled"));
 
-					if (token.IsCancellationRequested)
+					return;
+				}
+
+				this.AddVerboseLog("beginprocess: {0}", msg.Type);
+
+				if (!item.IsControl)
+				{
+					if (!_isConnectionStarted || _isDisconnecting)
+						throw new InvalidOperationException($"unable to process {msg.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
+
+					if (msg is ISubscriptionMessage subMsg)
 					{
-						var tcs = AsyncHelper.CreateTaskCompletionSource(false);
-						tcs.SetCanceled();
-						item.Task = tcs.Task;
-
-						if (item.IsTransaction)
-							_adapter.HandleMessageException(msg, new OperationCanceledException("canceled"));
-
-						return;
-					}
-
-					this.AddVerboseLog("beginprocess: {0}", msg.Type);
-
-					if (!item.IsControl)
-					{
-						if (!_isConnectionStarted || _isDisconnecting)
-							throw new InvalidOperationException($"unable to process {msg.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
-
-						if (msg is ISubscriptionMessage subMsg)
+						if (subMsg.IsSubscribe)
 						{
-							if (subMsg.IsSubscribe)
+							var (cts, childToken) = token.CreateChildToken();
+							token = childToken;
+							_subscriptionTokens.Add(subMsg.TransactionId, cts);
+						}
+						else
+						{
+							// in case a subscription still in "subscribe" state
+							// (for example, for long historical data request)
+							if (_subscriptionTokens.TryGetAndRemove(subMsg.OriginalTransactionId, out var cts))
 							{
-								var (cts, childToken) = token.CreateChildToken();
-								token = childToken;
-								_subscriptionTokens.Add(subMsg.TransactionId, cts);
-							}
-							else
-							{
-								// in case a subscription still in "subscribe" state
-								// (for example, for long historical data request)
-								if (_subscriptionTokens.TryGetAndRemove(subMsg.OriginalTransactionId, out var cts))
-								{
-									cts.Cancel();
-									item.Task = Task.CompletedTask;
+								cts.Cancel();
 
-									_processMessageEvt.Reset();
-									return;
-								}
+								_processMessageEvt.Set();
+								return;
 							}
 						}
 					}
+				}
 
-					ValueTask vt;
-
-					vt = msg switch
+				ValueTask _()
+					=> msg switch
 					{
 						ConnectMessage m			=> ConnectAsync(m, token),
 						DisconnectMessage m			=> DisconnectAsync(m),
@@ -246,68 +239,57 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 						_ => _adapter.ProcessMessageAsync(msg, token)
 					};
-										
-					async Task finishTask(Task t)
-					{
-						if (!t.IsCompletedSuccessfully)
-						{
-							Exception ex = t.IsFaulted ? t.Exception : new OperationCanceledException();
-							this.AddVerboseLog("endprocess: {0} ({1})", msg.Type, ex?.GetType().Name);
 
-							if (t.IsFaulted)
-								await _adapter.FaultDelay.Delay(_globalCts.Token);
-
-							_adapter.HandleMessageException(msg, ex);
-						}
-						else
-						{
-							this.AddVerboseLog("endprocess: {0}", msg.Type);
-
-							if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
-								_subscriptionTokens.Remove(subMsg.TransactionId);
-						}
-
-						_processMessageEvt.Reset();
-					}
-
-					var task = item.Task = vt.AsTask();
-
-					if (task.IsCompleted)
-					{
-						await finishTask(task);
-						return;
-					}
-
+				void done()
+				{
 					if (!item.IsControl)
-						_childTasks.Add(task, () => $"task({msg})");
+						_childTasks.Remove(item);
 
+					_messages.Remove(item);
+					_processMessageEvt.Set();
+				}
+
+				try
+				{
+					var vt = _();
+
+					if (!vt.IsCompleted)
+					{
+						if (!item.IsControl)
+							_childTasks.Add(item, vt.AsTask());
+
+						await vt;
+
+						if (!item.IsControl)
+							_childTasks.Remove(item);
+					}
+
+					this.AddVerboseLog("endprocess: {0}", msg.Type);
+
+					if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
+						_subscriptionTokens.Remove(subMsg.TransactionId);
+				}
+				catch (Exception ex)
+				{
 					try
 					{
-						await task;
+						var error = token.IsCancellationRequested ? new OperationCanceledException() : ex;
+						this.AddVerboseLog("endprocess: {0} ({1})", msg.Type, error.GetType().Name);
+
+						if (!token.IsCancellationRequested)
+							await _adapter.FaultDelay.Delay(_globalCts.Token);
+
+						_adapter.HandleMessageException(msg, ex);
 					}
 					catch
 					{
-						// handling error in finishTask
-					}
-					finally
-					{
-						if (!item.IsControl)
-							_childTasks.Remove(task);
-
-						await finishTask(task);
-
-						_processMessageEvt.Set();
+						done();
+						throw;
 					}
 				}
-				catch (Exception e)
+				finally
 				{
-					var tcs = AsyncHelper.CreateTaskCompletionSource(false);
-					tcs.TrySetFrom(e);
-					item.Task = tcs.Task;
-
-					_ = tcs.Task.Exception; // observe
-
-					throw;
+					done();
 				}
 			}
 
@@ -325,9 +307,6 @@ class AsyncMessageProcessor : BaseLogReceiver
 				break;
 
 			_processMessageEvt.Reset();
-
-			lock(_messages.SyncRoot)
-				_messages.RemoveWhere(m => m.IsDone);
 
 			try
 			{
@@ -397,9 +376,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 		var allComplete = true;
 
-		await Task.WhenAll(tasks.Select(t => t.Key.WithCancellation(token))).CatchHandle(finalizer: () =>
+		await Task.WhenAll(tasks.Select(t => t.Value.WithCancellation(token))).CatchHandle(finalizer: () =>
 		{
-			var incomplete = tasks.Where(t => !t.Key.IsCompleted).Select(t => t.Value()).ToArray();
+			var incomplete = tasks.Where(t => !t.Value.IsCompleted).Select(t => t.Key.ToString()).ToArray();
 			if(incomplete.Any())
 			{
 				allComplete = false;
