@@ -1,4 +1,12 @@
 {
+  "FaultDelay": {
+    "en": "Fault delay",
+    "ru": "Паузе ошибок"
+  },
+  "FaultDelayDesc": {
+    "en": "Delay between faulted iterations.",
+    "ru": "Пауза между ошибочными итерациями."
+  },
   "AllDays": {
     "en": "All days.",
     "ru": "Все дни."

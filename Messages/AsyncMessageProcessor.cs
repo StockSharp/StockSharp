@@ -171,7 +171,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 			var msg = item.Message;
 
-			ValueTask wrapper()
+			async ValueTask wrapper()
 			{
 				try
 				{
@@ -186,7 +186,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 						if (item.IsTransaction)
 							_adapter.HandleMessageException(msg, new OperationCanceledException("canceled"));
 
-						return default;
+						return;
 					}
 
 					this.AddVerboseLog("beginprocess: {0}", msg.Type);
@@ -214,7 +214,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 									item.Task = Task.CompletedTask;
 
 									_processMessageEvt.Reset();
-									return default;
+									return;
 								}
 							}
 						}
@@ -247,13 +247,17 @@ class AsyncMessageProcessor : BaseLogReceiver
 						_ => _adapter.ProcessMessageAsync(msg, token)
 					};
 										
-					void finishTask(Task t)
+					async Task finishTask(Task t)
 					{
 						if (!t.IsCompletedSuccessfully)
 						{
 							Exception ex = t.IsFaulted ? t.Exception : new OperationCanceledException();
-							_adapter.HandleMessageException(msg, ex);
 							this.AddVerboseLog("endprocess: {0} ({1})", msg.Type, ex?.GetType().Name);
+
+							if (t.IsFaulted)
+								await _adapter.FaultDelay.Delay(_globalCts.Token);
+
+							_adapter.HandleMessageException(msg, ex);
 						}
 						else
 						{
@@ -270,25 +274,30 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 					if (task.IsCompleted)
 					{
-						finishTask(task);
+						await finishTask(task);
+						return;
 					}
-					else
+
+					if (!item.IsControl)
+						_childTasks.Add(task, () => $"task({msg})");
+
+					try
+					{
+						await task;
+					}
+					catch
+					{
+						// handling error in finishTask
+					}
+					finally
 					{
 						if (!item.IsControl)
-							_childTasks.Add(task, () => $"task({msg})");
+							_childTasks.Remove(task);
 
-						task.ContinueWith(t =>
-						{
-							if (!item.IsControl)
-								_childTasks.Remove(task);
+						await finishTask(task);
 
-							finishTask(task);
-
-							_processMessageEvt.Set();
-						});
+						_processMessageEvt.Set();
 					}
-
-					return vt;
 				}
 				catch (Exception e)
 				{
@@ -303,15 +312,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 			}
 
 #pragma warning disable CA2012
-
-			AsyncHelper.CatchHandle(
-				wrapper,
-				handleError: e => _adapter.HandleMessageException(msg, e),
-				handleCancel: e => _adapter.HandleMessageException(msg, e),
-				rethrowCancel: false,
-				rethrowErr: false
-			);
-
+			_ = wrapper();
 #pragma warning restore CA2012
 
 			return true;

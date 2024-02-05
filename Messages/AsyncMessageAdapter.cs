@@ -38,6 +38,8 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	[Browsable(false)]
 	public virtual TimeSpan DisconnectTimeout { get; } = TimeSpan.FromSeconds(5);
 
+	private int _maxParallelMessages = 5;
+
 	/// <summary>
 	/// Max number of parallel (non-control) messages processing.
 	/// </summary>
@@ -47,7 +49,40 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		Description = LocalizedStrings.ParallelDescKey,
 		GroupName = LocalizedStrings.AdaptersKey,
 		Order = 310)]
-	public int MaxParallelMessages { get; set; } = 5;
+	public int MaxParallelMessages
+	{
+		get => _maxParallelMessages;
+		set
+		{
+			if (_maxParallelMessages < 1)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_maxParallelMessages = value;
+		}
+	}
+
+	private TimeSpan _faultDelay = TimeSpan.FromSeconds(2);
+
+	/// <summary>
+	/// Delay between faulted iterations.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.FaultDelayKey,
+		Description = LocalizedStrings.FaultDelayDescKey,
+		GroupName = LocalizedStrings.AdaptersKey,
+		Order = 310)]
+	public TimeSpan FaultDelay
+	{
+		get => _faultDelay;
+		set
+		{
+			if (value < TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_faultDelay = value;
+		}
+	}
 
 	/// <inheritdoc />
 	protected override bool OnSendInMessage(Message message)
@@ -293,7 +328,10 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	{
 		base.Save(storage);
 
-		storage.Set(nameof(MaxParallelMessages), MaxParallelMessages);
+		storage
+			.Set(nameof(MaxParallelMessages), MaxParallelMessages)
+			.Set(nameof(FaultDelay), FaultDelay)
+		;
 	}
 
 	/// <inheritdoc />
@@ -302,5 +340,6 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		base.Load(storage);
 
 		MaxParallelMessages = storage.GetValue(nameof(MaxParallelMessages), MaxParallelMessages);
+		FaultDelay = storage.GetValue(nameof(FaultDelay), FaultDelay);
 	}
 }
