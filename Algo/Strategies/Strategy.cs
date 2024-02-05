@@ -1127,11 +1127,24 @@ namespace StockSharp.Algo.Strategies
 			set => _tradingMode.Value = value;
 		}
 
+		private bool _isOnline;
+
 		/// <summary>
 		/// True means that strategy is started and all of its subscriptions are in online state and all child strategies are online.
 		/// </summary>
 		[Browsable(false)]
-		public bool IsOnline { get; private set; }
+		public bool IsOnline
+		{
+			get => _isOnline;
+			private set
+			{
+				if (_isOnline == value)
+					return;
+
+				_isOnline = value;
+				this.Notify();
+			}
+		}
 
 		private readonly StrategyParam<bool> _isOnlineStateIncludesChildren;
 
@@ -2102,10 +2115,7 @@ namespace StockSharp.Algo.Strategies
 				if (_rulesSuspendCount == 0)
 				{
 					foreach (var subscription in _suspendSubscriptions.CopyAndClear())
-					{
 						SubscriptionProvider.Subscribe(subscription);
-						CheckRefreshOnlineState();
-					}
 				}
 			}
 
@@ -3124,8 +3134,6 @@ namespace StockSharp.Algo.Strategies
 
 		private void UnSubscribe(bool globalAndLocal)
 		{
-			var changed = false;
-
 			foreach (var pair in _subscriptions.CachedPairs)
 			{
 				if (globalAndLocal || !pair.Value)
@@ -3137,12 +3145,8 @@ namespace StockSharp.Algo.Strategies
 
 					_subscriptions.Remove(subscription);
 					_subscriptionsById.Remove(subscription.TransactionId);
-					changed = true;
 				}
 			}
-
-			if(changed)
-				CheckRefreshOnlineState();
 		}
 
 		/// <summary>
