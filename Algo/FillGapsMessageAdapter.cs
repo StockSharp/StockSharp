@@ -25,6 +25,7 @@ public class FillGapsMessageAdapter : MessageAdapterWrapper
 		public SecurityId SecId { get; }
 		public FillGapsDays Days { get; }
 		public ISubscriptionMessage Current { get; set; }
+        public bool ResponseSent { get; set; }
     }
 
 	private readonly SynchronizedDictionary<long, FillGapInfo> _gapsRequests = new();
@@ -75,6 +76,8 @@ public class FillGapsMessageAdapter : MessageAdapterWrapper
 							current.FillGaps = null;
 
 							_gapsRequests.Add(subscrMsg.TransactionId, new(subscrMsg.TypedClone(), secIdMsg.SecurityId, days) { Current = current });
+
+							message = (Message)current;
 						}
 					}
 					else
@@ -146,8 +149,18 @@ public class FillGapsMessageAdapter : MessageAdapterWrapper
 			{
 				var response = (SubscriptionResponseMessage)message;
 
+				if (!_gapsRequests.TryGetValue(response.OriginalTransactionId, out var info))
+					break;
+
 				if (response.Error is not null)
 					_gapsRequests.Remove(response.OriginalTransactionId);
+				else
+				{
+					if (info.ResponseSent)
+						return;
+
+					info.ResponseSent = true;
+				}
 
 				break;
 			}

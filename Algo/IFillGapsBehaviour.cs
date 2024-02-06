@@ -51,7 +51,7 @@ public class StorageFillGapsBehaviour : IFillGapsBehaviour
 		if (from >= to)
 			return default;
 
-		var existing = _drive.GetStorageDrive(secId, dataType, _format).Dates.Where(d => d < from || d > to).ToSet();
+		var existing = _drive.GetStorageDrive(secId, dataType, _format).Dates.Where(d => from <= d || d <= to).ToSet();
 
 		DateTime? gapStart = null;
 		DateTime? gapEnd = null;
