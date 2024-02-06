@@ -169,10 +169,13 @@
 
 										AddSubscription();
 
-										// do not specify security cause adapter doesn't require it
-										mdMsg = mdMsg.TypedClone();
-										Extensions.AllSecurity.CopyEx(mdMsg, false);
-										message = mdMsg;
+										if (mdMsg.DataType2 != DataType.News)
+										{
+											mdMsg = mdMsg.TypedClone();
+											// do not specify security cause adapter doesn't require it
+											Extensions.AllSecurity.CopyEx(mdMsg, false);
+											message = mdMsg;
+										}
 
 										this.AddInfoLog("Sec ALL {0} subscribing.", transId);
 									}

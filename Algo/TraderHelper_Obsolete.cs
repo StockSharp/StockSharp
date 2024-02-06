@@ -1031,7 +1031,7 @@ namespace StockSharp.Algo
 		//[Obsolete("Use ISubscriptionProvider.Subscribe method.")]
 		public static Subscription SubscribeNews(this ISubscriptionProvider provider, Security security = null, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, IMessageAdapter adapter = null, long? skip = null)
 		{
-			return provider.SubscribeMarketData(security, DataType.News, from, to, count, adapter: adapter, skip: skip);
+			return provider.SubscribeMarketData(security ?? NewsSecurity, DataType.News, from, to, count, adapter: adapter, skip: skip);
 		}
 
 		/// <summary>
@@ -1042,7 +1042,7 @@ namespace StockSharp.Algo
 		[Obsolete("Use ISubscriptionProvider.UnSubscribe method.")]
 		public static void UnSubscribeNews(this ISubscriptionProvider provider, Security security = null)
 		{
-			provider.UnSubscribeMarketData(security, DataType.News);
+			provider.UnSubscribeMarketData(security ?? NewsSecurity, DataType.News);
 		}
 
 		/// <summary>
