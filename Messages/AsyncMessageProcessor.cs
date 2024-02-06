@@ -95,6 +95,9 @@ class AsyncMessageProcessor : BaseLogReceiver
 	/// </summary>
 	public bool EnqueueMessage(Message msg)
 	{
+		if (IsDisposed)
+			throw new ObjectDisposedException(nameof(AsyncMessageProcessor));
+
 		this.AddVerboseLog("enqueue: {0}", msg.Type);
 
 		lock (_messages.SyncRoot)

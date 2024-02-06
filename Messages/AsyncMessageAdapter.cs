@@ -29,6 +29,13 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		_asyncMessageProcessor.Dispose();
+		base.DisposeManaged();
+	}
+
+	/// <inheritdoc />
 	[Browsable(false)]
 	public override bool IsSupportPartialDownloading => false;
 
