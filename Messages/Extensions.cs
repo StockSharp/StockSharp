@@ -1831,12 +1831,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		///
+		/// Create error response.
 		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="ex"></param>
-		/// <param name="logs"></param>
-		/// <param name="getSubscribers"></param>
+		/// <param name="message">Original message.</param>
+		/// <param name="ex">Error.</param>
+		/// <param name="logs">Logs.</param>
+		/// <param name="getSubscribers">Subscriber identifiers provider.</param>
+		/// <returns>Error response.</returns>
 		public static Message CreateErrorResponse(this Message message, Exception ex, ILogReceiver logs, Func<DataType, long[]> getSubscribers = null)
 		{
 			if (message == null)
@@ -1844,9 +1845,6 @@ namespace StockSharp.Messages
 
 			if (ex == null)
 				throw new ArgumentNullException(nameof(ex));
-
-			if (sendOut == null)
-				throw new ArgumentNullException(nameof(sendOut));
 
 			logs.AddErrorLog(ex);
 
