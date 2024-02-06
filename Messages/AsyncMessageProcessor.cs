@@ -289,6 +289,13 @@ class AsyncMessageProcessor : Disposable
 						}
 						else
 						{
+							if (token.IsCancellationRequested && msg is ISubscriptionMessage subMsg)
+							{
+								// cancellation not an error for subscriptions as well as all responses
+								// must be reply for request only (see above item.UnsubscribeRequest logic)
+								return;
+							}
+
 							var error = token.IsCancellationRequested ? new OperationCanceledException() : ex;
 							_adapter.AddVerboseLog("endprocess: {0} ({1})", msg.Type, error.GetType().Name);
 
