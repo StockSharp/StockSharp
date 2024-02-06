@@ -55,12 +55,15 @@ class AsyncMessageProcessor : BaseLogReceiver
 		public bool IsLookup { get; }
 		public bool IsTransaction { get; }
 
+        public CancellationTokenSource Cts { get; set; }
+        public long UnsubscribeRequest { get; set; }
+
 		public override string ToString() => Message.ToString();
 	}
 
 	private readonly SynchronizedList<MessageQueueItem> _messages = new();
 	private readonly SynchronizedDictionary<MessageQueueItem, Task> _childTasks = new();
-	private readonly SynchronizedDictionary<long, CancellationTokenSource> _subscriptionTokens = new();
+	private readonly SynchronizedDictionary<long, MessageQueueItem> _subscriptionItems = new();
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
 	private CancellationTokenSource _globalCts = new();
@@ -172,14 +175,14 @@ class AsyncMessageProcessor : BaseLogReceiver
 
 			var msg = item.Message;
 
-			async ValueTask wrapper()
+			async ValueTask wrapperInner()
 			{
 				var token = _globalCts.Token;
 
 				if (token.IsCancellationRequested)
 				{
 					if (item.IsTransaction)
-						_adapter.HandleMessageException(msg, new OperationCanceledException("canceled"));
+						_adapter.SendOutMessage(msg.CreateErrorResponse(new OperationCanceledException(), this));
 
 					return;
 				}
@@ -189,7 +192,10 @@ class AsyncMessageProcessor : BaseLogReceiver
 				if (!item.IsControl)
 				{
 					if (!_isConnectionStarted || _isDisconnecting)
-						throw new InvalidOperationException($"unable to process {msg.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
+					{
+						this.AddDebugLog($"unable to process {msg.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
+						return;
+					}
 
 					if (msg is ISubscriptionMessage subMsg)
 					{
@@ -197,15 +203,17 @@ class AsyncMessageProcessor : BaseLogReceiver
 						{
 							var (cts, childToken) = token.CreateChildToken();
 							token = childToken;
-							_subscriptionTokens.Add(subMsg.TransactionId, cts);
+							item.Cts = cts;
+							_subscriptionItems.Add(subMsg.TransactionId, item);
 						}
 						else
 						{
 							// in case a subscription still in "subscribe" state
 							// (for example, for long historical data request)
-							if (_subscriptionTokens.TryGetAndRemove(subMsg.OriginalTransactionId, out var cts))
+							if (_subscriptionItems.TryGetAndRemove(subMsg.OriginalTransactionId, out var item))
 							{
-								cts.Cancel();
+								item.UnsubscribeRequest = subMsg.TransactionId;
+								item.Cts.Cancel();
 
 								_processMessageEvt.Set();
 								return;
@@ -267,29 +275,48 @@ class AsyncMessageProcessor : BaseLogReceiver
 					this.AddVerboseLog("endprocess: {0}", msg.Type);
 
 					if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
-						_subscriptionTokens.Remove(subMsg.TransactionId);
+						_subscriptionItems.Remove(subMsg.TransactionId);
 				}
 				catch (Exception ex)
 				{
 					try
 					{
-						var error = token.IsCancellationRequested ? new OperationCanceledException() : ex;
-						this.AddVerboseLog("endprocess: {0} ({1})", msg.Type, error.GetType().Name);
+						if (item.UnsubscribeRequest != default)
+						{
+							_adapter.SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = item.UnsubscribeRequest });
+						}
+						else
+						{
+							var error = token.IsCancellationRequested ? new OperationCanceledException() : ex;
+							this.AddVerboseLog("endprocess: {0} ({1})", msg.Type, error.GetType().Name);
 
-						if (!token.IsCancellationRequested)
-							await _adapter.FaultDelay.Delay(_globalCts.Token);
+							if (!token.IsCancellationRequested)
+								await _adapter.FaultDelay.Delay(_globalCts.Token);
 
-						_adapter.HandleMessageException(msg, ex);
+							_adapter.SendOutMessage(msg.CreateErrorResponse(ex, this));
+						}
 					}
-					catch
+					catch (Exception ex2)
 					{
 						done();
-						throw;
+						this.AddErrorLog(ex2);
 					}
 				}
 				finally
 				{
 					done();
+				}
+			}
+
+			async ValueTask wrapper()
+			{
+				try
+				{
+					await wrapperInner();
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog(ex);
 				}
 			}
 
@@ -356,8 +383,8 @@ class AsyncMessageProcessor : BaseLogReceiver
 		// token is already canceled in EnqueueMessage
 		await AsyncHelper.CatchHandle(() => WhenChildrenComplete(_adapter.DisconnectTimeout.CreateTimeoutToken()));
 
-		foreach (var (_, cts) in _subscriptionTokens.CopyAndClear())
-			cts.Cancel();
+		foreach (var (_, item) in _subscriptionItems.CopyAndClear())
+			item.Cts.Cancel();
 
 		await _adapter.ResetAsync(msg, default); // reset must not throw.
 

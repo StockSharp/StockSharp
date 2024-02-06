@@ -89,14 +89,6 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 		=> _asyncMessageProcessor.EnqueueMessage(message);
 
 	/// <summary>
-	/// Handle error associated with the specified message.
-	/// </summary>
-	/// <param name="msg"><see cref="Message"/>.</param>
-	/// <param name="err"><see cref="Exception"/>.</param>
-	public virtual void HandleMessageException(Message msg, Exception err)
-		=> SendOutMessage(msg.CreateErrorResponse(err, this));
-
-	/// <summary>
 	/// Process <see cref="ConnectMessage"/>.
 	/// </summary>
 	/// <param name="connectMsg"><see cref="ConnectMessage"/>.</param>
@@ -242,43 +234,33 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	/// <returns><see cref="ValueTask"/>.</returns>
 	public virtual async ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		try
+		if (mdMsg.IsSubscribe)
 		{
-			if (mdMsg.IsSubscribe)
+			var now = DateTimeOffset.UtcNow;
+
+			var from = mdMsg.From;
+			var to = mdMsg.To;
+
+			if ((from > now && mdMsg.IsHistoryOnly()) || from > to)
 			{
-				var now = DateTimeOffset.UtcNow;
-
-				var from = mdMsg.From;
-				var to = mdMsg.To;
-
-				if (from > now || from > to)
-				{
-					SendSubscriptionResult(mdMsg);
-					return;
-				}
+				SendSubscriptionResult(mdMsg);
+				return;
 			}
-
-			var dataType = mdMsg.DataType2;
-
-			var task =
-				  dataType == DataType.News 		? OnNewsSubscriptionAsync(mdMsg, cancellationToken)
-				: dataType == DataType.Level1 		? OnLevel1SubscriptionAsync(mdMsg, cancellationToken)
-				: dataType == DataType.Ticks 		? OnTicksSubscriptionAsync(mdMsg, cancellationToken)
-				: dataType == DataType.MarketDepth 	? OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken)
-				: dataType == DataType.OrderLog 	? OnOrderLogSubscriptionAsync(mdMsg, cancellationToken)
-				: dataType.IsTFCandles 				? OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken)
-				: dataType.IsCandles 				? OnCandlesSubscriptionAsync(mdMsg, cancellationToken)
-				: throw SubscriptionResponseMessage.NotSupported;
-
-			await task;
 		}
-		catch (OperationCanceledException)
-		{
-			if (!cancellationToken.IsCancellationRequested)
-				throw;
 
-			SendSubscriptionFinished(mdMsg.TransactionId);
-		}
+		var dataType = mdMsg.DataType2;
+
+		var task =
+				dataType == DataType.News 		? OnNewsSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.Level1 		? OnLevel1SubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.Ticks 		? OnTicksSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.MarketDepth 	? OnMarketDepthSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType == DataType.OrderLog 	? OnOrderLogSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType.IsTFCandles 				? OnTFCandlesSubscriptionAsync(mdMsg, cancellationToken)
+			: dataType.IsCandles 				? OnCandlesSubscriptionAsync(mdMsg, cancellationToken)
+			: throw SubscriptionResponseMessage.NotSupported;
+
+		await task;
 	}
 
 	/// <summary>
