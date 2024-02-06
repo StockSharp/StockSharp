@@ -69,6 +69,8 @@ partial class BitStampMessageAdapter
 
 					foreach (var c in ohlc.OrderBy(t => t.Time))
 					{
+						cancellationToken.ThrowIfCancellationRequested();
+
 						if (c.Time <= from)
 							continue;
 
@@ -171,6 +173,8 @@ partial class BitStampMessageAdapter
 
 				foreach (var trade in trades.OrderBy(t => t.Time))
 				{
+					cancellationToken.ThrowIfCancellationRequested();
+
 					if (trade.Time < from)
 						continue;
 
@@ -210,6 +214,8 @@ partial class BitStampMessageAdapter
 
 		foreach (var info in await _httpClient.GetPairsInfo(cancellationToken))
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var secMsg = new SecurityMessage
 			{
 				SecurityId = info.Name.ToStockSharp(),
