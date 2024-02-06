@@ -402,7 +402,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				message.HandleErrorResponse(ex, this, SendOutMessage);
+				SendOutMessage(message.CreateErrorResponse(ex, this));
 				return false;
 			}
 		}

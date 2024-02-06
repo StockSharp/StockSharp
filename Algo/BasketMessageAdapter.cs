@@ -1051,7 +1051,7 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				message.HandleErrorResponse(ex, this, SendOutMessage, GetSubscribers);
+				SendOutMessage(message.CreateErrorResponse(ex, this, GetSubscribers));
 				return false;
 			}
 		}

@@ -179,7 +179,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				message.HandleErrorResponse(ex, this, RaiseNewOutMessage);
+				RaiseNewOutMessage(message.CreateErrorResponse(ex, this));
 				throw;
 			}
 		}

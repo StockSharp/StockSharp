@@ -1836,9 +1836,8 @@ namespace StockSharp.Messages
 		/// <param name="message"></param>
 		/// <param name="ex"></param>
 		/// <param name="logs"></param>
-		/// <param name="sendOut"></param>
 		/// <param name="getSubscribers"></param>
-		public static void HandleErrorResponse(this Message message, Exception ex, ILogReceiver logs, Action<Message> sendOut, Func<DataType, long[]> getSubscribers = null)
+		public static Message CreateErrorResponse(this Message message, Exception ex, ILogReceiver logs, Func<DataType, long[]> getSubscribers = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1851,61 +1850,48 @@ namespace StockSharp.Messages
 
 			logs.AddErrorLog(ex);
 
-			void SendOutErrorExecution(ExecutionMessage execMsg)
+			ExecutionMessage makeErrorExecution(ExecutionMessage execMsg)
 			{
 				var subscribers = getSubscribers?.Invoke(DataType.Transactions);
 
 				if (subscribers != null)
 					execMsg.SetSubscriptionIds(subscribers);
 
-				sendOut(execMsg);
+				return execMsg;
 			}
 
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					sendOut(new ConnectMessage { Error = ex });
-					break;
+					return new ConnectMessage { Error = ex };
 
 				case MessageTypes.Disconnect:
-					sendOut(new DisconnectMessage { Error = ex });
-					break;
+					return new DisconnectMessage { Error = ex };
 
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderCancel:
 				case MessageTypes.OrderGroupCancel:
-				{
-					var replyMsg = ((OrderMessage)message).CreateReply(ex);
-					SendOutErrorExecution(replyMsg);
-					break;
-				}
+					return makeErrorExecution(((OrderMessage)message).CreateReply(ex));
 				case MessageTypes.OrderPairReplace:
-				{
-					var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply(ex);
-					SendOutErrorExecution(replyMsg);
-					break;
-				}
+					return makeErrorExecution(((OrderPairReplaceMessage)message).Message1.CreateReply(ex));
 
 				case MessageTypes.ChangePassword:
 				{
 					var pwdMsg = (ChangePasswordMessage)message;
-					sendOut(new ChangePasswordMessage
+					return new ChangePasswordMessage
 					{
 						OriginalTransactionId = pwdMsg.TransactionId,
 						Error = ex
-					});
-					break;
+					};
 				}
 
 				default:
 				{
 					if (message is ISubscriptionMessage subscrMsg)
-						sendOut(subscrMsg.CreateResponse(ex));
+						return subscrMsg.CreateResponse(ex);
 					else
-						sendOut(ex.ToErrorMessage((message as ITransactionIdMessage)?.TransactionId ?? 0));
-
-					break;
+						return ex.ToErrorMessage((message as ITransactionIdMessage)?.TransactionId ?? 0);
 				}
 			}
 		}

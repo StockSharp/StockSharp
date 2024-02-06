@@ -94,7 +94,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	/// <param name="msg"><see cref="Message"/>.</param>
 	/// <param name="err"><see cref="Exception"/>.</param>
 	public virtual void HandleMessageException(Message msg, Exception err)
-		=> msg.HandleErrorResponse(err, this, SendOutMessage);
+		=> SendOutMessage(msg.CreateErrorResponse(err, this));
 
 	/// <summary>
 	/// Process <see cref="ConnectMessage"/>.
