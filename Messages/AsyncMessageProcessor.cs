@@ -16,7 +16,7 @@ using StockSharp.Logging;
 /// <summary>
 /// Async message processor helper.
 /// </summary>
-class AsyncMessageProcessor : BaseLogReceiver
+class AsyncMessageProcessor : Disposable
 {
 	private class MessageQueueItem
 	{
@@ -80,7 +80,6 @@ class AsyncMessageProcessor : BaseLogReceiver
 	{
 		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 		// ReSharper disable once VirtualMemberCallInConstructor
-		Name = $"async({adapter.Name})";
 		Task.Run(ProcessMessagesAsync);
 	}
 
@@ -98,7 +97,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 		if (IsDisposed)
 			throw new ObjectDisposedException(nameof(AsyncMessageProcessor));
 
-		this.AddVerboseLog("enqueue: {0}", msg.Type);
+		_adapter.AddVerboseLog("enqueue: {0}", msg.Type);
 
 		lock (_messages.SyncRoot)
 		{
@@ -185,18 +184,18 @@ class AsyncMessageProcessor : BaseLogReceiver
 				if (token.IsCancellationRequested)
 				{
 					if (item.IsTransaction)
-						_adapter.SendOutMessage(msg.CreateErrorResponse(new OperationCanceledException(), this));
+						_adapter.SendOutMessage(msg.CreateErrorResponse(new OperationCanceledException(), _adapter));
 
 					return;
 				}
 
-				this.AddVerboseLog("beginprocess: {0}", msg.Type);
+				_adapter.AddVerboseLog("beginprocess: {0}", msg.Type);
 
 				if (!item.IsControl)
 				{
 					if (!_isConnectionStarted || _isDisconnecting)
 					{
-						this.AddDebugLog($"unable to process {msg.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
+						_adapter.AddDebugLog($"unable to process {msg.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
 						return;
 					}
 
@@ -275,7 +274,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 							_childTasks.Remove(item);
 					}
 
-					this.AddVerboseLog("endprocess: {0}", msg.Type);
+					_adapter.AddVerboseLog("endprocess: {0}", msg.Type);
 
 					if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
 						_subscriptionItems.Remove(subMsg.TransactionId);
@@ -291,18 +290,18 @@ class AsyncMessageProcessor : BaseLogReceiver
 						else
 						{
 							var error = token.IsCancellationRequested ? new OperationCanceledException() : ex;
-							this.AddVerboseLog("endprocess: {0} ({1})", msg.Type, error.GetType().Name);
+							_adapter.AddVerboseLog("endprocess: {0} ({1})", msg.Type, error.GetType().Name);
 
 							if (!token.IsCancellationRequested)
 								await _adapter.FaultDelay.Delay(_globalCts.Token);
 
-							_adapter.SendOutMessage(msg.CreateErrorResponse(ex, this));
+							_adapter.SendOutMessage(msg.CreateErrorResponse(ex, _adapter));
 						}
 					}
 					catch (Exception ex2)
 					{
 						done();
-						this.AddErrorLog(ex2);
+						_adapter.AddErrorLog(ex2);
 					}
 				}
 				finally
@@ -319,7 +318,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 				}
 				catch (Exception ex)
 				{
-					this.AddErrorLog(ex);
+					_adapter.AddErrorLog(ex);
 				}
 			}
 
@@ -344,7 +343,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 			}
 			catch (Exception e)
 			{
-				this.AddErrorLog("error processing message: {0}", e);
+				_adapter.AddErrorLog("error processing message: {0}", e);
 			}
 		}
 	}
@@ -412,7 +411,7 @@ class AsyncMessageProcessor : BaseLogReceiver
 			if(incomplete.Any())
 			{
 				allComplete = false;
-				this.AddErrorLog("following tasks were not completed:\n" + incomplete.JoinN());
+				_adapter.AddErrorLog("following tasks were not completed:\n" + incomplete.JoinN());
 			}
 		});
 

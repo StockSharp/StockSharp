@@ -25,7 +25,7 @@ public abstract class AsyncMessageAdapter : MessageAdapter
 	protected AsyncMessageAdapter(IdGenerator transactionIdGenerator)
 		: base(transactionIdGenerator)
 	{
-		_asyncMessageProcessor = new(this) { Parent = this };
+		_asyncMessageProcessor = new(this);
 	}
 
 	/// <inheritdoc />
