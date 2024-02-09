@@ -336,23 +336,26 @@ class AsyncMessageProcessor : Disposable
 			return true;
 		}
 
-		while (true)
+		await Do.Invariant(async () =>
 		{
-			await _processMessageEvt.WaitAsync();
-			if(IsDisposeStarted)
-				break;
-
-			_processMessageEvt.Reset();
-
-			try
+			while (true)
 			{
-				while(nextMessage()) {}
+				await _processMessageEvt.WaitAsync();
+				if (IsDisposeStarted)
+					break;
+
+				_processMessageEvt.Reset();
+
+				try
+				{
+					while (nextMessage()) { }
+				}
+				catch (Exception e)
+				{
+					_adapter.AddErrorLog("error processing message: {0}", e);
+				}
 			}
-			catch (Exception e)
-			{
-				_adapter.AddErrorLog("error processing message: {0}", e);
-			}
-		}
+		});
 	}
 
 	private ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
