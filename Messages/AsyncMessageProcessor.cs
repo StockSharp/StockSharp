@@ -141,30 +141,51 @@ class AsyncMessageProcessor : Disposable
 
 				var nonProcessing = _messages.Where(i => !i.IsProcessing);
 
+				//
 				// priority order:
+				//
 				// controls messages	- 1
 				// heartbeat(=ping)		- 2
-				// status				- 3
-				// transactions			- 4
-				// other				- 5
-				item = nonProcessing.FirstOrDefault(m => m.IsControl)
-					?? (
-					isPingProcessing
-						? null /* can't process parallel pings, select other message type */
-						: nonProcessing.FirstOrDefault(m => m.IsPing)
-					)
-					?? (
-					isLookupProcessing
-						? null /* can't process parallel lookup, select other message type */
-						: nonProcessing.FirstOrDefault(m => m.IsLookup)
-					)
-					?? (
-					numProcessing >= _adapter.MaxParallelMessages
-						? nonProcessing.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false }) // if the limit is exceeded we can only process unsubscribe messages
-						: (isTransactionProcessing
-							? nonProcessing.FirstOrDefault(m => !m.IsTransaction)
-							: (nonProcessing.FirstOrDefault(m => m.IsTransaction) ?? nonProcessing.FirstOrDefault()))
-					);
+				// unsubscribe			- 3
+				// lookup				- 4
+				// transactions			- 5
+				// other				- 6
+				//
+
+				item = nonProcessing.FirstOrDefault(m => m.IsControl);
+
+				if (item is null)
+				{
+					if (isPingProcessing)
+					{
+						// can't process parallel pings, applying filter
+						nonProcessing = nonProcessing.Where(m => !m.IsPing);
+					}
+					else
+						item = nonProcessing.FirstOrDefault(m => m.IsPing);
+				}
+
+				item ??= nonProcessing.FirstOrDefault(m => m.Message is ISubscriptionMessage { IsSubscribe: false });
+
+				// all other message types are MaxParallelMessages tolerant
+				if (item is null && numProcessing < _adapter.MaxParallelMessages)
+				{
+					if (isLookupProcessing)
+					{
+						// can't process parallel lookup, applying filter
+						nonProcessing = nonProcessing.Where(m => !m.IsLookup);
+					}
+					else
+						item = nonProcessing.FirstOrDefault(m => m.IsLookup);
+
+					if (item is null)
+					{
+						if (isTransactionProcessing)
+							item = nonProcessing.FirstOrDefault(m => !m.IsTransaction);
+						else
+							item = nonProcessing.FirstOrDefault(m => m.IsTransaction) ?? nonProcessing.FirstOrDefault();
+					}
+				}
 
 				if (item is null)
 					return false;
